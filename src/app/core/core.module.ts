@@ -6,7 +6,7 @@ import { NgxElectronModule } from 'ngx-electron';
 import { PhastModule } from '../phast/phast.module';
 import { PsatModule } from '../psat/psat.module';
 import { CalculatorModule } from '../calculator/calculator.module';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { CoreComponent } from './core.component';
 import { AssessmentService } from '../dashboard/assessment.service';
@@ -38,6 +38,7 @@ import { WasteWaterModule } from '../waste-water/waste-water.module';
 import { ToolsSuiteApiModule } from '../tools-suite-api/tools-suite-api.module';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { CompressedAirAssessmentModule } from '../compressed-air-assessment/compressed-air-assessment.module';
+import { PlotlyViaWindowModule } from 'angular-plotly.js';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { CompressedAirAssessmentModule } from '../compressed-air-assessment/comp
     MotorInventoryModule,
     WasteWaterModule,
     ToolsSuiteApiModule,
-    CompressedAirAssessmentModule
+    CompressedAirAssessmentModule,
+    PlotlyViaWindowModule
   ],
   providers: [
     AssessmentService,

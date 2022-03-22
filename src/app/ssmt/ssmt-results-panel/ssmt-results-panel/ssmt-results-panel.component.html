@@ -69,7 +69,7 @@
   </div>
   <div class="d-flex stripe my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="table-text">Electricity Usage (kW/yr) </span>
+      <span class="table-text">Electricity Purchased (kWh/yr) </span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span *ngIf="baselineValid" class="table-text">{{
@@ -155,7 +155,7 @@
         >Power Generated (<span
           [innerHTML]="settings.steamPowerMeasurement | settingsLabel"
         ></span
-        >/yr)</span
+        >)</span
       >
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
@@ -311,7 +311,7 @@
 
   <div class="d-flex my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Emissions (<span>tonne CO<sub>2</sub>/yr</span>)</span>
+      <span class="bold table-text">Annual Emissions (<span>tonne CO<sub>2</sub></span>)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span *ngIf="baselineValid" class="bold table-text">
@@ -341,7 +341,7 @@
 
   <div class="d-flex my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Emissions Savings (<span>tonne CO<sub>2</sub>/yr</span>)</span>
+      <span class="bold table-text">Annual Emissions Savings (<span>tonne CO<sub>2</sub></span>)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span class="bold table-text">&mdash;</span>
@@ -369,7 +369,7 @@
 
   <div class="d-flex my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Cost ({{settings.currency}}/yr)</span>
+      <span class="bold table-text">Annual Cost ({{settings.currency}})</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span *ngIf="baselineValid" class="bold table-text">{{
@@ -402,7 +402,7 @@
 
   <div class="d-flex stripe my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Savings ({{settings.currency}}/yr)</span>
+      <span class="bold table-text">Annual Savings ({{settings.currency}})</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span class="bold table-text">&mdash;</span>

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
 import { environment } from '../../../../environments/environment';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+declare const packageJson;
 @Component({
   selector: 'app-version-modal',
   templateUrl: './version-modal.component.html',

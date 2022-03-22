@@ -1,8 +1,8 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { CompressedAirAssessmentResult, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
-import * as Plotly from 'plotly.js';
 import { CompressedAirAssessment, CompressedAirDayType } from '../../../shared/models/compressed-air-assessment';
 import { CurrencyPipe } from '@angular/common';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-report-graphs',
@@ -27,7 +27,7 @@ export class ReportGraphsComponent implements OnInit {
   useAutomaticSequencer: boolean;
   reduceRuntime: boolean;
   addPrimaryReceiverVolume: boolean;
-  constructor() { }
+  constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
     this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes[0];
@@ -186,7 +186,7 @@ export class ReportGraphsComponent implements OnInit {
         responsive: true,
         displaylogo: false
       };
-      Plotly.newPlot(this.modificationGraph.nativeElement, traceData, layout, config);
+      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, config);
     }
   }
 

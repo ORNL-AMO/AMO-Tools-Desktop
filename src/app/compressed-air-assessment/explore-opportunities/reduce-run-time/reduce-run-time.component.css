@@ -47,6 +47,12 @@ td, th{
   }
 
 
+  .supply-demand{
+    padding-left: .25rem;
+      border-left: solid #ddd 2px;
+      font-size: 11px;
+      font-style: italic;
+}
   
 .group-label .form-control{
 	width: fit-content;

@@ -4,7 +4,7 @@ import { TreasureHuntReportService } from '../../../../../treasure-hunt/treasure
 import { TreasureHuntResults, UtilityUsageData } from '../../../../../shared/models/treasure-hunt';
 import { Settings } from '../../../../../shared/models/settings';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AssessmentService } from '../../../../assessment.service';
 
 @Component({

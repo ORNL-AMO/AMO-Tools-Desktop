@@ -18,5 +18,7 @@ export interface PrintOptions {
     printWasteWaterRollup: boolean;
     printDetailedResults: boolean;
     printReportDiagram: boolean;
+    printSystemProfiles: boolean;
+    printPerformanceProfiles: boolean;
     selectAll: boolean;
   }

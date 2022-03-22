@@ -7,7 +7,7 @@
 			<img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="flue-icon">
 		  </div>
 		  <div class="pl-2">
-			<h3>Flue Gas</h3>
+			<h3>Flue Gas Loss</h3>
 		  </div>
 		</div>
 		<div class="d-flex pr-2" *ngIf="inTreasureHunt">
@@ -83,7 +83,7 @@
 				  <div *ngIf="output.baseline.flueGasLosses" class="text-center bold small">
 					{{output.baseline.flueGasLosses | sigFigs:'3'}} 
 					<span class="input-group-addon"><span
-						[innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr</span>
+						[innerHTML]="settings.phastRollupFuelUnit | settingsLabel"></span>/hr</span>
 				  </div>
 				  <div *ngIf="!output.baseline.flueGasLosses" class="text-center bold small">
 					&mdash; &mdash;
@@ -161,7 +161,7 @@
 					  <div *ngIf="output.modification.flueGasLosses" class="text-center bold small">
 						{{output.modification.flueGasLosses | sigFigs:'3'}}
 						<span class="input-group-addon"><span
-							[innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr</span>
+							[innerHTML]="settings.phastRollupFuelUnit | settingsLabel"></span>/hr</span>
 					  </div>
 					  <div *ngIf="!output.modification.flueGasLosses" class="text-center bold small">
 						&mdash; &mdash;

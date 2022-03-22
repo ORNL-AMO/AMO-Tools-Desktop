@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { FlueGasCompareService } from "../flue-gas-compare.service";
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
@@ -60,7 +60,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     wetBulbTemp: 118.999
   }
 
-  calculationMethods: Array<string> = [
+  calculationMethods: Array<'Excess Air' | 'Oxygen in Flue Gas'> = [
     'Excess Air',
     'Oxygen in Flue Gas'
   ];

@@ -1,0 +1,18 @@
+td, th{    
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+    white-space: pre-line;
+}
+
+table {
+    border-bottom: solid 1px darkgray;
+    empty-cells: hide;
+}
+
+thead tr{
+    border-bottom: solid;
+}
+
+

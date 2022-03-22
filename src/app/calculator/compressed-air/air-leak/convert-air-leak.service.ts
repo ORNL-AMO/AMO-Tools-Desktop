@@ -28,7 +28,7 @@ export class ConvertAirLeakService {
         inputArray[i].orificeMethodData.compressorAirTemp = this.convertUnitsService.value(inputArray[i].orificeMethodData.compressorAirTemp).from('C').to('F');
         inputArray[i].orificeMethodData.atmosphericPressure = this.convertUnitsService.value(inputArray[i].orificeMethodData.atmosphericPressure).from('kPaa').to('psia');
         inputArray[i].orificeMethodData.orificeDiameter = this.convertUnitsService.value(inputArray[i].orificeMethodData.orificeDiameter).from('cm').to('in');
-        inputArray[i].orificeMethodData.supplyPressure = this.convertUnitsService.value(inputArray[i].orificeMethodData.supplyPressure).from('kPaa').to('psia');
+        inputArray[i].orificeMethodData.supplyPressure = this.convertUnitsService.value(inputArray[i].orificeMethodData.supplyPressure).from('kPaa').to('psig');
         let conversionHelper = this.convertUnitsService.value(1).from('m3').to('ft3');
         inputArray[i].compressorElectricityData.compressorSpecificPower = inputArray[i].compressorElectricityData.compressorSpecificPower / conversionHelper;
       }
@@ -88,7 +88,7 @@ export class ConvertAirLeakService {
     inputData.orificeMethodData.compressorAirTemp = this.convertUnitsService.value(inputData.orificeMethodData.compressorAirTemp).from('F').to('C');
     inputData.orificeMethodData.atmosphericPressure = this.convertUnitsService.value(inputData.orificeMethodData.atmosphericPressure).from('psia').to('kPaa');
     inputData.orificeMethodData.orificeDiameter = this.convertUnitsService.value(inputData.orificeMethodData.orificeDiameter).from('in').to('cm');
-    inputData.orificeMethodData.supplyPressure = this.convertUnitsService.value(inputData.orificeMethodData.supplyPressure).from('psia').to('kPaa');
+    inputData.orificeMethodData.supplyPressure = this.convertUnitsService.value(inputData.orificeMethodData.supplyPressure).from('psig').to('kPaa');
     inputData.orificeMethodData.compressorAirTemp = this.roundVal(inputData.orificeMethodData.compressorAirTemp);
     inputData.orificeMethodData.atmosphericPressure = this.roundVal(inputData.orificeMethodData.atmosphericPressure);
     inputData.orificeMethodData.orificeDiameter = this.roundVal(inputData.orificeMethodData.orificeDiameter);

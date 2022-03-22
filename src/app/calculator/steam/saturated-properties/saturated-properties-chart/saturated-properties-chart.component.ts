@@ -4,9 +4,9 @@ import { SaturatedPropertiesOutput } from '../../../../shared/models/steam/steam
 import { SimpleChart } from '../../../../shared/models/plotting';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 
-import * as Plotly from 'plotly.js';
 import { SaturatedPropertiesService, IsobarCoordinates } from '../../saturated-properties.service';
 import { SaturatedPropertiesConversionService } from '../../saturated-properties-conversion.service';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-saturated-properties-chart',
@@ -25,10 +25,8 @@ export class SaturatedPropertiesChartComponent implements OnChanges {
   toggleReset: boolean;
 
   // DOM
-  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
-  tabPanelChartId: string = 'tabPanelDiv';
-  expandedChartId: string = 'expandedChartDiv';
-  currentChartId: string = 'tabPanelDiv';
+  @ViewChild("expandedChartDiv", { static: false }) expandedChartDiv: ElementRef;
+  @ViewChild("panelChartDiv", { static: false }) panelChartDiv: ElementRef;
 
   entropyChart: SimpleChart;
   defaultEntropyUnit: string = 'kJkgK';
@@ -54,23 +52,28 @@ export class SaturatedPropertiesChartComponent implements OnChanges {
     }
   }
 
-  constructor(private saturatedPropertiesService: SaturatedPropertiesService, 
-    private saturatedPropertiesConversionService: SaturatedPropertiesConversionService) { }
+  constructor(private saturatedPropertiesService: SaturatedPropertiesService,
+    private saturatedPropertiesConversionService: SaturatedPropertiesConversionService,
+    private plotlyService: PlotlyService) { }
 
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.saturatedPropertiesOutput && !changes.toggleReset && !changes.saturatedPropertiesOutput.firstChange) {
-        if (this.validPlot && this.saturatedPropertiesOutput !== undefined) {
-          this.updateChart();
-        }
+      if (this.validPlot && this.saturatedPropertiesOutput !== undefined) {
+        this.updateChart();
+      }
     } else if (changes.toggleReset && !changes.toggleReset.firstChange) {
       if (this.entropyChart.existingPoint) {
         this.removePointTrace();
-      } 
+      }
     }
     else {
       this.initRenderChart();
     }
+  }
+  
+  ngAfterViewInit(){
+    this.initRenderChart();
   }
 
   save() {
@@ -78,7 +81,6 @@ export class SaturatedPropertiesChartComponent implements OnChanges {
   }
 
   initRenderChart() {
-    Plotly.purge(this.currentChartId);
 
     this.initChartSetup();
     this.initIsobarTraces();
@@ -88,7 +90,11 @@ export class SaturatedPropertiesChartComponent implements OnChanges {
     }
 
     let chartLayout = JSON.parse(JSON.stringify(this.entropyChart.layout));
-    Plotly.newPlot(this.currentChartId, this.entropyChart.data, chartLayout, this.entropyChart.config)
+    if (this.expanded && this.expandedChartDiv) {
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.entropyChart.data, chartLayout, this.entropyChart.config)
+    } else if (!this.expanded && this.panelChartDiv) {
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.entropyChart.data, chartLayout, this.entropyChart.config)
+    }
     this.save();
   }
 
@@ -97,7 +103,11 @@ export class SaturatedPropertiesChartComponent implements OnChanges {
       this.plotSegment();
     }
     let chartLayout = JSON.parse(JSON.stringify(this.entropyChart.layout));
-    Plotly.update(this.currentChartId, this.entropyChart.data, chartLayout);
+    if (this.expanded) {
+      this.plotlyService.update(this.expandedChartDiv.nativeElement, this.entropyChart.data, chartLayout);
+    } else {
+      this.plotlyService.update(this.panelChartDiv.nativeElement, this.entropyChart.data, chartLayout);
+    }
     this.save();
   }
 
@@ -106,10 +116,10 @@ export class SaturatedPropertiesChartComponent implements OnChanges {
     this.entropyChart = this.saturatedPropertiesService.entropyChart.getValue();
     this.saturatedPropertiesService.setEntropyChartConfig(this.settings);
   }
-  
+
   initIsobarTraces() {
     this.checkConvertIsobars();
-    let isobars: Array<IsobarCoordinates> = this.saturatedPropertiesService.isobars.getValue();    
+    let isobars: Array<IsobarCoordinates> = this.saturatedPropertiesService.isobars.getValue();
     isobars.forEach((line: IsobarCoordinates) => {
       let trace = this.saturatedPropertiesService.getEmptyTrace();
       trace.x = line.entropy;
@@ -120,15 +130,15 @@ export class SaturatedPropertiesChartComponent implements OnChanges {
   }
 
   checkConvertIsobars() {
-    if (this.settings.steamSpecificEntropyMeasurement !== undefined 
+    if (this.settings.steamSpecificEntropyMeasurement !== undefined
       && this.settings.steamSpecificEntropyMeasurement !== this.defaultEntropyUnit) {
       this.saturatedPropertiesConversionService.convertIsobarEntropy(this.settings, this.defaultEntropyUnit);
     }
-    if (this.settings.steamTemperatureMeasurement !== undefined 
+    if (this.settings.steamTemperatureMeasurement !== undefined
       && this.settings.steamTemperatureMeasurement !== this.defaultTempUnit) {
       this.saturatedPropertiesConversionService.convertIsobarTemperature(this.settings, this.defaultTempUnit);
     }
-    if (this.settings.steamPressureMeasurement !== undefined 
+    if (this.settings.steamPressureMeasurement !== undefined
       && this.settings.steamPressureMeasurement !== this.defaultPressureUnit) {
       this.saturatedPropertiesConversionService.convertIsobarPressure(this.settings, this.defaultPressureUnit);
     }
@@ -161,7 +171,7 @@ export class SaturatedPropertiesChartComponent implements OnChanges {
     lineTrace.marker.color = graphColors[0];
     lineTrace.marker.line.color = graphColors[0];
     lineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEntropyMeasurement, this.settings.steamTemperatureMeasurement, true);
-    
+
     if (this.entropyChart.existingPoint) {
       this.entropyChart.data[this.entropyChart.data.length - 1] = lineTrace;
     } else {
@@ -174,7 +184,11 @@ export class SaturatedPropertiesChartComponent implements OnChanges {
     this.entropyChart.data.splice(this.entropyChart.data.length - 1, 1);
     this.entropyChart.existingPoint = false;
     let chartLayout = JSON.parse(JSON.stringify(this.entropyChart.layout));
-    Plotly.update(this.currentChartId, this.entropyChart.data, chartLayout);
+    if (this.expanded) {
+      this.plotlyService.update(this.expandedChartDiv.nativeElement, this.entropyChart.data, chartLayout);
+    } else {
+      this.plotlyService.update(this.panelChartDiv.nativeElement, this.entropyChart.data, chartLayout);
+    }
     this.save();
   }
 
@@ -235,36 +249,23 @@ export class SaturatedPropertiesChartComponent implements OnChanges {
     }
   }
 
-  resizeGraph() {
-    let expandedChart = this.ngChartContainer.nativeElement;
-    if (expandedChart) {
-      if (this.expanded) {
-        this.currentChartId = this.expandedChartId;
-      }
-      else {
-        this.currentChartId = this.tabPanelChartId;
-      }
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
       this.initRenderChart();
-    }
+    }, 200);
   }
 
-    expandChart() {
-      this.expanded = true;
-      this.hideTooltip('btnExpandChart');
-      this.hideTooltip('btnCollapseChart');
-      setTimeout(() => {
-        this.resizeGraph();
-      }, 200);
-    }
-  
-    contractChart() {
-      this.expanded = false;
-      this.hideTooltip('btnExpandChart');
-      this.hideTooltip('btnCollapseChart');
-      setTimeout(() => {
-        this.resizeGraph();
-      }, 200);
-    }
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.initRenderChart();
+    }, 200);
+  }
 
   toggleGrid() {
     let showingGridX: boolean = this.entropyChart.layout.xaxis.showgrid;

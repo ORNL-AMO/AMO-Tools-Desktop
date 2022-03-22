@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { AllCompressedAirResultsData, CompressedAirCompare, CompressedAirResultsData, ReportItem } from './report-rollup-models';
+import { AllCompressedAirResultsData, CompressedAirCompare, CompressedAirResultsData, ReportItem, ReportUtilityTotal } from './report-rollup-models';
 import * as _ from 'lodash';
 import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../compressed-air-assessment/compressed-air-assessment-results.service';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { Settings } from '../shared/models/settings';
 @Injectable()
 export class CompressedAirReportRollupService {
 
@@ -10,7 +12,9 @@ export class CompressedAirReportRollupService {
   selectedAssessments: BehaviorSubject<Array<CompressedAirCompare>>;
   selectedAssessmentResults: Array<CompressedAirResultsData>;
   allAssessmentResults: Array<AllCompressedAirResultsData>;
-  constructor(private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) {
+  totals: ReportUtilityTotal;
+  constructor(private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
+    private convertUnitsService: ConvertUnitsService) {
     this.initSummary();
   }
 
@@ -19,6 +23,16 @@ export class CompressedAirReportRollupService {
     this.selectedAssessments = new BehaviorSubject<Array<CompressedAirCompare>>(new Array<CompressedAirCompare>());
     this.selectedAssessmentResults = new Array<CompressedAirResultsData>();
     this.allAssessmentResults = new Array<AllCompressedAirResultsData>();
+    this.totals = {
+      totalEnergy: 0,
+      totalCost: 0,
+      savingPotential: 0,
+      energySavingsPotential: 0,
+      fuelEnergy: 0,
+      electricityEnergy: 0,
+      carbonEmissions: 0,
+      carbonSavings: 0
+    }
   }
 
   //USED FOR Compressed air  SUMMARY
@@ -60,8 +74,8 @@ export class CompressedAirReportRollupService {
           if (val.assessment.compressedAirAssessment.modifications.length !== 0) {
             let modResultsArr: Array<DayTypeModificationResult> = new Array<DayTypeModificationResult>();
             val.assessment.compressedAirAssessment.modifications.forEach(mod => {
-              let tmpResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(val.assessment.compressedAirAssessment, mod, val.settings);
-              let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(tmpResults, baselineResults)
+              let tmpResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(val.assessment.compressedAirAssessment, mod, val.settings, undefined, baselineResults);
+              let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(tmpResults, baselineResults);
               modResultsArr.push(combinedResults);
             });
             this.allAssessmentResults.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
@@ -84,12 +98,58 @@ export class CompressedAirReportRollupService {
     selectedAssessments.forEach(val => {
       let baselineResults: BaselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(val.assessment.compressedAirAssessment, val.settings);
       if (val.modification) {
-        let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(val.assessment.compressedAirAssessment, val.modification, val.settings);
-        let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults, baselineResults)
+        let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(val.assessment.compressedAirAssessment, val.modification, val.settings, undefined, baselineResults);
+        let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults, baselineResults);
         this.selectedAssessmentResults.push({ baselineResults: baselineResults, modificationResults: combinedResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
       } else {
         this.selectedAssessmentResults.push({ baselineResults: baselineResults, modificationResults: undefined, assessmentId: val.assessmentId, name: val.name, modName: 'Baseline', baseline: val.baseline, modification: val.modification, settings: val.settings });
       }
     });
+  }
+
+  setTotals(settings: Settings) {
+    let sumSavings = 0;
+    let sumEnergy = 0;
+    let sumCost = 0;
+    let sumEnergySavings = 0;
+    let sumCo2Emissions = 0;
+    let sumCo2Savings = 0;
+    this.selectedAssessmentResults.forEach(result => {
+      let diffCost: number = 0;
+      let diffEnergy: number = 0;
+      if (result.modificationResults) {
+        diffCost = result.baselineResults.total.totalAnnualOperatingCost - result.modificationResults.totalAnnualOperatingCost;
+        sumCost += result.modificationResults.totalAnnualOperatingCost;
+        diffEnergy = result.baselineResults.total.energyUse - result.modificationResults.allSavingsResults.adjustedResults.power;
+        sumEnergy += result.modificationResults.allSavingsResults.adjustedResults.power;
+        
+        //1000 kg / 1 tonne
+        let co2SavingsConvertedTonne = result.modificationResults.allSavingsResults.savings.annualEmissionOutputSavings / 1000; 
+        sumCo2Savings += co2SavingsConvertedTonne;
+        let co2EmissionsConvertedTonne = result.modificationResults.annualEmissionOutput / 1000;
+        sumCo2Emissions += co2EmissionsConvertedTonne;
+      } else {
+        sumCost += result.baselineResults.total.totalAnnualOperatingCost;
+        sumEnergy += result.baselineResults.total.energyUse;
+        
+        //1000 kg / 1 tonne
+        let co2EmissionsConvertedTonne = result.baselineResults.total.annualEmissionOutput / 1000;
+        sumCo2Emissions += co2EmissionsConvertedTonne;
+      }
+      sumSavings += diffCost;
+      sumEnergySavings += diffEnergy;
+    })
+    sumEnergy = this.convertUnitsService.value(sumEnergy).from('kWh').to(settings.compressedAirRollupUnit);
+    sumEnergySavings = this.convertUnitsService.value(sumEnergySavings).from('kWh').to(settings.compressedAirRollupUnit);
+    this.totals = {
+      savingPotential: sumSavings,
+      energySavingsPotential: sumEnergySavings,
+      totalCost: sumCost,
+      totalEnergy: sumEnergy,
+      electricityEnergy: sumEnergy + sumEnergySavings,
+      fuelEnergy: 0,
+      carbonEmissions: sumCo2Emissions,
+      carbonSavings: sumCo2Savings
+    }
   }
 }

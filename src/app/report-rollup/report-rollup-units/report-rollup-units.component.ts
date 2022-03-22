@@ -109,9 +109,11 @@ export class ReportRollupUnitsComponent implements OnInit {
     this.compressedAirReportRollupService.compressedAirAssessments.next(compressedAirAssessments);
   }
 
-  checkForRollupUnits() {
-    this.tmpSettings.commonRollupUnit = this.settings.energyResultUnit;
+  checkForRollupUnits() {    
     if (this.settings.unitsOfMeasure === 'Imperial') {
+      if(!this.tmpSettings.commonRollupUnit){
+        this.tmpSettings.commonRollupUnit = this.settings.energyResultUnit;
+      }
       if (!this.tmpSettings.pumpsRollupUnit) {
         this.tmpSettings.pumpsRollupUnit = 'MWh';
       }
@@ -129,6 +131,9 @@ export class ReportRollupUnitsComponent implements OnInit {
       }
     }
     if (this.settings.unitsOfMeasure === 'Metric') {
+      if(!this.tmpSettings.commonRollupUnit){
+        this.tmpSettings.commonRollupUnit = this.settings.energyResultUnit;
+      }
       if (!this.tmpSettings.pumpsRollupUnit) {
         this.tmpSettings.pumpsRollupUnit = 'MWh';
       }

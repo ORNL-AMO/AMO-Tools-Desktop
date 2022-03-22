@@ -8,7 +8,7 @@ import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
 import { LossesService } from './losses/losses.service';
 import { StepTab, LossTab, stepTabs } from './tabs';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PhastCompareService } from './phast-compare.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
@@ -60,6 +60,7 @@ export class PhastComponent implements OnInit {
   isModalOpen: boolean = false;
   selectedLossTab: LossTab;
   calcTab: string;
+  hasEgridDataInit: boolean;
   assessmentTab: string = 'explore-opportunities';
   sankeyPhast: PHAST;
   modificationIndex: number;
@@ -75,6 +76,8 @@ export class PhastComponent implements OnInit {
   addNewSubscription: Subscription;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  showWelcomeScreen: boolean = false;
+  modificationModalOpen: boolean = false;
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
@@ -93,7 +96,11 @@ export class PhastComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.egridService.getAllSubRegions();
+    this.egridService.processCSVData().then(result => {
+      this.hasEgridDataInit = true;
+    }).catch(err => {
+      this.hasEgridDataInit = false;
+    });
     this.tab1Status = '';
     this.tab2Status = '';
 
@@ -161,6 +168,7 @@ export class PhastComponent implements OnInit {
     });
 
     this.openModListSubscription = this.lossesService.openModificationModal.subscribe(val => {
+      this.modificationModalOpen = val;
       if (val) {
         this.selectModificationModal();
       }
@@ -183,68 +191,64 @@ export class PhastComponent implements OnInit {
         this.showAddNewModal();
       }
     });
-
+    this.checkShowWelcomeScreen();
   }
 
-  ngAfterContentInit(){
-    this.checkTutorials();
-  }
 
-  setExploreOppsDefaults(modification: Modification) {  
+  setExploreOppsDefaults(modification: Modification) {
     // old assessments with scenario added - prevent break on missing properties
-    let exploreOppsDefault: SavingsOpportunity = {hasOpportunity: false, display: ''};
-      if (modification.exploreOppsShowAirTemp == undefined) {
-        modification.exploreOppsShowAirTemp = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowFlueGas == undefined) {
-        modification.exploreOppsShowFlueGas = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowMaterial == undefined) {
-        modification.exploreOppsShowMaterial = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowAllTimeOpen == undefined) {
-        modification.exploreOppsShowAllTimeOpen = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowOpening == undefined) {
-        modification.exploreOppsShowOpening = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowAllEmissivity == undefined) {
-        modification.exploreOppsShowAllEmissivity = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowCooling == undefined) {
-        modification.exploreOppsShowCooling = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowAtmosphere == undefined) {
-        modification.exploreOppsShowAtmosphere = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowOperations == undefined) {
-        modification.exploreOppsShowOperations = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowLeakage == undefined) {
-        modification.exploreOppsShowLeakage = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowSlag == undefined) {
-        modification.exploreOppsShowSlag = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowEfficiencyData == undefined) {
-        modification.exploreOppsShowEfficiencyData = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowWall == undefined) {
-        modification.exploreOppsShowWall = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowAllTemp == undefined) {
-        modification.exploreOppsShowAllTemp = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowFixtures == undefined) {
-        modification.exploreOppsShowFixtures = exploreOppsDefault;
-      }
+    let exploreOppsDefault: SavingsOpportunity = { hasOpportunity: false, display: '' };
+    if (modification.exploreOppsShowAirTemp == undefined) {
+      modification.exploreOppsShowAirTemp = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowFlueGas == undefined) {
+      modification.exploreOppsShowFlueGas = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowMaterial == undefined) {
+      modification.exploreOppsShowMaterial = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowAllTimeOpen == undefined) {
+      modification.exploreOppsShowAllTimeOpen = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowOpening == undefined) {
+      modification.exploreOppsShowOpening = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowAllEmissivity == undefined) {
+      modification.exploreOppsShowAllEmissivity = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowCooling == undefined) {
+      modification.exploreOppsShowCooling = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowAtmosphere == undefined) {
+      modification.exploreOppsShowAtmosphere = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowOperations == undefined) {
+      modification.exploreOppsShowOperations = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowLeakage == undefined) {
+      modification.exploreOppsShowLeakage = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowSlag == undefined) {
+      modification.exploreOppsShowSlag = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowEfficiencyData == undefined) {
+      modification.exploreOppsShowEfficiencyData = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowWall == undefined) {
+      modification.exploreOppsShowWall = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowAllTemp == undefined) {
+      modification.exploreOppsShowAllTemp = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowFixtures == undefined) {
+      modification.exploreOppsShowFixtures = exploreOppsDefault;
+    }
   }
 
   ngAfterViewInit() {
     //after init show disclaimer toasty
     setTimeout(() => {
       //initialize container height after content is rendered
-      this.disclaimerToast();
       this.getContainerHeight();
     }, 100);
   }
@@ -324,25 +328,6 @@ export class PhastComponent implements OnInit {
     }
     else {
       return 'success';
-    }
-  }
-
-  checkTutorials() {
-    if (this.mainTab === 'system-setup') {
-      if (!this.settingsDbService.globalSettings.disablePhastSetupTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('phast-setup-tutorial');
-      }
-    } else if (this.mainTab === 'assessment') {
-      if (!this.settingsDbService.globalSettings.disablePhastAssessmentTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('phast-assessment-tutorial');
-      }
-    } else if (this.mainTab === 'report') {
-      if (!this.settingsDbService.globalSettings.disablePhastReportTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('phast-report-tutorial');
-      }
     }
   }
 
@@ -432,10 +417,6 @@ export class PhastComponent implements OnInit {
     });
   }
 
-  exportData() {
-    //TODO: Logic for exporting data (csv?)
-  }
-
   setSankeyLabelStyle(style: string) {
     this.sankeyLabelStyle = style;
   }
@@ -470,7 +451,7 @@ export class PhastComponent implements OnInit {
 
   addNewMod() {
     let modName: string = 'Scenario ' + (this._phast.modifications.length + 1);
-    let exploreOppsDefault: SavingsOpportunity = {hasOpportunity: false, display: ''};
+    let exploreOppsDefault: SavingsOpportunity = { hasOpportunity: false, display: '' };
     let tmpModification: Modification = {
       phast: {
         losses: {},
@@ -518,33 +499,6 @@ export class PhastComponent implements OnInit {
     this.saveNewMod(tmpModification);
   }
 
-  disclaimerToast() {
-    if (this.settingsDbService.globalSettings.disableDisclaimer != true) {
-      this.toastData.title = 'Disclaimer';
-      this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
-      this.showToast = true;
-      this.cd.detectChanges();
-    }
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    };
-    this.cd.detectChanges();
-  }
-
-  disableDisclaimer() {
-    this.settingsDbService.globalSettings.disableDisclaimer = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
-    this.hideToast();
-  }
-
   addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
     newSettings.assessmentId = this.assessment.id;
@@ -588,7 +542,21 @@ export class PhastComponent implements OnInit {
       this.getSettings();
       this._phast.lossDataUnits = this.settings.unitsOfMeasure;
     }
+  }
 
+
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disablePhastTutorial) {
+      this.showWelcomeScreen = true;
+      this.phastService.modalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disablePhastTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    this.showWelcomeScreen = false;
+    this.phastService.modalOpen.next(false);
   }
 
 }

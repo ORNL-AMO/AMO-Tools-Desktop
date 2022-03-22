@@ -12,7 +12,7 @@ import { HelpPanelModule } from '../help-panel/help-panel.module';
 import { FsatSankeyModule } from '../../shared/fsat-sankey/fsat-sankey.module';
 import { VariableFrequencyDriveFormComponent } from './explore-opportunities-form/variable-frequency-drive-form/variable-frequency-drive-form.component';
 import { CalculatePressuresModule } from '../calculate-pressures/calculate-pressures.module';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 import { ToastModule } from '../../shared/toast/toast.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';

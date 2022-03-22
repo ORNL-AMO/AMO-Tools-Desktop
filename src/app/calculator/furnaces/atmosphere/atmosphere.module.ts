@@ -12,7 +12,7 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 
 

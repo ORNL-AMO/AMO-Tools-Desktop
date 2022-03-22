@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { MeteredEnergyModule } from './metered-energy/metered-energy.module';
 import { LossesModule } from './losses/losses.module';
 import { DesignedEnergyModule } from './designed-energy/designed-energy.module';
@@ -16,7 +16,6 @@ import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { PhastService } from './phast.service';
 import { SettingsModule } from '../settings/settings.module';
 import { AuxEquipmentModule } from './aux-equipment/aux-equipment.module';
-import { SankeyModule } from './sankey/sankey.module';
 import { PhastReportModule } from './phast-report/phast-report.module';
 import { PhastDiagramComponent } from './phast-diagram/phast-diagram.component';
 import { PhastResultsService } from './phast-results.service';
@@ -41,6 +40,7 @@ import { PhastValidService } from './phast-valid.service';
 import { FlueGasModule } from '../calculator/furnaces/flue-gas/flue-gas.module';
 import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +53,8 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     PhastCalculatorTabsComponent,
     ModificationNavbarComponent,
     ModificationListComponent,
-    AddModificationComponent
+    AddModificationComponent,
+    WelcomeScreenComponent
   ],
   exports: [
   ],
@@ -67,7 +68,6 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     AuxEquipmentModule,
     DesignedEnergyModule,
     MeteredEnergyModule,
-    SankeyModule,
     PhastReportModule,
     PreAssessmentModule,
     O2EnrichmentModule,

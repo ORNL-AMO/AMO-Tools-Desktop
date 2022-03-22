@@ -24,27 +24,15 @@ export class EnergyInputExhaustGasCompareService {
 
   compareLoss(index: number): boolean {
     return (
-      this.compareExcessAir(index) ||
-      this.compareCombustionAirTemp(index) ||
-      this.compareExhaustGasTemp(index) ||
-      this.compareTotalHeatInput(index) ||
-      this.compareElectricalPowerInput(index)
+      this.compareAvailableHeat(index) ||
+      this.compareTotalHeatInput(index)
     );
   }
-  compareExcessAir(index: number): boolean {
-    return this.compare(this.baselineEnergyInputExhaustGasLosses[index].excessAir, this.modifiedEnergyInputExhaustGasLosses[index].excessAir);
-  }
-  compareCombustionAirTemp(index: number): boolean {
-    return this.compare(this.baselineEnergyInputExhaustGasLosses[index].combustionAirTemp, this.modifiedEnergyInputExhaustGasLosses[index].combustionAirTemp);
-  }
-  compareExhaustGasTemp(index: number): boolean {
-    return this.compare(this.baselineEnergyInputExhaustGasLosses[index].exhaustGasTemp, this.modifiedEnergyInputExhaustGasLosses[index].exhaustGasTemp);
+  compareAvailableHeat(index: number): boolean {
+    return this.compare(this.baselineEnergyInputExhaustGasLosses[index].availableHeat, this.modifiedEnergyInputExhaustGasLosses[index].availableHeat);
   }
   compareTotalHeatInput(index: number): boolean {
     return this.compare(this.baselineEnergyInputExhaustGasLosses[index].totalHeatInput, this.modifiedEnergyInputExhaustGasLosses[index].totalHeatInput);
-  }
-  compareElectricalPowerInput(index: number): boolean {
-    return this.compare(this.baselineEnergyInputExhaustGasLosses[index].electricalPowerInput, this.modifiedEnergyInputExhaustGasLosses[index].electricalPowerInput);
   }
 
   compareBaselineModification(baseline: PHAST, modification: PHAST) {
@@ -65,11 +53,8 @@ export class EnergyInputExhaustGasCompareService {
 
   compareBaseModLoss(baseline: EnergyInputExhaustGasLoss, modification: EnergyInputExhaustGasLoss): boolean {
     return (
-      this.compare(baseline.excessAir, modification.excessAir) ||
-      this.compare(baseline.combustionAirTemp, modification.combustionAirTemp) ||
-      this.compare(baseline.exhaustGasTemp, modification.exhaustGasTemp) ||
-      this.compare(baseline.totalHeatInput, modification.totalHeatInput) ||
-      this.compare(baseline.electricalPowerInput, modification.electricalPowerInput)
+      this.compare(baseline.availableHeat, modification.availableHeat) ||
+      this.compare(baseline.totalHeatInput, modification.totalHeatInput)
     );
   }
 

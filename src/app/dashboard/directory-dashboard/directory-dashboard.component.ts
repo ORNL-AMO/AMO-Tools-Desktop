@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { DirectoryDashboardService } from './directory-dashboard.service';
 import { DashboardService } from '../dashboard.service';
 import { DirectoryItem, FilterDashboardBy } from '../../shared/models/directory-dashboard';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { AssessmentService } from '../assessment.service';
 
 @Component({
   selector: 'app-directory-dashboard',
@@ -32,9 +34,11 @@ export class DirectoryDashboardComponent implements OnInit {
   sortBy: { value: string, direction: string };
   sortBySub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService,
-    private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService) { }
+    private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
+    private settingsDbService: SettingsDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
+
     this.activatedRoute.params.subscribe(params => {
       this.directoryId = Number(params['id']);
       this.directoryDashboardService.selectedDirectoryId.next(this.directoryId);
@@ -62,6 +66,10 @@ export class DirectoryDashboardComponent implements OnInit {
     this.sortBySub = this.directoryDashboardService.sortBy.subscribe(val => {
       this.sortBy = val;
     });
+
+    if(!this.settingsDbService.globalSettings.disableDashboardTutorial){
+      this.assessmentService.showTutorial.next('dashboard-tutorial');
+    }
   }
 
   ngOnDestroy() {

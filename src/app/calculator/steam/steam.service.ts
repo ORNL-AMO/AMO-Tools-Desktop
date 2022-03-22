@@ -6,6 +6,7 @@ import { BoilerOutput, SaturatedPropertiesOutput, SteamPropertiesOutput, Deaerat
 import { SSMTInputs } from '../../shared/models/steam/ssmt';
 import { ConvertSteamService } from './convert-steam.service';
 import { SteamSuiteApiService } from '../../tools-suite-api/steam-suite-api.service';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Injectable()
@@ -16,10 +17,15 @@ export class SteamService {
     pressureOrTemperature: number
   };
 
+  steamModelerError: BehaviorSubject<string>;
   steamPropertiesInput: SteamPropertiesInput;
   saturatedPropertiesData: Array<{ pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number }>;
   steamPropertiesData: Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number }>;
-  constructor(private convertUnitsService: ConvertUnitsService, private steamSuiteApiService: SteamSuiteApiService, private convertSteamService: ConvertSteamService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, 
+    private steamSuiteApiService: SteamSuiteApiService, 
+    private convertSteamService: ConvertSteamService) {
+    this.steamModelerError = new BehaviorSubject<string>(undefined);
+   }
 
   test() {
   }
@@ -290,15 +296,14 @@ export class SteamService {
       results.outletIdealTemperature = idealResults.outletTemperature;
       results.outletIdealVolume = idealResults.outletVolume;
     } else {
-      let inletSpecificEntropy = results.inletSpecificEntropy
       let idealOutletInput: SteamPropertiesInput = {
         thermodynamicQuantity: 2,
         pressure: inputCpy.outletSteamPressure,
-        quantityValue: inletSpecificEntropy
+        quantityValue: results.inletSpecificEntropy
       }
       let idealOutletResults: SteamPropertiesOutput = this.steamSuiteApiService.steamProperties(idealOutletInput);
       results.outletIdealPressure = idealOutletResults.pressure;
-      results.outletIdealQuality = results.outletQuality;
+      results.outletIdealQuality = idealOutletResults.quality;
       results.outletIdealSpecificEnthalpy = idealOutletResults.specificEnthalpy;
       results.outletIdealSpecificEntropy = idealOutletResults.specificEntropy;
       results.outletIdealTemperature = idealOutletResults.temperature;
@@ -312,8 +317,66 @@ export class SteamService {
 
   steamModeler(inputData: SSMTInputs, settings: Settings): SSMTOutput {
     let convertedInputData: SSMTInputs = this.convertSteamService.convertInputData(JSON.parse(JSON.stringify(inputData)), settings);
-    let outputData: SSMTOutput = this.steamSuiteApiService.steamModeler(convertedInputData);
-    outputData = this.convertSteamService.convertSsmtOutput(outputData, settings);
-    return outputData;
+    let outputData: SSMTOutput;
+    try {
+      outputData = this.steamSuiteApiService.steamModeler(convertedInputData);
+    } catch (err) {
+      // Rare/wildy unrealistic cases Or when has preheat makeup water == true --> will crash modeler
+      this.steamModelerError.next('Steam Properties cannot be calculated. Please check input values.');
+      let outputData = this.getEmptyResults();
+      outputData.hasSteamModelerError = true;
+      return outputData;
+    }
+    this.steamModelerError.next(undefined);
+    return this.convertSteamService.convertSsmtOutput(outputData, settings);
+  }
+
+  getEmptyResults(): SSMTOutput {
+    return {
+      boilerOutput: undefined,
+
+      highPressureHeaderSteam: undefined,
+      highPressureSteamHeatLoss: undefined,
+
+      mediumPressureToLowPressurePrv: undefined,
+      highPressureToMediumPressurePrv: undefined,
+
+      highPressureToLowPressureTurbine: undefined,
+      highPressureToMediumPressureTurbine: undefined,
+      highPressureCondensateFlashTank: undefined,
+
+      lowPressureHeaderSteam: undefined,
+      lowPressureSteamHeatLoss: undefined,
+
+      mediumPressureToLowPressureTurbine: undefined,
+      mediumPressureCondensateFlashTank: undefined,
+
+      mediumPressureHeaderSteam: undefined,
+      mediumPressureSteamHeatLoss: undefined,
+
+      blowdownFlashTank: undefined,
+
+      highPressureCondensate: undefined,
+      lowPressureCondensate: undefined,
+      mediumPressureCondensate: undefined,
+      combinedCondensate: undefined,
+      returnCondensate: undefined,
+      condensateFlashTank: undefined,
+
+      makeupWater: undefined,
+      makeupWaterAndCondensate: undefined,
+
+      condensingTurbine: undefined,
+      deaeratorOutput: undefined,
+
+      highPressureProcessSteamUsage: undefined,
+      mediumPressureProcessSteamUsage: undefined,
+      lowPressureProcessSteamUsage: undefined,
+      lowPressureVentedSteam: undefined,
+      heatExchanger: undefined,
+      operationsOutput: undefined,
+      co2EmissionsOutput: undefined,
+    }
+    
   }
 }

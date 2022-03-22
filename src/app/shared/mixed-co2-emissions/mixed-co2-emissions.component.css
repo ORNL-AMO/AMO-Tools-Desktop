@@ -11,7 +11,7 @@
 
 .input-group-addon.units{
     border-left: solid 1px;
-    border-right: none;
+    /* border-right: none; */
 }
 
 .card-footer {
@@ -34,9 +34,6 @@
     background-color: #dc3545;
 }
 
-.centered {
-    justify-content: center;
-}
 
 .section-label {
     padding-bottom: 5px;
@@ -49,4 +46,8 @@ form {
 
 .click-link {
     padding-left: 5px;
+}
+
+.section-label{
+    width: 100%;
 }

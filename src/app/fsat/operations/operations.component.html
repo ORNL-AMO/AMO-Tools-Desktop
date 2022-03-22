@@ -14,7 +14,7 @@
         <span class="input-group-addon op-hour-addon units">
           <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
         </span>
-        <input name="operatingHours" type="number" min="0" max="1" step="any" class="form-control"
+        <input name="operatingHours" type="number" class="form-control"
           formControlName="operatingHours" id="{{'operatingHours_'+idString}}" (input)="save()"
           (focus)="focusField('operatingHours')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">hrs/yr</span>

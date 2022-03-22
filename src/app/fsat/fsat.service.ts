@@ -11,7 +11,6 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { FanEfficiencyInputs } from '../calculator/fans/fan-efficiency/fan-efficiency.service';
 import { ConvertFanAnalysisService } from '../calculator/fans/fan-analysis/convert-fan-analysis.service';
 import { FansSuiteApiService } from '../tools-suite-api/fans-suite-api.service';
-import { FormGroup } from '@angular/forms';
 import { OperationsService } from './operations/operations.service';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service'
 
@@ -72,6 +71,8 @@ export class FsatService {
 
   getPsychrometricWetBulb(inputs: BaseGasDensity, settings: Settings): PsychrometricResults {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
+    //hard coded per issue 5224
+    inputs.specificHeatGas = .24;
     let psychrometricResults: PsychrometricResults = this.fansSuiteApiService.getBaseGasDensityWetBulb(inputs);
     psychrometricResults = this.convertFanAnalysisService.convertPsychrometricResults(psychrometricResults, settings);
     return psychrometricResults;

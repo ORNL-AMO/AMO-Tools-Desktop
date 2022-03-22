@@ -89,9 +89,22 @@ export class AirHeatingService {
         inputCopy = this.convertPercentInputs(inputCopy);
         let airHeatingOutput: AirHeatingOutput = this.processHeatingApiService.airHeatingUsingExhaust(inputCopy);
         airHeatingOutput = this.convertResultUnits(airHeatingOutput, settings);
-        airHeatingOutput.costSavings = airHeatingOutput.energySavings * inputCopy.fuelCost;
-        airHeatingOutput.baselineEnergy = inputCopy.fireRate * inputCopy.operatingHours;
-        airHeatingOutput.modificationEnergy = inputCopy.fireRate * inputCopy.operatingHours - airHeatingOutput.energySavings;
+        let conversionHelper: number;
+        if (settings.unitsOfMeasure == "Metric"){
+          conversionHelper = this.convertUnitsService.value(1).from('GJ').to(settings.phastRollupUnit);
+        } else {
+          conversionHelper = this.convertUnitsService.value(1).from('MMBtu').to(settings.phastRollupUnit);
+        }
+
+        let fuelCost: number = inputCopy.fuelCost;
+        fuelCost = fuelCost / conversionHelper;
+
+        let fireRate: number = inputCopy.fireRate;
+        fireRate = fireRate * conversionHelper;
+
+        airHeatingOutput.costSavings = airHeatingOutput.energySavings * fuelCost;
+        airHeatingOutput.baselineEnergy = fireRate * inputCopy.operatingHours;
+        airHeatingOutput.modificationEnergy = fireRate * inputCopy.operatingHours - airHeatingOutput.energySavings;
         this.airHeatingOutput.next(airHeatingOutput);
     }
   }
@@ -179,15 +192,16 @@ export class AirHeatingService {
   }
 
   convertResultUnits(output: AirHeatingOutput, settings: Settings): AirHeatingOutput {
+
+    output.energySavings = this.convertUnitsService.value(output.energySavings).from('MMBtu').to(settings.phastRollupUnit);
+    output.energySavings = this.roundVal(output.energySavings, 2);
+
     if (settings.unitsOfMeasure == "Metric") {
       output.hxColdAir = this.convertUnitsService.value(output.hxColdAir).from('btuhr').to('kJh');
       output.hxColdAir = this.roundVal(output.hxColdAir, 2);
 
       output.hxOutletExhaust = this.convertUnitsService.value(output.hxOutletExhaust).from('F').to('C');
       output.hxOutletExhaust = this.roundVal(output.hxOutletExhaust, 2);
-
-      output.energySavings = this.convertUnitsService.value(output.energySavings).from('MMBtu').to('GJ');
-      output.energySavings = this.roundVal(output.energySavings, 2);
 
       output.heatCapacityFlue = this.convertUnitsService.value(output.heatCapacityFlue).from('Btu/F').to('J/C');
       output.heatCapacityFlue = this.roundVal(output.heatCapacityFlue, 4);

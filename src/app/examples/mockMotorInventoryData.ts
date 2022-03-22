@@ -8,14 +8,14 @@ export const MockMotorInventory: InventoryItem = {
             "energyType": 'electricity',
             "energySource": '',
             "fuelType": '',
-            "totalEmissionOutputRate": 430.78,
+            "totalEmissionOutputRate": 401.07,
             "electricityUse": 0,
             "eGridRegion": '',
-            "eGridSubregion": 'SRTV',
+            "eGridSubregion": 'U.S. Average',
             "totalEmissionOutput": 0,
             "userEnteredBaselineEmissions": false,
-            "userEnteredModificationEmissions": false,
-            "zipcode": '37830',
+            "userEnteredModificationEmissions": true,
+            "zipcode": '00000',
         },
         "departments": [
             {
@@ -344,7 +344,7 @@ export const MockMotorInventory: InventoryItem = {
                         "id": "r1hkhnkxp",
                         "departmentId": "a2jd7ua9i",
                         "description": "",
-                        "name": "Adhesive Agitetor ",
+                        "name": "Adhesive Agitator ",
                         "batchAnalysisData": {
                             "modifiedCost": 19538,
                             "modifiedPower": 150,

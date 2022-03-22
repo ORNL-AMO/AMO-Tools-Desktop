@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { CustomMaterialsService, MaterialData } from './custom-materials.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ImportExportService } from '../../dashboard/import-export/import-export.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 

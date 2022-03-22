@@ -6,7 +6,7 @@ import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/e
 import { EnergyInputExhaustGasService } from './energy-input-exhaust-gas.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { PhastResultsService } from '../../phast-results.service';
+import { EnergyInputWarnings, PhastResultsService } from '../../phast-results.service';
 
 @Component({
   selector: 'app-energy-input-exhaust-gas-losses',
@@ -39,27 +39,13 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
 
   _exhaustGasLosses: Array<EnInputExGasObj>;
   firstChange: boolean = true;
-  availableHeat: number = 0;
   resultsUnit: string;
   lossesLocked: boolean = false;
   showError: boolean = false;
   electricalHeatDelivered: number = 0;
   energyInputTotal: number = 0;
+  warnings: EnergyInputWarnings = {energyInputHeatDelivered: null};
   constructor(private phastService: PhastService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private phastResultsService: PhastResultsService) { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (changes.addLossToggle) {
-        this.addLoss();
-      } else if (changes.modificationIndex) {
-        this._exhaustGasLosses = new Array();
-        this.initForms();
-      }
-    }
-    else {
-      this.firstChange = false;
-    }
-  }
 
   ngOnInit() {
     if (this.settings.energyResultUnit !== 'kWh') {
@@ -77,6 +63,21 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.addLossToggle) {
+        this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._exhaustGasLosses = new Array();
+        this.initForms();
+      }
+    }
+    else {
+      this.firstChange = false;
+    }
+  }
+
+
   initForms() {
     if (this.losses.energyInputExhaustGasLoss) {
       let lossIndex = 1;
@@ -91,7 +92,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           });
-        }
+        }    
         lossIndex++;
         this.calculate(tmpLoss);
         this._exhaustGasLosses.push(tmpLoss);
@@ -120,10 +121,10 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
       let results = this.phastService.energyInputExhaustGasLosses(tmpLoss, this.settings);
       loss.heatLoss = results.heatDelivered;
       loss.exhaustGas = results.exhaustGasLosses;
-      this.availableHeat = results.availableHeat;
       let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
       this.energyInputTotal = tmpResults.grossHeatInput;
       this.electricalHeatDelivered = this.energyInputTotal - loss.heatLoss - loss.exhaustGas;
+      this.warnings.energyInputHeatDelivered = this.phastResultsService.checkEnergyInputWarnings(this.electricalHeatDelivered);
     } else {
       loss.heatLoss = 0;
       loss.exhaustGas = 0;

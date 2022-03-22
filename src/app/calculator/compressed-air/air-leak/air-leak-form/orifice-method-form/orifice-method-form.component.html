@@ -76,7 +76,7 @@
           formControlName="supplyPressure" id="supplyPressure" onfocus="this.select();"
           (input)="save()"
           (focus)="changeField('supplyPressure')">
-        <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
         <span class="alert-danger pull-right small"
         *ngIf="orificeMethodForm.controls.supplyPressure.invalid && !orificeMethodForm.controls.supplyPressure.pristine">

@@ -5,10 +5,10 @@ import { SSMT, SSMTInputs } from "../models/steam/ssmt";
 import { Assessment } from "../models/assessment";
 import { CalculateLossesService } from "../../ssmt/calculate-losses.service";
 import { SsmtService } from "../../ssmt/ssmt.service";
-import { SSMTSankeyNode } from "../models/steam/sankey.model";
 import { DecimalPipe } from "@angular/common";
+import { PlotlyService } from "angular-plotly.js";
+import { SankeyNode } from "../models/sankey";
 
-import * as Plotly from "plotly.js";
 
 @Component({
   selector: 'app-ssmt-sankey',
@@ -33,7 +33,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   losses: SSMTLosses;
   results: { inputData: SSMTInputs, outputData: SSMTOutput };
   links: Array<{ source: number, target: number }> = [];
-  nodes: Array<SSMTSankeyNode> = [];
+  nodes: Array<SankeyNode> = [];
 
   gradientStartColorOrange: string = '#c77f0a';
   gradientEndColorOrange: string = '#f6b141';
@@ -54,7 +54,8 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   constructor(private calculateLossesService: CalculateLossesService, private ssmtService: SsmtService,
     private _dom: ElementRef,
     private renderer: Renderer2,
-    private decimalPipe: DecimalPipe
+    private decimalPipe: DecimalPipe,
+    private plotlyService: PlotlyService
     ) { }
 
   ngOnInit(){
@@ -132,9 +133,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   renderSankey() {
-    if (this.ngChart) {
-      Plotly.purge(this.ngChart.nativeElement); 
-    }
+    if (this.results && !this.results.outputData.hasSteamModelerError) {
 
     let sankeyLink = {
       value: this.nodes.map(node => node.value),
@@ -212,8 +211,10 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       responsive: true,
     };
 
-    Plotly.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
+    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
     .then(chart => {
+      this.addGradientElement();
+      this.buildSvgArrows();
       chart.on('plotly_restyle', () => {
         this.setGradient();
       });
@@ -230,8 +231,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
         this.setGradient();
       });
     });
-    this.addGradientElement();
-    this.buildSvgArrows();
+    }
   }
 
   buildLinks() {  
@@ -253,7 +253,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       }
   }
 
-  buildNodes(): Array<SSMTSankeyNode> {
+  buildNodes(): Array<SankeyNode> {
     this.nodes = [];
     let energyInput = this.losses.fuelEnergy + this.losses.makeupWaterEnergy;
     let stackLosses = this.losses.stack;
@@ -275,7 +275,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let originalEnergyInput = energyInput;
     let energyInputValue = (energyInput / originalEnergyInput) * 100;
     
-    if (this.results.outputData.deaeratorOutput.feedwaterEnergyFlow) {
+    if (this.results.outputData && !this.results.outputData.hasSteamModelerError && this.results.outputData.deaeratorOutput.feedwaterEnergyFlow) {
       returnedCondensate = this.results.outputData.deaeratorOutput.feedwaterEnergyFlow;
       returnedCondensateValue = (returnedCondensate / energyInput) * 100;
     }
@@ -676,7 +676,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let fillOpacity = 1;
     let fill: string;
     let returnedCondensateNode = this.nodes.length - 2;
-
+    // debugger
     for (let i = 0; i < links.length; i++) {
       if (this.redLinkPaths.includes(i + 1)) {
         // To replicate Plotly event hover/unhover fill opacity
@@ -700,8 +700,10 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   setNodeLabelSpacing(nodeLabel) {
-    let labelText = nodeLabel.querySelector('.node-label-text-path');
-    labelText.setAttribute('startOffset', '3%');
+    let labelText = nodeLabel.querySelector('.node-label');
+    if(labelText){
+      labelText.setAttribute('startOffset', '3%');
+    }
   }
 
   buildSvgArrows() {

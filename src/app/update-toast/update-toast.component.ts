@@ -83,7 +83,6 @@ export class UpdateToastComponent implements OnInit {
   }
 
   updateNow() {
-    this.settingsDbService.globalSettings.disableDisclaimer = false;
     this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
     this.downloadingUpdate = true;
     this.cd.detectChanges();

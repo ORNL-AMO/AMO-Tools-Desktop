@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Calculator } from '../../../../shared/models/calculators';
 import { Directory } from '../../../../shared/models/directory';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -66,10 +66,12 @@ export class PreAssessmentItemComponent implements OnInit {
   }
 
   calculateData() {
-    this.numUnits = this.calculator.preAssessments.length;
-    let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'MMBtu', false);
-    this.energyUsed = _.sumBy(tmpResults, 'value');
-    this.energyCost = _.sumBy(tmpResults, 'energyCost');
+    if (this.calculator.preAssessments) {
+      this.numUnits = this.calculator.preAssessments.length;
+      let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'MMBtu', false);
+      this.energyUsed = _.sumBy(tmpResults, 'value');
+      this.energyCost = _.sumBy(tmpResults, 'energyCost');
+    } 
   }
 
   deletePreAssessment() {

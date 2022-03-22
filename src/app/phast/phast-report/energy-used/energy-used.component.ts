@@ -71,22 +71,28 @@ export class EnergyUsedComponent implements OnInit {
   fuelUsedUnit: string;
   baseEnergyUnit: string;
   electricityHeatingValue: number;
-  constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, 
-    private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService,
-    private sqlDbApiService: SqlDbApiService) { }
+
+  phastResults: PhastResults;
+  constructor(private designedEnergyService: DesignedEnergyService, 
+    private meteredEnergyService: MeteredEnergyService, 
+    private phastResultsService: PhastResultsService, 
+    private suiteDbService: SuiteDbService, 
+    private sqlDbApiService: SqlDbApiService,
+    private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    let tmpResults = this.phastResultsService.getResults(this.phast, this.settings);
+    this.phastResults = this.phastResultsService.getResults(this.phast, this.settings);
     this.calculatedResults = this.phastResultsService.calculatedByPhast(this.phast, this.settings);
     this.electricityHeatingValue = this.convertUnitsService.value(9800).from('Btu').to(this.settings.energyResultUnit);
     this.getUnits();
 
     if (this.settings.energySourceType === 'Steam') {
-      this.setSteamVals(tmpResults);
+      this.setSteamVals();
     } else if (this.settings.energySourceType === 'Electricity') {
-      this.setElectrotechVals(tmpResults);
+      this.setElectrotechVals();
+      this.setFuelVals();
     } else if (this.settings.energySourceType === 'Fuel') {
-      this.setFuelVals(tmpResults);
+      this.setFuelVals();
     }
 
     if (this.phast.designedEnergy) {
@@ -97,7 +103,7 @@ export class EnergyUsedComponent implements OnInit {
   }
 
   getUnits() {
-    if (this.settings.energyResultUnit !== 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh' && this.settings.energySourceType !== 'Electricity') {
       this.baseEnergyUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.baseEnergyUnit = this.settings.energyResultUnit;
@@ -124,8 +130,11 @@ export class EnergyUsedComponent implements OnInit {
 
   }
 
-  setElectrotechVals(tmpResults: PhastResults) {
-    this.electricEnergyUsed = tmpResults.grossHeatInput;
+  setElectrotechVals() {
+    this.electricEnergyUsed = this.phastResults.electricalHeatDelivered;
+    if (this.settings.furnaceType === 'Electric Arc Furnace (EAF)') {
+      this.electricEnergyUsed = this.phastResults.hourlyEAFResults.electricEnergyUsed; 
+    }
     if (this.phast.meteredEnergy) {
       if (this.phast.meteredEnergy.meteredEnergyElectricity) {
         this.meteredResults = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings);
@@ -133,8 +142,8 @@ export class EnergyUsedComponent implements OnInit {
     }
   }
 
-  setSteamVals(tmpResults: PhastResults) {
-    this.steamEnergyUsed = tmpResults.grossHeatInput;
+  setSteamVals() {
+    this.steamEnergyUsed = this.phastResults.grossHeatInput;
     if (this.phast.meteredEnergy) {
       if (this.phast.meteredEnergy.meteredEnergySteam) {
         this.meteredResults = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings);
@@ -143,29 +152,49 @@ export class EnergyUsedComponent implements OnInit {
     }
   }
 
-  setFuelVals(tmpResults: PhastResults) {
-    this.fuelEnergyUsed = tmpResults.grossHeatInput;
+  setFuelVals() {
+    this.fuelEnergyUsed = this.phastResults.grossHeatInput;
+    if (this.settings.energySourceType === 'Electricity') {
+      if (this.settings.furnaceType === 'Electric Arc Furnace (EAF)') {
+        this.fuelName = 'Natural Gas';
+        this.fuelHeatingValue = this.phastResults.hourlyEAFResults.naturalGasHeatingValue; 
+        this.fuelEnergyUsed = this.phastResults.hourlyEAFResults.naturalGasUsed;
+        if (this.settings.unitsOfMeasure == 'Imperial') {
+          this.energyPerMassUnit = 'Btu/lb';
+          this.baseEnergyUnit = 'MMBtu';
+        } else {
+          this.energyPerMassUnit = 'kJ/kg';
+          this.baseEnergyUnit = 'GJ';
+        }
+      } else {
+        this.fuelEnergyUsed = this.phastResults.energyInputHeatDelivered + this.phastResults.totalExhaustGas;
+      }
+    }
+
     if (this.phast.meteredEnergy) {
       if (this.phast.meteredEnergy.meteredEnergyFuel) {
         this.meteredResults = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings);
       }
     }
 
-    if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
-      let gas: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
-      if (gas) {
-        this.fuelHeatingValue = gas.heatingValue;
-        this.fuelName = gas.substance;
+    if (this.phast.losses.flueGasLosses) {
+      if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
+        let gas: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
+        if (gas) {
+          this.fuelHeatingValue = gas.heatingValue;
+          this.fuelName = gas.substance;
+        }
+      } else if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
+        let gas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
+        if (gas) {
+          this.fuelHeatingValue = gas.heatingValue;
+          this.fuelName = gas.substance;
+        }
       }
-    } else if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
-      let gas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
-      if (gas) {
-        this.fuelHeatingValue = gas.heatingValue;
-        this.fuelName = gas.substance;
-      }
+      this.fuelHeatingValue = this.convertResult(this.fuelHeatingValue, this.settings);
     }
-    this.fuelHeatingValue = this.convertResult(this.fuelHeatingValue, this.settings);
   }
+
 
   convertResult(val: number, settings: Settings): number {
     if (settings.unitsOfMeasure === 'Metric') {

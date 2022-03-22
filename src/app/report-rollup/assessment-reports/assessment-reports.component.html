@@ -1,5 +1,8 @@
 <!-- NOT PRINT -->
 <div *ngIf="!printView">
+    <div class="assessment-item" id="rollup_graphs">
+        <app-report-summary-graphs class="w-100"></app-report-summary-graphs>
+    </div>
     <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
         <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true"
             [settings]="item.settings">
@@ -42,6 +45,9 @@
 
 <!-- PRINT!! -->
 <div class="print-container" *ngIf="printView">
+    <div class="assessment-item" id="rollup_graphs">
+        <app-report-summary-graphs-print class="w-100"></app-report-summary-graphs-print>
+    </div>
     <div *ngIf="_psatAssessments.length > 0 && rollupPrintOptions.printPsatRollup" class="row">
         <div class="col-12">
             <app-psat-rollup [calculators]="selectedPsatCalcs" [inPrintView]="true">

@@ -1,140 +1,144 @@
 <div #ngChartContainer class="panel-chart-container" [ngClass]="{'expanded-chart': expanded}">
-    <div *ngIf="expanded" class="row">
-      <div class="col-12">
-        <div class="graph-btn-container">
-          <span class="fa fa-compress" (click)="contractChart()" (mouseenter)="initTooltip('btnCollapseChart')" (mouseleave)="hideTooltip('btnCollapseChart')"></span>
-          <app-simple-tooltip [message]="'Collapse graph'" [hover]="hoverBtnCollapse" [display]="displayCollapseTooltip"
+  <div *ngIf="expanded" class="row">
+    <div class="col-12">
+      <div class="graph-btn-container">
+        <span class="fa fa-compress" (click)="contractChart()" (mouseenter)="initTooltip('btnCollapseChart')"
+          (mouseleave)="hideTooltip('btnCollapseChart')"></span>
+        <app-simple-tooltip [message]="'Collapse graph'" [hover]="hoverBtnCollapse" [display]="displayCollapseTooltip"
           [adjustLeft]="20" [adjustPercent]="false"></app-simple-tooltip>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="expanded" class="w-100 p-3">
-      <div class="w-100" id="expandedChartDiv"></div>
-      <div class="col-md-12">
-        <form class="w-75 mx-auto">
-          <div class="form-group">
-              <div class="input-group">
-                <select class="form-control" name="selectedAxis" id="selectedAxis"
-                [(ngModel)]="selectedAxis" (change)="setAxisAndUpdate()">
-                <option *ngFor="let axis of selectedAxisOptions" [ngValue]="axis.value" [innerHTML]="axis.display"></option>
-              </select>
-            </div>
-          </div>
-        </form>
       </div>
     </div>
   </div>
-  
-  <div class="w-100 tab-panel-background p-2">
-    <div class="w-100" id="tabPanelDiv"></div>
+  <div *ngIf="expanded" class="w-100 p-3">
+    <div class="w-100" id="expandedChartDiv" #expandedChartDiv></div>
     <div class="col-md-12">
       <form class="w-75 mx-auto">
         <div class="form-group">
-            <div class="input-group">
-              <select class="form-control" name="selectedAxis" id="selectedAxis"
-              [(ngModel)]="selectedAxis" (change)="setAxisAndUpdate()">
-              <option *ngFor="let axis of selectedAxisOptions" [ngValue]="axis.value" [innerHTML]="axis.display"></option>
+          <div class="input-group">
+            <select class="form-control" name="selectedAxis" id="selectedAxis" [(ngModel)]="selectedAxis"
+              (change)="setAxisAndUpdate()">
+              <option *ngFor="let axis of selectedAxisOptions" [ngValue]="axis.value" [innerHTML]="axis.display">
+              </option>
             </select>
           </div>
         </div>
       </form>
     </div>
-    <div class="col-md-12 mt-3">
-      <div class="graph-btn-container">
-        <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
-        <app-simple-tooltip [message]="'Toggle graph grid lines'" [hover]="hoverBtnGridLines" [display]="displayGridLinesTooltip"
-          [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
+  </div>
+</div>
+
+<div class="w-100 tab-panel-background p-2">
+  <div class="w-100" id="tabPanelDiv" #panelChartDiv></div>
+  <div class="col-md-12">
+    <form class="w-75 mx-auto">
+      <div class="form-group">
+        <div class="input-group">
+          <select class="form-control" name="selectedAxis" id="selectedAxis" [(ngModel)]="selectedAxis"
+            (change)="setAxisAndUpdate()">
+            <option *ngFor="let axis of selectedAxisOptions" [ngValue]="axis.value" [innerHTML]="axis.display"></option>
+          </select>
+        </div>
       </div>
-      <div class="graph-btn-container">
-        <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')" (mouseleave)="hideTooltip('btnExpandChart')"></span>
-        <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand" [display]="displayExpandTooltip"
-          [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>
-      </div>
+    </form>
+  </div>
+  <div class="col-md-12 mt-3">
+    <div class="graph-btn-container">
+      <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')"
+        (mouseleave)="hideTooltip('btnGridLines')"></span>
+      <app-simple-tooltip [message]="'Toggle graph grid lines'" [hover]="hoverBtnGridLines"
+        [display]="displayGridLinesTooltip" [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
+    </div>
+    <div class="graph-btn-container">
+      <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')"
+        (mouseleave)="hideTooltip('btnExpandChart')"></span>
+      <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand"
+        [display]="displayExpandTooltip" [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>
     </div>
   </div>
+</div>
 
-  <div class="d-flex flex-column my-2 p-2 scroll-item data-summary">
-    <label class="group-label bold">Data Summary</label>
-    <table class="table pt-2 d-flex">
-      <tbody class="w-100">
-        <tr class="bold small text-center no-border">
-          <th class="bold w-25">Key</th>
-          <th class="bold w-25">Fuel Savings (%)</th>
-          <th class="bold w-25">Combustion Temp 
-            (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
-          </th>
-          <th class="bold w-25">Flue O2 (%)
-          </th>
-          <th class="bold w-25">Fuel Temp
-            (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
-          </th>
-        </tr>
-        <tr *ngFor="let point of selectedDataPoints; let index = index">
+<div class="d-flex flex-column my-2 p-2 scroll-item data-summary">
+  <label class="group-label bold">Data Summary</label>
+  <table class="table pt-2 d-flex">
+    <tbody class="w-100">
+      <tr class="bold small text-center no-border">
+        <th class="bold w-25">Key</th>
+        <th class="bold w-25">Fuel Savings (%)</th>
+        <th class="bold w-25">Combustion Temp
+          (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>)
+        </th>
+        <th class="bold w-25">Flue O2 (%)
+        </th>
+        <th class="bold w-25">Fuel Temp
+          (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>)
+        </th>
+      </tr>
+      <tr *ngFor="let point of selectedDataPoints; let index = index">
 
-          <td class="text-center">
-            <div class="graph-point-name">
-              {{ point.name }}
-            </div>
-            <div class="spline mb-1" [ngStyle]="{'background-color': point.pointColor}">
-            </div>
-          </td>
-          <td class="text-center">
-            <span *ngIf="point.pointY">
-              {{point.pointY | number: '1.1-1'}}
-            </span>
-            <span *ngIf="!point.pointY">
-              &mdash; &mdash;
-            </span>
-          </td>
-          <td class="text-center">{{point.combAirTemp}}</td>
-          <td class="text-center">{{point.o2FlueGas | number: '1.0-2'}}</td>
-          <td class="text-center">{{point.flueGasTemp | number: '1.0-2'}}</td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
-
-
-    <div class="hidden-copy-table">
-      <label class="group-label bold">Data Summary</label>
-      <table #dataSummaryTable class="table pt-2 d-flex">
-        <tbody class="w-100">
-          <tr class="bold small text-center no-border">
-            <th class="bold w-25">Key</th>
-            <th class="bold w-25">Fuel Savings (%)</th>
-            <th class="bold w-25">Combustion Temp 
-              (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
-            </th>
-            <th class="bold w-25">Flue O2 (%)
-            </th>
-            <th class="bold w-25">Fuel Temp
-              (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
-            </th>
-          </tr>
-          <tr *ngFor="let point of selectedDataPoints; let index = index">
-            <td class="text-center">
-              {{ point.name }}
-            </td>
-            <td class="text-center">
-              <span *ngIf="point.pointY">
-                {{point.pointY | number: '1.1-1'}}
-              </span>
-              <span *ngIf="!point.pointY">
-                &mdash; &mdash;
-              </span>
-            </td>
-            <td class="text-center">{{point.combAirTemp}}</td>
-            <td class="text-center">{{point.o2FlueGas | number: '1.0-2'}}</td>
-            <td class="text-center">{{point.flueGasTemp | number: '1.0-2'}}</td>
-          </tr>
-        </tbody>
-      </table>
-      </div>
+        <td class="text-center">
+          <div class="graph-point-name">
+            {{ point.name }}
+          </div>
+          <div class="spline mb-1" [ngStyle]="{'background-color': point.pointColor}">
+          </div>
+        </td>
+        <td class="text-center">
+          <span *ngIf="point.pointY">
+            {{point.pointY | number: '1.1-1'}}
+          </span>
+          <span *ngIf="!point.pointY">
+            &mdash; &mdash;
+          </span>
+        </td>
+        <td class="text-center">{{point.combAirTemp}}</td>
+        <td class="text-center">{{point.o2FlueGas | number: '1.0-2'}}</td>
+        <td class="text-center">{{point.flueGasTemp | number: '1.0-2'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 
-     <app-exportable-results-table [tableString]="dataSummaryTableString"
-      (updateTableString)="updateTableString()"></app-exportable-results-table>
+<div class="hidden-copy-table">
+  <label class="group-label bold">Data Summary</label>
+  <table #dataSummaryTable class="table pt-2 d-flex">
+    <tbody class="w-100">
+      <tr class="bold small text-center no-border">
+        <th class="bold w-25">Key</th>
+        <th class="bold w-25">Fuel Savings (%)</th>
+        <th class="bold w-25">Combustion Temp
+          (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>)
+        </th>
+        <th class="bold w-25">Flue O2 (%)
+        </th>
+        <th class="bold w-25">Fuel Temp
+          (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>)
+        </th>
+      </tr>
+      <tr *ngFor="let point of selectedDataPoints; let index = index">
+        <td class="text-center">
+          {{ point.name }}
+        </td>
+        <td class="text-center">
+          <span *ngIf="point.pointY">
+            {{point.pointY | number: '1.1-1'}}
+          </span>
+          <span *ngIf="!point.pointY">
+            &mdash; &mdash;
+          </span>
+        </td>
+        <td class="text-center">{{point.combAirTemp}}</td>
+        <td class="text-center">{{point.o2FlueGas | number: '1.0-2'}}</td>
+        <td class="text-center">{{point.flueGasTemp | number: '1.0-2'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<app-exportable-results-table [tableString]="dataSummaryTableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>
