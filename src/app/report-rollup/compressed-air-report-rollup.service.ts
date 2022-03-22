@@ -122,13 +122,19 @@ export class CompressedAirReportRollupService {
         sumCost += result.modificationResults.totalAnnualOperatingCost;
         diffEnergy = result.baselineResults.total.energyUse - result.modificationResults.allSavingsResults.adjustedResults.power;
         sumEnergy += result.modificationResults.allSavingsResults.adjustedResults.power;
-        sumCo2Savings += result.modificationResults.allSavingsResults.savings.annualEmissionOutputSavings;
-        sumCo2Emissions += result.modificationResults.annualEmissionOutput;
         
+        //1000 kg / 1 tonne
+        let co2SavingsConvertedTonne = result.modificationResults.allSavingsResults.savings.annualEmissionOutputSavings / 1000; 
+        sumCo2Savings += co2SavingsConvertedTonne;
+        let co2EmissionsConvertedTonne = result.modificationResults.annualEmissionOutput / 1000;
+        sumCo2Emissions += co2EmissionsConvertedTonne;
       } else {
         sumCost += result.baselineResults.total.totalAnnualOperatingCost;
         sumEnergy += result.baselineResults.total.energyUse;
-        sumCo2Emissions += result.baselineResults.total.annualEmissionOutput;
+        
+        //1000 kg / 1 tonne
+        let co2EmissionsConvertedTonne = result.baselineResults.total.annualEmissionOutput / 1000;
+        sumCo2Emissions += co2EmissionsConvertedTonne;
       }
       sumSavings += diffCost;
       sumEnergySavings += diffEnergy;
