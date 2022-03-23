@@ -10,9 +10,9 @@ import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-for
 import { Co2SavingsPhastService } from './losses/operations/co2-savings-phast/co2-savings-phast.service';
 import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
 import { FlueGasByVolumeSuiteResults, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
-import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { EnInputResultsObj } from './losses/energy-input/energy-input.component';
+import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
 
 
 @Injectable()
@@ -24,8 +24,9 @@ export class PhastResultsService {
     private convertUnitsService: ConvertUnitsService,
     private energyInputExhaustGasService: EnergyInputExhaustGasService,
     private energyInputService: EnergyInputService,
+    private sqlDbApiService: SqlDbApiService,
     private co2SavingPhastService: Co2SavingsPhastService,
-    private suiteDbService: SuiteDbService) { }
+    ) { }
   checkLoss(loss: any) {
     if (!loss) {
       return false;
@@ -189,7 +190,7 @@ export class PhastResultsService {
         if (tmpFlueGas.flueGasType === 'By Mass') {
           let tmpForm = this.flueGasFormService.initByMassFormFromLoss(tmpFlueGas, true);
           if (tmpForm.status === 'VALID') {
-            let gases: Array<SolidLiquidFlueGasMaterial> = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+            let gases: Array<SolidLiquidFlueGasMaterial> = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
             let selectedGas: SolidLiquidFlueGasMaterial = gases.find(gas => { return gas.id == tmpFlueGas.flueGasByMass.gasTypeId });
             let availableHeat: number = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, settings);
             if (tmpFlueGas.flueGasByMass.oxygenCalculationMethod == 'Excess Air' && selectedGas) {

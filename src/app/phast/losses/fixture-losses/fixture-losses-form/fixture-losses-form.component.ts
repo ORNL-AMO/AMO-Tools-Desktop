@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { FixtureLossesCompareService } from "../fixture-losses-compare.service";
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';

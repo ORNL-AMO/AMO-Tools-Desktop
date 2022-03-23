@@ -76,7 +76,6 @@ export class EnergyUsedComponent implements OnInit {
   constructor(private designedEnergyService: DesignedEnergyService, 
     private meteredEnergyService: MeteredEnergyService, 
     private phastResultsService: PhastResultsService, 
-    private suiteDbService: SuiteDbService, 
     private sqlDbApiService: SqlDbApiService,
     private convertUnitsService: ConvertUnitsService) { }
 
