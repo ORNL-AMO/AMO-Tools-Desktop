@@ -3,14 +3,18 @@ import { FSAT } from '../shared/models/fans';
 import { BehaviorSubject } from 'rxjs';
 import { FsatService } from './fsat.service';
 import { Settings } from '../shared/models/settings';
+import { Co2savingsDifferent } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { CO2DataDifferent } from '../waste-water/modify-conditions/compare.service';
 
 @Injectable()
 export class CompareService {
   baselineFSAT: FSAT;
   modifiedFSAT: FSAT;
   selectedModification: BehaviorSubject<FSAT>;
+  co2SavingsDifferent: BehaviorSubject<Co2savingsDifferent>;
   constructor(private fsatService: FsatService) {
     this.selectedModification = new BehaviorSubject<FSAT>(undefined);
+    this.co2SavingsDifferent = new BehaviorSubject<Co2savingsDifferent>(undefined);
   }
 
 
@@ -758,6 +762,26 @@ export class CompareService {
     } else {
       return false;
     }
+  }
+
+  isCo2SavingsDifferent(baseline?: FSAT, modification?: FSAT): void {
+    let co2SavingsDifferent: CO2DataDifferent = {
+      totalEmissionOutputRate: false,
+    }
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fsatOperations.cO2SavingsData && modification.fsatOperations.cO2SavingsData) {
+        co2SavingsDifferent = {
+          totalEmissionOutputRate: baseline.fsatOperations.cO2SavingsData.totalEmissionOutputRate != modification.fsatOperations.cO2SavingsData.totalEmissionOutputRate,
+        }
+      }
+    }
+    this.co2SavingsDifferent.next(co2SavingsDifferent);
   }
 
   getBadges(baseline: FSAT, modification: FSAT, settings: Settings): Array<{ badge: string, componentStr: string }> {

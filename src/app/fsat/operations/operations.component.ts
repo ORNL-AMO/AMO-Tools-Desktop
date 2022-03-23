@@ -9,7 +9,8 @@ import { FsatService } from '../fsat.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { OperationsService } from './operations.service';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
-import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { AssessmentCo2SavingsService, Co2savingsDifferent } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-operations',
@@ -35,6 +36,7 @@ export class OperationsComponent implements OnInit {
   modificationIndex: number;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  co2SavingsDifferentSubscription: Subscription;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
@@ -42,6 +44,8 @@ export class OperationsComponent implements OnInit {
   co2SavingsFormDisabled: boolean;
 
   cO2SavingsData: Co2SavingsData;
+
+  co2SavingsDifferent: Co2savingsDifferent;
 
   warnings: FanOperationsWarnings;
   
@@ -62,10 +66,17 @@ export class OperationsComponent implements OnInit {
     else {
       this.idString = 'fsat_baseline';
     }
+    this.co2SavingsDifferentSubscription = this.compareService.co2SavingsDifferent.subscribe(val => {
+      this.co2SavingsDifferent = val;
+    })
     this.init();
     if (!this.selected) {
       this.disableForm();
     }
+  }
+
+  ngOnDestroy() {
+    this.co2SavingsDifferentSubscription.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -116,9 +127,13 @@ export class OperationsComponent implements OnInit {
   updateFsatCo2SavingsData(cO2SavingsData?: Co2SavingsData) {
     this.cO2SavingsData = cO2SavingsData;
     this.save();
+    if (this.canCompare()) {
+      this.compareService.isCo2SavingsDifferent();
+    }
   }
 
   setCo2SavingsData() {
+    this.compareService.isCo2SavingsDifferent();
     if (this.fsatOperations.cO2SavingsData) {
       this.cO2SavingsData = this.fsatOperations.cO2SavingsData;
     } else {

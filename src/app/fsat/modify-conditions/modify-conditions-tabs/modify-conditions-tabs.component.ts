@@ -104,7 +104,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
     let isDifferent = false;
     if (modification) {
       validModTest = this.fanFieldDataService.isFanFieldDataValid(modification.fieldData);
-      isDifferent = this.compareService.checkFanFieldDataDifferent();
+      isDifferent = this.compareService.checkFanFieldDataDifferent() || this.compareService.co2SavingsDifferent.getValue().totalEmissionOutputRate;
     }
     let inputError = this.checkFieldDataWarnings();
     if (!validBaselineTest || !validModTest) {

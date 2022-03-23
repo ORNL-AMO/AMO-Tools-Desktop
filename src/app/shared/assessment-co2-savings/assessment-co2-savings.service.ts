@@ -134,5 +134,17 @@ export class AssessmentCo2SavingsService {
     }
     return totalEmissionsResult;
   }
-}
 
+}
+export interface Co2savingsDifferent {
+  energyType?: boolean;
+  totalEmissionOutputRate?: boolean;
+  totalFuelEmissionOutputRate?: boolean,
+  electricityUse?: boolean;
+  energySource?: boolean;
+  fuelType?: boolean;
+  eGridRegion?: boolean;
+  eGridSubregion?: boolean;
+  totalEmissionOutput?: boolean;
+  zipcode?: boolean,
+}
