@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SettingsService } from '../../../settings/settings.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../shared/models/settings';
 import { DirectoryDashboardService } from '../directory-dashboard.service';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';

@@ -58,3 +58,10 @@ td, th{
 input.form-control.ng-invalid{
   border: red solid 2px;
 }
+
+.supply-demand{
+	padding-left: .25rem;
+    border-left: solid #ddd 2px;
+    font-size: 11px;
+    font-style: italic;
+}

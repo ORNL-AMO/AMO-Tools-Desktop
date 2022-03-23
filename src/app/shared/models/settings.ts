@@ -50,29 +50,16 @@ export interface Settings {
 
     disableTutorial?: boolean,
     disableDashboardTutorial?: boolean,
-    disablePsatSetupTutorial?: boolean,
-    disablePsatAssessmentTutorial?: boolean,
-    disablePsatReportTutorial?: boolean,
-    disablePhastSetupTutorial?: boolean,
-    disablePhastAssessmentTutorial?: boolean,
-    disablePhastReportTutorial?: boolean,
-    disableFsatSetupTutorial?: boolean,
-    disableFsatAssessmentTutorial?: boolean,
-    disableFsatReportTutorial?: boolean,
+    disablePsatTutorial?: boolean,
+    disableFansTutorial?: boolean,
+    disablePhastTutorial?: boolean,
+    disableWasteWaterTutorial?: boolean,
+    disableSteamTutorial?: boolean,
+    disableMotorInventoryTutorial?: boolean,
+    disableTreasureHuntTutorial?: boolean,
+    disableDataExplorerTutorial?: boolean,
+    disableCompressedAirTutorial?: boolean,
 
-    disableSsmtSystemSetupTutorial?: boolean,
-    disableSsmtAssessmentTutorial?: boolean,
-    disableSsmtReportTutorial?: boolean,
-    disableSsmtDiagramTutorial?: boolean,
-
-    disableTreasureHuntFindTreasureTutorial?: boolean,
-    disableTreasureHuntReportTutorial?: boolean,
-    disableTreasureHuntSetupTutorial?: boolean,
-    disableTreasureHuntTreasureChestTutorial?: boolean,
-
-    disableSurveyMonkey?: boolean,
-    disableDisclaimer?: boolean,
-    disableWebDisclaimer?: boolean,
     //costs
     electricityCost?: number,
     fuelCost?: number,
@@ -101,7 +88,9 @@ export interface Settings {
     printDetailedResults?: boolean,
     printReportDiagram?: boolean,
     printAll?: boolean,
-    printCompressedAirRollup?: boolean
+    printCompressedAirRollup?: boolean,
+    printSystemProfiles?: boolean
+    printPerformanceProfiles?: boolean
 
     // Co2SavingsData
     co2SavingsEnergyType?: string,
@@ -113,6 +102,12 @@ export interface Settings {
     eGridSubregion?: string,
     totalEmissionOutput?: number,
     totalFuelEmissionOutputRate?: number,
+    totalNaturalGasEmissionOutputRate?: number,
+    totalCoalEmissionOutputRate?: number,
+    totalOtherEmissionOutputRate?: number,
+    coalFuelType?: string;
+    eafOtherFuelSource?: string,
+    otherFuelType?: string;
     userEnteredBaselineEmissions?: boolean,
     userEnteredModificationEmissions?: boolean,
     zipcode?: string

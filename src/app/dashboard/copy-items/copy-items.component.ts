@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
@@ -70,13 +70,13 @@ export class CopyItemsComponent implements OnInit {
     if (this.folderSelected) {
       return this.formBuilder.group({
         'directoryId': [this.directory.parentDirectoryId, Validators.required],
-        'copyModifications': [false],
+        'copyModifications': [true],
         'copyCalculators': [false]
       });
     } else {
       return this.formBuilder.group({
         'directoryId': [this.directory.id, Validators.required],
-        'copyModifications': [false],
+        'copyModifications': [true],
         'copyCalculators': [false]
       });
     }
@@ -137,6 +137,10 @@ export class CopyItemsComponent implements OnInit {
             assessmentCopy.fsat.modifications = new Array();
           } else if (assessmentCopy.type == 'SSMT') {
             assessmentCopy.ssmt.modifications = new Array();
+          } else if (assessmentCopy.type === 'CompressedAir') {
+            assessmentCopy.compressedAirAssessment.modifications = new Array();
+          } else if (assessmentCopy.type === 'WasteWater') {
+            assessmentCopy.wasteWater.modifications = new Array();
           }
         }
 

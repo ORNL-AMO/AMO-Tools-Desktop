@@ -10,7 +10,7 @@ import { SsmtService } from '../ssmt.service';
 import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -85,6 +85,7 @@ export class OperationsComponent implements OnInit {
     }
     if(changes.modificationIndex && !changes.modificationIndex.isFirstChange()){
       this.initForm();
+      this.setCo2SavingsData();
     }
   }
 
@@ -111,8 +112,10 @@ export class OperationsComponent implements OnInit {
       co2SavingsData.energySource = 'Natural Gas';
     }
     this.co2SavingsData = co2SavingsData;
-    let shouldSetOutputRate = this.co2SavingsData.totalFuelEmissionOutputRate === undefined || this.co2SavingsData.totalFuelEmissionOutputRate === 0;
-
+    let shouldSetOutputRate: boolean = false;
+    if(!this.co2SavingsData.totalFuelEmissionOutputRate) {
+      shouldSetOutputRate = true;
+    } 
     this.setEnergySource(shouldSetOutputRate);
   }
 
@@ -123,13 +126,14 @@ export class OperationsComponent implements OnInit {
 
   setEnergySource(shouldSetOutputRate: boolean = true) {
     this.setFuelOptions();
-    this.co2SavingsData.fuelType = this.fuelOptions[0].fuelType;
     let outputRate: number = this.fuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
-      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to('GJ');
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
+      outputRate = Number(outputRate.toFixed(2));
     }
     if (shouldSetOutputRate) {
       this.co2SavingsData.totalFuelEmissionOutputRate = outputRate;
+      this.co2SavingsData.fuelType = this.fuelOptions[0].fuelType;
     }
     this.save();
   }
@@ -138,7 +142,7 @@ export class OperationsComponent implements OnInit {
     let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.co2SavingsData.fuelType === val.fuelType; });
     let outputRate: number = tmpFuel.outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
-      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to('GJ');
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
     }
     this.co2SavingsData.totalFuelEmissionOutputRate = outputRate;
     this.save();

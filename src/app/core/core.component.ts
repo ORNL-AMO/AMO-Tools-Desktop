@@ -44,8 +44,6 @@ export class CoreComponent implements OnInit {
   inTutorialsView: boolean;
   updateError: boolean = false;
 
-  showSurvey: string = 'hide';
-  destroySurvey: boolean = false;
   info: any;
   updateAvailableSubscription: Subscription;
   showTranslateModalSub: Subscription;
@@ -120,17 +118,6 @@ export class CoreComponent implements OnInit {
     this.showTranslateModalSub.unsubscribe();
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      if (this.settingsDbService.globalSettings.disableSurveyMonkey != true) {
-        this.showSurvey = 'show';
-      } else {
-        this.destroySurvey = true;
-      }
-    }, 3500);
-  }
-
-
   initData() {
     this.indexedDbService.db = this.indexedDbService.initDb().then(done => {
       this.indexedDbService.getAllDirectories().then(val => {
@@ -153,9 +140,6 @@ export class CoreComponent implements OnInit {
     this.directoryDbService.setAll().then(() => {
       this.assessmentDbService.setAll().then(() => {
         this.settingsDbService.setAll().then(() => {
-          if (!this.electronService.isElectronApp) {
-            this.showWebDisclaimer();
-          }
           this.calculatorDbService.setAll().then(() => {
             this.inventoryDbService.setAll().then(() => {
               if (this.sqlDbApiService.hasStarted == true) {
@@ -170,15 +154,6 @@ export class CoreComponent implements OnInit {
     });
   }
 
-  showWebDisclaimer() {
-    if (this.settingsDbService.globalSettings.disableWebDisclaimer != true) {
-      this.toastData.title = 'Disclaimer';
-      this.toastData.body = 'The web version of MEASUR is still in beta. Please let us know if you have any suggestions for improving the app.';
-      this.showWebDisclaimerToast = true;
-      this.changeDetectorRef.detectChanges();
-    }
-  }
-
   hideToast() {
     this.showToast = false;
     this.toastData = {
@@ -187,21 +162,6 @@ export class CoreComponent implements OnInit {
       setTimeoutVal: undefined
     };
     this.changeDetectorRef.detectChanges();
-  }
-
-  disableWebDisclaimer() {
-    this.settingsDbService.globalSettings.disableWebDisclaimer = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
-    this.hideToast();
-  }
-
-  closeSurvey() {
-    this.showSurvey = 'hide';
-    setTimeout(() => {
-      this.destroySurvey = true;
-    }, 500);
   }
 
   hideUpdateToast() {
@@ -216,15 +176,6 @@ export class CoreComponent implements OnInit {
 
   closeTranslate() {
     this.showTranslate = 'hide';
-  }
-
-
-  disableSurvey() {
-    this.settingsDbService.globalSettings.disableSurveyMonkey = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
-    this.closeSurvey();
   }
 
 }

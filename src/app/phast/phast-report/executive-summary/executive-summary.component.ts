@@ -46,8 +46,11 @@ export class ExecutiveSummaryComponent implements OnInit {
     if (this.phast.modifications) {
       this.phastMods = this.phast.modifications;
       this.phast.modifications.forEach(mod => {
-        let tmpSummary = this.executiveSummaryService.getSummary(mod.phast, true, this.settings, this.phast, this.baseline);
-        this.modifications.push(tmpSummary);
+        let modSummary = this.executiveSummaryService.getSummary(mod.phast, true, this.settings, this.phast, this.baseline);
+        if (modSummary) {
+          modSummary.co2EmissionsOutput.emissionsSavings = this.baseline.co2EmissionsOutput.totalEmissionOutput - modSummary.co2EmissionsOutput.totalEmissionOutput;
+        }
+        this.modifications.push(modSummary);
       });
       // this.initMaxAnnualSavings();
       this.notes = this.executiveSummaryService.buildSummaryNotes(this.phast.modifications);

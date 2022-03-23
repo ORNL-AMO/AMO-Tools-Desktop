@@ -45,6 +45,15 @@ export class OperationsCompareService {
   compareFuelCost(): boolean {
     return this.compare(this.baseline.operatingCosts.fuelCost, this.modification.operatingCosts.fuelCost);
   }
+  compareCoalCarbonCost(): boolean {
+    return this.compare(this.baseline.operatingCosts.coalCarbonCost, this.modification.operatingCosts.coalCarbonCost);
+  }
+  compareElectrodeCost(): boolean {
+    return this.compare(this.baseline.operatingCosts.electrodeCost, this.modification.operatingCosts.electrodeCost);
+  }
+  compareOtherFuelCost(): boolean {
+    return this.compare(this.baseline.operatingCosts.otherFuelCost, this.modification.operatingCosts.otherFuelCost);
+  }
   compareSteamCost(): boolean {
     return this.compare(this.baseline.operatingCosts.steamCost, this.modification.operatingCosts.steamCost);
   }

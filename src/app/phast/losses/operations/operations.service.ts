@@ -3,20 +3,39 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { FormGroup } from '@angular/forms';
 import { PHAST } from '../../../shared/models/phast/phast';
 import { OperatingCosts, OperatingHours } from '../../../shared/models/operations';
+import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class OperationsService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) { 
+  }
 
-  initForm(phast: PHAST): FormGroup {
+  initForm(phast: PHAST, settings: Settings): FormGroup {
     let form = this.formBuilder.group({
       hoursPerYear: [phast.operatingHours.hoursPerYear, Validators.required],
       fuelCost: [phast.operatingCosts.fuelCost, Validators.required],
+      coalCarbonCost: [phast.operatingCosts.coalCarbonCost],
+      electrodeCost: [phast.operatingCosts.electrodeCost],
+      otherFuelCost: [phast.operatingCosts.otherFuelCost],
       steamCost: [phast.operatingCosts.steamCost, Validators.required],
       electricityCost: [phast.operatingCosts.electricityCost, Validators.required],
       implementationCost: [phast.implementationCost]
     });
+
+    if (settings.furnaceType === 'Electric Arc Furnace (EAF)') {
+      form.controls.coalCarbonCost.setValidators([Validators.required]);
+      form.controls.coalCarbonCost.markAsDirty();
+      form.controls.coalCarbonCost.updateValueAndValidity();
+
+      form.controls.electrodeCost.setValidators([Validators.required]);
+      form.controls.electrodeCost.markAsDirty();
+      form.controls.electrodeCost.updateValueAndValidity();
+      
+      form.controls.otherFuelCost.setValidators([Validators.required]);
+      form.controls.otherFuelCost.markAsDirty();
+      form.controls.otherFuelCost.updateValueAndValidity();
+    }
     return form;
   }
 
@@ -24,7 +43,10 @@ export class OperationsService {
     let costs: OperatingCosts = {
       electricityCost: form.controls.electricityCost.value,
       steamCost: form.controls.steamCost.value,
-      fuelCost: form.controls.fuelCost.value
+      fuelCost: form.controls.fuelCost.value,
+      coalCarbonCost: form.controls.coalCarbonCost.value,
+      electrodeCost: form.controls.electrodeCost.value,
+      otherFuelCost: form.controls.otherFuelCost.value,
     };
     let hours: OperatingHours = {
       hoursPerYear: form.controls.hoursPerYear.value,

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AtmosphereSpecificHeat } from '../../../shared/models/materials';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CustomMaterialsService } from '../custom-materials.service';

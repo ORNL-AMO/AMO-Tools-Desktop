@@ -3,7 +3,7 @@ import { Assessment } from '../models/assessment';
 import { Settings } from '../models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../models/steam/ssmt';
-import { CompressedAirPressureReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure, TreasureHuntOpportunity } from '../models/treasure-hunt';
+import { CompressedAirPressureReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
 import { CompressedAirPressureReductionData } from '../models/standalone';
@@ -52,7 +52,7 @@ export class UpdateDataService {
     updateWasteWater(assessment: Assessment): Assessment {
         //logic for updating wastewater data
         assessment.appVersion = environment.version;
-        if (!assessment.wasteWater.baselineData.operations) {
+        if (assessment.wasteWater.baselineData && !assessment.wasteWater.baselineData.operations) {
             assessment.wasteWater.baselineData.operations = {
                 MaxDays: 100,
                 TimeIncrement: .5,
@@ -63,12 +63,14 @@ export class UpdateDataService {
 
         if (assessment.wasteWater.modifications) {
             assessment.wasteWater.modifications.forEach(mod => {
-                mod.operations = {
-                    MaxDays: 100,
-                    TimeIncrement: .5,
-                    operatingMonths: 12,
-                    EnergyCostUnit: 0.09
-                };
+                if (!mod.operations) {
+                    mod.operations = {
+                        MaxDays: 100,
+                        TimeIncrement: .5,
+                        operatingMonths: 12,
+                        EnergyCostUnit: 0.09
+                    };
+                }
             })
         }
 
@@ -150,19 +152,6 @@ export class UpdateDataService {
             fsat.fsatOperations = {
                 operatingHours: operatingHours,
                 cost: cost,
-                cO2SavingsData: {
-                    energyType: 'electricity',
-                    energySource: '',
-                    fuelType: '',
-                    totalEmissionOutputRate: 0,
-                    electricityUse: 0,
-                    eGridRegion: '',
-                    eGridSubregion: 'SRTV',
-                    totalEmissionOutput: 0,
-                    userEnteredBaselineEmissions: false,
-                    userEnteredModificationEmissions: true,
-                    zipcode: '37830',
-                }, 
             }
         }
         return fsat;
@@ -194,21 +183,6 @@ export class UpdateDataService {
                 electricityCost: .066
             };
         }
-        if (!assessment.phast.co2SavingsData) {
-            assessment.phast.co2SavingsData = {
-                energyType: "fuel",
-                energySource: "Natural Gas",
-                fuelType: "Natural Gas",
-                totalEmissionOutputRate: 53.06,
-                electricityUse: 0,
-                eGridRegion: '',
-                eGridSubregion: "SRT",
-                totalEmissionOutput: 0,
-                userEnteredBaselineEmissions: false,
-                userEnteredModificationEmissions: false,
-                zipcode: "37830"
-            };
-        }
 
         assessment.phast = this.updateMoistureInAirCombustion(assessment.phast);
         if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
@@ -225,23 +199,10 @@ export class UpdateDataService {
         }
 
         assessment.appVersion = environment.version;
+        assessment.phast = this.updateEnergyInputExhaustGasLoss(assessment.phast);
         if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
             assessment.phast.modifications.forEach(mod => {
-                if(!mod.phast.co2SavingsData){
-                    mod.phast.co2SavingsData = {
-                        energyType: "fuel",
-                        energySource: "Natural Gas",
-                        fuelType: "Natural Gas",
-                        totalEmissionOutputRate: 53.06,
-                        electricityUse: 0,
-                        eGridRegion: '',
-                        eGridSubregion: "SRT",
-                        totalEmissionOutput: 0,
-                        userEnteredBaselineEmissions: false,
-                        userEnteredModificationEmissions: false,
-                        zipcode: "37830"
-                    };
-                }
+                mod.phast = this.updateEnergyInputExhaustGasLoss(mod.phast);
             });
         }
 
@@ -286,6 +247,17 @@ export class UpdateDataService {
         } 
         fg.ambientAirTemp = ambientAirTemp;
         return fg;
+    }
+
+    updateEnergyInputExhaustGasLoss(phast: PHAST): PHAST{
+        if (phast.losses && phast.losses.energyInputExhaustGasLoss && phast.losses.energyInputExhaustGasLoss.length > 0) {
+            phast.losses.energyInputExhaustGasLoss.forEach(input => {
+                if(!input.availableHeat){
+                    input.availableHeat = 100;
+                }
+            });
+        }
+        return phast;
     }
 
     checkSettingsVersionDifferent(settings: Settings): boolean {

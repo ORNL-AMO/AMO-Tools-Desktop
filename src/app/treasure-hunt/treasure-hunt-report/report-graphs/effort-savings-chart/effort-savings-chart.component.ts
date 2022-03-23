@@ -1,14 +1,15 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
 
-import * as Plotly from 'plotly.js';
+import * as Plotly from 'plotly.js-dist';
 import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { Settings } from "../../../../shared/models/settings";
+import { PlotlyService } from 'angular-plotly.js';
 
 export interface ChartOpportunity {
-  curveNumber: number, 
-  pointNumber: number, 
+  curveNumber: number,
+  pointNumber: number,
   isHidden: boolean,
   name: string,
   effort: number,
@@ -37,25 +38,29 @@ export class EffortSavingsChartComponent implements OnInit {
   displayGridLinesTooltip: boolean = false;
 
   chartOpportunities: Array<ChartOpportunity> = [];
-  hoverLabels: Array<{curveNumber: number, pointNumber: number}> = [];
+  hoverLabels: Array<{ curveNumber: number, pointNumber: number }> = [];
   showingHoverLabels: boolean = false;
   effortChartId: string = 'effortChartDiv';
   effortChart: SimpleChart;
 
   @ViewChild('dataSummaryTable', { static: false }) dataSummaryTable: ElementRef;
+  @ViewChild('effortChartDiv', { static: false }) effortChartDiv: ElementRef;
   dataSummaryTableString: any;
-  constructor() { }
+  constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
-    if(!this.showPrint){
+  }
+
+  ngAfterViewInit(){
+    if (!this.showPrint) {
       this.initRenderChart();
-    }else{
+    } else {
       this.initRenderPrintChart();
     }
   }
 
   initRenderChart() {
-    Plotly.purge(this.effortChartId);
+    // Plotly.purge(this.effortChartId);
 
     this.effortChart = {
       name: 'Payback vs. Effort to Implement',
@@ -98,8 +103,12 @@ export class EffortSavingsChartComponent implements OnInit {
     };
 
     this.buildTrace();
+    this.newPlot();
+  }
+
+  newPlot() {
     let chartLayout = JSON.parse(JSON.stringify(this.effortChart.layout));
-    Plotly.newPlot(this.effortChartId, this.effortChart.data, chartLayout, this.effortChart.config)
+    this.plotlyService.newPlot(this.effortChartDiv.nativeElement, this.effortChart.data, chartLayout, this.effortChart.config)
       .then(chart => {
         chart.on('plotly_beforehover', () => {
           if (this.showingHoverLabels) {
@@ -107,7 +116,7 @@ export class EffortSavingsChartComponent implements OnInit {
           }
         });
         chart.on('plotly_legendclick', (legendClick) => {
-         this.updateVisibleLabels(legendClick);
+          this.updateVisibleLabels(legendClick);
         });
         chart.on('plotly_relayout', () => {
           this.showingHoverLabels = false;
@@ -116,7 +125,7 @@ export class EffortSavingsChartComponent implements OnInit {
   }
 
   initRenderPrintChart() {
-    Plotly.purge(this.effortChartId);
+    // Plotly.purge(this.effortChartId);
 
     this.effortChart = {
       name: 'Payback vs. Effort to Implement',
@@ -161,20 +170,7 @@ export class EffortSavingsChartComponent implements OnInit {
 
     this.buildTrace();
     let chartLayout = JSON.parse(JSON.stringify(this.effortChart.layout));
-    Plotly.newPlot(this.effortChartId, this.effortChart.data, chartLayout, this.effortChart.config)
-      .then(chart => {
-        chart.on('plotly_beforehover', () => {
-          if (this.showingHoverLabels) {
-            return false;
-          }
-        });
-        chart.on('plotly_legendclick', (legendClick) => {
-         this.updateVisibleLabels(legendClick);
-        });
-        chart.on('plotly_relayout', () => {
-          this.showingHoverLabels = false;
-        });
-      });
+    this.plotlyService.newPlot(this.effortChartDiv.nativeElement, this.effortChart.data, chartLayout, this.effortChart.config);
   }
 
   updateVisibleLabels(legendClick) {
@@ -193,15 +189,10 @@ export class EffortSavingsChartComponent implements OnInit {
     if (this.showingHoverLabels) {
       // Match Plotly's 300ms doubleclick timeout
       setTimeout(() => {
-        Plotly.Fx.hover(this.effortChartId, []);
-        Plotly.Fx.hover(this.effortChartId, this.hoverLabels);
+        Plotly.Fx.hover(this.effortChartDiv.nativeElement, []);
+        Plotly.Fx.hover(this.effortChartDiv.nativeElement, this.hoverLabels);
       }, 300);
     }
-  }
-
-  updateChart() {
-    let chartLayout = JSON.parse(JSON.stringify(this.effortChart.layout));
-    Plotly.relayout(this.effortChartId, chartLayout);
   }
 
   buildTrace() {
@@ -232,8 +223,8 @@ export class EffortSavingsChartComponent implements OnInit {
         this.effortChart.data.push(trace);
         this.chartOpportunities.push(
           {
-            curveNumber: index, 
-            pointNumber: 0, 
+            curveNumber: index,
+            pointNumber: 0,
             isHidden: false,
             name: summary.opportunityName,
             effort: summary.opportunityCost.implementationEffort,
@@ -252,7 +243,7 @@ export class EffortSavingsChartComponent implements OnInit {
     })));
   }
 
-   hideTooltip(btnType: string) {
+  hideTooltip(btnType: string) {
     if (btnType === 'btnLabels') {
       this.hoverBtnLabels = false;
       this.displayLabelsTooltip = false;
@@ -293,13 +284,13 @@ export class EffortSavingsChartComponent implements OnInit {
       }
     }
   }
-  
+
   toggleLabels() {
     if (!this.showingHoverLabels) {
-      Plotly.Fx.hover(this.effortChartId, this.hoverLabels);
+      Plotly.Fx.hover(this.effortChartDiv.nativeElement, this.hoverLabels);
       this.showingHoverLabels = true;
     } else {
-      Plotly.Fx.hover(this.effortChartId, []);
+      Plotly.Fx.hover(this.effortChartDiv.nativeElement, []);
       this.showingHoverLabels = false;
     }
   }
@@ -309,7 +300,7 @@ export class EffortSavingsChartComponent implements OnInit {
     let showingGridY: boolean = this.effortChart.layout.yaxis.showgrid;
     this.effortChart.layout.xaxis.showgrid = !showingGridX;
     this.effortChart.layout.yaxis.showgrid = !showingGridY;
-    this.updateChart();
+    this.newPlot();
   }
 
   updateTableString() {

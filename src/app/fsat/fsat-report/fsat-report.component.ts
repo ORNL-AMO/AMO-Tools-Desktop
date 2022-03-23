@@ -26,8 +26,6 @@ export class FsatReportComponent implements OnInit {
   assessment: Assessment;
   @Input()
   inFsat: boolean;
-  @Output('exportData')
-  exportData = new EventEmitter<boolean>();
   @Input()
   inRollup: boolean;
   @Output('selectModification')
@@ -142,10 +140,6 @@ export class FsatReportComponent implements OnInit {
         this.getDirectoryList(results.parentDirectoryId);
       }
     }
-  }
-
-  exportToCsv() {
-    this.exportData.emit(true);
   }
 
   useModification(event: any) {

@@ -5,13 +5,17 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "target": "es2015",
+    "module": "esnext",
     "lib": [
-      "es2016",
-      "dom"
+      "es2018",
+      "dom",
+      "esnext"
     ],
-    "resolveJsonModule": true,
   },
-  "allowSyntheticDefaultImports": true
 }

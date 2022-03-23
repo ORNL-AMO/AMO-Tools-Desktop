@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
@@ -37,7 +37,8 @@ export class FlueGasModalComponent implements OnInit {
   output: FlueGasOutput;
   
   constructor(private settingsDbService: SettingsDbService, 
-              private flueGasService: FlueGasService) { }
+              private flueGasService: FlueGasService,
+              private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     if (!this.settings) {
@@ -71,6 +72,7 @@ export class FlueGasModalComponent implements OnInit {
     this.outputSubscription = this.flueGasService.output.subscribe(val => {
       if (val) {
         this.output = val;
+        this.cd.detectChanges();
       }
     });
   }

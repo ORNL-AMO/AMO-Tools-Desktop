@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlueGasFormVolumeComponent } from './flue-gas-form-volume/flue-gas-form-volume.component';
 import { FlueGasFormMassComponent } from './flue-gas-form-mass/flue-gas-form-mass.component';
 import { FlueGasComponent } from './flue-gas.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { FlueGasModalComponent } from './flue-gas-modal/flue-gas-modal.component';

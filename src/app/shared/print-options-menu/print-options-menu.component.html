@@ -33,6 +33,16 @@
                         Pump Rollup Summary
                     </div>
                 </div>
+                <div class="row toggle-btn pad-top-10" *ngIf="showCompressedAirOptions && showRollupReportOptions"
+                    (click)="togglePrint('compressedAirRollup')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printOptions.printCompressedAirRollup">
+                        </app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Compressed Air Rollup Summary
+                    </div>
+                </div>
                 <div class="row toggle-btn pad-top-10" *ngIf="showPhastReportOptions && showRollupReportOptions"
                     (click)="togglePrint('phastRollup')">
                     <div class="col-2">
@@ -70,18 +80,6 @@
                         Treasure Hunt Rollup Summary
                     </div>
                 </div>
-                <div class="row toggle-btn pad-top-10" *ngIf="showCompressedAirOptions && showRollupReportOptions"
-                    (click)="togglePrint('compressedAirRollup')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printCompressedAirRollup">
-                        </app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Compressed Air Rollup Summary
-                    </div>
-                </div>
-
-
                 <div class="row toggle-btn pad-top-10" *ngIf="showWasteWaterOptions && showRollupReportOptions"
                     (click)="togglePrint('printWasteWaterRollup')">
                     <div class="col-2">
@@ -92,35 +90,6 @@
                         Wastewater Rollup Summary
                     </div>
                 </div>
-
-                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showWasteWaterOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('results')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printResults"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Result Data
-                    </div>
-                </div>                
-                
-                <div class="row toggle-btn pad-top-10" (click)="togglePrint('reportGraphs')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printReportGraphs"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Report Graphs
-                    </div>
-                </div>
-                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showSsmtReportOptions"
-                    class="row toggle-btn pad-top-10" (click)="togglePrint('reportSankey')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printReportSankey"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8"
-                        [ngClass]="{'bold-bottom-divider' : (showPsatReportOptions) && !showPhastReportOptions && !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions || showPhastReportOptions || showFsatReportOptions}">
-                        Report Sankey
-                    </div>
-                </div>    
 
                 <div *ngIf="showPhastReportOptions || showSsmtReportOptions || showTHReportOptions || showCompressedAirOptions"
                     class="row toggle-btn pad-top-10" (click)="togglePrint('executiveSummary')">
@@ -143,13 +112,55 @@
                     </div>
                 </div>
 
-                <div *ngIf="showFsatReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('detailedResults')">
+                <div *ngIf="showFsatReportOptions" class="row toggle-btn pad-top-10"
+                    (click)="togglePrint('detailedResults')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printDetailedResults"></app-animated-checkmark>
                     </div>
                     <div class="col-8"
                         [ngClass]="{'bold-bottom-divider' : (showFsatReportOptions) && !showPhastReportOptions && !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions || showPhastReportOptions}">
                         Detailed Results
+                    </div>
+                </div>
+
+                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showWasteWaterOptions"
+                    class="row toggle-btn pad-top-10" (click)="togglePrint('results')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printOptions.printResults"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Result Data
+                    </div>
+                </div>
+
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('reportGraphs')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printOptions.printReportGraphs"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Report Graphs
+                    </div>
+                </div>
+
+                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showSsmtReportOptions"
+                    class="row toggle-btn pad-top-10" (click)="togglePrint('reportSankey')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printOptions.printReportSankey"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8"
+                        [ngClass]="{'bold-bottom-divider' : (showPsatReportOptions) && !showPhastReportOptions && !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions || showPhastReportOptions || showFsatReportOptions}">
+                        Report Sankey
+                    </div>
+                </div>
+
+                <div *ngIf="showSsmtReportOptions" class="row toggle-btn pad-top-10"
+                    (click)="togglePrint('reportDiagram')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printOptions.printReportDiagram"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8"
+                        [ngClass]="{'bold-bottom-divider' : showSsmtReportOptions && !showRollupReportOptions, 'bottom-divider' : showRollupReportOptions}">
+                        Report Diagram
                     </div>
                 </div>
 
@@ -163,18 +174,9 @@
                     </div>
                 </div>
 
-                <div *ngIf="showSsmtReportOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('reportDiagram')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printReportDiagram"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8" [ngClass]="{'bold-bottom-divider' : showSsmtReportOptions && !showRollupReportOptions, 'bottom-divider' : showRollupReportOptions}">
-                        Report Diagram
-                    </div>
-                </div>
-
                 <!-- treasure hunt specific options -->
-                <div *ngIf="showTHReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('opportunitySummary')">
+                <div *ngIf="showTHReportOptions" class="row toggle-btn pad-top-10"
+                    (click)="togglePrint('opportunitySummary')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printReportOpportunitySummary">
                         </app-animated-checkmark>
@@ -183,19 +185,42 @@
                         Opportunity Summary
                     </div>
                 </div>
-                
-                <div *ngIf="showTHReportOptions || showCompressedAirOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('opportunityPayback')">
+
+                <div *ngIf="showTHReportOptions || showCompressedAirOptions" class="row toggle-btn pad-top-10"
+                    (click)="togglePrint('opportunityPayback')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printReportOpportunityPayback">
                         </app-animated-checkmark>
                     </div>
-                    <div class="col-8 bold-bottom-divider">
+                    <div class="col-8 bottom-divider">
                         Opportunity Payback Details
                     </div>
                 </div>
                 <!-- end treasure hunt specific options -->
 
-                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showSsmtReportOptions || showWasteWaterOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('inputData')">
+                <div *ngIf="showCompressedAirOptions" class="row toggle-btn pad-top-10"
+                    (click)="togglePrint('performanceProfiles')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printOptions.printPerformanceProfiles">
+                        </app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Performance Profiles
+                    </div>
+                </div>
+
+                <div *ngIf="showCompressedAirOptions" class="row toggle-btn pad-top-10"
+                    (click)="togglePrint('systemProfiles')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printOptions.printSystemProfiles"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bold-bottom-divider">
+                        System Profiles
+                    </div>
+                </div>
+
+                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showSsmtReportOptions || showWasteWaterOptions || showCompressedAirOptions"
+                    class="row toggle-btn pad-top-10" (click)="togglePrint('inputData')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printInputData"></app-animated-checkmark>
                     </div>

@@ -4,7 +4,7 @@ import { BoilerService, BoilerWarnings } from './boiler.service';
 import { BoilerInput, HeaderInput, SSMT } from '../../shared/models/steam/ssmt';
 import { FormGroup } from '@angular/forms';
 import { SsmtService } from '../ssmt.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompareService } from '../compare.service';
 import { HeaderService } from '../header/header.service';
 import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.service';
@@ -273,7 +273,13 @@ export class BoilerComponent implements OnInit {
   }
 
   setBoilerEfficiencyAndClose(efficiency: number) {
-    this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
+    if (this.boilerInput && this.boilerInput.stackLossInput) {
+      this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
+    } else {
+      let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
+      this.boilerInput = tmpBoiler;
+      this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
+    }
     this.boilerForm.controls.combustionEfficiency.patchValue(efficiency);
     this.closeBoilerEfficiencyModal();
   }

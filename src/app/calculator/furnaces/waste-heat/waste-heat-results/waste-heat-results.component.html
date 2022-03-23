@@ -6,7 +6,7 @@
         <tr>
           <td class="bold w-50">Baseline Electricity</td>
           <td *ngIf="output.annualEnergy" class="text-center w-50">
-            {{output.annualEnergy | number:'1.0-0'}} kW/yr
+            {{output.annualEnergy | number:'1.0-0'}} {{settings.phastRollupElectricityUnit}}
           </td>
           <td *ngIf="!output.annualEnergy" class="text-center w-50">
             &mdash; &mdash;
@@ -15,13 +15,13 @@
         <tr>
           <td class="bold w-50">Modification Electricity</td>
           <td class="text-center w-50">
-            0 kW/yr
+            0 {{settings.phastRollupElectricityUnit}}
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Annual Energy Savings</td>
           <td *ngIf="output.annualEnergy" class="text-center w-50">
-            {{output.annualEnergy | number:'1.0-0'}} kW/yr
+            {{output.annualEnergy | number:'1.0-0'}} {{settings.phastRollupElectricityUnit}}
           </td>
           <td *ngIf="!output.annualEnergy" class="text-center w-50">
             &mdash; &mdash;
@@ -51,8 +51,7 @@
           <td *ngIf="output.recoveredHeat" class="text-center w-50">
             {{output.recoveredHeat | number:'1.0-3'}}
             <span class="input-group-addon">
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+              <span>{{settings.phastRollupUnit}}/hr</span>
           </span>
           </td>
           <td *ngIf="!output.recoveredHeat" class="text-center w-50">
@@ -101,7 +100,7 @@
         <tr>
           <td class="bold w-50">Electrical Energy Required</td>
           <td *ngIf="output.electricalEnergy" class="text-center w-50">
-            {{output.electricalEnergy | number:'1.0-2'}} kW
+            {{output.electricalEnergy | number:'1.0-2'}} {{settings.phastRollupElectricityUnit}}
           </td>
           <td *ngIf="!output.electricalEnergy" class="text-center w-50">
             &mdash; &mdash;

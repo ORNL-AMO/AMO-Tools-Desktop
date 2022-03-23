@@ -2,10 +2,10 @@ import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, ChangeD
 import { PsatService } from '../../../../psat/psat.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { FormGroup } from '@angular/forms';
-import { SpecificSpeedService} from '../specific-speed.service';
+import { SpecificSpeedService } from '../specific-speed.service';
 
-import * as Plotly from 'plotly.js';
 import { DataPoint, SimpleChart, TraceData } from '../../../../shared/models/plotting';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-specific-speed-graph',
@@ -22,14 +22,11 @@ export class SpecificSpeedGraphComponent implements OnInit {
   @Input()
   toggleCalculate: boolean;
 
-  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("expandedChartDiv", { static: false }) expandedChartDiv: ElementRef;
+  @ViewChild("panelChartDiv", { static: false }) panelChartDiv: ElementRef;
   @ViewChild('dataSummaryTable', { static: false }) dataSummaryTable: ElementRef;
   dataSummaryTableString: any;
-  
-  tabPanelChartId: string = 'tabPanelDiv';
-  expandedChartId: string = 'expandedChartDiv';
-  currentChartId: string = 'tabPanelDiv';
-  
+
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
     if (this.expanded) {
@@ -38,15 +35,15 @@ export class SpecificSpeedGraphComponent implements OnInit {
       }
     }
   }
-  
-   // Update conditions/data
+
+  // Update conditions/data
   selectedDataPoints: Array<DataPoint>;
   pointColors: Array<string>;
   specificSpeedChart: SimpleChart;
   firstChange: boolean = true;
   validCurrentSpeed: boolean = false;
   currentPumpType: number;
-  
+
   // Tooltips
   expanded: boolean;
   hoverBtnExpand: boolean;
@@ -55,28 +52,25 @@ export class SpecificSpeedGraphComponent implements OnInit {
   hoverBtnGridLines: any;
   displayGridLinesTooltip: boolean;
   displayCollapseTooltip: boolean;
-
-  constructor(private psatService: PsatService, 
-              private specificSpeedService: SpecificSpeedService,
-              private cd: ChangeDetectorRef) { }
+  dataPointTraces: Array<TraceData>;
+  constructor(private psatService: PsatService,
+    private specificSpeedService: SpecificSpeedService,
+    private cd: ChangeDetectorRef,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit() {
     this.currentPumpType = this.speedForm.controls.pumpType.value;
-    this.triggerInitialResize();
   }
 
-  triggerInitialResize() {
-    window.dispatchEvent(new Event('resize'));
-    setTimeout(() => {
-      this.initRenderChart();
-    }, 25)
+  ngAfterViewInit() {
+    this.renderChart();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.resetData) {
         this.specificSpeedService.initChartData();
-        this.initRenderChart();
+        this.renderChart();
       }
       if (changes.toggleCalculate && !changes.resetData) {
         if (this.speedForm.valid) {
@@ -93,27 +87,44 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.specificSpeedService.selectedDataPoints.next(this.selectedDataPoints);
   }
 
-  initRenderChart() {
-    Plotly.purge(this.currentChartId);
-    
+  renderChart() {
     this.initChartSetup();
+    this.dataPointTraces = new Array();
+    this.selectedDataPoints = new Array();
     this.setCalculatedTrace();
-
-    let chartLayout = JSON.parse(JSON.stringify(this.specificSpeedChart.layout));
-    Plotly.newPlot(this.currentChartId, this.specificSpeedChart.data, chartLayout, this.specificSpeedChart.config)
-      .then(chart => {
-        chart.on('plotly_click', (graphData) => {
-          this.createDataPoint(graphData);
-        });
-      });
+    this.newPlot();
     this.save();
-    
+  }
+
+  newPlot() {
+    let traceData: Array<TraceData> = new Array();
+    this.specificSpeedChart.data.forEach((trace, i) => {
+      traceData.push(trace);
+    });
+    this.dataPointTraces.forEach(trace => {
+      traceData.push(trace);
+    })
+    let chartLayout = JSON.parse(JSON.stringify(this.specificSpeedChart.layout));
+    if (this.expanded && this.expandedChartDiv) {
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, traceData, chartLayout, this.specificSpeedChart.config)
+        .then(chart => {
+          chart.on('plotly_click', (graphData) => {
+            this.createDataPoint(graphData);
+          });
+        });
+    } else if (!this.expanded && this.panelChartDiv) {
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, traceData, chartLayout, this.specificSpeedChart.config)
+        .then(chart => {
+          chart.on('plotly_click', (graphData) => {
+            this.createDataPoint(graphData);
+          });
+        });
+    }
   }
 
   updateChart() {
-    let chartLayout = JSON.parse(JSON.stringify(this.specificSpeedChart.layout));
     this.setCalculatedTrace();
-    Plotly.update(this.currentChartId, this.specificSpeedChart.data, chartLayout, [1]);
+    this.newPlot();
     this.save();
   }
 
@@ -122,7 +133,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.pointColors = graphColors;
     this.specificSpeedChart = this.specificSpeedService.specificSpeedChart.getValue();
     this.selectedDataPoints = this.specificSpeedService.selectedDataPoints.getValue();
-    
+
     // lineTrace
     this.specificSpeedChart.data[0].x = currentData.x;
     this.specificSpeedChart.data[0].y = currentData.y;
@@ -153,14 +164,15 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   createDataPoint(graphData) {
     let selectedPoint: DataPoint = {
-      pointColor: this.pointColors[(this.specificSpeedChart.data.length + 1) % this.pointColors.length],
+      pointColor: this.pointColors[(this.dataPointTraces.length + 1) % this.pointColors.length],
       x: graphData.points[0].x,
       y: graphData.points[0].y
     }
 
     let selectedPointTrace = this.specificSpeedService.getTraceDataFromPoint(selectedPoint);
-    Plotly.addTraces(this.currentChartId, selectedPointTrace);
+    this.dataPointTraces.push(selectedPointTrace);
     this.selectedDataPoints.push(selectedPoint);
+    this.newPlot();
     this.cd.detectChanges();
     this.save();
   }
@@ -170,7 +182,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     let ToVerticalTurbine = this.currentPumpType != 9 && this.speedForm.controls.pumpType.value == 9;
 
     if (fromVerticalTurbine || ToVerticalTurbine) {
-      this.initRenderChart();
+      this.renderChart();
     } else {
       this.updateChart();
     }
@@ -211,16 +223,12 @@ export class SpecificSpeedGraphComponent implements OnInit {
     return traceCoordinates;
   }
 
-  deleteDataPoint(point: DataPoint) {
-    let traceCount: number = this.specificSpeedChart.data.length;
-    let deleteTraceIndex: number = this.specificSpeedChart.data.findIndex(trace => trace.x[0] == point.x && trace.y[0] == point.y);
-    // ignore default traces
-    if (traceCount > 2 && deleteTraceIndex != -1) {
-      Plotly.deleteTraces(this.currentChartId, [deleteTraceIndex]);
-      this.selectedDataPoints.splice(deleteTraceIndex - 1, 1);
-      this.cd.detectChanges();
-      this.save();
-    }
+  deleteDataPoint(point: DataPoint, index: number) {
+    this.dataPointTraces = this.dataPointTraces.filter(trace => { return trace.marker.color != point.pointColor });
+    this.selectedDataPoints.splice(index, 1);
+    this.newPlot();
+    this.cd.detectChanges();
+    this.save();
   }
 
   getSpecificSpeed(): number {
@@ -229,21 +237,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   updateTableString() {
     this.dataSummaryTableString = this.dataSummaryTable.nativeElement.innerText;
-  }
-
-  resizeGraph() {
-    let expandedChart = this.ngChartContainer.nativeElement;
-    if (expandedChart) {
-      if (this.expanded) {
-        this.currentChartId = this.expandedChartId;
-      }
-      else {
-        this.currentChartId = this.tabPanelChartId;
-      }
-      if (this.speedForm.valid) {
-        this.initRenderChart();
-      }
-    }
   }
 
   toggleGrid() {
@@ -259,7 +252,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.resizeGraph();
+      this.newPlot();
     }, 100);
   }
 
@@ -268,10 +261,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.resizeGraph();
+      this.newPlot();
     }, 100);
   }
-  
+
 
   hideTooltip(btnType: string) {
     if (btnType === 'btnExpandChart') {

@@ -5,8 +5,8 @@
       <td class="bold w-50">Energy Savings From Water Heater</td>
       <td *ngIf="output.energySavedDWH" class="text-center w-50">
         {{output.energySavedDWH | number:'1.0-0'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
       </td>
       <td *ngIf="!output.energySavedDWH" class="text-center w-50">
         &mdash; &mdash;
@@ -16,8 +16,8 @@
       <td class="bold w-50">Energy Savings From Boiler</td>
       <td *ngIf="output.energySavedBoiler" class="text-center w-50">
         {{output.energySavedBoiler | number:'1.0-0'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
       </td>
       <td *ngIf="!output.energySavedBoiler" class="text-center w-50">
         &mdash; &mdash;
@@ -27,8 +27,8 @@
       <td class="bold w-50">Baseline Energy</td>
       <td *ngIf="output.energySavedTotal" class="text-center w-50">
         {{output.energySavedTotal | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
       </td>
       <td *ngIf="!output.energySavedTotal" class="text-center w-50">
         &mdash; &mdash;
@@ -38,8 +38,8 @@
       <td class="bold w-50">Energy Savings</td>
       <td *ngIf="output.energySavedTotal" class="text-center w-50">
         {{output.energySavedTotal | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
       </td>
       <td *ngIf="!output.energySavedTotal" class="text-center w-50">
         &mdash; &mdash;
@@ -49,8 +49,8 @@
       <td class="bold w-50">Baseline Water Savings</td>
       <td *ngIf="output.waterSaved" class="text-center w-50">
         {{output.waterSaved | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal/yr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
       </td>
       <td *ngIf="!output.waterSaved" class="text-center w-50">
         &mdash; &mdash;
@@ -60,8 +60,8 @@
       <td class="bold w-50">Water Savings</td>
       <td *ngIf="output.waterSaved" class="text-center w-50">
         {{output.waterSaved | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal/yr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
       </td>
       <td *ngIf="!output.waterSaved" class="text-center w-50">
         &mdash; &mdash;

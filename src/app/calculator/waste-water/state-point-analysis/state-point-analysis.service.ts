@@ -90,6 +90,8 @@ export class StatePointAnalysisService {
       sviValue: 0,
       numberOfClarifiers: 0,
       areaOfClarifier: 0,
+      diameter: 0,
+      isUserDefinedArea: true,
       MLSS: 0,
       influentFlow: 0,
       rasFlow: 0,
@@ -144,6 +146,8 @@ export class StatePointAnalysisService {
       sviParameter: 4,
       numberOfClarifiers: 2,
       areaOfClarifier: 910,
+      diameter: 0,
+      isUserDefinedArea: true,
       MLSS: 2.5,
       influentFlow: 1,
       rasFlow: .7,
@@ -154,6 +158,8 @@ export class StatePointAnalysisService {
       sviParameter: 4,
       numberOfClarifiers: 2,
       areaOfClarifier: 910,
+      diameter: 0,
+      isUserDefinedArea: true,
       MLSS: 2.5,
       influentFlow: .9,
       rasFlow: .7,
@@ -264,6 +270,12 @@ export class StatePointAnalysisService {
     
     results.RasConcentration = this.convertUnitsService.value(results.RasConcentration).from('kgL').to('mg/L');
     return results;
+  }
+
+  calculateArea(diameter: number): number {
+    // (diameter / 2)^2 * Math.PI;
+    let area = Math.pow(diameter / 2, 2) * Math.PI;
+    return area;
   }
 
 }

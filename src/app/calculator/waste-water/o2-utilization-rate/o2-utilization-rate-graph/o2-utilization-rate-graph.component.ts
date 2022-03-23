@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { PlotlyService } from 'angular-plotly.js';
 import { Subscription } from 'rxjs';
 import { O2UtilizationDataPoints, O2UtilizationRateService } from '../o2-utilization-rate.service';
-import * as Plotly from 'plotly.js';
 
 @Component({
   selector: 'app-o2-utilization-rate-graph',
@@ -22,7 +22,7 @@ export class O2UtilizationRateGraphComponent implements OnInit {
   displayCollapseTooltip: boolean = false;
   expanded: boolean = false;
   showGridLines: boolean = true;
-  constructor(private o2UtilizationRateService: O2UtilizationRateService) { }
+  constructor(private o2UtilizationRateService: O2UtilizationRateService, private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
     this.inputDataPointsSub = this.o2UtilizationRateService.inputDataPoints.subscribe(val => {
@@ -36,14 +36,11 @@ export class O2UtilizationRateGraphComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.drawGraph();      
-    }, 100)
+    this.drawGraph();
   }
 
   drawGraph() {
     if (this.o2UtilizationChart) {
-      Plotly.purge(this.o2UtilizationChart.nativeElement);
       let trace = {
         x: this.inputDataPoints.map(dataPoint => { return dataPoint.time }),
         y: this.inputDataPoints.map(dataPoint => { return dataPoint.dissolvedOxygen }),
@@ -80,11 +77,11 @@ export class O2UtilizationRateGraphComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       }
-      Plotly.newPlot(this.o2UtilizationChart.nativeElement, [trace], layout, config);
+      this.plotlyService.newPlot(this.o2UtilizationChart.nativeElement, [trace], layout, config);
     }
   }
 
-  
+
   expandChart() {
     this.expanded = true;
     this.hideTooltip('btnExpandChart');
@@ -102,7 +99,7 @@ export class O2UtilizationRateGraphComponent implements OnInit {
       this.drawGraph();
     }, 100);
   }
-  
+
 
   hideTooltip(btnType: string) {
     if (btnType === 'btnExpandChart') {

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ModalDirective } from 'ngx-bootstrap';
-import { Directory, DirectoryDbRef } from '../../shared/models/directory';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { Directory } from '../../shared/models/directory';
 import { Router } from '@angular/router';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../../shared/models/settings';
@@ -14,6 +14,7 @@ import { AssessmentService } from '../assessment.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 import { DashboardService } from '../dashboard.service';
 import { Assessment } from '../../shared/models/assessment';
+import { ConvertFanAnalysisService } from '../../calculator/fans/fan-analysis/convert-fan-analysis.service';
 
 @Component({
   selector: 'app-assessment-create',
@@ -40,7 +41,8 @@ export class AssessmentCreateComponent implements OnInit {
     private assessmentDbService: AssessmentDbService,
     private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService,
-    private dashboardService: DashboardService) { }
+    private dashboardService: DashboardService,
+    private convertFanAnalysisService: ConvertFanAnalysisService) { }
 
   ngOnInit() {
     this.directories = this.directoryDbService.getAll();
@@ -108,7 +110,8 @@ export class AssessmentCreateComponent implements OnInit {
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('FSAT');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
-        tmpAssessment.fsat = this.assessmentService.getNewFsat();
+        tmpAssessment.fsat = this.assessmentService.getNewFsat(this.settings);
+        tmpAssessment.fsat.baseGasDensity = this.convertFanAnalysisService.convertBaseGasDensityDefaults(tmpAssessment.fsat.baseGasDensity, this.settings)
         this.addAssessment(tmpAssessment, '/fsat/');
       }
       //ssmt

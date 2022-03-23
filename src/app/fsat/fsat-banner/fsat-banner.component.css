@@ -7,7 +7,7 @@
     font-size: 20px;
 }
 
-.home-nav-item{
+.home-nav-item, .home-nav-item a{
     color: black;
     border-color: black !important;
 }

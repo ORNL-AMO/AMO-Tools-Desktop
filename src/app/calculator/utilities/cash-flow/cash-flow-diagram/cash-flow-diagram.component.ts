@@ -3,8 +3,8 @@ import { CashFlowResults } from '../cash-flow';
 import { CashFlowForm } from '../cash-flow';
 import { CashFlowService } from '../cash-flow.service';
 import { TraceData, SimpleChart } from '../../../../shared/models/plotting';
+import { PlotlyService } from 'angular-plotly.js';
 
-import * as Plotly from 'plotly.js';
 
 
 @Component({
@@ -20,13 +20,13 @@ export class CashFlowDiagramComponent implements OnInit {
   @Input()
   cashFlowForm: CashFlowForm;
 
-  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("expandedChartDiv", { static: false })  expandedChartDiv: ElementRef;
+  @ViewChild("panelChartDiv", { static: false })  panelChartDiv: ElementRef;
+  
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
-  tabPanelChartId: string = 'tabPanelDiv';
-  expandedChartId: string = 'expandedChartDiv';
-  currentChartId: string = 'tabPanelDiv';
+
   
   expanded: boolean;
   hoverBtnExpand: boolean;
@@ -40,17 +40,14 @@ export class CashFlowDiagramComponent implements OnInit {
   cashFlowChart: SimpleChart;
   cashFlowData: Array<any>;
   years: Array<any>;
-  constructor(private cashFlowService: CashFlowService) {}
+  constructor(private cashFlowService: CashFlowService,
+    private plotlyService: PlotlyService) {}
 
   ngOnInit() {
-    this.triggerInitialResize(); 
   }
 
-  triggerInitialResize() {
-    window.dispatchEvent(new Event('resize'));
-    setTimeout(() => {
-      this.initRenderChart();
-    }, 100)
+  ngAfterViewInit(){
+    this.initRenderChart();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -60,14 +57,17 @@ export class CashFlowDiagramComponent implements OnInit {
   }
 
   initRenderChart() {
-    Plotly.purge(this.currentChartId);
     this.cashFlowChart = this.cashFlowService.getEmptyChart();
     
     this.compileGraphData();
     let chartTraces = this.buildTraces();
     this.cashFlowChart.data = chartTraces;
     let chartLayout = JSON.parse(JSON.stringify(this.cashFlowChart.layout));
-    Plotly.newPlot(this.currentChartId, this.cashFlowChart.data, chartLayout, this.cashFlowChart.config);
+    if(this.expanded && this.expandedChartDiv){
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.cashFlowChart.data, chartLayout, this.cashFlowChart.config);
+    }else if(!this.expanded && this.panelChartDiv){
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.cashFlowChart.data, chartLayout, this.cashFlowChart.config);
+    }
   }
 
   buildTraces() {
@@ -123,25 +123,12 @@ export class CashFlowDiagramComponent implements OnInit {
     this.cashFlowData.push(salvageSavings, fuelCost, annualSavings, operationCost, installationCost, junkCost);
   }
 
-  resizeGraph() {
-    let expandedChart = this.ngChartContainer.nativeElement;
-    if (expandedChart) {
-      if (this.expanded) {
-        this.currentChartId = this.expandedChartId;
-      }
-      else {
-        this.currentChartId = this.tabPanelChartId;
-      }
-        this.initRenderChart();
-    }
-  }
-
   expandChart() {
     this.expanded = true;
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.resizeGraph();
+      this.initRenderChart();
     }, 100);
   }
 
@@ -150,7 +137,7 @@ export class CashFlowDiagramComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.resizeGraph();
+      this.initRenderChart();
     }, 100);
   }
 

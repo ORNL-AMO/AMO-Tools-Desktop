@@ -209,9 +209,7 @@ export class StackLossService {
 
 
   getExampleData(settings: Settings): StackLossInput {
-    let exampleCombAirTemp: number = 80;
     let exampleFlueGasTemp: number = 320;
-    let exampleFuelTemp: number = 80;
     let ambientAirTemp: number = 60;
     if (settings.unitsOfMeasure != 'Imperial') {
     }
@@ -219,14 +217,9 @@ export class StackLossService {
       ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C');
       ambientAirTemp = Number(ambientAirTemp.toFixed(2));
 
-      exampleCombAirTemp = this.convertUnitsService.value(exampleCombAirTemp).from('F').to('C');
-      exampleCombAirTemp = Number(exampleCombAirTemp.toFixed(2));
-
       exampleFlueGasTemp = this.convertUnitsService.value(exampleFlueGasTemp).from('F').to('C');
       exampleFlueGasTemp = Number(exampleFlueGasTemp.toFixed(2));
-
-      exampleFuelTemp = this.convertUnitsService.value(exampleFuelTemp).from('F').to('C');
-      exampleFuelTemp = Number(exampleFuelTemp.toFixed(2));
+      
     }
     let exampleInput: StackLossInput = {
       flueGasByMass: undefined,
@@ -242,12 +235,12 @@ export class StackLossService {
         N2: 3.6,
         O2: 0.1,
         SO2: 0,
-        combustionAirTemperature: exampleCombAirTemp,
+        combustionAirTemperature: ambientAirTemp,
         excessAirPercentage: 15,
         moistureInAirCombustion: 0,
         ambientAirTemp: ambientAirTemp,
         flueGasTemperature: exampleFlueGasTemp,
-        fuelTemperature: exampleFuelTemp,
+        fuelTemperature: ambientAirTemp,
         gasTypeId: 1,
         o2InFlueGas: 2.857,
         oxygenCalculationMethod: "Excess Air"

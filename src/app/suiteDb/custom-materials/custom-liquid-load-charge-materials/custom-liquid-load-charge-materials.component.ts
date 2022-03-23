@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/cor
 import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { LiquidLoadChargeMaterial } from '../../../shared/models/materials';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';

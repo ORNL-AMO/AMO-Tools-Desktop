@@ -1,12 +1,12 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, ChangeDetectorRef, KeyValueDiffers, OnChanges, SimpleChanges, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, ChangeDetectorRef } from '@angular/core';
 import { EnrichmentInput } from '../../../../shared/models/phast/o2Enrichment';
 import { Settings } from '../../../../shared/models/settings';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 
 import { SimpleChart, TraceCoordinates } from '../../../../shared/models/plotting';
-import * as Plotly from 'plotly.js';
 import { O2EnrichmentService, DisplayPoint, Axis } from '../o2-enrichment.service';
 import { Subscription } from 'rxjs';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-enrichment-graph',
@@ -19,12 +19,11 @@ export class EnrichmentGraphComponent implements OnInit {
   settings: Settings;
 
   // DOM
-  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
   @ViewChild('dataSummaryTable', { static: false }) dataSummaryTable: ElementRef;
+  @ViewChild("expandedChartDiv", { static: false }) expandedChartDiv: ElementRef;
+  @ViewChild("panelChartDiv", { static: false }) panelChartDiv: ElementRef;
+
   dataSummaryTableString: any;
-  tabPanelChartId: string = 'tabPanelDiv';
-  expandedChartId: string = 'expandedChartDiv';
-  currentChartId: string = 'tabPanelDiv';
 
   // Graph Data
   selectedDataPoints: Array<DisplayPoint>;
@@ -44,7 +43,7 @@ export class EnrichmentGraphComponent implements OnInit {
 
   initResizeCompleted: boolean = false;
 
-  selectedAxisOptions = Array<{display: string, value: number}>();
+  selectedAxisOptions = Array<{ display: string, value: number }>();
   selectedAxis: number = 0;
   xAxis: Axis;
   selectedAxisSub: Subscription;
@@ -60,13 +59,17 @@ export class EnrichmentGraphComponent implements OnInit {
 
   constructor(private o2EnrichmentService: O2EnrichmentService,
     private cd: ChangeDetectorRef,
+    private plotlyService: PlotlyService
   ) {
   }
 
   ngOnInit() {
     this.initAxisOptions();
-    this.triggerInitialResize();
     this.initSubscriptions();
+  }
+
+  ngAfterViewInit(){
+    this.renderChart();
   }
 
   ngOnDestroy() {
@@ -81,31 +84,13 @@ export class EnrichmentGraphComponent implements OnInit {
         if (this.enrichmentChart && !resetData) {
           this.updateChart();
         } else {
-          this.initRenderChart();
+          this.renderChart();
         }
       }
     });
   }
 
-  triggerInitialResize() {
-    window.dispatchEvent(new Event('resize'));
-    setTimeout(() => {
-      this.initRenderChart(true);
-    }, 25)
-  }
 
-  resizeGraph() {
-    let expandedChart = this.ngChartContainer.nativeElement;
-    if (expandedChart) {
-      if (this.expanded) {
-        this.currentChartId = this.expandedChartId;
-      }
-      else {
-        this.currentChartId = this.tabPanelChartId;
-      }
-      this.initRenderChart();
-    }
-  }
 
   initAxisOptions() {
     let temperatureUnit = '&#8457;';
@@ -113,10 +98,10 @@ export class EnrichmentGraphComponent implements OnInit {
       temperatureUnit = '&#8451;';
     }
     this.selectedAxisOptions = [
-      {display: 'O2 in Combustion Air (%)', value: 0},
-      {display: 'Combustion Air Preheat Temperature ' + temperatureUnit, value: 1},
-      {display: 'Flue Gas Temperature ' + temperatureUnit, value: 2},
-      {display: 'O2 in Flue Gases (%)', value: 3},
+      { display: 'O2 in Combustion Air (%)', value: 0 },
+      { display: 'Combustion Air Preheat Temperature ' + temperatureUnit, value: 1 },
+      { display: 'Flue Gas Temperature ' + temperatureUnit, value: 2 },
+      { display: 'O2 in Flue Gases (%)', value: 3 },
     ];
   }
 
@@ -125,21 +110,33 @@ export class EnrichmentGraphComponent implements OnInit {
     this.o2EnrichmentService.selectedDataPoints.next(this.selectedDataPoints);
   }
 
-  initRenderChart(isInitResize = false) {
-    Plotly.purge(this.currentChartId);
+  renderChart() {
     this.initChartSetup();
     this.setTraces();
 
     let chartLayout = JSON.parse(JSON.stringify(this.enrichmentChart.layout));
-    Plotly.newPlot(this.currentChartId, this.enrichmentChart.data, chartLayout, this.enrichmentChart.config)
-      .then(chart => {
-        chart.on('plotly_hover', hoverData => {
-          this.displayHoverGroupData(hoverData);
+    if (this.expanded && this.expandedChartDiv) {
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.enrichmentChart.data, chartLayout, this.enrichmentChart.config)
+        .then(chart => {
+          chart.on('plotly_hover', hoverData => {
+            this.displayHoverGroupData(hoverData);
+          });
+          chart.on('plotly_unhover', unhoverData => {
+            this.removeHoverGroupData();
+          });
         });
-        chart.on('plotly_unhover', unhoverData => {
-          this.removeHoverGroupData();
+    } else if (!this.expanded && this.panelChartDiv) {
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.enrichmentChart.data, chartLayout, this.enrichmentChart.config)
+        .then(chart => {
+          chart.on('plotly_hover', hoverData => {
+            this.displayHoverGroupData(hoverData);
+          });
+          chart.on('plotly_unhover', unhoverData => {
+            this.removeHoverGroupData();
+          });
         });
-      });
+
+    }
     this.save();
   }
 
@@ -153,7 +150,11 @@ export class EnrichmentGraphComponent implements OnInit {
   updateChart() {
     this.updateTraces();
     let chartLayout = JSON.parse(JSON.stringify(this.enrichmentChart.layout));
-    Plotly.update(this.currentChartId, this.enrichmentChart.data, chartLayout);
+    if (this.expanded) {
+      this.plotlyService.update(this.expandedChartDiv.nativeElement, this.enrichmentChart.data, chartLayout);
+    } else {
+      this.plotlyService.update(this.panelChartDiv.nativeElement, this.enrichmentChart.data, chartLayout);
+    }
     this.save();
   }
 
@@ -162,7 +163,11 @@ export class EnrichmentGraphComponent implements OnInit {
     let chartLayout = JSON.parse(JSON.stringify(this.enrichmentChart.layout));
     chartLayout.xaxis.range = [];
     chartLayout.xaxis.autorange = true;
-    Plotly.update(this.currentChartId, this.enrichmentChart.data, chartLayout);
+    if (this.expanded) {
+      this.plotlyService.update(this.expandedChartDiv.nativeElement, this.enrichmentChart.data, chartLayout);
+    } else {
+      this.plotlyService.update(this.panelChartDiv.nativeElement, this.enrichmentChart.data, chartLayout);
+    }
     this.save();
   }
 
@@ -170,7 +175,7 @@ export class EnrichmentGraphComponent implements OnInit {
     this.enrichmentInputs.forEach((enrichmentInput: EnrichmentInput, index) => {
       let currentColor = this.getNextColor();
       // Line trace
-      let graphData: {data: TraceCoordinates, xAxis: Axis} = this.o2EnrichmentService.getGraphData(this.settings, enrichmentInput.inputData, this.selectedAxis);
+      let graphData: { data: TraceCoordinates, xAxis: Axis } = this.o2EnrichmentService.getGraphData(this.settings, enrichmentInput.inputData, this.selectedAxis);
       this.xAxis = graphData.xAxis;
       let lineTrace = this.o2EnrichmentService.getLineTrace();
       lineTrace.x = graphData.data.x;
@@ -178,7 +183,7 @@ export class EnrichmentGraphComponent implements OnInit {
       lineTrace.name = enrichmentInput.inputData.name;
       lineTrace.hovertemplate = this.xAxis.hoverTemplate;
       lineTrace.line.color = currentColor;
-      
+
       // Point trace
       let outputs = this.o2EnrichmentService.enrichmentOutputs.getValue();
       let fuelSavings = outputs[index].outputData.fuelSavings;
@@ -203,7 +208,7 @@ export class EnrichmentGraphComponent implements OnInit {
         pointTrace.marker.line.color = 'rgba(0, 0, 0, .6)';
         displayPoint.pointColor = "#000";
       }
-      
+
       this.enrichmentChart.data.push(lineTrace, pointTrace);
       this.selectedDataPoints.push(displayPoint);
     });
@@ -244,7 +249,7 @@ export class EnrichmentGraphComponent implements OnInit {
       }
 
       // Line trace
-      let graphData: {data: TraceCoordinates, xAxis: Axis} = this.o2EnrichmentService.getGraphData(this.settings, enrichmentInput.inputData, this.selectedAxis);
+      let graphData: { data: TraceCoordinates, xAxis: Axis } = this.o2EnrichmentService.getGraphData(this.settings, enrichmentInput.inputData, this.selectedAxis);
       this.xAxis = graphData.xAxis;
       let lineTrace = this.o2EnrichmentService.getLineTrace();
       lineTrace.x = graphData.data.x;
@@ -252,7 +257,7 @@ export class EnrichmentGraphComponent implements OnInit {
       lineTrace.name = enrichmentInput.inputData.name;
       lineTrace.hovertemplate = this.xAxis.hoverTemplate;
       lineTrace.line.color = lineTraceColor || currentColor;
-      
+
       // Point trace
       let outputs = this.o2EnrichmentService.enrichmentOutputs.getValue();
       let fuelSavings = outputs[index].outputData.fuelSavings;
@@ -270,7 +275,7 @@ export class EnrichmentGraphComponent implements OnInit {
       pointTrace.marker.color = pointColor || currentColor;
       pointTrace.marker.line.color = pointOutlineColor || currentColor;
       pointTrace.hovertemplate = this.xAxis.hoverTemplate;
-      
+
       this.enrichmentChart.data[lineIndex] = lineTrace;
       this.enrichmentChart.data[pointIndex] = pointTrace;
 
@@ -328,7 +333,7 @@ export class EnrichmentGraphComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.resizeGraph();
+      this.renderChart();
     }, 100);
   }
 
@@ -337,7 +342,7 @@ export class EnrichmentGraphComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.resizeGraph();
+      this.renderChart();
     }, 100);
   }
 

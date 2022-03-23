@@ -6,7 +6,7 @@ import { AssessmentItemComponent } from './assessment-item/assessment-item.compo
 import { CalculatorListComponent } from './calculator-list/calculator-list.component';
 import { DirectoryItemComponent } from './directory-item/directory-item.component';
 import { VersionModalComponent } from './version-modal/version-modal.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { DashboardPipeModule } from '../dashboard-pipe/dashboard-pipe.module';
 import { InventoryItemComponent } from './inventory-item/inventory-item.component';
 

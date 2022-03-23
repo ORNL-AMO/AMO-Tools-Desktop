@@ -138,7 +138,10 @@ export class AssessmentService {
       operatingCosts: {
         electricityCost: settings.electricityCost || .066,
         steamCost: settings.steamCost || 4.69,
-        fuelCost: settings.fuelCost || 3.99
+        fuelCost: settings.fuelCost || 3.99,
+        coalCarbonCost: .06,
+        electrodeCost: 3,
+        otherFuelCost: settings.fuelCost,
       },
       modifications: new Array()
     };
@@ -170,7 +173,7 @@ export class AssessmentService {
     this.workingAssessment = assessment;
   }
 
-  getNewFsat(): FSAT {
+  getNewFsat(settings: Settings): FSAT {
     let newFsat: FSAT = {
       fieldData: {
         
@@ -187,8 +190,7 @@ export class AssessmentService {
       },
       fsatOperations: {
         operatingHours: 8760,
-        cost: null,
-        cO2SavingsData: null
+        cost: 0.06,
       },
       fanMotor: {
         lineFrequency: 60,
@@ -205,7 +207,7 @@ export class AssessmentService {
         drive: 0
       },
       baseGasDensity: {
-        dryBulbTemp: 68,
+        dryBulbTemp: 123,
         staticPressure: 0,
         barometricPressure: 29.92,
         gasDensity: 0.0749,

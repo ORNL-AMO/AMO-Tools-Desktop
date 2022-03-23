@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -59,6 +59,7 @@ export class WasteWaterComponent implements OnInit {
 
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  showWelcomeScreen: boolean;
   constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
     private router: Router,
     private egridService: EGridService,
@@ -127,6 +128,7 @@ export class WasteWaterComponent implements OnInit {
       this.isModalOpen = val;
     });
 
+    this.checkShowWelcomeScreen();
   }
 
   ngOnDestroy() {
@@ -142,7 +144,6 @@ export class WasteWaterComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.disclaimerToast();
       this.getContainerHeight();
     }, 100);
   }
@@ -232,33 +233,6 @@ export class WasteWaterComponent implements OnInit {
     }
   }
 
-  disclaimerToast() {
-    if (this.settingsDbService.globalSettings.disableDisclaimer != true) {
-      this.toastData.title = 'Disclaimer';
-      this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
-      this.showToast = true;
-      this.cd.detectChanges();
-    }
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    };
-    this.cd.detectChanges();
-  }
-
-  disableDisclaimer() {
-    this.settingsDbService.globalSettings.disableDisclaimer = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
-    this.hideToast();
-  }
-
   initUpdateUnitsModal(oldSettings: Settings) {
     this.oldSettings = oldSettings;
     this.showUpdateUnitsModal = true;
@@ -286,5 +260,19 @@ export class WasteWaterComponent implements OnInit {
     this.assessment.wasteWater = this.convertWasteWaterService.convertWasteWater(this.assessment.wasteWater, this.oldSettings, currentSettings);
     this.assessment.wasteWater.existingDataUnits = currentSettings.unitsOfMeasure;
     this.saveWasteWater(this.assessment.wasteWater);
+  }
+
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disableWasteWaterTutorial) {
+      this.showWelcomeScreen = true;
+      this.wasteWaterService.isModalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disableWasteWaterTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    this.showWelcomeScreen = false;
+    this.wasteWaterService.isModalOpen.next(false);
   }
 }

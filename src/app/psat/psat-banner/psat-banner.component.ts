@@ -22,7 +22,7 @@ export class PsatBannerComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.mainTabSub.unsubscribe();
   }
 

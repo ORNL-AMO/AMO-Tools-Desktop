@@ -991,7 +991,6 @@ Calculators
   /* background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(30, 144, 255, 0.26)); */
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
   background: linear-gradient(rgba(228, 219, 219, 0.34), #FC5B00);
 }
@@ -999,7 +998,6 @@ Calculators
   height: 55px;
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
   background: linear-gradient(rgba(228, 219, 219, 0.34), #FC5B00);
 }
@@ -1016,7 +1014,6 @@ Calculators
   background: linear-gradient(rgba(228, 219, 219, 0.34), #BF3D00);
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
 
@@ -1025,7 +1022,6 @@ Calculators
   background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32);
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
 
@@ -1034,14 +1030,12 @@ Calculators
   background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(107, 132, 106, 0.65));
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
 .ico-size4.steam {
   height: 55px;
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
   background: linear-gradient(rgba(228, 219, 219, 0.34), #FC5B00);
 }
@@ -1050,28 +1044,17 @@ Calculators
   height: 55px;
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
   background: linear-gradient(rgba(228, 219, 219, 0.34), #003087);
 }
 
 .ico-size5 {
   height: 55px;
-  background: linear-gradient(rgba(147, 112, 219, 0.34), rgba(216, 191, 216, 0.65));
+  background: linear-gradient(#ffffff, #6f42c1);
   /*background-color: rgba(41, 128, 185, 0);*/
+  padding: 2px;
   border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
-}
-
-.fan-icon {
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
-  /*background-color: rgba(41, 128, 185, 0);*/
-  border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
-  box-shadow: #7b7878 2px 2px 5px 1px;
-  width: 85px;
-  height: 75px;
 }
 .lighting-bulb {
   height: 55px;
@@ -1082,27 +1065,13 @@ Calculators
   background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(0, 123, 255, 0.34));
 }
 
-.ssmt-icon {
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #F39C12);
-  /*background-color: rgba(41, 128, 185, 0);*/
-  border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
-  box-shadow: #7b7878 2px 2px 5px 1px;
-}
 
-.waste-water-icon-landing {
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #70A2FF);
-  border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
-  box-shadow: #7b7878 2px 2px 5px 1px;
-}
 
 .ico-size4.general {
   height: 55px;
   background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32) !important;
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
 

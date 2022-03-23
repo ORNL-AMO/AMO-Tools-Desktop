@@ -176,6 +176,7 @@ export class CompareService {
         this.isFuelDifferent(baseline, modification) ||
         this.isCombustionEfficiencyDifferent(baseline, modification) ||
         this.isBlowdownRateDifferent(baseline, modification) ||
+        this.isBlowdownFlashedDifferent(baseline, modification) ||
         this.isPreheatMakeupWaterDifferent(baseline, modification) ||
         this.isSteamTemperatureDifferent(baseline, modification) ||
         this.isDeaeratorVentRateDifferent(baseline, modification) ||
@@ -360,13 +361,15 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerInput.approachTemperature !== modification.boilerInput.approachTemperature) {
-        return true;
+      if (baseline.boilerInput.preheatMakeupWater && modification.boilerInput.preheatMakeupWater) {
+        if (baseline.boilerInput.approachTemperature !== modification.boilerInput.approachTemperature) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
-    } else {
-      return false;
     }
   }
 

@@ -6,6 +6,7 @@ import { WaterReductionData, WaterReductionResults } from '../../../shared/model
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { WaterReductionService } from './water-reduction.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Assessment } from '../../../shared/models/assessment';
 
 @Component({
   selector: 'app-water-reduction',
@@ -25,6 +26,8 @@ export class WaterReductionComponent implements OnInit {
   operatingHours: OperatingHours;
   @Input()
   isWastewater: boolean = false;
+  @Input()
+  assessment: Assessment;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;

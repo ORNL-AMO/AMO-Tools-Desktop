@@ -7,7 +7,7 @@ import { CondensingEconomizerComponent } from './condensing-economizer.component
 import { CondensingEconomizerService } from './condensing-economizer.service';
 import { CondensingEconomizerFormService } from './condensing-economizer-form.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
