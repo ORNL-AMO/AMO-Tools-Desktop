@@ -18,6 +18,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   co2SavingsData: Co2SavingsData;
   @Input()
   co2SavingsDifferent: Co2SavingsDifferent;
+  @Input()
   totalEmissionOutputRateDifferent: boolean;
   @Input()
   isFormDisabled: boolean;

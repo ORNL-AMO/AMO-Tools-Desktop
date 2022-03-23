@@ -134,7 +134,6 @@ export class AssessmentCo2SavingsService {
     }
     return totalEmissionsResult;
   }
-
 }
 export interface Co2SavingsDifferent {
   energyType?: boolean;
