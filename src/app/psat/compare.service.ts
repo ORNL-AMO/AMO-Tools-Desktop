@@ -4,6 +4,8 @@ import { BehaviorSubject } from 'rxjs';
 import { PsatService } from './psat.service';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { Co2SavingsDifferent } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { CO2DataDifferent } from '../waste-water/modify-conditions/compare.service';
 @Injectable()
 export class CompareService {
 
@@ -13,10 +15,12 @@ export class CompareService {
   openModificationModal: BehaviorSubject<boolean>;
   openNewModal: BehaviorSubject<boolean>;
   currCurrency: string = "$";
+  totalEmissionOutputRateDifferent: BehaviorSubject<boolean>;
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) {
     this.selectedModification = new BehaviorSubject<PSAT>(undefined);
     this.openModificationModal = new BehaviorSubject<boolean>(undefined);
     this.openNewModal = new BehaviorSubject<boolean>(undefined);
+    this.totalEmissionOutputRateDifferent = new BehaviorSubject<boolean>(false);
   }
 
   setCompareVals(psat: PSAT, selectedModIndex: number) {
@@ -116,7 +120,8 @@ export class CompareService {
     if (baseline && modification) {
       return (
         this.isOperatingHoursDifferent(baseline, modification) ||
-        this.isCostKwhrDifferent(baseline, modification)
+        this.isCostKwhrDifferent(baseline, modification) || 
+        this.isTotalEmissionOutputRateDifferent(false, baseline, modification)
       )
     }
     else {
@@ -589,6 +594,27 @@ export class CompareService {
     } else {
       return false;
     }
+  }
+
+  isTotalEmissionOutputRateDifferent(shouldUpdateModifyForm: boolean = true, baseline?: PSAT, modification?: PSAT): boolean {
+    let totalEmissionOutputRateDifferent: boolean = false;
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.co2SavingsData && modification.inputs.co2SavingsData) {
+        totalEmissionOutputRateDifferent = baseline.inputs.co2SavingsData.totalEmissionOutputRate != modification.inputs.co2SavingsData.totalEmissionOutputRate;
+      }
+    } 
+
+    if (shouldUpdateModifyForm) {
+      this.totalEmissionOutputRateDifferent.next(totalEmissionOutputRateDifferent);
+    }
+
+    return totalEmissionOutputRateDifferent;
   }
  
   //load factor
