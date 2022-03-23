@@ -2,3 +2,29 @@
     position: fixed;
     top: 100%;
 }
+
+.btn-copy-table {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+    height: 30px;
+    width: 125px;
+    opacity: 0.7;
+    background-color: #17202A;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    color: white;
+    transition: ease-in-out 0.2s all;
+}
+
+.modal-dialog{
+    top: .75rem;
+}
+
+.btn{
+    padding: 6px;
+}
+
+#fileName {
+    width: 500px;
+}
