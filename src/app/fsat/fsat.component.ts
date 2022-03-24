@@ -85,6 +85,7 @@ export class FsatComponent implements OnInit {
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   showWelcomeScreen: boolean = false;
+  modificationModalOpen: boolean = false;
   constructor(private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
     private fsatService: FsatService,
@@ -149,6 +150,7 @@ export class FsatComponent implements OnInit {
       }
     });
     this.openModSub = this.fsatService.openModificationModal.subscribe(val => {
+      this.modificationModalOpen = val;
       if (val) {
         this.selectModificationModal();
       }

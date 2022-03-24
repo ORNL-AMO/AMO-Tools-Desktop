@@ -23,7 +23,10 @@ export class OperationsCompareService {
       this.compareHoursPerYear() ||
       this.compareFuelCost() ||
       this.compareSteamCost() ||
-      this.compareElectricityCost()
+      this.compareElectricityCost() ||
+      this.compareCoalCarbonCost() ||
+      this.compareElectrodeCost() ||
+      this.compareOtherFuelCost()
     );
   }
 
@@ -71,7 +74,10 @@ export class OperationsCompareService {
       this.compare(baseline.operatingHours.hoursPerYear, modification.operatingHours.hoursPerYear) ||
       this.compare(baseline.operatingCosts.fuelCost, modification.operatingCosts.fuelCost) ||
       this.compare(baseline.operatingCosts.steamCost, modification.operatingCosts.steamCost) ||
-      this.compare(baseline.operatingCosts.electricityCost, modification.operatingCosts.electricityCost));
+      this.compare(baseline.operatingCosts.electricityCost, modification.operatingCosts.electricityCost)) ||
+      this.compare(baseline.operatingCosts.coalCarbonCost, modification.operatingCosts.coalCarbonCost) ||
+      this.compare(baseline.operatingCosts.electrodeCost, modification.operatingCosts.electrodeCost) ||
+      this.compare(baseline.operatingCosts.otherFuelCost, modification.operatingCosts.otherFuelCost);
   }
 
   compare(a: any, b: any) {

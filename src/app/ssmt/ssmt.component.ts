@@ -83,6 +83,7 @@ export class SsmtComponent implements OnInit {
   sankeyLabelStyle: string = 'both';
   showSankeyLabelOptions: boolean;
   showWelcomeScreen: boolean = false;
+  modificationModalOpen: boolean = false;
   constructor(
     private egridService: EGridService,
     private activatedRoute: ActivatedRoute,
@@ -150,6 +151,7 @@ export class SsmtComponent implements OnInit {
     });
 
     this.openModificationSelectSubscription = this.ssmtService.openModificationSelectModal.subscribe(val => {
+      this.modificationModalOpen = val;
       if (val) {
         this.selectModificationModal();
       }

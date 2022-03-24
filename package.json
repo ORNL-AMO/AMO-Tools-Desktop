@@ -12,12 +12,12 @@
     "npm": "6.14.8"
   },
   "scripts": {
-    "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --configuration production --aot",
+    "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --configuration production",
     "start": "ng serve",
     "build": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build",
     "build-watch": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --watch",
-    "build-prod": "ng build --aot",
-    "build-prod-windows": "./scripts/ng.sh build --prod --aot",
+    "build-prod": "ng build --configuration production",
+    "build-prod-windows": "./scripts/ng.sh build --configuration production",
     "clean": "rm -rf node_modules && rm -rf dist && rm -f package-lock.json",
     "electron": "electron .",
     "lint": "ng lint",
@@ -77,8 +77,8 @@
       "oneClick": false,
       "allowElevation": true,
       "allowToChangeInstallationDirectory": true,
-      "installerIcon": "../AMO-Tools-Desktop/src/favicon.ico",
-      "installerHeaderIcon": "../AMO-Tools-Desktop/src/favicon.ico",
+      "installerIcon": "src/favicon.ico",
+      "installerHeaderIcon": "src/favicon.ico",
       "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "linux": {
