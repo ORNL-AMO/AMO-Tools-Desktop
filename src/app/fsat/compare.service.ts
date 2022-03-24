@@ -3,7 +3,7 @@ import { FSAT } from '../shared/models/fans';
 import { BehaviorSubject } from 'rxjs';
 import { FsatService } from './fsat.service';
 import { Settings } from '../shared/models/settings';
-import { Co2savingsDifferent } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { Co2SavingsDifferent } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { CO2DataDifferent } from '../waste-water/modify-conditions/compare.service';
 
 @Injectable()
@@ -11,10 +11,12 @@ export class CompareService {
   baselineFSAT: FSAT;
   modifiedFSAT: FSAT;
   selectedModification: BehaviorSubject<FSAT>;
-  co2SavingsDifferent: BehaviorSubject<Co2savingsDifferent>;
+  co2SavingsDifferent: BehaviorSubject<Co2SavingsDifferent>;
+  totalEmissionOutputRateDifferent: BehaviorSubject<boolean>;
   constructor(private fsatService: FsatService) {
     this.selectedModification = new BehaviorSubject<FSAT>(undefined);
-    this.co2SavingsDifferent = new BehaviorSubject<Co2savingsDifferent>(undefined);
+    this.co2SavingsDifferent = new BehaviorSubject<Co2SavingsDifferent>(undefined);
+    this.totalEmissionOutputRateDifferent = new BehaviorSubject<boolean>(false);
   }
 
 
@@ -379,7 +381,8 @@ export class CompareService {
     if (baseline && modification) {
       return (
         this.isOperatingHoursDifferent(baseline, modification) ||
-        this.isCostDifferent(baseline, modification)
+        this.isCostDifferent(baseline, modification) ||
+        this.isTotalEmissionOutputRateDifferent(false, baseline, modification)
       );
     } else {
       return false;
@@ -764,10 +767,8 @@ export class CompareService {
     }
   }
 
-  isCo2SavingsDifferent(baseline?: FSAT, modification?: FSAT): void {
-    let co2SavingsDifferent: CO2DataDifferent = {
-      totalEmissionOutputRate: false,
-    }
+  isTotalEmissionOutputRateDifferent(shouldUpdateModifyForm: boolean = true, baseline?: FSAT, modification?: FSAT): boolean {
+    let totalEmissionOutputRateDifferent: boolean = false;
     if (!baseline) {
       baseline = this.baselineFSAT;
     }
@@ -776,12 +777,15 @@ export class CompareService {
     }
     if (baseline && modification) {
       if (baseline.fsatOperations.cO2SavingsData && modification.fsatOperations.cO2SavingsData) {
-        co2SavingsDifferent = {
-          totalEmissionOutputRate: baseline.fsatOperations.cO2SavingsData.totalEmissionOutputRate != modification.fsatOperations.cO2SavingsData.totalEmissionOutputRate,
-        }
+        totalEmissionOutputRateDifferent = baseline.fsatOperations.cO2SavingsData.totalEmissionOutputRate != modification.fsatOperations.cO2SavingsData.totalEmissionOutputRate;
       }
+    } 
+
+    if (shouldUpdateModifyForm) {
+      this.totalEmissionOutputRateDifferent.next(totalEmissionOutputRateDifferent);
     }
-    this.co2SavingsDifferent.next(co2SavingsDifferent);
+
+    return totalEmissionOutputRateDifferent;
   }
 
   getBadges(baseline: FSAT, modification: FSAT, settings: Settings): Array<{ badge: string, componentStr: string }> {

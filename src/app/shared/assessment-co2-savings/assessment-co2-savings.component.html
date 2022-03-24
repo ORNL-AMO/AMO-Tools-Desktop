@@ -4,7 +4,7 @@
       Zip code
     </label>
     <div class="input-group">
-      <input name="zipcode" type="text" [ngClass]="{'indicate-different': co2SavingsDifferent.zipcode}" class="form-control" formControlName="zipcode" id="zipcode"
+      <input name="zipcode" type="text"  class="form-control" formControlName="zipcode" id="zipcode"
         onfocus="this.select();" (input)="setZipcode()" (focus)="focusField('zipcode')">
     </div>
   </div>
@@ -13,7 +13,7 @@
   <div *ngIf="zipCodeSubRegionData" class="form-group">
     <label class="small" for="eGridSubregion">eGRID Subregion</label>
     <div *ngIf="zipCodeSubRegionData.length > 1" class="input-group">
-      <select name="eGridSubregion" [ngClass]="{'indicate-different': co2SavingsDifferent.eGridSubregion}" class="form-control" id="eGridSubregion" formControlName="eGridSubregion"
+      <select name="eGridSubregion" class="form-control" id="eGridSubregion" formControlName="eGridSubregion"
         (focus)="focusField('eGridSubregion')" (change)="setSubRegionEmissionsOutput()">
         <option *ngFor="let subregion of zipCodeSubRegionData" [ngValue]="subregion">{{subregion}}</option>
       </select>
@@ -31,7 +31,7 @@
       Total Emission Output Rate
     </label>
     <div class="input-group">
-      <input name="totalEmissionOutputRate" [ngClass]="{'indicate-different': co2SavingsDifferent.totalEmissionOutputRate}" type="number" class="form-control" formControlName="totalEmissionOutputRate"
+      <input name="totalEmissionOutputRate" [ngClass]="{'indicate-different': totalEmissionOutputRateDifferent}" type="number" class="form-control" formControlName="totalEmissionOutputRate"
         id="totalEmissionOutputRate" onfocus="this.select();" (input)="setUserEmissionsOutput()"
         (focus)="focusField('totalEmissionOutputRate')">
       <span *ngIf="!inTreasureHunt" class="input-group-addon units small">kg CO<sub>2</sub>/<span>MWh</span>
