@@ -34,6 +34,7 @@ export class CompareService {
     } else {
       //compare baseline with baseline, all will come back false
       operationsDifferent = this.compareOperations(baselineData.operations, baselineData.operations);
+      // copy co2DataDifferent above and compare baseline
       activatedSludgeDifferent = this.compareActivatedSludge(baselineData.activatedSludgeData, baselineData.activatedSludgeData);
       aeratorPerformanceDifferent = this.compareAeratorPerformance(baselineData.aeratorPerformanceData, baselineData.aeratorPerformanceData);
     }
@@ -66,6 +67,7 @@ export class CompareService {
     }
   }
 
+  // Don't need this method
   isCo2SavingsDifferent(baseline?: Co2SavingsData, modification?: Co2SavingsData): void {
     let co2SavingsDifferent = {
       totalEmissionOutputRate: false,

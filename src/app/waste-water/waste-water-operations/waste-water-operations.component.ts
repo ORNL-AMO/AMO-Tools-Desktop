@@ -78,8 +78,9 @@ export class WasteWaterOperationsComponent implements OnInit {
       this.operationsForm.controls.EnergyCostUnit.disable();
     }
 
-    this.wasteWaterDifferentSub = this.compareService.wasteWaterDifferent.subscribe(val => {
-      this.operationsDifferent = val.operationsDifferent;
+    this.wasteWaterDifferentSub = this.compareService.wasteWaterDifferent.subscribe(wasteWaterDifferent => {
+      this.operationsDifferent = wasteWaterDifferent.operationsDifferent;
+      // create totalEmissionOutputRateDifferent boolean and set from ww different here. it gets passed as input in the template
       this.cd.detectChanges();
     });
 
