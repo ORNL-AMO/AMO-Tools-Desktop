@@ -81,24 +81,9 @@
     </div> 
     
     <div class="pl-3 pr-3">
-        <!-- pass totalEmissionOutputRateDifferent   -->
-        <!-- <app-assessment-co2-savings *ngIf="co2SavingsData"
-      [co2SavingsData]="co2SavingsData"
-      [co2SavingsDifferent]="co2SavingsDifferent"
-
-      This input should have existed here. See co2-diff-highlighting or the psat implementation 
-      [totalEmissionOutputRateDifferent]="totalEmissionOutputRateDifferent"
-
-      [isFormDisabled]="co2SavingsFormDisabled"
-      [inBaseline]="!isModification"
-      (emitCurrentField)="focusField($event)"
-      (emitUpdateCo2SavingsData)="updateCo2SavingsData($event)"
-      ></app-assessment-co2-savings> -->
-
-
       <app-assessment-co2-savings *ngIf="co2SavingsData"
       [co2SavingsData]="co2SavingsData"
-      [co2SavingsDifferent]="co2SavingsDifferent"
+      [totalEmissionOutputRateDifferent]="totalEmissionOutputRateDifferent"
       [isFormDisabled]="co2SavingsFormDisabled"
       [inBaseline]="!isModification"
       (emitCurrentField)="focusField($event)"

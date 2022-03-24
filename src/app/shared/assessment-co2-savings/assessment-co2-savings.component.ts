@@ -17,8 +17,6 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   @Input()
   co2SavingsData: Co2SavingsData;
   @Input()
-  co2SavingsDifferent: Co2SavingsDifferent;
-  @Input()
   totalEmissionOutputRateDifferent: boolean;
   @Input()
   isFormDisabled: boolean;
@@ -74,7 +72,6 @@ export class AssessmentCo2SavingsComponent implements OnInit {
       this.assessmentCo2Service.baselineCo2SavingsData.next(this.co2SavingsData);
       this.co2SavingsDataSub = this.assessmentCo2Service.baselineCo2SavingsData.subscribe(baselineCo2SavingsData => {
         if (baselineCo2SavingsData) {
-          debugger;
           this.co2SavingsData = baselineCo2SavingsData
           this.initForm();
         }

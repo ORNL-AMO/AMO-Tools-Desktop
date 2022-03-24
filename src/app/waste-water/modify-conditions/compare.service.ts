@@ -2,16 +2,13 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import { AeratorPerformanceData, WasteWaterData, ActivatedSludgeData, WasteWaterOperations } from '../../shared/models/waste-water';
-import { Co2SavingsDifferent } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Injectable()
 export class CompareService {
 
   wasteWaterDifferent: BehaviorSubject<WasteWaterDifferent>;
-  co2SavingsDifferent: BehaviorSubject<Co2SavingsDifferent>;
   constructor() {
     this.wasteWaterDifferent = new BehaviorSubject<WasteWaterDifferent>(undefined);
-    this.co2SavingsDifferent = new BehaviorSubject<Co2SavingsDifferent>(undefined);
   }
 
   setWasteWaterDifferent(baselineData: WasteWaterData, modificationData?: WasteWaterData) {
@@ -32,9 +29,8 @@ export class CompareService {
       aeratorPerformanceDifferent = this.compareAeratorPerformance(baselineData.aeratorPerformanceData, modificationData.aeratorPerformanceData);
       isDifferent = this.checkHasDifferent(activatedSludgeDifferent) || this.checkHasDifferent(aeratorPerformanceDifferent) || this.checkHasDifferent(co2DataDifferent);
     } else {
-      //compare baseline with baseline, all will come back false
       operationsDifferent = this.compareOperations(baselineData.operations, baselineData.operations);
-      // copy co2DataDifferent above and compare baseline
+      co2DataDifferent = this.compareCo2SavingsData(baselineData.co2SavingsData, baselineData.co2SavingsData);
       activatedSludgeDifferent = this.compareActivatedSludge(baselineData.activatedSludgeData, baselineData.activatedSludgeData);
       aeratorPerformanceDifferent = this.compareAeratorPerformance(baselineData.aeratorPerformanceData, baselineData.aeratorPerformanceData);
     }
@@ -65,22 +61,6 @@ export class CompareService {
         totalEmissionOutputRate: false
       }
     }
-  }
-
-  // Don't need this method
-  isCo2SavingsDifferent(baseline?: Co2SavingsData, modification?: Co2SavingsData): void {
-    let co2SavingsDifferent = {
-      totalEmissionOutputRate: false,
-    }
-    if (baseline && modification) {
-      if (baseline && modification) {
-        co2SavingsDifferent = {
-          totalEmissionOutputRate: baseline.totalEmissionOutputRate != modification.totalEmissionOutputRate,
-        }
-      }
-    }
-    debugger;
-    this.co2SavingsDifferent.next(co2SavingsDifferent);
   }
 
   compareAeratorPerformance(baselineData: AeratorPerformanceData, modificationData: AeratorPerformanceData): AeratorPerformanceDifferent {
