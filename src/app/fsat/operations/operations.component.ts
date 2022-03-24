@@ -9,7 +9,7 @@ import { FsatService } from '../fsat.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { OperationsService } from './operations.service';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
-import { AssessmentCo2SavingsService, Co2SavingsDifferent } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -36,7 +36,6 @@ export class OperationsComponent implements OnInit {
   modificationIndex: number;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
-  co2SavingsDifferentSubscription: Subscription;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
@@ -44,8 +43,6 @@ export class OperationsComponent implements OnInit {
   co2SavingsFormDisabled: boolean;
 
   cO2SavingsData: Co2SavingsData;
-
-  co2SavingsDifferent: Co2SavingsDifferent;
 
   totalEmissionOutputRateDifferent: boolean = false;
 
@@ -73,9 +70,6 @@ export class OperationsComponent implements OnInit {
     else {
       this.idString = 'fsat_baseline';
     }
-    this.co2SavingsDifferentSubscription = this.compareService.co2SavingsDifferent.subscribe(val => {
-      this.co2SavingsDifferent = val;
-    })
     this.init();
     if (!this.selected) {
       this.disableForm();
@@ -135,7 +129,7 @@ export class OperationsComponent implements OnInit {
   updateFsatCo2SavingsData(cO2SavingsData?: Co2SavingsData) {
     this.cO2SavingsData = cO2SavingsData;
     this.save();
-    this.compareService.isTotalEmissionOutputRateDifferent();
+    this.isTotalEmissionOutputRateDifferent();
   }
 
   setCo2SavingsData() {
