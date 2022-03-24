@@ -135,6 +135,7 @@ export class AssessmentCo2SavingsService {
     return totalEmissionsResult;
   }
 }
+
 export interface Co2SavingsDifferent {
   energyType?: boolean;
   totalEmissionOutputRate?: boolean;
@@ -146,4 +147,5 @@ export interface Co2SavingsDifferent {
   eGridSubregion?: boolean;
   totalEmissionOutput?: boolean;
   zipcode?: boolean,
-}
+} 
+
