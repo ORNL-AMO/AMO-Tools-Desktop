@@ -83,6 +83,7 @@
     <div class="pl-3 pr-3">
       <app-assessment-co2-savings *ngIf="co2SavingsData"
       [co2SavingsData]="co2SavingsData"
+      [co2SavingsDifferent]="co2SavingsDifferent"
       [isFormDisabled]="co2SavingsFormDisabled"
       [inBaseline]="!isModification"
       (emitCurrentField)="focusField($event)"

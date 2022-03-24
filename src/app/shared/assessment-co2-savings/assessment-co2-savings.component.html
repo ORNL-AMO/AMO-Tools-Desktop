@@ -32,7 +32,7 @@
     </label>
     <div class="input-group">
       <input name="totalEmissionOutputRate" type="number" class="form-control"  
-      [ngClass]="{'indicate-different': totalEmissionOutputRateDifferent}" formControlName="totalEmissionOutputRate"
+      [ngClass]="{'indicate-different': co2SavingsDifferent.totalEmissionOutputRate}" formControlName="totalEmissionOutputRate"
         id="totalEmissionOutputRate" onfocus="this.select();" (input)="setUserEmissionsOutput()"
         (focus)="focusField('totalEmissionOutputRate')">
       <span *ngIf="!inTreasureHunt" class="input-group-addon units small">kg CO<sub>2</sub>/<span>MWh</span>

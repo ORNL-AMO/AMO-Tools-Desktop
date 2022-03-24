@@ -9,6 +9,7 @@ import { WasteWater, WasteWaterData, WasteWaterOperations } from '../../shared/m
 import { CompareService, OperationsDifferent } from '../modify-conditions/compare.service';
 import { WasteWaterService } from '../waste-water.service';
 import { WasteWaterOperationsService } from './waste-water-operations.service';
+import { Co2SavingsDifferent } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
   selector: 'app-waste-water-operations',
@@ -38,7 +39,9 @@ export class WasteWaterOperationsComponent implements OnInit {
   modificationIndex: number;
   selectedModificationIdSub: Subscription;
   operationsDifferent: OperationsDifferent;
+  co2SavingsDifferent: Co2SavingsDifferent;
   wasteWaterDifferentSub: Subscription;
+  co2SavingsDifferentSub: Subscription;
   settings: Settings;
 
   constructor(
@@ -81,10 +84,18 @@ export class WasteWaterOperationsComponent implements OnInit {
     });
 
 
+
+    // this.co2SavingsDifferentSub = this.compareService.co2SavingsDifferent.subscribe(val => {
+    //   debugger;
+    //   this.co2SavingsDifferent.totalEmissionOutputRate = val.totalEmissionOutputRate;
+    // })
+
+
   }
 
   updateCo2SavingsData(co2SavingsData?: Co2SavingsData) {
     this.co2SavingsData = co2SavingsData;
+    this.compareService.isCo2SavingsDifferent();
     this.saveOperations();
   }
 
@@ -150,6 +161,7 @@ export class WasteWaterOperationsComponent implements OnInit {
       this.selectedModificationIdSub.unsubscribe();
     } 
     this.wasteWaterDifferentSub.unsubscribe();
+    this.co2SavingsDifferentSub.unsubscribe();
   }
 
 }
