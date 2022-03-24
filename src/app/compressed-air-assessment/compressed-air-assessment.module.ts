@@ -138,6 +138,8 @@ import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module'
 import { CentrifugalGraphModule } from './centrifugal-graph/centrifugal-graph.module';
 import { BleedTestModule } from '../calculator/compressed-air/bleed-test/bleed-test.module';
 import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-modal.component';
+import { CompressedAirSankeyComponent } from './compressed-air-sankey/compressed-air-sankey.component';
+import { CompressedAirSankeyService } from './compressed-air-sankey/compressed-air-sankey.service';
 
 @NgModule({
   declarations: [
@@ -218,7 +220,8 @@ import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-moda
     ImproveEndUseEfficiencyItemComponent,
     CompressorSummaryComponent,
     WelcomeScreenComponent,
-    FlaModalComponent
+    FlaModalComponent,
+    CompressedAirSankeyComponent
   ],
   imports: [
     CommonModule,
@@ -283,7 +286,8 @@ import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-moda
     UseAutomaticSequencerService,
     AdjustCascadingSetPointsService,
     ReduceRunTimeService,
-    ExploreOpportunitiesValidationService
+    ExploreOpportunitiesValidationService,
+    CompressedAirSankeyService
   ]
 })
 export class CompressedAirAssessmentModule { }

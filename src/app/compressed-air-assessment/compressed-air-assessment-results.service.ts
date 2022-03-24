@@ -23,9 +23,11 @@ export class CompressedAirAssessmentResultsService {
     let totalFullLoadCapacity: number = this.getTotalCapacity(compressedAirAssessment.compressorInventoryItems);
     let totalFullLoadPower: number = this.getTotalPower(compressedAirAssessment.compressorInventoryItems);
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-      let baselineProfileSummary: Array<ProfileSummary>
+      let baselineProfileSummary: Array<ProfileSummary>;
       if (baselineProfileSummaries) {
-        baselineProfileSummary = baselineProfileSummaries.find(summary => { return summary.dayTypeId == dayType.dayTypeId }).profileSummary;
+        baselineProfileSummary = baselineProfileSummaries.find(summary => { 
+          return summary.dayTypeId == dayType.dayTypeId 
+        }).profileSummary;
       } else {
         baselineProfileSummary = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessment, dayType, settings);
       }
@@ -1217,6 +1219,51 @@ export class CompressedAirAssessmentResultsService {
     return profliesForPrint;
   }
 
+  // Done before avgs logic was complete. Check if this can be refactored/removed 
+  getDayTypeCompressorAverageResults(compressedAirAssessment: CompressedAirAssessment, settings: Settings, baselineDayTypeProfileSummaries?: Array<ProfileSummary>): Array<DayTypeCompressorAverageResults> {
+    let dayTypeCompressorAverageResults: Array<DayTypeCompressorAverageResults> = [];
+    compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+      let dayTypeCompressorAverageResult: DayTypeCompressorAverageResults = {
+        dayTypeId: dayType.dayTypeId,
+        compressorAverages: []
+      }
+      let baselineProfileSummaries: Array<ProfileSummary> = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessment, dayType, settings);
+      // numbers in power and acfm are changing after above
+      compressedAirAssessment.compressorInventoryItems.forEach(compressor => {
+        let compressorSummary: ProfileSummary = baselineProfileSummaries.find(summary => summary.compressorId == compressor.itemId);
+        let compressorDayTypeTotals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals([compressor], dayType, [compressorSummary], compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
+        
+        let hoursOn = 0;
+        compressorDayTypeTotals.forEach(total => {
+          if (total.power != 0) {
+            hoursOn = hoursOn + compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+          }
+        });
+        let sumCompressorPower: number = _.sumBy(compressorDayTypeTotals, (total) => { 
+          return total.power 
+        });
+        let sumCompressorAirFlow: number = _.sumBy(compressorDayTypeTotals, (total) => { 
+          return total.airflow 
+        });
+
+        let validAirflowAverage: boolean = !isNaN(sumCompressorAirFlow) && sumCompressorAirFlow !== 0;
+        let validPowerAverage: boolean = !isNaN(sumCompressorPower) && sumCompressorPower !== 0;
+        // Skip compressor in sankey if no power or air hours on
+        if (validAirflowAverage && validPowerAverage) {
+          dayTypeCompressorAverageResult.compressorAverages.push({
+            compressorId: compressor.itemId,
+            compressorName: compressor.name,
+            averagePower: sumCompressorPower / hoursOn,
+            averageAirflow: sumCompressorAirFlow / hoursOn,
+          });
+        }
+      });
+      dayTypeCompressorAverageResults.push(dayTypeCompressorAverageResult);
+    });
+
+    return dayTypeCompressorAverageResults;
+  }
+
 }
 
 
@@ -1293,6 +1340,7 @@ export interface BaselineResult {
   name: string,
   maxAirFlow: number,
   averageAirFlow: number,
+  compressorsAverageResults?: Array<DayTypeCompressorAverageResults>,
   averageAirFlowPercentCapacity: number,
   operatingDays: number,
   totalOperatingHours: number,
@@ -1303,6 +1351,17 @@ export interface BaselineResult {
 }
 
 
+export interface DayTypeCompressorAverageResults {
+  dayTypeId: string,
+  compressorAverages: Array<CompressorAverageResult>
+}
+
+export interface CompressorAverageResult {
+  compressorId: string,
+  compressorName: string,
+  averagePower: number,
+  averageAirflow: number,
+}
 export interface AdjustProfileResults {
   adjustedProfileSummary: Array<ProfileSummary>,
   adjustedCompressors: Array<CompressorInventoryItem>,
