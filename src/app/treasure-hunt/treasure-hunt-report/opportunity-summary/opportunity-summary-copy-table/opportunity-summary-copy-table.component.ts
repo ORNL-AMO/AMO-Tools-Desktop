@@ -15,20 +15,20 @@ export class OpportunitySummaryCopyTableComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('copyTable', { static: false }) copyTable: ElementRef; 
-  @ViewChild('copyTable2', { static: false }) copyTable2: ElementRef;  
-  @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective; 
-  
-  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  @ViewChild('copyTable2', { static: false }) copyTable2: ElementRef;
+  @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
+  tableString: any;
+
   fileName: string;
   individualOpportunitySummaries: Array<OpportunitySummary>;
-  constructor( private cd: ChangeDetectorRef) { }
+  constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.individualOpportunitySummaries = new Array();
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.setIndividualSummaries();
     this.cd.detectChanges();
   }
@@ -92,17 +92,17 @@ export class OpportunitySummaryCopyTableComponent implements OnInit {
   }
 
   updateTableString() {
-    this.setIndividualSummaries();   
-    this.exportToExcel();
-  } 
+    this.setIndividualSummaries();
+    this.tableString = this.copyTable.nativeElement.innerText;
+  }
 
   exportToExcel() {
     let tableId1: string = this.copyTable.nativeElement.id;
     let tableId2: string = this.copyTable2.nativeElement.id;
     const date = new Date();
     const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
-    if(!this.fileName){
-      this.fileName = dateStr +'_Treasure-Hunt-Tracking.xlsx';
+    if (!this.fileName) {
+      this.fileName = dateStr + '_Project-Tracker.xlsx';
     }
     let targetTableElm: HTMLElement = document.getElementById(tableId1);
     let targetTable2Elm: HTMLElement = document.getElementById(tableId2);
@@ -110,16 +110,16 @@ export class OpportunitySummaryCopyTableComponent implements OnInit {
     let sheet2: XLSX.WorkSheet = XLSX.utils.table_to_sheet(targetTable2Elm, <XLSX.Table2SheetOpts>{ sheet: "Project Tracking" });
     let wb: XLSX.WorkBook = XLSX.utils.book_new();
     wb.SheetNames = ['Opportunity Summary', 'Project Tracking'];
-    wb.Sheets = {['Opportunity Summary']: sheet1, ['Project Tracking']: sheet2 };
-    
+    wb.Sheets = { ['Opportunity Summary']: sheet1, ['Project Tracking']: sheet2 };
+
     XLSX.writeFile(wb, this.fileName + '.xlsx');
     this.hideExportModal();
   }
 
   showExportModal() {
     const date = new Date();
-    const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();   
-    this.fileName = dateStr +'_Treasure-Hunt-Tracking.xlsx';
+    const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+    this.fileName = dateStr + '_Project-Tracker.xlsx';
     this.setIndividualSummaries();
     this.exportModal.show();
   }
