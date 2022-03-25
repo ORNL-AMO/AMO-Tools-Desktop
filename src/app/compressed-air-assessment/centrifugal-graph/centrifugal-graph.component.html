@@ -9,4 +9,4 @@
         </label>
     </div>
 </div>
-<div [ngStyle]="{'display': !this.showGraph? 'none' : ''}" #centrifugalGraph id="centrifugalGraph"></div>
+<div [hidden]="!showGraph" #centrifugalGraph id="centrifugalGraph"></div>
