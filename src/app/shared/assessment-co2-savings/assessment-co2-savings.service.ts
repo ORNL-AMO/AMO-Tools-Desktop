@@ -148,3 +148,4 @@ export interface Co2SavingsDifferent {
   totalEmissionOutput?: boolean;
   zipcode?: boolean,
 } 
+

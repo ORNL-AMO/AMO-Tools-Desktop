@@ -3,8 +3,8 @@
     <label class="small" for="zipcode">
       Zip code
     </label>
-    <div class="input-group" >
-      <input name="zipcode" type="text" class="form-control" formControlName="zipcode" id="zipcode"
+    <div class="input-group">
+      <input name="zipcode" type="text"  class="form-control" formControlName="zipcode" id="zipcode"
         onfocus="this.select();" (input)="setZipcode()" (focus)="focusField('zipcode')">
     </div>
   </div>
@@ -31,8 +31,7 @@
       Total Emission Output Rate
     </label>
     <div class="input-group">
-      <input name="totalEmissionOutputRate" type="number" class="form-control"  
-      [ngClass]="{'indicate-different': totalEmissionOutputRateDifferent}" formControlName="totalEmissionOutputRate"
+      <input name="totalEmissionOutputRate" [ngClass]="{'indicate-different': totalEmissionOutputRateDifferent}" type="number" class="form-control" formControlName="totalEmissionOutputRate"
         id="totalEmissionOutputRate" onfocus="this.select();" (input)="setUserEmissionsOutput()"
         (focus)="focusField('totalEmissionOutputRate')">
       <span *ngIf="!inTreasureHunt" class="input-group-addon units small">kg CO<sub>2</sub>/<span>MWh</span>
