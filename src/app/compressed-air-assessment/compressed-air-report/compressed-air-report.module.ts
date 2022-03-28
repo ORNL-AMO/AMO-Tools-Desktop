@@ -19,6 +19,7 @@ import { CompressorSummaryTableModule } from '../compressor-summary-table/compre
 import { SystemProfileGraphsModule } from '../system-profile-graphs/system-profile-graphs.module';
 import { InventoryPerformanceProfileModule } from '../inventory-performance-profile/inventory-performance-profile.module';
 import { PerformanceProfilesComponent } from './performance-profiles/performance-profiles.component';
+import { CentrifugalGraphModule } from '../centrifugal-graph/centrifugal-graph.module';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { PerformanceProfilesComponent } from './performance-profiles/performance
     PrintOptionsMenuModule,
     CompressorSummaryTableModule,
     SystemProfileGraphsModule,
-    InventoryPerformanceProfileModule
+    InventoryPerformanceProfileModule,
+    CentrifugalGraphModule
   ],
   exports: [
     CompressedAirReportComponent
