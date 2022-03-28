@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { OpportunityCost, OpportunitySummary } from '../../../../shared/models/treasure-hunt';
 import { Settings } from '../../../../shared/models/settings';
 import * as XLSX from 'xlsx';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-opportunity-summary-copy-table',
@@ -22,16 +23,13 @@ export class OpportunitySummaryCopyTableComponent implements OnInit {
 
   fileName: string;
   individualOpportunitySummaries: Array<OpportunitySummary>;
-  constructor(private cd: ChangeDetectorRef) { }
+  constructor() { }
 
-  ngOnInit(): void {
-    this.individualOpportunitySummaries = new Array();
-  }
-
-  ngAfterViewInit() {
+  ngOnInit() {
     this.setIndividualSummaries();
-    this.cd.detectChanges();
   }
+
+  
 
   setIndividualSummaries() {
     this.individualOpportunitySummaries = new Array();
@@ -99,10 +97,8 @@ export class OpportunitySummaryCopyTableComponent implements OnInit {
   exportToExcel() {
     let tableId1: string = this.copyTable.nativeElement.id;
     let tableId2: string = this.copyTable2.nativeElement.id;
-    const date = new Date();
-    const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
     if (!this.fileName) {
-      this.fileName = dateStr + '_Project-Tracker.xlsx';
+      this.fileName = this.getFileName();
     }
     let targetTableElm: HTMLElement = document.getElementById(tableId1);
     let targetTable2Elm: HTMLElement = document.getElementById(tableId2);
@@ -117,14 +113,18 @@ export class OpportunitySummaryCopyTableComponent implements OnInit {
   }
 
   showExportModal() {
-    const date = new Date();
-    const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
-    this.fileName = dateStr + '_Project-Tracker.xlsx';
+    this.fileName = this.getFileName();
     this.setIndividualSummaries();
     this.exportModal.show();
   }
 
   hideExportModal() {
     this.exportModal.hide();
+  }
+
+  getFileName(): string{
+    const date: Date = new Date();
+    let formatedDate: string = moment(date).format("MMM D, YYYY").toString();
+    return formatedDate + '_Project Tracker.xlsx';
   }
 }
