@@ -408,8 +408,24 @@ export class PhastResultsService {
       return null;
     }
   }
+
+  checkElectricityInputWarning(phast: PHAST, settings: Settings): boolean {
+    if (phast.losses) {
+      let results: PhastResults = this.getResults(phast, settings);
+      if( results.totalExhaustGasEAF >= results.energyInputTotalChemEnergy){
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+    
+  }
+
 }
 
 export interface EnergyInputWarnings {
-  energyInputHeatDelivered: string
+  energyInputHeatDelivered: string,
+  electricityInputWarning?: boolean
 }
