@@ -147,7 +147,6 @@ export class AssessmentCo2SavingsService {
 
 }
 
-
 export interface Co2SavingsDifferent {
   totalEmissionOutputRate?: boolean;
   totalFuelEmissionOutputRate?: boolean,
