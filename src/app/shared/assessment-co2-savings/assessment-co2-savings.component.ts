@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, Simp
 import { eGridRegion } from '../../calculator/utilities/co2-savings/co2-savings-form/electricityGridRegions';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import * as _ from 'lodash';
-import { AssessmentCo2SavingsService } from './assessment-co2-savings.service';
+import { AssessmentCo2SavingsService, Co2SavingsDifferent } from './assessment-co2-savings.service';
 import { FormGroup } from '@angular/forms';
 import { EGridService, SubRegionData, SubregionEmissions } from '../helper-services/e-grid.service';
 import { Subscription } from 'rxjs';
@@ -18,6 +18,8 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   co2SavingsData: Co2SavingsData;
   @Input()
   totalEmissionOutputRateDifferent: boolean;
+  @Input()
+  co2SavingsDifferent: Co2SavingsDifferent;
   @Input()
   isFormDisabled: boolean;
   @Input()
@@ -45,6 +47,9 @@ export class AssessmentCo2SavingsComponent implements OnInit {
     // Only needed until all are hooked up
     if (!this.totalEmissionOutputRateDifferent) {
       this.totalEmissionOutputRateDifferent = false;
+    }
+    if (!this.co2SavingsDifferent) {
+      this.co2SavingsDifferent = this.assessmentCo2Service.getDefaultCO2Different();
     }
     this.initCo2SavingsSubscription();
   }
