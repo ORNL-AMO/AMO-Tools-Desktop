@@ -29,8 +29,8 @@ export class CompareService {
       aeratorPerformanceDifferent = this.compareAeratorPerformance(baselineData.aeratorPerformanceData, modificationData.aeratorPerformanceData);
       isDifferent = this.checkHasDifferent(activatedSludgeDifferent) || this.checkHasDifferent(aeratorPerformanceDifferent) || this.checkHasDifferent(co2DataDifferent);
     } else {
-      //compare baseline with baseline, all will come back false
       operationsDifferent = this.compareOperations(baselineData.operations, baselineData.operations);
+      co2DataDifferent = this.compareCo2SavingsData(baselineData.co2SavingsData, baselineData.co2SavingsData);
       activatedSludgeDifferent = this.compareActivatedSludge(baselineData.activatedSludgeData, baselineData.activatedSludgeData);
       aeratorPerformanceDifferent = this.compareAeratorPerformance(baselineData.aeratorPerformanceData, baselineData.aeratorPerformanceData);
     }
