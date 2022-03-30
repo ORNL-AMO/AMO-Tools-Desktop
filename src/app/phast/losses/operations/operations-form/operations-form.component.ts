@@ -7,7 +7,8 @@ import { PHAST, PhastCo2SavingsData } from '../../../../shared/models/phast/phas
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Co2SavingsPhastService } from '../co2-savings-phast/co2-savings-phast.service';
+import { Co2SavingsPhastService, PhastCo2SavingsDifferent } from '../co2-savings-phast/co2-savings-phast.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-operations-form',
@@ -46,7 +47,9 @@ export class OperationsFormComponent implements OnInit {
   formWidth: number;
   showOperatingHoursModal: boolean = false;
   showOperatingCostsModal: boolean = false;
-
+  
+  co2SavingsDifferent: PhastCo2SavingsDifferent;
+  co2SavingsDifferentSubscription: Subscription;
   co2SavingsFormDisabled: boolean;
   co2SavingsData: PhastCo2SavingsData;
 
@@ -56,6 +59,9 @@ export class OperationsFormComponent implements OnInit {
     private phastCO2SavingService: Co2SavingsPhastService) { }
 
   ngOnInit() {
+    this.co2SavingsDifferentSubscription = this.operationsCompareService.co2SavingsDifferent.subscribe(val => {
+      this.co2SavingsDifferent = val;
+    });
     if (!this.isBaseline) {
       this.idString = '_modification';
     }
@@ -63,6 +69,11 @@ export class OperationsFormComponent implements OnInit {
       this.idString = '_baseline';
     }
     this.init();
+  }
+
+  ngOnDestroy() {
+    this.operationsCompareService.co2SavingsDifferent.next(this.phastCO2SavingService.getDefaultCO2Different());
+    this.co2SavingsDifferentSubscription.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -98,6 +109,7 @@ export class OperationsFormComponent implements OnInit {
   save() {
     this.checkWarnings();
     this.saveEmit.emit(true);
+    this.isCo2SavingsDifferent();
   }
 
   closeOperatingHoursModal() {
@@ -142,7 +154,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   canCompare() {
-    if (this.operationsCompareService.baseline && this.operationsCompareService.modification) {
+    if (this.operationsCompareService.baseline && this.operationsCompareService.modification && !this.inSetup) {
       return true;
     } else {
       return false;
@@ -193,6 +205,16 @@ export class OperationsFormComponent implements OnInit {
       return this.operationsCompareService.compareSteamCost();
     } else {
       return false;
+    }
+  }
+
+  isCo2SavingsDifferent() {
+    if (this.canCompare()) {
+      debugger;
+      this.operationsCompareService.isCo2SavingsDifferent(this.settings);
+    } else {
+      debugger;
+      this.operationsCompareService.co2SavingsDifferent.next(this.phastCO2SavingService.getDefaultCO2Different());
     }
   }
   

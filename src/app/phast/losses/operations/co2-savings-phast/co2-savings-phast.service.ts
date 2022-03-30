@@ -247,5 +247,34 @@ export class Co2SavingsPhastService {
     return co2EmissionsOutput;
 }
 
+getDefaultCO2Different(): PhastCo2SavingsDifferent {
+  return {
+    totalEmissionOutputRate: false,
+    totalFuelEmissionOutputRate: false,
+    energySource: false,
+    fuelType: false,
+    totalNaturalGasEmissionOutputRate: false,
+    totalCoalEmissionOutputRate: false,
+    totalOtherEmissionOutputRate: false,
+    coalFuelType: false,
+    eafOtherFuelSource: false,
+    otherFuelType: false,
+  }
+}
 
+
+}
+
+export interface PhastCo2SavingsDifferent {
+  totalEmissionOutputRate?: boolean,
+  totalFuelEmissionOutputRate?: boolean,
+  totalNaturalGasEmissionOutputRate?: boolean,
+  totalCoalEmissionOutputRate?: boolean,
+  totalOtherEmissionOutputRate?: boolean,
+  coalFuelType?: boolean,
+  eafOtherFuelSource?: boolean,
+  otherFuelType?: boolean,
+  electricityUse?: boolean,
+  energySource?: boolean,
+  fuelType?: boolean,
 }
