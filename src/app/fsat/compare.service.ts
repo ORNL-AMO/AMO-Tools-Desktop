@@ -3,19 +3,15 @@ import { FSAT } from '../shared/models/fans';
 import { BehaviorSubject } from 'rxjs';
 import { FsatService } from './fsat.service';
 import { Settings } from '../shared/models/settings';
-import { Co2SavingsDifferent } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
-import { CO2DataDifferent } from '../waste-water/modify-conditions/compare.service';
 
 @Injectable()
 export class CompareService {
   baselineFSAT: FSAT;
   modifiedFSAT: FSAT;
   selectedModification: BehaviorSubject<FSAT>;
-  co2SavingsDifferent: BehaviorSubject<Co2SavingsDifferent>;
   totalEmissionOutputRateDifferent: BehaviorSubject<boolean>;
   constructor(private fsatService: FsatService) {
     this.selectedModification = new BehaviorSubject<FSAT>(undefined);
-    this.co2SavingsDifferent = new BehaviorSubject<Co2SavingsDifferent>(undefined);
     this.totalEmissionOutputRateDifferent = new BehaviorSubject<boolean>(false);
   }
 

@@ -210,10 +210,8 @@ export class OperationsFormComponent implements OnInit {
 
   isCo2SavingsDifferent() {
     if (this.canCompare()) {
-      debugger;
       this.operationsCompareService.isCo2SavingsDifferent(this.settings);
     } else {
-      debugger;
       this.operationsCompareService.co2SavingsDifferent.next(this.phastCO2SavingService.getDefaultCO2Different());
     }
   }
