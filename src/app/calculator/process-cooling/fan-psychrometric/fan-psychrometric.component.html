@@ -47,7 +47,8 @@
 		<div class="d-flex mr-2 ml-2">
             <div class="d-flex flex-column w-100 align-items-center p-1">
                 <app-fan-psychrometric-results class="w-100" *ngIf="tabSelect == 'results'" [settings]="settings"></app-fan-psychrometric-results>
-                <app-fan-psychrometric-chart class="w-100" *ngIf="tabSelect == 'chart'" [gasDensityForm]="gasDensityForm" [settings]="settings"></app-fan-psychrometric-chart>
+                <!-- <app-fan-psychrometric-chart class="w-100" *ngIf="tabSelect == 'chart'" [gasDensityForm]="gasDensityForm" [settings]="settings"></app-fan-psychrometric-chart> -->
+				<app-psychrometric-chart class="w-100"></app-psychrometric-chart>
 				
 				<app-fan-psychrometric-help *ngIf="tabSelect == 'help'"></app-fan-psychrometric-help>
 			</div>

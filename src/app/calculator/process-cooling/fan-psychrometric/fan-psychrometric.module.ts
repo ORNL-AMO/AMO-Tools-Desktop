@@ -10,6 +10,7 @@ import { FanPsychrometricComponent } from './fan-psychrometric.component';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { FanPsychrometricResultsComponent } from './fan-psychrometric-results/fan-psychrometric-results.component';
 import { FanPsychrometricChartComponent } from './fan-psychrometric-chart/fan-psychrometric-chart.component';
+import { PsychrometricChartComponent } from './psychrometric-chart/psychrometric-chart.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { FanPsychrometricChartComponent } from './fan-psychrometric-chart/fan-ps
     FanPsychrometricTableComponent,
     FanPsychrometricComponent,
     FanPsychrometricResultsComponent,
-    FanPsychrometricChartComponent
+    FanPsychrometricChartComponent,
+    PsychrometricChartComponent
   ],
   imports: [
     CommonModule,

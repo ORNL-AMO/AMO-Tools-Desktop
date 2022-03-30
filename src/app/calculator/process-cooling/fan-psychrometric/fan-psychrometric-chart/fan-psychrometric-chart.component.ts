@@ -6,7 +6,7 @@ import { FormGroup } from '@angular/forms';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { PsychrometricResults, BaseGasDensity } from '../../../../shared/models/fans';
 import { FanPsychrometricService } from '../fan-psychrometric.service';
-import * as Plotly from 'plotly.js';
+import { PlotlyService } from 'angular-plotly.js';
 
 
 const c8 = -1.0440397e4;
@@ -30,10 +30,12 @@ export class FanPsychrometricChartComponent implements OnInit {
   settings: Settings;
 
   // DOM
-  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("psychrometricChartDiv", { static: false }) psychrometricChartDiv: ElementRef;
+  @ViewChild("ngChartContainer", {static: false}) ngChartContainer: ElementRef;
   tabPanelChartId: string = 'tabPanelDiv';
   expandedChartId: string = 'expandedChartDiv';
   currentChartId: string = 'tabPanelDiv';
+
 
   // Tooltips
   hoverBtnGridLines: boolean = false;
@@ -52,6 +54,19 @@ export class FanPsychrometricChartComponent implements OnInit {
       }
     }
   }
+
+  plotlyTraceColors: Array<string> = [
+    '#1f77b4',  // muted blue
+    '#ff7f0e',  // safety orange
+    '#2ca02c',  // cooked asparagus green
+    '#d62728',  // brick red
+    '#9467bd',  // muted purple
+    '#8c564b',  // chestnut brown
+    '#e377c2',  // raspberry yogurt pink
+    '#7f7f7f',  // middle gray
+    '#bcbd22',  // curry yellow-green
+    '#17becf'   // blue-teal
+  ];
 
   // Graphing
   selectedDataPoints: BehaviorSubject<Array<AirPoint>>;
@@ -79,7 +94,7 @@ export class FanPsychrometricChartComponent implements OnInit {
 
   resetFormSubscription: Subscription;
   calculatedBaseGasDensitySubscription: Subscription;
-  constructor(private psychrometricService: FanPsychrometricService, private cd: ChangeDetectorRef) { }
+  constructor(private psychrometricService: FanPsychrometricService, private cd: ChangeDetectorRef, plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
     this.calculatedBaseGasDensitySubscription = this.psychrometricService.calculatedBaseGasDensity.subscribe(results => {
@@ -138,6 +153,7 @@ export class FanPsychrometricChartComponent implements OnInit {
   
   getTraceDataFromPoint(selectedPoint: DataPoint): TraceData {
     let trace: TraceData = {
+      //selectedPoint parameter necessary? other graphs don't have that parameter
       x: [selectedPoint.x],
       y: [selectedPoint.y],
       type: 'scatter',
@@ -224,11 +240,11 @@ export class FanPsychrometricChartComponent implements OnInit {
     };
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    // if (changes.toggleCalculate && !changes.toggleCalculate.firstChange && this.gasDensityForm.valid) {
-    //     this.initRenderChart();
-    // }
-  }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (changes.toggleCalculate && !changes.toggleCalculate.firstChange && this.gasDensityForm.valid) {
+  //       this.initRenderChart();
+  //   }
+  // }
 
   // triggerInitialResize() {
   //   window.dispatchEvent(new Event('resize'));
@@ -263,6 +279,15 @@ export class FanPsychrometricChartComponent implements OnInit {
   //   this.save();
   // }
 
+  // plotPoint(dryBulbTemp: number, humidityRatio: number) {
+  //   let pointTrace = this.getTraceDataFromPoint();
+  //   pointTrace.marker.color = graphColors[0];
+  //   pointTrace.x = [dryBulbTemp];
+  //   pointTrace.y = [humidityRatio];
+  //   pointTrace.hovertemplate
+
+  // }
+
   // initChartSetup() {
   //   this.psychrometricService.initPsychrometricChartData();
   //   this.graphColors = graphColors;
@@ -270,18 +295,18 @@ export class FanPsychrometricChartComponent implements OnInit {
   //   this.selectedDataPoints = this.psychrometricService.selectedDataPoints.getValue();
   // }
 
-  // drawTraces() {
-  //   let allLineData: Array<TraceCoordinates> = this.psychrometricChart.buildLineData(this.gasDensityForm, this.settings);
-  //   allLineData.forEach((data, index) => {
-  //     let trace = this.psychrometricService.getEmptyTrace();
-  //     trace.x = data.x;
-  //     trace.y = data.y;
-  //     trace.name = this.traceNames[index];
-  //     trace.hovertemplate = '%{y:.2r}%';
-  //     trace.line.color = this.graphColors[(index) % this.graphColors.length]
-  //     this.performanceChart.data[index] = trace;
-  //   });
-  // }
+  drawTraces() {
+    let allLineData: Array<TraceCoordinates> = this.buildLineData(this.gasDensityForm, this.settings);
+    allLineData.forEach((data, index) => {
+      let trace = this.getEmptyTrace();
+      trace.x = data.x;
+      trace.y = data.y;
+      trace.name = this.traceNames[index];
+      trace.hovertemplate = '%{y:.2r}%';
+      trace.line.color = this.plotlyTraceColors[(index) % this.plotlyTraceColors.length]
+      // this.performanceChart.data[index] = trace;
+    });
+  }
 
   // addSelectedPointTraces(graphData) {
   //   let currentPointIndex: number = graphData.points[0].pointIndex;
