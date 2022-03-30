@@ -114,7 +114,7 @@
     "@types/node": "11.11.1",
     "angular-plotly.js": "^4.0.4",
     "codelyzer": "^6.0.0",
-    "electron": "11.5.0",
+    "electron": "13.6.6",
     "electron-builder": "22.9.1",
     "electron-download-tf": "4.3.4",
     "electron-packager": "15.2.0",
