@@ -69,7 +69,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
     if (modificationData) {
       let modificationForm: FormGroup = this.operationsService.getFormFromObj(modificationData.operations);
       validModTest = modificationForm.valid;
-      isDifferent = this.compareService.checkHasDifferent(wasteWaterDifferent.operationsDifferent);
+      isDifferent = this.compareService.checkHasDifferent(wasteWaterDifferent.operationsDifferent) || this.compareService.checkHasDifferent(wasteWaterDifferent.co2DataDifferent)
     }
     if (!validBaselineTest || !validModTest) {
       badgeStr = 'missing-data';
