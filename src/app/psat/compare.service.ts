@@ -4,8 +4,6 @@ import { BehaviorSubject } from 'rxjs';
 import { PsatService } from './psat.service';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { Co2SavingsDifferent } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
-import { CO2DataDifferent } from '../waste-water/modify-conditions/compare.service';
 @Injectable()
 export class CompareService {
 
