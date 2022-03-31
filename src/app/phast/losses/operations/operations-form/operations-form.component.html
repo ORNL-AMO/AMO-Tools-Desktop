@@ -101,7 +101,7 @@
 </form>
 
 <div *ngIf="co2SavingsData">
-  <app-co2-savings-phast [co2SavingsData]="co2SavingsData" [isFormDisabled]="!selected"
+  <app-co2-savings-phast [co2SavingsData]="co2SavingsData" [co2SavingsDifferent]="co2SavingsDifferent" [isFormDisabled]="!selected"
     [isBaseline]="isBaseline" [settings]="settings" (emitCurrentField)="focusField($event)"
     (emitUpdateCo2SavingsData)="updateCo2SavingsData($event)">
   </app-co2-savings-phast>
