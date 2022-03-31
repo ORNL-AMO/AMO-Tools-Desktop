@@ -232,17 +232,17 @@ export class PsychrometricChartComponent implements OnInit {
     // this.plotlyService.newPlot(this.psychrometricChart.nativeElement, traceData, layout, config);
   } 
 
-  drawLines() {
-    let
-    isotherms.forEach((line: IsothermCoordinates) => {
-      let trace = this.saturatedPropertiesService.getEmptyTrace();
-      trace.x = line.enthalpy;
-      trace.y = line.pressure;
-      let temperatureUnit = this.saturatedPropertiesService.getDisplayUnit(this.settings.steamTemperatureMeasurement);
-      trace.hovertemplate = `Isotherm ${line.temperature} ${temperatureUnit}`;
-      this.enthalpyChart.data.push(trace);
-    });
-  }
+  // drawLines() {
+  //   let
+  //   isotherms.forEach((line: IsothermCoordinates) => {
+  //     let trace = this.saturatedPropertiesService.getEmptyTrace();
+  //     trace.x = line.enthalpy;
+  //     trace.y = line.pressure;
+  //     let temperatureUnit = this.saturatedPropertiesService.getDisplayUnit(this.settings.steamTemperatureMeasurement);
+  //     trace.hovertemplate = `Isotherm ${line.temperature} ${temperatureUnit}`;
+  //     this.enthalpyChart.data.push(trace);
+  //   });
+  // }
 
   getTrace(xData: Array<number>, yData: Array<number>, name: string, color: string, dash: string): TraceData {
     let trace: TraceData = {

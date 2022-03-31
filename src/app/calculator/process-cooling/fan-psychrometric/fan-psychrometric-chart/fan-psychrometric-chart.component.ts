@@ -1,20 +1,11 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef, Input, ChangeDetectorRef, SimpleChanges } from '@angular/core';
-import { Settings } from '../../../../shared/models/settings';
-import { Subscription, BehaviorSubject } from 'rxjs';
-import { DataPoint, SimpleChart, TraceCoordinates, TraceData } from '../../../../shared/models/plotting';
+
+import { Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
-import { PsychrometricResults, BaseGasDensity } from '../../../../shared/models/fans';
-import { FanPsychrometricService } from '../fan-psychrometric.service';
 import { PlotlyService } from 'angular-plotly.js';
-
-
-const c8 = -1.0440397e4;
-const c9 = -1.129465e1;
-const c10 = -2.7022355e-2;
-const c11 = 1.289036e-5;
-const c12 = -2.4780681e-9;
-const c13 = 6.5459673;
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
+import { Settings } from '../../../../shared/models/settings';
+import { FanPsychrometricService } from '../fan-psychrometric.service';
 
 @Component({
   selector: 'app-fan-psychrometric-chart',
@@ -22,207 +13,279 @@ const c13 = 6.5459673;
   styleUrls: ['./fan-psychrometric-chart.component.css']
 })
 export class FanPsychrometricChartComponent implements OnInit {
+ 
   @Input()
   gasDensityForm: FormGroup;
-  @Input()
-  toggleCalculate: boolean;
+  // ** remove above if we don't end up using
+
   @Input()
   settings: Settings;
 
-  // DOM
-  @ViewChild("psychrometricChartDiv", { static: false }) psychrometricChartDiv: ElementRef;
-  @ViewChild("ngChartContainer", {static: false}) ngChartContainer: ElementRef;
-  tabPanelChartId: string = 'tabPanelDiv';
-  expandedChartId: string = 'expandedChartDiv';
-  currentChartId: string = 'tabPanelDiv';
 
+  @ViewChild("expandedChartDiv", { static: false }) expandedChartDiv: ElementRef;
+  @ViewChild("panelChartDiv", { static: false }) panelChartDiv: ElementRef;
+  ngChartContainer: ElementRef;
+  chart: SimpleChart;
 
-  // Tooltips
-  hoverBtnGridLines: boolean = false;
-  displayGridLinesTooltip: boolean = false;
-  hoverBtnExpand: boolean = false;
-  displayExpandTooltip: boolean = false;
-  hoverBtnCollapse: boolean = false;
-  displayCollapseTooltip: boolean = false;
   expanded: boolean = false;
+  hoverBtnExpand: boolean;
+  displayExpandTooltip: boolean;
+  hoverBtnCollapse: boolean;
+  hoverBtnGridLines: boolean;
+  displayCollapseTooltip: boolean;
+  displayGridLinesTooltip: boolean;
 
-  @HostListener('document:keyup', ['$event'])
-  closeExpandedGraph(event) {
-    if (this.expanded) {
-      if (event.code === 'Escape') {
-        this.contractChart();
-      }
-    }
-  }
+  constructor(private plotlyService: PlotlyService, private psychrometricService: FanPsychrometricService, private convertUnitsService: ConvertUnitsService) {}
 
-  plotlyTraceColors: Array<string> = [
-    '#1f77b4',  // muted blue
-    '#ff7f0e',  // safety orange
-    '#2ca02c',  // cooked asparagus green
-    '#d62728',  // brick red
-    '#9467bd',  // muted purple
-    '#8c564b',  // chestnut brown
-    '#e377c2',  // raspberry yogurt pink
-    '#7f7f7f',  // middle gray
-    '#bcbd22',  // curry yellow-green
-    '#17becf'   // blue-teal
-  ];
-
-  // Graphing
-  selectedDataPoints: BehaviorSubject<Array<AirPoint>>;
-  psychrometricChart: BehaviorSubject<SimpleChart>;
-  traceNames = {
-    0: 'Wet Bulb',
-    1: 'Dry Bulb',
-    2: 'Relative Humidity'
-  };
-  
-
-  tempMotorPower: number;
-  tempRpm: number;
-  tempEfficiencyClass: string;
-  tempVoltage: number;
-  tempAmps: number;
-  tempLineFrequency: string;
-  airPointColors: Array<string>;
-  resultData: Array<PsychrometricResults>;
-  hasValidResults: boolean; 
-
-  baseGasDensityData: BehaviorSubject<BaseGasDensity>;
-  calculatedBaseGasDensity: BehaviorSubject<PsychrometricResults>;
-  psychrometricResults: PsychrometricResults;
-
-  resetFormSubscription: Subscription;
-  calculatedBaseGasDensitySubscription: Subscription;
-  constructor(private psychrometricService: FanPsychrometricService, private cd: ChangeDetectorRef, plotlyService: PlotlyService) { }
-
-  ngOnInit(): void {
-    this.calculatedBaseGasDensitySubscription = this.psychrometricService.calculatedBaseGasDensity.subscribe(results => {
-      this.psychrometricResults = results;
-      if (results) {
-        let inputData: BaseGasDensity = this.psychrometricService.baseGasDensityData.getValue();
-        this.psychrometricResults.barometricPressure = inputData.barometricPressure;
-        this.psychrometricResults.dryBulbTemp = inputData.dryBulbTemp;
-      }
-    });
-    // this.triggerInitialResize();
-  }
-
-  initChart() {
-    let emptyChart: SimpleChart = this.getEmptyChart();
-    this.psychrometricChart = new BehaviorSubject<SimpleChart>(emptyChart);
+  ngOnInit() {
+    this.triggerInitialResize();
+    // If we get results from a subscription (i.e. psychrometricService.calculatedBaseGasDensity)
+    // Then set results and this.initRenderChart() here, otherwise see onChanges 
     
-    let selectedDataPoints = new Array<AirPoint>();
-    this.selectedDataPoints = new BehaviorSubject<Array<AirPoint>>(selectedDataPoints);
+
+
+    // Remove this when done
+    this.initRenderChart();
   }
 
-  buildLineData(gasDensityForm: FormGroup, settings: Settings): Array<TraceCoordinates> {
-    let relHumidity20: TraceCoordinates = {x: [], y: []};
-    let relHumidity40: TraceCoordinates = {x: [], y: []};
-    let relHumidity60: TraceCoordinates = {x: [], y: []};
-    let relHumidity80: TraceCoordinates = {x: [], y: []};
-    let relHumidity100: TraceCoordinates = {x: [], y: []};
-
-    for (let i = 35; i <= 130; i = i + 5) {
-      let barometricPressure = this.psychrometricResults.barometricPressure;
-      let relativeHumidity = this.psychrometricResults.relativeHumidity;
-
-      relHumidity20.x.push(i);
-      relHumidity20.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
-      relHumidity40.x.push(i);
-      relHumidity40.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
-      relHumidity60.x.push(i);
-      relHumidity60.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
-      relHumidity80.x.push(i);
-      relHumidity80.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
-      relHumidity100.x.push(i);
-      relHumidity100.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
+  ngOnChanges(changes: SimpleChanges) {
+    // If we're getting results from @Input() 
+    // then Check for form changes here and render chart
+    if (changes.gasDensityForm && !changes.gasDensityForm.firstChange) {
+      this.initRenderChart();
     }
-    return [relHumidity20, relHumidity40, relHumidity60, relHumidity80, relHumidity100];
   }
+
+  initRenderChart() {
+    this.chart = this.getEmptyChart();
+    // Pass changing information to this method, i.e. labels, ticks, etc
+    this.chart.layout = this.getLayout()
+
+    // Chart trace/coordinates
+    this.addBlueTraces();
+    this.addRedTraces();
+    this.addGridTraces();
+    this.addTopAxisTrace();
+
+    // pass chart data to plotly for rendering at div
+    if (this.expanded && this.expandedChartDiv) {
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.chart.data, this.chart.layout, this.chart.config)
+
+    } else if (!this.expanded && this.panelChartDiv) {
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.chart.data, this.chart.layout, this.chart.config)
+    }
+  }
+
+  addBlueTraces() {
+    // see interface at bottom of file
+
+
+    // let blueLines = get your constants 
+    // blueLines = this.convertAxisTemperatures(blueLines);
+    
+    // blueLines.forEach((lineTrace => {
+    //   let trace = this.getEmptyTrace();
+    //   // dry bulb
+    //   trace.x = lineTrace.temp;
+    //   // rel humidity
+    //   trace.y = lineTrace.relativeHumidity;
+    //   trace.hovertemplate = `Relative Humidity ${line.relativeHumidity} ${units}`;
+    //   this.chart.data.push(trace);
+    // });
+  }
+
+
+  addRedTraces() {}
+
+  addGridTraces() {}
+
+  addTopAxisTrace() {
+    // We need a trace for the line/axis
+    // and also for the points along it. 
+  }
+
+  convertAxisTemperatures(lineTraces) {
+    // if this.settings.unitsOfmeasure change 
+    // then below
+
+    // lineTraces.map(line => {
+    //   line.temp = this.convertArray(line.temp, old unit, new unit);
+    // });
+
+
+  }
+
+  convertArray(oldArray: Array<number>, from: string, to: string): Array<number> {
+    let convertedArray = new Array<number>();
+    for (let i = 0; i < oldArray.length; i++) {
+      convertedArray.push(this.convertVal(oldArray[i], from, to));
+    }
+    return convertedArray;
+  }
+
+  convertVal(val: number, from: string, to: string) {
+    if (val !== undefined) {
+      val = this.convertUnitsService.value(val).from(from).to(to);
+    }
+    return val;
+  }
+
+
+  // Charlotte work
+  // buildLineData(gasDensityForm: FormGroup, settings: Settings): Array<TraceCoordinates> {
+  //   let relHumidity20: TraceCoordinates = {x: [], y: []};
+  //   let relHumidity40: TraceCoordinates = {x: [], y: []};
+  //   let relHumidity60: TraceCoordinates = {x: [], y: []};
+  //   let relHumidity80: TraceCoordinates = {x: [], y: []};
+  //   let relHumidity100: TraceCoordinates = {x: [], y: []};
+
+  //   for (let i = 35; i <= 130; i = i + 5) {
+  //     let barometricPressure = this.psychrometricResults.barometricPressure;
+  //     let relativeHumidity = this.psychrometricResults.relativeHumidity;
+
+  //     relHumidity20.x.push(i);
+  //     relHumidity20.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
+  //     relHumidity40.x.push(i);
+  //     relHumidity40.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
+  //     relHumidity60.x.push(i);
+  //     relHumidity60.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
+  //     relHumidity80.x.push(i);
+  //     relHumidity80.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
+  //     relHumidity100.x.push(i);
+  //     relHumidity100.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
+  //   }
+  //   return [relHumidity20, relHumidity40, relHumidity60, relHumidity80, relHumidity100];
+  // }
 
 
   calculateHumidityRatio(dryBulbTemp: number, relativeHumidity: number, barometricPressure: number) {
+    const c8 = -1.0440397e4;
+    const c9 = -1.129465e1;
+    const c10 = -2.7022355e-2;
+    const c11 = 1.289036e-5;
+    const c12 = -2.4780681e-9;
+    const c13 = 6.5459673;
+
     var t = dryBulbTemp + 459.67;
     var lnOfSatPress = c8 / t + c9 + c10 * t + c11 * Math.pow(t, 2) + c12 * Math.pow(t, 3) + c13 * Math.log(t);
     var satPress = Math.exp(lnOfSatPress);
     var humidRatio = (0.621945 * satPress) / (barometricPressure - satPress);
     return humidRatio;
   }
+// End charlotte work
 
-  
-  getTraceDataFromPoint(selectedPoint: DataPoint): TraceData {
+
+
+
+   
+  getEmptyTrace(): TraceData {
     let trace: TraceData = {
-      //selectedPoint parameter necessary? other graphs don't have that parameter
-      x: [selectedPoint.x],
-      y: [selectedPoint.y],
-      type: 'scatter',
+      x: [],
+      y: [],
       name: '',
       showlegend: false,
-      mode: 'markers',
-      hoverinfo: 'skip',
-      marker: {
-        color: selectedPoint.pointColor,
-        size: 14,
+      type: 'scatter',
+      mode: 'lines',
+      hovertemplate: '',
+      line: {
+        shape: 'spline',
+        color: '#FFA500',
+        width: 1,
       },
     };
     return trace;
   }
 
-  getEmptyTrace(): TraceData {
-    let trace: TraceData =   {
-      x: [],
-      y: [],
-      name: '',
-      showlegend: true,
-      type: 'scatter',
-      line: {
-        shape: 'spline',
-        color: '',
+  getLayout() {
+    // Convert tick values here or convert them and pass them in here
+    return  {
+      legend: {
+        orientation: 'h',
+        font: {
+          size: 12,
+        },
+        x: 0,
+        y: -.25
+      },
+      hovermode: 'x',
+      xaxis: {
+        autorange: false,
+        showgrid: false,
+        title: {
+          text:"Dry Bulb Temperature (F)"
+        },
+        showticksuffix: 'all',
+        tickangle: 0,
+        tickmode: 'array',
+        // Change hoverFormat.. wrong or deprecated
+        // hoverformat: '%{x}%',
+        range: [35, 130],
+        tickvals: [35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130],
+      },
+      xaxis2: {
+        autorange: false,
+        showgrid: false,
+        title: {
+          text:"Wet Bulb (F)"
+        },
+        side: 'left',
+        anchor: 'free',
+        overlaying: 'x',
+        xaxis: 'x2',
+        showticksuffix: 'all',
+        tickmode: 'array',
+        // hoverformat: '%{x}%',
+        range: [30, 130],
+        tickvals: [30, 40, 50 , 60, 70, 80, 90, 100, 110, 120, 130]
+        // tickvals: [35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130],
+      },
+      yaxis: {
+        autorange: true,
+        type: 'linear',
+        showgrid: false,
+        side: 'right',
+        title: {
+          text: "Humidity Ratio(Lbv/Lba)"
+        },
+        range: [0, 0.1],
+        tickvals: [0, 0.004, 0.008, 0.012, 0.016, 0.020, 0.024, 0.028],
+        //ticktext: ['0', '20%', '40%', '60%', '80%', '100%', '120%'],
+        rangemode: 'tozero',
+        showticksuffix: 'all'
+      },
+      margin: {
+        t: 50,
+        b: 75,
+        l: 75,
+        r: 50
       }
-    };
-    return trace;
+    }
   }
 
-  getEmptyChart(): SimpleChart {
+  getEmptyChart() {
     return {
-      name: 'Psychrometric Graph',
+      name: 'Psychrometric Chart',
       data: [],
+      // Empty layout or set it to the default
       layout: {
-        legend: {
-          orientation: 'h',
-          font: {
-            size: 12,
-          },
-          x: 0,
-          y: -.25
-        },
-        hovermode: 'x',
+        hovermode: 'closest',
         xaxis: {
           autorange: false,
-          showgrid: false,
+          type: 'auto',
+          showgrid: true,
           title: {
-            text: "Drey Bulb Temperature (F)"
+            text: ``
           },
           showticksuffix: 'all',
-          tickangle: -60,
-          tickmode: 'array',
-          hoverformat: '%{x}%',
-          range: [35, 130],
-          tickvals: [35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130],
         },
         yaxis: {
-          autorange: true,
-          type: 'linear',
-          showgrid: false,
+          autorange: false,
+          type: 'auto',
+          showgrid: true,
+          showticksuffix: 'all',
           title: {
-            text: "Humidity Ratio"
+            text: ``
           },
-          range: [0, 0.1],
-          tickvals: [0, 0.02, 0.04, 0.06, 0.08, 0.1],
-          //ticktext: ['0', '20%', '40%', '60%', '80%', '100%', '120%'],
-          rangemode: 'tozero',
-          showticksuffix: 'all'
         },
         margin: {
           t: 50,
@@ -232,161 +295,61 @@ export class FanPsychrometricChartComponent implements OnInit {
         }
       },
       config: {
-        modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'toggleSpikelines', 'hoverCompareCartesian'],
+        modeBarButtonsToRemove: ['autoScale2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
         displaylogo: false,
         displayModeBar: true,
         responsive: true
-      }
+      },
     };
   }
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes.toggleCalculate && !changes.toggleCalculate.firstChange && this.gasDensityForm.valid) {
-  //       this.initRenderChart();
-  //   }
-  // }
 
-  // triggerInitialResize() {
-  //   window.dispatchEvent(new Event('resize'));
-  //   setTimeout(() => {
-  //     this.initRenderChart();
-  //   }, 25)
-  // }
 
-  // resizeGraph() {
-  //   let expandedChart = this.ngChartContainer.nativeElement;
-  //   if (expandedChart) {
-  //     if (this.expanded) {
-  //       this.currentChartId = this.expandedChartId;
-  //     }
-  //     else {
-  //       this.currentChartId = this.tabPanelChartId;
-  //     }
-  //     this.initRenderChart();
-  //   }
-  // }
+  // Ignore below
+  // Utilities
 
-  // initRenderChart() {
-  //   Plotly.purge(this.currentChartId);
-  //   this.initChartSetup();
-  //   this.drawTraces();
-  //   if (this.validPlot && this.psychrometricResults !== undefined) {
-  //     this.plotPoint(this.psychrometricResults.dryBulbTemp, this.psychrometricResults.humidityRatio);
-  //   }
 
-  //   let chartLayout = JSON.parse(JSON.stringify(this.gasDensityForm.layout));
-  //   Plotly.newPlot(this.currentChartId, this.psychrometricChart.data, chartLayout, this.psychrometricChart.config)
-  //   this.save();
-  // }
-
-  // plotPoint(dryBulbTemp: number, humidityRatio: number) {
-  //   let pointTrace = this.getTraceDataFromPoint();
-  //   pointTrace.marker.color = graphColors[0];
-  //   pointTrace.x = [dryBulbTemp];
-  //   pointTrace.y = [humidityRatio];
-  //   pointTrace.hovertemplate
-
-  // }
-
-  // initChartSetup() {
-  //   this.psychrometricService.initPsychrometricChartData();
-  //   this.graphColors = graphColors;
-  //   this.psychrometricChart = this.psychrometricService.psychrometricChart.getValue();
-  //   this.selectedDataPoints = this.psychrometricService.selectedDataPoints.getValue();
-  // }
-
-  drawTraces() {
-    let allLineData: Array<TraceCoordinates> = this.buildLineData(this.gasDensityForm, this.settings);
-    allLineData.forEach((data, index) => {
-      let trace = this.getEmptyTrace();
-      trace.x = data.x;
-      trace.y = data.y;
-      trace.name = this.traceNames[index];
-      trace.hovertemplate = '%{y:.2r}%';
-      trace.line.color = this.plotlyTraceColors[(index) % this.plotlyTraceColors.length]
-      // this.performanceChart.data[index] = trace;
-    });
+  toggleGrid() {
+    let showingGridX: boolean = this.chart.layout.xaxis.showgrid;
+    let showingGridY: boolean = this.chart.layout.yaxis.showgrid;
+    this.chart.layout.xaxis.showgrid = !showingGridX;
+    this.chart.layout.yaxis.showgrid = !showingGridY;
+    this.initRenderChart();
   }
 
-  // addSelectedPointTraces(graphData) {
-  //   let currentPointIndex: number = graphData.points[0].pointIndex;
-  //   let selectedAirPoint: AirPoint = this.getAirPoint(currentPointIndex, graphData.points[0]);
-  //   let currentColor = this.graphColors[(this.psychrometricChart.data.length - 1) % this.graphColors.length]
-  //   this.psychrometricChart.data.forEach((trace, i) => {
-  //     // Create points for 3 default line traces
-  //     if (i < 3) {
-  //       let point: AirPoint = {
-  //         pointColor: currentColor,
-  //         dryBulbTemp: selectedAirPoint.dryBulbTemp,
-  //         humidityRatio: selectedAirPoint.humidityRatio,
-  //         wetBulbTemp: selectedAirPoint.wetBulbTemp,
-  //         relHumidity: selectedAirPoint.relHumidity,
-  //         x: Number(trace.x[currentPointIndex]),
-  //         y: Number(trace.y[currentPointIndex])
-  //       };
-  //       let pointTrace = this.psychrometricService.getTraceDataFromPoint(point);
-  //       Plotly.addTraces(this.currentChartId, pointTrace);
-  //     }
-  //   });
-  //   selectedAirPoint.pointColor = currentColor;
-  //   this.selectedDataPoints.push(selectedAirPoint);
-  //   this.cd.detectChanges();
-  //   this.save();
-  // }
 
+  triggerInitialResize() {
+    window.dispatchEvent(new Event("resize"));
+    setTimeout(() => {
+      this.initRenderChart();
+    }, 100);
+  }
 
-  // getAirPoint(currentPointIndex: number, currentPoint): AirPoint {
-  //   let relativeCoordinate = {
-  //     dryBulbTemp: Number(this.psychrometricChart.data[0].x[currentPointIndex]),
-  //     humidityRatio: Number(this.psychrometricChart.data[0].y[currentPointIndex]),
-  //     wetBulbTemp: Number(this.psychrometricChart.data[1].y[currentPointIndex]),
-  //     relHumidity: Number(this.psychrometricChart.data[2].y[currentPointIndex]),
-  //     x: currentPoint.x,
-  //     y: currentPoint.y
-  //   }
-  //   return relativeCoordinate;
-  // }
-
-  // save() {
-  //   this.psychrometricService.psychrometricChart.next(this.psychrometricChart);
-  //   this.psychrometricService.selectedDataPoints.next(this.selectedDataPoints);
-  // }
-
-  // deleteDataPoint(point: DataPoint, index: number) {
-  //   let deleteTraceIndex: number = this.psychrometricChart.data.findIndex(trace => trace.x[0] == point.x && trace.y[0] == point.y);
-  //   // ignore default motorpoint trace
-  //   if (deleteTraceIndex == -1) {
-  //     deleteTraceIndex = this.psychrometricChart.data.length - 3;
-  //   }
-  //   let traces = [deleteTraceIndex, deleteTraceIndex + 1, deleteTraceIndex + 2];
-  //   Plotly.deleteTraces(this.currentChartId, traces);
-  //   this.selectedDataPoints.splice(index, 1);
-  //   this.cd.detectChanges();
-  //   this.save();
-  // }
-
-  // toggleGrid() {
-  //   let showingGridX: boolean = this.psychrometricChart.layout.xaxis.showgrid;
-  //   let showingGridY: boolean = this.psychrometricChart.layout.yaxis.showgrid;
-  //   this.psychrometricChart.layout.xaxis.showgrid = !showingGridX;
-  //   this.psychrometricChart.layout.yaxis.showgrid = !showingGridY;
-
-  //   let chartLayout = JSON.parse(JSON.stringify(this.psychrometricChart.layout));
-  //   Plotly.update(this.currentChartId, this.psychrometricChart.data, chartLayout);
-  //   this.save();
-  // }
-
-  // updateTableString() {
-  //   this.dataSummaryTableString = this.dataSummaryTable.nativeElement.innerText;
-  // }
+  @HostListener("document:keyup", ["$event"])
+  closeExpandedGraph(event) {
+    if (this.expanded) {
+      if (event.code === "Escape") {
+        this.contractChart();
+      }
+    }
+  }
 
   expandChart() {
     this.expanded = true;
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      // this.resizeGraph();
-    }, 100);
+      this.initRenderChart();
+    }, 200);
+  }
+
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.initRenderChart();
+    }, 200);
   }
 
   hideTooltip(btnType: string) {
@@ -445,26 +408,30 @@ export class FanPsychrometricChartComponent implements OnInit {
       }
     }
   }
-
-  contractChart() {
-    this.expanded = false;
-    this.hideTooltip('btnExpandChart');
-    this.hideTooltip('btnCollapseChart');
-    setTimeout(() => {
-      // this.resizeGraph();
-    }, 200);
-  }
-
 }
 
-export interface HoverGroupData {
-  hoverPoints: Array<DataPoint>,
-  dryBulbTemp?: DataPoint
-};
 
-export interface AirPoint extends DataPoint {
-  dryBulbTemp: number,
-  humidityRatio: number,
-  wetBulbTemp: number,
-  relHumidity: number
-};
+
+
+export interface BlueLine {
+  x: number[],
+  y: number[],
+}
+
+
+// Use better name
+const blueLines: Array<BlueLine> = [
+  // Dummy vals
+  {
+      x:  [3.27, 6.576, 9.927, 13.322, 16.762, 20.245, 23.773, 27.344, 30.959, 34.619, 38.324, 42.073, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.989, 54.375, 63.045, 71.971, 81.146, 90.569, 100.241, 110.163, 120.337, 130.766, 141.452, 152.397, 163.604, 175.075, 186.814, 198.824, 211.106, 223.665, 236.504, 249.624, 263.03, 276.723, 290.708, 304.986, 319.561, 334.435, 349.61, 365.089, 380.875, 396.969, 413.373, 430.089, 447.12, 464.465, 482.128, 500.109, 518.409, 537.03],
+      y:  [3.27, 6.576, 9.927, 13.322, 16.762, 20.245, 23.773, 27.344, 30.959, 34.619, 38.324, 42.073, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.989, 54.375, 63.045, 71.971, 81.146, 90.569, 100.241, 110.163, 120.337, 130.766, 141.452, 152.397, 163.604, 175.075, 186.814, 198.824, 211.106, 223.665, 236.504, 249.624, 263.03, 276.723, 290.708, 304.986, 319.561, 334.435, 349.61, 365.089, 380.875, 396.969, 413.373, 430.089, 447.12, 464.465, 482.128, 500.109, 518.409, 537.03]
+  },
+  {
+    x:  [3.27, 6.576, 9.927, 13.322, 16.762, 20.245, 23.773, 27.344, 30.959, 34.619, 38.324, 42.073, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.989, 54.375, 63.045, 71.971, 81.146, 90.569, 100.241, 110.163, 120.337, 130.766, 141.452, 152.397, 163.604, 175.075, 186.814, 198.824, 211.106, 223.665, 236.504, 249.624, 263.03, 276.723, 290.708, 304.986, 319.561, 334.435, 349.61, 365.089, 380.875, 396.969, 413.373, 430.089, 447.12, 464.465, 482.128, 500.109, 518.409, 537.03],
+    y:  [3.27, 6.576, 9.927, 13.322, 16.762, 20.245, 23.773, 27.344, 30.959, 34.619, 38.324, 42.073, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.989, 54.375, 63.045, 71.971, 81.146, 90.569, 100.241, 110.163, 120.337, 130.766, 141.452, 152.397, 163.604, 175.075, 186.814, 198.824, 211.106, 223.665, 236.504, 249.624, 263.03, 276.723, 290.708, 304.986, 319.561, 334.435, 349.61, 365.089, 380.875, 396.969, 413.373, 430.089, 447.12, 464.465, 482.128, 500.109, 518.409, 537.03],
+},
+ // etc...
+];
+
+
+
