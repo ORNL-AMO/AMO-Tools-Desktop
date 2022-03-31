@@ -409,16 +409,16 @@ export class PhastResultsService {
     }
   }
 
-  checkElectricityInputWarning(phast: PHAST, settings: Settings): boolean {
+  checkElectricityInputWarning(phast: PHAST, settings: Settings): string {
     if (phast.losses) {
       let results: PhastResults = this.getResults(phast, settings);
       if( results.totalExhaustGasEAF >= results.energyInputTotalChemEnergy){
-        return true;
+        return 'Exhaust Gas Losses must be less than Chemical Energy Delivered. Please check Electricity Input value.';
       } else {
-        return false;
+        return null;
       }
     } else {
-      return false;
+      return null;
     }
     
   }
@@ -427,5 +427,5 @@ export class PhastResultsService {
 
 export interface EnergyInputWarnings {
   energyInputHeatDelivered: string,
-  electricityInputWarning?: boolean
+  electricityInputWarning?: string
 }

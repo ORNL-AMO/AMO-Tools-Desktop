@@ -26,7 +26,7 @@ export class EnergyInputTabComponent implements OnInit {
   badgeHover: boolean;
   displayTooltip: boolean;
 
-  inputError: boolean;
+  inputError: string;
   numLosses: number = 0;
   missingData: boolean;
   isDifferent: boolean;
