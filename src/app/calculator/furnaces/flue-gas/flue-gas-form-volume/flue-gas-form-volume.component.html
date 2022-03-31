@@ -10,7 +10,16 @@
         <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
       </select>
     </div>
-
+    <div class="form-group">
+      <label class="small">Higher Heating Value</label>
+      <div *ngIf="higherHeatingValue" class="text-center small">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{higherHeatingValue | number:'2.0-2'}} Btu/lb</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">{{higherHeatingValue | number:'2.0-2'}} kJ/kg</span>
+      </div>
+      <div *ngIf="!higherHeatingValue" class="text-center small">
+        &mdash; &mdash;
+      </div>
+    </div>
     <div class="form-group">
       <label class="small" for="flueGasTemperature">Flue Gas Temperature</label>
       <div class="input-group">
