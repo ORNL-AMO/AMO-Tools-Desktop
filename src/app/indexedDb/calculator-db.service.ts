@@ -57,6 +57,10 @@ export class CalculatorDbService {
     return this.dbService.add(this.storeName, calculator);
   }
 
+  updateWithObservable(calculator: Calculator): Observable<any> {
+    return this.dbService.update(this.storeName, calculator);
+  }
+  
   deleteById(calculatorId: number) {
     this.dbService.delete(this.storeName, calculatorId);
   }

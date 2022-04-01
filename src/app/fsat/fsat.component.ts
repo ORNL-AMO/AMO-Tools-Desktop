@@ -7,7 +7,7 @@ import { Settings } from '../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData, FsatOperations } from '../shared/models/fans';
 import * as _ from 'lodash';
 import { CompareService } from './compare.service';
@@ -285,7 +285,7 @@ export class FsatComponent implements OnInit {
     this.save();
   }
 
-  save() {
+  async save() {
     if (this._fsat.modifications) {
       if (this._fsat.modifications.length === 0) {
         this.modificationExists = false;
@@ -301,11 +301,10 @@ export class FsatComponent implements OnInit {
     this.compareService.setCompareVals(this._fsat, this.modificationIndex);
     this._fsat.setupDone = this.checkSetupDone(this._fsat);
     this.assessment.fsat = (JSON.parse(JSON.stringify(this._fsat)));
-    this.indexedDbService.putAssessment(this.assessment).then(results => {
-      this.assessmentDbService.setAll().then(() => {
-        this.fsatService.updateData.next(true);
-      });
-    });
+
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment))
+    this.assessmentDbService.setAll(assessments);
+    this.fsatService.updateData.next(true);
   }
 
   updateModificationCO2Savings(modFsat: FSAT) {

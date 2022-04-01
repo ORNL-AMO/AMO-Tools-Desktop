@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorR
 import { Assessment } from '../shared/models/assessment';
 import { ActivatedRoute } from '@angular/router';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { SsmtService } from './ssmt.service';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
@@ -239,7 +239,7 @@ export class SsmtComponent implements OnInit {
     }
   }
 
-  save() {
+  async save() {
     this._ssmt = this.updateModificationCO2Savings(this._ssmt);
     if (this._ssmt.modifications) {
       if (this._ssmt.modifications.length === 0) {
@@ -254,11 +254,10 @@ export class SsmtComponent implements OnInit {
     this.compareService.setCompareVals(this._ssmt, this.modificationIndex);
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
     this.initSankeyList();
-    this.indexedDbService.putAssessment(this.assessment).then(results => {
-      this.assessmentDbService.setAll().then(() => {
-        this.ssmtService.updateData.next(true);
-      });
-    });
+
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    this.assessmentDbService.setAll(assessments);
+    this.ssmtService.updateData.next(true);
   }
 
   updateModificationCO2Savings(ssmt: SSMT) {

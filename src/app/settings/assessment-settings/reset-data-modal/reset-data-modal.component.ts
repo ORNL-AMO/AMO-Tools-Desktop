@@ -153,8 +153,8 @@ export class ResetDataModalComponent implements OnInit {
     defaultSettings.disableTutorial = this.settingsDbService.globalSettings.disableTutorial;
     defaultSettings.printAll = this.settingsDbService.globalSettings.printAll;
     delete defaultSettings.facilityInfo;
-    await firstValueFrom(this.settingsDbService.updateWithObservable(defaultSettings));
-    this.settingsDbService.setAll();
+    let settings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(defaultSettings));
+    this.settingsDbService.setAll(settings);
   }
 
   async resetFactoryExampleAssessments() {
@@ -360,7 +360,5 @@ export class ResetDataModalComponent implements OnInit {
     this.coreService.relaunchApp();
   }
 
-  async updateGlobalSettings() {
-    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
-  }
+
 }

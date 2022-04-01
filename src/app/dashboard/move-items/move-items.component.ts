@@ -9,6 +9,7 @@ import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { InventoryDbService } from '../../indexedDb/inventory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
 import { Settings } from '../../shared/models/settings';
 import { DashboardService } from '../dashboard.service';
@@ -98,17 +99,17 @@ export class MoveItemsComponent implements OnInit {
     return str;
   }
 
-  save() {
-    this.directory.assessments.forEach(assessment => {
-      if (assessment.selected) {
-        assessment.directoryId = this.moveForm.controls.directoryId.value;
-        this.indexedDbService.putAssessment(assessment).then(val => {
-          this.assessmentDbService.setAll().then(() => {
-            this.dashboardService.updateDashboardData.next(true);
-          });
-        });
+  async save() {
+    for (let i = 0; i < this.directory.assessments.length; i++) {
+      if (this.directory.assessments[i].selected) {
+        this.directory.assessments[i].directoryId = this.moveForm.controls.directoryId.value;
+        let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.directory.assessments[i]));
+        // Call below after iteration?
+        this.assessmentDbService.setAll(assessments);
+        this.dashboardService.updateDashboardData.next(true);
       }
-    });
+    }
+
     this.directory.calculators.forEach(calculator => {
       if (calculator.selected) {
         calculator.directoryId = this.moveForm.controls.directoryId.value;
@@ -120,6 +121,7 @@ export class MoveItemsComponent implements OnInit {
         calculator.selected = false;
       }
     });
+    
     this.directory.subDirectory.forEach(subDir => {
       if (subDir.selected) {
         if (subDir.parentDirectoryId !== this.moveForm.controls.directoryId.value) {

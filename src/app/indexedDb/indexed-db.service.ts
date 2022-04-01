@@ -252,22 +252,22 @@ export class IndexedDbService {
     });
   }
 
-  getAssessment(id: number): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readonly');
-      let store = transaction.objectStore(myDb.storeNames.assessments);
-      let getRequest = store.get(id);
-      myDb.setDefaultErrorHandler(getRequest, myDb);
-      getRequest.onsuccess = (e) => {
-        //e.target.result = Assessment
-        let assessment = this.updateDataService.checkAssessment(e.target.result);
-        resolve(assessment);
-      };
-      getRequest.onerror = (error) => {
-        reject(error.target.result);
-      };
-    });
-  }
+  // getAssessment(id: number): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readonly');
+  //     let store = transaction.objectStore(myDb.storeNames.assessments);
+  //     let getRequest = store.get(id);
+  //     myDb.setDefaultErrorHandler(getRequest, myDb);
+  //     getRequest.onsuccess = (e) => {
+  //       //e.target.result = Assessment
+  //       let assessment = this.updateDataService.checkAssessment(e.target.result);
+  //       resolve(assessment);
+  //     };
+  //     getRequest.onerror = (error) => {
+  //       reject(error.target.result);
+  //     };
+  //   });
+  // }
 
   // getDirectoryAssessments(directoryId: number): Promise<any> {
   //   return new Promise((resolve, reject) => {
@@ -291,31 +291,31 @@ export class IndexedDbService {
   //   })
   // }
 
-  putAssessment(assessment: Assessment): Promise<any> {
-    assessment.modifiedDate = new Date();
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.assessments);
-      let getRequest = store.get(assessment.id);
+  // putAssessment(assessment: Assessment): Promise<any> {
+  //   assessment.modifiedDate = new Date();
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.assessments);
+  //     let getRequest = store.get(assessment.id);
 
-      getRequest.onsuccess = (event) => {
-        let tmpAssessment: Assessment = event.target.result;
-        tmpAssessment = assessment;
-        tmpAssessment.modifiedDate = new Date();
-        tmpAssessment.id = assessment.id;
-        let updateRequest = store.put(tmpAssessment);
-        updateRequest.onsuccess = (event) => {
-          resolve(event);
-        };
-        updateRequest.onerror = (event) => {
-          reject(event);
-        };
-      };
-      getRequest.onerror = (event) => {
-        reject(event);
-      };
-    });
-  }
+  //     getRequest.onsuccess = (event) => {
+  //       let tmpAssessment: Assessment = event.target.result;
+  //       tmpAssessment = assessment;
+  //       tmpAssessment.modifiedDate = new Date();
+  //       tmpAssessment.id = assessment.id;
+  //       let updateRequest = store.put(tmpAssessment);
+  //       updateRequest.onsuccess = (event) => {
+  //         resolve(event);
+  //       };
+  //       updateRequest.onerror = (event) => {
+  //         reject(event);
+  //       };
+  //     };
+  //     getRequest.onerror = (event) => {
+  //       reject(event);
+  //     };
+  //   });
+  // }
 
   deleteAssessment(id: number): Promise<any> {
     return new Promise((resolve, reject) => {

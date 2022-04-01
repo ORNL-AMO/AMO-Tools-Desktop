@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { firstValueFrom } from 'rxjs';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-opening-tutorial',
@@ -47,7 +48,7 @@ export class OpeningTutorialComponent implements OnInit {
 
   async sendDontShow() {
       this.settingsDbService.globalSettings.disableTutorial = this.dontShow;
-      await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
-      this.settingsDbService.setAll();
+      let settings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+      this.settingsDbService.setAll(settings);
   }
 }

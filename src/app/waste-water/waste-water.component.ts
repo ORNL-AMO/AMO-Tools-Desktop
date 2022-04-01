@@ -158,10 +158,11 @@ export class WasteWaterComponent implements OnInit {
     }
   }
 
-  saveWasteWater(wasteWater: WasteWater) {
+  async saveWasteWater(wasteWater: WasteWater) {
     wasteWater = this.updateModificationCO2Savings(wasteWater);
     this.assessment.wasteWater = wasteWater;
-    this.assessmentDbService.updateAndSetAll(this.assessment);
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment)) 
+    this.assessmentDbService.setAll(assessments);
   }
 
   updateModificationCO2Savings(wasteWater: WasteWater) {

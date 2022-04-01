@@ -85,6 +85,12 @@ export class AssessmentDbService {
     return this.dbService.bulkDelete(this.storeName, assessmentIds);
   }
 
+  updateWithObservable(assessment: Assessment): Observable<any> {
+    assessment.modifiedDate = new Date();
+    return this.dbService.update(this.storeName, assessment);
+  }
+
+
   updateAndSetAll(assessment: Assessment): void {
     this.dbService.update(this.storeName, assessment).subscribe(assessments => {
       this.allAssessments = assessments;

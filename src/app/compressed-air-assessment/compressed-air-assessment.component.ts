@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
@@ -57,7 +57,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
     private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private systemInformationFormService: SystemInformationFormService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private indexedDbService: IndexedDbService, private compressedAirCalculationService: CompressedAirCalculationService,
+    private indexedDbService: IndexedDbService,
     private dayTypeService: DayTypeService,
     private egridService: EGridService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
@@ -237,11 +237,10 @@ export class CompressedAirAssessmentComponent implements OnInit {
     }
   }
 
-  save(compressedAirAssessment: CompressedAirAssessment) {
+  async save(compressedAirAssessment: CompressedAirAssessment) {
     this.assessment.compressedAirAssessment = compressedAirAssessment;
-    this.indexedDbService.putAssessment(this.assessment).then(() => {
-      this.assessmentDbService.setAll();
-    });
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    this.assessmentDbService.setAll(assessments);
   }
 
   initUpdateUnitsModal(oldSettings: Settings) {

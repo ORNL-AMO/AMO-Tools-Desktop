@@ -78,16 +78,16 @@ export class SelectAssessmentModalComponent implements OnInit {
     this.newAssessmentForm.controls.assessmentType.disable();
   }
 
-  selectAssessment(assessment: Assessment) {
+  async selectAssessment(assessment: Assessment) {
     assessment.compressedAirAssessment = this.setDayTypesFromLogTool(assessment.compressedAirAssessment)
-    this.indexedDbService.putAssessment(assessment).then(() => {
-      this.assessmentDbService.setAll().then(() => {
-        this.compressedAirAssessmentService.mainTab.next('system-setup');
-        this.compressedAirAssessmentService.setupTab.next('day-types');
-        // this.router.navigateByUrl('/compressed-air/' + assessment.id);
-        this.assessmentService.goToAssessment(assessment, 'system-setup', 'day-types');
-      })
-    })
+    
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
+    this.assessmentDbService.setAll(assessments);
+    this.compressedAirAssessmentService.mainTab.next('system-setup');
+    this.compressedAirAssessmentService.setupTab.next('day-types');
+    // this.router.navigateByUrl('/compressed-air/' + assessment.id);
+    this.assessmentService.goToAssessment(assessment, 'system-setup', 'day-types');
+
   }
 
   setDayTypesFromLogTool(compressedAirAssessment: CompressedAirAssessment): CompressedAirAssessment {

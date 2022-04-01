@@ -11,7 +11,7 @@ import { StepTab, LossTab, stepTabs } from './tabs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PhastCompareService } from './phast-compare.service';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsService } from '../settings/settings.service';
@@ -400,14 +400,14 @@ export class PhastComponent implements OnInit {
     this.isModalOpen = $event;
   }
   //called on all changes to forms
-  saveDb() {
+  async saveDb() {
     this.checkSetupDone();
     //set assessment.phast to _phast (object used in forms)
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     //update our assessment in the iDb
-    this.indexedDbService.putAssessment(this.assessment).then(() => {
-      this.assessmentDbService.setAll();
-    });
+    
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment))
+    this.assessmentDbService.setAll(assessments);
   }
   
   setSankeyLabelStyle(style: string) {

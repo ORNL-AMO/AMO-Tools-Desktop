@@ -8,7 +8,7 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { CompareService } from './compare.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -258,7 +258,7 @@ export class PsatComponent implements OnInit {
     }
   }
 
-  save() {
+  async save() {
     let tmpPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
     let tmpMotorForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
     let tmpFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true, this._psat.inputs.whatIfScenario);
@@ -288,11 +288,11 @@ export class PsatComponent implements OnInit {
     }
     this.compareService.setCompareVals(this._psat, this.modificationIndex);
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
-    this.indexedDbService.putAssessment(this.assessment).then(results => {
-      this.assessmentDbService.setAll().then(() => {
-        this.psatService.getResults.next(true);
-      })
-    });
+
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    this.assessmentDbService.setAll(assessments);
+    this.psatService.getResults.next(true);
+
     this.cd.detectChanges();
   }
 

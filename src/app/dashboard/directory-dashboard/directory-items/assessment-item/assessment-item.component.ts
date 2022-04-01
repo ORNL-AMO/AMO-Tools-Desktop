@@ -177,15 +177,14 @@ export class AssessmentItemComponent implements OnInit {
     return str;
   }
 
-  save() {
+  async save() {
     this.assessment.name = this.editForm.controls.name.value;
     this.assessment.directoryId = this.editForm.controls.directoryId.value;
-    this.indexedDbService.putAssessment(this.assessment).then(val => {
-      this.assessmentDbService.setAll().then(() => {
-        this.dashboardService.updateDashboardData.next(true);
-        this.hideEditModal();
-      });
-    });
+    
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment))
+    this.assessmentDbService.setAll(assessments);
+    this.dashboardService.updateDashboardData.next(true);
+    this.hideEditModal();
   }
 
   showDropdown() {

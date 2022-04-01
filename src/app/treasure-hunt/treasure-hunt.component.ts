@@ -6,7 +6,7 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { TreasureHuntService } from './treasure-hunt.service';
 import { TreasureHunt } from '../shared/models/treasure-hunt';
 import { CalculatorsService } from './calculators/calculators.service';
@@ -172,14 +172,13 @@ export class TreasureHuntComponent implements OnInit {
     }
   }
 
-  saveTreasureHunt(treasureHunt: TreasureHunt) {
+  async saveTreasureHunt(treasureHunt: TreasureHunt) {
     this.assessment.treasureHunt = treasureHunt;
     this.assessment.treasureHunt.setupDone = this.checkSetupDone();
-    this.indexedDbService.putAssessment(this.assessment).then(results => {
-      this.assessmentDbService.setAll().then(() => {
-        this.treasureHuntService.getResults.next(true);
-      })
-    })
+
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    this.assessmentDbService.setAll(assessments);
+    this.treasureHuntService.getResults.next(true);
   }
 
   checkSetupDone() {

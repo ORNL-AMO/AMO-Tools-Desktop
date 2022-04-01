@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener, Input } from '@
 import { Settings } from '../../../shared/models/settings';
 import { AirFlowConversionService } from './air-flow-conversion.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Calculator } from '../../../shared/models/calculators';
@@ -81,6 +81,7 @@ export class AirFlowConversionComponent implements OnInit {
 
   getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    debugger;
     if (this.assessmentCalculator) {
       if (this.assessmentCalculator.airFlowConversionInputs) {
         this.airFlowConversionService.airFlowConversionInput.next(this.assessmentCalculator.airFlowConversionInputs);
@@ -102,21 +103,18 @@ export class AirFlowConversionComponent implements OnInit {
     return tmpCalculator;
   }
 
-  saveAssessmentCalculator(){
+  async saveAssessmentCalculator(){
     if (!this.saving) {
       if (this.assessmentCalculator.id) {
-        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
+        let assessments: Assessment[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(this.assessmentCalculator));
+        this.calculatorDbService.setAll(assessments);
       } else {
         this.saving = true;
         this.assessmentCalculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.assessmentCalculator.id = result;
-            this.saving = false;
-          });
-        });
+        let addedCalculator: Calculator = await firstValueFrom(this.calculatorDbService.addWithObservable(this.assessmentCalculator));
+        this.calculatorDbService.setAll();
+        this.assessmentCalculator.id = addedCalculator.id;
+        this.saving = false;
       }
     }
   }
