@@ -12,7 +12,7 @@ import { CalculatorDbService } from '../../../../indexedDb/calculator-db.service
 import { Calculator } from '../../../../shared/models/calculators';
 import { AssessmentService } from '../../../assessment.service';
 import { DashboardService } from '../../../dashboard.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { WasteWaterService } from '../../../../waste-water/waste-water.service';
@@ -48,7 +48,7 @@ export class AssessmentItemComponent implements OnInit {
   ngOnInit() {
     this.assessment.selected = false;
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
-      this.allDirectories = this.directoryDbService.getAll();
+      this.setDirectories();
     });
 
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
@@ -75,6 +75,10 @@ export class AssessmentItemComponent implements OnInit {
   ngOnDestroy() {
     this.updateDashboardDataSub.unsubscribe();
     this.dashboardViewSub.unsubscribe();
+  }
+
+  async setDirectories() {
+    this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
   goToAssessment(assessment: Assessment) {

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Directory } from '../shared/models/directory';
 import { Settings } from '../shared/models/settings';
 import { MockPhast, MockPhastSettings } from '../examples/mockPhast';
@@ -8,9 +7,16 @@ import { MockFsat, MockFsatSettings, MockFsatCalculator } from '../examples/mock
 import { MockSsmt, MockSsmtSettings } from '../examples/mockSsmt';
 import { MockTreasureHunt, MockTreasureHuntSettings } from '../examples/mockTreasureHunt';
 import { MockMotorInventory } from '../examples/mockMotorInventoryData';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, forkJoin, Observable, ObservableInput } from 'rxjs';
 import { MockWasteWater, MockWasteWaterSettings } from '../examples/mockWasteWater';
 import { MockCompressedAirAssessment, MockCompressedAirAssessmentSettings } from '../examples/mockCompressedAirAssessment';
+import { DirectoryDbService } from '../indexedDb/directory-db.service';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { CalculatorDbService } from '../indexedDb/calculator-db.service';
+import { Assessment } from '../shared/models/assessment';
+import { InventoryDbService } from '../indexedDb/inventory-db.service';
+import { ElectronService } from 'ngx-electron';
 @Injectable()
 export class CoreService {
 
@@ -25,135 +31,140 @@ export class CoreService {
   exampleTreasureHuntId: number;
   exampleMotorInventoryId: number;
   exampleCompressedAirAssessmentId: number;
-  constructor(private indexedDbService: IndexedDbService) {
+  constructor(
+    private settingsDbService: SettingsDbService,
+    private calculatorDbService: CalculatorDbService,
+    private assessmentDbService: AssessmentDbService,
+    private inventoryDbService: InventoryDbService,
+    private electronService: ElectronService,
+    private directoryDbService: DirectoryDbService) {
     this.showTranslateModal = new BehaviorSubject<boolean>(false);
   }
 
-  createExamples(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      MockPhast.directoryId = this.exampleDirectoryId;
-      this.indexedDbService.addAssessment(MockPhast).then(phastId => {
-
-        this.examplePhastId = phastId;
-        MockPsat.directoryId = this.exampleDirectoryId;
-        this.indexedDbService.addAssessment(MockPsat).then(psatId => {
-
-          this.examplePsatId = psatId;
-          MockPsatCalculator.assessmentId = this.examplePsatId;
-
-          this.indexedDbService.addCalculator(MockPsatCalculator).then(() => {
-
-            MockFsat.directoryId = this.exampleDirectoryId;
-            this.indexedDbService.addAssessment(MockFsat).then(fsatId => {
-              this.exampleFsatId = fsatId;
-              MockFsatCalculator.assessmentId = fsatId;
-
-              this.indexedDbService.addCalculator(MockFsatCalculator).then(() => {
-
-                MockSsmt.directoryId = this.exampleDirectoryId;
-                this.indexedDbService.addAssessment(MockSsmt).then(ssmtId => {
-                  this.exampleSsmtId = ssmtId;
-
-                  MockTreasureHunt.directoryId = this.exampleDirectoryId;
-                  this.indexedDbService.addAssessment(MockTreasureHunt).then(tHuntId => {
-                    this.exampleTreasureHuntId = tHuntId;
-
-                    MockMotorInventory.directoryId = this.exampleDirectoryId;
-                    this.indexedDbService.addInventoryItem(MockMotorInventory).then(inventoryId => {
-                      this.exampleMotorInventoryId = inventoryId;
-
-                      MockWasteWater.directoryId = this.exampleDirectoryId;
-                      this.indexedDbService.addAssessment(MockWasteWater).then(wwId => {
-                        this.exampleWasteWaterId = wwId;
-                        MockCompressedAirAssessment.directoryId = this.exampleDirectoryId;
-                        this.indexedDbService.addAssessment(MockCompressedAirAssessment).then(compressedAirAssessmentId => {
-                          this.exampleCompressedAirAssessmentId = compressedAirAssessmentId;
-                          resolve(true);
-                        })
-                      });
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
+  getDefaultSettingsObject(): Settings {
+    let defaultSettings: Settings = JSON.parse(JSON.stringify(MockPhastSettings));
+    defaultSettings.directoryId = 1;
+    delete defaultSettings.facilityInfo;
+    return defaultSettings;
   }
 
-  createDirectorySettings(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let tmpSettings: Settings = JSON.parse(JSON.stringify(MockPhastSettings));
-      tmpSettings.directoryId = 1;
-      delete tmpSettings.facilityInfo;
-      this.indexedDbService.addSettings(tmpSettings).then(() => {
-
-        MockPhastSettings.facilityInfo.date = new Date().toDateString();
-        MockPhastSettings.directoryId = this.exampleDirectoryId;
-        this.indexedDbService.addSettings(MockPhastSettings).then(() => {
-
-          delete MockPhastSettings.directoryId;
-          MockPhastSettings.assessmentId = this.examplePhastId;
-
-          this.indexedDbService.addSettings(MockPhastSettings).then(() => {
-
-            MockPsatSettings.assessmentId = this.examplePsatId;
-
-            MockPsatSettings.facilityInfo.date = new Date().toDateString();
-            this.indexedDbService.addSettings(MockPsatSettings).then(() => {
-
-              MockFsatSettings.assessmentId = this.exampleFsatId;
-
-              MockFsatSettings.facilityInfo.date = new Date().toDateString();
-              this.indexedDbService.addSettings(MockFsatSettings).then(() => {
-                MockSsmtSettings.assessmentId = this.exampleSsmtId;
-
-                this.indexedDbService.addSettings(MockSsmtSettings).then(() => {
-
-                  MockTreasureHuntSettings.assessmentId = this.exampleTreasureHuntId;
-                  this.indexedDbService.addSettings(MockTreasureHuntSettings).then(() => {
-
-                    delete MockPsatSettings.assessmentId;
-                    MockPsatSettings.inventoryId = this.exampleMotorInventoryId;
-                    this.indexedDbService.addSettings(MockPsatSettings).then(() => {
-
-                      MockWasteWaterSettings.assessmentId = this.exampleWasteWaterId;
-                      this.indexedDbService.addSettings(MockWasteWaterSettings).then(() => {
-                        MockCompressedAirAssessmentSettings.assessmentId = this.exampleCompressedAirAssessmentId;
-                        this.indexedDbService.addSettings(MockCompressedAirAssessmentSettings).then(() => {
-                          resolve(true);
-                        })
-                      });
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
+  relaunchApp(){
+    console.log('relaunch app');
+    this.electronService.ipcRenderer.send("relaunch");
   }
 
-  createDirectory(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let tmpDirectory: Directory = {
+  getAllAppData() {
+    let initializedAppData = {
+      directories: this.directoryDbService.getAllDirectories(),
+      assessments: this.assessmentDbService.getAllAssessments(),
+      settings: this.settingsDbService.getAllSettings(),
+      calculators: this.calculatorDbService.getAllCalculators(),
+      inventoryItems: this.inventoryDbService.getAllInventory(),
+    };
+    return forkJoin(initializedAppData);
+  }
+
+  // async appDefaultDataInitialized() {
+  //   let settingsCount: number = await firstValueFrom(this.dbService.count(this.settingsDbService.storeName));
+  //   return settingsCount > 0;
+  // }
+
+  async createDefaultDirectories() {
+      let allAssessmentsDir: Directory = {
         name: 'All Assessments',
         createdDate: new Date(),
         modifiedDate: new Date(),
         parentDirectoryId: null,
       };
-      this.indexedDbService.addDirectory(tmpDirectory).then(
-        results => {
-          tmpDirectory.parentDirectoryId = results;
-          tmpDirectory.name = 'Examples';
-          tmpDirectory.isExample = true;
-          this.indexedDbService.addDirectory(tmpDirectory).then(dirId => {
-            this.exampleDirectoryId = dirId;
-            resolve(true);
-          });
-        });
-    });
+      let allDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(allAssessmentsDir));
+      console.log('all dir id', allDirectory.id)
+      let exampleAssessmentsDir: Directory = {
+        name: 'Examples',
+        createdDate: new Date(),
+        modifiedDate: new Date(),
+        parentDirectoryId: allDirectory.id,
+        isExample: true
+      };
+      let exampleDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(exampleAssessmentsDir));
+      console.log('examples dir id', exampleDirectory.id)
+      this.exampleDirectoryId = exampleDirectory.id;
+  }
+
+  // TODO Breakout methods
+  async createExamples() {
+    MockPhast.directoryId = this.exampleDirectoryId;
+    MockPsat.directoryId = this.exampleDirectoryId;
+    MockFsat.directoryId = this.exampleDirectoryId;
+    MockSsmt.directoryId = this.exampleDirectoryId;
+    MockTreasureHunt.directoryId = this.exampleDirectoryId;
+    MockMotorInventory.directoryId = this.exampleDirectoryId;
+    MockWasteWater.directoryId = this.exampleDirectoryId;
+    MockCompressedAirAssessment.directoryId = this.exampleDirectoryId;
+
+    let examplePhast: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockPhast));
+    let exampleSsmt: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockSsmt));
+    let exampleTreasureHunt: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockTreasureHunt));
+    let exampleMotorInventory: Assessment = await firstValueFrom(this.inventoryDbService.addWithObservable(MockMotorInventory));
+    let exampleWasteWater: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockWasteWater));
+    let exampleCompressedAirAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockCompressedAirAssessment));
+    let examplePsat: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockPsat));
+    let exampleFsat: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockFsat));
+
+    this.examplePhastId = examplePhast.id;
+    this.exampleSsmtId = exampleSsmt.id;
+    this.exampleTreasureHuntId = exampleTreasureHunt.id;
+    this.exampleMotorInventoryId = exampleMotorInventory.id;
+    this.exampleWasteWaterId = exampleWasteWater.id;
+    this.exampleCompressedAirAssessmentId = exampleCompressedAirAssessment.id;
+    this.examplePsatId = examplePsat.id;
+    this.exampleFsatId = exampleFsat.id
+
+    MockPsatCalculator.assessmentId = this.examplePsatId;
+    await firstValueFrom(this.calculatorDbService.addWithObservable(MockPsatCalculator));
+
+    MockFsatCalculator.assessmentId = this.exampleFsatId;
+    await firstValueFrom(this.calculatorDbService.addWithObservable(MockFsatCalculator));
+  }
+
+  async createDirectorySettings() {
+    // Add settings for 'All Assessments'
+    let defaultSettings: Settings = this.getDefaultSettingsObject();
+    await firstValueFrom(this.settingsDbService.addWithObservable(defaultSettings));
+
+    // check default settings dir id
+    // Add settings for 'Examples'
+    MockPhastSettings.facilityInfo.date = new Date().toDateString();
+    MockPhastSettings.directoryId = this.exampleDirectoryId;
+    await firstValueFrom(this.settingsDbService.addWithObservable(MockPhastSettings));
+    
+    // Add settings for PHAST
+    delete MockPhastSettings.directoryId;
+    MockPhastSettings.assessmentId = this.examplePhastId;
+    await firstValueFrom(this.settingsDbService.addWithObservable(MockPhastSettings));
+
+    MockPsatSettings.assessmentId = this.examplePsatId;
+    MockPsatSettings.facilityInfo.date = new Date().toDateString();
+    await firstValueFrom(this.settingsDbService.addWithObservable(MockPsatSettings));
+
+    MockFsatSettings.assessmentId = this.exampleFsatId;
+    MockFsatSettings.facilityInfo.date = new Date().toDateString();
+    await firstValueFrom(this.settingsDbService.addWithObservable(MockFsatSettings));
+
+    // No facility date?
+    MockSsmtSettings.assessmentId = this.exampleSsmtId;
+    await firstValueFrom(this.settingsDbService.addWithObservable(MockSsmtSettings));
+
+    MockTreasureHuntSettings.assessmentId = this.exampleTreasureHuntId;
+    await firstValueFrom(this.settingsDbService.addWithObservable(MockTreasureHuntSettings));
+
+    delete MockPsatSettings.assessmentId;
+    MockPsatSettings.inventoryId = this.exampleMotorInventoryId;
+    await firstValueFrom(this.settingsDbService.addWithObservable(MockPsatSettings));
+
+    MockWasteWaterSettings.assessmentId = this.exampleWasteWaterId;
+    await firstValueFrom(this.settingsDbService.addWithObservable(MockWasteWaterSettings));
+
+    MockCompressedAirAssessmentSettings.assessmentId = this.exampleCompressedAirAssessmentId;
+    await firstValueFrom(this.settingsDbService.addWithObservable(MockCompressedAirAssessmentSettings));
   }
 }

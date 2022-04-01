@@ -50,7 +50,7 @@ export class AssessmentSettingsComponent implements OnInit {
     this.indexedDbService.putSettings(tmpSettings).then(
       results => {
         this.settingsDbService.setAll().then(() => {
-          this.settings = this.settingsDbService.getById(this.settings.id);
+          this.settings = this.settingsDbService.findById(this.settings.id);
           // this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
           // this.emitUpdateDirectory.emit(true);
         });

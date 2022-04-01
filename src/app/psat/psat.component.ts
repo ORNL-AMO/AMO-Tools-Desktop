@@ -96,7 +96,7 @@ export class PsatComponent implements OnInit {
   ngOnInit() {
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
+      this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
       this.getSettings();
       this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
       if (this._psat.modifications) {

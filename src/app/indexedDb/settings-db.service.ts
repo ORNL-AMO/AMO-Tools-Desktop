@@ -7,37 +7,107 @@ import { SettingsService } from '../settings/settings.service';
 import { DirectoryDbService } from './directory-db.service';
 import { Directory } from '../shared/models/directory';
 import { InventoryItem } from '../shared/models/inventory/inventory';
+import { NgxIndexedDBService } from 'ngx-indexed-db';
+import { combineLatestWith, firstValueFrom, Observable } from 'rxjs';
+import { SettingsStoreMeta } from './dbConfig';
 
 @Injectable()
 export class SettingsDbService {
   allSettings: Array<Settings>;
   globalSettings: Settings;
-  constructor(private indexedDbService: IndexedDbService, private settingService: SettingsService, private directoryDbService: DirectoryDbService) { }
+  storeName: string = SettingsStoreMeta.store;
+  constructor(
+    private settingService: SettingsService, 
+    private dbService: NgxIndexedDBService,
+    private directoryDbService: DirectoryDbService) { }
 
-  setAll(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (this.indexedDbService.db) {
-        this.indexedDbService.getAllSettings().then(settings => {
-          this.allSettings = settings;
-          this.globalSettings = this.getByDirectoryId(1);
-          this.globalSettings = this.checkSettings(this.globalSettings);
-          resolve(true);
-        });
-      } else {
-        this.allSettings = [];
-        resolve(false);
-      }
-    });
+  // setAll(): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     if (this.indexedDbService.db) {
+  //       this.indexedDbService.getAllSettings().then(settings => {
+  //         this.allSettings = settings;
+  //         this.globalSettings = this.getByDirectoryId(1);
+  //         this.globalSettings = this.checkSettings(this.globalSettings);
+  //         resolve(true);
+  //       });
+  //     } else {
+  //       this.allSettings = [];
+  //       resolve(false);
+  //     }
+  //   });
+  // }
+
+  // setAll(): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //       this.allSettings = [];
+  //       resolve(false);
+  //     }
+  //   );
+  // }
+
+  async setAll(settings?: Array<Settings>) {
+    if (settings) {
+      this.allSettings = settings;
+    } else {
+      this.allSettings = await firstValueFrom(this.getAllSettings());
+    }
+    this.globalSettings = this.getByDirectoryId(1);
+    this.globalSettings = this.checkSettings(this.globalSettings);
+  }
+
+  async setAllWithObservable(): Promise<any> {
+    let allSettings$ = this.getAllSettings();
+    this.allSettings = await firstValueFrom(allSettings$);
+    this.globalSettings = this.getByDirectoryId(1);
+    this.globalSettings = this.checkSettings(this.globalSettings);
+    return allSettings$;
   }
 
   getAll(): Array<Settings> {
     return this.allSettings;
   }
 
-  getById(id: number): Settings {
+  getAllSettings(): Observable<Array<Settings>> {
+    return this.dbService.getAll(this.storeName);
+  }
+
+  add(settings: Settings): void {
+    this.dbService.add(this.storeName, settings);
+  }
+
+  addWithObservable(settings: Settings): Observable<any> {
+    return this.dbService.add(this.storeName, settings);
+  }
+
+  deleteById(settingsId: number) {
+    this.dbService.delete(this.storeName, settingsId);
+  }
+
+  deleteByIdWithObservable(settingsId: number): Observable<any> {
+    return this.dbService.delete(this.storeName, settingsId);
+  }
+
+  bulkDeleteWithObservable(calculatorIds: Array<number>): Observable<any> {
+    return this.dbService.bulkDelete(this.storeName, calculatorIds);
+  }
+
+  update(settings: Settings): void {
+    this.dbService.update(this.storeName, settings);
+  }
+
+  updateWithObservable(settings: Settings): Observable<any> {
+    settings.modifiedDate = new Date();
+    return this.dbService.update(this.storeName, settings);
+  }
+
+  findById(id: number): Settings {
     let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.id === id; });
     selectedSettings = this.checkSettings(selectedSettings);
     return selectedSettings;
+  }
+
+  getById(id: number): Observable<Settings> {
+    return this.dbService.getByKey(this.storeName, id);
   }
 
   getByDirectoryId(id: number): Settings {
@@ -164,5 +234,6 @@ export class SettingsDbService {
     }
     return settings;
   }
+
 
 }

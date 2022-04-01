@@ -106,7 +106,7 @@ export class PhastComponent implements OnInit {
     this.lossesService.initDone();
     //get assessmentId from route phast/:id
     this.actvatedRouteSubscription = this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
+      this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       //use copy of phast object of as modal provided to forms
       this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
       if (this._phast.modifications) {

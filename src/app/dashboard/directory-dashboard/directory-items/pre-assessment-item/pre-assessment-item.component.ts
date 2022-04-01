@@ -12,7 +12,7 @@ import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { DashboardService } from '../../../dashboard.service';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pre-assessment-item',
@@ -50,7 +50,7 @@ export class PreAssessmentItemComponent implements OnInit {
   ngOnInit() {
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.directory = this.directoryDbService.getById(this.calculator.directoryId);
-      this.allDirectories = this.directoryDbService.getAll();
+      this.setDirectories();
       this.settings = this.settingsDbService.getByDirectoryId(this.calculator.directoryId);
       this.calculateData();
     });
@@ -64,6 +64,11 @@ export class PreAssessmentItemComponent implements OnInit {
     this.updateDashboardDataSub.unsubscribe();
     this.dashboardViewSub.unsubscribe();
   }
+
+  async setDirectories() {
+    this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
+  }
+
 
   calculateData() {
     if (this.calculator.preAssessments) {

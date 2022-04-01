@@ -15,6 +15,7 @@ import { DirectoryDashboardService } from '../directory-dashboard/directory-dash
 import { DashboardService } from '../dashboard.service';
 import { Assessment } from '../../shared/models/assessment';
 import { ConvertFanAnalysisService } from '../../calculator/fans/fan-analysis/convert-fan-analysis.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-assessment-create',
@@ -36,7 +37,6 @@ export class AssessmentCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private assessmentService: AssessmentService,
     private router: Router,
-    private indexedDbService: IndexedDbService,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
     private directoryDbService: DirectoryDbService,
@@ -45,7 +45,7 @@ export class AssessmentCreateComponent implements OnInit {
     private convertFanAnalysisService: ConvertFanAnalysisService) { }
 
   ngOnInit() {
-    this.directories = this.directoryDbService.getAll();
+    this.setDirectories();
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     this.directory = this.directoryDbService.getById(directoryId);
     this.settings = this.settingsDbService.getByDirectoryId(directoryId);
@@ -61,6 +61,10 @@ export class AssessmentCreateComponent implements OnInit {
 
   ngAfterViewInit() {
     this.showCreateModal();
+  }
+
+  async setDirectories() {
+    this.directories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
   initForm() {
@@ -148,13 +152,12 @@ export class AssessmentCreateComponent implements OnInit {
     }
   }
 
-  addAssessment(assessment: Assessment, navigationUrl: string) {
-    this.indexedDbService.addAssessment(assessment).then(assessmentId => {
-      this.assessmentDbService.setAll();
-      this.hideCreateModal();
-      this.createModal.onHidden.subscribe(() => {
-        this.router.navigateByUrl(navigationUrl + assessmentId);
-      });
+  async addAssessment(assessment: Assessment, navigationUrl: string) {
+    let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(assessment));
+    this.assessmentDbService.setAll();
+    this.hideCreateModal();
+    this.createModal.onHidden.subscribe(() => {
+      this.router.navigateByUrl(navigationUrl + createdAssessment.id);
     });
   }
 
@@ -182,7 +185,7 @@ export class AssessmentCreateComponent implements OnInit {
   }
 
 
-  createFolder() {
+  async createFolder() {
     let tmpFolder: Directory = {
       name: this.newFolderForm.controls.folderName.value,
       parentDirectoryId: this.newFolderForm.controls.directoryId.value
@@ -197,20 +200,21 @@ export class AssessmentCreateComponent implements OnInit {
         date: new Date().toLocaleDateString()
       };
     }
-    this.indexedDbService.addDirectory(tmpFolder).then((newDirId) => {
-      tmpSettings.directoryId = newDirId;
-      this.directoryDbService.setAll().then(() => {
-        this.indexedDbService.addSettings(tmpSettings).then(() => {
-          this.settingsDbService.setAll().then(() => {
-            this.directories = this.directoryDbService.getAll();
-            this.newAssessmentForm.patchValue({
-              'directoryId': newDirId
-            });
-            this.cancelNewFolder();
-          });
-        });
-      });
+
+
+    let createdDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(tmpFolder))
+    tmpSettings.directoryId = createdDirectory.id;
+    this.directories = await firstValueFrom(this.directoryDbService.getAllDirectories());
+    this.directoryDbService.setAll(this.directories);
+    
+    await firstValueFrom(this.settingsDbService.addWithObservable(tmpSettings));
+    let allSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(allSettings);
+
+    this.newAssessmentForm.patchValue({
+      'directoryId': createdDirectory.id
     });
+    this.cancelNewFolder();
   }
 
   initFolderForm() {

@@ -2,35 +2,50 @@ import { Injectable } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { IndexedDbService } from './indexed-db.service';
 import * as _ from 'lodash';
+import { NgxIndexedDBService } from 'ngx-indexed-db';
+import { firstValueFrom, Observable } from 'rxjs';
+import { AssessmentStoreMeta } from './dbConfig';
 
 @Injectable()
 export class AssessmentDbService {
 
   allAssessments: Array<Assessment>;
-  constructor(private indexedDbService: IndexedDbService) {
+  storeName: string = AssessmentStoreMeta.store;
+
+  constructor(
+    private dbService: NgxIndexedDBService) {
+  }
+  
+  async setAll(assessments?: Array<Assessment>) {
+    if (assessments) {
+      this.allAssessments = assessments;
+    } else {
+      this.allAssessments = await firstValueFrom(this.getAllAssessments());
+    }
   }
 
-  setAll(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (this.indexedDbService.db) {
-        this.indexedDbService.getAllAssessments().then(assessments => {
-          this.allAssessments = assessments;
-          resolve(true);
-        });
-      } else {
-        this.allAssessments = [];
-        resolve(false);
-      }
-    });
+  async setAllWithObservable(): Promise<any> {
+    let allAssessments$ = this.getAllAssessments();
+    this.allAssessments = await firstValueFrom(allAssessments$);
+    return allAssessments$;
   }
+
 
   getAll(): Array<Assessment> {
     return this.allAssessments;
   }
 
-  getById(id: number): Assessment {
+  getAllAssessments(): Observable<Array<Assessment>> {
+    return this.dbService.getAll(this.storeName);
+  }
+
+  findById(id: number): Assessment {
     let selectedAssessment: Assessment = _.find(this.allAssessments, (assessment) => { return assessment.id === id; });
     return selectedAssessment;
+  }
+
+  getById(assessmentId: number): Observable<Assessment> {
+    return this.dbService.getByKey(this.storeName, assessmentId);
   }
 
   getByDirectoryId(id: number): Array<Assessment> {
@@ -44,5 +59,37 @@ export class AssessmentDbService {
     });
     return example;
   }
+
+
+  add(assessment: Assessment) {
+    assessment.createdDate = new Date();
+    assessment.modifiedDate = new Date();
+    this.dbService.add(this.storeName, assessment);
+  }
+
+  addWithObservable(assessment: Assessment): Observable<any> {
+    assessment.createdDate = new Date();
+    assessment.modifiedDate = new Date();
+    return this.dbService.add(this.storeName, assessment);
+  }
+
+  deleteById(assessmentId: number) {
+    this.dbService.delete(this.storeName, assessmentId);
+  }
+
+  deleteByIdWithObservable(assessmentId: number): Observable<any> {
+    return this.dbService.delete(this.storeName, assessmentId);
+  }
+
+  bulkDeleteWithObservable(assessmentIds: Array<number>): Observable<any> {
+    return this.dbService.bulkDelete(this.storeName, assessmentIds);
+  }
+
+  updateAndSetAll(assessment: Assessment): void {
+    this.dbService.update(this.storeName, assessment).subscribe(assessments => {
+      this.allAssessments = assessments;
+    });
+  }
+
 
 }

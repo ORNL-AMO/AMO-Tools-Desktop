@@ -98,7 +98,7 @@ export class SsmtComponent implements OnInit {
   ngOnInit() {
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
+      this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
       this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
       if (this._ssmt.modifications) {
         if (this._ssmt.modifications.length !== 0) {

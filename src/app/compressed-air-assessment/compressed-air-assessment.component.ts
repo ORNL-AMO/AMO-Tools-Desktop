@@ -67,7 +67,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.egridService.getAllSubRegions();
     // this.compressedAirCalculationService.test();
     this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
+      this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       if (!settings) {
         settings = this.settingsDbService.getByAssessmentId(this.assessment, false);

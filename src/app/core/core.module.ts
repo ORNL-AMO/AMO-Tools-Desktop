@@ -37,6 +37,7 @@ import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { WasteWaterModule } from '../waste-water/waste-water.module';
 import { CompressedAirAssessmentModule } from '../compressed-air-assessment/compressed-air-assessment.module';
 import { PlotlyViaWindowModule } from 'angular-plotly.js';
+import { IndexedDbModule } from '../indexedDb/indexed-db.module';
 
 @NgModule({
   declarations: [
@@ -68,19 +69,13 @@ import { PlotlyViaWindowModule } from 'angular-plotly.js';
     MotorInventoryModule,
     WasteWaterModule,
     CompressedAirAssessmentModule,
-    PlotlyViaWindowModule
+    PlotlyViaWindowModule,
+    IndexedDbModule
   ],
   providers: [
     AssessmentService,
     CoreService,
     WindowRefService,
-    IndexedDbService,
-    AssessmentDbService,
-    DirectoryDbService,
-    SettingsDbService,
-    CalculatorDbService,
-    DeleteDataService,
-    InventoryDbService
   ]
 })
 

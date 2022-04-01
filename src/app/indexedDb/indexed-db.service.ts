@@ -8,6 +8,8 @@ import { UpdateDataService } from '../shared/helper-services/update-data.service
 import { Calculator } from '../shared/models/calculators';
 import { LogToolDbData } from '../log-tool/log-tool-models';
 import { InventoryItem } from '../shared/models/inventory/inventory';
+import { SettingsDbService } from './settings-db.service';
+import { firstValueFrom } from 'rxjs';
 
 var myDb: any = {
   name: 'CrudDB',
@@ -43,6 +45,7 @@ var myDb: any = {
 };
 
 
+
 @Injectable()
 export class IndexedDbService {
 
@@ -51,165 +54,167 @@ export class IndexedDbService {
   private _window: Window;
 
   initCustomObjects: boolean = true;
-  constructor(private windowRef: WindowRefService, private updateDataService: UpdateDataService) {
+  constructor(private windowRef: WindowRefService,
+    private settingsDbService: SettingsDbService,
+     private updateDataService: UpdateDataService) {
     this._window = windowRef.nativeWindow;
   }
 
-  initDb(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.request = this._window.indexedDB.open(myDb.name, myDb.version);
-      this.request.onupgradeneeded = function (e) {
-        var newVersion = e.target.result;
-        //assessments
-        if (!newVersion.objectStoreNames.contains(myDb.storeNames.assessments)) {
-          console.log('creating assessments store...');
-          let assessmentObjStore = newVersion.createObjectStore(myDb.storeNames.assessments, {
-            autoIncrement: true,
-            keyPath: 'id'
-          });
-          assessmentObjStore.createIndex('directoryId', 'directoryId', { unique: false });
-        }
-        //directories
-        if (!newVersion.objectStoreNames.contains(myDb.storeNames.directories)) {
-          console.log('creating directories store...');
-          let directoryObjectStore = newVersion.createObjectStore(myDb.storeNames.directories, {
-            autoIncrement: true,
-            keyPath: 'id'
-          });
-          directoryObjectStore.createIndex('parentDirectoryId', 'parentDirectoryId', { unique: false });
-        }
-        //settings
-        if (!newVersion.objectStoreNames.contains(myDb.storeNames.settings)) {
-          console.log('creating settings store...');
-          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.settings, {
-            autoIncrement: true,
-            keyPath: 'id'
-          });
-          settingsObjStore.createIndex('directoryId', 'directoryId', { unique: false });
-          settingsObjStore.createIndex('assessmentId', 'assessmentId', { unique: false });
-          settingsObjStore.createIndex('inventoryId', 'inventoryId', {unique: false});
-        }
-        //gasLoadChargeMaterial
-        if (!newVersion.objectStoreNames.contains(myDb.storeNames.gasLoadChargeMaterial)) {
-          console.log('creating gasLoadChargeMaterial store...');
-          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.gasLoadChargeMaterial, {
-            autoIncrement: true,
-            keyPath: 'id'
-          });
-          settingsObjStore.createIndex('id', 'id', { unique: false });
-        }
+  // initDb(): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     this.request = this._window.indexedDB.open(myDb.name, myDb.version);
+  //     this.request.onupgradeneeded = function (e) {
+  //       var newVersion = e.target.result;
+  //       //assessments
+  //       if (!newVersion.objectStoreNames.contains(myDb.storeNames.assessments)) {
+  //         console.log('creating assessments store...');
+  //         let assessmentObjStore = newVersion.createObjectStore(myDb.storeNames.assessments, {
+  //           autoIncrement: true,
+  //           keyPath: 'id'
+  //         });
+  //         assessmentObjStore.createIndex('directoryId', 'directoryId', { unique: false });
+  //       }
+  //       //directories
+  //       if (!newVersion.objectStoreNames.contains(myDb.storeNames.directories)) {
+  //         console.log('creating directories store...');
+  //         let directoryObjectStore = newVersion.createObjectStore(myDb.storeNames.directories, {
+  //           autoIncrement: true,
+  //           keyPath: 'id'
+  //         });
+  //         directoryObjectStore.createIndex('parentDirectoryId', 'parentDirectoryId', { unique: false });
+  //       }
+  //       //settings
+  //       if (!newVersion.objectStoreNames.contains(myDb.storeNames.settings)) {
+  //         console.log('creating settings store...');
+  //         let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.settings, {
+  //           autoIncrement: true,
+  //           keyPath: 'id'
+  //         });
+  //         settingsObjStore.createIndex('directoryId', 'directoryId', { unique: false });
+  //         settingsObjStore.createIndex('assessmentId', 'assessmentId', { unique: false });
+  //         settingsObjStore.createIndex('inventoryId', 'inventoryId', {unique: false});
+  //       }
+  //       //gasLoadChargeMaterial
+  //       if (!newVersion.objectStoreNames.contains(myDb.storeNames.gasLoadChargeMaterial)) {
+  //         console.log('creating gasLoadChargeMaterial store...');
+  //         let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.gasLoadChargeMaterial, {
+  //           autoIncrement: true,
+  //           keyPath: 'id'
+  //         });
+  //         settingsObjStore.createIndex('id', 'id', { unique: false });
+  //       }
 
-        //liquidLoadChargeMaterial
-        if (!newVersion.objectStoreNames.contains(myDb.storeNames.liquidLoadChargeMaterial)) {
-          console.log('creating liquidLoadChargeMaterial store...');
-          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.liquidLoadChargeMaterial, {
-            autoIncrement: true,
-            keyPath: 'id'
-          });
-          settingsObjStore.createIndex('id', 'id', { unique: false });
-        }
+  //       //liquidLoadChargeMaterial
+  //       if (!newVersion.objectStoreNames.contains(myDb.storeNames.liquidLoadChargeMaterial)) {
+  //         console.log('creating liquidLoadChargeMaterial store...');
+  //         let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.liquidLoadChargeMaterial, {
+  //           autoIncrement: true,
+  //           keyPath: 'id'
+  //         });
+  //         settingsObjStore.createIndex('id', 'id', { unique: false });
+  //       }
 
-        //solidLoadChargeMaterial
-        if (!newVersion.objectStoreNames.contains(myDb.storeNames.solidLoadChargeMaterial)) {
-          console.log('creating solidLoadChargeMaterial store...');
-          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.solidLoadChargeMaterial, {
-            autoIncrement: true,
-            keyPath: 'id'
-          });
-          settingsObjStore.createIndex('id', 'id', { unique: false });
-        }
-        //atmosphereSpecificHeat
-        if (!newVersion.objectStoreNames.contains(myDb.storeNames.atmosphereSpecificHeat)) {
-          console.log('creating atmosphereSpecificHeat store...');
-          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.atmosphereSpecificHeat, {
-            autoIncrement: true,
-            keyPath: 'id'
-          });
-          settingsObjStore.createIndex('id', 'id', { unique: false });
-        }
-        //wallLossesSurface
-        if (!newVersion.objectStoreNames.contains(myDb.storeNames.wallLossesSurface)) {
-          console.log('creating wallLossesSurface store...');
-          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.wallLossesSurface, {
-            autoIncrement: true,
-            keyPath: 'id'
-          });
-          settingsObjStore.createIndex('id', 'id', { unique: false });
-        }
-        //flueGasMaterial
-        if (!newVersion.objectStoreNames.contains(myDb.storeNames.flueGasMaterial)) {
-          console.log('creating flueGasMaterial store...');
-          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.flueGasMaterial, {
-            autoIncrement: true,
-            keyPath: 'id'
-          });
-          settingsObjStore.createIndex('id', 'id', { unique: false });
-        }
-        //solidLiquidFlueGasMaterial
-        if (!newVersion.objectStoreNames.contains(myDb.storeNames.solidLiquidFlueGasMaterial)) {
-          console.log('creating solidLiquidFlueGasMaterial store...');
-          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.solidLiquidFlueGasMaterial, {
-            autoIncrement: true,
-            keyPath: 'id'
-          });
-          settingsObjStore.createIndex('id', 'id', { unique: false });
-        }
-        //calculator
-        if (!newVersion.objectStoreNames.contains(myDb.storeNames.calculator)) {
-          console.log('creating calculator store...');
-          let calculatorObjStore = newVersion.createObjectStore(myDb.storeNames.calculator, {
-            autoIncrement: true,
-            keyPath: 'id'
-          });
-          calculatorObjStore.createIndex('id', 'id', { unique: false });
-          calculatorObjStore.createIndex('directoryId', 'directoryId', { unique: false });
-          calculatorObjStore.createIndex('assessmentId', 'assessmentId', { unique: false });
-        }
-        //calculator
-        if (!newVersion.objectStoreNames.contains(myDb.storeNames.logTool)) {
-          console.log('creating logTool store...');
-          let calculatorObjStore = newVersion.createObjectStore(myDb.storeNames.logTool, {
-            autoIncrement: true,
-            keyPath: 'id'
-          });
-          calculatorObjStore.createIndex('id', 'id', { unique: false });
-        }
-        //inventoryItems
-        if (!newVersion.objectStoreNames.contains(myDb.storeNames.inventoryItems)) {
-          console.log('creating inventoryItems store...');
-          let inventoryItemsObjStore = newVersion.createObjectStore(myDb.storeNames.inventoryItems, {
-            autoIncrement: true,
-            keyPath: 'id'
-          });
-          inventoryItemsObjStore.createIndex('directoryId', 'directoryId', { unique: false });
-        }
-      };
-      myDb.setDefaultErrorHandler(this.request, myDb);
+  //       //solidLoadChargeMaterial
+  //       if (!newVersion.objectStoreNames.contains(myDb.storeNames.solidLoadChargeMaterial)) {
+  //         console.log('creating solidLoadChargeMaterial store...');
+  //         let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.solidLoadChargeMaterial, {
+  //           autoIncrement: true,
+  //           keyPath: 'id'
+  //         });
+  //         settingsObjStore.createIndex('id', 'id', { unique: false });
+  //       }
+  //       //atmosphereSpecificHeat
+  //       if (!newVersion.objectStoreNames.contains(myDb.storeNames.atmosphereSpecificHeat)) {
+  //         console.log('creating atmosphereSpecificHeat store...');
+  //         let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.atmosphereSpecificHeat, {
+  //           autoIncrement: true,
+  //           keyPath: 'id'
+  //         });
+  //         settingsObjStore.createIndex('id', 'id', { unique: false });
+  //       }
+  //       //wallLossesSurface
+  //       if (!newVersion.objectStoreNames.contains(myDb.storeNames.wallLossesSurface)) {
+  //         console.log('creating wallLossesSurface store...');
+  //         let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.wallLossesSurface, {
+  //           autoIncrement: true,
+  //           keyPath: 'id'
+  //         });
+  //         settingsObjStore.createIndex('id', 'id', { unique: false });
+  //       }
+  //       //flueGasMaterial
+  //       if (!newVersion.objectStoreNames.contains(myDb.storeNames.flueGasMaterial)) {
+  //         console.log('creating flueGasMaterial store...');
+  //         let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.flueGasMaterial, {
+  //           autoIncrement: true,
+  //           keyPath: 'id'
+  //         });
+  //         settingsObjStore.createIndex('id', 'id', { unique: false });
+  //       }
+  //       //solidLiquidFlueGasMaterial
+  //       if (!newVersion.objectStoreNames.contains(myDb.storeNames.solidLiquidFlueGasMaterial)) {
+  //         console.log('creating solidLiquidFlueGasMaterial store...');
+  //         let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.solidLiquidFlueGasMaterial, {
+  //           autoIncrement: true,
+  //           keyPath: 'id'
+  //         });
+  //         settingsObjStore.createIndex('id', 'id', { unique: false });
+  //       }
+  //       //calculator
+  //       if (!newVersion.objectStoreNames.contains(myDb.storeNames.calculator)) {
+  //         console.log('creating calculator store...');
+  //         let calculatorObjStore = newVersion.createObjectStore(myDb.storeNames.calculator, {
+  //           autoIncrement: true,
+  //           keyPath: 'id'
+  //         });
+  //         calculatorObjStore.createIndex('id', 'id', { unique: false });
+  //         calculatorObjStore.createIndex('directoryId', 'directoryId', { unique: false });
+  //         calculatorObjStore.createIndex('assessmentId', 'assessmentId', { unique: false });
+  //       }
+  //       //calculator
+  //       if (!newVersion.objectStoreNames.contains(myDb.storeNames.logTool)) {
+  //         console.log('creating logTool store...');
+  //         let calculatorObjStore = newVersion.createObjectStore(myDb.storeNames.logTool, {
+  //           autoIncrement: true,
+  //           keyPath: 'id'
+  //         });
+  //         calculatorObjStore.createIndex('id', 'id', { unique: false });
+  //       }
+  //       //inventoryItems
+  //       if (!newVersion.objectStoreNames.contains(myDb.storeNames.inventoryItems)) {
+  //         console.log('creating inventoryItems store...');
+  //         let inventoryItemsObjStore = newVersion.createObjectStore(myDb.storeNames.inventoryItems, {
+  //           autoIncrement: true,
+  //           keyPath: 'id'
+  //         });
+  //         inventoryItemsObjStore.createIndex('directoryId', 'directoryId', { unique: false });
+  //       }
+  //     };
+  //     myDb.setDefaultErrorHandler(this.request, myDb);
 
-      this.request.onsuccess = function (e) {
-        myDb.instance = e.target.result;
-        resolve('db init success');
-      };
+  //     this.request.onsuccess = function (e) {
+  //       myDb.instance = e.target.result;
+  //       resolve('db init success');
+  //     };
 
-      this.request.onerror = (error) => {
-        reject(error.target.result);
-      };
-    });
-  }
+  //     this.request.onerror = (error) => {
+  //       reject(error.target.result);
+  //     };
+  //   });
+  // }
 
-  deleteDb(): Promise<any> {
-    this.db = undefined;
-    return new Promise((resolve, reject) => {
-      myDb.instance.close();
-      let deleteRequest = this._window.indexedDB.deleteDatabase(myDb.name);
-      deleteRequest.onsuccess = (e) => {
-        resolve(e);
-      };
-      deleteRequest.onerror = (e) => {
-        reject(e);
-      };
-    });
-  }
+  // deleteDb(): Promise<any> {
+  //   this.db = undefined;
+  //   return new Promise((resolve, reject) => {
+  //     myDb.instance.close();
+  //     let deleteRequest = this._window.indexedDB.deleteDatabase(myDb.name);
+  //     deleteRequest.onsuccess = (e) => {
+  //       resolve(e);
+  //     };
+  //     deleteRequest.onerror = (e) => {
+  //       reject(e);
+  //     };
+  //   });
+  // }
 
   //ASSESSMENTS
   addAssessment(_assessment: Assessment): Promise<any> {
@@ -424,23 +429,6 @@ export class IndexedDbService {
       };
       deleteRequest.onerror = (event) => {
         reject(event.target.result);
-      };
-    });
-  }
-
-
-  //Settings
-  addSettings(_settings: Settings): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.settings);
-      let addRequest = store.add(_settings);
-      myDb.setDefaultErrorHandler(addRequest, myDb);
-      addRequest.onsuccess = (e) => {
-        resolve(e.target.result);
-      };
-      addRequest.onerror = (e) => {
-        reject(e.target.result);
       };
     });
   }
@@ -769,6 +757,12 @@ export class IndexedDbService {
     });
   }
 
+   // TODO TEMPORARY reroute - remove
+   async addSettings(_settings: Settings) {
+    return firstValueFrom(this.settingsDbService.addWithObservable(_settings));
+  }
+
+
   deleteSolidLoadChargeMaterial(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readwrite');
@@ -936,103 +930,6 @@ export class IndexedDbService {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readwrite');
       let store = transaction.objectStore(myDb.storeNames.atmosphereSpecificHeat);
-      let clearRequest = store.clear();
-      myDb.setDefaultErrorHandler(clearRequest, myDb);
-      clearRequest.onsuccess = (e) => {
-        resolve(e.target.result);
-      };
-      clearRequest.onerror = (error) => {
-        reject(error.target.result);
-      };
-    });
-  }
-
-  //wallLossesSurface
-  addWallLossesSurface(_material: WallLossesSurface): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
-      let addRequest = store.add(_material);
-      myDb.setDefaultErrorHandler(addRequest, myDb);
-      addRequest.onsuccess = (e) => {
-        resolve(e.target.result);
-      };
-      addRequest.onerror = (e) => {
-        reject(e.target.result);
-      };
-    });
-  }
-
-  deleteWallLossesSurface(id: number): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
-      let deleteRequest = store.delete(id);
-      deleteRequest.onsuccess = (event) => {
-        resolve(event.target.result);
-      };
-      deleteRequest.onerror = (event) => {
-        reject(event.target.result);
-      };
-    });
-  }
-
-  putWallLossesSurface(material: WallLossesSurface): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
-      let getRequest = store.get(material.id);
-      getRequest.onsuccess = (event) => {
-        let tmpMaterial: WallLossesSurface = event.target.result;
-        tmpMaterial = material;
-        let updateRequest = store.put(material);
-        updateRequest.onsuccess = (event) => {
-          resolve(event);
-        };
-        updateRequest.onerror = (event) => {
-          reject(event);
-        };
-      };
-      getRequest.onerror = (event) => {
-        reject(event);
-      };
-    });
-  }
-
-  getWallLossesSurfaceById(id: number): Promise<WallLossesSurface> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readonly');
-      let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
-      let getRequest = store.get(id);
-      myDb.setDefaultErrorHandler(getRequest, myDb);
-      getRequest.onsuccess = (e) => {
-        resolve(e.target.result);
-      };
-      getRequest.onerror = (error) => {
-        reject(error.target.result);
-      };
-    });
-  }
-
-  getWallLossesSurface(): Promise<Array<WallLossesSurface>> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readonly');
-      let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
-      let getRequest = store.getAll();
-      myDb.setDefaultErrorHandler(getRequest, myDb);
-      getRequest.onsuccess = (e) => {
-        resolve(e.target.result);
-      };
-      getRequest.onerror = (error) => {
-        reject(error.target.result);
-      };
-    });
-  }
-
-  clearWallLossesSurface(): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
       let clearRequest = store.clear();
       myDb.setDefaultErrorHandler(clearRequest, myDb);
       clearRequest.onsuccess = (e) => {
@@ -1423,7 +1320,7 @@ export class IndexedDbService {
     });
   }
 
-  //inventoryItems
+  // //inventoryItems
   addInventoryItem(inventoryItem: InventoryItem): Promise<any> {
     inventoryItem.createdDate = new Date();
     inventoryItem.modifiedDate = new Date();

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { firstValueFrom } from 'rxjs';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
@@ -40,11 +41,15 @@ export class MoveItemsComponent implements OnInit {
     private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    this.allDirectories = this.directoryDbService.getAll();
+    this.setDirectories();
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     this.directory = this.directoryDbService.getById(directoryId);
     this.moveForm  = this.initForm();
     this.newFolderForm = this.initFolderForm();
+  }
+
+  async setDirectories() {
+    this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
   initForm() {
@@ -183,7 +188,7 @@ export class MoveItemsComponent implements OnInit {
       this.directoryDbService.setAll().then(() => {
         this.indexedDbService.addSettings(tmpSettings).then(() => {
           this.settingsDbService.setAll().then(() => {
-            this.allDirectories = this.directoryDbService.getAll();
+            this.setDirectories();
             this.moveForm.patchValue({
               'directoryId': newDirId
             });

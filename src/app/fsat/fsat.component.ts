@@ -105,7 +105,7 @@ export class FsatComponent implements OnInit {
   ngOnInit() {
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
+      this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
       this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));
       if (this._fsat.modifications) {
         if (this._fsat.modifications.length !== 0) {

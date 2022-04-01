@@ -5,6 +5,8 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { WallLossesSurfaceDbService } from '../../indexedDb/wall-losses-surface-db.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-wall-losses-surface',
@@ -38,7 +40,8 @@ export class WallLossesSurfaceComponent implements OnInit {
   currentField: string = 'selectedMaterial';
   idbEditMaterialId: number;
   sdbEditMaterialId: number;
-  constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, 
+    private wallLossesSurfaceDbService: WallLossesSurfaceDbService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -47,12 +50,7 @@ export class WallLossesSurfaceComponent implements OnInit {
 
     if (this.editExistingMaterial) {
       this.allMaterials = this.suiteDbService.selectWallLossesSurface();
-      this.indexedDbService.getWallLossesSurface().then(idbResults => {
-        this.allCustomMaterials = idbResults;
-        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.surface === material.surface; }).id;
-        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.surface === material.surface; }).id;
-        this.setExisting();
-      });
+      this.getAllMaterials();
     }
     else {
       this.canAdd = true;
@@ -61,14 +59,21 @@ export class WallLossesSurfaceComponent implements OnInit {
     }
   }
 
+  async getAllMaterials() {
+    this.allCustomMaterials = await firstValueFrom(this.wallLossesSurfaceDbService.getAll());
+    this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.surface === material.surface; }).id;
+    this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.surface === material.surface; }).id;
+    this.setExisting();
+  }
+
   addMaterial() {
     if (this.canAdd) {
       this.canAdd = false;
       let suiteDbResult = this.suiteDbService.insertWallLossesSurface(this.newMaterial);
       if (suiteDbResult === true) {
-        this.indexedDbService.addWallLossesSurface(this.newMaterial).then(idbResults => {
-          this.closeModal.emit(this.newMaterial);
-        });
+        this.wallLossesSurfaceDbService.add(this.newMaterial);
+        this.closeModal.emit(this.newMaterial);
+
       }
     }
   }
@@ -79,9 +84,8 @@ export class WallLossesSurfaceComponent implements OnInit {
     if (suiteDbResult === true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
-      this.indexedDbService.putWallLossesSurface(this.newMaterial).then(val => {
-        this.closeModal.emit(this.newMaterial);
-      });
+      this.wallLossesSurfaceDbService.update(this.newMaterial);
+      this.closeModal.emit(this.newMaterial);
     }
   }
 
@@ -89,9 +93,8 @@ export class WallLossesSurfaceComponent implements OnInit {
     if (this.deletingMaterial && this.existingMaterial) {
       let suiteDbResult = this.suiteDbService.deleteWallLossesSurface(this.sdbEditMaterialId);
       if (suiteDbResult === true) {
-        this.indexedDbService.deleteWallLossesSurface(this.idbEditMaterialId).then(val => {
-          this.closeModal.emit(this.newMaterial);
-        });
+        this.wallLossesSurfaceDbService.deleteById(this.idbEditMaterialId);
+        this.closeModal.emit(this.newMaterial);
       }
     }
   }

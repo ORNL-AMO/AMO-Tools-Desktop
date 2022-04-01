@@ -12,6 +12,8 @@ export class DashboardTutorialComponent implements OnInit {
   closeTutorial = new EventEmitter<boolean>();
   @Input()
   inTutorials: boolean;
+  @Input()
+  idbStarted: boolean;
 
   showItem: Array<boolean> = [true, false, false, false, false, false, false, false, false, false, false, false];
 
@@ -46,9 +48,9 @@ export class DashboardTutorialComponent implements OnInit {
   }
 
   sendDontShow() {
-    this.settingsDbService.globalSettings.disableDashboardTutorial = this.dontShow;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
+      this.settingsDbService.globalSettings.disableDashboardTutorial = this.dontShow;
+      this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+        this.settingsDbService.setAll();
+      });
   }
 }

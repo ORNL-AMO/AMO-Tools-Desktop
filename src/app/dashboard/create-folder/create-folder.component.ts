@@ -9,6 +9,7 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import * as _ from 'lodash';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 import { DashboardService } from '../dashboard.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-create-folder',
@@ -37,7 +38,7 @@ export class CreateFolderComponent implements OnInit {
 
   ngOnInit() {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
-    this.directories = this.directoryDbService.getAll();
+    this.setDirectories();
     this.directory = this.directoryDbService.getById(directoryId);
     this.settings = this.settingsDbService.getByDirectoryId(directoryId);
     this.newFolderForm = this.initForm();
@@ -45,6 +46,10 @@ export class CreateFolderComponent implements OnInit {
 
   ngAfterViewInit() {
     this.showCreateModal();
+  }
+
+  async setDirectories() {
+    this.directories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
   initForm() {

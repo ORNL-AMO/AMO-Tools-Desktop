@@ -15,6 +15,7 @@ import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsService } from '../../settings/settings.service';
 import { MotorInventoryService } from '../../motor-inventory/motor-inventory.service';
+import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'app-create-inventory',
   templateUrl: './create-inventory.component.html',
@@ -44,7 +45,7 @@ export class CreateInventoryComponent implements OnInit {
     private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit() {
-    this.directories = this.directoryDbService.getAll();
+    this.setDirectories();
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     this.directory = this.directoryDbService.getById(directoryId);
     this.settings = this.settingsDbService.getByDirectoryId(directoryId);
@@ -55,6 +56,10 @@ export class CreateInventoryComponent implements OnInit {
 
   ngAfterViewInit() {
     this.showCreateModal();
+  }
+
+  async setDirectories() {
+    this.directories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
   initForm() {
@@ -147,7 +152,7 @@ export class CreateInventoryComponent implements OnInit {
       this.directoryDbService.setAll().then(() => {
         this.indexedDbService.addSettings(tmpSettings).then(() => {
           this.settingsDbService.setAll().then(() => {
-            this.directories = this.directoryDbService.getAll();
+            this.setDirectories();
             this.newInventoryItemForm.patchValue({
               'directoryId': newDirId
             });

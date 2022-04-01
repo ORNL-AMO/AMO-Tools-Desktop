@@ -9,7 +9,7 @@ import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
 import { AssessmentService } from '../../../assessment.service';
 import { DashboardService } from '../../../dashboard.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { DirectoryItem, FilterDashboardBy } from '../../../../shared/models/directory-dashboard';
 
@@ -63,12 +63,16 @@ export class DirectoryItemComponent implements OnInit {
     this.filterDashboardBySub.unsubscribe();
   }
 
+  async setDirectories() {
+    this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
+  }
+
   goToAssessment(assessment: Assessment) {
     this.assessmentService.goToAssessment(assessment);
   }
 
   showEditModal() {
-    this.allDirectories = this.directoryDbService.getAll();
+    this.setDirectories();
     _.remove(this.allDirectories, (dir) => { return dir.id === this.directory.id; });
     _.remove(this.allDirectories, (dir) => { return dir.parentDirectoryId === this.directory.id; });
     this.editForm = this.formBuilder.group({
@@ -77,6 +81,7 @@ export class DirectoryItemComponent implements OnInit {
     });
     this.editModal.show();
   }
+  
 
   hideEditModal() {
     this.editModal.hide();

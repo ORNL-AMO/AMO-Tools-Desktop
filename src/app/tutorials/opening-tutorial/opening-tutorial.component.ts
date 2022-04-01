@@ -1,6 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-opening-tutorial',
@@ -10,6 +11,8 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 export class OpeningTutorialComponent implements OnInit {
   @Output('closeTutorial')
   closeTutorial = new EventEmitter<boolean>();
+  @Input()
+  idbStarted: boolean;
 
   showItem: Array<boolean> = [true, false, false, false, false, false, false];
 
@@ -42,10 +45,9 @@ export class OpeningTutorialComponent implements OnInit {
     this.closeTutorial.emit(true);
   }
 
-  sendDontShow() {
-    this.settingsDbService.globalSettings.disableTutorial = this.dontShow;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+  async sendDontShow() {
+      this.settingsDbService.globalSettings.disableTutorial = this.dontShow;
+      await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
       this.settingsDbService.setAll();
-    });
   }
 }

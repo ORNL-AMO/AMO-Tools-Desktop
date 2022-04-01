@@ -1,30 +1,37 @@
 import { Injectable } from '@angular/core';
 import { Calculator } from '../shared/models/calculators';
-import { IndexedDbService } from './indexed-db.service';
 import * as _ from 'lodash';
+import { firstValueFrom, Observable } from 'rxjs';
+import { NgxIndexedDBService } from 'ngx-indexed-db';
+import { CalculatorStoreMeta } from './dbConfig';
+
 @Injectable()
 export class CalculatorDbService {
   allCalculators: Array<Calculator>;
-  constructor(private indexedDbService: IndexedDbService) {
-    // this.indexedDbService.setAllCalcs.subscribe()
+  storeName: string = CalculatorStoreMeta.store;
+  constructor(private dbService: NgxIndexedDBService) {}
+
+  async setAll(calculators?: Array<Calculator>) {
+    if (calculators) {
+      this.allCalculators = calculators;
+    } else {
+      this.allCalculators = await firstValueFrom(this.getAllCalculators());
+    }
   }
 
-  setAll(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (this.indexedDbService.db) {
-        this.indexedDbService.getAllCalculator().then(calculators => {
-          this.allCalculators = calculators;
-          resolve(true);
-        });
-      } else {
-        this.allCalculators = [];
-        resolve(false);
-      }
-    });
+  async setAllWithObservable() {
+    let allCalculators$ = this.getAllCalculators();
+    this.allCalculators = await firstValueFrom(allCalculators$);
+    return this.getAllCalculators();
   }
+
 
   getAll() {
     return this.allCalculators;
+  }
+
+  getAllCalculators(): Observable<Array<Calculator>> {
+    return this.dbService.getAll(this.storeName);
   }
 
   getById(id: number): Calculator {
@@ -41,4 +48,25 @@ export class CalculatorDbService {
     let selectedCalculator: Calculator = _.find(this.allCalculators, (calculator) => { return calculator.assessmentId === id; });
     return selectedCalculator;
   }
+
+  add(calculator: Calculator): void {
+    this.dbService.add(this.storeName, calculator);
+  }
+
+  addWithObservable(calculator: Calculator): Observable<any> {
+    return this.dbService.add(this.storeName, calculator);
+  }
+
+  deleteById(calculatorId: number) {
+    this.dbService.delete(this.storeName, calculatorId);
+  }
+
+  deleteByIdWithObservable(calculatorId: number) {
+    return this.dbService.delete(this.storeName, calculatorId);
+  }
+
+  bulkDeleteWithObservable(calculatorIds: Array<number>): Observable<any> {
+    return this.dbService.bulkDelete(this.storeName, calculatorIds);
+  }
+
 }

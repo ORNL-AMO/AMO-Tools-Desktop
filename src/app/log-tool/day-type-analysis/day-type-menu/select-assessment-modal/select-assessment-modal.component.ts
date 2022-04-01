@@ -17,6 +17,7 @@ import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { DayTypeAnalysisService } from '../../day-type-analysis.service';
 import { LogToolService } from '../../../log-tool.service';
 import { InventoryService } from '../../../../compressed-air-assessment/inventory/inventory.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-select-assessment-modal',
@@ -41,16 +42,18 @@ export class SelectAssessmentModalComponent implements OnInit {
     private dayTypeAnalysisService: DayTypeAnalysisService, private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
-    this.directories = this.directoryDbService.getAll();
+    this.setDirectories();
     let allAssessments: Array<Assessment> = this.assessmentDbService.getAll();
     this.compressedAirAssessments = allAssessments.filter(assessment => { return assessment.type == "CompressedAir" });
     this.compressedAirAssessments = _.orderBy(this.compressedAirAssessments, 'modifiedDate');
     this.initForm();
   }
 
-
   ngAfterViewInit() {
     this.showModal();
+  }
+  async setDirectories() {
+    this.directories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
   closeModal() {

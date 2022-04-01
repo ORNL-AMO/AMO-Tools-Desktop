@@ -11,6 +11,7 @@ import { WasteWaterService } from '../waste-water.service';
 import { SystemBasicsService } from './system-basics.service';
 
 import * as _ from 'lodash';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -61,7 +62,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
     this.wasteWaterService.updateWasteWater(wasteWater);
   }
 
-  saveSettings() {
+  async saveSettings() {
     let currentSettings: Settings = this.wasteWaterService.settings.getValue();
     let id = currentSettings.id;
     let createdDate = currentSettings.createdDate;
@@ -82,9 +83,8 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
     newSettings.id = id;
     newSettings.createdDate = createdDate;
     newSettings.assessmentId = assessmentId;
-    this.indexedDbService.putSettings(newSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
+    await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
+    this.settingsDbService.setAll();
     this.wasteWaterService.settings.next(newSettings);
 
   }

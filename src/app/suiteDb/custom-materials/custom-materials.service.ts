@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { GasLoadChargeMaterial, FlueGasMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, WallLossesSurface, SolidLoadChargeMaterial, AtmosphereSpecificHeat } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { WallLossesSurfaceDbService } from '../../indexedDb/wall-losses-surface-db.service';
 
 @Injectable()
 export class CustomMaterialsService {
@@ -18,7 +19,9 @@ export class CustomMaterialsService {
 
   getSelected: BehaviorSubject<boolean>;
   selectAll: BehaviorSubject<boolean>;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) {
+  constructor(private suiteDbService: SuiteDbService, 
+    private indexedDbService: IndexedDbService,
+    private wallLossesSurfaceDbService: WallLossesSurfaceDbService) {
     this.selectedAtmosphere = new Array<AtmosphereSpecificHeat>();
     this.selectedFlueGas = new Array<FlueGasMaterial>();
     this.selectedGasLoadCharge = new Array<GasLoadChargeMaterial>();
@@ -141,7 +144,7 @@ export class CustomMaterialsService {
       delete material.id;
       let test: boolean = this.suiteDbService.insertWallLossesSurface(material);
       if (test === true) {
-        this.indexedDbService.addWallLossesSurface(material);
+        this.wallLossesSurfaceDbService.add(material);
       }
     });
   }
@@ -228,16 +231,11 @@ export class CustomMaterialsService {
   deleteWallLossSurfaces(data: Array<WallLossesSurface>) {
     let sdbMaterials: Array<WallLossesSurface> = this.suiteDbService.selectWallLossesSurface();
     data.forEach(material => {
-      this.indexedDbService.deleteWallLossesSurface(material.id);
+      this.wallLossesSurfaceDbService.deleteById(material.id);
       let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.surface === sdbMaterial.surface; }).id;
       this.suiteDbService.deleteWallLossesSurface(sdbId);
     });
   }
-
-
-
-
-
 
 }
 

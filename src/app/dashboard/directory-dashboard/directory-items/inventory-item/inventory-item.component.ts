@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { InventoryItem } from '../../../../shared/models/inventory/inventory';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -47,13 +47,17 @@ export class InventoryItemComponent implements OnInit {
       this.dashboardView = val;
     });
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
-      this.allDirectories = this.directoryDbService.getAll();
+      this.setDirectories();
     });
   }
 
   ngOnDestroy() {
     this.dashboardViewSub.unsubscribe();
     this.updateDashboardDataSub.unsubscribe();
+  }
+
+  async setDirectories() {
+    this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
   goToInventoryItem(inventoryPage?: string) {
