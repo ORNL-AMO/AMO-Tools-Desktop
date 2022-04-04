@@ -7,6 +7,11 @@ import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import * as _ from 'lodash';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { InventoryDbService } from '../../indexedDb/inventory-db.service';
+import { firstValueFrom } from 'rxjs';
+import { Assessment } from '../../shared/models/assessment';
+import { Settings } from '../../shared/models/settings';
+import { Calculator } from '../../shared/models/calculators';
+import { Directory } from '../../shared/models/directory';
 
 @Injectable()
 export class ImportService {
@@ -105,94 +110,111 @@ export class ImportService {
     return _directory;
   }
 
-  addDirectory(importDir: ImportDirectory) {
+  async addDirectory(importDir: ImportDirectory) {
     if (importDir.directoryItem) {
       delete importDir.directoryItem.directory.id;
-      this.indexedDbService.addDirectory(importDir.directoryItem.directory).then(newId => {
-        this.directoryDbService.setAll();
-        importDir.directoryItem.settings.directoryId = newId;
-        delete importDir.directoryItem.settings.id;
-        this.indexedDbService.addSettings(importDir.directoryItem.settings).then(() => {
-          this.settingsDbService.setAll();
-        });
 
-        if (importDir.directoryItem.calculator) {
-          if (importDir.directoryItem.calculator.length !== 0) {
-            importDir.directoryItem.calculator[0].directoryId = newId;
-            delete importDir.directoryItem.calculator[0].id;
-            this.indexedDbService.addCalculator(importDir.directoryItem.calculator[0]).then(() => {
-              this.calculatorDbService.setAll();
-            });
-          }
-        }
+      let newDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(importDir.directoryItem.directory));
+      let allDirectories: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories());
+      this.directoryDbService.setAll(allDirectories);
+      importDir.directoryItem.settings.directoryId = newDirectory.id;
+      delete importDir.directoryItem.settings.id;
 
-        importDir.assessments.forEach(assessmentItem => {
-          assessmentItem.assessment.directoryId = newId;
+
+      await firstValueFrom(this.settingsDbService.addWithObservable(importDir.directoryItem.settings));
+      let allSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+      this.settingsDbService.setAll(allSettings);
+
+      if (importDir.directoryItem.calculator && importDir.directoryItem.calculator.length !== 0) {
+        let calculator: Calculator = importDir.directoryItem.calculator[0]; 
+        calculator.directoryId = newDirectory.id;
+        delete calculator.id;
+        await firstValueFrom(this.calculatorDbService.addWithObservable(calculator));
+        let allCalculators: Calculator[] =  await firstValueFrom(this.calculatorDbService.getAllCalculators());
+        this.calculatorDbService.setAll(allCalculators);
+      }
+
+      for (let i = 0; i < importDir.assessments.length; i++) {
+          let assessmentItem: ImportExportAssessment = importDir.assessments[i];
+          assessmentItem.assessment.directoryId = newDirectory.id;
           delete assessmentItem.assessment.id;
-          this.indexedDbService.addAssessment(assessmentItem.assessment).then(newAssessmentId => {
-            this.assessmentDbService.setAll();
-            assessmentItem.settings.assessmentId = newAssessmentId;
-            delete assessmentItem.settings.id;
-            this.indexedDbService.addSettings(assessmentItem.settings).then(() => {
-              this.settingsDbService.setAll();
-            });
+          // ***
+          assessmentItem = await this.addImportedAssessmentItem(assessmentItem, newDirectory.id);
+      }
 
-            if (assessmentItem.calculator) {
-              assessmentItem.calculator.directoryId = newId;
-              delete assessmentItem.calculator.id;
-              this.indexedDbService.addCalculator(assessmentItem.calculator).then(() => {
-                this.calculatorDbService.setAll();
-              });
+      importDir.subDirectories.forEach(subDir => {
+        if (subDir.directoryItem.directory) {
+          subDir.directoryItem.directory.parentDirectoryId = newDirectory.id;
+        }
+        this.addDirectory(subDir);
+      });
 
-            }
-          });
-        });
-
-        importDir.subDirectories.forEach(subDir => {
-          if (subDir.directoryItem.directory) {
-            subDir.directoryItem.directory.parentDirectoryId = newId;
-          }
-          this.addDirectory(subDir);
-        });
-
-        importDir.inventories.forEach(inventory => {
-          inventory.inventoryItem.selected = false;
-          delete inventory.inventoryItem.id;
-          inventory.inventoryItem.directoryId = newId;
-          this.indexedDbService.addInventoryItem(inventory.inventoryItem).then(newInventoryId => {
-            delete inventory.settings.id;
-            inventory.settings.inventoryId = newInventoryId;
-            this.indexedDbService.addSettings(inventory.settings).then(() => {
-              this.settingsDbService.setAll();
-              this.inventoryDbService.setAll();
-            })
+      importDir.inventories.forEach(inventory => {
+        inventory.inventoryItem.selected = false;
+        delete inventory.inventoryItem.id;
+        inventory.inventoryItem.directoryId = newDirectory.id;
+        this.indexedDbService.addInventoryItem(inventory.inventoryItem).then(newInventoryId => {
+          delete inventory.settings.id;
+          inventory.settings.inventoryId = newInventoryId;
+          this.indexedDbService.addSettings(inventory.settings).then(() => {
+            this.settingsDbService.setAll();
+            this.inventoryDbService.setAll();
           })
         })
-
       });
     } else {
       importDir.subDirectories.forEach(subDir => { this.addDirectory(subDir); });
     }
   }
 
+  async addImportedAssessmentItem(item: ImportExportAssessment, newDirectoryId: number) {
+    let addedAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(item.assessment));
+    let updatedAssessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    this.assessmentDbService.setAll(updatedAssessments);
+    item.settings.assessmentId = addedAssessment.id;
 
-  addAssessments(assessments: Array<ImportExportAssessment>, workingDirectoryId: number) {
-    assessments.forEach(assessment => {
+    delete item.settings.id;
+    await firstValueFrom(this.settingsDbService.addWithObservable(item.settings));
+    let allSettings: Settings[] =  await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(allSettings);
+
+    if (item.calculator) {
+      item.calculator.directoryId = newDirectoryId;
+      delete item.calculator.id;
+      await firstValueFrom(this.calculatorDbService.addWithObservable(item.calculator));
+      let allCalculators: Calculator[] =  await firstValueFrom(this.calculatorDbService.getAllCalculators());
+      this.calculatorDbService.setAll(allCalculators);
+    }
+    return item;
+  }
+
+
+  // ***
+  async addAssessments(assessments: Array<ImportExportAssessment>, workingDirectoryId: number) {
+    for (let i = 0; i < assessments.length; i++) {
+      let assessment: ImportExportAssessment = assessments[i]; 
       delete assessment.assessment.id;
       assessment.assessment.directoryId = workingDirectoryId;
-      this.indexedDbService.addAssessment(assessment.assessment).then(newId => {
-        this.assessmentDbService.setAll().then(() => {
-          assessment.settings.assessmentId = newId;
-          delete assessment.settings.id;
-          this.indexedDbService.addSettings(assessment.settings).then(() => { this.settingsDbService.setAll(); });
-          if (assessment.calculator) {
-            assessment.calculator.assessmentId = newId;
-            delete assessment.calculator.id;
-            this.indexedDbService.addCalculator(assessment.calculator).then(() => { this.calculatorDbService.setAll(); });
-          }
-        });
-      });
-    });
+
+      let newAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(assessment.assessment));
+      let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+      this.assessmentDbService.setAll(allAssessments);
+
+      assessment.settings.assessmentId = newAssessment.id;
+      delete assessment.settings.id;
+
+      await firstValueFrom(this.settingsDbService.addWithObservable(assessment.settings));
+      let allSettings: Settings[] =  await firstValueFrom(this.settingsDbService.getAllSettings());
+      this.settingsDbService.setAll(allSettings);
+
+      if (assessment.calculator) {
+        assessment.calculator.assessmentId = newAssessment.id;
+        delete assessment.calculator.id;
+        await firstValueFrom(this.calculatorDbService.addWithObservable(assessment.calculator));
+        let allCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+        this.calculatorDbService.setAll(allCalculators);
+      }
+    }
   }
 
   addInventories(inventories: Array<ImportExportInventory>, workingDirectoryId: number) {

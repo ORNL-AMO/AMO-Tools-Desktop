@@ -217,22 +217,22 @@ export class IndexedDbService {
   // }
 
   //ASSESSMENTS
-  addAssessment(_assessment: Assessment): Promise<any> {
-    _assessment.createdDate = new Date();
-    _assessment.modifiedDate = new Date();
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.assessments);
-      let addRequest = store.add(_assessment);
-      myDb.setDefaultErrorHandler(addRequest, myDb);
-      addRequest.onsuccess = function (e) {
-        resolve(e.target.result);
-      };
-      addRequest.onerror = (error) => {
-        reject(error.target.result);
-      };
-    });
-  }
+  // addAssessment(_assessment: Assessment): Promise<any> {
+  //   _assessment.createdDate = new Date();
+  //   _assessment.modifiedDate = new Date();
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.assessments);
+  //     let addRequest = store.add(_assessment);
+  //     myDb.setDefaultErrorHandler(addRequest, myDb);
+  //     addRequest.onsuccess = function (e) {
+  //       resolve(e.target.result);
+  //     };
+  //     addRequest.onerror = (error) => {
+  //       reject(error.target.result);
+  //     };
+  //   });
+  // }
 
   getAllAssessments(): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -317,37 +317,37 @@ export class IndexedDbService {
   //   });
   // }
 
-  deleteAssessment(id: number): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.assessments);
-      let deleteRequest = store.delete(id);
-      deleteRequest.onsuccess = (event) => {
-        resolve(event.target.result);
-      };
-      deleteRequest.onerror = (event) => {
-        reject(event.target.result);
-      };
-    });
-  }
+  // deleteAssessment(id: number): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.assessments);
+  //     let deleteRequest = store.delete(id);
+  //     deleteRequest.onsuccess = (event) => {
+  //       resolve(event.target.result);
+  //     };
+  //     deleteRequest.onerror = (event) => {
+  //       reject(event.target.result);
+  //     };
+  //   });
+  // }
 
   //DIRECTORIES
-  addDirectory(directoryRef: DirectoryDbRef): Promise<any> {
-    directoryRef.createdDate = new Date();
-    directoryRef.modifiedDate = new Date();
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.directories);
-      let addRequest = store.add(directoryRef);
-      myDb.setDefaultErrorHandler(addRequest, myDb);
-      addRequest.onsuccess = function (e) {
-        resolve(e.target.result);
-      };
-      addRequest.onerror = (error) => {
-        reject(error.target.result);
-      };
-    });
-  }
+  // addDirectory(directoryRef: DirectoryDbRef): Promise<any> {
+  //   directoryRef.createdDate = new Date();
+  //   directoryRef.modifiedDate = new Date();
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.directories);
+  //     let addRequest = store.add(directoryRef);
+  //     myDb.setDefaultErrorHandler(addRequest, myDb);
+  //     addRequest.onsuccess = function (e) {
+  //       resolve(e.target.result);
+  //     };
+  //     addRequest.onerror = (error) => {
+  //       reject(error.target.result);
+  //     };
+  //   });
+  // }
 
   // getDirectory(id: number): Promise<any> {
   //   return new Promise((resolve, reject) => {

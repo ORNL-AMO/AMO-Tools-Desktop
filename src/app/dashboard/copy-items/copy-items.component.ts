@@ -115,8 +115,9 @@ export class CopyItemsComponent implements OnInit {
     return str;
   }
 
-  createCopy(){
-    this.directory.assessments.forEach(assessment => {
+  async createCopy(){
+    for (let i = 0; i < this.directory.assessments.length; i++) {
+      let assessment: Assessment = this.directory.assessments[i];
       if (assessment.selected) {
         let assessmentCopy: Assessment = JSON.parse(JSON.stringify(assessment));
         delete assessmentCopy.id;
@@ -150,27 +151,24 @@ export class CopyItemsComponent implements OnInit {
           }
         }
 
-        this.indexedDbService.addAssessment(assessmentCopy).then(newAssessmentId => {
-          settingsCopy.assessmentId = newAssessmentId;
-          this.indexedDbService.addSettings(settingsCopy).then(() => {
-            this.settingsDbService.setAll().then(() => {
-              this.assessmentDbService.setAll().then(() => {
-                if (this.copyForm.controls.copyCalculators.value === true) {
-                  assessmentCalculatorCopy.assessmentId = newAssessmentId;
-                  this.indexedDbService.addCalculator(assessmentCalculatorCopy).then(() => {
-                    this.calculatorDbService.setAll().then(() => {
-                      this.dashboardService.updateDashboardData.next(true);
-                    });
-                  });
-                } else {
-                  this.dashboardService.updateDashboardData.next(true);
-                }
-              });
-            });
-          });
-        });
+        let addedAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(assessmentCopy));
+        let updatedAssessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+        this.assessmentDbService.setAll(updatedAssessments);
+        settingsCopy.assessmentId = addedAssessment.id;
+
+        await firstValueFrom(this.settingsDbService.addWithObservable(settingsCopy));
+        let allSettings: Settings[] =  await firstValueFrom(this.settingsDbService.getAllSettings());
+        this.settingsDbService.setAll(allSettings);
+    
+        if (this.copyForm.controls.copyCalculators.value === true) {
+          assessmentCalculatorCopy.assessmentId = addedAssessment.id;
+          await firstValueFrom(this.calculatorDbService.addWithObservable(assessmentCalculatorCopy));
+          let allCalculators: Calculator[] =  await firstValueFrom(this.calculatorDbService.getAllCalculators());
+          this.calculatorDbService.setAll(allCalculators);
+        }
+        this.dashboardService.updateDashboardData.next(true);
       }
-    });
+    };
     
     this.directory.calculators.forEach(preAssessment => {
       if (preAssessment.selected) {
@@ -233,36 +231,13 @@ export class CopyItemsComponent implements OnInit {
     });
   }
 
-  createFolder() {
-    let tmpFolder: Directory = {
-      name: this.newFolderForm.controls.folderName.value,
-      parentDirectoryId: this.newFolderForm.controls.directoryId.value,
-      selected: false
-    };
-    let tmpSettings: Settings = this.settingsDbService.getByDirectoryId(this.newFolderForm.controls.directoryId.value);
-    delete tmpSettings.facilityInfo;
-    delete tmpSettings.id;
-    if (this.newFolderForm.controls.companyName.value || this.newFolderForm.controls.facilityName.value) {
-      tmpSettings.facilityInfo = {
-        companyName: this.newFolderForm.controls.companyName.value,
-        facilityName: this.newFolderForm.controls.facilityName.value,
-        date: new Date().toLocaleDateString()
-      };
-    }
-    this.indexedDbService.addDirectory(tmpFolder).then((newDirId) => {
-      tmpSettings.directoryId = newDirId;
-      this.directoryDbService.setAll().then(() => {
-        this.indexedDbService.addSettings(tmpSettings).then(() => {
-          this.settingsDbService.setAll().then(() => {
-            this.setDirectories();
-            this.copyForm.patchValue({
-              'directoryId': newDirId
-            });
-            this.cancelNewFolder();
-          });
-        });
-      });
+  async createFolder() {
+    let newDirectoryId: number = await this.directoryDashboardService.addDirectoryAndSettings(this.newFolderForm);
+    this.setDirectories();
+    this.newFolderForm.patchValue({
+      'directoryId': newDirectoryId
     });
+    this.cancelNewFolder();
   }
 
 }

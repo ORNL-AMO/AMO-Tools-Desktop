@@ -72,10 +72,14 @@ export class DirectoryDbService {
   // }
 
   add(directory: Directory) {
+    directory.createdDate = new Date();
+    directory.modifiedDate = new Date();
     this.dbService.add(this.storeName, directory);
   }
 
   addWithObservable(directory: Directory): Observable<any> {
+    directory.createdDate = new Date();
+    directory.modifiedDate = new Date();
     return this.dbService.add(this.storeName, directory);
   }
 

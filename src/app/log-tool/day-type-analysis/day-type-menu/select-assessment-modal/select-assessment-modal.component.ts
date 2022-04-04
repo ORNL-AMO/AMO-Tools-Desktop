@@ -116,7 +116,7 @@ export class SelectAssessmentModalComponent implements OnInit {
     return compressedAirAssessment;
   }
 
-  createAssessment() {
+  async createAssessment() {
     if (this.newAssessmentForm.valid) {
       let tmpAssessment = this.assessmentService.getNewAssessment('CompressedAir');
       tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
@@ -124,10 +124,11 @@ export class SelectAssessmentModalComponent implements OnInit {
       let settings: Settings = this.settingsDbService.getByDirectoryId(tmpAssessment.directoryId);
       tmpAssessment.compressedAirAssessment = this.assessmentService.getNewCompressedAirAssessment(settings);
       // this.addAssessment(tmpAssessment, '/compressed-air/');
-      this.indexedDbService.addAssessment(tmpAssessment).then(id => {
-        tmpAssessment.id = id;
-        this.selectAssessment(tmpAssessment);
-      });
+      let assessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
+      tmpAssessment.id = assessment.id;
+      let updatedAssessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+      this.assessmentDbService.setAll(updatedAssessments);
+      this.selectAssessment(tmpAssessment);
     }
   }
 

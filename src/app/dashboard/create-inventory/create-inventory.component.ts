@@ -132,35 +132,13 @@ export class CreateInventoryComponent implements OnInit {
     this.showNewFolder = false;
   }
 
-  createFolder() {
-    let tmpFolder: Directory = {
-      name: this.newFolderForm.controls.folderName.value,
-      parentDirectoryId: this.newFolderForm.controls.directoryId.value
-    };
-    let tmpSettings: Settings = this.settingsDbService.getByDirectoryId(this.newFolderForm.controls.directoryId.value);
-    delete tmpSettings.facilityInfo;
-    delete tmpSettings.id;
-    if (this.newFolderForm.controls.companyName.value || this.newFolderForm.controls.facilityName.value) {
-      tmpSettings.facilityInfo = {
-        companyName: this.newFolderForm.controls.companyName.value,
-        facilityName: this.newFolderForm.controls.facilityName.value,
-        date: new Date().toLocaleDateString()
-      };
-    }
-    this.indexedDbService.addDirectory(tmpFolder).then((newDirId) => {
-      tmpSettings.directoryId = newDirId;
-      this.directoryDbService.setAll().then(() => {
-        this.indexedDbService.addSettings(tmpSettings).then(() => {
-          this.settingsDbService.setAll().then(() => {
-            this.setDirectories();
-            this.newInventoryItemForm.patchValue({
-              'directoryId': newDirId
-            });
-            this.cancelNewFolder();
-          });
-        });
-      });
+  async createFolder() {
+    let newDirectoryId: number = await this.directoryDashboardService.addDirectoryAndSettings(this.newFolderForm);
+    this.setDirectories();
+    this.newFolderForm.patchValue({
+      'directoryId': newDirectoryId
     });
+    this.cancelNewFolder();
   }
 
   initFolderForm() {

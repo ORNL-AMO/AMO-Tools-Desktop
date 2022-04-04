@@ -70,11 +70,11 @@ export class CreateFolderComponent implements OnInit {
     this.directoryDashboardService.createFolder.next(false);
   }
 
-  createFolder() {
+  async createFolder() {
     if (this.canAdd) {
       this.canAdd = false;
       this.hideCreateModal();
-      let newDir: DirectoryDbRef = {
+      let newDir: Directory = {
         name: this.newFolderForm.controls.newFolderName.value,
         parentDirectoryId: this.newFolderForm.controls.directoryId.value,
         createdDate: new Date(),
@@ -90,20 +90,20 @@ export class CreateFolderComponent implements OnInit {
         };
       }
 
-      this.indexedDbService.addDirectory(newDir).then(newDirId => {
-        this.directoryDbService.setAll().then(() => {
-          this.settings.directoryId = newDirId;
-          delete this.settings.id;
-          this.indexedDbService.addSettings(this.settings).then(() => {
-            this.settingsDbService.setAll().then(() => {
-              this.canAdd = true;
-              this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(this.directory.id);
-              this.newFolderForm = this.initForm();
-              this.dashboardService.updateDashboardData.next(true);
-            });
-          });
-        });
-      });
+      let addedDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(newDir));
+      let allDirectories: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories());
+      this.directoryDbService.setAll(allDirectories);
+  
+      this.settings.directoryId = addedDirectory.id;
+      delete this.settings.id;
+      await firstValueFrom(this.settingsDbService.addWithObservable(this.settings));
+      let allSettings: Settings[] =  await firstValueFrom(this.settingsDbService.getAllSettings());
+      this.settingsDbService.setAll(allSettings);
+
+      this.canAdd = true;
+      this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(this.directory.id);
+      this.newFolderForm = this.initForm();
+      this.dashboardService.updateDashboardData.next(true);
     }
   }
 

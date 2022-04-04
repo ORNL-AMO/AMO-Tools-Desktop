@@ -11,6 +11,7 @@ import { Settings } from '../shared/models/settings';
 import { Calculator } from '../shared/models/calculators';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { InventoryDbService } from './inventory-db.service';
+import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class DeleteDataService {
 
@@ -87,7 +88,7 @@ export class DeleteDataService {
     }
   }
 
-  deleteAssessment(assessment: Assessment) {
+  async deleteAssessment(assessment: Assessment) {
     let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
     if (settings && settings.assessmentId === assessment.id) {
       this.indexedDbService.deleteSettings(settings.id).then(() => {
@@ -100,9 +101,8 @@ export class DeleteDataService {
         this.calculatorDbService.setAll();
       });
     }
-    this.indexedDbService.deleteAssessment(assessment.id).then(() => {
-      this.assessmentDbService.setAll();
-    });
+    let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(assessment.id));
+    this.assessmentDbService.setAll(updatedAssessments);
   }
 
   deleteInventory(inventory: InventoryItem){

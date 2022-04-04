@@ -216,7 +216,7 @@ export const WallLossesSurfaceStoreMeta = {
 };
 
 export const dbConfig: DBConfig = {
-  name: 'MEASURdb',
+  name: 'CrudDB',
   version: 6,
   objectStoresMeta: [
     AssessmentStoreMeta,
