@@ -28,6 +28,8 @@ export class EnergyInputFormComponent implements OnInit {
   inSetup: boolean;
   @Input()
   isBaseline: boolean;
+  @Input()
+  electricityInputWarning: string;
 
   flowInput: boolean;
   idString: string;
