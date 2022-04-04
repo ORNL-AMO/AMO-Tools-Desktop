@@ -4,7 +4,6 @@ import { AirVelocityInput, PipeSizes } from "../../../shared/models/standalone";
 import { Settings } from '../../../shared/models/settings';
 import { AirVelocityService } from './air-velocity.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import {IndexedDbService} from '../../../indexedDb/indexed-db.service';
 import {Assessment} from '../../../shared/models/assessment';
 import {Calculator} from '../../../shared/models/calculators';
 import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
@@ -39,9 +38,10 @@ export class AirVelocityComponent implements OnInit {
   assessmentCalculator: Calculator;
 
   constructor(private airVelocityService: AirVelocityService, private standaloneService: StandaloneService, private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
+    private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -68,7 +68,7 @@ export class AirVelocityComponent implements OnInit {
     this.outputs = this.standaloneService.airVelocity(inputs, this.settings);
      if(this.assessmentCalculator) {
        this.assessmentCalculator.airVelocityInputs = this.inputs;
-       this.saveAssessmentCalculator();
+       this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
      }else{
        this.airVelocityService.airVelocityInputs = this.inputs;
      }
@@ -105,7 +105,7 @@ export class AirVelocityComponent implements OnInit {
       }
     }else{
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.saveAssessmentCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 
@@ -119,24 +119,6 @@ export class AirVelocityComponent implements OnInit {
     return tmpCalculator;
   }
 
-  saveAssessmentCalculator(){
-    if (!this.saving) {
-      if (this.assessmentCalculator.id) {
-        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.assessmentCalculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.assessmentCalculator.id = result;
-            this.saving = false;
-          });
-        });
-      }
-    }
-  }
 
   btnResetData() {
     let defaultInputs = this.airVelocityService.getDefault();

@@ -7,7 +7,6 @@ import { NemaEnergyEfficiencyService, NemaInputs } from './nema-energy-efficienc
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { PsatService } from '../../../psat/psat.service';
 import { FSAT } from '../../../shared/models/fans';
 
@@ -45,9 +44,10 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   calculator: Calculator;
   tefcValue: number;
 
-  constructor(private settingsDbService: SettingsDbService, private psatService: PsatService, private nemaEnergyEfficiencyService: NemaEnergyEfficiencyService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private settingsDbService: SettingsDbService, private psatService: PsatService, private nemaEnergyEfficiencyService: NemaEnergyEfficiencyService, private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -84,11 +84,11 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
         }
         let tmpNemaInputs: NemaInputs = this.nemaEnergyEfficiencyService.getObjFromForm(this.nemaForm);
         this.calculator.nemaInputs = tmpNemaInputs;
-        this.saveCalculator();
+        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 
@@ -124,26 +124,6 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
 
   }
 
-  saveCalculator() {
-    if (!this.saving || this.calcExists) {
-      if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.calculator.id = result;
-            this.calcExists = true;
-            this.saving = false;
-          });
-        });
-      }
-    }
-  }
-
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
@@ -177,7 +157,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
       this.nemaEnergyEfficiencyService.nemaInputs = this.nemaEnergyEfficiencyService.getObjFromForm(this.nemaForm);
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.nemaInputs = this.nemaEnergyEfficiencyService.getObjFromForm(this.nemaForm);
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 

@@ -81,7 +81,6 @@ export class AirFlowConversionComponent implements OnInit {
 
   getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
-    debugger;
     if (this.assessmentCalculator) {
       if (this.assessmentCalculator.airFlowConversionInputs) {
         this.airFlowConversionService.airFlowConversionInput.next(this.assessmentCalculator.airFlowConversionInputs);

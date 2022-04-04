@@ -7,7 +7,6 @@ import { MotorPerformanceService, MotorPerformanceInputs } from './motor-perform
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { FSAT } from '../../../shared/models/fans';
 
 @Component({
@@ -44,10 +43,11 @@ export class MotorPerformanceComponent implements OnInit {
   calcExists: boolean;
   saving: boolean;
 
-  constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) {
+  constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService, private calculatorDbService: CalculatorDbService) {
   }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (this.inAssessment) {
       this.getCalculator();
     } else {
@@ -85,7 +85,7 @@ export class MotorPerformanceComponent implements OnInit {
       this.motorPerformanceService.motorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.motorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
     this.toggleCalculate = !this.toggleCalculate;
   }
@@ -114,11 +114,11 @@ export class MotorPerformanceComponent implements OnInit {
         }
         let tmpMotorPerformanceInputs: MotorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
         this.calculator.motorPerformanceInputs = tmpMotorPerformanceInputs;
-        this.saveCalculator();
+        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 
@@ -143,26 +143,6 @@ export class MotorPerformanceComponent implements OnInit {
       this.performanceForm = this.motorPerformanceService.initFormFromObj(this.motorPerformanceService.motorPerformanceInputs);
     } else {
       this.performanceForm = this.motorPerformanceService.resetForm();
-    }
-  }
-
-  saveCalculator() {
-    if (!this.saving || this.calcExists) {
-      if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.calculator.id = result;
-            this.calcExists = true;
-            this.saving = false;
-          });
-        });
-      }
     }
   }
 

@@ -1,7 +1,6 @@
 import {Component, OnInit, Input, ElementRef, ViewChild, HostListener} from '@angular/core';
 import {PSAT} from '../../../shared/models/psat';
 import {Settings} from '../../../shared/models/settings';
-import {IndexedDbService} from '../../../indexedDb/indexed-db.service';
 import {FormGroup} from '@angular/forms';
 import {SettingsDbService} from '../../../indexedDb/settings-db.service';
 import {SpecificSpeedService} from './specific-speed.service';
@@ -45,10 +44,11 @@ export class SpecificSpeedComponent implements OnInit {
   calculator: Calculator;
 
   constructor(private specificSpeedService: SpecificSpeedService, private settingsDbService: SettingsDbService,
-              private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) {
+              private calculatorDbService: CalculatorDbService) {
   }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -84,7 +84,7 @@ export class SpecificSpeedComponent implements OnInit {
       this.specificSpeedService.specificSpeedInputs = this.specificSpeedService.getObjFromForm(this.speedForm);
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.specificSpeedInputs = this.specificSpeedService.getObjFromForm(this.speedForm);
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 
@@ -106,11 +106,11 @@ export class SpecificSpeedComponent implements OnInit {
         this.speedForm = this.specificSpeedService.initFormFromPsat(this.psat.inputs);
         let tmpSpecificSpeedInputs: SpecificSpeedInputs = this.specificSpeedService.getObjFromForm(this.speedForm);
         this.calculator.specificSpeedInputs = tmpSpecificSpeedInputs;
-        this.saveCalculator();
+        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 
@@ -133,26 +133,6 @@ export class SpecificSpeedComponent implements OnInit {
       }
     } else {
       this.speedForm = this.specificSpeedService.initFormFromPsat(this.psat.inputs);
-    }
-  }
-
-  saveCalculator() {
-    if (!this.saving || this.calcExists) {
-      if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.calculator.id = result;
-            this.calcExists = true;
-            this.saving = false;
-          });
-        });
-      }
     }
   }
 

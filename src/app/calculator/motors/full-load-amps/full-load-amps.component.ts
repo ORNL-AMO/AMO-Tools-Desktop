@@ -1,7 +1,6 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
@@ -39,10 +38,11 @@ export class FullLoadAmpsComponent implements OnInit {
   assessmentCalculator: Calculator;
 
   constructor(private settingsDbService: SettingsDbService, 
-    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService,
+    private calculatorDbService: CalculatorDbService, 
     private fullLoadAmpsService: FullLoadAmpsService) { }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -83,7 +83,7 @@ export class FullLoadAmpsComponent implements OnInit {
     this.fullLoadAmpsService.estimateFullLoadAmps(this.settings);
     if (this.assessmentCalculator) {
       this.assessmentCalculator.fullLoadAmpsInput = this.fullLoadAmpsService.fullLoadAmpsInputs.getValue();
-      this.saveAssessmentCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
      }
   }
 
@@ -97,7 +97,7 @@ export class FullLoadAmpsComponent implements OnInit {
       }
     }else{
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.saveAssessmentCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 
@@ -108,25 +108,6 @@ export class FullLoadAmpsComponent implements OnInit {
       fullLoadAmpsInput: inputs
     };
     return tmpCalculator;
-  }
-
-  saveAssessmentCalculator(){
-    if (!this.saving) {
-      if (this.assessmentCalculator.id) {
-        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.assessmentCalculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.assessmentCalculator.id = result;
-            this.saving = false;
-          });
-        });
-      }
-    }
   }
 
   

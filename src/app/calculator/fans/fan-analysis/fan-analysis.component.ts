@@ -9,7 +9,6 @@ import { PlaneDataFormService } from './fan-analysis-form/plane-data-form/plane-
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { GasDensityFormService } from './fan-analysis-form/gas-density-form/gas-density-form.service';
 import { FanShaftPowerFormService } from './fan-analysis-form/fan-shaft-power-form/fan-shaft-power-form.service';
 import { FanInfoFormService } from './fan-analysis-form/fan-info-form/fan-info-form.service';
@@ -53,10 +52,11 @@ export class FanAnalysisComponent implements OnInit {
   originalCalculator: Calculator;
   setupDone: boolean = false;
   constructor(private settingsDbService: SettingsDbService, private fanAnalysisService: FanAnalysisService, private convertFanAnalysisService: ConvertFanAnalysisService,
-    private planeDataFormService: PlaneDataFormService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService,
+    private planeDataFormService: PlaneDataFormService, private calculatorDbService: CalculatorDbService,
     private fanInfoFormService: FanInfoFormService, private gasDensityFormService: GasDensityFormService, private fanShaftPowerFormService: FanShaftPowerFormService ) { }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     this.fanAnalysisService.inAssessmentModal = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
@@ -88,7 +88,7 @@ export class FanAnalysisComponent implements OnInit {
         this.setPlaneTabIndex('3a');
       }
       if(this.assessment){
-        this.saveCalculator();
+        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     });
 
@@ -105,7 +105,8 @@ export class FanAnalysisComponent implements OnInit {
     this.modalOpenSub.unsubscribe();
     if (this.assessment && this.calcExists) {
       this.calculator.fan203Inputs = this.fanAnalysisService.inputData;
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+
     }
   }
 
@@ -149,12 +150,14 @@ export class FanAnalysisComponent implements OnInit {
         tmpFans203Inputs = this.convertFanAnalysisService.convertFan203Inputs(tmpFans203Inputs, this.settings);
         this.calculator.fan203Inputs = tmpFans203Inputs;
         this.fanAnalysisService.inputData = this.calculator.fan203Inputs;
-        this.saveCalculator();
+        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+
       }
     } else {
       this.calculator = this.initCalculator();
       this.fanAnalysisService.inputData = this.calculator.fan203Inputs;
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+
     }
   }
 
@@ -166,26 +169,6 @@ export class FanAnalysisComponent implements OnInit {
       fan203Inputs: tmpFans203Inputs
     };
     return tmpCalculator;
-  }
-
-  saveCalculator() {
-    if (!this.saving || this.calcExists) {
-      if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.calculator.id = result;
-            this.calcExists = true;
-            this.saving = false;
-          });
-        });
-      }
-    }
   }
 
   getContainerHeight() {

@@ -115,102 +115,123 @@ export class CopyItemsComponent implements OnInit {
     return str;
   }
 
-  async createCopy(){
-    for (let i = 0; i < this.directory.assessments.length; i++) {
-      let assessment: Assessment = this.directory.assessments[i];
-      if (assessment.selected) {
-        let assessmentCopy: Assessment = JSON.parse(JSON.stringify(assessment));
-        delete assessmentCopy.id;
-        let tempCalculator: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
-        let assessmentCalculatorCopy: Calculator;
-        if (tempCalculator){
-          assessmentCalculatorCopy = JSON.parse(JSON.stringify(tempCalculator));
-          delete assessmentCalculatorCopy.id;
-        }
-        let tempSettings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-        let settingsCopy: Settings = JSON.parse(JSON.stringify(tempSettings));
-        delete settingsCopy.id;
-        assessmentCopy.name = assessment.name + ' (copy)';
-        assessmentCopy.directoryId = this.copyForm.controls.directoryId.value;
-        assessmentCopy.createdDate = new Date();
-        assessmentCopy.modifiedDate = new Date();
+  async copyDirectoryAssessmentsAndSettings() {
+    let hasSelectedToCopy: boolean = this.directory.assessments.some(assessment => assessment.selected);
+    if (hasSelectedToCopy) {
+      for (let i = 0; i < this.directory.assessments.length; i++) {
+        let assessment: Assessment = this.directory.assessments[i];
+        if (assessment.selected) {
+          let assessmentCopy: Assessment = JSON.parse(JSON.stringify(assessment));
+          delete assessmentCopy.id;
+          let tempCalculator: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
+          let assessmentCalculatorCopy: Calculator;
+          if (tempCalculator) {
+            assessmentCalculatorCopy = JSON.parse(JSON.stringify(tempCalculator));
+            delete assessmentCalculatorCopy.id;
+          }
+          let tempSettings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+          let settingsCopy: Settings = JSON.parse(JSON.stringify(tempSettings));
+          delete settingsCopy.id;
+          assessmentCopy.name = assessment.name + ' (copy)';
+          assessmentCopy.directoryId = this.copyForm.controls.directoryId.value;
+          assessmentCopy.createdDate = new Date();
+          assessmentCopy.modifiedDate = new Date();
 
-        if (this.copyForm.controls.copyModifications.value === false) {
-          if (assessmentCopy.type === 'PHAST') {
-            assessmentCopy.phast.modifications = new Array();
-          } else if (assessmentCopy.type === 'PSAT') {
-            assessmentCopy.psat.modifications = new Array();
-          } else if (assessmentCopy.type == 'FSAT') {
-            assessmentCopy.fsat.modifications = new Array();
-          } else if (assessmentCopy.type == 'SSMT') {
-            assessmentCopy.ssmt.modifications = new Array();
-          } else if (assessmentCopy.type === 'CompressedAir') {
-            assessmentCopy.compressedAirAssessment.modifications = new Array();
-          } else if (assessmentCopy.type === 'WasteWater') {
-            assessmentCopy.wasteWater.modifications = new Array();
+          if (this.copyForm.controls.copyModifications.value === false) {
+            if (assessmentCopy.type === 'PHAST') {
+              assessmentCopy.phast.modifications = new Array();
+            } else if (assessmentCopy.type === 'PSAT') {
+              assessmentCopy.psat.modifications = new Array();
+            } else if (assessmentCopy.type == 'FSAT') {
+              assessmentCopy.fsat.modifications = new Array();
+            } else if (assessmentCopy.type == 'SSMT') {
+              assessmentCopy.ssmt.modifications = new Array();
+            } else if (assessmentCopy.type === 'CompressedAir') {
+              assessmentCopy.compressedAirAssessment.modifications = new Array();
+            } else if (assessmentCopy.type === 'WasteWater') {
+              assessmentCopy.wasteWater.modifications = new Array();
+            }
+          }
+
+          let addedAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(assessmentCopy));
+          settingsCopy.assessmentId = addedAssessment.id;
+
+          await firstValueFrom(this.settingsDbService.addWithObservable(settingsCopy));
+
+          if (this.copyForm.controls.copyCalculators.value === true) {
+            assessmentCalculatorCopy.assessmentId = addedAssessment.id;
+            await firstValueFrom(this.calculatorDbService.addWithObservable(assessmentCalculatorCopy));
           }
         }
+      };
+      let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+      let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+      let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+      this.assessmentDbService.setAll(updatedAssessments);
+      this.settingsDbService.setAll(updatedSettings);
+      this.calculatorDbService.setAll(updatedCalculators);
+      this.dashboardService.updateDashboardData.next(true);
+    }
+  }
 
-        let addedAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(assessmentCopy));
-        let updatedAssessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
-        this.assessmentDbService.setAll(updatedAssessments);
-        settingsCopy.assessmentId = addedAssessment.id;
-
-        await firstValueFrom(this.settingsDbService.addWithObservable(settingsCopy));
-        let allSettings: Settings[] =  await firstValueFrom(this.settingsDbService.getAllSettings());
-        this.settingsDbService.setAll(allSettings);
-    
-        if (this.copyForm.controls.copyCalculators.value === true) {
-          assessmentCalculatorCopy.assessmentId = addedAssessment.id;
-          await firstValueFrom(this.calculatorDbService.addWithObservable(assessmentCalculatorCopy));
-          let allCalculators: Calculator[] =  await firstValueFrom(this.calculatorDbService.getAllCalculators());
-          this.calculatorDbService.setAll(allCalculators);
+  async copyDirectoryCalculators() {
+    let hasSelectedToCopy: boolean = this.directory.calculators.some(calculator => calculator.selected);
+    if (hasSelectedToCopy) {
+      for (let i = 0; i < this.directory.calculators.length; i++) {
+        let calculator: Calculator = this.directory.calculators[i];
+        if (calculator.selected) {
+          let calculatorCopy: Calculator = JSON.parse(JSON.stringify(calculator));
+          delete calculatorCopy.id;
+          calculatorCopy.selected = false;
+          calculatorCopy.name = calculator.name + ' (copy)';
+          calculatorCopy.directoryId = this.copyForm.controls.directoryId.value;
+          
+          await firstValueFrom(this.calculatorDbService.addWithObservable(calculatorCopy));
+          calculator.selected = false;
         }
-        this.dashboardService.updateDashboardData.next(true);
-      }
-    };
-    
-    this.directory.calculators.forEach(preAssessment => {
-      if (preAssessment.selected) {
-        let preAssessmentCopy: Calculator = JSON.parse(JSON.stringify(preAssessment));
-        delete preAssessmentCopy.id;
-        preAssessmentCopy.selected = false;
-        preAssessmentCopy.name = preAssessment.name + ' (copy)';
-        preAssessmentCopy.directoryId = this.copyForm.controls.directoryId.value;
-        this.indexedDbService.addCalculator(preAssessmentCopy).then(preAssessmentId => {
-          this.calculatorDbService.setAll().then(() => {
-            this.dashboardService.updateDashboardData.next(true);            
-          });
-        });
-        preAssessment.selected = false;
-      }
-    });
+      };
+      let updatedCalculators = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+      this.calculatorDbService.setAll(updatedCalculators);
+      
+      this.dashboardService.updateDashboardData.next(true);
+    }
+  }
 
-    this.directory.inventories.forEach(inventory => {
-      if (inventory.selected) {
-        let inventoryCopy: InventoryItem = JSON.parse(JSON.stringify(inventory));
-        delete inventoryCopy.id;
-        let tmpSettings: Settings = this.settingsDbService.getByInventoryId(inventory);
-        let settingsCopy: Settings = JSON.parse(JSON.stringify(tmpSettings));
-        delete settingsCopy.id;
-        inventoryCopy.selected = false;
-        inventoryCopy.name = inventory.name + ' (copy)';
-        inventoryCopy.directoryId = this.copyForm.controls.directoryId.value;
-        inventoryCopy.createdDate = new Date();
-        inventoryCopy.modifiedDate = new Date();
-        this.indexedDbService.addInventoryItem(inventoryCopy).then(newInventoryId => {
-          settingsCopy.inventoryId = newInventoryId;
-          this.indexedDbService.addSettings(settingsCopy).then(() => {
-            this.settingsDbService.setAll().then(() => {
-              this.inventoryDbService.setAll().then(() => {
-                this.dashboardService.updateDashboardData.next(true);
+  async copyDirectoryInventory() {
+    let hasSelectedToCopy: boolean = this.directory.inventories.some(inventory => inventory.selected);
+    if (hasSelectedToCopy) {
+      this.directory.inventories.forEach(inventory => {
+        if (inventory.selected) {
+          let inventoryCopy: InventoryItem = JSON.parse(JSON.stringify(inventory));
+          delete inventoryCopy.id;
+          let tmpSettings: Settings = this.settingsDbService.getByInventoryId(inventory);
+          let settingsCopy: Settings = JSON.parse(JSON.stringify(tmpSettings));
+          delete settingsCopy.id;
+          inventoryCopy.selected = false;
+          inventoryCopy.name = inventory.name + ' (copy)';
+          inventoryCopy.directoryId = this.copyForm.controls.directoryId.value;
+          inventoryCopy.createdDate = new Date();
+          inventoryCopy.modifiedDate = new Date();
+          this.indexedDbService.addInventoryItem(inventoryCopy).then(newInventoryId => {
+            settingsCopy.inventoryId = newInventoryId;
+            this.indexedDbService.addSettings(settingsCopy).then(() => {
+              this.settingsDbService.setAll().then(() => {
+                this.inventoryDbService.setAll().then(() => {
+                  this.dashboardService.updateDashboardData.next(true);
+                });
               });
             });
           });
-        });
-        inventory.selected = false;
-      }
-    });
+          inventory.selected = false;
+        }
+      });
+    }
+  }
+
+  createCopy(){
+    this.copyDirectoryAssessmentsAndSettings();
+    this.copyDirectoryCalculators();
+    this.copyDirectoryInventory();
     this.hideCopyModal();
   }
 

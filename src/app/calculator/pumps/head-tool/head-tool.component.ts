@@ -8,6 +8,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { HeadToolService } from './head-tool.service';
+import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'app-head-tool',
   templateUrl: './head-tool.component.html',
@@ -145,18 +146,17 @@ export class HeadToolComponent implements OnInit {
     this.currentField = str;
   }
 
-  save() {
+  async save() {
     this.psat.inputs.head = this.results.pumpHead;
     if (this.inAssessment) {
       if (this.isSavedCalc) {
         this.calculator.headTool = this.headToolService.getHeadToolFromForm(this.headToolForm);
         this.calculator.headToolSuction = this.headToolService.getHeadToolSuctionFromForm(this.headToolSuctionForm);
         this.calculator.headToolType = this.headToolType;
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll().then(() => {
-            this.closeTool();
-          });
-        });
+
+        let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(this.calculator)) 
+        this.calculatorDbService.setAll(updatedCalculators);
+        this.closeTool();
       } else {
         this.calculator = {
           headTool: this.headToolService.getHeadToolFromForm(this.headToolForm),
@@ -164,12 +164,11 @@ export class HeadToolComponent implements OnInit {
           headToolType: this.headToolType,
           assessmentId: this.assessmentId
         };
-        this.indexedDbService.addCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll().then(() => {
-            this.closeTool();
-          });
-        });
-        ;
+
+        await firstValueFrom(this.calculatorDbService.addWithObservable(this.calculator));
+        let updatedCalculators = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+        this.calculatorDbService.setAll(updatedCalculators);
+        this.closeTool();
       }
     } else {
       this.closeTool();

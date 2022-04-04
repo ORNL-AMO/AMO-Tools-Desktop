@@ -79,13 +79,11 @@ export class PreAssessmentItemComponent implements OnInit {
     } 
   }
 
-  deletePreAssessment() {
-    this.indexedDbService.deleteCalculator(this.calculator.id).then(() => {
-      this.calculatorDbService.setAll().then(() => {
-        this.dashboardService.updateDashboardData.next(true);
-        this.hideDeleteModal();
-      });
-    });
+  async deletePreAssessment() {
+    let calculators: Calculator[] = await firstValueFrom(this.calculatorDbService.deleteByIdWithObservable(this.calculator.id)); 
+    this.calculatorDbService.setAll(calculators); 
+    this.dashboardService.updateDashboardData.next(true);
+    this.hideDeleteModal();
   }
 
   showPreAssessment() {
@@ -118,15 +116,13 @@ export class PreAssessmentItemComponent implements OnInit {
     }
   }
 
-  save() {
+  async save() {
     this.calculator.name = this.editForm.controls.name.value;
     this.calculator.directoryId = this.editForm.controls.directoryId.value;
-    this.indexedDbService.putCalculator(this.calculator).then(val => {
-      this.calculatorDbService.setAll().then(() => {
-        this.dashboardService.updateDashboardData.next(true);
-        this.hideEditModal();
-      });
-    });
+    let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(this.calculator)) 
+    this.calculatorDbService.setAll(updatedCalculators);
+    this.dashboardService.updateDashboardData.next(true);
+    this.hideEditModal();
   }
 
   showDropdown() {
@@ -153,16 +149,16 @@ export class PreAssessmentItemComponent implements OnInit {
     this.copyModal.hide();
   }
 
-  createCopy() {
+  async createCopy() {
     let calculatorCopy: Calculator = JSON.parse(JSON.stringify(this.calculator));
     delete calculatorCopy.id;
     calculatorCopy.name = this.copyForm.controls.name.value;
     calculatorCopy.directoryId = this.copyForm.controls.directoryId.value;
-    this.indexedDbService.addCalculator(calculatorCopy).then(calculatorId => {
-      this.calculatorDbService.setAll().then(() => {
-        this.dashboardService.updateDashboardData.next(true);
-        this.hideCopyModal();
-      });
-    });
+    
+    await firstValueFrom(this.calculatorDbService.addWithObservable(calculatorCopy));
+    let updatedCalculators = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+    this.calculatorDbService.setAll(updatedCalculators);
+    this.dashboardService.updateDashboardData.next(true);
+    this.hideCopyModal();
   }
 }

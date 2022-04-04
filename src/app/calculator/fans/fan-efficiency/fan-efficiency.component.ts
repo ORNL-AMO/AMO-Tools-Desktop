@@ -6,7 +6,6 @@ import { FsatService } from '../../../fsat/fsat.service';
 import { FanEfficiencyService, FanEfficiencyInputs } from './fan-efficiency.service';
 import { FormGroup } from '@angular/forms';
 import { Calculator } from '../../../shared/models/calculators';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 
@@ -44,9 +43,10 @@ export class FanEfficiencyComponent implements OnInit {
   calculator: Calculator;
   originalCalculator: Calculator;
   constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService, private fanEfficiencyService: FanEfficiencyService,
-    private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
+    private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (this.inAssessment) {
       this.getCalculator();
       this.originalCalculator = this.calculator;
@@ -108,7 +108,7 @@ export class FanEfficiencyComponent implements OnInit {
       this.fanEfficiencyService.fanEfficiencyInputs = tmpFanEfficiencyInputs;
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.fanEfficiencyInputs = tmpFanEfficiencyInputs;
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
 
     if (this.fanEfficiencyForm.valid) {
@@ -140,11 +140,11 @@ export class FanEfficiencyComponent implements OnInit {
         }
         let tmpFanEfficiencyInputs: FanEfficiencyInputs = this.fanEfficiencyService.getObjFromForm(this.fanEfficiencyForm);
         this.calculator.fanEfficiencyInputs = tmpFanEfficiencyInputs;
-        this.saveCalculator();
+        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 
@@ -167,26 +167,6 @@ export class FanEfficiencyComponent implements OnInit {
       this.fanEfficiencyForm = this.fanEfficiencyService.initFormFromObj(this.fanEfficiencyService.fanEfficiencyInputs);
     } else {
       this.fanEfficiencyForm = this.fanEfficiencyService.initForm();
-    }
-  }
-
-  saveCalculator() {
-    if (!this.saving || this.calcExists) {
-      if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.calculator.id = result;
-            this.calcExists = true;
-            this.saving = false;
-          });
-        });
-      }
     }
   }
 }

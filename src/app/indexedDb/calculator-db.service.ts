@@ -4,10 +4,12 @@ import * as _ from 'lodash';
 import { firstValueFrom, Observable } from 'rxjs';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { CalculatorStoreMeta } from './dbConfig';
+import { Assessment } from '../shared/models/assessment';
 
 @Injectable()
 export class CalculatorDbService {
   allCalculators: Array<Calculator>;
+  isSaving: boolean = false;
   storeName: string = CalculatorStoreMeta.store;
   constructor(private dbService: NgxIndexedDBService) {}
 
@@ -50,14 +52,19 @@ export class CalculatorDbService {
   }
 
   add(calculator: Calculator): void {
+    calculator.createdDate = new Date();
+    calculator.modifiedDate = new Date();
     this.dbService.add(this.storeName, calculator);
   }
 
   addWithObservable(calculator: Calculator): Observable<any> {
+    calculator.createdDate = new Date();
+    calculator.modifiedDate = new Date();
     return this.dbService.add(this.storeName, calculator);
   }
 
   updateWithObservable(calculator: Calculator): Observable<any> {
+    calculator.modifiedDate = new Date(new Date().toLocaleDateString());
     return this.dbService.update(this.storeName, calculator);
   }
   
@@ -73,4 +80,19 @@ export class CalculatorDbService {
     return this.dbService.bulkDelete(this.storeName, calculatorIds);
   }
 
+  async saveAssessmentCalculator(assessment: Assessment, assessmentCalculator: Calculator){
+    if (!this.isSaving) {
+      if (assessmentCalculator.id) {
+        let calculators: Calculator[] = await firstValueFrom(this.updateWithObservable(assessmentCalculator));
+        this.setAll(calculators);
+      } else {
+        this.isSaving = true;
+        assessmentCalculator.assessmentId = assessment.id;
+        let addedCalculator: Calculator = await firstValueFrom(this.addWithObservable(assessmentCalculator));
+        this.setAll();
+        assessmentCalculator.id = addedCalculator.id;
+        this.isSaving = false;
+      }
+    }
+  }
 }

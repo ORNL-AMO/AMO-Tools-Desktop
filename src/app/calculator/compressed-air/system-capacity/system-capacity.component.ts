@@ -43,16 +43,15 @@ export class SystemCapacityComponent implements OnInit {
   outputs: AirSystemCapacityOutput;
   currentField: string = 'default';
 
-  constructor(private standaloneService: StandaloneService, private indexedDbService: IndexedDbService,
+  constructor(private standaloneService: StandaloneService,
      private calculatorDbService: CalculatorDbService, private systemCapacityService: SystemCapacityService, private settingsDbService: SettingsDbService) {
   }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     this.outputs = this.systemCapacityService.getDefaultEmptyOutput();
-    console.log(this.settings);
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
-      console.log('set');
     }
     this.inputs = this.systemCapacityService.inputs;
     this.calculate();
@@ -93,7 +92,7 @@ export class SystemCapacityComponent implements OnInit {
     } else {
       if(this.assessmentCalculator) {
         this.assessmentCalculator.airSystemCapacityInputs = this.inputs;
-        this.saveAssessmentCalculator();
+        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
       }else{
         this.systemCapacityService.inputs = this.inputs;
       }
@@ -111,7 +110,7 @@ export class SystemCapacityComponent implements OnInit {
       }
     } else{
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.saveAssessmentCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 
@@ -125,24 +124,7 @@ export class SystemCapacityComponent implements OnInit {
     return tmpCalculator;
   }
 
-  saveAssessmentCalculator(){
-    if (!this.saving) {
-      if (this.assessmentCalculator.id) {
-        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.assessmentCalculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.assessmentCalculator.id = result;
-            this.saving = false;
-          });
-        });
-      }
-    }
-  }
+  
 
   changeField($event) {
     this.currentField = $event;

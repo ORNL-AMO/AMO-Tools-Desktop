@@ -25,7 +25,7 @@ export class ImportService {
   constructor(private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
     private assessmentDbService: AssessmentDbService, private inventoryDbService: InventoryDbService) { }
 
-  importData(data: ImportExportData, workingDirectoryId: number) {
+  async importData(data: ImportExportData, workingDirectoryId: number) {
     this.addedDirIds = new Array<number>();
     this.assessmentsAdded = new Array<ImportExportAssessment>();
     this.inventoriesAdded = new Array<ImportExportInventory>();
@@ -65,12 +65,16 @@ export class ImportService {
     }
 
     if (data.calculators) {
-      data.calculators.forEach(calc => {
-        calc.selected = false;
-        delete calc.id;
-        calc.directoryId = workingDirectoryId;
-        this.indexedDbService.addCalculator(calc).then(() => { this.calculatorDbService.setAll(); });
-      });
+      let updatedCalculators: Calculator[];
+      for (let i = 0; i < data.calculators.length; i++) {
+        let calculator: Calculator = data.calculators[i];
+        calculator.selected = false;
+        delete calculator.id;
+        calculator.directoryId = workingDirectoryId;
+        await firstValueFrom(this.calculatorDbService.addWithObservable(calculator));
+      };
+      updatedCalculators = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+      this.calculatorDbService.setAll(updatedCalculators);
     }
   }
 

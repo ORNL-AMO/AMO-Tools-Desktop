@@ -4,7 +4,7 @@ import { AirLeakSurveyInput } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { AirLeakSurveyTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
@@ -51,10 +51,11 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
     this.resizeTabs();
   }
 
-  constructor(private airLeakService: AirLeakService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService,
+  constructor(private airLeakService: AirLeakService, private calculatorDbService: CalculatorDbService,
               private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
+    this.calculatorDbService.isSaving = false;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
@@ -91,7 +92,7 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
     this.airLeakService.calculate(this.settings);
     if (this.assessmentCalculator) {
       this.assessmentCalculator.airLeakInput = this.airLeakService.airLeakInput.getValue();;
-      this.saveAssessmentCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 
@@ -106,7 +107,7 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
       }
     }else{
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.saveAssessmentCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 
@@ -117,25 +118,6 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
       airLeakInput: inputs
     };
     return tmpCalculator;
-  }
-
-  saveAssessmentCalculator(){
-    if (!this.saving) {
-      if (this.assessmentCalculator.id) {
-        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.assessmentCalculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.assessmentCalculator.id = result;
-            this.saving = false;
-          });
-        });
-      }
-    }
   }
 
   ngAfterViewInit() {

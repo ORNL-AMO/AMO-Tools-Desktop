@@ -3,12 +3,10 @@ import { Settings } from '../../../shared/models/settings';
 import { PreAssessment } from './pre-assessment';
 import * as _ from 'lodash';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
-import { ConvertPhastService } from '../../../phast/convert-phast.service';
 import { Calculator } from '../../../shared/models/calculators';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { PreAssessmentService } from './pre-assessment.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { DirectoryDashboardService } from '../../../dashboard/directory-dashboard/directory-dashboard.service';
 
@@ -56,10 +54,11 @@ export class PreAssessmentComponent implements OnInit {
   type: string = 'furnace';
   calcExists: boolean;
   saving: boolean;
-  constructor(private preAssessmentService: PreAssessmentService, private convertPhastService: ConvertPhastService, private settingsDbService: SettingsDbService,
-    private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private directoryDashboardService: DirectoryDashboardService) { }
+  constructor(private preAssessmentService: PreAssessmentService, private settingsDbService: SettingsDbService,
+    private calculatorDbService: CalculatorDbService, private directoryDashboardService: DirectoryDashboardService) { }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       if (this.inModal) {
         let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
@@ -186,7 +185,7 @@ export class PreAssessmentComponent implements OnInit {
       this.calculator.preAssessments = this.preAssessments;
       //save in assessment, in modal button needs to be clicked to save
       if (this.inAssessment) {
-        this.saveCalculator();
+        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     }
     //this is fired when forms change
@@ -241,13 +240,13 @@ export class PreAssessmentComponent implements OnInit {
         this.calculator.preAssessments = new Array<PreAssessment>();
         this.preAssessments = this.calculator.preAssessments;
         this.addPreAssessment();
-        this.saveCalculator();
+        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
       this.preAssessments = this.calculator.preAssessments;
       this.addPreAssessment();
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 
@@ -260,23 +259,4 @@ export class PreAssessmentComponent implements OnInit {
     return tmpCalculator;
   }
 
-  saveCalculator() {
-    if (!this.saving || this.calcExists) {
-      if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.calculator.id = result;
-            this.calcExists = true;
-            this.saving = false;
-          });
-        });
-      }
-    }
-  }
 }

@@ -10,6 +10,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { InventoryDbService } from '../../indexedDb/inventory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../../shared/models/assessment';
+import { Calculator } from '../../shared/models/calculators';
 import { Directory } from '../../shared/models/directory';
 import { Settings } from '../../shared/models/settings';
 import { DashboardService } from '../dashboard.service';
@@ -110,17 +111,17 @@ export class MoveItemsComponent implements OnInit {
       }
     }
 
-    this.directory.calculators.forEach(calculator => {
+    for (let i = 0; i < this.directory.calculators.length; i++) {
+      let calculator: Calculator = this.directory.calculators[i];
       if (calculator.selected) {
         calculator.directoryId = this.moveForm.controls.directoryId.value;
-        this.indexedDbService.putCalculator(calculator).then(val => {
-          this.calculatorDbService.setAll().then(() => {
-            this.dashboardService.updateDashboardData.next(true);
-          });
-        });
+        await firstValueFrom(this.calculatorDbService.updateWithObservable(calculator)) 
         calculator.selected = false;
       }
-    });
+    };
+    let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+    this.calculatorDbService.setAll(updatedCalculators);
+    this.dashboardService.updateDashboardData.next(true);
     
     this.directory.subDirectory.forEach(subDir => {
       if (subDir.selected) {

@@ -3,7 +3,6 @@ import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
 import { CompressedAirPressureReductionService } from './compressed-air-pressure-reduction.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { FormBuilder } from '@angular/forms';
 import { CompressedAirPressureReductionResults, CompressedAirPressureReductionData } from '../../../shared/models/standalone';
 import { CompressedAirPressureReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { Assessment } from '../../../shared/models/assessment';
@@ -59,6 +58,7 @@ export class CompressedAirPressureReductionComponent implements OnInit {
     private compressedAirPressureReductionService: CompressedAirPressureReductionService) { }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
@@ -183,7 +183,7 @@ export class CompressedAirPressureReductionComponent implements OnInit {
     this.compressedAirPressureReductionResults = this.compressedAirPressureReductionService.getResults(this.settings, this.baselineData, this.modificationData);
     if (this.assessmentCalculator) {
       this.setAssessmentCalculatorData();
-      this.saveAssessmentCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 
@@ -204,7 +204,7 @@ export class CompressedAirPressureReductionComponent implements OnInit {
       this.getResults();
     }else{
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.saveAssessmentCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 
@@ -227,25 +227,6 @@ export class CompressedAirPressureReductionComponent implements OnInit {
       }
     };
     return tmpCalculator;
-  }
-
-  saveAssessmentCalculator(){
-    if (!this.saving) {
-      if (this.assessmentCalculator.id) {
-        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.assessmentCalculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.assessmentCalculator.id = result;
-            this.saving = false;
-          });
-        });
-      }
-    }
   }
 
   btnResetData() {

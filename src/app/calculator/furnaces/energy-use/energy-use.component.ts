@@ -47,9 +47,10 @@ export class EnergyUseComponent implements OnInit {
   saving: boolean;
   calculator: Calculator;
   originalCalculator: Calculator;
-  constructor(private phastService: PhastService, private energyUseService: EnergyUseService, private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private phastService: PhastService, private energyUseService: EnergyUseService, private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -117,7 +118,7 @@ export class EnergyUseComponent implements OnInit {
       this.flowCalculations = this.energyUseService.flowCalculations;
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.flowCalculations = this.flowCalculations;
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
     this.flowCalculationResults = this.phastService.flowCalculations(this.flowCalculations, this.settings);
     //update exportable table string whenever results are updated
@@ -134,12 +135,12 @@ export class EnergyUseComponent implements OnInit {
         let tmpFlowCalculations: FlowCalculations = this.energyUseService.generateExample(this.settings);
         this.calculator.flowCalculations = tmpFlowCalculations;
         this.flowCalculations = this.calculator.flowCalculations;
-        this.saveCalculator();
+        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
       this.flowCalculations = this.calculator.flowCalculations;
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 
@@ -157,26 +158,6 @@ export class EnergyUseComponent implements OnInit {
       this.flowCalculations = this.energyUseService.flowCalculations;
     } else {
       this.flowCalculations = this.energyUseService.generateExample(this.settings);
-    }
-  }
-
-  saveCalculator() {
-    if (!this.saving || this.calcExists) {
-      if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.calculator.id = result;
-            this.calcExists = true;
-            this.saving = false;
-          });
-        });
-      }
     }
   }
 

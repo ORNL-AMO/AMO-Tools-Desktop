@@ -49,6 +49,7 @@ export class EfficiencyImprovementComponent implements OnInit {
 
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -111,7 +112,7 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.efficiencyImprovementService.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
     this.efficiencyImprovementOutputs = this.phastService.efficiencyImprovement(this.efficiencyImprovementInputs, this.settings);
   }
@@ -129,11 +130,12 @@ export class EfficiencyImprovementComponent implements OnInit {
       } else {
         this.efficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
         this.calculator.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
-        this.saveCalculator();
+        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
-      this.saveCalculator();
+      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+
     }
     this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
   }
@@ -155,25 +157,5 @@ export class EfficiencyImprovementComponent implements OnInit {
     }
     this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
     this.calculate(this.efficiencyImprovementInputs);
-  }
-
-  saveCalculator() {
-    if (!this.saving || this.calcExists) {
-      if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.calculator.id = result;
-            this.calcExists = true;
-            this.saving = false;
-          });
-        });
-      }
-    }
   }
 }
