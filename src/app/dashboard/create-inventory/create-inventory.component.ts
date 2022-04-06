@@ -80,31 +80,32 @@ export class CreateInventoryComponent implements OnInit {
     this.dashboardService.createInventory.next(false);
   }
 
-  create() {
+  async create() {
     if (this.newInventoryItemForm.valid && this.canCreate) {
       this.canCreate = false;
       this.hideCreateModal();
-      this.createInventoryItemModal.onHidden.subscribe(() => {
+      this.createInventoryItemModal.onHidden.subscribe(async () => {
         if (this.newInventoryItemForm.controls.inventoryType.value === 'motorInventory') {
           this.motorInventoryService.mainTab.next('setup');
           this.motorInventoryService.setupTab.next('plant-setup');
           let tmpInventoryItem: InventoryItem = this.inventoryService.getNewMotorInventoryItem();
           tmpInventoryItem.name = this.newInventoryItemForm.controls.inventoryName.value;
           tmpInventoryItem.directoryId = this.newInventoryItemForm.controls.directoryId.value;
-          this.indexedDbService.addInventoryItem(tmpInventoryItem).then(itemId => {
-            this.inventoryDbService.setAll().then(() => {
-              let settingsForm = this.settingsService.getFormFromSettings(this.settings);
-              this.settings = this.settingsService.getSettingsFromForm(settingsForm);
-              this.settings.createdDate = new Date();
-              this.settings.modifiedDate = new Date();
-              this.settings.inventoryId = itemId;
-              this.indexedDbService.addSettings(this.settings).then(settingsId => {
-                this.settingsDbService.setAll().then(() => {
-                  this.router.navigateByUrl('/motor-inventory/' + itemId);
-                })
-              });
-            });
-          });
+
+
+          let newInventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(tmpInventoryItem));
+          let settingsForm = this.settingsService.getFormFromSettings(this.settings);
+          this.settings = this.settingsService.getSettingsFromForm(settingsForm);
+          this.settings.createdDate = new Date();
+          this.settings.modifiedDate = new Date();
+          this.settings.inventoryId = newInventory.id;
+          await firstValueFrom(this.settingsDbService.addWithObservable(this.settings));
+
+          let updatedInventories: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
+          let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+          this.inventoryDbService.setAll(updatedInventories);
+          this.settingsDbService.setAll(updatedSettings);
+          this.router.navigateByUrl('/motor-inventory/' + newInventory.id);
         }
       });
     }

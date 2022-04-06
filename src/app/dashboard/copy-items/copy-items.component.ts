@@ -200,7 +200,8 @@ export class CopyItemsComponent implements OnInit {
   async copyDirectoryInventory() {
     let hasSelectedToCopy: boolean = this.directory.inventories.some(inventory => inventory.selected);
     if (hasSelectedToCopy) {
-      this.directory.inventories.forEach(inventory => {
+      for (let i = 0; i < this.directory.inventories.length; i++) {
+        let inventory = this.directory.inventories[i];
         if (inventory.selected) {
           let inventoryCopy: InventoryItem = JSON.parse(JSON.stringify(inventory));
           delete inventoryCopy.id;
@@ -210,21 +211,18 @@ export class CopyItemsComponent implements OnInit {
           inventoryCopy.selected = false;
           inventoryCopy.name = inventory.name + ' (copy)';
           inventoryCopy.directoryId = this.copyForm.controls.directoryId.value;
-          inventoryCopy.createdDate = new Date();
-          inventoryCopy.modifiedDate = new Date();
-          this.indexedDbService.addInventoryItem(inventoryCopy).then(newInventoryId => {
-            settingsCopy.inventoryId = newInventoryId;
-            this.indexedDbService.addSettings(settingsCopy).then(() => {
-              this.settingsDbService.setAll().then(() => {
-                this.inventoryDbService.setAll().then(() => {
-                  this.dashboardService.updateDashboardData.next(true);
-                });
-              });
-            });
-          });
+
+          let newInventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(inventoryCopy));
+          settingsCopy.inventoryId = newInventory.id;
+          await firstValueFrom(this.settingsDbService.addWithObservable(settingsCopy));
           inventory.selected = false;
         }
-      });
+      }
+      let updatedInventories: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
+      let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+      this.inventoryDbService.setAll(updatedInventories);
+      this.settingsDbService.setAll(updatedSettings);
+      this.dashboardService.updateDashboardData.next(true);
     }
   }
 

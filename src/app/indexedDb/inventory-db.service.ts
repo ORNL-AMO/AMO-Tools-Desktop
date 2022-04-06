@@ -74,6 +74,11 @@ export class InventoryDbService {
     this.dbService.add(this.storeName, inventory);
   }
 
+  updateWithObservable(inventory: InventoryItem): Observable<any> {
+    inventory.modifiedDate = new Date();
+    return this.dbService.update(this.storeName, inventory);
+  }
+
   addWithObservable(inventory: InventoryItem): Observable<any> {
     inventory.createdDate = new Date();
     inventory.modifiedDate = new Date();

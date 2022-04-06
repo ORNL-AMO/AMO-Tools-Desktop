@@ -12,6 +12,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { Calculator } from '../../shared/models/calculators';
 import { Directory } from '../../shared/models/directory';
+import { InventoryItem } from '../../shared/models/inventory/inventory';
 
 @Injectable()
 export class ImportService {
@@ -117,14 +118,12 @@ export class ImportService {
   async addDirectory(importDir: ImportDirectory) {
     if (importDir.directoryItem) {
       delete importDir.directoryItem.directory.id;
-
       let newDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(importDir.directoryItem.directory));
       let allDirectories: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories());
       this.directoryDbService.setAll(allDirectories);
+
       importDir.directoryItem.settings.directoryId = newDirectory.id;
       delete importDir.directoryItem.settings.id;
-
-
       await firstValueFrom(this.settingsDbService.addWithObservable(importDir.directoryItem.settings));
       let allSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
       this.settingsDbService.setAll(allSettings);
@@ -138,12 +137,11 @@ export class ImportService {
         this.calculatorDbService.setAll(allCalculators);
       }
 
-      for (let i = 0; i < importDir.assessments.length; i++) {
-          let assessmentItem: ImportExportAssessment = importDir.assessments[i];
-          assessmentItem.assessment.directoryId = newDirectory.id;
-          delete assessmentItem.assessment.id;
-          // ***
-          assessmentItem = await this.addImportedAssessmentItem(assessmentItem, newDirectory.id);
+      if (importDir.assessments.length > 0) {
+        this.addImportDirectoryAssessments(importDir, newDirectory.id);
+      }
+      if (importDir.inventories.length > 0) {
+        this.addImportDirectoryInventories(importDir, newDirectory.id);
       }
 
       importDir.subDirectories.forEach(subDir => {
@@ -153,45 +151,57 @@ export class ImportService {
         this.addDirectory(subDir);
       });
 
-      importDir.inventories.forEach(inventory => {
-        inventory.inventoryItem.selected = false;
-        delete inventory.inventoryItem.id;
-        inventory.inventoryItem.directoryId = newDirectory.id;
-        this.indexedDbService.addInventoryItem(inventory.inventoryItem).then(newInventoryId => {
-          delete inventory.settings.id;
-          inventory.settings.inventoryId = newInventoryId;
-          this.indexedDbService.addSettings(inventory.settings).then(() => {
-            this.settingsDbService.setAll();
-            this.inventoryDbService.setAll();
-          })
-        })
-      });
     } else {
       importDir.subDirectories.forEach(subDir => { this.addDirectory(subDir); });
     }
   }
 
-  async addImportedAssessmentItem(item: ImportExportAssessment, newDirectoryId: number) {
-    let addedAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(item.assessment));
+  async addImportDirectoryAssessments(importDir: ImportDirectory, newDirectoryId: number) {
+    for (let i = 0; i < importDir.assessments.length; i++) {
+      let assessmentItem: ImportExportAssessment = importDir.assessments[i];
+      assessmentItem.assessment.directoryId = newDirectoryId;
+      delete assessmentItem.assessment.id;
+      // ***
+      assessmentItem = await this.addImportedAssessmentItem(assessmentItem, newDirectoryId);
+    }
     let updatedAssessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(updatedAssessments);
-    item.settings.assessmentId = addedAssessment.id;
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(updatedSettings);
+    let allCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+    this.calculatorDbService.setAll(allCalculators);
+  }
 
+  async addImportedAssessmentItem(item: ImportExportAssessment, newDirectoryId: number) {
+    let addedAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(item.assessment));
+    item.settings.assessmentId = addedAssessment.id;
     delete item.settings.id;
     await firstValueFrom(this.settingsDbService.addWithObservable(item.settings));
-    let allSettings: Settings[] =  await firstValueFrom(this.settingsDbService.getAllSettings());
-    this.settingsDbService.setAll(allSettings);
-
     if (item.calculator) {
       item.calculator.directoryId = newDirectoryId;
       delete item.calculator.id;
       await firstValueFrom(this.calculatorDbService.addWithObservable(item.calculator));
-      let allCalculators: Calculator[] =  await firstValueFrom(this.calculatorDbService.getAllCalculators());
-      this.calculatorDbService.setAll(allCalculators);
     }
     return item;
   }
 
+  async addImportDirectoryInventories(importDir: ImportDirectory, newDirectoryId: number) {
+    for (let i = 0; i < importDir.inventories.length; i++) {
+      let inventory: ImportExportInventory = importDir.inventories[i];
+      inventory.inventoryItem.selected = false;
+      delete inventory.inventoryItem.id;
+      inventory.inventoryItem.directoryId = newDirectoryId;
+
+      let newInventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(inventory.inventoryItem));
+      delete inventory.settings.id;
+      inventory.settings.inventoryId = newInventory.id;
+      await firstValueFrom(this.settingsDbService.addWithObservable(inventory.settings));
+    }
+    let updatedInventories: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.inventoryDbService.setAll(updatedInventories);
+    this.settingsDbService.setAll(updatedSettings);
+  }
 
   // ***
   async addAssessments(assessments: Array<ImportExportAssessment>, workingDirectoryId: number) {
@@ -221,20 +231,22 @@ export class ImportService {
     }
   }
 
-  addInventories(inventories: Array<ImportExportInventory>, workingDirectoryId: number) {
-    inventories.forEach(inventory => {
-      inventory.inventoryItem.selected = false;
-      delete inventory.inventoryItem.id;
-      inventory.inventoryItem.directoryId = workingDirectoryId;
-      this.indexedDbService.addInventoryItem(inventory.inventoryItem).then(newInventoryId => {
-        delete inventory.settings.id;
-        inventory.settings.inventoryId = newInventoryId;
-        this.indexedDbService.addSettings(inventory.settings).then(() => {
-          this.settingsDbService.setAll();
-          this.inventoryDbService.setAll();
-        })
-      })
-    })
+async addInventories(inventories: Array<ImportExportInventory>, workingDirectoryId: number) {
+   for (let i = 0; i < inventories.length; i++) {
+     let inventory = inventories[i];
+       inventory.inventoryItem.selected = false;
+       delete inventory.inventoryItem.id;
+       inventory.inventoryItem.directoryId = workingDirectoryId;
+       let newInventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(inventory.inventoryItem));
+       delete inventory.settings.id;
+       inventory.settings.inventoryId = newInventory.id;
+       await firstValueFrom(this.settingsDbService.addWithObservable(inventory.settings));
+       
+       let updatedInventories: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
+       let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+       this.inventoryDbService.setAll(updatedInventories);
+       this.settingsDbService.setAll(updatedSettings);
+      }
   }
 }
 

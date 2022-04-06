@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Directory } from '../../../shared/models/directory';
 import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';
 import { DirectoryItem, FilterDashboardBy } from '../../../shared/models/directory-dashboard';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { DashboardService } from '../../dashboard.service';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
@@ -54,13 +54,10 @@ export class DirectoryItemComponent implements OnInit {
     this.selectedDirectoryIdSub.unsubscribe();
   }
 
-  toggleDirectoryCollapse(directory: Directory) {
-    // if (directory.collapsed == true || directory.id == this.selectedDirectoryId) {
-      directory.collapsed = !directory.collapsed;
-      this.indexedDbService.putDirectory(this.directory).then(() => {
-        this.directoryDbService.setAll();
-      });
-    // }
+  async toggleDirectoryCollapse(directory: Directory) {
+    directory.collapsed = !directory.collapsed;
+    let updatedDirectories: Directory[] = await firstValueFrom(this.directoryDbService.updateWithObservable(this.directory));
+    this.directoryDbService.setAll(updatedDirectories);
   }
 
   checkSubDirectorySelected() {

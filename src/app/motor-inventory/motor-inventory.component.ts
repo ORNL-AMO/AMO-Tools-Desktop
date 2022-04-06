@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { MotorInventoryService } from './motor-inventory.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { MotorInventoryData } from './motor-inventory';
 import { Settings } from '../shared/models/settings';
@@ -105,16 +105,15 @@ export class MotorInventoryComponent implements OnInit {
     }
   }
 
-  saveDbData() {
+  async saveDbData() {
     let inventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
     let batchAnalysisSettings: BatchAnalysisSettings = this.batchAnalysisService.batchAnalysisSettings.getValue();
     this.motorInventoryItem.modifiedDate = new Date();
     this.motorInventoryItem.appVersion = packageJson.version;
     this.motorInventoryItem.motorInventoryData = inventoryData;
     this.motorInventoryItem.batchAnalysisSettings = batchAnalysisSettings;
-    this.indexedDbService.putInventoryItem(this.motorInventoryItem).then(() => {
-      this.inventoryDbService.setAll();
-    });
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.motorInventoryItem));
+    this.inventoryDbService.setAll(updatedInventoryItems);
   }
 
   continue() {

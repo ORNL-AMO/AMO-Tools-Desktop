@@ -59,9 +59,8 @@ export class DeleteDataService {
         };
         this.calculatorDbService.setAll(updatedCalculators); 
       }
-      this.indexedDbService.deleteDirectory(directory.id).then(() => {
-        this.directoryDbService.setAll();
-      });
+      let updatedDirectories: Directory[] = await firstValueFrom(this.directoryDbService.deleteByIdWithObservable(directory.id));
+      this.directoryDbService.setAll(updatedDirectories);
     } else if (directory.calculators && directory.calculators.length !== 0) {
       let updatedCalculators: Calculator[];
       for (let i = 0; i < directory.calculators.length; i++){
@@ -101,16 +100,14 @@ export class DeleteDataService {
     this.assessmentDbService.setAll(updatedAssessments);
   }
 
-  deleteInventory(inventory: InventoryItem){
+  async deleteInventory(inventory: InventoryItem){
     let settings: Settings = this.settingsDbService.getByInventoryId(inventory);
     if (settings && settings.inventoryId === inventory.id) {
-      this.indexedDbService.deleteSettings(settings.id).then(() => {
-        this.settingsDbService.setAll();
-      });
+      let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.deleteByIdWithObservable(settings.id));
+      this.settingsDbService.setAll(updatedSettings);
     }
-    this.indexedDbService.deleteInventoryItem(inventory.id).then(() => {
-      this.inventoryDbService.setAll();
-    })
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.deleteByIdWithObservable(inventory.id));
+    this.inventoryDbService.setAll(updatedInventoryItems);
   }
 
 }

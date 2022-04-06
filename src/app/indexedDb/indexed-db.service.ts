@@ -234,23 +234,23 @@ export class IndexedDbService {
   //   });
   // }
 
-  getAllAssessments(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readonly');
-      let store = transaction.objectStore(myDb.storeNames.assessments);
-      let getRequest = store.getAll();
-      myDb.setDefaultErrorHandler(getRequest, myDb);
-      getRequest.onsuccess = (e) => {
-        e.target.result.forEach(assessment => {
-          assessment = this.updateDataService.checkAssessment(assessment);
-        })
-        resolve(e.target.result);
-      };
-      getRequest.onerror = (error) => {
-        reject(error.target.result);
-      };
-    });
-  }
+  // getAllAssessments(): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readonly');
+  //     let store = transaction.objectStore(myDb.storeNames.assessments);
+  //     let getRequest = store.getAll();
+  //     myDb.setDefaultErrorHandler(getRequest, myDb);
+  //     getRequest.onsuccess = (e) => {
+  //       e.target.result.forEach(assessment => {
+  //         assessment = this.updateDataService.checkAssessment(assessment);
+  //       })
+  //       resolve(e.target.result);
+  //     };
+  //     getRequest.onerror = (error) => {
+  //       reject(error.target.result);
+  //     };
+  //   });
+  // }
 
   // getAssessment(id: number): Promise<any> {
   //   return new Promise((resolve, reject) => {
@@ -364,20 +364,20 @@ export class IndexedDbService {
   //   })
   // }
 
-  getAllDirectories(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readonly');
-      let store = transaction.objectStore(myDb.storeNames.directories);
-      let getRequest = store.getAll();
-      myDb.setDefaultErrorHandler(getRequest, myDb);
-      getRequest.onsuccess = (e) => {
-        resolve(e.target.result);
-      };
-      getRequest.onerror = (error) => {
-        reject(error.target.result);
-      };
-    });
-  }
+  // getAllDirectories(): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readonly');
+  //     let store = transaction.objectStore(myDb.storeNames.directories);
+  //     let getRequest = store.getAll();
+  //     myDb.setDefaultErrorHandler(getRequest, myDb);
+  //     getRequest.onsuccess = (e) => {
+  //       resolve(e.target.result);
+  //     };
+  //     getRequest.onerror = (error) => {
+  //       reject(error.target.result);
+  //     };
+  //   });
+  // }
 
   // getChildrenDirectories(parentDirectoryId): Promise<any> {
   //   return new Promise((resolve, reject) => {
@@ -395,43 +395,43 @@ export class IndexedDbService {
   //   })
   // }
 
-  putDirectory(directoryRef: DirectoryDbRef): Promise<any> {
-    directoryRef.modifiedDate = new Date();
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.directories);
-      let getRequest = store.get(directoryRef.id);
-      getRequest.onsuccess = (event) => {
-        let tmpDirectory: DirectoryDbRef = event.target.result;
-        tmpDirectory = directoryRef;
-        tmpDirectory.modifiedDate = new Date();
-        let updateRequest = store.put(tmpDirectory);
-        updateRequest.onsuccess = (event) => {
-          resolve(event);
-        };
-        updateRequest.onerror = (event) => {
-          reject(event);
-        };
-      };
-      getRequest.onerror = (event) => {
-        reject(event);
-      };
-    });
-  }
+  // putDirectory(directoryRef: DirectoryDbRef): Promise<any> {
+  //   directoryRef.modifiedDate = new Date();
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.directories);
+  //     let getRequest = store.get(directoryRef.id);
+  //     getRequest.onsuccess = (event) => {
+  //       let tmpDirectory: DirectoryDbRef = event.target.result;
+  //       tmpDirectory = directoryRef;
+  //       tmpDirectory.modifiedDate = new Date();
+  //       let updateRequest = store.put(tmpDirectory);
+  //       updateRequest.onsuccess = (event) => {
+  //         resolve(event);
+  //       };
+  //       updateRequest.onerror = (event) => {
+  //         reject(event);
+  //       };
+  //     };
+  //     getRequest.onerror = (event) => {
+  //       reject(event);
+  //     };
+  //   });
+  // }
 
-  deleteDirectory(id: number): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.directories);
-      let deleteRequest = store.delete(id);
-      deleteRequest.onsuccess = (event) => {
-        resolve(event.target.result);
-      };
-      deleteRequest.onerror = (event) => {
-        reject(event.target.result);
-      };
-    });
-  }
+  // deleteDirectory(id: number): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.directories);
+  //     let deleteRequest = store.delete(id);
+  //     deleteRequest.onsuccess = (event) => {
+  //       resolve(event.target.result);
+  //     };
+  //     deleteRequest.onerror = (event) => {
+  //       reject(event.target.result);
+  //     };
+  //   });
+  // }
 
   // getSettings(id: number): Promise<any> {
   //   return new Promise((resolve, reject) => {
@@ -494,43 +494,43 @@ export class IndexedDbService {
   //   })
   // }
 
-  getAllSettings(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readonly');
-      let store = transaction.objectStore(myDb.storeNames.settings);
-      let getRequest = store.getAll();
-      myDb.setDefaultErrorHandler(getRequest, myDb);
-      getRequest.onsuccess = (e) => {
-        resolve(e.target.result);
-      };
-      getRequest.onerror = (error) => {
-        reject(error.target.result);
-      };
-    });
-  }
+  // getAllSettings(): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readonly');
+  //     let store = transaction.objectStore(myDb.storeNames.settings);
+  //     let getRequest = store.getAll();
+  //     myDb.setDefaultErrorHandler(getRequest, myDb);
+  //     getRequest.onsuccess = (e) => {
+  //       resolve(e.target.result);
+  //     };
+  //     getRequest.onerror = (error) => {
+  //       reject(error.target.result);
+  //     };
+  //   });
+  // }
 
-  putSettings(settings: Settings): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.settings);
-      let getRequest = store.get(settings.id);
-      getRequest.onsuccess = (event) => {
-        let tmpSettings: Settings = event.target.result;
-        tmpSettings = settings;
-        tmpSettings.modifiedDate = new Date();
-        let updateRequest = store.put(tmpSettings);
-        updateRequest.onsuccess = (event) => {
-          resolve(event);
-        };
-        updateRequest.onerror = (event) => {
-          reject(event);
-        };
-      };
-      getRequest.onerror = (event) => {
-        reject(event);
-      };
-    });
-  }
+  // putSettings(settings: Settings): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.settings);
+  //     let getRequest = store.get(settings.id);
+  //     getRequest.onsuccess = (event) => {
+  //       let tmpSettings: Settings = event.target.result;
+  //       tmpSettings = settings;
+  //       tmpSettings.modifiedDate = new Date();
+  //       let updateRequest = store.put(tmpSettings);
+  //       updateRequest.onsuccess = (event) => {
+  //         resolve(event);
+  //       };
+  //       updateRequest.onerror = (event) => {
+  //         reject(event);
+  //       };
+  //     };
+  //     getRequest.onerror = (event) => {
+  //       reject(event);
+  //     };
+  //   });
+  // }
 
   deleteSettings(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -1322,96 +1322,96 @@ export class IndexedDbService {
   }
 
   // //inventoryItems
-  addInventoryItem(inventoryItem: InventoryItem): Promise<any> {
-    inventoryItem.createdDate = new Date();
-    inventoryItem.modifiedDate = new Date();
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.inventoryItems);
-      let addRequest = store.add(inventoryItem);
-      myDb.setDefaultErrorHandler(addRequest, myDb);
-      addRequest.onsuccess = function (e) {
-        resolve(e.target.result);
-      };
-      addRequest.onerror = (error) => {
-        reject(error.target.result);
-      };
-    });
-  }
+  // addInventoryItem(inventoryItem: InventoryItem): Promise<any> {
+  //   inventoryItem.createdDate = new Date();
+  //   inventoryItem.modifiedDate = new Date();
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.inventoryItems);
+  //     let addRequest = store.add(inventoryItem);
+  //     myDb.setDefaultErrorHandler(addRequest, myDb);
+  //     addRequest.onsuccess = function (e) {
+  //       resolve(e.target.result);
+  //     };
+  //     addRequest.onerror = (error) => {
+  //       reject(error.target.result);
+  //     };
+  //   });
+  // }
 
-  getAllInventoryItems(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readonly');
-      let store = transaction.objectStore(myDb.storeNames.inventoryItems);
-      let getRequest = store.getAll();
-      myDb.setDefaultErrorHandler(getRequest, myDb);
-      getRequest.onsuccess = (e) => {
-        // e.target.result.forEach(inventoryItem => {
-        //   inventoryItem = this.updateDataService.checkAssessment(inventoryItem);
-        // })
-        resolve(e.target.result);
-      };
-      getRequest.onerror = (error) => {
-        reject(error.target.result);
-      };
-    });
-  }
+  // getAllInventoryItems(): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readonly');
+  //     let store = transaction.objectStore(myDb.storeNames.inventoryItems);
+  //     let getRequest = store.getAll();
+  //     myDb.setDefaultErrorHandler(getRequest, myDb);
+  //     getRequest.onsuccess = (e) => {
+  //       // e.target.result.forEach(inventoryItem => {
+  //       //   inventoryItem = this.updateDataService.checkAssessment(inventoryItem);
+  //       // })
+  //       resolve(e.target.result);
+  //     };
+  //     getRequest.onerror = (error) => {
+  //       reject(error.target.result);
+  //     };
+  //   });
+  // }
 
-  getInventoryItem(id: number): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readonly');
-      let store = transaction.objectStore(myDb.storeNames.inventoryItems);
-      let getRequest = store.get(id);
-      myDb.setDefaultErrorHandler(getRequest, myDb);
-      getRequest.onsuccess = (e) => {
-        //e.target.result = Assessment
-        // let assessment = this.updateDataService.checkAssessment(e.target.result);
-        resolve(e.target.result);
-      };
-      getRequest.onerror = (error) => {
-        reject(error.target.result);
-      };
-    });
-  }
+  // getInventoryItem(id: number): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readonly');
+  //     let store = transaction.objectStore(myDb.storeNames.inventoryItems);
+  //     let getRequest = store.get(id);
+  //     myDb.setDefaultErrorHandler(getRequest, myDb);
+  //     getRequest.onsuccess = (e) => {
+  //       //e.target.result = Assessment
+  //       // let assessment = this.updateDataService.checkAssessment(e.target.result);
+  //       resolve(e.target.result);
+  //     };
+  //     getRequest.onerror = (error) => {
+  //       reject(error.target.result);
+  //     };
+  //   });
+  // }
 
-  putInventoryItem(inventoryItem: InventoryItem): Promise<any> {
-    inventoryItem.modifiedDate = new Date();
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.inventoryItems);
-      let getRequest = store.get(inventoryItem.id);
+  // putInventoryItem(inventoryItem: InventoryItem): Promise<any> {
+  //   inventoryItem.modifiedDate = new Date();
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.inventoryItems);
+  //     let getRequest = store.get(inventoryItem.id);
 
-      getRequest.onsuccess = (event) => {
-        let tmpInventoryItem: InventoryItem = event.target.result;
-        tmpInventoryItem = inventoryItem;
-        tmpInventoryItem.modifiedDate = new Date();
-        tmpInventoryItem.id = inventoryItem.id;
-        let updateRequest = store.put(tmpInventoryItem);
-        updateRequest.onsuccess = (event) => {
-          resolve(event);
-        };
-        updateRequest.onerror = (event) => {
-          reject(event);
-        };
-      };
-      getRequest.onerror = (event) => {
-        reject(event);
-      };
-    });
-  }
+  //     getRequest.onsuccess = (event) => {
+  //       let tmpInventoryItem: InventoryItem = event.target.result;
+  //       tmpInventoryItem = inventoryItem;
+  //       tmpInventoryItem.modifiedDate = new Date();
+  //       tmpInventoryItem.id = inventoryItem.id;
+  //       let updateRequest = store.put(tmpInventoryItem);
+  //       updateRequest.onsuccess = (event) => {
+  //         resolve(event);
+  //       };
+  //       updateRequest.onerror = (event) => {
+  //         reject(event);
+  //       };
+  //     };
+  //     getRequest.onerror = (event) => {
+  //       reject(event);
+  //     };
+  //   });
+  // }
 
-  deleteInventoryItem(id: number): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.inventoryItems);
-      let deleteRequest = store.delete(id);
-      deleteRequest.onsuccess = (event) => {
-        resolve(event.target.result);
-      };
-      deleteRequest.onerror = (event) => {
-        reject(event.target.result);
-      };
-    });
-  }
+  // deleteInventoryItem(id: number): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.inventoryItems);
+  //     let deleteRequest = store.delete(id);
+  //     deleteRequest.onsuccess = (event) => {
+  //       resolve(event.target.result);
+  //     };
+  //     deleteRequest.onerror = (event) => {
+  //       reject(event.target.result);
+  //     };
+  //   });
+  // }
 
 }

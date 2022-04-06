@@ -83,15 +83,14 @@ export class InventoryItemComponent implements OnInit {
     this.editModal.hide();
   }
 
-  save() {
+  async save() {
     this.inventoryItem.name = this.editForm.controls.name.value;
     this.inventoryItem.directoryId = this.editForm.controls.directoryId.value;
-    this.indexedDbService.putInventoryItem(this.inventoryItem).then(val => {
-      this.inventoryDbService.setAll().then(() => {
-        this.dashboardService.updateDashboardData.next(true);
-        this.hideEditModal();
-      });
-    });
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.inventoryItem));
+    this.inventoryDbService.setAll(updatedInventoryItems);
+    this.dashboardService.updateDashboardData.next(true);
+    this.hideEditModal();
+
   }
 
   getParentDirStr(id: number) {
@@ -112,18 +111,14 @@ export class InventoryItemComponent implements OnInit {
     this.deleteModal.hide();
   }
 
-  deleteInventory() {
+  async deleteInventory() {
     let deleteSettings: Settings = this.settingsDbService.getByInventoryId(this.inventoryItem);
-    this.indexedDbService.deleteInventoryItem(this.inventoryItem.id).then(() => {
-      this.indexedDbService.deleteSettings(deleteSettings.id).then(() => {
-        this.inventoryDbService.setAll().then(() => {
-          this.settingsDbService.setAll().then(() => {
-            this.dashboardService.updateDashboardData.next(true);
-            this.hideDeleteModal();
-          });
-        });
-      });
-    });
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.deleteByIdWithObservable(this.inventoryItem.id));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.deleteByIdWithObservable(deleteSettings.id));
+    this.inventoryDbService.setAll(updatedInventoryItems);
+    this.settingsDbService.setAll(updatedSettings);
+    this.dashboardService.updateDashboardData.next(true);
+    this.hideDeleteModal();
   }
 
   showCopyModal() {
@@ -138,7 +133,7 @@ export class InventoryItemComponent implements OnInit {
     this.copyModal.hide();
   }
 
-  createCopy() {
+  async createCopy() {
     let inventoryCopy: InventoryItem = JSON.parse(JSON.stringify(this.inventoryItem));
     delete inventoryCopy.id;
     let tmpSettings: Settings = this.settingsDbService.getByInventoryId(this.inventoryItem);
@@ -146,19 +141,17 @@ export class InventoryItemComponent implements OnInit {
     delete settingsCopy.id;
     inventoryCopy.name = this.copyForm.controls.name.value;
     inventoryCopy.directoryId = this.copyForm.controls.directoryId.value;
-    inventoryCopy.createdDate = new Date();
-    inventoryCopy.modifiedDate = new Date();
-    this.indexedDbService.addInventoryItem(inventoryCopy).then(newInventoryId => {
-      settingsCopy.inventoryId = newInventoryId;
-      this.indexedDbService.addSettings(settingsCopy).then(() => {
-        this.settingsDbService.setAll().then(() => {
-          this.inventoryDbService.setAll().then(() => {
-            this.dashboardService.updateDashboardData.next(true);
-            this.hideCopyModal();
-          });
-        });
-      });
-    });
+
+    let newInventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(inventoryCopy));
+    settingsCopy.inventoryId = newInventory.id;
+    await firstValueFrom(this.settingsDbService.addWithObservable(settingsCopy));
+
+    let updatedInventories: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.inventoryDbService.setAll(updatedInventories);
+    this.settingsDbService.setAll(updatedSettings);
+    this.dashboardService.updateDashboardData.next(true);
+    this.hideCopyModal();
   }
 
 }

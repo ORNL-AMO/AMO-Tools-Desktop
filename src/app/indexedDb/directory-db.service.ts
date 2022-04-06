@@ -91,6 +91,15 @@ export class DirectoryDbService {
     this.dbService.update(this.storeName, directory);
   }
 
+  updateWithObservable(directory: Directory): Observable<any> {
+    directory.modifiedDate = new Date();
+    return this.dbService.update(this.storeName, directory);
+  }
+
+  deleteByIdWithObservable(id: number): Observable<any> {
+    return this.dbService.delete(this.storeName, id);
+  }
+
   clearWallLossesSurface(): void {
     this.dbService.clear(this.storeName);
   }

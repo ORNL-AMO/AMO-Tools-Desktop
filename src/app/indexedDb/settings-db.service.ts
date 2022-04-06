@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../shared/models/settings';
-import { IndexedDbService } from './indexed-db.service';
 import * as _ from 'lodash';
 import { Assessment } from '../shared/models/assessment';
 import { SettingsService } from '../settings/settings.service';
@@ -20,30 +19,6 @@ export class SettingsDbService {
     private settingService: SettingsService, 
     private dbService: NgxIndexedDBService,
     private directoryDbService: DirectoryDbService) { }
-
-  // setAll(): Promise<any> {
-  //   return new Promise((resolve, reject) => {
-  //     if (this.indexedDbService.db) {
-  //       this.indexedDbService.getAllSettings().then(settings => {
-  //         this.allSettings = settings;
-  //         this.globalSettings = this.getByDirectoryId(1);
-  //         this.globalSettings = this.checkSettings(this.globalSettings);
-  //         resolve(true);
-  //       });
-  //     } else {
-  //       this.allSettings = [];
-  //       resolve(false);
-  //     }
-  //   });
-  // }
-
-  // setAll(): Promise<any> {
-  //   return new Promise((resolve, reject) => {
-  //       this.allSettings = [];
-  //       resolve(false);
-  //     }
-  //   );
-  // }
 
   async setAll(settings?: Array<Settings>) {
     if (settings) {
@@ -72,6 +47,8 @@ export class SettingsDbService {
   }
 
   add(settings: Settings): void {
+    settings.createdDate = new Date();
+    settings.modifiedDate = new Date();
     this.dbService.add(this.storeName, settings);
   }
 

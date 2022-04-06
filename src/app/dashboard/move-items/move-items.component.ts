@@ -12,9 +12,11 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../../shared/models/assessment';
 import { Calculator } from '../../shared/models/calculators';
 import { Directory } from '../../shared/models/directory';
+import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { Settings } from '../../shared/models/settings';
 import { DashboardService } from '../dashboard.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
+import { ImportExportInventory } from '../import-export/importExportModel';
 
 @Component({
   selector: 'app-move-items',
@@ -101,56 +103,84 @@ export class MoveItemsComponent implements OnInit {
   }
 
   async save() {
-    for (let i = 0; i < this.directory.assessments.length; i++) {
-      if (this.directory.assessments[i].selected) {
-        this.directory.assessments[i].directoryId = this.moveForm.controls.directoryId.value;
-        let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.directory.assessments[i]));
-        // Call below after iteration?
-        this.assessmentDbService.setAll(assessments);
+    this.saveAssessments();
+    this.saveCalculators();
+    this.saveDirectories();
+    this.saveInventories();
+    this.hideMoveModal();
+  }
+
+  async saveAssessments() {
+    let hasSelectedToCopy: boolean = this.directory.assessments.some(assessment => assessment.selected);
+    if (hasSelectedToCopy) {
+      let updatedAssessments: Assessment[] = [];
+      for (let i = 0; i < this.directory.assessments.length; i++) {
+        if (this.directory.assessments[i].selected) {
+          this.directory.assessments[i].directoryId = this.moveForm.controls.directoryId.value;
+          updatedAssessments = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.directory.assessments[i]));
+        }
+      }
+      this.assessmentDbService.setAll(updatedAssessments);
+      this.dashboardService.updateDashboardData.next(true);
+    }
+  }
+
+  async saveCalculators() {
+    let hasSelectedToCopy: boolean = this.directory.calculators.some(calculator => calculator.selected);
+    if (hasSelectedToCopy) {
+      let updatedCalculators: Calculator[] = [];
+      for (let i = 0; i < this.directory.calculators.length; i++) {
+        let calculator: Calculator = this.directory.calculators[i];
+        if (calculator.selected) {
+          calculator.directoryId = this.moveForm.controls.directoryId.value;
+          updatedCalculators = await firstValueFrom(this.calculatorDbService.updateWithObservable(calculator))
+          calculator.selected = false;
+        }
+      };
+      this.calculatorDbService.setAll(updatedCalculators);
+      this.dashboardService.updateDashboardData.next(true);
+    }
+  }
+
+  async saveInventories() {
+    let hasSelectedToCopy: boolean = this.directory.inventories.some(inventory => inventory.selected);
+    if (hasSelectedToCopy) {
+      let updatedInventoryItems: InventoryItem[];
+      if (this.directory.inventories.length > 0) {
+        for (let i = 0; i < this.directory.inventories.length; i++) {
+          let inventory: InventoryItem = this.directory.inventories[i];
+          if (inventory.selected) {
+            inventory.directoryId = this.moveForm.controls.directoryId.value;
+            updatedInventoryItems = await firstValueFrom(this.inventoryDbService.updateWithObservable(inventory));
+            inventory.selected = false;
+          }
+        }
+        this.inventoryDbService.setAll(updatedInventoryItems);
         this.dashboardService.updateDashboardData.next(true);
       }
-    }
+    } 
+  }
 
-    for (let i = 0; i < this.directory.calculators.length; i++) {
-      let calculator: Calculator = this.directory.calculators[i];
-      if (calculator.selected) {
-        calculator.directoryId = this.moveForm.controls.directoryId.value;
-        await firstValueFrom(this.calculatorDbService.updateWithObservable(calculator)) 
-        calculator.selected = false;
-      }
-    };
-    let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
-    this.calculatorDbService.setAll(updatedCalculators);
-    this.dashboardService.updateDashboardData.next(true);
-    
-    this.directory.subDirectory.forEach(subDir => {
-      if (subDir.selected) {
-        if (subDir.parentDirectoryId !== this.moveForm.controls.directoryId.value) {
-          subDir.parentDirectoryId = this.moveForm.controls.directoryId.value;
-          this.indexedDbService.putDirectory(subDir).then(val => {
-            this.directoryDbService.setAll().then(() => {
-              this.dashboardService.updateDashboardData.next(true);
-            });
-          });
-        } else {
-          subDir.parentDirectoryId = subDir.parentDirectoryId;
-          this.hideMoveModal();
+  async saveDirectories() {
+    let hasSelectedToCopy: boolean = this.directory.subDirectory.some(directory => directory.selected);
+    if (hasSelectedToCopy) {
+      let updatedDirectories: Directory[];
+        for (let i = 0; i < this.directory.inventories.length; i++) {
+          let subDir: Directory = this.directory.inventories[i];
+          if (subDir.selected) {
+            if (subDir.parentDirectoryId !== this.moveForm.controls.directoryId.value) {
+              subDir.parentDirectoryId = this.moveForm.controls.directoryId.value;
+              updatedDirectories = await firstValueFrom(this.directoryDbService.updateWithObservable(this.directory));
+            } else {
+              subDir.parentDirectoryId = subDir.parentDirectoryId;
+              this.hideMoveModal();
+            }
+            subDir.selected = false;
+          }
         }
-        subDir.selected = false;
-      }
-    });
-    this.directory.inventories.forEach(inventory => {
-      if (inventory.selected) {
-        inventory.directoryId = this.moveForm.controls.directoryId.value;
-        this.indexedDbService.putInventoryItem(inventory).then(val => {
-          this.inventoryDbService.setAll().then(() => {
-            this.dashboardService.updateDashboardData.next(true);
-          });
-        });
-        inventory.selected = false;
-      }
-    });
-    this.hideMoveModal();
+        this.directoryDbService.setAll(updatedDirectories);
+        this.dashboardService.updateDashboardData.next(true);
+    }
   }
 
   addFolder() {
