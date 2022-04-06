@@ -215,14 +215,14 @@ export class TreasureHuntComponent implements OnInit {
     }
   }
   
-  addSettings(settings: Settings) {
+  async addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
     newSettings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(newSettings).then(id => {
-      this.settingsDbService.setAll().then(() => {
-        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-      });
-    });
+    await firstValueFrom(this.settingsDbService.addWithObservable(newSettings));
+    let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(updatedSettings);
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+
   }
 
   initUpdateUnitsModal(oldSettings: Settings) {

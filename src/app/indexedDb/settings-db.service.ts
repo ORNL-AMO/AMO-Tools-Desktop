@@ -53,6 +53,8 @@ export class SettingsDbService {
   }
 
   addWithObservable(settings: Settings): Observable<any> {
+    settings.createdDate = new Date();
+    settings.modifiedDate = new Date();
     return this.dbService.add(this.storeName, settings);
   }
 

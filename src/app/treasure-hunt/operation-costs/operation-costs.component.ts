@@ -3,7 +3,7 @@ import { TreasureHunt, EnergyUsage, TreasureHuntResults } from '../../shared/mod
 import { Settings } from '../../shared/models/settings';
 import { TreasureHuntReportService } from '../treasure-hunt-report/treasure-hunt-report.service';
 import { TreasureHuntService } from '../treasure-hunt.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -254,15 +254,10 @@ export class OperationCostsComponent implements OnInit {
     this.saveSettingsOnDestroy = true;
   }
 
-  saveSettings() {
-    this.indexedDbService.putSettings(this.settings).then(
-      results => {
-        this.settingsDbService.setAll().then(() => {
-          //get updated settings
-          this.updateSettings.emit(true);
-        })
-      }
-    )
+  async saveSettings() {
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    this.settingsDbService.setAll(updatedSettings);
+    this.updateSettings.emit(true);
   }
 
   setNaturalGasCO2SavingsData(){

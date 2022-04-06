@@ -10,6 +10,7 @@ import { TreasureHuntService } from '../treasure-hunt.service';
 import { ConvertInputDataService } from '../convert-input-data.service';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -65,7 +66,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
-  saveSettings() {
+  async saveSettings() {
     let id: number = this.settings.id;
     this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.settings.id = id;
@@ -80,14 +81,9 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
       this.showSuccessMessage = false;
     }
 
-    this.indexedDbService.putSettings(this.settings).then(
-      results => {
-        this.settingsDbService.setAll().then(() => {
-          //get updated settings
-          this.updateSettings.emit(true);
-        })
-      }
-    )
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    this.settingsDbService.setAll(updatedSettings);
+    this.updateSettings.emit(true);
   }
 
   saveTreasureHunt() {

@@ -7,7 +7,7 @@ import { MotorInventoryService } from '../../motor-inventory.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Co2SavingsData } from '../../../calculator/utilities/co2-savings/co2-savings.service';
 import { MotorInventoryData } from '../../motor-inventory';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
@@ -45,7 +45,7 @@ export class PlantSetupComponent implements OnInit {
     this.motorInventoryService.focusedField.next(field);
   }
 
-  save() {
+  async save() {
     let id: number = this.settings.id;
     let createdDate = this.settings.createdDate;
     let inventoryId: number = this.settings.inventoryId;
@@ -55,9 +55,8 @@ export class PlantSetupComponent implements OnInit {
     this.settings.inventoryId = inventoryId;
     this.motorInventoryService.settings.next(this.settings);
     //TODO: check for changes and add conversion logic
-    this.indexedDbService.putSettings(this.settings).then(() => {
-      this.settingsDbService.setAll();
-    });
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    this.settingsDbService.setAll(updatedSettings);
   }
 
   updateCo2SavingsData(co2SavingsData?: Co2SavingsData) {

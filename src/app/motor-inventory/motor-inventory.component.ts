@@ -145,9 +145,10 @@ export class MotorInventoryComponent implements OnInit {
     }
   }
 
-  closeWelcomeScreen() {
+  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableMotorInventoryTutorial = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    let settings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(settings);
     this.showWelcomeScreen = false;
     this.motorInventoryService.modalOpen.next(false);
   }

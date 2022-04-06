@@ -3,7 +3,7 @@ import { DirectoryDashboardService } from '../directory-dashboard.service';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { FormGroup } from '@angular/forms';
 import { DashboardService } from '../../dashboard.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { Directory } from '../../../shared/models/directory';
 import { Settings, FacilityInfo } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -228,19 +228,17 @@ export class DirectorySummaryComponent implements OnInit {
     this.settingsModal.hide();
   }
 
-  updateSettings() {
+  async updateSettings() {
     let id = this.directorySettings.id;
     let facilityInfo: FacilityInfo = this.directorySettings.facilityInfo;
     this.directorySettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.directorySettings.directoryId = this.directory.id;
     this.directorySettings.id = id;
     this.directorySettings.facilityInfo = facilityInfo;
-    this.indexedDbService.putSettings(this.directorySettings).then(() => {
-      this.settingsDbService.setAll().then(() => {
-        this.calculateSummary();
-        this.settingsModal.hide();
-      });
-    });
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.directorySettings))
+    this.settingsDbService.setAll(updatedSettings);
+    this.calculateSummary();
+    this.settingsModal.hide();
   }
 }
 

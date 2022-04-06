@@ -492,15 +492,14 @@ export class PhastComponent implements OnInit {
     this.saveNewMod(tmpModification);
   }
 
-  addSettings(settings: Settings) {
+  async addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
     newSettings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(newSettings).then(id => {
-      this.settingsDbService.setAll().then(() => {
-        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-        this.lossesService.setTabs(this.settings);
-      });
-    });
+    await firstValueFrom(this.settingsDbService.addWithObservable(newSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(updatedSettings);
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    this.lossesService.setTabs(this.settings);
   }
 
   initUpdateUnitsModal(oldSettings: Settings) {

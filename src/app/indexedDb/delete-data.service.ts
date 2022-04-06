@@ -47,9 +47,8 @@ export class DeleteDataService {
     if (!isWorkingDir) {
       let dirSettings: Settings = this.settingsDbService.getByDirectoryId(directory.id);
       if (dirSettings) {
-        this.indexedDbService.deleteSettings(dirSettings.id).then(() => {
-          this.settingsDbService.setAll();
-        });
+        let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.deleteByIdWithObservable(dirSettings.id))
+        this.settingsDbService.setAll(updatedSettings);
       }
       let calculators: Array<Calculator> = this.calculatorDbService.getByDirectoryId(directory.id);
       if (calculators) {
@@ -87,9 +86,8 @@ export class DeleteDataService {
   async deleteAssessment(assessment: Assessment) {
     let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
     if (settings && settings.assessmentId === assessment.id) {
-      this.indexedDbService.deleteSettings(settings.id).then(() => {
-        this.settingsDbService.setAll();
-      });
+      let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.deleteByIdWithObservable(settings.id))
+      this.settingsDbService.setAll(updatedSettings);
     }
     let calculator: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
     if (calculator) {

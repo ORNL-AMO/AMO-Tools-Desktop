@@ -5,6 +5,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { FormGroup } from '@angular/forms';
 import { EGridService } from '../../shared/helper-services/e-grid.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-assessment-settings',
@@ -41,43 +42,21 @@ export class AssessmentSettingsComponent implements OnInit {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
   }
 
-  updateSettings() {
+  async updateSettings() {
     let tmpSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     tmpSettings.directoryId = this.settings.directoryId;
     tmpSettings.id = this.settings.id;
     tmpSettings.appVersion = this.settings.appVersion;
     tmpSettings.disableTutorial = this.settings.disableTutorial;
-    this.indexedDbService.putSettings(tmpSettings).then(
-      results => {
-        this.settingsDbService.setAll().then(() => {
-          this.settings = this.settingsDbService.findById(this.settings.id);
-          // this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
-          // this.emitUpdateDirectory.emit(true);
-        });
-      }
-    );
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(tmpSettings))
+    this.settingsDbService.setAll(updatedSettings);
+    this.settings = this.settingsDbService.findById(this.settings.id);
   }
 
-  saveTutorialChanges() {
-    this.indexedDbService.putSettings(this.settings).then(
-      results => {
-        this.settingsDbService.setAll().then(() => {
-          this.settings = this.settingsDbService.getByDirectoryId(this.settings.id);
-          // this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
-          // this.emitUpdateDirectory.emit(true);
-        });
-      }
-    );
-  }
-
-  savePrintSettings(){
-    this.indexedDbService.putSettings(this.settings).then(
-      results => {
-        this.settingsDbService.setAll().then(() => {
-          this.settings = this.settingsDbService.getByDirectoryId(this.settings.id);
-        });
-      }
-    );
+  async saveSettings() {
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    this.settingsDbService.setAll(updatedSettings);
+    this.settings = this.settingsDbService.getByDirectoryId(this.settings.id);
   }
 
   //simple toggle function needed for each section

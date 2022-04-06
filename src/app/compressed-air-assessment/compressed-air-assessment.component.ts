@@ -152,23 +152,22 @@ export class CompressedAirAssessmentComponent implements OnInit {
     }, 100);
   }
 
-  addSettings(settings: Settings) {
+ async addSettings(settings: Settings) {
     delete settings.id;
     delete settings.directoryId;
     settings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(settings).then(() => {
-      this.settingsDbService.setAll().then(() => {
-        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-        //on init, settings added. need to convert defaults
-        if (this.settings.unitsOfMeasure == 'Metric') {
-          let oldSettings: Settings = JSON.parse(JSON.stringify(this.settings));
-          oldSettings.unitsOfMeasure = 'Imperial';
-          this.assessment.compressedAirAssessment = this.convertCompressedAirService.convertCompressedAir(this.assessment.compressedAirAssessment, oldSettings, this.settings);
-        }
-        this.genericCompressorDbService.getAllCompressors(this.settings);
-        this.compressedAirAssessmentService.settings.next(this.settings);
-      });
-    });
+    await firstValueFrom(this.settingsDbService.addWithObservable(settings));
+    let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(updatedSettings);
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      let oldSettings: Settings = JSON.parse(JSON.stringify(this.settings));
+      oldSettings.unitsOfMeasure = 'Imperial';
+      this.assessment.compressedAirAssessment = this.convertCompressedAirService.convertCompressedAir(this.assessment.compressedAirAssessment, oldSettings, this.settings);
+    }
+    this.genericCompressorDbService.getAllCompressors(this.settings);
+    this.compressedAirAssessmentService.settings.next(this.settings);
   }
 
   setDisableNext() {
@@ -279,9 +278,10 @@ export class CompressedAirAssessmentComponent implements OnInit {
     }
   }
 
-  closeWelcomeScreen() {
+  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableCompressedAirTutorial = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.compressedAirAssessmentService.modalOpen.next(false);
   }

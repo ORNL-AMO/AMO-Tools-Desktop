@@ -224,12 +224,10 @@ export class FsatComponent implements OnInit {
     }
   }
 
-  saveSettings(newSettings: Settings) {
+  async saveSettings(newSettings: Settings) {
     this.settings = newSettings;
-    this.indexedDbService.putSettings(this.settings).then(() => {
-      this.settingsDbService.setAll().then(() => {
-      });
-    });
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    this.settingsDbService.setAll(updatedSettings);
   }
 
 
@@ -403,15 +401,14 @@ export class FsatComponent implements OnInit {
   }
 
   
-  addSettings(settings: Settings) {
+  async addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
     newSettings = this.setSettingsUnitType(newSettings);
     newSettings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(newSettings).then(id => {
-      this.settingsDbService.setAll().then(() => {
-        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-      });
-    });
+    await firstValueFrom(this.settingsDbService.addWithObservable(newSettings));
+    let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(updatedSettings);
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
   }
 
   setSettingsUnitType(settings: Settings): Settings {
@@ -487,9 +484,10 @@ export class FsatComponent implements OnInit {
     }
   }
 
-  closeWelcomeScreen() {
+  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableFansTutorial = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.fsatService.modalOpen.next(false);
   }
