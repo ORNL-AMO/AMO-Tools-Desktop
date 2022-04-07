@@ -21,13 +21,6 @@ export class CalculatorDbService {
     }
   }
 
-  async setAllWithObservable() {
-    let allCalculators$ = this.getAllCalculators();
-    this.allCalculators = await firstValueFrom(allCalculators$);
-    return this.getAllCalculators();
-  }
-
-
   getAll() {
     return this.allCalculators;
   }

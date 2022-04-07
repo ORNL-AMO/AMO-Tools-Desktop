@@ -24,18 +24,11 @@ export class AssessmentDbService {
     }
   }
 
-  async setAllWithObservable(): Promise<any> {
-    let allAssessments$ = this.getAllAssessments();
-    this.allAssessments = await firstValueFrom(allAssessments$);
-    return allAssessments$;
-  }
-
-
   getAll(): Array<Assessment> {
     return this.allAssessments;
   }
 
-  getAllAssessments(): Observable<Array<Assessment>> {
+  getAllAssessments(): Observable<any> {
     return this.dbService.getAll(this.storeName);
   }
 
@@ -88,13 +81,6 @@ export class AssessmentDbService {
   updateWithObservable(assessment: Assessment): Observable<any> {
     assessment.modifiedDate = new Date();
     return this.dbService.update(this.storeName, assessment);
-  }
-
-
-  updateAndSetAll(assessment: Assessment): void {
-    this.dbService.update(this.storeName, assessment).subscribe(assessments => {
-      this.allAssessments = assessments;
-    });
   }
 
 

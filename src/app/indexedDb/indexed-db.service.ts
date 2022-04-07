@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { WindowRefService } from '../indexedDb/window-ref.service';
-import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
-import { UpdateDataService } from '../shared/helper-services/update-data.service';
-import { Calculator } from '../shared/models/calculators';
-import { LogToolDbData } from '../log-tool/log-tool-models';
+import { GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
+
 
 var myDb: any = {
   name: 'CrudDB',
@@ -624,75 +621,6 @@ export class IndexedDbService {
       };
       clearRequest.onerror = (error) => {
         reject(error.target.result);
-      };
-    });
-  }
-
-  //log tool
-  addLogTool(logTool: LogToolDbData): Promise<any> {
-    logTool.modifiedDate = new Date();
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.logTool], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.logTool);
-      let addRequest = store.add(logTool);
-      myDb.setDefaultErrorHandler(addRequest, myDb);
-      addRequest.onsuccess = (e) => {
-        resolve(e.target.result);
-      };
-      addRequest.onerror = (e) => {
-        reject(e.target.result);
-      };
-    });
-  }
-
-  getAllLogTool(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.logTool], 'readonly');
-      let store = transaction.objectStore(myDb.storeNames.logTool);
-      let getRequest = store.getAll();
-      myDb.setDefaultErrorHandler(getRequest, myDb);
-      getRequest.onsuccess = (e) => {
-        resolve(e.target.result);
-      };
-      getRequest.onerror = (error) => {
-        reject(error.target.result);
-      };
-    });
-  }
-
-  putLogTool(logTool: LogToolDbData): Promise<any> {
-    logTool.modifiedDate = new Date();
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.logTool], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.logTool);
-      let getRequest = store.get(logTool.id);
-      getRequest.onsuccess = (event) => {
-        let tmpCalc: Calculator = event.target.result;
-        tmpCalc = logTool;
-        let updateRequest = store.put(tmpCalc);
-        updateRequest.onsuccess = (event) => {
-          resolve(event);
-        };
-        updateRequest.onerror = (event) => {
-          reject(event);
-        };
-      };
-      getRequest.onerror = (event) => {
-        reject(event);
-      };
-    });
-  }
-
-  deleteLogTool(id: number): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.logTool], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.logTool);
-      let deleteRequest = store.delete(id);
-      deleteRequest.onsuccess = (event) => {
-        resolve(event.target.result);
-      };
-      deleteRequest.onerror = (event) => {
-        reject(event.target.result);
       };
     });
   }

@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../shared/models/settings';
 import { MockPhastSettings, MockPhast } from '../../../examples/mockPhast';
@@ -64,15 +63,25 @@ export class ResetDataModalComponent implements OnInit {
     this.resetSystemSettingsModal.show();
   }
 
+  // hideResetSystemSettingsModal() {
+  //   if (this.hidingModal) {
+  //     clearTimeout(this.hidingModal);
+  //   }
+  //   this.hidingModal = setTimeout(() => {
+  //     console.log('hiding modal');
+  //     this.resetSystemSettingsModal.hide();
+  //     this.dashboardService.updateDashboardData.next(true);
+  //     this.closeModal.emit(true);
+  //   }, 1000)
+  // }
   hideResetSystemSettingsModal() {
-    if (this.hidingModal) {
-      clearTimeout(this.hidingModal);
-    }
-    this.hidingModal = setTimeout(() => {
-      this.resetSystemSettingsModal.hide();
-      this.dashboardService.updateDashboardData.next(true);
-      this.closeModal.emit(true);
-    }, 1000)
+    // if (this.hidingModal) {
+    //   clearTimeout(this.hidingModal);
+    // }
+    this.dashboardService.updateDashboardData.next(true);
+    this.resetSystemSettingsModal.hide();
+    this.closeModal.emit(true);
+    console.log('**** hiding modal');
   }
 
   toggleResetSystemSettingsOption(option: string) {
@@ -116,7 +125,7 @@ export class ResetDataModalComponent implements OnInit {
   }
 
   // needs help
-  resetSystemSettingsAccept() {
+  async resetSystemSettingsAccept() {
     this.deleting = true;
     if (this.resetCustomMaterials) {
       this.resetFactoryCustomMaterials();
@@ -134,7 +143,6 @@ export class ResetDataModalComponent implements OnInit {
         this.resetFactoryExampleAssessments();
       }
     }
-    this.hideResetSystemSettingsModal();
   }
 
   async resetFactorySystemSettings() {
@@ -175,60 +183,64 @@ export class ResetDataModalComponent implements OnInit {
       delete tmpSettings.facilityInfo;
       await firstValueFrom(this.settingsDbService.addWithObservable(tmpSettings));
       this.resetAllExampleAssessments(createdDirectory.id);
-      this.assessmentDbService.setAll();
     }
+    // let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    // this.assessmentDbService.setAll(updatedAssessments);
+    // console.log('updatedAssessments', updatedAssessments);
+    // this.hideResetSystemSettingsModal();
   }
 
-  async resetAllExampleAssessments(id: number) {
+  async resetAllExampleAssessments(dirId: number) {
+    // TODO - not updating assessment/dirs correctly after reset 
+    // this method should resolve all through forkjoin or subscribe
     let psatExample: Assessment = this.assessmentDbService.getExample('PSAT');
     MockPsatSettings.facilityInfo.date = new Date().toDateString();
-    this.resetExampleAssessment(psatExample, MockPsat, MockPsatSettings, id, MockPsatCalculator);
+    this.resetExampleAssessment(psatExample, MockPsat, MockPsatSettings, dirId, MockPsatCalculator);
 
     MockFsatSettings.facilityInfo.date = new Date().toDateString();
     let fsatExample: Assessment = this.assessmentDbService.getExample('FSAT');
-    this.resetExampleAssessment(fsatExample, MockFsat, MockFsatSettings, id);
+    this.resetExampleAssessment(fsatExample, MockFsat, MockFsatSettings, dirId);
 
     MockWasteWaterSettings.facilityInfo.date = new Date().toDateString();
     let wasteWaterExample: Assessment = this.assessmentDbService.getExample('WasteWater');
-    this.resetExampleAssessment(wasteWaterExample, MockWasteWater, MockWasteWaterSettings, id);
+    this.resetExampleAssessment(wasteWaterExample, MockWasteWater, MockWasteWaterSettings, dirId);
 
     let phastExample: Assessment = this.assessmentDbService.getExample('PHAST');
     if (phastExample) {
-      console.log('phast delete id', phastExample.id);
       await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(phastExample.id));
-      this.createPhastExample(id);
-    } else {
-      this.createPhastExample(id);
     }
+    this.createPhastExample(dirId);
 
     let ssmtExample: Assessment = this.assessmentDbService.getExample('SSMT');
-    this.resetExampleAssessment(ssmtExample, MockSsmt, MockSsmtSettings, id);
+    this.resetExampleAssessment(ssmtExample, MockSsmt, MockSsmtSettings, dirId);
 
     let treasureHuntExample: Assessment = this.assessmentDbService.getExample('TreasureHunt');
-    this.resetExampleAssessment(treasureHuntExample, MockTreasureHunt, MockTreasureHuntSettings, id);
+    this.resetExampleAssessment(treasureHuntExample, MockTreasureHunt, MockTreasureHuntSettings, dirId);
 
     let compressedAirAssessmentExample: Assessment = this.assessmentDbService.getExample('CompressedAir');
-    this.resetExampleAssessment(compressedAirAssessmentExample, MockCompressedAirAssessment, MockCompressedAirAssessmentSettings, id);
+    this.resetExampleAssessment(compressedAirAssessmentExample, MockCompressedAirAssessment, MockCompressedAirAssessmentSettings, dirId);
   
     let motorInventoryExample: InventoryItem = this.inventoryDbService.getMotorInventoryExample();
     if (motorInventoryExample) {
       await firstValueFrom(this.inventoryDbService.deleteByIdWithObservable(motorInventoryExample.id));
-      this.createMotorInventoryExample(id);
-    } else {
-      this.createMotorInventoryExample(id);
-    }
-    this.assessmentDbService.setAll();
-    console.log('allAssessments after reset', this.assessmentDbService.allAssessments)
+    } 
+    this.createMotorInventoryExample(dirId);
+
+    let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    this.assessmentDbService.setAll(updatedAssessments);
+    console.log('updatedAssessments', updatedAssessments);
+    this.hideResetSystemSettingsModal();
   }
 
-  async resetExampleAssessment(assessment: Assessment, mockAssessment: Assessment, mockSettings: Settings, id: number, calculator?: Calculator) {
-    console.log(assessment, mockAssessment, mockSettings, id);
-    console.log('ids: assessment, dir', assessment.id, assessment.directoryId)
+  async resetExampleAssessment(assessment: Assessment, mockAssessment: Assessment, mockSettings: Settings, dirId: number, calculator?: Calculator) {
+    console.log(assessment, mockAssessment, mockSettings, dirId);
+    console.log('assessment id', assessment.id);
+    console.log('dir id', assessment.directoryId);
     if (assessment) {
       await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(assessment.id));
-      this.createExample(mockAssessment, mockSettings, id, calculator);
+      this.createExample(mockAssessment, mockSettings, dirId, calculator);
     } else {
-      this.createExample(mockAssessment, mockSettings, id, calculator);
+      this.createExample(mockAssessment, mockSettings, dirId, calculator);
     }
   }
 
@@ -305,8 +317,6 @@ export class ResetDataModalComponent implements OnInit {
       this.dashboardService.updateDashboardData.next(true);
       this.hideResetSystemSettingsModal();
     });
-    
-    
   }
 
   resetFactoryCustomMaterials() {
@@ -320,19 +330,6 @@ export class ResetDataModalComponent implements OnInit {
   }
 
   async resetAllData() {
-    // let isDatabaseDeleted = this.deleteDatabase();
-    // console.log('is database deleted', isDatabaseDeleted);
-    // if (isDatabaseDeleted) {
-    //   this.createObjectStores();
-    //   this.coreService.createDefaultDirectories();
-    //   if (!this.resetAppSettings) {
-    //     await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
-    //   }
-      
-    //   this.coreService.createExamples();
-    //   this.coreService.createDirectorySettings();
-    //   this.setAllDbData();
-    // }
       try {
           this.dbService.deleteDatabase().subscribe(
             {

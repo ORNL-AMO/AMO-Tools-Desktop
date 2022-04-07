@@ -5,7 +5,6 @@ import { DirectoryItem, FilterDashboardBy } from '../../../shared/models/directo
 import { firstValueFrom, Subscription } from 'rxjs';
 import { DashboardService } from '../../dashboard.service';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 
 @Component({
   selector: 'app-directory-item',
@@ -24,15 +23,13 @@ export class DirectoryItemComponent implements OnInit {
   updateDashboardDataSub: Subscription;
   selectedDirectoryId: number;
   selectedDirectoryIdSub: Subscription;
-  constructor(private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private directoryDbService: DirectoryDbService,
-    private indexedDbService: IndexedDbService) { }
+  constructor(private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private directoryDbService: DirectoryDbService) { }
 
   ngOnInit() {
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       if(this.directory){
         this.directory = this.directoryDbService.getById(this.directory.id);
         this.directoryItems = this.directoryDashboardService.getDirectoryItems(this.directory);
-
       }
     });
     this.filterDashboardBySub = this.directoryDashboardService.filterDashboardBy.subscribe(val => {

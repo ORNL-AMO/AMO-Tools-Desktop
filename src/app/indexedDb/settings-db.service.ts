@@ -30,14 +30,6 @@ export class SettingsDbService {
     this.globalSettings = this.checkSettings(this.globalSettings);
   }
 
-  async setAllWithObservable(): Promise<any> {
-    let allSettings$ = this.getAllSettings();
-    this.allSettings = await firstValueFrom(allSettings$);
-    this.globalSettings = this.getByDirectoryId(1);
-    this.globalSettings = this.checkSettings(this.globalSettings);
-    return allSettings$;
-  }
-
   getAll(): Array<Settings> {
     return this.allSettings;
   }

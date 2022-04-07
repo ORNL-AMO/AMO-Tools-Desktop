@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { LogToolDbData } from './log-tool-models';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { LogToolService } from './log-tool.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { LogToolDataService } from './log-tool-data.service';
 import { VisualizeService } from './visualize/visualize.service';
 import { DayTypeAnalysisService } from './day-type-analysis/day-type-analysis.service';
 import { DayTypeGraphService } from './day-type-analysis/day-type-graph/day-type-graph.service';
+import { LogToolIdbService } from '../indexedDb/log-tool-idb.service';
 
 @Injectable()
 export class LogToolDbService {
@@ -14,29 +15,30 @@ export class LogToolDbService {
   previousDataAvailable: BehaviorSubject<Date>;
   logToolDbData: Array<LogToolDbData>;
   constructor(private indexedDbService: IndexedDbService, private logToolService: LogToolService,
+    private dbService: LogToolIdbService,
     private logToolDataService: LogToolDataService, private visualizeService: VisualizeService,
     private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService) {
     this.previousDataAvailable = new BehaviorSubject<Date>(undefined);
   }
-  initLogToolData() {
+
+  async initLogToolData() {
     //first time in log tool for this session, 
     //initialize data with last use
     if (!this.logToolService.dataSubmitted.getValue()) {
-      this.indexedDbService.getAllLogTool().then((logToolDbData: Array<LogToolDbData>) => {
-        if (logToolDbData.length == 0) {
-          this.addLogToolToDb();
-        } else {
-          //get latest entry
-          this.logToolDbData = logToolDbData;
-          if(this.logToolDbData[0].setupData.dataSubmitted === true) {
-          this.previousDataAvailable.next(logToolDbData[0].modifiedDate);
-          }
+      let allLogToolData: LogToolDbData[] = await firstValueFrom(this.dbService.getAllLogToolDbDatas());
+      if (allLogToolData.length == 0) {
+        this.addLogToolToDb();
+      } else {
+        //get latest entry
+        this.logToolDbData = allLogToolData;
+        if (this.logToolDbData[0].setupData.dataSubmitted === true) {
+          this.previousDataAvailable.next(allLogToolData[0].modifiedDate);
         }
-      })
+      }
     }
   }
 
-  addLogToolToDb() {
+  async addLogToolToDb() {
     //no id on add, automatically set on insert
     let logToolDbData: LogToolDbData = {
       name: 'Latest',
@@ -70,7 +72,7 @@ export class LogToolDbService {
         individualDayScatterPlotData: undefined
       }
     }
-    this.indexedDbService.addLogTool(logToolDbData);
+    await firstValueFrom(this.dbService.addWithObservable(logToolDbData));
   }
 
   setLogToolData() {
@@ -100,11 +102,10 @@ export class LogToolDbService {
 
   }
 
-  saveData() {
+ async saveData() {
     let logToolDbData: LogToolDbData = this.getLogToolDbDataObj();
-    this.indexedDbService.putLogTool(logToolDbData);
+    let allData: LogToolDbData[] = await firstValueFrom(this.dbService.updateWithObservable(logToolDbData));
   }
-
 
   getSavedData(): LogToolDbData {
     let logToolDbData: LogToolDbData = this.getLogToolDbDataObj();

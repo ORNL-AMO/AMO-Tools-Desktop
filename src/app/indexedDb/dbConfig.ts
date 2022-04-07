@@ -215,6 +215,20 @@ export const WallLossesSurfaceStoreMeta = {
   ]
 };
 
+export const LogToolStoreMeta = {
+  store: 'logTool',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'id', keypath: 'id', options: {unique: false } },
+    { name: 'name', keypath: 'name', options: {unique: false } },
+    { name: 'modifiedDate', keypath: 'modifiedDate', options: {unique: false } },
+    { name: 'origin', keypath: 'origin', options: {unique: false } },
+    { name: 'setupData', keypath: 'setupData', options: {unique: false } },
+    { name: 'visualizeData', keypath: 'visualizeData', options: {unique: false } },
+    { name: 'dayTypeData', keypath: 'dayTypeData', options: {unique: false } },
+  ]
+};
+
 export const dbConfig: DBConfig = {
   name: 'CrudDB',
   version: 6,
@@ -224,7 +238,8 @@ export const dbConfig: DBConfig = {
     CalculatorStoreMeta,
     SettingsStoreMeta,
     InventoryStoreMeta,
-    WallLossesSurfaceStoreMeta
+    WallLossesSurfaceStoreMeta,
+    LogToolStoreMeta
   ]
 };
 

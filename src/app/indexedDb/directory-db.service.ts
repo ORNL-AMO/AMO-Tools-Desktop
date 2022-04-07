@@ -30,12 +30,6 @@ export class DirectoryDbService {
     }
   }
 
-  async setAllWithObservable(): Promise<any> {
-    let allDirectories$ = this.getAllDirectories();
-    this.allDirectories = await firstValueFrom(allDirectories$);
-    return allDirectories$;
-  }
-
   getAllDirectories(): Observable<Array<Directory>> {
     return this.dbService.getAll(this.storeName);
   }

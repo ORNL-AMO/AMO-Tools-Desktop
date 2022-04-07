@@ -139,6 +139,7 @@ export class CoreComponent implements OnInit {
     let existingDirectories: number = await firstValueFrom(this.directoryDbService.count());
 
     // let existingDirectories = 0;
+    console.log('existing dirs', existingDirectories)
     if (existingDirectories === 0) {
       console.log('no existing data')
       await this.coreService.createDefaultDirectories();

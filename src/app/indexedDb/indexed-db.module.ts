@@ -10,6 +10,7 @@ import { CalculatorDbService } from './calculator-db.service';
 import { DeleteDataService } from './delete-data.service';
 import { InventoryDbService } from './inventory-db.service';
 import { WallLossesSurfaceDbService } from './wall-losses-surface-db.service';
+import { LogToolIdbService } from './log-tool-idb.service';
 
 
 
@@ -27,7 +28,8 @@ import { WallLossesSurfaceDbService } from './wall-losses-surface-db.service';
     CalculatorDbService,
     DeleteDataService,
     WallLossesSurfaceDbService,
-    InventoryDbService
+    InventoryDbService,
+    LogToolIdbService
   ]
 })
 export class IndexedDbModule { }

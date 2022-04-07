@@ -20,13 +20,6 @@ export class InventoryDbService {
     }
   }
 
-  async setAllWithObservable(): Promise<any> {
-    let allInventoryItems$: Observable<any> = this.getAllInventory();
-    this.allInventoryItems = await firstValueFrom(allInventoryItems$);
-    return allInventoryItems$;
-  }
-
-
   getAll(): Array<InventoryItem> {
     return this.allInventoryItems;
   }
