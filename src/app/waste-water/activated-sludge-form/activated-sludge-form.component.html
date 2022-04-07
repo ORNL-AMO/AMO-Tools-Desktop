@@ -26,10 +26,54 @@
             </span>
         </div>
         <!-- So -->
+
+        <div class="form-group" *ngIf="!this.form.controls.isUserDefinedSo.value"
+        [ngClass]="{'indicate-different': activatedSludgeDifferent.influentCBODBefore, 'invalid': form.controls.influentCBODBefore.invalid}">
+            <label>Influent CBOD<sub>5</sub> Before</label>
+            <div class="input-group">
+                <input class="form-control" name="influentCBODBefore" id="influentCBODBefore" formControlName="influentCBODBefore" type="number"
+                    (input)="calculateSo()" onfocus="this.select();" (focus)="focusField('influentCBODBefore')">
+                <span class="input-group-addon units">mg/L</span>
+            </div>
+                <span *ngIf="form.controls.influentCBODBefore.invalid && !form.controls.influentCBODBefore.pristine">
+                    <span class="alert-danger pull-right small" *ngIf="form.controls.influentCBODBefore.errors.required">Value
+                        Required
+                    </span>
+                    <span class="alert-danger pull-right small" *ngIf="form.controls.influentCBODBefore.errors.greaterThan == 0">Value can't be
+                        less than or equal 0 mg/L
+                    </span>
+                </span>
+        </div>
+
+        <div class="form-group" *ngIf="!this.form.controls.isUserDefinedSo.value"
+        [ngClass]="{'indicate-different': activatedSludgeDifferent.clarifierEfficiency, 'invalid': form.controls.clarifierEfficiency.invalid}">
+            <label>Clarifier Efficiency</label>
+            <div class="input-group">
+                <input class="form-control" name="clarifierEfficiency" id="clarifierEfficiency" formControlName="clarifierEfficiency" type="number"
+                    (input)="calculateSo()" onfocus="this.select();" (focus)="focusField('clarifierEfficiency')">
+                <span class="input-group-addon units">%</span>
+            </div>
+                <span *ngIf="form.controls.clarifierEfficiency.invalid && !form.controls.clarifierEfficiency.pristine">
+                    <span class="alert-danger pull-right small" *ngIf="form.controls.clarifierEfficiency.errors.required">Value Required
+                    </span>
+                    <span class="alert-danger pull-right small" *ngIf="form.controls.clarifierEfficiency.errors.greaterThan == 0">Value can't be
+                        less than or equal to 0%
+                    </span>
+                    <span class="alert-danger pull-right small" *ngIf="form.controls.clarifierEfficiency.errors.max">Value can't be
+                        greater than {{form.controls.clarifierEfficiency.errors.max.max}}
+                    </span>
+                </span>
+        </div>
+
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.So, 'invalid': form.controls.So.invalid}">
-            <label for="{{'So_'+idString}}">Influent CBOD<sub>5</sub> (S<sub>o</sub>)</label>
-            <div class="input-group">
+            <label for="{{'So_'+idString}}">Influent CBOD<sub>5</sub> (S<sub>o</sub>)
+                <a class="click-link small form-text" (click)="showHideInputField()"
+                    *ngIf="form.controls.isUserDefinedSo.value">Calculate Influent CBOD<sub>5</sub> (S<sub>o</sub>)</a>
+                <a class="click-link small form-text" (click)="showHideInputField()"
+                    *ngIf="!form.controls.isUserDefinedSo.value">Define Influent CBOD<sub>5</sub> (S<sub>o</sub>)</a>
+            </label>
+            <div class="input-group" *ngIf="form.controls.isUserDefinedSo.value">
                 <input type="number" name="So" class="form-control number-input-field" id="{{'So_'+idString}}"
                     (focus)="focusField('So')" (input)="save()" formControlName="So" [readonly]="!selected">
                 <span class="input-group-addon units">mg/L</span>
@@ -40,6 +84,11 @@
                 <span class="alert-danger pull-right small" *ngIf="form.controls.So.errors.min">Value can't be
                     less than {{form.controls.So.errors.min.min}} mg/L</span>
             </span>
+            <div class="input-group d-flex justify-content-center small bold" *ngIf="!form.controls.isUserDefinedSo.value">
+                <span class="mr-2">
+                    {{form.controls.So.value | number:'1.0-2'}}
+                </span>
+            </div>
         </div>
         <!-- Volume -->
         <div class="form-group"
