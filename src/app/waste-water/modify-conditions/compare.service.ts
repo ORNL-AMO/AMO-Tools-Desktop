@@ -83,6 +83,9 @@ export class CompareService {
     return {
       Temperature: baselineData.Temperature != modificationData.Temperature,
       So: baselineData.So != modificationData.So,
+      isUserDefinedSo: baselineData.isUserDefinedSo != modificationData.isUserDefinedSo,
+      influentCBODBefore: baselineData.influentCBODBefore != modificationData.influentCBODBefore,
+      clarifierEfficiency: baselineData.clarifierEfficiency != modificationData.clarifierEfficiency,
       Volume: baselineData.Volume != modificationData.Volume,
       FlowRate: baselineData.FlowRate != modificationData.FlowRate,
       InertVSS: baselineData.InertVSS != modificationData.InertVSS,
@@ -143,6 +146,9 @@ export interface WasteWaterDifferent {
 export interface ActivatedSludgeDifferent {
   Temperature: boolean,
   So: boolean,
+  isUserDefinedSo: boolean,
+  influentCBODBefore: boolean,
+  clarifierEfficiency: boolean,
   Volume: boolean,
   FlowRate: boolean,
   InertVSS: boolean,
