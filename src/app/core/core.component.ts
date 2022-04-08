@@ -1,9 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { firstValueFrom, forkJoin, Observable, Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
@@ -12,7 +11,6 @@ import { CoreService } from './core.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
-import { NgxIndexedDBService } from 'ngx-indexed-db';
 
 declare var google: any;
 @Component({
@@ -129,13 +127,6 @@ export class CoreComponent implements OnInit {
   }
 
   async initData() {
-    // try {
-    //   this.dbService.openCursor(this.directoryDbService.storeName).subscribe((evt) => {
-    //     console.log(evt);
-    //   });
-    // } catch(e) {
-    //   console.log(e);
-    // }
     let existingDirectories: number = await firstValueFrom(this.directoryDbService.count());
 
     // let existingDirectories = 0;
@@ -161,7 +152,7 @@ export class CoreComponent implements OnInit {
       this.calculatorDbService.setAll(initializedData.calculators);
       this.inventoryDbService.setAll(initializedData.inventoryItems);
       if (this.suiteDbService.hasStarted == true) {
-        // this.suiteDbService.initCustomDbMaterials();
+        this.suiteDbService.initCustomDbMaterials();
       }
       this.idbStarted = true;
       this.changeDetectorRef.detectChanges();

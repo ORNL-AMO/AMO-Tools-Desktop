@@ -11,6 +11,12 @@ import { DeleteDataService } from './delete-data.service';
 import { InventoryDbService } from './inventory-db.service';
 import { WallLossesSurfaceDbService } from './wall-losses-surface-db.service';
 import { LogToolIdbService } from './log-tool-idb.service';
+import { GasLoadMaterialDbService } from './gas-load-material-db.service';
+import { LiquidLoadMaterialDbService } from './liquid-load-material-db.service';
+import { SolidLoadMaterialDbService } from './solid-load-material-db.service';
+import { SolidLiquidMaterialDbService } from './solid-liquid-material-db.service';
+import { FlueGasMaterialDbService } from './flue-gas-material-db.service';
+import { AtmosphereDbService } from './atmosphere-db.service';
 
 
 
@@ -27,9 +33,15 @@ import { LogToolIdbService } from './log-tool-idb.service';
     SettingsDbService,
     CalculatorDbService,
     DeleteDataService,
-    WallLossesSurfaceDbService,
     InventoryDbService,
-    LogToolIdbService
+    LogToolIdbService,
+    WallLossesSurfaceDbService,
+    GasLoadMaterialDbService,
+    LiquidLoadMaterialDbService,
+    SolidLoadMaterialDbService,
+    SolidLiquidMaterialDbService,
+    FlueGasMaterialDbService,
+    AtmosphereDbService
   ]
 })
 export class IndexedDbModule { }

@@ -64,11 +64,6 @@ export class CoreService {
     return forkJoin(initializedAppData);
   }
 
-  // async appDefaultDataInitialized() {
-  //   let settingsCount: number = await firstValueFrom(this.dbService.count(this.settingsDbService.storeName));
-  //   return settingsCount > 0;
-  // }
-
   async createDefaultDirectories() {
       let allAssessmentsDir: Directory = {
         name: 'All Assessments',

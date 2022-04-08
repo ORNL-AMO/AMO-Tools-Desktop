@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
-import { IndexedDbService } from './indexed-db.service';
 import * as _ from 'lodash';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { firstValueFrom, Observable } from 'rxjs';

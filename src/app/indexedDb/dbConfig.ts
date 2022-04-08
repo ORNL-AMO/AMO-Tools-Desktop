@@ -205,16 +205,6 @@ export const InventoryStoreMeta = {
   ]
 };
 
-export const WallLossesSurfaceStoreMeta = {
-  store: 'wallLossesSurface',
-  storeConfig: { keyPath: 'id', autoIncrement: true },
-  storeSchema: [
-    { name: 'conditionFactor', keypath: 'conditionFactor', options: { unique: false } },
-    { name: 'selected', keypath: 'selected', options: { unique: false } },
-    { name: 'surface', keypath: 'surface', options: { unique: false } },
-  ]
-};
-
 export const LogToolStoreMeta = {
   store: 'logTool',
   storeConfig: { keyPath: 'id', autoIncrement: true },
@@ -229,6 +219,105 @@ export const LogToolStoreMeta = {
   ]
 };
 
+
+export const GasLoadMaterialStoreMeta = {
+  store: 'gasLoadChargeMaterial',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'selected', keypath: 'selected', options: { unique: false } },
+    { name: 'specificHeatVapor', keypath: 'specificHeatVapor', options: { unique: false } },
+    { name: 'substance', keypath: 'substance', options: { unique: false } },
+  ]
+};
+
+export const SolidLoadMaterialStoreMeta = {
+  store: 'solidLoadChargeMaterial',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'selected', keypath: 'selected', options: { unique: false } },
+    { name: 'latentHeat', keypath: 'latentHeat', options: { unique: false } },
+    { name: 'meltingPoint', keypath: 'meltingPoint', options: { unique: false } },
+    { name: 'specificHeatLiquid', keypath: 'specificHeatLiquid', options: { unique: false } },
+    { name: 'specificHeatSolid', keypath: 'specificHeatSolid', options: { unique: false } },
+    { name: 'substance', keypath: 'substance', options: { unique: false } },
+  ]
+};
+
+export const LiquidLoadMaterialStoreMeta = {
+  store: 'liquidLoadChargeMaterial',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'selected', keypath: 'selected', options: { unique: false } },
+    { name: 'latentHeat', keypath: 'latentHeat', options: { unique: false } },
+    { name: 'specificHeatLiquid', keypath: 'specificHeatLiquid', options: { unique: false } },
+    { name: 'specificHeatVapor', keypath: 'specificHeatVapor', options: { unique: false } },
+    { name: 'substance', keypath: 'substance', options: { unique: false } },
+    { name: 'vaporizationTemperature', keypath: 'vaporizationTemperature', options: { unique: false } },
+  ]
+};
+
+export const AtmosphereStoreMeta = {
+  store: 'atmosphereSpecificHeat',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'selected', keypath: 'selected', options: { unique: false } },
+    { name: 'specificHeat', keypath: 'specificHeat', options: { unique: false } },
+    { name: 'substance', keypath: 'substance', options: { unique: false } },
+  ]
+};
+
+export const WallLossesSurfaceStoreMeta = {
+  store: 'wallLossesSurface',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'conditionFactor', keypath: 'conditionFactor', options: { unique: false } },
+    { name: 'selected', keypath: 'selected', options: { unique: false } },
+    { name: 'surface', keypath: 'surface', options: { unique: false } },
+  ]
+};
+
+export const FlueGasMaterialStoreMeta = {
+  store: 'flueGasMaterial',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'C2H6', keypath: 'C2H6', options: {unique: false } },
+    { name: 'C3H8', keypath: 'C3H8', options: {unique: false } },
+    { name: 'C4H10_CnH2n', keypath: 'C4H10_CnH2n', options: {unique: false } },
+    { name: 'CH4', keypath: 'CH4', options: {unique: false } },
+    { name: 'CO', keypath: 'CO', options: {unique: false } },
+    { name: 'CO2', keypath: 'CO2', options: {unique: false } },
+    { name: 'H2', keypath: 'H2', options: {unique: false } },
+    { name: 'H2O', keypath: 'H2O', options: {unique: false } },
+    { name: 'N2', keypath: 'N2', options: {unique: false } },
+    { name: 'O2', keypath: 'O2', options: {unique: false } },
+    { name: 'SO2', keypath: 'SO2', options: {unique: false } },
+    { name: 'heatingValue', keypath: 'heatingValue', options: {unique: false } },
+    { name: 'heatingValueVolume', keypath: 'heatingValueVolume', options: {unique: false } },
+    { name: 'selected', keypath: 'selected', options: {unique: false } },
+    { name: 'specificGravity', keypath: 'specificGravity', options: {unique: false } },
+    { name: 'substance', keypath: 'substance', options: {unique: false } },
+  ]
+};
+
+export const SolidLiquidFlueGasMaterialStoreMeta = {
+  store: 'solidLiquidFlueGasMaterial',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'carbon', keypath: 'carbon', options: {unique: false } },
+    { name: 'hydrogen', keypath: 'hydrogen', options: {unique: false } },
+    { name: 'selected', keypath: 'selected', options: {unique: false } },
+    { name: 'inertAsh', keypath: 'inertAsh', options: {unique: false } },
+    { name: 'moisture', keypath: 'moisture', options: {unique: false } },
+    { name: 'nitrogen', keypath: 'nitrogen', options: {unique: false } },
+    { name: 'o2', keypath: 'o2', options: {unique: false } },
+    { name: 'substance', keypath: 'substance', options: {unique: false } },
+    { name: 'sulphur', keypath: 'sulphur', options: {unique: false } },
+    { name: 'heatingValue', keypath: 'heatingValue', options: {unique: false } },
+  ]
+}
+
+
+
 export const dbConfig: DBConfig = {
   name: 'CrudDB',
   version: 6,
@@ -238,8 +327,15 @@ export const dbConfig: DBConfig = {
     CalculatorStoreMeta,
     SettingsStoreMeta,
     InventoryStoreMeta,
+    LogToolStoreMeta,
+
+    GasLoadMaterialStoreMeta,
+    SolidLoadMaterialStoreMeta,
+    LiquidLoadMaterialStoreMeta,
+    AtmosphereStoreMeta,
     WallLossesSurfaceStoreMeta,
-    LogToolStoreMeta
+    FlueGasMaterialStoreMeta,
+    SolidLiquidFlueGasMaterialStoreMeta
   ]
 };
 

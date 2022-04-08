@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/cor
 import { Settings } from '../../../shared/models/settings';
 import { WallLossesSurface } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
 import { firstValueFrom, Subscription } from 'rxjs';
@@ -64,17 +63,17 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
   }
   
   async getCustomMaterials() {
-    this.wallLossesSurfaces = await firstValueFrom(this.wallLossesSurfaceDbService.getAll());
+    this.wallLossesSurfaces = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
   }
 
   async editMaterial(id: number) {
-    this.existingMaterial = await firstValueFrom(this.wallLossesSurfaceDbService.getById(id));
+    this.existingMaterial = await firstValueFrom(this.wallLossesSurfaceDbService.getByIdWithObservable(id));
     this.editExistingMaterial = true;
     this.showMaterialModal();
   }
 
   async deleteMaterial(id: number) {
-    this.existingMaterial = await firstValueFrom(this.wallLossesSurfaceDbService.getById(id));
+    await firstValueFrom(this.wallLossesSurfaceDbService.deleteByIdWithObservable(id));
     this.editExistingMaterial = true;
     this.deletingMaterial = true;
     this.showMaterialModal();

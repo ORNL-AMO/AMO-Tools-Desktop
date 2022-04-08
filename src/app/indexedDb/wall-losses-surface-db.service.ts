@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { WallLossesSurface } from '../shared/models/materials';
 import { WallLossesSurfaceStoreMeta } from './dbConfig';
 
@@ -8,31 +8,27 @@ import { WallLossesSurfaceStoreMeta } from './dbConfig';
 export class WallLossesSurfaceDbService {
 
   storeName: string = WallLossesSurfaceStoreMeta.store;
-  selectedSurface: BehaviorSubject<WallLossesSurface>;
-  allSurfaces: BehaviorSubject<Array<WallLossesSurface>>;
   constructor(private dbService: NgxIndexedDBService) {
-      this.selectedSurface = new BehaviorSubject<WallLossesSurface>(undefined);
-      this.allSurfaces = new BehaviorSubject<Array<WallLossesSurface>>(new Array());
   }
 
-  getAll(): Observable<Array<WallLossesSurface>> {
+  getAllWithObservable(): Observable<Array<WallLossesSurface>> {
     return this.dbService.getAll(this.storeName);
   }
 
-  getById(surfaceId: number): Observable<WallLossesSurface> {
-    return this.dbService.getByKey(this.storeName, surfaceId);
+  getByIdWithObservable(materialId: number): Observable<WallLossesSurface> {
+    return this.dbService.getByKey(this.storeName, materialId);
   }
 
-  add(surface: WallLossesSurface): void {
-    this.dbService.add(this.storeName, surface);
+  addWithObservable(material: WallLossesSurface): Observable<WallLossesSurface> {
+    return this.dbService.add(this.storeName, material);
   }
 
-  deleteById(surfaceId: number): void {
-    this.dbService.delete(this.storeName, surfaceId);
+  deleteByIdWithObservable(materialId: number): Observable<Array<WallLossesSurface>> {
+    return this.dbService.delete(this.storeName, materialId);
   }
 
-  update(surface: WallLossesSurface): void {
-    this.dbService.update(this.storeName, surface);
+  updateWithObservable(material: WallLossesSurface): Observable<Array<WallLossesSurface>> {
+    return this.dbService.update(this.storeName, material);
   }
 
   clearWallLossesSurface(): void {

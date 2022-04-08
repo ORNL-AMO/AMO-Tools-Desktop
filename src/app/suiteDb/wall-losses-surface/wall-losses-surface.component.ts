@@ -60,40 +60,40 @@ export class WallLossesSurfaceComponent implements OnInit {
   }
 
   async getAllMaterials() {
-    this.allCustomMaterials = await firstValueFrom(this.wallLossesSurfaceDbService.getAll());
+    this.allCustomMaterials = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
     this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.surface === material.surface; }).id;
     this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.surface === material.surface; }).id;
     this.setExisting();
   }
 
-  addMaterial() {
+  async addMaterial() {
     if (this.canAdd) {
       this.canAdd = false;
       let suiteDbResult = this.suiteDbService.insertWallLossesSurface(this.newMaterial);
       if (suiteDbResult === true) {
-        this.wallLossesSurfaceDbService.add(this.newMaterial);
+        await firstValueFrom(this.wallLossesSurfaceDbService.addWithObservable(this.newMaterial));
         this.closeModal.emit(this.newMaterial);
 
       }
     }
   }
 
-  updateMaterial() {
+ async updateMaterial() {
     this.newMaterial.id = this.sdbEditMaterialId;
     let suiteDbResult = this.suiteDbService.updateWallLossesSurface(this.newMaterial);
     if (suiteDbResult === true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
-      this.wallLossesSurfaceDbService.update(this.newMaterial);
+      await firstValueFrom(this.wallLossesSurfaceDbService.updateWithObservable(this.newMaterial));
       this.closeModal.emit(this.newMaterial);
     }
   }
 
-  deleteMaterial() {
+  async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
       let suiteDbResult = this.suiteDbService.deleteWallLossesSurface(this.sdbEditMaterialId);
       if (suiteDbResult === true) {
-        this.wallLossesSurfaceDbService.deleteById(this.idbEditMaterialId);
+        await firstValueFrom(this.wallLossesSurfaceDbService.deleteByIdWithObservable(this.idbEditMaterialId));
         this.closeModal.emit(this.newMaterial);
       }
     }

@@ -6,6 +6,8 @@ import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { PhastService } from '../../phast/phast.service';
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
+import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
+import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'app-solid-liquid-flue-gas-material',
   templateUrl: './solid-liquid-flue-gas-material.component.html',
@@ -48,19 +50,11 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   differenceError: boolean = false;
   idbEditMaterialId: number;
   sdbEditMaterialId: number;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private suiteDbService: SuiteDbService, private solidLiquidMaterialDbService: SolidLiquidMaterialDbService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (this.editExistingMaterial) {
-      this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
-      this.indexedDbService.getSolidLiquidFlueGasMaterials().then(idbResults => {
-        this.allCustomMaterials = idbResults;
-        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
-        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
-        this.setExisting();
-        this.setHHV();
-      });
-
+      this.setAllMaterials();
     }
     else {
       this.canAdd = true;
@@ -70,7 +64,16 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     }
   }
 
-  addMaterial() {
+  async setAllMaterials() {
+    this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+    this.allCustomMaterials = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
+    this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
+    this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
+    this.setExisting();
+    this.setHHV();
+  }
+
+  async addMaterial() {
     if (this.canAdd) {
       this.convertDecimals();
       this.canAdd = false;
@@ -79,14 +82,13 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
       }
       let suiteDbResult = this.suiteDbService.insertSolidLiquidFlueGasMaterial(this.newMaterial);
       if (suiteDbResult == true) {
-        this.indexedDbService.addSolidLiquidFlueGasMaterial(this.newMaterial).then(idbResults => {
-          this.closeModal.emit(this.newMaterial);
-        })
+        await firstValueFrom(this.solidLiquidMaterialDbService.addWithObservable(this.newMaterial))
+        this.closeModal.emit(this.newMaterial);
       }
     }
   }
 
-  updateMaterial() {
+ async updateMaterial() {
     this.convertDecimals();
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
@@ -96,19 +98,17 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     if (suiteDbResult == true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
-      this.indexedDbService.putSolidLiquidFlueGasMaterial(this.newMaterial).then(val => {
-        this.closeModal.emit(this.newMaterial);
-      });
+      await firstValueFrom(this.solidLiquidMaterialDbService.updateWithObservable(this.newMaterial));
+      this.closeModal.emit(this.newMaterial);
     }
   }
 
-  deleteMaterial() {
+ async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
       let suiteDbResult = this.suiteDbService.deleteSolidLiquidFlueGasMaterial(this.sdbEditMaterialId);
       if (suiteDbResult == true) {
-        this.indexedDbService.deleteSolidLiquidFlueGasMaterial(this.idbEditMaterialId).then(val => {
-          this.closeModal.emit(this.newMaterial);
-        });
+        await firstValueFrom(this.solidLiquidMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
+        this.closeModal.emit(this.newMaterial);
       }
     }
   }

@@ -24,6 +24,12 @@ import { WallLossesSurfaceDbService } from '../../../indexedDb/wall-losses-surfa
 import { firstValueFrom, forkJoin, Observable } from 'rxjs';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { AssessmentStoreMeta, CalculatorStoreMeta, dbConfig, DirectoryStoreMeta, InventoryStoreMeta, SettingsStoreMeta, WallLossesSurfaceStoreMeta } from '../../../indexedDb/dbConfig';
+import { AtmosphereDbService } from '../../../indexedDb/atmosphere-db.service';
+import { FlueGasMaterialDbService } from '../../../indexedDb/flue-gas-material-db.service';
+import { GasLoadMaterialDbService } from '../../../indexedDb/gas-load-material-db.service';
+import { LiquidLoadMaterialDbService } from '../../../indexedDb/liquid-load-material-db.service';
+import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
+import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-material-db.service';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -50,6 +56,12 @@ export class ResetDataModalComponent implements OnInit {
     private dbService: NgxIndexedDBService,
     private assessmentDbService: AssessmentDbService,
     private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
+    private gasLoadDbService: GasLoadMaterialDbService,
+    private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,
+    private solidLoadMaterialDbService: SolidLoadMaterialDbService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService,
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
+    private atmosphereDbService: AtmosphereDbService,
     private inventoryDbService: InventoryDbService) { }
 
   ngOnInit() {
@@ -320,12 +332,12 @@ export class ResetDataModalComponent implements OnInit {
   }
 
   resetFactoryCustomMaterials() {
-    // this.indexedDbService.clearGasLoadChargeMaterial();
-    // this.indexedDbService.clearAtmosphereSpecificHeat();
-    // this.indexedDbService.clearFlueGasMaterials();
-    // this.indexedDbService.clearLiquidLoadChargeMaterial();
-    // this.indexedDbService.clearSolidLiquidFlueGasMaterials();
-    // this.indexedDbService.clearSolidLoadChargeMaterial();
+    this.gasLoadDbService.clearGasLoadChargeMaterial();
+    this.atmosphereDbService.clearAtmosphereSpecificHeat();
+    this.flueGasMaterialDbService.clearFlueGasMaterials();
+    this.liquidLoadMaterialDbService.clearLiquidLoadChargeMaterial();
+    this.solidLiquidMaterialDbService.clearSolidLiquidFlueGasMaterials();
+    this.solidLoadMaterialDbService.clearSolidLoadChargeMaterial();
     this.wallLossesSurfaceDbService.clearWallLossesSurface();
   }
 
