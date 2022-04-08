@@ -23,22 +23,22 @@
                 Utility Savings Units
             </th>
             <th>
-                Cost Savings ({{settings.currency}})
+                Cost Savings
             </th>
             <th>
-                Material Cost ({{settings.currency}})
+                Material Cost
             </th>
             <th>
-                Labor Cost ({{settings.currency}})
+                Labor Cost
             </th>
             <th>
-                Engineering Cost ({{settings.currency}})
+                Engineering Cost
             </th>
             <th>
-                Other Cost ({{settings.currency}})
+                Other Cost
             </th>
             <th>
-                Total Cost ({{settings.currency}})
+                Total Cost
             </th>
             <th>
                 Simple Payback
@@ -189,26 +189,24 @@
             <th>
                 Status
             </th>
-            <th></th>
             <th>
-                Estimated Implementation Cost ({{settings.currency}})
+                Estimated Implementation Cost
             </th>
             <th>
-                Estimated Cost Savings ({{settings.currency}})
+                Estimated Cost Savings
             </th>
             <th>
                 Estimated Payback
             </th>
             <th>
-                Actual Implementation Cost ({{settings.currency}})
+                Actual Implementation Cost
             </th>
             <th>
-                Actual Cost Savings ({{settings.currency}})
+                Actual Cost Savings
             </th>
             <th>
                 Actual Payback
             </th>
-            <th></th>
             <th>
                 Estimated Utility Savings
             </th>
@@ -216,7 +214,7 @@
                 Utility Savings Units
             </th>
             <th>
-                Actual Savings ({{settings.currency}})
+                Actual Utility Savings 
             </th>
 
         </tr>
@@ -241,23 +239,20 @@
             </td>
 
             <td>
-                <!-- date started -->
+                &mdash;
             </td>
 
             <td>
-                <!-- date completed -->
+                &mdash;
             </td>
 
             <td>
-                <!-- assigned -->
+                &mdash;
             </td>
 
             <td>
-                <!-- status -->
+                &mdash;
             </td>
-
-            <td></td>
-
             <td>
                 {{ opportunity.totalCost | number: "1.0-0" }}
             </td>
@@ -269,18 +264,17 @@
             </td>
 
             <td>
-                <!-- actual Implementation cost -->
+                &mdash;
             </td>
 
             <td>
-                <!-- actual cost savings -->
+                &mdash;
             </td>
 
             <td>
-                <!-- actual payback -->
+                &mdash;
             </td>
 
-            <td></td>
             <!--Estimated energy savings-->
             <td *ngIf="opportunity.utilityType != 'Mixed'">
                 {{ opportunity.totalEnergySavings | number: "1.0-0" }}
@@ -338,7 +332,7 @@
             </td>
 
             <td>
-                <!-- actual savings -->
+                &mdash;
             </td>
 
         </tr>
