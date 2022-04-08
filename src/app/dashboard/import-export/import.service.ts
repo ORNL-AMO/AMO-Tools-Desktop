@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { ImportExportData, ImportExportAssessment, ImportExportDirectory, ImportExportInventory } from './importExportModel';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
@@ -23,7 +23,7 @@ export class ImportService {
   addedDirIds: Array<number>;
   assessmentsAdded: Array<ImportExportAssessment>;
   inventoriesAdded: Array<ImportExportInventory>;
-  constructor(private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
+  constructor(   private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
     private assessmentDbService: AssessmentDbService, private inventoryDbService: InventoryDbService) { }
 
   async importData(data: ImportExportData, workingDirectoryId: number) {

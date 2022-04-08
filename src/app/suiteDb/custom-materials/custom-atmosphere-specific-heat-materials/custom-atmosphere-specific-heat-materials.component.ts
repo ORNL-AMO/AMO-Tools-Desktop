@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/cor
 import { Settings } from '../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AtmosphereSpecificHeat } from '../../../shared/models/materials';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
 import { firstValueFrom, Subscription } from 'rxjs';
@@ -85,10 +85,7 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   }
 
   async deleteMaterial(id: number) {
-    let deletedMaterial: AtmosphereSpecificHeat = await firstValueFrom(this.atmospherDbService.getByIdWithObservable(id));
-    await firstValueFrom(this.atmospherDbService.deleteByIdWithObservable(id));
-    // does this really need to be set?
-    this.existingMaterial = deletedMaterial;
+    this.existingMaterial = await firstValueFrom(this.atmospherDbService.getByIdWithObservable(id));
     this.editExistingMaterial = true;
     this.deletingMaterial = true;
     this.showMaterialModal();

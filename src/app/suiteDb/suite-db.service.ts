@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, WallLossesSurface, SuiteDbMotor, SuiteDbPump } from '../shared/models/materials';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { WallLossesSurfaceDbService } from '../indexedDb/wall-losses-surface-db.service';
 import { firstValueFrom } from 'rxjs';
 import { AtmosphereDbService } from '../indexedDb/atmosphere-db.service';
@@ -17,7 +17,7 @@ declare var db: any;
 export class SuiteDbService {
   db: any = db;
   hasStarted: boolean = false;
-  constructor(private indexedDbService: IndexedDbService, 
+  constructor(   
     private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
     private gasLoadDbService: GasLoadMaterialDbService,
     private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,

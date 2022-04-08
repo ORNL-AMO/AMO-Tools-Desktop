@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment/compressed-air-assessment.service';
 import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
-import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+ 
 import { Assessment } from '../../../../shared/models/assessment';
 import { CompressedAirAssessment } from '../../../../shared/models/compressed-air-assessment';
 import { LogToolField } from '../../../log-tool-models';
@@ -36,7 +36,7 @@ export class SelectAssessmentModalComponent implements OnInit {
   addNewAssessment: boolean = false;
   newAssessmentForm: FormGroup;
   constructor(private assessmentDbService: AssessmentDbService, private logToolService: LogToolService,
-    private indexedDbService: IndexedDbService, private router: Router,
+       private router: Router,
     private compressedAirAssessmentService: CompressedAirAssessmentService, private directoryDbService: DirectoryDbService,
     private formBuilder: FormBuilder, private assessmentService: AssessmentService, private settingsDbService: SettingsDbService,
     private dayTypeAnalysisService: DayTypeAnalysisService, private inventoryService: InventoryService) { }

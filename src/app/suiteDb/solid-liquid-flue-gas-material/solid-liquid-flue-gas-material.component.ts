@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { PhastService } from '../../phast/phast.service';

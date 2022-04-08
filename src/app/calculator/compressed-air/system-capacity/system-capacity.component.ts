@@ -8,7 +8,7 @@ import { Output, EventEmitter } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 
 @Component({
   selector: 'app-system-capacity',

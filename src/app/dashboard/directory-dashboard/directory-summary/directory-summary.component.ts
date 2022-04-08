@@ -21,7 +21,7 @@ import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { SsmtService } from '../../../ssmt/ssmt.service';
 import { SettingsService } from '../../../settings/settings.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { WasteWaterService } from '../../../waste-water/waste-water.service';
 import { WasteWaterResults } from '../../../shared/models/waste-water';
 import { BaselineResults, CompressedAirAssessmentResultsService } from '../../../compressed-air-assessment/compressed-air-assessment-results.service';
@@ -53,7 +53,7 @@ export class DirectorySummaryComponent implements OnInit {
   constructor(private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
     private dashboardService: DashboardService, private settingsDbService: SettingsDbService, private psatService: PsatService,
     private executiveSummaryService: ExecutiveSummaryService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService,
-    private ssmtService: SsmtService, private settingsService: SettingsService, private indexedDbService: IndexedDbService,
+    private ssmtService: SsmtService, private settingsService: SettingsService,   
     private wasteWaterService: WasteWaterService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService
   ) { }
 

@@ -83,9 +83,7 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   }
 
   async deleteMaterial(id: number) {
-    let deletedMaterial: GasLoadChargeMaterial = await firstValueFrom(this.gasLoadMaterialDbService.getByIdWithObservable(id));
-    await firstValueFrom(this.gasLoadMaterialDbService.deleteByIdWithObservable(id));
-    this.existingMaterial = deletedMaterial;
+    this.existingMaterial = await firstValueFrom(this.gasLoadMaterialDbService.getByIdWithObservable(id));
     this.editExistingMaterial = true;
     this.deletingMaterial = true;
     this.showMaterialModal();

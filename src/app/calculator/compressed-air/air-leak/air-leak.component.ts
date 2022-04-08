@@ -8,7 +8,7 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { AirLeakSurveyTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 
 @Component({

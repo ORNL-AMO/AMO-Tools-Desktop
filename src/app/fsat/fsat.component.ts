@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { Assessment } from '../shared/models/assessment';
 import { FsatService } from './fsat.service';
 import { Settings } from '../shared/models/settings';
@@ -86,7 +86,7 @@ export class FsatComponent implements OnInit {
   showToast: boolean = false;
   showWelcomeScreen: boolean = false;
   constructor(private activatedRoute: ActivatedRoute,
-    private indexedDbService: IndexedDbService,
+      
     private fsatService: FsatService,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { LiquidLoadChargeMaterial } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CustomMaterialsService } from '../custom-materials.service';
@@ -87,8 +87,7 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   }
 
   async deleteMaterial(id: number) {
-    let deletedMaterial: LiquidLoadChargeMaterial = await firstValueFrom(this.liquidLoadMaterialDbService.getByIdWithObservable(id));
-    await firstValueFrom(this.liquidLoadMaterialDbService.deleteByIdWithObservable(id));
+    this.existingMaterial = await firstValueFrom(this.liquidLoadMaterialDbService.getByIdWithObservable(id));
     this.editExistingMaterial = true;
     this.deletingMaterial = true;
     this.showMaterialModal();

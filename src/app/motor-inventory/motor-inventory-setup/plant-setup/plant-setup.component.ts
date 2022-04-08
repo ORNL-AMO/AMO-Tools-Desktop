@@ -4,7 +4,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SettingsService } from '../../../settings/settings.service';
 import { FormGroup } from '@angular/forms';
 import { MotorInventoryService } from '../../motor-inventory.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { Co2SavingsData } from '../../../calculator/utilities/co2-savings/co2-savings.service';
 import { MotorInventoryData } from '../../motor-inventory';
 import { firstValueFrom, Subscription } from 'rxjs';
@@ -26,7 +26,7 @@ export class PlantSetupComponent implements OnInit {
 
   constructor(private settingsDbService: SettingsDbService, private settingsService: SettingsService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService,
-    private motorInventoryService: MotorInventoryService, private indexedDbService: IndexedDbService) { }
+    private motorInventoryService: MotorInventoryService,  ) { }
 
   ngOnInit(): void {
     this.settings = this.motorInventoryService.settings.getValue();

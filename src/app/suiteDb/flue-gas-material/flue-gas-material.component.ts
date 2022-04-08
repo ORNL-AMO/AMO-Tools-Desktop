@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FlueGasMaterial } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';

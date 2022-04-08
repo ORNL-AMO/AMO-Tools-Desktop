@@ -86,10 +86,7 @@ export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
   }
 
   async deleteMaterial(id: number) {
-    let deletedMaterial: SolidLoadChargeMaterial = await firstValueFrom(this.solidLoadMaterialDbService.getByIdWithObservable(id));
-    await firstValueFrom(this.solidLoadMaterialDbService.deleteByIdWithObservable(id));
-    // does this really need to be set?
-    this.existingMaterial = deletedMaterial;
+    this.existingMaterial = await firstValueFrom(this.solidLoadMaterialDbService.getByIdWithObservable(id));
     this.editExistingMaterial = true;
     this.deletingMaterial = true;
     this.showMaterialModal();

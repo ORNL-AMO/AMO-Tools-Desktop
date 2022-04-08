@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { InventoryDbService } from '../../indexedDb/inventory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../../shared/models/assessment';
@@ -38,7 +38,7 @@ export class MoveItemsComponent implements OnInit {
     private directoryDashboardService: DirectoryDashboardService,
     private dashboardService: DashboardService,
     private formBuilder: FormBuilder,
-    private indexedDbService: IndexedDbService,
+      
     private assessmentDbService: AssessmentDbService,
     private calculatorDbService: CalculatorDbService,
     private inventoryDbService: InventoryDbService,

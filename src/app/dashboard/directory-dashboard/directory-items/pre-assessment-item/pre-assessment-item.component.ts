@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Calculator } from '../../../../shared/models/calculators';
 import { Directory } from '../../../../shared/models/directory';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+ 
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PreAssessmentService } from '../../../../calculator/utilities/pre-assessment/pre-assessment.service';
@@ -44,7 +44,7 @@ export class PreAssessmentItemComponent implements OnInit {
   updateDashboardDataSub: Subscription;
   dashboardView: string;
   dashboardViewSub: Subscription;
-  constructor(private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService, private calculatorDbService: CalculatorDbService,
+  constructor(   private settingsDbService: SettingsDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService, private calculatorDbService: CalculatorDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private directoryDbService: DirectoryDbService) { }
 
   ngOnInit() {

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import { Assessment } from '../shared/models/assessment';
@@ -57,7 +57,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
     private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private systemInformationFormService: SystemInformationFormService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private indexedDbService: IndexedDbService,
+      
     private dayTypeService: DayTypeService,
     private egridService: EGridService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,

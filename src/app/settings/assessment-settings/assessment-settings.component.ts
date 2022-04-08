@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../settings.service'
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { FormGroup } from '@angular/forms';
 import { EGridService } from '../../shared/helper-services/e-grid.service';
@@ -28,7 +28,7 @@ export class AssessmentSettingsComponent implements OnInit {
   showSettingsModal: boolean = false;
   showCo2Settings: boolean = false;
 
-  constructor(private indexedDbService: IndexedDbService, 
+  constructor(   
     private egridService: EGridService, private settingsDbService: SettingsDbService, private settingsService: SettingsService) {
   }
 

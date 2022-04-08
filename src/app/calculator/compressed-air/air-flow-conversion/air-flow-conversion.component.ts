@@ -4,7 +4,7 @@ import { AirFlowConversionService } from './air-flow-conversion.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { Calculator } from '../../../shared/models/calculators';
 import { Assessment } from '../../../shared/models/assessment';
 
@@ -34,7 +34,7 @@ export class AirFlowConversionComponent implements OnInit {
 
   
   constructor(private airFlowConversionService: AirFlowConversionService, private calculatorDbService: CalculatorDbService, 
-    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
+       private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
     if (!this.settings) {

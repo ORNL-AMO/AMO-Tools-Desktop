@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Directory } from '../../../../shared/models/directory';
-import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+ 
 import { Assessment } from '../../../../shared/models/assessment';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as _ from 'lodash';
@@ -33,7 +33,7 @@ export class DirectoryItemComponent implements OnInit {
   filterDashboardBySub: Subscription;
   sortBy: { value: string, direction: string };
   sortBySub: Subscription;
-  constructor(private indexedDbService: IndexedDbService, private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService, 
+  constructor(   private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService, 
     private formBuilder: FormBuilder, private dashboardService: DashboardService, private directoryDashboardService: DirectoryDashboardService) { }
 
   ngOnInit() {    

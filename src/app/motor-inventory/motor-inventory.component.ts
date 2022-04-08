@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { MotorInventoryService } from './motor-inventory.service';
 import { firstValueFrom, Subscription } from 'rxjs';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { MotorInventoryData } from './motor-inventory';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
@@ -41,7 +41,7 @@ export class MotorInventoryComponent implements OnInit {
   batchAnalysisSettingsSub: Subscription;
   showWelcomeScreen: boolean = false;
   constructor(private motorInventoryService: MotorInventoryService, private activatedRoute: ActivatedRoute,
-    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private inventoryDbService: InventoryDbService,
+       private settingsDbService: SettingsDbService, private inventoryDbService: InventoryDbService,
     private motorCatalogService: MotorCatalogService, private batchAnalysisService: BatchAnalysisService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {

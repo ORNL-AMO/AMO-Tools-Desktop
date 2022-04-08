@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SettingsService } from '../../../settings/settings.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../shared/models/settings';
 import { DirectoryDashboardService } from '../directory-dashboard.service';
@@ -27,7 +27,7 @@ export class DirectoryContactInfoComponent implements OnInit {
   showAssessmentContact: boolean = false;
   showNoData: boolean = true;
   selectedDirectorySub: Subscription;
-  constructor(private indexedDbService: IndexedDbService, private settingsService: SettingsService, private settingsDbService: SettingsDbService,
+  constructor(   private settingsService: SettingsService, private settingsDbService: SettingsDbService,
     private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService, private dashboardService: DashboardService) { }
 
   ngOnInit() {

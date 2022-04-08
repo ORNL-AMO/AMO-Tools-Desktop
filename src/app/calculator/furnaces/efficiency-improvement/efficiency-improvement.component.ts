@@ -5,7 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { EfficiencyImprovementService } from './efficiency-improvement.service';
 import { Calculator } from '../../../shared/models/calculators';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { FormGroup } from '@angular/forms';
@@ -45,7 +45,7 @@ export class EfficiencyImprovementComponent implements OnInit {
   calculator: Calculator;
   efficiencyImprovementForm: FormGroup;
   constructor(private phastService: PhastService, private efficiencyImprovementService: EfficiencyImprovementService, private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
+    private calculatorDbService: CalculatorDbService,  ) { }
 
 
   ngOnInit() {

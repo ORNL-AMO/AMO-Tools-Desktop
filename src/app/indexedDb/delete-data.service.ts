@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IndexedDbService } from './indexed-db.service';
+ 
 import { CalculatorDbService } from './calculator-db.service';
 import { AssessmentDbService } from './assessment-db.service';
 import { DirectoryDbService } from './directory-db.service';
@@ -15,7 +15,7 @@ import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class DeleteDataService {
 
-  constructor(private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
+  constructor(   private calculatorDbService: CalculatorDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
     private inventoryDbService: InventoryDbService) { }
 
   async deleteDirectory(directory: Directory, isWorkingDir?: boolean) {

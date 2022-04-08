@@ -6,7 +6,7 @@ import { SystemAndEquipmentCurveService } from './system-and-equipment-curve.ser
 import { firstValueFrom, Subscription } from 'rxjs';
 import { Calculator } from '../../shared/models/calculators';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { CurveDataService } from './curve-data.service';
 import { Router } from '@angular/router';
 
@@ -33,7 +33,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
   systemCurveCollapsedSub: Subscription;
   maxFlowRate: number = 0;
   constructor(private settingsDbService: SettingsDbService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
-    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService, private curveDataService: CurveDataService,
+    private calculatorDbService: CalculatorDbService,    private curveDataService: CurveDataService,
     private router: Router) { }
 
   ngOnInit() {

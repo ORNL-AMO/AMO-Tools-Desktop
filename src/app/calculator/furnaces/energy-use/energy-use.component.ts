@@ -6,7 +6,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { EnergyUseService } from './energy-use.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 
 @Component({

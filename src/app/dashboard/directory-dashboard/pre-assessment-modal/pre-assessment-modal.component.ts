@@ -5,7 +5,7 @@ import { DirectoryDashboardService } from '../directory-dashboard.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Directory } from '../../../shared/models/directory';
 import { Settings } from '../../../shared/models/settings';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Calculator } from '../../../shared/models/calculators';
 import { PreAssessment } from '../../../calculator/utilities/pre-assessment/pre-assessment';

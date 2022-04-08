@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { GasLoadChargeMaterial } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
@@ -55,6 +55,7 @@ export class GasLoadChargeMaterialComponent implements OnInit {
     this.allMaterials = this.suiteDbService.selectGasLoadChargeMaterials();
 
     if (this.editExistingMaterial) {
+      this.setAllMaterials();
     }
     else {
       this.canAdd = true;
@@ -102,6 +103,7 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
       let suiteDbResult = this.suiteDbService.deleteGasLoadChargeMaterial(this.sdbEditMaterialId);
+      debugger;
       if (suiteDbResult == true) {
         await firstValueFrom(this.gasLoadMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
         this.closeModal.emit(this.newMaterial);

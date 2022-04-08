@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { ActivatedRoute } from '@angular/router';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { firstValueFrom, Subscription } from 'rxjs';
 import { SsmtService } from './ssmt.service';
 import { Settings } from '../shared/models/settings';
@@ -84,7 +84,7 @@ export class SsmtComponent implements OnInit {
   constructor(
     private egridService: EGridService,
     private activatedRoute: ActivatedRoute,
-    private indexedDbService: IndexedDbService,
+      
     private ssmtService: SsmtService,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,

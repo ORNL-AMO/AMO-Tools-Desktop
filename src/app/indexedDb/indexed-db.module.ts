@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxIndexedDBModule } from 'ngx-indexed-db';
 import { dbConfig } from './dbConfig';
-import { IndexedDbService } from './indexed-db.service';
+ 
 import { AssessmentDbService } from './assessment-db.service';
 import { DirectoryDbService } from './directory-db.service';
 import { SettingsDbService } from './settings-db.service';
@@ -27,7 +27,6 @@ import { AtmosphereDbService } from './atmosphere-db.service';
     NgxIndexedDBModule.forRoot(dbConfig),
   ],
   providers: [
-    IndexedDbService,
     AssessmentDbService,
     DirectoryDbService,
     SettingsDbService,

@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Settings } from '../shared/models/settings';
 import { LogToolDbService } from './log-tool-db.service';
@@ -28,7 +28,7 @@ export class LogToolComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute, 
     private logToolDbService: LogToolDbService, private logToolService: LogToolService,
     private settingsDbService: SettingsDbService,
-    private indexedDbService: IndexedDbService) { }
+     ) { }
 
   ngOnInit() {
     this.logToolDbService.initLogToolData();

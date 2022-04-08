@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input, ElementRef, ViewChild, HostListener, ChangeDetectorRef } from '@angular/core';
 import { PsatService } from '../../../psat/psat.service';
 import { PSAT } from '../../../shared/models/psat';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { Calculator } from '../../../shared/models/calculators';
@@ -57,7 +57,7 @@ export class HeadToolComponent implements OnInit {
   isSavedCalc: boolean = false;
   calculator: Calculator;
   constructor(private headToolService: HeadToolService, private psatService: PsatService, private calculatorDbService: CalculatorDbService, 
-    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private cd: ChangeDetectorRef) { }
+       private settingsDbService: SettingsDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     if (!this.settings) {

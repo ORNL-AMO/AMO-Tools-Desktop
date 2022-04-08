@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SettingsService } from '../../settings/settings.service';
 import { Assessment } from '../../shared/models/assessment';
@@ -33,7 +33,7 @@ export class SystemBasicsComponent implements OnInit {
   constructor(private settingsService: SettingsService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private convertCompressedAirService: ConvertCompressedAirService,
-    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService,
+       private settingsDbService: SettingsDbService,
     private systemBasicsFormService: SystemBasicsFormService) { }
 
 

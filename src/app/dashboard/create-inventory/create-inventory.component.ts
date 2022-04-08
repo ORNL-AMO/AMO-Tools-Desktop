@@ -3,7 +3,7 @@ import { Directory } from '../../shared/models/directory';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { Router } from '@angular/router';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { DashboardService } from '../dashboard.service';
@@ -34,7 +34,7 @@ export class CreateInventoryComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private indexedDbService: IndexedDbService,
+      
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService,

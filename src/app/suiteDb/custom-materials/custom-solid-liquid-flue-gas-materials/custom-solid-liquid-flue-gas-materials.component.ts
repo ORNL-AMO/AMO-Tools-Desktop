@@ -72,9 +72,7 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
   }
 
   async deleteMaterial(id: number) {
-    let deletedMaterial: SolidLiquidFlueGasMaterial = await firstValueFrom(this.solidLiquidMaterialDbService.getByIdWithObservable(id));
-    await firstValueFrom(this.solidLiquidMaterialDbService.deleteByIdWithObservable(id));
-    this.existingMaterial = deletedMaterial;
+    this.existingMaterial = await firstValueFrom(this.solidLiquidMaterialDbService.getByIdWithObservable(id));
     this.editExistingMaterial = true;
     this.deletingMaterial = true;
     this.showMaterialModal();

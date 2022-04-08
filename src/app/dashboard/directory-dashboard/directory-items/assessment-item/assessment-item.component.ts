@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../../shared/models/assessment';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Directory } from '../../../../shared/models/directory';
-import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+ 
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
@@ -38,7 +38,7 @@ export class AssessmentItemComponent implements OnInit {
   dashboardViewSub: Subscription;
   isSetup: boolean;
   constructor(private assessmentService: AssessmentService,
-    private indexedDbService: IndexedDbService, private formBuilder: FormBuilder,
+       private formBuilder: FormBuilder,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService,
     private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Directory, DirectoryDbRef } from '../../shared/models/directory';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { Settings } from '../../shared/models/settings';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
@@ -30,7 +30,7 @@ export class CreateFolderComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private indexedDbService: IndexedDbService,
+      
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService,

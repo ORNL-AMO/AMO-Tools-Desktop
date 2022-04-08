@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorR
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { ActivatedRoute } from '@angular/router';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -53,7 +53,7 @@ export class TreasureHuntComponent implements OnInit {
   showWelcomeScreen: boolean = false;
   constructor(
     private assessmentService: AssessmentService,
-    private indexedDbService: IndexedDbService,
+      
     private activatedRoute: ActivatedRoute,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,

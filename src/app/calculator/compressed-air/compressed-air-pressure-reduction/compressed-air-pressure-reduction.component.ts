@@ -8,7 +8,7 @@ import { CompressedAirPressureReductionTreasureHunt, Treasure } from '../../../s
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 
 @Component({
   selector: 'app-compressed-air-pressure-reduction',
@@ -54,7 +54,7 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   saving: boolean;
   assessmentCalculator: Calculator;
 
-  constructor(private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService,
+  constructor(private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService,   
     private compressedAirPressureReductionService: CompressedAirPressureReductionService) { }
 
   ngOnInit() {

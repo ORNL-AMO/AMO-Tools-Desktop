@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { FlueGasMaterial } from '../../../shared/models/materials';
 import { Settings } from '../../../shared/models/settings';
 import { LossesService } from '../../../phast/losses/losses.service';
@@ -89,9 +89,7 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   }
 
   async deleteMaterial(id: number) {
-    let deletedMaterial: FlueGasMaterial = await firstValueFrom(this.flueGasMaterialDbService.getByIdWithObservable(id));
-    await firstValueFrom(this.flueGasMaterialDbService.deleteByIdWithObservable(id));
-    this.existingMaterial = deletedMaterial;
+    this.existingMaterial = await firstValueFrom(this.flueGasMaterialDbService.getByIdWithObservable(id));
     this.editExistingMaterial = true;
     this.deletingMaterial = true;
     this.showMaterialModal();

@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { GasLoadChargeMaterial, FlueGasMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, WallLossesSurface, SolidLoadChargeMaterial, AtmosphereSpecificHeat } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { WallLossesSurfaceDbService } from '../../indexedDb/wall-losses-surface-db.service';
 import { GasLoadMaterialDbService } from '../../indexedDb/gas-load-material-db.service';
 import { LiquidLoadMaterialDbService } from '../../indexedDb/liquid-load-material-db.service';
@@ -26,7 +26,7 @@ export class CustomMaterialsService {
   getSelected: BehaviorSubject<boolean>;
   selectAll: BehaviorSubject<boolean>;
   constructor(private suiteDbService: SuiteDbService, 
-    private indexedDbService: IndexedDbService,
+      
     private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
     private gasLoadDbService: GasLoadMaterialDbService,
     private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,

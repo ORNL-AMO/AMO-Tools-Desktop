@@ -4,7 +4,7 @@ import { Settings } from '../../shared/models/settings';
 import { TreasureHuntReportService } from '../treasure-hunt-report/treasure-hunt-report.service';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { firstValueFrom, Subscription } from 'rxjs';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
@@ -54,7 +54,7 @@ export class OperationCostsComponent implements OnInit {
   treasureHuntResults: TreasureHuntResults;
   saveSettingsOnDestroy: boolean = false;
   constructor(private treasureHuntReportService: TreasureHuntReportService, private treasureHuntService: TreasureHuntService,
-    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
+       private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.globalSettings = this.settingsDbService.globalSettings;

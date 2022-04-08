@@ -3,7 +3,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { SettingsService } from '../../settings/settings.service';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { ConvertPhastService } from '../convert-phast.service';
 import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
@@ -36,7 +36,7 @@ export class SystemBasicsComponent implements OnInit {
   lossesExist: boolean;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertPhastService: ConvertPhastService, private settingsDbService: SettingsDbService) { }
+  constructor(private settingsService: SettingsService,    private convertPhastService: ConvertPhastService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);

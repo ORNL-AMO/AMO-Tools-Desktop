@@ -3,7 +3,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { PSAT } from '../../shared/models/psat';
 import { SettingsService } from '../../settings/settings.service';
 import { Settings } from '../../shared/models/settings';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
@@ -39,7 +39,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   showSuccessMessage: boolean = false;
   @ViewChild('settingsModal', { static: false }) public settingsModal: ModalDirective;
 
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private psatService: PsatService) { }
+  constructor(private settingsService: SettingsService,    private settingsDbService: SettingsDbService, private psatService: PsatService) { }
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);

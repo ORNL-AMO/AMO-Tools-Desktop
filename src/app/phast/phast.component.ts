@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, HostListener, ChangeDetectorR
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { PhastService } from './phast.service';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
@@ -82,7 +82,7 @@ export class PhastComponent implements OnInit {
     private phastService: PhastService,
     private convertPhastService: ConvertPhastService,
     private phastValidService: PhastValidService,
-    private indexedDbService: IndexedDbService,
+      
     private activatedRoute: ActivatedRoute,
     private lossesService: LossesService,
     private phastCompareService: PhastCompareService,

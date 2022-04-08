@@ -4,7 +4,7 @@ import { AssessmentService } from '../dashboard/assessment.service';
 import { PSAT, Modification, PsatOutputs, PsatInputs } from '../shared/models/psat';
 import { PsatService } from './psat.service';
 import * as _ from 'lodash';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { CompareService } from './compare.service';
@@ -79,7 +79,7 @@ export class PsatComponent implements OnInit {
   constructor(
     private assessmentService: AssessmentService,
     private psatService: PsatService,
-    private indexedDbService: IndexedDbService,
+      
     private activatedRoute: ActivatedRoute,
     private compareService: CompareService,
     private settingsDbService: SettingsDbService,

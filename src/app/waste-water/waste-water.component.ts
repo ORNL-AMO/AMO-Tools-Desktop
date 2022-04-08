@@ -5,7 +5,6 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
@@ -60,7 +59,7 @@ export class WasteWaterComponent implements OnInit {
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   showWelcomeScreen: boolean;
-  constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
+  constructor(private activatedRoute: ActivatedRoute,   
     private egridService: EGridService,
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
     private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService,

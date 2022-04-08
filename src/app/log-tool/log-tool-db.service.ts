@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LogToolDbData } from './log-tool-models';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { LogToolService } from './log-tool.service';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { LogToolDataService } from './log-tool-data.service';
@@ -14,7 +14,7 @@ export class LogToolDbService {
 
   previousDataAvailable: BehaviorSubject<Date>;
   logToolDbData: Array<LogToolDbData>;
-  constructor(private indexedDbService: IndexedDbService, private logToolService: LogToolService,
+  constructor(   private logToolService: LogToolService,
     private dbService: LogToolIdbService,
     private logToolDataService: LogToolDataService, private visualizeService: VisualizeService,
     private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService) {

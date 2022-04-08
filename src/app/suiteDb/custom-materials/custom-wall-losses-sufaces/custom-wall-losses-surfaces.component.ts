@@ -73,7 +73,7 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
   }
 
   async deleteMaterial(id: number) {
-    await firstValueFrom(this.wallLossesSurfaceDbService.deleteByIdWithObservable(id));
+    this.existingMaterial = await firstValueFrom(this.wallLossesSurfaceDbService.getByIdWithObservable(id));
     this.editExistingMaterial = true;
     this.deletingMaterial = true;
     this.showMaterialModal();

@@ -5,7 +5,7 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+ 
 import { InventoryDbService } from '../../../../indexedDb/inventory-db.service';
 import { DashboardService } from '../../../dashboard.service';
 import { Directory } from '../../../../shared/models/directory';
@@ -38,7 +38,7 @@ export class InventoryItemComponent implements OnInit {
   updateDashboardDataSub: Subscription;
 
   constructor(private router: Router, private directoryDashboardService: DirectoryDashboardService,
-    private formBuilder: FormBuilder, private indexedDbService: IndexedDbService, private inventoryDbService: InventoryDbService,
+    private formBuilder: FormBuilder,    private inventoryDbService: InventoryDbService,
     private dashboardService: DashboardService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
     private motorInventoryService: MotorInventoryService) { }
 

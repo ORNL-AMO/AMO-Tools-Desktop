@@ -3,7 +3,7 @@ import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { FormGroup } from '@angular/forms';
 import { SettingsService } from '../../settings/settings.service';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../shared/models/operations';
 import { TreasureHuntService } from '../treasure-hunt.service';
@@ -41,7 +41,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   oldSettings: Settings;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService,
+  constructor(private settingsService: SettingsService,   
     private settingsDbService: SettingsDbService, private treasureHuntService: TreasureHuntService, private convertInputDataService: ConvertInputDataService,
     private convertUnitsService: ConvertUnitsService) { }
 

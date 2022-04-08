@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { firstValueFrom } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 
@@ -20,7 +20,7 @@ export class OpeningTutorialComponent implements OnInit {
   index: number = 0;
   dontShow: boolean = true;
   show: boolean = true;
-  constructor(private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private settingsDbService: SettingsDbService,  ) { }
 
   ngOnInit() {
     setTimeout(() => {
