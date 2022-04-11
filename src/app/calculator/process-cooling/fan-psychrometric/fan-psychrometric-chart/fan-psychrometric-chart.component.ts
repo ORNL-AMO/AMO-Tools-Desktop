@@ -3,9 +3,11 @@ import { Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, View
 import { FormGroup } from '@angular/forms';
 import { PlotlyService } from 'angular-plotly.js';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
+import { SimpleChart, TraceData, TraceCoordinates } from '../../../../shared/models/plotting';
 import { Settings } from '../../../../shared/models/settings';
 import { FanPsychrometricService } from '../fan-psychrometric.service';
+import { Subscription } from 'rxjs';
+import { BaseGasDensity, PsychrometricResults } from '../../../../shared/models/fans';
 
 @Component({
   selector: 'app-fan-psychrometric-chart',
@@ -27,6 +29,9 @@ export class FanPsychrometricChartComponent implements OnInit {
   ngChartContainer: ElementRef;
   chart: SimpleChart;
 
+  psychrometricResults: PsychrometricResults;
+  calculatedBaseGasDensitySubscription: Subscription;
+
   expanded: boolean = false;
   hoverBtnExpand: boolean;
   displayExpandTooltip: boolean;
@@ -39,9 +44,20 @@ export class FanPsychrometricChartComponent implements OnInit {
 
   ngOnInit() {
     this.triggerInitialResize();
+    // debugger;
+    this.psychrometricService.calculateBaseGasDensity(this.settings);
+    //take care of this once you get clarification from Kristina for a few things
     // If we get results from a subscription (i.e. psychrometricService.calculatedBaseGasDensity)
     // Then set results and this.initRenderChart() here, otherwise see onChanges 
-    
+    this.calculatedBaseGasDensitySubscription = this.psychrometricService.calculatedBaseGasDensity.subscribe(results => {
+      debugger;
+      this.psychrometricResults = results;
+      if (results) {
+        let inputData: BaseGasDensity = this.psychrometricService.baseGasDensityData.getValue();
+        this.psychrometricResults.barometricPressure = inputData.barometricPressure;
+        this.psychrometricResults.dryBulbTemp = inputData.dryBulbTemp;
+      }
+    });
 
 
     // Remove this when done
@@ -80,22 +96,37 @@ export class FanPsychrometricChartComponent implements OnInit {
     // see interface at bottom of file
 
 
-    // let blueLines = get your constants 
+    let blueLines = this.buildLineData(); 
     // blueLines = this.convertAxisTemperatures(blueLines);
     
-    // blueLines.forEach((lineTrace => {
-    //   let trace = this.getEmptyTrace();
-    //   // dry bulb
-    //   trace.x = lineTrace.temp;
-    //   // rel humidity
-    //   trace.y = lineTrace.relativeHumidity;
-    //   trace.hovertemplate = `Relative Humidity ${line.relativeHumidity} ${units}`;
-    //   this.chart.data.push(trace);
-    // });
+    blueLines.forEach((lineTrace) => {
+      let trace = this.getEmptyTrace('blue');
+      // dry bulb
+      trace.x = lineTrace.x;
+      // rel humidity
+      trace.y = lineTrace.y;
+      let units = this.settings.unitsOfMeasure;
+      trace.hovertemplate = `Relative Humidity ${lineTrace.y} ${units}`;
+      this.chart.data.push(trace);
+    });
   }
 
 
-  addRedTraces() {}
+  addRedTraces() {
+    let redLines = this.buildRedLineData(); 
+    // blueLines = this.convertAxisTemperatures(blueLines);
+    
+    redLines.forEach((lineTrace) => {
+      let trace = this.getEmptyTrace('red');
+      // dry bulb
+      trace.x = lineTrace.x;
+      // rel humidity
+      trace.y = lineTrace.y;
+      let units = this.settings.unitsOfMeasure;
+      trace.hovertemplate = `Relative Humidity ${lineTrace.y} ${units}`;
+      this.chart.data.push(trace);
+    });
+  }
 
   addGridTraces() {}
 
@@ -132,33 +163,61 @@ export class FanPsychrometricChartComponent implements OnInit {
 
 
   // Charlotte work
-  // buildLineData(gasDensityForm: FormGroup, settings: Settings): Array<TraceCoordinates> {
-  //   let relHumidity20: TraceCoordinates = {x: [], y: []};
-  //   let relHumidity40: TraceCoordinates = {x: [], y: []};
-  //   let relHumidity60: TraceCoordinates = {x: [], y: []};
-  //   let relHumidity80: TraceCoordinates = {x: [], y: []};
-  //   let relHumidity100: TraceCoordinates = {x: [], y: []};
+  buildLineData(): Array<TraceCoordinates> {
+    let relHumidity20: TraceCoordinates = {x: [], y: []};
+    let relHumidity40: TraceCoordinates = {x: [], y: []};
+    let relHumidity60: TraceCoordinates = {x: [], y: []};
+    let relHumidity80: TraceCoordinates = {x: [], y: []};
+    let relHumidity100: TraceCoordinates = {x: [], y: []};
 
-  //   for (let i = 35; i <= 130; i = i + 5) {
-  //     let barometricPressure = this.psychrometricResults.barometricPressure;
-  //     let relativeHumidity = this.psychrometricResults.relativeHumidity;
+    for (let i = 35; i <= 130; i = i + 5) {
+      debugger;
+      let barometricPressure = this.psychrometricResults.barometricPressure;
+      let relativeHumidity = this.psychrometricResults.relativeHumidity;
 
-  //     relHumidity20.x.push(i);
-  //     relHumidity20.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
-  //     relHumidity40.x.push(i);
-  //     relHumidity40.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
-  //     relHumidity60.x.push(i);
-  //     relHumidity60.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
-  //     relHumidity80.x.push(i);
-  //     relHumidity80.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
-  //     relHumidity100.x.push(i);
-  //     relHumidity100.y.push(this.calculateHumidityRatio(i, relativeHumidity, barometricPressure));
-  //   }
-  //   return [relHumidity20, relHumidity40, relHumidity60, relHumidity80, relHumidity100];
-  // }
+      relHumidity20.x.push(i);
+      relHumidity20.y.push(this.calculateHumidityRatio(i, 20, 20));
+      relHumidity40.x.push(i);
+      relHumidity40.y.push(this.calculateHumidityRatio(i, 40, 40));
+      relHumidity60.x.push(i);
+      relHumidity60.y.push(this.calculateHumidityRatio(i, 60, 60));
+      relHumidity80.x.push(i);
+      relHumidity80.y.push(this.calculateHumidityRatio(i, 80, 80));
+      relHumidity100.x.push(i);
+      relHumidity100.y.push(this.calculateHumidityRatio(i, 90, 90));
+    }
+    return [relHumidity20, relHumidity40, relHumidity60, relHumidity80, relHumidity100];
+  }
+
+  buildRedLineData(): Array<TraceCoordinates> {
+    let relHumidity20: TraceCoordinates = {x: [], y: []};
+    let relHumidity40: TraceCoordinates = {x: [], y: []};
+    let relHumidity60: TraceCoordinates = {x: [], y: []};
+    let relHumidity80: TraceCoordinates = {x: [], y: []};
+    let relHumidity100: TraceCoordinates = {x: [], y: []};
+
+    for (let i = 35; i <= 130; i = i + 5) {
+      debugger;
+      let barometricPressure = this.psychrometricResults.barometricPressure;
+      let relativeHumidity = this.psychrometricResults.relativeHumidity;
+
+      relHumidity20.x.push(i);
+      relHumidity20.y.push(this.calculateHumidityRatio(i, 30, 30));
+      relHumidity40.x.push(i);
+      relHumidity40.y.push(this.calculateHumidityRatio(i, 20, 20));
+      relHumidity60.x.push(i);
+      relHumidity60.y.push(this.calculateHumidityRatio(i, 40, 60));
+      relHumidity80.x.push(i);
+      relHumidity80.y.push(this.calculateHumidityRatio(i, 60, 80));
+      relHumidity100.x.push(i);
+      relHumidity100.y.push(this.calculateHumidityRatio(i, 90, 90));
+    }
+    return [relHumidity20, relHumidity40, relHumidity60, relHumidity80, relHumidity100];
+  }
 
 
-  calculateHumidityRatio(dryBulbTemp: number, relativeHumidity: number, barometricPressure: number) {
+
+  calculateHumidityRatio(dryBulbTemp: number, relativeHumidity: number, barometricPressure: number) { //relative humidity not being used??
     const c8 = -1.0440397e4;
     const c9 = -1.129465e1;
     const c10 = -2.7022355e-2;
@@ -170,6 +229,7 @@ export class FanPsychrometricChartComponent implements OnInit {
     var lnOfSatPress = c8 / t + c9 + c10 * t + c11 * Math.pow(t, 2) + c12 * Math.pow(t, 3) + c13 * Math.log(t);
     var satPress = Math.exp(lnOfSatPress);
     var humidRatio = (0.621945 * satPress) / (barometricPressure - satPress);
+    // console.log('humidRatio value: ' + humidRatio);
     return humidRatio;
   }
 // End charlotte work
@@ -178,7 +238,7 @@ export class FanPsychrometricChartComponent implements OnInit {
 
 
    
-  getEmptyTrace(): TraceData {
+  getEmptyTrace(color: string): TraceData {
     let trace: TraceData = {
       x: [],
       y: [],
@@ -189,7 +249,7 @@ export class FanPsychrometricChartComponent implements OnInit {
       hovertemplate: '',
       line: {
         shape: 'spline',
-        color: '#FFA500',
+        color: color,
         width: 1,
       },
     };
@@ -210,7 +270,8 @@ export class FanPsychrometricChartComponent implements OnInit {
       hovermode: 'x',
       xaxis: {
         autorange: false,
-        showgrid: false,
+        showgrid: true,
+        gridcolor: '#000000',
         title: {
           text:"Dry Bulb Temperature (F)"
         },
@@ -220,24 +281,7 @@ export class FanPsychrometricChartComponent implements OnInit {
         // Change hoverFormat.. wrong or deprecated
         // hoverformat: '%{x}%',
         range: [35, 130],
-        tickvals: [35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130],
-      },
-      xaxis2: {
-        autorange: false,
-        showgrid: false,
-        title: {
-          text:"Wet Bulb (F)"
-        },
-        side: 'left',
-        anchor: 'free',
-        overlaying: 'x',
-        xaxis: 'x2',
-        showticksuffix: 'all',
-        tickmode: 'array',
-        // hoverformat: '%{x}%',
-        range: [30, 130],
-        tickvals: [30, 40, 50 , 60, 70, 80, 90, 100, 110, 120, 130]
-        // tickvals: [35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130],
+        tickvals: [30,  40,  50,  60,  70,  80,  90,  100,  110,  120,  130],
       },
       yaxis: {
         autorange: true,
@@ -247,10 +291,10 @@ export class FanPsychrometricChartComponent implements OnInit {
         title: {
           text: "Humidity Ratio(Lbv/Lba)"
         },
-        range: [0, 0.1],
-        tickvals: [0, 0.004, 0.008, 0.012, 0.016, 0.020, 0.024, 0.028],
+        // range: [0, 0.1],
+        // tickvals: [0, 0.004, 0.008, 0.012, 0.016, 0.020, 0.024, 0.028],
         //ticktext: ['0', '20%', '40%', '60%', '80%', '100%', '120%'],
-        rangemode: 'tozero',
+        // rangemode: 'tozero',
         showticksuffix: 'all'
       },
       margin: {
@@ -301,6 +345,10 @@ export class FanPsychrometricChartComponent implements OnInit {
         responsive: true
       },
     };
+  }
+
+  drawTopTrace() {
+
   }
 
 

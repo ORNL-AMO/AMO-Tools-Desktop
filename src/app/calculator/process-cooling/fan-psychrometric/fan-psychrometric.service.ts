@@ -84,9 +84,9 @@ export class FanPsychrometricService {
   calcDensityWetBulb(baseGasDensityData: BaseGasDensity, settings: Settings): PsychrometricResults {
     let psychrometricResults: PsychrometricResults;
     let form = this.gasDensityFormService.getGasDensityFormFromObj(baseGasDensityData, settings);
-    if (this.isWetBulbValid(form)) {
+    // if (this.isWetBulbValid(form)) { // commenting out for now until validation is figured out, currently returning invalid. the psychrometric graph will not render unless this method returns valid/true
       psychrometricResults = this.fsatService.getPsychrometricWetBulb(baseGasDensityData, settings);
-    }
+    // }
     return psychrometricResults;
   }
 
