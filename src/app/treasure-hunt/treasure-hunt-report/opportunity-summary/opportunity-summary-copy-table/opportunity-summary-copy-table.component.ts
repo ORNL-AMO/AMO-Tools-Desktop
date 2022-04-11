@@ -410,8 +410,12 @@ export class OpportunitySummaryCopyTableComponent implements OnInit {
       pattern: 'solid',
       fgColor: { argb: 'FF203864' }
     };
-    title.alignment = { vertical: 'middle', horizontal: 'left' };
-    worksheet2.mergeCells('A1', 'S5');
+    title.alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet2.mergeCells('A1', 'H5');
+    worksheet2.getCell('I1').style = {
+      fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF203864' } },
+    };
+    worksheet2.mergeCells('I1', 'S5');
 
     worksheet2.getCell('A6').value = 'Projects Summary';
     worksheet2.getCell('A6').style = {
