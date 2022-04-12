@@ -129,7 +129,7 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "lodash.foreach": "^4.5.0",
     "lodash.keys": "^4.2.0",
-    "moment": "^2.18.1",
+    "moment": "^2.29.2",
     "ngx-bootstrap": "8.0.0",
     "ngx-clipboard": "15.0.1",
     "papaparse": "^5.1.0",
