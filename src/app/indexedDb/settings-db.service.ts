@@ -30,18 +30,8 @@ export class SettingsDbService {
     this.globalSettings = this.checkSettings(this.globalSettings);
   }
 
-  getAll(): Array<Settings> {
-    return this.allSettings;
-  }
-
   getAllSettings(): Observable<Array<Settings>> {
     return this.dbService.getAll(this.storeName);
-  }
-
-  add(settings: Settings): void {
-    settings.createdDate = new Date();
-    settings.modifiedDate = new Date();
-    this.dbService.add(this.storeName, settings);
   }
 
   addWithObservable(settings: Settings): Observable<any> {
@@ -50,20 +40,13 @@ export class SettingsDbService {
     return this.dbService.add(this.storeName, settings);
   }
 
-  deleteById(settingsId: number) {
-    this.dbService.delete(this.storeName, settingsId);
-  }
-
   deleteByIdWithObservable(settingsId: number): Observable<any> {
     return this.dbService.delete(this.storeName, settingsId);
   }
 
   bulkDeleteWithObservable(calculatorIds: Array<number>): Observable<any> {
+    // ngx-indexed-db returns Array<Array<T>>
     return this.dbService.bulkDelete(this.storeName, calculatorIds);
-  }
-
-  update(settings: Settings): void {
-    this.dbService.update(this.storeName, settings);
   }
 
   updateWithObservable(settings: Settings): Observable<any> {
@@ -75,10 +58,6 @@ export class SettingsDbService {
     let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.id === id; });
     selectedSettings = this.checkSettings(selectedSettings);
     return selectedSettings;
-  }
-
-  getById(id: number): Observable<Settings> {
-    return this.dbService.getByKey(this.storeName, id);
   }
 
   getByDirectoryId(id: number): Settings {

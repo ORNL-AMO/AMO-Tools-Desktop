@@ -23,7 +23,6 @@ import { Calculator } from '../../../shared/models/calculators';
 import { WallLossesSurfaceDbService } from '../../../indexedDb/wall-losses-surface-db.service';
 import { firstValueFrom, forkJoin, Observable } from 'rxjs';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { AssessmentStoreMeta, CalculatorStoreMeta, dbConfig, DirectoryStoreMeta, InventoryStoreMeta, SettingsStoreMeta, WallLossesSurfaceStoreMeta } from '../../../indexedDb/dbConfig';
 import { AtmosphereDbService } from '../../../indexedDb/atmosphere-db.service';
 import { FlueGasMaterialDbService } from '../../../indexedDb/flue-gas-material-db.service';
 import { GasLoadMaterialDbService } from '../../../indexedDb/gas-load-material-db.service';
@@ -75,21 +74,7 @@ export class ResetDataModalComponent implements OnInit {
     this.resetSystemSettingsModal.show();
   }
 
-  // hideResetSystemSettingsModal() {
-  //   if (this.hidingModal) {
-  //     clearTimeout(this.hidingModal);
-  //   }
-  //   this.hidingModal = setTimeout(() => {
-  //     console.log('hiding modal');
-  //     this.resetSystemSettingsModal.hide();
-  //     this.dashboardService.updateDashboardData.next(true);
-  //     this.closeModal.emit(true);
-  //   }, 1000)
-  // }
   hideResetSystemSettingsModal() {
-    // if (this.hidingModal) {
-    //   clearTimeout(this.hidingModal);
-    // }
     this.dashboardService.updateDashboardData.next(true);
     this.resetSystemSettingsModal.hide();
     this.closeModal.emit(true);
@@ -136,26 +121,57 @@ export class ResetDataModalComponent implements OnInit {
     }
   }
 
-  // needs help
   async resetSystemSettingsAccept() {
     this.deleting = true;
     if (this.resetCustomMaterials) {
+      console.log('RESET CUSTOM MATERIALS')
       this.resetFactoryCustomMaterials();
+
     }
 
     if (this.resetAll) {
+      console.log('RESET ALL DATA')
+
       this.resetAllData();
     } else if (this.resetUserAssessments) {
+      console.log('RESET USER ASSESSMENTS')
       this.resetAllUserAssessments();
     } else {
       if (this.resetAppSettings) {
+      console.log('RESET SETTINGS')
         this.resetFactorySystemSettings();
       }
       if (this.resetExampleAssessments) {
+      console.log('RESET EXAMPLES')
         this.resetFactoryExampleAssessments();
       }
     }
   }
+
+//   // needs help
+//   async resetSystemSettingsAccept() {
+//     this.deleting = true;
+//     if (this.resetCustomMaterials) {
+//       this.resetFactoryCustomMaterials();
+//       console.log('RESET CUSTOM MATERIALS')
+//     }
+//     if (this.resetAll) {
+//       this.resetAllData();
+//       console.log('RESET ALL DATA')
+//     }
+//     if (this.resetUserAssessments) {
+//       console.log('RESET USER ASSESSMENTS')
+//       this.resetAllUserAssessments();
+//     }
+//     if (this.resetAppSettings) {
+//       console.log('RESET SETTINGS')
+//       this.resetFactorySystemSettings();
+//     }
+//     if (this.resetExampleAssessments) {
+//       console.log('RESET EXAMPLES')
+//       this.resetFactoryExampleAssessments();
+//     }
+// }
 
   async resetFactorySystemSettings() {
     let defaultSettings: Settings = JSON.parse(JSON.stringify(MockPhastSettings));
@@ -202,134 +218,236 @@ export class ResetDataModalComponent implements OnInit {
     // this.hideResetSystemSettingsModal();
   }
 
-  async resetAllExampleAssessments(dirId: number) {
-    // TODO - not updating assessment/dirs correctly after reset 
-    // this method should resolve all through forkjoin or subscribe
-    let psatExample: Assessment = this.assessmentDbService.getExample('PSAT');
-    MockPsatSettings.facilityInfo.date = new Date().toDateString();
-    this.resetExampleAssessment(psatExample, MockPsat, MockPsatSettings, dirId, MockPsatCalculator);
+//   async resetAllExampleAssessments(dirId: number) {
+//     // TODO - not updating assessment/dirs correctly after reset 
+//     // this method should resolve all through forkjoin or subscribe
+//     let psatExample: Assessment = this.assessmentDbService.getExample('PSAT');
+//     MockPsatSettings.facilityInfo.date = new Date().toDateString();
+//     this.resetExampleAssessment(psatExample, MockPsat, MockPsatSettings, dirId, MockPsatCalculator);
 
-    MockFsatSettings.facilityInfo.date = new Date().toDateString();
-    let fsatExample: Assessment = this.assessmentDbService.getExample('FSAT');
-    this.resetExampleAssessment(fsatExample, MockFsat, MockFsatSettings, dirId);
+//     MockFsatSettings.facilityInfo.date = new Date().toDateString();
+//     let fsatExample: Assessment = this.assessmentDbService.getExample('FSAT');
+//     this.resetExampleAssessment(fsatExample, MockFsat, MockFsatSettings, dirId);
 
-    MockWasteWaterSettings.facilityInfo.date = new Date().toDateString();
-    let wasteWaterExample: Assessment = this.assessmentDbService.getExample('WasteWater');
-    this.resetExampleAssessment(wasteWaterExample, MockWasteWater, MockWasteWaterSettings, dirId);
+//     MockWasteWaterSettings.facilityInfo.date = new Date().toDateString();
+//     let wasteWaterExample: Assessment = this.assessmentDbService.getExample('WasteWater');
+//     this.resetExampleAssessment(wasteWaterExample, MockWasteWater, MockWasteWaterSettings, dirId);
 
-    let phastExample: Assessment = this.assessmentDbService.getExample('PHAST');
-    if (phastExample) {
-      await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(phastExample.id));
-    }
-    this.createPhastExample(dirId);
+//     let phastExample: Assessment = this.assessmentDbService.getExample('PHAST');
+//     if (phastExample) {
+//       await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(phastExample.id));
+//     }
+//     this.createPhastExample(dirId);
 
-    let ssmtExample: Assessment = this.assessmentDbService.getExample('SSMT');
-    this.resetExampleAssessment(ssmtExample, MockSsmt, MockSsmtSettings, dirId);
+//     let ssmtExample: Assessment = this.assessmentDbService.getExample('SSMT');
+//     this.resetExampleAssessment(ssmtExample, MockSsmt, MockSsmtSettings, dirId);
 
-    let treasureHuntExample: Assessment = this.assessmentDbService.getExample('TreasureHunt');
-    this.resetExampleAssessment(treasureHuntExample, MockTreasureHunt, MockTreasureHuntSettings, dirId);
+//     let treasureHuntExample: Assessment = this.assessmentDbService.getExample('TreasureHunt');
+//     this.resetExampleAssessment(treasureHuntExample, MockTreasureHunt, MockTreasureHuntSettings, dirId);
 
-    let compressedAirAssessmentExample: Assessment = this.assessmentDbService.getExample('CompressedAir');
-    this.resetExampleAssessment(compressedAirAssessmentExample, MockCompressedAirAssessment, MockCompressedAirAssessmentSettings, dirId);
+//     let compressedAirAssessmentExample: Assessment = this.assessmentDbService.getExample('CompressedAir');
+//     this.resetExampleAssessment(compressedAirAssessmentExample, MockCompressedAirAssessment, MockCompressedAirAssessmentSettings, dirId);
   
-    let motorInventoryExample: InventoryItem = this.inventoryDbService.getMotorInventoryExample();
-    if (motorInventoryExample) {
-      await firstValueFrom(this.inventoryDbService.deleteByIdWithObservable(motorInventoryExample.id));
-    } 
-    this.createMotorInventoryExample(dirId);
+//     let motorInventoryExample: InventoryItem = this.inventoryDbService.getMotorInventoryExample();
+//     if (motorInventoryExample) {
+//       await firstValueFrom(this.inventoryDbService.deleteByIdWithObservable(motorInventoryExample.id));
+//     } 
+//     this.createMotorInventoryExample(dirId);
 
-    let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
-    this.assessmentDbService.setAll(updatedAssessments);
-    console.log('updatedAssessments', updatedAssessments);
-    this.hideResetSystemSettingsModal();
-  }
+//     let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+//     this.assessmentDbService.setAll(updatedAssessments);
+//     console.log('updatedAssessments', updatedAssessments);
 
-  async resetExampleAssessment(assessment: Assessment, mockAssessment: Assessment, mockSettings: Settings, dirId: number, calculator?: Calculator) {
-    console.log(assessment, mockAssessment, mockSettings, dirId);
-    console.log('assessment id', assessment.id);
-    console.log('dir id', assessment.directoryId);
-    if (assessment) {
-      await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(assessment.id));
-      this.createExample(mockAssessment, mockSettings, dirId, calculator);
-    } else {
-      this.createExample(mockAssessment, mockSettings, dirId, calculator);
-    }
-  }
 
-  async createExample(MockAssessment: Assessment, mockSettings: Settings, dirId: number, calculator?: Calculator) {
-    MockAssessment.directoryId = dirId;
-    let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockAssessment));
-    mockSettings.assessmentId = createdAssessment.id;
-    await firstValueFrom(this.settingsDbService.addWithObservable(mockSettings));
-    if (calculator) {
-      calculator.assessmentId = createdAssessment.id;
-      this.calculatorDbService.add(calculator);
-    }
-  }
+//     this.hideResetSystemSettingsModal();
+//   }
 
-  async createPhastExample(dirId: number) {
-    MockPhast.directoryId = dirId;
-    let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockPhast));
-    delete MockPhastSettings.directoryId;
-    MockPhastSettings.assessmentId = createdAssessment.id;
-    await firstValueFrom(this.settingsDbService.addWithObservable(MockPhastSettings));
-  }
-
-  async createMotorInventoryExample(dirId: number) {
-    MockMotorInventory.directoryId = dirId;
-    let inventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(MockMotorInventory));
-    delete MockPsatSettings.directoryId;
-    delete MockPsatSettings.assessmentId;
-    MockPsatSettings.assessmentId = inventory.id;
-    await firstValueFrom(this.settingsDbService.addWithObservable(MockPsatSettings));
-  }
-
-  async resetAllUserAssessments() {
-    let resetAssessmentsIds: Array<number> = [];
-    // let resetInventoryIds = this.inventoryDbService.allInventoryItems.filter(item => !item.isExample);
-    let resetSettingsIds: Array<number> = [];
-    let resetCalculatorIds: Array<number> = [];
-    for (let index: number = 0; index < this.assessmentDbService.allAssessments.length; index++) {
-      let assessment: Assessment = this.assessmentDbService.allAssessments[index];
-      if (!assessment.isExample) {
-        resetAssessmentsIds.push(assessment.id);
-        resetSettingsIds.push(this.settingsDbService.allSettings.find(settings => { return settings.assessmentId == assessment.id }).id);
-        let assessmentCalculator = this.calculatorDbService.allCalculators.find(calculator => { return calculator.assessmentId == assessment.id });
-        if (assessmentCalculator) {
-          resetCalculatorIds.push(assessmentCalculator.id);
-        }
+getAssessmentsAndDataIds(isExampleDirectory: boolean = false): DirectoryDataIds {
+  let assessmentsIds: Array<number> = [];
+  let settingsIds: Array<number> = [];
+  let calculatorIds: Array<number> = [];
+  for (let index: number = 0; index < this.assessmentDbService.allAssessments.length; index++) {
+    let assessment: Assessment = this.assessmentDbService.allAssessments[index];
+    if (isExampleDirectory && assessment.isExample) {
+      assessmentsIds.push(assessment.id);
+      settingsIds.push(this.settingsDbService.allSettings.find(settings => { return settings.assessmentId == assessment.id }).id);
+      let assessmentCalculator = this.calculatorDbService.allCalculators.find(calculator => { return calculator.assessmentId == assessment.id });
+      if (assessmentCalculator) {
+        calculatorIds.push(assessmentCalculator.id);
+      }
+    } else if (!isExampleDirectory && !assessment.isExample) {
+      assessmentsIds.push(assessment.id);
+      settingsIds.push(this.settingsDbService.allSettings.find(settings => { return settings.assessmentId == assessment.id }).id);
+      let assessmentCalculator = this.calculatorDbService.allCalculators.find(calculator => { return calculator.assessmentId == assessment.id });
+      if (assessmentCalculator) {
+        calculatorIds.push(assessmentCalculator.id);
       }
     }
+  }
+  return {
+    assessments: assessmentsIds, 
+    settings: settingsIds, 
+    calculators: calculatorIds
+  }
+}
 
-    let resetActions: Array<Observable<Assessment | Settings | Calculator>> = [
-          this.assessmentDbService.bulkDeleteWithObservable(resetAssessmentsIds),
-          this.settingsDbService.bulkDeleteWithObservable(resetSettingsIds),
-          this.calculatorDbService.bulkDeleteWithObservable(resetCalculatorIds),
-      ];
-      console.log('user assessment delete ids', resetAssessmentsIds, resetSettingsIds, resetCalculatorIds);
-    forkJoin(
-          resetActions
-        ).subscribe(completedActions => {
-          console.log('All user items deleted', completedActions);
-          this.calculatorDbService.setAll();
-          this.assessmentDbService.setAll();
-          this.settingsDbService.setAll();
-          this.hideResetSystemSettingsModal();
-        }); 
+async resetAllExampleAssessments(dirId: number) {
+  // Delete all
+  // extract for reset method
+  let directoryDataIds: DirectoryDataIds = this.getAssessmentsAndDataIds(true);
+  let exampleInventoryId: number = this.inventoryDbService.allInventoryItems.find(item => { return item.directoryId == dirId && item.isExample}).id;
+  let allAssessments: Array<Assessment[]> = await firstValueFrom(this.assessmentDbService.bulkDeleteWithObservable(directoryDataIds.assessments));
+  let allSettings: Array<Settings[]> = await firstValueFrom(this.settingsDbService.bulkDeleteWithObservable(directoryDataIds.settings));
+  let allCalculators: Array<Calculator[]> = await firstValueFrom(this.calculatorDbService.bulkDeleteWithObservable(directoryDataIds.calculators));
+  let allInventoryItems: Array<InventoryItem> = await firstValueFrom(this.inventoryDbService.deleteByIdWithObservable(exampleInventoryId));
+  this.assessmentDbService.setAll(allAssessments[0]);
+  this.inventoryDbService.setAll(allInventoryItems);
+  this.settingsDbService.setAll(allSettings[0]);
+  this.calculatorDbService.setAll(allCalculators[0]);
+
+  // Set new examples/mock and add
+  MockPsatSettings.facilityInfo.date = new Date().toDateString();
+  MockPsat.directoryId = dirId;
+  let createdPsat: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockPsat));
+  MockPsatSettings.assessmentId = createdPsat.id;
+  await firstValueFrom(this.settingsDbService.addWithObservable(MockPsatSettings));
+  MockPsatCalculator.assessmentId = createdPsat.id;
+  await firstValueFrom(this.calculatorDbService.addWithObservable(MockPsatCalculator));
+
+  MockFsatSettings.facilityInfo.date = new Date().toDateString();
+  MockFsat.directoryId = dirId;
+  let createdFsat: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockFsat));
+  MockFsatSettings.assessmentId = createdFsat.id;
+  await firstValueFrom(this.settingsDbService.addWithObservable(MockFsatSettings));
+
+  MockWasteWaterSettings.facilityInfo.date = new Date().toDateString();
+  MockWasteWater.directoryId = dirId;
+  let createdWasteWater: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockWasteWater));
+  MockWasteWaterSettings.assessmentId = createdWasteWater.id;
+  await firstValueFrom(this.settingsDbService.addWithObservable(MockWasteWaterSettings));
+
+  MockPhast.directoryId = dirId;
+  let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockPhast));
+  delete MockPhastSettings.directoryId;
+  MockPhastSettings.assessmentId = createdAssessment.id;
+  await firstValueFrom(this.settingsDbService.addWithObservable(MockPhastSettings));
+
+  MockSsmt.directoryId = dirId;
+  let createdSSMT: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockSsmt));
+  MockSsmtSettings.assessmentId = createdSSMT.id;
+  await firstValueFrom(this.settingsDbService.addWithObservable(MockSsmtSettings));
+
+  MockTreasureHunt.directoryId = dirId;
+  let createdTreasureHunt: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockTreasureHunt));
+  MockTreasureHuntSettings.assessmentId = createdTreasureHunt.id;
+  await firstValueFrom(this.settingsDbService.addWithObservable(MockTreasureHuntSettings));
+
+  MockCompressedAirAssessment.directoryId = dirId;
+  let createdCompressedAir: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockCompressedAirAssessment));
+  MockCompressedAirAssessmentSettings.assessmentId = createdCompressedAir.id;
+  await firstValueFrom(this.settingsDbService.addWithObservable(MockCompressedAirAssessmentSettings));
+
+  MockMotorInventory.directoryId = dirId;
+  let inventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(MockMotorInventory));
+  delete MockPsatSettings.directoryId;
+  delete MockPsatSettings.assessmentId;
+  MockPsatSettings.assessmentId = inventory.id;
+  await firstValueFrom(this.settingsDbService.addWithObservable(MockPsatSettings));
+
+  let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+  let settings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+  let calculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+  let inventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
+  this.assessmentDbService.setAll(assessments);
+  this.settingsDbService.setAll(settings);
+  this.calculatorDbService.setAll(calculators);
+  this.inventoryDbService.setAll(inventoryItems);
+  this.hideResetSystemSettingsModal();
+}
+
+  // async resetExampleAssessment(assessment: Assessment, mockAssessment: Assessment, mockSettings: Settings, dirId: number, calculator?: Calculator) {
+  //   console.log(assessment, mockAssessment, mockSettings, dirId);
+  //   console.log('assessment id', assessment.id);
+  //   console.log('asessnebt,dir id', assessment.directoryId);
+  //   if (assessment) {
+  //     console.log('assessment exists, delete id', assessment.id);
+  //     let remainingAssessments = await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(assessment.id));
+  //     console.log('remaining assessments', remainingAssessments);
+  //     await this.createExample(mockAssessment, mockSettings, dirId, calculator);
+  //   } else {
+  //     await this.createExample(mockAssessment, mockSettings, dirId, calculator);
+  //   }
+  // }
+
+  // async createExample(MockAssessment: Assessment, mockSettings: Settings, dirId: number, calculator?: Calculator) {
+  //   MockAssessment.directoryId = dirId;
+  //   let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockAssessment));
+  //   mockSettings.assessmentId = createdAssessment.id;
+  //   await firstValueFrom(this.settingsDbService.addWithObservable(mockSettings));
+  //   if (calculator) {
+  //     calculator.assessmentId = createdAssessment.id;
+  //     await firstValueFrom(this.calculatorDbService.addWithObservable(calculator));
+  //   }
+  // }
+
+  // async createPhastExample(dirId: number) {
+  //   MockPhast.directoryId = dirId;
+  //   let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockPhast));
+  //   delete MockPhastSettings.directoryId;
+  //   MockPhastSettings.assessmentId = createdAssessment.id;
+  //   await firstValueFrom(this.settingsDbService.addWithObservable(MockPhastSettings));
+  // }
+
+  // async createMotorInventoryExample(dirId: number) {
+  //   MockMotorInventory.directoryId = dirId;
+  //   let inventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(MockMotorInventory));
+  //   delete MockPsatSettings.directoryId;
+  //   delete MockPsatSettings.assessmentId;
+  //   MockPsatSettings.assessmentId = inventory.id;
+  //   await firstValueFrom(this.settingsDbService.addWithObservable(MockPsatSettings));
+  // }
+
+  async resetAllUserAssessments() {
+    let directoryDataIds: DirectoryDataIds = this.getAssessmentsAndDataIds();
+    console.log(directoryDataIds);
+    let assessments: Array<Assessment[]> = await firstValueFrom(this.assessmentDbService.bulkDeleteWithObservable(directoryDataIds.assessments));
+    let settings: Array<Settings[]> = await firstValueFrom(this.settingsDbService.bulkDeleteWithObservable(directoryDataIds.settings));
+    let calculators: Array<Calculator[]> = await firstValueFrom(this.calculatorDbService.bulkDeleteWithObservable(directoryDataIds.calculators))
+ 
+    this.assessmentDbService.setAll(assessments[0]);
+    this.calculatorDbService.setAll(calculators[0]);
+    this.settingsDbService.setAll(settings[0]);
+    this.hideResetSystemSettingsModal();
+
+
+    // let resetActions: Array<Observable<Assessment | Settings | Calculator>> = [
+    //       this.assessmentDbService.bulkDeleteWithObservable(resetAssessmentsIds),
+    //       this.settingsDbService.bulkDeleteWithObservable(resetSettingsIds),
+    //       this.calculatorDbService.bulkDeleteWithObservable(resetCalculatorIds),
+    //   ];
+    //   console.log('user assessment delete ids', resetAssessmentsIds, resetSettingsIds, resetCalculatorIds);
+    // forkJoin(
+    //       resetActions
+    //     ).subscribe((completedActions: Array<Assessment | Settings | Calculator>) => {
+    //       console.log('All user items deleted', completedActions);
+    //       this.calculatorDbService.setAll(completedActions[0]);
+    //       this.assessmentDbService.setAll();
+    //       this.settingsDbService.setAll();
+    //       this.hideResetSystemSettingsModal();
+    //     }); 
   }
 
-  setAllDbData() {
-    this.coreService.getAllAppData().subscribe(initializedData => {
-      console.log('reset-data-modal.component data reset', initializedData);
-      this.directoryDbService.setAll(initializedData.directories);
-      this.settingsDbService.setAll(initializedData.settings);
-      this.assessmentDbService.setAll(initializedData.assessments);
-      this.calculatorDbService.setAll(initializedData.calculators);
-      this.inventoryDbService.setAll(initializedData.inventoryItems);
-      this.dashboardService.updateDashboardData.next(true);
-      this.hideResetSystemSettingsModal();
-    });
-  }
+  // setAllDbData() {
+  //   this.coreService.getAllAppData().subscribe(initializedData => {
+  //     console.log('reset-data-modal.component data reset', initializedData);
+  //     this.directoryDbService.setAll(initializedData.directories);
+  //     this.settingsDbService.setAll(initializedData.settings);
+  //     this.assessmentDbService.setAll(initializedData.assessments);
+  //     this.calculatorDbService.setAll(initializedData.calculators);
+  //     this.inventoryDbService.setAll(initializedData.inventoryItems);
+  //     this.hideResetSystemSettingsModal();
+  //   });
+  // }
 
   resetFactoryCustomMaterials() {
     this.gasLoadDbService.clearGasLoadChargeMaterial();
@@ -366,8 +484,14 @@ export class ResetDataModalComponent implements OnInit {
 
   finishDelete(){
     // TODO if not in electron, do location.reload()
-    this.coreService.relaunchApp();
+    // this.coreService.relaunchApp();
   }
 
 
+}
+
+export interface DirectoryDataIds {
+  assessments: Array<number>, 
+  settings: Array<number>, 
+  calculators: Array<number>
 }

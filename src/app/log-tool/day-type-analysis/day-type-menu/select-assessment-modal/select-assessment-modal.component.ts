@@ -36,17 +36,21 @@ export class SelectAssessmentModalComponent implements OnInit {
   addNewAssessment: boolean = false;
   newAssessmentForm: FormGroup;
   constructor(private assessmentDbService: AssessmentDbService, private logToolService: LogToolService,
-       private router: Router,
     private compressedAirAssessmentService: CompressedAirAssessmentService, private directoryDbService: DirectoryDbService,
     private formBuilder: FormBuilder, private assessmentService: AssessmentService, private settingsDbService: SettingsDbService,
     private dayTypeAnalysisService: DayTypeAnalysisService, private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
     this.setDirectories();
-    let allAssessments: Array<Assessment> = this.assessmentDbService.getAll();
+    this.setAssessments();
+    this.initForm();
+  }
+
+  async setAssessments() {
+    let allAssessments: Array<Assessment> = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    this.assessmentDbService.setAll(allAssessments);
     this.compressedAirAssessments = allAssessments.filter(assessment => { return assessment.type == "CompressedAir" });
     this.compressedAirAssessments = _.orderBy(this.compressedAirAssessments, 'modifiedDate');
-    this.initForm();
   }
 
   ngAfterViewInit() {

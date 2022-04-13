@@ -60,29 +60,10 @@ export class DirectoryDbService {
     return example;
   }
 
-
-  // getById(directoryId: number): Observable<Directory> {
-  //   return this.dbService.getByKey(this.storeName, directoryId);
-  // }
-
-  add(directory: Directory) {
-    directory.createdDate = new Date();
-    directory.modifiedDate = new Date();
-    this.dbService.add(this.storeName, directory);
-  }
-
   addWithObservable(directory: Directory): Observable<any> {
     directory.createdDate = new Date();
     directory.modifiedDate = new Date();
     return this.dbService.add(this.storeName, directory);
-  }
-
-  deleteById(surfaceId: number): void {
-    this.dbService.delete(this.storeName, surfaceId);
-  }
-
-  update(directory: Directory): void {
-    this.dbService.update(this.storeName, directory);
   }
 
   updateWithObservable(directory: Directory): Observable<any> {

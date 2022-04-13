@@ -202,7 +202,7 @@ export class AssessmentItemComponent implements OnInit {
 
     let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(this.assessment.id)); 
     this.assessmentDbService.setAll(assessments);
-    let settings: Settings[] = await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(deleteSettings.id)); 
+    let settings: Settings[] = await firstValueFrom(this.settingsDbService.deleteByIdWithObservable(deleteSettings.id)); 
     this.settingsDbService.setAll(settings); 
 
     let assessmentCalculatorCopy: Calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);

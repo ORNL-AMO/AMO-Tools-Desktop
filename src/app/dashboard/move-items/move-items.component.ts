@@ -54,6 +54,7 @@ export class MoveItemsComponent implements OnInit {
 
   async setDirectories() {
     this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
+    console.log(this.allDirectories);
   }
 
   initForm() {
@@ -200,8 +201,8 @@ export class MoveItemsComponent implements OnInit {
     });
   }
 
+
   async createFolder() {
-    // ***
     let newDirectoryId: number = await this.directoryDashboardService.addDirectoryAndSettings(this.newFolderForm);
     this.setDirectories();
     this.moveForm.patchValue({

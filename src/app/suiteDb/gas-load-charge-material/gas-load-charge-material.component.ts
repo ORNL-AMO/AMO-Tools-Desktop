@@ -103,7 +103,6 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
       let suiteDbResult = this.suiteDbService.deleteGasLoadChargeMaterial(this.sdbEditMaterialId);
-      debugger;
       if (suiteDbResult == true) {
         await firstValueFrom(this.gasLoadMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
         this.closeModal.emit(this.newMaterial);

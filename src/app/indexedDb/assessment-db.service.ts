@@ -23,10 +23,6 @@ export class AssessmentDbService {
     }
   }
 
-  getAll(): Array<Assessment> {
-    return this.allAssessments;
-  }
-
   getAllAssessments(): Observable<any> {
     return this.dbService.getAll(this.storeName);
   }
@@ -34,10 +30,6 @@ export class AssessmentDbService {
   findById(id: number): Assessment {
     let selectedAssessment: Assessment = _.find(this.allAssessments, (assessment) => { return assessment.id === id; });
     return selectedAssessment;
-  }
-
-  getById(assessmentId: number): Observable<Assessment> {
-    return this.dbService.getByKey(this.storeName, assessmentId);
   }
 
   getByDirectoryId(id: number): Array<Assessment> {
@@ -52,21 +44,10 @@ export class AssessmentDbService {
     return example;
   }
 
-
-  add(assessment: Assessment) {
-    assessment.createdDate = new Date();
-    assessment.modifiedDate = new Date();
-    this.dbService.add(this.storeName, assessment);
-  }
-
   addWithObservable(assessment: Assessment): Observable<any> {
     assessment.createdDate = new Date();
     assessment.modifiedDate = new Date();
     return this.dbService.add(this.storeName, assessment);
-  }
-
-  deleteById(assessmentId: number) {
-    this.dbService.delete(this.storeName, assessmentId);
   }
 
   deleteByIdWithObservable(assessmentId: number): Observable<any> {
@@ -74,6 +55,7 @@ export class AssessmentDbService {
   }
 
   bulkDeleteWithObservable(assessmentIds: Array<number>): Observable<any> {
+    // ngx-indexed-db returns Array<Array<T>>
     return this.dbService.bulkDelete(this.storeName, assessmentIds);
   }
 

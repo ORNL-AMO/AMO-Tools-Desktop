@@ -185,11 +185,10 @@ export class WasteWaterComponent implements OnInit {
     delete settings.id;
     delete settings.directoryId;
     settings.assessmentId = this.assessment.id;
-    await firstValueFrom(this.settingsDbService.addWithObservable(settings));
-    this.settingsDbService.setAll();
-    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-    console.log('reset assessment settings', this.settings)
+    this.settings = await firstValueFrom(this.settingsDbService.addWithObservable(settings));
     this.wasteWaterService.settings.next(this.settings);
+    let allSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(allSettings);
   }
 
   setDisableNext(wasteWater: WasteWater) {
@@ -261,9 +260,10 @@ export class WasteWaterComponent implements OnInit {
     }
   }
 
-  closeWelcomeScreen() {
+ async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableWasteWaterTutorial = true;
-    this.settingsDbService.update(this.settingsDbService.globalSettings);
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.wasteWaterService.isModalOpen.next(false);
   }

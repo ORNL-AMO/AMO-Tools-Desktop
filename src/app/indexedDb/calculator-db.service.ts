@@ -21,17 +21,8 @@ export class CalculatorDbService {
     }
   }
 
-  getAll() {
-    return this.allCalculators;
-  }
-
   getAllCalculators(): Observable<Array<Calculator>> {
     return this.dbService.getAll(this.storeName);
-  }
-
-  getById(id: number): Calculator {
-    let selectedCalculator: Calculator = _.find(this.allCalculators, (calculator) => { return id === calculator.id; });
-    return selectedCalculator;
   }
 
   getByDirectoryId(id: number): Array<Calculator> {
@@ -42,12 +33,6 @@ export class CalculatorDbService {
   getByAssessmentId(id: number): Calculator {
     let selectedCalculator: Calculator = _.find(this.allCalculators, (calculator) => { return calculator.assessmentId === id; });
     return selectedCalculator;
-  }
-
-  add(calculator: Calculator): void {
-    calculator.createdDate = new Date();
-    calculator.modifiedDate = new Date();
-    this.dbService.add(this.storeName, calculator);
   }
 
   addWithObservable(calculator: Calculator): Observable<any> {
@@ -61,15 +46,12 @@ export class CalculatorDbService {
     return this.dbService.update(this.storeName, calculator);
   }
   
-  deleteById(calculatorId: number) {
-    this.dbService.delete(this.storeName, calculatorId);
-  }
-
   deleteByIdWithObservable(calculatorId: number) {
     return this.dbService.delete(this.storeName, calculatorId);
   }
 
   bulkDeleteWithObservable(calculatorIds: Array<number>): Observable<any> {
+    // ngx-indexed-db returns Array<Array<T>>
     return this.dbService.bulkDelete(this.storeName, calculatorIds);
   }
 

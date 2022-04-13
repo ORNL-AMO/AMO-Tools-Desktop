@@ -20,10 +20,6 @@ export class InventoryDbService {
     }
   }
 
-  getAll(): Array<InventoryItem> {
-    return this.allInventoryItems;
-  }
-
   getAllInventory(): Observable<any> {
     return this.dbService.getAll(this.storeName);
   }
@@ -53,18 +49,8 @@ export class InventoryDbService {
     return tmpExample;
   }
 
-  deleteById(inventoryId: number) {
-    this.dbService.delete(this.storeName, inventoryId);
-  }
-
   deleteByIdWithObservable(inventoryId: number): Observable<any> {
     return this.dbService.delete(this.storeName, inventoryId);
-  }
-
-  add(inventory: InventoryItem) {
-    inventory.createdDate = new Date();
-    inventory.modifiedDate = new Date();
-    this.dbService.add(this.storeName, inventory);
   }
 
   updateWithObservable(inventory: InventoryItem): Observable<any> {
