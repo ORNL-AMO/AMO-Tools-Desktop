@@ -1,0 +1,440 @@
+
+import { Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { PlotlyService } from 'angular-plotly.js';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { SimpleChart, TraceData, TraceCoordinates } from '../../../../shared/models/plotting';
+import { Settings } from '../../../../shared/models/settings';
+import { FanPsychrometricService } from '../fan-psychrometric.service';
+import { Subscription } from 'rxjs';
+import { BaseGasDensity, PsychrometricResults } from '../../../../shared/models/fans';
+
+@Component({
+  selector: 'app-fan-psychrometric-chart',
+  templateUrl: './fan-psychrometric-chart.component.html',
+  styleUrls: ['./fan-psychrometric-chart.component.css']
+})
+export class FanPsychrometricChartComponent implements OnInit {
+ 
+  @Input()
+  gasDensityForm: FormGroup;
+  // ** remove above if we don't end up using
+
+  @Input()
+  settings: Settings;
+
+  @ViewChild("expandedChartDiv", { static: false }) expandedChartDiv: ElementRef;
+  @ViewChild("panelChartDiv", { static: false }) panelChartDiv: ElementRef;
+  ngChartContainer: ElementRef;
+  chart: SimpleChart;
+
+  psychrometricResults: PsychrometricResults;
+  calculatedBaseGasDensitySubscription: Subscription;
+  inputData: BaseGasDensity;
+  expanded: boolean = false;
+  hoverBtnExpand: boolean;
+  displayExpandTooltip: boolean;
+  hoverBtnCollapse: boolean;
+  hoverBtnGridLines: boolean;
+  displayCollapseTooltip: boolean;
+  displayGridLinesTooltip: boolean;
+  temperatureUnits: string = 'F';
+  useImperialUnits: boolean = true;
+  lineCreationData: LineCreationData = ImperialLineData;
+
+  constructor(private plotlyService: PlotlyService, private psychrometricService: FanPsychrometricService, private convertUnitsService: ConvertUnitsService) {}
+
+  ngOnInit() {
+    this.triggerInitialResize();
+    this.setChartUnits();
+    this.calculatedBaseGasDensitySubscription = this.psychrometricService.calculatedBaseGasDensity.subscribe(results => {
+      this.psychrometricResults = results;
+      this.inputData = this.psychrometricService.baseGasDensityData.getValue();
+      this.initRenderChart();
+    });
+  }
+
+  initRenderChart() {
+    // Set base chart object
+    this.chart = this.getEmptyChart();
+
+    // Chart trace/coordinates
+    let blueTraces: Array<TraceData> = this.addBlueTraces();
+    let redTraces: Array<TraceData> = this.addRedTraces();
+    this.addTopAxisTrace(blueTraces);
+
+    // pass chart data to plotly for rendering at div
+    if (this.expanded && this.expandedChartDiv) {
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.chart.data, this.chart.layout, this.chart.config)
+
+    } else if (!this.expanded && this.panelChartDiv) {
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.chart.data, this.chart.layout, this.chart.config)
+    }
+  }
+
+
+  addBlueTraces(): Array<TraceData> {
+    // List 2: Dry Bulb 
+    let xCoordinates = [];
+    for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
+      xCoordinates.push(i);
+    }
+    // List 1: Relative Humidity 
+    let relativeHumidities: Array<number> = [];
+    for (let i = 0; i <= 100; i += 20) {
+      relativeHumidities.push(i);
+    }
+
+    let blueTraces: Array<TraceData> = [];
+    // Calculated humidity ratio will be Y values
+    let humidityRatios: Array<number>;
+    relativeHumidities.forEach(relativeHumidity => {
+      let trace = this.getEmptyTrace('Relative Humidity', 'blue');
+      trace.x = xCoordinates;
+      humidityRatios = [];
+      xCoordinates.forEach(x => {
+        // Default data from psych
+        let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
+        relativeHumidityInput.dryBulbTemp = x;
+        relativeHumidityInput.relativeHumidity = relativeHumidity;
+        relativeHumidityInput.inputType = 'relativeHumidity';
+        let results: PsychrometricResults = this.psychrometricService.calcDensityRelativeHumidity(relativeHumidityInput, this.settings, true);
+        if (results) {
+          humidityRatios.push(results.humidityRatio);
+        }
+      });
+      trace.hovertemplate = `Relative Humidity ${trace.y}%`;
+      trace.y = humidityRatios;
+      this.chart.data.push(trace);
+
+      blueTraces.push(trace);
+    });
+    console.log('blueTraces', blueTraces);
+    return blueTraces;
+  }
+
+  addRedTraces(): Array<TraceData> {
+    // List 1: Wet Bulb = sequence(35 , 130, by 5) (may want to change to by 10 if too crowded)
+    let wetBulbTemps: Array<number> = [];
+    for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
+      wetBulbTemps.push(i);
+    }
+    
+    let redTraces: Array<TraceData> = [];
+    // Calculated humidity ratio will be Y values
+    let humidityRatios: Array<number> = [];
+    let xCoordinates: Array<number> = [];
+    wetBulbTemps.forEach(wetBulbTemp => {
+      // List 2: Dry Bulb 
+      xCoordinates = [];
+      for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
+        if (i >= wetBulbTemp) {
+          xCoordinates.push(i);
+        }
+      }
+      let trace = this.getEmptyTrace('Wet Bulb', 'red');
+      humidityRatios = [];
+      let invalidIndicies: Array<number> = [];
+      xCoordinates.forEach(x => {
+        let wetBulb: number = wetBulbTemp;
+        let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
+        relativeHumidityInput.dryBulbTemp = x;
+        relativeHumidityInput.wetBulbTemp = wetBulb;
+        relativeHumidityInput.inputType = 'wetBulb';
+        let results: PsychrometricResults = this.psychrometricService.calcDensityWetBulb(relativeHumidityInput, this.settings, true);
+        if (results) {
+          humidityRatios.push(results.humidityRatio);
+        }
+      });
+      
+      // Filter out invalid
+      humidityRatios = humidityRatios.filter((ratio: number, index: number) => {
+        if (ratio < 0) {
+          invalidIndicies.push(index);
+        } else {
+          return ratio;
+        }
+      });
+      xCoordinates = xCoordinates.filter((x: number, index: number) => !invalidIndicies.includes(index));
+      
+      trace.hovertemplate = `Wet Bulb ${trace.y} ${this.temperatureUnits}`;
+      trace.x = xCoordinates;
+      trace.y = humidityRatios;
+      
+      redTraces.push(trace);
+    });
+    redTraces.forEach(trace => this.chart.data.push(trace));
+    console.log('redtraces', redTraces);
+    this.chart.layout = this.getLayout(xCoordinates, humidityRatios);
+    return redTraces;
+  }
+
+  addTopAxisTrace(blueTraces: Array<TraceData>) {
+    // We need a trace or text/labels for this psuedo axis
+    // Should be able to index into blue lines array, copy the last trace, modify styling and add markers (see 'text' and 'customdata' property and usage)  and add to chart
+  }
+
+  addUserPoint() {
+
+    // This will get the y (humidity ratio)  for user point
+
+    // let trace = this.getEmptyTrace('Wet Bulb', 'red');
+    // trace.x = user dry bulb;
+    // let relativeHumidityInput: BaseGasDensity = Take from current user input;
+    // relativeHumidityInput.dryBulbTemp = user dry bulb;
+    // relativeHumidityInput.wetBulbTemp = user wetBulb temp;
+    // relativeHumidityInput.inputType = 'wetBulb';
+    // let results: PsychrometricResults = this.psychrometricService.calcDensityWetBulb(relativeHumidityInput, this.settings, true);
+    // trace.y = results.humidityRatio;
+
+  }
+
+  setChartUnits() {
+    if (this.settings.fanTemperatureMeasurement === 'C' || this.settings.fanTemperatureMeasurement === 'K') {
+      this.lineCreationData = MetricLineData;
+        // If Kelvin (K)- just use the metric graph (C), if Rankine (R), just use the imperial graph (F)
+    // check fanTemperatureMeasurement and set this.temperatureUnits to the string (or the UNICODE) that should display 
+
+     // 'F'"     &#8457;</span>
+    // 'C'"     &#8451;</span>
+    // 'K'"     &#8490;</span>
+    // 'R'"     &#176;R</span>
+      this.temperatureUnits = 'C';
+    } 
+  }
+
+  convertTemperatures(XYValues: Array<number>) {
+    if (this.settings.fanTemperatureMeasurement === 'C' || this.settings.fanTemperatureMeasurement === 'K') {
+      XYValues = this.convertUnitsService.convertArray(XYValues, 'F', 'C');
+    }
+    return XYValues;
+  }
+
+  getEmptyTrace(name: string, color: string): TraceData {
+    let trace: TraceData = {
+      x: [],
+      y: [],
+      name: name,
+      showlegend: false,
+      type: 'scatter',
+      mode: 'lines',
+      hovertemplate: '',
+      line: {
+        shape: 'spline',
+        color: color,
+        width: 1,
+      },
+    };
+    return trace;
+  }
+
+  getLayout(xticks: Array<number>, yticks: Array<number>) {
+    return  {
+      legend: {
+        orientation: 'h',
+        font: {
+          size: 12,
+        },
+        // x: 0,
+        // y: -.25
+      },
+      hovermode: 'x',
+      xaxis: {
+        autorange: true,
+        showgrid: true,
+        gridcolor: '#000000',
+        title: {
+          text:"Dry Bulb Temperature (F)"
+        },
+        showticksuffix: 'all',
+        tickangle: 45,
+        // tickmode: 'array',
+        // Change hoverFormat.. wrong or deprecated
+        // hoverformat: '%{x}%',
+        // range: [35, 130],
+        // tickvals: xticks,
+      },
+      yaxis: {
+        autorange: true,
+        // type: 'linear',
+        showgrid: false,
+        side: 'right',
+        title: {
+          text: "Humidity Ratio(Lbv/Lba)"
+        },
+        // range: [0, .1],
+        autotick: true,
+        // tickmode: 'array',
+        // tickvals: yticks,
+        rangemode: 'tozero',
+        showticksuffix: 'all'
+      },
+      margin: {
+        t: 50,
+        b: 75,
+        l: 25,
+        r: 75
+      }
+    }
+  }
+
+  getEmptyChart() {
+    return {
+      name: 'Psychrometric Chart',
+      data: [],
+      // Empty layout or set it to the default
+      layout: {
+        hovermode: 'closest',
+        xaxis: {
+          autorange: false,
+          type: 'auto',
+          showgrid: true,
+          title: {
+            text: ``
+          },
+          showticksuffix: 'all',
+        },
+        yaxis: {
+          autorange: false,
+          type: 'auto',
+          showgrid: true,
+          showticksuffix: 'all',
+          title: {
+            text: ``
+          },
+        },
+        margin: {
+          t: 50,
+          b: 75,
+          l: 75,
+          r: 50
+        }
+      },
+      config: {
+        modeBarButtonsToRemove: ['autoScale2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+        displaylogo: false,
+        displayModeBar: true,
+        responsive: true
+      },
+    };
+  }
+
+  toggleGrid() {
+    let showingGridX: boolean = this.chart.layout.xaxis.showgrid;
+    let showingGridY: boolean = this.chart.layout.yaxis.showgrid;
+    this.chart.layout.xaxis.showgrid = !showingGridX;
+    this.chart.layout.yaxis.showgrid = !showingGridY;
+    this.initRenderChart();
+  }
+
+
+  triggerInitialResize() {
+    window.dispatchEvent(new Event("resize"));
+    setTimeout(() => {
+      this.initRenderChart();
+    }, 100);
+  }
+
+  @HostListener("document:keyup", ["$event"])
+  closeExpandedGraph(event) {
+    if (this.expanded) {
+      if (event.code === "Escape") {
+        this.contractChart();
+      }
+    }
+  }
+
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.initRenderChart();
+    }, 200);
+  }
+
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.initRenderChart();
+    }, 200);
+  }
+
+  hideTooltip(btnType: string) {
+    if (btnType === 'btnExpandChart') {
+      this.hoverBtnExpand = false;
+      this.displayExpandTooltip = false;
+    }
+    else if (btnType === 'btnCollapseChart') {
+      this.hoverBtnCollapse = false;
+      this.displayCollapseTooltip = false;
+    }
+    else if (btnType === 'btnGridLines') {
+      this.hoverBtnGridLines = false;
+      this.displayGridLinesTooltip = false;
+    }
+  }
+
+  initTooltip(btnType: string) {
+    if (btnType === 'btnExpandChart') {
+      this.hoverBtnExpand = true;
+    }
+    else if (btnType === 'btnCollapseChart') {
+      this.hoverBtnCollapse = true;
+    }
+    else if (btnType === 'btnGridLines') {
+      this.hoverBtnGridLines = true;
+    }
+    setTimeout(() => {
+      this.checkHover(btnType);
+    }, 200);
+  }
+
+  checkHover(btnType: string) {
+    if (btnType === 'btnExpandChart') {
+      if (this.hoverBtnExpand) {
+        this.displayExpandTooltip = true;
+      }
+      else {
+        this.displayExpandTooltip = false;
+      }
+    }
+    else if (btnType === 'btnGridLines') {
+      if (this.hoverBtnGridLines) {
+        this.displayGridLinesTooltip = true;
+      }
+      else {
+        this.displayGridLinesTooltip = false;
+      }
+    }
+    else if (btnType === 'btnCollapseChart') {
+      if (this.hoverBtnCollapse) {
+        this.displayCollapseTooltip = true;
+      }
+      else {
+        this.displayCollapseTooltip = false;
+      }
+    }
+  }
+}
+
+
+export const ImperialLineData: LineCreationData = {
+    start: 35,
+    end: 130,
+    increment: 5
+}
+
+export const MetricLineData: LineCreationData = {
+  start: 0,
+  end: 60,
+  increment: 3
+}
+
+interface LineCreationData {
+    start: number,
+    end: number,
+    increment: number
+}
