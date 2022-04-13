@@ -6,6 +6,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as moment from 'moment';
 import * as ExcelJS from 'exceljs';
 import * as fs from 'file-saver';
+import * as betterPlantsImg from './better-plants-img.js';
 
 @Component({
   selector: 'app-opportunity-summary-copy-table',
@@ -243,7 +244,20 @@ export class OpportunitySummaryCopyTableComponent implements OnInit {
     table1Rows.forEach(d => {
       worksheet1.addRow(Object.values(d));
     });
+
+    const imageId = workbook.addImage({
+      base64: betterPlantsImg.logoBase64,
+      extension: 'png',
+    });
+    worksheet1.addImage(imageId, { 
+      tl: { col: 0, row: 0 },
+      ext: { width: 225, height: 96 },
+      editAs: 'oneCell'
+    });
+
     return worksheet1
+
+
   }
 
   getWorksheet2(workbook: ExcelJS.Workbook): ExcelJS.Worksheet {
@@ -251,9 +265,9 @@ export class OpportunitySummaryCopyTableComponent implements OnInit {
 
     worksheet2.getCell('A1').value = 'Project Tracker Tool';
     worksheet2.getCell('A1').style = this.setTitleStyle();
-    worksheet2.mergeCells('A1', 'H5');
-    worksheet2.getCell('I1').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF203864' } };
-    worksheet2.mergeCells('I1', 'S5');
+    worksheet2.mergeCells('A1', 'L5');
+    worksheet2.getCell('M1').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF203864' } };
+    worksheet2.mergeCells('M1', 'S5');
 
     this.createProjectsSummaryTable(worksheet2);
 
@@ -368,6 +382,16 @@ export class OpportunitySummaryCopyTableComponent implements OnInit {
     });
     table2Rows.forEach(d => {
       worksheet2.addRow(Object.values(d));
+    });
+
+    const imageId = workbook.addImage({
+      base64: betterPlantsImg.logoBase64,
+      extension: 'png',
+    });
+    worksheet2.addImage(imageId, { 
+      tl: { col: 0, row: 0 },
+      ext: { width: 225, height: 96 },
+      editAs: 'oneCell'
     });
 
     return worksheet2
