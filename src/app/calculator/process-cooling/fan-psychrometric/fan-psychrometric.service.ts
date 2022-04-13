@@ -81,12 +81,12 @@ export class FanPsychrometricService {
     this.calculatedBaseGasDensity.next(psychrometricResults);
   }
 
-  calcDensityWetBulb(baseGasDensityData: BaseGasDensity, settings: Settings): PsychrometricResults {
+  calcDensityWetBulb(baseGasDensityData: BaseGasDensity, settings: Settings, isBuildingGraph?: boolean): PsychrometricResults {
     let psychrometricResults: PsychrometricResults;
     let form = this.gasDensityFormService.getGasDensityFormFromObj(baseGasDensityData, settings);
-    // if (this.isWetBulbValid(form)) { // commenting out for now until validation is figured out, currently returning invalid. the psychrometric graph will not render unless this method returns valid/true
+    if (this.isWetBulbValid(form) || isBuildingGraph) { 
       psychrometricResults = this.fsatService.getPsychrometricWetBulb(baseGasDensityData, settings);
-    // }
+    } 
     return psychrometricResults;
   }
 
@@ -95,12 +95,12 @@ export class FanPsychrometricService {
       && gasDensityForm.controls.specificGravity.valid && gasDensityForm.controls.wetBulbTemp.valid);
   }
 
-  calcDensityRelativeHumidity(baseGasDensityData: BaseGasDensity, settings: Settings): PsychrometricResults {
+  calcDensityRelativeHumidity(baseGasDensityData: BaseGasDensity, settings: Settings, isBuildingGraph?: boolean): PsychrometricResults {
     let psychrometricResults: PsychrometricResults;
     let form = this.gasDensityFormService.getGasDensityFormFromObj(baseGasDensityData, settings);
-    if (this.isRelativeHumidityValid(form)) {
+    if (this.isRelativeHumidityValid(form) || isBuildingGraph) {
       psychrometricResults = this.fsatService.getPsychrometricRelativeHumidity(baseGasDensityData, settings);
-    }
+    } 
     return psychrometricResults;
   }
 

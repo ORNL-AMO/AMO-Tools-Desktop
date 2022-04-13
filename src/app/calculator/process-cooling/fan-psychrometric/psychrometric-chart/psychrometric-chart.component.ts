@@ -35,7 +35,6 @@ export class PsychrometricChartComponent implements OnInit {
     this.calculatedBaseGasDensitySubscription = this.psychrometricService.calculatedBaseGasDensity.subscribe(results => {
       this.psychrometricResults = results;
       if (results) {
-        debugger;
         let inputData: BaseGasDensity = this.psychrometricService.baseGasDensityData.getValue();
         this.psychrometricResults.barometricPressure = inputData.barometricPressure;
         this.psychrometricResults.dryBulbTemp = inputData.dryBulbTemp;

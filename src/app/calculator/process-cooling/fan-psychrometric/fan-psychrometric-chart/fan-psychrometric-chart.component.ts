@@ -23,7 +23,6 @@ export class FanPsychrometricChartComponent implements OnInit {
   @Input()
   settings: Settings;
 
-
   @ViewChild("expandedChartDiv", { static: false }) expandedChartDiv: ElementRef;
   @ViewChild("panelChartDiv", { static: false }) panelChartDiv: ElementRef;
   ngChartContainer: ElementRef;
@@ -31,7 +30,7 @@ export class FanPsychrometricChartComponent implements OnInit {
 
   psychrometricResults: PsychrometricResults;
   calculatedBaseGasDensitySubscription: Subscription;
-
+  inputData: BaseGasDensity;
   expanded: boolean = false;
   hoverBtnExpand: boolean;
   displayExpandTooltip: boolean;
@@ -39,49 +38,30 @@ export class FanPsychrometricChartComponent implements OnInit {
   hoverBtnGridLines: boolean;
   displayCollapseTooltip: boolean;
   displayGridLinesTooltip: boolean;
+  temperatureUnits: string = 'F';
+  useImperialUnits: boolean = true;
+  lineCreationData: LineCreationData = ImperialLineData;
 
   constructor(private plotlyService: PlotlyService, private psychrometricService: FanPsychrometricService, private convertUnitsService: ConvertUnitsService) {}
 
   ngOnInit() {
     this.triggerInitialResize();
-    // debugger;
-    this.psychrometricService.calculateBaseGasDensity(this.settings);
-    //take care of this once you get clarification from Kristina for a few things
-    // If we get results from a subscription (i.e. psychrometricService.calculatedBaseGasDensity)
-    // Then set results and this.initRenderChart() here, otherwise see onChanges 
+    this.setChartUnits();
     this.calculatedBaseGasDensitySubscription = this.psychrometricService.calculatedBaseGasDensity.subscribe(results => {
-      debugger;
       this.psychrometricResults = results;
-      if (results) {
-        let inputData: BaseGasDensity = this.psychrometricService.baseGasDensityData.getValue();
-        this.psychrometricResults.barometricPressure = inputData.barometricPressure;
-        this.psychrometricResults.dryBulbTemp = inputData.dryBulbTemp;
-      }
-    });
-
-
-    // Remove this when done
-    this.initRenderChart();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    // If we're getting results from @Input() 
-    // then Check for form changes here and render chart
-    if (changes.gasDensityForm && !changes.gasDensityForm.firstChange) {
+      this.inputData = this.psychrometricService.baseGasDensityData.getValue();
       this.initRenderChart();
-    }
+    });
   }
 
   initRenderChart() {
+    // Set base chart object
     this.chart = this.getEmptyChart();
-    // Pass changing information to this method, i.e. labels, ticks, etc
-    this.chart.layout = this.getLayout()
 
     // Chart trace/coordinates
-    this.addBlueTraces();
-    this.addRedTraces();
-    this.addGridTraces();
-    this.addTopAxisTrace();
+    let blueTraces: Array<TraceData> = this.addBlueTraces();
+    let redTraces: Array<TraceData> = this.addRedTraces();
+    this.addTopAxisTrace(blueTraces);
 
     // pass chart data to plotly for rendering at div
     if (this.expanded && this.expandedChartDiv) {
@@ -92,157 +72,149 @@ export class FanPsychrometricChartComponent implements OnInit {
     }
   }
 
-  addBlueTraces() {
-    // see interface at bottom of file
 
+  addBlueTraces(): Array<TraceData> {
+    // List 2: Dry Bulb 
+    let xCoordinates = [];
+    for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
+      xCoordinates.push(i);
+    }
+    // List 1: Relative Humidity 
+    let relativeHumidities: Array<number> = [];
+    for (let i = 0; i <= 100; i += 20) {
+      relativeHumidities.push(i);
+    }
 
-    let blueLines = this.buildLineData(); 
-    // blueLines = this.convertAxisTemperatures(blueLines);
-    
-    blueLines.forEach((lineTrace) => {
-      let trace = this.getEmptyTrace('blue');
-      // dry bulb
-      trace.x = lineTrace.x;
-      // rel humidity
-      trace.y = lineTrace.y;
-      let units = this.settings.unitsOfMeasure;
-      trace.hovertemplate = `Relative Humidity ${lineTrace.y} ${units}`;
+    let blueTraces: Array<TraceData> = [];
+    // Calculated humidity ratio will be Y values
+    let humidityRatios: Array<number>;
+    relativeHumidities.forEach(relativeHumidity => {
+      let trace = this.getEmptyTrace('Relative Humidity', 'blue');
+      trace.x = xCoordinates;
+      humidityRatios = [];
+      xCoordinates.forEach(x => {
+        // Default data from psych
+        let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
+        relativeHumidityInput.dryBulbTemp = x;
+        relativeHumidityInput.relativeHumidity = relativeHumidity;
+        relativeHumidityInput.inputType = 'relativeHumidity';
+        let results: PsychrometricResults = this.psychrometricService.calcDensityRelativeHumidity(relativeHumidityInput, this.settings, true);
+        if (results) {
+          humidityRatios.push(results.humidityRatio);
+        }
+      });
+      trace.hovertemplate = `Relative Humidity ${trace.y}%`;
+      trace.y = humidityRatios;
       this.chart.data.push(trace);
+
+      blueTraces.push(trace);
     });
+    console.log('blueTraces', blueTraces);
+    return blueTraces;
   }
 
-
-  addRedTraces() {
-    let redLines = this.buildRedLineData(); 
-    // blueLines = this.convertAxisTemperatures(blueLines);
+  addRedTraces(): Array<TraceData> {
+    // List 1: Wet Bulb = sequence(35 , 130, by 5) (may want to change to by 10 if too crowded)
+    let wetBulbTemps: Array<number> = [];
+    for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
+      wetBulbTemps.push(i);
+    }
     
-    redLines.forEach((lineTrace) => {
-      let trace = this.getEmptyTrace('red');
-      // dry bulb
-      trace.x = lineTrace.x;
-      // rel humidity
-      trace.y = lineTrace.y;
-      let units = this.settings.unitsOfMeasure;
-      trace.hovertemplate = `Relative Humidity ${lineTrace.y} ${units}`;
-      this.chart.data.push(trace);
+    let redTraces: Array<TraceData> = [];
+    // Calculated humidity ratio will be Y values
+    let humidityRatios: Array<number> = [];
+    let xCoordinates: Array<number> = [];
+    wetBulbTemps.forEach(wetBulbTemp => {
+      // List 2: Dry Bulb 
+      xCoordinates = [];
+      for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
+        if (i >= wetBulbTemp) {
+          xCoordinates.push(i);
+        }
+      }
+      let trace = this.getEmptyTrace('Wet Bulb', 'red');
+      humidityRatios = [];
+      let invalidIndicies: Array<number> = [];
+      xCoordinates.forEach(x => {
+        let wetBulb: number = wetBulbTemp;
+        let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
+        relativeHumidityInput.dryBulbTemp = x;
+        relativeHumidityInput.wetBulbTemp = wetBulb;
+        relativeHumidityInput.inputType = 'wetBulb';
+        let results: PsychrometricResults = this.psychrometricService.calcDensityWetBulb(relativeHumidityInput, this.settings, true);
+        if (results) {
+          humidityRatios.push(results.humidityRatio);
+        }
+      });
+      
+      // Filter out invalid
+      humidityRatios = humidityRatios.filter((ratio: number, index: number) => {
+        if (ratio < 0) {
+          invalidIndicies.push(index);
+        } else {
+          return ratio;
+        }
+      });
+      xCoordinates = xCoordinates.filter((x: number, index: number) => !invalidIndicies.includes(index));
+      
+      trace.hovertemplate = `Wet Bulb ${trace.y} ${this.temperatureUnits}`;
+      trace.x = xCoordinates;
+      trace.y = humidityRatios;
+      
+      redTraces.push(trace);
     });
+    redTraces.forEach(trace => this.chart.data.push(trace));
+    console.log('redtraces', redTraces);
+    this.chart.layout = this.getLayout(xCoordinates, humidityRatios);
+    return redTraces;
   }
 
-  addGridTraces() {}
-
-  addTopAxisTrace() {
-    // We need a trace for the line/axis
-    // and also for the points along it. 
+  addTopAxisTrace(blueTraces: Array<TraceData>) {
+    // We need a trace or text/labels for this psuedo axis
+    // Should be able to index into blue lines array, copy the last trace, modify styling and add markers (see 'text' and 'customdata' property and usage)  and add to chart
   }
 
-  convertAxisTemperatures(lineTraces) {
-    // if this.settings.unitsOfmeasure change 
-    // then below
+  addUserPoint() {
 
-    // lineTraces.map(line => {
-    //   line.temp = this.convertArray(line.temp, old unit, new unit);
-    // });
+    // This will get the y (humidity ratio)  for user point
 
+    // let trace = this.getEmptyTrace('Wet Bulb', 'red');
+    // trace.x = user dry bulb;
+    // let relativeHumidityInput: BaseGasDensity = Take from current user input;
+    // relativeHumidityInput.dryBulbTemp = user dry bulb;
+    // relativeHumidityInput.wetBulbTemp = user wetBulb temp;
+    // relativeHumidityInput.inputType = 'wetBulb';
+    // let results: PsychrometricResults = this.psychrometricService.calcDensityWetBulb(relativeHumidityInput, this.settings, true);
+    // trace.y = results.humidityRatio;
 
   }
 
-  convertArray(oldArray: Array<number>, from: string, to: string): Array<number> {
-    let convertedArray = new Array<number>();
-    for (let i = 0; i < oldArray.length; i++) {
-      convertedArray.push(this.convertVal(oldArray[i], from, to));
+  setChartUnits() {
+    if (this.settings.fanTemperatureMeasurement === 'C' || this.settings.fanTemperatureMeasurement === 'K') {
+      this.lineCreationData = MetricLineData;
+        // If Kelvin (K)- just use the metric graph (C), if Rankine (R), just use the imperial graph (F)
+    // check fanTemperatureMeasurement and set this.temperatureUnits to the string (or the UNICODE) that should display 
+
+     // 'F'"     &#8457;</span>
+    // 'C'"     &#8451;</span>
+    // 'K'"     &#8490;</span>
+    // 'R'"     &#176;R</span>
+      this.temperatureUnits = 'C';
+    } 
+  }
+
+  convertTemperatures(XYValues: Array<number>) {
+    if (this.settings.fanTemperatureMeasurement === 'C' || this.settings.fanTemperatureMeasurement === 'K') {
+      XYValues = this.convertUnitsService.convertArray(XYValues, 'F', 'C');
     }
-    return convertedArray;
+    return XYValues;
   }
 
-  convertVal(val: number, from: string, to: string) {
-    if (val !== undefined) {
-      val = this.convertUnitsService.value(val).from(from).to(to);
-    }
-    return val;
-  }
-
-
-  // Charlotte work
-  buildLineData(): Array<TraceCoordinates> {
-    let relHumidity20: TraceCoordinates = {x: [], y: []};
-    let relHumidity40: TraceCoordinates = {x: [], y: []};
-    let relHumidity60: TraceCoordinates = {x: [], y: []};
-    let relHumidity80: TraceCoordinates = {x: [], y: []};
-    let relHumidity100: TraceCoordinates = {x: [], y: []};
-
-    for (let i = 35; i <= 130; i = i + 5) {
-      debugger;
-      let barometricPressure = this.psychrometricResults.barometricPressure;
-      let relativeHumidity = this.psychrometricResults.relativeHumidity;
-
-      relHumidity20.x.push(i);
-      relHumidity20.y.push(this.calculateHumidityRatio(i, 20, 20));
-      relHumidity40.x.push(i);
-      relHumidity40.y.push(this.calculateHumidityRatio(i, 40, 40));
-      relHumidity60.x.push(i);
-      relHumidity60.y.push(this.calculateHumidityRatio(i, 60, 60));
-      relHumidity80.x.push(i);
-      relHumidity80.y.push(this.calculateHumidityRatio(i, 80, 80));
-      relHumidity100.x.push(i);
-      relHumidity100.y.push(this.calculateHumidityRatio(i, 90, 90));
-    }
-    return [relHumidity20, relHumidity40, relHumidity60, relHumidity80, relHumidity100];
-  }
-
-  buildRedLineData(): Array<TraceCoordinates> {
-    let relHumidity20: TraceCoordinates = {x: [], y: []};
-    let relHumidity40: TraceCoordinates = {x: [], y: []};
-    let relHumidity60: TraceCoordinates = {x: [], y: []};
-    let relHumidity80: TraceCoordinates = {x: [], y: []};
-    let relHumidity100: TraceCoordinates = {x: [], y: []};
-
-    for (let i = 35; i <= 130; i = i + 5) {
-      debugger;
-      let barometricPressure = this.psychrometricResults.barometricPressure;
-      let relativeHumidity = this.psychrometricResults.relativeHumidity;
-
-      relHumidity20.x.push(i);
-      relHumidity20.y.push(this.calculateHumidityRatio(i, 30, 30));
-      relHumidity40.x.push(i);
-      relHumidity40.y.push(this.calculateHumidityRatio(i, 20, 20));
-      relHumidity60.x.push(i);
-      relHumidity60.y.push(this.calculateHumidityRatio(i, 40, 60));
-      relHumidity80.x.push(i);
-      relHumidity80.y.push(this.calculateHumidityRatio(i, 60, 80));
-      relHumidity100.x.push(i);
-      relHumidity100.y.push(this.calculateHumidityRatio(i, 90, 90));
-    }
-    return [relHumidity20, relHumidity40, relHumidity60, relHumidity80, relHumidity100];
-  }
-
-
-
-  calculateHumidityRatio(dryBulbTemp: number, relativeHumidity: number, barometricPressure: number) { //relative humidity not being used??
-    const c8 = -1.0440397e4;
-    const c9 = -1.129465e1;
-    const c10 = -2.7022355e-2;
-    const c11 = 1.289036e-5;
-    const c12 = -2.4780681e-9;
-    const c13 = 6.5459673;
-
-    var t = dryBulbTemp + 459.67;
-    var lnOfSatPress = c8 / t + c9 + c10 * t + c11 * Math.pow(t, 2) + c12 * Math.pow(t, 3) + c13 * Math.log(t);
-    var satPress = Math.exp(lnOfSatPress);
-    var humidRatio = (0.621945 * satPress) / (barometricPressure - satPress);
-    // console.log('humidRatio value: ' + humidRatio);
-    return humidRatio;
-  }
-// End charlotte work
-
-
-
-
-   
-  getEmptyTrace(color: string): TraceData {
+  getEmptyTrace(name: string, color: string): TraceData {
     let trace: TraceData = {
       x: [],
       y: [],
-      name: '',
+      name: name,
       showlegend: false,
       type: 'scatter',
       mode: 'lines',
@@ -256,52 +228,52 @@ export class FanPsychrometricChartComponent implements OnInit {
     return trace;
   }
 
-  getLayout() {
-    // Convert tick values here or convert them and pass them in here
+  getLayout(xticks: Array<number>, yticks: Array<number>) {
     return  {
       legend: {
         orientation: 'h',
         font: {
           size: 12,
         },
-        x: 0,
-        y: -.25
+        // x: 0,
+        // y: -.25
       },
       hovermode: 'x',
       xaxis: {
-        autorange: false,
+        autorange: true,
         showgrid: true,
         gridcolor: '#000000',
         title: {
           text:"Dry Bulb Temperature (F)"
         },
         showticksuffix: 'all',
-        tickangle: 0,
-        tickmode: 'array',
+        tickangle: 45,
+        // tickmode: 'array',
         // Change hoverFormat.. wrong or deprecated
         // hoverformat: '%{x}%',
-        range: [35, 130],
-        tickvals: [30,  40,  50,  60,  70,  80,  90,  100,  110,  120,  130],
+        // range: [35, 130],
+        // tickvals: xticks,
       },
       yaxis: {
         autorange: true,
-        type: 'linear',
+        // type: 'linear',
         showgrid: false,
         side: 'right',
         title: {
           text: "Humidity Ratio(Lbv/Lba)"
         },
-        // range: [0, 0.1],
-        // tickvals: [0, 0.004, 0.008, 0.012, 0.016, 0.020, 0.024, 0.028],
-        //ticktext: ['0', '20%', '40%', '60%', '80%', '100%', '120%'],
-        // rangemode: 'tozero',
+        // range: [0, .1],
+        autotick: true,
+        // tickmode: 'array',
+        // tickvals: yticks,
+        rangemode: 'tozero',
         showticksuffix: 'all'
       },
       margin: {
         t: 50,
         b: 75,
-        l: 75,
-        r: 50
+        l: 25,
+        r: 75
       }
     }
   }
@@ -346,16 +318,6 @@ export class FanPsychrometricChartComponent implements OnInit {
       },
     };
   }
-
-  drawTopTrace() {
-
-  }
-
-
-
-  // Ignore below
-  // Utilities
-
 
   toggleGrid() {
     let showingGridX: boolean = this.chart.layout.xaxis.showgrid;
@@ -459,27 +421,20 @@ export class FanPsychrometricChartComponent implements OnInit {
 }
 
 
-
-
-export interface BlueLine {
-  x: number[],
-  y: number[],
+export const ImperialLineData: LineCreationData = {
+    start: 35,
+    end: 130,
+    increment: 5
 }
 
+export const MetricLineData: LineCreationData = {
+  start: 0,
+  end: 60,
+  increment: 3
+}
 
-// Use better name
-const blueLines: Array<BlueLine> = [
-  // Dummy vals
-  {
-      x:  [3.27, 6.576, 9.927, 13.322, 16.762, 20.245, 23.773, 27.344, 30.959, 34.619, 38.324, 42.073, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.989, 54.375, 63.045, 71.971, 81.146, 90.569, 100.241, 110.163, 120.337, 130.766, 141.452, 152.397, 163.604, 175.075, 186.814, 198.824, 211.106, 223.665, 236.504, 249.624, 263.03, 276.723, 290.708, 304.986, 319.561, 334.435, 349.61, 365.089, 380.875, 396.969, 413.373, 430.089, 447.12, 464.465, 482.128, 500.109, 518.409, 537.03],
-      y:  [3.27, 6.576, 9.927, 13.322, 16.762, 20.245, 23.773, 27.344, 30.959, 34.619, 38.324, 42.073, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.989, 54.375, 63.045, 71.971, 81.146, 90.569, 100.241, 110.163, 120.337, 130.766, 141.452, 152.397, 163.604, 175.075, 186.814, 198.824, 211.106, 223.665, 236.504, 249.624, 263.03, 276.723, 290.708, 304.986, 319.561, 334.435, 349.61, 365.089, 380.875, 396.969, 413.373, 430.089, 447.12, 464.465, 482.128, 500.109, 518.409, 537.03]
-  },
-  {
-    x:  [3.27, 6.576, 9.927, 13.322, 16.762, 20.245, 23.773, 27.344, 30.959, 34.619, 38.324, 42.073, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.989, 54.375, 63.045, 71.971, 81.146, 90.569, 100.241, 110.163, 120.337, 130.766, 141.452, 152.397, 163.604, 175.075, 186.814, 198.824, 211.106, 223.665, 236.504, 249.624, 263.03, 276.723, 290.708, 304.986, 319.561, 334.435, 349.61, 365.089, 380.875, 396.969, 413.373, 430.089, 447.12, 464.465, 482.128, 500.109, 518.409, 537.03],
-    y:  [3.27, 6.576, 9.927, 13.322, 16.762, 20.245, 23.773, 27.344, 30.959, 34.619, 38.324, 42.073, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.989, 54.375, 63.045, 71.971, 81.146, 90.569, 100.241, 110.163, 120.337, 130.766, 141.452, 152.397, 163.604, 175.075, 186.814, 198.824, 211.106, 223.665, 236.504, 249.624, 263.03, 276.723, 290.708, 304.986, 319.561, 334.435, 349.61, 365.089, 380.875, 396.969, 413.373, 430.089, 447.12, 464.465, 482.128, 500.109, 518.409, 537.03],
-},
- // etc...
-];
-
-
-
+interface LineCreationData {
+    start: number,
+    end: number,
+    increment: number
+}
