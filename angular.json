@@ -39,7 +39,8 @@
               "plotly.js",
               "c3",
               "regression",
-              "xlsx"
+              "xlsx",
+              "exceljs"
             ],
             "outputPath": "dist",
             "index": "src/index.html",
