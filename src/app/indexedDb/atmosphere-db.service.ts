@@ -30,8 +30,8 @@ export class AtmosphereDbService {
     return this.dbService.update(this.storeName, material);
   }
 
-  clearAtmosphereSpecificHeat(): void {
-    this.dbService.clear(this.storeName);
+  clearAtmosphereSpecificHeat(): Observable<boolean> {
+    return this.dbService.clear(this.storeName);
   }
 
 }

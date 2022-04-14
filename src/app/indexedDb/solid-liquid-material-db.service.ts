@@ -30,8 +30,8 @@ export class SolidLiquidMaterialDbService {
     return this.dbService.update(this.storeName, material);
   }
 
-  clearSolidLiquidFlueGasMaterials(): void {
-    this.dbService.clear(this.storeName);
+  clearSolidLiquidFlueGasMaterials(): Observable<boolean> {
+    return this.dbService.clear(this.storeName);
   }
 
 }

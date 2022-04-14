@@ -59,7 +59,6 @@ export class SsmtService {
     let ssmtCopy: SSMT = JSON.parse(JSON.stringify(ssmt));
     const ssmtValid: SsmtValid = this.checkValid(ssmtCopy, settings);
     let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, 0, true);
-    console.log('ssmt valid', ssmtValid.isValid)
     if (ssmtValid.isValid) {
       let outputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
       outputData.co2EmissionsOutput = this.setCo2SavingsEmissionsResult(setupInputData, outputData, settings, true);

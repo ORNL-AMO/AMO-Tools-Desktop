@@ -29,8 +29,9 @@ export class GasLoadMaterialDbService {
   updateWithObservable(material: GasLoadChargeMaterial): Observable<Array<GasLoadChargeMaterial>> {
     return this.dbService.update(this.storeName, material);
   }
-  clearGasLoadChargeMaterial(): void {
-    this.dbService.clear(this.storeName);
+
+  clearGasLoadChargeMaterial(): Observable<boolean> {
+    return this.dbService.clear(this.storeName);
   }
 
 }

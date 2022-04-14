@@ -13,10 +13,8 @@ import { Assessment } from '../../shared/models/assessment';
 import { Calculator } from '../../shared/models/calculators';
 import { Directory } from '../../shared/models/directory';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
-import { Settings } from '../../shared/models/settings';
 import { DashboardService } from '../dashboard.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
-import { ImportExportInventory } from '../import-export/importExportModel';
 
 @Component({
   selector: 'app-move-items',
@@ -41,8 +39,7 @@ export class MoveItemsComponent implements OnInit {
       
     private assessmentDbService: AssessmentDbService,
     private calculatorDbService: CalculatorDbService,
-    private inventoryDbService: InventoryDbService,
-    private settingsDbService: SettingsDbService) { }
+    private inventoryDbService: InventoryDbService) { }
 
   ngOnInit() {
     this.setDirectories();
@@ -54,7 +51,6 @@ export class MoveItemsComponent implements OnInit {
 
   async setDirectories() {
     this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
-    console.log(this.allDirectories);
   }
 
   initForm() {
@@ -86,10 +82,11 @@ export class MoveItemsComponent implements OnInit {
     this.moveModal.show();
   }
 
-  hideMoveModal() {
+  async hideMoveModal() {
     this.folderSelected = false;
     this.moveModal.hide();
-    this.directoryDbService.setAll();
+    let updatedDirectories: Array<Directory> = await firstValueFrom(this.directoryDbService.getAllDirectories());
+    this.directoryDbService.setAll(updatedDirectories);
     this.dashboardService.moveItems.next(false);
   }
 
@@ -112,8 +109,8 @@ export class MoveItemsComponent implements OnInit {
   }
 
   async saveAssessments() {
-    let hasSelectedToCopy: boolean = this.directory.assessments.some(assessment => assessment.selected);
-    if (hasSelectedToCopy) {
+    let hasSelectedAssessments: boolean = this.directory.assessments.some(assessment => assessment.selected);
+    if (hasSelectedAssessments) {
       let updatedAssessments: Assessment[] = [];
       for (let i = 0; i < this.directory.assessments.length; i++) {
         if (this.directory.assessments[i].selected) {
@@ -127,8 +124,8 @@ export class MoveItemsComponent implements OnInit {
   }
 
   async saveCalculators() {
-    let hasSelectedToCopy: boolean = this.directory.calculators.some(calculator => calculator.selected);
-    if (hasSelectedToCopy) {
+    let hasSelectedCalculators: boolean = this.directory.calculators.some(calculator => calculator.selected);
+    if (hasSelectedCalculators) {
       let updatedCalculators: Calculator[] = [];
       for (let i = 0; i < this.directory.calculators.length; i++) {
         let calculator: Calculator = this.directory.calculators[i];
@@ -144,8 +141,8 @@ export class MoveItemsComponent implements OnInit {
   }
 
   async saveInventories() {
-    let hasSelectedToCopy: boolean = this.directory.inventories.some(inventory => inventory.selected);
-    if (hasSelectedToCopy) {
+    let hasSelectedInventories: boolean = this.directory.inventories.some(inventory => inventory.selected);
+    if (hasSelectedInventories) {
       let updatedInventoryItems: InventoryItem[];
       if (this.directory.inventories.length > 0) {
         for (let i = 0; i < this.directory.inventories.length; i++) {
@@ -163,17 +160,17 @@ export class MoveItemsComponent implements OnInit {
   }
 
   async saveDirectories() {
-    let hasSelectedToCopy: boolean = this.directory.subDirectory.some(directory => directory.selected);
-    if (hasSelectedToCopy) {
+    let hasSelectedDirectories: boolean = this.directory.subDirectory.some(directory => directory.selected);
+    if (hasSelectedDirectories) {
       let updatedDirectories: Directory[];
-        for (let i = 0; i < this.directory.inventories.length; i++) {
-          let subDir: Directory = this.directory.inventories[i];
+        for (let i = 0; i < this.directory.subDirectory.length; i++) {
+          let subDir: Directory = this.directory.subDirectory[i];
           if (subDir.selected) {
             if (subDir.parentDirectoryId !== this.moveForm.controls.directoryId.value) {
               subDir.parentDirectoryId = this.moveForm.controls.directoryId.value;
-              updatedDirectories = await firstValueFrom(this.directoryDbService.updateWithObservable(this.directory));
+              updatedDirectories = await firstValueFrom(this.directoryDbService.updateWithObservable(subDir));
+              this.directoryDbService.setAll(updatedDirectories);
             } else {
-              subDir.parentDirectoryId = subDir.parentDirectoryId;
               this.hideMoveModal();
             }
             subDir.selected = false;

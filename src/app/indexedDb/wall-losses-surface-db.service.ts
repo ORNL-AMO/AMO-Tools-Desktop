@@ -31,8 +31,8 @@ export class WallLossesSurfaceDbService {
     return this.dbService.update(this.storeName, material);
   }
 
-  clearWallLossesSurface(): void {
-    this.dbService.clear(this.storeName);
+  clearWallLossesSurface(): Observable<boolean> {
+    return this.dbService.clear(this.storeName);
   }
 
 }

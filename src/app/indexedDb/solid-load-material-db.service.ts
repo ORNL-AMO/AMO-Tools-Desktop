@@ -30,8 +30,8 @@ export class SolidLoadMaterialDbService {
     return this.dbService.update(this.storeName, material);
   }
 
-  clearSolidLoadChargeMaterial(): void {
-    this.dbService.clear(this.storeName);
+  clearSolidLoadChargeMaterial(): Observable<boolean> {
+    return this.dbService.clear(this.storeName);
   }
 
 }

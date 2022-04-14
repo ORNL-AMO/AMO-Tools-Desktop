@@ -29,8 +29,8 @@ export class LiquidLoadMaterialDbService {
     return this.dbService.update(this.storeName, material);
   }
 
-  clearLiquidLoadChargeMaterial(): void {
-    this.dbService.clear(this.storeName);
+  clearLiquidLoadChargeMaterial(): Observable<boolean> {
+    return this.dbService.clear(this.storeName);
   }
 
 }

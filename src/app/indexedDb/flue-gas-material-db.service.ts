@@ -31,8 +31,8 @@ export class FlueGasMaterialDbService {
     return this.dbService.update(this.storeName, material);
   }
 
-  clearFlueGasMaterials(): void {
-    this.dbService.clear(this.storeName);
+  clearFlueGasMaterials(): Observable<boolean> {
+    return this.dbService.clear(this.storeName);
   }
 
 }

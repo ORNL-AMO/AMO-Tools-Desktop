@@ -28,7 +28,6 @@ export class DirectoryDashboardMenuComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      console.log('params sub', params)
       let id: number = Number(params['id']);
       this.breadCrumbs = new Array();
       this.directory = this.directoryDbService.getById(id);
@@ -66,7 +65,6 @@ export class DirectoryDashboardMenuComponent implements OnInit {
 
   init(){
     this.activatedRoute.params.subscribe(params => {
-      console.log('params sub 2', params);
       let id: number = Number(params['id']);
       this.breadCrumbs = new Array();
       this.directory = this.directoryDbService.getById(id);
@@ -82,8 +80,8 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     if (this.directory.calculators) {
       hasCalculatorSelected = _.find(this.directory.calculators, (value) => { return value.selected == true });
     }
-    let isSelected: boolean = hasAssessmentSelected != undefined || hasDirectorySelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined;
-    return isSelected;
+    let hasSelectedItems: boolean = hasAssessmentSelected != undefined || hasDirectorySelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined;
+    return hasSelectedItems;
   }
 
   checkReport() {
