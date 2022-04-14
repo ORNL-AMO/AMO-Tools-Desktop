@@ -61,7 +61,11 @@ export class FanPsychrometricChartComponent implements OnInit {
     // Chart trace/coordinates
     let blueTraces: Array<TraceData> = this.addBlueTraces();
     let redTraces: Array<TraceData> = this.addRedTraces();
-    this.addUserPoint();
+
+    if (this.inputData.dryBulbTemp && this.psychrometricResults && this.psychrometricResults.humidityRatio !== undefined) {
+      this.addUserPoint();
+    }
+
     this.addTopAxisTrace(blueTraces);
 
     // pass chart data to plotly for rendering at div
@@ -444,6 +448,10 @@ export class FanPsychrometricChartComponent implements OnInit {
         this.displayCollapseTooltip = false;
       }
     }
+  }
+
+  ngOnDestroy() {
+    this.calculatedBaseGasDensitySubscription.unsubscribe();
   }
 }
 
