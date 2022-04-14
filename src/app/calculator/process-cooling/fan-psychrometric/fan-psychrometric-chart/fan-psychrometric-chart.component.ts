@@ -61,6 +61,7 @@ export class FanPsychrometricChartComponent implements OnInit {
     // Chart trace/coordinates
     let blueTraces: Array<TraceData> = this.addBlueTraces();
     let redTraces: Array<TraceData> = this.addRedTraces();
+    this.addUserPoint();
     this.addTopAxisTrace(blueTraces);
 
     // pass chart data to plotly for rendering at div
@@ -178,6 +179,14 @@ export class FanPsychrometricChartComponent implements OnInit {
 
     // This will get the y (humidity ratio)  for user point
 
+    let trace = this.getEmptyPointTrace('user point', 'black');
+    debugger;
+    let dryBulbTemperature = this.inputData.dryBulbTemp;
+    trace.x.push(dryBulbTemperature);
+    trace.y.push(this.psychrometricResults.humidityRatio); //returning undefined, does return valid value when you generate example though
+    this.chart.data.push(trace);
+
+
     // let trace = this.getEmptyTrace('Wet Bulb', 'red');
     // trace.x = user dry bulb;
     // let relativeHumidityInput: BaseGasDensity = Take from current user input;
@@ -218,6 +227,24 @@ export class FanPsychrometricChartComponent implements OnInit {
       showlegend: false,
       type: 'scatter',
       mode: 'lines',
+      hovertemplate: '',
+      line: {
+        shape: 'spline',
+        color: color,
+        width: 1,
+      },
+    };
+    return trace;
+  }
+
+  getEmptyPointTrace(name: string, color: string): TraceData {
+    let trace: TraceData = {
+      x: [],
+      y: [],
+      name: name,
+      showlegend: false,
+      type: 'scatter',
+      mode: 'markers',
       hovertemplate: '',
       line: {
         shape: 'spline',
@@ -428,7 +455,7 @@ export const ImperialLineData: LineCreationData = {
 }
 
 export const MetricLineData: LineCreationData = {
-  start: 0,
+  start: 3,
   end: 60,
   increment: 3
 }
