@@ -17,10 +17,6 @@ export class ActivatedSludgeFormService {
       MLSSparValidators = [Validators.required, Validators.min(0)];
     }
 
-    if (obj.isUserDefinedSo == null) {
-      obj.isUserDefinedSo = true;
-    }
-
     let form: FormGroup = this.formBuilder.group({
       Temperature: [obj.Temperature, [Validators.required, Validators.min(0)]],
       So: [obj.So, [Validators.required, Validators.min(0)]],

@@ -74,6 +74,10 @@ export class UpdateDataService {
             })
         }
 
+        if (assessment.wasteWater.baselineData.activatedSludgeData.isUserDefinedSo == null) {
+            assessment.wasteWater.baselineData.activatedSludgeData.isUserDefinedSo = true;
+        }
+
         return assessment;
     }
 
