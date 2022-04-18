@@ -161,7 +161,6 @@ export class ImportService {
       let assessmentItem: ImportExportAssessment = importDir.assessments[i];
       assessmentItem.assessment.directoryId = newDirectoryId;
       delete assessmentItem.assessment.id;
-      // ***
       assessmentItem = await this.addImportedAssessmentItem(assessmentItem, newDirectoryId);
     }
     let updatedAssessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
@@ -203,7 +202,6 @@ export class ImportService {
     this.settingsDbService.setAll(updatedSettings);
   }
 
-  // ***
   async addAssessments(assessments: Array<ImportExportAssessment>, workingDirectoryId: number) {
     for (let i = 0; i < assessments.length; i++) {
       let assessment: ImportExportAssessment = assessments[i]; 

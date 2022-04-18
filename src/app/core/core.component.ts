@@ -88,10 +88,10 @@ export class CoreComponent implements OnInit {
       this.suiteDbService.startup();
     }
 
-    const start = performance.now(); 
+    // const start = performance.now(); 
     window.indexedDB.databases().then(db => {
-      const duration = performance.now() - start;
-      console.log(db, duration);
+      // const duration = performance.now() - start;
+      // console.log(db, duration);
       this.initData();
     });
 
@@ -130,22 +130,18 @@ export class CoreComponent implements OnInit {
     let existingDirectories: number = await firstValueFrom(this.directoryDbService.count());
 
     // let existingDirectories = 0;
-    console.log('existing dirs', existingDirectories)
     if (existingDirectories === 0) {
-      console.log('no existing data')
       await this.coreService.createDefaultDirectories();
       await this.coreService.createExamples();
       await this.coreService.createDirectorySettings();
       this.setAllDbData();
     } else {
-      console.log('has existing data')
       this.setAllDbData();
     }
   }
 
   async setAllDbData() {
     this.coreService.getAllAppData().subscribe(initializedData => {
-      console.log('core.component app data initilized', initializedData);
       this.directoryDbService.setAll(initializedData.directories);
       this.settingsDbService.setAll(initializedData.settings);
       this.assessmentDbService.setAll(initializedData.assessments);

@@ -78,7 +78,6 @@ export class ResetDataModalComponent implements OnInit {
     this.dashboardService.updateDashboardData.next(true);
     this.resetSystemSettingsModal.hide();
     this.closeModal.emit(true);
-    console.log('**** hiding modal');
   }
 
   toggleResetSystemSettingsOption(option: string) {
@@ -124,19 +123,14 @@ export class ResetDataModalComponent implements OnInit {
   async resetSystemSettingsAccept() {
     this.deleting = true;
     if (this.resetAll) {
-      console.log('RESET ALL DATA')
       this.resetAllData();
     } else if (this.resetUserAssessments) {
-      console.log('RESET USER ASSESSMENTS')
       this.resetAllUserAssessments();
     } else if (this.resetAppSettings) {
-      console.log('RESET SETTINGS')
       this.resetFactorySystemSettings();
     } else if (this.resetExampleAssessments) {
-      console.log('RESET EXAMPLES')
       this.resetFactoryExampleAssessments();
     } else if (this.resetCustomMaterials) {
-      console.log('RESET CUSTOM MATERIALS')
       this.resetFactoryCustomMaterials();
     }
 }

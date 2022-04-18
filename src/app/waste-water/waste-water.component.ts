@@ -70,7 +70,6 @@ export class WasteWaterComponent implements OnInit {
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
-      console.log(this.assessment.id);
       this.wasteWaterService.updateWasteWater(this.assessment.wasteWater);
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       if (!settings) {

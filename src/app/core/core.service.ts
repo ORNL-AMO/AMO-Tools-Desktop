@@ -49,7 +49,6 @@ export class CoreService {
   }
 
   relaunchApp(){
-    console.log('relaunch app');
     this.electronService.ipcRenderer.send("relaunch");
   }
 
@@ -72,7 +71,6 @@ export class CoreService {
         parentDirectoryId: null,
       };
       let allDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(allAssessmentsDir));
-      console.log('all dir id', allDirectory.id)
       let exampleAssessmentsDir: Directory = {
         name: 'Examples',
         createdDate: new Date(),
@@ -81,7 +79,6 @@ export class CoreService {
         isExample: true
       };
       let exampleDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(exampleAssessmentsDir));
-      console.log('examples dir id', exampleDirectory.id)
       this.exampleDirectoryId = exampleDirectory.id;
   }
 
