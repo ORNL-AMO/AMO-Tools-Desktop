@@ -71,10 +71,13 @@ export class UpdateDataService {
                         EnergyCostUnit: 0.09
                     };
                 }
+                if (!mod.activatedSludgeData.isUserDefinedSo) {
+                    mod.activatedSludgeData.isUserDefinedSo = true;
+                }
             })
         }
 
-        if (assessment.wasteWater.baselineData.activatedSludgeData.isUserDefinedSo == null) {
+        if (!assessment.wasteWater.baselineData.activatedSludgeData.isUserDefinedSo) {
             assessment.wasteWater.baselineData.activatedSludgeData.isUserDefinedSo = true;
         }
 
