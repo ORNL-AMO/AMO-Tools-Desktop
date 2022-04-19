@@ -32,7 +32,7 @@
             <label>Influent CBOD<sub>5</sub> Before</label>
             <div class="input-group">
                 <input class="form-control" name="influentCBODBefore" id="influentCBODBefore" formControlName="influentCBODBefore" type="number"
-                    (input)="calculateSo()" onfocus="this.select();" (focus)="focusField('influentCBODBefore')">
+                    (input)="calculateSo()" onfocus="this.select();" (focus)="focusField('influentCBODBefore')" [readonly]="!selected">
                 <span class="input-group-addon units">mg/L</span>
             </div>
                 <span *ngIf="form.controls.influentCBODBefore.invalid && !form.controls.influentCBODBefore.pristine">
@@ -50,7 +50,7 @@
             <label>Clarifier Efficiency</label>
             <div class="input-group">
                 <input class="form-control" name="clarifierEfficiency" id="clarifierEfficiency" formControlName="clarifierEfficiency" type="number"
-                    (input)="calculateSo()" onfocus="this.select();" (focus)="focusField('clarifierEfficiency')">
+                    (input)="calculateSo()" onfocus="this.select();" (focus)="focusField('clarifierEfficiency')" [readonly]="!selected">
                 <span class="input-group-addon units">%</span>
             </div>
                 <span *ngIf="form.controls.clarifierEfficiency.invalid && !form.controls.clarifierEfficiency.pristine">
