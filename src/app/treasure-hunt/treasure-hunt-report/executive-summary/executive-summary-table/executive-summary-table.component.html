@@ -1,6 +1,9 @@
 <label class="group-label">{{title}}</label>
-<table #copyTable class="table table-striped table-hover">
+<table #copyTable id="{{tableId}}" class="table table-striped table-hover">
     <tbody>
+        <tr *ngIf="exportToPPT" class="bold">
+            <td [attr.colspan]="colSpan">{{title}}</td>
+        </tr>
         <tr class="bold">
             <!--cant use colspan with copy table button (need 2)-->
             <td *ngIf="showFullSummary">
@@ -36,8 +39,11 @@
             <td>
                 Payback
             </td>
-            <td *ngIf="treasureHuntResults.hasMixed == true">
+            <td *ngIf="treasureHuntResults.hasMixed == true && !exportToPPT">
 
+            </td>
+            <td *ngIf="treasureHuntResults.hasMixed == true && exportToPPT">
+                Has Mixed
             </td>
         </tr>
         <!--Electricity-->
@@ -73,7 +79,8 @@
                 {{treasureHuntResults.electricity.paybackPeriod | number:'1.0-2'}}
             </td>
             <td *ngIf="treasureHuntResults.hasMixed == true">
-                <span *ngIf="treasureHuntResults.electricity.hasMixed == true" class="fa fa-asterisk"></span>
+                <span *ngIf="treasureHuntResults.electricity.hasMixed == true && !exportToPPT" class="fa fa-asterisk"></span>
+                <span *ngIf="treasureHuntResults.electricity.hasMixed == true && exportToPPT" class="bold"> * </span>
             </td>
         </tr>
         <!--Natural Gas-->
@@ -110,7 +117,8 @@
                 {{treasureHuntResults.naturalGas.paybackPeriod | number:'1.0-2'}}
             </td>
             <td *ngIf="treasureHuntResults.hasMixed == true">
-                <span *ngIf="treasureHuntResults.naturalGas.hasMixed == true" class="fa fa-asterisk"></span>
+                <span *ngIf="treasureHuntResults.naturalGas.hasMixed == true && !exportToPPT" class="fa fa-asterisk"></span>
+                <span *ngIf="treasureHuntResults.naturalGas.hasMixed == true && exportToPPT" class="bold"> * </span>
             </td>
         </tr>
         <!--Water-->
@@ -147,7 +155,8 @@
                 {{treasureHuntResults.water.paybackPeriod | number:'1.0-2'}}
             </td>
             <td *ngIf="treasureHuntResults.water.hasMixed == true">
-                <span *ngIf="treasureHuntResults.hasMixed == true" class="fa fa-asterisk"></span>
+                <span *ngIf="treasureHuntResults.hasMixed == true && !exportToPPT" class="fa fa-asterisk"></span>
+                <span *ngIf="treasureHuntResults.hasMixed == true && exportToPPT" class="bold"> * </span>
             </td>
         </tr>
         <!--Waste Water-->
@@ -184,7 +193,8 @@
                 {{treasureHuntResults.wasteWater.paybackPeriod | number:'1.0-2'}}
             </td>
             <td *ngIf="treasureHuntResults.hasMixed == true">
-                <span *ngIf="treasureHuntResults.wasteWater.hasMixed == true" class="fa fa-asterisk"></span>
+                <span *ngIf="treasureHuntResults.wasteWater.hasMixed == true && !exportToPPT" class="fa fa-asterisk"></span>
+                <span *ngIf="treasureHuntResults.wasteWater.hasMixed == true && exportToPPT" class="bold"> * </span>
             </td>
         </tr>
         <!--Other Fuel-->
@@ -221,7 +231,8 @@
                 {{treasureHuntResults.otherFuel.paybackPeriod | number:'1.0-2'}}
             </td>
             <td *ngIf="treasureHuntResults.hasMixed == true">
-                <span *ngIf="treasureHuntResults.otherFuel.hasMixed == true" class="fa fa-asterisk"></span>
+                <span *ngIf="treasureHuntResults.otherFuel.hasMixed == true && !exportToPPT" class="fa fa-asterisk"></span>
+                <span *ngIf="treasureHuntResults.otherFuel.hasMixed == true && exportToPPT" class="bold"> * </span>
             </td>
         </tr>
         <!--Compressed Air-->
@@ -258,7 +269,8 @@
                 {{treasureHuntResults.compressedAir.paybackPeriod | number:'1.0-2'}}
             </td>
             <td *ngIf="treasureHuntResults.hasMixed == true">
-                <span *ngIf="treasureHuntResults.compressedAir.hasMixed == true" class="fa fa-asterisk"></span>
+                <span *ngIf="treasureHuntResults.compressedAir.hasMixed == true && !exportToPPT" class="fa fa-asterisk"></span>
+                <span *ngIf="treasureHuntResults.compressedAir.hasMixed == true && exportToPPT" class="bold"> * </span>
             </td>
         </tr>
         <!--Steam-->
@@ -295,7 +307,8 @@
                 {{treasureHuntResults.steam.paybackPeriod | number:'1.0-2'}}
             </td>
             <td *ngIf="treasureHuntResults.hasMixed == true">
-                <span *ngIf="treasureHuntResults.steam.hasMixed == true" class="fa fa-asterisk"></span>
+                <span *ngIf="treasureHuntResults.steam.hasMixed == true && !exportToPPT" class="fa fa-asterisk"></span>
+                <span *ngIf="treasureHuntResults.steam.hasMixed == true && exportToPPT" class="bold"> * </span>
             </td>
         </tr>
         <!--Other -->
@@ -337,7 +350,8 @@
                 {{treasureHuntResults.other.paybackPeriod | number:'1.0-2'}}
             </td>
             <td *ngIf="treasureHuntResults.hasMixed == true">
-                <span class="fa fa-asterisk"></span>
+                <span *ngIf="!exportToPPT" class="fa fa-asterisk"></span>
+                <span *ngIf="exportToPPT" class="bold"> * </span>
             </td>
         </tr>
         <tr *ngIf="treasureHuntResults.totalAdditionalSavings != 0">

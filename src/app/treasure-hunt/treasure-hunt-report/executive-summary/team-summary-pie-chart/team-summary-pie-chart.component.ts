@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
 import { PlotlyService } from 'angular-plotly.js';
+import { TreasureHuntReportService } from '../../treasure-hunt-report.service';
 @Component({
   selector: 'app-team-summary-pie-chart',
   templateUrl: './team-summary-pie-chart.component.html',
@@ -15,7 +16,7 @@ export class TeamSummaryPieChartComponent implements OnInit {
 
   @ViewChild('plotlyPieChart', { static: false }) plotlyPieChart: ElementRef;
 
-  constructor(private plotlyService: PlotlyService) { }
+  constructor(private plotlyService: PlotlyService, private treasureHuntReportService: TreasureHuntReportService) { }
 
   ngOnInit(): void {
   }
@@ -83,6 +84,17 @@ export class TeamSummaryPieChartComponent implements OnInit {
       responsive: true
     };
     this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
+
+    // let that = this;
+
+    // this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
+    // then(function (gd) {
+    //   this.plotlyPieChart.toImage(gd).then(
+    //     function (url) {
+    //       this.treasureHuntReportService.teamSummaryPieUrl = url;
+    //     }
+    //   );
+    // });
   }
 
   drawPrintPlot() {
@@ -117,5 +129,14 @@ export class TeamSummaryPieChartComponent implements OnInit {
       responsive: true
     };
     this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
+    // let that = this;
+
+    // this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, modebarBtns).then(function (gd) {
+    //   Plotly.service.d.ts.map.toImage(gd).then(
+    //     function (url) {
+    //       this.treasureHuntReportService.setTeamSummaryPie(url);
+    //     }
+    //   );
+    // });
   }
 }

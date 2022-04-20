@@ -1,6 +1,9 @@
 <div class="d-flex flex-column output-summary align-items-center">
-  <table class="table table-striped table-hover">
+  <table #copyTable id="{{tableId}}" class="table table-striped table-hover">
     <tbody>
+      <tr *ngIf="exportToPPT" class="bold">
+        <td [attr.colspan]="3">Opportunity Payback Details</td>
+      </tr>
       <tr class="bold">
         <td>
           Payback Length

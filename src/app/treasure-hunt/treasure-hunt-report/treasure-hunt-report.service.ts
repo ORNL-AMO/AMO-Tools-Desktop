@@ -10,6 +10,7 @@ import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savin
 
 @Injectable()
 export class TreasureHuntReportService {
+  teamSummaryPieUrl: string;
   
   constructor(private opportunitySummaryService: OpportunitySummaryService, private treasureChestMenuService: TreasureChestMenuService, private convertUnitsService: ConvertUnitsService) {
   }
@@ -18,6 +19,10 @@ export class TreasureHuntReportService {
     let opportunitySummaries: Array<OpportunitySummary> = this.opportunitySummaryService.getOpportunitySummaries(treasureHunt, settings);
     let results: TreasureHuntResults = this.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, treasureHunt.currentEnergyUsage, settings);
     return results;
+  }
+
+  setTeamSummaryPie(graphUrl: string) {
+    this.teamSummaryPieUrl = graphUrl;
   }
 
   calculateTreasureHuntResultsFromSummaries(opportunitySummaries: Array<OpportunitySummary>, currentEnergyUsage: EnergyUsage, settings: Settings): TreasureHuntResults {
@@ -329,4 +334,12 @@ export class TreasureHuntReportService {
 
   
 
+}
+
+export interface PresentReport {
+  executiveSummary: boolean,
+  opportunitySummary: boolean,
+  paybackDetails: boolean,
+  reportGraphs: boolean,
+  facilityInfo: boolean
 }

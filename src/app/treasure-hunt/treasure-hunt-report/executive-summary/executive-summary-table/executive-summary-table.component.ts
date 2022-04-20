@@ -16,6 +16,12 @@ export class ExecutiveSummaryTableComponent implements OnInit {
   settings: Settings;
   @Input()
   title: string;
+  @Input()
+  tableId: string;
+  @Input()
+  exportToPPT: boolean;
+  @Input()
+  colSpan: number;
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { OpportunitiesPaybackDetails } from '../../../../shared/models/treasure-hunt';
 import { Settings } from '../../../../shared/models/settings';
 
@@ -12,6 +12,12 @@ export class OpportunityPaybackTableComponent implements OnInit {
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
   @Input()
   settings: Settings;
+  @Input()
+  tableId: string;
+  @Input()
+  exportToPPT: boolean;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
 
   constructor() { }
 

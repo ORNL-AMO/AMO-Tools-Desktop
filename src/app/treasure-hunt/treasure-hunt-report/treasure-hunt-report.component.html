@@ -17,7 +17,8 @@
     <app-treasure-chest-menu [settings]="settings" [inReport]="true" *ngIf="!inRollup && !showPrintView">
     </app-treasure-chest-menu>
     <div *ngIf="!inRollup" class="btn-group hide-print">
-      <button class="btn btn-secondary" (click)="print()">Print</button>
+      <button class="btn btn-secondary ml-2" (click)="print()">Print</button>
+      <button class="btn btn-secondary ml-2" (click)="present()">Export to PPT</button>
     </div>
 
     <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
@@ -82,13 +83,13 @@
       <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
     </div>
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'executiveSummary' && !showPrintView) || (showPrintView && printOptions.printExecutiveSummary)) && dataCalculated"
+      *ngIf="((currentTab == 'executiveSummary' && !showPrintView) || (showPrintView && printOptions.printExecutiveSummary)|| (presenting.executiveSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <h4 class="show-print">Executive Summary</h4>
       <div class="d-flex justify-content-center">
         <app-executive-summary [treasureHuntResults]="treasureHuntResults" [settings]="settings"
           [showPrintView]="showPrintView && printOptions.printExecutiveSummary"
-          [opportunityCardsData]="opportunityCardsData">
+          [opportunityCardsData]="opportunityCardsData" [exportToPPT]="presenting.executiveSummary">
         </app-executive-summary>
       </div>
     </div>
@@ -110,11 +111,11 @@
     </div>
 
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'opportunityPayback' && !showPrintView) || (showPrintView && printOptions.printReportOpportunityPayback)) && dataCalculated"
+      *ngIf="((currentTab == 'opportunityPayback' && !showPrintView) || (showPrintView && printOptions.printReportOpportunityPayback) || (presenting.executiveSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <h4 class="show-print">Payback Details</h4>
       <app-opportunity-payback [showPrint]="showPrintView && printOptions.printReportOpportunityPayback"
-        [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [settings]="settings">
+        [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [settings]="settings" [exportToPPT]="presenting.executiveSummary">
       </app-opportunity-payback>
     </div>
   </div>

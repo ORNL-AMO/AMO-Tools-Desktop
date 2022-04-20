@@ -19,6 +19,8 @@ export class ExecutiveSummaryComponent implements OnInit {
   showPrintView: boolean;
   @Input()
   opportunityCardsData: Array<OpportunityCardData>;
+  @Input()
+  exportToPPT: boolean;
 
   teamData: Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>;
   constructor(private treasureHuntReportService: TreasureHuntReportService) { }

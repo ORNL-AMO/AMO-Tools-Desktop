@@ -14,6 +14,11 @@ export class CarbonEmissionsSummaryTableComponent implements OnInit {
 
   @Input()
   treasureHuntResults: TreasureHuntResults;  
+
+  @Input()
+  tableId: string;
+  @Input()
+  exportToPPT: boolean;
   
   carbonResults: TreasureHuntCo2EmissionsResults;
 
