@@ -20,6 +20,9 @@ import { PresentReport } from './treasure-hunt-report.service';
 import pptxgen from 'pptxgenjs';
 import * as _ from 'lodash';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import * as betterPlantsPPTimg from './better-plants-ppt-img.js';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import * as moment from 'moment';
 @Component({
   selector: 'app-treasure-hunt-report',
   templateUrl: './treasure-hunt-report.component.html',
@@ -38,6 +41,7 @@ export class TreasureHuntReportComponent implements OnInit {
   inRollup: boolean = false;
 
   @ViewChild('executiveSummaryTable', { static: false }) executiveSummary: ExecutiveSummaryComponent;
+  @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
 
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
@@ -58,6 +62,7 @@ export class TreasureHuntReportComponent implements OnInit {
     reportGraphs: false,
     facilityInfo: false
   };
+  fileName: string;
 
   currentTab: string = 'executiveSummary';
   assessmentDirectories: Array<Directory> = [];
@@ -182,7 +187,27 @@ export class TreasureHuntReportComponent implements OnInit {
     this.printOptionsMenuService.showPrintMenu.next(true);
   }
 
+  showExportModal() {
+    this.fileName = this.getFileName();
+    this.exportModal.show();
+  }
+
+  hideExportModal() {
+    this.exportModal.hide();
+  }
+
+  getFileName(): string {
+    const date: Date = new Date();
+    let formatedDate: string = moment(date).format("MMM D, YYYY").toString();
+    return formatedDate + ' - Treasure Hunt Report.ppt';
+  }
+
   present() {
+    this.presenting.executiveSummary = true;
+    this.cd.detectChanges();
+    if (!this.fileName) {
+      this.fileName = this.getFileName();
+    }
     let facilityInfo: FacilityInfo;
     let settings = this.settingsDbService.getByDirectoryId(this.assessment.directoryId);
     if (settings) {
@@ -194,187 +219,123 @@ export class TreasureHuntReportComponent implements OnInit {
     pptx.layout = "LAYOUT_WIDE";
     pptx.defineSlideMaster({
       title: "MASTER_SLIDE",
-      background: { color: "2E4053" },
+      background: { data: betterPlantsPPTimg.logoBase64 },
       margin: 0.0
     });
-    let slide1 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    //slide1.background = { color: '2E4053' };
-    let textboxText = facilityInfo.facilityName + " Treasure Hunt Report";
-    let textboxOpts: pptxgen.TextPropsOptions = { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 88, valign: 'middle', isTextBox: true };
-    slide1.addText(textboxText, textboxOpts);
-    this.presenting.executiveSummary = true;
-    this.cd.detectChanges();
-    //slide 2    
-    pptx.tableToSlides("costSum", { masterSlideName: "MASTER_SLIDE", autoPage: true , addHeaderToEach: true, autoPageCharWeight: -1.0, autoPageLineWeight: -1.0, slideMargin: 0.0 });
-    
-    //slide 3 Cost Summary Bar chart
-    let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
-    let costSumBarData = [
-      {
-        name: "Baseline",
-        labels: chartData.labels,
-        values: chartData.costSavings
-      },
-      {
-        name: "Modification",
-        labels: chartData.labels,
-        values: chartData.projectedCosts
-      }
 
-    ];
-    let barChartOptions: pptxgen.IChartOpts = { 
-      x: 0, 
-      y: 0, 
-      w: '100%', 
-      h: '100%', 
-      altText: 'Cost Summary Bar chart', 
-      title: 'Cost Summary Bar chart', 
-      titleAlign: 'center', 
-      titleColor: 'FFFFFF', 
-      titleFontSize: 18, 
-      titlePos: { x:0, y:1}, 
-      showLabel: true, 
-      showTitle: true, 
-      showValue: true, 
-      showLegend: true, 
-      barDir: 'col', 
-      barGrouping: 'stacked',
-      dataLabelFormatCode: '$#,##0',
-      dataLabelPosition: 't',
-      chartColors: ['1E7640', '2ABDDA', '84B641', '7030A0'],
-      legendFontSize: 16,
-      legendColor: 'FFFFFF',
-      dataLabelColor: 'FFFFFF',
-      catAxisLabelColor: 'FFFFFF',
-      valAxisLabelColor: 'FFFFFF',
-      dataLabelFontSize: 16,
-      catAxisLabelFontSize: 16
-    };
+    let tableToSlidesOpt: pptxgen.TableToSlidesProps = this.getTableToSlideProperties();   
+    let slideTitleOps: pptxgen.TextPropsOptions = this.getSlideTitleProperties();    
+    let barChartOptions: pptxgen.IChartOpts = this.getBarChartProperties();
+    let pieChartOptions: pptxgen.IChartOpts = this.getPieChartProperties();
+    let costSumBarData: { name: string, labels: Array<string>, values: Array<number> }[] = this.getCostSummaryData();    
+    let teamSummaryData: { name: string, labels: Array<string>, values: Array<number> }[] = this.getTeamSummaryData();
+    let paybackBarData: { name: string, labels: Array<string>, values: Array<number> }[] = this.getPaybackData();    
+    
+    let slide1 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide1.addText(facilityInfo.facilityName + " Treasure Hunt Report", { w: '100%', h: '100%', align: 'center', bold: true, color: '2E4053', fontSize: 88, valign: 'middle', isTextBox: true });
+    
+    pptx.tableToSlides("costSum", tableToSlidesOpt);
 
     let slide3 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide3.addChart("bar", costSumBarData, barChartOptions);
-    
-    
-    
-    
-    //slide 4
-    pptx.tableToSlides("detailedSum", { masterSlideName: "MASTER_SLIDE", autoPage: true, addHeaderToEach: true, autoPageCharWeight: -1.0, autoPageLineWeight: -1.0, slideMargin: 0.0 });
-    //slide 5
-    pptx.tableToSlides("carbonResults", { masterSlideName: "MASTER_SLIDE", autoPage: true, addHeaderToEach: true, autoPageCharWeight: -1.0, autoPageLineWeight: -1.0, slideMargin: 0.0 });
-    //slide 6
-    pptx.tableToSlides("teamSummaryTable", { masterSlideName: "MASTER_SLIDE", autoPage: true, addHeaderToEach: true, autoPageCharWeight: -1.0, autoPageLineWeight: -1.0, slideMargin: 0.0 });
-   
-    
-    let teamData = this.treasureHuntReportService.getTeamData(this.opportunityCardsData);
-    teamData = _.orderBy(teamData, 'costSavings', 'desc');
-    let values: Array<number> = new Array();
-    let labels: Array<string> = new Array();
-    teamData.forEach(team => {
-      values.push(team.costSavings);
-      labels.push(team.team);
-    });
-    let data = [{
-      name: "Team Summary",
-      labels: labels,
-      values: values
-    }];
+    slide3.addText('Cost Summary', slideTitleOps);
+
+    pptx.tableToSlides("detailedSum", tableToSlidesOpt);
+
+    pptx.tableToSlides("carbonResults", tableToSlidesOpt);
+
+    pptx.tableToSlides("teamSummaryTable", tableToSlidesOpt);
+
     let slide7 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    let chartOptions: pptxgen.IChartOpts = { 
-      x: 0,
-      y: 0, 
-      w: '100%', 
-      h: '100%', 
-      altText: 'Team Summary', 
-      title: 'Team Summary', 
-      titleAlign: 'center', 
-      titleColor: 'FFFFFF', 
-      titleFontSize: 18, 
-      titlePos: { x:0, y:1}, 
-      showLabel: true, 
-      showTitle: true, 
-      showValue: true,
-      showPercent: false,
-      dataLabelFormatCode: '$#,##0',
-      chartColors: ['1E7640', '2ABDDA', '84B641', '7030A0'],
-      dataLabelPosition: 'ctr',
-      dataLabelFontSize: 16
-    };
-    slide7.addChart("pie", data, chartOptions);
+    slide7.addChart("pie", teamSummaryData, pieChartOptions);
+    slide7.addText('Team Summary', slideTitleOps);
 
-    //slide 8
-    pptx.tableToSlides("paybackTable", { masterSlideName: "MASTER_SLIDE", autoPage: true, addHeaderToEach: true, autoPageCharWeight: -1.0, autoPageLineWeight: -1.0, slideMargin: 0.0 });
-   
+    pptx.tableToSlides("paybackTable", tableToSlidesOpt);
+
     let slide9 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    let paybackBarData = this.getPaybackBarData();
     slide9.addChart("bar", paybackBarData, barChartOptions);
-   
+    slide9.addText('Payback Details', slideTitleOps);
 
+    let slide10 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide10.addChart("pie", paybackBarData, pieChartOptions);
+    slide10.addText('Payback Details', slideTitleOps);
 
     this.presenting.executiveSummary = false;
     this.cd.detectChanges();
-    pptx.writeFile();
-
+    pptx.writeFile({ fileName: this.fileName + '.pptx' });
+    this.hideExportModal();
   }
 
-  getChartData(): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
+  getSlideTitleProperties(): pptxgen.TextPropsOptions{
+    let slideTitleOps: pptxgen.TextPropsOptions = { 
+      w: '100%', 
+      align: 'center', 
+      bold: true, 
+      color: 'FFFFFF', 
+      fontSize: 60, 
+      valign: 'top', 
+      isTextBox: true 
+    };
+    return slideTitleOps;
+  }
+
+  getTableToSlideProperties(): pptxgen.TableToSlidesProps{
+    let tableToSlidesOpt: pptxgen.TableToSlidesProps = { 
+      y: 1.2, 
+      masterSlideName: "MASTER_SLIDE", 
+      autoPage: true, 
+      addHeaderToEach: true, 
+      autoPageCharWeight: -1.0, 
+      autoPageLineWeight: -1.0, 
+      slideMargin: 0.0 
+    };
+    return tableToSlidesOpt;
+  }
+
+  getCostSummaryData(): { name: string, labels: Array<string>, values: Array<number> }[] {
     let labels = new Array<string>();
     let projectedCosts = new Array<number>();
     let costSavings = new Array<number>();
-    /*
-      Electricity
-      Natural Gas
-      Other Fuel
-      Water
-      Wastewater
-      Steam
-      Compressed Air
-    */
     if (this.treasureHuntResults.electricity.costSavings > 0) {
       labels.push('Electricity');
       projectedCosts.push(this.treasureHuntResults.electricity.modifiedEnergyCost);
       costSavings.push(this.treasureHuntResults.electricity.costSavings);
-      // data.push([this.treasureHuntResults.electricity.modifiedEnergyCost, this.treasureHuntResults.electricity.costSavings]);
     }
     if (this.treasureHuntResults.naturalGas.costSavings > 0) {
       labels.push('Natural Gas');
       projectedCosts.push(this.treasureHuntResults.naturalGas.modifiedEnergyCost);
       costSavings.push(this.treasureHuntResults.naturalGas.costSavings);
-      // data.push([this.treasureHuntResults.naturalGas.modifiedEnergyCost, this.treasureHuntResults.naturalGas.costSavings]);
     }
     if (this.treasureHuntResults.otherFuel.costSavings > 0) {
       labels.push('Other Fuel');
       projectedCosts.push(this.treasureHuntResults.otherFuel.modifiedEnergyCost);
       costSavings.push(this.treasureHuntResults.otherFuel.costSavings);
-      // data.push([this.treasureHuntResults.otherFuel.modifiedEnergyCost, this.treasureHuntResults.otherFuel.costSavings]);
     }
     if (this.treasureHuntResults.water.costSavings > 0) {
       labels.push('Water');
       projectedCosts.push(this.treasureHuntResults.water.modifiedEnergyCost);
       costSavings.push(this.treasureHuntResults.water.costSavings);
-      // data.push([this.treasureHuntResults.water.modifiedEnergyCost, this.treasureHuntResults.water.costSavings]);
     }
     if (this.treasureHuntResults.wasteWater.costSavings > 0) {
       labels.push('Wastewater');
       projectedCosts.push(this.treasureHuntResults.wasteWater.modifiedEnergyCost);
       costSavings.push(this.treasureHuntResults.wasteWater.costSavings);
-      // data.push([this.treasureHuntResults.wasteWater.modifiedEnergyCost, this.treasureHuntResults.wasteWater.costSavings]);
     }
     if (this.treasureHuntResults.steam.costSavings > 0) {
       labels.push('Steam');
       projectedCosts.push(this.treasureHuntResults.steam.modifiedEnergyCost);
       costSavings.push(this.treasureHuntResults.steam.costSavings);
-      // data.push([this.treasureHuntResults.steam.modifiedEnergyCost, this.treasureHuntResults.steam.costSavings]);
     }
     if (this.treasureHuntResults.compressedAir.costSavings > 0) {
       labels.push('Comp. Air');
       projectedCosts.push(this.treasureHuntResults.compressedAir.modifiedEnergyCost);
       costSavings.push(this.treasureHuntResults.compressedAir.costSavings);
-      // data.push([this.treasureHuntResults.compressedAir.modifiedEnergyCost, this.treasureHuntResults.compressedAir.costSavings > 0 ? this.treasureHuntResults.compressedAir.costSavings : 0]);
     }
-    return { projectedCosts: projectedCosts, labels: labels, costSavings: costSavings };
+    let costSumBarData = [{ name: "Modification", labels: labels, values: projectedCosts }, { name: "Baseline", labels: labels, values: costSavings }];
+    return costSumBarData;
   }
 
-  getPaybackBarData() {
+  getPaybackData(): { name: string, labels: Array<string>, values: Array<number> }[] {
     let values: Array<number> = new Array();
     let labels: Array<string> = new Array();
     values = [
@@ -395,6 +356,70 @@ export class TreasureHuntReportComponent implements OnInit {
       values: values
     }];
     return data;
+  }
+
+  getTeamSummaryData(): { name: string, labels: Array<string>, values: Array<number> }[] {
+    let teamData = this.treasureHuntReportService.getTeamData(this.opportunityCardsData);
+    teamData = _.orderBy(teamData, 'costSavings', 'desc');
+    let values: Array<number> = new Array();
+    let labels: Array<string> = new Array();
+    teamData.forEach(team => {
+      values.push(team.costSavings);
+      labels.push(team.team);
+    });
+    let data = [{
+      name: "Team Summary",
+      labels: labels,
+      values: values
+    }];
+    return data;
+  }
+
+  getPieChartProperties() {
+    let pieChartOptions: pptxgen.IChartOpts = {
+      x: 1.6,
+      y: 1.2,
+      w: '76%',
+      h: '76%',
+      showPercent: false,
+      showValue: true,
+      dataLabelFormatCode: '$#,##0',
+      chartColors: ['1E7640', '2ABDDA', '84B641', 'BC8FDD'],
+      dataLabelPosition: 'bestFit',
+      dataLabelFontSize: 18,
+      dataLabelColor: '000000',
+      dataLabelFontBold: true,
+      showLegend: true,
+      legendFontSize: 16,
+      legendColor: '2E4053',
+      firstSliceAng: 90
+    };
+    return pieChartOptions;
+  }
+
+  getBarChartProperties() {
+    let barChartOptions: pptxgen.IChartOpts = {
+      x: 1.6,
+      y: 1.2,
+      w: '76%',
+      h: '76%',
+      showLegend: true,
+      showValue: true,
+      barDir: 'col',
+      barGrouping: 'stacked',
+      dataLabelFormatCode: '$#,##0',
+      dataLabelPosition: 'bestFit',
+      chartColors: ['1E7640', '2ABDDA', '84B641', 'BC8FDD'],
+      legendFontSize: 16,
+      legendColor: '2E4053',
+      dataLabelColor: '000000',
+      dataLabelFontBold: true,
+      catAxisLabelColor: '2E4053',
+      valAxisLabelColor: '2E4053',
+      dataLabelFontSize: 18,
+      catAxisLabelFontSize: 16
+    };
+    return barChartOptions;
   }
 
 }

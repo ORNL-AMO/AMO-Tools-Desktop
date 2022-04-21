@@ -18,7 +18,7 @@
     </app-treasure-chest-menu>
     <div *ngIf="!inRollup" class="btn-group hide-print">
       <button class="btn btn-secondary ml-2" (click)="print()">Print</button>
-      <button class="btn btn-secondary ml-2" (click)="present()">Export to PPT</button>
+      <button class="btn btn-secondary ml-2" (click)="showExportModal()">Export to PPT</button>
     </div>
 
     <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
@@ -130,3 +130,30 @@
 </div>
 
 <app-print-options-menu *ngIf="showPrintMenu"></app-print-options-menu>
+
+<div bsModal #exportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg export-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Export Treasure Hunt Report to PPT</h3>
+                <button class="close" aria-label="Close" (click)="hideExportModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-center w-100">
+                    <div class="form-group d-flex mr-2">
+                        <label for="fileName"> Name your file:</label>
+                        <input type="text" class="form-control" id="fileName" [(ngModel)]="fileName">
+                    </div>
+                    <button class="btn btn-primary ml-2" (click)="present()">Export
+                        as .ppt</button>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <button class="btn btn-secondary" (click)="hideExportModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
