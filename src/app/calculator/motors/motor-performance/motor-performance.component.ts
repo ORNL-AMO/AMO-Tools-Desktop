@@ -40,7 +40,6 @@ export class MotorPerformanceComponent implements OnInit {
   calculator: Calculator;
   toggleCalculate: boolean = false;
   tabSelect: string = 'results';
-  calcExists: boolean;
   saving: boolean;
 
   constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService, private calculatorDbService: CalculatorDbService) {
@@ -83,7 +82,7 @@ export class MotorPerformanceComponent implements OnInit {
   calculate() {
     if (!this.psat && !this.inAssessment) {
       this.motorPerformanceService.motorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
-    } else if (this.inAssessment && this.calcExists) {
+    } else if (this.inAssessment && this.calculator.id) {
       this.calculator.motorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
       this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
@@ -101,7 +100,6 @@ export class MotorPerformanceComponent implements OnInit {
   getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
-      this.calcExists = true;
       if (this.calculator.motorPerformanceInputs) {
         this.performanceForm = this.motorPerformanceService.initFormFromObj(this.calculator.motorPerformanceInputs);
       } else {

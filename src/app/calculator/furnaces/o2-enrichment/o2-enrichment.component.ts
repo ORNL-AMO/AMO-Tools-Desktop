@@ -33,7 +33,6 @@ export class O2EnrichmentComponent implements OnInit {
   headerHeight: number;
 
   tabSelect: string = 'results';
-  calcExists: boolean;
   saving: boolean;
   calculator: Calculator;
   originalCalculator: Calculator;
@@ -93,7 +92,6 @@ export class O2EnrichmentComponent implements OnInit {
   getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
-      this.calcExists = true;
       if (this.calculator.o2EnrichmentInputs) {
         this.o2EnrichmentService.enrichmentInputs.next(this.calculator.o2EnrichmentInputs);
       } else {

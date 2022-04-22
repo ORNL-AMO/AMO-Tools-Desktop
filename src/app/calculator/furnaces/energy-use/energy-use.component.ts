@@ -43,7 +43,6 @@ export class EnergyUseComponent implements OnInit {
   headerHeight: number;
   currentField: string = 'default';
   tabSelect: string = 'results';
-  calcExists: boolean;
   saving: boolean;
   calculator: Calculator;
   originalCalculator: Calculator;
@@ -81,7 +80,7 @@ export class EnergyUseComponent implements OnInit {
   }
 
   btnResetData() {
-    if (this.inAssessment && this.calcExists) {
+    if (this.inAssessment && this.calculator.id) {
       this.calculator = this.originalCalculator;
     }
     else {
@@ -116,7 +115,7 @@ export class EnergyUseComponent implements OnInit {
   calculate() {
     if (!this.inAssessment) {
       this.flowCalculations = this.energyUseService.flowCalculations;
-    } else if (this.inAssessment && this.calcExists) {
+    } else if (this.inAssessment && this.calculator.id) {
       this.calculator.flowCalculations = this.flowCalculations;
       this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
@@ -128,7 +127,6 @@ export class EnergyUseComponent implements OnInit {
   getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
-      this.calcExists = true;
       if (this.calculator.flowCalculations) {
         this.flowCalculations = this.calculator.flowCalculations;
       } else {

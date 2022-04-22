@@ -38,7 +38,6 @@ export class FanEfficiencyComponent implements OnInit {
   currentField: string;
   tabSelect: string = 'results';
   fanEfficiency: number = 0;
-  calcExists: boolean;
   saving: boolean;
   calculator: Calculator;
   originalCalculator: Calculator;
@@ -106,7 +105,7 @@ export class FanEfficiencyComponent implements OnInit {
     let tmpFanEfficiencyInputs: FanEfficiencyInputs = this.fanEfficiencyService.getObjFromForm(this.fanEfficiencyForm);
     if (!this.inAssessment) {
       this.fanEfficiencyService.fanEfficiencyInputs = tmpFanEfficiencyInputs;
-    } else if (this.inAssessment && this.calcExists) {
+    } else if (this.inAssessment && this.calculator.id) {
       this.calculator.fanEfficiencyInputs = tmpFanEfficiencyInputs;
       this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
@@ -129,7 +128,6 @@ export class FanEfficiencyComponent implements OnInit {
   getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
-      this.calcExists = true;
       if (this.calculator.fanEfficiencyInputs) {
         this.fanEfficiencyForm = this.fanEfficiencyService.initFormFromObj(this.calculator.fanEfficiencyInputs);
       } else {
@@ -145,6 +143,7 @@ export class FanEfficiencyComponent implements OnInit {
     } else {
       this.calculator = this.initCalculator();
       this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      console.log('added calc id', this.calculator.id)
     }
   }
 

@@ -39,7 +39,6 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   currentField: string;
   nemaForm: FormGroup;
   tabSelect: string = 'results';
-  calcExists: boolean;
   saving: boolean;
   calculator: Calculator;
   tefcValue: number;
@@ -71,7 +70,6 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
-      this.calcExists = true;
       if (this.calculator.nemaInputs) {
         this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromObj(this.calculator.nemaInputs);
       } else {
@@ -155,7 +153,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
 
     if (!this.psat && !this.inAssessment) {
       this.nemaEnergyEfficiencyService.nemaInputs = this.nemaEnergyEfficiencyService.getObjFromForm(this.nemaForm);
-    } else if (this.inAssessment && this.calcExists) {
+    } else if (this.inAssessment && this.calculator.id) {
       this.calculator.nemaInputs = this.nemaEnergyEfficiencyService.getObjFromForm(this.nemaForm);
       this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }

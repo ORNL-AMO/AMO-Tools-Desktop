@@ -52,7 +52,6 @@ export class PreAssessmentComponent implements OnInit {
   toggleCalculate: boolean = false;
   contentHeight: number = 0;
   type: string = 'furnace';
-  calcExists: boolean;
   saving: boolean;
   constructor(private preAssessmentService: PreAssessmentService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private directoryDashboardService: DirectoryDashboardService) { }
@@ -233,7 +232,6 @@ export class PreAssessmentComponent implements OnInit {
   getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
-      this.calcExists = true;
       if (this.calculator.preAssessments) {
         this.preAssessments = this.calculator.preAssessments;
       } else {
