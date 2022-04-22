@@ -111,7 +111,7 @@ export class ActivatedSludgeFormComponent implements OnInit {
       let clarifierEfficiency: number = this.form.controls.clarifierEfficiency.value;
 
       if (influentCBODBefore && clarifierEfficiency) {
-        let calculatedSo: number =  influentCBODBefore * (1 - clarifierEfficiency / 100);
+        let calculatedSo: number =  influentCBODBefore * (clarifierEfficiency / 100);
         this.form.patchValue({
           So: calculatedSo
         })

@@ -29,7 +29,7 @@
 
         <div class="form-group" *ngIf="!this.form.controls.isUserDefinedSo.value"
         [ngClass]="{'indicate-different': activatedSludgeDifferent.influentCBODBefore, 'invalid': form.controls.influentCBODBefore.invalid}">
-            <label>Influent CBOD<sub>5</sub> Before</label>
+            <label>Influent CBOD<sub>5</sub> (Before Clarifier)</label>
             <div class="input-group">
                 <input class="form-control" name="influentCBODBefore" id="influentCBODBefore" formControlName="influentCBODBefore" type="number"
                     (input)="calculateSo()" onfocus="this.select();" (focus)="focusField('influentCBODBefore')" [readonly]="!selected">
@@ -89,6 +89,7 @@
                     {{form.controls.So.value | number:'1.0-2'}}
                 </span>
                 <span class="mr-2" *ngIf="!form.controls.influentCBODBefore.value || !form.controls.clarifierEfficiency.value">&mdash; &mdash;</span>
+                <span class="input-group-addon">mg/L</span>
             </div>
         </div>
         <!-- Volume -->
