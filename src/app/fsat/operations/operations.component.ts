@@ -10,6 +10,7 @@ import { HelpPanelService } from '../help-panel/help-panel.service';
 import { OperationsService } from './operations.service';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-operations',
@@ -43,6 +44,10 @@ export class OperationsComponent implements OnInit {
 
   cO2SavingsData: Co2SavingsData;
 
+  totalEmissionOutputRateDifferent: boolean = false;
+
+  totalEmissionOutputRateDifferentSub: Subscription;
+
   warnings: FanOperationsWarnings;
   
   formWidth: number;
@@ -56,6 +61,9 @@ export class OperationsComponent implements OnInit {
   constructor(private fsatWarningService: FsatWarningService, private assessmentCo2SavingsService: AssessmentCo2SavingsService, private compareService: CompareService, private operationsService: OperationsService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 
   ngOnInit() {
+    this.totalEmissionOutputRateDifferentSub = this.compareService.totalEmissionOutputRateDifferent.subscribe(isDifferent => {
+      this.totalEmissionOutputRateDifferent = isDifferent;
+    })
     if (!this.baseline) {
       this.idString = 'fsat_modification_' + this.modificationIndex;
     }
@@ -66,6 +74,11 @@ export class OperationsComponent implements OnInit {
     if (!this.selected) {
       this.disableForm();
     }
+  }
+
+  ngOnDestroy() {
+    this.compareService.totalEmissionOutputRateDifferent.next(false);
+    this.totalEmissionOutputRateDifferentSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -116,14 +129,24 @@ export class OperationsComponent implements OnInit {
   updateFsatCo2SavingsData(cO2SavingsData?: Co2SavingsData) {
     this.cO2SavingsData = cO2SavingsData;
     this.save();
+    this.isTotalEmissionOutputRateDifferent();
   }
 
   setCo2SavingsData() {
+    this.isTotalEmissionOutputRateDifferent();
     if (this.fsatOperations.cO2SavingsData) {
       this.cO2SavingsData = this.fsatOperations.cO2SavingsData;
     } else {
       let cO2SavingsData: Co2SavingsData = this.assessmentCo2SavingsService.getCo2SavingsDataFromSettingsObject(this.settings);
       this.cO2SavingsData = cO2SavingsData;
+    }
+  }
+
+  isTotalEmissionOutputRateDifferent() {
+    if (this.canCompare()) {
+      this.compareService.isTotalEmissionOutputRateDifferent();
+    } else {
+      this.compareService.totalEmissionOutputRateDifferent.next(false);
     }
   }
 

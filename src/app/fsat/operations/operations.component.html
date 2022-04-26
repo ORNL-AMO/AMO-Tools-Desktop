@@ -61,6 +61,7 @@
 *ngIf="cO2SavingsData">
   <app-assessment-co2-savings 
   [co2SavingsData]="cO2SavingsData"
+  [totalEmissionOutputRateDifferent]="totalEmissionOutputRateDifferent"
   [isFormDisabled]="co2SavingsFormDisabled"
   [inBaseline]="baseline"
   (emitCurrentField)="focusField($event)"

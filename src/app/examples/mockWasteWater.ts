@@ -14,6 +14,9 @@ export const MockWasteWater: Assessment = {
       activatedSludgeData: {
         Temperature: 20,
         So: 200,
+        isUserDefinedSo: true,
+        influentCBODBefore: 0,
+        clarifierEfficiency: 0,
         Volume: 1,
         FlowRate: 1,
         InertVSS: 40,
@@ -72,6 +75,9 @@ export const MockWasteWater: Assessment = {
         activatedSludgeData: {
           Temperature: 20,
           So: 200,
+          isUserDefinedSo: true,
+          influentCBODBefore: 0,
+          clarifierEfficiency: 0,
           Volume: 1,
           FlowRate: 1,
           InertVSS: 40,

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedSludgeData } from '../../shared/models/waste-water';
+import { GreaterThanValidator } from '../../shared/validators/greater-than';
 
 @Injectable()
 export class ActivatedSludgeFormService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,) { }
 
   getFormFromObj(obj: ActivatedSludgeData): FormGroup {
     let MLSSparValidators: Array<ValidatorFn> = [];
@@ -19,6 +20,9 @@ export class ActivatedSludgeFormService {
     let form: FormGroup = this.formBuilder.group({
       Temperature: [obj.Temperature, [Validators.required, Validators.min(0)]],
       So: [obj.So, [Validators.required, Validators.min(0)]],
+      isUserDefinedSo: [obj.isUserDefinedSo],
+      influentCBODBefore: [obj.influentCBODBefore],
+      clarifierEfficiency: [obj.clarifierEfficiency],
       Volume: [obj.Volume, [Validators.required, Validators.min(0)]],
       FlowRate: [obj.FlowRate, [Validators.required, Validators.min(0)]],
       InertVSS: [obj.InertVSS, [Validators.required, Validators.min(0)]],
@@ -37,6 +41,7 @@ export class ActivatedSludgeFormService {
       CalculateGivenSRT: [obj.CalculateGivenSRT, [Validators.required]],
       DefinedSRT: [obj.DefinedSRT, DefinedSRTValidators]
     });
+    form = this.setSoCalculateValidators(form);
     for (let key in form.controls) {
       if (form.controls[key].value) {
         form.controls[key].markAsDirty();
@@ -45,10 +50,28 @@ export class ActivatedSludgeFormService {
     return form;
   }
 
+  setSoCalculateValidators(form: FormGroup) {
+    if (form.controls.isUserDefinedSo.value === true) {
+      form.controls.influentCBODBefore.setValidators([]);
+      form.controls.influentCBODBefore.updateValueAndValidity();
+      form.controls.clarifierEfficiency.setValidators([]);
+      form.controls.clarifierEfficiency.updateValueAndValidity();
+    } else {
+      form.controls.influentCBODBefore.setValidators([Validators.required, GreaterThanValidator.greaterThan(0)]);
+      form.controls.influentCBODBefore.updateValueAndValidity();
+      form.controls.clarifierEfficiency.setValidators([Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]);
+      form.controls.clarifierEfficiency.updateValueAndValidity();
+    }
+    return form;
+  }
+
   getObjFromForm(form: FormGroup): ActivatedSludgeData {
     return {
       Temperature: form.controls.Temperature.value,
       So: form.controls.So.value,
+      isUserDefinedSo: form.controls.isUserDefinedSo.value,
+      influentCBODBefore: form.controls.influentCBODBefore.value,
+      clarifierEfficiency: form.controls.clarifierEfficiency.value,
       Volume: form.controls.Volume.value,
       FlowRate: form.controls.FlowRate.value,
       InertVSS: form.controls.InertVSS.value,

@@ -46,7 +46,7 @@ export class FlueGasComponent implements OnInit {
   outputSubscription: Subscription;
   output: FlueGasOutput;
 
-  method: string = 'By Mass';
+  method: string = 'By Volume';
   currentField: string;
   tabSelect: string = 'results';
   baselineSelected = true;
@@ -153,7 +153,7 @@ export class FlueGasComponent implements OnInit {
     this.flueGasService.resetData.next(true);
     this.baselineSelected = true;
     this.flueGasService.modificationData.next(undefined);
-    this.method = 'By Mass';
+    this.method = 'By Volume';
   }
 
   btnGenerateExample() {
