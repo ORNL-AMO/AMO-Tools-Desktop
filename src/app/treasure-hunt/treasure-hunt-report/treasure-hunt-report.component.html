@@ -83,13 +83,13 @@
       <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
     </div>
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'executiveSummary' && !showPrintView) || (showPrintView && printOptions.printExecutiveSummary)|| (presenting.executiveSummary)) && dataCalculated"
+      *ngIf="((currentTab == 'executiveSummary' && !showPrintView) || (showPrintView && printOptions.printExecutiveSummary) || presenting) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <h4 class="show-print">Executive Summary</h4>
       <div class="d-flex justify-content-center">
         <app-executive-summary [treasureHuntResults]="treasureHuntResults" [settings]="settings"
           [showPrintView]="showPrintView && printOptions.printExecutiveSummary"
-          [opportunityCardsData]="opportunityCardsData" [exportToPPT]="presenting.executiveSummary">
+          [opportunityCardsData]="opportunityCardsData" [exportToPPT]="presenting">
         </app-executive-summary>
       </div>
     </div>
@@ -111,11 +111,11 @@
     </div>
 
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'opportunityPayback' && !showPrintView) || (showPrintView && printOptions.printReportOpportunityPayback) || (presenting.executiveSummary)) && dataCalculated"
+      *ngIf="((currentTab == 'opportunityPayback' && !showPrintView) || (showPrintView && printOptions.printReportOpportunityPayback) || (presenting)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <h4 class="show-print">Payback Details</h4>
       <app-opportunity-payback [showPrint]="showPrintView && printOptions.printReportOpportunityPayback"
-        [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [settings]="settings" [exportToPPT]="presenting.executiveSummary">
+        [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [settings]="settings" [exportToPPT]="presenting">
       </app-opportunity-payback>
     </div>
   </div>
@@ -130,30 +130,29 @@
 </div>
 
 <app-print-options-menu *ngIf="showPrintMenu"></app-print-options-menu>
-
 <div bsModal #exportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel"
-    aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-lg export-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Export Treasure Hunt Report to PPT</h3>
-                <button class="close" aria-label="Close" (click)="hideExportModal()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="d-flex justify-content-center w-100">
-                    <div class="form-group d-flex mr-2">
-                        <label for="fileName"> Name your file:</label>
-                        <input type="text" class="form-control" id="fileName" [(ngModel)]="fileName">
-                    </div>
-                    <button class="btn btn-primary ml-2" (click)="present()">Export
-                        as .ppt</button>
-                </div>
-            </div>
-            <div class="modal-footer justify-content-end">
-                <button class="btn btn-secondary" (click)="hideExportModal()">Cancel</button>
-            </div>
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg export-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Export Treasure Hunt Report to PPT</h3>
+        <button class="close" aria-label="Close" (click)="hideExportModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-center w-100">
+          <div class="form-group d-flex mr-2">
+            <label for="fileName"> Name your file:</label>
+            <input type="text" class="form-control" id="fileName" [(ngModel)]="fileName">
+          </div>
+          <button class="btn btn-primary ml-2" (click)="present()">Export
+            as .ppt</button>
         </div>
+      </div>
+      <div class="modal-footer justify-content-end">
+        <button class="btn btn-secondary" (click)="hideExportModal()">Cancel</button>
+      </div>
     </div>
+  </div>
 </div>

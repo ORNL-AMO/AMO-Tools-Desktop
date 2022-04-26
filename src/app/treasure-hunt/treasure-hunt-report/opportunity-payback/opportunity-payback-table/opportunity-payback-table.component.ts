@@ -13,8 +13,6 @@ export class OpportunityPaybackTableComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  tableId: string;
-  @Input()
   exportToPPT: boolean;
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;

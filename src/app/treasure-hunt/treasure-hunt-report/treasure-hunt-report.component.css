@@ -67,3 +67,6 @@
 .modal-dialog{
     top: .75rem;
 }
+.btn{
+    padding: 6px;
+}
