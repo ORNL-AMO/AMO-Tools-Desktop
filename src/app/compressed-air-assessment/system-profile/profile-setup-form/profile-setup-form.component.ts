@@ -25,6 +25,8 @@ export class ProfileSetupFormComponent implements OnInit {
   settingsSub: Subscription;
   hourIntervalData: Array<ProfileSummary>;
   dayIntervalData: Array<ProfileSummary>;
+  halfHourIntervalData: Array<ProfileSummary>;
+  quarterHourIntervalData: Array<ProfileSummary>;
   constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointsFormService: PerformancePointsFormService) { }
 
@@ -110,10 +112,80 @@ export class ProfileSetupFormComponent implements OnInit {
         } else {
           this.save();
         }
+      } else if (this.form.controls.dataInterval.value == 1 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 0.5) {
+        this.halfHourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+        if (this.hourIntervalData) {
+          this.save(this.hourIntervalData);
+        } else {
+          this.save();
+        }
+      } else if (this.form.controls.dataInterval.value == 1 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 0.25) {
+        this.quarterHourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+        if (this.hourIntervalData) {
+          this.save(this.hourIntervalData);
+        } else {
+          this.save();
+        }
       } else if (this.form.controls.dataInterval.value == 24 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 1) {
         this.hourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
         if (this.dayIntervalData) {
           this.save(this.dayIntervalData);
+        } else {
+          this.save();
+        }
+      } else if (this.form.controls.dataInterval.value == 24 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 0.5) {
+        this.halfHourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+        if (this.dayIntervalData) {
+          this.save(this.dayIntervalData);
+        } else {
+          this.save();
+        }
+      } else if (this.form.controls.dataInterval.value == 24 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 0.25) {
+        this.quarterHourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+        if (this.dayIntervalData) {
+          this.save(this.dayIntervalData);
+        } else {
+          this.save();
+        }
+      } else if (this.form.controls.dataInterval.value == 0.25 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 0.5) {
+        this.halfHourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+        if (this.quarterHourIntervalData) {
+          this.save(this.quarterHourIntervalData);
+        } else {
+          this.save();
+        }
+      } else if (this.form.controls.dataInterval.value == 0.25 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 1) {
+        this.hourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+        if (this.quarterHourIntervalData) {
+          this.save(this.quarterHourIntervalData);
+        } else {
+          this.save();
+        }
+      } else if (this.form.controls.dataInterval.value == 0.25 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 24) {
+        this.dayIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+        if (this.quarterHourIntervalData) {
+          this.save(this.quarterHourIntervalData);
+        } else {
+          this.save();
+        }
+      } else if (this.form.controls.dataInterval.value == 0.5 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 0.25) {
+        this.quarterHourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+        if (this.halfHourIntervalData) {
+          this.save(this.halfHourIntervalData);
+        } else {
+          this.save();
+        }
+      } else if (this.form.controls.dataInterval.value == 0.5 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 1) {
+        this.hourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+        if (this.halfHourIntervalData) {
+          this.save(this.halfHourIntervalData);
+        } else {
+          this.save();
+        }
+      } else if (this.form.controls.dataInterval.value == 0.5 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 24) {
+        this.dayIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+        if (this.halfHourIntervalData) {
+          this.save(this.halfHourIntervalData);
         } else {
           this.save();
         }

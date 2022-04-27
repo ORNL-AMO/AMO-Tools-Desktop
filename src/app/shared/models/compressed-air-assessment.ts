@@ -220,7 +220,7 @@ export interface SystemProfile {
 export interface SystemProfileSetup {
     dayTypeId: string,
     numberOfHours: number,
-    dataInterval: 1 | 24,
+    dataInterval: 0.25 | 0.5 | 1 | 24,
     profileDataType: "power" | "percentCapacity" | "airflow" | "powerFactor" | "percentPower"
 }
 

@@ -44,6 +44,7 @@ export class CompressorOrderingTableComponent implements OnInit {
     this.hourIntervals = new Array();
     for (let index = 0; index < systemProfileSetup.numberOfHours;) {
       this.hourIntervals.push(index)
+      console.log("index " + index);
       index = index + systemProfileSetup.dataInterval;
     }
   }
@@ -53,6 +54,7 @@ export class CompressorOrderingTableComponent implements OnInit {
     let optionIndex: number = 1;
     compressorInventoryItems.forEach(() => {
       this.orderingOptions.push(optionIndex);
+      console.log("option index " + optionIndex);
       optionIndex++;
     });
   }
@@ -62,6 +64,7 @@ export class CompressorOrderingTableComponent implements OnInit {
       if (this.profileSummary[summaryIndex].dayTypeId == this.selectedDayTypeId) {
         for (let i = 0; i < this.profileSummary[summaryIndex].profileSummaryData.length; i++) {
           this.profileSummary[summaryIndex].profileSummaryData[i].order = 0;
+          console.log("summary index " + i);
         }
       }
     }
