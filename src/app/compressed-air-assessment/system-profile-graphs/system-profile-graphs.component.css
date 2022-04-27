@@ -3,6 +3,9 @@
     text-transform: none;
 }
 
+.ca-system-profiles-graph-print {
+    width: 1000px !important;
+}
 
 
 @media print {

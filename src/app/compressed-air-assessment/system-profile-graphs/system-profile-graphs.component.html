@@ -1,21 +1,21 @@
 <div class="print-container">
     <div class="print-avoid-break">
         <label class="group-label bg-white pl-2">{{labelName}} System Capacity</label>
-        <div class="w-100" #systemCapacityGraph id="systemCapacityGraph"></div>
+        <div [ngClass]="{'ca-system-profiles-graph-print': printView, 'w-100': !printView}" #systemCapacityGraph id="systemCapacityGraph"></div>
     </div>
     <hr>
     <div class="print-avoid-break">
         <label class="group-label bg-white pl-2">{{labelName}} Compressor Airflow Capacity</label>
-        <div class="w-100" #compressorCapacityGraph id="compressorCapacityGraph"></div>
+        <div #compressorCapacityGraph [ngClass]="{'ca-system-profiles-graph-print': printView, 'w-100': !printView}" id="compressorCapacityGraph" ></div>
     </div>
     <hr>
     <div class="print-avoid-break">
         <label class="group-label bg-white pl-2">{{labelName}} System Power</label>
-        <div class="w-100" #systemPowerGraph id="systemPowerGraph"></div>
+        <div #systemPowerGraph id="systemPowerGraph" [ngClass]="{'ca-system-profiles-graph-print': printView, 'w-100': !printView}"></div>
     </div>
     <hr>
     <div class="print-avoid-break">
         <label class="group-label bg-white pl-2">{{labelName}} Compressor Power</label>
-        <div class="w-100" #compressorPowerGraph id="compressorPowerGraph"></div>
+        <div #compressorPowerGraph id="compressorPowerGraph" [ngClass]="{'ca-system-profiles-graph-print': printView, 'w-100': !printView}"></div>
     </div>
 </div>
