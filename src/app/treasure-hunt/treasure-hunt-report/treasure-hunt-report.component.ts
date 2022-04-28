@@ -206,15 +206,18 @@ export class TreasureHuntReportComponent implements OnInit {
     let settings = this.settingsDbService.getByDirectoryId(this.assessment.directoryId);
     if (settings) {
       if (settings.facilityInfo) {
-        facilityInfo = settings.facilityInfo;
+        facilityInfo = settings.facilityInfo;        
+      }if (this.dataCalculated) {
+        let pptx = new pptxgen();
+        pptx = this.treasureHuntPPTService.createPPT(facilityInfo, settings, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails);
+        this.presenting = false;
+        this.cd.detectChanges();
+        pptx.writeFile({ fileName: this.fileName + '.pptx' });
+      } else {
+        this.presenting = false;
       }
     }
-    let pptx = new pptxgen();
-    pptx = this.treasureHuntPPTService.createPPT(facilityInfo, settings, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails);
 
-    this.presenting = false;
-    this.cd.detectChanges();
-    pptx.writeFile({ fileName: this.fileName + '.pptx' });
     this.hideExportModal();
   }
 

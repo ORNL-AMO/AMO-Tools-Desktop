@@ -242,12 +242,12 @@ export class TreasureHuntPptService {
     let paybackBarData: PptxgenjsChartData[] = this.getPaybackData(opportunitiesPaybackDetails, settings);
 
     let slide1 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    let titleSlideName: string;
-    if (!facilityInfo.facilityName) {
-      titleSlideName = "Treasure Hunt Report";
-    } else {
-      titleSlideName = facilityInfo.facilityName + " Treasure Hunt Report";
-    }
+    let titleSlideName: string = "Treasure Hunt Report";
+    if (facilityInfo) {
+      if (facilityInfo.facilityName){
+        titleSlideName = facilityInfo.facilityName + " Treasure Hunt Report";
+      } 
+    } 
     slide1.addText(titleSlideName, { w: '100%', h: '100%', align: 'center', bold: true, color: '1D428A', fontSize: 88, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true });
 
     pptx.tableToSlides("costSum", tableToSlidesProperties);
@@ -260,7 +260,9 @@ export class TreasureHuntPptService {
 
     pptx.tableToSlides("carbonResults", tableToSlidesProperties);
 
-    pptx.tableToSlides("teamSummaryTable", tableToSlidesProperties);
+    if (this.treasureHuntReportService.getTeamData(opportunityCardsData).length > 0) {
+      pptx.tableToSlides("teamSummaryTable", tableToSlidesProperties);
+    }
 
     let slide7 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide7.addChart("pie", teamSummaryData, pieChartOptions);
