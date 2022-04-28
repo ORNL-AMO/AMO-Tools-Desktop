@@ -210,73 +210,7 @@ export class TreasureHuntReportComponent implements OnInit {
       }
     }
     let pptx = new pptxgen();
-    pptx.layout = "LAYOUT_WIDE";
-    pptx.defineSlideMaster({
-      title: "MASTER_SLIDE",
-      background: { data: betterPlantsPPTimg.logoBase64 },
-      margin: 0.0
-    });
-
-    let tableToSlidesProperties: pptxgen.TableToSlidesProps = this.treasureHuntPPTService.getTableToSlideProperties();
-    let slideTitleProperties: pptxgen.TextPropsOptions = this.treasureHuntPPTService.getSlideTitleProperties();
-    let barChartOptions: pptxgen.IChartOpts = this.treasureHuntPPTService.getBarChartProperties();
-    let pieChartOptions: pptxgen.IChartOpts = this.treasureHuntPPTService.getPieChartProperties();
-    let costSumBarData: PptxgenjsChartData[] = this.treasureHuntPPTService.getCostSummaryData(this.treasureHuntResults);
-    let teamSummaryData: PptxgenjsChartData[] = this.treasureHuntPPTService.getTeamSummaryData(this.opportunityCardsData);
-    let paybackBarData: PptxgenjsChartData[] = this.treasureHuntPPTService.getPaybackData(this.opportunitiesPaybackDetails, settings);
-
-    let slide1 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    let titleSlideName: string;
-    if (!facilityInfo.facilityName) {
-      titleSlideName = "Treasure Hunt Report";
-    } else {
-      titleSlideName = facilityInfo.facilityName + " Treasure Hunt Report";
-    }
-    slide1.addText(titleSlideName, { w: '100%', h: '100%', align: 'center', bold: true, color: '1D428A', fontSize: 88, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true });
-
-    pptx.tableToSlides("costSum", tableToSlidesProperties);
-
-    let slide3 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide3.addChart("bar", costSumBarData, barChartOptions);
-    slide3.addText('Cost Summary', slideTitleProperties);
-
-    pptx.tableToSlides("detailedSum", tableToSlidesProperties);
-
-    pptx.tableToSlides("carbonResults", tableToSlidesProperties);
-
-    pptx.tableToSlides("teamSummaryTable", tableToSlidesProperties);
-
-    let slide7 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide7.addChart("pie", teamSummaryData, pieChartOptions);
-    slide7.addText('Team Summary', slideTitleProperties);
-
-    pptx.tableToSlides("paybackTable", tableToSlidesProperties);
-
-    let slide9 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide9.addChart("bar", paybackBarData, barChartOptions);
-    slide9.addText('Payback Details', slideTitleProperties);
-
-    let slide10 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide10.addChart("pie", paybackBarData, pieChartOptions);
-    slide10.addText('Payback Details', slideTitleProperties);
-
-    let slide11 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide11.addText('Opportunity Summaries', { w: '100%', h: '100%', align: 'center', bold: true, color: '1D428A', fontSize: 88, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true });
-
-    let counter: number = 0;
-    this.opportunityCardsData.forEach(opp => {
-      let newSlide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-      newSlide.addText('Opportunity: ' + opp.name, slideTitleProperties);
-      let slideText: { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } = this.treasureHuntPPTService.getOpportunitySlideText(opp.opportunitySheet);
-      newSlide.addText(slideText.text, slideText.options);
-      newSlide.addText('Placeholder for picture', { x: 8.45, y: 1.2, w: 4.43, h: 2.81, align: 'center', fill: { color: '7ADCFF' }, color: 'FFFFFF', fontSize: 18, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true });
-      let rows = [];
-      rows.push(["Utility", "Energy Savings", "Cost Saving", "Material Cost", "Labor Cost", "Other Cost", "Total Cost", "Simple Payback"]);
-      let x: OpportunitySummary = this.treasureHuntResults.opportunitySummaries[counter];
-      rows.push([x.utilityType, x.totalEnergySavings, x.costSavings, x.opportunityCost.material, x.opportunityCost.labor, x.opportunityCost.otherCosts, x.totalCost, x.payback]);
-      newSlide.addTable(rows, { x: 1.19, y: 5.26, w: 10.95, color: "1D428A", fontSize: 16, fontFace: 'Arial (Body)'  });
-      counter++;
-    });
+    pptx = this.treasureHuntPPTService.createPPT(facilityInfo, settings, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails);
 
     this.presenting = false;
     this.cd.detectChanges();

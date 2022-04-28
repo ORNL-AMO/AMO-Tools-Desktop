@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FacilityInfo, Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
-import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, TreasureHunt, OpportunitySheet } from '../../shared/models/treasure-hunt';
+import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, TreasureHunt, OpportunitySheet, OpportunityCost } from '../../shared/models/treasure-hunt';
 import { TreasureHuntReportService } from './treasure-hunt-report.service';
 import { OpportunityPaybackService } from './opportunity-payback.service';
 import { Subscription } from 'rxjs';
@@ -193,16 +193,17 @@ export class TreasureHuntPptService {
     return barChartOptions;
   }
 
-  getOpportunitySlideText(opportunityData: OpportunitySheet): {text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions} {
+  getOpportunitySlideText(opportunityData: OpportunitySheet): { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } {
     let slideText: pptxgen.TextProps[] = [
       { text: "Process / Equipment: " + opportunityData.equipment, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true } },
-      { text: "Plant: USER INPUT", options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true } },
-      { text: "Business Unit: " + opportunityData.businessUnits, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true } },
+      { text: "Team: " + opportunityData.owner, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true } },
+      { text: "Owner/Lead: " + opportunityData.businessUnits, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true } },
       { text: "Description: " + opportunityData.description, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true } },
     ];
     let slideTextProps = this.getOppSlideProperties();
-    return {text: slideText, options: slideTextProps};
+    return { text: slideText, options: slideTextProps };
   }
+
   getOppSlideProperties(): pptxgen.TextPropsOptions {
     let textProps: pptxgen.TextPropsOptions = {
       x: 0,
@@ -218,6 +219,141 @@ export class TreasureHuntPptService {
     };
     return textProps;
 
+  }
+
+
+  createPPT(facilityInfo: FacilityInfo, settings: Settings, treasureHuntResults: TreasureHuntResults, opportunityCardsData: Array<OpportunityCardData>,
+    opportunitiesPaybackDetails: OpportunitiesPaybackDetails): pptxgen {
+    let pptx = new pptxgen();
+
+    pptx.layout = "LAYOUT_WIDE";
+    pptx.defineSlideMaster({
+      title: "MASTER_SLIDE",
+      background: { data: betterPlantsPPTimg.logoBase64 },
+      margin: 0.0
+    });
+
+    let tableToSlidesProperties: pptxgen.TableToSlidesProps = this.getTableToSlideProperties();
+    let slideTitleProperties: pptxgen.TextPropsOptions = this.getSlideTitleProperties();
+    let barChartOptions: pptxgen.IChartOpts = this.getBarChartProperties();
+    let pieChartOptions: pptxgen.IChartOpts = this.getPieChartProperties();
+    let costSumBarData: PptxgenjsChartData[] = this.getCostSummaryData(treasureHuntResults);
+    let teamSummaryData: PptxgenjsChartData[] = this.getTeamSummaryData(opportunityCardsData);
+    let paybackBarData: PptxgenjsChartData[] = this.getPaybackData(opportunitiesPaybackDetails, settings);
+
+    let slide1 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let titleSlideName: string;
+    if (!facilityInfo.facilityName) {
+      titleSlideName = "Treasure Hunt Report";
+    } else {
+      titleSlideName = facilityInfo.facilityName + " Treasure Hunt Report";
+    }
+    slide1.addText(titleSlideName, { w: '100%', h: '100%', align: 'center', bold: true, color: '1D428A', fontSize: 88, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true });
+
+    pptx.tableToSlides("costSum", tableToSlidesProperties);
+
+    let slide3 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide3.addChart("bar", costSumBarData, barChartOptions);
+    slide3.addText('Cost Summary', slideTitleProperties);
+
+    pptx.tableToSlides("detailedSum", tableToSlidesProperties);
+
+    pptx.tableToSlides("carbonResults", tableToSlidesProperties);
+
+    pptx.tableToSlides("teamSummaryTable", tableToSlidesProperties);
+
+    let slide7 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide7.addChart("pie", teamSummaryData, pieChartOptions);
+    slide7.addText('Team Summary', slideTitleProperties);
+
+    pptx.tableToSlides("paybackTable", tableToSlidesProperties);
+
+    let slide9 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide9.addChart("bar", paybackBarData, barChartOptions);
+    slide9.addText('Payback Details', slideTitleProperties);
+
+    let slide10 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide10.addChart("pie", paybackBarData, pieChartOptions);
+    slide10.addText('Payback Details', slideTitleProperties);
+
+    let slide11 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide11.addText('Opportunity Summaries', { w: '100%', h: '100%', align: 'center', bold: true, color: '1D428A', fontSize: 88, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true });
+
+    let counter: number = 0;
+    opportunityCardsData.forEach(opp => {
+      let newSlide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+      newSlide.addText('Opportunity: ' + opp.name, slideTitleProperties);
+      let slideText: { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } = this.getOpportunitySlideText(opp.opportunitySheet);
+      newSlide.addText(slideText.text, slideText.options);
+      newSlide.addText('Placeholder for picture', { x: 8.45, y: 1.2, w: 4.43, h: 2.81, align: 'center', fill: { color: '7ADCFF' }, color: 'FFFFFF', fontSize: 18, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true });
+      let rows = [];
+      rows.push(["Utility", "Energy Savings", " ", "Cost Saving", "Material Cost", "Labor Cost", "Other Cost", "Total Cost", "Simple Payback"]);
+      let x: OpportunitySummary = treasureHuntResults.opportunitySummaries[counter];
+      let utilityUnit: string;
+      if (x.mixedIndividualResults) {
+        x.mixedIndividualResults.forEach(x => {
+          utilityUnit = this.getUtilityUnit(x.utilityType, settings);
+          rows.push([x.utilityType, this.roundVal(x.totalEnergySavings), utilityUnit, this.roundVal(x.costSavings), x.opportunityCost.material, x.opportunityCost.labor, this.getOtherCost(x.opportunityCost), x.totalCost, this.roundVal(x.payback)]);
+        });
+      } else {
+        utilityUnit = this.getUtilityUnit(x.utilityType, settings);
+        rows.push([x.utilityType, this.roundVal(x.totalEnergySavings), utilityUnit, this.roundVal(x.costSavings), x.opportunityCost.material, x.opportunityCost.labor, this.getOtherCost(x.opportunityCost), x.totalCost, this.roundVal(x.payback)]);
+      }
+
+      newSlide.addTable(rows, { x: 0, y: 5.21, w: 13.33, colW: [1.86, 1.8, 1.11, 1.42, 1.53, 1.33, 1.29, 1.19, 1.81], color: "1D428A", fontSize: 16, fontFace: 'Arial (Body)', border: { type: "solid", color: 'FFFFFF' }, fill: { color: '7ADCFF' } });
+      counter++;
+    });
+
+    return pptx;
+  }
+
+  roundVal(num: number): number {
+    return Number(num.toFixed(2));
+  }
+
+  getOtherCost(oppCost: OpportunityCost): number {
+    let total: number = 0;
+    if (oppCost && oppCost.otherCosts && oppCost.otherCosts.length != 0) {
+      oppCost.otherCosts.forEach(oCost => {
+        total = total + oCost.cost;
+      });
+    }
+    if (oppCost && oppCost.additionalSavings) {
+      total = total - oppCost.additionalSavings.cost
+    }
+    return total;
+  }
+
+  getUtilityUnit(utilityType: string, settings: Settings): string {
+    let utilityUnit: string;
+    if (utilityType == 'Electricity') {
+      utilityUnit = 'kWh'
+    } else if (utilityType == 'Compressed Air') {
+      if (settings.unitsOfMeasure == 'Imperial') {
+        utilityUnit = 'kSCF';
+      } else {
+        utilityUnit = 'Nm<sup>3</sup>'
+      }
+    } else if (utilityType == 'Water' || utilityType == 'Waste Water') {
+      if (settings.unitsOfMeasure == 'Imperial') {
+        utilityUnit = 'kgal';
+      } else {
+        utilityUnit = 'm<sup>3</sup>'
+      }
+    } else if (utilityType == 'Steam') {
+      if (settings.unitsOfMeasure == 'Imperial') {
+        utilityUnit = 'klb';
+      } else {
+        utilityUnit = 'tonne'
+      }
+    } else if (utilityType == 'Natural Gas' || utilityType == 'Other Fuel') {
+      if (settings.unitsOfMeasure == 'Imperial') {
+        utilityUnit = 'MMBtu';
+      } else {
+        utilityUnit = 'MJ'
+      }
+    }
+    return utilityUnit;
   }
 
 }
