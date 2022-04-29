@@ -19,6 +19,7 @@ export class OperatingProfileTableComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;
   isFormChange: boolean = false;
   hourIntervals: Array<number>;
+  nameIntervals: Array<number>;
   profileSummary: Array<ProfileSummary>;
   profileDataType: "power" | "percentCapacity" | "airflow" | "powerFactor" | "percentPower";
   selectedDayTypeId: string;
@@ -100,8 +101,20 @@ export class OperatingProfileTableComponent implements OnInit {
 
   setHourIntervals(systemProfileSetup: SystemProfileSetup) {
     this.hourIntervals = new Array();
+    this.nameIntervals = new Array();
+    if(systemProfileSetup.dataInterval == 0.5 || systemProfileSetup.dataInterval == 0.25 ){
+      let totalEntries: number = 24 / systemProfileSetup.dataInterval;
+      for (let index = 0; index < totalEntries; index++ ) {
+        this.hourIntervals.push(index);
+      }
+    } else {
+      for (let index = 0; index < systemProfileSetup.numberOfHours;) {
+        this.hourIntervals.push(index)
+        index = index + systemProfileSetup.dataInterval;
+      }
+    }
     for (let index = 0; index < systemProfileSetup.numberOfHours;) {
-      this.hourIntervals.push(index)
+      this.nameIntervals.push(index)
       index = index + systemProfileSetup.dataInterval;
     }
   }
@@ -155,21 +168,40 @@ export class OperatingProfileTableComponent implements OnInit {
 
   getDummyData(numberOfHours: number, dataInterval: number): Array<ProfileSummaryData> {
     let profileSummaryData: Array<ProfileSummaryData> = new Array();
-    for (let timeInterval = 0; timeInterval < numberOfHours;) {
-      profileSummaryData.push({
-        power: undefined,
-        airflow: undefined,
-        percentCapacity: undefined,
-        timeInterval: timeInterval,
-        percentPower: undefined,
-        percentSystemCapacity: 0,
-        percentSystemPower: 0,
-        order: 0,
-        powerFactor: 0,
-        amps: 0,
-        volts: 0
-      })
-      timeInterval = timeInterval + dataInterval;
+    if(dataInterval == 0.5 || dataInterval == 0.25){
+      let totalEntries: number = 24 / dataInterval;
+      for (let timeInterval = 0; timeInterval < totalEntries; timeInterval++) {
+        profileSummaryData.push({
+          power: undefined,
+          airflow: undefined,
+          percentCapacity: undefined,
+          timeInterval: timeInterval,
+          percentPower: undefined,
+          percentSystemCapacity: 0,
+          percentSystemPower: 0,
+          order: 0,
+          powerFactor: 0,
+          amps: 0,
+          volts: 0
+        });
+      }
+    } else {
+      for (let timeInterval = 0; timeInterval < numberOfHours;) {
+        profileSummaryData.push({
+          power: undefined,
+          airflow: undefined,
+          percentCapacity: undefined,
+          timeInterval: timeInterval,
+          percentPower: undefined,
+          percentSystemCapacity: 0,
+          percentSystemPower: 0,
+          order: 0,
+          powerFactor: 0,
+          amps: 0,
+          volts: 0
+        });
+        timeInterval = timeInterval + dataInterval;
+      }
     }
     return profileSummaryData;
   }
