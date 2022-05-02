@@ -177,6 +177,22 @@ export class FanPsychrometricChartComponent implements OnInit {
   addTopAxisTrace(blueTraces: Array<TraceData>) {
     // We need a trace or text/labels for this psuedo axis
     // Should be able to index into blue lines array, copy the last trace, modify styling and add markers (see 'text' and 'customdata' property and usage)  and add to chart
+
+    //below variables will eventually be used for annotation coordinates
+    // let xCoordinates = blueTraces[5].x;
+    // let yCoordinates = blueTraces[5].y;
+
+    let trace = {
+      //current x and y coordinates are hard-coded based on the top blue trace. will eventually use the values from the blueTraces parameter being passed in
+      x: [40, 50, 60, 70, 80, 90, 100, 110, 120, 130],
+      y: [0.005195123704269834, 0.007631013371269642, 0.011042711334813505, 0.01576586057214435, 0.02224224917938616, 0.031058314712040406,  0.04300391773481307, 0.05916577350446308, 0.08108245084506918, 0.11101404514918507],
+      mode: 'text',
+      text: ['40', '50', '60', '70', '80', '90', '100', '110', '120', '130'],
+      textposition: 'top',
+      type: 'scatter',
+      showlegend: false
+    }
+    this.chart.data.push(trace);
   }
 
   addUserPoint() {
