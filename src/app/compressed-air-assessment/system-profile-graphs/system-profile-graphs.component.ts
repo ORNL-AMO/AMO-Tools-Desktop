@@ -276,8 +276,8 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(trace);
       });
       let yAxisRange: Array<number> = this.getYAxisRange(true, this.totalFullLoadCapacity);
-      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 25 : 1;
-      let xRange: Array<number> = [0, xRangeMax];
+      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 24 : 1;
+      let xRange: Array<number> = [1, xRangeMax];
       let unit: string = 'acfm';
       if (this.settings.unitsOfMeasure == 'Metric') {
         unit = 'm&#xB3;/min'
@@ -348,8 +348,8 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       });
-      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 25 : 1;
-      var layout = this.getLayout("Compressor Capacity (%)", [0, xRangeMax], [-5, 105], '%');
+      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 24 : 1;
+      var layout = this.getLayout("Compressor Capacity (%)", [1, xRangeMax], [0, 105], '%');
       var config = {
         responsive: !this.printView,
         displaylogo: false
@@ -389,8 +389,8 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(trace);
       });
       let yAxisRange: Array<number> = this.getYAxisRange(false, this.totalFullLoadPower);
-      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 25 : 1;
-      let xRange: Array<number> = [0, xRangeMax];
+      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 24 : 1;
+      let xRange: Array<number> = [1, xRangeMax];
       var layout = this.getLayout("Power (kW)", xRange, yAxisRange, undefined);
       var config = {
         responsive: !this.printView,
@@ -434,7 +434,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       });
-      var layout = this.getLayout("Compressor Power %", undefined, [-5, 105], '%');
+      var layout = this.getLayout("Compressor Power %", undefined, [0, 100], '%');
       var config = {
         responsive: !this.printView,
         displaylogo: false
