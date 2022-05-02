@@ -15,4 +15,8 @@
     .print-avoid-break{
         page-break-inside: avoid;
     }
+
+    .print-container {
+        overflow: hidden;
+    }
 }

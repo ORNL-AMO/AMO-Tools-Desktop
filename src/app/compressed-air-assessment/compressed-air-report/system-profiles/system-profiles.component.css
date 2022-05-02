@@ -1,3 +1,9 @@
 .avoid-break {
     page-break-inside: avoid;
 }
+
+@media print {
+    .print-container {
+        overflow: hidden;
+    }
+}
