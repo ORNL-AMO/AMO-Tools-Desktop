@@ -19,13 +19,21 @@ export class ProfileSummaryTableComponent implements OnInit {
   @Input()
   printView: boolean;
 
+  dataInterval: number;
+  nameIntervals: number[];
 
 
   @ViewChild('profileTable', { static: false }) profileTable: ElementRef;
   allTablesString: string;
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.dataInterval = 24 / this.totals.length;
+    this.nameIntervals = new Array();    
+    for (let index = 0; index < 24;) {
+      this.nameIntervals.push(index)
+      index = index + this.dataInterval;
+    }
   }
 
   updateTableString() {

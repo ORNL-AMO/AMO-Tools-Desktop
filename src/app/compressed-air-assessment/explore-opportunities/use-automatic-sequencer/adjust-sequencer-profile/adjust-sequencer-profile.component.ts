@@ -32,6 +32,7 @@ export class AdjustSequencerProfileComponent implements OnInit {
 
   orderingOptions: Array<number>;
   hourIntervals: Array<number>;
+  nameIntervals: Array<number>;
   fillRight: boolean = false;
   numberPipeDecimals: string;
   constructor(private inventoryService: InventoryService) { }
@@ -48,8 +49,20 @@ export class AdjustSequencerProfileComponent implements OnInit {
 
   setHourIntervals(systemProfileSetup: SystemProfileSetup) {
     this.hourIntervals = new Array();
+    this.nameIntervals = new Array();
+    if(systemProfileSetup.dataInterval == 0.5 || systemProfileSetup.dataInterval == 0.25 ){
+      let totalEntries: number = 24 / systemProfileSetup.dataInterval;
+      for (let index = 0; index < totalEntries; index++ ) {
+        this.hourIntervals.push(index);
+      }
+    } else {
+      for (let index = 0; index < systemProfileSetup.numberOfHours;) {
+        this.hourIntervals.push(index)
+        index = index + systemProfileSetup.dataInterval;
+      }
+    }
     for (let index = 0; index < systemProfileSetup.numberOfHours;) {
-      this.hourIntervals.push(index)
+      this.nameIntervals.push(index)
       index = index + systemProfileSetup.dataInterval;
     }
   }

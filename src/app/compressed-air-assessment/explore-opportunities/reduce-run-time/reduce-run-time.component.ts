@@ -45,6 +45,10 @@ export class ReduceRunTimeComponent implements OnInit {
   hasInvalidDayType: boolean;
   settings: Settings;
   numberPipeDecimals: string;
+
+  dataInterval: number;
+  nameIntervals: number[];
+
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService, private reduceRunTimeService: ReduceRunTimeService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
@@ -85,6 +89,12 @@ export class ReduceRunTimeComponent implements OnInit {
         }
       }
     });
+    this.dataInterval = 24 / this.reduceRuntime.runtimeData[0].intervalData.length;
+    this.nameIntervals = new Array();    
+    for (let index = 0; index < 24;) {
+      this.nameIntervals.push(index)
+      index = index + this.dataInterval;
+    }
   }
 
   ngOnDestroy() {
