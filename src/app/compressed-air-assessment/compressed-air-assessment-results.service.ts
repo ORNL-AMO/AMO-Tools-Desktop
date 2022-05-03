@@ -42,10 +42,14 @@ export class CompressedAirAssessmentResultsService {
       let averageAirFlow: number = _.sumBy(totals, (total) => { return total.airflow }) / hoursOn;
       if (isNaN(averageAirFlow)) {
         averageAirFlow = 0;
+      } else if (compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval !== 24) {
+        averageAirFlow = averageAirFlow * compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       }
       let averagePower: number = _.sumBy(totals, (total) => { return total.power }) / hoursOn;
       if (isNaN(averagePower)) {
         averagePower = 0;
+      } else if (compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval !== 24) {
+        averagePower = averagePower * compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       }
 
       let peakDemandTotal: ProfileSummaryTotal = _.maxBy(totals, (total) => { return total.power });
@@ -463,7 +467,7 @@ export class CompressedAirAssessmentResultsService {
         adjustedProfileSummary = this.improveEndUseEfficiency(adjustedProfileSummary, settings, dayType, modification.improveEndUseEfficiency, adjustedCompressors, atmosphericPressure, numberOfSummaryIntervals, totalAirStorage, reduceRuntime);
         improveEndUseEfficiencyProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
         if (electricityCost) {
-          auxiliaryPowerUsage = this.calculateEfficiencyImprovementAuxiliaryPower(modification.improveEndUseEfficiency, electricityCost, dayType);
+          auxiliaryPowerUsage = this.calculateEfficiencyImprovementAuxiliaryPower(modification.improveEndUseEfficiency, electricityCost, dayType, numberOfSummaryIntervals);
           let implementationCost: number = 0;
           modification.improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => { implementationCost = implementationCost + item.implementationCost });
           improveEndUseEfficiencySavings = this.calculateSavings(adjustedProfileCopy, adjustedProfileSummary, dayType, electricityCost, implementationCost, numberOfSummaryIntervals)
@@ -841,7 +845,7 @@ export class CompressedAirAssessmentResultsService {
     return adjustedProfileSummary;
   }
 
-  calculateEfficiencyImprovementAuxiliaryPower(improveEndUseEfficiency: ImproveEndUseEfficiency, electricityCost: number, dayType: CompressedAirDayType): { cost: number, energyUse: number } {
+  calculateEfficiencyImprovementAuxiliaryPower(improveEndUseEfficiency: ImproveEndUseEfficiency, electricityCost: number, dayType: CompressedAirDayType, numberOfSummaryIntervals: number): { cost: number, energyUse: number } {
     let energyUse: number = 0;
     improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => {
       if (item.substituteAuxiliaryEquipment) {
@@ -860,6 +864,9 @@ export class CompressedAirAssessmentResultsService {
               energyUse = energyUse + item.equipmentDemand;
             }
           });
+        }
+        if (numberOfSummaryIntervals !== 24) {
+          energyUse = energyUse * numberOfSummaryIntervals;
         }
       }
     });
