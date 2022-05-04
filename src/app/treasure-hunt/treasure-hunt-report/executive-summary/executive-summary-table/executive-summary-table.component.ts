@@ -19,6 +19,7 @@ export class ExecutiveSummaryTableComponent implements OnInit {
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
+  
   constructor() { }
 
   ngOnInit(): void {

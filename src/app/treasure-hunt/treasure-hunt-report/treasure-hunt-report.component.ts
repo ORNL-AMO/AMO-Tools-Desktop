@@ -14,8 +14,6 @@ import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-o
 import { PrintOptions } from '../../shared/models/printing';
 import { TreasureHuntResultsData } from '../../report-rollup/report-rollup-models';
 import { TreasureHuntReportRollupService } from '../../report-rollup/treasure-hunt-report-rollup.service';
-import { TreasureHuntService } from '../treasure-hunt.service';
-import { ExecutiveSummaryComponent } from './executive-summary/executive-summary.component';
 import pptxgen from 'pptxgenjs';
 import * as _ from 'lodash';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
@@ -39,7 +37,6 @@ export class TreasureHuntReportComponent implements OnInit {
   @Input()
   inRollup: boolean = false;
 
-  @ViewChild('executiveSummaryTable', { static: false }) executiveSummary: ExecutiveSummaryComponent;
   @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
 
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
@@ -70,7 +67,7 @@ export class TreasureHuntReportComponent implements OnInit {
     private opportunityPaybackService: OpportunityPaybackService,
     private opportunityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService,
     private sortCardsService: SortCardsService, private directoryDbService: DirectoryDbService, private cd: ChangeDetectorRef,
-    private treasureHuntReportRollupService: TreasureHuntReportRollupService, private treasureHuntService: TreasureHuntService,
+    private treasureHuntReportRollupService: TreasureHuntReportRollupService,
     private settingsDbService: SettingsDbService, private treasureHuntPPTService: TreasureHuntPptService) { }
 
   ngOnInit() {
