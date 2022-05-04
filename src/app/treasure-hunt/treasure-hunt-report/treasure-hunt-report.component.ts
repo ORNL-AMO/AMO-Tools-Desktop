@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { FacilityInfo, Settings } from '../../shared/models/settings';
+import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
 import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, TreasureHunt } from '../../shared/models/treasure-hunt';
@@ -19,10 +19,9 @@ import { ExecutiveSummaryComponent } from './executive-summary/executive-summary
 import pptxgen from 'pptxgenjs';
 import * as _ from 'lodash';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import * as betterPlantsPPTimg from './better-plants-ppt-img.js';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as moment from 'moment';
-import { PptxgenjsChartData, TreasureHuntPptService } from './treasure-hunt-ppt.service';
+import { TreasureHuntPptService } from './treasure-hunt-ppt.service';
 @Component({
   selector: 'app-treasure-hunt-report',
   templateUrl: './treasure-hunt-report.component.html',
