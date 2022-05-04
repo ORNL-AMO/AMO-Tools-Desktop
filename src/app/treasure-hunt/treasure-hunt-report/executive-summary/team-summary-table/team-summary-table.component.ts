@@ -8,9 +8,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 export class TeamSummaryTableComponent implements OnInit {
   @Input()
   teamData: Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>;
-  @Input()
-  exportToPPT: boolean;
-  
+    
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
   

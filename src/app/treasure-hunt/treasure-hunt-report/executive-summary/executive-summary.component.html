@@ -33,7 +33,7 @@
 </div>
 <div class="row no-gutters mb-4 print-avoid-break" *ngIf="teamData.length > 0">
   <div class="col-lg-6 col-sm-12">
-    <app-team-summary-table [teamData]="teamData" [exportToPPT]="exportToPPT"></app-team-summary-table>
+    <app-team-summary-table [teamData]="teamData"></app-team-summary-table>
   </div>
   <div class="col-lg-6 col-sm-12 pie-chart" [ngClass]="{'col-12': showPrintView}">
     <app-team-summary-pie-chart class="w-100" [teamData]="teamData" [showPrintView]="showPrintView"></app-team-summary-pie-chart>

@@ -267,7 +267,9 @@ export class TreasureHuntPptService {
     slide5 = this.getCarbonSummaryTable(slide5, treasureHuntResults.co2EmissionsResults);
 
     if (this.treasureHuntReportService.getTeamData(opportunityCardsData).length > 0) {
-      pptx.tableToSlides("teamSummaryTable", tableToSlidesProperties);
+      let slide6 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+      slide6.addText('Team Summary', slideTitleProperties);
+      slide6 = this.getTeamSummaryTable(slide6, opportunityCardsData);
     }
 
     let slide7 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
@@ -792,6 +794,29 @@ export class TreasureHuntPptService {
       this.roundVal(carbonResults.totalCO2ProjectedUse),
       this.roundVal(carbonResults.totalCO2Savings)
     ]);
+
+    slide.addTable(rows, { x: 0, y: 1.2, w: 13.33, color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: 'FFFFFF' }, fill: { color: '7ADCFF' } });
+
+    return slide;
+  }
+
+  getTeamSummaryTable(slide: pptxgen.Slide, opportunityCardsData: Array<OpportunityCardData>): pptxgen.Slide {
+    let teamData = this.treasureHuntReportService.getTeamData(opportunityCardsData);
+    let rows = [];
+    rows.push([
+      { text: "Team", options: { bold: true } },
+      { text: "Cost Savings ($)", options: { bold: true } },
+      { text: "Implementation Cost ($)", options: { bold: true } },
+      { text: "Payback", options: { bold: true } }
+    ]);
+    teamData.forEach(data => {
+      rows.push([
+        data.team,
+        this.roundVal(data.costSavings),
+        this.roundVal(data.implementationCost),
+        this.roundVal(data.paybackPeriod)
+      ]);
+    });
 
     slide.addTable(rows, { x: 0, y: 1.2, w: 13.33, color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: 'FFFFFF' }, fill: { color: '7ADCFF' } });
 
