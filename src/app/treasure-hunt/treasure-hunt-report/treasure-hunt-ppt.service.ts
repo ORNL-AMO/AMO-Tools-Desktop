@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FacilityInfo, Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
-import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, TreasureHunt, OpportunitySheet, OpportunityCost } from '../../shared/models/treasure-hunt';
+import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, TreasureHunt, OpportunitySheet, OpportunityCost, TreasureHuntCo2EmissionsResults } from '../../shared/models/treasure-hunt';
 import { TreasureHuntReportService } from './treasure-hunt-report.service';
 import { OpportunityPaybackService } from './opportunity-payback.service';
 import { Subscription } from 'rxjs';
@@ -249,10 +249,10 @@ export class TreasureHuntPptService {
       }
     }
     slide1.addText(titleSlideName, { w: '100%', h: '100%', align: 'center', bold: true, color: '1D428A', fontSize: 88, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true });
-    
+
     let slide2 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide2.addText('Cost Summary', slideTitleProperties);
-    slide2 = this.getCostSummaryTable(slide2, treasureHuntResults, settings);
+    slide2 = this.getCostSummaryTable(slide2, treasureHuntResults);
 
     let slide3 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide3.addChart("bar", costSumBarData, barChartOptions);
@@ -261,8 +261,10 @@ export class TreasureHuntPptService {
     let slide4 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide4.addText('Detailed Summary', slideTitleProperties);
     slide4 = this.getDetailedSummaryTable(slide4, treasureHuntResults, settings);
-
-    pptx.tableToSlides("carbonResults", tableToSlidesProperties);
+   
+    let slide5 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide5.addText('Carbon Emission Results', slideTitleProperties);
+    slide5 = this.getCarbonSummaryTable(slide5, treasureHuntResults.co2EmissionsResults);
 
     if (this.treasureHuntReportService.getTeamData(opportunityCardsData).length > 0) {
       pptx.tableToSlides("teamSummaryTable", tableToSlidesProperties);
@@ -577,7 +579,7 @@ export class TreasureHuntPptService {
     return slide;
   }
 
-  getCostSummaryTable(slide: pptxgen.Slide, treasureHuntResults: TreasureHuntResults, settings: Settings): pptxgen.Slide {
+  getCostSummaryTable(slide: pptxgen.Slide, treasureHuntResults: TreasureHuntResults): pptxgen.Slide {
     let rows = [];
     rows.push([
       { text: "Utility", options: { bold: true } },
@@ -719,6 +721,88 @@ export class TreasureHuntPptService {
 
     return slide;
   }
+
+  getCarbonSummaryTable(slide: pptxgen.Slide, carbonResults: TreasureHuntCo2EmissionsResults): pptxgen.Slide {
+    let rows = [];
+    rows.push([
+      { text: "Utility", options: { bold: true } },
+      { text: "Current CO2 Emissions (tonne CO2)", options: { bold: true } },
+      { text: "Projected CO2 Emissions (tonne CO2)", options: { bold: true } },
+      { text: "CO2 Emission Savings (tonne CO2)", options: { bold: true } }
+    ]);
+    if (carbonResults.electricityCO2CurrentUse != 0) {
+      rows.push([
+        { text: "Electricity", options: { bold: true } },
+        this.roundVal(carbonResults.electricityCO2CurrentUse),
+        this.roundVal(carbonResults.electricityCO2ProjectedUse),
+        this.roundVal(carbonResults.electricityCO2Savings)
+      ]);
+    }
+    if (carbonResults.naturalGasCO2CurrentUse != 0) {
+      rows.push([
+        { text: "Natural Gas", options: { bold: true } },
+        this.roundVal(carbonResults.naturalGasCO2CurrentUse),
+        this.roundVal(carbonResults.naturalGasCO2ProjectedUse),
+        this.roundVal(carbonResults.naturalGasCO2Savings)
+      ]);
+    }
+    if (carbonResults.waterCO2CurrentUse != 0) {
+      rows.push([
+        { text: "Water", options: { bold: true } },
+        this.roundVal(carbonResults.waterCO2CurrentUse),
+        this.roundVal(carbonResults.waterCO2ProjectedUse),
+        this.roundVal(carbonResults.waterCO2Savings)
+      ]);
+    }
+    if (carbonResults.wasteWaterCO2CurrentUse != 0) {
+      rows.push([
+        { text: "WasteWater", options: { bold: true } },
+        this.roundVal(carbonResults.wasteWaterCO2CurrentUse),
+        this.roundVal(carbonResults.wasteWaterCO2ProjectedUse),
+        this.roundVal(carbonResults.wasteWaterCO2Savings)
+      ]);
+    }
+    if (carbonResults.otherFuelCO2CurrentUse != 0) {
+      rows.push([
+        { text: "Other Fuel", options: { bold: true } },
+        this.roundVal(carbonResults.otherFuelCO2CurrentUse),
+        this.roundVal(carbonResults.otherFuelCO2ProjectedUse),
+        this.roundVal(carbonResults.otherFuelCO2Savings)
+      ]);
+    }
+    if (carbonResults.compressedAirCO2CurrentUse != 0) {
+      rows.push([
+        { text: "Compressed Air", options: { bold: true } },
+        this.roundVal(carbonResults.compressedAirCO2CurrentUse),
+        this.roundVal(carbonResults.compressedAirCO2ProjectedUse),
+        this.roundVal(carbonResults.compressedAirCO2Savings)
+      ]);
+    }
+    if (carbonResults.steamCO2CurrentUse != 0) {
+      rows.push([
+        { text: "Steam", options: { bold: true } },
+        this.roundVal(carbonResults.steamCO2CurrentUse),
+        this.roundVal(carbonResults.steamCO2ProjectedUse),
+        this.roundVal(carbonResults.steamCO2Savings)
+      ]);
+    }
+    rows.push([
+      { text: "Total", options: { bold: true } },
+      this.roundVal(carbonResults.totalCO2CurrentUse),
+      this.roundVal(carbonResults.totalCO2ProjectedUse),
+      this.roundVal(carbonResults.totalCO2Savings)
+    ]);
+
+    slide.addTable(rows, { x: 0, y: 1.2, w: 13.33, color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: 'FFFFFF' }, fill: { color: '7ADCFF' } });
+
+    return slide;
+  }
+
+
+
+
+
+
 
 }
 
