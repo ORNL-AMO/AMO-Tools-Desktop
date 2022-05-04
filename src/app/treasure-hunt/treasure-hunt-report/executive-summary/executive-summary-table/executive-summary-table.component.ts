@@ -16,26 +16,13 @@ export class ExecutiveSummaryTableComponent implements OnInit {
   settings: Settings;
   @Input()
   title: string;
-  @Input()
-  exportToPPT: boolean;
-
-  colSpan: number;
-  tableId: string;
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
-  
+
   constructor() { }
 
-  ngOnInit() {
-    if(this.showFullSummary){
-      this.tableId = 'detailedSum';
-      this.colSpan = 11;
-    } 
-    if (!this.showFullSummary){
-      this.tableId = 'costSum';
-      this.colSpan = 5;
-    }
+  ngOnInit(): void {
   }
 
   updateTableString() {
