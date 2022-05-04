@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
 import { PlotlyService } from 'angular-plotly.js';
-
 @Component({
   selector: 'app-team-summary-pie-chart',
   templateUrl: './team-summary-pie-chart.component.html',
@@ -81,7 +80,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
       responsive: true
     };
     this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
-
   }
 
   drawPrintPlot() {
@@ -114,7 +112,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
       displayModeBar: false,
       responsive: true
     };
-    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
-    
+    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);    
   }
 }
