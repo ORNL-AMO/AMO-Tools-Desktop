@@ -55,7 +55,6 @@ export class TreasureHuntReportComponent implements OnInit {
   showPrintDiv: boolean = false;
   selectAll: boolean = false;
 
-  presenting: boolean;
   fileName: string;
 
   currentTab: string = 'executiveSummary';
@@ -190,34 +189,31 @@ export class TreasureHuntReportComponent implements OnInit {
     this.exportModal.hide();
   }
 
-  getFileName(): string {
+  getCurrentDate(): string{
     const date: Date = new Date();
     let formatedDate: string = moment(date).format("MMM D, YYYY").toString();
-    return formatedDate + ' - Treasure Hunt Report.ppt';
+    return formatedDate;
+  }
+
+  getFileName(): string {
+    if (!this.fileName) {
+      this.fileName = this.getCurrentDate() + ' - Treasure Hunt Report';
+    }
+    return this.fileName;
   }
 
   present() {
-    this.presenting = true;
-    this.cd.detectChanges();
-    if (!this.fileName) {
-      this.fileName = this.getFileName();
-    }
-    let facilityInfo: FacilityInfo;
+    this.fileName = this.getFileName();
+    let facilityName: string = "Treasure Hunt Report " + this.getCurrentDate();
     let settings = this.settingsDbService.getByDirectoryId(this.assessment.directoryId);
-    if (settings) {
-      if (settings.facilityInfo) {
-        facilityInfo = settings.facilityInfo;        
-      }if (this.dataCalculated) {
-        let pptx = new pptxgen();
-        pptx = this.treasureHuntPPTService.createPPT(facilityInfo, settings, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails);
-        this.presenting = false;
-        this.cd.detectChanges();
-        pptx.writeFile({ fileName: this.fileName + '.pptx' });
-      } else {
-        this.presenting = false;
+    if (this.dataCalculated) {
+      if (settings.facilityInfo && settings.facilityInfo.facilityName) {
+        facilityName = settings.facilityInfo.facilityName + " " + facilityName;
       }
+      let pptx = new pptxgen();
+      pptx = this.treasureHuntPPTService.createPPT(facilityName, settings, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails);
+      pptx.writeFile({ fileName: this.fileName + '.pptx' });
     }
-
     this.hideExportModal();
   }
 

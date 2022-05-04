@@ -14,8 +14,6 @@ export class OpportunityPaybackComponent implements OnInit {
   showPrint: boolean;
   @Input()
   settings: Settings;
-  @Input()
-  exportToPPT: boolean;
 
   constructor() { }
 

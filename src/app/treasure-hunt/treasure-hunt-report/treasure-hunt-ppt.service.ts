@@ -46,20 +46,6 @@ export class TreasureHuntPptService {
     return slideTitleProps;
   }
 
-
-  getTableToSlideProperties(): pptxgen.TableToSlidesProps {
-    let tableToSlidesProps: pptxgen.TableToSlidesProps = {
-      y: 1.2,
-      masterSlideName: "MASTER_SLIDE",
-      autoPage: true,
-      addHeaderToEach: true,
-      autoPageCharWeight: -1.0,
-      autoPageLineWeight: -1.0,
-      slideMargin: 0.0
-    };
-    return tableToSlidesProps;
-  }
-
   getCostSummaryData(treasureHuntResults: TreasureHuntResults): PptxgenjsChartData[] {
     let labels = new Array<string>();
     let projectedCosts = new Array<number>();
@@ -222,7 +208,7 @@ export class TreasureHuntPptService {
   }
 
 
-  createPPT(facilityInfo: FacilityInfo, settings: Settings, treasureHuntResults: TreasureHuntResults, opportunityCardsData: Array<OpportunityCardData>,
+  createPPT(facilityName: string, settings: Settings, treasureHuntResults: TreasureHuntResults, opportunityCardsData: Array<OpportunityCardData>,
     opportunitiesPaybackDetails: OpportunitiesPaybackDetails): pptxgen {
     let pptx = new pptxgen();
 
@@ -233,7 +219,6 @@ export class TreasureHuntPptService {
       margin: 0.0
     });
 
-    let tableToSlidesProperties: pptxgen.TableToSlidesProps = this.getTableToSlideProperties();
     let slideTitleProperties: pptxgen.TextPropsOptions = this.getSlideTitleProperties();
     let barChartOptions: pptxgen.IChartOpts = this.getBarChartProperties();
     let pieChartOptions: pptxgen.IChartOpts = this.getPieChartProperties();
@@ -241,14 +226,8 @@ export class TreasureHuntPptService {
     let teamSummaryData: PptxgenjsChartData[] = this.getTeamSummaryData(opportunityCardsData);
     let paybackBarData: PptxgenjsChartData[] = this.getPaybackData(opportunitiesPaybackDetails, settings);
 
-    let slide1 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    let titleSlideName: string = "Treasure Hunt Report";
-    if (facilityInfo) {
-      if (facilityInfo.facilityName) {
-        titleSlideName = facilityInfo.facilityName + " Treasure Hunt Report";
-      }
-    }
-    slide1.addText(titleSlideName, { w: '100%', h: '100%', align: 'center', bold: true, color: '1D428A', fontSize: 88, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true });
+    let slide1 = pptx.addSlide({ masterName: "MASTER_SLIDE" });    
+    slide1.addText(facilityName, { w: '100%', h: '100%', align: 'center', bold: true, color: '1D428A', fontSize: 88, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true });
 
     let slide2 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide2.addText('Cost Summary', slideTitleProperties);
@@ -276,7 +255,9 @@ export class TreasureHuntPptService {
     slide7.addChart("pie", teamSummaryData, pieChartOptions);
     slide7.addText('Team Summary', slideTitleProperties);
 
-    pptx.tableToSlides("paybackTable", tableToSlidesProperties);
+    let slide8 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide8.addText('Opportunity Payback Details', slideTitleProperties);
+    slide8 = this.getTeamSummaryTable(slide8, opportunityCardsData);
 
     let slide9 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide9.addChart("bar", paybackBarData, barChartOptions);
@@ -817,6 +798,39 @@ export class TreasureHuntPptService {
         this.roundVal(data.paybackPeriod)
       ]);
     });
+
+    slide.addTable(rows, { x: 0, y: 1.2, w: 13.33, color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: 'FFFFFF' }, fill: { color: '7ADCFF' } });
+
+    return slide;
+  }
+
+  getOppPaybackTable(slide: pptxgen.Slide, opportunitiesPaybackDetails: OpportunitiesPaybackDetails): pptxgen.Slide {
+    let rows = [];
+    rows.push([
+      { text: "Payback Length", options: { bold: true } },
+      { text: "Number of Opportunities", options: { bold: true } },
+      { text: "Total Savings ($)", options: { bold: true } }
+    ]);    
+    rows.push([
+      "Less than 1 year",
+      this.roundVal(opportunitiesPaybackDetails.lessThanOneYear.numOpportunities),
+      this.roundVal(opportunitiesPaybackDetails.lessThanOneYear.totalSavings)
+    ]);
+    rows.push([
+      "2 to 3 years",
+      this.roundVal(opportunitiesPaybackDetails.twoToThreeYears.numOpportunities),
+      this.roundVal(opportunitiesPaybackDetails.twoToThreeYears.totalSavings)
+    ]);
+    rows.push([
+      "More than 3 years",
+      this.roundVal(opportunitiesPaybackDetails.moreThanThreeYears.numOpportunities),
+      this.roundVal(opportunitiesPaybackDetails.moreThanThreeYears.totalSavings)
+    ]);
+    rows.push([
+      "Total",
+      this.roundVal(opportunitiesPaybackDetails.totals.numOpportunities),
+      this.roundVal(opportunitiesPaybackDetails.totals.totalSavings)
+    ]);    
 
     slide.addTable(rows, { x: 0, y: 1.2, w: 13.33, color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: 'FFFFFF' }, fill: { color: '7ADCFF' } });
 

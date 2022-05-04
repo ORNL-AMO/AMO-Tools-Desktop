@@ -12,8 +12,6 @@ export class OpportunityPaybackTableComponent implements OnInit {
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
   @Input()
   settings: Settings;
-  @Input()
-  exportToPPT: boolean;
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
 

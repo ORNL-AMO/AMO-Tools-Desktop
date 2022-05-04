@@ -83,7 +83,7 @@
       <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
     </div>
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'executiveSummary' && !showPrintView) || (showPrintView && printOptions.printExecutiveSummary) || presenting) && dataCalculated"
+      *ngIf="((currentTab == 'executiveSummary' && !showPrintView) || (showPrintView && printOptions.printExecutiveSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <h4 class="show-print">Executive Summary</h4>
       <div class="d-flex justify-content-center">
@@ -111,11 +111,11 @@
     </div>
 
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'opportunityPayback' && !showPrintView) || (showPrintView && printOptions.printReportOpportunityPayback) || (presenting)) && dataCalculated"
+      *ngIf="((currentTab == 'opportunityPayback' && !showPrintView) || (showPrintView && printOptions.printReportOpportunityPayback)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <h4 class="show-print">Payback Details</h4>
       <app-opportunity-payback [showPrint]="showPrintView && printOptions.printReportOpportunityPayback"
-        [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [settings]="settings" [exportToPPT]="presenting">
+        [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [settings]="settings">
       </app-opportunity-payback>
     </div>
   </div>
