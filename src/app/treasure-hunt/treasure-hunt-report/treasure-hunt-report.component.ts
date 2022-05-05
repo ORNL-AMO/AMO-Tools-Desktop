@@ -199,15 +199,16 @@ export class TreasureHuntReportComponent implements OnInit {
   }
 
   present() {
+    let date: string = this.getCurrentDate();
     this.fileName = this.getFileName();
-    let facilityName: string = "Treasure Hunt Report " + this.getCurrentDate();
+    let facilityName: string = "Treasure Hunt Report";
     let settings = this.settingsDbService.getByDirectoryId(this.assessment.directoryId);
     if (this.dataCalculated) {
       if (settings.facilityInfo && settings.facilityInfo.facilityName) {
-        facilityName = settings.facilityInfo.facilityName + " " + facilityName;
+        facilityName = settings.facilityInfo.facilityName + " Treasure Hunt Report";
       }
       let pptx = new pptxgen();
-      pptx = this.treasureHuntPPTService.createPPT(facilityName, settings, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails);
+      pptx = this.treasureHuntPPTService.createPPT(facilityName, date, settings, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails);
       pptx.writeFile({ fileName: this.fileName + '.pptx' });
     }
     this.hideExportModal();

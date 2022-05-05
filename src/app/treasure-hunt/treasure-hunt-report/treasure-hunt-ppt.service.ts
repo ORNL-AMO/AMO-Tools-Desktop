@@ -1,27 +1,11 @@
 import { Injectable } from '@angular/core';
-import { FacilityInfo, Settings } from '../../shared/models/settings';
-import { Assessment } from '../../shared/models/assessment';
-import { Directory } from '../../shared/models/directory';
-import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, TreasureHunt, OpportunitySheet, OpportunityCost, TreasureHuntCo2EmissionsResults } from '../../shared/models/treasure-hunt';
+import { Settings } from '../../shared/models/settings';
+import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, OpportunitySheet, OpportunityCost, TreasureHuntCo2EmissionsResults } from '../../shared/models/treasure-hunt';
 import { TreasureHuntReportService } from './treasure-hunt-report.service';
-import { OpportunityPaybackService } from './opportunity-payback.service';
-import { Subscription } from 'rxjs';
-import { OpportunityCardsService, OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
-import { TreasureChestMenuService } from '../treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
-import { SortCardsService } from '../treasure-chest/opportunity-cards/sort-cards.service';
-import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
-import { PrintOptions } from '../../shared/models/printing';
-import { TreasureHuntResultsData } from '../../report-rollup/report-rollup-models';
-import { TreasureHuntReportRollupService } from '../../report-rollup/treasure-hunt-report-rollup.service';
-import { TreasureHuntService } from '../treasure-hunt.service';
-import { ExecutiveSummaryComponent } from './executive-summary/executive-summary.component';
+import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 import pptxgen from 'pptxgenjs';
 import * as _ from 'lodash';
-import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import * as betterPlantsPPTimg from './better-plants-ppt-img.js';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import * as moment from 'moment';
 
 @Injectable()
 export class TreasureHuntPptService {
@@ -41,7 +25,8 @@ export class TreasureHuntPptService {
       fontSize: 32,
       fontFace: 'Arial (Headings)',
       valign: 'middle',
-      isTextBox: true
+      isTextBox: true,
+      autoFit: true
     };
     return slideTitleProps;
   }
@@ -163,17 +148,17 @@ export class TreasureHuntPptService {
       showLegend: true,
       showValue: true,
       barDir: 'col',
-      barGrouping: 'stacked',
+      barGrouping: 'clustered',
       dataLabelFormatCode: '$#,##0',
       dataLabelPosition: 'bestFit',
       chartColors: ['1E7640', '2ABDDA', '84B641', 'BC8FDD'],
       legendFontSize: 16,
       legendColor: '2E4053',
       dataLabelColor: '000000',
-      dataLabelFontBold: true,
+      dataLabelFontBold: false,
       catAxisLabelColor: '2E4053',
       valAxisLabelColor: '2E4053',
-      dataLabelFontSize: 18,
+      dataLabelFontSize: 12,
       catAxisLabelFontSize: 16
     };
     return barChartOptions;
@@ -181,10 +166,10 @@ export class TreasureHuntPptService {
 
   getOpportunitySlideText(opportunityData: OpportunitySheet): { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } {
     let slideText: pptxgen.TextProps[] = [
-      { text: "Process / Equipment: " + opportunityData.equipment, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true } },
-      { text: "Team: " + opportunityData.owner, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true } },
-      { text: "Owner/Lead: " + opportunityData.businessUnits, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true } },
-      { text: "Description: " + opportunityData.description, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true } },
+      { text: "Process / Equipment: " + opportunityData.equipment, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
+      { text: "Team: " + opportunityData.owner, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
+      { text: "Owner/Lead: " + opportunityData.businessUnits, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
+      { text: "Description: " + opportunityData.description, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
     ];
     let slideTextProps = this.getOppSlideProperties();
     return { text: slideText, options: slideTextProps };
@@ -201,21 +186,22 @@ export class TreasureHuntPptService {
       fontSize: 28,
       fontFace: 'Arial (Body)',
       valign: 'top',
-      isTextBox: true
+      isTextBox: true,
+      autoFit: true
     };
     return textProps;
 
   }
 
 
-  createPPT(facilityName: string, settings: Settings, treasureHuntResults: TreasureHuntResults, opportunityCardsData: Array<OpportunityCardData>,
+  createPPT(facilityName: string, date: string, settings: Settings, treasureHuntResults: TreasureHuntResults, opportunityCardsData: Array<OpportunityCardData>,
     opportunitiesPaybackDetails: OpportunitiesPaybackDetails): pptxgen {
     let pptx = new pptxgen();
 
     pptx.layout = "LAYOUT_WIDE";
     pptx.defineSlideMaster({
       title: "MASTER_SLIDE",
-      background: { data: betterPlantsPPTimg.logoBase64 },
+      background: { data: betterPlantsPPTimg.betterPlantsSlide },
       margin: 0.0
     });
 
@@ -226,8 +212,10 @@ export class TreasureHuntPptService {
     let teamSummaryData: PptxgenjsChartData[] = this.getTeamSummaryData(opportunityCardsData);
     let paybackBarData: PptxgenjsChartData[] = this.getPaybackData(opportunitiesPaybackDetails, settings);
 
-    let slide1 = pptx.addSlide({ masterName: "MASTER_SLIDE" });    
-    slide1.addText(facilityName, { w: '100%', h: '100%', align: 'center', bold: true, color: '1D428A', fontSize: 88, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true });
+    let slide1 = pptx.addSlide();
+    slide1.background = { data: betterPlantsPPTimg.betterPlantsTitleSlide };
+    slide1.addText(facilityName, { x: 0.3, y: 2.1, w: 5.73, h: 1.21, align: 'center', bold: true, color: '1D428A', fontSize: 26, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
+    slide1.addText(date, { x: 0.3, y: 4.19, w: 4.34, h: 0.74, align: 'left', color: '8B93B1', fontSize: 20, fontFace: 'Arial (Body)', valign: 'top', isTextBox: true, autoFit: true });
 
     let slide2 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide2.addText('Cost Summary', slideTitleProperties);
@@ -240,7 +228,7 @@ export class TreasureHuntPptService {
     let slide4 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide4.addText('Detailed Summary', slideTitleProperties);
     slide4 = this.getDetailedSummaryTable(slide4, treasureHuntResults, settings);
-   
+
     let slide5 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide5.addText('Carbon Emission Results', slideTitleProperties);
     slide5 = this.getCarbonSummaryTable(slide5, treasureHuntResults.co2EmissionsResults);
@@ -257,7 +245,7 @@ export class TreasureHuntPptService {
 
     let slide8 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide8.addText('Opportunity Payback Details', slideTitleProperties);
-    slide8 = this.getTeamSummaryTable(slide8, opportunityCardsData);
+    slide8 = this.getOppPaybackTable(slide8, opportunitiesPaybackDetails);
 
     let slide9 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide9.addChart("bar", paybackBarData, barChartOptions);
@@ -267,8 +255,9 @@ export class TreasureHuntPptService {
     slide10.addChart("pie", paybackBarData, pieChartOptions);
     slide10.addText('Payback Details', slideTitleProperties);
 
-    let slide11 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide11.addText('Opportunity Summaries', { w: '100%', h: '100%', align: 'center', bold: true, color: '1D428A', fontSize: 88, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true });
+    let slide11 = pptx.addSlide();
+    slide11.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
+    slide11.addText('Opportunity Summaries', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
 
     let counter: number = 0;
     opportunityCardsData.forEach(opp => {
@@ -276,30 +265,40 @@ export class TreasureHuntPptService {
       newSlide.addText('Opportunity: ' + opp.name, slideTitleProperties);
       let slideText: { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } = this.getOpportunitySlideText(opp.opportunitySheet);
       newSlide.addText(slideText.text, slideText.options);
-      newSlide.addText('Placeholder for picture', { x: 8.45, y: 1.2, w: 4.43, h: 2.81, align: 'center', fill: { color: '7ADCFF' }, color: 'FFFFFF', fontSize: 18, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true });
+      newSlide.addText('Placeholder for picture', { x: 8.45, y: 1.2, w: 4.43, h: 2.81, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 18, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
       let rows = [];
-      rows.push(["Utility", "Energy Savings", " ", "Cost Saving", "Material Cost", "Labor Cost", "Other Cost", "Total Cost", "Simple Payback"]);
+      rows.push([
+        { text: "Utility", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+        { text: "Energy Savings", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+        { text: "Unit", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+        { text: "Cost Saving ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+        { text: "Material Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+        { text: "Labor Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+        { text: "Other Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+        { text: "Total Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+        { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
+      ]);
       let x: OpportunitySummary = treasureHuntResults.opportunitySummaries[counter];
       let utilityUnit: string;
       if (x.mixedIndividualResults) {
         x.mixedIndividualResults.forEach(x => {
           utilityUnit = this.getUtilityUnit(x.utilityType, settings);
-          rows.push([x.utilityType, this.roundVal(x.totalEnergySavings), utilityUnit, this.roundVal(x.costSavings), x.opportunityCost.material, x.opportunityCost.labor, this.getOtherCost(x.opportunityCost), x.totalCost, this.roundVal(x.payback)]);
+          rows.push([x.utilityType, this.roundValToString(x.totalEnergySavings), utilityUnit, this.roundValToString(x.costSavings), this.roundValToString(x.opportunityCost.material), this.roundValToString(x.opportunityCost.labor), this.getOtherCost(x.opportunityCost), this.roundValToString(x.totalCost), this.roundValToString(x.payback)]);
         });
       } else {
         utilityUnit = this.getUtilityUnit(x.utilityType, settings);
-        rows.push([x.utilityType, this.roundVal(x.totalEnergySavings), utilityUnit, this.roundVal(x.costSavings), x.opportunityCost.material, x.opportunityCost.labor, this.getOtherCost(x.opportunityCost), x.totalCost, this.roundVal(x.payback)]);
+        rows.push([x.utilityType, this.roundValToString(x.totalEnergySavings), utilityUnit, this.roundValToString(x.costSavings), this.roundValToString(x.opportunityCost.material), this.roundValToString(x.opportunityCost.labor), this.getOtherCost(x.opportunityCost), this.roundValToString(x.totalCost), this.roundValToString(x.payback)]);
       }
 
-      newSlide.addTable(rows, { x: 0, y: 5.21, w: 13.33, colW: [1.86, 1.8, 1.11, 1.42, 1.53, 1.33, 1.29, 1.19, 1.81], color: "1D428A", fontSize: 16, fontFace: 'Arial (Body)', border: { type: "solid", color: 'FFFFFF' }, fill: { color: '7ADCFF' } });
+      newSlide.addTable(rows, { x: 1.14, y: 5.2, w: 11.05, colW: [1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
       counter++;
     });
 
     return pptx;
   }
 
-  roundVal(num: number): number {
-    return Number(num.toFixed(2));
+  roundValToString(num: number): string {
+    return Number(num.toFixed(2)).toLocaleString('en-US');
   }
 
   getOtherCost(oppCost: OpportunityCost): number {
@@ -318,30 +317,30 @@ export class TreasureHuntPptService {
   getUtilityUnit(utilityType: string, settings: Settings): string {
     let utilityUnit: string;
     if (utilityType == 'Electricity') {
-      utilityUnit = 'kWh'
+      utilityUnit = 'kWh';
     } else if (utilityType == 'Compressed Air') {
       if (settings.unitsOfMeasure == 'Imperial') {
         utilityUnit = 'kSCF';
       } else {
-        utilityUnit = 'Nm<sup>3</sup>'
+        utilityUnit = 'Nm<sup>3</sup>';
       }
     } else if (utilityType == 'Water' || utilityType == 'Waste Water') {
       if (settings.unitsOfMeasure == 'Imperial') {
         utilityUnit = 'kgal';
       } else {
-        utilityUnit = 'm<sup>3</sup>'
+        utilityUnit = 'm<sup>3</sup>';
       }
     } else if (utilityType == 'Steam') {
       if (settings.unitsOfMeasure == 'Imperial') {
         utilityUnit = 'klb';
       } else {
-        utilityUnit = 'tonne'
+        utilityUnit = 'tonne';
       }
     } else if (utilityType == 'Natural Gas' || utilityType == 'Other Fuel') {
       if (settings.unitsOfMeasure == 'Imperial') {
         utilityUnit = 'MMBtu';
       } else {
-        utilityUnit = 'MJ'
+        utilityUnit = 'MJ';
       }
     }
     return utilityUnit;
@@ -350,182 +349,173 @@ export class TreasureHuntPptService {
   getDetailedSummaryTable(slide: pptxgen.Slide, treasureHuntResults: TreasureHuntResults, settings: Settings): pptxgen.Slide {
     let rows = [];
     rows.push([
-      { text: "Utility", options: { bold: true } },
-      "",
-      { text: "Current Use", options: { bold: true } },
-      { text: "Projected Use", options: { bold: true } },
-      { text: "Utility Savings", options: { bold: true } },
-      { text: "Current Cost ($)", options: { bold: true } },
-      { text: "Projected Cost ($)", options: { bold: true } },
-      { text: "Cost Savings ($)", options: { bold: true } },
-      { text: "Implementation Cost ($)", options: { bold: true } },
-      { text: "Payback", options: { bold: true } },
-      { text: "Mixed", options: { bold: true } }
+      { text: "Utility", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Unit", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Current Use", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Projected Use", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Utility Savings", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Current Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Projected Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Cost Savings ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Implementation Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
     ]);
     if (treasureHuntResults.electricity.baselineEnergyUsage != 0) {
       let electricity = treasureHuntResults.electricity;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed && electricity.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       rows.push([
-        { text: "Electricity", options: { bold: true } },
-        "kWh",
-        this.roundVal(electricity.baselineEnergyUsage),
-        this.roundVal(electricity.modifiedEnergyUsage),
-        this.roundVal(electricity.energySavings),
-        this.roundVal(electricity.baselineEnergyCost),
-        this.roundVal(electricity.modifiedEnergyCost),
-        this.roundVal(electricity.costSavings),
-        this.roundVal(electricity.implementationCost),
-        this.roundVal(electricity.paybackPeriod),
-        mixed
+        { text: "Electricity", options: { bold: true, fill: { color: fillColor } } },
+        { text: "kWh", options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(electricity.baselineEnergyUsage), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(electricity.modifiedEnergyUsage), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(electricity.energySavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(electricity.baselineEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(electricity.modifiedEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(electricity.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(electricity.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(electricity.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.naturalGas.baselineEnergyUsage != 0) {
       let naturalGas = treasureHuntResults.naturalGas;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed && naturalGas.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       let utilityUnit: string = this.getUtilityUnit("Natural Gas", settings);
       rows.push([
-        { text: "Natural Gas", options: { bold: true } },
-        utilityUnit,
-        this.roundVal(naturalGas.baselineEnergyUsage),
-        this.roundVal(naturalGas.modifiedEnergyUsage),
-        this.roundVal(naturalGas.energySavings),
-        this.roundVal(naturalGas.baselineEnergyCost),
-        this.roundVal(naturalGas.modifiedEnergyCost),
-        this.roundVal(naturalGas.costSavings),
-        this.roundVal(naturalGas.implementationCost),
-        this.roundVal(naturalGas.paybackPeriod),
-        mixed
+        { text: "Natural Gas", options: { bold: true, fill: { color: fillColor } } },
+        { text: utilityUnit, options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(naturalGas.baselineEnergyUsage), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(naturalGas.modifiedEnergyUsage), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(naturalGas.energySavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(naturalGas.baselineEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(naturalGas.modifiedEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(naturalGas.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(naturalGas.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(naturalGas.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.water.baselineEnergyUsage != 0) {
       let water = treasureHuntResults.water;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed && water.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       let utilityUnit: string = this.getUtilityUnit("Water", settings);
       rows.push([
-        { text: "Water", options: { bold: true } },
-        utilityUnit,
-        this.roundVal(water.baselineEnergyUsage),
-        this.roundVal(water.modifiedEnergyUsage),
-        this.roundVal(water.energySavings),
-        this.roundVal(water.baselineEnergyCost),
-        this.roundVal(water.modifiedEnergyCost),
-        this.roundVal(water.costSavings),
-        this.roundVal(water.implementationCost),
-        this.roundVal(water.paybackPeriod),
-        mixed
+        { text: "Water", options: { bold: true, fill: { color: fillColor } } },
+        { text: utilityUnit, options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(water.baselineEnergyUsage), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(water.modifiedEnergyUsage), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(water.energySavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(water.baselineEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(water.modifiedEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(water.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(water.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(water.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.wasteWater.baselineEnergyUsage != 0) {
       let wasteWater = treasureHuntResults.wasteWater;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed && wasteWater.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       let utilityUnit: string = this.getUtilityUnit("Waste Water", settings);
       rows.push([
-        { text: "WasteWater", options: { bold: true } },
-        utilityUnit,
-        this.roundVal(wasteWater.baselineEnergyUsage),
-        this.roundVal(wasteWater.modifiedEnergyUsage),
-        this.roundVal(wasteWater.energySavings),
-        this.roundVal(wasteWater.baselineEnergyCost),
-        this.roundVal(wasteWater.modifiedEnergyCost),
-        this.roundVal(wasteWater.costSavings),
-        this.roundVal(wasteWater.implementationCost),
-        this.roundVal(wasteWater.paybackPeriod),
-        mixed
+        { text: "Wastewater", options: { bold: true, fill: { color: fillColor } } },
+        { text: utilityUnit, options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(wasteWater.baselineEnergyUsage), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(wasteWater.modifiedEnergyUsage), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(wasteWater.energySavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(wasteWater.baselineEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(wasteWater.modifiedEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(wasteWater.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(wasteWater.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(wasteWater.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.otherFuel.baselineEnergyUsage != 0) {
       let otherFuel = treasureHuntResults.otherFuel;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed && otherFuel.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       let utilityUnit: string = this.getUtilityUnit("Other Fuel", settings);
       rows.push([
-        { text: "Other Fuel", options: { bold: true } },
-        utilityUnit,
-        this.roundVal(otherFuel.baselineEnergyUsage),
-        this.roundVal(otherFuel.modifiedEnergyUsage),
-        this.roundVal(otherFuel.energySavings),
-        this.roundVal(otherFuel.baselineEnergyCost),
-        this.roundVal(otherFuel.modifiedEnergyCost),
-        this.roundVal(otherFuel.costSavings),
-        this.roundVal(otherFuel.implementationCost),
-        this.roundVal(otherFuel.paybackPeriod),
-        mixed
+        { text: "Other Fuel", options: { bold: true, fill: { color: fillColor } } },
+        { text: utilityUnit, options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(otherFuel.baselineEnergyUsage), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(otherFuel.modifiedEnergyUsage), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(otherFuel.energySavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(otherFuel.baselineEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(otherFuel.modifiedEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(otherFuel.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(otherFuel.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(otherFuel.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.compressedAir.baselineEnergyUsage != 0) {
       let compressedAir = treasureHuntResults.compressedAir;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed && compressedAir.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       let utilityUnit: string = this.getUtilityUnit("Compressed Air", settings);
       rows.push([
-        { text: "Compressed Air", options: { bold: true } },
-        utilityUnit,
-        this.roundVal(compressedAir.baselineEnergyUsage),
-        this.roundVal(compressedAir.modifiedEnergyUsage),
-        this.roundVal(compressedAir.energySavings),
-        this.roundVal(compressedAir.baselineEnergyCost),
-        this.roundVal(compressedAir.modifiedEnergyCost),
-        this.roundVal(compressedAir.costSavings),
-        this.roundVal(compressedAir.implementationCost),
-        this.roundVal(compressedAir.paybackPeriod),
-        mixed
+        { text: "Compressed Air", options: { bold: true, fill: { color: fillColor } } },
+        { text: utilityUnit, options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(compressedAir.baselineEnergyUsage), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(compressedAir.modifiedEnergyUsage), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(compressedAir.energySavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(compressedAir.baselineEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(compressedAir.modifiedEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(compressedAir.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(compressedAir.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(compressedAir.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.steam.baselineEnergyUsage != 0) {
       let steam = treasureHuntResults.steam;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed && steam.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       let utilityUnit: string = this.getUtilityUnit("Steam", settings);
       rows.push([
-        { text: "Steam", options: { bold: true } },
-        utilityUnit,
-        this.roundVal(steam.baselineEnergyUsage),
-        this.roundVal(steam.modifiedEnergyUsage),
-        this.roundVal(steam.energySavings),
-        this.roundVal(steam.baselineEnergyCost),
-        this.roundVal(steam.modifiedEnergyCost),
-        this.roundVal(steam.costSavings),
-        this.roundVal(steam.implementationCost),
-        this.roundVal(steam.paybackPeriod),
-        mixed
+        { text: "Steam", options: { bold: true, fill: { color: fillColor } } },
+        { text: utilityUnit, options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(steam.baselineEnergyUsage), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(steam.modifiedEnergyUsage), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(steam.energySavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(steam.baselineEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(steam.modifiedEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(steam.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(steam.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(steam.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.other.implementationCost != 0) {
       let other = treasureHuntResults.other;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       rows.push([
-        { text: "Mixed", options: { bold: true } },
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        this.roundVal(other.implementationCost),
-        this.roundVal(other.paybackPeriod),
-        mixed
+        { text: "Mixed", options: { bold: true, fill: { color: fillColor } } },
+        { text: "", options: { fill: { color: fillColor } } },
+        { text: "", options: { fill: { color: fillColor } } },
+        { text: "", options: { fill: { color: fillColor } } },
+        { text: "", options: { fill: { color: fillColor } } },
+        { text: "", options: { fill: { color: fillColor } } },
+        { text: "", options: { fill: { color: fillColor } } },
+        { text: "", options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(other.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(other.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.totalAdditionalSavings != 0) {
@@ -537,8 +527,7 @@ export class TreasureHuntPptService {
         "",
         "",
         "",
-        this.roundVal(treasureHuntResults.totalAdditionalSavings),
-        "",
+        this.roundValToString(treasureHuntResults.totalAdditionalSavings),
         "",
         ""
       ]);
@@ -549,144 +538,136 @@ export class TreasureHuntPptService {
       "",
       "",
       "",
-      this.roundVal(treasureHuntResults.totalBaselineCost),
-      this.roundVal(treasureHuntResults.totalModificationCost),
-      this.roundVal(treasureHuntResults.totalSavings),
-      this.roundVal(treasureHuntResults.totalImplementationCost),
-      this.roundVal(treasureHuntResults.paybackPeriod),
-      ""
+      this.roundValToString(treasureHuntResults.totalBaselineCost),
+      this.roundValToString(treasureHuntResults.totalModificationCost),
+      this.roundValToString(treasureHuntResults.totalSavings),
+      this.roundValToString(treasureHuntResults.totalImplementationCost),
+      this.roundValToString(treasureHuntResults.paybackPeriod)
     ]);
 
-    slide.addTable(rows, { x: 0, y: 1.2, w: 13.33, colW: [1.22, 0.8, 1.18, 1.38, 1.41, 1.24, 1.4, 1.26, 1.86, 0.89, 0.68], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: 'FFFFFF' }, fill: { color: '7ADCFF' } });
-
+    slide.addTable(rows, { x: 0.28, y: 1.6, w: 12.77, colW: [1.7, 0.88, 1.26, 1.34, 1.37, 1.22, 1.4, 1.27, 1.45, 0.89], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, valign: 'middle', align: 'left' });
+    if (treasureHuntResults.hasMixed) {
+      slide.addText('* * * Savings for opportunities with mixed utilities are under their respective utilities; implementation costs and payback are under "Mixed“ * * *', { x: 1.26, y: 6.58, w: 10.82, h: 0.3, align: 'center', fill: { color: 'D0FCBA' }, color: '1D428A', fontSize: 12, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+    }
     return slide;
   }
 
   getCostSummaryTable(slide: pptxgen.Slide, treasureHuntResults: TreasureHuntResults): pptxgen.Slide {
     let rows = [];
     rows.push([
-      { text: "Utility", options: { bold: true } },
-      { text: "Cost Savings ($)", options: { bold: true } },
-      { text: "Implementation Cost ($)", options: { bold: true } },
-      { text: "Payback", options: { bold: true } },
-      { text: "Mixed", options: { bold: true } }
+      { text: "Utility", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Cost Savings ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Implementation Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
     ]);
     if (treasureHuntResults.electricity.baselineEnergyUsage != 0) {
       let electricity = treasureHuntResults.electricity;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed && electricity.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       rows.push([
-        { text: "Electricity", options: { bold: true } },
-        this.roundVal(electricity.costSavings),
-        this.roundVal(electricity.implementationCost),
-        this.roundVal(electricity.paybackPeriod),
-        mixed
+        { text: "Electricity", options: { bold: true, fill: { color: fillColor } } },
+        { text: this.roundValToString(electricity.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(electricity.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(electricity.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.naturalGas.baselineEnergyUsage != 0) {
       let naturalGas = treasureHuntResults.naturalGas;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed && naturalGas.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       rows.push([
-        { text: "Natural Gas", options: { bold: true } },
-        this.roundVal(naturalGas.costSavings),
-        this.roundVal(naturalGas.implementationCost),
-        this.roundVal(naturalGas.paybackPeriod),
-        mixed
+        { text: "Natural Gas", options: { bold: true, fill: { color: fillColor } } },
+        { text: this.roundValToString(naturalGas.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(naturalGas.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(naturalGas.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.water.baselineEnergyUsage != 0) {
       let water = treasureHuntResults.water;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed && water.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       rows.push([
-        { text: "Water", options: { bold: true } },
-        this.roundVal(water.costSavings),
-        this.roundVal(water.implementationCost),
-        this.roundVal(water.paybackPeriod),
-        mixed
+        { text: "Water", options: { bold: true, fill: { color: fillColor } } },
+        { text: this.roundValToString(water.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(water.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(water.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.wasteWater.baselineEnergyUsage != 0) {
       let wasteWater = treasureHuntResults.wasteWater;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed && wasteWater.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       rows.push([
-        { text: "WasteWater", options: { bold: true } },
-        this.roundVal(wasteWater.costSavings),
-        this.roundVal(wasteWater.implementationCost),
-        this.roundVal(wasteWater.paybackPeriod),
-        mixed
+        { text: "WasteWater", options: { bold: true, fill: { color: fillColor } } },
+        { text: this.roundValToString(wasteWater.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(wasteWater.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(wasteWater.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.otherFuel.baselineEnergyUsage != 0) {
       let otherFuel = treasureHuntResults.otherFuel;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed && otherFuel.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       rows.push([
-        { text: "Other Fuel", options: { bold: true } },
-        this.roundVal(otherFuel.costSavings),
-        this.roundVal(otherFuel.implementationCost),
-        this.roundVal(otherFuel.paybackPeriod),
-        mixed
+        { text: "Other Fuel", options: { bold: true, fill: { color: fillColor } } },
+        { text: this.roundValToString(otherFuel.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(otherFuel.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(otherFuel.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.compressedAir.baselineEnergyUsage != 0) {
       let compressedAir = treasureHuntResults.compressedAir;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed && compressedAir.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       rows.push([
-        { text: "Compressed Air", options: { bold: true } },
-        this.roundVal(compressedAir.costSavings),
-        this.roundVal(compressedAir.implementationCost),
-        this.roundVal(compressedAir.paybackPeriod),
-        mixed
+        { text: "Compressed Air", options: { bold: true, fill: { color: fillColor } } },
+        { text: this.roundValToString(compressedAir.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(compressedAir.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(compressedAir.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.steam.baselineEnergyUsage != 0) {
       let steam = treasureHuntResults.steam;
-      let mixed: string = "";
+      let fillColor: string = "BDEEFF";
       if (treasureHuntResults.hasMixed && steam.hasMixed) {
-        mixed = "*";
+        fillColor = "D0FCBA";
       }
       rows.push([
-        { text: "Steam", options: { bold: true } },
-        this.roundVal(steam.costSavings),
-        this.roundVal(steam.implementationCost),
-        this.roundVal(steam.paybackPeriod),
-        mixed
+        { text: "Steam", options: { bold: true, fill: { color: fillColor } } },
+        { text: this.roundValToString(steam.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(steam.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(steam.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.other.implementationCost != 0) {
       let other = treasureHuntResults.other;
-      let mixed: string = "";
-      if (treasureHuntResults.hasMixed) {
-        mixed = "*";
+      let fillColor: string = "BDEEFF";
+      if (treasureHuntResults.hasMixed && other.hasMixed) {
+        fillColor = "D0FCBA";
       }
       rows.push([
-        { text: "Mixed ($)", options: { bold: true } },
-        "",
-        this.roundVal(other.implementationCost),
-        this.roundVal(other.paybackPeriod),
-        mixed
+        { text: "Mixed ($)", options: { bold: true, fill: { color: fillColor } } },
+        { text: "", options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(other.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToString(other.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.totalAdditionalSavings != 0) {
       rows.push([
         { text: "Other ($)", options: { bold: true } },
-        this.roundVal(treasureHuntResults.totalAdditionalSavings),
+        this.roundValToString(treasureHuntResults.totalAdditionalSavings),
         "",
         "",
         ""
@@ -694,89 +675,92 @@ export class TreasureHuntPptService {
     }
     rows.push([
       { text: "Total", options: { bold: true } },
-      this.roundVal(treasureHuntResults.totalSavings),
-      this.roundVal(treasureHuntResults.totalImplementationCost),
-      this.roundVal(treasureHuntResults.paybackPeriod),
+      this.roundValToString(treasureHuntResults.totalSavings),
+      this.roundValToString(treasureHuntResults.totalImplementationCost),
+      this.roundValToString(treasureHuntResults.paybackPeriod),
       ""
     ]);
 
-    slide.addTable(rows, { x: 0, y: 1.2, w: 13.33, color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: 'FFFFFF' }, fill: { color: '7ADCFF' } });
-
+   
+    slide.addTable(rows, { x: 3.26, y: 1.6, w: 6.82, colW: [1.5, 1.57, 2.23, 1.52], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: "middle" });
+    if (treasureHuntResults.hasMixed) {
+      slide.addText('* * * Savings for opportunities with mixed utilities are under their respective utilities; implementation costs and payback are under "Mixed“ * * *', { x: 1.26, y: 6.58, w: 10.82, h: 0.3, align: 'center', fill: { color: 'D0FCBA' }, color: '1D428A', fontSize: 12, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+    }
     return slide;
   }
 
   getCarbonSummaryTable(slide: pptxgen.Slide, carbonResults: TreasureHuntCo2EmissionsResults): pptxgen.Slide {
     let rows = [];
     rows.push([
-      { text: "Utility", options: { bold: true } },
-      { text: "Current CO2 Emissions (tonne CO2)", options: { bold: true } },
-      { text: "Projected CO2 Emissions (tonne CO2)", options: { bold: true } },
-      { text: "CO2 Emission Savings (tonne CO2)", options: { bold: true } }
+      { text: "Utility", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Current CO2 Emissions (tonne CO2)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Projected CO2 Emissions (tonne CO2)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "CO2 Emission Savings (tonne CO2)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
     ]);
     if (carbonResults.electricityCO2CurrentUse != 0) {
       rows.push([
         { text: "Electricity", options: { bold: true } },
-        this.roundVal(carbonResults.electricityCO2CurrentUse),
-        this.roundVal(carbonResults.electricityCO2ProjectedUse),
-        this.roundVal(carbonResults.electricityCO2Savings)
+        this.roundValToString(carbonResults.electricityCO2CurrentUse),
+        this.roundValToString(carbonResults.electricityCO2ProjectedUse),
+        this.roundValToString(carbonResults.electricityCO2Savings)
       ]);
     }
     if (carbonResults.naturalGasCO2CurrentUse != 0) {
       rows.push([
         { text: "Natural Gas", options: { bold: true } },
-        this.roundVal(carbonResults.naturalGasCO2CurrentUse),
-        this.roundVal(carbonResults.naturalGasCO2ProjectedUse),
-        this.roundVal(carbonResults.naturalGasCO2Savings)
+        this.roundValToString(carbonResults.naturalGasCO2CurrentUse),
+        this.roundValToString(carbonResults.naturalGasCO2ProjectedUse),
+        this.roundValToString(carbonResults.naturalGasCO2Savings)
       ]);
     }
     if (carbonResults.waterCO2CurrentUse != 0) {
       rows.push([
         { text: "Water", options: { bold: true } },
-        this.roundVal(carbonResults.waterCO2CurrentUse),
-        this.roundVal(carbonResults.waterCO2ProjectedUse),
-        this.roundVal(carbonResults.waterCO2Savings)
+        this.roundValToString(carbonResults.waterCO2CurrentUse),
+        this.roundValToString(carbonResults.waterCO2ProjectedUse),
+        this.roundValToString(carbonResults.waterCO2Savings)
       ]);
     }
     if (carbonResults.wasteWaterCO2CurrentUse != 0) {
       rows.push([
         { text: "WasteWater", options: { bold: true } },
-        this.roundVal(carbonResults.wasteWaterCO2CurrentUse),
-        this.roundVal(carbonResults.wasteWaterCO2ProjectedUse),
-        this.roundVal(carbonResults.wasteWaterCO2Savings)
+        this.roundValToString(carbonResults.wasteWaterCO2CurrentUse),
+        this.roundValToString(carbonResults.wasteWaterCO2ProjectedUse),
+        this.roundValToString(carbonResults.wasteWaterCO2Savings)
       ]);
     }
     if (carbonResults.otherFuelCO2CurrentUse != 0) {
       rows.push([
         { text: "Other Fuel", options: { bold: true } },
-        this.roundVal(carbonResults.otherFuelCO2CurrentUse),
-        this.roundVal(carbonResults.otherFuelCO2ProjectedUse),
-        this.roundVal(carbonResults.otherFuelCO2Savings)
+        this.roundValToString(carbonResults.otherFuelCO2CurrentUse),
+        this.roundValToString(carbonResults.otherFuelCO2ProjectedUse),
+        this.roundValToString(carbonResults.otherFuelCO2Savings)
       ]);
     }
     if (carbonResults.compressedAirCO2CurrentUse != 0) {
       rows.push([
         { text: "Compressed Air", options: { bold: true } },
-        this.roundVal(carbonResults.compressedAirCO2CurrentUse),
-        this.roundVal(carbonResults.compressedAirCO2ProjectedUse),
-        this.roundVal(carbonResults.compressedAirCO2Savings)
+        this.roundValToString(carbonResults.compressedAirCO2CurrentUse),
+        this.roundValToString(carbonResults.compressedAirCO2ProjectedUse),
+        this.roundValToString(carbonResults.compressedAirCO2Savings)
       ]);
     }
     if (carbonResults.steamCO2CurrentUse != 0) {
       rows.push([
         { text: "Steam", options: { bold: true } },
-        this.roundVal(carbonResults.steamCO2CurrentUse),
-        this.roundVal(carbonResults.steamCO2ProjectedUse),
-        this.roundVal(carbonResults.steamCO2Savings)
+        this.roundValToString(carbonResults.steamCO2CurrentUse),
+        this.roundValToString(carbonResults.steamCO2ProjectedUse),
+        this.roundValToString(carbonResults.steamCO2Savings)
       ]);
     }
     rows.push([
       { text: "Total", options: { bold: true } },
-      this.roundVal(carbonResults.totalCO2CurrentUse),
-      this.roundVal(carbonResults.totalCO2ProjectedUse),
-      this.roundVal(carbonResults.totalCO2Savings)
+      this.roundValToString(carbonResults.totalCO2CurrentUse),
+      this.roundValToString(carbonResults.totalCO2ProjectedUse),
+      this.roundValToString(carbonResults.totalCO2Savings)
     ]);
 
-    slide.addTable(rows, { x: 0, y: 1.2, w: 13.33, color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: 'FFFFFF' }, fill: { color: '7ADCFF' } });
+    slide.addTable(rows, { x: 0.97, y: 1.6, w: 11.39, colW: [1.5, 3.27, 3.42, 3.2], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: "left", valign: "middle" });
 
     return slide;
   }
@@ -785,21 +769,21 @@ export class TreasureHuntPptService {
     let teamData = this.treasureHuntReportService.getTeamData(opportunityCardsData);
     let rows = [];
     rows.push([
-      { text: "Team", options: { bold: true } },
-      { text: "Cost Savings ($)", options: { bold: true } },
-      { text: "Implementation Cost ($)", options: { bold: true } },
-      { text: "Payback", options: { bold: true } }
+      { text: "Team", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Cost Savings ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Implementation Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
     ]);
     teamData.forEach(data => {
       rows.push([
         data.team,
-        this.roundVal(data.costSavings),
-        this.roundVal(data.implementationCost),
-        this.roundVal(data.paybackPeriod)
+        this.roundValToString(data.costSavings),
+        this.roundValToString(data.implementationCost),
+        this.roundValToString(data.paybackPeriod)
       ]);
     });
 
-    slide.addTable(rows, { x: 0, y: 1.2, w: 13.33, color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: 'FFFFFF' }, fill: { color: '7ADCFF' } });
+    slide.addTable(rows, { x: 3.24, y: 1.6, w: 6.85, colW: [1.5, 1.6, 2.25, 1.5], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
 
     return slide;
   }
@@ -807,32 +791,32 @@ export class TreasureHuntPptService {
   getOppPaybackTable(slide: pptxgen.Slide, opportunitiesPaybackDetails: OpportunitiesPaybackDetails): pptxgen.Slide {
     let rows = [];
     rows.push([
-      { text: "Payback Length", options: { bold: true } },
-      { text: "Number of Opportunities", options: { bold: true } },
-      { text: "Total Savings ($)", options: { bold: true } }
-    ]);    
+      { text: "Payback Length", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Number of Opportunities", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Total Savings ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
+    ]);
     rows.push([
       "Less than 1 year",
-      this.roundVal(opportunitiesPaybackDetails.lessThanOneYear.numOpportunities),
-      this.roundVal(opportunitiesPaybackDetails.lessThanOneYear.totalSavings)
+      this.roundValToString(opportunitiesPaybackDetails.lessThanOneYear.numOpportunities),
+      this.roundValToString(opportunitiesPaybackDetails.lessThanOneYear.totalSavings)
     ]);
     rows.push([
       "2 to 3 years",
-      this.roundVal(opportunitiesPaybackDetails.twoToThreeYears.numOpportunities),
-      this.roundVal(opportunitiesPaybackDetails.twoToThreeYears.totalSavings)
+      this.roundValToString(opportunitiesPaybackDetails.twoToThreeYears.numOpportunities),
+      this.roundValToString(opportunitiesPaybackDetails.twoToThreeYears.totalSavings)
     ]);
     rows.push([
       "More than 3 years",
-      this.roundVal(opportunitiesPaybackDetails.moreThanThreeYears.numOpportunities),
-      this.roundVal(opportunitiesPaybackDetails.moreThanThreeYears.totalSavings)
+      this.roundValToString(opportunitiesPaybackDetails.moreThanThreeYears.numOpportunities),
+      this.roundValToString(opportunitiesPaybackDetails.moreThanThreeYears.totalSavings)
     ]);
     rows.push([
       "Total",
-      this.roundVal(opportunitiesPaybackDetails.totals.numOpportunities),
-      this.roundVal(opportunitiesPaybackDetails.totals.totalSavings)
-    ]);    
+      this.roundValToString(opportunitiesPaybackDetails.totals.numOpportunities),
+      this.roundValToString(opportunitiesPaybackDetails.totals.totalSavings)
+    ]);
 
-    slide.addTable(rows, { x: 0, y: 1.2, w: 13.33, color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: 'FFFFFF' }, fill: { color: '7ADCFF' } });
+    slide.addTable(rows, { x: 3.96, y: 1.6, w: 5.42, colW: [1.6, 2.22, 1.6], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
 
     return slide;
   }
