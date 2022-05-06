@@ -146,8 +146,9 @@
             <label for="fileName"> Name your file:</label>
             <input type="text" class="form-control" id="fileName" [(ngModel)]="fileName">
           </div>
-          <button class="btn btn-primary ml-2" (click)="present()">Export
-            as .ppt</button>
+          <button class="btn btn-primary ml-2" (click)="present()" [disabled]="!fileName">
+            Export as .ppt
+          </button>
         </div>
       </div>
       <div class="modal-footer justify-content-end">

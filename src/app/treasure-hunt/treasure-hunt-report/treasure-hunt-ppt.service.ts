@@ -194,7 +194,7 @@ export class TreasureHuntPptService {
   }
 
 
-  createPPT(facilityName: string, date: string, settings: Settings, treasureHuntResults: TreasureHuntResults, opportunityCardsData: Array<OpportunityCardData>,
+  createPPT(pptTitle: string, date: string, settings: Settings, treasureHuntResults: TreasureHuntResults, opportunityCardsData: Array<OpportunityCardData>,
     opportunitiesPaybackDetails: OpportunitiesPaybackDetails): pptxgen {
     let pptx = new pptxgen();
 
@@ -214,7 +214,7 @@ export class TreasureHuntPptService {
 
     let slide1 = pptx.addSlide();
     slide1.background = { data: betterPlantsPPTimg.betterPlantsTitleSlide };
-    slide1.addText(facilityName, { x: 0.3, y: 2.1, w: 5.73, h: 1.21, align: 'center', bold: true, color: '1D428A', fontSize: 26, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
+    slide1.addText(pptTitle, { x: 0.3, y: 2.1, w: 5.73, h: 1.21, align: 'center', bold: true, color: '1D428A', fontSize: 26, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
     slide1.addText(date, { x: 0.3, y: 4.19, w: 4.34, h: 0.74, align: 'left', color: '8B93B1', fontSize: 20, fontFace: 'Arial (Body)', valign: 'top', isTextBox: true, autoFit: true });
 
     let slide2 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
@@ -271,11 +271,11 @@ export class TreasureHuntPptService {
         { text: "Utility", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
         { text: "Energy Savings", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
         { text: "Unit", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-        { text: "Cost Saving ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-        { text: "Material Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-        { text: "Labor Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-        { text: "Other Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-        { text: "Total Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+        { text: "Cost Saving", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+        { text: "Material Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+        { text: "Labor Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+        { text: "Other Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+        { text: "Total Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
         { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
       ]);
       let x: OpportunitySummary = treasureHuntResults.opportunitySummaries[counter];
@@ -283,11 +283,11 @@ export class TreasureHuntPptService {
       if (x.mixedIndividualResults) {
         x.mixedIndividualResults.forEach(x => {
           utilityUnit = this.getUtilityUnit(x.utilityType, settings);
-          rows.push([x.utilityType, this.roundValToString(x.totalEnergySavings), utilityUnit, this.roundValToString(x.costSavings), this.roundValToString(x.opportunityCost.material), this.roundValToString(x.opportunityCost.labor), this.getOtherCost(x.opportunityCost), this.roundValToString(x.totalCost), this.roundValToString(x.payback)]);
+          rows.push([x.utilityType, this.roundValToString(x.totalEnergySavings), utilityUnit, this.roundValToCurrency(x.costSavings), this.roundValToCurrency(x.opportunityCost.material), this.roundValToCurrency(x.opportunityCost.labor), this.getOtherCost(x.opportunityCost), this.roundValToCurrency(x.totalCost), this.roundValToString(x.payback)]);
         });
       } else {
         utilityUnit = this.getUtilityUnit(x.utilityType, settings);
-        rows.push([x.utilityType, this.roundValToString(x.totalEnergySavings), utilityUnit, this.roundValToString(x.costSavings), this.roundValToString(x.opportunityCost.material), this.roundValToString(x.opportunityCost.labor), this.getOtherCost(x.opportunityCost), this.roundValToString(x.totalCost), this.roundValToString(x.payback)]);
+        rows.push([x.utilityType, this.roundValToString(x.totalEnergySavings), utilityUnit, this.roundValToCurrency(x.costSavings), this.roundValToCurrency(x.opportunityCost.material), this.roundValToCurrency(x.opportunityCost.labor), this.getOtherCost(x.opportunityCost), this.roundValToCurrency(x.totalCost), this.roundValToString(x.payback)]);
       }
 
       newSlide.addTable(rows, { x: 1.14, y: 5.2, w: 11.05, colW: [1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
@@ -301,7 +301,12 @@ export class TreasureHuntPptService {
     return Number(num.toFixed(2)).toLocaleString('en-US');
   }
 
-  getOtherCost(oppCost: OpportunityCost): number {
+  roundValToCurrency(num: number): string {
+    let number = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
+    return number;
+  }
+
+  getOtherCost(oppCost: OpportunityCost): string {
     let total: number = 0;
     if (oppCost && oppCost.otherCosts && oppCost.otherCosts.length != 0) {
       oppCost.otherCosts.forEach(oCost => {
@@ -311,7 +316,7 @@ export class TreasureHuntPptService {
     if (oppCost && oppCost.additionalSavings) {
       total = total - oppCost.additionalSavings.cost
     }
-    return total;
+    return this.roundValToCurrency(total);
   }
 
   getUtilityUnit(utilityType: string, settings: Settings): string {
@@ -354,10 +359,10 @@ export class TreasureHuntPptService {
       { text: "Current Use", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
       { text: "Projected Use", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
       { text: "Utility Savings", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-      { text: "Current Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-      { text: "Projected Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-      { text: "Cost Savings ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-      { text: "Implementation Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Current Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Projected Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Cost Savings", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Implementation Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
       { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
     ]);
     if (treasureHuntResults.electricity.baselineEnergyUsage != 0) {
@@ -372,10 +377,10 @@ export class TreasureHuntPptService {
         { text: this.roundValToString(electricity.baselineEnergyUsage), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(electricity.modifiedEnergyUsage), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(electricity.energySavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(electricity.baselineEnergyCost), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(electricity.modifiedEnergyCost), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(electricity.costSavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(electricity.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(electricity.baselineEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(electricity.modifiedEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(electricity.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(electricity.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(electricity.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
@@ -392,10 +397,10 @@ export class TreasureHuntPptService {
         { text: this.roundValToString(naturalGas.baselineEnergyUsage), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(naturalGas.modifiedEnergyUsage), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(naturalGas.energySavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(naturalGas.baselineEnergyCost), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(naturalGas.modifiedEnergyCost), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(naturalGas.costSavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(naturalGas.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(naturalGas.baselineEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(naturalGas.modifiedEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(naturalGas.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(naturalGas.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(naturalGas.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
@@ -412,10 +417,10 @@ export class TreasureHuntPptService {
         { text: this.roundValToString(water.baselineEnergyUsage), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(water.modifiedEnergyUsage), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(water.energySavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(water.baselineEnergyCost), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(water.modifiedEnergyCost), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(water.costSavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(water.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(water.baselineEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(water.modifiedEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(water.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(water.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(water.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
@@ -432,10 +437,10 @@ export class TreasureHuntPptService {
         { text: this.roundValToString(wasteWater.baselineEnergyUsage), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(wasteWater.modifiedEnergyUsage), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(wasteWater.energySavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(wasteWater.baselineEnergyCost), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(wasteWater.modifiedEnergyCost), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(wasteWater.costSavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(wasteWater.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(wasteWater.baselineEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(wasteWater.modifiedEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(wasteWater.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(wasteWater.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(wasteWater.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
@@ -452,10 +457,10 @@ export class TreasureHuntPptService {
         { text: this.roundValToString(otherFuel.baselineEnergyUsage), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(otherFuel.modifiedEnergyUsage), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(otherFuel.energySavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(otherFuel.baselineEnergyCost), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(otherFuel.modifiedEnergyCost), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(otherFuel.costSavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(otherFuel.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(otherFuel.baselineEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(otherFuel.modifiedEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(otherFuel.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(otherFuel.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(otherFuel.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
@@ -472,10 +477,10 @@ export class TreasureHuntPptService {
         { text: this.roundValToString(compressedAir.baselineEnergyUsage), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(compressedAir.modifiedEnergyUsage), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(compressedAir.energySavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(compressedAir.baselineEnergyCost), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(compressedAir.modifiedEnergyCost), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(compressedAir.costSavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(compressedAir.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(compressedAir.baselineEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(compressedAir.modifiedEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(compressedAir.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(compressedAir.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(compressedAir.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
@@ -492,10 +497,10 @@ export class TreasureHuntPptService {
         { text: this.roundValToString(steam.baselineEnergyUsage), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(steam.modifiedEnergyUsage), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(steam.energySavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(steam.baselineEnergyCost), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(steam.modifiedEnergyCost), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(steam.costSavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(steam.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(steam.baselineEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(steam.modifiedEnergyCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(steam.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(steam.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(steam.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
@@ -514,7 +519,7 @@ export class TreasureHuntPptService {
         { text: "", options: { fill: { color: fillColor } } },
         { text: "", options: { fill: { color: fillColor } } },
         { text: "", options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(other.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(other.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(other.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
@@ -527,7 +532,7 @@ export class TreasureHuntPptService {
         "",
         "",
         "",
-        this.roundValToString(treasureHuntResults.totalAdditionalSavings),
+        this.roundValToCurrency(treasureHuntResults.totalAdditionalSavings),
         "",
         ""
       ]);
@@ -538,14 +543,14 @@ export class TreasureHuntPptService {
       "",
       "",
       "",
-      this.roundValToString(treasureHuntResults.totalBaselineCost),
-      this.roundValToString(treasureHuntResults.totalModificationCost),
-      this.roundValToString(treasureHuntResults.totalSavings),
-      this.roundValToString(treasureHuntResults.totalImplementationCost),
+      this.roundValToCurrency(treasureHuntResults.totalBaselineCost),
+      this.roundValToCurrency(treasureHuntResults.totalModificationCost),
+      this.roundValToCurrency(treasureHuntResults.totalSavings),
+      this.roundValToCurrency(treasureHuntResults.totalImplementationCost),
       this.roundValToString(treasureHuntResults.paybackPeriod)
     ]);
 
-    slide.addTable(rows, { x: 0.28, y: 1.6, w: 12.77, colW: [1.7, 0.88, 1.26, 1.34, 1.37, 1.22, 1.4, 1.27, 1.45, 0.89], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, valign: 'middle', align: 'left' });
+    slide.addTable(rows, { x: 0.12, y: 1.6, w: 13.1, colW: [1.5, 0.8, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.5, 0.9], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, valign: 'middle', align: 'left' });
     if (treasureHuntResults.hasMixed) {
       slide.addText('* * * Savings for opportunities with mixed utilities are under their respective utilities; implementation costs and payback are under "Mixed“ * * *', { x: 1.26, y: 6.58, w: 10.82, h: 0.3, align: 'center', fill: { color: 'D0FCBA' }, color: '1D428A', fontSize: 12, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
     }
@@ -556,8 +561,8 @@ export class TreasureHuntPptService {
     let rows = [];
     rows.push([
       { text: "Utility", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-      { text: "Cost Savings ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-      { text: "Implementation Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Cost Savings", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Implementation Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
       { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
     ]);
     if (treasureHuntResults.electricity.baselineEnergyUsage != 0) {
@@ -568,8 +573,8 @@ export class TreasureHuntPptService {
       }
       rows.push([
         { text: "Electricity", options: { bold: true, fill: { color: fillColor } } },
-        { text: this.roundValToString(electricity.costSavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(electricity.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(electricity.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(electricity.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(electricity.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
@@ -581,8 +586,8 @@ export class TreasureHuntPptService {
       }
       rows.push([
         { text: "Natural Gas", options: { bold: true, fill: { color: fillColor } } },
-        { text: this.roundValToString(naturalGas.costSavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(naturalGas.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(naturalGas.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(naturalGas.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(naturalGas.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
@@ -594,8 +599,8 @@ export class TreasureHuntPptService {
       }
       rows.push([
         { text: "Water", options: { bold: true, fill: { color: fillColor } } },
-        { text: this.roundValToString(water.costSavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(water.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(water.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(water.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(water.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
@@ -607,8 +612,8 @@ export class TreasureHuntPptService {
       }
       rows.push([
         { text: "WasteWater", options: { bold: true, fill: { color: fillColor } } },
-        { text: this.roundValToString(wasteWater.costSavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(wasteWater.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(wasteWater.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(wasteWater.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(wasteWater.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
@@ -620,8 +625,8 @@ export class TreasureHuntPptService {
       }
       rows.push([
         { text: "Other Fuel", options: { bold: true, fill: { color: fillColor } } },
-        { text: this.roundValToString(otherFuel.costSavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(otherFuel.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(otherFuel.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(otherFuel.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(otherFuel.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
@@ -633,8 +638,8 @@ export class TreasureHuntPptService {
       }
       rows.push([
         { text: "Compressed Air", options: { bold: true, fill: { color: fillColor } } },
-        { text: this.roundValToString(compressedAir.costSavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(compressedAir.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(compressedAir.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(compressedAir.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(compressedAir.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
@@ -646,28 +651,28 @@ export class TreasureHuntPptService {
       }
       rows.push([
         { text: "Steam", options: { bold: true, fill: { color: fillColor } } },
-        { text: this.roundValToString(steam.costSavings), options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(steam.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(steam.costSavings), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(steam.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(steam.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.other.implementationCost != 0) {
       let other = treasureHuntResults.other;
       let fillColor: string = "BDEEFF";
-      if (treasureHuntResults.hasMixed && other.hasMixed) {
+      if (treasureHuntResults.hasMixed) {
         fillColor = "D0FCBA";
       }
       rows.push([
-        { text: "Mixed ($)", options: { bold: true, fill: { color: fillColor } } },
+        { text: "Mixed", options: { bold: true, fill: { color: fillColor } } },
         { text: "", options: { fill: { color: fillColor } } },
-        { text: this.roundValToString(other.implementationCost), options: { fill: { color: fillColor } } },
+        { text: this.roundValToCurrency(other.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(other.paybackPeriod), options: { fill: { color: fillColor } } }
       ]);
     }
     if (treasureHuntResults.totalAdditionalSavings != 0) {
       rows.push([
-        { text: "Other ($)", options: { bold: true } },
-        this.roundValToString(treasureHuntResults.totalAdditionalSavings),
+        { text: "Other", options: { bold: true } },
+        this.roundValToCurrency(treasureHuntResults.totalAdditionalSavings),
         "",
         "",
         ""
@@ -675,14 +680,14 @@ export class TreasureHuntPptService {
     }
     rows.push([
       { text: "Total", options: { bold: true } },
-      this.roundValToString(treasureHuntResults.totalSavings),
-      this.roundValToString(treasureHuntResults.totalImplementationCost),
+      this.roundValToCurrency(treasureHuntResults.totalSavings),
+      this.roundValToCurrency(treasureHuntResults.totalImplementationCost),
       this.roundValToString(treasureHuntResults.paybackPeriod),
       ""
     ]);
 
-   
-    slide.addTable(rows, { x: 3.26, y: 1.6, w: 6.82, colW: [1.5, 1.57, 2.23, 1.52], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: "middle" });
+
+    slide.addTable(rows, { x: 3.42, y: 1.6, w: 6.5, colW: [1.5, 1.5, 2, 1.5], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: "middle" });
     if (treasureHuntResults.hasMixed) {
       slide.addText('* * * Savings for opportunities with mixed utilities are under their respective utilities; implementation costs and payback are under "Mixed“ * * *', { x: 1.26, y: 6.58, w: 10.82, h: 0.3, align: 'center', fill: { color: 'D0FCBA' }, color: '1D428A', fontSize: 12, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
     }
@@ -770,20 +775,20 @@ export class TreasureHuntPptService {
     let rows = [];
     rows.push([
       { text: "Team", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-      { text: "Cost Savings ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-      { text: "Implementation Cost ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Cost Savings", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Implementation Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
       { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
     ]);
     teamData.forEach(data => {
       rows.push([
         data.team,
-        this.roundValToString(data.costSavings),
-        this.roundValToString(data.implementationCost),
+        this.roundValToCurrency(data.costSavings),
+        this.roundValToCurrency(data.implementationCost),
         this.roundValToString(data.paybackPeriod)
       ]);
     });
 
-    slide.addTable(rows, { x: 3.24, y: 1.6, w: 6.85, colW: [1.5, 1.6, 2.25, 1.5], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
+    slide.addTable(rows, { x: 3.42, y: 1.6, w: 6.5, colW: [1.5, 1.5, 2, 1.5], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
 
     return slide;
   }
@@ -793,39 +798,33 @@ export class TreasureHuntPptService {
     rows.push([
       { text: "Payback Length", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
       { text: "Number of Opportunities", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-      { text: "Total Savings ($)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
+      { text: "Total Savings", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
     ]);
     rows.push([
       "Less than 1 year",
       this.roundValToString(opportunitiesPaybackDetails.lessThanOneYear.numOpportunities),
-      this.roundValToString(opportunitiesPaybackDetails.lessThanOneYear.totalSavings)
+      this.roundValToCurrency(opportunitiesPaybackDetails.lessThanOneYear.totalSavings)
     ]);
     rows.push([
       "2 to 3 years",
       this.roundValToString(opportunitiesPaybackDetails.twoToThreeYears.numOpportunities),
-      this.roundValToString(opportunitiesPaybackDetails.twoToThreeYears.totalSavings)
+      this.roundValToCurrency(opportunitiesPaybackDetails.twoToThreeYears.totalSavings)
     ]);
     rows.push([
       "More than 3 years",
       this.roundValToString(opportunitiesPaybackDetails.moreThanThreeYears.numOpportunities),
-      this.roundValToString(opportunitiesPaybackDetails.moreThanThreeYears.totalSavings)
+      this.roundValToCurrency(opportunitiesPaybackDetails.moreThanThreeYears.totalSavings)
     ]);
     rows.push([
       "Total",
       this.roundValToString(opportunitiesPaybackDetails.totals.numOpportunities),
-      this.roundValToString(opportunitiesPaybackDetails.totals.totalSavings)
+      this.roundValToCurrency(opportunitiesPaybackDetails.totals.totalSavings)
     ]);
 
     slide.addTable(rows, { x: 3.96, y: 1.6, w: 5.42, colW: [1.6, 2.22, 1.6], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
 
     return slide;
   }
-
-
-
-
-
-
 
 }
 
