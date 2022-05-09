@@ -248,6 +248,7 @@ export interface ProfileSummary {
     avgAirflow?: number,
     avgPrecentPower?: number,
     avgPercentCapacity?: number
+    profileSummaryForPrint?: Array<Array<ProfileSummaryData>>,
 }
 
 export interface ProfileSummaryData {
