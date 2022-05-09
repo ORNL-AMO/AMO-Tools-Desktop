@@ -31,6 +31,7 @@ export class FanPsychrometricChartComponent implements OnInit {
   psychrometricResults: PsychrometricResults;
   calculatedBaseGasDensitySubscription: Subscription;
   inputData: BaseGasDensity;
+  formValid: boolean;
   expanded: boolean = false;
   hoverBtnExpand: boolean;
   displayExpandTooltip: boolean;
@@ -59,14 +60,22 @@ export class FanPsychrometricChartComponent implements OnInit {
     this.chart = this.getEmptyChart();
 
     // Chart trace/coordinates
-    let blueTraces: Array<TraceData> = this.addBlueTraces();
-    let redTraces: Array<TraceData> = this.addRedTraces();
+    //gas density form is always undefined need to fetch form form service maybe?
+    this.formValid = this.psychrometricService.formValid.getValue();
+    if (this.formValid) {
+      let blueTraces: Array<TraceData> = this.addBlueTraces();
+      let redTraces: Array<TraceData> = this.addRedTraces();
 
-    if (this.inputData.dryBulbTemp && this.psychrometricResults && this.psychrometricResults.humidityRatio !== undefined) {
-      this.addUserPoint();
+      // this.drawVerticalGridLines(blueTraces[5]);
+
+      if (this.inputData.dryBulbTemp && this.psychrometricResults && this.psychrometricResults.humidityRatio !== undefined) {
+          this.addUserPoint();
+      }
+      this.addTopAxisTrace(blueTraces);
+      this.newVerticalLines(blueTraces[5]);
     }
 
-    // this.addTopAxisTrace(blueTraces);
+
 
     // pass chart data to plotly for rendering at div
     if (this.expanded && this.expandedChartDiv) {
@@ -105,9 +114,12 @@ export class FanPsychrometricChartComponent implements OnInit {
         relativeHumidityInput.relativeHumidity = relativeHumidity;
         relativeHumidityInput.inputType = 'relativeHumidity';
         relativeHumidityInput.barometricPressure = this.inputData.barometricPressure;
-        let results: PsychrometricResults = this.psychrometricService.calcDensityRelativeHumidity(relativeHumidityInput, this.settings, true);
-        if (results) {
-          humidityRatios.push(results.humidityRatio);
+        if (relativeHumidityInput.dryBulbTemp && relativeHumidityInput.relativeHumidity && relativeHumidityInput.barometricPressure) {
+          let results: PsychrometricResults = this.psychrometricService.calcDensityRelativeHumidity(relativeHumidityInput, this.settings, true);
+          if (results) {
+            humidityRatios.push(results.humidityRatio);
+          }
+
         }
       });
       // trace.hovertemplate = `Relative Humidity ${trace.y}%`;
@@ -116,7 +128,7 @@ export class FanPsychrometricChartComponent implements OnInit {
 
       blueTraces.push(trace);
     });
-    // console.log('blueTraces', blueTraces);
+
     return blueTraces;
   }
 
@@ -237,7 +249,7 @@ export class FanPsychrometricChartComponent implements OnInit {
       // List 2: Dry Bulb 
       xCoordinates = [];
       for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
-        if (i >= wetBulbTemp) {
+        if (i >= this.psychrometricResults.wetBulbTemp) {
           xCoordinates.push(i);
         }
       }
@@ -253,7 +265,6 @@ export class FanPsychrometricChartComponent implements OnInit {
         relativeHumidityInput.barometricPressure = this.inputData.barometricPressure;
         relativeHumidityInput.inputType = 'wetBulb';
         let results: PsychrometricResults = this.psychrometricService.calcDensityWetBulb(relativeHumidityInput, this.settings, true);
-        debugger;
         if (results) {
           humidityRatios.push(results.humidityRatio);
         }
@@ -307,7 +318,6 @@ export class FanPsychrometricChartComponent implements OnInit {
     // This will get the y (humidity ratio)  for user point
 
     let trace = this.getEmptyPointTrace('user point', 'black');
-    debugger;
     let dryBulbTemperature = this.inputData.dryBulbTemp;
     trace.x.push(dryBulbTemperature);
     trace.y.push(this.psychrometricResults.humidityRatio); //returning undefined, does return valid value when you generate example though
@@ -315,16 +325,41 @@ export class FanPsychrometricChartComponent implements OnInit {
 
     this.addUserBlueTrace();
     this.addUserRedTrace();
+  }
 
-    // let trace = this.getEmptyTrace('Wet Bulb', 'red');
-    // trace.x = user dry bulb;
-    // let relativeHumidityInput: BaseGasDensity = Take from current user input;
-    // relativeHumidityInput.dryBulbTemp = user dry bulb;
-    // relativeHumidityInput.wetBulbTemp = user wetBulb temp;
-    // relativeHumidityInput.inputType = 'wetBulb';
-    // let results: PsychrometricResults = this.psychrometricService.calcDensityWetBulb(relativeHumidityInput, this.settings, true);
-    // trace.y = results.humidityRatio;
+  newVerticalLines(blueTraces) {
+    let trace = this.getEmptyTrace('', 'black');
+    let blackTraces: Array<TraceData> = [];
+    let xCoordinates: Array<number> = [];
+    let wetBulbTemps: Array<number> = [];
+    let humidityRatios: Array<number> = [];
+    let index = 0;
 
+    for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
+      wetBulbTemps.push(i);
+    }
+    for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
+      xCoordinates.push(i);
+    }
+      let newTrace = this.getEmptyTrace('Trace', 'black');
+      // wetBulbTemps.forEach((index) => {
+        for (let index = 0; index < wetBulbTemps.length; index++) {
+          let xValues: Array<number> = [];
+          let yValues: Array<number> = [];
+
+          xValues.push(xCoordinates[index], xCoordinates[index]);
+          yValues.push(0, blueTraces.y[index]);
+            
+          newTrace.x = xValues;
+          newTrace.y = yValues;
+          newTrace.name = 'Name' + index;
+  
+          blackTraces.push(newTrace);
+        }
+      // })
+      
+    blackTraces.forEach(trace => this.chart.data.push(trace));
+    // this.chart.layout = this.getLayout(xCoordinates, humidityRatios)
   }
 
   setChartUnits() {
@@ -352,7 +387,7 @@ export class FanPsychrometricChartComponent implements OnInit {
     let trace: TraceData = {
       x: [],
       y: [],
-      name: '',
+      name: name,
       showlegend: false,
       type: 'scatter',
       mode: 'lines',
@@ -380,6 +415,9 @@ export class FanPsychrometricChartComponent implements OnInit {
         color: color,
         width: 1,
       },
+      marker: {
+        size: 10
+      }
     };
     return trace;
   }
@@ -398,13 +436,12 @@ export class FanPsychrometricChartComponent implements OnInit {
       hovermode: 'false',
       xaxis: {
         autorange: true,
-        showgrid: true,
-        gridcolor: '#000000',
+        showgrid: false,
         title: {
           text:"Dry Bulb Temperature (F)"
         },
         showticksuffix: 'all',
-        tickangle: 45,
+        tickangle: 0,
         tickmode: 'array',
         tickvals: xTicks
         // Change hoverFormat.. wrong or deprecated
@@ -435,11 +472,10 @@ export class FanPsychrometricChartComponent implements OnInit {
       },
       annotations: [{
         x: 85,
-        // y: 0.02224224917938616,
         y: .05,
         xref: 'x',
         yref: 'y',
-        text: 'Wet Humidity Ratio (F)',
+        text: 'Wet Bulb Temperature (F)',
         showarrow: false,
         textangle: -35
       }
