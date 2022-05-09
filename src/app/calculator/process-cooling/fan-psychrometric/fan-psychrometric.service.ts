@@ -17,6 +17,7 @@ export class FanPsychrometricService {
   baseGasDensityData: BehaviorSubject<BaseGasDensity>;
   calculatedBaseGasDensity: BehaviorSubject<PsychrometricResults>;
   psychrometricResults: BehaviorSubject<Array<PsychrometricResults>>;
+  formValid: BehaviorSubject<boolean>;
 
   constructor(private gasDensityFormService: GasDensityFormService,
     private fsatService: FsatService,
@@ -24,6 +25,7 @@ export class FanPsychrometricService {
     this.currentField = new BehaviorSubject<string>('default');
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
+    this.formValid = new BehaviorSubject<boolean>(undefined);
 
     this.psychrometricResults = new BehaviorSubject<Array<PsychrometricResults>>(undefined);
     this.baseGasDensityData = new BehaviorSubject<BaseGasDensity>(undefined);

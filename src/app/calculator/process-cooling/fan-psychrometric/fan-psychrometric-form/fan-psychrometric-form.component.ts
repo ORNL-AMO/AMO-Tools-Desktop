@@ -71,7 +71,16 @@ export class FanPsychrometricFormComponent implements OnInit {
       });
     }
     let currentData = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
+    this.isFormValid(this.gasDensityForm);
     this.fanPsychrometricService.baseGasDensityData.next(currentData);
+  }
+
+  isFormValid(form) {
+    if (form.valid) {
+      this.fanPsychrometricService.formValid.next(true);
+    } else {
+      this.fanPsychrometricService.formValid.next(false);
+    }
   }
 
   calculateBarometricPressure() {

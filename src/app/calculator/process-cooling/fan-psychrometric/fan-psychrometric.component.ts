@@ -66,6 +66,7 @@ export class FanPsychrometricComponent implements OnInit {
     let exampleData: BaseGasDensity = this.fanPsychrometricService.getExampleData(this.settings);
     this.fanPsychrometricService.baseGasDensityData.next(exampleData);
     this.fanPsychrometricService.generateExample.next(true);
+    this.fanPsychrometricService.formValid.next(true);
   }
 
   btnResetData(){
