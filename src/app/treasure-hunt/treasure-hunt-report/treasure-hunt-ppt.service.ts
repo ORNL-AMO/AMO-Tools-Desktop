@@ -72,8 +72,8 @@ export class TreasureHuntPptService {
       costSavings.push(treasureHuntResults.compressedAir.costSavings);
     }
     let costSumBarData: PptxgenjsChartData[] = [
-      { name: "Modification", labels: labels, values: projectedCosts },
-      { name: "Baseline", labels: labels, values: costSavings }
+      { name: "Modification Costs", labels: labels, values: projectedCosts },
+      { name: "Savings From Baseline", labels: labels, values: costSavings }
     ];
     return costSumBarData;
   }
@@ -127,7 +127,7 @@ export class TreasureHuntPptService {
       showPercent: false,
       showValue: true,
       dataLabelFormatCode: '$#,##0',
-      chartColors: ['1E7640', '2ABDDA', '84B641', 'BC8FDD'],
+      chartColors: ['1E7640', '2ABDDA', '84B641', 'BC8FDD', '#E1CD00', '#306DBE', '#A03123', '#7FD7E9', '#DE762D', '#948A54', '#A9D58B', '#FFE166', '#DD7164', '#3f4a7d'],
       dataLabelPosition: 'bestFit',
       dataLabelFontSize: 18,
       dataLabelColor: '000000',
@@ -152,7 +152,32 @@ export class TreasureHuntPptService {
       barGrouping: 'clustered',
       dataLabelFormatCode: '$#,##0',
       dataLabelPosition: 'bestFit',
-      chartColors: ['1E7640', '2ABDDA', '84B641', 'BC8FDD'],
+      chartColors: ['1E7640', '2ABDDA', '84B641', 'BC8FDD', '#E1CD00', '#306DBE', '#A03123', '#7FD7E9', '#DE762D', '#948A54', '#A9D58B', '#FFE166', '#DD7164', '#3f4a7d'],
+      legendFontSize: 16,
+      legendColor: '2E4053',
+      dataLabelColor: '000000',
+      dataLabelFontBold: false,
+      catAxisLabelColor: '2E4053',
+      valAxisLabelColor: '2E4053',
+      dataLabelFontSize: 12,
+      catAxisLabelFontSize: 16
+    };
+    return barChartOptions;
+  }
+
+  getCostBarChartProperties() {
+    let barChartOptions: pptxgen.IChartOpts = {
+      x: 1.6,
+      y: 1.2,
+      w: '76%',
+      h: '76%',
+      showLegend: true,
+      showValue: true,
+      barDir: 'col',
+      barGrouping: 'stacked',
+      dataLabelFormatCode: '$#,##0',
+      dataLabelPosition: 'bestFit',
+      chartColors: ['2ABDDA', '1E7640'],
       legendFontSize: 16,
       legendColor: '2E4053',
       dataLabelColor: '000000',
@@ -198,7 +223,7 @@ export class TreasureHuntPptService {
     if (settings.facilityInfo && settings.facilityInfo.facilityName) {
       return settings.facilityInfo.facilityName + " Treasure Hunt Report";
     } else {
-      return  "Treasure Hunt Report";
+      return "Treasure Hunt Report";
     }
   }
 
@@ -224,6 +249,7 @@ export class TreasureHuntPptService {
     });
 
     let slideTitleProperties: pptxgen.TextPropsOptions = this.getSlideTitleProperties();
+    let costBarChartOptions: pptxgen.IChartOpts = this.getCostBarChartProperties();
     let barChartOptions: pptxgen.IChartOpts = this.getBarChartProperties();
     let pieChartOptions: pptxgen.IChartOpts = this.getPieChartProperties();
     let costSumBarData: PptxgenjsChartData[] = this.getCostSummaryData(treasureHuntResults);
@@ -240,7 +266,7 @@ export class TreasureHuntPptService {
     slide2 = this.getCostSummaryTable(slide2, treasureHuntResults);
 
     let slide3 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide3.addChart("bar", costSumBarData, barChartOptions);
+    slide3.addChart("bar", costSumBarData, costBarChartOptions);
     slide3.addText('Cost Summary', slideTitleProperties);
 
     let slide4 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
