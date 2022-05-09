@@ -6,6 +6,7 @@ import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportu
 import pptxgen from 'pptxgenjs';
 import * as _ from 'lodash';
 import * as betterPlantsPPTimg from './better-plants-ppt-img.js';
+import * as moment from 'moment';
 
 @Injectable()
 export class TreasureHuntPptService {
@@ -193,10 +194,27 @@ export class TreasureHuntPptService {
 
   }
 
+  getpptTitle(settings: Settings): string {
+    if (settings.facilityInfo && settings.facilityInfo.facilityName) {
+      return settings.facilityInfo.facilityName + " Treasure Hunt Report";
+    } else {
+      return  "Treasure Hunt Report";
+    }
+  }
 
-  createPPT(pptTitle: string, date: string, settings: Settings, treasureHuntResults: TreasureHuntResults, opportunityCardsData: Array<OpportunityCardData>,
+  getCurrentDate(): string {
+    const date: Date = new Date();
+    let formatedDate: string = moment(date).format("MMM D, YYYY").toString();
+    return formatedDate;
+  }
+
+
+  createPPT(settings: Settings, treasureHuntResults: TreasureHuntResults, opportunityCardsData: Array<OpportunityCardData>,
     opportunitiesPaybackDetails: OpportunitiesPaybackDetails): pptxgen {
     let pptx = new pptxgen();
+
+    let pptTitle = this.getpptTitle(settings);
+    let date: string = this.getCurrentDate();
 
     pptx.layout = "LAYOUT_WIDE";
     pptx.defineSlideMaster({

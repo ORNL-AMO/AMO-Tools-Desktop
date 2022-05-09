@@ -185,34 +185,20 @@ export class TreasureHuntReportComponent implements OnInit {
     this.exportModal.hide();
   }
 
-  getCurrentDate(): string {
-    const date: Date = new Date();
-    let formatedDate: string = moment(date).format("MMM D, YYYY").toString();
-    return formatedDate;
-  }
-
   getFileName(): string {
     if (!this.fileName) {
-      this.fileName = this.getCurrentDate() + ' - Treasure Hunt Report';
+      const date: Date = new Date();
+      let formatedDate: string = moment(date).format("MMM D, YYYY").toString();
+      this.fileName = formatedDate + ' - Treasure Hunt Report';
     }
     return this.fileName;
   }
-
-  getpptTitle(settings: Settings): string {
-    if (settings.facilityInfo && settings.facilityInfo.facilityName) {
-      return settings.facilityInfo.facilityName + " Treasure Hunt Report";
-    } else {
-      return  "Treasure Hunt Report";
-    }
-  }
-
+  
   present() {
     if (this.dataCalculated) {
-      let settings = this.settingsDbService.getByDirectoryId(this.assessment.directoryId);
-      let pptTitle = this.getpptTitle(settings);
-      let date: string = this.getCurrentDate();    
+      let settings = this.settingsDbService.getByDirectoryId(this.assessment.directoryId);    
       let pptx = new pptxgen();
-      pptx = this.treasureHuntPPTService.createPPT(pptTitle, date, settings, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails);
+      pptx = this.treasureHuntPPTService.createPPT(settings, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails);
       pptx.writeFile({ fileName: this.fileName + '.pptx' });
     }
     this.hideExportModal();
