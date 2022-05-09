@@ -186,9 +186,8 @@ export class TreasureHuntReportComponent implements OnInit {
   }
 
   getFileName(): string {
-    if (!this.fileName) {
-      const date: Date = new Date();
-      let formatedDate: string = moment(date).format("MMM D, YYYY").toString();
+    if (!this.fileName) {      
+      let formatedDate = this.treasureHuntPPTService.getCurrentDate();
       this.fileName = formatedDate + ' - Treasure Hunt Report';
     }
     return this.fileName;
