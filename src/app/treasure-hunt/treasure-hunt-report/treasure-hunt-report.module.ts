@@ -28,6 +28,7 @@ import { EffortSavingsChartComponent } from './report-graphs/effort-savings-char
 import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
 import { CarbonEmissionsSummaryTableComponent } from './executive-summary/carbon-emissions-summary-table/carbon-emissions-summary-table.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { TreasureHuntPptService } from './treasure-hunt-ppt.service';
 
 @NgModule({
   imports: [
@@ -62,6 +63,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     CarbonEmissionsSummaryTableComponent
   ],
   exports: [TreasureHuntReportComponent, CostPieChartComponent, UtilityBarChartComponent, ExecutiveSummaryTableComponent, TeamSummaryPieChartComponent, OpportunityPaybackBarChartComponent],
-  providers: [OpportunityPaybackService, OpportunitySummaryService, CurrencyPipe]
+  providers: [OpportunityPaybackService, OpportunitySummaryService, CurrencyPipe, TreasureHuntPptService]
 })
 export class TreasureHuntReportModule { }

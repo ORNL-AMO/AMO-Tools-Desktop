@@ -1,7 +1,7 @@
-<div class="group-label">
+<div *ngIf="selectedCompressor" class="group-label">
     <span *ngIf="inReport"> Baseline Performance Profiles </span>
     <span *ngIf="!inReport"> Performance Profile </span>
-    <span *ngIf="!showAllCompressors && selectedCompressor && !inAssessment"> ({{selectedCompressor.name}}) </span>
+    <span *ngIf="!showAllCompressors && !inAssessment"> ({{selectedCompressor.name}}) </span>
     <div class="input-group checkbox" *ngIf="!inAssessment">
         <label *ngIf="!inReport" class="p-2">
             <input type="checkbox" id="showAllCompressors" (change)="drawChart()" [(ngModel)]="showAllCompressors" />
@@ -13,4 +13,4 @@
         </label>
     </div>
 </div>
-<div #performanceProfileChart id="performanceProfileChart" [ngClass]="{'print-view': printView}"></div>
+<div [hidden]="(!inAssessment && !selectedCompressor) || (inAssessment && !compressedAirAssessment) " #performanceProfileChart id="performanceProfileChart" [ngClass]="{'print-view': printView}"></div>
