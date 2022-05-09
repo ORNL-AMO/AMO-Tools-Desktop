@@ -32,7 +32,7 @@ export class CleanDataComponent implements OnInit {
       this.dataExists = true;
     }
   }
-  
+
 
   submit() {
     this.cleaningData = true;
@@ -82,14 +82,16 @@ export class CleanDataComponent implements OnInit {
       return field.isTimeField == true;
     });
     csvData.hasTimeField = csvData.timeField != undefined;
-    csvData.csvImportData.data.map(dataItem => { 
-      if (dataItem[csvData.timeField.fieldName]) {
-        let splitTime = dataItem[csvData.timeField.fieldName].toString().split(" ");
-        if (splitTime.length > 1) {
-          dataItem[csvData.timeField.fieldName] = splitTime[1];
-        }
-      }
-    });
+    //this split causing issues for "2:19:00 PM" ending up "PM"
+    //removing for issue-5574 but leaving if we find out data that drove this decision
+    // csvData.csvImportData.data.map(dataItem => {
+    //   if (dataItem[csvData.timeField.fieldName]) {
+    //     let splitTime = dataItem[csvData.timeField.fieldName].toString().split(" ");
+    //     if (splitTime.length > 1) {
+    //       dataItem[csvData.timeField.fieldName] = splitTime[1];
+    //     }
+    //   }
+    // });
     this.cd.detectChanges();
   }
 }
