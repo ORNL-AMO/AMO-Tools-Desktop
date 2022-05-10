@@ -18,7 +18,6 @@ export class FanPsychrometricChartComponent implements OnInit {
  
   @Input()
   gasDensityForm: FormGroup;
-  // ** remove above if we don't end up using
 
   @Input()
   settings: Settings;
@@ -64,16 +63,14 @@ export class FanPsychrometricChartComponent implements OnInit {
     this.formValid = this.psychrometricService.formValid.getValue();
     if (this.formValid) {
       let blueTraces: Array<TraceData> = this.addBlueTraces();
-      let redTraces: Array<TraceData> = this.addRedTraces();
-      this.addTopAxisTrace(blueTraces[5]);
-      this.addVerticalGridLines(blueTraces[5]);
+      this.addRedTraces();
+      this.addTopAxisTrace(blueTraces[blueTraces.length - 1]);
+      this.addVerticalGridLines(blueTraces[blueTraces.length - 1]);
 
       if (this.inputData.dryBulbTemp && this.psychrometricResults && this.psychrometricResults.humidityRatio !== undefined) {
-          this.addUserPoint(blueTraces[5]);
+          this.addUserPoint(blueTraces[blueTraces.length - 1]);
       }
     }
-
-
 
     // pass chart data to plotly for rendering at div
     if (this.expanded && this.expandedChartDiv) {
@@ -169,7 +166,6 @@ export class FanPsychrometricChartComponent implements OnInit {
 
       blueTraces.push(trace);
     });
-    // console.log('blueTraces', blueTraces);
     return blueTraces;
   
 }
@@ -232,62 +228,45 @@ export class FanPsychrometricChartComponent implements OnInit {
     return redTraces;
   }
 
-  addUserRedTrace(blueTraces): Array<TraceData> {
-    // List 1: Wet Bulb = sequence(35 , 130, by 5) (may want to change to by 10 if too crowded)
-    let wetBulbTemps: Array<number> = [];
-    for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
-      wetBulbTemps.push(i);
-    }
-    let dryBulbTemps: Array<number> = blueTraces.x;
-    let yCoordinates: Array<number> = blueTraces.y;
-    let redTraces: Array<TraceData> = [];
-    // Calculated humidity ratio will be Y values
-    let humidityRatios: Array<number> = [];
+  addUserRedTrace(topAxisBlueTrace: TraceData): void {
+    let xConstraints: Array<number> = [];
     let xCoordinates: Array<number> = [];
-    wetBulbTemps.forEach(wetBulbTemp => {
-      // List 2: Dry Bulb 
-      xCoordinates = [];
-      for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
-        if (i >= this.psychrometricResults.wetBulbTemp) {
-          xCoordinates.push(i);
+    // Use higher res increment than other red lines to find xrange constraints against the 'top axis'/top blue trace
+    let highResolutionIncrement: number = .02;
+    for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += highResolutionIncrement) {
+      if (i >= this.psychrometricResults.wetBulbTemp) {
+        xConstraints.push(i);
+      }
+    }
+
+    let traceX: number[] = [];
+    let traceY: number[] = [];
+    // Only create start and end point
+    xCoordinates = [xConstraints[0], xConstraints[xConstraints.length -1]];
+    xCoordinates.forEach(x => {
+      let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
+      relativeHumidityInput.dryBulbTemp = x;
+      relativeHumidityInput.wetBulbTemp = this.psychrometricResults.wetBulbTemp;
+      relativeHumidityInput.barometricPressure = this.inputData.barometricPressure;
+      relativeHumidityInput.inputType = 'wetBulb';
+      let results: PsychrometricResults = this.psychrometricService.calcDensityWetBulb(relativeHumidityInput, this.settings, true);
+      if (results) {
+        // TODO This may no longer be needed
+        if (results.humidityRatio >= 0) {
+          traceX.push(x);
+          traceY.push(results.humidityRatio);    
         }
       }
-      let trace = this.getEmptyTrace('Wet Bulb', 'red');
-      //use wet bulb result from results table when creating intersecting line at point/plot instead of the array
-      humidityRatios = [];
-      let invalidIndicies: Array<number> = [];
-      xCoordinates.forEach(x => {
-        let wetBulb: number = this.psychrometricResults.wetBulbTemp;
-        let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
-        relativeHumidityInput.dryBulbTemp = x;
-        relativeHumidityInput.wetBulbTemp = wetBulb;
-        relativeHumidityInput.barometricPressure = this.inputData.barometricPressure;
-        relativeHumidityInput.inputType = 'wetBulb';
-        let results: PsychrometricResults = this.psychrometricService.calcDensityWetBulb(relativeHumidityInput, this.settings, true);
-        if (results) {
-          humidityRatios.push(results.humidityRatio);
-        }
-      });
-
-      // Filter out invalid
-      humidityRatios = humidityRatios.filter((ratio: number, index: number) => {
-        if (ratio < 0) {
-          invalidIndicies.push(index);
-        } else {
-          return ratio;
-        }
-      });
-      xCoordinates = xCoordinates.filter((x: number, index: number) => !invalidIndicies.includes(index));
-      
-      // trace.hovertemplate = `Wet Bulb ${trace.y} ${this.temperatureUnits}`;
-      trace.x = xCoordinates;
-      trace.y = humidityRatios;
-      
-      redTraces.push(trace);
     });
-    redTraces.forEach(trace => this.chart.data.push(trace));
-    this.chart.layout = this.getLayout(dryBulbTemps, yCoordinates);
-    return redTraces;
+    
+    let trace = this.getEmptyTrace('Wet Bulb', 'red');
+    trace.x = traceX;
+    trace.y = traceY;
+    console.log('user red', trace);
+    this.chart.data.push(trace);
+    let xRange: number[] = topAxisBlueTrace.x.map(x => Number(x));
+    let yRange: number[] = topAxisBlueTrace.y.map(y => Number(y));
+    this.chart.layout = this.getLayout(xRange, yRange);
   }
 
   addTopAxisTrace(blueTraces) {
@@ -466,6 +445,8 @@ export class FanPsychrometricChartComponent implements OnInit {
         l: 25,
         r: 75
       },
+      // TODO need to better represent what these annotations coords are
+      // TODO temp label should change with units
       annotations: [{
         x: xticks[9],
         y: yticks[9],
