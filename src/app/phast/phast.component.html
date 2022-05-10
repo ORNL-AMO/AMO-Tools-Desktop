@@ -43,11 +43,11 @@
   </div>
 
   <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <div *ngIf="assessmentTab == 'explore-opportunities'">
       <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings"
-        [assessment]="assessment" (save)="saveDb()" [exploreModIndex]="modificationIndex"
-        (exploreOppsToast)="hideToast($event)" (emitAddNewMod)="addNewMod()"></app-explore-phast-opportunities>
+        [assessment]="assessment" (save)="saveDb()" [exploreModIndex]="modificationIndex" (emitAddNewMod)="addNewMod()">
+      </app-explore-phast-opportunities>
     </div>
     <div *ngIf="assessmentTab == 'modify-conditions' && hasEgridDataInit">
       <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings"
@@ -62,28 +62,30 @@
     </div>
   </div>
   <!--Sankey-->
-  <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item"
+    [ngStyle]="{'height.px': containerHeight}">
     <nav class="navbar phast">
       <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-start align-items-center w-100 flex-wrap">
         <div class="tab-content pl-2 pr-2">
-            <div class="form-group" *ngIf="phastOptions.length > 1">
-              <select name="phastSelect" class="form-control mx-auto w-100" id="phastSelect" [(ngModel)]="sankeyPhast">
-                <option *ngFor="let mod of phastOptions" [ngValue]="mod.phast">{{mod.name}}</option>
-              </select>
-            </div>
-        </div>
-          <div class="btn-group btn-group-sm align-self-center">
-              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
-                  [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
-              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('power')"
-                  [ngClass]="{'active': sankeyLabelStyle == 'power'}">Loss Power</button>
-              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
-                  [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
+          <div class="form-group" *ngIf="phastOptions.length > 1">
+            <select name="phastSelect" class="form-control mx-auto w-100" id="phastSelect" [(ngModel)]="sankeyPhast">
+              <option *ngFor="let mod of phastOptions" [ngValue]="mod.phast">{{mod.name}}</option>
+            </select>
           </div>
+        </div>
+        <div class="btn-group btn-group-sm align-self-center">
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
+            [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('power')"
+            [ngClass]="{'active': sankeyLabelStyle == 'power'}">Loss Power</button>
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
+            [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
+        </div>
       </div>
-  </nav>
+    </nav>
     <div *ngIf="sankeyPhast" class="sankey-padding">
-      <app-phast-sankey [phast]="sankeyPhast" [labelStyle]="sankeyLabelStyle" [settings]="settings" [appBackground]="true"></app-phast-sankey>
+      <app-phast-sankey [phast]="sankeyPhast" [labelStyle]="sankeyLabelStyle" [settings]="settings"
+        [appBackground]="true"></app-phast-sankey>
     </div>
   </div>
 
@@ -94,8 +96,6 @@
 
   <!--Calculators-->
   <div *ngIf="mainTab =='calculators'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
-    <app-efficiency-improvement *ngIf="calcTab == 'efficiency-improvement'" [inAssessment]="true"
-      [assessment]="assessment" [settings]="settings"></app-efficiency-improvement>
     <app-energy-equivalency *ngIf="calcTab == 'energy-equivalency'" [inAssessment]="true" [assessment]="assessment"
       [settings]="settings"></app-energy-equivalency>
     <app-energy-use *ngIf="calcTab == 'energy-use'" [settings]="settings"></app-energy-use>
@@ -120,10 +120,6 @@
     </div>
   </div>
 </div>
-
-<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
-  (emitDisable)="disableDisclaimer()"></app-toast>
 
 <div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="changeModificationModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}" *ngIf="_phast">
@@ -164,4 +160,7 @@
 </div>
 
 <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'phast'"
- (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
+  (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
+
+
+<app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>

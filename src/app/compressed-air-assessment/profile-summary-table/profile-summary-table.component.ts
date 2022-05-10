@@ -16,6 +16,8 @@ export class ProfileSummaryTableComponent implements OnInit {
   totals: Array<ProfileSummaryTotal>;
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
 
 
 

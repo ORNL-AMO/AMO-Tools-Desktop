@@ -83,6 +83,8 @@ export interface FieldData {
   fanRatedInfo?: FanRatedInfo;
   planeData?: PlaneData;
   pressureCalcResultType?: string;
+  userDefinedCompressibilityFactor?: boolean;
+  userDefinedVelocityPressure?: boolean;
 }
 
 export interface FanMotor {

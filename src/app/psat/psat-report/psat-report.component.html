@@ -13,7 +13,6 @@
     <div #reportHeader class="report-header" [ngClass]="{'hide-print': inPsat}">
         <div *ngIf="inPsat && !quickReport" class="btn-group hide-print">
             <button class="btn btn-secondary" (click)="print()">Print</button>
-            <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button>
         </div>
         <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
         <div *ngIf="assessment" class="row assessment-name">

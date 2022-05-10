@@ -90,6 +90,10 @@
                 <a class="click-link small" (click)="usePreviousData()">Load Data from Last Use
                     ({{previousDataAvailable | date:'long'}})</a>
             </div>
+            <hr class="mb-0">
+            <div class="pt-2" *ngIf="canUseExampleData">
+                <a class="click-link small" (click)="useExampleData()">Load Example Data</a>
+            </div>
         </div>
 
     </div>

@@ -20,7 +20,7 @@ import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { SsmtService } from '../../../ssmt/ssmt.service';
 import { SettingsService } from '../../../settings/settings.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { WasteWaterService } from '../../../waste-water/waste-water.service';
 import { WasteWaterResults } from '../../../shared/models/waste-water';
@@ -49,7 +49,7 @@ export class DirectorySummaryComponent implements OnInit {
   settingsForm: FormGroup;
   updateDashboardDataSub: Subscription;
   directoryIdSub: Subscription;
-  counter: NodeJS.Timeout;
+  counter: any;
   constructor(private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
     private dashboardService: DashboardService, private settingsDbService: SettingsDbService, private psatService: PsatService,
     private executiveSummaryService: ExecutiveSummaryService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService,
@@ -167,7 +167,7 @@ export class DirectorySummaryComponent implements OnInit {
         if (results.outputData.boilerOutput != undefined) {
           results.outputData.operationsOutput.boilerFuelUsage = this.convertUnitsService.value(results.outputData.operationsOutput.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
           totalEnergyUsed = results.outputData.operationsOutput.boilerFuelUsage + totalEnergyUsed;
-          totalCost = results.outputData.operationsOutput.totalOperatingCost + totalCost;
+          totalCost = results.outputData.operationsOutput.boilerFuelCost + results.outputData.operationsOutput.makeupWaterCost;
         }
       }
     });

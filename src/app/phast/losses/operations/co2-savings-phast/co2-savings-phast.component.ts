@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { coalFuels, EAFOtherFuels, OtherFuel, otherFuels } from '../../../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
@@ -9,7 +9,7 @@ import { EGridService, SubRegionData, SubregionEmissions } from '../../../../sha
 import { PhastCo2SavingsData } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { LossesService } from '../../losses.service';
-import { Co2SavingsPhastService } from './co2-savings-phast.service';
+import { Co2SavingsPhastService, PhastCo2SavingsDifferent } from './co2-savings-phast.service';
 
 @Component({
   selector: 'app-co2-savings-phast',
@@ -20,6 +20,8 @@ export class Co2SavingsPhastComponent implements OnInit {
 
   @Input()
   co2SavingsData: PhastCo2SavingsData;
+  @Input()
+  co2SavingsDifferent: PhastCo2SavingsDifferent;
   @Input()
   isFormDisabled: boolean;
   @Input()
@@ -71,6 +73,9 @@ export class Co2SavingsPhastComponent implements OnInit {
     private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    if (!this.co2SavingsDifferent) {
+      this.co2SavingsDifferent = this.phastCO2SavingsService.getDefaultCO2Different();
+    }
     this.initCo2SavingsSubscription();
   }
 
@@ -89,6 +94,10 @@ export class Co2SavingsPhastComponent implements OnInit {
       }
       this.cd.detectChanges();
     }
+    if (changes.co2SavingsData && !changes.co2SavingsData.firstChange) {
+      this.initForm();
+    }
+
   }
 
   initCo2SavingsSubscription() {
@@ -153,13 +162,13 @@ export class Co2SavingsPhastComponent implements OnInit {
     if (this.settings.furnaceType == 'Electric Arc Furnace (EAF)') {
       this.coalFuelOptions = coalFuels;
       this.eafOtherFuelSources = EAFOtherFuels;
-      shouldSetOutputRate = this.isFieldEmpty(this.co2SavingsData.totalCoalEmissionOutputRate);
+      shouldSetOutputRate = !this.co2SavingsData.totalCoalEmissionOutputRate;
       this.setCoalFuel(shouldSetOutputRate);
-      shouldSetOutputRate = this.isFieldEmpty(this.co2SavingsData.totalOtherEmissionOutputRate);
+      shouldSetOutputRate = !this.co2SavingsData.totalOtherEmissionOutputRate;
       this.setEAFFuelSource(shouldSetOutputRate);
     } else {
       this.energySources = otherFuels;
-      shouldSetOutputRate = this.isFieldEmpty(this.co2SavingsData.totalFuelEmissionOutputRate);
+      shouldSetOutputRate = !this.co2SavingsData.totalFuelEmissionOutputRate;
       this.setEnergySource(shouldSetOutputRate);
     }
   }
@@ -185,9 +194,6 @@ export class Co2SavingsPhastComponent implements OnInit {
     let eafOtherFuelSources: OtherFuel = _.find(this.eafOtherFuelSources, (val) => { return this.form.controls.eafOtherFuelSource.value === val.energySource; });
     this.eafOtherFuelOptions = eafOtherFuelSources.fuelTypes;
 
-    this.form.patchValue({
-      otherFuelType: this.eafOtherFuelOptions[0].fuelType
-    });
     let outputRate: number = this.eafOtherFuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
       outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', this.settings.phastRollupFuelUnit);
@@ -196,7 +202,8 @@ export class Co2SavingsPhastComponent implements OnInit {
 
     if (shouldSetOutputRate) {
       this.form.patchValue({
-        totalOtherEmissionOutputRate: outputRate
+        totalOtherEmissionOutputRate: outputRate,
+        otherFuelType: this.eafOtherFuelOptions[0].fuelType
       });
     }
 
@@ -230,10 +237,6 @@ export class Co2SavingsPhastComponent implements OnInit {
       totalOtherEmissionOutputRate: outputRate
     });
     this.calculate();
-  }
-
-  isFieldEmpty(value: number): boolean {
-    return value === undefined || value === null || value === 0;
   }
 
   getFuelOutputRate(fuelType: string, options: Array<{fuelType: string, outputRate: number}>): number {

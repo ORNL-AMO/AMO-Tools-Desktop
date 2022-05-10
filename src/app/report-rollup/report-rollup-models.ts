@@ -241,6 +241,7 @@ export interface AllCompressedAirResultsData {
 export interface ReportUtilityTotal {
     totalEnergy: number,
     totalCost: number,
+    steamTotalModificationCost?: number,
     savingPotential: number,
     energySavingsPotential: number,
     fuelEnergy: number,

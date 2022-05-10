@@ -19,7 +19,7 @@
                     <div class="form-group">
                         <label for="profileDataType">Profile Data Type</label>
                         <select class="form-control" id="profileDataType" formControlName="profileDataType"
-                            (focus)="focusField('profileDataType')" (change)="save()">
+                            (focus)="focusField('profileDataType')" (change)="changeProfileDataType()">
                             <option [ngValue]="'percentCapacity'">Airflow, % Capacity</option>
                             <option [ngValue]="'power'">Power, kW</option>
                             <option [ngValue]="'airflow'">Airflow,

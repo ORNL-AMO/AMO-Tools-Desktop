@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
 import { LogToolField } from '../../../log-tool-models';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { measurementOptions } from './field-unit-options';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 

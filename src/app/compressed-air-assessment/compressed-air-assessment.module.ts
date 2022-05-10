@@ -13,7 +13,7 @@ import { EndUsesComponent } from './end-uses/end-uses.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { SystemProfileSetupComponent } from './system-profile/system-profile-setup/system-profile-setup.component';
 import { SystemProfileSummaryComponent } from './system-profile/system-profile-summary/system-profile-summary.component';
-import { SystemProfileGraphsModule } from '../shared/system-profile-graphs/system-profile-graphs.module';
+import { SystemProfileGraphsModule } from './system-profile-graphs/system-profile-graphs.module';
 import { SystemBasicsFormService } from './system-basics/system-basics-form.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
@@ -37,7 +37,7 @@ import { UnloadPointComponent } from './inventory/performance-points/unload-poin
 import { BlowoffComponent } from './inventory/performance-points/blowoff/blowoff.component';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { GenericCompressorModalComponent } from './inventory/generic-compressor-modal/generic-compressor-modal.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { CompressorOptionsTableComponent } from './inventory/generic-compressor-modal/compressor-options-table/compressor-options-table.component';
 import { FilterCompressorsComponent } from './inventory/generic-compressor-modal/filter-compressors/filter-compressors.component';
 import { FilterCompressorsPipe } from './inventory/generic-compressor-modal/filter-compressors.pipe';
@@ -113,7 +113,7 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
 import { AdjustSequencerProfileComponent } from './explore-opportunities/use-automatic-sequencer/adjust-sequencer-profile/adjust-sequencer-profile.component';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { FacilityInfoSummaryModule } from '../shared/facility-info-summary/facility-info-summary.module';
-import { SystemProfileGraphsService } from '../shared/system-profile-graphs/system-profile-graphs.service'; 
+import { SystemProfileGraphsService } from './system-profile-graphs/system-profile-graphs.service'; 
 import { AdjustCascadingSetPointsHelpComponent } from './results-panel/help-panel/assessment-help/adjust-cascading-set-points-help/adjust-cascading-set-points-help.component';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 import { AssessmentNotesComponent } from './explore-opportunities/assessment-notes/assessment-notes.component';
@@ -132,7 +132,10 @@ import { SharedCompressorPipesModule } from './shared-compressor-pipes/shared-co
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { CompressorSummaryTableModule } from './compressor-summary-table/compressor-summary-table.module';
 import { CompressorSummaryComponent } from './system-profile/compressor-summary/compressor-summary.component';
-import { InventoryPerformanceProfileModule } from '../shared/inventory-performance-profile/inventory-performance-profile.module';
+import { InventoryPerformanceProfileModule } from './inventory-performance-profile/inventory-performance-profile.module';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
+import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
+import { CentrifugalGraphModule } from './centrifugal-graph/centrifugal-graph.module';
 
 @NgModule({
   declarations: [
@@ -211,7 +214,8 @@ import { InventoryPerformanceProfileModule } from '../shared/inventory-performan
     AdjustCascadingSetPointsHelpComponent,
     AssessmentNotesComponent,
     ImproveEndUseEfficiencyItemComponent,
-    CompressorSummaryComponent
+    CompressorSummaryComponent,
+    WelcomeScreenComponent
   ],
   imports: [
     CommonModule,
@@ -242,7 +246,9 @@ import { InventoryPerformanceProfileModule } from '../shared/inventory-performan
     SharedCompressorPipesModule,
     CompressorSummaryTableModule,
     SystemProfileGraphsModule,
-    InventoryPerformanceProfileModule
+    InventoryPerformanceProfileModule,
+    Co2HelpTextModule,
+    CentrifugalGraphModule
   ],
   providers: [
     CompressedAirAssessmentService,

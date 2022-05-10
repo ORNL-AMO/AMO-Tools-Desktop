@@ -67,6 +67,7 @@ export interface SSMTOutput {
   // sitePowerDemand: number;
   operationsOutput: SSMTOperationsOutput;
   co2EmissionsOutput?: SteamCo2EmissionsOutput;
+  hasSteamModelerError?: boolean,
 }
 
 export interface SteamCo2EmissionsOutput {

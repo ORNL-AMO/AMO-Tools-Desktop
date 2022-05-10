@@ -17,7 +17,7 @@
     </div>
     <div class="pr-1 pl-2" *ngIf="tabSelect == 'help' || inSetup && (stepTab != 'fan-field-data' && stepTab != 'fsat-fluid')">
         <app-system-basics-help *ngIf="stepTab == 'system-basics'"></app-system-basics-help>
-        <app-fan-operations-help *ngIf="stepTab == 'operations'" [currentField]="currentField"></app-fan-operations-help>
+        <app-fan-operations-help *ngIf="stepTab == 'fan-operations'" [currentField]="currentField"></app-fan-operations-help>
         <app-fan-field-data-help *ngIf="stepTab == 'fan-field-data'" [currentField]="currentField"></app-fan-field-data-help>
         <app-fan-motor-help *ngIf="stepTab == 'fan-motor'" [currentField]="currentField"></app-fan-motor-help>
         <app-fan-setup-help *ngIf="tabSelect == 'help' && stepTab == 'fan-setup'" [currentField]="currentField"></app-fan-setup-help>

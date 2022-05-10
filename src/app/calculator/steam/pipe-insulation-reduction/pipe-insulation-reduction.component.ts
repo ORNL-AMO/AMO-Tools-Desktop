@@ -89,9 +89,9 @@ export class PipeInsulationReductionComponent implements OnInit {
     if (this.pipeInsulationReductionService.baselineData == undefined) {
       this.pipeInsulationReductionService.baselineData = this.pipeInsulationReductionService.initObject(this.settings, this.operatingHours);
     }
-    this.baselineForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.baselineData, true);
+    this.baselineForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.baselineData, this.settings, true);
     if (this.pipeInsulationReductionService.modificationData) {
-      this.modificationForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.modificationData, false);
+      this.modificationForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.modificationData, this.settings, false);
       this.modificationExists = true;
       this.modificationForm.disable();
     }
@@ -100,7 +100,7 @@ export class PipeInsulationReductionComponent implements OnInit {
 
   createModification() {
     this.pipeInsulationReductionService.modificationData = JSON.parse(JSON.stringify(this.pipeInsulationReductionService.baselineData));
-    this.modificationForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.modificationData, false);
+    this.modificationForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.modificationData, this.settings, false);
     this.getResults();
     this.modificationExists = true;
     this.setModificationSelected();
@@ -137,7 +137,7 @@ export class PipeInsulationReductionComponent implements OnInit {
 
   btnResetData() {
     this.pipeInsulationReductionService.baselineData = this.pipeInsulationReductionService.initObject(this.settings, this.operatingHours);
-    this.baselineForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.baselineData, true);
+    this.baselineForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.baselineData, this.settings, true);
     this.baselineForm.updateValueAndValidity();
     this.pipeInsulationReductionService.modificationData = null;
     this.baselineSelected = true;
@@ -156,9 +156,9 @@ export class PipeInsulationReductionComponent implements OnInit {
 
   generateExample() {
     this.pipeInsulationReductionService.baselineData = this.pipeInsulationReductionService.generateExample(this.settings, true);
-    this.baselineForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.baselineData, true);
+    this.baselineForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.baselineData, this.settings, true);
     this.pipeInsulationReductionService.modificationData = this.pipeInsulationReductionService.generateExample(this.settings, false);
-    this.modificationForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.modificationData, false);
+    this.modificationForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.modificationData, this.settings, false);
     this.modificationExists = true;
     this.setBaselineSelected();
   }

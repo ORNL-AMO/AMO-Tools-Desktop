@@ -8,7 +8,7 @@ import { WallService } from './wall.service';
 import { WallFormService } from './wall-form.service';
 import { WallComponent } from './wall.component';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { FlueGasModule } from '../flue-gas/flue-gas.module';
 import { WallResultsComponent } from './wall-results/wall-results.component';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';

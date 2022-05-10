@@ -365,7 +365,7 @@
 <div bsModal #zipCodeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="zipCodeModalLabel"
   aria-hidden="true" [config]="{backdrop: 'fixed'}">
   <div class="modal-dialog modal-md">
-    <div class="modal-content"> 
+    <div class="modal-content" *ngIf="electricityModalShown"> 
       <div class="d-flex header mr-2 ml-2 pb-1 pt-1 justify-content-between">
         <div class="col-md-auto ico-col">
         </div>
@@ -396,7 +396,7 @@
 <div bsModal #mixedCO2EmissionsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="mixedCO2EmissionsModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+    <div class="modal-content" *ngIf="naturalGasEmissionsShown">
       <div class="d-flex header mr-2 ml-2 pb-1 pt-1 justify-content-between">
         <div class="col-md-auto ico-col">
         </div>

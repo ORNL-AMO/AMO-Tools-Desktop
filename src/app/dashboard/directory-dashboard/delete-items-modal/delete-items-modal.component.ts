@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { DirectoryDashboardService } from '../directory-dashboard.service';
 import { DeleteDataService } from '../../../indexedDb/delete-data.service';
 import { Directory } from '../../../shared/models/directory';

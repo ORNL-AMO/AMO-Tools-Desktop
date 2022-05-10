@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import * as Plotly from 'plotly.js';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
+import { PlotlyService } from 'angular-plotly.js';
 @Component({
   selector: 'app-team-summary-pie-chart',
   templateUrl: './team-summary-pie-chart.component.html',
@@ -15,7 +15,7 @@ export class TeamSummaryPieChartComponent implements OnInit {
 
   @ViewChild('plotlyPieChart', { static: false }) plotlyPieChart: ElementRef;
 
-  constructor() { }
+  constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
   }
@@ -30,7 +30,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
 
   ngOnChanges() {
     if (this.plotlyPieChart && !this.showPrintView) {
-      // this.setHeight();
       this.drawPlot();
     }else if (this.plotlyPieChart && this.showPrintView) {
       this.drawPrintPlot();
@@ -50,7 +49,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
 
   drawPlot() {
     let valuesAndLabels = this.getValuesAndLabels();
-    Plotly.purge(this.plotlyPieChart.nativeElement)
     var data = [{
       values: valuesAndLabels.values,
       labels: valuesAndLabels.labels,
@@ -60,8 +58,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
       type: 'pie',
       textposition: 'auto',
       insidetextorientation: "horizontal",
-      // automargin: true,
-      // textinfo: 'label+value',
       hoverformat: '.2r',
       texttemplate: '<b>%{label}: </b>%{value:$,.0f}',
       hoverinfo: 'label+percent',
@@ -83,7 +79,7 @@ export class TeamSummaryPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    Plotly.react(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
   }
 
   drawPrintPlot() {
@@ -97,7 +93,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
       type: 'pie',
       textposition: 'auto',
       insidetextorientation: "horizontal",
-      // automargin: true,
       texttemplate: '<b>%{label}: </b>%{value:$,.0f}',
       hoverformat: '.2r',
       direction: "clockwise",
@@ -117,6 +112,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
       displayModeBar: false,
       responsive: true
     };
-    Plotly.react(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);    
   }
 }

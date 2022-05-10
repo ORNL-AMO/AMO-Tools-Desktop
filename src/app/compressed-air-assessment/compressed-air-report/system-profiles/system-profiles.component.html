@@ -1,4 +1,4 @@
-<div class="d-flex flex-column">
+<div class="d-flex flex-column avoid-break print-container">
     <h4 class="show-print print-section-header">System Profiles</h4>
     <div class="d-flex justify-content-center">
         <div class="pr-1">
@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <app-profile-summary-table [profileSummary]="selectedProfileSummary"
+    <app-profile-summary-table [printView]="printView"  [profileSummary]="selectedProfileSummary"
         [inventoryItems]="compressedAirAssessment.compressorInventoryItems" [totals]="selectedTotals"
         [settings]="settings">
     </app-profile-summary-table>

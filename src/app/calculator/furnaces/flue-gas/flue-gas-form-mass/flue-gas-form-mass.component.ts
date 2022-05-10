@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
@@ -41,6 +41,8 @@ export class FlueGasFormMassComponent implements OnInit {
   calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
   warnings: FlueGasWarnings;
+
+  higherHeatingValue: number;
 
   constructor(private flueGasService: FlueGasService,
     private flueGasFormService: FlueGasFormService,
@@ -166,6 +168,8 @@ export class FlueGasFormMassComponent implements OnInit {
 
   calculate() {
     this.byMassForm = this.flueGasFormService.setValidators(this.byMassForm);
+    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.byMassForm.controls.gasTypeId.value);
+    this.higherHeatingValue = this.phastService.flueGasByMassCalculateHeatingValue(tmpFlueGas);
     this.checkWarnings();
     let currentDataByMass: FlueGas = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
     if (this.isBaseline) {

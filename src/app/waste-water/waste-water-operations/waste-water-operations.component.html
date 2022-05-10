@@ -10,7 +10,8 @@
         <form class="pl-3 pr-3" #formRef [formGroup]="operationsForm">
             <!-- <label class="group-label">Modeling Conditions</label> -->
             <!-- MaxDays -->
-            <div class="form-group">
+            <div class="form-group"
+                [ngClass]="{'indicate-different': operationsDifferent.MaxDays}">
                 <label for="MaxDays">Max. Solids Retention Time (SRT)</label>
                 <div class="input-group">
                     <input type="number" name="MaxDays" class="form-control number-input-field"
@@ -28,7 +29,8 @@
                 </span>
             </div>
             <!--operatingMonths-->
-            <div class="form-group">
+            <div class="form-group"
+                [ngClass]="{'indicate-different': operationsDifferent.operatingMonths}">
                 <label for="operatingMonths">Operating Months</label>
                 <div class="input-group">
                     <input type="number" name="operatingMonths" class="form-control number-input-field"
@@ -81,6 +83,7 @@
     <div class="pl-3 pr-3">
       <app-assessment-co2-savings *ngIf="co2SavingsData"
       [co2SavingsData]="co2SavingsData"
+      [totalEmissionOutputRateDifferent]="totalEmissionOutputRateDifferent"
       [isFormDisabled]="co2SavingsFormDisabled"
       [inBaseline]="!isModification"
       (emitCurrentField)="focusField($event)"

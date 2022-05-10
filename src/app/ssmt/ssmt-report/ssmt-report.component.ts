@@ -57,6 +57,7 @@ export class SsmtReportComponent implements OnInit {
         this.assessment.ssmt.valid = this.ssmtService.checkValid(this.assessment.ssmt, this.settings);
         let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateBaselineModel(this.assessment.ssmt, this.settings);
         this.assessment.ssmt.name = 'Baseline';
+        if (!resultData.outputData.hasSteamModelerError) {
         resultData.outputData = this.calculateResultsWithMarginalCosts(this.assessment.ssmt, resultData.outputData);
         this.assessment.ssmt.outputData = resultData.outputData;
         this.baselineOutput = resultData.outputData;
@@ -85,6 +86,7 @@ export class SsmtReportComponent implements OnInit {
         }
         this.getTableCellWidth();
         this.dataCalculated = true;
+      }
       }, 10);
     } else {
       this.dataCalculated = true;

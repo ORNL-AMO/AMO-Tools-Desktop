@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitte
 import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FieldData, InletPressureData, OutletPressureData, FSAT, PlaneData, FanRatedInfo, CompressibilityFactor, FsatOutput } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { FsatService, InletVelocityPressureInputs } from '../fsat.service';
@@ -48,7 +48,6 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   formWidth: number;
-  userDefinedCompressibilityFactor: boolean = false;
 
   bodyHeight: number;
   loadEstimateMethods: Array<{ value: number, display: string }> = [
@@ -65,7 +64,6 @@ export class FanFieldDataComponent implements OnInit {
   outletPressureCopy: OutletPressureData;
   idString: string;
   disableApplyData: boolean = true;
-  userDefinedVelocityPressure: boolean = true;
   constructor(private compareService: CompareService, private fsatWarningService: FsatWarningService, private fanFieldDataService: FanFieldDataService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 
   ngOnInit() {
@@ -121,7 +119,8 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   toggleUserDefinedCompressibilityFactor() {
-    this.userDefinedCompressibilityFactor = !this.userDefinedCompressibilityFactor;
+    let userDefinedCompressibilityFactor: boolean = this.fieldDataForm.controls.userDefinedCompressibilityFactor.value;
+    this.fieldDataForm.controls.userDefinedCompressibilityFactor.patchValue(!userDefinedCompressibilityFactor);
     this.save();
   }
 
@@ -150,7 +149,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   save(usingModalVelocityPressure?: boolean) {
-    if (!this.userDefinedCompressibilityFactor) {
+    if (!this.fieldDataForm.controls.userDefinedCompressibilityFactor.value) {
       this.getCompressibilityFactor();
     }
     if (!usingModalVelocityPressure) {
@@ -224,7 +223,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   setInletVelocityPressure() {
-    if (this.fieldDataForm.controls.usingStaticPressure.value == true && !this.userDefinedVelocityPressure) {
+    if (this.fieldDataForm.controls.usingStaticPressure.value == true && !this.fieldDataForm.controls.userDefinedVelocityPressure.value) {
       if (this.fieldDataForm.controls.flowRate.valid) {
         this.setInletVelocityPressureInputs();
         let calculatedInletVelocityPressure: number = this.fsatService.calculateInletVelocityPressure(this.inletVelocityPressureInputs);
@@ -251,7 +250,8 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   toggleUserDefinedVelocityPressure() {
-    this.userDefinedVelocityPressure = !this.userDefinedVelocityPressure;
+    let userDefinedVelocityPressure: boolean = this.fieldDataForm.controls.userDefinedVelocityPressure.value;
+    this.fieldDataForm.controls.userDefinedVelocityPressure.patchValue(!userDefinedVelocityPressure);
     this.save();
   }
 
@@ -327,7 +327,7 @@ export class FanFieldDataComponent implements OnInit {
     if (fieldData.usingStaticPressure && fieldData.inletVelocityPressure) {
       inletVelocityPressure = fieldData.inletVelocityPressure;
       usingModalVelocityPressure = true;
-      this.userDefinedVelocityPressure = true;
+      this.fieldDataForm.controls.userDefinedVelocityPressure.patchValue(true);
     }
     this.fieldData.inletPressure = fieldData.inletPressure;
     this.fieldData.usingStaticPressure = fieldData.usingStaticPressure;

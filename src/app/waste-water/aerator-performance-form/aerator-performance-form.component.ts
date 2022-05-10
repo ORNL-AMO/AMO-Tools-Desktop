@@ -36,6 +36,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
   showOperatingTimeAlert: boolean = false;
   showSpeedAlert: boolean = false;
   disableOptimize: boolean = false;
+  aeratorBlowerLabel: string;
   constructor(private wasteWaterService: WasteWaterService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
     private compareService: CompareService, private cd: ChangeDetectorRef) { }
 
@@ -53,7 +54,6 @@ export class AeratorPerformanceFormComponent implements OnInit {
           let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
           this.aeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(modificationData.aeratorPerformanceData);
           this.form = this.aeratorPerformanceFormService.getFormFromObj(modificationData.aeratorPerformanceData);
-          this.setDefaultSOTR();
           if(this.isModification){
             this.setDisableOptimize();
           }
@@ -63,7 +63,6 @@ export class AeratorPerformanceFormComponent implements OnInit {
       let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
       this.aeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(wasteWater.baselineData.aeratorPerformanceData);
       this.form = this.aeratorPerformanceFormService.getFormFromObj(wasteWater.baselineData.aeratorPerformanceData);
-      this.setDefaultSOTR();
     }
     this.setFormControlStatus();
 
@@ -90,8 +89,10 @@ export class AeratorPerformanceFormComponent implements OnInit {
     this.form.controls.TypeAerators.enable();
 
     if (this.form.controls.Aerator.value == 'Other') {
+      this.aeratorBlowerLabel = "Aerator/Blower";
       this.aeratorTypes = defaultAeratorTypes;
     } else if (isDiffuserAerator) {
+      this.aeratorBlowerLabel = "Blower";
       // Mechanical is removed. set to next option.
       if (this.form.controls.TypeAerators.value == 1) {
         this.form.patchValue({
@@ -100,6 +101,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
       }
       this.aeratorTypes = defaultAeratorTypes.filter(aerator => aerator.value != 1);
     } else {
+      this.aeratorBlowerLabel = "Aerator";
       this.aeratorTypes = defaultAeratorTypes;
       this.form.patchValue({
         TypeAerators: defaultAeratorTypes[0].value
@@ -210,5 +212,17 @@ export class AeratorPerformanceFormComponent implements OnInit {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     let modificationValid: WasteWaterValid = this.wasteWaterService.checkWasteWaterValid(wasteWater.modifications[this.modificationIndex].activatedSludgeData, wasteWater.modifications[this.modificationIndex].aeratorPerformanceData, wasteWater.modifications[this.modificationIndex].operations);
     this.disableOptimize = modificationValid.isValid == false;
+  }
+
+  isSOTRDifferent() {
+    if (this.inSetup) {
+      let SOTRDefault: number = this.SOTRDefaults.find(SOTRValue => SOTRValue.label == this.form.controls.Aerator.value).value;
+      if (this.form.controls.SOTR.value !== SOTRDefault) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
   }
 }

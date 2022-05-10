@@ -14,7 +14,12 @@ import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-o
 import { PrintOptions } from '../../shared/models/printing';
 import { TreasureHuntResultsData } from '../../report-rollup/report-rollup-models';
 import { TreasureHuntReportRollupService } from '../../report-rollup/treasure-hunt-report-rollup.service';
-import { TreasureHuntService } from '../treasure-hunt.service';
+import pptxgen from 'pptxgenjs';
+import * as _ from 'lodash';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import * as moment from 'moment';
+import { TreasureHuntPptService } from './treasure-hunt-ppt.service';
 @Component({
   selector: 'app-treasure-hunt-report',
   templateUrl: './treasure-hunt-report.component.html',
@@ -32,6 +37,8 @@ export class TreasureHuntReportComponent implements OnInit {
   @Input()
   inRollup: boolean = false;
 
+  @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
+
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
   reportContainerHeight: number;
@@ -43,6 +50,8 @@ export class TreasureHuntReportComponent implements OnInit {
   showPrintMenuSub: Subscription;
   showPrintDiv: boolean = false;
   selectAll: boolean = false;
+
+  fileName: string;
 
   currentTab: string = 'executiveSummary';
   assessmentDirectories: Array<Directory> = [];
@@ -58,7 +67,8 @@ export class TreasureHuntReportComponent implements OnInit {
     private opportunityPaybackService: OpportunityPaybackService,
     private opportunityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService,
     private sortCardsService: SortCardsService, private directoryDbService: DirectoryDbService, private cd: ChangeDetectorRef,
-    private treasureHuntReportRollupService: TreasureHuntReportRollupService, private treasureHuntService: TreasureHuntService) { }
+    private treasureHuntReportRollupService: TreasureHuntReportRollupService,
+    private settingsDbService: SettingsDbService, private treasureHuntPPTService: TreasureHuntPptService) { }
 
   ngOnInit() {
     if (this.assessment) {
@@ -165,5 +175,33 @@ export class TreasureHuntReportComponent implements OnInit {
     this.printOptionsMenuService.printContext.next('treasureHunt');
     this.printOptionsMenuService.showPrintMenu.next(true);
   }
+
+  showExportModal() {
+    this.fileName = this.getFileName();
+    this.exportModal.show();
+  }
+
+  hideExportModal() {
+    this.exportModal.hide();
+  }
+
+  getFileName(): string {
+    if (!this.fileName) {      
+      let formatedDate = this.treasureHuntPPTService.getCurrentDate();
+      this.fileName = formatedDate + ' - Treasure Hunt Report';
+    }
+    return this.fileName;
+  }
+  
+  present() {
+    if (this.dataCalculated) {
+      let settings = this.settingsDbService.getByDirectoryId(this.assessment.directoryId);    
+      let pptx = new pptxgen();
+      pptx = this.treasureHuntPPTService.createPPT(settings, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails);
+      pptx.writeFile({ fileName: this.fileName + '.pptx' });
+    }
+    this.hideExportModal();
+  }
+
 
 }

@@ -41,6 +41,7 @@ export class PrintSettingsComponent implements OnInit {
       this.settings.printDetailedResults &&
       this.settings.printReportDiagram &&
       this.settings.printCompressedAirRollup &&
+      this.settings.printPerformanceProfiles &&
       this.settings.printAll
     );
   }
@@ -67,6 +68,7 @@ export class PrintSettingsComponent implements OnInit {
     this.settings.printReportDiagram = this.selectAllOptions;
     this.settings.printCompressedAirRollup = this.selectAllOptions;
     this.settings.printAll = this.selectAllOptions;
+    this.settings.printPerformanceProfiles = this.selectAllOptions;
     this.savePrintSettings.emit(true);
   }
 
@@ -180,6 +182,12 @@ export class PrintSettingsComponent implements OnInit {
 
   togglePrintReportDiagram() {
     this.settings.printReportDiagram = !this.settings.printReportDiagram;
+    this.checkSelectAll();
+    this.savePrintSettings.emit(true);
+  }
+
+  togglePrintPerformanceProfiles() {
+    this.settings.printPerformanceProfiles = !this.settings.printPerformanceProfiles;
     this.checkSelectAll();
     this.savePrintSettings.emit(true);
   }

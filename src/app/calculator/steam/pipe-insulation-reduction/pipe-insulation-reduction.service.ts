@@ -50,7 +50,11 @@ export class PipeInsulationReductionService {
     return obj;
   }
 
-  getFormFromObj(obj: PipeInsulationReductionInput, isBaseline: boolean): FormGroup {
+  getFormFromObj(obj: PipeInsulationReductionInput, settings: Settings, isBaseline: boolean): FormGroup {
+    let maxPipeTemperature: number = 1700;
+    if (settings.unitsOfMeasure === 'Metric') {
+      maxPipeTemperature = this.convertUnitsService.roundVal(this.convertUnitsService.value(maxPipeTemperature).from('F').to('C') + 273.15, 0);
+    }
     let form: FormGroup = this.fb.group({
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       utilityType: [{ value: obj.utilityType, disabled: !isBaseline }],
@@ -59,7 +63,7 @@ export class PipeInsulationReductionService {
       pipeLength: [obj.pipeLength, [Validators.required, Validators.min(0)]],
       pipeDiameterSelection: [obj.pipeDiameterSelection],
       windVelocity: [obj.windVelocity, [Validators.required, Validators.min(0)]],
-      pipeTemperature: [obj.pipeTemperature, [Validators.required]],
+      pipeTemperature: [obj.pipeTemperature, [Validators.required, Validators.min(0), Validators.max(maxPipeTemperature)]],
       ambientTemperature: [obj.ambientTemperature, [Validators.required]],
       pipeBaseMaterialSelection: [obj.pipeBaseMaterialSelection],
       insulationMaterialSelection: [obj.insulationMaterialSelection],

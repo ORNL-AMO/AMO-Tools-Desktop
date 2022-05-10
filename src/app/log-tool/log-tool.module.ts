@@ -27,7 +27,7 @@ import { DayTypeTableComponent } from './day-type-analysis/day-type-table/day-ty
 import { DayTypeMenuComponent } from './day-type-analysis/day-type-menu/day-type-menu.component';
 import { DataTableComponent } from './system-setup/setup-data/data-table/data-table.component';
 import { FieldUnitsModalComponent } from './system-setup/clean-data/field-units-modal/field-units-modal.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 import { AnnotateGraphComponent } from './visualize/visualize-menu/annotate-graph/annotate-graph.component';
 import { GraphBasicsComponent } from './visualize/visualize-menu/graph-basics/graph-basics.component';
@@ -43,6 +43,7 @@ import { BinDataComponent } from './visualize/visualize-menu/bin-data/bin-data.c
 import { LogToolDbService } from './log-tool-db.service';
 import { SelectAssessmentModalComponent } from './day-type-analysis/day-type-menu/select-assessment-modal/select-assessment-modal.component';
 import { ExportModalComponent } from './export-modal/export-modal.component';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { ExportModalComponent } from './export-modal/export-modal.component';
     SelectedDataTableComponent,
     BinDataComponent,
     SelectAssessmentModalComponent,
-    ExportModalComponent
+    ExportModalComponent,
+    WelcomeScreenComponent
   ],
   imports: [
     CommonModule,

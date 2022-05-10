@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGasCompareService } from "../flue-gas-compare.service";
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
@@ -261,6 +261,15 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       return false;
     }
   }
+
+  compareVolumeO2InFlueGas() {
+    if (this.canCompare()) {
+      return this.flueGasCompareService.compareVolumeO2InFlueGas(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
   compareVolumeCombustionAirTemperature() {
     if (this.canCompare()) {
       return this.flueGasCompareService.compareVolumeCombustionAirTemperature(this.lossIndex);

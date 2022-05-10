@@ -1,0 +1,18 @@
+.group-label{
+    font-size: 15px;
+    text-transform: none;
+}
+
+.ca-system-profiles-graph-print {
+    width: 1000px !important;
+}
+
+
+@media print {
+    .print-container {
+        width: 1000px;
+    }
+    .print-avoid-break{
+        page-break-inside: avoid;
+    }
+}

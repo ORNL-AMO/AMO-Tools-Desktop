@@ -9,7 +9,7 @@ import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/op
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { AssessmentCo2SavingsModule } from '../../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { MixedCo2EmissionsModule } from '../../shared/mixed-co2-emissions/mixed-co2-emissions.module';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   imports: [

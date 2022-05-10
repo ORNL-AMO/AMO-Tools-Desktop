@@ -10,6 +10,11 @@ export class FanFieldDataService {
 
 
   getFormFromObj(obj: FieldData): FormGroup {
+    let userDefinedVelocityPressure: boolean = true;
+    if(obj.userDefinedVelocityPressure != undefined){
+      userDefinedVelocityPressure = obj.userDefinedVelocityPressure;
+    }
+
     let form: FormGroup = this.formBuilder.group({
       flowRate: [obj.flowRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       inletPressure: [obj.inletPressure, [Validators.required]],
@@ -20,7 +25,9 @@ export class FanFieldDataService {
       loadEstimatedMethod: [obj.loadEstimatedMethod, Validators.required],
       motorPower: [obj.motorPower, Validators.required],
       compressibilityFactor: [obj.compressibilityFactor, [Validators.required, Validators.min(0)]],
-      measuredVoltage: [obj.measuredVoltage, Validators.required]
+      measuredVoltage: [obj.measuredVoltage, Validators.required],
+      userDefinedCompressibilityFactor: [obj.userDefinedCompressibilityFactor],
+      userDefinedVelocityPressure: [userDefinedVelocityPressure]
     });
     for (let key in form.controls) {
       if (form.controls[key].value) {
@@ -41,7 +48,9 @@ export class FanFieldDataService {
       usingStaticPressure: form.controls.usingStaticPressure.value,
       motorPower: form.controls.motorPower.value,
       compressibilityFactor: form.controls.compressibilityFactor.value,
-      measuredVoltage: form.controls.measuredVoltage.value
+      measuredVoltage: form.controls.measuredVoltage.value,
+      userDefinedCompressibilityFactor: form.controls.userDefinedCompressibilityFactor.value,
+      userDefinedVelocityPressure: form.controls.userDefinedVelocityPressure.value
     };
     return newData;
   }

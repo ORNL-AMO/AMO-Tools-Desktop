@@ -39,6 +39,7 @@ export class MotorInventoryComponent implements OnInit {
   motorInventoryDataSub: Subscription;
   motorInventoryItem: InventoryItem;
   batchAnalysisSettingsSub: Subscription;
+  showWelcomeScreen: boolean = false;
   constructor(private motorInventoryService: MotorInventoryService, private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private inventoryDbService: InventoryDbService,
     private motorCatalogService: MotorCatalogService, private batchAnalysisService: BatchAnalysisService, private cd: ChangeDetectorRef) { }
@@ -72,6 +73,7 @@ export class MotorInventoryComponent implements OnInit {
       this.isModalOpen = val;
       this.cd.detectChanges();
     });
+    this.checkShowWelcomeScreen();
   }
 
   ngOnDestroy() {
@@ -135,5 +137,19 @@ export class MotorInventoryComponent implements OnInit {
     } else if (this.setupTab == 'motor-catalog') {
       this.motorInventoryService.setupTab.next('motor-properties');
     }
+  }
+
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disableMotorInventoryTutorial) {
+      this.showWelcomeScreen = true;
+      this.motorInventoryService.modalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disableMotorInventoryTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    this.showWelcomeScreen = false;
+    this.motorInventoryService.modalOpen.next(false);
   }
 }

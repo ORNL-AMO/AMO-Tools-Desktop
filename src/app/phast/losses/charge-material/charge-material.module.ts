@@ -7,7 +7,7 @@ import { GasChargeMaterialFormComponent } from './gas-charge-material-form/gas-c
 import { LiquidChargeMaterialFormComponent } from "./liquid-charge-material-form/liquid-charge-material-form.component";
 import { SolidChargeMaterialFormComponent } from "./solid-charge-material-form/solid-charge-material-form.component";
 
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 @NgModule({

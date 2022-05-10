@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../../../shared/models/assessment';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../../../shared/models/settings';
 import { SSMTOutput } from '../../../../../shared/models/steam/steam-outputs';
 import { SSMTInputs, SSMT } from '../../../../../shared/models/steam/ssmt';
@@ -24,6 +24,7 @@ export class SsmtSummaryCardComponent implements OnInit {
   maxCostSavings: number = 0;
   maxEnergySavings: number = 0;
   showReport: boolean = false;
+  totalBaselineCost: number = 0;
 
   @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
 
@@ -47,6 +48,7 @@ export class SsmtSummaryCardComponent implements OnInit {
 
   getBaselineData() {
     this.baselineData = this.getData(this.assessmentCpy.ssmt, true);
+    this.totalBaselineCost = (this.baselineData.outputData.operationsOutput.boilerFuelCost + this.baselineData.outputData.operationsOutput.makeupWaterCost);
   }
 
   getModificationData() {

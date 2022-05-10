@@ -1,7 +1,7 @@
 <form #formRef [formGroup]="form">
     <div *ngIf="inSetup" class="d-flex flex-column">
         <div class="header mr-2 ml-2">
-            <h3>Aerator Performance Data</h3>
+            <h3>Aeration Performance Data</h3>
         </div>
     </div>
 
@@ -64,7 +64,7 @@
         <!-- Aerator -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Aerator, 'invalid': form.controls.Aerator.invalid}">
-            <label for="{{'Aerator_'+idString}}">Aerator</label>
+            <label for="{{'Aerator_'+idString}}">Aerator/Blower</label>
             <select class="form-control" formControlName="Aerator" (change)="setDefaultSOTR()"
                 (focus)="focusField('aerator')">
                 <optgroup label="Diffused Air Systems">
@@ -87,7 +87,7 @@
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.SOTR, 'invalid': form.controls.SOTR.invalid}">
             <label for="{{'SOTR_'+idString}}">Standard O<sub>2</sub> Transfer Rate (SOTR)</label>
-            <div class="input-group">
+            <div class="input-group" [ngClass]="{'indicate-different-db': isSOTRDifferent()}">
                 <input type="number" name="SOTR" class="form-control number-input-field" id="{{'SOTR_'+idString}}"
                     (focus)="focusField('SOTR')" (input)="save()" formControlName="SOTR" [readonly]="!selected">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb
@@ -148,7 +148,7 @@
         <!-- OperatingTime -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.OperatingTime, 'invalid': form.controls.OperatingTime.invalid}">
-            <label for="{{'OperatingTime_'+idString}}">Aerator Operating Time
+            <label for="{{'OperatingTime_'+idString}}">{{aeratorBlowerLabel}} Operating Time
                 <a *ngIf="isModification" class="form-text small click-link" (click)="calculateOperatingTime()"
                     [ngClass]="{'disabled-link':!selected || disableOptimize}">Optimize Operating Time</a>
             </label>
@@ -177,7 +177,7 @@
         <!-- TypeAerators -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.TypeAerators, 'invalid': form.controls.TypeAerators.invalid}">
-            <label for="{{'TypeAerators_'+idString}}">Type of Aerator</label>
+            <label for="{{'TypeAerators_'+idString}}">Type of {{aeratorBlowerLabel}}</label>
             <select class="form-control" formControlName="TypeAerators" (change)="save()"
                 (focus)="focusField('TypeAerators')">
                 <option *ngFor="let aeratorType of aeratorTypes" [ngValue]="aeratorType.value">{{aeratorType.display}}
@@ -187,7 +187,7 @@
         <!-- Speed -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Speed,'error': aeratorPerformanceWarnings.Speed !== null, 'invalid': form.controls.Speed.invalid}">
-            <label for="{{'Speed_'+idString}}">Aerator Speed
+            <label for="{{'Speed_'+idString}}">{{aeratorBlowerLabel}} Speed
                 <a *ngIf="isModification" class="form-text small click-link" (click)="calculateSpeed()"
                     [ngClass]="{'disabled-link':!selected || disableOptimize}">Optimize Speed</a></label>
             <div class="input-group">

@@ -11,8 +11,6 @@ import { WasteWaterService } from '../waste-water.service';
 export class ExploreOpportunitiesComponent implements OnInit {
   @Input()
   containerHeight: number;
-  @Output('exploreOppsToast')
-  exploreOppsToast: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   modificationExists: boolean;
   selectedModificationIdSub: Subscription;
@@ -56,7 +54,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
         let title: string = 'Explore Opportunities';
         let body: string = 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.';
         this.openToast(title, body);
-        this.exploreOppsToast.emit(false);
       }else if(this.showToast){
         this.hideToast();
       }

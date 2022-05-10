@@ -8,7 +8,7 @@ import { NaturalGasReductionModule } from '../../calculator/utilities/natural-ga
 import { ElectricityReductionModule } from '../../calculator/utilities/electricity-reduction/electricity-reduction.module';
 import { WaterReductionModule } from '../../calculator/waste-water/water-reduction/water-reduction.module';
 import { LightingReplacementModule } from '../../calculator/lighting/lighting-replacement/lighting-replacement.module';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { OpportunitySheetHelpComponent } from './standalone-opportunity-sheet/opportunity-sheet-help/opportunity-sheet-help.component';
 import { OpportunitySheetResultsComponent } from './standalone-opportunity-sheet/opportunity-sheet-results/opportunity-sheet-results.component';

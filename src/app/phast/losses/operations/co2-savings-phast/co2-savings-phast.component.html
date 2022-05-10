@@ -7,6 +7,7 @@
         <label class="small" for="energySource">Energy Source</label>
         <div class="input-group">
           <select name="energySource" class="form-control" id="energySource" formControlName="energySource"
+          [ngClass]="{'indicate-different': co2SavingsDifferent.energySource}"
             (change)="setEnergySource()" [required]="true" (focus)="focusField('energySource')">
             <option *ngFor="let option of energySources" [ngValue]="option.energySource">{{option.energySource}}</option>
           </select>
@@ -17,6 +18,7 @@
         <label class="small" for="fuelType">Fuel Type</label>
         <div class="input-group">
           <select name="fuelType" class="form-control" id="fuelType" formControlName="fuelType" (change)="setFuel()"
+          [ngClass]="{'indicate-different': co2SavingsDifferent.fuelType}"
             [required]="true" (focus)="focusField('fuelType')">
             <option *ngFor="let option of fuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
           </select>
@@ -29,7 +31,9 @@
             Calculate Net CO<sub>2</sub> Emissions from Mixed Sources</a>
           </label>
           <div class="input-group">
-            <input class="form-control" name="totalFuelEmissionOutputRate" formControlName="totalFuelEmissionOutputRate" type="number"
+            <input class="form-control" name="totalFuelEmissionOutputRate" 
+            [ngClass]="{'indicate-different': co2SavingsDifferent.totalFuelEmissionOutputRate}"
+            formControlName="totalFuelEmissionOutputRate" type="number"
             (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
               CO<sub>2</sub>/MMBtu</span>
@@ -45,6 +49,7 @@
       </label>
       <div class="input-group">
         <input class="form-control" name="totalNaturalGasEmissionOutputRate"
+        [ngClass]="{'indicate-different': co2SavingsDifferent.totalNaturalGasEmissionOutputRate}"
           formControlName="totalNaturalGasEmissionOutputRate" type="number"
           (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
         <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
@@ -58,6 +63,7 @@
       <label class="small" for="coalFuelType">Coal Carbon Fuel Type</label>
       <div class="input-group">
           <select name="coalFuelType" class="form-control" id="coalFuelType" formControlName="coalFuelType"
+          [ngClass]="{'indicate-different': co2SavingsDifferent.coalFuelType}"
                (change)="setCoalFuel(true, true)" [required]="true" (focus)="focusField('fuelType')">
               <option *ngFor="let option of coalFuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
           </select>
@@ -68,6 +74,7 @@
       </label>
       <div class="input-group">
         <input class="form-control" name="totalCoalEmissionOutputRate"
+        [ngClass]="{'indicate-different': co2SavingsDifferent.totalCoalEmissionOutputRate}"
           formControlName="totalCoalEmissionOutputRate" type="number"
           (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
         <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
@@ -81,6 +88,7 @@
       <label class="small" for="eafOtherFuelSource">Other Fuel Energy Source</label>
       <div class="input-group">
         <select name="eafOtherFuelSource" class="form-control" id="eafOtherFuelSource" formControlName="eafOtherFuelSource"
+        [ngClass]="{'indicate-different': co2SavingsDifferent.eafOtherFuelSource}"
           (change)="setEAFFuelSource()" [required]="true" (focus)="focusField('energySource')">
           <option *ngFor="let option of eafOtherFuelSources" [ngValue]="option.energySource">{{option.energySource}}</option>
         </select>
@@ -91,6 +99,7 @@
       <label class="small" for="otherFuelType">Other Fuel Type</label>
       <div class="input-group">
           <select name="otherFuelType" class="form-control" id="otherFuelType" formControlName="otherFuelType"
+          [ngClass]="{'indicate-different': co2SavingsDifferent.otherFuelType}"
                (change)="setOtherFuel()" [required]="true" (focus)="focusField('fuelType')">
               <option *ngFor="let option of eafOtherFuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
           </select>
@@ -104,6 +113,7 @@
       </label>
       <div class="input-group">
         <input class="form-control" name="totalOtherEmissionOutputRate"
+        [ngClass]="{'indicate-different': co2SavingsDifferent.totalOtherEmissionOutputRate}"
           formControlName="totalOtherEmissionOutputRate" type="number"
           (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
         <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
@@ -154,6 +164,7 @@
         </label>
         <div class="input-group">
             <input name="totalEmissionOutputRate" type="number" class="form-control"
+            [ngClass]="{'indicate-different': co2SavingsDifferent.totalEmissionOutputRate}"
             formControlName="totalEmissionOutputRate" id="totalEmissionOutputRate" onfocus="this.select();"
             (input)="setUserEmissionsOutput()" (focus)="focusField('totalEmissionOutputRate')">
             <span class="input-group-addon units small">kg CO<sub>2</sub>/MWh

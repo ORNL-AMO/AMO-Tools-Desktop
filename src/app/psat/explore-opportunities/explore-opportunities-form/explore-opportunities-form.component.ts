@@ -6,7 +6,7 @@ import { FieldDataWarnings, PsatWarningService, MotorWarnings, OperationsWarning
 import { FieldDataService } from '../../field-data/field-data.service';
 import { PumpFluidService } from '../../pump-fluid/pump-fluid.service';
 import { MotorService } from '../../motor/motor.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PsatService } from '../../psat.service';
 import { PumpOperationsService } from '../../pump-operations/pump-operations.service';
 @Component({
