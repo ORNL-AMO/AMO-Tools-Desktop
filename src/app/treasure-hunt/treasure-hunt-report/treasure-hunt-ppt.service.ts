@@ -191,14 +191,41 @@ export class TreasureHuntPptService {
   }
 
   getOpportunitySlideText(opportunityData: OpportunitySheet): { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } {
+    let equipmentName: string = this.getEquipmentName(opportunityData.equipment);
     let slideText: pptxgen.TextProps[] = [
-      { text: "Process / Equipment: " + opportunityData.equipment, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
+      { text: "Process / Equipment: " + equipmentName, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
       { text: "Team: " + opportunityData.owner, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
       { text: "Owner/Lead: " + opportunityData.businessUnits, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
       { text: "Description: " + opportunityData.description, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
     ];
     let slideTextProps = this.getOppSlideProperties();
     return { text: slideText, options: slideTextProps };
+  }
+
+  getEquipmentName(oppEquipment: string): string {
+    let equipmentName: string = " ";
+    if (oppEquipment == 'motor') {
+      equipmentName = 'Motor';
+    } else if (oppEquipment == 'pump') {
+      equipmentName = 'Pump';
+    } else if (oppEquipment == 'fan') {
+      equipmentName = 'Fan';
+    } else if (oppEquipment == 'compressedAir') {
+      equipmentName = 'Compressed Air';
+    } else if (oppEquipment == 'lights') {
+      equipmentName = 'Lights';
+    } else if (oppEquipment == 'processHeating') {
+      equipmentName = 'Process Heating';
+    } else if (oppEquipment == 'processCooling') {
+      equipmentName = 'Process Cooling';
+    } else if (oppEquipment == 'steam') {
+      equipmentName = 'Steam';
+    } else if (oppEquipment == 'other') {
+      equipmentName = 'Other';
+    } else if (oppEquipment == 'hvac') {
+      equipmentName = 'HVAC System';
+    }
+    return equipmentName;
   }
 
   getOppSlideProperties(): pptxgen.TextPropsOptions {
