@@ -234,7 +234,7 @@
                 </td>
             </tr>
         </tbody>
-        <!-- <tbody>
+        <tbody>
             <tr class="compressor-name-row">
                 <td class="bold" colspan="100">Totals</td>
             </tr>
@@ -242,7 +242,7 @@
                 <td class="pl-2">
                     Auxiliary Power, kW
                 </td>
-                <td *ngFor="let total of totals;">
+                <td *ngFor="let total of totalsForPrint[index];">
                     {{total.auxiliaryPower | number:'1.0-2'}}
                 </td>
             </tr>
@@ -250,7 +250,7 @@
                 <td class="pl-2">
                     Compressor Power, kW
                 </td>
-                <td *ngFor="let total of totals;">
+                <td *ngFor="let total of totalsForPrint[index];">
                     {{total.power | number:'1.0-2'}}
                 </td>
             </tr>
@@ -258,7 +258,7 @@
                 <td class="pl-2">
                     Total Power, kW
                 </td>
-                <td *ngFor="let total of totals;">
+                <td *ngFor="let total of totalsForPrint[index];">
                     {{total.totalPower | number:'1.0-2'}}
                 </td>
             </tr>
@@ -268,7 +268,7 @@
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </td>
-                <td *ngFor="let total of totals;">
+                <td *ngFor="let total of totalsForPrint[index];">
                     {{total.airflow | number:'1.0-2'}}
                 </td>
             </tr>
@@ -276,7 +276,7 @@
                 <td class="pl-2">
                     % Capacity
                 </td>
-                <td *ngFor="let total of totals;">
+                <td *ngFor="let total of totalsForPrint[index];">
                     {{total.percentCapacity | number:'1.0-2'}}
                 </td>
             </tr>
@@ -284,10 +284,10 @@
                 <td class="pl-2">
                     % Power
                 </td>
-                <td *ngFor="let total of totals;">
+                <td *ngFor="let total of totalsForPrint[index];">
                     {{total.percentPower | number:'1.0-2'}}
                 </td>
             </tr>
-        </tbody> -->
+        </tbody>
     </table>
 </div>

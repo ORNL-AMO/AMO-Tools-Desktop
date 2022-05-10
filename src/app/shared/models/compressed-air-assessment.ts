@@ -289,3 +289,9 @@ export interface CompressorSummary {
     ratedSpecificPower: number,
     ratedIsentropicEfficiency: number
 }
+
+export interface ProfilesForPrint {
+    dayType: CompressedAirDayType,
+    profileSummary: Array<ProfileSummary>,
+    totalsForPrint: Array<Array<ProfileSummaryTotal>>;
+}
