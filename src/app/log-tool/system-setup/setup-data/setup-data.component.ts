@@ -9,6 +9,7 @@ import { IndividualDataFromCsv, LogToolDbData } from '../../log-tool-models';
 import { LogToolDbService } from '../../log-tool-db.service';
 import { Subscription } from 'rxjs';
 import * as XLSX from 'xlsx';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-setup-data',
@@ -33,6 +34,7 @@ export class SetupDataComponent implements OnInit {
   selectedSheet: string;
   workBook: XLSX.WorkBook;
   importJsonData: LogToolDbData;
+  canUseExampleData: boolean = true;
   headerRowOptions: Array<{ value: number, display: number }> = [
     { value: 0, display: 1 },
     { value: 1, display: 2 },
@@ -48,7 +50,7 @@ export class SetupDataComponent implements OnInit {
   ];
   itemIndexes: Array<number> = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   selectedHeaderRow: string = "0";
-  constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private cd: ChangeDetectorRef,
+  constructor(private csvToJsonService: CsvToJsonService, private router: Router, private logToolService: LogToolService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
     private logToolDataService: LogToolDataService, private logToolDbService: LogToolDbService) { }
 
@@ -57,8 +59,11 @@ export class SetupDataComponent implements OnInit {
     if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
       this.dataExists = true;
     }
+    if (this.individualDataFromCsv.length !== 0 && this.logToolService.dataSubmitted) {
+      this.canUseExampleData = false;
+    }
     this.previousDataAvailableSub = this.logToolDbService.previousDataAvailable.subscribe(val => {
-    if (this.dataExists == false && this.logToolService.dataSubmitted.getValue() == false) {
+      if (this.dataExists == false && this.logToolService.dataSubmitted.getValue()) {
         this.previousDataAvailable = val;
       }
       });
@@ -159,6 +164,7 @@ export class SetupDataComponent implements OnInit {
   parseImportData() {
     this.importingData = true;
     this.previewDataFromCsv = undefined;
+    this.canUseExampleData = false;
     this.cd.detectChanges();
     setTimeout(() => {
       this.importDataFromCsv = this.csvToJsonService.parseCsvWithHeaders(this.importData, Number(this.selectedHeaderRow));
@@ -173,6 +179,17 @@ export class SetupDataComponent implements OnInit {
     }, 100);
   }
 
+  async useExampleData() {
+    this.importDataFromCsv = await this.csvToJsonService.parseExampleCSV();
+    this.logToolService.addCsvData(this.importDataFromCsv, 'Example Data');
+    this.dataExists = true;
+    this.importingData = true;
+    this.importSuccesful = true;
+    this.canUseExampleData = false;
+    this.logToolService.dataSubmitted.next(true);
+    this.router.navigateByUrl('/log-tool/system-setup/clean-data');
+  }
+
   resetData() {
     this.dayTypeAnalysisService.resetData();
     this.visualizeService.resetData();
@@ -181,6 +198,7 @@ export class SetupDataComponent implements OnInit {
     this.logToolDataService.resetData();
     this.dataExists = false;
     this.importSuccesful = false;
+    this.canUseExampleData = true;
     this.logToolDbService.saveData()
     this.cd.detectChanges();
   }
