@@ -8,6 +8,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { FanPsychrometricService } from '../fan-psychrometric.service';
 import { Subscription } from 'rxjs';
 import { BaseGasDensity, PsychrometricResults } from '../../../../shared/models/fans';
+import { GasDensityFormService } from '../../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 
 @Component({
   selector: 'app-fan-psychrometric-chart',
@@ -30,7 +31,7 @@ export class FanPsychrometricChartComponent implements OnInit {
   psychrometricResults: PsychrometricResults;
   calculatedBaseGasDensitySubscription: Subscription;
   inputData: BaseGasDensity;
-  formValid: boolean;
+  // formValid: boolean;
   expanded: boolean = false;
   hoverBtnExpand: boolean;
   displayExpandTooltip: boolean;
@@ -42,7 +43,8 @@ export class FanPsychrometricChartComponent implements OnInit {
   useImperialUnits: boolean = true;
   lineCreationData: LineCreationData = ImperialLineData;
 
-  constructor(private plotlyService: PlotlyService, private psychrometricService: FanPsychrometricService, private convertUnitsService: ConvertUnitsService) {}
+  constructor(private plotlyService: PlotlyService, private psychrometricService: FanPsychrometricService, private convertUnitsService: ConvertUnitsService,
+    private gasDensityFormService: GasDensityFormService) {}
 
   ngOnInit() {
     this.triggerInitialResize();
@@ -54,15 +56,17 @@ export class FanPsychrometricChartComponent implements OnInit {
     });
   }
 
-  ngAfterViewInit() {
-    this.initRenderChart();
-  }
 
+  ngOnDestroy() {
+    this.calculatedBaseGasDensitySubscription.unsubscribe();
+  }
+  
+  
   initRenderChart() {
     // Set base chart object
     this.chart = this.getEmptyChart();
-    this.formValid = this.psychrometricService.formValid.getValue();
-    if (this.formValid) {
+    let form: FormGroup = this.gasDensityFormService.getGasDensityFormFromObj(this.inputData, this.settings);
+    if (form.valid) {
       let blueTraces: Array<TraceData> = this.addBlueTraces();
       this.addRedTraces();
       this.addTopAxisTrace(blueTraces[blueTraces.length - 1]);
@@ -72,7 +76,7 @@ export class FanPsychrometricChartComponent implements OnInit {
           this.addUserPoint(blueTraces[blueTraces.length - 1]);
       }
     }
-
+    
     // pass chart data to plotly for rendering at div
     if (this.expanded && this.expandedChartDiv) {
       this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.chart.data, this.chart.layout, this.chart.config)
@@ -605,9 +609,7 @@ export class FanPsychrometricChartComponent implements OnInit {
     }
   }
 
-  ngOnDestroy() {
-    this.calculatedBaseGasDensitySubscription.unsubscribe();
-  }
+
 }
 
 

@@ -21,7 +21,7 @@ export class FanPsychrometricFormComponent implements OnInit {
     { display: 'Wet Bulb Temperature', value: 'wetBulb' },
     { display: 'Dew Point', value: 'dewPoint' },
   ];
-  
+
   userDefinedBarometricPressure: boolean = true;
   gasDensityForm: FormGroup;
 
@@ -55,7 +55,7 @@ export class FanPsychrometricFormComponent implements OnInit {
 
   showHideInputField() {
     this.userDefinedBarometricPressure = !this.userDefinedBarometricPressure;
-    if(this.userDefinedBarometricPressure) {
+    if (this.userDefinedBarometricPressure) {
       this.save();
     }
   }
@@ -71,16 +71,7 @@ export class FanPsychrometricFormComponent implements OnInit {
       });
     }
     let currentData = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
-    this.isFormValid(this.gasDensityForm);
     this.fanPsychrometricService.baseGasDensityData.next(currentData);
-  }
-
-  isFormValid(form) {
-    if (form.valid) {
-      this.fanPsychrometricService.formValid.next(true);
-    } else {
-      this.fanPsychrometricService.formValid.next(false);
-    }
   }
 
   calculateBarometricPressure() {
@@ -102,7 +93,7 @@ export class FanPsychrometricFormComponent implements OnInit {
     this.gasDensityForm = this.gasDensityFormService.setValidators(this.gasDensityForm, this.settings);
     this.save();
   }
-  
+
   getDisplayUnit(unit: any) {
     if (unit) {
       let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
