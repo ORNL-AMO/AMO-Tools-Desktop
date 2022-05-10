@@ -54,12 +54,13 @@ export class FanPsychrometricChartComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    this.initRenderChart();
+  }
+
   initRenderChart() {
     // Set base chart object
     this.chart = this.getEmptyChart();
-
-    // Chart trace/coordinates
-    //gas density form is always undefined need to fetch form form service maybe?
     this.formValid = this.psychrometricService.formValid.getValue();
     if (this.formValid) {
       let blueTraces: Array<TraceData> = this.addBlueTraces();
@@ -97,7 +98,6 @@ export class FanPsychrometricChartComponent implements OnInit {
     let blueTraces: Array<TraceData> = [];
     // Calculated humidity ratio will be Y values
     let humidityRatios: Array<number>;
-    //for making new line to intersect at point use result form results table instead of array
     relativeHumidities.forEach(relativeHumidity => {
       let trace = this.getEmptyTrace('Relative Humidity', 'black');
       trace.x = xCoordinates;
@@ -255,7 +255,6 @@ export class FanPsychrometricChartComponent implements OnInit {
     let trace = this.getEmptyTrace('Wet Bulb', 'red');
     trace.x = traceX;
     trace.y = traceY;
-    console.log('user red', trace);
     this.chart.data.push(trace);
     let xRange: number[] = topAxisBlueTrace.x.map(x => Number(x));
     let yRange: number[] = topAxisBlueTrace.y.map(y => Number(y));
@@ -290,13 +289,10 @@ export class FanPsychrometricChartComponent implements OnInit {
   }
 
   addUserPoint(blueTraces) {
-
-    // This will get the y (humidity ratio)  for user point
-
-    let trace = this.getEmptyPointTrace('user point', 'black');
+    let trace = this.getEmptyPointTrace('', 'black');
     let dryBulbTemperature = this.inputData.dryBulbTemp;
     trace.x.push(dryBulbTemperature);
-    trace.y.push(this.psychrometricResults.humidityRatio); //returning undefined, does return valid value when you generate example though
+    trace.y.push(this.psychrometricResults.humidityRatio);
     this.chart.data.push(trace);
 
     this.addUserBlueTrace();
@@ -304,7 +300,6 @@ export class FanPsychrometricChartComponent implements OnInit {
   }
 
   addVerticalGridLines(blueTraces) {
-    let trace = this.getEmptyTrace('', 'black');
     let blackTraces: Array<TraceData> = [];
     let xCoordinates: Array<number> = [];
     let wetBulbTemps: Array<number> = [];
@@ -319,7 +314,7 @@ export class FanPsychrometricChartComponent implements OnInit {
     }
 
       for (let index = 0; index < wetBulbTemps.length; index++) {
-          let newTrace = this.getEmptyTrace('Trace', 'black');
+          let newTrace = this.getEmptyTrace('', 'black');
           let xValues: Array<number> = [];
           let yValues: Array<number> = [];
 
@@ -420,8 +415,6 @@ export class FanPsychrometricChartComponent implements OnInit {
         font: {
           size: 12,
         },
-        // x: 0,
-        // y: -.25
       },
       hovermode: 'false',
       xaxis: {
@@ -453,7 +446,6 @@ export class FanPsychrometricChartComponent implements OnInit {
         r: 75
       },
       // TODO need to better represent what these annotations coords are
-      // TODO temp label should change with units
       annotations: [{
         x: xticks[12],
         y: yticks[12],
