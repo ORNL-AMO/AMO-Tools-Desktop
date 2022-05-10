@@ -65,14 +65,12 @@ export class FanPsychrometricChartComponent implements OnInit {
     if (this.formValid) {
       let blueTraces: Array<TraceData> = this.addBlueTraces();
       let redTraces: Array<TraceData> = this.addRedTraces();
-
-      // this.drawVerticalGridLines(blueTraces[5]);
+      this.addTopAxisTrace(blueTraces[5]);
+      this.addVerticalGridLines(blueTraces[5]);
 
       if (this.inputData.dryBulbTemp && this.psychrometricResults && this.psychrometricResults.humidityRatio !== undefined) {
-          this.addUserPoint();
+          this.addUserPoint(blueTraces[5]);
       }
-      this.addTopAxisTrace(blueTraces);
-      this.newVerticalLines(blueTraces[5]);
     }
 
 
@@ -234,13 +232,14 @@ export class FanPsychrometricChartComponent implements OnInit {
     return redTraces;
   }
 
-  addUserRedTrace(): Array<TraceData> {
+  addUserRedTrace(blueTraces): Array<TraceData> {
     // List 1: Wet Bulb = sequence(35 , 130, by 5) (may want to change to by 10 if too crowded)
     let wetBulbTemps: Array<number> = [];
     for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
       wetBulbTemps.push(i);
     }
-    
+    let dryBulbTemps: Array<number> = blueTraces.x;
+    let yCoordinates: Array<number> = blueTraces.y;
     let redTraces: Array<TraceData> = [];
     // Calculated humidity ratio will be Y values
     let humidityRatios: Array<number> = [];
@@ -269,7 +268,7 @@ export class FanPsychrometricChartComponent implements OnInit {
           humidityRatios.push(results.humidityRatio);
         }
       });
-      
+
       // Filter out invalid
       humidityRatios = humidityRatios.filter((ratio: number, index: number) => {
         if (ratio < 0) {
@@ -287,33 +286,34 @@ export class FanPsychrometricChartComponent implements OnInit {
       redTraces.push(trace);
     });
     redTraces.forEach(trace => this.chart.data.push(trace));
-    // console.log('redtraces', redTraces);
-    this.chart.layout = this.getLayout(xCoordinates, humidityRatios);
+    this.chart.layout = this.getLayout(dryBulbTemps, yCoordinates);
     return redTraces;
   }
 
-  addTopAxisTrace(blueTraces: Array<TraceData>) {
-    // We need a trace or text/labels for this psuedo axis
-    // Should be able to index into blue lines array, copy the last trace, modify styling and add markers (see 'text' and 'customdata' property and usage)  and add to chart
+  addTopAxisTrace(blueTraces) {
+    let xCoordinates: Array<number> = [];
+    let yCoordinates: Array<number> = [];
+    for (let index = 1; index < blueTraces.x.length; index+=2) {
+      xCoordinates.push(blueTraces.x[index]);
+    }
 
-    //below variables will eventually be used for annotation coordinates
-    // let xCoordinates = blueTraces[5].x;
-    // let yCoordinates = blueTraces[5].y;
+    for (let index = 1; index < blueTraces.y.length; index+=2) {
+      yCoordinates.push(blueTraces.y[index]);
+    }
 
     let trace = {
-      //current x and y coordinates are hard-coded based on the top blue trace. will eventually use the values from the blueTraces parameter being passed in
-      x: [40, 50, 60, 70, 80, 90, 100, 110, 120, 130],
-      y: [0.005195123704269834, 0.007631013371269642, 0.011042711334813505, 0.01576586057214435, 0.02224224917938616, 0.031058314712040406,  0.04300391773481307, 0.05916577350446308, 0.08108245084506918, 0.11101404514918507],
+      x: xCoordinates,
+      y: yCoordinates,
       mode: 'text',
       text: ['40', '50', '60', '70', '80', '90', '100', '110', '120', '130'],
       textposition: 'top',
       type: 'scatter',
-      showlegend: false
+      showlegend: false,
     }
     this.chart.data.push(trace);
   }
 
-  addUserPoint() {
+  addUserPoint(blueTraces) {
 
     // This will get the y (humidity ratio)  for user point
 
@@ -324,10 +324,10 @@ export class FanPsychrometricChartComponent implements OnInit {
     this.chart.data.push(trace);
 
     this.addUserBlueTrace();
-    this.addUserRedTrace();
+    this.addUserRedTrace(blueTraces);
   }
 
-  newVerticalLines(blueTraces) {
+  addVerticalGridLines(blueTraces) {
     let trace = this.getEmptyTrace('', 'black');
     let blackTraces: Array<TraceData> = [];
     let xCoordinates: Array<number> = [];
@@ -341,9 +341,9 @@ export class FanPsychrometricChartComponent implements OnInit {
     for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
       xCoordinates.push(i);
     }
-      let newTrace = this.getEmptyTrace('Trace', 'black');
-      // wetBulbTemps.forEach((index) => {
-        for (let index = 0; index < wetBulbTemps.length; index++) {
+
+      for (let index = 0; index < wetBulbTemps.length; index++) {
+          let newTrace = this.getEmptyTrace('Trace', 'black');
           let xValues: Array<number> = [];
           let yValues: Array<number> = [];
 
@@ -356,10 +356,10 @@ export class FanPsychrometricChartComponent implements OnInit {
   
           blackTraces.push(newTrace);
         }
-      // })
       
     blackTraces.forEach(trace => this.chart.data.push(trace));
-    // this.chart.layout = this.getLayout(xCoordinates, humidityRatios)
+    humidityRatios = blueTraces.y;
+    this.chart.layout = this.getLayout(xCoordinates, humidityRatios);
   }
 
   setChartUnits() {
@@ -423,7 +423,7 @@ export class FanPsychrometricChartComponent implements OnInit {
   }
 
   getLayout(xticks: Array<number>, yticks: Array<number>) {
-    let xTicks = [40, 50, 60, 70, 80, 90, 100, 110, 120, 130];
+    let xTicksVal = [40, 50, 60, 70, 80, 90, 100, 110, 120, 130];
     return  {
       legend: {
         orientation: 'h',
@@ -443,11 +443,7 @@ export class FanPsychrometricChartComponent implements OnInit {
         showticksuffix: 'all',
         tickangle: 0,
         tickmode: 'array',
-        tickvals: xTicks
-        // Change hoverFormat.. wrong or deprecated
-        // hoverformat: '%{x}%',
-        // range: [35, 130],
-        // tickvals: xticks,
+        tickvals: xTicksVal
       },
       yaxis: {
         autorange: true,
@@ -471,13 +467,15 @@ export class FanPsychrometricChartComponent implements OnInit {
         r: 75
       },
       annotations: [{
-        x: 85,
-        y: .05,
+        x: xticks[9],
+        y: yticks[9],
         xref: 'x',
         yref: 'y',
         text: 'Wet Bulb Temperature (F)',
         showarrow: false,
-        textangle: -35
+        textangle: -35,
+        height: 45,
+        yshift: 55
       }
       ]
     }
