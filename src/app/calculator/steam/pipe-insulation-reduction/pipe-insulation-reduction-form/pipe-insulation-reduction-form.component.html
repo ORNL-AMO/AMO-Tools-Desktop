@@ -139,6 +139,8 @@
                 <span *ngIf="form.controls.pipeTemperature.errors.required">Value required.</span>
                 <span *ngIf="form.controls.pipeTemperature.errors.min">Value can't be less than
                     {{form.controls.pipeTemperature.errors.min.min}}.</span>
+                <span *ngIf="form.controls.pipeTemperature.errors.max">Value can't be greater than
+                    {{form.controls.pipeTemperature.errors.max.max}}.</span>
             </span>
         </div>
 

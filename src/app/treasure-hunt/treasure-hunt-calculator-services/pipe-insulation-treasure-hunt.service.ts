@@ -51,7 +51,7 @@ export class PipeInsulationTreasureHuntService {
 
     if (pipeInsulationReduction.baseline.utilityType == 0) {
       treasureHuntOpportunityResults.utilityType = 'Natural Gas';
-    } else if (pipeInsulationReduction.modification.utilityType == 1) {
+    } else if (pipeInsulationReduction.baseline.utilityType == 1) {
       treasureHuntOpportunityResults.utilityType = 'Other Fuel';
     }
 
