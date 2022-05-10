@@ -102,7 +102,7 @@ export class FanPsychrometricChartComponent implements OnInit {
     let humidityRatios: Array<number>;
     //for making new line to intersect at point use result form results table instead of array
     relativeHumidities.forEach(relativeHumidity => {
-      let trace = this.getEmptyTrace('Relative Humidity', 'blue');
+      let trace = this.getEmptyTrace('Relative Humidity', 'black');
       trace.x = xCoordinates;
       humidityRatios = []; 
       xCoordinates.forEach(x => {
@@ -120,7 +120,6 @@ export class FanPsychrometricChartComponent implements OnInit {
 
         }
       });
-      // trace.hovertemplate = `Relative Humidity ${trace.y}%`;
       trace.y = humidityRatios;
       this.chart.data.push(trace);
 
@@ -143,9 +142,7 @@ export class FanPsychrometricChartComponent implements OnInit {
     }
 
     let blueTraces: Array<TraceData> = [];
-    // Calculated humidity ratio will be Y values
-    // let humidityRatios: Array<number>;
-    //for making new line to intersect at point use result form results table instead of array
+
     relativeHumidities.forEach(relativeHumidity => {
 
       let trace = this.getEmptyTrace('Relative Humidity', 'blue');
@@ -163,13 +160,11 @@ export class FanPsychrometricChartComponent implements OnInit {
           humidityRatios.push(results.humidityRatio);
         }
       });
-      // trace.hovertemplate = `Relative Humidity ${trace.y}%`;
       trace.y = humidityRatios;
       this.chart.data.push(trace);
 
       blueTraces.push(trace);
     });
-    // console.log('blueTraces', blueTraces);
     return blueTraces;
   
 }
@@ -193,8 +188,7 @@ export class FanPsychrometricChartComponent implements OnInit {
           xCoordinates.push(i);
         }
       }
-      let trace = this.getEmptyTrace('Wet Bulb', 'red');
-      //use wet bulb result from results table when creating intersecting line at point/plot instead of the array
+      let trace = this.getEmptyTrace('Wet Bulb', 'darkgrey');
       humidityRatios = [];
       let invalidIndicies: Array<number> = [];
       xCoordinates.forEach(x => {
@@ -220,14 +214,12 @@ export class FanPsychrometricChartComponent implements OnInit {
       });
       xCoordinates = xCoordinates.filter((x: number, index: number) => !invalidIndicies.includes(index));
       
-      // trace.hovertemplate = `Wet Bulb ${trace.y} ${this.temperatureUnits}`;
       trace.x = xCoordinates;
       trace.y = humidityRatios;
       
       redTraces.push(trace);
     });
     redTraces.forEach(trace => this.chart.data.push(trace));
-    // console.log('redtraces', redTraces);
     this.chart.layout = this.getLayout(xCoordinates, humidityRatios);
     return redTraces;
   }
@@ -293,6 +285,10 @@ export class FanPsychrometricChartComponent implements OnInit {
   addTopAxisTrace(blueTraces) {
     let xCoordinates: Array<number> = [];
     let yCoordinates: Array<number> = [];
+    let xAxisText = ['40', '50', '60', '70', '80', '90', '100', '110', '120', '130'];
+    if (!this.useImperialUnits) {
+       xAxisText = ['6', '12', '18', '24', '30', '36', '42', '48', '54', '60']
+    }
     for (let index = 1; index < blueTraces.x.length; index+=2) {
       xCoordinates.push(blueTraces.x[index]);
     }
@@ -305,7 +301,7 @@ export class FanPsychrometricChartComponent implements OnInit {
       x: xCoordinates,
       y: yCoordinates,
       mode: 'text',
-      text: ['40', '50', '60', '70', '80', '90', '100', '110', '120', '130'],
+      text: xAxisText,
       textposition: 'top',
       type: 'scatter',
       showlegend: false,
@@ -365,6 +361,7 @@ export class FanPsychrometricChartComponent implements OnInit {
   setChartUnits() {
     if (this.settings.fanTemperatureMeasurement === 'C' || this.settings.fanTemperatureMeasurement === 'K') {
       this.lineCreationData = MetricLineData;
+      this.useImperialUnits = false;
         // If Kelvin (K)- just use the metric graph (C), if Rankine (R), just use the imperial graph (F)
     // check fanTemperatureMeasurement and set this.temperatureUnits to the string (or the UNICODE) that should display 
 
@@ -423,7 +420,20 @@ export class FanPsychrometricChartComponent implements OnInit {
   }
 
   getLayout(xticks: Array<number>, yticks: Array<number>) {
+    let xUnits = '&#8457;';
+    let yUnits = '(lb<sub>v</sub>/lb<sub>a</sub>)';
+    let topAxisText: string = `Wet Bulb Temperature ${xUnits}`;
+    let xAxisText: string = `Dry Bulb Temperature ${xUnits}`;
+    let yAxisText: string = `Humidity Ratio ${yUnits}`;
     let xTicksVal = [40, 50, 60, 70, 80, 90, 100, 110, 120, 130];
+    if (!this.useImperialUnits) {
+      xUnits = '&#8451;';
+      yUnits = '(kg<sub>v</sub>/kg<sub>a</sub>)';
+      topAxisText = `Wet Bulb Temperature ${xUnits}`;
+      xAxisText = `Dry Bulb Temperature ${xUnits}`;
+      yAxisText = `Humidity Ratio ${yUnits}`;
+      xTicksVal = [6, 12, 18, 24, 30, 36, 42, 48, 54, 60];
+    }
     return  {
       legend: {
         orientation: 'h',
@@ -438,7 +448,7 @@ export class FanPsychrometricChartComponent implements OnInit {
         autorange: true,
         showgrid: false,
         title: {
-          text:"Dry Bulb Temperature (F)"
+          text: xAxisText
         },
         showticksuffix: 'all',
         tickangle: 0,
@@ -447,16 +457,12 @@ export class FanPsychrometricChartComponent implements OnInit {
       },
       yaxis: {
         autorange: true,
-        // type: 'linear',
         showgrid: false,
         side: 'right',
         title: {
-          text: "Humidity Ratio(Lbv/Lba)"
+          text: yAxisText
         },
-        // range: [0, .1],
         autotick: true,
-        // tickmode: 'array',
-        // tickvals: yticks,
         rangemode: 'tozero',
         showticksuffix: 'all'
       },
@@ -467,15 +473,19 @@ export class FanPsychrometricChartComponent implements OnInit {
         r: 75
       },
       annotations: [{
-        x: xticks[9],
-        y: yticks[9],
+        x: xticks[12],
+        y: yticks[12],
         xref: 'x',
         yref: 'y',
-        text: 'Wet Bulb Temperature (F)',
+        text: topAxisText,
+        font: {
+          size: 12
+        },
         showarrow: false,
         textangle: -35,
         height: 45,
-        yshift: 55
+        xshift: -40,
+        yshift: 40
       }
       ]
     }
@@ -485,7 +495,6 @@ export class FanPsychrometricChartComponent implements OnInit {
     return {
       name: 'Psychrometric Chart',
       data: [],
-      // Empty layout or set it to the default
       layout: {
         hovermode: 'false',
         xaxis: {
