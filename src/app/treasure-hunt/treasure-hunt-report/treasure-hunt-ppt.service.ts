@@ -191,8 +191,9 @@ export class TreasureHuntPptService {
   }
 
   getOpportunitySlideText(opportunityData: OpportunitySheet): { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } {
+    let equipmentName: string = this.getEquipmentName(opportunityData.equipment);
     let slideText: pptxgen.TextProps[] = [
-      { text: "Process / Equipment: " + this.getEquipmentName(opportunityData.equipment), options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
+      { text: "Process / Equipment: " + equipmentName, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
       { text: "Team: " + opportunityData.owner, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
       { text: "Owner/Lead: " + opportunityData.businessUnits, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
       { text: "Description: " + opportunityData.description, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
@@ -200,38 +201,29 @@ export class TreasureHuntPptService {
     let slideTextProps = this.getOppSlideProperties();
     return { text: slideText, options: slideTextProps };
   }
-  
-  getEquipmentName(oppEquipment: string): string{
-    let equipmentName: string;
-    if (oppEquipment = 'motor'){      
+
+  getEquipmentName(oppEquipment: string): string {
+    let equipmentName: string = " ";
+    if (oppEquipment == 'motor') {
       equipmentName = 'Motor';
-    }
-    if (oppEquipment = 'pump'){      
+    } else if (oppEquipment == 'pump') {
       equipmentName = 'Pump';
-    }
-    if (oppEquipment = 'fan'){      
+    } else if (oppEquipment == 'fan') {
       equipmentName = 'Fan';
-    }
-    if (oppEquipment = 'compressedAir'){      
+    } else if (oppEquipment == 'compressedAir') {
       equipmentName = 'Compressed Air';
-    }
-    if (oppEquipment = 'lights'){      
+    } else if (oppEquipment == 'lights') {
       equipmentName = 'Lights';
-    }
-    if (oppEquipment = 'processHeating'){      
+    } else if (oppEquipment == 'processHeating') {
       equipmentName = 'Process Heating';
-    }
-    if (oppEquipment = 'processCooling'){      
+    } else if (oppEquipment == 'processCooling') {
       equipmentName = 'Process Cooling';
-    }
-    if (oppEquipment = 'steam'){      
-      equipmentName= 'Steam';
-    }
-    if (oppEquipment = 'other'){      
-      equipmentName= 'Other';
-    }
-    if (oppEquipment = 'hvac'){      
-      equipmentName= 'HVAC System';
+    } else if (oppEquipment == 'steam') {
+      equipmentName = 'Steam';
+    } else if (oppEquipment == 'other') {
+      equipmentName = 'Other';
+    } else if (oppEquipment == 'hvac') {
+      equipmentName = 'HVAC System';
     }
     return equipmentName;
   }
