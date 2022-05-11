@@ -9,7 +9,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 import { FanPsychrometricComponent } from './fan-psychrometric.component';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { FanPsychrometricResultsComponent } from './fan-psychrometric-results/fan-psychrometric-results.component';
-
+import { FanPsychrometricChartComponent } from './fan-psychrometric-chart/fan-psychrometric-chart.component';
+import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 
 
 @NgModule({
@@ -18,12 +19,14 @@ import { FanPsychrometricResultsComponent } from './fan-psychrometric-results/fa
     FanPsychrometricHelpComponent, 
     FanPsychrometricTableComponent,
     FanPsychrometricComponent,
-    FanPsychrometricResultsComponent
+    FanPsychrometricResultsComponent,
+    FanPsychrometricChartComponent,
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     ExportableResultsTableModule,
+    SimpleTooltipModule,
     SharedPipesModule
   ],
   providers: [

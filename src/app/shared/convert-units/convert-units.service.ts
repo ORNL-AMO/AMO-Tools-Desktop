@@ -502,6 +502,14 @@ export class ConvertUnitsService {
     return value / conversionHelper;
   }
 
+  convertArray(oldArray: Array<number>, from: string, to: string): Array<number> {
+    let convertedArray = new Array<number>();
+    for (let i = 0; i < oldArray.length; i++) {
+      convertedArray.push(this.convertValue(oldArray[i], from, to));
+    }
+    return convertedArray;
+  }
+
   convertInvertedEnergy(outputRate: number, oldUnit: string, newUnit: string) {  
     // For fuel emissions factor and other mass/energy
     let conversionHelper: number = this.value(1).from(oldUnit).to(newUnit);
@@ -523,5 +531,12 @@ export class ConvertUnitsService {
     //imperial: $/SCF, metric: $/m2
     newSettings.compressedAirCost = this.convertDollarsPerFt3AndM3(newSettings.compressedAirCost, oldSettings, newSettings);
     return newSettings;
+  }
+
+  convertTemperatures(XYValues: Array<number>, settings: Settings) {
+    if (settings.fanTemperatureMeasurement === 'C' || settings.fanTemperatureMeasurement === 'K') {
+      XYValues = this.convertArray(XYValues, 'F', 'C');
+    }
+    return XYValues;
   }
 }
