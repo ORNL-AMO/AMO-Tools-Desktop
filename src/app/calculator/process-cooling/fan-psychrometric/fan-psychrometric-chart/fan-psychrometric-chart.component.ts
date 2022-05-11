@@ -312,7 +312,6 @@ export class FanPsychrometricChartComponent implements OnInit {
             
           newTrace.x = xValues;
           newTrace.y = yValues;
-          newTrace.name = 'Name' + index;
   
           blackTraces.push(newTrace);
         }
