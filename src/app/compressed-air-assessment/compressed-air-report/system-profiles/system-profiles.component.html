@@ -27,8 +27,8 @@
 
 </div>
 
-<span *ngFor="let profile of profliesForPrint">
-    <div class="d-flex flex-column avoid-break print-container" *ngIf="printView">
+<div *ngIf="printView">
+    <div class="d-flex flex-column avoid-break print-container" *ngFor="let profile of profliesForPrint">
         <h4 class="show-print print-section-header">System Profiles</h4>
         <div class="d-flex justify-content-center">
             <div class="pr-1">
@@ -43,4 +43,4 @@
             [settings]="settings" [totalsForPrint]="profile.totalsForPrint">
         </app-profile-summary-table>
     </div>
-</span>
+</div>
