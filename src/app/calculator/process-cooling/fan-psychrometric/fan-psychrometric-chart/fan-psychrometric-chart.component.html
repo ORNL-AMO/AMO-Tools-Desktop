@@ -17,11 +17,6 @@
   <div class="w-100" #panelChartDiv></div>
   <div class="col-md-12">
     <div class="graph-btn-container">
-      <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
-      <app-simple-tooltip [message]="'Toggle graph grid lines'" [hover]="hoverBtnGridLines" [display]="displayGridLinesTooltip"
-        [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
-    </div>
-    <div class="graph-btn-container">
       <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')" (mouseleave)="hideTooltip('btnExpandChart')"></span>
       <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand" [display]="displayExpandTooltip"
         [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>

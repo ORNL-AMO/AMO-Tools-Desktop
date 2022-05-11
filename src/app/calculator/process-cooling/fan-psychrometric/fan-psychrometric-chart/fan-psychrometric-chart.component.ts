@@ -3,7 +3,7 @@ import { Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, View
 import { FormGroup } from '@angular/forms';
 import { PlotlyService } from 'angular-plotly.js';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { SimpleChart, TraceData, TraceCoordinates } from '../../../../shared/models/plotting';
+import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
 import { Settings } from '../../../../shared/models/settings';
 import { FanPsychrometricService } from '../fan-psychrometric.service';
 import { Subscription } from 'rxjs';
@@ -16,7 +16,7 @@ import { GasDensityFormService } from '../../../fans/fan-analysis/fan-analysis-f
   styleUrls: ['./fan-psychrometric-chart.component.css']
 })
 export class FanPsychrometricChartComponent implements OnInit {
- 
+
   @Input()
   gasDensityForm: FormGroup;
 
@@ -35,15 +35,13 @@ export class FanPsychrometricChartComponent implements OnInit {
   hoverBtnExpand: boolean;
   displayExpandTooltip: boolean;
   hoverBtnCollapse: boolean;
-  hoverBtnGridLines: boolean;
   displayCollapseTooltip: boolean;
-  displayGridLinesTooltip: boolean;
   temperatureUnits: string = 'F';
   useImperialUnits: boolean = true;
   lineCreationData: LineCreationData = ImperialLineData;
 
   constructor(private plotlyService: PlotlyService, private psychrometricService: FanPsychrometricService, private convertUnitsService: ConvertUnitsService,
-    private gasDensityFormService: GasDensityFormService) {}
+    private gasDensityFormService: GasDensityFormService) { }
 
   ngOnInit() {
     this.triggerInitialResize();
@@ -59,19 +57,18 @@ export class FanPsychrometricChartComponent implements OnInit {
   ngOnDestroy() {
     this.calculatedBaseGasDensitySubscription.unsubscribe();
   }
-  
-  
+
+
   initRenderChart() {
     this.chart = this.getEmptyChart();
     let form: FormGroup = this.gasDensityFormService.getGasDensityFormFromObj(this.inputData, this.settings);
-    if (form.valid) {
+    if (form.valid && this.psychrometricResults) {
       let blueTraces: Array<TraceData> = this.addBlueTraces();
       this.addRedTraces();
       this.addTopAxisTrace(blueTraces[blueTraces.length - 1]);
       this.addVerticalGridLines(blueTraces[blueTraces.length - 1]);
-
       if (this.inputData.dryBulbTemp && this.psychrometricResults && this.psychrometricResults.humidityRatio !== undefined) {
-          this.addUserPoint(blueTraces[blueTraces.length - 1]);
+        this.addUserPoint(blueTraces[blueTraces.length - 1]);
       }
     }
     
@@ -99,7 +96,7 @@ export class FanPsychrometricChartComponent implements OnInit {
     relativeHumidities.forEach(relativeHumidity => {
       let trace = this.getEmptyTrace('Relative Humidity', 'black');
       trace.x = xCoordinates;
-      humidityRatios = []; 
+      humidityRatios = [];
       xCoordinates.forEach(x => {
         let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
         relativeHumidityInput.dryBulbTemp = x;
@@ -111,7 +108,6 @@ export class FanPsychrometricChartComponent implements OnInit {
           if (results) {
             humidityRatios.push(results.humidityRatio);
           }
-
         }
       });
       trace.y = humidityRatios;
@@ -134,38 +130,43 @@ export class FanPsychrometricChartComponent implements OnInit {
     }
 
     let blueTraces: Array<TraceData> = [];
-
     relativeHumidities.forEach(relativeHumidity => {
-
       let trace = this.getEmptyTrace('Relative Humidity', 'blue');
-      trace.x = xCoordinates;
-      let humidityRatios = []; 
-      xCoordinates.forEach(x => {
-        let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
-        relativeHumidityInput.dryBulbTemp = x;
-        relativeHumidityInput.relativeHumidity = this.psychrometricResults.relativeHumidity;
-        relativeHumidityInput.barometricPressure = this.inputData.barometricPressure;
-        relativeHumidityInput.inputType = 'relativeHumidity';
-        let results: PsychrometricResults = this.psychrometricService.calcDensityRelativeHumidity(relativeHumidityInput, this.settings, true);
-        if (results) {
-          humidityRatios.push(results.humidityRatio);
+      let humidityRatios = [];
+      let invalidIndicies: Array<number> = [];
+      xCoordinates.forEach((x, index) => {
+        if (this.psychrometricResults.relativeHumidity >= 0) {
+          let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
+          relativeHumidityInput.dryBulbTemp = x;
+          relativeHumidityInput.relativeHumidity = this.psychrometricResults.relativeHumidity;
+          relativeHumidityInput.barometricPressure = this.inputData.barometricPressure;
+          relativeHumidityInput.inputType = 'relativeHumidity';
+          let results: PsychrometricResults = this.psychrometricService.calcDensityRelativeHumidity(relativeHumidityInput, this.settings, true);
+          if (results) {
+            humidityRatios.push(results.humidityRatio);
+          }
+        } else {
+          invalidIndicies.push(index);
         }
       });
+      xCoordinates = xCoordinates.filter((x: number, index: number) => !invalidIndicies.includes(index));
+      trace.x = xCoordinates;
       trace.y = humidityRatios;
       this.chart.data.push(trace);
 
       blueTraces.push(trace);
     });
+
     return blueTraces;
-  
-}
+
+  }
 
   addRedTraces(): Array<TraceData> {
     let wetBulbTemps: Array<number> = [];
     for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
       wetBulbTemps.push(i);
     }
-    
+
     let redTraces: Array<TraceData> = [];
     let humidityRatios: Array<number> = [];
     let xCoordinates: Array<number> = [];
@@ -200,10 +201,10 @@ export class FanPsychrometricChartComponent implements OnInit {
         }
       });
       xCoordinates = xCoordinates.filter((x: number, index: number) => !invalidIndicies.includes(index));
-      
+
       trace.x = xCoordinates;
       trace.y = humidityRatios;
-      
+
       redTraces.push(trace);
     });
     redTraces.forEach(trace => this.chart.data.push(trace));
@@ -216,16 +217,16 @@ export class FanPsychrometricChartComponent implements OnInit {
     let xCoordinates: Array<number> = [];
 
     let highResolutionIncrement: number = .02;
+    // Use higher res increment than other red lines to find xrange constraints against the 'top axis'/top blue trace
     for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += highResolutionIncrement) {
       if (i >= this.psychrometricResults.wetBulbTemp) {
         xConstraints.push(i);
       }
     }
-
     let traceX: number[] = [];
     let traceY: number[] = [];
-
-    xCoordinates = [xConstraints[0], xConstraints[xConstraints.length -1]];
+    // Only create start and end point
+    xCoordinates = [xConstraints[0], xConstraints[xConstraints.length - 1]];
     xCoordinates.forEach(x => {
       let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
       relativeHumidityInput.dryBulbTemp = x;
@@ -237,11 +238,11 @@ export class FanPsychrometricChartComponent implements OnInit {
         // TODO This may no longer be needed
         if (results.humidityRatio >= 0) {
           traceX.push(x);
-          traceY.push(results.humidityRatio);    
+          traceY.push(results.humidityRatio);
         }
       }
     });
-    
+
     let trace = this.getEmptyTrace('Wet Bulb', 'red');
     trace.x = traceX;
     trace.y = traceY;
@@ -256,13 +257,13 @@ export class FanPsychrometricChartComponent implements OnInit {
     let yCoordinates: Array<number> = [];
     let xAxisText = ['40', '50', '60', '70', '80', '90', '100', '110', '120', '130'];
     if (!this.useImperialUnits) {
-       xAxisText = ['6', '12', '18', '24', '30', '36', '42', '48', '54', '60']
+      xAxisText = ['6', '12', '18', '24', '30', '36', '42', '48', '54', '60']
     }
-    for (let index = 1; index < blueTraces.x.length; index+=2) {
+    for (let index = 1; index < blueTraces.x.length; index += 2) {
       xCoordinates.push(blueTraces.x[index]);
     }
 
-    for (let index = 1; index < blueTraces.y.length; index+=2) {
+    for (let index = 1; index < blueTraces.y.length; index += 2) {
       yCoordinates.push(blueTraces.y[index]);
     }
 
@@ -302,20 +303,20 @@ export class FanPsychrometricChartComponent implements OnInit {
       xCoordinates.push(i);
     }
 
-      for (let index = 0; index < wetBulbTemps.length; index++) {
-          let newTrace = this.getEmptyTrace('', 'black');
-          let xValues: Array<number> = [];
-          let yValues: Array<number> = [];
+    for (let index = 0; index < wetBulbTemps.length; index++) {
+      let newTrace = this.getEmptyTrace('', 'black');
+      let xValues: Array<number> = [];
+      let yValues: Array<number> = [];
 
-          xValues.push(xCoordinates[index], xCoordinates[index]);
-          yValues.push(0, blueTraces.y[index]);
-            
-          newTrace.x = xValues;
-          newTrace.y = yValues;
-  
-          blackTraces.push(newTrace);
-        }
-      
+      xValues.push(xCoordinates[index], xCoordinates[index]);
+      yValues.push(0, blueTraces.y[index]);
+
+      newTrace.x = xValues;
+      newTrace.y = yValues;
+
+      blackTraces.push(newTrace);
+    }
+
     blackTraces.forEach(trace => this.chart.data.push(trace));
     humidityRatios = blueTraces.y;
     this.chart.layout = this.getLayout(xCoordinates, humidityRatios);
@@ -326,7 +327,7 @@ export class FanPsychrometricChartComponent implements OnInit {
       this.lineCreationData = MetricLineData;
       this.useImperialUnits = false;
       this.temperatureUnits = 'C';
-    } 
+    }
   }
 
   getEmptyTrace(name: string, color: string): TraceData {
@@ -383,7 +384,7 @@ export class FanPsychrometricChartComponent implements OnInit {
       yAxisText = `Humidity Ratio ${yUnits}`;
       xTicksVal = [6, 12, 18, 24, 30, 36, 42, 48, 54, 60];
     }
-    return  {
+    return {
       legend: {
         orientation: 'h',
         font: {
@@ -479,13 +480,6 @@ export class FanPsychrometricChartComponent implements OnInit {
     };
   }
 
-  toggleGrid() {
-    let showingGridX: boolean = this.chart.layout.xaxis.showgrid;
-    let showingGridY: boolean = this.chart.layout.yaxis.showgrid;
-    this.chart.layout.xaxis.showgrid = !showingGridX;
-    this.chart.layout.yaxis.showgrid = !showingGridY;
-    this.initRenderChart();
-  }
 
 
   triggerInitialResize() {
@@ -531,10 +525,6 @@ export class FanPsychrometricChartComponent implements OnInit {
       this.hoverBtnCollapse = false;
       this.displayCollapseTooltip = false;
     }
-    else if (btnType === 'btnGridLines') {
-      this.hoverBtnGridLines = false;
-      this.displayGridLinesTooltip = false;
-    }
   }
 
   initTooltip(btnType: string) {
@@ -543,9 +533,6 @@ export class FanPsychrometricChartComponent implements OnInit {
     }
     else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = true;
-    }
-    else if (btnType === 'btnGridLines') {
-      this.hoverBtnGridLines = true;
     }
     setTimeout(() => {
       this.checkHover(btnType);
@@ -561,14 +548,6 @@ export class FanPsychrometricChartComponent implements OnInit {
         this.displayExpandTooltip = false;
       }
     }
-    else if (btnType === 'btnGridLines') {
-      if (this.hoverBtnGridLines) {
-        this.displayGridLinesTooltip = true;
-      }
-      else {
-        this.displayGridLinesTooltip = false;
-      }
-    }
     else if (btnType === 'btnCollapseChart') {
       if (this.hoverBtnCollapse) {
         this.displayCollapseTooltip = true;
@@ -582,9 +561,9 @@ export class FanPsychrometricChartComponent implements OnInit {
 
 
 export const ImperialLineData: LineCreationData = {
-    start: 35,
-    end: 130,
-    increment: 5
+  start: 35,
+  end: 130,
+  increment: 5
 }
 
 export const MetricLineData: LineCreationData = {
@@ -594,7 +573,7 @@ export const MetricLineData: LineCreationData = {
 }
 
 interface LineCreationData {
-    start: number,
-    end: number,
-    increment: number
+  start: number,
+  end: number,
+  increment: number
 }
