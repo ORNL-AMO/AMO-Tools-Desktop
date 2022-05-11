@@ -109,7 +109,7 @@ export class MaxFullFlowComponent implements OnInit {
     }
 
     if (!this.selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure) {
-      let defaultValue: number = this.maxFullFlowCalculationsService.getMaxFullFlowPressure(this.selectedCompressor, true);
+      let defaultValue: number = this.maxFullFlowCalculationsService.getMaxFullFlowPressure(this.selectedCompressor, true, this.settings);
       this.showPressureCalc = (this.selectedCompressor.performancePoints.maxFullFlow.dischargePressure != defaultValue);
     } else {
       this.showPressureCalc = false;
@@ -131,7 +131,7 @@ export class MaxFullFlowComponent implements OnInit {
   }
 
   setPressure() {
-    let defaultValue: number = this.maxFullFlowCalculationsService.getMaxFullFlowPressure(this.selectedCompressor, true);
+    let defaultValue: number = this.maxFullFlowCalculationsService.getMaxFullFlowPressure(this.selectedCompressor, true, this.settings);
     this.form.controls.dischargePressure.patchValue(defaultValue);
     this.form.controls.isDefaultPressure.patchValue(true);
     this.save();
