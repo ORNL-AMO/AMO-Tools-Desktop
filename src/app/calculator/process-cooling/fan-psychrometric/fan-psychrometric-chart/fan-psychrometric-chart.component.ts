@@ -31,7 +31,6 @@ export class FanPsychrometricChartComponent implements OnInit {
   psychrometricResults: PsychrometricResults;
   calculatedBaseGasDensitySubscription: Subscription;
   inputData: BaseGasDensity;
-  // formValid: boolean;
   expanded: boolean = false;
   hoverBtnExpand: boolean;
   displayExpandTooltip: boolean;
@@ -63,7 +62,6 @@ export class FanPsychrometricChartComponent implements OnInit {
   
   
   initRenderChart() {
-    // Set base chart object
     this.chart = this.getEmptyChart();
     let form: FormGroup = this.gasDensityFormService.getGasDensityFormFromObj(this.inputData, this.settings);
     if (form.valid) {
@@ -77,7 +75,6 @@ export class FanPsychrometricChartComponent implements OnInit {
       }
     }
     
-    // pass chart data to plotly for rendering at div
     if (this.expanded && this.expandedChartDiv) {
       this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.chart.data, this.chart.layout, this.chart.config)
 
@@ -88,26 +85,22 @@ export class FanPsychrometricChartComponent implements OnInit {
 
 
   addBlueTraces(): Array<TraceData> {
-    // List 2: Dry Bulb 
     let xCoordinates = [];
     for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
       xCoordinates.push(i);
     }
-    // List 1: Relative Humidity 
     let relativeHumidities: Array<number> = [];
     for (let i = 0; i <= 100; i += 20) {
       relativeHumidities.push(i);
     }
 
     let blueTraces: Array<TraceData> = [];
-    // Calculated humidity ratio will be Y values
     let humidityRatios: Array<number>;
     relativeHumidities.forEach(relativeHumidity => {
       let trace = this.getEmptyTrace('Relative Humidity', 'black');
       trace.x = xCoordinates;
       humidityRatios = []; 
       xCoordinates.forEach(x => {
-        // Default data from psych
         let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
         relativeHumidityInput.dryBulbTemp = x;
         relativeHumidityInput.relativeHumidity = relativeHumidity;
@@ -131,12 +124,10 @@ export class FanPsychrometricChartComponent implements OnInit {
   }
 
   addUserBlueTrace(): Array<TraceData> {
-    // List 2: Dry Bulb 
     let xCoordinates = [];
     for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
       xCoordinates.push(i);
     }
-    // List 1: Relative Humidity 
     let relativeHumidities: Array<number> = [];
     for (let i = 0; i <= 100; i += 20) {
       relativeHumidities.push(i);
@@ -150,7 +141,6 @@ export class FanPsychrometricChartComponent implements OnInit {
       trace.x = xCoordinates;
       let humidityRatios = []; 
       xCoordinates.forEach(x => {
-        // Default data from psych
         let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
         relativeHumidityInput.dryBulbTemp = x;
         relativeHumidityInput.relativeHumidity = this.psychrometricResults.relativeHumidity;
@@ -171,18 +161,15 @@ export class FanPsychrometricChartComponent implements OnInit {
 }
 
   addRedTraces(): Array<TraceData> {
-    // List 1: Wet Bulb = sequence(35 , 130, by 5) (may want to change to by 10 if too crowded)
     let wetBulbTemps: Array<number> = [];
     for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
       wetBulbTemps.push(i);
     }
     
     let redTraces: Array<TraceData> = [];
-    // Calculated humidity ratio will be Y values
     let humidityRatios: Array<number> = [];
     let xCoordinates: Array<number> = [];
     wetBulbTemps.forEach(wetBulbTemp => {
-      // List 2: Dry Bulb 
       xCoordinates = [];
       for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
         if (i >= wetBulbTemp) {
@@ -205,7 +192,6 @@ export class FanPsychrometricChartComponent implements OnInit {
         }
       });
       
-      // Filter out invalid
       humidityRatios = humidityRatios.filter((ratio: number, index: number) => {
         if (ratio < 0) {
           invalidIndicies.push(index);
@@ -228,7 +214,7 @@ export class FanPsychrometricChartComponent implements OnInit {
   addUserRedTrace(topAxisBlueTrace: TraceData): void {
     let xConstraints: Array<number> = [];
     let xCoordinates: Array<number> = [];
-    // Use higher res increment than other red lines to find xrange constraints against the 'top axis'/top blue trace
+
     let highResolutionIncrement: number = .02;
     for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += highResolutionIncrement) {
       if (i >= this.psychrometricResults.wetBulbTemp) {
@@ -238,7 +224,7 @@ export class FanPsychrometricChartComponent implements OnInit {
 
     let traceX: number[] = [];
     let traceY: number[] = [];
-    // Only create start and end point
+
     xCoordinates = [xConstraints[0], xConstraints[xConstraints.length -1]];
     xCoordinates.forEach(x => {
       let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
@@ -308,7 +294,6 @@ export class FanPsychrometricChartComponent implements OnInit {
     let xCoordinates: Array<number> = [];
     let wetBulbTemps: Array<number> = [];
     let humidityRatios: Array<number> = [];
-    let index = 0;
 
     for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
       wetBulbTemps.push(i);
@@ -341,13 +326,6 @@ export class FanPsychrometricChartComponent implements OnInit {
     if (this.settings.fanTemperatureMeasurement === 'C' || this.settings.fanTemperatureMeasurement === 'K') {
       this.lineCreationData = MetricLineData;
       this.useImperialUnits = false;
-        // If Kelvin (K)- just use the metric graph (C), if Rankine (R), just use the imperial graph (F)
-    // check fanTemperatureMeasurement and set this.temperatureUnits to the string (or the UNICODE) that should display 
-
-     // 'F'"     &#8457;</span>
-    // 'C'"     &#8451;</span>
-    // 'K'"     &#8490;</span>
-    // 'R'"     &#176;R</span>
       this.temperatureUnits = 'C';
     } 
   }
@@ -608,8 +586,6 @@ export class FanPsychrometricChartComponent implements OnInit {
       }
     }
   }
-
-
 }
 
 
