@@ -32,7 +32,7 @@ export class FanPsychrometricResultsComponent implements OnInit {
     });
   }
 
-
+  //will need to update values in the table when input changes? currently only changes only onInit
 
   ngOnDestroy() {
     this.calculatedBaseGasDensitySubscription.unsubscribe();
