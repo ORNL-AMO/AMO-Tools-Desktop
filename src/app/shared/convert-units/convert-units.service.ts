@@ -532,4 +532,11 @@ export class ConvertUnitsService {
     newSettings.compressedAirCost = this.convertDollarsPerFt3AndM3(newSettings.compressedAirCost, oldSettings, newSettings);
     return newSettings;
   }
+
+  convertTemperatures(XYValues: Array<number>, settings: Settings) {
+    if (settings.fanTemperatureMeasurement === 'C' || settings.fanTemperatureMeasurement === 'K') {
+      XYValues = this.convertArray(XYValues, 'F', 'C');
+    }
+    return XYValues;
+  }
 }

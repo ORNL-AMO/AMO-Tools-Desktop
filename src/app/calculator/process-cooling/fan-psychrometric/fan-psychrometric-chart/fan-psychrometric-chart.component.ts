@@ -330,13 +330,6 @@ export class FanPsychrometricChartComponent implements OnInit {
     } 
   }
 
-  convertTemperatures(XYValues: Array<number>) {
-    if (this.settings.fanTemperatureMeasurement === 'C' || this.settings.fanTemperatureMeasurement === 'K') {
-      XYValues = this.convertUnitsService.convertArray(XYValues, 'F', 'C');
-    }
-    return XYValues;
-  }
-
   getEmptyTrace(name: string, color: string): TraceData {
     let trace: TraceData = {
       x: [],
