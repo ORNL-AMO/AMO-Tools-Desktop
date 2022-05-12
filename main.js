@@ -120,12 +120,6 @@ ipcMain.once('later', (event, arg) => {
   update = null;
 });
 
-app.on('activate', () => {
-  if (win === null) {
-    createWindow();
-  }
-});
-
 app.on('window-all-closed', function () {
   app.quit();
 });
