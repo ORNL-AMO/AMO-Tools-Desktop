@@ -41,6 +41,9 @@ export interface WasteWaterData {
 export interface ActivatedSludgeData {
     Temperature: number,
     So: number,
+    isUserDefinedSo: boolean,
+    influentCBODBefore : number,
+    clarifierEfficiency: number,
     Volume: number,
     FlowRate: number,
     InertVSS: number,
@@ -151,6 +154,9 @@ export interface CalculationsTableRow {
 export interface WasteWaterTreatmentInputData {
     Temperature: number,
     So: number,
+    isUserDefinedSo: boolean,
+    influentCBODBefore: number,
+    clarifierEfficiency: number,
     Volume: number,
     FlowRate: number,
     InertVSS: number,

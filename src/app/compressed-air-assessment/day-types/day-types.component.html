@@ -39,12 +39,12 @@
                                 <span *ngIf="dayTypeForm.controls.numberOfDays.errors.required">Value required.</span>
                                 <span *ngIf="dayTypeForm.controls.numberOfDays.errors.min">Value can't be less than
                                     {{dayTypeForm.controls.numberOfDays.errors.min.min}}.</span>
-                                <span *ngIf="dayType.controls.numberOfDays.errors.max">Value can't be greater than
+                                <span *ngIf="dayTypeForm.controls.numberOfDays.errors.max">Value can't be greater than
                                     {{dayTypeForm.controls.numberOfDays.errors.max.max}}.</span>
                             </span>
                         </td>
                         <td class="text-center">
-                            <span *ngIf="dayTypesFormArray.length > 1">
+                            <span *ngIf="dayTypesFormArray.length > 1 && !hasModifications">
                                 <button class="btn btn-sm btn-danger"
                                     (click)="openConfirmDeleteModal(dayTypeForm.controls.dayTypeId.value)">
                                     <span class="fa fa-trash"></span>
@@ -75,13 +75,19 @@
                 </tr>
             </tfoot>
         </table>
-        <a class="click-link pull-right small" (click)="addDayType()">+Add Day Type</a>
+        <a class="click-link pull-right small" (click)="addDayType()" *ngIf="!hasModifications">+Add Day Type</a>
     </div>
     <div class="py-2" *ngIf="hasValidDayTypes === false" class="alert-danger pull-right small">Total annual days must be
         greater than 0 and less than or equal to 365.
     </div>
-    <div class="p-2 w-100 text-center">
+    <div class="p-2 w-100 text-center" *ngIf="!hasModifications">
         <button class="btn btn-primary btn-sm" (click)="openDataExplorer()">Find Day Types With Data Explorer</button>
+    </div>
+    <div class="p-2" *ngIf="hasModifications">
+        <div class="alert-info small p-2">
+            Day Types cannot be added or removed in assessments with modifications. Delete modifications to alter Day
+            Types.
+        </div>
     </div>
 </div>
 

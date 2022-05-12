@@ -8,21 +8,19 @@ import { UnloadPointCalculationsService } from './unload-point-calculations.serv
 @Injectable()
 export class BlowoffCalculationsService {
 
-  constructor(private unloadPointCalculationsService: UnloadPointCalculationsService, private convertCompressedAirService: ConvertCompressedAirService,
-    private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  constructor(private unloadPointCalculationsService: UnloadPointCalculationsService, private convertCompressedAirService: ConvertCompressedAirService) { }
 
   //inlet butterfly modulation with blowoff
   setBlowoff(selectedCompressor: CompressorInventoryItem, settings: Settings): PerformancePoint {
     //blowoff
-    selectedCompressor.performancePoints.blowoff.dischargePressure = this.getBlowoffDischargePressure(selectedCompressor, selectedCompressor.performancePoints.blowoff.isDefaultPressure);
+    selectedCompressor.performancePoints.blowoff.dischargePressure = this.getBlowoffDischargePressure(selectedCompressor, selectedCompressor.performancePoints.blowoff.isDefaultPressure, settings);
     selectedCompressor.performancePoints.blowoff.airflow = this.getBlowoffAirFlow(selectedCompressor, selectedCompressor.performancePoints.blowoff.isDefaultAirFlow, settings);
     selectedCompressor.performancePoints.blowoff.power = this.getBlowoffPower(selectedCompressor, selectedCompressor.performancePoints.blowoff.isDefaultPower);
     return selectedCompressor.performancePoints.blowoff;
   }
 
-  getBlowoffDischargePressure(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
+  getBlowoffDischargePressure(selectedCompressor: CompressorInventoryItem, isDefault: boolean, settings: Settings): number {
     if (isDefault) {
-      let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
       let defaultPressure: number = this.convertCompressedAirService.roundPressureForPresentation(selectedCompressor.performancePoints.fullLoad.dischargePressure, settings);
       return defaultPressure;
     } else {

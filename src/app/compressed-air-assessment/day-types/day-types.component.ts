@@ -27,7 +27,7 @@ export class DayTypesComponent implements OnInit {
   dayTypesFormArray: Array<FormGroup>;
   isFormChange: boolean = false;
   hasValidDayTypes: boolean;
-
+  hasModifications: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private dayTypeService: DayTypeService, private router: Router,
     private inventoryService: InventoryService) { }
@@ -35,6 +35,11 @@ export class DayTypesComponent implements OnInit {
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.compressedAirAssessment = val;
+      if(this.compressedAirAssessment.modifications && this.compressedAirAssessment.modifications.length != 0){
+        this.hasModifications = true;
+      }else{
+        this.hasModifications = false;
+      }
       this.setTotalDays();
       this.hasValidDayTypes = this.dayTypeService.hasValidDayTypes(val.compressedAirDayTypes);
       if (this.isFormChange == false) {

@@ -30,6 +30,6 @@ td, th{
   .print-container {
     page-break-before: always;
     page-break-inside: avoid;
-    width: fit-content;
+    width: 1000px;
   }
 }

@@ -21,6 +21,8 @@ export class SystemProfileGraphsComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   labelName: string;
+  @Input()
+  printView: boolean;
 
   @ViewChild("systemCapacityGraph", { static: false }) systemCapacityGraph: ElementRef;
   @ViewChild("compressorCapacityGraph", { static: false }) compressorCapacityGraph: ElementRef;
@@ -283,7 +285,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let yAxisTitle: string = "System Capacity (" + unit + ")";
       var layout = this.getLayout(yAxisTitle, xRange, yAxisRange, undefined);
       var config = {
-        responsive: true,
+        responsive: !this.printView,
         displaylogo: false
       };
 
@@ -349,7 +351,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 24 : 1;
       var layout = this.getLayout("Compressor Capacity (%)", [1, xRangeMax], [0, 105], '%');
       var config = {
-        responsive: true,
+        responsive: !this.printView,
         displaylogo: false
       };
       this.plotlyService.newPlot(this.compressorCapacityGraph.nativeElement, traceData, layout, config).then(chart => {
@@ -391,7 +393,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let xRange: Array<number> = [1, xRangeMax];
       var layout = this.getLayout("Power (kW)", xRange, yAxisRange, undefined);
       var config = {
-        responsive: true,
+        responsive: !this.printView,
         displaylogo: false
       };
 
@@ -434,7 +436,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       });
       var layout = this.getLayout("Compressor Power %", undefined, [0, 100], '%');
       var config = {
-        responsive: true,
+        responsive: !this.printView,
         displaylogo: false
       };
       this.plotlyService.newPlot(this.compressorPowerGraph.nativeElement, traceData, layout, config).then(chart => {
@@ -454,7 +456,12 @@ export class SystemProfileGraphsComponent implements OnInit {
   }
 
   getLayout(yAxisTitle: string, xAxisRange: Array<number>, yAxisRange: Array<number>, yAxisTickSuffix: string) {
+    let width: number;
+    if (this.printView) {
+      width = 1000;
+    }
     return {
+      width: width,
       showlegend: true,
       barmode: 'stack',
       xaxis: {

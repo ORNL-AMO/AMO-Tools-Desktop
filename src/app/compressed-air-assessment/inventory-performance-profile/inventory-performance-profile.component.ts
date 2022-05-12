@@ -84,25 +84,32 @@ export class InventoryPerformanceProfileComponent implements OnInit {
         this.showAllCompressors = true;
         this.showAvgOpPoints = true;
         this.selectedCompressor = this.compressedAirAssessment.compressorInventoryItems[0];
-        this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == this.compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId });
-        this.drawChart();
+        if (this.selectedCompressor) {
+          this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == this.compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId });
+          this.drawChart();
+        }
       } else {
         this.dataSub = this.inventoryService.selectedCompressor.subscribe(val => {
           this.selectedCompressor = val;
-          this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-          this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == this.compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId });
-          this.drawChart();
+          if (this.selectedCompressor) {
+            this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+            this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == this.compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId });
+            this.drawChart();
+          }
         });
       }
     } else {
       this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(selectedDayType => {
-        this.selectedDayType = selectedDayType;
-        this.setCompressorData();
+        if (selectedDayType) {
+          this.selectedDayType = selectedDayType;
+          this.setCompressorData();
+        }
       });
-
       this.modificationResultsSub = this.exploreOpportunitiesService.modificationResults.subscribe(modificationResults => {
-        this.modificationResults = modificationResults;
-        this.setCompressorData();
+        if (modificationResults) {
+          this.modificationResults = modificationResults;
+          this.setCompressorData();
+        }
       });
     }
   }
@@ -117,7 +124,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if (this.performanceProfileChart) {
+    if (this.selectedCompressor) {
       this.drawChart();
     }
   }

@@ -2,9 +2,8 @@ import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChanges, ViewChi
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
-import { PhastService } from '../../../../phast/phast.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
-import { FlueGas, FlueGasByVolume, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { FlueGasFormService } from '../flue-gas-form.service';
@@ -51,9 +50,10 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   warnings: FlueGasWarnings;
   baselineDataSub: Subscription;
 
+  higherHeatingValue: number;
+
   constructor(private flueGasService: FlueGasService,
     private flueGasFormService: FlueGasFormService,
-    private phastService: PhastService,
     private sqlDbApiService: SqlDbApiService) {
   }
 
@@ -168,6 +168,8 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.byVolumeForm = this.flueGasFormService.setValidators(this.byVolumeForm);
     this.checkWarnings();
     let currentDataByVolume: FlueGas = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm)
+    let tmpFlueGas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(currentDataByVolume.flueGasByVolume.gasTypeId);
+    this.higherHeatingValue = tmpFlueGas.heatingValue;
     if (this.isBaseline) {
       this.flueGasService.baselineData.next(currentDataByVolume);
     } else {

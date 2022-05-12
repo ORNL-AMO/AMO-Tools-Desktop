@@ -169,7 +169,7 @@ export class FlueGasService {
 
   initDefaultEmptyInputs(treasureHuntHours?: number) {
     let emptyBaselineData: FlueGas = {
-      flueGasType: 'By Mass',
+      flueGasType: 'By Volume',
       flueGasByVolume: undefined,
       flueGasByMass: undefined,
       name: undefined
