@@ -30,7 +30,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
 
   ngOnChanges() {
     if (this.plotlyPieChart && !this.showPrintView) {
-      // this.setHeight();
       this.drawPlot();
     }else if (this.plotlyPieChart && this.showPrintView) {
       this.drawPrintPlot();
@@ -59,8 +58,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
       type: 'pie',
       textposition: 'auto',
       insidetextorientation: "horizontal",
-      // automargin: true,
-      // textinfo: 'label+value',
       hoverformat: '.2r',
       texttemplate: '<b>%{label}: </b>%{value:$,.0f}',
       hoverinfo: 'label+percent',
@@ -96,7 +93,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
       type: 'pie',
       textposition: 'auto',
       insidetextorientation: "horizontal",
-      // automargin: true,
       texttemplate: '<b>%{label}: </b>%{value:$,.0f}',
       hoverformat: '.2r',
       direction: "clockwise",
@@ -116,6 +112,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
       displayModeBar: false,
       responsive: true
     };
-    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);    
   }
 }

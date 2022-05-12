@@ -325,8 +325,8 @@ export class TreasureHuntReportService {
       totalCO2ProjectedtUse += carbonResults.steamCO2ProjectedUse;
     }
     return totalCO2ProjectedtUse;
-  }
+  } 
+
 
   
-
 }

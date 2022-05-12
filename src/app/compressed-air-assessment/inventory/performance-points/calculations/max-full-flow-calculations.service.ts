@@ -14,16 +14,15 @@ export class MaxFullFlowCalculationsService {
   ) { }
 
   setMaxFullFlow(selectedCompressor: CompressorInventoryItem, atmosphericPressure: number, settings: Settings): PerformancePoint {
-    selectedCompressor.performancePoints.maxFullFlow.dischargePressure = this.getMaxFullFlowPressure(selectedCompressor, selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure);
+    selectedCompressor.performancePoints.maxFullFlow.dischargePressure = this.getMaxFullFlowPressure(selectedCompressor, selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure, settings);
     selectedCompressor.performancePoints.maxFullFlow.airflow = this.getMaxFullFlowAirFlow(selectedCompressor, selectedCompressor.performancePoints.maxFullFlow.isDefaultAirFlow, atmosphericPressure, settings);
     selectedCompressor.performancePoints.maxFullFlow.power = this.getMaxFullFlowPower(selectedCompressor, selectedCompressor.performancePoints.maxFullFlow.isDefaultPower, atmosphericPressure, settings);
     return selectedCompressor.performancePoints.maxFullFlow;
   }
 
-  getMaxFullFlowPressure(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
+  getMaxFullFlowPressure(selectedCompressor: CompressorInventoryItem, isDefault: boolean, settings: Settings): number {
     if (isDefault) {
       //all control types the same
-      let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
       return this.convertCompressedAirService.roundPressureForPresentation(selectedCompressor.designDetails.maxFullFlowPressure, settings);
     } else {
       return selectedCompressor.performancePoints.maxFullFlow.dischargePressure;

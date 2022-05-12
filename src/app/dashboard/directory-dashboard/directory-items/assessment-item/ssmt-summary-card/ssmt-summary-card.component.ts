@@ -24,6 +24,7 @@ export class SsmtSummaryCardComponent implements OnInit {
   maxCostSavings: number = 0;
   maxEnergySavings: number = 0;
   showReport: boolean = false;
+  totalBaselineCost: number = 0;
 
   @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
 
@@ -47,6 +48,7 @@ export class SsmtSummaryCardComponent implements OnInit {
 
   getBaselineData() {
     this.baselineData = this.getData(this.assessmentCpy.ssmt, true);
+    this.totalBaselineCost = (this.baselineData.outputData.operationsOutput.boilerFuelCost + this.baselineData.outputData.operationsOutput.makeupWaterCost);
   }
 
   getModificationData() {

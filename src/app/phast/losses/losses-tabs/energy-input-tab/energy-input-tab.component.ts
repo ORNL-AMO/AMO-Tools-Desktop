@@ -26,6 +26,7 @@ export class EnergyInputTabComponent implements OnInit {
   badgeHover: boolean;
   displayTooltip: boolean;
 
+  inputError: string;
   numLosses: number = 0;
   missingData: boolean;
   isDifferent: boolean;
@@ -43,6 +44,7 @@ export class EnergyInputTabComponent implements OnInit {
       this.enInput1Done = this.lossesService.enInput1Done;
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
+      this.inputError = this.phastResultsService.checkElectricityInputWarning(this.phast, this.settings);
       this.setBadgeClass();
     });
     this.badgeHover = false;
@@ -56,7 +58,9 @@ export class EnergyInputTabComponent implements OnInit {
     let badgeStr: Array<string> = ['success'];
     if (this.missingData || !this.enInput1Done) {
       badgeStr = ['missing-data'];
-    } else if (this.isDifferent && !this.inSetup) {
+    } else if (this.inputError) {
+      badgeStr = ['input-error'];
+    }else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;

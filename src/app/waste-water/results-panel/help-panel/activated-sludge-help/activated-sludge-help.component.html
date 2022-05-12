@@ -59,13 +59,39 @@
             S<sub>o</sub>
             <br>
             <small class="text-muted">
-                Influent CBOD<sub>5</sub> concentration (S<sub>o</sub>) is the concentration of CBOD<sub>5</sub> that
-                enters the activated sludge
-                reactor. The growth limiting substrate in the Bio-Tiger model is CBOD<sub>5</sub>. While the influent
-                CBOD<sub>5</sub>
-                concentration changes during the day and throughout the week, this should be the average
-                CBOD<sub>5</sub>
-                concentration for the particular activated sludge process being evaluated at steady-state.
+                Influent CBOD<sub>5</sub> concentration (S<sub>o</sub>) is the concentration of CBOD<sub>5</sub> that enters the activated sludge reactor, after a
+                primary clarifier. The growth limiting substrate in the Bio-Tiger model is CBOD<sub>5</sub>. While the influent CBOD<sub>5</sub> concentration
+                changes during the day and throughout the week, this should be the average CBOD<sub>5</sub> concentration for the particular
+                activated sludge process being evaluated at steady-state.
+                <hr>
+            </small>
+        </h6>
+        <div class="d-flex flex-column justify-content-center align-items-center h-100 w-100">
+            <img src="assets/images/waste-water-diagram-cbod5.png" class="w-100 p-5">
+        </div>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'influentCBODBefore'">
+        <h6>
+            S<sub>o</sub> Before
+            <br>
+            <small class="text-muted">
+                Influent CBOD<sub>5</sub> concentration (S<sub>o</sub>) is the concentration of CBOD<sub>5</sub> before a primary clarifier. 
+                The growth limiting substrate in the Bio-Tiger model is CBOD<sub>5</sub>.
+                While the influent CBOD<sub>5</sub> concentration changes during the day and throughout
+                the week, this should be the average CBOD<sub>5</sub> concentration for the particular activated sludge process being evaluated at
+                steady-state.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'clarifierEfficiency'">
+        <h6>
+            Clarifier Efficiency
+            <br>
+            <small class="text-muted">
+                Approximate efficiency of the primary clarifier for removing BOD.
                 <hr>
             </small>
         </h6>

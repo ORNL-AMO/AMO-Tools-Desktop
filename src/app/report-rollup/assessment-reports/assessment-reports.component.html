@@ -142,7 +142,7 @@
         </div>
     </div>
 
-    <div class="assessment-item row" *ngFor="let item of _compressedAirAssessments"
+    <div class="assessment-item row print-container" *ngFor="let item of _compressedAirAssessments"
         id="{{'assessment_'+item.assessment.id}}">
         <div class="col-12">
             <app-compressed-air-report *ngIf="item.assessment.compressedAirAssessment" [assessment]="item.assessment"
