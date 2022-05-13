@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, OpportunitySheet, OpportunityCost, TreasureHuntCo2EmissionsResults } from '../../shared/models/treasure-hunt';
+import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, OpportunitySheet, OpportunityCost, TreasureHuntCo2EmissionsResults, EnergyUsage, TreasureHunt } from '../../shared/models/treasure-hunt';
 import { TreasureHuntReportService } from './treasure-hunt-report.service';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 import pptxgen from 'pptxgenjs';
@@ -261,7 +261,7 @@ export class TreasureHuntPptService {
   }
 
 
-  createPPT(settings: Settings, treasureHuntResults: TreasureHuntResults, opportunityCardsData: Array<OpportunityCardData>,
+  createPPT(settings: Settings, treasureHunt: TreasureHunt, treasureHuntResults: TreasureHuntResults, opportunityCardsData: Array<OpportunityCardData>,
     opportunitiesPaybackDetails: OpportunitiesPaybackDetails): pptxgen {
     let pptx = new pptxgen();
 
@@ -283,10 +283,16 @@ export class TreasureHuntPptService {
     let teamSummaryData: PptxgenjsChartData[] = this.getTeamSummaryData(opportunityCardsData);
     let paybackBarData: PptxgenjsChartData[] = this.getPaybackData(opportunitiesPaybackDetails, settings);
 
-    let slide1 = pptx.addSlide();
-    slide1.background = { data: betterPlantsPPTimg.betterPlantsTitleSlide };
-    slide1.addText(pptTitle, { x: 0.3, y: 2.1, w: 5.73, h: 1.21, align: 'center', bold: true, color: '1D428A', fontSize: 26, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
-    slide1.addText(date, { x: 0.3, y: 4.19, w: 4.34, h: 0.74, align: 'left', color: '8B93B1', fontSize: 20, fontFace: 'Arial (Body)', valign: 'top', isTextBox: true, autoFit: true });
+    let slide0 = pptx.addSlide();
+    slide0.background = { data: betterPlantsPPTimg.betterPlantsTitleSlide };
+    slide0.addText(pptTitle, { x: 0.3, y: 2.1, w: 5.73, h: 1.21, align: 'center', bold: true, color: '1D428A', fontSize: 26, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
+    slide0.addText(date, { x: 0.3, y: 4.19, w: 4.34, h: 0.74, align: 'left', color: '8B93B1', fontSize: 20, fontFace: 'Arial (Body)', valign: 'top', isTextBox: true, autoFit: true });
+
+    let slide1 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide1.addText('Energy Utility Usage & Cost', slideTitleProperties);
+    if (treasureHunt.currentEnergyUsage) {
+      slide1 = this.getEnergyUtilityTable(slide1, treasureHunt.currentEnergyUsage, settings);
+    }
 
     let slide2 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide2.addText('Cost Summary', slideTitleProperties);
@@ -372,6 +378,14 @@ export class TreasureHuntPptService {
     return Number(num.toFixed(2)).toLocaleString('en-US');
   }
 
+  valToString(num: number): string {
+    if (num == undefined) {
+      return "0";
+    } else { 
+      return num.toString();
+    }
+  }
+
   roundValToCurrency(num: number): string {
     let number = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
     return number;
@@ -416,7 +430,7 @@ export class TreasureHuntPptService {
       if (settings.unitsOfMeasure == 'Imperial') {
         utilityUnit = 'MMBtu';
       } else {
-        utilityUnit = 'MJ';
+        utilityUnit = 'GJ';
       }
     }
     return utilityUnit;
@@ -682,7 +696,7 @@ export class TreasureHuntPptService {
         fillColor = "D0FCBA";
       }
       rows.push([
-        { text: "WasteWater", options: { bold: true, fill: { color: fillColor } } },
+        { text: "Wastewater", options: { bold: true, fill: { color: fillColor } } },
         { text: this.roundValToCurrency(wasteWater.costSavings), options: { fill: { color: fillColor } } },
         { text: this.roundValToCurrency(wasteWater.implementationCost), options: { fill: { color: fillColor } } },
         { text: this.roundValToString(wasteWater.paybackPeriod), options: { fill: { color: fillColor } } }
@@ -799,7 +813,7 @@ export class TreasureHuntPptService {
     }
     if (carbonResults.wasteWaterCO2CurrentUse != 0) {
       rows.push([
-        { text: "WasteWater", options: { bold: true } },
+        { text: "Wastewater", options: { bold: true } },
         this.roundValToString(carbonResults.wasteWaterCO2CurrentUse),
         this.roundValToString(carbonResults.wasteWaterCO2ProjectedUse),
         this.roundValToString(carbonResults.wasteWaterCO2Savings)
@@ -893,6 +907,116 @@ export class TreasureHuntPptService {
     ]);
 
     slide.addTable(rows, { x: 3.96, y: 1.6, w: 5.42, colW: [1.6, 2.22, 1.6], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
+
+    return slide;
+  }
+
+  getEnergyUtilityTable(slide: pptxgen.Slide, currentEnergyUsage: EnergyUsage, settings: Settings): pptxgen.Slide {
+    let rows = [];
+    rows.push([
+      { text: "Utility", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Unit Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Annual Consumption", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Annual Costs", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+      { text: "Total Carbon Emission Output Rate", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
+    ]);
+    if (currentEnergyUsage.electricityUsage) {
+      let utilityUnit: string = this.getUtilityUnit("Electricity", settings);
+      rows.push([
+        "Electricity",
+        this.valToString(settings.electricityCost) + " $/" + utilityUnit,
+        this.roundValToString(currentEnergyUsage.electricityUsage) + " " + utilityUnit,
+        this.roundValToCurrency(currentEnergyUsage.electricityCosts),
+        this.roundValToString(currentEnergyUsage.electricityCO2SavingsData.totalEmissionOutputRate) + " kg CO2/" + utilityUnit
+      ]);
+    }
+    if (currentEnergyUsage.naturalGasUsed) {
+      let utilityUnit: string = this.getUtilityUnit("Natural Gas", settings);
+      rows.push([
+        "Natural Gas",
+        this.valToString(settings.fuelCost) + " $/" + utilityUnit,
+        this.roundValToString(currentEnergyUsage.naturalGasUsage) + " " + utilityUnit,
+        this.roundValToCurrency(currentEnergyUsage.naturalGasCosts),
+        this.roundValToString(currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate) + " kg CO2/" + utilityUnit
+      ]);
+    }
+    if (currentEnergyUsage.otherFuelUsed) {
+      let utilityUnit: string = this.getUtilityUnit("Other Fuel", settings);
+      rows.push([
+        "Other Fuel",
+        this.valToString(settings.otherFuelCost) + " $/" + utilityUnit,
+        this.roundValToString(currentEnergyUsage.otherFuelUsage) + " " + utilityUnit,
+        this.roundValToCurrency(currentEnergyUsage.otherFuelCosts),
+        this.roundValToString(currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate) + " kg CO2/" + utilityUnit
+      ]); 
+    }
+    if (currentEnergyUsage.waterUsed) {
+      let utilityUnit: string;
+      let utilityCostUnit: string;
+      if (settings.unitsOfMeasure == 'Imperial') {
+        utilityUnit = 'kgal';
+        utilityCostUnit = 'gal';
+      } else {
+        utilityUnit = 'L';
+        utilityCostUnit = 'L';
+      }
+      rows.push([
+        "Water",
+        this.valToString(settings.waterCost) + " $/" + utilityCostUnit,
+        this.roundValToString(currentEnergyUsage.waterUsage) + " " + utilityUnit,
+        this.roundValToCurrency(currentEnergyUsage.waterCosts),
+        this.roundValToString(currentEnergyUsage.waterCO2OutputRate) + " kg CO2/" + utilityCostUnit
+      ]);
+    }
+    if (currentEnergyUsage.wasteWaterUsed) {
+      let utilityUnit: string;
+      let utilityCostUnit: string;
+      if (settings.unitsOfMeasure == 'Imperial') {
+        utilityUnit = 'kgal';
+        utilityCostUnit = 'gal';
+      } else {
+        utilityUnit = 'L';
+        utilityCostUnit = 'L';
+      }
+      rows.push([
+        "Wastewater",
+        this.valToString(settings.waterWasteCost) + " $/" + utilityCostUnit,
+        this.roundValToString(currentEnergyUsage.wasteWaterUsage) + " " + utilityUnit,
+        this.roundValToCurrency(currentEnergyUsage.wasteWaterCosts),
+        this.roundValToString(currentEnergyUsage.wasteWaterCO2OutputRate) + " kg CO2/" + utilityCostUnit
+      ]);
+    }
+
+    if (currentEnergyUsage.compressedAirUsed) {
+      let utilityUnit: string;
+      let utilityCostUnit: string;
+      if (settings.unitsOfMeasure == 'Imperial') {
+        utilityUnit = 'kSCF';
+        utilityCostUnit = 'SCF';
+      } else {
+        utilityUnit = 'm<sup>3</sup>';
+        utilityCostUnit = 'm<sup>3</sup>';
+      }
+      rows.push([
+        "Compressed Air",
+        this.valToString(settings.compressedAirCost) + " $/" + utilityCostUnit,
+        this.roundValToString(currentEnergyUsage.compressedAirUsage) + " " + utilityUnit,
+        this.roundValToCurrency(currentEnergyUsage.compressedAirCosts),
+        this.roundValToString(currentEnergyUsage.compressedAirCO2OutputRate) + " kg CO2/" + utilityCostUnit
+      ]);
+    }
+    if (currentEnergyUsage.steamUsed) {
+      let utilityUnit: string = this.getUtilityUnit("Steam", settings);
+      rows.push([
+        "Steam",
+        this.valToString(settings.steamCost) + " $/" + utilityUnit,
+        this.roundValToString(currentEnergyUsage.steamUsage) + " " + utilityUnit,
+        this.roundValToCurrency(currentEnergyUsage.steamCosts),
+        this.roundValToString(currentEnergyUsage.steamCO2OutputRate) + " kg CO2/" + utilityUnit
+      ]);
+    }
+
+    slide.addTable(rows, { x: 1.84, y: 1.6, w: 9.95, colW: [1.5, 1.3, 2, 1.75, 3.1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: "left", valign: "middle" });
 
     return slide;
   }
