@@ -169,7 +169,7 @@ export class FlueGasFormMassComponent implements OnInit {
 
   calculate() {
     this.byMassForm = this.flueGasFormService.setValidators(this.byMassForm);
-    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.byMassForm.controls.gasTypeId.value);
+    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.byMassForm.controls.gasTypeId.value);
     this.higherHeatingValue = this.phastService.flueGasByMassCalculateHeatingValue(tmpFlueGas);
     this.checkWarnings();
     let currentDataByMass: FlueGas = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
