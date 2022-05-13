@@ -260,6 +260,15 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       return false;
     }
   }
+
+  compareVolumeO2InFlueGas() {
+    if (this.canCompare()) {
+      return this.flueGasCompareService.compareVolumeO2InFlueGas(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
   compareVolumeCombustionAirTemperature() {
     if (this.canCompare()) {
       return this.flueGasCompareService.compareVolumeCombustionAirTemperature(this.lossIndex);

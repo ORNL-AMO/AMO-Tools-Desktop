@@ -66,6 +66,7 @@ export class FsatService {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
     let psychrometricResults: PsychrometricResults = this.fansSuiteApiService.getBaseGasDensityRelativeHumidity(inputs);
     psychrometricResults = this.convertFanAnalysisService.convertPsychrometricResults(psychrometricResults, settings);
+    
     return psychrometricResults;
   }
 

@@ -1,0 +1,59 @@
+.panel-chart-container {
+  background: white;
+}
+
+.tab-panel-background {
+  background: white;
+}
+
+.hidden{
+  display: none;
+}
+
+
+.point-key-circle {
+  width: 16px;
+	height: 16px;
+	margin: auto;
+	border-radius: 50%;
+}
+
+td{
+  font-size: small;
+}
+
+th {
+  border-top: none;
+  padding: .25rem;
+}
+
+td{
+  font-size: small;
+  padding: .25rem;
+}
+
+table {
+  margin-bottom: .5rem;
+  background: white;
+}
+
+.tab-panel-background {
+  background: white;
+}
+
+.data-summary{
+  background-color: white;
+}
+
+.xsmall {
+  font-size: 1rem;
+}
+
+.hidden-copy-table {
+  z-index: -10;
+  position: fixed;
+  opacity: 0;
+  top: -1000px;
+  height: 0;
+  width: 0;
+}

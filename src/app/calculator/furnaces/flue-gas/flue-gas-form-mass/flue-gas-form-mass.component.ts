@@ -42,6 +42,8 @@ export class FlueGasFormMassComponent implements OnInit {
   calcMethodExcessAir: boolean;
   warnings: FlueGasWarnings;
 
+  higherHeatingValue: number;
+
   constructor(private flueGasService: FlueGasService,
     private flueGasFormService: FlueGasFormService,
     private sqlDbApiService: SqlDbApiService, 
@@ -167,6 +169,8 @@ export class FlueGasFormMassComponent implements OnInit {
 
   calculate() {
     this.byMassForm = this.flueGasFormService.setValidators(this.byMassForm);
+    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.byMassForm.controls.gasTypeId.value);
+    this.higherHeatingValue = this.phastService.flueGasByMassCalculateHeatingValue(tmpFlueGas);
     this.checkWarnings();
     let currentDataByMass: FlueGas = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
     if (this.isBaseline) {
