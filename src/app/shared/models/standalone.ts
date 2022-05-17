@@ -143,6 +143,13 @@ export interface AirVelocityInput {
   atmosphericPressure: number;
 }
 
+export interface BleedTestInput {
+  totalSystemVolume: number;
+  normalOperatingPressure: number;
+  testPressure: number;
+  time: number;
+}
+
 export interface PipeSizingInput {
   airFlow: number;
   airlinePressure: number;

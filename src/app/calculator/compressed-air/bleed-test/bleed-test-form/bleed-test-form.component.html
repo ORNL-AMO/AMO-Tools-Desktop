@@ -1,1 +1,60 @@
-<p>bleed-test-form works!</p>
+<div class="tab-content">
+    <form>
+        <div class="form-section">
+            <div class="form-group">
+                <label for="totalSystemVolume">Total System Volume</label>
+                <div class="input-group">
+                    <input name="totalSystemVolume" class="form-control" type="number" step="any"
+                        [(ngModel)]="inputs.totalSystemVolume" id="totalSystemVolume" (input)="emitChange()"
+                        onfocus="this.select();" (focus)="changeField('totalSystemVolume')">
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'"
+                        class="input-group-addon units">ft<sup>3</sup></span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'"
+                        class="input-group-addon units">m<sup>3</sup></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="normalOperatingPressure">Normal Operating Pressure</label>
+                <div class="input-group">
+                    <input name="normalOperatingPressure" class="form-control" type="number" step="any"
+                        [(ngModel)]="inputs.normalOperatingPressure" id="normalOperatingPressure" (input)="emitChange()"
+                        onfocus="this.select();" (focus)="changeField('normalOperatingPressure')">
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="testPressure">Test Pressure</label>
+                <div class="input-group">
+                    <input name="testPressure" class="form-control" type="number" step="any"
+                        [(ngModel)]="inputs.testPressure" id="testPressure" (input)="emitChange()"
+                        onfocus="this.select();" (focus)="changeField('testPressure')">
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="time">Time</label>
+                <div class="input-group">
+                    <input name="time" class="form-control" type="number" step="any" [(ngModel)]="inputs.time" id="time"
+                        (input)="emitChange()" onfocus="this.select();" (focus)="changeField('time')">
+                    <span class="input-group-addon units">s</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-section pt-1">
+            <div class="form-group">
+                <label class="bold">Leakage</label>
+                <div class="text-center small">
+                    <span *ngIf="outputs">
+                        <strong>{{outputs | number:'1.0-2'}} </strong>
+                        <strong>CFM</strong>
+                    </span>
+                    <span *ngIf="!outputs">
+                        <strong>&mdash; &mdash;</strong>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
