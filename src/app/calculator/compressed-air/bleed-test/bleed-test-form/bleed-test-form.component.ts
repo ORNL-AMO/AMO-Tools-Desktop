@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { BleedTestInput } from '../../../../shared/models/standalone';
+import { BleedTestService } from '../bleed-test.service';
 
 @Component({
   selector: 'app-bleed-test-form',
@@ -18,12 +20,17 @@ export class BleedTestFormComponent implements OnInit {
   calculate = new EventEmitter<BleedTestInput>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
+
+  bleedForm: FormGroup;
   
-  constructor() { }
+  constructor(private bleedTestService: BleedTestService) { }
 
   ngOnInit() {
+    this.bleedForm = this.bleedTestService.getBleedFormFromObj(this.inputs);
   }
   emitChange() {
+    this.inputs = this.bleedTestService.getBleedTestObjFromForm(this.bleedForm)
+    this.bleedForm = this.bleedTestService.getBleedFormFromObj(this.inputs);
     this.calculate.emit(this.inputs);
   }
 

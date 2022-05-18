@@ -1,15 +1,32 @@
 import { Injectable } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { BleedTestInput } from '../../../shared/models/standalone';
+import { LessThanValidator } from '../../../shared/validators/less-than';
 
 @Injectable()
 export class BleedTestService {
-
+  bleedTestInput: BehaviorSubject<BleedTestInput>;
   inputs: BleedTestInput;
-  constructor(private convertUnitsService: ConvertUnitsService) { 
+  resetData: BehaviorSubject<boolean>;
+  generateExample: BehaviorSubject<boolean>;
+  settings: Settings;
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { 
     this.inputs = this.getDefaultData();
-   }
+    this.bleedTestInput = new BehaviorSubject<BleedTestInput>(undefined);
+    this.resetData = new BehaviorSubject<boolean>(undefined);
+    this.generateExample = new BehaviorSubject<boolean>(undefined);
+
+  }
+
+
+  initDefaultEmptyInputs() {
+    let emptyBleedTest = this.getDefaultData();
+    
+    this.bleedTestInput.next(emptyBleedTest);
+  }
 
   getDefaultData(): BleedTestInput {
     return {
@@ -51,6 +68,27 @@ export class BleedTestService {
     leakage = (tmpInputs.totalSystemVolume * (tmpInputs.normalOperatingPressure - tmpInputs.testPressure) / tmpInputs.time * 14.7 ) * 1.25;
     
     return leakage;
+  }
+
+  getBleedFormFromObj(inputObj: BleedTestInput): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
+      totalSystemVolume: [inputObj.totalSystemVolume, [Validators.required, Validators.min(0)]],
+      normalOperatingPressure: [inputObj.normalOperatingPressure, [Validators.required, Validators.min(0)]],
+      testPressure: [inputObj.testPressure, [Validators.required, Validators.min(0), Validators.max(inputObj.normalOperatingPressure)]],
+      time: [inputObj.time, [Validators.required, Validators.min(0)]]
+      
+    });
+    return form;
+  }
+
+  getBleedTestObjFromForm(form: FormGroup): BleedTestInput{
+    let bleedTestInput: BleedTestInput = {
+      totalSystemVolume: form.controls.totalSystemVolume.value,
+      normalOperatingPressure: form.controls.normalOperatingPressure.value,
+      testPressure: form.controls.testPressure.value,
+      time: form.controls.time.value
+    }
+    return bleedTestInput;
   }
 
 }
