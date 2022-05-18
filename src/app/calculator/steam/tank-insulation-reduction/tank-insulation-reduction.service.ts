@@ -208,11 +208,13 @@ export class TankInsulationReductionService {
     }else{
       modificationResults = baselineResults;
     }
+    let energyUnit = this.getEnergyUnit(baselineCopy.utilityType, settings);
     let tankInsulationReductionResults: TankInsulationReductionResults = {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
       annualHeatSavings: annualHeatLossReduction,
-      annualCostSavings: annualCostSavings
+      annualCostSavings: annualCostSavings,
+      energyUnit: energyUnit
     };
     return tankInsulationReductionResults;
   }
@@ -493,6 +495,20 @@ export class TankInsulationReductionService {
       //Steel
       return 0.8;
     }
+  }
+
+  getEnergyUnit(utilityType: number, settings: Settings) {
+    let energyUnit: string = settings.energyResultUnit;
+    if (utilityType === 2) {
+      energyUnit = "kWh";
+    } else {
+      if (settings.unitsOfMeasure == 'Meteric'){
+        energyUnit = "GJ"
+      } else {
+        energyUnit = "MMBtu"
+      }
+    }
+    return energyUnit;
   }
 
 }

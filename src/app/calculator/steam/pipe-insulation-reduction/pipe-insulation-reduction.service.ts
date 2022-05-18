@@ -201,11 +201,13 @@ export class PipeInsulationReductionService {
     } else {
       modificationResults = baselineResults;
     }
+    let energyUnit = this.getEnergyUnit(baselineCopy.utilityType, settings);
     let pipeInsulationReductionResults: PipeInsulationReductionResults = {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
       annualHeatSavings: annualHeatLossReduction,
-      annualCostSavings: annualCostSavings
+      annualCostSavings: annualCostSavings,
+      energyUnit: energyUnit
     };
     return pipeInsulationReductionResults;
   }
@@ -433,4 +435,19 @@ export class PipeInsulationReductionService {
       },
     ];
   }
+
+  getEnergyUnit(utilityType: number, settings: Settings) {
+    let energyUnit: string = settings.energyResultUnit;
+    if (utilityType === 2) {
+      energyUnit = "kWh";
+    } else {
+      if (settings.unitsOfMeasure == 'Meteric'){
+        energyUnit = "GJ"
+      } else {
+        energyUnit = "MMBtu"
+      }
+    }
+    return energyUnit;
+  }
+
 }

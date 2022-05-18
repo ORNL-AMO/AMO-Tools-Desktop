@@ -51,13 +51,7 @@
                 <input class="form-control" name="utilityCost" id="{{'utilityCost_'+idString}}"
                     formControlName="utilityCost" type="number" (input)="calculate()"
                     (focus)="focusField('utilityCost')" (blur)="focusOut()" onfocus="this.select();">
-                <span class="units input-group-addon">$/
-                    <!-- <span *ngIf="form.controls.utilityType.value == 0 && settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-                    <span *ngIf="form.controls.utilityType.value == 0 && settings.unitsOfMeasure != 'Imperial'">GJ</span> -->
-                    <span *ngIf="form.controls.utilityType.value != 2 && settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-                    <span *ngIf="form.controls.utilityType.value != 2 && settings.unitsOfMeasure != 'Imperial'">GJ</span>
-                    <span *ngIf="form.controls.utilityType.value == 2">kWh</span>
-                </span>
+                <span class="input-group-addon units">$/{{energyUnit}}</span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.utilityCost.invalid && !form.controls.utilityCost.pristine">

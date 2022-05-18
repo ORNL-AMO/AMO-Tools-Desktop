@@ -26,10 +26,9 @@ export class TankInsulationReductionFormComponent implements OnInit {
   @Input()
   utilityCost: number;
   @Input()
-  heatedOrChilled: number;
-  @Input()
   form: FormGroup;
 
+  energyUnit: string;
   formWidth: number;
   showOperatingHoursModal: boolean;
   tankThicknessWarning: string = null;
@@ -135,6 +134,7 @@ export class TankInsulationReductionFormComponent implements OnInit {
     else {
       this.idString = 'modification';
     }
+    this.energyUnit = this.tankInsulationReductionService.getEnergyUnit(this.form.controls.utilityType.value, this.settings);
   }
 
   ngAfterViewInit() {
@@ -150,9 +150,6 @@ export class TankInsulationReductionFormComponent implements OnInit {
     }
     if (changes.utilityCost && !changes.utilityCost.firstChange) {
       this.form.patchValue({ utilityCost: this.utilityCost });
-    }
-    if (changes.heatedOrChilled && !changes.heatedOrChilled.firstChange) {
-      this.form.patchValue({ heatedOrChilled: this.heatedOrChilled });
     }
   }
 
@@ -172,6 +169,7 @@ export class TankInsulationReductionFormComponent implements OnInit {
         tmpCost = this.tankInsulationReductionService.modificationData.otherUtilityCost;
       }
     }
+    this.energyUnit = this.tankInsulationReductionService.getEnergyUnit(this.form.controls.utilityType.value, this.settings);
     this.form.controls.utilityCost.setValue(tmpCost);
     this.calculate();
   }

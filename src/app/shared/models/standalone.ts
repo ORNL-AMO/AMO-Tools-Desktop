@@ -638,7 +638,8 @@ export interface PipeInsulationReductionResults {
   baselineResults: PipeInsulationReductionResult,
   modificationResults: PipeInsulationReductionResult,
   annualHeatSavings: number,
-  annualCostSavings: number
+  annualCostSavings: number,
+  energyUnit: string
 };
 
 export interface PipeInsulationReductionResult {
@@ -682,7 +683,8 @@ export interface TankInsulationReductionResults {
   baselineResults: TankInsulationReductionResult,
   modificationResults: TankInsulationReductionResult,
   annualHeatSavings: number,
-  annualCostSavings: number
+  annualCostSavings: number,
+  energyUnit: string
 };
 
 export interface TankInsulationReductionResult {
