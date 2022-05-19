@@ -26,6 +26,8 @@ export class TankInsulationReductionFormComponent implements OnInit {
   @Input()
   utilityCost: number;
   @Input()
+  heatedOrChilled: number;
+  @Input()
   form: FormGroup;
 
   energyUnit: string;
@@ -150,6 +152,9 @@ export class TankInsulationReductionFormComponent implements OnInit {
     }
     if (changes.utilityCost && !changes.utilityCost.firstChange) {
       this.form.patchValue({ utilityCost: this.utilityCost });
+    }
+    if (changes.heatedOrChilled && !changes.heatedOrChilled.firstChange) {
+      this.form.patchValue({ heatedOrChilled: this.heatedOrChilled });
     }
   }
 
