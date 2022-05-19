@@ -13,16 +13,14 @@ import { BleedTestService } from '../bleed-test.service';
 export class BleedTestFormComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Output('calculate')
-  calculate = new EventEmitter<BleedTestInput>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
   bleedForm: FormGroup;
-  bleedTestInputSub: Subscription;
   bleedTestOutput: number;
-  bleedTestOutputSub: Subscription;
-  
+  resetDataSub: Subscription;
+  generateExampleSub: Subscription;
+
   constructor(private bleedTestService: BleedTestService) { }
 
   ngOnInit() {
@@ -30,26 +28,33 @@ export class BleedTestFormComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this.bleedTestInputSub = this.bleedTestService.bleedTestInput.subscribe(bleedTestInput => {
-      this.bleedForm = this.bleedTestService.getBleedFormFromObj(bleedTestInput);
+    this.resetDataSub = this.bleedTestService.resetData.subscribe(value => {
+      this.updateForm();
     });
-    this.bleedTestOutputSub = this.bleedTestService.bleedTestOutput.subscribe(val => {
-      this.bleedTestOutput = val;
+    this.generateExampleSub = this.bleedTestService.generateExample.subscribe(value => {
+      this.updateForm();
     });
   }
-  emitChange() {
-    let inputs = this.bleedTestService.getBleedTestObjFromForm(this.bleedForm)
+
+  updateForm() {
+    let inputs: BleedTestInput = this.bleedTestService.bleedTestInput.getValue();
     this.bleedForm = this.bleedTestService.getBleedFormFromObj(inputs);
+    this.save();
+  }
+
+  save() {
+    this.bleedTestOutput = this.bleedTestService.bleedTestOutput.getValue();
+    let inputs = this.bleedTestService.getBleedTestObjFromForm(this.bleedForm);
     this.bleedTestService.bleedTestInput.next(inputs);
-    this.calculate.emit(inputs);
   }
 
   changeField(str: string) {
     this.emitChangeField.emit(str);
   }
 
-  ngOnDestroy(){
-    this.bleedTestInputSub.unsubscribe();
-    this.bleedTestOutputSub.unsubscribe();
+  ngOnDestroy() {
+    this.generateExampleSub.unsubscribe();
+    this.resetDataSub.unsubscribe();
   }
+
 }

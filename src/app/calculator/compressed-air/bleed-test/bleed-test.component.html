@@ -9,8 +9,7 @@
             </div>
         </div>
         <div class="d-flex flex-column m-4">
-            <app-bleed-test-form [settings]="settings" (calculate)="calculateBleedTest($event)"
-                (emitChangeField)="setField($event)"></app-bleed-test-form>
+            <app-bleed-test-form [settings]="settings" (emitChangeField)="setField($event)"></app-bleed-test-form>
             <div class="w-100 justify-content-center btn-group btn-group-sm">
                 <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
                     Reset Data

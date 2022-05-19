@@ -6,7 +6,6 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
-import { BleedTestInput } from '../../../shared/models/standalone';
 import { StandaloneService } from '../../standalone.service';
 import { BleedTestService } from './bleed-test.service';
 
@@ -30,7 +29,6 @@ export class BleedTestComponent implements OnInit {
   }
 
   headerHeight: number;
-  bleedTestInput: BleedTestInput;
   bleedTestInputSub: Subscription;
   currentField: string;
   tabSelect: string = 'results';
@@ -43,27 +41,20 @@ export class BleedTestComponent implements OnInit {
     private calculatorDbService: CalculatorDbService,
     private indexedDbService: IndexedDbService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.bleedTestInput = this.bleedTestService.bleedTestInput.value;
-    if(!this.bleedTestInput){
-      this.bleedTestService.initDefaultEmptyInputs();
-    }
+    this.bleedTestService.initDefaultEmptyInputs();
     this.initSubscriptions();
     if (this.assessment) {
       this.getCalculatorForAssessment();
-    } else {
-      this.bleedTestInput = this.bleedTestService.inputs;
-      this.calculateBleedTest(this.bleedTestInput);
-    }
+    } 
   }
 
   initSubscriptions() {
     this.bleedTestInputSub = this.bleedTestService.bleedTestInput.subscribe(value => {
-      this.bleedTestInput = value;
-      this.calculateBleedTest(this.bleedTestInput);
+      this.calculateBleedTest();
     })
   }
   
@@ -86,7 +77,7 @@ export class BleedTestComponent implements OnInit {
 
   ngOnDestroy(){
     if (this.assessmentCalculator) {
-      this.bleedTestService.inputs = this.bleedTestService.getDefaultData();
+      this.bleedTestService.initDefaultEmptyInputs();
     }
     this.bleedTestInputSub.unsubscribe();
   }
@@ -94,21 +85,15 @@ export class BleedTestComponent implements OnInit {
   setField(str: string) {
     this.currentField = str;
   }
-
-  changeField(str: string) {
-    this.currentField = str;
-  }
-
+  
   getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.assessmentCalculator) {
       if (this.assessmentCalculator.bleedTestInputs) {
-        this.bleedTestInput = this.assessmentCalculator.bleedTestInputs;
+        this.bleedTestService.bleedTestInput.next(this.assessmentCalculator.bleedTestInputs);
       } else {
-        this.bleedTestInput = this.bleedTestService.inputs;
-        this.assessmentCalculator.bleedTestInputs = this.bleedTestInput;
+        this.assessmentCalculator.bleedTestInputs = this.bleedTestService.bleedTestInput.getValue();
       }
-      this.calculateBleedTest(this.bleedTestInput);
     } else {
       this.assessmentCalculator = this.initNewAssessmentCalculator();
       this.saveAssessmentCalculator();
@@ -116,24 +101,22 @@ export class BleedTestComponent implements OnInit {
   }
 
   initNewAssessmentCalculator(): Calculator {
-    this.bleedTestInput = this.bleedTestService.inputs;
-    this.calculateBleedTest(this.bleedTestInput);
+    let bleedTestInput = this.bleedTestService.bleedTestInput.value;
+    this.calculateBleedTest();
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
-      bleedTestInputs: this.bleedTestInput
+      bleedTestInputs: bleedTestInput
     };
     return tmpCalculator;
   }
 
 
-  calculateBleedTest(bleedTestInput: BleedTestInput) {
-    this.bleedTestService.calculate(bleedTestInput, this.settings);
+  calculateBleedTest() {
+    this.bleedTestService.calculate(this.settings);
     if (this.assessmentCalculator) {
-      this.assessmentCalculator.bleedTestInputs = this.bleedTestInput;
+      this.assessmentCalculator.bleedTestInputs = this.bleedTestService.bleedTestInput.getValue();
       this.saveAssessmentCalculator();
-    } else {
-      this.bleedTestService.inputs = this.bleedTestInput;
-    }
+    } 
   }
 
   saveAssessmentCalculator() {

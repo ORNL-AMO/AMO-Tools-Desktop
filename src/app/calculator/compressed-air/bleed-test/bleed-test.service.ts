@@ -4,18 +4,15 @@ import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { BleedTestInput } from '../../../shared/models/standalone';
-import { LessThanValidator } from '../../../shared/validators/less-than';
 
 @Injectable()
 export class BleedTestService {
   bleedTestInput: BehaviorSubject<BleedTestInput>;
   bleedTestOutput: BehaviorSubject<number>;
-  inputs: BleedTestInput;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
   settings: Settings;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { 
-    this.inputs = this.getDefaultData();
     this.bleedTestInput = new BehaviorSubject<BleedTestInput>(undefined);
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
@@ -33,14 +30,6 @@ export class BleedTestService {
     this.bleedTestInput.next(emptyBleedTest);
   }
 
-  getDefaultData(): BleedTestInput {
-    return {
-      totalSystemVolume: 0,
-      normalOperatingPressure: 150,
-      testPressure: 75,
-      time: 0
-    }
-  }
 
   getExampleData(): BleedTestInput {
     let emptyBleedTest = {
@@ -59,14 +48,14 @@ export class BleedTestService {
       tmpInputs.totalSystemVolume = Math.round(this.convertUnitsService.value(tmpInputs.totalSystemVolume).from('ft3').to('m3') * 100) / 100;
       tmpInputs.normalOperatingPressure = Math.round(this.convertUnitsService.value(tmpInputs.normalOperatingPressure).from('psig').to('kPa') * 100) / 100;
       tmpInputs.testPressure = Math.round(this.convertUnitsService.value(tmpInputs.testPressure).from('psig').to('kPa') * 100) / 100;
-      //tmpInputs.time = Math.round(this.convertUnitsService.value(tmpInputs.time).from('psia').to('kPaa') * 100) / 100;
     }
     return tmpInputs;
   }
 
-  calculate(input: BleedTestInput, settings: Settings) {
+  calculate(settings: Settings) {
     let leakage: number;    
-    let tmpInputs: BleedTestInput = input;
+    let inputs: BleedTestInput = this.bleedTestInput.value;
+    let tmpInputs: BleedTestInput = JSON.parse(JSON.stringify(inputs));
     let validInput: boolean = this.getBleedFormFromObj(tmpInputs).valid;
     if(!validInput){
       leakage = undefined;
@@ -95,6 +84,7 @@ export class BleedTestService {
   }
 
   getBleedTestObjFromForm(form: FormGroup): BleedTestInput{
+    form = this.setValidators(form);
     let bleedTestInput: BleedTestInput = {
       totalSystemVolume: form.controls.totalSystemVolume.value,
       normalOperatingPressure: form.controls.normalOperatingPressure.value,

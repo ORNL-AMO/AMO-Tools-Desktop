@@ -2,10 +2,10 @@
     <form [formGroup]="bleedForm">
         <div class="form-section">
             <div class="form-group">
-                <label for="totalSystemVolume">Total System Volume</label>
+                <label class="small" for="totalSystemVolume">Total System Volume</label>
                 <div class="input-group">
-                    <input name="totalSystemVolume" class="form-control" type="number" step="any"
-                        formControlName="totalSystemVolume" id="totalSystemVolume" (input)="emitChange()"
+                    <input class="form-control" name="totalSystemVolume" type="number"
+                        formControlName="totalSystemVolume" id="totalSystemVolume" (input)="save()"
                         onfocus="this.select();" (focus)="changeField('totalSystemVolume')">
                     <span *ngIf="settings.unitsOfMeasure != 'Metric'"
                         class="input-group-addon units">ft<sup>3</sup></span>
@@ -13,65 +13,56 @@
                         class="input-group-addon units">m<sup>3</sup></span>
                     <span class="alert-danger pull-right small"
                         *ngIf="bleedForm.controls.totalSystemVolume.invalid && !bleedForm.controls.totalSystemVolume.pristine">
-                        <span *ngIf="bleedForm.controls.totalSystemVolume.errors.required">Value
-                            required.</span>
-                        <span *ngIf="bleedForm.controls.totalSystemVolume.errors.min">Value can't be less
-                            than
+                        <span *ngIf="bleedForm.controls.totalSystemVolume.errors.required">Value required.</span>
+                        <span *ngIf="bleedForm.controls.totalSystemVolume.errors.min">Value can't be less than
                             {{bleedForm.controls.totalSystemVolume.errors.min.min}}.</span>
                     </span>
                 </div>
             </div>
             <div class="form-group">
-                <label for="normalOperatingPressure">Normal Operating Pressure</label>
+                <label class="small" for="normalOperatingPressure">Normal Operating Pressure</label>
                 <div class="input-group">
-                    <input name="normalOperatingPressure" class="form-control" type="number" step="any"
-                        formControlName="normalOperatingPressure" id="normalOperatingPressure" (input)="emitChange()"
+                    <input class="form-control" name="normalOperatingPressure" type="number"
+                        formControlName="normalOperatingPressure" id="normalOperatingPressure" (input)="save()"
                         onfocus="this.select();" (focus)="changeField('normalOperatingPressure')">
                     <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
                     <span class="alert-danger pull-right small"
                         *ngIf="bleedForm.controls.normalOperatingPressure.invalid && !bleedForm.controls.normalOperatingPressure.pristine">
-                        <span *ngIf="bleedForm.controls.normalOperatingPressure.errors.required">Value
-                            required.</span>
-                        <span *ngIf="bleedForm.controls.normalOperatingPressure.errors.min">Value can't be less
-                            than
+                        <span *ngIf="bleedForm.controls.normalOperatingPressure.errors.required">Value required.</span>
+                        <span *ngIf="bleedForm.controls.normalOperatingPressure.errors.min"> Value can't be less than
                             {{bleedForm.controls.normalOperatingPressure.errors.min.min}}.</span>
                     </span>
                 </div>
             </div>
             <div class="form-group">
-                <label for="testPressure">Test Pressure</label>
+                <label class="small" for="testPressure">Test Pressure</label>
                 <div class="input-group">
-                    <input name="testPressure" class="form-control" type="number" step="any"
-                        formControlName="testPressure" id="testPressure" (input)="emitChange()" onfocus="this.select();"
+                    <input class="form-control" name="testPressure" type="number" formControlName="testPressure"
+                        id="testPressure" (input)="save()" onfocus="this.select();"
                         (focus)="changeField('testPressure')">
                     <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
                     <span class="alert-danger pull-right small"
                         *ngIf="bleedForm.controls.testPressure.invalid && !bleedForm.controls.testPressure.pristine">
-                        <span *ngIf="bleedForm.controls.testPressure.errors.required">Value
-                            required.</span>
-                        <span *ngIf="bleedForm.controls.testPressure.errors.max">Value can't be greater
-                            than
+                        <span *ngIf="bleedForm.controls.testPressure.errors.required">Value required.</span>
+                        <span *ngIf="bleedForm.controls.testPressure.errors.max">Value can't be greater than
                             {{bleedForm.controls.testPressure.errors.max.max}}.</span>
-                        <span *ngIf="bleedForm.controls.testPressure.errors.min">Value can't be less
-                            than
+                        <span *ngIf="bleedForm.controls.testPressure.errors.min"> Value can't be less than
                             {{bleedForm.controls.testPressure.errors.min.min}}.</span>
                     </span>
                 </div>
             </div>
             <div class="form-group">
-                <label for="time">Time</label>
+                <label class="small" for="time">Time</label>
                 <div class="input-group">
-                    <input name="time" class="form-control" type="number" step="any" id="time" formControlName="time"
-                        (input)="emitChange()" onfocus="this.select();" (focus)="changeField('time')">
+                    <input class="form-control" name="time" type="number" id="time" formControlName="time"
+                        (input)="save()" onfocus="this.select();" (focus)="changeField('time')">
                     <span class="input-group-addon units">s</span>
                     <span class="alert-danger pull-right small"
                         *ngIf="bleedForm.controls.time.invalid && !bleedForm.controls.time.pristine">
-                        <span *ngIf="bleedForm.controls.time.errors.required">Value
-                            required.</span>
-                        <span *ngIf="bleedForm.controls.time.errors.min">Value can't be less
-                            than
+                        <span *ngIf="bleedForm.controls.time.errors.required">Value required.</span>
+                        <span *ngIf="bleedForm.controls.time.errors.min">Value can't be less than
                             {{bleedForm.controls.time.errors.min.min}}.</span>
                     </span>
                 </div>
