@@ -81,11 +81,11 @@
             <div class="form-group">
                 <label class="bold">Leakage</label>
                 <div class="text-center small">
-                    <span *ngIf="outputs">
-                        <strong>{{outputs | number:'1.0-2'}} </strong>
+                    <span *ngIf="bleedTestOutput">
+                        <strong>{{bleedTestOutput | number:'1.0-2'}} </strong>
                         <strong>CFM</strong>
                     </span>
-                    <span *ngIf="!outputs">
+                    <span *ngIf="!bleedTestOutput">
                         <strong>&mdash; &mdash;</strong>
                     </span>
                 </div>

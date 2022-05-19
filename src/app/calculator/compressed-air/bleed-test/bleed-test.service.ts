@@ -9,6 +9,7 @@ import { LessThanValidator } from '../../../shared/validators/less-than';
 @Injectable()
 export class BleedTestService {
   bleedTestInput: BehaviorSubject<BleedTestInput>;
+  bleedTestOutput: BehaviorSubject<number>;
   inputs: BleedTestInput;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
@@ -18,13 +19,17 @@ export class BleedTestService {
     this.bleedTestInput = new BehaviorSubject<BleedTestInput>(undefined);
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
-
+    this.bleedTestOutput = new BehaviorSubject<number>(undefined);
   }
 
 
   initDefaultEmptyInputs() {
-    let emptyBleedTest = this.getDefaultData();
-    
+    let emptyBleedTest = {
+      totalSystemVolume: 0,
+      normalOperatingPressure: 150,
+      testPressure: 0,
+      time: 0
+    }    
     this.bleedTestInput.next(emptyBleedTest);
   }
 
@@ -38,12 +43,14 @@ export class BleedTestService {
   }
 
   getExampleData(): BleedTestInput {
-    return {
+    let emptyBleedTest = {
       totalSystemVolume: 100,
       normalOperatingPressure: 150,
       testPressure: 75,
       time: 120
     }
+    this.bleedTestInput.next(emptyBleedTest);
+    return emptyBleedTest;
   }
 
   convertBleedTestExample(inputs: BleedTestInput, settings: Settings): BleedTestInput {
@@ -57,27 +64,33 @@ export class BleedTestService {
     return tmpInputs;
   }
 
-  bleedTest(input: BleedTestInput, settings: Settings): number {
+  calculate(input: BleedTestInput, settings: Settings) {
     let leakage: number;    
     let tmpInputs: BleedTestInput = input;
-    if (settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.totalSystemVolume = this.convertUnitsService.value(tmpInputs.totalSystemVolume).from('m3').to('ft3');
-      tmpInputs.normalOperatingPressure = this.convertUnitsService.value(tmpInputs.normalOperatingPressure).from('kPa').to('psig');
-      tmpInputs.testPressure = this.convertUnitsService.value(tmpInputs.testPressure).from('kPa').to('psig');
+    let validInput: boolean = this.getBleedFormFromObj(tmpInputs).valid;
+    if(!validInput){
+      leakage = undefined;
+      this.bleedTestOutput.next(leakage);
+    } else {
+      if (settings.unitsOfMeasure == 'Metric') {
+        tmpInputs.totalSystemVolume = this.convertUnitsService.value(tmpInputs.totalSystemVolume).from('m3').to('ft3');
+        tmpInputs.normalOperatingPressure = this.convertUnitsService.value(tmpInputs.normalOperatingPressure).from('kPa').to('psig');
+        tmpInputs.testPressure = this.convertUnitsService.value(tmpInputs.testPressure).from('kPa').to('psig');
+      }
+      leakage = (tmpInputs.totalSystemVolume * (tmpInputs.normalOperatingPressure - tmpInputs.testPressure) / tmpInputs.time * 14.7 ) * 1.25;
+      this.bleedTestOutput.next(leakage);
     }
-    leakage = (tmpInputs.totalSystemVolume * (tmpInputs.normalOperatingPressure - tmpInputs.testPressure) / tmpInputs.time * 14.7 ) * 1.25;
-    
-    return leakage;
   }
 
   getBleedFormFromObj(inputObj: BleedTestInput): FormGroup {
     let form: FormGroup = this.formBuilder.group({
-      totalSystemVolume: [inputObj.totalSystemVolume, [Validators.required, Validators.min(0)]],
-      normalOperatingPressure: [inputObj.normalOperatingPressure, [Validators.required, Validators.min(0)]],
-      testPressure: [inputObj.testPressure, [Validators.required, Validators.min(0), Validators.max(inputObj.normalOperatingPressure)]],
-      time: [inputObj.time, [Validators.required, Validators.min(0)]]
+      totalSystemVolume: [inputObj.totalSystemVolume],
+      normalOperatingPressure: [inputObj.normalOperatingPressure],
+      testPressure: [inputObj.testPressure],
+      time: [inputObj.time]
       
     });
+    form = this.setValidators(form);
     return form;
   }
 
@@ -89,6 +102,14 @@ export class BleedTestService {
       time: form.controls.time.value
     }
     return bleedTestInput;
+  }
+
+  setValidators(form: FormGroup): FormGroup {
+    form.controls.totalSystemVolume.setValidators([Validators.required, Validators.min(0)]);
+    form.controls.normalOperatingPressure.setValidators([Validators.required, Validators.min(0)]);
+    form.controls.testPressure.setValidators([Validators.required, Validators.min(0), Validators.max(form.controls.normalOperatingPressure.value)]);
+    form.controls.time.setValidators([Validators.required, Validators.min(0)]);
+    return form;
   }
 
 }

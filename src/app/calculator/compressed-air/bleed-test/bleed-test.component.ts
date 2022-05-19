@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -29,8 +30,8 @@ export class BleedTestComponent implements OnInit {
   }
 
   headerHeight: number;
-  inputs: BleedTestInput;
-  outputs: number;
+  bleedTestInput: BleedTestInput;
+  bleedTestInputSub: Subscription;
   currentField: string;
   tabSelect: string = 'results';
   saving: boolean;
@@ -46,20 +47,33 @@ export class BleedTestComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
+    this.bleedTestInput = this.bleedTestService.bleedTestInput.value;
+    if(!this.bleedTestInput){
+      this.bleedTestService.initDefaultEmptyInputs();
+    }
+    this.initSubscriptions();
     if (this.assessment) {
       this.getCalculatorForAssessment();
     } else {
-      this.inputs = this.bleedTestService.inputs;
-      this.calculateBleedTest(this.inputs);
+      this.bleedTestInput = this.bleedTestService.inputs;
+      this.calculateBleedTest(this.bleedTestInput);
     }
   }
+
+  initSubscriptions() {
+    this.bleedTestInputSub = this.bleedTestService.bleedTestInput.subscribe(value => {
+      this.bleedTestInput = value;
+      this.calculateBleedTest(this.bleedTestInput);
+    })
+  }
+  
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
   }
-
+  
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
@@ -74,6 +88,7 @@ export class BleedTestComponent implements OnInit {
     if (this.assessmentCalculator) {
       this.bleedTestService.inputs = this.bleedTestService.getDefaultData();
     }
+    this.bleedTestInputSub.unsubscribe();
   }
 
   setField(str: string) {
@@ -88,12 +103,12 @@ export class BleedTestComponent implements OnInit {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.assessmentCalculator) {
       if (this.assessmentCalculator.bleedTestInputs) {
-        this.inputs = this.assessmentCalculator.bleedTestInputs;
+        this.bleedTestInput = this.assessmentCalculator.bleedTestInputs;
       } else {
-        this.inputs = this.bleedTestService.inputs;
-        this.assessmentCalculator.bleedTestInputs = this.inputs;
+        this.bleedTestInput = this.bleedTestService.inputs;
+        this.assessmentCalculator.bleedTestInputs = this.bleedTestInput;
       }
-      this.calculateBleedTest(this.inputs);
+      this.calculateBleedTest(this.bleedTestInput);
     } else {
       this.assessmentCalculator = this.initNewAssessmentCalculator();
       this.saveAssessmentCalculator();
@@ -101,23 +116,23 @@ export class BleedTestComponent implements OnInit {
   }
 
   initNewAssessmentCalculator(): Calculator {
-    this.inputs = this.bleedTestService.inputs;
-    this.calculateBleedTest(this.inputs);
+    this.bleedTestInput = this.bleedTestService.inputs;
+    this.calculateBleedTest(this.bleedTestInput);
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
-      bleedTestInputs: this.inputs
+      bleedTestInputs: this.bleedTestInput
     };
     return tmpCalculator;
   }
 
 
-  calculateBleedTest(inputs: BleedTestInput) {
-    this.outputs = this.bleedTestService.bleedTest(inputs, this.settings);
+  calculateBleedTest(bleedTestInput: BleedTestInput) {
+    this.bleedTestService.calculate(bleedTestInput, this.settings);
     if (this.assessmentCalculator) {
-      this.assessmentCalculator.bleedTestInputs = this.inputs;
+      this.assessmentCalculator.bleedTestInputs = this.bleedTestInput;
       this.saveAssessmentCalculator();
     } else {
-      this.bleedTestService.inputs = this.inputs;
+      this.bleedTestService.inputs = this.bleedTestInput;
     }
   }
 
@@ -141,16 +156,13 @@ export class BleedTestComponent implements OnInit {
   }
 
   btnResetData() {
-    let defaultInputs = this.bleedTestService.getDefaultData();
-    this.bleedTestService.inputs = defaultInputs;
-    this.inputs = defaultInputs;
-    this.calculateBleedTest(this.inputs);
+    this.bleedTestService.initDefaultEmptyInputs();
+    this.bleedTestService.resetData.next(true);
   }
 
   btnGenerateExample() {
-    let tempInputs: BleedTestInput = this.bleedTestService.getExampleData();
-    this.inputs = this.bleedTestService.convertBleedTestExample(tempInputs, this.settings);
-    this.calculateBleedTest(this.inputs);
+    this.bleedTestService.getExampleData();
+    this.bleedTestService.generateExample.next(true);
   }
 
 }

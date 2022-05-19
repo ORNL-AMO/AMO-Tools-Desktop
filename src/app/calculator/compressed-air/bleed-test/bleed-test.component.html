@@ -2,15 +2,15 @@
     <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
         <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
             <div class="col-md-auto">
-                <img src="assets/images/calculator-icons/compressed-air-icons/pipe-sizing.png" class="ico-size5">
+                <img src="assets/images/calculator-icons/compressed-air-icons/bleedTestIcon.png" class="ico-size5">
             </div>
             <div class="pl-2">
                 <h3>Bleed Test</h3>
             </div>
         </div>
         <div class="d-flex flex-column m-4">
-            <app-bleed-test-form [settings]="settings" [inputs]="inputs" [outputs]="outputs" (calculate)="calculateBleedTest($event)"
-            (emitChangeField)="setField($event)"></app-bleed-test-form>
+            <app-bleed-test-form [settings]="settings" (calculate)="calculateBleedTest($event)"
+                (emitChangeField)="setField($event)"></app-bleed-test-form>
             <div class="w-100 justify-content-center btn-group btn-group-sm">
                 <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
                     Reset Data
@@ -36,7 +36,8 @@
                 <h5>
                     Bleed Test Help
                     <br>
-                    <small class="text-muted"> This calculator helps in finding the estimated leak rate for the system.
+                    <small class="text-muted"> This calculator helps find the estimated leak rate for the system. Also
+                        called a Dropdown test or a Pressure Decay test.
                     </small>
                 </h5>
                 <hr class="my-1 hr-spacer">
