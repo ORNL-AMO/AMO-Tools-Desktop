@@ -63,12 +63,7 @@ export class CompressedAirSuiteApiService {
       instance = this.compressorsCalcStartStop(inputData);
     }
 
-    let suiteOutput: {
-      kW_Calc: number,
-      C_Calc: number,
-      PerkW: number,
-      C_Per: number
-    };
+    let suiteOutput;
     if (inputData.computeFrom == Module.ComputeFrom.PercentagePower) {
       suiteOutput = instance.calculateFromPerkW(inputData.computeFromVal);
     }
@@ -85,14 +80,15 @@ export class CompressedAirSuiteApiService {
       suiteOutput = instance.calculateFromVIPFMeasured(inputData.computeFromVal, inputData.computeFromPFVoltage, inputData.computeFromPFAmps);
     }
 
-    let output: CompressorCalcResult = {
+    let results: CompressorCalcResult = {
       powerCalculated: suiteOutput.kW_Calc,
       capacityCalculated: suiteOutput.C_Calc,
       percentagePower: suiteOutput.PerkW,
       percentageCapacity: suiteOutput.C_Per
     };
+    suiteOutput.delete();
     instance.delete();
-    return output;
+    return results;
   }
 
   compressorsCalcModulationWOUnload(input: CompressorsCalcInput) {
@@ -143,12 +139,7 @@ export class CompressedAirSuiteApiService {
     }
 
     //TODO: Blowoff results added
-    let suiteOutput: {
-      kW_Calc: number,
-      C_Calc: number,
-      PerkW: number,
-      C_Per: number
-    };
+    let suiteOutput;
     if (inputData.controlType == Module.ControlType.BlowOff) {
       if (inputData.computeFrom == Module.ComputeFrom.PercentagePower) {
         suiteOutput = instance.calculateFromPerkW_BlowOff(inputData.computeFromVal, inputData.percentageBlowOff);
@@ -184,14 +175,15 @@ export class CompressedAirSuiteApiService {
       }
     }
 
-    let output: CompressorCalcResult = {
+    let results: CompressorCalcResult = {
       powerCalculated: suiteOutput.kW_Calc,
       capacityCalculated: suiteOutput.C_Calc,
       percentagePower: suiteOutput.PerkW,
       percentageCapacity: suiteOutput.C_Per
     };
+    suiteOutput.delete();
     instance.delete();
-    return output;
+    return results;
 
   }
 
