@@ -136,6 +136,7 @@ import { InventoryPerformanceProfileModule } from './inventory-performance-profi
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
 import { CentrifugalGraphModule } from './centrifugal-graph/centrifugal-graph.module';
+import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-modal.component';
 
 @NgModule({
   declarations: [
@@ -215,7 +216,8 @@ import { CentrifugalGraphModule } from './centrifugal-graph/centrifugal-graph.mo
     AssessmentNotesComponent,
     ImproveEndUseEfficiencyItemComponent,
     CompressorSummaryComponent,
-    WelcomeScreenComponent
+    WelcomeScreenComponent,
+    FlaModalComponent
   ],
   imports: [
     CommonModule,
