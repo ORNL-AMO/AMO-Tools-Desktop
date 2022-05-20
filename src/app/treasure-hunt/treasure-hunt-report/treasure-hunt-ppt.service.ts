@@ -375,20 +375,28 @@ export class TreasureHuntPptService {
   }
 
   roundValToFormatString(num: number): string {
-    return Number(num.toFixed(2)).toLocaleString('en-US');
+    if (!num) {
+      return "-";
+    } else {
+      return Number(num.toFixed(2)).toLocaleString('en-US');
+    }
   }
 
   returnValAsString(num: number): string {
-    if (num == undefined) {
-      return "0";
+    if (!num) {
+      return "-";
     } else {
       return num.toString();
     }
   }
 
   roundValToCurrency(num: number): string {
-    let number = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
-    return number;
+    if (!num) {
+      return "-";
+    } else {
+      let number = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
+      return number;
+    }
   }
 
   getOtherCost(oppCost: OpportunityCost): string {
