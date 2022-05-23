@@ -420,6 +420,7 @@ export class SqlDbApiService {
   deleteSolidLiquidFlueGasMaterial(id: number): boolean {
     try {
       let success = dbInstance.deleteSolidLiquidFlueGasMaterial(id);
+      console.log(success);
       return success;
     } catch (err) {
       console.log(err);
@@ -436,7 +437,9 @@ export class SqlDbApiService {
         let gasLoadChargeMaterialPointer = items.get(index);
         let gasLoadChargeMaterial: GasLoadChargeMaterial = this.getGasLoadChargeMaterialFromWASM(gasLoadChargeMaterialPointer);
         gasLoadChargeMaterials.push(gasLoadChargeMaterial);
+        gasLoadChargeMaterialPointer.delete();
       }
+      items.delete();
       return gasLoadChargeMaterials;
     }
     catch (err) {
@@ -459,6 +462,7 @@ export class SqlDbApiService {
     try {
       let gasLoadChargeMaterialPointer = dbInstance.getGasLoadChargeMaterialById(id);
       let gasLoadChargeMaterial: GasLoadChargeMaterial = this.getGasLoadChargeMaterialFromWASM(gasLoadChargeMaterialPointer);
+      gasLoadChargeMaterialPointer.delete();
       return gasLoadChargeMaterial;
     }
     catch (err) {
@@ -522,7 +526,9 @@ export class SqlDbApiService {
         let liquidLoadChargeMaterialPointer = items.get(index);
         let liquidLoadChargeMaterial: LiquidLoadChargeMaterial = this.getLiquidLoadChargeMaterialFromWASM(liquidLoadChargeMaterialPointer);
         liquidLoadChargeMaterials.push(liquidLoadChargeMaterial);
+        liquidLoadChargeMaterialPointer.delete();
       }
+      items.delete();
       return liquidLoadChargeMaterials;
     }
     catch (err) {
@@ -548,6 +554,7 @@ export class SqlDbApiService {
     try {
       let liquidLoadChargeMaterialPointer = dbInstance.getLiquidLoadChargeMaterialById(id);
       let liquidLoadChargeMaterial: LiquidLoadChargeMaterial = this.getLiquidLoadChargeMaterialFromWASM(liquidLoadChargeMaterialPointer);
+      liquidLoadChargeMaterialPointer.delete();
       return liquidLoadChargeMaterial;
     }
     catch (err) {
@@ -614,7 +621,9 @@ export class SqlDbApiService {
         let solidLoadChargeMaterialPointer = items.get(index);
         let solidLoadChargeMaterial: SolidLoadChargeMaterial = this.getSolidLoadChargeMaterialFromWASM(solidLoadChargeMaterialPointer);
         solidLoadChargeMaterials.push(solidLoadChargeMaterial);
+        solidLoadChargeMaterialPointer.delete();
       }
+      items.delete();
       return solidLoadChargeMaterials;
     }
     catch (err) {
@@ -640,6 +649,7 @@ export class SqlDbApiService {
     try {
       let solidLoadChargeMaterialPointer = dbInstance.getSolidLoadChargeMaterialById(id);
       let solidLoadChargeMaterial: SolidLoadChargeMaterial = this.getSolidLoadChargeMaterialFromWASM(solidLoadChargeMaterialPointer);
+      solidLoadChargeMaterialPointer.delete();
       return solidLoadChargeMaterial;
     }
     catch (err) {
@@ -706,7 +716,9 @@ export class SqlDbApiService {
         let suiteDbMotorPointer = items.get(index);
         let suiteDbMotor: SuiteDbMotor = this.getSuiteDbMotorFromWASM(suiteDbMotorPointer);
         suiteDbMotors.push(suiteDbMotor);
+        suiteDbMotorPointer.delete();
       }
+      items.delete();
       return suiteDbMotors;
     }
     catch (err) {
@@ -741,6 +753,7 @@ export class SqlDbApiService {
     try {
       let suiteDbMotorPointer = dbInstance.getMotorDataById(id);
       let suiteDbMotor: SuiteDbMotor = this.getSuiteDbMotorFromWASM(suiteDbMotorPointer);
+      suiteDbMotorPointer.delete();
       return suiteDbMotor;
     }
     catch (err) {
@@ -815,7 +828,9 @@ export class SqlDbApiService {
         let suiteDbPumpPointer = items.get(index);
         let suiteDbPump: SuiteDbPump = this.getSuiteDbPumpFromWASM(suiteDbPumpPointer);
         suiteDbPumps.push(suiteDbPump);
+        suiteDbPumpPointer.delete();
       }
+      items.delete();
       return suiteDbPumps;
     }
     catch (err) {
@@ -880,6 +895,7 @@ export class SqlDbApiService {
     try {
       let suiteDbPumpPointer = dbInstance.getPumpDataById(id);
       let suiteDbPump: SuiteDbPump = this.getSuiteDbPumpFromWASM(suiteDbPumpPointer);
+      suiteDbPumpPointer.delete();
       return suiteDbPump;
     }
     catch (err) {
