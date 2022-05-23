@@ -53,17 +53,17 @@
       </div>
       <div #modalBody class="modal-body p-0">
         <app-calculate-inlet-pressure *ngIf="pressureCalcType == 'inlet' && bodyHeight" [settings]="settings"
-          [inletPressureData]="inletPressureCopy" (emitSave)="saveInletPressure($event)" [bodyHeight]="bodyHeight">
+          [inletPressureData]="inletPressureCopy" [inletVelocityPressureInputs]="inletVelocityPressureInputs"
+          (emitSave)="saveInletPressure($event)" [bodyHeight]="bodyHeight" (emitInvalid)="setCalcInvalid($event)">
         </app-calculate-inlet-pressure>
         <app-calculate-outlet-pressure *ngIf="pressureCalcType == 'outlet' && bodyHeight" [settings]="settings"
-          [outletPressureData]="outletPressureCopy" (emitSave)="saveOutletPressure($event)" [bodyHeight]="bodyHeight">
+          [outletPressureData]="outletPressureCopy" [inletVelocityPressureInputs]="inletVelocityPressureInputs"
+          (emitSave)="saveOutletPressure($event)" [bodyHeight]="bodyHeight" (emitInvalid)="setCalcInvalid($event)">
         </app-calculate-outlet-pressure>
-        <!-- <app-calculate-flow-pressures *ngIf="pressureCalcType == 'flow' && bodyHeight" [settings]="settings" [fsat]="fsatCopy"
-          (saveFlowAndPressure)="saveFsatCopy($event)" [bodyHeight]="bodyHeight"></app-calculate-flow-pressures> -->
       </div>
       <div class="modal-footer fsat justify-content-between">
         <button class="btn btn-default pull-left" (click)="hidePressureModal()">Cancel</button>
-        <button class="btn btn-primary" (click)="saveAndClose()">Apply Data</button>
+        <button [disabled]="disableApplyData == true" class="btn btn-primary" (click)="saveAndClose()">Apply Data</button>
       </div>
     </div>
   </div>
