@@ -175,7 +175,7 @@ export class ConvertInputDataService {
 
     currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate, oldFuelUnit, newFuelUnit);
     currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate, oldFuelUnit, newFuelUnit);
-    if(currentEnergyUsage.otherFuelMixedCO2SavingsData.length != 0){
+    if(currentEnergyUsage.otherFuelMixedCO2SavingsData && currentEnergyUsage.otherFuelMixedCO2SavingsData.length != 0){
       currentEnergyUsage.otherFuelMixedCO2SavingsData.forEach(fuel => {
         fuel.totalEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(fuel.totalEmissionOutputRate, oldFuelUnit, newFuelUnit);
       });
