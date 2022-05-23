@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, BagMethodInput, BagMethodOutput, CalculateUsableCapacity, CombinedHeatPower, CombinedHeatPowerOutput, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, OperatingCostInput, OperatingCostOutput, PipeInsulationReductionInput, PipeInsulationReductionResult, PipeSizes, PipeSizingInput, PipeSizingOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput, PneumaticValve, PneumaticValveFlowCoefficient, PneumaticValveFlowRateInput, PneumaticValveFlowRateOutput, ReceiverTankBridgingCompressor, ReceiverTankDedicatedStorage, ReceiverTankGeneral, ReceiverTankMeteredStorage, SteamReductionInput, TankInsulationReductionInput, TankInsulationReductionResult, WaterReductionInput, WaterReductionResult } from '../shared/models/standalone';
+import { AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, BagMethodInput, BagMethodOutput, CalculateUsableCapacity, CombinedHeatPower, CombinedHeatPowerOutput, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, OperatingCostInput, OperatingCostOutput, PipeInsulationReductionInput, PipeInsulationReductionResult, PipeSizes, PipeSizingInput, PipeSizingOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput, ReceiverTankBridgingCompressor, ReceiverTankDedicatedStorage, ReceiverTankGeneral, ReceiverTankMeteredStorage } from '../shared/models/standalone';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
 @Injectable()
 export class StandaloneSuiteApiService {
 
-  constructor(private suiteApiHelperService: SuiteApiHelperService ) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService) { }
 
   pneumaticAirRequirement(input: PneumaticAirRequirementInput): PneumaticAirRequirementOutput {
     let pistonType = this.suiteApiHelperService.getPistonTypeEnum(input.pistonType);
@@ -22,8 +22,14 @@ export class StandaloneSuiteApiService {
       PneumaticAirRequirement = new Module.PneumaticAirRequirement(pistonType, input.cylinderDiameter, input.cylinderStroke, input.airPressure, input.cyclesPerMinute);
     }
     let output = PneumaticAirRequirement.calculate();
+    let results: PneumaticAirRequirementOutput = {
+      airRequirementPneumaticCylinder: output.airRequirementPneumaticCylinder,
+      volumeAirIntakePiston: output.volumeAirIntakePiston,
+      compressionRatio: output.compressionRatio,
+    }
+    output.delete();
     PneumaticAirRequirement.delete();
-    return output;
+    return results;
   }
 
   receiverTankGeneral(input: ReceiverTankGeneral): number {
@@ -83,17 +89,24 @@ export class StandaloneSuiteApiService {
     input.costOfElectricity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.costOfElectricity);
 
     let OperatingCost = new Module.OperatingCost(
-      input.motorBhp, 
-      input.bhpUnloaded, 
+      input.motorBhp,
+      input.bhpUnloaded,
       input.annualOperatingHours,
-      input.runTimeLoaded, 
-      input.efficiencyLoaded, 
+      input.runTimeLoaded,
+      input.efficiencyLoaded,
       input.efficiencyUnloaded,
       input.costOfElectricity
     );
-    let output: OperatingCostOutput = OperatingCost.calculate();
+    let output = OperatingCost.calculate();
+    let results: OperatingCostOutput = {
+      runTimeUnloaded: output.runTimeUnloaded,
+      costForLoaded: output.costForLoaded,
+      costForUnloaded: output.costForUnloaded,
+      totalAnnualCost: output.totalAnnualCost,
+    }
+    output.delete();
     OperatingCost.delete();
-    return output;
+    return results;
   }
 
   airSystemCapacity(input: AirSystemCapacityInput): AirSystemCapacityOutput {
@@ -103,24 +116,24 @@ export class StandaloneSuiteApiService {
     let receiverCapacitiesInput = this.returnDoubleVector(receiverCapacities);
 
     let PipeData = new Module.PipeData(
-      input.oneHalf, 
-      input.threeFourths, 
-      input.one, 
-      input.oneAndOneFourth, 
-      input.oneAndOneHalf, 
-      input.two, 
-      input.twoAndOneHalf, 
+      input.oneHalf,
+      input.threeFourths,
+      input.one,
+      input.oneAndOneFourth,
+      input.oneAndOneHalf,
+      input.two,
+      input.twoAndOneHalf,
       input.three,
-      input.threeAndOneHalf, 
-      input.four, 
-      input.five, 
-      input.six, 
-      input.eight, 
-      input.ten, 
-      input.twelve, 
-      input.fourteen, 
-      input.sixteen, 
-      input.eighteen, 
+      input.threeAndOneHalf,
+      input.four,
+      input.five,
+      input.six,
+      input.eight,
+      input.ten,
+      input.twelve,
+      input.fourteen,
+      input.sixteen,
+      input.eighteen,
       input.twenty,
       input.twentyFour,
     );
@@ -131,7 +144,8 @@ export class StandaloneSuiteApiService {
 
     let receiverCapacitiesOutput: Array<number> = [];
     for (let i = 0; i < rawOutput.receiverCapacities.size(); ++i) {
-      receiverCapacitiesOutput.push(rawOutput.receiverCapacities.get(i));
+      let output = rawOutput.receiverCapacities.get(i);
+      receiverCapacitiesOutput.push(output);
     }
 
     let output: AirSystemCapacityOutput = {
@@ -161,7 +175,7 @@ export class StandaloneSuiteApiService {
       twenty: rawOutput.pipeLengths.twenty,
       twentyFour: rawOutput.pipeLengths.twentyFour,
     }
-
+    rawOutput.delete();
     PipeData.delete();
     AirSystemCapacity.delete();
     receiverCapacitiesInput.delete();
@@ -173,9 +187,32 @@ export class StandaloneSuiteApiService {
     input.pipePressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.pipePressure);
     input.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPressure);
     let AirVelocity = new Module.AirVelocity(input.airFlow, input.pipePressure, input.atmosphericPressure);
-    let output: PipeSizes = AirVelocity.calculate();
+    let output = AirVelocity.calculate();
+    let results: PipeSizes = {
+      oneHalf: output.oneHalf,
+      threeFourths: output.threeFourths,
+      one: output.one,
+      oneAndOneFourth: output.oneAndOneFourth,
+      oneAndOneHalf: output.oneAndOneHalf,
+      two: output.two,
+      twoAndOneHalf: output.twoAndOneHalf,
+      three: output.three,
+      threeAndOneHalf: output.threeAndOneHalf,
+      four: output.four,
+      five: output.five,
+      six: output.six,
+      eight: output.eight,
+      ten: output.ten,
+      twelve: output.twelve,
+      fourteen: output.fourteen,
+      sixteen: output.sixteen,
+      eighteen: output.eighteen,
+      twenty: output.twenty,
+      twentyFour: output.twentyFour,
+    }
+    output.delete();
     AirVelocity.delete();
-    return output;
+    return results;
   }
 
   pipeSizing(input: PipeSizingInput): PipeSizingOutput {
@@ -185,24 +222,31 @@ export class StandaloneSuiteApiService {
     input.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPressure);
 
     let PipeSizing = new Module.PipeSizing(input.airFlow, input.airlinePressure, input.designVelocity, input.atmosphericPressure);
-    let output: PipeSizingOutput = PipeSizing.calculate();
+    let output = PipeSizing.calculate();
+    let results: PipeSizingOutput = {
+      crossSectionalArea: output.crossSectionalArea,
+      pipeDiameter: output.pipeDiameter
+    }
+    output.delete();
     PipeSizing.delete();
-    return output;
+    return results;
   }
 
-  pneumaticValveCalculateFlowRate(input: PneumaticValveFlowRateInput): PneumaticValveFlowRateOutput {
-    let PneumaticValve = new Module.PneumaticValve(input.inletPressure, input.outletPressure);
-    let output: PneumaticValveFlowRateOutput = PneumaticValve.calculate();
-    PneumaticValve.delete();
-    return output;
-  }
+  // pneumaticValveCalculateFlowRate(input: PneumaticValveFlowRateInput): PneumaticValveFlowRateOutput {
+  //   let PneumaticValve = new Module.PneumaticValve(input.inletPressure, input.outletPressure);
+  //   let output: PneumaticValveFlowRateOutput = PneumaticValve.calculate();
+  //   console.log(output);
+  //   PneumaticValve.delete();
+  //   return output;
+  // }
 
-  pneumaticValve(input: PneumaticValve): PneumaticValveFlowCoefficient {
-    let PneumaticValve = new Module.PneumaticValve(input.inletPressure, input.outletPressure, input.flowRate);
-    let output: PneumaticValveFlowCoefficient = PneumaticValve.calculate();
-    PneumaticValve.delete();
-    return output;
-  }
+  // pneumaticValve(input: PneumaticValve): PneumaticValveFlowCoefficient {
+  //   let PneumaticValve = new Module.PneumaticValve(input.inletPressure, input.outletPressure, input.flowRate);
+  //   let output: PneumaticValveFlowCoefficient = PneumaticValve.calculate();
+  //   console.log(output);
+  //   PneumaticValve.delete();
+  //   return output;
+  // }
 
   bagMethod(input: BagMethodInput): BagMethodOutput {
     input.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagFillTime);
@@ -211,45 +255,56 @@ export class StandaloneSuiteApiService {
     let BagMethod = new Module.BagMethod(input.operatingTime, input.bagFillTime, input.heightOfBag, input.diameterOfBag, input.numberOfUnits);
     let rawOutput = BagMethod.calculate();
     let output: BagMethodOutput = {
-      flowRate: isNaN(rawOutput.flowRate)? undefined : rawOutput.flowRate,
-      annualConsumption: isNaN(rawOutput.annualConsumption)? undefined : rawOutput.annualConsumption
+      flowRate: isNaN(rawOutput.flowRate) ? undefined : rawOutput.flowRate,
+      annualConsumption: isNaN(rawOutput.annualConsumption) ? undefined : rawOutput.annualConsumption
     }
+    rawOutput.delete();
     BagMethod.delete();
     return output;
   }
 
   CHPcalculator(input: CombinedHeatPower): CombinedHeatPowerOutput {
-    input.annualOperatingHours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.annualOperatingHours); 
-    input.annualElectricityConsumption = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.annualElectricityConsumption); 
-    input.annualThermalDemand = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.annualThermalDemand); 
-    input.boilerThermalFuelCosts = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.boilerThermalFuelCosts); 
-    input.avgElectricityCosts = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.avgElectricityCosts); 
-    input.boilerThermalFuelCostsCHPcase = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.boilerThermalFuelCostsCHPcase); 
-    input.CHPfuelCosts = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.CHPfuelCosts); 
-    input.percentAvgkWhElectricCostAvoidedOrStandbyRate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.percentAvgkWhElectricCostAvoidedOrStandbyRate); 
-    input.displacedThermalEfficiency = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.displacedThermalEfficiency); 
-    input.chpAvailability = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.chpAvailability); 
+    input.annualOperatingHours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.annualOperatingHours);
+    input.annualElectricityConsumption = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.annualElectricityConsumption);
+    input.annualThermalDemand = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.annualThermalDemand);
+    input.boilerThermalFuelCosts = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.boilerThermalFuelCosts);
+    input.avgElectricityCosts = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.avgElectricityCosts);
+    input.boilerThermalFuelCostsCHPcase = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.boilerThermalFuelCostsCHPcase);
+    input.CHPfuelCosts = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.CHPfuelCosts);
+    input.percentAvgkWhElectricCostAvoidedOrStandbyRate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.percentAvgkWhElectricCostAvoidedOrStandbyRate);
+    input.displacedThermalEfficiency = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.displacedThermalEfficiency);
+    input.chpAvailability = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.chpAvailability);
     input.thermalUtilization = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.thermalUtilization);
-  
+
     let chpOption = this.suiteApiHelperService.getCHPOptionEnum(input.option);
     let CHP = new Module.CHP(
-      input.annualOperatingHours, 
-      input.annualElectricityConsumption, 
-      input.annualThermalDemand, 
-      input.boilerThermalFuelCosts, 
-      input.avgElectricityCosts, 
-      chpOption, 
-      input.boilerThermalFuelCostsCHPcase, 
-      input.CHPfuelCosts, 
-      input.percentAvgkWhElectricCostAvoidedOrStandbyRate, 
-      input.displacedThermalEfficiency, 
-      input.chpAvailability, 
+      input.annualOperatingHours,
+      input.annualElectricityConsumption,
+      input.annualThermalDemand,
+      input.boilerThermalFuelCosts,
+      input.avgElectricityCosts,
+      chpOption,
+      input.boilerThermalFuelCostsCHPcase,
+      input.CHPfuelCosts,
+      input.percentAvgkWhElectricCostAvoidedOrStandbyRate,
+      input.displacedThermalEfficiency,
+      input.chpAvailability,
       input.thermalUtilization
-      );
+    );
 
-    let output: CombinedHeatPowerOutput = CHP.getCostInfo();
+    let output = CHP.getCostInfo();
+    let results: CombinedHeatPowerOutput = {
+      annualOperationSavings: output.annualOperationSavings,
+      totalInstalledCostsPayback: output.totalInstalledCostsPayback,
+      simplePayback: output.simplePayback,
+      fuelCosts: output.fuelCosts,
+      thermalCredit: output.thermalCredit,
+      incrementalOandM: output.incrementalOandM,
+      totalOperatingCosts: output.totalOperatingCosts,
+    }
+    output.delete();
     CHP.delete();
-    return output;
+    return results;
   }
 
   usableAirCapacity(input: CalculateUsableCapacity): number {
