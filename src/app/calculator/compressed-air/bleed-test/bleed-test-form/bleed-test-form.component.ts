@@ -44,7 +44,7 @@ export class BleedTestFormComponent implements OnInit {
 
   save() {
     this.bleedTestOutput = this.bleedTestService.bleedTestOutput.getValue();
-    let inputs = this.bleedTestService.getBleedTestObjFromForm(this.bleedForm);
+    let inputs: BleedTestInput = this.bleedTestService.getBleedTestObjFromForm(this.bleedForm);
     this.bleedTestService.bleedTestInput.next(inputs);
   }
 

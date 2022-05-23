@@ -6,7 +6,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
-import { StandaloneService } from '../../standalone.service';
+import { BleedTestInput } from '../../../shared/models/standalone';
 import { BleedTestService } from './bleed-test.service';
 
 @Component({
@@ -35,7 +35,7 @@ export class BleedTestComponent implements OnInit {
   saving: boolean;
   assessmentCalculator: Calculator;
 
-  constructor(private standaloneService: StandaloneService,
+  constructor(
     private bleedTestService: BleedTestService,
     private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService,
@@ -45,11 +45,13 @@ export class BleedTestComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.bleedTestService.initDefaultEmptyInputs();
-    this.initSubscriptions();
+   
     if (this.assessment) {
       this.getCalculatorForAssessment();
+    } else {
+      this.bleedTestService.initDefaultEmptyInputs();
     } 
+    this.initSubscriptions();
   }
 
   initSubscriptions() {
@@ -76,8 +78,8 @@ export class BleedTestComponent implements OnInit {
   }
 
   ngOnDestroy(){
-    if (this.assessmentCalculator) {
-      this.bleedTestService.initDefaultEmptyInputs();
+    if (this.assessment) {
+      this.saveAssessmentCalculator();
     }
     this.bleedTestInputSub.unsubscribe();
   }
@@ -101,13 +103,13 @@ export class BleedTestComponent implements OnInit {
   }
 
   initNewAssessmentCalculator(): Calculator {
-    let bleedTestInput = this.bleedTestService.bleedTestInput.value;
+    let bleedTestInput: BleedTestInput = this.bleedTestService.bleedTestInput.value;
     this.calculateBleedTest();
-    let tmpCalculator: Calculator = {
+    let newCalculator: Calculator = {
       assessmentId: this.assessment.id,
       bleedTestInputs: bleedTestInput
     };
-    return tmpCalculator;
+    return newCalculator;
   }
 
 
@@ -144,7 +146,7 @@ export class BleedTestComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    this.bleedTestService.getExampleData();
+    this.bleedTestService.getExampleData(this.settings);
     this.bleedTestService.generateExample.next(true);
   }
 
