@@ -68,10 +68,10 @@ export class CoreComponent implements OnInit {
           this.changeDetectorRef.detectChanges();
         }
       });
-      
+
       //send signal to main.js to check for update
       this.electronService.ipcRenderer.send('ready', null);
-      
+
       this.electronService.ipcRenderer.once('release-info', (event, info) => {
         this.info = info;
       })
@@ -142,9 +142,7 @@ export class CoreComponent implements OnInit {
         this.settingsDbService.setAll().then(() => {
           this.calculatorDbService.setAll().then(() => {
             this.inventoryDbService.setAll().then(() => {
-              if (this.sqlDbApiService.hasStarted == true) {
-                this.sqlDbApiService.initCustomDbMaterials();
-              }
+              this.sqlDbApiService.initCustomDbMaterials();
               this.idbStarted = true;
               this.changeDetectorRef.detectChanges();
             })
