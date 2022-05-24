@@ -8,13 +8,13 @@ declare var Module: any;
 @Injectable()
 export class ChillersSuiteApiService {
 
-  constructor(private suiteEnumService: SuiteApiHelperService) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService) { }
 
   coolingTowerMakeupWater(input: CoolingTowerInput): CoolingTowerOutput {
-    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.coolingLoad = this.suiteEnumService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.coolingLoad);
-    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.flowRate = this.suiteEnumService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.flowRate);
-    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.lossCorrectionFactor = this.suiteEnumService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.lossCorrectionFactor);
-    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.operationalHours = this.suiteEnumService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.operationalHours);
+    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.coolingLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.coolingLoad);
+    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.flowRate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.flowRate);
+    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.lossCorrectionFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.lossCorrectionFactor);
+    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.operationalHours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.operationalHours);
 
     let OperatingConditionsData = new Module.CoolingTowerOperatingConditionsData(
       input.coolingTowerMakeupWaterCalculator.operatingConditionsData.flowRate,
@@ -22,12 +22,12 @@ export class ChillersSuiteApiService {
       input.coolingTowerMakeupWaterCalculator.operatingConditionsData.operationalHours,
       input.coolingTowerMakeupWaterCalculator.operatingConditionsData.lossCorrectionFactor,
     );
-    input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.cyclesOfConcentration = this.suiteEnumService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.cyclesOfConcentration);
+    input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.cyclesOfConcentration = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.cyclesOfConcentration);
     let BaselineWaterConservationData = new Module.CoolingTowerWaterConservationData(
       input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.cyclesOfConcentration,
       input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.driftLossFactor,
     );
-    input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.cyclesOfConcentration = this.suiteEnumService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.cyclesOfConcentration);
+    input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.cyclesOfConcentration = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.cyclesOfConcentration);
     let ModificationConservationData = new Module.CoolingTowerWaterConservationData(
       input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.cyclesOfConcentration,
       input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.driftLossFactor,

@@ -181,7 +181,7 @@ export class FansSuiteApiService {
       return row.map(columnVal => Number(columnVal));
     });
     traverseData.forEach(dataRow => {
-      doubleVector = this.returnDoubleVector(dataRow);
+      doubleVector = this.suiteApiHelperService.returnDoubleVector(dataRow);
       traversePlaneTraverseData.push_back(doubleVector);
       doubleVector.delete();
     });
@@ -322,7 +322,7 @@ export class FansSuiteApiService {
     let traversePlaneTraverseData = new Module.DoubleVector2D();
     let doubleVector;
     input.PlaneData.FlowTraverse.traverseData.forEach(dataRow => {
-      doubleVector = this.returnDoubleVector(dataRow);
+      doubleVector = this.suiteApiHelperService.returnDoubleVector(dataRow);
       traversePlaneTraverseData.push_back(doubleVector);
       doubleVector.delete();
     });
@@ -339,7 +339,7 @@ export class FansSuiteApiService {
 
       let doubleVector;
       traversePlane.traverseData.forEach(dataRow => {
-        doubleVector = this.returnDoubleVector(dataRow);
+        doubleVector = this.suiteApiHelperService.returnDoubleVector(dataRow);
         traversePlaneTraverseData.push_back(doubleVector);
         doubleVector.delete();
       });
@@ -355,7 +355,7 @@ export class FansSuiteApiService {
       let traversePlane: Plane = input.PlaneData.AddlTraversePlanes[1];
       let doubleVector;
       traversePlane.traverseData.forEach(dataRow => {
-        doubleVector = this.returnDoubleVector(dataRow);
+        doubleVector = this.suiteApiHelperService.returnDoubleVector(dataRow);
         traversePlaneTraverseData.push_back(doubleVector);
         doubleVector.delete();
       });
@@ -409,14 +409,5 @@ export class FansSuiteApiService {
     let compressibilityFactorResult = compressibilityFactor.calculate();
     compressibilityFactor.delete();
     return compressibilityFactorResult;
-  }
-
-  //helpers
-  returnDoubleVector(doublesArray: Array<number>) {
-    let doubleVector = new Module.DoubleVector();
-    doublesArray.forEach(x => {
-      doubleVector.push_back(x);
-    });
-    return doubleVector;
   }
 }

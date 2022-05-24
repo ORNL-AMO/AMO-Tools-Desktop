@@ -113,7 +113,7 @@ export class StandaloneSuiteApiService {
     let receiverCapacities: Array<number> = input.receiverCapacities.map(capacity => {
       return Number(capacity);
     });
-    let receiverCapacitiesInput = this.returnDoubleVector(receiverCapacities);
+    let receiverCapacitiesInput = this.suiteApiHelperService.returnDoubleVector(receiverCapacities);
 
     let PipeData = new Module.PipeData(
       input.oneHalf,
@@ -175,6 +175,7 @@ export class StandaloneSuiteApiService {
       twenty: rawOutput.pipeLengths.twenty,
       twentyFour: rawOutput.pipeLengths.twentyFour,
     }
+
     rawOutput.delete();
     PipeData.delete();
     AirSystemCapacity.delete();
@@ -235,7 +236,6 @@ export class StandaloneSuiteApiService {
   // pneumaticValveCalculateFlowRate(input: PneumaticValveFlowRateInput): PneumaticValveFlowRateOutput {
   //   let PneumaticValve = new Module.PneumaticValve(input.inletPressure, input.outletPressure);
   //   let output: PneumaticValveFlowRateOutput = PneumaticValve.calculate();
-  //   console.log(output);
   //   PneumaticValve.delete();
   //   return output;
   // }
@@ -243,7 +243,6 @@ export class StandaloneSuiteApiService {
   // pneumaticValve(input: PneumaticValve): PneumaticValveFlowCoefficient {
   //   let PneumaticValve = new Module.PneumaticValve(input.inletPressure, input.outletPressure, input.flowRate);
   //   let output: PneumaticValveFlowCoefficient = PneumaticValve.calculate();
-  //   console.log(output);
   //   PneumaticValve.delete();
   //   return output;
   // }
@@ -315,13 +314,5 @@ export class StandaloneSuiteApiService {
     let output: number = ReceiverTank.calculateUsableCapacity(input.tankSize, input.airPressureIn, input.airPressureOut);
     ReceiverTank.delete();
     return output;
-  }
-
-  returnDoubleVector(doublesArray: Array<number>) {
-    let doubleVector = new Module.DoubleVector();
-    doublesArray.forEach(x => {
-      doubleVector.push_back(x);
-    });
-    return doubleVector;
   }
 }

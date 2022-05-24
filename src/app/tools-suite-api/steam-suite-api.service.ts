@@ -305,7 +305,7 @@ export class SteamSuiteApiService {
     let ssmtOutput: SSMTOutput;
 
 
-    this.convertNullInputsForObjectConstructor(inputData.boilerInput);
+    this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.boilerInput);
     let boilerInputObj = new Module.BoilerInput(
       inputData.boilerInput.fuelType,
       inputData.boilerInput.fuel,
@@ -322,10 +322,10 @@ export class SteamSuiteApiService {
 
     let highPressureHeaderObj;
     if (inputData.headerInput.highPressureHeader) {
-      this.convertNullInputsForObjectConstructor(inputData.headerInput.highPressureHeader);
+      this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.headerInput.highPressureHeader);
       highPressureHeaderObj = this.getHighPressureHeaderObject(inputData.headerInput.highPressureHeader);
     } else {
-      this.convertNullInputsForObjectConstructor(inputData.headerInput.highPressure);
+      this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.headerInput.highPressure);
       highPressureHeaderObj = this.getHighPressureHeaderObject(inputData.headerInput.highPressure);
     }
 
@@ -346,18 +346,18 @@ export class SteamSuiteApiService {
 
     let mediumPressureHeaderObj = null;
     if (inputData.headerInput.mediumPressureHeader !== null && inputData.headerInput.mediumPressureHeader !== undefined) {
-      this.convertNullInputsForObjectConstructor(inputData.headerInput.mediumPressureHeader);
+      this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.headerInput.mediumPressureHeader);
       mediumPressureHeaderObj = this.getNotHighPressureHeaderObject(inputData.headerInput.mediumPressureHeader);
     } else if (inputData.headerInput.mediumPressure !== null && inputData.headerInput.mediumPressure !== undefined) {
-      this.convertNullInputsForObjectConstructor(inputData.headerInput.mediumPressure);
+      this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.headerInput.mediumPressure);
       mediumPressureHeaderObj = this.getNotHighPressureHeaderObject(inputData.headerInput.mediumPressure);
     }
     let lowPressureHeaderObj = null;
     if (inputData.headerInput.lowPressureHeader !== null && inputData.headerInput.lowPressureHeader !== undefined) {
-      this.convertNullInputsForObjectConstructor(inputData.headerInput.lowPressureHeader);
+      this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.headerInput.lowPressureHeader);
       lowPressureHeaderObj = this.getNotHighPressureHeaderObject(inputData.headerInput.lowPressureHeader);
     } else if (inputData.headerInput.lowPressure !== null && inputData.headerInput.lowPressure !== undefined) {
-      this.convertNullInputsForObjectConstructor(inputData.headerInput.lowPressure);
+      this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.headerInput.lowPressure);
       lowPressureHeaderObj = this.getNotHighPressureHeaderObject(inputData.headerInput.lowPressure);
     }
 
@@ -369,7 +369,7 @@ export class SteamSuiteApiService {
       lowPressureHeaderObj.delete();
     }
 
-    this.convertNullInputsForObjectConstructor(inputData.turbineInput.condensingTurbine);
+    this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.turbineInput.condensingTurbine);
     let condensingTurbineObj = new Module.CondensingTurbine(
       inputData.turbineInput.condensingTurbine.isentropicEfficiency,
       inputData.turbineInput.condensingTurbine.generationEfficiency,
@@ -378,7 +378,7 @@ export class SteamSuiteApiService {
       inputData.turbineInput.condensingTurbine.operationValue,
       inputData.turbineInput.condensingTurbine.useTurbine
     );
-    this.convertNullInputsForObjectConstructor(inputData.turbineInput.highToLowTurbine);
+    this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.turbineInput.highToLowTurbine);
     let highToLowTurbineObj = new Module.PressureTurbine(
       inputData.turbineInput.highToLowTurbine.isentropicEfficiency,
       inputData.turbineInput.highToLowTurbine.generationEfficiency,
@@ -387,7 +387,7 @@ export class SteamSuiteApiService {
       inputData.turbineInput.highToLowTurbine.operationValue2,
       inputData.turbineInput.highToLowTurbine.useTurbine
     );
-    this.convertNullInputsForObjectConstructor(inputData.turbineInput.highToMediumTurbine);
+    this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.turbineInput.highToMediumTurbine);
     let highToMediumTurbineObj = new Module.PressureTurbine(
       inputData.turbineInput.highToMediumTurbine.isentropicEfficiency,
       inputData.turbineInput.highToMediumTurbine.generationEfficiency,
@@ -396,7 +396,7 @@ export class SteamSuiteApiService {
       inputData.turbineInput.highToMediumTurbine.operationValue2,
       inputData.turbineInput.highToMediumTurbine.useTurbine
     );
-    this.convertNullInputsForObjectConstructor(inputData.turbineInput.mediumToLowTurbine);
+    this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.turbineInput.mediumToLowTurbine);
     let mediumToLowTurbineObj = new Module.PressureTurbine(
       inputData.turbineInput.mediumToLowTurbine.isentropicEfficiency,
       inputData.turbineInput.mediumToLowTurbine.generationEfficiency,
@@ -1183,22 +1183,6 @@ export class SteamSuiteApiService {
 
   }
 
-  returnDoubleVector(doublesArray: Array<number>) {
-    let doubleVector = new Module.DoubleVector();
-    doublesArray.forEach(x => {
-      doubleVector.push_back(x);
-    });
-    return doubleVector;
-  }
-
-  convertNullInputsForObjectConstructor(inputObj: Object) {
-    for (var prop in inputObj) {
-      if (inputObj.hasOwnProperty(prop) && inputObj[prop] === null || inputObj[prop] === undefined) {
-        inputObj[prop] = 0;
-      }
-    }
-    return inputObj;
-  }
 
   getInletVector(inletsArray: Array<HeaderInputObj>) {
     let inletVector = new Module.InletVector();
