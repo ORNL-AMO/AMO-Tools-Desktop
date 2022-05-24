@@ -56,7 +56,6 @@ export class WasteWaterSuiteApiService {
     if (wasteWaterTreatmentOutput.calculationsTable) {
       wasteWaterTreatmentResults.calculationsTable = this.getConvertedCalculationsTableArray(wasteWaterTreatmentOutput.calculationsTable);
     }
-
     WasteWaterTreatmentInstance.delete();
     wasteWaterTreatmentOutput.delete();
     return wasteWaterTreatmentResults;
@@ -73,6 +72,7 @@ export class WasteWaterSuiteApiService {
         }
         convertedCalculationsTable.push(calcTable);
       }
+      tempArray.delete();
       
     }
     return convertedCalculationsTable;
