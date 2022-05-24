@@ -55,6 +55,7 @@ export class WasteWaterSuiteApiService {
     wasteWaterTreatmentResults = this.getWasteWaterResultsFromOutputObject(wasteWaterTreatmentOutput);
     if (wasteWaterTreatmentOutput.calculationsTable) {
       wasteWaterTreatmentResults.calculationsTable = this.getConvertedCalculationsTableArray(wasteWaterTreatmentOutput.calculationsTable);
+      wasteWaterTreatmentOutput.calculationsTable.delete();
     }
     WasteWaterTreatmentInstance.delete();
     wasteWaterTreatmentOutput.delete();
