@@ -137,6 +137,7 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
 import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
 import { CentrifugalGraphModule } from './centrifugal-graph/centrifugal-graph.module';
 import { BleedTestModule } from '../calculator/compressed-air/bleed-test/bleed-test.module';
+import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-modal.component';
 
 @NgModule({
   declarations: [
@@ -216,7 +217,8 @@ import { BleedTestModule } from '../calculator/compressed-air/bleed-test/bleed-t
     AssessmentNotesComponent,
     ImproveEndUseEfficiencyItemComponent,
     CompressorSummaryComponent,
-    WelcomeScreenComponent
+    WelcomeScreenComponent,
+    FlaModalComponent
   ],
   imports: [
     CommonModule,

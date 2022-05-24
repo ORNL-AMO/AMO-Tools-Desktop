@@ -1,5 +1,4 @@
-<div class="d-flex flex-column avoid-break print-container">
-    <h4 class="show-print print-section-header">System Profiles</h4>
+<div class="d-flex flex-column" *ngIf="!printView">
     <div class="d-flex justify-content-center">
         <div class="pr-1">
             <select class="day-type-select" id="selectedDayType" name="selectedDayType"
@@ -26,4 +25,22 @@
         [settings]="settings">
     </app-profile-summary-table>
 
+</div>
+
+<div *ngIf="printView">
+    <div class="d-flex flex-column avoid-break print-container" *ngFor="let profile of profliesForPrint">
+        <h4 class="show-print print-section-header">System Profiles</h4>
+        <div class="d-flex justify-content-center">
+            <div class="pr-1">
+                <h5>Baseline</h5>
+            </div>
+            <div class="pl-1">
+                <h5>{{profile.dayType.name}}</h5>
+            </div>
+        </div>
+        <app-profile-summary-table [printView]="printView" [profileSummary]="profile.profileSummary"
+            [inventoryItems]="compressedAirAssessment.compressorInventoryItems" [totals]="selectedTotals"
+            [settings]="settings" [totalsForPrint]="profile.totalsForPrint">
+        </app-profile-summary-table>
+    </div>
 </div>

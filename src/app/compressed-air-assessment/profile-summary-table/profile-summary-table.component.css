@@ -26,10 +26,14 @@ td, th{
     width: auto;
   }
 
+  caption { 
+    display: table-caption;
+    text-align: center;
+    caption-side: top;
+  }
+  
   @media print {
   .print-container {
-    page-break-before: always;
-    page-break-inside: avoid;
-    width: 1000px;
+    page-break-after: always;
   }
 }

@@ -284,9 +284,9 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
     orificeMethodData: {
       compressorAirTemp: 250,
       atmosphericPressure: 14.7,
-      dischargeCoefficient: 1.0,
-      orificeDiameter: 6.0,
-      supplyPressure: 6.2,
+      dischargeCoefficient: 0.97,
+      orificeDiameter: 0.375,
+      supplyPressure: 115,
       numberOfOrifices: 4,
     },
     units: 1
