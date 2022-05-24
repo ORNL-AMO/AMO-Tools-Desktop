@@ -3,7 +3,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { DayTypeSummary, LogToolField } from '../../../../log-tool/log-tool-models';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { CompressedAirAssessmentService, ProfileSummaryValid, } from '../../../compressed-air-assessment.service';
 import { SystemProfileService } from '../../system-profile.service';
 
 @Component({
@@ -28,7 +28,7 @@ export class OperatingProfileTableComponent implements OnInit {
   showSelectField: boolean = false;
   fillRight: boolean = false;
 
-  validProfileSummaryData: boolean;
+  profileSummaryValid: ProfileSummaryValid;
   assessmentDayTypes: Array<CompressedAirDayType>
   inventoryItems: Array<CompressorInventoryItem>;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileService: SystemProfileService) { }
@@ -45,7 +45,7 @@ export class OperatingProfileTableComponent implements OnInit {
         this.profileDataType = val.systemProfile.systemProfileSetup.profileDataType;
         this.selectedDayTypeId = val.systemProfile.systemProfileSetup.dayTypeId;
         this.profileSummary = val.systemProfile.profileSummary;
-        this.validProfileSummaryData = this.compressedAirAssessmentService.hasValidProfileSummaryData(val);
+        this.profileSummaryValid = this.compressedAirAssessmentService.hasValidProfileSummaryData(val);
         this.setHourIntervals(val.systemProfile.systemProfileSetup);
         this.inventoryItems = val.compressorInventoryItems;
         if (this.profileDataType) {
@@ -67,7 +67,7 @@ export class OperatingProfileTableComponent implements OnInit {
       this.updateSummaryDataFields(changedSummary, dataInputIndex);
     }
     compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
-    this.validProfileSummaryData = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment);
+    this.profileSummaryValid = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment);
     this.isFormChange = true;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
@@ -96,6 +96,36 @@ export class OperatingProfileTableComponent implements OnInit {
         summary = changedSummary;
       }
     });
+  }
+
+  findIsValidInput(compressorId: string, dataIndex: number): boolean { 
+    let summaryInputValidationData = this.profileSummaryValid.summaryInputValidationData.find(summary => summary.compressorId === compressorId);
+    return summaryInputValidationData.profileDataInputValidity.find((dataInputValue, index) => index === dataIndex);
+  }
+
+  findIsValidAirflow(compressorId: string, dataIndex: number): boolean { 
+    let summaryInputValidationData = this.profileSummaryValid.summaryInputValidationData.find(summary => summary.compressorId === compressorId);
+    return summaryInputValidationData.airflowValidity.find((dataInputValue, index) => index === dataIndex).airFlowValid;
+  }
+
+  findHasAirflowWarning(compressorId: string, dataIndex: number): boolean { 
+    let summaryInputValidationData = this.profileSummaryValid.summaryInputValidationData.find(summary => summary.compressorId === compressorId);
+    return summaryInputValidationData.airflowValidity.find((dataInputValue, index) => index === dataIndex).airFlowWarning;
+  }
+
+  findIsValidPowerFactor(compressorId: string, dataIndex: number): boolean { 
+    let summaryInputValidationData = this.profileSummaryValid.summaryInputValidationData.find(summary => summary.compressorId === compressorId);
+    return summaryInputValidationData.powerFactorInputValidity.find((dataInputValue, index) => index === dataIndex).powerFactorValid;
+  }
+
+  findIsValidVolts(compressorId: string, dataIndex: number): boolean { 
+    let summaryInputValidationData = this.profileSummaryValid.summaryInputValidationData.find(summary => summary.compressorId === compressorId);
+    return summaryInputValidationData.powerFactorInputValidity.find((dataInputValue, index) => index === dataIndex).voltsValid;
+  }
+
+  findIsValidAmps(compressorId: string, dataIndex: number): boolean { 
+    let summaryInputValidationData = this.profileSummaryValid.summaryInputValidationData.find(summary => summary.compressorId === compressorId);
+    return summaryInputValidationData.powerFactorInputValidity.find((dataInputValue, index) => index === dataIndex).ampsValid;
   }
 
   setHourIntervals(systemProfileSetup: SystemProfileSetup) {

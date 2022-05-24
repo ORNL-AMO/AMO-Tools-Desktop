@@ -26,9 +26,25 @@
 </div>
 
 <div class="scroll-item">
-    <div class="p-2 alert alert-danger small" *ngIf="!validProfileSummaryData">
-        Invalid Profile Data. Values cannot be blank or less than 0.
+    <div class="p-2 alert alert-danger small" *ngIf="profileSummaryValid.powerError !== undefined">
+        {{profileSummaryValid.powerError}}
     </div>
+    <div class="p-2 alert alert-danger small" *ngIf="profileSummaryValid.airFlowError !== undefined">
+        {{profileSummaryValid.airFlowError}}
+    </div>
+    <div class="p-2 warning alert-warning small" *ngIf="profileSummaryValid.airFlowWarning !== undefined">
+        {{profileSummaryValid.airFlowWarning}}
+    </div>
+    <div class="p-2 alert alert-danger small" *ngIf="profileSummaryValid.powerFactorError !== undefined">
+        {{profileSummaryValid.powerFactorError}}
+    </div>
+    <div class="p-2 alert alert-danger small" *ngIf="profileSummaryValid.voltError !== undefined">
+        {{profileSummaryValid.voltError}}
+    </div>
+    <div class="p-2 alert alert-danger small" *ngIf="profileSummaryValid.ampError !== undefined">
+        {{profileSummaryValid.ampError}}
+    </div>
+
     <table class="table bg-white" *ngIf="profileDataType && selectedDayTypeId"
         [ngClass]="{'single-entry': hourIntervals.length == 1}">
         <thead>
@@ -98,18 +114,23 @@
                         </option>
                     </select>
                 </td>
+
                 <td class="input-cell" *ngFor="let summaryData of summary.profileSummaryData; let dataIndex = index;">
                     <span *ngIf="summaryData.order != 0 && profileDataType != 'powerFactor'">
                         <input required *ngIf="profileDataType == 'power'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.power"
-                            step="any" min="0">
+                            step="any" 
+                            [ngClass]="{'invalid': !findIsValidInput(summary.compressorId, dataIndex)}">
                         <input required *ngIf="profileDataType == 'airflow'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.airflow"
-                            step="any" min="0">
+                            step="any"
+                            [ngClass]="{'invalid': !findIsValidAirflow(summary.compressorId, dataIndex),
+                                        'warning': findHasAirflowWarning(summary.compressorId, dataIndex)}"
+                            >
                         <input required *ngIf="profileDataType == 'percentCapacity'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
@@ -119,7 +140,7 @@
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.percentPower"
-                            step="any" min="0">
+                            step="any">
                     </span>
                     <div class="w-100 bold text-center" *ngIf="summaryData.order == 0">
                         &mdash; &mdash;
@@ -129,15 +150,17 @@
                             id="{{'order_powerFactor_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_powerFactor_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.powerFactor"
-                            step=".1" min="0">
+                            step=".1"
+                            [ngClass]="{'invalid': !findIsValidPowerFactor(summary.compressorId, dataIndex)}">
                         <input type="number" class="form-control" id="{{'order_amps_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_amps_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.amps" step="any"
-                            min="0">
+                            [ngClass]="{'invalid': !findIsValidAmps(summary.compressorId, dataIndex)}">
                         <input type="number" class="form-control" id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_volts_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.volts"
-                            step="any" min="0">
+                            step="any"
+                            [ngClass]="{'invalid': !findIsValidVolts(summary.compressorId, dataIndex)}">
                     </div>
                 </td>
             </tr>
