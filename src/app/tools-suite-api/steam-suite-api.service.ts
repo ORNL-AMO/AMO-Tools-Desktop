@@ -232,7 +232,7 @@ export class SteamSuiteApiService {
       input.outletPressure
     );
 
-    let prvOutput: PrvOutput = this.getPRVOutput(prvWithoutDesuperheating);
+    let prvOutput: PrvOutput = this.getPRVOutput(prvWithoutDesuperheating, true);
     prvWithoutDesuperheating.delete();
 
     return prvOutput;
@@ -255,7 +255,7 @@ export class SteamSuiteApiService {
       input.desuperheatingTemp
     );
 
-    let prvOutput: PrvOutput = this.getPRVOutput(prvWithDesuperheating);
+    let prvOutput: PrvOutput = this.getPRVOutput(prvWithDesuperheating, true);
     prvWithDesuperheating.delete();
 
     return prvOutput;
@@ -424,11 +424,6 @@ export class SteamSuiteApiService {
 
     let modeler = new Module.SteamModeler();
     let wasmOutput = modeler.model(steamModelerInput);
-    debugger
-    console.log(wasmOutput.processSteamUsageCalculationsDomain.lowPressureProcessUsagePtr);
-    console.log(wasmOutput.processSteamUsageCalculationsDomain.lowPressureProcessUsagePtr.smartPtr)
-    wasmOutput.processSteamUsageCalculationsDomain.lowPressureProcessUsagePtr.delete();
-    // console.log(wasmOutput)
     ssmtOutput = this.getSSMTOutputFromWASMOutput(wasmOutput);
 
     wasmOutput.delete();
@@ -498,142 +493,182 @@ export class SteamSuiteApiService {
       operationsOutput: undefined,
     }
 
-    ssmtOutput.boilerOutput = this.getBoilerOutput(wasmOutput.boiler);
+    let boiler = wasmOutput.boiler;
+    ssmtOutput.boilerOutput = this.getBoilerOutput(boiler);
+    boiler.delete();
 
-    ssmtOutput.highPressureHeaderSteam = this.getSteamPropertiesOutput(wasmOutput.highPressureHeaderCalculationsDomain.highPressureHeaderOutput);
-    wasmOutput.highPressureHeaderCalculationsDomain.highPressureHeaderOutput.delete();
 
-    ssmtOutput.blowdownFlashTank = this.getFlashTankOutput(wasmOutput.blowdownFlashTank);
-    if (wasmOutput.blowdownFlashTank) {
-      wasmOutput.blowdownFlashTank.delete();
+    let highPressureHeaderCalculationsDomain = wasmOutput.highPressureHeaderCalculationsDomain;
+    let highPressureHeaderOutput = highPressureHeaderCalculationsDomain.highPressureHeaderOutput;
+    ssmtOutput.highPressureHeaderSteam = this.getSteamPropertiesOutput(highPressureHeaderOutput);
+    highPressureHeaderOutput.delete();
+
+
+    let blowdownFlashTank = wasmOutput.blowdownFlashTank;
+    ssmtOutput.blowdownFlashTank = this.getFlashTankOutput(blowdownFlashTank);
+    if (blowdownFlashTank) {
+      blowdownFlashTank.delete();
     }
 
-    ssmtOutput.deaeratorOutput = this.getDeaeratorOutput(wasmOutput.deaerator);
-    wasmOutput.deaerator.delete();
+    let deaerator = wasmOutput.deaerator;
+    ssmtOutput.deaeratorOutput = this.getDeaeratorOutput(deaerator);
+    deaerator.delete();
 
-    if (wasmOutput.powerBalanceCheckerCalculationsDomain) {
-      ssmtOutput.lowPressureVentedSteam = this.getSteamPropertiesOutput(wasmOutput.powerBalanceCheckerCalculationsDomain.lowPressureVentedSteam);
-      if (wasmOutput.powerBalanceCheckerCalculationsDomain.lowPressureVentedSteam) {
-        wasmOutput.powerBalanceCheckerCalculationsDomain.lowPressureVentedSteam.delete();
+    let powerBalanceCheckerCalculationsDomain = wasmOutput.powerBalanceCheckerCalculationsDomain;
+    if (powerBalanceCheckerCalculationsDomain) {
+      let lowPressureVentedSteam = powerBalanceCheckerCalculationsDomain.lowPressureVentedSteam;
+      ssmtOutput.lowPressureVentedSteam = this.getSteamPropertiesOutput(lowPressureVentedSteam);
+      if (lowPressureVentedSteam) {
+        lowPressureVentedSteam.delete();
       }
-      wasmOutput.powerBalanceCheckerCalculationsDomain.delete();
+      powerBalanceCheckerCalculationsDomain.delete();
     }
 
-    if (wasmOutput.highPressureHeaderCalculationsDomain) {
-      ssmtOutput.highPressureSteamHeatLoss = this.getHeatLoss(wasmOutput.highPressureHeaderCalculationsDomain.highPressureHeaderHeatLoss);
-      if (wasmOutput.highPressureHeaderCalculationsDomain.highPressureHeaderHeatLoss) {
-        wasmOutput.highPressureHeaderCalculationsDomain.highPressureHeaderHeatLoss.delete();
+    if (highPressureHeaderCalculationsDomain) {
+      let highPressureHeaderHeatLoss = highPressureHeaderCalculationsDomain.highPressureHeaderHeatLoss;
+      ssmtOutput.highPressureSteamHeatLoss = this.getHeatLoss(highPressureHeaderHeatLoss);
+      if (highPressureHeaderHeatLoss) {
+        highPressureHeaderHeatLoss.delete();
       }
 
-      ssmtOutput.highPressureToLowPressureTurbine = this.getTurbineOutput(wasmOutput.highPressureHeaderCalculationsDomain.highToLowPressureTurbine);
-      if (wasmOutput.highPressureHeaderCalculationsDomain.highToLowPressureTurbine) {
-        wasmOutput.highPressureHeaderCalculationsDomain.highToLowPressureTurbine.delete();
+      let highToLowPressureTurbine = highPressureHeaderCalculationsDomain.highToLowPressureTurbine;
+      ssmtOutput.highPressureToLowPressureTurbine = this.getTurbineOutput(highToLowPressureTurbine);
+      if (highToLowPressureTurbine) {
+        highToLowPressureTurbine.delete();
       }
 
-      ssmtOutput.highPressureToLowPressureTurbineIdeal = this.getTurbineOutput(wasmOutput.highPressureHeaderCalculationsDomain.highToLowPressureTurbineIdeal);
-      if (wasmOutput.highPressureHeaderCalculationsDomain.highToLowPressureTurbineIdeal) {
-        wasmOutput.highPressureHeaderCalculationsDomain.highToLowPressureTurbineIdeal.delete();
+      let highToLowPressureTurbineIdeal = highPressureHeaderCalculationsDomain.highToLowPressureTurbineIdeal;
+      ssmtOutput.highPressureToLowPressureTurbineIdeal = this.getTurbineOutput(highToLowPressureTurbineIdeal);
+      if (highToLowPressureTurbineIdeal) {
+        highToLowPressureTurbineIdeal.delete();
       }
 
-      ssmtOutput.highPressureToMediumPressureTurbine = this.getTurbineOutput(wasmOutput.highPressureHeaderCalculationsDomain.highToMediumPressureTurbine);
-      if (wasmOutput.highPressureHeaderCalculationsDomain.highToMediumPressureTurbine) {
-        wasmOutput.highPressureHeaderCalculationsDomain.highToMediumPressureTurbine.delete();
+      let highToMediumPressureTurbine = highPressureHeaderCalculationsDomain.highToMediumPressureTurbine;
+      ssmtOutput.highPressureToMediumPressureTurbine = this.getTurbineOutput(highToMediumPressureTurbine);
+      if (highToMediumPressureTurbine) {
+        highToMediumPressureTurbine.delete();
       }
 
       // Typo 'Idle' on backend
-      ssmtOutput.highPressureToMediumPressureTurbineIdeal = this.getTurbineOutput(wasmOutput.highPressureHeaderCalculationsDomain.highToMediumPressureTurbineIdle);
-      if (wasmOutput.highPressureHeaderCalculationsDomain.highToMediumPressureTurbineIdle) {
-        wasmOutput.highPressureHeaderCalculationsDomain.highToMediumPressureTurbineIdle.delete();
+      let highToMediumPressureTurbineIdle = highPressureHeaderCalculationsDomain.highToMediumPressureTurbineIdle;
+      ssmtOutput.highPressureToMediumPressureTurbineIdeal = this.getTurbineOutput(highToMediumPressureTurbineIdle);
+      if (highToMediumPressureTurbineIdle) {
+        highToMediumPressureTurbineIdle.delete();
       }
 
-      ssmtOutput.highPressureCondensateFlashTank = this.getFlashTankOutput(wasmOutput.highPressureHeaderCalculationsDomain.highPressureCondensateFlashTank);
-      if (wasmOutput.highPressureHeaderCalculationsDomain.highPressureCondensateFlashTank) {
-        wasmOutput.highPressureHeaderCalculationsDomain.highPressureCondensateFlashTank.delete();
+      let highPressureCondensateFlashTank = highPressureHeaderCalculationsDomain.highPressureCondensateFlashTank
+      ssmtOutput.highPressureCondensateFlashTank = this.getFlashTankOutput(highPressureCondensateFlashTank);
+      if (highPressureCondensateFlashTank) {
+        highPressureCondensateFlashTank.delete();
       }
 
-      ssmtOutput.highPressureCondensate = this.getSteamPropertiesOutput(wasmOutput.highPressureHeaderCalculationsDomain.highPressureCondensate);
-      if (wasmOutput.highPressureHeaderCalculationsDomain.highPressureCondensate) {
-        wasmOutput.highPressureHeaderCalculationsDomain.highPressureCondensate.delete();
+      let highPressureCondensate = highPressureHeaderCalculationsDomain.highPressureCondensate;
+      ssmtOutput.highPressureCondensate = this.getSteamPropertiesOutput(highPressureCondensate);
+      if (highPressureCondensate) {
+        highPressureCondensate.delete();
       }
 
-      ssmtOutput.condensingTurbine = this.getTurbineOutput(wasmOutput.highPressureHeaderCalculationsDomain.condensingTurbine);
-      if (wasmOutput.highPressureHeaderCalculationsDomain.condensingTurbine) {
-        wasmOutput.highPressureHeaderCalculationsDomain.condensingTurbine.delete();
+      let condensingTurbine = highPressureHeaderCalculationsDomain.condensingTurbine;
+      ssmtOutput.condensingTurbine = this.getTurbineOutput(condensingTurbine);
+      if (condensingTurbine) {
+        condensingTurbine.delete();
       }
 
-      ssmtOutput.condensingTurbineIdeal = this.getTurbineOutput(wasmOutput.highPressureHeaderCalculationsDomain.condensingTurbineIdeal);
-      if (wasmOutput.highPressureHeaderCalculationsDomain.condensingTurbineIdeal) {
-        wasmOutput.highPressureHeaderCalculationsDomain.condensingTurbineIdeal.delete();
+      let condensingTurbineIdeal = highPressureHeaderCalculationsDomain.condensingTurbineIdeal;
+      ssmtOutput.condensingTurbineIdeal = this.getTurbineOutput(condensingTurbineIdeal);
+      if (condensingTurbineIdeal) {
+        condensingTurbineIdeal.delete();
       }
 
-      wasmOutput.highPressureHeaderCalculationsDomain.delete();
+      highPressureHeaderCalculationsDomain.delete();
     }
 
 
-    if (wasmOutput.lowPressureHeaderCalculationsDomain) {
-      ssmtOutput.lowPressureHeaderSteam = this.getSteamPropertiesOutput(wasmOutput.lowPressureHeaderCalculationsDomain.lowPressureHeaderOutput);
-      wasmOutput.lowPressureHeaderCalculationsDomain.lowPressureHeaderOutput.delete();
+    let lowPressureHeaderCalculationsDomain = wasmOutput.lowPressureHeaderCalculationsDomain;
+    if (lowPressureHeaderCalculationsDomain) {
+      let lowPressureHeaderOutput = lowPressureHeaderCalculationsDomain.lowPressureHeaderOutput;
+      ssmtOutput.lowPressureHeaderSteam = this.getSteamPropertiesOutput(lowPressureHeaderOutput);
+      if (lowPressureHeaderOutput) {
+        lowPressureHeaderOutput.delete();
+      }
 
-      ssmtOutput.lowPressureSteamHeatLoss = this.getHeatLoss(wasmOutput.lowPressureHeaderCalculationsDomain.lowPressureHeaderHeatLoss);
-      wasmOutput.lowPressureHeaderCalculationsDomain.lowPressureHeaderHeatLoss.delete();
+      let lowPressureHeaderHeatLoss = lowPressureHeaderCalculationsDomain.lowPressureHeaderHeatLoss;
+      ssmtOutput.lowPressureSteamHeatLoss = this.getHeatLoss(lowPressureHeaderHeatLoss);
+      if (lowPressureHeaderHeatLoss) {
+        lowPressureHeaderHeatLoss.delete();
+      }
 
-      ssmtOutput.mediumPressureToLowPressurePrv = this.getPRVOutput(wasmOutput.lowPressureHeaderCalculationsDomain.lowPressurePrv);
-      wasmOutput.lowPressureHeaderCalculationsDomain.lowPressurePrv.delete();
+      let lowPressurePrv = lowPressureHeaderCalculationsDomain.lowPressurePrv;
+      ssmtOutput.mediumPressureToLowPressurePrv = this.getPRVOutput(lowPressurePrv, false);
+      if (lowPressurePrv) {
+        lowPressurePrv.delete();
+      }
 
-      ssmtOutput.lowPressureCondensate = this.getSteamPropertiesOutput(wasmOutput.lowPressureHeaderCalculationsDomain.lowPressureCondensate);
-      wasmOutput.lowPressureHeaderCalculationsDomain.lowPressureCondensate.delete();
+      let lowPressureCondensate = lowPressureHeaderCalculationsDomain.lowPressureCondensate;
+      ssmtOutput.lowPressureCondensate = this.getSteamPropertiesOutput(lowPressureCondensate);
+      if (lowPressureCondensate) {
+        lowPressureCondensate.delete();
+      }
 
-      wasmOutput.lowPressureHeaderCalculationsDomain.delete();
+      lowPressureHeaderCalculationsDomain.delete();
     }
 
-
-    if (wasmOutput.mediumPressureHeaderCalculationsDomain) {
-      ssmtOutput.highPressureToMediumPressurePrv = this.getPRVOutput(wasmOutput.mediumPressureHeaderCalculationsDomain.highToMediumPressurePrv);
-      if (wasmOutput.mediumPressureHeaderCalculationsDomain.highToMediumPressurePrv) {
-        wasmOutput.mediumPressureHeaderCalculationsDomain.highToMediumPressurePrv.delete();
+    let mediumPressureHeaderCalculationsDomain = wasmOutput.mediumPressureHeaderCalculationsDomain;
+    if (mediumPressureHeaderCalculationsDomain) {
+      let highToMediumPressurePrv = mediumPressureHeaderCalculationsDomain.highToMediumPressurePrv;
+      ssmtOutput.highPressureToMediumPressurePrv = this.getPRVOutput(highToMediumPressurePrv, false);
+      if (highToMediumPressurePrv) {
+        highToMediumPressurePrv.delete();
       }
 
-      ssmtOutput.mediumPressureToLowPressureTurbine = this.getTurbineOutput(wasmOutput.mediumPressureHeaderCalculationsDomain.mediumToLowPressureTurbine);
-      if (wasmOutput.mediumPressureHeaderCalculationsDomain.mediumToLowPressureTurbine) {
-        wasmOutput.mediumPressureHeaderCalculationsDomain.mediumToLowPressureTurbine.delete();
+      let mediumToLowPressureTurbine = mediumPressureHeaderCalculationsDomain.mediumToLowPressureTurbine
+      ssmtOutput.mediumPressureToLowPressureTurbine = this.getTurbineOutput(mediumToLowPressureTurbine);
+      if (mediumToLowPressureTurbine) {
+        mediumToLowPressureTurbine.delete();
       }
 
-      ssmtOutput.mediumPressureToLowPressureTurbineIdeal = this.getTurbineOutput(wasmOutput.mediumPressureHeaderCalculationsDomain.mediumToLowPressureTurbineIdeal);
-      if (wasmOutput.mediumPressureHeaderCalculationsDomain.mediumToLowPressureTurbineIdeal) {
-        wasmOutput.mediumPressureHeaderCalculationsDomain.mediumToLowPressureTurbineIdeal.delete();
+      let mediumToLowPressureTurbineIdeal = mediumPressureHeaderCalculationsDomain.mediumToLowPressureTurbineIdeal;
+      ssmtOutput.mediumPressureToLowPressureTurbineIdeal = this.getTurbineOutput(mediumToLowPressureTurbineIdeal);
+      if (mediumToLowPressureTurbineIdeal) {
+        mediumToLowPressureTurbineIdeal.delete();
       }
 
-      ssmtOutput.mediumPressureHeaderSteam = this.getSteamPropertiesOutput(wasmOutput.mediumPressureHeaderCalculationsDomain.mediumPressureHeaderOutput);
-      if (wasmOutput.mediumPressureHeaderCalculationsDomain.mediumPressureHeaderOutput) {
-        wasmOutput.mediumPressureHeaderCalculationsDomain.mediumPressureHeaderOutput.delete();
+      let mediumPressureHeaderOutput = mediumPressureHeaderCalculationsDomain.mediumPressureHeaderOutput
+      ssmtOutput.mediumPressureHeaderSteam = this.getSteamPropertiesOutput(mediumPressureHeaderOutput);
+      if (mediumPressureHeaderOutput) {
+        mediumPressureHeaderOutput.delete();
       }
 
-      ssmtOutput.mediumPressureSteamHeatLoss = this.getHeatLoss(wasmOutput.mediumPressureHeaderCalculationsDomain.mediumPressureHeaderHeatLoss);
-      if (wasmOutput.mediumPressureHeaderCalculationsDomain.mediumPressureHeaderHeatLoss) {
-        wasmOutput.mediumPressureHeaderCalculationsDomain.mediumPressureHeaderHeatLoss.delete();
+      let mediumPressureHeaderHeatLoss = mediumPressureHeaderCalculationsDomain.mediumPressureHeaderHeatLoss;
+      ssmtOutput.mediumPressureSteamHeatLoss = this.getHeatLoss(mediumPressureHeaderHeatLoss);
+      if (mediumPressureHeaderHeatLoss) {
+        mediumPressureHeaderHeatLoss.delete();
       }
 
-      ssmtOutput.mediumPressureCondensate = this.getSteamPropertiesOutput(wasmOutput.mediumPressureHeaderCalculationsDomain.mediumPressureCondensate);
-      if (wasmOutput.mediumPressureHeaderCalculationsDomain.mediumPressureCondensate) {
-        wasmOutput.mediumPressureHeaderCalculationsDomain.mediumPressureCondensate.delete();
+      let mediumPressureCondensate = mediumPressureHeaderCalculationsDomain.mediumPressureCondensate;
+      ssmtOutput.mediumPressureCondensate = this.getSteamPropertiesOutput(mediumPressureCondensate);
+      if (mediumPressureCondensate) {
+        mediumPressureCondensate.delete();
       }
 
-      wasmOutput.mediumPressureHeaderCalculationsDomain.delete();
+      mediumPressureHeaderCalculationsDomain.delete();
     }
 
-
-    if (wasmOutput.LowPressureFlashedSteamIntoHeaderCalculatorDomain) {
-      ssmtOutput.mediumPressureCondensateFlashTank = this.getFlashTankOutput(wasmOutput.LowPressureFlashedSteamIntoHeaderCalculatorDomain.mediumPressureCondensateFlashTank);
-      if (wasmOutput.LowPressureFlashedSteamIntoHeaderCalculatorDomain.mediumPressureCondensateFlashTank) {
-        wasmOutput.LowPressureFlashedSteamIntoHeaderCalculatorDomain.mediumPressureCondensateFlashTank.delete();
+    let LowPressureFlashedSteamIntoHeaderCalculatorDomain = wasmOutput.LowPressureFlashedSteamIntoHeaderCalculatorDomain;
+    if (LowPressureFlashedSteamIntoHeaderCalculatorDomain) {
+      let mediumPressureCondensateFlashTank = LowPressureFlashedSteamIntoHeaderCalculatorDomain.mediumPressureCondensateFlashTank;
+      ssmtOutput.mediumPressureCondensateFlashTank = this.getFlashTankOutput(mediumPressureCondensateFlashTank);
+      if (mediumPressureCondensateFlashTank) {
+        mediumPressureCondensateFlashTank.delete();
       }
 
-      wasmOutput.LowPressureFlashedSteamIntoHeaderCalculatorDomain.delete();
+      LowPressureFlashedSteamIntoHeaderCalculatorDomain.delete();
     }
 
     let operationsOutput: SSMTOperationsOutput;
 
-    if (!wasmOutput.energyAndCostCalculationsDomain) {
+    let energyAndCostCalculationsDomain = wasmOutput.energyAndCostCalculationsDomain;
+    if (!energyAndCostCalculationsDomain) {
       operationsOutput = {
         powerGenerated: undefined,
         boilerFuelCost: undefined,
@@ -648,77 +683,94 @@ export class SteamSuiteApiService {
       }
     } else {
       operationsOutput = {
-        powerGenerated: wasmOutput.energyAndCostCalculationsDomain.powerGenerated,
-        boilerFuelCost: wasmOutput.energyAndCostCalculationsDomain.boilerFuelCost,
-        makeupWaterCost: wasmOutput.energyAndCostCalculationsDomain.makeupWaterCost,
-        totalOperatingCost: wasmOutput.energyAndCostCalculationsDomain.totalOperatingCost,
-        powerGenerationCost: wasmOutput.energyAndCostCalculationsDomain.powerGenerationCost,
-        boilerFuelUsage: wasmOutput.energyAndCostCalculationsDomain.boilerFuelUsage,
-        sitePowerImport: wasmOutput.energyAndCostCalculationsDomain.sitePowerImport,
-        sitePowerDemand: wasmOutput.energyAndCostCalculationsDomain.powerDemand,
+        powerGenerated: energyAndCostCalculationsDomain.powerGenerated,
+        boilerFuelCost: energyAndCostCalculationsDomain.boilerFuelCost,
+        makeupWaterCost: energyAndCostCalculationsDomain.makeupWaterCost,
+        totalOperatingCost: energyAndCostCalculationsDomain.totalOperatingCost,
+        powerGenerationCost: energyAndCostCalculationsDomain.powerGenerationCost,
+        boilerFuelUsage: energyAndCostCalculationsDomain.boilerFuelUsage,
+        sitePowerImport: energyAndCostCalculationsDomain.sitePowerImport,
+        sitePowerDemand: energyAndCostCalculationsDomain.powerDemand,
         makeupWaterVolumeFlow: undefined,
         makeupWaterVolumeFlowAnnual: undefined
       }
-      wasmOutput.energyAndCostCalculationsDomain.delete();
+      energyAndCostCalculationsDomain.delete();
     }
 
-    if (wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain) {
-      ssmtOutput.combinedCondensate = this.getSteamPropertiesOutput(wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.combinedCondensate);
-      if (wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.combinedCondensate) {
-        wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.combinedCondensate.delete();
+    let makeupWaterAndCondensateHeaderCalculationsDomain = wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain;
+    if (makeupWaterAndCondensateHeaderCalculationsDomain) {
+      let combinedCondensate = makeupWaterAndCondensateHeaderCalculationsDomain.combinedCondensate;
+      ssmtOutput.combinedCondensate = this.getSteamPropertiesOutput(combinedCondensate);
+      if (combinedCondensate) {
+        combinedCondensate.delete();
       }
 
-      ssmtOutput.returnCondensate = this.getSteamPropertiesOutput(wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensate);
-      if (wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensate) {
-        wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensate.delete();
+      let returnCondensate = makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensate;
+      ssmtOutput.returnCondensate = this.getSteamPropertiesOutput(returnCondensate);
+      if (returnCondensate) {
+        returnCondensate.delete();
       }
 
-      if (wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensateCalculationsDomain) {
-        ssmtOutput.condensateFlashTank = this.getFlashTankOutput(wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensateCalculationsDomain.condensateFlashTank);
-        if (wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensateCalculationsDomain.condensateFlashTank) {
-          wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensateCalculationsDomain.condensateFlashTank.delete();
+      let returnCondensateCalculationsDomain = makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensateCalculationsDomain;
+
+      if (returnCondensateCalculationsDomain) {
+        let condensateFlashTank = returnCondensateCalculationsDomain.condensateFlashTank;
+        ssmtOutput.condensateFlashTank = this.getFlashTankOutput(condensateFlashTank);
+        if (condensateFlashTank) {
+          condensateFlashTank.delete();
         }
-        wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensateCalculationsDomain.delete();
+        returnCondensateCalculationsDomain.delete();
       }
 
-      ssmtOutput.makeupWater = this.getSteamPropertiesOutput(wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWater);
-      if (wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWater) {
-        wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWater.delete();
+      let makeupWater = makeupWaterAndCondensateHeaderCalculationsDomain.makeupWater;
+      ssmtOutput.makeupWater = this.getSteamPropertiesOutput(makeupWater);
+      if (makeupWater) {
+        makeupWater.delete();
       }
 
-      ssmtOutput.makeupWaterAndCondensate = this.getSteamPropertiesOutput(wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterAndCondensateHeaderOutput);
-      if (wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterAndCondensateHeaderOutput) {
-        wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterAndCondensateHeaderOutput.delete();
+      let makeupWaterAndCondensateHeaderOutput = makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterAndCondensateHeaderOutput;
+      ssmtOutput.makeupWaterAndCondensate = this.getSteamPropertiesOutput(makeupWaterAndCondensateHeaderOutput);
+      if (makeupWaterAndCondensateHeaderOutput) {
+        makeupWaterAndCondensateHeaderOutput.delete();
       }
 
-      ssmtOutput.heatExchanger = this.getHeatExchangerOutput(wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.heatExchangerOutput);
-      if (wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.heatExchangerOutput) {
-        wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.heatExchangerOutput.delete();
+      let heatExchangerOutput = makeupWaterAndCondensateHeaderCalculationsDomain.heatExchangerOutput;
+      ssmtOutput.heatExchanger = this.getHeatExchangerOutput(heatExchangerOutput);
+      if (heatExchangerOutput) {
+        heatExchangerOutput.delete();
       }
 
-      if (wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterVolumeFlowCalculationsDomain) {
-        operationsOutput.makeupWaterVolumeFlow = wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlow;
-        console.log(wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlow);
-        operationsOutput.makeupWaterVolumeFlowAnnual = wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlowAnnual;
-        wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterVolumeFlowCalculationsDomain.delete();
+      let makeupWaterVolumeFlowCalculationsDomain = makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterVolumeFlowCalculationsDomain
+      if (makeupWaterVolumeFlowCalculationsDomain) {
+        operationsOutput.makeupWaterVolumeFlow = makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlow;
+        operationsOutput.makeupWaterVolumeFlowAnnual = makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlowAnnual;
+        makeupWaterVolumeFlowCalculationsDomain.delete();
       }
 
-      wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain.delete();
+      makeupWaterAndCondensateHeaderCalculationsDomain.delete();
     }
 
     ssmtOutput.operationsOutput = operationsOutput;
+    let processSteamUsageCalculationsDomain = wasmOutput.processSteamUsageCalculationsDomain;
+    if (processSteamUsageCalculationsDomain) {
+      let highPressureProcessSteamUsage = processSteamUsageCalculationsDomain.highPressureProcessSteamUsage
+      ssmtOutput.highPressureProcessSteamUsage = this.getProcessSteamUsage(highPressureProcessSteamUsage);
+      if (highPressureProcessSteamUsage) {
+        highPressureProcessSteamUsage.delete();
+      }
 
-    if (wasmOutput.processSteamUsageCalculationsDomain) {
-      ssmtOutput.highPressureProcessSteamUsage = this.getProcessSteamUsage(wasmOutput.processSteamUsageCalculationsDomain.highPressureProcessSteamUsage);
-      wasmOutput.processSteamUsageCalculationsDomain.highPressureProcessSteamUsage?.delete();
+      let mediumPressureProcessUsagePtr = processSteamUsageCalculationsDomain.mediumPressureProcessUsagePtr;
+      ssmtOutput.mediumPressureProcessSteamUsage = this.getProcessSteamUsage(mediumPressureProcessUsagePtr);
+      if (mediumPressureProcessUsagePtr) {
+        mediumPressureProcessUsagePtr.delete();
+      }
 
-      ssmtOutput.mediumPressureProcessSteamUsage = this.getProcessSteamUsage(wasmOutput.processSteamUsageCalculationsDomain.mediumPressureProcessUsagePtr);
-      wasmOutput.processSteamUsageCalculationsDomain.mediumPressureProcessUsagePtr?.delete();
-
-      ssmtOutput.lowPressureProcessSteamUsage = this.getProcessSteamUsage(wasmOutput.processSteamUsageCalculationsDomain.lowPressureProcessUsagePtr);
-      wasmOutput.processSteamUsageCalculationsDomain.lowPressureProcessUsagePtr.delete();
-      console.log(wasmOutput.processSteamUsageCalculationsDomain.lowPressureProcessUsagePtr.pressure)
-      wasmOutput.processSteamUsageCalculationsDomain.delete();
+      let lowPressureProcessUsagePtr = processSteamUsageCalculationsDomain.lowPressureProcessUsagePtr;
+      ssmtOutput.lowPressureProcessSteamUsage = this.getProcessSteamUsage(lowPressureProcessUsagePtr);
+      if (lowPressureProcessUsagePtr) {
+        lowPressureProcessUsagePtr.delete();
+      }
+      processSteamUsageCalculationsDomain.delete();
     }
     return ssmtOutput;
   }
@@ -959,7 +1011,7 @@ export class SteamSuiteApiService {
     return heatLossOutput;
   }
 
-  getPRVOutput(prv): PrvOutput {
+  getPRVOutput(prv, inCalculator: boolean): PrvOutput {
     let prvOutput: PrvOutput = {
       feedwaterEnergyFlow: undefined,
       feedwaterMassFlow: undefined,
@@ -1013,10 +1065,25 @@ export class SteamSuiteApiService {
 
       outletProperties.delete();
 
-      if (prv.isWithDesuperheating()) {
-        // let prvWith = Module.PrvCastDesuperheating.Cast(prv);
-        // console.log(prvWith)
-        // if (prvWith != null) {
+      if (prv.isWithDesuperheating() && !inCalculator) {
+        let castDesuperheating = new Module.PrvCastDesuperheating();
+        let prvWith = castDesuperheating.Cast(prv);
+        if (prvWith != null) {
+          let feedwaterProperties = prvWith.getFeedwaterProperties();
+          prvOutput.feedwaterEnergyFlow = prvWith.getFeedwaterEnergyFlow();
+          prvOutput.feedwaterMassFlow = prvWith.getFeedwaterMassFlow();
+          prvOutput.feedwaterPressure = feedwaterProperties.pressure;
+          prvOutput.feedwaterQuality = feedwaterProperties.quality;
+          prvOutput.feedwaterVolume = feedwaterProperties.specificVolume;
+          prvOutput.feedwaterSpecificEnthalpy = feedwaterProperties.specificEnthalpy;
+          prvOutput.feedwaterSpecificEntropy = feedwaterProperties.specificEntropy;
+          prvOutput.feedwaterTemperature = feedwaterProperties.temperature;
+
+          feedwaterProperties.delete();
+          prvWith.delete();
+        }
+        castDesuperheating.delete();
+      }else if(prv.isWithDesuperheating() && inCalculator){
         let feedwaterProperties = prv.getFeedwaterProperties();
         prvOutput.feedwaterEnergyFlow = prv.getFeedwaterEnergyFlow();
         prvOutput.feedwaterMassFlow = prv.getFeedwaterMassFlow();
@@ -1028,7 +1095,6 @@ export class SteamSuiteApiService {
         prvOutput.feedwaterTemperature = feedwaterProperties.temperature;
 
         feedwaterProperties.delete();
-        // }
       }
     }
 
