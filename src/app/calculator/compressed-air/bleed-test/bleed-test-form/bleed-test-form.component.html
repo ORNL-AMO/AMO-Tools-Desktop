@@ -26,7 +26,7 @@
                         formControlName="normalOperatingPressure" id="normalOperatingPressure" (input)="save()"
                         onfocus="this.select();" (focus)="changeField('normalOperatingPressure')">
                     <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">barg</span>
                     <span class="alert-danger pull-right small"
                         *ngIf="bleedForm.controls.normalOperatingPressure.invalid && !bleedForm.controls.normalOperatingPressure.pristine">
                         <span *ngIf="bleedForm.controls.normalOperatingPressure.errors.required">Value required.</span>
@@ -42,7 +42,7 @@
                         id="testPressure" (input)="save()" onfocus="this.select();"
                         (focus)="changeField('testPressure')">
                     <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">barg</span>
                     <span class="alert-danger pull-right small"
                         *ngIf="bleedForm.controls.testPressure.invalid && !bleedForm.controls.testPressure.pristine">
                         <span *ngIf="bleedForm.controls.testPressure.errors.required">Value required.</span>
@@ -75,7 +75,7 @@
                     <span *ngIf="bleedTestOutput">
                         <strong>{{bleedTestOutput | number:'1.0-2'}} </strong>
                         <span *ngIf="settings.unitsOfMeasure != 'Metric'"><strong>CFM</strong></span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'"><strong>m<sup>3</sup>/hr</strong></span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'"><strong>m<sup>3</sup>/min</strong></span>
                     </span>
                     <span *ngIf="!bleedTestOutput">
                         <strong>&mdash; &mdash;</strong>

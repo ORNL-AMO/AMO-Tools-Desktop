@@ -47,8 +47,8 @@ export class BleedTestService {
     let copyInputs: BleedTestInput = inputs;
     if (settings.unitsOfMeasure == 'Metric') {
       copyInputs.totalSystemVolume = Math.round(this.convertUnitsService.value(copyInputs.totalSystemVolume).from('ft3').to('m3') * 100) / 100;
-      copyInputs.normalOperatingPressure = Math.round(this.convertUnitsService.value(copyInputs.normalOperatingPressure).from('psig').to('kPa') * 100) / 100;
-      copyInputs.testPressure = Math.round(this.convertUnitsService.value(copyInputs.testPressure).from('psig').to('kPa') * 100) / 100;
+      copyInputs.normalOperatingPressure = Math.round(this.convertUnitsService.value(copyInputs.normalOperatingPressure).from('psig').to('barg') * 100) / 100;
+      copyInputs.testPressure = Math.round(this.convertUnitsService.value(copyInputs.testPressure).from('psig').to('barg') * 100) / 100;
     }
     return copyInputs;
   }
@@ -63,10 +63,10 @@ export class BleedTestService {
     } else {      
       if (settings.unitsOfMeasure == 'Metric') {
         copyInputs.totalSystemVolume = this.convertUnitsService.value(copyInputs.totalSystemVolume).from('m3').to('ft3');
-        copyInputs.normalOperatingPressure = this.convertUnitsService.value(copyInputs.normalOperatingPressure).from('kPa').to('psig');
-        copyInputs.testPressure = this.convertUnitsService.value(copyInputs.testPressure).from('kPa').to('psig');
+        copyInputs.normalOperatingPressure = this.convertUnitsService.value(copyInputs.normalOperatingPressure).from('barg').to('psig');
+        copyInputs.testPressure = this.convertUnitsService.value(copyInputs.testPressure).from('barg').to('psig');
         let output: number  = (copyInputs.totalSystemVolume * ((copyInputs.normalOperatingPressure - copyInputs.testPressure) / copyInputs.time) * 14.7) * 1.25;
-        leakage = output * 1.699;
+        leakage = this.convertUnitsService.value(output).from('ft3/min').to('m3/min');
       } else {
         leakage  = (copyInputs.totalSystemVolume * ((copyInputs.normalOperatingPressure - copyInputs.testPressure) / copyInputs.time) * 14.7) * 1.25;
       }      

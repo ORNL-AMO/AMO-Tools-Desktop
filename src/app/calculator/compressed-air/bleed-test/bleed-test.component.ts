@@ -45,19 +45,19 @@ export class BleedTestComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-   
+    this.bleedTestService.initDefaultEmptyInputs();
+    this.initSubscriptions();
     if (this.assessment) {
       this.getCalculatorForAssessment();
-    } else {
-      this.bleedTestService.initDefaultEmptyInputs();
     } 
-    this.initSubscriptions();
   }
 
   initSubscriptions() {
     this.bleedTestInputSub = this.bleedTestService.bleedTestInput.subscribe(value => {
-      this.calculateBleedTest();
-    })
+      if(value){
+        this.calculateBleedTest();
+      }
+    });
   }
   
 
@@ -103,8 +103,7 @@ export class BleedTestComponent implements OnInit {
   }
 
   initNewAssessmentCalculator(): Calculator {
-    let bleedTestInput: BleedTestInput = this.bleedTestService.bleedTestInput.value;
-    this.calculateBleedTest();
+    let bleedTestInput: BleedTestInput = this.bleedTestService.bleedTestInput.getValue();
     let newCalculator: Calculator = {
       assessmentId: this.assessment.id,
       bleedTestInputs: bleedTestInput
