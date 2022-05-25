@@ -377,11 +377,8 @@ export class SqlDbApiService {
 
 
   selectSolidLiquidFlueGasMaterialById(id: number): SolidLiquidFlueGasMaterial {
-    debugger
     try {
-      console.log(id);
       let solidLiquidFlueGasMaterialPointer = dbInstance.getSolidLiquidFlueGasMaterialById(id);
-      console.log(solidLiquidFlueGasMaterialPointer);
       let solidLiquidFlueGasMaterial: SolidLiquidFlueGasMaterial = this.getSolidLiquidFlueGasMaterialFromWASM(solidLiquidFlueGasMaterialPointer);
       solidLiquidFlueGasMaterialPointer.delete();
       return solidLiquidFlueGasMaterial;
