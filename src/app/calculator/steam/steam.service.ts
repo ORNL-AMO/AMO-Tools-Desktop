@@ -321,6 +321,7 @@ export class SteamService {
     try {
       outputData = this.steamSuiteApiService.steamModeler(convertedInputData);
     } catch (err) {
+      console.log(err);
       // Rare/wildy unrealistic cases Or when has preheat makeup water == true --> will crash modeler
       this.steamModelerError.next('Steam Properties cannot be calculated. Please check input values.');
       let outputData = this.getEmptyResults();

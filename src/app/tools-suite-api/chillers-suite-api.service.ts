@@ -8,42 +8,50 @@ declare var Module: any;
 @Injectable()
 export class ChillersSuiteApiService {
 
-  constructor(private suiteEnumService: SuiteApiHelperService) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService) { }
 
   coolingTowerMakeupWater(input: CoolingTowerInput): CoolingTowerOutput {
-    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.coolingLoad = this.suiteEnumService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.coolingLoad);
-    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.flowRate = this.suiteEnumService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.flowRate);
-    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.lossCorrectionFactor = this.suiteEnumService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.lossCorrectionFactor);
-    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.operationalHours = this.suiteEnumService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.operationalHours);
-    
+    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.coolingLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.coolingLoad);
+    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.flowRate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.flowRate);
+    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.lossCorrectionFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.lossCorrectionFactor);
+    input.coolingTowerMakeupWaterCalculator.operatingConditionsData.operationalHours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.operationalHours);
+
     let OperatingConditionsData = new Module.CoolingTowerOperatingConditionsData(
       input.coolingTowerMakeupWaterCalculator.operatingConditionsData.flowRate,
       input.coolingTowerMakeupWaterCalculator.operatingConditionsData.coolingLoad,
       input.coolingTowerMakeupWaterCalculator.operatingConditionsData.operationalHours,
       input.coolingTowerMakeupWaterCalculator.operatingConditionsData.lossCorrectionFactor,
     );
-    input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.cyclesOfConcentration = this.suiteEnumService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.cyclesOfConcentration); 
+    input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.cyclesOfConcentration = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.cyclesOfConcentration);
     let BaselineWaterConservationData = new Module.CoolingTowerWaterConservationData(
       input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.cyclesOfConcentration,
       input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.driftLossFactor,
-    ); 
-    input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.cyclesOfConcentration = this.suiteEnumService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.cyclesOfConcentration); 
+    );
+    input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.cyclesOfConcentration = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.cyclesOfConcentration);
     let ModificationConservationData = new Module.CoolingTowerWaterConservationData(
       input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.cyclesOfConcentration,
       input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.driftLossFactor,
-    ); 
+    );
     let CoolingTowerMakeupWaterInstance = new Module.CoolingTowerMakeupWaterCalculator(
-      OperatingConditionsData, 
-      BaselineWaterConservationData, 
+      OperatingConditionsData,
+      BaselineWaterConservationData,
       ModificationConservationData
-      );
-    
-    let output: CoolingTowerOutput = CoolingTowerMakeupWaterInstance.calculate();
+    );
+
+    let output = CoolingTowerMakeupWaterInstance.calculate();
+    let results: CoolingTowerOutput = {
+      wcBaseline: output.wcBaseline,
+      wcModification: output.wcModification,
+      waterSavings: output.waterSavings,
+      savingsPercentage: output.savingsPercentage,
+      coolingTowerCaseResults: []
+    }
+    output.delete();
     CoolingTowerMakeupWaterInstance.delete();
     OperatingConditionsData.delete();
     BaselineWaterConservationData.delete();
     ModificationConservationData.delete();
-    return output;
+    return results;
   }
 
   // basinHeaterEnergyConsumption(input: CoolingTowerBasinInput) {
@@ -73,7 +81,7 @@ export class ChillersSuiteApiService {
   //     fanSpeedTypeBaseline,
   //     fanSpeedTypeModification
   //   );
-    
+
   //   return output;
   // }
 
@@ -81,7 +89,7 @@ export class ChillersSuiteApiService {
   //   let chillerType: number = this.suiteEnumService.getCoolingTowerChillerType(input.chillerType)
   //   let condenserCoolingType: number = this.suiteEnumService.getCoolingTowerCondenserCoolingType(input.condenserCoolingType)
   //   let compressorConfigType: number = this.suiteEnumService.getCoolingTowerCompressorConfigType(input.compressorConfigType)
-    
+
   //   let output: ChillerPerformanceOutput = Module.ChillerCapacityEfficiency(
   //     chillerType, 
   //     condenserCoolingType, 
@@ -104,7 +112,7 @@ export class ChillersSuiteApiService {
   //   let chillerType: number = this.suiteEnumService.getCoolingTowerChillerType(input.chillerType)
   //   let condenserCoolingType: number = this.suiteEnumService.getCoolingTowerCondenserCoolingType(input.condenserCoolingType)
   //   let compressorConfigType: number = this.suiteEnumService.getCoolingTowerCompressorConfigType(input.compressorConfigType)
-    
+
   //   let baselineLoadList = this.returnDoubleVector(input.baselineLoadList);
   //   let modLoadList = this.returnDoubleVector(input.modLoadList);
 

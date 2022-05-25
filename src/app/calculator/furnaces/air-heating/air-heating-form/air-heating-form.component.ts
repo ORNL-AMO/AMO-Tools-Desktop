@@ -100,6 +100,9 @@ export class AirHeatingFormComponent implements OnInit {
 
   changeFuelType() { {}
     let currentInput: AirHeatingInput;
+    this.setFuelOptions();
+    this.form.controls.materialTypeId.patchValue(this.fuelOptions[0].id);
+    this.setMaterialProperties();
     if (this.form.controls.gasFuelType.value == true) {
       currentInput = this.airHeatingFormService.getAirHeatingInputGasMaterial(this.form);
     } else {

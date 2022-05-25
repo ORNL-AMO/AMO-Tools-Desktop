@@ -16,20 +16,56 @@ export class PumpsSuiteApiService {
   //results
   resultsExisting(psatInput: PsatInputs): PsatOutputs {
     let psatWasmModule = this.getPsatModuleFromInputs(psatInput);
-    let calculatedResults: PsatOutputs = psatWasmModule.calculateExisting();
-    calculatedResults.annual_savings_potential = psatWasmModule.getAnnualSavingsPotential() * 1000;
-    calculatedResults.optimization_rating = psatWasmModule.getOptimizationRating();
-    calculatedResults = this.convertResultsToPercentages(calculatedResults);
-    return calculatedResults;
+    let calculatedResults = psatWasmModule.calculateExisting();
+    let output: PsatOutputs = {
+      pump_efficiency: calculatedResults.pump_efficiency,
+      motor_rated_power: calculatedResults.motor_rated_power,
+      motor_shaft_power: calculatedResults.motor_shaft_power,
+      pump_shaft_power: calculatedResults.pump_shaft_power,
+      motor_efficiency: calculatedResults.motor_efficiency,
+      motor_power_factor: calculatedResults.motor_power_factor,
+      motor_current: calculatedResults.motor_current,
+      motor_power: calculatedResults.motor_power,
+      load_factor: calculatedResults.load_factor,
+      drive_efficiency: calculatedResults.drive_efficiency,
+      annual_energy: calculatedResults.annual_energy,
+      annual_cost: calculatedResults.annual_cost,
+      annual_savings_potential: psatWasmModule.getAnnualSavingsPotential() * 1000,
+      optimization_rating: psatWasmModule.getOptimizationRating(),
+      percent_annual_savings: calculatedResults.percent_annual_savings,
+      co2EmissionsOutput: calculatedResults.co2EmissionsOutput,
+    }
+    calculatedResults.delete();
+    psatWasmModule.delete();
+    output = this.convertResultsToPercentages(output);
+    return output;
   }
 
   resultsModified(psatInput: PsatInputs): PsatOutputs {
     let psatWasmModule = this.getPsatModuleFromInputs(psatInput);
-    let calculatedResults: PsatOutputs = psatWasmModule.calculateModified();
-    calculatedResults.annual_savings_potential = psatWasmModule.getAnnualSavingsPotential() * 1000;
-    calculatedResults.optimization_rating = psatWasmModule.getOptimizationRating();
-    calculatedResults = this.convertResultsToPercentages(calculatedResults);
-    return calculatedResults;
+    let calculatedResults = psatWasmModule.calculateModified();
+    let output: PsatOutputs = {
+      pump_efficiency: calculatedResults.pump_efficiency,
+      motor_rated_power: calculatedResults.motor_rated_power,
+      motor_shaft_power: calculatedResults.motor_shaft_power,
+      pump_shaft_power: calculatedResults.pump_shaft_power,
+      motor_efficiency: calculatedResults.motor_efficiency,
+      motor_power_factor: calculatedResults.motor_power_factor,
+      motor_current: calculatedResults.motor_current,
+      motor_power: calculatedResults.motor_power,
+      load_factor: calculatedResults.load_factor,
+      drive_efficiency: calculatedResults.drive_efficiency,
+      annual_energy: calculatedResults.annual_energy,
+      annual_cost: calculatedResults.annual_cost,
+      annual_savings_potential: psatWasmModule.getAnnualSavingsPotential() * 1000,
+      optimization_rating: psatWasmModule.getOptimizationRating(),
+      percent_annual_savings: calculatedResults.percent_annual_savings,
+      co2EmissionsOutput: calculatedResults.co2EmissionsOutput,
+    }
+    calculatedResults.delete();
+    psatWasmModule.delete();
+    output = this.convertResultsToPercentages(output);
+    return output;
   }
 
   convertResultsToPercentages(calculatedResults: PsatOutputs): PsatOutputs {
@@ -61,9 +97,9 @@ export class PumpsSuiteApiService {
     let motorRatedVoltage = psatInput.motor_rated_voltage;
     let fullLoadAmps = psatInput.motor_rated_fla;
     // TODO New assessment, no margin. What should default margin be. Applied on backend?
-    let sizeMargin = psatInput.margin? psatInput.margin : 0;
+    let sizeMargin = psatInput.margin ? psatInput.margin : 0;
     let motor = new Module.Motor(lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedMotorEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin);
-    
+
     let flowRate = psatInput.flow_rate;
     let head = psatInput.head;
     let loadEstimationMethod = this.suiteApiHelperService.getLoadEstimationMethod(psatInput.load_estimation_method);
@@ -71,7 +107,7 @@ export class PumpsSuiteApiService {
     // TODO motorAmps null for sys setup
     let motorAmps = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.motor_field_current);
     let voltage = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.motor_field_voltage);
-    
+
     let fieldData = new Module.PumpFieldData(flowRate, head, loadEstimationMethod, motorPower, motorAmps, voltage);
     let psat = new Module.PSAT(pumpInput, motor, fieldData, psatInput.operating_hours, psatInput.cost_kw_hour);
     fieldData.delete();
@@ -83,16 +119,34 @@ export class PumpsSuiteApiService {
   //calculators
   headToolSuctionTank(specificGravity: number, flowRate: number, suctionPipeDiameter: number, suctionTankGasOverPressure: number, suctionTankFluidSurfaceElevation: number, suctionLineLossCoefficients: number, dischargePipeDiameter: number, dischargeGaugePressure: number, dischargeGaugeElevation: number, dischargeLineLossCoefficients: number): HeadToolResults {
     let instance = new Module.HeadToolSuctionTank(specificGravity, flowRate, suctionPipeDiameter, suctionTankGasOverPressure, suctionTankFluidSurfaceElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
-    let headToolSuctionTankResults: HeadToolResults = instance.calculate();
+    let headToolSuctionTankResults = instance.calculate();
+    let results: HeadToolResults = {
+      differentialElevationHead: headToolSuctionTankResults.differentialElevationHead,
+      differentialPressureHead: headToolSuctionTankResults.differentialPressureHead,
+      differentialVelocityHead: headToolSuctionTankResults.differentialVelocityHead,
+      estimatedSuctionFrictionHead: headToolSuctionTankResults.estimatedSuctionFrictionHead,
+      estimatedDischargeFrictionHead: headToolSuctionTankResults.estimatedDischargeFrictionHead,
+      pumpHead: headToolSuctionTankResults.pumpHead
+    }
+    headToolSuctionTankResults.delete();
     instance.delete();
-    return headToolSuctionTankResults;
+    return results;
   }
 
   headTool(specificGravity: number, flowRate: number, suctionPipeDiameter: number, suctionGaugePressure: number, suctionGaugeElevation: number, suctionLineLossCoefficients: number, dischargePipeDiameter: number, dischargeGaugePressure: number, dischargeGaugeElevation: number, dischargeLineLossCoefficients: number): HeadToolResults {
     let instance = new Module.HeadTool(specificGravity, flowRate, suctionPipeDiameter, suctionGaugePressure, suctionGaugeElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
-    let headToolResults: HeadToolResults = instance.calculate();
+    let headToolResults = instance.calculate();
+    let results: HeadToolResults = {
+      differentialElevationHead: headToolResults.differentialElevationHead,
+      differentialPressureHead: headToolResults.differentialPressureHead,
+      differentialVelocityHead: headToolResults.differentialVelocityHead,
+      estimatedSuctionFrictionHead: headToolResults.estimatedSuctionFrictionHead,
+      estimatedDischargeFrictionHead: headToolResults.estimatedDischargeFrictionHead,
+      pumpHead: headToolResults.pumpHead
+    }
+    headToolResults.delete();
     instance.delete();
-    return headToolResults;
+    return results;
   }
 
   achievableEfficiency(pumpStyle: number, specificSpeed: number): number {
@@ -106,8 +160,14 @@ export class PumpsSuiteApiService {
   pumpEfficiency(pumpStyle: number, flowRate: number): { average: number, max: number } {
     let pumpStyleEnum = this.suiteApiHelperService.getPumpStyleEnum(pumpStyle);
     let instance = new Module.PumpEfficiency(pumpStyleEnum, flowRate);
-    let pumpEfficiency: { average: number, max: number } = instance.calculate();
-    return pumpEfficiency;
+    let pumpEfficiency = instance.calculate();
+    let results: { average: number, max: number } = {
+      average: pumpEfficiency.average,
+      max: pumpEfficiency.max
+    };
+    pumpEfficiency.delete();
+    instance.delete();
+    return results;
   }
 
   //TODO: MOVE TO MOTOR API SERVICE
@@ -125,9 +185,16 @@ export class PumpsSuiteApiService {
     let lineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
     let motorEfficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
     let instance = new Module.MotorPerformance(lineFrequency, motorRPM, motorEfficiencyClass, motorRatedPower, specifiedEfficiency, loadFactor, motorRatedVoltage, fullLoadAmps);
-    let tmpResults: MotorPerformanceResults = instance.calculate();
+    let tmpResults = instance.calculate();
+    let results: MotorPerformanceResults = {
+      efficiency: tmpResults.efficiency,
+      current: tmpResults.current,
+      powerFactor: tmpResults.powerFactor
+
+    }
+    tmpResults.delete();
     instance.delete();
-    return tmpResults;
+    return results;
   }
 
   //TODO: MOVE TO MOTOR API SERVICE
@@ -166,7 +233,7 @@ export class PumpsSuiteApiService {
     let lineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
     let efficiencyClassEnum = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
     let instance = new Module.MotorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClassEnum, specifiedEfficiency, loadFactor, ratedVoltage);
-    let motorCurrent: number = instance.calculate(fullLoadAmps);
+    let motorCurrent: number = instance.calculateCurrent(fullLoadAmps);
     instance.delete();
     return motorCurrent;
   }

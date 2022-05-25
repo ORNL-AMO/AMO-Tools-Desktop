@@ -8,7 +8,6 @@ declare var dbInstance: any;
 @Injectable()
 export class SqlDbApiService {
 
-  hasStarted: boolean = false;
   constructor(private suiteApiHelperService: SuiteApiHelperService, private indexedDbService: IndexedDbService) { }
 
 
@@ -67,7 +66,9 @@ export class SqlDbApiService {
         let flueGasComposition = items.get(index);
         let flueGasItem: FlueGasMaterial = this.getFlueGasItemFromGasComposition(flueGasComposition)
         flueGasMaterials.push(flueGasItem);
+        flueGasComposition.delete();
       }
+      items.delete();
       return flueGasMaterials;
     }
     catch (err) {
@@ -105,6 +106,7 @@ export class SqlDbApiService {
       //get composition and create flue gas material
       let flueGasComposition = dbInstance.getGasFlueGasMaterialById(id);
       let flueGasItem: FlueGasMaterial = this.getFlueGasItemFromGasComposition(flueGasComposition);
+      flueGasComposition.delete();
       return flueGasItem;
     }
     catch (err) {
@@ -170,7 +172,9 @@ export class SqlDbApiService {
         let atmosphereSpecificHeatPointer = items.get(index);
         let atmosphereSpecificHeat: AtmosphereSpecificHeat = this.getAtmosphereSpecificHeatFromWASM(atmosphereSpecificHeatPointer);
         atmosphereSpecificHeatMaterials.push(atmosphereSpecificHeat);
+        atmosphereSpecificHeatPointer.delete();
       }
+      items.delete();
       return atmosphereSpecificHeatMaterials;
     }
     catch (err) {
@@ -193,6 +197,7 @@ export class SqlDbApiService {
     try {
       let atmosphereSpecificHeatPointer = dbInstance.getAtmosphereSpecificHeatById(id);
       let atmosphereSpecificHeat: AtmosphereSpecificHeat = this.getAtmosphereSpecificHeatFromWASM(atmosphereSpecificHeatPointer);
+      atmosphereSpecificHeatPointer.delete();
       return atmosphereSpecificHeat;
     }
     catch (err) {
@@ -254,7 +259,9 @@ export class SqlDbApiService {
         let wallLossesSurfacePointer = items.get(index);
         let wallLossesSurface: WallLossesSurface = this.getWallLossesSurfaceFromWASM(wallLossesSurfacePointer);
         wallLossesSurfaces.push(wallLossesSurface);
+        wallLossesSurfacePointer.delete();
       }
+      items.delete();
       return wallLossesSurfaces;
     }
     catch (err) {
@@ -277,6 +284,7 @@ export class SqlDbApiService {
     try {
       let wallLossesSurfacePointer = dbInstance.getWallLossesSurfaceById(id);
       let wallLossesSurface: WallLossesSurface = this.getWallLossesSurfaceFromWASM(wallLossesSurfacePointer);
+      wallLossesSurfacePointer.delete();
       return wallLossesSurface;
     }
     catch (err) {
@@ -339,7 +347,9 @@ export class SqlDbApiService {
         let solidLiquidFlueGasMaterialPointer = items.get(index);
         let solidLiquidFlueGasMaterial: SolidLiquidFlueGasMaterial = this.getSolidLiquidFlueGasMaterialFromWASM(solidLiquidFlueGasMaterialPointer);
         solidLiquidFlueGasMaterials.push(solidLiquidFlueGasMaterial);
+        solidLiquidFlueGasMaterialPointer.delete();
       }
+      items.delete();
       return solidLiquidFlueGasMaterials;
     }
     catch (err) {
@@ -370,6 +380,7 @@ export class SqlDbApiService {
     try {
       let solidLiquidFlueGasMaterialPointer = dbInstance.getSolidLiquidFlueGasMaterialById(id);
       let solidLiquidFlueGasMaterial: SolidLiquidFlueGasMaterial = this.getSolidLiquidFlueGasMaterialFromWASM(solidLiquidFlueGasMaterialPointer);
+      solidLiquidFlueGasMaterialPointer.delete();
       return solidLiquidFlueGasMaterial;
     }
     catch (err) {
@@ -406,13 +417,13 @@ export class SqlDbApiService {
   getSolidLiquidFlueGasMaterial(solidLiquidFlueGasMaterial: SolidLiquidFlueGasMaterial) {
     let SolidLiquidFlueGasMaterial = new Module.SolidLiquidFlueGasMaterial(
       solidLiquidFlueGasMaterial.substance,
-			solidLiquidFlueGasMaterial.carbon,
-			solidLiquidFlueGasMaterial.hydrogen,
-			solidLiquidFlueGasMaterial.sulphur,
-			solidLiquidFlueGasMaterial.inertAsh,
-			solidLiquidFlueGasMaterial.o2,
-			solidLiquidFlueGasMaterial.moisture,
-			solidLiquidFlueGasMaterial.nitrogen,
+      solidLiquidFlueGasMaterial.carbon,
+      solidLiquidFlueGasMaterial.hydrogen,
+      solidLiquidFlueGasMaterial.sulphur,
+      solidLiquidFlueGasMaterial.inertAsh,
+      solidLiquidFlueGasMaterial.o2,
+      solidLiquidFlueGasMaterial.moisture,
+      solidLiquidFlueGasMaterial.nitrogen,
     );
     return SolidLiquidFlueGasMaterial;
   }
@@ -436,7 +447,9 @@ export class SqlDbApiService {
         let gasLoadChargeMaterialPointer = items.get(index);
         let gasLoadChargeMaterial: GasLoadChargeMaterial = this.getGasLoadChargeMaterialFromWASM(gasLoadChargeMaterialPointer);
         gasLoadChargeMaterials.push(gasLoadChargeMaterial);
+        gasLoadChargeMaterialPointer.delete();
       }
+      items.delete();
       return gasLoadChargeMaterials;
     }
     catch (err) {
@@ -459,6 +472,7 @@ export class SqlDbApiService {
     try {
       let gasLoadChargeMaterialPointer = dbInstance.getGasLoadChargeMaterialById(id);
       let gasLoadChargeMaterial: GasLoadChargeMaterial = this.getGasLoadChargeMaterialFromWASM(gasLoadChargeMaterialPointer);
+      gasLoadChargeMaterialPointer.delete();
       return gasLoadChargeMaterial;
     }
     catch (err) {
@@ -513,7 +527,7 @@ export class SqlDbApiService {
   }
 
 
-  
+
   selectLiquidLoadChargeMaterials(): Array<LiquidLoadChargeMaterial> {
     try {
       let liquidLoadChargeMaterials: Array<LiquidLoadChargeMaterial> = new Array();
@@ -522,7 +536,9 @@ export class SqlDbApiService {
         let liquidLoadChargeMaterialPointer = items.get(index);
         let liquidLoadChargeMaterial: LiquidLoadChargeMaterial = this.getLiquidLoadChargeMaterialFromWASM(liquidLoadChargeMaterialPointer);
         liquidLoadChargeMaterials.push(liquidLoadChargeMaterial);
+        liquidLoadChargeMaterialPointer.delete();
       }
+      items.delete();
       return liquidLoadChargeMaterials;
     }
     catch (err) {
@@ -548,6 +564,7 @@ export class SqlDbApiService {
     try {
       let liquidLoadChargeMaterialPointer = dbInstance.getLiquidLoadChargeMaterialById(id);
       let liquidLoadChargeMaterial: LiquidLoadChargeMaterial = this.getLiquidLoadChargeMaterialFromWASM(liquidLoadChargeMaterialPointer);
+      liquidLoadChargeMaterialPointer.delete();
       return liquidLoadChargeMaterial;
     }
     catch (err) {
@@ -584,10 +601,10 @@ export class SqlDbApiService {
   getLiquidLoadChargeMaterial(liquidLoadChargeMaterial: LiquidLoadChargeMaterial) {
     let LiquidLoadChargeMaterial = new Module.LiquidLoadChargeMaterial();
     LiquidLoadChargeMaterial.setLatentHeat(liquidLoadChargeMaterial.latentHeat),
-    LiquidLoadChargeMaterial.setSpecificHeatLiquid(liquidLoadChargeMaterial.specificHeatLiquid),
-    LiquidLoadChargeMaterial.setSpecificHeatVapor(liquidLoadChargeMaterial.specificHeatVapor),
-    LiquidLoadChargeMaterial.setSubstance(liquidLoadChargeMaterial.substance),
-    LiquidLoadChargeMaterial.setVaporizingTemperature(liquidLoadChargeMaterial.vaporizationTemperature)
+      LiquidLoadChargeMaterial.setSpecificHeatLiquid(liquidLoadChargeMaterial.specificHeatLiquid),
+      LiquidLoadChargeMaterial.setSpecificHeatVapor(liquidLoadChargeMaterial.specificHeatVapor),
+      LiquidLoadChargeMaterial.setSubstance(liquidLoadChargeMaterial.substance),
+      LiquidLoadChargeMaterial.setVaporizingTemperature(liquidLoadChargeMaterial.vaporizationTemperature)
     if (liquidLoadChargeMaterial.id !== undefined) {
       LiquidLoadChargeMaterial.setID(liquidLoadChargeMaterial.id);
     }
@@ -605,7 +622,7 @@ export class SqlDbApiService {
   }
 
 
-    
+
   selectSolidLoadChargeMaterials(): Array<SolidLoadChargeMaterial> {
     try {
       let solidLoadChargeMaterials: Array<SolidLoadChargeMaterial> = new Array();
@@ -614,7 +631,9 @@ export class SqlDbApiService {
         let solidLoadChargeMaterialPointer = items.get(index);
         let solidLoadChargeMaterial: SolidLoadChargeMaterial = this.getSolidLoadChargeMaterialFromWASM(solidLoadChargeMaterialPointer);
         solidLoadChargeMaterials.push(solidLoadChargeMaterial);
+        solidLoadChargeMaterialPointer.delete();
       }
+      items.delete();
       return solidLoadChargeMaterials;
     }
     catch (err) {
@@ -640,6 +659,7 @@ export class SqlDbApiService {
     try {
       let solidLoadChargeMaterialPointer = dbInstance.getSolidLoadChargeMaterialById(id);
       let solidLoadChargeMaterial: SolidLoadChargeMaterial = this.getSolidLoadChargeMaterialFromWASM(solidLoadChargeMaterialPointer);
+      solidLoadChargeMaterialPointer.delete();
       return solidLoadChargeMaterial;
     }
     catch (err) {
@@ -675,7 +695,7 @@ export class SqlDbApiService {
 
   getSolidLoadChargeMaterial(solidLoadChargeMaterial: SolidLoadChargeMaterial) {
     let SolidLoadChargeMaterial = new Module.SolidLoadChargeMaterial();
-    SolidLoadChargeMaterial.selected = false,
+    SolidLoadChargeMaterial.selected = false;
     SolidLoadChargeMaterial.setLatentHeat(solidLoadChargeMaterial.latentHeat);
     SolidLoadChargeMaterial.setMeltingPoint(solidLoadChargeMaterial.meltingPoint);
     SolidLoadChargeMaterial.setSpecificHeatLiquid(solidLoadChargeMaterial.specificHeatLiquid);
@@ -706,7 +726,9 @@ export class SqlDbApiService {
         let suiteDbMotorPointer = items.get(index);
         let suiteDbMotor: SuiteDbMotor = this.getSuiteDbMotorFromWASM(suiteDbMotorPointer);
         suiteDbMotors.push(suiteDbMotor);
+        suiteDbMotorPointer.delete();
       }
+      items.delete();
       return suiteDbMotors;
     }
     catch (err) {
@@ -718,8 +740,8 @@ export class SqlDbApiService {
   getSuiteDbMotorFromWASM(suiteDbMotorPointer): SuiteDbMotor {
     let lineFrequency = this.suiteApiHelperService.getLineFrequencyFromSuiteEnumValue(suiteDbMotorPointer.getLineFrequency().value);
     let efficiencyClass = suiteDbMotorPointer.getEfficiencyClass().value;
-    
-    let suiteDbMotor =  {
+
+    let suiteDbMotor = {
       id: suiteDbMotorPointer.getId(),
       catalog: suiteDbMotorPointer.getCatalog(),
       efficiencyClass: efficiencyClass,
@@ -741,6 +763,7 @@ export class SqlDbApiService {
     try {
       let suiteDbMotorPointer = dbInstance.getMotorDataById(id);
       let suiteDbMotor: SuiteDbMotor = this.getSuiteDbMotorFromWASM(suiteDbMotorPointer);
+      suiteDbMotorPointer.delete();
       return suiteDbMotor;
     }
     catch (err) {
@@ -779,16 +802,16 @@ export class SqlDbApiService {
     let lineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(motor.lineFrequency);
     let MotorData = new Module.MotorData(
       motor.hp,
-      motor.synchronousSpeed, 
-      motor.poles, 
-      motor.nominalEfficiency, 
-      efficiencyClass, 
+      motor.synchronousSpeed,
+      motor.poles,
+      motor.nominalEfficiency,
+      efficiencyClass,
       motor.nemaTable,
-      motor.enclosureType, 
-      lineFrequency, 
-      motor.voltageLimit, 
+      motor.enclosureType,
+      lineFrequency,
+      motor.voltageLimit,
       motor.catalog
-      
+
     );
     if (motor.id !== undefined) {
       MotorData.setId(motor.id);
@@ -815,7 +838,9 @@ export class SqlDbApiService {
         let suiteDbPumpPointer = items.get(index);
         let suiteDbPump: SuiteDbPump = this.getSuiteDbPumpFromWASM(suiteDbPumpPointer);
         suiteDbPumps.push(suiteDbPump);
+        suiteDbPumpPointer.delete();
       }
+      items.delete();
       return suiteDbPumps;
     }
     catch (err) {
@@ -827,12 +852,12 @@ export class SqlDbApiService {
   getSuiteDbPumpFromWASM(pumpDataPointer): SuiteDbPump {
     return {
       id: pumpDataPointer.getId(),
-      manufacturer: pumpDataPointer.getManufacturer(), 
-      model: pumpDataPointer.getModel(), 
-      type: pumpDataPointer.getType(), 
+      manufacturer: pumpDataPointer.getManufacturer(),
+      model: pumpDataPointer.getModel(),
+      type: pumpDataPointer.getType(),
       serialNumber: pumpDataPointer.getSerialNumber(),
-      status: pumpDataPointer.getStatus(), 
-      pumpType: pumpDataPointer.getPumpType(), 
+      status: pumpDataPointer.getStatus(),
+      pumpType: pumpDataPointer.getPumpType(),
       radialBearingType: pumpDataPointer.getRadialBearingType(),
       thrustBearingType: pumpDataPointer.getThrustBearingType(),
       shaftOrientation: pumpDataPointer.getShaftOrientation(),
@@ -880,6 +905,7 @@ export class SqlDbApiService {
     try {
       let suiteDbPumpPointer = dbInstance.getPumpDataById(id);
       let suiteDbPump: SuiteDbPump = this.getSuiteDbPumpFromWASM(suiteDbPumpPointer);
+      suiteDbPumpPointer.delete();
       return suiteDbPump;
     }
     catch (err) {
@@ -915,51 +941,51 @@ export class SqlDbApiService {
 
   getPumpData(pump: SuiteDbPump) {
     let PumpData = new Module.PumpData(
-      pump.manufacturer, 
-      pump.model, 
-      pump.type, 
+      pump.manufacturer,
+      pump.model,
+      pump.type,
       pump.serialNumber,
-      pump.status, 
-      pump.pumpType, 
-      pump.radialBearingType,  
+      pump.status,
+      pump.pumpType,
+      pump.radialBearingType,
       pump.thrustBearingType,
-      pump.shaftOrientation, 
-      pump.shaftSealType, 
-      pump.fluidType, 
+      pump.shaftOrientation,
+      pump.shaftSealType,
+      pump.fluidType,
       pump.priority,
-      pump.driveType, 
-      pump.flangeConnectionClass, 
+      pump.driveType,
+      pump.flangeConnectionClass,
       pump.flangeConnectionSize,
-      pump.numShafts, 
-      pump.speed, 
-      pump.numStages,  
-      pump.yearlyOperatingHours, 
-      pump.yearInstalled, 
+      pump.numShafts,
+      pump.speed,
+      pump.numStages,
+      pump.yearlyOperatingHours,
+      pump.yearInstalled,
       pump.finalMotorRpm,
-      pump.inletDiameter, 
-      pump.weight, 
-      pump.outletDiameter, 
+      pump.inletDiameter,
+      pump.weight,
+      pump.outletDiameter,
       pump.percentageOfSchedule,
-      pump.dailyPumpCapacity, 
-      pump.measuredPumpCapacity, 
-      pump.pumpPerformance, 
+      pump.dailyPumpCapacity,
+      pump.measuredPumpCapacity,
+      pump.pumpPerformance,
       pump.staticSuctionHead,
-      pump.staticDischargeHead, 
-      pump.fluidDensity, 
+      pump.staticDischargeHead,
+      pump.fluidDensity,
       pump.lengthOfDischargePipe,
-      pump.pipeDesignFrictionLosses,  
-      pump.maxWorkingPressure, 
+      pump.pipeDesignFrictionLosses,
+      pump.maxWorkingPressure,
       pump.maxAmbientTemperature,
-      pump.maxSuctionLift,  
-      pump.displacement, 
-      pump.startingTorque, 
+      pump.maxSuctionLift,
+      pump.displacement,
+      pump.startingTorque,
       pump.ratedSpeed,
-      pump.shaftDiameter, 
-      pump.impellerDiameter, 
-      pump.efficiency, 
-      pump.output60Hz, 
+      pump.shaftDiameter,
+      pump.impellerDiameter,
+      pump.efficiency,
+      pump.output60Hz,
       pump.minFlowSize,
-      pump.pumpSize,  
+      pump.pumpSize,
       pump.outOfService
     );
     if (pump.id !== undefined) {
