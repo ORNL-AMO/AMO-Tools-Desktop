@@ -250,6 +250,7 @@ export interface ProfileSummary {
     avgPrecentPower?: number,
     avgPercentCapacity?: number,
     profileSummaryValid?: ProfileSummaryValid
+    profileSummaryForPrint?: Array<Array<ProfileSummaryData>>,
 }
 
 export interface ProfileSummaryData {
@@ -289,4 +290,10 @@ export interface CompressorSummary {
     specificPowerAvgLoad: number,
     ratedSpecificPower: number,
     ratedIsentropicEfficiency: number
+}
+
+export interface ProfilesForPrint {
+    dayType: CompressedAirDayType,
+    profileSummary: Array<ProfileSummary>,
+    totalsForPrint: Array<Array<ProfileSummaryTotal>>;
 }

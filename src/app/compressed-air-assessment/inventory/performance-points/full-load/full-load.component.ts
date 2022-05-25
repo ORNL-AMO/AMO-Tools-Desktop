@@ -110,7 +110,7 @@ export class FullLoadComponent implements OnInit {
     }
 
     if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultPressure) {
-      let defaultValue: number = this.fullLoadCalculationsService.getFullLoadDischargePressure(this.selectedCompressor, true);
+      let defaultValue: number = this.fullLoadCalculationsService.getFullLoadDischargePressure(this.selectedCompressor, true, this.settings);
       this.showPressureCalc = (this.selectedCompressor.performancePoints.fullLoad.dischargePressure != defaultValue);
     } else {
       this.showPressureCalc = false;
@@ -132,7 +132,7 @@ export class FullLoadComponent implements OnInit {
   }
 
   setPressure() {
-    let defaultValue: number = this.fullLoadCalculationsService.getFullLoadDischargePressure(this.selectedCompressor, true);
+    let defaultValue: number = this.fullLoadCalculationsService.getFullLoadDischargePressure(this.selectedCompressor, true, this.settings);
     this.form.controls.dischargePressure.patchValue(defaultValue);
     this.form.controls.isDefaultPressure.patchValue(true);
     this.save();

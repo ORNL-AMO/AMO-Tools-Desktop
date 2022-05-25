@@ -138,7 +138,6 @@ export class CentrifugalGraphComponent implements OnInit {
             }
             currentColorIndex++;
             currentTraceColor = this.plotlyTraceColors[currentColorIndex];
-
             let xData1: Array<number> = [compressor.centrifugalSpecifics.surgeAirflow, compressor.centrifugalSpecifics.maxFullLoadCapacity];
             let yData1: Array<number> = [compressor.centrifugalSpecifics.minFullLoadPressure, compressor.centrifugalSpecifics.maxFullLoadPressure];
             let name: string = compressor.name + ' Surge Limit';

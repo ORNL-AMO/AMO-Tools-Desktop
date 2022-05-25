@@ -1,5 +1,5 @@
 <div class="d-flex h-100 modify-conditions general standalone-calculator" #contentContainer>
-    <div class="d-flex flex-column w-100 h-100">
+    <div class="d-flex flex-column w-100 h-100" [ngStyle]="{'height.px': containerHeight}">
         <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center">
             <div class="d-flex pl-2 align-items-center">
                 <div class="col-md-auto">
@@ -13,7 +13,7 @@
 
 
         <div class="d-flex">
-            <div class="scroll-item col-7 bg-white" [ngStyle]="{'height.px' : containerHeight}">
+            <div class="scroll-item col-7 bg-white">
                 <div class="d-flex flex-column p-2">
                     <div class="pb-2">
                         <app-full-load-amps-form [settings]="settings"></app-full-load-amps-form>

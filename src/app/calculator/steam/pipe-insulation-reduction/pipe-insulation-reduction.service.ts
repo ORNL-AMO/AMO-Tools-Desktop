@@ -44,7 +44,8 @@ export class PipeInsulationReductionService {
       pipeBaseMaterialSelection: 0,
       pipeMaterialCoefficients: this.getBaseMaterialCoefficients(0),
       insulationMaterialSelection: 0,
-      insulationMaterialCoefficients: this.getInsulationMaterialCoefficients(0)
+      insulationMaterialCoefficients: this.getInsulationMaterialCoefficients(0),
+      heatedOrChilled: 0
     };
     return obj;
   }
@@ -67,7 +68,8 @@ export class PipeInsulationReductionService {
       pipeBaseMaterialSelection: [obj.pipeBaseMaterialSelection],
       insulationMaterialSelection: [obj.insulationMaterialSelection],
       insulationThickness: [obj.insulationThickness],
-      pipeJacketMaterialSelection: [obj.pipeJacketMaterialSelection]
+      pipeJacketMaterialSelection: [obj.pipeJacketMaterialSelection],
+      heatedOrChilled: [{ value: obj.heatedOrChilled, disabled: !isBaseline }]
     });
 
     if (obj.insulationMaterialSelection != 0) {
@@ -115,7 +117,8 @@ export class PipeInsulationReductionService {
       pipeBaseMaterialSelection: form.controls.pipeBaseMaterialSelection.value,
       pipeMaterialCoefficients: this.getBaseMaterialCoefficients(form.controls.pipeBaseMaterialSelection.value),
       insulationMaterialSelection: form.controls.insulationMaterialSelection.value,
-      insulationMaterialCoefficients: this.getInsulationMaterialCoefficients(form.controls.insulationMaterialSelection.value)
+      insulationMaterialCoefficients: this.getInsulationMaterialCoefficients(form.controls.insulationMaterialSelection.value),
+      heatedOrChilled: form.controls.heatedOrChilled.value
     };
     return obj;
   }
@@ -144,7 +147,8 @@ export class PipeInsulationReductionService {
         pipeBaseMaterialSelection: 0,
         pipeMaterialCoefficients: this.getBaseMaterialCoefficients(0),
         insulationMaterialSelection: 0,
-        insulationMaterialCoefficients: this.getInsulationMaterialCoefficients(0)
+        insulationMaterialCoefficients: this.getInsulationMaterialCoefficients(0),
+        heatedOrChilled: 0
       };
     } else {
       example = {
@@ -168,7 +172,8 @@ export class PipeInsulationReductionService {
         pipeBaseMaterialSelection: 0,
         pipeMaterialCoefficients: this.getBaseMaterialCoefficients(0),
         insulationMaterialSelection: 2,
-        insulationMaterialCoefficients: this.getInsulationMaterialCoefficients(2)
+        insulationMaterialCoefficients: this.getInsulationMaterialCoefficients(2),
+        heatedOrChilled: 0
       };
     }
     return example;
@@ -180,23 +185,29 @@ export class PipeInsulationReductionService {
     let modificationResults: PipeInsulationReductionResult = {
       heatLength: 0,
       annualHeatLoss: 0,
-      energyCost: 0
+      energyCost: 0,
+      energySourceType: baselineResults.energySourceType,
+      heatedOrChilled: baselineResults.heatedOrChilled
     };
     let annualHeatLossReduction: number = 0;
     let annualCostSavings: number = 0;
     if (modification) {
       let modificationCopy: PipeInsulationReductionInput = JSON.parse(JSON.stringify(modification));
+      modificationCopy.utilityType = baselineResults.energySourceType;
+      modificationCopy.heatedOrChilled = baselineResults.heatedOrChilled;
       modificationResults = this.calculate(modificationCopy, settings);
       annualHeatLossReduction = baselineResults.annualHeatLoss - modificationResults.annualHeatLoss;
       annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
     } else {
       modificationResults = baselineResults;
     }
+    let energyUnit = this.getEnergyUnit(baselineCopy.utilityType, settings);
     let pipeInsulationReductionResults: PipeInsulationReductionResults = {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
       annualHeatSavings: annualHeatLossReduction,
-      annualCostSavings: annualCostSavings
+      annualCostSavings: annualCostSavings,
+      energyUnit: energyUnit
     };
     return pipeInsulationReductionResults;
   }
@@ -204,12 +215,14 @@ export class PipeInsulationReductionService {
   calculate(input: PipeInsulationReductionInput, settings: Settings): PipeInsulationReductionResult {
     let convertedInput: PipeInsulationReductionInput = this.convertInputs(input, settings);
     let results: PipeInsulationReductionResult = this.standaloneService.pipeInsulationReduction(convertedInput);
+    results.energySourceType = convertedInput.utilityType;
+    results.heatedOrChilled = convertedInput.heatedOrChilled;
     results = this.convertResults(results, settings);
-    if (settings.unitsOfMeasure != 'Imperial') {
+    if (results.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial') {
       results.energyCost = results.annualHeatLoss * input.utilityCost / 1000;
     } else {
       results.energyCost = results.annualHeatLoss * input.utilityCost;
-    }
+    }         
     return results;
   }
 
@@ -229,11 +242,17 @@ export class PipeInsulationReductionService {
   }
 
   convertResults(results: PipeInsulationReductionResult, settings: Settings): PipeInsulationReductionResult {
-    if (settings.unitsOfMeasure == 'Imperial') {
+    if ( results.energySourceType != 2 && settings.unitsOfMeasure == 'Imperial') {
       results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('Wh').to('MMBtu');
-    } else {
+    } else if( results.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial'){
       results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('Wh').to('MJ');
+    } else {
+      results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('Wh').to('kWh');
     }
+    if( results.heatedOrChilled == 1){
+      results.annualHeatLoss = results.annualHeatLoss * (-1);
+    }
+
     return results;
   }
 
@@ -416,4 +435,19 @@ export class PipeInsulationReductionService {
       },
     ];
   }
+
+  getEnergyUnit(utilityType: number, settings: Settings) {
+    let energyUnit: string = settings.energyResultUnit;
+    if (utilityType === 2) {
+      energyUnit = "kWh";
+    } else {
+      if (settings.unitsOfMeasure == 'Meteric'){
+        energyUnit = "GJ"
+      } else {
+        energyUnit = "MMBtu"
+      }
+    }
+    return energyUnit;
+  }
+
 }
