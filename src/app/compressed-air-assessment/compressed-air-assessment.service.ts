@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { isNull, isUndefined } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { CompressedAirAssessment, CompressorInventoryItem, Modification } from '../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, Modification, ProfileSummaryData } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { DayTypeService } from './day-types/day-type.service';
 import { InventoryService } from './inventory/inventory.service';
@@ -51,44 +51,12 @@ export class CompressedAirAssessmentService {
       let hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, settings).valid;
       let hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
       let hasValidDayTypes = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
-      let validSystemProfile = this.hasValidProfileSummaryData(compressedAirAssessment);
-      compressedAirAssessment.setupDone = (hasValidSystemInformation && hasValidCompressors && hasValidDayTypes && validSystemProfile.isValid);
+      let profileSummaryValid = this.hasValidProfileSummaryData(compressedAirAssessment);
+      compressedAirAssessment.setupDone = (hasValidSystemInformation && hasValidCompressors && hasValidDayTypes && profileSummaryValid.isValid);
     }
     //TODO? set modifications valid?
     this.compressedAirAssessment.next(compressedAirAssessment);
   }
-
-  // hasValidProfileSummaryData(compressedAirAssessment?: CompressedAirAssessment) {
-  //   if (!compressedAirAssessment) {
-  //     compressedAirAssessment = this.compressedAirAssessment.getValue();
-  //   }
-  //   let isInvalidProfileSummaryData = false;
-  //   let profileSummary = compressedAirAssessment.systemProfile.profileSummary;
-  //   let profileDataType = compressedAirAssessment.systemProfile.systemProfileSetup.profileDataType;
-  //   let selectedDayTypeId = compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId;
-
-  //   isInvalidProfileSummaryData = profileSummary.some(summary => {
-  //     if (summary.dayTypeId == selectedDayTypeId) {
-  //       let hasInvalidData: boolean = summary.profileSummaryData.some(data => {
-  //         if (data.order != 0) {
-  //           if (profileDataType == 'percentCapacity' && this.checkIsInvalidNumber(data.percentCapacity)) {
-  //             return true
-  //           } else if (profileDataType == 'power' && this.checkIsInvalidNumber(data.power)) {
-  //             return true;
-  //           } else if (profileDataType == 'airflow' && this.checkIsInvalidNumber(data.airflow)) {
-  //             return true;
-  //           } else if (profileDataType == 'percentPower' && this.checkIsInvalidNumber(data.percentPower)) {
-  //             return true;
-  //           } else if (profileDataType == 'powerFactor' && (this.checkIsInvalidNumber(data.powerFactor) || this.checkIsInvalidNumber(data.amps) || this.checkIsInvalidNumber(data.volts))) {
-  //             return true;
-  //           }
-  //         }
-  //       });
-  //       return hasInvalidData;
-  //     }
-  //   });
-  //   return !isInvalidProfileSummaryData;
-  // }
 
   getDefaultProfileSummaryValid(): ProfileSummaryValid {
     return {
@@ -111,40 +79,53 @@ export class CompressedAirAssessmentService {
     let profileDataType = compressedAirAssessment.systemProfile.systemProfileSetup.profileDataType;
     let selectedDayTypeId = compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId;
 
+    let hasValidSummary: boolean = true;
     profileSummary.forEach(summary => {
       let summaryInputValidationData: SummaryInputValidationData = {
         compressorId: summary.compressorId,
         airflowValidity: [],
-        profileDataInputValidity: [],
+        percentCapacityValidity: [],
+        percentPowerValidity: [],
+        powerValidity: [],
         powerFactorInputValidity: []
       };
 
       if (summary.dayTypeId == selectedDayTypeId) {
-        let hasValidData: boolean = true;
         let currentCompressor: CompressorInventoryItem = this.compressedAirAssessment.getValue().compressorInventoryItems.find(compressor => compressor.itemId === summary.compressorId);
         summary.profileSummaryData.forEach((data, index) => {
           if (data.order != 0) {
-            if (profileDataType == 'percentCapacity') {
-              let isPercentCapacityValid: boolean = this.checkIsInvalidNumber(data.percentCapacity);
-              summaryInputValidationData.profileDataInputValidity.push(isPercentCapacityValid);
-            } else if (profileDataType == 'power') {
-              let isPowerValid: boolean = this.checkIsPowerValid(data.power, currentCompressor, profileSummaryValid);
-              summaryInputValidationData.profileDataInputValidity.push(isPowerValid);
-            } else if (profileDataType == 'airflow') {
-              let airFlowValid: AirflowValidation = this.checkIsAirflowValid(data.airflow, currentCompressor, profileSummaryValid);
-              summaryInputValidationData.airflowValidity.push(airFlowValid);
-            } else if (profileDataType == 'percentPower') {
-              let isPercentPowerValid: boolean = this.checkIsInvalidNumber(data.percentCapacity);
-              summaryInputValidationData.profileDataInputValidity.push(isPercentPowerValid);
-            } else if (profileDataType == 'powerFactor') {
-              let powerFactorValid: PowerFactorInputValidationData = this.checkIsPowerFactorValid(data.powerFactor, data.amps, data.volts, currentCompressor, profileSummaryValid);
-              summaryInputValidationData.powerFactorInputValidity.push(powerFactorValid);
-            }
+            let isValidProfileData: boolean = true;
+              if (profileDataType == 'percentCapacity') {
+                isValidProfileData = this.checkIsInvalidNumber(data.percentCapacity) !== true;
+                summaryInputValidationData.percentCapacityValidity.push(isValidProfileData);
+                if (!isValidProfileData) {
+                  profileSummaryValid.percentError = 'Percent must be 0 or greater'
+                }
+              } else if (profileDataType == 'power') {
+                isValidProfileData = this.checkIsPowerValid(data.power, currentCompressor, profileSummaryValid);
+                summaryInputValidationData.powerValidity.push(isValidProfileData);
+              } else if (profileDataType == 'airflow') {
+                let airFlowValidation: AirflowValidation = this.checkIsAirflowValid(data.airflow, currentCompressor, profileSummaryValid);
+                isValidProfileData = airFlowValidation.airFlowValid;
+                summaryInputValidationData.airflowValidity.push(airFlowValidation);
+              } else if (profileDataType == 'percentPower') {
+                isValidProfileData = this.checkIsInvalidNumber(data.percentPower) !== true;
+                summaryInputValidationData.percentPowerValidity.push(isValidProfileData);
+                if (!isValidProfileData) {
+                  profileSummaryValid.percentError = 'Percent must be 0 or greater'
+                }
+              } else if (profileDataType == 'powerFactor') {
+                let powerFactorValid: PowerFactorInputValidationData = this.checkIsPowerFactorValid(data.powerFactor, data.amps, data.volts, currentCompressor, profileSummaryValid);
+                isValidProfileData = powerFactorValid.isValid;
+                summaryInputValidationData.powerFactorInputValidity.push(powerFactorValid);
+              }
+
+              if (!isValidProfileData) {
+                profileSummaryValid.isValid = false;
+              }
           }
         });
-
         profileSummaryValid.summaryInputValidationData.push(summaryInputValidationData);
-        profileSummaryValid.isValid = hasValidData;
       }
     });
     return profileSummaryValid;
@@ -157,12 +138,13 @@ export class CompressedAirAssessmentService {
   checkIsPowerValid(power: number, currentCompressor: CompressorInventoryItem, profileSummaryValid: ProfileSummaryValid): boolean {
     let isValid: boolean = true;
     let motorServiceFactor: number = currentCompressor.nameplateData.totalPackageInputPower * currentCompressor.designDetails.serviceFactor;
+    motorServiceFactor = this.convertUnitsService.roundVal(motorServiceFactor, 2);
     if (power > motorServiceFactor) {
       isValid = false;
-      profileSummaryValid.powerError = 'Power exceeds Motor Service Factor';
+      profileSummaryValid.powerError = `Power exceeds Motor Service Factor (${motorServiceFactor})`;
     } else if (this.checkIsInvalidNumber(power)) {
       isValid = false;
-      profileSummaryValid.powerError = `Power field values should be 0 or greater`;
+      profileSummaryValid.powerError = `Power must be 0 or greater`;
     }
     return isValid;
   }
@@ -176,9 +158,9 @@ export class CompressedAirAssessmentService {
     if (airflow >= airFlowLimit) {
       airFlowValidation.airFlowWarning = true;
       profileSummaryValid.airFlowWarning = `Airflow should be less than 150% of Rated Flow (${airFlowLimit})`;
-    } else if ( this.checkIsInvalidNumber(airflow)) {
+    } else if (this.checkIsInvalidNumber(airflow)) {
       airFlowValidation.airFlowValid = false;
-      profileSummaryValid.airFlowError = `Airflow field values should be 0 or greater`;
+      profileSummaryValid.airFlowError = `Airflow must be 0 or greater`;
     }
     return airFlowValidation;
   }
@@ -187,14 +169,15 @@ export class CompressedAirAssessmentService {
     let powerFactorInputValidationData: PowerFactorInputValidationData = {
       powerFactorValid: true,
       ampsValid: true,
-      voltsValid: true
+      voltsValid: true,
+      isValid: true,
     }
     if (powerFactor >= 1) {
       powerFactorInputValidationData.powerFactorValid = false;
       profileSummaryValid.powerFactorError = `Power Factor must be less than 1`;
     } else if ( this.checkIsInvalidNumber(powerFactor)) {
       powerFactorInputValidationData.powerFactorValid = false;
-      profileSummaryValid.powerFactorError = `Power Factor field values should be 0 or greater`;
+      profileSummaryValid.powerFactorError = `Power Factor must be 0 or greater`;
     }
 
     if (volts > 6600) {
@@ -202,7 +185,7 @@ export class CompressedAirAssessmentService {
       profileSummaryValid.voltError = 'Volts cannot be greater than 6600';
     } else if ( this.checkIsInvalidNumber(volts)) {
       powerFactorInputValidationData.voltsValid = false;
-      profileSummaryValid.voltError = `Volts field values should be 0 or greater`;
+      profileSummaryValid.voltError = `Volts must be 0 or greater`;
     }
 
     let maxAmps: number = this.convertUnitsService.roundVal(compressor.nameplateData.fullLoadAmps * compressor.designDetails.serviceFactor, 2);
@@ -211,9 +194,10 @@ export class CompressedAirAssessmentService {
       profileSummaryValid.ampError = `Amps cannot be greater than ${maxAmps}`;
     } else if ( this.checkIsInvalidNumber(amps)) {
       powerFactorInputValidationData.ampsValid = false;
-      profileSummaryValid.ampError = `Amps field values should be 0 or greater`;
+      profileSummaryValid.ampError = `Amps must be 0 or greater`;
     }
 
+    powerFactorInputValidationData.isValid = powerFactorInputValidationData.ampsValid && powerFactorInputValidationData.voltsValid && powerFactorInputValidationData.powerFactorValid;
     return powerFactorInputValidationData;
   }
 
@@ -221,6 +205,7 @@ export class CompressedAirAssessmentService {
 
 export interface ProfileSummaryValid {
   powerError?: string,
+  percentError?: string,
   airFlowError?: string,
   airFlowWarning?: string,
   powerFactorError?: string,
@@ -234,7 +219,9 @@ export interface ProfileSummaryValid {
 export interface SummaryInputValidationData {
   compressorId: string,
   daytypeId?: string,
-  profileDataInputValidity: Array<boolean>,
+  powerValidity: Array<boolean>,
+  percentCapacityValidity: Array<boolean>,
+  percentPowerValidity: Array<boolean>,
   airflowValidity: Array<AirflowValidation>,
   powerFactorInputValidity?: Array<PowerFactorInputValidationData>
 }
@@ -244,6 +231,7 @@ export interface AirflowValidation {
   airFlowWarning: boolean
 }
 export interface PowerFactorInputValidationData {
+  isValid: boolean,
   powerFactorValid: boolean,
   ampsValid: boolean,
   voltsValid: boolean,

@@ -80,7 +80,6 @@ export class SetupTabsComponent implements OnInit {
       hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
       hasValidDayTypes = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
       hasValidSystemProfile = this.compressedAirAssessmentService.hasValidProfileSummaryData().isValid;
-
       canViewInventory = hasValidSystemInformation;
       canViewDayTypes = hasValidSystemInformation && hasValidCompressors;
       canViewSystemProfile = canViewDayTypes && hasValidDayTypes;

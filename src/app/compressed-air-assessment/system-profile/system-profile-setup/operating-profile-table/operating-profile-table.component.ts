@@ -98,9 +98,19 @@ export class OperatingProfileTableComponent implements OnInit {
     });
   }
 
-  findIsValidInput(compressorId: string, dataIndex: number): boolean { 
+  findIsValidPower(compressorId: string, dataIndex: number): boolean { 
     let summaryInputValidationData = this.profileSummaryValid.summaryInputValidationData.find(summary => summary.compressorId === compressorId);
-    return summaryInputValidationData.profileDataInputValidity.find((dataInputValue, index) => index === dataIndex);
+    return summaryInputValidationData.powerValidity.find((dataInputValue, index) => index === dataIndex);
+  }
+
+  findIsValidPercentPower(compressorId: string, dataIndex: number): boolean { 
+    let summaryInputValidationData = this.profileSummaryValid.summaryInputValidationData.find(summary => summary.compressorId === compressorId);
+    return summaryInputValidationData.percentPowerValidity.find((dataInputValue, index) => index === dataIndex);
+  }
+
+  findIsValidPercentCapacity(compressorId: string, dataIndex: number): boolean { 
+    let summaryInputValidationData = this.profileSummaryValid.summaryInputValidationData.find(summary => summary.compressorId === compressorId);
+    return summaryInputValidationData.percentCapacityValidity.find((dataInputValue, index) => index === dataIndex);
   }
 
   findIsValidAirflow(compressorId: string, dataIndex: number): boolean { 
