@@ -5,6 +5,17 @@
     </div>
     <div class="text-center p-2">
         <div class="pt-2" *ngFor="let csvData of individualDataFromCsv">
+            <div *ngIf="csvData.hasDateField || csvData.hasTimeField" class="form-group">
+                <div *ngIf="!dataExists" class="alert alert-warning align-items-left">
+                    <span class="small">If your data was taken in LESS than one minute intervals, please specify the time interval below.</span>
+                </div>
+                <label>Time Interval in Seconds</label>
+                <select class="form-control" name="intervalForSeconds" [(ngModel)]="intervalForSeconds"
+                    (change)="setIntervalForSeconds()" [disabled]="dataExists == true">
+                    <option *ngFor="let option of secondsIntervalOptions" [ngValue]="option">
+                        {{option}}</option>
+                </select>
+            </div>
             <table class="table table-striped">
                 <tbody>
                     <tr>
@@ -86,12 +97,18 @@
             </div>
             <span class="importing-text">Cleaning and setting up day data, one moment...</span>
         </div>
-        <div class="text-center p-2" *ngIf="dataSubmitted == true && !cleaningData">
+        <div class="text-center p-2" *ngIf="dataSubmitted == true && !cleaningData && dataIntervalValid">
             <div class="alert-success router-link">
                 Data cleaning finished! Click "Next" button to continue.
             </div>
         </div>
-
+        <div class="text-center p-2" *ngIf="dataSubmitted == true && !cleaningData && !dataIntervalValid">
+            <div class="alert-danger router-link">
+                Invalid time interval. <br>
+                One or more of your imported .csv files has data in LESS than one minute intervals. <br>
+                Please specify the time interval above.
+            </div>
+        </div>
         <div class="p-2" *ngIf="dataExists == true">
             <div class="alert-info p-2">
                 Your log tool data is setup and graphs have been created. If you would like to start over, click the
