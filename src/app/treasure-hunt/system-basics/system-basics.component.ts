@@ -124,14 +124,13 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   }
 
   updateData(showSuccess?: boolean) {
-    if(showSuccess) {
-      this.initSuccessMessage();
-    }
     this.assessment.treasureHunt = this.convertInputDataService.convertTreasureHuntInputData(this.assessment.treasureHunt, this.oldSettings, this.settings);
     this.settings = this.convertUnitsService.convertSettingsUnitCosts(this.oldSettings, this.settings);
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
-    this.saveSettings();
-
+    this.saveSettings();    
+    if(showSuccess) {
+      this.initSuccessMessage();
+    }
     this.assessment.treasureHunt.existingDataUnits = this.settings.unitsOfMeasure;
     this.saveTreasureHunt();
     this.showUpdateDataReminder = false;
