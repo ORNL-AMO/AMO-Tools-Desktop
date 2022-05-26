@@ -27,7 +27,10 @@
         </div>
         <div class="p-2">
             <app-weather-bins-help *ngIf="tabSelect == 'help'" [settings]="settings"></app-weather-bins-help>
-            <app-weather-bins-bar-chart *ngIf="tabSelect == 'results'"></app-weather-bins-bar-chart>
+            <ng-container *ngIf="tabSelect == 'results'">
+                <app-weather-bins-bar-chart></app-weather-bins-bar-chart>
+                <app-weather-bins-table [settings]="settings"></app-weather-bins-table>
+            </ng-container>
         </div>
     </div>
 </div>

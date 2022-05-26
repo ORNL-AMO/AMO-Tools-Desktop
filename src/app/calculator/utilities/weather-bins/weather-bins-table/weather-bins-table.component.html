@@ -1,10 +1,16 @@
-<div *ngIf="inputData" style="margin-top: 30px;">
+<div *ngIf="inputData && totalCaseDataPoints > 0" style="margin-top: 30px;">
     <table #copyTable class="table table-hover table-striped">
         <thead>
             <tr>
                 <th class="text-center bold w-25">Bin #</th>
-                <th class="text-center bold w-25">Lower Bound</th>
-                <th class="text-center bold w-25">Upper Bound</th>
+                <th class="text-center bold w-25">Lower Bound
+                    (<app-parameter-unit [settings]="settings" [parameter]="inputData.autoBinParameter">
+                    </app-parameter-unit>)
+                </th>
+                <th class="text-center bold w-25">Upper Bound
+                    (<app-parameter-unit [settings]="settings" [parameter]="inputData.autoBinParameter">
+                    </app-parameter-unit>)
+                </th>
                 <th class="text-center bold w-25">Hours</th>
             </tr>
         </thead>

@@ -76,21 +76,6 @@ export class BinsFormComponent implements OnInit {
   setParameterMinMax() {
     if (this.importDataFromCsv) {
       let minAndMax: { min: number, max: number } = this.weatherBinsService.getParameterMinMax(this.inputData, this.inputData.autoBinParameter, this.settings);
-      // if (this.settings.unitsOfMeasure != 'Metric') {
-      //   if (this.inputData.autoBinParameter == 'Dry-bulb (C)' || this.inputData.autoBinParameter == 'Wet Bulb (C)' || this.inputData.autoBinParameter == 'Dew-point (C)') {
-      //     minAndMax.min = this.convertUnitsService.value(minAndMax.min).from('C').to('F');
-      //     minAndMax.max = this.convertUnitsService.value(minAndMax.max).from('C').to('F');
-      //   } else if (this.inputData.autoBinParameter == 'Wspd (m/s)') {
-      //     minAndMax.min = this.convertUnitsService.value(minAndMax.min).from('m').to('ft');
-      //     minAndMax.max = this.convertUnitsService.value(minAndMax.max).from('m').to('ft');
-      //   } else if (this.inputData.autoBinParameter == 'Pressure (mbar)') {
-      //     minAndMax.min = this.convertUnitsService.value(minAndMax.min).from('mbar').to('inHg');
-      //     minAndMax.max = this.convertUnitsService.value(minAndMax.max).from('mbar').to('inHg');
-      //   } else if (this.inputData.autoBinParameter == 'Lprecip depth (mm)') {
-      //     minAndMax.min = this.convertUnitsService.value(minAndMax.min).from('mm').to('in');
-      //     minAndMax.max = this.convertUnitsService.value(minAndMax.max).from('mm').to('in');
-      //   }
-      // }
       this.parameterMin = Math.floor(minAndMax.min);
       this.parameterMax = Math.ceil(minAndMax.max);
     }

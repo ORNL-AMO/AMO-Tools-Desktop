@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../../../shared/models/settings';
 import { WeatherBinsInput, WeatherBinsService } from '../weather-bins.service';
 
 @Component({
@@ -9,14 +10,18 @@ import { WeatherBinsInput, WeatherBinsService } from '../weather-bins.service';
 })
 export class WeatherBinsTableComponent implements OnInit {
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  @Input() settings: Settings;
   tableString: any;
-
-  @Input()
   inputData: WeatherBinsInput;
+  inputDataSub: Subscription;
+  totalCaseDataPoints: number;
+  constructor(private weatherBinsService: WeatherBinsService) { }
 
-  constructor() { }
-
-  ngOnInit(): void {    
+  ngOnInit(): void {   
+    this.inputDataSub = this.weatherBinsService.inputData.subscribe(inputData => {      
+      this.inputData = inputData;
+      this.totalCaseDataPoints = this.weatherBinsService.getTotalCaseDataPoints(inputData);
+    }); 
   }
 
   updateTableString() {

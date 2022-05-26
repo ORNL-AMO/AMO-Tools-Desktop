@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
 import { WeatherBinsService, WeatherBinsInput } from '../weather-bins.service';
 import { Subscription } from 'rxjs';
 import * as Plotly from 'plotly.js-dist';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-weather-bins-bar-chart',
@@ -10,16 +11,14 @@ import * as Plotly from 'plotly.js-dist';
 })
 export class WeatherBinsBarChartComponent implements OnInit {
   @ViewChild('weatherBinsBarChart', { static: false }) weatherBinsBarChart: ElementRef;
+  @Input() settings: Settings;
 
   tableData: WeatherBinsInput;
   inputDataSub: Subscription;
-  sumTotal: number;
-  constructor(private weatherBinsService: WeatherBinsService, private cd: ChangeDetectorRef) { }
+  totalNumberOfDataPoints: number;
+  constructor(private weatherBinsService: WeatherBinsService) { }
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit() {
     this.inputDataSub = this.weatherBinsService.inputData.subscribe(inputData => {      
       this.tableData = inputData;
       this.createBarChart(inputData);
@@ -31,8 +30,8 @@ export class WeatherBinsBarChartComponent implements OnInit {
   }
 
   createBarChart(inputData: WeatherBinsInput) {
-    this.setSumTotal(inputData);
-    if (this.weatherBinsBarChart && this.sumTotal != 0) {
+    this.totalNumberOfDataPoints = this.weatherBinsService.getTotalCaseDataPoints(inputData);
+    if (this.weatherBinsBarChart && this.totalNumberOfDataPoints != 0) {
       let xData: Array<string> = inputData.cases.map(caseData => { return caseData.caseName });
       let yData: Array<number> = inputData.cases.map(caseData => { return caseData.totalNumberOfDataPoints });
       let traces = [{
@@ -78,11 +77,4 @@ export class WeatherBinsBarChartComponent implements OnInit {
     }
   }
 
-  setSumTotal(inputData: WeatherBinsInput) {
-    this.sumTotal = 0;
-    inputData.cases.forEach(caseItem => {
-      this.sumTotal += caseItem.totalNumberOfDataPoints;
-    });
-    this.cd.detectChanges();
-  }
 }
