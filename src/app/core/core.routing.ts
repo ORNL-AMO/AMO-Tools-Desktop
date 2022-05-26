@@ -105,6 +105,7 @@ import { FullLoadAmpsComponent } from '../calculator/motors/full-load-amps/full-
 import { AltitudeCorrectionComponent } from '../calculator/utilities/altitude-correction/altitude-correction.component';
 import { FeedwaterEconomizerComponent } from '../calculator/steam/feedwater-economizer/feedwater-economizer.component';
 import { CondensingEconomizerComponent } from '../calculator/steam/condensing-economizer/condensing-economizer.component';
+import { BleedTestComponent } from '../calculator/compressed-air/bleed-test/bleed-test.component';
 
 export const coreRoutes: Routes = [
   {
@@ -204,6 +205,10 @@ export const coreRoutes: Routes = [
           {
             path: 'bag-method',
             component: BagMethodComponent
+          },
+          {
+            path: 'bleed-test',
+            component: BleedTestComponent
           },
           {
             path: 'operating-cost',
