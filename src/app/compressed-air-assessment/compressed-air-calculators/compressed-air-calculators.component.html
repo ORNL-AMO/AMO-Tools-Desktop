@@ -4,10 +4,10 @@
 <!-- <app-system-and-equipment-curve *ngIf="calcTab == 'fan-curve'" [settings]="settings" [equipmentType]="'fan'"
       ></app-system-and-equipment-curve> -->
 <app-system-capacity *ngIf="calcTab == 'system-capacity'" [assessment]="assessment" [settings]="settings"></app-system-capacity>
-<app-pipe-sizing *ngIf="calcTab == 'pipe-sizing'" [assessment]="assessment" [settings]="settings"></app-pipe-sizing>
-<app-air-velocity *ngIf="calcTab == 'air-velocity'"[assessment]="assessment" [settings]="settings"></app-air-velocity>
+<app-pipe-sizing *ngIf="calcTab == 'pipe-sizing'" [assessment]="assessment" [settings]="settings" class="w-100"></app-pipe-sizing>
+<app-air-velocity *ngIf="calcTab == 'air-velocity'"[assessment]="assessment" [settings]="settings" class="w-100"></app-air-velocity>
 <app-air-leak *ngIf="calcTab == 'air-leak-survey'" [assessment]="assessment" [settings]="settings" class="w-100"></app-air-leak>
 <app-compressed-air-pressure-reduction *ngIf="calcTab == 'compressed-air-pressure-reduction'" [assessment]="assessment" [settings]="settings" class="w-100"></app-compressed-air-pressure-reduction>
 <app-full-load-amps *ngIf="calcTab == 'full-load-amps'" [assessment]="assessment" [settings]="settings" class="w-100"></app-full-load-amps>
 <app-altitude-correction *ngIf="calcTab == 'altitude-correction'" [assessment]="assessment" [settings]="settings" class="w-100"></app-altitude-correction>
-<app-bleed-test *ngIf="calcTab == 'bleed-test'" [assessment]="assessment" [settings]="settings"></app-bleed-test>
+<app-bleed-test *ngIf="calcTab == 'bleed-test'" [assessment]="assessment" [settings]="settings" class="w-100"></app-bleed-test>
