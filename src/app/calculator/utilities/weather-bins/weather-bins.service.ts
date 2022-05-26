@@ -215,6 +215,13 @@ export class WeatherBinsService {
     return inputData;
   }
 
+  getTotalCaseDataPoints(inputData: WeatherBinsInput) {
+    let totalCaseDataPoints: number = 0;
+    if (this.inputData && inputData.cases) {
+      totalCaseDataPoints = inputData.cases.reduce((total, caseItem) => total + caseItem.totalNumberOfDataPoints, 0);
+    }
+    return totalCaseDataPoints;
+  }
   getParameterMinMax(inputData: WeatherBinsInput, parameter: string, settings: Settings): { min: number, max: number } {
     let dataInDateRange: Array<any> = this.getDataInDateRange(inputData);
     let minValueObj: any = _.minBy(dataInDateRange, parameter);
