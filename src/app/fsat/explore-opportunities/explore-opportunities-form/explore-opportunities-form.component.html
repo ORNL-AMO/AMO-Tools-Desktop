@@ -53,12 +53,12 @@
       </div>
       <div #modalBody class="modal-body p-0">
         <app-calculate-inlet-pressure *ngIf="pressureCalcType == 'inlet' && bodyHeight" [settings]="settings"
-          [inletPressureData]="inletPressureCopy" [inletVelocityPressureInputs]="inletVelocityPressureInputs"
-          (emitSave)="saveInletPressure($event)" [bodyHeight]="bodyHeight" (emitInvalid)="setCalcInvalid($event)">
+          [inletPressureData]="inletPressureCopy" (emitSave)="saveInletPressure($event)" [bodyHeight]="bodyHeight"
+          (emitInvalid)="setCalcInvalid($event)" [usingStaticPressure]="baselineFieldDataForm.controls.usingStaticPressure.value">
         </app-calculate-inlet-pressure>
         <app-calculate-outlet-pressure *ngIf="pressureCalcType == 'outlet' && bodyHeight" [settings]="settings"
-          [outletPressureData]="outletPressureCopy" [inletVelocityPressureInputs]="inletVelocityPressureInputs"
-          (emitSave)="saveOutletPressure($event)" [bodyHeight]="bodyHeight" (emitInvalid)="setCalcInvalid($event)">
+          [outletPressureData]="outletPressureCopy" (emitSave)="saveOutletPressure($event)" [bodyHeight]="bodyHeight"
+          (emitInvalid)="setCalcInvalid($event)" [usingStaticPressure]="baselineFieldDataForm.controls.usingStaticPressure.value">
         </app-calculate-outlet-pressure>
       </div>
       <div class="modal-footer fsat justify-content-between">
