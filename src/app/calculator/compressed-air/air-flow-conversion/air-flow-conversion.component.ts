@@ -71,15 +71,15 @@ export class AirFlowConversionComponent implements OnInit {
     })
   }
 
-  calculate() {
+  async calculate() {
     this.airFlowConversionService.calculate(this.settings);
     if (this.assessmentCalculator) {
       this.assessmentCalculator.airFlowConversionInputs = this.airFlowConversionService.airFlowConversionInput.getValue();
-      this.saveAssessmentCalculator();
+      await this.saveAssessmentCalculator();
      }
   }
 
-  getCalculatorForAssessment() {
+ async getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.assessmentCalculator) {
       if (this.assessmentCalculator.airFlowConversionInputs) {
@@ -89,7 +89,7 @@ export class AirFlowConversionComponent implements OnInit {
       }
     } else{
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.saveAssessmentCalculator();
+      await this.saveAssessmentCalculator();
     }
   }
 

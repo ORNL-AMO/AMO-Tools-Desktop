@@ -80,27 +80,28 @@ export class O2EnrichmentComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this.enrichmentInputsSub = this.o2EnrichmentService.enrichmentInputs.subscribe(value => {
+    // TODO - medium confidence level on the async designator here. not much doc on awaiting inside a subscription.
+    this.enrichmentInputsSub = this.o2EnrichmentService.enrichmentInputs.subscribe(async(value) => {
       this.enrichmentInputs = value;
       this.o2EnrichmentService.calculate(this.settings);
       if(this.inAssessment){
-        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+         await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     })
   }
 
-  getCalculator() {
+  async getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
       if (this.calculator.o2EnrichmentInputs) {
         this.o2EnrichmentService.enrichmentInputs.next(this.calculator.o2EnrichmentInputs);
       } else {
         this.calculator.o2EnrichmentInputs = this.o2EnrichmentService.enrichmentInputs.getValue();
-        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+        await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 

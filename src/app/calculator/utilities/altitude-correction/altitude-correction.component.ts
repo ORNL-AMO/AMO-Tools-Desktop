@@ -77,15 +77,15 @@ export class AltitudeCorrectionComponent implements OnInit {
     });
   }
 
-  calculate() {
+  async calculate() {
     this.altitudeCorrectionService.calculateBarometricPressure(this.settings);
     if (this.assessmentCalculator) {
       this.assessmentCalculator.altitudeCorrectionInput = this.altitudeCorrectionService.altitudeCorrectionInputs.getValue();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
      }
   }
 
-  getCalculatorForAssessment() {
+  async getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.assessmentCalculator) {
       if (this.assessmentCalculator.altitudeCorrectionInput) {
@@ -95,7 +95,7 @@ export class AltitudeCorrectionComponent implements OnInit {
       }
     } else{
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 

@@ -67,7 +67,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     }, 100);
   }
 
-  getCalculator() {
+  async getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
       if (this.calculator.nemaInputs) {
@@ -82,11 +82,11 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
         }
         let tmpNemaInputs: NemaInputs = this.nemaEnergyEfficiencyService.getObjFromForm(this.nemaForm);
         this.calculator.nemaInputs = tmpNemaInputs;
-        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+        await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 
@@ -136,7 +136,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     this.currentField = str;
   }
 
-  calculate() {
+  async calculate() {
     if (this.nemaForm.valid) {
       // const efficiency = this.psatService.getEfficiencyFromForm(this.nemaForm);
       this.tefcValue = this.psatService.nema(
@@ -155,7 +155,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
       this.nemaEnergyEfficiencyService.nemaInputs = this.nemaEnergyEfficiencyService.getObjFromForm(this.nemaForm);
     } else if (this.inAssessment && this.calculator.id) {
       this.calculator.nemaInputs = this.nemaEnergyEfficiencyService.getObjFromForm(this.nemaForm);
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 

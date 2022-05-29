@@ -104,7 +104,7 @@ export class ReceiverTankComponent implements OnInit {
     }
   }
 
-  updateAssessmentCalculator(updatedInputs: ReceiverTankInputs) {
+  async updateAssessmentCalculator(updatedInputs: ReceiverTankInputs) {
     if (updatedInputs.airCapacityInputs) {
       this.assessmentCalculator.receiverTankInput.airCapacityInputs = updatedInputs.airCapacityInputs;
     }
@@ -120,10 +120,10 @@ export class ReceiverTankComponent implements OnInit {
     if (updatedInputs.airCapacityInputs) {
       this.assessmentCalculator.receiverTankInput.meteredStorageInputs = updatedInputs.meteredStorageInputs;
     }
-    this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+    await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
   }
 
-  getCalculatorForAssessment() {
+  async getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.assessmentCalculator) {
       if (this.assessmentCalculator.receiverTankInput) {
@@ -148,7 +148,7 @@ export class ReceiverTankComponent implements OnInit {
       }
     } else {
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 

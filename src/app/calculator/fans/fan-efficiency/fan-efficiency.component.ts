@@ -101,13 +101,13 @@ export class FanEfficiencyComponent implements OnInit {
     }
   }
 
-  calculate() {
+  async calculate() {
     let tmpFanEfficiencyInputs: FanEfficiencyInputs = this.fanEfficiencyService.getObjFromForm(this.fanEfficiencyForm);
     if (!this.inAssessment) {
       this.fanEfficiencyService.fanEfficiencyInputs = tmpFanEfficiencyInputs;
     } else if (this.inAssessment && this.calculator.id) {
       this.calculator.fanEfficiencyInputs = tmpFanEfficiencyInputs;
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
 
     if (this.fanEfficiencyForm.valid) {
@@ -125,7 +125,7 @@ export class FanEfficiencyComponent implements OnInit {
     this.currentField = str;
   }
 
-  getCalculator() {
+  async getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
       if (this.calculator.fanEfficiencyInputs) {
@@ -138,11 +138,11 @@ export class FanEfficiencyComponent implements OnInit {
         }
         let tmpFanEfficiencyInputs: FanEfficiencyInputs = this.fanEfficiencyService.getObjFromForm(this.fanEfficiencyForm);
         this.calculator.fanEfficiencyInputs = tmpFanEfficiencyInputs;
-        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+        await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       console.log('added calc id', this.calculator.id)
     }
   }

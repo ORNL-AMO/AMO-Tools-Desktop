@@ -67,11 +67,11 @@ export class PipeSizingComponent implements OnInit {
     }
   }
 
-  calculatePipeSize(inputs: PipeSizingInput) {
+  async calculatePipeSize(inputs: PipeSizingInput) {
     this.outputs = this.standaloneService.pipeSizing(inputs, this.settings);
     if (this.assessmentCalculator) {
       this.assessmentCalculator.pipeSizingInputs = this.inputs;
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     } else {
       this.pipeSizingService.inputs = this.inputs;
     }
@@ -96,7 +96,7 @@ export class PipeSizingComponent implements OnInit {
     this.currentField = str;
   }
 
-  getCalculatorForAssessment() {
+  async getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.assessmentCalculator) {
       if (this.assessmentCalculator.pipeSizingInputs) {
@@ -108,7 +108,7 @@ export class PipeSizingComponent implements OnInit {
       this.calculatePipeSize(this.inputs);
     } else {
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 

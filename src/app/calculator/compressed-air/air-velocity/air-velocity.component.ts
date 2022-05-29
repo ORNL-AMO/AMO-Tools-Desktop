@@ -64,11 +64,11 @@ export class AirVelocityComponent implements OnInit {
     }
   }
 
-  getAirVelocity(inputs: AirVelocityInput) {
+  async getAirVelocity(inputs: AirVelocityInput) {
     this.outputs = this.standaloneService.airVelocity(inputs, this.settings);
      if(this.assessmentCalculator) {
        this.assessmentCalculator.airVelocityInputs = this.inputs;
-       this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
      }else{
        this.airVelocityService.airVelocityInputs = this.inputs;
      }
@@ -92,7 +92,7 @@ export class AirVelocityComponent implements OnInit {
     this.currentField = str;
   }
 
-  getCalculatorForAssessment() {
+  async getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if(this.assessmentCalculator) {
       if (this.assessmentCalculator.airVelocityInputs) {
@@ -105,7 +105,7 @@ export class AirVelocityComponent implements OnInit {
       }
     }else{
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+     await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 

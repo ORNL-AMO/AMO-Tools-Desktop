@@ -179,15 +179,15 @@ export class CompressedAirPressureReductionComponent implements OnInit {
     }
   }
 
-  getResults() {
+  async getResults() {
     this.compressedAirPressureReductionResults = this.compressedAirPressureReductionService.getResults(this.settings, this.baselineData, this.modificationData);
     if (this.assessmentCalculator) {
       this.setAssessmentCalculatorData();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 
-  getCalculatorForAssessment() {
+ async getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if(this.assessmentCalculator) {
       if (this.assessmentCalculator.compressedAirPressureReduction) {
@@ -204,7 +204,7 @@ export class CompressedAirPressureReductionComponent implements OnInit {
       this.getResults();
     }else{
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 

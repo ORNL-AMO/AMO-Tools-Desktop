@@ -85,21 +85,21 @@ export class SystemCapacityComponent implements OnInit {
     }
   }
 
-  calculate() {
+  async calculate() {
     this.outputs = this.standaloneService.airSystemCapacity(this.inputs, this.settings);
     if (this.inModal) {
       this.emitTotalCapacity.emit(this.outputs.totalCapacityOfCompressedAirSystem);
     } else {
       if(this.assessmentCalculator) {
         this.assessmentCalculator.airSystemCapacityInputs = this.inputs;
-        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+       await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
       }else{
         this.systemCapacityService.inputs = this.inputs;
       }
     }
   }
 
-  getCalculatorForAssessment() {
+  async getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if(this.assessmentCalculator) {
       if (this.assessmentCalculator.airSystemCapacityInputs) {
@@ -110,7 +110,7 @@ export class SystemCapacityComponent implements OnInit {
       }
     } else{
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+     await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 

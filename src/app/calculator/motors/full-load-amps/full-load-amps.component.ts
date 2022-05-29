@@ -79,15 +79,15 @@ export class FullLoadAmpsComponent implements OnInit {
     })
   }
 
-  calculate() {
+  async calculate() {
     this.fullLoadAmpsService.estimateFullLoadAmps(this.settings);
     if (this.assessmentCalculator) {
       this.assessmentCalculator.fullLoadAmpsInput = this.fullLoadAmpsService.fullLoadAmpsInputs.getValue();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
      }
   }
 
-  getCalculatorForAssessment() {
+ async getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if(this.assessmentCalculator) {
       if (this.assessmentCalculator.fullLoadAmpsInput) {
@@ -97,7 +97,7 @@ export class FullLoadAmpsComponent implements OnInit {
       }
     }else{
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+     await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 

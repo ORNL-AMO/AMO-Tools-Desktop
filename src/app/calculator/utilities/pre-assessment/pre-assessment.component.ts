@@ -179,12 +179,12 @@ export class PreAssessmentComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  calculate() {
+  async calculate() {
     if (this.calculator) {
       this.calculator.preAssessments = this.preAssessments;
       //save in assessment, in modal button needs to be clicked to save
       if (this.inAssessment) {
-        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+        await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     }
     //this is fired when forms change
@@ -229,7 +229,7 @@ export class PreAssessmentComponent implements OnInit {
     this.showName = false;
   }
 
-  getCalculator() {
+  async getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
       if (this.calculator.preAssessments) {
@@ -238,13 +238,13 @@ export class PreAssessmentComponent implements OnInit {
         this.calculator.preAssessments = new Array<PreAssessment>();
         this.preAssessments = this.calculator.preAssessments;
         this.addPreAssessment();
-        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+        await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
       this.preAssessments = this.calculator.preAssessments;
       this.addPreAssessment();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 

@@ -78,13 +78,13 @@ export class SpecificSpeedComponent implements OnInit {
     }
   }
 
-  calculate() {
+  async calculate() {
     this.toggleCalculate = !this.toggleCalculate;
     if (!this.psat) {
       this.specificSpeedService.specificSpeedInputs = this.specificSpeedService.getObjFromForm(this.speedForm);
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.specificSpeedInputs = this.specificSpeedService.getObjFromForm(this.speedForm);
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+     await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 
@@ -96,7 +96,7 @@ export class SpecificSpeedComponent implements OnInit {
     this.currentField = str;
   }
 
-  getCalculator() {
+  async getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
       this.calcExists = true;
@@ -106,11 +106,11 @@ export class SpecificSpeedComponent implements OnInit {
         this.speedForm = this.specificSpeedService.initFormFromPsat(this.psat.inputs);
         let tmpSpecificSpeedInputs: SpecificSpeedInputs = this.specificSpeedService.getObjFromForm(this.speedForm);
         this.calculator.specificSpeedInputs = tmpSpecificSpeedInputs;
-        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+        await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 

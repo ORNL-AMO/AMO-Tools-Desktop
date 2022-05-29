@@ -78,7 +78,7 @@ export class FanAnalysisComponent implements OnInit {
       this.setPlaneTabIndex(val);
     });
 
-    this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
+    this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(async(val) => {
       this.checkSetupDone();
       this.setPlaneStepTabs();
       if (this.planeStepTabs[this.planeStepIndex] == '3b' && this.fanAnalysisService.inputData.FanRatedInfo.traversePlanes == 1) {
@@ -88,7 +88,7 @@ export class FanAnalysisComponent implements OnInit {
         this.setPlaneTabIndex('3a');
       }
       if(this.assessment){
-        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+        await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     });
 
@@ -104,10 +104,13 @@ export class FanAnalysisComponent implements OnInit {
     this.getResultsSubscription.unsubscribe();
     this.modalOpenSub.unsubscribe();
     if (this.assessment && this.calcExists) {
-      this.calculator.fan203Inputs = this.fanAnalysisService.inputData;
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
-
+      this.resetAndSaveCalculator();
     }
+  }
+
+  async resetAndSaveCalculator() {
+    this.calculator.fan203Inputs = this.fanAnalysisService.inputData;
+    await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
   }
 
   ngAfterViewInit() {

@@ -118,12 +118,12 @@ export class EnergyEquivalencyComponent implements OnInit {
     this.calculateFuel();
   }
 
-  calculateFuel() {
+  async calculateFuel() {
     if (!this.inAssessment) {
       this.energyEquivalencyService.energyEquivalencyFuel = this.energyEquivalencyFuel;
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.energyEquivalencyInputs.energyEquivalencyFuel = this.energyEquivalencyFuel;
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
     this.energyEquivalencyFuelOutput = this.phastService.energyEquivalencyFuel(this.energyEquivalencyFuel, this.settings);
   }
@@ -133,12 +133,12 @@ export class EnergyEquivalencyComponent implements OnInit {
     this.calculateElectric();
   }
 
-  calculateElectric() {
+  async calculateElectric() {
     if (!this.inAssessment) {
       this.energyEquivalencyService.energyEquivalencyElectric = this.energyEquivalencyElectric;
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.energyEquivalencyInputs.energyEquivalencyElectric = this.energyEquivalencyElectric;
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
     this.energyEquivalencyElectricOutput = this.phastService.energyEquivalencyElectric(this.energyEquivalencyElectric, this.settings);
   }
@@ -151,7 +151,7 @@ export class EnergyEquivalencyComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  getCalculator() {
+  async getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
       this.calcExists = true;
@@ -166,12 +166,12 @@ export class EnergyEquivalencyComponent implements OnInit {
         this.calculator.energyEquivalencyInputs = tmpEnergyEquivalencyInputs;
         this.energyEquivalencyElectric = this.calculator.energyEquivalencyInputs.energyEquivalencyElectric;
         this.energyEquivalencyFuel = this.calculator.energyEquivalencyInputs.energyEquivalencyFuel;
-        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+        await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
 
       }
     } else {
       this.calculator = this.initCalculator();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
 
     }
     this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);

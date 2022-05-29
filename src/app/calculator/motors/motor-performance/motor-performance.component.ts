@@ -79,12 +79,12 @@ export class MotorPerformanceComponent implements OnInit {
     }
   }
 
-  calculate() {
+ async calculate() {
     if (!this.psat && !this.inAssessment) {
       this.motorPerformanceService.motorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
     } else if (this.inAssessment && this.calculator.id) {
       this.calculator.motorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
     this.toggleCalculate = !this.toggleCalculate;
   }
@@ -97,7 +97,7 @@ export class MotorPerformanceComponent implements OnInit {
     this.currentField = str;
   }
 
-  getCalculator() {
+  async getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
       if (this.calculator.motorPerformanceInputs) {
@@ -112,11 +112,11 @@ export class MotorPerformanceComponent implements OnInit {
         }
         let tmpMotorPerformanceInputs: MotorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
         this.calculator.motorPerformanceInputs = tmpMotorPerformanceInputs;
-        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+        await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 

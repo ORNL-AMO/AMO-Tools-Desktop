@@ -106,13 +106,13 @@ export class EfficiencyImprovementComponent implements OnInit {
   }
 
 
-  calculate(data: EfficiencyImprovementInputs) {
+  async calculate(data: EfficiencyImprovementInputs) {
     this.efficiencyImprovementInputs = data;
     if (!this.inAssessment) {
       this.efficiencyImprovementService.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
     this.efficiencyImprovementOutputs = this.phastService.efficiencyImprovement(this.efficiencyImprovementInputs, this.settings);
   }
@@ -121,7 +121,7 @@ export class EfficiencyImprovementComponent implements OnInit {
     this.currentField = str;
   }
 
-  getCalculator() {
+  async getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
       this.calcExists = true;
@@ -130,11 +130,11 @@ export class EfficiencyImprovementComponent implements OnInit {
       } else {
         this.efficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
         this.calculator.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
-        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+        await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
 
     }
     this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);

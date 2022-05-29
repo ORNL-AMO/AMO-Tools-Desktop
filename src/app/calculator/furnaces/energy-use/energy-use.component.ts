@@ -112,19 +112,19 @@ export class EnergyUseComponent implements OnInit {
     this.updateTableString();
   }
 
-  calculate() {
+  async calculate() {
     if (!this.inAssessment) {
       this.flowCalculations = this.energyUseService.flowCalculations;
     } else if (this.inAssessment && this.calculator.id) {
       this.calculator.flowCalculations = this.flowCalculations;
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
     this.flowCalculationResults = this.phastService.flowCalculations(this.flowCalculations, this.settings);
     //update exportable table string whenever results are updated
     this.updateTableString();
   }
 
-  getCalculator() {
+  async getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
       if (this.calculator.flowCalculations) {
@@ -133,12 +133,12 @@ export class EnergyUseComponent implements OnInit {
         let tmpFlowCalculations: FlowCalculations = this.energyUseService.generateExample(this.settings);
         this.calculator.flowCalculations = tmpFlowCalculations;
         this.flowCalculations = this.calculator.flowCalculations;
-        this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+       await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
       this.flowCalculations = this.calculator.flowCalculations;
-      this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 
