@@ -87,7 +87,7 @@
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.SOTR, 'invalid': form.controls.SOTR.invalid}">
             <label for="{{'SOTR_'+idString}}">Standard O<sub>2</sub> Transfer Rate (SOTR)</label>
-            <div class="input-group">
+            <div class="input-group" [ngClass]="{'indicate-different-db': isSOTRDifferent()}">
                 <input type="number" name="SOTR" class="form-control number-input-field" id="{{'SOTR_'+idString}}"
                     (focus)="focusField('SOTR')" (input)="save()" formControlName="SOTR" [readonly]="!selected">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb

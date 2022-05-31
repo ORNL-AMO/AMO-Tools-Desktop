@@ -133,6 +133,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   renderSankey() {
+    if (this.results && !this.results.outputData.hasSteamModelerError) {
 
     let sankeyLink = {
       value: this.nodes.map(node => node.value),
@@ -230,6 +231,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
         this.setGradient();
       });
     });
+    }
   }
 
   buildLinks() {  
@@ -273,7 +275,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let originalEnergyInput = energyInput;
     let energyInputValue = (energyInput / originalEnergyInput) * 100;
     
-    if (this.results.outputData.deaeratorOutput.feedwaterEnergyFlow) {
+    if (this.results.outputData && !this.results.outputData.hasSteamModelerError && this.results.outputData.deaeratorOutput.feedwaterEnergyFlow) {
       returnedCondensate = this.results.outputData.deaeratorOutput.feedwaterEnergyFlow;
       returnedCondensateValue = (returnedCondensate / energyInput) * 100;
     }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -17,6 +17,10 @@ export class FullLoadAmpsComponent implements OnInit {
   settings: Settings;
   @Input()
   assessment: Assessment;
+  @Input()
+  inModal: boolean;
+  @Output('emitFullLoadAmps')
+  emitFullLoadAmps = new EventEmitter<number>();
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;  
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
@@ -33,6 +37,7 @@ export class FullLoadAmpsComponent implements OnInit {
   headerHeight: number;
 
   flaInputSub: Subscription;
+  flaResultSub: Subscription;
   currentField: string;
   saving: boolean;
   assessmentCalculator: Calculator;
@@ -60,18 +65,21 @@ export class FullLoadAmpsComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.resizeTabs();
-    }, 100);
-  }
-
-
   ngOnDestroy(){
     this.flaInputSub.unsubscribe();
+    if (this.inModal) {
+      this.flaResultSub.unsubscribe();
+    }
   }
 
   initSubscriptions() {
+    if (this.inModal) {
+    this.flaResultSub = this.fullLoadAmpsService.fullLoadAmpsResult.subscribe(result => {
+      if (result) {
+        this.emitFullLoadAmps.emit(result); 
+      }
+    });
+    }
     this.flaInputSub = this.fullLoadAmpsService.fullLoadAmpsInputs.subscribe(updatedInputs => {
       if (updatedInputs) {
         this.calculate();

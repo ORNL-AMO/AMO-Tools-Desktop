@@ -3,7 +3,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FlueGas, FlueGasByMass, FlueGasByVolume, FlueGasWarnings } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
-import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class FlueGasFormService {
@@ -11,9 +10,11 @@ export class FlueGasFormService {
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
   initEmptyVolumeForm(settings: Settings, loss?: number): FormGroup {
-    let ambientAirTemp: number = 60;
+    let defaultTemp: number = 65;
+    let defaultFlueGasTemp: number = 212;
     if (settings.unitsOfMeasure != 'Imperial') {
-      ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C')
+      defaultTemp = this.convertUnitsService.value(defaultTemp).from('F').to('C');
+      defaultFlueGasTemp = this.convertUnitsService.value(defaultFlueGasTemp).from('F').to('C');
     }
 
     let defaultMoistureInAirComp: any = .0077;
@@ -24,14 +25,14 @@ export class FlueGasFormService {
     }
     let formGroup = this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
-      'flueGasTemperature': [0, Validators.required],
+      'flueGasTemperature': [defaultFlueGasTemp, Validators.required],
       'oxygenCalculationMethod': ['Excess Air', Validators.required],
       'excessAirPercentage': [0, Validators.required],
       'o2InFlueGas': [0, Validators.required],
-      'combustionAirTemperature': [0, [Validators.required]],
+      'combustionAirTemperature': [defaultTemp, [Validators.required]],
       'moistureInAirCombustion': [defaultMoistureInAirComp, [Validators.required, Validators.min(0), Validators.max(100)]],
-      'fuelTemperature': [0, Validators.required],
-      'ambientAirTemp': [ambientAirTemp, Validators.required],
+      'fuelTemperature': [defaultTemp, Validators.required],
+      'ambientAirTemp': [defaultTemp, Validators.required],
       'CH4': [0, Validators.required],
       'C2H6': [0, Validators.required],
       'N2': [0, Validators.required],
@@ -47,7 +48,7 @@ export class FlueGasFormService {
     });
 
     if (!loss) {
-      formGroup.addControl('heatInput', new FormControl('', [Validators.required, Validators.min(0)]));
+      formGroup.addControl('heatInput', new FormControl(0, [Validators.required, Validators.min(0)]));
     }
 
     formGroup = this.setValidators(formGroup);
@@ -62,20 +63,22 @@ export class FlueGasFormService {
       lossNumber = loss;
     }
 
-    let ambientAirTemp: number = 60;
+    let defaultTemp: number = 65;
+    let defaultFlueGasTemp: number = 212;
     if (settings.unitsOfMeasure != 'Imperial') {
-      ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C')
+      defaultTemp = this.convertUnitsService.value(defaultTemp).from('F').to('C');
+      defaultFlueGasTemp = this.convertUnitsService.value(defaultFlueGasTemp).from('F').to('C');
     }
 
      let formGroup = this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
-      'flueGasTemperature': [0, Validators.required],
+      'flueGasTemperature': [defaultFlueGasTemp, Validators.required],
       'oxygenCalculationMethod': ['Excess Air', Validators.required],
       'excessAirPercentage': [0, Validators.required],
       'o2InFlueGas': [0, Validators.required],
-      'combustionAirTemperature': [0, [Validators.required]],
-      'fuelTemperature': [0, Validators.required],
-      'ambientAirTemp': [ambientAirTemp, Validators.required],
+      'combustionAirTemperature': [defaultTemp, [Validators.required]],
+      'fuelTemperature': [defaultTemp, Validators.required],
+      'ambientAirTemp': [defaultTemp, Validators.required],
       'moistureInAirCombustion': [defaultMoistureInAirComp, [Validators.required, Validators.min(0), Validators.max(100)]],
       'ashDischargeTemperature': [0, Validators.required],
       'unburnedCarbonInAsh': [0, [Validators.required, Validators.min(0), Validators.max(100)]],

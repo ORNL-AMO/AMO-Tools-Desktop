@@ -9,14 +9,16 @@ export class CompareService {
   baselineFSAT: FSAT;
   modifiedFSAT: FSAT;
   selectedModification: BehaviorSubject<FSAT>;
+  totalEmissionOutputRateDifferent: BehaviorSubject<boolean>;
   constructor(private fsatService: FsatService) {
     this.selectedModification = new BehaviorSubject<FSAT>(undefined);
+    this.totalEmissionOutputRateDifferent = new BehaviorSubject<boolean>(false);
   }
 
 
   setCompareVals(fsat: FSAT, selectedModIndex?: number) {
     this.baselineFSAT = fsat;
-    if (fsat.modifications) {
+    if (fsat.modifications && selectedModIndex != undefined) {
       if (fsat.modifications.length !== 0) {
         this.selectedModification.next(fsat.modifications[selectedModIndex].fsat);
         this.modifiedFSAT = this.selectedModification.value;
@@ -375,7 +377,8 @@ export class CompareService {
     if (baseline && modification) {
       return (
         this.isOperatingHoursDifferent(baseline, modification) ||
-        this.isCostDifferent(baseline, modification)
+        this.isCostDifferent(baseline, modification) ||
+        this.isTotalEmissionOutputRateDifferent(false, baseline, modification)
       );
     } else {
       return false;
@@ -397,7 +400,8 @@ export class CompareService {
         this.isInletPressureDifferent(baseline, modification) ||
         this.isOutletPressureDifferent(baseline, modification) ||
         this.isSpecificHeatRatioDifferent(baseline, modification) ||
-        this.isCompressibilityFactorDifferent(baseline, modification)
+        this.isCompressibilityFactorDifferent(baseline, modification) || 
+        this.isMeasuredVoltageDifferent(baseline, modification)
       );
     } else {
       return false;
@@ -757,6 +761,27 @@ export class CompareService {
     } else {
       return false;
     }
+  }
+
+  isTotalEmissionOutputRateDifferent(shouldUpdateModifyForm: boolean = true, baseline?: FSAT, modification?: FSAT): boolean {
+    let totalEmissionOutputRateDifferent: boolean = false;
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fsatOperations.cO2SavingsData && modification.fsatOperations.cO2SavingsData) {
+        totalEmissionOutputRateDifferent = baseline.fsatOperations.cO2SavingsData.totalEmissionOutputRate != modification.fsatOperations.cO2SavingsData.totalEmissionOutputRate;
+      }
+    } 
+
+    if (shouldUpdateModifyForm) {
+      this.totalEmissionOutputRateDifferent.next(totalEmissionOutputRateDifferent);
+    }
+
+    return totalEmissionOutputRateDifferent;
   }
 
   getBadges(baseline: FSAT, modification: FSAT, settings: Settings): Array<{ badge: string, componentStr: string }> {

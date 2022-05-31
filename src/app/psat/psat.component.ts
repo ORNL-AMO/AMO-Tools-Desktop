@@ -76,6 +76,7 @@ export class PsatComponent implements OnInit {
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   showWelcomeScreen: boolean = false;
+  modificationModalOpen: boolean = false;
   constructor(
     private assessmentService: AssessmentService,
     private psatService: PsatService,
@@ -149,6 +150,7 @@ export class PsatComponent implements OnInit {
     })
 
     this.openModSub = this.compareService.openModificationModal.subscribe(val => {
+      this.modificationModalOpen = val;
       if (val) {
         this.selectModificationModal()
       }

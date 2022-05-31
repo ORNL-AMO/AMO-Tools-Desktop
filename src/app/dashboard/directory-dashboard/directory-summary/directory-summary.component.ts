@@ -167,7 +167,7 @@ export class DirectorySummaryComponent implements OnInit {
         if (results.outputData.boilerOutput != undefined) {
           results.outputData.operationsOutput.boilerFuelUsage = this.convertUnitsService.value(results.outputData.operationsOutput.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
           totalEnergyUsed = results.outputData.operationsOutput.boilerFuelUsage + totalEnergyUsed;
-          totalCost = results.outputData.operationsOutput.totalOperatingCost + totalCost;
+          totalCost = results.outputData.operationsOutput.boilerFuelCost + results.outputData.operationsOutput.makeupWaterCost;
         }
       }
     });

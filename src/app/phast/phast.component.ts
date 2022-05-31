@@ -77,6 +77,7 @@ export class PhastComponent implements OnInit {
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   showWelcomeScreen: boolean = false;
+  modificationModalOpen: boolean = false;
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
@@ -162,6 +163,7 @@ export class PhastComponent implements OnInit {
     });
 
     this.openModListSubscription = this.lossesService.openModificationModal.subscribe(val => {
+      this.modificationModalOpen = val;
       if (val) {
         this.selectModificationModal();
       }
@@ -188,54 +190,54 @@ export class PhastComponent implements OnInit {
   }
 
 
-  setExploreOppsDefaults(modification: Modification) {  
+  setExploreOppsDefaults(modification: Modification) {
     // old assessments with scenario added - prevent break on missing properties
-    let exploreOppsDefault: SavingsOpportunity = {hasOpportunity: false, display: ''};
-      if (modification.exploreOppsShowAirTemp == undefined) {
-        modification.exploreOppsShowAirTemp = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowFlueGas == undefined) {
-        modification.exploreOppsShowFlueGas = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowMaterial == undefined) {
-        modification.exploreOppsShowMaterial = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowAllTimeOpen == undefined) {
-        modification.exploreOppsShowAllTimeOpen = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowOpening == undefined) {
-        modification.exploreOppsShowOpening = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowAllEmissivity == undefined) {
-        modification.exploreOppsShowAllEmissivity = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowCooling == undefined) {
-        modification.exploreOppsShowCooling = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowAtmosphere == undefined) {
-        modification.exploreOppsShowAtmosphere = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowOperations == undefined) {
-        modification.exploreOppsShowOperations = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowLeakage == undefined) {
-        modification.exploreOppsShowLeakage = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowSlag == undefined) {
-        modification.exploreOppsShowSlag = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowEfficiencyData == undefined) {
-        modification.exploreOppsShowEfficiencyData = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowWall == undefined) {
-        modification.exploreOppsShowWall = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowAllTemp == undefined) {
-        modification.exploreOppsShowAllTemp = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowFixtures == undefined) {
-        modification.exploreOppsShowFixtures = exploreOppsDefault;
-      }
+    let exploreOppsDefault: SavingsOpportunity = { hasOpportunity: false, display: '' };
+    if (modification.exploreOppsShowAirTemp == undefined) {
+      modification.exploreOppsShowAirTemp = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowFlueGas == undefined) {
+      modification.exploreOppsShowFlueGas = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowMaterial == undefined) {
+      modification.exploreOppsShowMaterial = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowAllTimeOpen == undefined) {
+      modification.exploreOppsShowAllTimeOpen = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowOpening == undefined) {
+      modification.exploreOppsShowOpening = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowAllEmissivity == undefined) {
+      modification.exploreOppsShowAllEmissivity = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowCooling == undefined) {
+      modification.exploreOppsShowCooling = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowAtmosphere == undefined) {
+      modification.exploreOppsShowAtmosphere = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowOperations == undefined) {
+      modification.exploreOppsShowOperations = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowLeakage == undefined) {
+      modification.exploreOppsShowLeakage = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowSlag == undefined) {
+      modification.exploreOppsShowSlag = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowEfficiencyData == undefined) {
+      modification.exploreOppsShowEfficiencyData = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowWall == undefined) {
+      modification.exploreOppsShowWall = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowAllTemp == undefined) {
+      modification.exploreOppsShowAllTemp = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowFixtures == undefined) {
+      modification.exploreOppsShowFixtures = exploreOppsDefault;
+    }
   }
 
   ngAfterViewInit() {
@@ -409,7 +411,7 @@ export class PhastComponent implements OnInit {
     let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment))
     this.assessmentDbService.setAll(assessments);
   }
-  
+
   setSankeyLabelStyle(style: string) {
     this.sankeyLabelStyle = style;
   }
@@ -444,7 +446,7 @@ export class PhastComponent implements OnInit {
 
   addNewMod() {
     let modName: string = 'Scenario ' + (this._phast.modifications.length + 1);
-    let exploreOppsDefault: SavingsOpportunity = {hasOpportunity: false, display: ''};
+    let exploreOppsDefault: SavingsOpportunity = { hasOpportunity: false, display: '' };
     let tmpModification: Modification = {
       phast: {
         losses: {},
@@ -536,7 +538,7 @@ export class PhastComponent implements OnInit {
     }
   }
 
-  
+
   checkShowWelcomeScreen() {
     if (!this.settingsDbService.globalSettings.disablePhastTutorial) {
       this.showWelcomeScreen = true;
@@ -546,6 +548,7 @@ export class PhastComponent implements OnInit {
 
   closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disablePhastTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
     this.showWelcomeScreen = false;
     this.phastService.modalOpen.next(false);
   }

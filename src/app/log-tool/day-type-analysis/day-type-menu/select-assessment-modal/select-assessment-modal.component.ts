@@ -50,6 +50,7 @@ export class SelectAssessmentModalComponent implements OnInit {
     let allAssessments: Array<Assessment> = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(allAssessments);
     this.compressedAirAssessments = allAssessments.filter(assessment => { return assessment.type == "CompressedAir" });
+    this.compressedAirAssessments = this.compressedAirAssessments.filter(assessment => {return !assessment.compressedAirAssessment.modifications || assessment.compressedAirAssessment.modifications.length == 0});
     this.compressedAirAssessments = _.orderBy(this.compressedAirAssessments, 'modifiedDate');
   }
 

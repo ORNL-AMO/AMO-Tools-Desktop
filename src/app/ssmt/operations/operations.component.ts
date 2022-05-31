@@ -5,12 +5,14 @@ import { FormGroup } from '@angular/forms';
 import { OperationsService } from './operations.service';
 import { OperatingHours, OperatingCosts } from '../../shared/models/operations';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
-import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { AssessmentCo2SavingsService, Co2SavingsDifferent } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { SsmtService } from '../ssmt.service';
 import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { CompareService } from '../compare.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -40,6 +42,7 @@ export class OperationsComponent implements OnInit {
 
   co2SavingsFormDisabled: boolean = false;
   co2SavingsData: Co2SavingsData;
+  co2SavingsDifferent: Co2SavingsDifferent;
   operationsForm: FormGroup;
 
   otherFuels: Array<OtherFuel>;
@@ -48,13 +51,18 @@ export class OperationsComponent implements OnInit {
     outputRate: number
   }>;
   mixedCO2EmissionsOutputRate: number;
+  co2SavingsDifferentSubscription: Subscription;
 
   constructor(private operationsService: OperationsService,
     private ssmtService: SsmtService,
     private convertUnitsService: ConvertUnitsService,
+    private compareService: CompareService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
 
   ngOnInit() {
+    this.co2SavingsDifferentSubscription = this.compareService.co2SavingsDifferent.subscribe(val => {
+      this.co2SavingsDifferent = val;
+    });
     this.initForm();
     this.setCo2SavingsData();
     if (!this.isBaseline) {
@@ -73,6 +81,11 @@ export class OperationsComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.compareService.co2SavingsDifferent.next(this.assessmentCo2SavingsService.getDefaultCO2Different());
+    this.co2SavingsDifferentSubscription.unsubscribe();
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.isFirstChange()) {
       if (this.selected === true) {
@@ -85,6 +98,7 @@ export class OperationsComponent implements OnInit {
     }
     if(changes.modificationIndex && !changes.modificationIndex.isFirstChange()){
       this.initForm();
+      this.setCo2SavingsData();
     }
   }
 
@@ -111,9 +125,27 @@ export class OperationsComponent implements OnInit {
       co2SavingsData.energySource = 'Natural Gas';
     }
     this.co2SavingsData = co2SavingsData;
-    let shouldSetOutputRate = this.co2SavingsData.totalFuelEmissionOutputRate === undefined || this.co2SavingsData.totalFuelEmissionOutputRate === 0;
-
+    let shouldSetOutputRate: boolean = false;
+    if(!this.co2SavingsData.totalFuelEmissionOutputRate || !this.co2SavingsData.fuelType) {
+      shouldSetOutputRate = true;
+    } 
     this.setEnergySource(shouldSetOutputRate);
+  }
+  
+  canCompare() {
+    if (this.compareService.baselineSSMT && this.compareService.modifiedSSMT && !this.inSetup) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isCo2SavingsDifferent() {
+    if (this.canCompare()) {
+      this.compareService.isCo2SavingsDifferent();
+    } else {
+      this.compareService.co2SavingsDifferent.next(this.assessmentCo2SavingsService.getDefaultCO2Different());
+    }
   }
 
   setFuelOptions(){
@@ -123,13 +155,14 @@ export class OperationsComponent implements OnInit {
 
   setEnergySource(shouldSetOutputRate: boolean = true) {
     this.setFuelOptions();
-    this.co2SavingsData.fuelType = this.fuelOptions[0].fuelType;
     let outputRate: number = this.fuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
       outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
+      outputRate = Number(outputRate.toFixed(2));
     }
     if (shouldSetOutputRate) {
       this.co2SavingsData.totalFuelEmissionOutputRate = outputRate;
+      this.co2SavingsData.fuelType = this.fuelOptions[0].fuelType;
     }
     this.save();
   }
@@ -199,5 +232,6 @@ export class OperationsComponent implements OnInit {
     this.ssmt.generalSteamOperations = newData.generalSteamOperations;
     this.ssmt.co2SavingsData = this.co2SavingsData;
     this.emitSave.emit(this.ssmt);
+    this.isCo2SavingsDifferent();
   }
 }

@@ -78,6 +78,9 @@ export class ExportService {
     if (assessment.ssmt) {
       assessment = this.removeSsmtResults(assessment);
     }
+    if (assessment.compressedAirAssessment) {
+      assessment = this.removeDataExplorerData(assessment);
+    }
     let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
     let calculator: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
     let model: ImportExportAssessment = {
@@ -106,6 +109,22 @@ export class ExportService {
       delete ssmt.outputData;
     }
     return ssmt;
+  }
+
+
+  removeDataExplorerData(assessment: Assessment): Assessment {
+    if (assessment.compressedAirAssessment.logToolData) {
+      delete assessment.compressedAirAssessment.logToolData;
+    }
+    if (assessment.compressedAirAssessment.systemProfile) {
+      assessment.compressedAirAssessment.systemProfile.profileSummary.forEach(profile => {
+        profile.logToolFieldId = undefined;
+        profile.logToolFieldIdAmps = undefined;
+        profile.logToolFieldIdPowerFactor = undefined;
+        profile.logToolFieldIdVolts = undefined;
+      });
+    }
+    return assessment;
   }
 
   addDirectoryObj(directory: Directory) {

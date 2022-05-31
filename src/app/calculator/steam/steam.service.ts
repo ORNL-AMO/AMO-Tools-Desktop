@@ -5,6 +5,7 @@ import { Settings } from "../../shared/models/settings";
 import { BoilerOutput, SaturatedPropertiesOutput, SteamPropertiesOutput, DeaeratorOutput, FlashTankOutput, HeaderOutput, HeatLossOutput, TurbineOutput, PrvOutput, HeatExchangerOutput, SSMTOutput } from '../../shared/models/steam/steam-outputs';
 import { SSMTInputs } from '../../shared/models/steam/ssmt';
 import { ConvertSteamService } from './convert-steam.service';
+import { BehaviorSubject } from 'rxjs';
 
 declare var steamAddon: any;
 
@@ -16,10 +17,13 @@ export class SteamService {
     pressureOrTemperature: number
   };
 
+  steamModelerError: BehaviorSubject<string>;
   steamPropertiesInput: SteamPropertiesInput;
   saturatedPropertiesData: Array<{ pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number }>;
   steamPropertiesData: Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number }>;
-  constructor(private convertUnitsService: ConvertUnitsService, private convertSteamService: ConvertSteamService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private convertSteamService: ConvertSteamService) {
+    this.steamModelerError = new BehaviorSubject<string>(undefined);
+   }
 
   test() {
     console.log(steamAddon);
@@ -316,10 +320,62 @@ export class SteamService {
     try {
       outputData = steamAddon.steamModeler(convertedInputData);
     } catch (err) {
-      // Rare/wildy unrealistic cases will crash modeler
-      console.log(err);
+      // Rare/wildy unrealistic cases Or when has preheat makeup water == true --> will crash modeler
+      this.steamModelerError.next('Steam Properties cannot be calculated. Please check input values.');
+      let outputData = this.getEmptyResults();
+      outputData.hasSteamModelerError = true;
+      return outputData;
     }
-    outputData = this.convertSteamService.convertSsmtOutput(outputData, settings);
-    return outputData;
+    this.steamModelerError.next(undefined);
+    return this.convertSteamService.convertSsmtOutput(outputData, settings);
+  }
+
+  getEmptyResults(): SSMTOutput {
+    return {
+      boilerOutput: undefined,
+
+      highPressureHeaderSteam: undefined,
+      highPressureSteamHeatLoss: undefined,
+
+      mediumPressureToLowPressurePrv: undefined,
+      highPressureToMediumPressurePrv: undefined,
+
+      highPressureToLowPressureTurbine: undefined,
+      highPressureToMediumPressureTurbine: undefined,
+      highPressureCondensateFlashTank: undefined,
+
+      lowPressureHeaderSteam: undefined,
+      lowPressureSteamHeatLoss: undefined,
+
+      mediumPressureToLowPressureTurbine: undefined,
+      mediumPressureCondensateFlashTank: undefined,
+
+      mediumPressureHeaderSteam: undefined,
+      mediumPressureSteamHeatLoss: undefined,
+
+      blowdownFlashTank: undefined,
+
+      highPressureCondensate: undefined,
+      lowPressureCondensate: undefined,
+      mediumPressureCondensate: undefined,
+      combinedCondensate: undefined,
+      returnCondensate: undefined,
+      condensateFlashTank: undefined,
+
+      makeupWater: undefined,
+      makeupWaterAndCondensate: undefined,
+
+      condensingTurbine: undefined,
+      deaeratorOutput: undefined,
+
+      highPressureProcessSteamUsage: undefined,
+      mediumPressureProcessSteamUsage: undefined,
+      lowPressureProcessSteamUsage: undefined,
+      lowPressureVentedSteam: undefined,
+      heatExchanger: undefined,
+      operationsOutput: undefined,
+      co2EmissionsOutput: undefined,
+    }
+    
   }
 }

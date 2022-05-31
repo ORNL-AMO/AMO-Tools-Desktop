@@ -26,7 +26,7 @@
     </div>
   </div>
   <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true}" class="tab-content"
+  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" [ngClass]="{'modal-open': isModalOpen == true}" class="tab-content"
     [ngStyle]="{'height.px': containerHeight}">
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [ssmt]="_ssmt"
       [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitSaveAssessment)="save()"
@@ -150,5 +150,8 @@
 
 <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'ssmt'"
  (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
+
+ <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
+  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'warning'"></app-toast>
 
 <app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>

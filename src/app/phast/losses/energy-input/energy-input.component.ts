@@ -38,7 +38,7 @@ export class EnergyInputComponent implements OnInit {
   phast: PHAST;
 
   _energyInputs: Array<EnInputObj>;
-  warnings: EnergyInputWarnings = {energyInputHeatDelivered: null};
+  warnings: EnergyInputWarnings = {energyInputHeatDelivered: null, electricityInputWarning: null};
 
   firstChange: boolean = true;
   resultsUnit: string;
@@ -136,7 +136,7 @@ export class EnergyInputComponent implements OnInit {
         grossHeatInput: tmpResults.energyInputTotal
       };
       this.warnings.energyInputHeatDelivered = this.phastResultsService.checkEnergyInputWarnings(loss.results.energyInputHeatDelivered);
-
+      this.warnings.electricityInputWarning = this.phastResultsService.checkElectricityInputWarning(this.phast, this.settings);
     } else {
       loss.results = {
         energyInputHeatDelivered: null,

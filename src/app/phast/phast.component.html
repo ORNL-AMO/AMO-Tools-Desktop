@@ -43,7 +43,7 @@
   </div>
 
   <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <div *ngIf="assessmentTab == 'explore-opportunities'">
       <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings"
         [assessment]="assessment" (save)="saveDb()" [exploreModIndex]="modificationIndex" (emitAddNewMod)="addNewMod()">

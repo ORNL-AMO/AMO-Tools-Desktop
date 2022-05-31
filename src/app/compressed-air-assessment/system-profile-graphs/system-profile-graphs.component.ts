@@ -1,12 +1,12 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData } from '../models/compressed-air-assessment';
-import { CompressedAirAssessmentService } from '../../compressed-air-assessment/compressed-air-assessment.service'; 
-import { ExploreOpportunitiesService } from '../../compressed-air-assessment/explore-opportunities/explore-opportunities.service';
-import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment/compressed-air-assessment-results.service';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessmentService } from '../compressed-air-assessment.service'; 
+import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
+import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
 import * as _ from 'lodash';
 import { AxisRanges, HoverPositionData, SystemProfileGraphsService } from './system-profile-graphs.service';
-import { Settings } from '../models/settings';
+import { Settings } from '../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
@@ -21,6 +21,8 @@ export class SystemProfileGraphsComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   labelName: string;
+  @Input()
+  printView: boolean;
 
   @ViewChild("systemCapacityGraph", { static: false }) systemCapacityGraph: ElementRef;
   @ViewChild("compressorCapacityGraph", { static: false }) compressorCapacityGraph: ElementRef;
@@ -97,6 +99,9 @@ export class SystemProfileGraphsComponent implements OnInit {
 
   ngAfterViewInit() {
     this.drawCharts();
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));      
+    }, 100)
   }
 
   setProfileData() {
@@ -280,7 +285,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let yAxisTitle: string = "System Capacity (" + unit + ")";
       var layout = this.getLayout(yAxisTitle, xRange, yAxisRange, undefined);
       var config = {
-        responsive: true,
+        responsive: !this.printView,
         displaylogo: false
       };
 
@@ -346,7 +351,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 24 : 1;
       var layout = this.getLayout("Compressor Capacity (%)", [1, xRangeMax], [0, 105], '%');
       var config = {
-        responsive: true,
+        responsive: !this.printView,
         displaylogo: false
       };
       this.plotlyService.newPlot(this.compressorCapacityGraph.nativeElement, traceData, layout, config).then(chart => {
@@ -388,7 +393,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let xRange: Array<number> = [1, xRangeMax];
       var layout = this.getLayout("Power (kW)", xRange, yAxisRange, undefined);
       var config = {
-        responsive: true,
+        responsive: !this.printView,
         displaylogo: false
       };
 
@@ -431,7 +436,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       });
       var layout = this.getLayout("Compressor Power %", undefined, [0, 100], '%');
       var config = {
-        responsive: true,
+        responsive: !this.printView,
         displaylogo: false
       };
       this.plotlyService.newPlot(this.compressorPowerGraph.nativeElement, traceData, layout, config).then(chart => {
@@ -451,7 +456,12 @@ export class SystemProfileGraphsComponent implements OnInit {
   }
 
   getLayout(yAxisTitle: string, xAxisRange: Array<number>, yAxisRange: Array<number>, yAxisTickSuffix: string) {
+    let width: number;
+    if (this.printView) {
+      width = 1000;
+    }
     return {
+      width: width,
       showlegend: true,
       barmode: 'stack',
       xaxis: {

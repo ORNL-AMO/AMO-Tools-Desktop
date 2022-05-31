@@ -95,7 +95,7 @@ export class BlowoffComponent implements OnInit {
     }
 
     if (!this.selectedCompressor.performancePoints.blowoff.isDefaultPressure) {
-      let defaultValue: number = this.blowoffCalculationsService.getBlowoffDischargePressure(this.selectedCompressor, true);
+      let defaultValue: number = this.blowoffCalculationsService.getBlowoffDischargePressure(this.selectedCompressor, true, this.settings);
       this.showPressureCalc = (this.selectedCompressor.performancePoints.blowoff.dischargePressure != defaultValue);
     } else {
       this.showPressureCalc = false;
@@ -117,7 +117,7 @@ export class BlowoffComponent implements OnInit {
   }
 
   setPressure() {
-    let defaultValue: number = this.blowoffCalculationsService.getBlowoffDischargePressure(this.selectedCompressor, true);
+    let defaultValue: number = this.blowoffCalculationsService.getBlowoffDischargePressure(this.selectedCompressor, true, this.settings);
     this.form.controls.dischargePressure.patchValue(defaultValue);
     this.form.controls.isDefaultPressure.patchValue(true);
     this.save();

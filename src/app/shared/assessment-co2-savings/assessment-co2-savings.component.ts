@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, Simp
 import { eGridRegion } from '../../calculator/utilities/co2-savings/co2-savings-form/electricityGridRegions';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import * as _ from 'lodash';
-import { AssessmentCo2SavingsService } from './assessment-co2-savings.service';
+import { AssessmentCo2SavingsService, Co2SavingsDifferent } from './assessment-co2-savings.service';
 import { FormGroup } from '@angular/forms';
 import { EGridService, SubRegionData, SubregionEmissions } from '../helper-services/e-grid.service';
 import { Subscription } from 'rxjs';
@@ -16,6 +16,10 @@ import { ConvertUnitsService } from '../convert-units/convert-units.service';
 export class AssessmentCo2SavingsComponent implements OnInit {
   @Input()
   co2SavingsData: Co2SavingsData;
+  @Input()
+  totalEmissionOutputRateDifferent: boolean;
+  @Input()
+  co2SavingsDifferent: Co2SavingsDifferent;
   @Input()
   isFormDisabled: boolean;
   @Input()
@@ -40,6 +44,9 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   constructor(private assessmentCo2Service: AssessmentCo2SavingsService, private egridService: EGridService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    if (!this.co2SavingsDifferent) {
+      this.co2SavingsDifferent = this.assessmentCo2Service.getDefaultCO2Different();
+    }
     this.initCo2SavingsSubscription();
   }
   
@@ -74,7 +81,8 @@ export class AssessmentCo2SavingsComponent implements OnInit {
       this.assessmentCo2Service.modificationCo2SavingsData.next(this.co2SavingsData);
       this.co2SavingsDataSub = this.assessmentCo2Service.modificationCo2SavingsData.subscribe(modificationCo2SavingsData => {
         if (modificationCo2SavingsData) {
-          this.co2SavingsData = modificationCo2SavingsData
+          this.co2SavingsData.eGridSubregion = modificationCo2SavingsData.eGridSubregion;
+          this.co2SavingsData.zipcode = modificationCo2SavingsData.zipcode;
           this.initForm();
         }
       });
@@ -150,11 +158,6 @@ export class AssessmentCo2SavingsComponent implements OnInit {
           this.zipCodeSubRegionData.push(subregion);
         }
       });
-      if (this.inBaseline) {
-        this.setBaselineSubregionForm();
-      } else {
-        this.setModificationSubregionForm()
-      }
     } else {
       // not a valid zip, set emmissions to US Average
       subRegionData = _.find(this.egridService.subRegionsByZipcode, (val) => val.zip === '00000');
@@ -164,13 +167,15 @@ export class AssessmentCo2SavingsComponent implements OnInit {
         }
       });
       this.isUsAverage = true;
-      if (this.inBaseline) {
-        this.setBaselineSubregionForm();
-      } else {
-        this.setModificationSubregionForm()
-      }
     }
-    if (!isFormInit) {
+
+    if (this.inBaseline) {
+      this.setBaselineSubregionForm();
+    } else {
+      this.setModificationSubregionForm()
+    }
+
+    if (!isFormInit || this.isUsAverage) {
       this.calculate();
     }
   }
