@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, ElementRef, Input, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 
@@ -62,6 +62,7 @@ export class CompressedAirSankeyComponent implements OnInit {
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private _dom: ElementRef,
     private renderer: Renderer2,
+    private cd: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
     private compressedAirSankeyService: CompressedAirSankeyService,
     private resultsService: CompressedAirAssessmentResultsService,
@@ -134,14 +135,15 @@ export class CompressedAirSankeyComponent implements OnInit {
 
 
   renderSankey() {
-    if (this.compressedAirAssessment && this.compressedAirAssessment.setupDone) {
-      this.sankeyResults = this.compressedAirSankeyService.getSankeyResults(this.compressedAirAssessment, undefined, this.settings);
-    }
-
-    this.gradientLinkPaths = [3,4,6,7];
+    this.nodes = [];
     this.connectingNodes = [];
     this.minLosses = [];
-    this.buildNodes();
+    
+    if (this.compressedAirAssessment && this.compressedAirAssessment.setupDone && this.powerSankeyInputForm.valid) {
+      this.sankeyResults = this.compressedAirSankeyService.getSankeyResults(this.compressedAirAssessment, undefined, this.settings);
+      this.gradientLinkPaths = [3,4,6,7];
+      this.buildNodes();
+    }
     
     this.links = [
       { source: 0, target: 1},
@@ -274,15 +276,15 @@ export class CompressedAirSankeyComponent implements OnInit {
     this.checkHasMinimumDisplayableEnergy("System Leakage", this.sankeyResults.kWLeakSystem, kwLeakSysPercentage);
     this.checkHasMinimumDisplayableEnergy("Productive Use", this.sankeyResults.kWAirSystem, kwAirSysPercentage);
 
-    console.log('originConnectorPercentage', originConnectorPercentage);
-    console.log('secondaryConnectorPercentage', secondaryConnectorPercentage);
-    console.log('kWMechPercentage', kWMechPercentage);
-    console.log('kwHocSysPercentage', kwHocSysPercentage);
-    console.log('kwLeakSysPercentage', kwLeakSysPercentage);
-    console.log('kwAirSysPercentage', kwAirSysPercentage);
+    // console.log('originConnectorPercentage', originConnectorPercentage);
+    // console.log('secondaryConnectorPercentage', secondaryConnectorPercentage);
+    // console.log('kWMechPercentage', kWMechPercentage);
+    // console.log('kwHocSysPercentage', kwHocSysPercentage);
+    // console.log('kwLeakSysPercentage', kwLeakSysPercentage);
+    // console.log('kwAirSysPercentage', kwAirSysPercentage);
 
     let diff = this.sankeyResults.kWInSystem - this.sankeyResults.kWMechSystem - this.sankeyResults.kWHeatOfcompressionSystem - this.sankeyResults.kWLeakSystem - this.sankeyResults.kWAirSystem;
-    console.log('diff vs kWin system', diff);
+    // console.log('diff vs kWin system', diff);
     this.nodes = [
       {
         name: this.getNameLabel("Energy Input", this.sankeyResults.kWInSystem, 100),
@@ -386,6 +388,7 @@ export class CompressedAirSankeyComponent implements OnInit {
   checkHasMinimumDisplayableEnergy(name: string, loss: number, lossValue: number) {
     if (lossValue <= this.minPlotlyDisplayValue) {
       this.minLosses.push(this.getNameLabel(name, loss, lossValue, '1.0-4'));
+      this.cd.detectChanges();
     }
   }
 

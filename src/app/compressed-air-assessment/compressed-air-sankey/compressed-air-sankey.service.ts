@@ -10,6 +10,7 @@ import { BaselineResults, CompressedAirAssessmentResultsService, CompressorAvera
 export class CompressedAirSankeyService {
 
   baseSize: number = 300;
+  airPropertiesLookupLimits = {temperatureLowRange: -50, temperatureHighRange: 1000, pressureLowRange: 0, pressureHighRange: 500};
   constructor(
     private airPropertiesService: AirPropertiesCsvService,
     private convertUnitsService: ConvertUnitsService,
@@ -55,7 +56,6 @@ export class CompressedAirSankeyService {
         denominatorSummedCompressors += (compr_cfm * (sankeyResults.compressorResults[cfmIndex].pressure2 / sankeyResults.systemPressure));
       });
       let CFMLeakSystem: number = compressedAirAssessment.powerSankeyInputs.CFMLeakSystem;  
-      // let CFMLeakSystemConverted: number = 
       sankeyResults.compressorResults.forEach((compressor, index) => {
         // Block 3 calculated with system level pressure3 and t3
         let pressure3: number = sankeyResults.systemPressure;
@@ -106,7 +106,6 @@ export class CompressedAirSankeyService {
       sankeyResults.kWMechSystem = sankeyResults.compressorResults.reduce((systemTotal, compressor) => systemTotal + compressor.kWMech, 0);
       sankeyResults.kWAirSystem = sankeyResults.kWTotalSystem - sankeyResults.kWLeakSystem;
     }
-    debugger;
 
     // expected Example results
     // kWInSystem = 182.06
@@ -139,16 +138,6 @@ export class CompressedAirSankeyService {
     let cv_1 = this.getSpecificHeatConstantVolume(pressure1ConvertedPSIG, temperature1);
     
     let CFM: number = currentCompressorDayTypeAverages.averageAirflow;
-
-    // Test example
-    // let CFM: number;
-    // if (index == 0) {
-    //   CFM = 333.6;
-    // } else if (index == 1) {
-    //   CFM = 328.6;
-    // } else if (index == 2) {
-    //   CFM = 323.1;
-    // }
     let eta_poly: number = (0.027 * Math.log(CFM)) + 0.4984;
   
     // Initial air properties with temperature2 guess
@@ -162,10 +151,12 @@ export class CompressedAirSankeyService {
     let currentLowestDiff: number = Infinity;
     //lowestDiffN = n corresponding to lowestDiff
     let lowestDiffN: number;
-    let iterationValue: number = .0001;
+    let iterationValue: number = .001;
     let pressure2ConvertedPSIA = this.convertUnitsService.value(pressure2).from('psig').to('psia');
     let dt_poly: number;
     
+    // Should three change here?
+    let invalidLookupValue: number;
     for (let n = 0; n <= 3; n += iterationValue) {
       let LHS: number = n / (n - 1);
       let RHS: number = k / (k - 1) * eta_poly;
@@ -174,35 +165,44 @@ export class CompressedAirSankeyService {
       if (nDiff < currentLowestDiff) {
         currentLowestDiff = nDiff;
         lowestDiffN = n;
-        
-        cp_2 = this.getSpecificHeatConstantPressure(pressure2, temperature2);
-        cv_2 = this.getSpecificHeatConstantVolume(pressure2, temperature2);
-        cp_avg = (cp_1 + cp_2) / 2;
-        cv_avg = (cv_1 + cv_2) / 2;
-        k = cp_avg / cv_avg;
-        
-        let base: number = (pressure2ConvertedPSIA / pressure1);
-        let exponent: number = (lowestDiffN - 1) / lowestDiffN;
-        dt_poly = temperature1 * (Math.pow(base, exponent) - 1) / eta_poly;
-        temperature2 = dt_poly + temperature1;
+        if (this.validTemperatureLookup(temperature2)) {
+          cp_2 = this.getSpecificHeatConstantPressure(pressure2, temperature2);
+          cv_2 = this.getSpecificHeatConstantVolume(pressure2, temperature2);
+          cp_avg = (cp_1 + cp_2) / 2;
+          cv_avg = (cv_1 + cv_2) / 2;
+          k = cp_avg / cv_avg;
+          
+          let base: number = (pressure2ConvertedPSIA / pressure1);
+          let exponent: number = (lowestDiffN - 1) / lowestDiffN;
+          dt_poly = temperature1 * (Math.pow(base, exponent) - 1) / eta_poly;
+          temperature2 = dt_poly + temperature1;
+        } else {
+          invalidLookupValue = temperature2;
+        }
       }
     }
 
-    // BLOCK 2 ========================================== 
-    let h_1: number = this.getEnthalpy(pressure1ConvertedPSIG, temperature1);
-    let h_2: number = this.getEnthalpy(pressure2, temperature2);
-    let rho_1: number = this.getDensity(pressure1ConvertedPSIG, temperature1);
-    let rho_2: number = this.getDensity(pressure2, temperature2);
-    let rho_avg: number = (rho_1 + rho_2) / 2;
+    // affected by invalid system profile values?
+    if (invalidLookupValue) {
+      console.log('******** INVALID TEMP', invalidLookupValue)
+    }
+    // console.log('end loop')
 
-    let kWComp: number = (h_2 - h_1) * CFM * rho_avg * 60 / 3412.14;
+    // BLOCK 2 ========================================== 
+    // let h_1: number = this.getEnthalpy(pressure1ConvertedPSIG, temperature1);
+    // let h_2: number = this.getEnthalpy(pressure2, temperature2);
+    // let rho_1: number = this.getDensity(pressure1ConvertedPSIG, temperature1);
+    // let rho_2: number = this.getDensity(pressure2, temperature2);
+    // let rho_avg: number = (rho_1 + rho_2) / 2;
+
+    // let kWComp: number = (h_2 - h_1) * CFM * rho_avg * 60 / 3412.14;
     
     // should be calculated instead of constant?
     // // let eta_motor: number = currentCompressor.designDetails.designEfficiency / 100;
 
     let kWInput: number = currentCompressorDayTypeAverages.averagePower;
-    console.log('initial kwIn')
-    // Test example
+    // console.log('initial kwIn')
+    // // Test example
     // let kWInput: number;
     // if (index == 0) {
     //   kWInput = 57.54;
@@ -217,7 +217,9 @@ export class CompressedAirSankeyService {
     // kW_mech = kW_in*(1-eta_motor)
     // kW_in = kW_comp+kW_mech 
 
-    let kWMech: number = kWInput - kWComp;
+    // let kWMech: number = kWInput - kWComp;
+    let kWMech: number = kWInput * (1 - (currentCompressor.designDetails.designEfficiency / 100));
+    let kWComp = kWInput - kWMech;
     // no longer used?
     // let eta_motor: number = 1 - kWMech / kWInput;
 
@@ -240,6 +242,14 @@ export class CompressedAirSankeyService {
       pressure1: pressure1,
     }
     return compressorResults;
+  }
+
+  validTemperatureLookup(temperature: number) {
+    return temperature >= this.airPropertiesLookupLimits.temperatureLowRange && temperature <= this.airPropertiesLookupLimits.temperatureHighRange;
+  }
+
+  validPressureLookup(pressure: number) {
+    return pressure >= this.airPropertiesLookupLimits.pressureLowRange && pressure <= this.airPropertiesLookupLimits.pressureHighRange;
   }
 
   calculateAirPropertyFromInterpolation(airPropertyLowBound: number, airPropertyHighBound: number, interpolationProperty: InterpolationData): number {
@@ -295,7 +305,6 @@ export class CompressedAirSankeyService {
   getSpecificHeatConstantVolume(pressure: number, temperature: number): number {
     let specificHeatConstantVolume: number;
     let airPropertiesLookup: AirPropertiesLookup = this.getAirPropertiesLookupData(pressure, temperature);
-    
     if (airPropertiesLookup.result) { 
       specificHeatConstantVolume = airPropertiesLookup.result.c_v;
     } else if (airPropertiesLookup.singleInterpolation) {
@@ -385,13 +394,12 @@ export class CompressedAirSankeyService {
     let canLookupByTemperature: boolean = this.checkIsTenMultiple(temperature);
     let interpolateBothInputs: boolean = !canLookupByPressure && !canLookupByTemperature;
     
-    
     if (canLookupByPressure && canLookupByTemperature) {
       airPropertiesLookup.result = this.getAirPropertiesFromLookup(pressure, temperature);
     } else if (canLookupByTemperature) {
       airPropertiesLookup.singleInterpolation = this.setInterpolatedPressure(pressure, temperatureInt);
     } else if (canLookupByPressure) {
-      airPropertiesLookup.singleInterpolation = this.setInterpolatedTemperature(pressureInt, temperature)
+      airPropertiesLookup.singleInterpolation = this.setInterpolatedTemperature(pressureInt, temperature);
     } else if (interpolateBothInputs) {
       let temperatureLowBound = this.getLowBound(temperature);
       let temperatureHighBound = this.getHighBound(temperature);
@@ -492,9 +500,17 @@ export class CompressedAirSankeyService {
       CFMLeakSystem: [powerSankeyInputs.CFMLeakSystem],
       selectedDayTypeId: [powerSankeyInputs.selectedDayTypeId]
     });
-    // this.markFormDirtyToDisplayValidation(form);
     form = this.setSankeyInputValidators(form, baselineResults, settings);
+    this.markFormDirtyToDisplayValidation(form);
     return form;
+  }
+
+  markFormDirtyToDisplayValidation(form: FormGroup) {
+    for (let key in form.controls) {
+      if (form.controls[key] && form.controls[key].value != undefined) {
+        form.controls[key].markAsDirty();
+      }
+    }
   }
 
   getEmptyForm(baselineResults: BaselineResults, selectedDayTypeId: string, settings: Settings): FormGroup {

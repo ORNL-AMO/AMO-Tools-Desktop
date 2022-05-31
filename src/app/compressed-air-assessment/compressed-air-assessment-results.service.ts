@@ -1259,8 +1259,10 @@ export class CompressedAirAssessmentResultsService {
         }
       });
       dayTypeCompressorAverageResults.push(dayTypeCompressorAverageResult);
+      console.log('dayTypeCompressorAverageResults', dayTypeCompressorAverageResult)
     });
-
+    
+    
     return dayTypeCompressorAverageResults;
   }
 
