@@ -16,6 +16,7 @@ export interface CompressedAirAssessment {
         dayTypeSummaries: Array<DayTypeSummary>,
         logToolFields: Array<LogToolField>
     },
+    endUses: Array<EndUse>,
     compressedAirDayTypes: Array<CompressedAirDayType>,
     setupDone: boolean
 }
@@ -48,6 +49,22 @@ export interface ReduceAirLeaks {
 export interface ImproveEndUseEfficiency {
     endUseEfficiencyItems: Array<EndUseEfficiencyItem>,
     order: number
+}
+
+export interface EndUse {
+    endUseId: string,
+    modifiedDate: Date,
+    endUseName: string,
+    endUseDescription: string,
+    dayType?: string,
+    dayTypeLeakRate?: number,
+    location?: string,
+    averageAirflow?: number,
+    averageCapacity?: number,
+    regulated?: boolean,
+    requiredPressure?: number,
+    excessPressure?: number,
+    measuredPressure?: number,
 }
 
 

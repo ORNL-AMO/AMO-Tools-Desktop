@@ -29,6 +29,7 @@ export class InventoryComponent implements OnInit {
   ngOnInit(): void {
     this.initializeInventory();
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
+      debugger;
       if (val) {
         this.selectedCompressor = val;
         this.hasInventoryItems = true;
@@ -56,6 +57,7 @@ export class InventoryComponent implements OnInit {
   initializeInventory() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.hasInventoryItems = (compressedAirAssessment.compressorInventoryItems.length != 0);
+    debugger;
     if (this.hasInventoryItems) {
       this.hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
       let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();

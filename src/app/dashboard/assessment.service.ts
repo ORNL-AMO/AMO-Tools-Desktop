@@ -384,6 +384,7 @@ export class AssessmentService {
         },
         profileSummary: new Array()
       },
+      endUses: new Array(),
       compressedAirDayTypes: [{
         dayTypeId: initDayTypeId,
         name: 'Standard Day Type',

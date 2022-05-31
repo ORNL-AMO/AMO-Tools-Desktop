@@ -13,6 +13,7 @@ import { CompressedAirAssessmentService } from './compressed-air-assessment.serv
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
 import { DayTypeService } from './day-types/day-type.service';
+import { EndUsesService } from './end-uses/end-uses.service';
 import { ExploreOpportunitiesService } from './explore-opportunities/explore-opportunities.service';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { InventoryService } from './inventory/inventory.service';
@@ -60,6 +61,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
       
     private dayTypeService: DayTypeService,
     private egridService: EGridService,
+    private endUseService: EndUsesService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
     private exploreOpportunitiesService: ExploreOpportunitiesService, private assessmentService: AssessmentService) { }
 
@@ -140,6 +142,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.compressedAirAssessmentService.setupTab.next('system-basics');
     this.compressedAirAssessmentService.profileTab.next('setup');
     this.inventoryService.selectedCompressor.next(undefined);
+    this.endUseService.endUses.next(undefined);
     this.exploreOpportunitiesService.modificationResults.next(undefined);
     this.exploreOpportunitiesService.selectedDayType.next(undefined);
     this.compressedAirAssessmentService.compressedAirAssessment.next(undefined);
