@@ -1,7 +1,6 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
@@ -38,8 +37,7 @@ export class BleedTestComponent implements OnInit {
   constructor(
     private bleedTestService: BleedTestService,
     private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService,
-    private indexedDbService: IndexedDbService) { }
+    private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit(): void {
     if (!this.settings) {
@@ -78,9 +76,10 @@ export class BleedTestComponent implements OnInit {
   }
 
   ngOnDestroy(){
-    if (this.assessment) {
-      this.saveAssessmentCalculator();
-    }
+    // if (this.assessment) {
+    //   this.saveAssessmentCalculator();
+    //   await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+    // }
     this.bleedTestInputSub.unsubscribe();
   }
 
@@ -88,7 +87,7 @@ export class BleedTestComponent implements OnInit {
     this.currentField = str;
   }
   
-  getCalculatorForAssessment() {
+  async getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.assessmentCalculator) {
       if (this.assessmentCalculator.bleedTestInputs) {
@@ -98,7 +97,7 @@ export class BleedTestComponent implements OnInit {
       }
     } else {
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.saveAssessmentCalculator();
+      await await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 
@@ -112,32 +111,32 @@ export class BleedTestComponent implements OnInit {
   }
 
 
-  calculateBleedTest() {
+  async calculateBleedTest() {
     this.bleedTestService.calculate(this.settings);
     if (this.assessmentCalculator) {
       this.assessmentCalculator.bleedTestInputs = this.bleedTestService.bleedTestInput.getValue();
-      this.saveAssessmentCalculator();
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     } 
   }
 
-  saveAssessmentCalculator() {
-    if (!this.saving) {
-      if (this.assessmentCalculator.id) {
-        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.assessmentCalculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.assessmentCalculator.id = result;
-            this.saving = false;
-          });
-        });
-      }
-    }
-  }
+  // saveAssessmentCalculator() {
+  //   if (!this.saving) {
+  //     if (this.assessmentCalculator.id) {
+  //       this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
+  //         this.calculatorDbService.setAll();
+  //       });
+  //     } else {
+  //       this.saving = true;
+  //       this.assessmentCalculator.assessmentId = this.assessment.id;
+  //       this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
+  //         this.calculatorDbService.setAll().then(() => {
+  //           this.assessmentCalculator.id = result;
+  //           this.saving = false;
+  //         });
+  //       });
+  //     }
+  //   }
+  // }
 
   btnResetData() {
     this.bleedTestService.initDefaultEmptyInputs();

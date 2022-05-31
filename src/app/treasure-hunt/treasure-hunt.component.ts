@@ -265,9 +265,10 @@ export class TreasureHuntComponent implements OnInit {
     }
   }
 
-  closeWelcomeScreen() {
+ async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableTreasureHuntTutorial = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.treasureHuntService.modalOpen.next(false);
   }
