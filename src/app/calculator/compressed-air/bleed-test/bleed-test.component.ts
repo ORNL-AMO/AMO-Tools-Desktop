@@ -76,10 +76,6 @@ export class BleedTestComponent implements OnInit {
   }
 
   ngOnDestroy(){
-    // if (this.assessment) {
-    //   this.saveAssessmentCalculator();
-    //   await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
-    // }
     this.bleedTestInputSub.unsubscribe();
   }
 
@@ -118,25 +114,6 @@ export class BleedTestComponent implements OnInit {
       await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     } 
   }
-
-  // saveAssessmentCalculator() {
-  //   if (!this.saving) {
-  //     if (this.assessmentCalculator.id) {
-  //       this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
-  //         this.calculatorDbService.setAll();
-  //       });
-  //     } else {
-  //       this.saving = true;
-  //       this.assessmentCalculator.assessmentId = this.assessment.id;
-  //       this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
-  //         this.calculatorDbService.setAll().then(() => {
-  //           this.assessmentCalculator.id = result;
-  //           this.saving = false;
-  //         });
-  //       });
-  //     }
-  //   }
-  // }
 
   btnResetData() {
     this.bleedTestService.initDefaultEmptyInputs();
