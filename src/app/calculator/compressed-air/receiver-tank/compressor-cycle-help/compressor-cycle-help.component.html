@@ -1,0 +1,59 @@
+<div class="my-2">
+    <h6>
+        Compressor Cycle
+        <br>
+        <small class="text-muted">******** Ask Alex or Kristia ***********
+            <hr>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="currentField == 'loadTime'">
+    <h6>
+        Load Time
+        <br>
+        <small class="text-muted">
+            Time that the compressor is loaded during a cycle.
+            <hr>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="currentField == 'unloadTime'">
+    <h6>
+        Unload Time
+        <br>
+        <small class="text-muted">
+            Time the compressor is unloaded during a cycle, the time allowed for pressure drop.
+            <hr>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="currentField == 'compressorCapacity'">
+    <h6>
+        Compressor Capacity
+        <br>
+        <small class="text-muted">
+            The rated capacity of the compressor.
+            <hr>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="currentField == 'fullLoadPressure'">
+    <h6>
+        Full Load or cut-in pressure
+        <br>
+        <small class="text-muted">
+            The lower limit for the pressure band, the final reciever pressure before the compressor loads.
+            <hr>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="currentField == 'unloadPressure'">
+    <h6>
+        Unload or cut-out pressure
+        <br>
+        <small class="text-muted">
+            The upper limit for the pressure band, the initial pressure of the reciever when the compressor unloads.
+            <hr>
+        </small>
+    </h6>
+</div>

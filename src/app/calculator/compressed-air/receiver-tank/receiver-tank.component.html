@@ -32,6 +32,8 @@
             </app-metered-storage-form>
             <app-delay-method-form *ngIf="receiverTankService.receiverTankMethod == 3" [settings]="settings">
             </app-delay-method-form>
+            <app-compressor-cycle-form *ngIf="receiverTankService.receiverTankMethod == 4" [settings]="settings">
+            </app-compressor-cycle-form>
           </div>
         </form>
       </div>
@@ -111,6 +113,9 @@
         <app-delay-method-help *ngIf="calcType == 'size-calculations' && receiverTankService.receiverTankMethod == 3"
           [currentField]="currentField">
         </app-delay-method-help>
+        <app-compressor-cycle-help *ngIf="calcType == 'size-calculations' && receiverTankService.receiverTankMethod == 4"
+          [currentField]="currentField">
+        </app-compressor-cycle-help>
       </div>
     </div>
   </div>

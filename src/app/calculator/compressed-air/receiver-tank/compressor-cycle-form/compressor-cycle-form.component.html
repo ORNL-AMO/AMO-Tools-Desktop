@@ -1,0 +1,117 @@
+<div class="form-section bottomBorder">
+    <div class="form-group">
+        <label for="loadTime">Load Time</label>
+        <div class="input-group">
+            <input name="loadTime" class="form-control" type="number" step="any" [(ngModel)]="inputs.loadTime"
+                id="loadTime" (input)="save()" onfocus="this.select();" (focus)="changeField('loadTime')">
+            <span class="input-group-addon units">sec.</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="unloadTime">Unload Time</label>
+        <div class="input-group">
+            <input name="unloadTime" class="form-control" type="number" step="any" [(ngModel)]="inputs.unloadTime"
+                id="unloadTime" (input)="save()" onfocus="this.select();" (focus)="changeField('unloadTime')">
+            <span class="input-group-addon units">sec.</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="compressorCapacity">Compressor Capacity</label>
+        <div class="input-group">
+            <input name="compressorCapacity" class="form-control" type="number" step="any"
+                [(ngModel)]="inputs.compressorCapacity" id="compressorCapacity" (input)="save()"
+                onfocus="this.select();" (focus)="changeField('compressorCapacity')">
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">acfm</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="fullLoadPressure">Full Load or cut-in pressure</label>
+        <div class="input-group">
+            <input name="fullLoadPressure" class="form-control" type="number" step="any"
+                [(ngModel)]="inputs.fullLoadPressure" id="fullLoadPressure" (input)="save()"
+                onfocus="this.select();" (focus)="changeField('fullLoadPressure')">
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">barg</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="unloadPressure">Unload or cut-out pressure</label>
+        <div class="input-group">
+            <input name="unloadPressure" class="form-control" type="number" step="any"
+                [(ngModel)]="inputs.unloadPressure" id="unloadPressure" (input)="save()" onfocus="this.select();"
+                (focus)="changeField('unloadPressure')">
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">barg</span>
+        </div>
+    </div>
+</div>
+<div class="form-section bottomBorder">
+    <div class="form-group">
+        <label class="bold">Pressure Change</label>
+        <div class="text-center small">
+            <span *ngIf="output">
+                <strong>{{output.pressureChange | number:'1.0-2'}} </strong>
+                <strong *ngIf="settings.unitsOfMeasure != 'Metric'">psig</strong>
+                <strong *ngIf="settings.unitsOfMeasure == 'Metric'">barg</strong>
+            </span>
+            <span *ngIf="!output">
+                <strong>&mdash; &mdash;</strong>
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="bold">Atmospheric Pressure</label>
+        <div class="text-center small">
+            <span *ngIf="output">
+                <strong>{{inputs.atmosphericPressure | number:'1.0-2'}} </strong>
+                <strong *ngIf="settings.unitsOfMeasure != 'Metric'">psia</strong>
+                <strong *ngIf="settings.unitsOfMeasure == 'Metric'">bara</strong>
+            </span>
+            <span *ngIf="!output">
+                <strong>&mdash; &mdash;</strong>
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="bold">Capacity</label>
+        <div class="text-center small">
+            <span *ngIf="output">
+                <strong>{{output.capacity | number:'1.0-2'}} </strong>
+                <strong *ngIf="settings.unitsOfMeasure != 'Metric'">acfm</strong>
+                <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</strong>
+            </span>
+            <span *ngIf="!output">
+                <strong>&mdash; &mdash;</strong>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="form-section">
+    <div class="form-group">
+        <label class="bold">Storage Volume</label>
+        <div class="text-center small">
+            <span *ngIf="output">
+                <strong>{{output.areaStorageVolume | number:'1.0-2'}} </strong>
+                <strong *ngIf="settings.unitsOfMeasure != 'Metric'">ft<sup>3</sup></strong>
+                <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></strong>
+            </span>
+            <span *ngIf="!output">
+                <strong>&mdash; &mdash;</strong>
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="bold">Storage Volume</label>
+        <div class="text-center small">
+            <span *ngIf="output">
+                <strong>{{output.liquidStorageVolume | number:'1.0-2'}} </strong>
+                <strong *ngIf="settings.unitsOfMeasure != 'Metric'">gal</strong>
+                <strong *ngIf="settings.unitsOfMeasure == 'Metric'">L</strong>
+            </span>
+            <span *ngIf="!output">
+                <strong>&mdash; &mdash;</strong>
+            </span>
+        </div>
+    </div>
+</div>
