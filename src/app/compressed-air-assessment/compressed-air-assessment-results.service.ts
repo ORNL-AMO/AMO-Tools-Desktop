@@ -1246,8 +1246,10 @@ export class CompressedAirAssessmentResultsService {
           return total.airflow 
         });
 
+
         let validAirflowAverage: boolean = !isNaN(sumCompressorAirFlow) && sumCompressorAirFlow !== 0;
         let validPowerAverage: boolean = !isNaN(sumCompressorPower) && sumCompressorPower !== 0;
+        // console.log('has valid averages', validAirflowAverage && validPowerAverage)
         // Skip compressor in sankey if no power or air hours on
         if (validAirflowAverage && validPowerAverage) {
           dayTypeCompressorAverageResult.compressorAverages.push({
@@ -1259,7 +1261,7 @@ export class CompressedAirAssessmentResultsService {
         }
       });
       dayTypeCompressorAverageResults.push(dayTypeCompressorAverageResult);
-      console.log('dayTypeCompressorAverageResults', dayTypeCompressorAverageResult)
+      // console.log('dayTypeCompressorAverageResults', dayTypeCompressorAverageResult)
     });
     
     

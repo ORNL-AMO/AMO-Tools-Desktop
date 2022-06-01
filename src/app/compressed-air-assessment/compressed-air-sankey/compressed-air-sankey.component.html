@@ -1,9 +1,8 @@
-
-
 <div class="d-flex flex-column w-100 compressed-air">
   <div class="row">
     <div class="navbar w-50 col-6">
-      <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-center align-items-center w-100 flex-wrap">
+      <div class="d-flex justify-content-center align-items-center w-100 flex-wrap">
+        <!-- <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-center align-items-center w-100 flex-wrap"> -->
         <div class="tab-content pl-2 pr-2">
           <!-- <div class="form-group" *ngIf="compressedAirAssessmentOptions.length > 1">
             <select name="compressedAirAssessmentSelect" class="form-control mx-auto w-100" id="caSankeySelect"
@@ -12,38 +11,41 @@
             [ngValue]="compressedAirAssessment">{{compressedAirAssessment.name}}</option>
           </select>
         </div> -->
-      </div>
-      <div class="btn-group btn-group-sm align-self-center">
-        <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
-        [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
-        <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('energy')"
-        [ngClass]="{'active': sankeyLabelStyle == 'energy'}">Loss Energy</button>
-        <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
-        [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
+        </div>
+        <div class="btn-group btn-group-sm align-self-center">
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
+            [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('energy')"
+            [ngClass]="{'active': sankeyLabelStyle == 'energy'}">Loss Energy</button>
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
+            [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="p-2 w-50 justify-content-start col-6">
-    <form [formGroup]="powerSankeyInputForm" class="px-4 py-2 w-75">
-    <label class="group-label">
-      System Data</label>
+    <div class="p-2 w-50 justify-content-start col-6">
+      <form [formGroup]="powerSankeyInputForm" class="px-4 py-2 w-75">
+        <label class="group-label">
+          System Data</label>
         <div class="form-group">
           <label for="ambientAirTemperature">Ambient Air Temperature</label>
           <div class="input-group">
             <input class="form-control" type="number" name="ambientAirTemperature"
-            formControlName="ambientAirTemperature" (input)="saveUserInputChange()" (focus)="focusField()">
+              formControlName="ambientAirTemperature" (input)="saveUserInputChange()" (focus)="focusField()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">&#8451;</span>
           </div>
-          <span class="alert-danger pull-right small" *ngIf="powerSankeyInputForm.controls.ambientAirTemperature.invalid && !powerSankeyInputForm.controls.ambientAirTemperature.pristine">
+          <span class="alert-danger pull-right small"
+            *ngIf="powerSankeyInputForm.controls.ambientAirTemperature.invalid && !powerSankeyInputForm.controls.ambientAirTemperature.pristine">
             <span *ngIf="powerSankeyInputForm.controls.ambientAirTemperature.errors.required">Value Required</span>
             <span *ngIf="powerSankeyInputForm.controls.ambientAirTemperature.errors.min">
-              Value can't be less than ({{powerSankeyInputForm.controls.ambientAirTemperature.errors.min.min | number: '1.0-1'}}
+              Value can't be less than ({{powerSankeyInputForm.controls.ambientAirTemperature.errors.min.min | number:
+              '1.0-1'}}
               <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>).
             </span>
             <span *ngIf="powerSankeyInputForm.controls.ambientAirTemperature.errors.max">
-              Value can't be greater than ({{powerSankeyInputForm.controls.ambientAirTemperature.errors.max.max | number: '1.0-1'}}
+              Value can't be greater than ({{powerSankeyInputForm.controls.ambientAirTemperature.errors.max.max |
+              number: '1.0-1'}}
               <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>).
             </span>
@@ -53,12 +55,13 @@
         <div class="form-group">
           <label for="CFM_leak_sys">System CFM lost through leaks</label>
           <div class="input-group">
-            <input class="form-control" type="number" name="CFM_leak_sys"
-            formControlName="CFMLeakSystem" (input)="saveUserInputChange()" (focus)="focusField()">
+            <input class="form-control" type="number" name="CFM_leak_sys" formControlName="CFMLeakSystem"
+              (input)="saveUserInputChange()" (focus)="focusField()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup>/min</span>
           </div>
-          <span class="alert-danger pull-right small" *ngIf="powerSankeyInputForm.controls.CFMLeakSystem.invalid && !powerSankeyInputForm.controls.CFMLeakSystem.pristine">
+          <span class="alert-danger pull-right small"
+            *ngIf="powerSankeyInputForm.controls.CFMLeakSystem.invalid && !powerSankeyInputForm.controls.CFMLeakSystem.pristine">
             <span *ngIf="powerSankeyInputForm.controls.CFMLeakSystem.errors.required">Value Required</span>
             <span *ngIf="powerSankeyInputForm.controls.CFMLeakSystem.errors.min">Value can't be negative</span>
             <span *ngIf="powerSankeyInputForm.controls.CFMLeakSystem.errors.max">
@@ -76,30 +79,33 @@
           <div class="input-group">
             <select class="form-control mx-auto mt-0 w-100" id="selectedDayTypeId" formControlName="selectedDayTypeId"
               (focus)="focusField()" (change)="saveUserInputChange()">
-              <option *ngFor="let dayType of compressedAirAssessment.compressedAirDayTypes" [ngValue]="dayType.dayTypeId">
+              <option *ngFor="let dayType of compressedAirAssessment.compressedAirDayTypes"
+                [ngValue]="dayType.dayTypeId">
                 {{dayType.name}}
               </option>
             </select>
           </div>
         </div>
-    
-        
+
       </form>
     </div>
+  </div>
+  <div *ngIf="!profileDataComplete" class="row">
+     <span class="alert-danger small px-4 py-2 mx-auto">Calculation requires averages of airflow and power from System Profile Setup. Please check System Profile Setup data for correctness.</span>
   </div>
 </div>
 
 
-    <div class="sankey-padding w-100">
-      <div #ngChart></div>
-      <div *ngIf="minLosses.length > 0" class="ml-5">
-        <div class="mt-4">
-            <label class="group-label bold mb-2">Negligible Losses</label>
-            <table class="small w-25 ml-3">
-                <tr *ngFor="let loss of minLosses">
-                    <td>{{loss}}</td>
-                </tr>
-            </table>
-        </div>
+<div class="sankey-padding w-100">
+  <div #ngChart></div>
+  <div *ngIf="minLosses.length > 0" class="ml-5">
+    <div class="mt-4">
+      <label class="group-label bold mb-2">Negligible Losses</label>
+      <table class="small w-25 ml-3">
+        <tr *ngFor="let loss of minLosses">
+          <td>{{loss}}</td>
+        </tr>
+      </table>
     </div>
   </div>
+</div>
