@@ -65,6 +65,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   disableApplyData: boolean = true;
 
+  inletVelocityPressureInputs: InletVelocityPressureInputs;
+
   constructor(private helpPanelService: HelpPanelService, private modifyConditionsService: ModifyConditionsService, private fanFieldDataService: FanFieldDataService,
     private fanMotorService: FanMotorService, private fanSetupService: FanSetupService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService,
     private fsatWarningService: FsatWarningService, private fanOperationsService: OperationsService) { }
@@ -111,14 +113,12 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     let tmpPlaneData: PlaneData = this.fsat.modifications[this.exploreModIndex].fsat.fieldData.planeData;
     let tmpfanRatedInfo: FanRatedInfo = this.fsat.modifications[this.exploreModIndex].fsat.fieldData.fanRatedInfo;
     let tmpCalcType: string = this.fsat.modifications[this.exploreModIndex].fsat.fieldData.pressureCalcResultType;
-    let compressibilityFactor: number = this.updateCompressibilityFactor();
     this.fsat.modifications[this.exploreModIndex].fsat.fieldData = this.fanFieldDataService.getObjFromForm(this.modificationFieldDataForm);
     this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData = tmpInletPressureData;
     this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressureData = tmpOutletPressureData;
     this.fsat.modifications[this.exploreModIndex].fsat.fieldData.planeData = tmpPlaneData;
     this.fsat.modifications[this.exploreModIndex].fsat.fieldData.fanRatedInfo = tmpfanRatedInfo;
     this.fsat.modifications[this.exploreModIndex].fsat.fieldData.pressureCalcResultType = tmpCalcType;
-    this.fsat.modifications[this.exploreModIndex].fsat.fieldData.compressibilityFactor = compressibilityFactor;
   }
 
   initForms() {
@@ -182,6 +182,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   openPressureModal(str: string) {
+    this.setInletVelocityPressureInputs();
     if (this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData) {
       this.inletPressureCopy = JSON.parse(JSON.stringify(this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData));
     }
@@ -194,13 +195,17 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   hidePressureModal() {
-    this.disableApplyData = true;
     this.pressureCalcType = undefined;
     this.fsatService.modalOpen.next(false);
     this.pressureModal.hide();
   }
 
-  saveAndClose() {
+  resetModalData() {
+    this.disableApplyData = false;
+    this.hidePressureModal();
+  }
+
+  applyModalData() {
     if (this.pressureCalcType === 'inlet') {
       this.saveInletPressure(this.inletPressureCopy);
     } else if (this.pressureCalcType === 'outlet') {
@@ -210,25 +215,27 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   saveInletPressure(inletPressureData: InletPressureData) {
+    this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData = inletPressureData;
+    this.modificationFieldDataForm.patchValue({
+      inletPressure: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData.calculatedInletPressure
+    });
+    this.save();
+  }
+
+  saveInletPressureCopy(inletPressureData: InletPressureData) {
     this.inletPressureCopy = inletPressureData;
-    if (this.inletPressureCopy) {
-      this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData = inletPressureData;
-      this.modificationFieldDataForm.patchValue({
-        inletPressure: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData.calculatedInletPressure
-      });
-      this.save();
-    }
   }
 
   saveOutletPressure(outletPressureData: OutletPressureData) {
+    this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressureData = outletPressureData;
+    this.modificationFieldDataForm.patchValue({
+      outletPressure: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressureData.calculatedOutletPressure
+    });
+    this.save();
+  }
+
+  saveOutletPressureCopy(outletPressureData: OutletPressureData) {
     this.outletPressureCopy = outletPressureData;
-    if (this.outletPressureCopy) {
-      this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressureData = outletPressureData;
-      this.modificationFieldDataForm.patchValue({
-        outletPressure: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressureData.calculatedOutletPressure
-      });
-      this.save();
-    }
   }
 
   getBodyHeight() {
@@ -239,48 +246,12 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
 
-  updateCompressibilityFactor(): number {
-    let fsatOutput: FsatOutput;
-    let fsatCopy: FSAT = JSON.parse(JSON.stringify(this.fsat.modifications[this.exploreModIndex].fsat));
-    fsatCopy.fieldData = this.fanFieldDataService.getObjFromForm(this.modificationFieldDataForm);
-    if(isNaN(fsatCopy.fieldData.compressibilityFactor) || fsatCopy.fieldData.compressibilityFactor == 0 || fsatCopy.fieldData.compressibilityFactor == undefined){
-      fsatCopy.fieldData.compressibilityFactor = 1;
+  setInletVelocityPressureInputs() {
+    this.inletVelocityPressureInputs = {
+      ductArea: this.modificationFieldDataForm.controls.ductArea.value,
+      gasDensity: this.fsat.modifications[this.exploreModIndex].fsat.baseGasDensity.gasDensity,
+      flowRate: this.modificationFieldDataForm.controls.flowRate.value
     }
-    fsatOutput = this.fsatService.getResults(fsatCopy, false, this.settings);
-    let inputs: CompressibilityFactor = {
-      moverShaftPower: fsatOutput.fanShaftPower,
-      inletPressure: this.modificationFieldDataForm.controls.inletPressure.value,
-      outletPressure: this.modificationFieldDataForm.controls.outletPressure.value,
-      barometricPressure: this.fsat.baseGasDensity.barometricPressure,
-      flowRate: this.modificationFieldDataForm.controls.flowRate.value,
-      specificHeatRatio: fsatCopy.baseGasDensity.specificHeatRatio
-    };
-    let compressibilityFactor: number = this.calculateCompressibilityFactor(inputs, true, fsatOutput);
-    this.modificationFieldDataForm.controls.compressibilityFactor.setValue(compressibilityFactor);
-    return compressibilityFactor;
-  }
-  calculateCompressibilityFactor(compressibilityFactorInput: CompressibilityFactor, isBaseline: boolean, fsatOutput: FsatOutput) {
-    let compressibilityFactor: number;
-    if (isBaseline) {
-      compressibilityFactor = this.fsatService.compressibilityFactor(compressibilityFactorInput, this.settings);
-    } else {
-      let currentMoverShaftPower;
-      let diff = 1;
-
-      while (diff > .001) {
-        let fanEff = fsatOutput.fanEfficiency;
-        // If not first iteration, calculate with moverShaftPower (tempShaftPower from the previous iteration)
-        if (currentMoverShaftPower) {
-          compressibilityFactorInput.moverShaftPower = currentMoverShaftPower
-        }
-        compressibilityFactor = this.fsatService.compressibilityFactor(compressibilityFactorInput, this.settings);
-        let tempShaftPower = compressibilityFactorInput.flowRate * (compressibilityFactorInput.outletPressure - compressibilityFactorInput.inletPressure) * compressibilityFactor / (6362 * (fanEff / 100));
-
-        diff = Math.abs(compressibilityFactorInput.moverShaftPower - tempShaftPower);
-        currentMoverShaftPower = tempShaftPower;
-      }
-    }
-    return compressibilityFactor;
   }
 
 }

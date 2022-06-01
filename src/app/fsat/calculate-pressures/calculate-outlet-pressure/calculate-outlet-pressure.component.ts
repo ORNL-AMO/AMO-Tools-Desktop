@@ -72,9 +72,7 @@ export class CalculateOutletPressureComponent implements OnInit {
   }
 
   calculate() {
-    if (this.inletVelocityPressureInputs) {
-      this.setInletVelocityPressure();
-    }
+    this.setInletVelocityPressure();
     let sum: number = 0;
     Object.keys(this.outletPressureData).map((key, index) => {
       if (key.valueOf() !== 'calculatedOutletPressure'
