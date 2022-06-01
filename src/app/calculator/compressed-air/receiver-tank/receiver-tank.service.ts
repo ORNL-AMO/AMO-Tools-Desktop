@@ -275,21 +275,20 @@ export class ReceiverTankService {
   convertCompressorCycleExample(inputs: ReceiverTankCompressorCycle, settings: Settings) {
     let tmpInputs: ReceiverTankCompressorCycle = inputs;
     if (settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.atmosphericPressure = Math.round(tmpInputs.atmosphericPressure = this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('bara') * 100) / 100;
+      tmpInputs.atmosphericPressure = Math.round(tmpInputs.atmosphericPressure = this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('kPaa') * 100) / 100;
       tmpInputs.compressorCapacity = Math.round(this.convertUnitsService.value(tmpInputs.compressorCapacity).from('ft3/min').to('m3/min') * 100) / 100;
-      tmpInputs.fullLoadPressure = Math.round(this.convertUnitsService.value(tmpInputs.fullLoadPressure).from('psig').to('barg') * 100) / 100;
-      tmpInputs.unloadPressure = Math.round(this.convertUnitsService.value(tmpInputs.unloadPressure).from('psig').to('barg') * 100) / 100;
+      tmpInputs.fullLoadPressure = Math.round(this.convertUnitsService.value(tmpInputs.fullLoadPressure).from('psi').to('kPa') * 100) / 100;
+      tmpInputs.unloadPressure = Math.round(this.convertUnitsService.value(tmpInputs.unloadPressure).from('psi').to('kPa') * 100) / 100;
     }
     return tmpInputs;
   }
 }
 
 export interface ReceiverTankInputs {
-    dedicatedStorageInputs?: ReceiverTankDedicatedStorage,
-    airCapacityInputs?: CalculateUsableCapacity,
-    generalMethodInputs?: ReceiverTankGeneral,
-    meteredStorageInputs?: ReceiverTankMeteredStorage,
-    bridgeCompressorInputs?: ReceiverTankBridgingCompressor,
-    compressorCycleInputs?: ReceiverTankCompressorCycle
-  
+  dedicatedStorageInputs?: ReceiverTankDedicatedStorage,
+  airCapacityInputs?: CalculateUsableCapacity,
+  generalMethodInputs?: ReceiverTankGeneral,
+  meteredStorageInputs?: ReceiverTankMeteredStorage,
+  bridgeCompressorInputs?: ReceiverTankBridgingCompressor,
+  compressorCycleInputs?: ReceiverTankCompressorCycle
 }

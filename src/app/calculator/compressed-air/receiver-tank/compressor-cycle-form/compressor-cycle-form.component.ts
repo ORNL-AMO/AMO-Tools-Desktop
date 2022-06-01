@@ -75,10 +75,10 @@ export class CompressorCycleFormComponent implements OnInit {
   convertInputs(): ReceiverTankCompressorCycle {
     let tmpInputs: ReceiverTankCompressorCycle = this.inputs;
     if (this.settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.atmosphericPressure = this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('bara').to('psia');
+      tmpInputs.atmosphericPressure = this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('kPaa').to('psia');
       tmpInputs.compressorCapacity = this.convertUnitsService.value(tmpInputs.compressorCapacity).from('m3/min').to('ft3/min');
-      tmpInputs.fullLoadPressure = this.convertUnitsService.value(tmpInputs.fullLoadPressure).from('barg').to('psig');
-      tmpInputs.unloadPressure = this.convertUnitsService.value(tmpInputs.unloadPressure).from('barg').to('psig');
+      tmpInputs.fullLoadPressure = this.convertUnitsService.value(tmpInputs.fullLoadPressure).from('kPa').to('psi');
+      tmpInputs.unloadPressure = this.convertUnitsService.value(tmpInputs.unloadPressure).from('kPa').to('psi');
     }
     return tmpInputs;
   }
