@@ -10,9 +10,7 @@ export class LogToolDataService {
   logToolDays: Array<LogToolDay>;
   isTimeSeries: boolean;
   dataIntervalValid: BehaviorSubject<boolean>;
-  intervalForSeconds: BehaviorSubject<number>;
   constructor(private logToolService: LogToolService) {
-    this.intervalForSeconds = new BehaviorSubject<number>(undefined);
     this.dataIntervalValid = new BehaviorSubject<boolean>(undefined);
    }
 
@@ -131,6 +129,7 @@ export class LogToolDataService {
         csvData.startDate = undefined;
         csvData.endDate = undefined;
         this.isTimeSeries = false;
+        this.dataIntervalValid.next(true);
       } 
       else {
         //update date field format
@@ -161,7 +160,7 @@ export class LogToolDataService {
         let date1 = new Date(csvData.csvImportData.data[0][csvData.dateField.fieldName]);
         let date2 = new Date(csvData.csvImportData.data[1][csvData.dateField.fieldName]);
         let intervalDifference: number = (date2.getTime() - date1.getTime()) / 1000;
-        let intervalIncrement: number = this.intervalForSeconds.getValue();
+        let intervalIncrement: number = csvData.intervalForSeconds;
         if (intervalIncrement !== undefined && intervalDifference <= 0) {
           csvData.csvImportData.data = this.addLostSecondsBack(csvData, intervalIncrement);
           this.dataIntervalValid.next(true);

@@ -24,8 +24,7 @@ export class CleanDataComponent implements OnInit {
   editField: LogToolField;
   individualDataFromCsv: Array<IndividualDataFromCsv>;
   dateExistsForEachCsv: boolean;
-  intervalForSecondsSub: Subscription;
-  intervalForSeconds: number;
+  dataIntervalValidSub: Subscription;
   secondsIntervalOptions: Array<number> = [ undefined, 1, 2, 5, 15, 20, 30 ];
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
@@ -36,13 +35,13 @@ export class CleanDataComponent implements OnInit {
     if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
       this.dataExists = true;
     }
-    this.intervalForSecondsSub = this.logToolDataService.intervalForSeconds.subscribe(val => {
-      this.intervalForSeconds = val;
+    this.dataIntervalValidSub = this.logToolDataService.dataIntervalValid.subscribe(val => {
+      this.dataIntervalValid = val;
     });
   }
   
   ngOnDestroy(){
-    this.intervalForSecondsSub.unsubscribe();
+    this.dataIntervalValidSub.unsubscribe();
   }
 
   submit() {
@@ -54,7 +53,6 @@ export class CleanDataComponent implements OnInit {
       this.dateExistsForEachCsv = this.individualDataFromCsv.find(dataItem => { return dataItem.hasDateField == false }) == undefined;
       this.logToolService.noDayTypeAnalysis.next(!this.dateExistsForEachCsv);
       this.logToolService.dataCleaned.next(true);
-      this.dataIntervalValid = this.logToolDataService.dataIntervalValid.getValue();
       this.cleaningData = false;
       this.dataSubmitted = true;
       this.logToolDbService.saveData();
@@ -107,8 +105,4 @@ export class CleanDataComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  setIntervalForSeconds(){
-    this.logToolDataService.intervalForSeconds.next(this.intervalForSeconds);
-    this.cd.detectChanges();
-  }
 }

@@ -10,8 +10,7 @@
                     <span class="small">If your data was taken in LESS than one minute intervals, please specify the time interval below.</span>
                 </div>
                 <label>Time Interval in Seconds</label>
-                <select class="form-control" name="intervalForSeconds" [(ngModel)]="intervalForSeconds"
-                    (change)="setIntervalForSeconds()" [disabled]="dataExists == true">
+                <select class="form-control" name="intervalForSeconds" [(ngModel)]="csvData.intervalForSeconds" [disabled]="dataExists == true">
                     <option *ngFor="let option of secondsIntervalOptions" [ngValue]="option">
                         {{option}}</option>
                 </select>
