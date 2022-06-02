@@ -117,5 +117,12 @@ export const ControlTypes: Array<ControlType> = [
         label: 'Inlet guide vane modulation with unloading',
         compressorTypes: [6],
         enumValue: 1
-    }
+    },
+    {
+        value: 11,
+        label: 'VFD',
+        compressorTypes: [1,2,3,4,5],
+        // TODO what should this be
+        enumValue: 0
+    },
 ]

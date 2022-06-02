@@ -198,6 +198,8 @@ export interface DesignDetails {
 export interface PerformancePoints {
     fullLoad: PerformancePoint,
     maxFullFlow: PerformancePoint,
+    midTurndown?: PerformancePoint,
+    turndown?: PerformancePoint,
     unloadPoint: PerformancePoint,
     noLoad: PerformancePoint,
     blowoff: PerformancePoint
