@@ -40,7 +40,8 @@
               "c3",
               "regression",
               "xlsx",
-              "exceljs"
+              "exceljs",
+              "pptxgenjs"
             ],
             "outputPath": "dist",
             "index": "src/index.html",

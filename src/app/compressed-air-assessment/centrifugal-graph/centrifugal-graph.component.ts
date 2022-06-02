@@ -86,16 +86,20 @@ export class CentrifugalGraphComponent implements OnInit {
       this.drawChart();
     } else {
       this.compressorInventorySub = this.inventoryService.selectedCompressor.subscribe(val => {
-        this.selectedCompressor = val;
-        this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-        this.centrifugalSpecifics = this.selectedCompressor.centrifugalSpecifics;
-        this.selectedCompressorType = this.selectedCompressor.nameplateData.compressorType;
-        if (this.selectedCompressorType == 6 && this.selectedCompressor.compressorControls.controlType != undefined) {
-          this.showGraph = true;
+        if (val) {
+          this.selectedCompressor = val;
+          this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+          this.centrifugalSpecifics = this.selectedCompressor.centrifugalSpecifics;
+          this.selectedCompressorType = this.selectedCompressor.nameplateData.compressorType;
+          if (this.selectedCompressorType == 6 && this.selectedCompressor.compressorControls.controlType != undefined) {
+            this.showGraph = true;
+          } else {
+            this.showGraph = false;
+          }
+          this.drawChart();
         } else {
           this.showGraph = false;
         }
-        this.drawChart();
       });
     }
   }
@@ -107,7 +111,7 @@ export class CentrifugalGraphComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if (this.centrifugalGraph) {
+    if (this.showGraph) {
       this.drawChart();
     }
   }
@@ -134,7 +138,6 @@ export class CentrifugalGraphComponent implements OnInit {
             }
             currentColorIndex++;
             currentTraceColor = this.plotlyTraceColors[currentColorIndex];
-
             let xData1: Array<number> = [compressor.centrifugalSpecifics.surgeAirflow, compressor.centrifugalSpecifics.maxFullLoadCapacity];
             let yData1: Array<number> = [compressor.centrifugalSpecifics.minFullLoadPressure, compressor.centrifugalSpecifics.maxFullLoadPressure];
             let name: string = compressor.name + ' Surge Limit';

@@ -81,26 +81,26 @@ export class FanPsychrometricService {
     this.calculatedBaseGasDensity.next(psychrometricResults);
   }
 
-  calcDensityWetBulb(baseGasDensityData: BaseGasDensity, settings: Settings): PsychrometricResults {
+  calcDensityWetBulb(baseGasDensityData: BaseGasDensity, settings: Settings, isBuildingGraph?: boolean): PsychrometricResults {
     let psychrometricResults: PsychrometricResults;
     let form = this.gasDensityFormService.getGasDensityFormFromObj(baseGasDensityData, settings);
-    if (this.isWetBulbValid(form)) {
+    if (this.isWetBulbValid(form) || isBuildingGraph) { 
       psychrometricResults = this.fsatService.getPsychrometricWetBulb(baseGasDensityData, settings);
-    }
+    } 
     return psychrometricResults;
   }
-
+  
   isWetBulbValid(gasDensityForm: FormGroup): boolean {
     return (gasDensityForm.controls.dryBulbTemp.valid && gasDensityForm.controls.staticPressure.valid
       && gasDensityForm.controls.specificGravity.valid && gasDensityForm.controls.wetBulbTemp.valid);
-  }
-
-  calcDensityRelativeHumidity(baseGasDensityData: BaseGasDensity, settings: Settings): PsychrometricResults {
+    }
+    
+    calcDensityRelativeHumidity(baseGasDensityData: BaseGasDensity, settings: Settings, isBuildingGraph?: boolean): PsychrometricResults {
     let psychrometricResults: PsychrometricResults;
     let form = this.gasDensityFormService.getGasDensityFormFromObj(baseGasDensityData, settings);
-    if (this.isRelativeHumidityValid(form)) {
+    if (this.isRelativeHumidityValid(form) || isBuildingGraph) {
       psychrometricResults = this.fsatService.getPsychrometricRelativeHumidity(baseGasDensityData, settings);
-    }
+    } 
     return psychrometricResults;
   }
 
@@ -122,4 +122,31 @@ export class FanPsychrometricService {
     return (gasDensityForm.controls.dryBulbTemp.valid && gasDensityForm.controls.staticPressure.valid
       && gasDensityForm.controls.specificGravity.valid && gasDensityForm.controls.dewPoint.valid);
   }
+
+  checkWarnings(results: PsychrometricResults): FanPsychrometricWarnings {
+    let warnings: FanPsychrometricWarnings = {
+      resultHumidityRatio: undefined,
+      resultSaturationPressure: undefined,
+      hasResultWarning: false,
+    }
+    if (results) {
+      if (results.humidityRatio < 0) {
+        warnings.resultHumidityRatio = `Data is producing a negative Humidity Ratio. Please review data`;
+        warnings.hasResultWarning = true;
+      }
+      if (results.saturationPressure < 0) {
+        warnings.resultSaturationPressure = `Data is producing a negative Saturation Pressure. Please review data`;
+        warnings.hasResultWarning = true;
+      }
+    }
+    return warnings;
+  }
+}
+
+
+export interface FanPsychrometricWarnings {
+  resultHumidityRatio: string,
+  resultSaturationPressure: string,
+  hasResultWarning: boolean,
+  modificationName?: string,
 }

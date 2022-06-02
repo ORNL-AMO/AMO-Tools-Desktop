@@ -1,6 +1,24 @@
 <div class="mt-3">
   <label class="group-label mb-2">Psychrometric Data</label>
-  <table class="table table-hover table-striped" *ngIf="!isBaselineTypeCustom || modificationName">
+  <div *ngIf="baselineWarnings.hasResultWarning"  class="d-flex w-75 ml-auto mr-auto alert-warning p-2 small">
+    <span *ngIf="baselineWarnings.resultHumidityRatio">
+        Baseline {{ baselineWarnings.resultHumidityRatio }}
+    </span>
+    <span *ngIf="baselineWarnings.resultSaturationPressure">
+      Baseline {{ baselineWarnings.resultSaturationPressure }}
+  </span>
+  </div>
+
+  <div *ngIf="modificationWarnings.hasResultWarning"  class="d-flex w-75 ml-auto mr-auto alert-warning p-2 small">
+    <span *ngIf="modificationWarnings.resultHumidityRatio">
+      Modification {{ modificationWarnings.resultHumidityRatio }}
+    </span>
+    <span *ngIf="modificationWarnings.resultSaturationPressure">
+      Modification {{ modificationWarnings.resultSaturationPressure }}
+  </span>
+  </div>
+  
+  <table class="table table-hover table-striped" *ngIf="(!baselineWarnings.hasResultWarning && !modificationWarnings.hasResultWarning) && (!isBaselineTypeCustom || modificationName)">
     <tbody [ngClass]="{'mod-exists': modificationName}">
       <tr *ngIf="inSetup || modificationName" class="bold">
         <td>&nbsp;</td>

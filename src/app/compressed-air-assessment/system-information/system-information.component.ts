@@ -49,8 +49,9 @@ export class SystemInformationComponent implements OnInit {
   }
 
   openSystemCapacityModal() {
-    this.compressedAirAssessmentService.modalOpen.next(true);
     this.showSystemCapacityModal = true;
+    this.systemCapacityModal.show();
+    this.compressedAirAssessmentService.modalOpen.next(true);
   }
 
   closeSystemCapacityModal(totalCapacityOfCompressedAirSystem?: number) {
@@ -59,6 +60,7 @@ export class SystemInformationComponent implements OnInit {
         totalAirStorage: totalCapacityOfCompressedAirSystem
       });
     }
+    this.systemCapacityModal.hide();
     this.compressedAirAssessmentService.modalOpen.next(false);
     this.showSystemCapacityModal = false;
     this.save();

@@ -1,5 +1,22 @@
 <div class="output-summary">
     <h6>Psychrometric Data</h6>
+         <div *ngIf="baselineWarnings.hasResultWarning"  class="d-flex w-75 ml-auto mr-auto alert-warning p-2 small">
+            <span *ngIf="baselineWarnings.resultHumidityRatio">
+                Baseline {{ baselineWarnings.resultHumidityRatio }}
+            </span>
+            <span *ngIf="baselineWarnings.resultSaturationPressure">
+                Baseline {{ baselineWarnings.resultSaturationPressure }}
+            </span>
+           </div>
+           
+           <div *ngIf="modificationWarnings.hasResultWarning"  class="d-flex w-75 ml-auto mr-auto alert-warning p-2 small">
+            <span *ngIf="modificationWarnings.resultHumidityRatio">
+                {{modificationWarnings.modificationName}} {{ modificationWarnings.resultHumidityRatio }}
+            </span>
+            <span *ngIf="modificationWarnings.resultSaturationPressure">
+                {{modificationWarnings.modificationName}} {{ modificationWarnings.resultSaturationPressure }}
+            </span>
+           </div>
     <table class="table table-hover table-striped">
         <thead>
             <tr>

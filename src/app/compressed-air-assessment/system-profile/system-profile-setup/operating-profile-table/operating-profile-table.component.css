@@ -35,3 +35,13 @@ td, th{
   input.ng-invalid{
     border-color: red;
   }
+
+  .warning {
+    border-color: orange;
+    border-width: 2px;
+  }
+
+  .invalid {
+    border-color: red;
+    border-width: 2px;
+  }

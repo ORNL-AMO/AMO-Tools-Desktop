@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "main.js",
   "license": "MIT",
   "description": "MEASUR",
@@ -54,6 +54,7 @@
     "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
     "ngx-electron": "2.2.0",
+    "pptxgenjs": "^3.10.0",
     "regression": "^2.0.0",
     "rxjs": "6.6.6",
     "rxjs-compat": "6.6.3",

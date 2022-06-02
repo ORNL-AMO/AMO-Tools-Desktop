@@ -160,5 +160,10 @@
       </div>
 </div>
 
-<app-system-capacity-modal *ngIf="showSystemCapacityModal" [settings]="settings"
-    (closeModal)="closeSystemCapacityModal($event)"></app-system-capacity-modal>
+<div bsModal #systemCapacityModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="systemCapacityModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
+    <div class="modal-dialog modal-lg">
+        <app-system-capacity-modal *ngIf="showSystemCapacityModal" [settings]="settings"
+            (closeModal)="closeSystemCapacityModal($event)"></app-system-capacity-modal>
+    </div>
+</div>

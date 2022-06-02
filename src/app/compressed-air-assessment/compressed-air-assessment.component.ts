@@ -183,7 +183,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     } else if (hasValidCompressors == false && this.setupTab != 'system-basics' && this.setupTab != 'system-information') {
       this.disableNext = true;
     } else if (this.setupTab == 'system-profile') {
-      let hasValidSystemProfile: boolean = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment);
+      let hasValidSystemProfile: boolean = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment).isValid;
       if (hasValidSystemProfile) {
         this.disableNext = false;
       } else {
