@@ -1,9 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ReceiverTankCompressorCycle, ReceiverTankCompressorCycleOutput } from '../../../../shared/models/standalone';
-import { StandaloneService } from '../../../standalone.service';
 import { ReceiverTankService } from '../receiver-tank.service';
 
 @Component({
@@ -20,7 +18,7 @@ export class CompressorCycleFormComponent implements OnInit {
   output: ReceiverTankCompressorCycleOutput;
   setFormSub: Subscription;
 
-  constructor(private receiverTankService: ReceiverTankService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private receiverTankService: ReceiverTankService) { }
 
   ngOnInit() {
     this.setFormSub = this.receiverTankService.setForm.subscribe(val => {
@@ -70,17 +68,6 @@ export class CompressorCycleFormComponent implements OnInit {
     } else {
       return undefined;
     }
-  }
-
-  convertInputs(): ReceiverTankCompressorCycle {
-    let tmpInputs: ReceiverTankCompressorCycle = this.inputs;
-    if (this.settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.atmosphericPressure = this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('kPaa').to('psia');
-      tmpInputs.compressorCapacity = this.convertUnitsService.value(tmpInputs.compressorCapacity).from('m3/min').to('ft3/min');
-      tmpInputs.fullLoadPressure = this.convertUnitsService.value(tmpInputs.fullLoadPressure).from('kPa').to('psi');
-      tmpInputs.unloadPressure = this.convertUnitsService.value(tmpInputs.unloadPressure).from('kPa').to('psi');
-    }
-    return tmpInputs;
   }
 
 }
