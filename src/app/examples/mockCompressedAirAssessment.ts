@@ -16985,10 +16985,49 @@ export const MockCompressedAirAssessment: Assessment =  {
         ],
         "endUses": [
             {
-                "endUseId": 'lb6pu4k8k',
+                "endUseId": "lb6pu4k8k",
+                "endUseName": "Aerator",
                 "modifiedDate": new Date(),
-                "endUseName": "Example End Use",
-                "endUseDescription": "Example End Use",
+                "endUseDescription": "Aerator airflow usage",
+                "dayType": "hopx028cf",
+                "dayTypeLeakRate": 1,
+                "location": null,
+                "averageAirflow": 300,
+                "averageCapacity": 15,
+                "regulated": false,
+                "requiredPressure": 10,
+                "excessPressure": 30,
+                "measuredPressure": 20
+            },
+            {
+                "endUseId": "57pvni4vd",
+                "endUseName": "Hand Tools",
+                "modifiedDate": new Date(),
+                "endUseDescription": "Hand tools airflow usage",
+                "dayType": "hopx028cf",
+                "dayTypeLeakRate": 0.5,
+                "location": null,
+                "averageAirflow": 50,
+                "averageCapacity": 35,
+                "regulated": false,
+                "requiredPressure": 11,
+                "excessPressure": 11,
+                "measuredPressure": 11
+            },
+            {
+                "endUseId": "0z95wm6f2",
+                "modifiedDate": new Date(),
+                "endUseName": "Pneumatic Machines",
+                "endUseDescription": "Machine airflow usage",
+                "dayType": "hopx028cf",
+                "dayTypeLeakRate": 2,
+                "location": null,
+                "averageAirflow": 50,
+                "averageCapacity": 35,
+                "regulated": false,
+                "requiredPressure": 11,
+                "excessPressure": 11,
+                "measuredPressure": 11
             }
         ]
     },

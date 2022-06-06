@@ -17,16 +17,17 @@ export class ResultsPanelComponent implements OnInit {
 
   ngOnInit(): void {
     this.setupTabSub = this.compressedAirAssessmentService.setupTab.subscribe(val => {
+      console.log('va', val)
       this.displayEndUses = (val == 'end-uses');
       this.displayInventory = (val == 'inventory');
       if(this.displayInventory){
         this.tabSelect = 'current-inventory';
       }
-
+      if (this.displayEndUses) {
+        this.tabSelect = 'end-uses';
+      }
       if (this.tabSelect != 'help') {
-        if (!this.displayEndUses && this.tabSelect == 'end-uses') {
-          this.tabSelect = 'help';
-        } else if (!this.displayInventory && (this.tabSelect == 'performance-profile' || this.tabSelect == 'current-inventory')) {
+       if (!this.displayInventory && (this.tabSelect == 'performance-profile' || this.tabSelect == 'current-inventory')) {
           this.tabSelect = 'help';
         }
       }

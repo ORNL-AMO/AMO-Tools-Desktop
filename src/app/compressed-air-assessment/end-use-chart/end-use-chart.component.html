@@ -1,4 +1,14 @@
-<p>end-use-chart works!</p>
+<div class="d-flex justify-content-center">
+        <div class="pl-1" *ngIf="compressedAirAssessment && compressedAirAssessment.compressedAirDayTypes.length > 0">
+            <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
+                (change)="setSelectedDayType()">
+                <option [ngValue]="undefined">All Day Types</option>
+                <option *ngFor="let dayType of compressedAirAssessment.compressedAirDayTypes" [ngValue]="dayType">
+                    {{dayType.name}}</option>
+            </select>
+        </div>
+    </div>
 
-
-<!-- See motor inv chart -->
+<div class="d-flex w-100 p-2">
+    <div class="flex-fill" id="overviewPieChart" #overviewPieChart></div>
+</div>

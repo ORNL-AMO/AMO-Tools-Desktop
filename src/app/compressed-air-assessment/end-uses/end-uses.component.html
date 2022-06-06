@@ -10,6 +10,12 @@
     <div class="mr-2 ml-2" *ngIf="hasEndUses">
         <form [formGroup]="form">
             <div class="form-group">
+                <label for="name">End Use Name</label>
+                <input type="text" class="form-control" name="endUseName" formControlName="endUseName"
+                    (focus)="focusField('endUseName')" (input)="save()" />
+            </div>
+            
+            <div class="form-group">
                 <label for="dayType">Day Type</label>
                 <select id="dayType" name="dayType" formControlName="dayType" (change)="save()"
                     (focus)="focusField('dayType')" class="form-control">
@@ -29,11 +35,6 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="name">End Use Name</label>
-                <input type="text" class="form-control" name="endUseName" formControlName="endUseName"
-                    (focus)="focusField('endUseName')" (input)="save()" />
-            </div>
             <div class="form-group">
                 <label>Description</label>
                 <textarea class="form-control" type="text" id="endUseDescription" formControlName="endUseDescription"
@@ -61,15 +62,12 @@
                 </div>
             </div>
 
-            <div class="form-group" [ngClass]="{'invalid': form.controls.averageCapacity.invalid}">
+            <div class="form-group">
                 <label for="averageCapacity">Average Percent Capacity</label>
-                <div class="input-group">
-                    <input name="averageCapacity" type="number" step="any" class="form-control"
-                        id="averageCapacity" formControlName="averageCapacity" (input)="save()"
-                        (focus)="focusField('averageCapacity')">
+                <div class="text-center small bold">
+                    {{endUseResults.averagePercentCapacity | number}} %
                 </div>
             </div>
-
 
             <div class="form-group">
                 <label for="regulated">Regulated</label>
@@ -100,14 +98,12 @@
                 </div>
             </div>
 
-
-            <div class="form-group" [ngClass]="{'invalid': form.controls.excessPressure.invalid}">
+            <div class="form-group">
                 <label for="excessPressure">Excess Pressure</label>
-                <div class="input-group">
-                    <input name="excessPressure" type="number" step="any" class="form-control" id="excessPressure"
-                        formControlName="excessPressure" (input)="save()" (focus)="focusField('excessPressure')">
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+                <div class="text-center small">
+                    {{endUseResults.excessPressure | number}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
                 </div>
             </div>
 

@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, EndUse } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
-import { EndUsesService, UpdatedEndUseData } from './end-uses.service';
+import { EndUseResults, EndUsesService, UpdatedEndUseData } from './end-uses.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 
@@ -22,6 +22,8 @@ export class EndUsesComponent implements OnInit {
 
   selectedDayType: CompressedAirDayType;
   dayTypeOptions: Array<CompressedAirDayType>;
+  endUseResults: EndUseResults;
+  // selectedEndUseResultsSubscription: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private endUsesService: EndUsesService) { }
 
   ngOnInit(): void {
@@ -31,13 +33,13 @@ export class EndUsesComponent implements OnInit {
       if (selectedEndUse) {
         this.selectedEndUse = selectedEndUse;
         this.hasEndUses = true;
-        debugger;
         let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
         // INIT select with selected day type?
         this.dayTypeOptions = compressedAirAssessment.compressedAirDayTypes;
-        debugger;
         if (this.isFormChange == false) {
           this.form = this.endUsesService.getEndUseFormFromObj(selectedEndUse);
+          this.endUseResults = this.endUsesService.setEndUseResults(this.selectedEndUse, compressedAirAssessment, this.settings);
+          debugger;
         } else {
           this.isFormChange = false;
         }
@@ -45,15 +47,22 @@ export class EndUsesComponent implements OnInit {
         this.hasEndUses = false;
       }
     });
+    // this.selectedEndUseResultsSubscription = this.endUsesService.selectedEndUseResults.subscribe(results => {
+    //   this.endUseResults = results;
+    //   console.log('this.endUseResults', this.endUseResults);
+    // })
   }
 
   ngOnDestroy() {
     this.selectedEndUseSubscription.unsubscribe();
+    // this.selectedEndUseResultsSubscription.unsubscribe();
   }
 
   save() {
     this.isFormChange = true;
-    let updated: UpdatedEndUseData = this.endUsesService.updateCompressedAirEndUse(this.form, this.compressedAirAssessmentService.compressedAirAssessment.getValue());
+    let compressedAirAssessment =  this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let updated: UpdatedEndUseData = this.endUsesService.updateCompressedAirEndUse(this.form, compressedAirAssessment, this.settings);
+    this.endUseResults =this.endUsesService.setEndUseResults(updated.endUse, compressedAirAssessment, this.settings);
     this.compressedAirAssessmentService.compressedAirAssessment.next(updated.compressedAirAssessment);
     console.log(updated.compressedAirAssessment)
     console.log(updated.endUse)
@@ -86,8 +95,7 @@ export class EndUsesComponent implements OnInit {
 
   addEndUse() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    debugger;
-    let result = this.endUsesService.addToAssessment(compressedAirAssessment);
+    let result: UpdatedEndUseData = this.endUsesService.addToAssessment(compressedAirAssessment);
     this.compressedAirAssessmentService.updateCompressedAir(result.compressedAirAssessment, true);
     this.endUsesService.selectedEndUse.next(result.endUse);
     this.hasEndUses = true;

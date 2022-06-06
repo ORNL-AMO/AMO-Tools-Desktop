@@ -60,11 +60,11 @@ export interface EndUse {
     dayTypeLeakRate?: number,
     location?: string,
     averageAirflow?: number,
-    averageCapacity?: number,
     regulated?: boolean,
     requiredPressure?: number,
-    excessPressure?: number,
     measuredPressure?: number,
+    averageCapacity?: number,
+    excessPressure?: number,
 }
 
 

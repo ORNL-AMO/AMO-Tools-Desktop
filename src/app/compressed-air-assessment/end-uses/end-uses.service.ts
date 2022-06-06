@@ -1,20 +1,26 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CompressedAirAssessment, EndUse } from '../../shared/models/compressed-air-assessment';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { CompressedAirAssessment, CompressedAirDayType, EndUse } from '../../shared/models/compressed-air-assessment';
+import { Settings } from '../../shared/models/settings';
+import { CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 
 @Injectable()
 export class EndUsesService {
 
   selectedEndUse: BehaviorSubject<EndUse>;
-  // endUses: BehaviorSubject<Array<EndUse>>;
-  constructor(private formBuilder: FormBuilder) {
+  // selectedEndUseResults: BehaviorSubject<EndUseResults>;
+  constructor(private formBuilder: FormBuilder, 
+    private convertUnitsService: ConvertUnitsService,
+    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) {
     this.selectedEndUse = new BehaviorSubject<EndUse>(undefined);
-    // this.endUses = new BehaviorSubject<Array<EndUse>>(undefined);
+    // this.selectedEndUseResults = new BehaviorSubject<EndUseResults>({averagePercentCapacity: undefined, excessPressure: undefined});
   }
 
-  updateCompressedAirEndUse(endUseForm: FormGroup, compressedAirAssessment: CompressedAirAssessment): UpdatedEndUseData {
+  updateCompressedAirEndUse(endUseForm: FormGroup, compressedAirAssessment: CompressedAirAssessment, settings: Settings): UpdatedEndUseData {
     let updatedEndUse = this.getEndUseFromFrom(endUseForm);
+    // this.setEndUseResults(updatedEndUse, compressedAirAssessment, settings);
     updatedEndUse.modifiedDate = new Date();
     let endUseIndex: number = compressedAirAssessment.endUses.findIndex(item => { return item.endUseId == updatedEndUse.endUseId});
     compressedAirAssessment.endUses[endUseIndex] = updatedEndUse;
@@ -39,12 +45,26 @@ export class EndUsesService {
     }
   }
 
+  setEndUseResults(endUse: EndUse, compressedAirAssessment: CompressedAirAssessment, settings: Settings): EndUseResults {
+    let baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(compressedAirAssessment, settings);
+    // end use airflow / Average system flow for day type
+    let dayTypeAverageAirflow: number = baselineResults.dayTypeResults.find(result => result.dayTypeId === endUse.dayType).averageAirFlow;
+    let endUseResults: EndUseResults = {
+      averagePercentCapacity: undefined,
+      excessPressure: undefined,
+    }
+    endUseResults.averagePercentCapacity = this.convertUnitsService.roundVal((endUse.averageAirflow / dayTypeAverageAirflow) * 100, 2);
+    debugger;
+    endUseResults.excessPressure = endUse.measuredPressure - endUse.requiredPressure;
+    // this.selectedEndUseResults.next(endUseResults);
+    return endUseResults;
+  }
+
   addToAssessment(compressedAirAssessment: CompressedAirAssessment, newEndUse?: EndUse): UpdatedEndUseData {
     if (!newEndUse) {
       newEndUse = this.getNewEndUse();
     }
     newEndUse.modifiedDate = new Date();
-    debugger;
     compressedAirAssessment.endUses.push(newEndUse);
     return {
       endUse: newEndUse,
@@ -61,11 +81,11 @@ export class EndUsesService {
       dayTypeLeakRate: [endUse.dayTypeLeakRate],
       location: [endUse.location],
       averageAirflow: [endUse.averageAirflow],
-      averageCapacity: [endUse.averageCapacity],
       regulated: [endUse.regulated],
       requiredPressure: [endUse.requiredPressure],
-      excessPressure: [endUse.excessPressure],
       measuredPressure: [endUse.measuredPressure],
+      // averageCapacity: [endUse.averageCapacity],
+      // excessPressure: [endUse.excessPressure],
     });
     this.markFormDirtyToDisplayValidation(form);
     return form;
@@ -83,11 +103,11 @@ export class EndUsesService {
       dayTypeLeakRate: form.controls.dayTypeLeakRate.value,
       location: form.controls.location.value,
       averageAirflow: form.controls.averageAirflow.value,
-      averageCapacity: form.controls.averageCapacity.value,
       regulated: form.controls.regulated.value,
       requiredPressure: form.controls.requiredPressure.value,
-      excessPressure: form.controls.excessPressure.value,
       measuredPressure: form.controls.measuredPressure.value,
+      // averageCapacity: form.controls.averageCapacity.value,
+      // excessPressure: form.controls.excessPressure.value,
     }
   }
 
@@ -99,10 +119,16 @@ export class EndUsesService {
     }
   }
 
+
 }
 
 
 export interface UpdatedEndUseData {
   endUse: EndUse,
   compressedAirAssessment: CompressedAirAssessment
+}
+
+export interface EndUseResults {
+  averagePercentCapacity: number
+  excessPressure: number,
 }
