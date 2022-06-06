@@ -13,8 +13,8 @@
                 <label for="dayType">Day Type</label>
                 <select id="dayType" name="dayType" formControlName="dayType" (change)="save()"
                     (focus)="focusField('dayType')" class="form-control">
-                    <option *ngFor="let dayTypeOption of dayTypeOptions" [ngValue]="dayTypeOption.value">
-                        {{dayTypeOption.label}}</option>
+                    <option *ngFor="let dayTypeOption of dayTypeOptions" [ngValue]="dayTypeOption.dayTypeId">
+                        {{dayTypeOption.name}}</option>
                 </select>
             </div>
 

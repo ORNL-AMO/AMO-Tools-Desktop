@@ -1,1 +1,48 @@
-<p>end-use-table works!</p>
+<div class="card p-2">
+    <div class="card-body p-0">
+        <!-- <span class="alert-danger pull-right small" *ngIf="hasInvalidCompressors">
+            One or more compressor is invalid - Review inventory and make changes to continue
+        </span> -->
+        <table class="table table-sm table-striped table-hover mb-0" *ngIf="selectedEndUse && endUses">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let endUse of endUses"
+                    [ngClass]="{'selected-item':endUse.itemId == selectedEndUse.itemId,
+                                'invalid-compressor': !endUse.isValid}">
+                    <td>
+                        <span *ngIf="endUse.itemId == selectedEndUse.itemId"
+                            class="fa fa-chevron-right danger"></span>
+                        <a class="click-link"
+                            (click)="selectItem(endUse)">{{endUse.name}}</a>
+                    </td>
+                    <td>
+                        Placeholder
+                    </td>
+                    <td>
+                        <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(endUse)"></a>
+                        
+                    </td>
+                    <td>
+                        <a class="fa fa-copy" (click)="createCopy(endUse)"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="w-100 text-right">
+            <a class="click-link small" (click)="addNewEndUse()">+Add New End Use</a>
+        </div>
+    </div>
+</div>
+
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteData" (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>

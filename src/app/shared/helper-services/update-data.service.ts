@@ -91,7 +91,10 @@ export class UpdateDataService {
     updateCompressedAir(assessment: Assessment): Assessment {
         //logic for updating wastewater data
         assessment.appVersion = packageJson.version;
-
+        if (assessment.compressedAirAssessment && !assessment.compressedAirAssessment.endUses) {
+            debugger;
+            assessment.compressedAirAssessment.endUses = [];
+        };
         return assessment;
     }
 

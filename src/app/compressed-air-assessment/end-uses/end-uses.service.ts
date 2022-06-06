@@ -7,26 +7,18 @@ import { CompressedAirAssessment, EndUse } from '../../shared/models/compressed-
 export class EndUsesService {
 
   selectedEndUse: BehaviorSubject<EndUse>;
-  endUses: BehaviorSubject<Array<EndUse>>;
+  // endUses: BehaviorSubject<Array<EndUse>>;
   constructor(private formBuilder: FormBuilder) {
     this.selectedEndUse = new BehaviorSubject<EndUse>(undefined);
-    this.endUses = new BehaviorSubject<Array<EndUse>>(undefined);
+    // this.endUses = new BehaviorSubject<Array<EndUse>>(undefined);
   }
 
-  getEndUseInformationForm(name: string, description: string) {
-    let form: FormGroup = this.formBuilder.group({
-      name: [name, Validators.required],
-      description: [description]
-    });
-    return form;
-  }
-
-  updateEndUseInformation(endUse: EndUse) {
-    // let endUse: EndUse = this.selectedEndUse.getValue();
-    endUse.modifiedDate = new Date();
-    // endUse.endUseName = name;
-    // endUse.endUseDescription = description;
-    this.selectedEndUse.next(endUse)
+  updateCompressedAirEndUse(endUseForm: FormGroup, compressedAirAssessment: CompressedAirAssessment): UpdatedEndUseData {
+    let updatedEndUse = this.getEndUseFromFrom(endUseForm);
+    updatedEndUse.modifiedDate = new Date();
+    let endUseIndex: number = compressedAirAssessment.endUses.findIndex(item => { return item.endUseId == updatedEndUse.endUseId});
+    compressedAirAssessment.endUses[endUseIndex] = updatedEndUse;
+    return {endUse: updatedEndUse, compressedAirAssessment: compressedAirAssessment};
   }
 
   getNewEndUse(): EndUse {
@@ -47,14 +39,15 @@ export class EndUsesService {
     }
   }
 
-  addToAssessment(compressedAirAssessment: CompressedAirAssessment, newEndUse?: EndUse) {
+  addToAssessment(compressedAirAssessment: CompressedAirAssessment, newEndUse?: EndUse): UpdatedEndUseData {
     if (!newEndUse) {
       newEndUse = this.getNewEndUse();
     }
     newEndUse.modifiedDate = new Date();
+    debugger;
     compressedAirAssessment.endUses.push(newEndUse);
     return {
-      newEndUse: newEndUse,
+      endUse: newEndUse,
       compressedAirAssessment: compressedAirAssessment
     }
   }
@@ -106,4 +99,10 @@ export class EndUsesService {
     }
   }
 
+}
+
+
+export interface UpdatedEndUseData {
+  endUse: EndUse,
+  compressedAirAssessment: CompressedAirAssessment
 }

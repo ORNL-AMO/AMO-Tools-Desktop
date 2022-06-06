@@ -142,7 +142,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.compressedAirAssessmentService.setupTab.next('system-basics');
     this.compressedAirAssessmentService.profileTab.next('setup');
     this.inventoryService.selectedCompressor.next(undefined);
-    this.endUseService.endUses.next(undefined);
+    // this.endUseService.endUses.next(undefined);
+    this.endUseService.selectedEndUse.next(undefined);
     this.exploreOpportunitiesService.modificationResults.next(undefined);
     this.exploreOpportunitiesService.selectedDayType.next(undefined);
     this.compressedAirAssessmentService.compressedAirAssessment.next(undefined);
