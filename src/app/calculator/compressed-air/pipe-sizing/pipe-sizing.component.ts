@@ -4,7 +4,6 @@ import { PipeSizingInput, PipeSizingOutput } from "../../../shared/models/standa
 import { Settings } from '../../../shared/models/settings';
 import { PipeSizingService } from './pipe-sizing.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import {IndexedDbService} from '../../../indexedDb/indexed-db.service';
 import {Assessment} from '../../../shared/models/assessment';
 import {Calculator} from '../../../shared/models/calculators';
 import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
@@ -39,10 +38,11 @@ export class PipeSizingComponent implements OnInit {
   assessmentCalculator: Calculator;
 
   constructor(private standaloneService: StandaloneService, private pipeSizingService: PipeSizingService, private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) {
+    private calculatorDbService: CalculatorDbService) {
   }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -67,11 +67,11 @@ export class PipeSizingComponent implements OnInit {
     }
   }
 
-  calculatePipeSize(inputs: PipeSizingInput) {
+  async calculatePipeSize(inputs: PipeSizingInput) {
     this.outputs = this.standaloneService.pipeSizing(inputs, this.settings);
     if (this.assessmentCalculator) {
       this.assessmentCalculator.pipeSizingInputs = this.inputs;
-      this.saveAssessmentCalculator();
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     } else {
       this.pipeSizingService.inputs = this.inputs;
     }
@@ -96,7 +96,7 @@ export class PipeSizingComponent implements OnInit {
     this.currentField = str;
   }
 
-  getCalculatorForAssessment() {
+  async getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.assessmentCalculator) {
       if (this.assessmentCalculator.pipeSizingInputs) {
@@ -108,7 +108,7 @@ export class PipeSizingComponent implements OnInit {
       this.calculatePipeSize(this.inputs);
     } else {
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.saveAssessmentCalculator();
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 
@@ -120,26 +120,6 @@ export class PipeSizingComponent implements OnInit {
       pipeSizingInputs: this.inputs
     };
     return tmpCalculator;
-  }
-
-  
-  saveAssessmentCalculator() {
-    if (!this.saving) {
-      if (this.assessmentCalculator.id) {
-        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.assessmentCalculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.assessmentCalculator.id = result;
-            this.saving = false;
-          });
-        });
-      }
-    }
   }
 
   btnResetData() {

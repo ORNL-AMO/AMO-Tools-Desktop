@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IndexedDbService } from './indexed-db.service';
+ 
 import { CalculatorDbService } from './calculator-db.service';
 import { AssessmentDbService } from './assessment-db.service';
 import { DirectoryDbService } from './directory-db.service';
@@ -11,13 +11,14 @@ import { Settings } from '../shared/models/settings';
 import { Calculator } from '../shared/models/calculators';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { InventoryDbService } from './inventory-db.service';
+import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class DeleteDataService {
 
-  constructor(private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
+  constructor(   private calculatorDbService: CalculatorDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
     private inventoryDbService: InventoryDbService) { }
 
-  deleteDirectory(directory: Directory, isWorkingDir?: boolean) {
+  async deleteDirectory(directory: Directory, isWorkingDir?: boolean) {
     let assessments: Array<Assessment>;
     let inventories: Array<InventoryItem>;
     if (!isWorkingDir) {
@@ -46,32 +47,27 @@ export class DeleteDataService {
     if (!isWorkingDir) {
       let dirSettings: Settings = this.settingsDbService.getByDirectoryId(directory.id);
       if (dirSettings) {
-        this.indexedDbService.deleteSettings(dirSettings.id).then(() => {
-          this.settingsDbService.setAll();
-        });
+        let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.deleteByIdWithObservable(dirSettings.id))
+        this.settingsDbService.setAll(updatedSettings);
       }
       let calculators: Array<Calculator> = this.calculatorDbService.getByDirectoryId(directory.id);
       if (calculators) {
-        calculators.forEach(calculator => {
-          this.indexedDbService.deleteCalculator(calculator.id).then(() => {
-            this.calculatorDbService.setAll();
-          });
-        });
+        let updatedCalculators: Calculator[];
+        for (let i = 0; i < calculators.length; i++) {
+          updatedCalculators = await firstValueFrom(this.calculatorDbService.deleteByIdWithObservable(calculators[i].id)); 
+        };
+        this.calculatorDbService.setAll(updatedCalculators); 
       }
-      this.indexedDbService.deleteDirectory(directory.id).then(() => {
-        this.directoryDbService.setAll();
-      });
-    } else if (directory.calculators) {
-      if (directory.calculators.length !== 0) {
-        directory.calculators.forEach(calculator => {
-          if (calculator.id && calculator.selected) {
-            this.indexedDbService.deleteCalculator(calculator.id).then(() => {
-              this.calculatorDbService.setAll();
-            });
-          }
-        });
-
-      }
+      let updatedDirectories: Directory[] = await firstValueFrom(this.directoryDbService.deleteByIdWithObservable(directory.id));
+      this.directoryDbService.setAll(updatedDirectories);
+    } else if (directory.calculators && directory.calculators.length !== 0) {
+      let updatedCalculators: Calculator[];
+      for (let i = 0; i < directory.calculators.length; i++){
+        if (directory.calculators[i].id && directory.calculators[i].selected) {
+          updatedCalculators = await firstValueFrom(this.calculatorDbService.deleteByIdWithObservable(directory.calculators[i].id));  
+        }
+      };
+      this.calculatorDbService.setAll(updatedCalculators);
     }
 
     let subDirectories: Array<Directory>;
@@ -87,34 +83,29 @@ export class DeleteDataService {
     }
   }
 
-  deleteAssessment(assessment: Assessment) {
+  async deleteAssessment(assessment: Assessment) {
     let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
     if (settings && settings.assessmentId === assessment.id) {
-      this.indexedDbService.deleteSettings(settings.id).then(() => {
-        this.settingsDbService.setAll();
-      });
+      let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.deleteByIdWithObservable(settings.id))
+      this.settingsDbService.setAll(updatedSettings);
     }
     let calculator: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
     if (calculator) {
-      this.indexedDbService.deleteCalculator(calculator.id).then(() => {
-        this.calculatorDbService.setAll();
-      });
+      let calculators: Calculator[] = await firstValueFrom(this.calculatorDbService.deleteByIdWithObservable(calculator.id)); 
+      this.calculatorDbService.setAll(calculators); 
     }
-    this.indexedDbService.deleteAssessment(assessment.id).then(() => {
-      this.assessmentDbService.setAll();
-    });
+    let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(assessment.id));
+    this.assessmentDbService.setAll(updatedAssessments);
   }
 
-  deleteInventory(inventory: InventoryItem){
+  async deleteInventory(inventory: InventoryItem){
     let settings: Settings = this.settingsDbService.getByInventoryId(inventory);
     if (settings && settings.inventoryId === inventory.id) {
-      this.indexedDbService.deleteSettings(settings.id).then(() => {
-        this.settingsDbService.setAll();
-      });
+      let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.deleteByIdWithObservable(settings.id));
+      this.settingsDbService.setAll(updatedSettings);
     }
-    this.indexedDbService.deleteInventoryItem(inventory.id).then(() => {
-      this.inventoryDbService.setAll();
-    })
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.deleteByIdWithObservable(inventory.id));
+    this.inventoryDbService.setAll(updatedInventoryItems);
   }
 
 }

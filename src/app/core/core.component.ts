@@ -1,9 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
@@ -12,6 +11,7 @@ import { CoreService } from './core.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
+
 declare var google: any;
 @Component({
   selector: 'app-core',
@@ -48,9 +48,13 @@ export class CoreComponent implements OnInit {
   updateAvailableSubscription: Subscription;
   showTranslateModalSub: Subscription;
   showTranslate: string = 'hide';
-  constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
-    private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService,
-    private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
+  constructor(private electronService: ElectronService, 
+    private assessmentService: AssessmentService, 
+    private changeDetectorRef: ChangeDetectorRef,
+    private suiteDbService: SuiteDbService, 
+    private assessmentDbService: AssessmentDbService,
+    private settingsDbService: SettingsDbService, 
+    private directoryDbService: DirectoryDbService,
     private calculatorDbService: CalculatorDbService, private coreService: CoreService, private router: Router,
     private inventoryDbService: InventoryDbService) {
   }
@@ -83,10 +87,13 @@ export class CoreComponent implements OnInit {
     if (this.suiteDbService.hasStarted === false) {
       this.suiteDbService.startup();
     }
-    if (this.indexedDbService.db === undefined) {
-      this.initData();
-    }
 
+    // const start = performance.now(); 
+    window.indexedDB.databases().then(db => {
+      // const duration = performance.now() - start;
+      // console.log(db, duration);
+      this.initData();
+    });
 
 
     this.updateAvailableSubscription = this.assessmentService.updateAvailable.subscribe(val => {
@@ -112,45 +119,39 @@ export class CoreComponent implements OnInit {
 
   }
 
+
   ngOnDestroy() {
     if (this.openingTutorialSub) this.openingTutorialSub.unsubscribe();
     this.updateAvailableSubscription.unsubscribe();
     this.showTranslateModalSub.unsubscribe();
   }
 
-  initData() {
-    this.indexedDbService.db = this.indexedDbService.initDb().then(done => {
-      this.indexedDbService.getAllDirectories().then(val => {
-        if (val.length === 0) {
-          this.coreService.createDirectory().then(() => {
-            this.coreService.createExamples().then(() => {
-              this.coreService.createDirectorySettings().then(() => {
-                this.setAllDbData();
-              });
-            });
-          });
-        } else {
-          this.setAllDbData();
-        }
-      });
-    });
+  async initData() {
+    let existingDirectories: number = await firstValueFrom(this.directoryDbService.count());
+
+    // let existingDirectories = 0;
+    if (existingDirectories === 0) {
+      await this.coreService.createDefaultDirectories();
+      await this.coreService.createExamples();
+      await this.coreService.createDirectorySettings();
+      this.setAllDbData();
+    } else {
+      this.setAllDbData();
+    }
   }
 
-  setAllDbData() {
-    this.directoryDbService.setAll().then(() => {
-      this.assessmentDbService.setAll().then(() => {
-        this.settingsDbService.setAll().then(() => {
-          this.calculatorDbService.setAll().then(() => {
-            this.inventoryDbService.setAll().then(() => {
-              if (this.suiteDbService.hasStarted == true) {
-                this.suiteDbService.initCustomDbMaterials();
-              }
-              this.idbStarted = true;
-              this.changeDetectorRef.detectChanges();
-            })
-          });
-        });
-      });
+  async setAllDbData() {
+    this.coreService.getAllAppData().subscribe(initializedData => {
+      this.directoryDbService.setAll(initializedData.directories);
+      this.settingsDbService.setAll(initializedData.settings);
+      this.assessmentDbService.setAll(initializedData.assessments);
+      this.calculatorDbService.setAll(initializedData.calculators);
+      this.inventoryDbService.setAll(initializedData.inventoryItems);
+      if (this.suiteDbService.hasStarted == true) {
+        this.suiteDbService.initCustomDbMaterials();
+      }
+      this.idbStarted = true;
+      this.changeDetectorRef.detectChanges();
     });
   }
 

@@ -6,7 +6,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { EnergyUseService } from './energy-use.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 
 @Component({
@@ -43,13 +43,13 @@ export class EnergyUseComponent implements OnInit {
   headerHeight: number;
   currentField: string = 'default';
   tabSelect: string = 'results';
-  calcExists: boolean;
   saving: boolean;
   calculator: Calculator;
   originalCalculator: Calculator;
-  constructor(private phastService: PhastService, private energyUseService: EnergyUseService, private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private phastService: PhastService, private energyUseService: EnergyUseService, private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -80,7 +80,7 @@ export class EnergyUseComponent implements OnInit {
   }
 
   btnResetData() {
-    if (this.inAssessment && this.calcExists) {
+    if (this.inAssessment && this.calculator.id) {
       this.calculator = this.originalCalculator;
     }
     else {
@@ -112,34 +112,33 @@ export class EnergyUseComponent implements OnInit {
     this.updateTableString();
   }
 
-  calculate() {
+  async calculate() {
     if (!this.inAssessment) {
       this.flowCalculations = this.energyUseService.flowCalculations;
-    } else if (this.inAssessment && this.calcExists) {
+    } else if (this.inAssessment && this.calculator.id) {
       this.calculator.flowCalculations = this.flowCalculations;
-      this.saveCalculator();
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
     this.flowCalculationResults = this.phastService.flowCalculations(this.flowCalculations, this.settings);
     //update exportable table string whenever results are updated
     this.updateTableString();
   }
 
-  getCalculator() {
+  async getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
-      this.calcExists = true;
       if (this.calculator.flowCalculations) {
         this.flowCalculations = this.calculator.flowCalculations;
       } else {
         let tmpFlowCalculations: FlowCalculations = this.energyUseService.generateExample(this.settings);
         this.calculator.flowCalculations = tmpFlowCalculations;
         this.flowCalculations = this.calculator.flowCalculations;
-        this.saveCalculator();
+       await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
       this.flowCalculations = this.calculator.flowCalculations;
-      this.saveCalculator();
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 
@@ -157,26 +156,6 @@ export class EnergyUseComponent implements OnInit {
       this.flowCalculations = this.energyUseService.flowCalculations;
     } else {
       this.flowCalculations = this.energyUseService.generateExample(this.settings);
-    }
-  }
-
-  saveCalculator() {
-    if (!this.saving || this.calcExists) {
-      if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.calculator.id = result;
-            this.calcExists = true;
-            this.saving = false;
-          });
-        });
-      }
     }
   }
 
