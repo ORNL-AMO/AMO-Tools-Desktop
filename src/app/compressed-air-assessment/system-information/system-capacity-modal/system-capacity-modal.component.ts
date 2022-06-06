@@ -15,14 +15,9 @@ export class SystemCapacityModalComponent implements OnInit {
   settings: Settings;
   totalCapacityOfCompressedAirSystem: number;
 
-  @ViewChild('systemCapacityModal', { static: false }) public systemCapacityModal: ModalDirective;
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit() {
-    this.systemCapacityModal.show();
   }
   
   setSystemCapacity(totalCapacity: number) {
@@ -34,12 +29,10 @@ export class SystemCapacityModalComponent implements OnInit {
 
   closeSystemCapacityModal() {
     this.closeModal.emit(undefined);
-    this.systemCapacityModal.hide();
   }
   
   saveSystemCapacity() {
     this.closeModal.emit(this.totalCapacityOfCompressedAirSystem);
-    this.systemCapacityModal.hide();
   }
 
 }

@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { GasLoadChargeMaterial } from '../../../shared/models/materials';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { CustomMaterialsService } from '../custom-materials.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { GasLoadMaterialDbService } from '../../../indexedDb/gas-load-material-db.service';
 
 @Component({
   selector: 'app-custom-gas-load-charge-materials',
@@ -29,7 +29,7 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   selectedSub: Subscription;
   selectAllSub: Subscription;
 
-  constructor(private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private gasLoadMaterialDbService: GasLoadMaterialDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.gasChargeMaterials = new Array<GasLoadChargeMaterial>();
@@ -69,30 +69,24 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
     }
   }
 
-  getCustomMaterials() {
-    this.indexedDbService.getAllGasLoadChargeMaterial().then(idbResults => {
-      this.gasChargeMaterials = idbResults;
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        this.convertAllMaterials();
-      }
-    });
+  async getCustomMaterials() {
+    this.gasChargeMaterials = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
+    if (this.settings.unitsOfMeasure === 'Metric') {
+      this.convertAllMaterials();
+    }
   }
 
-  editMaterial(id: number) {
-    this.indexedDbService.getGasLoadChargeMaterial(id).then(idbResults => {
-      this.existingMaterial = idbResults;
-      this.editExistingMaterial = true;
-      this.showMaterialModal();
-    });
+ async editMaterial(id: number) {
+    this.existingMaterial = await firstValueFrom(this.gasLoadMaterialDbService.getByIdWithObservable(id));
+    this.editExistingMaterial = true;
+    this.showMaterialModal();
   }
 
-  deleteMaterial(id: number) {
-    this.indexedDbService.getGasLoadChargeMaterial(id).then(idbResults => {
-      this.existingMaterial = idbResults;
-      this.editExistingMaterial = true;
-      this.deletingMaterial = true;
-      this.showMaterialModal();
-    });
+  async deleteMaterial(id: number) {
+    this.existingMaterial = await firstValueFrom(this.gasLoadMaterialDbService.getByIdWithObservable(id));
+    this.editExistingMaterial = true;
+    this.deletingMaterial = true;
+    this.showMaterialModal();
   }
 
   showMaterialModal() {

@@ -305,6 +305,9 @@ export class AssessmentService {
         activatedSludgeData: {
           Temperature: undefined,
           So: undefined,
+          isUserDefinedSo: true,
+          influentCBODBefore: undefined,
+          clarifierEfficiency: undefined,
           Volume: undefined,
           FlowRate: undefined,
           InertVSS: undefined,

@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { FilterDashboardBy, DirectoryItem } from '../../shared/models/directory-dashboard';
 import * as _ from 'lodash';
 import { Directory } from '../../shared/models/directory';
+import { FormGroup } from '@angular/forms';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import { Settings } from '../../shared/models/settings';
 
 @Injectable()
 export class DirectoryDashboardService {
@@ -16,7 +20,7 @@ export class DirectoryDashboardService {
   showPreAssessmentModalIndex: BehaviorSubject<{ index: number, isNew: boolean }>;
   filterDashboardBy: BehaviorSubject<FilterDashboardBy>;
   sortBy: BehaviorSubject<{ value: string, direction: string }>;
-  constructor() {
+  constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService) {
     this.dashboardView = new BehaviorSubject<string>('grid');
     this.createFolder = new BehaviorSubject<boolean>(false);
     this.selectedDirectoryId = new BehaviorSubject<number>(1);
@@ -96,6 +100,34 @@ export class DirectoryDashboardService {
     return directoryItems;
   }
 
+  async addDirectoryAndSettings(form: FormGroup): Promise<number> {
+    let newDirectory: Directory = {
+      name: form.controls.folderName.value,
+      parentDirectoryId: form.controls.directoryId.value,
+      selected: false
+    };
+    let newSettings: Settings = this.settingsDbService.getByDirectoryId(form.controls.directoryId.value);
+    delete newSettings.facilityInfo;
+    delete newSettings.id;
+    if (form.controls.companyName.value || form.controls.facilityName.value) {
+      newSettings.facilityInfo = {
+        companyName: form.controls.companyName.value,
+        facilityName: form.controls.facilityName.value,
+        date: new Date().toLocaleDateString()
+      };
+    }
+
+    let addedDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(newDirectory));
+    let allDirectories: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories());
+    this.directoryDbService.setAll(allDirectories);
+
+    newSettings.directoryId = addedDirectory.id;
+    await firstValueFrom(this.settingsDbService.addWithObservable(newSettings));
+    let allSettings: Settings[] =  await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(allSettings);
+
+    return addedDirectory.id;
+  }
 
   filterDirectoryItems(directoryItems: Array<DirectoryItem>, filterDashboardBy: FilterDashboardBy): Array<DirectoryItem> {
     let assessmentItems: Array<DirectoryItem> = _.filter(directoryItems, (item) => { return item.type == 'assessment' });
@@ -120,7 +152,7 @@ export class DirectoryDashboardService {
       else if (item.isShown == false) {
         item.isShown = true;
       }
-    })
+    });
     if (filterDashboardBy.showPreAssessments == false && filterDashboardBy.showAll == false) {
       preAssessmentItems.forEach(item => { item.isShown = false });
     } else {

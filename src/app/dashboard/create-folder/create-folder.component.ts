@@ -2,13 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Directory, DirectoryDbRef } from '../../shared/models/directory';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { Settings } from '../../shared/models/settings';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import * as _ from 'lodash';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 import { DashboardService } from '../dashboard.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-create-folder',
@@ -29,7 +30,7 @@ export class CreateFolderComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private indexedDbService: IndexedDbService,
+      
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService,
@@ -37,7 +38,7 @@ export class CreateFolderComponent implements OnInit {
 
   ngOnInit() {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
-    this.directories = this.directoryDbService.getAll();
+    this.setDirectories();
     this.directory = this.directoryDbService.getById(directoryId);
     this.settings = this.settingsDbService.getByDirectoryId(directoryId);
     this.newFolderForm = this.initForm();
@@ -45,6 +46,10 @@ export class CreateFolderComponent implements OnInit {
 
   ngAfterViewInit() {
     this.showCreateModal();
+  }
+
+  async setDirectories() {
+    this.directories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
   initForm() {
@@ -65,11 +70,11 @@ export class CreateFolderComponent implements OnInit {
     this.directoryDashboardService.createFolder.next(false);
   }
 
-  createFolder() {
+  async createFolder() {
     if (this.canAdd) {
       this.canAdd = false;
       this.hideCreateModal();
-      let newDir: DirectoryDbRef = {
+      let newDir: Directory = {
         name: this.newFolderForm.controls.newFolderName.value,
         parentDirectoryId: this.newFolderForm.controls.directoryId.value,
         createdDate: new Date(),
@@ -85,20 +90,20 @@ export class CreateFolderComponent implements OnInit {
         };
       }
 
-      this.indexedDbService.addDirectory(newDir).then(newDirId => {
-        this.directoryDbService.setAll().then(() => {
-          this.settings.directoryId = newDirId;
-          delete this.settings.id;
-          this.indexedDbService.addSettings(this.settings).then(() => {
-            this.settingsDbService.setAll().then(() => {
-              this.canAdd = true;
-              this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(this.directory.id);
-              this.newFolderForm = this.initForm();
-              this.dashboardService.updateDashboardData.next(true);
-            });
-          });
-        });
-      });
+      let addedDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(newDir));
+      let allDirectories: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories());
+      this.directoryDbService.setAll(allDirectories);
+  
+      this.settings.directoryId = addedDirectory.id;
+      delete this.settings.id;
+      await firstValueFrom(this.settingsDbService.addWithObservable(this.settings));
+      let allSettings: Settings[] =  await firstValueFrom(this.settingsDbService.getAllSettings());
+      this.settingsDbService.setAll(allSettings);
+
+      this.canAdd = true;
+      this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(this.directory.id);
+      this.newFolderForm = this.initForm();
+      this.dashboardService.updateDashboardData.next(true);
     }
   }
 

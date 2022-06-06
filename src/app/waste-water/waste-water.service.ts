@@ -130,6 +130,9 @@ export class WasteWaterService {
     let inputData: WasteWaterTreatmentInputData = {
       Temperature: activatedSludge.Temperature,
       So: activatedSludge.So,
+      isUserDefinedSo: activatedSludge.isUserDefinedSo,
+      influentCBODBefore: activatedSludge.influentCBODBefore,
+      clarifierEfficiency: activatedSludge.clarifierEfficiency,
       Volume: activatedSludge.Volume,
       FlowRate: activatedSludge.FlowRate,
       InertVSS: activatedSludge.InertVSS,

@@ -3,7 +3,7 @@ import { Directory } from '../../shared/models/directory';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { Router } from '@angular/router';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { DashboardService } from '../dashboard.service';
@@ -15,6 +15,7 @@ import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsService } from '../../settings/settings.service';
 import { MotorInventoryService } from '../../motor-inventory/motor-inventory.service';
+import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'app-create-inventory',
   templateUrl: './create-inventory.component.html',
@@ -33,7 +34,7 @@ export class CreateInventoryComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private indexedDbService: IndexedDbService,
+      
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService,
@@ -44,7 +45,7 @@ export class CreateInventoryComponent implements OnInit {
     private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit() {
-    this.directories = this.directoryDbService.getAll();
+    this.setDirectories();
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     this.directory = this.directoryDbService.getById(directoryId);
     this.settings = this.settingsDbService.getByDirectoryId(directoryId);
@@ -55,6 +56,10 @@ export class CreateInventoryComponent implements OnInit {
 
   ngAfterViewInit() {
     this.showCreateModal();
+  }
+
+  async setDirectories() {
+    this.directories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
   initForm() {
@@ -75,31 +80,32 @@ export class CreateInventoryComponent implements OnInit {
     this.dashboardService.createInventory.next(false);
   }
 
-  create() {
+  async create() {
     if (this.newInventoryItemForm.valid && this.canCreate) {
       this.canCreate = false;
       this.hideCreateModal();
-      this.createInventoryItemModal.onHidden.subscribe(() => {
+      this.createInventoryItemModal.onHidden.subscribe(async () => {
         if (this.newInventoryItemForm.controls.inventoryType.value === 'motorInventory') {
           this.motorInventoryService.mainTab.next('setup');
           this.motorInventoryService.setupTab.next('plant-setup');
           let tmpInventoryItem: InventoryItem = this.inventoryService.getNewMotorInventoryItem();
           tmpInventoryItem.name = this.newInventoryItemForm.controls.inventoryName.value;
           tmpInventoryItem.directoryId = this.newInventoryItemForm.controls.directoryId.value;
-          this.indexedDbService.addInventoryItem(tmpInventoryItem).then(itemId => {
-            this.inventoryDbService.setAll().then(() => {
-              let settingsForm = this.settingsService.getFormFromSettings(this.settings);
-              this.settings = this.settingsService.getSettingsFromForm(settingsForm);
-              this.settings.createdDate = new Date();
-              this.settings.modifiedDate = new Date();
-              this.settings.inventoryId = itemId;
-              this.indexedDbService.addSettings(this.settings).then(settingsId => {
-                this.settingsDbService.setAll().then(() => {
-                  this.router.navigateByUrl('/motor-inventory/' + itemId);
-                })
-              });
-            });
-          });
+
+
+          let newInventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(tmpInventoryItem));
+          let settingsForm = this.settingsService.getFormFromSettings(this.settings);
+          this.settings = this.settingsService.getSettingsFromForm(settingsForm);
+          this.settings.createdDate = new Date();
+          this.settings.modifiedDate = new Date();
+          this.settings.inventoryId = newInventory.id;
+          await firstValueFrom(this.settingsDbService.addWithObservable(this.settings));
+
+          let updatedInventories: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
+          let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+          this.inventoryDbService.setAll(updatedInventories);
+          this.settingsDbService.setAll(updatedSettings);
+          this.router.navigateByUrl('/motor-inventory/' + newInventory.id);
         }
       });
     }
@@ -127,35 +133,13 @@ export class CreateInventoryComponent implements OnInit {
     this.showNewFolder = false;
   }
 
-  createFolder() {
-    let tmpFolder: Directory = {
-      name: this.newFolderForm.controls.folderName.value,
-      parentDirectoryId: this.newFolderForm.controls.directoryId.value
-    };
-    let tmpSettings: Settings = this.settingsDbService.getByDirectoryId(this.newFolderForm.controls.directoryId.value);
-    delete tmpSettings.facilityInfo;
-    delete tmpSettings.id;
-    if (this.newFolderForm.controls.companyName.value || this.newFolderForm.controls.facilityName.value) {
-      tmpSettings.facilityInfo = {
-        companyName: this.newFolderForm.controls.companyName.value,
-        facilityName: this.newFolderForm.controls.facilityName.value,
-        date: new Date().toLocaleDateString()
-      };
-    }
-    this.indexedDbService.addDirectory(tmpFolder).then((newDirId) => {
-      tmpSettings.directoryId = newDirId;
-      this.directoryDbService.setAll().then(() => {
-        this.indexedDbService.addSettings(tmpSettings).then(() => {
-          this.settingsDbService.setAll().then(() => {
-            this.directories = this.directoryDbService.getAll();
-            this.newInventoryItemForm.patchValue({
-              'directoryId': newDirId
-            });
-            this.cancelNewFolder();
-          });
-        });
-      });
+  async createFolder() {
+    let newDirectoryId: number = await this.directoryDashboardService.addDirectoryAndSettings(this.newFolderForm);
+    this.setDirectories();
+    this.newFolderForm.patchValue({
+      'directoryId': newDirectoryId
     });
+    this.cancelNewFolder();
   }
 
   initFolderForm() {

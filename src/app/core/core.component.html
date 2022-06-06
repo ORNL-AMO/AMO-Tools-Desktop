@@ -2,9 +2,9 @@
 <app-update-toast *ngIf="showUpdateModal && info" (emitCloseToast)="hideUpdateToast()" [info]="info"></app-update-toast>
 <div *ngIf="idbStarted">
     <div *ngIf="!hideTutorial" class="opening-tutorial">
-        <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" (closeTutorial)="closeTutorial()">
+        <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" [idbStarted]="idbStarted" (closeTutorial)="closeTutorial()">
         </app-opening-tutorial>
-        <app-dashboard-tutorial *ngIf="tutorialType == 'dashboard-tutorial'" (closeTutorial)="closeTutorial()"
+        <app-dashboard-tutorial *ngIf="tutorialType == 'dashboard-tutorial'"  [idbStarted]="idbStarted" (closeTutorial)="closeTutorial()"
             [inTutorials]="inTutorialsView"></app-dashboard-tutorial>
     </div>
 

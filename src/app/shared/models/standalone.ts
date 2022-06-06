@@ -143,6 +143,13 @@ export interface AirVelocityInput {
   atmosphericPressure: number;
 }
 
+export interface BleedTestInput {
+  totalSystemVolume: number;
+  normalOperatingPressure: number;
+  testPressure: number;
+  time: number;
+}
+
 export interface PipeSizingInput {
   airFlow: number;
   airlinePressure: number;
@@ -630,20 +637,24 @@ export interface PipeInsulationReductionInput {
   pipeBaseMaterialSelection: number,
   pipeMaterialCoefficients: Array<number>,
   insulationMaterialSelection: number,
-  insulationMaterialCoefficients: Array<number>
+  insulationMaterialCoefficients: Array<number>,
+  heatedOrChilled: number
 };
 
 export interface PipeInsulationReductionResults {
   baselineResults: PipeInsulationReductionResult,
   modificationResults: PipeInsulationReductionResult,
   annualHeatSavings: number,
-  annualCostSavings: number
+  annualCostSavings: number,
+  energyUnit: string
 };
 
 export interface PipeInsulationReductionResult {
   heatLength: number,
   annualHeatLoss: number,
-  energyCost: number
+  energyCost: number,
+  energySourceType: number,
+  heatedOrChilled: number
 };
 
 //===== END pipe insulation reduction objects =====
@@ -671,20 +682,24 @@ export interface TankInsulationReductionInput {
   jacketEmissivity: number,
   tankMaterialSelection: number,
   insulationMaterialSelection: number,
-  jacketMaterialSelection: number
+  jacketMaterialSelection: number,
+  heatedOrChilled: number
 };
 
 export interface TankInsulationReductionResults {
   baselineResults: TankInsulationReductionResult,
   modificationResults: TankInsulationReductionResult,
   annualHeatSavings: number,
-  annualCostSavings: number
+  annualCostSavings: number,
+  energyUnit: string
 };
 
 export interface TankInsulationReductionResult {
   heatLoss: number,
   annualHeatLoss: number,
-  energyCost: number
+  energyCost: number,
+  energySourceType: number,
+  heatedOrChilled: number
 };
 
 //===== END tank insulation reduction objects =====

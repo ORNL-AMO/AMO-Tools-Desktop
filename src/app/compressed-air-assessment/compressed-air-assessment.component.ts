@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import { Assessment } from '../shared/models/assessment';
@@ -57,7 +57,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
     private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private systemInformationFormService: SystemInformationFormService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private indexedDbService: IndexedDbService, private compressedAirCalculationService: CompressedAirCalculationService,
+      
     private dayTypeService: DayTypeService,
     private egridService: EGridService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
@@ -67,7 +67,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.egridService.getAllSubRegions();
     // this.compressedAirCalculationService.test();
     this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
+      this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       if (!settings) {
         settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
@@ -152,23 +152,22 @@ export class CompressedAirAssessmentComponent implements OnInit {
     }, 100);
   }
 
-  addSettings(settings: Settings) {
+ async addSettings(settings: Settings) {
     delete settings.id;
     delete settings.directoryId;
     settings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(settings).then(() => {
-      this.settingsDbService.setAll().then(() => {
-        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-        //on init, settings added. need to convert defaults
-        if (this.settings.unitsOfMeasure == 'Metric') {
-          let oldSettings: Settings = JSON.parse(JSON.stringify(this.settings));
-          oldSettings.unitsOfMeasure = 'Imperial';
-          this.assessment.compressedAirAssessment = this.convertCompressedAirService.convertCompressedAir(this.assessment.compressedAirAssessment, oldSettings, this.settings);
-        }
-        this.genericCompressorDbService.getAllCompressors(this.settings);
-        this.compressedAirAssessmentService.settings.next(this.settings);
-      });
-    });
+    await firstValueFrom(this.settingsDbService.addWithObservable(settings));
+    let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(updatedSettings);
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      let oldSettings: Settings = JSON.parse(JSON.stringify(this.settings));
+      oldSettings.unitsOfMeasure = 'Imperial';
+      this.assessment.compressedAirAssessment = this.convertCompressedAirService.convertCompressedAir(this.assessment.compressedAirAssessment, oldSettings, this.settings);
+    }
+    this.genericCompressorDbService.getAllCompressors(this.settings);
+    this.compressedAirAssessmentService.settings.next(this.settings);
   }
 
   setDisableNext() {
@@ -183,7 +182,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     } else if (hasValidCompressors == false && this.setupTab != 'system-basics' && this.setupTab != 'system-information') {
       this.disableNext = true;
     } else if (this.setupTab == 'system-profile') {
-      let hasValidSystemProfile: boolean = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment);
+      let hasValidSystemProfile: boolean = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment).isValid;
       if (hasValidSystemProfile) {
         this.disableNext = false;
       } else {
@@ -237,11 +236,10 @@ export class CompressedAirAssessmentComponent implements OnInit {
     }
   }
 
-  save(compressedAirAssessment: CompressedAirAssessment) {
+  async save(compressedAirAssessment: CompressedAirAssessment) {
     this.assessment.compressedAirAssessment = compressedAirAssessment;
-    this.indexedDbService.putAssessment(this.assessment).then(() => {
-      this.assessmentDbService.setAll();
-    });
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    this.assessmentDbService.setAll(assessments);
   }
 
   initUpdateUnitsModal(oldSettings: Settings) {
@@ -280,9 +278,10 @@ export class CompressedAirAssessmentComponent implements OnInit {
     }
   }
 
-  closeWelcomeScreen() {
+  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableCompressedAirTutorial = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.compressedAirAssessmentService.modalOpen.next(false);
   }

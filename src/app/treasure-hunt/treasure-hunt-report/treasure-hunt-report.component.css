@@ -59,3 +59,14 @@
 .fa-print {
     font-size: 150px;
 }
+
+#fileName {
+    width: 500px;
+}
+
+.modal-dialog{
+    top: .75rem;
+}
+.btn{
+    padding: 6px;
+}

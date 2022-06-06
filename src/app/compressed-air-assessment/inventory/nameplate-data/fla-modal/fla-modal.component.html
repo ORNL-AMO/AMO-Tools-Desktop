@@ -1,0 +1,18 @@
+<div class="modal-content">
+  <div class="modal-header p-2">
+    <button class="close" aria-label="Close" (click)="closeFullLoadAmpsModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body p-0">
+    <app-full-load-amps [inModal]="true" (emitFullLoadAmps)="setFullLoadAmps($event)" [settings]="settings">
+    </app-full-load-amps>
+  </div>
+  <div class="modal-footer p-2">
+    <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="closeFullLoadAmpsModal()">Cancel</button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="saveFullLoadAmps()"
+      [disabled]="!fullLoadAmps">Save</button>
+  </div>
+</div>
+
+

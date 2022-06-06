@@ -94,7 +94,7 @@ export class OperationsTabComponent implements OnInit {
 
   checkDifferent() {
     if (this.operationsCompareService.baseline && this.operationsCompareService.modification) {
-      return this.operationsCompareService.compareAllLosses();
+      return this.operationsCompareService.compareOperations(this.settings);
     }
   }
 

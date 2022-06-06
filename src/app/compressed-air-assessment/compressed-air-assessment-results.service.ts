@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ReduceSystemAirPressure, Modification, ProfileSummary, ReduceRuntime, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntimeData, ImproveEndUseEfficiency, ReduceAirLeaks, UseAutomaticSequencer, AdjustCascadingSetPoints, CascadingSetPointData, EndUseEfficiencyReductionData, CompressorSummary } from '../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ReduceSystemAirPressure, Modification, ProfileSummary, ReduceRuntime, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntimeData, ImproveEndUseEfficiency, ReduceAirLeaks, UseAutomaticSequencer, AdjustCascadingSetPoints, CascadingSetPointData, EndUseEfficiencyReductionData, CompressorSummary, ProfilesForPrint } from '../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from './compressed-air-calculation.service';
 import * as _ from 'lodash';
 import { PerformancePointCalculationsService } from './inventory/performance-points/calculations/performance-point-calculations.service';
@@ -1169,6 +1169,53 @@ export class CompressedAirAssessmentResultsService {
     return avgPercentCapacity;
   }
 
+  getProfileSummariesForPrinting(profileSummary: Array<ProfileSummary>): Array<ProfileSummary> {
+    profileSummary.forEach(summary => {
+      summary.profileSummaryForPrint = new Array<Array<ProfileSummaryData>>();
+      let numberOfBreaks: number = summary.profileSummaryData.length / 12;
+      if (numberOfBreaks > 1) {
+        let start: number = 0;
+        let end: number = 12;
+        for (let i = 0; i < numberOfBreaks; i++) {
+          summary.profileSummaryForPrint.push(summary.profileSummaryData.slice(start, end));
+          start += 12;
+          end += 12;
+        }
+      } else {
+        summary.profileSummaryForPrint.push(summary.profileSummaryData);
+      }
+    });
+    return profileSummary;
+  }
+
+  getProfileSummariesTotalsForPrinting(totals: Array<ProfileSummaryTotal>): Array<Array<ProfileSummaryTotal>> {
+    let totalsForPrint: Array<Array<ProfileSummaryTotal>> = new Array<Array<ProfileSummaryTotal>>();
+    let numberOfBreaks: number = totals.length / 12;
+    if (numberOfBreaks > 1) {
+      let start: number = 0;
+      let end: number = 12;
+      for (let i = 0; i < numberOfBreaks; i++) {
+        totalsForPrint.push(totals.slice(start, end));
+        start += 12;
+        end += 12;
+      }
+    } else {
+      totalsForPrint.push(totals);
+    }
+    return totalsForPrint;
+  }
+
+  setProfileSummariesForPrinting(compressedAir: CompressedAirAssessment, baselineProfileSummaries: Array<{ profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType }>): Array<ProfilesForPrint> {
+    let profliesForPrint: Array<ProfilesForPrint> = new Array<ProfilesForPrint>();
+    compressedAir.compressedAirDayTypes.forEach(dayType => {
+      let profileSums: Array<ProfileSummary> = baselineProfileSummaries.find(summary => { return summary.dayType.dayTypeId == dayType.dayTypeId }).profileSummary;
+      profileSums = this.getProfileSummariesForPrinting(profileSums);
+      let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(compressedAir.compressorInventoryItems, dayType, profileSums, compressedAir.systemProfile.systemProfileSetup.dataInterval);
+      let totalsForPrint: Array<Array<ProfileSummaryTotal>> = this.getProfileSummariesTotalsForPrinting(totals);
+      profliesForPrint.push({ dayType: dayType, profileSummary: profileSums, totalsForPrint: totalsForPrint });
+    });
+    return profliesForPrint;
+  }
 
 }
 

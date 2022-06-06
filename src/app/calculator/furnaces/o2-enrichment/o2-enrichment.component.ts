@@ -4,7 +4,6 @@ import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { O2EnrichmentService } from './o2-enrichment.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Calculator } from '../../../shared/models/calculators';
 import { FormGroup } from '@angular/forms';
@@ -34,7 +33,6 @@ export class O2EnrichmentComponent implements OnInit {
   headerHeight: number;
 
   tabSelect: string = 'results';
-  calcExists: boolean;
   saving: boolean;
   calculator: Calculator;
   originalCalculator: Calculator;
@@ -46,9 +44,10 @@ export class O2EnrichmentComponent implements OnInit {
   enrichmentInputsSub: Subscription;
 
   constructor(private settingsDbService: SettingsDbService, private o2EnrichmentService: O2EnrichmentService, private o2FormService: O2EnrichmentFormService,
-    private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
+   private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -81,28 +80,28 @@ export class O2EnrichmentComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this.enrichmentInputsSub = this.o2EnrichmentService.enrichmentInputs.subscribe(value => {
+    // TODO - medium confidence level on the async designator here. not much doc on awaiting inside a subscription.
+    this.enrichmentInputsSub = this.o2EnrichmentService.enrichmentInputs.subscribe(async(value) => {
       this.enrichmentInputs = value;
       this.o2EnrichmentService.calculate(this.settings);
       if(this.inAssessment){
-        this.saveCalculator();
+         await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     })
   }
 
-  getCalculator() {
+  async getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
-      this.calcExists = true;
       if (this.calculator.o2EnrichmentInputs) {
         this.o2EnrichmentService.enrichmentInputs.next(this.calculator.o2EnrichmentInputs);
       } else {
         this.calculator.o2EnrichmentInputs = this.o2EnrichmentService.enrichmentInputs.getValue();
-        this.saveCalculator();
+        await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
-      this.saveCalculator();
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
   }
 
@@ -115,25 +114,6 @@ export class O2EnrichmentComponent implements OnInit {
     return tmpCalculator;
   }
 
-  saveCalculator() {
-    if (!this.saving || this.calcExists) {
-      if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.calculator.id = result;
-            this.calcExists = true;
-            this.saving = false;
-          });
-        });
-      }
-    }
-  }
 
   btnGenerateExample() {
     let exampleInputs: Array<EnrichmentInput> = this.o2FormService.generateExample(this.settings);

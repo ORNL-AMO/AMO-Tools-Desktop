@@ -1,46 +1,51 @@
-<table #copyTable class="table table-hover">
+<table #copyTable id="copyTable" class="table table-hover">
     <tbody>
         <tr class="table-header-row bold">
-            <td>
+            <th>
                 Opportunity Name
-            </td>
-            <td>
+            </th>
+            <th>
                 Utility
-            </td>
-            <td>
+            </th>
+            <th>
                 Team
-            </td>
-            <td>
+            </th>
+            <th>
                 Equipment
-            </td>
-            <td>
+            </th>
+            <th>
                 Owner/Lead
-            </td>
-            <td>
-                Utility Savings ({{settings.currency}})
-            </td>
-            <td></td>
-            <td>
-                Cost Savings ({{settings.currency}})
-            </td>
-            <td>
-                Material Cost ({{settings.currency}})
-            </td>
-            <td>
-                Labor Cost ({{settings.currency}})
-            </td>
-            <td>
-                Engineering Cost ({{settings.currency}})
-            </td>
-            <td>
-                Other Cost ({{settings.currency}})
-            </td>
-            <td>
-                Total Cost ({{settings.currency}})
-            </td>
-            <td>
+            </th>
+            <th>
+                Utility Savings
+            </th>
+            <th>
+                Utility Savings Units
+            </th>
+            <th>
+                Cost Savings
+            </th>
+            <th>
+                Material Cost
+            </th>
+            <th>
+                Labor Cost
+            </th>
+            <th>
+                Engineering Cost
+            </th>
+            <th>
+                Other Cost
+            </th>
+            <th>
+                Total Cost
+            </th>
+            <th>
                 Simple Payback
-            </td>
+            </th>
+            <th>
+                Effort to Implement
+            </th>
         </tr>
         <tr *ngFor="let opportunity of individualOpportunitySummaries">
             <!--name-->
@@ -143,10 +148,228 @@
             <td>
                 {{ opportunity.payback | number: "1.0-2" }}
             </td>
+            <!--Effort to Implement-->
+            <td>
+                {{getEffortToImplement(opportunity.opportunityCost) | number: "1.0-0" }}
+            </td>
         </tr>
     </tbody>
 </table>
 
+<table #copyTable2 id="copyTable2" class="table table-hover">
+    <tbody>
+        <tr class="table-header-row bold">
+            <th>
+                Opportunity Name
+            </th>
+            <th>
+                Utility
+            </th>
+            <th>
+                Team
+            </th>
+            <th>
+                Equipment
+            </th>
+            <th>
+                Owner/Lead
+            </th>
+            <th>
+                Effort to Implement
+            </th>
+            <th>
+                Date Started
+            </th>
+            <th>
+                Date Completed
+            </th>
+            <th>
+                Assigned
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Estimated Implementation Cost
+            </th>
+            <th>
+                Estimated Cost Savings
+            </th>
+            <th>
+                Estimated Payback
+            </th>
+            <th>
+                Actual Implementation Cost
+            </th>
+            <th>
+                Actual Cost Savings
+            </th>
+            <th>
+                Actual Payback
+            </th>
+            <th>
+                Estimated Utility Savings
+            </th>
+            <th>
+                Utility Savings Units
+            </th>
+            <th>
+                Actual Utility Savings 
+            </th>
 
+        </tr>
+        <tr *ngFor="let opportunity of individualOpportunitySummaries">
+            <td>
+                {{ opportunity.opportunityName }}
+            </td>
+            <td>
+                {{ opportunity.utilityType }}
+            </td>
+            <td>
+                {{ opportunity.team }}
+            </td>
+            <td>
+                {{ opportunity.equipment }}
+            </td>
+            <td>
+                {{ opportunity.owner }}
+            </td>
+            <td>
+                {{getEffortToImplement(opportunity.opportunityCost) | number: "1.0-0" }}
+            </td>
+
+            <td>
+                &mdash;
+            </td>
+
+            <td>
+                &mdash;
+            </td>
+
+            <td>
+                &mdash;
+            </td>
+
+            <td>
+                &mdash;
+            </td>
+            <td>
+                {{ opportunity.totalCost | number: "1.0-0" }}
+            </td>
+            <td>
+                {{ opportunity.costSavings | number: "1.0-0" }}
+            </td>
+            <td>
+                {{ opportunity.payback | number: "1.0-2" }}
+            </td>
+
+            <td>
+                &mdash;
+            </td>
+
+            <td>
+                &mdash;
+            </td>
+
+            <td>
+                &mdash;
+            </td>
+
+            <!--Estimated energy savings-->
+            <td *ngIf="opportunity.utilityType != 'Mixed'">
+                {{ opportunity.totalEnergySavings | number: "1.0-0" }}
+            </td>
+            <!--unit-->
+            <td>
+                <span *ngIf="opportunity.utilityType == 'Electricity'">kWh</span>
+
+                <span *ngIf="opportunity.utilityType == 'Compressed Air'">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kSCF</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
+                </span>
+
+                <span *ngIf="opportunity.utilityType == 'Water' || opportunity.utilityType == 'Waste Water'">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+                </span>
+
+                <span *ngIf="opportunity.utilityType == 'Steam'">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">klb</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne</span>
+                </span>
+
+                <span *ngIf="opportunity.utilityType == 'Natural Gas' || opportunity.utilityType == 'Other Fuel'">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+                </span>
+                <!--mixed-->
+                <span *ngIf="opportunity.utilityType == 'Mixed'">
+                    <span *ngFor="let result of opportunity.mixedIndividualResults">
+                        <span *ngIf="result.utilityType == 'Electricity'">kWh</span>
+
+                        <span *ngIf="result.utilityType == 'Compressed Air'">
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
+                        </span>
+
+                        <span *ngIf="result.utilityType == 'Steam'">
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">klb</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne</span>
+                        </span>
+
+                        <span *ngIf="result.utilityType == 'Water' || result.utilityType == 'Waste Water'">
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+                        </span>
+
+                        <span *ngIf="result.utilityType == 'Natural Gas' || result.utilityType == 'Other Fuel'">
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+                        </span>
+                        <br />
+                    </span>
+                </span>
+            </td>
+
+            <td>
+                &mdash;
+            </td>
+
+        </tr>
+    </tbody>
+</table>
 <app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
 </app-exportable-results-table>
+
+<div class="d-flex w-100 justify-content-center pl-2 pr-2">
+    <button class="btn-copy-table" (click)="showExportModal()">
+        Export Project Tracker
+    </button>
+</div>
+
+<div bsModal #exportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg export-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Export Project Tracker to Excel</h3>
+                <button class="close" aria-label="Close" (click)="hideExportModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-center w-100">
+                    <div class="form-group d-flex mr-2">
+                        <label for="fileName"> Name your file:</label>
+                        <input type="text" class="form-control" id="fileName" [(ngModel)]="fileName">
+                    </div>
+                    <button class="btn btn-primary ml-2" (click)="exportToExcel()">Export
+                        as .xlsx</button>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <button class="btn btn-secondary" (click)="hideExportModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

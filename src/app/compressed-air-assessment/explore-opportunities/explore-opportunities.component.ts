@@ -139,7 +139,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   save() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let modIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId = this.modification.modificationId });
+    let modIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == this.modification.modificationId });
     compressedAirAssessment.modifications[modIndex] = this.modification;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, false);
   }

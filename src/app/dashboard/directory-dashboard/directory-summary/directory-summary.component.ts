@@ -3,7 +3,7 @@ import { DirectoryDashboardService } from '../directory-dashboard.service';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { FormGroup } from '@angular/forms';
 import { DashboardService } from '../../dashboard.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { Directory } from '../../../shared/models/directory';
 import { Settings, FacilityInfo } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -21,7 +21,7 @@ import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { SsmtService } from '../../../ssmt/ssmt.service';
 import { SettingsService } from '../../../settings/settings.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { WasteWaterService } from '../../../waste-water/waste-water.service';
 import { WasteWaterResults } from '../../../shared/models/waste-water';
 import { BaselineResults, CompressedAirAssessmentResultsService } from '../../../compressed-air-assessment/compressed-air-assessment-results.service';
@@ -53,7 +53,7 @@ export class DirectorySummaryComponent implements OnInit {
   constructor(private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
     private dashboardService: DashboardService, private settingsDbService: SettingsDbService, private psatService: PsatService,
     private executiveSummaryService: ExecutiveSummaryService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService,
-    private ssmtService: SsmtService, private settingsService: SettingsService, private indexedDbService: IndexedDbService,
+    private ssmtService: SsmtService, private settingsService: SettingsService,   
     private wasteWaterService: WasteWaterService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService
   ) { }
 
@@ -167,7 +167,7 @@ export class DirectorySummaryComponent implements OnInit {
         if (results.outputData.boilerOutput != undefined) {
           results.outputData.operationsOutput.boilerFuelUsage = this.convertUnitsService.value(results.outputData.operationsOutput.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
           totalEnergyUsed = results.outputData.operationsOutput.boilerFuelUsage + totalEnergyUsed;
-          totalCost = results.outputData.operationsOutput.totalOperatingCost + totalCost;
+          totalCost = results.outputData.operationsOutput.boilerFuelCost + results.outputData.operationsOutput.makeupWaterCost;
         }
       }
     });
@@ -228,19 +228,17 @@ export class DirectorySummaryComponent implements OnInit {
     this.settingsModal.hide();
   }
 
-  updateSettings() {
+  async updateSettings() {
     let id = this.directorySettings.id;
     let facilityInfo: FacilityInfo = this.directorySettings.facilityInfo;
     this.directorySettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.directorySettings.directoryId = this.directory.id;
     this.directorySettings.id = id;
     this.directorySettings.facilityInfo = facilityInfo;
-    this.indexedDbService.putSettings(this.directorySettings).then(() => {
-      this.settingsDbService.setAll().then(() => {
-        this.calculateSummary();
-        this.settingsModal.hide();
-      });
-    });
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.directorySettings))
+    this.settingsDbService.setAll(updatedSettings);
+    this.calculateSummary();
+    this.settingsModal.hide();
   }
 }
 

@@ -26,11 +26,21 @@
 
         <!-- Utility Type -->
         <div class="form-group">
-            <label class="small" for="{{'utilityType_'+idString}}">Fuel Type</label>
+            <label class="small" for="{{'utilityType_'+idString}}">Energy Source Type</label>
             <select class="form-control" name="utilityType" id="{{'utilityType_'+idString}}"
                 formControlName="utilityType" (change)="changeUtilityType()" (focus)="focusField('utilityType')"
                 (blur)="focusOut()">
                 <option *ngFor="let option of utilityOptions" [ngValue]="option.value">{{option.name}}</option>
+            </select>
+        </div>
+
+        <!-- Heated or Chilled -->
+        <div class="form-group">
+            <label class="small" for="{{'heatedOrChilled_'+idString}}">Heated or Chilled</label>
+            <select class="form-control" name="heatedOrChilled" id="{{'heatedOrChilled_'+idString}}"
+                formControlName="heatedOrChilled" (change)="calculate()" (focus)="focusField('heatedOrChilled')"
+                (blur)="focusOut()">
+                <option *ngFor="let option of heatedOrChilledOptions" [ngValue]="option.value">{{option.name}}</option>
             </select>
         </div>
 
@@ -41,15 +51,7 @@
                 <input class="form-control" name="utilityCost" id="{{'utilityCost_'+idString}}"
                     formControlName="utilityCost" type="number" (input)="calculate()"
                     (focus)="focusField('utilityCost')" (blur)="focusOut()" onfocus="this.select();">
-                <span class="units input-group-addon">$/<span
-                        *ngIf="form.controls.utilityType.value == 0 && settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-                    <span
-                        *ngIf="form.controls.utilityType.value == 0 && settings.unitsOfMeasure != 'Imperial'">GJ</span>
-                    <span
-                        *ngIf="form.controls.utilityType.value != 0 && settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-                    <span
-                        *ngIf="form.controls.utilityType.value != 0 && settings.unitsOfMeasure != 'Imperial'">GJ</span>
-                </span>
+                <span class="input-group-addon units">$/{{energyUnit}}</span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.utilityCost.invalid && !form.controls.utilityCost.pristine">

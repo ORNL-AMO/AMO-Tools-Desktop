@@ -104,4 +104,30 @@ export class ActivatedSludgeFormComponent implements OnInit {
     }
     this.save();
   }
+
+  calculateSo() {
+    if (!this.form.controls.isUserDefinedSo.value) {
+      let influentCBODBefore: number = this.form.controls.influentCBODBefore.value;
+      let clarifierEfficiency: number = this.form.controls.clarifierEfficiency.value;
+
+      if (influentCBODBefore && clarifierEfficiency) {
+        let calculatedSo: number =  influentCBODBefore * (clarifierEfficiency / 100);
+        this.form.patchValue({
+          So: calculatedSo
+        })
+      }
+    }
+    this.save();
+  }
+
+  showHideInputField() {
+    this.form.patchValue({
+      isUserDefinedSo: !this.form.controls.isUserDefinedSo.value
+    });
+    this.form = this.activatedSludgeFormService.setSoCalculateValidators(this.form);
+    if (!this.form.controls.isUserDefinedSo.value) {
+      this.calculateSo();
+    }
+    this.save();
+  }
 }

@@ -2,14 +2,17 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { firstValueFrom } from 'rxjs';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { InventoryDbService } from '../../indexedDb/inventory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { Assessment } from '../../shared/models/assessment';
+import { Calculator } from '../../shared/models/calculators';
 import { Directory } from '../../shared/models/directory';
-import { Settings } from '../../shared/models/settings';
+import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { DashboardService } from '../dashboard.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 
@@ -33,18 +36,21 @@ export class MoveItemsComponent implements OnInit {
     private directoryDashboardService: DirectoryDashboardService,
     private dashboardService: DashboardService,
     private formBuilder: FormBuilder,
-    private indexedDbService: IndexedDbService,
+      
     private assessmentDbService: AssessmentDbService,
     private calculatorDbService: CalculatorDbService,
-    private inventoryDbService: InventoryDbService,
-    private settingsDbService: SettingsDbService) { }
+    private inventoryDbService: InventoryDbService) { }
 
   ngOnInit() {
-    this.allDirectories = this.directoryDbService.getAll();
+    this.setDirectories();
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     this.directory = this.directoryDbService.getById(directoryId);
     this.moveForm  = this.initForm();
     this.newFolderForm = this.initFolderForm();
+  }
+
+  async setDirectories() {
+    this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
   initForm() {
@@ -76,10 +82,11 @@ export class MoveItemsComponent implements OnInit {
     this.moveModal.show();
   }
 
-  hideMoveModal() {
+  async hideMoveModal() {
     this.folderSelected = false;
     this.moveModal.hide();
-    this.directoryDbService.setAll();
+    let updatedDirectories: Array<Directory> = await firstValueFrom(this.directoryDbService.getAllDirectories());
+    this.directoryDbService.setAll(updatedDirectories);
     this.dashboardService.moveItems.next(false);
   }
 
@@ -93,56 +100,85 @@ export class MoveItemsComponent implements OnInit {
     return str;
   }
 
-  save() {
-    this.directory.assessments.forEach(assessment => {
-      if (assessment.selected) {
-        assessment.directoryId = this.moveForm.controls.directoryId.value;
-        this.indexedDbService.putAssessment(assessment).then(val => {
-          this.assessmentDbService.setAll().then(() => {
-            this.dashboardService.updateDashboardData.next(true);
-          });
-        });
-      }
-    });
-    this.directory.calculators.forEach(calculator => {
-      if (calculator.selected) {
-        calculator.directoryId = this.moveForm.controls.directoryId.value;
-        this.indexedDbService.putCalculator(calculator).then(val => {
-          this.calculatorDbService.setAll().then(() => {
-            this.dashboardService.updateDashboardData.next(true);
-          });
-        });
-        calculator.selected = false;
-      }
-    });
-    this.directory.subDirectory.forEach(subDir => {
-      if (subDir.selected) {
-        if (subDir.parentDirectoryId !== this.moveForm.controls.directoryId.value) {
-          subDir.parentDirectoryId = this.moveForm.controls.directoryId.value;
-          this.indexedDbService.putDirectory(subDir).then(val => {
-            this.directoryDbService.setAll().then(() => {
-              this.dashboardService.updateDashboardData.next(true);
-            });
-          });
-        } else {
-          subDir.parentDirectoryId = subDir.parentDirectoryId;
-          this.hideMoveModal();
-        }
-        subDir.selected = false;
-      }
-    });
-    this.directory.inventories.forEach(inventory => {
-      if (inventory.selected) {
-        inventory.directoryId = this.moveForm.controls.directoryId.value;
-        this.indexedDbService.putInventoryItem(inventory).then(val => {
-          this.inventoryDbService.setAll().then(() => {
-            this.dashboardService.updateDashboardData.next(true);
-          });
-        });
-        inventory.selected = false;
-      }
-    });
+  async save() {
+    this.saveAssessments();
+    this.saveCalculators();
+    this.saveDirectories();
+    this.saveInventories();
     this.hideMoveModal();
+  }
+
+  async saveAssessments() {
+    let hasSelectedAssessments: boolean = this.directory.assessments.some(assessment => assessment.selected);
+    if (hasSelectedAssessments) {
+      let updatedAssessments: Assessment[] = [];
+      for (let i = 0; i < this.directory.assessments.length; i++) {
+        if (this.directory.assessments[i].selected) {
+          this.directory.assessments[i].directoryId = this.moveForm.controls.directoryId.value;
+          updatedAssessments = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.directory.assessments[i]));
+        }
+      }
+      this.assessmentDbService.setAll(updatedAssessments);
+      this.dashboardService.updateDashboardData.next(true);
+    }
+  }
+
+  async saveCalculators() {
+    let hasSelectedCalculators: boolean = this.directory.calculators.some(calculator => calculator.selected);
+    if (hasSelectedCalculators) {
+      let updatedCalculators: Calculator[] = [];
+      for (let i = 0; i < this.directory.calculators.length; i++) {
+        let calculator: Calculator = this.directory.calculators[i];
+        if (calculator.selected) {
+          calculator.directoryId = this.moveForm.controls.directoryId.value;
+          updatedCalculators = await firstValueFrom(this.calculatorDbService.updateWithObservable(calculator))
+          calculator.selected = false;
+        }
+      };
+      this.calculatorDbService.setAll(updatedCalculators);
+      this.dashboardService.updateDashboardData.next(true);
+    }
+  }
+
+  async saveInventories() {
+    let hasSelectedInventories: boolean = this.directory.inventories.some(inventory => inventory.selected);
+    if (hasSelectedInventories) {
+      let updatedInventoryItems: InventoryItem[];
+      if (this.directory.inventories.length > 0) {
+        for (let i = 0; i < this.directory.inventories.length; i++) {
+          let inventory: InventoryItem = this.directory.inventories[i];
+          if (inventory.selected) {
+            inventory.directoryId = this.moveForm.controls.directoryId.value;
+            updatedInventoryItems = await firstValueFrom(this.inventoryDbService.updateWithObservable(inventory));
+            inventory.selected = false;
+          }
+        }
+        this.inventoryDbService.setAll(updatedInventoryItems);
+        this.dashboardService.updateDashboardData.next(true);
+      }
+    } 
+  }
+
+  async saveDirectories() {
+    let hasSelectedDirectories: boolean = this.directory.subDirectory.some(directory => directory.selected);
+    if (hasSelectedDirectories) {
+      let updatedDirectories: Directory[];
+        for (let i = 0; i < this.directory.subDirectory.length; i++) {
+          let subDir: Directory = this.directory.subDirectory[i];
+          if (subDir.selected) {
+            if (subDir.parentDirectoryId !== this.moveForm.controls.directoryId.value) {
+              subDir.parentDirectoryId = this.moveForm.controls.directoryId.value;
+              updatedDirectories = await firstValueFrom(this.directoryDbService.updateWithObservable(subDir));
+              this.directoryDbService.setAll(updatedDirectories);
+            } else {
+              this.hideMoveModal();
+            }
+            subDir.selected = false;
+          }
+        }
+        this.directoryDbService.setAll(updatedDirectories);
+        this.dashboardService.updateDashboardData.next(true);
+    }
   }
 
   addFolder() {
@@ -162,35 +198,13 @@ export class MoveItemsComponent implements OnInit {
     });
   }
 
-  createFolder() {
-    let tmpFolder: Directory = {
-      name: this.newFolderForm.controls.folderName.value,
-      parentDirectoryId: this.newFolderForm.controls.directoryId.value,
-      selected: false
-    };
-    let tmpSettings: Settings = this.settingsDbService.getByDirectoryId(this.newFolderForm.controls.directoryId.value);
-    delete tmpSettings.facilityInfo;
-    delete tmpSettings.id;
-    if (this.newFolderForm.controls.companyName.value || this.newFolderForm.controls.facilityName.value) {
-      tmpSettings.facilityInfo = {
-        companyName: this.newFolderForm.controls.companyName.value,
-        facilityName: this.newFolderForm.controls.facilityName.value,
-        date: new Date().toLocaleDateString()
-      };
-    }
-    this.indexedDbService.addDirectory(tmpFolder).then((newDirId) => {
-      tmpSettings.directoryId = newDirId;
-      this.directoryDbService.setAll().then(() => {
-        this.indexedDbService.addSettings(tmpSettings).then(() => {
-          this.settingsDbService.setAll().then(() => {
-            this.allDirectories = this.directoryDbService.getAll();
-            this.moveForm.patchValue({
-              'directoryId': newDirId
-            });
-            this.cancelNewFolder();
-          });
-        });
-      });
+
+  async createFolder() {
+    let newDirectoryId: number = await this.directoryDashboardService.addDirectoryAndSettings(this.newFolderForm);
+    this.setDirectories();
+    this.moveForm.patchValue({
+      'directoryId': newDirectoryId
     });
+    this.cancelNewFolder();
   }
 }

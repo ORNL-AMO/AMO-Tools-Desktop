@@ -38,6 +38,7 @@ export class WasteWaterOperationsComponent implements OnInit {
   modificationIndex: number;
   selectedModificationIdSub: Subscription;
   operationsDifferent: OperationsDifferent;
+  totalEmissionOutputRateDifferent: boolean;
   wasteWaterDifferentSub: Subscription;
   settings: Settings;
 
@@ -75,12 +76,11 @@ export class WasteWaterOperationsComponent implements OnInit {
       this.operationsForm.controls.EnergyCostUnit.disable();
     }
 
-    this.wasteWaterDifferentSub = this.compareService.wasteWaterDifferent.subscribe(val => {
-      this.operationsDifferent = val.operationsDifferent;
+    this.wasteWaterDifferentSub = this.compareService.wasteWaterDifferent.subscribe(wasteWaterDifferent => {
+      this.operationsDifferent = wasteWaterDifferent.operationsDifferent;
+      this.totalEmissionOutputRateDifferent = wasteWaterDifferent.co2DataDifferent.totalEmissionOutputRate
       this.cd.detectChanges();
     });
-
-
   }
 
   updateCo2SavingsData(co2SavingsData?: Co2SavingsData) {

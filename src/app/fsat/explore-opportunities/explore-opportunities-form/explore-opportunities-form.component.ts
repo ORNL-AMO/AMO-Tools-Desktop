@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { FSAT, InletPressureData, OutletPressureData, PlaneData, FanRatedInfo } from '../../../shared/models/fans';
+import { FSAT, InletPressureData, OutletPressureData, PlaneData, FanRatedInfo, FsatOutput, CompressibilityFactor } from '../../../shared/models/fans';
 import { HelpPanelService } from '../../help-panel/help-panel.service';
 import { ModifyConditionsService } from '../../modify-conditions/modify-conditions.service';
 import { FormGroup } from '@angular/forms';
@@ -8,7 +8,7 @@ import { FanFieldDataService } from '../../fan-field-data/fan-field-data.service
 import { FanMotorService } from '../../fan-motor/fan-motor.service';
 import { FanSetupService } from '../../fan-setup/fan-setup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { FsatService } from '../../fsat.service';
+import { FsatService, InletVelocityPressureInputs } from '../../fsat.service';
 import { FanFieldDataWarnings, FanOperationsWarnings, FsatWarningService } from '../../fsat-warning.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
@@ -62,6 +62,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   inletPressureCopy: InletPressureData;
   outletPressureCopy: OutletPressureData;
   pressureModalSub: Subscription;
+
+  disableApplyData: boolean = true;
+
+  inletVelocityPressureInputs: InletVelocityPressureInputs;
 
   constructor(private helpPanelService: HelpPanelService, private modifyConditionsService: ModifyConditionsService, private fanFieldDataService: FanFieldDataService,
     private fanMotorService: FanMotorService, private fanSetupService: FanSetupService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService,
@@ -173,8 +177,12 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.save();
   }
 
+  setCalcInvalid(isCalcValid: boolean) {
+    this.disableApplyData = isCalcValid;
+  }
 
   openPressureModal(str: string) {
+    this.setInletVelocityPressureInputs();
     if (this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData) {
       this.inletPressureCopy = JSON.parse(JSON.stringify(this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData));
     }
@@ -187,10 +195,17 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   hidePressureModal() {
+    this.pressureCalcType = undefined;
+    this.fsatService.modalOpen.next(false);
     this.pressureModal.hide();
   }
 
-  saveAndClose() {
+  resetModalData() {
+    this.disableApplyData = false;
+    this.hidePressureModal();
+  }
+
+  applyModalData() {
     if (this.pressureCalcType === 'inlet') {
       this.saveInletPressure(this.inletPressureCopy);
     } else if (this.pressureCalcType === 'outlet') {
@@ -200,25 +215,27 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   saveInletPressure(inletPressureData: InletPressureData) {
+    this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData = inletPressureData;
+    this.modificationFieldDataForm.patchValue({
+      inletPressure: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData.calculatedInletPressure
+    });
+    this.save();
+  }
+
+  saveInletPressureCopy(inletPressureData: InletPressureData) {
     this.inletPressureCopy = inletPressureData;
-    if (this.inletPressureCopy) {
-      this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData = inletPressureData;
-      this.modificationFieldDataForm.patchValue({
-        inletPressure: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData.calculatedInletPressure
-      });
-      this.save();
-    }
   }
 
   saveOutletPressure(outletPressureData: OutletPressureData) {
+    this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressureData = outletPressureData;
+    this.modificationFieldDataForm.patchValue({
+      outletPressure: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressureData.calculatedOutletPressure
+    });
+    this.save();
+  }
+
+  saveOutletPressureCopy(outletPressureData: OutletPressureData) {
     this.outletPressureCopy = outletPressureData;
-    if (this.outletPressureCopy) {
-      this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressureData = outletPressureData;
-      this.modificationFieldDataForm.patchValue({
-        outletPressure: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressureData.calculatedOutletPressure
-      });
-      this.save();
-    }
   }
 
   getBodyHeight() {
@@ -228,4 +245,13 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.bodyHeight = 0;
     }
   }
+
+  setInletVelocityPressureInputs() {
+    this.inletVelocityPressureInputs = {
+      ductArea: this.modificationFieldDataForm.controls.ductArea.value,
+      gasDensity: this.fsat.modifications[this.exploreModIndex].fsat.baseGasDensity.gasDensity,
+      flowRate: this.modificationFieldDataForm.controls.flowRate.value
+    }
+  }
+
 }

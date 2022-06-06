@@ -25,6 +25,7 @@ export class ProfileSetupFormComponent implements OnInit {
   settingsSub: Subscription;
   hourIntervalData: Array<ProfileSummary>;
   dayIntervalData: Array<ProfileSummary>;
+  isProfileDataTypeChange: boolean = false;
   constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointsFormService: PerformancePointsFormService) { }
 
@@ -65,6 +66,17 @@ export class ProfileSetupFormComponent implements OnInit {
       compressedAirAssessment.systemProfile.profileSummary = dataIntervalProfile;
     }
     compressedAirAssessment.systemProfile.systemProfileSetup = systemProfileSetup;
+
+    if (this.isProfileDataTypeChange) {
+      compressedAirAssessment.systemProfile.profileSummary.forEach(summary => {
+        summary.logToolFieldId = undefined;
+        summary.logToolFieldIdAmps = undefined;
+        summary.logToolFieldIdPowerFactor = undefined;
+        summary.logToolFieldIdVolts = undefined;
+      });
+      this.isProfileDataTypeChange = false;
+    }
+
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
@@ -119,6 +131,12 @@ export class ProfileSetupFormComponent implements OnInit {
         }
       }
     }
+  }
+
+
+  changeProfileDataType() {
+    this.isProfileDataTypeChange = true;
+    this.save();
   }
 
 }

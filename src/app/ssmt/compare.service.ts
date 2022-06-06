@@ -1,14 +1,23 @@
 import { Injectable } from '@angular/core';
 import { SSMT, PressureTurbine } from '../shared/models/steam/ssmt';
 import { BehaviorSubject } from 'rxjs';
+import { Co2SavingsDifferent } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Injectable()
 export class CompareService {
   baselineSSMT: SSMT;
   modifiedSSMT: SSMT;
   selectedModification: BehaviorSubject<SSMT>;
+  co2SavingsDifferent: BehaviorSubject<Co2SavingsDifferent>;
+
   constructor() {
     this.selectedModification = new BehaviorSubject<SSMT>(undefined);
+    this.co2SavingsDifferent = new BehaviorSubject<Co2SavingsDifferent>({
+      totalEmissionOutputRate: false,
+      totalFuelEmissionOutputRate: false,
+      energySource: false,
+      fuelType: false,
+    });
   }
 
 
@@ -38,13 +47,18 @@ export class CompareService {
     }
 
     if (baseline && modification) {
+      let co2Different: Co2SavingsDifferent = this.isCo2SavingsDifferent(false, baseline, modification);
       return (
         // this.isSitePowerImportDifferent(baseline, modification) ||
         this.isMakeUpWaterTemperatureDifferent(baseline, modification) ||
         this.isHoursPerYearDifferent(baseline, modification) ||
         this.isFuelCostDifferent(baseline, modification) ||
         this.isElectricityCostDifferent(baseline, modification) ||
-        this.isMakeUpWaterCostsDifferent(baseline, modification)
+        this.isMakeUpWaterCostsDifferent(baseline, modification) ||
+        co2Different.totalEmissionOutputRate ||
+        co2Different.totalFuelEmissionOutputRate ||
+        co2Different.energySource ||
+        co2Different.fuelType
       );
     } else {
       return false;
@@ -160,6 +174,36 @@ export class CompareService {
       return false;
     }
   }
+
+  isCo2SavingsDifferent(shouldUpdateModification: boolean = true, baseline?: SSMT, modification?: SSMT): Co2SavingsDifferent {
+    let co2SavingsDifferent: Co2SavingsDifferent = {
+      totalEmissionOutputRate: false,
+      totalFuelEmissionOutputRate: false,
+      energySource: false,
+      fuelType: false,
+    }
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.co2SavingsData && modification.co2SavingsData) {
+        co2SavingsDifferent = {
+          totalEmissionOutputRate: baseline.co2SavingsData.totalEmissionOutputRate != modification.co2SavingsData.totalEmissionOutputRate,
+          totalFuelEmissionOutputRate: baseline.co2SavingsData.totalFuelEmissionOutputRate != modification.co2SavingsData.totalFuelEmissionOutputRate,
+          energySource: baseline.co2SavingsData.energySource != modification.co2SavingsData.energySource,
+          fuelType: baseline.co2SavingsData.fuelType != modification.co2SavingsData.fuelType,
+        }
+      }
+    } 
+    if (shouldUpdateModification) {
+      this.co2SavingsDifferent.next(co2SavingsDifferent);
+    }
+    return co2SavingsDifferent;
+  }
+ 
 
   //boiler
   checkBoilerDifferent(baseline?: SSMT, modification?: SSMT): boolean {

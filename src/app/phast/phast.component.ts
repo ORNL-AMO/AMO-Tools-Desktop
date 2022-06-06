@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, HostListener, ChangeDetectorR
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { PhastService } from './phast.service';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
@@ -11,7 +11,7 @@ import { StepTab, LossTab, stepTabs } from './tabs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PhastCompareService } from './phast-compare.service';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsService } from '../settings/settings.service';
@@ -77,12 +77,13 @@ export class PhastComponent implements OnInit {
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   showWelcomeScreen: boolean = false;
+  modificationModalOpen: boolean = false;
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
     private convertPhastService: ConvertPhastService,
     private phastValidService: PhastValidService,
-    private indexedDbService: IndexedDbService,
+      
     private activatedRoute: ActivatedRoute,
     private lossesService: LossesService,
     private phastCompareService: PhastCompareService,
@@ -106,7 +107,7 @@ export class PhastComponent implements OnInit {
     this.lossesService.initDone();
     //get assessmentId from route phast/:id
     this.actvatedRouteSubscription = this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
+      this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       //use copy of phast object of as modal provided to forms
       this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
       if (this._phast.modifications) {
@@ -162,6 +163,7 @@ export class PhastComponent implements OnInit {
     });
 
     this.openModListSubscription = this.lossesService.openModificationModal.subscribe(val => {
+      this.modificationModalOpen = val;
       if (val) {
         this.selectModificationModal();
       }
@@ -188,54 +190,54 @@ export class PhastComponent implements OnInit {
   }
 
 
-  setExploreOppsDefaults(modification: Modification) {  
+  setExploreOppsDefaults(modification: Modification) {
     // old assessments with scenario added - prevent break on missing properties
-    let exploreOppsDefault: SavingsOpportunity = {hasOpportunity: false, display: ''};
-      if (modification.exploreOppsShowAirTemp == undefined) {
-        modification.exploreOppsShowAirTemp = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowFlueGas == undefined) {
-        modification.exploreOppsShowFlueGas = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowMaterial == undefined) {
-        modification.exploreOppsShowMaterial = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowAllTimeOpen == undefined) {
-        modification.exploreOppsShowAllTimeOpen = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowOpening == undefined) {
-        modification.exploreOppsShowOpening = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowAllEmissivity == undefined) {
-        modification.exploreOppsShowAllEmissivity = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowCooling == undefined) {
-        modification.exploreOppsShowCooling = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowAtmosphere == undefined) {
-        modification.exploreOppsShowAtmosphere = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowOperations == undefined) {
-        modification.exploreOppsShowOperations = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowLeakage == undefined) {
-        modification.exploreOppsShowLeakage = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowSlag == undefined) {
-        modification.exploreOppsShowSlag = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowEfficiencyData == undefined) {
-        modification.exploreOppsShowEfficiencyData = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowWall == undefined) {
-        modification.exploreOppsShowWall = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowAllTemp == undefined) {
-        modification.exploreOppsShowAllTemp = exploreOppsDefault;
-      }
-      if (modification.exploreOppsShowFixtures == undefined) {
-        modification.exploreOppsShowFixtures = exploreOppsDefault;
-      }
+    let exploreOppsDefault: SavingsOpportunity = { hasOpportunity: false, display: '' };
+    if (modification.exploreOppsShowAirTemp == undefined) {
+      modification.exploreOppsShowAirTemp = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowFlueGas == undefined) {
+      modification.exploreOppsShowFlueGas = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowMaterial == undefined) {
+      modification.exploreOppsShowMaterial = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowAllTimeOpen == undefined) {
+      modification.exploreOppsShowAllTimeOpen = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowOpening == undefined) {
+      modification.exploreOppsShowOpening = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowAllEmissivity == undefined) {
+      modification.exploreOppsShowAllEmissivity = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowCooling == undefined) {
+      modification.exploreOppsShowCooling = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowAtmosphere == undefined) {
+      modification.exploreOppsShowAtmosphere = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowOperations == undefined) {
+      modification.exploreOppsShowOperations = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowLeakage == undefined) {
+      modification.exploreOppsShowLeakage = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowSlag == undefined) {
+      modification.exploreOppsShowSlag = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowEfficiencyData == undefined) {
+      modification.exploreOppsShowEfficiencyData = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowWall == undefined) {
+      modification.exploreOppsShowWall = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowAllTemp == undefined) {
+      modification.exploreOppsShowAllTemp = exploreOppsDefault;
+    }
+    if (modification.exploreOppsShowFixtures == undefined) {
+      modification.exploreOppsShowFixtures = exploreOppsDefault;
+    }
   }
 
   ngAfterViewInit() {
@@ -400,16 +402,16 @@ export class PhastComponent implements OnInit {
     this.isModalOpen = $event;
   }
   //called on all changes to forms
-  saveDb() {
+  async saveDb() {
     this.checkSetupDone();
     //set assessment.phast to _phast (object used in forms)
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     //update our assessment in the iDb
-    this.indexedDbService.putAssessment(this.assessment).then(() => {
-      this.assessmentDbService.setAll();
-    });
+    
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment))
+    this.assessmentDbService.setAll(assessments);
   }
-  
+
   setSankeyLabelStyle(style: string) {
     this.sankeyLabelStyle = style;
   }
@@ -444,7 +446,7 @@ export class PhastComponent implements OnInit {
 
   addNewMod() {
     let modName: string = 'Scenario ' + (this._phast.modifications.length + 1);
-    let exploreOppsDefault: SavingsOpportunity = {hasOpportunity: false, display: ''};
+    let exploreOppsDefault: SavingsOpportunity = { hasOpportunity: false, display: '' };
     let tmpModification: Modification = {
       phast: {
         losses: {},
@@ -492,15 +494,14 @@ export class PhastComponent implements OnInit {
     this.saveNewMod(tmpModification);
   }
 
-  addSettings(settings: Settings) {
+  async addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
     newSettings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(newSettings).then(id => {
-      this.settingsDbService.setAll().then(() => {
-        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-        this.lossesService.setTabs(this.settings);
-      });
-    });
+    await firstValueFrom(this.settingsDbService.addWithObservable(newSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(updatedSettings);
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    this.lossesService.setTabs(this.settings);
   }
 
   initUpdateUnitsModal(oldSettings: Settings) {
@@ -537,7 +538,7 @@ export class PhastComponent implements OnInit {
     }
   }
 
-  
+
   checkShowWelcomeScreen() {
     if (!this.settingsDbService.globalSettings.disablePhastTutorial) {
       this.showWelcomeScreen = true;
@@ -545,9 +546,10 @@ export class PhastComponent implements OnInit {
     }
   }
 
-  closeWelcomeScreen() {
+  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disablePhastTutorial = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.phastService.modalOpen.next(false);
   }

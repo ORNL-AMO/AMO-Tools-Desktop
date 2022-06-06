@@ -32,6 +32,24 @@ export class CsvToJsonService {
     return results;
   }
 
+  parseExampleCSV(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      Papa.parse("assets/data-explorer-example.csv", {
+        header: true,
+        dynamicTyping: true,
+        download: true,
+        complete: results => {
+          console.log(results);
+          resolve(results);
+        },
+        error: results => {
+          reject(true);
+        },
+      });
+    });
+  }
+
+
   parseCsvWithoutHeaders(csvData: any): CsvImportData {
     let results: CsvImportData;
     results = Papa.parse(csvData, {

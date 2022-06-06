@@ -44,7 +44,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   showError: boolean = false;
   electricalHeatDelivered: number = 0;
   energyInputTotal: number = 0;
-  warnings: EnergyInputWarnings = {energyInputHeatDelivered: null};
+  warnings: EnergyInputWarnings = {energyInputHeatDelivered: null };
   constructor(private phastService: PhastService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private phastResultsService: PhastResultsService) { }
 
   ngOnInit() {
