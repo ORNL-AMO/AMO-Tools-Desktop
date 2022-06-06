@@ -53,8 +53,12 @@ export class LiquidMaterialFormService {
       'name': [chargeMaterial.name]
     });
 
-
-    formGroup = this.setInitialTempValidator(formGroup);
+    //
+    if (!chargeMaterial.liquidChargeMaterial.materialId){
+      formGroup = this.initLiquidForm();
+    } else {
+      formGroup = this.setInitialTempValidator(formGroup);
+    }
     return formGroup;
   }
 

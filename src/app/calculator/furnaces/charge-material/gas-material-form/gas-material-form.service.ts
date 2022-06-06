@@ -49,7 +49,12 @@ export class GasMaterialFormService {
       'name': [chargeMaterial.name]
     });
 
-    formGroup = this.setInitialTempValidator(formGroup);
+    //
+    if (!chargeMaterial.gasChargeMaterial.materialId){
+      formGroup = this.initGasForm();
+    } else {
+      formGroup = this.setInitialTempValidator(formGroup);
+    }
     return formGroup;
   }
 

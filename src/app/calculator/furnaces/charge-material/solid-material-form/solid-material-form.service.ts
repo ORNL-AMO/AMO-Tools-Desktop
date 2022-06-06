@@ -60,7 +60,12 @@ export class SolidMaterialFormService {
       'name': [chargeMaterial.name]
     });
 
-    formGroup = this.setInitialTempValidator(formGroup);
+    //
+    if (!chargeMaterial.solidChargeMaterial.materialId){
+      formGroup = this.initSolidForm();
+    } else {
+      formGroup = this.setInitialTempValidator(formGroup);
+    }
     return formGroup;
   }
 
