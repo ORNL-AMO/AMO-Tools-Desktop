@@ -8,7 +8,7 @@
 
       <div class="form-group">
         <label for="chillerType">Chiller Type</label>
-        <select class="form-control" formControlName="chillerType" (change)="setChillerCharacteristics()"
+        <select class="form-control" id="chillerType" formControlName="chillerType" (change)="setChillerCharacteristics()"
           (focus)="focusField('chillerType')">
           <option *ngFor="let chillerType of characteristics.chillerTypes" [ngValue]="chillerType.value">
             {{chillerType.display}}
@@ -18,7 +18,7 @@
 
       <div class="form-group">
         <label for="condenserCoolingType">Condenser Cooling Type</label>
-        <select class="form-control" formControlName="condenserCoolingType" (change)="setChillerCharacteristics()"
+        <select class="form-control" id="condenserCoolingType" formControlName="condenserCoolingType" (change)="setChillerCharacteristics()"
           (focus)="focusField('condenserCoolingType')">
           <option *ngFor="let condenserCoolingType of characteristics.condenserCoolingTypes"
             [ngValue]="condenserCoolingType.value">{{condenserCoolingType.display}}
@@ -28,7 +28,7 @@
 
       <div class="form-group">
         <label for="motorDriveType">Motor Drive Type</label>
-        <select class="form-control" formControlName="motorDriveType" (change)="setChillerCharacteristics()"
+        <select class="form-control" id="motorDriveType" formControlName="motorDriveType" (change)="setChillerCharacteristics()"
           (focus)="focusField('motorDriveType')">
           <option *ngFor="let motorDriveType of characteristics.motorDriveTypes" [ngValue]="motorDriveType.value">
             {{motorDriveType.display}}
@@ -38,7 +38,7 @@
 
       <div class="form-group">
         <label for="compressorConfigType">Compressor Config Type</label>
-        <select class="form-control" formControlName="compressorConfigType" (change)="setChillerCharacteristics()"
+        <select class="form-control" id="compressorConfigType" formControlName="compressorConfigType" (change)="setChillerCharacteristics()"
           (focus)="focusField('compressorConfigType')">
           <option *ngFor="let compressorConfigType of characteristics.compressorConfigTypes"
             [ngValue]="compressorConfigType.value">{{compressorConfigType.display}}
