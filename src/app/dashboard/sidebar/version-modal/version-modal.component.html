@@ -10,230 +10,141 @@
       </div>
       <div class="modal-body scroll-item">
 
-        <h4>Release Notes v0.10.0</h4>
+        <h4>Release Notes v1.0.1</h4>
 
+        <p>
+          A software tool for calculating energy efficiency for a variety of industrial and manufacturing applications.
+          MEASUR helps manufacturers increase industrial energy efficiency at the plant-level and in specific systems.
+          Learn step-by-step ways to identify opportunities, monitor progress, and improve efficiency in any facility.
+          Some tools help facilities implement an energy management system and prepare to become ISO 50001 and Superior
+          Energy Performance certified. Based on older Department of Energy (DOE) tools, the Advanced Manufacturing
+          Office (AMO) has undertaken this effort to refactor the legacy tools into a modern environment.
+          The suite includes 7 energy system assessment modules, a Data Exploration Module, extensive help text,
+          comprehensive reports, data visualization, and 72 calculators!
+        </p>
+        <p>
+          MEASUR is a supported application, updates are expected and may impact previously created assessments.
+        </p>
+        <label>Warnings:</label>
+        <ul>
+          <li>Installing v1.0.0 or an earlier version of this tool will automatically reset your app data. Data can be
+            imported into an earlier version from v1.0.1</li>
+          <li>Do not install an earlier version of this tool without resetting your app data (in settings). </li>
+          <li>Assessments created in MEASUR 0.8.0 or later are not compatible with older versions. </li>
+          <li>Exporting from v.0.8.0 and importing to a lower version will continue to work, though new features will
+            not be available.</li>
+        </ul>
+
+        <label>What's New?</label>
+        <ul>
+          <li>Automatic generation of Closeout PowerPoint and Excel Data Tracker files for Treasure Hunt</li>
+          <li>Psychrometric graph for the Psychrometric Calculator</li>
+          <li>Included an example for Data Explorer</li>
+          <li>Updated the example for compressed air - be sure to go to settings and "Reset Example Assessments"! </li>
+          <li>Various Bug Fixes and Enhancements</li>
+
+        </ul>
+
+        <label>Here are the details of what's new in version 1.0.1:</label>
+        <br>
         <label>Application</label>
         <ul>
-          <li>Added: A gear icon next to the folder and home to navigate to settings</li>
-          <li>Added: Ability to bulk move assessments in dashboard</li>
-          <li>Added: Ability to set global print settings within the global settings</li>
-          <li>Added: Additional pie chart to roll up reports reflecting energy & cost savings per equipment </li>
-          <li>Enhancement: Updated text for the "Restore System Settings" button in Settings to clarify the options when using the button</li>
-          <li>Fixed: Improved copy-table strings so no longer concatenating strings</li>
-          <li>Fixed: Made sure accept button on modal windows match color of assessment</li>
-          <li>Removed: Help text tables about allowed data ranges that were not helpful (example: minimum of zero, no maximum)</li>
-          <li>Updated: Acknowledgements with names of new experts for Compressed Air and new developers, inters, and ORNL staff</li>
+          <li>Fixed: Audited npm packages and addressed all high severity vulnerabilities </li>
+          <li>Fixed: Audited Update Data Service to ensure user assessments from previous versions do not crash app</li>
         </ul>
 
         <label>Calculators</label>
         <ul>
-            <li>Added: Standalone calculator for estimating full load amps of a motor</li>
-            <li>Added: Standalone calculator for estimating the impact of altitude on atmospheric pressure</li>
-            <li>Enhanced: Compressed Air Reduction calculator so that users can choose between entering measured or rated data</li>
-            <li>Fixed: Bug where some calculators were showing "Results" when default was set to "Help"</li>
-            <li>Fixed: Missing help text for Pump Type in Achievable Efficiency and Specific Speed Calculators</li>
-            <li>Fixed: Small bug in blowdown rate calculator</li>
-            <li>Fixed: Various instances where the calculator’s name in help text was incorrect</li>
-            <li>Updated: Changed dropdown menus in Carbon Calculator to match online tool</li>
-            <li>Updated: Order of calculators after several new calculator additions</li>
+          <li>Fixed: Added data validation to Pipe Insulation calculator field pipe temperature to prevent crashes</li>
+        </ul>
+
+        <label>Data Explorer</label>
+        <ul>
+          <li>Added: Example data file for creating day type analysis and graphs
+          </li>
+          <li>Fixed: Bug relating to Explorer expecting time series in a certain format</li>
         </ul>
 
         <label>Compressed Air</label>
         <ul>
-          <li>Enhanced: reported units for System Capacity calculator switched to gal for imperial units</li>
-          <li>Fixed: Unit mislabel in Receiver Tank - Metered Storage calculator </li>
-          <li>New Feature: A new module for estimating energy and savings potential for compressed air systems</li>
-          <li>New Feature: Set up an hourly profile or a single hour day type for analysis</li>
-          <li>New Feature: Compressed air reports</li>
-          <li>New Feature: Integration of data explorer day types with compressed air data entry</li>
-          <li>New Feature: Database of generic compressors</li>
-          <li>New Feature: Example compressed air system analysis</li>
-          <li>New Feature: Graphs to understand load and air flow of compressor system</li>
-          <li>New Feature: Several predefined savings opportunities in Assessment</li>
-        
+          <li>Added: Additional graph for centrifugal compressors </li>
+          <li>Fixed: Bug causing the System Profile page to not update when importing data from Data Explorer</li>
+          <li>Fixed: Bug relating to changing the day types after a modification was created</li>
+          <li>Fixed: Bug relating to changing the name of a modification after creation causing crash</li>
+          <li>Fixed: Compressed Air Profile Summary Graphs page styling</li>
+          <li>Fixed: Inability to export compressed air assessment if Data Explorer was used to create day types and
+            system profile</li>
+          <li>Fixed: Performance Profile and other graphs were cut off when printing and other report printing issues
+          </li>
+          <li>Updated: Added a new compressed air example</li>
         </ul>
-        <label>Data Explorer</label>
-
-        <ul>
-          <li>Added: Functionality to help users make sure their full timestamp is preserved if importing from excel (cannot recover full timestamps from csv files)</li>
-          <li>Added: Import/Export Functionality for Data Explorer explorations (including day type analysis, data visualizations)</li>
-          <li>Added: Screen loading message for importing excel or csv files</li>
-          <li>Added: Scroll bar on left side of screen</li>
-          <li>Added: The ability for users to import excel and specify which worksheet to import</li>
-          <li>Updated: Help text to provide guidance on changes</li>
-        </ul>
-        
 
         <label>Pumps</label>
         <ul>
-          <li>Added: Ability to compare two pumps’ performance side-by-side (instead of performing a what-if analysis)</li>
-          <li>Added: Notes for modifications show up in report </li>
-          <li>Added: Operations page and moved relevant data (operating hours and electricity cost) to match other assessments</li>
-          <li>Fixed: Bug relating to validation of "other" fluid</li>
-          <li>Fixed: Pumps API service bug</li>
+          <li>Fixed: Confirmed all fields in assessment have blue highlighting when different from baseline </li>
         </ul>
 
         <label>Fans</label>
         <ul>
-          <li>Added: Ability to compare two fan's performance side-by-side (instead of performing a what-if analysis)</li>
-          <li>Added: Ability to import traverse data from csv template</li>
-          <li>Added: In traverse calculator, copied the figure from the fan input help text into the fan results table </li>
-          <li>Added: Notes for modifications show up in report</li>
-          <li>Added: Operations page and moved relevant data (operating hours and electricity cost) to match other assessments</li>
-          <li>Added: Results of psychrometric analysis and traverse calculator are included in fan report</li>
-          <li>Enhanced: Combined the Fluid & Fan tabs to match Pumps Assessment</li>
-          <li>Fixed: Bug in the pitot tube static pressure readings table rendering</li>
-          <li>Fixed: Bug relating to validation of velocity pressure entry in "Estimate" modals for inlet and outlet pressures</li>
-          <li>Fixed: Various bugs in the psychrometric calculations within assessment</li>
-        </ul>
-
-        <label>Process Cooling</label>
-        <ul>
-          <li>Updated: Psychrometric Calculator description</li>
+          <li>Fixed: Confirmed all fields in assessment have blue highlighting when different from baseline </li>
         </ul>
 
         <label>Process Heating</label>
         <ul>
-          <li>Added: Additional graph to electrotechnologies to illustrate the amounts of chemical and electrical heat input</li>
-          <li>Added: Calculation assistance via modal for the calculation of moisture in combustion air using psychrometric calculator</li>
-          <li>Added: Calculator for estimating the cost of blended/mixed fuels</li>
-          <li>Added: Min/Max help text table to applicable fields</li>
-          <li>Enhanced: Default values for new fields so importing older assessments will not cause crash</li>
-          <li>Enhanced: Flue gas calculations now account for moisture in combustion air</li>
-          <li>Enhanced: Users can now set ambient air temperature for flue gas calculations</li>
-          <li>Fixed: Adding PHAST materials/fuels/etc. updates options in modification</li>
-          <li>Fixed: Bug where Fuel Temperature was not undergoing unit conversion when switching units within an assessment</li>
-          <li>Fixed: Bug where properties being set as an empty string instead of a number</li>
-          <li>Fixed: Bugs causing console errors</li>
-          <li>Fixed: Flue gas page displaying wrong help text</li>
-          <li>Fixed: Heat Cascading - field "Higher Heating Value" is filled by choice for fuel </li>
-          <li>Fixed: Validation bug in Efficiency Improvement calculator</li>
-          <li>Fixed: Validation in Charge materials to now allow users to have the same inlet and outlet temperature (heat loss of zero instead of an error)</li>
-          <li>Fixed: Various other issues with Heat Cascading calculator</li>
-          <li>Updated: Various backend settings to adjust for new available heat algorithm</li>
+          <li>Added: Additional field validation for Electric Arc Furnaces ensuring that the calculated exhaust gas
+            losses cannot be greater than the total input energy</li>
+          <li>Enhanced: Added additional help text for flue gas calculator (in assessment, standalone, and as a modal)
+          </li>
+          <li>Enhanced: Added default values for ambient air, fuel temperature, and combustion air temperature (65
+            degrees F)</li>
+          <li>Enhanced: Added display of calculated higher heating value to flue gas page</li>
+          <li>Enhanced: Set fuel option defaults to "Gas" and "Natural Gas"</li>
+          <li>Fixed: Confirmed all fields in assessment have blue highlighting when different from baseline </li>
         </ul>
 
         <label>Steam</label>
         <ul>
-          <li>Added: Help text to operating hours field</li>
-          <li>Added: New calculator for estimating savings from installing a condensing heat exchanger (condensing economizer)</li>
-          <li>Added: New calculator for estimating savings from installing a boiler feedwater economizer </li>
-          <li>Added: Service to conduct the conversions of input/output data</li>
-          <li>Enhanced: Changed field name of "Flash Condensate Into Header" to "Flash Condensate Coming into Header" and updated help text to improve user understandability</li>
-          <li>Fixed: Bug relating to rows in the losses table with zero value not showing up if the equipment is present</li>
-          <li>Fixed: The white background of each column extends to the full height of the container</li>
-          <li>Updated: Diagram page to match setup of Sankey page</li>
+          <li>Fixed: Confirmed all fields in assessment have blue highlighting when different from baseline </li>
+          <li>Fixed: Removed electrical energy and cost from folder summary for steam (changes to electric energy and
+            cost are included for modifications)</li>
         </ul>
 
         <label>Treasure Hunt</label>
         <ul>
-          <li>Added: More error feedback when user tries to import a Treasure Hunt Opportunities json into the desktop</li>
-          <li>Added: Several process heating and steam calculators to Treasure Hunt</li>
-          <li>Fixed: Added button to Process Heating TH calcs to choose what fuel (Natural Gas or other) for the calculator to add savings to</li>
-          <li>Fixed: Bugs relating to importing old assessments</li>
-          <li>Fixed: Calculation error in Heat Cascading</li>
-          <li>Fixed: Various issues with calculator icon displays</li>
+          <li>Added: Treasure Hunt Closeout Presentation Download - produces an MS PowerPoint file with key tables and
+            graphs from the TH report, plus a slide for each opportunity</li>
+          <li>Added: Treasure Hunt Project Tracker Download - produces an MS Excel workbook with each opportunity with
+            columns for project tracking. Formatted to match existing Better Plants TH project trackers</li>
+          <li>Fixed: Bug in Pipe Insulation where savings were not being properly applied to "Other Fuels"</li>
+        </ul>
+
+        <label>Motor Inventory</label>
+        <ul>
         </ul>
         <label>Wastewater</label>
         <ul>
-          <li>Fixed: Bugs relating to report tables not having values</li>
-          <li>Updated: New modification to have a default name</li>
+          <li>Enhanced: Added field to change Influent CBOD5 into a calculated field based on clarifier efficiency and
+            Influent CBOD5 level before clarifier</li>
+          <li>Enhanced: Added figure and updated help text for Influent CBOD5 field to clarify where measurement should
+            be taken</li>
+          <li>Fixed: Bug relating to SOTR field not saving user input</li>
+          <li>Fixed: Bug where Assessment banner was whited out when in Assessment tab</li>
+          <li>Fixed: Confirmed all fields in assessment have blue highlighting when different from baseline </li>
+        </ul>
+        <label>Process Cooling</label>
+        <ul>
+          <li>
+            Added: A dynamic psychrometric graph to the psychrometric calculator
+          </li>
         </ul>
 
         <label>Known Issues:</label>
         <ul>
-          <li>The Mac and Linux releases do not support Auto-updating</li>
+          <li>The Linux release does not support Auto-updating</li>
           <li>Renaming an export in Windows Download menu can delete the file extension (.json)</li>
           <li>Assessments made in a previous major release may experience errors</li>
           <li>Import files made in a previous major release may not be useable due to field additions/removals</li>
         </ul>
-
-
-        <h4>Release Notes v0.9.2</h4>
-
-        <label>Application</label>
-        <ul>
-          <li>Added: Home and dashboard buttons to Settings Page</li>
-          <li>Added: Total row to various charts in Rollup Report</li>
-          <li>Enhanced: Cleaned up home page spacing, added Data Analysis short cut to home card</li>
-          <li>Enhanced: Increased number of displayed digits for electricity cost in dashboard settings</li>
-          <li>Fixed: Bug causing pre-assessments to not show up in dashboard</li>
-        </ul>
-
-        <label>Calculators</label>
-        <ul>
-            <li>Fixed: Bug in CO2 Emissions Calculator relating to unit conversion</li>
-            <li>Updated: eGrid emissions factors for CO2 Emissions Calculator</li>
-        </ul>
-        <label>Compressed Air</label>
-
-        <ul>
-          <li>Fixed: Compressed Air Pressure Reduction's baseline energy consumption calculation not adjusting for using sub-rated power
-          </li>
-        
-        </ul>
-
-        <label>Pumps</label>
-        <ul>
-            <li>Fixed: Returned the "Field Voltage" data field to "Field Data" tab for modifications and added expanded help text and warnings</li>
-           <li>Fixed: Units in results tables and input summary table</li>
-        </ul>
-        <label>Fans</label>
-        <ul>
-          <li>Added: Fan Assessment Scorecard calculator</li>
-          <li>Added: Plane diagram added to help text for Traverse Calculator</li>
-          <li>Enhanced: "Calculate ... Pressure" modals to add field for velocity pressure if using Total Pressure for calculations</li>
-          <li>Enhanced: Changed default for Fan Traverse plane 3 Dry bulb temperature to equal that set in "Fluid" tab</li>
-          <li>Enhanced: Help text for Fan Traverse plane 3 Dry bulb temperature</li>
-          <li>Enhanced: Turned off ability to change values with arrow keys for Pitot Tube Readings Table</li>
-          <li>Fixed: Fan Energy Index using incorrect power value for calculations</li>
-          <li>Fixed: Returned the "Field Voltage" data field to "Field Data" tab for modifications and added expanded help text and warnings</li>
-          <li>Fixed: Units in results tables and input summary table</li>
-        </ul>
-
-        <label>Process Heating</label>
-        <ul>
-          <li>Added: Several standalone calculators to Treasure Hunt</li>
-          <li>Enhanced: Changed order of data fields in "Auxiliary Equipment" tab</li>
-          <li>Enhanced: User workflow for O2 Enrichment calculator</li>
-          <li>Fixed: Capitalization in Explore Opportunities</li>
-          <li>Fixed: Size of icons within icon box for new standalone calculators</li>
-          <li>Fixed: Units for Heat Capacity in Slag Loss calculator</li>
-        </ul>
-
-        <label>Steam</label>
-        <ul>
-          <li>Enhanced: Separated "Stack Loss" arrow in Sankey to "Stack Loss" and "Blowdown"</li>
-          <li>Fixed: Algorithm for "Outlet Ideal" for the Steam Turbine calculator</li>
-        </ul>
-
-        <label>Treasure Hunt</label>
-        <ul>
-          <li>Added: PH Flue gas loss calculator</li>
-          <li>Added: PH Leakage loss calculator</li>
-          <li>Added: PH Opening loss calculator</li>
-          <li>Added: PH Wall loss calculator</li>
-          <li>Enhanced: Treasure Hunt Design</li>
-        </ul>
-        <label>Wastewater</label>
-        <ul>
-          <li>Added: Wastewater to filters in Dashboard
-          </li>
-        </ul>
-
-        <label>Known Issues:</label>
-        <ul>
-          <li>The Mac and Linux releases can have issues Auto-updating
-          </li>
-          <li>Renaming an export in Windows Download menu can delete the file extension (.json)
-          </li>
-          <li>Assessments made in a previous major release may experience errors
-          </li>
-          <li>Import files made in a previous major release may not be useable due to field additions/removals
-          </li>
-        </ul>
-        
-       
       </div>
     </div>
   </div>

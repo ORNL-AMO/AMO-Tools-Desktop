@@ -9,7 +9,7 @@ import { EGridService, SubRegionData, SubregionEmissions } from '../../../../sha
 import { PhastCo2SavingsData } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { LossesService } from '../../losses.service';
-import { Co2SavingsPhastService } from './co2-savings-phast.service';
+import { Co2SavingsPhastService, PhastCo2SavingsDifferent } from './co2-savings-phast.service';
 
 @Component({
   selector: 'app-co2-savings-phast',
@@ -20,6 +20,8 @@ export class Co2SavingsPhastComponent implements OnInit {
 
   @Input()
   co2SavingsData: PhastCo2SavingsData;
+  @Input()
+  co2SavingsDifferent: PhastCo2SavingsDifferent;
   @Input()
   isFormDisabled: boolean;
   @Input()
@@ -71,6 +73,9 @@ export class Co2SavingsPhastComponent implements OnInit {
     private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    if (!this.co2SavingsDifferent) {
+      this.co2SavingsDifferent = this.phastCO2SavingsService.getDefaultCO2Different();
+    }
     this.initCo2SavingsSubscription();
   }
 

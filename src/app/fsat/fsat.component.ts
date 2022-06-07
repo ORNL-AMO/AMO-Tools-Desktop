@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { Assessment } from '../shared/models/assessment';
 import { FsatService } from './fsat.service';
 import { Settings } from '../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData, FsatOperations } from '../shared/models/fans';
 import * as _ from 'lodash';
 import { CompareService } from './compare.service';
@@ -85,8 +85,9 @@ export class FsatComponent implements OnInit {
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   showWelcomeScreen: boolean = false;
+  modificationModalOpen: boolean = false;
   constructor(private activatedRoute: ActivatedRoute,
-    private indexedDbService: IndexedDbService,
+      
     private fsatService: FsatService,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
@@ -105,7 +106,7 @@ export class FsatComponent implements OnInit {
   ngOnInit() {
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
+      this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
       this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));
       if (this._fsat.modifications) {
         if (this._fsat.modifications.length !== 0) {
@@ -149,6 +150,7 @@ export class FsatComponent implements OnInit {
       }
     });
     this.openModSub = this.fsatService.openModificationModal.subscribe(val => {
+      this.modificationModalOpen = val;
       if (val) {
         this.selectModificationModal();
       }
@@ -224,12 +226,10 @@ export class FsatComponent implements OnInit {
     }
   }
 
-  saveSettings(newSettings: Settings) {
+  async saveSettings(newSettings: Settings) {
     this.settings = newSettings;
-    this.indexedDbService.putSettings(this.settings).then(() => {
-      this.settingsDbService.setAll().then(() => {
-      });
-    });
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    this.settingsDbService.setAll(updatedSettings);
   }
 
 
@@ -285,7 +285,7 @@ export class FsatComponent implements OnInit {
     this.save();
   }
 
-  save() {
+  async save() {
     if (this._fsat.modifications) {
       if (this._fsat.modifications.length === 0) {
         this.modificationExists = false;
@@ -301,11 +301,10 @@ export class FsatComponent implements OnInit {
     this.compareService.setCompareVals(this._fsat, this.modificationIndex);
     this._fsat.setupDone = this.checkSetupDone(this._fsat);
     this.assessment.fsat = (JSON.parse(JSON.stringify(this._fsat)));
-    this.indexedDbService.putAssessment(this.assessment).then(results => {
-      this.assessmentDbService.setAll().then(() => {
-        this.fsatService.updateData.next(true);
-      });
-    });
+
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment))
+    this.assessmentDbService.setAll(assessments);
+    this.fsatService.updateData.next(true);
   }
 
   updateModificationCO2Savings(modFsat: FSAT) {
@@ -404,15 +403,14 @@ export class FsatComponent implements OnInit {
   }
 
   
-  addSettings(settings: Settings) {
+  async addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
     newSettings = this.setSettingsUnitType(newSettings);
     newSettings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(newSettings).then(id => {
-      this.settingsDbService.setAll().then(() => {
-        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-      });
-    });
+    await firstValueFrom(this.settingsDbService.addWithObservable(newSettings));
+    let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(updatedSettings);
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
   }
 
   setSettingsUnitType(settings: Settings): Settings {
@@ -488,9 +486,10 @@ export class FsatComponent implements OnInit {
     }
   }
 
-  closeWelcomeScreen() {
+  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableFansTutorial = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.fsatService.modalOpen.next(false);
   }

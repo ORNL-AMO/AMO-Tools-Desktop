@@ -20,7 +20,7 @@
                 (click)="changeTab('system-setup')">System Basics</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid && mainTab !== 'assessment'}"
                 (click)="changeTab('assessment')">Assessment</a>
         </div>
         <div class="nav-item">
@@ -28,7 +28,7 @@
                 (click)="changeTab('analysis')">Analysis</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram'}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !isBaselineValid}"
                 (click)="changeTab('diagram')">Diagram</a>
         </div>
         <div class="nav-item">

@@ -66,7 +66,8 @@
                         [isBaseline]="false" (emitCalculate)="getResults()" (emitChangeField)="changeField($event)"
                         [selected]="!baselineSelected"
                         [utilityType]="pipeInsulationReductionService.baselineData.utilityType"
-                        [utilityCost]="pipeInsulationReductionService.baselineData.utilityCost">
+                        [utilityCost]="pipeInsulationReductionService.baselineData.utilityCost"
+                        [heatedOrChilled]="pipeInsulationReductionService.baselineData.heatedOrChilled">
                     </app-pipe-insulation-reduction-form>
                 </div>
 

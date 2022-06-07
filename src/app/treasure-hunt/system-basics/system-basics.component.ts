@@ -3,13 +3,14 @@ import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { FormGroup } from '@angular/forms';
 import { SettingsService } from '../../settings/settings.service';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../shared/models/operations';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { ConvertInputDataService } from '../convert-input-data.service';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -40,7 +41,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   oldSettings: Settings;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService,
+  constructor(private settingsService: SettingsService,   
     private settingsDbService: SettingsDbService, private treasureHuntService: TreasureHuntService, private convertInputDataService: ConvertInputDataService,
     private convertUnitsService: ConvertUnitsService) { }
 
@@ -65,7 +66,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
-  saveSettings() {
+  async saveSettings() {
     let id: number = this.settings.id;
     this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.settings.id = id;
@@ -80,14 +81,9 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
       this.showSuccessMessage = false;
     }
 
-    this.indexedDbService.putSettings(this.settings).then(
-      results => {
-        this.settingsDbService.setAll().then(() => {
-          //get updated settings
-          this.updateSettings.emit(true);
-        })
-      }
-    )
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    this.settingsDbService.setAll(updatedSettings);
+    this.updateSettings.emit(true);
   }
 
   saveTreasureHunt() {
@@ -124,14 +120,13 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   }
 
   updateData(showSuccess?: boolean) {
-    if(showSuccess) {
-      this.initSuccessMessage();
-    }
     this.assessment.treasureHunt = this.convertInputDataService.convertTreasureHuntInputData(this.assessment.treasureHunt, this.oldSettings, this.settings);
     this.settings = this.convertUnitsService.convertSettingsUnitCosts(this.oldSettings, this.settings);
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
-    this.saveSettings();
-
+    this.saveSettings();    
+    if(showSuccess) {
+      this.initSuccessMessage();
+    }
     this.assessment.treasureHunt.existingDataUnits = this.settings.unitsOfMeasure;
     this.saveTreasureHunt();
     this.showUpdateDataReminder = false;

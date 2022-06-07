@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, WallLossesSurface, SuiteDbMotor, SuiteDbPump } from '../shared/models/materials';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
+import { WallLossesSurfaceDbService } from '../indexedDb/wall-losses-surface-db.service';
+import { firstValueFrom } from 'rxjs';
+import { AtmosphereDbService } from '../indexedDb/atmosphere-db.service';
+import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
+import { GasLoadMaterialDbService } from '../indexedDb/gas-load-material-db.service';
+import { LiquidLoadMaterialDbService } from '../indexedDb/liquid-load-material-db.service';
+import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
+import { SolidLoadMaterialDbService } from '../indexedDb/solid-load-material-db.service';
 
 declare var db: any;
 
@@ -9,7 +17,15 @@ declare var db: any;
 export class SuiteDbService {
   db: any = db;
   hasStarted: boolean = false;
-  constructor(private indexedDbService: IndexedDbService) { }
+  constructor(   
+    private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
+    private gasLoadDbService: GasLoadMaterialDbService,
+    private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,
+    private solidLoadMaterialDbService: SolidLoadMaterialDbService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService,
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
+    private atmosphereDbService: AtmosphereDbService,
+    ) { }
 
   startup() {
     this.hasStarted = true;
@@ -21,10 +37,6 @@ export class SuiteDbService {
 
   postUpdate() {
     return db.postUpdate();
-  }
-
-  test() {
-    console.log(db);
   }
 
   //volume
@@ -303,49 +315,42 @@ export class SuiteDbService {
   }
 
   //insert custom materials held in indexedDb into suite db
-  initCustomDbMaterials() {
+  async initCustomDbMaterials() {
     // this.test();
-    this.indexedDbService.getAllGasLoadChargeMaterial().then(results => {
-      let customGasLoadChargeMaterials: GasLoadChargeMaterial[] = results;
-      customGasLoadChargeMaterials.forEach(material => {
-        let suiteResult = this.insertGasLoadChargeMaterial(material);
-      });
+    let customGasLoadChargeMaterials: GasLoadChargeMaterial[] = await firstValueFrom(this.gasLoadDbService.getAllWithObservable());
+    customGasLoadChargeMaterials.forEach(material => {
+      this.insertGasLoadChargeMaterial(material);
     });
-    this.indexedDbService.getAllLiquidLoadChargeMaterial().then(results => {
-      let customLiquidLoadChargeMaterials: LiquidLoadChargeMaterial[] = results;
-      customLiquidLoadChargeMaterials.forEach(material => {
-        let suiteResult = this.insertLiquidLoadChargeMaterial(material);
-      });
+
+    let customLiquidLoadChargeMaterials: LiquidLoadChargeMaterial[] = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
+    customLiquidLoadChargeMaterials.forEach(material => {
+      this.insertLiquidLoadChargeMaterial(material);
     });
-    this.indexedDbService.getAllSolidLoadChargeMaterial().then(results => {
-      let customLiquidLoadChargeMaterials: SolidLoadChargeMaterial[] = results;
-      customLiquidLoadChargeMaterials.forEach(material => {
-        let suiteResult = this.insertSolidLoadChargeMaterial(material);
-      });
+
+    let customSolidLoadChargeMaterials: SolidLoadChargeMaterial[] = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
+    customSolidLoadChargeMaterials.forEach(material => {
+      this.insertSolidLoadChargeMaterial(material);
     });
-    this.indexedDbService.getAtmosphereSpecificHeat().then(results => {
-      let customAtmosphereSpecificHeatMaterials: AtmosphereSpecificHeat[] = results;
-      customAtmosphereSpecificHeatMaterials.forEach(material => {
-        let suiteResult = this.insertAtmosphereSpecificHeat(material);
-      });
+
+    let customAtmosphereSpecificHeatMaterials: AtmosphereSpecificHeat[] = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
+    customAtmosphereSpecificHeatMaterials.forEach(material => {
+      this.insertAtmosphereSpecificHeat(material);
     });
-    this.indexedDbService.getWallLossesSurface().then(results => {
-      let customWallLossesSurfaces: WallLossesSurface[] = results;
-      customWallLossesSurfaces.forEach(material => {
-        let suiteResult = this.insertWallLossesSurface(material);
-      });
+
+    let customWallLossesSurfaces: WallLossesSurface[] = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
+    customWallLossesSurfaces.forEach(material => {
+      this.insertWallLossesSurface(material);
     });
-    this.indexedDbService.getFlueGasMaterials().then(results => {
-      let customFluesGasses: FlueGasMaterial[] = results;
-      customFluesGasses.forEach(material => {
-        let suiteResult = this.insertGasFlueGasMaterial(material);
-      });
+
+    let customFluesGasses: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+    customFluesGasses.forEach(material => {
+      this.insertGasFlueGasMaterial(material);
     });
-    this.indexedDbService.getSolidLiquidFlueGasMaterials().then(results => {
-      let customSolidLiquidFlueGasses: SolidLiquidFlueGasMaterial[] = results;
-      customSolidLiquidFlueGasses.forEach(material => {
-        let suiteResult = this.insertSolidLiquidFlueGasMaterial(material);
-      });
+    
+    let customSolidLiquidFlueGasses: SolidLiquidFlueGasMaterial[] = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
+    customSolidLiquidFlueGasses.forEach(material => {
+      this.insertSolidLiquidFlueGasMaterial(material);
     });
   }
+
 }

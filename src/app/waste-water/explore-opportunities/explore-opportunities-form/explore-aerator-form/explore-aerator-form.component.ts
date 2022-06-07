@@ -52,7 +52,7 @@ export class ExploreAeratorFormComponent implements OnInit {
         this.initExploreAearatorPerformance();
         this.initExploreReduceOxygen();
         this.initExploreAeratorUpgrade();
-        this.setDefaultSOTR();
+        this.setAeratorTypeStatus();
         this.setDisableOptimize();
       }
     });

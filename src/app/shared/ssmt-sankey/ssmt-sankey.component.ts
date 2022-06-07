@@ -676,7 +676,6 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let fillOpacity = 1;
     let fill: string;
     let returnedCondensateNode = this.nodes.length - 2;
-    // debugger
     for (let i = 0; i < links.length; i++) {
       if (this.redLinkPaths.includes(i + 1)) {
         // To replicate Plotly event hover/unhover fill opacity

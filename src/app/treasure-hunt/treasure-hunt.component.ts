@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorR
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { ActivatedRoute } from '@angular/router';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { TreasureHuntService } from './treasure-hunt.service';
 import { TreasureHunt } from '../shared/models/treasure-hunt';
 import { CalculatorsService } from './calculators/calculators.service';
@@ -53,7 +53,7 @@ export class TreasureHuntComponent implements OnInit {
   showWelcomeScreen: boolean = false;
   constructor(
     private assessmentService: AssessmentService,
-    private indexedDbService: IndexedDbService,
+      
     private activatedRoute: ActivatedRoute,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
@@ -70,7 +70,7 @@ export class TreasureHuntComponent implements OnInit {
   ngOnInit() {
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
+      this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
         if (!this.assessment.treasureHunt) {
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
@@ -172,14 +172,13 @@ export class TreasureHuntComponent implements OnInit {
     }
   }
 
-  saveTreasureHunt(treasureHunt: TreasureHunt) {
+  async saveTreasureHunt(treasureHunt: TreasureHunt) {
     this.assessment.treasureHunt = treasureHunt;
     this.assessment.treasureHunt.setupDone = this.checkSetupDone();
-    this.indexedDbService.putAssessment(this.assessment).then(results => {
-      this.assessmentDbService.setAll().then(() => {
-        this.treasureHuntService.getResults.next(true);
-      })
-    })
+
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    this.assessmentDbService.setAll(assessments);
+    this.treasureHuntService.getResults.next(true);
   }
 
   checkSetupDone() {
@@ -216,14 +215,14 @@ export class TreasureHuntComponent implements OnInit {
     }
   }
   
-  addSettings(settings: Settings) {
+  async addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
     newSettings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(newSettings).then(id => {
-      this.settingsDbService.setAll().then(() => {
-        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-      });
-    });
+    await firstValueFrom(this.settingsDbService.addWithObservable(newSettings));
+    let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(updatedSettings);
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+
   }
 
   initUpdateUnitsModal(oldSettings: Settings) {
@@ -266,9 +265,10 @@ export class TreasureHuntComponent implements OnInit {
     }
   }
 
-  closeWelcomeScreen() {
+ async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableTreasureHuntTutorial = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.treasureHuntService.modalOpen.next(false);
   }

@@ -1,13 +1,14 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { FlueGasMaterial } from '../../../shared/models/materials';
 import { Settings } from '../../../shared/models/settings';
 import { LossesService } from '../../../phast/losses/losses.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { FlueGasMaterialDbService } from '../../../indexedDb/flue-gas-material-db.service';
 
 @Component({
   selector: 'app-custom-flue-gas-materials',
@@ -32,7 +33,7 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   selectedSub: Subscription;
   selectAllSub: Subscription;
 
-  constructor(private indexedDbService: IndexedDbService, private lossesService: LossesService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private flueGasMaterialDbService: FlueGasMaterialDbService, private lossesService: LossesService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.flueGasMaterials = new Array<FlueGasMaterial>();
@@ -74,30 +75,24 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   }
 
 
-  getCustomMaterials() {
-    this.indexedDbService.getFlueGasMaterials().then(idbResults => {
-      this.flueGasMaterials = idbResults;
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        this.convertAllMaterials();
-      }
-    });
+  async getCustomMaterials() {
+    this.flueGasMaterials = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+    if (this.settings.unitsOfMeasure === 'Metric') {
+      this.convertAllMaterials();
+    }
   }
 
-  editMaterial(id: number) {
-    this.indexedDbService.getFlueGasMaterialById(id).then(idbResults => {
-      this.existingMaterial = idbResults;
-      this.editExistingMaterial = true;
-      this.showMaterialModal();
-    });
+  async editMaterial(id: number) {
+    this.existingMaterial = await firstValueFrom(this.flueGasMaterialDbService.getByIdWithObservable(id));
+    this.editExistingMaterial = true;
+    this.showMaterialModal();
   }
 
-  deleteMaterial(id: number) {
-    this.indexedDbService.getFlueGasMaterialById(id).then(idbResults => {
-      this.existingMaterial = idbResults;
-      this.editExistingMaterial = true;
-      this.deletingMaterial = true;
-      this.showMaterialModal();
-    });
+  async deleteMaterial(id: number) {
+    this.existingMaterial = await firstValueFrom(this.flueGasMaterialDbService.getByIdWithObservable(id));
+    this.editExistingMaterial = true;
+    this.deletingMaterial = true;
+    this.showMaterialModal();
   }
 
   showMaterialModal() {

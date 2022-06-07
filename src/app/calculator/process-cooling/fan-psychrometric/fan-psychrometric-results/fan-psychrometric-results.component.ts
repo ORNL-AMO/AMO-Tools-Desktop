@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PsychrometricResults, BaseGasDensity } from '../../../../shared/models/fans';
 import { Settings } from '../../../../shared/models/settings';
-import { FanPsychrometricService } from '../fan-psychrometric.service';
+import { FanPsychrometricService, FanPsychrometricWarnings } from '../fan-psychrometric.service';
 
 @Component({
   selector: 'app-fan-psychrometric-results',
@@ -15,6 +15,7 @@ export class FanPsychrometricResultsComponent implements OnInit {
 
   resultData: Array<PsychrometricResults>;
   hasValidResults: boolean; 
+  warnings: FanPsychrometricWarnings;
   psychrometricResults: PsychrometricResults;
   
   resetFormSubscription: Subscription;
@@ -24,15 +25,15 @@ export class FanPsychrometricResultsComponent implements OnInit {
   ngOnInit(): void {
     this.calculatedBaseGasDensitySubscription = this.fanPsychrometricService.calculatedBaseGasDensity.subscribe(results => {
       this.psychrometricResults = results;
-      if (results) {
+      if (this.psychrometricResults) {
         let inputData: BaseGasDensity = this.fanPsychrometricService.baseGasDensityData.getValue();
         this.psychrometricResults.barometricPressure = inputData.barometricPressure;
         this.psychrometricResults.dryBulbTemp = inputData.dryBulbTemp;
       }
+      this.warnings = this.fanPsychrometricService.checkWarnings(this.psychrometricResults);
     });
   }
-
-
+  
 
   ngOnDestroy() {
     this.calculatedBaseGasDensitySubscription.unsubscribe();

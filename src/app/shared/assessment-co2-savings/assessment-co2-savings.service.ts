@@ -134,5 +134,24 @@ export class AssessmentCo2SavingsService {
     }
     return totalEmissionsResult;
   }
+
+
+  getDefaultCO2Different(): Co2SavingsDifferent {
+    return {
+      totalEmissionOutputRate: false,
+      totalFuelEmissionOutputRate: false,
+      energySource: false,
+      fuelType: false,
+    }
+  }
+
 }
+
+export interface Co2SavingsDifferent {
+  totalEmissionOutputRate?: boolean;
+  totalFuelEmissionOutputRate?: boolean,
+  energySource?: boolean;
+  fuelType?: boolean;
+}
+
 

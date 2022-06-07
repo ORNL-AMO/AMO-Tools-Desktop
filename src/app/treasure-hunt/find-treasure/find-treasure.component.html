@@ -151,7 +151,8 @@ class="card calc-card-item m-2" (click)="openCalculator('waste-heat')">
 </div>
     <!--pipe insulation-->
     <div
-      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Other Fuel') && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
+      && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
       class="card calc-card-item m-2" (click)="openCalculator('pipe-insulation-reduction')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="steam-calc-icon d-flex justify-content-center align-items-center">
@@ -165,7 +166,8 @@ class="card calc-card-item m-2" (click)="openCalculator('waste-heat')">
     </div>
     <!--tank insulation reduction-->
     <div
-      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Other Fuel') && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
+      && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
       class="card calc-card-item m-2" (click)="openCalculator('tank-insulation-reduction')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="steam-calc-icon d-flex justify-content-center align-items-center">
