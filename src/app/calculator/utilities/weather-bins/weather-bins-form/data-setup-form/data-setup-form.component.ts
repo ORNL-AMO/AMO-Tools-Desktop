@@ -37,7 +37,6 @@ export class DataSetupFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.weatherDbService.initWeatherData();
-
     this.inputDataSub = this.weatherBinsService.inputData.subscribe(inputData => {
       this.inputData = inputData;
       if(this.inputData.fileName){

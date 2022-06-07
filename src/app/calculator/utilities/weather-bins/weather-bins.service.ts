@@ -4,7 +4,6 @@ import { CsvImportData } from '../../../shared/helper-services/csv-to-json.servi
 import * as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 /*
 WEATHER BINS FIELD OPTIONS FROM "TMY3" CSV DATA FOUND AT
 https://rredc.nrel.gov/solar/old_data/nsrdb/1991-2005/tmy3/by_state_and_city.html
@@ -31,7 +30,7 @@ export class WeatherBinsService {
   dataSubmitted: BehaviorSubject<boolean>;
   integratedCalculator: BehaviorSubject<WeatherIntegratedCalculatorData>;
 
-  constructor(private convertUnitsService: ConvertUnitsService, private indexedDbService: IndexedDbService) {
+  constructor(private convertUnitsService: ConvertUnitsService) {
     let initInputData: WeatherBinsInput = this.initInputData();
     this.inputData = new BehaviorSubject(initInputData);
     // this.dataFields = new BehaviorSubject(undefined);
