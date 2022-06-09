@@ -52,13 +52,8 @@ export class LiquidMaterialFormService {
       'additionalHeatRequired': [chargeMaterial.liquidChargeMaterial.additionalHeat, Validators.required],
       'name': [chargeMaterial.name]
     });
-
-    //
-    if (!chargeMaterial.liquidChargeMaterial.materialId){
-      formGroup = this.initLiquidForm();
-    } else {
-      formGroup = this.setInitialTempValidator(formGroup);
-    }
+    
+    formGroup = this.setInitialTempValidator(formGroup);
     return formGroup;
   }
 

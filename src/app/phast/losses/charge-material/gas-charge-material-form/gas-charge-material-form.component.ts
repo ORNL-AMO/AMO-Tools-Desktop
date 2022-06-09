@@ -7,6 +7,8 @@ import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { GasLoadChargeMaterial } from '../../../../shared/models/materials';
+import { GasLoadMaterialDbService } from '../../../../indexedDb/gas-load-material-db.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-gas-charge-material-form',
@@ -35,10 +37,13 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
+  usedMaterialExsits: boolean = true;
+  editExistingMaterial: boolean;
+  existingMaterial: GasLoadChargeMaterial;
   materialTypes: Array<GasLoadChargeMaterial>;
   showModal: boolean = false;
   idString: string;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private gasLoadMaterialDbService: GasLoadMaterialDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isBaseline) {
@@ -64,6 +69,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
       if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
         if (this.chargeMaterialForm.controls.materialSpecificHeat.value === '') {
           this.setProperties();
+        } else {
+          this.checkForMaterial();
         }
       }
     }
@@ -109,6 +116,34 @@ export class GasChargeMaterialFormComponent implements OnInit {
   focusOut() {
     this.changeField.emit('default');
   }
+
+  checkForMaterial() {
+    let selectedMaterial: GasLoadChargeMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (!selectedMaterial) {
+      this.usedMaterialExsits = false;
+      this.addMaterial();
+    } 
+    this.save();
+  }
+
+  async addMaterial() {
+    let customMaterial: GasLoadChargeMaterial = {
+      id: 999,
+      substance: "Custom Material",
+      selected: true,
+      specificHeatVapor: this.chargeMaterialForm.controls.materialSpecificHeat.value
+    };
+    let suiteDbResult = this.suiteDbService.insertGasLoadChargeMaterial(customMaterial);
+    if (suiteDbResult === true) {
+      await firstValueFrom(this.gasLoadMaterialDbService.addWithObservable(customMaterial));
+    }
+    this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
+    let newMaterial: GasLoadChargeMaterial = this.materialTypes.find(material => { return material.substance === customMaterial.substance; });
+    this.chargeMaterialForm.patchValue({
+      materialId: newMaterial.id
+    });
+  }
+
   setProperties() {
     let selectedMaterial: GasLoadChargeMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (selectedMaterial) {
@@ -221,7 +256,15 @@ export class GasChargeMaterialFormComponent implements OnInit {
     }
   }
 
-  showMaterialModal() {
+  showMaterialModal(editExistingMaterial: boolean) {
+    this.editExistingMaterial = editExistingMaterial;
+    if(editExistingMaterial === true) {
+      this.existingMaterial = {
+        id: this.chargeMaterialForm.controls.materialId.value,
+        specificHeatVapor: this.chargeMaterialForm.controls.materialSpecificHeat.value,
+        substance: " "
+      };
+    }
     this.showModal = true;
     this.lossesService.modalOpen.next(this.showModal);
     this.materialModal.show();
@@ -240,7 +283,12 @@ export class GasChargeMaterialFormComponent implements OnInit {
     }
     this.materialModal.hide();
     this.showModal = false;
+    this.dismissMessage();
     this.lossesService.modalOpen.next(this.showModal);
     this.calculate.emit(true);
+  }
+
+  dismissMessage() {
+    this.usedMaterialExsits = true;
   }
 }

@@ -48,13 +48,8 @@ export class GasMaterialFormService {
       'additionalHeatRequired': [chargeMaterial.gasChargeMaterial.additionalHeat, Validators.required],
       'name': [chargeMaterial.name]
     });
-
-    //
-    if (!chargeMaterial.gasChargeMaterial.materialId){
-      formGroup = this.initGasForm();
-    } else {
-      formGroup = this.setInitialTempValidator(formGroup);
-    }
+    
+    formGroup = this.setInitialTempValidator(formGroup);
     return formGroup;
   }
 
