@@ -2,24 +2,18 @@
     <h5>
         Weather Bins Help
         <br>
-        <small> This calculator can be useful when estimating energy savings from weather-related
-            energy conservation measures. This calculator can take both TMY3 and historical weather data files.
-        </small>
-        <!-- <hr class="my-1 hr-spacer"> -->
-        <!-- <small>
-            TMY3 weather files can be downloaded for all U.S. states and territories:
-            <a href="https://rredc.nrel.gov/solar/old_data/nsrdb/1991-2005/tmy3/by_state_and_city.html"
-                target="_blank">https://rredc.nrel.gov/solar/old_data/nsrdb/1991-2005/tmy3/by_state_and_city.html</a>
-        </small>
-        <hr class="my-1 hr-spacer">
         <small>
-            The TMY3 weather files for each USAFN number can be downloaded:
-            <a href="https://rredc.nrel.gov/solar/old_data/nsrdb/1991-2005/tmy3/by_USAFN_old.html"
-                target="_blank">https://rredc.nrel.gov/solar/old_data/nsrdb/1991-2005/tmy3/by_USAFN_old.html</a>
-        </small> -->
+            This calculator can be useful when estimating energy savings from weather-related energy conservation measures.
+            <br>
+            This calculator requires modified TMY3 weather data with calculated wet bulb temperatures that can be found at 
+            <a href="https://energyefficiency.ornl.gov/tools-training/" target="_blank">https://energyefficiency.ornl.gov/tools-training/</a>.
+            Use the Weather Station Lookup Tool to find the file name you will need based on your zip code.
+            <br>
+            You can also load the last file uploaded using the link below the Data File field.            
+        </small>
     </h5>
     <hr class="my-1 hr-spacer">
-    <!-- <table class="table table-striped">
+    <table class="table table-striped">
         <tbody>
             <tr class="bold">
                 <td>Parameter Option</td>
@@ -38,5 +32,91 @@
                 </td>
             </tr>
         </tbody>
-    </table> -->
+    </table>
+
+    <div class="my-2" *ngIf="currentField == 'startMonth' || currentField == 'startDay'">
+        <h6>
+            Start Day
+            <small class="text-muted">
+                <br>
+                Choose the month and day you wish to start your data analysis on.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'endMonth' || currentField == 'endDay'">
+        <h6>
+            End Day
+            <small class="text-muted">
+                <br>
+                Choose the month and day you wish to end your data analysis on.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'autoBinParameter'">
+        <h6>
+            Auto-bin Parameter
+            <small class="text-muted">
+                <br>
+                Possible weather data to bin. The tool will find the minimum and maximum of the chosen parameter and automatically create bins based on the bin size chosen. 
+                <br>
+                Click "Set Bins" after finalizing your auto-bin parameter and bin size.
+                <br>
+                If you wish to create your own analysis with different sized bins, click "+Add Case" for each bin you wish to create.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'autoBinRangeValue'">
+        <h6>
+            Bin Size
+            <small class="text-muted">
+                <br>
+                The size of the bins you wish to automatically create. The tool will find the minimum and maximum of the chosen parameter and automatically create bins based on the bin size chosen. 
+                <br>
+                Click "Set Bins" after finalizing your auto-bin parameter and bin size.
+                <br>
+                If you wish to create your own analysis with different sized bins, click "+Add Case" for each bin you wish to create.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'weatherParameter'">
+        <h6>
+            Weather Parameter
+            <small class="text-muted">
+                <br>
+                Possible weather data to bin. If creating bins manually, you can create bins with multiple parameters to find all hours that match both conditions.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'upperBound'">
+        <h6>
+            Upper Bound
+            <small class="text-muted">
+                <br>
+                Highest value for the bin.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'lowerBound'">
+        <h6>
+            Lower Bound
+            <small class="text-muted">
+                <br>
+                Lowest value for the bin.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
 </div>
