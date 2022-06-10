@@ -65,7 +65,8 @@ export class ChillerPerformanceFormComponent implements OnInit {
   initForm() {
     let chillerPerformanceInput: ChillerPerformanceInput = this.chillerPerformanceService.chillerPerformanceInput.getValue();
     this.form = this.chillerPerformanceFormService.getChillerPerformanceForm(chillerPerformanceInput);
-    this.setChillerCharacteristics();
+    // JL note: For some reason, we need to wait a tick before calling setChillerCharacteristics() in order to get the inputs to disable/enable properly.
+    setTimeout(this.setChillerCharacteristics.bind(this), 1);
   }
 
   setChillerCharacteristics() {
@@ -93,6 +94,10 @@ export class ChillerPerformanceFormComponent implements OnInit {
       this.form.controls.compressorConfigType.disable();
     } 
     this.form.controls.compressorConfigType.updateValueAndValidity();
+
+    this.form.patchValue({maxCapacityRatio: 0.92});
+    this.form.controls.maxCapacityRatio.enable();
+    this.form.controls.maxCapacityRatio.updateValueAndValidity();
   }
 
   setScrewChillerOptions() {
@@ -103,6 +108,10 @@ export class ChillerPerformanceFormComponent implements OnInit {
     this.form.patchValue({compressorConfigType: 0});
     this.form.controls.compressorConfigType.disable();
     this.form.controls.compressorConfigType.updateValueAndValidity();
+
+    this.form.patchValue({maxCapacityRatio: 1});
+    this.form.controls.maxCapacityRatio.disable();
+    this.form.controls.maxCapacityRatio.updateValueAndValidity();
   }
 
 
