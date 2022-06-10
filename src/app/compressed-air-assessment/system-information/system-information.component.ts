@@ -30,8 +30,8 @@ export class SystemInformationComponent implements OnInit {
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.setCo2SavingsData(compressedAirAssessment);
     this.form = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, this.settings);
+    this.setCo2SavingsData(compressedAirAssessment); // Grab Co2SavingsData immediately, in case the user does not specify non-default values
   }
 
   save(co2SavingsData?: Co2SavingsData) {
@@ -39,6 +39,11 @@ export class SystemInformationComponent implements OnInit {
     let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
     if (co2SavingsData) {
       systemInformation.co2SavingsData = co2SavingsData;
+      this.co2SavingsData = co2SavingsData; // Cache co2SavingsData in case save() is called later without providing co2SavingsData
+    }
+    // Cached co2SavingsData from setCo2SavingsData() or previous calls to save(co2SavingsData)
+    else if (this.co2SavingsData) {
+      systemInformation.co2SavingsData = this.co2SavingsData;
     }
     compressedAirAssessment.systemInformation = systemInformation;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
@@ -106,11 +111,20 @@ export class SystemInformationComponent implements OnInit {
   }
 
   setCo2SavingsData(compressedAirAssessment: CompressedAirAssessment) {
+
+    let co2SavingsData: Co2SavingsData;
+
     if (compressedAirAssessment.systemInformation.co2SavingsData) {
-      this.co2SavingsData = compressedAirAssessment.systemInformation.co2SavingsData;
-    } else {
-      let co2SavingsData: Co2SavingsData = this.assessmentCo2SavingsService.getCo2SavingsDataFromSettingsObject(this.settings);
-      this.co2SavingsData = co2SavingsData;
+      // Get co2SavingsData from memory if we have it
+      co2SavingsData = compressedAirAssessment.systemInformation.co2SavingsData;
     }
+    else {
+      // Load from settings if we don't yet have it in memory
+      co2SavingsData = this.assessmentCo2SavingsService.getCo2SavingsDataFromSettingsObject(this.settings);
+    }
+
+    // Cache into this.co2SavingsData in case save() is called later without co2SavingsData provided
+    this.co2SavingsData = co2SavingsData;
+    this.save(co2SavingsData);
   }
 }
