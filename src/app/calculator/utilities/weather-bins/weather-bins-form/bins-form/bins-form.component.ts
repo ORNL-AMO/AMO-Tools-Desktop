@@ -59,6 +59,9 @@ export class BinsFormComponent implements OnInit {
     this.integratedCalculatorSub.unsubscribe();
   }
 
+  focusField(str: string) {
+    this.weatherBinsService.currentField.next(str);
+  }
 
   save() {
     this.inputData.cases = [];
@@ -70,8 +73,6 @@ export class BinsFormComponent implements OnInit {
     this.inputData.cases = [];
     this.weatherBinsService.inputData.next(this.inputData)
   }
-
-
 
   setParameterMinMax() {
     if (this.importDataFromCsv) {

@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { WeatherBinsService } from '../weather-bins.service'; 
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-weather-bins-help',
@@ -11,15 +13,21 @@ export class WeatherBinsHelpComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  currentFieldSub: Subscription;
+  currentField: string;
+
   fieldHelp: Array<{
     fieldName: string,
     min: number,
     max: number
   }>;
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private weatherBinsService: WeatherBinsService) { }
 
   ngOnInit(): void {
-    // this.setFieldHelp();
+    this.setFieldHelp();
+    this.currentFieldSub = this.weatherBinsService.currentField.subscribe(val => {
+      this.currentField = val;
+    });
   }
 
   setFieldHelp() {

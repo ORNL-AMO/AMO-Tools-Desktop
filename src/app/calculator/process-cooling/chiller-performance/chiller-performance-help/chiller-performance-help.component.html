@@ -4,23 +4,146 @@
       <br>
       <small class="text-muted">
         Determines chiller energy consumption/potential energy savings due to chilled water supply temperature and entering condenser water temperature reset. Algorithm methodology has been adopted by the eQuest energy simulation tool.
+        <br>
+        Use the Weather Data Calculator and weather data found at 
+        <a href="https://energyefficiency.ornl.gov/tools-training/" target="_blank">https://energyefficiency.ornl.gov/tools-training/</a>
+        to understand the operating hours spent at different set points.
       </small>
     </h5>
     <hr class="my-1 hr-spacer">
-  
-    <div class="my-2" *ngIf="currentField == 'operatingHours'">
+ 
+    <div class="my-2" *ngIf="currentField == 'chillerType'">
       <h6>
-        Operating hours
+        Chiller Type
         <small class="text-muted">
           <br>
-          Number of hours per year the lighting is on. This is not necessarily how many hours the facility is operating.
-          Be sure to include normally scheduled overtime.
+          Choose the type of chiller. The chiller type is determined by the types of their compressors. Centrifugal chillers use centrifugal compressors and screw chillers use screw compressors.
           <hr>
         </small>
       </h6>
     </div>
- 
- 
+
+    <div class="my-2" *ngIf="currentField == 'condenserCoolingType'">
+      <h6>
+        Condenser Cooling Type
+        <small class="text-muted">
+          <br>
+          Choose the type of cooling used by the condenser. Air-cooled condensers dissipate heat from chiller's condenser directly to air. Water-colled condensers are typically connected to a condenser water loop with cooling towers and use cooling towers to dissipate heat to air.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'motorDriveType'">
+      <h6>
+        Motor Drive Type
+        <small class="text-muted">
+          <br>
+          Choose the motor drive type. Open chillers are driven by external motors and hermetic chillers are driven by external motors.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'compressorConfigType'">
+      <h6>
+        Compressor Config Type
+        <small class="text-muted">
+          <br>
+          Choose the compressor configureation type. A variable speed drive on the motor allows the compressor to operate much more efficiently at partial loads than standard compressors. Chillers with magnetic bearing typically have higher energy efficiency because of lower bearing friction.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'ariCapacity'">
+      <h6>
+        Chiller Capacity @ ARI
+        <small class="text-muted">
+          <br>
+          Chiller Capacity is  how much cooling a chiller is producing or is able to produce. To standardize the value, it is measured at a certain raited condition: The Air Conditioning and Refrigeration Institute (ARI) Chiller Capacity rating. The temperature conditions are based on the type of chiller: for water-cooled chillers use 44 F chilled water temperature; use 85 F condensing water temperature for water-cooled condensers; and use 95 F air temperature for air-cooled condensers.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'ariEfficiency'">
+      <h6>
+        Full Load Efficiency @ ARI
+        <small class="text-muted">
+          <br>
+          The Chiller Efficiency when running at full (100%) load. To standardize the value, it is measured at a certain raited condition: The Air Conditioning and Refrigeration Institute (ARI) Chiller Capacity rating. The temperature conditions are based on the type of chiller: for water-cooled chillers use 44 F chilled water temperature; use 85 F condensing water temperature for water-cooled condensers; and use 95 F air temperature for air-cooled condensers.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'maxCapacityRatio'">
+      <h6>
+        Design/Max Capacity Ratio
+        <small class="text-muted">
+          <br>
+          Specifies the ratio of the design capacity to the maximum capacity.  The maximum capacity of a centrifugal chiller is often greater than the design capacity; either because of the components used to build up the chiller, or in order to meet the efficiency requirements at the specified conditions. For centrafugal compressors, 0.92 is a good first estimate.  This field is not applicable to screw chillers, please use 1.0.
+          <hr>
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'operatingHours'">
+      <h6>
+        Annual Operating Hours
+        <small class="text-muted">
+          <br>
+          Number of hours per year the chiller is at these conditions. This is not necessarily how many hours the facility is operating.  If using Weather Data to create different set points, this will be the annual hours spent at each set point (determined by weather bins).
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'waterFlowRate'">
+      <h6>
+        Chilled Water Flow Rate
+        <small class="text-muted">
+          <br>
+          Chilled water flow rate through the chiller evaporator. The value can be obtained using flow meters or estimated using the relationship between flow rate and pressure drop across the chiller evaporator bundle or pump curves.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'waterDeltaT'">
+      <h6>
+        Chilled Water &Delta;T
+        <small class="text-muted">
+          <br>
+          The temperature difference between the return temperature and supply temperature of the chilled water. This can be calculated using the temperature readings from the thermcouples installed before the chilled water leaving and entering the chiller evaporator bundle.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'baselineWaterSupplyTemp' || currentField == 'modWaterSupplyTemp'">
+      <h6>
+        Chilled Water Supply Temperature
+        <small class="text-muted">
+          <br>
+          Temperature of water leaving the chiller evaporator.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'baselineWaterEnteringTemp' || currentField == 'modWaterEnteringTemp'">
+      <h6>
+        Entering Condenser Water Temperature
+        <small class="text-muted">
+          <br>
+          Temperature of water entering the chiller condenser.
+          <hr>
+        </small>
+      </h6>
+    </div>
+
   </div>
   
  

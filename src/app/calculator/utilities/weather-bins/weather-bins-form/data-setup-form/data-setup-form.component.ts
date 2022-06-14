@@ -65,6 +65,10 @@ export class DataSetupFormComponent implements OnInit {
     }
   }
 
+  focusField(str: string) {
+    this.weatherBinsService.currentField.next(str);
+  }
+
   setImportFile($event) {
     if ($event.target.files) {
       if ($event.target.files.length !== 0) {

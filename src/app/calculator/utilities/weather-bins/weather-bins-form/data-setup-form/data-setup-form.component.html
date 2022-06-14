@@ -44,12 +44,12 @@
                 <label for="startMonth">Start Day</label>
                 <div class="d-flex w-50">
                     <select name="startMonth" id="startMonth" class="form-control" [(ngModel)]="inputData.startMonth"
-                        (change)="setStartMonth()">
+                        (change)="setStartMonth()" (focus)="focusField('startMonth')">
                         <option *ngFor="let dateSelection of dateSelectionData" [ngValue]="dateSelection.monthValue">
                             {{dateSelection.month}}</option>
                     </select>
                     <select name="startDay" id="startDay" class="form-control" [(ngModel)]="inputData.startDay"
-                        (change)="save()">
+                        (change)="save()"  (focus)="focusField('startDay')">
                         <option *ngFor="let day of startMonthDays" [ngValue]="day">
                             {{day}}</option>
                     </select>
@@ -59,12 +59,12 @@
                 <label for="endMonth">End Day</label>
                 <div class="d-flex w-50">
                     <select name="endMonth" id="endMonth" class="form-control" [(ngModel)]="inputData.endMonth"
-                        (change)="setEndMonth()">
+                        (change)="setEndMonth()" (focus)="focusField('endMonth')">
                         <option *ngFor="let dateSelection of dateSelectionData" [ngValue]="dateSelection.monthValue">
                             {{dateSelection.month}}</option>
                     </select>
                     <select name="endDay" id="endDay" class="form-control" [(ngModel)]="inputData.endDay"
-                        (change)="save()">
+                        (change)="save()"  (focus)="focusField('endDay')">
                         <option *ngFor="let day of endMonthDays" [ngValue]="day">
                             {{day}}</option>
                     </select>

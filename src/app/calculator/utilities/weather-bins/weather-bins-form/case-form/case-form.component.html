@@ -9,7 +9,7 @@
             <div class="form-group">
                 <label for="{{'field'+parameterIndex}}">Weather Parameter</label>
                 <select name="{{'field'+parameterIndex}}" id="{{'field'+parameterIndex}}" class="form-control"
-                    [(ngModel)]="parameter.field" (change)="save()">
+                    [(ngModel)]="parameter.field" (change)="save()" (focus)="focusField('weatherParameter')">
                     <!-- <option *ngFor="let field of dataFields" [ngValue]="field">{{field}}</option> -->
                     <option [ngValue]="'Dry-bulb (C)'">
                         Dry-bulb Temperature
@@ -43,7 +43,7 @@
                 <label for="{{'upperBound'+parameterIndex}}">Upper Bound</label>
                 <div class="input-group">
                     <input name="{{'upperBound'+parameterIndex}}" type="number" class="form-control"
-                        id="{{'upperBound'+parameterIndex}}" [(ngModel)]="parameter.upperBound" (input)="save()">
+                        id="{{'upperBound'+parameterIndex}}" [(ngModel)]="parameter.upperBound" (input)="save()" (focus)="focusField('upperBound')">
                     <span class="input-group-addon units">
                         <app-parameter-unit [settings]="settings" [parameter]="parameter.field">
                         </app-parameter-unit>
@@ -55,7 +55,7 @@
                 <label for="{{'lowerBound'+parameterIndex}}">Lower Bound</label>
                 <div class="input-group">
                     <input name="{{'lowerBound'+parameterIndex}}" type="number" class="form-control"
-                        id="{{'lowerBound'+parameterIndex}}" [(ngModel)]="parameter.lowerBound" (input)="save()">
+                        id="{{'lowerBound'+parameterIndex}}" [(ngModel)]="parameter.lowerBound" (input)="save()" (focus)="focusField('lowerBound')">
                     <span class="input-group-addon units">
                         <app-parameter-unit [settings]="settings" [parameter]="parameter.field">
                         </app-parameter-unit>

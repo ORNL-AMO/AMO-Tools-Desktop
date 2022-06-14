@@ -4,22 +4,113 @@
       <br>
       <small class="text-muted">
         Determines cooling tower basin heater energy consumption based on ambient dry bulb, basin temperature setpoint and windspeed. Additionally, this calculator lets the user determine energy savings due to basin heater temperature setpoint optimization. This algorithm follows the methodology adopted by the eQuest energy simulation tool.
+        <br>
+        Use the Weather Data Calculator and weather data found at 
+        <a href="https://energyefficiency.ornl.gov/tools-training/" target="_blank">https://energyefficiency.ornl.gov/tools-training/</a>
+        to automatically calcuate using weather binning approach.
       </small>
     </h5>
     <hr class="my-1 hr-spacer">
-  
-    <div class="my-2" *ngIf="currentField == 'operatingHours'">
+ 
+    <div class="my-2" *ngIf="currentField == 'ratedCapacity'">
       <h6>
-        Operating hours
+        Rated Capacity
         <small class="text-muted">
           <br>
-          Number of hours per year the lighting is on. This is not necessarily how many hours the facility is operating.
-          Be sure to include normally scheduled overtime.
+          The rated cooling tower capacity is the capacity rated at the CTI (Cooling Tower Institute) conditions (95°F entering condensing water temp and 85°F leaving condensing water temp; 78°F wet bulb temperature; 10°F Range and 7°F Approach; 3 GPM per ton). The cooling tower capacity can be found on the name plate.
           <hr>
         </small>
       </h6>
     </div>
- 
+    
+    <div class="my-2" *ngIf="currentField == 'ratedTempSetPoint'">
+      <h6>
+        Basin Temperature Setpoint
+        <small class="text-muted">
+          <br>
+          Set point temperature of the basin used for the calculation of rated pan heat loss.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'ratedTempDryBulb'">
+      <h6>
+        Ambient Dry Bulb Temperature
+        <small class="text-muted">
+          <br>
+          Ambient dry bulb temperature for the calucation of rated pan heat loss.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'ratedWindSpeed'">
+      <h6>
+        Windspeed
+        <small class="text-muted">
+          <br>
+          Windspeed for the calcuation of rated pan heat loss.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'panLossRatio'">
+      <h6>
+        Pan Loss Ratio
+        <small class="text-muted">
+          <br>
+          The ratio of the design pan losses to the design cooling tower capacity at the CTI (Cooling Tower Institute) conditions (95°F entering condensing water temp and 85°F leaving condensing water temp; 78°F wet bulb temperature; 10°F Range and 7°F Approach; 3 GPM per ton).
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'operatingWindSpeed'">
+      <h6>
+        Windspeed
+        <small class="text-muted">
+          <br>
+          The estimated average windspeed for these operation hours.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  
+    <div class="my-2" *ngIf="currentField == 'operatingHours'">
+      <h6>
+        Annual Operating Hours
+        <small class="text-muted">
+          <br>
+          Number of hours per year the chiller is at these conditions. This is not necessarily how many hours the facility is operating.  If using Weather Data, this is set automatically from the weather bins.
+          <hr>
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'operatingTempDryBulb'">
+      <h6>
+        Ambient Dry Bulb Temperature
+        <small class="text-muted">
+          <br>
+          Actual ambient dry bulb temperature. If using Weather Data, this is set automatically using the midpoint of each weather bin.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'baselineTempSetPoint' || currentField == 'modTempSetPoint'">
+      <h6>
+        Basin Temperature Setpoint
+        <small class="text-muted">
+          <br>
+          The operating setpoint for Basin Temperature. Can be configured in the building automation system.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
  
   </div>
   

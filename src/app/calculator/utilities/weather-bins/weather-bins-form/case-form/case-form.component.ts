@@ -34,6 +34,10 @@ export class CaseFormComponent implements OnInit {
     this.importDataFromCsvSub.unsubscribe();
   }
 
+  focusField(str: string) {
+    this.weatherBinsService.currentField.next(str);
+  }
+
   save() {
     this.weatherBinsService.save(this.inputData, this.settings);
   }

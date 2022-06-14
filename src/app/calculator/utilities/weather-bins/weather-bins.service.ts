@@ -29,6 +29,7 @@ export class WeatherBinsService {
   dataInDateRange: Array<any>;
   dataSubmitted: BehaviorSubject<boolean>;
   integratedCalculator: BehaviorSubject<WeatherIntegratedCalculatorData>;
+  currentField: BehaviorSubject<string>;
 
   constructor(private convertUnitsService: ConvertUnitsService) {
     let initInputData: WeatherBinsInput = this.initInputData();
@@ -37,6 +38,7 @@ export class WeatherBinsService {
     this.importDataFromCsv = new BehaviorSubject(undefined);
     this.dataSubmitted = new BehaviorSubject<boolean>(false);
     this.integratedCalculator = new BehaviorSubject<WeatherIntegratedCalculatorData>(undefined);
+    this.currentField = new BehaviorSubject<string>(undefined);
   }
 
   resetData() {

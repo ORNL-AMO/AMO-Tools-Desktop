@@ -58,7 +58,6 @@ export class WeatherDbService {
           individualDataFromCsv: [weatherData],
         },
       }
-      debugger;
       await firstValueFrom(this.weatherDataIdbService.updateWithObservable(weatherDataDbData));
     }
   }

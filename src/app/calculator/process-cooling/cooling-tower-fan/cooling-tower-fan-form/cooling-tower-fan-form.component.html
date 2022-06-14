@@ -8,7 +8,7 @@
 
       <div class="form-group">
         <label for="towerType">Tower Type</label>
-        <select class="form-control" formControlName="towerType" (change)="calculate()"
+        <select class="form-control" id="towerType" formControlName="towerType" (change)="calculate()"
           (focus)="focusField('towerType')">
           <option *ngFor="let towerType of towerTypes" [ngValue]="towerType.value">
             {{towerType.display}}
@@ -177,7 +177,7 @@
     <form #formElement [formGroup]="form">
       <div class="form-group">
         <label for="baselineSpeedType">Fan Control</label>
-        <select class="form-control" formControlName="baselineSpeedType" (change)="calculate()"
+        <select class="form-control" id="baselineSpeedType" formControlName="baselineSpeedType" (change)="calculate()"
           (focus)="focusField('baselineSpeedType')">
           <option *ngFor="let fanControlType of fanControlTypes" [ngValue]="fanControlType.value">
             {{fanControlType.display}}
@@ -195,7 +195,7 @@
     <form #formElement [formGroup]="form">
       <div class="form-group">
         <label for="modSpeedType">Fan Control</label>
-        <select class="form-control" formControlName="modSpeedType" (change)="calculate()"
+        <select class="form-control" id="modSpeedType" formControlName="modSpeedType" (change)="calculate()"
           (focus)="focusField('modSpeedType')">
           <option *ngFor="let fanControlType of fanControlTypes" [ngValue]="fanControlType.value">
             {{fanControlType.display}}
