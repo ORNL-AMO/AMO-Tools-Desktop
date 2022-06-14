@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ChillerStagingInput } from '../../../../shared/models/chillers';
@@ -11,7 +11,7 @@ import { ChillerStagingService } from '../chiller-staging.service';
 @Component({
   selector: 'app-chiller-staging-form',
   templateUrl: './chiller-staging-form.component.html',
-  styleUrls: ['./chiller-staging-form.component.css']
+  styleUrls: ['./chiller-staging-form.component.css'],
 })
 export class ChillerStagingFormComponent implements OnInit {
   @Input()
@@ -36,19 +36,21 @@ export class ChillerStagingFormComponent implements OnInit {
   formWidth: number;
 
   constructor(private chillerStagingService: ChillerStagingService, 
-              private chillerStagingFormService: ChillerStagingFormService) { }
+              private chillerStagingFormService: ChillerStagingFormService,
+              private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.initSubscriptions();
+    this.initForm();
   }
 
   initSubscriptions() {
-    this.resetDataSub = this.chillerStagingService.resetData.subscribe(value => {
-      this.initForm();
-    })
-    this.generateExampleSub = this.chillerStagingService.generateExample.subscribe(value => {
-      this.initForm();
-    })
+    this.resetDataSub = this.chillerStagingService.resetData.subscribe(isPressed => {
+      if (isPressed) this.initForm();
+    });
+    this.generateExampleSub = this.chillerStagingService.generateExample.subscribe(isPressed => {
+      if (isPressed) this.initForm();
+    });
   }
 
   ngAfterViewInit() {
@@ -65,12 +67,12 @@ export class ChillerStagingFormComponent implements OnInit {
   initForm() {
     let chillerStagingInput: ChillerStagingInput = this.chillerStagingService.chillerStagingInput.getValue();
     this.form = this.chillerStagingFormService.getChillerStagingForm(chillerStagingInput);
-    // JL note: For some reason, we need to wait a tick before calling setChillerCharacteristics() in order to get the inputs to disable/enable properly.
-    setTimeout(this.setChillerCharacteristics.bind(this), 1);
+    this.setChillerCharacteristics();
   }
 
   setChillerCharacteristics() {
     this.characteristics = JSON.parse(JSON.stringify(chillerCharacteristics));
+    this.cd.detectChanges();
     if (this.form.value.chillerType == 0) {
       this.setCentrifugalChillerOptions();
     } else if (this.form.value.chillerType == 1) {

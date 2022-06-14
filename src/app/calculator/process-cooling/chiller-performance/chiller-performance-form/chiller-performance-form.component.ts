@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ChillerPerformanceInput } from '../../../../shared/models/chillers';
@@ -36,18 +36,20 @@ export class ChillerPerformanceFormComponent implements OnInit {
   formWidth: number;
 
   constructor(private chillerPerformanceService: ChillerPerformanceService, 
-              private chillerPerformanceFormService: ChillerPerformanceFormService) { }
+              private chillerPerformanceFormService: ChillerPerformanceFormService,
+              private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.initSubscriptions();
+    this.initForm();
   }
 
   initSubscriptions() {
-    this.resetDataSub = this.chillerPerformanceService.resetData.subscribe(value => {
-      this.initForm();
+    this.resetDataSub = this.chillerPerformanceService.resetData.subscribe(isPressed => {
+      if (isPressed) this.initForm();
     })
-    this.generateExampleSub = this.chillerPerformanceService.generateExample.subscribe(value => {
-      this.initForm();
+    this.generateExampleSub = this.chillerPerformanceService.generateExample.subscribe(isPressed => {
+      if (isPressed) this.initForm();
     })
   }
 
@@ -65,12 +67,12 @@ export class ChillerPerformanceFormComponent implements OnInit {
   initForm() {
     let chillerPerformanceInput: ChillerPerformanceInput = this.chillerPerformanceService.chillerPerformanceInput.getValue();
     this.form = this.chillerPerformanceFormService.getChillerPerformanceForm(chillerPerformanceInput);
-    // JL note: For some reason, we need to wait a tick before calling setChillerCharacteristics() in order to get the inputs to disable/enable properly.
-    setTimeout(this.setChillerCharacteristics.bind(this), 1);
+    this.setChillerCharacteristics();
   }
 
   setChillerCharacteristics() {
     this.characteristics = JSON.parse(JSON.stringify(chillerCharacteristics));
+    this.cd.detectChanges();
     if (this.form.value.chillerType == 0) {
       this.setCentrifugalChillerOptions();
     } else if (this.form.value.chillerType == 1) {
