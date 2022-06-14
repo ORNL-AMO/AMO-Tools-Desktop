@@ -1,11 +1,11 @@
 <form [formGroup]="chargeMaterialForm">
   <div class="alert-warning m-2 py-3 small mx-auto w-75 text-center" *ngIf="!usedMaterialExsits">
     <div>
-      A custom material used in this assessment has been deleted. A placeholder material was created to save the data. To
-      edit the custom material, please use the Custom Materials database or add a new material on this page.
+      A custom material used in this assessment has been deleted and a placeholder material was created to save the data. To
+      edit the custom material, please use the Custom Materials database or click 'Restore Gas Material'.
     </div>
     <div class="d-flex justify-content-around">
-      <a class="click-link" (click)="showMaterialModal(true)">Restore Gas Load Charge Material</a>
+      <a class="click-link" (click)="showMaterialModal(true)">Restore Gas Material</a>
       <a class="click-link" (click)="dismissMessage()">Dismiss</a>
     </div>
   </div>
