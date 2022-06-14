@@ -128,8 +128,6 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   async addMaterial() {
     let customMaterial: SolidLoadChargeMaterial = {
-      id: 999,
-      selected: true,
       latentHeat: this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value,
       meltingPoint: this.chargeMaterialForm.controls.materialMeltingPoint.value,
       specificHeatLiquid: this.chargeMaterialForm.controls.materialHeatOfLiquid.value,
@@ -374,7 +372,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
         meltingPoint: this.chargeMaterialForm.controls.materialMeltingPoint.value,
         specificHeatLiquid: this.chargeMaterialForm.controls.materialHeatOfLiquid.value,
         specificHeatSolid: this.chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.value,
-        substance: " "
+        substance: "Custom Material"
       };
     }
     this.showModal = true;

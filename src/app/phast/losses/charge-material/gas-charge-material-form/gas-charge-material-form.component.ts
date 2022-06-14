@@ -128,9 +128,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
   async addMaterial() {
     let customMaterial: GasLoadChargeMaterial = {
-      id: 999,
       substance: "Custom Material",
-      selected: true,
       specificHeatVapor: this.chargeMaterialForm.controls.materialSpecificHeat.value
     };
     let suiteDbResult = this.suiteDbService.insertGasLoadChargeMaterial(customMaterial);
@@ -262,7 +260,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
       this.existingMaterial = {
         id: this.chargeMaterialForm.controls.materialId.value,
         specificHeatVapor: this.chargeMaterialForm.controls.materialSpecificHeat.value,
-        substance: " "
+        substance: "Custom Material"
       };
     }
     this.showModal = true;

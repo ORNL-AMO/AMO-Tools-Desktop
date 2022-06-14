@@ -119,9 +119,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
 
   async addMaterial() {
     let customMaterial: LiquidLoadChargeMaterial = {
-      id: 999,
       substance: "Custom Material",
-      selected: true,
       latentHeat: this.chargeMaterialForm.controls.materialLatentHeat.value,
       specificHeatLiquid: this.chargeMaterialForm.controls.materialSpecificHeatLiquid.value,
       specificHeatVapor: this.chargeMaterialForm.controls.materialSpecificHeatVapor.value,
@@ -319,7 +317,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
         specificHeatLiquid: this.chargeMaterialForm.controls.materialSpecificHeatLiquid.value,
         specificHeatVapor: this.chargeMaterialForm.controls.materialSpecificHeatVapor.value,
         vaporizationTemperature: this.chargeMaterialForm.controls.materialVaporizingTemperature.value,
-        substance: " "
+        substance: "Custom Material"
       };
     }
     this.showModal = true;
