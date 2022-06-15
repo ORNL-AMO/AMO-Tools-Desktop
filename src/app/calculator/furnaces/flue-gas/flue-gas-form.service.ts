@@ -122,7 +122,10 @@ export class FlueGasFormService {
       'CO2': [loss.flueGasByVolume.CO2, Validators.required],
       'SO2': [loss.flueGasByVolume.SO2, Validators.required],
       'O2': [loss.flueGasByVolume.O2, Validators.required],
-      'name': [loss.name]
+      'name': [loss.name],
+      'specificGravity': [loss.flueGasByVolume.specificGravity],
+      'heatingValue': [loss.flueGasByVolume.heatingValue],
+      'heatingValueVolume': [loss.flueGasByVolume.heatingValueVolume]
     });
 
     if (!inAssessment) {
@@ -153,7 +156,8 @@ export class FlueGasFormService {
       'o2': [loss.flueGasByMass.o2, Validators.required],
       'moisture': [loss.flueGasByMass.moisture, Validators.required],
       'nitrogen': [loss.flueGasByMass.nitrogen, Validators.required],
-      'name': [loss.name]
+      'name': [loss.name],
+      'heatingValue': [loss.flueGasByMass.heatingValue]
     });
 
     if (!inAssessment) {
