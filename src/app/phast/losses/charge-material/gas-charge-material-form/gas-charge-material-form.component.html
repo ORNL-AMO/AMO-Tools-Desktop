@@ -1,5 +1,5 @@
 <form [formGroup]="chargeMaterialForm">
-  <div class="alert-warning m-2 py-3 small mx-auto w-75 text-center" *ngIf="!usedMaterialExsits">
+  <div class="alert-warning m-2 small mx-auto w-100 text-center" *ngIf="hasDeletedCustomMaterial">
     <div>
       A custom material used in this assessment has been deleted and a placeholder material was created to save the data. To
       edit the custom material, please use the Custom Materials database or click 'Restore Gas Material'.

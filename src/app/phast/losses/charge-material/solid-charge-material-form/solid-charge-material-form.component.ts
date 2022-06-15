@@ -43,7 +43,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   firstChange: boolean = true;
 
-  usedMaterialExsits: boolean = true;
+  hasDeletedCustomMaterial: boolean = false;
   editExistingMaterial: boolean;
   existingMaterial: SolidLoadChargeMaterial;
   materialTypes: Array<SolidLoadChargeMaterial>;
@@ -85,7 +85,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
         if (this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value === '') {
           this.setProperties();
         } else {
-          this.checkForMaterial();
+          this.checkForDeletedMaterial();
         }
       }
     }
@@ -117,16 +117,16 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     this.changeField.emit('default');
   }
 
-  checkForMaterial() {
+  checkForDeletedMaterial() {
     let selectedMaterial: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (!selectedMaterial) {
-      this.usedMaterialExsits = false;
-      this.addMaterial();
+      this.hasDeletedCustomMaterial = true;
+      this.restoreMaterial();
     }
     this.save();
   }
 
-  async addMaterial() {
+  async restoreMaterial() {
     let customMaterial: SolidLoadChargeMaterial = {
       latentHeat: this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value,
       meltingPoint: this.chargeMaterialForm.controls.materialMeltingPoint.value,
@@ -398,6 +398,6 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   }
 
   dismissMessage() {
-    this.usedMaterialExsits = true;
+    this.hasDeletedCustomMaterial = false;
   }
 }

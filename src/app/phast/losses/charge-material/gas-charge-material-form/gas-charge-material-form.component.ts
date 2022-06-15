@@ -37,7 +37,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
-  usedMaterialExsits: boolean = true;
+  hasDeletedCustomMaterial: boolean = false;
   editExistingMaterial: boolean;
   existingMaterial: GasLoadChargeMaterial;
   materialTypes: Array<GasLoadChargeMaterial>;
@@ -70,7 +70,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
         if (this.chargeMaterialForm.controls.materialSpecificHeat.value === '') {
           this.setProperties();
         } else {
-          this.checkForMaterial();
+          this.checkForDeletedMaterial();
         }
       }
     }
@@ -117,16 +117,16 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.changeField.emit('default');
   }
 
-  checkForMaterial() {
+  checkForDeletedMaterial() {
     let selectedMaterial: GasLoadChargeMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (!selectedMaterial) {
-      this.usedMaterialExsits = false;
-      this.addMaterial();
+      this.hasDeletedCustomMaterial = true;
+      this.restoreMaterial();
     } 
     this.save();
   }
 
-  async addMaterial() {
+  async restoreMaterial() {
     let customMaterial: GasLoadChargeMaterial = {
       substance: "Custom Material",
       specificHeatVapor: this.chargeMaterialForm.controls.materialSpecificHeat.value
@@ -287,6 +287,6 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
 
   dismissMessage() {
-    this.usedMaterialExsits = true;
+    this.hasDeletedCustomMaterial = false;
   }
 }

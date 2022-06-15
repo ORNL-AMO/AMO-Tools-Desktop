@@ -43,7 +43,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   materialTypes: any;
   selectedMaterial: any;
 
-  usedMaterialExsits: boolean = true;
+  hasDeletedCustomMaterial: boolean = false;
   editExistingMaterial: boolean;
   existingMaterial: LiquidLoadChargeMaterial;
   warnings: LiquidMaterialWarnings;
@@ -77,7 +77,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
         if (this.chargeMaterialForm.controls.materialLatentHeat.value === '') {
           this.setProperties();
         } else {
-          this.checkForMaterial();
+          this.checkForDeletedMaterial();
         }
       }
     }
@@ -108,16 +108,16 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     this.changeField.emit('default');
   }
 
-  checkForMaterial() {
+  checkForDeletedMaterial() {
     let selectedMaterial: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (!selectedMaterial) {
-      this.usedMaterialExsits = false;
-      this.addMaterial();
+      this.hasDeletedCustomMaterial = true;
+      this.restoreMaterial();
     } 
     this.save();
   }
 
-  async addMaterial() {
+  async restoreMaterial() {
     let customMaterial: LiquidLoadChargeMaterial = {
       substance: "Custom Material",
       latentHeat: this.chargeMaterialForm.controls.materialLatentHeat.value,
@@ -342,6 +342,6 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   dismissMessage() {
-    this.usedMaterialExsits = true;
+    this.hasDeletedCustomMaterial = false;
   }
 }
