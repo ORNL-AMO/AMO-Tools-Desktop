@@ -1039,13 +1039,15 @@ Calculators
   box-shadow: #7b7878 2px 2px 5px 1px;
   background: linear-gradient(rgba(228, 219, 219, 0.34), #FC5B00);
 }
-
 .ico-size4.waste-water {
   height: 55px;
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
   box-shadow: #7b7878 2px 2px 5px 1px;
   background: linear-gradient(rgba(228, 219, 219, 0.34), #003087);
+}
+.ico-size4.process-cooling {
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #ADC8E2);
 }
 
 .ico-size5 {
