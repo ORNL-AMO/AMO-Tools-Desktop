@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ChillerPerformanceInput } from '../../../../shared/models/chillers';
@@ -36,18 +36,20 @@ export class ChillerPerformanceFormComponent implements OnInit {
   formWidth: number;
 
   constructor(private chillerPerformanceService: ChillerPerformanceService, 
-              private chillerPerformanceFormService: ChillerPerformanceFormService) { }
+              private chillerPerformanceFormService: ChillerPerformanceFormService,
+              private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.initSubscriptions();
+    this.initForm();
   }
 
   initSubscriptions() {
-    this.resetDataSub = this.chillerPerformanceService.resetData.subscribe(value => {
-      this.initForm();
+    this.resetDataSub = this.chillerPerformanceService.resetData.subscribe(isPressed => {
+      if (isPressed) this.initForm();
     })
-    this.generateExampleSub = this.chillerPerformanceService.generateExample.subscribe(value => {
-      this.initForm();
+    this.generateExampleSub = this.chillerPerformanceService.generateExample.subscribe(isPressed => {
+      if (isPressed) this.initForm();
     })
   }
 
@@ -70,6 +72,7 @@ export class ChillerPerformanceFormComponent implements OnInit {
 
   setChillerCharacteristics() {
     this.characteristics = JSON.parse(JSON.stringify(chillerCharacteristics));
+    this.cd.detectChanges();
     if (this.form.value.chillerType == 0) {
       this.setCentrifugalChillerOptions();
     } else if (this.form.value.chillerType == 1) {
@@ -93,6 +96,10 @@ export class ChillerPerformanceFormComponent implements OnInit {
       this.form.controls.compressorConfigType.disable();
     } 
     this.form.controls.compressorConfigType.updateValueAndValidity();
+
+    this.form.patchValue({maxCapacityRatio: 0.92});
+    this.form.controls.maxCapacityRatio.enable();
+    this.form.controls.maxCapacityRatio.updateValueAndValidity();
   }
 
   setScrewChillerOptions() {
@@ -103,6 +110,10 @@ export class ChillerPerformanceFormComponent implements OnInit {
     this.form.patchValue({compressorConfigType: 0});
     this.form.controls.compressorConfigType.disable();
     this.form.controls.compressorConfigType.updateValueAndValidity();
+
+    this.form.patchValue({maxCapacityRatio: 1});
+    this.form.controls.maxCapacityRatio.disable();
+    this.form.controls.maxCapacityRatio.updateValueAndValidity();
   }
 
 

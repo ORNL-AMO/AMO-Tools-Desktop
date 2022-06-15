@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ChillerStagingInput } from '../../../../shared/models/chillers';
@@ -11,7 +11,7 @@ import { ChillerStagingService } from '../chiller-staging.service';
 @Component({
   selector: 'app-chiller-staging-form',
   templateUrl: './chiller-staging-form.component.html',
-  styleUrls: ['./chiller-staging-form.component.css']
+  styleUrls: ['./chiller-staging-form.component.css'],
 })
 export class ChillerStagingFormComponent implements OnInit {
   @Input()
@@ -36,19 +36,21 @@ export class ChillerStagingFormComponent implements OnInit {
   formWidth: number;
 
   constructor(private chillerStagingService: ChillerStagingService, 
-              private chillerStagingFormService: ChillerStagingFormService) { }
+              private chillerStagingFormService: ChillerStagingFormService,
+              private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.initSubscriptions();
+    this.initForm();
   }
 
   initSubscriptions() {
-    this.resetDataSub = this.chillerStagingService.resetData.subscribe(value => {
-      this.initForm();
-    })
-    this.generateExampleSub = this.chillerStagingService.generateExample.subscribe(value => {
-      this.initForm();
-    })
+    this.resetDataSub = this.chillerStagingService.resetData.subscribe(isPressed => {
+      if (isPressed) this.initForm();
+    });
+    this.generateExampleSub = this.chillerStagingService.generateExample.subscribe(isPressed => {
+      if (isPressed) this.initForm();
+    });
   }
 
   ngAfterViewInit() {
@@ -70,6 +72,7 @@ export class ChillerStagingFormComponent implements OnInit {
 
   setChillerCharacteristics() {
     this.characteristics = JSON.parse(JSON.stringify(chillerCharacteristics));
+    this.cd.detectChanges();
     if (this.form.value.chillerType == 0) {
       this.setCentrifugalChillerOptions();
     } else if (this.form.value.chillerType == 1) {
@@ -105,6 +108,10 @@ export class ChillerStagingFormComponent implements OnInit {
       this.form.controls.compressorConfigType.disable();
     } 
     this.form.controls.compressorConfigType.updateValueAndValidity();
+
+    this.form.patchValue({maxCapacityRatio: 0.92});
+    this.form.controls.maxCapacityRatio.enable();
+    this.form.controls.maxCapacityRatio.updateValueAndValidity();
   }
 
   setScrewChillerOptions() {
@@ -115,6 +122,10 @@ export class ChillerStagingFormComponent implements OnInit {
     this.form.patchValue({compressorConfigType: 0});
     this.form.controls.compressorConfigType.disable();
     this.form.controls.compressorConfigType.updateValueAndValidity();
+
+    this.form.patchValue({maxCapacityRatio: 1});
+    this.form.controls.maxCapacityRatio.disable();
+    this.form.controls.maxCapacityRatio.updateValueAndValidity();
   }
 
 
