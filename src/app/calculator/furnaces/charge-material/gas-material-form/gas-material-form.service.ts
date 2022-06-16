@@ -48,7 +48,7 @@ export class GasMaterialFormService {
       'additionalHeatRequired': [chargeMaterial.gasChargeMaterial.additionalHeat, Validators.required],
       'name': [chargeMaterial.name]
     });
-
+    
     formGroup = this.setInitialTempValidator(formGroup);
     return formGroup;
   }
