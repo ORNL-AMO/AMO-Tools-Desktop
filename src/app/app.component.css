@@ -986,6 +986,7 @@ Calculators
   background: transparent;
 }
 
+<<<<<<< HEAD
 .ico-size {
   height: 55px;
   /* background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(30, 144, 255, 0.26)); */
@@ -1074,12 +1075,13 @@ Calculators
   padding-top: 5px;
 }
 
+=======
+>>>>>>> 439347b61 (#5678 Calculator icons - CSS code cleanup)
 .calc-item-row{
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: #eee solid 1px;
 }
-
 
 /* Pump Head
 ================================================ */
