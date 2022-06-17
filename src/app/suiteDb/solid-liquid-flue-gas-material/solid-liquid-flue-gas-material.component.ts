@@ -36,7 +36,8 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     nitrogen: 0,
     o2: 0,
     sulphur: 0,
-    heatingValue: 0
+    heatingValue: 0,
+    ambientAirTempF: 65
   };
   selectedMaterial: SolidLiquidFlueGasMaterial;
   allMaterials: Array<SolidLiquidFlueGasMaterial>;
@@ -79,6 +80,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
       this.canAdd = false;
       if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
+        this.newMaterial.ambientAirTempF = this.convertUnitsService.value(this.newMaterial.ambientAirTempF).from('C').to('F');
       }
       let suiteDbResult = this.suiteDbService.insertSolidLiquidFlueGasMaterial(this.newMaterial);
       if (suiteDbResult == true) {
@@ -92,6 +94,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     this.convertDecimals();
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
+      this.newMaterial.ambientAirTempF = this.convertUnitsService.value(this.newMaterial.ambientAirTempF).from('C').to('F');
     }
     this.newMaterial.id = this.sdbEditMaterialId;
     let suiteDbResult = this.suiteDbService.updateSolidLiquidFlueGasMaterial(this.newMaterial);
@@ -123,7 +126,8 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
         nitrogen: this.newMaterial.nitrogen/100,
         o2: this.newMaterial.o2/100,
         sulphur: this.newMaterial.sulphur/100,
-        heatingValue: this.newMaterial.heatingValue
+        heatingValue: this.newMaterial.heatingValue,
+        ambientAirTempF: this.newMaterial.ambientAirTempF,
       }
   }
 
@@ -139,7 +143,8 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
         nitrogen: this.existingMaterial.nitrogen*100,
         o2: this.existingMaterial.o2*100,
         sulphur: this.existingMaterial.sulphur*100,
-        heatingValue: 0
+        heatingValue: 0,
+        ambientAirTempF: this.existingMaterial.ambientAirTempF
       }
       this.setHHV();
       this.checkEditMaterialName();
@@ -154,7 +159,8 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
         nitrogen: this.selectedMaterial.nitrogen*100,
         o2: this.selectedMaterial.o2*100,
         sulphur: this.selectedMaterial.sulphur*100,
-        heatingValue: 0
+        heatingValue: 0,
+        ambientAirTempF: 65
       }
       this.setHHV();
       this.checkMaterialName();
@@ -169,6 +175,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
       this.newMaterial.heatingValue = tmpHeatingVals;
       if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(tmpHeatingVals).from('btuLb').to('kJkg');
+        this.newMaterial.ambientAirTempF = this.convertUnitsService.value(this.newMaterial.ambientAirTempF).from('F').to('C');
       }
     } else {
       this.isValid = false;
