@@ -1,8 +1,20 @@
 <form [formGroup]="atmosphereLossForm">
+
+  <div class="alert-warning m-2 small mx-auto w-100 text-center" *ngIf="hasDeletedCustomMaterial">
+    <div>
+      A custom material used in this assessment has been deleted and a placeholder material was created to save the data. To
+      edit the custom material, please use the Custom Materials database or click 'Restore Gas Material'.
+    </div>
+    <div class="d-flex justify-content-around">
+      <a class="click-link" (click)="showMaterialModal(true)">Restore Gas Material</a>
+      <a class="click-link" (click)="dismissMessage()">Dismiss Message</a>
+    </div>
+  </div>
+
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="{{'atmosphereGas'+idString}}">Atmosphere Gas
-        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas</a>
+        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal(false)" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas</a>
       </label>
       <select name="{{'atmosphereGas'+lossIndex}}" class="form-control" id="{{'atmosphereGas'+idString}}" formControlName="atmosphereGas" (change)="setProperties()"
         (focus)="focusField('materialName')"  [ngClass]="{'indicate-different': compareAtmosphereGas(), 'invalid': atmosphereLossForm.controls.atmosphereGas.invalid}">
@@ -99,7 +111,7 @@
     <div class="modal-content">
       <div>
         <app-atmosphere-specific-heat-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
-          [settings]="settings"></app-atmosphere-specific-heat-material>
+          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial"></app-atmosphere-specific-heat-material>
       </div>
     </div>
   </div>
