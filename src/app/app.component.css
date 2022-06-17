@@ -1058,14 +1058,6 @@ Calculators
   border-radius: 15px;
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
-.lighting-bulb {
-  height: 55px;
-  width: 55px;
-  border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
-  box-shadow: #7b7878 2px 2px 5px 1px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(0, 123, 255, 0.34));
-}
 
 
 
@@ -1080,17 +1072,6 @@ Calculators
 
 .ico-col{
   padding-top: 5px;
-}
-.calculator-panel .ico-size,
-.calculator-panel .ico-size2,
-.calculator-panel .ico-size3,
-.calculator-panel .ico-size4{
-  height: 35px;
-  border-radius: 8px;
-}
-
-.calculator-panel .header{
-  padding-bottom: 5px;
 }
 
 .calc-item-row{
