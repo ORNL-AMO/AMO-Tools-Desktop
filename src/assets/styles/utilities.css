@@ -1,37 +1,37 @@
-a:not([href]):not([tabindex]).click-link{
+a:not([href]):not([tabindex]).click-link {
     color: #007bff;
 }
 
-a:not([href]):not([tabindex]).click-link:hover{
+a:not([href]):not([tabindex]).click-link:hover {
     text-decoration: underline;
     cursor: pointer;
     color: #0056b3;
 }
 
-a:not([href]):not([tabindex]).disabled-link{
+a:not([href]):not([tabindex]).disabled-link {
     color: gray;
 }
 
-a:not([href]):not([tabindex]).disabled-link:hover{
+a:not([href]):not([tabindex]).disabled-link:hover {
     font-weight: normal;
     cursor: default;
     text-decoration: none;
 }
 
 
-.stand-alone-calc{
+.stand-alone-calc {
     height: 100vh;
 }
 
 
 /**Input Data Report **/
-.summary-card .card-header h5{
+.summary-card .card-header h5 {
     margin-bottom: 0px;
     font-size: 16px;
     font-weight: bold;
 }
 
-.summary-card .card-header{
+.summary-card .card-header {
     background-color: #ffffff;
 }
 
@@ -47,63 +47,63 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 }
 
 
-.fsat .btn-primary{
+.fsat .btn-primary {
     background-color: #FFE400;
     border-color: #FFE400;
     color: black;
 }
 
-.ssmt .btn-primary{
+.ssmt .btn-primary {
     background-color: #F39C12;
     border-color: #F39C12;
     color: black;
 }
 
-.phast .btn-primary{
+.phast .btn-primary {
     background-color: #bf3d00;
     border-color: #bf3d00;
 }
 
-.inRollup .btn-primary{
+.inRollup .btn-primary {
     background-color: #156739;
     border-color: #156739;
 }
 
-.treasure-hunt .btn-primary{
+.treasure-hunt .btn-primary {
     background-color: #2E4053;
     border-color: #2E4053;
 }
 
-.waste-water .btn-primary{
+.waste-water .btn-primary {
     background-color: #003087;
     border-color: #003087;
 }
 
-.compressed-air .btn-primary{
-  background-color: #7030A0;
+.compressed-air .btn-primary {
+    background-color: #7030A0;
 }
 
-.fan-block i{
-    color:#FFE400
-  }
-  
-  .fan-block{
+.fan-block i {
+    color: #FFE400
+}
+
+.fan-block {
     display: inline-flex;
     background-color: #7F8C8D;
     padding: 2px;
-  }
-  
-.loss-results{
+}
+
+.loss-results {
     margin-bottom: 20px;
 }
 
-.loss-total{
+.loss-total {
     border-top: 2px groove #bf3d00;
     padding-top: 5px;
     font-size: 15px;
 }
 
-.disable .loss-total{
+.disable .loss-total {
     border-top: #ddd solid 1px;
 }
 
@@ -111,27 +111,27 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 
 
 /*grid view*/
-.summary-card-header{
+.summary-card-header {
     text-transform: uppercase;
     display: inline-block;
     font-size: 14px;
 }
 
 /*tab badge*/
-.gray-badge.input-error{
+.gray-badge.input-error {
     background-color: orange;
 }
 
 
-.gray-badge.missing-data{
+.gray-badge.missing-data {
     background-color: red;
 }
 
-.gray-badge.success{
+.gray-badge.success {
     background-color: green;
 }
 
-.gray-badge.loss-different{
+.gray-badge.loss-different {
     background-color: #007bff;
     /* background-color: blue; */
 }
@@ -170,12 +170,12 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     border-left: 5px solid red; /* red *
     border-right: 5px solid red; /* red *
   } */
-.ssmt .input-group.indicate-different, 
-.ssmt .form-control.indicate-different, 
-.phast .input-group.indicate-different, 
-.phast .form-control.indicate-different, 
+.ssmt .input-group.indicate-different,
+.ssmt .form-control.indicate-different,
+.phast .input-group.indicate-different,
+.phast .form-control.indicate-different,
 .form-group.indicate-different .input-group,
-.form-group.indicate-different > .form-control   {
+.form-group.indicate-different>.form-control {
     border: #007bff solid 2px;
     /* box-shadow: 0px 0px 1px #007bff; */
 }
@@ -201,10 +201,10 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .form-group.indicate-different.invalid .input-group,
 .form-group.indicate-different.error.invalid .input-group,
 .form-group.error.invalid .input-group,
-.form-group.invalid > .form-control ,
-.form-group.indicate-different.invalid > .form-control ,
-.form-group.error.invalid > .form-control,
-.form-group.indicate-different.error.invalid > .form-control  {
+.form-group.invalid>.form-control,
+.form-group.indicate-different.invalid>.form-control,
+.form-group.error.invalid>.form-control,
+.form-group.indicate-different.error.invalid>.form-control {
     border: red solid 2px;
     /* box-shadow: 0px 0px 1px red; */
 }
@@ -219,8 +219,8 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .ssmt .form-control.indicate-different.error,
 .form-group.error .input-group,
 .form-group.indicate-different.error .input-group,
-.form-group.error > .form-control,
-.form-group.indicate-different.error > .form-control {
+.form-group.error>.form-control,
+.form-group.indicate-different.error>.form-control {
     border: orange solid 2px;
     /* box-shadow: 0px 0px 1px orange; */
 }
@@ -231,84 +231,122 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 } */
 
 
-.card-item{
+.card-item {
     box-shadow: 3px 0px 5px 2px gray;
-  } 
+}
 
 
-  /* Fan flow rate pressure modal colors */
+/* Fan flow rate pressure modal colors */
 
-  .flow-rate{
+.flow-rate {
     color: #8E44AD;
     font-weight: bold;
-  }
+}
 
 
-  .inlet-pressure{
+.inlet-pressure {
     color: #3498DB;
     font-weight: bold;
-  }
+}
 
-  .outlet-pressure{
-   color: #DC7633;
-   font-weight: bold;
-  }
+.outlet-pressure {
+    color: #DC7633;
+    font-weight: bold;
+}
 
 
-  /*Calculator menu icons */
-.calc-icon-div{
+/*Calculator menu icons */
+.calc-icon-div {
     height: 90px;
     width: 90px;
     border-radius: 15px;
     box-shadow: #7b7878 2px 2px 5px 1px;
 }
 
-.motors .calc-icon-div{
+.calc-icon-header {
+    height: 55px;
+    width: 55px;
+    display: flex;
+}
+
+.calc-icon-header img {
+    max-height: 45px;
+    max-width: 45px;
+    height: auto;
+    width: auto;
+    margin: auto auto;
+}
+
+.calc-icon-header.in-treasure-hunt {
+    border-radius: 50%;
+}
+
+.calc-icon-header.standalone {
+    border-radius: 15px;
+    box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.calc-standalone-icon {
+    height: 55px;
+    width: 55px;
+}
+
+.motors .calc-icon-div,
+.icon-motors {
     background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(107, 132, 106, 0.65));
 }
 
-.psat .calc-icon-div{
-    background: linear-gradient(rgba(228, 219, 219, 0.34),#2980b9);
+.psat .calc-icon-div,
+.icon-psat {
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #2980b9);
 }
 
-.fsat .calc-icon-div{
+.fsat .calc-icon-div,
+.icon-fsat {
     background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
 }
 
-.phast .calc-icon-div{
+.phast .calc-icon-div,
+.icon-phast {
     background: linear-gradient(rgba(228, 219, 219, 0.34), #BF3D00);
 }
 
-.utilities .calc-icon-div{
+.utilities .calc-icon-div,
+.icon-utilities {
     background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32);
 }
 
-.compressed-air .calc-icon-div{
+.compressed-air .calc-icon-div,
+.icon-compressed-air {
     background: linear-gradient(#ffffff, #6f42c1);
 }
 
-.process-cooling .calc-icon-div{
+.process-cooling .calc-icon-div,
+.icon-process-cooling {
     background: linear-gradient(rgba(228, 219, 219, 0.34), #ADC8E2);
 }
 
-.steam .calc-icon-div {
+.steam .calc-icon-div,
+.icon-steam {
+    /* TODO: to bottom right? */
     background: linear-gradient(rgba(228, 219, 219, 0.34), #FC5B00);
 }
-.lighting .calc-icon-div {
-    background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(0, 123, 255, 0.34));
+
+.lighting .calc-icon-div,
+.icon-lighting {
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #007bff57);
 }
 
-
-.treasure-hunt-calc .calc-icon-div{
-    background: linear-gradient(rgba(228, 219, 219, 0.34),#2E4053);
+.treasure-hunt-calc .calc-icon-div {
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #2E4053);
 }
 
-
-.waste-water .calc-icon-div{
+.waste-water .calc-icon-div,
+.icon-waste-water {
     background: linear-gradient(rgba(228, 219, 219, 0.34), #003087);
 }
 
-.calc-img{
+.calc-img {
     width: 90%;
 }
 
@@ -317,22 +355,25 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 
 .standalone-calculator .ng-invalid:not(form, .form-array), .flow-pressure-form .ng-invalid:not(form){
     border-left: 5px solid #a94442; /* red */
-  }
+}
 
-.standalone-calculator .header h3, .stand-alone-calc .header h3, .stand-alone-calc .tabs.primary .panel-tab-item a{
+.standalone-calculator .header h3,
+.stand-alone-calc .header h3,
+.stand-alone-calc .tabs.primary .panel-tab-item a {
     font-size: 18px;
 }
 
-.standalone-calculator{
+.standalone-calculator {
     background: #ececec;
 }
 
 
-.ngb-dp-header{
+.ngb-dp-header {
     /* background-color: white !important; */
     display: none !important;
 }
 
-.ngb-dp-month-name, .ngb-dp-weekdays{
+.ngb-dp-month-name,
+.ngb-dp-weekdays {
     background-color: white !important;
 }

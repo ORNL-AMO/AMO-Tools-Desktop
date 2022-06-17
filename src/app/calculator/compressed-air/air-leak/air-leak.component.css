@@ -7,26 +7,11 @@
     cursor: pointer;
 }
 
-.fa-save, .fa-times, .fa-edit {
+.fa-save,
+.fa-times,
+.fa-edit {
     font-size: xx-large;
 }
-
-.compressed-air-icon {
-    height: auto;
-    width: 45px;
-    margin-top: 12px;
-    margin-bottom: 12px;
-}
-
-.icon-background{
-    height: 55px;
-    width: 55px;
-    background: linear-gradient(#ffffff, #6f42c1);
-    border-radius: 15px;
-    box-shadow: #7b7878 2px 2px 5px 1px;
-
-}
-
 .leak-form-width {
     width: 67%;
 }
@@ -52,13 +37,9 @@
 .compressor-form-item {
     flex: 1 1 350px;
     padding: 1em;
-  }
-  
-  .leak-form-item {
+}
+
+.leak-form-item {
     flex: 1 1 460px;
     padding: 1em;
-  }
-  
-.inTreasureHunt-icon{
-    border-radius: 50%;
 }
