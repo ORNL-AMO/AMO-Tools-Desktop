@@ -17,8 +17,7 @@ const Windows = 'Windows';
 const MacZip = 'Mac .ZIP';
 const MacDMG = 'Mac .DMG';
 
-// main();
-console.log( ['Name', 'Date', Windows, MacDMG, MacZip, AppImage, TarGz, Latest, LatestMac, LatestLinux].join(', '))
+main();
 
 async function main() {
     
