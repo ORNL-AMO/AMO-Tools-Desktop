@@ -201,8 +201,8 @@ export class TankInsulationReductionService {
     if (modification) {
       let modificationCopy: TankInsulationReductionInput = JSON.parse(JSON.stringify(modification));
       modificationCopy.utilityType = baselineResults.energySourceType;
-      modificationResults = this.calculate(modificationCopy, settings);
       modificationCopy.heatedOrChilled = baselineResults.heatedOrChilled;
+      modificationResults = this.calculate(modificationCopy, settings);
       annualHeatLossReduction = baselineResults.annualHeatLoss - modificationResults.annualHeatLoss;
       annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
     }else{

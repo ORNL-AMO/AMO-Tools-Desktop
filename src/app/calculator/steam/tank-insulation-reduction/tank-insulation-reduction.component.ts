@@ -97,7 +97,7 @@ export class TankInsulationReductionComponent implements OnInit {
       this.modificationForm = this.tankInsulationReductionService.getFormFromObj(this.tankInsulationReductionService.modificationData, false);
       this.modificationExists = true;
       this.modificationForm.disable();
-      this.setModificationSelected();
+      //this.setModificationSelected();
     }
   }
 

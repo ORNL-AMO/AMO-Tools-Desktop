@@ -134,8 +134,13 @@ export class PipeInsulationReductionFormComponent implements OnInit {
       } else {
         tmpCost = this.pipeInsulationReductionService.modificationData.naturalGasUtilityCost;
       }
-    }
-    else {
+    } else if (this.form.controls.utilityType.value == 2) {
+      if (this.isBaseline == true) {
+        tmpCost = this.settings.electricityCost;
+      } else {
+        tmpCost = this.settings.electricityCost;
+      }
+    } else {
       if (this.isBaseline == true) {
         tmpCost = this.pipeInsulationReductionService.baselineData.otherUtilityCost;
       } else {
