@@ -65,10 +65,10 @@ export class BleedTestService {
         copyInputs.totalSystemVolume = this.convertUnitsService.value(copyInputs.totalSystemVolume).from('m3').to('ft3');
         copyInputs.normalOperatingPressure = this.convertUnitsService.value(copyInputs.normalOperatingPressure).from('barg').to('psig');
         copyInputs.testPressure = this.convertUnitsService.value(copyInputs.testPressure).from('barg').to('psig');
-        let output: number  = (copyInputs.totalSystemVolume * ((copyInputs.normalOperatingPressure - copyInputs.testPressure) / copyInputs.time) * 14.7) * 1.25;
+        let output: number  = ((((copyInputs.totalSystemVolume * (copyInputs.normalOperatingPressure - copyInputs.testPressure)) / copyInputs.time) * 14.7) * 1.25);
         leakage = this.convertUnitsService.value(output).from('ft3/min').to('m3/min');
       } else {
-        leakage  = (copyInputs.totalSystemVolume * ((copyInputs.normalOperatingPressure - copyInputs.testPressure) / copyInputs.time) * 14.7) * 1.25;
+        leakage  = ((((copyInputs.totalSystemVolume * (copyInputs.normalOperatingPressure - copyInputs.testPressure)) / copyInputs.time) * 14.7) * 1.25);
       }      
       this.bleedTestOutput.next(leakage);
     }
