@@ -50,6 +50,10 @@ export class ReceiverTankComponent implements OnInit {
     {
       name: 'Bridging Compressor Reaction Delay',
       value: 3
+    },
+    {
+      name: 'Compressor Cycle',
+      value: 4
     }
   ];
   currentField: string;
@@ -120,6 +124,9 @@ export class ReceiverTankComponent implements OnInit {
     if (updatedInputs.airCapacityInputs) {
       this.assessmentCalculator.receiverTankInput.meteredStorageInputs = updatedInputs.meteredStorageInputs;
     }
+    if (updatedInputs.compressorCycleInputs) {
+      this.assessmentCalculator.receiverTankInput.compressorCycleInputs = updatedInputs.compressorCycleInputs;
+    }
     await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
   }
 
@@ -142,6 +149,9 @@ export class ReceiverTankComponent implements OnInit {
         }
         if (this.assessmentCalculator.receiverTankInput.airCapacityInputs) {
           this.receiverTankService.airCapacityInputs = this.assessmentCalculator.receiverTankInput.airCapacityInputs;
+        }
+        if (this.assessmentCalculator.receiverTankInput.compressorCycleInputs) {
+          this.receiverTankService.compressorCycleInputs = this.assessmentCalculator.receiverTankInput.compressorCycleInputs;
         }
       } else {
         this.assessmentCalculator.receiverTankInput = this.getCurrentInputs();
@@ -167,12 +177,14 @@ export class ReceiverTankComponent implements OnInit {
     let generalMethodInputs = this.receiverTankService.generalMethodInputs;
     let meteredStorageInputs = this.receiverTankService.meteredStorageInputs;
     let bridgeCompressorInputs = this.receiverTankService.bridgeCompressorInputs;
+    let compressorCycleInputs = this.receiverTankService.compressorCycleInputs;
     return {
       dedicatedStorageInputs: dedicatedStorageInputs,
       airCapacityInputs: airCapacityInputs,
       generalMethodInputs: generalMethodInputs,
       meteredStorageInputs: meteredStorageInputs,
       bridgeCompressorInputs: bridgeCompressorInputs,
+      compressorCycleInputs: compressorCycleInputs
     }
   }
 

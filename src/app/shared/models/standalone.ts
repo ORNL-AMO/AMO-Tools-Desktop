@@ -65,6 +65,21 @@ export interface ReceiverTankMeteredStorage extends ReceiverTankDedicatedStorage
   meteredControl: number;
 }
 
+export interface ReceiverTankCompressorCycle extends ReceiverTank {
+  loadTime: number;
+  unloadTime: number;
+  compressorCapacity: number;
+  fullLoadPressure: number;
+  unloadPressure: number;
+}
+
+export interface ReceiverTankCompressorCycleOutput {
+  pressureChange: number;
+  capacity: number;
+  areaStorageVolume: number;
+  liquidStorageVolume: number;
+}
+
 export interface OperatingCostInput {
   motorBhp: number;
   bhpUnloaded: number;
