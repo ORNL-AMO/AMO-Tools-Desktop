@@ -13,6 +13,7 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 import { WeatherBinsModule } from '../../utilities/weather-bins/weather-bins.module';
 import { CoolingWeatherChartModule } from '../../../shared/cooling-weather-chart/cooling-weather-chart.module';
+import { WeatherStationLookupModule } from '../../../shared/weather-station-lookup/weather-station-lookup.module';
 
 
 
@@ -33,6 +34,7 @@ import { CoolingWeatherChartModule } from '../../../shared/cooling-weather-chart
     ExportableResultsTableModule,
     ReactiveFormsModule,
     CoolingWeatherChartModule,
+    WeatherStationLookupModule
   ],
   exports: [
     CoolingTowerBasinComponent

@@ -4,6 +4,7 @@ import { CsvImportData } from '../../../shared/helper-services/csv-to-json.servi
 import * as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { WeatherStation } from '../../../shared/weather-station-lookup/weather-station-lookup.service';
 /*
 WEATHER BINS FIELD OPTIONS FROM "TMY3" CSV DATA FOUND AT
 https://rredc.nrel.gov/solar/old_data/nsrdb/1991-2005/tmy3/by_state_and_city.html
@@ -27,6 +28,7 @@ export class WeatherBinsService {
   inputData: BehaviorSubject<WeatherBinsInput>;
   importDataFromCsv: BehaviorSubject<CsvImportData>;
   dataInDateRange: Array<any>;
+  weatherDataSourceView: BehaviorSubject<WeatherDataSourceView>;
   dataSubmitted: BehaviorSubject<boolean>;
   integratedCalculator: BehaviorSubject<WeatherIntegratedCalculatorData>;
   currentField: BehaviorSubject<string>;
@@ -34,14 +36,14 @@ export class WeatherBinsService {
   constructor(private convertUnitsService: ConvertUnitsService) {
     let initInputData: WeatherBinsInput = this.initInputData();
     this.inputData = new BehaviorSubject(initInputData);
-    // this.dataFields = new BehaviorSubject(undefined);
+    this.weatherDataSourceView = new BehaviorSubject('lookup');
     this.importDataFromCsv = new BehaviorSubject(undefined);
     this.dataSubmitted = new BehaviorSubject<boolean>(false);
     this.integratedCalculator = new BehaviorSubject<WeatherIntegratedCalculatorData>(undefined);
     this.currentField = new BehaviorSubject<string>(undefined);
   }
 
-  resetData() {
+  resetBinCaseData() {
     let initInputData: WeatherBinsInput = this.initInputData();
     this.inputData.next(initInputData);
     this.importDataFromCsv.next(undefined);
@@ -277,3 +279,5 @@ export interface CaseParameter {
 export interface WeatherIntegratedCalculatorData {
   binningParameters: Array<string>
 }
+
+export type WeatherDataSourceView = "both" | "lookup" | "file";

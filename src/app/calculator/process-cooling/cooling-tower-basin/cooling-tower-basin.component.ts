@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { CoolingTowerBasinService } from './cooling-tower-basin.service';
-import { WeatherBinsService } from '../../utilities/weather-bins/weather-bins.service';
+import { WeatherBinsService, WeatherDataSourceView } from '../../utilities/weather-bins/weather-bins.service';
 
 @Component({
   selector: 'app-cooling-tower-basin',
@@ -31,6 +31,7 @@ export class CoolingTowerBasinComponent implements OnInit {
   hasWeatherBinsDataSub: Subscription;
   hasWeatherBinsData: boolean = false;
   isShowingWeatherResults : boolean = false;
+  weatherDataSourceView: WeatherDataSourceView;
   
   constructor(private coolingTowerBasinService: CoolingTowerBasinService, private weatherBinService: WeatherBinsService,
     private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
@@ -39,6 +40,7 @@ export class CoolingTowerBasinComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
+    this.weatherDataSourceView = this.weatherBinService.weatherDataSourceView.getValue();
     let existingInputs = this.coolingTowerBasinService.coolingTowerBasinInput.getValue();
     if(!existingInputs) {
       this.coolingTowerBasinService.initDefaultEmptyInputs();
@@ -55,7 +57,11 @@ export class CoolingTowerBasinComponent implements OnInit {
     this.weatherBinSub.unsubscribe();
     this.hasWeatherBinsDataSub.unsubscribe();
     this.coolingTowerBasinService.resetWeatherIntegratedCalculator();
+  }
 
+  setWeatherDataSource(source: WeatherDataSourceView) {
+    this.weatherDataSourceView = source;
+    this.weatherBinService.weatherDataSourceView.next(this.weatherDataSourceView);
   }
 
   ngAfterViewInit() {
