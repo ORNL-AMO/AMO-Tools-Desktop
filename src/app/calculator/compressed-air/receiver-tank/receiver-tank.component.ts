@@ -124,6 +124,9 @@ export class ReceiverTankComponent implements OnInit {
     if (updatedInputs.airCapacityInputs) {
       this.assessmentCalculator.receiverTankInput.meteredStorageInputs = updatedInputs.meteredStorageInputs;
     }
+    if (updatedInputs.compressorCycleInputs) {
+      this.assessmentCalculator.receiverTankInput.compressorCycleInputs = updatedInputs.compressorCycleInputs;
+    }
     await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
   }
 
