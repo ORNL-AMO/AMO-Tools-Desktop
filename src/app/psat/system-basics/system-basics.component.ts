@@ -3,13 +3,14 @@ import { Assessment } from '../../shared/models/assessment';
 import { PSAT } from '../../shared/models/psat';
 import { SettingsService } from '../../settings/settings.service';
 import { Settings } from '../../shared/models/settings';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatService } from '../psat.service';
 import * as _ from 'lodash';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-system-basics',
@@ -38,7 +39,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   showSuccessMessage: boolean = false;
   @ViewChild('settingsModal', { static: false }) public settingsModal: ModalDirective;
 
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private psatService: PsatService) { }
+  constructor(private settingsService: SettingsService,    private settingsDbService: SettingsDbService, private psatService: PsatService) { }
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
@@ -55,7 +56,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
     }
   }
 
-  saveChanges() {
+  async saveChanges() {
     let id = this.settings.id;
     this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.settings.id = id;
@@ -70,7 +71,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
       this.settings.temperatureMeasurement != this.oldSettings.temperatureMeasurement ||
       this.settings.unitsOfMeasure !== this.oldSettings.unitsOfMeasure;
     let hasData: boolean = Boolean(this.assessment.psat.inputs.flow_rate || this.assessment.psat.inputs.head || this.assessment.psat.inputs.motor_rated_power || this.assessment.psat.inputs.fluidTemperature);
-    
+
     if (hasData && settingsChanged) {
       this.assessment.psat.existingDataUnits = this.oldSettings.unitsOfMeasure;
 
@@ -80,15 +81,9 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
     if (this.showSuccessMessage == true) {
       this.showSuccessMessage = false;
     }
-    //save
-    this.indexedDbService.putSettings(this.settings).then(
-      results => {
-        this.settingsDbService.setAll().then(() => {
-          //get updated settings
-          this.updateSettings.emit(true);
-        })
-      }
-    )
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    this.settingsDbService.setAll(updatedSettings);
+    this.updateSettings.emit(true);
   }
 
   getExistingDataSettings(): Settings {

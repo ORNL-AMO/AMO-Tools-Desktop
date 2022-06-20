@@ -12,6 +12,7 @@ import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { SSMT } from '../../shared/models/steam/ssmt';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { InventoryDbService } from '../../indexedDb/inventory-db.service';
+import { DayTypeSummary, LogToolField } from '../../log-tool/log-tool-models';
 
 @Injectable()
 export class ExportService {
@@ -114,7 +115,16 @@ export class ExportService {
 
   removeDataExplorerData(assessment: Assessment): Assessment {
     if (assessment.compressedAirAssessment.logToolData) {
-      delete assessment.compressedAirAssessment.logToolData;
+      let excludedDayTypeIndex: number;
+      assessment.compressedAirAssessment.logToolData.dayTypeSummaries.forEach((dts: DayTypeSummary, index: number) => {
+        delete dts.dayType.logToolDays;
+        if (dts.dayType.label === 'Excluded') {
+          excludedDayTypeIndex = index;
+        }
+      });
+      if (excludedDayTypeIndex !== undefined) {
+        assessment.compressedAirAssessment.logToolData.dayTypeSummaries.splice(excludedDayTypeIndex, 1);
+      }
     }
     if (assessment.compressedAirAssessment.systemProfile) {
       assessment.compressedAirAssessment.systemProfile.profileSummary.forEach(profile => {

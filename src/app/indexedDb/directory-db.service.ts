@@ -1,39 +1,37 @@
 import { Injectable } from '@angular/core';
 import { Directory } from '../shared/models/directory';
-import { IndexedDbService } from './indexed-db.service';
 import * as _ from 'lodash';
 import { AssessmentDbService } from './assessment-db.service';
 import { CalculatorDbService } from './calculator-db.service';
-import { Calculator } from '../shared/models/calculators';
 import { InventoryDbService } from './inventory-db.service';
+import { firstValueFrom, Observable } from 'rxjs';
+import { NgxIndexedDBService } from 'ngx-indexed-db';
+import { DirectoryStoreMeta } from './dbConfig';
 @Injectable()
 export class DirectoryDbService {
 
   allDirectories: Array<Directory>;
-  constructor(private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private calculatorDbService: CalculatorDbService,
+  storeName: string = DirectoryStoreMeta.store;
+  constructor(
+    private dbService: NgxIndexedDBService,
+    private assessmentDbService: AssessmentDbService, private calculatorDbService: CalculatorDbService,
     private inventoryDbService: InventoryDbService) {
-    // this.indexedDbService.setAllDirs.subscribe(val => {
-    //   console.log('set all dirs 1')
-    //   this.setAll();
-    // })
   }
 
-  setAll(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (this.indexedDbService.db) {
-        this.indexedDbService.getAllDirectories().then(directories => {
-          this.allDirectories = directories;
-          resolve(true);
-        });
-      } else {
-        this.allDirectories = [];
-        resolve(false);
-      }
-    });
+  count(): Observable<number> {
+    return this.dbService.count(this.storeName);
   }
 
-  getAll() {
-    return this.allDirectories;
+  async setAll(directories?: Array<Directory>) {
+    if (directories) {
+      this.allDirectories = directories;
+    } else {
+      this.allDirectories = await firstValueFrom(this.getAllDirectories());
+    }
+  }
+
+  getAllDirectories(): Observable<Array<Directory>> {
+    return this.dbService.getAll(this.storeName);
   }
 
   getById(id: number): Directory {
@@ -61,4 +59,24 @@ export class DirectoryDbService {
     });
     return example;
   }
+
+  addWithObservable(directory: Directory): Observable<any> {
+    directory.createdDate = new Date();
+    directory.modifiedDate = new Date();
+    return this.dbService.add(this.storeName, directory);
+  }
+
+  updateWithObservable(directory: Directory): Observable<any> {
+    directory.modifiedDate = new Date();
+    return this.dbService.update(this.storeName, directory);
+  }
+
+  deleteByIdWithObservable(id: number): Observable<any> {
+    return this.dbService.delete(this.storeName, id);
+  }
+
+  clearWallLossesSurface(): void {
+    this.dbService.clear(this.storeName);
+  }
+
 }

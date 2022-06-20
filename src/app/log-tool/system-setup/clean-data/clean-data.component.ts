@@ -7,6 +7,7 @@ import { VisualizeService } from '../../visualize/visualize.service';
 import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-type-graph.service';
 import { Router } from '@angular/router';
 import { LogToolDbService } from '../../log-tool-db.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-clean-data',
@@ -19,9 +20,12 @@ export class CleanDataComponent implements OnInit {
   dataSubmitted: boolean = false;
   dataExists: boolean = false;
   showEditModal: boolean = false;
+  dataIntervalValid: boolean = false;
   editField: LogToolField;
   individualDataFromCsv: Array<IndividualDataFromCsv>;
   dateExistsForEachCsv: boolean;
+  dataIntervalValidSub: Subscription;
+  secondsIntervalOptions: Array<number> = [ undefined, 1, 2, 5, 15, 20, 30 ];
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
     private router: Router, private logToolDbService: LogToolDbService) { }
@@ -31,8 +35,14 @@ export class CleanDataComponent implements OnInit {
     if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
       this.dataExists = true;
     }
+    this.dataIntervalValidSub = this.logToolDataService.dataIntervalValid.subscribe(val => {
+      this.dataIntervalValid = val;
+    });
   }
-
+  
+  ngOnDestroy(){
+    this.dataIntervalValidSub.unsubscribe();
+  }
 
   submit() {
     this.cleaningData = true;
@@ -94,4 +104,5 @@ export class CleanDataComponent implements OnInit {
     // });
     this.cd.detectChanges();
   }
+
 }

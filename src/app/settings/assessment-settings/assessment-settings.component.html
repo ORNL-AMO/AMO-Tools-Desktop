@@ -94,7 +94,7 @@
           </label>
           <div *ngIf="showTutorialSettings">
             <p class="help-text">Use these settings to disable/enable tutorials.</p>
-            <app-tutorial-settings [(settings)]="settings" (saveTutorialChanges)="saveTutorialChanges()"></app-tutorial-settings>
+            <app-tutorial-settings [(settings)]="settings" (saveTutorialChanges)="saveSettings()"></app-tutorial-settings>
           </div>
         </div>
 
@@ -105,7 +105,7 @@
           </label>
           <div *ngIf="showPrintSettings">
             <p class="help-text">Select all report items you would like to include in your printed report.</p>
-            <app-print-settings [(settings)]="settings" (savePrintSettings)="savePrintSettings()"></app-print-settings>
+            <app-print-settings [(settings)]="settings" (savePrintSettings)="saveSettings()"></app-print-settings>
           </div>
         </div>
 

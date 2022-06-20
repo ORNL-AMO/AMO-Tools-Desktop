@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SettingsService } from '../../../settings/settings.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../shared/models/settings';
 import { DirectoryDashboardService } from '../directory-dashboard.service';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { Directory } from '../../../shared/models/directory';
 import { DashboardService } from '../../dashboard.service';
 
@@ -27,7 +27,7 @@ export class DirectoryContactInfoComponent implements OnInit {
   showAssessmentContact: boolean = false;
   showNoData: boolean = true;
   selectedDirectorySub: Subscription;
-  constructor(private indexedDbService: IndexedDbService, private settingsService: SettingsService, private settingsDbService: SettingsDbService,
+  constructor(   private settingsService: SettingsService, private settingsDbService: SettingsDbService,
     private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService, private dashboardService: DashboardService) { }
 
   ngOnInit() {
@@ -50,7 +50,7 @@ export class DirectoryContactInfoComponent implements OnInit {
     this.facilityModal.hide();
   }
 
-  save() {
+  async save() {
     if (this.settings.directoryId != this.directory.id) {
       let settingsForm = this.settingsService.getFormFromSettings(this.settings);
       let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
@@ -59,21 +59,18 @@ export class DirectoryContactInfoComponent implements OnInit {
       tmpSettings.directoryId = this.directory.id;
       tmpSettings.facilityInfo = this.settings.facilityInfo;
       this.settings = tmpSettings;
-      this.indexedDbService.addSettings(this.settings).then(val => {
-        this.settingsDbService.setAll().then(() => {
-          this.checkShow();
-          this.dashboardService.updateDashboardData.next(true);
-          this.hideFacilityModal();
-        });
-      });
+      await firstValueFrom(this.settingsDbService.addWithObservable(this.settings));
+      let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
+      this.settingsDbService.setAll(updatedSettings);
+      this.checkShow();
+      this.dashboardService.updateDashboardData.next(true);
+      this.hideFacilityModal()
     } else {
-      this.indexedDbService.putSettings(this.settings).then(returnVal => {
-        this.settingsDbService.setAll().then(() => {
-          this.checkShow();
-          this.dashboardService.updateDashboardData.next(true);
-          this.hideFacilityModal();
-        });
-      });
+      let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+      this.settingsDbService.setAll(updatedSettings);
+      this.checkShow();
+      this.dashboardService.updateDashboardData.next(true);
+      this.hideFacilityModal();
     }
   }
 

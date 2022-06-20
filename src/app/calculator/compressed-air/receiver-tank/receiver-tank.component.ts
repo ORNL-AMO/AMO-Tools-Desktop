@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 
 @Component({
   selector: 'app-receiver-tank',
@@ -60,12 +59,12 @@ export class ReceiverTankComponent implements OnInit {
   currentField: string;
   currentFieldSub: Subscription;
   constructor(public receiverTankService: ReceiverTankService, 
-    private calculatorDbService: CalculatorDbService, 
-    private indexedDbService: IndexedDbService,
+    private calculatorDbService: CalculatorDbService,
     private settingsDbService: SettingsDbService, private router: Router) {
   }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (this.calcType == undefined) {
       this.setCalcType();
     }
@@ -109,7 +108,7 @@ export class ReceiverTankComponent implements OnInit {
     }
   }
 
-  updateAssessmentCalculator(updatedInputs: ReceiverTankInputs) {
+  async updateAssessmentCalculator(updatedInputs: ReceiverTankInputs) {
     if (updatedInputs.airCapacityInputs) {
       this.assessmentCalculator.receiverTankInput.airCapacityInputs = updatedInputs.airCapacityInputs;
     }
@@ -125,13 +124,10 @@ export class ReceiverTankComponent implements OnInit {
     if (updatedInputs.airCapacityInputs) {
       this.assessmentCalculator.receiverTankInput.meteredStorageInputs = updatedInputs.meteredStorageInputs;
     }
-    if (updatedInputs.compressorCycleInputs) {
-      this.assessmentCalculator.receiverTankInput.compressorCycleInputs = updatedInputs.compressorCycleInputs;
-    }
-    this.saveAssessmentCalculator();
+    await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
   }
 
-  getCalculatorForAssessment() {
+  async getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.assessmentCalculator) {
       if (this.assessmentCalculator.receiverTankInput) {
@@ -159,7 +155,7 @@ export class ReceiverTankComponent implements OnInit {
       }
     } else {
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.saveAssessmentCalculator();
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 
@@ -186,25 +182,6 @@ export class ReceiverTankComponent implements OnInit {
       meteredStorageInputs: meteredStorageInputs,
       bridgeCompressorInputs: bridgeCompressorInputs,
       compressorCycleInputs: compressorCycleInputs
-    }
-  }
-
-  saveAssessmentCalculator(){
-    if (!this.saving) {
-      if (this.assessmentCalculator.id) {
-        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.assessmentCalculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.assessmentCalculator.id = result;
-            this.saving = false;
-          });
-        });
-      }
     }
   }
 
