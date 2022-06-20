@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
+import { WeatherBinsService, WeatherDataSourceView } from '../../utilities/weather-bins/weather-bins.service';
 import { ChillerPerformanceService } from './chiller-performance.service';
 
 @Component({
@@ -30,14 +31,17 @@ export class ChillerPerformanceComponent implements OnInit {
 
   hasWeatherBinsDataSub: Subscription;
   hasWeatherBinsData: boolean = false;
+  weatherDataSourceView: WeatherDataSourceView;
+
   
-  constructor(private chillerPerformanceService: ChillerPerformanceService,
+  constructor(private chillerPerformanceService: ChillerPerformanceService, private weatherBinsService: WeatherBinsService,
               private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
+    this.weatherDataSourceView = this.weatherBinsService.weatherDataSourceView.getValue();
     let existingInputs = this.chillerPerformanceService.chillerPerformanceInput.getValue();
     if(!existingInputs) {
       this.chillerPerformanceService.initDefaultEmptyInputs();
@@ -47,6 +51,11 @@ export class ChillerPerformanceComponent implements OnInit {
       this.chillerPerformanceService.sethasWeatherBinsData();
     }
     this.initSubscriptions();
+  }
+
+  setWeatherDataSource(source: WeatherDataSourceView) {
+    this.weatherDataSourceView = source;
+    this.weatherBinsService.weatherDataSourceView.next(this.weatherDataSourceView);
   }
 
   ngOnDestroy() {

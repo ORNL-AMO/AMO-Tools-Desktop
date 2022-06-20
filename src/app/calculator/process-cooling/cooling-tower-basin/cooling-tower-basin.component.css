@@ -120,13 +120,6 @@ div.active{
     font-size: 12px;
 }
 
-
-.btn-secondary:not([disabled]):not(.disabled).active{
-    background-color: #0275d8;
-    transition: all .5s ease-in-out;
-}
-
-
 .btn-col{
     text-align: center;
     padding-top: 3px;

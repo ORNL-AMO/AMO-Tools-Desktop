@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { CsvToJsonService, CsvImportData } from '../../../../../shared/helper-services/csv-to-json.service';
 import { DateSelection, DateSelectionData } from './date-data';
-import { WeatherBinsInput, WeatherBinsService } from '../../weather-bins.service';
+import { WeatherBinsInput, WeatherBinsService, WeatherDataSourceView } from '../../weather-bins.service';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../../shared/models/settings';
 import { WeatherDbService } from '../../weather-db.service';
@@ -28,10 +28,12 @@ export class DataSetupFormComponent implements OnInit {
   endMonthDays: Array<number>;
   inputData: WeatherBinsInput;
   inputDataSub: Subscription;
+  weatherDataSourceView: WeatherDataSourceView;
 
   previousDataAvailableSub: Subscription;
   previousDataAvailable: Date;
   dataExists: boolean = false;
+  weatherDataSourceSubscription: Subscription;
   constructor(private csvToJsonService: CsvToJsonService, 
     private weatherDbService: WeatherDbService, private cd: ChangeDetectorRef, private weatherBinsService: WeatherBinsService) { }
 
@@ -46,6 +48,11 @@ export class DataSetupFormComponent implements OnInit {
         this.dataExists = false;
       }
     });
+
+    this.weatherDataSourceSubscription = this.weatherBinsService.weatherDataSourceView.subscribe(weatherDataSourceView => {
+      this.weatherDataSourceView = weatherDataSourceView;
+    })
+
     this.previousDataAvailableSub = this.weatherDbService.previousDataAvailable.subscribe(val => {
       if (this.dataExists == false && this.weatherBinsService.dataSubmitted.getValue() == false) {
         this.previousDataAvailable = val;
@@ -60,6 +67,7 @@ export class DataSetupFormComponent implements OnInit {
 
   ngOnDestroy() {
     this.inputDataSub.unsubscribe();
+    this.weatherDataSourceSubscription.unsubscribe();
     if (this.previousDataAvailableSub) {
       this.previousDataAvailableSub.unsubscribe();
     }
@@ -89,8 +97,7 @@ export class DataSetupFormComponent implements OnInit {
     this.dataExists = false;
     this.weatherBinsService.dataSubmitted.next(false);
     this.weatherDbService.initWeatherData();
-    this.weatherBinsService.resetData();
-
+    this.weatherBinsService.resetBinCaseData();
   }
 
   importFile() {
@@ -102,6 +109,9 @@ export class DataSetupFormComponent implements OnInit {
   }
 
   usePreviousData() {
+    if (this.weatherBinsService.importDataFromCsv.getValue()) {
+      this.weatherBinsService.resetBinCaseData();
+    }
     this.weatherDbService.setFromPreviousData();
     let inputData = this.weatherBinsService.inputData.getValue();
     if (inputData.cases.length > 0) {
@@ -114,7 +124,9 @@ export class DataSetupFormComponent implements OnInit {
     this.importingData = true;
     this.cd.detectChanges();
     setTimeout(() => {
-      // let csvImportData: CsvImportData = this.csvToJsonService.parseWeatherCSV(this.importData);
+      if (this.weatherBinsService.importDataFromCsv.getValue()) {
+        this.weatherBinsService.resetBinCaseData();
+      }
       let csvImportData: CsvImportData = this.csvToJsonService.parseCSV(this.importData);
       this.weatherBinsService.importDataFromCsv.next(csvImportData);
       this.inputData.fileName = this.fileReference.name;

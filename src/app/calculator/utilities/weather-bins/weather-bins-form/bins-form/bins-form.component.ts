@@ -70,8 +70,7 @@ export class BinsFormComponent implements OnInit {
   }
 
   deleteAllCase(){    
-    this.inputData.cases = [];
-    this.weatherBinsService.inputData.next(this.inputData)
+    this.weatherBinsService.resetBinCaseData();
   }
 
   setParameterMinMax() {

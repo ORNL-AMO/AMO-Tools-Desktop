@@ -14,6 +14,7 @@ import { ChillerPerformanceFormService } from './chiller-performance-form.servic
 import { ChillerPerformanceChartComponent } from './chiller-performance-chart/chiller-performance-chart.component';
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 import { WeatherBinsModule } from '../../utilities/weather-bins/weather-bins.module';
+import { WeatherStationLookupModule } from '../../../shared/weather-station-lookup/weather-station-lookup.module';
 
 
 
@@ -34,7 +35,8 @@ import { WeatherBinsModule } from '../../utilities/weather-bins/weather-bins.mod
     ExportableResultsTableModule,
     ReactiveFormsModule,
     SimpleTooltipModule,
-    WeatherBinsModule
+    WeatherBinsModule,
+    WeatherStationLookupModule
   ],
   exports: [
     ChillerPerformanceComponent

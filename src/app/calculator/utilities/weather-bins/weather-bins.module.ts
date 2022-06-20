@@ -13,6 +13,7 @@ import { ParameterUnitComponent } from './weather-bins-form/parameter-unit/param
 import { WeatherDbService } from './weather-db.service';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { WeatherBinsTableComponent } from './weather-bins-table/weather-bins-table.component';
+import { WeatherStationLookupModule } from '../../../shared/weather-station-lookup/weather-station-lookup.module';
 
 
 
@@ -21,7 +22,8 @@ import { WeatherBinsTableComponent } from './weather-bins-table/weather-bins-tab
   imports: [
     CommonModule,
     FormsModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    WeatherStationLookupModule
   ],
   exports: [
     WeatherBinsFormComponent,
