@@ -119,6 +119,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.fsat.modifications[this.exploreModIndex].fsat.fieldData.planeData = tmpPlaneData;
     this.fsat.modifications[this.exploreModIndex].fsat.fieldData.fanRatedInfo = tmpfanRatedInfo;
     this.fsat.modifications[this.exploreModIndex].fsat.fieldData.pressureCalcResultType = tmpCalcType;
+    this.fsat.modifications[this.exploreModIndex].fsat.fieldData.compressibilityFactor = this.getCompressibilityFactor();
   }
 
   initForms() {
@@ -252,6 +253,54 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       gasDensity: this.fsat.modifications[this.exploreModIndex].fsat.baseGasDensity.gasDensity,
       flowRate: this.modificationFieldDataForm.controls.flowRate.value
     }
+  }
+
+  getCompressibilityFactor(): number {
+    let fsatOutput: FsatOutput;
+    let fsatCopy: FSAT = JSON.parse(JSON.stringify(this.fsat));
+    fsatCopy.fieldData = this.fanFieldDataService.getObjFromForm(this.modificationFieldDataForm);
+    if(isNaN(fsatCopy.fieldData.compressibilityFactor) || fsatCopy.fieldData.compressibilityFactor == 0 || fsatCopy.fieldData.compressibilityFactor == undefined){
+      fsatCopy.fieldData.compressibilityFactor = 1;
+    }
+    fsatOutput = this.fsatService.getResults(fsatCopy, false, this.settings);
+    let inputs: CompressibilityFactor = {
+      moverShaftPower: fsatOutput.fanShaftPower,
+      inletPressure: this.modificationFieldDataForm.controls.inletPressure.value,
+      outletPressure: this.modificationFieldDataForm.controls.outletPressure.value,
+      barometricPressure: this.fsat.baseGasDensity.barometricPressure,
+      flowRate: this.modificationFieldDataForm.controls.flowRate.value,
+      specificHeatRatio: fsatCopy.baseGasDensity.specificHeatRatio
+    };
+
+    let compressibilityFactor: number = this.calculateCompressibilityFactor(inputs, true, fsatOutput);
+    this.modificationFieldDataForm.patchValue({
+      compressibilityFactor: Number(compressibilityFactor.toFixed(3))
+    });
+    return compressibilityFactor;
+  }
+
+  calculateCompressibilityFactor(compressibilityFactorInput: CompressibilityFactor, isBaseline: boolean, fsatOutput: FsatOutput) {
+    let compressibilityFactor: number;
+    if (isBaseline) {
+      compressibilityFactor = this.fsatService.compressibilityFactor(compressibilityFactorInput, this.settings);
+    } else {
+      let currentMoverShaftPower;
+      let diff = 1;
+
+      while (diff > .001) {
+        let fanEff = fsatOutput.fanEfficiency;
+        // If not first iteration, calculate with moverShaftPower (tempShaftPower from the previous iteration)
+        if (currentMoverShaftPower) {
+          compressibilityFactorInput.moverShaftPower = currentMoverShaftPower
+        }
+        compressibilityFactor = this.fsatService.compressibilityFactor(compressibilityFactorInput, this.settings);
+        let tempShaftPower = compressibilityFactorInput.flowRate * (compressibilityFactorInput.outletPressure - compressibilityFactorInput.inletPressure) * compressibilityFactor / (6362 * (fanEff / 100));
+
+        diff = Math.abs(compressibilityFactorInput.moverShaftPower - tempShaftPower);
+        currentMoverShaftPower = tempShaftPower;
+      }
+    }
+    return compressibilityFactor;
   }
 
 }
