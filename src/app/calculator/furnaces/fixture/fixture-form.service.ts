@@ -11,13 +11,16 @@ export class FixtureFormService {
 
   initForm(lossNum?: number): FormGroup {
     let formGroup = this.formBuilder.group({
-      'materialName': ['', Validators.required],
+      'materialName': [1, Validators.required],
       'feedRate': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
       'initialTemp': ['', Validators.required],
       'finalTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
       'specificHeat': ['', [Validators.required, Validators.min(0)]],
-      'name': ['Loss #' + lossNum]
+      'name': ['Loss #' + lossNum],
+      'specificHeatLiquid': [''],
+      'meltingPoint': [''],
+      'latentHeat': ['']
     });
 
     if (!lossNum) {
@@ -38,7 +41,10 @@ export class FixtureFormService {
       'finalTemp': [loss.finalTemperature, Validators.required],
       'correctionFactor': [loss.correctionFactor, Validators.required],
       'specificHeat': [loss.specificHeat, [Validators.required, Validators.min(0)]],
-      'name': [loss.name]
+      'name': [loss.name],
+      'specificHeatLiquid': [loss.specificHeatLiquid],
+      'meltingPoint': [loss.meltingPoint],
+      'latentHeat': [loss.latentHeat]
     });
 
     if (!inAssessment) {
@@ -59,7 +65,10 @@ export class FixtureFormService {
       finalTemperature: form.controls.finalTemp.value,
       correctionFactor: form.controls.correctionFactor.value,
       materialName: form.controls.materialName.value,
-      name: form.controls.name.value
+      name: form.controls.name.value,
+      specificHeatLiquid: form.controls.specificHeatLiquid.value,
+      meltingPoint: form.controls.meltingPoint.value,
+      latentHeat: form.controls.latentHeat.value
     };
 
     // In standalone
