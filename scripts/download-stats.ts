@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { Parser } from 'json2csv';
+import * as Papa from 'papaparse';
 import { promises as fs, existsSync } from 'fs';
 import * as path from 'path';
 
@@ -28,6 +28,7 @@ async function main() {
     
     const headers = getHeaders();
     const releases = await getReleases(headers);
+    // const releases = require('./download-stats/raw-data.json');
     const csv = parseReleases(releases);
     outputCsv(csv);
 }
@@ -101,9 +102,8 @@ function parseReleases(releases) {
         jsonData.push(newDatum);
     }
     
-    const fields = ['Name', 'Date', Windows, MacDMG, MacZip, AppImage, TarGz, Latest, LatestMac, LatestLinux];
-    const parser = new Parser({ fields: fields });
-    const csv = parser.parse(jsonData);
+    const columns = ['Name', 'Date', Windows, MacDMG, MacZip, AppImage, TarGz, Latest, LatestMac, LatestLinux];
+    const csv = Papa.unparse(jsonData, { columns: columns, quotes: true });
     
     return csv;
 }
