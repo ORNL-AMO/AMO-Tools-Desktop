@@ -18,6 +18,7 @@ export class BleedTestFormComponent implements OnInit {
 
   bleedForm: FormGroup;
   bleedTestOutput: number;
+  bleedTestOutputSub: Subscription;
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
 
@@ -34,6 +35,9 @@ export class BleedTestFormComponent implements OnInit {
     this.generateExampleSub = this.bleedTestService.generateExample.subscribe(value => {
       this.updateForm();
     });
+    this.bleedTestOutputSub = this.bleedTestService.bleedTestOutput.subscribe( val => {
+      this.bleedTestOutput = val;
+    })
   }
 
   updateForm() {
@@ -43,7 +47,6 @@ export class BleedTestFormComponent implements OnInit {
   }
 
   save() {
-    this.bleedTestOutput = this.bleedTestService.bleedTestOutput.getValue();
     let inputs: BleedTestInput = this.bleedTestService.getBleedTestObjFromForm(this.bleedForm);
     this.bleedTestService.bleedTestInput.next(inputs);
   }
@@ -55,6 +58,7 @@ export class BleedTestFormComponent implements OnInit {
   ngOnDestroy() {
     this.generateExampleSub.unsubscribe();
     this.resetDataSub.unsubscribe();
+    this.bleedTestOutputSub.unsubscribe();
   }
 
 }
