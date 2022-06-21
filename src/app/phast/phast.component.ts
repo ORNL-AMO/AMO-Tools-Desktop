@@ -40,6 +40,7 @@ export class PhastComponent implements OnInit {
 
   showUpdateUnitsModal: boolean;
   oldSettings: Settings;
+  modListOpen: boolean = false;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -418,10 +419,12 @@ export class PhastComponent implements OnInit {
 
   selectModificationModal() {
     this.isModalOpen = true;
+    this.modListOpen = true;
     this.changeModificationModal.show();
   }
   closeSelectModification() {
     this.isModalOpen = false;
+    this.modListOpen = false;
     this.lossesService.openModificationModal.next(false);
     this.changeModificationModal.hide();
   }
