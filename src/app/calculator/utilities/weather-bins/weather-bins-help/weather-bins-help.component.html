@@ -2,17 +2,20 @@
     <h5>
         Weather Bins Help
         <br>
-        <small>
-            This calculator can be useful when estimating energy savings from weather-related energy conservation measures.
+        <small class="text-muted">
+            This calculator requires modified TMY3 weather data with calculated wet bulb temperatures found online. You can use the <i>Zip Code Lookup</i> feature if you are connected to the internet.
             <br>
-            This calculator requires modified TMY3 weather data with calculated wet bulb temperatures that can be found at 
-            <a href="https://energyefficiency.ornl.gov/tools-training/" target="_blank">https://energyefficiency.ornl.gov/tools-training/</a>.
-            Use the Weather Station Lookup Tool to find the file name you will need based on your zip code.
+            If you are likely to use this tool while not online, please first visit <a href="https://energyefficiency.ornl.gov/tools-training/" target="_blank">https://energyefficiency.ornl.gov/tools-training/</a>, 
+            download the .zip file with weather data and use the Weather Station Lookup Tool to find the file name you will need based on your zip code.
             <br>
-            You can also load the last file uploaded using the link below the Data File field.            
+            If you are not located in the U.S. please use create and upload an hourly TMY weather data file with the following headers: 
+            <br>
+            Date (MM/DD/YYYY), Time (HH:MM), Dry-bulb (C), RHum (%), Wet Bulb (C), Dew-point (C), Pressure (mbar), Wdir (degrees), Wspd (m/s), Lprecip depth (mm)
+            You can also load the last file uploaded using the link below the Data File field.
         </small>
     </h5>
     <hr class="my-1 hr-spacer">
+    
     <table class="table table-striped">
         <tbody>
             <tr class="bold">
@@ -33,6 +36,7 @@
             </tr>
         </tbody>
     </table>
+    <hr class="my-1 hr-spacer">
 
     <div class="my-2" *ngIf="currentField == 'startMonth' || currentField == 'startDay'">
         <h6>
@@ -114,6 +118,17 @@
             <small class="text-muted">
                 <br>
                 Lowest value for the bin.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'zipcode'">
+        <h6>
+            Zip Code
+            <small class="text-muted">
+                <br>
+                Enter a valid zip code of your facility's location. This tool will find the nearest weather stations to that zip code.
                 <hr>
             </small>
         </h6>

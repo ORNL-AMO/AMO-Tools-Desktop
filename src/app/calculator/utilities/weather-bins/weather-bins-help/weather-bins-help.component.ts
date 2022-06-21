@@ -26,7 +26,7 @@ export class WeatherBinsHelpComponent implements OnInit {
   ngOnInit(): void {
     this.setFieldHelp();
     this.currentFieldSub = this.weatherBinsService.currentField.subscribe(val => {
-      this.currentField = val;
+      if (val) this.currentField = val;
     });
   }
 

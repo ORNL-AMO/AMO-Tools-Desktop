@@ -158,7 +158,8 @@ export class WeatherStationLookupComponent implements OnInit {
     this.zipcode = undefined;
   }
 
-  focusField(field: string) {}
-
+  focusField(str: string) {
+    this.weatherBinsService.currentField.next(str);
+  }
 
 }
