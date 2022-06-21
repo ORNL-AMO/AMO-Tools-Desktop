@@ -167,11 +167,7 @@ export class TankInsulationReductionFormComponent implements OnInit {
         tmpCost = this.tankInsulationReductionService.modificationData.naturalGasUtilityCost;
       }
     } else if (this.form.controls.utilityType.value == 2) {
-      if (this.isBaseline == true) {
-        tmpCost = this.settings.electricityCost;
-      } else {
-        tmpCost = this.settings.electricityCost;
-      }
+      tmpCost = this.settings.electricityCost;
     } else {
       if (this.isBaseline == true) {
         tmpCost = this.tankInsulationReductionService.baselineData.otherUtilityCost;
