@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input, HostListener } from '@angular/core';
 import { WeatherBinsService, WeatherBinsInput } from '../weather-bins.service';
 import { Subscription } from 'rxjs';
 import * as Plotly from 'plotly.js-dist';
@@ -16,12 +16,26 @@ export class WeatherBinsBarChartComponent implements OnInit {
   tableData: WeatherBinsInput;
   inputDataSub: Subscription;
   totalNumberOfDataPoints: number;
+
   constructor(private weatherBinsService: WeatherBinsService) { }
 
   ngOnInit(): void {
+    this.triggerInitialResize();
+    this.totalNumberOfDataPoints = this.weatherBinsService.getTotalCaseDataPoints(this.weatherBinsService.inputData.getValue());
+  }
+
+  triggerInitialResize() {
+    window.dispatchEvent(new Event("resize"));
+    setTimeout(() => {
+      // Resize
+      this.createBarChart(this.tableData);
+    }, 20);
+  }
+
+  ngAfterViewInit() {
     this.inputDataSub = this.weatherBinsService.inputData.subscribe(inputData => {      
       this.tableData = inputData;
-      this.createBarChart(inputData);
+      this.createBarChart(this.tableData);
     });
   }
 
