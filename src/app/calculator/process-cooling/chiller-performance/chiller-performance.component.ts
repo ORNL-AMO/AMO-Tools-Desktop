@@ -1,4 +1,4 @@
-import { ElementRef, HostListener, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -14,8 +14,9 @@ import { ChillerPerformanceService } from './chiller-performance.service';
 export class ChillerPerformanceComponent implements OnInit {
   @Input()
   settings: Settings;
-  
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  helpPanelContainerHeight: number;
   
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -34,7 +35,7 @@ export class ChillerPerformanceComponent implements OnInit {
   weatherDataSourceView: WeatherDataSourceView;
 
   // Comment out weather functionality 5707
-  constructor(private chillerPerformanceService: ChillerPerformanceService, private weatherBinsService: WeatherBinsService,
+  constructor(private chillerPerformanceService: ChillerPerformanceService, private weatherBinsService: WeatherBinsService, private cd: ChangeDetectorRef,
               private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
@@ -104,6 +105,8 @@ export class ChillerPerformanceComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.helpPanelContainerHeight = this.contentContainer.nativeElement.offsetHeight - this.headerHeight;
+      this.cd.detectChanges();
     }
   }
 

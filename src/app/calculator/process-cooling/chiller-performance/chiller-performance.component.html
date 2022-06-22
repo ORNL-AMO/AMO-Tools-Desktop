@@ -82,7 +82,7 @@
 				</a>
 			</div>
 		</div>
-		<div *ngIf="!displayWeatherTab" class="d-flex mr-2 ml-2">
+		<div *ngIf="!displayWeatherTab" class="d-flex mr-2 ml-2" [ngStyle]="{'height.px': helpPanelContainerHeight}">
 			<app-chiller-performance-results class="w-100 p-2" *ngIf="tabSelect == 'results'" [settings]="settings"
 				[modificationExists]="modificationExists"></app-chiller-performance-results>
 			<app-chiller-performance-help class="p-2" *ngIf="tabSelect == 'help'" [settings]="settings">

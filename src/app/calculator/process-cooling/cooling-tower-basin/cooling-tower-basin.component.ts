@@ -119,6 +119,7 @@ export class CoolingTowerBasinComponent implements OnInit {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
       this.helpPanelContainerHeight = this.contentContainer.nativeElement.offsetHeight - this.headerHeight;
+      this.cd.detectChanges();
     }
   }  
  toggleWeatherResults(weatherResultsOn: boolean) {

@@ -8,14 +8,14 @@ export class ChillerStagingFormService {
 
   getChillerStagingForm(inputObj: ChillerStagingInput): FormGroup {
     let form: FormGroup = this.formBuilder.group({
-      chillerType: [inputObj.chillerType, [Validators.required, Validators.min(0), Validators.max(8760)]],
+      chillerType: [inputObj.chillerType, ],
       condenserCoolingType: [inputObj.condenserCoolingType, Validators.required],
       motorDriveType: [inputObj.motorDriveType, Validators.required],
       compressorConfigType: [inputObj.compressorConfigType, Validators.required],
       ariCapacity: [inputObj.ariCapacity, Validators.required],
       ariEfficiency: [inputObj.ariEfficiency, Validators.required],
       maxCapacityRatio: [inputObj.maxCapacityRatio, Validators.required],
-      operatingHours: [inputObj.operatingHours, Validators.required],
+      operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       coolingLoad: [inputObj.coolingLoad, Validators.required],
       waterSupplyTemp: [inputObj.waterSupplyTemp, Validators.required],
       waterEnteringTemp: [inputObj.waterEnteringTemp, Validators.required],
