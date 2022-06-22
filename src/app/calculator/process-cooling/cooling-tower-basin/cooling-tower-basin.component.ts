@@ -15,6 +15,8 @@ export class CoolingTowerBasinComponent implements OnInit {
   settings: Settings;
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  helpPanelContainerHeight: number;
   
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -116,6 +118,7 @@ export class CoolingTowerBasinComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.helpPanelContainerHeight = this.contentContainer.nativeElement.offsetHeight - this.headerHeight;
     }
   }  
  toggleWeatherResults(weatherResultsOn: boolean) {

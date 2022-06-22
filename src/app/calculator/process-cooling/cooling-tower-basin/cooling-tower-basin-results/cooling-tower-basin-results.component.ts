@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CoolingTowerBasinOutput, WeatherBinnedResult } from '../../../../shared/models/chillers';
 import { Settings } from '../../../../shared/models/settings';
@@ -29,7 +29,7 @@ export class CoolingTowerBasinResultsComponent implements OnInit {
   weatherBinnedResults: Array<WeatherBinnedResult> = [];
   isShowingWeatherResults: boolean;
 
-  constructor(private coolingTowerBasinService: CoolingTowerBasinService) { }
+  constructor(private coolingTowerBasinService: CoolingTowerBasinService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.outputSubscription = this.coolingTowerBasinService.coolingTowerBasinOutput.subscribe(val => {
@@ -38,7 +38,9 @@ export class CoolingTowerBasinResultsComponent implements OnInit {
     });
     this.isShowingWeatherResultsSub = this.coolingTowerBasinService.isShowingWeatherResults.subscribe(value => {
       this.isShowingWeatherResults = value;
-    });
+      this.output = this.coolingTowerBasinService.coolingTowerBasinOutput.getValue();
+      this.setWeatherBinnedResults(this.output);
+      });
   }
 
   ngOnDestroy() {
@@ -48,11 +50,17 @@ export class CoolingTowerBasinResultsComponent implements OnInit {
 
   setWeatherBinnedResults(output: CoolingTowerBasinOutput) {
     if (output.weatherBinnedResults && output.weatherBinnedResults.length > 0) {
+      this.selectedWeatherBinResult = this.coolingTowerBasinService.selectedWeatherBinResult;
       if (!this.selectedWeatherBinResult) {
         this.selectedWeatherBinResult = output.weatherBinnedResults[0];
       }
       this.weatherBinnedResults = output.weatherBinnedResults;
+      this.cd.detectChanges();
     }
+  }
+
+  setSelectedWeatherResult() {
+    this.coolingTowerBasinService.selectedWeatherBinResult = this.selectedWeatherBinResult;
   }
 
   updateTable0String() {

@@ -1,6 +1,6 @@
 <div class="d-flex h-100 process-cooling modify-conditions standalone-calculator" #contentContainer>
 	<div class="d-flex flex-column w-66 mh-100 bg-white scroll-item">
-		<div #leftPanelHeader class="row header bg-grey pl-2">
+		<!-- <div #leftPanelHeader class="row header bg-grey pl-2">
 			<div class="w-50 d-flex p-2 align-items-center clickable-tab" 
 			(click)="setWeatherCalculatorActive(false)"
 			[ngClass]="{'active': !displayWeatherTab}">
@@ -23,6 +23,17 @@
 					<h3>Weather Data</h3>
 				</div>
 			</div>
+		</div> -->
+		<div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center">
+			<div class="d-flex p-2 align-items-center">
+				<div class="col-md-auto">
+					<img src="assets/images/calculator-icons/process-cooling-icons/chiller-performance.png"
+						class="ico-size4 process-cooling px-2 py-1">
+				</div>
+				<div class="pl-2">
+					<h3>Chiller Energy Performance and Temperature Reset</h3>
+				</div>
+			</div>
 		</div>
 
 		<div *ngIf="!displayWeatherTab" class="d-flex flex-column m-4">
@@ -39,7 +50,7 @@
 			</div>
 		</div>
 
-		<div *ngIf="displayWeatherTab" class="d-flex flex-column m-4">
+		<!-- <div *ngIf="displayWeatherTab" class="d-flex flex-column m-4">
 			<div class="mt-3 text-center pl-1 pr-1 pb-1" >
 				<span class="text-muted small mx-auto">Select data retrieval method. Lookup requires internet connection.</span>
 			  </div>
@@ -54,7 +65,7 @@
 			</div>
 			<app-weather-station-lookup></app-weather-station-lookup>
 			<app-weather-bins-form [settings]="settings"></app-weather-bins-form>
-		</div>
+		</div> -->
 	</div>
 
 	<div class="d-flex flex-column w-33 scroll-item">
@@ -77,13 +88,13 @@
 			<app-chiller-performance-help class="p-2" *ngIf="tabSelect == 'help'" [settings]="settings">
 			</app-chiller-performance-help>
 		</div>
-		<div *ngIf="displayWeatherTab" class="d-flex mr-2 ml-2">
+		<!-- <div *ngIf="displayWeatherTab" class="d-flex mr-2 ml-2">
 			<app-weather-bins-help *ngIf="tabSelect == 'help'" [settings]="settings"></app-weather-bins-help>
             <div *ngIf="tabSelect == 'results'">
                 <app-weather-bins-bar-chart></app-weather-bins-bar-chart>
                 <app-weather-bins-table [settings]="settings"></app-weather-bins-table>
 			</div>
-		</div>
+		</div> -->
 	</div>
 
 </div>
