@@ -135,6 +135,7 @@ export class ChillerStagingFormComponent implements OnInit {
 
   calculate() {
     let updatedInput: ChillerStagingInput = this.chillerStagingFormService.getChillerStagingInput(this.form);
+    this.form = this.chillerStagingFormService.setWaterTempValidators(this.form);
     this.chillerStagingService.chillerStagingInput.next(updatedInput)
   }
 
