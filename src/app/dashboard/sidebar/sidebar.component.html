@@ -5,12 +5,12 @@
 </div>
 
 <div class="sidebar-group create-button">
-  <div class="p-2">
+  <div class="p-3">
     <div class="nav-item dropdown">
       <button type="button" class="btn btn-primary w-100" (click)="toggleNewDropdown()">
-        <a class="dropdown-toggle">
+        <span class="dropdown-toggle">
           Add New
-        </a>
+        </span>
       </button>
       <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showNewDropdown == true}">
         <div class="list-group bold">

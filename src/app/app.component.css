@@ -1870,3 +1870,7 @@ No Data Messaging
       margin: 0;
   }
 }
+
+:focus-visible {
+  outline: rgb(47, 230, 117) auto 1.5px;
+}
