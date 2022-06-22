@@ -10,9 +10,9 @@ export class CoolingTowerFanFormService {
   getCoolingTowerFanForm(inputObj: CoolingTowerFanInput): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       towerType: [inputObj.towerType, Validators.required],
-      numCells: [inputObj.numCells, [Validators.required, Validators.min(1), Validators.max(10)]],
-      waterFlowRate: [inputObj.waterFlowRate, Validators.required],
-      ratedFanPower: [inputObj.ratedFanPower, Validators.required],
+      numCells: [inputObj.numCells, [Validators.required, Validators.min(0)]],
+      waterFlowRate: [inputObj.waterFlowRate, [Validators.required, Validators.min(0)]],
+      ratedFanPower: [inputObj.ratedFanPower, [Validators.required, Validators.min(0)]],
       waterLeavingTemp: [inputObj.waterLeavingTemp, Validators.required],
       waterEnteringTemp: [inputObj.waterEnteringTemp, Validators.required],
       operatingTempWetBulb: [inputObj.operatingTempWetBulb, Validators.required],
@@ -21,8 +21,28 @@ export class CoolingTowerFanFormService {
       modSpeedType: [inputObj.modSpeedType, Validators.required],
     });
 
+    form = this.setWaterTempValidators(form);
     return form;
   }
+
+  setWaterTempValidators(formGroup: FormGroup) {
+    let waterLeavingTemp = formGroup.controls.waterLeavingTemp.value;
+    let waterEnteringTemp = formGroup.controls.waterEnteringTemp.value;
+
+    formGroup.controls.waterLeavingTemp.setValidators([Validators.required, Validators.max(waterEnteringTemp)]);
+    formGroup.controls.waterLeavingTemp.markAsDirty();
+    formGroup.controls.waterLeavingTemp.updateValueAndValidity();
+
+    formGroup.controls.operatingTempWetBulb.setValidators([Validators.required, Validators.max(waterEnteringTemp)]);
+    formGroup.controls.operatingTempWetBulb.markAsDirty();
+    formGroup.controls.operatingTempWetBulb.updateValueAndValidity();
+
+    formGroup.controls.waterEnteringTemp.setValidators([Validators.required, Validators.min(waterLeavingTemp)]);
+    formGroup.controls.waterEnteringTemp.markAsDirty();
+    formGroup.controls.waterEnteringTemp.updateValueAndValidity();
+    
+    return formGroup;
+}
 
   getCoolingTowerFanInput(form: FormGroup): CoolingTowerFanInput {
     let obj: CoolingTowerFanInput = {

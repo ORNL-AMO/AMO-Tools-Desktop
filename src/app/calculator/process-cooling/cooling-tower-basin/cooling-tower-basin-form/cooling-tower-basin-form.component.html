@@ -17,8 +17,6 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.ratedCapacity.invalid && !form.controls.ratedCapacity.pristine">
           <span *ngIf="form.controls.ratedCapacity.errors.required">Value required.</span>
-          <span *ngIf="form.controls.ratedCapacity.errors.max">Value can't be greater than
-          {{form.controls.ratedCapacity.errors.max.max}}.</span>
         <span *ngIf="form.controls.ratedCapacity.errors.min">Value can't be less than
           {{form.controls.ratedCapacity.errors.min.min}}.</span>
         </span>
@@ -39,7 +37,10 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.ratedTempSetPoint.invalid && !form.controls.ratedTempSetPoint.pristine">
           <span *ngIf="form.controls.ratedTempSetPoint.errors.required">Value required.</span>
+          <span *ngIf="form.controls.ratedTempSetPoint.errors.min">Value can't be less than
+            {{form.controls.ratedTempSetPoint.errors.min.min}}.</span>
         </span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.basinTempSetPoint !== null">{{warnings.basinTempSetPoint}}</span>
       </div>
 
       <div class="form-group">
@@ -67,6 +68,8 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.ratedWindSpeed.invalid && !form.controls.ratedWindSpeed.pristine">
           <span *ngIf="form.controls.ratedWindSpeed.errors.required">Value required.</span>
+          <span *ngIf="form.controls.ratedWindSpeed.errors.min">Value can't be less than
+            {{form.controls.ratedWindSpeed.errors.min.min}}.</span>
         </span>
       </div>
 
@@ -79,6 +82,10 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.panLossRatio.invalid && !form.controls.panLossRatio.pristine">
           <span *ngIf="form.controls.panLossRatio.errors.required">Value required.</span>
+          <span *ngIf="form.controls.panLossRatio.errors.min">Value can't be less than
+            {{form.controls.panLossRatio.errors.min.min}}.</span>
+            <span *ngIf="form.controls.panLossRatio.errors.max">Value can't be greater than
+              {{form.controls.panLossRatio.errors.max.max}}.</span>
         </span>
       </div>
 
@@ -170,7 +177,10 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.baselineTempSetPoint.invalid && !form.controls.baselineTempSetPoint.pristine">
           <span *ngIf="form.controls.baselineTempSetPoint.errors.required">Value required.</span>
+          <span *ngIf="form.controls.baselineTempSetPoint.errors.min">Value can't be less than
+            {{form.controls.baselineTempSetPoint.errors.min.min}}.</span>
         </span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.baselineTempSetPoint !== null">{{warnings.baselineTempSetPoint}}</span>
       </div>
     </form>
 
@@ -192,7 +202,10 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.modTempSetPoint.invalid && !form.controls.modTempSetPoint.pristine">
           <span *ngIf="form.controls.modTempSetPoint.errors.required">Value required.</span>
+          <span *ngIf="form.controls.modTempSetPoint.errors.min">Value can't be less than
+            {{form.controls.modTempSetPoint.errors.min.min}}.</span>
         </span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.modTempSetPoint !== null">{{warnings.modTempSetPoint}}</span>
       </div>
     </form>
   </div>

@@ -31,12 +31,12 @@ export class CoolingTowerFanService {
     let emptyInput: CoolingTowerFanInput = {
       towerType: 0,
       numCells: 1,
-      waterFlowRate: undefined,
-      ratedFanPower: undefined,
-      waterLeavingTemp: undefined,
-      waterEnteringTemp: undefined,
-      operatingTempWetBulb: undefined,
-      operatingHours: undefined,
+      waterFlowRate: 0,
+      ratedFanPower: 0,
+      waterLeavingTemp: 0,
+      waterEnteringTemp: 0,
+      operatingTempWetBulb: 0,
+      operatingHours: 8760,
       baselineSpeedType: 0,
       modSpeedType: 0,
     };

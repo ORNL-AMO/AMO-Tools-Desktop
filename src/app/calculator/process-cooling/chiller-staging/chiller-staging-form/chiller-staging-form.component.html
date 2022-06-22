@@ -60,6 +60,8 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.ariCapacity.invalid && !form.controls.ariCapacity.pristine">
           <span *ngIf="form.controls.ariCapacity.errors.required">Value required.</span>
+          <span *ngIf="form.controls.ariCapacity.errors.min">Value can't be less than
+            {{form.controls.ariCapacity.errors.min.min}}.</span>
         </span>
       </div>
 
@@ -73,6 +75,8 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.ariEfficiency.invalid && !form.controls.ariEfficiency.pristine">
           <span *ngIf="form.controls.ariEfficiency.errors.required">Value required.</span>
+          <span *ngIf="form.controls.ariEfficiency.errors.min">Value can't be less than
+            {{form.controls.ariEfficiency.errors.min.min}}.</span>
         </span>
       </div>
 
@@ -85,6 +89,10 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.maxCapacityRatio.invalid && !form.controls.maxCapacityRatio.pristine">
           <span *ngIf="form.controls.maxCapacityRatio.errors.required">Value required.</span>
+          <span *ngIf="form.controls.maxCapacityRatio.errors.min">Value can't be less than
+            {{form.controls.maxCapacityRatio.errors.min.min}}.</span>
+            <span *ngIf="form.controls.maxCapacityRatio.errors.max">Value can't be greater than
+              {{form.controls.maxCapacityRatio.errors.max.max}}</span>
         </span>
       </div>
     </form>
@@ -104,9 +112,11 @@
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.waterSupplyTemp.invalid && !form.controls.waterSupplyTemp.pristine">
-          <span *ngIf="form.controls.waterSupplyTemp.errors.required">Value required.</span>
-        </span>
+        *ngIf="form.controls.waterSupplyTemp.invalid && !form.controls.waterSupplyTemp.pristine">
+        <span *ngIf="form.controls.waterSupplyTemp.errors.required">Value required.</span>
+          <span *ngIf="form.controls.waterSupplyTemp.errors.max">Value can't be greater than Condenser Water Temperature
+            ({{form.controls.waterSupplyTemp.errors.max.max}})</span>
+      </span>
       </div>
 
       <div class="form-group">
@@ -121,6 +131,8 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.waterEnteringTemp.invalid && !form.controls.waterEnteringTemp.pristine">
           <span *ngIf="form.controls.waterEnteringTemp.errors.required">Value required.</span>
+          <span *ngIf="form.controls.waterEnteringTemp.errors.min">Value can't be less than Water Supply Temperature
+            ({{form.controls.waterEnteringTemp.errors.min.min}}).</span>
         </span>
       </div>
 

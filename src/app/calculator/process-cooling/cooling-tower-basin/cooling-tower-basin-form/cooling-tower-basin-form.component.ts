@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CoolingTowerBasinInput } from '../../../../shared/models/chillers';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { Settings } from '../../../../shared/models/settings';
-import { CoolingTowerBasinFormService } from '../cooling-tower-basin-form.service';
+import { CoolingTowerBasinFormService, CoolingTowerBasinWarnings } from '../cooling-tower-basin-form.service';
 import { CoolingTowerBasinService } from '../cooling-tower-basin.service';
 
 @Component({
@@ -28,6 +28,7 @@ export class CoolingTowerBasinFormComponent implements OnInit {
   hasWeatherBinsDataSub: Subscription;
   generateExampleSub: Subscription;
   isShowingWeatherResultsSub: Subscription;
+  warnings: CoolingTowerBasinWarnings;
 
   showOpHoursModal: boolean = false;
   formWidth: number;
@@ -71,7 +72,7 @@ export class CoolingTowerBasinFormComponent implements OnInit {
 
   initForm() {
     let coolingTowerBasinInput: CoolingTowerBasinInput = this.coolingTowerBasinService.coolingTowerBasinInput.getValue();
-    this.form = this.coolingTowerBasinFormService.getCoolingTowerBasinForm(coolingTowerBasinInput);
+    this.form = this.coolingTowerBasinFormService.getCoolingTowerBasinForm(coolingTowerBasinInput, this.settings);
     this.calculate();
   }
 
@@ -80,6 +81,7 @@ export class CoolingTowerBasinFormComponent implements OnInit {
   }
 
   calculate() {
+    this.warnings = this.coolingTowerBasinFormService.checkCoolingTowerBasinWarnings(this.form, this.settings);
     let updatedInput: CoolingTowerBasinInput = this.coolingTowerBasinFormService.getCoolingTowerBasinInput(this.form);
     this.coolingTowerBasinService.coolingTowerBasinInput.next(updatedInput)
   }
