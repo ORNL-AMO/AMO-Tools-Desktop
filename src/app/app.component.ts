@@ -3,8 +3,7 @@ import { Component, ViewEncapsulation, ViewContainerRef, ChangeDetectionStrategy
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
   private viewContainerRef: ViewContainerRef;
