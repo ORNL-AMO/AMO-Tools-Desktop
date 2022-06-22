@@ -119,6 +119,7 @@
           <select class="form-control" name="selectedWeatherBinResult" id="selectedWeatherBinResult"
             [(ngModel)]="selectedWeatherBinResult" (change)="setSelectedWeatherResult()">
             <option *ngFor="let result of weatherBinnedResults" [ngValue]="result"
+            [selected]="result.caseName == this.selectedWeatherBinResult.caseName"
               [innerHTML]="result.caseName"></option>
           </select>
         </div>

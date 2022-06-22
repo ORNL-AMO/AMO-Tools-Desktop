@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CoolingTowerBasinOutput, WeatherBinnedResult } from '../../../../shared/models/chillers';
 import { Settings } from '../../../../shared/models/settings';
@@ -38,10 +38,11 @@ export class CoolingTowerBasinResultsComponent implements OnInit {
     });
     this.isShowingWeatherResultsSub = this.coolingTowerBasinService.isShowingWeatherResults.subscribe(value => {
       this.isShowingWeatherResults = value;
-      this.output = this.coolingTowerBasinService.coolingTowerBasinOutput.getValue();
+      this.output = this.coolingTowerBasinService.coolingTowerBasinOutput.getValue();  
       this.setWeatherBinnedResults(this.output);
       });
   }
+
 
   ngOnDestroy() {
     this.outputSubscription.unsubscribe();
@@ -50,12 +51,13 @@ export class CoolingTowerBasinResultsComponent implements OnInit {
 
   setWeatherBinnedResults(output: CoolingTowerBasinOutput) {
     if (output.weatherBinnedResults && output.weatherBinnedResults.length > 0) {
+      this.weatherBinnedResults = output.weatherBinnedResults;
       this.selectedWeatherBinResult = this.coolingTowerBasinService.selectedWeatherBinResult;
       if (!this.selectedWeatherBinResult) {
         this.selectedWeatherBinResult = output.weatherBinnedResults[0];
       }
-      this.weatherBinnedResults = output.weatherBinnedResults;
       this.cd.detectChanges();
+      this.weatherBinnedResults = output.weatherBinnedResults;
     }
   }
 
