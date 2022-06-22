@@ -41,6 +41,7 @@ export class CustomMaterialsComponent implements OnInit {
   fileReference: any;
   isValidFile: boolean;
   importing: boolean = false;
+  exportName: string;
 
   importFileError: string;
   constructor(private customMaterialService: CustomMaterialsService, private importExportService: ImportExportService, private settingsDbService: SettingsDbService) { }
@@ -167,7 +168,7 @@ export class CustomMaterialsComponent implements OnInit {
   }
 
   exportData() {
-    this.importExportService.downloadMaterialData(this.selectedMaterialData);
+    this.importExportService.downloadMaterialData(this.selectedMaterialData, this.exportName);
     this.hideExportModal();
   }
 
