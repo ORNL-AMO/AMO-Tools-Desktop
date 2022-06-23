@@ -1,0 +1,223 @@
+<!-- Shared inputs -->
+<div class="d-flex w-100 my-2">
+  <div class="w-50 d-flex flex-column mx-4 mb-4">
+    <form #formElement [formGroup]="form">
+      <label class="group-label my-1">
+        Chiller Characteristics
+      </label>
+
+      <div class="form-group">
+        <label for="chillerType">Chiller Type</label>
+        <select class="form-control" id="chillerType" formControlName="chillerType" (change)="setChillerCharacteristics()"
+          (focus)="focusField('chillerType')">
+          <option *ngFor="let chillerType of characteristics.chillerTypes" [ngValue]="chillerType.value">
+            {{chillerType.display}}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="condenserCoolingType">Condenser Cooling Type</label>
+        <select class="form-control" id="condenserCoolingType" formControlName="condenserCoolingType" (change)="setChillerCharacteristics()"
+          (focus)="focusField('condenserCoolingType')">
+          <option *ngFor="let condenserCoolingType of characteristics.condenserCoolingTypes"
+            [ngValue]="condenserCoolingType.value">{{condenserCoolingType.display}}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="motorDriveType">Motor Drive Type</label>
+        <select class="form-control" id="motorDriveType" formControlName="motorDriveType" (change)="setChillerCharacteristics()"
+          (focus)="focusField('motorDriveType')">
+          <option *ngFor="let motorDriveType of characteristics.motorDriveTypes" [ngValue]="motorDriveType.value">
+            {{motorDriveType.display}}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="compressorConfigType">Compressor Config Type</label>
+        <select class="form-control" id="compressorConfigType" formControlName="compressorConfigType" (change)="setChillerCharacteristics()"
+          (focus)="focusField('compressorConfigType')">
+          <option *ngFor="let compressorConfigType of characteristics.compressorConfigTypes"
+            [ngValue]="compressorConfigType.value">{{compressorConfigType.display}}
+          </option>
+        </select>
+      </div>
+
+      <label class="group-label mt-3">
+        Rated Conditions
+      </label>
+      <div class="form-group">
+        <label class="small" for="ariCapacity">Chiller Capacity @ ARI</label>
+        <div class="input-group">
+          <input class="form-control" name="ariCapacity" id="ariCapacity" formControlName="ariCapacity" type="number"
+            (input)="calculate()" (focus)="focusField('ariCapacity')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">tons</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.ariCapacity.invalid && !form.controls.ariCapacity.pristine">
+          <span *ngIf="form.controls.ariCapacity.errors.required">Value required.</span>
+          <span *ngIf="form.controls.ariCapacity.errors.min">Value can't be less than
+            {{form.controls.ariCapacity.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="ariEfficiency">Full Load Efficiency @ ARI</label>
+        <div class="input-group">
+          <input class="form-control" name="ariEfficiency" id="ariEfficiency" formControlName="ariEfficiency"
+            type="number" (input)="calculate()" (focus)="focusField('ariEfficiency')" onfocus="this.select();">
+          <span class="input-group-addon units">kW/ton</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.ariEfficiency.invalid && !form.controls.ariEfficiency.pristine">
+          <span *ngIf="form.controls.ariEfficiency.errors.required">Value required.</span>
+          <span *ngIf="form.controls.ariEfficiency.errors.min">Value can't be less than
+            {{form.controls.ariEfficiency.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="maxCapacityRatio">Design/Max Capacity Ratio</label>
+        <div class="input-group">
+          <input class="form-control" name="maxCapacityRatio" id="maxCapacityRatio" formControlName="maxCapacityRatio"
+            type="number" (input)="calculate()" (focus)="focusField('maxCapacityRatio')" onfocus="this.select();">
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.maxCapacityRatio.invalid && !form.controls.maxCapacityRatio.pristine">
+          <span *ngIf="form.controls.maxCapacityRatio.errors.required">Value required.</span>
+          <span *ngIf="form.controls.maxCapacityRatio.errors.min">Value can't be less than
+            {{form.controls.maxCapacityRatio.errors.min.min}}.</span>
+            <span *ngIf="form.controls.maxCapacityRatio.errors.max">Value can't be greater than
+              {{form.controls.maxCapacityRatio.errors.max.max}}</span>
+        </span>
+      </div>
+    </form>
+  </div>
+
+  <div class="w-50 d-flex flex-column mx-4 mb-4">
+    <label class="group-label my-1">
+      Operating Conditions
+    </label>
+    <form [formGroup]="form">
+      <div class="form-group">
+        <label class="small" for="waterSupplyTemp">Chilled Water Supply Temperature</label>
+        <div class="input-group">
+          <input class="form-control" name="waterSupplyTemp" id="waterSupplyTemp" formControlName="waterSupplyTemp"
+            type="number" (input)="calculate()" (focus)="focusField('waterSupplyTemp')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="form.controls.waterSupplyTemp.invalid && !form.controls.waterSupplyTemp.pristine">
+        <span *ngIf="form.controls.waterSupplyTemp.errors.required">Value required.</span>
+          <span *ngIf="form.controls.waterSupplyTemp.errors.max">Value can't be greater than Condenser Water Temperature
+            ({{form.controls.waterSupplyTemp.errors.max.max}})</span>
+      </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="waterEnteringTemp">Entering Condenser Water Temperature</label>
+        <div class="input-group">
+          <input class="form-control" name="waterEnteringTemp" id="waterEnteringTemp"
+            formControlName="waterEnteringTemp" type="number" (input)="calculate()"
+            (focus)="focusField('waterEnteringTemp')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.waterEnteringTemp.invalid && !form.controls.waterEnteringTemp.pristine">
+          <span *ngIf="form.controls.waterEnteringTemp.errors.required">Value required.</span>
+          <span *ngIf="form.controls.waterEnteringTemp.errors.min">Value can't be less than Water Supply Temperature
+            ({{form.controls.waterEnteringTemp.errors.min.min}}).</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="operatingHours">Annual Operating Hours</label>
+        <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+          </span>
+          <input class="form-control" name="operatingHours" id="operatingHours" formControlName="operatingHours"
+            type="number" (input)="calculate()" (focus)="focusField('operatingHours')" onfocus="this.select();">
+          <span class="units input-group-addon">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
+          <span *ngIf="form.controls.operatingHours.errors.required">Value required.</span>
+          <span *ngIf="form.controls.operatingHours.errors.max">Value can't be greater than
+            {{form.controls.operatingHours.errors.max.max}}.</span>
+          <span *ngIf="form.controls.operatingHours.errors.min">Value can't be less than
+            {{form.controls.operatingHours.errors.min.min}}.</span>
+        </span>
+      </div>
+
+
+    </form>
+  </div>
+
+</div>
+
+<div class="w-100 header mx-2 mb-4">
+  <h3>Chilled Water Temperature Reset</h3>
+</div>
+<div class="d-flex w-100">
+  <!-- Baseline -->
+  <div class="w-50 d-flex flex-column mx-4 mb-4">
+    <label class="group-label my-1">
+      Baseline
+    </label>
+    <form [formGroup]="form">
+      <div formArrayName="baselineLoadList" class="form-group form-array"
+        *ngFor="let baselineLoad of getBaselineLoadList(); let i = index">
+        <label class="small" for="{{'baselineLoad'+i}}">Load Assigned to Chiller {{i + 1}}</label>
+        <div class="input-group">
+          <input class="form-control" name="{{'baselineLoad'+i}}" id="{{'baselineLoad'+i}}" [formControl]="baselineLoad"
+            type="number" (input)="calculate()" (focus)="focusField('chillerLoad')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">tons</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.baselineLoadList.controls[i].invalid && !form.controls.baselineLoadList.controls[i].pristine">
+          <span *ngIf="form.controls.baselineLoadList.controls[i].errors.required">Value required.</span>
+        </span>
+      </div>
+    </form>
+  </div>
+
+  <div class="w-50 d-flex flex-column mx-4 mb-4">
+    <label class="group-label my-1">
+      Modification
+    </label>
+    <form [formGroup]="form">
+      <div formArrayName="modLoadList" class="form-group form-array"
+        *ngFor="let modLoad of getModLoadList(); let i = index">
+        <label class="small" for="{{'modLoad'+i}}">Load Assigned to Chiller {{i + 1}}</label>
+        <div class="input-group">
+          <input class="form-control" name="{{'modLoad'+i}}" id="{{'modLoad'+i}}" [formControl]="modLoad" type="number"
+            (input)="calculate()" (focus)="focusField('chillerLoad')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">tons</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
+          <span [ngClass]="{'invisible': i == 0}" class="btn-delete-field" (click)="removeChiller(i)"> &times;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.modLoadList.controls[i].invalid && !form.controls.modLoadList.controls[i].pristine">
+          <span *ngIf="form.controls.modLoadList.controls[i].errors.required">Value required.</span>
+        </span>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-auto mx-auto">
+    <a class="click-link small" (click)="addChiller()">Add Chiller</a>
+  </div>
+</div>
+
+<app-operating-hours-modal *ngIf="showOpHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true">
+</app-operating-hours-modal>

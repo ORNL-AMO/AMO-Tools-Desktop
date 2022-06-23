@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LogToolService } from './log-tool.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import * as _ from 'lodash';
 import { LogToolDay, LogToolField, IndividualDataFromCsv } from './log-tool-models';
 import { BehaviorSubject } from 'rxjs';

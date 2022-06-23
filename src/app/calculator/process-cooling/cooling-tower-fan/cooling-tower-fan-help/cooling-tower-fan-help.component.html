@@ -1,0 +1,120 @@
+<div class="p-2 pt-3 d-flex flex-column help-info">
+    <h5>
+      Cooling Tower Fan Energy Help
+      <br>
+      <small class="text-muted">
+        Determines the impact of cooling tower operational parameters on fan energy consumption. 
+        This calculator can be used to explore potential energy savings from optimizing cooling tower fan control. Algorithm methodology has been adopted by the eQuest energy simulation tool.
+      </small>
+    </h5>
+    <hr class="my-1 hr-spacer">
+  
+    <div class="my-2" *ngIf="currentField == 'operatingHours'">
+      <h6>
+        Annual Operating Hours
+        <small class="text-muted">
+          <br>
+          Number of hours per year the chiller is at these conditions. This is not necessarily how many hours the facility is operating. 
+          <hr>
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'towerType'">
+      <h6>
+        Tower Type
+        <small class="text-muted">
+          <br>
+          Cooling tower type. At this time, the only option is Open Tower: a cooling tower that directly exposes the fluid in the condenser loop to the air flowing through the tower.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'numCells'">
+      <h6>
+        Number of Cells
+        <small class="text-muted">
+          <br>
+          The total number of independently controlled cells in the tower. A cell is the smallest tower component that can function as an independent unit with regard to air and water flow. They are contained by exterior or partition walls and each cell may have one or more fans and distribution systems.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'ratedFanPower'">
+      <h6>
+        Rated Fan Power
+        <small class="text-muted">
+          <br>
+          The power of the cooling tower fan at CTI (Cooling Tower Institute) conditions (95°F entering condensing water temp and 85°F leaving condensing water temp; 78°F wet bulb temperature; 10°F Range and 7°F Approach; 3 GPM per ton). The rated fan power can be found on the nameplate of cooling tower.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'waterLeavingTemp'">
+      <h6>
+        Leaving Cooling Tower Water Temperature
+        <small class="text-muted">
+          <br>
+          Temperature of water leaving the cooling tower.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'waterEnteringTemp'">
+      <h6>
+        Entering Cooling Water Temperature
+        <small class="text-muted">
+          <br>
+          Temperature of water entering the cooling tower.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'operatingTempWetBulb'">
+      <h6>
+        Ambient Wet Bulb Temperature
+        <small class="text-muted">
+          <br>
+          Average wet bulb temperature for the time period.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'waterFlowRate'">
+      <h6>
+        Water Flow Rate
+        <small class="text-muted">
+          <br>
+          The condensing water flow rate through the cooling tower.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'baselineSpeedType' || currentField == 'modSpeedType'">
+      <h6>
+        Fan Control
+        <small class="text-muted">
+          <br>
+          Choose control type for fan: 1-speed, 2-speed, or variable speed.
+          <br>
+          1-speed fan: A one-speed fan cycles on and off to maintain the tower setpoint. The program assumes that the fan can cycle as often as required to maintain the setpoint. In actual practice, fan cycling is usually limited to 4-8 cycles per hour to protect the motor from burnout. This can cause wide fluctuations in the condenser loop temperature, which the is not modeled.
+          <br>
+          2-speed fan: The fan cycles between off, low speed, and high speed to maintain the fluid setpoint.
+          <br>
+          Variable speed fan: The air flow is modulated so that the rejection capacity exactly matches the load at the desired setpoint. This option simulates both variable speed drives and variable pitch fans. Power consumption at reduced air flows is calculated using the FAN-KW-FSPEED curve from eQuest 3.65.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    
+ 
+  </div>
+  
+ 

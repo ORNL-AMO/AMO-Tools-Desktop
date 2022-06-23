@@ -1,0 +1,95 @@
+<div *ngIf="weatherDataSourceView == 'lookup'" class="mx-3 mb-2 p-2 form-section">
+    <label class="group-label bold my-1 w-100">
+        Search weather station data
+    </label>
+    <div class="alert-danger small w-100 text-center p-2" *ngIf="weatherLookupError">
+        <span class="mb-2">{{weatherLookupError.message}}</span>
+        <a *ngIf="weatherLookupError" class="click-link form-text" (click)="resetWeatherData(true)">
+            Try Again
+        </a>
+    </div>
+    <ng-container *ngIf="!isCollapsed && !weatherLookupError">
+
+        <div class="d-flex w-100 mt-2">
+            <div *ngIf="!selectedStation" class="w-100 d-flex flex-column mx-0 mb-2">
+                <form>
+                    <div class="form-group">
+                        <label class="small" for="zipcode">Zip code</label>
+                        <div class="input-group">
+                            <input class="form-control" name="zipcode" id="zipcode" [(ngModel)]="zipcode" type="text"
+                                (input)="setStations()" (focus)="focusField('zipcode')" onfocus="this.select();">
+                            <span class="alert-danger small w-100 text-center" *ngIf="hasZipcodeNotFoundError">
+                                Enter a valid zip code to find the nearest weather stations.
+                            </span>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <ng-container *ngIf="!selectedStation">
+            <div class="d-flex flex-row justify-content-end">
+                <div class="d-flex">
+                    <span class="small p-1">Show</span>
+                    <select [disabled]="!nearestStations" (change)="setNearestStations()" class="small p-1"
+                        [(ngModel)]="resultCount">
+                        <option [ngValue]=5>5</option>
+                        <option [ngValue]=10>10</option>
+                        <option [ngValue]=20>20</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex w-100 mx-0 mb-1">
+                <table class="table table-hover table-striped small my-1">
+                    <tbody>
+                        <tr>
+                            <th class="bold text-left">
+                                Station
+                            </th>
+                            <th class="bold text-left">
+                                City
+                            </th>
+                            <th class="bold text-left">
+                                State
+                            </th>
+                            <th class="bold text-left">
+                                Distance (miles)
+                            </th>
+                        </tr>
+                        <tr *ngFor="let weatherStation of nearestStations"
+                            [ngClass]="{'selected-item': weatherStation.selected === true}">
+                            <td class="text-left p-1">
+                                <a class="click-link"
+                                    (click)="setSelectedStation(weatherStation)">{{weatherStation.StationName}}</a>
+                            </td>
+                            <td class="text-left p-1">{{weatherStation.City}}</td>
+                            <td class="text-left p-1">{{weatherStation.State}}</td>
+                            <td class="text-left p-1">
+                                {{weatherStation.distance}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="selectedStation">
+            <div class="form-group small">
+                <label>Selected station data:</label>
+                <div class="input-group">
+                    {{selectedStation.StationName}}
+                </div>
+            </div>
+        </ng-container>
+
+        <div class="d-flex flex-row justify-content-end">
+            <div class="d-flex mt-2 w-100 justify-content-end">
+                <button *ngIf="this.selectedStation" class="w-25 btn btn-danger small pull-right" role="button"
+                    (click)="resetWeatherData()">Reset Data</button>
+            </div>
+        </div>
+
+    </ng-container>
+
+</div>
