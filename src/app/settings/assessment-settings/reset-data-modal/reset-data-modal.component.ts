@@ -29,6 +29,7 @@ import { GasLoadMaterialDbService } from '../../../indexedDb/gas-load-material-d
 import { LiquidLoadMaterialDbService } from '../../../indexedDb/liquid-load-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
 import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-material-db.service';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -48,6 +49,7 @@ export class ResetDataModalComponent implements OnInit {
   deleting: boolean = false;
   hidingModal: any;
   constructor(private dashboardService: DashboardService, 
+    private electronService: ElectronService,
     private calculatorDbService: CalculatorDbService,
     private coreService: CoreService, 
     private directoryDbService: DirectoryDbService, 
@@ -331,8 +333,11 @@ async resetAllExampleAssessments(dirId: number) {
   }
 
   finishDelete() {
-    // TODO if not in electron, do location.reload()
-    this.coreService.relaunchApp();
+    if (this.electronService.isElectronApp) {
+      this.coreService.relaunchApp();
+    } else {
+      location.reload()
+    }
   }
 
 

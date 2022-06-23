@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
@@ -89,18 +88,7 @@ export class CoreComponent implements OnInit {
       }
     });
 
-    // if (this.indexedDbService.db === undefined) {
-    //   this.initData();
-    // }
-
-    // if (this.suiteDbService.hasStarted === false) {
-    //   this.suiteDbService.startup();
-    // }
-
-    // const start = performance.now(); 
     window.indexedDB.databases().then(db => {
-      // const duration = performance.now() - start;
-      // console.log(db, duration);
       this.initData();
     });
 
@@ -137,7 +125,6 @@ export class CoreComponent implements OnInit {
   async initData() {
     let existingDirectories: number = await firstValueFrom(this.directoryDbService.count());
 
-    // let existingDirectories = 0;
     if (existingDirectories === 0) {
       await this.coreService.createDefaultDirectories();
       await this.coreService.createExamples();
@@ -155,9 +142,6 @@ export class CoreComponent implements OnInit {
       this.assessmentDbService.setAll(initializedData.assessments);
       this.calculatorDbService.setAll(initializedData.calculators);
       this.inventoryDbService.setAll(initializedData.inventoryItems);
-      if (this.suiteDbService.hasStarted == true) {
-        this.suiteDbService.initCustomDbMaterials();
-      }
       this.idbStarted = true;
       this.changeDetectorRef.detectChanges();
     });

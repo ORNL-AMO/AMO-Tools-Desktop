@@ -687,8 +687,8 @@ export interface PipeInsulationReductionResult {
   heatLength: number,
   annualHeatLoss: number,
   energyCost: number,
-  energySourceType: number,
-  heatedOrChilled: number
+  energySourceType?: number,
+  heatedOrChilled?: number
 };
 
 //===== END pipe insulation reduction objects =====
@@ -732,8 +732,8 @@ export interface TankInsulationReductionResult {
   heatLoss: number,
   annualHeatLoss: number,
   energyCost: number,
-  energySourceType: number,
-  heatedOrChilled: number
+  energySourceType?: number,
+  heatedOrChilled?: number
 };
 
 //===== END tank insulation reduction objects =====

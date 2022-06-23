@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
  
 import { Assessment } from '../shared/models/assessment';
 import { FsatService } from './fsat.service';
@@ -10,16 +9,16 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData, FsatOperations } from '../shared/models/fans';
-import * as _ from 'lodash';
 import { CompareService } from './compare.service';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
-import { FanImperialDefaults, FanMetricDefaults, SettingsService } from '../settings/settings.service';
+import { FanImperialDefaults, SettingsService } from '../settings/settings.service';
 import { ConvertFsatService } from './convert-fsat.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-fsat',
