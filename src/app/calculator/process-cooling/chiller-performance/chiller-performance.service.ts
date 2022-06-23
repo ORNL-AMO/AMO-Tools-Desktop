@@ -4,7 +4,6 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { ChillerPerformanceInput, ChillerPerformanceOutput } from '../../../shared/models/chillers';
 import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
-import { WeatherBinsService } from '../../utilities/weather-bins/weather-bins.service';
 import { ChillerPerformanceFormService } from './chiller-performance-form.service';
 
 declare var chillersAddon: any;
@@ -24,9 +23,7 @@ export class ChillerPerformanceService {
 
   operatingHours: OperatingHours;
 
-  // Comment out weather functionality 5707
   constructor(private convertUnitsService: ConvertUnitsService, 
-    // private weatherBinsService: WeatherBinsService,
     private chillerPerformanceFormService: ChillerPerformanceFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.chillerPerformanceInput = new BehaviorSubject<ChillerPerformanceInput>(undefined);
@@ -34,19 +31,7 @@ export class ChillerPerformanceService {
     this.generateExample = new BehaviorSubject<boolean>(undefined);
     this.currentField = new BehaviorSubject<string>(undefined);
     this.modalOpen = new BehaviorSubject<boolean>(false);
-    // this.sethasWeatherBinsData();
   }
-
-  // sethasWeatherBinsData() {
-  //   let weatherBinsData = this.weatherBinsService.inputData.getValue();
-  //   let hasWeatherBinsData = weatherBinsData && weatherBinsData.cases.length > 0;
-  //   if (!this.hasWeatherBinsData) {
-  //     this.hasWeatherBinsData = new BehaviorSubject<boolean>(hasWeatherBinsData);
-  //   } else {
-  //     if (hasWeatherBinsData !== this.hasWeatherBinsData.getValue())
-  //     this.hasWeatherBinsData.next(hasWeatherBinsData);
-  //   }
-  // }
 
   initDefaultEmptyInputs() {
     let emptyInput: ChillerPerformanceInput = {
@@ -93,18 +78,10 @@ export class ChillerPerformanceService {
       this.initDefaultEmptyOutputs();
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
-
-      // this.sethasWeatherBinsData();
-      // if (this.hasWeatherBinsData.getValue() == true) {
-      //   let weatherBinsData = this.weatherBinsService.inputData.getValue();
-      //   let chillerPerformanceOutput: ChillerPerformanceOutput = chillersAddon.chillerCapacityEfficiency(inputCopy);
-      //   chillerPerformanceOutput = this.convertResultUnits(chillerPerformanceOutput, settings);
-      //   this.chillerPerformanceOutput.next(chillerPerformanceOutput);
-      // } else {
-        let chillerPerformanceOutput: ChillerPerformanceOutput = chillersAddon.chillerCapacityEfficiency(inputCopy);
-        chillerPerformanceOutput = this.convertResultUnits(chillerPerformanceOutput, settings);
-        this.chillerPerformanceOutput.next(chillerPerformanceOutput);
-      // }
+      let chillerPerformanceOutput: ChillerPerformanceOutput = chillersAddon.chillerCapacityEfficiency(inputCopy);
+      chillerPerformanceOutput = this.convertResultUnits(chillerPerformanceOutput, settings);
+      this.chillerPerformanceOutput.next(chillerPerformanceOutput);
+      
     }
   }
 

@@ -34,7 +34,6 @@ export class ChillerPerformanceComponent implements OnInit {
   hasWeatherBinsData: boolean = false;
   weatherDataSourceView: WeatherDataSourceView;
 
-  // Comment out weather functionality 5707
   constructor(private chillerPerformanceService: ChillerPerformanceService, private weatherBinsService: WeatherBinsService, private cd: ChangeDetectorRef,
               private settingsDbService: SettingsDbService) { }
 
@@ -42,27 +41,16 @@ export class ChillerPerformanceComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    // this.weatherDataSourceView = this.weatherBinsService.weatherDataSourceView.getValue();
     let existingInputs = this.chillerPerformanceService.chillerPerformanceInput.getValue();
     if(!existingInputs) {
       this.chillerPerformanceService.initDefaultEmptyInputs();
       this.chillerPerformanceService.initDefaultEmptyOutputs();
     } 
-    else {
-      // this.chillerPerformanceService.sethasWeatherBinsData();
-    }
     this.initSubscriptions();
   }
 
-  // setWeatherDataSource(source: WeatherDataSourceView) {
-  //   this.weatherDataSourceView = source;
-  //   this.weatherBinsService.weatherDataSourceView.next(this.weatherDataSourceView);
-  // }
-
   ngOnDestroy() {
     this.chillerPerformanceInputSub.unsubscribe();
-    // this.hasWeatherBinsDataSub.unsubscribe();
-
   }
 
   ngAfterViewInit() {
@@ -71,17 +59,10 @@ export class ChillerPerformanceComponent implements OnInit {
     }, 100);
   }
 
-  // setWeatherCalculatorActive(displayWeatherTab: boolean) {
-  //   this.displayWeatherTab = displayWeatherTab;
-  // }
-
   initSubscriptions() {
     this.chillerPerformanceInputSub = this.chillerPerformanceService.chillerPerformanceInput.subscribe(value => {
       this.calculate();
     });
-    // this.hasWeatherBinsDataSub = this.chillerPerformanceService.hasWeatherBinsData.subscribe(value => {
-    //   this.hasWeatherBinsData = value;
-    // });
   }
 
   calculate() {
