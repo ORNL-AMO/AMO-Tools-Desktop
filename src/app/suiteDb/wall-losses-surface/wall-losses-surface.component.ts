@@ -1,10 +1,11 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { WallLossesSurface } from '../../shared/models/materials';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
+import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
+import { firstValueFrom } from 'rxjs';
+import { WallLossesSurfaceDbService } from '../../indexedDb/wall-losses-surface-db.service';
 
 @Component({
   selector: 'app-wall-losses-surface',
@@ -39,7 +40,7 @@ export class WallLossesSurfaceComponent implements OnInit {
   idbEditMaterialId: number;
   sdbEditMaterialId: number;
   constructor(
-    private sqlDbApiService: SqlDbApiService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService) { }
+    private sqlDbApiService: SqlDbApiService, private settingsDbService: SettingsDbService, private wallLossesSurfaceDbService: WallLossesSurfaceDbService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -48,12 +49,7 @@ export class WallLossesSurfaceComponent implements OnInit {
 
     if (this.editExistingMaterial) {
       this.allMaterials = this.sqlDbApiService.selectWallLossesSurface();
-      this.indexedDbService.getWallLossesSurface().then(idbResults => {
-        this.allCustomMaterials = idbResults;
-        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.surface === material.surface; }).id;
-        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.surface === material.surface; }).id;
-        this.setExisting();
-      });
+      this.getAllMaterials();
     }
     else {
       this.canAdd = true;
@@ -62,37 +58,42 @@ export class WallLossesSurfaceComponent implements OnInit {
     }
   }
 
-  addMaterial() {
+  async getAllMaterials() {
+    this.allCustomMaterials = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
+    this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.surface === material.surface; }).id;
+    this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.surface === material.surface; }).id;
+    this.setExisting();
+  }
+
+  async addMaterial() {
     if (this.canAdd) {
       this.canAdd = false;
       let suiteDbResult = this.sqlDbApiService.insertWallLossesSurface(this.newMaterial);
       if (suiteDbResult === true) {
-        this.indexedDbService.addWallLossesSurface(this.newMaterial).then(idbResults => {
-          this.closeModal.emit(this.newMaterial);
-        });
+        await firstValueFrom(this.wallLossesSurfaceDbService.addWithObservable(this.newMaterial));
+        this.closeModal.emit(this.newMaterial);
+
       }
     }
   }
 
-  updateMaterial() {
+ async updateMaterial() {
     this.newMaterial.id = this.sdbEditMaterialId;
     let suiteDbResult = this.sqlDbApiService.updateWallLossesSurface(this.newMaterial);
     if (suiteDbResult === true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
-      this.indexedDbService.putWallLossesSurface(this.newMaterial).then(val => {
-        this.closeModal.emit(this.newMaterial);
-      });
+      await firstValueFrom(this.wallLossesSurfaceDbService.updateWithObservable(this.newMaterial));
+      this.closeModal.emit(this.newMaterial);
     }
   }
 
-  deleteMaterial() {
+  async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
       let suiteDbResult = this.sqlDbApiService.deleteWallLossesSurface(this.sdbEditMaterialId);
       if (suiteDbResult === true) {
-        this.indexedDbService.deleteWallLossesSurface(this.idbEditMaterialId).then(val => {
-          this.closeModal.emit(this.newMaterial);
-        });
+        await firstValueFrom(this.wallLossesSurfaceDbService.deleteByIdWithObservable(this.idbEditMaterialId));
+        this.closeModal.emit(this.newMaterial);
       }
     }
   }

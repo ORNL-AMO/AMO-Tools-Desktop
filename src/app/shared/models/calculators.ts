@@ -52,7 +52,8 @@ export interface Calculator {
     fanEfficiencyInputs?: FanEfficiencyInputs;
     fan203Inputs?: Fan203Inputs;
     selected?: boolean;
-    systemAndEquipmentCurveData?: SystemAndEquipmentCurveData
+    systemAndEquipmentCurveData?: SystemAndEquipmentCurveData,
+    bleedTestInputs?: BleedTestInputs;
 }
 
 export interface HeadToolSuction {
@@ -149,6 +150,12 @@ export interface PipeSizingInputs {
      atmosphericPressure: number;
 }
 
+export interface BleedTestInputs {
+    totalSystemVolume: number;
+    normalOperatingPressure: number;
+    testPressure: number;
+    time: number;
+  }
 
 export interface AirVelocityInputs {
     airFlow: number;

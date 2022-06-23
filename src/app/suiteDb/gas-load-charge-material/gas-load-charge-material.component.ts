@@ -1,11 +1,13 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { GasLoadChargeMaterial } from '../../shared/models/materials';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
-import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
+import { firstValueFrom } from 'rxjs';
+import { GasLoadMaterialDbService } from '../../indexedDb/gas-load-material-db.service';
+import * as _ from 'lodash';
+
 @Component({
   selector: 'app-gas-load-charge-material',
   templateUrl: './gas-load-charge-material.component.html',
@@ -39,7 +41,7 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   canAdd: boolean;
   idbEditMaterialId: number;
   sdbEditMaterialId: number;
-  constructor(private sqlDbApiService: SqlDbApiService,  private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private settingsDbService: SettingsDbService, private gasLoadMaterialDbService: GasLoadMaterialDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -53,13 +55,7 @@ export class GasLoadChargeMaterialComponent implements OnInit {
     this.allMaterials = this.sqlDbApiService.selectGasLoadChargeMaterials();
 
     if (this.editExistingMaterial) {
-      this.indexedDbService.getAllGasLoadChargeMaterial().then(idbResults => {
-        this.allCustomMaterials = idbResults;
-        //id used by IDb
-        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
-        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
-        this.setExisting();
-      });
+      this.setAllMaterials();
     }
     else {
       this.canAdd = true;
@@ -67,8 +63,16 @@ export class GasLoadChargeMaterialComponent implements OnInit {
     }
   }
 
+  async setAllMaterials() {
+    this.allCustomMaterials = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
+    //id used by IDb
+    this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
+    this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
+    this.setExisting();
+  }
 
-  addMaterial() {
+
+ async addMaterial() {
     if (this.canAdd) {
       this.canAdd = false;
       if (this.settings.unitsOfMeasure == 'Metric') {
@@ -76,14 +80,13 @@ export class GasLoadChargeMaterialComponent implements OnInit {
       }
       let suiteDbResult = this.sqlDbApiService.insertGasLoadChargeMaterial(this.newMaterial);
       if (suiteDbResult == true) {
-        this.indexedDbService.addGasLoadChargeMaterial(this.newMaterial).then(idbResults => {
-          this.closeModal.emit(this.newMaterial);
-        })
+        await firstValueFrom(this.gasLoadMaterialDbService.addWithObservable(this.newMaterial));
+        this.closeModal.emit(this.newMaterial);
       }
     }
   }
 
-  updateMaterial() {
+  async updateMaterial() {
     if (this.settings.unitsOfMeasure == 'Metric') {
       this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
     }
@@ -92,19 +95,17 @@ export class GasLoadChargeMaterialComponent implements OnInit {
     if (suiteDbResult == true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
-      this.indexedDbService.putGasLoadChargeMaterial(this.newMaterial).then(val => {
-        this.closeModal.emit(this.newMaterial);
-      });
+      await firstValueFrom(this.gasLoadMaterialDbService.updateWithObservable(this.newMaterial))
+      this.closeModal.emit(this.newMaterial);
     }
   }
 
-  deleteMaterial() {
+  async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
       let suiteDbResult = this.sqlDbApiService.deleteGasLoadChargeMaterial(this.sdbEditMaterialId);
       if (suiteDbResult == true) {
-        this.indexedDbService.deleteGasLoadChargeMaterial(this.idbEditMaterialId).then(val => {
-          this.closeModal.emit(this.newMaterial);
-        });
+        await firstValueFrom(this.gasLoadMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
+        this.closeModal.emit(this.newMaterial);
       }
     }
   }

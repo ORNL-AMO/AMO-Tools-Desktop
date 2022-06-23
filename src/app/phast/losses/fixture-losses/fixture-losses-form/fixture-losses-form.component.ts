@@ -7,6 +7,8 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { FormGroup } from '@angular/forms';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
+import { SolidLoadMaterialDbService } from '../../../../indexedDb/solid-load-material-db.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-fixture-losses-form',
@@ -37,10 +39,13 @@ export class FixtureLossesFormComponent implements OnInit {
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
+  hasDeletedCustomMaterial: boolean = false;
+  editExistingMaterial: boolean;
+  existingMaterial: SolidLoadChargeMaterial;
   materials: Array<SolidLoadChargeMaterial>;
   showModal: boolean = false;
   idString: string;
-  constructor(private fixtureLossesCompareService: FixtureLossesCompareService, private sqlDbApiService: SqlDbApiService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private fixtureLossesCompareService: FixtureLossesCompareService, private sqlDbApiService: SqlDbApiService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private solidLoadMaterialDbService: SolidLoadMaterialDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -63,6 +68,15 @@ export class FixtureLossesFormComponent implements OnInit {
       this.idString = '_baseline_' + this.lossIndex;
     }
     this.materials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
+    if (this.lossesForm) {
+      if (this.lossesForm.controls.materialName.value && this.lossesForm.controls.materialName.value !== '') {
+        if (this.lossesForm.controls.specificHeat.value === '') {
+          this.setProperties();
+        } else {
+          this.checkForDeletedMaterial();
+        }
+      }
+    }
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -120,25 +134,70 @@ export class FixtureLossesFormComponent implements OnInit {
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
+
+  checkForDeletedMaterial() {
+    let selectedMaterial: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+    if (!selectedMaterial) {
+      this.hasDeletedCustomMaterial = true;
+      this.restoreMaterial();
+    }
+    this.save();
+  }
+
+  async restoreMaterial() {
+    let customMaterial: SolidLoadChargeMaterial = {
+      latentHeat: this.lossesForm.controls.latentHeat.value,
+      meltingPoint: this.lossesForm.controls.meltingPoint.value,
+      specificHeatLiquid: this.lossesForm.controls.specificHeatLiquid.value,
+      specificHeatSolid: this.lossesForm.controls.specificHeat.value,
+      substance: "Custom Fixture Material"
+    };
+    let suiteDbResult = this.sqlDbApiService.insertSolidLoadChargeMaterial(customMaterial);
+    if (suiteDbResult === true) {
+      await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(customMaterial));
+    }
+    this.materials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
+    let newMaterial: SolidLoadChargeMaterial = this.materials.find(material => { return material.substance === customMaterial.substance; });
+    this.lossesForm.patchValue({
+      materialName: newMaterial.id
+    });
+  }
   
   setProperties() {
     let selectedMaterial: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
     if (selectedMaterial) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+        selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
+        selectedMaterial.meltingPoint = this.convertUnitsService.value(selectedMaterial.meltingPoint).from('F').to('C');
+        selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');      
       }
 
       this.lossesForm.patchValue({
-        specificHeat: this.roundVal(selectedMaterial.specificHeatSolid, 4)
+        specificHeat: this.roundVal(selectedMaterial.specificHeatSolid, 4),
+        meltingPoint: selectedMaterial.meltingPoint,
+        specificHeatLiquid: selectedMaterial.specificHeatLiquid,
+        latentHeat: selectedMaterial.latentHeat
       });
     }
-    this.calculate.emit(true);
+    this.save();
   }
   roundVal(val: number, digits: number) {
     let test = Number(val.toFixed(digits));
     return test;
   }
-  showMaterialModal() {
+  showMaterialModal(editExistingMaterial: boolean) {
+    this.editExistingMaterial = editExistingMaterial;
+    if(editExistingMaterial === true) {
+      this.existingMaterial = {
+        id: this.lossesForm.controls.materialName.value,
+        latentHeat: this.lossesForm.controls.latentHeat.value,
+        meltingPoint: this.lossesForm.controls.meltingPoint.value,
+        specificHeatLiquid: this.lossesForm.controls.specificHeatLiquid.value,
+        specificHeatSolid: this.lossesForm.controls.specificHeat.value,
+        substance: "Custom Fixture Material"
+      };
+    }
     this.showModal = true;
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
@@ -155,6 +214,7 @@ export class FixtureLossesFormComponent implements OnInit {
       }
     }
     this.showModal = false;
+    this.dismissMessage();
     this.materialModal.hide();
     this.lossesService.modalOpen.next(false);
   }
@@ -200,6 +260,7 @@ export class FixtureLossesFormComponent implements OnInit {
       return false;
     }
   }
-
-
+  dismissMessage() {
+    this.hasDeletedCustomMaterial = false;
+  }
 }

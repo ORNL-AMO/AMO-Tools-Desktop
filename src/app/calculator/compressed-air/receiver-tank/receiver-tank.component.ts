@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 
 @Component({
   selector: 'app-receiver-tank',
@@ -51,17 +50,21 @@ export class ReceiverTankComponent implements OnInit {
     {
       name: 'Bridging Compressor Reaction Delay',
       value: 3
+    },
+    {
+      name: 'Compressor Cycle',
+      value: 4
     }
   ];
   currentField: string;
   currentFieldSub: Subscription;
   constructor(public receiverTankService: ReceiverTankService, 
-    private calculatorDbService: CalculatorDbService, 
-    private indexedDbService: IndexedDbService,
+    private calculatorDbService: CalculatorDbService,
     private settingsDbService: SettingsDbService, private router: Router) {
   }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (this.calcType == undefined) {
       this.setCalcType();
     }
@@ -105,7 +108,7 @@ export class ReceiverTankComponent implements OnInit {
     }
   }
 
-  updateAssessmentCalculator(updatedInputs: ReceiverTankInputs) {
+  async updateAssessmentCalculator(updatedInputs: ReceiverTankInputs) {
     if (updatedInputs.airCapacityInputs) {
       this.assessmentCalculator.receiverTankInput.airCapacityInputs = updatedInputs.airCapacityInputs;
     }
@@ -121,10 +124,13 @@ export class ReceiverTankComponent implements OnInit {
     if (updatedInputs.airCapacityInputs) {
       this.assessmentCalculator.receiverTankInput.meteredStorageInputs = updatedInputs.meteredStorageInputs;
     }
-    this.saveAssessmentCalculator();
+    if (updatedInputs.compressorCycleInputs) {
+      this.assessmentCalculator.receiverTankInput.compressorCycleInputs = updatedInputs.compressorCycleInputs;
+    }
+    await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
   }
 
-  getCalculatorForAssessment() {
+  async getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.assessmentCalculator) {
       if (this.assessmentCalculator.receiverTankInput) {
@@ -144,12 +150,15 @@ export class ReceiverTankComponent implements OnInit {
         if (this.assessmentCalculator.receiverTankInput.airCapacityInputs) {
           this.receiverTankService.airCapacityInputs = this.assessmentCalculator.receiverTankInput.airCapacityInputs;
         }
+        if (this.assessmentCalculator.receiverTankInput.compressorCycleInputs) {
+          this.receiverTankService.compressorCycleInputs = this.assessmentCalculator.receiverTankInput.compressorCycleInputs;
+        }
       } else {
         this.assessmentCalculator.receiverTankInput = this.getCurrentInputs();
       }
     } else {
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      this.saveAssessmentCalculator();
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 
@@ -168,31 +177,14 @@ export class ReceiverTankComponent implements OnInit {
     let generalMethodInputs = this.receiverTankService.generalMethodInputs;
     let meteredStorageInputs = this.receiverTankService.meteredStorageInputs;
     let bridgeCompressorInputs = this.receiverTankService.bridgeCompressorInputs;
+    let compressorCycleInputs = this.receiverTankService.compressorCycleInputs;
     return {
       dedicatedStorageInputs: dedicatedStorageInputs,
       airCapacityInputs: airCapacityInputs,
       generalMethodInputs: generalMethodInputs,
       meteredStorageInputs: meteredStorageInputs,
       bridgeCompressorInputs: bridgeCompressorInputs,
-    }
-  }
-
-  saveAssessmentCalculator(){
-    if (!this.saving) {
-      if (this.assessmentCalculator.id) {
-        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.assessmentCalculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.assessmentCalculator.id = result;
-            this.saving = false;
-          });
-        });
-      }
+      compressorCycleInputs: compressorCycleInputs
     }
   }
 

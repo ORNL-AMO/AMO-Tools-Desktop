@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../../shared/models/assessment';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Directory } from '../../../../shared/models/directory';
-import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+ 
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
@@ -12,7 +12,7 @@ import { CalculatorDbService } from '../../../../indexedDb/calculator-db.service
 import { Calculator } from '../../../../shared/models/calculators';
 import { AssessmentService } from '../../../assessment.service';
 import { DashboardService } from '../../../dashboard.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { WasteWaterService } from '../../../../waste-water/waste-water.service';
@@ -38,7 +38,7 @@ export class AssessmentItemComponent implements OnInit {
   dashboardViewSub: Subscription;
   isSetup: boolean;
   constructor(private assessmentService: AssessmentService,
-    private indexedDbService: IndexedDbService, private formBuilder: FormBuilder,
+       private formBuilder: FormBuilder,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService,
     private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
@@ -48,7 +48,7 @@ export class AssessmentItemComponent implements OnInit {
   ngOnInit() {
     this.assessment.selected = false;
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
-      this.allDirectories = this.directoryDbService.getAll();
+      this.setDirectories();
     });
 
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
@@ -75,6 +75,10 @@ export class AssessmentItemComponent implements OnInit {
   ngOnDestroy() {
     this.updateDashboardDataSub.unsubscribe();
     this.dashboardViewSub.unsubscribe();
+  }
+
+  async setDirectories() {
+    this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
   goToAssessment(assessment: Assessment) {
@@ -107,7 +111,7 @@ export class AssessmentItemComponent implements OnInit {
     this.copyModal.hide();
   }
 
-  createCopy() {
+  async createCopy() {
     let assessmentCopy: Assessment = JSON.parse(JSON.stringify(this.assessment));
     delete assessmentCopy.id;
     let tmpCalculator: Calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
@@ -140,27 +144,25 @@ export class AssessmentItemComponent implements OnInit {
       }
     }
 
-    this.indexedDbService.addAssessment(assessmentCopy).then(newAssessmentId => {
-      settingsCopy.assessmentId = newAssessmentId;
-      this.indexedDbService.addSettings(settingsCopy).then(() => {
-        this.settingsDbService.setAll().then(() => {
-          this.assessmentDbService.setAll().then(() => {
-            if (this.copyForm.controls.copyCalculators.value === true) {
-              assessmentCalculatorCopy.assessmentId = newAssessmentId;
-              this.indexedDbService.addCalculator(assessmentCalculatorCopy).then(() => {
-                this.calculatorDbService.setAll().then(() => {
-                  this.dashboardService.updateDashboardData.next(true);
-                  this.hideCopyModal();
-                });
-              });
-            } else {
-              this.dashboardService.updateDashboardData.next(true);
-              this.hideCopyModal();
-            }
-          });
-        });
-      });
-    });
+
+    let addedAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(assessmentCopy));
+    let updatedAssessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    this.assessmentDbService.setAll(updatedAssessments);
+    settingsCopy.assessmentId = addedAssessment.id;
+
+    await firstValueFrom(this.settingsDbService.addWithObservable(settingsCopy));
+    let allSettings: Settings[] =  await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(allSettings);
+
+    if (this.copyForm.controls.copyCalculators.value === true) {
+      assessmentCalculatorCopy.assessmentId = addedAssessment.id;
+      await firstValueFrom(this.calculatorDbService.addWithObservable(assessmentCalculatorCopy));
+      let allCalculators: Calculator[] =  await firstValueFrom(this.calculatorDbService.getAllCalculators());
+      this.calculatorDbService.setAll(allCalculators);
+    } 
+    
+    this.dashboardService.updateDashboardData.next(true);
+    this.hideCopyModal();
   }
 
   getParentDirStr(id: number) {
@@ -173,15 +175,14 @@ export class AssessmentItemComponent implements OnInit {
     return str;
   }
 
-  save() {
+  async save() {
     this.assessment.name = this.editForm.controls.name.value;
     this.assessment.directoryId = this.editForm.controls.directoryId.value;
-    this.indexedDbService.putAssessment(this.assessment).then(val => {
-      this.assessmentDbService.setAll().then(() => {
-        this.dashboardService.updateDashboardData.next(true);
-        this.hideEditModal();
-      });
-    });
+    
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment))
+    this.assessmentDbService.setAll(assessments);
+    this.dashboardService.updateDashboardData.next(true);
+    this.hideEditModal();
   }
 
   showDropdown() {
@@ -196,27 +197,22 @@ export class AssessmentItemComponent implements OnInit {
     this.deleteModal.hide();
   }
 
-  deleteAssessment() {
+  async deleteAssessment() {
     let deleteSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
-    this.indexedDbService.deleteAssessment(this.assessment.id).then(() => {
-      this.indexedDbService.deleteSettings(deleteSettings.id).then(() => {
-        this.assessmentDbService.setAll().then(() => {
-          this.settingsDbService.setAll().then(() => {
-            let assessmentCalculatorCopy: Calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
-            if (assessmentCalculatorCopy) {
-              this.indexedDbService.deleteCalculator(assessmentCalculatorCopy.id).then(() => {
-                this.calculatorDbService.setAll().then(() => {
-                  this.dashboardService.updateDashboardData.next(true);
-                  this.hideDeleteModal();
-                });
-              });
-            } else {
-              this.dashboardService.updateDashboardData.next(true);
-              this.hideDeleteModal();
-            }
-          });
-        });
-      });
-    });
+
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(this.assessment.id)); 
+    this.assessmentDbService.setAll(assessments);
+    let settings: Settings[] = await firstValueFrom(this.settingsDbService.deleteByIdWithObservable(deleteSettings.id)); 
+    this.settingsDbService.setAll(settings); 
+
+    let assessmentCalculatorCopy: Calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if (assessmentCalculatorCopy) {
+      let calculators: Calculator[] = await firstValueFrom(this.calculatorDbService.deleteByIdWithObservable(assessmentCalculatorCopy.id)); 
+      this.calculatorDbService.setAll(calculators); 
+    } 
+
+    this.dashboardService.updateDashboardData.next(true);
+    this.hideDeleteModal();
   }
+
 }

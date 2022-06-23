@@ -9,7 +9,8 @@ import { LiquidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { LiquidMaterialFormService, LiquidMaterialWarnings } from '../../../../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
-
+import { firstValueFrom } from 'rxjs';
+import { LiquidLoadMaterialDbService } from '../../../../indexedDb/liquid-load-material-db.service';
 @Component({
   selector: 'app-liquid-charge-material-form',
   templateUrl: './liquid-charge-material-form.component.html',
@@ -42,10 +43,13 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   materialTypes: any;
   selectedMaterial: any;
 
+  hasDeletedCustomMaterial: boolean = false;
+  editExistingMaterial: boolean;
+  existingMaterial: LiquidLoadChargeMaterial;
   warnings: LiquidMaterialWarnings;
   showModal: boolean = false;
   idString: string;
-  constructor(private sqlDbApiService: SqlDbApiService, private liquidMaterialFormService: LiquidMaterialFormService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private liquidMaterialFormService: LiquidMaterialFormService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private liquidLoadMaterialDbService: LiquidLoadMaterialDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -72,6 +76,8 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
         if (this.chargeMaterialForm.controls.materialLatentHeat.value === '') {
           this.setProperties();
+        } else {
+          this.checkForDeletedMaterial();
         }
       }
     }
@@ -101,6 +107,35 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   focusOut() {
     this.changeField.emit('default');
   }
+
+  checkForDeletedMaterial() {
+    let selectedMaterial: LiquidLoadChargeMaterial = this.sqlDbApiService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (!selectedMaterial) {
+      this.hasDeletedCustomMaterial = true;
+      this.restoreMaterial();
+    } 
+    this.save();
+  }
+
+  async restoreMaterial() {
+    let customMaterial: LiquidLoadChargeMaterial = {
+      substance: "Custom Material",
+      latentHeat: this.chargeMaterialForm.controls.materialLatentHeat.value,
+      specificHeatLiquid: this.chargeMaterialForm.controls.materialSpecificHeatLiquid.value,
+      specificHeatVapor: this.chargeMaterialForm.controls.materialSpecificHeatVapor.value,
+      vaporizationTemperature: this.chargeMaterialForm.controls.materialVaporizingTemperature.value
+    };
+    let suiteDbResult = this.sqlDbApiService.insertLiquidLoadChargeMaterial(customMaterial);
+    if (suiteDbResult === true) {
+      await firstValueFrom(this.liquidLoadMaterialDbService.addWithObservable(customMaterial));
+    }
+    this.materialTypes = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
+    let newMaterial: LiquidLoadChargeMaterial = this.materialTypes.find(material => { return material.substance === customMaterial.substance; });
+    this.chargeMaterialForm.patchValue({
+      materialId: newMaterial.id
+    });
+  }
+
 
   setProperties() {
     let selectedMaterial: LiquidLoadChargeMaterial = this.sqlDbApiService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
@@ -273,7 +308,18 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       return false;
     }
   }
-  showMaterialModal() {
+  showMaterialModal(editExistingMaterial: boolean) {
+    this.editExistingMaterial = editExistingMaterial;
+    if(editExistingMaterial === true) {
+      this.existingMaterial = {
+        id: this.chargeMaterialForm.controls.materialId.value,
+        latentHeat: this.chargeMaterialForm.controls.materialLatentHeat.value,
+        specificHeatLiquid: this.chargeMaterialForm.controls.materialSpecificHeatLiquid.value,
+        specificHeatVapor: this.chargeMaterialForm.controls.materialSpecificHeatVapor.value,
+        vaporizationTemperature: this.chargeMaterialForm.controls.materialVaporizingTemperature.value,
+        substance: "Custom Material"
+      };
+    }
     this.showModal = true;
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
@@ -291,6 +337,11 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     }
     this.materialModal.hide();
     this.showModal = false;
+    this.dismissMessage();
     this.lossesService.modalOpen.next(false);
+  }
+
+  dismissMessage() {
+    this.hasDeletedCustomMaterial = false;
   }
 }

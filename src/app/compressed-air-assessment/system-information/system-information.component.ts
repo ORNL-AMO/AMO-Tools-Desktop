@@ -30,8 +30,8 @@ export class SystemInformationComponent implements OnInit {
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.setCo2SavingsData(compressedAirAssessment);
     this.form = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, this.settings);
+    this.setCo2SavingsData(compressedAirAssessment);
   }
 
   save(co2SavingsData?: Co2SavingsData) {
@@ -39,6 +39,10 @@ export class SystemInformationComponent implements OnInit {
     let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
     if (co2SavingsData) {
       systemInformation.co2SavingsData = co2SavingsData;
+      this.co2SavingsData = co2SavingsData;
+    }
+    else if (this.co2SavingsData) {
+      systemInformation.co2SavingsData = this.co2SavingsData;
     }
     compressedAirAssessment.systemInformation = systemInformation;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
@@ -49,8 +53,9 @@ export class SystemInformationComponent implements OnInit {
   }
 
   openSystemCapacityModal() {
-    this.compressedAirAssessmentService.modalOpen.next(true);
     this.showSystemCapacityModal = true;
+    this.systemCapacityModal.show();
+    this.compressedAirAssessmentService.modalOpen.next(true);
   }
 
   closeSystemCapacityModal(totalCapacityOfCompressedAirSystem?: number) {
@@ -59,6 +64,7 @@ export class SystemInformationComponent implements OnInit {
         totalAirStorage: totalCapacityOfCompressedAirSystem
       });
     }
+    this.systemCapacityModal.hide();
     this.compressedAirAssessmentService.modalOpen.next(false);
     this.showSystemCapacityModal = false;
     this.save();
@@ -104,11 +110,17 @@ export class SystemInformationComponent implements OnInit {
   }
 
   setCo2SavingsData(compressedAirAssessment: CompressedAirAssessment) {
+
+    let co2SavingsData: Co2SavingsData;
+
     if (compressedAirAssessment.systemInformation.co2SavingsData) {
-      this.co2SavingsData = compressedAirAssessment.systemInformation.co2SavingsData;
-    } else {
-      let co2SavingsData: Co2SavingsData = this.assessmentCo2SavingsService.getCo2SavingsDataFromSettingsObject(this.settings);
-      this.co2SavingsData = co2SavingsData;
+      co2SavingsData = compressedAirAssessment.systemInformation.co2SavingsData;
     }
+    else {
+      co2SavingsData = this.assessmentCo2SavingsService.getCo2SavingsDataFromSettingsObject(this.settings);
+    }
+    
+    this.co2SavingsData = co2SavingsData;
+    this.save(co2SavingsData);
   }
 }

@@ -131,7 +131,7 @@ export class FixtureLossesComponent implements OnInit {
         });
       }
       lossIndex++;
-      let tmpFixtureLoss = this.fixtureFormService.getLossFromForm(loss.form);
+      let tmpFixtureLoss: FixtureLoss = this.fixtureFormService.getLossFromForm(loss.form);
       tmpFixtureLoss.heatLoss = loss.heatLoss;
       tmpFixtureLosses.push(tmpFixtureLoss);
     });

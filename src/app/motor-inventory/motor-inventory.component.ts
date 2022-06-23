@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { MotorInventoryService } from './motor-inventory.service';
-import { Subscription } from 'rxjs';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { firstValueFrom, Subscription } from 'rxjs';
+ 
 import { MotorInventoryData } from './motor-inventory';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
@@ -42,8 +42,10 @@ export class MotorInventoryComponent implements OnInit {
   showWelcomeScreen: boolean = false;
   constructor(private motorInventoryService: MotorInventoryService, private activatedRoute: ActivatedRoute,
     private router: Router,
-    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private inventoryDbService: InventoryDbService,
-    private motorCatalogService: MotorCatalogService, private batchAnalysisService: BatchAnalysisService, private cd: ChangeDetectorRef) { }
+    private inventoryDbService: InventoryDbService,
+    private settingsDbService: SettingsDbService,
+    private motorCatalogService: MotorCatalogService, 
+    private batchAnalysisService: BatchAnalysisService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -111,16 +113,15 @@ export class MotorInventoryComponent implements OnInit {
     }
   }
 
-  saveDbData() {
+  async saveDbData() {
     let inventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
     let batchAnalysisSettings: BatchAnalysisSettings = this.batchAnalysisService.batchAnalysisSettings.getValue();
     this.motorInventoryItem.modifiedDate = new Date();
     this.motorInventoryItem.appVersion = environment.version;
     this.motorInventoryItem.motorInventoryData = inventoryData;
     this.motorInventoryItem.batchAnalysisSettings = batchAnalysisSettings;
-    this.indexedDbService.putInventoryItem(this.motorInventoryItem).then(() => {
-      this.inventoryDbService.setAll();
-    });
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.motorInventoryItem));
+    this.inventoryDbService.setAll(updatedInventoryItems);
   }
 
   continue() {
@@ -152,9 +153,10 @@ export class MotorInventoryComponent implements OnInit {
     }
   }
 
-  closeWelcomeScreen() {
+  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableMotorInventoryTutorial = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    let settings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(settings);
     this.showWelcomeScreen = false;
     this.motorInventoryService.modalOpen.next(false);
   }

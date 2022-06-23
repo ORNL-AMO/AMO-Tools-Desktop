@@ -47,6 +47,20 @@
     </h6>
   </div>
 
+  <div class="my-2" *ngIf="currentField == 'powerType'">
+    <h6>
+      Power Type
+      <small class="text-muted">
+        <br>
+        Measured power - This setting allows the user to enter the data collected in the field. The user will need the
+        measured power and the current operating pressure
+        <hr class="my-1"> Rated Power - This method asks for nameplate rated power and pressure, and then will calculated the consumed power
+        using the actual measure operating pressure
+        <hr class="my-1">
+      </small>
+    </h6>
+  </div>
+
   <div class="my-2" *ngIf="currentField == 'compressorPower'">
     <h6>
       Compressor Power

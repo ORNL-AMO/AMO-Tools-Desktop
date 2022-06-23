@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankGeneral, ReceiverTankMeteredStorage, AirSystemCapacityInput, CalculateUsableCapacity } from '../../../shared/models/standalone';
+import { ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankGeneral, ReceiverTankMeteredStorage, AirSystemCapacityInput, CalculateUsableCapacity, ReceiverTankCompressorCycle } from '../../../shared/models/standalone';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
@@ -11,6 +11,7 @@ export class ReceiverTankService {
   bridgeCompressorInputs: ReceiverTankBridgingCompressor;
   generalMethodInputs: ReceiverTankGeneral;
   meteredStorageInputs: ReceiverTankMeteredStorage;
+  compressorCycleInputs: ReceiverTankCompressorCycle;
   receiverTankMethod: number;
   airCapacityInputs: CalculateUsableCapacity;
   setForm: BehaviorSubject<boolean>;
@@ -34,6 +35,7 @@ export class ReceiverTankService {
         generalMethodInputs: undefined,
         meteredStorageInputs: undefined,
         bridgeCompressorInputs: undefined,
+        compressorCycleInputs: undefined
       }
     );
   }
@@ -44,6 +46,7 @@ export class ReceiverTankService {
     this.bridgeCompressorInputs = this.getBridgeCompressorDefault();
     this.generalMethodInputs = this.getGeneralMethodDefaults();
     this.meteredStorageInputs = this.getMeteredStorageDefaults();
+    this.compressorCycleInputs = this.getCompressorCycleDefaults()
     // this.systemCapacityInputs = this.getSystemCapacityDefaults();
   }
 
@@ -63,6 +66,9 @@ export class ReceiverTankService {
 
     this.meteredStorageInputs = this.getMeteredStorageExample();
     this.meteredStorageInputs = this.convertTankMeteredStorageExample(this.meteredStorageInputs, settings);
+
+    this.compressorCycleInputs = this.getCompressorCycleExample();
+    this.compressorCycleInputs = this.convertCompressorCycleExample(this.compressorCycleInputs, settings);
 
   }
 
@@ -241,13 +247,49 @@ export class ReceiverTankService {
     }
     return tmpInputs;
   }
+
+  getCompressorCycleExample(): ReceiverTankCompressorCycle {
+    return {
+      method: 2,
+      atmosphericPressure: 14.5,
+      loadTime: 34,
+      unloadTime: 27,
+      compressorCapacity: 430,
+      fullLoadPressure: 100,
+      unloadPressure: 110
+    };
+  }
+
+  getCompressorCycleDefaults(): ReceiverTankCompressorCycle {
+    return {
+      method: 2,
+      atmosphericPressure: 14.5,
+      loadTime: 0,
+      unloadTime: 0,
+      compressorCapacity: 0,
+      fullLoadPressure: 0,
+      unloadPressure: 0
+    };
+  }
+
+  convertCompressorCycleExample(inputs: ReceiverTankCompressorCycle, settings: Settings) {
+    let tmpInputs: ReceiverTankCompressorCycle = inputs;
+    if (settings.unitsOfMeasure == 'Metric') {
+      tmpInputs.atmosphericPressure = Math.round(tmpInputs.atmosphericPressure = this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('kPaa') * 100) / 100;
+      tmpInputs.compressorCapacity = Math.round(this.convertUnitsService.value(tmpInputs.compressorCapacity).from('ft3/min').to('m3/min') * 100) / 100;
+      tmpInputs.fullLoadPressure = Math.round(this.convertUnitsService.value(tmpInputs.fullLoadPressure).from('psi').to('kPa') * 100) / 100;
+      tmpInputs.unloadPressure = Math.round(this.convertUnitsService.value(tmpInputs.unloadPressure).from('psi').to('kPa') * 100) / 100;
+    }
+    return tmpInputs;
+  }
+
 }
 
 export interface ReceiverTankInputs {
-    dedicatedStorageInputs?: ReceiverTankDedicatedStorage,
-    airCapacityInputs?: CalculateUsableCapacity,
-    generalMethodInputs?: ReceiverTankGeneral,
-    meteredStorageInputs?: ReceiverTankMeteredStorage,
-    bridgeCompressorInputs?: ReceiverTankBridgingCompressor,
-  
+  dedicatedStorageInputs?: ReceiverTankDedicatedStorage,
+  airCapacityInputs?: CalculateUsableCapacity,
+  generalMethodInputs?: ReceiverTankGeneral,
+  meteredStorageInputs?: ReceiverTankMeteredStorage,
+  bridgeCompressorInputs?: ReceiverTankBridgingCompressor,
+  compressorCycleInputs?: ReceiverTankCompressorCycle
 }

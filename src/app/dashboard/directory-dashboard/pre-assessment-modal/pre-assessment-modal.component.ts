@@ -5,11 +5,12 @@ import { DirectoryDashboardService } from '../directory-dashboard.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Directory } from '../../../shared/models/directory';
 import { Settings } from '../../../shared/models/settings';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Calculator } from '../../../shared/models/calculators';
 import { PreAssessment } from '../../../calculator/utilities/pre-assessment/pre-assessment';
 import { DashboardService } from '../../dashboard.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-pre-assessment-modal',
@@ -24,8 +25,7 @@ export class PreAssessmentModalComponent implements OnInit {
   directorySettings: Settings;
   preAssessmentCalculator: Calculator;
   modalShown: boolean;
-  constructor(private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService, private settingsDbService: SettingsDbService,
-    private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService) { }
+  constructor(private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService, private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService) { }
 
   ngOnInit() {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
@@ -63,24 +63,20 @@ export class PreAssessmentModalComponent implements OnInit {
     });
   }
 
-  savePreAssessment() {
+  async savePreAssessment() {
     let preAssessmentCalculatorIndex: { index: number, isNew: boolean } = this.directoryDashboardService.showPreAssessmentModalIndex.getValue();
     if (preAssessmentCalculatorIndex.isNew == true) {
-      this.indexedDbService.addCalculator(this.preAssessmentCalculator).then(calculatorId => {
-        this.updateAllAndClose();
-      });
-    } else {
-      this.indexedDbService.putCalculator(this.preAssessmentCalculator).then(() => {
-        this.updateAllAndClose();
-      })
-    }
-  }
-
-  updateAllAndClose() {
-    this.calculatorDbService.setAll().then(() => {
+      await firstValueFrom(this.calculatorDbService.addWithObservable(this.preAssessmentCalculator));
+      let updatedCalculators = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+      this.calculatorDbService.setAll(updatedCalculators);
       this.dashboardService.updateDashboardData.next(true);
       this.hidePreAssessmentModal();
-    });
+    } else {
+      let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(this.preAssessmentCalculator)); 
+      this.calculatorDbService.setAll(updatedCalculators);
+      this.dashboardService.updateDashboardData.next(true);
+      this.hidePreAssessmentModal();
+    }
   }
 
 }

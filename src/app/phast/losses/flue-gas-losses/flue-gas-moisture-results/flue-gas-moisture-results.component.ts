@@ -3,6 +3,7 @@ import { PsychrometricResults } from '../../../../shared/models/fans';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasCompareService } from '../flue-gas-compare.service';
+import { FanPsychrometricService, FanPsychrometricWarnings } from '../../../../calculator/process-cooling/fan-psychrometric/fan-psychrometric.service';
 
 
 @Component({
@@ -16,11 +17,14 @@ export class FlueGasMoistureResultsComponent implements OnInit {
 
   psychrometricSubscription: Subscription;
   psychrometricResults: PsychrometricResults;
-  constructor(private flueGasCompareService: FlueGasCompareService) { }
+  warnings: FanPsychrometricWarnings;
+
+  constructor(private flueGasCompareService: FlueGasCompareService, private fanPsychrometricService: FanPsychrometricService) { }
 
   ngOnInit(): void {
     this.psychrometricSubscription = this.flueGasCompareService.moistureSubject.subscribe(val => {
       this.psychrometricResults = val;
+      this.warnings = this.fanPsychrometricService.checkWarnings(this.psychrometricResults);
     });
 
   }

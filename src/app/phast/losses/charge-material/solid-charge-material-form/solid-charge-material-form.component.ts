@@ -9,6 +9,8 @@ import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { SolidMaterialFormService, SolidMaterialWarnings } from '../../../../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
+import { SolidLoadMaterialDbService } from '../../../../indexedDb/solid-load-material-db.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-solid-charge-material-form',
@@ -41,6 +43,9 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   firstChange: boolean = true;
 
+  hasDeletedCustomMaterial: boolean = false;
+  editExistingMaterial: boolean;
+  existingMaterial: SolidLoadChargeMaterial;
   materialTypes: Array<SolidLoadChargeMaterial>;
   showModal: boolean = false;
   warnings: SolidMaterialWarnings;
@@ -50,7 +55,8 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     private sqlDbApiService: SqlDbApiService, 
     private solidMaterialFormService: SolidMaterialFormService,
     private lossesService: LossesService,
-    private convertUnitsService: ConvertUnitsService) {
+    private convertUnitsService: ConvertUnitsService,
+    private solidLoadMaterialDbService: SolidLoadMaterialDbService) {
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -79,6 +85,8 @@ export class SolidChargeMaterialFormComponent implements OnInit {
       if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
         if (this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value === '') {
           this.setProperties();
+        } else {
+          this.checkForDeletedMaterial();
         }
       }
     }
@@ -108,6 +116,34 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   focusOut() {
     this.changeField.emit('default');
+  }
+
+  checkForDeletedMaterial() {
+    let selectedMaterial: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (!selectedMaterial) {
+      this.hasDeletedCustomMaterial = true;
+      this.restoreMaterial();
+    }
+    this.save();
+  }
+
+  async restoreMaterial() {
+    let customMaterial: SolidLoadChargeMaterial = {
+      latentHeat: this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value,
+      meltingPoint: this.chargeMaterialForm.controls.materialMeltingPoint.value,
+      specificHeatLiquid: this.chargeMaterialForm.controls.materialHeatOfLiquid.value,
+      specificHeatSolid: this.chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.value,
+      substance: "Custom Material"
+    };
+    let suiteDbResult = this.sqlDbApiService.insertSolidLoadChargeMaterial(customMaterial);
+    if (suiteDbResult === true) {
+      await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(customMaterial));
+    }
+    this.materialTypes = this.sqlDbApiService.selectSolidLoadChargeMaterials();
+    let newMaterial: SolidLoadChargeMaterial = this.materialTypes.find(material => { return material.substance === customMaterial.substance; });
+    this.chargeMaterialForm.patchValue({
+      materialId: newMaterial.id
+    });
   }
 
   setProperties() {
@@ -328,7 +364,18 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     }
   }
 
-  showMaterialModal() {
+  showMaterialModal(editExistingMaterial: boolean) {
+    this.editExistingMaterial = editExistingMaterial;
+    if(editExistingMaterial === true) {
+      this.existingMaterial = {
+        id: this.chargeMaterialForm.controls.materialId.value,
+        latentHeat: this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value,
+        meltingPoint: this.chargeMaterialForm.controls.materialMeltingPoint.value,
+        specificHeatLiquid: this.chargeMaterialForm.controls.materialHeatOfLiquid.value,
+        specificHeatSolid: this.chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.value,
+        substance: "Custom Material"
+      };
+    }
     this.showModal = true;
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
@@ -346,7 +393,12 @@ export class SolidChargeMaterialFormComponent implements OnInit {
       }
     }
     this.showModal = false;
+    this.dismissMessage();
     this.materialModal.hide();
     this.lossesService.modalOpen.next(false);
+  }
+
+  dismissMessage() {
+    this.hasDeletedCustomMaterial = false;
   }
 }
