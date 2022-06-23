@@ -124,23 +124,6 @@ export class FanFieldDataComponent implements OnInit {
     this.save();
   }
 
-  calculateCompressibility() {
-    let tmpResults: FsatOutput = this.fsatService.getResults(this.fsat, true, this.settings);
-    let inputs: CompressibilityFactor = {
-      moverShaftPower: tmpResults.motorShaftPower,
-      inletPressure: this.fieldDataForm.controls.inletPressure.value,
-      outletPressure: this.fieldDataForm.controls.outletPressure.value,
-      barometricPressure: this.fsat.baseGasDensity.barometricPressure,
-      flowRate: this.fieldDataForm.controls.flowRate.value,
-      specificHeatRatio: this.fsat.baseGasDensity.specificHeatRatio
-    };
-    let calcCompFactor: number = this.fsatService.compressibilityFactor(inputs, this.settings);
-
-    this.fieldDataForm.patchValue({
-      compressibilityFactor: Number(calcCompFactor.toFixed(3))
-    });
-  }
-
   focusField(inputName: string) {
     if (!this.baseline && inputName === 'measuredVoltage') {
       inputName = 'modMeasuredVoltage';
@@ -192,34 +175,10 @@ export class FanFieldDataComponent implements OnInit {
       specificHeatRatio: fsatCopy.baseGasDensity.specificHeatRatio
     };
 
-    let compressibilityFactor: number = this.calculateCompressibilityFactor(inputs, true, fsatOutput);
+    let compressibilityFactor: number = this.fanFieldDataService.calculateCompressibilityFactor(inputs, true, fsatOutput, this.settings);
     this.fieldDataForm.patchValue({
       compressibilityFactor: Number(compressibilityFactor.toFixed(3))
     });
-  }
-
-  calculateCompressibilityFactor(compressibilityFactorInput: CompressibilityFactor, isBaseline: boolean, fsatOutput: FsatOutput) {
-    let compressibilityFactor: number;
-    if (isBaseline) {
-      compressibilityFactor = this.fsatService.compressibilityFactor(compressibilityFactorInput, this.settings);
-    } else {
-      let currentMoverShaftPower;
-      let diff = 1;
-
-      while (diff > .001) {
-        let fanEff = fsatOutput.fanEfficiency;
-        // If not first iteration, calculate with moverShaftPower (tempShaftPower from the previous iteration)
-        if (currentMoverShaftPower) {
-          compressibilityFactorInput.moverShaftPower = currentMoverShaftPower
-        }
-        compressibilityFactor = this.fsatService.compressibilityFactor(compressibilityFactorInput, this.settings);
-        let tempShaftPower = compressibilityFactorInput.flowRate * (compressibilityFactorInput.outletPressure - compressibilityFactorInput.inletPressure) * compressibilityFactor / (6362 * (fanEff / 100));
-
-        diff = Math.abs(compressibilityFactorInput.moverShaftPower - tempShaftPower);
-        currentMoverShaftPower = tempShaftPower;
-      }
-    }
-    return compressibilityFactor;
   }
 
   setInletVelocityPressure() {
