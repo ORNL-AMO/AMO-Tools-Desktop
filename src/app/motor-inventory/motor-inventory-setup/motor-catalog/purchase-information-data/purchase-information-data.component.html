@@ -14,7 +14,7 @@
     <div class="form-group" *ngIf="displayOptions.listPrice">
         <label for="listPrice">List Price</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('listPrice')" (input)="save()"
+            <input type="number" step="10" class="form-control" (focus)="focusField('listPrice')" (input)="save()"
                 formControlName="listPrice" id="listPrice">
             <span class="input-group-addon units">$</span>
         </div>
@@ -35,7 +35,7 @@
     <div class="form-group" *ngIf="displayOptions.directReplacementCost">
         <label for="directReplacementCost">Direct Replacement Cost</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('directReplacementCost')" (input)="save()"
+            <input type="number" step="10" class="form-control" (focus)="focusField('directReplacementCost')" (input)="save()"
                 formControlName="directReplacementCost" id="directReplacementCost">
             <span class="input-group-addon units">$</span>
         </div>
