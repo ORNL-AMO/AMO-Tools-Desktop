@@ -70,7 +70,7 @@
 				</a>
 			</div>
 		</div>
-		<div *ngIf="!displayWeatherTab" class="d-flex mr-2 ml-2">
+		<div *ngIf="!displayWeatherTab" class="d-flex mr-2 ml-2" [ngStyle]="{'height.px': helpPanelContainerHeight}">
 			<div class="d-flex flex-column w-100" *ngIf="tabSelect == 'results'">
 				<div class="mb-3 d-block">
 					<div class="w-100 justify-content-center btn-group btn-group-sm results pt-1 pb-1">
@@ -80,7 +80,7 @@
 						[ngClass]="{'active': isShowingWeatherResults == false}">See calculated results</button>
 					</div>
 				  </div>
-				<app-cooling-tower-basin-results class="w-100 p-2" *ngIf="tabSelect == 'results'" [settings]="settings"
+				<app-cooling-tower-basin-results class="w-100 p-2" [settings]="settings"
 				[modificationExists]="modificationExists"></app-cooling-tower-basin-results>
 			</div>
 			<app-cooling-tower-basin-help class="p-2" *ngIf="tabSelect == 'help'" [settings]="settings">

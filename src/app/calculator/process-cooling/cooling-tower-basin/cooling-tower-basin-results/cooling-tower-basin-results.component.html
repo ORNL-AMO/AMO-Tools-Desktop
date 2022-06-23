@@ -1,4 +1,4 @@
-<ng-container *ngIf="!isShowingWeatherResults">
+<ng-container *ngIf="!isShowingWeatherResults && output.results">
   <label class="group-label">Baseline</label>
   <table #copyTable0 class="table table-hover table-striped">
     <tbody>
@@ -74,11 +74,6 @@
 </ng-container>
 
 
-  <!-- <app-cooling-weather-chart *ngIf="output.weatherBinnedChartData"
-    [weatherParameterUnit]="output.weatherBinnedChartData.parameterUnits" [yValueUnit]="output.weatherBinnedChartData.yValueUnit"
-    [barChartDataArray]="[output.weatherBinnedChartData.baselineData, output.weatherBinnedChartData.modData]">
-  </app-cooling-weather-chart> -->
-
   <ng-container *ngIf="isShowingWeatherResults && output.weatherBinnedChartData">
   <app-cooling-weather-chart
     [weatherBinnedChartData]="output.weatherBinnedChartData">
@@ -118,12 +113,13 @@
     </tbody>
   </table>
 
-    <form class="w-75 pt-3 pb-1 mx-auto">
+    <form *ngIf="weatherBinnedResults" class="w-75 pt-3 pb-1 mx-auto">
       <div class="form-group">
         <div class="input-group">
           <select class="form-control" name="selectedWeatherBinResult" id="selectedWeatherBinResult"
-            [(ngModel)]="selectedWeatherBinResult">
+            [(ngModel)]="selectedWeatherBinResult" (change)="setSelectedWeatherResult()">
             <option *ngFor="let result of weatherBinnedResults" [ngValue]="result"
+            [selected]="result.caseName == this.selectedWeatherBinResult.caseName"
               [innerHTML]="result.caseName"></option>
           </select>
         </div>

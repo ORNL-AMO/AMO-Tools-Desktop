@@ -20,7 +20,10 @@ export class CoolingWeatherChartComponent implements OnInit {
   ngOnInit(): void {}
 
   ngAfterViewInit() {
-    this.createChart();
+    window.dispatchEvent(new Event("resize"));
+    setTimeout(() => {
+      this.createChart();
+    }, 20);
   }
 
   ngOnChanges() {
@@ -76,7 +79,7 @@ export class CoolingWeatherChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    Plotly.react(this.barChart.nativeElement, traces, layout, configOptions);
+    Plotly.newPlot(this.barChart.nativeElement, traces, layout, configOptions);
   }
 
   getTraces(): Array<CoolingChartTraceData>{

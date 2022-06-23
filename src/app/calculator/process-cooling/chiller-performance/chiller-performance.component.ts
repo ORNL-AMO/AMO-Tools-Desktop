@@ -1,4 +1,4 @@
-import { ElementRef, HostListener, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -14,8 +14,9 @@ import { ChillerPerformanceService } from './chiller-performance.service';
 export class ChillerPerformanceComponent implements OnInit {
   @Input()
   settings: Settings;
-  
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  helpPanelContainerHeight: number;
   
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -33,35 +34,23 @@ export class ChillerPerformanceComponent implements OnInit {
   hasWeatherBinsData: boolean = false;
   weatherDataSourceView: WeatherDataSourceView;
 
-  
-  constructor(private chillerPerformanceService: ChillerPerformanceService, private weatherBinsService: WeatherBinsService,
+  constructor(private chillerPerformanceService: ChillerPerformanceService, private weatherBinsService: WeatherBinsService, private cd: ChangeDetectorRef,
               private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.weatherDataSourceView = this.weatherBinsService.weatherDataSourceView.getValue();
     let existingInputs = this.chillerPerformanceService.chillerPerformanceInput.getValue();
     if(!existingInputs) {
       this.chillerPerformanceService.initDefaultEmptyInputs();
       this.chillerPerformanceService.initDefaultEmptyOutputs();
     } 
-    else {
-      this.chillerPerformanceService.sethasWeatherBinsData();
-    }
     this.initSubscriptions();
-  }
-
-  setWeatherDataSource(source: WeatherDataSourceView) {
-    this.weatherDataSourceView = source;
-    this.weatherBinsService.weatherDataSourceView.next(this.weatherDataSourceView);
   }
 
   ngOnDestroy() {
     this.chillerPerformanceInputSub.unsubscribe();
-    this.hasWeatherBinsDataSub.unsubscribe();
-
   }
 
   ngAfterViewInit() {
@@ -70,16 +59,9 @@ export class ChillerPerformanceComponent implements OnInit {
     }, 100);
   }
 
-  setWeatherCalculatorActive(displayWeatherTab: boolean) {
-    this.displayWeatherTab = displayWeatherTab;
-  }
-
   initSubscriptions() {
     this.chillerPerformanceInputSub = this.chillerPerformanceService.chillerPerformanceInput.subscribe(value => {
       this.calculate();
-    });
-    this.hasWeatherBinsDataSub = this.chillerPerformanceService.hasWeatherBinsData.subscribe(value => {
-      this.hasWeatherBinsData = value;
     });
   }
 
@@ -104,6 +86,8 @@ export class ChillerPerformanceComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.helpPanelContainerHeight = this.contentContainer.nativeElement.offsetHeight - this.headerHeight;
+      this.cd.detectChanges();
     }
   }
 

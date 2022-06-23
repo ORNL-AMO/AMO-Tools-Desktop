@@ -15,6 +15,7 @@ export class CoolingTowerBasinService {
 
   coolingTowerBasinInput: BehaviorSubject<CoolingTowerBasinInput>;
   coolingTowerBasinOutput: BehaviorSubject<CoolingTowerBasinOutput>;
+  selectedWeatherBinResult: WeatherBinnedResult;
   
   isShowingWeatherResults: BehaviorSubject<boolean>;
   resetData: BehaviorSubject<boolean>;
@@ -169,6 +170,9 @@ export class CoolingTowerBasinService {
             weatherBinnedResult.results = coolingTowerBasinResult;
             output.weatherBinnedResults.push(weatherBinnedResult);
             
+            output.totalResults.baselineEnergy = coolingTowerBasinResult.baselineEnergy; 
+            output.totalResults.modEnergy = coolingTowerBasinResult.modEnergy; 
+
             baselineBarData.barChartValues.push(coolingTowerBasinResult.baselineEnergy);
             baselineBarData.chartHourValues.push(weatherCase.totalNumberOfDataPoints);
             modBarData.barChartValues.push(coolingTowerBasinResult.modEnergy);

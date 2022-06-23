@@ -9,7 +9,7 @@ export class ChillerPerformanceFormService {
 
   getChillerPerformanceForm(inputObj: ChillerPerformanceInput): FormGroup {
     let form: FormGroup = this.formBuilder.group({
-      chillerType: [inputObj.chillerType, [Validators.required, Validators.min(0), Validators.max(8760)]],
+      chillerType: [inputObj.chillerType],
       condenserCoolingType: [inputObj.condenserCoolingType, Validators.required],
       motorDriveType: [inputObj.motorDriveType, Validators.required],
       compressorConfigType: [inputObj.compressorConfigType, Validators.required],
@@ -18,7 +18,7 @@ export class ChillerPerformanceFormService {
       maxCapacityRatio: [inputObj.maxCapacityRatio, [Validators.required, Validators.min(0), Validators.max(1)]],
       waterDeltaT: [inputObj.waterDeltaT, [Validators.min(0), Validators.required]],
       waterFlowRate: [inputObj.waterFlowRate, [Validators.min(0), Validators.required]],
-      operatingHours: [inputObj.operatingHours, Validators.required],
+      operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       baselineWaterSupplyTemp: [inputObj.baselineWaterSupplyTemp, Validators.required],
       baselineWaterEnteringTemp: [inputObj.baselineWaterEnteringTemp, Validators.required],
       modWaterSupplyTemp: [inputObj.modWaterSupplyTemp, Validators.required],
