@@ -122,6 +122,7 @@ export class ChillerPerformanceFormComponent implements OnInit {
   }
 
   calculate() {
+    this.form = this.chillerPerformanceFormService.setWaterTempValidators(this.form);
     let updatedInput: ChillerPerformanceInput = this.chillerPerformanceFormService.getChillerPerformanceInput(this.form);
     this.chillerPerformanceService.chillerPerformanceInput.next(updatedInput)
   }

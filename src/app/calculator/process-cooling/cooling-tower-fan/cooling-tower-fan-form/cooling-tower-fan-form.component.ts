@@ -75,6 +75,7 @@ export class CoolingTowerFanFormComponent implements OnInit {
   }
 
   calculate() {
+    this.form = this.coolingTowerFanFormService.setWaterTempValidators(this.form);
     let updatedInput: CoolingTowerFanInput = this.coolingTowerFanFormService.getCoolingTowerFanInput(this.form);
     this.coolingTowerFanService.coolingTowerFanInput.next(updatedInput);
     this.calculateTemperatureResults(updatedInput);

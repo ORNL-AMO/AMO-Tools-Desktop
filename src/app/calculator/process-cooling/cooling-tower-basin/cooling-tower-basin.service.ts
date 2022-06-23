@@ -94,7 +94,7 @@ export class CoolingTowerBasinService {
     let coolingTowerBasinInput: CoolingTowerBasinInput = this.coolingTowerBasinInput.getValue();
     let inputCopy: CoolingTowerBasinInput = JSON.parse(JSON.stringify(coolingTowerBasinInput));
     let validInput: boolean;
-    validInput = this.coolingTowerBasinFormService.getCoolingTowerBasinForm(inputCopy).valid;
+    validInput = this.coolingTowerBasinFormService.getCoolingTowerBasinForm(inputCopy, settings).valid;
     
     if(!validInput) {
       this.initDefaultEmptyOutputs();

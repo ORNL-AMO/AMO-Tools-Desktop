@@ -12,9 +12,9 @@ export class ChillerStagingFormService {
       condenserCoolingType: [inputObj.condenserCoolingType, Validators.required],
       motorDriveType: [inputObj.motorDriveType, Validators.required],
       compressorConfigType: [inputObj.compressorConfigType, Validators.required],
-      ariCapacity: [inputObj.ariCapacity, Validators.required],
-      ariEfficiency: [inputObj.ariEfficiency, Validators.required],
-      maxCapacityRatio: [inputObj.maxCapacityRatio, Validators.required],
+      ariCapacity: [inputObj.ariCapacity, [Validators.required, Validators.min(0)]],
+      ariEfficiency: [inputObj.ariEfficiency, [Validators.required, Validators.min(0)]],
+      maxCapacityRatio: [inputObj.maxCapacityRatio, [Validators.required, Validators.min(0), Validators.max(1)]],
       operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       coolingLoad: [inputObj.coolingLoad, Validators.required],
       waterSupplyTemp: [inputObj.waterSupplyTemp, Validators.required],
@@ -24,7 +24,7 @@ export class ChillerStagingFormService {
       modLoadList: this.formBuilder.array(inputObj.modLoadList)
     });
 
-
+    form = this.setWaterTempValidators(form);
     let baselineLoadList: FormArray = this.getLoadFormArray(form.controls.baselineLoadList);
     let modLoadList: FormArray = this.getLoadFormArray(form.controls.modLoadList);
     this.setLoadValidators(baselineLoadList);
@@ -32,13 +32,27 @@ export class ChillerStagingFormService {
     return form;
   }
 
+  setWaterTempValidators(formGroup: FormGroup) {
+    let waterSupplyTemp = formGroup.controls.waterSupplyTemp.value;
+    let waterEnteringTemp = formGroup.controls.waterEnteringTemp.value;
+    formGroup.controls.waterSupplyTemp.setValidators([Validators.required, Validators.max(waterEnteringTemp)]);
+    formGroup.controls.waterSupplyTemp.markAsDirty();
+    formGroup.controls.waterSupplyTemp.updateValueAndValidity();
+
+    formGroup.controls.waterEnteringTemp.setValidators([Validators.required, Validators.min(waterSupplyTemp)]);
+    formGroup.controls.waterEnteringTemp.markAsDirty();
+    formGroup.controls.waterEnteringTemp.updateValueAndValidity();
+    
+    return formGroup;
+}
+
   getLoadFormArray(loadListControl: AbstractControl): FormArray {
     return loadListControl as FormArray;
   }
 
   setLoadValidators(loadList: FormArray) {
     loadList.controls.forEach(control => {
-      control.setValidators(Validators.required);
+      control.setValidators([Validators.required, Validators.min(0)]);
       control.updateValueAndValidity();
       control.markAsDirty();
     });
@@ -47,9 +61,8 @@ export class ChillerStagingFormService {
   addChillerInputs(form: FormGroup): FormGroup {
     let baselineLoadList: FormArray = this.getLoadFormArray(form.controls.baselineLoadList);
     let modLoadList: FormArray = this.getLoadFormArray(form.controls.modLoadList);
-    baselineLoadList.push(new FormControl(0, [Validators.required]));
-    modLoadList.push(new FormControl(0, [Validators.required]));
-    console.log(form);
+    baselineLoadList.push(new FormControl(0, [Validators.required, Validators.min(0)]));
+    modLoadList.push(new FormControl(0, [Validators.required, Validators.min(0)]));
     return form;
   }
 
