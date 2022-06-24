@@ -10,7 +10,7 @@
       </div>
       <div class="modal-body scroll-item">
 
-        <h4>Release Notes v1.0.1</h4>
+        <h4>Release Notes v1.1.0</h4>
 
         <p>
           A software tool for calculating energy efficiency for a variety of industrial and manufacturing applications.
@@ -27,8 +27,8 @@
         </p>
         <label>Warnings:</label>
         <ul>
-          <li>Installing v1.0.0 or an earlier version of this tool will automatically reset your app data. Data can be
-            imported into an earlier version from v1.0.1</li>
+          <li>Installing v1.0.1 or an earlier version of this tool will automatically reset your app data. Data can be
+            imported into an earlier version from v1.1.0</li>
           <li>Do not install an earlier version of this tool without resetting your app data (in settings). </li>
           <li>Assessments created in MEASUR 0.8.0 or later are not compatible with older versions. </li>
           <li>Exporting from v.0.8.0 and importing to a lower version will continue to work, though new features will
@@ -37,105 +37,80 @@
 
         <label>What's New?</label>
         <ul>
-          <li>Automatic generation of Closeout PowerPoint and Excel Data Tracker files for Treasure Hunt</li>
-          <li>Psychrometric graph for the Psychrometric Calculator</li>
-          <li>Included an example for Data Explorer</li>
-          <li>Updated the example for compressed air - be sure to go to settings and "Reset Example Assessments"! </li>
+          <li>Several new calculators for Process Cooling (chillers & cooling towers) calculations</li>
+          <li>Weather Bin analysis calculator with web-based weather data lookup</li>
           <li>Various Bug Fixes and Enhancements</li>
-
         </ul>
 
-        <label>Here are the details of what's new in version 1.0.1:</label>
+        <label>Here are the details of what's new in version 1.1.0:</label>
         <br>
         <label>Application</label>
         <ul>
-          <li>Fixed: Audited npm packages and addressed all high severity vulnerabilities </li>
-          <li>Fixed: Audited Update Data Service to ensure user assessments from previous versions do not crash app</li>
+          <li>Enhanced: Added script for hot-reloading of electron process</li>
+          <li>Enhanced: Cleaned up CSS classes for calculator icons</li>
+          <li>Enhanced: Updated background "Industrial Skyline" to be vectorized image</li>
+          <li>Enhanced: Updated uses of DOE logo to be vectorized image</li>
+          <li>Fixed: Bug relating to "Units of measure were changed" warning not disappearing after data is updated</li>
+          <li>Fixed: Fixed package dependency requiring legacy version on Mac</li>
+          <li>Fixed: Updated package/package-lock for npm vulnerabilities</li>
+          <li>Updated: Replaced IndexedDb service with ngx-indexed-db package to better manage database state</li>
+          <li>Updated: Updated MEASUR API service calls to garbage-collect result objects returned from amo-tools-suite WASM bindings</li>
         </ul>
 
         <label>Calculators</label>
         <ul>
-          <li>Fixed: Added data validation to Pipe Insulation calculator field pipe temperature to prevent crashes</li>
+          <li>Added: Several Process Cooling calculators to estimate the impacts of changes to chillers and cooling towers</li>
+          <li>Added: Weather Data Calculator - for developing a bin analysis of hourly TMY weather data</li>
         </ul>
 
         <label>Data Explorer</label>
         <ul>
-          <li>Added: Example data file for creating day type analysis and graphs
+          <li>Added: Dropdown menu and message asking users to provide data interval for less than minute data to help account for .csv's losing seconds data if data not formatted with it in Excel
           </li>
-          <li>Fixed: Bug relating to Explorer expecting time series in a certain format</li>
         </ul>
 
         <label>Compressed Air</label>
         <ul>
-          <li>Added: Additional graph for centrifugal compressors </li>
-          <li>Fixed: Bug causing the System Profile page to not update when importing data from Data Explorer</li>
-          <li>Fixed: Bug relating to changing the day types after a modification was created</li>
-          <li>Fixed: Bug relating to changing the name of a modification after creation causing crash</li>
-          <li>Fixed: Compressed Air Profile Summary Graphs page styling</li>
-          <li>Fixed: Inability to export compressed air assessment if Data Explorer was used to create day types and
-            system profile</li>
-          <li>Fixed: Performance Profile and other graphs were cut off when printing and other report printing issues
-          </li>
-          <li>Updated: Added a new compressed air example</li>
-        </ul>
-
-        <label>Pumps</label>
-        <ul>
-          <li>Fixed: Confirmed all fields in assessment have blue highlighting when different from baseline </li>
+          <li>Added: Bleed Test Calculator</li>
+          <li>Added: Calculation method for Receiver Tank Sizing calculator for compressors with load/unload controls, when the compressor cycle time, and the loaded/unloaded times are known</li>
+          <li>Added: Pop up modal for calculation of Full Load Amps in Compressed Air Module Inventory</li>
+          <li>Enhanced: Added help text relating to "Power Type" for Pressure Reduction Calculator</li>
+          <li>Enhanced: Added validation for System Profile data entry</li>
+          <li>Enhanced: Day types profile data imported from Data Explorer now saves and can be exported with Compressed Air assessments.</li>
+          <li>Enhanced: Split the hourly System Profile data in printed report to make sure all data is printed</li>
+          <li>Fixed: Bug not allowing System Capacity modal to reopen if closed by clicking the backdrop area</li>
+          <li>Fixed: Bug relating to CO2 results when field for emission rate is blank</li>
+          <li>Updated: Compressed Air Leak Survey's "Get Example" Orifice Leak to use more realistic values</li>
         </ul>
 
         <label>Fans</label>
         <ul>
-          <li>Fixed: Confirmed all fields in assessment have blue highlighting when different from baseline </li>
+          <li>Fixed: Bug not applying results from "Inlet Pressure" and "Outlet Pressure" modals in Fan Assessment's Novice View</li>
         </ul>
 
         <label>Process Heating</label>
         <ul>
-          <li>Added: Additional field validation for Electric Arc Furnaces ensuring that the calculated exhaust gas
-            losses cannot be greater than the total input energy</li>
-          <li>Enhanced: Added additional help text for flue gas calculator (in assessment, standalone, and as a modal)
-          </li>
-          <li>Enhanced: Added default values for ambient air, fuel temperature, and combustion air temperature (65
-            degrees F)</li>
-          <li>Enhanced: Added display of calculated higher heating value to flue gas page</li>
-          <li>Enhanced: Set fuel option defaults to "Gas" and "Natural Gas"</li>
-          <li>Fixed: Confirmed all fields in assessment have blue highlighting when different from baseline </li>
-        </ul>
-
-        <label>Steam</label>
-        <ul>
-          <li>Fixed: Confirmed all fields in assessment have blue highlighting when different from baseline </li>
-          <li>Fixed: Removed electrical energy and cost from folder summary for steam (changes to electric energy and
-            cost are included for modifications)</li>
+          <li>Fixed: Bugs relating to importing custom materials</li>
+          <li>Update: Updated the handling of deleted custom materials and allow users to restore custom materials still used by assessments
         </ul>
 
         <label>Treasure Hunt</label>
         <ul>
-          <li>Added: Treasure Hunt Closeout Presentation Download - produces an MS PowerPoint file with key tables and
-            graphs from the TH report, plus a slide for each opportunity</li>
-          <li>Added: Treasure Hunt Project Tracker Download - produces an MS Excel workbook with each opportunity with
-            columns for project tracking. Formatted to match existing Better Plants TH project trackers</li>
-          <li>Fixed: Bug in Pipe Insulation where savings were not being properly applied to "Other Fuels"</li>
+          <li>Enhanced: Added slide to PowerPoint Export detailing the Annual Utility Usage and Costs</li>
+          <li>Enhanced: Removed use of "NaN" in PowerPoint Export. </li>
+          <li>Fixed: Bug relating to imported opportunities including a Compressed Air Reduction</li>
         </ul>
 
-        <label>Motor Inventory</label>
-        <ul>
-        </ul>
-        <label>Wastewater</label>
-        <ul>
-          <li>Enhanced: Added field to change Influent CBOD5 into a calculated field based on clarifier efficiency and
-            Influent CBOD5 level before clarifier</li>
-          <li>Enhanced: Added figure and updated help text for Influent CBOD5 field to clarify where measurement should
-            be taken</li>
-          <li>Fixed: Bug relating to SOTR field not saving user input</li>
-          <li>Fixed: Bug where Assessment banner was whited out when in Assessment tab</li>
-          <li>Fixed: Confirmed all fields in assessment have blue highlighting when different from baseline </li>
-        </ul>
         <label>Process Cooling</label>
         <ul>
-          <li>
-            Added: A dynamic psychrometric graph to the psychrometric calculator
-          </li>
+          <li>Added: Chiller Energy Performance and Temperature Reset Calculator</li>
+          <li>Added: Chiller Staging calculator</li>
+          <li>Added: Cooling Tower Basin Heater Energy Calculator</li>
+          <li>Added: Cooling Tower Fan Energy Calculator </li>
+          <li>Added: Weather Data Calculator integration to Basin Heater Calculator</li>
+          <li>Enhanced: Added validation to Psychrometric Calculator to handle when wet bulb temperatures resulting in negative humidity variables</li>
+          <li>Fixed: Altitude field not hiding when reset data is clicked</li>
+          <li>Fixed: Bug relating to Barometric Pressure not properly calculating from Altitude</li>
         </ul>
 
         <label>Known Issues:</label>
