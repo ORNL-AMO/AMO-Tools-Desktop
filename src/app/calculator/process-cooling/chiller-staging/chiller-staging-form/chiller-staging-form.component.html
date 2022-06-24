@@ -184,6 +184,8 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.baselineLoadList.controls[i].invalid && !form.controls.baselineLoadList.controls[i].pristine">
           <span *ngIf="form.controls.baselineLoadList.controls[i].errors.required">Value required.</span>
+          <span *ngIf="form.controls.baselineLoadList.controls[i].errors.min">Value can't be less than
+            {{form.controls.baselineLoadList.controls[i].errors.min.min}}.</span>
         </span>
       </div>
     </form>
@@ -207,6 +209,8 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.modLoadList.controls[i].invalid && !form.controls.modLoadList.controls[i].pristine">
           <span *ngIf="form.controls.modLoadList.controls[i].errors.required">Value required.</span>
+          <span *ngIf="form.controls.modLoadList.controls[i].errors.min">Value can't be less than
+            {{form.controls.modLoadList.controls[i].errors.min.min}}.</span>
         </span>
       </div>
     </form>

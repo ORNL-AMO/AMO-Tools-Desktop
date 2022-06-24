@@ -43,7 +43,7 @@ export class CoolingTowerBasinFormService {
       maxTemperature = 10;
     }
     if (basinTempSetPoint && basinTempSetPoint > maxTemperature) {
-      return `Basin temperature should be less than ${maxTemperature}, `
+      return `Basin temperature should be less than ${maxTemperature}`
     } else {
       return null;
     }
