@@ -157,28 +157,28 @@ export class CoolingTowerBasinService {
       weatherBinnedResult.caseName = `${weatherCase.caseName} (${label} &#8457;)`;
       baselineBarData.barChartLabels.push(label);
       modBarData.barChartLabels.push(label);
-      
+
       weatherCase.caseParameters.forEach(parameter => {
         if (parameter.field == 'Dry-bulb (C)') {
-            let paramDataRange: Array<number> = _.range(parameter.lowerBound, parameter.upperBound + 1);
-            let dryBulbTemp = this.getMedianParameterValue(paramDataRange);
-            
-            input.operatingHours = weatherCase.totalNumberOfDataPoints;
-            input.operatingTempDryBulb = dryBulbTemp;
-            let coolingTowerBasinResult: CoolingTowerBasinResult = chillersAddon.coolingTowerBasinHeaterEnergyConsumption(input);
-            coolingTowerBasinResult = this.convertResultUnits(coolingTowerBasinResult, settings);
-            weatherBinnedResult.results = coolingTowerBasinResult;
-            output.weatherBinnedResults.push(weatherBinnedResult);
-            
-            output.totalResults.baselineEnergy = coolingTowerBasinResult.baselineEnergy; 
-            output.totalResults.modEnergy = coolingTowerBasinResult.modEnergy; 
+          let paramDataRange: Array<number> = _.range(parameter.lowerBound, parameter.upperBound + 1);
+          let dryBulbTemp = this.getMedianParameterValue(paramDataRange);
 
-            baselineBarData.barChartValues.push(coolingTowerBasinResult.baselineEnergy);
-            baselineBarData.chartHourValues.push(weatherCase.totalNumberOfDataPoints);
-            modBarData.barChartValues.push(coolingTowerBasinResult.modEnergy);
-            modBarData.chartHourValues.push(weatherCase.totalNumberOfDataPoints);
-          }
-        });
+          input.operatingHours = weatherCase.totalNumberOfDataPoints;
+          input.operatingTempDryBulb = dryBulbTemp;
+          let coolingTowerBasinResult: CoolingTowerBasinResult = chillersAddon.coolingTowerBasinHeaterEnergyConsumption(input);
+          coolingTowerBasinResult = this.convertResultUnits(coolingTowerBasinResult, settings);
+          weatherBinnedResult.results = coolingTowerBasinResult;
+          output.weatherBinnedResults.push(weatherBinnedResult);
+
+          output.totalResults.baselineEnergy += coolingTowerBasinResult.baselineEnergy;
+          output.totalResults.modEnergy += coolingTowerBasinResult.modEnergy;
+
+          baselineBarData.barChartValues.push(coolingTowerBasinResult.baselineEnergy);
+          baselineBarData.chartHourValues.push(weatherCase.totalNumberOfDataPoints);
+          modBarData.barChartValues.push(coolingTowerBasinResult.modEnergy);
+          modBarData.chartHourValues.push(weatherCase.totalNumberOfDataPoints);
+        }
+      });
     });
 
     output.totalResults.savingsEnergy = output.totalResults.baselineEnergy - output.totalResults.modEnergy;
@@ -188,7 +188,6 @@ export class CoolingTowerBasinService {
     } else {
       output.weatherBinnedChartData.parameterUnit = '&#8451;';
     }
-
     return output;
   }
 
