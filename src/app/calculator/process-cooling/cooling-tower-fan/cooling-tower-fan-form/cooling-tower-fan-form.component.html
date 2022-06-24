@@ -135,8 +135,8 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.waterFlowRate.invalid && !form.controls.waterFlowRate.pristine">
           <span *ngIf="form.controls.waterFlowRate.errors.required">Value required.</span>
-          <span *ngIf="form.controls.waterFlowRate.errors.min">Value can't be less than
-            {{form.controls.waterFlowRate.min.min}}.</span>
+            <span *ngIf="form.controls.waterFlowRate.errors.min">Value can't be less than
+              {{form.controls.waterFlowRate.errors.min.min}}.</span>
         </span>
       </div>
 
