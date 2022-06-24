@@ -51,7 +51,7 @@
 </nav>
 <!--displays selected filter options-->
 <nav class="navbar second-nav"
-  *ngIf="(sortCardsData.teams.length != 0 || sortCardsData.equipments.length != 0 || sortCardsData.calculatorTypes.length != 0 || sortCardsData.utilityTypes.length != 0) && !inReport">
+  *ngIf="(sortCardsData.teams.length != 0 || sortCardsData.equipments.length != 0 || sortCardsData.calculatorTypes.length != 0 || sortCardsData.utilityTypes.length != 0)">
   <div class="nav-item" *ngFor="let team of sortCardsData.teams; let index = index;">
     <button type="button" class="nav-btn" (click)="removeTeam(index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{team.display}}</button>
@@ -91,6 +91,7 @@
     </div>
   </div>
   <div class="card-footer p-2">
+    <button class="nav-btn pull-left" (click)="clearAllFilters()">Reset Filters</button>
     <button class="nav-btn pull-right" (click)="toggleAdditionalFilters()">Close</button>
   </div>
 </div>
