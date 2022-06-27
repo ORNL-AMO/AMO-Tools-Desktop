@@ -33,8 +33,7 @@ export class TurndownCalculationService {
 
   getTurndownAirflow(selectedCompressor: CompressorInventoryItem, isDefault: boolean, settings: Settings): number {
     if (isDefault) {
-      let unloadPointCapacityConstant: number = .2;
-      let defaultAirflow: number = unloadPointCapacityConstant * selectedCompressor.performancePoints.fullLoad.airflow;      
+      let defaultAirflow: number = (selectedCompressor.compressorControls.unloadPointCapacity / 100) * selectedCompressor.performancePoints.fullLoad.airflow;      
       return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow, settings);
     } else {
       return selectedCompressor.performancePoints.turndown.airflow;

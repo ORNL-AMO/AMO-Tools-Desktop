@@ -31,8 +31,7 @@ export class MidTurndownCalculationService {
 
   getMidTurndownAirflow(selectedCompressor: CompressorInventoryItem, isDefault: boolean, settings: Settings): number {
     if (isDefault) {
-      let unloadPointCapacityConstant: number =.2;
-      let defaultAirflow: number = ((1 - unloadPointCapacityConstant)/2 + unloadPointCapacityConstant) * selectedCompressor.performancePoints.fullLoad.airflow;      
+      let defaultAirflow: number = ((1 - (selectedCompressor.compressorControls.unloadPointCapacity / 100))/2 + (selectedCompressor.compressorControls.unloadPointCapacity / 100)) * selectedCompressor.performancePoints.fullLoad.airflow;      
       return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow, settings);
     } else {
       return selectedCompressor.performancePoints.midTurndown.airflow;
