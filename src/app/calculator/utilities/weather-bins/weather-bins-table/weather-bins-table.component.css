@@ -1,0 +1,19 @@
+td{
+    font-size: small;
+}
+
+th{
+    font-size: medium;
+}
+
+td{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+}
+
+
+table {
+    box-shadow: 0 4px 8px 0 grey
+  }

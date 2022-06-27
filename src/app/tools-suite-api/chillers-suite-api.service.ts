@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CoolingTowerInput, CoolingTowerOutput } from '../shared/models/chillers';
+import { ChillerPerformanceInput, ChillerPerformanceOutput, ChillerStagingInput, ChillerStagingOutput, CoolingTowerBasinInput, CoolingTowerBasinOutput, CoolingTowerBasinResult, CoolingTowerFanInput, CoolingTowerFanOutput, CoolingTowerInput, CoolingTowerOutput } from '../shared/models/chillers';
 // import { ChillerPerformanceInput, ChillerPerformanceOutput, ChillerStagingInput, ChillerStagingOutput, CoolingTowerBasinInput, CoolingTowerBasinOutput, CoolingTowerFanInput, CoolingTowerFanOutput, CoolingTowerInput, CoolingTowerOutput } from '../shared/models/chillers';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 
@@ -54,113 +54,138 @@ export class ChillersSuiteApiService {
     return results;
   }
 
-  // basinHeaterEnergyConsumption(input: CoolingTowerBasinInput) {
-  //   let output: CoolingTowerBasinOutput = Module.BasinHeaterEnergyConsumption(
-  //     input.ratedCapacity,
-  //     input.ratedTempSetPoint,
-  //     input.ratedTempDryBulb,
-  //     input.ratedWindSpeed,
-  //     input.operatingTempDryBulb,
-  //     input.operatingWindSpeed,
-  //     input.operatingHours,
-  //     input.baselineTempSetPoint, 
-  //     input.modTempSetPoint
-  //   );
-  //   return output;
-  // }
+  basinHeaterEnergyConsumption(input: CoolingTowerBasinInput) {
+    let output = Module.BasinHeaterEnergyConsumption(
+      input.ratedCapacity,
+      input.ratedTempSetPoint,
+      input.ratedTempDryBulb,
+      input.ratedWindSpeed,
+      input.operatingTempDryBulb,
+      input.operatingWindSpeed,
+      input.operatingHours,
+      input.baselineTempSetPoint, 
+      input.modTempSetPoint,
+      input.panLossRatio,
+    );
 
-  // fanEnergyConsumption(input: CoolingTowerFanInput): CoolingTowerFanOutput {
-  //   let fanSpeedTypeBaseline: number = this.suiteEnumService.getCoolingTowerFanControlSpeedType(input.baselineSpeedType)
-  //   let fanSpeedTypeModification: number = this.suiteEnumService.getCoolingTowerFanControlSpeedType(input.modSpeedType)
-  //   let output: CoolingTowerFanOutput = Module.FanEnergyConsumption(
-  //     input.ratedFanPower, 
-  //     input.waterLeavingTemp,
-  //     input.waterEnteringTemp,
-  //     input.operatingTempWetBulb,
-  //     input.operatingHours, 
-  //     fanSpeedTypeBaseline,
-  //     fanSpeedTypeModification
-  //   );
+    let results: CoolingTowerBasinResult = {
+      baselinePower: output.baselinePower,
+      baselineEnergy: output.baselineEnergy,
+      modPower: output.modPower,
+      modEnergy: output.modEnergy,
+      savingsEnergy: output.savingsEnergy,
+    }
+    output.delete();
 
-  //   return output;
-  // }
+    return results;
+  }
 
-  // chillerCapacityEfficiency(input: ChillerPerformanceInput) {
-  //   let chillerType: number = this.suiteEnumService.getCoolingTowerChillerType(input.chillerType)
-  //   let condenserCoolingType: number = this.suiteEnumService.getCoolingTowerCondenserCoolingType(input.condenserCoolingType)
-  //   let compressorConfigType: number = this.suiteEnumService.getCoolingTowerCompressorConfigType(input.compressorConfigType)
+  fanEnergyConsumption(input: CoolingTowerFanInput): CoolingTowerFanOutput {
+    let fanSpeedTypeBaseline: number = this.suiteApiHelperService.getCoolingTowerFanControlSpeedType(input.baselineSpeedType)
+    let fanSpeedTypeModification: number = this.suiteApiHelperService.getCoolingTowerFanControlSpeedType(input.modSpeedType)
+    let output = Module.FanEnergyConsumption(
+      input.ratedFanPower, 
+      input.waterLeavingTemp,
+      input.waterEnteringTemp,
+      input.operatingTempWetBulb,
+      input.operatingHours, 
+      fanSpeedTypeBaseline,
+      fanSpeedTypeModification
+    );
 
-  //   let output: ChillerPerformanceOutput = Module.ChillerCapacityEfficiency(
-  //     chillerType, 
-  //     condenserCoolingType, 
-  //     compressorConfigType,
-  //     input.ariCapacity, 
-  //     input.ariEfficiency, 
-  //     input.maxCapacityRatio, 
-  //     input.operatingHours, 
-  //     input.waterFlowRate, 
-  //     input.waterDeltaT,
-  //     input.baselineWaterSupplyTemp, 
-  //     input.baselineWaterEnteringTemp, 
-  //     input.modWaterSupplyTemp, 
-  //     input.modWaterEnteringTemp
-  //   );
-  //   return output;
-  // }
+    let results: CoolingTowerFanOutput = {
+      baselinePower: output.baselinePower,
+      baselineEnergy: output.baselineEnergy,
+      modPower: output.modPower,
+      modEnergy: output.modEnergy,
+      savingsEnergy: output.savingsEnergy,
+    }
+    output.delete();
+    
+    return results;
+  }
 
-  // chillerStagingEfficiency(input: ChillerStagingInput) {
-  //   let chillerType: number = this.suiteEnumService.getCoolingTowerChillerType(input.chillerType)
-  //   let condenserCoolingType: number = this.suiteEnumService.getCoolingTowerCondenserCoolingType(input.condenserCoolingType)
-  //   let compressorConfigType: number = this.suiteEnumService.getCoolingTowerCompressorConfigType(input.compressorConfigType)
+  chillerCapacityEfficiency(input: ChillerPerformanceInput) {
+    let chillerType: number = this.suiteApiHelperService.getCoolingTowerChillerType(input.chillerType)
+    let condenserCoolingType: number = this.suiteApiHelperService.getCoolingTowerCondenserCoolingType(input.condenserCoolingType)
+    let compressorConfigType: number = this.suiteApiHelperService.getCoolingTowerCompressorConfigType(input.compressorConfigType)
 
-  //   let baselineLoadList = this.returnDoubleVector(input.baselineLoadList);
-  //   let modLoadList = this.returnDoubleVector(input.modLoadList);
+    let output = Module.ChillerCapacityEfficiency(
+      chillerType, 
+      condenserCoolingType, 
+      compressorConfigType,
+      input.ariCapacity, 
+      input.ariEfficiency, 
+      input.maxCapacityRatio, 
+      input.operatingHours, 
+      input.waterFlowRate, 
+      input.waterDeltaT,
+      input.baselineWaterSupplyTemp, 
+      input.baselineWaterEnteringTemp, 
+      input.modWaterSupplyTemp, 
+      input.modWaterEnteringTemp
+    );
 
-  //   let rawOutput = Module.ChillerStagingEfficiency(
-  //     chillerType, 
-  //     condenserCoolingType, 
-  //     compressorConfigType,
-  //     input.ariCapacity, 
-  //     input.ariEfficiency, 
-  //     input.maxCapacityRatio, 
-  //     input.operatingHours, 
-  //     input.waterSupplyTemp, 
-  //     input.waterEnteringTemp,
-  //     baselineLoadList, 
-  //     modLoadList
-  //   );
+    let results: ChillerPerformanceOutput = {
+      baselineActualEfficiency: output.baselineActualEfficiency,
+      baselineActualCapacity: output.baselineActualCapacity,
+      baselinePower: output.baselinePower,
+      baselineEnergy: output.baselineEnergy,
+      modActualEfficiency: output.modActualEfficiency,
+      modActualCapacity: output.modActualCapacity,
+      modPower: output.modPower,
+      modEnergy: output.modEnergy,
+      savingsEnergy: output.savingsEnergy,
+    }
+    output.delete();
+    return results;
+  }
 
-  //   let baselinePowerList: Array<number> = [];
-  //   let modPowerList: Array<number> = [];
-  //   for (let i = 0; i < rawOutput.baselinePowerList.size(); ++i) {
-  //     baselinePowerList.push(rawOutput.baselinePowerList.get(i));
-  //     if (modPowerList) {
-  //       modPowerList.push(rawOutput.modPowerList.get(i));
+  chillerStagingEfficiency(input: ChillerStagingInput) {
+    let chillerType: number = this.suiteApiHelperService.getCoolingTowerChillerType(input.chillerType)
+    let condenserCoolingType: number = this.suiteApiHelperService.getCoolingTowerCondenserCoolingType(input.condenserCoolingType)
+    let compressorConfigType: number = this.suiteApiHelperService.getCoolingTowerCompressorConfigType(input.compressorConfigType)
 
-  //     }
-  //   }
+    let baselineLoadList = this.suiteApiHelperService.returnDoubleVector(input.baselineLoadList);
+    let modLoadList = this.suiteApiHelperService.returnDoubleVector(input.modLoadList);
 
-  //   let output: ChillerStagingOutput = {
-  //     baselineTotalPower: rawOutput.baselineTotalPower,
-  //     baselineTotalEnergy: rawOutput.baselineTotalEnergy,
-  //     modTotalPower: rawOutput.modTotalPower,
-  //     modTotalEnergy: rawOutput.modTotalEnergy,
-  //     savingsEnergy: rawOutput.savingsEnergy,
-  //     baselinePowerList: baselinePowerList,
-  //     modPowerList: modPowerList,
-  //   }
-  //   baselineLoadList.delete();
-  //   modLoadList.delete();
-  //   return output;
-  // }
+    let rawOutput = Module.ChillerStagingEfficiency(
+      chillerType, 
+      condenserCoolingType, 
+      compressorConfigType,
+      input.ariCapacity, 
+      input.ariEfficiency, 
+      input.maxCapacityRatio, 
+      input.operatingHours, 
+      input.waterSupplyTemp, 
+      input.waterEnteringTemp,
+      baselineLoadList, 
+      modLoadList
+    );
 
+    let baselinePowerList: Array<number> = [];
+    let modPowerList: Array<number> = [];
+    for (let i = 0; i < rawOutput.baselinePowerList.size(); ++i) {
+      baselinePowerList.push(rawOutput.baselinePowerList.get(i));
+      if (modPowerList) {
+        modPowerList.push(rawOutput.modPowerList.get(i));
 
-  // returnDoubleVector(doublesArray: Array<number>) {
-  //   let doubleVector = new Module.DoubleVector();
-  //   doublesArray.forEach(x => {
-  //     doubleVector.push_back(x);
-  //   });
-  //   return doubleVector;
-  // }
+      }
+    }
+
+    let output: ChillerStagingOutput = {
+      baselineTotalPower: rawOutput.baselineTotalPower,
+      baselineTotalEnergy: rawOutput.baselineTotalEnergy,
+      modTotalPower: rawOutput.modTotalPower,
+      modTotalEnergy: rawOutput.modTotalEnergy,
+      savingsEnergy: rawOutput.savingsEnergy,
+      baselinePowerList: baselinePowerList,
+      modPowerList: modPowerList,
+    }
+    baselineLoadList.delete();
+    modLoadList.delete();
+    rawOutput.delete();
+    return output;
+  }
 
 }
