@@ -1,0 +1,24 @@
+<!--TEMP-->
+<span *ngIf="parameter == 'Dry-bulb (C)' || parameter == 'Wet Bulb (C)' || parameter == 'Dry-bulb (C)' || parameter == 'Dew-point (C)'">
+    <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
+    <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+</span>
+<!--Relative Humidity-->
+<span *ngIf="parameter == 'RHum (%)'">%</span>
+<!--Wind Direction-->
+<span *ngIf="parameter == 'Wdir (degrees)'">degrees</span>
+<!--Wind Speed-->
+<span *ngIf="parameter == 'Wspd (m/s)'">
+    <span *ngIf="settings.unitsOfMeasure != 'Metric'">ft/s</span>
+    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m/s</span>
+</span>
+<!--Pressure-->
+<span *ngIf="parameter == 'Pressure (mbar)'">
+    <span *ngIf="settings.unitsOfMeasure != 'Metric'">in Hg</span>
+    <span *ngIf="settings.unitsOfMeasure == 'Metric'">mbar</span>
+</span>
+<!--Liq Precipitation Depth-->
+<span *ngIf="parameter == 'Lprecip depth (mm)'">
+    <span *ngIf="settings.unitsOfMeasure != 'Metric'">in</span>
+    <span *ngIf="settings.unitsOfMeasure == 'Metric'">mm</span>
+</span>

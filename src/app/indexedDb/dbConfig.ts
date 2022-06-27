@@ -219,6 +219,18 @@ export const LogToolStoreMeta = {
   ]
 };
 
+export const WeatherDataStoreMeta = {
+  store: 'weatherData',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'id', keypath: 'id', options: {unique: false } },
+    { name: 'name', keypath: 'name', options: {unique: false } },
+    { name: 'modifiedDate', keypath: 'modifiedDate', options: {unique: false } },
+    { name: 'filename', keypath: 'filename', options: {unique: false } },
+    { name: 'setupData', keypath: 'setupData', options: {unique: false } },
+  ]
+};
+
 
 export const GasLoadMaterialStoreMeta = {
   store: 'gasLoadChargeMaterial',
@@ -328,7 +340,7 @@ export const dbConfig: DBConfig = {
     SettingsStoreMeta,
     InventoryStoreMeta,
     LogToolStoreMeta,
-
+    WeatherDataStoreMeta,
     GasLoadMaterialStoreMeta,
     SolidLoadMaterialStoreMeta,
     LiquidLoadMaterialStoreMeta,
