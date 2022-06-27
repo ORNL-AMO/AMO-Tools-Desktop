@@ -3,7 +3,7 @@ import { OpportunityCost, OpportunitySummary } from '../../../../shared/models/t
 import { Settings } from '../../../../shared/models/settings';
 import * as XLSX from 'xlsx';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import * as moment from 'moment';
+import moment from 'moment';
 import * as ExcelJS from 'exceljs';
 import * as fs from 'file-saver';
 import * as betterPlantsImg from './better-plants-img.js';

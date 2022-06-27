@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { CompressorNameplateData } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
@@ -16,10 +18,16 @@ import { CompressorTypeOptions } from '../inventoryOptions';
 export class NameplateDataComponent implements OnInit {
   settings: Settings;
   selectedCompressorSub: Subscription;
+  
   form: FormGroup;
   isFormChange: boolean = false;
+  @ViewChild('fullLoadAmpsModal', { static: false }) public fullLoadAmpsModal: ModalDirective;
+
+  showFullLoadAmpsModal: boolean = false;
+
   compressorTypeOptions: Array<{ value: number, label: string }> = CompressorTypeOptions;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private convertUnitsService: ConvertUnitsService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
@@ -49,4 +57,21 @@ export class NameplateDataComponent implements OnInit {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
 
+  openFullLoadAmpsModal() {
+    this.fullLoadAmpsModal.show();
+    this.compressedAirAssessmentService.modalOpen.next(true);
+    this.showFullLoadAmpsModal = true;
+  }
+  
+  closeFullLoadAmpsModal(fullLoadAmps?: number) {
+    if (fullLoadAmps) {
+      this.form.patchValue({
+        fullLoadAmps: fullLoadAmps
+      });
+    }
+    this.compressedAirAssessmentService.modalOpen.next(false);
+    this.showFullLoadAmpsModal = false;
+    this.fullLoadAmpsModal.hide();
+    this.save();
+  }
 }

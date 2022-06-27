@@ -2,7 +2,9 @@ import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, Input } fro
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { ElectronService } from 'ngx-electron';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
+import { firstValueFrom } from 'rxjs';
+import { Settings } from '../shared/models/settings';
 
 @Component({
   selector: 'app-update-toast',
@@ -36,7 +38,7 @@ export class UpdateToastComponent implements OnInit {
   downloadingUpdate: boolean = false;
   updateDownloaded: boolean = false;
   version: string;
-  constructor(private electronService: ElectronService, private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private electronService: ElectronService, private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService,  ) { }
 
   ngOnInit() {
     this.releaseName = this.info.releaseName;
@@ -82,8 +84,9 @@ export class UpdateToastComponent implements OnInit {
     }, 500);
   }
 
-  updateNow() {
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+  async updateNow() {
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(updatedSettings);
     this.downloadingUpdate = true;
     this.cd.detectChanges();
     this.electronService.ipcRenderer.send('update', null);

@@ -27,7 +27,7 @@ export class TankInsulationReductionService {
       utilityType: 0,
       utilityCost: settings.fuelCost,
       naturalGasUtilityCost: settings.fuelCost,
-      otherUtilityCost: settings.otherFuelCost,
+      otherUtilityCost: settings.otherFuelCost || 0,
       tankHeight: 0,
       tankDiameter: 0,
       tankThickness: 0,
@@ -42,7 +42,8 @@ export class TankInsulationReductionService {
       jacketEmissivity: 0.9,
       tankMaterialSelection: 0,
       insulationMaterialSelection: 0,
-      jacketMaterialSelection: 0
+      jacketMaterialSelection: 0,
+      heatedOrChilled: 0
     };
     return obj;
   }
@@ -64,7 +65,8 @@ export class TankInsulationReductionService {
       tankMaterialSelection: [obj.tankMaterialSelection],
       insulationMaterialSelection: [obj.insulationMaterialSelection],
       customInsulationConductivity: [obj.customInsulationConductivity],
-      jacketMaterialSelection: [obj.jacketMaterialSelection]
+      jacketMaterialSelection: [obj.jacketMaterialSelection],
+      heatedOrChilled: [{ value: obj.heatedOrChilled, disabled: !isBaseline }],
     });
 
     if (obj.insulationMaterialSelection != 0) {
@@ -117,7 +119,8 @@ export class TankInsulationReductionService {
       jacketEmissivity: this.getJacketEmissivity(form.controls.jacketMaterialSelection.value),
       tankMaterialSelection: form.controls.tankMaterialSelection.value,
       insulationMaterialSelection: form.controls.insulationMaterialSelection.value,
-      jacketMaterialSelection: form.controls.jacketMaterialSelection.value
+      jacketMaterialSelection: form.controls.jacketMaterialSelection.value,
+      heatedOrChilled: form.controls.heatedOrChilled.value
     };
     if (obj.insulationMaterialSelection == 1) {
       if (settings.unitsOfMeasure != 'Imperial') {
@@ -137,7 +140,7 @@ export class TankInsulationReductionService {
         utilityType: 0,
         utilityCost: settings.fuelCost,
         naturalGasUtilityCost: settings.fuelCost,
-        otherUtilityCost: settings.otherFuelCost,
+        otherUtilityCost: settings.otherFuelCost || 0,
         tankHeight: 50,
         tankDiameter: 1.0,
         tankThickness: 0.25,
@@ -152,7 +155,8 @@ export class TankInsulationReductionService {
         jacketEmissivity: this.getJacketEmissivity(0),
         tankMaterialSelection: 6,
         insulationMaterialSelection: 0,
-        jacketMaterialSelection: 0
+        jacketMaterialSelection: 0,
+        heatedOrChilled: 0
       };
     } else {
       example = {
@@ -160,7 +164,7 @@ export class TankInsulationReductionService {
         utilityType: 0,
         utilityCost: settings.fuelCost,
         naturalGasUtilityCost: settings.fuelCost,
-        otherUtilityCost: settings.otherFuelCost,
+        otherUtilityCost: settings.otherFuelCost || 0,
         tankHeight: 50,
         tankDiameter: 1.0,
         tankThickness: 0.25,
@@ -175,7 +179,8 @@ export class TankInsulationReductionService {
         jacketEmissivity: this.getJacketEmissivity(8),
         tankMaterialSelection: 6,
         insulationMaterialSelection: 22,
-        jacketMaterialSelection: 8
+        jacketMaterialSelection: 8,
+        heatedOrChilled: 0
       };
     }
     return example;
@@ -187,23 +192,29 @@ export class TankInsulationReductionService {
     let modificationResults: TankInsulationReductionResult = {
       heatLoss: 0,
       annualHeatLoss: 0,
-      energyCost: 0
+      energyCost: 0,
+      energySourceType: baselineResults.energySourceType,
+      heatedOrChilled: baselineResults.heatedOrChilled
     };
     let annualHeatLossReduction: number = 0;
     let annualCostSavings: number = 0;
     if (modification) {
       let modificationCopy: TankInsulationReductionInput = JSON.parse(JSON.stringify(modification));
+      modificationCopy.utilityType = baselineResults.energySourceType;
+      modificationCopy.heatedOrChilled = baselineResults.heatedOrChilled;
       modificationResults = this.calculate(modificationCopy, settings);
       annualHeatLossReduction = baselineResults.annualHeatLoss - modificationResults.annualHeatLoss;
       annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
     }else{
       modificationResults = baselineResults;
     }
+    let energyUnit = this.getEnergyUnit(baselineCopy.utilityType, settings);
     let tankInsulationReductionResults: TankInsulationReductionResults = {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
       annualHeatSavings: annualHeatLossReduction,
-      annualCostSavings: annualCostSavings
+      annualCostSavings: annualCostSavings,
+      energyUnit: energyUnit
     };
     return tankInsulationReductionResults;
   }
@@ -211,6 +222,8 @@ export class TankInsulationReductionService {
   calculate(input: TankInsulationReductionInput, settings: Settings): TankInsulationReductionResult {
     let convertedInput: TankInsulationReductionInput = this.convertInputs(input, settings);
     let results: TankInsulationReductionResult = this.standaloneService.tankInsulationReduction(convertedInput);
+    results.energySourceType = convertedInput.utilityType;
+    results.heatedOrChilled = convertedInput.heatedOrChilled;
     results = this.convertResults(results, settings);
     if (settings.unitsOfMeasure != 'Imperial') {
       results.energyCost = results.annualHeatLoss * input.utilityCost / 1000;
@@ -238,8 +251,13 @@ export class TankInsulationReductionService {
   }
 
   convertResults(results: TankInsulationReductionResult, settings: Settings): TankInsulationReductionResult {
-    if (settings.unitsOfMeasure != 'Imperial') {
+    if (results.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial') {
       results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('MMBtu').to('MJ');
+    } else if (results.energySourceType == 2) {
+      results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('MMBtu').to('kWh');
+    }
+    if( results.heatedOrChilled == 1){
+      results.annualHeatLoss = results.annualHeatLoss * (-1);
     }
     return results;
   }
@@ -477,6 +495,20 @@ export class TankInsulationReductionService {
       //Steel
       return 0.8;
     }
+  }
+
+  getEnergyUnit(utilityType: number, settings: Settings) {
+    let energyUnit: string = settings.energyResultUnit;
+    if (utilityType === 2) {
+      energyUnit = "kWh";
+    } else {
+      if (settings.unitsOfMeasure == 'Meteric'){
+        energyUnit = "GJ"
+      } else {
+        energyUnit = "MMBtu"
+      }
+    }
+    return energyUnit;
   }
 
 }

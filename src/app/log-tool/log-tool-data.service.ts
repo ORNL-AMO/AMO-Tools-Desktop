@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { LogToolService } from './log-tool.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import * as _ from 'lodash';
 import { LogToolDay, LogToolField, IndividualDataFromCsv } from './log-tool-models';
+import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class LogToolDataService {
 
   logToolDays: Array<LogToolDay>;
   isTimeSeries: boolean;
-  constructor(private logToolService: LogToolService) { }
+  dataIntervalValid: BehaviorSubject<boolean>;
+  constructor(private logToolService: LogToolService) {
+    this.dataIntervalValid = new BehaviorSubject<boolean>(undefined);
+   }
 
   resetData() {
     this.logToolDays = new Array();
@@ -125,6 +129,7 @@ export class LogToolDataService {
         csvData.startDate = undefined;
         csvData.endDate = undefined;
         this.isTimeSeries = false;
+        this.dataIntervalValid.next(true);
       } 
       else {
         //update date field format
@@ -150,6 +155,21 @@ export class LogToolDataService {
         _.remove(csvData.csvImportData.data, (dataItem) => {
           return dataItem[csvData.dateField.fieldName] == 'Invalid date';
         });
+
+        //checking intervals for lost seconds 
+        let date1 = new Date(csvData.csvImportData.data[0][csvData.dateField.fieldName]);
+        let date2 = new Date(csvData.csvImportData.data[1][csvData.dateField.fieldName]);
+        let intervalDifference: number = (date2.getTime() - date1.getTime()) / 1000;
+        let intervalIncrement: number = csvData.intervalForSeconds;
+        if (intervalIncrement !== undefined && intervalDifference <= 0) {
+          csvData.csvImportData.data = this.addLostSecondsBack(csvData, intervalIncrement);
+          this.dataIntervalValid.next(true);
+        } else if (intervalIncrement == undefined && intervalDifference <= 0) {
+          this.dataIntervalValid.next(false);
+        } else if (intervalDifference > 0) {
+          this.dataIntervalValid.next(true);
+        }
+
         //order by date descending
         csvData.csvImportData.data = _.sortBy(csvData.csvImportData.data, (dataItem) => {
           return dataItem[csvData.dateField.fieldName];
@@ -163,6 +183,21 @@ export class LogToolDataService {
       }
     });
     this.logToolService.setFields(individualDataFromCsv);
+  }
+
+  addLostSecondsBack(csvData: IndividualDataFromCsv, intervalIncrement: number) {
+    let secondsCounter: number = 0;
+    csvData.csvImportData.data.map(dataItem => {
+      if (secondsCounter == 60) {
+        secondsCounter = 0;
+      }
+      dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName]).format('YYYY-MM-DD HH:mm:ss');
+      let date = new Date(dataItem[csvData.dateField.fieldName]);
+      date.setSeconds(secondsCounter);
+      dataItem[csvData.dateField.fieldName] = moment(date).format('YYYY-MM-DD HH:mm:ss');
+      secondsCounter += intervalIncrement;
+    });
+    return csvData.csvImportData.data;    
   }
 
   divideDataIntoDays(data: Array<any>, dateField: string): Array<{ date: Date, data: Array<any> }> {

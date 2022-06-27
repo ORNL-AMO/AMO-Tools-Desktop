@@ -3,11 +3,12 @@ import { Assessment } from '../../shared/models/assessment';
 import { SettingsService } from '../../settings/settings.service';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { ConvertPhastService } from '../convert-phast.service';
 import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import * as _ from 'lodash';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -35,7 +36,7 @@ export class SystemBasicsComponent implements OnInit {
   lossesExist: boolean;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertPhastService: ConvertPhastService, private settingsDbService: SettingsDbService) { }
+  constructor(private settingsService: SettingsService,    private convertPhastService: ConvertPhastService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
@@ -71,7 +72,7 @@ export class SystemBasicsComponent implements OnInit {
     return lossesExist;
   }
   
-  saveSettings() {
+  async saveSettings() {
     let id = this.settings.id;
     this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.settings.id = id;
@@ -83,11 +84,10 @@ export class SystemBasicsComponent implements OnInit {
         this.showUpdateDataReminder = true;
       }
     }
-    this.indexedDbService.putSettings(this.settings).then(() => {
-      this.settingsDbService.setAll().then(() => {
-        this.updateSettings.emit(true);
-      });
-    });
+
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    this.settingsDbService.setAll(updatedSettings);
+    this.updateSettings.emit(true);
   }
 
   getExistingDataSettings(): Settings {

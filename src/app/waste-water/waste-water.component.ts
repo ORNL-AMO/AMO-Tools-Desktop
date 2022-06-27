@@ -2,10 +2,9 @@ import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChi
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
@@ -60,7 +59,7 @@ export class WasteWaterComponent implements OnInit {
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   showWelcomeScreen: boolean;
-  constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
+  constructor(private activatedRoute: ActivatedRoute,   
     private egridService: EGridService,
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
     private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService,
@@ -70,7 +69,7 @@ export class WasteWaterComponent implements OnInit {
   ngOnInit(): void {
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
+      this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       this.wasteWaterService.updateWasteWater(this.assessment.wasteWater);
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       if (!settings) {
@@ -157,13 +156,11 @@ export class WasteWaterComponent implements OnInit {
     }
   }
 
-  saveWasteWater(wasteWater: WasteWater) {
+  async saveWasteWater(wasteWater: WasteWater) {
     wasteWater = this.updateModificationCO2Savings(wasteWater);
     this.assessment.wasteWater = wasteWater;
-    
-    this.indexedDbService.putAssessment(this.assessment).then(() => {
-      this.assessmentDbService.setAll();
-    });
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment)) 
+    this.assessmentDbService.setAll(assessments);
   }
 
   updateModificationCO2Savings(wasteWater: WasteWater) {
@@ -183,16 +180,14 @@ export class WasteWaterComponent implements OnInit {
     return wasteWater;
   }
 
-  addSettings(settings: Settings) {
+  async addSettings(settings: Settings) {
     delete settings.id;
     delete settings.directoryId;
     settings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(settings).then(() => {
-      this.settingsDbService.setAll().then(() => {
-        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-        this.wasteWaterService.settings.next(this.settings);
-      });
-    });
+    this.settings = await firstValueFrom(this.settingsDbService.addWithObservable(settings));
+    this.wasteWaterService.settings.next(this.settings);
+    let allSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(allSettings);
   }
 
   setDisableNext(wasteWater: WasteWater) {
@@ -264,9 +259,10 @@ export class WasteWaterComponent implements OnInit {
     }
   }
 
-  closeWelcomeScreen() {
+ async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableWasteWaterTutorial = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.wasteWaterService.isModalOpen.next(false);
   }

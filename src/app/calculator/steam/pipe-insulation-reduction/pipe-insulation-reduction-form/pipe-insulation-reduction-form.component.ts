@@ -26,10 +26,13 @@ export class PipeInsulationReductionFormComponent implements OnInit {
   @Input()
   utilityCost: number;
   @Input()
+  heatedOrChilled: number;
+  @Input()
   form: FormGroup;
 
   formWidth: number;
   showOperatingHoursModal: boolean;
+  energyUnit: string;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -39,7 +42,9 @@ export class PipeInsulationReductionFormComponent implements OnInit {
 
   utilityOptions: Array<{ value: number, name: string }> = [
     { value: 0, name: 'Natural Gas' },
-    { value: 1, name: 'Other' }
+    { value: 1, name: 'Other Fuel' },
+    { value: 2, name: 'Electricity' },
+    { value: 3, name: 'Steam' }
   ];
 
   pipeBaseMaterials: Array<{ value: number, name: string }> = [
@@ -79,6 +84,11 @@ export class PipeInsulationReductionFormComponent implements OnInit {
     { value: 8, name: 'Flexible Aerogel' }
   ];
 
+  heatedOrChilledOptions: Array<{ value: number, name: string }> = [
+    { value: 0, name: 'Heated' },
+    { value: 1, name: 'Chilled' }
+  ];
+
   npsList: Array<{ value: number, name: string }>;
 
   idString: string;
@@ -94,6 +104,7 @@ export class PipeInsulationReductionFormComponent implements OnInit {
       this.idString = 'modification';
     }
     this.initNpsList();
+    this.energyUnit = this.pipeInsulationReductionService.getEnergyUnit(this.form.controls.utilityType.value, this.settings);
   }
 
   ngAfterViewInit() {
@@ -110,6 +121,9 @@ export class PipeInsulationReductionFormComponent implements OnInit {
     if (changes.utilityCost && !changes.utilityCost.firstChange) {
       this.form.patchValue({ utilityCost: this.utilityCost });
     }
+    if (changes.heatedOrChilled && !changes.heatedOrChilled.firstChange) {
+      this.form.patchValue({ heatedOrChilled: this.heatedOrChilled });
+    }
   }
 
   changeUtilityType() {
@@ -120,14 +134,16 @@ export class PipeInsulationReductionFormComponent implements OnInit {
       } else {
         tmpCost = this.pipeInsulationReductionService.modificationData.naturalGasUtilityCost;
       }
-    }
-    else {
+    } else if (this.form.controls.utilityType.value == 2) {
+      tmpCost = this.settings.electricityCost;
+    } else {
       if (this.isBaseline == true) {
         tmpCost = this.pipeInsulationReductionService.baselineData.otherUtilityCost;
       } else {
         tmpCost = this.pipeInsulationReductionService.modificationData.otherUtilityCost;
       }
     }
+    this.energyUnit = this.pipeInsulationReductionService.getEnergyUnit(this.form.controls.utilityType.value, this.settings);
     this.form.controls.utilityCost.setValue(tmpCost);
     this.calculate();
   }

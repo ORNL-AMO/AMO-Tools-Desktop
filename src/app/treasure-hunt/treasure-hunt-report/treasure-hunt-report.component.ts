@@ -18,7 +18,6 @@ import pptxgen from 'pptxgenjs';
 import * as _ from 'lodash';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import * as moment from 'moment';
 import { TreasureHuntPptService } from './treasure-hunt-ppt.service';
 @Component({
   selector: 'app-treasure-hunt-report',
@@ -195,9 +194,9 @@ export class TreasureHuntReportComponent implements OnInit {
   
   present() {
     if (this.dataCalculated) {
-      let settings = this.settingsDbService.getByDirectoryId(this.assessment.directoryId);    
+      let settings = this.settingsDbService.getByAssessmentId(this.assessment, true);;    
       let pptx = new pptxgen();
-      pptx = this.treasureHuntPPTService.createPPT(settings, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails);
+      pptx = this.treasureHuntPPTService.createPPT(settings, this.assessment.treasureHunt, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails);
       pptx.writeFile({ fileName: this.fileName + '.pptx' });
     }
     this.hideExportModal();

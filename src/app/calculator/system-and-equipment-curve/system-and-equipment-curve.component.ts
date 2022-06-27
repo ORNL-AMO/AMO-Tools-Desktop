@@ -3,10 +3,10 @@ import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SystemAndEquipmentCurveService } from './system-and-equipment-curve.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { Calculator } from '../../shared/models/calculators';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { CurveDataService } from './curve-data.service';
 import { Router } from '@angular/router';
 
@@ -33,7 +33,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
   systemCurveCollapsedSub: Subscription;
   maxFlowRate: number = 0;
   constructor(private settingsDbService: SettingsDbService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
-    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService, private curveDataService: CurveDataService,
+    private calculatorDbService: CalculatorDbService,    private curveDataService: CurveDataService,
     private router: Router) { }
 
   ngOnInit() {
@@ -235,7 +235,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     this.curveDataService.setAssessmentCalculatorData(this.equipmentType, this.assessment);
   }
 
-  saveCalculator() {
+  async saveCalculator() {
     let calculator: Calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (calculator != undefined) {
       calculator.systemAndEquipmentCurveData = {
@@ -247,9 +247,8 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
         equipmentCurveFormView: this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue()
       }
 
-      this.indexedDbService.putCalculator(calculator).then(() => {
-        this.calculatorDbService.setAll();
-      });
+      let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(calculator)) 
+      this.calculatorDbService.setAll(updatedCalculators);
     } else {
       calculator = {
         assessmentId: this.assessment.id,
@@ -262,9 +261,9 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
           equipmentCurveFormView: this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue()
         }
       };
-      this.indexedDbService.addCalculator(calculator).then((result) => {
-        this.calculatorDbService.setAll();
-      });
+      await firstValueFrom(this.calculatorDbService.addWithObservable(calculator));
+      let updatedCalculators = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+      this.calculatorDbService.setAll(updatedCalculators);
     }
   }
 

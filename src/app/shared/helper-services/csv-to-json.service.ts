@@ -61,6 +61,31 @@ export class CsvToJsonService {
 
   }
 
+  parseWeatherCSV(csvData: any): CsvImportData {
+    let results: CsvImportData = Papa.parse(csvData, {
+      // header: true,
+      dynamicTyping: true
+    });
+    results.data.shift();
+
+    let unparsed = Papa.unparse(results.data);
+    results = Papa.parse(unparsed, {
+      header: true,
+      dynamicTyping: true
+    });
+    return results;
+  }
+
+  // Weather calc old method
+  parseCSV(csvData: any): CsvImportData {
+    let results: CsvImportData = Papa.parse(csvData, {
+      header: true,
+      dynamicTyping: true
+    });
+    //last item ends up as null
+    results.data.pop();
+    return results;
+  }
 }
 
 

@@ -126,11 +126,7 @@
             <span class="alert-danger pull-right small"
                 *ngIf="modificationForm.controls.outletPressure.invalid && !modificationForm.controls.outletPressure.pristine">
                 <span *ngIf="modificationForm.controls.outletPressure.errors.required">Value Required</span>
-            </span>
-            <span class="alert-warning pull-right small"
-                *ngIf="modificationWarnings.outletPressureError !== null && !modificationForm.controls.outletPressure.pristine && !modificationForm.controls.outletPressure.invalid">
-                {{modificationWarnings.outletPressureError}} <span
-                    [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+                <span *ngIf="modificationForm.controls.outletPressure.errors.min">Outlet pressure is usually not less than zero</span>
             </span>
         </div>
     </form>

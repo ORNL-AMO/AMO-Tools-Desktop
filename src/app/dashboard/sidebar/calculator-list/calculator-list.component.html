@@ -22,6 +22,8 @@
       Gas Reduction</span>
     <span [routerLink]="['/calculators/altitude-correction']" routerLinkActive="selected" class="sidebar-item">Altitude
       Correction</span>
+    <span [routerLink]="['/calculators/weather-bins']" routerLinkActive="selected"
+    class="sidebar-item">Weather Bins</span>
   </div>
 </div>
 <!--compressed air-->
@@ -39,6 +41,8 @@
       Survey</span>
     <span [routerLink]="['/calculators/air-flow-conversion']" routerLinkActive="selected" class="sidebar-item">Actual to
       Standard Airflow</span>
+    <span [routerLink]="['/calculators/bleed-test']" routerLinkActive="selected" class="sidebar-item">Bleed 
+      Test</span>
     <span [routerLink]="['/calculators/bag-method']" routerLinkActive="selected" class="sidebar-item">Leak Loss
       Estimator - Bag Method</span>
     <span [routerLink]="['/calculators/pneumatic-air']" routerLinkActive="selected" class="sidebar-item">Pneumatic Air
@@ -102,10 +106,12 @@
   <span class="sidebar-item" [routerLink]="['/calculators/process-cooling-list']" routerLinkActive="selected">Process
     Cooling</span>
   <div class="directory-item">
-    <span [routerLink]="['/calculators/cooling-tower']" routerLinkActive="selected" class="sidebar-item">Cooling Tower
-      Makeup Water</span>
-      <span [routerLink]="['/calculators/fan-psychrometric']" routerLinkActive="selected"
-      class="sidebar-item">Psychrometric Calculator</span>
+    <span [routerLink]="['/calculators/chiller-staging']" routerLinkActive="selected" class="sidebar-item">Chiller Staging</span>
+    <span [routerLink]="['/calculators/chiller-performance']" routerLinkActive="selected" class="sidebar-item">Chiller Energy Performance and Temperature Reset</span>
+    <span [routerLink]="['/calculators/cooling-tower-basin']" routerLinkActive="selected" class="sidebar-item">Cooling Tower Basin Heater Energy</span>
+    <span [routerLink]="['/calculators/cooling-tower-fan']" routerLinkActive="selected" class="sidebar-item">Cooling Tower Fan Energy</span>
+    <span [routerLink]="['/calculators/cooling-tower']" routerLinkActive="selected" class="sidebar-item">Cooling Tower Makeup Water</span>
+    <span [routerLink]="['/calculators/fan-psychrometric']" routerLinkActive="selected" class="sidebar-item">Psychrometric Calculator</span>
   </div>
 </div>
 <!--Process heating-->

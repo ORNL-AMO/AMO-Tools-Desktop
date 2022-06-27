@@ -74,7 +74,10 @@
 
     <!-- fullLoadAmps -->
     <div class="form-group" [ngClass]="{'invalid': form.controls.fullLoadAmps.invalid}">
-        <label for="fullLoadAmps">Full Load Amps</label>
+        <label for="fullLoadAmps">Full Load Amps
+            <a class="form-text small click-link" (click)="openFullLoadAmpsModal()">Calculate Full Load Amps
+                </a>
+        </label>
         <div class="input-group">
             <input name="fullLoadAmps" type="number" step="any" class="form-control" id="fullLoadAmps"
                 formControlName="fullLoadAmps" (input)="save()" (focus)="focusField('fullLoadAmps')">
@@ -108,3 +111,11 @@
     <!-- ratedLoadPower (hidden)-->
     <!-- ploytropicCompressorExponent (hidden)-->
 </form>
+
+
+<div bsModal #fullLoadAmpsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="fullLoadAmpsModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
+  <div class="modal-dialog modal-lg">
+    <app-fla-modal *ngIf="showFullLoadAmpsModal" [settings]="settings" (closeModal)="closeFullLoadAmpsModal($event)"></app-fla-modal>
+  </div>
+</div>

@@ -72,6 +72,7 @@ import { SteamPropertiesComponent } from '../calculator/steam/steam-properties/s
 import { TurbineComponent } from '../calculator/steam/turbine/turbine.component';
 import { TankInsulationReductionComponent } from '../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.component';
 import { AssessmentReportsComponent } from '../report-rollup/assessment-reports/assessment-reports.component';
+import { WeatherBinsComponent } from '../calculator/utilities/weather-bins/weather-bins.component';
 import { AirLeakComponent } from '../calculator/compressed-air/air-leak/air-leak.component';
 import { CompressedAirReductionComponent } from '../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.component';
 import { CompressedAirPressureReductionComponent } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.component';
@@ -97,6 +98,10 @@ import { FixtureComponent } from '../calculator/furnaces/fixture/fixture.compone
 import { WasteHeatComponent } from '../calculator/furnaces/waste-heat/waste-heat.component';
 import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/heat-cascading.component';
 import { WasteWaterComponent } from '../waste-water/waste-water.component';
+import { ChillerPerformanceComponent } from '../calculator/process-cooling/chiller-performance/chiller-performance.component';
+import { CoolingTowerFanComponent } from '../calculator/process-cooling/cooling-tower-fan/cooling-tower-fan.component';
+import { CoolingTowerBasinComponent } from '../calculator/process-cooling/cooling-tower-basin/cooling-tower-basin.component';
+import { ChillerStagingComponent } from '../calculator/process-cooling/chiller-staging/chiller-staging.component';
 import { WaterHeatingComponent } from '../calculator/steam/water-heating/water-heating.component';
 import { CompressedAirAssessmentComponent } from '../compressed-air-assessment/compressed-air-assessment.component';
 import { FanSystemChecklistComponent } from '../calculator/fans/fan-system-checklist/fan-system-checklist.component';
@@ -105,6 +110,7 @@ import { FullLoadAmpsComponent } from '../calculator/motors/full-load-amps/full-
 import { AltitudeCorrectionComponent } from '../calculator/utilities/altitude-correction/altitude-correction.component';
 import { FeedwaterEconomizerComponent } from '../calculator/steam/feedwater-economizer/feedwater-economizer.component';
 import { CondensingEconomizerComponent } from '../calculator/steam/condensing-economizer/condensing-economizer.component';
+import { BleedTestComponent } from '../calculator/compressed-air/bleed-test/bleed-test.component';
 
 export const coreRoutes: Routes = [
   {
@@ -204,6 +210,10 @@ export const coreRoutes: Routes = [
           {
             path: 'bag-method',
             component: BagMethodComponent
+          },
+          {
+            path: 'bleed-test',
+            component: BleedTestComponent
           },
           {
             path: 'operating-cost',
@@ -474,8 +484,28 @@ export const coreRoutes: Routes = [
             component: TankInsulationReductionComponent
           },
           {
+            path: 'cooling-tower-fan',
+            component: CoolingTowerFanComponent
+          },
+          {
+            path: 'weather-bins',
+            component: WeatherBinsComponent
+          },
+          {
             path: 'cooling-tower',
             component: CoolingTowerComponent
+          },
+          {
+            path: 'chiller-performance',
+            component: ChillerPerformanceComponent
+          },
+          {
+            path: 'cooling-tower-basin',
+            component: CoolingTowerBasinComponent
+          },
+          {
+            path: 'chiller-staging',
+            component: ChillerStagingComponent
           },
           {
             path: 'waste-water-list',

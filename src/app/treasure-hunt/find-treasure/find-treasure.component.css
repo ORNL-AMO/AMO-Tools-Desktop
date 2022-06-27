@@ -31,7 +31,7 @@ a:not([href]):not([tabindex]){
 }
 
 .skyline{
-    background-image: url('../../../assets/images/industrial-skyline.png');
+    background-image: url('../../../assets/images/industrial-skyline.svg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: bottom center; 

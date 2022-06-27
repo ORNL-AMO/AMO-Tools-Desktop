@@ -53,6 +53,10 @@ export class PipeInsulationTreasureHuntService {
       treasureHuntOpportunityResults.utilityType = 'Natural Gas';
     } else if (pipeInsulationReduction.baseline.utilityType == 1) {
       treasureHuntOpportunityResults.utilityType = 'Other Fuel';
+    } else if (pipeInsulationReduction.baseline.utilityType == 2) {
+      treasureHuntOpportunityResults.utilityType = 'Electricity';
+    } else if (pipeInsulationReduction.baseline.utilityType == 3) {
+      treasureHuntOpportunityResults.utilityType = 'Steam';
     }
 
     return treasureHuntOpportunityResults;
@@ -69,6 +73,15 @@ export class PipeInsulationTreasureHuntService {
       }
     } else if (reduction.baseline.utilityType == 1) {
       currentCosts = currentEnergyUsage.otherFuelCosts;
+      unitStr = 'MMBtu';
+      if (settings.unitsOfMeasure == 'Imperial') {
+        unitStr = 'GJ';
+      }
+    } else if (reduction.baseline.utilityType == 2) {
+      currentCosts = currentEnergyUsage.electricityCosts;
+      unitStr = 'kWh';
+    } else if (reduction.baseline.utilityType == 3) {
+      currentCosts = currentEnergyUsage.steamCosts;
       unitStr = 'MMBtu';
       if (settings.unitsOfMeasure == 'Imperial') {
         unitStr = 'GJ';

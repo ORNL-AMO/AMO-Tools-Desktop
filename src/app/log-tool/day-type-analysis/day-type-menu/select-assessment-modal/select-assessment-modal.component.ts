@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment/compressed-air-assessment.service';
 import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
-import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+ 
 import { Assessment } from '../../../../shared/models/assessment';
 import { CompressedAirAssessment } from '../../../../shared/models/compressed-air-assessment';
 import { LogToolField } from '../../../log-tool-models';
@@ -17,6 +17,7 @@ import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { DayTypeAnalysisService } from '../../day-type-analysis.service';
 import { LogToolService } from '../../../log-tool.service';
 import { InventoryService } from '../../../../compressed-air-assessment/inventory/inventory.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-select-assessment-modal',
@@ -35,23 +36,29 @@ export class SelectAssessmentModalComponent implements OnInit {
   addNewAssessment: boolean = false;
   newAssessmentForm: FormGroup;
   constructor(private assessmentDbService: AssessmentDbService, private logToolService: LogToolService,
-    private indexedDbService: IndexedDbService, private router: Router,
     private compressedAirAssessmentService: CompressedAirAssessmentService, private directoryDbService: DirectoryDbService,
     private formBuilder: FormBuilder, private assessmentService: AssessmentService, private settingsDbService: SettingsDbService,
     private dayTypeAnalysisService: DayTypeAnalysisService, private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
-    this.directories = this.directoryDbService.getAll();
-    let allAssessments: Array<Assessment> = this.assessmentDbService.getAll();
-    this.compressedAirAssessments = allAssessments.filter(assessment => { return assessment.type == "CompressedAir" });
-    this.compressedAirAssessments = this.compressedAirAssessments.filter(assessment => {return !assessment.compressedAirAssessment.modifications || assessment.compressedAirAssessment.modifications.length == 0});
-    this.compressedAirAssessments = _.orderBy(this.compressedAirAssessments, 'modifiedDate');
+    this.setDirectories();
+    this.setAssessments();
     this.initForm();
   }
 
+  async setAssessments() {
+    let allAssessments: Array<Assessment> = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    this.assessmentDbService.setAll(allAssessments);
+    this.compressedAirAssessments = allAssessments.filter(assessment => { return assessment.type == "CompressedAir" });
+    this.compressedAirAssessments = this.compressedAirAssessments.filter(assessment => {return !assessment.compressedAirAssessment.modifications || assessment.compressedAirAssessment.modifications.length == 0});
+    this.compressedAirAssessments = _.orderBy(this.compressedAirAssessments, 'modifiedDate');
+  }
 
   ngAfterViewInit() {
     this.showModal();
+  }
+  async setDirectories() {
+    this.directories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
   closeModal() {
@@ -76,16 +83,16 @@ export class SelectAssessmentModalComponent implements OnInit {
     this.newAssessmentForm.controls.assessmentType.disable();
   }
 
-  selectAssessment(assessment: Assessment) {
+  async selectAssessment(assessment: Assessment) {
     assessment.compressedAirAssessment = this.setDayTypesFromLogTool(assessment.compressedAirAssessment)
-    this.indexedDbService.putAssessment(assessment).then(() => {
-      this.assessmentDbService.setAll().then(() => {
-        this.compressedAirAssessmentService.mainTab.next('system-setup');
-        this.compressedAirAssessmentService.setupTab.next('day-types');
-        // this.router.navigateByUrl('/compressed-air/' + assessment.id);
-        this.assessmentService.goToAssessment(assessment, 'system-setup', 'day-types');
-      })
-    })
+    
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
+    this.assessmentDbService.setAll(assessments);
+    this.compressedAirAssessmentService.mainTab.next('system-setup');
+    this.compressedAirAssessmentService.setupTab.next('day-types');
+    // this.router.navigateByUrl('/compressed-air/' + assessment.id);
+    this.assessmentService.goToAssessment(assessment, 'system-setup', 'day-types');
+
   }
 
   setDayTypesFromLogTool(compressedAirAssessment: CompressedAirAssessment): CompressedAirAssessment {
@@ -114,7 +121,7 @@ export class SelectAssessmentModalComponent implements OnInit {
     return compressedAirAssessment;
   }
 
-  createAssessment() {
+  async createAssessment() {
     if (this.newAssessmentForm.valid) {
       let tmpAssessment = this.assessmentService.getNewAssessment('CompressedAir');
       tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
@@ -122,10 +129,11 @@ export class SelectAssessmentModalComponent implements OnInit {
       let settings: Settings = this.settingsDbService.getByDirectoryId(tmpAssessment.directoryId);
       tmpAssessment.compressedAirAssessment = this.assessmentService.getNewCompressedAirAssessment(settings);
       // this.addAssessment(tmpAssessment, '/compressed-air/');
-      this.indexedDbService.addAssessment(tmpAssessment).then(id => {
-        tmpAssessment.id = id;
-        this.selectAssessment(tmpAssessment);
-      });
+      let assessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
+      tmpAssessment.id = assessment.id;
+      let updatedAssessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+      this.assessmentDbService.setAll(updatedAssessments);
+      this.selectAssessment(tmpAssessment);
     }
   }
 

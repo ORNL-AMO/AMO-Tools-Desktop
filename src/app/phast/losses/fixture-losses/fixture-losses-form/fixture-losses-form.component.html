@@ -1,8 +1,18 @@
 <form [formGroup]="lossesForm">
+  <div class="alert-warning m-2 small mx-auto w-100 text-center" *ngIf="hasDeletedCustomMaterial">
+    <div>
+      A custom material used in this assessment has been deleted and a placeholder material was created to save the data. To
+      edit the custom material, please use the Custom Materials database or click 'Restore Solid Material'.
+    </div>
+    <div class="d-flex justify-content-around">
+      <a class="click-link" (click)="showMaterialModal(true)">Restore Solid Material</a>
+      <a class="click-link" (click)="dismissMessage()">Dismiss Message</a>
+    </div>
+  </div>
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="{{'materialName'+idString}}">Material Name
-        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add
+        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal(false)" [ngClass]="{'disabled-link': !baselineSelected}">Add
           New Material</a>
       </label>
       <select name="{{'materialName_'+lossIndex}}" class="form-control" formControlName="materialName" id="{{'materialName'+idString}}"
@@ -95,7 +105,7 @@
     <div class="modal-content">
       <div>
         <app-solid-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
-          [settings]="settings"></app-solid-load-charge-material>
+          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial"></app-solid-load-charge-material>
       </div>
     </div>
   </div>

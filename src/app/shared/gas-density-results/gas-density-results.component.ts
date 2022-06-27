@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../models/settings';
 import { GasDensityFormService } from '../../calculator/fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 import { CompareService } from '../../fsat/compare.service';
+import { FanPsychrometricService, FanPsychrometricWarnings } from '../../calculator/process-cooling/fan-psychrometric/fan-psychrometric.service';
 
 
 @Component({
@@ -27,12 +28,16 @@ export class GasDensityResultsComponent implements OnInit {
   isModificationTypeCustom: boolean;
 
   modificationName: string;
+  baselineWarnings: FanPsychrometricWarnings;
+  modificationWarnings: FanPsychrometricWarnings;
+
   constructor(
-    private gasDensityFormService: GasDensityFormService, private compareService: CompareService) { }
+    private gasDensityFormService: GasDensityFormService, private compareService: CompareService, private fanPsychrometricService: FanPsychrometricService) { }
 
   ngOnInit(): void {
     this.modificationGasDensitySubscription = this.gasDensityFormService.modificationPsychrometricResults.subscribe(val => {
       this.modPsychrometricResults = val;
+      this.modificationWarnings = this.fanPsychrometricService.checkWarnings(val);
     });
     this.modificationCalculationTypeSubscription = this.gasDensityFormService.modificationCalculationType.subscribe(val => {
       this.isModificationTypeCustom = (val === 'custom');
@@ -40,6 +45,7 @@ export class GasDensityResultsComponent implements OnInit {
 
     this.baselineGasDensitySubscription = this.gasDensityFormService.baselinePsychrometricResults.subscribe(val => {
       this.baselinePsychrometricResults = val;
+      this.baselineWarnings = this.fanPsychrometricService.checkWarnings(val);
     });
     this.baselineCalculationTypeSubscription = this.gasDensityFormService.baselineCalculationType.subscribe(val => {
       this.isBaselineTypeCustom = (val === 'custom');
@@ -53,6 +59,7 @@ export class GasDensityResultsComponent implements OnInit {
       }
     });
   }
+
 
   ngOnDestroy() {
     this.baselineGasDensitySubscription.unsubscribe();
