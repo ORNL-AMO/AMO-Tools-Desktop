@@ -28,48 +28,48 @@ export class AssessmentService {
     this.showTutorial = new BehaviorSubject<string>(null);
   }
 
-  goToAssessment(assessment: Assessment, str?: string, str2?: string) {
-    if (str) {
-      this.tab = str;
+  goToAssessment(assessment: Assessment, mainTab?: string, subTab?: string) {
+    if (mainTab) {
+      this.tab = mainTab;
     } else {
       this.tab = 'system-setup';
     }
 
-    if (str2) {
-      this.subTab = str2;
+    if (subTab) {
+      this.subTab = subTab;
     }
     if (assessment.type === 'PSAT') {
-      if (assessment.psat.setupDone && !str && (!assessment.isExample)) {
+      if (assessment.psat.setupDone && !mainTab && (!assessment.isExample)) {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/psat/' + assessment.id);
     } else if (assessment.type === 'PHAST') {
-      if (assessment.phast.setupDone && !str && (!assessment.isExample)) {
+      if (assessment.phast.setupDone && !mainTab && (!assessment.isExample)) {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/phast/' + assessment.id);
     } else if (assessment.type === 'FSAT') {
-      if (assessment.fsat.setupDone && !str && !assessment.isExample) {
+      if (assessment.fsat.setupDone && !mainTab && !assessment.isExample) {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/fsat/' + assessment.id);
     } else if (assessment.type === 'SSMT') {
-      if (assessment.ssmt.setupDone && !str && !assessment.isExample) {
+      if (assessment.ssmt.setupDone && !mainTab && !assessment.isExample) {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/ssmt/' + assessment.id);
     } else if (assessment.type == 'TreasureHunt') {
-      if (assessment.treasureHunt.setupDone && !str && !assessment.isExample) {
+      if (assessment.treasureHunt.setupDone && !mainTab && !assessment.isExample) {
         this.tab = 'treasure-chest';
       }
       this.router.navigateByUrl('/treasure-hunt/' + assessment.id);
     } else if (assessment.type == 'WasteWater') {
-      if (assessment.wasteWater.setupDone && !str && !assessment.isExample) {
+      if (assessment.wasteWater.setupDone && !mainTab && !assessment.isExample) {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/waste-water/' + assessment.id);
     } else if (assessment.type == 'CompressedAir') {
-      if (assessment.compressedAirAssessment.setupDone && !str && !assessment.isExample) {
+      if (assessment.compressedAirAssessment.setupDone && !mainTab && !assessment.isExample) {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/compressed-air/' + assessment.id);

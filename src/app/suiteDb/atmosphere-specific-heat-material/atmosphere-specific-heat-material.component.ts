@@ -1,11 +1,12 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { AtmosphereSpecificHeat } from '../../shared/models/materials';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
-import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
+import { AtmosphereDbService } from '../../indexedDb/atmosphere-db.service';
+import { firstValueFrom } from 'rxjs';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-atmosphere-specific-heat-material',
   templateUrl: './atmosphere-specific-heat-material.component.html',
@@ -38,7 +39,7 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   currentField: string = "selectedMaterial";
   idbEditMaterialId: number;
   sdbEditMaterialId: number;
-  constructor(private settingsDbService: SettingsDbService, private sqlDbApiService: SqlDbApiService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private settingsDbService: SettingsDbService, private atmosphereDbService: AtmosphereDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -46,13 +47,7 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
     }
 
     if (this.editExistingMaterial) {
-      this.allMaterials = this.sqlDbApiService.selectAtmosphereSpecificHeat();
-      this.indexedDbService.getAtmosphereSpecificHeat().then(idbResults => {
-        this.allCustomMaterials = idbResults;
-        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance === material.substance; }).id;
-        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance === material.substance; }).id;
-        this.setExisting();
-      });
+     this.setAllMaterials();
     }
     else {
       this.canAdd = true;
@@ -61,7 +56,15 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
     }
   }
 
-  addMaterial() {
+  async setAllMaterials() {
+    this.allMaterials = this.sqlDbApiService.selectAtmosphereSpecificHeat();
+    this.allCustomMaterials = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
+    this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance === material.substance; }).id;
+    this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance === material.substance; }).id;
+    this.setExisting();
+  }
+
+  async addMaterial() {
     if (this.canAdd) {
       this.canAdd = false;
       if (this.settings.unitsOfMeasure === 'Metric') {
@@ -69,14 +72,13 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
       }
       let suiteDbResult = this.sqlDbApiService.insertAtmosphereSpecificHeat(this.newMaterial);
       if (suiteDbResult === true) {
-        this.indexedDbService.addAtmosphereSpecificHeat(this.newMaterial).then(idbResults => {
-          this.closeModal.emit(this.newMaterial);
-        });
+        let material: AtmosphereSpecificHeat = await firstValueFrom(this.atmosphereDbService.addWithObservable(this.newMaterial))
+        this.closeModal.emit(this.newMaterial);
       }
     }
   }
 
-  updateMaterial() {
+  async updateMaterial() {
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.newMaterial.specificHeat = this.convertUnitsService.value(this.newMaterial.specificHeat).from('kJkgC').to('btulbF');
     }
@@ -85,19 +87,17 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
     if (suiteDbResult === true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
-      this.indexedDbService.putAtmosphereSpecificHeat(this.newMaterial).then(val => {
-        this.closeModal.emit(this.newMaterial);
-      });
+      await firstValueFrom(this.atmosphereDbService.updateWithObservable(this.newMaterial))
+      this.closeModal.emit(this.newMaterial);
     }
   }
 
-  deleteMaterial() {
+  async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
       let suiteDbResult = this.sqlDbApiService.deleteAtmosphereSpecificHeat(this.sdbEditMaterialId);
       if (suiteDbResult === true) {
-        this.indexedDbService.deleteAtmosphereSpecificHeat(this.idbEditMaterialId).then(val => {
-          this.closeModal.emit(this.newMaterial);
-        });
+        await firstValueFrom(this.atmosphereDbService.deleteByIdWithObservable(this.idbEditMaterialId));
+        this.closeModal.emit(this.newMaterial);
       }
     }
   }

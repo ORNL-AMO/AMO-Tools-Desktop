@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Directory } from '../../../../shared/models/directory';
-import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+ 
 import { Assessment } from '../../../../shared/models/assessment';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as _ from 'lodash';
@@ -9,7 +9,7 @@ import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
 import { AssessmentService } from '../../../assessment.service';
 import { DashboardService } from '../../../dashboard.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { DirectoryItem, FilterDashboardBy } from '../../../../shared/models/directory-dashboard';
 
@@ -33,7 +33,7 @@ export class DirectoryItemComponent implements OnInit {
   filterDashboardBySub: Subscription;
   sortBy: { value: string, direction: string };
   sortBySub: Subscription;
-  constructor(private indexedDbService: IndexedDbService, private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService, 
+  constructor(   private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService, 
     private formBuilder: FormBuilder, private dashboardService: DashboardService, private directoryDashboardService: DirectoryDashboardService) { }
 
   ngOnInit() {    
@@ -63,12 +63,16 @@ export class DirectoryItemComponent implements OnInit {
     this.filterDashboardBySub.unsubscribe();
   }
 
+  async setDirectories() {
+    this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
+  }
+
   goToAssessment(assessment: Assessment) {
     this.assessmentService.goToAssessment(assessment);
   }
 
   showEditModal() {
-    this.allDirectories = this.directoryDbService.getAll();
+    this.setDirectories();
     _.remove(this.allDirectories, (dir) => { return dir.id === this.directory.id; });
     _.remove(this.allDirectories, (dir) => { return dir.parentDirectoryId === this.directory.id; });
     this.editForm = this.formBuilder.group({
@@ -77,6 +81,7 @@ export class DirectoryItemComponent implements OnInit {
     });
     this.editModal.show();
   }
+  
 
   hideEditModal() {
     this.editModal.hide();
@@ -97,14 +102,12 @@ export class DirectoryItemComponent implements OnInit {
     }
   }
 
-  save() {
+  async save() {
     this.directory.name = this.editForm.controls.name.value;
     this.directory.parentDirectoryId = this.editForm.controls.directoryId.value;
-    this.indexedDbService.putDirectory(this.directory).then(val => {
-      this.directoryDbService.setAll().then(() => {
-        this.dashboardService.updateDashboardData.next(true);
-        this.hideEditModal();
-      });
-    });
+    let updatedDirectories: Directory[] = await firstValueFrom(this.directoryDbService.updateWithObservable(this.directory));
+    this.directoryDbService.setAll(updatedDirectories);
+    this.dashboardService.updateDashboardData.next(true);
+    this.hideEditModal();
   }
 }

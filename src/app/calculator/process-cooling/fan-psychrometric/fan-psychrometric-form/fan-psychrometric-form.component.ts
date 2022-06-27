@@ -46,11 +46,19 @@ export class FanPsychrometricFormComponent implements OnInit {
     this.resetFormSubscription = this.fanPsychrometricService.resetData.subscribe(val => {
       let defaultData = this.fanPsychrometricService.baseGasDensityData.getValue();
       this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(defaultData, this.settings);
+      this.hideInputField();
     });
     this.generateFormSubscription = this.fanPsychrometricService.generateExample.subscribe(val => {
       let exampleData = this.fanPsychrometricService.baseGasDensityData.getValue();
       this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(exampleData, this.settings);
+      this.hideInputField();
     });
+  }
+
+  hideInputField() {
+    // Reset to default, i.e. user-defined barometric pressure
+    this.userDefinedBarometricPressure = true;
+    this.save();
   }
 
   showHideInputField() {
@@ -83,7 +91,7 @@ export class FanPsychrometricFormComponent implements OnInit {
     let exponentOp = Math.pow(parensOp, 5.2559);
     let barometricPressure = 101.325 * exponentOp;
     if (this.settings.unitsOfMeasure != 'Metric') {
-      barometricPressure = this.convertUnitsService.value(barometricPressure).from('Pa').to('inHg');
+      barometricPressure = this.convertUnitsService.value(barometricPressure).from('kPa').to('inHg');
     }
 
     return barometricPressure;

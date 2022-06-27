@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { firstValueFrom } from 'rxjs';
+import { AtmosphereDbService } from '../indexedDb/atmosphere-db.service';
+import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
+import { GasLoadMaterialDbService } from '../indexedDb/gas-load-material-db.service';
+import { LiquidLoadMaterialDbService } from '../indexedDb/liquid-load-material-db.service';
+import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
+import { SolidLoadMaterialDbService } from '../indexedDb/solid-load-material-db.service';
+import { WallLossesSurfaceDbService } from '../indexedDb/wall-losses-surface-db.service';
 import { AtmosphereSpecificHeat, FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial, SuiteDbMotor, SuiteDbPump, WallLossesSurface } from '../shared/models/materials';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 
@@ -8,53 +15,54 @@ declare var dbInstance: any;
 @Injectable()
 export class SqlDbApiService {
 
-  constructor(private suiteApiHelperService: SuiteApiHelperService, private indexedDbService: IndexedDbService) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService,
+    private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
+    private gasLoadMaterialDbService: GasLoadMaterialDbService,
+    private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,
+    private solidLoadMaterialDbService: SolidLoadMaterialDbService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService,
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
+    private atmosphereDbService: AtmosphereDbService,
+    ) { }
 
 
-  initCustomDbMaterials() {
-    // this.test();
-    this.indexedDbService.getAllGasLoadChargeMaterial().then(results => {
-      let customGasLoadChargeMaterials: GasLoadChargeMaterial[] = results;
-      customGasLoadChargeMaterials.forEach(material => {
-        let suiteResult = this.insertGasLoadChargeMaterial(material);
-      });
+  async initCustomDbMaterials() {
+    let customGasLoadChargeMaterials: GasLoadChargeMaterial[] = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
+    customGasLoadChargeMaterials.forEach(material => {
+      let suiteResult = this.insertGasLoadChargeMaterial(material);
     });
-    this.indexedDbService.getAllLiquidLoadChargeMaterial().then(results => {
-      let customLiquidLoadChargeMaterials: LiquidLoadChargeMaterial[] = results;
-      customLiquidLoadChargeMaterials.forEach(material => {
-        let suiteResult = this.insertLiquidLoadChargeMaterial(material);
-      });
+
+
+    let customLiquidLoadChargeMaterials: LiquidLoadChargeMaterial[] = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
+    customLiquidLoadChargeMaterials.forEach(material => {
+      let suiteResult = this.insertLiquidLoadChargeMaterial(material);
     });
-    this.indexedDbService.getAllSolidLoadChargeMaterial().then(results => {
-      let customLiquidLoadChargeMaterials: SolidLoadChargeMaterial[] = results;
-      customLiquidLoadChargeMaterials.forEach(material => {
-        let suiteResult = this.insertSolidLoadChargeMaterial(material);
-      });
+
+    let solidLoadChargeMaterials: SolidLoadChargeMaterial[] = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
+    solidLoadChargeMaterials.forEach(material => {
+      let suiteResult = this.insertSolidLoadChargeMaterial(material);
     });
-    this.indexedDbService.getAtmosphereSpecificHeat().then(results => {
-      let customAtmosphereSpecificHeatMaterials: AtmosphereSpecificHeat[] = results;
-      customAtmosphereSpecificHeatMaterials.forEach(material => {
-        let suiteResult = this.insertAtmosphereSpecificHeat(material);
-      });
+
+    let atmosphereMaterials: AtmosphereSpecificHeat[] = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
+    atmosphereMaterials.forEach(material => {
+      let suiteResult = this.insertAtmosphereSpecificHeat(material);
     });
-    this.indexedDbService.getWallLossesSurface().then(results => {
-      let customWallLossesSurfaces: WallLossesSurface[] = results;
-      customWallLossesSurfaces.forEach(material => {
-        let suiteResult = this.insertWallLossesSurface(material);
-      });
+
+    let wallMaterials: WallLossesSurface[] = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
+    wallMaterials.forEach(material => {
+      let suiteResult = this.insertWallLossesSurface(material);
     });
-    this.indexedDbService.getFlueGasMaterials().then(results => {
-      let customFluesGasses: FlueGasMaterial[] = results;
-      customFluesGasses.forEach(material => {
-        let suiteResult = this.insertGasFlueGasMaterial(material);
-      });
+
+   let flueGasMaterials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+   flueGasMaterials.forEach(material => {
+      let suiteResult = this.insertGasFlueGasMaterial(material);
     });
-    this.indexedDbService.getSolidLiquidFlueGasMaterials().then(results => {
-      let customSolidLiquidFlueGasses: SolidLiquidFlueGasMaterial[] = results;
-      customSolidLiquidFlueGasses.forEach(material => {
-        let suiteResult = this.insertSolidLiquidFlueGasMaterial(material);
-      });
+
+    let solidLiquidFlueGasMaterial: SolidLiquidFlueGasMaterial[] = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
+    solidLiquidFlueGasMaterial.forEach(material => {
+      let suiteResult = this.insertSolidLiquidFlueGasMaterial(material);
     });
+
   }
 
   //GAS FLUE GAS MATERIALS
@@ -371,6 +379,7 @@ export class SqlDbApiService {
       substance: solidLiquidFlueGasMaterialPointer.getSubstance(),
       sulphur: solidLiquidFlueGasMaterialPointer.getSulphur(),
       heatingValue: undefined,
+      ambientAirTempF: undefined
     };
     return solidLiquidFlueGasMaterial;
   }

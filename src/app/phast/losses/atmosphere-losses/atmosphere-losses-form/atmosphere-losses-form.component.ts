@@ -9,6 +9,8 @@ import { FormGroup } from '@angular/forms';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { AtmosphereFormService, AtmosphereLossWarnings } from '../../../../calculator/furnaces/atmosphere/atmosphere-form.service';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
+import { firstValueFrom } from 'rxjs';
+import { AtmosphereDbService } from '../../../../indexedDb/atmosphere-db.service';
 
 @Component({
   selector: 'app-atmosphere-losses-form',
@@ -41,10 +43,14 @@ export class AtmosphereLossesFormComponent implements OnInit {
   firstChange: boolean = true;
   warnings: AtmosphereLossWarnings;
 
+  hasDeletedCustomMaterial: boolean = false;
+  editExistingMaterial: boolean;
+  existingMaterial: AtmosphereSpecificHeat;
   materialTypes: Array<AtmosphereSpecificHeat>;
   showModal: boolean = false;
   idString: string;
-  constructor(private atmosphereLossesCompareService: AtmosphereLossesCompareService, private sqlDbApiService: SqlDbApiService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private atmosphereFormService: AtmosphereFormService) { }
+  constructor(private atmosphereLossesCompareService: AtmosphereLossesCompareService, 
+    private sqlDbApiService: SqlDbApiService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private atmosphereFormService: AtmosphereFormService, private atmosphereDbService: AtmosphereDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -67,10 +73,44 @@ export class AtmosphereLossesFormComponent implements OnInit {
       this.idString = '_baseline_' + this.lossIndex;
     }
     this.materialTypes = this.sqlDbApiService.selectAtmosphereSpecificHeat();
+    if (this.atmosphereLossForm) {
+      if (this.atmosphereLossForm.controls.atmosphereGas.value && this.atmosphereLossForm.controls.atmosphereGas.value !== '') {
+        if (this.atmosphereLossForm.controls.specificHeat.value === '') {
+          this.setProperties();
+        } else {
+          this.checkForDeletedMaterial();
+        }
+      }
+    }
     if (!this.baselineSelected) {
       this.disableForm();
     }
     this.checkWarnings();
+  }
+
+  checkForDeletedMaterial() {
+    let selectedMaterial: AtmosphereSpecificHeat = this.sqlDbApiService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
+    if (!selectedMaterial) {
+      this.hasDeletedCustomMaterial = true;
+      this.restoreMaterial();
+    }
+    this.save();
+  }
+
+  async restoreMaterial() {
+    let customMaterial: AtmosphereSpecificHeat = {
+      specificHeat: this.atmosphereLossForm.controls.specificHeat.value,
+      substance: "Custom Material"
+    };
+    let suiteDbResult = this.sqlDbApiService.insertAtmosphereSpecificHeat(customMaterial);
+    if (suiteDbResult === true) {
+      await firstValueFrom(this.atmosphereDbService.addWithObservable(customMaterial));
+    }
+    this.materialTypes = this.sqlDbApiService.selectAtmosphereSpecificHeat();
+    let newMaterial: AtmosphereSpecificHeat = this.materialTypes.find(material => { return material.substance === customMaterial.substance; });
+    this.atmosphereLossForm.patchValue({
+      atmosphereGas: newMaterial.id
+    });
   }
 
   setProperties() {
@@ -192,7 +232,15 @@ export class AtmosphereLossesFormComponent implements OnInit {
     }
   }
 
-  showMaterialModal() {
+  showMaterialModal(editExistingMaterial: boolean) {
+    this.editExistingMaterial = editExistingMaterial;
+    if(editExistingMaterial === true) {
+      this.existingMaterial = {
+        id: this.atmosphereLossForm.controls.atmosphereGas.value,
+        specificHeat: this.atmosphereLossForm.controls.specificHeat.value,
+        substance: "Custom Material"
+      };
+    }
     this.showModal = true;
     this.lossesService.modalOpen.next(this.showModal);
     this.materialModal.show();
@@ -210,7 +258,12 @@ export class AtmosphereLossesFormComponent implements OnInit {
       }
     }
     this.materialModal.hide();
+    this.dismissMessage();
     this.showModal = false;
     this.lossesService.modalOpen.next(this.showModal);
+  }
+
+  dismissMessage() {
+    this.hasDeletedCustomMaterial = false;
   }
 }

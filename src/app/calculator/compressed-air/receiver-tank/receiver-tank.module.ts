@@ -13,6 +13,8 @@ import { DelayMethodHelpComponent } from './delay-method-help/delay-method-help.
 import { GeneralMethodHelpComponent } from './general-method-help/general-method-help.component';
 import { MeteredStorageHelpComponent } from './metered-storage-help/metered-storage-help.component';
 import { ReceiverTankService } from './receiver-tank.service';
+import { CompressorCycleFormComponent } from './compressor-cycle-form/compressor-cycle-form.component';
+import { CompressorCycleHelpComponent } from './compressor-cycle-help/compressor-cycle-help.component';
 
 @NgModule({
   imports: [
@@ -30,7 +32,9 @@ import { ReceiverTankService } from './receiver-tank.service';
     DedicatedStorageHelpComponent,
     DelayMethodHelpComponent,
     GeneralMethodHelpComponent,
-    MeteredStorageHelpComponent
+    MeteredStorageHelpComponent,
+    CompressorCycleFormComponent,
+    CompressorCycleHelpComponent
   ],
   exports: [
     ReceiverTankComponent

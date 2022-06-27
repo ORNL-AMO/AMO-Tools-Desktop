@@ -168,7 +168,7 @@ export class AirLeakFormService {
     let exampleData: FacilityCompressorData = {
       hoursPerYear: 8760,
       utilityType: 1,
-      utilityCost: 0.12,
+      utilityCost: 0.06,
       compressorElectricityData: {
         compressorControl: 8,
         compressorControlAdjustment: 25,

@@ -2,7 +2,6 @@ import { Component, OnInit, ElementRef, ViewChild, HostListener, ChangeDetectorR
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { PhastService } from './phast.service';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
@@ -11,7 +10,7 @@ import { StepTab, LossTab, stepTabs } from './tabs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PhastCompareService } from './phast-compare.service';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsService } from '../settings/settings.service';
@@ -83,7 +82,7 @@ export class PhastComponent implements OnInit {
     private phastService: PhastService,
     private convertPhastService: ConvertPhastService,
     private phastValidService: PhastValidService,
-    private indexedDbService: IndexedDbService,
+      
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private lossesService: LossesService,
@@ -108,7 +107,7 @@ export class PhastComponent implements OnInit {
     this.lossesService.initDone();
     //get assessmentId from route phast/:id
     this.actvatedRouteSubscription = this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
+      this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       if (!this.assessment || (this.assessment && this.assessment.type !== 'PHAST')) {
         this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
       } else { 
@@ -407,14 +406,14 @@ export class PhastComponent implements OnInit {
     this.isModalOpen = $event;
   }
   //called on all changes to forms
-  saveDb() {
+  async saveDb() {
     this.checkSetupDone();
     //set assessment.phast to _phast (object used in forms)
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     //update our assessment in the iDb
-    this.indexedDbService.putAssessment(this.assessment).then(() => {
-      this.assessmentDbService.setAll();
-    });
+    
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment))
+    this.assessmentDbService.setAll(assessments);
   }
 
   setSankeyLabelStyle(style: string) {
@@ -499,15 +498,14 @@ export class PhastComponent implements OnInit {
     this.saveNewMod(tmpModification);
   }
 
-  addSettings(settings: Settings) {
+  async addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
     newSettings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(newSettings).then(id => {
-      this.settingsDbService.setAll().then(() => {
-        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-        this.lossesService.setTabs(this.settings);
-      });
-    });
+    await firstValueFrom(this.settingsDbService.addWithObservable(newSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(updatedSettings);
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    this.lossesService.setTabs(this.settings);
   }
 
   initUpdateUnitsModal(oldSettings: Settings) {
@@ -552,9 +550,10 @@ export class PhastComponent implements OnInit {
     }
   }
 
-  closeWelcomeScreen() {
+  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disablePhastTutorial = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.phastService.modalOpen.next(false);
   }

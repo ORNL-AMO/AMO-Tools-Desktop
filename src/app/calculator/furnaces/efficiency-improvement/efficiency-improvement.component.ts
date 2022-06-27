@@ -5,7 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { EfficiencyImprovementService } from './efficiency-improvement.service';
 import { Calculator } from '../../../shared/models/calculators';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { FormGroup } from '@angular/forms';
@@ -45,10 +45,11 @@ export class EfficiencyImprovementComponent implements OnInit {
   calculator: Calculator;
   efficiencyImprovementForm: FormGroup;
   constructor(private phastService: PhastService, private efficiencyImprovementService: EfficiencyImprovementService, private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
+    private calculatorDbService: CalculatorDbService,  ) { }
 
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -105,13 +106,13 @@ export class EfficiencyImprovementComponent implements OnInit {
   }
 
 
-  calculate(data: EfficiencyImprovementInputs) {
+  async calculate(data: EfficiencyImprovementInputs) {
     this.efficiencyImprovementInputs = data;
     if (!this.inAssessment) {
       this.efficiencyImprovementService.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
-      this.saveCalculator();
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
     this.efficiencyImprovementOutputs = this.phastService.efficiencyImprovement(this.efficiencyImprovementInputs, this.settings);
   }
@@ -120,7 +121,7 @@ export class EfficiencyImprovementComponent implements OnInit {
     this.currentField = str;
   }
 
-  getCalculator() {
+  async getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
       this.calcExists = true;
@@ -129,11 +130,12 @@ export class EfficiencyImprovementComponent implements OnInit {
       } else {
         this.efficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
         this.calculator.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
-        this.saveCalculator();
+        await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     } else {
       this.calculator = this.initCalculator();
-      this.saveCalculator();
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+
     }
     this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
   }
@@ -155,25 +157,5 @@ export class EfficiencyImprovementComponent implements OnInit {
     }
     this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
     this.calculate(this.efficiencyImprovementInputs);
-  }
-
-  saveCalculator() {
-    if (!this.saving || this.calcExists) {
-      if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.calculator.id = result;
-            this.calcExists = true;
-            this.saving = false;
-          });
-        });
-      }
-    }
   }
 }

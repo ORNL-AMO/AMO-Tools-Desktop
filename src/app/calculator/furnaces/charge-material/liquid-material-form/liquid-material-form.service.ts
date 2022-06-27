@@ -52,8 +52,7 @@ export class LiquidMaterialFormService {
       'additionalHeatRequired': [chargeMaterial.liquidChargeMaterial.additionalHeat, Validators.required],
       'name': [chargeMaterial.name]
     });
-
-
+    
     formGroup = this.setInitialTempValidator(formGroup);
     return formGroup;
   }
