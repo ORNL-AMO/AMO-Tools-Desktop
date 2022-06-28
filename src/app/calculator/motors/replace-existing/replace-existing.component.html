@@ -3,7 +3,9 @@
     <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
       [ngClass]="{'justify-content-between': inTreasureHunt}">
       <div class="d-flex pl-2 align-items-center">
-        <img src="assets/images/calculator-icons/motor-icons/replace.png" class="replace-existing-icon">
+        <div class="calc-icon-header icon-motors">
+          <img src="assets/images/calculator-icons/motor-icons/replace.png">
+        </div>
         <div class="pl-2">
           <h3 *ngIf="inTreasureHunt">Replace Existing Motor - Efficiency Upgrade</h3>
           <h3 *ngIf="!inTreasureHunt">Replace vs Rewind</h3>

@@ -3,7 +3,9 @@
     <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
       [ngClass]="{'justify-content-between': inTreasureHunt}">
       <div class="d-flex pl-2 align-items-center">
-        <img src="assets/images/calculator-icons/motor-icons/motor-drive.png" class="ico-size4">
+        <div class="calc-icon-header icon-motors">
+          <img src="assets/images/calculator-icons/motor-icons/motor-drive.png">
+        </div>
         <div class="pl-2">
           <h3 *ngIf="!inTreasureHunt">Motor Drive Comparison</h3>
           <h3 *ngIf="inTreasureHunt">Upgrade Motor Drive</h3>
