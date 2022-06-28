@@ -189,8 +189,15 @@
           <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.wallLossesSurface">{{material.surface}}</div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary pull-right" (click)="exportData()">Export</button>
+      <div class="modal-footer justify-content-between">
+          <button class="btn btn-secondary" (click)="hideExportModal()">Cancel</button>
+          <div class="d-flex">
+              <div class="form-group d-flex mr-2">
+                  <label for="exportName"> Name your file:</label>
+                  <input type="text" class="form-control" id="exportName" [(ngModel)]="exportName">
+              </div>
+              <button class="btn btn-primary ml-2" (click)="exportData()">Export as .json</button>
+          </div>
       </div>
     </div>
   </div>
@@ -229,7 +236,7 @@
       </div>
       <div class="modal-footer">
         <div class="d-flex flex-column w-100">
-          <p class="danger text-center small">{{importFileError}}</p>
+          <p class="danger text-center small" [innerHTML]="importFileError"></p>
           <div class="d-flex justify-content-between">
             <button class="btn btn-secondary" (click)="hideImportModal()">Cancel</button>
             <button [disabled]="isValidFile !== true" class="btn btn-primary" (click)="importFile()">Import</button>

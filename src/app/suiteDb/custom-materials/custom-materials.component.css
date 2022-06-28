@@ -91,3 +91,9 @@
 p.danger{
     color: red;
 }
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 700px;
+    }
+}
