@@ -77,7 +77,9 @@ export class CaPressureReductionTreasureHuntService {
       name: opportunitySummary.opportunityName,
       opportunitySheet: reduction.opportunitySheet,
       iconString: 'assets/images/calculator-icons/utilities-icons/compressed-air-pressure-reduction-icon.png',
-      teamName: reduction.opportunitySheet? reduction.opportunitySheet.owner : undefined
+      teamName: reduction.opportunitySheet? reduction.opportunitySheet.owner : undefined,
+      iconCalcType: 'compressedAir',
+      needBackground: true
     };
     return cardData;
   }
