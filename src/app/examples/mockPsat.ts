@@ -83,7 +83,7 @@ export const MockPsat: Assessment = {
                     "fluidTemperature": 68,
                     "specifiedDriveEfficiency": null,
                     "implementationCosts": null,
-                    "whatIfScenario": false,
+                    "whatIfScenario": true,
                     "co2SavingsData":{
                         "energyType": 'electricity',
                         "energySource": '',
