@@ -8,7 +8,7 @@
     <div class="form-group" *ngIf="displayOptions.modifiedCost">
         <label for="modifiedCost">Modified Cost</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('modifiedCost')" (input)="save()"
+            <input type="number" step="10" class="form-control" (focus)="focusField('modifiedCost')" (input)="save()"
                 formControlName="modifiedCost" id="modifiedCost">
             <span class="input-group-addon units">$</span>
         </div>
@@ -69,7 +69,7 @@
     <div class="form-group" *ngIf="displayOptions.rewindCost">
         <label for="rewindCost">Rewind Cost</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('rewindCost')" (input)="save()"
+            <input type="number" step="10" class="form-control" (focus)="focusField('rewindCost')" (input)="save()"
                 formControlName="rewindCost" id="rewindCost">
             <span class="input-group-addon units">$</span>
         </div>

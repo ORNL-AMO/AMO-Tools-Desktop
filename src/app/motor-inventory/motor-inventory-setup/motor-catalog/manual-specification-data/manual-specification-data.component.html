@@ -16,7 +16,7 @@
     <div class="form-group" *ngIf="displayOptions.ratedSpeed">
         <label for="ratedSpeed">Rated Speed</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('ratedSpeed')" (input)="save()"
+            <input type="number" step="10" class="form-control" (focus)="focusField('ratedSpeed')" (input)="save()"
                 formControlName="ratedSpeed" id="ratedSpeed">
             <span class="input-group-addon units">rpm</span>
         </div>
@@ -48,7 +48,7 @@
     <div class="form-group" *ngIf="displayOptions.windingResistance">
         <label for="windingResistance">Winding Resistance</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('windingResistance')" (input)="save()"
+            <input type="number" step="100" class="form-control" (focus)="focusField('windingResistance')" (input)="save()"
                 formControlName="windingResistance" id="windingResistance">
             <span class="input-group-addon units">&#x3A9;</span>
         </div>
