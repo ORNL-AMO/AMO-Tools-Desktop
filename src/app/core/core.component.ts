@@ -88,10 +88,7 @@ export class CoreComponent implements OnInit {
       }
     });
 
-    window.indexedDB.databases().then(db => {
-      this.initData();
-    });
-
+    this.initData();
 
     this.updateAvailableSubscription = this.assessmentService.updateAvailable.subscribe(val => {
       if (val == true && this.electronService.isElectronApp) {
