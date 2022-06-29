@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import * as _ from 'lodash';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 import { AssessmentStoreMeta } from './dbConfig';
+import { UpdateDataService } from '../shared/helper-services/update-data.service';
 
 @Injectable()
 export class AssessmentDbService {
@@ -12,7 +13,7 @@ export class AssessmentDbService {
   storeName: string = AssessmentStoreMeta.store;
 
   constructor(
-    private dbService: NgxIndexedDBService) {
+    private dbService: NgxIndexedDBService, private updateDataService: UpdateDataService) {
   }
   
   async setAll(assessments?: Array<Assessment>) {
@@ -24,7 +25,11 @@ export class AssessmentDbService {
   }
 
   getAllAssessments(): Observable<any> {
-    return this.dbService.getAll(this.storeName);
+    return this.dbService.getAll(this.storeName).pipe(
+      map((assessments: Array<Assessment>) => {
+        assessments.forEach((assessment: Assessment) => this.updateDataService.checkAssessment(assessment));
+        return assessments;
+      }));
   }
 
   findById(id: number): Assessment {
