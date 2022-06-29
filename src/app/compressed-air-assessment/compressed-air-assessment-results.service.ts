@@ -616,6 +616,7 @@ export class CompressedAirAssessmentResultsService {
             }
             let calcResult: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, settings, computeFrom, computeFromVal, compressedAirAssessment.systemInformation.atmosphericPressure, compressedAirAssessment.systemInformation.totalAirStorage, 0, true, powerFactorData);
             summaryData.airflow = this.convertUnitsService.roundVal(calcResult.capacityCalculated, 2);
+            // debugger should still set these if undefined?
             summaryData.power = calcResult.powerCalculated;
             summaryData.percentCapacity = calcResult.percentageCapacity;
             summaryData.percentPower = calcResult.percentagePower;

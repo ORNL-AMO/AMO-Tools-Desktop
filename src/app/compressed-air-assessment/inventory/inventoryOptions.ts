@@ -123,6 +123,6 @@ export const ControlTypes: Array<ControlType> = [
         label: 'VFD',
         compressorTypes: [1,2,3,4,5],
         // TODO what should this be
-        enumValue: 0
+        enumValue: 7
     },
 ]
