@@ -37,7 +37,7 @@
       </div>
     </div>
     <app-custom-flue-gas-materials *ngIf="showFlueMaterials" [settings]="settings" [showModal]="showFlueModal" [importing]="importing"
-      (emitNumMaterials)="hasFlueMaterials = ($event > 0)"></app-custom-flue-gas-materials>
+      (emitNumMaterials)="setHasMaterials('hasFlueMaterials', $event)"></app-custom-flue-gas-materials>
   </div>
 </div>
 
@@ -55,7 +55,7 @@
       </div>
     </div>
     <app-custom-solid-liquid-flue-gas-materials *ngIf="showSolidLiquidFlueMaterials" [settings]="settings" [showModal]="showSolidLiquidFlueModal"
-      [importing]="importing" (emitNumMaterials)="hasSolidLiquidFlueMaterials = ($event > 0)"></app-custom-solid-liquid-flue-gas-materials>
+      [importing]="importing" (emitNumMaterials)="setHasMaterials('hasSolidLiquidFlueMaterials', $event)"></app-custom-solid-liquid-flue-gas-materials>
   </div>
 </div>
 
@@ -73,7 +73,7 @@
       </div>
     </div>
     <app-custom-gas-load-charge-materials *ngIf="showGasLoadChargeMaterials" [settings]="settings" [showModal]="showGasLoadChargeModal"
-      [importing]="importing" (emitNumMaterials)="hasGasLoadChargeMaterials = ($event > 0)"></app-custom-gas-load-charge-materials>
+      [importing]="importing" (emitNumMaterials)="setHasMaterials('hasGasLoadChargeMaterials', $event)"></app-custom-gas-load-charge-materials>
   </div>
 </div>
 
@@ -91,7 +91,7 @@
       </div>
     </div>
     <app-custom-liquid-load-charge-materials *ngIf="showLiquidLoadChargeMaterials" [settings]="settings" [showModal]="showLiquidLoadChargeModal"
-      [importing]="importing" (emitNumMaterials)="hasLiquidLoadChargeMaterials = ($event > 0)"></app-custom-liquid-load-charge-materials>
+      [importing]="importing" (emitNumMaterials)="setHasMaterials('hasLiquidLoadChargeMaterials', $event)"></app-custom-liquid-load-charge-materials>
   </div>
 </div>
 
@@ -109,7 +109,7 @@
       </div>
     </div>
     <app-custom-solid-load-charge-materials *ngIf="showSolidLoadChargeMaterials" [settings]="settings" [showModal]="showSolidLoadChargeModal"
-      [importing]="importing" (emitNumMaterials)="hasSolidLoadChargeMaterials = ($event > 0)"></app-custom-solid-load-charge-materials>
+      [importing]="importing" (emitNumMaterials)="setHasMaterials('hasSolidLoadChargeMaterials', $event)"></app-custom-solid-load-charge-materials>
   </div>
 </div>
 
@@ -127,7 +127,7 @@
       </div>
     </div>
     <app-custom-atmosphere-specific-heat-materials *ngIf="showAtmosphereMaterials" [settings]="settings" [showModal]="showAtmosphereModal"
-      [importing]="importing" (emitNumMaterials)="hasAtmosphereMaterials = ($event > 0)"></app-custom-atmosphere-specific-heat-materials>
+      [importing]="importing" (emitNumMaterials)="setHasMaterials('hasAtmosphereMaterials', $event)"></app-custom-atmosphere-specific-heat-materials>
   </div>
 </div>
 
@@ -145,7 +145,7 @@
       </div>
     </div>
     <app-custom-wall-losses-surfaces *ngIf="showWallSurfaceMaterials" [settings]="settings" [showModal]="showWallSurfaceModal"
-      [importing]="importing" (emitNumMaterials)="hasWallSurfaceMaterials = ($event > 0)"></app-custom-wall-losses-surfaces>
+      [importing]="importing" (emitNumMaterials)="setHasMaterials('hasWallSurfaceMaterials', $event)"></app-custom-wall-losses-surfaces>
   </div>
 </div>
 

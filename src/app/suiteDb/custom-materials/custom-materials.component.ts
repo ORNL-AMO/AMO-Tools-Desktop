@@ -190,6 +190,9 @@ export class CustomMaterialsComponent implements OnInit {
     this.exportModal.hide();
   }
 
+  setHasMaterials(propertyKey: string, numMaterials: number) {
+    this[propertyKey] = (numMaterials > 0);
+  }
 
   setImportFile($event) {
     this.importFileError = null;
