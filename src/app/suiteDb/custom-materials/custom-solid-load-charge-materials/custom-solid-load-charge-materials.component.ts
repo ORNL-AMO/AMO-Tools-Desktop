@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SolidLoadChargeMaterial } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -19,6 +19,8 @@ export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
   showModal: boolean;
   @Input()
   importing: boolean;
+  @Output()
+  emitNumMaterials: EventEmitter<number> = new EventEmitter<number>();
 
   solidChargeMaterials: Array<SolidLoadChargeMaterial>;
   editExistingMaterial: boolean = false;
@@ -72,11 +74,11 @@ export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
   }
 
   async getCustomMaterials() {
-    let allMaterial: SolidLoadChargeMaterial[] = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
-    this.solidChargeMaterials = allMaterial;
+    this.solidChargeMaterials = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.convertAllMaterials();
     }
+    this.emitNumMaterials.emit(this.solidChargeMaterials.length);
   }
 
   async editMaterial(id: number) {

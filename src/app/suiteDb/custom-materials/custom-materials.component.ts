@@ -31,6 +31,14 @@ export class CustomMaterialsComponent implements OnInit {
   showAtmosphereMaterials: boolean = true;
   showWallSurfaceMaterials: boolean = true;
 
+  hasFlueMaterials: boolean = false;
+  hasSolidLiquidFlueMaterials: boolean = false;
+  hasGasLoadChargeMaterials: boolean = false;
+  hasLiquidLoadChargeMaterials: boolean = false;
+  hasSolidLoadChargeMaterials: boolean = false;
+  hasAtmosphereMaterials: boolean = false;
+  hasWallSurfaceMaterials: boolean = false;
+  
   isAllSelected: boolean = false;
   deleteModalOpen: boolean = false;
   @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
@@ -87,25 +95,25 @@ export class CustomMaterialsComponent implements OnInit {
   toggleMaterial(material: string) {
     switch (material) {
       case 'flue':
-        this.showFlueMaterials = !this.showFlueMaterials;
+        this.showFlueMaterials = !this.showFlueMaterials || !this.hasFlueMaterials;
         break;
       case 'solid-liquid-flue':
-        this.showSolidLiquidFlueMaterials = !this.showSolidLiquidFlueMaterials;
+        this.showSolidLiquidFlueMaterials = !this.showSolidLiquidFlueMaterials || !this.hasSolidLiquidFlueMaterials;
         break;
       case 'gas-load':
-        this.showGasLoadChargeMaterials = !this.showGasLoadChargeMaterials;
+        this.showGasLoadChargeMaterials = !this.showGasLoadChargeMaterials || !this.hasGasLoadChargeMaterials;
         break;
       case 'liquid-load':
-        this.showLiquidLoadChargeMaterials = !this.showLiquidLoadChargeMaterials;
+        this.showLiquidLoadChargeMaterials = !this.showLiquidLoadChargeMaterials || !this.hasLiquidLoadChargeMaterials;
         break;
       case 'solid-load':
-        this.showSolidLoadChargeMaterials = !this.showSolidLoadChargeMaterials;
+        this.showSolidLoadChargeMaterials = !this.showSolidLoadChargeMaterials || !this.hasSolidLoadChargeMaterials;
         break;
       case 'atmosphere-material':
-        this.showAtmosphereMaterials = !this.showAtmosphereMaterials;
+        this.showAtmosphereMaterials = !this.showAtmosphereMaterials || !this.hasAtmosphereMaterials;
         break;
       case 'wall-surface':
-        this.showWallSurfaceMaterials = !this.showWallSurfaceMaterials;
+        this.showWallSurfaceMaterials = !this.showWallSurfaceMaterials || !this.hasWallSurfaceMaterials;
         break;
       default:
         break;

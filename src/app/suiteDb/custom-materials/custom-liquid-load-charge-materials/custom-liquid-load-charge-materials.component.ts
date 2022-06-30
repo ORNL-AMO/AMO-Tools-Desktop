@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
  
 import { LiquidLoadChargeMaterial } from '../../../shared/models/materials';
@@ -20,6 +20,8 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   showModal: boolean;
   @Input()
   importing: boolean;
+  @Output()
+  emitNumMaterials: EventEmitter<number> = new EventEmitter<number>();
 
   liquidChargeMaterials: Array<LiquidLoadChargeMaterial>;
   existingMaterial: LiquidLoadChargeMaterial;
@@ -75,9 +77,10 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
 
   async getCustomMaterials() {
     this.liquidChargeMaterials = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        this.convertAllMaterials();
-      }
+    if (this.settings.unitsOfMeasure === 'Metric') {
+      this.convertAllMaterials();
+    }
+    this.emitNumMaterials.emit(this.liquidChargeMaterials.length);
   }
 
  async editMaterial(id: number) {
