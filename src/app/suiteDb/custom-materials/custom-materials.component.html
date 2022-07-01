@@ -1,151 +1,135 @@
-<div class="row">
-  <div class="col-11 mx-auto pt-3">
-    <div class="card card-item">
-      <div class="card-header">
-        Custom Materials Management
-      </div>
-      <div class="card-body p-1">
-        <div class="actions d-flex align-items-center">
-          <div class="d-flex flex-wrap">
-            <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="delete()">Delete</button>
-            <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="export()">Export</button>
-            <button class="btn btn-secondary action-btn" type="button" (click)="showImportModal()">Import</button>
-          </div>
-          <label class="ml-auto select-all">
-            <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()" />
-            <a>Select all folder content</a>
-          </label>
-          <!-- <a (click)="emitImport()">Import...</a> -->
+<div class="col-11 mx-auto pt-3">
+  <div class="card card-item">
+    <div class="card-header">
+      Custom Materials Management
+    </div>
+    <div class="card-body p-1">
+      <div class="actions d-flex align-items-center">
+        <div class="d-flex flex-wrap">
+          <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="delete()">Delete</button>
+          <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="export()">Export</button>
+          <button class="btn btn-secondary action-btn" type="button" (click)="showImportModal()">Import</button>
         </div>
-        <p class="help-text text-center">View, create, or edit your custom materials.</p>
+        <label class="ml-auto select-all">
+          <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()" />
+          <a>Select all folder content</a>
+        </label>
+        <!-- <a (click)="emitImport()">Import...</a> -->
       </div>
+      <p class="help-text text-center">View, create, or edit your custom materials.</p>
     </div>
   </div>
 </div>
 
 
-<div class="row">
-  <div class="col-11 mx-auto">
-    <div class="tab-content content-container">
-      <div class="card-form">
-        <label class="group-label general" (click)="toggleMaterial('flue')">Custom Gaseous Fuels
-          <span class="fa fa-chevron-up pull-right" *ngIf="!showFlueMaterials"></span>
-          <span class="fa fa-chevron-down pull-right" *ngIf="showFlueMaterials"></span>
-        </label>
-        <a class="click-link pull-right small" *ngIf="showFlueMaterials" (click)="toggleModal('flue')">+Add Custom Gaseous Fuel</a>
-        <!-- <p class="help-text">View, create, edit your custom flue gas materials.</p> -->
-      </div>
+<div class="col-11 mx-auto">
+  <div class="tab-content content-container">
+    <div class="card-form">
+      <label class="group-label general" (click)="toggleMaterial('flue')">Custom Gaseous Fuels
+        <span class="fa fa-chevron-up pull-right" *ngIf="!showFlueMaterials"></span>
+        <span class="fa fa-chevron-down pull-right" *ngIf="showFlueMaterials"></span>
+      </label>
+      <a class="click-link pull-right small" *ngIf="showFlueMaterials" (click)="toggleModal('flue')">+Add Custom Gaseous Fuel</a>
+      <!-- <p class="help-text">View, create, edit your custom flue gas materials.</p> -->
     </div>
-    <app-custom-flue-gas-materials *ngIf="showFlueMaterials" [settings]="settings" [showModal]="showFlueModal" [importing]="importing"></app-custom-flue-gas-materials>
   </div>
+  <app-custom-flue-gas-materials *ngIf="showFlueMaterials" [settings]="settings" [showModal]="showFlueModal" [importing]="importing"></app-custom-flue-gas-materials>
 </div>
 
 
-<div class="row">
-  <div class="col-11 mx-auto">
-    <div class="tab-content content-container">
-      <div class="card-form">
-        <label class="group-label general" (click)="toggleMaterial('solid-liquid-flue')">Custom Solid/Liquid Fuels
-          <span class="fa fa-chevron-up pull-right" *ngIf="!showSolidLiquidFlueMaterials"></span>
-          <span class="fa fa-chevron-down pull-right" *ngIf="showSolidLiquidFlueMaterials"></span>
-        </label>
-        <a class="click-link pull-right small" *ngIf="showSolidLiquidFlueMaterials" (click)="toggleModal('solid-liquid-flue')">+Add Custom Solid/Liquid Fuel</a>
-        <!-- <p class="help-text">View, create, edit your custom solid/liquid flue gas materials.</p> -->
-      </div>
+<div class="col-11 mx-auto">
+  <div class="tab-content content-container">
+    <div class="card-form">
+      <label class="group-label general" (click)="toggleMaterial('solid-liquid-flue')">Custom Solid/Liquid Fuels
+        <span class="fa fa-chevron-up pull-right" *ngIf="!showSolidLiquidFlueMaterials"></span>
+        <span class="fa fa-chevron-down pull-right" *ngIf="showSolidLiquidFlueMaterials"></span>
+      </label>
+      <a class="click-link pull-right small" *ngIf="showSolidLiquidFlueMaterials" (click)="toggleModal('solid-liquid-flue')">+Add Custom Solid/Liquid Fuel</a>
+      <!-- <p class="help-text">View, create, edit your custom solid/liquid flue gas materials.</p> -->
     </div>
-    <app-custom-solid-liquid-flue-gas-materials *ngIf="showSolidLiquidFlueMaterials" [settings]="settings" [showModal]="showSolidLiquidFlueModal"
-      [importing]="importing"></app-custom-solid-liquid-flue-gas-materials>
   </div>
+  <app-custom-solid-liquid-flue-gas-materials *ngIf="showSolidLiquidFlueMaterials" [settings]="settings" [showModal]="showSolidLiquidFlueModal"
+    [importing]="importing"></app-custom-solid-liquid-flue-gas-materials>
 </div>
 
 
-<div class="row">
-  <div class="col-11 mx-auto">
-    <div class="tab-content content-container">
-      <div class="card-form">
-        <label class="group-label general" (click)="toggleMaterial('gas-load')">Custom Gas Load Charge Materials
-          <span class="fa fa-chevron-up pull-right" *ngIf="!showGasLoadChargeMaterials"></span>
-          <span class="fa fa-chevron-down pull-right" *ngIf="showGasLoadChargeMaterials"></span>
-        </label>
-        <a class="click-link pull-right small" *ngIf="showGasLoadChargeMaterials" (click)="toggleModal('gas-load')">+Add Custom Gas Load Charge Material</a>
-        <!-- <p class="help-text">View, create, edit your custom gas load charge materials.</p> -->
-      </div>
+<div class="col-11 mx-auto">
+  <div class="tab-content content-container">
+    <div class="card-form">
+      <label class="group-label general" (click)="toggleMaterial('gas-load')">Custom Gas Load Charge Materials
+        <span class="fa fa-chevron-up pull-right" *ngIf="!showGasLoadChargeMaterials"></span>
+        <span class="fa fa-chevron-down pull-right" *ngIf="showGasLoadChargeMaterials"></span>
+      </label>
+      <a class="click-link pull-right small" *ngIf="showGasLoadChargeMaterials" (click)="toggleModal('gas-load')">+Add Custom Gas Load Charge Material</a>
+      <!-- <p class="help-text">View, create, edit your custom gas load charge materials.</p> -->
     </div>
-    <app-custom-gas-load-charge-materials *ngIf="showGasLoadChargeMaterials" [settings]="settings" [showModal]="showGasLoadChargeModal"
-      [importing]="importing"></app-custom-gas-load-charge-materials>
   </div>
+  <app-custom-gas-load-charge-materials *ngIf="showGasLoadChargeMaterials" [settings]="settings" [showModal]="showGasLoadChargeModal"
+    [importing]="importing"></app-custom-gas-load-charge-materials>
 </div>
 
 
-<div class="row">
-  <div class="col-11 mx-auto">
-    <div class="tab-content content-container">
-      <div class="card-form">
-        <label class="group-label general" (click)="toggleMaterial('liquid-load')">Custom Liquid Load Charge Materials
-          <span class="fa fa-chevron-up pull-right" *ngIf="!showLiquidLoadChargeMaterials"></span>
-          <span class="fa fa-chevron-down pull-right" *ngIf="showLiquidLoadChargeMaterials"></span>
-        </label>
-        <a class="click-link pull-right small" *ngIf="showLiquidLoadChargeMaterials" (click)="toggleModal('liquid-load')">+Add Custom Liquid Load Charge Material</a>
-        <!-- <p class="help-text">View, create, edit your custom liquid load charge materials.</p> -->
-      </div>
+<div class="col-11 mx-auto">
+  <div class="tab-content content-container">
+    <div class="card-form">
+      <label class="group-label general" (click)="toggleMaterial('liquid-load')">Custom Liquid Load Charge Materials
+        <span class="fa fa-chevron-up pull-right" *ngIf="!showLiquidLoadChargeMaterials"></span>
+        <span class="fa fa-chevron-down pull-right" *ngIf="showLiquidLoadChargeMaterials"></span>
+      </label>
+      <a class="click-link pull-right small" *ngIf="showLiquidLoadChargeMaterials" (click)="toggleModal('liquid-load')">+Add Custom Liquid Load Charge Material</a>
+      <!-- <p class="help-text">View, create, edit your custom liquid load charge materials.</p> -->
     </div>
-    <app-custom-liquid-load-charge-materials *ngIf="showLiquidLoadChargeMaterials" [settings]="settings" [showModal]="showLiquidLoadChargeModal"
-      [importing]="importing"></app-custom-liquid-load-charge-materials>
   </div>
+  <app-custom-liquid-load-charge-materials *ngIf="showLiquidLoadChargeMaterials" [settings]="settings" [showModal]="showLiquidLoadChargeModal"
+    [importing]="importing"></app-custom-liquid-load-charge-materials>
 </div>
 
 
-<div class="row">
-  <div class="col-11 mx-auto">
-    <div class="tab-content content-container">
-      <div class="card-form">
-        <label class="group-label general" (click)="toggleMaterial('solid-load')">Custom Solid Load Charge Materials
-          <span class="fa fa-chevron-up pull-right" *ngIf="!showSolidLoadChargeMaterials"></span>
-          <span class="fa fa-chevron-down pull-right" *ngIf="showSolidLoadChargeMaterials"></span>
-        </label>
-        <a class="click-link pull-right small" *ngIf="showSolidLoadChargeMaterials" (click)="toggleModal('solid-load')">+Add Custom Solid Load Charge Material</a>
-        <!-- <p class="help-text">View, create, edit your custom solid load charge materials.</p> -->
-      </div>
+<div class="col-11 mx-auto">
+  <div class="tab-content content-container">
+    <div class="card-form">
+      <label class="group-label general" (click)="toggleMaterial('solid-load')">Custom Solid Load Charge Materials
+        <span class="fa fa-chevron-up pull-right" *ngIf="!showSolidLoadChargeMaterials"></span>
+        <span class="fa fa-chevron-down pull-right" *ngIf="showSolidLoadChargeMaterials"></span>
+      </label>
+      <a class="click-link pull-right small" *ngIf="showSolidLoadChargeMaterials" (click)="toggleModal('solid-load')">+Add Custom Solid Load Charge Material</a>
+      <!-- <p class="help-text">View, create, edit your custom solid load charge materials.</p> -->
     </div>
-    <app-custom-solid-load-charge-materials *ngIf="showSolidLoadChargeMaterials" [settings]="settings" [showModal]="showSolidLoadChargeModal"
-      [importing]="importing"></app-custom-solid-load-charge-materials>
   </div>
+  <app-custom-solid-load-charge-materials *ngIf="showSolidLoadChargeMaterials" [settings]="settings" [showModal]="showSolidLoadChargeModal"
+    [importing]="importing"></app-custom-solid-load-charge-materials>
 </div>
 
 
-<div class="row">
-  <div class="col-11 mx-auto">
-    <div class="tab-content content-container">
-      <div class="card-form">
-        <label class="group-label general" (click)="toggleMaterial('atmosphere-material')">Custom Atmosphere Gases
-          <span class="fa fa-chevron-up pull-right" *ngIf="!showAtmosphereMaterials"></span>
-          <span class="fa fa-chevron-down pull-right" *ngIf="showAtmosphereMaterials"></span>
-        </label>
-        <a class="click-link pull-right small" *ngIf="showAtmosphereMaterials" (click)="toggleModal('atmosphere-material')">+Add Custom Atmosphere Gas</a>
-        <!-- <p class="help-text">View, create, edit your custom atmosphere specific heat materials.</p> -->
-      </div>
+<div class="col-11 mx-auto">
+  <div class="tab-content content-container">
+    <div class="card-form">
+      <label class="group-label general" (click)="toggleMaterial('atmosphere-material')">Custom Atmosphere Gases
+        <span class="fa fa-chevron-up pull-right" *ngIf="!showAtmosphereMaterials"></span>
+        <span class="fa fa-chevron-down pull-right" *ngIf="showAtmosphereMaterials"></span>
+      </label>
+      <a class="click-link pull-right small" *ngIf="showAtmosphereMaterials" (click)="toggleModal('atmosphere-material')">+Add Custom Atmosphere Gas</a>
+      <!-- <p class="help-text">View, create, edit your custom atmosphere specific heat materials.</p> -->
     </div>
-    <app-custom-atmosphere-specific-heat-materials *ngIf="showAtmosphereMaterials" [settings]="settings" [showModal]="showAtmosphereModal"
-      [importing]="importing"></app-custom-atmosphere-specific-heat-materials>
   </div>
+  <app-custom-atmosphere-specific-heat-materials *ngIf="showAtmosphereMaterials" [settings]="settings" [showModal]="showAtmosphereModal"
+    [importing]="importing"></app-custom-atmosphere-specific-heat-materials>
 </div>
 
 
-<div class="row mb-5">
-  <div class="col-11 mx-auto">
-    <div class="tab-content content-container">
-      <div class="card-form">
-        <label class="group-label general" (click)="toggleMaterial('wall-surface')">Wall Surfaces
-          <span class="fa fa-chevron-up pull-right" *ngIf="!showWallSurfaceMaterials"></span>
-          <span class="fa fa-chevron-down pull-right" *ngIf="showWallSurfaceMaterials"></span>
-        </label>
-        <a class="click-link pull-right small" *ngIf="showWallSurfaceMaterials" (click)="toggleModal('wall-surface')">+Add New Wall Surface</a>
-        <!-- <p class="help-text">View, create, edit your custom wall losses surfaces.</p> -->
-      </div>
+<div class="col-11 mx-auto mb-5">
+  <div class="tab-content content-container">
+    <div class="card-form">
+      <label class="group-label general" (click)="toggleMaterial('wall-surface')">Wall Surfaces
+        <span class="fa fa-chevron-up pull-right" *ngIf="!showWallSurfaceMaterials"></span>
+        <span class="fa fa-chevron-down pull-right" *ngIf="showWallSurfaceMaterials"></span>
+      </label>
+      <a class="click-link pull-right small" *ngIf="showWallSurfaceMaterials" (click)="toggleModal('wall-surface')">+Add New Wall Surface</a>
+      <!-- <p class="help-text">View, create, edit your custom wall losses surfaces.</p> -->
     </div>
-    <app-custom-wall-losses-surfaces *ngIf="showWallSurfaceMaterials" [settings]="settings" [showModal]="showWallSurfaceModal"
-      [importing]="importing"></app-custom-wall-losses-surfaces>
   </div>
+  <app-custom-wall-losses-surfaces *ngIf="showWallSurfaceMaterials" [settings]="settings" [showModal]="showWallSurfaceModal"
+    [importing]="importing"></app-custom-wall-losses-surfaces>
 </div>
 
 <!--Export Modal-->
