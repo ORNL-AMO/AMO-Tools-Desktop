@@ -61,6 +61,11 @@ export class FilterCompressorsComponent implements OnInit {
     this.inventoryService.filterCompressorOptions.next(this.filterCompressorOptions);
   }
 
+  resetFilters(){
+    let genericCompressors: Array<GenericCompressor> = this.genericCompressorDbService.genericCompressors;
+    this.initFilterCompressorOptions(genericCompressors);
+  }
+
 
   setControlTypes(save?: boolean) {
     //no start/stop in DB
