@@ -14,3 +14,10 @@
     background: #84b641;
     color: white;
 }
+
+.nav-btn-clear{
+    background: #6D757C;
+    color: white;
+    border: none;
+    line-height: 2;
+}
