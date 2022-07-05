@@ -5,10 +5,10 @@ import { PlotlyService } from 'angular-plotly.js';
 
 import { CompressedAirSankeyNode, CompressedAirSankeyResults, CompressedAirSankeyService, SankeySystemInputs } from './compressed-air-sankey.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
-import { CompressedAirAssessment, CompressedAirDayType, ProfileSummary } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, ProfileSummary } from '../../shared/models/compressed-air-assessment';
 import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { BaselineResults, CompressedAirAssessmentResultsService, CompressorAverageResult, DayTypeCompressorAverageResults } from '../compressed-air-assessment-results.service';
+import { BaselineResults, CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 
 
 @Component({
@@ -62,6 +62,8 @@ export class CompressedAirSankeyComponent implements OnInit {
   showSankeyLabelOptions: boolean;
   sankeyLabelStyle: string = 'both';
   profileDataComplete: boolean = true;
+  baselineResults: BaselineResults;
+  dayTypeBaselineProfileSummaries: Array<{dayTypeId: string, profileSummary: Array<ProfileSummary>}>;
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private _dom: ElementRef,
@@ -77,6 +79,7 @@ export class CompressedAirSankeyComponent implements OnInit {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.initForm();
+    this.renderSankey();
     this.initSankeyList();
   }
 
@@ -92,8 +95,9 @@ export class CompressedAirSankeyComponent implements OnInit {
 
   saveUserInputChange() {
     let powerSankeyInputs: SankeySystemInputs = this.compressedAirSankeyService.getPowerSankeyInputs(this.powerSankeyInputForm);
-    let baselineResults: BaselineResults = this.getBaselineResults(powerSankeyInputs.selectedDayTypeId);
-    this.powerSankeyInputForm = this.compressedAirSankeyService.setSankeyInputValidators(this.powerSankeyInputForm, baselineResults, this.settings);
+    this.dayTypeBaselineProfileSummaries = this.getDayTypeProfileSummaries();
+    this.baselineResults = this.resultsService.calculateBaselineResults(this.compressedAirAssessment, this.settings, this.dayTypeBaselineProfileSummaries);
+    this.powerSankeyInputForm = this.compressedAirSankeyService.setSankeyInputValidators(this.powerSankeyInputForm, this.baselineResults, this.settings);
     this.compressedAirAssessment.powerSankeyInputs = powerSankeyInputs;
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, true);
     this.renderSankey();
@@ -101,28 +105,27 @@ export class CompressedAirSankeyComponent implements OnInit {
 
   initForm() {
     let selectedDayTypeId: string = this.compressedAirAssessment.compressedAirDayTypes[0].dayTypeId;
+    this.dayTypeBaselineProfileSummaries = this.getDayTypeProfileSummaries();
+    this.baselineResults = this.resultsService.calculateBaselineResults(this.compressedAirAssessment, this.settings, this.dayTypeBaselineProfileSummaries);
     if (this.compressedAirAssessment.powerSankeyInputs) {
       selectedDayTypeId = this.compressedAirAssessment.powerSankeyInputs.selectedDayTypeId;
-      let baselineResults: BaselineResults = this.getBaselineResults(selectedDayTypeId);
-      this.powerSankeyInputForm = this.compressedAirSankeyService.getPowerSankeyForm(this.compressedAirAssessment.powerSankeyInputs, baselineResults, this.settings);
+      this.powerSankeyInputForm = this.compressedAirSankeyService.getPowerSankeyForm(this.compressedAirAssessment.powerSankeyInputs, this.baselineResults, this.settings);
     } else {
-      let baselineResults: BaselineResults = this.getBaselineResults(selectedDayTypeId);
-      this.powerSankeyInputForm = this.compressedAirSankeyService.getEmptyForm(baselineResults, selectedDayTypeId, this.settings);
+      this.powerSankeyInputForm = this.compressedAirSankeyService.getEmptyForm(this.baselineResults, selectedDayTypeId, this.settings);
       this.compressedAirAssessment.powerSankeyInputs = this.compressedAirSankeyService.getPowerSankeyInputs(this.powerSankeyInputForm);
     }
   }
 
-  getBaselineResults(selectedDayTypeId: string) {
-    let dayTypeProfileSummaries: Array<{dayTypeId: string, profileSummary: Array<ProfileSummary>}> = [];
-    let selectedDayType: CompressedAirDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => dayType.dayTypeId === selectedDayTypeId);
-    let baselineProfileSummaries: Array<ProfileSummary> = this.resultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, selectedDayType, this.settings);
-    dayTypeProfileSummaries.push(
-      {
-        dayTypeId: selectedDayType.dayTypeId,
-        profileSummary: baselineProfileSummaries
-      }
-    )
-    return this.resultsService.calculateBaselineResults(this.compressedAirAssessment, this.settings, undefined);
+  getDayTypeProfileSummaries() {
+    let baselineDayTypeProfileSummarries = new Array<{dayTypeId: string, profileSummary: Array<ProfileSummary>}>();
+      this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+        let baselineProfileSummary: Array<ProfileSummary> = this.resultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, dayType, this.settings);
+        baselineDayTypeProfileSummarries.push({
+          dayTypeId: dayType.dayTypeId,
+          profileSummary: baselineProfileSummary
+        });
+      });
+    return baselineDayTypeProfileSummarries;
   }
 
   initSankeyList() {
@@ -143,22 +146,21 @@ export class CompressedAirSankeyComponent implements OnInit {
     this.connectingNodes = [];
     this.minLosses = [];
 
-    let dayTypeCompressorAverageResults: Array<DayTypeCompressorAverageResults> = this.resultsService.getDayTypeCompressorAverageResults(this.compressedAirAssessment, this.settings);
-    let selectedCompressorDayTypeAverages: Array<CompressorAverageResult>;
+    let selectedCompressorDayTypeSummary: Array<ProfileSummary>;
     if (!this.powerSankeyInputForm.controls.selectedDayTypeId.value) {
-      // console.log('NO SELECTED DAY TYPE ID')
-      selectedCompressorDayTypeAverages = dayTypeCompressorAverageResults[0].compressorAverages;
+      selectedCompressorDayTypeSummary = this.dayTypeBaselineProfileSummaries[0].profileSummary;
     } else {
-      // console.log('SELECTED DAY TYPE ID', this.powerSankeyInputForm.controls.selectedDayTypeId.value)
-      selectedCompressorDayTypeAverages = dayTypeCompressorAverageResults.find(dayTypeAverageResult => dayTypeAverageResult.dayTypeId == this.powerSankeyInputForm.controls.selectedDayTypeId.value).compressorAverages;
+      selectedCompressorDayTypeSummary = this.dayTypeBaselineProfileSummaries.find(result => result.dayTypeId == this.powerSankeyInputForm.controls.selectedDayTypeId.value).profileSummary;
     }
-
-    this.profileDataComplete = selectedCompressorDayTypeAverages.length > 0;
+    
+    if (selectedCompressorDayTypeSummary) {
+      this.profileDataComplete;
+    }
     this.cd.detectChanges();
 
     let canRenderSankey: boolean = this.compressedAirAssessment && this.compressedAirAssessment.setupDone && this.profileDataComplete && this.powerSankeyInputForm.valid;
     if (canRenderSankey) {
-      this.sankeyResults = this.compressedAirSankeyService.getSankeyResults(this.compressedAirAssessment, undefined, selectedCompressorDayTypeAverages, this.settings);
+      this.sankeyResults = this.compressedAirSankeyService.getSankeyResults(this.compressedAirAssessment, undefined, selectedCompressorDayTypeSummary, this.settings);
       this.gradientLinkPaths = [3, 4, 6, 7];
       this.buildNodes();
     }

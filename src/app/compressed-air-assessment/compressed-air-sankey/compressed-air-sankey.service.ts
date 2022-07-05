@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { AirPropertiesCsvService } from '../../shared/helper-services/air-properties-csv.service';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
-import { BaselineResults, CompressedAirAssessmentResultsService, CompressorAverageResult, DayTypeCompressorAverageResults } from '../compressed-air-assessment-results.service';
+import { BaselineResults, CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 
 @Injectable()
 export class CompressedAirSankeyService {
@@ -15,10 +15,9 @@ export class CompressedAirSankeyService {
     private airPropertiesService: AirPropertiesCsvService,
     private convertUnitsService: ConvertUnitsService,
     private formBuilder: FormBuilder,
-    private resultsService: CompressedAirAssessmentResultsService,
   ) { }
 
-  getSankeyResults(compressedAirAssessment: CompressedAirAssessment, selectedDayTypeId: string, selectedCompressorDayTypeAverages: Array<CompressorAverageResult>, settings: Settings): CompressedAirSankeyResults {
+  getSankeyResults(compressedAirAssessment: CompressedAirAssessment, selectedDayTypeId: string, dayTypeProfileSummaries: Array<ProfileSummary>, settings: Settings): CompressedAirSankeyResults {
     let sankeyResults: CompressedAirSankeyResults = {
       compressorResults: [],
       CFMLeak_all_compressors: 0,
@@ -32,8 +31,8 @@ export class CompressedAirSankeyService {
       systemPressure: 0,
     };
 
-    selectedCompressorDayTypeAverages.forEach((currentCompressorDayTypeAverages, index: number) => {
-      let compressorResults: SankeyCompressorResults = this.getSankeyCompressorResults(compressedAirAssessment, currentCompressorDayTypeAverages, index);
+    dayTypeProfileSummaries.forEach((summary, index: number) => {
+      let compressorResults: SankeyCompressorResults = this.getSankeyCompressorResults(compressedAirAssessment, summary, index);
       sankeyResults.compressorResults.push(compressorResults);
     });
 
@@ -107,8 +106,8 @@ export class CompressedAirSankeyService {
   }
 
 
-  getSankeyCompressorResults(compressedAirAssessment: CompressedAirAssessment, currentCompressorDayTypeAverages: CompressorAverageResult, index?: number): SankeyCompressorResults {
-    let currentCompressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(compressor => compressor.itemId == currentCompressorDayTypeAverages.compressorId);
+  getSankeyCompressorResults(compressedAirAssessment: CompressedAirAssessment, summary: ProfileSummary, index?: number): SankeyCompressorResults {
+    let currentCompressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(compressor => compressor.itemId == summary.compressorId);
     // BLOCK 1 ==========================================
     let pressure1: number = compressedAirAssessment.systemInformation.atmosphericPressure;
     let pressure2: number;
@@ -126,7 +125,7 @@ export class CompressedAirSankeyService {
     let cp_1 = this.getSpecificHeatConstantPressure(pressure1ConvertedPSIG, temperature1);
     let cv_1 = this.getSpecificHeatConstantVolume(pressure1ConvertedPSIG, temperature1);
 
-    let CFM: number = currentCompressorDayTypeAverages.averageAirflow;
+    let CFM: number = summary.avgAirflow;
     let eta_poly: number = (0.027 * Math.log(CFM)) + 0.4984;
 
     // Initial air properties with temperature2 guess
@@ -193,7 +192,7 @@ export class CompressedAirSankeyService {
     // let kWComp: number = (h_2 - h_1) * CFM * rho_avg * 60 / 3412.14;
     // // let eta_motor: number = currentCompressor.designDetails.designEfficiency / 100;
 
-    let kWInput: number = currentCompressorDayTypeAverages.averagePower;
+    let kWInput: number = summary.avgPower;
 
     // kW_comp = (h_2-h_1)*CFM*rho_avg*60 [min/hr]/3412.14 [(Btu/hr)/kW]
     // {simultanous - begin }
