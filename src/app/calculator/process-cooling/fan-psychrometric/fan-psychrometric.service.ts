@@ -9,7 +9,6 @@ import { ConvertFanAnalysisService } from '../../fans/fan-analysis/convert-fan-a
 
 @Injectable()
 export class FanPsychrometricService {
-
   currentField: BehaviorSubject<string>;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
@@ -81,12 +80,12 @@ export class FanPsychrometricService {
     this.calculatedBaseGasDensity.next(psychrometricResults);
   }
 
-  calcDensityWetBulb(baseGasDensityData: BaseGasDensity, settings: Settings, isBuildingGraph?: boolean): PsychrometricResults {
+  calcDensityWetBulb(baseGasDensityData: BaseGasDensity, settings: Settings): PsychrometricResults {
     let psychrometricResults: PsychrometricResults;
     let form = this.gasDensityFormService.getGasDensityFormFromObj(baseGasDensityData, settings);
-    if (this.isWetBulbValid(form) || isBuildingGraph) { 
+    if (this.isWetBulbValid(form)) {
       psychrometricResults = this.fsatService.getPsychrometricWetBulb(baseGasDensityData, settings);
-    } 
+    }
     return psychrometricResults;
   }
   
@@ -95,10 +94,10 @@ export class FanPsychrometricService {
       && gasDensityForm.controls.specificGravity.valid && gasDensityForm.controls.wetBulbTemp.valid);
     }
     
-    calcDensityRelativeHumidity(baseGasDensityData: BaseGasDensity, settings: Settings, isBuildingGraph?: boolean): PsychrometricResults {
+    calcDensityRelativeHumidity(baseGasDensityData: BaseGasDensity, settings: Settings): PsychrometricResults {
     let psychrometricResults: PsychrometricResults;
     let form = this.gasDensityFormService.getGasDensityFormFromObj(baseGasDensityData, settings);
-    if (this.isRelativeHumidityValid(form) || isBuildingGraph) {
+    if (this.isRelativeHumidityValid(form)) {
       psychrometricResults = this.fsatService.getPsychrometricRelativeHumidity(baseGasDensityData, settings);
     } 
     return psychrometricResults;
