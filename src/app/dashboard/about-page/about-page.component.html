@@ -1,391 +1,389 @@
-<div class="row">
-  <div class="col-10  mx-auto">
-    <div class="content-container">
-      <div class="content-header">Manufacturing Energy Assessment Software for Utility Reduction (MEASUR)</div>
-      <p class="small">
-        The Manufacturing Energy Assessment Software for Utility Reduction (MEASUR) is an open-source software suite for
-        increasing the understanding of energy use and potential savings opportunities for industrial and commercial
-        equipment. MEASUR is based on and will ultimately replace several of DOE’s legacy software tools.
-        It leverages DOE’s extensive understanding of industrial energy use to help users better understand
-        the energy use of their equipment. It also allows them to evaluate various energy-related “what-if” scenarios
-        to quantify potential energy and cost savings.
-      </p>
-      <hr>
-      <p class="small">
-        Assessments are organized in folders with unique or inherited information about the user’s facility. Users can
-        save and send their assessments to other MEASUR users, regardless of their operating system. MEASUR can also
-        generate individual assessment and roll up reports. There are also several calculators that can be used
-        independently for system parameter estimations and graphical analysis (e.g., estimate pump head, examine the
-        pump-system curve, converting energy requirements for different heat sources).
-      </p>
-      <hr>
-      <div class="card">
-        <div class="card-header bold" (click)="toggleDisclosure()">
-          Disclosure
-          <span class="pull-right" *ngIf="!showDisclosure"><i class="fa fa-chevron-up"></i></span>
-          <span class="pull-right" *ngIf="showDisclosure"><i class="fa fa-chevron-down"></i></span>
-        </div>
-        <div class="card-body small" *ngIf="showDisclosure">
-          <p>
-            The Advanced Manufacturing Office (AMO) is an office within the Department of Energy's (DOE) Office of
-            Energy
-            Efficiency and Renewable Energy (EERE). AMO supports R&D projects and consortia, as well as early-stage
-            technical partnerships with national laboratories, companies (for-profit and not-for profit), research
-            institutions, and universities through competitive, merit reviewed funding opportunities designed to
-            investigate
-            novel manufacturing technologies.
-          </p>
-          <hr>
-          <p>
-            The Advanced Manufacturing Office (AMO) is an office within the Department of Energy's (DOE) Office of
-            Energy
-            Efficiency and Renewable Energy (EERE). AMO supports R&D projects and consortia, as well as early-stage
-            technical partnerships with national laboratories, companies (for-profit and not-for profit), research
-            institutions, and universities through competitive, merit reviewed funding opportunities designed to
-            investigate
-            novel manufacturing technologies.
-          </p>
-          <hr>
-          <p>
-            MEASUR was sponsored by an agency of the United States Government. Neither the United States Government nor
-            any
-            agency thereof, nor any of their employees, makes any warranty, express or implied, or assumes any legal
-            liability or responsibility for the accuracy, completeness, or usefulness of any information, apparatus,
-            product, or process disclosed, or represents that its use would not infringe privately owned rights.
-          </p>
-        </div>
+<div class="col-10  mx-auto">
+  <div class="content-container">
+    <div class="content-header">Manufacturing Energy Assessment Software for Utility Reduction (MEASUR)</div>
+    <p class="small">
+      The Manufacturing Energy Assessment Software for Utility Reduction (MEASUR) is an open-source software suite for
+      increasing the understanding of energy use and potential savings opportunities for industrial and commercial
+      equipment. MEASUR is based on and will ultimately replace several of DOE’s legacy software tools.
+      It leverages DOE’s extensive understanding of industrial energy use to help users better understand
+      the energy use of their equipment. It also allows them to evaluate various energy-related “what-if” scenarios
+      to quantify potential energy and cost savings.
+    </p>
+    <hr>
+    <p class="small">
+      Assessments are organized in folders with unique or inherited information about the user’s facility. Users can
+      save and send their assessments to other MEASUR users, regardless of their operating system. MEASUR can also
+      generate individual assessment and roll up reports. There are also several calculators that can be used
+      independently for system parameter estimations and graphical analysis (e.g., estimate pump head, examine the
+      pump-system curve, converting energy requirements for different heat sources).
+    </p>
+    <hr>
+    <div class="card">
+      <div class="card-header bold" (click)="toggleDisclosure()">
+        Disclosure
+        <span class="pull-right" *ngIf="!showDisclosure"><i class="fa fa-chevron-up"></i></span>
+        <span class="pull-right" *ngIf="showDisclosure"><i class="fa fa-chevron-down"></i></span>
       </div>
-
-      <div class="card">
-        <div class="card-header bold" (click)="toggleShowUser()">
-          Intended Users
-          <span class="pull-right" *ngIf="!showUser"><i class="fa fa-chevron-up"></i></span>
-          <span class="pull-right" *ngIf="showUser"><i class="fa fa-chevron-down"></i></span>
-        </div>
-        <div *ngIf="showUser" class="card-body small">
-          <p>
-            The tool is designed for industrial energy coordinators, plant managers, engineers, and personnel who are
-            interested in improving system efficiency and measuring potential savings opportunities in both dollars and
-            energy savings.
-          </p>
-        </div>
+      <div class="card-body small" *ngIf="showDisclosure">
+        <p>
+          The Advanced Manufacturing Office (AMO) is an office within the Department of Energy's (DOE) Office of
+          Energy
+          Efficiency and Renewable Energy (EERE). AMO supports R&D projects and consortia, as well as early-stage
+          technical partnerships with national laboratories, companies (for-profit and not-for profit), research
+          institutions, and universities through competitive, merit reviewed funding opportunities designed to
+          investigate
+          novel manufacturing technologies.
+        </p>
+        <hr>
+        <p>
+          The Advanced Manufacturing Office (AMO) is an office within the Department of Energy's (DOE) Office of
+          Energy
+          Efficiency and Renewable Energy (EERE). AMO supports R&D projects and consortia, as well as early-stage
+          technical partnerships with national laboratories, companies (for-profit and not-for profit), research
+          institutions, and universities through competitive, merit reviewed funding opportunities designed to
+          investigate
+          novel manufacturing technologies.
+        </p>
+        <hr>
+        <p>
+          MEASUR was sponsored by an agency of the United States Government. Neither the United States Government nor
+          any
+          agency thereof, nor any of their employees, makes any warranty, express or implied, or assumes any legal
+          liability or responsibility for the accuracy, completeness, or usefulness of any information, apparatus,
+          product, or process disclosed, or represents that its use would not infringe privately owned rights.
+        </p>
       </div>
+    </div>
 
-      <div class="card">
-        <div class="card-header bold" (click)="toggleCompressedAir()">
-          Compressed Air
-          <span class="pull-right" *ngIf="!showCompressedAir"><i class="fa fa-chevron-up"></i></span>
-          <span class="pull-right" *ngIf="showCompressedAir"><i class="fa fa-chevron-down"></i></span>
-        </div>
-        <div *ngIf="showCompressedAir" class="card-body small">
-          <p>The original compressed air assessment tool (AirMaster) was developed by Eric Bessey, now of TTed Solutions, Inc., to
-            provide an initial assessment of a compressed air system’s performance. AirMaster was later upgraded and improved to
-            DOE legacy tool, AirMaster+.
-          </p>
-          <hr>
-          <p>
-            Now part of MEASUR, the Compressed Air module helps users evaluate the potential energy savings opportunities of
-            compressed air systems based on field-measured data. It is also intended to help assess different system modifications
-            to determine which would be the most energetically beneficial.
-            To assist users model their own compressed air systems, the Compressed Air Module provides a generic compressor
-            database. This database includes various compressor types and controls to help users model their compressor
-            performance curves. The tool also allows the consideration of various "what-if" scenarios for various options to
-            reduce energy use.
-          </p>
-          <hr>
-          <div class="content-subheader">Inputs</div>
-          <p>To use the Compressed Air module, users need actual compressed air system data, though use of the generic database
-            minimizes the data required:</p>
-            <ul>
-              <li>Compressed air system information (storage capacity, sequencer controls, elevation or atmospheric pressure)</li>
-              <li>Compressor inventory data (nameplate data, controls, design details, performance data)</li>
-              <li>Compressor profile data for each day type (hourly or daily averages of airflow, power, load factor, or voltage,
-                current and power factor)</li>
-            </ul>
-          <div class="content-subheader">Outputs</div>
-          <p>Based on inputs, the Compressed Air module will provide the following:</p>
+    <div class="card">
+      <div class="card-header bold" (click)="toggleShowUser()">
+        Intended Users
+        <span class="pull-right" *ngIf="!showUser"><i class="fa fa-chevron-up"></i></span>
+        <span class="pull-right" *ngIf="showUser"><i class="fa fa-chevron-down"></i></span>
+      </div>
+      <div *ngIf="showUser" class="card-body small">
+        <p>
+          The tool is designed for industrial energy coordinators, plant managers, engineers, and personnel who are
+          interested in improving system efficiency and measuring potential savings opportunities in both dollars and
+          energy savings.
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header bold" (click)="toggleCompressedAir()">
+        Compressed Air
+        <span class="pull-right" *ngIf="!showCompressedAir"><i class="fa fa-chevron-up"></i></span>
+        <span class="pull-right" *ngIf="showCompressedAir"><i class="fa fa-chevron-down"></i></span>
+      </div>
+      <div *ngIf="showCompressedAir" class="card-body small">
+        <p>The original compressed air assessment tool (AirMaster) was developed by Eric Bessey, now of TTed Solutions, Inc., to
+          provide an initial assessment of a compressed air system’s performance. AirMaster was later upgraded and improved to
+          DOE legacy tool, AirMaster+.
+        </p>
+        <hr>
+        <p>
+          Now part of MEASUR, the Compressed Air module helps users evaluate the potential energy savings opportunities of
+          compressed air systems based on field-measured data. It is also intended to help assess different system modifications
+          to determine which would be the most energetically beneficial.
+          To assist users model their own compressed air systems, the Compressed Air Module provides a generic compressor
+          database. This database includes various compressor types and controls to help users model their compressor
+          performance curves. The tool also allows the consideration of various "what-if" scenarios for various options to
+          reduce energy use.
+        </p>
+        <hr>
+        <div class="content-subheader">Inputs</div>
+        <p>To use the Compressed Air module, users need actual compressed air system data, though use of the generic database
+          minimizes the data required:</p>
           <ul>
-            <li>Individual compressor power vs. air flow performance profiles</li>
-            <li>Compressor system profiles</li>
-            <li>Estimated energy use in “what-if” scenarios</li>
-            <li>Equipment annual energy use and costs</li>
-            <li>Peak demand estimation and cost</li>
-            <li>Potential annual energy savings</li>
+            <li>Compressed air system information (storage capacity, sequencer controls, elevation or atmospheric pressure)</li>
+            <li>Compressor inventory data (nameplate data, controls, design details, performance data)</li>
+            <li>Compressor profile data for each day type (hourly or daily averages of airflow, power, load factor, or voltage,
+              current and power factor)</li>
           </ul>
-        </div>
+        <div class="content-subheader">Outputs</div>
+        <p>Based on inputs, the Compressed Air module will provide the following:</p>
+        <ul>
+          <li>Individual compressor power vs. air flow performance profiles</li>
+          <li>Compressor system profiles</li>
+          <li>Estimated energy use in “what-if” scenarios</li>
+          <li>Equipment annual energy use and costs</li>
+          <li>Peak demand estimation and cost</li>
+          <li>Potential annual energy savings</li>
+        </ul>
       </div>
-
-
-      <div class="card">
-        <div class="card-header bold" (click)="toggleShowPSAT()">
-          Pumping
-          <span class="pull-right" *ngIf="!showPSAT"><i class="fa fa-chevron-up"></i></span>
-          <span class="pull-right" *ngIf="showPSAT"><i class="fa fa-chevron-down"></i></span>
-        </div>
-        <div *ngIf="showPSAT" class="card-body small">
-          <p>
-            The original Pumping System Assessment Tool (PSAT) was developed by Don Casada of Diagnostic Solutions, LLC
-            to provide an initial assessment of a pump’s performance. Now part of MEASUR, the Pump module helps users
-            evaluate the potential energy savings opportunities of pumping systems based on field-measured data. It is
-            also intended to help assess different system modifications to determine which would be the most
-            energetically beneficial.
-          </p>
-          <hr>
-          <p>
-            The Pumping Module uses achievable pump performance data from Hydraulic Institute standards and performance
-            data of commercially available motors database to calculate potential energy. The tool also allows the
-            consideration of various "what-if" scenarios for various options to reduce energy use. The Pumping Module
-            also enables users to understand the connection between their system and pump curves.
-          </p>
-          <hr>
-          <div class="content-subheader">Inputs</div>
-          <p>To use the Pumping module, users need actual system pump and motor data:</p>
-          <ul>
-            <li>Pump style (standard pump types)</li>
-            <li> Pump and motor speed(s)</li>
-            <li> Motor nameplate ratings</li>
-            <li> Operating hours</li>
-            <li> Electricity cost rates</li>
-            <li> Pump operating conditions (flow rate and head)</li>
-            <li> Field motor electric power (or current) and voltage.</li>
-          </ul>
-          <hr>
-          <div class="content-subheader">Outputs</div>
-          <p>Based on inputs, the Pumping module will provide the following:</p>
-          <ul>
-            <li> Estimated pump and motor efficiencies and shaft powers for both existing and top-of-the-line
-              commercially available equipment of "optimal" equipment</li>
-            <li> Estimated energy use in “what-if” scenarios</li>
-            <li> Equipment annual energy use and costs </li>
-            <li> Potential annual energy savings</li>
-          </ul>
-        </div>
-      </div>
+    </div>
 
 
-      <div class="card">
-        <div class="card-header bold" (click)="toggleShowPHAST()">
-          Process Heating
-          <span class="pull-right" *ngIf="!showPHAST"><i class="fa fa-chevron-up"></i></span>
-          <span class="pull-right" *ngIf="showPHAST"><i class="fa fa-chevron-down"></i></span>
-        </div>
-        <div *ngIf="showPHAST" class="card-body small">
-          <p>The original Process Heating Assessment and Survey Tool (PHAST) was developed by Dr. Arvind Thekdi of E3M,
-            Inc., Oak Ridge National Laboratory and the Industrial Heating Equipment Association (IHEA), introduces
-            methods to improve thermal efficiency of heating equipment.
-          </p>
-          <hr>
-          <p>Now a part of MEASUR, the Process Heating module helps users understand process heating equipment’s energy
-            consumption (fuel, electricity, or steam), and identifies the most energy-intensive equipment.
-            The tool can help perform a heat balance to identify major areas of energy use under various operating
-            conditions and test "what-if" scenarios for various options to reduce energy use.
-          </p>
-          <hr>
-          <div class="content-subheader">Inputs</div>
-          <p>To use the Process Heating module, users need actual system data:</p>
-          <ul>
-            <li>Available energy sources for the plant, fuel heating value and cost</li>
-            <li>Mass flow and physical operating conditions of charge materials, fixtures and process atmosphere</li>
-            <li>Flue gas characteristics</li>
-            <li>Equipment wall temperatures</li>
-            <li>Cooling flow characteristics </li>
-          </ul>
-
-          <div class="content-subheader">Outputs</div>
-          <p>Based on inputs, the Process Heating Module will:</p>
-          <ul>
-            <li>Construct a detailed heat balance for selected pieces of equipment</li>
-            <li>Estimated energy use in “what-if” scenarios</li>
-            <li>Equipment annual energy use and costs </li>
-            <li>Potential annual energy savings</li>
-          </ul>
-        </div>
+    <div class="card">
+      <div class="card-header bold" (click)="toggleShowPSAT()">
+        Pumping
+        <span class="pull-right" *ngIf="!showPSAT"><i class="fa fa-chevron-up"></i></span>
+        <span class="pull-right" *ngIf="showPSAT"><i class="fa fa-chevron-down"></i></span>
       </div>
-      <div class="card">
-        <div class="card-header bold" (click)="toggleShowFAST()">
-          Fans
-          <span class="pull-right" *ngIf="!showFAST"><i class="fa fa-chevron-up"></i></span>
-          <span class="pull-right" *ngIf="showFAST"><i class="fa fa-chevron-down"></i></span>
-        </div>
-        <div *ngIf="showFAST" class="card-body small">
-          <p>
-            The original Fan System Assessment Tool (FSAT) was developed by Don Casada of Diagnostic Solutions, LLC to
-            provide an initial assessment of an industrial fan’s performance. Now part of MEASUR, the Fan module helps
-            users evaluate the potential energy savings opportunities of fan systems based on field-measured data. It is
-            also intended to help assess different system modifications to determine which would be the most
-            energetically beneficial.
-          </p>
-          <hr>
-          <p>
-            The Fan Module uses achievable fan and motor performance data of commercially available equipment database
-            to calculate potential energy. The tool also allows the consideration of various "what-if" scenarios for
-            various options to reduce energy use. The Fan Module also enables users to understand the connection between
-            their system and fan curves.
-          </p>
-          <hr>
-          <div class="content-subheader">Inputs</div>
-          <p>To use the Fan module, users need actual system fan and motor data:</p>
-          <ul>
-            <li> Fan style (standard fan types)</li>
-            <li> Fan and motor speed(s)</li>
-            <li> Motor nameplate ratings</li>
-            <li> Operating hours</li>
-            <li> Electricity cost rates</li>
-            <li> Fan operating conditions (flow rate, initial and final pressures)</li>
-            <li> Field motor electric power (or current) and voltage.</li>
-          </ul>
-          <div class="content-subheader">
-            Outputs
-          </div>
-          <p>Based on inputs, the Fan module will provide the following:</p>
-          <ul>
-            <li>Estimated Fan and motor efficiencies and shaft powers for both existing and top-of-the-line
-              commercially available equipment of "optimal" equipment</li>
-            <li>Estimated energy use in “what-if” scenarios</li>
-            <li>Equipment annual energy use and costs </li>
-            <li>Potential annual energy savings</li>
-          </ul>
-        </div>
+      <div *ngIf="showPSAT" class="card-body small">
+        <p>
+          The original Pumping System Assessment Tool (PSAT) was developed by Don Casada of Diagnostic Solutions, LLC
+          to provide an initial assessment of a pump’s performance. Now part of MEASUR, the Pump module helps users
+          evaluate the potential energy savings opportunities of pumping systems based on field-measured data. It is
+          also intended to help assess different system modifications to determine which would be the most
+          energetically beneficial.
+        </p>
+        <hr>
+        <p>
+          The Pumping Module uses achievable pump performance data from Hydraulic Institute standards and performance
+          data of commercially available motors database to calculate potential energy. The tool also allows the
+          consideration of various "what-if" scenarios for various options to reduce energy use. The Pumping Module
+          also enables users to understand the connection between their system and pump curves.
+        </p>
+        <hr>
+        <div class="content-subheader">Inputs</div>
+        <p>To use the Pumping module, users need actual system pump and motor data:</p>
+        <ul>
+          <li>Pump style (standard pump types)</li>
+          <li> Pump and motor speed(s)</li>
+          <li> Motor nameplate ratings</li>
+          <li> Operating hours</li>
+          <li> Electricity cost rates</li>
+          <li> Pump operating conditions (flow rate and head)</li>
+          <li> Field motor electric power (or current) and voltage.</li>
+        </ul>
+        <hr>
+        <div class="content-subheader">Outputs</div>
+        <p>Based on inputs, the Pumping module will provide the following:</p>
+        <ul>
+          <li> Estimated pump and motor efficiencies and shaft powers for both existing and top-of-the-line
+            commercially available equipment of "optimal" equipment</li>
+          <li> Estimated energy use in “what-if” scenarios</li>
+          <li> Equipment annual energy use and costs </li>
+          <li> Potential annual energy savings</li>
+        </ul>
       </div>
-      <div class="card">
-        <div class="card-header bold" (click)="toggleSteam()">
-          Steam
-          <span class="pull-right" *ngIf="!showSteam"><i class="fa fa-chevron-up"></i></span>
-          <span class="pull-right" *ngIf="showSteam"><i class="fa fa-chevron-down"></i></span>
-        </div>
-        <div *ngIf="showSteam" class="card-body small">
-          <p>The Steam System Assessment Tool (SSAT) was originally developed by Linnhoff March, a division of KBC
-            Process Technology Ltd.,
-            Spirax Sarco Inc., and Greg Harrell, Ph.D., P.E.. The Steam System Modeler Tool (SSMT) was based on the SSAT
-            and
-            further developed by Michael B. Mueller.</p>
-          <hr>
-          <p>
-            The MEASUR Steam module helps users identify and evaluate the potential energy savings opportunities in
-            steam systems. The tool helps industrial users better understand the current operating conditions of the
-            components of a steam system, including boilers, turbines and flash tanks. The Steam module also helps
-            estimate the various steam flows throughout the system and test “what-if” scenarios for various
-            opportunities to reduce energy use.
-          </p>
-          <hr>
-          <div class="content-subheader">Inputs</div>
-          <p>To use the Steam module, users need actual system data:</p>
-          <ul>
-            <li>Boiler, deaerator and turbine operating conditions</li>
-            <li>Boiler efficiency</li>
-            <li>Turbine isentropic and generating efficiencies</li>
-            <li>Steam header pressures and process use</li>
-            <li>Steam line heat loss</li>
-          </ul>
-          <div class="content-subheader">Outputs</div>
-          <p>Based on inputs, the Steam module will provide the following:</p>
-          <ul>
-            <li>Estimated header steam flow rates, electricity generation, boiler and turbine losses</li>
-            <li>Estimated energy use in “what-if” scenarios</li>
-            <li>System annual energy use and costs</li>
-            <li>Potential annual energy savings</li>
-          </ul>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header bold" (click)="toggleTreasureHunt()">
-          Treasure Hunt
-          <span class="pull-right" *ngIf="!showTreasureHunt"><i class="fa fa-chevron-up"></i></span>
-          <span class="pull-right" *ngIf="showTreasureHunt"><i class="fa fa-chevron-down"></i></span>
-        </div>
-        <div *ngIf="showTreasureHunt" class="card-body small">
-          <p>MEASUR’s Treasure Hunt is a collection of calculators that can be used in a Kaizen, Treasure Hunt, or
-            Energy Sweep type event. It pairs with the DOE Better Plants Treasure Hunt Toolkit. This tool helps
-            industrial users quantify savings for low/no cost energy opportunities such as turning off unused equipment,
-            reducing compressed air pressure, upgrading lighting fixtures, and many more. The Treasure Hunt module also
-            helps users organize the opportunities found during the event in their “Treasure Chest”, share them between
-            users, and roll them together in a comprehensive report. </p>
-          <hr>
-          <div class="content-subheader">Inputs</div>
-          <p>To use the Treasure Hunt module, users need actual system data:</p>
-          <ul>
-            <li> Estimated energy use or operating conditions for various industrial equipment</li>
-            <li> Potential energy use or operating conditions for savings opportunities</li>
-            <li> Annual energy use and cost (electricity, fuel, or compressed air or steam as utilities)</li>
-            <li> Unit energy costs</li>
-          </ul>
-          <div class="content-subheader">Outputs</div>
-          <p>Based on inputs, the Treasure Hunt module will provide the following:</p>
-          <ul>
-            <li> Estimated energy use and savings in alternate scenarios</li>
-            <li> Total potential annual energy savings</li>
-            <li> Estimations of opportunity payback</li>
-          </ul>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header bold" (click)="toggleDataExplorer()">
-          Data Exploration
-          <span class="pull-right" *ngIf="!showDataExplorer"><i class="fa fa-chevron-up"></i></span>
-          <span class="pull-right" *ngIf="showDataExplorer"><i class="fa fa-chevron-down"></i></span>
-        </div>
-        <div *ngIf="showDataExplorer" class="card-body small">
-          <p>The Data Exploration module was designed to replace AirMaster's LogTool (originally developed by SBW
-            Consulting for the Compressed Air Challenge). The Data Exploration module, like LogTool, can be used to create
-            "Day Types" (hourly averages for days with similar operation) used in the Compressed Air analysis module. It
-            can also be used to create scatter plots and histograms of large data files (such as 5-second operating
-            data). </p>
-          <hr>
-          <div class="content-subheader">Inputs</div>
-          <p>A .csv or .xlsx file with data, such as those from data loggers or weather data. The first "true" row of data can be
-            chosen in the module, so data does not need to be prepared before use. For a better experience, combine data files
-            with matching time stamps into one .xlsx file (this will allow full use of the scatter plot abilities). An analysis
-            completed in the Data Exploration Module can also be exported and reloaded using the same upload screen.</p>
-          <div class="content-subheader">Outputs</div>
-          <p>Based on inputs, the Data Exploration module will provide the following:</p>
-          <ul>
-            <li> Day Type Analysis displaying hourly averages - for input data containing time stamp information</li>
-            <li> Data Visualization (Scatter plots and histograms)</li>
-          </ul>
-        </div>
-      </div>
+    </div>
 
 
-      <div class="card">
-        <div class="card-header bold" (click)="toggleInventory()">
-          Inventory Management
-          <span class="pull-right" *ngIf="!showInventory"><i class="fa fa-chevron-up"></i></span>
-          <span class="pull-right" *ngIf="showInventory"><i class="fa fa-chevron-down"></i></span>
+    <div class="card">
+      <div class="card-header bold" (click)="toggleShowPHAST()">
+        Process Heating
+        <span class="pull-right" *ngIf="!showPHAST"><i class="fa fa-chevron-up"></i></span>
+        <span class="pull-right" *ngIf="showPHAST"><i class="fa fa-chevron-down"></i></span>
+      </div>
+      <div *ngIf="showPHAST" class="card-body small">
+        <p>The original Process Heating Assessment and Survey Tool (PHAST) was developed by Dr. Arvind Thekdi of E3M,
+          Inc., Oak Ridge National Laboratory and the Industrial Heating Equipment Association (IHEA), introduces
+          methods to improve thermal efficiency of heating equipment.
+        </p>
+        <hr>
+        <p>Now a part of MEASUR, the Process Heating module helps users understand process heating equipment’s energy
+          consumption (fuel, electricity, or steam), and identifies the most energy-intensive equipment.
+          The tool can help perform a heat balance to identify major areas of energy use under various operating
+          conditions and test "what-if" scenarios for various options to reduce energy use.
+        </p>
+        <hr>
+        <div class="content-subheader">Inputs</div>
+        <p>To use the Process Heating module, users need actual system data:</p>
+        <ul>
+          <li>Available energy sources for the plant, fuel heating value and cost</li>
+          <li>Mass flow and physical operating conditions of charge materials, fixtures and process atmosphere</li>
+          <li>Flue gas characteristics</li>
+          <li>Equipment wall temperatures</li>
+          <li>Cooling flow characteristics </li>
+        </ul>
+
+        <div class="content-subheader">Outputs</div>
+        <p>Based on inputs, the Process Heating Module will:</p>
+        <ul>
+          <li>Construct a detailed heat balance for selected pieces of equipment</li>
+          <li>Estimated energy use in “what-if” scenarios</li>
+          <li>Equipment annual energy use and costs </li>
+          <li>Potential annual energy savings</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header bold" (click)="toggleShowFAST()">
+        Fans
+        <span class="pull-right" *ngIf="!showFAST"><i class="fa fa-chevron-up"></i></span>
+        <span class="pull-right" *ngIf="showFAST"><i class="fa fa-chevron-down"></i></span>
+      </div>
+      <div *ngIf="showFAST" class="card-body small">
+        <p>
+          The original Fan System Assessment Tool (FSAT) was developed by Don Casada of Diagnostic Solutions, LLC to
+          provide an initial assessment of an industrial fan’s performance. Now part of MEASUR, the Fan module helps
+          users evaluate the potential energy savings opportunities of fan systems based on field-measured data. It is
+          also intended to help assess different system modifications to determine which would be the most
+          energetically beneficial.
+        </p>
+        <hr>
+        <p>
+          The Fan Module uses achievable fan and motor performance data of commercially available equipment database
+          to calculate potential energy. The tool also allows the consideration of various "what-if" scenarios for
+          various options to reduce energy use. The Fan Module also enables users to understand the connection between
+          their system and fan curves.
+        </p>
+        <hr>
+        <div class="content-subheader">Inputs</div>
+        <p>To use the Fan module, users need actual system fan and motor data:</p>
+        <ul>
+          <li> Fan style (standard fan types)</li>
+          <li> Fan and motor speed(s)</li>
+          <li> Motor nameplate ratings</li>
+          <li> Operating hours</li>
+          <li> Electricity cost rates</li>
+          <li> Fan operating conditions (flow rate, initial and final pressures)</li>
+          <li> Field motor electric power (or current) and voltage.</li>
+        </ul>
+        <div class="content-subheader">
+          Outputs
         </div>
-        <div *ngIf="showInventory" class="card-body small">
-          <p>
-            MEASUR's Inventory Management tools allow users to create and manage equipment inventory and maintenance
-            logs, allowing them to evaluate their energy efficiency and identify opportunities to reduce energy use.
-            These tools are based on the MotorMaster+ (originally developed by the U.S. Department of Energy’s
-            Industrial Technologies Program) and AirMaster's compressor database.
-          </p>
-          <p>
-            Users can create inventories for several different equipment types:</p>
-          <ul>
-            <li>Motors</li>
-            <li>Pumps (in development)</li>
-            <li>Fans (in development)</li>
-            <li>Compressors (in development)</li>
-            <li>Maintenance Logs (in development)</li>
-          </ul>
-          <hr>
-          <div class="content-subheader">Inputs</div>
-          <p>Inputs vary for each equipment type, but often are related to</p>
-          <ul>
-            <li>Equipment Rated Power/Capacity</li>
-            <li>Nameplate Data</li>
-            <li>Load Characteristics</li>
-            <li>Field Measurements</li>
-            <li>Purchase / Replacement Information</li>
-          </ul>
-          <div class="content-subheader">Outputs</div>
-          <p>Based on inputs, MEASUR will provide the following:</p>
-          <ul>
-            <li>Inventory Summary/Overview</li>
-            <li>Inventory Breakdown</li>
-            <li>Simple Batch Analysis</li>
-          </ul>
-        </div>
+        <p>Based on inputs, the Fan module will provide the following:</p>
+        <ul>
+          <li>Estimated Fan and motor efficiencies and shaft powers for both existing and top-of-the-line
+            commercially available equipment of "optimal" equipment</li>
+          <li>Estimated energy use in “what-if” scenarios</li>
+          <li>Equipment annual energy use and costs </li>
+          <li>Potential annual energy savings</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header bold" (click)="toggleSteam()">
+        Steam
+        <span class="pull-right" *ngIf="!showSteam"><i class="fa fa-chevron-up"></i></span>
+        <span class="pull-right" *ngIf="showSteam"><i class="fa fa-chevron-down"></i></span>
+      </div>
+      <div *ngIf="showSteam" class="card-body small">
+        <p>The Steam System Assessment Tool (SSAT) was originally developed by Linnhoff March, a division of KBC
+          Process Technology Ltd.,
+          Spirax Sarco Inc., and Greg Harrell, Ph.D., P.E.. The Steam System Modeler Tool (SSMT) was based on the SSAT
+          and
+          further developed by Michael B. Mueller.</p>
+        <hr>
+        <p>
+          The MEASUR Steam module helps users identify and evaluate the potential energy savings opportunities in
+          steam systems. The tool helps industrial users better understand the current operating conditions of the
+          components of a steam system, including boilers, turbines and flash tanks. The Steam module also helps
+          estimate the various steam flows throughout the system and test “what-if” scenarios for various
+          opportunities to reduce energy use.
+        </p>
+        <hr>
+        <div class="content-subheader">Inputs</div>
+        <p>To use the Steam module, users need actual system data:</p>
+        <ul>
+          <li>Boiler, deaerator and turbine operating conditions</li>
+          <li>Boiler efficiency</li>
+          <li>Turbine isentropic and generating efficiencies</li>
+          <li>Steam header pressures and process use</li>
+          <li>Steam line heat loss</li>
+        </ul>
+        <div class="content-subheader">Outputs</div>
+        <p>Based on inputs, the Steam module will provide the following:</p>
+        <ul>
+          <li>Estimated header steam flow rates, electricity generation, boiler and turbine losses</li>
+          <li>Estimated energy use in “what-if” scenarios</li>
+          <li>System annual energy use and costs</li>
+          <li>Potential annual energy savings</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header bold" (click)="toggleTreasureHunt()">
+        Treasure Hunt
+        <span class="pull-right" *ngIf="!showTreasureHunt"><i class="fa fa-chevron-up"></i></span>
+        <span class="pull-right" *ngIf="showTreasureHunt"><i class="fa fa-chevron-down"></i></span>
+      </div>
+      <div *ngIf="showTreasureHunt" class="card-body small">
+        <p>MEASUR’s Treasure Hunt is a collection of calculators that can be used in a Kaizen, Treasure Hunt, or
+          Energy Sweep type event. It pairs with the DOE Better Plants Treasure Hunt Toolkit. This tool helps
+          industrial users quantify savings for low/no cost energy opportunities such as turning off unused equipment,
+          reducing compressed air pressure, upgrading lighting fixtures, and many more. The Treasure Hunt module also
+          helps users organize the opportunities found during the event in their “Treasure Chest”, share them between
+          users, and roll them together in a comprehensive report. </p>
+        <hr>
+        <div class="content-subheader">Inputs</div>
+        <p>To use the Treasure Hunt module, users need actual system data:</p>
+        <ul>
+          <li> Estimated energy use or operating conditions for various industrial equipment</li>
+          <li> Potential energy use or operating conditions for savings opportunities</li>
+          <li> Annual energy use and cost (electricity, fuel, or compressed air or steam as utilities)</li>
+          <li> Unit energy costs</li>
+        </ul>
+        <div class="content-subheader">Outputs</div>
+        <p>Based on inputs, the Treasure Hunt module will provide the following:</p>
+        <ul>
+          <li> Estimated energy use and savings in alternate scenarios</li>
+          <li> Total potential annual energy savings</li>
+          <li> Estimations of opportunity payback</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header bold" (click)="toggleDataExplorer()">
+        Data Exploration
+        <span class="pull-right" *ngIf="!showDataExplorer"><i class="fa fa-chevron-up"></i></span>
+        <span class="pull-right" *ngIf="showDataExplorer"><i class="fa fa-chevron-down"></i></span>
+      </div>
+      <div *ngIf="showDataExplorer" class="card-body small">
+        <p>The Data Exploration module was designed to replace AirMaster's LogTool (originally developed by SBW
+          Consulting for the Compressed Air Challenge). The Data Exploration module, like LogTool, can be used to create
+          "Day Types" (hourly averages for days with similar operation) used in the Compressed Air analysis module. It
+          can also be used to create scatter plots and histograms of large data files (such as 5-second operating
+          data). </p>
+        <hr>
+        <div class="content-subheader">Inputs</div>
+        <p>A .csv or .xlsx file with data, such as those from data loggers or weather data. The first "true" row of data can be
+          chosen in the module, so data does not need to be prepared before use. For a better experience, combine data files
+          with matching time stamps into one .xlsx file (this will allow full use of the scatter plot abilities). An analysis
+          completed in the Data Exploration Module can also be exported and reloaded using the same upload screen.</p>
+        <div class="content-subheader">Outputs</div>
+        <p>Based on inputs, the Data Exploration module will provide the following:</p>
+        <ul>
+          <li> Day Type Analysis displaying hourly averages - for input data containing time stamp information</li>
+          <li> Data Visualization (Scatter plots and histograms)</li>
+        </ul>
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="card-header bold" (click)="toggleInventory()">
+        Inventory Management
+        <span class="pull-right" *ngIf="!showInventory"><i class="fa fa-chevron-up"></i></span>
+        <span class="pull-right" *ngIf="showInventory"><i class="fa fa-chevron-down"></i></span>
+      </div>
+      <div *ngIf="showInventory" class="card-body small">
+        <p>
+          MEASUR's Inventory Management tools allow users to create and manage equipment inventory and maintenance
+          logs, allowing them to evaluate their energy efficiency and identify opportunities to reduce energy use.
+          These tools are based on the MotorMaster+ (originally developed by the U.S. Department of Energy’s
+          Industrial Technologies Program) and AirMaster's compressor database.
+        </p>
+        <p>
+          Users can create inventories for several different equipment types:</p>
+        <ul>
+          <li>Motors</li>
+          <li>Pumps (in development)</li>
+          <li>Fans (in development)</li>
+          <li>Compressors (in development)</li>
+          <li>Maintenance Logs (in development)</li>
+        </ul>
+        <hr>
+        <div class="content-subheader">Inputs</div>
+        <p>Inputs vary for each equipment type, but often are related to</p>
+        <ul>
+          <li>Equipment Rated Power/Capacity</li>
+          <li>Nameplate Data</li>
+          <li>Load Characteristics</li>
+          <li>Field Measurements</li>
+          <li>Purchase / Replacement Information</li>
+        </ul>
+        <div class="content-subheader">Outputs</div>
+        <p>Based on inputs, MEASUR will provide the following:</p>
+        <ul>
+          <li>Inventory Summary/Overview</li>
+          <li>Inventory Breakdown</li>
+          <li>Simple Batch Analysis</li>
+        </ul>
       </div>
     </div>
   </div>
