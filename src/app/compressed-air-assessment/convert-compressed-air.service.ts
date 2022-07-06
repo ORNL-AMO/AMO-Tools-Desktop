@@ -201,6 +201,11 @@ export class ConvertCompressedAirService {
     }
     inputObj.dischargePsiFullLoad = this.convertPressure(inputObj.dischargePsiFullLoad);
     inputObj.noLoadDischargePressure = this.convertPressure(inputObj.noLoadDischargePressure);
+    inputObj.midTurndownDischargePressure = this.convertPressure(inputObj.midTurndownDischargePressure);
+    inputObj.turndownDischargePressure = this.convertPressure(inputObj.turndownDischargePressure);
+
+    inputObj.turndownAirflow = this.convertUnitsService.value(inputObj.turndownAirflow).from('m3/min').to('ft3/min');
+    inputObj.midTurndownAirflow = this.convertUnitsService.value(inputObj.midTurndownAirflow).from('m3/min').to('ft3/min');
     inputObj.capacityAtFullLoad = this.convertUnitsService.value(inputObj.capacityAtFullLoad).from('m3/min').to('ft3/min');
     inputObj.capacityAtMaxFullFlow = this.convertUnitsService.value(inputObj.capacityAtMaxFullFlow).from('m3/min').to('ft3/min');
     inputObj.pressureAtUnload = this.convertPressure(inputObj.pressureAtUnload);
