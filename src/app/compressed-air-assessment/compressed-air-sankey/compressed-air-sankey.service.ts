@@ -4,6 +4,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { AirPropertiesCsvService } from '../../shared/helper-services/air-properties-csv.service';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
+import { GreaterThanValidator } from '../../shared/validators/greater-than';
 import { BaselineResults, CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 
 @Injectable()
@@ -29,6 +30,9 @@ export class CompressedAirSankeyService {
       kWTotalSystem: 0,
       CFM_sys: 0,
       systemPressure: 0,
+      warnings: {
+        CFMWarning: undefined,
+      }
     };
 
     dayTypeProfileSummaries.forEach((summary, index: number) => {
@@ -36,8 +40,27 @@ export class CompressedAirSankeyService {
       sankeyResults.compressorResults.push(compressorResults);
     });
 
-    sankeyResults.CFM_sys = sankeyResults.compressorResults.reduce((systemTotal, compressor) => systemTotal + compressor.CFM, 0);
-    sankeyResults.systemPressure = sankeyResults.compressorResults.reduce((systemTotal, compressor) => systemTotal + compressor.systemPressure, 0) / sankeyResults.CFM_sys;
+    sankeyResults.CFM_sys = sankeyResults.compressorResults.reduce((systemTotal, compressor) => {
+      debugger;
+      return systemTotal + compressor.CFM;
+    }, 0);
+    console.log('sankey Results CFM_sys',sankeyResults.CFM_sys);
+    // sankeyResults.systemPressure = sankeyResults.compressorResults.reduce((systemTotal, compressor) => {
+    //   console.log('compressor.systemPressure', compressor.systemPressure);
+    //   return systemTotal + compressor.systemPressure
+    // }, 0);
+
+    // if (!isNaN(sankeyResults.systemPressure)) {
+    //   console.log('dividing by sankeyResults.CFM_sys', sankeyResults.CFM_sys);
+    //   sankeyResults.systemPressure = sankeyResults.systemPressure / sankeyResults.CFM_sys;
+    // } {
+    //   sankeyResults.systemPressure = 0;
+    // }
+
+    sankeyResults.systemPressure = sankeyResults.compressorResults.reduce((systemTotal, compressor) => systemTotal + compressor.systemPressure, 0);
+    console.log('sankey Results system pressure',sankeyResults.systemPressure);
+    sankeyResults.systemPressure = sankeyResults.systemPressure / sankeyResults.CFM_sys;
+    debugger;
 
     let CFM_by_compressor = sankeyResults.compressorResults.map(compressor => compressor.CFM);
     let denominatorSummedCompressors: number = 0;
@@ -45,6 +68,8 @@ export class CompressedAirSankeyService {
       denominatorSummedCompressors += (compr_cfm * (sankeyResults.compressorResults[cfmIndex].pressure2 / sankeyResults.systemPressure));
     });
     let CFMLeakSystem: number = compressedAirAssessment.powerSankeyInputs.CFMLeakSystem;
+
+    let compressor_CFM_Warning: string = undefined;
     sankeyResults.compressorResults.forEach((compressor, index) => {
       // Block 3 calculated with system level pressure3 and t3
       let pressure3: number = sankeyResults.systemPressure;
@@ -55,39 +80,47 @@ export class CompressedAirSankeyService {
       // T4 == temp at exit with starting value of t3 
       let t4: number = t3;
 
-      let pressure3ConvertedPSIG = this.convertUnitsService.value(pressure3).from('psia').to('psig');
-      let cp_3: number = this.getSpecificHeatConstantPressure(pressure3ConvertedPSIG, t3);
-      // let cp_3: number = .2429
-      let cp_4: number = this.getSpecificHeatConstantPressure(pressure4, t4);
-      // let cp_4: number = .2403;
-      let cv_3: number = this.getSpecificHeatConstantVolume(pressure3ConvertedPSIG, t3);
-      let cv_4: number = this.getSpecificHeatConstantVolume(pressure4, t4);
-      // let cv_4: number = .1714;
-      let cp_e_avg: number = (cp_3 + cp_4) / 2;
-      let cv_e_avg: number = (cv_3 + cv_4) / 2;
+      let pressure3ConvertedPSIG: number = this.convertUnitsService.value(pressure3).from('psia').to('psig');
+      debugger;
+      if (sankeyResults.CFM_sys > 0) {
+        console.log('valid', sankeyResults.CFM_sys);
+        let cp_3: number = this.getSpecificHeatConstantPressure(pressure3ConvertedPSIG, t3);
+        // let cp_3: number = .2429
+        let cp_4: number = this.getSpecificHeatConstantPressure(pressure4, t4);
+        // let cp_4: number = .2403;
+        let cv_3: number = this.getSpecificHeatConstantVolume(pressure3ConvertedPSIG, t3);
+        let cv_4: number = this.getSpecificHeatConstantVolume(pressure4, t4);
+        // let cv_4: number = .1714;
+        let cp_e_avg: number = (cp_3 + cp_4) / 2;
+        let cv_e_avg: number = (cv_3 + cv_4) / 2;
 
-      let k_e: number = cp_e_avg / cv_e_avg;
-      let base_eet: number = (pressure4 / pressure3);
-      let exponent_eet: number = ((k_e - 1) / k_e);
-      let calc_eet: number = Math.pow(base_eet, exponent_eet);
-      t4 = t3 - eta_isen * t3 * (1 - calc_eet);
-      let z_3: number = this.getCompressibilityFactor(pressure3ConvertedPSIG, t3);
-      let z_4: number = this.getCompressibilityFactor(pressure4, t4);
-      let Z_avg: number = (z_3 + z_4) / 2;
-      let rho_3: number = this.getDensity(pressure3ConvertedPSIG, t3);
-
-      // MW_a MolarMass 28.96 [lbm/lb-mole] Constant for air
-      let MW_a: number = 28.96;
-      let BHP_expansion: number = eta_isen * eta_mech * (1 / 33000) * (sankeyResults.CFM_sys * rho_3) * Z_avg * 1545 * t3 / MW_a * (k_e / (k_e - 1)) * (1 - calc_eet);
-      let kWTotalSystem = BHP_expansion * 0.746;
-
-      compressor.kWTotal = kWTotalSystem * ((compressor.systemPressure) / (sankeyResults.CFM_sys * sankeyResults.systemPressure));
-      compressor.kWHeatOfCompression = compressor.kWComp - compressor.kWTotal;
-
-      let numeratorCFMLeak: number = compressor.CFM * (compressor.pressure2 / sankeyResults.systemPressure);
-      compressor.CFMLeak = CFMLeakSystem * (numeratorCFMLeak / denominatorSummedCompressors);
+        let k_e: number = cp_e_avg / cv_e_avg;
+        let base_eet: number = (pressure4 / pressure3);
+        let exponent_eet: number = ((k_e - 1) / k_e);
+        let calc_eet: number = Math.pow(base_eet, exponent_eet);
+        t4 = t3 - eta_isen * t3 * (1 - calc_eet);
+        let z_3: number = this.getCompressibilityFactor(pressure3ConvertedPSIG, t3);
+        let z_4: number = this.getCompressibilityFactor(pressure4, t4);
+        let Z_avg: number = (z_3 + z_4) / 2;
+        let rho_3: number = this.getDensity(pressure3ConvertedPSIG, t3);
+        
+        // MW_a MolarMass 28.96 [lbm/lb-mole] Constant for air
+        let MW_a: number = 28.96;
+        let BHP_expansion: number = eta_isen * eta_mech * (1 / 33000) * (sankeyResults.CFM_sys * rho_3) * Z_avg * 1545 * t3 / MW_a * (k_e / (k_e - 1)) * (1 - calc_eet);
+        let kWTotalSystem = BHP_expansion * 0.746;
+        
+        compressor.kWTotal = kWTotalSystem * ((compressor.systemPressure) / (sankeyResults.CFM_sys * sankeyResults.systemPressure));
+        compressor.kWHeatOfCompression = compressor.kWComp - compressor.kWTotal;
+        
+        let numeratorCFMLeak: number = compressor.CFM * (compressor.pressure2 / sankeyResults.systemPressure);
+        compressor.CFMLeak = CFMLeakSystem * (numeratorCFMLeak / denominatorSummedCompressors);
+      } else {
+        console.log('invalid', sankeyResults.CFM_sys);
+        compressor_CFM_Warning = `Sankey was calculated with a compressor total airflow (CFM) of ${sankeyResults.CFM_sys}. Please check System Profile Setup data for correctness.`
+      }
     });
-
+    
+    sankeyResults.warnings.CFMWarning = compressor_CFM_Warning;
     sankeyResults.kWInSystem = sankeyResults.compressorResults.reduce((systemTotal, compressor) => systemTotal + compressor.kWInput, 0);
     sankeyResults.kWTotalSystem = sankeyResults.compressorResults.reduce((systemTotal, compressor) => systemTotal + compressor.kWTotal, 0);
     sankeyResults.kWLeakSystem = (CFMLeakSystem / sankeyResults.CFM_sys) * sankeyResults.kWTotalSystem;
@@ -95,12 +128,6 @@ export class CompressedAirSankeyService {
     sankeyResults.kWMechSystem = sankeyResults.compressorResults.reduce((systemTotal, compressor) => systemTotal + compressor.kWMech, 0);
     sankeyResults.kWAirSystem = sankeyResults.kWTotalSystem - sankeyResults.kWLeakSystem;
 
-    // expected Example results
-    // kWInSystem = 182.06
-    // sankeyResults.kWMechSystem = 15.11
-    // sankeyResults.kWHeatOfcompressionSystem = 143.69
-    // sankeyResults.kWLeakSystem = 2.361
-    //  sankeyResults.kWAirSystem =  20.9 
     console.log('sankeyResults', sankeyResults);
     return sankeyResults;
   }
@@ -270,13 +297,18 @@ export class CompressedAirSankeyService {
         airPropertiesLookup.singleInterpolation.highRangeAirProperty.c_p, 
         airPropertiesLookup.singleInterpolation);
     } else if (airPropertiesLookup.doubleInterpolation) {
-      specificHeatConstantPressure = this.calculateAirPropertyFromDoubleInterpolation(
-        airPropertiesLookup, 
-        airPropertiesLookup.doubleInterpolation.pressure.lowRangeAirProperty.c_p, 
-        airPropertiesLookup.doubleInterpolation.pressure.highRangeAirProperty.c_p, 
-        airPropertiesLookup.doubleInterpolation.temperature.lowRangeAirProperty.c_p, 
-        airPropertiesLookup.doubleInterpolation.temperature.highRangeAirProperty.c_p
-        );
+      try {
+
+        specificHeatConstantPressure = this.calculateAirPropertyFromDoubleInterpolation(
+          airPropertiesLookup, 
+          airPropertiesLookup.doubleInterpolation.pressure.lowRangeAirProperty.c_p, 
+          airPropertiesLookup.doubleInterpolation.pressure.highRangeAirProperty.c_p, 
+          airPropertiesLookup.doubleInterpolation.temperature.lowRangeAirProperty.c_p, 
+          airPropertiesLookup.doubleInterpolation.temperature.highRangeAirProperty.c_p
+          );
+        } catch {
+          debugger;
+        }
     }
     return specificHeatConstantPressure;
   }
@@ -530,6 +562,7 @@ export class CompressedAirSankeyService {
     }
     form.controls.ambientAirTemperature.setValidators([Validators.required, Validators.min(minTemperature), Validators.max(maxTemperature)]);
     form.controls.CFMLeakSystem.setValidators([Validators.required, Validators.min(0), Validators.max(maxLeakSystem)]);
+    // form.controls.CFMLeakSystem.setValidators([Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(maxLeakSystem)]);
     form.controls.ambientAirTemperature.updateValueAndValidity();
     form.controls.CFMLeakSystem.updateValueAndValidity();
     this.markFormDirtyToDisplayValidation(form);
@@ -586,6 +619,8 @@ export interface CompressedAirSankeyResults {
   CFMLeak_all_compressors: number,
   // Effective system pressure
   systemPressure: number,
+  warnings: CompressedAirSankeyWarnings
+
 }
 
 export interface AirProperties {
@@ -644,4 +679,8 @@ export interface SankeySystemInputs {
   ambientAirTemperature: number, 
   CFMLeakSystem: number,
   selectedDayTypeId: string
+}
+
+export interface CompressedAirSankeyWarnings {
+  CFMWarning: string;
 }

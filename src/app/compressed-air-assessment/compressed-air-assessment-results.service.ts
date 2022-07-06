@@ -1130,9 +1130,7 @@ export class CompressedAirAssessmentResultsService {
   getAvgPower(profileSummaryData: Array<ProfileSummaryData>): number {
     let powerData: Array<number> = new Array<number>();
     profileSummaryData.forEach(data => {
-      if (data.power != 0) {
         powerData.push(data.power);
-      }
     });
     let avgPower: number = _.mean(powerData);
     return avgPower;
@@ -1141,9 +1139,7 @@ export class CompressedAirAssessmentResultsService {
   getAvgAirflow(profileSummaryData: Array<ProfileSummaryData>): number {
     let airflowData: Array<number> = new Array<number>();
     profileSummaryData.forEach(data => {
-      if (data.airflow != 0) {
         airflowData.push(data.airflow);
-      }
     });
     let avgAirflow: number = _.mean(airflowData);
     return avgAirflow;

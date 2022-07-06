@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, Sim
 import { Settings } from '../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 
-import { CompressedAirSankeyNode, CompressedAirSankeyResults, CompressedAirSankeyService, SankeySystemInputs } from './compressed-air-sankey.service';
+import { CompressedAirSankeyNode, CompressedAirSankeyResults, CompressedAirSankeyService, CompressedAirSankeyWarnings, SankeySystemInputs } from './compressed-air-sankey.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { CompressedAirAssessment, ProfileSummary } from '../../shared/models/compressed-air-assessment';
 import { Subscription } from 'rxjs';
@@ -79,7 +79,6 @@ export class CompressedAirSankeyComponent implements OnInit {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.initForm();
-    this.renderSankey();
     this.initSankeyList();
   }
 
@@ -156,14 +155,16 @@ export class CompressedAirSankeyComponent implements OnInit {
     if (selectedCompressorDayTypeSummary) {
       this.profileDataComplete;
     }
-    this.cd.detectChanges();
-
+    
     let canRenderSankey: boolean = this.compressedAirAssessment && this.compressedAirAssessment.setupDone && this.profileDataComplete && this.powerSankeyInputForm.valid;
     if (canRenderSankey) {
       this.sankeyResults = this.compressedAirSankeyService.getSankeyResults(this.compressedAirAssessment, undefined, selectedCompressorDayTypeSummary, this.settings);
-      this.gradientLinkPaths = [3, 4, 6, 7];
-      this.buildNodes();
+      if (!this.sankeyResults.warnings.CFMWarning) {
+        this.gradientLinkPaths = [3, 4, 6, 7];
+        this.buildNodes();
+      }
     }
+    this.cd.detectChanges();
 
     let sankeyLink = {
       value: this.nodes.map(node => node.value),
