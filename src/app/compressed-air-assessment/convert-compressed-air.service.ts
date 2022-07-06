@@ -222,6 +222,11 @@ export class ConvertCompressedAirService {
     if (inputObj.lubricantType != 1) {
       inputObj.unloadSumpPressure = this.convertPressure(inputObj.unloadSumpPressure);
     }
+
+
+    //TODO: Convert turndown/midturndown
+
+
     return inputObj;
   }
 

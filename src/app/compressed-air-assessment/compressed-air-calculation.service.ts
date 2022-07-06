@@ -183,6 +183,8 @@ export class CompressedAirCalculationService {
 
   suiteCompressorCalc(inputData: CompressorsCalcInput): CompressorCalcResult {
     try {
+      // console.log(inputData);
+      // debugger
       return compressorAddon.CompressorsCalc(inputData);
     } catch (err) {
       console.log(err);
@@ -275,7 +277,6 @@ export class CompressedAirCalculationService {
       compressor.compressorControls.unloadSumpPressure = 15;
     }
     let loadFactorUnloaded: number = compressor.performancePoints.noLoad.power / compressor.performancePoints.fullLoad.power;
-
     return {
       computeFrom: computeFrom,
       computeFromVal: computeFromVal,
@@ -339,7 +340,15 @@ export class CompressedAirCalculationService {
       blowdownTime: compressor.designDetails.blowdownTime,
       unloadSumpPressure: compressor.compressorControls.unloadSumpPressure,
       noLoadPowerFM: compressor.designDetails.noLoadPowerFM / 100,
-      noLoadDischargePressure: compressor.performancePoints.noLoad.dischargePressure
+      noLoadDischargePressure: compressor.performancePoints.noLoad.dischargePressure,
+      
+      turndownAirflow: compressor.performancePoints.turndown?.airflow,
+      turndownDischargePressure: compressor.performancePoints.turndown?.dischargePressure,
+      turndownPower: compressor.performancePoints.turndown?.power,
+
+      midTurndownAirflow: compressor.performancePoints.midTurndown?.airflow,
+      midTurndownDischargePressure: compressor.performancePoints.midTurndown?.dischargePressure,
+      midTurndownPower: compressor.performancePoints.midTurndown?.power
 
     }
   }
@@ -464,7 +473,16 @@ export interface CompressorsCalcInput {
   unloadSumpPressure: number,
   noLoadPowerFM: number,
   pressureAtUnload: number,
-  noLoadDischargePressure: number
+  noLoadDischargePressure: number,
+
+  midTurndownDischargePressure: number,
+  midTurndownAirflow: number,
+  midTurndownPower: number,
+
+  turndownDischargePressure: number,
+  turndownAirflow: number,
+  turndownPower: number
+
 }
 
 
