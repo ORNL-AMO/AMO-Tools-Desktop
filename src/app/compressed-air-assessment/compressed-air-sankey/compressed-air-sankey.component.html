@@ -26,31 +26,6 @@
       <form [formGroup]="powerSankeyInputForm" class="px-4 py-2 w-75">
         <label class="group-label">
           System Data</label>
-        <div class="form-group">
-          <label for="ambientAirTemperature">Ambient Air Temperature</label>
-          <div class="input-group">
-            <input class="form-control" type="number" name="ambientAirTemperature"
-              formControlName="ambientAirTemperature" (input)="saveUserInputChange()" (focus)="focusField()">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">&#8457;</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">&#8451;</span>
-          </div>
-          <span class="alert-danger pull-right small"
-            *ngIf="powerSankeyInputForm.controls.ambientAirTemperature.invalid && !powerSankeyInputForm.controls.ambientAirTemperature.pristine">
-            <span *ngIf="powerSankeyInputForm.controls.ambientAirTemperature.errors.required">Value Required</span>
-            <span *ngIf="powerSankeyInputForm.controls.ambientAirTemperature.errors.min">
-              Value can't be less than ({{powerSankeyInputForm.controls.ambientAirTemperature.errors.min.min | number:
-              '1.0-1'}}
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>).
-            </span>
-            <span *ngIf="powerSankeyInputForm.controls.ambientAirTemperature.errors.max">
-              Value can't be greater than ({{powerSankeyInputForm.controls.ambientAirTemperature.errors.max.max |
-              number: '1.0-1'}}
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>).
-            </span>
-          </span>
-        </div>
 
         <div class="form-group">
           <label for="CFM_leak_sys">System CFM lost through leaks</label>

@@ -4,8 +4,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { AirPropertiesCsvService } from '../../shared/helper-services/air-properties-csv.service';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
-import { GreaterThanValidator } from '../../shared/validators/greater-than';
-import { BaselineResults, CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
+import { BaselineResults } from '../compressed-air-assessment-results.service';
 
 @Injectable()
 export class CompressedAirSankeyService {
@@ -41,10 +40,9 @@ export class CompressedAirSankeyService {
     });
 
     sankeyResults.CFM_sys = sankeyResults.compressorResults.reduce((systemTotal, compressor) => {
-      debugger;
       return systemTotal + compressor.CFM;
     }, 0);
-    console.log('sankey Results CFM_sys',sankeyResults.CFM_sys);
+    // console.log('sankey Results CFM_sys',sankeyResults.CFM_sys);
     // sankeyResults.systemPressure = sankeyResults.compressorResults.reduce((systemTotal, compressor) => {
     //   console.log('compressor.systemPressure', compressor.systemPressure);
     //   return systemTotal + compressor.systemPressure
@@ -60,7 +58,6 @@ export class CompressedAirSankeyService {
     sankeyResults.systemPressure = sankeyResults.compressorResults.reduce((systemTotal, compressor) => systemTotal + compressor.systemPressure, 0);
     console.log('sankey Results system pressure',sankeyResults.systemPressure);
     sankeyResults.systemPressure = sankeyResults.systemPressure / sankeyResults.CFM_sys;
-    debugger;
 
     let CFM_by_compressor = sankeyResults.compressorResults.map(compressor => compressor.CFM);
     let denominatorSummedCompressors: number = 0;
@@ -81,9 +78,7 @@ export class CompressedAirSankeyService {
       let t4: number = t3;
 
       let pressure3ConvertedPSIG: number = this.convertUnitsService.value(pressure3).from('psia').to('psig');
-      debugger;
       if (sankeyResults.CFM_sys > 0) {
-        console.log('valid', sankeyResults.CFM_sys);
         let cp_3: number = this.getSpecificHeatConstantPressure(pressure3ConvertedPSIG, t3);
         // let cp_3: number = .2429
         let cp_4: number = this.getSpecificHeatConstantPressure(pressure4, t4);
@@ -115,7 +110,6 @@ export class CompressedAirSankeyService {
         let numeratorCFMLeak: number = compressor.CFM * (compressor.pressure2 / sankeyResults.systemPressure);
         compressor.CFMLeak = CFMLeakSystem * (numeratorCFMLeak / denominatorSummedCompressors);
       } else {
-        console.log('invalid', sankeyResults.CFM_sys);
         compressor_CFM_Warning = `Sankey was calculated with a compressor total airflow (CFM) of ${sankeyResults.CFM_sys}. Please check System Profile Setup data for correctness.`
       }
     });
@@ -138,7 +132,8 @@ export class CompressedAirSankeyService {
     // BLOCK 1 ==========================================
     let pressure1: number = compressedAirAssessment.systemInformation.atmosphericPressure;
     let pressure2: number;
-    let temperature1: number = compressedAirAssessment.powerSankeyInputs.ambientAirTemperature;
+    // Temperature one has no effect on results
+    let temperature1: number = 75;
     let temperature2: number = temperature1;
 
     if (compressedAirAssessment.systemInformation.isSequencerUsed) {
@@ -297,7 +292,6 @@ export class CompressedAirSankeyService {
         airPropertiesLookup.singleInterpolation.highRangeAirProperty.c_p, 
         airPropertiesLookup.singleInterpolation);
     } else if (airPropertiesLookup.doubleInterpolation) {
-      try {
 
         specificHeatConstantPressure = this.calculateAirPropertyFromDoubleInterpolation(
           airPropertiesLookup, 
@@ -306,10 +300,8 @@ export class CompressedAirSankeyService {
           airPropertiesLookup.doubleInterpolation.temperature.lowRangeAirProperty.c_p, 
           airPropertiesLookup.doubleInterpolation.temperature.highRangeAirProperty.c_p
           );
-        } catch {
-          debugger;
         }
-    }
+        
     return specificHeatConstantPressure;
   }
 
@@ -508,7 +500,6 @@ export class CompressedAirSankeyService {
 
   getPowerSankeyForm(powerSankeyInputs: SankeySystemInputs, baselineResults: BaselineResults, settings: Settings): FormGroup {
     let form: FormGroup = this.formBuilder.group({
-      ambientAirTemperature: [powerSankeyInputs.ambientAirTemperature],
       CFMLeakSystem: [powerSankeyInputs.CFMLeakSystem],
       selectedDayTypeId: [powerSankeyInputs.selectedDayTypeId]
     });
@@ -534,7 +525,6 @@ export class CompressedAirSankeyService {
     }
 
     let form: FormGroup = this.formBuilder.group({
-      ambientAirTemperature: [ambientAirTemp],
       CFMLeakSystem: [CFMLeakSystem],
       selectedDayTypeId: [selectedDayTypeId]
     });
@@ -544,7 +534,6 @@ export class CompressedAirSankeyService {
 
   getPowerSankeyInputs(form: FormGroup): SankeySystemInputs {
     return {
-      ambientAirTemperature: form.controls.ambientAirTemperature.value,
       CFMLeakSystem: form.controls.CFMLeakSystem.value,
       selectedDayTypeId: form.controls.selectedDayTypeId.value
     }
@@ -560,10 +549,8 @@ export class CompressedAirSankeyService {
       maxTemperature = this.convertUnitsService.value(maxTemperature).from('F').to('C');
       maxLeakSystem = this.convertUnitsService.value(maxLeakSystem).from('ft3/min').to('m3/min');
     }
-    form.controls.ambientAirTemperature.setValidators([Validators.required, Validators.min(minTemperature), Validators.max(maxTemperature)]);
     form.controls.CFMLeakSystem.setValidators([Validators.required, Validators.min(0), Validators.max(maxLeakSystem)]);
     // form.controls.CFMLeakSystem.setValidators([Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(maxLeakSystem)]);
-    form.controls.ambientAirTemperature.updateValueAndValidity();
     form.controls.CFMLeakSystem.updateValueAndValidity();
     this.markFormDirtyToDisplayValidation(form);
 
@@ -676,7 +663,6 @@ export interface SankeyCompressorResults {
 
 
 export interface SankeySystemInputs {
-  ambientAirTemperature: number, 
   CFMLeakSystem: number,
   selectedDayTypeId: string
 }
