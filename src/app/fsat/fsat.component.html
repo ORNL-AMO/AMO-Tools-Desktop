@@ -133,7 +133,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-modification-list [fsat]="_fsat" (save)="save()" [modificationIndex]="modificationIndex"
+        <app-modification-list *ngIf="modListOpen" [fsat]="_fsat" (save)="save()" [modificationIndex]="modificationIndex"
           (close)="closeSelectModification()" [settings]="settings"></app-modification-list>
       </div>
     </div>
