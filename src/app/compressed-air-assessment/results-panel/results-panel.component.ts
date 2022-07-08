@@ -10,27 +10,21 @@ import { CompressedAirAssessmentService } from '../compressed-air-assessment.ser
 export class ResultsPanelComponent implements OnInit {
 
   setupTabSub: Subscription;
-  tabSelect: 'help' | 'performance-profile' | 'current-inventory' | 'end-uses' = 'help';
+  tabSelect: CompressedAirSetupTab = 'help';
   displayEndUses: boolean;
   displayInventory: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.setupTabSub = this.compressedAirAssessmentService.setupTab.subscribe(val => {
-      console.log('va', val)
       this.displayEndUses = (val == 'end-uses');
       this.displayInventory = (val == 'inventory');
-      if(this.displayInventory){
-        this.tabSelect = 'current-inventory';
+      if(this.displayInventory || this.displayEndUses){
+        this.tabSelect = val as CompressedAirSetupTab;
+      } else {
+        this.tabSelect = 'help';
       }
-      if (this.displayEndUses) {
-        this.tabSelect = 'end-uses';
-      }
-      if (this.tabSelect != 'help') {
-       if (!this.displayInventory && (this.tabSelect == 'performance-profile' || this.tabSelect == 'current-inventory')) {
-          this.tabSelect = 'help';
-        }
-      }
+
     });
   }
 
@@ -38,7 +32,10 @@ export class ResultsPanelComponent implements OnInit {
     this.setupTabSub.unsubscribe();
   }
 
-  setTab(str: 'help' | 'performance-profile' | 'current-inventory' | 'end-uses') {
+  setTab(str: CompressedAirSetupTab) {
     this.tabSelect = str;
   }
 }
+
+
+  export type CompressedAirSetupTab = 'help' | 'performance-profile' | 'inventory' | 'end-uses';

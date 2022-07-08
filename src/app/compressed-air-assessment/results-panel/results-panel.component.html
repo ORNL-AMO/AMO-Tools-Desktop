@@ -19,14 +19,8 @@
 
                 <!--inventory tabs-->
                 <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" *ngIf="displayInventory">
-                    <!-- <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'performance-profile'}">
-                        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
-                            (click)="setTab('performance-profile')">
-                            <div>Performance Profile</div>
-                        </a>
-                    </div> -->
-                    <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'current-inventory'}">
-                        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('current-inventory')">
+                    <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'inventory'}">
+                        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('inventory')">
                             <div>Current Inventory</div>
                         </a>
                     </div>
@@ -46,17 +40,19 @@
         </div>
         <div class="row no-gutters">
             <div class="col-12 pr-2 pl-2 pb-4 mt-1">
-                <ng-container *ngIf="tabSelect == 'current-inventory'">
+                <ng-container *ngIf="tabSelect == 'inventory'">
                     <app-inventory-table ></app-inventory-table>
-                    <hr  >
+                    <hr >
                     <app-inventory-performance-profile ></app-inventory-performance-profile>
                     <app-centrifugal-graph ></app-centrifugal-graph>
                 </ng-container>
+
                 <ng-container *ngIf="tabSelect == 'end-uses'">
                     <app-end-use-table></app-end-use-table>
                     <hr>
                     <app-end-use-chart></app-end-use-chart>
                 </ng-container>
+                
                 <app-help-panel *ngIf="tabSelect == 'help'">
                 </app-help-panel>
                 <!-- <app-results-table *ngIf="tabSelect == 'results' && displayInventory">
