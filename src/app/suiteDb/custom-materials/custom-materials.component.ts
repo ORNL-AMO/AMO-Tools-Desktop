@@ -31,6 +31,14 @@ export class CustomMaterialsComponent implements OnInit {
   showAtmosphereMaterials: boolean = true;
   showWallSurfaceMaterials: boolean = true;
 
+  hasFlueMaterials: boolean = false;
+  hasSolidLiquidFlueMaterials: boolean = false;
+  hasGasLoadChargeMaterials: boolean = false;
+  hasLiquidLoadChargeMaterials: boolean = false;
+  hasSolidLoadChargeMaterials: boolean = false;
+  hasAtmosphereMaterials: boolean = false;
+  hasWallSurfaceMaterials: boolean = false;
+
   isAllSelected: boolean = false;
   deleteModalOpen: boolean = false;
   @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
@@ -87,25 +95,25 @@ export class CustomMaterialsComponent implements OnInit {
   toggleMaterial(material: string) {
     switch (material) {
       case 'flue':
-        this.showFlueMaterials = !this.showFlueMaterials;
+        this.showFlueMaterials = !this.showFlueMaterials || !this.hasFlueMaterials;
         break;
       case 'solid-liquid-flue':
-        this.showSolidLiquidFlueMaterials = !this.showSolidLiquidFlueMaterials;
+        this.showSolidLiquidFlueMaterials = !this.showSolidLiquidFlueMaterials || !this.hasSolidLiquidFlueMaterials;
         break;
       case 'gas-load':
-        this.showGasLoadChargeMaterials = !this.showGasLoadChargeMaterials;
+        this.showGasLoadChargeMaterials = !this.showGasLoadChargeMaterials || !this.hasGasLoadChargeMaterials;
         break;
       case 'liquid-load':
-        this.showLiquidLoadChargeMaterials = !this.showLiquidLoadChargeMaterials;
+        this.showLiquidLoadChargeMaterials = !this.showLiquidLoadChargeMaterials || !this.hasLiquidLoadChargeMaterials;
         break;
       case 'solid-load':
-        this.showSolidLoadChargeMaterials = !this.showSolidLoadChargeMaterials;
+        this.showSolidLoadChargeMaterials = !this.showSolidLoadChargeMaterials || !this.hasSolidLoadChargeMaterials;
         break;
       case 'atmosphere-material':
-        this.showAtmosphereMaterials = !this.showAtmosphereMaterials;
+        this.showAtmosphereMaterials = !this.showAtmosphereMaterials || !this.hasAtmosphereMaterials;
         break;
       case 'wall-surface':
-        this.showWallSurfaceMaterials = !this.showWallSurfaceMaterials;
+        this.showWallSurfaceMaterials = !this.showWallSurfaceMaterials || !this.hasWallSurfaceMaterials;
         break;
       default:
         break;
@@ -182,6 +190,23 @@ export class CustomMaterialsComponent implements OnInit {
     this.exportModal.hide();
   }
 
+  setHasMaterials(propertyKey: string, numMaterials: number) {
+    if (propertyKey == 'hasFlueMaterials') {
+      this.hasFlueMaterials = (numMaterials > 0);
+    } else if (propertyKey == 'hasSolidLiquidFlueMaterials') {
+      this.hasSolidLiquidFlueMaterials = (numMaterials > 0);
+    } else if (propertyKey == 'hasGasLoadChargeMaterials') {
+      this.hasGasLoadChargeMaterials = (numMaterials > 0);
+    } else if (propertyKey == 'hasLiquidLoadChargeMaterials') {
+      this.hasLiquidLoadChargeMaterials = (numMaterials > 0);
+    } else if (propertyKey == 'hasSolidLoadChargeMaterials') {
+      this.hasSolidLoadChargeMaterials = (numMaterials > 0);
+    } else if (propertyKey == 'hasAtmosphereMaterials') {
+      this.hasAtmosphereMaterials = (numMaterials > 0);
+    } else if (propertyKey == 'hasWallSurfaceMaterials') {
+      this.hasWallSurfaceMaterials = (numMaterials > 0);
+    }
+  }
 
   setImportFile($event) {
     this.importFileError = null;
@@ -242,9 +267,9 @@ export class CustomMaterialsComponent implements OnInit {
             this.importing = false;
             this.hideImportModal();
           }, 1500);
-        }else if (importJson.origin === 'AMO-TOOLS-DESKTOP') {
+        } else if (importJson.origin === 'AMO-TOOLS-DESKTOP') {
           this.importFileError = 'This file can only be imported in your assessment dashboard. Use this import area for custom materials.';
-        }else {
+        } else {
           this.importFileError = unrecognizedFileError;
         }
       }
