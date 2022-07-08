@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ViewContainerRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewEncapsulation, ViewContainerRef } from '@angular/core';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

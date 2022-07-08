@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, HostListener, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { PhastService } from './phast.service';
@@ -24,7 +24,6 @@ import { EGridService } from '../shared/helper-services/e-grid.service';
   selector: 'app-phast',
   templateUrl: './phast.component.html',
   styleUrls: ['./phast.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PhastComponent implements OnInit {
   @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
  
 import { Assessment } from '../shared/models/assessment';
@@ -24,7 +24,6 @@ import { EGridService } from '../shared/helper-services/e-grid.service';
   selector: 'app-fsat',
   templateUrl: './fsat.component.html',
   styleUrls: ['./fsat.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FsatComponent implements OnInit {
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;

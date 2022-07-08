@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { ActivatedRoute } from '@angular/router';
  
@@ -21,7 +21,6 @@ import { SteamService } from '../calculator/steam/steam.service';
   selector: 'app-ssmt',
   templateUrl: './ssmt.component.html',
   styleUrls: ['./ssmt.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SsmtComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;

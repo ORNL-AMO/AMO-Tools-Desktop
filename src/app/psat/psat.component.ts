@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { PSAT, Modification, PsatOutputs, PsatInputs } from '../shared/models/psat';
@@ -24,7 +24,6 @@ import { EGridService } from '../shared/helper-services/e-grid.service';
   selector: 'app-psat',
   templateUrl: './psat.component.html',
   styleUrls: ['./psat.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PsatComponent implements OnInit {
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
