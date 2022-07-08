@@ -29,7 +29,6 @@ export class EndUsesComponent implements OnInit {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.selectedEndUseSubscription = this.endUsesService.selectedEndUse.subscribe(selectedEndUse => {
       if (selectedEndUse) {
-        // Probably won't need this bool
         this.hasEndUses = true;
         let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
         this.dayTypeOptions = compressedAirAssessment.compressedAirDayTypes;
@@ -74,8 +73,7 @@ export class EndUsesComponent implements OnInit {
 
   initializeEndUses() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.hasEndUses = compressedAirAssessment.endUses && compressedAirAssessment.endUses.length != 0;
-    // debugger probably don't need all these checks anymore
+    this.hasEndUses = compressedAirAssessment.endUses.length !== 0;
     if (this.hasEndUses) {
       let selectedEndUse: EndUse = this.endUsesService.selectedEndUse.getValue();
       if (selectedEndUse) {
@@ -92,6 +90,13 @@ export class EndUsesComponent implements OnInit {
 
   changeSelectedDayTypeEndUse() {
     let selectedDayTypeEndUse = this.dayTypeEndUses.find(dayTypeUse => dayTypeUse.dayTypeId === this.form.controls.selectedDayTypeId.value);
+    if (!selectedDayTypeEndUse) {
+      let currentEndUse: EndUse = this.endUsesService.selectedEndUse.getValue();
+      let newDayTypeEndUse: DayTypeEndUse = this.endUsesService.getDefaultDayTypeEndUse(this.form.controls.selectedDayTypeId.value); 
+      currentEndUse.dayTypeEndUses.push(newDayTypeEndUse);
+      this.save(currentEndUse);
+      selectedDayTypeEndUse = newDayTypeEndUse;
+    }
     this.selectedDayType = this.dayTypeOptions.find(option => option.dayTypeId === selectedDayTypeEndUse.dayTypeId);
     this.endUsesService.selectedDayTypeEndUse.next(selectedDayTypeEndUse);
     this.save();

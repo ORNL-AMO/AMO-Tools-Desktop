@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, ImproveEndUseEfficiency, InletConditions, Modification, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemInformation, SystemProfile, UseAutomaticSequencer } from '../shared/models/compressed-air-assessment';
+import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, EndUse, ImproveEndUseEfficiency, InletConditions, Modification, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemInformation, SystemProfile, UseAutomaticSequencer } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CentrifugalInput, CompressorCalcResult, CompressorsCalcInput } from './compressed-air-calculation.service';
 
@@ -23,6 +23,7 @@ export class ConvertCompressedAirService {
     compressedAirData.systemInformation = this.convertSystemInformation(compressedAirData.systemInformation, oldSettings, newSettings);
     compressedAirData.compressorInventoryItems = this.convertCompressorInventoryItems(compressedAirData.compressorInventoryItems, oldSettings, newSettings);
     compressedAirData.systemProfile = this.convertSystemProfile(compressedAirData.systemProfile, oldSettings, newSettings);
+    compressedAirData.endUses = this.convertEndUses(compressedAirData.endUses, oldSettings, newSettings);
     return compressedAirData;
   }
 
@@ -58,6 +59,46 @@ export class ConvertCompressedAirService {
       compressorItem.performancePoints = this.convertPerformancePoints(compressorItem.performancePoints, oldSettings, newSettings);
     });
     return compressorInventoryItems;
+  }
+
+  convertEndUses(endUses: Array<EndUse>, oldSettings: Settings, newSettings: Settings): Array<EndUse> {
+    endUses.forEach((endUse: EndUse) => {
+      endUse.dayTypeEndUses.map(dayTypeUse => {
+        if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+          dayTypeUse.requiredPressure = this.convertUnitsService.value(dayTypeUse.requiredPressure).from('barg').to('psig');
+          dayTypeUse.measuredPressure = this.convertUnitsService.value(dayTypeUse.measuredPressure).from('barg').to('psig');
+          dayTypeUse.averageAirflow = this.convertUnitsService.value(dayTypeUse.averageAirflow).from('m3/min').to('ft3/min');
+    
+        } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+          dayTypeUse.requiredPressure = this.convertUnitsService.value(dayTypeUse.requiredPressure).from('psig').to('barg');
+          dayTypeUse.measuredPressure = this.convertUnitsService.value(dayTypeUse.measuredPressure).from('psig').to('barg');
+          dayTypeUse.averageAirflow = this.convertUnitsService.value(dayTypeUse.averageAirflow).from('ft3/min').to('m3/min');
+        }
+        dayTypeUse.requiredPressure = this.convertUnitsService.roundVal(dayTypeUse.requiredPressure, 2);
+        dayTypeUse.measuredPressure = this.convertUnitsService.roundVal(dayTypeUse.measuredPressure, 2);
+        dayTypeUse.averageAirflow = this.convertUnitsService.roundVal(dayTypeUse.averageAirflow, 2);
+    
+      });
+    });
+    return endUses;
+  }
+
+  convertDayTypeEndUse(namePlateData: CompressorNameplateData, oldSettings: Settings, newSettings: Settings): CompressorNameplateData {
+    if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      namePlateData.motorPower = this.convertUnitsService.value(namePlateData.motorPower).from('kW').to('hp');
+      namePlateData.fullLoadOperatingPressure = this.convertUnitsService.value(namePlateData.fullLoadOperatingPressure).from('barg').to('psig');
+      namePlateData.fullLoadRatedCapacity = this.convertUnitsService.value(namePlateData.fullLoadRatedCapacity).from('m3/min').to('ft3/min');
+
+    } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      namePlateData.motorPower = this.convertUnitsService.value(namePlateData.motorPower).from('hp').to('kW');
+      namePlateData.fullLoadOperatingPressure = this.convertUnitsService.value(namePlateData.fullLoadOperatingPressure).from('psig').to('barg');
+      namePlateData.fullLoadRatedCapacity = this.convertUnitsService.value(namePlateData.fullLoadRatedCapacity).from('ft3/min').to('m3/min');
+    }
+    namePlateData.motorPower = this.convertUnitsService.roundVal(namePlateData.motorPower, 2);
+    namePlateData.fullLoadOperatingPressure = this.convertUnitsService.roundVal(namePlateData.fullLoadOperatingPressure, 2);
+    namePlateData.fullLoadRatedCapacity = this.convertUnitsService.roundVal(namePlateData.fullLoadRatedCapacity, 2);
+
+    return namePlateData;
   }
 
   convertNamePlateData(namePlateData: CompressorNameplateData, oldSettings: Settings, newSettings: Settings): CompressorNameplateData {

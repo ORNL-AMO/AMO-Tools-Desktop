@@ -15,7 +15,8 @@
             <div class="form-group">
                 <label for="averageCapacity">Average Percent Capacity</label>
                 <div class="text-center small bold">
-                    {{dayTypeEndUseResult.averagePercentCapacity | number}} %
+                    <span *ngIf="dayTypeEndUseResult.averagePercentCapacity">{{dayTypeEndUseResult.averagePercentCapacity | number}}%</span>
+                    <span *ngIf="!dayTypeEndUseResult.averagePercentCapacity">&mdash; &mdash;</span>
                 </div>
             </div>
 
@@ -51,9 +52,11 @@
             <div class="form-group">
                 <label for="excessPressure">Excess Pressure</label>
                 <div class="text-center small bold">
-                    {{dayTypeEndUseResult.excessPressure | number}}
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                    <span *ngIf="dayTypeEndUseResult.excessPressure">{{dayTypeEndUseResult.excessPressure | number}}
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                    </span>
+                    <span *ngIf="!dayTypeEndUseResult.excessPressure">&mdash; &mdash;</span>
                 </div>
             </div>
 

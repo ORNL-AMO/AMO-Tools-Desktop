@@ -46,7 +46,7 @@ export class EndUsesService {
       dayTypeLeakRate: undefined,
       averageAirflow: undefined,
       averageCapacity: undefined,
-      regulated: undefined,
+      regulated: false,
       requiredPressure: undefined,
       excessPressure: undefined,
       measuredPressure: undefined,
@@ -101,13 +101,15 @@ export class EndUsesService {
       let currentDayTypeResults: BaselineResult = dayTypeBaselineResults.dayTypeResults.find(result => result.dayTypeId == selectedDayType.dayTypeId);
       compressedAirAssessment.endUses.forEach((endUse: EndUse) => {
         let dayTypeEndUse: DayTypeEndUse = endUse.dayTypeEndUses.find(dayTypeUse => dayTypeUse.dayTypeId == selectedDayType.dayTypeId);
-        let dayTypeEndUseResult: EndUseResults = this.getSingleDayTypeEndUseResults(dayTypeEndUse, currentDayTypeResults);
+        if (dayTypeEndUse) {
+          let dayTypeEndUseResult: EndUseResults = this.getSingleDayTypeEndUseResults(dayTypeEndUse, currentDayTypeResults);
           endUseEnergyData.push({
             dayTypeAverageAirflowPercent: dayTypeEndUseResult.averagePercentCapacity,
             dayTypeAverageAirFlow: dayTypeEndUse.averageAirflow,
             endUseName: endUse.endUseName,
             color: undefined
           });
+        }
       });      
     } else {
       // For all day types
