@@ -55,10 +55,14 @@ export interface EndUse {
     endUseId: string,
     modifiedDate: Date,
     endUseName: string,
-    endUseDescription: string,
-    dayType?: string,
-    dayTypeLeakRate?: number,
     location?: string,
+    endUseDescription: string,
+    selectedDayTypeId: string,
+    dayTypeEndUses?: Array<DayTypeEndUse>,
+}
+
+export interface DayTypeEndUse {
+    dayTypeId: string,
     averageAirflow?: number,
     regulated?: boolean,
     requiredPressure?: number,

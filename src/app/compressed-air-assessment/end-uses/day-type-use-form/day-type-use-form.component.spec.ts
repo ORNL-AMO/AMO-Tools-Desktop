@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EndUseFormComponent } from './end-use-form.component';
+import { DayTypeUseFormComponent } from './day-type-use-form.component';
 
-describe('EndUseFormComponent', () => {
-  let component: EndUseFormComponent;
-  let fixture: ComponentFixture<EndUseFormComponent>;
+describe('DayTypeUseFormComponent', () => {
+  let component: DayTypeUseFormComponent;
+  let fixture: ComponentFixture<DayTypeUseFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EndUseFormComponent ]
+      declarations: [ DayTypeUseFormComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EndUseFormComponent);
+    fixture = TestBed.createComponent(DayTypeUseFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -16989,45 +16989,84 @@ export const MockCompressedAirAssessment: Assessment =  {
                 "endUseName": "Aerator",
                 "modifiedDate": new Date(),
                 "endUseDescription": "Aerator airflow usage",
-                "dayType": "hopx028cf",
-                "dayTypeLeakRate": 1,
                 "location": null,
-                "averageAirflow": 300,
-                "averageCapacity": 15,
-                "regulated": false,
-                "requiredPressure": 10,
-                "excessPressure": 30,
-                "measuredPressure": 20
+                "selectedDayTypeId": "hopx028cf",
+                "dayTypeEndUses": [
+                    {
+                        "dayTypeId": "hopx028cf",
+                        "averageAirflow": 27,
+                        "averageCapacity": 88,
+                        "regulated": false,
+                        "requiredPressure": 14,
+                        "excessPressure": 15,
+                        "measuredPressure": 12, 
+                    },
+                    {
+                        "dayTypeId": "mufcn7yvy",
+                        "averageAirflow": 44,
+                        "averageCapacity": 88,
+                        "regulated": false,
+                        "requiredPressure": 14,
+                        "excessPressure": 15,
+                        "measuredPressure": 12, 
+                    }
+                ]
             },
             {
                 "endUseId": "57pvni4vd",
                 "endUseName": "Hand Tools",
                 "modifiedDate": new Date(),
                 "endUseDescription": "Hand tools airflow usage",
-                "dayType": "hopx028cf",
-                "dayTypeLeakRate": 0.5,
                 "location": null,
-                "averageAirflow": 50,
-                "averageCapacity": 35,
-                "regulated": false,
-                "requiredPressure": 11,
-                "excessPressure": 11,
-                "measuredPressure": 11
+                "selectedDayTypeId": "hopx028cf",
+                "dayTypeEndUses": [
+                    {
+                        "dayTypeId": "hopx028cf",
+                        "averageAirflow": 27,
+                        "averageCapacity": 88,
+                        "regulated": false,
+                        "requiredPressure": 14,
+                        "excessPressure": 15,
+                        "measuredPressure": 12, 
+                    },
+                    {
+                        "dayTypeId": "mufcn7yvy",
+                        "averageAirflow": 44,
+                        "averageCapacity": 88,
+                        "regulated": false,
+                        "requiredPressure": 14,
+                        "excessPressure": 15,
+                        "measuredPressure": 12, 
+                    }
+                ]
             },
             {
                 "endUseId": "0z95wm6f2",
                 "modifiedDate": new Date(),
                 "endUseName": "Pneumatic Machines",
                 "endUseDescription": "Machine airflow usage",
-                "dayType": "hopx028cf",
-                "dayTypeLeakRate": 2,
                 "location": null,
-                "averageAirflow": 50,
-                "averageCapacity": 35,
-                "regulated": false,
-                "requiredPressure": 11,
-                "excessPressure": 11,
-                "measuredPressure": 11
+                "selectedDayTypeId": "hopx028cf",
+                "dayTypeEndUses": [
+                    {
+                        "dayTypeId": "hopx028cf",
+                        "averageAirflow": 27,
+                        "averageCapacity": 88,
+                        "regulated": false,
+                        "requiredPressure": 14,
+                        "excessPressure": 15,
+                        "measuredPressure": 12, 
+                    },
+                    {
+                        "dayTypeId": "mufcn7yvy",
+                        "averageAirflow": 44,
+                        "averageCapacity": 88,
+                        "regulated": false,
+                        "requiredPressure": 14,
+                        "excessPressure": 15,
+                        "measuredPressure": 12, 
+                    }
+                ]
             }
         ]
     },

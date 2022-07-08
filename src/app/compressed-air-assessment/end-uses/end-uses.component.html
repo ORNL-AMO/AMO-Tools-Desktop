@@ -1,6 +1,6 @@
 <div class="d-flex flex-column panel-container">
     <div class="header mr-2 ml-2">
-        <h3>End Uses</h3>
+        <h3>End Use</h3>
         <br>
     </div>
     <div class="p-3 no-data" *ngIf="!hasEndUses">
@@ -14,26 +14,6 @@
                 <input type="text" class="form-control" name="endUseName" formControlName="endUseName"
                     (focus)="focusField('endUseName')" (input)="save()" />
             </div>
-            
-            <div class="form-group">
-                <label for="dayType">Day Type</label>
-                <select id="dayType" name="dayType" formControlName="dayType" (change)="save()"
-                    (focus)="focusField('dayType')" class="form-control">
-                    <option *ngFor="let dayTypeOption of dayTypeOptions" [ngValue]="dayTypeOption.dayTypeId">
-                        {{dayTypeOption.name}}</option>
-                </select>
-            </div>
-
-            <div class="form-group" [ngClass]="{'invalid': form.controls.dayTypeLeakRate.invalid}">
-                <label for="dayTypeLeakRate">Day Type Leak Rate</label>
-                <div class="input-group">
-                    <input name="dayTypeLeakRate" type="number" step="any" class="form-control" id="dayTypeLeakRate"
-                        formControlName="dayTypeLeakRate" (input)="save()" (focus)="focusField('dayTypeLeakRate')">
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'"
-                        class="units input-group-addon">m<sup>3</sup>/min</span>
-                </div>
-            </div>
 
             <div class="form-group">
                 <label>Description</label>
@@ -41,73 +21,26 @@
                     (focus)="focusField('endUseDescription')" (input)="save()"></textarea>
             </div>
 
-
-
-            <div class="form-group" [ngClass]="{'invalid': form.controls.location.invalid}">
+            <div class="form-group">
                 <label for="location">Location</label>
                 <div class="input-group">
-                    <input name="location" type="number" step="any" class="form-control" id="location"
+                    <input name="location" type="text" step="any" class="form-control" id="location"
                         formControlName="location" (input)="save()" (focus)="focusField('location')">
                 </div>
             </div>
-
-            <div class="form-group" [ngClass]="{'invalid': form.controls.averageAirflow.invalid}">
-                <label for="averageAirflow">Average Airflow</label>
-                <div class="input-group">
-                    <input name="averageAirflow" type="number" step="any" class="form-control" id="averageAirflow"
-                        formControlName="averageAirflow" (input)="save()" (focus)="focusField('averageAirflow')">
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'"
-                        class="units input-group-addon">m<sup>3</sup>/min</span>
-                </div>
-            </div>
-
+            
             <div class="form-group">
-                <label for="averageCapacity">Average Percent Capacity</label>
-                <div class="text-center small bold">
-                    {{endUseResults.averagePercentCapacity | number}} %
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="regulated">Regulated</label>
-                <select id="regulated" name="regulated" formControlName="regulated" (change)="save()"
-                    (focus)="focusField('regulated')" class="form-control">
-                    <option [ngValue]="true">Yes</option>
-                    <option [ngValue]="false">No</option>
+                <label for="selectedDayTypeId">Day Type</label>
+                <select id="selectedDayTypeId" name="selectedDayTypeId" formControlName="selectedDayTypeId" (change)="changeSelectedDayTypeEndUse()"
+                    (focus)="focusField('dayType')" class="form-control">
+                    <option *ngFor="let dayTypeOption of dayTypeOptions" [ngValue]="dayTypeOption.dayTypeId">
+                        {{dayTypeOption.name}}</option>
                 </select>
             </div>
-
-            <div class="form-group" [ngClass]="{'invalid': form.controls.requiredPressure.invalid}">
-                <label for="requiredPressure">Required Pressure</label>
-                <div class="input-group">
-                    <input name="requiredPressure" type="number" step="any" class="form-control" id="requiredPressure"
-                        formControlName="requiredPressure" (input)="save()" (focus)="focusField('requiredPressure')">
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
-                </div>
-            </div>
-
-            <div class="form-group" [ngClass]="{'invalid': form.controls.measuredPressure.invalid}">
-                <label for="measuredPressure">Measured Pressure</label>
-                <div class="input-group">
-                    <input name="measuredPressure" type="number" step="any" class="form-control" id="measuredPressure"
-                        formControlName="measuredPressure" (input)="save()" (focus)="focusField('measuredPressure')">
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="excessPressure">Excess Pressure</label>
-                <div class="text-center small">
-                    {{endUseResults.excessPressure | number}}
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
-                </div>
-            </div>
-
         </form>
+
+        <label class="group-label">{{selectedDayType.name}} Data</label>
+        <app-day-type-use-form></app-day-type-use-form>
 
     </div>
 </div>

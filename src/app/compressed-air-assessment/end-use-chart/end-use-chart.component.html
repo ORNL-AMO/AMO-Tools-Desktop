@@ -1,14 +1,15 @@
-<div class="d-flex justify-content-center">
-        <div class="pl-1" *ngIf="compressedAirAssessment && compressedAirAssessment.compressedAirDayTypes.length > 0">
-            <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
-                (change)="setSelectedDayType()">
+<div [ngStyle]="{'visibility': compressedAirAssessment.endUses.length > 0? 'visible' : 'hidden'}">
+    <div class="d-flex flex-column chart-background w-100 p-2">
+        <div class="d-flex pl-1 justify-content-center"
+            >
+            <select class="day-type-select mt-2" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
+                (change)="setChartData()">
                 <option [ngValue]="undefined">All Day Types</option>
                 <option *ngFor="let dayType of compressedAirAssessment.compressedAirDayTypes" [ngValue]="dayType">
                     {{dayType.name}}</option>
             </select>
         </div>
+        <span class="alert-warning small mt-2 p-1" *ngIf="dayTypeEndUseWarning">{{dayTypeEndUseWarning}}</span>
+        <div class="flex-fill" id="overviewPieChart" #overviewPieChart></div>
     </div>
-
-<div class="d-flex w-100 p-2">
-    <div class="flex-fill" id="overviewPieChart" #overviewPieChart></div>
 </div>

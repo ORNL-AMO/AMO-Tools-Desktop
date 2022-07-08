@@ -36,15 +36,11 @@ export class EndUseTableComponent implements OnInit {
         this.compressedAirAssessment = compressedAirAssessment;
         console.log('compressedAirAssessment.endUses', this.compressedAirAssessment)
         this.compressedAirAssessment.endUses.forEach(endUse => {
-          let results: EndUseResults = this.endUsesService.setEndUseResults(endUse, this.compressedAirAssessment, this.settings);
-          endUse.averageCapacity = results.averagePercentCapacity;
-          endUse.excessPressure = results.excessPressure;
+          // TODO Below once table columns are decided
+          // let results: EndUseResults = this.endUsesService.getEndUseResults(endUse, this.compressedAirAssessment, this.settings);
+          // endUse.averageCapacity = results.averagePercentCapacity;
+          // endUse.excessPressure = results.excessPressure;
         })
-        // this.endUses.forEach(endUse => {
-          // TODO check valid?
-          // compressor.isValid = this.endUsesService.isCompressorValid(compressor);
-        // });
-        // this.hasInvalidCompressors = this.endUses.some(compressor => !compressor.isValid);
       }
     });
   }

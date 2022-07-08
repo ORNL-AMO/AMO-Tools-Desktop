@@ -141,8 +141,8 @@ import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-moda
 import { EndUseTableComponent } from './results-panel/end-use-table/end-use-table.component';
 import { EndUseChartComponent } from './end-use-chart/end-use-chart.component';
 import { EndUsesService } from './end-uses/end-uses.service';
-import { EndUseFormComponent } from './end-uses/end-use-form/end-use-form.component';
-import { EndUseFormService } from './end-uses/end-use-form/end-use-form.service';
+import { DayTypeUseFormComponent } from './end-uses/day-type-use-form/day-type-use-form.component';
+import { DayTypeUseFormService } from './end-uses/day-type-use-form/day-type-use-form.service';
 
 @NgModule({
   declarations: [
@@ -226,7 +226,7 @@ import { EndUseFormService } from './end-uses/end-use-form/end-use-form.service'
     FlaModalComponent,
     EndUseTableComponent,
     EndUseChartComponent,
-    EndUseFormComponent
+    DayTypeUseFormComponent
   ],
   imports: [
     CommonModule,
@@ -260,7 +260,7 @@ import { EndUseFormService } from './end-uses/end-use-form/end-use-form.service'
     InventoryPerformanceProfileModule,
     Co2HelpTextModule,
     CentrifugalGraphModule,
-    BleedTestModule
+    BleedTestModule,
   ],
   providers: [
     CompressedAirAssessmentService,
@@ -293,7 +293,7 @@ import { EndUseFormService } from './end-uses/end-use-form/end-use-form.service'
     ReduceRunTimeService,
     ExploreOpportunitiesValidationService,
     EndUsesService,
-    EndUseFormService
+    DayTypeUseFormService
   ]
 })
 export class CompressedAirAssessmentModule { }

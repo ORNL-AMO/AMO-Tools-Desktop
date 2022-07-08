@@ -1,0 +1,63 @@
+<div class="d-flex flex-column">
+    <!-- <div class="mr-2 ml-2"> -->
+        <form [formGroup]="form">
+            <div class="form-group" [ngClass]="{'invalid': form.controls.averageAirflow.invalid}">
+                <label for="averageAirflow">Average Airflow</label>
+                <div class="input-group">
+                    <input name="averageAirflow" type="number" step="any" class="form-control" id="averageAirflow"
+                        formControlName="averageAirflow" (input)="save()" (focus)="focusField('averageAirflow')">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'"
+                        class="units input-group-addon">m<sup>3</sup>/min</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="averageCapacity">Average Percent Capacity</label>
+                <div class="text-center small bold">
+                    {{dayTypeEndUseResult.averagePercentCapacity | number}} %
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="regulated">Regulated</label>
+                <select id="regulated" name="regulated" formControlName="regulated" (change)="save()"
+                    (focus)="focusField('regulated')" class="form-control">
+                    <option [ngValue]="true">Yes</option>
+                    <option [ngValue]="false">No</option>
+                </select>
+            </div>
+
+            <div class="form-group" [ngClass]="{'invalid': form.controls.requiredPressure.invalid}">
+                <label for="requiredPressure">Required Pressure</label>
+                <div class="input-group">
+                    <input name="requiredPressure" type="number" step="any" class="form-control" id="requiredPressure"
+                        formControlName="requiredPressure" (input)="save()" (focus)="focusField('requiredPressure')">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+                </div>
+            </div>
+
+            <div class="form-group" [ngClass]="{'invalid': form.controls.measuredPressure.invalid}">
+                <label for="measuredPressure">Measured Pressure</label>
+                <div class="input-group">
+                    <input name="measuredPressure" type="number" step="any" class="form-control" id="measuredPressure"
+                        formControlName="measuredPressure" (input)="save()" (focus)="focusField('measuredPressure')">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="excessPressure">Excess Pressure</label>
+                <div class="text-center small bold">
+                    {{dayTypeEndUseResult.excessPressure | number}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                </div>
+            </div>
+
+        </form>
+
+    <!-- </div> -->
+</div>

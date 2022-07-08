@@ -1,9 +1,12 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, EndUse } from '../../shared/models/compressed-air-assessment';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { CompressedAirAssessment, CompressedAirDayType } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
+import { BaselineResults, DayTypeProfileSummary } from '../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
+import { EndUseEnergyData, EndUsesService } from '../end-uses/end-uses.service';
 
 @Component({
   selector: 'app-end-use-chart',
@@ -15,17 +18,23 @@ export class EndUseChartComponent implements OnInit {
   settings: Settings;
   units: string;
   selectedDayType: CompressedAirDayType;
+  selectedDayTypeAverage: number;
+  dayTypeBaselineResults: BaselineResults;
+  dayTypeEndUseWarning: string;
   compressedAirAssessment: CompressedAirAssessment;
-  // endUses: Array<EndUse>;
-  // compressedAirDayTypes: Array<CompressedAirDayType>;
+  dayTypeProfileSummaries: Array<DayTypeProfileSummary>;
   compressedAirAssessmentSub: Subscription;
+
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private convertUnitsService: ConvertUnitsService,
+    private endUsesService: EndUsesService,
     private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes[0];
-    this.settings = this.compressedAirAssessmentService.settings.getValue();
+    this.dayTypeBaselineResults = this.endUsesService.getBaselineResults(this.compressedAirAssessment, this.settings);
     if (this.settings.unitsOfMeasure == 'Imperial') {
       this.units = 'acfm';
     } else {
@@ -36,78 +45,87 @@ export class EndUseChartComponent implements OnInit {
   ngAfterViewInit() {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       this.compressedAirAssessment = compressedAirAssessment;
-      console.log('enduses', this.compressedAirAssessment.endUses);
-      let endUseEnergyData: Array<EndUseEnergyData> = this.getEndUseEnergySummary(compressedAirAssessment.endUses);
-      var data = [{
-        values: endUseEnergyData.map(val => { return val.dayTypeAverageAirflow }),
-        labels: endUseEnergyData.map(val => { return val.endUseName }),
-        marker: {
-          colors: endUseEnergyData.map(val => { return 'rgb(' + val.color + ')' }),
-          line: {
-            width: endUseEnergyData.map(val => { return 2 }),
-            color: '#fff'
-          }
-        },
-        type: 'pie',
-        textposition: 'auto',
-        insidetextorientation: "horizontal",
-        textinfo: 'label+value',
-        texttemplate: '%{label}<br>%{value:$,.0f}',
-        hoverinfo: 'label+percent',
-        hovertemplate: '%{percent:%,.2f} <extra></extra>',
-        // direction: "clockwise",
-        // rotation: -45,
-        sort: false,
-        automargin: true
-      }];
-      let layout = {
-        title: {
-          text: `${this.selectedDayType.name} Average ${this.units}`
-        },
-        showlegend: false,
-        font: {
-          size: 12,
-        },
-      };
-
-      let configOptions = {
-        modeBarButtonsToRemove: ['hoverClosestPie'],
-        displaylogo: false,
-        displayModeBar: true,
-        responsive: true
-      };
-      this.plotlyService.newPlot(this.overviewPieChart.nativeElement, data, layout, configOptions);
-    })
+      if (compressedAirAssessment.endUses.length > 0) {
+        this.dayTypeBaselineResults = this.endUsesService.getBaselineResults(this.compressedAirAssessment, this.settings);
+        this.setSelectedDayTypeAverage(this.selectedDayType);
+        let endUseEnergyData: Array<EndUseEnergyData> = this.endUsesService.getEndUseEnergyData(compressedAirAssessment, this.selectedDayType, this.dayTypeBaselineResults);
+        this.renderPieChart(endUseEnergyData);
+      }
+    });
   }
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
   }
 
+  renderPieChart(endUseEnergyData: Array<EndUseEnergyData>) {
+    let dayTypeAverage: string = `Day Type Average (${this.units}): ${this.selectedDayTypeAverage}`
+    //   dayTypeAverage = `${this.selectedDayType.name} Day Type Average: ${this.selectedDayTypeAverage} (${this.units})`
+    //   dayTypeAverage = `All Day Type Average: ${this.selectedDayTypeAverage} (${this.units})`
 
-  getEndUseEnergySummary(endUses: Array<EndUse>, selectedDayType?: CompressedAirDayType): Array<EndUseEnergyData> {
-    if (!selectedDayType) {
-      // get all
+    if (endUseEnergyData.length === 0) {
+      this.dayTypeEndUseWarning = "No end uses with selected day type";
+    } else {
+      this.dayTypeEndUseWarning = undefined;
     }
 
-    let endUseEnergyData = new Array<EndUseEnergyData>();
-    endUses.forEach(endUse => {
-      endUseEnergyData.push({
-          dayTypeAverageAirflow: undefined,
-          endUseName: endUse.endUseName,
-          color: undefined
-        })
-    });
+    let data = [{
+      values: endUseEnergyData.map(val => val.dayTypeAverageAirflowPercent),
+      labels: endUseEnergyData.map(val => val.endUseName),
+      text: endUseEnergyData.map(val => val.dayTypeAverageAirFlow),
+      marker: {
+        colors: endUseEnergyData.map(val => { return 'rgb(' + val.color + ')' }),
+        line: {
+          width: endUseEnergyData.map(val => { return 2 }),
+          color: '#fff'
+        }
+      },
+      type: 'pie',
+      textposition: 'auto',
+      insidetextorientation: "horizontal",
+      textinfo: 'label+value',
+      // texttemplate: '%{label}<br>%{text:.0f}',
+      texttemplate: '%{label}<br>%{text:.0f} ' + this.units,
+      hovertemplate: '%{label} <br> %{value:.3r}% <extra></extra>',
+      sort: false,
+      automargin: true
+    }];
+    let layout = {
+      title: {
+        // text: `${this.selectedDayType.name} End Use Average Capacity (${this.units})`
+        text: dayTypeAverage
+      },
+      showlegend: false,
+      font: {
+        size: 12,
+      },
+    };
 
-    return endUseEnergyData;
+    let configOptions = {
+      modeBarButtonsToRemove: ['hoverClosestPie'],
+      displaylogo: false,
+      displayModeBar: true,
+      responsive: true
+    };
+    this.plotlyService.newPlot(this.overviewPieChart.nativeElement, data, layout, configOptions);
   }
 
-  setSelectedDayType(selectedDayType: CompressedAirDayType) {
-    this.getEndUseEnergySummary(this.compressedAirAssessment.endUses, selectedDayType);
-  } 
-}
+  setSelectedDayTypeAverage(selectedDayType: CompressedAirDayType) {
+    if (this.dayTypeBaselineResults) {
+      if (!selectedDayType) {
+        let dayTypeSummedAirflows: number = this.dayTypeBaselineResults.dayTypeResults.reduce((summedAirFlows, result) => summedAirFlows + result.averageAirFlow, 0);
+        // needs to be weighted?
+        this.selectedDayTypeAverage = this.convertUnitsService.roundVal(dayTypeSummedAirflows, 0);
+      } else {
+        let selectedDayTypeResults = this.dayTypeBaselineResults.dayTypeResults.find(result => result.dayTypeId === selectedDayType.dayTypeId);
+        this.selectedDayTypeAverage = this.convertUnitsService.roundVal(selectedDayTypeResults.averageAirFlow, 0);
+      }
+    }
+  }
 
-
-export interface EndUseEnergyData {
-  dayTypeAverageAirflow: number, endUseName: string, color: string 
+  setChartData() {
+    this.setSelectedDayTypeAverage(this.selectedDayType);
+    let endUseEnergyData: Array<EndUseEnergyData> = this.endUsesService.getEndUseEnergyData(this.compressedAirAssessment, this.selectedDayType, this.dayTypeBaselineResults);
+    this.renderPieChart(endUseEnergyData);
+  }
 }
