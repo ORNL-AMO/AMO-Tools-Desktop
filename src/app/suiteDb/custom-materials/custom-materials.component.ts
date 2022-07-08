@@ -38,7 +38,7 @@ export class CustomMaterialsComponent implements OnInit {
   hasSolidLoadChargeMaterials: boolean = false;
   hasAtmosphereMaterials: boolean = false;
   hasWallSurfaceMaterials: boolean = false;
-  
+
   isAllSelected: boolean = false;
   deleteModalOpen: boolean = false;
   @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
@@ -191,7 +191,21 @@ export class CustomMaterialsComponent implements OnInit {
   }
 
   setHasMaterials(propertyKey: string, numMaterials: number) {
-    this[propertyKey] = (numMaterials > 0);
+    if (propertyKey == 'hasFlueMaterials') {
+      this.hasFlueMaterials = (numMaterials > 0);
+    } else if (propertyKey == 'hasSolidLiquidFlueMaterials') {
+      this.hasSolidLiquidFlueMaterials = (numMaterials > 0);
+    } else if (propertyKey == 'hasGasLoadChargeMaterials') {
+      this.hasGasLoadChargeMaterials = (numMaterials > 0);
+    } else if (propertyKey == 'hasLiquidLoadChargeMaterials') {
+      this.hasLiquidLoadChargeMaterials = (numMaterials > 0);
+    } else if (propertyKey == 'hasSolidLoadChargeMaterials') {
+      this.hasSolidLoadChargeMaterials = (numMaterials > 0);
+    } else if (propertyKey == 'hasAtmosphereMaterials') {
+      this.hasAtmosphereMaterials = (numMaterials > 0);
+    } else if (propertyKey == 'hasWallSurfaceMaterials') {
+      this.hasWallSurfaceMaterials = (numMaterials > 0);
+    }
   }
 
   setImportFile($event) {
@@ -253,9 +267,9 @@ export class CustomMaterialsComponent implements OnInit {
             this.importing = false;
             this.hideImportModal();
           }, 1500);
-        }else if (importJson.origin === 'AMO-TOOLS-DESKTOP') {
+        } else if (importJson.origin === 'AMO-TOOLS-DESKTOP') {
           this.importFileError = 'This file can only be imported in your assessment dashboard. Use this import area for custom materials.';
-        }else {
+        } else {
           this.importFileError = unrecognizedFileError;
         }
       }
