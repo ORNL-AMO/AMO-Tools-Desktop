@@ -21,7 +21,7 @@
             <span class="input-group-addon op-hour-addon units">
                 <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
             </span>
-            <input type="number" class="form-control" (focus)="focusField('annualOperatingHours')" (input)="save()"
+            <input type="number" step="10" class="form-control" (focus)="focusField('annualOperatingHours')" (input)="save()"
                 formControlName="annualOperatingHours" id="annualOperatingHours">
             <span class="input-group-addon units">hrs/yr</span>
         </div>

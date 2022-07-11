@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Calculator } from '../../../../shared/models/calculators';
 import { Directory } from '../../../../shared/models/directory';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+ 
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PreAssessmentService } from '../../../../calculator/utilities/pre-assessment/pre-assessment.service';
@@ -12,7 +12,7 @@ import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { DashboardService } from '../../../dashboard.service';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pre-assessment-item',
@@ -44,13 +44,13 @@ export class PreAssessmentItemComponent implements OnInit {
   updateDashboardDataSub: Subscription;
   dashboardView: string;
   dashboardViewSub: Subscription;
-  constructor(private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService, private calculatorDbService: CalculatorDbService,
+  constructor(   private settingsDbService: SettingsDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService, private calculatorDbService: CalculatorDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private directoryDbService: DirectoryDbService) { }
 
   ngOnInit() {
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.directory = this.directoryDbService.getById(this.calculator.directoryId);
-      this.allDirectories = this.directoryDbService.getAll();
+      this.setDirectories();
       this.settings = this.settingsDbService.getByDirectoryId(this.calculator.directoryId);
       this.calculateData();
     });
@@ -65,6 +65,11 @@ export class PreAssessmentItemComponent implements OnInit {
     this.dashboardViewSub.unsubscribe();
   }
 
+  async setDirectories() {
+    this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
+  }
+
+
   calculateData() {
     if (this.calculator.preAssessments) {
       this.numUnits = this.calculator.preAssessments.length;
@@ -74,13 +79,11 @@ export class PreAssessmentItemComponent implements OnInit {
     } 
   }
 
-  deletePreAssessment() {
-    this.indexedDbService.deleteCalculator(this.calculator.id).then(() => {
-      this.calculatorDbService.setAll().then(() => {
-        this.dashboardService.updateDashboardData.next(true);
-        this.hideDeleteModal();
-      });
-    });
+  async deletePreAssessment() {
+    let calculators: Calculator[] = await firstValueFrom(this.calculatorDbService.deleteByIdWithObservable(this.calculator.id)); 
+    this.calculatorDbService.setAll(calculators); 
+    this.dashboardService.updateDashboardData.next(true);
+    this.hideDeleteModal();
   }
 
   showPreAssessment() {
@@ -113,15 +116,13 @@ export class PreAssessmentItemComponent implements OnInit {
     }
   }
 
-  save() {
+  async save() {
     this.calculator.name = this.editForm.controls.name.value;
     this.calculator.directoryId = this.editForm.controls.directoryId.value;
-    this.indexedDbService.putCalculator(this.calculator).then(val => {
-      this.calculatorDbService.setAll().then(() => {
-        this.dashboardService.updateDashboardData.next(true);
-        this.hideEditModal();
-      });
-    });
+    let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(this.calculator)) 
+    this.calculatorDbService.setAll(updatedCalculators);
+    this.dashboardService.updateDashboardData.next(true);
+    this.hideEditModal();
   }
 
   showDropdown() {
@@ -148,16 +149,16 @@ export class PreAssessmentItemComponent implements OnInit {
     this.copyModal.hide();
   }
 
-  createCopy() {
+  async createCopy() {
     let calculatorCopy: Calculator = JSON.parse(JSON.stringify(this.calculator));
     delete calculatorCopy.id;
     calculatorCopy.name = this.copyForm.controls.name.value;
     calculatorCopy.directoryId = this.copyForm.controls.directoryId.value;
-    this.indexedDbService.addCalculator(calculatorCopy).then(calculatorId => {
-      this.calculatorDbService.setAll().then(() => {
-        this.dashboardService.updateDashboardData.next(true);
-        this.hideCopyModal();
-      });
-    });
+    
+    await firstValueFrom(this.calculatorDbService.addWithObservable(calculatorCopy));
+    let updatedCalculators = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+    this.calculatorDbService.setAll(updatedCalculators);
+    this.dashboardService.updateDashboardData.next(true);
+    this.hideCopyModal();
   }
 }

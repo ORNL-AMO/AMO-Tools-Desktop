@@ -6,7 +6,7 @@ import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportu
 import pptxgen from 'pptxgenjs';
 import * as _ from 'lodash';
 import * as betterPlantsPPTimg from './better-plants-ppt-img.js';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Injectable()
 export class TreasureHuntPptService {

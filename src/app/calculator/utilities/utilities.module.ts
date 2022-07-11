@@ -11,6 +11,7 @@ import { CashFlowModule } from './cash-flow/cash-flow.module';
 import { UnitConverterModule } from './unit-converter/unit-converter.module';
 import { UtilitiesListComponent } from './utilities-list/utilities-list.component';
 import { RouterModule } from '@angular/router';
+import { WeatherBinsModule } from './weather-bins/weather-bins.module';
 import { AltitudeCorrectionModule } from './altitude-correction/altitude-correction.module';
 
 @NgModule({
@@ -33,6 +34,7 @@ import { AltitudeCorrectionModule } from './altitude-correction/altitude-correct
         CashFlowModule,
         UnitConverterModule,
         RouterModule,
+        WeatherBinsModule,
         AltitudeCorrectionModule
     ]
 })

@@ -58,26 +58,6 @@ td {
     color: black;
 }
 
-.general .ico-size3 {
-    background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32);
-    transition: all .5s ease-in-out;
-}
-
-.phast .ico-size3 {
-    background: linear-gradient(rgba(228, 219, 219, 0.34), #BF3D00);
-    transition: all .5s ease-in-out;
-}
-
-.psat .ico-size3 {
-    background: linear-gradient(rgba(228, 219, 219, 0.34), #2980b9);
-    transition: all .5s ease-in-out;
-}
-
-.fsat .ico-size3 {
-    background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
-    transition: all .5s ease-in-out;
-}
-
 .no-data {
     width: 100%;
 }

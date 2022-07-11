@@ -1,131 +1,132 @@
 <form [formGroup]="gasDensityForm">
-    <div class="p-1">
-      <div class="form-group">
-        <label for="dryBulbTemp">Dry Bulb Temp (T<sub>DB</sub>)</label>
-        <div class="input-group">
-          <input name="dryBulbTemp" type="number" step="any" class="form-control" formControlName="dryBulbTemp"
-            id="dryBulbTemp" (input)="save()" (focus)="focusField('dryBulbTemp')" onfocus="this.select();">
-            <span class="input-group-addon units">
-              <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
-            </span>
-            <span class="alert-danger pull-right small"
-              *ngIf="gasDensityForm.controls.dryBulbTemp.invalid && !gasDensityForm.controls.dryBulbTemp.pristine">
-              <span *ngIf="gasDensityForm.controls.dryBulbTemp.errors.required">Value Required</span>
-              <span *ngIf="gasDensityForm.controls.dryBulbTemp.errors.max">Value can't be greater than
-                {{gasDensityForm.controls.dryBulbTemp.errors.max.max}}.</span>
-              <span *ngIf="gasDensityForm.controls.dryBulbTemp.errors.min">Value can't be less than
-                {{gasDensityForm.controls.dryBulbTemp.errors.min.min}}.</span>
-            </span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="inputType">Humidity Metric</label>
-        <select class="form-control" name="inputType" formControlName="inputType" id="inputType"
-          (change)="setValidators()" (focus)="focusField('inputType')">
-          <option *ngFor="let method of methods" [ngValue]="method.value">{{method.display}}</option>
-        </select>
-      </div>
-      <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'wetBulb'">
-        <label for="wetBulbTemp">Wet Bulb Temp (T<sub>WB</sub>)</label>
-        <div class="input-group">
-          <input name="wetBulbTemp" type="number" step="any" class="form-control" formControlName="wetBulbTemp"
-            id="wetBulbTemp" (input)="save()" (focus)="focusField('wetBulbTemp')" onfocus="this.select();">
-            <span class="input-group-addon units">
-              <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
-            </span>
-            <span class="alert-danger pull-right small"
-              *ngIf="gasDensityForm.controls.wetBulbTemp.invalid && !gasDensityForm.controls.wetBulbTemp.pristine">
-              <span *ngIf="gasDensityForm.controls.wetBulbTemp.errors.required">Value Required</span>
-      
-              <span *ngIf="gasDensityForm.controls.wetBulbTemp.errors.max">Value can't be greater than
-                {{gasDensityForm.controls.wetBulbTemp.errors.max.max}}.</span>
-              <span *ngIf="gasDensityForm.controls.wetBulbTemp.errors.min">Value can't be less than
-                {{gasDensityForm.controls.wetBulbTemp.errors.min.min}}.</span>
-            </span>
-        </div>
-      </div>
-      <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'relativeHumidity'">
-        <label for="relativeHumidity">Relative Humidity (RH)</label>
-        <div class="input-group">
-          <input name="relativeHumidity" type="number" step="any" class="form-control" formControlName="relativeHumidity"
-            id="relativeHumidity" (input)="save()" (focus)="focusField('relativeHumidity')"
-            onfocus="this.select();">
-          <span class="input-group-addon units">%</span>
-          <span class="alert-danger pull-right small"
-            *ngIf="gasDensityForm.controls.relativeHumidity.invalid && !gasDensityForm.controls.relativeHumidity.pristine">
-            <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.required">Value Required</span>
-            <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.max">Value can't be greater than
-              {{gasDensityForm.controls.relativeHumidity.errors.max.max}}.</span>
-              <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.min">Value can't be less than 0.</span>
-          </span>
-        </div>
-      </div>
-      <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'dewPoint'">
-        <label for="dewPoint">Air Dew Point (T<sub>DP</sub>)</label>
-        <div class="input-group">
-          <input name="dewPoint" type="number" step="any" class="form-control" formControlName="dewPoint" id="dewPoint"
-            (input)="save()" (focus)="focusField('dewPoint')" onfocus="this.select();">
-            <span class="input-group-addon units">
-              <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
-            </span>
-            <span class="alert-danger pull-right small"
-              *ngIf="gasDensityForm.controls.dewPoint.invalid && !gasDensityForm.controls.dewPoint.pristine">
-              <span *ngIf="gasDensityForm.controls.dewPoint.errors.required">Value Required</span>
-              <span *ngIf="gasDensityForm.controls.dewPoint.errors.max">Value can't be greater than
-                {{gasDensityForm.controls.dewPoint.errors.max.max}}.</span>
-              <span *ngIf="gasDensityForm.controls.dewPoint.errors.min">Value can't be less than
-                {{gasDensityForm.controls.dewPoint.errors.min.min}}.</span>
-            </span>
-        </div>
-      </div>
-      <div class="form-group" *ngIf="!userDefinedBarometricPressure">
-        <label for="altitude">Altitude</label>
-        <div class="input-group">
-          <input class="form-control" name="altitude" id="altitude" formControlName="altitude" type="number"
-            (input)="save()" (focus)="focusField('altitude')" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-          <span class="alert-danger pull-right small"
-            *ngIf="gasDensityForm.controls.altitude.invalid && !gasDensityForm.controls.altitude.pristine">
-            <span *ngIf="gasDensityForm.controls.altitude.errors.min">Value can't be less than
-              {{gasDensityForm.controls.altitude.errors.min.min}}
-              <span *ngIf="settings.unitsOfMeasure != 'Metric'">ft</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>.
-            </span>
-          </span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="barometricPressure">Barometric Pressure (P<sub>atm</sub>)
-          <a class="click-link small form-text" (click)="showHideInputField()" *ngIf="userDefinedBarometricPressure">
-            Calculate From Altitude</a>
-          <a class="click-link small form-text" (click)="showHideInputField()" *ngIf="!userDefinedBarometricPressure">Define
-            Actual Barometric Pressure</a>
-        </label>
-        <div class="input-group" *ngIf="userDefinedBarometricPressure">
-          <input name="barometricPressure" type="number" step="any" class="form-control"
-            formControlName="barometricPressure" id="barometricPressure" (input)="save()"
-            (focus)="focusField('barometricPressure')" onfocus="this.select();">
-          <span class="input-group-addon units" [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
-          <span class="alert-danger pull-right small"
-            *ngIf="gasDensityForm.controls.barometricPressure.invalid && !gasDensityForm.controls.barometricPressure.pristine">
-            <span *ngIf="gasDensityForm.controls.barometricPressure.errors.required">Value Required</span>
-    
-            <span *ngIf="gasDensityForm.controls.barometricPressure.errors.max">Value can't be greater than
-              {{gasDensityForm.controls.barometricPressure.errors.max.max}}.</span>
-            <span *ngIf="gasDensityForm.controls.barometricPressure.errors.min">Value can't be less than
-              {{gasDensityForm.controls.barometricPressure.errors.min.min}}.</span>
-          </span>
-        </div>
-        <div class="input-group d-flex justify-content-center small bold pt-1" *ngIf="!userDefinedBarometricPressure">
-          <span class="mr-2" *ngIf="gasDensityForm.controls.barometricPressure.value">
-            {{gasDensityForm.controls.barometricPressure.value | number:'1.2-2'}}
-
-          </span>
-          <span class="mr-2" *ngIf="!gasDensityForm.controls.barometricPressure.value">&mdash; &mdash;</span>
-          <span [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
-        </div>
+  <div class="p-1">
+    <div class="form-group">
+      <label for="dryBulbTemp">Dry Bulb Temp (T<sub>DB</sub>)</label>
+      <div class="input-group">
+        <input name="dryBulbTemp" type="number" step="any" class="form-control" formControlName="dryBulbTemp"
+          id="dryBulbTemp" (input)="save()" (focus)="focusField('dryBulbTemp')" onfocus="this.select();">
+        <span class="input-group-addon units">
+          <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
+        </span>
+        <span class="alert-danger pull-right small"
+          *ngIf="gasDensityForm.controls.dryBulbTemp.invalid && !gasDensityForm.controls.dryBulbTemp.pristine">
+          <span *ngIf="gasDensityForm.controls.dryBulbTemp.errors.required">Value Required</span>
+          <span *ngIf="gasDensityForm.controls.dryBulbTemp.errors.max">Value can't be greater than
+            {{gasDensityForm.controls.dryBulbTemp.errors.max.max}}.</span>
+          <span *ngIf="gasDensityForm.controls.dryBulbTemp.errors.min">Value can't be less than
+            {{gasDensityForm.controls.dryBulbTemp.errors.min.min}}.</span>
+        </span>
       </div>
     </div>
+    <div class="form-group">
+      <label for="inputType">Humidity Metric</label>
+      <select class="form-control" name="inputType" formControlName="inputType" id="inputType"
+        (change)="setValidators()" (focus)="focusField('inputType')">
+        <option *ngFor="let method of methods" [ngValue]="method.value">{{method.display}}</option>
+      </select>
+    </div>
+    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'wetBulb'">
+      <label for="wetBulbTemp">Wet Bulb Temp (T<sub>WB</sub>)</label>
+      <div class="input-group">
+        <input name="wetBulbTemp" type="number" step="any" class="form-control" formControlName="wetBulbTemp"
+          id="wetBulbTemp" (input)="save()" (focus)="focusField('wetBulbTemp')" onfocus="this.select();">
+        <span class="input-group-addon units">
+          <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
+        </span>
+        <span class="alert-danger pull-right small"
+          *ngIf="gasDensityForm.controls.wetBulbTemp.invalid && !gasDensityForm.controls.wetBulbTemp.pristine">
+          <span *ngIf="gasDensityForm.controls.wetBulbTemp.errors.required">Value Required</span>
 
-  </form>
+          <span *ngIf="gasDensityForm.controls.wetBulbTemp.errors.max">Value can't be greater than
+            {{gasDensityForm.controls.wetBulbTemp.errors.max.max}}.</span>
+          <span *ngIf="gasDensityForm.controls.wetBulbTemp.errors.min">Value can't be less than
+            {{gasDensityForm.controls.wetBulbTemp.errors.min.min}}.</span>
+        </span>
+      </div>
+    </div>
+    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'relativeHumidity'">
+      <label for="relativeHumidity">Relative Humidity (RH)</label>
+      <div class="input-group">
+        <input name="relativeHumidity" type="number" step="any" class="form-control" formControlName="relativeHumidity"
+          id="relativeHumidity" (input)="save()" (focus)="focusField('relativeHumidity')" onfocus="this.select();">
+        <span class="input-group-addon units">%</span>
+        <span class="alert-danger pull-right small"
+          *ngIf="gasDensityForm.controls.relativeHumidity.invalid && !gasDensityForm.controls.relativeHumidity.pristine">
+          <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.required">Value Required</span>
+          <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.max">Value can't be greater than
+            {{gasDensityForm.controls.relativeHumidity.errors.max.max}}.</span>
+          <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.min">Value can't be less than 0.</span>
+        </span>
+      </div>
+    </div>
+    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'dewPoint'">
+      <label for="dewPoint">Air Dew Point (T<sub>DP</sub>)</label>
+      <div class="input-group">
+        <input name="dewPoint" type="number" step="any" class="form-control" formControlName="dewPoint" id="dewPoint"
+          (input)="save()" (focus)="focusField('dewPoint')" onfocus="this.select();">
+        <span class="input-group-addon units">
+          <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
+        </span>
+        <span class="alert-danger pull-right small"
+          *ngIf="gasDensityForm.controls.dewPoint.invalid && !gasDensityForm.controls.dewPoint.pristine">
+          <span *ngIf="gasDensityForm.controls.dewPoint.errors.required">Value Required</span>
+          <span *ngIf="gasDensityForm.controls.dewPoint.errors.max">Value can't be greater than
+            {{gasDensityForm.controls.dewPoint.errors.max.max}}.</span>
+          <span *ngIf="gasDensityForm.controls.dewPoint.errors.min">Value can't be less than
+            {{gasDensityForm.controls.dewPoint.errors.min.min}}.</span>
+        </span>
+      </div>
+    </div>
+    <div class="form-group" *ngIf="!userDefinedBarometricPressure">
+      <label for="altitude">Altitude</label>
+      <div class="input-group">
+        <input class="form-control" name="altitude" id="altitude" formControlName="altitude" type="number"
+          (input)="save()" (focus)="focusField('altitude')" onfocus="this.select();">
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
+        <span class="alert-danger pull-right small"
+          *ngIf="gasDensityForm.controls.altitude.invalid && !gasDensityForm.controls.altitude.pristine">
+          <span *ngIf="gasDensityForm.controls.altitude.errors.min">Value can't be less than
+            {{gasDensityForm.controls.altitude.errors.min.min}}
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'">ft</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>.
+          </span>
+        </span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="barometricPressure">Barometric Pressure (P<sub>atm</sub>)
+        <a class="click-link small form-text" (click)="showHideInputField()" *ngIf="userDefinedBarometricPressure">
+          Calculate From Altitude
+        </a>
+        <a class="click-link small form-text" (click)="showHideInputField()" *ngIf="!userDefinedBarometricPressure">
+          Define Actual Barometric Pressure
+        </a>
+      </label>
+      <div class="input-group" *ngIf="userDefinedBarometricPressure">
+        <input name="barometricPressure" type="number" step="any" class="form-control"
+          formControlName="barometricPressure" id="barometricPressure" (input)="save()"
+          (focus)="focusField('barometricPressure')" onfocus="this.select();">
+        <span class="input-group-addon units" [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
+        <span class="alert-danger pull-right small"
+          *ngIf="gasDensityForm.controls.barometricPressure.invalid && !gasDensityForm.controls.barometricPressure.pristine">
+          <span *ngIf="gasDensityForm.controls.barometricPressure.errors.required">Value Required</span>
+
+          <span *ngIf="gasDensityForm.controls.barometricPressure.errors.max">Value can't be greater than
+            {{gasDensityForm.controls.barometricPressure.errors.max.max}}.</span>
+          <span *ngIf="gasDensityForm.controls.barometricPressure.errors.min">Value can't be less than
+            {{gasDensityForm.controls.barometricPressure.errors.min.min}}.</span>
+        </span>
+      </div>
+      <div class="input-group d-flex justify-content-center small bold pt-1" *ngIf="!userDefinedBarometricPressure">
+        <span class="mr-2" *ngIf="gasDensityForm.controls.barometricPressure.value">
+          {{gasDensityForm.controls.barometricPressure.value | number:'1.2-2'}}
+
+        </span>
+        <span class="mr-2" *ngIf="!gasDensityForm.controls.barometricPressure.value">&mdash; &mdash;</span>
+        <span [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
+      </div>
+    </div>
+  </div>
+
+</form>

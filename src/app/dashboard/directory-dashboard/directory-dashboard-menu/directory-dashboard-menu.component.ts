@@ -73,15 +73,15 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   }
 
   checkSelected() {
-    let assessmentSelectedTest: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
-    let directorySelectedTest: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == true });
-    let inventorySelectedTest: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == true });
-    let checkAssessmentDirectorySelected: boolean = (assessmentSelectedTest != undefined) || (directorySelectedTest != undefined) || (inventorySelectedTest != undefined);
-    let calculatorSelectedTest: Calculator
+    let hasAssessmentSelected: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
+    let hasDirectorySelected: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == true });
+    let hasInventorySelected: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == true });
+    let hasCalculatorSelected: Calculator;
     if (this.directory.calculators) {
-      calculatorSelectedTest = _.find(this.directory.calculators, (value) => { return value.selected == true });
+      hasCalculatorSelected = _.find(this.directory.calculators, (value) => { return value.selected == true });
     }
-    return checkAssessmentDirectorySelected || (calculatorSelectedTest != undefined);
+    let hasSelectedItems: boolean = hasAssessmentSelected != undefined || hasDirectorySelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined;
+    return hasSelectedItems;
   }
 
   checkReport() {
@@ -97,15 +97,15 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   }
 
   checkIfCopyItem(){
-    let assessmentSelectedTest: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
-    let directorySelectedTest: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == true });
-    let inventorySelectedTest: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == true });
-    let checkAssessmentDirectorySelected: boolean = (assessmentSelectedTest != undefined) || (inventorySelectedTest != undefined);
-    let calculatorSelectedTest: Calculator
+    let hasAssessmentSelected: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
+    let hasDirectorySelected: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == true });
+    let hasInventorySelected: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == true });
+    let hasCalculatorSelected: Calculator;
     if (this.directory.calculators) {
-      calculatorSelectedTest = _.find(this.directory.calculators, (value) => { return value.selected == true });
+      hasCalculatorSelected = _.find(this.directory.calculators, (value) => { return value.selected == true });
     }
-    return (checkAssessmentDirectorySelected || (calculatorSelectedTest != undefined)) && directorySelectedTest == undefined;
+    let canCopyItem: boolean = (hasAssessmentSelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined) && hasDirectorySelected == undefined;
+    return canCopyItem;
   }
 
   showCreateAssessment() {

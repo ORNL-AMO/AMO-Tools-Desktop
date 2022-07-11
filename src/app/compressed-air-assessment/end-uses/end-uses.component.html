@@ -1,6 +1,46 @@
 <div class="d-flex flex-column panel-container">
     <div class="header mr-2 ml-2">
-        <h3>End Uses</h3>
+        <h3>End Use</h3>
         <br>
+    </div>
+    <div class="p-3 no-data" *ngIf="!hasEndUses">
+        <h3>Add End Use</h3>
+        <button type="button" class="btn btn-primary active" (click)="addEndUse()">+Add End Use</button>
+    </div>
+    <div class="mr-2 ml-2" *ngIf="hasEndUses">
+        <form [formGroup]="form">
+            <div class="form-group">
+                <label for="name">End Use Name</label>
+                <input type="text" class="form-control" name="endUseName" formControlName="endUseName"
+                    (focus)="focusField('endUseName')" (input)="save()" />
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea class="form-control" type="text" id="endUseDescription" formControlName="endUseDescription"
+                    (focus)="focusField('endUseDescription')" (input)="save()"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location</label>
+                <div class="input-group">
+                    <input name="location" type="text" step="any" class="form-control" id="location"
+                        formControlName="location" (input)="save()" (focus)="focusField('location')">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="selectedDayTypeId">Day Type</label>
+                <select id="selectedDayTypeId" name="selectedDayTypeId" formControlName="selectedDayTypeId" (change)="changeSelectedDayTypeEndUse()"
+                    (focus)="focusField('dayType')" class="form-control">
+                    <option *ngFor="let dayTypeOption of dayTypeOptions" [ngValue]="dayTypeOption.dayTypeId">
+                        {{dayTypeOption.name}}</option>
+                </select>
+            </div>
+        </form>
+
+        <label class="group-label">{{selectedDayType.name}} Data</label>
+        <app-day-type-use-form></app-day-type-use-form>
+
     </div>
 </div>

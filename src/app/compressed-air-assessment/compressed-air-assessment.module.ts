@@ -138,6 +138,11 @@ import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module'
 import { CentrifugalGraphModule } from './centrifugal-graph/centrifugal-graph.module';
 import { BleedTestModule } from '../calculator/compressed-air/bleed-test/bleed-test.module';
 import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-modal.component';
+import { EndUseTableComponent } from './results-panel/end-use-table/end-use-table.component';
+import { EndUseChartComponent } from './end-use-chart/end-use-chart.component';
+import { EndUsesService } from './end-uses/end-uses.service';
+import { DayTypeUseFormComponent } from './end-uses/day-type-use-form/day-type-use-form.component';
+import { DayTypeUseFormService } from './end-uses/day-type-use-form/day-type-use-form.service';
 
 @NgModule({
   declarations: [
@@ -218,7 +223,10 @@ import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-moda
     ImproveEndUseEfficiencyItemComponent,
     CompressorSummaryComponent,
     WelcomeScreenComponent,
-    FlaModalComponent
+    FlaModalComponent,
+    EndUseTableComponent,
+    EndUseChartComponent,
+    DayTypeUseFormComponent
   ],
   imports: [
     CommonModule,
@@ -252,7 +260,7 @@ import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-moda
     InventoryPerformanceProfileModule,
     Co2HelpTextModule,
     CentrifugalGraphModule,
-    BleedTestModule
+    BleedTestModule,
   ],
   providers: [
     CompressedAirAssessmentService,
@@ -283,7 +291,9 @@ import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-moda
     UseAutomaticSequencerService,
     AdjustCascadingSetPointsService,
     ReduceRunTimeService,
-    ExploreOpportunitiesValidationService
+    ExploreOpportunitiesValidationService,
+    EndUsesService,
+    DayTypeUseFormService
   ]
 })
 export class CompressedAirAssessmentModule { }

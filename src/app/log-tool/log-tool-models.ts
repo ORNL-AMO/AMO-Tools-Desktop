@@ -77,6 +77,7 @@ export interface IndividualDataFromCsv {
     hasTimeField?: boolean,
     dateField?: LogToolField,
     timeField?: LogToolField,
+    intervalForSeconds?: number;
 }
 
 export interface HourlyAverage {

@@ -9,6 +9,13 @@
     line-height: 2;
 }
 
+.nav-btn-clear{
+    background: #6D757C;
+    color: white;
+    border: none;
+    line-height: 2;
+}
+
 
 .nav-item{
     margin-left: .2rem;

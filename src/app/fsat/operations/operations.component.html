@@ -14,7 +14,7 @@
         <span class="input-group-addon op-hour-addon units">
           <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
         </span>
-        <input name="operatingHours" type="number" class="form-control"
+        <input name="operatingHours" type="number" step="10" class="form-control"
           formControlName="operatingHours" id="{{'operatingHours_'+idString}}" (input)="save()"
           (focus)="focusField('operatingHours')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">hrs/yr</span>
@@ -33,7 +33,7 @@
       [ngClass]="{'indicate-different': isCostDifferent(),'error': warnings.costError !== null, 'invalid':operationsForm.controls.cost.invalid}">
       <label for="{{'cost_'+idString}}">Electricity Cost</label>
       <div class="input-group">
-        <input name="cost" type="number" min="0" max="1" step="any" class="form-control" formControlName="cost"
+        <input name="cost" type="number" min="0" max="1" step="0.01" class="form-control" formControlName="cost"
           id="{{'cost_'+idString}}" (input)="save()" (focus)="focusField('cost')" onfocus="this.select();"
           [readonly]="!selected">
         <span class="input-group-addon units">$/kWh</span>

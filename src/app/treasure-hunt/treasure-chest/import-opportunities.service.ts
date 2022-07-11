@@ -11,7 +11,7 @@ export class ImportOpportunitiesService {
       if (treasureHunt.compressedAirReductions == undefined) {
         treasureHunt.compressedAirReductions = new Array();
       }
-      this.updateLegacyOpportunities(data.compressedAirPressureReductions, Treasure.compressedAir);
+      this.updateLegacyOpportunities(data.compressedAirReductions, Treasure.compressedAir);
       treasureHunt.compressedAirReductions = treasureHunt.compressedAirReductions.concat(data.compressedAirReductions);
     }
     if (data.opportunitySheets) {

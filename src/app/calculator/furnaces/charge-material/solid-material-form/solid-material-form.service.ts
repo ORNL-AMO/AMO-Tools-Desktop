@@ -59,7 +59,7 @@ export class SolidMaterialFormService {
       'additionalHeatRequired': [chargeMaterial.solidChargeMaterial.additionalHeat, Validators.required],
       'name': [chargeMaterial.name]
     });
-
+    
     formGroup = this.setInitialTempValidator(formGroup);
     return formGroup;
   }

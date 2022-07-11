@@ -1,8 +1,9 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { firstValueFrom, Subscription } from 'rxjs';
+ 
 import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { Settings } from '../shared/models/settings';
 import { LogToolDbService } from './log-tool-db.service';
 import { LogToolService } from './log-tool.service';
 
@@ -27,7 +28,7 @@ export class LogToolComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute, 
     private logToolDbService: LogToolDbService, private logToolService: LogToolService,
     private settingsDbService: SettingsDbService,
-    private indexedDbService: IndexedDbService) { }
+     ) { }
 
   ngOnInit() {
     this.logToolDbService.initLogToolData();
@@ -68,9 +69,10 @@ export class LogToolComponent implements OnInit {
     }
   }
 
-  closeWelcomeScreen() {
+  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableDataExplorerTutorial = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.logToolService.isModalOpen.next(false);
   }

@@ -35,6 +35,9 @@ export class UpdateDataService {
                 return this.updateTreasureHunt(assessment);
             } else if (assessment.type === 'WasteWater') {
                 return this.updateWasteWater(assessment);
+            } else if (assessment.type === 'CompressedAir') {
+                console.log('updated legacy CA assessment')
+                return this.updateCompressedAir(assessment);
             } else {
                 return assessment;
             }
@@ -81,6 +84,16 @@ export class UpdateDataService {
             assessment.wasteWater.baselineData.activatedSludgeData.isUserDefinedSo = true;
         }
 
+        return assessment;
+    }
+
+
+    updateCompressedAir(assessment: Assessment): Assessment {
+        //logic for updating wastewater data
+        assessment.appVersion = packageJson.version;
+        if (assessment.compressedAirAssessment && !assessment.compressedAirAssessment.endUses) {
+            assessment.compressedAirAssessment.endUses = [];
+        };
         return assessment;
     }
 

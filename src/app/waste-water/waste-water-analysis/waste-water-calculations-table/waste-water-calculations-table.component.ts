@@ -26,7 +26,6 @@ export class WasteWaterCalculationsTableComponent implements OnInit {
     this.dataTableVariables = DataTableVariables;
     this.selectedTableDataSub = this.wasteWaterAnalysisService.selectedTableData.subscribe(val => {
       this.selectedTableData = val;
-      console.log(this.selectedTableData);
     });
   }
 

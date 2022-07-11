@@ -1,34 +1,38 @@
 import { Injectable } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
-import { IndexedDbService } from './indexed-db.service';
 import * as _ from 'lodash';
+import { NgxIndexedDBService } from 'ngx-indexed-db';
+import { firstValueFrom, map, Observable } from 'rxjs';
+import { AssessmentStoreMeta } from './dbConfig';
+import { UpdateDataService } from '../shared/helper-services/update-data.service';
 
 @Injectable()
 export class AssessmentDbService {
 
   allAssessments: Array<Assessment>;
-  constructor(private indexedDbService: IndexedDbService) {
+  storeName: string = AssessmentStoreMeta.store;
+
+  constructor(
+    private dbService: NgxIndexedDBService, private updateDataService: UpdateDataService) {
+  }
+  
+  async setAll(assessments?: Array<Assessment>) {
+    if (assessments) {
+      this.allAssessments = assessments;
+    } else {
+      this.allAssessments = await firstValueFrom(this.getAllAssessments());
+    }
   }
 
-  setAll(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (this.indexedDbService.db) {
-        this.indexedDbService.getAllAssessments().then(assessments => {
-          this.allAssessments = assessments;
-          resolve(true);
-        });
-      } else {
-        this.allAssessments = [];
-        resolve(false);
-      }
-    });
+  getAllAssessments(): Observable<any> {
+    return this.dbService.getAll(this.storeName).pipe(
+      map((assessments: Array<Assessment>) => {
+        assessments.forEach((assessment: Assessment) => this.updateDataService.checkAssessment(assessment));
+        return assessments;
+      }));
   }
 
-  getAll(): Array<Assessment> {
-    return this.allAssessments;
-  }
-
-  getById(id: number): Assessment {
+  findById(id: number): Assessment {
     let selectedAssessment: Assessment = _.find(this.allAssessments, (assessment) => { return assessment.id === id; });
     return selectedAssessment;
   }
@@ -44,5 +48,26 @@ export class AssessmentDbService {
     });
     return example;
   }
+
+  addWithObservable(assessment: Assessment): Observable<any> {
+    assessment.createdDate = new Date();
+    assessment.modifiedDate = new Date();
+    return this.dbService.add(this.storeName, assessment);
+  }
+
+  deleteByIdWithObservable(assessmentId: number): Observable<any> {
+    return this.dbService.delete(this.storeName, assessmentId);
+  }
+
+  bulkDeleteWithObservable(assessmentIds: Array<number>): Observable<any> {
+    // ngx-indexed-db returns Array<Array<T>>
+    return this.dbService.bulkDelete(this.storeName, assessmentIds);
+  }
+
+  updateWithObservable(assessment: Assessment): Observable<any> {
+    assessment.modifiedDate = new Date();
+    return this.dbService.update(this.storeName, assessment);
+  }
+
 
 }

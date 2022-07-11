@@ -1,6 +1,8 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
+import { firstValueFrom } from 'rxjs';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-dashboard-tutorial',
@@ -12,6 +14,8 @@ export class DashboardTutorialComponent implements OnInit {
   closeTutorial = new EventEmitter<boolean>();
   @Input()
   inTutorials: boolean;
+  @Input()
+  idbStarted: boolean;
 
   showItem: Array<boolean> = [true, false, false, false, false, false, false, false, false, false, false, false];
 
@@ -19,7 +23,7 @@ export class DashboardTutorialComponent implements OnInit {
   showWelcomeText: Array<boolean> = [false, false, false, false];
   dontShow: boolean = true;
   show: boolean = true;
-  constructor(private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private settingsDbService: SettingsDbService,  ) { }
 
   ngOnInit() {
     setTimeout(() => {
@@ -45,10 +49,9 @@ export class DashboardTutorialComponent implements OnInit {
     this.closeTutorial.emit(true);
   }
 
-  sendDontShow() {
+  async sendDontShow() {
     this.settingsDbService.globalSettings.disableDashboardTutorial = this.dontShow;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    this.settingsDbService.setAll(updatedSettings);
   }
 }
