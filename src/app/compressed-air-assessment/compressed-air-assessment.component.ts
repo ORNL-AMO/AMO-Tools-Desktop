@@ -6,6 +6,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
  
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
+import { AirPropertiesCsvService } from '../shared/helper-services/air-properties-csv.service';
 import { Assessment } from '../shared/models/assessment';
 import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
@@ -56,6 +57,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   assessmentTabSub: Subscription;
   showWelcomeScreen: boolean = false;
   constructor(private activatedRoute: ActivatedRoute,
+    private airPropertiesService: AirPropertiesCsvService,
     private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private systemInformationFormService: SystemInformationFormService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
       
@@ -68,6 +70,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   ngOnInit(): void {
     this.egridService.getAllSubRegions();
     // this.compressedAirCalculationService.test();
+    this.airPropertiesService.initAirPropertiesData();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);

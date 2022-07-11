@@ -140,9 +140,11 @@ import { BleedTestModule } from '../calculator/compressed-air/bleed-test/bleed-t
 import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-modal.component';
 import { EndUseTableComponent } from './results-panel/end-use-table/end-use-table.component';
 import { EndUseChartComponent } from './end-use-chart/end-use-chart.component';
-import { EndUsesService } from './end-uses/end-uses.service';
 import { DayTypeUseFormComponent } from './end-uses/day-type-use-form/day-type-use-form.component';
+import { CompressedAirSankeyComponent } from './compressed-air-sankey/compressed-air-sankey.component';
+import { EndUsesService } from './end-uses/end-uses.service';
 import { DayTypeUseFormService } from './end-uses/day-type-use-form/day-type-use-form.service';
+import { CompressedAirSankeyService } from './compressed-air-sankey/compressed-air-sankey.service';
 
 @NgModule({
   declarations: [
@@ -226,7 +228,8 @@ import { DayTypeUseFormService } from './end-uses/day-type-use-form/day-type-use
     FlaModalComponent,
     EndUseTableComponent,
     EndUseChartComponent,
-    DayTypeUseFormComponent
+    DayTypeUseFormComponent,
+    CompressedAirSankeyComponent
   ],
   imports: [
     CommonModule,
@@ -293,7 +296,8 @@ import { DayTypeUseFormService } from './end-uses/day-type-use-form/day-type-use
     ReduceRunTimeService,
     ExploreOpportunitiesValidationService,
     EndUsesService,
-    DayTypeUseFormService
+    DayTypeUseFormService,
+    CompressedAirSankeyService
   ]
 })
 export class CompressedAirAssessmentModule { }
