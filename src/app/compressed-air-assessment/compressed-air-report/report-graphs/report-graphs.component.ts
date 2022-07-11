@@ -1,8 +1,9 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { CompressedAirAssessmentResult, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
-import { CompressedAirAssessment, CompressedAirDayType } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../../../shared/models/compressed-air-assessment';
 import { CurrencyPipe } from '@angular/common';
 import { PlotlyService } from 'angular-plotly.js';
+import { CompressedAirModificationValid } from '../../explore-opportunities/explore-opportunities-validation.service';
 
 @Component({
   selector: 'app-report-graphs',
@@ -12,6 +13,8 @@ import { PlotlyService } from 'angular-plotly.js';
 export class ReportGraphsComponent implements OnInit {
   @Input()
   assessmentResults: Array<CompressedAirAssessmentResult>;
+  @Input()
+  combinedDayTypeResults: Array<{modification: Modification, combinedResults: DayTypeModificationResult, validation: CompressedAirModificationValid}>;
   @Input()
   compressedAirAssessment: CompressedAirAssessment;
   @Input()
@@ -39,9 +42,8 @@ export class ReportGraphsComponent implements OnInit {
   }
 
   drawModificationGraph() {
-    if (this.assessmentResults && this.assessmentResults.length != 0 && this.modificationGraph) {
-      
-      let x: Array<string> = this.assessmentResults.map(result => { return result.modification.name });
+    if (this.assessmentResults && this.combinedDayTypeResults && this.combinedDayTypeResults.length != 0 && this.modificationGraph) {
+      let x: Array<string> = this.combinedDayTypeResults.map(result => { return result.modification.name });
       x.unshift('Baseline');
       let yValue = this.getAnnualCost();
       let traceData = new Array();
@@ -193,76 +195,67 @@ export class ReportGraphsComponent implements OnInit {
 
   getReduceAirLeaksTrace(): Array<number> {
     let y: Array<number> = [0];
-    this.assessmentResults.forEach(result => {
-      let dayTypeModificationResult: DayTypeModificationResult = result.dayTypeModificationResults.find(dResult => { return dResult.dayTypeId == this.selectedDayType.dayTypeId });
-      y.push(dayTypeModificationResult.reduceAirLeaksSavings.savings.cost);
+    this.combinedDayTypeResults.forEach(result => {
+      y.push(result.combinedResults.reduceAirLeaksSavings.savings.cost);
     });
     return y;
   }
 
   getImproveEfficiencyTrace(): Array<number> {
     let y: Array<number> = [0];
-    this.assessmentResults.forEach(result => {
-      let dayTypeModificationResult: DayTypeModificationResult = result.dayTypeModificationResults.find(dResult => { return dResult.dayTypeId == this.selectedDayType.dayTypeId });
-      y.push(dayTypeModificationResult.improveEndUseEfficiencySavings.savings.cost);
+    this.combinedDayTypeResults.forEach(result => {
+      y.push(result.combinedResults.improveEndUseEfficiencySavings.savings.cost);
     });
     return y;
   }
   getReduceAirSystemPressureTrace(): Array<number> {
     let y: Array<number> = [0];
-    this.assessmentResults.forEach(result => {
-      let dayTypeModificationResult: DayTypeModificationResult = result.dayTypeModificationResults.find(dResult => { return dResult.dayTypeId == this.selectedDayType.dayTypeId });
-      y.push(dayTypeModificationResult.reduceSystemAirPressureSavings.savings.cost);
+    this.combinedDayTypeResults.forEach(result => {
+      y.push(result.combinedResults.reduceSystemAirPressureSavings.savings.cost);
     });
     return y;
   }
   getAdjustCascadePointTrace(): Array<number> {
     let y: Array<number> = [0];
-    this.assessmentResults.forEach(result => {
-      let dayTypeModificationResult: DayTypeModificationResult = result.dayTypeModificationResults.find(dResult => { return dResult.dayTypeId == this.selectedDayType.dayTypeId });
-      y.push(dayTypeModificationResult.adjustCascadingSetPointsSavings.savings.cost);
+    this.combinedDayTypeResults.forEach(result => {
+      y.push(result.combinedResults.adjustCascadingSetPointsSavings.savings.cost);
     });
     return y;
   }
   getAutomaticSequencerTrace(): Array<number> {
     let y: Array<number> = [0];
-    this.assessmentResults.forEach(result => {
-      let dayTypeModificationResult: DayTypeModificationResult = result.dayTypeModificationResults.find(dResult => { return dResult.dayTypeId == this.selectedDayType.dayTypeId });
-      y.push(dayTypeModificationResult.useAutomaticSequencerSavings.savings.cost);
+    this.combinedDayTypeResults.forEach(result => {
+      y.push(result.combinedResults.useAutomaticSequencerSavings.savings.cost);
     });
     return y;
   }
   getReduceRuntimeTrace(): Array<number> {
     let y: Array<number> = [0];
-    this.assessmentResults.forEach(result => {
-      let dayTypeModificationResult: DayTypeModificationResult = result.dayTypeModificationResults.find(dResult => { return dResult.dayTypeId == this.selectedDayType.dayTypeId });
-      y.push(dayTypeModificationResult.reduceRunTimeSavings.savings.cost);
+    this.combinedDayTypeResults.forEach(result => {
+      y.push(result.combinedResults.reduceRunTimeSavings.savings.cost);
     });
     return y;
   }
   getReceiverVolumeTrace(): Array<number> {
     let y: Array<number> = [0];
-    this.assessmentResults.forEach(result => {
-      let dayTypeModificationResult: DayTypeModificationResult = result.dayTypeModificationResults.find(dResult => { return dResult.dayTypeId == this.selectedDayType.dayTypeId });
-      y.push(dayTypeModificationResult.addReceiverVolumeSavings.savings.cost);
+    this.combinedDayTypeResults.forEach(result => {
+      y.push(result.combinedResults.addReceiverVolumeSavings.savings.cost);
     });
     return y;
   }
 
   getAnnualCost(): Array<number> {
     let y: Array<number> = [this.assessmentResults[0].totalBaselineCost];
-    this.assessmentResults.forEach(result => {
-      let dayTypeModificationResult: DayTypeModificationResult = result.dayTypeModificationResults.find(dResult => { return dResult.dayTypeId == this.selectedDayType.dayTypeId });
-      y.push(dayTypeModificationResult.allSavingsResults.adjustedResults.cost);
+    this.combinedDayTypeResults.forEach(result => {
+      y.push(result.combinedResults.allSavingsResults.adjustedResults.cost);
     });
     return y;
   }
 
   getFlowReallocationTrace(): Array<number> {
     let y: Array<number> = [0];
-    this.assessmentResults.forEach(result => {
-      let dayTypeModificationResult: DayTypeModificationResult = result.dayTypeModificationResults.find(dResult => { return dResult.dayTypeId == this.selectedDayType.dayTypeId });
-      y.push(dayTypeModificationResult.flowReallocationSavings.savings.cost);
+    this.combinedDayTypeResults.forEach(result => {
+      y.push(result.combinedResults.flowReallocationSavings.savings.cost);
     });
     return y;
   }
@@ -305,7 +298,7 @@ export class ReportGraphsComponent implements OnInit {
     this.useAutomaticSequencer = false;
     this.reduceRuntime = false;
     this.addPrimaryReceiverVolume = false;
-    this.assessmentResults.forEach(result => {
+    this.combinedDayTypeResults.forEach(result => {
       if (result.modification.addPrimaryReceiverVolume.order != 100) {
         this.addPrimaryReceiverVolume = true;
       }
