@@ -4,7 +4,6 @@ import { Settings } from '../../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { GreaterThanValidator } from '../../../../../shared/validators/greater-than';
 
 @Injectable()
 export class GasDensityFormService {
