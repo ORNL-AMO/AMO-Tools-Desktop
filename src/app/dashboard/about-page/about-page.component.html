@@ -18,9 +18,15 @@
       pump-system curve, converting energy requirements for different heat sources).
     </p>
     <hr>
-    <p class="small">
-      To access the web-version click here <a target="_blank" href="https://{{'measur.ornl.gov/landing-screen'}}" alt="https://measur.ornl.gov/landing-screen">measur.ornl.gov/landing-screen</a>.
-      To download the installable version click here <a target="_blank" href="https://{{'ornl-amo.github.io/'}}" alt="https://ornl-amo.github.io/">ornl-amo.github.io/</a>.
+    <p class="small" *ngIf="isElectronApp">
+      A web version of this application can be found at: <a target="_blank" href="https://measur.ornl.gov"
+        alt="https://measur.ornl.gov">https://measur.ornl.gov</a>
+    </p>
+    <p class="small" *ngIf="!isElectronApp">
+      MEASUR can also be downloaded as a desktop application. Links for installers to various operating systems, as well
+      as installers for other applications can be found at: <a target="_blank" href="https://ornl-amo.github.io"
+        alt="https://ornl-amo.github.io/">https://ornl-amo.github.io/</a>
+
     </p>
     <hr>
     <div class="card">
@@ -82,30 +88,39 @@
         <span class="pull-right" *ngIf="showCompressedAir"><i class="fa fa-chevron-down"></i></span>
       </div>
       <div *ngIf="showCompressedAir" class="card-body small">
-        <p>The original compressed air assessment tool (AirMaster) was developed by Eric Bessey, now of TTed Solutions, Inc., to
-          provide an initial assessment of a compressed air system’s performance. AirMaster was later upgraded and improved to
+        <p>The original compressed air assessment tool (AirMaster) was developed by Eric Bessey, now of TTed Solutions,
+          Inc., to
+          provide an initial assessment of a compressed air system’s performance. AirMaster was later upgraded and
+          improved to
           DOE legacy tool, AirMaster+.
         </p>
         <hr>
         <p>
-          Now part of MEASUR, the Compressed Air module helps users evaluate the potential energy savings opportunities of
-          compressed air systems based on field-measured data. It is also intended to help assess different system modifications
+          Now part of MEASUR, the Compressed Air module helps users evaluate the potential energy savings opportunities
+          of
+          compressed air systems based on field-measured data. It is also intended to help assess different system
+          modifications
           to determine which would be the most energetically beneficial.
-          To assist users model their own compressed air systems, the Compressed Air Module provides a generic compressor
+          To assist users model their own compressed air systems, the Compressed Air Module provides a generic
+          compressor
           database. This database includes various compressor types and controls to help users model their compressor
-          performance curves. The tool also allows the consideration of various "what-if" scenarios for various options to
+          performance curves. The tool also allows the consideration of various "what-if" scenarios for various options
+          to
           reduce energy use.
         </p>
         <hr>
         <div class="content-subheader">Inputs</div>
-        <p>To use the Compressed Air module, users need actual compressed air system data, though use of the generic database
+        <p>To use the Compressed Air module, users need actual compressed air system data, though use of the generic
+          database
           minimizes the data required:</p>
-          <ul>
-            <li>Compressed air system information (storage capacity, sequencer controls, elevation or atmospheric pressure)</li>
-            <li>Compressor inventory data (nameplate data, controls, design details, performance data)</li>
-            <li>Compressor profile data for each day type (hourly or daily averages of airflow, power, load factor, or voltage,
-              current and power factor)</li>
-          </ul>
+        <ul>
+          <li>Compressed air system information (storage capacity, sequencer controls, elevation or atmospheric
+            pressure)</li>
+          <li>Compressor inventory data (nameplate data, controls, design details, performance data)</li>
+          <li>Compressor profile data for each day type (hourly or daily averages of airflow, power, load factor, or
+            voltage,
+            current and power factor)</li>
+        </ul>
         <div class="content-subheader">Outputs</div>
         <p>Based on inputs, the Compressed Air module will provide the following:</p>
         <ul>
@@ -336,9 +351,12 @@
           data). </p>
         <hr>
         <div class="content-subheader">Inputs</div>
-        <p>A .csv or .xlsx file with data, such as those from data loggers or weather data. The first "true" row of data can be
-          chosen in the module, so data does not need to be prepared before use. For a better experience, combine data files
-          with matching time stamps into one .xlsx file (this will allow full use of the scatter plot abilities). An analysis
+        <p>A .csv or .xlsx file with data, such as those from data loggers or weather data. The first "true" row of data
+          can be
+          chosen in the module, so data does not need to be prepared before use. For a better experience, combine data
+          files
+          with matching time stamps into one .xlsx file (this will allow full use of the scatter plot abilities). An
+          analysis
           completed in the Data Exploration Module can also be exported and reloaded using the same upload screen.</p>
         <div class="content-subheader">Outputs</div>
         <p>Based on inputs, the Data Exploration module will provide the following:</p>
