@@ -1,0 +1,78 @@
+<div class="d-flex flex-column w-100 compressed-air">
+    <div class="row">
+      <div class="navbar w-50 col-6">
+        <div class="d-flex justify-content-center align-items-center w-100 flex-wrap">
+          <!-- <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-center align-items-center w-100 flex-wrap"> -->
+          <div class="tab-content pl-2 pr-2">
+            <!-- <div class="form-group" *ngIf="compressedAirAssessmentOptions.length > 1">
+              <select name="compressedAirAssessmentSelect" class="form-control mx-auto w-100" id="caSankeySelect"
+              [(ngModel)]="selectedSankeyOption">
+              <option *ngFor="let compressedAirAssessment of compressedAirAssessmentOptions"
+              [ngValue]="compressedAirAssessment">{{compressedAirAssessment.name}}</option>
+            </select>
+          </div> -->
+          </div>
+          <div class="btn-group btn-group-sm align-self-center">
+            <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
+              [ngClass]="{'active': sankeyLabelStyle == 'percent'}">End Use Percent</button>
+            <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('energy')"
+              [ngClass]="{'active': sankeyLabelStyle == 'energy'}">End Use Airflow</button>
+            <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
+              [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
+          </div>
+        </div>
+      </div>
+      <div class="p-2 w-50 justify-content-start col-6">
+        <form class="px-4 py-2 w-75">
+            <div class="form-group">
+              <label for="selectedDayTypeId">Day Type</label>
+              <div class="input-group">
+                <select class="form-control mx-auto mt-0 w-100" id="selectedDayTypeId" [(ngModel)]="selectedDayTypeId"
+                  name="selectedDayTypeId"
+                  (focus)="focusField()">
+                  <option *ngFor="let dayType of compressedAirAssessment.compressedAirDayTypes"
+                    [ngValue]="dayType.dayTypeId">
+                    {{dayType.name}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          <div class="form-group">
+            <label for="dayTypeLeakRate">Day Type Leak Rate</label>
+            <div class="input-group">
+              <input class="form-control" type="number" name="dayTypeLeakRate" 
+              name="dayTypeLeakRate"
+              [(ngModel)]="dayTypeLeakRate"
+                (input)="saveDayTypeLeakRate()" (focus)="focusField()">
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup>/min</span>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- <div *ngIf="sankeyResults" class="row">
+      <span class="alert-warning small px-4 py-2 mx-auto" *ngIf="sankeyResults.warnings.CFMWarning !== undefined">{{ sankeyResults.warnings.CFMWarning }}</span>
+    </div> -->
+    <div *ngIf="!hasValidLeakRate" class="row">
+      <span class="alert-danger small px-4 py-2 mx-auto">Sankey calculation requires a Day Type Leak Rate value</span>
+    </div>
+    <div *ngIf="!profileDataComplete" class="row">
+      <span class="alert-danger small px-4 py-2 mx-auto">Sankey calculation requires averages of airflow and power from System Profile Setup. Please check System Profile Setup data for correctness.</span>
+    </div>
+  </div>
+  
+  
+  <div class="sankey-padding w-100">
+    <div #airflowChart></div>
+    <div *ngIf="minLosses.length > 0" class="ml-5">
+      <div class="mt-4">
+        <label class="group-label bold mb-2">Negligible Losses</label>
+        <table class="small w-25 ml-3">
+          <tr *ngFor="let loss of minLosses">
+            <td>{{loss}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>

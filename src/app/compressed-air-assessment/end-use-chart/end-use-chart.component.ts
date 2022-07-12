@@ -48,7 +48,7 @@ export class EndUseChartComponent implements OnInit {
       if (compressedAirAssessment.endUses.length > 0) {
         this.dayTypeBaselineResults = this.endUsesService.getBaselineResults(this.compressedAirAssessment, this.settings);
         this.setSelectedDayTypeAverage(this.selectedDayType);
-        let endUseEnergyData: Array<EndUseEnergyData> = this.endUsesService.getEndUseEnergyData(compressedAirAssessment, this.selectedDayType, this.dayTypeBaselineResults);
+        let endUseEnergyData: Array<EndUseEnergyData> = this.endUsesService.getEndUseEnergyData(compressedAirAssessment, this.selectedDayType.dayTypeId, this.dayTypeBaselineResults);
         this.renderPieChart(endUseEnergyData);
       }
     });
@@ -125,7 +125,7 @@ export class EndUseChartComponent implements OnInit {
 
   setChartData() {
     this.setSelectedDayTypeAverage(this.selectedDayType);
-    let endUseEnergyData: Array<EndUseEnergyData> = this.endUsesService.getEndUseEnergyData(this.compressedAirAssessment, this.selectedDayType, this.dayTypeBaselineResults);
+    let endUseEnergyData: Array<EndUseEnergyData> = this.endUsesService.getEndUseEnergyData(this.compressedAirAssessment, this.selectedDayType.dayTypeId, this.dayTypeBaselineResults);
     this.renderPieChart(endUseEnergyData);
   }
 }

@@ -94,19 +94,20 @@ export class EndUsesService {
   }
 
 
-  getEndUseEnergyData(compressedAirAssessment: CompressedAirAssessment, selectedDayType: CompressedAirDayType, dayTypeBaselineResults: BaselineResults): Array<EndUseEnergyData> {
+  getEndUseEnergyData(compressedAirAssessment: CompressedAirAssessment, selectedDayTypeId: string, dayTypeBaselineResults: BaselineResults): Array<EndUseEnergyData> {
     let endUseEnergyData = new Array<EndUseEnergyData>();
     // let dayTypeEndUses: Array<DayTypeEndUse> = [];
-    if (selectedDayType) {
-      let currentDayTypeResults: BaselineResult = dayTypeBaselineResults.dayTypeResults.find(result => result.dayTypeId == selectedDayType.dayTypeId);
+    if (selectedDayTypeId) {
+      let currentDayTypeResults: BaselineResult = dayTypeBaselineResults.dayTypeResults.find(result => result.dayTypeId == selectedDayTypeId);
       compressedAirAssessment.endUses.forEach((endUse: EndUse) => {
-        let dayTypeEndUse: DayTypeEndUse = endUse.dayTypeEndUses.find(dayTypeUse => dayTypeUse.dayTypeId == selectedDayType.dayTypeId);
+        let dayTypeEndUse: DayTypeEndUse = endUse.dayTypeEndUses.find(dayTypeUse => dayTypeUse.dayTypeId == selectedDayTypeId);
         if (dayTypeEndUse) {
           let dayTypeEndUseResult: EndUseResults = this.getSingleDayTypeEndUseResults(dayTypeEndUse, currentDayTypeResults);
           endUseEnergyData.push({
             dayTypeAverageAirflowPercent: dayTypeEndUseResult.averagePercentCapacity,
             dayTypeAverageAirFlow: dayTypeEndUse.averageAirflow,
             endUseName: endUse.endUseName,
+            endUseId: endUse.endUseId,
             color: undefined
           });
         }
@@ -121,6 +122,7 @@ export class EndUsesService {
             dayTypeAverageAirflowPercent: dayTypeEndUseResult.averagePercentCapacity,
             dayTypeAverageAirFlow: dayTypeEndUse.averageAirflow,
             endUseName: endUse.endUseName,
+            endUseId: endUse.endUseId,
             color: undefined
           });
         });
@@ -230,5 +232,6 @@ export interface EndUseEnergyData {
   dayTypeAverageAirFlow: number, 
   dayTypeAverageAirflowPercent: number,
   endUseName: string, 
+  endUseId: string, 
   color: string 
 }

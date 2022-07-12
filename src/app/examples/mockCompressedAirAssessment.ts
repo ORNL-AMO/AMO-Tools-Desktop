@@ -16994,7 +16994,7 @@ export const MockCompressedAirAssessment: Assessment =  {
                 "dayTypeEndUses": [
                     {
                         "dayTypeId": "hopx028cf",
-                        "averageAirflow": 27,
+                        "averageAirflow": 34,
                         "averageCapacity": 88,
                         "regulated": false,
                         "requiredPressure": 14,
@@ -17022,7 +17022,7 @@ export const MockCompressedAirAssessment: Assessment =  {
                 "dayTypeEndUses": [
                     {
                         "dayTypeId": "hopx028cf",
-                        "averageAirflow": 27,
+                        "averageAirflow": 31,
                         "averageCapacity": 88,
                         "regulated": false,
                         "requiredPressure": 14,
@@ -17050,7 +17050,7 @@ export const MockCompressedAirAssessment: Assessment =  {
                 "dayTypeEndUses": [
                     {
                         "dayTypeId": "hopx028cf",
-                        "averageAirflow": 27,
+                        "averageAirflow": 25,
                         "averageCapacity": 88,
                         "regulated": false,
                         "requiredPressure": 14,
@@ -17068,7 +17068,20 @@ export const MockCompressedAirAssessment: Assessment =  {
                     }
                 ]
             }
-        ]
+        ],
+        "airFlowSankeyInputs": {
+            "selectedDayTypeId": "hopx028cf",
+            "dayTypeLeakRates": [
+                {
+                    "dayTypeId": "hopx028cf",
+                    "dayTypeLeakRate": undefined,
+                },
+                {
+                    "dayTypeId": "mufcn7yvy",
+                    "dayTypeLeakRate": undefined,
+                }
+            ]
+        }
     },
     "id": 71,
     "selected": true

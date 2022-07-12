@@ -1228,7 +1228,7 @@ export interface CompressedAirAssessmentResult {
   totalCostPower: number,
   modification: Modification
 }
-export interface DayTypeProfileSummary { dayTypeId: string, profileSummary: Array<ProfileSummary> }
+export interface DayTypeProfileSummary { dayTypeId: string, profileSummary: Array<ProfileSummary> };
 
 export interface DayTypeModificationResult {
   adjustedProfileSummary: Array<ProfileSummary>,

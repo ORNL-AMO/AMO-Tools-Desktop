@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { AirPropertiesCsvService } from '../../shared/helper-services/air-properties-csv.service';
-import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../shared/models/compressed-air-assessment';
-import { Settings } from '../../shared/models/settings';
-import { BaselineResults } from '../compressed-air-assessment-results.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { AirPropertiesCsvService } from '../../../shared/helper-services/air-properties-csv.service';
+import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
+import { BaselineResults } from '../../compressed-air-assessment-results.service';
 
 @Injectable()
-export class CompressedAirSankeyService {
-
+export class PowerSankeyService {
   baseSize: number = 300;
   airPropertiesLookupLimits = {temperatureLowRange: -50, temperatureHighRange: 1000, pressureLowRange: 0, pressureHighRange: 500};
   constructor(

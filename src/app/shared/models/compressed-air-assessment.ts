@@ -1,6 +1,7 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 import { ProfileSummaryValid } from "../../compressed-air-assessment/compressed-air-assessment.service";
-import { SankeySystemInputs } from "../../compressed-air-assessment/compressed-air-sankey/compressed-air-sankey.service";
+import { AirFlowSankeyInputs } from "../../compressed-air-assessment/compressed-air-sankey/airflow-sankey/airflow-sankey.service";
+import { SankeySystemInputs } from "../../compressed-air-assessment/compressed-air-sankey/power-sankey/power-sankey.service";
 import { DayTypeSummary, LogToolField } from "../../log-tool/log-tool-models";
 
 export interface CompressedAirAssessment {
@@ -11,6 +12,7 @@ export interface CompressedAirAssessment {
     systemBasics: CASystemBasics,
     systemInformation: SystemInformation,
     powerSankeyInputs?: SankeySystemInputs,
+    airFlowSankeyInputs?: AirFlowSankeyInputs,
     compressorInventoryItems: Array<CompressorInventoryItem>,
     systemProfile: SystemProfile,
     // logToolDbData?: LogToolDbData,
