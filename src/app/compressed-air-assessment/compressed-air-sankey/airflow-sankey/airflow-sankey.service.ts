@@ -12,17 +12,19 @@ export class AirflowSankeyService {
   getAirFlowSankeyResults(compressedAirAssessment: CompressedAirAssessment, selectedDayTypeId: string, settings: Settings): AirFlowSankeyResults {
     let airflowSankeyResults: AirFlowSankeyResults = {
       endUseEnergyData: [],
+      totalEndUseAirflow: undefined,
       warnings: {
         CFMWarning: undefined,
       }
     };
 
     if (compressedAirAssessment.endUses.length > 0) {
-      // should just combine sankey results into normal results so we only have to iterate through everything once
+      // TODO should just combine sankey results into normal results so we only have to iterate through everything once
       // Set as behavior subject?
       let dayTypeBaselineResults: BaselineResults = this.endUsesService.getBaselineResults(compressedAirAssessment, settings);
       airflowSankeyResults.endUseEnergyData = this.endUsesService.getEndUseEnergyData(compressedAirAssessment, selectedDayTypeId, dayTypeBaselineResults);
-      
+      // TODO Should this be total system airflow for daytype, from sys profile?
+      airflowSankeyResults.totalEndUseAirflow = airflowSankeyResults.endUseEnergyData.reduce((total, endUseData) => total + endUseData.dayTypeAverageAirFlow, 0);
     }
     
     
@@ -75,7 +77,7 @@ export interface CompressedAirSankeyNode {
   x: number,
   y: number,
   nodeColor: string,
-  loss: number,
+  flow: number,
   source: number,
   target: number[],
   isConnector: boolean,
@@ -86,6 +88,7 @@ export interface CompressedAirSankeyNode {
 
 export interface AirFlowSankeyResults {
   endUseEnergyData?: Array<EndUseEnergyData>,
+  totalEndUseAirflow: number,
   warnings: CompressedAirSankeyWarnings
 
 }
@@ -99,7 +102,7 @@ export interface AirFlowSankeyResults {
 
 
 export interface AirFlowSankeyInputs {
-  selectedDayTypeId: string
+  selectedDayTypeId: string,
   dayTypeLeakRates: Array<{dayTypeId: string, dayTypeLeakRate: number}>,
 }
 

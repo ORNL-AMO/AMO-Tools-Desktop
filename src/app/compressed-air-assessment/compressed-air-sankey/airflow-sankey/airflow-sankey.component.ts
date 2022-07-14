@@ -1,12 +1,13 @@
 import { DecimalPipe } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { PlotlyService } from 'angular-plotly.js';
+import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, EndUse, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { BaselineResults, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { EndUseEnergyData } from '../../end-uses/end-uses.service';
 import { AirflowSankeyService, CompressedAirSankeyNode, AirFlowSankeyResults, AirFlowSankeyInputs } from './airflow-sankey.service';
 
 @Component({
@@ -27,16 +28,17 @@ export class AirflowSankeyComponent implements OnInit {
   labelStyle: string;
   settings: Settings;
   nodes: Array<CompressedAirSankeyNode> = [];
-  links: Array<{source: number, target: number}> = [
-    { source: 0, target: 1 },
-    { source: 0, target: 2 },
-    { source: 1, target: 2 },
-    { source: 1, target: 3 },
-    { source: 2, target: 4 },
-    { source: 2, target: 5 },
-    { source: 5, target: 6 },
-    { source: 5, target: 7 }
-  ];
+  links: Array<{source: number, target: number}>;
+  // = [
+  //   { source: 0, target: 1 },
+  //   { source: 0, target: 2 },
+  //   { source: 1, target: 2 },
+  //   { source: 1, target: 3 },
+  //   { source: 2, target: 4 },
+  //   { source: 2, target: 5 },
+  //   { source: 5, target: 6 },
+  //   { source: 5, target: 7 }
+  // ];
   airFlowSankeyInputs: AirFlowSankeyInputs = {
     selectedDayTypeId: undefined,
     dayTypeLeakRates: []
@@ -47,12 +49,12 @@ export class AirflowSankeyComponent implements OnInit {
   gradientEndColorPurple: string = 'rgb(187, 142, 221)';
   connectingNodes: Array<number>;
   gradientLinkPaths: Array<number>;
-  minLosses: Array<string> = [];
-  units: string = 'kW';
+  minFlowes: Array<string> = [];
+  units: string = 'acfm';
 
   // node/link not rendered or too small to see
   minPlotlyDisplayValue = .2;
-  hasLowPressureVentLoss: boolean;
+  hasLowPressureVentFlow: boolean;
   
   compressedAirAssessment: CompressedAirAssessment;
   compressedAirAssessmentSub: Subscription;
@@ -138,16 +140,18 @@ export class AirflowSankeyComponent implements OnInit {
   renderSankey() {
     this.nodes = [];
     this.connectingNodes = [];
-    this.minLosses = [];
+    this.minFlowes = [];
     
-    let canRenderSankey: boolean = this.compressedAirAssessment && this.compressedAirAssessment.setupDone && this.profileDataComplete && !this.hasValidLeakRate;
+    let canRenderSankey: boolean = this.compressedAirAssessment && this.compressedAirAssessment.setupDone && this.profileDataComplete && this.hasValidLeakRate;
     if (canRenderSankey) {
       this.airFlowSankeyResults = this.airflowSankeyService.getAirFlowSankeyResults(this.compressedAirAssessment, this.selectedDayTypeId, this.settings);
       if (!this.airFlowSankeyResults.warnings.CFMWarning) {
-        this.gradientLinkPaths = [3, 4, 6, 7];
         this.buildNodes();
+        this.buildLinks();
       }
     }
+    console.log('nodes', this.nodes)
+    console.log('links', this.links)
     this.cd.detectChanges();
 
     let sankeyLink = {
@@ -254,149 +258,232 @@ export class AirflowSankeyComponent implements OnInit {
     });
   }
 
+  buildLinks() {
+    // this.links = [
+    //     { source: 0, target: 1 },
+    //     { source: 0, target: 2 },
+    //     { source: 1, target: 2 },
+    //     { source: 1, target: 3 },
+    //     { source: 1, target: 4 },
+    //   ];
+    this.connectingNodes = [];
+    this.links = [];
+    // for (let i = 0; i < this.nodes.length; i++) {
+    //   if (this.nodes[i].isConnector) {
+    //     this.connectingNodes.push(i);
+    //   }
+
+    //   for (let j = 0; j < this.nodes[i].target.length; j++) {
+    //     // if (this.nodes[i].isConnector) {
+    //       if (this.nodes[i].source) {
+    //         debugger;
+    //       }
+    //       this.links.push(
+    //         {
+    //           source: this.nodes[i].source,
+    //           target: this.nodes[i].target[j]
+    //         }
+    //       )
+    //     // }
+    //   }
+    // }
+
+    for (let i = 0; i < this.nodes.length; i++) {
+      if (this.nodes[i].isConnector) {
+        this.connectingNodes.push(i);
+      }
+    }
+    
+    debugger;
+    for (let i = 0; i < this.nodes.length; i++) {
+      for (let j = 0; j < this.nodes[i].target.length; j++) {
+          if (this.nodes[i].source) {
+            debugger;
+          }
+          this.links.push(
+            {
+              source: this.nodes[i].source,
+              target: this.nodes[i].target[j]
+            }
+          )
+      }
+    }
+  }
+
   buildNodes() {
-    // let originConnectorValue: number = this.airFlowSankeyResults.kWInSystem - this.airFlowSankeyResults.kWMechSystem;
+    // let originConnectorValue: number = this.airFlowSankeyResults.totalEndUseAirflow - this.airFlowSankeyResults.kWMechSystem;
     // let originConnectorPercentage: number = (originConnectorValue / this.airFlowSankeyResults.kWInSystem) * 100;
     // let secondaryConnectorValue: number = originConnectorValue - this.airFlowSankeyResults.kWHeatOfcompressionSystem;
     // let secondaryConnectorPercentage: number = (secondaryConnectorValue / this.airFlowSankeyResults.kWInSystem) * 100;
     // this.connectingNodes = [0,1,2,5];
+
     
-    // let kWMechPercentage = (this.airFlowSankeyResults.kWMechSystem / this.airFlowSankeyResults.kWInSystem) * 100;
-    // let kwHocSysPercentage = (this.airFlowSankeyResults.kWHeatOfcompressionSystem / this.airFlowSankeyResults.kWInSystem) * 100;
-    // let kwLeakSysPercentage = (this.airFlowSankeyResults.kWLeakSystem / this.airFlowSankeyResults.kWInSystem) * 100;
-    // let kwAirSysPercentage = (this.airFlowSankeyResults.kWAirSystem / this.airFlowSankeyResults.kWInSystem) * 100;
-    // this.checkHasMinimumDisplayableEnergy("Motor and Drive Efficiency", this.airFlowSankeyResults.kWMechSystem, kWMechPercentage);
-    // this.checkHasMinimumDisplayableEnergy("Heat of Compression", this.airFlowSankeyResults.kWHeatOfcompressionSystem, kwHocSysPercentage);
-    // this.checkHasMinimumDisplayableEnergy("System Leakage", this.airFlowSankeyResults.kWLeakSystem, kwLeakSysPercentage);
-    // this.checkHasMinimumDisplayableEnergy("Productive Use", this.airFlowSankeyResults.kWAirSystem, kwAirSysPercentage);
+    // this.connectingNodes = [0,1];
+    let originConnectorFlow: number = this.airFlowSankeyResults.totalEndUseAirflow;
+    let totalEndUseAirflow: number = originConnectorFlow;
+    let originConnectorValue: number = 100;
 
-    // console.log('originConnectorPercentage', originConnectorPercentage);
-    // console.log('secondaryConnectorPercentage', secondaryConnectorPercentage);
-    // console.log('kWMechPercentage', kWMechPercentage);
-    // console.log('kwHocSysPercentage', kwHocSysPercentage);
-    // console.log('kwLeakSysPercentage', kwLeakSysPercentage);
-    // console.log('kwAirSysPercentage', kwAirSysPercentage);
+    let flowNodeYPositions: Array<number> = [.1, .9, .2, .8, .15, .9, .2, .8, .1, .9, .2, .8, .1, .9, .2, .8];
+    let flowNodeXPosition: number = .5;
+    let offsetYPlacementIndex: number = 0;
 
-    // let diff = this.airFlowSankeyResults.kWInSystem - this.airFlowSankeyResults.kWMechSystem - this.airFlowSankeyResults.kWHeatOfcompressionSystem - this.airFlowSankeyResults.kWLeakSystem - this.airFlowSankeyResults.kWAirSystem;
-    // console.log('diff vs kWin system', diff);
-    // this.nodes = [
-    //   {
-    //     name: this.getNameLabel("Energy Input", this.airFlowSankeyResults.kWInSystem, 100),
-    //     value: 100,
-    //     x: .1,
-    //     y: .6,
-    //     source: 0,
-    //     loss: this.airFlowSankeyResults.kWInSystem,
-    //     target: [1,2],
-    //     isConnector: true,
-    //     nodeColor: this.gradientStartColorPurple,
-    //     id: 'originalInputConnector'
-    //   },
-    //   {
-    //     name: "",
-    //     value: 0,
-    //     x: .4,
-    //     y: .6,
-    //     source: 1,
-    //     loss: this.airFlowSankeyResults.kWInSystem,
-    //     target: [2, 3],
-    //     isConnector: true,
-    //     nodeColor: this.gradientStartColorPurple,
-    //     id: 'inputConnector'
-    //   },
-    //   {
-    //     name: "",
-    //     value: originConnectorPercentage,
-    //     x: .475,
-    //     y: .625,
-    //     source: 2,
-    //     loss:  originConnectorValue,
-    //     target: [4, 5],
-    //     isConnector: true,
-    //     nodeColor: this.gradientStartColorPurple,
-    //     id: 'originConnector'
-    //   },
-    //   {
-    //     name: this.getNameLabel("Motor and Drive Efficiency", this.airFlowSankeyResults.kWMechSystem, kWMechPercentage),
-    //     value: kWMechPercentage,
-    //     x: .5,
-    //     y: .10,
-    //     source: 3,
-    //     loss: this.airFlowSankeyResults.kWMechSystem,
-    //     target: [],
-    //     isConnector: false,
-    //     nodeColor: this.gradientEndColorPurple,
-    //     id: 'kW_mech_sys'
-    //   },
-    //   {
-    //     name: this.getNameLabel("Heat of Compression", this.airFlowSankeyResults.kWHeatOfcompressionSystem, kwHocSysPercentage),
-    //     value: kwHocSysPercentage,
-    //     x: .6,
-    //     y: .5,
-    //     source: 4,
-    //     loss: this.airFlowSankeyResults.kWHeatOfcompressionSystem,
-    //     target: [],
-    //     isConnector: false,
-    //     nodeColor: this.gradientEndColorPurple,
-    //     id: 'kW_hoc_sys'
-    //   },
-    //   {
-    //     name: "",
-    //     value: secondaryConnectorPercentage,
-    //     x: .55,
-    //     y: .9,
-    //     source: 5,
-    //     loss: secondaryConnectorValue,
-    //     target: [6, 7],
-    //     isConnector: true,
-    //     nodeColor: this.gradientStartColorPurple,
-    //     id: 'secondaryConnector'
-    //   },
-    //   {
-    //     name: this.getNameLabel("System Leakage", this.airFlowSankeyResults.kWLeakSystem, kwLeakSysPercentage),
-    //     value: kwLeakSysPercentage,
-    //     x: .8,
-    //     y: .7,
-    //     source: 6,
-    //     target: [],
-    //     loss: this.airFlowSankeyResults.kWLeakSystem,
-    //     isConnector: false,
-    //     nodeColor: this.gradientEndColorPurple,
-    //     id: 'kW_leak_sys'
-    //   },
-    //   {
-    //     name: this.getNameLabel("Productive Use", this.airFlowSankeyResults.kWAirSystem, kwAirSysPercentage),
-    //     value: kwAirSysPercentage,
-    //     x: .85,
-    //     y: .9,
-    //     source: 7,
-    //     loss: this.airFlowSankeyResults.kWAirSystem,
-    //     target: [],
-    //     isConnector: false,
-    //     nodeColor: this.gradientEndColorPurple,
-    //     id: 'kW_air_sys'
-    //   }
+    this.gradientLinkPaths = [];
+    // let endUseTargets: Array<number> = []; 
+    this.nodes.unshift(
+      {
+        name: this.getNameLabel("0", originConnectorValue, 100),
+        value: originConnectorValue,
+        x: .1,
+        y: .6,
+        source: 0,
+        flow: originConnectorFlow,
+        target: [1, 2],
+        isConnector: true,
+        nodeColor: this.gradientStartColorPurple,
+        id: 'originalInputConnector'
+      },
+      {
+        name: `1`,
+        value: 0,
+        x: .3,
+        y: .6,
+        source: 1,
+        flow: originConnectorFlow,
+        target: [2, 3],
+        // target: _.range(2, this.airFlowSankeyResults.endUseEnergyData.length + 2),
+        isConnector: true,
+        nodeColor: this.gradientStartColorPurple,
+        id: 'inputConnector'
+      },
+    );
+
+    this.airFlowSankeyResults.endUseEnergyData.forEach((endUse, index) => {
+      let endUseFlowValue: number = (endUse.dayTypeAverageAirFlow / totalEndUseAirflow) * 100;
+      this.checkHasMinimumDisplayableEnergy(endUse.endUseName + 1, endUse.dayTypeAverageAirFlow, endUseFlowValue)
+      
+      // offset count by the 2 origin connector nodes
+      let offsetIndex = index + 2;
+      let connectorId = `connector_${endUse.endUseId}`;
+      let previousEndUseNodes = this.nodes.slice(-2);
+      let connector: number = (previousEndUseNodes[1].flow - endUse.dayTypeAverageAirFlow);
+      let connectorValue: number = (connector / totalEndUseAirflow) * 100;
+
+      // if (offsetIndex === 2) {
+      //   let nextEndUse: EndUseEnergyData = this.airFlowSankeyResults.endUseEnergyData[index + 1];
+      //   // connectorValue = previousEndUseNodes[1].flow - endUse.dayTypeAverageAirFlow - nextEndUse.dayTypeAverageAirFlow;
+      // }
+
+      console.log('endUseFlow: ', endUse.dayTypeAverageAirFlow);
+      console.log('endUseFlowValue: ', endUseFlowValue);
+      console.log('connector: ', connector);
+      console.log('connectorValue: ', connectorValue);
+      this.nodes.push({
+        name: this.getNameLabel(`src: ${offsetIndex}`, endUse.dayTypeAverageAirFlow, endUseFlowValue),
+        // name: this.getNameLabel(`src: ${offsetIndex}  ${endUse.endUseName}`, endUse.dayTypeAverageAirFlow, endUseFlowValue),
+        value: endUseFlowValue,
+        x: flowNodeXPosition,
+        y: flowNodeYPositions[offsetYPlacementIndex],
+        source: offsetIndex,
+        flow: endUse.dayTypeAverageAirFlow,
+        target: [],
+        isConnector: false,
+        nodeColor: this.gradientEndColorPurple,
+        id: endUse.endUseId
+      });
+
+      this.nodes.push({
+          name: `src: ${offsetIndex} connector`,
+          value: connectorValue,
+          x: flowNodeXPosition - .05,
+          y: .6,
+          source: offsetIndex + 1,
+          flow: connector,
+          target: [offsetIndex + 3],
+          isConnector: true,
+          nodeColor: this.gradientStartColorPurple,
+          id: connectorId
+        });
+
+      flowNodeXPosition += .05;
+      offsetYPlacementIndex++;
+      this.gradientLinkPaths.push(offsetIndex);
+      // endUseTargets.push(indexOffset);
+      originConnectorValue -= endUse.dayTypeAverageAirFlow;
+    });
+
+
+    this.nodes[0].source = 0;
+    this.nodes[0].target = [1,2];
+
+    this.nodes[1].source = 1;
+    this.nodes[1].target = [2,3];
+
+    this.nodes[2].source = 2;
+    this.nodes[2].target = [];
+    this.nodes[3].source = 3;
+    this.nodes[3].target = [4,5];
+    
+    this.nodes[4].source = 4;
+    this.nodes[4].target = [];
+    this.nodes[5].source = 5;
+    this.nodes[5].target = [6,7];
+
+    this.nodes[6].source = 6;
+    this.nodes[6].target = [];
+    this.nodes[7].source = 7;
+    this.nodes[7].isConnector = false;
+    this.nodes[7].target = [];
+
+    this.gradientLinkPaths = [2, 4, 6, 7];
+
+
+    // this.connectingNodes = [0,1,3,5]
+
+    // this.links = [
+    //   { source: 0, target: 1 },
+    //   { source: 0, target: 2 },
+    //   { source: 1, target: 2 },
+    //   { source: 1, target: 3 },
+    //   { source: 3, target: 4 },
+    //   { source: 3, target: 5 },
+    //   { source: 5, target: 6 },
+    //   { source: 5, target: 7 }
     // ];
+
+    // generated
+//     0: {source: 0, target: 1}
+    // 1: {source: 0, target: 2}
+    // 2: {source: 1, target: 2}
+    // 3: {source: 1, target: 3}
+    // 4: {source: 3, target: 4}
+    // 5: {source: 4, target: 5}
+    // 6: {source: 4, target: 6}
+    // 7: {source: 6, target: 7}
+    // 8: {source: 6, target: 8}
+
+    console.log('nodes', this.nodes)
+    console.log('links', this.links)
+
   }
 
-  checkHasMinimumDisplayableEnergy(name: string, loss: number, lossValue: number) {
-    if (lossValue <= this.minPlotlyDisplayValue) {
-      this.minLosses.push(this.getNameLabel(name, loss, lossValue, '1.0-4'));
+  checkHasMinimumDisplayableEnergy(name: string, flow: number, flowValue: number) {
+    if (flowValue <= this.minPlotlyDisplayValue) {
+      this.minFlowes.push(this.getNameLabel(name, flow, flowValue, '1.0-4'));
       this.cd.detectChanges();
     }
   }
 
-  getNameLabel(lossName: string, loss: number, lossValue: number, decimalPlaces?: string) {
+  getNameLabel(flowName: string, flow: number, flowValue: number, decimalPlaces?: string) {
     let nameLabel: string;
     if (!decimalPlaces) {
       decimalPlaces = '1.0-0';
     }
     if (this.sankeyLabelStyle == 'both') {
-      nameLabel = `${lossName} ${this.decimalPipe.transform(loss, decimalPlaces)} ${this.units} (${this.decimalPipe.transform(lossValue, decimalPlaces)}%)`
+      nameLabel = `${flowName} ${this.decimalPipe.transform(flow, decimalPlaces)} ${this.units} (${this.decimalPipe.transform(flowValue, decimalPlaces)}%)`
     } else if (this.sankeyLabelStyle == 'energy') {
-      nameLabel = `${lossName} ${this.decimalPipe.transform(loss, decimalPlaces)} ${this.units}`
+      nameLabel = `${flowName} ${this.decimalPipe.transform(flow, decimalPlaces)} ${this.units}`
     } else {
-      nameLabel = `${lossName} ${this.decimalPipe.transform(lossValue, decimalPlaces)}%`
+      nameLabel = `${flowName} ${this.decimalPipe.transform(flowValue, decimalPlaces)}%`
     }
     return nameLabel;
   }
@@ -451,7 +538,8 @@ export class AirflowSankeyComponent implements OnInit {
         
         let width = height;
         let verticalAlignment: number = 2.75;
-        let sizingRatio: number = 1.75;
+        let sizingRatio: number = 1.6;
+        // let sizingRatio: number = 1.75;
         // if (Number(height) > this.airFlowSankeyResults.kWInSystem / 2) {
         //   width = height * .8;
         //   sizingRatio = sizingRatio * .7;

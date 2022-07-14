@@ -65,12 +65,12 @@
   
   <div class="sankey-padding w-100">
     <div #airflowChart></div>
-    <div *ngIf="minLosses.length > 0" class="ml-5">
+    <div *ngIf="minFlowes.length > 0" class="ml-5">
       <div class="mt-4">
-        <label class="group-label bold mb-2">Negligible Losses</label>
+        <label class="group-label bold mb-2">Negligible AirFlow</label>
         <table class="small w-25 ml-3">
-          <tr *ngFor="let loss of minLosses">
-            <td>{{loss}}</td>
+          <tr *ngFor="let flow of minFlowes">
+            <td>{{flow}}</td>
           </tr>
         </table>
       </div>
