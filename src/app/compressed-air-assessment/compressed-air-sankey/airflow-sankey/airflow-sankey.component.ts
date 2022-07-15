@@ -109,7 +109,6 @@ export class AirflowSankeyComponent implements OnInit {
         dayTypeLeakRate.dayTypeLeakRate = this.dayTypeLeakRate
       }
     })
-    debugger;
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, true);
     this.renderSankey();
   }
@@ -139,6 +138,7 @@ export class AirflowSankeyComponent implements OnInit {
 
   renderSankey() {
     this.nodes = [];
+    this.links = [];
     this.connectingNodes = [];
     this.minFlowes = [];
     
@@ -206,6 +206,7 @@ export class AirflowSankeyComponent implements OnInit {
       margin: {
         l: 50,
         t: 25,
+        pad: 10,
       },
       xaxis: {
         showgrid: false,
@@ -259,81 +260,36 @@ export class AirflowSankeyComponent implements OnInit {
   }
 
   buildLinks() {
-    // this.links = [
-    //     { source: 0, target: 1 },
-    //     { source: 0, target: 2 },
-    //     { source: 1, target: 2 },
-    //     { source: 1, target: 3 },
-    //     { source: 1, target: 4 },
-    //   ];
-    this.connectingNodes = [];
-    this.links = [];
-    // for (let i = 0; i < this.nodes.length; i++) {
-    //   if (this.nodes[i].isConnector) {
-    //     this.connectingNodes.push(i);
-    //   }
-
-    //   for (let j = 0; j < this.nodes[i].target.length; j++) {
-    //     // if (this.nodes[i].isConnector) {
-    //       if (this.nodes[i].source) {
-    //         debugger;
-    //       }
-    //       this.links.push(
-    //         {
-    //           source: this.nodes[i].source,
-    //           target: this.nodes[i].target[j]
-    //         }
-    //       )
-    //     // }
-    //   }
-    // }
-
     for (let i = 0; i < this.nodes.length; i++) {
-      if (this.nodes[i].isConnector) {
+      if (this.nodes[i].isConnector === true) {
         this.connectingNodes.push(i);
       }
     }
-    
-    debugger;
-    for (let i = 0; i < this.nodes.length; i++) {
-      for (let j = 0; j < this.nodes[i].target.length; j++) {
-          if (this.nodes[i].source) {
-            debugger;
+
+    for (let i = 0; i < this.connectingNodes.length; i++) {
+      let nodeSource: number = this.connectingNodes[i];
+      for (let j = 0; j < this.nodes[nodeSource].target.length; j++) {
+        this.links.push(
+          {
+            source: this.nodes[nodeSource].source,
+            target: this.nodes[nodeSource].target[j]
           }
-          this.links.push(
-            {
-              source: this.nodes[i].source,
-              target: this.nodes[i].target[j]
-            }
-          )
+        )
       }
     }
   }
 
   buildNodes() {
-    // let originConnectorValue: number = this.airFlowSankeyResults.totalEndUseAirflow - this.airFlowSankeyResults.kWMechSystem;
-    // let originConnectorPercentage: number = (originConnectorValue / this.airFlowSankeyResults.kWInSystem) * 100;
-    // let secondaryConnectorValue: number = originConnectorValue - this.airFlowSankeyResults.kWHeatOfcompressionSystem;
-    // let secondaryConnectorPercentage: number = (secondaryConnectorValue / this.airFlowSankeyResults.kWInSystem) * 100;
-    // this.connectingNodes = [0,1,2,5];
-
-    
-    // this.connectingNodes = [0,1];
     let originConnectorFlow: number = this.airFlowSankeyResults.totalEndUseAirflow;
     let totalEndUseAirflow: number = originConnectorFlow;
     let originConnectorValue: number = 100;
-
-    let flowNodeYPositions: Array<number> = [.1, .9, .2, .8, .15, .9, .2, .8, .1, .9, .2, .8, .1, .9, .2, .8];
-    let flowNodeXPosition: number = .5;
-    let offsetYPlacementIndex: number = 0;
-
+    
     this.gradientLinkPaths = [];
-    // let endUseTargets: Array<number> = []; 
     this.nodes.unshift(
       {
         name: this.getNameLabel("0", originConnectorValue, 100),
         value: originConnectorValue,
-        x: .1,
+        x: .05,
         y: .6,
         source: 0,
         flow: originConnectorFlow,
@@ -343,47 +299,44 @@ export class AirflowSankeyComponent implements OnInit {
         id: 'originalInputConnector'
       },
       {
-        name: `1`,
+        name: "",
         value: 0,
-        x: .3,
+        x: .125,
         y: .6,
         source: 1,
         flow: originConnectorFlow,
         target: [2, 3],
-        // target: _.range(2, this.airFlowSankeyResults.endUseEnergyData.length + 2),
         isConnector: true,
         nodeColor: this.gradientStartColorPurple,
         id: 'inputConnector'
       },
-    );
+      );
+      
 
-    this.airFlowSankeyResults.endUseEnergyData.forEach((endUse, index) => {
+    // let flowNodeYPositions: Array<number> = [.1, .9, .2, .8, .15, .9, .2, .8, .1, .9, .2, .8, .1, .9, .2, .8];
+    let flowNodeYPositions: Array<number> = [.9, .2, .8, .15, .9, .2, .8, .1, .9, .2, .8, .1, .9, .2, .8];
+    let arrowNodeXPosition: number = .25;
+    let nodeXPositionIncrements: SankeyXIncrements = this.getNodeIncrement();
+    let offsetYPlacementIndex: number = 0;
+    // offset count by the 2 origin connector nodes
+    let arrowNodeIndex: number = 2;
+    
+    this.airFlowSankeyResults.endUseEnergyData.forEach((endUse: EndUseEnergyData, index) => {
       let endUseFlowValue: number = (endUse.dayTypeAverageAirFlow / totalEndUseAirflow) * 100;
       this.checkHasMinimumDisplayableEnergy(endUse.endUseName + 1, endUse.dayTypeAverageAirFlow, endUseFlowValue)
-      
-      // offset count by the 2 origin connector nodes
-      let offsetIndex = index + 2;
+
       let connectorId = `connector_${endUse.endUseId}`;
       let previousEndUseNodes = this.nodes.slice(-2);
       let connector: number = (previousEndUseNodes[1].flow - endUse.dayTypeAverageAirFlow);
       let connectorValue: number = (connector / totalEndUseAirflow) * 100;
 
-      // if (offsetIndex === 2) {
-      //   let nextEndUse: EndUseEnergyData = this.airFlowSankeyResults.endUseEnergyData[index + 1];
-      //   // connectorValue = previousEndUseNodes[1].flow - endUse.dayTypeAverageAirFlow - nextEndUse.dayTypeAverageAirFlow;
-      // }
-
-      console.log('endUseFlow: ', endUse.dayTypeAverageAirFlow);
-      console.log('endUseFlowValue: ', endUseFlowValue);
-      console.log('connector: ', connector);
-      console.log('connectorValue: ', connectorValue);
       this.nodes.push({
-        name: this.getNameLabel(`src: ${offsetIndex}`, endUse.dayTypeAverageAirFlow, endUseFlowValue),
-        // name: this.getNameLabel(`src: ${offsetIndex}  ${endUse.endUseName}`, endUse.dayTypeAverageAirFlow, endUseFlowValue),
+        name: this.getNameLabel(endUse.endUseName, endUse.dayTypeAverageAirFlow, endUseFlowValue),
+        // name: this.getNameLabel(`src: ${arrowNodeIndex}`, endUse.dayTypeAverageAirFlow, endUseFlowValue),
         value: endUseFlowValue,
-        x: flowNodeXPosition,
+        x: arrowNodeXPosition,
         y: flowNodeYPositions[offsetYPlacementIndex],
-        source: offsetIndex,
+        source: arrowNodeIndex,
         flow: endUse.dayTypeAverageAirFlow,
         target: [],
         isConnector: false,
@@ -391,79 +344,56 @@ export class AirflowSankeyComponent implements OnInit {
         id: endUse.endUseId
       });
 
-      this.nodes.push({
-          name: `src: ${offsetIndex} connector`,
-          value: connectorValue,
-          x: flowNodeXPosition - .05,
-          y: .6,
-          source: offsetIndex + 1,
-          flow: connector,
-          target: [offsetIndex + 3],
-          isConnector: true,
-          nodeColor: this.gradientStartColorPurple,
-          id: connectorId
-        });
+      let isConnector: boolean = true;
+      if (index === this.airFlowSankeyResults.endUseEnergyData.length - 1) {
+        isConnector = false;
+      } 
 
-      flowNodeXPosition += .05;
+      // .6 should be default, but plotly doesn't render all .6 values at same height
+      let yAdjustment: number = .6;
+      let connectorNodeIndex: number = arrowNodeIndex + 1;
+      if (connectorNodeIndex % 2 !== 0) {
+        yAdjustment = .65;
+      }
+      this.nodes.push({
+        name: ``,
+        // name: `src: ${connectorNodeIndex} connector`,
+        value: connectorValue,
+        x: arrowNodeXPosition - nodeXPositionIncrements.connector,
+        y: yAdjustment,
+        source: connectorNodeIndex,
+        flow: connector,
+        target: [connectorNodeIndex + 1, connectorNodeIndex + 2],
+        isConnector: isConnector,
+        nodeColor: this.gradientStartColorPurple,
+        id: connectorId
+      });
+
+      this.gradientLinkPaths.push(arrowNodeIndex);
+      arrowNodeXPosition += nodeXPositionIncrements.arrow;
       offsetYPlacementIndex++;
-      this.gradientLinkPaths.push(offsetIndex);
-      // endUseTargets.push(indexOffset);
+      arrowNodeIndex += 2;
       originConnectorValue -= endUse.dayTypeAverageAirFlow;
     });
-
-
-    this.nodes[0].source = 0;
-    this.nodes[0].target = [1,2];
-
-    this.nodes[1].source = 1;
-    this.nodes[1].target = [2,3];
-
-    this.nodes[2].source = 2;
-    this.nodes[2].target = [];
-    this.nodes[3].source = 3;
-    this.nodes[3].target = [4,5];
-    
-    this.nodes[4].source = 4;
-    this.nodes[4].target = [];
-    this.nodes[5].source = 5;
-    this.nodes[5].target = [6,7];
-
-    this.nodes[6].source = 6;
-    this.nodes[6].target = [];
-    this.nodes[7].source = 7;
-    this.nodes[7].isConnector = false;
-    this.nodes[7].target = [];
-
-    this.gradientLinkPaths = [2, 4, 6, 7];
-
-
-    // this.connectingNodes = [0,1,3,5]
-
-    // this.links = [
-    //   { source: 0, target: 1 },
-    //   { source: 0, target: 2 },
-    //   { source: 1, target: 2 },
-    //   { source: 1, target: 3 },
-    //   { source: 3, target: 4 },
-    //   { source: 3, target: 5 },
-    //   { source: 5, target: 6 },
-    //   { source: 5, target: 7 }
-    // ];
-
-    // generated
-//     0: {source: 0, target: 1}
-    // 1: {source: 0, target: 2}
-    // 2: {source: 1, target: 2}
-    // 3: {source: 1, target: 3}
-    // 4: {source: 3, target: 4}
-    // 5: {source: 4, target: 5}
-    // 6: {source: 4, target: 6}
-    // 7: {source: 6, target: 7}
-    // 8: {source: 6, target: 8}
 
     console.log('nodes', this.nodes)
     console.log('links', this.links)
 
+  }
+
+  getNodeIncrement(): SankeyXIncrements {
+    let sankeyXIncrements = {
+      arrow: .075,
+      connector: .05,
+    }
+    if (this.airFlowSankeyResults.endUseEnergyData.length <= 3) {
+      sankeyXIncrements.arrow = .25;
+      sankeyXIncrements.connector = -.15; 
+    } else if (this.airFlowSankeyResults.endUseEnergyData.length <= 6) {
+      sankeyXIncrements.arrow = .15;
+      sankeyXIncrements.connector = -.05;
+    }
+    return sankeyXIncrements;
   }
 
   checkHasMinimumDisplayableEnergy(name: string, flow: number, flowValue: number) {
@@ -533,8 +463,8 @@ export class AirflowSankeyComponent implements OnInit {
 
     for (let i = 0; i < rects.length; i++) {
       if (!this.connectingNodes.includes(i)) {
-        const height = rects[i].getAttribute('height');
-        const defaultY = rects[i].getAttribute('y');
+        const height = JSON.parse(JSON.stringify(rects[i].getAttribute('height')));
+        const defaultY = JSON.parse(JSON.stringify(rects[i].getAttribute('y')));
         
         let width = height;
         let verticalAlignment: number = 2.75;
@@ -588,3 +518,8 @@ export interface SankeyOption {
   name: string, 
   compressedAirAssessment: CompressedAirAssessment,
 };
+
+export interface SankeyXIncrements {
+  arrow: number,
+  connector: number
+}

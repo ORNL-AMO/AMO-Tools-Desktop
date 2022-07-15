@@ -22,7 +22,25 @@ export class AirflowSankeyService {
       // TODO should just combine sankey results into normal results so we only have to iterate through everything once
       // Set as behavior subject?
       let dayTypeBaselineResults: BaselineResults = this.endUsesService.getBaselineResults(compressedAirAssessment, settings);
-      airflowSankeyResults.endUseEnergyData = this.endUsesService.getEndUseEnergyData(compressedAirAssessment, selectedDayTypeId, dayTypeBaselineResults);
+      let endUseEnergyData: Array<EndUseEnergyData> = this.endUsesService.getEndUseEnergyData(compressedAirAssessment, selectedDayTypeId, dayTypeBaselineResults);
+      if (endUseEnergyData.length > 10) {
+        airflowSankeyResults.endUseEnergyData = endUseEnergyData.slice(0,10);
+        airflowSankeyResults.otherEndUseData = endUseEnergyData.slice(11, endUseEnergyData.length - 1).reduce((totalOtherEnergyData, data) => {
+          return {
+            dayTypeAverageAirFlow: totalOtherEnergyData.dayTypeAverageAirFlow += data.dayTypeAverageAirFlow, 
+            dayTypeAverageAirflowPercent: totalOtherEnergyData.dayTypeAverageAirflowPercent += data.dayTypeAverageAirflowPercent,
+            endUseName: totalOtherEnergyData.endUseName,
+            endUseId: totalOtherEnergyData.endUseId,
+            color: undefined,
+          };
+        }, {
+          dayTypeAverageAirFlow: 0, 
+          dayTypeAverageAirflowPercent: 0,
+          endUseName: 'Other End Use Energy',
+          endUseId: Math.random().toString(36).substr(2, 9),
+          color: undefined,
+        });
+      }
       // TODO Should this be total system airflow for daytype, from sys profile?
       airflowSankeyResults.totalEndUseAirflow = airflowSankeyResults.endUseEnergyData.reduce((total, endUseData) => total + endUseData.dayTypeAverageAirFlow, 0);
     }
@@ -88,6 +106,7 @@ export interface CompressedAirSankeyNode {
 
 export interface AirFlowSankeyResults {
   endUseEnergyData?: Array<EndUseEnergyData>,
+  otherEndUseData?: EndUseEnergyData,
   totalEndUseAirflow: number,
   warnings: CompressedAirSankeyWarnings
 
