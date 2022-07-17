@@ -18,7 +18,7 @@
   <div class="p-4">
     <app-application-settings [inPhast]="true" [(settingsForm)]="settingsForm" (startSavePolling)="saveSettings()">
     </app-application-settings>
-    <app-phast-settings [(settingsForm)]="settingsForm" (startSavePolling)="saveSettings()" [disable]="lossesExist">
+    <app-phast-settings [(settingsForm)]="settingsForm" [inPhast]="true" (startSavePolling)="saveSettings()" [disable]="lossesExist">
     </app-phast-settings>
     <form>
       <div class="form-group">
