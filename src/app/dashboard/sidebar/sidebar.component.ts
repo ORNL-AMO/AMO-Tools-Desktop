@@ -17,6 +17,7 @@ export class SidebarComponent implements OnInit {
   @Output('openModal')
   openModal = new EventEmitter<boolean>();
 
+  sidebarCollapsed: boolean = false;
   versionNum: any;
   isUpdateAvailable: boolean;
   showModal: boolean;
@@ -28,6 +29,8 @@ export class SidebarComponent implements OnInit {
   selectedDirectoryIdSub: Subscription;
   googleTranslateAvailable: boolean;
   showNewDropdown: boolean = false;
+  totalScreenWidth: number;
+  totalScreenWidthSub: Subscription;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private coreService: CoreService) { }
@@ -45,6 +48,10 @@ export class SidebarComponent implements OnInit {
 
     this.selectedDirectoryIdSub = this.directoryDashboardService.selectedDirectoryId.subscribe(val => {
       this.selectedDirectoryId = val;
+    });
+
+    this.totalScreenWidthSub = this.dashboardService.totalScreenWidth.subscribe(val => {
+      this.totalScreenWidth = val;
     })
     try {
       google;
@@ -58,6 +65,7 @@ export class SidebarComponent implements OnInit {
     this.updateSub.unsubscribe();
     this.updateDashboardDataSub.unsubscribe();
     this.selectedDirectoryIdSub.unsubscribe();
+    this.totalScreenWidthSub.unsubscribe();
   }
 
   showCreateAssessment() {
@@ -102,4 +110,15 @@ export class SidebarComponent implements OnInit {
   toggleNewDropdown(){
     this.showNewDropdown = !this.showNewDropdown;
   }
+
+  collapseSidebar() {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
+    if(this.sidebarCollapsed == true){
+      this.dashboardService.sidebarX.next(35);
+    } else {
+      this.dashboardService.sidebarX.next(this.totalScreenWidth);
+    }
+    window.dispatchEvent(new Event("resize"));
+  }
+  
 }

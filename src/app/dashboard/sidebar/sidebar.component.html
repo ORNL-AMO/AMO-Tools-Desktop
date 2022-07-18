@@ -1,66 +1,75 @@
-<div class="d-flex w-100 justify-content-center">
-  <div>
-    <img routerLink="/landing-screen" src="assets/images/DOE-banner-color.svg" class="doe-logo mx-auto">
+<div class="sidebar hide-print scroll-item" id="sidebar">
+  <div class="d-flex align-items-center d-block d-lg-none" (click)="collapseSidebar()">
+    <div class="p-1 d-flex pull-right">
+      <span *ngIf="!sidebarCollapsed" class="fa fa-chevron-left"></span>
+      <span *ngIf="sidebarCollapsed" class="fa fa-chevron-right"></span>
+    </div>
   </div>
-</div>
+  <div class="d-flex w-100 justify-content-center" [ngClass]="{'collapse': sidebarCollapsed}">
+    <div [ngClass]="{'collapse': sidebarCollapsed}">
+      <img routerLink="/landing-screen" src="assets/images/DOE-banner-color.svg" class="doe-logo mx-auto">
+    </div>
+  </div>
 
-<div class="sidebar-group create-button">
-  <div class="p-3">
-    <div class="nav-item dropdown">
-      <button type="button" class="btn btn-primary w-100" (click)="toggleNewDropdown()">
-        <span class="dropdown-toggle">
-          Add New
-        </span>
-      </button>
-      <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showNewDropdown == true}">
-        <div class="list-group bold">
-          <a class="list-group-item list-group-item-action" (click)="showCreateAssessment()">
-            Add New Assessment
-          </a>
-          <a class="list-group-item list-group-item-action" (click)="showCreateInventory()">
-            Add New Inventory
-          </a>
-          <a class="list-group-item list-group-item-action" (click)="showCreateFolder()">
-            Add New Folder
-          </a>
+  <div class="sidebar-group create-button" [ngClass]="{'collapse': sidebarCollapsed}">
+    <div class="p-3">
+      <div class="nav-item dropdown">
+        <button type="button" class="btn btn-primary w-100" (click)="toggleNewDropdown()">
+          <span class="dropdown-toggle">
+            Add New
+          </span>
+        </button>
+        <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showNewDropdown == true}">
+          <div class="list-group bold">
+            <a class="list-group-item list-group-item-action" (click)="showCreateAssessment()">
+              Add New Assessment
+            </a>
+            <a class="list-group-item list-group-item-action" (click)="showCreateInventory()">
+              Add New Inventory
+            </a>
+            <a class="list-group-item list-group-item-action" (click)="showCreateFolder()">
+              Add New Folder
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="sidebar-group secondary">
-  <span class="sidebar-item" [routerLink]="['/landing-screen']" routerLinkActive="selected">Home</span>
-</div>
+  <div class="sidebar-group secondary" [ngClass]="{'collapse': sidebarCollapsed}">
+    <span class="sidebar-item" [routerLink]="['/landing-screen']" routerLinkActive="selected">Home</span>
+  </div>
 
-<div class="sidebar-group secondary pl-1 horizontal scroll-item">
-  <app-directory-item [directory]="rootDirectory"></app-directory-item>
-</div>
+  <div class="sidebar-group secondary pl-1 horizontal scroll-item" [ngClass]="{'collapse': sidebarCollapsed}">
+    <app-directory-item [directory]="rootDirectory"></app-directory-item>
+  </div>
 
-<div class="sidebar-group secondary">
-  <span routerLink="/log-tool" routerLinkActive="selected" class="sidebar-item">Data Exploration</span>
-</div>
+  <div class="sidebar-group secondary" [ngClass]="{'collapse': sidebarCollapsed}">
+    <span routerLink="/log-tool" routerLinkActive="selected" class="sidebar-item">Data Exploration</span>
+  </div>
 
-<div class="sidebar-group secondary">
-  <app-calculator-list></app-calculator-list>
-</div>
+  <div class="sidebar-group secondary" [ngClass]="{'collapse': sidebarCollapsed}">
+    <app-calculator-list></app-calculator-list>
+  </div>
 
-<div class="sidebar-group secondary">
-  <span routerLink="/settings" routerLinkActive="selected" class="sidebar-item">Settings</span>
-  <span routerLink="/custom-materials" routerLinkActive="selected" class="sidebar-item">Custom Materials</span>
-  <span routerLink="/tutorials" routerLinkActive="selected" class="sidebar-item">User Manuals</span>
-  <span routerLink="/about" routerLinkActive="selected" class="sidebar-item">About</span>
-  <span routerLink="/contact" routerLinkActive="selected" class="sidebar-item">Feedback</span>
-  <span routerLink="/acknowledgments" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
-  <span *ngIf="googleTranslateAvailable" class="sidebar-item" (click)="emitTranslate()"><span
-      class="fa fa-globe"></span> Translate</span>
-</div>
+  <div class="sidebar-group secondary" [ngClass]="{'collapse': sidebarCollapsed}">
+    <span routerLink="/settings" routerLinkActive="selected" class="sidebar-item">Settings</span>
+    <span routerLink="/custom-materials" routerLinkActive="selected" class="sidebar-item">Custom Materials</span>
+    <span routerLink="/tutorials" routerLinkActive="selected" class="sidebar-item">User Manuals</span>
+    <span routerLink="/about" routerLinkActive="selected" class="sidebar-item">About</span>
+    <span routerLink="/contact" routerLinkActive="selected" class="sidebar-item">Feedback</span>
+    <span routerLink="/acknowledgments" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
+    <span *ngIf="googleTranslateAvailable" class="sidebar-item" (click)="emitTranslate()"><span
+        class="fa fa-globe"></span> Translate</span>
+  </div>
 
-<div class="sidebar-group">
-  <span class="version-num">v{{versionNum}}
-    <i class="fa fa-info-circle" (click)="openVersionModal()"></i>
-  </span>
-  <span *ngIf="isUpdateAvailable" class="update-available" (click)="openUpdateModal()">Update Available!</span>
-</div>
+  <div class="sidebar-group" [ngClass]="{'collapse': sidebarCollapsed}">
+    <span class="version-num">v{{versionNum}}
+      <i class="fa fa-info-circle" (click)="openVersionModal()"></i>
+    </span>
+    <span *ngIf="isUpdateAvailable" class="update-available" (click)="openUpdateModal()">Update Available!</span>
+  </div>
 
-<app-version-modal *ngIf="showVersionModal" (closeModal)="closeVersionModal()"></app-version-modal>
+  <app-version-modal [ngClass]="{'collapse': sidebarCollapsed}" *ngIf="showVersionModal"
+    (closeModal)="closeVersionModal()"></app-version-modal>
+</div>
