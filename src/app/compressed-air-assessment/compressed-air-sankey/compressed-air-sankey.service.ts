@@ -17,7 +17,7 @@ export class CompressedAirSankeyService {
     private formBuilder: FormBuilder,
   ) { }
 
-  getSankeyResults(compressedAirAssessment: CompressedAirAssessment, selectedDayTypeId: string, dayTypeProfileSummaries: Array<ProfileSummary>, settings: Settings): CompressedAirSankeyResults {
+  getSankeyResults(compressedAirAssessment: CompressedAirAssessment, dayTypeProfileSummaries: Array<ProfileSummary>): CompressedAirSankeyResults {
     let sankeyResults: CompressedAirSankeyResults = {
       compressorResults: [],
       CFMLeak_all_compressors: 0,
@@ -42,21 +42,8 @@ export class CompressedAirSankeyService {
     sankeyResults.CFM_sys = sankeyResults.compressorResults.reduce((systemTotal, compressor) => {
       return systemTotal + compressor.CFM;
     }, 0);
-    // console.log('sankey Results CFM_sys',sankeyResults.CFM_sys);
-    // sankeyResults.systemPressure = sankeyResults.compressorResults.reduce((systemTotal, compressor) => {
-    //   console.log('compressor.systemPressure', compressor.systemPressure);
-    //   return systemTotal + compressor.systemPressure
-    // }, 0);
-
-    // if (!isNaN(sankeyResults.systemPressure)) {
-    //   console.log('dividing by sankeyResults.CFM_sys', sankeyResults.CFM_sys);
-    //   sankeyResults.systemPressure = sankeyResults.systemPressure / sankeyResults.CFM_sys;
-    // } {
-    //   sankeyResults.systemPressure = 0;
-    // }
 
     sankeyResults.systemPressure = sankeyResults.compressorResults.reduce((systemTotal, compressor) => systemTotal + compressor.systemPressure, 0);
-    console.log('sankey Results system pressure',sankeyResults.systemPressure);
     sankeyResults.systemPressure = sankeyResults.systemPressure / sankeyResults.CFM_sys;
 
     let CFM_by_compressor = sankeyResults.compressorResults.map(compressor => compressor.CFM);
@@ -80,12 +67,9 @@ export class CompressedAirSankeyService {
       let pressure3ConvertedPSIG: number = this.convertUnitsService.value(pressure3).from('psia').to('psig');
       if (sankeyResults.CFM_sys > 0) {
         let cp_3: number = this.getSpecificHeatConstantPressure(pressure3ConvertedPSIG, t3);
-        // let cp_3: number = .2429
         let cp_4: number = this.getSpecificHeatConstantPressure(pressure4, t4);
-        // let cp_4: number = .2403;
         let cv_3: number = this.getSpecificHeatConstantVolume(pressure3ConvertedPSIG, t3);
         let cv_4: number = this.getSpecificHeatConstantVolume(pressure4, t4);
-        // let cv_4: number = .1714;
         let cp_e_avg: number = (cp_3 + cp_4) / 2;
         let cv_e_avg: number = (cv_3 + cv_4) / 2;
 
@@ -122,7 +106,6 @@ export class CompressedAirSankeyService {
     sankeyResults.kWMechSystem = sankeyResults.compressorResults.reduce((systemTotal, compressor) => systemTotal + compressor.kWMech, 0);
     sankeyResults.kWAirSystem = sankeyResults.kWTotalSystem - sankeyResults.kWLeakSystem;
 
-    console.log('sankeyResults', sankeyResults);
     return sankeyResults;
   }
 
@@ -164,7 +147,6 @@ export class CompressedAirSankeyService {
     let pressure2ConvertedPSIA = this.convertUnitsService.value(pressure2).from('psig').to('psia');
     let dt_poly: number;
     
-    // Should three change here?
     let invalidLookupValue: number;
     let invalidValues = {
       cp_2: undefined, 
@@ -197,35 +179,9 @@ export class CompressedAirSankeyService {
       }
     }
 
-    // affected by invalid system profile values?
-    if (invalidLookupValue) {
-      // console.log('******** INVALID TEMP', invalidLookupValue)
-      // console.log('******** eta poly', eta_poly)
-      // console.log('******** CFM', CFM)
-    }
-    // console.log('end loop')
-
-    // BLOCK 2 ========================================== 
-    // let h_1: number = this.getEnthalpy(pressure1ConvertedPSIG, temperature1);
-    // let h_2: number = this.getEnthalpy(pressure2, temperature2);
-    // let rho_1: number = this.getDensity(pressure1ConvertedPSIG, temperature1);
-    // let rho_2: number = this.getDensity(pressure2, temperature2);
-    // let rho_avg: number = (rho_1 + rho_2) / 2;
-    // let kWComp: number = (h_2 - h_1) * CFM * rho_avg * 60 / 3412.14;
-    // // let eta_motor: number = currentCompressor.designDetails.designEfficiency / 100;
-
     let kWInput: number = summary.avgPower;
-
-    // kW_comp = (h_2-h_1)*CFM*rho_avg*60 [min/hr]/3412.14 [(Btu/hr)/kW]
-    // {simultanous - begin }
-    // kW_mech = kW_in*(1-eta_motor)
-    // kW_in = kW_comp+kW_mech 
-
-    // let kWMech: number = kWInput - kWComp;
     let kWMech: number = kWInput * (1 - (currentCompressor.designDetails.designEfficiency / 100));
     let kWComp = kWInput - kWMech;
-    // let eta_motor: number = 1 - kWMech / kWInput;
-    // kWInput = kWComp + kW_mech; 
 
     // BLOCK 3 ==========================================
 
@@ -255,8 +211,6 @@ export class CompressedAirSankeyService {
   }
 
   calculateAirPropertyFromInterpolation(airPropertyLowBound: number, airPropertyHighBound: number, interpolationProperty: InterpolationData): number {
-    // Example using enthalpy
-    // enthalpy = enthalpy low + ((enthalpy high – enthalpy low) / (val high – val low)) * (val – val low)
     let airPropertyResult = airPropertyLowBound + ((airPropertyHighBound - airPropertyLowBound) / (interpolationProperty.highBound - interpolationProperty.lowBound)) * (interpolationProperty.value - interpolationProperty.lowBound);
     return airPropertyResult;
   }
@@ -393,7 +347,6 @@ export class CompressedAirSankeyService {
     let pressureInt = this.convertUnitsService.roundVal(pressure, 0);
     let temperatureInt = this.convertUnitsService.roundVal(temperature, 0);
 
-    // TODO should round for this check
     let canLookupByPressure: boolean = this.checkIsTenMultiple(pressure);
     let canLookupByTemperature: boolean = this.checkIsTenMultiple(temperature);
     let interpolateBothInputs: boolean = !canLookupByPressure && !canLookupByTemperature;
@@ -479,24 +432,6 @@ export class CompressedAirSankeyService {
     return value % 10 === 0 || value === 0;
   }
 
-  // TODO merge with existing sankey node from mroot
-  createNode(name: string, value: number, displaySize: number, width: number, x: number, y: number, input: boolean, usefulOutput: boolean, inter: boolean, top: boolean, units: string, extSurfaceLoss: boolean, availableHeatPercent?: boolean): SankeyNode {
-    let newNode: SankeyNode = {
-      name: name,
-      value: value,
-      displaySize: displaySize,
-      width: width,
-      x: x,
-      y: y,
-      input: input,
-      usefulOutput: usefulOutput,
-      inter: inter,
-      top: top,
-      units: units,
-    };
-
-    return newNode;
-  }
 
   getPowerSankeyForm(powerSankeyInputs: SankeySystemInputs, baselineResults: BaselineResults, settings: Settings): FormGroup {
     let form: FormGroup = this.formBuilder.group({
@@ -518,7 +453,6 @@ export class CompressedAirSankeyService {
   getEmptyForm(baselineResults: BaselineResults, selectedDayTypeId: string, settings: Settings): FormGroup {
     let ambientAirTemp: number = 75;
     let CFMLeakSystem: number = 100;
-    // max capacity should be max of total air capacity in system?
     if (settings.unitsOfMeasure === 'Metric') {
       ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C');
       CFMLeakSystem = this.convertUnitsService.value(CFMLeakSystem).from('ft3/min').to('m3/min');
@@ -550,7 +484,6 @@ export class CompressedAirSankeyService {
       maxLeakSystem = this.convertUnitsService.value(maxLeakSystem).from('ft3/min').to('m3/min');
     }
     form.controls.CFMLeakSystem.setValidators([Validators.required, Validators.min(0), Validators.max(maxLeakSystem)]);
-    // form.controls.CFMLeakSystem.setValidators([Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(maxLeakSystem)]);
     form.controls.CFMLeakSystem.updateValueAndValidity();
     this.markFormDirtyToDisplayValidation(form);
 
@@ -651,14 +584,6 @@ export interface SankeyCompressorResults {
   pressure2: number,
   kWComp: number,
   pressure1: number,
-  // individual compressor inputs for system level results
-  // eta_isen: number,
-  // eta_mech: number,
-  // rho_3: number,
-  // z_avg: number,
-  // t3: number,
-  // k_e: number,
-  // calc_eet: number,
 }
 
 

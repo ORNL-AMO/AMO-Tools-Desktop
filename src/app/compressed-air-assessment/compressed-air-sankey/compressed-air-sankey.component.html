@@ -39,8 +39,6 @@
             *ngIf="powerSankeyInputForm.controls.CFMLeakSystem.invalid && !powerSankeyInputForm.controls.CFMLeakSystem.pristine">
             <span *ngIf="powerSankeyInputForm.controls.CFMLeakSystem.errors.required">Value Required</span>
             <span *ngIf="powerSankeyInputForm.controls.CFMLeakSystem.errors.min">Value can't be negative</span>
-            <!-- <span *ngIf="powerSankeyInputForm.controls.CFMLeakSystem.errors.greaterThan == 0">Value must be greater than
-              {{powerSankeyInputForm.controls.CFMLeakSystem.errors.greaterThan}}.</span> -->
             <span *ngIf="powerSankeyInputForm.controls.CFMLeakSystem.errors.max">
               Value can't be greater than the max airflow in the system
               ({{powerSankeyInputForm.controls.CFMLeakSystem.errors.max.max |
