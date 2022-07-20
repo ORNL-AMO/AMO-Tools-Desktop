@@ -11,11 +11,6 @@
                             </option>
                         </select>
                     </div>
-                    <!-- <div class="form-group">
-                        <label for="numberOfHours">Number of Hours</label>
-                        <input type="number" class="form-control" id="numberOfHours" formControlName="numberOfHours"
-                            (focus)="focusField('numberOfHours')" (input)="save()" step="1" min="24">
-                    </div> -->
                     <div class="form-group">
                         <label for="profileDataType">Profile Data Type</label>
                         <select class="form-control" id="profileDataType" formControlName="profileDataType"
@@ -36,10 +31,9 @@
                         <label for="dataInterval">Data Interval</label>
                         <select class="form-control" id="dataInterval" formControlName="dataInterval"
                             (focus)="focusField('dataInterval')" (change)="changeDataInterval()">
-                            <option [ngValue]="1">1 hr</option>
-                            <!-- <option [ngValue]="2">2 hr</option>-->
                             <option [ngValue]=".5">30 min</option>
                             <option [ngValue]=".25">15 min</option>
+                            <option [ngValue]="1">1 hr</option>
                             <option [ngValue]="24">24 hr</option>
                         </select>
                     </div>
