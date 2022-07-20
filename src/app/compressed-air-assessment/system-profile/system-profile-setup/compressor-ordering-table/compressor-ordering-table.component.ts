@@ -19,6 +19,7 @@ export class CompressorOrderingTableComponent implements OnInit {
   selectedDayTypeId: string;
   fillRight: boolean = false;
   inventoryItems: Array<CompressorInventoryItem>;
+  dataInterval: number;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -41,9 +42,10 @@ export class CompressorOrderingTableComponent implements OnInit {
   }
 
   setHourIntervals(systemProfileSetup: SystemProfileSetup) {
+    // this.dataInterval = systemProfileSetup.dataInterval;
     this.hourIntervals = new Array();
     for (let index = 0; index < systemProfileSetup.numberOfHours;) {
-      this.hourIntervals.push(index)
+      this.hourIntervals.push(index + systemProfileSetup.dataInterval)
       index = index + systemProfileSetup.dataInterval;
     }
   }

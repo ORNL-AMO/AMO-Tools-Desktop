@@ -114,23 +114,24 @@ export class ProfileSetupFormComponent implements OnInit {
   changeDataInterval() {
     //when interval changes, hold previous interval summary data in case they change back
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    if (compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval != this.form.controls.dataInterval.value) {
-      if (this.form.controls.dataInterval.value == 1 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 24) {
-        this.dayIntervalData = compressedAirAssessment.systemProfile.profileSummary;
-        if (this.hourIntervalData) {
-          this.save(this.hourIntervalData);
-        } else {
-          this.save();
-        }
-      } else if (this.form.controls.dataInterval.value == 24 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 1) {
-        this.hourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
-        if (this.dayIntervalData) {
-          this.save(this.dayIntervalData);
-        } else {
-          this.save();
-        }
-      }
-    }
+    // if (compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval != this.form.controls.dataInterval.value) {
+    //   if (this.form.controls.dataInterval.value == 1 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 24) {
+    //     this.dayIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+    //     if (this.hourIntervalData) {
+    //       this.save(this.hourIntervalData);
+    //     } else {
+    //       this.save();
+    //     }
+    //   } else if (this.form.controls.dataInterval.value == 24 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 1) {
+    //     this.hourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+    //     if (this.dayIntervalData) {
+    //       this.save(this.dayIntervalData);
+    //     } else {
+    //       this.save();
+    //     }
+    //   }
+    // }
+    this.save();
   }
 
 

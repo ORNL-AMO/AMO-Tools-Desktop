@@ -35,6 +35,7 @@ export class SystemProfileService {
 
   //no sequencer
   updateCompressorOrderingNoSequencer(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, numberOfHourIntervals: number): Array<ProfileSummary> {
+    console.log('update 1')
     let dayTypeSummaries: Array<ProfileSummary> = profileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
     for (let compressorIndex = 0; compressorIndex < dayTypeSummaries.length; compressorIndex++) {
       for (let orderIndex = 0; orderIndex < numberOfHourIntervals; orderIndex++) {
@@ -58,6 +59,7 @@ export class SystemProfileService {
   }
 
   updateCompressorOrderingSequencer(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, removedSummary: ProfileSummary, numberOfHourIntervals: number): Array<ProfileSummary> {
+    console.log('update 2')
     let dayTypeSummaries: Array<ProfileSummary> = profileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
     for (let compressorIndex = 0; compressorIndex < dayTypeSummaries.length; compressorIndex++) {
       for (let orderIndex = 0; orderIndex < numberOfHourIntervals; orderIndex++) {
