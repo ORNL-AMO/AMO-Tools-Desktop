@@ -33,7 +33,7 @@
                     FLP
                 </th>
                 <th class="text-center" *ngFor="let interval of hourIntervals">
-                    {{interval}}
+                    {{interval | intervalHourLabel}}
                 </th>
             </tr>
         </thead>

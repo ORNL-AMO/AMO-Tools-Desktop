@@ -108,7 +108,7 @@
                     Day Type
                 </th>
                 <th *ngFor="let hourInterval of hourIntervals">
-                    {{hourInterval}}
+                    {{hourInterval | intervalHourLabel}}
                 </th>
             </tr>
         </thead>

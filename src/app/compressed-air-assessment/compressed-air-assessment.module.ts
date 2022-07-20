@@ -139,6 +139,7 @@ import { CentrifugalGraphModule } from './centrifugal-graph/centrifugal-graph.mo
 import { BleedTestModule } from '../calculator/compressed-air/bleed-test/bleed-test.module';
 import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-modal.component';
 import { ImproveEndUseFormControlsPipe } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-form-controls.pipe';
+import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-label.module';
 
 @NgModule({
   declarations: [
@@ -254,7 +255,8 @@ import { ImproveEndUseFormControlsPipe } from './explore-opportunities/improve-e
     InventoryPerformanceProfileModule,
     Co2HelpTextModule,
     CentrifugalGraphModule,
-    BleedTestModule
+    BleedTestModule,
+    IntervalHourLabelModule
   ],
   providers: [
     CompressedAirAssessmentService,
