@@ -45,6 +45,7 @@ export class ReduceRunTimeComponent implements OnInit {
   hasInvalidDayType: boolean;
   settings: Settings;
   numberPipeDecimals: string;
+  intervalAmount: number;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService, private reduceRunTimeService: ReduceRunTimeService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
@@ -58,6 +59,7 @@ export class ReduceRunTimeComponent implements OnInit {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
+        this.intervalAmount = this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
         this.setOrderOptions();
       }
     });
@@ -154,9 +156,9 @@ export class ReduceRunTimeComponent implements OnInit {
     if (this.reduceRuntime.order != 100 && this.selectedDayType) {
       let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
       let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.reduceRuntime.order, modification, this.modificationResults, this.selectedDayType.dayType.dayTypeId);
-      let numberOfSummaryIntervals: number = this.compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+      // let numberOfSummaryIntervals: number = this.compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       let reduceRuntimeProfile: Array<ProfileSummary> = this.modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == this.selectedDayType.dayType.dayTypeId }).reduceRunTimeProfileSummary;
-      let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(adjustedProfileSummary, numberOfSummaryIntervals, reduceRuntimeProfile, this.compressedAirAssessment.compressorInventoryItems, true);
+      let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(adjustedProfileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup, reduceRuntimeProfile, this.compressedAirAssessment.compressorInventoryItems, true);
       let dayTypeIndex: number = this.dayTypeOptions.findIndex(dayTypeOption => { return dayTypeOption.dayType.dayTypeId == this.selectedDayType.dayType.dayTypeId });
       this.dayTypeOptions[dayTypeIndex].availableAirflow = dataArrays.availableAirflow;
       this.dayTypeOptions[dayTypeIndex].requiredAirflow = dataArrays.requiredAirflow;
@@ -173,8 +175,8 @@ export class ReduceRunTimeComponent implements OnInit {
         let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
         let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.reduceRuntime.order, modification, this.modificationResults, dayType.dayTypeId);
         let reduceRuntimeProfile: Array<ProfileSummary> = this.modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == dayType.dayTypeId }).reduceRunTimeProfileSummary;
-        let numberOfSummaryIntervals: number = this.compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
-        let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(adjustedProfileSummary, numberOfSummaryIntervals, reduceRuntimeProfile, this.compressedAirAssessment.compressorInventoryItems, true);
+        // let numberOfSummaryIntervals: number = this.compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+        let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(adjustedProfileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup, reduceRuntimeProfile, this.compressedAirAssessment.compressorInventoryItems, true);
         this.dayTypeOptions.push({
           dayType: dayType,
           isValid: dataArrays.isValid,

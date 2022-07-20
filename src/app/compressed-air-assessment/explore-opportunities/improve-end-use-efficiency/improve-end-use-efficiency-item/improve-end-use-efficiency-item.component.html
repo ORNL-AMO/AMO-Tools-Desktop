@@ -117,7 +117,7 @@
                 <td *ngIf="dataForms.length != 1">
                     {{dataForm.dayTypeName}}
                 </td>
-                <td *ngFor="let item of getFormControls(dataForm.form);">
+                <td *ngFor="let item of dataForm.form | improveEndUseFormControls">
                     <!--FIXED-->
                     <input *ngIf="form.controls.reductionType.value == 'Fixed'" type="checkbox"
                         formControlName={{item.name}} (change)="saveDataForm()">

@@ -138,6 +138,7 @@ import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module'
 import { CentrifugalGraphModule } from './centrifugal-graph/centrifugal-graph.module';
 import { BleedTestModule } from '../calculator/compressed-air/bleed-test/bleed-test.module';
 import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-modal.component';
+import { ImproveEndUseFormControlsPipe } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-form-controls.pipe';
 
 @NgModule({
   declarations: [
@@ -218,7 +219,8 @@ import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-moda
     ImproveEndUseEfficiencyItemComponent,
     CompressorSummaryComponent,
     WelcomeScreenComponent,
-    FlaModalComponent
+    FlaModalComponent,
+    ImproveEndUseFormControlsPipe
   ],
   imports: [
     CommonModule,

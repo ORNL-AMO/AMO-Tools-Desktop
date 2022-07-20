@@ -552,7 +552,7 @@ export class InventoryService {
         item.reductionData.push({
           dayTypeName: dayTypeName,
           dayTypeId: dayTypeId,
-          data: this.exploreOpportunitiesService.getDefaultReductionData(compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval)
+          data: this.exploreOpportunitiesService.getDefaultReductionData(compressedAirAssessment.systemProfile.systemProfileSetup)
         });
       });
       modification.reduceRuntime.runtimeData.push(reduceRuntimeData);

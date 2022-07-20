@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ImproveEndUseEfficiency, Modification, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, UseAutomaticSequencer } from '../../shared/models/compressed-air-assessment';
+import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ImproveEndUseEfficiency, Modification, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemProfileSetup, UseAutomaticSequencer } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
 import { AddReceiverVolumeService } from './add-receiver-volume/add-receiver-volume.service';
@@ -129,8 +129,8 @@ export class ExploreOpportunitiesValidationService {
           if (isValid) {
             let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(modification.reduceRuntime.order, modification, modificationResults, dayType.dayTypeId);
             let eemSequencerProfileSummary: Array<ProfileSummary> = modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == dayType.dayTypeId }).reduceRunTimeProfileSummary;
-            let numberOfSummaryIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
-            let dataArrays: ValidationDataArrays = this.getDataArrays(adjustedProfileSummary, numberOfSummaryIntervals, eemSequencerProfileSummary, compressedAirAssessment.compressorInventoryItems, false);
+            // let numberOfSummaryIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+            let dataArrays: ValidationDataArrays = this.getDataArrays(adjustedProfileSummary, compressedAirAssessment.systemProfile.systemProfileSetup, eemSequencerProfileSummary, compressedAirAssessment.compressorInventoryItems, false);
             isValid = dataArrays.isValid;
           }
         });
@@ -160,8 +160,8 @@ export class ExploreOpportunitiesValidationService {
             let adjustedCompressors: Array<CompressorInventoryItem> = this.compressedAirAssessmentResultsService.useAutomaticSequencerAdjustCompressor(modification.useAutomaticSequencer, JSON.parse(JSON.stringify(compressedAirAssessment.compressorInventoryItems)), modification.useAutomaticSequencer.profileSummary, dayType.dayTypeId, compressedAirAssessment.systemInformation.atmosphericPressure, settings);
             let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(modification.useAutomaticSequencer.order, modification, modificationResults, dayType.dayTypeId);
             let eemSequencerProfileSummary: Array<ProfileSummary> = modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == dayType.dayTypeId }).useAutomaticSequencerProfileSummary;
-            let numberOfSummaryIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
-            let dataArrays: ValidationDataArrays = this.getDataArrays(adjustedProfileSummary, numberOfSummaryIntervals, eemSequencerProfileSummary, adjustedCompressors, false);
+            // let numberOfSummaryIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+            let dataArrays: ValidationDataArrays = this.getDataArrays(adjustedProfileSummary, compressedAirAssessment.systemProfile.systemProfileSetup, eemSequencerProfileSummary, adjustedCompressors, false);
             isValid = dataArrays.isValid;
           }
         });
@@ -172,36 +172,39 @@ export class ExploreOpportunitiesValidationService {
   }
 
 
-  getDataArrays(adjustedProfileSummary: Array<ProfileSummary>, numberOfSummaryIntervals: number,
+  getDataArrays(adjustedProfileSummary: Array<ProfileSummary>, systemProfileSetup: SystemProfileSetup,
     eemProfileSummary: Array<ProfileSummary>, adjustedCompressors: Array<CompressorInventoryItem>,
     profilePowerNeeded: boolean): ValidationDataArrays {
     let requiredAirflow: Array<number> = new Array();
     let availableAirflow: Array<number> = new Array();
     let profilePower: Array<number> = new Array();
     adjustedProfileSummary.forEach(summary => {
-      for (let i = 0; i < numberOfSummaryIntervals; i++) {
-        if (requiredAirflow[i] == undefined) {
+      let index: number = 0;
+      for (let i = 0; i < 24;) {
+        if (requiredAirflow[index] == undefined) {
           requiredAirflow.push(0);
         }
-        if (availableAirflow[i] == undefined) {
+        if (availableAirflow[index] == undefined) {
           availableAirflow.push(0);
         }
-        if (profilePower[i] == undefined) {
+        if (profilePower[index] == undefined) {
           profilePower.push(0);
         }
-        if (summary.profileSummaryData[i].order != 0) {
-          requiredAirflow[i] = requiredAirflow[i] + summary.profileSummaryData[i].airflow;
+        if (summary.profileSummaryData[index].order != 0) {
+          requiredAirflow[index] = requiredAirflow[index] + summary.profileSummaryData[index].airflow;
         }
         let profileSummary: ProfileSummary = eemProfileSummary.find(sequencerSummary => { return summary.compressorId == sequencerSummary.compressorId && summary.dayTypeId == sequencerSummary.dayTypeId });
         let intervalItem: ProfileSummaryData = profileSummary.profileSummaryData.find(data => { return data.timeInterval == i });
         if (intervalItem.order != 0) {
-          availableAirflow[i] = availableAirflow[i] + this.getFullLoadCapacity(profileSummary.compressorId, adjustedCompressors);
+          availableAirflow[index] = availableAirflow[index] + this.getFullLoadCapacity(profileSummary.compressorId, adjustedCompressors);
         }
         if (profilePowerNeeded) {
           let powerProfile: ProfileSummary = eemProfileSummary.find(profileSummary => { return summary.compressorId == profileSummary.compressorId && summary.dayTypeId == profileSummary.dayTypeId });
           let powerProfileData: ProfileSummaryData = powerProfile.profileSummaryData.find(data => { return data.timeInterval == i });
-          profilePower[i] = profilePower[i] + powerProfileData.power;
+          profilePower[index] = profilePower[index] + powerProfileData.power;
         }
+        i = i + systemProfileSetup.dataInterval;
+        index++;
       }
     });
     let isValid: boolean = this.checkAirflowValid(requiredAirflow, availableAirflow);
