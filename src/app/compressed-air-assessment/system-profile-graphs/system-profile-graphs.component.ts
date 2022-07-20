@@ -278,8 +278,13 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(trace);
       });
       let yAxisRange: Array<number> = this.getYAxisRange(true, this.totalFullLoadCapacity);
-      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 24 : 1;
-      let xRange: Array<number> = [this.timeInterval, xRangeMax];
+      let xRangeMax: number = 24;
+      let xRangeMin: number = this.timeInterval;
+      if(this.profileSummary[0].profileSummaryData.length == 1){
+        xRangeMax = 1;
+        xRangeMin = 0;
+      }
+      let xRange: Array<number> = [xRangeMin, xRangeMax];
       let unit: string = 'acfm';
       if (this.settings.unitsOfMeasure == 'Metric') {
         unit = 'm&#xB3;/min'
@@ -350,8 +355,13 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       });
-      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 24 : 1;
-      var layout = this.getLayout("Compressor Capacity (%)", [this.timeInterval, xRangeMax], [0, 105], '%');
+      let xRangeMax: number = 24;
+      let xRangeMin: number = this.timeInterval;
+      if(this.profileSummary[0].profileSummaryData.length == 1){
+        xRangeMax = 1;
+        xRangeMin = 0;
+      }
+      var layout = this.getLayout("Compressor Capacity (%)", [xRangeMin, xRangeMax], [0, 105], '%');
       var config = {
         responsive: !this.printView,
         displaylogo: false
@@ -391,8 +401,14 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(trace);
       });
       let yAxisRange: Array<number> = this.getYAxisRange(false, this.totalFullLoadPower);
-      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 24 : 1;
-      let xRange: Array<number> = [this.timeInterval, xRangeMax];
+      let xRangeMax: number = 24;
+      let xRangeMin: number = this.timeInterval;
+      if(this.profileSummary[0].profileSummaryData.length == 1){
+        xRangeMax = 1;
+        xRangeMin = 0;
+      }
+
+      let xRange: Array<number> = [xRangeMin, xRangeMax];
       var layout = this.getLayout("Power (kW)", xRange, yAxisRange, undefined);
       var config = {
         responsive: !this.printView,
