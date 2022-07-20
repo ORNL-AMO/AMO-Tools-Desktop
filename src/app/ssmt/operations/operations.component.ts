@@ -126,7 +126,7 @@ export class OperationsComponent implements OnInit {
     }
     this.co2SavingsData = co2SavingsData;
     let shouldSetOutputRate: boolean = false;
-    if(!this.co2SavingsData.totalFuelEmissionOutputRate || !this.co2SavingsData.fuelType) {
+    if(this.co2SavingsData.totalFuelEmissionOutputRate === undefined || !this.co2SavingsData.fuelType) {
       shouldSetOutputRate = true;
     } 
     this.setEnergySource(shouldSetOutputRate);

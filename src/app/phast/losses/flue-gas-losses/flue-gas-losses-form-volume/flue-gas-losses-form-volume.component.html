@@ -1,8 +1,18 @@
 <form [formGroup]="flueGasLossForm">
+  <div class="alert-warning m-2 small mx-auto w-100 text-center" *ngIf="hasDeletedCustomMaterial">
+    <div>
+      A custom material used in this assessment has been deleted and a placeholder material was created to save the data. To
+      edit the custom material, please use the Custom Materials database or click 'Restore Gas Material'.
+    </div>
+    <div class="d-flex justify-content-around">
+      <a class="click-link" (click)="showMaterialModal(true)">Restore Gas Material</a>
+      <a class="click-link" (click)="dismissMessage()">Dismiss Message</a>
+    </div>
+  </div>
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="{{'gasTypeId'+idString}}">Fuel
-        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()"
+        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal(false)"
           [ngClass]="{'disabled-link': !baselineSelected}">Add New Fuel</a>
       </label>
       <select name="{{'gasTypeId_'+lossIndex}}" class="form-control" formControlName="gasTypeId"
@@ -165,7 +175,7 @@
     <div class="modal-content">
       <div>
         <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)"
-          (hideModal)="hideMaterialModal($event)" [settings]="settings"></app-flue-gas-material>
+          (hideModal)="hideMaterialModal($event)" [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial"></app-flue-gas-material>
       </div>
     </div>
   </div>

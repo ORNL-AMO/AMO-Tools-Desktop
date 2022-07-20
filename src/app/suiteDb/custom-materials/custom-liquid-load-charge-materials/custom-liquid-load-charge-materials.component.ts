@@ -1,12 +1,13 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { LiquidLoadChargeMaterial } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { LiquidLoadMaterialDbService } from '../../../indexedDb/liquid-load-material-db.service';
 @Component({
   selector: 'app-custom-liquid-load-charge-materials',
   templateUrl: './custom-liquid-load-charge-materials.component.html',
@@ -19,6 +20,8 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   showModal: boolean;
   @Input()
   importing: boolean;
+  @Output()
+  emitNumMaterials: EventEmitter<number> = new EventEmitter<number>();
 
   liquidChargeMaterials: Array<LiquidLoadChargeMaterial>;
   existingMaterial: LiquidLoadChargeMaterial;
@@ -29,7 +32,7 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   selectedSub: Subscription;
   selectAllSub: Subscription;
 
-  constructor(private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private liquidLoadMaterialDbService: LiquidLoadMaterialDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.liquidChargeMaterials = new Array<LiquidLoadChargeMaterial>();
@@ -72,30 +75,25 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
     }
   }
 
-  getCustomMaterials() {
-    this.indexedDbService.getAllLiquidLoadChargeMaterial().then(idbResults => {
-      this.liquidChargeMaterials = idbResults;
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        this.convertAllMaterials();
-      }
-    });
+  async getCustomMaterials() {
+    this.liquidChargeMaterials = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
+    if (this.settings.unitsOfMeasure === 'Metric') {
+      this.convertAllMaterials();
+    }
+    this.emitNumMaterials.emit(this.liquidChargeMaterials.length);
   }
 
-  editMaterial(id: number) {
-    this.indexedDbService.getLiquidLoadChargeMaterial(id).then(idbResults => {
-      this.existingMaterial = idbResults;
-      this.editExistingMaterial = true;
-      this.showMaterialModal();
-    });
+ async editMaterial(id: number) {
+   this.existingMaterial = await firstValueFrom(this.liquidLoadMaterialDbService.getByIdWithObservable(id));
+   this.editExistingMaterial = true;
+   this.showMaterialModal();
   }
 
-  deleteMaterial(id: number) {
-    this.indexedDbService.getLiquidLoadChargeMaterial(id).then(idbResults => {
-      this.existingMaterial = idbResults;
-      this.editExistingMaterial = true;
-      this.deletingMaterial = true;
-      this.showMaterialModal();
-    });
+  async deleteMaterial(id: number) {
+    this.existingMaterial = await firstValueFrom(this.liquidLoadMaterialDbService.getByIdWithObservable(id));
+    this.editExistingMaterial = true;
+    this.deletingMaterial = true;
+    this.showMaterialModal();
   }
 
   showMaterialModal() {

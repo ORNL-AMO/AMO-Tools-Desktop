@@ -22,5 +22,6 @@
 ## For Developers
 - To generate a new angular module: `npm run ng g module path/to/module`
 - To generate a new angular component: `npm run ng g component path/to/component`
-- For more information, see [the angular docs](https://docs.angularjs.org/guide/component)
+- For more information, see [the Angular docs](https://docs.angularjs.org/guide/component)
 - For making small, frequent changes try using `npm run build-watch`. This type of build will watch for changes made to source files and only recompile what is necessary
+- To retrieve download counts for each of MEASUR's releases: `npm run download-stats`

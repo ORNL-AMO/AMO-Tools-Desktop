@@ -15,9 +15,9 @@
 
             </label>
             <div class="input-group">
-                <input type="number" name="OperatingDO" class="form-control number-input-field"
+                <input type="number" step="0.1" name="OperatingDO" class="form-control number-input-field"
                     id="{{'OperatingDO_'+idString}}" (focus)="focusField('OperatingDO')" (input)="save()"
-                    formControlName="OperatingDO" [readonly]="!selected" step=".1">
+                    formControlName="OperatingDO" [readonly]="!selected">
                 <span class="input-group-addon units">mg/L</span>
             </div>
             <span *ngIf="form.controls.OperatingDO.invalid && !form.controls.OperatingDO.pristine">
@@ -35,7 +35,7 @@
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Alpha, 'invalid': form.controls.Alpha.invalid}">
             <label for="{{'Alpha_'+idString}}">O<sub>2</sub> Transfer Coefficient Ratio (&alpha;)</label>
             <div class="input-group">
-                <input type="number" name="Alpha" class="form-control number-input-field" id="{{'Alpha_'+idString}}"
+                <input type="number" step="0.1" name="Alpha" class="form-control number-input-field" id="{{'Alpha_'+idString}}"
                     (focus)="focusField('Alpha')" (input)="save()" formControlName="Alpha" [readonly]="!selected">
             </div>
             <span *ngIf="form.controls.Alpha.invalid && !form.controls.Alpha.pristine">
@@ -50,7 +50,7 @@
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Beta, 'invalid': form.controls.Beta.invalid}">
             <label for="{{'Beta_'+idString}}">Saturation DO Concentration Ratio (&beta;)</label>
             <div class="input-group">
-                <input type="number" name="Beta" class="form-control number-input-field" id="{{'Beta_'+idString}}"
+                <input type="number" step="0.1" name="Beta" class="form-control number-input-field" id="{{'Beta_'+idString}}"
                     (focus)="focusField('Beta')" (input)="save()" formControlName="Beta" [readonly]="!selected">
             </div>
             <span *ngIf="form.controls.Beta.invalid && !form.controls.Beta.pristine">
@@ -110,7 +110,7 @@
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Aeration, 'invalid': form.controls.Aeration.invalid}">
             <label for="{{'Aeration_'+idString}}">Aeration Operating Power</label>
             <div class="input-group">
-                <input type="number" name="Aeration" class="form-control number-input-field"
+                <input type="number" step="10" name="Aeration" class="form-control number-input-field"
                     id="{{'Aeration_'+idString}}" (focus)="focusField('Aeration')" (input)="save()"
                     formControlName="Aeration" [readonly]="!selected">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
@@ -130,7 +130,7 @@
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Elevation, 'invalid': form.controls.Elevation.invalid}">
             <label for="{{'Elevation_'+idString}}">Site Elevation</label>
             <div class="input-group">
-                <input type="number" name="Elevation" class="form-control number-input-field"
+                <input type="number" step="10" name="Elevation" class="form-control number-input-field"
                     id="{{'Elevation_'+idString}}" (focus)="focusField('Elevation')" (input)="save()"
                     formControlName="Elevation" [readonly]="!selected">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>

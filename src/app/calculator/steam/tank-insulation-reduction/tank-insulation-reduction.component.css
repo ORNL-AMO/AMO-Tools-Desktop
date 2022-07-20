@@ -56,26 +56,10 @@
     margin-bottom: 0px;
 }
 
-.tank-insulation-reduction-icon {
-    height: auto;
-    width: 35px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
 .opp-sheet-icon {
     width: 35px;
 }
 
-.icon-background{
-    height: 55px;
-    width: 55px;
-    background-image: linear-gradient(to bottom right, #ffffff, #FC5B00);
-    border-radius: 15px;
-    box-shadow: #7b7878 2px 2px 5px 1px;
-
-}
-
-.inTreasureHunt-icon{
-    border-radius: 50%;
+.calc-icon-header img {
+    max-width: 35px;
 }

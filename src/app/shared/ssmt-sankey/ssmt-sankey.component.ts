@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, ViewChild, ElementRef, Renderer2, AfterViewInit, SimpleChanges, OnChanges} from "@angular/core";
+import {Component, OnInit, Input, ViewChild, ElementRef, Renderer2, AfterViewInit, SimpleChanges, OnChanges, ChangeDetectionStrategy} from "@angular/core";
 import { SSMTOutput, SSMTLosses } from "../models/steam/steam-outputs";
 import { Settings } from "../../shared/models/settings";
 import { SSMT, SSMTInputs } from "../models/steam/ssmt";
@@ -13,7 +13,8 @@ import { SankeyNode } from "../models/sankey";
 @Component({
   selector: 'app-ssmt-sankey',
   templateUrl: './ssmt-sankey.component.html',
-  styleUrls: ['./ssmt-sankey.component.css']
+  styleUrls: ['./ssmt-sankey.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   @Input()
@@ -676,7 +677,6 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let fillOpacity = 1;
     let fill: string;
     let returnedCondensateNode = this.nodes.length - 2;
-    // debugger
     for (let i = 0; i < links.length; i++) {
       if (this.redLinkPaths.includes(i + 1)) {
         // To replicate Plotly event hover/unhover fill opacity

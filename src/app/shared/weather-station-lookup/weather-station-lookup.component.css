@@ -1,0 +1,42 @@
+
+.btn-group {
+    display: block;
+    text-align: center;
+}
+
+.btn.btn-primary.btn-sm.btn-apply {
+    font-size: small !important;
+}
+
+.btn-margin-10 {
+    margin: 10px 0px;
+}
+
+.selected-item{
+    border: solid;
+}
+
+.group-label{
+    font-weight: bold;
+}
+
+
+.collapsed-border {
+    border-bottom: none;
+}
+
+td, th{
+    font-size: small;
+    padding: 3px;
+}
+
+
+  .form-section{
+    border-bottom: #bbb dashed 1px;
+    padding-top: 1rem;
+    padding-bottom: .5rem;
+}
+
+.btn{
+    padding: 4px;
+}

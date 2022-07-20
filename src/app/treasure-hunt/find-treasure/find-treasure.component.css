@@ -31,7 +31,7 @@ a:not([href]):not([tabindex]){
 }
 
 .skyline{
-    background-image: url('../../../assets/images/industrial-skyline.png');
+    background-image: url('../../../assets/images/industrial-skyline.svg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: bottom center; 
@@ -68,13 +68,6 @@ a:not([href]):not([tabindex]){
     border-radius: 15px;
 }
 
-.ph-calc-icon{
-    background-image: linear-gradient(to bottom right, #ffffff, #BF3D00);
-    border-radius: 50%;
-    height: 81px;
-    width: 81px;
-}
-
 .th-calc-img{
     height: 52px;
     width: auto;
@@ -91,18 +84,30 @@ a:not([href]):not([tabindex]){
     margin-right: auto;
 }
 
-.steam-calc-icon{
-    background-image: linear-gradient(to bottom right, #ffffff, #FC5B00);
+.steam-calc-icon, .ca-calc-icon, .ph-calc-icon, .lighting-calc-icon, .motor-calc-icon {
     border-radius: 50%;
     height: 81px;
     width: 81px;
 }
 
+.steam-calc-icon{
+    background-image: linear-gradient(to bottom right, #ffffff, #FC5B00);
+}
+
 .ca-calc-icon{
     background-image: linear-gradient(to bottom right, #ffffff, #6f42c1);
-    border-radius: 50%;
-    height: 81px;
-    width: 81px;
+}
+
+.ph-calc-icon{
+    background-image: linear-gradient(to bottom right, #ffffff, #BF3D00);
+}
+
+.lighting-calc-icon {
+    background: linear-gradient(to bottom right, #e4dbdb57, #007bff57);
+}
+
+.motor-calc-icon {
+    background: linear-gradient(to bottom right, #e4dbdb57, #6b846aa6);
 }
 
 .calc-icon-div{

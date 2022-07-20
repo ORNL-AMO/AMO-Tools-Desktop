@@ -15,6 +15,7 @@ export interface SimpleChart {
         barmode?: string,
         height?: number,
         width?: number,
+        showlegend?: boolean,
         shapes?: Array<any>,
         legend?: {
             orientation: string,
@@ -38,7 +39,6 @@ export interface SimpleChart {
             }
         },
         hovermode: string,
-        showlegend?: boolean,
         xaxis: AxisObj,
         yaxis: AxisObj,
         xaxis2?: AxisObj,

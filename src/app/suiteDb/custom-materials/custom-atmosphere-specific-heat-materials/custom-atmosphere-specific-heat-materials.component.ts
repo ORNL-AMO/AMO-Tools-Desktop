@@ -1,12 +1,13 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AtmosphereSpecificHeat } from '../../../shared/models/materials';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+ 
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { AtmosphereDbService } from '../../../indexedDb/atmosphere-db.service';
 @Component({
   selector: 'app-custom-atmosphere-specific-heat-materials',
   templateUrl: './custom-atmosphere-specific-heat-materials.component.html',
@@ -19,7 +20,8 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   showModal: boolean;
   @Input()
   importing: boolean;
-
+  @Output()
+  emitNumMaterials: EventEmitter<number> = new EventEmitter<number>();
 
   editExistingMaterial: boolean = false;
   existingMaterial: AtmosphereSpecificHeat;
@@ -30,7 +32,7 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   selectedSub: Subscription;
   selectAllSub: Subscription;
 
-  constructor(private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private atmospherDbService: AtmosphereDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.atmosphereSpecificHeatMaterials = new Array<AtmosphereSpecificHeat>();
@@ -70,31 +72,25 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
     }
   }
 
-  getCustomMaterials() {
-    this.indexedDbService.getAtmosphereSpecificHeat().then(idbResults => {
-      this.atmosphereSpecificHeatMaterials = idbResults;
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        this.convertAllMaterials();
-      }
-    });
-
+  async getCustomMaterials() {
+    this.atmosphereSpecificHeatMaterials = await firstValueFrom(this.atmospherDbService.getAllWithObservable());
+    if (this.settings.unitsOfMeasure === 'Metric') {
+      this.convertAllMaterials();
+    }
+    this.emitNumMaterials.emit(this.atmosphereSpecificHeatMaterials.length);
   }
 
-  editMaterial(id: number) {
-    this.indexedDbService.getAtmosphereSpecificHeatById(id).then(idbResults => {
-      this.existingMaterial = idbResults;
-      this.editExistingMaterial = true;
-      this.showMaterialModal();
-    });
+  async editMaterial(id: number) {
+    this.existingMaterial = await firstValueFrom(this.atmospherDbService.getByIdWithObservable(id));
+    this.editExistingMaterial = true;
+    this.showMaterialModal();
   }
 
-  deleteMaterial(id: number) {
-    this.indexedDbService.getAtmosphereSpecificHeatById(id).then(idbResults => {
-      this.existingMaterial = idbResults;
-      this.editExistingMaterial = true;
-      this.deletingMaterial = true;
-      this.showMaterialModal();
-    });
+  async deleteMaterial(id: number) {
+    this.existingMaterial = await firstValueFrom(this.atmospherDbService.getByIdWithObservable(id));
+    this.editExistingMaterial = true;
+    this.deletingMaterial = true;
+    this.showMaterialModal();
   }
 
   showMaterialModal() {

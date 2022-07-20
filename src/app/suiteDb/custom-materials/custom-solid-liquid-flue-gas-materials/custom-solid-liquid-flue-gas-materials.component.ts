@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
+import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
 
 @Component({
   selector: 'app-custom-solid-liquid-flue-gas-materials',
@@ -19,6 +19,8 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
   showModal: boolean;
   @Input()
   importing: boolean;
+  @Output()
+  emitNumMaterials: EventEmitter<number> = new EventEmitter<number>();
   
   solidLiquidFlueGasMaterials: Array<SolidLiquidFlueGasMaterial>;
   editExistingMaterial: boolean = false;
@@ -27,7 +29,7 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   selectedSub: Subscription;
   selectAllSub: Subscription;
-  constructor(private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }
+  constructor(private solidLiquidMaterialDbService: SolidLiquidMaterialDbService, private customMaterialService: CustomMaterialsService) { }
 
   ngOnInit() {
     this.solidLiquidFlueGasMaterials = new Array<SolidLiquidFlueGasMaterial>();
@@ -61,27 +63,22 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
     }
   }
 
-  getCustomMaterials() {
-    this.indexedDbService.getSolidLiquidFlueGasMaterials().then(idbResults => {
-      this.solidLiquidFlueGasMaterials = idbResults;
-    });
+  async getCustomMaterials() {
+    this.solidLiquidFlueGasMaterials = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
+    this.emitNumMaterials.emit(this.solidLiquidFlueGasMaterials.length);
   }
 
-  editMaterial(id: number) {
-    this.indexedDbService.getSolidLiquidFlueGasMaterialById(id).then(idbResults => {
-      this.existingMaterial = idbResults;
-      this.editExistingMaterial = true;
-      this.showMaterialModal();
-    });
+  async editMaterial(id: number) {
+    this.existingMaterial = await firstValueFrom(this.solidLiquidMaterialDbService.getByIdWithObservable(id));
+    this.editExistingMaterial = true;
+    this.showMaterialModal();
   }
 
-  deleteMaterial(id: number) {
-    this.indexedDbService.getSolidLiquidFlueGasMaterialById(id).then(idbResults => {
-      this.existingMaterial = idbResults;
-      this.editExistingMaterial = true;
-      this.deletingMaterial = true;
-      this.showMaterialModal();
-    });
+  async deleteMaterial(id: number) {
+    this.existingMaterial = await firstValueFrom(this.solidLiquidMaterialDbService.getByIdWithObservable(id));
+    this.editExistingMaterial = true;
+    this.deletingMaterial = true;
+    this.showMaterialModal();
   }
 
   showMaterialModal() {

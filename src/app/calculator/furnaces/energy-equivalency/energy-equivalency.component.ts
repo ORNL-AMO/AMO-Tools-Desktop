@@ -5,7 +5,6 @@ import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { EnergyEquivalencyService } from './energy-equivalency.service';
 import { Calculator } from '../../../shared/models/calculators';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { FormGroup } from '@angular/forms';
@@ -47,9 +46,10 @@ export class EnergyEquivalencyComponent implements OnInit {
   formElectric: FormGroup;
   formFuel: FormGroup;
   constructor(private phastService: PhastService, private energyEquivalencyService: EnergyEquivalencyService, private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
+    private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit() {
+    this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -118,12 +118,12 @@ export class EnergyEquivalencyComponent implements OnInit {
     this.calculateFuel();
   }
 
-  calculateFuel() {
+  async calculateFuel() {
     if (!this.inAssessment) {
       this.energyEquivalencyService.energyEquivalencyFuel = this.energyEquivalencyFuel;
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.energyEquivalencyInputs.energyEquivalencyFuel = this.energyEquivalencyFuel;
-      this.saveCalculator();
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
     this.energyEquivalencyFuelOutput = this.phastService.energyEquivalencyFuel(this.energyEquivalencyFuel, this.settings);
   }
@@ -133,12 +133,12 @@ export class EnergyEquivalencyComponent implements OnInit {
     this.calculateElectric();
   }
 
-  calculateElectric() {
+  async calculateElectric() {
     if (!this.inAssessment) {
       this.energyEquivalencyService.energyEquivalencyElectric = this.energyEquivalencyElectric;
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.energyEquivalencyInputs.energyEquivalencyElectric = this.energyEquivalencyElectric;
-      this.saveCalculator();
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
     }
     this.energyEquivalencyElectricOutput = this.phastService.energyEquivalencyElectric(this.energyEquivalencyElectric, this.settings);
   }
@@ -151,7 +151,7 @@ export class EnergyEquivalencyComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  getCalculator() {
+  async getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
       this.calcExists = true;
@@ -166,11 +166,13 @@ export class EnergyEquivalencyComponent implements OnInit {
         this.calculator.energyEquivalencyInputs = tmpEnergyEquivalencyInputs;
         this.energyEquivalencyElectric = this.calculator.energyEquivalencyInputs.energyEquivalencyElectric;
         this.energyEquivalencyFuel = this.calculator.energyEquivalencyInputs.energyEquivalencyFuel;
-        this.saveCalculator();
+        await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+
       }
     } else {
       this.calculator = this.initCalculator();
-      this.saveCalculator();
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+
     }
     this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
     this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
@@ -204,23 +206,4 @@ export class EnergyEquivalencyComponent implements OnInit {
     this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
   }
 
-  saveCalculator() {
-    if (!this.saving || this.calcExists) {
-      if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.calculator.id = result;
-            this.calcExists = true;
-            this.saving = false;
-          });
-        });
-      }
-    }
-  }
 }

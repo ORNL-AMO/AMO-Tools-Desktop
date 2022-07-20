@@ -11,6 +11,9 @@ export interface FixtureLoss {
     hoursPerYear?: number;
     fuelCost?: number;
     energySourceType?: string;
+    latentHeat?: number;
+    meltingPoint?: number;
+    specificHeatLiquid?: number;
 }
 
 export interface FixtureLossOutput {

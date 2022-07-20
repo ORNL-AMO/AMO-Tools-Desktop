@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SettingsService } from '../../settings/settings.service';
 import { Assessment } from '../../shared/models/assessment';
@@ -10,6 +10,7 @@ import { CompressedAirAssessmentService } from '../compressed-air-assessment.ser
 import { ConvertCompressedAirService } from '../convert-compressed-air.service';
 import { SystemBasicsFormService } from './system-basics-form.service';
 import * as _ from 'lodash';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class SystemBasicsComponent implements OnInit {
   constructor(private settingsService: SettingsService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private convertCompressedAirService: ConvertCompressedAirService,
-    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService,
+       private settingsDbService: SettingsDbService,
     private systemBasicsFormService: SystemBasicsFormService) { }
 
 
@@ -62,7 +63,7 @@ export class SystemBasicsComponent implements OnInit {
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
-  saveSettings() {
+  async saveSettings() {
     let currentSettings: Settings = this.compressedAirAssessmentService.settings.getValue();
     let id = currentSettings.id;
     let createdDate = currentSettings.createdDate;
@@ -83,9 +84,8 @@ export class SystemBasicsComponent implements OnInit {
     newSettings.id = id;
     newSettings.createdDate = createdDate;
     newSettings.assessmentId = assessmentId;
-    this.indexedDbService.putSettings(newSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings))
+    this.settingsDbService.setAll(updatedSettings);
     this.compressedAirAssessmentService.settings.next(newSettings);
   }
 

@@ -17,7 +17,7 @@ import { ReportRollupModule } from '../report-rollup/report-rollup.module';
 import { FsatModule } from '../fsat/fsat.module';
 import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
 import { WindowRefService } from '../indexedDb/window-ref.service';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
+ 
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
@@ -37,6 +37,7 @@ import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { WasteWaterModule } from '../waste-water/waste-water.module';
 import { CompressedAirAssessmentModule } from '../compressed-air-assessment/compressed-air-assessment.module';
 import { PlotlyViaWindowModule } from 'angular-plotly.js';
+import { IndexedDbModule } from '../indexedDb/indexed-db.module';
 
 @NgModule({
   declarations: [
@@ -68,19 +69,13 @@ import { PlotlyViaWindowModule } from 'angular-plotly.js';
     MotorInventoryModule,
     WasteWaterModule,
     CompressedAirAssessmentModule,
-    PlotlyViaWindowModule
+    PlotlyViaWindowModule,
+    IndexedDbModule
   ],
   providers: [
     AssessmentService,
     CoreService,
     WindowRefService,
-    IndexedDbService,
-    AssessmentDbService,
-    DirectoryDbService,
-    SettingsDbService,
-    CalculatorDbService,
-    DeleteDataService,
-    InventoryDbService
   ]
 })
 

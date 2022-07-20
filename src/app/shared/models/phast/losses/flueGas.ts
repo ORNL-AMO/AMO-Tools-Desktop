@@ -34,6 +34,7 @@ export interface FlueGasByMass {
     moisture?: number;
     nitrogen?: number;
     heatInput?: number;
+    heatingValue?: number;
 }
 
 export interface FlueGasByVolume {
@@ -65,6 +66,9 @@ export interface FlueGasByVolume {
     SO2?: number;
     O2?: number;
     heatInput?: number;
+    heatingValue?: number;
+    heatingValueVolume?: number;
+    specificGravity?: number;
 }
 
 export interface FlueGasByVolumeSuiteResults {

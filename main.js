@@ -1,8 +1,9 @@
-const { app, BrowserWindow, ipcMain, crashReporter, Menu } = require('electron');
+const { app, BrowserWindow, ipcMain, crashReporter, Menu, shell } = require('electron');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
+const { electron } = require('process');
 // const Menu = require('menu');
 
 
@@ -107,7 +108,16 @@ app.on('ready', function () {
   ];
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
-  win.setMenuBarVisibility(false)
+  win.setMenuBarVisibility(false);
+
+  win.webContents.on('new-window', function (e, url) {
+    // make sure local urls stay in electron perimeter
+    if ('file://' === url.substr(0, 'file://'.length)) {
+      return;
+    }
+    e.preventDefault();
+    shell.openExternal(url);
+  });
 });
 
 // Listen for message from core.component to either download updates or not
@@ -119,6 +129,13 @@ ipcMain.once('update', (event, arg) => {
 ipcMain.once('later', (event, arg) => {
   update = null;
 });
+
+ipcMain.once('relaunch', () => {
+  console.log('ipcMain relaunch emitted');
+  app.relaunch();
+  app.exit();
+});
+
 
 app.on('window-all-closed', function () {
   app.quit();

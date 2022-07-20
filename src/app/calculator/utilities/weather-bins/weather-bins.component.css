@@ -1,0 +1,11 @@
+.btn-danger{
+    padding: 4px;
+}
+
+a:not([href]):not([tabindex]).click-link.danger{
+    color: red;
+}
+
+.weather-icon{
+    height: 55px;
+}

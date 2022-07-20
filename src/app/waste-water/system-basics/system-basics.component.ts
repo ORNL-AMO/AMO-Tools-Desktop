@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+ 
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SettingsService } from '../../settings/settings.service';
 import { Assessment } from '../../shared/models/assessment';
@@ -11,6 +11,7 @@ import { WasteWaterService } from '../waste-water.service';
 import { SystemBasicsService } from './system-basics.service';
 
 import * as _ from 'lodash';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   showSuccessMessage: boolean = false;
   constructor(private settingsService: SettingsService, private systemBasicsService: SystemBasicsService,
     private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
-    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
+       private settingsDbService: SettingsDbService) { }
 
 
   ngOnInit() {
@@ -61,7 +62,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
     this.wasteWaterService.updateWasteWater(wasteWater);
   }
 
-  saveSettings() {
+  async saveSettings() {
     let currentSettings: Settings = this.wasteWaterService.settings.getValue();
     let id = currentSettings.id;
     let createdDate = currentSettings.createdDate;
@@ -82,9 +83,8 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
     newSettings.id = id;
     newSettings.createdDate = createdDate;
     newSettings.assessmentId = assessmentId;
-    this.indexedDbService.putSettings(newSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
+    let settings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
+    this.settingsDbService.setAll(settings);
     this.wasteWaterService.settings.next(newSettings);
 
   }

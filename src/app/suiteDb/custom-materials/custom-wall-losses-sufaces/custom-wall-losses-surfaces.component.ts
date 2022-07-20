@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { WallLossesSurface } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
+import { WallLossesSurfaceDbService } from '../../../indexedDb/wall-losses-surface-db.service';
 
 @Component({
   selector: 'app-custom-wall-losses-surfaces',
@@ -19,6 +19,8 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
   showModal: boolean;
   @Input()
   importing: boolean;
+  @Output()
+  emitNumMaterials: EventEmitter<number> = new EventEmitter<number>();
   
   editExistingMaterial: boolean = false;
   existingMaterial: WallLossesSurface;
@@ -28,7 +30,7 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   selectedSub: Subscription;
   selectAllSub: Subscription;
-  constructor(private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }
+  constructor(private wallLossesSurfaceDbService: WallLossesSurfaceDbService, private customMaterialService: CustomMaterialsService) { }
 
   ngOnInit() {
     this.wallLossesSurfaces = new Array<WallLossesSurface>();
@@ -62,27 +64,22 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
     }
   }
   
-  getCustomMaterials() {
-    this.indexedDbService.getWallLossesSurface().then(idbResults => {
-      this.wallLossesSurfaces = idbResults;
-    });
+  async getCustomMaterials() {
+    this.wallLossesSurfaces = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
+    this.emitNumMaterials.emit(this.wallLossesSurfaces.length);
   }
 
-  editMaterial(id: number) {
-    this.indexedDbService.getWallLossesSurfaceById(id).then(idbResults => {
-      this.existingMaterial = idbResults;
-      this.editExistingMaterial = true;
-      this.showMaterialModal();
-    });
+  async editMaterial(id: number) {
+    this.existingMaterial = await firstValueFrom(this.wallLossesSurfaceDbService.getByIdWithObservable(id));
+    this.editExistingMaterial = true;
+    this.showMaterialModal();
   }
 
-  deleteMaterial(id: number) {
-    this.indexedDbService.getWallLossesSurfaceById(id).then(idbResults => {
-      this.existingMaterial = idbResults;
-      this.editExistingMaterial = true;
-      this.deletingMaterial = true;
-      this.showMaterialModal();
-    });
+  async deleteMaterial(id: number) {
+    this.existingMaterial = await firstValueFrom(this.wallLossesSurfaceDbService.getByIdWithObservable(id));
+    this.editExistingMaterial = true;
+    this.deletingMaterial = true;
+    this.showMaterialModal();
   }
 
   showMaterialModal() {

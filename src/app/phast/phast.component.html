@@ -98,7 +98,7 @@
   <div *ngIf="mainTab =='calculators'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <app-energy-equivalency *ngIf="calcTab == 'energy-equivalency'" [inAssessment]="true" [assessment]="assessment"
       [settings]="settings"></app-energy-equivalency>
-    <app-energy-use *ngIf="calcTab == 'energy-use'" [settings]="settings"></app-energy-use>
+    <app-energy-use *ngIf="calcTab == 'energy-use'" [inAssessment]="true" [assessment]="assessment" [settings]="settings"></app-energy-use>
     <app-o2-enrichment *ngIf="calcTab == 'o2-enrichment'" [inAssessment]="true" [assessment]="assessment"
       [settings]="settings"></app-o2-enrichment>
     <app-pre-assessment *ngIf="calcTab == 'pre-assessment'" [settings]="settings" [height]="containerHeight"
@@ -132,7 +132,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-modification-list [phast]="_phast" (save)="saveDb()" [modificationIndex]="modificationIndex"
+        <app-modification-list *ngIf="modListOpen" [phast]="_phast" (save)="saveDb()" [modificationIndex]="modificationIndex"
           (close)="closeSelectModification()"></app-modification-list>
       </div>
     </div>

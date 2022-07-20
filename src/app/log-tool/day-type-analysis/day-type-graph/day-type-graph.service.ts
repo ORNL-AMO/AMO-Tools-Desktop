@@ -3,7 +3,7 @@ import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import * as _ from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { DayType, DayTypeGraphItem, LogToolDay, LogToolField, DayTypeSummary, HourlyAverage } from '../../log-tool-models';
 
 @Injectable()

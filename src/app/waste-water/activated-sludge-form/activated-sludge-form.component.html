@@ -169,7 +169,7 @@
             [ngClass]="{'indicate-different': activatedSludgeDifferent.Biomass, 'invalid': form.controls.Biomass.invalid}">
             <label for="{{'Biomass_'+idString}}">VSS/TSS Ratio of Biomass</label>
             <div class="input-group">
-                <input type="number" name="Biomass" class="form-control number-input-field" id="{{'Biomass_'+idString}}"
+                <input type="number" step="0.1" name="Biomass" class="form-control number-input-field" id="{{'Biomass_'+idString}}"
                     (focus)="focusField('Biomass')" (input)="save()" formControlName="Biomass" [readonly]="!selected">
             </div>
             <span *ngIf="form.controls.Biomass.invalid && !form.controls.Biomass.pristine">
@@ -238,7 +238,7 @@
             [ngClass]="{'indicate-different': activatedSludgeDifferent.RASTSS, 'invalid': form.controls.RASTSS.invalid}">
             <label for="{{'RASTSS_'+idString}}">RAS TSS</label>
             <div class="input-group">
-                <input type="number" name="RASTSS" class="form-control number-input-field" id="{{'RASTSS_'+idString}}"
+                <input type="number" step="100" name="RASTSS" class="form-control number-input-field" id="{{'RASTSS_'+idString}}"
                     (focus)="focusField('RASTSS')" (input)="save()" formControlName="RASTSS" [readonly]="!selected">
                 <span class="input-group-addon units">mg/L</span>
             </div>
@@ -264,7 +264,7 @@
             [ngClass]="{'indicate-different': activatedSludgeDifferent.MLSSpar, 'invalid': form.controls.MLSSpar.invalid}">
             <label for="{{'MLSSpar_'+idString}}">MLSS</label>
             <div class="input-group">
-                <input type="number" name="MLSSpar" class="form-control number-input-field" id="{{'MLSSpar_'+idString}}"
+                <input type="number" step="100" name="MLSSpar" class="form-control number-input-field" id="{{'MLSSpar_'+idString}}"
                     (focus)="focusField('MLSSpar')" (input)="save()" formControlName="MLSSpar" [readonly]="!selected">
                 <span class="input-group-addon units">mg/L</span>
             </div>
@@ -299,7 +299,7 @@
             [ngClass]="{'indicate-different': activatedSludgeDifferent.FractionBiomass, 'invalid': form.controls.FractionBiomass.invalid}">
             <label for="{{'FractionBiomass_'+idString}}">Cell Debris Biomass Fraction (f<sub>d</sub>)</label>
             <div class="input-group">
-                <input type="number" name="FractionBiomass" class="form-control number-input-field"
+                <input type="number" step="0.1" name="FractionBiomass" class="form-control number-input-field"
                     id="{{'FractionBiomass_'+idString}}" (focus)="focusField('FractionBiomass')" (input)="save()"
                     formControlName="FractionBiomass" [readonly]="!selected">
                 <span class="input-group-addon units">mg VSS/mg</span>
@@ -318,7 +318,7 @@
             [ngClass]="{'indicate-different': activatedSludgeDifferent.BiomassYeild, 'invalid': form.controls.BiomassYeild.invalid}">
             <label for="{{'BiomassYeild_'+idString}}">Biomass Yield Constant (Y)</label>
             <div class="input-group">
-                <input type="number" name="BiomassYeild" class="form-control number-input-field"
+                <input type="number" step="0.1" name="BiomassYeild" class="form-control number-input-field"
                     id="{{'BiomassYeild_'+idString}}" (focus)="focusField('BiomassYeild')" (input)="save()"
                     formControlName="BiomassYeild" [readonly]="!selected">
                 <span class="input-group-addon units">mg VSS/mg</span>
@@ -354,7 +354,7 @@
             [ngClass]="{'indicate-different': activatedSludgeDifferent.MicrobialDecay, 'invalid': form.controls.MicrobialDecay.invalid}">
             <label for="{{'MicrobialDecay_'+idString}}">Endogenous Decay Coefficient (K<sub>d</sub>)</label>
             <div class="input-group">
-                <input type="number" name="MicrobialDecay" class="form-control HalfSaturation-input-field"
+                <input type="number" step="0.1" name="MicrobialDecay" class="form-control HalfSaturation-input-field"
                     id="{{'MicrobialDecay_'+idString}}" (focus)="focusField('MicrobialDecay')" (input)="save()"
                     formControlName="MicrobialDecay" [readonly]="!selected">
                 <span class="input-group-addon units">1/day</span>

@@ -7,6 +7,8 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { WallFormService } from '../../../../calculator/furnaces/wall/wall-form.service';
+import { firstValueFrom } from 'rxjs';
+import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
 
 @Component({
   selector: 'app-wall-losses-form',
@@ -36,10 +38,13 @@ export class WallLossesFormComponent implements OnInit {
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
+  hasDeletedCustomMaterial: boolean = false;
+  editExistingMaterial: boolean;
+  existingMaterial: WallLossesSurface;
   surfaceOptions: Array<WallLossesSurface>;
   showModal: boolean = false;
   idString: string;
-  constructor(private wallLossCompareService: WallLossCompareService, private wallFormService: WallFormService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
+  constructor(private wallLossCompareService: WallLossCompareService, private wallFormService: WallFormService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private wallLossesSurfaceDbService: WallLossesSurfaceDbService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -49,6 +54,15 @@ export class WallLossesFormComponent implements OnInit {
       this.idString = '_baseline_' + this.lossIndex;
     }
     this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
+    if (this.surfaceOptions) {
+      if (this.wallLossesForm.controls.surfaceShape.value && this.wallLossesForm.controls.surfaceShape.value !== '') {
+        if (this.wallLossesForm.controls.conditionFactor.value === '') {
+          this.setProperties();
+        } else {
+          this.checkForDeletedMaterial();
+        }
+      }
+    }
     //init warnings
     if (!this.baselineSelected) {
       this.disableForm();
@@ -94,6 +108,32 @@ export class WallLossesFormComponent implements OnInit {
     this.saveEmit.emit(true);
   }
 
+  checkForDeletedMaterial() {
+    let selectedMaterial: WallLossesSurface = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
+    if (!selectedMaterial) {
+      this.hasDeletedCustomMaterial = true;
+      this.restoreMaterial();
+    }
+    this.save();
+  }
+
+  async restoreMaterial() {
+    let customMaterial: WallLossesSurface = {
+      conditionFactor: this.wallLossesForm.controls.conditionFactor.value,
+      surface: "Custom Material"
+    };
+    let suiteDbResult = this.suiteDbService.insertWallLossesSurface(customMaterial);
+    if (suiteDbResult === true) {
+      await firstValueFrom(this.wallLossesSurfaceDbService.addWithObservable(customMaterial));
+    }
+    this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
+    let newMaterial: WallLossesSurface = this.surfaceOptions.find(material => { return material.surface === customMaterial.surface; });
+    this.wallLossesForm.patchValue({
+      surfaceShape: newMaterial.id
+    });
+  }
+
+
   setProperties() {
     let tmpFactor: WallLossesSurface = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
     if (tmpFactor) {
@@ -109,7 +149,14 @@ export class WallLossesFormComponent implements OnInit {
     return test;
   }
 
-  showMaterialModal() {
+  showMaterialModal(editExistingMaterial: boolean) {
+    this.editExistingMaterial = editExistingMaterial;
+    if(editExistingMaterial === true) {
+      this.existingMaterial = {
+        conditionFactor: this.wallLossesForm.controls.conditionFactor.value,
+        surface: "Custom Material"
+      };
+    }
     this.showModal = true;
     this.lossesService.modalOpen.next(this.showModal);
     this.materialModal.show();
@@ -128,6 +175,7 @@ export class WallLossesFormComponent implements OnInit {
     }
     this.materialModal.hide();
     this.showModal = false;
+    this.dismissMessage();
     this.lossesService.modalOpen.next(this.showModal);
   }
   canCompare() {
@@ -199,6 +247,10 @@ export class WallLossesFormComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  dismissMessage() {
+    this.hasDeletedCustomMaterial = false;
   }
 
 

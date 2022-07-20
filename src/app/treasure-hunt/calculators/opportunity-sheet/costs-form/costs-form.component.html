@@ -7,7 +7,7 @@
   <div class="form-group">
     <label for="engineeringServices">Engineering Services</label>
     <div class="input-group">
-      <input type="number" class="form-control" [(ngModel)]="opportunityCost.engineeringServices"
+      <input type="number" step="10" class="form-control" [(ngModel)]="opportunityCost.engineeringServices"
         name="engineeringServices" id="engineeringServices" (focus)="focusField('engineeringServices')">
       <span class="input-group-addon units">$</span>
     </div>
@@ -17,7 +17,7 @@
   <div class="form-group">
     <label for="material">Material</label>
     <div class="input-group">
-      <input type="number" class="form-control" [(ngModel)]="opportunityCost.material" name="material" id="material"
+      <input type="number" step="10" class="form-control" [(ngModel)]="opportunityCost.material" name="material" id="material"
         (focus)="focusField('material')">
       <span class="input-group-addon units">$</span>
     </div>
@@ -27,7 +27,7 @@
   <div class="form-group">
     <label for="labor">Labor</label>
     <div class="input-group">
-      <input type="number" class="form-control" [(ngModel)]="opportunityCost.labor" name="labor" id="labor"
+      <input type="number" step="10" class="form-control" [(ngModel)]="opportunityCost.labor" name="labor" id="labor"
         (focus)="focusField('labor')">
       <span class="input-group-addon units">$</span>
     </div>

@@ -60,17 +60,22 @@ export class BleedTestService {
     let validInput: boolean = this.getBleedFormFromObj(copyInputs).valid;
     if (!validInput) {
       this.bleedTestOutput.next(undefined);
-    } else {      
+    } else {
       if (settings.unitsOfMeasure == 'Metric') {
         copyInputs.totalSystemVolume = this.convertUnitsService.value(copyInputs.totalSystemVolume).from('m3').to('ft3');
         copyInputs.normalOperatingPressure = this.convertUnitsService.value(copyInputs.normalOperatingPressure).from('barg').to('psig');
         copyInputs.testPressure = this.convertUnitsService.value(copyInputs.testPressure).from('barg').to('psig');
-        let output: number  = (copyInputs.totalSystemVolume * ((copyInputs.normalOperatingPressure - copyInputs.testPressure) / copyInputs.time) * 14.7) * 1.25;
-        leakage = this.convertUnitsService.value(output).from('ft3/min').to('m3/min');
-      } else {
-        leakage  = (copyInputs.totalSystemVolume * ((copyInputs.normalOperatingPressure - copyInputs.testPressure) / copyInputs.time) * 14.7) * 1.25;
-      }      
-      this.bleedTestOutput.next(leakage);
+      }
+      
+      let leakageNumerator: number = copyInputs.totalSystemVolume * (copyInputs.normalOperatingPressure - copyInputs.testPressure);
+      let leakageDenominator: number = copyInputs.time * 14.7;
+      // ft3/min
+      let leakageResult: number = (leakageNumerator / leakageDenominator) * 1.25;
+
+      if (settings.unitsOfMeasure == 'Metric') {
+        leakageResult = this.convertUnitsService.value(leakageResult).from('ft3/min').to('m3/min');
+      }
+      this.bleedTestOutput.next(leakageResult);
     }
   }
 

@@ -75,7 +75,9 @@ export class ReplaceExistingTreasureHuntService {
       name: opportunitySummary.opportunityName,
       opportunitySheet: replaceExistingMotor.opportunitySheet,
       iconString: 'assets/images/calculator-icons/motor-icons/replace.png',
-      teamName: replaceExistingMotor.opportunitySheet? replaceExistingMotor.opportunitySheet.owner : undefined
+      teamName: replaceExistingMotor.opportunitySheet? replaceExistingMotor.opportunitySheet.owner : undefined,
+      iconCalcType: 'motor',
+      needBackground: true
     };
     return cardData;
   }
