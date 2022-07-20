@@ -580,7 +580,7 @@ export class CompressedAirAssessmentResultsService {
 
   calculateBaselineDayTypeProfileSummary(compressedAirAssessment: CompressedAirAssessment, dayType: CompressedAirDayType, settings: Settings): Array<ProfileSummary> {
     let inventoryItems: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(compressedAirAssessment.compressorInventoryItems));
-    //Adjuste perfomance points for sequencer
+    //Adjust perfomance points for sequencer
     if (compressedAirAssessment.systemInformation.isSequencerUsed) {
       inventoryItems.forEach(item => {
         item = this.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessment.systemInformation.targetPressure, compressedAirAssessment.systemInformation.variance, item, compressedAirAssessment.systemInformation.atmosphericPressure, settings)
@@ -648,7 +648,6 @@ export class CompressedAirAssessmentResultsService {
       }
     });
     let totals: Array<ProfileSummaryTotal> = new Array();
-    // let numIntervals: number = 24 / selectedHourInterval;
     for (let interval = 0; interval < 24;) {
       let totalAirFlow: number = 0;
       let compressorPower: number = 0;

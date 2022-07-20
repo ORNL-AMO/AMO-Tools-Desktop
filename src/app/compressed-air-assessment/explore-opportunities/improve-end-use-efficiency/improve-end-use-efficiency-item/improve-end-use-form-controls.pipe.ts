@@ -6,10 +6,6 @@ import { AbstractControl, FormGroup } from '@angular/forms';
 })
 export class ImproveEndUseFormControlsPipe implements PipeTransform {
 
-  // transform(value: unknown, ...args: unknown[]): unknown {
-  //   return null;
-  // }
-
   transform(form: FormGroup): Array<{control: AbstractControl, name: string}>{
     let controlNames: Array<{control: AbstractControl, name: string}> = new Array();
     for (let key in form.controls) {

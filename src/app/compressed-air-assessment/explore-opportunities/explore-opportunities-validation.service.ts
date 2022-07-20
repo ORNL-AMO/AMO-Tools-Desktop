@@ -121,7 +121,6 @@ export class ExploreOpportunitiesValidationService {
   checkReduceRuntimeValid(compressedAirAssessment: CompressedAirAssessment, modification: Modification, modificationResults: CompressedAirAssessmentResult): boolean {
     let isValid: boolean = true;
     if (modification.reduceRuntime.order != 100) {
-      //TODO:
       let form: FormGroup = this.reduceRunTimeService.getFormFromObj(modification.reduceRuntime);
       isValid = form.valid;
       if (isValid) {
@@ -129,7 +128,6 @@ export class ExploreOpportunitiesValidationService {
           if (isValid) {
             let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(modification.reduceRuntime.order, modification, modificationResults, dayType.dayTypeId);
             let eemSequencerProfileSummary: Array<ProfileSummary> = modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == dayType.dayTypeId }).reduceRunTimeProfileSummary;
-            // let numberOfSummaryIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
             let dataArrays: ValidationDataArrays = this.getDataArrays(adjustedProfileSummary, compressedAirAssessment.systemProfile.systemProfileSetup, eemSequencerProfileSummary, compressedAirAssessment.compressorInventoryItems, false);
             isValid = dataArrays.isValid;
           }
@@ -151,7 +149,6 @@ export class ExploreOpportunitiesValidationService {
   checkUseAutomaticSequencerValid(compressedAirAssessment: CompressedAirAssessment, modification: Modification, modificationResults: CompressedAirAssessmentResult, settings: Settings): boolean {
     let isValid: boolean = true;
     if (modification.useAutomaticSequencer.order != 100) {
-      //TODO:
       let form: FormGroup = this.useAutomaticSequencerService.getFormFromObj(modification.useAutomaticSequencer);
       isValid = form.valid;
       if (isValid) {
@@ -160,7 +157,6 @@ export class ExploreOpportunitiesValidationService {
             let adjustedCompressors: Array<CompressorInventoryItem> = this.compressedAirAssessmentResultsService.useAutomaticSequencerAdjustCompressor(modification.useAutomaticSequencer, JSON.parse(JSON.stringify(compressedAirAssessment.compressorInventoryItems)), modification.useAutomaticSequencer.profileSummary, dayType.dayTypeId, compressedAirAssessment.systemInformation.atmosphericPressure, settings);
             let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(modification.useAutomaticSequencer.order, modification, modificationResults, dayType.dayTypeId);
             let eemSequencerProfileSummary: Array<ProfileSummary> = modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == dayType.dayTypeId }).useAutomaticSequencerProfileSummary;
-            // let numberOfSummaryIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
             let dataArrays: ValidationDataArrays = this.getDataArrays(adjustedProfileSummary, compressedAirAssessment.systemProfile.systemProfileSetup, eemSequencerProfileSummary, adjustedCompressors, false);
             isValid = dataArrays.isValid;
           }
