@@ -64,5 +64,15 @@ export class SelectedOptionsComponent implements OnInit {
     let department: MotorInventoryDepartment = this.motorInventoryData.departments.find(department => { return department.id == id });
     return department.name;
   }
+
+  clearAllFilters() {
+    this.filterInventorySummary = {
+      selectedDepartmentIds: [],
+      efficiencyClasses: [],
+      ratedPower: [],
+      ratedVoltage: []
+    }
+    this.save();
+  }
 }
 

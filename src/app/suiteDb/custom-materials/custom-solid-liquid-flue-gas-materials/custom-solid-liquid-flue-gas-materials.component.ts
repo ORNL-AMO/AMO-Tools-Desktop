@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -19,6 +19,8 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
   showModal: boolean;
   @Input()
   importing: boolean;
+  @Output()
+  emitNumMaterials: EventEmitter<number> = new EventEmitter<number>();
   
   solidLiquidFlueGasMaterials: Array<SolidLiquidFlueGasMaterial>;
   editExistingMaterial: boolean = false;
@@ -63,6 +65,7 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
 
   async getCustomMaterials() {
     this.solidLiquidFlueGasMaterials = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
+    this.emitNumMaterials.emit(this.solidLiquidFlueGasMaterials.length);
   }
 
   async editMaterial(id: number) {

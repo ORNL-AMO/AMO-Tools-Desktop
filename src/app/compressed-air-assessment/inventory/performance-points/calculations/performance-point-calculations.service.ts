@@ -6,12 +6,15 @@ import { MaxFullFlowCalculationsService } from './max-full-flow-calculations.ser
 import { BlowoffCalculationsService } from './blowoff-calculations.service';
 import { UnloadPointCalculationsService } from './unload-point-calculations.service';
 import { Settings } from '../../../../shared/models/settings';
+import { MidTurndownCalculationService } from './mid-turndown-calculation.service';
+import { TurndownCalculationService } from './turndown-calculation.service';
 
 @Injectable()
 export class PerformancePointCalculationsService {
 
   constructor(private fullLoadCalculationsService: FullLoadCalculationsService,
     private noLoadCalculationsService: NoLoadCalculationsService, private maxFullFlowCalculationsService: MaxFullFlowCalculationsService,
+    private midTurndownCalculationService: MidTurndownCalculationService, private turndownCalculationService: TurndownCalculationService,
     private blowoffCalculationsService: BlowoffCalculationsService, private unloadPointCalculationsService: UnloadPointCalculationsService) { }
 
   updatePerformancePoints(selectedCompressor: CompressorInventoryItem, atmosphericPressure: number, settings: Settings): PerformancePoints {
@@ -50,7 +53,12 @@ export class PerformancePointCalculationsService {
     } else if (selectedCompressor.compressorControls.controlType == 10) {
       //inlet van modulation with unloading
       selectedCompressor.performancePoints = this.setInletVaneModulationWithUnloading(selectedCompressor, atmosphericPressure, settings);
-    } else if (selectedCompressor.compressorControls.controlType == 4 && selectedCompressor.nameplateData.compressorType == 6) {
+    } else if (selectedCompressor.compressorControls.controlType == 11) {
+      //VFD
+      selectedCompressor.performancePoints = this.setVFDPerformancePoints(selectedCompressor, atmosphericPressure, settings);
+    }
+    
+    else if (selectedCompressor.compressorControls.controlType == 4 && selectedCompressor.nameplateData.compressorType == 6) {
       //load/unload (non-centrifugal)
       selectedCompressor.performancePoints = this.setLubricatedLoadUnloadCentrifugalPerformancePoints(selectedCompressor, atmosphericPressure, settings);
     }
@@ -64,6 +72,13 @@ export class PerformancePointCalculationsService {
     //unloadPoint
     selectedCompressor.performancePoints.unloadPoint = this.unloadPointCalculationsService.setUnload(selectedCompressor, settings);
     //noLoad
+    selectedCompressor.performancePoints.noLoad = this.noLoadCalculationsService.setNoLoad(selectedCompressor, settings);
+    return selectedCompressor.performancePoints;
+  }
+
+  setVFDPerformancePoints(selectedCompressor: CompressorInventoryItem, atmosphericPressure: number, settings: Settings): PerformancePoints {
+    selectedCompressor.performancePoints.midTurndown = this.midTurndownCalculationService.setMidTurndown(selectedCompressor, settings);
+    selectedCompressor.performancePoints.turndown = this.turndownCalculationService.setTurndown(selectedCompressor, settings);
     selectedCompressor.performancePoints.noLoad = this.noLoadCalculationsService.setNoLoad(selectedCompressor, settings);
     return selectedCompressor.performancePoints;
   }

@@ -23,7 +23,7 @@ import { EGridService } from '../shared/helper-services/e-grid.service';
 @Component({
   selector: 'app-psat',
   templateUrl: './psat.component.html',
-  styleUrls: ['./psat.component.css']
+  styleUrls: ['./psat.component.css'],
 })
 export class PsatComponent implements OnInit {
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
@@ -37,6 +37,7 @@ export class PsatComponent implements OnInit {
   showUpdateUnitsModal: boolean = false;
   oldSettings: Settings;
   containerHeight: number;
+  modListOpen: boolean = false;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -324,10 +325,12 @@ export class PsatComponent implements OnInit {
 
   selectModificationModal() {
     this.isModalOpen = true;
+    this.modListOpen = true;
     this.changeModificationModal.show();
   }
   closeSelectModification() {
     this.isModalOpen = false;
+    this.modListOpen = false;
     this.compareService.openModificationModal.next(false);
     this.changeModificationModal.hide();
   }

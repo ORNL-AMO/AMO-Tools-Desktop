@@ -141,7 +141,7 @@ export class OperatingProfileTableComponent implements OnInit {
   setHourIntervals(systemProfileSetup: SystemProfileSetup) {
     this.hourIntervals = new Array();
     for (let index = 0; index < systemProfileSetup.numberOfHours;) {
-      this.hourIntervals.push(index)
+      this.hourIntervals.push(index + systemProfileSetup.dataInterval)
       index = index + systemProfileSetup.dataInterval;
     }
   }

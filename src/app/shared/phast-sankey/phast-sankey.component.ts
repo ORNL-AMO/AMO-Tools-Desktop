@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { PhastValidService } from '../../phast/phast-valid.service';
 import { Assessment } from '../models/assessment';
 import { PHAST } from '../models/phast/phast';
@@ -12,7 +12,8 @@ import { SankeyNode } from '../models/sankey';
 @Component({
   selector: 'app-phast-sankey',
   templateUrl: './phast-sankey.component.html',
-  styleUrls: ['./phast-sankey.component.css']
+  styleUrls: ['./phast-sankey.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PhastSankeyComponent implements OnInit, OnChanges {
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter } from '@angular/core';
  
 import { FlueGasMaterial } from '../../../shared/models/materials';
 import { Settings } from '../../../shared/models/settings';
@@ -22,6 +22,8 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   showModal: boolean;
   @Input()
   importing: boolean;
+  @Output()
+  emitNumMaterials: EventEmitter<number> = new EventEmitter<number>();
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
@@ -80,6 +82,7 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.convertAllMaterials();
     }
+    this.emitNumMaterials.emit(this.flueGasMaterials.length);
   }
 
   async editMaterial(id: number) {

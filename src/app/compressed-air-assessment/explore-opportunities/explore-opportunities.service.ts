@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CascadingSetPointData, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
+import { CascadingSetPointData, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntimeData, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
 
 @Injectable()
@@ -33,7 +33,7 @@ export class ExploreOpportunitiesService {
       reductionData.push({
         dayTypeId: dayType.dayTypeId,
         dayTypeName: dayType.name,
-        data: this.getDefaultReductionData(compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval)
+        data: this.getDefaultReductionData(compressedAirAssessment.systemProfile.systemProfileSetup)
       });
       compressedAirAssessment.compressorInventoryItems.forEach(item => {
         let itemProfile: ProfileSummary = compressedAirAssessment.systemProfile.profileSummary.find(summary => {
@@ -127,14 +127,15 @@ export class ExploreOpportunitiesService {
   }
 
 
-  getDefaultReductionData(numberOfEntries: number): Array<{ hourInterval: number, applyReduction: boolean, reductionAmount: number }> {
+  getDefaultReductionData(systemProfileSetup: SystemProfileSetup): Array<{ hourInterval: number, applyReduction: boolean, reductionAmount: number }> {
     let reductionData: Array<{ hourInterval: number, applyReduction: boolean, reductionAmount: number }> = new Array();
-    for (let i = 0; i < numberOfEntries; i++) {
+    for (let i = 0; i < 24;) {
       reductionData.push({
         hourInterval: i,
         applyReduction: false,
         reductionAmount: undefined
       });
+      i = i + systemProfileSetup.dataInterval;
     }
     return reductionData;
   }

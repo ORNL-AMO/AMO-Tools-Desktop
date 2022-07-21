@@ -58,6 +58,25 @@ export class CompressedAirDataManagementService {
     selectedCompressor.performancePoints.maxFullFlow.isDefaultPower = true;
     selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure = true;
 
+    
+    selectedCompressor.performancePoints.midTurndown = {
+      isDefaultAirFlow: true,
+      airflow: undefined,
+      isDefaultPower: true,
+      power: undefined,
+      isDefaultPressure: true,
+      dischargePressure: undefined,
+    }
+
+    selectedCompressor.performancePoints.turndown = {
+      isDefaultAirFlow: true,
+      airflow: undefined,
+      isDefaultPower: true,
+      power: undefined,
+      isDefaultPressure: true,
+      dischargePressure: undefined,
+    }
+
     selectedCompressor.performancePoints.noLoad.isDefaultAirFlow = true;
     selectedCompressor.performancePoints.noLoad.isDefaultPower = true;
     selectedCompressor.performancePoints.noLoad.isDefaultPressure = true;
@@ -84,11 +103,13 @@ export class CompressedAirDataManagementService {
     this.updateAssessmentFromDependentCompressorItem(selectedCompressor, true, performancePointUpdateNeeded);
   }
   //Control Data
-  updateControlData(compressorControls: CompressorControls, performancePointUpdateNeeded: boolean) {
+  updateControlData(compressorControls: CompressorControls, performancePointUpdateNeeded: boolean, isControlTypeChange?: boolean) {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
-    //update controls data
     selectedCompressor.compressorControls = compressorControls;
+    if (isControlTypeChange && selectedCompressor.compressorControls.controlType == 11) {
+      selectedCompressor.designDetails.noLoadPowerUL = 5;
+    }
     //save updated compressor
     this.updateAssessmentFromDependentCompressorItem(selectedCompressor, true, performancePointUpdateNeeded);
   }
@@ -138,6 +159,20 @@ export class CompressedAirDataManagementService {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.performancePoints.maxFullFlow = maxFullFlow;
+    //save updated compressor
+    this.updateAssessmentFromDependentCompressorItem(selectedCompressor, true, true);
+  }
+  updateMidturndown(midTurndown: PerformancePoint) {
+    let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
+    selectedCompressor.modifiedDate = new Date();
+    selectedCompressor.performancePoints.midTurndown = midTurndown;
+    //save updated compressor
+    this.updateAssessmentFromDependentCompressorItem(selectedCompressor, true, true);
+  }
+  updateTurndown(turndown: PerformancePoint) {
+    let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
+    selectedCompressor.modifiedDate = new Date();
+    selectedCompressor.performancePoints.turndown = turndown;
     //save updated compressor
     this.updateAssessmentFromDependentCompressorItem(selectedCompressor, true, true);
   }

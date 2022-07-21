@@ -142,7 +142,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-modification-list [psat]="_psat" (save)="save()" [settings]="settings"
+        <app-modification-list *ngIf="modListOpen" [psat]="_psat" (save)="save()" [settings]="settings"
           [modificationIndex]="modificationIndex" (close)="closeSelectModification()"></app-modification-list>
       </div>
     </div>
