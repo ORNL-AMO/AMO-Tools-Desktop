@@ -1,4 +1,4 @@
-<nav class="hide-print" *ngIf="mainTab == 'system-setup'">
+<nav class="hide-print d-none d-lg-block" *ngIf="mainTab == 'system-setup'">
   <div class="d-flex tabs psat subtabs progress-tabs flex-wrap">
     <div class="fixed-tab-size" [ngClass]="settingsClassStatus">
       <a (click)="changeSubTab('system-basics')">
@@ -27,6 +27,46 @@
         <span (mouseenter)="showTooltip(fieldDataBadge)" (mouseleave)="hideTooltip(fieldDataBadge)" class="step-number">5</span>
         Field Data</a>
       <app-tabs-tooltip [badgeClass]="fieldDataClassStatus[0]" [reveal]="fieldDataBadge.display" [display]="fieldDataBadge.hover"></app-tabs-tooltip>
+    </div>
+  </div>
+</nav>
+<nav class="hide-print d-block d-lg-none" *ngIf="mainTab == 'system-setup'">
+  <div class="d-flex justify-content-center tabs psat subtabs progress-tabs">
+    <div  *ngIf="stepTab != 'system-basics'" class="pull-left">
+      <a (click)="back()">
+        <span class="fa fa-chevron-left"></span></a>
+    </div>
+    <div *ngIf="stepTab == 'system-basics'" class="fixed-tab-size" [ngClass]="settingsClassStatus">
+      <a (click)="changeSubTab('system-basics')">
+        <span class="step-number">1</span> Assessment Settings</a>
+    </div>
+    <div *ngIf="stepTab == 'operations'" class="fixed-tab-size" [ngClass]="operationsTabStatus">
+      <a (click)="changeSubTab('operations')">
+        <span (mouseenter)="showTooltip(operationsBadge)" (mouseleave)="hideTooltip(operationsBadge)" class="step-number">2</span>
+        Operations</a>
+      <app-tabs-tooltip [badgeClass]="operationsTabStatus[0]" [reveal]="operationsBadge.display" [display]="operationsBadge.hover"></app-tabs-tooltip>
+    </div>
+    <div *ngIf="stepTab == 'pump-fluid'" class="fixed-tab-size" [ngClass]="pumpFluidClassStatus">
+      <a (click)="changeSubTab('pump-fluid')">
+        <span (mouseenter)="showTooltip(pumpFluidBadge)" (mouseleave)="hideTooltip(pumpFluidBadge)" class="step-number">3</span>
+        Pump &amp; Fluid</a>
+      <app-tabs-tooltip [badgeClass]="pumpFluidClassStatus[0]" [reveal]="pumpFluidBadge.display" [display]="pumpFluidBadge.hover"></app-tabs-tooltip>
+    </div>
+    <div *ngIf="stepTab == 'motor'" class="fixed-tab-size" [ngClass]="motorClassStatus">
+      <a (click)="changeSubTab('motor')">
+        <span (mouseenter)="showTooltip(motorBadge)" (mouseleave)="hideTooltip(motorBadge)" class="step-number">4</span>
+        Motor</a>
+      <app-tabs-tooltip [badgeClass]="motorClassStatus[0]" [reveal]="motorBadge.display" [display]="motorBadge.hover"></app-tabs-tooltip>
+    </div>
+    <div *ngIf="stepTab == 'field-data'" class="fixed-tab-size" [ngClass]="fieldDataClassStatus">
+      <a (click)="changeSubTab('field-data')">
+        <span (mouseenter)="showTooltip(fieldDataBadge)" (mouseleave)="hideTooltip(fieldDataBadge)" class="step-number">5</span>
+        Field Data</a>
+      <app-tabs-tooltip [badgeClass]="fieldDataClassStatus[0]" [reveal]="fieldDataBadge.display" [display]="fieldDataBadge.hover"></app-tabs-tooltip>
+    </div>
+    <div  *ngIf="stepTab != 'field-data'" class="pull-right">
+      <a (click)="continue()" [disabled]="!getCanContinue()">
+        <span class="fa fa-chevron-right"></span></a>
     </div>
   </div>
 </nav>

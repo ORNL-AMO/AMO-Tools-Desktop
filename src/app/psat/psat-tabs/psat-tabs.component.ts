@@ -241,4 +241,28 @@ export class PsatTabsComponent implements OnInit {
       badge.display = false;
     }
   }
+
+  continue() {
+    this.psatTabService.continue();
+  }
+
+  back() {
+    this.psatTabService.back();
+  }
+
+  getCanContinue() {
+    if (this.stepTab == 'system-basics') {
+      return true;
+    }
+    else if (this.stepTab == 'pump-fluid') {
+      let tmpForm: FormGroup = this.pumpFluidService.getFormFromObj(this.psat.inputs);
+      return tmpForm.valid;
+    } else if (this.stepTab == 'motor') {
+      let tmpForm: FormGroup = this.motorService.getFormFromObj(this.psat.inputs);
+      return tmpForm.valid;
+    } else if (this.stepTab == 'field-data') {
+      let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this.psat.inputs, true, this.psat.inputs.whatIfScenario);
+      return tmpForm.valid;
+    }
+  }
 }
