@@ -137,6 +137,10 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
 import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
 import { CentrifugalGraphModule } from './centrifugal-graph/centrifugal-graph.module';
 import { BleedTestModule } from '../calculator/compressed-air/bleed-test/bleed-test.module';
+import { TurndownComponent } from './inventory/performance-points/turndown/turndown.component';
+import { MidTurndownComponent } from './inventory/performance-points/mid-turndown/mid-turndown.component';
+import { MidTurndownCalculationService } from './inventory/performance-points/calculations/mid-turndown-calculation.service';
+import { TurndownCalculationService } from './inventory/performance-points/calculations/turndown-calculation.service';
 import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-modal.component';
 import { ImproveEndUseFormControlsPipe } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-form-controls.pipe';
 import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-label.module';
@@ -221,7 +225,9 @@ import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-lab
     CompressorSummaryComponent,
     WelcomeScreenComponent,
     FlaModalComponent,
-    ImproveEndUseFormControlsPipe
+    ImproveEndUseFormControlsPipe,
+    TurndownComponent,
+    MidTurndownComponent
   ],
   imports: [
     CommonModule,
@@ -287,7 +293,9 @@ import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-lab
     UseAutomaticSequencerService,
     AdjustCascadingSetPointsService,
     ReduceRunTimeService,
-    ExploreOpportunitiesValidationService
+    ExploreOpportunitiesValidationService,
+    MidTurndownCalculationService,
+    TurndownCalculationService
   ]
 })
 export class CompressedAirAssessmentModule { }

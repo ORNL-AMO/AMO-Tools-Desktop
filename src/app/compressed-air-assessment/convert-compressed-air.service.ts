@@ -119,6 +119,10 @@ export class ConvertCompressedAirService {
   convertPerformancePoints(performancePoints: PerformancePoints, oldSettings: Settings, newSettings: Settings): PerformancePoints {
     performancePoints.fullLoad = this.convertPerformancePoint(performancePoints.fullLoad, oldSettings, newSettings);
     performancePoints.maxFullFlow = this.convertPerformancePoint(performancePoints.maxFullFlow, oldSettings, newSettings);
+    if (performancePoints.midTurndown && performancePoints.turndown) {
+      performancePoints.midTurndown = this.convertPerformancePoint(performancePoints.midTurndown, oldSettings, newSettings);
+      performancePoints.turndown = this.convertPerformancePoint(performancePoints.turndown, oldSettings, newSettings);
+    }
     performancePoints.unloadPoint = this.convertPerformancePoint(performancePoints.unloadPoint, oldSettings, newSettings);
     performancePoints.noLoad = this.convertPerformancePoint(performancePoints.noLoad, oldSettings, newSettings);
     performancePoints.blowoff = this.convertPerformancePoint(performancePoints.blowoff, oldSettings, newSettings);
@@ -201,6 +205,11 @@ export class ConvertCompressedAirService {
     }
     inputObj.dischargePsiFullLoad = this.convertPressure(inputObj.dischargePsiFullLoad);
     inputObj.noLoadDischargePressure = this.convertPressure(inputObj.noLoadDischargePressure);
+    inputObj.midTurndownDischargePressure = this.convertPressure(inputObj.midTurndownDischargePressure);
+    inputObj.turndownDischargePressure = this.convertPressure(inputObj.turndownDischargePressure);
+
+    inputObj.turndownAirflow = this.convertUnitsService.value(inputObj.turndownAirflow).from('m3/min').to('ft3/min');
+    inputObj.midTurndownAirflow = this.convertUnitsService.value(inputObj.midTurndownAirflow).from('m3/min').to('ft3/min');
     inputObj.capacityAtFullLoad = this.convertUnitsService.value(inputObj.capacityAtFullLoad).from('m3/min').to('ft3/min');
     inputObj.capacityAtMaxFullFlow = this.convertUnitsService.value(inputObj.capacityAtMaxFullFlow).from('m3/min').to('ft3/min');
     inputObj.pressureAtUnload = this.convertPressure(inputObj.pressureAtUnload);
@@ -222,6 +231,8 @@ export class ConvertCompressedAirService {
     if (inputObj.lubricantType != 1) {
       inputObj.unloadSumpPressure = this.convertPressure(inputObj.unloadSumpPressure);
     }
+
+
     return inputObj;
   }
 
