@@ -83,6 +83,22 @@ export class InventoryService {
           power: undefined,
           isDefaultPressure: true
         },
+        midTurndown: {
+          dischargePressure: undefined,
+          isDefaultPower: true,
+          airflow: undefined,
+          isDefaultAirFlow: true,
+          power: undefined,
+          isDefaultPressure: true
+        },
+        turndown: {
+          dischargePressure: undefined,
+          isDefaultPower: true,
+          airflow: undefined,
+          isDefaultAirFlow: true,
+          power: undefined,
+          isDefaultPressure: true
+        },
         unloadPoint: {
           dischargePressure: undefined,
           isDefaultPower: true,
@@ -171,7 +187,7 @@ export class InventoryService {
   }
 
   checkDisplayUnloadCapacity(controlType: number): boolean {
-    return (controlType == 2 || controlType == 3 || controlType == 4 || controlType == 5);
+    return (controlType == 2 || controlType == 3 || controlType == 4 || controlType == 5 || controlType == 11);
   }
 
   checkDisplayAutomaticShutdown(controlType: number): boolean {
