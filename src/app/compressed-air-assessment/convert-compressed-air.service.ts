@@ -119,6 +119,10 @@ export class ConvertCompressedAirService {
   convertPerformancePoints(performancePoints: PerformancePoints, oldSettings: Settings, newSettings: Settings): PerformancePoints {
     performancePoints.fullLoad = this.convertPerformancePoint(performancePoints.fullLoad, oldSettings, newSettings);
     performancePoints.maxFullFlow = this.convertPerformancePoint(performancePoints.maxFullFlow, oldSettings, newSettings);
+    if (performancePoints.midTurndown && performancePoints.turndown) {
+      performancePoints.midTurndown = this.convertPerformancePoint(performancePoints.midTurndown, oldSettings, newSettings);
+      performancePoints.turndown = this.convertPerformancePoint(performancePoints.turndown, oldSettings, newSettings);
+    }
     performancePoints.unloadPoint = this.convertPerformancePoint(performancePoints.unloadPoint, oldSettings, newSettings);
     performancePoints.noLoad = this.convertPerformancePoint(performancePoints.noLoad, oldSettings, newSettings);
     performancePoints.blowoff = this.convertPerformancePoint(performancePoints.blowoff, oldSettings, newSettings);
@@ -227,9 +231,6 @@ export class ConvertCompressedAirService {
     if (inputObj.lubricantType != 1) {
       inputObj.unloadSumpPressure = this.convertPressure(inputObj.unloadSumpPressure);
     }
-
-
-    //TODO: Convert turndown/midturndown
 
 
     return inputObj;

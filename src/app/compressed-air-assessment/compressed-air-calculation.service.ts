@@ -138,7 +138,6 @@ export class CompressedAirCalculationService {
           // console.log('METRIC:');
           // console.log(inputData);
         } else {
-          // debugger this may be converting undefined to 3000
           inputData.receiverVolume = this.convertUnitsService.value(inputData.receiverVolume).from('gal').to('ft3');
           // console.log('IMPERIAL:');
           // console.log(inputData);
@@ -183,8 +182,6 @@ export class CompressedAirCalculationService {
 
   suiteCompressorCalc(inputData: CompressorsCalcInput): CompressorCalcResult {
     try {
-      // console.log(inputData);
-      // debugger
       return compressorAddon.CompressorsCalc(inputData);
     } catch (err) {
       console.log(err);
