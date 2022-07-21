@@ -142,6 +142,8 @@ import { MidTurndownComponent } from './inventory/performance-points/mid-turndow
 import { MidTurndownCalculationService } from './inventory/performance-points/calculations/mid-turndown-calculation.service';
 import { TurndownCalculationService } from './inventory/performance-points/calculations/turndown-calculation.service';
 import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-modal.component';
+import { ImproveEndUseFormControlsPipe } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-form-controls.pipe';
+import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-label.module';
 
 @NgModule({
   declarations: [
@@ -223,6 +225,7 @@ import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-moda
     CompressorSummaryComponent,
     WelcomeScreenComponent,
     FlaModalComponent,
+    ImproveEndUseFormControlsPipe,
     TurndownComponent,
     MidTurndownComponent
   ],
@@ -258,7 +261,8 @@ import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-moda
     InventoryPerformanceProfileModule,
     Co2HelpTextModule,
     CentrifugalGraphModule,
-    BleedTestModule
+    BleedTestModule,
+    IntervalHourLabelModule
   ],
   providers: [
     CompressedAirAssessmentService,

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, EndUseEfficiencyItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, Modification, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, EndUseEfficiencyItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, Modification, ProfileSummary, ProfileSummaryTotal, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { BaselineResults, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
@@ -28,6 +28,7 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   hasInvalidForm: boolean;
   baselineResults: BaselineResults;
   settings: Settings;
+  systemProfileSetup: SystemProfileSetup;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private improveEndUseEfficiencyService: ImproveEndUseEfficiencyService,
     private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
@@ -38,9 +39,10 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
       if (compressedAirAssessment && !this.isFormChange) {
         this.baselineResults = this.exploreOpportunitiesService.baselineResults;
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
+        this.systemProfileSetup = this.compressedAirAssessment.systemProfile.systemProfileSetup;
         this.setOrderOptions();
         this.setData()
-        this.setHourIntervals(this.compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
+        this.setHourIntervals();
       } else {
         this.isFormChange = false;
       }
@@ -117,11 +119,12 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
     this.save(false);
   }
 
-  setHourIntervals(numberOfHours: number) {
-    if (!this.hourIntervals || (this.hourIntervals && this.hourIntervals.length != numberOfHours)) {
+  setHourIntervals() {
+    if (!this.hourIntervals || (this.hourIntervals && this.hourIntervals.length != this.systemProfileSetup.numberOfHours)) {
       this.hourIntervals = new Array();
-      for (let i = 1; i < numberOfHours + 1; i++) {
-        this.hourIntervals.push(i);
+      for (let i = 0; i < 24;) {
+        this.hourIntervals.push(i + this.systemProfileSetup.dataInterval);
+        i = i + this.systemProfileSetup.dataInterval;
       }
     }
   }
@@ -145,6 +148,7 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
     for (let i = 0; i < reductionData.length; i++) {
       for (let x = 0; x < reductionData[i].data.length; x++) {
         reductionData[i].data[x].applyReduction = false;
+        reductionData[i].data[x].reductionAmount = 0;
       }
     }
     this.improveEndUseEfficiency.endUseEfficiencyItems.push({

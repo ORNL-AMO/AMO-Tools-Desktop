@@ -42,6 +42,7 @@ export class SystemProfileGraphsComponent implements OnInit {
   showingCapacityMaxSub: Subscription;
   showingPowerMaxSub: Subscription;
   settings: Settings;
+  timeInterval: number;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileGraphService: SystemProfileGraphsService,
     private exploreOpportunitiesService: ExploreOpportunitiesService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
     private plotlyService: PlotlyService) { }
@@ -50,6 +51,7 @@ export class SystemProfileGraphsComponent implements OnInit {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.compressedAirAssessment = val;
+      this.timeInterval = this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       if (!this.inModification) {
         this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == this.compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId });
       }
@@ -252,7 +254,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       this.profileSummary.forEach(compressorProfile => {
         let percentOfSystem: Array<number> = [];
         let trace = {
-          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval + 1 }),
+          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval + this.timeInterval }),
           y: compressorProfile.profileSummaryData.map(data => {
             if (data.order != 0) {
               percentOfSystem.push(data.percentSystemCapacity);
@@ -276,8 +278,13 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(trace);
       });
       let yAxisRange: Array<number> = this.getYAxisRange(true, this.totalFullLoadCapacity);
-      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 24 : 1;
-      let xRange: Array<number> = [1, xRangeMax];
+      let xRangeMax: number = 24;
+      let xRangeMin: number = this.timeInterval;
+      if(this.profileSummary[0].profileSummaryData.length == 1){
+        xRangeMax = 1;
+        xRangeMin = 0;
+      }
+      let xRange: Array<number> = [xRangeMin, xRangeMax];
       let unit: string = 'acfm';
       if (this.settings.unitsOfMeasure == 'Metric') {
         unit = 'm&#xB3;/min'
@@ -329,7 +336,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let traceData = new Array();
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
-          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval + 1 }),
+          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval + this.timeInterval }),
           y: compressorProfile.profileSummaryData.map(data => {
             if (data.order != 0) {
               return data.percentCapacity;
@@ -348,8 +355,13 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       });
-      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 24 : 1;
-      var layout = this.getLayout("Compressor Capacity (%)", [1, xRangeMax], [0, 105], '%');
+      let xRangeMax: number = 24;
+      let xRangeMin: number = this.timeInterval;
+      if(this.profileSummary[0].profileSummaryData.length == 1){
+        xRangeMax = 1;
+        xRangeMin = 0;
+      }
+      var layout = this.getLayout("Compressor Capacity (%)", [xRangeMin, xRangeMax], [0, 105], '%');
       var config = {
         responsive: !this.printView,
         displaylogo: false
@@ -366,7 +378,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       this.profileSummary.forEach(compressorProfile => {
         let percentOfSystem: Array<number> = [];
         let trace = {
-          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval + 1 }),
+          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
           y: compressorProfile.profileSummaryData.map(data => {
             if (data.order != 0) {
               percentOfSystem.push(data.percentSystemPower);
@@ -389,8 +401,14 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(trace);
       });
       let yAxisRange: Array<number> = this.getYAxisRange(false, this.totalFullLoadPower);
-      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 24 : 1;
-      let xRange: Array<number> = [1, xRangeMax];
+      let xRangeMax: number = 24;
+      let xRangeMin: number = this.timeInterval;
+      if(this.profileSummary[0].profileSummaryData.length == 1){
+        xRangeMax = 1;
+        xRangeMin = 0;
+      }
+
+      let xRange: Array<number> = [xRangeMin, xRangeMax];
       var layout = this.getLayout("Power (kW)", xRange, yAxisRange, undefined);
       var config = {
         responsive: !this.printView,
@@ -415,7 +433,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let traceData = new Array();
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
-          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval + 1 }),
+          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval + this.timeInterval }),
           y: compressorProfile.profileSummaryData.map(data => {
             if (data.order != 0) {
               return data.percentPower

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceRuntimeData, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 import { GreaterThanValidator } from '../../shared/validators/greater-than';
 import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
@@ -468,7 +468,7 @@ export class InventoryService {
     return true;
   }
 
-  addNewCompressor(numberOfEntries: number, compressedAirAssessment: CompressedAirAssessment, newInventoryItem?: CompressorInventoryItem): {newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment} {
+  addNewCompressor(compressedAirAssessment: CompressedAirAssessment, newInventoryItem?: CompressorInventoryItem): {newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment} {
     if (!newInventoryItem) {
       newInventoryItem = this.getNewInventoryItem();
     }
@@ -477,17 +477,18 @@ export class InventoryService {
     // let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.compressorInventoryItems.push(newInventoryItem);
     let intervalData: Array<{ isCompressorOn: boolean, timeInterval: number }> = new Array();
-    for (let i = 0; i < numberOfEntries; i++) {
+    for (let i = 0; i < 24;) {
       intervalData.push({
         isCompressorOn: false,
         timeInterval: i
       })
+      i = i + compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval
     }
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       compressedAirAssessment.systemProfile.profileSummary.push({
         compressorId: newInventoryItem.itemId,
         dayTypeId: dayType.dayTypeId,
-        profileSummaryData: this.getEmptyProfileSummaryData(numberOfEntries),
+        profileSummaryData: this.getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup),
         fullLoadPressure: newInventoryItem.performancePoints.fullLoad.dischargePressure,
         fullLoadCapacity: newInventoryItem.performancePoints.fullLoad.airflow
       });
@@ -538,7 +539,7 @@ export class InventoryService {
       let profileSummary: ProfileSummary = {
         compressorId: item.itemId,
         dayTypeId: newDayType.dayTypeId,
-        profileSummaryData: this.getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval),
+        profileSummaryData: this.getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup),
         fullLoadPressure: item.performancePoints.fullLoad.dischargePressure,
         fullLoadCapacity: item.performancePoints.fullLoad.airflow
       }
@@ -568,7 +569,7 @@ export class InventoryService {
         item.reductionData.push({
           dayTypeName: dayTypeName,
           dayTypeId: dayTypeId,
-          data: this.exploreOpportunitiesService.getDefaultReductionData(compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval)
+          data: this.exploreOpportunitiesService.getDefaultReductionData(compressedAirAssessment.systemProfile.systemProfileSetup)
         });
       });
       modification.reduceRuntime.runtimeData.push(reduceRuntimeData);
@@ -578,9 +579,9 @@ export class InventoryService {
     return compressedAirAssessment;
   }
 
-  getEmptyProfileSummaryData(numberOfEntries: number): Array<ProfileSummaryData> {
+  getEmptyProfileSummaryData(systemProfileSetup: SystemProfileSetup): Array<ProfileSummaryData> {
     let summaryData: Array<ProfileSummaryData> = new Array();
-    for (let i = 0; i < numberOfEntries; i++) {
+    for (let i = 0; i < 24;) {
       summaryData.push({
         power: 0,
         airflow: 0,
@@ -591,6 +592,7 @@ export class InventoryService {
         percentSystemPower: undefined,
         order: 0
       })
+      i = i + systemProfileSetup.dataInterval;
     }
     return summaryData;
   }

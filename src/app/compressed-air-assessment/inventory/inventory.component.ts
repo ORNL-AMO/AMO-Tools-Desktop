@@ -74,8 +74,7 @@ export class InventoryComponent implements OnInit {
 
   addInventoryItem() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let numberOfEntries: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
-    let result: { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } = this.inventoryService.addNewCompressor(numberOfEntries, compressedAirAssessment);
+    let result: { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } = this.inventoryService.addNewCompressor(compressedAirAssessment);
     this.compressedAirAssessmentService.updateCompressedAir(result.compressedAirAssessment, true);
     this.inventoryService.selectedCompressor.next(result.newInventoryItem);
     this.hasInventoryItems = true;
