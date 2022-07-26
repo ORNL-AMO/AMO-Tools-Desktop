@@ -3,20 +3,20 @@
         <!-- <span class="alert-danger pull-right small" *ngIf="hasInvalidCompressors">
             One or more compressor is invalid - Review inventory and make changes to continue
         </span> -->
-        <table class="table table-sm table-striped table-hover mb-0" *ngIf="selectedEndUse && compressedAirAssessment.endUses">
+        <table class="table table-sm table-striped table-hover mb-0" *ngIf="selectedEndUse && compressedAirAssessment.endUseData.endUses">
             <thead>
                 <tr>
                     <th>
                         Name
                     </th>
-                    <!-- <th>Average Airflow</th>
-                    <th>Average Capacity</th> -->
+                    <th>Location</th>
+                    <th>Required Pressure</th>
                     <th></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let endUse of compressedAirAssessment.endUses"
+                <tr *ngFor="let endUse of compressedAirAssessment.endUseData.endUses"
                     [ngClass]="{'selected-end-use': endUse.endUseId == selectedEndUse.endUseId}">
                     <td>
                         <span *ngIf="endUse.endUseId == selectedEndUse.endUseId"
@@ -24,12 +24,14 @@
                         <a class="click-link"
                             (click)="selectItem(endUse)">{{endUse.endUseName}}</a>
                     </td>
-                    <!-- <td>
-                        {{endUse.averageAirflow}} acfm
+                    <td>
+                        {{endUse.location}}
                     </td>
                     <td>
-                        {{endUse.averageCapacity}} %
-                    </td> -->
+                        {{endUse.requiredPressure}} 
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                    </td>
                     <td>
                         <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(endUse)"></a>
                         

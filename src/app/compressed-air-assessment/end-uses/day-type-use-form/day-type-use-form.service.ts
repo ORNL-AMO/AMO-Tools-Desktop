@@ -12,7 +12,6 @@ export class DayTypeUseFormService {
       averageAirflow: [dayTypeEndUse.averageAirflow],
       averageCapacity: [dayTypeEndUse.averageCapacity],
       regulated: [dayTypeEndUse.regulated],
-      requiredPressure: [dayTypeEndUse.requiredPressure],
       excessPressure: [dayTypeEndUse.excessPressure],
       measuredPressure: [dayTypeEndUse.measuredPressure],
     });
@@ -26,7 +25,6 @@ export class DayTypeUseFormService {
       averageAirflow: form.controls.averageAirflow.value,
       averageCapacity: form.controls.averageCapacity.value,
       regulated: form.controls.regulated.value,
-      requiredPressure: form.controls.requiredPressure.value,
       excessPressure: form.controls.excessPressure.value,
       measuredPressure: form.controls.measuredPressure.value,
     }
@@ -39,4 +37,24 @@ export class DayTypeUseFormService {
       }
     }
   }
+
+  checkEndUseWarnings(daytypeEndUse: DayTypeEndUse, endUse?: EndUse): DayTypeEndUseWarnings {
+    return {
+      measuredPressure: this.checkMeasuredPressure(daytypeEndUse, endUse)
+    }
+  }
+
+  checkMeasuredPressure(dayTypeEndUse: DayTypeEndUse, endUse?: EndUse): string {
+    if (dayTypeEndUse.measuredPressure !== undefined && dayTypeEndUse.measuredPressure <= endUse.requiredPressure) {
+      return `Measured Pressure should be greater than Required Pressure (${endUse.requiredPressure})`;
+    } else {
+      return undefined;
+    }
+  }
+
+}
+
+
+export interface DayTypeEndUseWarnings {
+  measuredPressure: string
 }

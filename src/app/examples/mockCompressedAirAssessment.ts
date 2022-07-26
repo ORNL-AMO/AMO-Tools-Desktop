@@ -16983,105 +16983,106 @@ export const MockCompressedAirAssessment: Assessment =  {
                 "profileDataType": "power"
             }
         ],
-        "endUses": [
-            {
-                "endUseId": "lb6pu4k8k",
-                "endUseName": "Aerator",
-                "modifiedDate": new Date(),
-                "endUseDescription": "Aerator airflow usage",
-                "location": null,
+        "endUseData": {
+            "endUseDayTypeSetup": {
                 "selectedDayTypeId": "hopx028cf",
-                "dayTypeEndUses": [
+                "dayTypeLeakRates": [
                     {
-                        "dayTypeId": "hopx028cf",
-                        "averageAirflow": 34,
-                        "averageCapacity": 88,
-                        "regulated": false,
-                        "requiredPressure": 14,
-                        "excessPressure": 15,
-                        "measuredPressure": 12, 
+                        "dayTypeId": "hopx028cf", 
+                        "dayTypeLeakRate": 100
                     },
                     {
-                        "dayTypeId": "mufcn7yvy",
-                        "averageAirflow": 44,
-                        "averageCapacity": 88,
-                        "regulated": false,
-                        "requiredPressure": 14,
-                        "excessPressure": 15,
-                        "measuredPressure": 12, 
+                        "dayTypeId": "mufcn7yvy", 
+                        "dayTypeLeakRate": 90
                     }
-                ]
+                ],
             },
-            {
-                "endUseId": "57pvni4vd",
-                "endUseName": "Hand Tools",
-                "modifiedDate": new Date(),
-                "endUseDescription": "Hand tools airflow usage",
-                "location": null,
-                "selectedDayTypeId": "hopx028cf",
-                "dayTypeEndUses": [
-                    {
-                        "dayTypeId": "hopx028cf",
-                        "averageAirflow": 31,
-                        "averageCapacity": 88,
-                        "regulated": false,
-                        "requiredPressure": 14,
-                        "excessPressure": 15,
-                        "measuredPressure": 12, 
-                    },
-                    {
-                        "dayTypeId": "mufcn7yvy",
-                        "averageAirflow": 44,
-                        "averageCapacity": 88,
-                        "regulated": false,
-                        "requiredPressure": 14,
-                        "excessPressure": 15,
-                        "measuredPressure": 12, 
-                    }
-                ]
-            },
-            {
-                "endUseId": "0z95wm6f2",
-                "modifiedDate": new Date(),
-                "endUseName": "Pneumatic Machines",
-                "endUseDescription": "Machine airflow usage",
-                "location": null,
-                "selectedDayTypeId": "hopx028cf",
-                "dayTypeEndUses": [
-                    {
-                        "dayTypeId": "hopx028cf",
-                        "averageAirflow": 25,
-                        "averageCapacity": 88,
-                        "regulated": false,
-                        "requiredPressure": 14,
-                        "excessPressure": 15,
-                        "measuredPressure": 12, 
-                    },
-                    {
-                        "dayTypeId": "mufcn7yvy",
-                        "averageAirflow": 44,
-                        "averageCapacity": 88,
-                        "regulated": false,
-                        "requiredPressure": 14,
-                        "excessPressure": 15,
-                        "measuredPressure": 12, 
-                    }
-                ]
-            }
-        ],
-        "airFlowSankeyInputs": {
-            "selectedDayTypeId": "hopx028cf",
-            "dayTypeLeakRates": [
+            "dayTypeAirFlowTotals": undefined,
+            "endUses": [
                 {
-                    "dayTypeId": "hopx028cf",
-                    "dayTypeLeakRate": undefined,
+                    "endUseId": "lb6pu4k8k",
+                    "endUseName": "Aerator",
+                    "modifiedDate": new Date(),
+                    "endUseDescription": "Aerator airflow usage",
+                    "location": 'Warehouse 1',
+                    "requiredPressure": 12,
+                    "selectedDayTypeId": "hopx028cf",
+                    "dayTypeEndUses": [
+                        {
+                            "dayTypeId": "hopx028cf",
+                            "averageAirflow": 2612,
+                            "averageCapacity": 88,
+                            "regulated": false,
+                            "excessPressure": undefined,
+                            "measuredPressure": 15,
+                        },
+                        {
+                            "dayTypeId": "mufcn7yvy",
+                            "averageAirflow": 3000,
+                            "averageCapacity": 88,
+                            "regulated": false,
+                            "excessPressure": undefined,
+                            "measuredPressure": 15,
+                        }
+                    ]
                 },
                 {
-                    "dayTypeId": "mufcn7yvy",
-                    "dayTypeLeakRate": undefined,
+                    "endUseId": "57pvni4vd",
+                    "endUseName": "Hand Tools",
+                    "modifiedDate": new Date(),
+                    "endUseDescription": "Hand tools airflow usage",
+                    "location": 'NA',
+                    "requiredPressure": 12,
+                    "selectedDayTypeId": "hopx028cf",
+                    "dayTypeEndUses": [
+                        {
+                            "dayTypeId": "hopx028cf",
+                            "averageAirflow": 4170.3,
+                            "averageCapacity": 88,
+                            "regulated": false,
+                            "excessPressure": undefined,
+                            "measuredPressure": 15,
+                        },
+                        {
+                            "dayTypeId": "mufcn7yvy",
+                            "averageAirflow": 3000,
+                            "averageCapacity": 88,
+                            "regulated": false,
+                            "requiredPressure": 14,
+                            "excessPressure": undefined,
+                            "measuredPressure": 15,
+                        }
+                    ]
+                },
+                {
+                    "endUseId": "0z95wm6f2",
+                    "modifiedDate": new Date(),
+                    "endUseName": "Pneumatic Machines",
+                    "endUseDescription": "Machine airflow usage",
+                    "location": 'Warehouse 2',
+                    "requiredPressure": 12,
+                    "selectedDayTypeId": "hopx028cf",
+                    "dayTypeEndUses": [
+                        {
+                            "dayTypeId": "hopx028cf",
+                            "averageAirflow": 1800,
+                            "averageCapacity": 88,
+                            "regulated": false,
+                            "excessPressure": undefined,
+                            "measuredPressure": 15,
+                        },
+                        {
+                            "dayTypeId": "mufcn7yvy",
+                            "averageAirflow": 4205.9,
+                            "averageCapacity": 88,
+                            "regulated": false,
+                            "excessPressure": undefined,
+                            "measuredPressure": 15,
+                        }
+                    ]
                 }
-            ]
-        }
+            ],
+        },
     },
     "id": 71,
     "selected": true

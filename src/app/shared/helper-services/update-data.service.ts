@@ -91,8 +91,20 @@ export class UpdateDataService {
     updateCompressedAir(assessment: Assessment): Assessment {
         //logic for updating wastewater data
         assessment.appVersion = packageJson.version;
-        if (assessment.compressedAirAssessment && !assessment.compressedAirAssessment.endUses) {
-            assessment.compressedAirAssessment.endUses = [];
+        if (assessment.compressedAirAssessment && !assessment.compressedAirAssessment.endUseData) {
+            assessment.compressedAirAssessment.endUseData = {
+                endUseDayTypeSetup: {
+                    selectedDayTypeId: undefined,
+                    dayTypeLeakRates: [
+                        {
+                            dayTypeId: undefined, 
+                            dayTypeLeakRate: 0
+                        }
+                    ],
+                },
+                dayTypeAirFlowTotals: undefined,
+                endUses: new Array(),
+              };
         };
         return assessment;
     }

@@ -32,15 +32,9 @@ export class EndUseTableComponent implements OnInit {
       this.selectedEndUse = val;
     })
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
-      if (compressedAirAssessment && compressedAirAssessment.endUses) {
+      if (compressedAirAssessment && compressedAirAssessment.endUseData.endUses) {
         this.compressedAirAssessment = compressedAirAssessment;
-        console.log('compressedAirAssessment.endUses', this.compressedAirAssessment)
-        this.compressedAirAssessment.endUses.forEach(endUse => {
-          // TODO Below once table columns are decided
-          // let results: EndUseResults = this.endUsesService.getEndUseResults(endUse, this.compressedAirAssessment, this.settings);
-          // endUse.averageCapacity = results.averagePercentCapacity;
-          // endUse.excessPressure = results.excessPressure;
-        })
+        console.log('compressedAirAssessment.endUseData.endUses', this.compressedAirAssessment)
       }
     });
   }
@@ -55,14 +49,14 @@ export class EndUseTableComponent implements OnInit {
   }
 
   addNewEndUse() {
-    let result: UpdatedEndUseData = this.endUsesService.addToAssessment(this.compressedAirAssessment);
+    let result: UpdatedEndUseData = this.endUsesService.addToAssessment(this.compressedAirAssessment, this.settings);
     this.compressedAirAssessmentService.updateCompressedAir(result.compressedAirAssessment, true);
     this.endUsesService.selectedEndUse.next(result.endUse);
   }
 
   deleteEndUse() {
-    let itemIndex: number = this.compressedAirAssessment.endUses.findIndex(endUse => { return endUse.endUseId == this.deleteSelectedId });
-    this.compressedAirAssessment.endUses.splice(itemIndex, 1);
+    let itemIndex: number = this.compressedAirAssessment.endUseData.endUses.findIndex(endUse => { return endUse.endUseId == this.deleteSelectedId });
+    this.compressedAirAssessment.endUseData.endUses.splice(itemIndex, 1);
 
     this.compressedAirAssessment.modifications.forEach(modification => {
       modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(data => { return data.compressorId != this.deleteSelectedId });
@@ -71,7 +65,7 @@ export class EndUseTableComponent implements OnInit {
     });
 
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, true);
-    this.endUsesService.selectedEndUse.next(this.compressedAirAssessment.endUses[0]);
+    this.endUsesService.selectedEndUse.next(this.compressedAirAssessment.endUseData.endUses[0]);
   }
 
   openConfirmDeleteModal(endUse: EndUse) {
@@ -96,6 +90,7 @@ export class EndUseTableComponent implements OnInit {
     let endUseCopy: EndUse = JSON.parse(JSON.stringify(endUse));
     endUseCopy.endUseId = Math.random().toString(36).substr(2, 9);
     endUseCopy.endUseName = endUseCopy.endUseName + ' (copy)';
-    this.endUsesService.addToAssessment(this.compressedAirAssessment, endUseCopy);
+    let newEndUse: UpdatedEndUseData = this.endUsesService.addToAssessment(this.compressedAirAssessment, this.settings, endUseCopy);
+    this.compressedAirAssessmentService.updateCompressedAir(newEndUse.compressedAirAssessment, true);
   }
 }

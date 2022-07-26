@@ -29,16 +29,6 @@
                 </select>
             </div>
 
-            <div class="form-group" [ngClass]="{'invalid': form.controls.requiredPressure.invalid}">
-                <label for="requiredPressure">Required Pressure</label>
-                <div class="input-group">
-                    <input name="requiredPressure" type="number" step="any" class="form-control" id="requiredPressure"
-                        formControlName="requiredPressure" (input)="save()" (focus)="focusField('requiredPressure')">
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
-                </div>
-            </div>
-
             <div class="form-group" [ngClass]="{'invalid': form.controls.measuredPressure.invalid}">
                 <label for="measuredPressure">Measured Pressure</label>
                 <div class="input-group">
@@ -46,6 +36,7 @@
                         formControlName="measuredPressure" (input)="save()" (focus)="focusField('measuredPressure')">
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+                <span class="alert-warning small px-4 py-2 mx-auto" *ngIf="warnings.measuredPressure !== undefined">{{ warnings.measuredPressure }}</span>
                 </div>
             </div>
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, EndUse, ImproveEndUseEfficiency, InletConditions, Modification, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemInformation, SystemProfile, UseAutomaticSequencer } from '../shared/models/compressed-air-assessment';
+import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, EndUse, EndUseData, ImproveEndUseEfficiency, InletConditions, Modification, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemInformation, SystemProfile, UseAutomaticSequencer } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CentrifugalInput, CompressorCalcResult, CompressorsCalcInput } from './compressed-air-calculation.service';
 
@@ -23,7 +23,7 @@ export class ConvertCompressedAirService {
     compressedAirData.systemInformation = this.convertSystemInformation(compressedAirData.systemInformation, oldSettings, newSettings);
     compressedAirData.compressorInventoryItems = this.convertCompressorInventoryItems(compressedAirData.compressorInventoryItems, oldSettings, newSettings);
     compressedAirData.systemProfile = this.convertSystemProfile(compressedAirData.systemProfile, oldSettings, newSettings);
-    compressedAirData.endUses = this.convertEndUses(compressedAirData.endUses, oldSettings, newSettings);
+    compressedAirData.endUseData = this.convertEndUses(compressedAirData.endUseData, oldSettings, newSettings);
     return compressedAirData;
   }
 
@@ -61,8 +61,11 @@ export class ConvertCompressedAirService {
     return compressorInventoryItems;
   }
 
-  convertEndUses(endUses: Array<EndUse>, oldSettings: Settings, newSettings: Settings): Array<EndUse> {
-    endUses.forEach((endUse: EndUse) => {
+  convertEndUses(endUseData: EndUseData, oldSettings: Settings, newSettings: Settings): EndUseData {
+    // debugger
+    // endUseData.dayTypeLeakRates
+    // endUseData.unaccountedAirflow
+    endUseData.endUses.forEach((endUse: EndUse) => {
       endUse.dayTypeEndUses.map(dayTypeUse => {
         if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
           dayTypeUse.requiredPressure = this.convertUnitsService.value(dayTypeUse.requiredPressure).from('barg').to('psig');
@@ -80,7 +83,7 @@ export class ConvertCompressedAirService {
     
       });
     });
-    return endUses;
+    return endUseData;
   }
 
   convertDayTypeEndUse(namePlateData: CompressorNameplateData, oldSettings: Settings, newSettings: Settings): CompressorNameplateData {

@@ -3,12 +3,12 @@ import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, Vie
 import { PlotlyService } from 'angular-plotly.js';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, EndUse, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
-import { BaselineResults, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
+import { BaselineResults } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { EndUseEnergyData } from '../../end-uses/end-uses.service';
-import { AirflowSankeyService, CompressedAirSankeyNode, AirFlowSankeyResults, AirFlowSankeyInputs } from './airflow-sankey.service';
+import { EndUseEnergyData, EndUsesService } from '../../end-uses/end-uses.service';
+import { AirflowSankeyService, CompressedAirSankeyNode, AirFlowSankeyResults } from './airflow-sankey.service';
 
 @Component({
   selector: 'app-airflow-sankey',
@@ -39,11 +39,7 @@ export class AirflowSankeyComponent implements OnInit {
   //   { source: 5, target: 6 },
   //   { source: 5, target: 7 }
   // ];
-  airFlowSankeyInputs: AirFlowSankeyInputs = {
-    selectedDayTypeId: undefined,
-    dayTypeLeakRates: []
-  };
-  // airFlowSankeyForm: FormGroup;
+
 
   gradientStartColorPurple: string = 'rgba(112, 48, 160, .85)';
   gradientEndColorPurple: string = 'rgb(187, 142, 221)';
@@ -69,8 +65,9 @@ export class AirflowSankeyComponent implements OnInit {
 
   dayTypeBaselineProfileSummaries: Array<{dayTypeId: string, profileSummary: Array<ProfileSummary>}>;
   selectedDayTypeId: string;
-  dayTypeLeakRate: number;
+  // dayTypeLeakRate: number;
   hasValidLeakRate: boolean = true;
+  unaccountedAirflow: string;
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private _dom: ElementRef,
@@ -78,14 +75,14 @@ export class AirflowSankeyComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
     private airflowSankeyService: AirflowSankeyService,
-    private resultsService: CompressedAirAssessmentResultsService,
+    private endUsesService: EndUsesService,
     private plotlyService: PlotlyService
   ) { }
 
   ngOnInit() {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.initForm();
+    this.selectedDayTypeId = this.compressedAirAssessment.compressedAirDayTypes[0].dayTypeId;
     this.initSankeyList();
   }
 
@@ -97,42 +94,12 @@ export class AirflowSankeyComponent implements OnInit {
     this.renderSankey();
   }
 
+
   focusField() {}
 
-  saveDayTypeLeakRate() {
-    this.hasValidLeakRate = this.dayTypeLeakRate === undefined;
-    // this.dayTypeBaselineProfileSummaries = this.getDayTypeProfileSummaries();
-    // this.baselineResults = this.resultsService.calculateBaselineResults(this.compressedAirAssessment, this.settings, this.dayTypeBaselineProfileSummaries);
-    this.compressedAirAssessment.airFlowSankeyInputs.selectedDayTypeId = this.selectedDayTypeId;
-      this.compressedAirAssessment.airFlowSankeyInputs.dayTypeLeakRates.map(dayTypeLeakRate => {
-      if (dayTypeLeakRate.dayTypeId === this.selectedDayTypeId) {
-        dayTypeLeakRate.dayTypeLeakRate = this.dayTypeLeakRate
-      }
-    })
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, true);
+  setSelectedDayType() {
+    this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals = this.endUsesService.getDayTypeAirflowTotals(this.compressedAirAssessment, this.selectedDayTypeId, this.settings);
     this.renderSankey();
-  }
-
-  initForm() {
-    // this.dayTypeBaselineProfileSummaries = this.getDayTypeProfileSummaries();
-    // this.baselineResults = this.resultsService.calculateBaselineResults(this.compressedAirAssessment, this.settings, this.dayTypeBaselineProfileSummaries);
-    if (this.compressedAirAssessment.airFlowSankeyInputs.dayTypeLeakRates.length > 0) {
-      this.selectedDayTypeId = this.compressedAirAssessment.airFlowSankeyInputs.selectedDayTypeId;
-      this.dayTypeLeakRate =  this.compressedAirAssessment.airFlowSankeyInputs.dayTypeLeakRates.find(input => input.dayTypeId === this.selectedDayTypeId).dayTypeLeakRate;
-      this.hasValidLeakRate = this.dayTypeLeakRate !== undefined;
-    } else {
-      this.selectedDayTypeId = this.compressedAirAssessment.compressedAirDayTypes[0].dayTypeId;
-      this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-        this.compressedAirAssessment.airFlowSankeyInputs.dayTypeLeakRates.push(
-          {dayTypeId: dayType.dayTypeId, dayTypeLeakRate: undefined}
-        )
-      });
-      console.log(this.compressedAirAssessment.airFlowSankeyInputs);
-      this.hasValidLeakRate = false;
-      // move to assessment init
-      this.compressedAirAssessment.airFlowSankeyInputs = this.airFlowSankeyInputs;
-    }
-    console.log(this.hasValidLeakRate)
   }
 
 
@@ -141,14 +108,13 @@ export class AirflowSankeyComponent implements OnInit {
     this.links = [];
     this.connectingNodes = [];
     this.minFlowes = [];
-    
+
     let canRenderSankey: boolean = this.compressedAirAssessment && this.compressedAirAssessment.setupDone && this.profileDataComplete && this.hasValidLeakRate;
     if (canRenderSankey) {
       this.airFlowSankeyResults = this.airflowSankeyService.getAirFlowSankeyResults(this.compressedAirAssessment, this.selectedDayTypeId, this.settings);
-      if (!this.airFlowSankeyResults.warnings.CFMWarning) {
-        this.buildNodes();
-        this.buildLinks();
-      }
+      console.log(this.airFlowSankeyResults)
+      this.buildNodes();
+      this.buildLinks();
     }
     console.log('nodes', this.nodes)
     console.log('links', this.links)
@@ -287,7 +253,7 @@ export class AirflowSankeyComponent implements OnInit {
     this.gradientLinkPaths = [];
     this.nodes.unshift(
       {
-        name: this.getNameLabel("0", originConnectorValue, 100),
+        name: this.getNameLabel("Total End Use Airflow", originConnectorFlow, originConnectorValue),
         value: originConnectorValue,
         x: .05,
         y: .6,
@@ -330,6 +296,13 @@ export class AirflowSankeyComponent implements OnInit {
       let connector: number = (previousEndUseNodes[1].flow - endUse.dayTypeAverageAirFlow);
       let connectorValue: number = (connector / totalEndUseAirflow) * 100;
 
+      let arrowNodeColor: string = this.gradientEndColorPurple;
+      let connectorNodeColor: string = this.gradientStartColorPurple;
+      if (endUse.endUseId === 'dayTypeLeakRate') {
+        arrowNodeColor = 'rgb(255, 0, 0)';
+        connectorNodeColor = 'rgb(255, 0, 0)';
+      }
+
       this.nodes.push({
         name: this.getNameLabel(endUse.endUseName, endUse.dayTypeAverageAirFlow, endUseFlowValue),
         // name: this.getNameLabel(`src: ${arrowNodeIndex}`, endUse.dayTypeAverageAirFlow, endUseFlowValue),
@@ -340,14 +313,9 @@ export class AirflowSankeyComponent implements OnInit {
         flow: endUse.dayTypeAverageAirFlow,
         target: [],
         isConnector: false,
-        nodeColor: this.gradientEndColorPurple,
+        nodeColor: arrowNodeColor,
         id: endUse.endUseId
       });
-
-      let isConnector: boolean = true;
-      if (index === this.airFlowSankeyResults.endUseEnergyData.length - 1) {
-        isConnector = false;
-      } 
 
       // .6 should be default, but plotly doesn't render all .6 values at same height
       let yAdjustment: number = .6;
@@ -355,19 +323,84 @@ export class AirflowSankeyComponent implements OnInit {
       if (connectorNodeIndex % 2 !== 0) {
         yAdjustment = .65;
       }
+
+      let isConnector: boolean = true;
+      let connectorTargets: Array<number> = [connectorNodeIndex + 1, connectorNodeIndex + 2];
+      // let connectorName: string = `src: ${connectorNodeIndex} connector`;
+      
+      if (index === this.airFlowSankeyResults.endUseEnergyData.length - 1) {
+        isConnector = false;
+        connectorTargets = [];
+        // connectorName = 'LAST NODE';
+      } 
+
       this.nodes.push({
-        name: ``,
-        // name: `src: ${connectorNodeIndex} connector`,
+        name: undefined,
         value: connectorValue,
         x: arrowNodeXPosition - nodeXPositionIncrements.connector,
         y: yAdjustment,
         source: connectorNodeIndex,
         flow: connector,
-        target: [connectorNodeIndex + 1, connectorNodeIndex + 2],
+        target: connectorTargets,
         isConnector: isConnector,
-        nodeColor: this.gradientStartColorPurple,
+        nodeColor: connectorNodeColor,
         id: connectorId
       });
+
+      console.log('arrow node value', this.nodes[this.nodes.length - 2].value);
+      console.log('arrow node flow', this.nodes[this.nodes.length - 2].flow);
+      console.log('connecor node value', this.nodes[this.nodes.length - 1].value);
+      console.log('connecor node flow', this.nodes[this.nodes.length - 1].flow);
+      if (this.airFlowSankeyResults.otherEndUseData && index === this.airFlowSankeyResults.endUseEnergyData.length - 1) {
+        // console.log('2nd last  node value', this.nodes[this.nodes.length - 2].value);
+        // console.log('2nd last node flow', this.nodes[this.nodes.length - 2].flow);
+        // console.log('last node value', this.nodes[this.nodes.length - 1].value);
+        // console.log('last node flow', this.nodes[this.nodes.length - 1].flow);
+        // change last endUseEnergyData node to a connector
+        // Add other energy node
+        let otherEndUseData = this.airFlowSankeyResults.otherEndUseData;
+        endUseFlowValue = (otherEndUseData.dayTypeAverageAirFlow / totalEndUseAirflow) * 100;
+
+        let otherEndUseConnector = this.nodes[this.nodes.length - 1]
+        // otherEndUseConnector.name = `Other connector`;
+          // name: `src: ${connectorNodeIndex} connector`,
+        otherEndUseConnector.value = connectorValue,
+        otherEndUseConnector.x = arrowNodeXPosition - nodeXPositionIncrements.arrow,
+        otherEndUseConnector.y = yAdjustment,
+        otherEndUseConnector.source = connectorNodeIndex,
+        otherEndUseConnector.flow = otherEndUseData.dayTypeAverageAirFlow,
+        otherEndUseConnector.target = [connectorNodeIndex + 1],
+        otherEndUseConnector.isConnector = true,
+        otherEndUseConnector.nodeColor = this.gradientStartColorPurple,
+        otherEndUseConnector.id = `connector_${this.airFlowSankeyResults.otherEndUseData.endUseId}`
+
+        console.log('other connector value', connectorValue);
+        console.log('other connector flow', otherEndUseData.dayTypeAverageAirFlow);
+        console.log('other end use value', endUseFlowValue);
+        console.log('other end use flow', otherEndUseData.dayTypeAverageAirFlow);
+
+        arrowNodeXPosition += nodeXPositionIncrements.arrow;
+        offsetYPlacementIndex++;
+        let otherArrowNodeIndex = arrowNodeIndex + 2;
+        this.gradientLinkPaths.push(otherArrowNodeIndex);
+
+        this.nodes.push({
+          name: this.getNameLabel(otherEndUseData.endUseName, otherEndUseData.dayTypeAverageAirFlow, endUseFlowValue),
+          // name: this.getNameLabel(`src: ${otherArrowNodeIndex}`, endUse.dayTypeAverageAirFlow, endUseFlowValue),
+          value: endUseFlowValue,
+          x: arrowNodeXPosition,
+          y: flowNodeYPositions[offsetYPlacementIndex],
+          source: otherArrowNodeIndex,
+          flow: otherEndUseData.dayTypeAverageAirFlow,
+          target: [],
+          isConnector: false,
+          nodeColor: this.gradientEndColorPurple,
+          id: otherEndUseData.endUseId
+        });
+
+
+        // this.buildOtherEndUseNodes();
+      }
 
       this.gradientLinkPaths.push(arrowNodeIndex);
       arrowNodeXPosition += nodeXPositionIncrements.arrow;
@@ -375,9 +408,12 @@ export class AirflowSankeyComponent implements OnInit {
       arrowNodeIndex += 2;
       originConnectorValue -= endUse.dayTypeAverageAirFlow;
     });
-
     console.log('nodes', this.nodes)
     console.log('links', this.links)
+
+  }
+
+  buildOtherEndUseNodes() {
 
   }
 
@@ -430,6 +466,10 @@ export class AirflowSankeyComponent implements OnInit {
       }  else {
         fill = `${this.gradientStartColorPurple} !important`;
       }
+
+      if (i === (links.length - 1) && !this.airFlowSankeyResults.otherEndUseData) {
+        fill = 'url(#compressedAirGradientRed) !important';
+      }
     
       links[i].setAttribute('style', `fill: ${fill}; opacity: 1; fill-opacity: ${fillOpacity};`);
       
@@ -448,6 +488,10 @@ export class AirflowSankeyComponent implements OnInit {
     <linearGradient id="compressedAirGradientPurple">
       <stop offset="10%" stop-color="${this.gradientStartColorPurple}" />
       <stop offset="100%" stop-color="${this.gradientEndColorPurple}" />
+    </linearGradient>
+    <linearGradient id="compressedAirGradientRed">
+      <stop offset="10%" stop-color="${this.gradientStartColorPurple}" />
+      <stop offset="100%" stop-color="rgb(255, 0, 0)" />
     </linearGradient>
     `
     // Insert our gradient Def
@@ -475,6 +519,7 @@ export class AirflowSankeyComponent implements OnInit {
         //   sizingRatio = sizingRatio * .7;
         //   verticalAlignment = verticalAlignment / .3;
         // }
+
         rects[i].setAttribute('y', `${defaultY - (height / verticalAlignment)}`);
         rects[i].setAttribute('style', `width: ${width}px; height: ${height * sizingRatio}px; clip-path:  ${arrowShape}; 
          stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: ${this.gradientEndColorPurple}; fill-opacity: ${arrowOpacity};`);
@@ -486,18 +531,6 @@ export class AirflowSankeyComponent implements OnInit {
     let labelText = nodeLabel.querySelector('.node-label-text-path');
     labelText.setAttribute('startOffset', '3%');
   }
-
-    // getDayTypeProfileSummaries() {
-  //   let baselineDayTypeProfileSummarries = new Array<{dayTypeId: string, profileSummary: Array<ProfileSummary>}>();
-  //     this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-  //       let baselineProfileSummary: Array<ProfileSummary> = this.resultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, dayType, this.settings);
-  //       baselineDayTypeProfileSummarries.push({
-  //         dayTypeId: dayType.dayTypeId,
-  //         profileSummary: baselineProfileSummary
-  //       });
-  //     });
-  //   return baselineDayTypeProfileSummarries;
-  // }
 
   initSankeyList() {
     this.compressedAirAssessmentOptions = new Array<{ name: string, compressedAirAssessment: CompressedAirAssessment }>();

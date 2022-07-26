@@ -2,16 +2,6 @@
     <div class="row">
       <div class="navbar w-50 col-6">
         <div class="d-flex justify-content-center align-items-center w-100 flex-wrap">
-          <!-- <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-center align-items-center w-100 flex-wrap"> -->
-          <div class="tab-content pl-2 pr-2">
-            <!-- <div class="form-group" *ngIf="compressedAirAssessmentOptions.length > 1">
-              <select name="compressedAirAssessmentSelect" class="form-control mx-auto w-100" id="caSankeySelect"
-              [(ngModel)]="selectedSankeyOption">
-              <option *ngFor="let compressedAirAssessment of compressedAirAssessmentOptions"
-              [ngValue]="compressedAirAssessment">{{compressedAirAssessment.name}}</option>
-            </select>
-          </div> -->
-          </div>
           <div class="btn-group btn-group-sm align-self-center">
             <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
               [ngClass]="{'active': sankeyLabelStyle == 'percent'}">End Use Percent</button>
@@ -27,7 +17,7 @@
             <div class="form-group">
               <label for="selectedDayTypeId">Day Type</label>
               <div class="input-group">
-                <select class="form-control mx-auto mt-0 w-100" id="selectedDayTypeId" [(ngModel)]="selectedDayTypeId"
+                <select class="form-control mx-auto mt-0 w-100" (change)="setSelectedDayType()" id="selectedDayTypeId" [(ngModel)]="selectedDayTypeId"
                   name="selectedDayTypeId"
                   (focus)="focusField()">
                   <option *ngFor="let dayType of compressedAirAssessment.compressedAirDayTypes"
@@ -37,42 +27,83 @@
                 </select>
               </div>
             </div>
-          <div class="form-group">
-            <label for="dayTypeLeakRate">Day Type Leak Rate</label>
-            <div class="input-group">
-              <input class="form-control" type="number" name="dayTypeLeakRate" 
-              name="dayTypeLeakRate"
-              [(ngModel)]="dayTypeLeakRate"
-                (input)="saveDayTypeLeakRate()" (focus)="focusField()">
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup>/min</span>
-            </div>
-          </div>
         </form>
       </div>
     </div>
-    <!-- <div *ngIf="sankeyResults" class="row">
-      <span class="alert-warning small px-4 py-2 mx-auto" *ngIf="sankeyResults.warnings.CFMWarning !== undefined">{{ sankeyResults.warnings.CFMWarning }}</span>
-    </div> -->
+    <div *ngIf="compressedAirAssessment" class="row">
+      <div class="alert-warning small px-4 py-2 mx-auto"
+        *ngIf="compressedAirAssessment.endUseData.dayTypeAirFlowTotals.unaccountedAirflow">
+        Total average airflow of end uses is
+        {{compressedAirAssessment.endUseData.dayTypeAirFlowTotals.unaccountedAirflow}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+        less than the system profile average airflow for this day type
+        ({{compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeAverageAirflow}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>)
+      </div>
+      <div class="alert-warning small px-4 py-2 mx-auto" *ngIf="compressedAirAssessment.endUseData.dayTypeAirFlowTotals.exceededAirflow">
+        Total average airflow of end uses is
+        {{compressedAirAssessment.endUseData.dayTypeAirFlowTotals.exceededAirflow}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+        greater than the system profile average for this day type
+        ({{compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeAverageAirflow}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>)
+    </div>
+
+    </div>
+
+    <div *ngIf="airFlowSankeyResults" class="row">
+      <span class="alert-warning small px-4 py-2 mx-auto" *ngIf="airFlowSankeyResults.warnings.minAirflow !== undefined">{{ airFlowSankeyResults.warnings.minAirflow }}</span>
+    </div>
     <div *ngIf="!hasValidLeakRate" class="row">
-      <span class="alert-danger small px-4 py-2 mx-auto">Sankey calculation requires a Day Type Leak Rate value</span>
+      <span class="alert-danger small px-4 py-2 mx-auto">Airflow Sankey calculation requires a Day Type Leak Rate value</span>
     </div>
     <div *ngIf="!profileDataComplete" class="row">
-      <span class="alert-danger small px-4 py-2 mx-auto">Sankey calculation requires averages of airflow and power from System Profile Setup. Please check System Profile Setup data for correctness.</span>
+      <span class="alert-danger small px-4 py-2 mx-auto">Airflow Sankey calculation requires averages of airflow and power from System Profile Setup. Please check System Profile Setup data for correctness.</span>
     </div>
   </div>
   
   
   <div class="sankey-padding w-100">
     <div #airflowChart></div>
-    <div *ngIf="minFlowes.length > 0" class="ml-5">
-      <div class="mt-4">
-        <label class="group-label bold mb-2">Negligible AirFlow</label>
-        <table class="small w-25 ml-3">
-          <tr *ngFor="let flow of minFlowes">
-            <td>{{flow}}</td>
-          </tr>
-        </table>
+    <div>
+
+      <div *ngIf="minFlowes.length > 0" class="ml-5 w-50">
+        <div class="mt-4">
+          <label class="group-label bold mb-2">Negligible AirFlow</label>
+          <table class="small w-100 ml-3">
+            <tr *ngFor="let flow of minFlowes">
+              <td>{{flow}}</td>
+            </tr>
+          </table>
+        </div>
       </div>
+
+      <!-- <div *ngIf="compressedAirAssessment && compressedAirAssessment.endUseData.dayTypeAirFlowTotals" class="ml-5 w-50">
+        <div class="mt-4">
+          <label class="group-label bold mb-2">Airflow Totals Differ</label>
+          <table class="small w-100 ml-3">
+            <tr *ngIf="compressedAirAssessment.endUseData.dayTypeAirFlowTotals.unaccountedAirflow > 0">
+              <td>Total end use airflow is less than the system profile total for this day type 
+                ({{compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeEndUseAirflow}})
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+              </td>
+            </tr>
+            <tr *ngIf="compressedAirAssessment.endUseData.dayTypeAirFlowTotals.unaccountedAirflow < 0">
+              <td>Total end use airflow is greater than the system profile total for this day type 
+                ({{compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeEndUseAirflow}})
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div> -->
+
     </div>
   </div>
+  

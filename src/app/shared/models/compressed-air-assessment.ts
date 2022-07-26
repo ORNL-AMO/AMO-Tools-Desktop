@@ -1,6 +1,5 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 import { ProfileSummaryValid } from "../../compressed-air-assessment/compressed-air-assessment.service";
-import { AirFlowSankeyInputs } from "../../compressed-air-assessment/compressed-air-sankey/airflow-sankey/airflow-sankey.service";
 import { SankeySystemInputs } from "../../compressed-air-assessment/compressed-air-sankey/power-sankey/power-sankey.service";
 import { DayTypeSummary, LogToolField } from "../../log-tool/log-tool-models";
 
@@ -12,7 +11,6 @@ export interface CompressedAirAssessment {
     systemBasics: CASystemBasics,
     systemInformation: SystemInformation,
     powerSankeyInputs?: SankeySystemInputs,
-    airFlowSankeyInputs?: AirFlowSankeyInputs,
     compressorInventoryItems: Array<CompressorInventoryItem>,
     systemProfile: SystemProfile,
     // logToolDbData?: LogToolDbData,
@@ -20,7 +18,7 @@ export interface CompressedAirAssessment {
         dayTypeSummaries: Array<DayTypeSummary>,
         logToolFields: Array<LogToolField>
     },
-    endUses: Array<EndUse>,
+    endUseData: EndUseData,
     compressedAirDayTypes: Array<CompressedAirDayType>,
     setupDone: boolean
 }
@@ -55,6 +53,27 @@ export interface ImproveEndUseEfficiency {
     order: number
 }
 
+export interface EndUseData {
+    endUses: Array<EndUse>,
+    endUseDayTypeSetup: EndUseDayTypeSetup,
+    dayTypeAirFlowTotals: DayTypeAirflowTotals 
+}
+
+export interface DayTypeAirflowTotals {
+        unaccountedAirflow?: number,
+        unaccountedAirflowPercent: number,
+        exceededAirflow?: number,
+        exceededAirflowPercent?: number,
+        totalDayTypeEndUseAirflow: number,
+        totalDayTypeEndUseAirflowPercent: number,
+        totalDayTypeAverageAirflow: number
+}
+
+export interface EndUseDayTypeSetup {
+    selectedDayTypeId: string,
+    dayTypeLeakRates: Array<{dayTypeId: string, dayTypeLeakRate: number}>,
+}
+
 export interface EndUse {
     endUseId: string,
     modifiedDate: Date,
@@ -62,6 +81,7 @@ export interface EndUse {
     location?: string,
     endUseDescription: string,
     selectedDayTypeId: string,
+    requiredPressure?: number,
     dayTypeEndUses?: Array<DayTypeEndUse>,
 }
 
@@ -69,8 +89,8 @@ export interface DayTypeEndUse {
     dayTypeId: string,
     averageAirflow?: number,
     regulated?: boolean,
-    requiredPressure?: number,
     measuredPressure?: number,
+    requiredPressure?: number,
     averageCapacity?: number,
     excessPressure?: number,
 }

@@ -1,10 +1,36 @@
-<div [ngStyle]="{'visibility': compressedAirAssessment.endUses.length > 0? 'visible' : 'hidden'}">
+<!--  todo use airflowunit for the below instead of repeatedly checking settings
+     -->
+
+<ng-container *ngIf="compressedAirAssessment.endUseData.dayTypeAirFlowTotals">
+    <div class="alert-warning small px-4 py-2 mx-auto"
+        *ngIf="compressedAirAssessment.endUseData.dayTypeAirFlowTotals.unaccountedAirflow">
+        Total average airflow of end uses is
+        {{compressedAirAssessment.endUseData.dayTypeAirFlowTotals.unaccountedAirflow}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+        less than the system profile average airflow for this day type
+        ({{compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeAverageAirflow}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>)
+    </div>
+    <div class="alert-warning small px-4 py-2 mx-auto"
+        *ngIf="compressedAirAssessment.endUseData.dayTypeAirFlowTotals.exceededAirflow">
+        Total average airflow of end uses is
+        {{compressedAirAssessment.endUseData.dayTypeAirFlowTotals.exceededAirflow}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+        greater than the system profile average for this day type
+        ({{compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeAverageAirflow}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>)
+    </div>
+</ng-container>
+<div [ngStyle]="{'visibility': compressedAirAssessment.endUseData.endUses.length > 0? 'visible' : 'hidden'}">
     <div class="d-flex flex-column chart-background w-100 p-2">
-        <div class="d-flex pl-1 justify-content-center"
-            >
-            <select class="day-type-select mt-2" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
-                (change)="setChartData()">
-                <option [ngValue]="undefined">All Day Types</option>
+        <div class="d-flex pl-1 justify-content-center">
+            <select class="day-type-select mt-2" id="selectedDayType" name="selectedDayType"
+                [(ngModel)]="selectedDayType" (change)="setChartData()">
+                <!-- <option [ngValue]="undefined">All Day Types</option> -->
                 <option *ngFor="let dayType of compressedAirAssessment.compressedAirDayTypes" [ngValue]="dayType">
                     {{dayType.name}}</option>
             </select>

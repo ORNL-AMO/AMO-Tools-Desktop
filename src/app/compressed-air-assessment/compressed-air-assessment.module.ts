@@ -148,6 +148,8 @@ import { PowerSankeyComponent } from './compressed-air-sankey/power-sankey/power
 import { PowerSankeyService } from './compressed-air-sankey/power-sankey/power-sankey.service';
 import { AirflowSankeyComponent } from './compressed-air-sankey/airflow-sankey/airflow-sankey.component';
 import { AirflowSankeyService } from './compressed-air-sankey/airflow-sankey/airflow-sankey.service';
+import { DayTypeSetupFormComponent } from './end-uses/day-type-setup-form/day-type-setup-form.component';
+import { DayTypeSetupService } from './end-uses/day-type-setup-form/day-type-setup.service';
 
 @NgModule({
   declarations: [
@@ -234,7 +236,8 @@ import { AirflowSankeyService } from './compressed-air-sankey/airflow-sankey/air
     DayTypeUseFormComponent,
     CompressedAirSankeyComponent,
     AirflowSankeyComponent,
-    PowerSankeyComponent
+    PowerSankeyComponent,
+    DayTypeSetupFormComponent
   ],
   imports: [
     CommonModule,
@@ -304,6 +307,7 @@ import { AirflowSankeyService } from './compressed-air-sankey/airflow-sankey/air
     DayTypeUseFormService,
     AirflowSankeyService,
     PowerSankeyService,
+    DayTypeSetupService
   ]
 })
 export class CompressedAirAssessmentModule { }

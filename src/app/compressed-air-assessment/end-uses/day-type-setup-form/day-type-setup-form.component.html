@@ -1,0 +1,34 @@
+<div class="header mr-2 ml-2">
+    <h3>Day Type End Use Setup</h3>
+    <br>
+</div>
+<div class="mr-2 ml-2">
+    <form [formGroup]="form">
+        <div class="form-group">
+            <label for="selectedDayTypeId">Day Type</label>
+            <select id="selectedDayTypeId" formControlName="selectedDayTypeId"
+                (change)="setSelectedDayTypeLeakRate()" (focus)="focusField('dayType')" class="form-control">
+                <option *ngFor="let dayTypeOption of dayTypeOptions" [ngValue]="dayTypeOption.dayTypeId">
+                    {{dayTypeOption.name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="dayTypeLeakRate">Day Type Leak Rate</label>
+            <div class="input-group">
+                <input class="form-control" type="number" (input)="save()" formControlName="dayTypeLeakRate"
+                     (focus)="focusField('dayTypeLeakRate')">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup>/min</span>
+                <span class="alert-danger pull-right small"
+                    *ngIf="form.controls.dayTypeLeakRate.invalid && !form.controls.dayTypeLeakRate.pristine">
+                    <span *ngIf="form.controls.dayTypeLeakRate.errors.required">Value Required</span>
+                    <!-- <span *ngIf="form.controls.dayTypeLeakRate.errors.min">Value can't be less than
+                        {{form.controls.dayTypeLeakRate.errors.min.min}}
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                    </span> -->
+                </span>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
+import { Assessment } from "../../shared/models/assessment";
 
 
 @Component({
@@ -7,16 +8,21 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ['./compressed-air-sankey.component.css']
 })
 export class CompressedAirSankeyComponent implements OnInit {
+  @Input()
+  assessment: Assessment;
 
   sankeyTab: 'airflow' | 'power' = 'power';
   constructor(
   ) { }
 
   ngOnInit() {
+    console.log(this.assessment)
   }
 
   changeSankeyTab(sankeyTab: 'airflow' | 'power') {
-    this.sankeyTab = sankeyTab;
+    if (sankeyTab === 'power' || (sankeyTab === 'airflow' && this.assessment.compressedAirAssessment.endUseData.endUses.length !== 0)) {
+      this.sankeyTab = sankeyTab;
+    }
   }
 
 }

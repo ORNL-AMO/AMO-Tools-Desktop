@@ -384,11 +384,13 @@ export class AssessmentService {
         },
         profileSummary: new Array()
       },
-      endUses: new Array(),
-      airFlowSankeyInputs: {
-        selectedDayTypeId: "",
-        dayTypeLeakRates: []
-
+      endUseData: {
+        endUseDayTypeSetup: {
+          selectedDayTypeId: undefined,
+          dayTypeLeakRates: [],
+        },
+        dayTypeAirFlowTotals: undefined,
+        endUses: new Array(),
       },
       compressedAirDayTypes: [{
         dayTypeId: initDayTypeId,

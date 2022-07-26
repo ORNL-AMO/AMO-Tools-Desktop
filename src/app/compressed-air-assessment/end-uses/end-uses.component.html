@@ -1,4 +1,6 @@
 <div class="d-flex flex-column panel-container">
+    <!--  if we don't add this to sankey, it can be part of end uses form -->
+    <app-day-type-setup-form></app-day-type-setup-form>
     <div class="header mr-2 ml-2">
         <h3>End Use</h3>
         <br>
@@ -28,19 +30,28 @@
                         formControlName="location" (input)="save()" (focus)="focusField('location')">
                 </div>
             </div>
-            
+
             <div class="form-group">
-                <label for="selectedDayTypeId">Day Type</label>
-                <select id="selectedDayTypeId" name="selectedDayTypeId" formControlName="selectedDayTypeId" (change)="changeSelectedDayTypeEndUse()"
-                    (focus)="focusField('dayType')" class="form-control">
-                    <option *ngFor="let dayTypeOption of dayTypeOptions" [ngValue]="dayTypeOption.dayTypeId">
-                        {{dayTypeOption.name}}</option>
-                </select>
+                <label for="requiredPressure">Required Pressure</label>
+                <div class="input-group">
+                    <input name="requiredPressure" type="number" step="any" class="form-control" id="requiredPressure"
+                        formControlName="requiredPressure" (input)="updateDayTypeEndUsePressure()" (focus)="focusField('requiredPressure')">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+                </div>
             </div>
+
         </form>
 
-        <label class="group-label">{{selectedDayType.name}} Data</label>
-        <app-day-type-use-form></app-day-type-use-form>
+        <div>
+            <label class="group-label sub-form-label">{{selectedDayType.name}} End Use Data</label>
+            <app-day-type-use-form></app-day-type-use-form>
+        </div>
+
+        <!-- <div>
+            <label class="group-label sub-form-label d-inline">{{selectedDayType.name}} End Use Data</label>
+            <app-day-type-use-form></app-day-type-use-form>
+        </div> -->
 
     </div>
 </div>
