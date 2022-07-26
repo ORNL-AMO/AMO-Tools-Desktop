@@ -9,7 +9,6 @@ import { WallFormService } from '../../../../calculator/furnaces/wall/wall-form.
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { firstValueFrom } from 'rxjs';
 import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 
 @Component({
   selector: 'app-wall-losses-form',
@@ -45,7 +44,7 @@ export class WallLossesFormComponent implements OnInit {
   surfaceOptions: Array<WallLossesSurface>;
   showModal: boolean = false;
   idString: string;
-  constructor(private wallLossCompareService: WallLossCompareService, private sqlDbApiService: SqlDbApiService, private wallFormService: WallFormService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private wallLossesSurfaceDbService: WallLossesSurfaceDbService) { }
+  constructor(private wallLossCompareService: WallLossCompareService, private sqlDbApiService: SqlDbApiService, private wallFormService: WallFormService, private lossesService: LossesService, private wallLossesSurfaceDbService: WallLossesSurfaceDbService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -110,7 +109,7 @@ export class WallLossesFormComponent implements OnInit {
   }
 
   checkForDeletedMaterial() {
-    let selectedMaterial: WallLossesSurface = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
+    let selectedMaterial: WallLossesSurface = this.sqlDbApiService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
     if (!selectedMaterial) {
       this.hasDeletedCustomMaterial = true;
       this.restoreMaterial();
@@ -123,11 +122,11 @@ export class WallLossesFormComponent implements OnInit {
       conditionFactor: this.wallLossesForm.controls.conditionFactor.value,
       surface: "Custom Material"
     };
-    let suiteDbResult = this.suiteDbService.insertWallLossesSurface(customMaterial);
+    let suiteDbResult = this.sqlDbApiService.insertWallLossesSurface(customMaterial);
     if (suiteDbResult === true) {
       await firstValueFrom(this.wallLossesSurfaceDbService.addWithObservable(customMaterial));
     }
-    this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
+    this.surfaceOptions = this.sqlDbApiService.selectWallLossesSurface();
     let newMaterial: WallLossesSurface = this.surfaceOptions.find(material => { return material.surface === customMaterial.surface; });
     this.wallLossesForm.patchValue({
       surfaceShape: newMaterial.id
