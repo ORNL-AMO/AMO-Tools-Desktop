@@ -33,17 +33,19 @@ export class CompressedAirAssessmentResultsService {
       let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(compressedAirAssessment.compressorInventoryItems, dayType, baselineProfileSummary, compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
       let baselineResults: SavingsItem = this.calculateEnergyAndCost(baselineProfileSummary, dayType, compressedAirAssessment.systemBasics.electricityCost, compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
       let hoursOn: number = 0;
+      let numberOfDataPoints: number = 0;
       totals.forEach(total => {
         if (total.power != 0) {
           hoursOn = hoursOn + compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+          numberOfDataPoints++;
         }
       });
       let totalOperatingHours: number = dayType.numberOfDays * hoursOn;
-      let averageAirFlow: number = _.sumBy(totals, (total) => { return total.airflow }) / hoursOn;
+      let averageAirFlow: number = _.sumBy(totals, (total) => { return total.airflow }) / numberOfDataPoints;
       if (isNaN(averageAirFlow)) {
         averageAirFlow = 0;
       }
-      let averagePower: number = _.sumBy(totals, (total) => { return total.power }) / hoursOn;
+      let averagePower: number = _.sumBy(totals, (total) => { return total.power }) / numberOfDataPoints;
       if (isNaN(averagePower)) {
         averagePower = 0;
       }
