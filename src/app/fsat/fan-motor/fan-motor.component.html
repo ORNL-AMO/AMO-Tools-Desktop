@@ -21,7 +21,7 @@
         <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.fanPowerMeasurement}}</option>
       </select> -->
       <div class="input-group">
-        <input type="number" name="motorRatedPower" class="form-control number-input-field" id="{{'motorRatedPower_'+idString}}"
+        <input type="number" name="motorRatedPower" step="10" min="0" class="form-control number-input-field" id="{{'motorRatedPower_'+idString}}"
           (focus)="focusField('motorRatedPower')" (input)="save()" formControlName="motorRatedPower" [readonly]="!selected">
         <span class="input-group-addon units">{{settings.fanPowerMeasurement}}</span>
       </div>
@@ -35,7 +35,7 @@
     <div class="form-group" [ngClass]="{'indicate-different': isMotorRpmDifferent(),'error': warnings.rpmError !== null, 'invalid': fanMotorForm.controls.motorRpm.invalid}">
       <label for="{{'motorRpm_'+idString}}">Motor RPM</label>
       <div name="motorRpm" class="input-group">
-        <input type="number" step="10" class="form-control number-input-field" id="{{'motorRpm_'+idString}}"
+        <input type="number" step="100" class="form-control number-input-field" id="{{'motorRpm_'+idString}}"
           formControlName="motorRpm" (input)="save()" (focus)="focusField('motorRPM')" onfocus="this.select();"
           [readonly]="!selected">
         <span class="input-group-addon units">rpm</span>
@@ -75,7 +75,7 @@
     <div class="form-group" [ngClass]="{'indicate-different': isMotorRatedVoltageDifferent(),'error': warnings.voltageError !== null, 'invalid':fanMotorForm.controls.motorRatedVoltage.invalid}">
       <label for="{{'motorRatedVoltage_'+idString}}">Rated Voltage</label>
       <div class="input-group">
-        <input name="motorRatedVoltage" type="number" min="0" step="any" class="form-control number-input-field" id="{{'motorRatedVoltage_'+idString}}"
+        <input name="motorRatedVoltage" type="number" min="0" step="10" class="form-control number-input-field" id="{{'motorRatedVoltage_'+idString}}"
           formControlName="motorRatedVoltage" (input)="save()" (focus)="focusField('motorVoltage')" onfocus="this.select();"
           [readonly]="!selected">
         <span class="input-group-addon units">V</span>

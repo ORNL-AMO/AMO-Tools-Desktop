@@ -9,3 +9,15 @@
     padding-top: 0px;
     padding-bottom: 0px;
 }
+
+.btn-primary{
+    background: #84b641;
+    color: white;
+}
+
+.nav-btn-clear{
+    background: #6D757C;
+    color: white;
+    border: none;
+    line-height: 2;
+}

@@ -79,7 +79,9 @@ export class LightingReplacementTreasureHuntService {
       name: opportunitySummary.opportunityName,
       opportunitySheet: lightingReplacement.opportunitySheet,
       iconString: 'assets/images/calculator-icons/utilities-icons/lighting-replacement-icon.png',
-      teamName: lightingReplacement.opportunitySheet? lightingReplacement.opportunitySheet.owner : undefined
+      teamName: lightingReplacement.opportunitySheet? lightingReplacement.opportunitySheet.owner : undefined,
+      iconCalcType: 'lighting',
+      needBackground: true
     }
     return cardData;
   }

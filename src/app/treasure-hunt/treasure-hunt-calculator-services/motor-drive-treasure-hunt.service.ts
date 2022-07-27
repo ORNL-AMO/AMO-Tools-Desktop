@@ -75,7 +75,9 @@ export class MotorDriveTreasureHuntService {
       name: opportunitySummary.opportunityName,
       opportunitySheet: drive.opportunitySheet,
       iconString: 'assets/images/calculator-icons/motor-icons/motor-drive.png',
-      teamName: drive.opportunitySheet? drive.opportunitySheet.owner : undefined
+      teamName: drive.opportunitySheet? drive.opportunitySheet.owner : undefined,
+      iconCalcType: 'motor',
+      needBackground: true
     }
     return cardData;
   }

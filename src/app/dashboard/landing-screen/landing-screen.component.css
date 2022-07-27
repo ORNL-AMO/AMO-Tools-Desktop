@@ -7,15 +7,6 @@
     height: 82px;
 }
 
-.ssmt-icon {
-	background: linear-gradient(rgba(228, 219, 219, 0.34), #F39C12);
-	border-radius: 15px;
-	border: 0.1px solid rgba(123, 120, 120, 0.25);
-	box-shadow: #7b7878 2px 2px 5px 1px;
-	width: 80px;
-	height: 70px;
-  }
-
 .ca-image{
 	width: 70px;
 	padding: 2px;
@@ -34,7 +25,6 @@
 	width:60px;
 	height:60px;
 }
-
 
 .skyline{
 	position: relative;

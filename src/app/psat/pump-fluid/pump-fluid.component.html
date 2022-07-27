@@ -57,7 +57,7 @@
       [ngClass]="{'indicate-different': isPumpRpmDifferent(),'error': pumpFluidWarnings.rpmError !== null, 'invalid':psatForm.controls.pumpRPM.invalid}">
       <label for="{{'pumpRPM_'+idString}}">Pump Speed</label>
       <div class="input-group">
-        <input [readonly]="!selected" type="number" name="pumpRPM" min="0" step="10" class="form-control"
+        <input [readonly]="!selected" type="number" name="pumpRPM" min="0" step="100" class="form-control"
           formControlName="pumpRPM" id="{{'pumpRPM_'+idString}}" (input)="save()" (focus)="focusField('pumpRPM')"
           onfocus="this.select();">
         <span class="input-group-addon units">rpm</span>
@@ -133,7 +133,7 @@
     <div class="form-group"
       [ngClass]="{'indicate-different': isSpecificGravityDifferent(), 'invalid':psatForm.controls.gravity.invalid}">
       <label for="{{'gravity_'+idString}}">Specific Gravity</label>
-      <input [readonly]="!selected" type="number" min="0" name="gravity" step="any" class="form-control"
+      <input [readonly]="!selected" type="number" min="0" name="gravity" step="0.1" class="form-control"
         formControlName="gravity" id="{{'gravity_'+idString}}" (input)="save()" (focus)="focusField('specificGravity')"
         onfocus="this.select();">
       <span class="alert-danger pull-right small"
@@ -148,7 +148,7 @@
       [ngClass]="{'indicate-different': isKinematicViscosityDifferent(), 'invalid':psatForm.controls.viscosity.invalid}">
       <label for="{{'viscosity_'+idString}}">Kinematic Viscosity</label>
       <div class="input-group">
-        <input [readonly]="!selected" type="number" min="0" name="viscosity" step="any" class="form-control"
+        <input [readonly]="!selected" type="number" min="0" name="viscosity" step="0.1" class="form-control"
           formControlName="viscosity" id="{{'viscosity_'+idString}}" (input)="save()" (focus)="focusField('viscosity')"
           onfocus="this.select();">
         <span class="input-group-addon units">cSt</span>

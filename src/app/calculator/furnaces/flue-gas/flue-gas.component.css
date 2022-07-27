@@ -1,7 +1,6 @@
-
 .header .fa.fa-lightbulb-o {
- font-size: -webkit-xxx-large;
- padding-left: 12px;
+    font-size: -webkit-xxx-large;
+    padding-left: 12px;
 }
 
 .fa.fa-times-circle-o:hover {
@@ -32,6 +31,7 @@
 .btn-form {
     border-radius: 4px !important;
 }
+
 .panel-column.disabled {
     background-color: #ececec;
     transition: all 0.2s ease-in-out;
@@ -42,7 +42,9 @@
     background-color: #fff;
 }
 
-.fa-save, .fa-times, .fa-edit {
+.fa-save,
+.fa-times,
+.fa-edit {
     font-size: xx-large;
 }
 
@@ -60,11 +62,11 @@
     margin-bottom: 0px;
 }
 
-.add-fixture{
+.add-fixture {
     margin-top: 10px;
 }
 
-.opp-sheet-icon{
+.opp-sheet-icon {
     width: 35px;
 }
 
@@ -80,28 +82,3 @@ span.alert-warning {
     font-size: 80%;
     /* font-weight: 400; */
 }
-
-.inTreasureHunt-icon{
-    border-radius: 50%;
-}
-.calc-list-icon{
-    border-radius: 15px;
-    box-shadow: #7b7878 2px 2px 5px 1px;
-}
- 
-.icon-background{
-    height: 55px;
-    width: 55px;
-    background-image: linear-gradient(to bottom right, #ffffff, #BF3D00);
-    
-}
-
-.flue-icon{    
-    height: 45px;
-    width: auto;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 10px;
-    margin-right: 10px;
-}
-  

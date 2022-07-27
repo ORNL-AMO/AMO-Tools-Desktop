@@ -181,6 +181,10 @@ export const otherFuels: Array<OtherFuel> = [
             {
                 fuelType: 'Coke Oven Gas',
                 outputRate: 46.85
+            }, 
+            {
+                fuelType: 'Hydrogen',
+                outputRate: 0
             },          
 
         ]
@@ -401,7 +405,11 @@ export const EAFOtherFuels: Array<OtherFuel> = [
             {
                 fuelType: 'Coke Oven Gas',
                 outputRate: 46.85
-            },          
+            },
+            {
+                fuelType: 'Hydrogen',
+                outputRate: 0
+            },      
 
         ]
     },

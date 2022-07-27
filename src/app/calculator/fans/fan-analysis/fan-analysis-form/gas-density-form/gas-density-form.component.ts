@@ -130,7 +130,7 @@ export class GasDensityFormComponent implements OnInit {
     //static pressure
     //specific gravity
     //relativeHumidity
-    return (this.gasDensityForm.controls.dryBulbTemp.valid && this.gasDensityForm.controls.staticPressure.valid
+    return (this.gasDensityForm.controls.dryBulbTemp.valid && this.gasDensityForm.controls.staticPressure.valid && this.gasDensityForm.controls.barometricPressure.valid
       && this.gasDensityForm.controls.specificGravity.valid && this.gasDensityForm.controls.relativeHumidity.valid);
   }
 

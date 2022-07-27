@@ -986,119 +986,11 @@ Calculators
   background: transparent;
 }
 
-.ico-size {
-  height: 55px;
-  /* background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(30, 144, 255, 0.26)); */
-  /*background-color: rgba(41, 128, 185, 0);*/
-  border-radius: 15px;
-  box-shadow: #7b7878 2px 2px 5px 1px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #FC5B00);
-}
-.ico-size.steam {
-  height: 55px;
-  /*background-color: rgba(41, 128, 185, 0);*/
-  border-radius: 15px;
-  box-shadow: #7b7878 2px 2px 5px 1px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #FC5B00);
-}
-.psat .ico-size{
-  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(30, 144, 255, 0.26));
-}
-
-.fsat .ico-size{
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
-}
-
-.ico-size2 {
-  height: 55px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #BF3D00);
-  /*background-color: rgba(41, 128, 185, 0);*/
-  border-radius: 15px;
-  box-shadow: #7b7878 2px 2px 5px 1px;
-}
-
-.ico-size3 {
-  height: 55px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32);
-  /*background-color: rgba(41, 128, 185, 0);*/
-  border-radius: 15px;
-  box-shadow: #7b7878 2px 2px 5px 1px;
-}
-
-.ico-size4 {
-  height: 55px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(107, 132, 106, 0.65));
-  /*background-color: rgba(41, 128, 185, 0);*/
-  border-radius: 15px;
-  box-shadow: #7b7878 2px 2px 5px 1px;
-}
-.ico-size4.steam {
-  height: 55px;
-  /*background-color: rgba(41, 128, 185, 0);*/
-  border-radius: 15px;
-  box-shadow: #7b7878 2px 2px 5px 1px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #FC5B00);
-}
-.ico-size4.waste-water {
-  height: 55px;
-  /*background-color: rgba(41, 128, 185, 0);*/
-  border-radius: 15px;
-  box-shadow: #7b7878 2px 2px 5px 1px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #003087);
-}
-.ico-size4.process-cooling {
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #ADC8E2);
-}
-
-.ico-size5 {
-  height: 55px;
-  background: linear-gradient(#ffffff, #6f42c1);
-  /*background-color: rgba(41, 128, 185, 0);*/
-  padding: 2px;
-  border-radius: 15px;
-  box-shadow: #7b7878 2px 2px 5px 1px;
-}
-.lighting-bulb {
-  height: 55px;
-  width: 55px;
-  border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
-  box-shadow: #7b7878 2px 2px 5px 1px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(0, 123, 255, 0.34));
-}
-
-
-
-.ico-size4.general {
-  height: 55px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32) !important;
-  /*background-color: rgba(41, 128, 185, 0);*/
-  border-radius: 15px;
-  box-shadow: #7b7878 2px 2px 5px 1px;
-}
-
-
-.ico-col{
-  padding-top: 5px;
-}
-.calculator-panel .ico-size,
-.calculator-panel .ico-size2,
-.calculator-panel .ico-size3,
-.calculator-panel .ico-size4{
-  height: 35px;
-  border-radius: 8px;
-}
-
-.calculator-panel .header{
-  padding-bottom: 5px;
-}
-
 .calc-item-row{
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: #eee solid 1px;
 }
-
 
 /* Pump Head
 ================================================ */

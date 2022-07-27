@@ -14,6 +14,8 @@ export class PhastSettingsComponent implements OnInit {
   startSavePolling = new EventEmitter<boolean>();
   @Input()
   disable: boolean;
+  @Input()
+  inPhast: boolean;
 
   energyOptions: Array<string> = [
     'MMBtu',
@@ -67,17 +69,17 @@ export class PhastSettingsComponent implements OnInit {
     });
   }
 
-  setOptions() {
+  setOptions(isChanged?: boolean) {
     if (this.settingsForm.controls.energySourceType.value === 'Electricity') {
-      this.settingsForm.patchValue({
-        furnaceType: 'Electrical Infrared',
-        energyResultUnit: 'kWh'
-      });
+      this.settingsForm.patchValue({furnaceType: 'Electrical Infrared'});
+      if (isChanged || !this.settingsForm.controls.energyResultUnit.value) {  
+        this.settingsForm.patchValue({energyResultUnit: 'kWh'});
+      }
     } else if (this.settingsForm.controls.energySourceType.value === 'Fuel' || this.settingsForm.controls.energySourceType.value === 'Steam') {
-      this.settingsForm.patchValue({
-        furnaceType: null,
-        energyResultUnit: 'MMBtu'
-      });
+      this.settingsForm.patchValue({furnaceType: null});
+      if (isChanged || !this.settingsForm.controls.energyResultUnit.value) {
+        this.settingsForm.patchValue({energyResultUnit: 'MMBtu'});
+      }
     }
     this.startPolling();
   }

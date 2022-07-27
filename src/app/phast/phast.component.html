@@ -132,7 +132,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-modification-list [phast]="_phast" (save)="saveDb()" [modificationIndex]="modificationIndex"
+        <app-modification-list *ngIf="modListOpen" [phast]="_phast" (save)="saveDb()" [modificationIndex]="modificationIndex"
           (close)="closeSelectModification()"></app-modification-list>
       </div>
     </div>

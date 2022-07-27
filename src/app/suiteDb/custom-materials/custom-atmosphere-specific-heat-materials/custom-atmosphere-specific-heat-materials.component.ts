@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AtmosphereSpecificHeat } from '../../../shared/models/materials';
@@ -20,7 +20,8 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   showModal: boolean;
   @Input()
   importing: boolean;
-
+  @Output()
+  emitNumMaterials: EventEmitter<number> = new EventEmitter<number>();
 
   editExistingMaterial: boolean = false;
   existingMaterial: AtmosphereSpecificHeat;
@@ -76,6 +77,7 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.convertAllMaterials();
     }
+    this.emitNumMaterials.emit(this.atmosphereSpecificHeatMaterials.length);
   }
 
   async editMaterial(id: number) {
