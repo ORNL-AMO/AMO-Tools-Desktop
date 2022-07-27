@@ -137,7 +137,7 @@ export class AssessmentCreateComponent implements OnInit {
       else if (this.newAssessmentForm.controls.assessmentType.value == 'WasteWater') {
         let tmpAssessment = this.assessmentService.getNewAssessment('WasteWater');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
-        tmpAssessment.directoryId = this.directory.id;
+        tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         tmpAssessment.wasteWater = this.assessmentService.getNewWasteWater(this.settings);
         this.addAssessment(tmpAssessment, '/waste-water/');
       }
@@ -145,7 +145,7 @@ export class AssessmentCreateComponent implements OnInit {
       else if (this.newAssessmentForm.controls.assessmentType.value == 'CompressedAir') {
         let tmpAssessment = this.assessmentService.getNewAssessment('CompressedAir');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
-        tmpAssessment.directoryId = this.directory.id;
+        tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         tmpAssessment.compressedAirAssessment = this.assessmentService.getNewCompressedAirAssessment(this.settings);
         this.addAssessment(tmpAssessment, '/compressed-air/');
       }

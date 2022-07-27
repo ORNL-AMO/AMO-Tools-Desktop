@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressorInventoryItem } from '../../../shared/models/compressed-air-assessment';
 import { InventoryService } from '../inventory.service';
@@ -13,6 +13,8 @@ export class PerformancePointsComponent implements OnInit {
 
   selectedCompressorSub: Subscription;
   showMaxFullFlow: boolean;
+  showMidTurndown: boolean;
+  showTurndown: boolean;
   showUnload: boolean;
   showNoLoad: boolean;
   showBlowoff: boolean;
@@ -25,6 +27,8 @@ export class PerformancePointsComponent implements OnInit {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         this.hasValidPerformancePoints = this.performancePointsFormService.checkPerformancePointsValid(val);
+        this.setShowMidTurndown(val);
+        this.setShowTurndown(val);
         this.setShowMaxFlow(val);
         this.setShowUnload(val);
         this.setShowNoLoad(val);
@@ -41,6 +45,14 @@ export class PerformancePointsComponent implements OnInit {
 
   setShowMaxFlow(selectedCompressor: CompressorInventoryItem) {
     this.showMaxFullFlow = this.performancePointsFormService.checkShowMaxFlowPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
+  }
+
+  setShowMidTurndown(selectedCompressor: CompressorInventoryItem) {
+    this.showMidTurndown = this.performancePointsFormService.checkShowMidTurndown(selectedCompressor.compressorControls.controlType);
+  }
+
+  setShowTurndown(selectedCompressor: CompressorInventoryItem) {
+    this.showTurndown = this.performancePointsFormService.checkShowTurndown(selectedCompressor.compressorControls.controlType);
   }
 
   setShowUnload(selectedCompressor: CompressorInventoryItem) {

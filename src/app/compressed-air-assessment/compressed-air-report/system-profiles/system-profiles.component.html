@@ -20,9 +20,9 @@
         </div>
     </div>
 
-    <app-profile-summary-table [printView]="printView"  [profileSummary]="selectedProfileSummary"
+    <app-profile-summary-table [printView]="printView" [profileSummary]="selectedProfileSummary"
         [inventoryItems]="compressedAirAssessment.compressorInventoryItems" [totals]="selectedTotals"
-        [settings]="settings">
+        [settings]="settings" [systemProfileSetup]="compressedAirAssessment.systemProfile.systemProfileSetup">
     </app-profile-summary-table>
 
 </div>
@@ -40,7 +40,8 @@
         </div>
         <app-profile-summary-table [printView]="printView" [profileSummary]="profile.profileSummary"
             [inventoryItems]="compressedAirAssessment.compressorInventoryItems" [totals]="selectedTotals"
-            [settings]="settings" [totalsForPrint]="profile.totalsForPrint">
+            [settings]="settings" [totalsForPrint]="profile.totalsForPrint"
+            [systemProfileSetup]="compressedAirAssessment.systemProfile.systemProfileSetup">
         </app-profile-summary-table>
     </div>
 </div>

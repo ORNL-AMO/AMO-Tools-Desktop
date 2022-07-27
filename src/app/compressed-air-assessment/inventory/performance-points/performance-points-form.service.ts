@@ -14,7 +14,7 @@ export class PerformancePointsFormService {
     this.validationMessageMap = new BehaviorSubject<ValidationMessageMap>(undefined);
   }
 
-  getPerformancePointFormFromObj(performancePoint: PerformancePoint, compressor: CompressorInventoryItem, pointName: 'fullLoad' | 'maxFullFlow' | 'noLoad' | 'blowoff' | 'unloadPoint'): FormGroup {
+  getPerformancePointFormFromObj(performancePoint: PerformancePoint, compressor: CompressorInventoryItem, pointName: 'fullLoad' | 'maxFullFlow' | 'noLoad' | 'blowoff' | 'unloadPoint' | 'midTurndown' | 'turndown'): FormGroup {
     let dischargePressureValidators: Array<ValidatorFn> = this.setDischargePressureValidators(performancePoint, compressor, pointName);
     let airflowValidators: Array<ValidatorFn> = this.setAirFlowValidators(performancePoint, compressor, pointName);
     let powerValidators: Array<ValidatorFn> = this.setPowerValidators(performancePoint, compressor, pointName);
@@ -56,7 +56,7 @@ export class PerformancePointsFormService {
     }
   }
 
-  setPowerValidators(performancePoint: PerformancePoint, compressor: CompressorInventoryItem, pointName: 'fullLoad' | 'maxFullFlow' | 'noLoad' | 'blowoff' | 'unloadPoint') {
+  setPowerValidators(performancePoint: PerformancePoint, compressor: CompressorInventoryItem, pointName: 'fullLoad' | 'maxFullFlow' | 'noLoad' | 'blowoff' | 'unloadPoint' | 'midTurndown' | 'turndown') {
     let powerValidators: Array<ValidatorFn> = [Validators.required];
     // simplifies conditional display for control types having multiple of same validation   
     let validationMessages: ValidationMessageMap = {
@@ -131,7 +131,7 @@ export class PerformancePointsFormService {
     return powerValidators;
   }
 
-  setDischargePressureValidators(performancePoint: PerformancePoint, compressor: CompressorInventoryItem, pointName: 'fullLoad' | 'maxFullFlow' | 'noLoad' | 'blowoff' | 'unloadPoint') {
+  setDischargePressureValidators(performancePoint: PerformancePoint, compressor: CompressorInventoryItem, pointName: 'fullLoad' | 'maxFullFlow' | 'noLoad' | 'blowoff' | 'unloadPoint' | 'midTurndown' | 'turndown') {
     let pressureValidators: Array<ValidatorFn> = [Validators.required];
 
     if (performancePoint.dischargePressure !== null) {
@@ -173,7 +173,7 @@ export class PerformancePointsFormService {
     return pressureValidators;
   }
 
-  setAirFlowValidators(performancePoint: PerformancePoint, compressor: CompressorInventoryItem, pointName: 'fullLoad' | 'maxFullFlow' | 'noLoad' | 'blowoff' | 'unloadPoint') {
+  setAirFlowValidators(performancePoint: PerformancePoint, compressor: CompressorInventoryItem, pointName: 'fullLoad' | 'maxFullFlow' | 'noLoad' | 'blowoff' | 'unloadPoint' | 'midTurndown' | 'turndown') {
     let airFlowValidators: Array<ValidatorFn> = [Validators.required];
 
     if (performancePoint.airflow !== null) {
@@ -245,18 +245,37 @@ export class PerformancePointsFormService {
       let blowoffForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.blowoff, compressor, 'blowoff');
       isValid = blowoffForm.valid;
     }
-    return isValid;
+    return true;
+    // return isValid;
   }
 
 
   checkShowMaxFlowPerformancePoint(compressorType: number, controlType: number): boolean {
     if (compressorType == 6 && (controlType == 7 || controlType == 9)) {
       return false;
-    } else if (compressorType == 1 || compressorType == 2) {
+    }
+    if (compressorType == 1 || compressorType == 2) {
       if (controlType == 1) {
         return false;
       }
+    } 
+    if (controlType === 11) {
+      return false;
     }
+    return true;
+  }
+
+  checkShowMidTurndown(controlType: number): boolean {
+    if (controlType !== 11) {
+      return false;
+    } 
+    return true;
+  }
+
+  checkShowTurndown(controlType: number): boolean {
+    if (controlType !== 11) {
+      return false;
+    } 
     return true;
   }
 
@@ -350,3 +369,4 @@ export interface ValidationMessageMap {
 export interface PerformancePointWarnings {
   motorServiceFactorExceeded?: string;
 }
+

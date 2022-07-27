@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
-import { CompressedAirAssessment, CompressedAirDayType, EndUseEfficiencyItem, ProfileSummary, ProfileSummaryTotal } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, EndUseEfficiencyItem, ProfileSummary, ProfileSummaryTotal, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { BaselineResults } from '../../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
@@ -28,6 +28,8 @@ export class ImproveEndUseEfficiencyItemComponent implements OnInit {
   baselineProfileSummaries: Array<{ dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal> }>;
   @Input()
   baselineResults: BaselineResults;
+  @Input()
+  systemProfileSetup: SystemProfileSetup;
 
   form: FormGroup;
   dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: FormGroup }>;
@@ -80,7 +82,7 @@ export class ImproveEndUseEfficiencyItemComponent implements OnInit {
   }
 
   saveDataForm() {
-    this.item = this.improveEndUseEfficiencyService.updateDataFromForm(this.dataForms, this.item);
+    this.item = this.improveEndUseEfficiencyService.updateDataFromForm(this.dataForms, this.item, this.systemProfileSetup);
     this.emitSave.emit({ item: this.item, itemIndex: this.itemIndex });
     this.setHasInvalidDataForm();
   }
@@ -92,13 +94,5 @@ export class ImproveEndUseEfficiencyItemComponent implements OnInit {
         this.hasInvalidForm = true;
       }
     });
-  }
-
-  getFormControls(form: FormGroup): Array<{control: AbstractControl, name: string}>{
-    let controlNames: Array<{control: AbstractControl, name: string}> = new Array();
-    for (let key in form.controls) {
-      controlNames.push({ control: form.controls[key], name: key});
-    }
-    return controlNames;
   }
 }
