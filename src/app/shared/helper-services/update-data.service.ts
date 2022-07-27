@@ -87,7 +87,7 @@ export class UpdateDataService {
     }
 
     updateCompressedAir(assessment: Assessment): Assessment {
-        assessment.appVersion = packageJson.version;
+        assessment.appVersion = environment.version;
         if (assessment.compressedAirAssessment && assessment.compressedAirAssessment.compressorInventoryItems
             && assessment.compressedAirAssessment.compressorInventoryItems.length > 0) {
             assessment.compressedAirAssessment.compressorInventoryItems.forEach(item => {
