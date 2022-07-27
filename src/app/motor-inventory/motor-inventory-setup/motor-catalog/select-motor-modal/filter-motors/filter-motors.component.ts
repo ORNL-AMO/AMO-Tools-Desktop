@@ -58,7 +58,7 @@ export class FilterMotorsComponent implements OnInit {
   }
 
   resetFilters(){
-    let motorOptions: Array<SuiteDbMotor> = this.suiteDbService.selectMotors();
+    let motorOptions: Array<SuiteDbMotor> = this.sqlDbApiService.selectMotors();
     this.initFilterMotorOptions(motorOptions);
   }
 
