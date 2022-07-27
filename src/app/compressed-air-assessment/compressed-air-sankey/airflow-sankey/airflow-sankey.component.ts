@@ -29,20 +29,10 @@ export class AirflowSankeyComponent implements OnInit {
   settings: Settings;
   nodes: Array<CompressedAirSankeyNode> = [];
   links: Array<{source: number, target: number}>;
-  // = [
-  //   { source: 0, target: 1 },
-  //   { source: 0, target: 2 },
-  //   { source: 1, target: 2 },
-  //   { source: 1, target: 3 },
-  //   { source: 2, target: 4 },
-  //   { source: 2, target: 5 },
-  //   { source: 5, target: 6 },
-  //   { source: 5, target: 7 }
-  // ];
-
 
   gradientStartColorPurple: string = 'rgba(112, 48, 160, .85)';
   gradientEndColorPurple: string = 'rgb(187, 142, 221)';
+  gradientOtherEndUses: string = 'rgba(187, 142, 221, 0.2)';
   connectingNodes: Array<number>;
   gradientLinkPaths: Array<number>;
   minFlowes: Array<string> = [];
@@ -65,8 +55,7 @@ export class AirflowSankeyComponent implements OnInit {
 
   dayTypeBaselineProfileSummaries: Array<{dayTypeId: string, profileSummary: Array<ProfileSummary>}>;
   selectedDayTypeId: string;
-  // dayTypeLeakRate: number;
-  hasValidLeakRate: boolean = true;
+  dayTypeLeakRate: number;
   unaccountedAirflow: string;
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
@@ -108,16 +97,13 @@ export class AirflowSankeyComponent implements OnInit {
     this.links = [];
     this.connectingNodes = [];
     this.minFlowes = [];
-
-    let canRenderSankey: boolean = this.compressedAirAssessment && this.compressedAirAssessment.setupDone && this.profileDataComplete && this.hasValidLeakRate;
+    this.dayTypeLeakRate = this.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates.find(dayTypeLeakRate => dayTypeLeakRate.dayTypeId === this.selectedDayTypeId).dayTypeLeakRate;
+    let canRenderSankey: boolean = this.compressedAirAssessment && this.compressedAirAssessment.setupDone && this.profileDataComplete && this.dayTypeLeakRate !== undefined;
     if (canRenderSankey) {
       this.airFlowSankeyResults = this.airflowSankeyService.getAirFlowSankeyResults(this.compressedAirAssessment, this.selectedDayTypeId, this.settings);
-      console.log(this.airFlowSankeyResults)
       this.buildNodes();
       this.buildLinks();
     }
-    console.log('nodes', this.nodes)
-    console.log('links', this.links)
     this.cd.detectChanges();
 
     let sankeyLink = {
@@ -251,7 +237,7 @@ export class AirflowSankeyComponent implements OnInit {
     let originConnectorValue: number = 100;
     
     this.gradientLinkPaths = [];
-    this.nodes.unshift(
+    this.nodes.push(
       {
         name: this.getNameLabel("Total End Use Airflow", originConnectorFlow, originConnectorValue),
         value: originConnectorValue,
@@ -280,7 +266,7 @@ export class AirflowSankeyComponent implements OnInit {
       
 
     // let flowNodeYPositions: Array<number> = [.1, .9, .2, .8, .15, .9, .2, .8, .1, .9, .2, .8, .1, .9, .2, .8];
-    let flowNodeYPositions: Array<number> = [.9, .2, .8, .15, .9, .2, .8, .1, .9, .2, .8, .1, .9, .2, .8];
+    let flowNodeYPositions: Array<number> = [.9, .2, .8, .15, .9, .2, .8, .1, .9, .2, .8, .4, .9, .2, .8];
     let arrowNodeXPosition: number = .25;
     let nodeXPositionIncrements: SankeyXIncrements = this.getNodeIncrement();
     let offsetYPlacementIndex: number = 0;
@@ -299,8 +285,7 @@ export class AirflowSankeyComponent implements OnInit {
       let arrowNodeColor: string = this.gradientEndColorPurple;
       let connectorNodeColor: string = this.gradientStartColorPurple;
       if (endUse.endUseId === 'dayTypeLeakRate') {
-        arrowNodeColor = 'rgb(255, 0, 0)';
-        connectorNodeColor = 'rgb(255, 0, 0)';
+        arrowNodeColor = endUse.color;
       }
 
       this.nodes.push({
@@ -347,24 +332,13 @@ export class AirflowSankeyComponent implements OnInit {
         id: connectorId
       });
 
-      console.log('arrow node value', this.nodes[this.nodes.length - 2].value);
-      console.log('arrow node flow', this.nodes[this.nodes.length - 2].flow);
-      console.log('connecor node value', this.nodes[this.nodes.length - 1].value);
-      console.log('connecor node flow', this.nodes[this.nodes.length - 1].flow);
+      // Add other energy node
       if (this.airFlowSankeyResults.otherEndUseData && index === this.airFlowSankeyResults.endUseEnergyData.length - 1) {
-        // console.log('2nd last  node value', this.nodes[this.nodes.length - 2].value);
-        // console.log('2nd last node flow', this.nodes[this.nodes.length - 2].flow);
-        // console.log('last node value', this.nodes[this.nodes.length - 1].value);
-        // console.log('last node flow', this.nodes[this.nodes.length - 1].flow);
-        // change last endUseEnergyData node to a connector
-        // Add other energy node
         let otherEndUseData = this.airFlowSankeyResults.otherEndUseData;
         endUseFlowValue = (otherEndUseData.dayTypeAverageAirFlow / totalEndUseAirflow) * 100;
 
         let otherEndUseConnector = this.nodes[this.nodes.length - 1]
-        // otherEndUseConnector.name = `Other connector`;
-          // name: `src: ${connectorNodeIndex} connector`,
-        otherEndUseConnector.value = connectorValue,
+        otherEndUseConnector.value = connectorValue; 
         otherEndUseConnector.x = arrowNodeXPosition - nodeXPositionIncrements.arrow,
         otherEndUseConnector.y = yAdjustment,
         otherEndUseConnector.source = connectorNodeIndex,
@@ -374,10 +348,10 @@ export class AirflowSankeyComponent implements OnInit {
         otherEndUseConnector.nodeColor = this.gradientStartColorPurple,
         otherEndUseConnector.id = `connector_${this.airFlowSankeyResults.otherEndUseData.endUseId}`
 
-        console.log('other connector value', connectorValue);
-        console.log('other connector flow', otherEndUseData.dayTypeAverageAirFlow);
-        console.log('other end use value', endUseFlowValue);
-        console.log('other end use flow', otherEndUseData.dayTypeAverageAirFlow);
+        // console.log('other connector value', connectorValue);
+        // console.log('other connector flow', otherEndUseData.dayTypeAverageAirFlow);
+        // console.log('other end use value', endUseFlowValue);
+        // console.log('other end use flow', otherEndUseData.dayTypeAverageAirFlow);
 
         arrowNodeXPosition += nodeXPositionIncrements.arrow;
         offsetYPlacementIndex++;
@@ -387,9 +361,11 @@ export class AirflowSankeyComponent implements OnInit {
         this.nodes.push({
           name: this.getNameLabel(otherEndUseData.endUseName, otherEndUseData.dayTypeAverageAirFlow, endUseFlowValue),
           // name: this.getNameLabel(`src: ${otherArrowNodeIndex}`, endUse.dayTypeAverageAirFlow, endUseFlowValue),
-          value: endUseFlowValue,
+          // TEST TEST
+          value: connectorValue,
+          // TEST TEST
           x: arrowNodeXPosition,
-          y: flowNodeYPositions[offsetYPlacementIndex],
+          y: flowNodeYPositions[offsetYPlacementIndex + 1],
           source: otherArrowNodeIndex,
           flow: otherEndUseData.dayTypeAverageAirFlow,
           target: [],
@@ -408,8 +384,6 @@ export class AirflowSankeyComponent implements OnInit {
       arrowNodeIndex += 2;
       originConnectorValue -= endUse.dayTypeAverageAirFlow;
     });
-    console.log('nodes', this.nodes)
-    console.log('links', this.links)
 
   }
 
@@ -467,9 +441,13 @@ export class AirflowSankeyComponent implements OnInit {
         fill = `${this.gradientStartColorPurple} !important`;
       }
 
-      if (i === (links.length - 1) && !this.airFlowSankeyResults.otherEndUseData) {
+      if (i === (1) && this.dayTypeLeakRate && this.dayTypeLeakRate > 0) {
         fill = 'url(#compressedAirGradientRed) !important';
       }
+
+      // if (i === links.length - 1 && this.airFlowSankeyResults.otherEndUseData) {
+      //   fill = 'url(#Gradient2) !important';
+      // }
     
       links[i].setAttribute('style', `fill: ${fill}; opacity: 1; fill-opacity: ${fillOpacity};`);
       
@@ -493,6 +471,13 @@ export class AirflowSankeyComponent implements OnInit {
       <stop offset="10%" stop-color="${this.gradientStartColorPurple}" />
       <stop offset="100%" stop-color="rgb(255, 0, 0)" />
     </linearGradient>
+
+      
+      <linearGradient id="Gradient2" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="${this.gradientStartColorPurple}" />
+      <stop offset="50%" stop-color="black" stop-opacity="0"/>
+      <stop offset="100%" stop-color="${this.gradientOtherEndUses}" />
+      </linearGradient>
     `
     // Insert our gradient Def
     this.renderer.appendChild(mainSVG, svgDefs);
@@ -520,9 +505,14 @@ export class AirflowSankeyComponent implements OnInit {
         //   verticalAlignment = verticalAlignment / .3;
         // }
 
+        let arrowColor = this.gradientEndColorPurple;
+        if (this.dayTypeLeakRate && this.dayTypeLeakRate > 0 && i == 2) {
+          arrowColor = 'rgb(255, 0, 0)';
+        }
+
         rects[i].setAttribute('y', `${defaultY - (height / verticalAlignment)}`);
         rects[i].setAttribute('style', `width: ${width}px; height: ${height * sizingRatio}px; clip-path:  ${arrowShape}; 
-         stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: ${this.gradientEndColorPurple}; fill-opacity: ${arrowOpacity};`);
+         stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: ${arrowColor}; fill-opacity: ${arrowOpacity};`);
       }
     }
   }

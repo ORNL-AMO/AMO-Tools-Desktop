@@ -176,20 +176,26 @@ export class EndUsesService {
       // });  
     }
 
-    // Currently hiding leak rate for this condition
     let endUseDayTypeSetup: EndUseDayTypeSetup = this.dayTypeSetupService.endUseDayTypeSetup.getValue();
     if (endUseDayTypeSetup && selectedDayTypeId) {
       let dayTypeLeakRate: number = endUseDayTypeSetup.dayTypeLeakRates.find(leakRate => leakRate.dayTypeId === selectedDayTypeId).dayTypeLeakRate;
       if (dayTypeLeakRate) {
         compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeEndUseAirflow;
         let leakRatePercent: number = (dayTypeLeakRate / compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeEndUseAirflow) * 100;
-        endUseEnergyData.push({
+        // endUseEnergyData.push({
+        //   dayTypeAverageAirflowPercent: leakRatePercent,
+        //   dayTypeAverageAirFlow: dayTypeLeakRate,
+        //   endUseName: 'Day Type Leak Rate',
+        //   endUseId: 'dayTypeLeakRate',
+        //   color: 'red'
+        // })
+        endUseEnergyData.unshift({
           dayTypeAverageAirflowPercent: leakRatePercent,
           dayTypeAverageAirFlow: dayTypeLeakRate,
           endUseName: 'Day Type Leak Rate',
           endUseId: 'dayTypeLeakRate',
-          color: 'red'
-        })
+          color: 'rgb(255, 0, 0)'
+        });
       }
 
     } 

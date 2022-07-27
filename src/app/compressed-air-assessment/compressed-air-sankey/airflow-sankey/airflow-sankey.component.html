@@ -58,7 +58,7 @@
     <div *ngIf="airFlowSankeyResults" class="row">
       <span class="alert-warning small px-4 py-2 mx-auto" *ngIf="airFlowSankeyResults.warnings.minAirflow !== undefined">{{ airFlowSankeyResults.warnings.minAirflow }}</span>
     </div>
-    <div *ngIf="!hasValidLeakRate" class="row">
+    <div *ngIf="dayTypeLeakRate === undefined" class="row">
       <span class="alert-danger small px-4 py-2 mx-auto">Airflow Sankey calculation requires a Day Type Leak Rate value</span>
     </div>
     <div *ngIf="!profileDataComplete" class="row">

@@ -62,9 +62,6 @@ export class ConvertCompressedAirService {
   }
 
   convertEndUses(endUseData: EndUseData, oldSettings: Settings, newSettings: Settings): EndUseData {
-    // debugger
-    // endUseData.dayTypeLeakRates
-    // endUseData.unaccountedAirflow
     endUseData.endUses.forEach((endUse: EndUse) => {
       endUse.dayTypeEndUses.map(dayTypeUse => {
         if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {

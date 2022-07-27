@@ -23,9 +23,7 @@ export class AirflowSankeyService {
       let endUseEnergyData: Array<EndUseEnergyData> = this.endUsesService.getEndUseEnergyData(compressedAirAssessment, selectedDayTypeId, dayTypeBaselineResults);
       airflowSankeyResults.endUseEnergyData = endUseEnergyData;  
       airflowSankeyResults.totalEndUseAirflow = compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeEndUseAirflow;
-      
 
-      debugger;
       if (airflowSankeyResults.totalEndUseAirflow) {
         if (endUseEnergyData.length > 10) {
           // 2440
