@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FieldData } from '../../shared/models/fans';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { CompressibilityFactor, FieldData, FsatOutput } from '../../shared/models/fans';
+import { Settings } from '../../shared/models/settings';
 import { GreaterThanValidator } from '../../shared/validators/greater-than';
+
+declare var fanAddon: any;
 
 @Injectable()
 export class FanFieldDataService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
 
   getFormFromObj(obj: FieldData): FormGroup {
@@ -58,6 +62,40 @@ export class FanFieldDataService {
   isFanFieldDataValid(obj: FieldData): boolean {
     let form: FormGroup = this.getFormFromObj(obj);
     return form.valid;
+  }
+
+  compressibilityFactor(inputs: CompressibilityFactor, settings: Settings) {
+    let inputCpy: CompressibilityFactor = JSON.parse(JSON.stringify(inputs));
+    inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from(settings.fanFlowRate).to('ft3/min');
+    inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from(settings.fanPressureMeasurement).to('inH2o');
+    inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from(settings.fanPressureMeasurement).to('inH2o');
+    inputCpy.barometricPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanBarometricPressure).to('inHg');
+    inputCpy.moverShaftPower = this.convertUnitsService.value(inputCpy.moverShaftPower).from(settings.fanPowerMeasurement).to('hp');
+    return fanAddon.compressibilityFactor(inputCpy);
+  }
+
+  calculateCompressibilityFactor(compressibilityFactorInput: CompressibilityFactor, isBaseline: boolean, fsatOutput: FsatOutput, settings: Settings) {
+    let compressibilityFactor: number;
+    if (isBaseline) {
+      compressibilityFactor = this.compressibilityFactor(compressibilityFactorInput, settings);
+    } else {
+      let currentMoverShaftPower;
+      let diff = 1;
+
+      while (diff > .001) {
+        let fanEff = fsatOutput.fanEfficiency;
+        // If not first iteration, calculate with moverShaftPower (tempShaftPower from the previous iteration)
+        if (currentMoverShaftPower) {
+          compressibilityFactorInput.moverShaftPower = currentMoverShaftPower
+        }
+        compressibilityFactor = this.compressibilityFactor(compressibilityFactorInput, settings);
+        let tempShaftPower = compressibilityFactorInput.flowRate * (compressibilityFactorInput.outletPressure - compressibilityFactorInput.inletPressure) * compressibilityFactor / (6362 * (fanEff / 100));
+
+        diff = Math.abs(compressibilityFactorInput.moverShaftPower - tempShaftPower);
+        currentMoverShaftPower = tempShaftPower;
+      }
+    }
+    return compressibilityFactor;
   }
 
   

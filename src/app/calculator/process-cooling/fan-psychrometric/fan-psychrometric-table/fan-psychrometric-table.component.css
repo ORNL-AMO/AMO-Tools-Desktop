@@ -1,14 +1,7 @@
 
-
-.calculator-table {
-    margin-top: 20px;
-    font-size: 13px;
-    text-align: center;
-}
-
 .calculator-table th {
     font-weight: bold;
-    padding: 0 1rem;
+    padding: .25 .5;
     border-bottom: #2C3E50 solid 3px;
 }
 
@@ -19,4 +12,21 @@
 .delete-row:hover {
     text-decoration: underline;
     cursor: pointer;
+}
+
+th, td {
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    border-top: solid 1px darkgray;
+    font-size: small;
+    padding: 3px;
+}
+
+
+tbody{
+    box-shadow: 0 4px 8px 0 grey
+}
+
+.group-label{
+    font-weight: bold;
 }

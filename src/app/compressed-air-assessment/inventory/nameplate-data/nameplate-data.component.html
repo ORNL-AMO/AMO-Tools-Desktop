@@ -17,7 +17,7 @@
     <div class="form-group" [ngClass]="{'invalid': form.controls.motorPower.invalid}">
         <label for="motorPower">Motor Power</label>
         <div class="input-group">
-            <input name="motorPower" type="number" step="any" class="form-control" id="motorPower"
+            <input name="motorPower" type="number" step="10" class="form-control" id="motorPower"
                 formControlName="motorPower" (input)="save()" (focus)="focusField('motorPower')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">hp</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">kW</span>
@@ -36,7 +36,7 @@
     <div class="form-group" [ngClass]="{'invalid': form.controls.fullLoadOperatingPressure.invalid}">
         <label for="fullLoadOperatingPressure">Full Load Operating Pressure</label>
         <div class="input-group">
-            <input name="fullLoadOperatingPressure" type="number" step="any" class="form-control"
+            <input name="fullLoadOperatingPressure" type="number" step="10" class="form-control"
                 id="fullLoadOperatingPressure" formControlName="fullLoadOperatingPressure" (input)="save()"
                 (focus)="focusField('fullLoadOperatingPressure')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>

@@ -9,7 +9,7 @@
             </div>
             <div class="col pl-1 pr-1">
               <div class="d-flex flex-column w-100 h-100 justify-content-center align-items-center">
-                <div class="justify-content-center align-items-center" [ngClass]="{'steam-icon': cardData.iconCalcType == 'steam', 'ca-icon': cardData.iconCalcType == 'compressedAir', 'heat-icon': cardData.iconCalcType == 'heat'}">
+                <div class="justify-content-center align-items-center" [ngClass]="{'steam-calc-icon': cardData.iconCalcType == 'steam', 'ca-calc-icon': cardData.iconCalcType == 'compressedAir', 'ph-calc-icon': cardData.iconCalcType == 'heat', 'lighting-calc-icon': cardData.iconCalcType == 'lighting', 'motor-calc-icon': cardData.iconCalcType == 'motor'}">
                   <img src="{{ cardData.iconString }}" class="calc-icon" [ngClass]="{'circle-icon-img': cardData.needBackground}" />
                 </div>                
                 <div class="text-center">

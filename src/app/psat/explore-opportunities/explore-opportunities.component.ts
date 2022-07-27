@@ -98,7 +98,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.psat.modifications[this.modificationIndex].psat.valid = this.psatService.isPsatValid(this.psat.modifications[this.modificationIndex].psat.inputs, false);
         this.opportunityPsatValid = this.psat.modifications[this.modificationIndex].psat.valid;
         psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings, this.psat.modifications[this.modificationIndex].psat.inputs);
-      } else if (this.psat.modifications[this.modificationIndex].psat.inputs.whatIfScenario === false) {
+      } else if (!this.psat.modifications[this.modificationIndex].psat.inputs.whatIfScenario) {
         // Pass scenario as baseline
         this.psat.modifications[this.modificationIndex].psat.valid = this.psatService.isPsatValid(this.psat.modifications[this.modificationIndex].psat.inputs, true);
         this.opportunityPsatValid = this.psat.modifications[this.modificationIndex].psat.valid;

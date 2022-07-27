@@ -16,10 +16,8 @@ import { GasDensityFormService } from '../../../fans/fan-analysis/fan-analysis-f
   styleUrls: ['./fan-psychrometric-chart.component.css']
 })
 export class FanPsychrometricChartComponent implements OnInit {
-
   @Input()
   gasDensityForm: FormGroup;
-
   @Input()
   settings: Settings;
 
@@ -36,9 +34,12 @@ export class FanPsychrometricChartComponent implements OnInit {
   displayExpandTooltip: boolean;
   hoverBtnCollapse: boolean;
   displayCollapseTooltip: boolean;
-  temperatureUnits: string = 'F';
-  useImperialUnits: boolean = true;
-  lineCreationData: LineCreationData = ImperialLineData;
+  relativeHumidities: Array<number> = [0, 20, 40, 60, 80, 100];
+
+  temperatureUnits: string;
+  humidityRatioUnits: string;
+  wetBulbAxisText: Array<string>;
+  lineCreationData: LineCreationData;
 
   constructor(private plotlyService: PlotlyService, private psychrometricService: FanPsychrometricService, private convertUnitsService: ConvertUnitsService,
     private gasDensityFormService: GasDensityFormService) { }
@@ -53,7 +54,6 @@ export class FanPsychrometricChartComponent implements OnInit {
     });
   }
 
-
   ngOnDestroy() {
     this.calculatedBaseGasDensitySubscription.unsubscribe();
   }
@@ -63,12 +63,13 @@ export class FanPsychrometricChartComponent implements OnInit {
     this.chart = this.getEmptyChart();
     let form: FormGroup = this.gasDensityFormService.getGasDensityFormFromObj(this.inputData, this.settings);
     if (form.valid && this.psychrometricResults) {
-      let blueTraces: Array<TraceData> = this.addBlueTraces();
-      this.addRedTraces();
-      this.addTopAxisTrace(blueTraces[blueTraces.length - 1]);
-      this.addVerticalGridLines(blueTraces[blueTraces.length - 1]);
+      let relativeHumiditiesCurves: Array<TraceData> = this.addRelativeHumidityCurves();
+      let topCurveTraceData: TraceData = relativeHumiditiesCurves[relativeHumiditiesCurves.length - 1]; 
+      this.addWetBulbLines();
+      this.addWetBulbTopAxis(topCurveTraceData);
+      this.addVerticalGridLines(topCurveTraceData);
       if (this.inputData.dryBulbTemp && this.psychrometricResults && this.psychrometricResults.humidityRatio !== undefined) {
-        this.addUserPoint(blueTraces[blueTraces.length - 1]);
+        this.addUserPlot(topCurveTraceData);
       }
     }
     
@@ -80,114 +81,85 @@ export class FanPsychrometricChartComponent implements OnInit {
     }
   }
 
-
-  addBlueTraces(): Array<TraceData> {
-    let xCoordinates = [];
-    for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
-      xCoordinates.push(i);
-    }
-    let relativeHumidities: Array<number> = [];
-    for (let i = 0; i <= 100; i += 20) {
-      relativeHumidities.push(i);
-    }
-
-    let blueTraces: Array<TraceData> = [];
-    let humidityRatios: Array<number>;
-    relativeHumidities.forEach(relativeHumidity => {
+  addRelativeHumidityCurves(): Array<TraceData> {
+    let xRange: Array<number> = this.getLineXRange();
+    let relativeHumiditiesCurves: Array<TraceData> = [];
+    let humidityRatiosY: Array<number>;
+    this.relativeHumidities.forEach(relativeHumidity => {
       let trace = this.getEmptyTrace('Relative Humidity', 'black');
-      trace.x = xCoordinates;
-      humidityRatios = [];
-      xCoordinates.forEach(x => {
+      trace.x = xRange;
+      humidityRatiosY = [];
+      xRange.forEach((x, index) => {
         let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
         relativeHumidityInput.dryBulbTemp = x;
         relativeHumidityInput.relativeHumidity = relativeHumidity;
         relativeHumidityInput.inputType = 'relativeHumidity';
         relativeHumidityInput.barometricPressure = this.inputData.barometricPressure;
         if (relativeHumidityInput.dryBulbTemp && relativeHumidityInput.relativeHumidity && relativeHumidityInput.barometricPressure) {
-          let results: PsychrometricResults = this.psychrometricService.calcDensityRelativeHumidity(relativeHumidityInput, this.settings, true);
+          let results: PsychrometricResults = this.psychrometricService.calcDensityRelativeHumidity(relativeHumidityInput, this.settings);
           if (results) {
-            humidityRatios.push(results.humidityRatio);
+            humidityRatiosY.push(results.humidityRatio);
           }
         }
+        
       });
-      trace.y = humidityRatios;
-      this.chart.data.push(trace);
 
-      blueTraces.push(trace);
+      trace.y = humidityRatiosY;
+      this.chart.data.push(trace);
+      relativeHumiditiesCurves.push(trace);
     });
 
-    return blueTraces;
+    return relativeHumiditiesCurves;
   }
 
-  addUserBlueTrace(): Array<TraceData> {
-    let xCoordinates = [];
-    for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
-      xCoordinates.push(i);
-    }
-    let relativeHumidities: Array<number> = [];
-    for (let i = 0; i <= 100; i += 20) {
-      relativeHumidities.push(i);
-    }
-
-    let blueTraces: Array<TraceData> = [];
-    relativeHumidities.forEach(relativeHumidity => {
-      let trace = this.getEmptyTrace('Relative Humidity', 'blue');
-      let humidityRatios = [];
-      let invalidIndicies: Array<number> = [];
-      xCoordinates.forEach((x, index) => {
-        if (this.psychrometricResults.relativeHumidity >= 0) {
-          let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
-          relativeHumidityInput.dryBulbTemp = x;
-          relativeHumidityInput.relativeHumidity = this.psychrometricResults.relativeHumidity;
-          relativeHumidityInput.barometricPressure = this.inputData.barometricPressure;
-          relativeHumidityInput.inputType = 'relativeHumidity';
-          let results: PsychrometricResults = this.psychrometricService.calcDensityRelativeHumidity(relativeHumidityInput, this.settings, true);
-          if (results) {
-            humidityRatios.push(results.humidityRatio);
-          }
-        } else {
-          invalidIndicies.push(index);
+  addUserRelativeHumidityCurve() {
+    let xRange = this.getLineXRange();
+    let trace = this.getEmptyTrace('Relative Humidity', 'blue');
+    let humidityRatiosY = [];
+    let invalidIndicies: Array<number> = [];
+    xRange.forEach((x, index) => {
+      if (this.psychrometricResults.relativeHumidity >= 0) {
+        let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
+        relativeHumidityInput.dryBulbTemp = x;
+        relativeHumidityInput.relativeHumidity = this.psychrometricResults.relativeHumidity;
+        relativeHumidityInput.barometricPressure = this.inputData.barometricPressure;
+        relativeHumidityInput.inputType = 'relativeHumidity';
+        let results: PsychrometricResults = this.psychrometricService.calcDensityRelativeHumidity(relativeHumidityInput, this.settings);
+        if (results) {
+          humidityRatiosY.push(results.humidityRatio);
         }
-      });
-      xCoordinates = xCoordinates.filter((x: number, index: number) => !invalidIndicies.includes(index));
-      trace.x = xCoordinates;
-      trace.y = humidityRatios;
-      this.chart.data.push(trace);
-
-      blueTraces.push(trace);
-    });
-
-    return blueTraces;
-
-  }
-
-  addRedTraces(): Array<TraceData> {
-    let wetBulbTemps: Array<number> = [];
-    for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
-      wetBulbTemps.push(i);
-    }
-
-    let redTraces: Array<TraceData> = [];
-    let humidityRatios: Array<number> = [];
-    let xCoordinates: Array<number> = [];
-    wetBulbTemps.forEach(wetBulbTemp => {
-      xCoordinates = [];
-      for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
-        if (i >= wetBulbTemp) {
-          xCoordinates.push(i);
-        }
+      } else {
+        invalidIndicies.push(index);
       }
+    });
+    xRange = xRange.filter((x: number, index: number) => !invalidIndicies.includes(index));
+    trace.x = xRange;
+    trace.y = humidityRatiosY;
+    this.chart.data.push(trace);
+  }
+
+  addWetBulbLines(): Array<TraceData> {
+    let wetbulbTempsX: Array<number> = this.getLineXRange();
+    let xRange: Array<number> = this.getLineXRange();
+    let wetBulbLines: Array<TraceData> = [];
+    let humidityRatios: Array<number> = [];
+
+    wetbulbTempsX.forEach((wetBulbTemp, i) => {
       let trace = this.getEmptyTrace('Wet Bulb', 'darkgrey');
       humidityRatios = [];
       let invalidIndicies: Array<number> = [];
-      xCoordinates.forEach(x => {
+      // X endpoint value follows Wet bulb axis - as we iterate over x, remove endpoint via shift()
+      if (i > 0) {
+        xRange.shift();
+      }
+      xRange.forEach(x => {
         let wetBulb: number = wetBulbTemp;
         let relativeHumidityInput: BaseGasDensity = this.psychrometricService.getDefaultData(this.settings);
         relativeHumidityInput.dryBulbTemp = x;
         relativeHumidityInput.wetBulbTemp = wetBulb;
         relativeHumidityInput.barometricPressure = this.inputData.barometricPressure;
         relativeHumidityInput.inputType = 'wetBulb';
-        let results: PsychrometricResults = this.psychrometricService.calcDensityWetBulb(relativeHumidityInput, this.settings, true);
+        let results: PsychrometricResults = this.psychrometricService.calcDensityWetBulb(relativeHumidityInput, this.settings);
         if (results) {
           humidityRatios.push(results.humidityRatio);
         }
@@ -200,23 +172,25 @@ export class FanPsychrometricChartComponent implements OnInit {
           return ratio;
         }
       });
-      xCoordinates = xCoordinates.filter((x: number, index: number) => !invalidIndicies.includes(index));
 
-      trace.x = xCoordinates;
+      let validXCoordinates = JSON.parse(JSON.stringify(xRange)).filter((x: number, index: number) => !invalidIndicies.includes(index));
+
+      trace.x = validXCoordinates;
       trace.y = humidityRatios;
 
-      redTraces.push(trace);
+      wetBulbLines.push(trace);
     });
-    redTraces.forEach(trace => this.chart.data.push(trace));
-    this.chart.layout = this.getLayout(xCoordinates, humidityRatios);
-    return redTraces;
+
+    wetBulbLines.forEach(trace => this.chart.data.push(trace));
+    this.chart.layout = this.getLayout(xRange, humidityRatios);
+    return wetBulbLines;
   }
 
-  addUserRedTrace(topAxisBlueTrace: TraceData): void {
+  addUserWetBulbLines(wetBulbTopTrace: TraceData): void {
     let xConstraints: Array<number> = [];
     let xCoordinates: Array<number> = [];
 
-    let highResolutionIncrement: number = .02;
+    let highResolutionIncrement: number = 1;
     // Use higher res increment than other red lines to find xrange constraints against the 'top axis'/top blue trace
     for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += highResolutionIncrement) {
       if (i >= this.psychrometricResults.wetBulbTemp) {
@@ -233,9 +207,8 @@ export class FanPsychrometricChartComponent implements OnInit {
       relativeHumidityInput.wetBulbTemp = this.psychrometricResults.wetBulbTemp;
       relativeHumidityInput.barometricPressure = this.inputData.barometricPressure;
       relativeHumidityInput.inputType = 'wetBulb';
-      let results: PsychrometricResults = this.psychrometricService.calcDensityWetBulb(relativeHumidityInput, this.settings, true);
+      let results: PsychrometricResults = this.psychrometricService.calcDensityWetBulb(relativeHumidityInput, this.settings);
       if (results) {
-        // TODO This may no longer be needed
         if (results.humidityRatio >= 0) {
           traceX.push(x);
           traceY.push(results.humidityRatio);
@@ -247,31 +220,23 @@ export class FanPsychrometricChartComponent implements OnInit {
     trace.x = traceX;
     trace.y = traceY;
     this.chart.data.push(trace);
-    let xRange: number[] = topAxisBlueTrace.x.map(x => Number(x));
-    let yRange: number[] = topAxisBlueTrace.y.map(y => Number(y));
+    let xRange: number[] = wetBulbTopTrace.x.map(x => Number(x));
+    let yRange: number[] = wetBulbTopTrace.y.map(y => Number(y));
     this.chart.layout = this.getLayout(xRange, yRange);
   }
 
-  addTopAxisTrace(blueTraces) {
+  addWetBulbTopAxis(wetBulbTopTrace: TraceData) {
     let xCoordinates: Array<number> = [];
     let yCoordinates: Array<number> = [];
-    let xAxisText = ['40', '50', '60', '70', '80', '90', '100', '110', '120', '130'];
-    if (!this.useImperialUnits) {
-      xAxisText = ['6', '12', '18', '24', '30', '36', '42', '48', '54', '60']
+    for (let index = 1; index < wetBulbTopTrace.x.length; index += 2) {
+      xCoordinates.push(Number(wetBulbTopTrace.x[index]));
+      yCoordinates.push(Number(wetBulbTopTrace.y[index]));
     }
-    for (let index = 1; index < blueTraces.x.length; index += 2) {
-      xCoordinates.push(blueTraces.x[index]);
-    }
-
-    for (let index = 1; index < blueTraces.y.length; index += 2) {
-      yCoordinates.push(blueTraces.y[index]);
-    }
-
     let trace = {
       x: xCoordinates,
       y: yCoordinates,
       mode: 'text',
-      text: xAxisText,
+      text: this.wetBulbAxisText,
       textposition: 'top',
       type: 'scatter',
       showlegend: false,
@@ -279,54 +244,45 @@ export class FanPsychrometricChartComponent implements OnInit {
     this.chart.data.push(trace);
   }
 
-  addUserPoint(blueTraces) {
-    let trace = this.getEmptyPointTrace('', 'black');
-    let dryBulbTemperature = this.inputData.dryBulbTemp;
-    trace.x.push(dryBulbTemperature);
-    trace.y.push(this.psychrometricResults.humidityRatio);
-    this.chart.data.push(trace);
+  addUserPlot(wetBulbTopTrace: TraceData) {
+    let userPointTrace: TraceData = this.getEmptyPointTrace('', 'black');
+    userPointTrace.x.push(this.inputData.dryBulbTemp);
+    userPointTrace.y.push(this.psychrometricResults.humidityRatio);
+    this.chart.data.push(userPointTrace);
 
-    this.addUserBlueTrace();
-    this.addUserRedTrace(blueTraces);
+    this.addUserRelativeHumidityCurve();
+    this.addUserWetBulbLines(wetBulbTopTrace);
   }
 
-  addVerticalGridLines(blueTraces) {
-    let blackTraces: Array<TraceData> = [];
-    let xCoordinates: Array<number> = [];
-    let wetBulbTemps: Array<number> = [];
-    let humidityRatios: Array<number> = [];
+  addVerticalGridLines(wetBulbTopTrace: TraceData) {
+    let verticalGridTraces: Array<TraceData> = [];
+    wetBulbTopTrace.y.forEach((y, index) => {
+      let trace = this.getEmptyTrace('Grid', 'black');
+      trace.x = [wetBulbTopTrace.x[index], wetBulbTopTrace.x[index]];
+      trace.y = [0, y];
+      verticalGridTraces.push(trace);
+      this.chart.data.push(trace)
+    });
+  }
 
+  getLineXRange() {
+    let lineRange: Array<number> = [];
     for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
-      wetBulbTemps.push(i);
+      lineRange.push(i);
     }
-    for (let i = this.lineCreationData.start; i <= this.lineCreationData.end; i += this.lineCreationData.increment) {
-      xCoordinates.push(i);
-    }
-
-    for (let index = 0; index < wetBulbTemps.length; index++) {
-      let newTrace = this.getEmptyTrace('', 'black');
-      let xValues: Array<number> = [];
-      let yValues: Array<number> = [];
-
-      xValues.push(xCoordinates[index], xCoordinates[index]);
-      yValues.push(0, blueTraces.y[index]);
-
-      newTrace.x = xValues;
-      newTrace.y = yValues;
-
-      blackTraces.push(newTrace);
-    }
-
-    blackTraces.forEach(trace => this.chart.data.push(trace));
-    humidityRatios = blueTraces.y;
-    this.chart.layout = this.getLayout(xCoordinates, humidityRatios);
+    return lineRange;
   }
 
   setChartUnits() {
+    this.temperatureUnits = '&#8457;';
+    this.humidityRatioUnits = '(lb<sub>v</sub>/lb<sub>a</sub>)';
+    this.wetBulbAxisText = ImperialWetBulbAxisText;
+    this.lineCreationData = ImperialLineData;
     if (this.settings.fanTemperatureMeasurement === 'C' || this.settings.fanTemperatureMeasurement === 'K') {
       this.lineCreationData = MetricLineData;
-      this.useImperialUnits = false;
-      this.temperatureUnits = 'C';
+      this.wetBulbAxisText = MetricWetBulbAxisText;
+      this.temperatureUnits = '&#8451;';
+      this.humidityRatioUnits = '(kg<sub>v</sub>/kg<sub>a</sub>)';
     }
   }
 
@@ -370,20 +326,9 @@ export class FanPsychrometricChartComponent implements OnInit {
   }
 
   getLayout(xticks: Array<number>, yticks: Array<number>) {
-    let xUnits = '&#8457;';
-    let yUnits = '(lb<sub>v</sub>/lb<sub>a</sub>)';
-    let topAxisText: string = `Wet Bulb Temperature ${xUnits}`;
-    let xAxisText: string = `Dry Bulb Temperature ${xUnits}`;
-    let yAxisText: string = `Humidity Ratio ${yUnits}`;
-    let xTicksVal = [40, 50, 60, 70, 80, 90, 100, 110, 120, 130];
-    if (!this.useImperialUnits) {
-      xUnits = '&#8451;';
-      yUnits = '(kg<sub>v</sub>/kg<sub>a</sub>)';
-      topAxisText = `Wet Bulb Temperature ${xUnits}`;
-      xAxisText = `Dry Bulb Temperature ${xUnits}`;
-      yAxisText = `Humidity Ratio ${yUnits}`;
-      xTicksVal = [6, 12, 18, 24, 30, 36, 42, 48, 54, 60];
-    }
+    let topAxisText: string = `Wet Bulb Temperature ${this.temperatureUnits}`;
+    let xAxisText: string = `Dry Bulb Temperature ${this.temperatureUnits}`;
+    let yAxisText: string = `Humidity Ratio ${this.humidityRatioUnits}`;
     return {
       legend: {
         orientation: 'h',
@@ -401,7 +346,7 @@ export class FanPsychrometricChartComponent implements OnInit {
         showticksuffix: 'all',
         tickangle: 0,
         tickmode: 'array',
-        tickvals: xTicksVal
+        tickvals: this.wetBulbAxisText
       },
       yaxis: {
         autorange: true,
@@ -428,7 +373,7 @@ export class FanPsychrometricChartComponent implements OnInit {
         yref: 'y',
         text: topAxisText,
         font: {
-          size: 12
+          size: 14
         },
         showarrow: false,
         textangle: -35,
@@ -571,6 +516,9 @@ export const MetricLineData: LineCreationData = {
   end: 60,
   increment: 3
 }
+
+export const ImperialWetBulbAxisText = ['40', '50', '60', '70', '80', '90', '100', '110', '120', '130'];
+export const MetricWetBulbAxisText = ['6', '12', '18', '24', '30', '36', '42', '48', '54', '60'];
 
 interface LineCreationData {
   start: number,

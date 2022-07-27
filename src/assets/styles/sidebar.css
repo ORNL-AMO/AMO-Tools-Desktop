@@ -2,60 +2,57 @@
 Sidebar css used in multiple components
 =========================================== */
  
-  .sidebar-group {
-    padding-bottom: 12px;
-  }
-  
-  .sidebar-group .btn-primary {
-    padding: 8px;
-  }
-  /* .sidebar-group h3 {
-    text-transform: uppercase;
-    font-size: 12px;
-    color: #898989;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-  } */
-  .sidebar-group ul, .sidebar-group li {
-    padding: 0;
-    margin: 0;
-  }
-  .sidebar-group li {
-    padding-left: .3rem;
-    list-style: none;
-    margin: 0;
-    line-height: 1;
-  }
-.sidebar-group .sidebar-item  {
-    font-size: 17px;
-    display: block;
-    color: #787878;
-    padding-top: 1.5px;
-    padding-bottom: 1.5px;
-    width: 100%;
-    padding-left: .3rem;
-    line-height: 1;
-  }
-  
-  .sidebar-group.secondary {
-    border-top: #ddd dotted 1px;
-    padding-top: 12px;
-  }
+.sidebar-group {
+  padding-bottom: .5rem;
+}
 
-  .sidebar-group .selected .sidebar-item, .sidebar-group .sidebar-item.selected {
-    color: #000;
-    background: #eee;
-    font-weight: bold;
-  }
-  
-  .sidebar-item:hover{
-    background-color: #eee;
-    cursor: pointer;
+.sidebar-group .btn-primary {
+  padding: 8px;
+}
+/* .sidebar-group h3 {
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #898989;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+} */
+.sidebar-group ul, .sidebar-group li {
+  padding: 0;
+  margin: 0;
+}
+.sidebar-group li {
+  padding-left: .3rem;
+  list-style: none;
+  margin: 0;
+  line-height: 1;
+}
+.sidebar-group .sidebar-item  {
+  font-size: 17px;
+  display: block;
+  color: #787878;
+  width: 100%;
+  padding-left: 1rem;
+  line-height: 1.5;
+}
+
+.sidebar-group.secondary {
+  border-top: #ddd dotted 1px;
+  padding-top: .5rem;
+}
+
+.sidebar-group .selected .sidebar-item, .sidebar-group .sidebar-item.selected {
+  color: #000;
+  background: #eee;
+  font-weight: bold;
+}
+
+.sidebar-item:hover{
+  background-color: #eee;
+  cursor: pointer;
 }
 
 .sidebar-group .directory-item{
-  padding-left: .1rem;
-  margin-left: .3rem;
+  margin-left: 1rem;
 }
 
 .siderbar-group .assessment-item{

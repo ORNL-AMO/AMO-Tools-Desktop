@@ -19,7 +19,7 @@ import { SteamService } from '../calculator/steam/steam.service';
 @Component({
   selector: 'app-ssmt',
   templateUrl: './ssmt.component.html',
-  styleUrls: ['./ssmt.component.css']
+  styleUrls: ['./ssmt.component.css'],
 })
 export class SsmtComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;

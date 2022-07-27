@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { WallLossesSurface } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -19,6 +19,8 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
   showModal: boolean;
   @Input()
   importing: boolean;
+  @Output()
+  emitNumMaterials: EventEmitter<number> = new EventEmitter<number>();
   
   editExistingMaterial: boolean = false;
   existingMaterial: WallLossesSurface;
@@ -64,6 +66,7 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
   
   async getCustomMaterials() {
     this.wallLossesSurfaces = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
+    this.emitNumMaterials.emit(this.wallLossesSurfaces.length);
   }
 
   async editMaterial(id: number) {

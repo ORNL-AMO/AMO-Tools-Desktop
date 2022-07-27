@@ -162,13 +162,13 @@ export class Co2SavingsPhastComponent implements OnInit {
     if (this.settings.furnaceType == 'Electric Arc Furnace (EAF)') {
       this.coalFuelOptions = coalFuels;
       this.eafOtherFuelSources = EAFOtherFuels;
-      shouldSetOutputRate = !this.co2SavingsData.totalCoalEmissionOutputRate;
+      shouldSetOutputRate = this.co2SavingsData.totalCoalEmissionOutputRate === undefined;
       this.setCoalFuel(shouldSetOutputRate);
-      shouldSetOutputRate = !this.co2SavingsData.totalOtherEmissionOutputRate;
+      shouldSetOutputRate = !this.co2SavingsData.totalOtherEmissionOutputRate  === undefined;
       this.setEAFFuelSource(shouldSetOutputRate);
     } else {
       this.energySources = otherFuels;
-      shouldSetOutputRate = !this.co2SavingsData.totalFuelEmissionOutputRate;
+      shouldSetOutputRate = !this.co2SavingsData.totalFuelEmissionOutputRate  === undefined;
       this.setEnergySource(shouldSetOutputRate);
     }
   }

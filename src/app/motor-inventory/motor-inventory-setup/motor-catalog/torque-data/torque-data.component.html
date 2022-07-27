@@ -8,7 +8,7 @@
     <div class="form-group" *ngIf="displayOptions.torqueFullLoad">
         <label for="torqueFullLoad">Full Load Torque</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('torqueFullLoad')" (input)="save()"
+            <input type="number" step="10" class="form-control" (focus)="focusField('torqueFullLoad')" (input)="save()"
                 formControlName="torqueFullLoad" id="torqueFullLoad">
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>
@@ -24,7 +24,7 @@
     <div class="form-group" *ngIf="displayOptions.torqueBreakDown">
         <label for="torqueBreakDown">Break Down Torque</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('torqueBreakDown')" (input)="save()"
+            <input type="number" step="10" class="form-control" (focus)="focusField('torqueBreakDown')" (input)="save()"
                 formControlName="torqueBreakDown" id="torqueBreakDown">
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>
@@ -40,7 +40,7 @@
     <div class="form-group" *ngIf="displayOptions.torqueLockedRotor">
         <label for="torqueLockedRotor">Locked Rotor Torque</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('torqueLockedRotor')" (input)="save()"
+            <input type="number" step="10" class="form-control" (focus)="focusField('torqueLockedRotor')" (input)="save()"
                 formControlName="torqueLockedRotor" id="torqueLockedRotor">
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>

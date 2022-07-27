@@ -1,4 +1,4 @@
-<div [ngClass]="{'selected-directory': directory.id == selectedDirectoryId, 'ml-0 pt-0': directory.id == 1}">
+<div [ngClass]="{'ml-0 pt-0': directory.id == 1}" >
   <span class="sidebar-item" routerLinkActive="selected" [routerLinkActiveOptions]="{exact:true}">
     <i class="fa" aria-hidden="true"
       [ngClass]="{'fa-folder': directory.collapsed == true, 'fa-folder-open': !directory.collapsed}"
@@ -8,7 +8,7 @@
   </span>
   <div class="directory-item"
     *ngFor="let directoryItem of directoryItems | directoryDashboardFilter:sortBy:filterDashboardBy"
-    [ngClass]="{'hidden': (directoryItem.isShown == false && directoryItem.type != 'directory') || directory.collapsed == true }">
+    [ngClass]="{'hidden': (directoryItem.isShown == false && directoryItem.type != 'directory') || directory.collapsed == true, 'selected-directory': directory.id == selectedDirectoryId}">
     <app-assessment-item *ngIf="directoryItem.type == 'assessment'" [assessment]="directoryItem.assessment">
     </app-assessment-item>
     <app-directory-item *ngIf="directoryItem.type == 'directory'" [directory]="directoryItem.subDirectory">
