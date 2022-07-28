@@ -47,20 +47,18 @@ export class CompressedAirSuiteApiService {
 
     if (inputData.controlType == Module.ControlType.LoadUnload) {
       instance = this.compressorsCalcLoadUnload(inputData);
-    }
-    else if (inputData.controlType == Module.ControlType.ModulationWOUnload) {
+    } else if (inputData.controlType == Module.ControlType.ModulationWOUnload) {
       instance = this.compressorsCalcModulationWOUnload(inputData);
-    }
-    else if (inputData.controlType == Module.ControlType.ModulationUnload) {
+    } else if (inputData.controlType == Module.ControlType.ModulationUnload) {
       instance = this.compressorsCalcModulationWithUnload(inputData);
-    }
-    else if (inputData.controlType == Module.ControlType.VariableDisplacementUnload) {
+    } else if (inputData.controlType == Module.ControlType.VariableDisplacementUnload) {
       instance = this.compressorsCalcVariableDisplacement(inputData);
     } else if (inputData.controlType == Module.ControlType.MultiStepUnloading) {
       instance = this.compressorsCalcMultiStepUnloading(inputData);
-    }
-    else if (inputData.controlType == Module.ControlType.StartStop) {
+    } else if (inputData.controlType == Module.ControlType.StartStop) {
       instance = this.compressorsCalcStartStop(inputData);
+    }  else if (inputData.controlType == Module.ControlType.VFD) {
+      instance = this.compressorsCalcVFD(inputData);
     }
 
     let suiteOutput;
@@ -98,6 +96,17 @@ export class CompressedAirSuiteApiService {
   compressorsCalcStartStop(input: CompressorsCalcInput) {
     return new Module.Compressors_StartStop(input.powerAtFullLoad, input.capacityAtFullLoad, input.powerMaxPercentage, input.powerAtFullLoadPercentage);
   }
+
+  compressorsCalcVFD(input: CompressorsCalcInput) {
+    return new Module.Compressor_VFD(
+      input.powerAtFullLoad, 
+      input.midTurndownPower, 
+      input.turndownPower, 
+      input.powerAtNoLoad, 
+      input.capacityAtFullLoad, 
+      input.midTurndownAirflow,
+      input.turndownAirflow);
+  }  
 
   compressorsCalcLoadUnload(input: CompressorsCalcInput) {
     return new Module.Compressors_LoadUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.receiverVolume, input.powerMax,

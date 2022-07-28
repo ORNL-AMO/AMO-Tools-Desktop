@@ -7,7 +7,7 @@
 </label>
 
 <div *ngIf="!contentCollapsed" class="p-2">
-    <table class="table">
+    <table class="table mb-0">
         <thead>
             <tr class="small bold">
                 <th class="p-1"></th>
@@ -26,6 +26,8 @@
             <tr [app-full-load]></tr>
             <tr [app-max-full-flow] *ngIf="showMaxFullFlow"></tr>
             <tr [app-unload-point] *ngIf="showUnload"></tr>
+            <tr [app-mid-turndown] *ngIf="showMidTurndown"></tr>
+            <tr [app-turndown] *ngIf="showTurndown"></tr>
             <tr [app-no-load] *ngIf="showNoLoad"></tr>
             <tr [app-blowoff] *ngIf="showBlowoff"></tr>
         </tbody>
