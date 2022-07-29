@@ -7,8 +7,6 @@ import { WaterHeatingInput, WaterHeatingOutput } from '../../../shared/models/st
 import { ProcessHeatingApiService } from '../../../tools-suite-api/process-heating-api.service';
 import { WaterHeatingFormService } from './water-heating-form.service';
 
-declare var processHeatAddon;
-
 @Injectable()
 export class WaterHeatingService {
 
