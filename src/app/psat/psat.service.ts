@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ExploreOpportunitiesResults, PsatInputs, PsatOutputs, PsatValid } from '../shared/models/psat';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-// declare var psatAddon: any;
 import { BehaviorSubject } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { MotorService } from './motor/motor.service';
@@ -36,10 +35,6 @@ export class PsatService {
     this.modalOpen = new BehaviorSubject<boolean>(true);
 
   }
-
-  // test() {
-  //   console.log(psatAddon);
-  // }
 
   roundVal(val: number, digits: number) {
     return Number(val.toFixed(digits))

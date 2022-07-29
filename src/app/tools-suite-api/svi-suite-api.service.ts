@@ -20,7 +20,6 @@ export class SviSuiteApiService {
       graphData.push(graphDataPoints)
       dataPoint.delete();
     }
-    console.log(results);
     let output: StatePointAnalysisResults= {
       SurfaceOverflow: results.SurfaceOverflow,
       AppliedSolidsLoading: results.AppliedSolidsLoading,

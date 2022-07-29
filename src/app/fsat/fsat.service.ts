@@ -42,10 +42,6 @@ export class FsatService {
     this.updateData = new BehaviorSubject<boolean>(false);
   }
 
-  // test() {
-  //   console.log(fanAddon);
-  // }
-
   fan203(input: Fan203Inputs, settings: Settings): Fan203Results {
     let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
     inputCpy = this.convertFanAnalysisService.convertFan203DataForCalculations(inputCpy, settings);
@@ -130,10 +126,6 @@ export class FsatService {
     results = this.convertFanAnalysisService.convertPlaneResults(results, settings);
     return results;
   }
-
-  // fanCurve() {
-  //   return fanAddon.fanCurve();
-  // }
 
   getInput(fsat: FSAT, settings: Settings) {
     let input: FsatInput = {
