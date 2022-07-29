@@ -12,6 +12,7 @@ export class PsatBannerComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
+  bannerCollapsed: boolean = true;
   mainTab: string;
   mainTabSub: Subscription;
   constructor(private psatTabService: PsatTabService) { }
@@ -24,6 +25,11 @@ export class PsatBannerComponent implements OnInit {
 
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
+  }
+
+  collapseBanner() {
+    this.bannerCollapsed = !this.bannerCollapsed;
+    window.dispatchEvent(new Event("resize"));
   }
 
   changeTab(str: string) {
