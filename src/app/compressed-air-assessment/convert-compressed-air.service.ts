@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, ImproveEndUseEfficiency, InletConditions, Modification, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemInformation, SystemProfile, UseAutomaticSequencer } from '../shared/models/compressed-air-assessment';
+import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, ImproveEndUseEfficiency, Modification, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemInformation, SystemProfile, UseAutomaticSequencer } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CentrifugalInput, CompressorCalcResult, CompressorsCalcInput } from './compressed-air-calculation.service';
 
@@ -53,7 +53,6 @@ export class ConvertCompressedAirService {
     compressorInventoryItems.forEach((compressorItem: CompressorInventoryItem) => {
       compressorItem.nameplateData = this.convertNamePlateData(compressorItem.nameplateData, oldSettings, newSettings);
       compressorItem.compressorControls = this.convertControls(compressorItem.compressorControls, oldSettings, newSettings);
-      compressorItem.inletConditions = this.convertInletConditions(compressorItem.inletConditions, oldSettings, newSettings);
       compressorItem.designDetails = this.convertDesignDetails(compressorItem.designDetails, oldSettings, newSettings);
       compressorItem.performancePoints = this.convertPerformancePoints(compressorItem.performancePoints, oldSettings, newSettings);
     });
@@ -86,16 +85,6 @@ export class ConvertCompressedAirService {
     }
     controls.unloadSumpPressure = this.convertUnitsService.roundVal(controls.unloadSumpPressure, 2);
     return controls;
-  }
-
-  convertInletConditions(inletConditions: InletConditions, oldSettings: Settings, newSettings: Settings): InletConditions {
-    if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      inletConditions.temperature = this.convertUnitsService.value(inletConditions.temperature).from('C').to('F');
-    } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      inletConditions.temperature = this.convertUnitsService.value(inletConditions.temperature).from('F').to('C');
-    }
-    inletConditions.temperature = this.convertUnitsService.roundVal(inletConditions.temperature, 2);
-    return inletConditions;
   }
 
   convertDesignDetails(designDetails: DesignDetails, oldSettings: Settings, newSettings: Settings): DesignDetails {
