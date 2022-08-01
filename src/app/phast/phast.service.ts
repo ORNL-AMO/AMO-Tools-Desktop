@@ -637,10 +637,7 @@ export class PhastService {
   flueGasByVolumeCalculateHeatingValue(inputs: FlueGasMaterial): HeatingValueByVolumeOutput {
     return this.processHeatingApiService.flueGasByVolumeCalculateHeatingValue(inputs);
   }
-  // flueGasByVolumeCalculateHeatingValue(inputs: FlueGasMaterial): FlueGasHeatingValue {
-  //   return phastAddon.flueGasByVolumeCalculateHeatingValue(inputs);
-  // }
-
+  
   flueGasByMassCalculateHeatingValue(inputs: SolidLiquidFlueGasMaterial): number {
     return this.processHeatingApiService.flueGasByMassCalculateHeatingValue(inputs);
   }

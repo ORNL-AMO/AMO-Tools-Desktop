@@ -11,6 +11,7 @@ import { SteamSuiteApiService } from './steam-suite-api.service';
 import { CalculatorSuiteApiService } from './calculator-suite-api.service';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { CompressedAirSuiteApiService } from './compressed-air-suite-api.service';
+import { SviSuiteApiService } from './svi-suite-api.service';
 
 
 
@@ -30,7 +31,8 @@ import { CompressedAirSuiteApiService } from './compressed-air-suite-api.service
     StandaloneSuiteApiService,
     SteamSuiteApiService,
     CalculatorSuiteApiService,
-    CompressedAirSuiteApiService
+    CompressedAirSuiteApiService,
+    SviSuiteApiService
   ]
 })
 export class ToolsSuiteApiModule { }

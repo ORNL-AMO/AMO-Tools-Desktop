@@ -4,13 +4,14 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { CompressibilityFactor, FieldData, FsatOutput } from '../../shared/models/fans';
 import { Settings } from '../../shared/models/settings';
 import { GreaterThanValidator } from '../../shared/validators/greater-than';
+import { FansSuiteApiService } from '../../tools-suite-api/fans-suite-api.service';
 
-declare var fanAddon: any;
 
 @Injectable()
 export class FanFieldDataService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService,
+    private fansSuiteApiService: FansSuiteApiService) { }
 
 
   getFormFromObj(obj: FieldData): FormGroup {
@@ -71,7 +72,7 @@ export class FanFieldDataService {
     inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from(settings.fanPressureMeasurement).to('inH2o');
     inputCpy.barometricPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanBarometricPressure).to('inHg');
     inputCpy.moverShaftPower = this.convertUnitsService.value(inputCpy.moverShaftPower).from(settings.fanPowerMeasurement).to('hp');
-    return fanAddon.compressibilityFactor(inputCpy);
+    return this.fansSuiteApiService.compressibilityFactor(inputCpy);
   }
 
   calculateCompressibilityFactor(compressibilityFactorInput: CompressibilityFactor, isBaseline: boolean, fsatOutput: FsatOutput, settings: Settings) {

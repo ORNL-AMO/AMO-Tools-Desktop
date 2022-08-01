@@ -18,7 +18,7 @@ export class FansSuiteApiService {
     let loadEstimationMethodEnum = this.suiteApiHelperService.getLoadEstimationMethod(input.loadEstimationMethod);
     //convert from percent to fraction
     let specifiedDriveEfficiencyFraction: number = input.specifiedDriveEfficiency / 100;
-
+    input.compressibilityFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.compressibilityFactor);
     let fanInput = new Module.FanInput(input.fanSpeed, input.airDensity, driveEnum, specifiedDriveEfficiencyFraction);
     let motor = new Module.Motor(lineFrequencyEnum, input.motorRatedPower, input.motorRpm, efficiencyClassEnum, input.specifiedEfficiency, input.motorRatedVoltage, input.fullLoadAmps, input.sizeMargin);
     let baselineFieldData = new Module.FieldDataBaseline(input.measuredPower, input.measuredVoltage, input.measuredAmps, input.flowRate, input.inletPressure, input.outletPressure, input.compressibilityFactor, loadEstimationMethodEnum, input.velocityPressure);

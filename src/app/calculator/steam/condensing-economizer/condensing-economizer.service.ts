@@ -7,7 +7,6 @@ import { CondensingEconomizerInput, CondensingEconomizerOutput, CondensingEconom
 import { ProcessHeatingApiService } from '../../../tools-suite-api/process-heating-api.service';
 import { CondensingEconomizerFormService } from './condensing-economizer-form.service';
 
-declare var processHeatAddon;
 @Injectable()
 export class CondensingEconomizerService {
 

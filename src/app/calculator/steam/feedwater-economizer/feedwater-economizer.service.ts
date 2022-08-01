@@ -7,8 +7,6 @@ import { FeedwaterEconomizerInput, FeedwaterEconomizerOutput, FeedwaterEconomize
 import { ProcessHeatingApiService } from '../../../tools-suite-api/process-heating-api.service';
 import { FeedwaterEconomizerFormService } from './feedwater-economizer-form.service';
 
-declare var processHeatAddon;
-
 @Injectable()
 export class FeedwaterEconomizerService {
 
