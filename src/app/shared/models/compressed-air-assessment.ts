@@ -150,7 +150,6 @@ export interface CompressorInventoryItem {
     isValid?: boolean,
     nameplateData: CompressorNameplateData,
     compressorControls: CompressorControls,
-    inletConditions: InletConditions,
     designDetails: DesignDetails,
     performancePoints: PerformancePoints,
     centrifugalSpecifics: CentrifugalSpecifics,
@@ -177,10 +176,6 @@ export interface CompressorControls {
     automaticShutdown: boolean,
     //ADDED TO REMOVE GENERIC COMPRESSOR FOR PP CALCS
     unloadSumpPressure: number,
-}
-
-export interface InletConditions {
-    temperature: number
 }
 
 export interface DesignDetails {

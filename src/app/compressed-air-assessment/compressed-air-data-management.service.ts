@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CentrifugalSpecifics, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, Modification, PerformancePoint } from '../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, Modification, PerformancePoint } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { GenericCompressor } from './generic-compressor-db.service';
@@ -37,7 +37,6 @@ export class CompressedAirDataManagementService {
     selectedCompressor.compressorControls.numberOfUnloadSteps = genericCompressor.UnloadSteps;
     selectedCompressor.designDetails.blowdownTime = this.overrideGenericDbValueForDisplay(genericCompressor.BlowdownTime);
     selectedCompressor.designDetails.modulatingPressureRange = this.overrideGenericDbValueForDisplay(genericCompressor.ModulatingPressRange);
-    selectedCompressor.inletConditions.temperature = genericCompressor.DesignInTemp;
     selectedCompressor.designDetails.inputPressure = genericCompressor.DesignInPressure;
     selectedCompressor.nameplateData.fullLoadOperatingPressure = genericCompressor.RatedPressure;
     selectedCompressor.nameplateData.fullLoadRatedCapacity = genericCompressor.RatedCapacity;
@@ -122,14 +121,6 @@ export class CompressedAirDataManagementService {
     this.updateAssessmentFromDependentCompressorItem(selectedCompressor, true, performancePointUpdateNeeded);
   }
 
-  //Inlet Conditions
-  updateInletConditions(inletConditions: InletConditions, performancePointUpdateNeeded: boolean) {
-    let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
-    selectedCompressor.modifiedDate = new Date();
-    selectedCompressor.inletConditions = inletConditions;
-    //save updated compressor
-    this.updateAssessmentFromDependentCompressorItem(selectedCompressor, true, performancePointUpdateNeeded);
-  }
   //Namplate Data
   updateNameplateData(nameplateData: CompressorNameplateData, performancePointUpdateNeeded: boolean) {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
