@@ -29,3 +29,8 @@
 .row-min-height {
     min-height: 100%;
 }
+
+.toggle-arrows {
+    background-color: #2980b9;
+    color: rgb(255, 255, 255);
+}

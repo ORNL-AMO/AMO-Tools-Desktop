@@ -1,4 +1,4 @@
-<div class="modify-conditions d-flex psat" *ngIf="settings">
+<div class="modify-conditions d-none d-lg-flex psat" *ngIf="settings">
 
   <!-- Baseline -->
   <div class="scroll-item col-8 p-0 d-flex" [ngStyle]="{'height.px': containerHeight}">
@@ -68,6 +68,102 @@
 
   <!-- Help Panel -->
   <div class="col-4 p-0 help-panel">
+    <app-help-panel *ngIf="modificationExists" (emitSave)="save()" [psat]="psat" [settings]="settings"
+      [(modification)]="psat.modifications[modificationIndex]" [modificationIndex]="modificationIndex"
+      [containerHeight]="containerHeight"></app-help-panel>
+    <div *ngIf="!modificationExists">
+      <div class="header mr-2 ml-2">
+        <h3>Help</h3>
+      </div>
+      <div class="p-4">
+        <p>Use a form similar to System Setup to explore potential opportunities for energy and cost savings within
+          your system.
+          First determine if your pump’s operating conditions (head, flow) are correct for your system needs. If they
+          are not, consider the effects of changing your pump’s operating conditions to meet demand, using your
+          manufacturers pump curve. Your pumping system can also be modified by improving pump or motor efficiency, or
+          drive type.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modify-conditions d-block d-lg-none psat" *ngIf="settings">
+
+  <!-- Baseline -->
+  <div class="scroll-item col-12 p-0 d-flex" [ngStyle]="{'height.px': containerHeight}">
+    <div class="modification baseline w-100 panel-column" (click)="togglePanel(baselineSelected)"
+      [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen, 'collapse': baselineCollapsed}">
+      <div class="header mr-2 ml-2">
+        <h3>Baseline</h3>
+      </div>
+      <div class="pl-2 pr-2 toggle-arrows header mr-2 ml-2 font-weight-bold" (click)="collapsePanel()">
+        Edit Modification
+      </div>
+      <div class="psat-losses-container">
+        <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
+        <app-pump-operations *ngIf="modifyTab == 'operations'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()"
+        [settings]="settings" (saved)="save()" [settings]="settings" [baseline]="true" [assessment]="assessment"></app-pump-operations>
+        <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()"
+          [settings]="settings" [baseline]="true"></app-pump-fluid>
+        <app-motor *ngIf="modifyTab == 'motor'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()"
+          [settings]="settings" [baseline]="true"></app-motor>
+        <app-field-data *ngIf="modifyTab == 'field-data'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()"
+          [settings]="settings" (saved)="save()" [settings]="settings" [baseline]="true" [assessment]="assessment">
+        </app-field-data>
+      </div>
+    </div>
+
+    <!-- Modifications Start -->
+    <div class="modification w-100 panel-column" (click)="togglePanel(modifiedSelected)" *ngIf="modificationExists"
+      [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen, 'collapse': !baselineCollapsed}">
+
+      <!-- Modification Header -->
+      <div class="header mr-2 ml-2">
+        <h3 *ngIf="psat.modifications[modificationIndex]">{{psat.modifications[modificationIndex].psat.name}}</h3>
+      </div>
+      <div class="pl-2 pr-2 toggle-arrows header mr-2 ml-2 font-weight-bold" (click)="collapsePanel()">
+        Edit Baseline
+      </div>
+
+      <!-- Forms -->
+      <div class="psat-losses-container">
+        <app-pump-operations *ngIf="modifyTab == 'operations'" [(psat)]="psat.modifications[modificationIndex].psat"
+        [baseline]="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == false" [selected]="modifiedSelected"
+        (saved)="save()" [settings]="settings" [assessment]="assessment" [modificationIndex]="modificationIndex"></app-pump-operations>
+        <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected"
+          [baseline]="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == false"
+          [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
+          [modificationIndex]="modificationIndex"></app-pump-fluid>
+        <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected"
+        [baseline]="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == false"
+          [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
+          [modificationIndex]="modificationIndex"></app-motor>
+        <app-field-data *ngIf="modifyTab == 'field-data'" [(psat)]="psat.modifications[modificationIndex].psat"
+          [baseline]="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == false" [selected]="modifiedSelected"
+          (saved)="save()" [settings]="settings" [assessment]="assessment" [modificationIndex]="modificationIndex"></app-field-data>
+      </div>
+
+
+    </div>
+    <!-- No content message -->
+    <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()">
+      <div class="header mr-2 ml-2">
+        <h3>Modification</h3>
+      </div>
+      <div class="p-3 no-data">
+        <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to
+          find efficiency
+          opportunities.
+        </h3>
+        <button type="button" class="btn btn-primary">Add Modified Condition</button>
+        <p>Data will be copied from your current baseline condition.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Panel -->
+  <div class="col-12 p-0 help-panel">
     <app-help-panel *ngIf="modificationExists" (emitSave)="save()" [psat]="psat" [settings]="settings"
       [(modification)]="psat.modifications[modificationIndex]" [modificationIndex]="modificationIndex"
       [containerHeight]="containerHeight"></app-help-panel>
