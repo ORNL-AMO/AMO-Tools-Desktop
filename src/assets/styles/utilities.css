@@ -287,7 +287,7 @@ a:not([href]):not([tabindex]).disabled-link:hover {
 
 .motors .calc-icon-div,
 .icon-motors {
-    background: linear-gradient(rgba(228, 219, 219, 0.34), #6b846aa6);
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #84B641);
 }
 
 .psat .calc-icon-div,
@@ -328,7 +328,7 @@ a:not([href]):not([tabindex]).disabled-link:hover {
 
 .lighting .calc-icon-div,
 .icon-lighting {
-    background: linear-gradient(rgba(228, 219, 219, 0.34), #007bff57);
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #c8f364);
 }
 
 .treasure-hunt-calc .calc-icon-div {
