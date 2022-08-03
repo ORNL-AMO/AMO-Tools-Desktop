@@ -23,6 +23,8 @@ export class AirflowSankeyComponent implements OnInit {
   appBackground: boolean = true;
   @Input()
   printView: boolean;
+  @Input()
+  inReport: boolean;
 
   @ViewChild("airflowChart", { static: false }) 
   ngChart: ElementRef;
@@ -98,13 +100,6 @@ export class AirflowSankeyComponent implements OnInit {
   ngOnDestroy() {
     this.dayTypeSetupServiceSubscription.unsubscribe();
   }
-
-  ngOnChanges() {
-    this.renderSankey();
-  }
-
-
-  focusField() {}
 
   setSankeyDayTypeSetup() {
     this.selectedDayTypeId = this.endUseDayTypeSetup.selectedDayTypeId;

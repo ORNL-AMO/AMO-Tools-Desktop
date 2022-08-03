@@ -10,13 +10,15 @@ import { Assessment } from "../../shared/models/assessment";
 export class CompressedAirSankeyComponent implements OnInit {
   @Input()
   assessment: Assessment;
+  @Input()
+  inReport: boolean;
 
+  
   sankeyTab: 'airflow' | 'power' = 'power';
   constructor(
   ) { }
 
   ngOnInit() {
-    console.log(this.assessment)
   }
 
   changeSankeyTab(sankeyTab: 'airflow' | 'power') {

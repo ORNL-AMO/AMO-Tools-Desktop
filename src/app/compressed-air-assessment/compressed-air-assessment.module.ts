@@ -143,18 +143,13 @@ import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-moda
 import { EndUseTableComponent } from './results-panel/end-use-table/end-use-table.component';
 import { EndUseChartComponent } from './end-use-chart/end-use-chart.component';
 import { DayTypeUseFormComponent } from './end-uses/day-type-use-form/day-type-use-form.component';
-import { CompressedAirSankeyComponent } from './compressed-air-sankey/compressed-air-sankey.component';
 import { EndUsesService } from './end-uses/end-uses.service';
 import { DayTypeUseFormService } from './end-uses/day-type-use-form/day-type-use-form.service';
-import { PowerSankeyComponent } from './compressed-air-sankey/power-sankey/power-sankey.component';
-import { PowerSankeyService } from './compressed-air-sankey/power-sankey/power-sankey.service';
-import { AirflowSankeyComponent } from './compressed-air-sankey/airflow-sankey/airflow-sankey.component';
-import { AirflowSankeyService } from './compressed-air-sankey/airflow-sankey/airflow-sankey.service';
-import { DayTypeSetupFormComponent } from './end-uses/day-type-setup-form/day-type-setup-form.component';
-import { DayTypeSetupService } from './end-uses/day-type-setup-form/day-type-setup.service';
 import { ImproveEndUseFormControlsPipe } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-form-controls.pipe';
 import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-label.module';
 import { EndUseHelpComponent } from './results-panel/help-panel/end-use-help/end-use-help.component';
+import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-air-sankey.module';
+import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use-day-type-setup.module';
 
 @NgModule({
   declarations: [
@@ -237,10 +232,6 @@ import { EndUseHelpComponent } from './results-panel/help-panel/end-use-help/end
     EndUseTableComponent,
     EndUseChartComponent,
     DayTypeUseFormComponent,
-    CompressedAirSankeyComponent,
-    AirflowSankeyComponent,
-    PowerSankeyComponent,
-    DayTypeSetupFormComponent,
     ImproveEndUseFormControlsPipe,
     TurndownComponent,
     MidTurndownComponent,
@@ -279,7 +270,9 @@ import { EndUseHelpComponent } from './results-panel/help-panel/end-use-help/end
     Co2HelpTextModule,
     CentrifugalGraphModule,
     BleedTestModule,
-    IntervalHourLabelModule
+    IntervalHourLabelModule,
+    CompressedAirSankeyModule,
+    EndUseDayTypeSetupModule,
   ],
   providers: [
     CompressedAirAssessmentService,
@@ -313,11 +306,8 @@ import { EndUseHelpComponent } from './results-panel/help-panel/end-use-help/end
     ExploreOpportunitiesValidationService,
     EndUsesService,
     DayTypeUseFormService,
-    AirflowSankeyService,
-    PowerSankeyService,
-    DayTypeSetupService,
     MidTurndownCalculationService,
     TurndownCalculationService
-  ]
+  ],
 })
 export class CompressedAirAssessmentModule { }
