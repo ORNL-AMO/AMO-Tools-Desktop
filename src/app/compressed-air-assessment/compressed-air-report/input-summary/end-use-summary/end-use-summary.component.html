@@ -1,0 +1,118 @@
+<div class="card summary-card">
+    <div class="card-header" (click)="toggleCollapse()">
+        <h5>End Use Data
+            <span class="pull-right fa hide-print"
+                [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+        </h5>
+    </div>
+
+    <div *ngIf="!collapse || printView">
+            <div class="card-body">
+            <div class="output-summary">
+                <!-- <div class="output-summary pl-2 pt-3 pr-2"> -->
+                <table #profileTable class="table table-hover bg-white">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Day Type</th>
+                            <th class="bold" *ngFor="let endUse of endUses">
+                                {{endUse.endUseName}}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="bold no-border">
+                                Location
+                            </td>
+                            <td></td>
+                            <td *ngFor="let endUse of endUses; let index = index">
+                                <span *ngIf="endUse.location">
+                                    {{endUse.location}}
+                                </span>
+                                <span *ngIf="!endUse.location">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bold no-border">
+                                Required Pressure
+                            </td>
+                            <td></td>
+                            <td *ngFor="let endUse of endUses; let index = index">
+                                <span *ngIf="endUse.requiredPressure">
+                                    {{endUse.requiredPressure}}
+                                </span>
+                                <span *ngIf="!endUse.requiredPressure">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bold no-border" [attr.rowspan]="compressedAirDayTypes.length + 1">
+                                Average Airflow
+                                (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>)
+                            </td>
+                        </tr>
+                        <tr *ngFor="let dayType of compressedAirDayTypes; let index = index">
+                            <td class="bold">
+                                {{dayType.name}}
+                            </td>
+                            <td *ngFor="let dayTypeUse of getDayTypeEndUses(dayType)">
+                                <span *ngIf="dayTypeUse.averageAirflow">
+                                    {{dayTypeUse.averageAirflow}}
+                                </span>
+                                <span *ngIf="!dayTypeUse.averageAirflow">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bold no-border" [attr.rowspan]="compressedAirDayTypes.length + 1">
+                                Measured Pressure
+                                (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">barg</span>)
+                            </td>
+                        </tr>
+                        <tr *ngFor="let dayType of compressedAirDayTypes; let index = index">
+                            <td class="bold">
+                                {{dayType.name}}
+                            </td>
+                            <td *ngFor="let dayTypeUse of getDayTypeEndUses(dayType)">
+                                <span *ngIf="dayTypeUse.measuredPressure">
+                                    {{dayTypeUse.measuredPressure}}
+                                </span>
+                                <span *ngIf="!dayTypeUse.measuredPressure">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bold no-border" [attr.rowspan]="compressedAirDayTypes.length + 1">
+                                Regulated
+                            </td>
+                        </tr>
+                        <tr *ngFor="let dayType of compressedAirDayTypes; let index = index">
+                            <td class="bold">
+                                {{dayType.name}}
+                            </td>
+                            <td *ngFor="let dayTypeUse of getDayTypeEndUses(dayType)">
+                                <span *ngIf="dayTypeUse.regulated">
+                                    (<span *ngIf="dayTypeUse.regulated == true">Yes</span>
+                                    <span *ngIf="dayTypeUse.regulated == false">No</span>
+                                </span>
+                                <span *ngIf="!dayTypeUse.regulated">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

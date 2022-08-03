@@ -20,6 +20,7 @@ import { SystemProfileGraphsModule } from '../system-profile-graphs/system-profi
 import { InventoryPerformanceProfileModule } from '../inventory-performance-profile/inventory-performance-profile.module';
 import { PerformanceProfilesComponent } from './performance-profiles/performance-profiles.component';
 import { CentrifugalGraphModule } from '../centrifugal-graph/centrifugal-graph.module';
+import { EndUseSummaryComponent } from './input-summary/end-use-summary/end-use-summary.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { CentrifugalGraphModule } from '../centrifugal-graph/centrifugal-graph.m
     CompressedAirReportComponent,
     SystemInfoSummaryComponent,
     CompressorItemSummaryComponent,
-    PerformanceProfilesComponent
+    PerformanceProfilesComponent,
+    EndUseSummaryComponent
   ],
   imports: [
     CommonModule,

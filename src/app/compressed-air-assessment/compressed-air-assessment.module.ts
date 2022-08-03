@@ -154,6 +154,7 @@ import { DayTypeSetupFormComponent } from './end-uses/day-type-setup-form/day-ty
 import { DayTypeSetupService } from './end-uses/day-type-setup-form/day-type-setup.service';
 import { ImproveEndUseFormControlsPipe } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-form-controls.pipe';
 import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-label.module';
+import { EndUseHelpComponent } from './results-panel/help-panel/end-use-help/end-use-help.component';
 
 @NgModule({
   declarations: [
@@ -242,7 +243,8 @@ import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-lab
     DayTypeSetupFormComponent,
     ImproveEndUseFormControlsPipe,
     TurndownComponent,
-    MidTurndownComponent
+    MidTurndownComponent,
+    EndUseHelpComponent
   ],
   imports: [
     CommonModule,
