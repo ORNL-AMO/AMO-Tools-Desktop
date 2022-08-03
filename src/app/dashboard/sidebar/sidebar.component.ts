@@ -7,7 +7,6 @@ import { DirectoryDashboardService } from '../directory-dashboard/directory-dash
 import { DashboardService } from '../dashboard.service';
 import { CoreService } from '../../core/core.service';
 import { environment } from '../../../environments/environment';
-declare var google: any;
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -26,7 +25,6 @@ export class SidebarComponent implements OnInit {
   rootDirectory: Directory;
   selectedDirectoryId: number;
   selectedDirectoryIdSub: Subscription;
-  googleTranslateAvailable: boolean;
   showNewDropdown: boolean = false;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
@@ -46,12 +44,6 @@ export class SidebarComponent implements OnInit {
     this.selectedDirectoryIdSub = this.directoryDashboardService.selectedDirectoryId.subscribe(val => {
       this.selectedDirectoryId = val;
     })
-    try {
-      google;
-      this.googleTranslateAvailable = true;
-    } catch{
-      this.googleTranslateAvailable = false;
-    }
   }
 
   ngOnDestroy() {
@@ -93,10 +85,6 @@ export class SidebarComponent implements OnInit {
   closeVersionModal() {
     this.openModal.emit(false);
     this.showVersionModal = false;
-  }
-
-  emitTranslate(){
-    this.coreService.showTranslateModal.next(true);
   }
 
   toggleNewDropdown(){

@@ -13,23 +13,4 @@
 
     <router-outlet></router-outlet>
  
-    <div class="card translate-card hide-print" [@translate]="showTranslate">
-        <div class="card-header text-center">
-            Translate Application
-            <button class="close pull-right" (click)="closeTranslate()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="card-body p-2 text-center">
-            <div id="google_translate_element"></div>
-            <p class="help-text small">
-                The content of this application will be sent to Google for translation using a secure connection.
-            </p>
-            <p class="help-text small alert-warning">
-                The content of the page will translate statically. Meaning, the results of calculations may not update
-                on a page as you change the input data. To update the results you can click the "Show original" button
-                and then re-translate or you can navigate away from the current page and return.
-            </p>
-        </div>
-    </div>
 </div>

@@ -20,7 +20,6 @@ import { ElectronService } from 'ngx-electron';
 @Injectable()
 export class CoreService {
 
-  showTranslateModal: BehaviorSubject<boolean>;
 
   exampleDirectoryId: number;
   examplePhastId: number;
@@ -38,7 +37,6 @@ export class CoreService {
     private inventoryDbService: InventoryDbService,
     private electronService: ElectronService,
     private directoryDbService: DirectoryDbService) {
-    this.showTranslateModal = new BehaviorSubject<boolean>(false);
   }
 
   getDefaultSettingsObject(): Settings {
