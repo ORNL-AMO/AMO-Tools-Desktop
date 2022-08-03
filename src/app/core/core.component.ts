@@ -12,7 +12,6 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
 
-declare var google: any;
 @Component({
   selector: 'app-core',
   templateUrl: './core.component.html',
@@ -21,13 +20,6 @@ declare var google: any;
     trigger('survey', [
       state('show', style({
         bottom: '20px'
-      })),
-      transition('hide => show', animate('.5s ease-in')),
-      transition('show => hide', animate('.5s ease-out'))
-    ]),
-    trigger('translate', [
-      state('show', style({
-        top: '40px'
       })),
       transition('hide => show', animate('.5s ease-in')),
       transition('show => hide', animate('.5s ease-out'))
@@ -46,8 +38,6 @@ export class CoreComponent implements OnInit {
 
   info: any;
   updateAvailableSubscription: Subscription;
-  showTranslateModalSub: Subscription;
-  showTranslate: string = 'hide';
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean;
   showWebDisclaimerToast: boolean = false;
@@ -96,27 +86,12 @@ export class CoreComponent implements OnInit {
         this.changeDetectorRef.detectChanges();
       }
     });
-
-    this.showTranslateModalSub = this.coreService.showTranslateModal.subscribe(val => {
-      if (val == true) {
-        try {
-          let instance = google.translate.TranslateElement.getInstance();
-          if (!instance) {
-            let element = new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
-          }
-          this.showTranslate = 'show';
-        } catch (err) {
-
-        }
-      }
-    });
   }
 
 
   ngOnDestroy() {
     if (this.openingTutorialSub) this.openingTutorialSub.unsubscribe();
     this.updateAvailableSubscription.unsubscribe();
-    this.showTranslateModalSub.unsubscribe();
   }
 
   async initData() {
@@ -163,9 +138,4 @@ export class CoreComponent implements OnInit {
     this.assessmentService.tutorialShown = true;
     this.hideTutorial = true;
   }
-
-  closeTranslate() {
-    this.showTranslate = 'hide';
-  }
-
 }
