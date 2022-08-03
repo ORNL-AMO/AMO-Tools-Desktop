@@ -96,13 +96,13 @@
             </div>
             <span class="importing-text">Cleaning and setting up day data, one moment...</span>
         </div>
-        <div class="text-center p-2" *ngIf="dataSubmitted == true && !cleaningData && dataIntervalValid">
+        <div class="text-center p-2" *ngIf="dataSubmitted == true && !cleaningData">
             <div class="alert-success router-link">
                 Data cleaning finished! Click "Next" button to continue.
             </div>
         </div>
-        <div class="text-center p-2" *ngIf="dataSubmitted == true && !cleaningData && !dataIntervalValid">
-            <div class="alert-danger router-link">
+        <div class="text-center p-2" *ngIf="dataSubmitted == true && !cleaningData">
+            <div class="alert-warning router-link">
                 Invalid time interval. <br>
                 One or more of your imported .csv files has data in LESS than one minute intervals. <br>
                 Please specify the time interval above.
