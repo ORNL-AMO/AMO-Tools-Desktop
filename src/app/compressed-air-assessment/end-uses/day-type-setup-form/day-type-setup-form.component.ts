@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, DayTypeEndUse, EndUseDayTypeSetup } from '../../../shared/models/compressed-air-assessment';
@@ -13,6 +13,9 @@ import { DayTypeSetupService, DayTypeSetupWarnings } from './day-type-setup.serv
   styleUrls: ['./day-type-setup-form.component.css']
 })
 export class DayTypeSetupFormComponent implements OnInit {
+  @Input()
+  inReportSankey: boolean;
+  
   settings: Settings;
   form: FormGroup;
   compressedAirAssessment: CompressedAirAssessment;
@@ -44,6 +47,9 @@ export class DayTypeSetupFormComponent implements OnInit {
 
     this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals = this.endUsesService.getDayTypeAirflowTotals(this.compressedAirAssessment, this.endUseDayTypeSetup.selectedDayTypeId, this.settings);
     this.form = this.dayTypeSetupFormService.getDayTypeSetupFormFromObj(this.endUseDayTypeSetup, this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals);
+    if (this.inReportSankey) {
+      this.form.controls.dayTypeLeakRate.disable();
+    }
     this.warnings = this.dayTypeSetupFormService.checkDayTypeSetupWarnings(this.endUseDayTypeSetup, this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals);
     this.dayTypeSetupFormService.endUseDayTypeSetup.next(this.endUseDayTypeSetup);
   }

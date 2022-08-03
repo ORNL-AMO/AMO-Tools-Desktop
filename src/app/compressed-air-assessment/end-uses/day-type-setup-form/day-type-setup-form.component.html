@@ -3,7 +3,7 @@
         <div class="form-group">
             <label for="selectedDayTypeId">Day Type</label>
             <select id="selectedDayTypeId" formControlName="selectedDayTypeId"
-                (change)="setSelectedDayTypeLeakRate()" (focus)="focusField('dayType')" class="form-control">
+                (change)="setSelectedDayTypeLeakRate()" (focus)="focusField('selectedEndUseDayType')" class="form-control">
                 <option *ngFor="let dayTypeOption of dayTypeOptions" [ngValue]="dayTypeOption.dayTypeId">
                     {{dayTypeOption.name}}</option>
             </select>

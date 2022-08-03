@@ -86,6 +86,7 @@ export interface EndUse {
 
 export interface DayTypeEndUse {
     dayTypeId: string,
+    dayTypeName?: string,
     averageAirflow?: number,
     regulated?: boolean,
     measuredPressure?: number,

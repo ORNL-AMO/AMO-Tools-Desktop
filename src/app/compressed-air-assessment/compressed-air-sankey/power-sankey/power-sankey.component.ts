@@ -20,7 +20,8 @@ export class PowerSankeyComponent implements OnInit {
   appBackground: boolean = true;
   @Input()
   printView: boolean;
-
+  @Input()
+  inReport: boolean;
   @ViewChild("powerChart", { static: false }) 
   ngChart: ElementRef;
   
@@ -102,12 +103,6 @@ export class PowerSankeyComponent implements OnInit {
   ngOnDestroy() {
     this.dayTypeSetupServiceSubscription.unsubscribe();
   }
-
-  ngOnChanges() {
-    this.renderSankey();
-  }
-
-  focusField() {}
   
   getDayTypeProfileSummaries() {
     let baselineDayTypeProfileSummarries = new Array<{dayTypeId: string, profileSummary: Array<ProfileSummary>}>();
