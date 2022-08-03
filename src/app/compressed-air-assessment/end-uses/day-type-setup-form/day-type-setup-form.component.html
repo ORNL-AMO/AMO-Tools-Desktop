@@ -1,0 +1,29 @@
+<div class="mr-2 ml-2">
+    <form [formGroup]="form">
+        <div class="form-group">
+            <label for="selectedDayTypeId">Day Type</label>
+            <select id="selectedDayTypeId" formControlName="selectedDayTypeId"
+                (change)="setSelectedDayTypeLeakRate()" (focus)="focusField('dayType')" class="form-control">
+                <option *ngFor="let dayTypeOption of dayTypeOptions" [ngValue]="dayTypeOption.dayTypeId">
+                    {{dayTypeOption.name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="dayTypeLeakRate">Day Type Leak Rate</label>
+            <div class="input-group">
+                <input class="form-control" type="number" (input)="save()" formControlName="dayTypeLeakRate"
+                     (focus)="focusField('dayTypeLeakRate')">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup>/min</span>
+                <span class="alert-danger pull-right small"
+                    *ngIf="form.controls.dayTypeLeakRate.invalid && !form.controls.dayTypeLeakRate.pristine">
+                    <span *ngIf="form.controls.dayTypeLeakRate.errors.required">Value Required</span>
+                    <span *ngIf="form.controls.dayTypeLeakRate.errors.min">Value must be 0 or greater</span>
+                    <span *ngIf="form.controls.dayTypeLeakRate.errors.max">Value must be less than the System Profile average airflow for this day type.
+                        ({{form.controls.dayTypeLeakRate.errors.max.max}})</span>
+                </span>
+                <span class="alert-warning small px-4 py-2 mx-auto" *ngIf="warnings.dayTypeLeakRate !== undefined">{{ warnings.dayTypeLeakRate }}</span>
+            </div>
+        </div>
+    </form>
+</div>

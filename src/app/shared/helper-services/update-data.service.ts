@@ -113,6 +113,33 @@ export class UpdateDataService {
                 }
             });
         };
+
+        if (assessment.compressedAirAssessment && !assessment.compressedAirAssessment.endUseData) {
+            assessment.compressedAirAssessment.endUseData = {
+                endUseDayTypeSetup: {
+                    selectedDayTypeId: undefined,
+                    dayTypeLeakRates: [
+                        {
+                            dayTypeId: undefined, 
+                            dayTypeLeakRate: 0
+                        }
+                    ],
+                },
+                dayTypeAirFlowTotals: undefined,
+                endUses: new Array(),
+              };
+            if (assessment.compressedAirAssessment.compressedAirDayTypes && assessment.compressedAirAssessment.compressedAirDayTypes.length > 0) {
+                assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates = []
+                assessment.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+                    assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates.push(
+                        {
+                            dayTypeId: dayType.dayTypeId, 
+                            dayTypeLeakRate: 0
+                        }
+                    )
+                });
+            }
+        };
         return assessment;
     }
 

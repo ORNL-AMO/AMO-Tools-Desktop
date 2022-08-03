@@ -16958,7 +16958,104 @@ export const MockCompressedAirAssessment: Assessment =  {
                 "numberOfDays": 104,
                 "profileDataType": "power"
             }
-        ]
+        ],
+        "endUseData": {
+            "endUseDayTypeSetup": {
+                "selectedDayTypeId": "hopx028cf",
+                "dayTypeLeakRates": [
+                    {
+                        "dayTypeId": "hopx028cf", 
+                        "dayTypeLeakRate": 100
+                    },
+                    {
+                        "dayTypeId": "mufcn7yvy", 
+                        "dayTypeLeakRate": 90
+                    }
+                ],
+            },
+            "dayTypeAirFlowTotals": undefined,
+            "endUses": [
+                {
+                    "endUseId": "lb6pu4k8k",
+                    "endUseName": "Aerator",
+                    "modifiedDate": new Date(),
+                    "endUseDescription": "Aerator airflow usage",
+                    "location": 'Building 1',
+                    "requiredPressure": 12,
+                    "dayTypeEndUses": [
+                        {
+                            "dayTypeId": "hopx028cf",
+                            "averageAirflow": 2612,
+                            "averageCapacity": 88,
+                            "regulated": false,
+                            "excessPressure": undefined,
+                            "measuredPressure": 15,
+                        },
+                        {
+                            "dayTypeId": "mufcn7yvy",
+                            "averageAirflow": 3000,
+                            "averageCapacity": 88,
+                            "regulated": false,
+                            "excessPressure": undefined,
+                            "measuredPressure": 15,
+                        }
+                    ]
+                },
+                {
+                    "endUseId": "57pvni4vd",
+                    "endUseName": "Hand Tools",
+                    "modifiedDate": new Date(),
+                    "endUseDescription": "Hand tools airflow usage",
+                    "location": 'NA',
+                    "requiredPressure": 12,
+                    "dayTypeEndUses": [
+                        {
+                            "dayTypeId": "hopx028cf",
+                            "averageAirflow": 4170.3,
+                            "averageCapacity": 88,
+                            "regulated": false,
+                            "excessPressure": undefined,
+                            "measuredPressure": 15,
+                        },
+                        {
+                            "dayTypeId": "mufcn7yvy",
+                            "averageAirflow": 3000,
+                            "averageCapacity": 88,
+                            "regulated": false,
+                            "requiredPressure": 14,
+                            "excessPressure": undefined,
+                            "measuredPressure": 15,
+                        }
+                    ]
+                },
+                {
+                    "endUseId": "0z95wm6f2",
+                    "modifiedDate": new Date(),
+                    "endUseName": "Pneumatic Machines",
+                    "endUseDescription": "Machine airflow usage",
+                    "location": 'Building 2',
+                    "requiredPressure": 12,
+                    "dayTypeEndUses": [
+                        {
+                            "dayTypeId": "hopx028cf",
+                            "averageAirflow": 1800,
+                            "averageCapacity": 88,
+                            "regulated": false,
+                            "excessPressure": undefined,
+                            "measuredPressure": 15,
+                        },
+                        {
+                            "dayTypeId": "mufcn7yvy",
+                            "averageAirflow": 4205.9,
+                            "averageCapacity": 88,
+                            "regulated": false,
+                            "excessPressure": undefined,
+                            "measuredPressure": 15,
+                        }
+                    ]
+                }
+            ],
+        },
     },
     "id": 71,
     "selected": true
