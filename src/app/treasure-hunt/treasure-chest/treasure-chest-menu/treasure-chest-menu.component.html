@@ -26,27 +26,31 @@
   <app-utility-type-dropdown [settings]="settings"></app-utility-type-dropdown>
   <!--filter by calculator type dropdown-->
   <app-calculator-type-dropdown [settings]="settings"></app-calculator-type-dropdown>
-
-  <!--manage cards button group-->
-  <div class="nav-item" *ngIf="!inReport">
-    <div class="btn-group">
-      <button type="button" class="nav-btn" (click)="openImportModal()">Import</button>
-      <button type="button" class="nav-btn middle" (click)="openExportModal()">Export</button>
-      <button type="button" class="nav-btn middle" (click)="selectAll()">Select All</button>
-      <button type="button" class="nav-btn" (click)="deselectAll()">Deselect All</button>
-    </div>
-  </div>
-
   <!--additional features when not in report-->
   <div *ngIf="!inReport" class="nav-item dropdown">
     <button type="button" class="nav-btn" (click)="toggleAdditionalFilters()">Add'l Filters</button>
   </div>
-
+  
   <!--teams use dropdown in report-->
   <app-teams-dropdown *ngIf="inReport" [inReport]="inReport" [settings]="settings"></app-teams-dropdown>
-
+  
   <!--equipment. use dropdown in report-->
   <app-equipments-dropdown *ngIf="inReport" [inReport]="inReport" [settings]="settings"></app-equipments-dropdown>
+  
+  <div class="nav-item">
+    <button class="nav-btn" (click)="clearAllFilters()">Clear All</button>
+  </div>
+  
+  <!--manage cards button group-->
+  <div class="nav-item" *ngIf="!inReport">
+    <div class="btn-group">
+      <button type="button" class="nav-btn" (click)="selectAll()">Select All</button>
+      <button type="button" class="nav-btn middle" (click)="deselectAll()">Deselect All</button>
+      <button type="button" class="nav-btn middle" (click)="openImportModal()">Import</button>
+      <button type="button" class="nav-btn" (click)="openExportModal()">Export</button>
+    </div>
+  </div>
+
 
 </nav>
 <!--displays selected filter options-->
@@ -67,9 +71,6 @@
   <div class="nav-item" *ngFor="let utilityType of sortCardsData.utilityTypes; let index = index;">
     <button type="button" class="nav-btn" (click)="removeUtilityType( index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{utilityType.display}}</button>
-  </div>
-  <div class="nav-item pull-right">
-    <button class="nav-btn-clear pull-right" (click)="clearAllFilters()">Clear All</button>
   </div>
 </nav>
 

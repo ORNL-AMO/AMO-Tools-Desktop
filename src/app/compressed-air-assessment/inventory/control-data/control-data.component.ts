@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressorControls } from '../../../shared/models/compressed-air-assessment';
+import { CompressorControls, CompressorInventoryItem, DesignDetails } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../compressed-air-data-management.service';
@@ -76,9 +76,12 @@ export class ControlDataComponent implements OnInit {
     if (this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 6 || this.form.controls.controlType.value == 7 || this.form.controls.controlType.value == 5) {
       this.form.controls.unloadPointCapacity.patchValue(100);
     }
+    if (this.form.controls.controlType.value == 11) {
+      this.form.controls.unloadPointCapacity.patchValue(20);
+    }
     this.toggleDisableControls();
     this.setDisplayValues();
-    this.save();
+    this.save(true);
   }
 
   toggleDisableControls() {
@@ -102,10 +105,10 @@ export class ControlDataComponent implements OnInit {
     this.displayUnloadSumpPressure = this.inventoryService.checkDisplayUnloadSlumpPressure(this.compressorType, this.form.controls.controlType.value)
   }
 
-  save() {
+  save(isControlTypeChange?: boolean) {
     this.isFormChange = true;
     let compressorControls: CompressorControls = this.inventoryService.getCompressorControlsObjFromForm(this.form);
-    this.compressedAirDataManagementService.updateControlData(compressorControls, true);
+    this.compressedAirDataManagementService.updateControlData(compressorControls, true, isControlTypeChange);
   }
 
   focusField(str: string) {

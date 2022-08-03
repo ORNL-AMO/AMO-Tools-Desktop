@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges, Renderer2, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges, Renderer2, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Settings } from '../models/settings';
 import { FSAT } from '../models/fans';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -11,7 +11,8 @@ import { SankeyNode } from '../models/sankey';
 @Component({
   selector: 'app-fsat-sankey',
   templateUrl: './fsat-sankey.component.html',
-  styleUrls: ['./fsat-sankey.component.css']
+  styleUrls: ['./fsat-sankey.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FsatSankeyComponent implements OnInit {
   @Input()

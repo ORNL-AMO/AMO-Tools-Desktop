@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GasLoadChargeMaterial } from '../../../shared/models/materials';
@@ -20,6 +20,8 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   showModal: boolean;
   @Input()
   importing: boolean;
+  @Output()
+  emitNumMaterials: EventEmitter<number> = new EventEmitter<number>();
 
   editExistingMaterial: boolean = false;
   existingMaterial: GasLoadChargeMaterial;
@@ -74,6 +76,7 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.convertAllMaterials();
     }
+    this.emitNumMaterials.emit(this.gasChargeMaterials.length);
   }
 
  async editMaterial(id: number) {

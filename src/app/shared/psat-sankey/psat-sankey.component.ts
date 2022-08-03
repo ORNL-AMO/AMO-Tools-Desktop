@@ -6,6 +6,7 @@ import {
   ViewChild,
   ElementRef,
   Renderer2,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { PSAT, PsatOutputs, PsatInputs, PsatValid } from "../models/psat";
 import { ConvertUnitsService } from "../convert-units/convert-units.service";
@@ -18,7 +19,8 @@ import { SankeyNode } from "../models/sankey";
 @Component({
   selector: 'app-psat-sankey',
   templateUrl: './psat-sankey.component.html',
-  styleUrls: ['./psat-sankey.component.css']
+  styleUrls: ['./psat-sankey.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PsatSankeyComponent implements OnInit {
   @Input()

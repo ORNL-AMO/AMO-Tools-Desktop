@@ -88,13 +88,11 @@ export class FanPsychrometricService {
     }
     return psychrometricResults;
   }
-  
   isWetBulbValid(gasDensityForm: FormGroup): boolean {
     return (gasDensityForm.controls.dryBulbTemp.valid && gasDensityForm.controls.staticPressure.valid
       && gasDensityForm.controls.specificGravity.valid && gasDensityForm.controls.wetBulbTemp.valid);
-    }
-    
-    calcDensityRelativeHumidity(baseGasDensityData: BaseGasDensity, settings: Settings): PsychrometricResults {
+  }
+  calcDensityRelativeHumidity(baseGasDensityData: BaseGasDensity, settings: Settings): PsychrometricResults {
     let psychrometricResults: PsychrometricResults;
     let form = this.gasDensityFormService.getGasDensityFormFromObj(baseGasDensityData, settings);
     if (this.isRelativeHumidityValid(form)) {
@@ -104,7 +102,7 @@ export class FanPsychrometricService {
   }
 
   isRelativeHumidityValid(gasDensityForm: FormGroup): boolean {
-    return (gasDensityForm.controls.dryBulbTemp.valid && gasDensityForm.controls.staticPressure.valid
+    return (gasDensityForm.controls.dryBulbTemp.valid && gasDensityForm.controls.staticPressure.valid && gasDensityForm.controls.barometricPressure.valid  
       && gasDensityForm.controls.specificGravity.valid && gasDensityForm.controls.relativeHumidity.valid);
   }
 

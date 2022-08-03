@@ -26,14 +26,15 @@
   <div class="tab-content content-container">
     <div class="card-form">
       <label class="group-label general" (click)="toggleMaterial('flue')">Custom Gaseous Fuels
-        <span class="fa fa-chevron-up pull-right" *ngIf="!showFlueMaterials"></span>
-        <span class="fa fa-chevron-down pull-right" *ngIf="showFlueMaterials"></span>
+        <span class="fa fa-chevron-up pull-right m-1" *ngIf="!showFlueMaterials"></span>
+        <span class="fa fa-chevron-down pull-right m-1" *ngIf="showFlueMaterials && hasFlueMaterials"></span>
       </label>
       <a class="click-link pull-right small" *ngIf="showFlueMaterials" (click)="toggleModal('flue')">+Add Custom Gaseous Fuel</a>
       <!-- <p class="help-text">View, create, edit your custom flue gas materials.</p> -->
     </div>
   </div>
-  <app-custom-flue-gas-materials *ngIf="showFlueMaterials" [settings]="settings" [showModal]="showFlueModal" [importing]="importing"></app-custom-flue-gas-materials>
+  <app-custom-flue-gas-materials *ngIf="showFlueMaterials" [settings]="settings" [showModal]="showFlueModal" [importing]="importing"
+    (emitNumMaterials)="setHasMaterials('hasFlueMaterials', $event)"></app-custom-flue-gas-materials>
 </div>
 
 
@@ -41,15 +42,15 @@
   <div class="tab-content content-container">
     <div class="card-form">
       <label class="group-label general" (click)="toggleMaterial('solid-liquid-flue')">Custom Solid/Liquid Fuels
-        <span class="fa fa-chevron-up pull-right" *ngIf="!showSolidLiquidFlueMaterials"></span>
-        <span class="fa fa-chevron-down pull-right" *ngIf="showSolidLiquidFlueMaterials"></span>
+        <span class="fa fa-chevron-up pull-right m-1" *ngIf="!showSolidLiquidFlueMaterials"></span>
+        <span class="fa fa-chevron-down pull-right m-1" *ngIf="showSolidLiquidFlueMaterials && hasSolidLiquidFlueMaterials"></span>
       </label>
       <a class="click-link pull-right small" *ngIf="showSolidLiquidFlueMaterials" (click)="toggleModal('solid-liquid-flue')">+Add Custom Solid/Liquid Fuel</a>
       <!-- <p class="help-text">View, create, edit your custom solid/liquid flue gas materials.</p> -->
     </div>
   </div>
   <app-custom-solid-liquid-flue-gas-materials *ngIf="showSolidLiquidFlueMaterials" [settings]="settings" [showModal]="showSolidLiquidFlueModal"
-    [importing]="importing"></app-custom-solid-liquid-flue-gas-materials>
+    [importing]="importing" (emitNumMaterials)="setHasMaterials('hasSolidLiquidFlueMaterials', $event)"></app-custom-solid-liquid-flue-gas-materials>
 </div>
 
 
@@ -57,15 +58,15 @@
   <div class="tab-content content-container">
     <div class="card-form">
       <label class="group-label general" (click)="toggleMaterial('gas-load')">Custom Gas Load Charge Materials
-        <span class="fa fa-chevron-up pull-right" *ngIf="!showGasLoadChargeMaterials"></span>
-        <span class="fa fa-chevron-down pull-right" *ngIf="showGasLoadChargeMaterials"></span>
+        <span class="fa fa-chevron-up pull-right m-1" *ngIf="!showGasLoadChargeMaterials"></span>
+        <span class="fa fa-chevron-down pull-right m-1" *ngIf="showGasLoadChargeMaterials && hasGasLoadChargeMaterials"></span>
       </label>
       <a class="click-link pull-right small" *ngIf="showGasLoadChargeMaterials" (click)="toggleModal('gas-load')">+Add Custom Gas Load Charge Material</a>
       <!-- <p class="help-text">View, create, edit your custom gas load charge materials.</p> -->
     </div>
   </div>
   <app-custom-gas-load-charge-materials *ngIf="showGasLoadChargeMaterials" [settings]="settings" [showModal]="showGasLoadChargeModal"
-    [importing]="importing"></app-custom-gas-load-charge-materials>
+    [importing]="importing" (emitNumMaterials)="setHasMaterials('hasGasLoadChargeMaterials', $event)"></app-custom-gas-load-charge-materials>
 </div>
 
 
@@ -73,15 +74,15 @@
   <div class="tab-content content-container">
     <div class="card-form">
       <label class="group-label general" (click)="toggleMaterial('liquid-load')">Custom Liquid Load Charge Materials
-        <span class="fa fa-chevron-up pull-right" *ngIf="!showLiquidLoadChargeMaterials"></span>
-        <span class="fa fa-chevron-down pull-right" *ngIf="showLiquidLoadChargeMaterials"></span>
+        <span class="fa fa-chevron-up pull-right m-1" *ngIf="!showLiquidLoadChargeMaterials"></span>
+        <span class="fa fa-chevron-down pull-right m-1" *ngIf="showLiquidLoadChargeMaterials && hasLiquidLoadChargeMaterials"></span>
       </label>
       <a class="click-link pull-right small" *ngIf="showLiquidLoadChargeMaterials" (click)="toggleModal('liquid-load')">+Add Custom Liquid Load Charge Material</a>
       <!-- <p class="help-text">View, create, edit your custom liquid load charge materials.</p> -->
     </div>
   </div>
   <app-custom-liquid-load-charge-materials *ngIf="showLiquidLoadChargeMaterials" [settings]="settings" [showModal]="showLiquidLoadChargeModal"
-    [importing]="importing"></app-custom-liquid-load-charge-materials>
+    [importing]="importing" (emitNumMaterials)="setHasMaterials('hasLiquidLoadChargeMaterials', $event)"></app-custom-liquid-load-charge-materials>
 </div>
 
 
@@ -89,15 +90,15 @@
   <div class="tab-content content-container">
     <div class="card-form">
       <label class="group-label general" (click)="toggleMaterial('solid-load')">Custom Solid Load Charge Materials
-        <span class="fa fa-chevron-up pull-right" *ngIf="!showSolidLoadChargeMaterials"></span>
-        <span class="fa fa-chevron-down pull-right" *ngIf="showSolidLoadChargeMaterials"></span>
+        <span class="fa fa-chevron-up pull-right m-1" *ngIf="!showSolidLoadChargeMaterials"></span>
+        <span class="fa fa-chevron-down pull-right m-1" *ngIf="showSolidLoadChargeMaterials && hasSolidLoadChargeMaterials"></span>
       </label>
       <a class="click-link pull-right small" *ngIf="showSolidLoadChargeMaterials" (click)="toggleModal('solid-load')">+Add Custom Solid Load Charge Material</a>
       <!-- <p class="help-text">View, create, edit your custom solid load charge materials.</p> -->
     </div>
   </div>
   <app-custom-solid-load-charge-materials *ngIf="showSolidLoadChargeMaterials" [settings]="settings" [showModal]="showSolidLoadChargeModal"
-    [importing]="importing"></app-custom-solid-load-charge-materials>
+    [importing]="importing" (emitNumMaterials)="setHasMaterials('hasSolidLoadChargeMaterials', $event)"></app-custom-solid-load-charge-materials>
 </div>
 
 
@@ -105,15 +106,15 @@
   <div class="tab-content content-container">
     <div class="card-form">
       <label class="group-label general" (click)="toggleMaterial('atmosphere-material')">Custom Atmosphere Gases
-        <span class="fa fa-chevron-up pull-right" *ngIf="!showAtmosphereMaterials"></span>
-        <span class="fa fa-chevron-down pull-right" *ngIf="showAtmosphereMaterials"></span>
+        <span class="fa fa-chevron-up pull-right m-1" *ngIf="!showAtmosphereMaterials"></span>
+        <span class="fa fa-chevron-down pull-right m-1" *ngIf="showAtmosphereMaterials && hasAtmosphereMaterials"></span>
       </label>
       <a class="click-link pull-right small" *ngIf="showAtmosphereMaterials" (click)="toggleModal('atmosphere-material')">+Add Custom Atmosphere Gas</a>
       <!-- <p class="help-text">View, create, edit your custom atmosphere specific heat materials.</p> -->
     </div>
   </div>
   <app-custom-atmosphere-specific-heat-materials *ngIf="showAtmosphereMaterials" [settings]="settings" [showModal]="showAtmosphereModal"
-    [importing]="importing"></app-custom-atmosphere-specific-heat-materials>
+    [importing]="importing" (emitNumMaterials)="setHasMaterials('hasAtmosphereMaterials', $event)"></app-custom-atmosphere-specific-heat-materials>
 </div>
 
 
@@ -121,15 +122,15 @@
   <div class="tab-content content-container">
     <div class="card-form">
       <label class="group-label general" (click)="toggleMaterial('wall-surface')">Wall Surfaces
-        <span class="fa fa-chevron-up pull-right" *ngIf="!showWallSurfaceMaterials"></span>
-        <span class="fa fa-chevron-down pull-right" *ngIf="showWallSurfaceMaterials"></span>
+        <span class="fa fa-chevron-up pull-right m-1" *ngIf="!showWallSurfaceMaterials"></span>
+        <span class="fa fa-chevron-down pull-right m-1" *ngIf="showWallSurfaceMaterials && hasWallSurfaceMaterials"></span>
       </label>
       <a class="click-link pull-right small" *ngIf="showWallSurfaceMaterials" (click)="toggleModal('wall-surface')">+Add New Wall Surface</a>
       <!-- <p class="help-text">View, create, edit your custom wall losses surfaces.</p> -->
     </div>
   </div>
   <app-custom-wall-losses-surfaces *ngIf="showWallSurfaceMaterials" [settings]="settings" [showModal]="showWallSurfaceModal"
-    [importing]="importing"></app-custom-wall-losses-surfaces>
+    [importing]="importing" (emitNumMaterials)="setHasMaterials('hasWallSurfaceMaterials', $event)"></app-custom-wall-losses-surfaces>
 </div>
 
 <!--Export Modal-->

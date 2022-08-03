@@ -194,7 +194,6 @@ export interface CompressorInventoryItem {
     isValid?: boolean,
     nameplateData: CompressorNameplateData,
     compressorControls: CompressorControls,
-    inletConditions: InletConditions,
     designDetails: DesignDetails,
     performancePoints: PerformancePoints,
     centrifugalSpecifics: CentrifugalSpecifics,
@@ -223,10 +222,6 @@ export interface CompressorControls {
     unloadSumpPressure: number,
 }
 
-export interface InletConditions {
-    temperature: number
-}
-
 export interface DesignDetails {
     blowdownTime: number,
     modulatingPressureRange: number,
@@ -242,6 +237,8 @@ export interface DesignDetails {
 export interface PerformancePoints {
     fullLoad: PerformancePoint,
     maxFullFlow: PerformancePoint,
+    midTurndown?: PerformancePoint,
+    turndown?: PerformancePoint,
     unloadPoint: PerformancePoint,
     noLoad: PerformancePoint,
     blowoff: PerformancePoint

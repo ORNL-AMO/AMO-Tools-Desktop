@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CompressedAirDayType, EndUseEfficiencyItem, EndUseEfficiencyReductionData, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirDayType, EndUseEfficiencyItem, EndUseEfficiencyReductionData, ProfileSummaryTotal, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
 import { BaselineResults } from '../../compressed-air-assessment-results.service';
 
 @Injectable()
@@ -85,7 +85,7 @@ export class ImproveEndUseEfficiencyService {
   }
 
 
-  updateDataFromForm(dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: FormGroup }>, endUseEfficiencyItem: EndUseEfficiencyItem): EndUseEfficiencyItem {
+  updateDataFromForm(dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: FormGroup }>, endUseEfficiencyItem: EndUseEfficiencyItem, systemProfileSetup: SystemProfileSetup): EndUseEfficiencyItem {
     dataForms.forEach(dataForm => {
       let endUseIndex: number = endUseEfficiencyItem.reductionData.findIndex(data => { return data.dayTypeId == dataForm.dayTypeId });
       let keyIndex: number = 0;
@@ -100,7 +100,7 @@ export class ImproveEndUseEfficiencyService {
         } else {
           endUseEfficiencyItem.reductionData[endUseIndex].data[dataIndex].applyReduction = dataForm.form.controls[key].value;
         }
-        keyIndex++;
+        keyIndex = keyIndex + systemProfileSetup.dataInterval;
       }
     });
     return endUseEfficiencyItem;

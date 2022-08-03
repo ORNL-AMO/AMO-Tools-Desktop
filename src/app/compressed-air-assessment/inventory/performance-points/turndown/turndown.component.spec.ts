@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InletConditionsComponent } from './inlet-conditions.component';
+import { TurndownComponent } from './turndown.component';
 
-describe('InletConditionsComponent', () => {
-  let component: InletConditionsComponent;
-  let fixture: ComponentFixture<InletConditionsComponent>;
+describe('TurndownComponent', () => {
+  let component: TurndownComponent;
+  let fixture: ComponentFixture<TurndownComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InletConditionsComponent ]
+      declarations: [ TurndownComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InletConditionsComponent);
+    fixture = TestBed.createComponent(TurndownComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

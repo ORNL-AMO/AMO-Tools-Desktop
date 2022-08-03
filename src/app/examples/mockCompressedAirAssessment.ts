@@ -12252,9 +12252,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "automaticShutdown": true,
                     "unloadSumpPressure": 15
                 },
-                "inletConditions": {
-                    "temperature": 68
-                },
                 "designDetails": {
                     "blowdownTime": 40,
                     "modulatingPressureRange": null,
@@ -12338,9 +12335,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "numberOfUnloadSteps": 2,
                     "automaticShutdown": true,
                     "unloadSumpPressure": 15
-                },
-                "inletConditions": {
-                    "temperature": 68
                 },
                 "designDetails": {
                     "blowdownTime": 40,
@@ -12426,9 +12420,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "automaticShutdown": true,
                     "unloadSumpPressure": 15
                 },
-                "inletConditions": {
-                    "temperature": 68
-                },
                 "designDetails": {
                     "blowdownTime": 40,
                     "modulatingPressureRange": null,
@@ -12512,9 +12503,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "numberOfUnloadSteps": 2,
                     "automaticShutdown": false,
                     "unloadSumpPressure": 15
-                },
-                "inletConditions": {
-                    "temperature": 68
                 },
                 "designDetails": {
                     "blowdownTime": 40,
@@ -12600,9 +12588,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "automaticShutdown": true,
                     "unloadSumpPressure": 15
                 },
-                "inletConditions": {
-                    "temperature": 68
-                },
                 "designDetails": {
                     "blowdownTime": 40,
                     "modulatingPressureRange": null,
@@ -12686,9 +12671,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "numberOfUnloadSteps": 2,
                     "automaticShutdown": true,
                     "unloadSumpPressure": 15
-                },
-                "inletConditions": {
-                    "temperature": 68
                 },
                 "designDetails": {
                     "blowdownTime": 40,
@@ -12774,9 +12756,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "automaticShutdown": true,
                     "unloadSumpPressure": 15
                 },
-                "inletConditions": {
-                    "temperature": 68
-                },
                 "designDetails": {
                     "blowdownTime": 40,
                     "modulatingPressureRange": null,
@@ -12860,9 +12839,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "numberOfUnloadSteps": 2,
                     "automaticShutdown": true,
                     "unloadSumpPressure": 15
-                },
-                "inletConditions": {
-                    "temperature": 68
                 },
                 "designDetails": {
                     "blowdownTime": 40,
@@ -17390,10 +17366,3 @@ export const MockCompressedAirCalculator: Calculator = {
         }
     }
 }
-
-
-
-
-
-
-

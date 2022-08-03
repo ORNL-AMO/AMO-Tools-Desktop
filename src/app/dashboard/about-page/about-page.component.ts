@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ElectronService } from 'ngx-electron';
 
 
 @Component({
@@ -18,9 +19,11 @@ export class AboutPageComponent implements OnInit {
   showDataExplorer: boolean = false;
   showInventory: boolean = false;
   showCompressedAir: boolean = false;
-  constructor() { }
+  isElectronApp: boolean;
+  constructor(private electronService: ElectronService) { }
 
   ngOnInit() {
+    this.isElectronApp = this.electronService.isElectronApp;
   }
   toggleShowPSAT() {
     this.showPSAT = !this.showPSAT;
@@ -34,22 +37,22 @@ export class AboutPageComponent implements OnInit {
   toggleShowFAST() {
     this.showFAST = !this.showFAST;
   }
-  toggleDisclosure(){
+  toggleDisclosure() {
     this.showDisclosure = !this.showDisclosure;
   }
-  toggleSteam(){
+  toggleSteam() {
     this.showSteam = !this.showSteam;
   }
-  toggleTreasureHunt(){
+  toggleTreasureHunt() {
     this.showTreasureHunt = !this.showTreasureHunt;
   }
-  toggleDataExplorer(){
+  toggleDataExplorer() {
     this.showDataExplorer = !this.showDataExplorer;
   }
-  toggleInventory(){
+  toggleInventory() {
     this.showInventory = !this.showInventory;
   }
-  toggleCompressedAir(){
+  toggleCompressedAir() {
     this.showCompressedAir = !this.showCompressedAir;
   }
 }

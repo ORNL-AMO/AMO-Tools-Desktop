@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, EndUse, EndUseData, ImproveEndUseEfficiency, InletConditions, Modification, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemInformation, SystemProfile, UseAutomaticSequencer } from '../shared/models/compressed-air-assessment';
+import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, EndUse, EndUseData, ImproveEndUseEfficiency, Modification, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemInformation, SystemProfile, UseAutomaticSequencer } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CentrifugalInput, CompressorCalcResult, CompressorsCalcInput } from './compressed-air-calculation.service';
 
@@ -54,7 +54,6 @@ export class ConvertCompressedAirService {
     compressorInventoryItems.forEach((compressorItem: CompressorInventoryItem) => {
       compressorItem.nameplateData = this.convertNamePlateData(compressorItem.nameplateData, oldSettings, newSettings);
       compressorItem.compressorControls = this.convertControls(compressorItem.compressorControls, oldSettings, newSettings);
-      compressorItem.inletConditions = this.convertInletConditions(compressorItem.inletConditions, oldSettings, newSettings);
       compressorItem.designDetails = this.convertDesignDetails(compressorItem.designDetails, oldSettings, newSettings);
       compressorItem.performancePoints = this.convertPerformancePoints(compressorItem.performancePoints, oldSettings, newSettings);
     });
@@ -143,16 +142,6 @@ export class ConvertCompressedAirService {
     return controls;
   }
 
-  convertInletConditions(inletConditions: InletConditions, oldSettings: Settings, newSettings: Settings): InletConditions {
-    if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      inletConditions.temperature = this.convertUnitsService.value(inletConditions.temperature).from('C').to('F');
-    } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      inletConditions.temperature = this.convertUnitsService.value(inletConditions.temperature).from('F').to('C');
-    }
-    inletConditions.temperature = this.convertUnitsService.roundVal(inletConditions.temperature, 2);
-    return inletConditions;
-  }
-
   convertDesignDetails(designDetails: DesignDetails, oldSettings: Settings, newSettings: Settings): DesignDetails {
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       designDetails.modulatingPressureRange = this.convertUnitsService.value(designDetails.modulatingPressureRange).from('barg').to('psig');
@@ -174,6 +163,10 @@ export class ConvertCompressedAirService {
   convertPerformancePoints(performancePoints: PerformancePoints, oldSettings: Settings, newSettings: Settings): PerformancePoints {
     performancePoints.fullLoad = this.convertPerformancePoint(performancePoints.fullLoad, oldSettings, newSettings);
     performancePoints.maxFullFlow = this.convertPerformancePoint(performancePoints.maxFullFlow, oldSettings, newSettings);
+    if (performancePoints.midTurndown && performancePoints.turndown) {
+      performancePoints.midTurndown = this.convertPerformancePoint(performancePoints.midTurndown, oldSettings, newSettings);
+      performancePoints.turndown = this.convertPerformancePoint(performancePoints.turndown, oldSettings, newSettings);
+    }
     performancePoints.unloadPoint = this.convertPerformancePoint(performancePoints.unloadPoint, oldSettings, newSettings);
     performancePoints.noLoad = this.convertPerformancePoint(performancePoints.noLoad, oldSettings, newSettings);
     performancePoints.blowoff = this.convertPerformancePoint(performancePoints.blowoff, oldSettings, newSettings);
@@ -256,6 +249,11 @@ export class ConvertCompressedAirService {
     }
     inputObj.dischargePsiFullLoad = this.convertPressure(inputObj.dischargePsiFullLoad);
     inputObj.noLoadDischargePressure = this.convertPressure(inputObj.noLoadDischargePressure);
+    inputObj.midTurndownDischargePressure = this.convertPressure(inputObj.midTurndownDischargePressure);
+    inputObj.turndownDischargePressure = this.convertPressure(inputObj.turndownDischargePressure);
+
+    inputObj.turndownAirflow = this.convertUnitsService.value(inputObj.turndownAirflow).from('m3/min').to('ft3/min');
+    inputObj.midTurndownAirflow = this.convertUnitsService.value(inputObj.midTurndownAirflow).from('m3/min').to('ft3/min');
     inputObj.capacityAtFullLoad = this.convertUnitsService.value(inputObj.capacityAtFullLoad).from('m3/min').to('ft3/min');
     inputObj.capacityAtMaxFullFlow = this.convertUnitsService.value(inputObj.capacityAtMaxFullFlow).from('m3/min').to('ft3/min');
     inputObj.pressureAtUnload = this.convertPressure(inputObj.pressureAtUnload);
@@ -277,6 +275,8 @@ export class ConvertCompressedAirService {
     if (inputObj.lubricantType != 1) {
       inputObj.unloadSumpPressure = this.convertPressure(inputObj.unloadSumpPressure);
     }
+
+
     return inputObj;
   }
 
