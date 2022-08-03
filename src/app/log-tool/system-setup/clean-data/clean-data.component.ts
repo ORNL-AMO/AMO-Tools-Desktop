@@ -25,7 +25,7 @@ export class CleanDataComponent implements OnInit {
   individualDataFromCsv: Array<IndividualDataFromCsv>;
   dateExistsForEachCsv: boolean;
   dataIntervalValidSub: Subscription;
-  secondsIntervalOptions: Array<number> = [ undefined, 1, 2, 3, 5, 15, 20, 30 ];
+  secondsIntervalOptions: Array<number> = [ undefined, 1, 2, 3, 4, 5, 15, 20, 30 ];
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
     private router: Router, private logToolDbService: LogToolDbService) { }
