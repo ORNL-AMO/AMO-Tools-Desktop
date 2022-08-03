@@ -135,6 +135,27 @@ export class CompressedAirAssessmentService {
             if (!isValidProfileData) {
               profileSummaryValid.isValid = false;
             }
+          } else {
+            if (profileDataType == 'percentCapacity') {
+              summaryInputValidationData.percentCapacityValidity.push(true);
+            } else if (profileDataType == 'power') {
+              summaryInputValidationData.powerValidity.push(true);
+            } else if (profileDataType == 'airflow') {
+              summaryInputValidationData.airflowValidity.push({
+                airFlowValid: true,
+                airFlowWarning: false
+              });
+            } else if (profileDataType == 'percentPower') {
+              summaryInputValidationData.percentPowerValidity.push(true);
+            } else if (profileDataType == 'powerFactor') {
+              summaryInputValidationData.powerFactorInputValidity.push({
+                isValid: true,
+                powerFactorValid: true,
+                ampsValid: true,
+                voltsValid: true,
+              });
+            }
+            profileSummaryValid.isValid = true;
           }
         });
         profileSummaryValid.summaryInputValidationData.push(summaryInputValidationData);
