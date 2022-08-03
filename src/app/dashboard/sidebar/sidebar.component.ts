@@ -28,8 +28,6 @@ export class SidebarComponent implements OnInit {
   selectedDirectoryIdSub: Subscription;
   googleTranslateAvailable: boolean;
   showNewDropdown: boolean = false;
-  totalScreenWidth: number;
-  totalScreenWidthSub: Subscription;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private coreService: CoreService) { }
@@ -47,10 +45,6 @@ export class SidebarComponent implements OnInit {
 
     this.selectedDirectoryIdSub = this.directoryDashboardService.selectedDirectoryId.subscribe(val => {
       this.selectedDirectoryId = val;
-    });
-
-    this.totalScreenWidthSub = this.dashboardService.totalScreenWidth.subscribe(val => {
-      this.totalScreenWidth = val;
     })
     try {
       google;
@@ -64,7 +58,6 @@ export class SidebarComponent implements OnInit {
     this.updateSub.unsubscribe();
     this.updateDashboardDataSub.unsubscribe();
     this.selectedDirectoryIdSub.unsubscribe();
-    this.totalScreenWidthSub.unsubscribe();
   }
 
   showCreateAssessment() {
