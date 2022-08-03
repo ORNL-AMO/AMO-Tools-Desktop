@@ -8,7 +8,7 @@
 
                 </th>
                 <th *ngFor="let data of profileSummary[0].profileSummaryData">
-                    {{data.timeInterval + 1}}
+                    {{data.timeInterval + systemProfileSetup.dataInterval | intervalHourLabel}}
                 </th>
             </tr>
         </thead>

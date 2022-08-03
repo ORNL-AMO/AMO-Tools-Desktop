@@ -19,6 +19,7 @@ export class CompressorOrderingTableComponent implements OnInit {
   selectedDayTypeId: string;
   fillRight: boolean = false;
   inventoryItems: Array<CompressorInventoryItem>;
+  dataInterval: number;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -43,7 +44,7 @@ export class CompressorOrderingTableComponent implements OnInit {
   setHourIntervals(systemProfileSetup: SystemProfileSetup) {
     this.hourIntervals = new Array();
     for (let index = 0; index < systemProfileSetup.numberOfHours;) {
-      this.hourIntervals.push(index)
+      this.hourIntervals.push(index + systemProfileSetup.dataInterval)
       index = index + systemProfileSetup.dataInterval;
     }
   }
@@ -101,7 +102,7 @@ export class CompressorOrderingTableComponent implements OnInit {
   toggleOn(summaryData: ProfileSummary, hourIndex: number) {
     if (summaryData.profileSummaryData[hourIndex].order != 0) {
       if (this.fillRight) {
-        for (let index = hourIndex; index <= this.hourIntervals[this.hourIntervals.length - 1]; index++) {
+        for (let index = hourIndex; index <= this.hourIntervals.length - 1; index++) {
           this.updateCompressorOrdering(summaryData, index);
         }
       } else {
@@ -109,7 +110,7 @@ export class CompressorOrderingTableComponent implements OnInit {
       }
     } else {
       if (this.fillRight) {
-        for (let index = hourIndex; index <= this.hourIntervals[this.hourIntervals.length - 1]; index++) {
+        for (let index = hourIndex; index <= this.hourIntervals.length - 1; index++) {
           this.setCompressorOrdering(summaryData, index);
         }
       } else {
@@ -153,7 +154,7 @@ export class CompressorOrderingTableComponent implements OnInit {
 
   changeOrderSequencer(selectedCompressorIndex: number, hourIndex: number) {
     if (this.fillRight) {
-      for (let index = hourIndex; index <= this.hourIntervals[this.hourIntervals.length - 1]; index++) {
+      for (let index = hourIndex; index <= this.hourIntervals.length - 1; index++) {
         if (hourIndex != index) {
           let dayTypeSummaries: Array<ProfileSummary> = this.profileSummary.filter(summary => { return summary.dayTypeId == this.selectedDayTypeId });
           let summaryIndex: number = this.profileSummary.findIndex(summary => { return summary.compressorId == dayTypeSummaries[selectedCompressorIndex].compressorId && summary.dayTypeId == dayTypeSummaries[selectedCompressorIndex].dayTypeId })

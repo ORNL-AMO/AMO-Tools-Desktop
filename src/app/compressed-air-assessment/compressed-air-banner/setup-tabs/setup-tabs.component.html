@@ -34,13 +34,13 @@
         <!-- <app-tabs-tooltip [badgeClass]="aeratorPerformanceClassStatus[0]" [reveal]="aeratorPerformanceBadge.display"
             [display]="aeratorPerformanceBadge.hover"></app-tabs-tooltip> -->
     </li>
-    <!-- <li [ngClass]="endUsesStatus">
+    <li [ngClass]="endUsesStatus">
         <a (click)="changeSetupTab('end-uses')">
             <span (mouseenter)="showTooltip(endUsesBadge)" (mouseleave)="hideTooltip(endUsesBadge)"
-                class="step-number">4</span>End Uses</a>
+                class="step-number">6</span>End Uses</a>
         <!-- <app-tabs-tooltip [badgeClass]="aeratorPerformanceClassStatus[0]" [reveal]="aeratorPerformanceBadge.display"
-            [display]="aeratorPerformanceBadge.hover"></app-tabs-tooltip> --
-    </li> -->
+            [display]="aeratorPerformanceBadge.hover"></app-tabs-tooltip> -->
+    </li>
 </ul>
 
 <ul *ngIf="setupTab == 'system-profile'" class="tabs subtabs progress-tabs compressed-air">

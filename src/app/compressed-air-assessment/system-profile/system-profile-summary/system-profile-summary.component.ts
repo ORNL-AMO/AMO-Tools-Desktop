@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { Settings } from '../../../shared/models/settings';
@@ -22,12 +22,14 @@ export class SystemProfileSummaryComponent implements OnInit {
   }>;
   inventoryItems: Array<CompressorInventoryItem>;
   settings: Settings;
+  systemProfileSetup: SystemProfileSetup;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
+      this.systemProfileSetup = val.systemProfile.systemProfileSetup;
       let selectedDayType: CompressedAirDayType = val.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == val.systemProfile.systemProfileSetup.dayTypeId });
       this.profileSummary = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(val, selectedDayType, this.settings);
       this.totals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(val.compressorInventoryItems, selectedDayType, this.profileSummary, val.systemProfile.systemProfileSetup.dataInterval);

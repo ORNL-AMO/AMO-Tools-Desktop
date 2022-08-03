@@ -1,0 +1,12 @@
+<ul class="tabs subtabs progress-tabs compressed-air">
+  <li [ngClass]="{'active': sankeyTab == 'power'}">
+    <a (click)="changeSankeyTab('power')">Power Sankey</a>
+  </li>
+  <li [ngClass]="{'active': sankeyTab == 'airflow'}">
+    <a (click)="changeSankeyTab('airflow')"
+      [ngClass]="{'disabled': assessment.compressedAirAssessment.endUseData.endUses.length === 0}">Airflow Sankey</a>
+  </li>
+</ul>
+
+<app-power-sankey *ngIf="sankeyTab === 'power'"></app-power-sankey>
+<app-airflow-sankey *ngIf="sankeyTab === 'airflow'"></app-airflow-sankey>

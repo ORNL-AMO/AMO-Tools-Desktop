@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { CompressorInventoryItem, ProfileSummary, ProfileSummaryTotal } from '../../shared/models/compressed-air-assessment';
+import { CompressorInventoryItem, ProfileSummary, ProfileSummaryTotal, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
@@ -20,6 +20,8 @@ export class ProfileSummaryTableComponent implements OnInit {
   printView: boolean;
   @Input()
   totalsForPrint: Array<Array<ProfileSummaryTotal>>;
+  @Input()
+  systemProfileSetup: SystemProfileSetup;
 
 
 
