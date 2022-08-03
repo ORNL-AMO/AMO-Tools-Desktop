@@ -17,7 +17,6 @@ export class SidebarComponent implements OnInit {
   @Output('openModal')
   openModal = new EventEmitter<boolean>();
 
-  sidebarCollapsed: boolean = false;
   versionNum: any;
   isUpdateAvailable: boolean;
   showModal: boolean;
@@ -109,16 +108,5 @@ export class SidebarComponent implements OnInit {
 
   toggleNewDropdown(){
     this.showNewDropdown = !this.showNewDropdown;
-  }
-
-  collapseSidebar() {
-    this.sidebarCollapsed = !this.sidebarCollapsed;
-    if(this.sidebarCollapsed == true){
-      this.dashboardService.sidebarX.next(35);
-    } else {
-      this.dashboardService.sidebarX.next(this.totalScreenWidth);
-    }
-    window.dispatchEvent(new Event("resize"));
-  }
-  
+  }  
 }
