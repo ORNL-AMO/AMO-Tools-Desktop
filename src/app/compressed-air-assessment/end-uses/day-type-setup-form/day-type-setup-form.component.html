@@ -1,7 +1,3 @@
-<div class="header mr-2 ml-2">
-    <h3>Day Type End Use Setup</h3>
-    <br>
-</div>
 <div class="mr-2 ml-2">
     <form [formGroup]="form">
         <div class="form-group">
@@ -22,12 +18,11 @@
                 <span class="alert-danger pull-right small"
                     *ngIf="form.controls.dayTypeLeakRate.invalid && !form.controls.dayTypeLeakRate.pristine">
                     <span *ngIf="form.controls.dayTypeLeakRate.errors.required">Value Required</span>
-                    <!-- <span *ngIf="form.controls.dayTypeLeakRate.errors.min">Value can't be less than
-                        {{form.controls.dayTypeLeakRate.errors.min.min}}
-                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
-                    </span> -->
+                    <span *ngIf="form.controls.dayTypeLeakRate.errors.min">Value must be 0 or greater</span>
+                    <span *ngIf="form.controls.dayTypeLeakRate.errors.max">Value must be less than the System Profile average airflow for this day type.
+                        ({{form.controls.dayTypeLeakRate.errors.max.max}})</span>
                 </span>
+                <span class="alert-warning small px-4 py-2 mx-auto" *ngIf="warnings.dayTypeLeakRate !== undefined">{{ warnings.dayTypeLeakRate }}</span>
             </div>
         </div>
     </form>

@@ -1,20 +1,22 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { DayTypeEndUse, EndUse } from '../../../shared/models/compressed-air-assessment';
+import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class DayTypeUseFormService {
   constructor(private formBuilder: FormBuilder) { }
 
-  getDayTypeUseForm(dayTypeEndUse: DayTypeEndUse): FormGroup {
+  getDayTypeUseForm(dayTypeEndUse: DayTypeEndUse, totalDayTypeAverageAirflow: number): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       dayTypeId: [dayTypeEndUse.dayTypeId],
       averageAirflow: [dayTypeEndUse.averageAirflow],
       averageCapacity: [dayTypeEndUse.averageCapacity],
       regulated: [dayTypeEndUse.regulated],
       excessPressure: [dayTypeEndUse.excessPressure],
-      measuredPressure: [dayTypeEndUse.measuredPressure],
+      measuredPressure: [dayTypeEndUse.measuredPressure, [Validators.required, GreaterThanValidator.greaterThan(0)]],
     });
+    form = this.setAverageAirflowValidation(form, totalDayTypeAverageAirflow);
     this.markFormDirtyToDisplayValidation(form);
     return form;
   }
@@ -30,22 +32,30 @@ export class DayTypeUseFormService {
     }
   }
 
+  setAverageAirflowValidation(form: FormGroup, totalDayTypeAverageAirflow: number) {
+      let max: number = totalDayTypeAverageAirflow
+      let averageAirFlowValidators: Array<ValidatorFn> = [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(max)];
+      form.controls.averageAirflow.setValidators(averageAirFlowValidators);
+      form.controls.averageAirflow.updateValueAndValidity();
+      return form;
+  }
+
   markFormDirtyToDisplayValidation(form: FormGroup) {
     for (let key in form.controls) {
-      if (form.controls[key] && form.controls[key].value != undefined) {
+      if (form.controls[key]) {
         form.controls[key].markAsDirty();
       }
     }
   }
 
-  checkEndUseWarnings(daytypeEndUse: DayTypeEndUse, endUse?: EndUse): DayTypeEndUseWarnings {
+  checkDayTypeEndUseWarnings(daytypeEndUse: DayTypeEndUse, endUse?: EndUse): DayTypeEndUseWarnings {
     return {
       measuredPressure: this.checkMeasuredPressure(daytypeEndUse, endUse)
     }
   }
 
   checkMeasuredPressure(dayTypeEndUse: DayTypeEndUse, endUse?: EndUse): string {
-    if (dayTypeEndUse.measuredPressure !== undefined && dayTypeEndUse.measuredPressure <= endUse.requiredPressure) {
+    if (dayTypeEndUse.measuredPressure && dayTypeEndUse.measuredPressure <= endUse.requiredPressure) {
       return `Measured Pressure should be greater than Required Pressure (${endUse.requiredPressure})`;
     } else {
       return undefined;

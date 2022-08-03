@@ -1,8 +1,5 @@
 <div class="card p-2">
     <div class="card-body p-0">
-        <!-- <span class="alert-danger pull-right small" *ngIf="hasInvalidCompressors">
-            One or more compressor is invalid - Review inventory and make changes to continue
-        </span> -->
         <table class="table table-sm table-striped table-hover mb-0" *ngIf="selectedEndUse && compressedAirAssessment.endUseData.endUses">
             <thead>
                 <tr>
@@ -29,8 +26,10 @@
                     </td>
                     <td>
                         {{endUse.requiredPressure}} 
-                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                        <span *ngIf="endUse.requiredPressure">
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                        </span>
                     </td>
                     <td>
                         <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(endUse)"></a>

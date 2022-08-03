@@ -10,7 +10,6 @@ export interface CompressedAirAssessment {
     selected?: boolean;
     systemBasics: CASystemBasics,
     systemInformation: SystemInformation,
-    powerSankeyInputs?: SankeySystemInputs,
     compressorInventoryItems: Array<CompressorInventoryItem>,
     systemProfile: SystemProfile,
     // logToolDbData?: LogToolDbData,
@@ -80,7 +79,7 @@ export interface EndUse {
     endUseName: string,
     location?: string,
     endUseDescription: string,
-    selectedDayTypeId: string,
+    // selectedDayTypeId: string,
     requiredPressure?: number,
     dayTypeEndUses?: Array<DayTypeEndUse>,
 }

@@ -1,12 +1,14 @@
 import { DecimalPipe } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { PlotlyService } from 'angular-plotly.js';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, EndUseDayTypeSetup, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { BaselineResults } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { DayTypeSetupService } from '../../end-uses/day-type-setup-form/day-type-setup.service';
 import { EndUseEnergyData, EndUsesService } from '../../end-uses/end-uses.service';
 import { AirflowSankeyService, CompressedAirSankeyNode, AirFlowSankeyResults } from './airflow-sankey.service';
 
@@ -56,7 +58,11 @@ export class AirflowSankeyComponent implements OnInit {
   dayTypeBaselineProfileSummaries: Array<{dayTypeId: string, profileSummary: Array<ProfileSummary>}>;
   selectedDayTypeId: string;
   dayTypeLeakRate: number;
+  dayTypeSetupForm: FormGroup;
   unaccountedAirflow: string;
+  endUseDayTypeSetup: EndUseDayTypeSetup;
+  hasValidDayTypeSetup: boolean;
+  dayTypeSetupServiceSubscription: Subscription;
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private _dom: ElementRef,
@@ -65,18 +71,32 @@ export class AirflowSankeyComponent implements OnInit {
     private decimalPipe: DecimalPipe,
     private airflowSankeyService: AirflowSankeyService,
     private endUsesService: EndUsesService,
+    private dayTypeSetupService: DayTypeSetupService,
     private plotlyService: PlotlyService
   ) { }
 
   ngOnInit() {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
+    if (this.settings.unitsOfMeasure !== 'Imperial') {
+      this.units = 'm<sup>3</sup>/min';
+    }
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.selectedDayTypeId = this.compressedAirAssessment.compressedAirDayTypes[0].dayTypeId;
     this.initSankeyList();
   }
 
   ngAfterViewInit() {
-    this.renderSankey();
+    this.dayTypeSetupServiceSubscription = this.dayTypeSetupService.endUseDayTypeSetup.subscribe(endUseDayTypeSetup => {
+      if (endUseDayTypeSetup) {
+        this.endUseDayTypeSetup = endUseDayTypeSetup;
+        this.setSankeyDayTypeSetup();
+        this.renderSankey();
+      }  
+    });
+  }
+
+  ngOnDestroy() {
+    this.dayTypeSetupServiceSubscription.unsubscribe();
   }
 
   ngOnChanges() {
@@ -86,9 +106,12 @@ export class AirflowSankeyComponent implements OnInit {
 
   focusField() {}
 
-  setSelectedDayType() {
+  setSankeyDayTypeSetup() {
+    this.selectedDayTypeId = this.endUseDayTypeSetup.selectedDayTypeId;
     this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals = this.endUsesService.getDayTypeAirflowTotals(this.compressedAirAssessment, this.selectedDayTypeId, this.settings);
-    this.renderSankey();
+    let endUseDayTypeSetupForm: FormGroup = this.dayTypeSetupService.getDayTypeSetupFormFromObj(this.endUseDayTypeSetup, this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals);
+    this.dayTypeLeakRate = endUseDayTypeSetupForm.controls.dayTypeLeakRate.value;
+    this.hasValidDayTypeSetup = endUseDayTypeSetupForm.valid;
   }
 
 
@@ -97,10 +120,15 @@ export class AirflowSankeyComponent implements OnInit {
     this.links = [];
     this.connectingNodes = [];
     this.minFlowes = [];
-    this.dayTypeLeakRate = this.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates.find(dayTypeLeakRate => dayTypeLeakRate.dayTypeId === this.selectedDayTypeId).dayTypeLeakRate;
-    let canRenderSankey: boolean = this.compressedAirAssessment && this.compressedAirAssessment.setupDone && this.profileDataComplete && this.dayTypeLeakRate !== undefined;
+    
+    let canRenderSankey: boolean = this.compressedAirAssessment 
+              && this.compressedAirAssessment.setupDone 
+              && this.profileDataComplete 
+              && !this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals.exceededAirflow
+              && this.hasValidDayTypeSetup;
+
     if (canRenderSankey) {
-      this.airFlowSankeyResults = this.airflowSankeyService.getAirFlowSankeyResults(this.compressedAirAssessment, this.selectedDayTypeId, this.settings);
+      this.airFlowSankeyResults = this.airflowSankeyService.getAirFlowSankeyResults(this.compressedAirAssessment, this.endUseDayTypeSetup, this.settings);
       this.buildNodes();
       this.buildLinks();
     }
@@ -232,14 +260,14 @@ export class AirflowSankeyComponent implements OnInit {
   }
 
   buildNodes() {
-    let originConnectorFlow: number = this.airFlowSankeyResults.totalEndUseAirflow;
+    let originConnectorFlow: number = this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeAverageAirflow
     let totalEndUseAirflow: number = originConnectorFlow;
     let originConnectorValue: number = 100;
     
     this.gradientLinkPaths = [];
     this.nodes.push(
       {
-        name: this.getNameLabel("Total End Use Airflow", originConnectorFlow, originConnectorValue),
+        name: this.getNameLabel("Total Day Type Average Airflow", originConnectorFlow, originConnectorValue),
         value: originConnectorValue,
         x: .05,
         y: .6,
@@ -275,7 +303,7 @@ export class AirflowSankeyComponent implements OnInit {
     
     this.airFlowSankeyResults.endUseEnergyData.forEach((endUse: EndUseEnergyData, index) => {
       let endUseFlowValue: number = (endUse.dayTypeAverageAirFlow / totalEndUseAirflow) * 100;
-      this.checkHasMinimumDisplayableEnergy(endUse.endUseName + 1, endUse.dayTypeAverageAirFlow, endUseFlowValue)
+      this.checkAddToMinimalFlows(endUse.endUseName, endUse.dayTypeAverageAirFlow, endUseFlowValue);
 
       let connectorId = `connector_${endUse.endUseId}`;
       let previousEndUseNodes = this.nodes.slice(-2);
@@ -284,13 +312,13 @@ export class AirflowSankeyComponent implements OnInit {
 
       let arrowNodeColor: string = this.gradientEndColorPurple;
       let connectorNodeColor: string = this.gradientStartColorPurple;
-      if (endUse.endUseId === 'dayTypeLeakRate') {
+      if (endUse.endUseId === 'dayTypeLeakRate' || endUse.endUseId === 'unaccounted') {
         arrowNodeColor = endUse.color;
-      }
+      } 
 
+    if (endUseFlowValue > this.minPlotlyDisplayValue || (endUse.endUseId === 'dayTypeLeakRate' || endUse.endUseId === 'unaccounted')) {
       this.nodes.push({
         name: this.getNameLabel(endUse.endUseName, endUse.dayTypeAverageAirFlow, endUseFlowValue),
-        // name: this.getNameLabel(`src: ${arrowNodeIndex}`, endUse.dayTypeAverageAirFlow, endUseFlowValue),
         value: endUseFlowValue,
         x: arrowNodeXPosition,
         y: flowNodeYPositions[offsetYPlacementIndex],
@@ -311,12 +339,10 @@ export class AirflowSankeyComponent implements OnInit {
 
       let isConnector: boolean = true;
       let connectorTargets: Array<number> = [connectorNodeIndex + 1, connectorNodeIndex + 2];
-      // let connectorName: string = `src: ${connectorNodeIndex} connector`;
       
       if (index === this.airFlowSankeyResults.endUseEnergyData.length - 1) {
         isConnector = false;
         connectorTargets = [];
-        // connectorName = 'LAST NODE';
       } 
 
       this.nodes.push({
@@ -348,11 +374,6 @@ export class AirflowSankeyComponent implements OnInit {
         otherEndUseConnector.nodeColor = this.gradientStartColorPurple,
         otherEndUseConnector.id = `connector_${this.airFlowSankeyResults.otherEndUseData.endUseId}`
 
-        // console.log('other connector value', connectorValue);
-        // console.log('other connector flow', otherEndUseData.dayTypeAverageAirFlow);
-        // console.log('other end use value', endUseFlowValue);
-        // console.log('other end use flow', otherEndUseData.dayTypeAverageAirFlow);
-
         arrowNodeXPosition += nodeXPositionIncrements.arrow;
         offsetYPlacementIndex++;
         let otherArrowNodeIndex = arrowNodeIndex + 2;
@@ -360,10 +381,7 @@ export class AirflowSankeyComponent implements OnInit {
 
         this.nodes.push({
           name: this.getNameLabel(otherEndUseData.endUseName, otherEndUseData.dayTypeAverageAirFlow, endUseFlowValue),
-          // name: this.getNameLabel(`src: ${otherArrowNodeIndex}`, endUse.dayTypeAverageAirFlow, endUseFlowValue),
-          // TEST TEST
           value: connectorValue,
-          // TEST TEST
           x: arrowNodeXPosition,
           y: flowNodeYPositions[offsetYPlacementIndex + 1],
           source: otherArrowNodeIndex,
@@ -373,21 +391,23 @@ export class AirflowSankeyComponent implements OnInit {
           nodeColor: this.gradientEndColorPurple,
           id: otherEndUseData.endUseId
         });
-
-
-        // this.buildOtherEndUseNodes();
       }
-
+      
       this.gradientLinkPaths.push(arrowNodeIndex);
       arrowNodeXPosition += nodeXPositionIncrements.arrow;
       offsetYPlacementIndex++;
       arrowNodeIndex += 2;
+    } else {
+      if (index === this.airFlowSankeyResults.endUseEnergyData.length - 1) {
+        // if this min flow is skipped and is last end use, previous connector is not needed
+        if (this.nodes[index - 1].isConnector) {
+          this.nodes.pop();
+        }
+      }
+    }
+
       originConnectorValue -= endUse.dayTypeAverageAirFlow;
     });
-
-  }
-
-  buildOtherEndUseNodes() {
 
   }
 
@@ -406,7 +426,7 @@ export class AirflowSankeyComponent implements OnInit {
     return sankeyXIncrements;
   }
 
-  checkHasMinimumDisplayableEnergy(name: string, flow: number, flowValue: number) {
+  checkAddToMinimalFlows(name: string, flow: number, flowValue: number) {
     if (flowValue <= this.minPlotlyDisplayValue) {
       this.minFlowes.push(this.getNameLabel(name, flow, flowValue, '1.0-4'));
       this.cd.detectChanges();
@@ -441,8 +461,12 @@ export class AirflowSankeyComponent implements OnInit {
         fill = `${this.gradientStartColorPurple} !important`;
       }
 
-      if (i === (1) && this.dayTypeLeakRate && this.dayTypeLeakRate > 0) {
+      if (i === (1) && this.hasValidDayTypeSetup && this.dayTypeLeakRate > 0) {
         fill = 'url(#compressedAirGradientRed) !important';
+      }
+
+      if (i === (3) && this.airFlowSankeyResults && this.airFlowSankeyResults.unaccountedEnergyData) {
+        fill = 'url(#compressedAirGradientGrey) !important';
       }
 
       // if (i === links.length - 1 && this.airFlowSankeyResults.otherEndUseData) {
@@ -471,13 +495,10 @@ export class AirflowSankeyComponent implements OnInit {
       <stop offset="10%" stop-color="${this.gradientStartColorPurple}" />
       <stop offset="100%" stop-color="rgb(255, 0, 0)" />
     </linearGradient>
-
-      
-      <linearGradient id="Gradient2" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0%" stop-color="${this.gradientStartColorPurple}" />
-      <stop offset="50%" stop-color="black" stop-opacity="0"/>
-      <stop offset="100%" stop-color="${this.gradientOtherEndUses}" />
-      </linearGradient>
+    <linearGradient id="compressedAirGradientGrey">
+    <stop offset="5%" stop-color="${this.gradientStartColorPurple}" />
+    <stop offset="50%" stop-color="rgb(190, 190, 190)" />
+  </linearGradient>
     `
     // Insert our gradient Def
     this.renderer.appendChild(mainSVG, svgDefs);
@@ -498,16 +519,14 @@ export class AirflowSankeyComponent implements OnInit {
         let width = height;
         let verticalAlignment: number = 2.75;
         let sizingRatio: number = 1.6;
-        // let sizingRatio: number = 1.75;
-        // if (Number(height) > this.airFlowSankeyResults.kWInSystem / 2) {
-        //   width = height * .8;
-        //   sizingRatio = sizingRatio * .7;
-        //   verticalAlignment = verticalAlignment / .3;
-        // }
 
         let arrowColor = this.gradientEndColorPurple;
         if (this.dayTypeLeakRate && this.dayTypeLeakRate > 0 && i == 2) {
           arrowColor = 'rgb(255, 0, 0)';
+        }
+
+        if (this.airFlowSankeyResults && this.airFlowSankeyResults.unaccountedEnergyData && i == 4) {
+          arrowColor = 'rgb(190, 190, 190)';
         }
 
         rects[i].setAttribute('y', `${defaultY - (height / verticalAlignment)}`);

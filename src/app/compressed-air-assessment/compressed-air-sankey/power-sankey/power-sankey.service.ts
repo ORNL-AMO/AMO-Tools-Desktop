@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { AirPropertiesCsvService } from '../../../shared/helper-services/air-properties-csv.service';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
-import { Settings } from '../../../shared/models/settings';
-import { BaselineResults } from '../../compressed-air-assessment-results.service';
 
 @Injectable()
 export class PowerSankeyService {
@@ -13,10 +10,9 @@ export class PowerSankeyService {
   constructor(
     private airPropertiesService: AirPropertiesCsvService,
     private convertUnitsService: ConvertUnitsService,
-    private formBuilder: FormBuilder,
   ) { }
 
-  getSankeyResults(compressedAirAssessment: CompressedAirAssessment, selectedDayTypeId: string, dayTypeProfileSummaries: Array<ProfileSummary>, settings: Settings): CompressedAirSankeyResults {
+  getSankeyResults(compressedAirAssessment: CompressedAirAssessment, CFMLeakSystem: number, dayTypeProfileSummaries: Array<ProfileSummary>): CompressedAirSankeyResults {
     let sankeyResults: CompressedAirSankeyResults = {
       compressorResults: [],
       CFMLeak_all_compressors: 0,
@@ -41,21 +37,8 @@ export class PowerSankeyService {
     sankeyResults.CFM_sys = sankeyResults.compressorResults.reduce((systemTotal, compressor) => {
       return systemTotal + compressor.CFM;
     }, 0);
-    // console.log('sankey Results CFM_sys',sankeyResults.CFM_sys);
-    // sankeyResults.systemPressure = sankeyResults.compressorResults.reduce((systemTotal, compressor) => {
-    //   console.log('compressor.systemPressure', compressor.systemPressure);
-    //   return systemTotal + compressor.systemPressure
-    // }, 0);
-
-    // if (!isNaN(sankeyResults.systemPressure)) {
-    //   console.log('dividing by sankeyResults.CFM_sys', sankeyResults.CFM_sys);
-    //   sankeyResults.systemPressure = sankeyResults.systemPressure / sankeyResults.CFM_sys;
-    // } {
-    //   sankeyResults.systemPressure = 0;
-    // }
 
     sankeyResults.systemPressure = sankeyResults.compressorResults.reduce((systemTotal, compressor) => systemTotal + compressor.systemPressure, 0);
-    console.log('sankey Results system pressure',sankeyResults.systemPressure);
     sankeyResults.systemPressure = sankeyResults.systemPressure / sankeyResults.CFM_sys;
 
     let CFM_by_compressor = sankeyResults.compressorResults.map(compressor => compressor.CFM);
@@ -63,7 +46,6 @@ export class PowerSankeyService {
     CFM_by_compressor.forEach((compr_cfm, cfmIndex) => {
       denominatorSummedCompressors += (compr_cfm * (sankeyResults.compressorResults[cfmIndex].pressure2 / sankeyResults.systemPressure));
     });
-    let CFMLeakSystem: number = compressedAirAssessment.powerSankeyInputs.CFMLeakSystem;
 
     let compressor_CFM_Warning: string = undefined;
     sankeyResults.compressorResults.forEach((compressor, index) => {
@@ -121,7 +103,6 @@ export class PowerSankeyService {
     sankeyResults.kWMechSystem = sankeyResults.compressorResults.reduce((systemTotal, compressor) => systemTotal + compressor.kWMech, 0);
     sankeyResults.kWAirSystem = sankeyResults.kWTotalSystem - sankeyResults.kWLeakSystem;
 
-    console.log('sankeyResults', sankeyResults);
     return sankeyResults;
   }
 
@@ -196,35 +177,13 @@ export class PowerSankeyService {
       }
     }
 
-    // affected by invalid system profile values?
-    if (invalidLookupValue) {
-      // console.log('******** INVALID TEMP', invalidLookupValue)
-      // console.log('******** eta poly', eta_poly)
-      // console.log('******** CFM', CFM)
-    }
-    // console.log('end loop')
 
     // BLOCK 2 ========================================== 
-    // let h_1: number = this.getEnthalpy(pressure1ConvertedPSIG, temperature1);
-    // let h_2: number = this.getEnthalpy(pressure2, temperature2);
-    // let rho_1: number = this.getDensity(pressure1ConvertedPSIG, temperature1);
-    // let rho_2: number = this.getDensity(pressure2, temperature2);
-    // let rho_avg: number = (rho_1 + rho_2) / 2;
-    // let kWComp: number = (h_2 - h_1) * CFM * rho_avg * 60 / 3412.14;
-    // // let eta_motor: number = currentCompressor.designDetails.designEfficiency / 100;
 
     let kWInput: number = summary.avgPower;
-
-    // kW_comp = (h_2-h_1)*CFM*rho_avg*60 [min/hr]/3412.14 [(Btu/hr)/kW]
-    // {simultanous - begin }
-    // kW_mech = kW_in*(1-eta_motor)
-    // kW_in = kW_comp+kW_mech 
-
-    // let kWMech: number = kWInput - kWComp;
     let kWMech: number = kWInput * (1 - (currentCompressor.designDetails.designEfficiency / 100));
     let kWComp = kWInput - kWMech;
-    // let eta_motor: number = 1 - kWMech / kWInput;
-    // kWInput = kWComp + kW_mech; 
+
 
     // BLOCK 3 ==========================================
 
@@ -495,65 +454,6 @@ export class PowerSankeyService {
     };
 
     return newNode;
-  }
-
-  getPowerSankeyForm(powerSankeyInputs: SankeySystemInputs, baselineResults: BaselineResults, settings: Settings): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
-      CFMLeakSystem: [powerSankeyInputs.CFMLeakSystem],
-      selectedDayTypeId: [powerSankeyInputs.selectedDayTypeId]
-    });
-    form = this.setSankeyInputValidators(form, baselineResults, settings);
-    return form;
-  }
-
-  markFormDirtyToDisplayValidation(form: FormGroup) {
-    for (let key in form.controls) {
-      if (form.controls[key] && form.controls[key].value != undefined) {
-        form.controls[key].markAsDirty();
-      }
-    }
-  }
-
-  getEmptyForm(baselineResults: BaselineResults, selectedDayTypeId: string, settings: Settings): FormGroup {
-    let ambientAirTemp: number = 75;
-    let CFMLeakSystem: number = 100;
-    // max capacity should be max of total air capacity in system?
-    if (settings.unitsOfMeasure === 'Metric') {
-      ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C');
-      CFMLeakSystem = this.convertUnitsService.value(CFMLeakSystem).from('ft3/min').to('m3/min');
-    }
-
-    let form: FormGroup = this.formBuilder.group({
-      CFMLeakSystem: [CFMLeakSystem],
-      selectedDayTypeId: [selectedDayTypeId]
-    });
-    form = this.setSankeyInputValidators(form, baselineResults, settings);
-    return form;
-  }
-
-  getPowerSankeyInputs(form: FormGroup): SankeySystemInputs {
-    return {
-      CFMLeakSystem: form.controls.CFMLeakSystem.value,
-      selectedDayTypeId: form.controls.selectedDayTypeId.value
-    }
-  }
-
-  setSankeyInputValidators(form: FormGroup, baselineResults: BaselineResults, settings: Settings): FormGroup {
-    let minTemperature: number = -50;
-    let maxTemperature: number = 1000;
-    let maxLeakSystem: number = baselineResults.total.maxAirFlow;
-    
-    if (settings.unitsOfMeasure === 'Metric') {
-      minTemperature = this.convertUnitsService.value(minTemperature).from('F').to('C');
-      maxTemperature = this.convertUnitsService.value(maxTemperature).from('F').to('C');
-      maxLeakSystem = this.convertUnitsService.value(maxLeakSystem).from('ft3/min').to('m3/min');
-    }
-    form.controls.CFMLeakSystem.setValidators([Validators.required, Validators.min(0), Validators.max(maxLeakSystem)]);
-    // form.controls.CFMLeakSystem.setValidators([Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(maxLeakSystem)]);
-    form.controls.CFMLeakSystem.updateValueAndValidity();
-    this.markFormDirtyToDisplayValidation(form);
-
-    return form;
   }
 
 }

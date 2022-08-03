@@ -13,7 +13,6 @@ import { EndUseResults, EndUsesService, UpdatedEndUseData } from '../../end-uses
 })
 export class EndUseTableComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;
-  // endUses: Array<EndUse>;
   compressedAirAssessment: CompressedAirAssessment;
 
   selectedEndUse: EndUse;
@@ -34,7 +33,6 @@ export class EndUseTableComponent implements OnInit {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && compressedAirAssessment.endUseData.endUses) {
         this.compressedAirAssessment = compressedAirAssessment;
-        console.log('compressedAirAssessment.endUseData.endUses', this.compressedAirAssessment)
       }
     });
   }

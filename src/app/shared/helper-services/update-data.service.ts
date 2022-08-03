@@ -36,7 +36,6 @@ export class UpdateDataService {
             } else if (assessment.type === 'WasteWater') {
                 return this.updateWasteWater(assessment);
             } else if (assessment.type === 'CompressedAir') {
-                console.log('updated legacy CA assessment')
                 return this.updateCompressedAir(assessment);
             } else {
                 return assessment;
@@ -89,7 +88,6 @@ export class UpdateDataService {
 
 
     updateCompressedAir(assessment: Assessment): Assessment {
-        //logic for updating wastewater data
         assessment.appVersion = packageJson.version;
         if (assessment.compressedAirAssessment && !assessment.compressedAirAssessment.endUseData) {
             assessment.compressedAirAssessment.endUseData = {
@@ -105,6 +103,17 @@ export class UpdateDataService {
                 dayTypeAirFlowTotals: undefined,
                 endUses: new Array(),
               };
+            if (assessment.compressedAirAssessment.compressedAirDayTypes && assessment.compressedAirAssessment.compressedAirDayTypes.length > 0) {
+                assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates = []
+                assessment.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+                    assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates.push(
+                        {
+                            dayTypeId: dayType.dayTypeId, 
+                            dayTypeLeakRate: 0
+                        }
+                    )
+                });
+            }
         };
         return assessment;
     }

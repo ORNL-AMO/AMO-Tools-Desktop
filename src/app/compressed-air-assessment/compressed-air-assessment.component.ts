@@ -11,7 +11,6 @@ import { Assessment } from '../shared/models/assessment';
 import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
-import { CompressedAirCalculationService } from './compressed-air-calculation.service';
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
 import { DayTypeService } from './day-types/day-type.service';
 import { EndUsesService } from './end-uses/end-uses.service';
@@ -19,6 +18,7 @@ import { ExploreOpportunitiesService } from './explore-opportunities/explore-opp
 import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { InventoryService } from './inventory/inventory.service';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
+import { DayTypeSetupService } from './end-uses/day-type-setup-form/day-type-setup.service';
 
 @Component({
   selector: 'app-compressed-air-assessment',
@@ -58,6 +58,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   showWelcomeScreen: boolean = false;
   constructor(private activatedRoute: ActivatedRoute,
     private airPropertiesService: AirPropertiesCsvService,
+    private endUseDayTypeSetupService: DayTypeSetupService,
     private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private systemInformationFormService: SystemInformationFormService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
       
@@ -147,6 +148,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.inventoryService.selectedCompressor.next(undefined);
     // this.endUseService.endUses.next(undefined);
     this.endUseService.selectedEndUse.next(undefined);
+    this.endUseService.selectedDayTypeEndUse.next(undefined);
+    this.endUseDayTypeSetupService.endUseDayTypeSetup.next(undefined)
     this.exploreOpportunitiesService.modificationResults.next(undefined);
     this.exploreOpportunitiesService.selectedDayType.next(undefined);
     this.compressedAirAssessmentService.compressedAirAssessment.next(undefined);

@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, DayTypeEndUse, EndUse, EndUseDayTypeSetup } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
-import { EndUsesService, UpdatedEndUseData } from './end-uses.service';
+import { EndUsesService, EndUseWarnings, UpdatedEndUseData } from './end-uses.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { DayTypeSetupService } from './day-type-setup-form/day-type-setup.service';
@@ -21,24 +21,23 @@ export class EndUsesComponent implements OnInit {
   settings: Settings;
   dayTypeEndUses: Array<DayTypeEndUse>;
   endUseDayTypeSetup: EndUseDayTypeSetup;
-
+  compressedAirAssessment: CompressedAirAssessment
   selectedDayType: CompressedAirDayType;
-  dayTypeOptions: Array<CompressedAirDayType>;
   dayTypeSetupServiceSubscription: Subscription;
+  warnings: EndUseWarnings = {requiredPressure: undefined};
+
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private dayTypeSetupService: DayTypeSetupService, private endUsesService: EndUsesService) { }
 
   ngOnInit(): void {
-    this.initializeEndUses();
-    this.settings = this.compressedAirAssessmentService.settings.getValue();
-    // set selected end use
+    this.initializeDefaultData();
     this.selectedEndUseSubscription = this.endUsesService.selectedEndUse.subscribe(selectedEndUse => {
       if (selectedEndUse) {
         this.hasEndUses = true;
-        let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-        this.dayTypeOptions = compressedAirAssessment.compressedAirDayTypes;
+        this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
         if (this.isFormChange == false) {
-          this.form = this.endUsesService.getEndUseFormFromObj(selectedEndUse);
+          this.warnings = this.endUsesService.checkEndUseWarnings(selectedEndUse);
+          this.form = this.endUsesService.getEndUseFormFromObj(selectedEndUse, this.compressedAirAssessment.endUseData.endUses);
           this.setDayTypeEndUseData(selectedEndUse);
         } else {
           this.isFormChange = false;
@@ -60,18 +59,24 @@ export class EndUsesComponent implements OnInit {
     this.dayTypeSetupServiceSubscription.unsubscribe();
   }
 
+  setEndUseName() {
+    this.form = this.endUsesService.setEndUseNameValidators(this.form, this.compressedAirAssessment.endUseData.endUses)
+    this.save();
+  }
+
   save(endUse?: EndUse) {
     if (!endUse) {
       endUse = this.endUsesService.getEndUseFromFrom(this.form);
       endUse.dayTypeEndUses = this.dayTypeEndUses;
     }
-    this.isFormChange = true;
-    let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     if (!this.endUseDayTypeSetup) {
-      this.endUseDayTypeSetup = compressedAirAssessment.endUseData.endUseDayTypeSetup; 
+      this.endUseDayTypeSetup = this.compressedAirAssessment.endUseData.endUseDayTypeSetup;
     }
-    compressedAirAssessment.endUseData.endUseDayTypeSetup = this.endUseDayTypeSetup;
-    let updated: UpdatedEndUseData = this.endUsesService.updateCompressedAirEndUse(endUse, compressedAirAssessment, this.settings);
+    this.isFormChange = true;
+    this.compressedAirAssessment.endUseData.endUseDayTypeSetup = this.endUseDayTypeSetup;
+    this.warnings = this.endUsesService.checkEndUseWarnings(endUse);
+    let updated: UpdatedEndUseData = this.endUsesService.updateCompressedAirEndUse(endUse, this.compressedAirAssessment, this.settings);
+    this.compressedAirAssessment = updated.compressedAirAssessment;
     this.compressedAirAssessmentService.compressedAirAssessment.next(updated.compressedAirAssessment);
     this.endUsesService.selectedEndUse.next(updated.endUse);
   }
@@ -84,29 +89,35 @@ export class EndUsesComponent implements OnInit {
 
   setDayTypeEndUseData(selectedEndUse: EndUse) {
     this.dayTypeEndUses = selectedEndUse.dayTypeEndUses;
-    this.selectedDayType = this.dayTypeOptions.find(option => option.dayTypeId === selectedEndUse.selectedDayTypeId);
-    let dayTypeEndUse = selectedEndUse.dayTypeEndUses.find(dayTypeUse => dayTypeUse.dayTypeId === this.form.controls.selectedDayTypeId.value);
+    if (this.endUseDayTypeSetup && this.endUseDayTypeSetup.selectedDayTypeId) {
+      this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes.find(option => option.dayTypeId === this.endUseDayTypeSetup.selectedDayTypeId);
+    } else {
+      this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes[0];
+    }
+
+    let dayTypeEndUse = selectedEndUse.dayTypeEndUses.find(dayTypeUse => dayTypeUse.dayTypeId === this.selectedDayType.dayTypeId);
     if (!dayTypeEndUse) {
-      let newDayTypeEndUse: DayTypeEndUse = this.endUsesService.getDefaultDayTypeEndUse(this.form.controls.selectedDayTypeId.value);
-      selectedEndUse.dayTypeEndUses.push(newDayTypeEndUse);
+      dayTypeEndUse = this.endUsesService.getDefaultDayTypeEndUse(this.selectedDayType.dayTypeId);
+      selectedEndUse.dayTypeEndUses.push(dayTypeEndUse);
       this.save(selectedEndUse);
     }
     this.endUsesService.selectedDayTypeEndUse.next(dayTypeEndUse);
   }
 
-  initializeEndUses() {
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.hasEndUses = compressedAirAssessment.endUseData.endUses.length !== 0;
+  initializeDefaultData() {
+    this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    this.endUseDayTypeSetup = this.dayTypeSetupService.endUseDayTypeSetup.getValue();
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
+    this.hasEndUses = this.compressedAirAssessment.endUseData.endUses && this.compressedAirAssessment.endUseData.endUses.length !== 0;
     if (this.hasEndUses) {
       let selectedEndUse: EndUse = this.endUsesService.selectedEndUse.getValue();
       if (selectedEndUse) {
-        let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-        let endUseExists: EndUse = compressedAirAssessment.endUseData.endUses.find(endUse => { return endUse.endUseId == selectedEndUse.endUseId });
+        let endUseExists: EndUse = this.compressedAirAssessment.endUseData.endUses.find(endUse => { return endUse.endUseId == selectedEndUse.endUseId });
         if (!endUseExists) {
-          this.setLastUsedEndUse(compressedAirAssessment);
+          this.setLastUsedEndUse();
         }
       } else {
-        this.setLastUsedEndUse(compressedAirAssessment);
+        this.setLastUsedEndUse();
       }
     }
   }
@@ -118,26 +129,25 @@ export class EndUsesComponent implements OnInit {
       let newDayTypeEndUse: DayTypeEndUse = this.endUsesService.getDefaultDayTypeEndUse(selectedDayTypeId); 
       selectedDayTypeEndUse = newDayTypeEndUse;
       currentEndUse.dayTypeEndUses.push(newDayTypeEndUse);
-      this.save(currentEndUse);
     }
-    this.selectedDayType = this.dayTypeOptions.find(option => option.dayTypeId === selectedDayTypeEndUse.dayTypeId);
+    this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes.find(option => option.dayTypeId === selectedDayTypeEndUse.dayTypeId);
+
     this.endUsesService.selectedDayTypeEndUse.next(selectedDayTypeEndUse);
     this.save();
   }
 
-  setLastUsedEndUse(compressedAirAssessment: CompressedAirAssessment) {
-    let lastItemModified: EndUse = _.maxBy(compressedAirAssessment.endUseData.endUses, 'modifiedDate');
+  setLastUsedEndUse() {
+    let lastItemModified: EndUse = _.maxBy(this.compressedAirAssessment.endUseData.endUses, 'modifiedDate');
     this.endUsesService.selectedEndUse.next(lastItemModified);
   }
 
   addEndUse() {
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    // TODO day type setup bandaid
-    if (!compressedAirAssessment.endUseData.endUseDayTypeSetup) {
-      compressedAirAssessment.endUseData.endUseDayTypeSetup = this.dayTypeSetupService.endUseDayTypeSetup.getValue();
-      this.endUseDayTypeSetup = compressedAirAssessment.endUseData.endUseDayTypeSetup;
+    if (!this.compressedAirAssessment.endUseData.endUseDayTypeSetup) {
+      this.compressedAirAssessment.endUseData.endUseDayTypeSetup = this.dayTypeSetupService.endUseDayTypeSetup.getValue();
+      this.endUseDayTypeSetup = this.compressedAirAssessment.endUseData.endUseDayTypeSetup;
     }
-    let newEndUse: UpdatedEndUseData = this.endUsesService.addToAssessment(compressedAirAssessment, this.settings);
+    let newEndUse: UpdatedEndUseData = this.endUsesService.addToAssessment(this.compressedAirAssessment, this.settings);
+    this.compressedAirAssessment = newEndUse.compressedAirAssessment;
     this.compressedAirAssessmentService.updateCompressedAir(newEndUse.compressedAirAssessment, true);
     this.endUsesService.selectedEndUse.next(newEndUse.endUse);
     this.hasEndUses = true;

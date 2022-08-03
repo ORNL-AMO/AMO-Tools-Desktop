@@ -17004,9 +17004,8 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "endUseName": "Aerator",
                     "modifiedDate": new Date(),
                     "endUseDescription": "Aerator airflow usage",
-                    "location": 'Warehouse 1',
+                    "location": 'Building 1',
                     "requiredPressure": 12,
-                    "selectedDayTypeId": "hopx028cf",
                     "dayTypeEndUses": [
                         {
                             "dayTypeId": "hopx028cf",
@@ -17033,7 +17032,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "endUseDescription": "Hand tools airflow usage",
                     "location": 'NA',
                     "requiredPressure": 12,
-                    "selectedDayTypeId": "hopx028cf",
                     "dayTypeEndUses": [
                         {
                             "dayTypeId": "hopx028cf",
@@ -17059,9 +17057,8 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "modifiedDate": new Date(),
                     "endUseName": "Pneumatic Machines",
                     "endUseDescription": "Machine airflow usage",
-                    "location": 'Warehouse 2',
+                    "location": 'Building 2',
                     "requiredPressure": 12,
-                    "selectedDayTypeId": "hopx028cf",
                     "dayTypeEndUses": [
                         {
                             "dayTypeId": "hopx028cf",

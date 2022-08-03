@@ -62,19 +62,33 @@ export class ConvertCompressedAirService {
   }
 
   convertEndUses(endUseData: EndUseData, oldSettings: Settings, newSettings: Settings): EndUseData {
+    if (endUseData.endUseDayTypeSetup) {
+      endUseData.endUseDayTypeSetup.dayTypeLeakRates.forEach(leakRate => {
+        if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+          leakRate.dayTypeLeakRate = this.convertUnitsService.value(leakRate.dayTypeLeakRate).from('m3/min').to('ft3/min');
+        } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+          leakRate.dayTypeLeakRate = this.convertUnitsService.value(leakRate.dayTypeLeakRate).from('ft3/min').to('m3/min');
+        }
+        leakRate.dayTypeLeakRate = this.convertUnitsService.roundVal(leakRate.dayTypeLeakRate, 2);
+      });
+    }
     endUseData.endUses.forEach((endUse: EndUse) => {
+      if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+        endUse.requiredPressure = this.convertUnitsService.value(endUse.requiredPressure).from('barg').to('psig');
+      } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+        endUse.requiredPressure = this.convertUnitsService.value(endUse.requiredPressure).from('psig').to('barg');
+      }
+      endUse.requiredPressure = this.convertUnitsService.roundVal(endUse.requiredPressure, 2);
+
       endUse.dayTypeEndUses.map(dayTypeUse => {
         if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-          dayTypeUse.requiredPressure = this.convertUnitsService.value(dayTypeUse.requiredPressure).from('barg').to('psig');
           dayTypeUse.measuredPressure = this.convertUnitsService.value(dayTypeUse.measuredPressure).from('barg').to('psig');
           dayTypeUse.averageAirflow = this.convertUnitsService.value(dayTypeUse.averageAirflow).from('m3/min').to('ft3/min');
     
         } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-          dayTypeUse.requiredPressure = this.convertUnitsService.value(dayTypeUse.requiredPressure).from('psig').to('barg');
           dayTypeUse.measuredPressure = this.convertUnitsService.value(dayTypeUse.measuredPressure).from('psig').to('barg');
           dayTypeUse.averageAirflow = this.convertUnitsService.value(dayTypeUse.averageAirflow).from('ft3/min').to('m3/min');
         }
-        dayTypeUse.requiredPressure = this.convertUnitsService.roundVal(dayTypeUse.requiredPressure, 2);
         dayTypeUse.measuredPressure = this.convertUnitsService.roundVal(dayTypeUse.measuredPressure, 2);
         dayTypeUse.averageAirflow = this.convertUnitsService.roundVal(dayTypeUse.averageAirflow, 2);
     

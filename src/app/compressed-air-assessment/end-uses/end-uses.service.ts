@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { CompressedAirAssessment, DayTypeAirflowTotals, DayTypeEndUse, EndUse, EndUseDayTypeSetup, ProfileSummary } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 import { BaselineResult, BaselineResults, CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 import { DayTypeSetupService } from './day-type-setup-form/day-type-setup.service';
+import { DayTypeUseFormService } from './day-type-use-form/day-type-use-form.service';
 
 @Injectable()
 export class EndUsesService {
@@ -15,6 +16,7 @@ export class EndUsesService {
   constructor(private formBuilder: FormBuilder,
     private compressedAirResultsService: CompressedAirAssessmentResultsService,
     private dayTypeSetupService: DayTypeSetupService, 
+    private dayTypeUseFormService: DayTypeUseFormService,
     private convertUnitsService: ConvertUnitsService) {
     this.selectedEndUse = new BehaviorSubject<EndUse>(undefined);
     this.selectedDayTypeEndUse = new BehaviorSubject<DayTypeEndUse>(undefined);
@@ -32,9 +34,14 @@ export class EndUsesService {
     return {endUse: updatedEndUse, compressedAirAssessment: compressedAirAssessment};
   }
 
+  // TODO cache these somewhere - update when daytypesetup changes
   getDayTypeAirflowTotals(compressedAirAssessment: CompressedAirAssessment, selectedDayTypeId: string, settings: Settings): DayTypeAirflowTotals {
     let baselineResults: BaselineResults = this.getBaselineResults(compressedAirAssessment, settings);
-    let totalDayTypeAverageAirflow: number = baselineResults.dayTypeResults.find(dayTypeResult => dayTypeResult.dayTypeId === selectedDayTypeId).averageAirFlow; 
+    let daytypeResult: BaselineResult = baselineResults.dayTypeResults.find(dayTypeResult => dayTypeResult.dayTypeId === selectedDayTypeId);
+    let totalDayTypeAverageAirflow: number = 0;
+    if (daytypeResult) {
+      totalDayTypeAverageAirflow = this.convertUnitsService.roundVal(daytypeResult.averageAirFlow, 1);
+    }
     let totalEndUseAirflow: number = 0;
     compressedAirAssessment.endUseData.endUses.forEach((endUse: EndUse) => {
       let dayTypeEndUse: DayTypeEndUse = endUse.dayTypeEndUses.find(dayTypeUse => dayTypeUse.dayTypeId == selectedDayTypeId);
@@ -44,9 +51,9 @@ export class EndUsesService {
     }); 
     let endUseDayTypeSetup: EndUseDayTypeSetup = this.dayTypeSetupService.endUseDayTypeSetup.getValue();
     if (endUseDayTypeSetup) {
-      let dayTypeLeakRate: number = endUseDayTypeSetup.dayTypeLeakRates.find(leakRate => leakRate.dayTypeId === selectedDayTypeId).dayTypeLeakRate;
-      if (dayTypeLeakRate) {
-        totalEndUseAirflow += dayTypeLeakRate;
+      let dayTypeLeakRateData = endUseDayTypeSetup.dayTypeLeakRates.find(leakRate => leakRate.dayTypeId === selectedDayTypeId);
+      if (dayTypeLeakRateData) {
+        totalEndUseAirflow += dayTypeLeakRateData.dayTypeLeakRate;
       }
     }
 
@@ -77,7 +84,6 @@ export class EndUsesService {
       modifiedDate: new Date(),
       endUseDescription: undefined,
       requiredPressure: undefined,
-      selectedDayTypeId: compressedAirAssessment.compressedAirDayTypes[0].dayTypeId,
       dayTypeEndUses: [this.getDefaultDayTypeEndUse(compressedAirAssessment.compressedAirDayTypes[0].dayTypeId)]
     }
   }
@@ -85,7 +91,7 @@ export class EndUsesService {
   getDefaultDayTypeEndUse(dayTypeId: string) {
     return {
       dayTypeId: dayTypeId,
-      dayTypeLeakRate: undefined,
+      dayTypeLeakRate: 0,
       averageAirflow: undefined,
       averageCapacity: undefined,
       regulated: false,
@@ -141,54 +147,38 @@ export class EndUsesService {
   }
 
 
-  getEndUseEnergyData(compressedAirAssessment: CompressedAirAssessment, selectedDayTypeId: string, dayTypeBaselineResults: BaselineResults): Array<EndUseEnergyData> {
+  getEndUseEnergyData(compressedAirAssessment: CompressedAirAssessment, endUseDayTypeSetup: EndUseDayTypeSetup, dayTypeBaselineResults: BaselineResults): Array<EndUseEnergyData> {
     let endUseEnergyData = new Array<EndUseEnergyData>();
-    
-    if (selectedDayTypeId) {
-      let currentDayTypeResults: BaselineResult = dayTypeBaselineResults.dayTypeResults.find(result => result.dayTypeId == selectedDayTypeId);
+    if (endUseDayTypeSetup.selectedDayTypeId) {
+      let currentDayTypeResults: BaselineResult = dayTypeBaselineResults.dayTypeResults.find(result => result.dayTypeId == endUseDayTypeSetup.selectedDayTypeId);
       compressedAirAssessment.endUseData.endUses.forEach((endUse: EndUse) => {
-        let dayTypeEndUse: DayTypeEndUse = endUse.dayTypeEndUses.find(dayTypeUse => dayTypeUse.dayTypeId == selectedDayTypeId);
-        if (dayTypeEndUse) {
-          let dayTypeEndUseResult: EndUseResults = this.getSingleDayTypeEndUseResults(dayTypeEndUse, currentDayTypeResults, endUse);
-          endUseEnergyData.push({
-            dayTypeAverageAirflowPercent: dayTypeEndUseResult.averagePercentCapacity,
-            dayTypeAverageAirFlow: dayTypeEndUse.averageAirflow,
-            endUseName: endUse.endUseName,
-            endUseId: endUse.endUseId,
-            color: undefined
-          });
-        }
-      });      
-    } else {
-      // // For all day types
-      // compressedAirAssessment.endUseData.endUses.forEach((endUse: EndUse) => {
-      //  endUse.dayTypeEndUses.forEach(dayTypeEndUse => {
-      //   let currentDayTypeResults: BaselineResult = dayTypeBaselineResults.dayTypeResults.find(result => result.dayTypeId == dayTypeEndUse.dayTypeId);
-      //     let dayTypeEndUseResult: EndUseResults = this.getSingleDayTypeEndUseResults(dayTypeEndUse, currentDayTypeResults, endUse);
-      //     endUseEnergyData.push({
-      //       dayTypeAverageAirflowPercent: dayTypeEndUseResult.averagePercentCapacity,
-      //       dayTypeAverageAirFlow: dayTypeEndUse.averageAirflow,
-      //       endUseName: endUse.endUseName,
-      //       endUseId: endUse.endUseId,
-      //       color: undefined
-      //     });
-      //   });
-      // });  
-    }
+        let isValidEndUse: boolean = this.getEndUseFormFromObj(endUse, compressedAirAssessment.endUseData.endUses).valid;
+        if (isValidEndUse) {
 
-    let endUseDayTypeSetup: EndUseDayTypeSetup = this.dayTypeSetupService.endUseDayTypeSetup.getValue();
-    if (endUseDayTypeSetup && selectedDayTypeId) {
-      let dayTypeLeakRate: number = endUseDayTypeSetup.dayTypeLeakRates.find(leakRate => leakRate.dayTypeId === selectedDayTypeId).dayTypeLeakRate;
+          let dayTypeEndUse: DayTypeEndUse = endUse.dayTypeEndUses.find(dayTypeUse => dayTypeUse.dayTypeId == endUseDayTypeSetup.selectedDayTypeId);
+          if (dayTypeEndUse) {
+
+            let isValidDayTypeEndUse: boolean = this.dayTypeUseFormService.getDayTypeUseForm(dayTypeEndUse, currentDayTypeResults.averageAirFlow).valid;
+            if (isValidDayTypeEndUse) {
+              
+              let dayTypeEndUseResult: EndUseResults = this.getSingleDayTypeEndUseResults(dayTypeEndUse, currentDayTypeResults, endUse);
+              endUseEnergyData.push({
+                dayTypeAverageAirflowPercent: dayTypeEndUseResult.averagePercentCapacity,
+                dayTypeAverageAirFlow: dayTypeEndUse.averageAirflow,
+                endUseName: endUse.endUseName,
+                endUseId: endUse.endUseId,
+                color: undefined
+              });
+            }
+          }
+        }
+      });  
+      
+
+      let dayTypeLeakRate: number = endUseDayTypeSetup.dayTypeLeakRates.find(leakRate => leakRate.dayTypeId === endUseDayTypeSetup.selectedDayTypeId).dayTypeLeakRate;
       if (dayTypeLeakRate) {
         compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeEndUseAirflow;
-        let leakRatePercent: number = (dayTypeLeakRate / compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeEndUseAirflow) * 100;
-        // endUseEnergyData.push({
-        //   dayTypeAverageAirflowPercent: leakRatePercent,
-        //   dayTypeAverageAirFlow: dayTypeLeakRate,
-        //   endUseName: 'Day Type Leak Rate',
-        //   endUseId: 'dayTypeLeakRate',
-        //   color: 'red'
-        // })
+        let leakRatePercent: number = (dayTypeLeakRate / compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeAverageAirflow) * 100;
         endUseEnergyData.unshift({
           dayTypeAverageAirflowPercent: leakRatePercent,
           dayTypeAverageAirFlow: dayTypeLeakRate,
@@ -197,41 +187,90 @@ export class EndUsesService {
           color: 'rgb(255, 0, 0)'
         });
       }
-
-    } 
+    }
 
     return endUseEnergyData;
   }
 
-  getEndUseFormFromObj(endUse: EndUse): FormGroup {
+  getEndUseFormFromObj(endUse: EndUse, endUses: Array<EndUse>): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       endUseName: [endUse.endUseName],
       endUseDescription: [endUse.endUseDescription],
       location: [endUse.location],
-      requiredPressure: [endUse.requiredPressure],
-      selectedDayTypeId: [endUse.selectedDayTypeId],
+      endUseId: [endUse.endUseId],
+      requiredPressure: [endUse.requiredPressure, [Validators.required, Validators.min(0)]],
     });
+    form = this.setEndUseNameValidators(form, endUses);
+
     this.markFormDirtyToDisplayValidation(form);
     return form;
   }
 
+  setEndUseNameValidators(form: FormGroup, endUses?: Array<EndUse>) {
+    let endUseNameValidators: Array<ValidatorFn> = [Validators.required, this.duplicateNameValidator(form, endUses)];
+    form.controls.endUseName.setValidators(endUseNameValidators);
+    form.controls.endUseName.updateValueAndValidity();
+    return form;
+ }
+
+
+ duplicateNameValidator(currentEndUseForm: FormGroup, endUses?: Array<EndUse>): ValidatorFn {
+  return (valueControl: AbstractControl): { [key: string]: { val: string } } => {
+    if (valueControl.value !== '' && valueControl.value !== null) {
+      let duplicateNamedUse: EndUse = endUses.find(endUse => {
+          return endUse.endUseName === currentEndUseForm.controls.endUseName.value && endUse.endUseId !== currentEndUseForm.controls.endUseId.value;
+        });
+      try {
+        if (duplicateNamedUse === undefined) {
+          return undefined;
+        }
+      }
+      catch (e) {
+        console.log(e);
+        return {
+          duplicateNamedUse: { val: duplicateNamedUse.endUseName }
+        };
+      }
+      return {
+        duplicateNamedUse: { val: duplicateNamedUse.endUseName }
+      };
+    }
+    else {
+      return undefined;
+    }
+  };
+}
+
   getEndUseFromFrom(form: FormGroup): EndUse {
     let selectedEndUse: EndUse = this.selectedEndUse.getValue();
-    // TODO set daytypeEndUses?
     return {
       endUseId: selectedEndUse.endUseId,
       modifiedDate: selectedEndUse.modifiedDate,
       endUseName: form.controls.endUseName.value,
       requiredPressure: form.controls.requiredPressure.value,
-      selectedDayTypeId: form.controls.selectedDayTypeId.value,
       location: form.controls.location.value,
       endUseDescription: form.controls.endUseDescription.value,
     }
   }
 
+  checkEndUseWarnings(endUse: EndUse): EndUseWarnings {
+    return {
+      requiredPressure: this.checkRequiredPressure(endUse),
+    }
+  }
+
+
+  checkRequiredPressure(endUse: EndUse): string {
+    if (endUse.requiredPressure !== undefined && endUse.requiredPressure === 0) {
+      return `Required Pressure should be greater than 0`;
+    } else {
+      return undefined;
+    }
+  }
+
   markFormDirtyToDisplayValidation(form: FormGroup) {
     for (let key in form.controls) {
-      if (form.controls[key] && form.controls[key].value != undefined) {
+      if (form.controls[key]) {
         form.controls[key].markAsDirty();
       }
     }
@@ -242,6 +281,10 @@ export class EndUsesService {
 export interface UpdatedEndUseData {
   endUse: EndUse,
   compressedAirAssessment: CompressedAirAssessment
+}
+
+export interface EndUseWarnings {
+  requiredPressure: string,
 }
 
 export interface EndUseResults {
@@ -258,5 +301,6 @@ export interface EndUseEnergyData {
 }
 
 export interface EndUseWarnings {
-  requiredPressure: string
+  requiredPressure: string,
+  duplicateNameWarning?: string
 }
