@@ -101,5 +101,5 @@ export class SidebarComponent implements OnInit {
 
   toggleNewDropdown(){
     this.showNewDropdown = !this.showNewDropdown;
-  }  
+  }
 }
