@@ -10,6 +10,7 @@ export class DashboardService {
   createAssessment: BehaviorSubject<boolean>;
   dashboardToastMessage: BehaviorSubject<string>;
   sidebarX: BehaviorSubject<number>;
+  totalScreenWidth: BehaviorSubject<number>;
   createInventory:BehaviorSubject<boolean>;
   copyItems: BehaviorSubject<boolean>;
   constructor() {
@@ -20,5 +21,6 @@ export class DashboardService {
     this.sidebarX = new BehaviorSubject<number>(undefined);
     this.createInventory = new BehaviorSubject<boolean>(false);
     this.copyItems = new BehaviorSubject<boolean>(false);
+    this.totalScreenWidth = new BehaviorSubject<number>(undefined);
   }
 }
