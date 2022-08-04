@@ -94,12 +94,16 @@
   <div class="scroll-item col-12 p-0 d-flex" [ngStyle]="{'height.px': containerHeight}">
     <div class="modification baseline w-100 panel-column" (click)="togglePanel(baselineSelected)"
       [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen, 'collapse': baselineCollapsed}">
-      <div class="header mr-2 ml-2">
-        <h3>Baseline</h3>
+
+      <div class="d-flex flex-nowrap tabs subtabs mr-2 ml-2 align-content-stretch">
+        <div class="flex-fill header" [ngClass]="{'active': !baselineCollapsed}">
+          <a><h3>Baseline</h3></a>
+        </div>
+        <div class="flex-fill header">
+          <a (click)="collapsePanel()"><h3>{{psat.modifications[modificationIndex].psat.name}}</h3></a>
+        </div>
       </div>
-      <div class="pl-2 pr-2 toggle-arrows header mr-2 ml-2 font-weight-bold" (click)="collapsePanel()">
-        Edit Modification
-      </div>
+
       <div class="psat-losses-container">
         <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
         <app-pump-operations *ngIf="modifyTab == 'operations'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()"
@@ -119,11 +123,13 @@
       [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen, 'collapse': !baselineCollapsed}">
 
       <!-- Modification Header -->
-      <div class="header mr-2 ml-2">
-        <h3 *ngIf="psat.modifications[modificationIndex]">{{psat.modifications[modificationIndex].psat.name}}</h3>
-      </div>
-      <div class="pl-2 pr-2 toggle-arrows header mr-2 ml-2 font-weight-bold" (click)="collapsePanel()">
-        Edit Baseline
+      <div class="d-flex flex-nowrap tabs subtabs mr-2 ml-2 align-content-stretch">
+        <div class="flex-fill header">
+          <a (click)="collapsePanel()"><h3>Baseline</h3></a>
+        </div>
+        <div class="flex-fill header" [ngClass]="{'active': baselineCollapsed}">
+          <a><h3 *ngIf="psat.modifications[modificationIndex]">{{psat.modifications[modificationIndex].psat.name}}</h3></a>
+        </div>
       </div>
 
       <!-- Forms -->
