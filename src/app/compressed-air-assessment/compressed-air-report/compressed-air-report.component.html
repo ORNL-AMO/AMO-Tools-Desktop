@@ -70,9 +70,9 @@
             <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
                 <a>Report Graphs</a>
             </li>
-            <!-- <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
+            <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
                 <a>Sankey</a>
-            </li> -->
+            </li>
             <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
                 <a>Input Summary</a>
             </li>
@@ -100,11 +100,16 @@
                 [assessment]="assessment" [settings]="settings"></app-executive-summary>
         </div>
         <div class="results scroll-item print-height page-break-before"
-            *ngIf="(currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && (printOptions.printReportGraphs || printOptions.printReportSankey))"
+            *ngIf="(currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && printOptions.printReportGraphs)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-report-graphs [assessmentResults]="assessmentResults" [combinedDayTypeResults]="combinedDayTypeResults"
                 [compressedAirAssessment]="assessment.compressedAirAssessment" [printView]="showPrintView">
             </app-report-graphs>
+        </div>
+        <div class="results scroll-item print-height page-break-before"
+            *ngIf="(currentTab == 'reportSankey' && !showPrintView) || (showPrintView && printOptions.printReportSankey)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-compressed-air-sankey [inReport]="true" [assessment]="assessment"></app-compressed-air-sankey>
         </div>
         <div class="print-height page-break-before" [ngClass]="{'results scroll-item':!showPrintView}"
             *ngIf="(currentTab == 'systemProfiles' && !showPrintView) || (showPrintView && printOptions.printSystemProfiles)"

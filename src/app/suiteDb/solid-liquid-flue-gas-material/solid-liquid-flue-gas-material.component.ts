@@ -117,32 +117,36 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   }
 
   convertDecimals() {
-      this.newMaterial = {
-        substance: this.newMaterial.substance,
-        carbon: this.newMaterial.carbon/100,
-        hydrogen: this.newMaterial.hydrogen/100,
-        inertAsh: this.newMaterial.inertAsh/100,
-        moisture: this.newMaterial.moisture/100,
-        nitrogen: this.newMaterial.nitrogen/100,
-        o2: this.newMaterial.o2/100,
-        sulphur: this.newMaterial.sulphur/100,
-        heatingValue: this.newMaterial.heatingValue,
-        ambientAirTempF: this.newMaterial.ambientAirTempF,
-      }
+    this.newMaterial = {
+      substance: this.newMaterial.substance,
+      carbon: this.fromPercent(this.newMaterial.carbon),
+      hydrogen: this.fromPercent(this.newMaterial.hydrogen),
+      inertAsh: this.fromPercent(this.newMaterial.inertAsh),
+      moisture: this.fromPercent(this.newMaterial.moisture),
+      nitrogen: this.fromPercent(this.newMaterial.nitrogen),
+      o2: this.fromPercent(this.newMaterial.o2),
+      sulphur: this.fromPercent(this.newMaterial.sulphur),
+      heatingValue: this.newMaterial.heatingValue,
+      ambientAirTempF: this.newMaterial.ambientAirTempF,
+    }
   }
 
+  fromPercent(num: number) {
+    return Number((num / 100).toFixed(6));
+  }
+  
   setExisting() {
     if (this.editExistingMaterial && this.existingMaterial) {
       this.newMaterial = {
         id: this.existingMaterial.id,
         substance: this.existingMaterial.substance,
-        carbon: this.existingMaterial.carbon*100,
-        hydrogen: this.existingMaterial.hydrogen*100,
-        inertAsh: this.existingMaterial.inertAsh*100,
-        moisture: this.existingMaterial.moisture*100,
-        nitrogen: this.existingMaterial.nitrogen*100,
-        o2: this.existingMaterial.o2*100,
-        sulphur: this.existingMaterial.sulphur*100,
+        carbon: this.toPercent(this.existingMaterial.carbon),
+        hydrogen: this.toPercent(this.existingMaterial.hydrogen),
+        inertAsh: this.toPercent(this.existingMaterial.inertAsh),
+        moisture: this.toPercent(this.existingMaterial.moisture),
+        nitrogen: this.toPercent(this.existingMaterial.nitrogen),
+        o2: this.toPercent(this.existingMaterial.o2),
+        sulphur: this.toPercent(this.existingMaterial.sulphur),
         heatingValue: 0,
         ambientAirTempF: this.existingMaterial.ambientAirTempF
       }
@@ -152,19 +156,23 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     else if (this.selectedMaterial) {
       this.newMaterial = {
         substance: this.selectedMaterial.substance + ' (mod)',
-        carbon: this.selectedMaterial.carbon*100,
-        hydrogen: this.selectedMaterial.hydrogen*100,
-        inertAsh: this.selectedMaterial.inertAsh*100,
-        moisture: this.selectedMaterial.moisture*100,
-        nitrogen: this.selectedMaterial.nitrogen*100,
-        o2: this.selectedMaterial.o2*100,
-        sulphur: this.selectedMaterial.sulphur*100,
+        carbon: this.toPercent(this.selectedMaterial.carbon),
+        hydrogen: this.toPercent(this.selectedMaterial.hydrogen),
+        inertAsh: this.toPercent(this.selectedMaterial.inertAsh),
+        moisture: this.toPercent(this.selectedMaterial.moisture),
+        nitrogen: this.toPercent(this.selectedMaterial.nitrogen),
+        o2: this.toPercent(this.selectedMaterial.o2),
+        sulphur: this.toPercent(this.selectedMaterial.sulphur),
         heatingValue: 0,
         ambientAirTempF: 65
       }
       this.setHHV();
       this.checkMaterialName();
     }
+  }
+
+  toPercent(num: number) {
+    return Number((num * 100).toFixed(4));
   }
 
   setHHV() {

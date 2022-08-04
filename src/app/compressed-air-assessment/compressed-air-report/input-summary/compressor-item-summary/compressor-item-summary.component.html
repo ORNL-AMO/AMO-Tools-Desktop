@@ -159,24 +159,6 @@
                                 </span>
                             </td>
                         </tr>
-                        <!--INLET CONDITIONS-->
-                        <tr>
-                            <th class="section-header">Inlet Conditions</th>
-                            <th *ngFor="let compressor of compressorInventoryItems">
-
-                            </th>
-                        </tr>
-                        <!-- temperature -->
-                        <tr>
-                            <td>
-                                Temperature
-                            </td>
-                            <td *ngFor="let compressor of compressorInventoryItems">
-                                {{compressor.inletConditions.temperature}}
-                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
-                            </td>
-                        </tr>
                         <!--DESIGN DETAILS-->
                         <tr>
                             <th class="section-header">Design Details</th>

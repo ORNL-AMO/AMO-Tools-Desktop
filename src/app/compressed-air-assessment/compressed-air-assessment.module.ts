@@ -41,7 +41,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { CompressorOptionsTableComponent } from './inventory/generic-compressor-modal/compressor-options-table/compressor-options-table.component';
 import { FilterCompressorsComponent } from './inventory/generic-compressor-modal/filter-compressors/filter-compressors.component';
 import { FilterCompressorsPipe } from './inventory/generic-compressor-modal/filter-compressors.pipe';
-import { InletConditionsComponent } from './inventory/inlet-conditions/inlet-conditions.component';
 import { PerformancePointCalculationsService } from './inventory/performance-points/calculations/performance-point-calculations.service';
 import { BlowoffCalculationsService } from './inventory/performance-points/calculations/blowoff-calculations.service';
 import { FullLoadCalculationsService } from './inventory/performance-points/calculations/full-load-calculations.service';
@@ -57,7 +56,6 @@ import { SystemInformationHelpComponent } from './results-panel/help-panel/syste
 import { InventoryHelpComponent } from './results-panel/help-panel/inventory-help/inventory-help.component';
 import { NameplateDataHelpComponent } from './results-panel/help-panel/inventory-help/nameplate-data-help/nameplate-data-help.component';
 import { ControlDataHelpComponent } from './results-panel/help-panel/inventory-help/control-data-help/control-data-help.component';
-import { InletConditionsHelpComponent } from './results-panel/help-panel/inventory-help/inlet-conditions-help/inlet-conditions-help.component';
 import { DesignDetailsHelpComponent } from './results-panel/help-panel/inventory-help/design-details-help/design-details-help.component';
 import { CentrifugalSpecificsHelpComponent } from './results-panel/help-panel/inventory-help/centrifugal-specifics-help/centrifugal-specifics-help.component';
 import { PerformancePointsHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/performance-points-help.component';
@@ -142,8 +140,16 @@ import { MidTurndownComponent } from './inventory/performance-points/mid-turndow
 import { MidTurndownCalculationService } from './inventory/performance-points/calculations/mid-turndown-calculation.service';
 import { TurndownCalculationService } from './inventory/performance-points/calculations/turndown-calculation.service';
 import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-modal.component';
+import { EndUseTableComponent } from './results-panel/end-use-table/end-use-table.component';
+import { EndUseChartComponent } from './end-use-chart/end-use-chart.component';
+import { DayTypeUseFormComponent } from './end-uses/day-type-use-form/day-type-use-form.component';
+import { EndUsesService } from './end-uses/end-uses.service';
+import { DayTypeUseFormService } from './end-uses/day-type-use-form/day-type-use-form.service';
 import { ImproveEndUseFormControlsPipe } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-form-controls.pipe';
 import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-label.module';
+import { EndUseHelpComponent } from './results-panel/help-panel/end-use-help/end-use-help.component';
+import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-air-sankey.module';
+import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use-day-type-setup.module';
 
 @NgModule({
   declarations: [
@@ -176,7 +182,6 @@ import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-lab
     CompressorOptionsTableComponent,
     FilterCompressorsComponent,
     FilterCompressorsPipe,
-    InletConditionsComponent,
     DayTypeFilterPipe,
     SystemCapacityModalComponent,
     HelpPanelComponent,
@@ -185,7 +190,6 @@ import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-lab
     InventoryHelpComponent,
     NameplateDataHelpComponent,
     ControlDataHelpComponent,
-    InletConditionsHelpComponent,
     DesignDetailsHelpComponent,
     CentrifugalSpecificsHelpComponent,
     PerformancePointsHelpComponent,
@@ -225,9 +229,13 @@ import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-lab
     CompressorSummaryComponent,
     WelcomeScreenComponent,
     FlaModalComponent,
+    EndUseTableComponent,
+    EndUseChartComponent,
+    DayTypeUseFormComponent,
     ImproveEndUseFormControlsPipe,
     TurndownComponent,
-    MidTurndownComponent
+    MidTurndownComponent,
+    EndUseHelpComponent
   ],
   imports: [
     CommonModule,
@@ -262,7 +270,9 @@ import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-lab
     Co2HelpTextModule,
     CentrifugalGraphModule,
     BleedTestModule,
-    IntervalHourLabelModule
+    IntervalHourLabelModule,
+    CompressedAirSankeyModule,
+    EndUseDayTypeSetupModule,
   ],
   providers: [
     CompressedAirAssessmentService,
@@ -294,8 +304,10 @@ import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-lab
     AdjustCascadingSetPointsService,
     ReduceRunTimeService,
     ExploreOpportunitiesValidationService,
+    EndUsesService,
+    DayTypeUseFormService,
     MidTurndownCalculationService,
     TurndownCalculationService
-  ]
+  ],
 })
 export class CompressedAirAssessmentModule { }

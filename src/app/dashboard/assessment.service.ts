@@ -385,6 +385,14 @@ export class AssessmentService {
         },
         profileSummary: new Array()
       },
+      endUseData: {
+        endUseDayTypeSetup: {
+          selectedDayTypeId: undefined,
+          dayTypeLeakRates: [],
+        },
+        dayTypeAirFlowTotals: undefined,
+        endUses: new Array(),
+      },
       compressedAirDayTypes: [{
         dayTypeId: initDayTypeId,
         name: 'Standard Day Type',
