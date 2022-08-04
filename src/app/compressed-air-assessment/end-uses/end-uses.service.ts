@@ -211,7 +211,7 @@ export class EndUsesService {
       }
     }
 
-    return {hasValidEndUses: !hasInvalidEndUse, endUseEnergyData};
+    return {hasValidEndUses: !hasInvalidEndUse, endUseEnergyData: endUseEnergyData};
   }
 
   getEndUseFormFromObj(endUse: EndUse, endUses: Array<EndUse>): FormGroup {
