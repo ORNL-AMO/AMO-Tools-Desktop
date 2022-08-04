@@ -122,116 +122,120 @@ export class AirflowSankeyComponent implements OnInit {
               && !this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals.exceededAirflow
               && this.hasValidDayTypeSetup;
 
+    let sankeyData = {};
     if (canRenderSankey) {
       this.airFlowSankeyResults = this.airflowSankeyService.getAirFlowSankeyResults(this.compressedAirAssessment, this.endUseDayTypeSetup, this.settings);
-      this.buildNodes();
-      this.buildLinks();
-    }
-    this.cd.detectChanges();
+      this.cd.detectChanges();
+      if (!this.airFlowSankeyResults.warnings.hasInvalidEndUses) {
+        this.buildNodes();
+        this.buildLinks();
 
-    let sankeyLink = {
-      value: this.nodes.map(node => node.value),
-      source: this.links.map(link => link.source),
-      target: this.links.map(link => link.target),
-      hoverinfo: 'none',
-      line: {
-        color: this.gradientStartColorPurple,
-        width: 0
-      },
-    };
 
-    let sankeyData = {
-      type: "sankey",
-      orientation: "h",
-      valuesuffix: "%",
-      ids: this.nodes.map(node => node.id),
-      textfont: {
-        color: 'rgba(0, 0, 0)',
-        size: 14
-      },
-      arrangement: 'freeform',
-      node: {
-        pad: 50,
-        line: {
-          color: this.gradientStartColorPurple,
-        },
-        label: this.nodes.map(node => node.name),
-        x: this.nodes.map(node => node.x),
-        y: this.nodes.map(node => node.y),
-        color: this.nodes.map(node => node.nodeColor),
-        hoverinfo: 'all',
-        hovertemplate: '%{value}<extra></extra>',
-        hoverlabel: {
-          font: {
-            size: 14,
-            color: 'rgba(255, 255, 255)'
+        let sankeyLink = {
+          value: this.nodes.map(node => node.value),
+          source: this.links.map(link => link.source),
+          target: this.links.map(link => link.target),
+          hoverinfo: 'none',
+          line: {
+            color: this.gradientStartColorPurple,
+            width: 0
           },
-          align: 'auto',
-        },
-        showgrid: false,
-      },
-      link: sankeyLink
-    };
+        };
 
-    let layout = {
-      autosize: true,
-      height: 500,
-      paper_bgcolor: undefined,
-      plot_bgcolor: undefined,
-      margin: {
-        l: 50,
-        t: 25,
-        pad: 10,
-      },
-      xaxis: {
-        showgrid: false,
-        showticklabels:false,
-        showline:false,
-      },
-      yaxis: {
-        showgrid: false,
-        showticklabels:false,
-        showline:false,
-      },
-    };
+        sankeyData = {
+          type: "sankey",
+          orientation: "h",
+          valuesuffix: "%",
+          ids: this.nodes.map(node => node.id),
+          textfont: {
+            color: 'rgba(0, 0, 0)',
+            size: 14
+          },
+          arrangement: 'freeform',
+          node: {
+            pad: 50,
+            line: {
+              color: this.gradientStartColorPurple,
+            },
+            label: this.nodes.map(node => node.name),
+            x: this.nodes.map(node => node.x),
+            y: this.nodes.map(node => node.y),
+            color: this.nodes.map(node => node.nodeColor),
+            hoverinfo: 'all',
+            hovertemplate: '%{value}<extra></extra>',
+            hoverlabel: {
+              font: {
+                size: 14,
+                color: 'rgba(255, 255, 255)'
+              },
+              align: 'auto',
+            },
+            showgrid: false,
+          },
+          link: sankeyLink
+        };
 
-    if (this.appBackground) {
-      layout.paper_bgcolor = 'ececec';
-      layout.plot_bgcolor = 'ececec';
+        let layout = {
+          autosize: true,
+          height: 500,
+          paper_bgcolor: undefined,
+          plot_bgcolor: undefined,
+          margin: {
+            l: 50,
+            t: 25,
+            pad: 10,
+          },
+          xaxis: {
+            showgrid: false,
+            showticklabels: false,
+            showline: false,
+          },
+          yaxis: {
+            showgrid: false,
+            showticklabels: false,
+            showline: false,
+          },
+        };
+
+        if (this.appBackground) {
+          layout.paper_bgcolor = 'ececec';
+          layout.plot_bgcolor = 'ececec';
+        }
+
+        let config = {
+          modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+          responsive: true,
+          displayModeBar: true,
+          displaylogo: true
+        };
+        if (this.printView) {
+          config.displaylogo = false;
+          config.displayModeBar = false;
+          config.responsive = false
+        }
+
+        this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
+          .then(chart => {
+            this.addGradientElement();
+            this.buildSvgArrows();
+            chart.on('plotly_restyle', () => {
+              this.setGradient();
+            });
+            chart.on('plotly_afterplot', () => {
+              this.setGradient();
+            });
+            chart.on('plotly_hover', () => {
+              this.setGradient();
+            });
+            chart.on('plotly_unhover', () => {
+              this.setGradient();
+            });
+            chart.on('plotly_relayout', () => {
+              this.setGradient();
+            });
+          });
+      }
     }
-
-    let config = {
-      modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
-      responsive: true,
-      displayModeBar: true,
-      displaylogo: true
-    };
-    if (this.printView) {
-        config.displaylogo = false;
-        config.displayModeBar = false;
-        config.responsive = false
-    }
-
-    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
-    .then(chart => {
-      this.addGradientElement();
-      this.buildSvgArrows();
-      chart.on('plotly_restyle', () => {
-        this.setGradient();
-      });
-      chart.on('plotly_afterplot', () => {
-        this.setGradient();
-      });
-      chart.on('plotly_hover', () => {
-        this.setGradient();
-      });
-      chart.on('plotly_unhover', () => {
-        this.setGradient();
-      });
-      chart.on('plotly_relayout', () => {
-        this.setGradient();
-      });
-    });
   }
 
   buildLinks() {
@@ -258,7 +262,7 @@ export class AirflowSankeyComponent implements OnInit {
     let originConnectorFlow: number = this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeAverageAirflow
     let totalEndUseAirflow: number = originConnectorFlow;
     let originConnectorValue: number = 100;
-    
+
     this.gradientLinkPaths = [];
     this.nodes.push(
       {

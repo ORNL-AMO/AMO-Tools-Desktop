@@ -1,4 +1,3 @@
-
 <div class="d-flex flex-column w-100 compressed-air">
   <div class="row">
     <div class="navbar w-50 col-6">
@@ -24,26 +23,24 @@
       </div>
     </div>
   </div>
-  <div class="mx-5">
-    <span class="alert-warning small px-4 py-2 mx-auto"
-      *ngIf="sankeyResults && sankeyResults.warnings.CFMWarning !== undefined">{{ sankeyResults.warnings.CFMWarning
-      }}</span>
-    <span *ngIf="!profileDataComplete" class="alert-danger small px-4 py-2 mx-auto">Sankey calculation requires averages
-      of airflow and power from System Profile Setup.
-      Please check System Profile Setup data for correctness.</span>
-  </div>
+  <span class="alert-warning small px-4 py-2 mx-auto"
+    *ngIf="sankeyResults && sankeyResults.warnings.CFMWarning !== undefined">{{ sankeyResults.warnings.CFMWarning
+    }}</span>
+  <span *ngIf="!profileDataComplete" class="alert-danger small px-4 py-2 mx-auto">Sankey calculation requires averages
+    of airflow and power from System Profile Setup.
+    Please check System Profile Setup data for correctness.</span>
 </div>
 
-  <div class="sankey-padding w-100">
-    <div #powerChart></div>
-    <div *ngIf="minFlowValues.length > 0" class="ml-5">
-      <div class="mt-4">
-        <label class="group-label bold mb-2">Negligible Losses</label>
-        <table class="small w-25 ml-3">
-          <tr *ngFor="let loss of minFlowValues">
-            <td>{{loss}}</td>
-          </tr>
-        </table>
-      </div>
+<div class="sankey-padding w-100">
+  <div #powerChart></div>
+  <div *ngIf="minFlowValues.length > 0" class="ml-5">
+    <div class="mt-4">
+      <label class="group-label bold mb-2">Negligible Losses</label>
+      <table class="small w-25 ml-3">
+        <tr *ngFor="let loss of minFlowValues">
+          <td>{{loss}}</td>
+        </tr>
+      </table>
     </div>
   </div>
+</div>

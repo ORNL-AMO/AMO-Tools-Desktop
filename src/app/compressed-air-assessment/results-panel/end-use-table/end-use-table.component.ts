@@ -23,6 +23,7 @@ export class EndUseTableComponent implements OnInit {
   confirmDeleteData: ConfirmDeleteData;
 
   settings: Settings;
+  hasInvalidEndUses: boolean = false;
   constructor(private endUsesService: EndUsesService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -33,6 +34,10 @@ export class EndUseTableComponent implements OnInit {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && compressedAirAssessment.endUseData.endUses) {
         this.compressedAirAssessment = compressedAirAssessment;
+        this.compressedAirAssessment.endUseData.endUses.forEach(endUse => {
+          endUse.isValid = this.endUsesService.isEndUseValid(endUse, this.compressedAirAssessment, this.settings);
+        });
+        this.hasInvalidEndUses = this.compressedAirAssessment.endUseData.endUses.some(endUse => !endUse.isValid);
       }
     });
   }

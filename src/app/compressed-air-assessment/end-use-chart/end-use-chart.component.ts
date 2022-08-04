@@ -7,7 +7,7 @@ import { Settings } from '../../shared/models/settings';
 import { BaselineResults, DayTypeProfileSummary } from '../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { DayTypeSetupService } from '../end-uses/day-type-setup-form/day-type-setup.service';
-import { EndUseEnergyData, EndUsesService } from '../end-uses/end-uses.service';
+import { EndUseEnergy, EndUseEnergyData, EndUsesService } from '../end-uses/end-uses.service';
 
 @Component({
   selector: 'app-end-use-chart',
@@ -44,6 +44,7 @@ export class EndUseChartComponent implements OnInit {
   showChart: boolean = true;
   dayTypeSetupServiceSubscription: Subscription;
   chartTitle: string;
+  hasInvalidEndUsesWarning: string;
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private convertUnitsService: ConvertUnitsService,
@@ -90,33 +91,37 @@ export class EndUseChartComponent implements OnInit {
   }
 
   setChartData() {
+    this.hasInvalidEndUsesWarning = undefined;
     if (this.compressedAirAssessment.endUseData.endUses.length > 0) {
       this.showChart = true;
       this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals = this.endUsesService.getDayTypeAirflowTotals(this.compressedAirAssessment, this.selectedDayType.dayTypeId, this.settings);
-      let endUseEnergyData: Array<EndUseEnergyData> = this.endUsesService.getEndUseEnergyData(this.compressedAirAssessment, this.endUseDayTypeSetup, this.dayTypeBaselineResults);
+      let endUseEnergy: EndUseEnergy = this.endUsesService.getEndUseEnergyData(this.compressedAirAssessment, this.endUseDayTypeSetup, this.dayTypeBaselineResults);
+      let endUseEnergyData: Array<EndUseEnergyData> = endUseEnergy.endUseEnergyData;
       let otherEndUseData: EndUseEnergyData;
-      if (endUseEnergyData.length > 10) {
-        let endUseEnergyDataCopy: Array<EndUseEnergyData> = JSON.parse(JSON.stringify(endUseEnergyData));
-        endUseEnergyData = endUseEnergyData.slice(0, 10);
-        // TODO get method otherenergysegment
-        otherEndUseData = endUseEnergyDataCopy.slice(10, endUseEnergyDataCopy.length).reduce((totalOtherEnergyData, data) => {
-          let thing = {
-            dayTypeAverageAirFlow: totalOtherEnergyData.dayTypeAverageAirFlow += data.dayTypeAverageAirFlow,
-            dayTypeAverageAirflowPercent: totalOtherEnergyData.dayTypeAverageAirflowPercent += data.dayTypeAverageAirflowPercent,
-            endUseName: totalOtherEnergyData.endUseName,
-            endUseId: totalOtherEnergyData.endUseId,
+      if (endUseEnergy.hasValidEndUses) {
+        if (endUseEnergyData.length > 10) {
+          let endUseEnergyDataCopy: Array<EndUseEnergyData> = JSON.parse(JSON.stringify(endUseEnergyData));
+          endUseEnergyData = endUseEnergyData.slice(0, 10);
+          otherEndUseData = endUseEnergyDataCopy.slice(10, endUseEnergyDataCopy.length).reduce((totalOtherEnergyData, data) => {
+            let thing = {
+              dayTypeAverageAirFlow: totalOtherEnergyData.dayTypeAverageAirFlow += data.dayTypeAverageAirFlow,
+              dayTypeAverageAirflowPercent: totalOtherEnergyData.dayTypeAverageAirflowPercent += data.dayTypeAverageAirflowPercent,
+              endUseName: totalOtherEnergyData.endUseName,
+              endUseId: totalOtherEnergyData.endUseId,
+              color: undefined,
+            };
+            return thing;
+          }, {
+            dayTypeAverageAirFlow: 0,
+            dayTypeAverageAirflowPercent: 0,
+            endUseName: 'Other End Use Energy',
+            endUseId: Math.random().toString(36).substr(2, 9),
             color: undefined,
-          };
-          return thing;
-        }, {
-          dayTypeAverageAirFlow: 0,
-          dayTypeAverageAirflowPercent: 0,
-          endUseName: 'Other End Use Energy',
-          endUseId: Math.random().toString(36).substr(2, 9),
-          color: undefined,
-        });
-      } 
-    
+          });
+        }
+      } else {
+        this.showChart = false;
+      }
       this.renderPieChart(endUseEnergyData, otherEndUseData);
     } else {
       this.showChart = false;
