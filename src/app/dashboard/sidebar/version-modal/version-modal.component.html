@@ -10,7 +10,7 @@
       </div>
       <div class="modal-body scroll-item">
 
-        <h4>Release Notes v1.1.0</h4>
+        <h4>Release Notes v1.2.0</h4>
 
         <p>
           A software tool for calculating energy efficiency for a variety of industrial and manufacturing applications.
@@ -27,90 +27,106 @@
         </p>
         <label>Warnings:</label>
         <ul>
-          <li>Installing v1.0.1 or an earlier version of this tool will automatically reset your app data. Data can be
-            imported into an earlier version from v1.1.0</li>
-          <li>Do not install an earlier version of this tool without resetting your app data (in settings). </li>
-          <li>Assessments created in MEASUR 0.8.0 or later are not compatible with older versions. </li>
-          <li>Exporting from v.0.8.0 and importing to a lower version will continue to work, though new features will
-            not be available.</li>
+            <li>Installing v1.1.0 or an earlier version of this tool will automatically reset your app data. Data can be imported into an earlier version from v1.2.0</li>
+            <li>Do not install an earlier version of this tool without resetting your app data (in settings).</li> 
+            <li>If MEASUR freezes during installation or fails to install, uninstall the previous version of MEASUR and repeat installation of the new installer</li>
+            <li>Assessments created in MEASUR 0.8.0 or later are not compatible with older versions.  </li>
+            <li>Exporting from v.0.8.0 and importing to a lower version will continue to work, though new features will not be available.</li>
         </ul>
 
         <label>What's New?</label>
         <ul>
-          <li>Several new calculators for Process Cooling (chillers & cooling towers) calculations</li>
-          <li>Weather Bin analysis calculator with web-based weather data lookup</li>
-          <li>Various Bug Fixes and Enhancements</li>
+          <li>New compressed air control type (VFDs)</li>
+        <li>Compressed air end uses & Sankey</li>
+        <li>Compressed air energy losses Sankey</li>
+        <li>Added Hydrogen to carbon emissions and process heating fuels lists</li>
         </ul>
 
-        <label>Here are the details of what's new in version 1.1.0:</label>
+        <label>Here are the details of what's new in version 1.2.0:</label>
         <br>
         <label>Application</label>
         <ul>
-          <li>Enhanced: Added script for hot-reloading of electron process</li>
-          <li>Enhanced: Cleaned up CSS classes for calculator icons</li>
-          <li>Enhanced: Updated background "Industrial Skyline" to be vectorized image</li>
-          <li>Enhanced: Updated uses of DOE logo to be vectorized image</li>
-          <li>Fixed: Bug relating to "Units of measure were changed" warning not disappearing after data is updated</li>
-          <li>Fixed: Fixed package dependency requiring legacy version on Mac</li>
-          <li>Fixed: Updated package/package-lock for npm vulnerabilities</li>
-          <li>Updated: Replaced IndexedDb service with ngx-indexed-db package to better manage database state</li>
-          <li>Updated: Updated MEASUR API service calls to garbage-collect result objects returned from amo-tools-suite WASM bindings</li>
+          <li>Added: Hydrogen to "Other Fuels" for carbon emissions lists</li>
+          <li>Added: Links to web and download versions in tool </li>
+          <li>Enhanced: Customized the value change of a single arrow stroke for each field across the application</li>
+          <li>Fixed: Bug keeping MEASUR from loading properly in Firefox</li>
+          <li>Fixed: Bug relating to exported custom materials not importing properly</li>
+          <li>Fixed: Bug relating to horizontal scroll bar showing up unnecessarily</li>
+          <li>Fixed: Dropdown chevrons for auxiliary pages (settings, custom materials, about, acknowledgements, etc.) all facing same direction</li>
+          <li>Fixed: General code clean relating the calculator icon CSS</li>
+          <li>Fixed: Missing assessment check for data update for new releases</li>
+          <li>Fixed: Several bugs relating to web version pages not loading properly</li>
+          <li>Fixed: Tweaks to visual style of home page and side bar</li>
         </ul>
 
         <label>Calculators</label>
         <ul>
-          <li>Added: Several Process Cooling calculators to estimate the impacts of changes to chillers and cooling towers</li>
-          <li>Added: Weather Data Calculator - for developing a bin analysis of hourly TMY weather data</li>
+          <li>Enhanced: Changed the background color of lighting and motor calculators</li>
+          <li>Enhanced: Improved speed to psychrometric calculator graph calculations</li>
+          <li>Fixed: Bug causing bins fields to disappear after clicking "Clear Bins" in Weather Bins Calculator</li>
+          <li>Fixed: Bug relating to psychrometric calculator freezing when entering values into barometric pressure</li>
         </ul>
 
         <label>Data Explorer</label>
         <ul>
-          <li>Added: Dropdown menu and message asking users to provide data interval for less than minute data to help account for .csv's losing seconds data if data not formatted with it in Excel
-          </li>
+          <li>Added: 3-second and 4-second interval for less-than-minute data intervals</li>
+          <li>Fixed: Bug relating to first datapoint for each data being removed from dataset</li>
+          <li>Fixed: Bugs related to 1-minute data intervals</li>
         </ul>
 
         <label>Compressed Air</label>
         <ul>
-          <li>Added: Bleed Test Calculator</li>
-          <li>Added: Calculation method for Receiver Tank Sizing calculator for compressors with load/unload controls, when the compressor cycle time, and the loaded/unloaded times are known</li>
-          <li>Added: Pop up modal for calculation of Full Load Amps in Compressed Air Module Inventory</li>
-          <li>Enhanced: Added help text relating to "Power Type" for Pressure Reduction Calculator</li>
-          <li>Enhanced: Added validation for System Profile data entry</li>
-          <li>Enhanced: Day types profile data imported from Data Explorer now saves and can be exported with Compressed Air assessments.</li>
-          <li>Enhanced: Split the hourly System Profile data in printed report to make sure all data is printed</li>
-          <li>Fixed: Bug not allowing System Capacity modal to reopen if closed by clicking the backdrop area</li>
-          <li>Fixed: Bug relating to CO2 results when field for emission rate is blank</li>
-          <li>Updated: Compressed Air Leak Survey's "Get Example" Orifice Leak to use more realistic values</li>
+          <li>Added: End Uses data inputs and report</li>
+          <li>Added: End Uses/ Air Flow Sankey</li>
+          <li>Added: Energy Use Sankey</li>
+          <li>Added: Filter reset button</li>
+          <li>Added: New control type for compressors - VFD</li>
+          <li>Added: Validation for system profile, power and capacity percent maximums</li>
+          <li>Enhanced: System profile data can be entered in 15 minute and 30 minute intervals</li>
+          <li>Fixed: Bug relating to consistence use of atmospheric pressure value used in EEM calculations</li>
+          <li>Fixed: Bug relating to report graphs showing incorrect data</li>
+          <li>Fixed: Bug where new compressed air assessments always saved to "All Assessments" instead of specified folder</li>
+          <li>Removed: Field for input temperature - not used</li>
+          <li>Updated: Example to illustrate End Use and Air Flow Sankey</li>
+        </ul>
+
+        <label>Pumps</label>
+        <ul>
+          <li>Fixed: Issue with pump example not loading correctly</li>
+          <li>Fixed: Issue with Sankey rendering slowly</li>
+          <li>Fixed: Label for "Head" in Specific Speed Calculator changed to "Head per Stage"</li>
         </ul>
 
         <label>Fans</label>
         <ul>
-          <li>Fixed: Bug not applying results from "Inlet Pressure" and "Outlet Pressure" modals in Fan Assessment's Novice View</li>
+          <li>Fixed: Bug relating to compressibility factor</li>
+          <li>Fixed: Issue with Sankey rendering slowly</li>
         </ul>
 
         <label>Process Heating</label>
         <ul>
-          <li>Fixed: Bugs relating to importing custom materials</li>
-          <li>Update: Updated the handling of deleted custom materials and allow users to restore custom materials still used by assessments
+          <li>Added: Hydrogen to common gas fuels list</li>
+          <li>Fixed: Bug causing "Common Result Unit" not correctly set results</li>
+          <li>Fixed: Extra decimals appearing in Custom Materials compositions</li>
+          <li>Removed: Unnecessary fields from Assessment Settings (Fuel, Electricity, Steam Energy Unit settings)</li>
         </ul>
 
         <label>Treasure Hunt</label>
         <ul>
-          <li>Enhanced: Added slide to PowerPoint Export detailing the Annual Utility Usage and Costs</li>
-          <li>Enhanced: Removed use of "NaN" in PowerPoint Export. </li>
-          <li>Fixed: Bug relating to imported opportunities including a Compressed Air Reduction</li>
+          <li>Added: Filter reset button</li>
+          <li>Fixed: Cleaned up filter and sort bar buttons</li>
         </ul>
+
+        <label>Motor Inventory</label>
+        <ul>
+          <li>Added: Filter reset button</li>
+        </ul>
+
 
         <label>Process Cooling</label>
         <ul>
-          <li>Added: Chiller Energy Performance and Temperature Reset Calculator</li>
-          <li>Added: Chiller Staging calculator</li>
-          <li>Added: Cooling Tower Basin Heater Energy Calculator</li>
-          <li>Added: Cooling Tower Fan Energy Calculator </li>
-          <li>Added: Weather Data Calculator integration to Basin Heater Calculator</li>
-          <li>Enhanced: Added validation to Psychrometric Calculator to handle when wet bulb temperatures resulting in negative humidity variables</li>
-          <li>Fixed: Altitude field not hiding when reset data is clicked</li>
-          <li>Fixed: Bug relating to Barometric Pressure not properly calculating from Altitude</li>
+          <li>Added: Validation to process cooling calculators</li>
+          <li>Removed: Unnecessary sub-header in Chiller Staging</li>
         </ul>
 
         <label>Known Issues:</label>
