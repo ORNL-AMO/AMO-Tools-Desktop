@@ -45,6 +45,7 @@ export class PsatTabsComponent implements OnInit {
   getResultsSub: Subscription;
   stepTabSub: Subscription;
   tabsCollapsed: boolean = true;
+  calcTabsCollapsed: boolean = true;
 
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private psatTabService: PsatTabService, private compareService: CompareService, private cd: ChangeDetectorRef,
     private pumpFluidService: PumpFluidService, private motorService: MotorService, private fieldDataService: FieldDataService, private pumpOperationsService: PumpOperationsService) { }
@@ -269,5 +270,8 @@ export class PsatTabsComponent implements OnInit {
 
   collapseTabs() {
     this.tabsCollapsed = !this.tabsCollapsed;
+  }
+  collapseCalcTabs() {
+    this.calcTabsCollapsed = !this.calcTabsCollapsed;
   }
 }

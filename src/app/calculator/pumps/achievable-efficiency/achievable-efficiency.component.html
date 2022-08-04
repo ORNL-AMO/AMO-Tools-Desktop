@@ -1,4 +1,4 @@
-<div class="d-flex h-100 modify-conditions psat standalone-calculator" *ngIf="settings">
+<div class="d-none d-lg-flex h-100 modify-conditions psat standalone-calculator" *ngIf="settings">
 	<div class="d-flex flex-column modification w-50 mh-100 scroll-item">
 		<div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
 			<div class="calc-icon-header icon-psat">
@@ -37,13 +37,66 @@
 				</a>
 			</div>
 		</div>
-			<app-achievable-efficiency-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-achievable-efficiency-help>
-			<div class="d-flex flex-column w-100 align-items-center pt-3 p-2" *ngIf="tabSelect == 'results'"
-				id="achievableEfficiencyGraph">
-				<app-achievable-efficiency-graph class="w-100" *ngIf="tabSelect == 'results'"
-					[toggleExampleData]="toggleExampleData" [efficiencyForm]="efficiencyForm" [settings]="settings"
-					[toggleCalculate]="toggleCalculate" [toggleResetData]="toggleResetData">
-				</app-achievable-efficiency-graph>
+		<app-achievable-efficiency-help *ngIf="tabSelect == 'help'" [currentField]="currentField">
+		</app-achievable-efficiency-help>
+		<div class="d-flex flex-column w-100 align-items-center pt-3 p-2" *ngIf="tabSelect == 'results'"
+			id="achievableEfficiencyGraph">
+			<app-achievable-efficiency-graph class="w-100" *ngIf="tabSelect == 'results'"
+				[toggleExampleData]="toggleExampleData" [efficiencyForm]="efficiencyForm" [settings]="settings"
+				[toggleCalculate]="toggleCalculate" [toggleResetData]="toggleResetData">
+			</app-achievable-efficiency-graph>
+		</div>
+	</div>
+</div>
+
+
+<div class="d-block d-lg-none h-100 modify-conditions psat standalone-calculator" *ngIf="settings">
+	<div class="d-block modification w-100 mh-100 scroll-item">
+		<div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+			<div class="calc-icon-header icon-psat">
+				<img src="assets/images/calculator-icons/pump-icons/pump-efficiency.png">
+			</div>
+			<div class="pl-2">
+				<h3>Pump Achievable Efficiency</h3>
 			</div>
 		</div>
+		<div class="d-block m-4">
+			<app-achievable-efficiency-form [(efficiencyForm)]="efficiencyForm" [settings]="settings"
+				(calculate)="calculate()" (changeField)="changeField($event)"></app-achievable-efficiency-form>
+			<div class="w-100 justify-content-center btn-group btn-group-sm">
+				<button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+					Reset Data
+				</button>
+				<!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+				<button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+					(click)="btnGenerateExample()">
+					Generate Example
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="d-block w-100 mh-100 scroll-item">
+		<div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+			<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+				<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+					(click)="setTab('results')">
+					<div>Graph</div>
+				</a>
+			</div>
+			<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+				<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+					<div>Help</div>
+				</a>
+			</div>
+		</div>
+		<app-achievable-efficiency-help *ngIf="tabSelect == 'help'" [currentField]="currentField">
+		</app-achievable-efficiency-help>
+		<div class="d-flex flex-column w-100 align-items-center pt-3 p-2" *ngIf="tabSelect == 'results'"
+			id="achievableEfficiencyGraph">
+			<app-achievable-efficiency-graph class="w-100" *ngIf="tabSelect == 'results'"
+				[toggleExampleData]="toggleExampleData" [efficiencyForm]="efficiencyForm" [settings]="settings"
+				[toggleCalculate]="toggleCalculate" [toggleResetData]="toggleResetData">
+			</app-achievable-efficiency-graph>
+		</div>
+	</div>
 </div>
