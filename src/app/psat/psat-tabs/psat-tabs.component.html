@@ -142,8 +142,8 @@
         Scenarios</button>
     </div>
     <div class="mx-auto pl-2 pr-2 align-items-center justify-content-center" (click)="collapseTabs()">
-      <span *ngIf="!tabsCollapsed" class="fa fa-caret-up"></span>
-      <span *ngIf="tabsCollapsed" class="fa fa-caret-down"></span>
+      <span *ngIf="!tabsCollapsed" class="fa fa-caret-up">Menu</span>
+      <span *ngIf="tabsCollapsed" class="fa fa-caret-down">Menu</span>
     </div>  
   </div>
 
@@ -181,8 +181,8 @@
 <div class="d-flex d-lg-none flex-column" *ngIf="mainTab == 'calculators'">
   <div class="tabs subtabs psat">
     <div class="mx-auto pl-2 pr-2 align-items-center justify-content-center" (click)="collapseCalcTabs()">
-      <span *ngIf="!calcTabsCollapsed" class="fa fa-caret-up"></span>
-      <span *ngIf="calcTabsCollapsed" class="fa fa-caret-down"></span>
+      <span *ngIf="!calcTabsCollapsed" class="fa fa-caret-up">Menu</span>
+      <span *ngIf="calcTabsCollapsed" class="fa fa-caret-down">Menu</span>
     </div> 
     <div [ngClass]="{'active': calcTab == 'achievable-efficiency', 'collapse': calcTabsCollapsed}">
       <a (click)="changeCalcTab('achievable-efficiency')">Pump Achievable Efficiency</a>
