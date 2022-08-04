@@ -6,8 +6,8 @@ import { Settings } from "../shared/models/settings";
 
 export const MockCompressedAirAssessment: Assessment =  {
     "name": "Compressed Air Example",
-    "createdDate": new Date("2022-05-06T15:05:49.914Z"),
-    "modifiedDate": new Date("2022-05-11T17:12:38.824Z"),
+    "createdDate": new Date("2022-08-03T21:06:22.630Z"),
+    "modifiedDate": new Date("2022-08-03T21:13:37.500Z"),
     "type": "CompressedAir",
     "isExample": true,
     "directoryId": 2,
@@ -35,122 +35,145 @@ export const MockCompressedAirAssessment: Assessment =  {
                                         {
                                             "hourInterval": 0,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
                                         },
                                         {
                                             "hourInterval": 1,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 2,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 3,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 4,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 5,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 6,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 7,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 8,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 9,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 10,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 11,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 12,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 13,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 14,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 15,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 16,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 17,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 18,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 19,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 20,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 21,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 22,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 23,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         }
                                     ]
                                 },
@@ -161,122 +184,146 @@ export const MockCompressedAirAssessment: Assessment =  {
                                         {
                                             "hourInterval": 0,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 1,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 2,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 3,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 4,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 5,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 6,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 7,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 8,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 9,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 10,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 11,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 12,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 13,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 14,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 15,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 16,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 17,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 18,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 19,
-                                            "applyReduction": true, 
-                                            reductionAmount: undefined
+                                            "applyReduction": true,
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 20,
-                                            "applyReduction": true, 
-                                            reductionAmount: undefined
+                                            "applyReduction": true,
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 21,
-                                            "applyReduction": true, 
-                                            reductionAmount: undefined
+                                            "applyReduction": true,
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 22,
-                                            "applyReduction": true, 
-                                            reductionAmount: undefined
+                                            "applyReduction": true,
+                                            "reductionAmount": undefined
+
                                         },
                                         {
                                             "hourInterval": 23,
                                             "applyReduction": true,
-                                            reductionAmount: undefined
+                                            "reductionAmount": undefined
+
                                         }
                                     ]
                                 }
@@ -360,8 +407,8 @@ export const MockCompressedAirAssessment: Assessment =  {
                 },
                 "useAutomaticSequencer": {
                     "order": 100,
-                    "variance": undefined,
                     "targetPressure": undefined,
+                    "variance": undefined,
                     "implementationCost": 0,
                     "profileSummary": [
                         {
@@ -6128,121 +6175,145 @@ export const MockCompressedAirAssessment: Assessment =  {
                                             "hourInterval": 0,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 1,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 2,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 3,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 4,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 5,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 6,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 7,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 8,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 9,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 10,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 11,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 12,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 13,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 14,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 15,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 16,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 17,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 18,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 19,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 20,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 21,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 22,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 23,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         }
                                     ]
                                 },
@@ -6254,121 +6325,145 @@ export const MockCompressedAirAssessment: Assessment =  {
                                             "hourInterval": 0,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 1,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 2,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 3,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 4,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 5,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 6,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 7,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 8,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 9,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 10,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 11,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 12,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 13,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 14,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 15,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 16,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 17,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 18,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 19,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 20,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 21,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 22,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         },
                                         {
                                             "hourInterval": 23,
                                             "applyReduction": true,
                                             reductionAmount: undefined
+
                                         }
                                     ]
                                 }
@@ -12287,12 +12382,12 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "unloadPoint": {
-                        "power": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
                         "dischargePressure": undefined,
-                        "isDefaultPressure": true
                     },
                     "noLoad": {
                         "dischargePressure": 15,
@@ -12303,12 +12398,28 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "blowoff": {
-                        "power": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
                         "dischargePressure": undefined,
-                        "isDefaultPressure": true
+                    },
+                    "midTurndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
+                    },
+                    "turndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
                     }
                 },
                 "isValid": true,
@@ -12325,8 +12436,8 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "fullLoadOperatingPressure": 100,
                     "fullLoadRatedCapacity": 1857,
                     "ploytropicCompressorExponent": 1.4,
-                    "fullLoadAmps": 385,
                     "ratedLoadPower": undefined,
+                    "fullLoadAmps": 385,
                     "totalPackageInputPower": 290.1
                 },
                 "compressorControls": {
@@ -12371,12 +12482,12 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "unloadPoint": {
-                        "power": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
                         "dischargePressure": undefined,
-                        "isDefaultPressure": true
                     },
                     "noLoad": {
                         "dischargePressure": 15,
@@ -12387,12 +12498,28 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "blowoff": {
-                        "power": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
                         "dischargePressure": undefined,
-                        "isDefaultPressure": true
+                    },
+                    "midTurndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
+                    },
+                    "turndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
                     }
                 },
                 "isValid": true,
@@ -12409,8 +12536,8 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "fullLoadOperatingPressure": 100,
                     "fullLoadRatedCapacity": 3095,
                     "ploytropicCompressorExponent": 1.4,
-                    "fullLoadAmps": 654,
                     "ratedLoadPower": undefined,
+                    "fullLoadAmps": 654,
                     "totalPackageInputPower": 497.3
                 },
                 "compressorControls": {
@@ -12455,12 +12582,12 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "unloadPoint": {
-                        "power": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
                         "dischargePressure": undefined,
-                        "isDefaultPressure": true
                     },
                     "noLoad": {
                         "dischargePressure": 15,
@@ -12471,12 +12598,28 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "blowoff": {
-                        "power": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
                         "dischargePressure": undefined,
-                        "isDefaultPressure": true
+                    },
+                    "midTurndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
+                    },
+                    "turndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
                     }
                 },
                 "isValid": true,
@@ -12492,8 +12635,8 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "motorPower": 500,
                     "fullLoadOperatingPressure": 125,
                     "fullLoadRatedCapacity": 2315,
-                    "ratedLoadPower": undefined,
                     "ploytropicCompressorExponent": 1.4,
+                    "ratedLoadPower": undefined,
                     "fullLoadAmps": 545,
                     "totalPackageInputPower": 414.4
                 },
@@ -12539,12 +12682,12 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "unloadPoint": {
-                        "dischargePressure": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
                         "power": undefined,
-                        "isDefaultPressure": true
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
                     },
                     "noLoad": {
                         "dischargePressure": 15,
@@ -12555,12 +12698,28 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "blowoff": {
-                        "dischargePressure": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
                         "power": undefined,
-                        "isDefaultPressure": true
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
+                    },
+                    "midTurndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
+                    },
+                    "turndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
                     }
                 },
                 "isValid": true,
@@ -12576,8 +12735,8 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "motorPower": 350,
                     "fullLoadOperatingPressure": 100,
                     "fullLoadRatedCapacity": 1857,
-                    "ratedLoadPower": undefined,
                     "ploytropicCompressorExponent": 1.4,
+                    "ratedLoadPower": undefined,
                     "fullLoadAmps": 385,
                     "totalPackageInputPower": 290.1
                 },
@@ -12623,12 +12782,12 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "unloadPoint": {
-                        "dischargePressure": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
                         "power": undefined,
-                        "isDefaultPressure": true
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
                     },
                     "noLoad": {
                         "dischargePressure": 15,
@@ -12639,12 +12798,28 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "blowoff": {
-                        "dischargePressure": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
                         "power": undefined,
-                        "isDefaultPressure": true
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
+                    },
+                    "midTurndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
+                    },
+                    "turndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
                     }
                 },
                 "isValid": true,
@@ -12660,8 +12835,8 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "motorPower": 350,
                     "fullLoadOperatingPressure": 100,
                     "fullLoadRatedCapacity": 1857,
-                    "ratedLoadPower": undefined,
                     "ploytropicCompressorExponent": 1.4,
+                    "ratedLoadPower": undefined,
                     "fullLoadAmps": 385,
                     "totalPackageInputPower": 290.1
                 },
@@ -12707,12 +12882,12 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "unloadPoint": {
-                        "dischargePressure": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
                         "power": undefined,
-                        "isDefaultPressure": true
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
                     },
                     "noLoad": {
                         "dischargePressure": 15,
@@ -12723,12 +12898,28 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "blowoff": {
-                        "dischargePressure": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
                         "power": undefined,
-                        "isDefaultPressure": true
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
+                    },
+                    "midTurndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
+                    },
+                    "turndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
                     }
                 },
                 "isValid": true,
@@ -12744,8 +12935,8 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "motorPower": 600,
                     "fullLoadOperatingPressure": 100,
                     "fullLoadRatedCapacity": 3095,
-                    "ratedLoadPower": undefined,
                     "ploytropicCompressorExponent": 1.4,
+                    "ratedLoadPower": undefined,
                     "fullLoadAmps": 654,
                     "totalPackageInputPower": 497.3
                 },
@@ -12791,12 +12982,12 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "unloadPoint": {
-                        "dischargePressure": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
                         "power": undefined,
-                        "isDefaultPressure": true
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
                     },
                     "noLoad": {
                         "dischargePressure": 15,
@@ -12807,12 +12998,28 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "blowoff": {
-                        "dischargePressure": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
                         "power": undefined,
-                        "isDefaultPressure": true
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
+                    },
+                    "midTurndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
+                    },
+                    "turndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
                     }
                 },
                 "isValid": true,
@@ -12828,8 +13035,8 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "motorPower": 500,
                     "fullLoadOperatingPressure": 125,
                     "fullLoadRatedCapacity": 2315,
-                    "ratedLoadPower": undefined,
                     "ploytropicCompressorExponent": 1.4,
+                    "ratedLoadPower": undefined,
                     "fullLoadAmps": 545,
                     "totalPackageInputPower": 414.4
                 },
@@ -12875,12 +13082,12 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "unloadPoint": {
-                        "dischargePressure": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
                         "power": undefined,
-                        "isDefaultPressure": true
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
                     },
                     "noLoad": {
                         "dischargePressure": 15,
@@ -12891,12 +13098,28 @@ export const MockCompressedAirAssessment: Assessment =  {
                         "isDefaultPressure": true
                     },
                     "blowoff": {
-                        "dischargePressure": undefined,
                         "isDefaultPower": true,
-                        "airflow": undefined,
                         "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
                         "power": undefined,
-                        "isDefaultPressure": true
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
+                    },
+                    "midTurndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
+                    },
+                    "turndown": {
+                        "isDefaultPower": true,
+                        "isDefaultAirFlow": true,
+                        "isDefaultPressure": true,
+                        "power": undefined,
+                        "airflow": undefined,
+                        "dischargePressure": undefined,
                     }
                 },
                 "isValid": true,
@@ -16964,102 +17187,161 @@ export const MockCompressedAirAssessment: Assessment =  {
                 "selectedDayTypeId": "hopx028cf",
                 "dayTypeLeakRates": [
                     {
-                        "dayTypeId": "hopx028cf", 
-                        "dayTypeLeakRate": 100
+                        "dayTypeId": "hopx028cf",
+                        "dayTypeLeakRate": 2100
                     },
                     {
-                        "dayTypeId": "mufcn7yvy", 
-                        "dayTypeLeakRate": 90
+                        "dayTypeId": "mufcn7yvy",
+                        "dayTypeLeakRate": 2500
                     }
-                ],
+                ]
             },
-            "dayTypeAirFlowTotals": undefined,
+            "dayTypeAirFlowTotals": {
+                "unaccountedAirflow": 1012.3,
+                "unaccountedAirflowPercent": 11.7,
+                "exceededAirflowPercent": null,
+                "totalDayTypeEndUseAirflow": 7670,
+                "totalDayTypeEndUseAirflowPercent": 88.3,
+                "totalDayTypeAverageAirflow": 8682.3
+            },
             "endUses": [
                 {
-                    "endUseId": "lb6pu4k8k",
+                    "endUseId": "x22ow6wc6",
+                    "modifiedDate": new Date("2022-08-03T21:07:29.942Z"),
+                    "endUseName": "Pneumatic Tools 1",
+                    "requiredPressure": 95,
+                    "location": "Production Line 1",
+                    "endUseDescription": "Total of all hand tools found on production line 1",
+                    "dayTypeEndUses": [
+                        {
+                            "dayTypeId": "hopx028cf",
+                            "averageAirflow": 1560,
+                            "averageCapacity": null,
+                            "regulated": false,
+                            "excessPressure": null,
+                            "measuredPressure": 120
+                        },
+                        {
+                            "dayTypeId": "mufcn7yvy",
+                            "averageAirflow": 1600,
+                            "averageCapacity": null,
+                            "regulated": false,
+                            "excessPressure": null,
+                            "measuredPressure": 120
+                        }
+                    ]
+                },
+                {
+                    "endUseId": "id97ec422",
+                    "modifiedDate": new Date("2022-08-03T21:08:05.433Z"),
+                    "endUseName": "Pneumatic Tools 2",
+                    "requiredPressure": 95,
+                    "location": "Production Line 2",
+                    "endUseDescription": "Total of all hand tools found on production line 2",
+                    "dayTypeEndUses": [
+                        {
+                            "dayTypeId": "hopx028cf",
+                            "averageAirflow": 1250,
+                            "averageCapacity": null,
+                            "regulated": false,
+                            "excessPressure": null,
+                            "measuredPressure": 117
+                        },
+                        {
+                            "dayTypeId": "mufcn7yvy",
+                            "averageAirflow": 1460,
+                            "averageCapacity": null,
+                            "regulated": false,
+                            "excessPressure": null,
+                            "measuredPressure": 117
+                        }
+                    ]
+                },
+                {
+                    "endUseId": "xtgn5b89p",
+                    "modifiedDate": new Date("2022-08-03T21:08:41.224Z"),
                     "endUseName": "Aerator",
-                    "modifiedDate": new Date(),
-                    "endUseDescription": "Aerator airflow usage",
-                    "location": 'Building 1',
-                    "requiredPressure": 12,
+                    "requiredPressure": 50,
+                    "location": "Production Tanks",
+                    "endUseDescription": "Injects air into production tanks",
                     "dayTypeEndUses": [
                         {
                             "dayTypeId": "hopx028cf",
-                            "averageAirflow": 2612,
-                            "averageCapacity": 88,
-                            "regulated": false,
-                            "excessPressure": undefined,
-                            "measuredPressure": 15,
+                            "averageAirflow": 550,
+                            "averageCapacity": null,
+                            "regulated": true,
+                            "excessPressure": null,
+                            "measuredPressure": 52
                         },
                         {
                             "dayTypeId": "mufcn7yvy",
-                            "averageAirflow": 3000,
-                            "averageCapacity": 88,
-                            "regulated": false,
-                            "excessPressure": undefined,
-                            "measuredPressure": 15,
+                            "averageAirflow": 500,
+                            "averageCapacity": null,
+                            "regulated": true,
+                            "excessPressure": null,
+                            "measuredPressure": 52
                         }
                     ]
                 },
                 {
-                    "endUseId": "57pvni4vd",
-                    "endUseName": "Hand Tools",
-                    "modifiedDate": new Date(),
-                    "endUseDescription": "Hand tools airflow usage",
-                    "location": 'NA',
-                    "requiredPressure": 12,
-                    "dayTypeEndUses": [
-                        {
-                            "dayTypeId": "hopx028cf",
-                            "averageAirflow": 4170.3,
-                            "averageCapacity": 88,
-                            "regulated": false,
-                            "excessPressure": undefined,
-                            "measuredPressure": 15,
-                        },
-                        {
-                            "dayTypeId": "mufcn7yvy",
-                            "averageAirflow": 3000,
-                            "averageCapacity": 88,
-                            "regulated": false,
-                            "requiredPressure": 14,
-                            "excessPressure": undefined,
-                            "measuredPressure": 15,
-                        }
-                    ]
-                },
-                {
-                    "endUseId": "0z95wm6f2",
-                    "modifiedDate": new Date(),
+                    "endUseId": "l0xtz0r0a",
+                    "modifiedDate": new Date("2022-08-03T21:09:16.018Z"),
                     "endUseName": "Pneumatic Machines",
-                    "endUseDescription": "Machine airflow usage",
-                    "location": 'Building 2',
-                    "requiredPressure": 12,
+                    "requiredPressure": 110,
+                    "location": "Stamping",
+                    "endUseDescription": "Production machines that require compressed air to control",
                     "dayTypeEndUses": [
                         {
                             "dayTypeId": "hopx028cf",
-                            "averageAirflow": 1800,
-                            "averageCapacity": 88,
+                            "averageAirflow": 750,
+                            "averageCapacity": null,
                             "regulated": false,
-                            "excessPressure": undefined,
-                            "measuredPressure": 15,
+                            "excessPressure": null,
+                            "measuredPressure": 120
                         },
                         {
                             "dayTypeId": "mufcn7yvy",
-                            "averageAirflow": 4205.9,
-                            "averageCapacity": 88,
+                            "averageAirflow": 870,
+                            "averageCapacity": null,
                             "regulated": false,
-                            "excessPressure": undefined,
-                            "measuredPressure": 15,
+                            "excessPressure": null,
+                            "measuredPressure": 120
+                        }
+                    ]
+                },
+                {
+                    "endUseId": "g41gi8jyt",
+                    "modifiedDate": new Date("2022-08-03T21:13:37.483Z"),
+                    "endUseName": "Processing",
+                    "requiredPressure": 110,
+                    "location": "Finishing",
+                    "endUseDescription": "Air used for final processing and packaging",
+                    "dayTypeEndUses": [
+                        {
+                            "dayTypeId": "hopx028cf",
+                            "averageAirflow": 1460,
+                            "averageCapacity": null,
+                            "regulated": false,
+                            "excessPressure": null,
+                            "measuredPressure": 126
+                        },
+                        {
+                            "dayTypeId": "mufcn7yvy",
+                            "averageAirflow": 1250,
+                            "averageCapacity": null,
+                            "regulated": false,
+                            "excessPressure": null,
+                            "measuredPressure": 126
                         }
                     ]
                 }
-            ],
-        },
+            ]
+        }
     },
     "id": 71,
-    "selected": true
-};
+    "selected": true,
+    "appVersion": "1.1.0"
+}
 
 
 export const MockCompressedAirAssessmentSettings: Settings = {

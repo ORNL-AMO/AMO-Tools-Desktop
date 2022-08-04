@@ -99,11 +99,11 @@
                                 {{dayType.name}}
                             </td>
                             <td *ngFor="let dayTypeUse of getDayTypeEndUses(dayType)">
-                                <span *ngIf="dayTypeUse.regulated">
-                                    (<span *ngIf="dayTypeUse.regulated == true">Yes</span>
+                                <span *ngIf="dayTypeUse.regulated !== undefined">
+                                    <span *ngIf="dayTypeUse.regulated == true">Yes</span>
                                     <span *ngIf="dayTypeUse.regulated == false">No</span>
                                 </span>
-                                <span *ngIf="!dayTypeUse.regulated">
+                                <span *ngIf="dayTypeUse.regulated === undefined">
                                     &mdash;
                                 </span>
                             </td>
