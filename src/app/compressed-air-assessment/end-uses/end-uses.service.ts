@@ -77,6 +77,26 @@ export class EndUsesService {
     };
   }
 
+  isEndUseValid(endUse: EndUse, compressedAirAssessment: CompressedAirAssessment, settings: Settings): boolean {
+    let allEndUseFieldsValid: boolean = true;
+    let dayTypeBaselineResults: BaselineResults = this.getBaselineResults(compressedAirAssessment, settings);
+    let currentDayTypeResults: BaselineResult = dayTypeBaselineResults.dayTypeResults.find(result => result.dayTypeId == compressedAirAssessment.endUseData.endUseDayTypeSetup.selectedDayTypeId);
+    
+    let isValidEndUse: boolean = this.getEndUseFormFromObj(endUse, compressedAirAssessment.endUseData.endUses).valid;
+    if (isValidEndUse) {
+      let dayTypeEndUse: DayTypeEndUse = endUse.dayTypeEndUses.find(dayTypeUse => dayTypeUse.dayTypeId == compressedAirAssessment.endUseData.endUseDayTypeSetup.selectedDayTypeId);
+      if (dayTypeEndUse) {
+        let isValidDayTypeEndUse: boolean = this.dayTypeUseFormService.getDayTypeUseForm(dayTypeEndUse, currentDayTypeResults.averageAirFlow).valid;
+        if (!isValidDayTypeEndUse) {
+          allEndUseFieldsValid = false;
+        }
+      }
+    } else {
+      allEndUseFieldsValid = false;
+    }
+    return allEndUseFieldsValid;
+  }
+
   getNewEndUse(compressedAirAssessment: CompressedAirAssessment): EndUse {
     return {
       endUseId: Math.random().toString(36).substr(2, 9),
@@ -147,20 +167,18 @@ export class EndUsesService {
   }
 
 
-  getEndUseEnergyData(compressedAirAssessment: CompressedAirAssessment, endUseDayTypeSetup: EndUseDayTypeSetup, dayTypeBaselineResults: BaselineResults): Array<EndUseEnergyData> {
+  getEndUseEnergyData(compressedAirAssessment: CompressedAirAssessment, endUseDayTypeSetup: EndUseDayTypeSetup, dayTypeBaselineResults: BaselineResults): EndUseEnergy {
     let endUseEnergyData = new Array<EndUseEnergyData>();
+    let hasInvalidEndUse: boolean = true;
     if (endUseDayTypeSetup.selectedDayTypeId) {
       let currentDayTypeResults: BaselineResult = dayTypeBaselineResults.dayTypeResults.find(result => result.dayTypeId == endUseDayTypeSetup.selectedDayTypeId);
-      compressedAirAssessment.endUseData.endUses.forEach((endUse: EndUse) => {
+      hasInvalidEndUse = compressedAirAssessment.endUseData.endUses.some((endUse: EndUse) => {
         let isValidEndUse: boolean = this.getEndUseFormFromObj(endUse, compressedAirAssessment.endUseData.endUses).valid;
         if (isValidEndUse) {
-
           let dayTypeEndUse: DayTypeEndUse = endUse.dayTypeEndUses.find(dayTypeUse => dayTypeUse.dayTypeId == endUseDayTypeSetup.selectedDayTypeId);
           if (dayTypeEndUse) {
-
             let isValidDayTypeEndUse: boolean = this.dayTypeUseFormService.getDayTypeUseForm(dayTypeEndUse, currentDayTypeResults.averageAirFlow).valid;
             if (isValidDayTypeEndUse) {
-              
               let dayTypeEndUseResult: EndUseResults = this.getSingleDayTypeEndUseResults(dayTypeEndUse, currentDayTypeResults, endUse);
               endUseEnergyData.push({
                 dayTypeAverageAirflowPercent: dayTypeEndUseResult.averagePercentCapacity,
@@ -169,11 +187,15 @@ export class EndUsesService {
                 endUseId: endUse.endUseId,
                 color: undefined
               });
+            } else {
+              return true;
             }
           }
+        } else {
+          return true;
         }
-      });  
-      
+      });
+
 
       let dayTypeLeakRate: number = endUseDayTypeSetup.dayTypeLeakRates.find(leakRate => leakRate.dayTypeId === endUseDayTypeSetup.selectedDayTypeId).dayTypeLeakRate;
       if (dayTypeLeakRate) {
@@ -189,7 +211,7 @@ export class EndUsesService {
       }
     }
 
-    return endUseEnergyData;
+    return {hasValidEndUses: !hasInvalidEndUse, endUseEnergyData};
   }
 
   getEndUseFormFromObj(endUse: EndUse, endUses: Array<EndUse>): FormGroup {
@@ -303,4 +325,9 @@ export interface EndUseEnergyData {
 export interface EndUseWarnings {
   requiredPressure: string,
   duplicateNameWarning?: string
+}
+
+export interface EndUseEnergy {
+  hasValidEndUses: boolean, 
+  endUseEnergyData: Array<EndUseEnergyData>
 }

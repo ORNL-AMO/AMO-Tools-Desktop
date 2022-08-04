@@ -1,5 +1,8 @@
 <div class="card p-2">
     <div class="card-body p-0">
+        <span class="alert-danger pull-right small" *ngIf="hasInvalidEndUses">
+            One or more End Use is invalid - review End Uses and make changes to continue
+        </span>
         <table class="table table-sm table-striped table-hover mb-0" *ngIf="selectedEndUse && compressedAirAssessment.endUseData.endUses">
             <thead>
                 <tr>
@@ -14,7 +17,8 @@
             </thead>
             <tbody>
                 <tr *ngFor="let endUse of compressedAirAssessment.endUseData.endUses"
-                    [ngClass]="{'selected-end-use': endUse.endUseId == selectedEndUse.endUseId}">
+                    [ngClass]="{'selected-end-use': endUse.endUseId == selectedEndUse.endUseId,
+                    'invalid-end-use': !endUse.isValid}">
                     <td>
                         <span *ngIf="endUse.endUseId == selectedEndUse.endUseId"
                             class="fa fa-chevron-right danger"></span>

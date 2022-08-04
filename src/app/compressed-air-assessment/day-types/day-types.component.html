@@ -44,7 +44,7 @@
                             </span>
                         </td>
                         <td class="text-center">
-                            <span *ngIf="dayTypesFormArray.length > 1 && !hasModifications">
+                            <span *ngIf="dayTypesFormArray.length > 1 && !hasModifications && !hasEndUses">
                                 <button class="btn btn-sm btn-danger"
                                     (click)="openConfirmDeleteModal(dayTypeForm.controls.dayTypeId.value)">
                                     <span class="fa fa-trash"></span>

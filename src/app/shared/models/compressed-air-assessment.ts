@@ -79,6 +79,7 @@ export interface EndUse {
     endUseName: string,
     location?: string,
     endUseDescription: string,
+    isValid?: boolean,
     // selectedDayTypeId: string,
     requiredPressure?: number,
     dayTypeEndUses?: Array<DayTypeEndUse>,

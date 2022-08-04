@@ -37,19 +37,19 @@
         <span [innerHTML]="units"></span>)
       </div>
     </div>
+    </div>
     <span *ngIf="airFlowSankeyResults && airFlowSankeyResults.warnings.minAirflow !== undefined"
       class="alert-warning small px-4 py-2 mx-auto">{{ airFlowSankeyResults.warnings.minAirflow }}</span>
+    <span *ngIf="airFlowSankeyResults && airFlowSankeyResults.warnings.hasInvalidEndUses !== undefined"
+      class="alert-danger small px-4 py-2 mx-auto">{{ airFlowSankeyResults.warnings.hasInvalidEndUses }}</span>
     <span *ngIf="!profileDataComplete" class="alert-danger small px-4 py-2 mx-auto">Airflow Sankey calculation requires
       average airflow from
       System Profile Setup. Please check System Profile Setup data for correctness.</span>
-  
-  </div>
-</div>
+    </div>
 
   <div class="sankey-padding w-100">
     <div #airflowChart></div>
     <div>
-
       <div *ngIf="minFlowes.length > 0" class="ml-5 w-50">
         <div class="mt-4">
           <label class="group-label bold mb-2">Negligible AirFlow</label>
