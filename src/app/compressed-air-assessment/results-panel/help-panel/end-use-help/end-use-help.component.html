@@ -1,0 +1,136 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5>
+        End Use Help
+        <br>
+    </h5>
+    <hr class="my-1 hr-spacer">
+    <div class="my-2">
+        <h6>
+            <small class="text-muted">
+                Enter data regarding the demand side of your compressed air system. This could include pneumatic tools, air driven equipment, or any other process that is receiving compressed air.  
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'selectedEndUseDayType'">
+        <h6>
+            Day Type
+            <br>
+            <small class="text-muted">
+                Day types are used to group your daily operations into sets of similar operating conditions. Your day types are defined on the day types tab. 
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'dayTypeLeakRate'">
+        <h6>
+            Day Type Leak Rate 
+            <br>
+            <small class="text-muted">
+                Estimated flow that is lost to leaks on a given day type.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'endUseName'">
+        <h6>
+            End Use Name
+            <br>
+            <small class="text-muted">
+                The identifier for a end user or group of end uses. 
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'endUseDescription'">
+        <h6>
+            Description
+            <br>
+            <small class="text-muted">
+                Give a short description about the end use or group of end use. 
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'location'">
+        <h6>
+            Location
+            <br>
+            <small class="text-muted">
+                Where a end use can be found within the facility. 
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'requiredPressure'">
+        <h6>
+            Required Pressure
+            <br>
+            <small class="text-muted">
+                The minimum pressure that the end use can operate without repercussions. 
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'averageAirflow'">
+        <h6>
+            Average Airflow
+            <br>
+            <small class="text-muted">
+                The average flow the end use uses on a given day type.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'averagePercentCapacity'">
+        <h6>
+            Average Percent Capacity
+            <br>
+            <small class="text-muted">
+                This is a calculated value using the average airflow for the end use and the average airflow for the day type calculated using the system profile.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'regulated'">
+        <h6>
+            Regulated
+            <br>
+            <small class="text-muted">
+                Is the pressure for end use regulated, or adjusted before it reaches the end use? 
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'measuredPressure'">
+        <h6>
+            Measured Pressure
+            <br>
+            <small class="text-muted">
+                The pressure that is actually delivered to the end use, this is a measured value. 
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'excessPressure'">
+        <h6>
+            Excess Pressure
+            <br>
+            <small class="text-muted">
+                The difference between the measured pressure and required pressure. 
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+</div>

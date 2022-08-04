@@ -27,7 +27,7 @@ export class CompressedAirAssessmentService {
   selectedModificationId: BehaviorSubject<string>;
   showModificationListModal: BehaviorSubject<boolean>;
   showAddModificationModal: BehaviorSubject<boolean>;
-  constructor(private systemInformationFormService: SystemInformationFormService,private convertUnitsService: ConvertUnitsService, private inventoryService: InventoryService,
+  constructor(private systemInformationFormService: SystemInformationFormService, private convertUnitsService: ConvertUnitsService, private inventoryService: InventoryService,
     private dayTypeService: DayTypeService) {
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.mainTab = new BehaviorSubject<string>('system-setup');
@@ -66,8 +66,9 @@ export class CompressedAirAssessmentService {
       powerFactorError: undefined,
       ampError: undefined,
       voltError: undefined,
-      isValid: true, 
-      summaryInputValidationData: []};
+      isValid: true,
+      summaryInputValidationData: []
+    };
   }
 
   hasValidProfileSummaryData(compressedAirAssessment?: CompressedAirAssessment): ProfileSummaryValid {
@@ -95,34 +96,66 @@ export class CompressedAirAssessmentService {
         summary.profileSummaryData.forEach((data, index) => {
           if (data.order != 0) {
             let isValidProfileData: boolean = true;
-              if (profileDataType == 'percentCapacity') {
-                isValidProfileData = this.checkIsInvalidNumber(data.percentCapacity) !== true;
-                summaryInputValidationData.percentCapacityValidity.push(isValidProfileData);
-                if (!isValidProfileData) {
-                  profileSummaryValid.percentError = 'Percent must be 0 or greater'
-                }
-              } else if (profileDataType == 'power') {
-                isValidProfileData = this.checkIsPowerValid(data.power, currentCompressor, profileSummaryValid);
-                summaryInputValidationData.powerValidity.push(isValidProfileData);
-              } else if (profileDataType == 'airflow') {
-                let airFlowValidation: AirflowValidation = this.checkIsAirflowValid(data.airflow, currentCompressor, profileSummaryValid);
-                isValidProfileData = airFlowValidation.airFlowValid;
-                summaryInputValidationData.airflowValidity.push(airFlowValidation);
-              } else if (profileDataType == 'percentPower') {
-                isValidProfileData = this.checkIsInvalidNumber(data.percentPower) !== true;
-                summaryInputValidationData.percentPowerValidity.push(isValidProfileData);
-                if (!isValidProfileData) {
-                  profileSummaryValid.percentError = 'Percent must be 0 or greater'
-                }
-              } else if (profileDataType == 'powerFactor') {
-                let powerFactorValid: PowerFactorInputValidationData = this.checkIsPowerFactorValid(data.powerFactor, data.amps, data.volts, currentCompressor, profileSummaryValid);
-                isValidProfileData = powerFactorValid.isValid;
-                summaryInputValidationData.powerFactorInputValidity.push(powerFactorValid);
-              }
-
+            if (profileDataType == 'percentCapacity') {
+              isValidProfileData = this.checkIsInvalidNumber(data.percentCapacity) !== true;
               if (!isValidProfileData) {
-                profileSummaryValid.isValid = false;
+                profileSummaryValid.percentError = 'Percent must be 0 or greater'
+              } else {
+                if (data.percentCapacity > 150) {
+                  isValidProfileData = false;
+                  profileSummaryValid.percentError = 'Percent must be less than 150%';
+                }
               }
+              summaryInputValidationData.percentCapacityValidity.push(isValidProfileData);
+            } else if (profileDataType == 'power') {
+              isValidProfileData = this.checkIsPowerValid(data.power, currentCompressor, profileSummaryValid);
+              summaryInputValidationData.powerValidity.push(isValidProfileData);
+            } else if (profileDataType == 'airflow') {
+              let airFlowValidation: AirflowValidation = this.checkIsAirflowValid(data.airflow, currentCompressor, profileSummaryValid);
+              isValidProfileData = airFlowValidation.airFlowValid;
+              summaryInputValidationData.airflowValidity.push(airFlowValidation);
+            } else if (profileDataType == 'percentPower') {
+              isValidProfileData = this.checkIsInvalidNumber(data.percentPower) !== true;
+              if (!isValidProfileData) {
+                profileSummaryValid.percentError = 'Percent must be 0 or greater'
+              } else {
+                let serviceFactorPercent: number = 100 * currentCompressor.designDetails.serviceFactor;
+                if (serviceFactorPercent < data.percentPower) {
+                  isValidProfileData = false;
+                  profileSummaryValid.percentError = 'Percent must be less than ' + serviceFactorPercent.toFixed(0) + '%';
+                }
+              }
+              summaryInputValidationData.percentPowerValidity.push(isValidProfileData);
+            } else if (profileDataType == 'powerFactor') {
+              let powerFactorValid: PowerFactorInputValidationData = this.checkIsPowerFactorValid(data.powerFactor, data.amps, data.volts, currentCompressor, profileSummaryValid);
+              isValidProfileData = powerFactorValid.isValid;
+              summaryInputValidationData.powerFactorInputValidity.push(powerFactorValid);
+            }
+
+            if (!isValidProfileData) {
+              profileSummaryValid.isValid = false;
+            }
+          } else {
+            if (profileDataType == 'percentCapacity') {
+              summaryInputValidationData.percentCapacityValidity.push(true);
+            } else if (profileDataType == 'power') {
+              summaryInputValidationData.powerValidity.push(true);
+            } else if (profileDataType == 'airflow') {
+              summaryInputValidationData.airflowValidity.push({
+                airFlowValid: true,
+                airFlowWarning: false
+              });
+            } else if (profileDataType == 'percentPower') {
+              summaryInputValidationData.percentPowerValidity.push(true);
+            } else if (profileDataType == 'powerFactor') {
+              summaryInputValidationData.powerFactorInputValidity.push({
+                isValid: true,
+                powerFactorValid: true,
+                ampsValid: true,
+                voltsValid: true,
+              });
+            }
+            profileSummaryValid.isValid = true;
           }
         });
         profileSummaryValid.summaryInputValidationData.push(summaryInputValidationData);
@@ -175,7 +208,7 @@ export class CompressedAirAssessmentService {
     if (powerFactor >= 1) {
       powerFactorInputValidationData.powerFactorValid = false;
       profileSummaryValid.powerFactorError = `Power Factor must be less than 1`;
-    } else if ( this.checkIsInvalidNumber(powerFactor)) {
+    } else if (this.checkIsInvalidNumber(powerFactor)) {
       powerFactorInputValidationData.powerFactorValid = false;
       profileSummaryValid.powerFactorError = `Power Factor must be 0 or greater`;
     }
@@ -183,7 +216,7 @@ export class CompressedAirAssessmentService {
     if (volts > 6600) {
       powerFactorInputValidationData.voltsValid = false;
       profileSummaryValid.voltError = 'Volts cannot be greater than 6600';
-    } else if ( this.checkIsInvalidNumber(volts)) {
+    } else if (this.checkIsInvalidNumber(volts)) {
       powerFactorInputValidationData.voltsValid = false;
       profileSummaryValid.voltError = `Volts must be 0 or greater`;
     }
@@ -192,7 +225,7 @@ export class CompressedAirAssessmentService {
     if (amps >= maxAmps) {
       powerFactorInputValidationData.ampsValid = false;
       profileSummaryValid.ampError = `Amps cannot be greater than ${maxAmps}`;
-    } else if ( this.checkIsInvalidNumber(amps)) {
+    } else if (this.checkIsInvalidNumber(amps)) {
       powerFactorInputValidationData.ampsValid = false;
       profileSummaryValid.ampError = `Amps must be 0 or greater`;
     }

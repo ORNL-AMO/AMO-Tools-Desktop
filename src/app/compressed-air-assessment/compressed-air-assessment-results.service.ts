@@ -18,14 +18,16 @@ export class CompressedAirAssessmentResultsService {
 
 
   calculateBaselineResults(compressedAirAssessment: CompressedAirAssessment,
-    settings: Settings, baselineProfileSummaries?: Array<{ dayTypeId: string, profileSummary: Array<ProfileSummary> }>): BaselineResults {
+    settings: Settings, baselineProfileSummaries?: Array<DayTypeProfileSummary>): BaselineResults {
     let dayTypeResults: Array<BaselineResult> = new Array();
     let totalFullLoadCapacity: number = this.getTotalCapacity(compressedAirAssessment.compressorInventoryItems);
     let totalFullLoadPower: number = this.getTotalPower(compressedAirAssessment.compressorInventoryItems);
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-      let baselineProfileSummary: Array<ProfileSummary>
+      let baselineProfileSummary: Array<ProfileSummary>;
       if (baselineProfileSummaries) {
-        baselineProfileSummary = baselineProfileSummaries.find(summary => { return summary.dayTypeId == dayType.dayTypeId }).profileSummary;
+        baselineProfileSummary = baselineProfileSummaries.find(summary => { 
+          return summary.dayTypeId == dayType.dayTypeId 
+        }).profileSummary;
       } else {
         baselineProfileSummary = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessment, dayType, settings);
       }
@@ -123,7 +125,7 @@ export class CompressedAirAssessmentResultsService {
     }
   }
 
-  setFlowReallocationSummaries(dayTypes: Array<CompressedAirDayType>, settings: Settings, baselineDayTypeProfileSummarries: Array<{ dayTypeId: string, profileSummary: Array<ProfileSummary> }>, compressors: Array<CompressorInventoryItem>, atmosphericPressure: number, numberOfSummaryIntervals: number, totalAirStorage: number, electricityCost: number) {
+  setFlowReallocationSummaries(dayTypes: Array<CompressedAirDayType>, settings: Settings, baselineDayTypeProfileSummarries: Array<DayTypeProfileSummary>, compressors: Array<CompressorInventoryItem>, atmosphericPressure: number, numberOfSummaryIntervals: number, totalAirStorage: number, electricityCost: number) {
     let flowReallocationSummaries: Array<FlowReallocationSummary> = new Array();
     dayTypes.forEach(dayType => {
       let baselineProfileSummary: Array<ProfileSummary> = baselineDayTypeProfileSummarries.find(summary => { return summary.dayTypeId == dayType.dayTypeId }).profileSummary;
@@ -157,7 +159,7 @@ export class CompressedAirAssessmentResultsService {
 
 
 
-  calculateModificationResults(compressedAirAssessment: CompressedAirAssessment, modification: Modification, settings: Settings, baselineProfileSummaries?: Array<{ dayTypeId: string, profileSummary: Array<ProfileSummary> }>, baselineResults?: BaselineResults): CompressedAirAssessmentResult {
+  calculateModificationResults(compressedAirAssessment: CompressedAirAssessment, modification: Modification, settings: Settings, baselineProfileSummaries?: Array<DayTypeProfileSummary>, baselineResults?: BaselineResults): CompressedAirAssessmentResult {
     let modificationOrders: Array<number> = [
       modification.addPrimaryReceiverVolume.order,
       modification.adjustCascadingSetPoints.order,
@@ -1131,9 +1133,7 @@ export class CompressedAirAssessmentResultsService {
   getAvgPower(profileSummaryData: Array<ProfileSummaryData>): number {
     let powerData: Array<number> = new Array<number>();
     profileSummaryData.forEach(data => {
-      if (data.power != 0) {
         powerData.push(data.power);
-      }
     });
     let avgPower: number = _.mean(powerData);
     return avgPower;
@@ -1142,9 +1142,7 @@ export class CompressedAirAssessmentResultsService {
   getAvgAirflow(profileSummaryData: Array<ProfileSummaryData>): number {
     let airflowData: Array<number> = new Array<number>();
     profileSummaryData.forEach(data => {
-      if (data.airflow != 0) {
         airflowData.push(data.airflow);
-      }
     });
     let avgAirflow: number = _.mean(airflowData);
     return avgAirflow;
@@ -1233,6 +1231,7 @@ export interface CompressedAirAssessmentResult {
   totalCostPower: number,
   modification: Modification
 }
+export interface DayTypeProfileSummary { dayTypeId: string, profileSummary: Array<ProfileSummary> };
 
 export interface DayTypeModificationResult {
   adjustedProfileSummary: Array<ProfileSummary>,

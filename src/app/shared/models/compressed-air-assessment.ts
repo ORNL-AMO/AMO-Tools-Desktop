@@ -1,6 +1,7 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 import { ProfileSummaryValid } from "../../compressed-air-assessment/compressed-air-assessment.service";
-import { DayTypeSummary, LogToolDbData, LogToolField } from "../../log-tool/log-tool-models";
+import { SankeySystemInputs } from "../../compressed-air-assessment/compressed-air-sankey/power-sankey/power-sankey.service";
+import { DayTypeSummary, LogToolField } from "../../log-tool/log-tool-models";
 
 export interface CompressedAirAssessment {
     name?: string;
@@ -16,6 +17,7 @@ export interface CompressedAirAssessment {
         dayTypeSummaries: Array<DayTypeSummary>,
         logToolFields: Array<LogToolField>
     },
+    endUseData: EndUseData,
     compressedAirDayTypes: Array<CompressedAirDayType>,
     setupDone: boolean
 }
@@ -48,6 +50,50 @@ export interface ReduceAirLeaks {
 export interface ImproveEndUseEfficiency {
     endUseEfficiencyItems: Array<EndUseEfficiencyItem>,
     order: number
+}
+
+export interface EndUseData {
+    endUses: Array<EndUse>,
+    endUseDayTypeSetup: EndUseDayTypeSetup,
+    dayTypeAirFlowTotals: DayTypeAirflowTotals 
+}
+
+export interface DayTypeAirflowTotals {
+        unaccountedAirflow?: number,
+        unaccountedAirflowPercent: number,
+        exceededAirflow?: number,
+        exceededAirflowPercent?: number,
+        totalDayTypeEndUseAirflow: number,
+        totalDayTypeEndUseAirflowPercent: number,
+        totalDayTypeAverageAirflow: number
+}
+
+export interface EndUseDayTypeSetup {
+    selectedDayTypeId: string,
+    dayTypeLeakRates: Array<{dayTypeId: string, dayTypeLeakRate: number}>,
+}
+
+export interface EndUse {
+    endUseId: string,
+    modifiedDate: Date,
+    endUseName: string,
+    location?: string,
+    endUseDescription: string,
+    isValid?: boolean,
+    // selectedDayTypeId: string,
+    requiredPressure?: number,
+    dayTypeEndUses?: Array<DayTypeEndUse>,
+}
+
+export interface DayTypeEndUse {
+    dayTypeId: string,
+    dayTypeName?: string,
+    averageAirflow?: number,
+    regulated?: boolean,
+    measuredPressure?: number,
+    requiredPressure?: number,
+    averageCapacity?: number,
+    excessPressure?: number,
 }
 
 
@@ -150,7 +196,6 @@ export interface CompressorInventoryItem {
     isValid?: boolean,
     nameplateData: CompressorNameplateData,
     compressorControls: CompressorControls,
-    inletConditions: InletConditions,
     designDetails: DesignDetails,
     performancePoints: PerformancePoints,
     centrifugalSpecifics: CentrifugalSpecifics,
@@ -177,10 +222,6 @@ export interface CompressorControls {
     automaticShutdown: boolean,
     //ADDED TO REMOVE GENERIC COMPRESSOR FOR PP CALCS
     unloadSumpPressure: number,
-}
-
-export interface InletConditions {
-    temperature: number
 }
 
 export interface DesignDetails {

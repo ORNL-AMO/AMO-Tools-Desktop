@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-inlet-conditions-help',
-  templateUrl: './inlet-conditions-help.component.html',
-  styleUrls: ['./inlet-conditions-help.component.css']
+  selector: 'app-end-use-help',
+  templateUrl: './end-use-help.component.html',
+  styleUrls: ['./end-use-help.component.css']
 })
-export class InletConditionsHelpComponent implements OnInit {
+export class EndUseHelpComponent implements OnInit {
 
   focusedField: string;
   focusedFieldSub: Subscription;
