@@ -44,6 +44,7 @@ export class PsatTabsComponent implements OnInit {
   mainSub: Subscription;
   getResultsSub: Subscription;
   stepTabSub: Subscription;
+  tabsCollapsed: boolean = true;
 
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private psatTabService: PsatTabService, private compareService: CompareService, private cd: ChangeDetectorRef,
     private pumpFluidService: PumpFluidService, private motorService: MotorService, private fieldDataService: FieldDataService, private pumpOperationsService: PumpOperationsService) { }
@@ -264,5 +265,9 @@ export class PsatTabsComponent implements OnInit {
       let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this.psat.inputs, true, this.psat.inputs.whatIfScenario);
       return tmpForm.valid;
     }
+  }
+
+  collapseTabs() {
+    this.tabsCollapsed = !this.tabsCollapsed;
   }
 }
