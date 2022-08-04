@@ -49,6 +49,7 @@ export class PsatReportComponent implements OnInit {
   createdDate: Date;
   reportContainerHeight: number;
   printOptions: PrintOptions;
+  tabsCollapsed: boolean = true;
 
   constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private settingsService: SettingsService, private printOptionsMenuService: PrintOptionsMenuService,
@@ -174,5 +175,9 @@ export class PsatReportComponent implements OnInit {
   getSavingsPercentage(baseline: PSAT, modification: PSAT): number {
     let tmpSavingsPercent: number = Number(Math.round(((((baseline.outputs.annual_cost - modification.outputs.annual_cost) * 100) / baseline.outputs.annual_cost) * 100) / 100).toFixed(0));
     return tmpSavingsPercent;
+  }
+
+  collapseTabs() {
+    this.tabsCollapsed = !this.tabsCollapsed;
   }
 }

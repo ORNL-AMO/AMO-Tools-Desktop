@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <div #reportHeader class="report-header" [ngClass]="{'hide-print': inPsat}">
+    <div #reportHeader class="report-header d-none d-lg-block" [ngClass]="{'hide-print': inPsat}">
         <div *ngIf="inPsat && !quickReport" class="btn-group hide-print">
             <button class="btn btn-secondary" (click)="print()">Print</button>
         </div>
@@ -50,23 +50,50 @@
     </div>
 
     <div class="report-data" *ngIf="assessment.psat.setupDone && assessment.psat.valid.isValid">
-        <ul #reportBtns class="tabs primary hide-print">
-            <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
-                <a>Result Data</a>
-            </li>
-            <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
-                <a>Report Graphs</a>
-            </li>
-            <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
-                <a>Sankey</a>
-            </li>
-            <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
-                <a>Input Summary</a>
-            </li>
-            <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
-                <a>Facility Info</a>
-            </li>
-        </ul>
+        <div class="d-none d-lg-flex">
+            <ul #reportBtns class="tabs primary hide-print">
+                <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
+                    <a>Result Data</a>
+                </li>
+                <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
+                    <a>Report Graphs</a>
+                </li>
+                <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
+                    <a>Sankey</a>
+                </li>
+                <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
+                    <a>Input Summary</a>
+                </li>
+                <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+                    <a>Facility Info</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="d-flex d-lg-none flex-column">
+            <div #reportBtns class="tabs primary hide-print">
+                <div class="mx-auto pl-2 pr-2 align-items-center justify-content-center" (click)="collapseTabs()">
+                    <span *ngIf="!tabsCollapsed" class="fa fa-caret-up"></span>
+                    <span *ngIf="tabsCollapsed" class="fa fa-caret-down"></span>
+                  </div>
+                <div (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results', 'collapse': tabsCollapsed}">
+                    <a>Result Data</a>
+                </div>
+                <div (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs', 'collapse': tabsCollapsed}">
+                    <a>Report Graphs</a>
+                </div>
+                <div (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey', 'collapse': tabsCollapsed}">
+                    <a>Sankey</a>
+                </div>
+                <div (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData', 'collapse': tabsCollapsed}">
+                    <a>Input Summary</a>
+                </div>
+                <div (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo', 'collapse': tabsCollapsed}">
+                    <a>Facility Info</a>
+                </div>
+            </div>
+        </div>
+
 
         <div class="results scroll-item print-height" *ngIf="currentTab == 'facilityInfo' || showPrintView"
             [ngStyle]="{'height.px':reportContainerHeight}">
