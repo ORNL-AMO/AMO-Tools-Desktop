@@ -37,7 +37,9 @@ export class ModifyConditionsComponent implements OnInit {
   isModalOpen: boolean = false;
   modifyConditionsSub: Subscription;
   modalOpenSub: Subscription;
-  baselineCollapsed: boolean = true;
+  baselineModTabs: string = 'baseline';
+  baselineCollapsed: boolean = false;
+  modCollapsed: boolean = true;
   constructor(private assessmentService: AssessmentService, private compareService: CompareService, private psatTabService: PsatTabService, private psatService: PsatService) { }
 
   ngOnInit() {
@@ -82,8 +84,15 @@ export class ModifyConditionsComponent implements OnInit {
     this.compareService.openNewModal.next(true);
   }
 
-  collapsePanel() {
-    this.baselineCollapsed = !this.baselineCollapsed;
-    window.dispatchEvent(new Event("resize"));
+  setBaselineModTabs(str: string) {
+    this.baselineModTabs = str;
+    if (str == 'baseline') {
+      this.baselineCollapsed = false;
+      this.modCollapsed = true;
+    } 
+    if (str == 'mod') {
+      this.baselineCollapsed = true;
+      this.modCollapsed = false;
+    }
   }
 }

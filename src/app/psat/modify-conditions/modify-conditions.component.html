@@ -88,22 +88,25 @@
   </div>
 </div>
 
-<div class="modify-conditions d-block d-lg-none psat" *ngIf="settings">
+<div class="modify-conditions d-block d-lg-none psat h-100" *ngIf="settings">
 
   <!-- Baseline -->
-  <div class="scroll-item col-12 p-0 d-flex" [ngStyle]="{'height.px': containerHeight}">
-    <div class="modification baseline w-100 panel-column" (click)="togglePanel(baselineSelected)"
-      [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen, 'collapse': baselineCollapsed}">
-
-      <div class="d-flex flex-nowrap tabs subtabs mr-2 ml-2 align-content-stretch">
-        <div class="flex-fill header" [ngClass]="{'active': !baselineCollapsed}">
-          <a><h3>Baseline</h3></a>
-        </div>
-        <div class="flex-fill header">
-          <a (click)="collapsePanel()"><h3>{{psat.modifications[modificationIndex].psat.name}}</h3></a>
-        </div>
+  <div class="d-block modification w-100 h-100 scroll-item">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': baselineModTabs == 'baseline'}">
+        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+          (click)="setBaselineModTabs('baseline')">
+          <div>Baseline</div>
+        </a>
       </div>
-
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': baselineModTabs == 'mod'}">
+        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setBaselineModTabs('mod')">
+          <div>Modification</div>
+        </a>
+      </div>
+    </div>
+    <div *ngIf="!baselineCollapsed" class="modification baseline w-100 panel-column" (click)="togglePanel(baselineSelected)"
+      [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen, 'collapse': baselineCollapsed}" >
       <div class="psat-losses-container">
         <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
         <app-pump-operations *ngIf="modifyTab == 'operations'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()"
@@ -119,19 +122,11 @@
     </div>
 
     <!-- Modifications Start -->
-    <div class="modification w-100 panel-column" (click)="togglePanel(modifiedSelected)" *ngIf="modificationExists"
-      [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen, 'collapse': !baselineCollapsed}">
+    <div *ngIf="modificationExists && !modCollapsed" class="modification w-100 panel-column" (click)="togglePanel(modifiedSelected)"
+      [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen, 'collapse': modCollapsed}">
 
       <!-- Modification Header -->
-      <div class="d-flex flex-nowrap tabs subtabs mr-2 ml-2 align-content-stretch">
-        <div class="flex-fill header">
-          <a (click)="collapsePanel()"><h3>Baseline</h3></a>
-        </div>
-        <div class="flex-fill header" [ngClass]="{'active': baselineCollapsed}">
-          <a><h3 *ngIf="psat.modifications[modificationIndex]">{{psat.modifications[modificationIndex].psat.name}}</h3></a>
-        </div>
-      </div>
-
+    
       <!-- Forms -->
       <div class="psat-losses-container">
         <app-pump-operations *ngIf="modifyTab == 'operations'" [(psat)]="psat.modifications[modificationIndex].psat"
@@ -153,7 +148,7 @@
 
     </div>
     <!-- No content message -->
-    <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()">
+    <div class="w-100 modification panel-column" *ngIf="!modificationExists && !modCollapsed" [ngClass]="{'collapse': modCollapsed}">
       <div class="header mr-2 ml-2">
         <h3>Modification</h3>
       </div>
@@ -169,7 +164,7 @@
   </div>
 
   <!-- Help Panel -->
-  <div class="col-12 p-0 help-panel">
+  <div class="d-block w-100 mh-100 scroll-item help-panel">
     <app-help-panel *ngIf="modificationExists" (emitSave)="save()" [psat]="psat" [settings]="settings"
       [(modification)]="psat.modifications[modificationIndex]" [modificationIndex]="modificationIndex"
       [containerHeight]="containerHeight"></app-help-panel>
