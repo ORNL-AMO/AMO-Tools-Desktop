@@ -88,13 +88,13 @@
   </div>
 </div>
 
-<div class="modify-conditions d-block d-lg-none psat h-100" *ngIf="settings">
+<div class="modify-conditions d-block d-lg-none psat scroll-item" *ngIf="settings">
 
   <!-- Baseline -->
-  <div class="d-block modification w-100 h-100 scroll-item">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+  <div class="d-block modification w-100 h-100">
+    <div class="d-flex flex-wrap w-100 tabs primary">
       <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': baselineModTabs == 'baseline'}">
-        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+        <a class="h-100 d-flex justify-content-center align-items-center"
           (click)="setBaselineModTabs('baseline')">
           <div>Baseline</div>
         </a>
@@ -164,7 +164,7 @@
   </div>
 
   <!-- Help Panel -->
-  <div class="d-block w-100 mh-100 scroll-item help-panel">
+  <div class="d-block w-100 mh-100 help-panel">
     <app-help-panel *ngIf="modificationExists" (emitSave)="save()" [psat]="psat" [settings]="settings"
       [(modification)]="psat.modifications[modificationIndex]" [modificationIndex]="modificationIndex"
       [containerHeight]="containerHeight"></app-help-panel>

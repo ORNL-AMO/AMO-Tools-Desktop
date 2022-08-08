@@ -92,8 +92,8 @@
 	</div>
 </div>
 
-<div class="d-block d-lg-none psat modify-conditions panel-container">
-	<div *ngIf="modificationExists" class="w-100 scroll-item" [ngStyle]="{'height.px': containerHeight}">
+<div class="d-block d-lg-none psat modify-conditions panel-container scroll-item">
+	<div *ngIf="modificationExists" class="w-100 h-100">
 		<div *ngIf="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == true">
 			<div class="header mr-2 ml-2">
 				<h3>Select Potential Adjustment Projects</h3>
@@ -122,7 +122,7 @@
 		</div>
 
 	</div>
-	<div *ngIf="!modificationExists" class="no-data w-100 scroll-item" [ngStyle]="{'height.px': containerHeight}">
+	<div *ngIf="!modificationExists" class="no-data w-100 h-100">
 		<h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to
 			find efficiency
 			opportunities.
@@ -142,13 +142,12 @@
 				<a (click)="setTab('help')">Help</a>
 			</div>
 		</div>
-		<div class="help-panel scroll-item" [ngStyle]="{'height.px': helpHeight}" *ngIf="tabSelect == 'help'">
+		<div class="help-panel h-100" *ngIf="tabSelect == 'help'">
 			<app-explore-opportunities-help [currentField]="currentField" [settings]="settings" [psat]="psat">
 			</app-explore-opportunities-help>
 		</div>
 
-		<div *ngIf="tabSelect == 'sankey' && modificationExists" class="scroll-item"
-				[ngStyle]="{'height.px': helpHeight}">
+		<div *ngIf="tabSelect == 'sankey' && modificationExists" class="w-100 h-100">
 			<div class="d-flex flex-column w-100">
 				<div class="btn-group mt-2 justify-content-center">
 				  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Baseline'" [ngClass]="{'active': sankeyView == 'Baseline'}">Baseline</button>
@@ -172,8 +171,7 @@
 				</app-psat-sankey>
 			  </div>
 		</div>
-		<div class="scroll-item" [ngStyle]="{'height.px': helpHeight}"
-			*ngIf="modificationExists && tabSelect == 'results'">
+		<div class="w-100 h-100" *ngIf="modificationExists && tabSelect == 'results'">
 			<app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat"
 				[exploreModIndex]="modificationIndex" [baselineResults]="baselineResults"
 				[modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings"
