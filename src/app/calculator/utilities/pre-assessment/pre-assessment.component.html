@@ -35,7 +35,7 @@
           (emitChangeField)="setCurrentField($event)" (emitAssessmentType)="setAssessmentType($event)">
         </app-pre-assessment-form>
       </div>
-      <div class="w-100 justify content-center btn-group btn-group-sm" *ngIf="!inModal">
+      <div class="w-100 justify-content-center btn-group btn-group-sm" *ngIf="!inModal">
         <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
           Reset Data
         </button>
@@ -79,11 +79,13 @@
   </div>
 </div>
 
-<div #container class="d-block d-lg-none h-100 modify-conditions general standalone-calculator" [ngStyle]="{'overflow-y': 'auto'}"
+<div #container class="d-block d-lg-none h-100 modify-conditions general standalone-calculator"
+  [ngStyle]="{'overflow-y': 'auto'}"
   [ngClass]="{'in-modal': inModal, 'phast': type == 'furnace', 'psat': type == 'pump', 'general': type == 'mixed', 'fsat': type == 'fan'}">
-  <div class="d-block modification w-100 mh-100">
-    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center scroll-item">
-      <div class="calc-icon-header" [ngClass]="{'icon-phast': type == 'furnace', 'icon-psat': type == 'pump', 'icon-fsat': type == 'fan'}">
+  <div class="d-block modification w-100 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="calc-icon-header"
+        [ngClass]="{'icon-phast': type == 'furnace', 'icon-psat': type == 'pump', 'icon-fsat': type == 'fan'}">
         <img src="assets/images/calculator-icons/utilities-icons/assessment.png">
       </div>
       <div class="pl-2">
@@ -110,13 +112,13 @@
         <a class="click-link" (click)="addPreAssessment()" *ngIf="showAdd">+Add Unit</a>
         <hr class="mt-1 mb-1">
       </div>
-      <div class="d-block" *ngFor="let assessment of preAssessments; let index = index;">
+      <div class="d-block w-100 mh-100" *ngFor="let assessment of preAssessments; let index = index;">
         <app-pre-assessment-form [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()"
           (emitCollapse)="collapsePreAssessment(assessment)" (emitDelete)="deletePreAssessment(assessment, index)"
           (emitChangeField)="setCurrentField($event)" (emitAssessmentType)="setAssessmentType($event)">
         </app-pre-assessment-form>
       </div>
-      <div class="d-block w-100 justify content-center btn-group btn-group-sm" *ngIf="!inModal">
+      <div class="d-block w-100 justify-content-center btn-group btn-group-sm" *ngIf="!inModal">
         <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
           Reset Data
         </button>
@@ -135,8 +137,8 @@
       </div>
     </div>
   </div>
-  <div class="d-block w-100 mh-100 scroll-item">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+  <div class="d-block w-100 mh-100">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
       <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
           <div>Results</div>
@@ -148,7 +150,7 @@
         </a>
       </div>
     </div>
-    <div class="d-block w-100 mh-100align-items-center pl-2 pr-2 scroll-item">
+    <div class="d-block w-100 mh-100 align-items-center pl-2 pr-2">
       <app-pre-assessment-help *ngIf="tabSelect == 'help'" [currentField]="currentField"
         [currentAssessmentType]="currentAssessmentType">
       </app-pre-assessment-help>
