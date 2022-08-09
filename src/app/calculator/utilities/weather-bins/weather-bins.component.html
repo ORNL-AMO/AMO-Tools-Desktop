@@ -1,4 +1,4 @@
-<div class="d-flex h-100 modify-conditions general standalone-calculator">
+<div class="d-none d-lg-flex h-100 modify-conditions general standalone-calculator">
     <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
         <div #leftPanelHeader class="header mr-2 ml-2 pb-1 pt-1">
             <div class="d-flex justify-content-between">
@@ -25,6 +25,56 @@
         <app-weather-bins-form [settings]="settings"></app-weather-bins-form>
     </div>
     <div class="d-flex flex-column w-50 mh-100 scroll-item">
+        <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+            <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+                <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                    (click)="setTab('results')">
+                    <div>Graph</div>
+                </a>
+            </div>
+            <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+                <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                    <div>Help</div>
+                </a>
+            </div>
+        </div>
+        <div class="p-2">
+            <app-weather-bins-help *ngIf="tabSelect == 'help'" [settings]="settings"></app-weather-bins-help>
+            <ng-container *ngIf="tabSelect == 'results'">
+                <app-weather-bins-bar-chart></app-weather-bins-bar-chart>
+                <app-weather-bins-table [settings]="settings"></app-weather-bins-table>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<div class="d-block d-lg-none h-100 modify-conditions general standalone-calculator" [ngStyle]="{'overflow-y': 'auto'}">
+    <div class="d-block modification w-100 mh-100 scroll-item">
+        <div #leftPanelHeader class="header mr-2 ml-2 pb-1 pt-1">
+            <div class="d-flex justify-content-between">
+                <div class="d-flex">
+                    <img src="assets/images/calculator-icons/utilities-icons/weather-bins-icon.png"
+                        class="weather-icon p-1">
+                    <h3 class="pl-2">Weather Bins</h3>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 text-center pl-1 pr-1 pb-1" >
+            <span class="text-muted small mx-auto">Select data retrieval method. Lookup requires internet connection.</span>
+          </div>
+        <div class="btn-col d-flex flex-column pb-3">
+            <div class="btn-group btn-group-sm align-self-center">
+                <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setWeatherDataSource('lookup')"
+                    [ngClass]="{'active':  weatherDataSourceView === 'lookup'}">Zip Code Lookup
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setWeatherDataSource('file')"
+                    [ngClass]="{'active': weatherDataSourceView === 'file'}">Upload</button>
+            </div>
+        </div>
+        <app-weather-station-lookup></app-weather-station-lookup>
+        <app-weather-bins-form [settings]="settings"></app-weather-bins-form>
+    </div>
+    <div class="d-block w-100 mh-100 scroll-item">
         <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
             <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
                 <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
