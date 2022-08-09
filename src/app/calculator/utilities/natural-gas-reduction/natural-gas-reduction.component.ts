@@ -40,6 +40,10 @@ export class NaturalGasReductionComponent implements OnInit {
 
   modificationExists = false;
 
+  baselineModTabs: string = 'baseline';
+  baselineCollapsed: boolean = false;
+  modCollapsed: boolean = true;
+
   naturalGasReductionResults: NaturalGasReductionResults;
   baselineData: Array<NaturalGasReductionData>;
   modificationData: Array<NaturalGasReductionData>;
@@ -206,4 +210,17 @@ export class NaturalGasReductionComponent implements OnInit {
       this.baselineSelected = false;
     }
   }
+
+  setBaselineModTabs(str: string) {
+    this.baselineModTabs = str;
+    if (str == 'baseline') {
+      this.baselineCollapsed = false;
+      this.modCollapsed = true;
+    } 
+    if (str == 'mod') {
+      this.baselineCollapsed = true;
+      this.modCollapsed = false;
+    }
+  }
+
 }

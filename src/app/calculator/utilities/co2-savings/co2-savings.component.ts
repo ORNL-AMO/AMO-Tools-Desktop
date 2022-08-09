@@ -41,6 +41,10 @@ export class Co2SavingsComponent implements OnInit {
   modificationExists: boolean = false;
   containerHeight: number;
 
+  baselineModTabs: string = 'baseline';
+  baselineCollapsed: boolean = false;
+  modCollapsed: boolean = true;
+
   constructor(private settingsDbService: SettingsDbService, 
     private egridService: EGridService,
     private co2SavingsService: Co2SavingsService) { }
@@ -199,4 +203,17 @@ export class Co2SavingsComponent implements OnInit {
   focusField(str: string) {
     this.currentField = str;
   }
+
+  setBaselineModTabs(str: string) {
+    this.baselineModTabs = str;
+    if (str == 'baseline') {
+      this.baselineCollapsed = false;
+      this.modCollapsed = true;
+    } 
+    if (str == 'mod') {
+      this.baselineCollapsed = true;
+      this.modCollapsed = false;
+    }
+  }
+
 }

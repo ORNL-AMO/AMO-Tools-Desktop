@@ -41,6 +41,10 @@ export class ElectricityReductionComponent implements OnInit {
 
   modificationExists = false;
 
+  baselineModTabs: string = 'baseline';
+  baselineCollapsed: boolean = false;
+  modCollapsed: boolean = true;
+
   electricityReductionResults: ElectricityReductionResults;
   baselineData: Array<ElectricityReductionData>;
   modificationData: Array<ElectricityReductionData>;
@@ -207,6 +211,18 @@ export class ElectricityReductionComponent implements OnInit {
   setModificationSelected() {
     if (this.baselineSelected == true) {
       this.baselineSelected = false;
+    }
+  }
+
+  setBaselineModTabs(str: string) {
+    this.baselineModTabs = str;
+    if (str == 'baseline') {
+      this.baselineCollapsed = false;
+      this.modCollapsed = true;
+    } 
+    if (str == 'mod') {
+      this.baselineCollapsed = true;
+      this.modCollapsed = false;
     }
   }
 
