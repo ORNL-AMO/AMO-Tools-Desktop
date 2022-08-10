@@ -1,4 +1,4 @@
-<div class="d-flex h-100 modify-conditions compressed-air standalone-calculator">
+<div class="d-none d-lg-flex h-100 modify-conditions compressed-air standalone-calculator">
   <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="calc-icon-header icon-compressed-air">
@@ -37,6 +37,121 @@
           <br>
           <small class="text-muted"> This calculator helps in computing the quantity of air required by a specific
             single acting or a double acting piston cylinder compressor. The design specs of the compressor are entered in the calculator and the
+            quantity of air needed is generated.
+          </small>
+        </h5>
+        <hr class="my-1 hr-spacer">
+
+        <div class="my-2" *ngIf="currentField == 'pistonType'">
+          <h6>
+            Piston Type
+            <br>
+            <small class="text-muted">
+              Select either 'Single Acting' or 'Double Acting' depending on the type of pneumatic cylinder.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'cylinderDiameter'">
+          <h6>
+            Cylinder Diameter
+            <br>
+            <small class="text-muted">
+              Inner diameter of the cylinder.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'airPressure'">
+          <h6>
+            Air Pressure
+            <br>
+            <small class="text-muted">
+              Pressure of the air supplied to cylinder.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'cylinderStroke'">
+          <h6>
+            Cylinder Stroke
+            <br>
+            <small class="text-muted">
+              Distance that the piston can travel inside a cylinder.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'pistonRodDiameter'">
+          <h6>
+            Piston Rod Diameter
+            <br>
+            <small class="text-muted">
+              Diameter of the piston rod (required only in case of a double acting cylinder).
+              <hr>
+            </small>
+          </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'cyclesPerMinute'">
+          <h6>
+            Cycles Per Minute
+            <br>
+            <small class="text-muted">
+              Number of cycles (1 cycle is a combination of 2 strokes of a piston) by the crankshaft in a minute.
+              <hr>
+            </small>
+          </h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="d-block d-lg-none h-100 modify-conditions compressed-air standalone-calculator" [ngStyle]="{'overflow-y': 'auto'}">
+  <div class="d-block modification w-100 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="calc-icon-header icon-compressed-air">
+        <img src="assets/images/calculator-icons/compressed-air-icons/pneumatic-air-requirement.png">
+      </div>
+      <div class="pl-2">
+        <h3>Pneumatic Air Requirement</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <app-pneumatic-air-form [settings]="settings" [inputs]="inputs" [outputs]="outputs"
+        (calculate)="calculatePneumaticAirRequirement($event)" (emitChangeField)="setField($event)">
+      </app-pneumatic-air-form>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+          Reset Data
+        </button>
+        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+          Generate Example
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="d-block w-100 mh-100">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+      <div class="flex-fill panel-tab-item h-100 active">
+        <a class="h-100 d-flex justify-content-center align-items-center">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="p-4 pt-2 d-flex flex-column help-info">
+        <h5>
+          Pneumatic Air Requirement Help
+          <br>
+          <small class="text-muted"> This calculator helps in computing the quantity of air required by a specific
+            single acting or a double acting piston cylinder compressor. The design specs of the compressor are entered
+            in the calculator and the
             quantity of air needed is generated.
           </small>
         </h5>

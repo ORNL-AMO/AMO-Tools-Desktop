@@ -1,4 +1,4 @@
-<div class="d-flex h-100 modify-conditions compressed-air standalone-calculator">
+<div class="d-none d-lg-flex h-100 modify-conditions compressed-air standalone-calculator">
 
   <div *ngIf="calcType == 'size-calculations'" class="d-flex flex-column modification w-50 mh-100 scroll-item">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
@@ -114,6 +114,130 @@
           [currentField]="currentField">
         </app-delay-method-help>
         <app-compressor-cycle-help *ngIf="calcType == 'size-calculations' && receiverTankService.receiverTankMethod == 4"
+          [currentField]="currentField">
+        </app-compressor-cycle-help>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="d-block d-lg-none h-100 modify-conditions compressed-air standalone-calculator" [ngStyle]="{'overflow-y': 'auto'}">
+
+  <div *ngIf="calcType == 'size-calculations'" class="d-block modification w-100 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="calc-icon-header icon-compressed-air">
+        <img src="assets/images/calculator-icons/compressed-air-icons/receiver-tank-calculation.png">
+      </div>
+      <div class="pl-2">
+        <h3>Receiver Tank Sizing</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <div class="tab-content">
+        <form>
+          <div class="form-section">
+            <div class="form-group">
+              <label for="method">Calculation Method</label>
+              <div class="input-group">
+                <select name="method" class="form-control" id="method"
+                  [(ngModel)]="receiverTankService.receiverTankMethod">
+                  <option *ngFor="let method of methods" [ngValue]="method.value">{{method.name}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-section pt-1">
+            <app-general-method-form *ngIf="receiverTankService.receiverTankMethod == 0" [settings]="settings">
+            </app-general-method-form>
+            <app-dedicated-storage-form *ngIf="receiverTankService.receiverTankMethod == 1" [settings]="settings">
+            </app-dedicated-storage-form>
+            <app-metered-storage-form *ngIf="receiverTankService.receiverTankMethod == 2" [settings]="settings">
+            </app-metered-storage-form>
+            <app-delay-method-form *ngIf="receiverTankService.receiverTankMethod == 3" [settings]="settings">
+            </app-delay-method-form>
+            <app-compressor-cycle-form *ngIf="receiverTankService.receiverTankMethod == 4" [settings]="settings">
+            </app-compressor-cycle-form>
+          </div>
+        </form>
+      </div>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+          Reset Data
+        </button>
+        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+          Generate Example
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="calcType == 'usable-air'" class="d-block modification w-100 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="calc-icon-header icon-compressed-air">
+        <img src="assets/images/calculator-icons/compressed-air-icons/receiver-tank-calculation.png">
+      </div>
+      <div class="pl-2">
+        <h3>Usable Air Capacity</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <app-air-capacity-form [settings]="settings">
+      </app-air-capacity-form>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+          Reset Data
+        </button>
+        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+          Generate Example
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="d-block w-100 mh-100">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+      <div class="flex-fill panel-tab-item h-100 active">
+        <a class="h-100 d-flex justify-content-center align-items-center">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="p-4 pt-2 d-flex flex-column help-info">
+        <h5 *ngIf="calcType == 'size-calculations'">Receiver Tank Sizing Help</h5>
+        <h5 *ngIf="calcType == 'usable-air'">Usable Air Capacity Help</h5>
+        <small *ngIf="calcType == 'size-calculations'" class="text-muted">
+          This calculator uses one of four methods to calculate the required size of the receiver tank.
+          The receiver tank is used to store a supply of compressed air and assure a steady
+          supply without excessive line pulsations or frequent loading and unloading of the compressor. There are
+          four methods to calculate the required size of the receiver tank.
+        </small>
+        <small *ngIf="calcType == 'usable-air'" class="text-muted">
+          This calculator computes the quantity of compressed air that is actually available for use. When air
+          receivers are installed, the system's pressure profile and lack of storage limit the effectiveness of
+          compressed air energy storage. Hence this calculator proves useful in such a context.
+        </small>
+        <hr class="my-1 hr-spacer">
+        <app-air-capacity-help *ngIf="calcType == 'usable-air'" [currentField]="currentField">
+        </app-air-capacity-help>
+        <app-general-method-help *ngIf="calcType == 'size-calculations' && receiverTankService.receiverTankMethod == 0"
+          [currentField]="currentField">
+        </app-general-method-help>
+        <app-dedicated-storage-help
+          *ngIf="calcType == 'size-calculations' && receiverTankService.receiverTankMethod == 1"
+          [currentField]="currentField">
+        </app-dedicated-storage-help>
+        <app-metered-storage-help *ngIf="calcType == 'size-calculations' && receiverTankService.receiverTankMethod == 2"
+          [currentField]="currentField">
+        </app-metered-storage-help>
+        <app-delay-method-help *ngIf="calcType == 'size-calculations' && receiverTankService.receiverTankMethod == 3"
+          [currentField]="currentField">
+        </app-delay-method-help>
+        <app-compressor-cycle-help
+          *ngIf="calcType == 'size-calculations' && receiverTankService.receiverTankMethod == 4"
           [currentField]="currentField">
         </app-compressor-cycle-help>
       </div>

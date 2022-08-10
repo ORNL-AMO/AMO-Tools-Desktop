@@ -1,4 +1,4 @@
-<div class="d-flex h-100 modify-conditions compressed-air standalone-calculator">
+<div class="d-none d-lg-flex h-100 modify-conditions compressed-air standalone-calculator">
   <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="calc-icon-header icon-compressed-air">
@@ -25,6 +25,45 @@
   </div>
   <div class="d-flex flex-column w-50 mh-100 scroll-item">
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+      <div class="flex-fill panel-tab-item h-100 active">
+        <a class="h-100 d-flex justify-content-center align-items-center">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <app-air-velocity-help [currentField]="currentField"></app-air-velocity-help>
+    </div>
+  </div>
+</div>
+
+<div class="d-block d-lg-none h-100 modify-conditions compressed-air standalone-calculator" [ngStyle]="{'overflow-y': 'auto'}">
+  <div class="d-block modification w-100 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="calc-icon-header icon-compressed-air">
+        <img src="assets/images/calculator-icons/compressed-air-icons/velocity-in-piping.png">
+      </div>
+      <div class="pl-2">
+        <h3>Velocity in the Piping</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <app-air-velocity-form [settings]="settings" [inputs]="inputs" [outputs]="outputs"
+        (calculate)="getAirVelocity($event)" (emitChangeField)="setField($event)"></app-air-velocity-form>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <!-- change "Reset Data" to "Clear Data" and add 'btn-form' class -->
+        <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+          Reset Data
+        </button>
+        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+          Generate Example
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="d-block w-100 mh-100">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
       <div class="flex-fill panel-tab-item h-100 active">
         <a class="h-100 d-flex justify-content-center align-items-center">
           <div>Help</div>

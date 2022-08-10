@@ -40,6 +40,9 @@ export class CompressedAirReductionComponent implements OnInit {
   modifiedSelected: boolean = false;
 
   modificationExists = false;
+  baselineModTabs: string = 'baseline';
+  baselineCollapsed: boolean = false;
+  modCollapsed: boolean = true;
 
   baselineData: Array<CompressedAirReductionData>;
   modificationData: Array<CompressedAirReductionData>;
@@ -219,6 +222,17 @@ export class CompressedAirReductionComponent implements OnInit {
   setModificationSelected() {
     if (this.baselineSelected == true) {
       this.baselineSelected = false;
+    }
+  }
+  setBaselineModTabs(str: string) {
+    this.baselineModTabs = str;
+    if (str == 'baseline') {
+      this.baselineCollapsed = false;
+      this.modCollapsed = true;
+    } 
+    if (str == 'mod') {
+      this.baselineCollapsed = true;
+      this.modCollapsed = false;
     }
   }
 }

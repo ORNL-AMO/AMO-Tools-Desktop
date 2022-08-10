@@ -1,4 +1,4 @@
-<div class="d-flex h-100 modify-conditions compressed-air standalone-calculator" #contentContainer>
+<div class="d-none d-lg-flex h-100 modify-conditions compressed-air standalone-calculator" #contentContainer>
   <div class="d-flex flex-column modification w-50 mh-100 scroll-item" [ngStyle]="{'height.px': bodyHeight}">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="calc-icon-header icon-compressed-air">
@@ -109,6 +109,139 @@
             <br>
             <small class="text-muted">
               General value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric pressure
+              at that location can be given.
+              <hr>
+            </small>
+          </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'dischargeTime'">
+          <h6>
+            Discharge Time
+            <br>
+            <small class="text-muted">
+              Time required to fully discharge the system.
+              <hr>
+            </small>
+          </h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="d-block d-lg-none h-100 modify-conditions compressed-air standalone-calculator" #contentContainer [ngStyle]="{'overflow-y': 'auto'}">
+  <div class="d-block modification w-100 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="calc-icon-header icon-compressed-air">
+        <img src="assets/images/calculator-icons/compressed-air-icons/air-system-capacity.png">
+      </div>
+      <div class="pl-2">
+        <h3>System Capacity</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <app-system-capacity-form [settings]="settings" [inputs]="inputs" [outputs]="outputs" (calculate)="calculate()"
+        (emitChangeField)="changeField($event)"></app-system-capacity-form>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+          Reset Data
+        </button>
+        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+          Generate Example
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="d-block w-100 mh-100">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+      <div class="flex-fill panel-tab-item h-100 active">
+        <a class="h-100 d-flex justify-content-center align-items-center">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="p-4 pt-2 d-flex flex-column help-info">
+        <h5>
+          System Capacity Help
+          <br>
+          <small class="text-muted"> Input the length of each standard pipe size, the size and length of any custom
+            pipes,
+            and the capacity of receiver tanks found in the compressed air system.
+            The total capacity of the compressed air system will be calculated by adding the volumes of the pipes and
+            receivers.
+            In a well-designed system, the total capacity of the compressed air system is always greater than the mean
+            air
+            consumption found over a reasonable amount of time.
+          </small>
+        </h5>
+        <hr class="my-1 hr-spacer">
+
+        <div class="my-2" *ngIf="currentField == 'pipeLength'">
+          <h6>
+            Pipe Length
+            <br>
+            <small class="text-muted">
+              Enter the length of the specified pipe size.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'pipeSize'">
+          <h6>
+            Pipe Size
+            <br>
+            <small class="text-muted">
+              Select a pipe size from the list of nominal schedule 40 pipe inner diameters or enter a custom pipe size
+              (inner diameter). For a quicker estimation,
+              ignore all pipe sizes
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'">2"</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">50mm</span>
+              or less (they do not add significant system capacity).
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'receiverTanks'">
+          <h6>
+            Receiver Tanks
+            <br>
+            <small class="text-muted">
+              Enter the nameplate capacity for each receiver tank in the system.
+              <hr>
+            </small>
+          </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'airPressureIn'">
+          <h6>
+            Air Pressure - High
+            <br>
+            <small class="text-muted">
+              Pressure of air entering the tank in psi.
+              <hr>
+            </small>
+          </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'airPressureOut'">
+          <h6>
+            Air Pressure - Low
+            <br>
+            <small class="text-muted">
+              Pressure of air leaving the tank in psi.
+              <hr>
+            </small>
+          </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'atmosphericPressure'">
+          <h6>
+            Atmospheric Pressure
+            <br>
+            <small class="text-muted">
+              General value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective
+              atmospheric pressure
               at that location can be given.
               <hr>
             </small>

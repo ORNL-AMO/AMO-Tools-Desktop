@@ -1,4 +1,4 @@
-<div class="d-flex h-100 modify-conditions compressed-air standalone-calculator">
+<div class="d-none d-lg-flex h-100 modify-conditions compressed-air standalone-calculator">
   <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="calc-icon-header icon-compressed-air">
@@ -84,6 +84,103 @@
             <br>
             <small class="text-muted">
               General value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric pressure
+              at that location can be given.
+              <hr>
+            </small>
+          </h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="d-block d-lg-none h-100 modify-conditions compressed-air standalone-calculator" [ngStyle]="{'overflow-y': 'auto'}">
+  <div class="d-block modification w-100 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="calc-icon-header icon-compressed-air">
+        <img src="assets/images/calculator-icons/compressed-air-icons/pipe-sizing.png">
+      </div>
+      <div class="pl-2">
+        <h3>Pipe Sizing</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <app-pipe-sizing-form [settings]="settings" [inputs]="inputs" [outputs]="outputs"
+        (calculate)="calculatePipeSize($event)" (emitChangeField)="setField($event)"></app-pipe-sizing-form>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+          Reset Data
+        </button>
+        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+          Generate Example
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="d-block w-100 mh-100">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+      <div class="flex-fill panel-tab-item h-100 active">
+        <a class="h-100 d-flex justify-content-center align-items-center">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="p-4 pt-2 d-flex flex-column help-info">
+        <h5>
+          Pipe Sizing Help
+          <br>
+          <small class="text-muted"> This calculator helps in finding the pipe diameter when the volumetric flow
+            velocity, pressure, and design velocity are known.
+          </small>
+        </h5>
+        <hr class="my-1 hr-spacer">
+
+        <div class="my-2" *ngIf="currentField == 'airFlow'">
+          <h6>
+            Air Flow
+            <br>
+            <small class="text-muted">
+              Volumetric flow rate of air in the compressor system, referenced to the compressor inlet conditions.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'airlinePressure'">
+          <h6>
+            Airline Pressure
+            <br>
+            <small class="text-muted">
+              Pressure of air flowing through the pipe.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'designVelocity'">
+          <h6>
+            Design Velocity
+            <br>
+            <small class="text-muted">
+              The air flow velocity that is meant to flow through the pipe.
+              <hr>
+              <div class="alert alert-info">
+                Note: <u>20 fps</u> is recommended for a header.
+                The value should never exceed <u>30 fps.</u>
+              </div>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'atmosphericPressure'">
+          <h6>
+            Atmospheric Pressure
+            <br>
+            <small class="text-muted">
+              General value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective
+              atmospheric pressure
               at that location can be given.
               <hr>
             </small>
