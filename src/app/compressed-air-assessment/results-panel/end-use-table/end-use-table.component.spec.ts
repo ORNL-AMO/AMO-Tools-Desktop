@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InletConditionsComponent } from './inlet-conditions.component';
+import { EndUseTableComponent } from './end-use-table.component';
 
-describe('InletConditionsComponent', () => {
-  let component: InletConditionsComponent;
-  let fixture: ComponentFixture<InletConditionsComponent>;
+describe('EndUseTableComponent', () => {
+  let component: EndUseTableComponent;
+  let fixture: ComponentFixture<EndUseTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InletConditionsComponent ]
+      declarations: [ EndUseTableComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InletConditionsComponent);
+    fixture = TestBed.createComponent(EndUseTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

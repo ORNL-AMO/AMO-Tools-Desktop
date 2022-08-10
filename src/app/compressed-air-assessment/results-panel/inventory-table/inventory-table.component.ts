@@ -57,8 +57,7 @@ export class InventoryTableComponent implements OnInit {
 
   addNewCompressor() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let numberOfEntries: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
-    let result: { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } = this.inventoryService.addNewCompressor(numberOfEntries, compressedAirAssessment);
+    let result: { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } = this.inventoryService.addNewCompressor(compressedAirAssessment);
     this.compressedAirAssessmentService.updateCompressedAir(result.compressedAirAssessment, true);
     this.inventoryService.selectedCompressor.next(result.newInventoryItem);
   }
@@ -118,10 +117,9 @@ export class InventoryTableComponent implements OnInit {
 
   createCopy(compressor: CompressorInventoryItem){
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
     let compressorCpy: CompressorInventoryItem = JSON.parse(JSON.stringify(compressor));
     compressorCpy.itemId = Math.random().toString(36).substr(2, 9);
     compressorCpy.name = compressorCpy.name + ' (copy)';
-    this.inventoryService.addNewCompressor(numberOfHourIntervals, compressedAirAssessment, compressorCpy);
+    this.inventoryService.addNewCompressor(compressedAirAssessment, compressorCpy);
   }
 }

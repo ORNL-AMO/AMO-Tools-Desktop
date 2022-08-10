@@ -1,0 +1,32 @@
+<ng-container *ngIf="!inReport">
+  <ul class="tabs subtabs progress-tabs compressed-air">
+    <li [ngClass]="{'active': sankeyTab == 'power'}">
+      <a (click)="changeSankeyTab('power')">Power Sankey</a>
+    </li>
+    <li [ngClass]="{'active': sankeyTab == 'airflow'}">
+      <a (click)="changeSankeyTab('airflow')"
+      [ngClass]="{'disabled': assessment.compressedAirAssessment.endUseData.endUses.length === 0}">Airflow Sankey</a>
+    </li>
+  </ul>
+  <app-power-sankey [inReport]="inReport" *ngIf="sankeyTab === 'power'"></app-power-sankey>
+  <app-airflow-sankey [inReport]="inReport" *ngIf="sankeyTab === 'airflow'"></app-airflow-sankey>
+</ng-container>
+
+
+<div *ngIf="inReport" class="output-summary">
+  <div class="d-flex flex-column">
+    <div class="d-flex">
+      <div class="w-100 m-3">
+        <label class="group-label w-100 h6">Power Sankey</label>
+        <app-power-sankey [inReport]="inReport"></app-power-sankey>
+      </div>
+    </div>
+    <hr>
+    <div class="d-flex">
+      <div class="w-100 m-3">
+        <label class="group-label w-100 h6">Airflow Sankey</label>
+        <app-airflow-sankey [inReport]="inReport" ></app-airflow-sankey>
+      </div>
+    </div>
+  </div>
+</div>

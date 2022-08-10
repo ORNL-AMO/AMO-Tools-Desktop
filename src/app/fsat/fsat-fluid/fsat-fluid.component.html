@@ -35,7 +35,7 @@
     <div class="form-group"
       [ngClass]="{'indicate-different': isSpecificHeatRatioDifferent(), 'invalid':gasDensityForm.controls.specificHeatRatio.invalid}">
       <label for="{{'specificHeatRatio_'+idString}}">Specific Heat Ratio (&gamma;)</label>
-      <input name="specificHeatRatio" type="number" min="0" step="any" class="form-control"
+      <input name="specificHeatRatio" type="number" min="0" step="0.1" class="form-control"
         formControlName="specificHeatRatio" id="{{'specificHeatRatio_'+idString}}" (input)="save()"
         (focus)="focusField('specificHeatRatio')" onfocus="this.select();" [readonly]="!selected">
       <span class="alert-danger pull-right small"
@@ -196,7 +196,7 @@
         <span [innerHTML]="settings.densityMeasurement|settingsLabel"></span>
       </div>
       <div class="input-group" *ngIf="gasDensityForm.controls.inputType.value == 'custom'">
-        <input name="gasDensity" type="number" step="any" class="form-control" formControlName="gasDensity"
+        <input name="gasDensity" type="number" step="0.1" class="form-control" formControlName="gasDensity"
           id="{{'gasDensity_'+idString}}" (input)="getResults()" (focus)="focusField('gasDensity')"
           onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="settings.densityMeasurement|settingsLabel"></span>

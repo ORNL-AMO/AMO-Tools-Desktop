@@ -39,7 +39,7 @@
     <div class="form-group">
         <label for="ratedMotorPower"><span class="fa fa-asterisk"></span>Rated Motor Power </label>
         <div class="input-group">
-            <input type="number" name="ratedMotorPower" class="form-control" id="ratedMotorPower"
+            <input type="number" step="10" name="ratedMotorPower" class="form-control" id="ratedMotorPower"
                 (focus)="focusField('ratedMotorPower')" (input)="save()" formControlName="ratedMotorPower">
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
@@ -158,7 +158,7 @@
     <div class="form-group" *ngIf="displayOptions.fullLoadSpeed">
         <label for="fullLoadSpeed">Full-Load Speed</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('fullLoadSpeed')" (input)="save()"
+            <input type="number" step="10" class="form-control" (focus)="focusField('fullLoadSpeed')" (input)="save()"
                 formControlName="fullLoadSpeed" id="fullLoadSpeed">
             <span class="input-group-addon units">rpm</span>
         </div>

@@ -23,7 +23,7 @@ import { EGridService } from '../shared/helper-services/e-grid.service';
 @Component({
   selector: 'app-fsat',
   templateUrl: './fsat.component.html',
-  styleUrls: ['./fsat.component.css']
+  styleUrls: ['./fsat.component.css'],
 })
 export class FsatComponent implements OnInit {
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
@@ -39,6 +39,7 @@ export class FsatComponent implements OnInit {
 
   showUpdateUnitsModal: boolean = false;
   oldSettings: Settings;
+  modListOpen: boolean = false;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -329,10 +330,12 @@ export class FsatComponent implements OnInit {
 
   selectModificationModal() {
     this.isModalOpen = true;
+    this.modListOpen = true;
     this.changeModificationModal.show();
   }
   closeSelectModification() {
     this.isModalOpen = false;
+    this.modListOpen = false;
     this.fsatService.openModificationModal.next(false);
     this.changeModificationModal.hide();
     this.fsatService.updateData.next(true);

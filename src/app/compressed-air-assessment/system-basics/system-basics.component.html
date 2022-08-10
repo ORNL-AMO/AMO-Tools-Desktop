@@ -32,7 +32,7 @@
     <div class="form-group">
       <label for="electricityCost">Electricity Cost</label>
       <div class="input-group">
-        <input name="electricityCost" type="number" step="any" class="form-control" id="electricityCost"
+        <input name="electricityCost" type="number" step="0.01" class="form-control" id="electricityCost"
           formControlName="electricityCost" (change)="saveSystemBasics()" (focus)="focusField('electricityCost')">
         <span class="units input-group-addon">$/kWh</span>
       </div>
@@ -47,7 +47,7 @@
     <div class="form-group">
       <label for="demandCost">Demand Cost</label>
       <div class="input-group">
-        <input name="demandCost" type="number" step="any" class="form-control" id="demandCost"
+        <input name="demandCost" type="number" step="0.01" class="form-control" id="demandCost"
           formControlName="demandCost" (change)="saveSystemBasics()" (focus)="focusField('demandCost')">
         <span class="units input-group-addon">$/kW-month</span>
       </div>

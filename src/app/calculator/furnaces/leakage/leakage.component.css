@@ -1,109 +1,92 @@
-
 .header .fa.fa-lightbulb-o {
     font-size: -webkit-xxx-large;
     padding-left: 12px;
-   }
-   
-   .fa.fa-times-circle-o:hover {
-       cursor: pointer;
-   }
-   
-   .no-data {
-       background: none;
-   }
-   
-   .btn-group {
-       display: block;
-       text-align: center;
-   }
-   
-   .btn-group .btn-sm {
-       font-size: small !important;
-   }
-   
-   .btn-margin-10 {
-       margin: 10px 0px;
-   }
-   
-   .btn-form {
-       border-radius: 4px !important;
-   }
-   .panel-column.disabled {
-       background-color: #ececec;
-       transition: all 0.2s ease-in-out;
-   }
-   
-   .panel-column.disabled:hover {
-       cursor: pointer;
-       background-color: #fff;
-   }
-   
-   .fa-save, .fa-times, .fa-edit {
-       font-size: xx-large;
-   }
-   
-   .action-item:hover {
-       cursor: pointer;
-       background: #efefef;
-   }
-   
-   .help-holder {
-       max-width: 500px;
-   }
-   
-   .treasure-hunt-help {
-       margin-right: .5rem;
-       margin-bottom: 0px;
-   }
-   
-   .add-loss{
-       margin-top: 10px;
-   }
-   
-   .ngas-icon{
-       height: 55px;
-   }
-   
-   .opp-sheet-icon{
-       width: 35px;
-   }
-   
-   .modal-open {
-       z-index: initial !important;
-   }
-   
-   span.alert-warning {
-       padding: 0;
-   }
-   
-   .small {
-       font-size: 80%;
-       /* font-weight: 400; */
-   }
-
-   .atmosphere-icon {
-        width: 53px;
-   }
-
-.inTreasureHunt-icon{
-    border-radius: 50%;
 }
-.calc-list-icon{
-    border-radius: 15px;
-    box-shadow: #7b7878 2px 2px 5px 1px;
+
+.fa.fa-times-circle-o:hover {
+    cursor: pointer;
 }
- 
-.icon-background{
+
+.no-data {
+    background: none;
+}
+
+.btn-group {
+    display: block;
+    text-align: center;
+}
+
+.btn-group .btn-sm {
+    font-size: small !important;
+}
+
+.btn-margin-10 {
+    margin: 10px 0px;
+}
+
+.btn-form {
+    border-radius: 4px !important;
+}
+
+.panel-column.disabled {
+    background-color: #ececec;
+    transition: all 0.2s ease-in-out;
+}
+
+.panel-column.disabled:hover {
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.fa-save,
+.fa-times,
+.fa-edit {
+    font-size: xx-large;
+}
+
+.action-item:hover {
+    cursor: pointer;
+    background: #efefef;
+}
+
+.help-holder {
+    max-width: 500px;
+}
+
+.treasure-hunt-help {
+    margin-right: .5rem;
+    margin-bottom: 0px;
+}
+
+.add-loss {
+    margin-top: 10px;
+}
+
+.ngas-icon {
     height: 55px;
-    width: 55px;
-    background-image: linear-gradient(to bottom right, #ffffff, #BF3D00);
 }
 
-.leak-icon{    
-    height: auto;
-    width: 45px;
-    margin-top: 9px;
-    margin-bottom: 9px;
-    margin-left: 5px;
-    margin-right: 5px;
+.opp-sheet-icon {
+    width: 35px;
+}
+
+.modal-open {
+    z-index: initial !important;
+}
+
+span.alert-warning {
+    padding: 0;
+}
+
+.small {
+    font-size: 80%;
+    /* font-weight: 400; */
+}
+
+.atmosphere-icon {
+    width: 53px;
+}
+
+.calc-icon-header img {
+    max-width: 40px;
 }

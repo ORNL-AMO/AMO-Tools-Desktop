@@ -1,10 +1,10 @@
 .wall-icon {
-     width: 53px;
+    width: 53px;
 }
 
 .header .fa.fa-lightbulb-o {
- font-size: -webkit-xxx-large;
- padding-left: 12px;
+    font-size: -webkit-xxx-large;
+    padding-left: 12px;
 }
 
 .fa.fa-times-circle-o:hover {
@@ -47,7 +47,9 @@
     background-color: #fff;
 }
 
-.fa-save, .fa-times, .fa-edit {
+.fa-save,
+.fa-times,
+.fa-edit {
     font-size: xx-large;
 }
 
@@ -75,27 +77,4 @@
 
 .modal-open {
     z-index: initial !important;
-}
-
-.inTreasureHunt-icon{
-    border-radius: 50%;
-}
-.calc-list-icon{
-    border-radius: 15px;
-    box-shadow: #7b7878 2px 2px 5px 1px;
-}
- 
-.icon-background{
-    height: 55px;
-    width: 55px;
-    background-image: linear-gradient(to bottom right, #ffffff, #BF3D00);
-}
-
-.wall-icon{    
-    height: 45px;
-    width: auto;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 10px;
-    margin-right: 10px;
 }

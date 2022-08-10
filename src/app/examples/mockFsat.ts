@@ -139,7 +139,7 @@ export const MockFsat: Assessment = {
                         outletPressure: 1.1,
                         loadEstimatedMethod: 0,
                         motorPower: 450,
-                        compressibilityFactor: 0.988,
+                        compressibilityFactor: 0.987,
                         measuredVoltage: 460
                     }
                 },
@@ -210,7 +210,7 @@ export const MockFsat: Assessment = {
                         outletPressure: 1.29,
                         loadEstimatedMethod: 0,
                         motorPower: 450,
-                        compressibilityFactor: 0.988,
+                        compressibilityFactor: 0.986,
                         measuredVoltage: 460
                     }
                 },

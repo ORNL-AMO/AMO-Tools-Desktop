@@ -48,6 +48,11 @@
     <app-compressed-air-diagram></app-compressed-air-diagram>
   </div>
 
+  <div class="tab-content" *ngIf="mainTab == 'sankey'">
+    <app-compressed-air-sankey [assessment]="assessment"></app-compressed-air-sankey>
+  </div>
+
+
   <!--Report-->
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-11 report-column">
@@ -66,9 +71,9 @@
       <button class="btn btn-default" [disabled]="setupTab == 'system-basics'" (click)="back()">Back</button>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" [disabled]="disableNext || setupTab == 'end-uses'" (click)="next()">
-        <span *ngIf="setupTab != 'system-profile'">Next</span>
-        <span *ngIf="setupTab == 'system-profile'">Go To Assessment</span>
+      <button class="btn btn-primary" [disabled]="disableNext" (click)="next()">
+        <span *ngIf="setupTab != 'end-uses'">Next</span>
+        <span *ngIf="setupTab == 'end-uses'">Go To Assessment</span>
       </button>
     </div>
   </div>

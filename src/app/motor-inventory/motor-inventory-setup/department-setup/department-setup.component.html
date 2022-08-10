@@ -15,7 +15,7 @@
             <div class="form-group">
                 <label>Operating Hours</label>
                 <div class="input-group">
-                    <input class="form-control" type="text" id="operatingHours" name="operatingHours"
+                    <input class="form-control" type="number" step="10" id="operatingHours" name="operatingHours"
                         [(ngModel)]="department.operatingHours" (input)="save()">
                     <span class="input-group-addon units">
                         hr/yr

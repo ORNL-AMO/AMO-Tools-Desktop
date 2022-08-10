@@ -1,0 +1,56 @@
+<div class="card p-2">
+    <div class="card-body p-0">
+        <span class="alert-danger pull-right small" *ngIf="hasInvalidEndUses">
+            One or more End Use is invalid - review End Uses and make changes to continue
+        </span>
+        <table class="table table-sm table-striped table-hover mb-0" *ngIf="selectedEndUse && compressedAirAssessment.endUseData.endUses">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>Location</th>
+                    <th>Required Pressure</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let endUse of compressedAirAssessment.endUseData.endUses"
+                    [ngClass]="{'selected-end-use': endUse.endUseId == selectedEndUse.endUseId,
+                    'invalid-end-use': !endUse.isValid}">
+                    <td>
+                        <span *ngIf="endUse.endUseId == selectedEndUse.endUseId"
+                            class="fa fa-chevron-right danger"></span>
+                        <a class="click-link"
+                            (click)="selectItem(endUse)">{{endUse.endUseName}}</a>
+                    </td>
+                    <td>
+                        {{endUse.location}}
+                    </td>
+                    <td>
+                        {{endUse.requiredPressure}} 
+                        <span *ngIf="endUse.requiredPressure">
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                        </span>
+                    </td>
+                    <td>
+                        <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(endUse)"></a>
+                        
+                    </td>
+                    <td>
+                        <a class="fa fa-copy" (click)="createCopy(endUse)"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="w-100 text-right">
+            <a class="click-link small" (click)="addNewEndUse()">+Add New End Use</a>
+        </div>
+    </div>
+</div>
+
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteData" (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>

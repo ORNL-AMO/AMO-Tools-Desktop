@@ -9,7 +9,7 @@
             [ngClass]="{'invalid': form.controls.systemElevation.invalid}">
             <label for="systemElevation">System Elevation</label>
             <div class="input-group">
-                <input name="systemElevation" type="number" step="any" class="form-control" id="systemElevation"
+                <input name="systemElevation" type="number" step="10" class="form-control" id="systemElevation"
                     formControlName="systemElevation" (input)="setAtmosphericPressure()"
                     (focus)="focusField('systemElevation')" min="0">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">ft</span>
@@ -70,7 +70,7 @@
                     Capacity</a>
             </label>
             <div class="input-group">
-                <input name="totalAirStorage" type="number" step="any" class="form-control" id="totalAirStorage"
+                <input name="totalAirStorage" type="number" step="10" class="form-control" id="totalAirStorage"
                     formControlName="totalAirStorage" (input)="save()" (focus)="focusField('totalAirStorage')" min="0">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">gal</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup></span>

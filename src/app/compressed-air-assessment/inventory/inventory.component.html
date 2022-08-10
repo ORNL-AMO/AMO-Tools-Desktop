@@ -25,7 +25,6 @@
         </form>
         <app-nameplate-data></app-nameplate-data>
         <app-control-data></app-control-data>
-        <app-inlet-conditions *ngIf="compressorType != undefined && controlType != undefined"></app-inlet-conditions>
         <app-design-details *ngIf="compressorType != undefined && controlType != undefined"></app-design-details>
         <app-centrifugal-specifics *ngIf="compressorType == 6 && controlType != undefined"></app-centrifugal-specifics>
         <app-performance-points *ngIf="compressorType != undefined && controlType != undefined"></app-performance-points>

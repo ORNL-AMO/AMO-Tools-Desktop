@@ -1,7 +1,7 @@
 .version-num{
     cursor: default !important;
     color: darkslategray;
-    padding-left: .3rem;
+    padding-left: 1rem;
 }
 
 .fa-info-circle{
@@ -33,8 +33,7 @@
 
 .doe-logo {
     width: 100%;
-    margin-bottom: 10px;
-  }
+}
 .doe-logo:hover {
     cursor: pointer;
 }
