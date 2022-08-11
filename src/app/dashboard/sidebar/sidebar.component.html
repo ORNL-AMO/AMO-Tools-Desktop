@@ -1,42 +1,44 @@
-<div *ngIf="showSidebar" class="d-flex w-100 justify-content-end">
-  <span (click)="toggleSidebar()" class="fa fa-chevron-circle-left"></span>
-</div>
-<div *ngIf="!showSidebar" class="d-flex w-100 justify-content-start">
-  <span (click)="toggleSidebar()" class="fa fa-chevron-circle-right"></span>
-</div>
-<div class="d-flex w-100 justify-content-center">
-  <div>
-    <img routerLink="/landing-screen" src="assets/images/DOE-banner-color.svg" class="doe-logo mx-auto">
+<div class="d-flex justify-content-end" (click)="collapseSidebar()">
+  <div class="py-2 px-1 d-flex">
+      <span *ngIf="isSidebarCollapsed" class="fa fa-chevron-circle-right h4"></span>
+      <span *ngIf="!isSidebarCollapsed" class="fa fa-chevron-circle-left h4"></span>
   </div>
 </div>
+<ng-container *ngIf="!isSidebarCollapsed">
 
-<div class="sidebar-group create-button">
-  <div class="p-3">
-    <div class="nav-item dropdown">
-      <button type="button" class="btn btn-primary w-100" (click)="toggleNewDropdown()">
-        <span class="dropdown-toggle">
-          Add New
-        </span>
-      </button>
-      <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showNewDropdown == true}">
-        <div class="list-group bold">
-          <a class="list-group-item list-group-item-action" (click)="showCreateAssessment()">
-            Add New Assessment
-          </a>
-          <a class="list-group-item list-group-item-action" (click)="showCreateInventory()">
-            Add New Inventory
-          </a>
-          <a class="list-group-item list-group-item-action" (click)="showCreateFolder()">
-            Add New Folder
-          </a>
+  <div class="d-flex w-100 justify-content-center">
+    <div>
+      <img routerLink="/landing-screen" src="assets/images/DOE-banner-color.svg" class="doe-logo mx-auto">
+    </div>
+  </div>
+  
+  <div class="sidebar-group create-button">
+    <div class="p-3">
+      <div class="nav-item dropdown">
+        <button type="button" class="btn btn-primary w-100" (click)="toggleNewDropdown()">
+          <span class="dropdown-toggle">
+            Add New
+          </span>
+        </button>
+        <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showNewDropdown == true}">
+          <div class="list-group bold">
+            <a class="list-group-item list-group-item-action" (click)="showCreateAssessment()">
+              Add New Assessment
+            </a>
+            <a class="list-group-item list-group-item-action" (click)="showCreateInventory()">
+              Add New Inventory
+            </a>
+            <a class="list-group-item list-group-item-action" (click)="showCreateFolder()">
+              Add New Folder
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-<div class="sidebar-group secondary">
-  <span class="sidebar-item" [routerLink]="['/landing-screen']" routerLinkActive="selected">Home</span>
+  
+  <div class="sidebar-group secondary">
+    <span class="sidebar-item" [routerLink]="['/landing-screen']" routerLinkActive="selected">Home</span>
 </div>
 
 <div class="sidebar-group secondary pl-1 horizontal scroll-item">
@@ -59,14 +61,15 @@
   <span routerLink="/contact" routerLinkActive="selected" class="sidebar-item">Feedback</span>
   <span routerLink="/acknowledgments" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
   <span *ngIf="googleTranslateAvailable" class="sidebar-item" (click)="emitTranslate()"><span
-      class="fa fa-globe"></span> Translate</span>
-</div>
-
-<div class="sidebar-group">
-  <span class="version-num">v{{versionNum}}
-    <i class="fa fa-info-circle" (click)="openVersionModal()"></i>
-  </span>
-  <span *ngIf="isUpdateAvailable" class="update-available" (click)="openUpdateModal()">Update Available!</span>
-</div>
-
-<app-version-modal *ngIf="showVersionModal" (closeModal)="closeVersionModal()"></app-version-modal>
+    class="fa fa-globe"></span> Translate</span>
+  </div>
+  
+  <div class="sidebar-group">
+    <span class="version-num">v{{versionNum}}
+      <i class="fa fa-info-circle" (click)="openVersionModal()"></i>
+    </span>
+    <span *ngIf="isUpdateAvailable" class="update-available" (click)="openUpdateModal()">Update Available!</span>
+  </div>
+  
+  <app-version-modal *ngIf="showVersionModal" (closeModal)="closeVersionModal()"></app-version-modal>
+</ng-container>

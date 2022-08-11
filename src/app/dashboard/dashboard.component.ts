@@ -45,7 +45,6 @@ export class DashboardComponent implements OnInit {
   sidebarWidth: number;
   sidebarWidthSub: Subscription;
   contentWidth: number;
-  sidebarCollapsed: boolean;
   constructor(private dashboardService: DashboardService, private directoryDashboardService: DirectoryDashboardService, private cd: ChangeDetectorRef) {
   }
 
@@ -84,7 +83,6 @@ export class DashboardComponent implements OnInit {
       this.sidebarWidth = val;
       if (this.dashboardContent && this.sidebarWidth) {
         this.contentWidth = this.dashboardContent.nativeElement.clientWidth - this.sidebarWidth;
-        this.dashboardService.totalScreenWidth.next(this.dashboardContent.nativeElement.clientWidth);
       }
     });
 
@@ -107,7 +105,6 @@ export class DashboardComponent implements OnInit {
   ngAfterViewInit() {
     if (this.dashboardContent && this.sidebarWidth) {
       this.contentWidth = this.dashboardContent.nativeElement.clientWidth - this.sidebarWidth;
-      this.dashboardService.totalScreenWidth.next(this.dashboardContent.nativeElement.clientWidth);
       this.cd.detectChanges();
     }
   }
@@ -126,17 +123,7 @@ export class DashboardComponent implements OnInit {
       body: '',
       setTimeoutVal: undefined
     }
-  }
-  collapseSidebar() {
-    this.sidebarCollapsed = !this.sidebarCollapsed;
-    let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
-    if(this.sidebarCollapsed == false){
-      this.dashboardService.sidebarX.next(0);
-    } else {
-      this.dashboardService.sidebarX.next(totalScreenWidth);
-    }
-    window.dispatchEvent(new Event("resize"));
-  }
+  }  
 }
 
 export interface ImportDataObjects {

@@ -28,8 +28,7 @@ export class SidebarComponent implements OnInit {
   selectedDirectoryIdSub: Subscription;
   googleTranslateAvailable: boolean;
   showNewDropdown: boolean = false;
-  open: boolean = true;
-  showSidebar: boolean = true;
+  isSidebarCollapsed: boolean = false;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private coreService: CoreService) { }
@@ -83,6 +82,16 @@ export class SidebarComponent implements OnInit {
     this.directoryDashboardService.createFolder.next(true);
   }
 
+  collapseSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+    if(this.isSidebarCollapsed == true){
+      this.dashboardService.sidebarX.next(40);
+    } else {
+      this.dashboardService.sidebarX.next(300);
+    }
+    window.dispatchEvent(new Event("resize"));
+  }
+
   openUpdateModal() {
     this.assessmentService.updateAvailable.next(true);
   }
@@ -103,15 +112,5 @@ export class SidebarComponent implements OnInit {
 
   toggleNewDropdown(){
     this.showNewDropdown = !this.showNewDropdown;
-  }
-  toggleSidebar(){
-    this.showSidebar = !this.showSidebar;
-    let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
-    if(this.showSidebar == true){
-      this.dashboardService.sidebarX.next(300);
-    } else {
-      this.dashboardService.sidebarX.next(45);
-    }
-    window.dispatchEvent(new Event("resize"));
   }
 }
