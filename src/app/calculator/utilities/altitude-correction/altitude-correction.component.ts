@@ -18,8 +18,7 @@ export class AltitudeCorrectionComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
-  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;  
-  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef; 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -28,7 +27,6 @@ export class AltitudeCorrectionComponent implements OnInit {
   }
 
 
-  containerHeight: number;
   tabSelect: string = 'help';
   headerHeight: number;
   saving: boolean;
@@ -112,7 +110,6 @@ export class AltitudeCorrectionComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.offsetHeight;
-      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
     }
   }
 
