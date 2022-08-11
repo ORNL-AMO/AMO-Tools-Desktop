@@ -29,6 +29,7 @@
       /* animation-name: capitol;
       animation-duration: 5s; */
         font-size: 5rem; 
+        font-size: 6vw;
       /* text-shadow: 5px 5px #196F3D; */
       animation-name: capitol;
       transition: all 2s ease-in-out !important;
