@@ -28,6 +28,7 @@ export class SidebarComponent implements OnInit {
   selectedDirectoryIdSub: Subscription;
   googleTranslateAvailable: boolean;
   showNewDropdown: boolean = false;
+  isSidebarCollapsed: boolean = false;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private coreService: CoreService) { }
@@ -79,6 +80,21 @@ export class SidebarComponent implements OnInit {
     this.dashboardService.createInventory.next(false);
     this.showNewDropdown = false;
     this.directoryDashboardService.createFolder.next(true);
+  }
+
+  collapseSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+    // let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
+
+    // Regardless of if we keep the draggable width feature, it may be wise to turn sidebarX into a 'sidebar' 
+    // object that has a sidebar x value and other data such as user set width, containerwidth/screen size 
+    // so we can make the expanded sidebar take the whole width when expanded on screens under 1024/1080 widths
+    if(this.isSidebarCollapsed == true){
+      this.dashboardService.sidebarX.next(40);
+    } else {
+      this.dashboardService.sidebarX.next(300);
+    }
+    window.dispatchEvent(new Event("resize"));
   }
 
   openUpdateModal() {

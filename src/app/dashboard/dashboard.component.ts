@@ -45,7 +45,6 @@ export class DashboardComponent implements OnInit {
   sidebarWidth: number;
   sidebarWidthSub: Subscription;
   contentWidth: number;
-  sidebarCollapsed: boolean;
   constructor(private dashboardService: DashboardService, private directoryDashboardService: DirectoryDashboardService, private cd: ChangeDetectorRef) {
   }
 
@@ -126,16 +125,6 @@ export class DashboardComponent implements OnInit {
       body: '',
       setTimeoutVal: undefined
     }
-  }
-  collapseSidebar() {
-    this.sidebarCollapsed = !this.sidebarCollapsed;
-    let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
-    if(this.sidebarCollapsed == false){
-      this.dashboardService.sidebarX.next(0);
-    } else {
-      this.dashboardService.sidebarX.next(totalScreenWidth);
-    }
-    window.dispatchEvent(new Event("resize"));
   }
 }
 
