@@ -13,14 +13,6 @@
     <div class="sidebar-bg" [ngStyle]="{'width.px': sidebarWidth}">
         <app-sidebar></app-sidebar>
     </div>
-    <div class="d-flex align-items-start d-block d-lg-none" (click)="collapseSidebar()">
-        <div class="p-1 d-flex">
-            <span *ngIf="sidebarCollapsed" class="fa fa-chevron-left"></span>
-            <span *ngIf="!sidebarCollapsed" class="fa fa-chevron-right"></span>
-        </div>
-    </div>
-    <!-- <div #dragbar draggable="true" class="dragbar" (dragover)="testDrag($event)"></div> -->
-    <app-drag-bar></app-drag-bar>
     <div class="flex-fill scroll-item dashboard-scroll skyline" [ngStyle]="{'width.px': contentWidth}">
         <router-outlet></router-outlet>
     </div>
