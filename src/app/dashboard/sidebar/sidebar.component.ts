@@ -84,10 +84,19 @@ export class SidebarComponent implements OnInit {
 
   collapseSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
-    if(this.isSidebarCollapsed == true){
-      this.dashboardService.sidebarX.next(40);
+    let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
+    if (totalScreenWidth < 1024) {
+      if (this.isSidebarCollapsed == true) {
+        this.dashboardService.sidebarX.next(40);
+      } else {
+        this.dashboardService.sidebarX.next(totalScreenWidth);
+      }
     } else {
-      this.dashboardService.sidebarX.next(300);
+      if (this.isSidebarCollapsed == true) {
+        this.dashboardService.sidebarX.next(40);
+      } else {
+        this.dashboardService.sidebarX.next(300);
+      }
     }
     window.dispatchEvent(new Event("resize"));
   }

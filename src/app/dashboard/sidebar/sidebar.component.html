@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-end sticky-top" (click)="collapseSidebar()">
+<div class="d-flex justify-content-end" (click)="collapseSidebar()">
   <div class="py-2 px-1 d-flex">
       <span *ngIf="isSidebarCollapsed" class="fa fa-chevron-circle-right h4"></span>
       <span *ngIf="!isSidebarCollapsed" class="fa fa-chevron-circle-left h4"></span>
@@ -49,11 +49,11 @@
   <span routerLink="/log-tool" routerLinkActive="selected" class="sidebar-item">Data Exploration</span>
 </div>
 
-<div class="sidebar-group secondary">
+<div class="sidebar-group secondary" (click)="collapseSidebar()">
   <app-calculator-list></app-calculator-list>
 </div>
 
-<div class="sidebar-group secondary">
+<div class="sidebar-group secondary" (click)="collapseSidebar()">
   <span routerLink="/settings" routerLinkActive="selected" class="sidebar-item">Settings</span>
   <span routerLink="/custom-materials" routerLinkActive="selected" class="sidebar-item">Custom Materials</span>
   <span routerLink="/tutorials" routerLinkActive="selected" class="sidebar-item">User Manuals</span>

@@ -83,6 +83,7 @@ export class DashboardComponent implements OnInit {
       this.sidebarWidth = val;
       if (this.dashboardContent && this.sidebarWidth) {
         this.contentWidth = this.dashboardContent.nativeElement.clientWidth - this.sidebarWidth;
+        this.dashboardService.totalScreenWidth.next(this.dashboardContent.nativeElement.clientWidth);
       }
     });
 
@@ -105,6 +106,7 @@ export class DashboardComponent implements OnInit {
   ngAfterViewInit() {
     if (this.dashboardContent && this.sidebarWidth) {
       this.contentWidth = this.dashboardContent.nativeElement.clientWidth - this.sidebarWidth;
+      this.dashboardService.totalScreenWidth.next(this.dashboardContent.nativeElement.clientWidth);
       this.cd.detectChanges();
     }
   }
