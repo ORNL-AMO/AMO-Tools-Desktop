@@ -1,20 +1,7 @@
-<!-- <div class="container-fluid">
-    <div class="row dashboard-content">
-        <div class="col-2 sidebar-bg p-0">
-            <app-sidebar></app-sidebar>
-        </div>
-        <div class="col-10 scroll-item dashboard-scroll skyline pl-0 pr-0">
-            <router-outlet></router-outlet>
-        </div>
-    </div>
-</div> -->
-
 <div class="d-flex dashboard-content w-100" #dashboardContent>
     <div class="sidebar-bg" [ngStyle]="{'width.px': sidebarWidth}">
         <app-sidebar></app-sidebar>
     </div>
-    <!-- <div #dragbar draggable="true" class="dragbar" (dragover)="testDrag($event)"></div> -->
-    <app-drag-bar></app-drag-bar>
     <div class="flex-fill scroll-item dashboard-scroll skyline" [ngStyle]="{'width.px': contentWidth}">
         <router-outlet></router-outlet>
     </div>

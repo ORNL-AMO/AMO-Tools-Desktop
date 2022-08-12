@@ -4,7 +4,7 @@
     padding-left: 1rem;
 }
 
-.fa-info-circle{
+.fa-info-circle, .fa-chevron-circle-right, .fa-chevron-circle-left{
     cursor: pointer;
 }
 
