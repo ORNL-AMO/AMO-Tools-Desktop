@@ -1,6 +1,6 @@
-<div class="d-flex dashboard-content w-100" #dashboardContent>
+ <div class="d-flex dashboard-content w-100" #dashboardContent>
     <div class="sidebar-bg" [ngStyle]="{'width.px': sidebarWidth}">
-        <app-sidebar></app-sidebar>
+        <app-sidebar *ngIf="contentWidth !== undefined"></app-sidebar>
     </div>
     <div class="flex-fill scroll-item dashboard-scroll skyline" [ngStyle]="{'width.px': contentWidth}">
         <router-outlet></router-outlet>
