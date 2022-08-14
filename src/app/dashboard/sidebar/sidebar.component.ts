@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { AssessmentService } from '../assessment.service';
 declare const packageJson;
@@ -29,8 +29,10 @@ export class SidebarComponent implements OnInit {
   googleTranslateAvailable: boolean;
   showNewDropdown: boolean = false;
   isSidebarCollapsed: boolean = false;
+  collapseSidebarSub: Subscription;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
+    private cd: ChangeDetectorRef,
     private coreService: CoreService) { }
 
   ngOnInit() {
@@ -46,6 +48,12 @@ export class SidebarComponent implements OnInit {
 
     this.selectedDirectoryIdSub = this.directoryDashboardService.selectedDirectoryId.subscribe(val => {
       this.selectedDirectoryId = val;
+    });
+
+    this.collapseSidebarSub = this.dashboardService.collapseSidebar.subscribe(shouldCollapse => {
+      if (shouldCollapse) {
+        this.collapseSidebar();
+      }
     })
     try {
       google;
@@ -53,6 +61,7 @@ export class SidebarComponent implements OnInit {
     } catch{
       this.googleTranslateAvailable = false;
     }
+    this.checkShouldCollapseSidebar();
   }
 
   ngOnDestroy() {
@@ -82,21 +91,32 @@ export class SidebarComponent implements OnInit {
     this.directoryDashboardService.createFolder.next(true);
   }
 
-  collapseSidebar() {
-    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  checkShouldCollapseSidebar() {
     let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
     if (totalScreenWidth < 1024) {
-      if (this.isSidebarCollapsed == true) {
-        this.dashboardService.sidebarX.next(40);
-      } else {
-        this.dashboardService.sidebarX.next(totalScreenWidth);
-      }
+      this.dashboardService.sidebarX.next(40);
+      this.isSidebarCollapsed = true;
+      this.cd.detectChanges();
+    } 
+  }
+
+  navigateSidebarLink(url: string) {
+    this.dashboardService.navigateSidebarLink(url);
+  }
+
+  collapseSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+    let collapsedXWidth: number = 40;
+    let expandedXWidth: number = 300;
+    let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
+    if (totalScreenWidth < 1024) {
+      expandedXWidth = totalScreenWidth;
+    } 
+    
+    if (this.isSidebarCollapsed == true) {
+      this.dashboardService.sidebarX.next(collapsedXWidth);
     } else {
-      if (this.isSidebarCollapsed == true) {
-        this.dashboardService.sidebarX.next(40);
-      } else {
-        this.dashboardService.sidebarX.next(300);
-      }
+      this.dashboardService.sidebarX.next(expandedXWidth);
     }
     window.dispatchEvent(new Event("resize"));
   }
