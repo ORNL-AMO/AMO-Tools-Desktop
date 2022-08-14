@@ -15,6 +15,7 @@ import { FlueGasEnergyData } from "../../calculator/furnaces/flue-gas/energy-for
 import { FeedwaterEconomizerInput } from "./steam/feedwaterEconomizer";
 import { CondensingEconomizerInput } from "./steam/condensingEconomizer";
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
+import { CoolingTowerData } from "./chillers";
 
 export interface TreasureHunt {
     name: string,
@@ -40,6 +41,7 @@ export interface TreasureHunt {
     heatCascadingOpportunities?: Array<HeatCascadingTreasureHunt>;
     condensingEconomizerOpportunities?: Array<CondensingEconTreasureHunt>;
     waterHeatingOpportunities?: Array<WaterHeatingTreasureHunt>;
+    coolingTowerMakeupOpportunities?: Array<CoolingTowerMakeupWaterTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     existingDataUnits?: string;
@@ -70,6 +72,7 @@ export enum Treasure {
     waterHeating = 'water-heating',
     feedwaterEconomizer = 'feedWaterEconomizer',
     condensingEconomizer = 'condensing-economizer',
+    coolingTowerMakeup = 'cooling-tower-makeup',
 }
 
 export interface FilterOption {
@@ -237,6 +240,13 @@ export interface CompressedAirPressureReductionTreasureHunt extends TreasureHunt
 export interface PipeInsulationReductionTreasureHunt extends TreasureHuntOpportunity{
     baseline: PipeInsulationReductionInput;
     modification: PipeInsulationReductionInput;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface CoolingTowerMakeupWaterTreasureHunt extends TreasureHuntOpportunity{
+    baseline: Array<CoolingTowerData>;
+    modification: Array<CoolingTowerData>;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
@@ -488,4 +498,5 @@ export interface ImportExportOpportunities {
     wasteHeatReductions?: Array<WasteHeatTreasureHunt>;
     heatCascadingOpportunities?: Array<HeatCascadingTreasureHunt>;
     waterHeatingOpportunities?: Array<WaterHeatingTreasureHunt>;
+    coolingTowerMakeupOpportunities?: Array<CoolingTowerMakeupWaterTreasureHunt>;
 }

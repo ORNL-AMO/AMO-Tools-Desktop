@@ -319,6 +319,22 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.coolingTowerMakeupOpportunities">
+                        <label>Cooling Tower Makeup Water </label>
+                        <ul>
+                            <li
+                                *ngFor="let coolingTowerMakeup of exportOpportunities.coolingTowerMakupeOpportunities; let index = index;">
+                                <span
+                                    *ngIf="!coolingTowerMakeup.opportunitySheet || !coolingTowerMakeup.opportunitySheet.name">
+                                    Cooling Tower Makeup Water #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="coolingTowerMakeup.opportunitySheet && coolingTowerMakeup.opportunitySheet.name">
+                                    {{coolingTowerMakeup.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="col-6 p-2" *ngIf="exportOpportunities.opportunitySheets">
                         <label>Opportunity Sheets</label>
                         <ul>

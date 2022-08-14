@@ -33,6 +33,7 @@ import { OpeningModule } from '../../calculator/furnaces/opening/opening.module'
 import { AirHeatingModule } from '../../calculator/furnaces/air-heating/air-heating.module';
 import { HeatCascadingModule } from '../../calculator/furnaces/heat-cascading/heat-cascading.module';
 import { WaterHeatingModule } from '../../calculator/steam/water-heating/water-heating.module';
+import { CoolingTowerModule } from '../../calculator/process-cooling/cooling-tower/cooling-tower.module';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { WaterHeatingModule } from '../../calculator/steam/water-heating/water-h
     WallModule,
     FlueGasModule,
     HeatCascadingModule,
-    WaterHeatingModule
+    WaterHeatingModule,
+    CoolingTowerModule
   ],
   providers: [
     CalculatorsService,
