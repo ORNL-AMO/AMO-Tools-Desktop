@@ -31,8 +31,8 @@
   </div>
 </nav>
 
-<nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs psat flex-wrap" *ngIf="mainTab == 'system-setup'">
-  <ul class="pagination d-flex justify-content-between tabs psat subtabs progress-tabs">
+<nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs psat flex-wrap flex-fill" *ngIf="mainTab == 'system-setup'">
+  <ul class="pagination d-flex justify-content-between tabs psat subtabs progress-tabs flex-fill">
     <li class="page-item" [ngClass]="{'disabled': stepTab == 'system-basics'}">
       <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': stepTab == 'system-basics'}">
         <span class="fa fa-chevron-left"></span></a>
@@ -133,9 +133,10 @@
       <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add
         Scenarios</button>
     </div>
-    <div class="mx-auto pl-2 pr-2 align-items-center justify-content-center" (click)="collapseTabs()">
-      <span *ngIf="!tabsCollapsed" class="fa fa-caret-up">Menu</span>
-      <span *ngIf="tabsCollapsed" class="fa fa-caret-down">Menu</span>
+    <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseTabs()">
+      <span *ngIf="!tabsCollapsed" class="fa fa-caret-up pr-2"></span>
+      <span *ngIf="tabsCollapsed" class="fa fa-caret-down pr-2"></span>
+      <span class="small text-uppercase">Menu</span>
     </div>  
   </div>
 
@@ -172,9 +173,10 @@
 
 <div class="d-flex d-lg-none flex-column" *ngIf="mainTab == 'calculators'">
   <div class="tabs subtabs psat">
-    <div class="mx-auto pl-2 pr-2 align-items-center justify-content-center" (click)="collapseCalcTabs()">
-      <span *ngIf="!calcTabsCollapsed" class="fa fa-caret-up">Menu</span>
-      <span *ngIf="calcTabsCollapsed" class="fa fa-caret-down">Menu</span>
+    <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseCalcTabs()">
+      <span *ngIf="!calcTabsCollapsed" class="fa fa-caret-up pr-2"></span>
+      <span *ngIf="calcTabsCollapsed" class="fa fa-caret-down pr-2"></span>
+      <span class="small text-uppercase">Menu</span>
     </div> 
     <div [ngClass]="{'active': calcTab == 'achievable-efficiency', 'collapse': calcTabsCollapsed}">
       <a (click)="changeCalcTab('achievable-efficiency')">Pump Achievable Efficiency</a>

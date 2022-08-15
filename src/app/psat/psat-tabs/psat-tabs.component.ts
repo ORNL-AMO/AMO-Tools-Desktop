@@ -91,14 +91,17 @@ export class PsatTabsComponent implements OnInit {
 
   changeTab(str: string) {
     this.psatTabService.secondaryTab.next(str);
+    this.collapseTabs();
   }
 
   changeCalcTab(str: string) {
     this.psatTabService.calcTab.next(str);
+    this.collapseCalcTabs();
   }
 
   selectModification() {
     this.compareService.openModificationModal.next(true);
+    this.collapseTabs();
   }
 
   checkPumpFluidInvalid(): boolean {

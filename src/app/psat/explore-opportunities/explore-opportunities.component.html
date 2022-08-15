@@ -1,5 +1,5 @@
-<div class="d-none d-lg-flex psat modify-conditions panel-container">
-	<div *ngIf="modificationExists" class="w-50 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+<div class="calculator-container psat modify-conditions panel-container">
+	<div *ngIf="modificationExists" class="panel-container lookup-form panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
 		<div *ngIf="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == true">
 			<div class="header mr-2 ml-2">
 				<h3>Select Potential Adjustment Projects</h3>
@@ -28,7 +28,7 @@
 		</div>
 
 	</div>
-	<div *ngIf="!modificationExists" class="no-data w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}">
+	<div *ngIf="!modificationExists" class="no-data panel-container lookup-form scroll-item" [ngStyle]="{'height.px': containerHeight}">
 		<h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to
 			find efficiency
 			opportunities.
@@ -36,7 +36,7 @@
 		<button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
 		<p>Data will be copied from your current baseline condition.</p>
 	</div>
-	<div class="w-50 d-flex flex-column mr-2 ml-2">
+	<div class="panel-container mr-2 ml-2">
 		<div class="d-flex flex-wrap tabs primary" #resultTabs>
 			<div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
 				<a class="border-left-0" (click)="setTab('results')">Results</a>
@@ -80,98 +80,6 @@
 		</div>
 		<div class="scroll-item" [ngStyle]="{'height.px': helpHeight}"
 			*ngIf="modificationExists && tabSelect == 'results'">
-			<app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat"
-				[exploreModIndex]="modificationIndex" [baselineResults]="baselineResults"
-				[modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings"
-				[modificationName]="psat.modifications[modificationIndex].psat.name">
-			</app-explore-opportunities-results>
-		</div>
-		<div *ngIf="!modificationExists && tabSelect != 'help'">
-			<p>Explore Opportunities to view results</p>
-		</div>
-	</div>
-</div>
-
-<div class="d-block d-lg-none psat modify-conditions panel-container scroll-item">
-	<div *ngIf="modificationExists" class="w-100 h-100">
-		<div *ngIf="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == true">
-			<div class="header mr-2 ml-2">
-				<h3>Select Potential Adjustment Projects</h3>
-			</div>
-			<p>Select potential adjustment projects to explore opportunities to increase efficiency and the
-				effectiveness of
-				your system.</p>
-			<app-explore-opportunities-form [psat]="psat" (emitCalculate)="getResults()" [settings]="settings"
-				(emitSave)="save()" [exploreModIndex]="modificationIndex" (changeField)="focusField($event)"
-				(emitAddNewMod)="addNewMod()" [assessmentId]="assessment.id">
-			</app-explore-opportunities-form>
-		</div>
-		<div *ngIf="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == false">
-			<div class="alert-warning header mr-2 ml-2">
-				<h3>
-					"COMPARE TWO PUMPS"
-				</h3>
-				<br> 
-				<small>
-					This form is unavailable while Compare Two Pumps is selected. <br>
-					
-					If you wish to access this form please click 'View / Add
-					Scenarios', and select 'Modify Pump'.
-				</small>	
-			</div>
-		</div>
-
-	</div>
-	<div *ngIf="!modificationExists" class="no-data w-100 h-100">
-		<h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to
-			find efficiency
-			opportunities.
-		</h3>
-		<button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
-		<p>Data will be copied from your current baseline condition.</p>
-	</div>
-	<div class="w-100 d-flex flex-column mr-2 ml-2">
-		<div class="d-flex flex-wrap tabs primary" #resultTabs>
-			<div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
-				<a class="border-left-0" (click)="setTab('results')">Results</a>
-			</div>
-			<div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'sankey'}">
-				<a (click)="setTab('sankey')">Sankey</a>
-			</div>
-			<div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
-				<a (click)="setTab('help')">Help</a>
-			</div>
-		</div>
-		<div class="help-panel h-100" *ngIf="tabSelect == 'help'">
-			<app-explore-opportunities-help [currentField]="currentField" [settings]="settings" [psat]="psat">
-			</app-explore-opportunities-help>
-		</div>
-
-		<div *ngIf="tabSelect == 'sankey' && modificationExists" class="w-100 h-100">
-			<div class="d-flex flex-column w-100">
-				<div class="btn-group mt-2 justify-content-center">
-				  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Baseline'" [ngClass]="{'active': sankeyView == 'Baseline'}">Baseline</button>
-				  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Modified'" [ngClass]="{'active': sankeyView == 'Modified'}">Modification</button>
-				</div>
-				<app-psat-sankey *ngIf="sankeyView == 'Baseline'"
-					[psat]="psat"
-					[settings]="settings"
-					[appBackground]="true"
-					[baselineResults]="baselineResults"
-					[validPsat]="opportunityPsatValid"
-					[isBaseline]="true">
-				</app-psat-sankey>
-				<app-psat-sankey *ngIf="sankeyView == 'Modified'"
-				  [settings]="settings"
-				  [psat]="psat"
-				  [appBackground]="true"
-				  [modResults]="modificationResults"
-			      [validPsat]="opportunityPsatValid"
-				  [isBaseline]="false">
-				</app-psat-sankey>
-			  </div>
-		</div>
-		<div class="w-100 h-100" *ngIf="modificationExists && tabSelect == 'results'">
 			<app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat"
 				[exploreModIndex]="modificationIndex" [baselineResults]="baselineResults"
 				[modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings"

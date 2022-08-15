@@ -11,8 +11,8 @@
   <!--end header-->
 
   <!--system setup-->
-  <div *ngIf="mainTab == 'system-setup'" class="d-none d-lg-flex tab-content">
-    <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
+  <div *ngIf="mainTab == 'system-setup'" class="calculator-container tab-content">
+    <div class="panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
       <app-pump-operations *ngIf="stepTab == 'operations'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
@@ -26,29 +26,8 @@
       <app-field-data *ngIf="stepTab == 'field-data'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data>
     </div>
-    <div class="w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}"
+    <div class="panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'pl-0': stepTab == 'field-data'}">
-      <app-help-panel [psat]="_psat" [settings]="settings" [modificationIndex]="modificationIndex"
-        [currentTab]="stepTab" [inSetup]="true" [containerHeight]="containerHeight"
-        [showResults]="stepTab == 'field-data'"></app-help-panel>
-    </div>
-  </div>
-
-  <div *ngIf="mainTab == 'system-setup'" class="d-block d-lg-none tab-content scroll-item">
-    <div class="w-100 modification d-block" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
-      <app-pump-operations *ngIf="stepTab == 'operations'" [(psat)]="_psat" (saved)="save()" [selected]="true"
-        [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
-      <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment"
-        (updateSettings)="getSettings($event)" (updateAssessment)="savePsat($event)" (openModal)="modalOpen()"
-        (closeModal)="modalClose()" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
-      <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true"
-        [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
-      <app-motor *ngIf="stepTab == 'motor'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
-        [baseline]="true" [inSetup]="true"></app-motor>
-      <app-field-data *ngIf="stepTab == 'field-data'" [(psat)]="_psat" (saved)="save()" [selected]="true"
-        [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data>
-    </div>
-    <div class="w-100 d-block scroll-item" [ngClass]="{'pl-0': stepTab == 'field-data'}">
       <app-help-panel [psat]="_psat" [settings]="settings" [modificationIndex]="modificationIndex"
         [currentTab]="stepTab" [inSetup]="true" [containerHeight]="containerHeight"
         [showResults]="stepTab == 'field-data'"></app-help-panel>

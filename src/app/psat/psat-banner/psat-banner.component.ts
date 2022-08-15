@@ -38,5 +38,6 @@ export class PsatBannerComponent implements OnInit {
     } else if (this.assessment.psat.setupDone) {
       this.psatTabService.mainTab.next(str);
     }
+    this.collapseBanner();
   }
 }

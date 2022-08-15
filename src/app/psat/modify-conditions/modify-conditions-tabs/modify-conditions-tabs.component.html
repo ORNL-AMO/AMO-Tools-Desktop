@@ -1,4 +1,4 @@
-<div class="d-none d-lg-flex tabs subtabs progress-tabs psat flex-wrap">
+<div class="d-none d-lg-flex tabs subtabs progress-tabs psat flex-wrap flex-fill">
   <div class="fixed-tab-size" [ngClass]="{'active': modifyTab == 'operations'}">
     <a class="nav-link small" (click)="tabChange('operations')"> Operations
       <span (mouseenter)="showTooltip('operations')" (mouseleave)="hideTooltip('operations')" class="badge gray-badge" [ngClass]="operationsBadgeClass">
@@ -29,8 +29,8 @@
   </div>
 </div>
 
-<div class="d-flex d-lg-none tabs subtabs progress-tabs psat flex-wrap">
-  <ul class="pagination d-flex justify-content-between tabs psat subtabs progress-tabs">
+<div class="d-flex d-lg-none tabs subtabs progress-tabs psat flex-wrap flex-fill">
+  <ul class="pagination d-flex justify-content-between tabs psat subtabs progress-tabs flex-fill">
     <li class="page-item" [ngClass]="{'active': modifyTab == 'operations'}">
       <a class="nav-link small" (click)="tabChange('operations')">
         <span *ngIf="modifyTab != 'operations'">1</span><span *ngIf="modifyTab == 'operations'">Operations</span>
