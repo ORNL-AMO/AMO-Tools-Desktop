@@ -1,6 +1,6 @@
-<div #container class="d-none d-lg-flex h-100 modify-conditions general standalone-calculator"
+<div #container class="calculator-container modify-conditions general standalone-calculator"
   [ngClass]="{'in-modal': inModal, 'phast': type == 'furnace', 'psat': type == 'pump', 'general': type == 'mixed', 'fsat': type == 'fan'}">
-  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+  <div class="panel-container lookup-form modification scroll-item">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="calc-icon-header" [ngClass]="{'icon-phast': type == 'furnace', 'icon-psat': type == 'pump', 'icon-fsat': type == 'fan'}">
         <img src="assets/images/calculator-icons/utilities-icons/assessment.png">
@@ -29,7 +29,7 @@
         <a class="click-link" (click)="addPreAssessment()" *ngIf="showAdd">+Add Unit</a>
         <hr class="mt-1 mb-1">
       </div>
-      <div class="d-block" *ngFor="let assessment of preAssessments; let index = index;">
+      <div class="d-block w-100 mh-100" *ngFor="let assessment of preAssessments; let index = index;">
         <app-pre-assessment-form [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()"
           (emitCollapse)="collapsePreAssessment(assessment)" (emitDelete)="deletePreAssessment(assessment, index)"
           (emitChangeField)="setCurrentField($event)" (emitAssessmentType)="setAssessmentType($event)">
@@ -44,7 +44,7 @@
         </button>
       </div>
     </div>
-    <div class="d-flex flex-column justify-content-center h-50" *ngIf="showName">
+    <div class="d-flex flex-column justify-content-center mh-100" *ngIf="showName">
       <div class="form-group pl-4 pr-4 pt-2">
         <label class="assessment-name" for="name">Pre-Assessment Name</label>
         <input class="form-control w-100" [(ngModel)]="calculator.name" type="text">
@@ -54,7 +54,7 @@
       </div>
     </div>
   </div>
-  <div class="d-flex flex-column w-50 mh-100 scroll-item">
+  <div class="panel-container scroll-item">
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
       <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
@@ -78,7 +78,7 @@
     </div>
   </div>
 </div>
-
+<!-- 
 <div #container class="d-block d-lg-none h-100 modify-conditions general standalone-calculator"
   [ngStyle]="{'overflow-y': 'auto'}"
   [ngClass]="{'in-modal': inModal, 'phast': type == 'furnace', 'psat': type == 'pump', 'general': type == 'mixed', 'fsat': type == 'fan'}">
@@ -159,4 +159,4 @@
       </app-pre-assessment-graph>
     </div>
   </div>
-</div>
+</div> -->

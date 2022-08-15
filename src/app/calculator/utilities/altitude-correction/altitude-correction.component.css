@@ -1,0 +1,30 @@
+/* Screens above  1024 */
+.calculator-container {
+    display: flex;
+    height: 100%;
+}
+
+.panel-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+/* Screens below 1024 */
+@media screen and (max-width: 1024px) {
+    .calculator-container {
+        display: block;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .panel-container {
+        display: block;
+        width: 100%;
+    }
+
+    .lookup-form {
+        height: 100%;
+    }
+
+}
