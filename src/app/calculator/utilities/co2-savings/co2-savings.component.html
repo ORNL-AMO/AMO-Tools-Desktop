@@ -9,20 +9,20 @@
     </div>
 
     <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
-      <div class="nav-item" (click)="setSmallScreenTab('baseline')" [ngClass]="{'active': smallScreenTab === 'baseline'}">
+      <div class="nav-item" (click)="setSmallScreenTab('baseline')" [ngClass]="{'small-screen-active': smallScreenTab === 'baseline'}">
         <a class="nav-link">Baseline</a>
       </div>
       <div class="nav-item" (click)="setSmallScreenTab('modification')"
-        [ngClass]="{'active': smallScreenTab === 'modification'}">
+        [ngClass]="{'small-screen-active': smallScreenTab === 'modification'}">
         <a class="nav-link">Modification</a>
       </div>
-      <div class="nav-item" (click)="setSmallScreenTab('details')" [ngClass]="{'active': smallScreenTab === 'details'}">
+      <div class="nav-item" (click)="setSmallScreenTab('details')" [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
         <a class="nav-link">Details</a>
       </div>
     </div>
 
     <div class="panel-group" [ngStyle]="{'height.px': containerHeight}">
-      <div class="panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'baseline'}"
+      <div class="calculator-panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'baseline'}"
       [ngStyle]="{'height.px': containerHeight}">
         <div class="header mr-2 ml-2">
           <h3>Baseline</h3>
@@ -51,7 +51,7 @@
         </div>
       </div>
 
-      <div class="panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'modification'}"
+      <div class="calculator-panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'modification'}"
       [ngStyle]="{'height.px': containerHeight}">
         <ng-container *ngIf="modificationExists">
           <div class="header mr-2 ml-2">
@@ -85,7 +85,7 @@
         </div>
       </div>
 
-      <div class="panel-container help-panel" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}"
+      <div class="calculator-panel-container help-panel" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}"
       [ngStyle]="{'height.px': containerHeight}">
         <div class="d-flex flex-column mh-100">
           <div class="d-flex flex-wrap tabs primary sticky-top">
