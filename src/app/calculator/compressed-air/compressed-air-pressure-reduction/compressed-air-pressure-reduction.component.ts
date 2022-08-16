@@ -31,6 +31,7 @@ export class CompressedAirPressureReductionComponent implements OnInit {
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -39,7 +40,7 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   }
 
   headerHeight: number;
-  containerHeight: number;
+  containerHeight: number
   currentField: string;
   tabSelect: string = 'results';
   baselineSelected: boolean = true;
@@ -53,6 +54,8 @@ export class CompressedAirPressureReductionComponent implements OnInit {
 
   saving: boolean;
   assessmentCalculator: Calculator;
+
+  smallScreenTab: string = 'baseline';
 
   constructor(private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService,   
     private compressedAirPressureReductionService: CompressedAirPressureReductionService) { }
@@ -92,6 +95,9 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -273,5 +279,9 @@ export class CompressedAirPressureReductionComponent implements OnInit {
     if (this.baselineSelected == true) {
       this.baselineSelected = false;
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }
