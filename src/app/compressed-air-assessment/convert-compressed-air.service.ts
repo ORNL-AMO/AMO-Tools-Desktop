@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, ImproveEndUseEfficiency, InletConditions, Modification, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemInformation, SystemProfile, UseAutomaticSequencer } from '../shared/models/compressed-air-assessment';
+import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, EndUse, EndUseData, ImproveEndUseEfficiency, Modification, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemInformation, SystemProfile, UseAutomaticSequencer } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CentrifugalInput, CompressorCalcResult, CompressorsCalcInput } from './compressed-air-calculation.service';
 
@@ -23,6 +23,7 @@ export class ConvertCompressedAirService {
     compressedAirData.systemInformation = this.convertSystemInformation(compressedAirData.systemInformation, oldSettings, newSettings);
     compressedAirData.compressorInventoryItems = this.convertCompressorInventoryItems(compressedAirData.compressorInventoryItems, oldSettings, newSettings);
     compressedAirData.systemProfile = this.convertSystemProfile(compressedAirData.systemProfile, oldSettings, newSettings);
+    compressedAirData.endUseData = this.convertEndUses(compressedAirData.endUseData, oldSettings, newSettings);
     return compressedAirData;
   }
 
@@ -53,11 +54,64 @@ export class ConvertCompressedAirService {
     compressorInventoryItems.forEach((compressorItem: CompressorInventoryItem) => {
       compressorItem.nameplateData = this.convertNamePlateData(compressorItem.nameplateData, oldSettings, newSettings);
       compressorItem.compressorControls = this.convertControls(compressorItem.compressorControls, oldSettings, newSettings);
-      compressorItem.inletConditions = this.convertInletConditions(compressorItem.inletConditions, oldSettings, newSettings);
       compressorItem.designDetails = this.convertDesignDetails(compressorItem.designDetails, oldSettings, newSettings);
       compressorItem.performancePoints = this.convertPerformancePoints(compressorItem.performancePoints, oldSettings, newSettings);
     });
     return compressorInventoryItems;
+  }
+
+  convertEndUses(endUseData: EndUseData, oldSettings: Settings, newSettings: Settings): EndUseData {
+    if (endUseData.endUseDayTypeSetup) {
+      endUseData.endUseDayTypeSetup.dayTypeLeakRates.forEach(leakRate => {
+        if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+          leakRate.dayTypeLeakRate = this.convertUnitsService.value(leakRate.dayTypeLeakRate).from('m3/min').to('ft3/min');
+        } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+          leakRate.dayTypeLeakRate = this.convertUnitsService.value(leakRate.dayTypeLeakRate).from('ft3/min').to('m3/min');
+        }
+        leakRate.dayTypeLeakRate = this.convertUnitsService.roundVal(leakRate.dayTypeLeakRate, 2);
+      });
+    }
+    endUseData.endUses.forEach((endUse: EndUse) => {
+      if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+        endUse.requiredPressure = this.convertUnitsService.value(endUse.requiredPressure).from('barg').to('psig');
+      } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+        endUse.requiredPressure = this.convertUnitsService.value(endUse.requiredPressure).from('psig').to('barg');
+      }
+      endUse.requiredPressure = this.convertUnitsService.roundVal(endUse.requiredPressure, 2);
+
+      endUse.dayTypeEndUses.map(dayTypeUse => {
+        if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+          dayTypeUse.measuredPressure = this.convertUnitsService.value(dayTypeUse.measuredPressure).from('barg').to('psig');
+          dayTypeUse.averageAirflow = this.convertUnitsService.value(dayTypeUse.averageAirflow).from('m3/min').to('ft3/min');
+    
+        } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+          dayTypeUse.measuredPressure = this.convertUnitsService.value(dayTypeUse.measuredPressure).from('psig').to('barg');
+          dayTypeUse.averageAirflow = this.convertUnitsService.value(dayTypeUse.averageAirflow).from('ft3/min').to('m3/min');
+        }
+        dayTypeUse.measuredPressure = this.convertUnitsService.roundVal(dayTypeUse.measuredPressure, 2);
+        dayTypeUse.averageAirflow = this.convertUnitsService.roundVal(dayTypeUse.averageAirflow, 2);
+    
+      });
+    });
+    return endUseData;
+  }
+
+  convertDayTypeEndUse(namePlateData: CompressorNameplateData, oldSettings: Settings, newSettings: Settings): CompressorNameplateData {
+    if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      namePlateData.motorPower = this.convertUnitsService.value(namePlateData.motorPower).from('kW').to('hp');
+      namePlateData.fullLoadOperatingPressure = this.convertUnitsService.value(namePlateData.fullLoadOperatingPressure).from('barg').to('psig');
+      namePlateData.fullLoadRatedCapacity = this.convertUnitsService.value(namePlateData.fullLoadRatedCapacity).from('m3/min').to('ft3/min');
+
+    } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      namePlateData.motorPower = this.convertUnitsService.value(namePlateData.motorPower).from('hp').to('kW');
+      namePlateData.fullLoadOperatingPressure = this.convertUnitsService.value(namePlateData.fullLoadOperatingPressure).from('psig').to('barg');
+      namePlateData.fullLoadRatedCapacity = this.convertUnitsService.value(namePlateData.fullLoadRatedCapacity).from('ft3/min').to('m3/min');
+    }
+    namePlateData.motorPower = this.convertUnitsService.roundVal(namePlateData.motorPower, 2);
+    namePlateData.fullLoadOperatingPressure = this.convertUnitsService.roundVal(namePlateData.fullLoadOperatingPressure, 2);
+    namePlateData.fullLoadRatedCapacity = this.convertUnitsService.roundVal(namePlateData.fullLoadRatedCapacity, 2);
+
+    return namePlateData;
   }
 
   convertNamePlateData(namePlateData: CompressorNameplateData, oldSettings: Settings, newSettings: Settings): CompressorNameplateData {
@@ -88,16 +142,6 @@ export class ConvertCompressedAirService {
     return controls;
   }
 
-  convertInletConditions(inletConditions: InletConditions, oldSettings: Settings, newSettings: Settings): InletConditions {
-    if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      inletConditions.temperature = this.convertUnitsService.value(inletConditions.temperature).from('C').to('F');
-    } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      inletConditions.temperature = this.convertUnitsService.value(inletConditions.temperature).from('F').to('C');
-    }
-    inletConditions.temperature = this.convertUnitsService.roundVal(inletConditions.temperature, 2);
-    return inletConditions;
-  }
-
   convertDesignDetails(designDetails: DesignDetails, oldSettings: Settings, newSettings: Settings): DesignDetails {
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       designDetails.modulatingPressureRange = this.convertUnitsService.value(designDetails.modulatingPressureRange).from('barg').to('psig');
@@ -119,6 +163,10 @@ export class ConvertCompressedAirService {
   convertPerformancePoints(performancePoints: PerformancePoints, oldSettings: Settings, newSettings: Settings): PerformancePoints {
     performancePoints.fullLoad = this.convertPerformancePoint(performancePoints.fullLoad, oldSettings, newSettings);
     performancePoints.maxFullFlow = this.convertPerformancePoint(performancePoints.maxFullFlow, oldSettings, newSettings);
+    if (performancePoints.midTurndown && performancePoints.turndown) {
+      performancePoints.midTurndown = this.convertPerformancePoint(performancePoints.midTurndown, oldSettings, newSettings);
+      performancePoints.turndown = this.convertPerformancePoint(performancePoints.turndown, oldSettings, newSettings);
+    }
     performancePoints.unloadPoint = this.convertPerformancePoint(performancePoints.unloadPoint, oldSettings, newSettings);
     performancePoints.noLoad = this.convertPerformancePoint(performancePoints.noLoad, oldSettings, newSettings);
     performancePoints.blowoff = this.convertPerformancePoint(performancePoints.blowoff, oldSettings, newSettings);
@@ -201,6 +249,11 @@ export class ConvertCompressedAirService {
     }
     inputObj.dischargePsiFullLoad = this.convertPressure(inputObj.dischargePsiFullLoad);
     inputObj.noLoadDischargePressure = this.convertPressure(inputObj.noLoadDischargePressure);
+    inputObj.midTurndownDischargePressure = this.convertPressure(inputObj.midTurndownDischargePressure);
+    inputObj.turndownDischargePressure = this.convertPressure(inputObj.turndownDischargePressure);
+
+    inputObj.turndownAirflow = this.convertUnitsService.value(inputObj.turndownAirflow).from('m3/min').to('ft3/min');
+    inputObj.midTurndownAirflow = this.convertUnitsService.value(inputObj.midTurndownAirflow).from('m3/min').to('ft3/min');
     inputObj.capacityAtFullLoad = this.convertUnitsService.value(inputObj.capacityAtFullLoad).from('m3/min').to('ft3/min');
     inputObj.capacityAtMaxFullFlow = this.convertUnitsService.value(inputObj.capacityAtMaxFullFlow).from('m3/min').to('ft3/min');
     inputObj.pressureAtUnload = this.convertPressure(inputObj.pressureAtUnload);
@@ -222,6 +275,8 @@ export class ConvertCompressedAirService {
     if (inputObj.lubricantType != 1) {
       inputObj.unloadSumpPressure = this.convertPressure(inputObj.unloadSumpPressure);
     }
+
+
     return inputObj;
   }
 

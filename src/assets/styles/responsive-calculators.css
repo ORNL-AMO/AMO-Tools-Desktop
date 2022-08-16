@@ -1,0 +1,122 @@
+
+
+/* 3-PANEL CALCULATOR STYLES (BASELINE, MOD, HELP/RESULTS) */
+
+/* SMALL SCREEN  STYLES */
+
+ /* Screens above  1024 */
+ .calculator-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.panel-group {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+.calculator-panel-container{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    background-color: white;
+    overflow-y: auto;
+}
+
+.calculator-panel-container::-webkit-scrollbar-thumb{
+	background-color: #156739;
+}
+
+.phast .calculator-panel-container::-webkit-scrollbar-thumb{
+    background-color: #BF3D00;
+}
+
+.psat .calculator-panel-container::-webkit-scrollbar-thumb{
+    background-color: #2980b9;
+}
+
+.phast .calculator-panel-container::-webkit-scrollbar-thumb{
+    background-color: #BF3D00;
+}
+
+.fsat .calculator-panel-container::-webkit-scrollbar-thumb{
+	background-color: #FFE400;
+}
+
+.ssmt .calculator-panel-container::-webkit-scrollbar-thumb{
+	background-color: #F39C12;
+}
+
+.treasure-hunt .calculator-panel-container::-webkit-scrollbar-thumb{
+	background-color: #2E4053;
+}
+
+.motor-inventory .calculator-panel-container::-webkit-scrollbar-thumb{
+	background-color: #84b641;
+}
+
+.waste-water .calculator-panel-container::-webkit-scrollbar-thumb{
+	background-color: #003087;
+}
+
+.compressed-air .calculator-panel-container::-webkit-scrollbar-thumb{
+	background-color: #7030A0;
+}
+
+.calculator-panel-container::-webkit-scrollbar {
+    width: .5em;
+    height: .5rem;
+}
+
+.help-panel {
+    background-color: unset;
+}
+
+.small-tab-select {
+    display: none;
+}
+
+.small-screen-active {
+    background: #fff;
+    color: black;
+    transition: all .1s ease-in-out;
+}
+
+@media screen and (max-width: 1024px) {
+    .small-screen-hide {
+        display: none;
+    }
+
+    .calculator-container {
+        display: flex;
+        overflow-y: hidden;
+    }
+
+    .panel-group {
+        flex-direction: column;
+    }
+
+    .calculator-panel-container{
+        display: none;
+        overflow-y: auto;
+    }
+    
+    .small-screen-tab {
+        display: flex;
+        min-height: 100%;
+        height: 100%;
+        width: 100%;
+    }
+
+    .small-tab-select {
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap;
+        margin: auto;
+    }
+    
+}

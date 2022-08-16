@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
 import { Directory } from '../shared/models/directory';
 import { Settings } from '../shared/models/settings';
 import { Assessment } from '../shared/models/assessment';
@@ -45,6 +45,11 @@ export class DashboardComponent implements OnInit {
   sidebarWidth: number;
   sidebarWidthSub: Subscription;
   contentWidth: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setContentWidth();
+  }
   constructor(private dashboardService: DashboardService, private directoryDashboardService: DirectoryDashboardService, private cd: ChangeDetectorRef) {
   }
 
@@ -81,8 +86,8 @@ export class DashboardComponent implements OnInit {
 
     this.sidebarWidthSub = this.dashboardService.sidebarX.subscribe(val => {
       this.sidebarWidth = val;
-      if (this.dashboardContent && this.sidebarWidth) {
-        this.contentWidth = this.dashboardContent.nativeElement.clientWidth - this.sidebarWidth;
+      if (this.dashboardContent && this.sidebarWidth !== undefined) {
+        this.setContentWidth();
       }
     });
 
@@ -103,10 +108,13 @@ export class DashboardComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    if (this.dashboardContent && this.sidebarWidth) {
-      this.contentWidth = this.dashboardContent.nativeElement.clientWidth - this.sidebarWidth;
-      this.cd.detectChanges();
-    }
+    this.setContentWidth();
+  }
+
+  setContentWidth() {
+    this.dashboardService.totalScreenWidth.next(this.dashboardContent.nativeElement.clientWidth);
+    this.contentWidth = this.dashboardContent.nativeElement.clientWidth - this.sidebarWidth;
+    this.cd.detectChanges();
   }
 
   //TOAST HERE

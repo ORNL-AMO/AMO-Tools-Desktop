@@ -1,0 +1,64 @@
+<div class="d-flex flex-column">
+        <form [formGroup]="form">
+            <div class="form-group">
+                <label for="averageAirflow">Average Airflow</label>
+                <div class="input-group">
+                    <input name="averageAirflow" type="number" step="any" class="form-control" id="averageAirflow"
+                        formControlName="averageAirflow" (input)="save()" (focus)="focusField('averageAirflow')">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup>/min</span>
+                    <span class="alert-danger pull-right small"
+                    *ngIf="form.controls.averageAirflow.invalid && !form.controls.averageAirflow.pristine">
+                    <span *ngIf="form.controls.averageAirflow.errors.required">Value Required</span>
+                    <span *ngIf="form.controls.averageAirflow.errors.greaterThan === 0">Value must be greater than 0 </span>
+                    <span *ngIf="form.controls.averageAirflow.errors.max">Value must be less than the System Profile average airflow for this day type.
+                        ({{form.controls.averageAirflow.errors.max.max}})</span>
+                </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="averageCapacity">Average Percent Capacity</label>
+                <div class="text-center small bold">
+                    <span *ngIf="dayTypeEndUseResult.averagePercentCapacity">{{dayTypeEndUseResult.averagePercentCapacity | number}}%</span>
+                    <span *ngIf="!dayTypeEndUseResult.averagePercentCapacity">&mdash; &mdash;</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="regulated">Regulated</label>
+                <select id="regulated" name="regulated" formControlName="regulated" (change)="save()"
+                    (focus)="focusField('regulated')" class="form-control">
+                    <option [ngValue]="true">Yes</option>
+                    <option [ngValue]="false">No</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="measuredPressure">Measured Pressure</label>
+                <div class="input-group">
+                    <input name="measuredPressure" type="number" step="any" class="form-control" id="measuredPressure"
+                        formControlName="measuredPressure" (input)="save()" (focus)="focusField('measuredPressure')">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+                    <span class="alert-danger pull-right small"
+                    *ngIf="form.controls.measuredPressure.invalid && !form.controls.measuredPressure.pristine">
+                    <span *ngIf="form.controls.measuredPressure.errors.required">Value Required</span>
+                    <span *ngIf="form.controls.measuredPressure.errors.greaterThan == 0">Value must be greater than 0 </span>
+                </span>
+                <span class="alert-warning small px-4 py-2 mx-auto" *ngIf="warnings.measuredPressure !== undefined">{{ warnings.measuredPressure }}</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="excessPressure">Excess Pressure</label>
+                <div class="text-center small bold">
+                    <span *ngIf="dayTypeEndUseResult.excessPressure">{{dayTypeEndUseResult.excessPressure | number}}
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                    </span>
+                    <span *ngIf="!dayTypeEndUseResult.excessPressure">&mdash; &mdash;</span>
+                </div>
+            </div>
+        </form>
+</div>

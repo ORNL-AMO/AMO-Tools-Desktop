@@ -177,7 +177,7 @@
       [ngClass]="{'indicate-different': isMeasuredVoltageDifferent(), 'error': warnings.voltageError !== null, 'invalid':fieldDataForm.controls.measuredVoltage.invalid}">
       <label for="{{'measuredVoltage_'+idString}}">Measured Voltage</label>
       <div class="input-group">
-        <input name="measuredVoltage" type="number" min="1" step="any" class="form-control"
+        <input name="measuredVoltage" type="number" step="10" class="form-control"
           formControlName="measuredVoltage" id="{{'measuredVoltage_'+idString}}" (input)="save()"
           (focus)="focusField('measuredVoltage')" onfocus="this.select();" [readonly]="!selected">
         <span class="units">V</span>

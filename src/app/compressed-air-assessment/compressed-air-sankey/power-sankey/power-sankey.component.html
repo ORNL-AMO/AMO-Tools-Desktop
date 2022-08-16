@@ -1,0 +1,49 @@
+
+<div class="d-flex flex-column w-100 compressed-air">
+  <div class="row">
+    <div class="navbar w-50 col-6">
+      <div class="d-flex justify-content-center align-items-center w-100 flex-wrap">
+        <div class="tab-content pl-2 pr-2">
+        </div>
+        <div class="btn-group btn-group-sm align-self-center">
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
+            [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('energy')"
+            [ngClass]="{'active': sankeyLabelStyle == 'energy'}">Loss Energy</button>
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
+            [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
+        </div>
+      </div>
+    </div>
+    <div class="p-2 w-50 justify-content-start col-6">
+      <div class="px-5 py-2">
+        <div>
+          <label class="group-label mb-1">Day Type Leak Rate Setup</label>
+          <app-day-type-setup-form></app-day-type-setup-form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mx-5">
+    <span class="alert-warning small px-4 py-2 mx-auto"
+      *ngIf="sankeyResults && sankeyResults.warnings.CFMWarning !== undefined">{{ sankeyResults.warnings.CFMWarning
+      }}</span>
+    <span *ngIf="!profileDataComplete" class="alert-danger small px-4 py-2 mx-auto">Sankey calculation requires averages
+      of airflow and power from System Profile Setup.
+      Please check System Profile Setup data for correctness.</span>
+  </div>
+</div>
+
+  <div class="sankey-padding w-100">
+    <div #powerChart></div>
+    <div *ngIf="minFlowValues.length > 0" class="ml-5">
+      <div class="mt-4">
+        <label class="group-label bold mb-2">Negligible Losses</label>
+        <table class="small w-25 ml-3">
+          <tr *ngFor="let loss of minFlowValues">
+            <td>{{loss}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>

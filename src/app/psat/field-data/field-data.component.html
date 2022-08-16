@@ -40,7 +40,7 @@
           Head</a>
       </label>
       <div class="input-group">
-        <input [readonly]="!selected" name="head" type="number" min="0.1" step="10" class="form-control"
+        <input [readonly]="!selected" name="head" type="number" step="10" class="form-control"
           formControlName="head" id="{{'head_'+idString}}" (input)="save()" (focus)="focusField('head')"
           onfocus="this.select();">
         <span class="input-group-addon units" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
@@ -105,7 +105,7 @@
       [ngClass]="{'indicate-different': isMotorFieldVoltageDifferent(), 'error': fieldDataWarnings.voltageError !== null, 'invalid': psatForm.controls.measuredVoltage.invalid}">
       <label for="{{'measuredVoltage_'+idString}}">Measured Voltage</label>
       <div class="input-group">
-        <input [readonly]="!selected" name="measuredVoltage" type="number" min="1" step="10" class="form-control"
+        <input [readonly]="!selected" name="measuredVoltage" type="number" step="10" class="form-control"
           formControlName="measuredVoltage" id="{{'measuredVoltage_'+idString}}" (input)="save()"
           (focus)="focusField('measuredVoltage')" onfocus="this.select();">
         <span class="units">V</span>

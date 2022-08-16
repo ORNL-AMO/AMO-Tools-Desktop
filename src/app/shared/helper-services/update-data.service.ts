@@ -35,6 +35,8 @@ export class UpdateDataService {
                 return this.updateTreasureHunt(assessment);
             } else if (assessment.type === 'WasteWater') {
                 return this.updateWasteWater(assessment);
+            }  else if (assessment.type === 'CompressedAir') {
+                return this.updateCompressedAir(assessment);
             } else {
                 return assessment;
             }
@@ -81,6 +83,63 @@ export class UpdateDataService {
             assessment.wasteWater.baselineData.activatedSludgeData.isUserDefinedSo = true;
         }
 
+        return assessment;
+    }
+
+    updateCompressedAir(assessment: Assessment): Assessment {
+        assessment.appVersion = packageJson.version;
+        if (assessment.compressedAirAssessment && assessment.compressedAirAssessment.compressorInventoryItems
+            && assessment.compressedAirAssessment.compressorInventoryItems.length > 0) {
+            assessment.compressedAirAssessment.compressorInventoryItems.forEach(item => {
+                if (!item.performancePoints.midTurndown) {
+                    item.performancePoints.midTurndown = {
+                        dischargePressure: undefined,
+                        isDefaultPower: true,
+                        airflow: undefined,
+                        isDefaultAirFlow: true,
+                        power: undefined,
+                        isDefaultPressure: true
+                      };
+                }
+                if (!item.performancePoints.turndown) {
+                    item.performancePoints.turndown = {
+                        dischargePressure: undefined,
+                        isDefaultPower: true,
+                        airflow: undefined,
+                        isDefaultAirFlow: true,
+                        power: undefined,
+                        isDefaultPressure: true
+                      }
+                }
+            });
+        };
+
+        if (assessment.compressedAirAssessment && !assessment.compressedAirAssessment.endUseData) {
+            assessment.compressedAirAssessment.endUseData = {
+                endUseDayTypeSetup: {
+                    selectedDayTypeId: undefined,
+                    dayTypeLeakRates: [
+                        {
+                            dayTypeId: undefined, 
+                            dayTypeLeakRate: 0
+                        }
+                    ],
+                },
+                dayTypeAirFlowTotals: undefined,
+                endUses: new Array(),
+              };
+            if (assessment.compressedAirAssessment.compressedAirDayTypes && assessment.compressedAirAssessment.compressedAirDayTypes.length > 0) {
+                assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates = []
+                assessment.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+                    assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates.push(
+                        {
+                            dayTypeId: dayType.dayTypeId, 
+                            dayTypeLeakRate: 0
+                        }
+                    )
+                });
+            }
+        };
         return assessment;
     }
 

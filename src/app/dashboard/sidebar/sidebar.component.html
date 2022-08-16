@@ -1,8 +1,11 @@
-<div class="d-flex justify-content-end" (click)="collapseSidebar()">
-  <div class="py-2 px-1 d-flex">
-      <span *ngIf="isSidebarCollapsed" class="fa fa-chevron-circle-right h4"></span>
-      <span *ngIf="!isSidebarCollapsed" class="fa fa-chevron-circle-left h4"></span>
+<div class="d-flex flex-row justify-content-end" [ngStyle]="{'height': isSidebarCollapsed? '100%' : undefined}">
+  <div>
+    <div class="d-flex justify-content-center p-2" (click)="collapseSidebar()">
+      <span *ngIf="isSidebarCollapsed" class="fa fa-chevron-circle-right h5"></span>
+      <span *ngIf="!isSidebarCollapsed" class="fa fa-chevron-circle-left h5"></span>
+    </div>
   </div>
+  <div *ngIf="isSidebarCollapsed" class="sidebar-border"></div>
 </div>
 <ng-container *ngIf="!isSidebarCollapsed">
 
@@ -54,12 +57,12 @@
 </div>
 
 <div class="sidebar-group secondary">
-  <span routerLink="/settings" routerLinkActive="selected" class="sidebar-item">Settings</span>
-  <span routerLink="/custom-materials" routerLinkActive="selected" class="sidebar-item">Custom Materials</span>
-  <span routerLink="/tutorials" routerLinkActive="selected" class="sidebar-item">User Manuals</span>
-  <span routerLink="/about" routerLinkActive="selected" class="sidebar-item">About</span>
-  <span routerLink="/contact" routerLinkActive="selected" class="sidebar-item">Feedback</span>
-  <span routerLink="/acknowledgments" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
+  <span (click)="navigateSidebarLink('/settings')" routerLinkActive="selected" class="sidebar-item">Settings</span>
+  <span (click)="navigateSidebarLink('/custom-materials')" routerLinkActive="selected" class="sidebar-item">Custom Materials</span>
+  <span (click)="navigateSidebarLink('/tutorials')" routerLinkActive="selected" class="sidebar-item">User Manuals</span>
+  <span (click)="navigateSidebarLink('/about')" routerLinkActive="selected" class="sidebar-item">About</span>
+  <span (click)="navigateSidebarLink('/contact')" routerLinkActive="selected" class="sidebar-item">Feedback</span>
+  <span (click)="navigateSidebarLink('/acknowledgments')" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
   <span *ngIf="googleTranslateAvailable" class="sidebar-item" (click)="emitTranslate()"><span
     class="fa fa-globe"></span> Translate</span>
   </div>

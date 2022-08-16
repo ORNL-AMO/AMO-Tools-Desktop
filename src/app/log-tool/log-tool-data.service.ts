@@ -12,7 +12,7 @@ export class LogToolDataService {
   dataIntervalValid: BehaviorSubject<boolean>;
   constructor(private logToolService: LogToolService) {
     this.dataIntervalValid = new BehaviorSubject<boolean>(undefined);
-   }
+  }
 
   resetData() {
     this.logToolDays = new Array();
@@ -130,19 +130,19 @@ export class LogToolDataService {
         csvData.endDate = undefined;
         this.isTimeSeries = false;
         this.dataIntervalValid.next(true);
-      } 
+      }
       else {
         //update date field format
         if (csvData.hasDateField == true && csvData.hasTimeField == true) {
-          csvData.csvImportData.data.map(dataItem => { 
-                      if (dataItem[csvData.dateField.fieldName]) {
-                        dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName].toString().split(" ")[0] + " " + dataItem[csvData.timeField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); 
-                        delete dataItem[csvData.timeField.fieldName];
-                      }
-                      else {
-                        dataItem[csvData.dateField.fieldName] = 'Invalid date';
-                      }
-                    });
+          csvData.csvImportData.data.map(dataItem => {
+            if (dataItem[csvData.dateField.fieldName]) {
+              dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName].toString().split(" ")[0] + " " + dataItem[csvData.timeField.fieldName]).format('YYYY-MM-DD HH:mm:ss');
+              delete dataItem[csvData.timeField.fieldName];
+            }
+            else {
+              dataItem[csvData.dateField.fieldName] = 'Invalid date';
+            }
+          });
           csvData.hasTimeField = false;
           let timeIndex = csvData.fields.indexOf(csvData.timeField);
           csvData.fields.splice(timeIndex, 1);
@@ -197,7 +197,7 @@ export class LogToolDataService {
       dataItem[csvData.dateField.fieldName] = moment(date).format('YYYY-MM-DD HH:mm:ss');
       secondsCounter += intervalIncrement;
     });
-    return csvData.csvImportData.data;    
+    return csvData.csvImportData.data;
   }
 
   divideDataIntoDays(data: Array<any>, dateField: string): Array<{ date: Date, data: Array<any> }> {
@@ -221,6 +221,8 @@ export class LogToolDataService {
         //re initialize
         individualDayData = new Array();
         currentDate = new Date(dataItem[dateField]);
+        //add next day data item before continuing
+        individualDayData.push(dataItem);
       }
     });
     //add final day
@@ -235,7 +237,7 @@ export class LogToolDataService {
     let csvData: IndividualDataFromCsv = this.logToolService.individualDataFromCsv.find(csvData => { return csvData.csvName == dataField.csvName });
     let data: Array<any> = _.filter(csvData.csvImportData.data, (dataItem => {
       if (xField.isDateField == true) {
-        let dateField: LogToolField = csvData.fields.find(field => {return field.isDateField})
+        let dateField: LogToolField = csvData.fields.find(field => { return field.isDateField })
         return (new Date(dataItem[dateField.fieldName]).valueOf() > new Date(xMin).valueOf() && new Date(dataItem[dateField.fieldName]).valueOf() < new Date(xMax).valueOf() && dataItem[dataField.fieldName] > dataMin && dataItem[dataField.fieldName] < dataMax);
       } else {
         return (dataItem[xField.fieldName] > xMin && dataItem[xField.fieldName] < xMax && dataItem[dataField.fieldName] > dataMin && dataItem[dataField.fieldName] < dataMax);
