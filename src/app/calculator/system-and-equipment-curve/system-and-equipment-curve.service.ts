@@ -124,10 +124,10 @@ export class SystemAndEquipmentCurveService {
     let intersectionData = this.systemCurveIntersectionData.getValue();
     let systemCurveData = this.pumpSystemCurveData.getValue();
     // roundoff pointOperatingFlow offset to find match
-    let pointOperatingFlow;
+    let pointOperatingFlow = 0;
     if (point.isUserPoint && !isModification) {
       pointOperatingFlow = Math.round(point.x / 10) * 10;
-    } else {
+    } else if (intersectionData) {
       pointOperatingFlow = Math.round(intersectionData.baseline.x / 10) * 10;
     }
     let powerAtBaselineFlow = baselinePowerDataPairs.find(pair => {
