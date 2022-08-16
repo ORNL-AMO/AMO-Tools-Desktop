@@ -29,6 +29,7 @@ export class FlueGasComponent implements OnInit {
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   baselineEnergySub: Subscription;
   modificationEnergySub: Subscription;
   @HostListener('window:resize', ['$event'])
@@ -51,6 +52,7 @@ export class FlueGasComponent implements OnInit {
   tabSelect: string = 'results';
   baselineSelected = true;
   modificationExists = false;
+  smallScreenTab: string = 'baseline';
 
   constructor(private settingsDbService: SettingsDbService, 
               private cd: ChangeDetectorRef,
@@ -205,6 +207,18 @@ export class FlueGasComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
+    }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+    if (this.smallScreenTab === 'baseline') {
+      this.baselineSelected = true;
+    } else if (this.smallScreenTab === 'modification') {
+      this.baselineSelected = false;
     }
   }
 }
