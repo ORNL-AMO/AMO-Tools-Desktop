@@ -29,35 +29,3 @@
 .btn-form {
   border-radius: 4px !important;
 }
-
-/* Screens above  1024 */
-.calculator-form-container {
-    display: flex;
-    height: 100%;
-}
-
-.calculator-form-panel-container {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-}
-
- /* Screens below 1024 */
-@media screen and (max-width: 1024px) {
-    /* Single Form Calculators */
-    .calculator-form-container {
-        display: block;
-        height: 100%;
-        overflow-y: auto;
-    }
-
-    .calculator-form-panel-container {
-        display: block;
-        width: 100%;
-    }
-
-    .lookup-form {
-        height: 100%;
-    }
-
-}
