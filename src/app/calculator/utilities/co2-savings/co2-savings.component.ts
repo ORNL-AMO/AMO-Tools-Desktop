@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Co2SavingsService, Co2SavingsData } from './co2-savings.service';
@@ -13,6 +13,7 @@ import { EGridService } from '../../../shared/helper-services/e-grid.service';
 export class Co2SavingsComponent implements OnInit {
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
@@ -40,6 +41,8 @@ export class Co2SavingsComponent implements OnInit {
   modifiedSelected: boolean = false;
   modificationExists: boolean = false;
   containerHeight: number;
+
+  smallScreenTab: string = 'baseline';
 
   constructor(private settingsDbService: SettingsDbService, 
     private egridService: EGridService,
@@ -122,6 +125,9 @@ export class Co2SavingsComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -198,5 +204,9 @@ export class Co2SavingsComponent implements OnInit {
 
   focusField(str: string) {
     this.currentField = str;
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

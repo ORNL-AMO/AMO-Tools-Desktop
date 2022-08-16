@@ -1,44 +1,4 @@
-.header .fa.fa-tachometer {
-    font-size: -webkit-xxx-large;
-}
-
-.fa.fa-times-circle-o:hover {
-    cursor: pointer;
-}
-
-.no-data {
-    background: none;
-}
-
-.btn.btn-primary {
-    padding: 4px;
-    background-color: #145A32;
-}
-
-.btn-group {
-    display: block;
-    text-align: center;
-}
-
-.btn-group .btn-sm {
-    font-size: small !important;
-}
-
-.btn-margin-10 {
-    margin: 10px 0px;
-}
-
-.btn-form {
-    border-radius: 4px !important;
-}
-
-
-
-
-/* 3-PANEL CALCULATOR STYLES (BASELINE, MOD, HELP/RESULTS) */
-/* SMALL SCREEN  STYLES */
-
- /* Screens above  1024 */
+/* 
  .calculator-container {
     display: flex;
     flex-direction: column;
@@ -84,36 +44,26 @@
     transition: all .1s ease-in-out;
 }
 
- /* Screens below 1024 */
-@media screen and (max-width: 1024px) {
-    .small-screen-hide {
-        display: none;
-    }
 
+@media screen and (max-width: 1024px) {
     .calculator-container {
         display: flex;
-        min-height:100%;
         height: 100%;
-        overflow-y: hidden;
+        overflow-y: auto;
     }
 
     .panel-group {
         display: flex;
         flex-direction: column;
         width: 100%;
-        height: 100% !important;
+        height: 100%;
     }
 
     .panel-container {
         display: none;
-        overflow-y: auto;
-    }
-    
-    .small-screen-tab {
-        display: flex;
-        min-height: 100%;
-        height: 100%;
+        flex-direction: column;
         width: 100%;
+        height: 100%;
     }
 
     .small-tab-select {
@@ -122,5 +72,14 @@
         flex-wrap: wrap;
         margin: auto;
     }
+
+    .small-view-tab {
+        display: flex;
+        height: 100%;
+    }
+
+    .small-view-hide {
+        display: none;
+    }
     
-}
+} */

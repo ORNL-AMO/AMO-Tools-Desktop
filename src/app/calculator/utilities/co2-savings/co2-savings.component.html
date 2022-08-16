@@ -1,6 +1,5 @@
-<div class="d-flex h-100 modify-conditions general standalone-calculator" #contentContainer>
-  <div class="d-flex flex-column w-100 h-100 scroll-item">
-    <div #leftPanelHeader class="d-flex header pb-1 pt-1 align-items-center bg-white">
+<div class="calculator-container modify-conditions general standalone-calculator" #contentContainer>
+    <div class="d-flex header pb-1 pt-1 align-items-center bg-white" #leftPanelHeader>
       <div class="calc-icon-header icon-utilities">
         <img src="assets/images/calculator-icons/utilities-icons/co2-savings.png">
       </div>
@@ -8,47 +7,56 @@
         <h3>CO<sub>2</sub> Savings</h3>
       </div>
     </div>
-    <!-- Baseline -->
-    <div class="d-flex">
-      <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
-        <div class="w-50">
-          <div class="header mr-2 ml-2">
-            <h3>Baseline</h3>
+
+    <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+      <div class="nav-item" (click)="setSmallScreenTab('baseline')" [ngClass]="{'active': smallScreenTab === 'baseline'}">
+        <a class="nav-link">Baseline</a>
+      </div>
+      <div class="nav-item" (click)="setSmallScreenTab('modification')"
+        [ngClass]="{'active': smallScreenTab === 'modification'}">
+        <a class="nav-link">Modification</a>
+      </div>
+      <div class="nav-item" (click)="setSmallScreenTab('details')" [ngClass]="{'active': smallScreenTab === 'details'}">
+        <a class="nav-link">Details</a>
+      </div>
+    </div>
+
+    <div class="panel-group" [ngStyle]="{'height.px': containerHeight}">
+      <div class="panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'baseline'}"
+      [ngStyle]="{'height.px': containerHeight}">
+        <div class="header mr-2 ml-2">
+          <h3>Baseline</h3>
+        </div>
+        <div class="d-flex flex-column ml-4 mr-4 mb-4">
+          <div class="p-2">
+            <a class="click-link pull-right small" (click)="addBaselineFixture()">+Add Energy Use</a>
           </div>
-          <div class="d-flex flex-column ml-4 mr-4 mb-4">
-            <div class="p-2">
-              <a class="click-link pull-right small" (click)="addBaselineFixture()">+Add Energy Use</a>
-            </div>
-            <div class="pb-2" *ngFor="let data of baselineData; let index = index;">
-              <label class="group-label w-100 bold"><span class="fa fa-tachometer pr-2"></span>Energy Use #{{index+1}}
-                <span *ngIf="baselineData.length != 1" class="fa fa-times-circle-o pull-right large"
-                  (click)="removeBaselineFixture(index)"></span></label>
-              <app-co2-savings-form [settings]="settings" [data]="data" (emitCalculate)="calculate()"
-              (emitChangeField)="changeField($event)" 
-                [modId]="'baseline'" [index]="index">
-              </app-co2-savings-form>
-            </div>
-            <div class="w-100 justify-content-center btn-group btn-group-sm">
-              <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
-                Reset Data
-              </button>
-              <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
-              <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
-                (click)="btnGenerateExample()">
-                Generate Example
-              </button>
-            </div>
+          <div class="pb-2" *ngFor="let data of baselineData; let index = index;">
+            <label class="group-label w-100 bold"><span class="fa fa-tachometer pr-2"></span>Energy Use #{{index+1}}
+              <span *ngIf="baselineData.length != 1" class="fa fa-times-circle-o pull-right large"
+                (click)="removeBaselineFixture(index)"></span></label>
+            <app-co2-savings-form [settings]="settings" [data]="data" (emitCalculate)="calculate()"
+              (emitChangeField)="changeField($event)" [modId]="'baseline'" [index]="index">
+            </app-co2-savings-form>
+          </div>
+          <div class="w-100 justify-content-center btn-group btn-group-sm">
+            <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+              Reset Data
+            </button>
+            <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+            <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+              Generate Example
+            </button>
           </div>
         </div>
+      </div>
 
-
-        <!-- Modifications Start -->
-        <div *ngIf="modificationExists" class="w-50">
-          <!-- Modification Header -->
+      <div class="panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'modification'}"
+      [ngStyle]="{'height.px': containerHeight}">
+        <ng-container *ngIf="modificationExists">
           <div class="header mr-2 ml-2">
             <h3>Modification</h3>
           </div>
-          <!-- Forms -->
           <div class="d-flex flex-column ml-4 mr-4 mb-4">
             <div class="p-2">
               <a class="click-link pull-right small" (click)="addModificationFixture()">+Add Energy Use</a>
@@ -57,14 +65,13 @@
               <label class="group-label w-100 bold"><span class="fa fa-tachometer pr-2"></span>Energy Use #{{index+1}}
                 <span *ngIf="modificationData.length != 1" class="fa fa-times-circle-o pull-right large"
                   (click)="removeModificationFixture(index)"></span></label>
-              <app-co2-savings-form [settings]="settings" [data]="data" (emitCalculate)="calculate()" 
-              (emitChangeField)="changeField($event)" 
-              [modId]="'modification'" [index]="index"></app-co2-savings-form>
+              <app-co2-savings-form [settings]="settings" [data]="data" (emitCalculate)="calculate()"
+                (emitChangeField)="changeField($event)" [modId]="'modification'" [index]="index"></app-co2-savings-form>
             </div>
           </div>
-        </div>
-        <!-- No content message -->
-        <div class="w-50" *ngIf="!modificationExists">
+        </ng-container>
+
+        <div *ngIf="!modificationExists">
           <div class="header mr-2 ml-2">
             <h3>Modification</h3>
           </div>
@@ -78,13 +85,12 @@
         </div>
       </div>
 
-      <!-- Help Panel -->
-      <div class="col-4 p-0 help-panel">
-        <div class="d-flex flex-column mh-100 scroll-item">
-          <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+      <div class="panel-container help-panel" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}"
+      [ngStyle]="{'height.px': containerHeight}">
+        <div class="d-flex flex-column mh-100">
+          <div class="d-flex flex-wrap tabs primary sticky-top">
             <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-              <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
-                (click)="setTab('results')">
+              <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
                 <div>Results</div>
               </a>
             </div>
@@ -94,14 +100,17 @@
               </a>
             </div>
           </div>
+
           <div class="p-2">
             <app-co2-savings-results *ngIf="tabSelect == 'results'" [baselineData]="baselineData"
-              [modificationData]="modificationData" [baselineTotal]="baselineTotal"
-              [modificationTotal]="modificationTotal"></app-co2-savings-results>
+            [modificationData]="modificationData" [baselineTotal]="baselineTotal" [modificationTotal]="modificationTotal" ></app-co2-savings-results>
             <app-co2-savings-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-co2-savings-help>
           </div>
         </div>
       </div>
+      
+
     </div>
-  </div>
+
+
 </div>
