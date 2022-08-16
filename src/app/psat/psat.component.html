@@ -12,25 +12,35 @@
 
   <!--system setup-->
   <div *ngIf="mainTab == 'system-setup'" class="calculator-container tab-content">
-    <div class="panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
-      <app-pump-operations *ngIf="stepTab == 'operations'" [(psat)]="_psat" (saved)="save()" [selected]="true"
-        [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
-      <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment"
-        (updateSettings)="getSettings($event)" (updateAssessment)="savePsat($event)" (openModal)="modalOpen()"
-        (closeModal)="modalClose()" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
-      <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true"
-        [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
-      <app-motor *ngIf="stepTab == 'motor'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
-        [baseline]="true" [inSetup]="true"></app-motor>
-      <app-field-data *ngIf="stepTab == 'field-data'" [(psat)]="_psat" (saved)="save()" [selected]="true"
-        [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data>
+    <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+      <div class="nav-item" (click)="setSmallScreenTab('form')" [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+        <a class="nav-link">Leak Survey Data</a>
+      </div>
+      <div class="nav-item" (click)="setSmallScreenTab('details')" [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+        <a class="nav-link">Details</a>
+      </div>
     </div>
-    <div class="panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'pl-0': stepTab == 'field-data'}">
-      <app-help-panel [psat]="_psat" [settings]="settings" [modificationIndex]="modificationIndex"
-        [currentTab]="stepTab" [inSetup]="true" [containerHeight]="containerHeight"
-        [showResults]="stepTab == 'field-data'"></app-help-panel>
+    <div class="panel-group">
+      <div class="calculator-panel-container modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
+        [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}">
+        <app-pump-operations *ngIf="stepTab == 'operations'" [(psat)]="_psat" (saved)="save()" [selected]="true"
+          [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
+        <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment"
+          (updateSettings)="getSettings($event)" (updateAssessment)="savePsat($event)" (openModal)="modalOpen()"
+          (closeModal)="modalClose()" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
+        <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true"
+          [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
+        <app-motor *ngIf="stepTab == 'motor'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
+          [baseline]="true" [inSetup]="true"></app-motor>
+        <app-field-data *ngIf="stepTab == 'field-data'" [(psat)]="_psat" (saved)="save()" [selected]="true"
+          [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data>
+      </div>
+      <div class="calculator-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
+        [ngClass]="{'pl-0': stepTab == 'field-data', 'small-screen-tab': smallScreenTab === 'details'}">
+        <app-help-panel [psat]="_psat" [settings]="settings" [modificationIndex]="modificationIndex"
+          [currentTab]="stepTab" [inSetup]="true" [containerHeight]="containerHeight"
+          [showResults]="stepTab == 'field-data'"></app-help-panel>
+      </div>
     </div>
   </div>
   <!--End system-setup-->
