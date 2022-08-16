@@ -41,9 +41,11 @@
             the pump to the gauge P<sub>d</sub>
           </small>
         </div>
-        <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" [settings]="settings"
-          (calculate)="calculateHeadToolSuctionTank()" [inAssessment]="inAssessment"
-          (changeField)="changeField($event)"></app-head-tool-suction-form>
+        <div class="mr-3 ml-3 pb-3">
+          <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" [settings]="settings"
+            (calculate)="calculateHeadToolSuctionTank()" [inAssessment]="inAssessment"
+            (changeField)="changeField($event)"></app-head-tool-suction-form>
+        </div>
       </div>
       <div *ngIf="headToolType == 'Suction gauge elevation' && headToolForm">
         <div class="head-diagram text-center">
@@ -71,7 +73,7 @@
     </div>
     <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
-      <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+      <div class="d-flex flex-wrap tabs primary sticky-top" [ngStyle]="{'height.px': headerHeight}">
         <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
           <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
             <div>Results</div>
