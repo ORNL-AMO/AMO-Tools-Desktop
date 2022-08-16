@@ -1,4 +1,10 @@
-/* 
+
+
+/* 3-PANEL CALCULATOR STYLES (BASELINE, MOD, HELP/RESULTS) */
+
+/* SMALL SCREEN  STYLES */
+
+ /* Screens above  1024 */
  .calculator-container {
     display: flex;
     flex-direction: column;
@@ -44,26 +50,30 @@
     transition: all .1s ease-in-out;
 }
 
-
 @media screen and (max-width: 1024px) {
+    .small-screen-hide {
+        display: none;
+    }
+
     .calculator-container {
         display: flex;
-        height: 100%;
-        overflow-y: auto;
+        overflow-y: hidden;
     }
 
     .panel-group {
-        display: flex;
         flex-direction: column;
-        width: 100%;
-        height: 100%;
     }
 
     .panel-container {
         display: none;
-        flex-direction: column;
-        width: 100%;
+        overflow-y: auto;
+    }
+    
+    .small-screen-tab {
+        display: flex;
+        min-height: 100%;
         height: 100%;
+        width: 100%;
     }
 
     .small-tab-select {
@@ -72,14 +82,5 @@
         flex-wrap: wrap;
         margin: auto;
     }
-
-    .small-view-tab {
-        display: flex;
-        height: 100%;
-    }
-
-    .small-view-hide {
-        display: none;
-    }
     
-} */
+}
