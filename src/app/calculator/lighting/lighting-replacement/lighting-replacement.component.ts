@@ -261,5 +261,10 @@ export class LightingReplacementComponent implements OnInit {
 
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
+    if (this.smallScreenTab === 'baseline') {
+      this.baselineSelected = true;
+    } else if (this.smallScreenTab === 'modification') {
+      this.baselineSelected = false;
+    }
   }
 }
