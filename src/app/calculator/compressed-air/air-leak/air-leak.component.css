@@ -43,3 +43,10 @@
     flex: 1 1 460px;
     padding: 1em;
 }
+
+@media screen and (max-width: 1024px) {
+    .leak-form-width, .leak-results-width {
+        width: 100%;
+    }
+    
+}
