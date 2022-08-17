@@ -1,5 +1,5 @@
-<div class="calculator-container psat modify-conditions">
-	<div *ngIf="modificationExists" class="panel-container lookup-form panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+<div class="assessment-container psat modify-conditions">
+	<div *ngIf="modificationExists" class="assessment-panel-container lookup-form panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
 		<div *ngIf="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == true">
 			<div class="header mr-2 ml-2">
 				<h3>Select Potential Adjustment Projects</h3>
@@ -28,7 +28,7 @@
 		</div>
 
 	</div>
-	<div *ngIf="!modificationExists" class="no-data panel-container lookup-form scroll-item" [ngStyle]="{'height.px': containerHeight}">
+	<div *ngIf="!modificationExists" class="no-data assessment-panel-container lookup-form scroll-item" [ngStyle]="{'height.px': containerHeight}">
 		<h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to
 			find efficiency
 			opportunities.
@@ -36,7 +36,7 @@
 		<button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
 		<p>Data will be copied from your current baseline condition.</p>
 	</div>
-	<div class="panel-container mr-2 ml-2">
+	<div class="assessment-panel-container">
 		<div class="d-flex flex-wrap tabs primary" #resultTabs>
 			<div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
 				<a class="border-left-0" (click)="setTab('results')">Results</a>

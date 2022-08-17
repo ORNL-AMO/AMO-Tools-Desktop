@@ -117,6 +117,7 @@ export class PsatReportComponent implements OnInit {
 
   setTab(str: string) {
     this.currentTab = str;
+    this.collapseTabs();
   }
 
   getSettings() {
@@ -146,6 +147,7 @@ export class PsatReportComponent implements OnInit {
   print() {
     this.printOptionsMenuService.printContext.next('psat');
     this.printOptionsMenuService.showPrintMenu.next(true);
+    this.collapseTabs();
   }
 
 

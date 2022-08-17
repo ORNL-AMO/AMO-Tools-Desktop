@@ -11,8 +11,8 @@
   <!--end header-->
 
   <!--system setup-->
-  <div *ngIf="mainTab == 'system-setup'" class="calculator-container tab-content">
-    <div class="panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
+  <div *ngIf="mainTab == 'system-setup'" class="assessment-container tab-content">
+    <div class="assessment-panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
       <app-pump-operations *ngIf="stepTab == 'operations'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
@@ -26,7 +26,7 @@
       <app-field-data *ngIf="stepTab == 'field-data'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data>
     </div>
-    <div class="panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
+    <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'pl-0': stepTab == 'field-data'}">
       <app-help-panel [psat]="_psat" [settings]="settings" [modificationIndex]="modificationIndex"
         [currentTab]="stepTab" [inSetup]="true" [containerHeight]="containerHeight"

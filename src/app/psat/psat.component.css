@@ -30,14 +30,17 @@
     background-color: #2980b9;
 }
 
+.psat .assessment-panel-container::-webkit-scrollbar-thumb{
+    background-color: #2980b9;
+}
 
- /* Screens above  1024 */
- .calculator-container {
+/* Screens above  1024 */
+.assessment-container {
     display: flex;
     height: 100%;
 }
 
-.panel-container {
+.assessment-panel-container {
     display: flex;
     flex-direction: column;
     width: 50%;
@@ -45,13 +48,13 @@
 
  /* Screens below 1024 */
 @media screen and (max-width: 1024px) {
-    .calculator-container {
+    .assessment-container {
         display: block;
         height: 100%;
         overflow-y: auto;
     }
 
-    .panel-container {
+    .assessment-panel-container {
         display: block;
         width: 100%;
     }

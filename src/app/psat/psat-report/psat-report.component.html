@@ -95,9 +95,13 @@
                     [ngClass]="{'active': currentTab == 'facilityInfo', 'collapse': tabsCollapsed}">
                     <a>Facility Info</a>
                 </div>
-                <div *ngIf="inPsat && !quickReport" class="btn-group hide-print" [ngClass]="{'collapse': tabsCollapsed}">
-                    <button class="btn btn-secondary" (click)="print()">Print</button>
+                <div (click)="print()" class="hide-print"
+                    [ngClass]="{'collapse': tabsCollapsed}">
+                    <a>Print</a>
                 </div>
+                <!-- <div *ngIf="inPsat && !quickReport" class="btn-group hide-print" [ngClass]="{'collapse': tabsCollapsed}">
+                    <button class="btn btn-secondary" (click)="print()">Print</button>
+                </div> -->
             </div>
         </div>
 
