@@ -1,11 +1,22 @@
-<div class="d-flex h-100 modify-conditions steam standalone-calculator">
-  <div class="d-flex flex-column modification w-50 scroll-item mh-100" [ngClass]="{'modal-open': isModalOpen == true}">
-    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
-      <div class="calc-icon-header icon-steam">
-        <img src="assets/images/calculator-icons/steam-icons/stack-loss.png">
-      </div>
-      <h3>Stack Loss</h3>
+<div class="calculator-container modify-conditions steam standalone-calculator">
+  <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+    <div class="calc-icon-header icon-steam">
+      <img src="assets/images/calculator-icons/steam-icons/stack-loss.png">
     </div>
+    <h3>Stack Loss</h3>
+  </div>
+
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('form')" [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link">Stack Loss Data</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')" [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Details</a>
+    </div>
+  </div>
+
+  <div class="panel-group">
+  <div class="calculator-panel-container modification mh-100" [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}">
     <div class="d-flex flex-column m-4">
       <div class="form-group">
         <label class="small" for="method">Type of fuel</label>
@@ -36,8 +47,9 @@
       </div>
     </div>
   </div>
-  <div class="d-flex flex-column w-50 scroll-item mh-100" [ngClass]="{'modal-open': isModalOpen == true}">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+
+  <div class="calculator-panel-container help-panel" [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'details'}">
+    <div class="d-flex flex-wrap tabs primary sticky-top" [ngStyle]="{'height.px': headerHeight}">
       <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
           <div>Results</div>
@@ -57,5 +69,6 @@
         <app-percent-graph [value]="stackLossPercent" [width]="200"></app-percent-graph>
       </div>
     </div>
+  </div>
   </div>
 </div>
