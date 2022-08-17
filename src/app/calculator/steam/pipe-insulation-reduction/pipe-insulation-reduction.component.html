@@ -76,9 +76,6 @@
 
             <div class="panel-column modification" *ngIf="!modificationExists" (click)="setModificationSelected()"
                 [ngClass]="{'disabled': baselineSelected == true}">
-                <div class="header mx-2">
-                    <h3>Modification</h3>
-                </div>
                 <div class="p-3 no-data">
                     <h3>Once you have set up your baseline..</h3>
                     <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
