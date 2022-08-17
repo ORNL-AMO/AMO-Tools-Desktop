@@ -14,7 +14,11 @@
   <div *ngIf="mainTab == 'system-setup'" class="calculator-container tab-content">
     <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
       <div class="nav-item" (click)="setSmallScreenTab('form')" [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
-        <a class="nav-link">Leak Survey Data</a>
+        <a *ngIf="stepTab == 'system-basics'" class="nav-link">Assessment Settings</a>
+        <a *ngIf="stepTab == 'operations'" class="nav-link">Operations</a>
+        <a *ngIf="stepTab == 'pump-fluid'" class="nav-link">Pump & Fluid</a>
+        <a *ngIf="stepTab == 'motor'" class="nav-link">Motor</a>
+        <a *ngIf="stepTab == 'field-data'" class="nav-link">Field Data</a>
       </div>
       <div class="nav-item" (click)="setSmallScreenTab('details')" [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
         <a class="nav-link">Details</a>

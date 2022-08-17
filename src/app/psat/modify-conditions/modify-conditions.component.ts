@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentService } from '../../dashboard/assessment.service';
@@ -29,6 +29,8 @@ export class ModifyConditionsComponent implements OnInit {
   @Input()
   containerHeight: number;
 
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+
   modifyTab: string;
   baselineSelected: boolean = false;
   modifiedSelected: boolean = true;
@@ -37,9 +39,7 @@ export class ModifyConditionsComponent implements OnInit {
   isModalOpen: boolean = false;
   modifyConditionsSub: Subscription;
   modalOpenSub: Subscription;
-  baselineModTabs: string = 'baseline';
-  baselineCollapsed: boolean = false;
-  modCollapsed: boolean = true;
+  smallScreenTab: string = 'baseline';
   constructor(private assessmentService: AssessmentService, private compareService: CompareService, private psatTabService: PsatTabService, private psatService: PsatService) { }
 
   ngOnInit() {
@@ -60,6 +60,28 @@ export class ModifyConditionsComponent implements OnInit {
   ngOnDestroy() {
     this.modifyConditionsSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight) {
+      if (!changes.containerHeight.firstChange) {
+        this.getContainerHeight();
+      }
+    }
+  }
+
+  getContainerHeight() {
+    if (this.containerHeight) {
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
+    }
   }
 
   save() {
@@ -84,15 +106,9 @@ export class ModifyConditionsComponent implements OnInit {
     this.compareService.openNewModal.next(true);
   }
 
-  setBaselineModTabs(str: string) {
-    this.baselineModTabs = str;
-    if (str == 'baseline') {
-      this.baselineCollapsed = false;
-      this.modCollapsed = true;
-    } 
-    if (str == 'mod') {
-      this.baselineCollapsed = true;
-      this.modCollapsed = false;
-    }
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
+
+  
 }

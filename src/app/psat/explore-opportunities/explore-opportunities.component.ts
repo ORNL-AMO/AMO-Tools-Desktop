@@ -30,7 +30,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   emitAddNewMod = new EventEmitter<boolean>();
 
   @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
-
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   annualSavings: number = 0;
   co2EmissionsSavings: number = 0;
   percentSavings: number = 0;
@@ -47,6 +47,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   helpHeight: number;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  smallScreenTab: string = 'form';
   constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private compareService: CompareService) { }
 
   ngOnInit() {
@@ -85,6 +86,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
     if (this.containerHeight && this.resultTabs) {
       let tabHeight = this.resultTabs.nativeElement.clientHeight;
       this.helpHeight = this.containerHeight - tabHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -157,5 +161,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
       body: '',
       setTimeoutVal: undefined
     }
+  }
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }
