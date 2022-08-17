@@ -117,6 +117,7 @@ export class PsatReportComponent implements OnInit {
 
   setTab(str: string) {
     this.currentTab = str;
+    this.collapseTabs();
   }
 
   getSettings() {
