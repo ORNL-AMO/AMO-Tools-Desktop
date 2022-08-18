@@ -105,7 +105,7 @@
 
   <!--report-->
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
-    <div class="col-11 report-column">
+    <div class="col-12 col-lg-11 report-column">
       <app-psat-report [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
         [containerHeight]="containerHeight"></app-psat-report>
     </div>

@@ -84,5 +84,13 @@ export class ModifyConditionsComponent implements OnInit {
 
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
+    if (selectedTab === 'baseline') {
+      this.baselineSelected = true;
+      this.modifiedSelected = false;
+    }
+    else if (selectedTab === 'modification') {
+      this.modifiedSelected = true;
+      this.baselineSelected = false;
+    }
   }
 }
