@@ -20,6 +20,8 @@ export class AchievableEfficiencyComponent implements OnInit {
   inPsat: boolean;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -34,6 +36,9 @@ export class AchievableEfficiencyComponent implements OnInit {
   toggleResetData: boolean = true;
   toggleExampleData: boolean = true;
   tabSelect: string = 'results';
+  
+  containerHeight: number;
+  smallScreenTab: string = 'form';
 
   constructor(private achievableEfficiencyService: AchievableEfficiencyService, private psatService: PsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
   ngOnInit() {
@@ -100,8 +105,12 @@ export class AchievableEfficiencyComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader) {
+    if (this.leftPanelHeader && this.contentContainer) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.headerHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -138,5 +147,8 @@ export class AchievableEfficiencyComponent implements OnInit {
     this.generateExample();
     this.toggleExampleData = !this.toggleExampleData;
     this.calculate();
+  }
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }
