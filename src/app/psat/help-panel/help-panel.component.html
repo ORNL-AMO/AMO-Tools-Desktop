@@ -1,5 +1,5 @@
 <div class="d-flex flex-column w-100 psat position-sticky" *ngIf="!inSetup || showResults" #resultTabs>
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+    <div class="d-flex flex-wrap tabs primary">
         <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
             <a class="border-left-0" (click)="setTab('results')">Results</a>
         </div>
@@ -11,7 +11,7 @@
         </div>
     </div>
 </div>
-<div class="scroll-item mr-2 ml-2" [ngStyle]="{'height.px': helpHeight}">
+<div class="scroll-item" [ngStyle]="{'height.px': helpHeight}">
     <div *ngIf="inSetup && !showResults" class="header">
         <h3>Help</h3>
     </div>

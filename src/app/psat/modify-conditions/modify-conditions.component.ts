@@ -37,6 +37,7 @@ export class ModifyConditionsComponent implements OnInit {
   isModalOpen: boolean = false;
   modifyConditionsSub: Subscription;
   modalOpenSub: Subscription;
+  smallScreenTab: string = 'baseline';
   constructor(private assessmentService: AssessmentService, private compareService: CompareService, private psatTabService: PsatTabService, private psatService: PsatService) { }
 
   ngOnInit() {
@@ -79,5 +80,17 @@ export class ModifyConditionsComponent implements OnInit {
 
   addModification() {
     this.compareService.openNewModal.next(true);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+    if (selectedTab === 'baseline') {
+      this.baselineSelected = true;
+      this.modifiedSelected = false;
+    }
+    else if (selectedTab === 'modification') {
+      this.modifiedSelected = true;
+      this.baselineSelected = false;
+    }
   }
 }
