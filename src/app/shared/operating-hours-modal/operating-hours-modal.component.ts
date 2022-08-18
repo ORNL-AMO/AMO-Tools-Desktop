@@ -35,6 +35,9 @@ export class OperatingHoursModalComponent implements OnInit {
   constructor(private operatingHoursModalService: OperatingHoursModalService) { }
 
   ngOnInit() {
+    if (this.width < 300) {
+      this.width = 300;
+    }
     setTimeout(() => {
       this.showModal = 'show';
     }, 100)
