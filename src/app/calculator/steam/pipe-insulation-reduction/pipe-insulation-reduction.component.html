@@ -62,6 +62,7 @@
         </div>
 
         <div class="calculator-panel-container px-3 panel-column modification" (click)="setModificationSelected()"
+        [ngStyle]="{'height.px': containerHeight}"
             [ngClass]="{'disabled': baselineSelected == true, 'small-screen-tab': smallScreenTab === 'modification'}">
             <div class="header mx-2">
                 <h3>Modification</h3>
@@ -87,6 +88,7 @@
 
         <!-- help panel -->
         <div class="calculator-panel-container help-panel"
+        [ngStyle]="{'height.px': containerHeight}"
             [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
             <div class="d-flex flex-column mh-100">
                 <div class="d-flex flex-wrap tabs primary sticky-top">

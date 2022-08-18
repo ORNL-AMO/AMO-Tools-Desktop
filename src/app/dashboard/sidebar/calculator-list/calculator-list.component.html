@@ -1,5 +1,5 @@
 <!-- place it in an alphabetical order when adding new calculator details -->
-<span [routerLink]="['/calculators/calculators-list']" routerLinkActive="selected" class="sidebar-item">All
+<span (click)="navigateSidebarLink('/calculators/calculators-list')" class="sidebar-item">All
   Calculators</span>
   <!--general-->
 <div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
