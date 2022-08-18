@@ -85,7 +85,7 @@
     <!-- No content message -->
 
     <!-- Help Panel -->
-    <div class="assessment-content-panel help-panel" [ngClass]="{'assessment-small-screen-tab': smallScreenTab === 'details'}">
+    <div class="assessment-content-panel modify-results-panel help-panel" [ngClass]="{'assessment-small-screen-tab': smallScreenTab === 'details'}">
       <app-help-panel *ngIf="modificationExists" (emitSave)="save()" [psat]="psat" [settings]="settings"
         [(modification)]="psat.modifications[modificationIndex]" [modificationIndex]="modificationIndex"
         [containerHeight]="containerHeight"></app-help-panel>
