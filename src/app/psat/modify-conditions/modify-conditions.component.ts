@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentService } from '../../dashboard/assessment.service';
@@ -29,6 +29,8 @@ export class ModifyConditionsComponent implements OnInit {
   @Input()
   containerHeight: number;
 
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  
   modifyTab: string;
   baselineSelected: boolean = false;
   modifiedSelected: boolean = true;
@@ -38,7 +40,7 @@ export class ModifyConditionsComponent implements OnInit {
   modifyConditionsSub: Subscription;
   modalOpenSub: Subscription;
   smallScreenTab: string = 'baseline';
-  constructor(private assessmentService: AssessmentService, private compareService: CompareService, private psatTabService: PsatTabService, private psatService: PsatService) { }
+  constructor(private assessmentService: AssessmentService, private cd: ChangeDetectorRef, private compareService: CompareService, private psatTabService: PsatTabService, private psatService: PsatService) { }
 
   ngOnInit() {
     let tmpTab = this.assessmentService.getSubTab();
@@ -53,6 +55,19 @@ export class ModifyConditionsComponent implements OnInit {
     this.modalOpenSub = this.psatService.modalOpen.subscribe(isOpen => {
       this.isModalOpen = isOpen;
     })
+  }
+
+  getContainerHeight() {
+    if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+      this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      this.cd.detectChanges();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight && !changes.containerHeight.firstChange) {
+      this.getContainerHeight();
+    }
   }
 
   ngOnDestroy() {
