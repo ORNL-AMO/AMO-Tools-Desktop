@@ -39,6 +39,7 @@ export class StackLossComponent implements OnInit {
   boilerEfficiency: number = 0;
   modalOpenSubscription: Subscription;
   isModalOpen: boolean = false;
+  smallScreenTab: string = 'form';
 
   constructor(private settingsDbService: SettingsDbService, private stackLossService: StackLossService, private cd: ChangeDetectorRef) {
   }
@@ -172,5 +173,9 @@ export class StackLossComponent implements OnInit {
     this.stackLossService.stackLossInput = this.stackLossService.getExampleData(this.settings);
     this.setStackLossForm();
     this.calculate(this.stackLossForm);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }
