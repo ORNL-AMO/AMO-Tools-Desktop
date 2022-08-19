@@ -24,9 +24,9 @@ export class DragBarComponent implements OnInit {
 
   ngAfterViewInit() {
     let sidebarXValue: number = this.dashboardService.sidebarX.getValue();
-    if (sidebarXValue == undefined && this.dragBar != undefined) {
-      this.dashboardService.sidebarX.next(this.dragBar.nativeElement.offsetLeft);
-    }
+    // if (sidebarXValue == undefined && this.dragBar != undefined) {
+    //   this.dashboardService.sidebarX.next(this.dragBar.nativeElement.offsetLeft);
+    // }
   }
 
 }

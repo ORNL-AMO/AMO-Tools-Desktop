@@ -1,5 +1,4 @@
-<div #contentContainer class="d-flex h-100 modify-conditions general standalone-calculator">
-    <div class="d-flex flex-column mh-100 w-100">
+<div #contentContainer class="calculator-container modify-conditions general standalone-calculator">
         <div #panelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center w-100"
             [ngClass]="{'justify-content-between': inTreasureHunt}">
             <div class="d-flex pl-2 align-items-center">
@@ -25,10 +24,20 @@
                 </div>
             </div>
         </div>
-        <!--add this ngIf so form wont render untils airLeakInput is initialized-->
-        <div class="d-flex w-100 h-100">
-            <div class="d-flex flex-column leak-form-width modification scroll-item h-100" *ngIf="airLeakInput"
-                [ngStyle]="{'height.px': containerHeight}">
+
+        <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+            <div class="nav-item" (click)="setSmallScreenTab('form')" [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+              <a class="nav-link">Leak Survey Data</a>
+            </div>
+            <div class="nav-item" (click)="setSmallScreenTab('details')" [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+              <a class="nav-link">Details</a>
+            </div>
+          </div>
+
+
+        <div class="panel-group">
+            <div class="calculator-panel-container leak-form-width modification" *ngIf="airLeakInput" [ngStyle]="{'height.px': containerHeight}"
+            [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
                 <div class="tab-content">
                     <div class="d-flex flex-row flex-wrap">
                         <div class="compressor-form-item pb-3">
@@ -62,9 +71,11 @@
                     [operatingHours]="operatingCostService.operatingCostOperatingHours">
                 </app-operating-hours-modal>
             </div>
-            <div class="d-flex flex-column leak-results-width mh-100 scroll-item"
-                [ngStyle]="{'height.px': containerHeight}">
-                <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+
+
+            <div class="calculator-panel-container leak-results-width help-panel" [ngStyle]="{'height.px': containerHeight}"
+            [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+                <div class="d-flex flex-wrap tabs primary sticky-top">
                     <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
                         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
                             (click)="setTab('results')">
@@ -86,5 +97,5 @@
                 </div>
             </div>
         </div>
+
     </div>
-</div>

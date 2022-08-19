@@ -20,16 +20,6 @@ export class HeadToolResultsComponent implements OnInit {
   ngOnInit() {
   }
 
-  ngAfterViewInit() {
-    this.updateTableString();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.results && changes.results.isFirstChange() == false) {
-      this.updateTableString();
-    }
-  }
-
   updateTableString() {
     this.tableString = this.copyTable.nativeElement.innerText;
   }

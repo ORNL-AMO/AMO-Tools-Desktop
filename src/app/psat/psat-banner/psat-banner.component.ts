@@ -12,6 +12,7 @@ export class PsatBannerComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
+  bannerCollapsed: boolean = true;
   mainTab: string;
   mainTabSub: Subscription;
   constructor(private psatTabService: PsatTabService) { }
@@ -26,11 +27,17 @@ export class PsatBannerComponent implements OnInit {
     this.mainTabSub.unsubscribe();
   }
 
+  collapseBanner() {
+    this.bannerCollapsed = !this.bannerCollapsed;
+    window.dispatchEvent(new Event("resize"));
+  }
+
   changeTab(str: string) {
     if (str == 'system-setup' || str == 'calculators') {
       this.psatTabService.mainTab.next(str);
     } else if (this.assessment.psat.setupDone) {
       this.psatTabService.mainTab.next(str);
     }
+    this.collapseBanner();
   }
 }

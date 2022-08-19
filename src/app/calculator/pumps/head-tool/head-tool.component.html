@@ -1,14 +1,27 @@
-<div class="d-flex h-100 modify-conditions psat standalone-calculator" *ngIf="settings">
-  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
-    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
-      <div class="calc-icon-header icon-psat">
-        <img src="assets/images/calculator-icons/pump-icons/head-tool.png">
-      </div>
-      <div class="pl-2">
-        <h3>Pump Head Tool</h3>
-      </div>
+<div #contentContainer class="calculator-container modify-conditions psat standalone-calculator" *ngIf="settings">
+  <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+    <div class="calc-icon-header icon-psat">
+      <img src="assets/images/calculator-icons/pump-icons/head-tool.png">
     </div>
-    <div class="d-flex flex-column m-4 mt-1">
+    <div class="pl-2">
+      <h3>Pump Head Tool</h3>
+    </div>
+  </div>
+
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link">Pump Head Tool Data</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Details</a>
+    </div>
+  </div>
+
+  <div class="panel-group">
+    <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
       <div class="row justify-content-center head-tool-toggle-switch">
         <div class="btn-group btn-group-sm align-self-center">
           <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Suction tank elevation')"
@@ -28,9 +41,11 @@
             the pump to the gauge P<sub>d</sub>
           </small>
         </div>
-        <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" [settings]="settings"
-          (calculate)="calculateHeadToolSuctionTank()" [inAssessment]="inAssessment"
-          (changeField)="changeField($event)"></app-head-tool-suction-form>
+        <div class="mr-3 ml-3 pb-3">
+          <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" [settings]="settings"
+            (calculate)="calculateHeadToolSuctionTank()" [inAssessment]="inAssessment"
+            (changeField)="changeField($event)"></app-head-tool-suction-form>
+        </div>
       </div>
       <div *ngIf="headToolType == 'Suction gauge elevation' && headToolForm">
         <div class="head-diagram text-center">
@@ -56,25 +71,26 @@
         </button>
       </div>
     </div>
-  </div>
-  <div class="d-flex flex-column w-50 mh-100 scroll-item">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
-          <div>Results</div>
-        </a>
+    <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+      <div class="d-flex flex-wrap tabs primary sticky-top" [ngStyle]="{'height.px': headerHeight}">
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+          <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+            <div>Results</div>
+          </a>
+        </div>
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+          <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+            <div>Help</div>
+          </a>
+        </div>
       </div>
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-          <div>Help</div>
-        </a>
-      </div>
-    </div>
-    <div class="d-flex mr-2 ml-2">
-      <app-head-tool-help *ngIf="tabSelect == 'help'" [currentField]="currentField" [headToolType]="headToolType"
-        [settings]="settings"></app-head-tool-help>
-      <div class="d-flex flex-column w-100 align-items-center pt-4 p-3" *ngIf="tabSelect == 'results'">
-        <app-head-tool-results class="w-100" [results]="results" [settings]="settings"></app-head-tool-results>
+      <div class="d-flex mr-2 ml-2">
+        <app-head-tool-help *ngIf="tabSelect == 'help'" [currentField]="currentField" [headToolType]="headToolType"
+          [settings]="settings"></app-head-tool-help>
+        <div class="d-flex flex-column w-100 align-items-center pt-4 p-3" *ngIf="tabSelect == 'results'">
+          <app-head-tool-results class="w-100" [results]="results" [settings]="settings"></app-head-tool-results>
+        </div>
       </div>
     </div>
   </div>

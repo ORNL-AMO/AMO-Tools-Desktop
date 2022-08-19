@@ -26,6 +26,8 @@ export class PipeInsulationReductionComponent implements OnInit {
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -44,6 +46,8 @@ export class PipeInsulationReductionComponent implements OnInit {
 
   baselineForm: FormGroup;
   modificationForm: FormGroup;
+  smallScreenTab: string = 'baseline';
+
 
   constructor(private settingsDbService: SettingsDbService, private pipeInsulationReductionService: PipeInsulationReductionService) { }
 
@@ -74,6 +78,9 @@ export class PipeInsulationReductionComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -169,5 +176,14 @@ export class PipeInsulationReductionComponent implements OnInit {
 
   cancel() {
     this.emitCancel.emit(true);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+    if (this.smallScreenTab === 'baseline') {
+      this.setBaselineSelected();
+    } else if (this.smallScreenTab === 'modification') {
+      this.setModificationSelected();
+    }
   }
 }
