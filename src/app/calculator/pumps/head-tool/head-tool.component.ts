@@ -29,6 +29,9 @@ export class HeadToolComponent implements OnInit {
   assessmentId: number;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -36,7 +39,8 @@ export class HeadToolComponent implements OnInit {
   }
 
   headerHeight: number;
-
+  smallScreenTab: string = 'form';
+  containerHeight: number;
   results: HeadToolResults = {
     differentialElevationHead: 0.0,
     differentialPressureHead: 0.0,
@@ -106,6 +110,10 @@ export class HeadToolComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -248,6 +256,9 @@ export class HeadToolComponent implements OnInit {
     this.calculateHeadTool();
     this.setFormView('Suction gauge elevation');
     this.calculateHeadToolSuctionTank();
+  }
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }
 

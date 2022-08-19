@@ -75,6 +75,7 @@
               "src/assets/styles/directory-dashboard.css",
               "src/assets/styles/sidebar.css",
               "src/assets/styles/plotly-overrides.css",
+              "src/assets/styles/responsive-calculators.css",
               "src/assets/styles/explore-opps.css",
               "src/assets/styles/pagination.css",
               "src/assets/styles/welcome-screen.css"

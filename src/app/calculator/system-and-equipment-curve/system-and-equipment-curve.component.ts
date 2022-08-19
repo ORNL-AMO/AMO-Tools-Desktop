@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
@@ -22,6 +22,21 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
   assessment: Assessment;
   @Input()
   settings: Settings;
+
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  headerHeight: number;
+  containerHeight: number;
+  smallScreenTab: string = 'form';
 
   calculatorTitle: string;
   tabSelect: string = 'results';
@@ -129,6 +144,25 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
       this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs = undefined;
       this.systemAndEquipmentCurveService.existingInputUnits = this.settings.unitsOfMeasure;
     }
+  }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader && this.contentContainer) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.headerHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
+    }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
   setEquipmentType() {

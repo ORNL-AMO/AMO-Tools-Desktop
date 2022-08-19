@@ -24,13 +24,19 @@ export class SpecificSpeedComponent implements OnInit {
   inAssessment: boolean;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
   headerHeight: number;
+  containerHeight: number;
+  smallScreenTab: string = 'form';
 
   currentField: string;
   speedForm: FormGroup;
@@ -73,8 +79,12 @@ export class SpecificSpeedComponent implements OnInit {
 
 
   resizeTabs() {
-    if (this.leftPanelHeader) {
+    if (this.leftPanelHeader && this.contentContainer) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.headerHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -146,5 +156,8 @@ export class SpecificSpeedComponent implements OnInit {
     this.toggleResetData = !this.toggleResetData;
     this.speedForm = this.specificSpeedService.initForm(this.settings);
     this.calculate();
+  }
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }
