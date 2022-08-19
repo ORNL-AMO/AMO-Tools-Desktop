@@ -1,5 +1,5 @@
-<div #contentContainer class="calculator-container modify-conditions general standalone-calculator">
-  <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+<div #contentContainer class="calculator-container modify-conditions general hide-scroll standalone-calculator">
+  <div #leftPanelHeader class="d-flex bg-white header pb-1 pt-1 align-items-center">
     <div class="calc-icon-header icon-motors">
       <img src="assets/images/calculator-icons/motor-icons/nema.png">
     </div>
@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div class="calculator-panel-container" [ngStyle]="{'height.px': containerHeight}"
+    <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
       <div class="d-flex flex-wrap tabs primary sticky-top" [ngStyle]="{'height.px': headerHeight}">
         <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
