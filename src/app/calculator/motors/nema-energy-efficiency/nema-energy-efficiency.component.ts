@@ -28,6 +28,8 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   inAssessment: boolean;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -35,6 +37,8 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   }
 
   headerHeight: number;
+  containerHeight: number;
+  smallScreenTab: string = 'form';
 
   currentField: string;
   nemaForm: FormGroup;
@@ -123,8 +127,12 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
+    if (this.leftPanelHeader && this.contentContainer) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.headerHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -186,4 +194,9 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     }
     this.calculate();
   }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
 }
