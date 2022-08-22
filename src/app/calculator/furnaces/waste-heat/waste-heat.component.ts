@@ -26,6 +26,7 @@ export class WasteHeatComponent implements OnInit {
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild("contentContainer", { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -39,6 +40,8 @@ export class WasteHeatComponent implements OnInit {
   containerHeight: number;
   isModalOpen: boolean;
   tabSelect: string = 'help';
+  smallScreenTab: string = 'form';
+  headerHeight: number;
   
   constructor(private wasteHeatService: WasteHeatService,
               private settingsDbService: SettingsDbService) { }
@@ -119,8 +122,16 @@ export class WasteHeatComponent implements OnInit {
 
   resizeTabs() {
     if (this.leftPanelHeader) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }
