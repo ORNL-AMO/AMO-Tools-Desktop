@@ -4,7 +4,7 @@ import { AirLeakSurveyInput } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AirLeakSurveyTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
@@ -43,8 +43,10 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
 
   saving: boolean;
   assessmentCalculator: Calculator;
+  smallScreenTab: string = 'form';
 
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @ViewChild('panelHeader', { static: false }) panelHeader: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -129,6 +131,9 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   resizeTabs() {
     if (this.panelHeader) {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.panelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -152,6 +157,10 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
 
   cancel() {
     this.emitCancel.emit(true);
+  }
+  
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }

@@ -1,45 +1,56 @@
-<div class="d-flex h-100 modify-conditions general standalone-calculator">
-  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
-    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
-      <div class="calc-icon-header icon-motors">
-        <img src="assets/images/calculator-icons/motor-icons/performance.png">
-      </div>
-      <div class="pl-2">
-        <h3>Motor Performance</h3>
-      </div>
+<div #contentContainer class="calculator-container modify-conditions general hide-scroll standalone-calculator">
+  <div #leftPanelHeader class="d-flex header bg-white pb-1 pt-1 align-items-center">
+    <div class="calc-icon-header icon-motors">
+      <img src="assets/images/calculator-icons/motor-icons/performance.png">
     </div>
-    <div class="d-flex flex-column m-4">
-      <app-motor-performance-form [(performanceForm)]="performanceForm" [settings]="settings" (calculate)="calculate()"
-        (changeField)="changeField($event)"></app-motor-performance-form>
-      <div class="w-100 justify-content-center btn-group btn-group-sm">
-        <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
-          Reset Data
-        </button>
-        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
-        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
-          Generate Example
-        </button>
-      </div>
+    <div class="pl-2">
+      <h3>Motor Performance</h3>
     </div>
   </div>
-  <div class="d-flex flex-column w-50 mh-100 scroll-item">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
-          <div>Graph</div>
-        </a>
-      </div>
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-          <div>Help</div>
-        </a>
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('form')" [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link">Motor Performance Data</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')" [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Details</a>
+    </div>
+  </div>
+  <div class="panel-group" [ngStyle]="{'height.px': containerHeight}">
+    <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+      <div class="d-flex flex-column m-4">
+        <app-motor-performance-form [(performanceForm)]="performanceForm" [settings]="settings" (calculate)="calculate()"
+          (changeField)="changeField($event)"></app-motor-performance-form>
+        <div class="w-100 justify-content-center btn-group btn-group-sm">
+          <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+            Reset Data
+          </button>
+          <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+          <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+            Generate Example
+          </button>
+        </div>
       </div>
     </div>
-    <div class="d-flex w-100" id="motorPerformanceGraph">
-      <app-motor-performance-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-motor-performance-help>
-      <div class="d-flex flex-column w-100 align-items-center pt-4 p-3" *ngIf="tabSelect == 'results'">
-        <app-motor-performance-chart class="w-100" [performanceForm]="performanceForm" [settings]="settings"
-        [toggleCalculate]="toggleCalculate"></app-motor-performance-chart>
+    <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+      <div class="d-flex flex-wrap tabs primary sticky-top" [ngStyle]="{'height.px': headerHeight}">
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+          <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+            <div>Graph</div>
+          </a>
+        </div>
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+          <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+            <div>Help</div>
+          </a>
+        </div>
+      </div>
+      <div class="d-flex w-100" id="motorPerformanceGraph">
+        <app-motor-performance-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-motor-performance-help>
+        <div class="d-flex flex-column w-100 align-items-center pt-4 p-3" *ngIf="tabSelect == 'results'">
+          <app-motor-performance-chart class="w-100" [performanceForm]="performanceForm" [settings]="settings"
+          [toggleCalculate]="toggleCalculate"></app-motor-performance-chart>
+        </div>
       </div>
     </div>
   </div>

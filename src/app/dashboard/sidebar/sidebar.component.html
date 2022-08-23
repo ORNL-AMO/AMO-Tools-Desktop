@@ -1,36 +1,47 @@
-<div class="d-flex w-100 justify-content-center">
+<div class="d-flex flex-row justify-content-end" [ngStyle]="{'height': isSidebarCollapsed? '100%' : undefined}">
   <div>
-    <img routerLink="/landing-screen" src="assets/images/DOE-banner-color.svg" class="doe-logo mx-auto">
+    <div class="d-flex justify-content-center p-2" (click)="collapseSidebar()">
+      <span *ngIf="isSidebarCollapsed" class="fa fa-chevron-circle-right h5"></span>
+      <span *ngIf="!isSidebarCollapsed" class="fa fa-chevron-circle-left h5"></span>
+    </div>
   </div>
+  <div *ngIf="isSidebarCollapsed" class="sidebar-border"></div>
 </div>
+<ng-container *ngIf="!isSidebarCollapsed">
 
-<div class="sidebar-group create-button">
-  <div class="p-3">
-    <div class="nav-item dropdown">
-      <button type="button" class="btn btn-primary w-100" (click)="toggleNewDropdown()">
-        <span class="dropdown-toggle">
-          Add New
-        </span>
-      </button>
-      <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showNewDropdown == true}">
-        <div class="list-group bold">
-          <a class="list-group-item list-group-item-action" (click)="showCreateAssessment()">
-            Add New Assessment
-          </a>
-          <a class="list-group-item list-group-item-action" (click)="showCreateInventory()">
-            Add New Inventory
-          </a>
-          <a class="list-group-item list-group-item-action" (click)="showCreateFolder()">
-            Add New Folder
-          </a>
+  <div class="d-flex w-100 justify-content-center">
+    <div>
+      <img routerLink="/landing-screen" src="assets/images/DOE-banner-color.svg" class="doe-logo mx-auto">
+    </div>
+  </div>
+  
+  <div class="sidebar-group create-button">
+    <div class="p-3">
+      <div class="nav-item dropdown">
+        <button type="button" class="btn btn-primary w-100" (click)="toggleNewDropdown()">
+          <span class="dropdown-toggle">
+            Add New
+          </span>
+        </button>
+        <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showNewDropdown == true}">
+          <div class="list-group bold">
+            <a class="list-group-item list-group-item-action" (click)="showCreateAssessment()">
+              Add New Assessment
+            </a>
+            <a class="list-group-item list-group-item-action" (click)="showCreateInventory()">
+              Add New Inventory
+            </a>
+            <a class="list-group-item list-group-item-action" (click)="showCreateFolder()">
+              Add New Folder
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-<div class="sidebar-group secondary">
-  <span class="sidebar-item" [routerLink]="['/landing-screen']" routerLinkActive="selected">Home</span>
+  
+  <div class="sidebar-group secondary">
+    <span class="sidebar-item" [routerLink]="['/landing-screen']" routerLinkActive="selected">Home</span>
 </div>
 
 <div class="sidebar-group secondary pl-1 horizontal scroll-item">
@@ -46,21 +57,22 @@
 </div>
 
 <div class="sidebar-group secondary">
-  <span routerLink="/settings" routerLinkActive="selected" class="sidebar-item">Settings</span>
-  <span routerLink="/custom-materials" routerLinkActive="selected" class="sidebar-item">Custom Materials</span>
-  <span routerLink="/tutorials" routerLinkActive="selected" class="sidebar-item">User Manuals</span>
-  <span routerLink="/about" routerLinkActive="selected" class="sidebar-item">About</span>
-  <span routerLink="/contact" routerLinkActive="selected" class="sidebar-item">Feedback</span>
-  <span routerLink="/acknowledgments" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
+  <span (click)="navigateSidebarLink('/settings')" routerLinkActive="selected" class="sidebar-item">Settings</span>
+  <span (click)="navigateSidebarLink('/custom-materials')" routerLinkActive="selected" class="sidebar-item">Custom Materials</span>
+  <span (click)="navigateSidebarLink('/tutorials')" routerLinkActive="selected" class="sidebar-item">User Manuals</span>
+  <span (click)="navigateSidebarLink('/about')" routerLinkActive="selected" class="sidebar-item">About</span>
+  <span (click)="navigateSidebarLink('/contact')" routerLinkActive="selected" class="sidebar-item">Feedback</span>
+  <span (click)="navigateSidebarLink('/acknowledgments')" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
   <span *ngIf="googleTranslateAvailable" class="sidebar-item" (click)="emitTranslate()"><span
-      class="fa fa-globe"></span> Translate</span>
-</div>
-
-<div class="sidebar-group">
-  <span class="version-num">v{{versionNum}}
-    <i class="fa fa-info-circle" (click)="openVersionModal()"></i>
-  </span>
-  <span *ngIf="isUpdateAvailable" class="update-available" (click)="openUpdateModal()">Update Available!</span>
-</div>
-
-<app-version-modal *ngIf="showVersionModal" (closeModal)="closeVersionModal()"></app-version-modal>
+    class="fa fa-globe"></span> Translate</span>
+  </div>
+  
+  <div class="sidebar-group">
+    <span class="version-num">v{{versionNum}}
+      <i class="fa fa-info-circle" (click)="openVersionModal()"></i>
+    </span>
+    <span *ngIf="isUpdateAvailable" class="update-available" (click)="openUpdateModal()">Update Available!</span>
+  </div>
+  
+  <app-version-modal *ngIf="showVersionModal" (closeModal)="closeVersionModal()"></app-version-modal>
+</ng-container>

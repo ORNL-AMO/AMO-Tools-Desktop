@@ -11,8 +11,8 @@
   <!--end header-->
 
   <!--system setup-->
-  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
-    <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
+  <div *ngIf="mainTab == 'system-setup'" class="assessment-container tab-content">
+    <div class="assessment-panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
       <app-pump-operations *ngIf="stepTab == 'operations'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
@@ -26,7 +26,7 @@
       <app-field-data *ngIf="stepTab == 'field-data'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data>
     </div>
-    <div class="w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}"
+    <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'pl-0': stepTab == 'field-data'}">
       <app-help-panel [psat]="_psat" [settings]="settings" [modificationIndex]="modificationIndex"
         [currentTab]="stepTab" [inSetup]="true" [containerHeight]="containerHeight"
@@ -105,7 +105,7 @@
 
   <!--report-->
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
-    <div class="col-11 report-column">
+    <div class="col-12 col-lg-11 report-column">
       <app-psat-report [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
         [containerHeight]="containerHeight"></app-psat-report>
     </div>
@@ -113,7 +113,7 @@
   <!--end report-->
 
   <!--footer-->
-  <div #footer id="psatFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
+  <div #footer id="psatFooter" class="footer hide-print d-none d-lg-block" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
     <div class="pull-left" *ngIf="stepTab != 'system-basics' || mainTab == 'assessment'">
       <button class="btn btn-default" (click)="back()">Back</button>
     </div>
@@ -133,7 +133,7 @@
 <div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="changeModificationModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}"
   *ngIf="_psat && _psat.modifications">
-  <div class="modal-dialog modal-lg list-modal">
+  <div class="modal-dialog modal-lg list-modal modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <h3>Select Scenario</h3>
