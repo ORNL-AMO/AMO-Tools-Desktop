@@ -149,6 +149,13 @@ export class ImportOpportunitiesService {
       this.updateLegacyOpportunities(data.waterHeatingOpportunities, Treasure.waterHeating);
       treasureHunt.waterHeatingOpportunities = treasureHunt.waterHeatingOpportunities.concat(data.waterHeatingOpportunities);
     }
+    if (data.chillerStagingOpportunities) {
+      if (treasureHunt.chillerStagingOpportunities == undefined) {
+        treasureHunt.chillerStagingOpportunities = new Array();
+      }
+      this.updateLegacyOpportunities(data.chillerStagingOpportunities, Treasure.chillerStaging);
+      treasureHunt.chillerStagingOpportunities = treasureHunt.chillerStagingOpportunities.concat(data.chillerStagingOpportunities);
+    }
     return treasureHunt;
   }
 

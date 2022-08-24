@@ -1,8 +1,10 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { ChillerStagingInput } from '../../../shared/models/chillers';
 // import { CalculatorDragBarService } from '../../../shared/calculator-drag-bar/calculator-drag-bar.service';
 import { Settings } from '../../../shared/models/settings';
+import { ChillerStagingTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { ChillerStagingService } from './chiller-staging.service';
 
 @Component({
@@ -13,20 +15,30 @@ import { ChillerStagingService } from './chiller-staging.service';
 export class ChillerStagingComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<ChillerStagingTreasureHunt>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
 
 
-  // @ViewChild('contentContainer', { static: false }) public contentContainer: ElementRef;
+  @ViewChild('contentContainer', { static: false }) public contentContainer: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
   chillerPerformanceInputSub: Subscription;
+  chillerPerformanceInput: ChillerStagingInput;
   // calcFormWidth: number;
   // calcFormWidthSub: Subscription;
   // resultsHelpWidth: number;
 
+  containerHeight: number;
   headerHeight: number;
   tabSelect: string = 'results';
 
@@ -39,15 +51,20 @@ export class ChillerStagingComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    let existingInputs = this.chillerStagingService.chillerStagingInput.getValue();
-    if (!existingInputs) {
-      this.chillerStagingService.initDefaultEmptyInputs();
+    this.chillerPerformanceInput = this.chillerStagingService.chillerStagingInput.getValue();
+    if (!this.chillerPerformanceInput) {
+      this.chillerStagingService.initDefaultEmptyInputs(this.settings);
       this.chillerStagingService.initDefaultEmptyOutputs();
     }
     this.initSubscriptions();
   }
 
   ngOnDestroy() {
+    if(!this.inTreasureHunt){
+      this.chillerStagingService.chillerStagingInput.next(this.chillerPerformanceInput);
+    } else {
+      this.chillerStagingService.chillerStagingInput.next(undefined);
+    }
     this.chillerPerformanceInputSub.unsubscribe();
     // this.calcFormWidthSub.unsubscribe();
   }
@@ -60,7 +77,10 @@ export class ChillerStagingComponent implements OnInit {
 
   initSubscriptions() {
     this.chillerPerformanceInputSub = this.chillerStagingService.chillerStagingInput.subscribe(value => {
-      this.calculate();
+      this.chillerPerformanceInput = value;
+      if(value){
+        this.calculate();
+      }
     });
 
     // Commenting out for issue 5634, 4744
@@ -77,7 +97,7 @@ export class ChillerStagingComponent implements OnInit {
   }
 
   btnResetData() {
-    this.chillerStagingService.initDefaultEmptyInputs();
+    this.chillerStagingService.initDefaultEmptyInputs(this.settings);
     this.chillerStagingService.resetData.next(true);
   }
 
@@ -93,7 +113,16 @@ export class ChillerStagingComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
     }
+  }
+
+  save() {
+    this.emitSave.emit({ chillerStagingData: this.chillerPerformanceInput, opportunityType: Treasure.chillerStaging });
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
   }
 
 }

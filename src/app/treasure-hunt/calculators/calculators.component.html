@@ -94,6 +94,11 @@
   [settings]="settings">
 </app-standalone-opportunity-sheet>
 
+<app-chiller-staging *ngIf="selectedCalc == 'chiller-staging'" [inTreasureHunt]="true"
+(emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)"
+[settings]="settings">
+</app-chiller-staging>
+
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">

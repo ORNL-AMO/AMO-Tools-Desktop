@@ -21,6 +21,7 @@ import { AirHeatingTreasureHuntService } from './treasure-hunt-calculator-servic
 import { HeatCascadingTreasureHuntService } from './treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
 import { WaterHeatingTreasureHuntService } from './treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
+import { ChillerStagingTreasureHuntService } from './treasure-hunt-calculator-services/chiller-staging-treasure-hunt.service';
 
 @Injectable()
 export class ConvertInputDataService {
@@ -43,7 +44,8 @@ export class ConvertInputDataService {
     private flueGasTreasureHuntService: FlueGasTreasureHuntService,
     private leakageTreasureHuntService: LeakageTreasureHuntService,
     private heatCascadingTreasureHuntService: HeatCascadingTreasureHuntService,
-    private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService
+    private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService,
+    private chillerStagingTreasureHuntService: ChillerStagingTreasureHuntService
     ) { }
 
   convertTreasureHuntInputData(treasureHunt: TreasureHunt, oldSettings: Settings, newSettings: Settings): TreasureHunt {
@@ -104,6 +106,9 @@ export class ConvertInputDataService {
     }
     if (treasureHunt.waterHeatingOpportunities != undefined) {
       treasureHunt.waterHeatingOpportunities = this.waterHeatingTreasureHuntService.convertWaterHeatingOpportunities(treasureHunt.waterHeatingOpportunities, oldSettings, newSettings);
+    }
+    if (treasureHunt.chillerStagingOpportunities != undefined) {
+      treasureHunt.chillerStagingOpportunities = this.chillerStagingTreasureHuntService.convertChillerStagingOpportunities(treasureHunt.chillerStagingOpportunities, oldSettings, newSettings);
     }
     if (treasureHunt.currentEnergyUsage != undefined) {
       treasureHunt.currentEnergyUsage = this.convertCurrentEnergyUsage(treasureHunt.currentEnergyUsage, oldSettings, newSettings);

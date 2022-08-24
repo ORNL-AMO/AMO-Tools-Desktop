@@ -319,6 +319,22 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.chillerStagingOpportunities">
+                        <label>Chiller Staging </label>
+                        <ul>
+                            <li
+                                *ngFor="let chillerStaging of exportOpportunities.chillerStagingOpportunities; let index = index;">
+                                <span
+                                    *ngIf="!chillerStaging.opportunitySheet || !chillerStaging.opportunitySheet.name">
+                                    Chiller Staging #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="chillerStaging.opportunitySheet && chillerStaging.opportunitySheet.name">
+                                    {{chillerStaging.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="col-6 p-2" *ngIf="exportOpportunities.opportunitySheets">
                         <label>Opportunity Sheets</label>
                         <ul>
