@@ -94,6 +94,11 @@
   [settings]="settings">
 </app-standalone-opportunity-sheet>
 
+<app-cooling-tower *ngIf="selectedCalc == 'cooling-tower-makeup'"
+  [inTreasureHunt]="true" (emitSave)="saveOpportunity($event)" 
+  (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-cooling-tower>
+
 <app-chiller-staging *ngIf="selectedCalc == 'chiller-staging'" [inTreasureHunt]="true"
 (emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)"
 [settings]="settings">

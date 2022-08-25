@@ -27,10 +27,14 @@ export class MotorPerformanceComponent implements OnInit {
   inAssessment: boolean;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
   headerHeight: number;
@@ -41,7 +45,8 @@ export class MotorPerformanceComponent implements OnInit {
   toggleCalculate: boolean = false;
   tabSelect: string = 'results';
   saving: boolean;
-
+  containerHeight: number;
+  smallScreenTab: string = 'form';
   constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService, private calculatorDbService: CalculatorDbService) {
   }
 
@@ -74,8 +79,12 @@ export class MotorPerformanceComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader) {
+    if (this.leftPanelHeader && this.contentContainer) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.headerHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -152,5 +161,9 @@ export class MotorPerformanceComponent implements OnInit {
   btnGenerateExample() {
     this.performanceForm = this.motorPerformanceService.initForm();
     this.calculate();
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

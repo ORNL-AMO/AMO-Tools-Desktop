@@ -7,29 +7,36 @@
 .dashboard-content::-webkit-scrollbar{
     display: none;
 }
-
 .landing-screen::-webkit-scrollbar,
 .sidebar-bg::-webkit-scrollbar {
-    width: .3em;
-  }
-  .landing-screen::-webkit-scrollbar-track ,
-  .sidebar-bg::-webkit-scrollbar-track {
-    /* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); */
-  }
-  .landing-screen::-webkit-scrollbar-thumb,
-  .sidebar-bg::-webkit-scrollbar-thumb {
-  background-color: #156739;
-  /* outline: 1px solid #fff; */
-  }
-
-.skyline{
-    background-image: url('../../assets/images/industrial-skyline.svg');
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: bottom center; 
-    background-size: 100%;
+  width: .5em;
 }
 
+.scroll-item::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.4);
+}
+
+.landing-screen::-webkit-scrollbar-track,
+.sidebar-bg::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, .4);
+}
+
+.scroll-item::-webkit-scrollbar-thumb {
+  background-color: #156739;
+}
+
+.landing-screen::-webkit-scrollbar-thumb,
+.sidebar-bg::-webkit-scrollbar-thumb {
+  background-color: #156739;
+}
+
+.skyline {
+  background-image: url('../../assets/images/industrial-skyline.svg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: bottom center;
+  background-size: 100%;
+}
 .sidebar-bg {
   min-height: 100%;
   background-color: #fff;

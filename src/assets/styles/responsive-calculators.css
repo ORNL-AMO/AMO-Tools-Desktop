@@ -86,6 +86,14 @@
     transition: all .1s ease-in-out;
 }
 
+.hide-scroll {
+    overflow-y: hidden;
+}
+
+.bg-white {
+    background: white;
+}
+
 @media screen and (max-width: 1024px) {
     .small-screen-hide {
         display: none;

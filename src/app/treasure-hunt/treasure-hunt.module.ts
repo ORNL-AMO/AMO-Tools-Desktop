@@ -54,6 +54,7 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
 import { MixedCo2EmissionsModule } from '../shared/mixed-co2-emissions/mixed-co2-emissions.module';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
+import { CoolingTowerMakeupTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-makeup-treasure-hunt.service';
 import { ChillerStagingTreasureHuntService } from './treasure-hunt-calculator-services/chiller-staging-treasure-hunt.service';
 
 @NgModule({
@@ -117,6 +118,7 @@ import { ChillerStagingTreasureHuntService } from './treasure-hunt-calculator-se
     OpeningTreasureHuntService,
     HeatCascadingTreasureHuntService,
     WaterHeatingTreasureHuntService,
+    CoolingTowerMakeupTreasureHuntService,
     ChillerStagingTreasureHuntService
   ]
 })
