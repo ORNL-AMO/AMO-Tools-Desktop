@@ -84,7 +84,7 @@ a:not([href]):not([tabindex]){
     margin-right: auto;
 }
 
-.steam-calc-icon, .ca-calc-icon, .ph-calc-icon, .lighting-calc-icon, .motor-calc-icon, .pc-calc-icon{
+.steam-calc-icon, .ca-calc-icon, .ph-calc-icon, .lighting-calc-icon, .motor-calc-icon {
     border-radius: 50%;
     height: 81px;
     width: 81px;
@@ -108,10 +108,6 @@ a:not([href]):not([tabindex]){
 
 .motor-calc-icon {
     background: linear-gradient(to bottom right, #e4dbdb57, #6b846aa6);
-}
-
-.pc-calc-icon {
-    background: linear-gradient(rgba(228, 219, 219, 0.34), #ADC8E2);
 }
 
 .calc-icon-div{
