@@ -163,7 +163,8 @@ export interface CoolingTowerFanOutput {
     chillerType: number,
     condenserCoolingType: number,
     motorDriveType: number,
-    compressorConfigType: number
+    compressorConfigType: number,
+    electricityCost: number,
     // chiller rated conditions
     ariCapacity: number,
     ariEfficiency: number,
@@ -185,6 +186,9 @@ export interface CoolingTowerFanOutput {
     modTotalPower: number,
     modTotalEnergy: number,
     savingsEnergy: number,
+    costSavings: number,
+    baselineCost: number,
+    modificationCost: number,
     baselinePowerList: Array<number>,
     modPowerList: Array<number>,
     chillerLoadResults?: Array<{baseline: number, modification: number}>

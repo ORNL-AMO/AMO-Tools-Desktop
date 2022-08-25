@@ -22,6 +22,7 @@ import { HeatCascadingTreasureHuntService } from './treasure-hunt-calculator-ser
 import { WaterHeatingTreasureHuntService } from './treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 import { CoolingTowerMakeupTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-makeup-treasure-hunt.service';
+import { ChillerStagingTreasureHuntService } from './treasure-hunt-calculator-services/chiller-staging-treasure-hunt.service';
 
 @Injectable()
 export class ConvertInputDataService {
@@ -46,6 +47,7 @@ export class ConvertInputDataService {
     private heatCascadingTreasureHuntService: HeatCascadingTreasureHuntService,
     private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService,
     private coolingTowerMakeupTreasureHuntService: CoolingTowerMakeupTreasureHuntService,
+    private chillerStagingTreasureHuntService: ChillerStagingTreasureHuntService
     ) { }
 
   convertTreasureHuntInputData(treasureHunt: TreasureHunt, oldSettings: Settings, newSettings: Settings): TreasureHunt {
@@ -109,6 +111,9 @@ export class ConvertInputDataService {
     }
     if (treasureHunt.coolingTowerMakeupOpportunities != undefined) {
       treasureHunt.coolingTowerMakeupOpportunities = this.coolingTowerMakeupTreasureHuntService.convertCoolingTowerMakeups(treasureHunt.coolingTowerMakeupOpportunities, oldSettings, newSettings);
+    }
+    if (treasureHunt.chillerStagingOpportunities != undefined) {
+      treasureHunt.chillerStagingOpportunities = this.chillerStagingTreasureHuntService.convertChillerStagingOpportunities(treasureHunt.chillerStagingOpportunities, oldSettings, newSettings);
     }
     if (treasureHunt.currentEnergyUsage != undefined) {
       treasureHunt.currentEnergyUsage = this.convertCurrentEnergyUsage(treasureHunt.currentEnergyUsage, oldSettings, newSettings);

@@ -48,6 +48,15 @@
       </td>
     </tr>
     <tr>
+      <td class="bold w-50">Total Baseline Energy Cost</td>
+      <td *ngIf="output.baselineCost" class="text-center w-50">
+        {{output.baselineCost | currency:'USD':'symbol':'0.0-0'}}
+      </td>
+      <td *ngIf="!output.baselineCost" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
+    <tr>
       <td class="bold w-50">Total Modification Power Consumption</td>
       <td *ngIf="output.modTotalPower" class="text-center w-50">
         {{output.modTotalPower | number:'1.0-2'}} kW
@@ -66,11 +75,29 @@
       </td>
     </tr>
     <tr>
+      <td class="bold w-50">Total Modification Energy Cost</td>
+      <td *ngIf="output.modificationCost" class="text-center w-50">
+        {{output.modificationCost | currency:'USD':'symbol':'0.0-0'}}
+      </td>
+      <td *ngIf="!output.modificationCost" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
+    <tr>
       <td class="bold w-50">Annual Energy Savings</td>
       <td *ngIf="output.savingsEnergy" class="text-center w-50">
         {{output.savingsEnergy | number:'1.0-0'}} kWh
       </td>
       <td *ngIf="!output.savingsEnergy" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Annual Energy Cost Savings</td>
+      <td *ngIf="output.costSavings" class="text-center w-50">
+        {{output.costSavings | currency:'USD':'symbol':'0.0-0'}}
+      </td>
+      <td *ngIf="!output.costSavings" class="text-center w-50">
         &mdash; &mdash;
       </td>
     </tr>

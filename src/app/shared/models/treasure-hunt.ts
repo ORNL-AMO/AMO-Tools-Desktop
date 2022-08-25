@@ -16,6 +16,7 @@ import { FeedwaterEconomizerInput } from "./steam/feedwaterEconomizer";
 import { CondensingEconomizerInput } from "./steam/condensingEconomizer";
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 import { CoolingTowerData } from "./chillers";
+import { ChillerStagingInput } from "./chillers";
 
 export interface TreasureHunt {
     name: string,
@@ -42,6 +43,7 @@ export interface TreasureHunt {
     condensingEconomizerOpportunities?: Array<CondensingEconTreasureHunt>;
     waterHeatingOpportunities?: Array<WaterHeatingTreasureHunt>;
     coolingTowerMakeupOpportunities?: Array<CoolingTowerMakeupWaterTreasureHunt>;
+    chillerStagingOpportunities?: Array<ChillerStagingTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     existingDataUnits?: string;
@@ -73,6 +75,7 @@ export enum Treasure {
     feedwaterEconomizer = 'feedWaterEconomizer',
     condensingEconomizer = 'condensing-economizer',
     coolingTowerMakeup = 'cooling-tower-makeup',
+    chillerStaging = 'chiller-staging'
 }
 
 export interface FilterOption {
@@ -406,6 +409,12 @@ export interface MotorDriveInputsTreasureHunt extends TreasureHuntOpportunity{
     selected?: boolean;
 }
 
+export interface ChillerStagingTreasureHunt extends TreasureHuntOpportunity {
+    chillerStagingData?: ChillerStagingInput;
+    opportunitySheet?: OpportunitySheet
+    selected?: boolean;
+}
+
 export interface TreasureHuntResults {
     totalSavings: number;
     percentSavings: number;
@@ -499,4 +508,5 @@ export interface ImportExportOpportunities {
     heatCascadingOpportunities?: Array<HeatCascadingTreasureHunt>;
     waterHeatingOpportunities?: Array<WaterHeatingTreasureHunt>;
     coolingTowerMakeupOpportunities?: Array<CoolingTowerMakeupWaterTreasureHunt>;
+    chillerStagingOpportunities?: Array<ChillerStagingTreasureHunt>;
 }
