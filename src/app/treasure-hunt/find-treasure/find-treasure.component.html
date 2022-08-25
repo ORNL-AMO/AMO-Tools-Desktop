@@ -46,81 +46,75 @@
     </div>
   </div>
 
-  
+
   <div class="d-flex flex-wrap justify-content-center">
-  <!--electricity reduction-->
-  <div
-  *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
-  class="card calc-card-item m-2" (click)="openCalculator('electricity-reduction')">
-  <div class="card-body d-flex flex-column p-2 align-items-center">
-    <div class="calc-icon d-flex justify-content-center align-items-center">
-      <img src="assets/images/calculator-icons/utilities-icons/electricity-reduction-icon.png" class="calc-img">
-    </div>
-    <a class="pt-2">Electricity Reduction</a>
-    <p class="mb-0 text-center help-text">
-      This calculator is used to quantify the energy savings associated with reducing electricity usage.
-    </p>
-  </div>
-</div>
-    <!--replace existing motor-->
-    <div
-      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
-      class="card calc-card-item m-2" (click)="openCalculator('replace-existing')">
-      <div class="card-body d-flex flex-column p-2 align-items-center">
-        <div class="motor-calc-icon d-flex justify-content-center align-items-center">
-          <img class="calc-img th-calc-img-w" src="assets/images/calculator-icons/motor-icons/replace.png">
+    <!--electricity reduction-->
+    <ng-container
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true">
+      <div class="card calc-card-item m-2" (click)="openCalculator('electricity-reduction')">
+        <div class="card-body d-flex flex-column p-2 align-items-center">
+          <div class="calc-icon d-flex justify-content-center align-items-center">
+            <img src="assets/images/calculator-icons/utilities-icons/electricity-reduction-icon.png" class="calc-img">
+          </div>
+          <a class="pt-2">Electricity Reduction</a>
+          <p class="mb-0 text-center help-text">
+            This calculator is used to quantify the energy savings associated with reducing electricity usage.
+          </p>
         </div>
-        <a class="pt-2">Replace Existing Motor</a>
-        <p class="mb-0 text-center help-text">
-          This calculator calculates the energy savings, cost savings, and payback period for replacing an
-          existing motor with a higher efficiency motor.
-        </p>
       </div>
-    </div>
-    <!--upgrade motor drive-->
-    <div
-      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
-      class="card calc-card-item m-2" (click)="openCalculator('motor-drive')">
-      <div class="card-body d-flex flex-column p-2 align-items-center">
-        <div class="motor-calc-icon d-flex justify-content-center align-items-center">
-          <img class="calc-img th-calc-img-w" src="assets/images/calculator-icons/motor-icons/motor-drive.png">
+      <!--replace existing motor-->
+      <div class="card calc-card-item m-2" (click)="openCalculator('replace-existing')">
+        <div class="card-body d-flex flex-column p-2 align-items-center">
+          <div class="motor-calc-icon d-flex justify-content-center align-items-center">
+            <img class="calc-img th-calc-img-w" src="assets/images/calculator-icons/motor-icons/replace.png">
+          </div>
+          <a class="pt-2">Replace Existing Motor</a>
+          <p class="mb-0 text-center help-text">
+            This calculator calculates the energy savings, cost savings, and payback period for replacing an
+            existing motor with a higher efficiency motor.
+          </p>
         </div>
-        <a class="pt-2">Upgrade Motor Drive</a>
-        <p class="mb-0 text-center help-text">
-          The Motor Drive Calculator compares the annual energy cost of three motor drives: V-belt drive, Notched
-          V-Belt drive, and Synchronous Belt Drive.
-        </p>
       </div>
-    </div>
-    <!--lighting replacement-->
-    <div
-      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
-      class="card calc-card-item m-2" (click)="openCalculator('lighting-replacement')">
-      <div class="card-body d-flex flex-column p-2 align-items-center">
-        <div class="lighting-calc-icon d-flex justify-content-center align-items-center">
-          <img src="assets/images/calculator-icons/utilities-icons/lighting-replacement-icon.png" class="calc-img th-calc-img">
+      <!--upgrade motor drive-->
+      <div class="card calc-card-item m-2" (click)="openCalculator('motor-drive')">
+        <div class="card-body d-flex flex-column p-2 align-items-center">
+          <div class="motor-calc-icon d-flex justify-content-center align-items-center">
+            <img class="calc-img th-calc-img-w" src="assets/images/calculator-icons/motor-icons/motor-drive.png">
+          </div>
+          <a class="pt-2">Upgrade Motor Drive</a>
+          <p class="mb-0 text-center help-text">
+            The Motor Drive Calculator compares the annual energy cost of three motor drives: V-belt drive, Notched
+            V-Belt drive, and Synchronous Belt Drive.
+          </p>
         </div>
-        <a class="pt-2">Lighting Replacement</a>
-        <p class="mb-0 text-center help-text">
-          The calculator is designed to quantify the energy savings associated with lighting opportunities.
-        </p>
       </div>
-    </div>
- <!--waste heat -->
-<div
-*ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
-class="card calc-card-item m-2" (click)="openCalculator('waste-heat')">
-<div class="card-body d-flex flex-column p-2 align-items-center">
-  <div class="ph-calc-icon d-flex justify-content-center align-items-center">
-    <img src="assets/images/calculator-icons/furnace-icons/waste-heat-icon.png" class="calc-img th-calc-img">
-  </div>
-  <a class="pt-2">Waste Heat</a>
-  <p class="mb-0 text-center help-text">
-    Calculate energy savings from using exhaust gas (waste) heat to provide energy for an absorption chiller in
-    place of a compressor.
-  </p>
-</div>
-</div>
+      <!--lighting replacement-->
+      <div class="card calc-card-item m-2" (click)="openCalculator('lighting-replacement')">
+        <div class="card-body d-flex flex-column p-2 align-items-center">
+          <div class="lighting-calc-icon d-flex justify-content-center align-items-center">
+            <img src="assets/images/calculator-icons/utilities-icons/lighting-replacement-icon.png"
+              class="calc-img th-calc-img">
+          </div>
+          <a class="pt-2">Lighting Replacement</a>
+          <p class="mb-0 text-center help-text">
+            The calculator is designed to quantify the energy savings associated with lighting opportunities.
+          </p>
+        </div>
+      </div>
+      <!--waste heat -->
+      <div class="card calc-card-item m-2" (click)="openCalculator('waste-heat')">
+        <div class="card-body d-flex flex-column p-2 align-items-center">
+          <div class="ph-calc-icon d-flex justify-content-center align-items-center">
+            <img src="assets/images/calculator-icons/furnace-icons/waste-heat-icon.png" class="calc-img th-calc-img">
+          </div>
+          <a class="pt-2">Waste Heat</a>
+          <p class="mb-0 text-center help-text">
+            Calculate energy savings from using exhaust gas (waste) heat to provide energy for an absorption chiller in
+            place of a compressor.
+          </p>
+        </div>
+      </div>
+    </ng-container>
     <!--natural gas reduction-->
     <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Natural Gas') && treasureHunt.currentEnergyUsage.naturalGasUsed == true"
@@ -135,20 +129,20 @@ class="card calc-card-item m-2" (click)="openCalculator('waste-heat')">
         </p>
       </div>
     </div>
- <!--steam reduction-->
- <div
- *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Other Fuel') && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
- class="card calc-card-item m-2" (click)="openCalculator('steam-reduction')">
- <div class="card-body d-flex flex-column p-2 align-items-center">
-   <div class="calc-icon d-flex justify-content-center align-items-center">
-     <img src="assets/images/calculator-icons/utilities-icons/steam-reduction-icon.png" class="calc-img">
-   </div>
-   <a class="pt-2">Steam Reduction</a>
-   <p class="mb-0 text-center help-text">
-     This calculator is used to quantify the energy savings associated with reducing steam use.
-   </p>
- </div>
-</div>
+    <!--steam reduction-->
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Other Fuel') && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
+      class="card calc-card-item m-2" (click)="openCalculator('steam-reduction')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/utilities-icons/steam-reduction-icon.png" class="calc-img">
+        </div>
+        <a class="pt-2">Steam Reduction</a>
+        <p class="mb-0 text-center help-text">
+          This calculator is used to quantify the energy savings associated with reducing steam use.
+        </p>
+      </div>
+    </div>
     <!--pipe insulation-->
     <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
@@ -181,109 +175,109 @@ class="card calc-card-item m-2" (click)="openCalculator('waste-heat')">
     </div>
     <!--flue gas -->
     <div
-    *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
     && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
-    class="card calc-card-item m-2" (click)="openCalculator('flue-gas')">
-    <div class="card-body d-flex flex-column p-2 align-items-center">
-      <div class="ph-calc-icon d-flex justify-content-center align-items-center">
-        <img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="calc-img th-calc-img">
+      class="card calc-card-item m-2" (click)="openCalculator('flue-gas')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="ph-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="calc-img th-calc-img">
+        </div>
+        <a class="pt-2">Flue Gas</a>
+        <p class="mb-0 text-center help-text">
+          Determine the amount of heat lost in the furnace flue gas
+        </p>
       </div>
-      <a class="pt-2">Flue Gas</a>
-      <p class="mb-0 text-center help-text">
-        Determine the amount of heat lost in the furnace flue gas
-      </p>
     </div>
-  </div>
-  <div
-  *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
   && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
-  class="card calc-card-item m-2" (click)="openCalculator('opening-loss')">
-  <div class="card-body d-flex flex-column p-2 align-items-center">
-    <div class="ph-calc-icon d-flex justify-content-center align-items-center">
-      <img src="assets/images/calculator-icons/furnace-icons/opening.png" class="calc-img th-calc-img-w">
+      class="card calc-card-item m-2" (click)="openCalculator('opening-loss')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="ph-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/furnace-icons/opening.png" class="calc-img th-calc-img-w">
+        </div>
+        <a class="pt-2">Opening Loss</a>
+        <p class="mb-0 text-center help-text">
+          Estimates losses due to openings in the heating system.
+        </p>
+      </div>
     </div>
-    <a class="pt-2">Opening Loss</a>
-    <p class="mb-0 text-center help-text">
-      Estimates losses due to openings in the heating system.
-    </p>
-  </div>
-</div>
-<div
-*ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
 && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
-class="card calc-card-item m-2" (click)="openCalculator('wall-loss')">
-<div class="card-body d-flex flex-column p-2 align-items-center">
-  <div class="ph-calc-icon d-flex justify-content-center align-items-center">
-    <img src="assets/images/calculator-icons/furnace-icons/wall-loss.png" class="calc-img th-calc-img-w">
-  </div>
-  <a class="pt-2">Wall Loss</a>
-  <p class="mb-0 text-center help-text">
-    This calculator can be used to calculate fuel savings due to changes in wall insulation for a heating system.
-  </p>
-</div>
-</div>
+      class="card calc-card-item m-2" (click)="openCalculator('wall-loss')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="ph-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/furnace-icons/wall-loss.png" class="calc-img th-calc-img-w">
+        </div>
+        <a class="pt-2">Wall Loss</a>
+        <p class="mb-0 text-center help-text">
+          This calculator can be used to calculate fuel savings due to changes in wall insulation for a heating system.
+        </p>
+      </div>
+    </div>
 
-<div
-*ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
 && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
-class="card calc-card-item m-2" (click)="openCalculator('leakage-loss')">
-<div class="card-body d-flex flex-column p-2 align-items-center">
-  <div class="ph-calc-icon d-flex justify-content-center align-items-center">
-    <img src="assets/images/calculator-icons/furnace-icons/leakage.png" class="calc-img th-calc-img">
-  </div>
-  <a class="pt-2">Leakage Loss</a>
-  <p class="mb-0 text-center help-text">
-    Estimates losses due to gases leaking out of or into the furnace.
-  </p>
-</div>
-</div>
-<div
-*ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
+      class="card calc-card-item m-2" (click)="openCalculator('leakage-loss')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="ph-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/furnace-icons/leakage.png" class="calc-img th-calc-img">
+        </div>
+        <a class="pt-2">Leakage Loss</a>
+        <p class="mb-0 text-center help-text">
+          Estimates losses due to gases leaking out of or into the furnace.
+        </p>
+      </div>
+    </div>
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
 && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
-class="card calc-card-item m-2" (click)="openCalculator('heat-cascading')">
-<div class="card-body d-flex flex-column p-2 align-items-center">
-  <div class="ph-calc-icon d-flex justify-content-center align-items-center">
-    <img src="assets/images/calculator-icons/furnace-icons/heat-cascading.png" class="calc-img th-calc-img">
-  </div>
-  <a class="pt-2">Heat Cascading</a>
-  <p class="mb-0 text-center help-text">
-    This calculator can be used to estimate energy and related cost savings when exhaust gases from a
-    higher temperature (primary) process heating equipment is used to supply heat to lower temperature
-    (secondary) process heating equipment.
-  </p>
-</div>
-</div>
-<div
-*ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
+      class="card calc-card-item m-2" (click)="openCalculator('heat-cascading')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="ph-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/furnace-icons/heat-cascading.png" class="calc-img th-calc-img">
+        </div>
+        <a class="pt-2">Heat Cascading</a>
+        <p class="mb-0 text-center help-text">
+          This calculator can be used to estimate energy and related cost savings when exhaust gases from a
+          higher temperature (primary) process heating equipment is used to supply heat to lower temperature
+          (secondary) process heating equipment.
+        </p>
+      </div>
+    </div>
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
     && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
-class="card calc-card-item m-2" (click)="openCalculator('air-heating')">
-<div class="card-body d-flex flex-column p-2 align-items-center">
-  <div class="ph-calc-icon d-flex justify-content-center align-items-center">
-    <img src="assets/images/calculator-icons/furnace-icons/air-heating-icon.png" class="calc-img th-calc-img">
-  </div>
-  <a class="pt-2">Air Heating using Flue Gas</a>
-  <p class="mb-0 text-center help-text">
-        This calculator can be used to estimate maximum air flow that can be heated by using exhaust gas heat of
-    flue gases from a furnace, oven, or boiler
-  </p>
-     
-</div>
-</div>
-<div
-*ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
+      class="card calc-card-item m-2" (click)="openCalculator('air-heating')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="ph-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/furnace-icons/air-heating-icon.png" class="calc-img th-calc-img">
+        </div>
+        <a class="pt-2">Air Heating using Flue Gas</a>
+        <p class="mb-0 text-center help-text">
+              This calculator can be used to estimate maximum air flow that can be heated by using exhaust gas heat of
+          flue gases from a furnace, oven, or boiler
+        </p>
+           
+      </div>
+    </div>
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Other Fuel') 
 && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
-class="card calc-card-item m-2" (click)="openCalculator('water-heating')">
-<div class="card-body d-flex flex-column p-2 align-items-center">
-  <div class="steam-calc-icon d-flex justify-content-center align-items-center">
-    <img src="assets/images/calculator-icons/steam-icons/water-heating-icon.png" class="calc-img th-calc-img">
-  </div>
-  <a class="pt-2">Vent Steam to Heat Water</a>
-  <p class="mb-0 text-center help-text">
-    This calculator is used to calculate energy and related energy cost saving when vent stream is used to heat
-    water using a steam to liquid heat exchanger.
-  </p>
-</div>
-</div>  
+      class="card calc-card-item m-2" (click)="openCalculator('water-heating')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="steam-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/steam-icons/water-heating-icon.png" class="calc-img th-calc-img">
+        </div>
+        <a class="pt-2">Vent Steam to Heat Water</a>
+        <p class="mb-0 text-center help-text">
+          This calculator is used to calculate energy and related energy cost saving when vent stream is used to heat
+          water using a steam to liquid heat exchanger.
+        </p>
+      </div>
+    </div>
     <!--compressed air reduction-->
     <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Compressed Air') && (treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.compressedAirUsed == true)"
@@ -343,6 +337,24 @@ class="card calc-card-item m-2" (click)="openCalculator('water-heating')">
         </p>
       </div>
     </div>
+
+
+    <div
+      *ngIf="(displayCalculatorType == 'All' || (displayCalculatorType == 'Water') && treasureHunt.currentEnergyUsage.waterUsed == true)"
+      class="card calc-card-item m-2" (click)="openCalculator('cooling-tower-makeup')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="process-cooling-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/process-cooling-icons/cooling-tower-makeup-water.png"
+            class="calc-img">
+        </div>
+        <a class="pt-2">Cooling Tower Makeup Water</a>
+        <p class="mb-0 text-center help-text">
+          Analyze cooling tower water consumption.
+        </p>
+      </div>
+    </div>
+
+
     <!--stand alone opp sheet-->
     <div class="card calc-card-item m-2" (click)="openCalculator('opportunity-sheet')">
       <div class="card-body d-flex flex-column p-2 align-items-center">

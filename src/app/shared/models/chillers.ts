@@ -5,6 +5,7 @@ export interface CoolingTowerData {
     name: string;
     operationalHours: number;
     flowRate: number;
+    waterCost: number;
     userDefinedCoolingLoad: boolean;
     temperatureDifference: number;
     coolingLoad: number;
@@ -29,6 +30,9 @@ export interface CoolingTowerData {
     wcModification: number;
     waterSavings: number;
     savingsPercentage: number;
+    annualCostSavings: number;
+    baselineCost: number;
+    modificationCost: number;
     coolingTowerCaseResults: Array<CoolingTowerResult>;
   }
   

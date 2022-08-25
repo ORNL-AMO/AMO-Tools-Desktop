@@ -94,6 +94,11 @@
   [settings]="settings">
 </app-standalone-opportunity-sheet>
 
+<app-cooling-tower *ngIf="selectedCalc == 'cooling-tower-makeup'"
+  [inTreasureHunt]="true" (emitSave)="saveOpportunity($event)" 
+  (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-cooling-tower>
+
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">

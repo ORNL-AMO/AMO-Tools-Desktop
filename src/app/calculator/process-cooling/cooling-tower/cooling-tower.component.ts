@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { CoolingTowerService } from './cooling-tower.service';
 import { Subscription } from 'rxjs';
 import { CoolingTowerOutput, CoolingTowerData } from '../../../shared/models/chillers';
+import { CoolingTowerMakeupWaterTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-cooling-tower',
@@ -15,6 +16,10 @@ export class CoolingTowerComponent implements OnInit {
 
   @Input()
   inTreasureHunt: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<CoolingTowerMakeupWaterTreasureHunt>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
   @Input()
@@ -70,8 +75,15 @@ export class CoolingTowerComponent implements OnInit {
   }
 
   ngOnDestroy() {
-      this.baselineDataSub.unsubscribe();
-      this.modificationDataSub.unsubscribe();
+    if (!this.inTreasureHunt) {
+      this.coolingTowerService.baselineData.next(this.baselineData);
+      this.coolingTowerService.modificationData.next(this.modificationData);
+    } else {
+      this.coolingTowerService.baselineData.next(undefined);
+      this.coolingTowerService.modificationData.next(undefined);
+    }
+    this.baselineDataSub.unsubscribe();
+    this.modificationDataSub.unsubscribe();
   }
 
   initSubscriptions() {
@@ -98,6 +110,14 @@ export class CoolingTowerComponent implements OnInit {
 
   addCase() {
     this.coolingTowerService.addCase(this.settings, this.operatingHours, this.modificationExists);
+  }
+
+  save() {
+    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData, opportunityType: Treasure.coolingTowerMakeup });
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
   }
 
   createModification() {
