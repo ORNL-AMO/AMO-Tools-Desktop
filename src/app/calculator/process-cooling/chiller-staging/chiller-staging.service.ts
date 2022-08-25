@@ -24,12 +24,13 @@ export class ChillerStagingService {
     this.currentField = new BehaviorSubject<string>(undefined);   
   }
 
-  initDefaultEmptyInputs() {
+  initDefaultEmptyInputs(settings: Settings) {
     let emptyInput: ChillerStagingInput = {
       chillerType: 0,
       condenserCoolingType: 0,
       motorDriveType: 0,
       compressorConfigType: 0,
+      electricityCost: settings.electricityCost,
       ariCapacity: 0,
       ariEfficiency: 0,
       maxCapacityRatio: 0,
@@ -50,30 +51,53 @@ export class ChillerStagingService {
       modTotalPower: 0,
       modTotalEnergy: 0,
       savingsEnergy: 0,
+      costSavings: 0,
+      baselineCost: 0,
+      modificationCost: 0,
       baselinePowerList: [],
       modPowerList: [],
     };
     this.chillerStagingOutput.next(emptyOutput);
   }
 
-  calculate(settings: Settings): void {
-    let chillerStagingInput: ChillerStagingInput = this.chillerStagingInput.getValue();
-    let inputCopy: ChillerStagingInput = JSON.parse(JSON.stringify(chillerStagingInput));
+  calculate(settings: Settings, inputs?: ChillerStagingInput) {
+    let chillerStagingInput: ChillerStagingInput;
+    let inputCopy: ChillerStagingInput;
+    if (!inputs){
+      chillerStagingInput = this.chillerStagingInput.getValue();
+      inputCopy = JSON.parse(JSON.stringify(chillerStagingInput));
+    } else {
+      inputCopy = JSON.parse(JSON.stringify(inputs));
+    }
     let validInput: boolean;
     validInput = this.chillerStagingFormService.getChillerStagingForm(inputCopy).valid;
     
     if(!validInput) {
       this.initDefaultEmptyOutputs();
     } else {
+      inputCopy = this.convertInputUnits(inputCopy, settings);
       let chillerStagingOutput: ChillerStagingOutput = chillersAddon.chillerStaging(inputCopy);
       if (chillerStagingOutput.baselinePowerList && chillerStagingOutput.modPowerList) {
         chillerStagingOutput.chillerLoadResults = [];
         chillerStagingOutput.baselinePowerList.forEach((baselineLoad: number, index) => {
           chillerStagingOutput.chillerLoadResults.push({baseline: baselineLoad, modification: chillerStagingOutput.modPowerList[index]});
         });
+        chillerStagingOutput.baselineCost = chillerStagingOutput.baselineTotalEnergy * inputCopy.electricityCost;
+        chillerStagingOutput.modificationCost = chillerStagingOutput.modTotalEnergy * inputCopy.electricityCost;
+        chillerStagingOutput.costSavings = chillerStagingOutput.baselineCost - chillerStagingOutput.modificationCost;
       }
       this.chillerStagingOutput.next(chillerStagingOutput);
+      return chillerStagingOutput;
     }
+  }
+  convertInputUnits(input: ChillerStagingInput, settings: Settings): ChillerStagingInput {
+    if (settings.unitsOfMeasure == "Metric") {
+      input.waterSupplyTemp = this.convertUnitsService.value(input.waterSupplyTemp).from('C').to('F');
+      input.waterSupplyTemp = this.roundVal(input.waterSupplyTemp, 2);
+      input.waterEnteringTemp = this.convertUnitsService.value(input.waterEnteringTemp).from('C').to('F');
+      input.waterEnteringTemp = this.roundVal(input.waterEnteringTemp, 2);
+    }
+    return input;
   }
 
   generateExampleData(settings: Settings) {
@@ -82,6 +106,7 @@ export class ChillerStagingService {
       condenserCoolingType: 0,
       motorDriveType: 0,
       compressorConfigType: 1,
+      electricityCost: settings.electricityCost,
       ariCapacity: 1000,
       ariEfficiency: 0.676,
       maxCapacityRatio: 1.0,
