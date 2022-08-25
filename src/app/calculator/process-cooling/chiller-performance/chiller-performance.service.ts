@@ -33,7 +33,7 @@ export class ChillerPerformanceService {
     this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
-  initDefaultEmptyInputs() {
+  initDefaultEmptyInputs(settings: Settings) {
     let emptyInput: ChillerPerformanceInput = {
       chillerType: 0,
       condenserCoolingType: 0,
@@ -49,6 +49,7 @@ export class ChillerPerformanceService {
       baselineWaterEnteringTemp: 0,
       modWaterSupplyTemp: 0,
       modWaterEnteringTemp: 0,
+      electricityCost: settings.electricityCost
     };
     this.chillerPerformanceInput.next(emptyInput);
   }
@@ -64,6 +65,9 @@ export class ChillerPerformanceService {
       modPower: 0,
       modEnergy: 0,
       savingsEnergy: 0,
+      baselineEnergyCost: 0,
+      modEnergyCost: 0,
+      annualCostSaving: 0,
     };
     this.chillerPerformanceOutput.next(emptyOutput);
   }
@@ -79,6 +83,9 @@ export class ChillerPerformanceService {
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       let chillerPerformanceOutput: ChillerPerformanceOutput = chillersAddon.chillerCapacityEfficiency(inputCopy);
+      chillerPerformanceOutput.baselineEnergyCost = chillerPerformanceOutput.baselineEnergy * inputCopy.electricityCost;
+      chillerPerformanceOutput.modEnergyCost = chillerPerformanceOutput.modEnergy * inputCopy.electricityCost;
+      chillerPerformanceOutput.annualCostSaving = chillerPerformanceOutput.baselineEnergy - chillerPerformanceOutput.modEnergy;
       chillerPerformanceOutput = this.convertResultUnits(chillerPerformanceOutput, settings);
       this.chillerPerformanceOutput.next(chillerPerformanceOutput);
       
@@ -100,7 +107,8 @@ export class ChillerPerformanceService {
       baselineWaterSupplyTemp: 42,
       baselineWaterEnteringTemp: 82.12,
       modWaterSupplyTemp: 43,
-      modWaterEnteringTemp: 81.12
+      modWaterEnteringTemp: 81.12,
+      electricityCost: settings.electricityCost
     };
 
     if (settings.unitsOfMeasure == 'Metric') {

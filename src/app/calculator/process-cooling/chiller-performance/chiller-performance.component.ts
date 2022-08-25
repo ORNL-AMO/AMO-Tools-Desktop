@@ -43,7 +43,7 @@ export class ChillerPerformanceComponent implements OnInit {
     }
     let existingInputs = this.chillerPerformanceService.chillerPerformanceInput.getValue();
     if(!existingInputs) {
-      this.chillerPerformanceService.initDefaultEmptyInputs();
+      this.chillerPerformanceService.initDefaultEmptyInputs(this.settings);
       this.chillerPerformanceService.initDefaultEmptyOutputs();
     } 
     this.initSubscriptions();
@@ -70,7 +70,7 @@ export class ChillerPerformanceComponent implements OnInit {
   }
 
   btnResetData() {
-    this.chillerPerformanceService.initDefaultEmptyInputs();
+    this.chillerPerformanceService.initDefaultEmptyInputs(this.settings);
     this.chillerPerformanceService.resetData.next(true);
   }
 
