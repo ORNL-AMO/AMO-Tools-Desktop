@@ -49,10 +49,10 @@
     </tr>
     <tr>
       <td class="bold w-50">Total Baseline Energy Cost</td>
-      <td *ngIf="output.baselineTotalEnergy" class="text-center w-50">
+      <td *ngIf="output.baselineCost" class="text-center w-50">
         {{output.baselineCost | currency:'USD':'symbol':'0.0-0'}}
       </td>
-      <td *ngIf="!output.baselineTotalEnergy" class="text-center w-50">
+      <td *ngIf="!output.baselineCost" class="text-center w-50">
         &mdash; &mdash;
       </td>
     </tr>
@@ -76,10 +76,10 @@
     </tr>
     <tr>
       <td class="bold w-50">Total Modification Energy Cost</td>
-      <td *ngIf="output.baselineTotalEnergy" class="text-center w-50">
+      <td *ngIf="output.modificationCost" class="text-center w-50">
         {{output.modificationCost | currency:'USD':'symbol':'0.0-0'}}
       </td>
-      <td *ngIf="!output.baselineTotalEnergy" class="text-center w-50">
+      <td *ngIf="!output.modificationCost" class="text-center w-50">
         &mdash; &mdash;
       </td>
     </tr>
@@ -94,10 +94,10 @@
     </tr>
     <tr>
       <td class="bold w-50">Annual Energy Cost Savings</td>
-      <td *ngIf="output.baselineTotalEnergy" class="text-center w-50">
+      <td *ngIf="output.costSavings" class="text-center w-50">
         {{output.costSavings | currency:'USD':'symbol':'0.0-0'}}
       </td>
-      <td *ngIf="!output.baselineTotalEnergy" class="text-center w-50">
+      <td *ngIf="!output.costSavings" class="text-center w-50">
         &mdash; &mdash;
       </td>
     </tr>
