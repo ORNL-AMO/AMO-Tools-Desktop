@@ -15,7 +15,7 @@ import { FlueGasEnergyData } from "../../calculator/furnaces/flue-gas/energy-for
 import { FeedwaterEconomizerInput } from "./steam/feedwaterEconomizer";
 import { CondensingEconomizerInput } from "./steam/condensingEconomizer";
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
-import { CoolingTowerData } from "./chillers";
+import { ChillerPerformanceInput, CoolingTowerData } from "./chillers";
 import { ChillerStagingInput } from "./chillers";
 
 export interface TreasureHunt {
@@ -44,6 +44,7 @@ export interface TreasureHunt {
     waterHeatingOpportunities?: Array<WaterHeatingTreasureHunt>;
     coolingTowerMakeupOpportunities?: Array<CoolingTowerMakeupWaterTreasureHunt>;
     chillerStagingOpportunities?: Array<ChillerStagingTreasureHunt>;
+    chillerPerformanceOpportunities?: Array<ChillerPerformanceTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     existingDataUnits?: string;
@@ -75,7 +76,8 @@ export enum Treasure {
     feedwaterEconomizer = 'feedWaterEconomizer',
     condensingEconomizer = 'condensing-economizer',
     coolingTowerMakeup = 'cooling-tower-makeup',
-    chillerStaging = 'chiller-staging'
+    chillerStaging = 'chiller-staging',
+    chillerPerformance = 'chiller-performance'
 }
 
 export interface FilterOption {
@@ -415,6 +417,12 @@ export interface ChillerStagingTreasureHunt extends TreasureHuntOpportunity {
     selected?: boolean;
 }
 
+export interface ChillerPerformanceTreasureHunt extends TreasureHuntOpportunity {
+    chillerPerformanceData?: ChillerPerformanceInput;
+    opportunitySheet?: OpportunitySheet
+    selected?: boolean;
+}
+
 export interface TreasureHuntResults {
     totalSavings: number;
     percentSavings: number;
@@ -509,4 +517,5 @@ export interface ImportExportOpportunities {
     waterHeatingOpportunities?: Array<WaterHeatingTreasureHunt>;
     coolingTowerMakeupOpportunities?: Array<CoolingTowerMakeupWaterTreasureHunt>;
     chillerStagingOpportunities?: Array<ChillerStagingTreasureHunt>;
+    chillerPerformanceOpportunities?: Array<ChillerPerformanceTreasureHunt>;
 }

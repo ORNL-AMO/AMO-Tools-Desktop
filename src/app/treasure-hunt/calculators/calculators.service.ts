@@ -28,6 +28,7 @@ import { HeatCascadingTreasureHuntService } from '../treasure-hunt-calculator-se
 import { WaterHeatingTreasureHuntService } from '../treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
 import { CoolingTowerMakeupTreasureHuntService } from '../treasure-hunt-calculator-services/cooling-tower-makeup-treasure-hunt.service';
 import { ChillerStagingTreasureHuntService } from '../treasure-hunt-calculator-services/chiller-staging-treasure-hunt.service';
+import { ChillerPerformanceTreasureHuntService } from '../treasure-hunt-calculator-services/chiller-performance-treasure-hunt.service';
 
 @Injectable()
 export class CalculatorsService {
@@ -62,7 +63,8 @@ export class CalculatorsService {
     private heatCascadingTreasureHuntService: HeatCascadingTreasureHuntService,
     private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService,
     private coolingTowerMakeupTreasureHuntService: CoolingTowerMakeupTreasureHuntService,
-    private chillerStagingTreasureHuntService: ChillerStagingTreasureHuntService
+    private chillerStagingTreasureHuntService: ChillerStagingTreasureHuntService,
+    private chillerPerformanceTreasureHuntService: ChillerPerformanceTreasureHuntService
     ) {
     this.selectedCalc = new BehaviorSubject<string>('none');
   }
@@ -121,6 +123,8 @@ export class CalculatorsService {
       this.coolingTowerMakeupTreasureHuntService.initNewCalculator();
     } else if (calculatorType === Treasure.chillerStaging) {
       this.chillerStagingTreasureHuntService.initNewCalculator();
+    } else if (calculatorType === Treasure.chillerPerformance) {
+      this.chillerPerformanceTreasureHuntService.initNewCalculator()
     }
     this.selectedCalc.next(calculatorType);
   }
@@ -263,6 +267,12 @@ export class CalculatorsService {
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.chillerStaging, settings);
       opportunityCardData = this.chillerStagingTreasureHuntService.getChillerStagingCardData(opportunityCardData.chillerStaging, opportunitySummary, treasureHunt.chillerStagingOpportunities.length - 1, treasureHunt.currentEnergyUsage, settings);
     
+    } else if (opportunityCardData.opportunityType === Treasure.chillerPerformance) {
+      opportunityCardData.chillerPerformance.opportunitySheet = this.updateCopyName(opportunityCardData.chillerPerformance.opportunitySheet);
+      this.chillerPerformanceTreasureHuntService.saveTreasureHuntOpportunity(opportunityCardData.chillerPerformance, treasureHunt);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.chillerPerformance, settings);
+      opportunityCardData = this.chillerPerformanceTreasureHuntService.getChillerPerformanceCardData(opportunityCardData.chillerPerformance, opportunitySummary, treasureHunt.chillerPerformanceOpportunities.length - 1, treasureHunt.currentEnergyUsage, settings);
+    
     } 
     return opportunityCardData;
   }
@@ -318,6 +328,8 @@ export class CalculatorsService {
       this.coolingTowerMakeupTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.coolingTowerMakeup);
     } else if (opportunityCardData.opportunityType === Treasure.chillerStaging) {
       this.chillerStagingTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.chillerStaging);
+    } else if (opportunityCardData.opportunityType === Treasure.chillerPerformance) {
+      this.chillerPerformanceTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.chillerPerformance);
     } 
 
     this.selectedCalc.next(opportunityCardData.opportunityType);
@@ -459,6 +471,11 @@ export class CalculatorsService {
       treasureHunt.chillerStagingOpportunities[opportunityCardData.opportunityIndex] = opportunityCardData.chillerStaging;
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.chillerStaging, settings);
       updatedCard = this.chillerStagingTreasureHuntService.getChillerStagingCardData(opportunityCardData.chillerStaging, opportunitySummary, opportunityCardData.opportunityIndex, treasureHunt.currentEnergyUsage, settings);
+    } else if (opportunityCardData.opportunityType === Treasure.chillerPerformance) {
+      opportunityCardData.chillerPerformance.selected = opportunityCardData.selected;
+      treasureHunt.chillerPerformanceOpportunities[opportunityCardData.opportunityIndex] = opportunityCardData.chillerPerformance;
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.chillerPerformance, settings);
+      updatedCard = this.chillerPerformanceTreasureHuntService.getChillerPerformanceCardData(opportunityCardData.chillerPerformance, opportunitySummary, opportunityCardData.opportunityIndex, treasureHunt.currentEnergyUsage, settings);
     }
     
     this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
@@ -512,6 +529,8 @@ export class CalculatorsService {
       this.coolingTowerMakeupTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
     } else if (deleteOpportunity.opportunityType === Treasure.chillerStaging) {
       this.chillerStagingTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
+    } else if (deleteOpportunity.opportunityType === Treasure.chillerPerformance) {
+      this.chillerPerformanceTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
     } 
 
     return treasureHunt;

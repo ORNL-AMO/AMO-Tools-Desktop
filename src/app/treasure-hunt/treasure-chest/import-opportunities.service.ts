@@ -163,6 +163,13 @@ export class ImportOpportunitiesService {
       this.updateLegacyOpportunities(data.chillerStagingOpportunities, Treasure.chillerStaging);
       treasureHunt.chillerStagingOpportunities = treasureHunt.chillerStagingOpportunities.concat(data.chillerStagingOpportunities);
     }
+    if (data.chillerPerformanceOpportunities) {
+      if (treasureHunt.chillerPerformanceOpportunities == undefined) {
+        treasureHunt.chillerPerformanceOpportunities = new Array();
+      }
+      this.updateLegacyOpportunities(data.chillerPerformanceOpportunities, Treasure.chillerPerformance);
+      treasureHunt.chillerPerformanceOpportunities = treasureHunt.chillerPerformanceOpportunities.concat(data.chillerPerformanceOpportunities);
+    }
     return treasureHunt;
   }
 

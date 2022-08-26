@@ -72,9 +72,15 @@ export class ChillerPerformanceService {
     this.chillerPerformanceOutput.next(emptyOutput);
   }
 
-  calculate(settings: Settings): void {
-    let chillerPerformanceInput: ChillerPerformanceInput = this.chillerPerformanceInput.getValue();
-    let inputCopy: ChillerPerformanceInput = JSON.parse(JSON.stringify(chillerPerformanceInput));
+  calculate(settings: Settings, inputs?: ChillerPerformanceInput) {
+    let chillerPerformanceInput: ChillerPerformanceInput;
+    let inputCopy: ChillerPerformanceInput;
+    if (!inputs){
+      chillerPerformanceInput = this.chillerPerformanceInput.getValue();
+      inputCopy = JSON.parse(JSON.stringify(chillerPerformanceInput));
+    } else {
+      inputCopy = JSON.parse(JSON.stringify(inputs));
+    }
     let validInput: boolean;
     validInput = this.chillerPerformanceFormService.getChillerPerformanceForm(inputCopy).valid;
     
@@ -88,7 +94,7 @@ export class ChillerPerformanceService {
       chillerPerformanceOutput.annualCostSaving = chillerPerformanceOutput.baselineEnergy - chillerPerformanceOutput.modEnergy;
       chillerPerformanceOutput = this.convertResultUnits(chillerPerformanceOutput, settings);
       this.chillerPerformanceOutput.next(chillerPerformanceOutput);
-      
+      return chillerPerformanceOutput;
     }
   }
 
@@ -131,7 +137,7 @@ export class ChillerPerformanceService {
     input.modWaterEnteringTemp = this.roundVal(input.modWaterEnteringTemp, 2);
 
     
-    input.waterDeltaT = this.convertUnitsService.value(input.waterDeltaT).from('F').to('C');
+    input.waterDeltaT = this.convertUnitsService.value(input.waterDeltaT).from('R').to('K');
     input.waterDeltaT = this.roundVal(input.waterDeltaT, 2);
 
     input.waterFlowRate = this.convertUnitsService.value(input.waterFlowRate).from('gpm').to('m3/s');
@@ -151,7 +157,8 @@ export class ChillerPerformanceService {
       input.modWaterSupplyTemp = this.convertUnitsService.value(input.modWaterSupplyTemp).from('C').to('F');
       input.modWaterEnteringTemp = this.convertUnitsService.value(input.modWaterEnteringTemp).from('C').to('F');
       
-      input.waterDeltaT = this.convertUnitsService.value(input.waterDeltaT).from('C').to('F');
+      input.waterDeltaT = this.convertUnitsService.value(input.waterDeltaT).from('K').to('R');
+      input.waterDeltaT = this.roundVal(input.waterDeltaT, 2);
       input.waterFlowRate = this.convertUnitsService.value(input.waterFlowRate).from('m3/s').to('gpm');
       input.ariCapacity = this.convertUnitsService.value(input.ariCapacity).from('kW').to('hp');
     }
