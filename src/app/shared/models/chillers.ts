@@ -113,6 +113,7 @@ export interface CoolingTowerData {
     waterDeltaT: number,
     waterFlowRate: number,
     operatingHours: number,
+    electricityCost: number,
     // chilled water temperature reset
     baselineWaterSupplyTemp: number,
     baselineWaterEnteringTemp: number
@@ -131,6 +132,9 @@ export interface CoolingTowerData {
     modPower: number,
     modEnergy: number,
     savingsEnergy: number,
+    baselineEnergyCost: number,
+    modEnergyCost: number,
+    annualCostSaving: number,
   }
 
 

@@ -100,10 +100,14 @@
   [operatingHours]="treasureHunt.operatingHours"></app-cooling-tower>
 
 <app-chiller-staging *ngIf="selectedCalc == 'chiller-staging'" [inTreasureHunt]="true"
-(emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)"
-[settings]="settings">
+  (emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)"
+  [settings]="settings">
 </app-chiller-staging>
 
+<app-chiller-performance *ngIf="selectedCalc == 'chiller-performance'" [inTreasureHunt]="true"
+  (emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)"
+  [settings]="settings">
+</app-chiller-performance>
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">

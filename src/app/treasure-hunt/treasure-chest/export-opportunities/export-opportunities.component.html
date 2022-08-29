@@ -351,6 +351,22 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.chillerPerformanceOpportunities">
+                        <label>Chiller Performance </label>
+                        <ul>
+                            <li
+                                *ngFor="let chillerPerformance of exportOpportunities.chillerPerformanceOpportunities; let index = index;">
+                                <span
+                                    *ngIf="!chillerPerformance.opportunitySheet || !chillerPerformance.opportunitySheet.name">
+                                    Chiller Performance #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="chillerPerformance.opportunitySheet && chillerPerformance.opportunitySheet.name">
+                                    {{chillerPerformance.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="col-6 p-2" *ngIf="exportOpportunities.opportunitySheets">
                         <label>Opportunity Sheets</label>
                         <ul>

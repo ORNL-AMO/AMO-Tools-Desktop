@@ -122,6 +122,8 @@ export class CalculatorTypeDropdownComponent implements OnInit {
         return 'Cooling Tower Makeup Water'
       case Treasure.chillerStaging:
         return 'Chiller Staging'
+      case Treasure.chillerPerformance:
+        return 'Chiller Performance'
     }
   }
 }
