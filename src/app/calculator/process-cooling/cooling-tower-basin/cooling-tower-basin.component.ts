@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild, ChangeDetectorRef, EventEmitter, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
@@ -13,6 +13,12 @@ import { WeatherBinsService, WeatherDataSourceView } from '../../utilities/weath
 export class CoolingTowerBasinComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  //emitSave = new EventEmitter<ChillerStagingTreasureHunt>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
@@ -20,13 +26,16 @@ export class CoolingTowerBasinComponent implements OnInit {
   
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   
   coolingTowerBasinInputSub: Subscription;
   weatherBinSub: Subscription;
   
   headerHeight: number;
+  containerHeight: number;
   tabSelect: string = 'results';
 
   displayWeatherTab: boolean = false;
@@ -45,7 +54,7 @@ export class CoolingTowerBasinComponent implements OnInit {
     this.weatherDataSourceView = this.weatherBinService.weatherDataSourceView.getValue();
     let existingInputs = this.coolingTowerBasinService.coolingTowerBasinInput.getValue();
     if(!existingInputs) {
-      this.coolingTowerBasinService.initDefaultEmptyInputs();
+      this.coolingTowerBasinService.initDefaultEmptyInputs(this.settings);
       this.coolingTowerBasinService.initDefaultEmptyOutputs();
     } else {
       this.coolingTowerBasinService.setHasWeatherBinsData();
@@ -102,7 +111,7 @@ export class CoolingTowerBasinComponent implements OnInit {
   }
 
   btnResetData() {
-    this.coolingTowerBasinService.initDefaultEmptyInputs();
+    this.coolingTowerBasinService.initDefaultEmptyInputs(this.settings);
     this.coolingTowerBasinService.resetData.next(true);
   }
 
@@ -118,6 +127,7 @@ export class CoolingTowerBasinComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
       this.helpPanelContainerHeight = this.contentContainer.nativeElement.offsetHeight - this.headerHeight;
       this.cd.detectChanges();
     }
@@ -127,5 +137,13 @@ export class CoolingTowerBasinComponent implements OnInit {
     this.coolingTowerBasinService.isShowingWeatherResults.next(weatherResultsOn);
     this.coolingTowerBasinService.calculate(this.settings);
  }
+
+ save() {
+  //this.emitSave.emit({ chillerStagingData: this.chillerPerformanceInput, opportunityType: Treasure.chillerStaging });
+}
+
+cancel() {
+  this.emitCancel.emit(true);
+}
 
 }

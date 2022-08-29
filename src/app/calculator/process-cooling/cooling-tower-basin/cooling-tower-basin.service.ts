@@ -61,7 +61,7 @@ export class CoolingTowerBasinService {
     this.weatherBinsService.integratedCalculator.next(undefined);
   }
 
-  initDefaultEmptyInputs() {
+  initDefaultEmptyInputs(settings: Settings) {
     let emptyInput: CoolingTowerBasinInput = {
       ratedCapacity: 0,
       ratedTempSetPoint: 0,
@@ -72,7 +72,8 @@ export class CoolingTowerBasinService {
       operatingWindSpeed: 0,
       operatingHours: 0,
       baselineTempSetPoint: 0,
-      modTempSetPoint: 0
+      modTempSetPoint: 0,
+      electricityCost: settings.electricityCost
     };
     this.coolingTowerBasinInput.next(emptyInput);
   }
@@ -213,7 +214,8 @@ export class CoolingTowerBasinService {
       operatingWindSpeed: 9.21,
       operatingHours: 1,
       baselineTempSetPoint: 40,
-      modTempSetPoint: 39
+      modTempSetPoint: 39,
+      electricityCost: settings.electricityCost
     };
 
     if (settings.unitsOfMeasure == 'Metric') {

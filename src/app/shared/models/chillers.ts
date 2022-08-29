@@ -64,7 +64,8 @@ export interface CoolingTowerData {
     operatingWindSpeed: number,
     operatingHours: number,
     baselineTempSetPoint: number,
-    modTempSetPoint: number
+    modTempSetPoint: number,
+    electricityCost: number,
   }
 
   export interface CoolingTowerBasinResult {

@@ -1,9 +1,9 @@
 <div class="d-flex h-100 process-cooling modify-conditions standalone-calculator" #contentContainer>
-	<div class="d-flex flex-column w-50 mh-100 bg-white scroll-item">
-		<div #leftPanelHeader class="d-flex header bg-grey pb-1 pt-1 bg-white">
-			<div class="w-50 d-flex pl-2 align-items-center clickable-tab" 
-			(click)="setWeatherCalculatorActive(false)"
-			[ngClass]="{'active': !displayWeatherTab}">
+	<div class="d-flex flex-column w-100 h-100">
+		<div div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
+			[ngClass]="{'justify-content-between': inTreasureHunt}">
+			<div class="w-50 d-flex pl-2 align-items-center clickable-tab" (click)="setWeatherCalculatorActive(false)"
+				[ngClass]="{'active': !displayWeatherTab}">
 				<div class="calc-icon-header icon-process-cooling">
 					<img src="assets/images/calculator-icons/process-cooling-icons/cooling-tower-basin-heater.png">
 				</div>
@@ -11,84 +11,112 @@
 					<h3>Cooling Tower Basin Heater Energy</h3>
 				</div>
 			</div>
-			<div class="w-50 d-flex pl-2 align-items-center clickable-tab" 
-			(click)="setWeatherCalculatorActive(true)"
-			[ngClass]="{'active': displayWeatherTab}">
+			<div class="w-50 d-flex pl-2 align-items-center clickable-tab" (click)="setWeatherCalculatorActive(true)"
+				[ngClass]="{'active': displayWeatherTab}">
 				<div class="col-md-auto">
 					<img src="assets/images/calculator-icons/utilities-icons/weather-bins-icon.png"
-                        class="weather-icon p-1">
+						class="weather-icon p-1">
 				</div>
 				<div class="pl-2">
 					<h3>Weather Data</h3>
 				</div>
 			</div>
-		</div>
 
-		<div *ngIf="!displayWeatherTab" class="d-flex flex-column m-4">
-			<app-cooling-tower-basin-form [settings]="settings"></app-cooling-tower-basin-form>
-			<div class="w-100 mt-3 justify content-center btn-group btn-group-sm">
-				<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
-					(click)="btnResetData()">
-					Reset Data
-				</button>
-				<button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
-					(click)="btnGenerateExample()">
-					Generate Example
-				</button>
-			</div>
-		</div>
-		<div *ngIf="displayWeatherTab" class="d-flex flex-column m-4">
-			<div class="mt-3 text-center pl-1 pr-1 pb-1" >
-				<span class="text-muted small mx-auto">Select data retrieval method. Lookup requires internet connection.</span>
-			  </div>
-			<div class="btn-col d-flex flex-column pb-3">
-				<div class="btn-group btn-group-sm align-self-center">
-					<button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setWeatherDataSource('lookup')"
-						[ngClass]="{'active':  weatherDataSourceView === 'lookup'}">Zip Code Lookup
-					</button>
-					<button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setWeatherDataSource('file')"
-						[ngClass]="{'active': weatherDataSourceView === 'file'}">Upload</button>
+			<div class="d-flex pr-2" *ngIf="inTreasureHunt">
+				<div class="d-flex help-holder">
+					<p class="help-text treasure-hunt-help">Click the save icon to add the treasure to your chest!
+						Click cancel to discard the opportunity and return to method selection.</p>
+				</div>
+				<div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
+					<span class="fa fa-save"></span>
+				</div>
+				<div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+					<span class="fa fa-times"></span>
 				</div>
 			</div>
-			<app-weather-station-lookup></app-weather-station-lookup>
-			<app-weather-bins-form [settings]="settings"></app-weather-bins-form>
 		</div>
-	</div>
-
-	<div class="d-flex flex-column w-50 scroll-item">
-		<div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
-			<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-				<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
-					(click)="setTab('results')">
-					<div>Results</div>
-				</a>
-			</div>
-			<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-				<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-					<div>Help</div>
-				</a>
-			</div>
-		</div>
-		<div *ngIf="!displayWeatherTab" class="d-flex mr-2 ml-2" [ngStyle]="{'height.px': helpPanelContainerHeight}">
-			<div class="d-flex flex-column w-100" *ngIf="tabSelect == 'results'">
-				<div class="mb-3 d-block">
-					<div class="w-100 justify-content-center btn-group btn-group-sm results pt-1 pb-1">
-						  <button type="button" [disabled]="!hasWeatherBinsData" class="btn btn-secondary btn-sm" (click)="toggleWeatherResults(true)"
-						[ngClass]="{'active': isShowingWeatherResults == true}">See weather binned results</button>
-						  <button type="button" class="btn btn-secondary btn-sm" (click)="toggleWeatherResults(false)"
-						[ngClass]="{'active': isShowingWeatherResults == false}">See calculated results</button>
+		<div class="d-flex">
+			<div class="col-6 bg-white scroll-item" [ngStyle]="{'height.px' : containerHeight}">
+				<div *ngIf="!displayWeatherTab" class="d-flex flex-column m-4">
+					<app-cooling-tower-basin-form [settings]="settings"></app-cooling-tower-basin-form>
+					<div class="w-100 mt-3 justify content-center btn-group btn-group-sm">
+						<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
+							(click)="btnResetData()">
+							Reset Data
+						</button>
+						<button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+							(click)="btnGenerateExample()">
+							Generate Example
+						</button>
 					</div>
-				  </div>
-				<app-cooling-tower-basin-results class="w-100 p-2" [settings]="settings"
-				[modificationExists]="modificationExists"></app-cooling-tower-basin-results>
+				</div>
+				<div *ngIf="displayWeatherTab" class="d-flex flex-column m-4">
+					<div class="mt-3 text-center pl-1 pr-1 pb-1">
+						<span class="text-muted small mx-auto">Select data retrieval method. Lookup requires internet
+							connection.</span>
+					</div>
+					<div class="btn-col d-flex flex-column pb-3">
+						<div class="btn-group btn-group-sm align-self-center">
+							<button type="button" class="btn btn-secondary btn-sm toggle-btn"
+								(click)="setWeatherDataSource('lookup')"
+								[ngClass]="{'active':  weatherDataSourceView === 'lookup'}">Zip Code Lookup
+							</button>
+							<button type="button" class="btn btn-secondary btn-sm toggle-btn"
+								(click)="setWeatherDataSource('file')"
+								[ngClass]="{'active': weatherDataSourceView === 'file'}">Upload</button>
+						</div>
+					</div>
+					<app-weather-station-lookup></app-weather-station-lookup>
+					<app-weather-bins-form [settings]="settings"></app-weather-bins-form>
+				</div>
 			</div>
-			<app-cooling-tower-basin-help class="p-2" *ngIf="tabSelect == 'help'" [settings]="settings">
-			</app-cooling-tower-basin-help>
+
+			<div class="col-6 help-panel">
+				<div class="d-flex flex-column mh-100 scroll-item" [ngStyle]="{'height.px' : containerHeight}">
+					<div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+						<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+							<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+								(click)="setTab('results')">
+								<div>Results</div>
+							</a>
+						</div>
+						<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+							<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+								<div>Help</div>
+							</a>
+						</div>
+					</div>
+					<div *ngIf="!displayWeatherTab" class="d-flex mr-2 ml-2" [ngStyle]="{'height.px': helpPanelContainerHeight}">
+						<div class="d-flex flex-column w-100" *ngIf="tabSelect == 'results'">
+							<div class="mb-3 d-block">
+								<div class="w-100 justify-content-center btn-group btn-group-sm results pt-1 pb-1">
+									<button type="button" [disabled]="!hasWeatherBinsData" class="btn btn-secondary btn-sm"
+										(click)="toggleWeatherResults(true)"
+										[ngClass]="{'active': isShowingWeatherResults == true}">See weather binned
+										results</button>
+									<button type="button" class="btn btn-secondary btn-sm"
+										(click)="toggleWeatherResults(false)"
+										[ngClass]="{'active': isShowingWeatherResults == false}">See calculated
+										results</button>
+								</div>
+							</div>
+							<app-cooling-tower-basin-results class="w-100 p-2" [settings]="settings"
+								[modificationExists]="modificationExists"></app-cooling-tower-basin-results>
+						</div>
+						<app-cooling-tower-basin-help class="p-2" *ngIf="tabSelect == 'help'" [settings]="settings">
+						</app-cooling-tower-basin-help>
+					</div>
+					<div *ngIf="displayWeatherTab" class="d-flex mr-2 ml-2">
+						<app-weather-bins-help *ngIf="tabSelect == 'help'" [settings]="settings"></app-weather-bins-help>
+						<app-weather-bins-bar-chart class="w-100 p-2" *ngIf="tabSelect == 'results'">
+						</app-weather-bins-bar-chart>
+					</div>
+
+				</div>
+			</div>
+
 		</div>
-		<div *ngIf="displayWeatherTab" class="d-flex mr-2 ml-2">
-			<app-weather-bins-help *ngIf="tabSelect == 'help'" [settings]="settings"></app-weather-bins-help>
-            <app-weather-bins-bar-chart class="w-100 p-2" *ngIf="tabSelect == 'results'"></app-weather-bins-bar-chart>
-		</div>
+
 	</div>
 
 </div>
