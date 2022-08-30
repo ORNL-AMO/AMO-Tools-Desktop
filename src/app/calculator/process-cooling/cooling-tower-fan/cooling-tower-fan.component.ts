@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
@@ -12,16 +12,26 @@ import { CoolingTowerFanService } from './cooling-tower-fan.service';
 export class CoolingTowerFanComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  //emitSave = new EventEmitter<CoolingTowerFanTreasureHunt>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   
   coolingTowerFanInputSub: Subscription;
   
+  containerHeight: number;
   headerHeight: number;
   tabSelect: string = 'results';
   
@@ -34,7 +44,7 @@ export class CoolingTowerFanComponent implements OnInit {
     }
     let existingInputs = this.coolingTowerFanService.coolingTowerFanInput.getValue();
     if(!existingInputs) {
-      this.coolingTowerFanService.initDefaultEmptyInputs();
+      this.coolingTowerFanService.initDefaultEmptyInputs(this.settings);
       this.coolingTowerFanService.initDefaultEmptyOutputs();
     }
     this.initSubscriptions();
@@ -61,7 +71,7 @@ export class CoolingTowerFanComponent implements OnInit {
   }
 
   btnResetData() {
-    this.coolingTowerFanService.initDefaultEmptyInputs();
+    this.coolingTowerFanService.initDefaultEmptyInputs(this.settings);
     this.coolingTowerFanService.resetData.next(true);
   }
 
@@ -77,7 +87,17 @@ export class CoolingTowerFanComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+
     }
+  }
+
+  save() {
+    //this.emitSave.emit({ chillerPerformanceData: this.chillerPerformanceInput, opportunityType: Treasure.chillerPerformance });
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
   }
 
 }
