@@ -1,0 +1,18 @@
+.modal-open {
+    z-index: initial !important;
+}
+
+.spinne {
+    width: 200px;
+}
+
+.spinner > div {
+    width: 25px;
+    height: 25px;
+    background-color: #117A65;
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    
+}

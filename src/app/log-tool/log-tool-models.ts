@@ -243,3 +243,54 @@ export interface LogToolDbData {
         individualDayScatterPlotData: Array<DayTypeGraphItem>
     }
 }
+
+
+export interface DataExplorerStatus {
+    hasFilesUploaded: boolean,
+    isStepHeaderRowComplete: boolean, 
+    isStepRefineComplete: boolean, 
+    isStepMapTimeDataComplete: boolean, 
+    showLoadingSpinner: boolean,
+    showLoadingMessage: string,
+    invalidFiles: Array<InvalidFile>
+  }
+  
+  export interface InvalidFile {
+    name: string;
+    message?: string;
+  }
+  
+  export interface ExplorerData {
+    fileData: Array<ExplorerFileData>,
+    datasets: Array<ExplorerDataSet>,
+    canEditData: boolean,
+    isSetupDone: boolean,
+  }
+  
+  export interface ExplorerFileData {
+    id: string, 
+    fileType: string,
+    name: string, 
+    data: any,
+    previewData: any,
+    workSheets?: Array<any>,
+    workBook?: any,
+    selectedSheet?: string,
+    headerRowVisited?: boolean,
+    headerRowIndex?: number,
+  }
+  
+  // OLD IndividualDataFromCSV
+  export interface ExplorerDataSet {
+    csvImportData: CsvImportData,
+    csvName: string,
+    fields: Array<LogToolField>;
+    startDate?: string,
+    endDate?: string,
+    dataPointsPerColumn?: number,
+    hasDateField: boolean,
+    hasTimeField?: boolean,
+    dateField?: LogToolField,
+    timeField?: LogToolField,
+    intervalForSeconds?: number;
+  }

@@ -1,0 +1,66 @@
+<div class="d-flex flex-column h-100 w-100">
+
+    <nav class="hide-print hidden" routerLinkActive="show" [routerLinkActiveOptions]="{exact:false}">
+        <div class="d-flex tabs subtabs progress-tabs flex-wrap log-tool">
+            <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                <a [routerLink]="['/log-tool/data-setup/import-data']">
+                    <span class="step-number">1</span> Import Data</a>
+            </div>
+            <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                <a *ngIf="isStepFileUploadComplete" [routerLink]="['/log-tool/data-setup/select-header-data']" routerLinkActive="active">
+                    <span class="step-number">2</span>Select Header Row</a>
+                <a *ngIf="!isStepFileUploadComplete" class="disabled">
+                    <span class="step-number">2</span>Select Header Row</a>
+            </div>
+
+            <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                <a *ngIf="isStepHeaderRowComplete" [routerLink]="['/log-tool/data-setup/refine-data']" routerLinkActive="active">
+                    <span class="step-number">3</span>Refine Data</a>
+                <a *ngIf="!isStepHeaderRowComplete" class="disabled">
+                    <span class="step-number">3</span>Refine Data</a>
+            </div>
+
+            <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                <a *ngIf="isStepRefineComplete" [routerLink]="['/log-tool/data-setup/map-time-data']" routerLinkActive="active">
+                    <span class="step-number">4</span>Map Date and Time</a>
+                <a *ngIf="!isStepRefineComplete" class="disabled">
+                    <span class="step-number">4</span>Map Date and Time</a>
+            </div>
+
+            <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                <a *ngIf="isStepMapTimeDataComplete" [routerLink]="['/log-tool/data-setup/finish']" routerLinkActive="active">
+                    <span class="step-number">5</span>Finish</a>
+                <a *ngIf="!isStepMapTimeDataComplete" class="disabled">
+                    <span class="step-number">5</span>Finish</a>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="d-flex w-100 h-100 tab-content">
+        <div class="scroll-item modification w-100" [ngClass]="{'modal-open': isModalOpen == true}">
+            <router-outlet *ngIf="status.showLoadingSpinner == false"></router-outlet>
+            <div class="align-items-center vw-100 h-100 text-center" *ngIf="status.showLoadingSpinner == true">
+                <div class="spinner mt-5">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+                <span class="importing-text">{{status.showLoadingMessage}}</span>
+            </div>
+        </div>
+        <!-- <div *ngIf="dataSetupTab !== 'import-data' && dataSetupTab !== 'select-header-data'" class="w-50 scroll-item">
+            <app-help-panel></app-help-panel>
+        </div> -->
+    </div>
+
+    <div #footer id="logToolFooter" class="footer hide-print">
+        <div class="pull-left">
+            <button class="btn btn-default" *ngIf="dataSetupTab === 'import-data'" (click)="resetFileData()">Reset Data</button>
+            <button class="btn btn-default" *ngIf="dataSetupTab !== 'import-data'" (click)="back()">Back</button>
+        </div>
+        <div class="pull-right">
+            <button class="btn btn-primary" (click)="continue()" [disabled]="disableNext">Next</button>
+        </div>
+    </div>
+</div>

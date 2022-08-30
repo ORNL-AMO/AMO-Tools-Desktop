@@ -39,21 +39,3 @@
         </div>
     </div>
 </nav>
-
-<nav class="hide-print hidden" routerLinkActive="show" [routerLinkActiveOptions]="{exact:false}">
-    <div class="d-flex tabs subtabs progress-tabs flex-wrap log-tool">
-        <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-            <a [routerLink]="['/log-tool/system-setup/setup-data']">
-                <span class="step-number">1</span> Setup Data</a>
-        </div>
-        <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-            <a [routerLink]="['/log-tool/system-setup/clean-data']" routerLinkActive="active"
-                *ngIf="dataSubmitted == true">
-                <span class="step-number">2</span>
-                Clean Data</a>
-            <a *ngIf="dataSubmitted == false" class="disabled">
-                <span class="step-number">2</span>
-                Clean Data</a>
-        </div>
-    </div>
-</nav>

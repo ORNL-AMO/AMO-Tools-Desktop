@@ -2,16 +2,49 @@ import { Injectable } from '@angular/core';
 import { LogToolService } from './log-tool.service';
 import moment from 'moment';
 import * as _ from 'lodash';
-import { LogToolDay, LogToolField, IndividualDataFromCsv } from './log-tool-models';
+import { LogToolDay, LogToolField, IndividualDataFromCsv, DataExplorerStatus, ExplorerData, ExplorerFileData } from './log-tool-models';
 import { BehaviorSubject } from 'rxjs';
+import { CsvImportData, CsvToJsonService } from '../shared/helper-services/csv-to-json.service';
+
 @Injectable()
 export class LogToolDataService {
 
   logToolDays: Array<LogToolDay>;
   isTimeSeries: boolean;
   dataIntervalValid: BehaviorSubject<boolean>;
-  constructor(private logToolService: LogToolService) {
+
+  status: BehaviorSubject<DataExplorerStatus>;
+  explorerData: BehaviorSubject<ExplorerData>;
+  selectedFileDataIndex: BehaviorSubject<number>;
+  constructor(private logToolService: LogToolService, 
+    private csvToJsonService: CsvToJsonService) {
     this.dataIntervalValid = new BehaviorSubject<boolean>(undefined);
+    this.explorerData = new BehaviorSubject<ExplorerData>(this.getDefaultExplorerData());
+    this.status = new BehaviorSubject<DataExplorerStatus>(this.getDefaultExplorerStatus());
+    this.selectedFileDataIndex = new BehaviorSubject<number>(0);
+  }
+
+  getDefaultExplorerData(): ExplorerData {
+    return {
+      canEditData: true,
+      isSetupDone: false,
+      fileData: [],
+      datasets: []
+    }
+  }
+
+  getDefaultExplorerStatus() {
+    return {
+      disableImport: false,
+      hasFilesUploaded: false,
+      isLoading: false,
+      isStepHeaderRowComplete: false, 
+      isStepRefineComplete: false, 
+      isStepMapTimeDataComplete: false, 
+      showLoadingSpinner: false,
+      showLoadingMessage: 'Loading Data',
+      invalidFiles: []
+    }
   }
 
   resetData() {
@@ -247,5 +280,81 @@ export class LogToolDataService {
     let valueArr = _.values(mappedValues);
     return valueArr;
   }
-}
+  
+  getUniqueId() {
+    return Math.random().toString(36).substr(2, 9);
+  }
 
+  importFileData() {
+    let explorerData: ExplorerData = this.explorerData.getValue();
+    explorerData.fileData.forEach(data => {
+      if (data.fileType !== '.json') {
+        let fileImportData = this.csvToJsonService.parseCsvWithHeaders(data.data, Number(data.headerRowIndex));
+        explorerData = this.addImportDataSet(fileImportData, data.name, explorerData);
+      } else {
+        let invididualDataFromCsv: IndividualDataFromCsv[] = data.data;
+        invididualDataFromCsv.forEach(csvData => {
+          let fileImportData = csvData.csvImportData;
+          explorerData = this.addImportDataSet(fileImportData, data.name, explorerData);
+        });
+      }
+    });
+    this.explorerData.next(explorerData);
+  }
+
+  // replace logtoolservice.addCsvdata()
+  addImportDataSet(data: CsvImportData, csvName: string, explorerData: ExplorerData) {
+    let csvId: string = Math.random().toString(36).substr(2, 9);
+    let fields: Array<LogToolField> = data.meta.fields.map(field => {
+      return {
+        fieldName: field,
+        alias: field,
+        useField: true,
+        isDateField: false,
+        unit: '',
+        invalidField: false,
+        csvId: csvId,
+        csvName: csvName,
+        fieldId: Math.random().toString(36).substr(2, 9)
+      }
+    });
+    explorerData.datasets.push({ csvImportData: JSON.parse(JSON.stringify(data)), csvName: csvName, fields: fields, hasDateField: false });
+    return explorerData;
+  }
+
+  resetFileData() {
+    this.explorerData.next(this.getDefaultExplorerData());
+    this.status.next(this.getDefaultExplorerStatus());
+    this.selectedFileDataIndex.next(undefined);
+  }
+
+  setLoadingSpinner(isLoading: boolean, msg?: string) {
+    let status: DataExplorerStatus = this.status.getValue(); 
+    status.showLoadingSpinner = isLoading;
+    status.showLoadingMessage = msg? msg : 'Loading...';
+    this.status.next(status);
+  }
+
+  checkStepSelectedHeaderComplete(explorerFileData?: Array<ExplorerFileData>): boolean {
+    if (!explorerFileData) {
+      explorerFileData = this.explorerData.getValue().fileData;
+    }
+    let stepIncomplete: boolean = false;
+    if (explorerFileData.length !== 0) {
+      stepIncomplete = explorerFileData.some(data => {
+        return !data.headerRowVisited;
+      });
+    } else {
+      stepIncomplete = true;
+    }
+    return !stepIncomplete;
+  } 
+  
+  checkStepRefineDataComplete(): boolean {
+    return false;
+  } 
+
+  checkStepMapDatesComplete(): boolean {
+    return false;
+  } 
+}

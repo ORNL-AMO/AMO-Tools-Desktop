@@ -44,6 +44,12 @@ import { LogToolDbService } from './log-tool-db.service';
 import { SelectAssessmentModalComponent } from './day-type-analysis/day-type-menu/select-assessment-modal/select-assessment-modal.component';
 import { ExportModalComponent } from './export-modal/export-modal.component';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
+import { DataSetupComponent } from './data-setup/data-setup.component';
+import { ImportDataComponent } from './data-setup/import-data/import-data.component';
+import { FinishDataComponent } from './data-setup/finish-data/finish-data.component';
+import { RefineDataComponent } from './data-setup/refine-data/refine-data.component';
+import { SelectDataHeaderComponent } from './data-setup/select-data-header/select-data-header.component';
+import { MapTimeDataComponent } from './data-setup/map-time-data/map-time-data.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +83,13 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
     BinDataComponent,
     SelectAssessmentModalComponent,
     ExportModalComponent,
-    WelcomeScreenComponent
+    WelcomeScreenComponent,
+    DataSetupComponent,
+    ImportDataComponent,
+    FinishDataComponent,
+    RefineDataComponent,
+    SelectDataHeaderComponent,
+    MapTimeDataComponent
   ],
   imports: [
     CommonModule,

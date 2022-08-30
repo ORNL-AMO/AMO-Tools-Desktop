@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LogToolService } from '../log-tool.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LogToolDataService } from '../log-tool-data.service';
 
 @Component({
   selector: 'app-system-setup',
@@ -21,7 +22,8 @@ export class SystemSetupComponent implements OnInit {
   currentTab: string;
 
   disableNext: boolean;
-  constructor(private logToolService: LogToolService, private activatedRoute: ActivatedRoute, private router: Router) { }
+  constructor(private logToolService: LogToolService, 
+    private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
     this.isModalOpenSub = this.logToolService.isModalOpen.subscribe(val => {
@@ -56,7 +58,7 @@ export class SystemSetupComponent implements OnInit {
   }
 
   continue() {
-    if (this.currentTab == 'setup-data') {
+    if (this.currentTab == 'import-data') {
       this.router.navigateByUrl('/log-tool/system-setup/clean-data');
     } else if (this.currentTab == 'clean-data') {
       if (this.noDayTypeAnalysis) {
@@ -72,7 +74,7 @@ export class SystemSetupComponent implements OnInit {
   }
 
   setDisableNext() {
-    if (this.currentTab == 'setup-data') {
+    if (this.currentTab == 'import-data') {
       if (this.dataSubmitted) {
         this.disableNext = false;
       } else {
