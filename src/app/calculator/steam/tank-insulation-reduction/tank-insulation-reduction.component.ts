@@ -28,6 +28,8 @@ export class TankInsulationReductionComponent implements OnInit {
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -41,6 +43,8 @@ export class TankInsulationReductionComponent implements OnInit {
   tabSelect: string = 'results';
   baselineSelected: boolean = true;
   modificationExists: boolean = false;
+  
+  smallScreenTab: string = 'baseline';
 
   tankInsulationReductionResults: TankInsulationReductionResults;
 
@@ -77,6 +81,9 @@ export class TankInsulationReductionComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -171,5 +178,14 @@ export class TankInsulationReductionComponent implements OnInit {
 
   cancel() {
     this.emitCancel.emit(true);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+    if (this.smallScreenTab === 'baseline') {
+      this.setBaselineSelected();
+    } else if (this.smallScreenTab === 'modification') {
+      this.setModificationSelected();
+    }
   }
 }

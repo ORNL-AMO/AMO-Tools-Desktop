@@ -15,9 +15,13 @@ export class BoilerBlowdownRateComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
 
   baselineInputs: BoilerBlowdownRateInputs;
   modificationInputs: BoilerBlowdownRateInputs;
@@ -26,6 +30,8 @@ export class BoilerBlowdownRateComponent implements OnInit {
   baselineSelected: boolean = true;
   tabSelect: string = 'results';
   headerHeight: number;
+  containerHeight: number;
+  smallScreenTab: string = 'baseline';
   constructor(private boilerBlowdownRateService: BoilerBlowdownRateService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
@@ -80,6 +86,10 @@ export class BoilerBlowdownRateComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -104,5 +114,14 @@ export class BoilerBlowdownRateComponent implements OnInit {
     this.boilerBlowdownRateService.showBoiler.next(true);
     this.boilerBlowdownRateService.showOperations.next(true);
     this.boilerBlowdownRateService.setForms.next(true);
+  }
+  
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+    if (this.smallScreenTab === 'baseline') {
+      this.setBaselineSelected();
+    } else if (this.smallScreenTab === 'modification') {
+      this.setModificationSelected();
+    }
   }
 }

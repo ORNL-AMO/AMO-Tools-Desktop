@@ -1,104 +1,109 @@
-<div class="d-flex h-100 modify-conditions steam standalone-calculator" #contentContainer>
-    <div class="d-flex flex-column w-100 h-100 scroll-item">
-        <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center">
-            <div class="d-flex pl-2 align-items-center">
-                <div class="calc-icon-header icon-steam">
-                    <img src="assets/images/calculator-icons/steam-icons/blowdown-rate.png">
-                </div>
-                <div class="pl-2">
-                    <h3>Boiler Blowdown Rate</h3>
-                </div>
+<div class="calculator-container modify-conditions steam standalone-calculator" #contentContainer>
+    <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center">
+        <div class="d-flex pl-2 align-items-center">
+            <div class="calc-icon-header icon-steam">
+                <img src="assets/images/calculator-icons/steam-icons/blowdown-rate.png">
+            </div>
+            <div class="pl-2">
+                <h3>Boiler Blowdown Rate</h3>
             </div>
         </div>
-
-
+    </div>
+    <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+        <div class="nav-item" (click)="setSmallScreenTab('baseline')"
+            [ngClass]="{'small-screen-active': smallScreenTab === 'baseline'}">
+            <a class="nav-link">Baseline</a>
+        </div>
+        <div class="nav-item" (click)="setSmallScreenTab('modification')"
+            [ngClass]="{'small-screen-active': smallScreenTab === 'modification'}">
+            <a class="nav-link">Modification</a>
+        </div>
+        <div class="nav-item" (click)="setSmallScreenTab('details')"
+            [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+            <a class="nav-link">Details</a>
+        </div>
+    </div>
+    <div class="panel-group">
         <!-- baseline -->
-        <div class="d-flex h-100">
-            <div class="scroll-item p-0 col-8 d-flex bg-white">
-                <div class="modification baseline w-50 panel-column" (click)="setBaselineSelected()"
-                    [ngClass]="{'disabled': baselineSelected == false}">
-                    <div class="header mx-2 mb-4">
-                        <h3>Baseline</h3>
-                    </div>
-
-                    <div class="d-flex flex-column mx-4 mb-4">
-                        <!-- app form -->
-                        <app-blowdown-rate-form [settings]="settings" [isBaseline]="true"
-                            [disabled]="baselineSelected == false"></app-blowdown-rate-form>
-                        <div class="w-100 justify content-center btn-group btn-group-sm">
-                            <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form"
-                                (click)="btnResetData()">
-                                Reset Data
-                            </button>
-                            <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
-                                (click)="btnGenerateExample()">
-                                Generate Example
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- modification -->
-                <div *ngIf="modificationExists" class="w-50 panel-column modification"
-                    (click)="setModificationSelected()" [ngClass]="{'disabled': baselineSelected == true}">
-                    <!-- modification header -->
-                    <div class="header mx-2 mb-4">
-                        <h3>Modification</h3>
-                    </div>
-                    <!-- forms -->
-                    <div class="d-flex flex-column mx-4 mb-4">
-                        <app-blowdown-rate-form [settings]="settings" [isBaseline]="false"
-                            [disabled]="baselineSelected == true"></app-blowdown-rate-form>
-                    </div>
-                </div>
-
-                <!-- no content message -->
-                <div class="w-50 panel-column modification" *ngIf="!modificationExists"
-                    (click)="setModificationSelected()" [ngClass]="{'disabled': baselineSelected == true}">
-                    <div class="header mx-2">
-                        <h3>Modification</h3>
-                    </div>
-                    <div class="p-3 no-data">
-                        <h3>Once you have set up your baseline..</h3>
-                        <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
-                            Condition</button>
-                        <p>Data will be copied from your current baseline condition.</p>
-                    </div>
-                </div>
+        <div class="calculator-panel-container px-3" (click)="setBaselineSelected()"
+            [ngClass]="{'disabled': baselineSelected == false, 'small-screen-tab': smallScreenTab === 'baseline'}"
+            [ngStyle]="{'height.px': containerHeight}">
+            <div class="header mx-2 mb-4">
+                <h3>Baseline</h3>
             </div>
 
-
-            <!-- help panel -->
-            <div class="col-4 p-0 help-panel">
-                <div class="d-flex flex-column mh-100 scroll-item">
-                    <div class="d-flex flex-wrap tabs primary mx-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
-                        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-                            <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
-                                (click)="setTab('results')">
-                                <div>Results</div>
-                            </a>
-                        </div>
-                        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-                            <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-                                <div>Help</div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="p-2">
-                        <!-- app results if results tab -->
-                        <app-blowdown-rate-results *ngIf="tabSelect === 'results'" [settings]="settings">
-                        </app-blowdown-rate-results>
-                        <!-- app help if help tab -->
-                        <app-blowdown-rate-help *ngIf="tabSelect === 'help'" [settings]="settings">
-                        </app-blowdown-rate-help>
-                    </div>
-
+            <div class="d-flex flex-column mx-4 mb-4">
+                <!-- app form -->
+                <app-blowdown-rate-form [settings]="settings" [isBaseline]="true"
+                    [disabled]="baselineSelected == false"></app-blowdown-rate-form>
+                <div class="w-100 justify content-center btn-group btn-group-sm">
+                    <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form"
+                        (click)="btnResetData()">
+                        Reset Data
+                    </button>
+                    <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+                        (click)="btnGenerateExample()">
+                        Generate Example
+                    </button>
                 </div>
             </div>
-
-
         </div>
 
+        <!-- modification -->
+        <div class="calculator-panel-container px-3 panel-column modification" (click)="setModificationSelected()"
+            [ngStyle]="{'height.px': containerHeight}"
+            [ngClass]="{'disabled': baselineSelected == true, 'small-screen-tab': smallScreenTab === 'modification'}">
+            <!-- modification header -->
+            <div class="header mx-2 mb-4">
+                <h3>Modification</h3>
+            </div>
+            <!-- forms -->
+            <div class="d-flex flex-column mx-4 mb-4" *ngIf="modificationExists">
+                <app-blowdown-rate-form [settings]="settings" [isBaseline]="false"
+                    [disabled]="baselineSelected == true"></app-blowdown-rate-form>
+            </div>
+            <!-- no content message -->
+            <div class="panel-column modification" *ngIf="!modificationExists" (click)="setModificationSelected()"
+                [ngClass]="{'disabled': baselineSelected == true}">
+                <div class="p-3 no-data">
+                    <h3>Once you have set up your baseline..</h3>
+                    <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
+                        Condition</button>
+                    <p>Data will be copied from your current baseline condition.</p>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- help panel -->
+        <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
+            [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+            <div class="d-flex flex-column mh-100">
+                <div class="d-flex flex-wrap tabs primary sticky-top">
+                    <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+                        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                            (click)="setTab('results')">
+                            <div>Results</div>
+                        </a>
+                    </div>
+                    <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+                        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                            <div>Help</div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="p-2">
+                    <!-- app results if results tab -->
+                    <app-blowdown-rate-results *ngIf="tabSelect === 'results'" [settings]="settings">
+                    </app-blowdown-rate-results>
+                    <!-- app help if help tab -->
+                    <app-blowdown-rate-help *ngIf="tabSelect === 'help'" [settings]="settings">
+                    </app-blowdown-rate-help>
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>
