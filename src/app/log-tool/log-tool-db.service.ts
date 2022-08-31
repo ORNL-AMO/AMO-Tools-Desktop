@@ -120,7 +120,7 @@ export class LogToolDbService {
       origin: 'AMO-LOG-TOOL-DATA',
       setupData: {
         logToolDays: this.logToolDataService.logToolDays,
-        individualDataFromCsv: this.logToolService.individualDataFromCsv,
+        individualDataFromCsv: this.logToolDataService.explorerData.getValue().datasets,
         fields: this.logToolService.fields,
         dataCleaned: this.logToolService.dataCleaned.getValue(),
         dataSubmitted: this.logToolService.dataSubmitted.getValue(),

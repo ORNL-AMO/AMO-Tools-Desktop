@@ -1,0 +1,80 @@
+<div class="d-flex flex-column justify-content-center scroll-item">
+    <div *ngIf="explorerData.datasets" class="w-100 px-5 mt-3">
+        <div class="text-left alert alert-info small my-2 mx-auto p-0">
+            <div class="p-1">
+                <ul class="m-2">
+                    <li>Select the columns which represent date and time.</li>
+                    <ul class="pl-3">
+                        <li>Mark "Is Date" if the column has both a date and a time</li>
+                        <li>Mark "Is Time" if the column is a time</li>
+                    </ul>
+                </ul>
+            </div>
+        </div>
+        <!-- <div *ngIf="explorerData.setupCompletion.isStepMapTimeDataComplete" class="text-left alert alert-success small my-2 mx-auto p-0">
+            <div class="p-1">Map Date and Time step completed.</div>
+        </div> -->
+        <div class="py-2 px-0 mx-auto" *ngIf="selectedDataSet">
+            <ul class="nav nav-tabs">
+                <li class="nav-item" *ngFor="let dataset of explorerData.datasets; let index=index;">
+                    <a class="nav-link" [ngClass]="{'active': selectedDataSetIndex == index}"
+                        (click)="setSelectedDataSet(index)">
+                        <span class="p-2">
+                            {{dataset.csvName}}
+                        </span>
+                    </a>
+                </li>
+            </ul>
+
+
+            <div class="m-3 scroll-item">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <td class="bold">Column Name</td>
+                            <td class="bold">Is Date</td>
+                            <td class="bold">Is Time</td>
+                        </tr>
+                        <tr *ngFor="let field of selectedDataSet.fields">
+                            <td>{{field.fieldName}}</td>
+                            <td>
+                                <input type="checkbox" [(ngModel)]="field.isDateField"
+                                    [disabled]="dataExists == true || (selectedDataSet.hasDateField && !field.isDateField) || field.isTimeField"
+                                    (change)="setDateField(selectedDataSet)">
+                            </td>
+                            <td>
+                                <input type="checkbox" [(ngModel)]="field.isTimeField"
+                                    [disabled]="dataExists == true || (selectedDataSet.hasTimeField && !field.isTimeField) || field.isDateField"
+                                    (change)="setTimeField(selectedDataSet)">
+                            </td>
+                        </tr>
+                        <tr *ngIf="selectedDataSet.startDate">
+                            <td colspan="3">
+                                Start Date
+                            </td>
+                            <td colspan="2">
+                                {{selectedDataSet.startDate | date}}
+                            </td>
+                        </tr>
+                        <tr *ngIf="selectedDataSet.endDate">
+                            <td colspan="3">
+                                End Date
+                            </td>
+                            <td colspan="2">
+                                {{selectedDataSet.endDate | date}}
+                            </td>
+                        </tr>
+                        <tr *ngIf="selectedDataSet.dataPointsPerColumn">
+                            <td colspan="3">
+                                Data Points Per Column
+                            </td>
+                            <td colspan="2">
+                                {{selectedDataSet.dataPointsPerColumn}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+</div>
