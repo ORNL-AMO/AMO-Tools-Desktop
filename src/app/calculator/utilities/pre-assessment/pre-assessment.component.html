@@ -1,80 +1,99 @@
-<div #container class="d-flex h-100 modify-conditions general standalone-calculator"
+<div #container class="calculator-container modify-conditions general standalone-calculator"
   [ngClass]="{'in-modal': inModal, 'phast': type == 'furnace', 'psat': type == 'pump', 'general': type == 'mixed', 'fsat': type == 'fan'}">
-  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
-    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
-      <div class="calc-icon-header" [ngClass]="{'icon-phast': type == 'furnace', 'icon-psat': type == 'pump', 'icon-fsat': type == 'fan'}">
-        <img src="assets/images/calculator-icons/utilities-icons/assessment.png">
-      </div>
-      <div class="pl-2">
-        <h3 class="pre-assessment-header">Pre-Assessment Screening</h3>
-      </div>
+  <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+    <div class="calc-icon-header"
+      [ngClass]="{'icon-phast': type == 'furnace', 'icon-psat': type == 'pump', 'icon-fsat': type == 'fan'}">
+      <img src="assets/images/calculator-icons/utilities-icons/assessment.png">
     </div>
-    <div class="d-flex flex-column pl-2 pr-2 scroll-item" [ngStyle]="{'height.px': contentHeight}" *ngIf="!showName">
-      <div class="d-block pr-2" *ngIf="inModal">
-        <div class="d-flex flex-column">
-          <label class="group-label w-100 p-0">Pre-assessment Type</label>
-          <div class="d-flex w-100 justify-content-center">
-            <div class="btn-group btn-group-sm pt-1">
-              <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setType('furnace')"
-                [ngClass]="{'active': calculator.type == 'furnace'}">Furnace</button>
-              <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setType('pump')"
-                [ngClass]="{'active': calculator.type == 'pump'}">Pump</button>
-              <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setType('fan')"
-                [ngClass]="{'active': calculator.type == 'fan'}">Fan</button>
+    <div class="pl-2">
+      <h3 class="pre-assessment-header">Pre-Assessment Screening</h3>
+    </div>
+  </div>
+
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link">Pre-Assessment Data</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Details</a>
+    </div>
+  </div>
+
+  <div class="panel-group">
+    <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+      <div class="d-flex flex-column pl-2 pr-2" *ngIf="!showName">
+        <div class="d-block pr-2" *ngIf="inModal">
+          <div class="d-flex flex-column">
+            <label class="group-label w-100 p-0">Pre-assessment Type</label>
+            <div class="d-flex w-100 justify-content-center">
+              <div class="btn-group btn-group-sm pt-1">
+                <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setType('furnace')"
+                  [ngClass]="{'active': calculator.type == 'furnace'}">Furnace</button>
+                <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setType('pump')"
+                  [ngClass]="{'active': calculator.type == 'pump'}">Pump</button>
+                <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setType('fan')"
+                  [ngClass]="{'active': calculator.type == 'fan'}">Fan</button>
+              </div>
             </div>
           </div>
         </div>
+        <div class="d-block w-100 text-right pt-1 pb-1">
+          <a class="click-link" (click)="addPreAssessment()" *ngIf="showAdd">+Add Unit</a>
+          <hr class="mt-1 mb-1">
+        </div>
+        <div class="w-100 justify-content-center btn-group btn-group-sm" *ngIf="!inModal">
+          <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+            Reset Data
+          </button>
+          <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+            Generate Example
+          </button>
+        </div>
+        <div class="d-block" *ngFor="let assessment of preAssessments; let index = index;">
+          <app-pre-assessment-form [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()"
+            (emitCollapse)="collapsePreAssessment(assessment)" (emitDelete)="deletePreAssessment(assessment, index)"
+            (emitChangeField)="setCurrentField($event)" (emitAssessmentType)="setAssessmentType($event)">
+          </app-pre-assessment-form>
+        </div>
+
       </div>
-      <div class="d-block w-100 text-right pt-1 pb-1">
-        <a class="click-link" (click)="addPreAssessment()" *ngIf="showAdd">+Add Unit</a>
-        <hr class="mt-1 mb-1">
-      </div>
-      <div class="d-block" *ngFor="let assessment of preAssessments; let index = index;">
-        <app-pre-assessment-form [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()"
-          (emitCollapse)="collapsePreAssessment(assessment)" (emitDelete)="deletePreAssessment(assessment, index)"
-          (emitChangeField)="setCurrentField($event)" (emitAssessmentType)="setAssessmentType($event)">
-        </app-pre-assessment-form>
-      </div>
-      <div class="w-100 justify content-center btn-group btn-group-sm" *ngIf="!inModal">
-        <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
-          Reset Data
-        </button>
-        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
-          Generate Example
-        </button>
-      </div>
-    </div>
-    <div class="d-flex flex-column justify-content-center h-50" *ngIf="showName">
-      <div class="form-group pl-4 pr-4 pt-2">
-        <label class="assessment-name" for="name">Pre-Assessment Name</label>
-        <input class="form-control w-100" [(ngModel)]="calculator.name" type="text">
-      </div>
-      <div class="pt-2 pr-4">
-        <button class="btn btn-primary pull-right submit-btn" (click)="setName()">Submit Name</button>
-      </div>
-    </div>
-  </div>
-  <div class="d-flex flex-column w-50 mh-100 scroll-item">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
-          <div>Results</div>
-        </a>
-      </div>
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-          <div>Help</div>
-        </a>
+      <div class="d-flex flex-column justify-content-center h-50" *ngIf="showName">
+        <div class="form-group pl-4 pr-4 pt-2">
+          <label class="assessment-name" for="name">Pre-Assessment Name</label>
+          <input class="form-control w-100" [(ngModel)]="calculator.name" type="text">
+        </div>
+        <div class="pt-2 pr-4">
+          <button class="btn btn-primary pull-right submit-btn" (click)="setName()">Submit Name</button>
+        </div>
       </div>
     </div>
-    <div class="d-flex flex-column w-100 align-items-center pl-2 pr-2 scroll-item"
-      [ngStyle]="{'height.px': contentHeight}">
-      <app-pre-assessment-help *ngIf="tabSelect == 'help'" [currentField]="currentField"
-        [currentAssessmentType]="currentAssessmentType">
-      </app-pre-assessment-help>
-      <app-pre-assessment-graph *ngIf="tabSelect == 'results'" class="w-100" [settings]="settings"
-        [preAssessments]="preAssessments" [printView]="false" [inRollup]="false" [toggleCalculate]="toggleCalculate">
-      </app-pre-assessment-graph>
+    <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+      <div class="d-flex flex-wrap tabs primary sticky-top">
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+          <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+            <div>Results</div>
+          </a>
+        </div>
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+          <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+            <div>Help</div>
+          </a>
+        </div>
+      </div>
+      <div class="d-flex flex-column w-100 align-items-center pl-2 pr-2 scroll-item"
+        [ngStyle]="{'height.px': contentHeight}">
+        <app-pre-assessment-help *ngIf="tabSelect == 'help'" [currentField]="currentField"
+          [currentAssessmentType]="currentAssessmentType">
+        </app-pre-assessment-help>
+        <app-pre-assessment-graph *ngIf="tabSelect == 'results'" class="w-100" [settings]="settings"
+          [preAssessments]="preAssessments" [printView]="false" [inRollup]="false" [toggleCalculate]="toggleCalculate">
+        </app-pre-assessment-graph>
+      </div>
     </div>
+
   </div>
 </div>
