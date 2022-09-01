@@ -25,13 +25,17 @@ export class WaterHeatingComponent implements OnInit {
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef; 
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   waterHeatingInputSub: Subscription;
   containerHeight: number;
   tabSelect: string = 'results';
+  smallScreenTab: string = 'form';
   
   constructor(private waterHeatingService: WaterHeatingService,
               private settingsDbService: SettingsDbService) { }
@@ -111,7 +115,14 @@ export class WaterHeatingComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }
