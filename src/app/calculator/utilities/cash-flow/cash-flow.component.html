@@ -1,40 +1,57 @@
-<div class="d-flex h-100 modify-conditions general standalone-calculator">
-  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
-    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
-      <div class="calc-icon-header icon-utilities">
-        <img src="assets/images/calculator-icons/utilities-icons/cash-flow.png">
-      </div>
-      <div class="pl-2">
-        <h3> Cash Flow
-        </h3>
-      </div>
+<div #contentContainer class="calculator-container modify-conditions general standalone-calculator">
+  <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+    <div class="calc-icon-header icon-utilities">
+      <img src="assets/images/calculator-icons/utilities-icons/cash-flow.png">
     </div>
-    <div class="d-flex flex-column m-4">
-      <app-cash-flow-form [cashFlowForm]="cashFlowForm" (emitCalculate)="calculate()" (changeField)="setField($event)"></app-cash-flow-form>
-      <div class="w-100 justify-content-center btn-group btn-group-sm">
-        <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
-          Reset Data
-        </button>
-      </div>
+    <div class="pl-2">
+      <h3> Cash Flow
+      </h3>
     </div>
   </div>
-  <div class="d-flex flex-column w-50 mh-100 scroll-item">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
-          <div>Diagram</div>
-        </a>
-      </div>
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-          <div>Help</div>
-        </a>
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link">Cash Flow Data</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Details</a>
+    </div>
+  </div>
+  <div class="panel-group">
+    <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+      <div class="d-flex flex-column m-4">
+        <app-cash-flow-form [cashFlowForm]="cashFlowForm" (emitCalculate)="calculate()"
+          (changeField)="setField($event)">
+        </app-cash-flow-form>
+        <div class="w-100 justify-content-center btn-group btn-group-sm">
+          <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+            Reset Data
+          </button>
+        </div>
       </div>
     </div>
-    <div class="d-flex">
-      <app-cash-flow-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-cash-flow-help>
-      <div class="d-flex flex-column w-100 align-items-center pt-4 mr-2 ml-2" *ngIf="tabSelect == 'results'">
-        <app-cash-flow-diagram class="w-100" [toggleCalculate]="toggleCalculate" [cashFlowResults]="cashFlowResults" [cashFlowForm]="cashFlowForm"></app-cash-flow-diagram>
+    <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+      <div class="d-flex flex-wrap tabs primary sticky-top">
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+          <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+            <div>Diagram</div>
+          </a>
+        </div>
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+          <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+            <div>Help</div>
+          </a>
+        </div>
+      </div>
+      <div class="d-flex">
+        <app-cash-flow-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-cash-flow-help>
+        <div class="d-flex flex-column w-100 align-items-center pt-4 mr-2 ml-2" *ngIf="tabSelect == 'results'">
+          <app-cash-flow-diagram class="w-100" [toggleCalculate]="toggleCalculate" [cashFlowResults]="cashFlowResults"
+            [cashFlowForm]="cashFlowForm"></app-cash-flow-diagram>
+        </div>
       </div>
     </div>
   </div>

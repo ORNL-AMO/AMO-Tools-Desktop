@@ -18,6 +18,7 @@ export class AltitudeCorrectionComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;  
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -27,7 +28,7 @@ export class AltitudeCorrectionComponent implements OnInit {
     }, 100);
   }
 
-
+  smallScreenTab: string = 'form';
   containerHeight: number;
   tabSelect: string = 'help';
   headerHeight: number;
@@ -113,6 +114,9 @@ export class AltitudeCorrectionComponent implements OnInit {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.offsetHeight;
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -129,6 +133,10 @@ export class AltitudeCorrectionComponent implements OnInit {
     this.altitudeCorrectionService.initExampleData(this.settings);
     this.altitudeCorrectionService.generateExample.next(true);
    
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }
