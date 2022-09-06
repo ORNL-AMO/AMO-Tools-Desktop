@@ -404,6 +404,7 @@ export class CalculatorSuiteApiService {
     inputObj.pipeMaterialCoefficients.forEach(coefficient => pipeMaterialCoefficients.push_back(coefficient));
     inputObj.insulationMaterialCoefficients.forEach(coefficient => insulationMaterialCoefficients.push_back(coefficient));
 
+    inputObj.systemEfficiency = inputObj.systemEfficiency / 100;
     let wasmConvertedInput = new Module.InsulatedPipeInput(
       inputObj.operatingHours,
       inputObj.pipeLength,
