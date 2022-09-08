@@ -12,7 +12,7 @@
 </nav>
 
 
-<nav class="hide-print w-100 justify-content-between">
+<nav class="d-none d-lg-block hide-print w-100 justify-content-between">
   <div class="d-flex tabs subtabs progress-tabs fsat flex-wrap">
     <div class="fixed-tab-size" [ngClass]="basicsClassStatus">
       <a (click)="changeStepTab('fan-info')">
@@ -36,4 +36,37 @@
         <span class="step-number"><span class="fa fa-superpowers"></span></span>Results</a>
     </div>
   </div>
+</nav>
+
+<nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs fsat flex-wrap flex-fill">
+  <ul class="pagination d-flex justify-content-between tabs fsat subtabs progress-tabs flex-fill">
+    <li class="page-item" [ngClass]="{'disabled': stepTab == 'fan-info'}">
+      <a class="nav-link nav-btn small" (click)="changeTabNextOrBack('back')" [ngClass]="{'disabled': stepTab == 'fan-info'}">
+        <span class="fa fa-chevron-left"></span></a>
+    </li>
+    <li class="page-item" [ngClass]="{'active': stepTab == 'fan-info', basicsClassStatus}">
+      <a class="nav-link nav-btn small" (click)="changeStepTab('fan-info')" [ngClass]="basicsClassStatus">
+        <span class="step-number">1</span></a>
+    </li>
+    <li class="page-item" [ngClass]="{'active': stepTab == 'gas-density', gasClassStatus}">
+      <a class="nav-link nav-btn small" (click)="changeStepTab('gas-density')" [ngClass]="gasClassStatus">
+        <span class="step-number">2</span></a>
+    </li>
+    <li class="page-item" [ngClass]="{'active': stepTab == 'plane-data', planeDataClassStatus}">
+      <a class="nav-link nav-btn small" (click)="changeStepTab('plane-data')" [ngClass]="planeDataClassStatus">
+        <span class="step-number">3</span></a>
+    </li>
+    <li class="page-item" [ngClass]="{'active': stepTab == 'fan-shaft-power', shaftPowerClassStatus}">
+      <a class="nav-link nav-btn small" (click)="changeStepTab('fan-shaft-power')" [ngClass]="shaftPowerClassStatus">
+        <span class="step-number">4</span></a>
+    </li>
+    <li class="page-item" [ngClass]="{'active': stepTab == 'fan-analysis-results', resultsTabClassStatus}">
+      <a class="nav-link nav-btn small" (click)="changeStepTab('fan-analysis-results')" [ngClass]="resultsTabClassStatus">
+        <span class="step-number"><span class="fa fa-superpowers"></span></span></a>
+    </li>
+    <li class="page-item" [ngClass]="{'disabled': stepTab == 'fan-analysis-results' || (stepTab == 'fan-shaft-power' && shaftPowerClassStatus[0] == 'missing-data')}">
+      <a class="nav-link nav-btn small" (click)="changeTabNextOrBack('next')" [ngClass]="{'disabled': stepTab == 'fan-analysis-results' || (stepTab == 'fan-shaft-power' && shaftPowerClassStatus[0] == 'missing-data')}">
+        <span class="fa fa-chevron-right"></span></a>
+    </li>
+  </ul>
 </nav>

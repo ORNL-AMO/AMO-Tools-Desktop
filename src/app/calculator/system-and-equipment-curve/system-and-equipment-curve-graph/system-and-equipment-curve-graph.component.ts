@@ -108,6 +108,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   ngAfterViewInit() {
     this.initSubscriptions();
     this.initRenderChart();
+    this.cd.detectChanges();
   }
 
   initSubscriptions() {
