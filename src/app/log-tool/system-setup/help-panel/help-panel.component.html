@@ -17,7 +17,7 @@
             <hr class="mt-2 mb-2">
         </h6>
     </div>
-    <div class="pl-2 pr-2 d-flex flex-column" *ngIf="activeHelpPanel == 'setup-data'">
+    <!-- <div class="pl-2 pr-2 d-flex flex-column" *ngIf="activeHelpPanel == 'setup-data'">
         <h6>
             <small>Choose a <b>.csv</b> or <b>.xlsx</b> data file from your file system
             </small>
@@ -81,8 +81,93 @@
             </small>
             <hr class="mt-2 mb-2">
         </h6>
-    </div>
+    </div> -->
 
+    <div class="p-2 d-flex flex-column" *ngIf="activeHelpPanel == 'clean-data'">
+        <h6>
+            <small>"Use Column" selects which data columns will be included in the "Day Type
+                Analysis" and "Data Visualization" sections.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small>"Is Date" Check this box if the column is dates with time stamps or just dates alone. Dates are needed for Day
+                Type analysis and time series plots. If you have data collected on a less-than-minute interval, you need to make
+                sure your time stamp data format includes seconds (e.g., MM/DD/YY HH:MM:SS) or specify the interval in the dropdown provided.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small>"Is Time" can be used if you have seperate date and time columns in your data file. Use "Is Date" for the date
+                portion and "Is Time" for the time portion. If you have data collected on a less-than-minute interval, you need to
+                make sure your time stamp data format includes seconds (e.g., MM/DD/YY HH:MM:SS) or specify the interval in the dropdown provided.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small>
+                "Column Name" is the name in the column header as it appears in the imported .csv or .xlsx file.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small>
+                "Alias" allows you to change the name of the data set that will be used for display purposes in the "Day Type Analysis"
+                and "Data Visualization" sections.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small>
+                "Units" can be set that correspond to the column. This is used only for data display purposes.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small>
+                Once you have cleaned your data, click "Submit" and your data will be cleaned and set for analysis. Once
+                this is complete you can continue to "Day Type Analysis" or "Data Visualization".
+            </small>
+        </h6>
+    </div>
+</div>
+
+
+<div class="mr-2 ml-2 d-flex flex-column help-info scroll-item mb-5">
+    <div class="header">
+        <h3>
+            Data Exploration Help
+            <br>
+        </h3>
+    </div>
+    <div class="pt-2 pl-2 pr-2 d-flex flex-column" *ngIf="activeHelpPanel !== 'import-data'">
+        <h6>
+            <small>
+                This module is designed to help users establish Day Types for equipment analysis incorporating multiple
+                operating
+                types (e.g., Compressed Air Assessments). It also provides a robust Data Visualization component to
+                allow users
+                to create scatter plots and histograms of their data.
+            </small>
+            <hr class="mt-2 mb-2">
+        </h6>
+    </div>
+    <div class="pl-2 pr-2 d-flex flex-column mt-1" *ngIf="activeHelpPanel == 'import-data'">
+        <h6>
+            <small>
+                Time stamps are required for Day Type Analysis
+            </small>
+        </h6>
+            <label class="pl-1 small" (click)="toggleTimeDetails()">
+                <span class="fa fa-chevron-down" *ngIf="displayTimeDetails"></span>
+                <span class="fa fa-chevron-right" *ngIf="!displayTimeDetails"></span>
+                <span>
+                    Details
+                </span>
+            </label>
+            <ul *ngIf="displayTimeDetails" class="ml-2 small">
+                <li>
+                    Time stamps with seconds are required for some additional functionality of the module. Some
+                    loggers do not save time stamps in this format. To correct this, open the file in another data
+                    analysis software and change the format of the column to an appropriate format. (This is NOT
+                    required for the Day Type analysis)
+                </li>
+                <li>
+                    Data files with a large time stamp gap (i.e., months) will take a long time to parse. If your
+                    data file takes several minutes to parse, there could be an error in your data (a single time
+                    stamp from the year 1999). You may need to manually edit in a spreadsheet/text editor software.
+                </li>
+            </ul>
+            <hr class="mt-2 mb-2">
+    </div>
     <div class="p-2 d-flex flex-column" *ngIf="activeHelpPanel == 'clean-data'">
         <h6>
             <small>"Use Column" selects which data columns will be included in the "Day Type

@@ -1,11 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DayTypeAnalysisService } from './day-type-analysis.service';
-import { Subscription } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { DayTypeGraphService } from './day-type-graph/day-type-graph.service';
-import { LogToolField } from '../log-tool-models';
+import { LoadingSpinner, LogToolField } from '../log-tool-models';
 import { LogToolDataService } from '../log-tool-data.service';
 import { LogToolDbService } from '../log-tool-db.service';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 @Component({
   selector: 'app-day-type-analysis',
   templateUrl: './day-type-analysis.component.html',
@@ -19,10 +20,23 @@ export class DayTypeAnalysisComponent implements OnInit {
   dataViewSub: Subscription;
   dataView: string;
   calculatingData: boolean = false;
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService, 
-    private cd: ChangeDetectorRef, private logToolDataService: LogToolDataService, private logToolDbService: LogToolDbService) { }
+
+  loadingSpinnerSub: Subscription;
+  loadingSpinner: LoadingSpinner = {show: true, msg: 'Finalizing Data Setup...'};
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, 
+    private dayTypeGraphService: DayTypeGraphService,
+    private activatedRoute: ActivatedRoute, 
+    private router: Router,
+    private cd: ChangeDetectorRef, 
+    private logToolDataService: LogToolDataService, 
+    private logToolDbService: LogToolDbService) { }
 
   ngOnInit() {
+    this.loadingSpinnerSub = this.logToolDataService.loadingSpinner.subscribe(loadingSpinner => {
+      this.loadingSpinner = loadingSpinner
+      this.cd.detectChanges();
+    });
+
     this.displayDayTypeCalanderSub = this.dayTypeAnalysisService.displayDayTypeCalander.subscribe(val => {
       this.displayDayTypeCalander = val;
     });
@@ -37,6 +51,12 @@ export class DayTypeAnalysisComponent implements OnInit {
       this.showContent = true;
       this.cd.detectChanges();
     }
+
+    setTimeout(() => {
+      this.loadingSpinner = {show: false};
+      this.logToolDataService.loadingSpinner.next({show: false, msg: 'Finalizing Data Setup...'});
+    }, 200);
+
   }
 
   ngOnDestroy() {

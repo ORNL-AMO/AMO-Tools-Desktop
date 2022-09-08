@@ -1,0 +1,91 @@
+
+<div class="data-setup d-flex flex-column justify-content-center scroll-item">
+    <div *ngIf="explorerData.datasets.length !== 0" class="w-100 px-5 mt-3">
+        <div class="text-left alert alert-info small my-2 mx-auto p-0">
+            <div *ngIf="explorerData.datasets.length > 1" class="p-1">Refine data columns and advance to the next file</div>
+            <div *ngIf="explorerData.datasets.length == 1" class="p-1">Refine data columns</div>
+        </div>
+
+        <div class="py-2 px-0 mx-auto" *ngIf="selectedDataSet">
+            <ul class="nav nav-tabs">
+                <li class="nav-item" *ngFor="let dataset of explorerData.datasets; let index=index;">
+                    <a class="nav-link" [ngClass]="{'active': selectedDataSetIndex == index}"
+                        (click)="setSelectedDataSet(index)">
+                        <span class="p-2">
+                            {{dataset.csvName}}
+                        </span>
+                    </a>
+                </li>
+            </ul>
+
+
+            <div class="m-3 preview-data scroll-item">
+                <table class="table table-condensed table-sm">
+                    <thead>
+                        <td class="bold">Use Column</td>
+                        <td class="bold">Column Name</td>
+                        <td class="bold">Alias</td>
+                        <td class="bold">Display Unit</td>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let field of selectedDataSet.fields; let i = index;">
+                            <td>
+                                <input type="checkbox" [(ngModel)]="field.useField" (input)="setUseField(i)">
+                            </td>
+                            <td>{{field.fieldName}}</td>
+                            <td>
+                                <input *ngIf="!field.invalidField" type="text" class="form-control w-100" (input)="updateFieldName(field, i)"
+                                    [(ngModel)]="field.alias">
+                                <span *ngIf="field.invalidField">Invalid field, not number or date. Cannot visualize.</span>
+                            </td>
+                            <td>
+                                <span *ngIf="field.unit && !field.isDateField && !field.invalidField">
+                                    <a class="click-link" (click)="editUnit(field)"><span
+                                            [innerHTML]="field.unit | settingsLabel"></span></a>
+                                </span>
+                                <span *ngIf="!field.unit && !field.invalidField && !field.isDateField">
+                                    <a class="click-link" (click)="editUnit(field)">+Add</a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr *ngIf="selectedDataSet.dataPointsPerColumn">
+                            <td colspan="3">
+                                Data Points Per Column
+                            </td>
+                            <td colspan="2">
+                                {{selectedDataSet.dataPointsPerColumn}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                
+                <table class="table table-sm table-bordered my-5">
+                    <thead>
+                        <tr>
+                            <td class="bold" colspan="100%">
+                                Original Data
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td *ngFor="let field of selectedDataSet.fields">
+                                {{field.fieldName}}
+                            </td>
+                        </tr>
+                        <tr *ngFor="let rowIndex of previewRowIndicies">
+                            <td *ngFor="let field of selectedDataSet.csvImportData.meta.fields">
+                                {{selectedDataSet.csvImportData.data[rowIndex][field]}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+        </div>
+</div>
+
+<app-field-units-modal *ngIf="showEditModal" [editField]="editField" (emitClose)="closeEditModal()">
+</app-field-units-modal>

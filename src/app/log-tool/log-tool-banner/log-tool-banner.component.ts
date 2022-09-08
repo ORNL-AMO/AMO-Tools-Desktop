@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LogToolService } from '../log-tool.service';
 import { Subscription } from 'rxjs';
+import { LogToolDataService } from '../log-tool-data.service';
+import { ExplorerData } from '../log-tool-models';
 
 @Component({
   selector: 'app-log-tool-banner',
@@ -9,36 +11,22 @@ import { Subscription } from 'rxjs';
 })
 export class LogToolBannerComponent implements OnInit {
 
-  dataSubmitted: boolean;
-  dataSubmittedSub: Subscription;
-  dataCleaned: boolean;
-  dataCleanedSub: Subscription;
-  noDayTypeAnalysis: boolean;
-  noDayTypeAnalysisSub: Subscription;
-  constructor(private logToolService: LogToolService) { }
+  explorerDataSub: any;
+  explorerData: ExplorerData;
+  constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) { }
 
   ngOnInit() {
-    this.dataSubmittedSub = this.logToolService.dataSubmitted.subscribe(val => {
-      this.dataSubmitted = val;
-    });
-    this.dataCleanedSub = this.logToolService.dataCleaned.subscribe(val => {
-      this.dataCleaned = val;
-    });
-    this.noDayTypeAnalysisSub = this.logToolService.noDayTypeAnalysis.subscribe(val => {
-      this.noDayTypeAnalysis = val;
+    this.explorerDataSub = this.logToolDataService.explorerData.subscribe(data => {
+      this.explorerData = data;
     });
   }
 
   ngOnDestroy() {
-    this.dataSubmittedSub.unsubscribe();
-    this.dataCleanedSub.unsubscribe();
-    this.noDayTypeAnalysisSub.unsubscribe();
+    this.explorerDataSub.unsubscribe();
   }
 
   openExportData() {
-    if (this.dataCleaned) {
-      this.logToolService.openExportData.next(true);
-    }
+    this.logToolService.openExportData.next(true);
   }
 
 }

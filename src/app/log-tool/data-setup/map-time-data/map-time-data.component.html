@@ -1,0 +1,77 @@
+<div class="data-setup d-flex flex-column justify-content-center scroll-item">
+    <div *ngIf="explorerData.datasets" class="w-100 px-5 mt-3">
+        <div class="text-left alert alert-info small my-2 mx-auto p-0">
+            <div class="p-1">
+                <ul class="m-2">
+                    <li>Time stamps are required for Day Type analysis.
+                        Advance ahead if you don't require Day Type analysis.
+                    </li>
+                    <ul class="pl-3">
+                        <li>Mark "Is Date" if the column has both a date and a time</li>
+                        <li>Mark "Is Time" if the column is a time</li>
+                    </ul>
+                </ul>
+            </div>
+        </div>
+
+        <div class="py-2 px-0 mx-auto" *ngIf="selectedDataSet">
+            <ul class="nav nav-tabs">
+                <li class="nav-item" *ngFor="let dataset of explorerData.datasets; let index=index;">
+                    <a class="nav-link" [ngClass]="{'active': selectedDataSetIndex == index}"
+                        (click)="setSelectedDataSet(index)">
+                        <span class="p-2">
+                            {{dataset.csvName}}
+                        </span>
+                    </a>
+                </li>
+            </ul>
+
+
+            <div class="m-3">
+                <table class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <td class="bold">Column Name</td>
+                            <td class="bold">Is Date</td>
+                            <td class="bold">Is Time</td>
+                        </tr>
+                        <ng-container *ngFor="let field of selectedDataSet.fields; let i = index;">
+                            <tr *ngIf="field.useField">
+                                <td>{{field.fieldName}}</td>
+                                <td>
+                                    <input type="checkbox" id="{{'isDateField'+i}}" [(ngModel)]="field.isDateField"
+                                        [disabled]="dataExists == true || (selectedDataSet.hasDateField && !field.isDateField) || field.isTimeField"
+                                        (change)="setDateField(selectedDataSet)">
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="{{'isTimeField'+i}}" [(ngModel)]="field.isTimeField"
+                                        [disabled]="dataExists == true || (selectedDataSet.hasTimeField && !field.isTimeField) || field.isDateField"
+                                        (change)="setTimeField(selectedDataSet)">
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="d-block">
+                <hr>
+            </div>
+            <div *ngIf="!explorerData.isExample" class="form-group my-1">
+                <div class="alert alert-info text-left small">
+                    If your data was taken in LESS than one minute intervals, please specify the time interval below.
+                </div>
+                <div class="mx-2">
+                    <label>Time Interval in Seconds</label>
+                    <select class="form-control" name="intervalForSeconds" 
+                    [disabled]="!selectedDataSet.hasDateField && !selectedDataSet.hasTimeField" 
+                    (change)="setSecondsInterval(option)" 
+                    [(ngModel)]="selectedDataSet.intervalForSeconds">
+                        <option  *ngFor="let option of secondsIntervalOptions" [ngValue]="option">
+                            {{option}}</option>
+                        </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
