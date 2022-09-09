@@ -20,10 +20,11 @@ export class SsmtDiagramTabComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.setScaleValue();
+    this.setResponsiveStyles();
   }
 
   @ViewChild('diagramContainer', { static: false }) diagramContainer: ElementRef;
+  @ViewChild('headerTabs', { static: false }) headerTabs: ElementRef;
 
   outputData: SSMTOutput;
   inputData: SSMTInputs;
@@ -50,7 +51,7 @@ export class SsmtDiagramTabComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.setScaleValue();
+    this.setResponsiveStyles();
   }
 
   collapseSidebar() {
@@ -67,6 +68,11 @@ export class SsmtDiagramTabComponent implements OnInit {
       this.scaleValue = 100;
       this.cd.detectChanges();
     }
+  }
+
+  setResponsiveStyles() {
+    this.containerHeight - this.headerTabs.nativeElement.clientHeight;
+    this.setScaleValue();
   }
 
   calculateResults() {
