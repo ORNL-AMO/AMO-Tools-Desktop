@@ -40,11 +40,11 @@
     </div>
   </div>
   
-  <div class="sidebar-group secondary" (click)="collapseSidebar()">
+  <div class="sidebar-group secondary" (click)="navigateSidebarLink('/landing-screen')">
     <span class="sidebar-item" [routerLink]="['/landing-screen']" routerLinkActive="selected">Home</span>
 </div>
 
-<div class="sidebar-group secondary pl-1 horizontal scroll-item" (click)="collapseSidebar()">
+<div class="sidebar-group secondary pl-1 horizontal scroll-item">
   <app-directory-item [directory]="rootDirectory"></app-directory-item>
 </div>
 
