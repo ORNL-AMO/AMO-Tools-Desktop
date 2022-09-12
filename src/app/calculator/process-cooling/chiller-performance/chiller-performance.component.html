@@ -1,71 +1,82 @@
-<div class="d-flex h-100 process-cooling modify-conditions standalone-calculator" #contentContainer>
-	<div class="d-flex flex-column w-100 h-100">
-		<div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
-			[ngClass]="{'justify-content-between': inTreasureHunt}">
-			<div class="d-flex pl-2 align-items-center">
-				<div class="calc-icon-header icon-process-cooling">
-					<img src="assets/images/calculator-icons/process-cooling-icons/chiller-performance.png">
-				</div>
-				<div class="pl-2">
-					<h3>Chiller Energy Performance and Temperature Reset</h3>
-				</div>
+<div class="calculator-container process-cooling modify-conditions standalone-calculator" #contentContainer>
+	<div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
+		[ngClass]="{'justify-content-between': inTreasureHunt}">
+		<div class="d-flex pl-2 align-items-center">
+			<div class="calc-icon-header icon-process-cooling">
+				<img src="assets/images/calculator-icons/process-cooling-icons/chiller-performance.png">
 			</div>
-			<div class="d-flex pr-2" *ngIf="inTreasureHunt">
-				<div class="d-flex help-holder">
-					<p class="help-text treasure-hunt-help">Click the save icon to add the treasure to your chest!
-						Click cancel to discard the opportunity and return to method selection.</p>
-				</div>
-				<div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
-					<span class="fa fa-save"></span>
-				</div>
-				<div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
-					<span class="fa fa-times"></span>
+			<div class="pl-2">
+				<h3>Chiller Energy Performance and Temperature Reset</h3>
+			</div>
+		</div>
+		<div class="d-flex pr-2" *ngIf="inTreasureHunt">
+			<div class="d-flex help-holder">
+				<p class="help-text treasure-hunt-help">Click the save icon to add the treasure to your chest!
+					Click cancel to discard the opportunity and return to method selection.</p>
+			</div>
+			<div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
+				<span class="fa fa-save"></span>
+			</div>
+			<div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+				<span class="fa fa-times"></span>
+			</div>
+		</div>
+	</div>
+	<div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+		<div class="nav-item" (click)="setSmallScreenTab('form')"
+			[ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+			<a class="nav-link">Chiller Energy Data</a>
+		</div>
+		<div class="nav-item" (click)="setSmallScreenTab('details')"
+			[ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+			<a class="nav-link">Details</a>
+		</div>
+	</div>
+	<div class="panel-group">
+		<div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
+			[ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+			<div *ngIf="!displayWeatherTab" class="d-flex flex-column m-2">
+				<app-chiller-performance-form [settings]="settings"></app-chiller-performance-form>
+				<div class="w-100 mt-3 justify-content-center btn-group btn-group-sm">
+					<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
+						(click)="btnResetData()">
+						Reset Data
+					</button>
+					<button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+						(click)="btnGenerateExample()">
+						Generate Example
+					</button>
 				</div>
 			</div>
 		</div>
-		<div class="d-flex">
-			<div class="col-8 bg-white scroll-item" [ngStyle]="{'height.px' : containerHeight}">
-				<div *ngIf="!displayWeatherTab" class="d-flex flex-column m-4">
-					<app-chiller-performance-form [settings]="settings"></app-chiller-performance-form>
-					<div class="w-100 mt-3 justify content-center btn-group btn-group-sm">
-						<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
-							(click)="btnResetData()">
-							Reset Data
-						</button>
-						<button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
-							(click)="btnGenerateExample()">
-							Generate Example
-						</button>
+
+		<div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
+			[ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+			<div class="d-flex flex-column mh-100">
+				<div class="d-flex flex-wrap tabs primary sticky-top">
+					<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+						<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+							(click)="setTab('results')">
+							<div>Results</div>
+						</a>
+					</div>
+					<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+						<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+							<div>Help</div>
+						</a>
 					</div>
 				</div>
-			</div>
-		
-			<div class="col-4 help-panel">
-				<div class="d-flex flex-column mh-100 scroll-item" [ngStyle]="{'height.px' : containerHeight}">
-					<div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
-						<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-							<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
-								(click)="setTab('results')">
-								<div>Results</div>
-							</a>
-						</div>
-						<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-							<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-								<div>Help</div>
-							</a>
-						</div>
-					</div>
-					<div *ngIf="!displayWeatherTab" class="d-flex mr-2 ml-2">
-						<app-chiller-performance-results class="w-100 p-2" *ngIf="tabSelect == 'results'" [settings]="settings"
-							[modificationExists]="modificationExists"></app-chiller-performance-results>
-						<app-chiller-performance-help class="p-2" *ngIf="tabSelect == 'help'" [settings]="settings">
-						</app-chiller-performance-help>
-					</div>
-
+				<div *ngIf="!displayWeatherTab" class="d-flex mr-2 ml-2">
+					<app-chiller-performance-results class="w-100 p-2" *ngIf="tabSelect == 'results'"
+						[settings]="settings" [modificationExists]="modificationExists">
+					</app-chiller-performance-results>
+					<app-chiller-performance-help class="p-2" *ngIf="tabSelect == 'help'" [settings]="settings">
+					</app-chiller-performance-help>
 				</div>
-			</div>
 
+			</div>
 		</div>
+
 	</div>
 
 </div>
