@@ -126,3 +126,11 @@ div.clickable-tab.active{
     padding-top: 3px;
     padding-bottom: 3px;
 }
+
+
+
+@media screen and (max-width: 1024px) {
+    .header-icon{
+        display: none;
+    }
+}

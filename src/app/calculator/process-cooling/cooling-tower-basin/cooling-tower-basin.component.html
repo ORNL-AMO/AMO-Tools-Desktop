@@ -2,20 +2,20 @@
 	<div #leftPanelHeader class="d-flex header bg-grey pb-1 pt-1 bg-white">
 		<div class="w-50 d-flex pl-2 align-items-center clickable-tab" (click)="setWeatherCalculatorActive(false)"
 			[ngClass]="{'active': !displayWeatherTab}">
-			<div class="calc-icon-header icon-process-cooling">
+			<div class="calc-icon-header icon-process-cooling header-icon">
 				<img src="assets/images/calculator-icons/process-cooling-icons/cooling-tower-basin-heater.png">
 			</div>
-			<div class="pl-2">
+			<div class="pl-lg-2 pl-md-0">
 				<h3>Cooling Tower Basin Heater Energy</h3>
 			</div>
 		</div>
 		<div class="w-50 d-flex pl-2 align-items-center clickable-tab" (click)="setWeatherCalculatorActive(true)"
 			[ngClass]="{'active': displayWeatherTab}">
-			<div class="d-flex">
+			<div class="d-none d-lg-flex">
 				<img src="assets/images/calculator-icons/utilities-icons/weather-bins-icon.png"
-					class="weather-icon p-1">
+					class="weather-icon p-1 header-icon">
 			</div>
-			<div class="pl-2">
+			<div class="pl-lg-2 pl-md-0">
 				<h3>Weather Data</h3>
 			</div>
 		</div>
