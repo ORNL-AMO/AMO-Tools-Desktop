@@ -96,13 +96,14 @@
 
 div.clickable-tab {
  cursor: pointer;
+ background-color: #C8C8C8;
 }
 
 .weather-icon{
  height: 55px;
 }
 
-div.active{
+div.clickable-tab.active{
  background: #fff;
  color: black;
  transition: all .1s ease-in-out;
@@ -124,4 +125,12 @@ div.active{
     text-align: center;
     padding-top: 3px;
     padding-bottom: 3px;
+}
+
+
+
+@media screen and (max-width: 1024px) {
+    .header-icon{
+        display: none;
+    }
 }
