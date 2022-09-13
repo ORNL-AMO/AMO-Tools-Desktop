@@ -43,7 +43,8 @@ export class TankInsulationReductionService {
       tankMaterialSelection: 0,
       insulationMaterialSelection: 0,
       jacketMaterialSelection: 0,
-      heatedOrChilled: 0
+      heatedOrChilled: 0,
+      surfaceTemperature: 0
     };
     return obj;
   }
@@ -67,6 +68,7 @@ export class TankInsulationReductionService {
       customInsulationConductivity: [obj.customInsulationConductivity],
       jacketMaterialSelection: [obj.jacketMaterialSelection],
       heatedOrChilled: [{ value: obj.heatedOrChilled, disabled: !isBaseline }],
+      surfaceTemperature: [obj.surfaceTemperature, [Validators.required, Validators.min(obj.ambientTemperature+1), Validators.max(obj.tankTemperature-1)]]
     });
 
     if (obj.insulationMaterialSelection != 0) {
@@ -76,10 +78,12 @@ export class TankInsulationReductionService {
       } else {
         form.controls.customInsulationConductivity.clearValidators();
       }
+      form = this.setSurfaceTempValidators(form);
     } else if (obj.insulationMaterialSelection == 0) {
       form.controls.insulationThickness.clearValidators();
       form.controls.customInsulationConductivity.clearValidators();
       form.controls.jacketMaterialSelection.disable();
+      form.controls.surfaceTemperature.clearValidators();
     }
 
     return form;
@@ -98,6 +102,7 @@ export class TankInsulationReductionService {
       insulationThickness = 0;
     } else {
       insulationThickness = form.controls.insulationThickness.value;
+      form = this.setSurfaceTempValidators(form);
     }
     let obj: TankInsulationReductionInput = {
       operatingHours: form.controls.operatingHours.value,
@@ -120,7 +125,8 @@ export class TankInsulationReductionService {
       tankMaterialSelection: form.controls.tankMaterialSelection.value,
       insulationMaterialSelection: form.controls.insulationMaterialSelection.value,
       jacketMaterialSelection: form.controls.jacketMaterialSelection.value,
-      heatedOrChilled: form.controls.heatedOrChilled.value
+      heatedOrChilled: form.controls.heatedOrChilled.value,
+      surfaceTemperature: form.controls.surfaceTemperature.value
     };
     if (obj.insulationMaterialSelection == 1) {
       if (settings.unitsOfMeasure != 'Imperial') {
@@ -130,6 +136,15 @@ export class TankInsulationReductionService {
       }
     }
     return obj;
+  }
+
+  setSurfaceTempValidators(form: FormGroup): FormGroup {
+    if (form.controls.insulationMaterialSelection.value != 0) {
+      form.controls.surfaceTemperature.setValidators([Validators.required, Validators.min(form.controls.ambientTemperature.value+1), Validators.max(form.controls.tankTemperature.value-1)]);  
+    } else {
+      form.controls.surfaceTemperature.clearValidators();
+    }
+    return form;  
   }
 
   generateExample(settings: Settings, isBaseline: boolean): TankInsulationReductionInput {
@@ -156,7 +171,8 @@ export class TankInsulationReductionService {
         tankMaterialSelection: 6,
         insulationMaterialSelection: 0,
         jacketMaterialSelection: 0,
-        heatedOrChilled: 0
+        heatedOrChilled: 0,
+        surfaceTemperature: 120
       };
     } else {
       example = {
@@ -180,7 +196,8 @@ export class TankInsulationReductionService {
         tankMaterialSelection: 6,
         insulationMaterialSelection: 22,
         jacketMaterialSelection: 8,
-        heatedOrChilled: 0
+        heatedOrChilled: 0,
+        surfaceTemperature: 120
       };
     }
     return example;
