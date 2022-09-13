@@ -24,8 +24,8 @@
   <div class="panel-group">
     <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
-      <div class="d-flex flex-column pl-2 pr-2" *ngIf="!showName">
-        <div class="d-block pr-2" *ngIf="inModal">
+      <div class="d-flex flex-column mh-100 pl-2 pr-2 my-2" *ngIf="!showName">
+        <div class="d-flex flex-column pr-2" *ngIf="inModal">
           <div class="d-flex flex-column">
             <label class="group-label w-100 p-0">Pre-assessment Type</label>
             <div class="d-flex w-100 justify-content-center">
@@ -40,7 +40,7 @@
             </div>
           </div>
         </div>
-        <div class="d-block w-100 text-right pt-1 pb-1">
+        <div class="d-flex flex-column w-100 text-right pt-1 pb-1">
           <a class="click-link" (click)="addPreAssessment()" *ngIf="showAdd">+Add Unit</a>
           <hr class="mt-1 mb-1">
         </div>
@@ -52,11 +52,15 @@
             Generate Example
           </button>
         </div>
-        <div class="d-block" *ngFor="let assessment of preAssessments; let index = index;">
-          <app-pre-assessment-form [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()"
-            (emitCollapse)="collapsePreAssessment(assessment)" (emitDelete)="deletePreAssessment(assessment, index)"
-            (emitChangeField)="setCurrentField($event)" (emitAssessmentType)="setAssessmentType($event)">
-          </app-pre-assessment-form>
+        <div class="d-flex flex-column mx-1 mb-4">
+          <div *ngFor="let assessment of preAssessments; let index = index;">
+            <div class="mb-4 p-2 form-card scroll-item">
+              <app-pre-assessment-form [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()"
+                (emitCollapse)="collapsePreAssessment(assessment)" (emitDelete)="deletePreAssessment(assessment, index)"
+                (emitChangeField)="setCurrentField($event)" (emitAssessmentType)="setAssessmentType($event)">
+              </app-pre-assessment-form>
+            </div>  
+          </div>
         </div>
 
       </div>
