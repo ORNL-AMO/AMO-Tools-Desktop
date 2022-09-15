@@ -1,12 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DayTypeAnalysisService } from './day-type-analysis.service';
-import { filter, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { DayTypeGraphService } from './day-type-graph/day-type-graph.service';
 import { LoadingSpinner, LogToolField } from '../log-tool-models';
 import { LogToolDataService } from '../log-tool-data.service';
 import { LogToolDbService } from '../log-tool-db.service';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 @Component({
   selector: 'app-day-type-analysis',
   templateUrl: './day-type-analysis.component.html',
@@ -25,8 +24,6 @@ export class DayTypeAnalysisComponent implements OnInit {
   loadingSpinner: LoadingSpinner = {show: true, msg: 'Finalizing Data Setup...'};
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService, 
     private dayTypeGraphService: DayTypeGraphService,
-    private activatedRoute: ActivatedRoute, 
-    private router: Router,
     private cd: ChangeDetectorRef, 
     private logToolDataService: LogToolDataService, 
     private logToolDbService: LogToolDbService) { }
@@ -51,7 +48,6 @@ export class DayTypeAnalysisComponent implements OnInit {
       this.showContent = true;
       this.cd.detectChanges();
     }
-
     setTimeout(() => {
       this.loadingSpinner = {show: false};
       this.logToolDataService.loadingSpinner.next({show: false, msg: 'Finalizing Data Setup...'});
@@ -63,22 +59,23 @@ export class DayTypeAnalysisComponent implements OnInit {
     this.displayDayTypeCalanderSub.unsubscribe();
     this.dataViewSub.unsubscribe();
     this.logToolDbService.saveData();
+    this.loadingSpinnerSub.unsubscribe();
   }
 
   runAnalysis() {
     this.calculatingData = true;
     this.cd.detectChanges();
     setTimeout(() => {
-      // console.time('runAnalysis');
+      console.time('runAnalysis');
       this.logToolDataService.setLogToolDays();
       this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
       this.dayTypeAnalysisService.initDayTypes();
       this.dayTypeAnalysisService.setDayTypeSummaries();
       this.dayTypeGraphService.setDayTypeScatterPlotData();
       this.dayTypeGraphService.setIndividualDayScatterPlotData();
-      // console.timeEnd('runAnalysis');
-      this.showContent = true;
       this.dayTypeAnalysisService.dayTypesCalculated = true;
+      console.timeEnd('runAnalysis');
+      this.showContent = true;
       this.calculatingData = false;
       this.cd.detectChanges();
     }, 50)

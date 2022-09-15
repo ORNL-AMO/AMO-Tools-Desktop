@@ -268,15 +268,20 @@ export interface LoadingSpinner {
   export interface ExplorerData {
     fileData: Array<ExplorerFileData>,
     datasets: Array<ExplorerDataSet>,
-    setupCompletion: {
-        isStepHeaderRowComplete: boolean,
-        isStepFileUploadComplete: boolean,
-        isStepRefineComplete: boolean,
-        isStepMapTimeDataComplete: boolean,
-    },
+    isStepHeaderRowComplete: boolean,
+    isStepFileUploadComplete: boolean,
+    refineDataStepStatus: RefineDataStepStatus,
+    isStepMapTimeDataComplete: boolean,
     isSetupDone: boolean,
     isExample?: boolean,
+    isExistingImport?: boolean,
     canRunDayTypeAnalysis: boolean
+  }
+
+  export interface RefineDataStepStatus {
+    isComplete: boolean,
+    currentDatasetValid?: boolean,
+    hasInvalidDataset?: boolean,
   }
   
   export interface ExplorerFileData {

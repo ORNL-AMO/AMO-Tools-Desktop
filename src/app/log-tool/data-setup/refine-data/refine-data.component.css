@@ -52,3 +52,13 @@ ul.nav.nav-tabs {
 .preview-data {
     height: 600px;
 }
+
+
+input[type='checkbox'] {
+    transform: scale(1.25);
+    margin: .5em 1em;
+}
+
+input[type='checkbox']:hover {
+ cursor: pointer;
+}

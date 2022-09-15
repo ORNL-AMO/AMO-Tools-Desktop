@@ -1,9 +1,12 @@
 
 <div class="data-setup d-flex flex-column justify-content-center scroll-item">
     <div *ngIf="explorerData.datasets.length !== 0" class="w-100 px-5 mt-3">
-        <div class="text-left alert alert-info small my-2 mx-auto p-0">
+        <div *ngIf="explorerData.refineDataStepStatus.currentDatasetValid" class="text-left alert alert-info small my-2 mx-auto p-0">
             <div *ngIf="explorerData.datasets.length > 1" class="p-1">Refine data columns and advance to the next file</div>
             <div *ngIf="explorerData.datasets.length == 1" class="p-1">Refine data columns</div>
+        </div>
+        <div *ngIf="!explorerData.refineDataStepStatus.currentDatasetValid" class="text-left alert alert-danger small my-2 mx-auto p-0">
+            <div class="p-1">Check "Use Column" to mark at least one column for analysis</div>
         </div>
 
         <div class="py-2 px-0 mx-auto" *ngIf="selectedDataSet">
@@ -30,11 +33,11 @@
                     <tbody>
                         <tr *ngFor="let field of selectedDataSet.fields; let i = index;">
                             <td>
-                                <input type="checkbox" [(ngModel)]="field.useField" (input)="setUseField(i)">
+                                <input type="checkbox" [(ngModel)]="field.useField" (change)="updateExplorerData()">
                             </td>
                             <td>{{field.fieldName}}</td>
                             <td>
-                                <input *ngIf="!field.invalidField" type="text" class="form-control w-100" (input)="updateFieldName(field, i)"
+                                <input *ngIf="!field.invalidField" type="text" class="form-control w-100" (change)="updateExplorerData()"
                                     [(ngModel)]="field.alias">
                                 <span *ngIf="field.invalidField">Invalid field, not number or date. Cannot visualize.</span>
                             </td>
@@ -46,14 +49,6 @@
                                 <span *ngIf="!field.unit && !field.invalidField && !field.isDateField">
                                     <a class="click-link" (click)="editUnit(field)">+Add</a>
                                 </span>
-                            </td>
-                        </tr>
-                        <tr *ngIf="selectedDataSet.dataPointsPerColumn">
-                            <td colspan="3">
-                                Data Points Per Column
-                            </td>
-                            <td colspan="2">
-                                {{selectedDataSet.dataPointsPerColumn}}
                             </td>
                         </tr>
                     </tbody>

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { LogToolDbService } from '../../log-tool-db.service';
-import { DataExplorerStatus, ExplorerData, ExplorerDataSet, ExplorerFileData, LoadingSpinner, LogToolField, StepMovement } from '../../log-tool-models';
+import { DataExplorerStatus, ExplorerData, ExplorerDataSet, LogToolField, StepMovement } from '../../log-tool-models';
 import { LogToolService } from '../../log-tool.service';
 
 @Component({
@@ -20,7 +20,6 @@ export class RefineDataComponent implements OnInit {
   selectedDataSetIndex: number = 0;
   previewRowIndicies: Array<number> = [0, 1];
   changeStepSub: Subscription;
-  
   constructor(
     private logToolDbService: LogToolDbService,
     private cd: ChangeDetectorRef,
@@ -30,9 +29,8 @@ export class RefineDataComponent implements OnInit {
 
   ngOnInit() {
     this.explorerData = this.logToolDataService.explorerData.getValue();
-
-    let isFileDataImported: boolean = this.explorerData.datasets.length !== 0;
-    if (!isFileDataImported) {
+    if (!this.explorerData.isExample && !this.explorerData.isExistingImport) {
+      this.logToolDataService.loadingSpinner.next({show: true, msg: 'Loading Data...'});
       this.parseFileDataAndSave();
     }
     this.setSelectedDataSet(0);
@@ -42,14 +40,12 @@ export class RefineDataComponent implements OnInit {
         this.changeStepOrNavigate(changeStep, changeStepIndex);
       }
     });
-    setTimeout(() => {
-      this.logToolDataService.loadingSpinner.next({show: false, msg: 'Loading Data...'});
-    }, 300);
+    this.logToolDataService.loadingSpinner.next({show: false, msg: 'Loading Data...'});
   }
   
-  parseFileDataAndSave() {
+ async parseFileDataAndSave() {
     this.logToolDataService.importFileData();
-    this.logToolDbService.saveData();
+    await this.logToolDbService.saveData();
     this.explorerData = this.logToolDataService.explorerData.getValue();
   }
 
@@ -60,16 +56,18 @@ export class RefineDataComponent implements OnInit {
   
   changeStepOrNavigate(changeStep: StepMovement, changeStepIndex: number) {
     if (changeStepIndex === -1) {
-      // out of current step bounds
-        if (this.explorerData.setupCompletion.isStepRefineComplete && changeStep.direction == 'forward') {
+        // is first or last file/dataset
+        if (this.explorerData.refineDataStepStatus.isComplete && changeStep.direction == 'forward') {
           this.router.navigateByUrl(changeStep.url);
         }
         if (changeStep.direction == 'back') {
           this.router.navigateByUrl(changeStep.url);
         }
       } else {
-        this.setSelectedDataSet(changeStepIndex);
-        this.cd.detectChanges();
+        if (changeStep.direction === 'back' || (changeStep.direction === 'forward' && this.explorerData.refineDataStepStatus.currentDatasetValid)) {
+          this.setSelectedDataSet(changeStepIndex);
+          this.cd.detectChanges();
+        }
       }
   }
 
@@ -86,14 +84,6 @@ export class RefineDataComponent implements OnInit {
     this.showEditModal = false;
   }
 
-  setUseField(index: number) {
-    this.updateExplorerData();
-  }
-
-  updateFieldName(field, index: number) {
-    this.updateExplorerData();
-  }
-
   updateExplorerData() {
     this.explorerData.datasets.map((dataset, index) => {
       if (index === this.selectedDataSetIndex) {
@@ -101,20 +91,16 @@ export class RefineDataComponent implements OnInit {
       }
       return dataset;
     });
-
+    this.explorerData.refineDataStepStatus = this.logToolDataService.checkStepRefineDataComplete(this.explorerData.datasets, this.selectedDataSetIndex);
     this.logToolDataService.explorerData.next(this.explorerData);
   }
 
   setSelectedDataSet(index: number) {
-    this.selectedDataSetIndex = index;
-    this.selectedDataSet = this.explorerData.datasets[index];
-    this.explorerData.datasets[index].refineDataTabVisited = true;
-    this.explorerData.setupCompletion.isStepRefineComplete = this.logToolDataService.checkStepRefineDataComplete(this.explorerData.datasets);
-    if (this.explorerData.setupCompletion.isStepRefineComplete) {
+      this.selectedDataSetIndex = index;
+      this.selectedDataSet = this.explorerData.datasets[index];
+      this.explorerData.datasets[index].refineDataTabVisited = true;
+      this.explorerData.refineDataStepStatus = this.logToolDataService.checkStepRefineDataComplete(this.explorerData.datasets, this.selectedDataSetIndex);
       this.logToolDataService.explorerData.next(this.explorerData);
-    }
-  }
-  
-
+   }
 
 }

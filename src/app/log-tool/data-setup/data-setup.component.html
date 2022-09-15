@@ -1,5 +1,4 @@
 <div class="d-flex flex-column h-100 w-100">
-
     <nav class="hide-print hidden" routerLinkActive="show" [routerLinkActiveOptions]="{exact:false}">
         <div class="d-flex tabs subtabs progress-tabs flex-wrap log-tool">
             <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
@@ -9,21 +8,21 @@
 
             <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
                 <a [routerLink]="['/log-tool/data-setup/select-header-data']" 
-                [ngClass]="{'disabled': !explorerData.setupCompletion.isStepFileUploadComplete}"
+                [ngClass]="{'disabled': !explorerData.isStepFileUploadComplete}"
                 routerLinkActive="active">
                     <span class="step-number">2</span>Select Header Row</a>
             </div>
 
             <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
                 <a [routerLink]="['/log-tool/data-setup/refine-data']" 
-                [ngClass]="{'disabled': !explorerData.setupCompletion.isStepHeaderRowComplete}"
+                [ngClass]="{'disabled': !explorerData.isStepHeaderRowComplete}"
                 routerLinkActive="active">
                     <span class="step-number">3</span>Refine Data</a>
             </div>
 
             <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
                 <a [routerLink]="['/log-tool/data-setup/map-time-data']"
-                [ngClass]="{'disabled': !explorerData.setupCompletion.isStepRefineComplete}"
+                [ngClass]="{'disabled': !explorerData.refineDataStepStatus.isComplete}"
                  routerLinkActive="active">
                     <span class="step-number">4</span>Map Date and Time</a>
             </div>
@@ -45,15 +44,15 @@
         </div>
     </div>
 
-    <div #footer id="logToolFooter" [ngStyle]="{'background-color': showTest? 'black' : 'unset'}" class="footer hide-print">
+    <div #footer id="logToolFooter" class="footer hide-print">
         <div class="pull-left">
             <button class="btn btn-default" *ngIf="dataSetupTab === 'import-data'" (click)="resetSetupData()">Reset Data</button>
             <button class="btn btn-default" *ngIf="dataSetupTab !== 'import-data'" (click)="back()">Back</button>
         </div>
         <div class="pull-right">
             <button class="btn btn-primary" (click)="continue()" [disabled]="disableNext">
-                <span *ngIf="dataSetupTab != 'map-time-data' || (dataSetupTab == 'map-time-data' && !this.explorerData.setupCompletion.isStepMapTimeDataComplete)">Next</span>
-                <span *ngIf="dataSetupTab == 'map-time-data' && this.explorerData.setupCompletion.isStepMapTimeDataComplete">Finish</span>
+                <span *ngIf="dataSetupTab != 'map-time-data' || (dataSetupTab == 'map-time-data' && !this.explorerData.isStepMapTimeDataComplete)">Next</span>
+                <span *ngIf="dataSetupTab == 'map-time-data' && this.explorerData.isStepMapTimeDataComplete">Finish</span>
             </button>
         </div>
     </div>

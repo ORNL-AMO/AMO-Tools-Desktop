@@ -12,10 +12,8 @@ import { LogToolService } from '../../log-tool.service';
   styleUrls: ['./map-time-data.component.css']
 })
 export class MapTimeDataComponent implements OnInit {
-  isStepCompleted: boolean = false;
   explorerData: ExplorerData;
   // Preview file data
-  previewData: Array<any>;
   selectedDataSet: ExplorerDataSet;
   selectedDataSetIndex: number = 0;
   changeStepSub: Subscription;
@@ -45,17 +43,20 @@ export class MapTimeDataComponent implements OnInit {
     this.changeStepSub.unsubscribe();
   }
 
-  changeStepOrNavigate(changeStep: StepMovement, changeStepIndex: number) {
+ async changeStepOrNavigate(changeStep: StepMovement, changeStepIndex: number) {
     if (changeStepIndex === -1) {
-      // out of current step bounds
-        if (this.explorerData.setupCompletion.isStepMapTimeDataComplete && changeStep.direction == 'forward') {
+      // is first or last file/dataset
+        if (this.explorerData.isStepMapTimeDataComplete && changeStep.direction == 'forward') {
           this.logToolDataService.loadingSpinner.next({show: true, msg: 'Finalizing Data Setup...'});
-          this.finalizeDataSetup();
-          let nextURL: string = changeStep.url;
-          if (!this.explorerData.canRunDayTypeAnalysis) {
-            nextURL = '/log-tool/visualize';
-          } 
-          this.router.navigateByUrl(nextURL);
+          // set delay to display spinner before blocked thread thread
+          setTimeout(async () => {
+            await this.finalizeDataSetup();
+            let nextURL: string = changeStep.url;
+            if (!this.explorerData.canRunDayTypeAnalysis) {
+              nextURL = '/log-tool/visualize';
+            } 
+            this.router.navigateByUrl(nextURL);
+          }, 25);
         }
         if (changeStep.direction == 'back') {
           this.router.navigateByUrl(changeStep.url);
@@ -67,22 +68,14 @@ export class MapTimeDataComponent implements OnInit {
   }
 
   async finalizeDataSetup() {
-    this.explorerData.canRunDayTypeAnalysis = this.logToolDataService.setCanRunDayTypeAnalysis();
-    // Eventually replace individualDataFromCsv 
-    if (this.explorerData.canRunDayTypeAnalysis) {
-      this.logToolService.individualDataFromCsv.map((dataSet: ExplorerDataSet) => {
-        dataSet.canRunDayTypeAnalysis = true;
-      });
-    }
-    this.logToolDataService.submitIndividualCsvData(this.logToolService.individualDataFromCsv);
+    this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
     await this.logToolDbService.saveData();
-    this.explorerData.isSetupDone = true;
     this.logToolDataService.explorerData.next(this.explorerData);
   }
 
   
-  setDateField(explorerDataSet: ExplorerDataSet) {
-    this.selectedDataSet.dateField = explorerDataSet.fields.find(field => {
+  setDateField() {
+    this.selectedDataSet.dateField = this.selectedDataSet.fields.find(field => {
       return field.isDateField == true;
     });
     this.selectedDataSet.hasDateField = this.selectedDataSet.dateField != undefined;
@@ -90,11 +83,11 @@ export class MapTimeDataComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  setTimeField(explorerDataSet: ExplorerDataSet) {
-    explorerDataSet.timeField = explorerDataSet.fields.find(field => {
+  setTimeField() {
+    this.selectedDataSet.timeField = this.selectedDataSet.fields.find(field => {
       return field.isTimeField == true;
     });
-    explorerDataSet.hasTimeField = explorerDataSet.timeField != undefined;
+    this.selectedDataSet.hasTimeField = this.selectedDataSet.timeField != undefined;
     //this split causing issues for "2:19:00 PM" ending up "PM"
     //removing for issue-5574 but leaving if we find out data that drove this decision
     // csvData.csvImportData.data.map(dataItem => {
@@ -131,8 +124,8 @@ export class MapTimeDataComponent implements OnInit {
     this.selectedDataSetIndex = index;
     this.selectedDataSet = this.explorerData.datasets[index];
     this.explorerData.datasets[index].mapTimeDataTabVisited = true;
-    this.explorerData.setupCompletion.isStepMapTimeDataComplete = this.logToolDataService.checkStepMapDatesComplete(this.explorerData.datasets);
-    if (this.explorerData.setupCompletion.isStepMapTimeDataComplete) {
+    this.explorerData.isStepMapTimeDataComplete = this.logToolDataService.checkStepMapDatesComplete(this.explorerData.datasets);
+    if (this.explorerData.isStepMapTimeDataComplete) {
       this.logToolDataService.explorerData.next(this.explorerData);
     }
   }

@@ -11,7 +11,7 @@ import { ExplorerData } from '../log-tool-models';
 })
 export class LogToolBannerComponent implements OnInit {
 
-  explorerDataSub: any;
+  explorerDataSub: Subscription;
   explorerData: ExplorerData;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) { }
 

@@ -2,10 +2,13 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@an
 import { LogToolDataService } from '../../log-tool-data.service';
 import { LogToolDbService } from '../../log-tool-db.service';
 import * as XLSX from 'xlsx';
-import { DataExplorerStatus, ExplorerData, InvalidFile, LogToolDbData } from '../../log-tool-models';
+import { DataExplorerStatus, ExplorerData, InvalidFile, LogToolDbData, LogToolField } from '../../log-tool-models';
 import { CsvImportData, CsvToJsonService } from '../../../shared/helper-services/csv-to-json.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysis.service';
+import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-type-graph.service';
+import { VisualizeService } from '../../visualize/visualize.service';
 
 @Component({
   selector: 'app-import-data',
@@ -15,7 +18,6 @@ import { Router } from '@angular/router';
 export class ImportDataComponent implements OnInit {
   displayTimeDetails: boolean;
   invalidFileReferences: Array<InvalidFile> = [];
-  explorerStatusSub: Subscription;
   explorerData: ExplorerData;
   explorerDataSub: Subscription;
   @ViewChild('importFileRef', { static: false }) importFileRef: ElementRef;
@@ -23,7 +25,9 @@ export class ImportDataComponent implements OnInit {
   constructor(
     private logToolDataService: LogToolDataService,
     private csvToJsonService: CsvToJsonService,
-    private router: Router,
+    private dayTypeAnalysisService: DayTypeAnalysisService,
+    private dayTypeGraphService: DayTypeGraphService,
+    private visualizeService: VisualizeService,
     private cd: ChangeDetectorRef,
     private logToolDbService: LogToolDbService) { }
 
@@ -44,13 +48,13 @@ export class ImportDataComponent implements OnInit {
   }
 
   checkResetFileInput() {
-    if (!this.explorerData.setupCompletion.isStepFileUploadComplete && this.importFileRef) {
+    if (!this.explorerData.isStepFileUploadComplete && this.importFileRef) {
       this.importFileRef.nativeElement.value = "";
     }
   }
 
   finishUpload() {
-    this.explorerData.setupCompletion.isStepFileUploadComplete = this.explorerData.fileData.length !== 0 && this.invalidFileReferences.length === 0;
+    this.explorerData.isStepFileUploadComplete = this.explorerData.fileData.length !== 0 && this.invalidFileReferences.length === 0;
     this.logToolDataService.loadingSpinner.next({show: false, msg: 'Uploading File Data...'});
     this.logToolDataService.explorerData.next(this.explorerData);
   }
@@ -58,6 +62,12 @@ export class ImportDataComponent implements OnInit {
   setImportFiles(files: FileList) {
     if (files.length !== 0) {
     this.logToolDataService.loadingSpinner.next({show: true, msg: 'Uploading File Data...'});
+    if (this.explorerData.isExistingImport) {
+      this.explorerData = this.logToolDataService.getDefaultExplorerData();
+      this.dayTypeAnalysisService.resetData();
+      this.visualizeService.resetData();
+      this.dayTypeGraphService.resetData();
+    }
       this.invalidFileReferences = new Array();
         let extensionPattern: string = '.(csv|xlsx)$';
         let validExtensions: RegExp = new RegExp(extensionPattern, 'i');
@@ -76,6 +86,13 @@ export class ImportDataComponent implements OnInit {
           }
         }
         Promise.all(fileReaderPromises).then((values) => {
+          // ignore previously loaded example
+          if (this.explorerData.isExample) {
+            this.explorerData.isExample = false;
+            let exampleIndex = this.explorerData.fileData.findIndex(fileData => fileData.fileType === 'example');
+            this.explorerData.fileData.splice(exampleIndex, 1);
+            this.explorerData.datasets = [];
+          }
           this.finishUpload();
         });
     }
@@ -142,6 +159,9 @@ export class ImportDataComponent implements OnInit {
 
   importExistingExplorerJson(files: FileList) {
     this.logToolDataService.loadingSpinner.next({show: true, msg: 'Uploading File Data...'});
+    this.dayTypeAnalysisService.resetData();
+    this.visualizeService.resetData();
+    this.dayTypeGraphService.resetData();
     this.invalidFileReferences = new Array();
     if (files[0]) {
         let extensionPattern: string = '.(json|JSON)$';
@@ -164,9 +184,9 @@ export class ImportDataComponent implements OnInit {
         let jsonData = JSON.parse(JSON.stringify(fr.result));
         let logToolDbData: LogToolDbData = JSON.parse(jsonData);
         if (logToolDbData.origin === "AMO-LOG-TOOL-DATA") {
+          this.explorerData.isExistingImport = true;
           this.logToolDbService.logToolDbData = [logToolDbData];
-          this.logToolDbService.saveData()
-          this.logToolDbService.setLogToolData();
+          this.logToolDbService.setLogToolData(logToolDbData);
           this.explorerData.fileData.push({ 
             dataSetId: this.logToolDataService.getUniqueId(), 
             fileType: '.json',
@@ -174,6 +194,7 @@ export class ImportDataComponent implements OnInit {
             data: logToolDbData.setupData.individualDataFromCsv,
             previewData: logToolDbData.setupData.individualDataFromCsv
           });
+          this.logToolDataService.importExistingDataSets(logToolDbData);
           resolve(logToolDbData);
         } else {
           let name = logToolDbData.name ? logToolDbData.name : undefined;
@@ -193,34 +214,58 @@ export class ImportDataComponent implements OnInit {
     this.explorerData.fileData.splice(index, 1);
     if (this.explorerData.fileData.length === 0) {
       this.logToolDataService.resetSetupData();
+      this.dayTypeAnalysisService.resetData();
+      this.visualizeService.resetData();
+      this.dayTypeGraphService.resetData();
     }
   }
 
   async useExampleData() {
+    this.logToolDataService.loadingSpinner.next({show: true, msg: 'Loading Example...'});
     let exampleDataSet: CsvImportData = await this.csvToJsonService.parseExampleCSV();
     let exampleName: string = 'Example Data';
-    this.setExistingDataComplete();
     this.explorerData.fileData.push({ 
-      dataSetId: this.logToolDataService.getUniqueId(), 
+      dataSetId: 'example',
       fileType: 'example',
       name: exampleName, 
       data: exampleDataSet.data,
       previewData: exampleDataSet
-    })
-    this.explorerData = this.logToolDataService.addImportDataSet(exampleDataSet, exampleName, exampleName, this.explorerData);
+    });
     this.explorerData.isExample = true;
+    this.explorerData = this.logToolDataService.addImportDataSet(exampleDataSet, exampleName, exampleName, this.explorerData);
+    this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
+    await this.logToolDbService.saveData();
     this.logToolDataService.explorerData.next(this.explorerData);
-    this.router.navigateByUrl('/log-tool/data-setup/select-header-data');
+    this.runDayTypeAnalysis();
+    this.setExistingDataComplete();
+    this.logToolDataService.loadingSpinner.next({show: false, msg: 'Loading Example...'});
+  }
+
+  runDayTypeAnalysis() {
+    console.time('runAnalysis');
+    this.dayTypeAnalysisService.resetData();
+    this.visualizeService.resetData();
+    this.dayTypeGraphService.resetData();
+    let allFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
+    this.dayTypeAnalysisService.selectedDataField.next(allFields[0]);
+    this.logToolDataService.setLogToolDays();
+    this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
+    this.dayTypeAnalysisService.initDayTypes();
+    this.dayTypeAnalysisService.setDayTypeSummaries();
+    this.dayTypeGraphService.setDayTypeScatterPlotData();
+    this.dayTypeGraphService.setIndividualDayScatterPlotData();
+    this.dayTypeAnalysisService.dayTypesCalculated = true;
+    console.timeEnd('runAnalysis');
   }
 
   setExistingDataComplete(canRunDayTypeAnalysis: boolean = true) {
     this.explorerData.isSetupDone = true;
     // remove after - 5839 
     this.explorerData.canRunDayTypeAnalysis = canRunDayTypeAnalysis;
-    this.explorerData.setupCompletion.isStepFileUploadComplete = true;
-    this.explorerData.setupCompletion.isStepHeaderRowComplete = true;
-    this.explorerData.setupCompletion.isStepRefineComplete = true;
-    this.explorerData.setupCompletion.isStepMapTimeDataComplete = true;
+    this.explorerData.isStepFileUploadComplete = true;
+    this.explorerData.isStepHeaderRowComplete = true;
+    this.explorerData.refineDataStepStatus.isComplete = true;
+    this.explorerData.isStepMapTimeDataComplete = true;
   }
 
 }

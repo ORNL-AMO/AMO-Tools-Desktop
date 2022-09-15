@@ -41,12 +41,12 @@
                                 <td>
                                     <input type="checkbox" id="{{'isDateField'+i}}" [(ngModel)]="field.isDateField"
                                         [disabled]="dataExists == true || (selectedDataSet.hasDateField && !field.isDateField) || field.isTimeField"
-                                        (change)="setDateField(selectedDataSet)">
+                                        (change)="setDateField()">
                                 </td>
                                 <td>
                                     <input type="checkbox" id="{{'isTimeField'+i}}" [(ngModel)]="field.isTimeField"
                                         [disabled]="dataExists == true || (selectedDataSet.hasTimeField && !field.isTimeField) || field.isDateField"
-                                        (change)="setTimeField(selectedDataSet)">
+                                        (change)="setTimeField()">
                                 </td>
                             </tr>
                         </ng-container>

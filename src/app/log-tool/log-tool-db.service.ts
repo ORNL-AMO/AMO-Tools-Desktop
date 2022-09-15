@@ -75,8 +75,11 @@ export class LogToolDbService {
     await firstValueFrom(this.dbService.addWithObservable(logToolDbData));
   }
 
-  setLogToolData() {
+  setLogToolData(importedLogToolDbData?: LogToolDbData) {
     let logToolDbData: LogToolDbData = this.logToolDbData[0];
+    if (importedLogToolDbData) {
+      logToolDbData = importedLogToolDbData;
+    } 
     this.logToolDataService.logToolDays = logToolDbData.setupData.logToolDays;
     this.logToolService.individualDataFromCsv = logToolDbData.setupData.individualDataFromCsv;
     this.logToolService.fields = logToolDbData.setupData.fields;

@@ -1,6 +1,6 @@
 <div class="data-setup d-flex flex-column justify-content-center scroll-item">
     <div class="w-100 px-5 mt-3">
-        <ng-container *ngIf="!explorerData.isExample && selectedFileData.fileType !== '.json'">
+        <ng-container *ngIf="!explorerData.isExample && !explorerData.isExistingImport">
             <div class="text-left alert alert-info small my-2 mx-auto p-0">
                 <div *ngIf="explorerData.fileData.length > 1" class="p-1">Select a header row and advance to the next file</div>
                 <div *ngIf="explorerData.fileData.length == 1" class="p-1">Select a header row</div>
@@ -25,12 +25,12 @@
                         <label for="workSheetInput">Choose Worksheet</label>
                         <select class="form-control" (change)="setSelectedSheet()" name="workSheetInput"
                             [(ngModel)]="selectedSheet">
-                            <option *ngFor="let workSheet of selectedFileData.workSheets">{{workSheet}}</option>
+                            <option *ngFor="let workSheet of selectedFileData.workSheets" [ngValue]="workSheet">{{workSheet}}</option>
                         </select>
                     </div>
                 </ng-container>
 
-                <table *ngIf="!explorerData.isExample && selectedFileData.fileType !== '.json'"
+                <table *ngIf="!explorerData.isExample && !explorerData.isExistingImport"
                     class="table table-condensed table-striped table-sm">
                     <thead class="thead-dark">
                         <tr>
@@ -54,7 +54,7 @@
                     </tbody>
                 </table>
 
-                <ng-container *ngIf="selectedFileData.fileType === '.json'">
+                <ng-container *ngIf="explorerData.isExistingImport">
                     <!--  Show table for each dataset from imported json -->
                     <table *ngFor="let csvDataItem of selectedFileData.previewData" class="table table-condensed table-striped mb-2">
                             <tbody>
