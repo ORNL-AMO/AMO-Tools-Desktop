@@ -206,7 +206,24 @@ export class Co2SavingsComponent implements OnInit {
     this.currentField = str;
   }
 
+  setBaselineSelected() {
+    if (this.baselineSelected == false) {
+      this.baselineSelected = true;
+    }
+  }
+
+  setModificationSelected() {
+    if (this.baselineSelected == true) {
+      this.baselineSelected = false;
+    }
+  }
+
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
+    if (this.smallScreenTab === 'baseline') {
+      this.setBaselineSelected();
+    } else if (this.smallScreenTab === 'modification') {
+      this.setModificationSelected();
+    }
   }
 }

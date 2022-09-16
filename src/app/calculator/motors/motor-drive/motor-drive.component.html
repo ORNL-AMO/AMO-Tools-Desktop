@@ -1,98 +1,107 @@
-<div class="d-flex h-100 modify-conditions general standalone-calculator" #contentContainer>
-  <div class="d-flex flex-column w-100 h-100">
-    <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
-      [ngClass]="{'justify-content-between': inTreasureHunt}">
-      <div class="d-flex pl-2 align-items-center">
-        <div class="calc-icon-header icon-motors">
-          <img src="assets/images/calculator-icons/motor-icons/motor-drive.png">
-        </div>
-        <div class="pl-2">
-          <h3 *ngIf="!inTreasureHunt">Motor Drive Comparison</h3>
-          <h3 *ngIf="inTreasureHunt">Upgrade Motor Drive</h3>
-        </div>
+<div class="calculator-container modify-conditions general standalone-calculator" #contentContainer>
+  <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
+    [ngClass]="{'justify-content-between': inTreasureHunt}">
+    <div class="d-flex pl-2 align-items-center">
+      <div class="calc-icon-header icon-motors">
+        <img src="assets/images/calculator-icons/motor-icons/motor-drive.png">
       </div>
-      <div class="d-flex pr-2" *ngIf="inTreasureHunt">
-        <div class="d-flex help-holder">
-          <p class="help-text treasure-hunt-help">Click the save icon to add the
-            treasure to your chest! Click cancel to discard the opportunity and return
-            to method selection.</p>
+      <div class="pl-2">
+        <h3 *ngIf="!inTreasureHunt">Motor Drive Comparison</h3>
+        <h3 *ngIf="inTreasureHunt">Upgrade Motor Drive</h3>
+      </div>
+    </div>
+    <div class="d-flex pr-2" *ngIf="inTreasureHunt">
+      <div class="d-flex help-holder">
+        <p class="help-text treasure-hunt-help">Click the save icon to add the
+          treasure to your chest! Click cancel to discard the opportunity and return
+          to method selection.</p>
+      </div>
+      <div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
+        <span class="fa fa-save"></span>
+      </div>
+      <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+        <span class="fa fa-times"></span>
+      </div>
+    </div>
+  </div>
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link">Motor Drive Data</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Details</a>
+    </div>
+  </div>
+  <div class="panel-group">
+    <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+      <div class="d-flex flex-column p-2">
+        <div class="header">
+          <h3>Motor Properties</h3>
         </div>
-        <div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
-          <span class="fa fa-save"></span>
-        </div>
-        <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
-          <span class="fa fa-times"></span>
+        <div class="pb-2">
+          <app-motor-drive-form [form]="motorDriveForm" (emitCalculate)="calculate($event)"
+            (changeField)="changeField($event)" [settings]="settings"></app-motor-drive-form>
+          <div class="w-100 justify-content-center btn-group btn-group-sm">
+            <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+              Reset Data
+            </button>
+            <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+            <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+              Generate Example
+            </button>
+          </div>
         </div>
       </div>
     </div>
-    <div class="d-flex">
-      <div class="scroll-item col-7 bg-white" [ngStyle]="{'height.px' : containerHeight}">
-        <div class="d-flex flex-column p-2">
-          <div class="header">
-            <h3>Motor Properties</h3>
+    <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+      <div class="d-flex flex-column mh-100">
+        <div class="d-flex flex-wrap tabs primary sticky-top">
+          <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+            <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+              <div>Results</div>
+            </a>
           </div>
-          <div class="pb-2">
-            <app-motor-drive-form [form]="motorDriveForm" (emitCalculate)="calculate($event)"
-              (changeField)="changeField($event)" [settings]="settings"></app-motor-drive-form>
-            <div class="w-100 justify-content-center btn-group btn-group-sm">
-              <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
-                Reset Data
-              </button>
-              <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
-              <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
-                Generate Example
-              </button>
-            </div>
+          <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+            <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+              <div>Help</div>
+            </a>
           </div>
         </div>
-      </div>
-      <div class="col-5 p-0 help-panel">
-        <div class="d-flex flex-column mh-100 scroll-item">
-          <div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
-            <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-              <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
-                (click)="setTab('results')">
-                <div>Results</div>
-              </a>
-            </div>
-            <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-              <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-                <div>Help</div>
-              </a>
-            </div>
-          </div>
-          <div class="d-flex mr-2 ml-2">
-            <app-motor-drive-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-motor-drive-help>
-            <div class="d-flex flex-column w-100 align-items-center" *ngIf="tabSelect == 'results'">
-              <div class="d-block w-100">
-                <div class="d-flex flex-column w-100">
-                  <div class="pt-3">
-                    <h5 class="text-center">Percent Savings</h5>
-                  </div>
-                  <div class="d-flex w-100 justify-content-center">
-                    <app-percent-graph [value]="percentSavings"></app-percent-graph>
-                  </div>
+        <div class="d-flex mr-2 ml-2">
+          <app-motor-drive-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-motor-drive-help>
+          <div class="d-flex flex-column w-100 align-items-center" *ngIf="tabSelect == 'results'">
+            <div class="d-block w-100">
+              <div class="d-flex flex-column w-100">
+                <div class="pt-3">
+                  <h5 class="text-center">Percent Savings</h5>
+                </div>
+                <div class="d-flex w-100 justify-content-center">
+                  <app-percent-graph [value]="percentSavings"></app-percent-graph>
                 </div>
               </div>
-              <div class="d-block w-100 pt-2">
-                <app-motor-drive-table [results]="outputData"></app-motor-drive-table>
-              </div>
-              <div class="pr-4 pl-4 pt-1 d-flex flex-column help-info">
-                <h6>
-                  Note
-                  <br>
-                  <small class="text-muted">
-                    Synchronous belts are the most efficient choice. However, notched belts may be a better choice when
-                    vibration damping is
-                    needed, retrofit of a synchronous belt is not cost effective, or shock loads cause abrupt torque
-                    changes
-                    that
-                    could shear a synchronous belt’s teeth. Consider the application and contact equipment manufacturer
-                    before
-                    deciding to replace any belt.
-                  </small>
-                </h6>
-              </div>
+            </div>
+            <div class="d-block w-100 pt-2">
+              <app-motor-drive-table [results]="outputData"></app-motor-drive-table>
+            </div>
+            <div class="pr-4 pl-4 pt-1 d-flex flex-column help-info">
+              <h6>
+                Note
+                <br>
+                <small class="text-muted">
+                  Synchronous belts are the most efficient choice. However, notched belts may be a better choice when
+                  vibration damping is
+                  needed, retrofit of a synchronous belt is not cost effective, or shock loads cause abrupt torque
+                  changes
+                  that
+                  could shear a synchronous belt’s teeth. Consider the application and contact equipment manufacturer
+                  before
+                  deciding to replace any belt.
+                </small>
+              </h6>
             </div>
           </div>
         </div>

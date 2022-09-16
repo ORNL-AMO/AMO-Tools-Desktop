@@ -18,3 +18,8 @@
 .banner{
    color: black;
 }
+
+.nav-btn {
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+}

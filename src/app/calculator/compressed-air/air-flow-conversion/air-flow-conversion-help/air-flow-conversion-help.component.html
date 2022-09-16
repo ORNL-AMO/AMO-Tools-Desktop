@@ -1,89 +1,87 @@
-<div class="d-flex">
-    <div class="p-4 pt-2 d-flex flex-column help-info">
-        <h5>
-            Actual to Standard Airflow Help
+<div class="p-4 pt-2 d-flex flex-column help-info">
+    <h5>
+        Actual to Standard Airflow Help
+        <br>
+        <small class="text-muted">
+            The calculator converts ACFM (Actual cubic feet per minute) to SCFM (Standard cubic feet per minute) and
+            vice versa for the given conditions using either ASME standard conditions or CAGI/ISO standard
+            conditions.
+        </small>
+    </h5>
+    <hr class="my-1 hr-spacer">
+
+    <div class="my-2">
+        <h6>
+            Standard Conditions
             <br>
             <small class="text-muted">
-                The calculator converts ACFM (Actual cubic feet per minute) to SCFM (Standard cubic feet per minute) and
-                vice versa for the given conditions using either ASME standard conditions or CAGI/ISO standard
-                conditions.
-            </small>
-        </h5>
-        <hr class="my-1 hr-spacer">
-
-        <div class="my-2">
-            <h6>
-                Standard Conditions
+                Standard conditions (STP) are standard sets of conditions for experimental measurements to be
+                established to
+                allow comparisons to be made between different sets of data. These vary between different official
+                standards.
+                Conditions with temperatures greater than 32F are often called “Normal Conditions”. For converting
+                airflow,
+                the
+                CAGI and ASME are the most used in the U.S.
                 <br>
-                <small class="text-muted">
-                    Standard conditions (STP) are standard sets of conditions for experimental measurements to be
-                    established to
-                    allow comparisons to be made between different sets of data. These vary between different official
-                    standards.
-                    Conditions with temperatures greater than 32F are often called “Normal Conditions”. For converting
-                    airflow,
-                    the
-                    CAGI and ASME are the most used in the U.S.
-                    <br>
-                    Below are some common standard conditions
-                    <hr>
-                </small>
-            </h6>
-            <div class="w-100 justify-content-center">
-                <table class="table table-hover table-striped">
-                    <tbody>
-                        <tr>
-                            <th class="text-center">Temperature (F)</th>
-                            <th class="text-center">Pressure (psia)</th>
-                            <th class="text-center">Relative Humidity (%)</th>
-                            <th class="text-center">Entity</th>
-                        </tr>
-                        <tr>
-                            <td class="text-center">32</td>
-                            <td class="text-center">14.5038</td>
-                            <td class="text-center">0</td>
-                            <td class="text-center">IUPAC (STP)</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">32</td>
-                            <td class="text-center">14.6959</td>
-                            <td class="text-center">0</td>
-                            <td class="text-center">NIST, ISO 10780 (STP)</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">68</td>
-                            <td class="text-center">14.6959</td>
-                            <td class="text-center">0</td>
-                            <td class="text-center">EPA, NIST (NTP)</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">77</td>
-                            <td class="text-center">14.5038</td>
-                            <td class="text-center">0</td>
-                            <td class="text-center">IUPAC (SATP)</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">68</td>
-                            <td class="text-center">14.5038</td>
-                            <td class="text-center">0</td>
-                            <td class="text-center">CAGI/ISO</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">70</td>
-                            <td class="text-center">14.7</td>
-                            <td class="text-center">0</td>
-                            <td class="text-center">AMCA</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">68</td>
-                            <td class="text-center">14.7</td>
-                            <td class="text-center">36</td>
-                            <td class="text-center">ASME</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                Below are some common standard conditions
+                <hr>
+            </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th class="text-center">Temperature (F)</th>
+                        <th class="text-center">Pressure (psia)</th>
+                        <th class="text-center">Relative Humidity (%)</th>
+                        <th class="text-center">Entity</th>
+                    </tr>
+                    <tr>
+                        <td class="text-center">32</td>
+                        <td class="text-center">14.5038</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">IUPAC (STP)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">32</td>
+                        <td class="text-center">14.6959</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">NIST, ISO 10780 (STP)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">68</td>
+                        <td class="text-center">14.6959</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">EPA, NIST (NTP)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">77</td>
+                        <td class="text-center">14.5038</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">IUPAC (SATP)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">68</td>
+                        <td class="text-center">14.5038</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">CAGI/ISO</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">70</td>
+                        <td class="text-center">14.7</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">AMCA</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">68</td>
+                        <td class="text-center">14.7</td>
+                        <td class="text-center">36</td>
+                        <td class="text-center">ASME</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-
     </div>
+
 </div>

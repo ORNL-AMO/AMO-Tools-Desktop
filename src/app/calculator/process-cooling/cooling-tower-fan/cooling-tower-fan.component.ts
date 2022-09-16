@@ -21,7 +21,8 @@ export class CoolingTowerFanComponent implements OnInit {
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
-  
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -30,8 +31,8 @@ export class CoolingTowerFanComponent implements OnInit {
   }
   
   coolingTowerFanInputSub: Subscription;
-  
   containerHeight: number;
+  smallScreenTab: string = 'form';
   headerHeight: number;
   tabSelect: string = 'results';
   
@@ -88,8 +89,14 @@ export class CoolingTowerFanComponent implements OnInit {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
-
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
   save() {

@@ -27,7 +27,8 @@ export class CoolingTowerComponent implements OnInit {
 
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;  
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -35,6 +36,7 @@ export class CoolingTowerComponent implements OnInit {
     }, 100);
   }
   
+  smallScreenTab: string = 'baseline';
   containerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
@@ -101,6 +103,9 @@ export class CoolingTowerComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -148,6 +153,15 @@ export class CoolingTowerComponent implements OnInit {
   setModificationSelected() {
     if (this.baselineSelected == true) {
       this.baselineSelected = false;
+    }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+    if (this.smallScreenTab === 'baseline') {
+      this.setBaselineSelected();
+    } else if (this.smallScreenTab === 'modification') {
+      this.setModificationSelected();
     }
   }
 }

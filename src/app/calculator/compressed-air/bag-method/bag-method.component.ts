@@ -17,12 +17,18 @@ export class BagMethodComponent implements OnInit {
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
+  smallScreenTab: string = 'form';
+  containerHeight: number;
   headerHeight: number;
   inputs: {
     inputsArray: Array<BagMethodInput>,
@@ -71,6 +77,10 @@ export class BagMethodComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
     if (this.formElement.nativeElement.clientWidth) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
@@ -135,6 +145,10 @@ export class BagMethodComponent implements OnInit {
     this.inputs.operatingHours = calculatedOpHrs.hoursPerYear;
     this.closeOperatingHoursModal();
     this.calculateAnnualConsumption();
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }

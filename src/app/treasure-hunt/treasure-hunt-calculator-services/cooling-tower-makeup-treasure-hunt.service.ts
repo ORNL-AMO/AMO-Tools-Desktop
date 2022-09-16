@@ -113,7 +113,7 @@ export class CoolingTowerMakeupTreasureHuntService {
       coolingTowerData.coolingLoad = this.convertUnitsService.value(coolingTowerData.coolingLoad).from('MMBtu').to('GJ');
       
     } else if (newSettings.unitsOfMeasure === 'Imperial') {
-      coolingTowerData.flowRate = this.convertUnitsService.value(coolingTowerData.flowRate).from('m3/s').to('gal');
+      coolingTowerData.flowRate = this.convertUnitsService.value(coolingTowerData.flowRate).from('m3/s').to('gpm');
       coolingTowerData.coolingLoad = this.convertUnitsService.value(coolingTowerData.coolingLoad).from('GJ').to('MMBtu');
     }
     coolingTowerData.flowRate = this.convertUnitsService.roundVal(coolingTowerData.flowRate, 2);

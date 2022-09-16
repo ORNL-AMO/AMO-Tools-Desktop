@@ -22,6 +22,7 @@ export class FanSystemChecklistComponent implements OnInit {
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -29,6 +30,7 @@ export class FanSystemChecklistComponent implements OnInit {
     }, 100);
   }
   
+  smallScreenTab: string = 'form';
   containerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
@@ -82,6 +84,9 @@ export class FanSystemChecklistComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -100,6 +105,10 @@ export class FanSystemChecklistComponent implements OnInit {
 
   btnGenerateExample() {
       this.fanSystemChecklistService.generateExampleData(this.settings);
+  }
+  
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }

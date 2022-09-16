@@ -1,91 +1,109 @@
-<div class="d-flex h-100 modify-conditions compressed-air standalone-calculator">
-    <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
-        <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
-            <div class="calc-icon-header icon-compressed-air">
-                <img src="assets/images/calculator-icons/compressed-air-icons/bleedTestIcon.png">
-            </div>
-            <div class="pl-2">
-                <h3>Bleed Test</h3>
-            </div>
+<div #contentContainer class="calculator-container modify-conditions compressed-air standalone-calculator">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+        <div class="calc-icon-header icon-compressed-air">
+            <img src="assets/images/calculator-icons/compressed-air-icons/bleedTestIcon.png">
         </div>
-        <div class="d-flex flex-column m-4">
-            <app-bleed-test-form [settings]="settings" (emitChangeField)="setField($event)"></app-bleed-test-form>
-            <div class="w-100 justify-content-center btn-group btn-group-sm">
-                <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
-                    Reset Data
-                </button>
-                <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
-                    (click)="btnGenerateExample()">
-                    Generate Example
-                </button>
-            </div>
+        <div class="pl-2">
+            <h3>Bleed Test</h3>
         </div>
     </div>
-    <div class="d-flex flex-column w-50 mh-100 scroll-item">
-        <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
-            <div class="flex-fill panel-tab-item h-100 active">
-                <a class="h-100 d-flex justify-content-center align-items-center">
-                    <div>Help</div>
-                </a>
+    <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+        <div class="nav-item" (click)="setSmallScreenTab('form')"
+            [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+            <a class="nav-link">Bleed Test Data</a>
+        </div>
+        <div class="nav-item" (click)="setSmallScreenTab('details')"
+            [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+            <a class="nav-link">Details</a>
+        </div>
+    </div>
+    <div class="panel-group">
+        <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
+            [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+            <div class="d-flex flex-column m-4">
+                <app-bleed-test-form [settings]="settings" (emitChangeField)="setField($event)"></app-bleed-test-form>
+                <div class="w-100 justify-content-center btn-group btn-group-sm">
+                    <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
+                        (click)="btnResetData()">
+                        Reset Data
+                    </button>
+                    <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+                        (click)="btnGenerateExample()">
+                        Generate Example
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="d-flex">
-            <div class="p-4 pt-2 d-flex flex-column help-info">
-                <h5>
-                    Bleed Test Help
-                    <br>
-                    <small class="text-muted"> This calculator helps find the estimated leak rate for the system. Also
-                        called a Dropdown test or a Pressure Decay test.
-                    </small>
-                </h5>
-                <hr class="my-1 hr-spacer">
 
-                <div class="my-2" *ngIf="currentField == 'totalSystemVolume'">
-                    <h6>
-                        Total System Volume
-                        <br>
-                        <small class="text-muted">
-                            This is the estimate of the entire system volume including any downstream storage and
-                            piping.
-                            <hr>
-                        </small>
-                    </h6>
+        <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
+            [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+            <div class="d-flex flex-wrap tabs primary">
+                <div class="flex-fill panel-tab-item h-100 active">
+                    <a class="h-100 d-flex justify-content-center align-items-center">
+                        <div>Help</div>
+                    </a>
                 </div>
-
-                <div class="my-2" *ngIf="currentField == 'normalOperatingPressure'">
-                    <h6>
-                        Normal Operating Pressure
+            </div>
+            <div class="d-flex">
+                <div class="p-4 pt-2 d-flex flex-column help-info">
+                    <h5>
+                        Bleed Test Help
                         <br>
-                        <small class="text-muted">
-                            The is the system pressure when you start recording for the test. The system should be
-                            pumped up to normal operating pressure before starting the test.
-                            <hr>
+                        <small class="text-muted"> This calculator helps find the estimated leak rate for the system.
+                            Also
+                            called a Dropdown test or a Pressure Decay test.
                         </small>
-                    </h6>
-                </div>
+                    </h5>
+                    <hr class="my-1 hr-spacer">
 
-                <div class="my-2" *ngIf="currentField == 'testPressure'">
-                    <h6>
-                        Test Pressure
-                        <br>
-                        <small class="text-muted">
-                            The is the pressure that the system will decay to during the recorded time. The ideal test
-                            pressure should be about half of the normal operating pressure.
-                            <hr>
-                        </small>
-                    </h6>
-                </div>
+                    <div class="my-2" *ngIf="currentField == 'totalSystemVolume'">
+                        <h6>
+                            Total System Volume
+                            <br>
+                            <small class="text-muted">
+                                This is the estimate of the entire system volume including any downstream storage and
+                                piping.
+                                <hr>
+                            </small>
+                        </h6>
+                    </div>
 
-                <div class="my-2" *ngIf="currentField == 'time'">
-                    <h6>
-                        Time (in seconds)
-                        <br>
-                        <small class="text-muted">
-                            The recorded time it takes for the normal operating pressure to reach the lower test
-                            pressure while the system is not operating.
-                            <hr>
-                        </small>
-                    </h6>
+                    <div class="my-2" *ngIf="currentField == 'normalOperatingPressure'">
+                        <h6>
+                            Normal Operating Pressure
+                            <br>
+                            <small class="text-muted">
+                                The is the system pressure when you start recording for the test. The system should be
+                                pumped up to normal operating pressure before starting the test.
+                                <hr>
+                            </small>
+                        </h6>
+                    </div>
+
+                    <div class="my-2" *ngIf="currentField == 'testPressure'">
+                        <h6>
+                            Test Pressure
+                            <br>
+                            <small class="text-muted">
+                                The is the pressure that the system will decay to during the recorded time. The ideal
+                                test
+                                pressure should be about half of the normal operating pressure.
+                                <hr>
+                            </small>
+                        </h6>
+                    </div>
+
+                    <div class="my-2" *ngIf="currentField == 'time'">
+                        <h6>
+                            Time (in seconds)
+                            <br>
+                            <small class="text-muted">
+                                The recorded time it takes for the normal operating pressure to reach the lower test
+                                pressure while the system is not operating.
+                                <hr>
+                            </small>
+                        </h6>
+                    </div>
                 </div>
             </div>
         </div>

@@ -19,17 +19,22 @@ export class AirFlowConversionComponent implements OnInit {
   @Input()
   assessment: Assessment;
   
-  headerHeight: number;
-
+  headerHeight: number;  
+  smallScreenTab: string = 'form';
+  containerHeight: number;
   airFlowConversionInputSub: Subscription;
 
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   saving: boolean;
   assessmentCalculator: Calculator;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
   
@@ -62,6 +67,10 @@ export class AirFlowConversionComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -128,6 +137,10 @@ export class AirFlowConversionComponent implements OnInit {
   btnGenerateExample() {
     this.airFlowConversionService.generateExampleData(this.settings);
     this.airFlowConversionService.generateExample.next(true);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }

@@ -133,6 +133,7 @@ export class CopyItemsComponent implements OnInit {
           let settingsCopy: Settings = JSON.parse(JSON.stringify(tempSettings));
           delete settingsCopy.id;
           assessmentCopy.name = assessment.name + ' (copy)';
+          assessmentCopy.isExample = false;
           assessmentCopy.directoryId = this.copyForm.controls.directoryId.value;
           assessmentCopy.createdDate = new Date();
           assessmentCopy.modifiedDate = new Date();

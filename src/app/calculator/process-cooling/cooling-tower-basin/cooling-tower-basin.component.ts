@@ -16,18 +16,23 @@ export class CoolingTowerBasinComponent implements OnInit {
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   helpPanelContainerHeight: number;
   
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   
   coolingTowerBasinInputSub: Subscription;
   weatherBinSub: Subscription;
   
+  containerHeight: number;
   headerHeight: number;
   tabSelect: string = 'results';
+  smallScreenTab: string = 'form';
 
   displayWeatherTab: boolean = false;
   hasWeatherBinsDataSub: Subscription;
@@ -119,6 +124,10 @@ export class CoolingTowerBasinComponent implements OnInit {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
       this.helpPanelContainerHeight = this.contentContainer.nativeElement.offsetHeight - this.headerHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
       this.cd.detectChanges();
     }
   }  
@@ -127,5 +136,9 @@ export class CoolingTowerBasinComponent implements OnInit {
     this.coolingTowerBasinService.isShowingWeatherResults.next(weatherResultsOn);
     this.coolingTowerBasinService.calculate(this.settings);
  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
 
 }
