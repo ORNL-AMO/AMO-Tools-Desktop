@@ -1,0 +1,94 @@
+<div class="data-setup d-flex flex-column justify-content-center scroll-item">
+    <div class="w-100 px-5 mt-3">
+        <ng-container *ngIf="!explorerData.isExample && !explorerData.isExistingImport">
+            <div class="text-left alert alert-info small my-2 mx-auto p-0">
+                <div *ngIf="explorerData.fileData.length > 1" class="p-1">Select a header row and advance to the next file</div>
+                <div *ngIf="explorerData.fileData.length == 1" class="p-1">Select a header row</div>
+            </div>
+        </ng-container>
+        <div class="py-2 px-0 mx-auto" *ngIf="selectedFileData">
+            <ul class="nav nav-tabs">
+                <li class="nav-item" *ngFor="let fileData of explorerData.fileData; let index=index;">
+                    <a class="nav-link" [ngClass]="{'active': selectedFileDataIndex == index}"
+                        (click)="setSelectedFileData(index)">
+                        <span class="p-2">
+                            {{fileData.name}}
+                        </span>
+                    </a>
+                </li>
+            </ul>
+
+
+            <div class="m-3 preview-data scroll-item">
+                <ng-container *ngIf="selectedFileData.fileType === '.xlsx' && selectedFileData.workSheets">
+                    <div class="form-group m-3">
+                        <label for="workSheetInput">Choose Worksheet</label>
+                        <select class="form-control" (change)="setSelectedSheet()" name="workSheetInput"
+                            [(ngModel)]="selectedSheet">
+                            <option *ngFor="let workSheet of selectedFileData.workSheets" [ngValue]="workSheet">{{workSheet}}</option>
+                        </select>
+                    </div>
+                </ng-container>
+
+                <table *ngIf="!explorerData.isExample && !explorerData.isExistingImport"
+                    class="table table-condensed table-striped table-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <td class="bold" colspan="100%">
+                                Select Header Row
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let rowIndex of previewRowIndicies">
+                            <tr>
+                                <td>
+                                    <input type="radio" name="selectedIndex" id="{{'item'+rowIndex}}"
+                                    [(ngModel)]="selectedFileData.headerRowIndex" [value]='rowIndex'>
+                                </td>
+                                <td *ngFor="let dataItem of selectedFileData.previewData[rowIndex]">
+                                    {{dataItem}}
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+
+                <ng-container *ngIf="explorerData.isExistingImport">
+                    <!--  Show table for each dataset from imported json -->
+                    <table *ngFor="let csvDataItem of selectedFileData.previewData" class="table table-condensed table-striped mb-2">
+                            <tbody>
+                                <tr>
+                                    <td *ngFor="let field of csvDataItem.fields">
+                                        {{field.fieldName}}
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let rowIndex of previewRowIndicies">
+                                    <td *ngFor="let field of csvDataItem.csvImportData.meta.fields">
+                                        {{csvDataItem.csvImportData.data[rowIndex][field]}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                </ng-container>
+
+                <table *ngIf="explorerData.isExample" class="table table-condensed table-striped mb-2">
+                    <tbody>
+                        <tr>
+                            <td *ngFor="let field of selectedFileData.previewData.meta.fields">
+                                {{field}}
+                            </td>
+                        </tr>
+                        <tr *ngFor="let rowIndex of previewRowIndicies">
+                            <td *ngFor="let field of selectedFileData.previewData.meta.fields">
+                                {{selectedFileData.previewData.data[rowIndex][field]}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+        </div>
+
+</div>

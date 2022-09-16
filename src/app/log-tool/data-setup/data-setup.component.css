@@ -1,14 +1,12 @@
-.card{
-    box-shadow: 0 4px 8px 0 grey;
+.modal-open {
+    z-index: initial !important;
 }
 
-.hidden{
-    display: none;
-}
-
-.btn-secondary{
-    color: white;
-    background: #117A65;
+.disabled {
+    color: gray;
+    pointer-events: none;
+    text-decoration: none;
+    background-color: #efefef;
 }
 
 .spinner-overlay {

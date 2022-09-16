@@ -2,33 +2,45 @@ import { Routes } from "@angular/router";
 import { SystemSetupComponent } from "./system-setup/system-setup.component";
 import { VisualizeComponent } from "./visualize/visualize.component";
 import { SetupDataComponent } from "./system-setup/setup-data/setup-data.component";
-import { CleanDataComponent } from "./system-setup/clean-data/clean-data.component";
 import { DayTypeAnalysisComponent } from "./day-type-analysis/day-type-analysis.component";
+import { DataSetupComponent } from "./data-setup/data-setup.component";
+import { ImportDataComponent } from "./data-setup/import-data/import-data.component";
+import { RefineDataComponent } from "./data-setup/refine-data/refine-data.component";
+import { SelectDataHeaderComponent } from "./data-setup/select-data-header/select-data-header.component";
+import { MapTimeDataComponent } from "./data-setup/map-time-data/map-time-data.component";
 
 
 export const logToolRoutes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'system-setup'
+        redirectTo: 'data-setup'
     },
     {
-        path: 'system-setup',
-        component: SystemSetupComponent,
+        path: 'data-setup',
+        component: DataSetupComponent,
         children: [
             {
                 path: '',
                 pathMatch: 'full',
-                redirectTo: 'setup-data'
+                redirectTo: 'import-data'
             },
             {
-                path: 'setup-data',
-                component: SetupDataComponent
+                path: 'import-data',
+                component: ImportDataComponent
             },
             {
-                path: 'clean-data',
-                component: CleanDataComponent
-            }
+                path: 'select-header-data',
+                component: SelectDataHeaderComponent
+            },
+            {
+                path: 'refine-data',
+                component: RefineDataComponent
+            },
+            {
+                path: 'map-time-data',
+                component: MapTimeDataComponent
+            },
         ]
     },
     {

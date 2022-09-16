@@ -13,6 +13,7 @@ export class VisualizeComponent implements OnInit {
   constructor(private logToolDataService: LogToolDataService, private visualizeService: VisualizeService) { }
 
   ngOnInit() {
+    this.logToolDataService.loadingSpinner.next({show: false, msg: undefined});
     this.visualizeService.visualizeDataInitialized = true;
     this.visualizeService.visualizeData = new Array();
     let dataFields = this.logToolDataService.getDataFieldOptionsWithDate();

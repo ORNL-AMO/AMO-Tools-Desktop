@@ -243,3 +243,81 @@ export interface LogToolDbData {
         individualDayScatterPlotData: Array<DayTypeGraphItem>
     }
 }
+
+
+export interface DataExplorerStatus {
+    hasFilesUploaded: boolean,
+    isStepHeaderRowComplete: boolean, 
+    isStepRefineComplete: boolean, 
+    isStepMapTimeDataComplete: boolean, 
+    showLoadingSpinner: boolean,
+    showLoadingMessage: string,
+    invalidFiles: Array<InvalidFile>
+  }
+
+export interface LoadingSpinner {
+    show: boolean,
+    msg?: string
+}
+  
+  export interface InvalidFile {
+    name: string;
+    message?: string;
+  }
+  
+  export interface ExplorerData {
+    fileData: Array<ExplorerFileData>,
+    datasets: Array<ExplorerDataSet>,
+    isStepHeaderRowComplete: boolean,
+    isStepFileUploadComplete: boolean,
+    refineDataStepStatus: RefineDataStepStatus,
+    isStepMapTimeDataComplete: boolean,
+    isSetupDone: boolean,
+    isExample?: boolean,
+    isExistingImport?: boolean,
+    canRunDayTypeAnalysis: boolean
+  }
+
+  export interface RefineDataStepStatus {
+    isComplete: boolean,
+    currentDatasetValid?: boolean,
+    hasInvalidDataset?: boolean,
+  }
+  
+  export interface ExplorerFileData {
+    dataSetId: string, 
+    fileType: string,
+    name: string, 
+    data: any,
+    previewData: any,
+    workSheets?: Array<any>,
+    workBook?: any,
+    selectedSheet?: string,
+    headerRowVisited?: boolean,
+    headerRowIndex?: number,
+}
+
+// OLD IndividualDataFromCSV
+export interface ExplorerDataSet {
+    dataSetId: string, 
+    refineDataTabVisited?: boolean,
+    mapTimeDataTabVisited?: boolean
+    csvImportData: CsvImportData,
+    csvName: string,
+    fields: Array<LogToolField>;
+    startDate?: string,
+    endDate?: string,
+    dataPointsPerColumn?: number,
+    hasDateField: boolean,
+    hasTimeField?: boolean,
+    dateField?: LogToolField,
+    timeField?: LogToolField,
+    intervalForSeconds?: number;
+    canRunDayTypeAnalysis: boolean
+
+  }
+
+  export interface StepMovement {
+    direction: 'forward' | 'back';
+    url: string
+  }

@@ -1,3 +1,11 @@
+<div class="spinner-overlay align-items-center vw-100 text-center" *ngIf="loadingSpinner && loadingSpinner.show == true">
+    <div class="spinner mt-5">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <span class="importing-text">{{loadingSpinner.msg}}</span>
+</div>
 <div class="d-flex w-100 h-100" *ngIf="showContent">
     <div class="d-flex flex-column w-100 h-100">
         <app-day-type-menu></app-day-type-menu>
