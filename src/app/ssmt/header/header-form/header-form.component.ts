@@ -121,7 +121,6 @@ export class HeaderFormComponent implements OnInit {
   }
 
   save() {
-    console.log(this.warnings);
     if (this.pressureLevel === 'highPressure') {
       let tmpHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.headerForm);
       this.ssmt.headerInput.highPressureHeader = tmpHeader;

@@ -333,12 +333,12 @@ export class HeaderService {
   checkReturnCondensateTemperature(ssmt: SSMT, settings: Settings): string {
     let warning: string = null;
     let lowPressureHeaderPressure: number;
-    if (ssmt.headerInput.numberOfHeaders == 1) {
+    if (ssmt.headerInput.numberOfHeaders == 1 && ssmt.headerInput.highPressureHeader) {
       lowPressureHeaderPressure = ssmt.headerInput.highPressureHeader.pressure;
-    } else {
+    } else if (ssmt.headerInput.lowPressureHeader) {
       lowPressureHeaderPressure = ssmt.headerInput.lowPressureHeader.pressure;
     }
-    let tmpCondensateReturnTempMax: number = 1000000;
+    let tmpCondensateReturnTempMax: number;
     if (lowPressureHeaderPressure != undefined) {
       let satPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(
         {
@@ -349,9 +349,11 @@ export class HeaderService {
       );
       tmpCondensateReturnTempMax = this.convertUnitsService.roundVal(satPropertiesOutput.saturatedTemperature, 0);
     }
-    if(tmpCondensateReturnTempMax && ssmt.headerInput.highPressureHeader && ssmt.headerInput.highPressureHeader.condensateReturnTemperature){
-      if(ssmt.headerInput.highPressureHeader.condensateReturnTemperature > tmpCondensateReturnTempMax){
-        warning = 'Value should be lower than saturation temperature at lowest pressure header. ' + tmpCondensateReturnTempMax;
+    if (tmpCondensateReturnTempMax != undefined) {
+      if (tmpCondensateReturnTempMax && ssmt.headerInput.highPressureHeader && ssmt.headerInput.highPressureHeader.condensateReturnTemperature) {
+        if (ssmt.headerInput.highPressureHeader.condensateReturnTemperature > tmpCondensateReturnTempMax) {
+          warning = 'Value should be lower than saturation temperature at lowest pressure header. ' + tmpCondensateReturnTempMax;
+        }
       }
     }
     return warning;
