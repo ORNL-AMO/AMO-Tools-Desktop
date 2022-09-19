@@ -44,20 +44,6 @@ export class LogToolDataService {
     }
   }
 
-  getDefaultExplorerStatus() {
-    return {
-      disableImport: false,
-      hasFilesUploaded: false,
-      isLoading: false,
-      isStepHeaderRowComplete: false, 
-      isStepRefineComplete: false, 
-      isStepMapTimeDataComplete: false, 
-      showLoadingSpinner: false,
-      showLoadingMessage: 'Loading Data',
-      invalidFiles: []
-    }
-  }
-
   resetData() {
     this.logToolDays = new Array();
   }
@@ -91,6 +77,7 @@ export class LogToolDataService {
         this.addLogToolDay(new Date(day.date), hourlyAverages);
       });
     });
+    console.log('logtooldays', this.logToolDays)
   }
 
   addLogToolDay(dayDate: Date, hourlyAverages: Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }>) {
@@ -170,6 +157,7 @@ export class LogToolDataService {
     this.isTimeSeries = true;
     console.time('submitIndividualCSVDAta')
     individualDataFromCsv.forEach(csvData => {
+      console.log('hasDateField', csvData.hasDateField)
       if (csvData.hasDateField == false) {
         csvData.startDate = undefined;
         csvData.endDate = undefined;
@@ -386,6 +374,12 @@ export class LogToolDataService {
   resetSetupData() {
     this.explorerData.next(this.getDefaultExplorerData());
     this.logToolService.resetData();
+  }
+
+  checkHasUnprocessedFileData(): boolean {
+    let filesLength: number = this.explorerData.getValue().fileData.length;
+    let dataSetsLength: number = this.explorerData.getValue().datasets.length;
+    return filesLength !== dataSetsLength;
   }
 
   checkStepSelectedHeaderComplete(explorerFileData?: Array<ExplorerFileData>): boolean {

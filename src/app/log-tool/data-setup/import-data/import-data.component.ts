@@ -2,13 +2,13 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@an
 import { LogToolDataService } from '../../log-tool-data.service';
 import { LogToolDbService } from '../../log-tool-db.service';
 import * as XLSX from 'xlsx';
-import { DataExplorerStatus, ExplorerData, InvalidFile, LogToolDbData, LogToolField } from '../../log-tool-models';
+import { ExplorerData, InvalidFile, LogToolDbData, LogToolField } from '../../log-tool-models';
 import { CsvImportData, CsvToJsonService } from '../../../shared/helper-services/csv-to-json.service';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
 import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysis.service';
 import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-type-graph.service';
 import { VisualizeService } from '../../visualize/visualize.service';
+import { LogToolService } from '../../log-tool.service';
 
 @Component({
   selector: 'app-import-data',
@@ -24,6 +24,7 @@ export class ImportDataComponent implements OnInit {
 
   constructor(
     private logToolDataService: LogToolDataService,
+    private logToolService: LogToolService,
     private csvToJsonService: CsvToJsonService,
     private dayTypeAnalysisService: DayTypeAnalysisService,
     private dayTypeGraphService: DayTypeGraphService,
@@ -61,40 +62,45 @@ export class ImportDataComponent implements OnInit {
   
   setImportFiles(files: FileList) {
     if (files.length !== 0) {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: 'Uploading File Data...'});
-    if (this.explorerData.isExistingImport) {
-      this.explorerData = this.logToolDataService.getDefaultExplorerData();
-      this.dayTypeAnalysisService.resetData();
-      this.visualizeService.resetData();
-      this.dayTypeGraphService.resetData();
-    }
+      this.logToolDataService.loadingSpinner.next({ show: true, msg: 'Uploading File Data...' });
+      if (this.explorerData.isExistingImport) {
+        this.explorerData = this.logToolDataService.getDefaultExplorerData();
+        this.dayTypeAnalysisService.resetData();
+        this.visualizeService.resetData();
+        this.dayTypeGraphService.resetData();
+      } else {
+        this.explorerData.isSetupDone = false;
+        this.explorerData.isStepHeaderRowComplete = false;
+        this.explorerData.refineDataStepStatus.isComplete = false;
+        this.explorerData.isStepMapTimeDataComplete = false;
+      }
       this.invalidFileReferences = new Array();
-        let extensionPattern: string = '.(csv|xlsx)$';
-        let validExtensions: RegExp = new RegExp(extensionPattern, 'i');
-        let fileReaderPromises = [];
-        for (let index = 0; index < files.length; index++) {
-          if (validExtensions.test(files[index].name)) {
-            let splitFilename = files[index].name.split(".");
-            let fileType: string = splitFilename[splitFilename.length - 1].toLowerCase();
-            if (fileType == "xlsx") {
-              fileReaderPromises.push(this.setExcelImportFile(files[index]));
-            } else if (fileType.toLowerCase() == "csv") {
-              fileReaderPromises.push(this.setCSVImportFile(files[index]));
-            }
-          } else {
-            this.invalidFileReferences.push({ name: files[index].name, message: 'File must be of type .csv or .xlsx. Use "Import Existing Data Exploration" to upload .json' });
+      let extensionPattern: string = '.(csv|xlsx)$';
+      let validExtensions: RegExp = new RegExp(extensionPattern, 'i');
+      let fileReaderPromises = [];
+      for (let index = 0; index < files.length; index++) {
+        if (validExtensions.test(files[index].name)) {
+          let splitFilename = files[index].name.split(".");
+          let fileType: string = splitFilename[splitFilename.length - 1].toLowerCase();
+          if (fileType == "xlsx") {
+            fileReaderPromises.push(this.setExcelImportFile(files[index]));
+          } else if (fileType.toLowerCase() == "csv") {
+            fileReaderPromises.push(this.setCSVImportFile(files[index]));
           }
+        } else {
+          this.invalidFileReferences.push({ name: files[index].name, message: 'File must be of type .csv or .xlsx. Use "Import Existing Data Exploration" to upload .json' });
         }
-        Promise.all(fileReaderPromises).then((values) => {
-          // ignore previously loaded example
-          if (this.explorerData.isExample) {
-            this.explorerData.isExample = false;
-            let exampleIndex = this.explorerData.fileData.findIndex(fileData => fileData.fileType === 'example');
-            this.explorerData.fileData.splice(exampleIndex, 1);
-            this.explorerData.datasets = [];
-          }
-          this.finishUpload();
-        });
+      }
+      Promise.all(fileReaderPromises).then((values) => {
+        // ignore previously loaded example
+        if (this.explorerData.isExample) {
+          this.explorerData.isExample = false;
+          let exampleIndex = this.explorerData.fileData.findIndex(fileData => fileData.fileType === 'example');
+          this.explorerData.fileData.splice(exampleIndex, 1);
+          this.explorerData.datasets = [];
+        }
+        this.finishUpload();
+      });
     }
   }
 
@@ -211,14 +217,44 @@ export class ImportDataComponent implements OnInit {
   }
 
   removefileReference(index) {
+    let dataSetId: string = this.explorerData.fileData[index].dataSetId;
     this.explorerData.fileData.splice(index, 1);
-    if (this.explorerData.fileData.length === 0) {
+    if (this.explorerData.fileData.length !== 0) {
+      let dataSetIndex: number = this.explorerData.datasets.findIndex(dataSet => dataSet.dataSetId === dataSetId);
+      if (dataSetIndex) {
+        this.updateDataAndAnalysis(dataSetIndex);
+      }
+    } else {
       this.logToolDataService.resetSetupData();
       this.dayTypeAnalysisService.resetData();
-      this.visualizeService.resetData();
       this.dayTypeGraphService.resetData();
+      this.visualizeService.resetData();
     }
   }
+
+  updateDataAndAnalysis(dataSetIndex: number) {
+    this.explorerData.datasets.splice(dataSetIndex, 1);
+    this.logToolService.individualDataFromCsv.splice(dataSetIndex, 1);
+    if (this.explorerData.isSetupDone) {
+      this.logToolDataService.loadingSpinner.next({show: true, msg: 'Re-calculating Analyzed Data...'});
+      // set delay to display spinner before blocked thread
+      setTimeout(async () => {
+        // need to pull out existing data sets
+        await this.finalizeDataSetup();
+        if (this.dayTypeAnalysisService.dayTypesCalculated) {
+          this.runDayTypeAnalysis();
+          this.logToolDataService.loadingSpinner.next({show: false, msg: 'Re-calculating Analyzed Data...'});
+        }
+      }, 25);
+    }
+  }
+
+  async finalizeDataSetup() {
+    this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
+    await this.logToolDbService.saveData();
+    this.logToolDataService.explorerData.next(this.explorerData);
+  }
+
 
   async useExampleData() {
     this.logToolDataService.loadingSpinner.next({show: true, msg: 'Loading Example...'});

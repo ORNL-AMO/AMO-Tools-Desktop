@@ -20,7 +20,7 @@
                 <input class="import-file p-2" id="importFile" type="file" #importFileRef id="importFileRef"
                     (input)="setImportFiles($event.target.files)" multiple accept=".xlsx, .csv">
             </div>
-            <div class="d-flex flex-column align-items-center text-left alert alert-info small pl-2 pt-2 pb-0 help">
+            <div class="d-block text-left alert alert-info small pl-2 pt-2 pb-0 help scroll-item">
                 <ul class="pl-3">
                     <li class="">Import .csv or .xlsx files from your file system. </li>
                     <li class="">The Refine Data and Map Data steps will allow you to modify imported data.</li>
@@ -28,12 +28,25 @@
                         Time stamps are required for Day Type Analysis.
                         <label class="d-block pt-1 show-pointer" (click)="toggleTimeDetails()">
                             <span class="collapse-label">
-                                Details
+                              Day Type Analysis Details
                             </span>
                             <span class="fa fa-chevron-down collapse-chevron" *ngIf="displayTimeDetails"></span>
                             <span class="fa fa-chevron-right collapse-chevron" *ngIf="!displayTimeDetails"></span>
                         </label>
-                        <ul *ngIf="displayTimeDetails" class="w-75">
+                        <ul *ngIf="displayTimeDetails">
+                            <li>
+                                Valid single-column time stamps will contain a date and time.
+                             </li>
+                             <li>
+                                Valid multi-column time stamps will have a separate date column as well as a time column.
+                             </li>
+                            <li>
+                               Example time stamp format:
+                               <ul>
+                                <li>5/1/2022 1:00</li>
+                                <li>5/1/2022 5:01:00 AM</li>
+                               </ul>
+                            </li>
                             <li>
                                 Time stamps with seconds are required for some additional functionality of the module.
                                 Some

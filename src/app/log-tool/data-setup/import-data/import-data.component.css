@@ -77,3 +77,8 @@ ul.nav.nav-tabs {
 .show-pointer {
  cursor: pointer;
 }
+
+.help {
+    max-width: 75vw;
+    height: 200px;
+}
