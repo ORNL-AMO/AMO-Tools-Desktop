@@ -58,9 +58,16 @@ export class CoolingTowerFanService {
     this.coolingTowerFanOutput.next(emptyOutput);
   }
 
-  calculate(settings: Settings): void {
-    let coolingTowerFanInput: CoolingTowerFanInput = this.coolingTowerFanInput.getValue();
-    let inputCopy: CoolingTowerFanInput = JSON.parse(JSON.stringify(coolingTowerFanInput));
+  calculate(settings: Settings, inputs?: CoolingTowerFanInput) {
+    let coolingTowerFanInput: CoolingTowerFanInput;
+    let inputCopy: CoolingTowerFanInput;
+    if(!inputs){
+      coolingTowerFanInput = this.coolingTowerFanInput.getValue();
+      inputCopy = JSON.parse(JSON.stringify(coolingTowerFanInput));
+    } else {
+      inputCopy = JSON.parse(JSON.stringify(inputs));
+    }
+     
     let validInput: boolean;
     validInput = this.coolingTowerFanFormService.getCoolingTowerFanForm(inputCopy).valid;
     
@@ -79,6 +86,7 @@ export class CoolingTowerFanService {
       coolingTowerFanOutput.annualCostSaving = coolingTowerFanOutput.baselineEnergy - coolingTowerFanOutput.modEnergy;
       coolingTowerFanOutput = this.convertResultUnits(coolingTowerFanOutput, settings);
       this.coolingTowerFanOutput.next(coolingTowerFanOutput);
+      return coolingTowerFanOutput;
     }
   }
 

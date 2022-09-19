@@ -364,6 +364,14 @@ export class ConvertUnitsService {
     }
   }
 
+  convertGallonPerMinuteAndM3PerSecondValue(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'gpm', 'm3/s');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'm3/s', 'gpm');
+    }
+  }
+
   convertInAndCmValue(val: number, oldSettings: Settings, newSettings: Settings): number {
     if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       return this.convertValue(val, 'in', 'cm');
