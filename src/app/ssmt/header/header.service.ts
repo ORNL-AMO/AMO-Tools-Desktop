@@ -131,19 +131,6 @@ export class HeaderService {
 
     let tmpCondensateReturnTempMin: number = this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement);
     tmpCondensateReturnTempMin = this.convertUnitsService.roundVal(tmpCondensateReturnTempMin, 3);
-
-    //return condensate max = saturated temp at dearator pressures
-    // let tmpCondensateReturnTempMax: number = 1000000;
-    // if (lowPressureHeaderPressure != undefined) {
-    //   let satPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(
-    //     {
-    //       saturatedPressure: lowPressureHeaderPressure
-    //     },
-    //     0,
-    //     settings
-    //   );
-    //   tmpCondensateReturnTempMax = this.convertUnitsService.roundVal(satPropertiesOutput.saturatedTemperature, 0);
-    // }
     let tmpDesuperheatingTempMin: number = this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement);
 
     if (headerPressure) {
@@ -170,7 +157,6 @@ export class HeaderService {
       pressureMin: tmpPressureMin,
       pressureMax: tmpPressureMax,
       condensateReturnTempMin: tmpCondensateReturnTempMin,
-      // condensateReturnTempMax: tmpCondensateReturnTempMax,
       desuperheatingTempMin: tmpDesuperheatingTempMin,
       desuperheatingTempMax: tmpDesuperheatingTempMax,
       processUsageMax: tmpProcessUsageMax,
@@ -366,7 +352,6 @@ export interface HeaderRanges {
   pressureMin: number;
   pressureMax: number;
   condensateReturnTempMin: number;
-  // condensateReturnTempMax: number;
   desuperheatingTempMin: number;
   desuperheatingTempMax: number;
   processUsageMin: number;
