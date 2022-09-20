@@ -4,6 +4,7 @@ import { Settings } from '../../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
 import { FormGroup } from '@angular/forms';
 import { SsmtService } from '../../../../ssmt.service';
+import { HeaderService, HeaderWarnings } from '../../../../header/header.service';
 
 @Component({
   selector: 'app-condensate-handling-form',
@@ -31,6 +32,10 @@ export class CondensateHandlingFormComponent implements OnInit {
   baselineMediumPressureForm: FormGroup;
   @Input()
   modificationMediumPressureForm: FormGroup;
+  @Input()
+  baselineWarnings: HeaderWarnings;
+  @Input()
+  modificationWarnings: HeaderWarnings;
 
 
   showHighPressureCondensateRecovery: boolean = false;
@@ -39,7 +44,8 @@ export class CondensateHandlingFormComponent implements OnInit {
   showReturnTemperature: boolean = false;
   showFlashCondensateMediumPressure: boolean = false;
   showFlashCondensateLowPressure: boolean = false;
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private ssmtService: SsmtService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private ssmtService: SsmtService,
+    private headerService: HeaderService) { }
 
   ngOnInit() {
     this.initCondensateHandling();
@@ -200,4 +206,5 @@ export class CondensateHandlingFormComponent implements OnInit {
     // this.exploreOpportunitiesService.currentTab.next('turbine');
     // this.exploreOpportunitiesService.currentField.next('default');
   }
+
 }
