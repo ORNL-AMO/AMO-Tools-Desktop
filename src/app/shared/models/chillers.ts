@@ -150,6 +150,7 @@ export interface CoolingTowerFanInput {
   operatingHours: number,
   baselineSpeedType: number,
   modSpeedType: number,
+  electricityCost: number,
 }
 
 
@@ -159,6 +160,9 @@ export interface CoolingTowerFanOutput {
   modPower: number,
   modEnergy: number,
   savingsEnergy: number,
+  baselineEnergyCost: number,
+  modEnergyCost: number,
+  annualCostSaving: number,
 }
 
 

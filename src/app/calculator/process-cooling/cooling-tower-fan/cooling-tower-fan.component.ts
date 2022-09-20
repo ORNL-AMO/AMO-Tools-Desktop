@@ -1,7 +1,9 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { CoolingTowerFanInput } from '../../../shared/models/chillers';
 import { Settings } from '../../../shared/models/settings';
+import { CoolingTowerFanTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { CoolingTowerFanService } from './cooling-tower-fan.service';
 
 @Component({
@@ -12,6 +14,12 @@ import { CoolingTowerFanService } from './cooling-tower-fan.service';
 export class CoolingTowerFanComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<CoolingTowerFanTreasureHunt>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
@@ -25,6 +33,7 @@ export class CoolingTowerFanComponent implements OnInit {
   }
   
   coolingTowerFanInputSub: Subscription;
+  coolingTowerFanInput: CoolingTowerFanInput;
   containerHeight: number;
   smallScreenTab: string = 'form';
   headerHeight: number;
@@ -33,19 +42,24 @@ export class CoolingTowerFanComponent implements OnInit {
   constructor(private coolingTowerFanService: CoolingTowerFanService,
               private settingsDbService: SettingsDbService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    let existingInputs = this.coolingTowerFanService.coolingTowerFanInput.getValue();
-    if(!existingInputs) {
-      this.coolingTowerFanService.initDefaultEmptyInputs();
+    this.coolingTowerFanInput = this.coolingTowerFanService.coolingTowerFanInput.getValue();
+    if(!this.coolingTowerFanInput) {
+      this.coolingTowerFanService.initDefaultEmptyInputs(this.settings);
       this.coolingTowerFanService.initDefaultEmptyOutputs();
     }
     this.initSubscriptions();
   }
 
   ngOnDestroy() {
+    if(!this.inTreasureHunt){
+      this.coolingTowerFanService.coolingTowerFanInput.next(this.coolingTowerFanInput);
+    } else {
+      this.coolingTowerFanService.coolingTowerFanInput.next(undefined);
+    }
     this.coolingTowerFanInputSub.unsubscribe();
   }
 
@@ -57,7 +71,10 @@ export class CoolingTowerFanComponent implements OnInit {
 
   initSubscriptions() {
     this.coolingTowerFanInputSub = this.coolingTowerFanService.coolingTowerFanInput.subscribe(value => {
-      this.calculate();
+      this.coolingTowerFanInput = value;
+      if(value){
+        this.calculate();
+      }
     });
   }
 
@@ -66,7 +83,7 @@ export class CoolingTowerFanComponent implements OnInit {
   }
 
   btnResetData() {
-    this.coolingTowerFanService.initDefaultEmptyInputs();
+    this.coolingTowerFanService.initDefaultEmptyInputs(this.settings);
     this.coolingTowerFanService.resetData.next(true);
   }
 
@@ -91,6 +108,14 @@ export class CoolingTowerFanComponent implements OnInit {
 
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
+  }
+
+  save() {
+    this.emitSave.emit({ coolingTowerFanData: this.coolingTowerFanInput, opportunityType: Treasure.coolingTowerFan });
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
   }
 
 }

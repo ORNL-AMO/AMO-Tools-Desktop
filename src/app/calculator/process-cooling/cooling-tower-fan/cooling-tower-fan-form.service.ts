@@ -18,7 +18,8 @@ export class CoolingTowerFanFormService {
       operatingTempWetBulb: [inputObj.operatingTempWetBulb, Validators.required],
       operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       baselineSpeedType: [inputObj.baselineSpeedType, Validators.required],
-      modSpeedType: [inputObj.modSpeedType, Validators.required],
+      modSpeedType: [inputObj.modSpeedType, Validators.required],      
+      electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]]
     });
 
     form = this.setWaterTempValidators(form);
@@ -56,6 +57,7 @@ export class CoolingTowerFanFormService {
       operatingHours: form.controls.operatingHours.value,
       baselineSpeedType: form.controls.baselineSpeedType.value,
       modSpeedType: form.controls.modSpeedType.value,
+      electricityCost: form.controls.electricityCost.value
     };
     return obj;
   }

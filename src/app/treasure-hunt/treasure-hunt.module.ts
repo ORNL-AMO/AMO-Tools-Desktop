@@ -57,6 +57,7 @@ import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module'
 import { CoolingTowerMakeupTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-makeup-treasure-hunt.service';
 import { ChillerStagingTreasureHuntService } from './treasure-hunt-calculator-services/chiller-staging-treasure-hunt.service';
 import { ChillerPerformanceTreasureHuntService } from './treasure-hunt-calculator-services/chiller-performance-treasure-hunt.service';
+import { CoolingTowerFanTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-fan-treasure-hunt.service';
 
 @NgModule({
   imports: [
@@ -121,7 +122,8 @@ import { ChillerPerformanceTreasureHuntService } from './treasure-hunt-calculato
     WaterHeatingTreasureHuntService,
     CoolingTowerMakeupTreasureHuntService,
     ChillerStagingTreasureHuntService,
-    ChillerPerformanceTreasureHuntService
+    ChillerPerformanceTreasureHuntService,
+    CoolingTowerFanTreasureHuntService
   ]
 })
 export class TreasureHuntModule { }
