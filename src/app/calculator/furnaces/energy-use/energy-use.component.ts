@@ -27,10 +27,14 @@ export class EnergyUseComponent implements OnInit {
   tableString: any;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild("contentContainer", { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
   flowCalculations: FlowCalculations;
@@ -40,7 +44,9 @@ export class EnergyUseComponent implements OnInit {
     heatInput: 0,
     totalFlow: 0
   };
+  containerHeight: number;
   headerHeight: number;
+  smallScreenTab: string = 'form';
   currentField: string = 'default';
   tabSelect: string = 'results';
   saving: boolean;
@@ -100,6 +106,10 @@ export class EnergyUseComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -165,5 +175,9 @@ export class EnergyUseComponent implements OnInit {
         this.tableString = this.copyTable.nativeElement.innerText;
       }, 25);
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

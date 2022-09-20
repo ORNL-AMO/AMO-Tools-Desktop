@@ -1,64 +1,86 @@
-<div class="d-flex h-100 modify-conditions steam standalone-calculator">
-  <div class="d-flex flex-column modification w-50 scroll-item mh-100">
-    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
-      <div>
-        <img src="assets/images/calculator-icons/steam-icons/saturated-properties.png" class="calc-icon-header"> <!-- calc-icon-header class given to img instead of its parent because image has a background -->
+<div #contentContainer class="calculator-container modify-conditions steam standalone-calculator">
+  <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+    <div>
+      <img src="assets/images/calculator-icons/steam-icons/saturated-properties.png" class="calc-icon-header">
+      <!-- calc-icon-header class given to img instead of its parent because image has a background -->
+    </div>
+    <div class="pl-2">
+      <h3>Saturated Properties</h3>
+    </div>
+  </div>
+
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link">Saturated Properties Data</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Details</a>
+    </div>
+  </div>
+
+  <div class="panel-group">
+    <div class="calculator-panel-container modification mh-100"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
+      <div class="d-flex flex-column m-4">
+        <app-saturated-properties-form [(saturatedPropertiesForm)]="saturatedPropertiesForm" [settings]="settings"
+          [output]="saturatedPropertiesOutput" (emitCalculate)="calculate($event)" (emitChangeField)="setField($event)"
+          [ranges]="ranges"></app-saturated-properties-form>
+        <div class="w-100 justify-content-center btn-group btn-group-sm">
+          <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+            Reset Data
+          </button>
+          <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+          <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+            Generate Example
+          </button>
+        </div>
+        <br>
+        <div class="d-flex w-100 justify-content-center align-items-center pt-1 pb-1">
+          <button (click)="addRow()" class="btn-add-row">Create Row</button>
+        </div>
+        <app-saturated-properties-table [toggleResetData]="toggleResetData" [toggleExampleData]="toggleExampleData"
+          [data]="data" [settings]="settings"></app-saturated-properties-table>
       </div>
-      <div class="pl-2">
-        <h3>Saturated Properties</h3>
+    </div>
+    <div class="calculator-panel-container help-panel" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}"
+      [ngStyle]="{'height.px': containerHeight}">
+      <div class="d-flex flex-wrap tabs primary sticky-top">
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+          <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+            <div>Graph</div>
+          </a>
+        </div>
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+          <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+            <div>Help</div>
+          </a>
+        </div>
+      </div>
+      <div class="d-flex flex-column p-2 h-100" *ngIf="tabSelect == 'results'">
+        <form class="pt-2 pb-2" [formGroup]="graphToggleForm">
+          <select name="graphToggle" class="form-control mx-auto justify-self-center align-self-center"
+            formControlName="graphToggle" id="graphToggle" (change)="toggleGraph()">
+            <option [ngValue]=0>T-S Diagram</option>
+            <option [ngValue]=1>P-H Diagram</option>
+          </select>
+        </form>
+        <div class="w-100 h-100" #lineChartContainer>
+          <app-saturated-properties-chart *ngIf="graphToggle == '0'" [settings]="settings"
+            [saturatedPropertiesOutput]="saturatedPropertiesOutput" [toggleReset]="toggleResetData"
+            [validPlot]="validPlot"></app-saturated-properties-chart>
+          <app-saturated-properties-ph-chart *ngIf="graphToggle == '1'" [settings]="settings"
+            [saturatedPropertiesOutput]="saturatedPropertiesOutput" [toggleReset]="toggleResetData"
+            [validPlot]="validPlot"></app-saturated-properties-ph-chart>
+        </div>
+      </div>
+      <div class="d-flex flex-column" *ngIf="tabSelect == 'help'">
+        <app-saturated-properties-help [currentField]="currentField" [ranges]="ranges" [settings]="settings">
+        </app-saturated-properties-help>
       </div>
     </div>
 
-    <div class="d-flex flex-column m-4">
-      <app-saturated-properties-form [(saturatedPropertiesForm)]="saturatedPropertiesForm" [settings]="settings"
-        [output]="saturatedPropertiesOutput" (emitCalculate)="calculate($event)" (emitChangeField)="setField($event)"
-        [ranges]="ranges"></app-saturated-properties-form>
-      <div class="w-100 justify-content-center btn-group btn-group-sm">
-        <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
-          Reset Data
-        </button>
-        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
-        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
-          Generate Example
-        </button>
-      </div>
-      <br>
-      <div class="d-flex w-100 justify-content-center align-items-center pt-1 pb-1">
-        <button (click)="addRow()" class="btn-add-row">Create Row</button>
-      </div>
-      <app-saturated-properties-table [toggleResetData]="toggleResetData" [toggleExampleData]="toggleExampleData" [data]="data" [settings]="settings"></app-saturated-properties-table>
-    </div>
   </div>
-  <div class="d-flex flex-column w-50 scroll-item mh-100">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
-          <div>Graph</div>
-        </a>
-      </div>
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-          <div>Help</div>
-        </a>
-      </div>
-    </div>
-    <div class="d-flex flex-column p-2 h-100" *ngIf="tabSelect == 'results'">
-      <form class="pt-2 pb-2" [formGroup]="graphToggleForm">
-        <select name="graphToggle" class="form-control mx-auto justify-self-center align-self-center" formControlName="graphToggle"
-          id="graphToggle" (change)="toggleGraph()">
-          <option [ngValue]=0>T-S Diagram</option>
-          <option [ngValue]=1>P-H Diagram</option>
-        </select>
-      </form>
-      <div class="w-100 h-100" #lineChartContainer>
-        <app-saturated-properties-chart *ngIf="graphToggle == '0'" [settings]="settings" [saturatedPropertiesOutput]="saturatedPropertiesOutput"
-        [toggleReset]="toggleResetData" [validPlot]="validPlot"></app-saturated-properties-chart>
-        <app-saturated-properties-ph-chart *ngIf="graphToggle == '1'" [settings]="settings" [saturatedPropertiesOutput]="saturatedPropertiesOutput"
-        [toggleReset]="toggleResetData" [validPlot]="validPlot"></app-saturated-properties-ph-chart>
-      </div>
-    </div>
-    <div class="d-flex flex-column" *ngIf="tabSelect == 'help'">
-      <app-saturated-properties-help [currentField]="currentField" [ranges]="ranges" [settings]="settings"></app-saturated-properties-help>
-    </div>
-  </div>
+
 </div>

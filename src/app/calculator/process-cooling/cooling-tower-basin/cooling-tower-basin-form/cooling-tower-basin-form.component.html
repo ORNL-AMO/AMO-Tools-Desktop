@@ -1,6 +1,6 @@
 <!-- Shared inputs -->
-<div class="d-flex w-100 my-2">
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+<div class="d-block d-lg-flex flex-direction-column">
+  <div class="col-12 col-lg-6 mb-4">
     <form #formElement [formGroup]="form">
       <label class="group-label my-1">
         Cooling Tower Characteristics
@@ -17,8 +17,8 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.ratedCapacity.invalid && !form.controls.ratedCapacity.pristine">
           <span *ngIf="form.controls.ratedCapacity.errors.required">Value required.</span>
-        <span *ngIf="form.controls.ratedCapacity.errors.min">Value can't be less than
-          {{form.controls.ratedCapacity.errors.min.min}}.</span>
+          <span *ngIf="form.controls.ratedCapacity.errors.min">Value can't be less than
+            {{form.controls.ratedCapacity.errors.min.min}}.</span>
         </span>
       </div>
 
@@ -29,8 +29,9 @@
       <div class="form-group">
         <label class="small" for="ratedTempSetPoint">Basin Temperature Setpoint</label>
         <div class="input-group">
-          <input class="form-control" name="ratedTempSetPoint" id="ratedTempSetPoint" formControlName="ratedTempSetPoint"
-            type="number" (input)="calculate()" (focus)="focusField('ratedTempSetPoint')" onfocus="this.select();">
+          <input class="form-control" name="ratedTempSetPoint" id="ratedTempSetPoint"
+            formControlName="ratedTempSetPoint" type="number" (input)="calculate()"
+            (focus)="focusField('ratedTempSetPoint')" onfocus="this.select();">
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
@@ -40,7 +41,8 @@
           <span *ngIf="form.controls.ratedTempSetPoint.errors.min">Value can't be less than
             {{form.controls.ratedTempSetPoint.errors.min.min}}.</span>
         </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.basinTempSetPoint !== null">{{warnings.basinTempSetPoint}}</span>
+        <span class="alert-warning pull-right small"
+          *ngIf="warnings.basinTempSetPoint !== null">{{warnings.basinTempSetPoint}}</span>
       </div>
 
       <div class="form-group">
@@ -76,16 +78,16 @@
       <div class="form-group">
         <label class="small" for="panLossRatio">Pan Loss Ratio</label>
         <div class="input-group">
-          <input class="form-control" name="panLossRatio" id="panLossRatio" formControlName="panLossRatio"
-            type="number" (input)="calculate()" (focus)="focusField('panLossRatio')" onfocus="this.select();">
+          <input class="form-control" name="panLossRatio" id="panLossRatio" formControlName="panLossRatio" type="number"
+            (input)="calculate()" (focus)="focusField('panLossRatio')" onfocus="this.select();">
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.panLossRatio.invalid && !form.controls.panLossRatio.pristine">
           <span *ngIf="form.controls.panLossRatio.errors.required">Value required.</span>
           <span *ngIf="form.controls.panLossRatio.errors.min">Value can't be less than
             {{form.controls.panLossRatio.errors.min.min}}.</span>
-            <span *ngIf="form.controls.panLossRatio.errors.max">Value can't be greater than
-              {{form.controls.panLossRatio.errors.max.max}}.</span>
+          <span *ngIf="form.controls.panLossRatio.errors.max">Value can't be greater than
+            {{form.controls.panLossRatio.errors.max.max}}.</span>
         </span>
       </div>
 
@@ -93,7 +95,7 @@
     </form>
   </div>
 
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+  <div class="col-12 col-lg-6 mb-4">
     <label class="group-label my-1">
       Basin Heater Operating Conditions
     </label>
@@ -102,8 +104,9 @@
       <div class="form-group">
         <label class="small" for="operatingWindSpeed">Windspeed</label>
         <div class="input-group">
-          <input class="form-control" name="operatingWindSpeed" id="operatingWindSpeed" formControlName="operatingWindSpeed"
-            type="number" (input)="calculate()" (focus)="focusField('operatingWindSpeed')" onfocus="this.select();">
+          <input class="form-control" name="operatingWindSpeed" id="operatingWindSpeed"
+            formControlName="operatingWindSpeed" type="number" (input)="calculate()"
+            (focus)="focusField('operatingWindSpeed')" onfocus="this.select();">
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">mph</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">km/h</span>
         </div>
@@ -152,8 +155,9 @@
       <div class="form-group" *ngIf="!isShowingWeatherResults">
         <label class="small" for="operatingTempDryBulb">Ambient Dry Bulb Temperature</label>
         <div class="input-group">
-          <input class="form-control" name="operatingTempDryBulb" id="operatingTempDryBulb" formControlName="operatingTempDryBulb"
-            type="number" (input)="calculate()" (focus)="focusField('operatingTempDryBulb')" onfocus="this.select();">
+          <input class="form-control" name="operatingTempDryBulb" id="operatingTempDryBulb"
+            formControlName="operatingTempDryBulb" type="number" (input)="calculate()"
+            (focus)="focusField('operatingTempDryBulb')" onfocus="this.select();">
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
@@ -175,9 +179,9 @@
 <div class="w-100 header mx-2 mb-4">
   <h3>Optimize Basin Temperature Setpoint</h3>
 </div>
-<div class="d-flex w-100">
+<div class="d-block d-lg-flex w-100">
 
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+  <div class="col-12 col-lg-6 mb-4">
     <label class="group-label my-1">
       Baseline
     </label>
@@ -185,8 +189,9 @@
       <div class="form-group">
         <label class="small" for="baselineTempSetPoint">Basin Temperature Setpoint</label>
         <div class="input-group">
-          <input class="form-control" name="baselineTempSetPoint" id="baselineTempSetPoint" formControlName="baselineTempSetPoint"
-            type="number" (input)="calculate()" (focus)="focusField('baselineTempSetPoint')" onfocus="this.select();">
+          <input class="form-control" name="baselineTempSetPoint" id="baselineTempSetPoint"
+            formControlName="baselineTempSetPoint" type="number" (input)="calculate()"
+            (focus)="focusField('baselineTempSetPoint')" onfocus="this.select();">
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
@@ -196,13 +201,14 @@
           <span *ngIf="form.controls.baselineTempSetPoint.errors.min">Value can't be less than
             {{form.controls.baselineTempSetPoint.errors.min.min}}.</span>
         </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.baselineTempSetPoint !== null">{{warnings.baselineTempSetPoint}}</span>
+        <span class="alert-warning pull-right small"
+          *ngIf="warnings.baselineTempSetPoint !== null">{{warnings.baselineTempSetPoint}}</span>
       </div>
     </form>
 
   </div>
 
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+  <div class="col-12 col-lg-6 mb-4">
     <label class="group-label my-1">
       Modification
     </label>
@@ -221,7 +227,8 @@
           <span *ngIf="form.controls.modTempSetPoint.errors.min">Value can't be less than
             {{form.controls.modTempSetPoint.errors.min.min}}.</span>
         </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.modTempSetPoint !== null">{{warnings.modTempSetPoint}}</span>
+        <span class="alert-warning pull-right small"
+          *ngIf="warnings.modTempSetPoint !== null">{{warnings.modTempSetPoint}}</span>
       </div>
     </form>
   </div>

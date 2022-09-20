@@ -100,3 +100,9 @@ td {
 .btn-form {
     border-radius: 4px !important;
 }
+
+.form-card {
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 20px 0 grey;
+}

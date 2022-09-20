@@ -32,14 +32,19 @@ export class PreAssessmentComponent implements OnInit {
   showName: boolean = false;
 
   @ViewChild('container', { static: false }) container: ElementRef;
-
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.getHeight();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
+  smallScreenTab: string = 'form';
+  containerHeight: number;
   headerHeight: number;
 
   preAssessments: Array<PreAssessment>;
@@ -76,11 +81,24 @@ export class PreAssessmentComponent implements OnInit {
 
   ngAfterViewInit() {
     this.getHeight();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
   ngOnDestroy() {
     if (!this.inModal && !this.inAssessment) {
       this.preAssessmentService.standaloneInputData = this.preAssessments;
+    }
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.container.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -255,6 +273,10 @@ export class PreAssessmentComponent implements OnInit {
       preAssessments: tmpPreAssessments
     };
     return tmpCalculator;
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }

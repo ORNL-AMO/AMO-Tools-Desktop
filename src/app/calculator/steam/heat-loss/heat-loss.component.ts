@@ -18,10 +18,16 @@ export class HeatLossComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   headerHeight: number;
+  containerHeight: number;  
+  smallScreenTab: string = 'form';
 
   tabSelect: string = 'results';
   currentField: string = 'default';
@@ -45,7 +51,7 @@ export class HeatLossComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
-    }, 50);
+    }, 100);
   }
 
   setTab(str: string) {
@@ -66,6 +72,10 @@ export class HeatLossComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -109,4 +119,8 @@ export class HeatLossComponent implements OnInit {
     this.heatLossForm = this.heatLossService.initForm(this.settings);
     this.calculate(this.heatLossForm);
   }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  } 
 }

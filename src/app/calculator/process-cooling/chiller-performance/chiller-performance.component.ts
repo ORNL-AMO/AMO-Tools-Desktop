@@ -26,6 +26,7 @@ export class ChillerPerformanceComponent implements OnInit {
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   helpPanelContainerHeight: number;
   
   @HostListener('window:resize', ['$event'])
@@ -43,6 +44,7 @@ export class ChillerPerformanceComponent implements OnInit {
   headerHeight: number;
   containerHeight: number;
   tabSelect: string = 'results';
+  smallScreenTab: string = 'form';
 
   hasWeatherBinsDataSub: Subscription;
   hasWeatherBinsData: boolean = false;
@@ -110,6 +112,9 @@ export class ChillerPerformanceComponent implements OnInit {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
       this.helpPanelContainerHeight = this.contentContainer.nativeElement.offsetHeight - this.headerHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
       this.cd.detectChanges();
     }
   }
@@ -120,6 +125,10 @@ export class ChillerPerformanceComponent implements OnInit {
 
   cancel() {
     this.emitCancel.emit(true);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }

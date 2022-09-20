@@ -14,13 +14,19 @@ export class PneumaticAirComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
+  smallScreenTab: string = 'form';
+  containerHeight: number;
   headerHeight: number;
 
   inputs: PneumaticAirRequirementInput;
@@ -53,6 +59,10 @@ export class PneumaticAirComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -68,5 +78,9 @@ export class PneumaticAirComponent implements OnInit {
     let tempInputs: PneumaticAirRequirementInput = this.pneumaticAirService.getExampleData();
     this.inputs = this.pneumaticAirService.convertPneumaticCylinderAirExample(tempInputs, this.settings);
     this.calculatePneumaticAirRequirement(this.inputs);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

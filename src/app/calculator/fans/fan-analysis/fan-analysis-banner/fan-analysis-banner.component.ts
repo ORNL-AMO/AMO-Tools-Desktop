@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FanAnalysisService } from '../fan-analysis.service';
 import { Subscription } from 'rxjs';
 import { PlaneDataFormService } from '../fan-analysis-form/plane-data-form/plane-data-form.service';
@@ -17,6 +17,8 @@ export class FanAnalysisBannerComponent implements OnInit {
   settings: Settings;
   @Input()
   inAssessment: boolean;
+  @Output('emitChangeTabs')
+  emitChangeTabs = new EventEmitter<string>();
 
   mainTab: string;
   mainTabSubscription: Subscription;
@@ -134,4 +136,9 @@ export class FanAnalysisBannerComponent implements OnInit {
       this.resultsTabClassStatus.push('active');
     }
   }
+
+  changeTabNextOrBack(str: string){
+    this.emitChangeTabs.emit(str);
+  }
+
 }

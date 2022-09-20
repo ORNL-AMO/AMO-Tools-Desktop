@@ -27,12 +27,18 @@ export class FanEfficiencyComponent implements OnInit {
   fanEfficiencyInputs: FanEfficiencyInputs;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
+  smallScreenTab: string = 'form';
+  containerHeight: number;
   fanEfficiencyForm: FormGroup;
   headerHeight: number;
   currentField: string;
@@ -97,6 +103,10 @@ export class FanEfficiencyComponent implements OnInit {
     if (this.leftPanelHeader) {
       if (this.leftPanelHeader.nativeElement.clientHeight) {
         this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+        this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+        if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+          this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+        }
       }
     }
   }
@@ -167,5 +177,9 @@ export class FanEfficiencyComponent implements OnInit {
     } else {
       this.fanEfficiencyForm = this.fanEfficiencyService.initForm();
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

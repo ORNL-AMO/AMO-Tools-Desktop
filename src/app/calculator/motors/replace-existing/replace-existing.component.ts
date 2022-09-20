@@ -26,6 +26,7 @@ export class ReplaceExistingComponent implements OnInit {
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -33,6 +34,7 @@ export class ReplaceExistingComponent implements OnInit {
       this.resizeTabs();
     }, 100);
   }
+  smallScreenTab: string = 'form';
   containerHeight: number;
   headerHeight: number;
   currentField: string;
@@ -109,6 +111,9 @@ export class ReplaceExistingComponent implements OnInit {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.offsetHeight;
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -131,6 +136,10 @@ export class ReplaceExistingComponent implements OnInit {
 
   cancel() {
     this.emitCancel.emit(true);
+  }
+  
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }
 

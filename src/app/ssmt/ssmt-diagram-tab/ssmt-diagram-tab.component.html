@@ -59,7 +59,7 @@
             <div class="d-flex flex-column flex-fill diagram-help-panel scroll-item"
               [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'col-1': sidebarCollapsed, '': !sidebarCollapsed}"
               *ngIf="outputData">
-              <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+              <div #headerTabs class="d-flex flex-wrap tabs primary mr-2 ml-2">
                 <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
                   <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
                     (click)="setTab('results')">
@@ -73,12 +73,12 @@
                 </div>
               </div>
               <div class="d-flex justify-content-center mr-2 ml-2">
-                <div class="pt-4 result-tables w-100"
+                <div class="py-4 result-tables w-100"
                   *ngIf="tabSelect == 'results' && dataCalculated && outputData.boilerOutput">
                   <app-results-table [outputData]="outputData" [selectedTable]="selectedTable" [inputData]="inputData"
                     [settings]="settings" (emitCalculateResultsWithMarginalCosts)="calculateResultsWithMarginalCosts()">
                   </app-results-table>
-                  <div class="d-flex w-100 pt-2 justify-content-center">
+                  <div class="d-flex w-100 pt-2 mb-5 justify-content-center">
                     <a class="click-link small" (click)="selectTable('default')" *ngIf="selectedTable != 'default'">Back to
                       General Summary</a>
                     <a class="click-link small" (click)="selectTable('cost')" *ngIf="selectedTable == 'default'">View More

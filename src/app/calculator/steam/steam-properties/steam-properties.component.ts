@@ -25,9 +25,12 @@ export class SteamPropertiesComponent implements OnInit {
     this.resizeTabs();
   }
 
-
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   headerHeight: number;
+  containerHeight: number;  
+  smallScreenTab: string = 'form';
 
   @ViewChild('lineChartContainer', { static: false }) lineChartContainer: ElementRef;
   chartContainerHeight: number;
@@ -111,6 +114,10 @@ export class SteamPropertiesComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -216,5 +223,9 @@ export class SteamPropertiesComponent implements OnInit {
     this.getForm(0);
     this.calculate(this.steamPropertiesForm);
     this.toggleExampleData = !this.toggleExampleData;
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

@@ -25,6 +25,7 @@ export class ChillerStagingComponent implements OnInit {
 
   @ViewChild('contentContainer', { static: false }) public contentContainer: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -38,6 +39,7 @@ export class ChillerStagingComponent implements OnInit {
   // calcFormWidthSub: Subscription;
   // resultsHelpWidth: number;
 
+  smallScreenTab: string = 'form';
   containerHeight: number;
   headerHeight: number;
   tabSelect: string = 'results';
@@ -114,6 +116,9 @@ export class ChillerStagingComponent implements OnInit {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -123,6 +128,10 @@ export class ChillerStagingComponent implements OnInit {
 
   cancel() {
     this.emitCancel.emit(true);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }
