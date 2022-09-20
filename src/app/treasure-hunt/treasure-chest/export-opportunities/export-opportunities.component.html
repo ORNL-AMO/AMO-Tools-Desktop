@@ -367,6 +367,22 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.coolingTowerFanOpportunities">
+                        <label>Cooling Tower Fan </label>
+                        <ul>
+                            <li
+                                *ngFor="let coolingTowerFan of exportOpportunities.coolingTowerFanOpportunities; let index = index;">
+                                <span
+                                    *ngIf="!coolingTowerFan.opportunitySheet || !coolingTowerFan.opportunitySheet.name">
+                                    Cooling Tower Fan #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="coolingTowerFan.opportunitySheet && coolingTowerFan.opportunitySheet.name">
+                                    {{coolingTowerFan.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="col-6 p-2" *ngIf="exportOpportunities.opportunitySheets">
                         <label>Opportunity Sheets</label>
                         <ul>
