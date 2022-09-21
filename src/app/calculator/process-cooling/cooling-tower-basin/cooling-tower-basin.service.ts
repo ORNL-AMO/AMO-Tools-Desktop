@@ -85,15 +85,28 @@ export class CoolingTowerBasinService {
         baselineEnergy: 0,
         modPower: 0,
         modEnergy: 0,
-        savingsEnergy: 0
+        savingsEnergy: 0,
+        baselineEnergyCost: 0,
+        modEnergyCost: 0,
+        annualCostSaving: 0,
       },
     };
     this.coolingTowerBasinOutput.next(emptyOutput);
   }
 
-  calculate(settings: Settings): void {
-    let coolingTowerBasinInput: CoolingTowerBasinInput = this.coolingTowerBasinInput.getValue();
-    let inputCopy: CoolingTowerBasinInput = JSON.parse(JSON.stringify(coolingTowerBasinInput));
+  calculate(settings: Settings, inputs?: CoolingTowerBasinInput, weatherData?: WeatherBinsInput) {
+    if(weatherData){
+      this.weatherBinsService.inputData.next(weatherData);
+    }
+    let coolingTowerBasinInput: CoolingTowerBasinInput;
+    let inputCopy: CoolingTowerBasinInput;
+    if(!inputs) {
+      coolingTowerBasinInput = this.coolingTowerBasinInput.getValue();
+      inputCopy = JSON.parse(JSON.stringify(coolingTowerBasinInput));
+    } else {
+      inputCopy = JSON.parse(JSON.stringify(inputs));
+    }
+    
     let validInput: boolean;
     validInput = this.coolingTowerBasinFormService.getCoolingTowerBasinForm(inputCopy, settings).valid;
     
@@ -102,15 +115,20 @@ export class CoolingTowerBasinService {
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       this.setHasWeatherBinsData();
-      if (this.hasWeatherBinsData.getValue() == true && this.isShowingWeatherResults.getValue() == true) {
+      if ((this.hasWeatherBinsData.getValue() == true && this.isShowingWeatherResults.getValue() == true) || weatherData) {
         let weatherBinsData = this.weatherBinsService.inputData.getValue();
         let coolingTowerBasinOutput: CoolingTowerBasinOutput = this.getWeatherBinnedOutput(inputCopy, weatherBinsData, settings);
         this.coolingTowerBasinOutput.next(coolingTowerBasinOutput);
+        return coolingTowerBasinOutput;
       } else {
         let coolingTowerBasinResult: CoolingTowerBasinResult = chillersAddon.coolingTowerBasinHeaterEnergyConsumption(inputCopy);
         let coolingTowerBasinOutput: CoolingTowerBasinOutput = {results: undefined};
+        coolingTowerBasinResult.baselineEnergyCost = coolingTowerBasinResult.baselineEnergy * inputCopy.electricityCost;
+        coolingTowerBasinResult.modEnergyCost = coolingTowerBasinResult.modEnergy * inputCopy.electricityCost;
+        coolingTowerBasinResult.annualCostSaving = coolingTowerBasinResult.baselineEnergyCost - coolingTowerBasinResult.modEnergyCost;
         coolingTowerBasinOutput.results = this.convertResultUnits(coolingTowerBasinResult, settings);
         this.coolingTowerBasinOutput.next(coolingTowerBasinOutput);
+        return coolingTowerBasinOutput;
       }
     }
   }
@@ -123,7 +141,10 @@ export class CoolingTowerBasinService {
         baselineEnergy: 0,
         modPower: 0,
         modEnergy: 0,
-        savingsEnergy: 0
+        savingsEnergy: 0,
+        baselineEnergyCost: 0,
+        modEnergyCost: 0,
+        annualCostSaving: 0,
       },
       weatherBinnedResults: [],
       weatherBinnedChartData: {
@@ -183,6 +204,9 @@ export class CoolingTowerBasinService {
     });
 
     output.totalResults.savingsEnergy = output.totalResults.baselineEnergy - output.totalResults.modEnergy;
+    output.totalResults.baselineEnergyCost = output.totalResults.baselineEnergy * input.electricityCost;
+    output.totalResults.modEnergyCost = output.totalResults.modEnergy * input.electricityCost;
+    output.totalResults.annualCostSaving = output.totalResults.baselineEnergyCost - output.totalResults.modEnergyCost;
     output.weatherBinnedChartData.barChartDataArray = [baselineBarData, modBarData];
     if (settings.unitsOfMeasure == 'Imperial') {
       output.weatherBinnedChartData.parameterUnit = '&#8457;';

@@ -74,6 +74,9 @@ export interface CoolingTowerData {
     modPower: number,
     modEnergy: number,
     savingsEnergy: number,
+    baselineEnergyCost: number,
+    modEnergyCost: number,
+    annualCostSaving: number,
   }
 
   export interface WeatherBinnedResult {

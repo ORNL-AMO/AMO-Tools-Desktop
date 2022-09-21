@@ -50,7 +50,7 @@
 			[ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
 
 			<div *ngIf="!displayWeatherTab" class="d-flex flex-column m-4">
-				<app-cooling-tower-basin-form [settings]="settings"></app-cooling-tower-basin-form>
+				<app-cooling-tower-basin-form [settings]="settings" [inTreasureHunt]="inTreasureHunt"></app-cooling-tower-basin-form>
 				<div class="w-100 mt-3 justify-content-center btn-group btn-group-sm">
 					<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
 						(click)="btnResetData()">

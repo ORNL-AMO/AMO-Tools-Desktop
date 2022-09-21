@@ -58,6 +58,7 @@ import { CoolingTowerMakeupTreasureHuntService } from './treasure-hunt-calculato
 import { ChillerStagingTreasureHuntService } from './treasure-hunt-calculator-services/chiller-staging-treasure-hunt.service';
 import { ChillerPerformanceTreasureHuntService } from './treasure-hunt-calculator-services/chiller-performance-treasure-hunt.service';
 import { CoolingTowerFanTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-fan-treasure-hunt.service';
+import { CoolingTowerBasinTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
 
 @NgModule({
   imports: [
@@ -123,7 +124,8 @@ import { CoolingTowerFanTreasureHuntService } from './treasure-hunt-calculator-s
     CoolingTowerMakeupTreasureHuntService,
     ChillerStagingTreasureHuntService,
     ChillerPerformanceTreasureHuntService,
-    CoolingTowerFanTreasureHuntService
+    CoolingTowerFanTreasureHuntService,
+    CoolingTowerBasinTreasureHuntService
   ]
 })
 export class TreasureHuntModule { }
