@@ -81,15 +81,22 @@ export class CleanDataComponent implements OnInit {
 
   setDateField(csvData: IndividualDataFromCsv) {
     csvData.dateField = csvData.fields.find(field => {
-      return field.isDateField == true;
+      if (field.isDateField) {
+        field.useField = true;
+      }
+      return field.isDateField;
     });
     csvData.hasDateField = csvData.dateField != undefined;
+
     this.cd.detectChanges();
   }
 
   setTimeField(csvData: IndividualDataFromCsv) {
     csvData.timeField = csvData.fields.find(field => {
-      return field.isTimeField == true;
+      if (field.isTimeField) {
+        field.useField = true;
+      }
+      return field.isTimeField;
     });
     csvData.hasTimeField = csvData.timeField != undefined;
     //this split causing issues for "2:19:00 PM" ending up "PM"
