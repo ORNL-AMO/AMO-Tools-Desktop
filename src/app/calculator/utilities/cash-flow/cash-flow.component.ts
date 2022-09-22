@@ -66,7 +66,7 @@ export class CashFlowComponent implements OnInit {
     this.cashFlowService.inputData = this.cashFlowForm;
   }
 
-  btnResetData() {
+  btnGenerateExample(){
     this.cashFlowForm = {
       lifeYears: 10,
       energySavings: 1000,
@@ -75,6 +75,20 @@ export class CashFlowComponent implements OnInit {
       operationCost: 500,
       fuelCost: 500,
       junkCost: 500
+    };
+    this.cashFlowService.inputData = this.cashFlowForm;
+    this.calculate();
+  }
+
+  btnResetData() {
+    this.cashFlowForm = {
+      lifeYears: 0,
+      energySavings: 0,
+      salvageInput: 0,
+      installationCost: 0,
+      operationCost: 0,
+      fuelCost: 0,
+      junkCost: 0
     };
     this.cashFlowService.inputData = this.cashFlowForm;
     this.calculate();
