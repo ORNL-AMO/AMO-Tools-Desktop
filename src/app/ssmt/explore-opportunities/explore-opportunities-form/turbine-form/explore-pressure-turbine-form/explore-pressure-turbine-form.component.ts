@@ -71,7 +71,10 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
 
 
   toggleOperationType() {
-    
+    if(this.showOperation === false) {
+      this.modificationForm.controls.operationType.patchValue(this.baselineForm.controls.operationType.value);
+    }
+    this.save();
   }
 
   changeBaselineOperationValidators() {

@@ -36,7 +36,7 @@
     [showFormToggle]="ssmt.modifications[exploreModIndex].exploreOppsShowHighToLowPressureTurbine.hasOpportunity" [exploreModIndex]="exploreModIndex"></app-explore-turbine-form>
   <app-explore-pressure-turbine-form *ngIf="modificationHighToLowTurbineForm.controls.useTurbine.value == true"
     [exploreModIndex]="exploreModIndex" [settings]="settings" (emitSave)="saveHighToLowTurbine()"
-    [baselineForm]="baselineHighToLowTurbineForm" [modificationForm]="modificationHighToLowTurbineForm"
+    [baselineForm]="baselineHighToLowTurbineForm" [modificationForm]="modificationHighToLowTurbineForm" (emitShowTurbine)="setShowHighLowTurbine($event)"
     [turbineType]="'highToLowTurbine'" [showFormToggle]="ssmt.modifications[exploreModIndex].exploreOppsShowHighToLowPressureTurbine.hasOpportunity">
   </app-explore-pressure-turbine-form>
 </ul>
@@ -57,7 +57,7 @@
     [exploreModIndex]="exploreModIndex"></app-explore-turbine-form>
   <app-explore-pressure-turbine-form *ngIf="modificationHighToMediumForm.controls.useTurbine.value == true"
     [exploreModIndex]="exploreModIndex" [settings]="settings" (emitSave)="saveHighToMediumTurbine()"
-    [baselineForm]="baselineHighToMediumForm" [modificationForm]="modificationHighToMediumForm"
+    [baselineForm]="baselineHighToMediumForm" [modificationForm]="modificationHighToMediumForm" (emitShowTurbine)="setShowHighMediumTurbine($event)"
     [turbineType]="'highToMediumTurbine'" [showFormToggle]="ssmt.modifications[exploreModIndex].exploreOppsShowHighToMediumPressureTurbine.hasOpportunity">
   </app-explore-pressure-turbine-form>
 </ul>
@@ -78,7 +78,7 @@
     [exploreModIndex]="exploreModIndex"></app-explore-turbine-form>
   <app-explore-pressure-turbine-form *ngIf="modificationMediumToLowForm.controls.useTurbine.value == true"
     [exploreModIndex]="exploreModIndex" [settings]="settings" (emitSave)="saveMediumToLowTurbine()"
-    [baselineForm]="baselineMediumToLowForm" [modificationForm]="modificationMediumToLowForm"
+    [baselineForm]="baselineMediumToLowForm" [modificationForm]="modificationMediumToLowForm" (emitShowTurbine)="setShowMediumLowTurbine($event)"
     [turbineType]="'mediumToLowTurbine'" [showFormToggle]="ssmt.modifications[exploreModIndex].exploreOppsShowMediumToLowPressureTurbine.hasOpportunity">
   </app-explore-pressure-turbine-form>
 </ul>

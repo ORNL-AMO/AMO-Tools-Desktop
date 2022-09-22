@@ -264,7 +264,7 @@
     </li>
     <hr class="mt-0 mb-0">
 
-    <div *ngIf="modificationMediumPressureForm.controls.useBaselineProcessSteamUsage.value == false">
+    <div *ngIf="showMediumPressureSteamUsage">
       <li class="explore-opps-header">
         <span class=" explore-opps-title text-muted">Baseline</span>
         <span class="explore-opps-title text-muted">Modifications</span>
@@ -333,7 +333,7 @@
     </li>
     <hr class="mt-0 mb-0">
 
-    <div *ngIf="modificationLowPressureForm.controls.useBaselineProcessSteamUsage.value == false">
+    <div *ngIf="showLowPressureSteamUsage">
       <li class="explore-opps-header" *ngIf="showLowPressureSteamUsage">
         <span class=" explore-opps-title text-muted">Baseline</span>
         <span class="explore-opps-title text-muted">Modifications</span>

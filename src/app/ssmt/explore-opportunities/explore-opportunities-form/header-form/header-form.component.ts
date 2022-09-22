@@ -114,7 +114,10 @@ export class HeaderFormComponent implements OnInit {
   initHeatLoss() {
     this.showMediumPressureHeatLoss = false;
     this.showLowPressureHeatLoss = false;
-    this.initHighPressureHeatLoss();
+    this.showHighPressureHeatLoss = false;
+    if(this.ssmt.headerInput.highPressureHeader){
+      this.initHighPressureHeatLoss();
+    }
     if (this.ssmt.headerInput.mediumPressureHeader) {
       this.initMediumPressureHeatLoss();
     }
@@ -131,8 +134,6 @@ export class HeaderFormComponent implements OnInit {
   initHighPressureHeatLoss() {
     if (this.baselineHighPressureForm.controls.heatLoss.value !== this.modificationHighPressureForm.controls.heatLoss.value) {
       this.showHighPressureHeatLoss = true;
-    } else {
-      this.showHighPressureHeatLoss = false;
     }
   }
   initMediumPressureHeatLoss() {
@@ -150,11 +151,13 @@ export class HeaderFormComponent implements OnInit {
     this.showHighPressureHeatLoss = false;
     this.showMediumPressureHeatLoss = false;
     this.showLowPressureHeatLoss = false;
-    this.toggleHighPressureHeatLoss();
+    if(this.baselineHighPressureForm.controls){
+      this.toggleHighPressureHeatLoss();
+    }
     if (this.baselineMediumPressureForm.controls) {
       this.toggleMediumPressureHeatLoss();
     }
-    if (this.baselineLowPressureForm) {
+    if (this.baselineLowPressureForm.controls) {
       this.toggleLowPressureHeatLoss();
     }
   }
@@ -181,13 +184,16 @@ export class HeaderFormComponent implements OnInit {
   }
   //STEAM USAGE
   initSteamUsage() {
+    this.showHighPressureSteamUsage = false;
     this.showMediumPressureSteamUsage = false;
     this.showLowPressureSteamUsage = false;
-    this.initHighPressureSteamUsage();
+    if(this.baselineHighPressureForm.controls){
+      this.initHighPressureSteamUsage();
+    }
     if (this.baselineMediumPressureForm.controls) {
       this.initMediumPressureSteamUsage();
     }
-    if (this.baselineLowPressureForm) {
+    if (this.baselineLowPressureForm.controls) {
       this.initLowPressureSteamUsage();
     }
     if (this.showHighPressureSteamUsage || this.showMediumPressureSteamUsage || this.showLowPressureSteamUsage) {
@@ -200,17 +206,15 @@ export class HeaderFormComponent implements OnInit {
   initHighPressureSteamUsage() {
     if (this.baselineHighPressureForm.controls.processSteamUsage.value !== this.modificationHighPressureForm.controls.processSteamUsage.value) {
       this.showHighPressureSteamUsage = true;
-    } else {
-      this.showHighPressureHeatLoss = false;
     }
   }
   initMediumPressureSteamUsage() {
-    if (this.modificationLowPressureForm.controls.useBaselineProcessSteamUsage.value == false) {
+    if (this.baselineMediumPressureForm.controls.processSteamUsage.value !== this.modificationMediumPressureForm.controls.processSteamUsage.value) {
       this.showMediumPressureSteamUsage = true;
     }
   }
   initLowPressureSteamUsage() {
-    if (this.modificationLowPressureForm.controls.useBaselineProcessSteamUsage.value == false) {
+    if (this.baselineLowPressureForm.controls.processSteamUsage.value !== this.modificationLowPressureForm.controls.processSteamUsage.value) {
       this.showLowPressureSteamUsage = true;
     }
   }
@@ -219,11 +223,13 @@ export class HeaderFormComponent implements OnInit {
     this.showHighPressureSteamUsage = false;
     this.showMediumPressureSteamUsage = false;
     this.showLowPressureSteamUsage = false;
-    this.toggleHighPressureSteamUsage();
+    if(this.baselineHighPressureForm.controls){
+      this.toggleHighPressureSteamUsage();
+    }
     if (this.baselineMediumPressureForm.controls) {
       this.toggleMediumPressureSteamUsage();
     }
-    if (this.baselineLowPressureForm) {
+    if (this.baselineLowPressureForm.controls) {
       this.toggleLowPressureSteamUsage();
     }
   }
@@ -232,6 +238,7 @@ export class HeaderFormComponent implements OnInit {
       this.modificationHighPressureForm.controls.processSteamUsage.patchValue(this.baselineHighPressureForm.controls.processSteamUsage.value);
       this.save();
     }
+    //this.modificationHighPressureForm.controls.useBaselineProcessSteamUsage.patchValue(!this.showHighPressureSteamUsage);
   }
 
   toggleMediumPressureSteamUsage() {
@@ -239,7 +246,7 @@ export class HeaderFormComponent implements OnInit {
       this.modificationMediumPressureForm.controls.processSteamUsage.patchValue(this.baselineMediumPressureForm.controls.processSteamUsage.value);
       this.save();
     }
-    this.modificationMediumPressureForm.controls.useBaselineProcessSteamUsage.patchValue(!this.showMediumPressureSteamUsage);
+    //this.modificationMediumPressureForm.controls.useBaselineProcessSteamUsage.patchValue(!this.showMediumPressureSteamUsage);
   }
 
   toggleLowPressureSteamUsage() {
@@ -247,7 +254,7 @@ export class HeaderFormComponent implements OnInit {
       this.modificationLowPressureForm.controls.processSteamUsage.patchValue(this.baselineLowPressureForm.controls.processSteamUsage.value);
       this.save();
     }
-    this.modificationLowPressureForm.controls.useBaselineProcessSteamUsage.patchValue(!this.showLowPressureSteamUsage);
+    //this.modificationLowPressureForm.controls.useBaselineProcessSteamUsage.patchValue(!this.showLowPressureSteamUsage);
   }
 
   save() {
