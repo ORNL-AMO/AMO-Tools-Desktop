@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CoolingTowerBasinService } from '../../calculator/process-cooling/cooling-tower-basin/cooling-tower-basin.service';
+import { WeatherBinsService } from '../../calculator/utilities/weather-bins/weather-bins.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { CoolingTowerBasinInput, CoolingTowerBasinOutput } from '../../shared/models/chillers';
 import { Settings } from '../../shared/models/settings';
@@ -9,7 +10,7 @@ import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportu
 @Injectable()
 export class CoolingTowerBasinTreasureHuntService {
 
-  constructor(private coolingTowerBasinService: CoolingTowerBasinService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private coolingTowerBasinService: CoolingTowerBasinService, private convertUnitsService: ConvertUnitsService, private weatherBinsService: WeatherBinsService) { }
 
   initNewCalculator() {
     this.resetCalculatorInputs();
@@ -17,6 +18,7 @@ export class CoolingTowerBasinTreasureHuntService {
 
   setCalculatorInputFromOpportunity(coolingTowerBasin: CoolingTowerBasinTreasureHunt) {
     this.coolingTowerBasinService.coolingTowerBasinInput.next(coolingTowerBasin.coolingTowerBasinData);
+    this.weatherBinsService.inputData.next(coolingTowerBasin.weatherData);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {

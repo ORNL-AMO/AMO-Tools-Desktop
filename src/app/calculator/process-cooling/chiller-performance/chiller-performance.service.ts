@@ -89,10 +89,10 @@ export class ChillerPerformanceService {
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       let chillerPerformanceOutput: ChillerPerformanceOutput = chillersAddon.chillerCapacityEfficiency(inputCopy);
+      chillerPerformanceOutput = this.convertResultUnits(chillerPerformanceOutput, settings);
       chillerPerformanceOutput.baselineEnergyCost = chillerPerformanceOutput.baselineEnergy * inputCopy.electricityCost;
       chillerPerformanceOutput.modEnergyCost = chillerPerformanceOutput.modEnergy * inputCopy.electricityCost;
-      chillerPerformanceOutput.annualCostSaving = chillerPerformanceOutput.baselineEnergy - chillerPerformanceOutput.modEnergy;
-      chillerPerformanceOutput = this.convertResultUnits(chillerPerformanceOutput, settings);
+      chillerPerformanceOutput.annualCostSaving = chillerPerformanceOutput.baselineEnergyCost - chillerPerformanceOutput.modEnergyCost;
       this.chillerPerformanceOutput.next(chillerPerformanceOutput);
       return chillerPerformanceOutput;
     }

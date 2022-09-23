@@ -676,7 +676,7 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
-  getChillerPerformanceOpportunities(chillerPerformanceOpportunities: Array<ChillerPerformanceTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData[] {
+  getChillerPerformanceOpportunities(chillerPerformanceOpportunities: Array<ChillerPerformanceTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
     if (chillerPerformanceOpportunities) {
       let index: number = 0;
@@ -690,7 +690,7 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
-  getCoolingTowerFanOpportunities(coolingTowerFanOpportunities: Array<CoolingTowerFanTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData[] {
+  getCoolingTowerFanOpportunities(coolingTowerFanOpportunities: Array<CoolingTowerFanTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
     if (coolingTowerFanOpportunities) {
       let index: number = 0;
@@ -704,7 +704,7 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
-  getCoolingTowerBasinOpportunities(coolingTowerBasinOpportunities: Array<CoolingTowerBasinTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData[] {
+  getCoolingTowerBasinOpportunities(coolingTowerBasinOpportunities: Array<CoolingTowerBasinTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
     if (coolingTowerBasinOpportunities) {
       let index: number = 0;

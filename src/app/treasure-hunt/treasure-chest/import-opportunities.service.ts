@@ -181,7 +181,7 @@ export class ImportOpportunitiesService {
       if (treasureHunt.coolingTowerBasinOpportunities == undefined) {
         treasureHunt.coolingTowerBasinOpportunities = new Array();
       }
-      this.updateLegacyOpportunities(data.coolingTowerBasinOpportunities, Treasure.coolingTowerFan);
+      this.updateLegacyOpportunities(data.coolingTowerBasinOpportunities, Treasure.coolingTowerBasin);
       treasureHunt.coolingTowerBasinOpportunities = treasureHunt.coolingTowerBasinOpportunities.concat(data.coolingTowerBasinOpportunities);
     }
     return treasureHunt;
