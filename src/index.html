@@ -2,18 +2,7 @@
 <html>
 
 <head>
-	<base href="/">
-	<script>
-		var dbInstance;
-		var Module = {
-			onRuntimeInitialized: function () {
-				console.log('Tools Suite Module Initialized');
-				dbInstance = new Module.SQLite(":memory:", true);
-			}
-		}
-	</script>
-	<script src="client.js"></script>
-	
+	<base href="/">	
 	<meta charset="utf-8">
 	<title>MEASUR</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
