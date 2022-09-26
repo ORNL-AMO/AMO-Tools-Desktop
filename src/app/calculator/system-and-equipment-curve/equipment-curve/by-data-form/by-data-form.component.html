@@ -12,7 +12,7 @@
                     <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
                 </select>
             </div>
-            <div class="form-group col-4 padding-offset">
+            <div class="form-group col-4">
                 <select id="powerDataOrder" name="powerDataOrder" class="form-control w-100" formControlName="powerDataOrder"
                     (focus)="focusField('powerDataOrder')" (change)="save()">
                     <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
@@ -23,11 +23,10 @@
         <form [formGroup]="control">
             <div class="row align-items-end">
                 <div class="form-group col-4">
-                    <label class="section-label" *ngIf="index == 0" for="flow">Flow</label>
+                    <label class="section-label" *ngIf="index == 0" for="flow">Flow (<span [innerHTML]="flowUnit | settingsLabel"></span>)</label>
                     <div class="input-group">
                         <input name="flow" formControlName="flow" type="number" step="any" class="form-control"
                             id="flow" onfocus="this.select();" (focus)="focusField('flow')" (input)="save()">
-                        <span class="input-group-addon units" [innerHTML]="flowUnit | settingsLabel"></span>
                     </div>
                     <span class="alert-danger pull-right small"
                         *ngIf="control.controls.flow.invalid && !control.controls.flow.pristine">
@@ -38,11 +37,10 @@
                     </span>
                 </div>
                 <div class="form-group col-4">
-                    <label class="section-label" *ngIf="index == 0" for="yValue">{{yValueLabel}}</label>
+                    <label class="section-label" *ngIf="index == 0" for="yValue">{{yValueLabel}} (<span [innerHTML]="yValueUnit | settingsLabel"></span>)</label>
                     <div class="input-group">
                         <input name="yValue" formControlName="yValue" type="number" step="any" class="form-control"
                             id="yValue" onfocus="this.select();" (focus)="focusField('yValue')" (input)="save()">
-                        <span class="input-group-addon units" [innerHTML]="yValueUnit | settingsLabel"></span>
                     </div>
                     <span class="alert-danger pull-right small"
                         *ngIf="control.controls.yValue.invalid && !control.controls.yValue.pristine">
@@ -54,11 +52,10 @@
                     </span>
                 </div>
                 <div class="form-group col-4">
-                    <label class="section-label" *ngIf="index == 0" for="power">Power</label>
+                    <label class="section-label" *ngIf="index == 0" for="power">Power (<span [innerHTML]="settings.fanPowerMeasurement | settingsLabel"></span>)</label>
                     <div class="input-group">
                         <input name="power" formControlName="power" type="number" step="any" class="form-control"
                             id="power" onfocus="this.select();" (focus)="focusField('power')" (input)="save()">
-                        <span class="input-group-addon units" [innerHTML]="settings.fanPowerMeasurement | settingsLabel"></span>
                         <span class="float-right ml-2" *ngIf="byDataForm.controls.dataRows.value.controls.length > 1">
                             <i class="fa fa-times-circle" (click)="removeRow(index)"></i>
                         </span>
