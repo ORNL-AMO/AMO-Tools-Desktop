@@ -8,6 +8,12 @@ import { BoilerService } from '../../../boiler/boiler.service';
 import { FormGroup } from '@angular/forms';
 import { StackLossInput } from '../../../../shared/models/steam/steam-inputs';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
+import { Co2SavingsData } from '../../../../calculator/utilities/co2-savings/co2-savings.service';
+import { AssessmentCo2SavingsService, Co2SavingsDifferent } from '../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { OtherFuel, otherFuels } from '../../../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { CompareService } from '../../../compare.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-boiler-form',
@@ -46,13 +52,27 @@ export class BoilerFormComponent implements OnInit {
 
   baselineForm: FormGroup;
   modificationForm: FormGroup;
+  baselineCo2SavingsData: Co2SavingsData;
+  modificationCo2SavingsData: Co2SavingsData;
+  isInitializingCo2SavingsData: boolean;
+  co2SavingsDifferentSubscription: Subscription;
+  co2SavingsDifferent: Co2SavingsDifferent;
 
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private suiteDbService: SuiteDbService, private boilerService: BoilerService,
+  otherFuels: Array<OtherFuel>;
+  fuelOptions: Array<{
+    fuelType: string,
+    outputRate: number
+  }>;
+
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, 
+    private convertUnitsService: ConvertUnitsService,
+    private compareService: CompareService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService, private suiteDbService: SuiteDbService, private boilerService: BoilerService,
     private ssmtService: SsmtService) { }
 
   ngOnInit() {
+    this.setCo2SavingsData();
     this.init();
-    this.setFuelTypes();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -67,22 +87,6 @@ export class BoilerFormComponent implements OnInit {
     setTimeout(() => {
       this.setBlowdownRateModalWidth();
     }, 100)
-  }
-
-  setFuelTypes(save?: boolean) {
-    if (this.baselineForm.controls.fuelType.value === 0) {
-      this.baselineFuelOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
-    } else if (this.baselineForm.controls.fuelType.value === 1) {
-      this.baselineFuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
-    }
-    if (this.modificationForm.controls.fuelType.value === 0) {
-      this.modificationFuelOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
-    } else if (this.modificationForm.controls.fuelType.value === 1) {
-      this.modificationFuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
-    }
-    if (save) {
-      this.save();
-    }
   }
 
   init() {
@@ -105,6 +109,64 @@ export class BoilerFormComponent implements OnInit {
     }
   }
 
+  
+  setCo2SavingsData() {
+    this.isInitializingCo2SavingsData = true;
+    this.co2SavingsDifferent = this.compareService.isCo2SavingsDifferent(false, this.ssmt, this.ssmt.modifications[this.exploreModIndex].ssmt);
+    this.baselineCo2SavingsData = this.ssmt.co2SavingsData;
+    let modificationCo2SavingsData: Co2SavingsData = this.ssmt.modifications[this.exploreModIndex].ssmt.co2SavingsData;
+    if (this.ssmt.co2SavingsData) {
+      this.modificationCo2SavingsData = modificationCo2SavingsData;
+    } else {
+      modificationCo2SavingsData = this.assessmentCo2SavingsService.getCo2SavingsDataFromSettingsObject(this.settings);
+    }
+    this.otherFuels = otherFuels;
+    if (!modificationCo2SavingsData.energySource) {
+      modificationCo2SavingsData.energyType = 'fuel';
+      modificationCo2SavingsData.energySource = 'Natural Gas';
+    }
+    this.modificationCo2SavingsData = modificationCo2SavingsData;
+    let shouldSetOutputRate: boolean = false;
+    if(this.modificationCo2SavingsData.totalFuelEmissionOutputRate === undefined || !this.modificationCo2SavingsData.fuelType) {
+      shouldSetOutputRate = true;
+    } 
+    this.setEnergySource(shouldSetOutputRate);
+    this.isInitializingCo2SavingsData = false;
+  }
+
+  setEnergySource(shouldSetOutputRate: boolean = true) {
+    this.setFuelOptions();
+    let outputRate: number = this.fuelOptions[0].outputRate;
+    if(this.settings.unitsOfMeasure !== 'Imperial'){
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
+      outputRate = Number(outputRate.toFixed(2));
+    }
+    if (shouldSetOutputRate) {
+      this.modificationCo2SavingsData.totalFuelEmissionOutputRate = outputRate;
+      this.modificationCo2SavingsData.fuelType = this.fuelOptions[0].fuelType;
+    }
+
+    if (!this.isInitializingCo2SavingsData) {
+      // other opps forms don't handle triggered save-->onChanges() event during init
+      this.save();
+    }
+  }
+
+  setFuelOptions(){
+    let tmpOtherFuel: OtherFuel = this.otherFuels.find((val) => { return val.energySource === this.modificationCo2SavingsData.energySource });
+    this.fuelOptions = tmpOtherFuel.fuelTypes;
+  }
+  
+  setFuel() {
+    let tmpFuel: { fuelType: string, outputRate: number } = this.fuelOptions.find((val) => { return this.modificationCo2SavingsData.fuelType === val.fuelType; });
+    let outputRate: number = tmpFuel.outputRate;
+    if(this.settings.unitsOfMeasure !== 'Imperial'){
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
+    }
+    this.modificationCo2SavingsData.totalFuelEmissionOutputRate = outputRate;
+    this.save();
+  }
+
   initCombustionEfficiency() {
     if (this.baselineForm.controls.combustionEfficiency.value !== this.modificationForm.controls.combustionEfficiency.value) {
       this.showCombustionEfficiency = true;
@@ -114,8 +176,7 @@ export class BoilerFormComponent implements OnInit {
   }
 
   initFuel() {
-    if (this.baselineForm.controls.fuel.value !== this.modificationForm.controls.fuel.value ||
-      this.baselineForm.controls.fuelType.value !== this.modificationForm.controls.fuelType.value) {
+    if (this.co2SavingsDifferent.fuelType || this.co2SavingsDifferent.fuelType || this.co2SavingsDifferent.totalFuelEmissionOutputRate) {
       this.showFuelType = true;
     } else {
       this.showFuelType = false;
@@ -179,7 +240,7 @@ export class BoilerFormComponent implements OnInit {
       this.toggleBlowdownFlashed();
       this.toggleBlowdownRate();
       this.toggleCombustionEfficiency();
-      this.toggleFuelType();
+      this.toggleFuelData();
     }
   }
 
@@ -190,10 +251,12 @@ export class BoilerFormComponent implements OnInit {
     }
   }
 
-  toggleFuelType() {
+  toggleFuelData() {
     if (this.showFuelType === false) {
-      this.modificationForm.controls.fuelType.patchValue(this.baselineForm.controls.fuelType.value);
-      this.modificationForm.controls.fuel.patchValue(this.baselineForm.controls.fuel.value);
+      this.ssmt.modifications[this.exploreModIndex].ssmt.co2SavingsData.energySource = this.ssmt.co2SavingsData.energySource; 
+      this.ssmt.modifications[this.exploreModIndex].ssmt.co2SavingsData.fuelType = this.ssmt.co2SavingsData.fuelType; 
+      this.ssmt.modifications[this.exploreModIndex].ssmt.co2SavingsData.totalFuelEmissionOutputRate = this.ssmt.co2SavingsData.totalFuelEmissionOutputRate; 
+      this.co2SavingsDifferent = this.compareService.isCo2SavingsDifferent(false, this.ssmt, this.ssmt.modifications[this.exploreModIndex].ssmt);
       this.save();
     }
   }
@@ -242,7 +305,10 @@ export class BoilerFormComponent implements OnInit {
     let tmpModificationBoilerInput: BoilerInput = this.boilerService.initObjFromForm(this.modificationForm);
     tmpModificationBoilerInput.stackLossInput = stackLossInput;
     this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput = tmpModificationBoilerInput;
+    // Use copy so co2SavingsData isn't overwritten from ssmt.component.updateModificationCO2Savings()
+    this.ssmt.modifications[this.exploreModIndex].ssmt.co2SavingsData = JSON.parse(JSON.stringify(this.modificationCo2SavingsData));    
     this.emitSave.emit(this.ssmt);
+    this.co2SavingsDifferent = this.compareService.isCo2SavingsDifferent(false, this.ssmt, this.ssmt.modifications[this.exploreModIndex].ssmt);
   }
 
   focusField(str: string) {
