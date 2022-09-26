@@ -42,25 +42,23 @@ export class HeaderFormComponent implements OnInit {
     private ssmtService: SsmtService) { }
 
   ngOnInit() {
+    this.initFormSetup();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()) {
+        this.initFormSetup();
+    }
+  }
+
+  initFormSetup() {
     this.initForms();
     this.initHeatLoss();
     this.initSteamUsage();
     this.setWarnings();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.exploreModIndex) {
-      if (!changes.exploreModIndex.isFirstChange()) {
-        this.initForms();
-        this.initHeatLoss();
-        this.initSteamUsage();
-        this.setWarnings();
-      }
-    }
-  }
-
   initForms() {
-
     if (this.ssmt.headerInput.highPressureHeader) {
       this.baselineHighPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.headerInput.highPressureHeader, this.settings, this.ssmt.boilerInput, undefined);
     } else {

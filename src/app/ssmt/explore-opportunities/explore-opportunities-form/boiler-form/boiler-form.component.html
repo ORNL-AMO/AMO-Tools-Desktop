@@ -63,7 +63,7 @@
   <li class="explore-opps-item">
     <div class="checkbox mt-2">
       <label for="modifyFuelType" class="steam-check-label">
-        <input type="checkbox" id="modifyFuelType" (focus)="focusField('fuel')" (change)="toggleFuelType()"
+        <input type="checkbox" id="modifyFuelType" (focus)="focusField('fuel')" (change)="toggleFuelData()"
           [(ngModel)]="showFuelType" />
         Change Fuel Type
       </label>
@@ -78,44 +78,75 @@
   </li>
 
   <li class="explore-opps-item mb-2">
-    <form [formGroup]="baselineForm" class="explore-opps-form">
+    <div class="explore-opps-form">
       <div class="text-center">
-        <label for="baselineFuelType" class="baseline-value-label"> Fuel Type</label>
+        <label for="energySource" class="baseline-value-label">Energy Source</label>
         <div class="text-muted text-center baseline-value-input">
-          <span *ngIf="baselineForm.value.fuelType == 0">Solid/Liquid</span>
-          <span *ngIf="baselineForm.value.fuelType == 1">Gas</span>
+          {{ baselineCo2SavingsData.energySource }}
         </div>
       </div>
-  </form>
-  <form [formGroup]="modificationForm" class="explore-opps-form">
-    <div class="form-group explore-opps-formgroup">
-      <label for="modificationFuelType" class="mod-value-label">Fuel Type</label>
-      <select name="modificationFuelType" id="modificationFuelType" class="form-control mod-max-width"
-      (focus)="focusField('fuelType')" (change)="setFuelTypes(true)" formControlName="fuelType">
-      <option [ngValue]="0">Solid/Liquid</option>
-            <option [ngValue]="1">Gas</option>
-          </select>
-        </div>
-    </form>
-  </li>
-  <li class="explore-opps-item mb-2">
-    <form [formGroup]="baselineForm" class="explore-opps-form">
-      <div class="text-center">
-        <label for="baselineFuel" class="baseline-value-label"> Fuel</label>
-        <div class="text-muted text-center baseline-value-input">
-          {{ baselineForm.value.fuel | optionDisplayValue : baselineFuelOptions : 'id' : 'substance'}}
-        </div>
     </div>
-    </form>
-    <form [formGroup]="modificationForm" class="explore-opps-form">
-          <div class="form-group explore-opps-formgroup">
-            <label for="modificationFuel" class="mod-value-label">Fuel</label>
-            <select name="modificationFuel" id="modificationFuel" class="form-control mod-max-width" (focus)="focusField('fuel')"
-            (change)="save()" formControlName="fuel">
-            <option *ngFor="let option of modificationFuelOptions" [ngValue]="option.id">{{option.substance}}</option>
-          </select>
+
+  <div class="explore-opps-form">
+    <div class="form-group explore-opps-formgroup">
+      <label for="energySource" class="mod-value-label">Energy Source</label>
+      <div class="input-group">
+        <select name="energySource" class="form-control mod-max-width" id="energySource" (focus)="focusField('energySource')"
+          [(ngModel)]="modificationCo2SavingsData.energySource" (change)="setEnergySource()">
+          <option *ngFor="let option of otherFuels" [ngValue]="option.energySource">{{option.energySource}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  </li>
+
+  <li class="explore-opps-item mb-2">
+    <div class="explore-opps-form">
+      <div class="text-center">
+        <label for="fuelType" class="baseline-value-label">Fuel Type</label>
+        <div class="text-muted text-center baseline-value-input">
+          {{ baselineCo2SavingsData.fuelType }}
         </div>
-      </form>
+      </div>
+    </div>
+    
+  <div class="explore-opps-form">
+    <div class="form-group explore-opps-formgroup">
+      <label for="fuelType" class="mod-value-label">Fuel Type</label>
+      <div class="input-group">
+        <select name="fuelType" class="form-control mod-max-width" id="fuelType" (focus)="focusField('fuelType')"
+          [(ngModel)]="modificationCo2SavingsData.fuelType" (change)="setFuel()">
+          <option *ngFor="let option of fuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  </li>
+
+  <li class="explore-opps-item mb-2">
+    <div class="explore-opps-form">
+      <div class="text-center">
+        <label for="fuelType" class="baseline-value-label">Total Fuel Emission Output Rate</label>
+        <div class="text-muted text-center baseline-value-input">
+          {{ baselineCo2SavingsData.totalFuelEmissionOutputRate }}
+        </div>
+      </div>
+    </div>
+    
+  <div class="explore-opps-form">
+    <div class="form-group explore-opps-formgroup">
+      <label for="fuelType" class="mod-value-label">Total Fuel Emission Output Rate</label>
+      <div class="input-group">
+        <input class="form-control" name="totalFuelEmissionOutputRate" type="number"
+          (focus)="focusField('totalEmissionOutputRate')"
+          [(ngModel)]="modificationCo2SavingsData.totalFuelEmissionOutputRate" (input)="save()">
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
+          CO<sub>2</sub>/MMBtu</span>
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
+          CO<sub>2</sub>/GJ</span>
+      </div>
+    </div>
+  </div>
   </li>
 </div>
 
