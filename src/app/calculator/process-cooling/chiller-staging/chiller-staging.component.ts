@@ -33,8 +33,8 @@ export class ChillerStagingComponent implements OnInit {
     }, 100);
   }
 
-  chillerPerformanceInputSub: Subscription;
-  chillerPerformanceInput: ChillerStagingInput;
+  chillerStagingInputSub: Subscription;
+  chillerStagingInput: ChillerStagingInput;
   // calcFormWidth: number;
   // calcFormWidthSub: Subscription;
   // resultsHelpWidth: number;
@@ -53,8 +53,8 @@ export class ChillerStagingComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.chillerPerformanceInput = this.chillerStagingService.chillerStagingInput.getValue();
-    if (!this.chillerPerformanceInput) {
+    this.chillerStagingInput = this.chillerStagingService.chillerStagingInput.getValue();
+    if (!this.chillerStagingInput) {
       this.chillerStagingService.initDefaultEmptyInputs(this.settings);
       this.chillerStagingService.initDefaultEmptyOutputs();
     }
@@ -63,11 +63,11 @@ export class ChillerStagingComponent implements OnInit {
 
   ngOnDestroy() {
     if(!this.inTreasureHunt){
-      this.chillerStagingService.chillerStagingInput.next(this.chillerPerformanceInput);
+      this.chillerStagingService.chillerStagingInput.next(this.chillerStagingInput);
     } else {
       this.chillerStagingService.chillerStagingInput.next(undefined);
     }
-    this.chillerPerformanceInputSub.unsubscribe();
+    this.chillerStagingInputSub.unsubscribe();
     // this.calcFormWidthSub.unsubscribe();
   }
 
@@ -78,8 +78,8 @@ export class ChillerStagingComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this.chillerPerformanceInputSub = this.chillerStagingService.chillerStagingInput.subscribe(value => {
-      this.chillerPerformanceInput = value;
+    this.chillerStagingInputSub = this.chillerStagingService.chillerStagingInput.subscribe(value => {
+      this.chillerStagingInput = value;
       if(value){
         this.calculate();
       }
@@ -123,7 +123,7 @@ export class ChillerStagingComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit({ chillerStagingData: this.chillerPerformanceInput, opportunityType: Treasure.chillerStaging });
+    this.emitSave.emit({ chillerStagingData: this.chillerStagingInput, opportunityType: Treasure.chillerStaging });
   }
 
   cancel() {

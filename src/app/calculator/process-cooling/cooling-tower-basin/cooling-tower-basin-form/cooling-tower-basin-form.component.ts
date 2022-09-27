@@ -16,6 +16,8 @@ export class CoolingTowerBasinFormComponent implements OnInit {
 
   @Input()
   settings: Settings;
+  @Input()
+  inTreasureHunt: boolean;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])

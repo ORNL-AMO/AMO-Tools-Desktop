@@ -499,6 +499,22 @@ export class ConvertUnitsService {
     }
   }
 
+  convertMphAndKmPerHour(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'mph', 'km/h');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'km/h', 'mph');
+    }
+  }
+
+  convertTonsAndKW(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'tons', 'kW');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'kW', 'tons');
+    }
+  }
+
 
   convertValue(value: number, oldUnit: string, newUnit: string): number {
     value = this.value(value).from(oldUnit).to(newUnit);

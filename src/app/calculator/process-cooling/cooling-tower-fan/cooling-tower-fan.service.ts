@@ -83,7 +83,7 @@ export class CoolingTowerFanService {
       }
       coolingTowerFanOutput.baselineEnergyCost = coolingTowerFanOutput.baselineEnergy * inputCopy.electricityCost;
       coolingTowerFanOutput.modEnergyCost = coolingTowerFanOutput.modEnergy * inputCopy.electricityCost;
-      coolingTowerFanOutput.annualCostSaving = coolingTowerFanOutput.baselineEnergy - coolingTowerFanOutput.modEnergy;
+      coolingTowerFanOutput.annualCostSaving = coolingTowerFanOutput.baselineEnergyCost - coolingTowerFanOutput.modEnergyCost;
       coolingTowerFanOutput = this.convertResultUnits(coolingTowerFanOutput, settings);
       this.coolingTowerFanOutput.next(coolingTowerFanOutput);
       return coolingTowerFanOutput;

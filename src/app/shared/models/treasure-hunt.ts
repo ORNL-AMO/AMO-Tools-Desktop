@@ -15,8 +15,9 @@ import { FlueGasEnergyData } from "../../calculator/furnaces/flue-gas/energy-for
 import { FeedwaterEconomizerInput } from "./steam/feedwaterEconomizer";
 import { CondensingEconomizerInput } from "./steam/condensingEconomizer";
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
-import { ChillerPerformanceInput, CoolingTowerData, CoolingTowerFanInput } from "./chillers";
+import { ChillerPerformanceInput, CoolingTowerBasinInput, CoolingTowerData, CoolingTowerFanInput } from "./chillers";
 import { ChillerStagingInput } from "./chillers";
+import { WeatherBinsInput } from "../../calculator/utilities/weather-bins/weather-bins.service";
 
 export interface TreasureHunt {
     name: string,
@@ -46,6 +47,7 @@ export interface TreasureHunt {
     chillerStagingOpportunities?: Array<ChillerStagingTreasureHunt>;
     chillerPerformanceOpportunities?: Array<ChillerPerformanceTreasureHunt>;
     coolingTowerFanOpportunities?: Array<CoolingTowerFanTreasureHunt>;
+    coolingTowerBasinOpportunities?: Array<CoolingTowerBasinTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     existingDataUnits?: string;
@@ -79,7 +81,8 @@ export enum Treasure {
     coolingTowerMakeup = 'cooling-tower-makeup',
     chillerStaging = 'chiller-staging',
     chillerPerformance = 'chiller-performance',
-    coolingTowerFan = 'cooling-tower-fan'
+    coolingTowerFan = 'cooling-tower-fan',
+    coolingTowerBasin = 'cooling-tower-basin'
 }
 
 export interface FilterOption {
@@ -431,6 +434,13 @@ export interface CoolingTowerFanTreasureHunt extends TreasureHuntOpportunity {
     selected?: boolean;
 }
 
+export interface CoolingTowerBasinTreasureHunt extends TreasureHuntOpportunity {
+    coolingTowerBasinData?: CoolingTowerBasinInput;  
+    weatherData?: WeatherBinsInput;  
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
 export interface TreasureHuntResults {
     totalSavings: number;
     percentSavings: number;
@@ -527,4 +537,5 @@ export interface ImportExportOpportunities {
     chillerStagingOpportunities?: Array<ChillerStagingTreasureHunt>;
     chillerPerformanceOpportunities?: Array<ChillerPerformanceTreasureHunt>;
     coolingTowerFanOpportunities?: Array<CoolingTowerFanTreasureHunt>;
+    coolingTowerBasinOpportunities?: Array<CoolingTowerBasinTreasureHunt>;
 }

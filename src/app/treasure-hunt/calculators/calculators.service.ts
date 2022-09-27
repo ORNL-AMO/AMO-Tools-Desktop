@@ -30,6 +30,7 @@ import { CoolingTowerMakeupTreasureHuntService } from '../treasure-hunt-calculat
 import { ChillerStagingTreasureHuntService } from '../treasure-hunt-calculator-services/chiller-staging-treasure-hunt.service';
 import { ChillerPerformanceTreasureHuntService } from '../treasure-hunt-calculator-services/chiller-performance-treasure-hunt.service';
 import { CoolingTowerFanTreasureHuntService } from '../treasure-hunt-calculator-services/cooling-tower-fan-treasure-hunt.service';
+import { CoolingTowerBasinTreasureHuntService } from '../treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
 
 @Injectable()
 export class CalculatorsService {
@@ -66,7 +67,8 @@ export class CalculatorsService {
     private coolingTowerMakeupTreasureHuntService: CoolingTowerMakeupTreasureHuntService,
     private chillerStagingTreasureHuntService: ChillerStagingTreasureHuntService,
     private chillerPerformanceTreasureHuntService: ChillerPerformanceTreasureHuntService,
-    private coolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService
+    private coolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService,
+    private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService
     ) {
     this.selectedCalc = new BehaviorSubject<string>('none');
   }
@@ -129,6 +131,8 @@ export class CalculatorsService {
       this.chillerPerformanceTreasureHuntService.initNewCalculator()
     } else if (calculatorType === Treasure.coolingTowerFan) {
       this.coolingTowerFanTreasureHuntService.initNewCalculator()
+    } else if (calculatorType === Treasure.coolingTowerBasin) {
+      this.coolingTowerBasinTreasureHuntService.initNewCalculator()
     }
     this.selectedCalc.next(calculatorType);
   }
@@ -283,6 +287,12 @@ export class CalculatorsService {
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.coolingTowerFan, settings);
       opportunityCardData = this.coolingTowerFanTreasureHuntService.getCoolingTowerFanCardData(opportunityCardData.coolingTowerFan, opportunitySummary, treasureHunt.coolingTowerFanOpportunities.length - 1, treasureHunt.currentEnergyUsage, settings);
     
+    } else if (opportunityCardData.opportunityType === Treasure.coolingTowerBasin) {
+      opportunityCardData.coolingTowerBasin.opportunitySheet = this.updateCopyName(opportunityCardData.coolingTowerBasin.opportunitySheet);
+      this.coolingTowerBasinTreasureHuntService.saveTreasureHuntOpportunity(opportunityCardData.coolingTowerBasin, treasureHunt);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.coolingTowerBasin, settings);
+      opportunityCardData = this.coolingTowerBasinTreasureHuntService.getCoolingTowerBasinCardData(opportunityCardData.coolingTowerBasin, opportunitySummary, treasureHunt.coolingTowerBasinOpportunities.length - 1, treasureHunt.currentEnergyUsage, settings);
+    
     }
     return opportunityCardData;
   }
@@ -342,6 +352,8 @@ export class CalculatorsService {
       this.chillerPerformanceTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.chillerPerformance);
     } else if (opportunityCardData.opportunityType === Treasure.coolingTowerFan) {
       this.coolingTowerFanTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.coolingTowerFan);
+    } else if (opportunityCardData.opportunityType === Treasure.coolingTowerBasin) {
+      this.coolingTowerBasinTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.coolingTowerBasin);
     }
 
     this.selectedCalc.next(opportunityCardData.opportunityType);
@@ -491,8 +503,13 @@ export class CalculatorsService {
     } else if (opportunityCardData.opportunityType === Treasure.coolingTowerFan) {
       opportunityCardData.coolingTowerFan.selected = opportunityCardData.selected;
       treasureHunt.coolingTowerFanOpportunities[opportunityCardData.opportunityIndex] = opportunityCardData.coolingTowerFan;
-      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.coolingTowerMakeup, settings);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.coolingTowerFan, settings);
       updatedCard = this.coolingTowerFanTreasureHuntService.getCoolingTowerFanCardData(opportunityCardData.coolingTowerFan, opportunitySummary, opportunityCardData.opportunityIndex, treasureHunt.currentEnergyUsage, settings);
+    } else if (opportunityCardData.opportunityType === Treasure.coolingTowerBasin) {
+      opportunityCardData.coolingTowerBasin.selected = opportunityCardData.selected;
+      treasureHunt.coolingTowerBasinOpportunities[opportunityCardData.opportunityIndex] = opportunityCardData.coolingTowerBasin;
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.coolingTowerBasin, settings);
+      updatedCard = this.coolingTowerBasinTreasureHuntService.getCoolingTowerBasinCardData(opportunityCardData.coolingTowerBasin, opportunitySummary, opportunityCardData.opportunityIndex, treasureHunt.currentEnergyUsage, settings);
     }
     
     this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
@@ -550,6 +567,8 @@ export class CalculatorsService {
       this.chillerPerformanceTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
     } else if (deleteOpportunity.opportunityType === Treasure.coolingTowerFan) {
       this.coolingTowerFanTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
+    } else if (deleteOpportunity.opportunityType === Treasure.coolingTowerBasin) {
+      this.coolingTowerBasinTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
     } 
 
     return treasureHunt;
