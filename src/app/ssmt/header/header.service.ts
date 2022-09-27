@@ -114,10 +114,10 @@ export class HeaderService {
     });
 
     // only add validation if pressureMin/Max constraint fields have value
-    if (pressureMin) {
+    if (pressureMin != undefined) {
       form.controls.pressure.addValidators(GreaterThanValidator.greaterThan(ranges.pressureMin))
     }
-    if (pressureMax) {
+    if (pressureMax != undefined) {
       form.controls.pressure.addValidators(LessThanValidator.lessThan(ranges.pressureMax))
     }
 
