@@ -66,14 +66,13 @@ export class HeaderComponent implements OnInit {
     let minHighPressure: number;
     if (this.headerInput.numberOfHeaders == 1) {
       minHighPressure = this.boilerInput.deaeratorPressure;
+    } else if (this.headerInput.numberOfHeaders == 2 && this.headerInput.lowPressureHeader && this.headerInput.lowPressureHeader.pressure) {
+      minHighPressure = this.headerInput.lowPressureHeader.pressure;
+    } else if (this.headerInput.numberOfHeaders == 3 && this.headerInput.mediumPressureHeader && this.headerInput.mediumPressureHeader.pressure) {
+      minHighPressure = this.headerInput.mediumPressureHeader.pressure;
     }
+
     if (this.headerInput.highPressureHeader) {
-      let lowPressureHeaderPressure: number;
-      if (this.headerInput.numberOfHeaders == 1) {
-        lowPressureHeaderPressure = this.headerInput.highPressureHeader.pressure;
-      } else {
-        lowPressureHeaderPressure = this.headerInput.lowPressureHeader.pressure;
-      }
       this.highPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, this.boilerInput, minHighPressure);
     }
     else {
@@ -99,15 +98,15 @@ export class HeaderComponent implements OnInit {
 
   setLowPressureForm() {
     if (this.headerInput.lowPressureHeader) {
-      let pressureMax: number;
-      if (this.headerInput.numberOfHeaders == 3 && this.headerInput.mediumPressureHeader) {
-        pressureMax = this.headerInput.mediumPressureHeader.pressure;
-      } else if (this.headerInput.highPressureHeader) {
-        pressureMax = this.headerInput.highPressureHeader.pressure;
+      let lowPressureMax: number;
+      if (this.headerInput.numberOfHeaders == 3 && this.headerInput.mediumPressureHeader && this.headerInput.mediumPressureHeader.pressure) {
+        lowPressureMax = this.headerInput.mediumPressureHeader.pressure;
+      } else if (this.headerInput.numberOfHeaders != 3 && this.headerInput.highPressureHeader && this.headerInput.highPressureHeader.pressure) {
+        lowPressureMax = this.headerInput.highPressureHeader.pressure;
       }
-      this.lowPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressureHeader, this.settings, this.boilerInput.deaeratorPressure, pressureMax);
+      this.lowPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressureHeader, this.settings, undefined, lowPressureMax);
     } else {
-      this.lowPressureForm = this.headerService.initHeaderForm(this.settings, this.isBaseline, this.boilerInput.deaeratorPressure, undefined);
+      this.lowPressureForm = this.headerService.initHeaderForm(this.settings, this.isBaseline, undefined, undefined);
     }
   }
 
@@ -126,7 +125,9 @@ export class HeaderComponent implements OnInit {
 
   save() {
     this.emitSave.emit(this.headerInput);
-    this.updatePressureMaxMins();
+    this.updateLowPressureHeaderValidation();
+    this.updateMediumPressureHeaderValidation();
+    this.updateHighPressureHeaderValidation();
   }
 
   saveHighPressure(header: HeaderWithHighestPressure) {
@@ -144,28 +145,39 @@ export class HeaderComponent implements OnInit {
     this.save();
   }
 
-
-  updatePressureMaxMins() {
-    let pressureMax: number;
-    if (this.headerInput.numberOfHeaders == 3 && this.headerInput.mediumPressureHeader) {
-      pressureMax = this.headerInput.mediumPressureHeader.pressure;
-    } else if (this.headerInput.numberOfHeaders != 3 && this.headerInput.highPressureHeader) {
-      pressureMax = this.headerInput.highPressureHeader.pressure;
+  updateLowPressureHeaderValidation() {
+    let lowPressureMax: number;
+    if (this.headerInput.numberOfHeaders == 3 && this.headerInput.mediumPressureHeader && this.headerInput.mediumPressureHeader.pressure) {
+      lowPressureMax = this.headerInput.mediumPressureHeader.pressure;
+    } else if (this.headerInput.numberOfHeaders != 3 && this.headerInput.highPressureHeader && this.headerInput.highPressureHeader.pressure) {
+      lowPressureMax = this.headerInput.highPressureHeader.pressure;
     }
-    let ranges: HeaderRanges = this.headerService.getRanges(this.settings, undefined, this.boilerInput.deaeratorPressure, pressureMax);
+    let ranges: HeaderRanges = this.headerService.getRanges(this.settings, undefined, lowPressureMax, undefined);
     this.lowPressureForm.controls.pressure.setValidators([Validators.required, LessThanValidator.lessThan(ranges.pressureMax), GreaterThanValidator.greaterThan(ranges.pressureMin)]);
     this.lowPressureForm.controls.pressure.updateValueAndValidity();
+  }
+
+  updateMediumPressureHeaderValidation() {
     let mediumPressureMin: number;
     let mediumPressureMax: number;
-    if (this.headerInput.lowPressureHeader) {
+    if (this.headerInput.lowPressureHeader && this.headerInput.lowPressureHeader.pressure != undefined) {
       mediumPressureMin = this.headerInput.lowPressureHeader.pressure;
     }
-    if (this.headerInput.highPressureHeader) {
-      mediumPressureMax = this.headerInput.highPressureHeader.pressure;
+    if (this.headerInput.highPressureHeader && this.headerInput.highPressureHeader.pressure) {
+        mediumPressureMax = this.headerInput.highPressureHeader.pressure;
     }
-    ranges = this.headerService.getRanges(this.settings, undefined, mediumPressureMin, mediumPressureMax);
+    let ranges: HeaderRanges = this.headerService.getRanges(this.settings, mediumPressureMin, mediumPressureMax, undefined);
     this.mediumPressureForm.controls.pressure.setValidators([Validators.required, LessThanValidator.lessThan(ranges.pressureMax), GreaterThanValidator.greaterThan(ranges.pressureMin)]);
     this.mediumPressureForm.controls.pressure.updateValueAndValidity();
+  }
 
+  updateHighPressureHeaderValidation() {
+    let highPressureMin: number;
+    if (this.headerInput.numberOfHeaders == 3 && this.headerInput.mediumPressureHeader && this.headerInput.mediumPressureHeader.pressure) {
+      highPressureMin = this.headerInput.mediumPressureHeader.pressure;
+    } else if (this.headerInput.numberOfHeaders != 3 && this.headerInput.lowPressureHeader && this.headerInput.lowPressureHeader.pressure) {
+      highPressureMin = this.headerInput.lowPressureHeader.pressure;
+    }
+    this.highPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, this.boilerInput, highPressureMin);
   }
 }

@@ -45,7 +45,6 @@ export class HeaderFormComponent implements OnInit {
 
   ngOnInit() {
     this.warnings = this.headerService.checkHeaderWarnings(this.ssmt, this.pressureLevel, this.settings);
-    console.log(this.warnings);
     if (this.selected === false) {
       this.disableForm();
     } else {
@@ -74,22 +73,16 @@ export class HeaderFormComponent implements OnInit {
   setErrorMsgs() {
     if (this.pressureLevel === 'highPressure') {
       if (this.numberOfHeaders == 1) {
-        this.minPressureErrorMsg = 'Value can\'t be less than deaerator pressure: ';
+        this.minPressureErrorMsg = 'Value can\'t be less than Deaerator Pressure: ';
       } else {
-        this.minPressureErrorMsg = 'Value must be greater than ';
-
+        this.minPressureErrorMsg = 'Value must be greater than Lower pressure Headers: ';
       }
       this.maxPressureErrorMsg = 'Value must be less than ';
-    } else {
-      if (this.pressureLevel === 'lowPressure') {
-        this.minPressureErrorMsg = 'Value can\'t be less than deaerator pressure: ';
-      } else {
-        this.minPressureErrorMsg = 'Value must be greater than low pressure header: ';
-      }
-      this.maxPressureErrorMsg = 'Value must be less than higher pressure headers: ';
-    }
+    } else if (this.pressureLevel === 'mediumPressure') {
+      this.minPressureErrorMsg = 'Value must be greater than Low Pressure Header: ';
+    } 
+    this.maxPressureErrorMsg = 'Value must be less than Higher Pressure Headers: ';
   }
-
 
   enableForm() {
     if (this.pressureLevel === 'highPressure') {

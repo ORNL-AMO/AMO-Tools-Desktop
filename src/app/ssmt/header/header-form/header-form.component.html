@@ -15,8 +15,8 @@
       <span class="alert-danger pull-right small"
         *ngIf="headerForm.controls.condensateReturnTemperature.invalid && !headerForm.controls.condensateReturnTemperature.pristine">
         <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.required">Value Required</span>
-        <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.max">Value must be lower than saturation
-          temperature at deaerator pressure.
+        <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.max">Value must be lower than Saturation
+          Temperature at Deaerator Pressure.
           ({{headerForm.controls.condensateReturnTemperature.errors.max.max}}
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)</span>
         <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.min">Value can't be less than
