@@ -245,8 +245,7 @@ export class PerformancePointsFormService {
       let blowoffForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.blowoff, compressor, 'blowoff');
       isValid = blowoffForm.valid;
     }
-    return true;
-    // return isValid;
+    return isValid;
   }
 
 
