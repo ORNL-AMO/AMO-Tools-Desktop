@@ -16,11 +16,22 @@
 
     <div *ngIf="index == 0" class="form-section">
 
-      <div class="d-flex flex-column w-100 justify-content-center pb-3">
-        <div class="btn-group btn-group-sm align-self-center">
-          <button type="button" [disabled]="!isBaseline && atmosphereLossForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Fuel')" [ngClass]="{'active': atmosphereLossForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
-          <button type="button" [disabled]="!isBaseline && atmosphereLossForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Electricity')" [ngClass]="{'active': atmosphereLossForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
-          <button type="button" [disabled]="!isBaseline && atmosphereLossForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Steam')" [ngClass]="{'active':  atmosphereLossForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
+      <div class="d-flex flex-wrap w-100 justify-content-center pb-3">
+        <div class="d-flex flex-fill btn-group btn-group-sm align-self-center">
+          <button type="button" [disabled]="!isBaseline && atmosphereLossForm.controls.energySourceType.value != 'Fuel'"
+            class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Fuel')"
+            [ngClass]="{'active': atmosphereLossForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
+        </div>
+        <div class="d-flex flex-fill btn-group btn-group-sm align-self-center">
+          <button type="button"
+            [disabled]="!isBaseline && atmosphereLossForm.controls.energySourceType.value != 'Electricity'"
+            class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Electricity')"
+            [ngClass]="{'active': atmosphereLossForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
+        </div>
+        <div class="d-flex flex-fill btn-group btn-group-sm align-self-center">
+          <button type="button" [disabled]="!isBaseline && atmosphereLossForm.controls.energySourceType.value != 'Steam'"
+            class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Steam')"
+            [ngClass]="{'active':  atmosphereLossForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
         </div>
       </div>
  
