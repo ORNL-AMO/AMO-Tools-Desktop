@@ -1,15 +1,20 @@
 <form [formGroup]="energyForm" >
     <div class="form-section">
-         <div class="d-flex flex-column w-100 justify-content-center pb-3">
-          <div class="d-none d-lg-flex btn-group btn-group-sm align-self-center">
-            <button type="button" [disabled]="!isBaseline && energyForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Fuel')" [ngClass]="{'active': energyForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
-            <button type="button" [disabled]="!isBaseline && energyForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Electricity')" [ngClass]="{'active': energyForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
-            <button type="button" [disabled]="!isBaseline && energyForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Steam')" [ngClass]="{'active':  energyForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
+        <div class="d-flex flex-wrap w-100 justify-content-center pb-3">
+          <div class="d-flex flex-fill btn-group btn-group-sm align-self-center">
+            <button type="button" [disabled]="!isBaseline && energyForm.controls.energySourceType.value != 'Fuel'"
+              class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Fuel')"
+              [ngClass]="{'active': energyForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
           </div>
-          <div class="d-flex d-lg-none btn-group-vertical btn-group-sm align-self-center">
-            <button type="button" [disabled]="!isBaseline && energyForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Fuel')" [ngClass]="{'active': energyForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
-            <button type="button" [disabled]="!isBaseline && energyForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Electricity')" [ngClass]="{'active': energyForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
-            <button type="button" [disabled]="!isBaseline && energyForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Steam')" [ngClass]="{'active':  energyForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
+          <div class="d-flex flex-fill btn-group btn-group-sm align-self-center">
+            <button type="button" [disabled]="!isBaseline && energyForm.controls.energySourceType.value != 'Electricity'"
+              class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Electricity')"
+              [ngClass]="{'active': energyForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
+          </div>
+          <div class="d-flex flex-fill btn-group btn-group-sm align-self-center">
+            <button type="button" [disabled]="!isBaseline && energyForm.controls.energySourceType.value != 'Steam'"
+              class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Steam')"
+              [ngClass]="{'active':  energyForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
           </div>
         </div>
    
