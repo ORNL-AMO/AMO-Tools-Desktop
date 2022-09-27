@@ -122,6 +122,9 @@ export class CoolingTowerBasinComponent implements OnInit {
   }
 
   calculate() {
+    if(this.inTreasureHunt === true){
+      this.coolingTowerBasinService.isShowingWeatherResults.next(true);
+    }
     this.coolingTowerBasinService.calculate(this.settings);
   }
 
