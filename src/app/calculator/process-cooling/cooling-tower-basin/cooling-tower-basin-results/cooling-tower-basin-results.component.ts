@@ -14,6 +14,8 @@ export class CoolingTowerBasinResultsComponent implements OnInit {
   settings: Settings;
   @Input()
   modificationExists: boolean;
+  @Input()
+  inTreasureHunt: boolean
 
   @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
   table0String: any;
