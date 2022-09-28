@@ -253,10 +253,10 @@ export class BoilerFormComponent implements OnInit {
 
   toggleFuelData() {
     if (this.showFuelType === false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.co2SavingsData.energySource = this.ssmt.co2SavingsData.energySource; 
-      this.ssmt.modifications[this.exploreModIndex].ssmt.co2SavingsData.fuelType = this.ssmt.co2SavingsData.fuelType; 
-      this.ssmt.modifications[this.exploreModIndex].ssmt.co2SavingsData.totalFuelEmissionOutputRate = this.ssmt.co2SavingsData.totalFuelEmissionOutputRate; 
-      this.co2SavingsDifferent = this.compareService.isCo2SavingsDifferent(false, this.ssmt, this.ssmt.modifications[this.exploreModIndex].ssmt);
+      this.modificationCo2SavingsData.energySource = this.ssmt.co2SavingsData.energySource; 
+      this.modificationCo2SavingsData.fuelType = this.ssmt.co2SavingsData.fuelType; 
+      this.setFuelOptions();
+      this.modificationCo2SavingsData.totalFuelEmissionOutputRate = this.ssmt.co2SavingsData.totalFuelEmissionOutputRate; 
       this.save();
     }
   }
@@ -298,17 +298,15 @@ export class BoilerFormComponent implements OnInit {
   }
 
   save() {
-    // not needed unless we enable baseline fields
-    // let tmpBaselineBoilerInput: BoilerInput = this.boilerService.initObjFromForm(this.baselineForm);
-    // this.ssmt.boilerInput = tmpBaselineBoilerInput;
     let stackLossInput: StackLossInput = this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.stackLossInput;
     let tmpModificationBoilerInput: BoilerInput = this.boilerService.initObjFromForm(this.modificationForm);
     tmpModificationBoilerInput.stackLossInput = stackLossInput;
     this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput = tmpModificationBoilerInput;
     // Use copy so co2SavingsData isn't overwritten from ssmt.component.updateModificationCO2Savings()
-    this.ssmt.modifications[this.exploreModIndex].ssmt.co2SavingsData = JSON.parse(JSON.stringify(this.modificationCo2SavingsData));    
-    this.emitSave.emit(this.ssmt);
+    this.ssmt.modifications[this.exploreModIndex].ssmt.co2SavingsData = JSON.parse(JSON.stringify(this.modificationCo2SavingsData));  
     this.co2SavingsDifferent = this.compareService.isCo2SavingsDifferent(false, this.ssmt, this.ssmt.modifications[this.exploreModIndex].ssmt);
+
+    this.emitSave.emit(this.ssmt);
   }
 
   focusField(str: string) {
