@@ -78,6 +78,7 @@ export class BoilerFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
+        this.setCo2SavingsData();
         this.init();
       }
     }
