@@ -96,12 +96,12 @@ export class HeaderFormComponent implements OnInit {
     if (this.ssmt.headerInput.mediumPressureHeader) {
       this.baselineMediumPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.headerInput.mediumPressureHeader, this.settings, this.ssmt.headerInput.lowPressureHeader.pressure, this.ssmt.headerInput.highPressureHeader.pressure);
     } else {
-      this.baselineMediumPressureForm = this.headerService.initHeaderForm(this.settings, false);
+      this.baselineMediumPressureForm = this.headerService.initHeaderForm(this.settings, false, undefined, undefined);
     }
     if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressureHeader) {
       this.modificationMediumPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressureHeader, this.settings, this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressureHeader.pressure, this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressureHeader.pressure);
     } else {
-      this.modificationMediumPressureForm = this.headerService.initHeaderForm(this.settings, true);
+      this.modificationMediumPressureForm = this.headerService.initHeaderForm(this.settings, true, undefined, undefined);
     }
     this.baselineHighPressureForm.disable();
     this.baselineLowPressureForm.disable();

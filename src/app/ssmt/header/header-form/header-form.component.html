@@ -56,15 +56,19 @@
     </div>
     <span class="alert-danger pull-right small"
       *ngIf="headerForm.controls.pressure.invalid && !headerForm.controls.pressure.pristine">
-      <span *ngIf="headerForm.controls.pressure.errors.required">Value Required</span>
-      <span *ngIf="headerForm.controls.pressure.errors.greaterThan">{{minPressureErrorMsg}}
+      <span class="d-block"*ngIf="headerForm.controls.pressure.errors.required">Value Required</span>
+      <span class="d-block" *ngIf="headerForm.controls.pressure.errors.greaterThan">{{minPressureErrorMsg}}
         {{headerForm.controls.pressure.errors.greaterThan}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="headerForm.controls.pressure.errors.lessThan">{{maxPressureErrorMsg}}
+      <span class="d-block" *ngIf="headerForm.controls.pressure.errors.lessThan">{{maxPressureErrorMsg}}
         {{headerForm.controls.pressure.errors.lessThan}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="headerForm.controls.pressure.errors.boilerTemp">Temperature of steam in boiler is too low for this
+      <span class="d-block" *ngIf="headerForm.controls.pressure.errors.boilerTemp">Temperature of steam in boiler is too low for this
         pressure value.</span>
+        <span class="d-block" *ngIf="headerForm.controls.pressure.errors.deaeratorPressure">
+          Value must be greater than Deaerator Pressure: {{headerForm.controls.pressure.errors.deaeratorPressure.val}} <span
+            [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+    </span>
     </span>
     <span class="alert-warning pull-right small" *ngIf="warnings.headerPressure !== null">{{warnings.headerPressure}}
       <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
