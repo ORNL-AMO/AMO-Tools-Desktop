@@ -1,4 +1,4 @@
-<ng-container *ngIf="(!isShowingWeatherResults && output.results) && !inTreasureHunt">
+<ng-container *ngIf="!isShowingWeatherResults && output.results && !inTreasureHunt">
   <label class="group-label">Baseline</label>
   <table #copyTable0 class="table table-hover table-striped">
     <tbody>
@@ -101,7 +101,7 @@
 </ng-container>
 
 
-  <ng-container *ngIf="(isShowingWeatherResults && output.weatherBinnedChartData) || inTreasureHunt">
+<ng-container *ngIf="output.weatherBinnedChartData && (inTreasureHunt || isShowingWeatherResults)">
   <app-cooling-weather-chart
     [weatherBinnedChartData]="output.weatherBinnedChartData">
   </app-cooling-weather-chart>
