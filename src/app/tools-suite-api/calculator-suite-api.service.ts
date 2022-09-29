@@ -449,7 +449,8 @@ export class CalculatorSuiteApiService {
       inputObj.systemEfficiency,
       inputObj.insulationThickness,
       inputObj.insulationConductivity,
-      inputObj.jacketEmissivity
+      inputObj.jacketEmissivity,
+      inputObj.surfaceTemperature
     );
     let InsulatedTankCalculator = new Module.InsulatedTankCalculator(input);
     let rawOutput = InsulatedTankCalculator.calculate();

@@ -105,31 +105,28 @@ export class SsmtComponent implements OnInit {
       if (!this.assessment || (this.assessment && this.assessment.type !== 'SSMT')) {
         this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' } });
       } else {
-        this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
-        if (this._ssmt.modifications) {
-          if (this._ssmt.modifications.length !== 0) {
-              if (this.assessment.ssmt.modifications.length !== 0) {
-                this.modificationExists = true;
-                this.modificationIndex = 0;
-                this.compareService.setCompareVals(this.assessment.ssmt, 0);
-              } else {
-                this.modificationExists = false;
-                this.compareService.setCompareVals(this.assessment.ssmt);
-              }
-            } else {
-              this.assessment.ssmt.modifications = new Array<Modification>();
-              this.modificationExists = false;
-              this.compareService.setCompareVals(this.assessment.ssmt);
-            }
-            this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
-
-            this.getSettings();
-            this.initSankeyList();
-            let tmpTab = this.assessmentService.getTab();
-            if (tmpTab) {
-              this.ssmtService.mainTab.next(tmpTab);
-            }
+        this.assessment.ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
+        if (this.assessment.ssmt.modifications) {
+          if (this.assessment.ssmt.modifications.length !== 0) {
+            this.modificationExists = true;
+            this.modificationIndex = 0;
+            this.compareService.setCompareVals(this.assessment.ssmt, 0);
+          } else {
+            this.modificationExists = false;
+            this.compareService.setCompareVals(this.assessment.ssmt);
           }
+        } else {
+          this.assessment.ssmt.modifications = new Array<Modification>();
+          this.modificationExists = false;
+          this.compareService.setCompareVals(this.assessment.ssmt);
+        }
+        this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
+        this.getSettings();
+        this.initSankeyList();
+        let tmpTab = this.assessmentService.getTab();
+        if (tmpTab) {
+          this.ssmtService.mainTab.next(tmpTab);
+        }
       }
     });
     this.subscribeTabs();

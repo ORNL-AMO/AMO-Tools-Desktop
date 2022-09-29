@@ -44,7 +44,11 @@ export class ChillersSuiteApiService {
       wcModification: output.wcModification,
       waterSavings: output.waterSavings,
       savingsPercentage: output.savingsPercentage,
-      coolingTowerCaseResults: []
+      coolingTowerCaseResults: [],
+      annualCostSavings: undefined,
+      baselineCost: undefined,
+      modificationCost: undefined,
+      
     }
     output.delete();
     CoolingTowerMakeupWaterInstance.delete();
@@ -74,6 +78,9 @@ export class ChillersSuiteApiService {
       modPower: output.modPower,
       modEnergy: output.modEnergy,
       savingsEnergy: output.savingsEnergy,
+      baselineEnergyCost: undefined,
+      modEnergyCost: undefined,
+      annualCostSaving: undefined
     }
     output.delete();
 
@@ -99,6 +106,9 @@ export class ChillersSuiteApiService {
       modPower: output.modPower,
       modEnergy: output.modEnergy,
       savingsEnergy: output.savingsEnergy,
+      annualCostSaving: undefined,
+      modEnergyCost: undefined,
+      baselineEnergyCost: undefined
     }
     output.delete();
     
@@ -136,6 +146,9 @@ export class ChillersSuiteApiService {
       modPower: output.modPower,
       modEnergy: output.modEnergy,
       savingsEnergy: output.savingsEnergy,
+      annualCostSaving: undefined,
+      modEnergyCost: undefined,
+      baselineEnergyCost: undefined
     }
     output.delete();
     return results;
@@ -181,6 +194,9 @@ export class ChillersSuiteApiService {
       savingsEnergy: rawOutput.savingsEnergy,
       baselinePowerList: baselinePowerList,
       modPowerList: modPowerList,
+      costSavings: undefined,
+      baselineCost: undefined,
+      modificationCost: undefined
     }
     baselineLoadList.delete();
     modLoadList.delete();
