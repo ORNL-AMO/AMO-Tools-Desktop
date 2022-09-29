@@ -118,6 +118,7 @@ export class OperationsComponent implements OnInit {
       this.co2SavingsData = co2SavingsData;
     } else {
       co2SavingsData = this.assessmentCo2SavingsService.getCo2SavingsDataFromSettingsObject(this.settings);
+      co2SavingsData.totalFuelEmissionOutputRate = 53.06;
     }
     this.otherFuels = otherFuels;
     if (!co2SavingsData.energySource) {

@@ -40,6 +40,7 @@ export class WeatherBinsBarChartComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    window.dispatchEvent(new Event("resize"));
     this.inputDataSub.unsubscribe();
   }
 

@@ -315,6 +315,11 @@ export class InventoryService {
       modulatingPressureValidators = [Validators.required, Validators.min(0)];
     }
 
+    let maxFullFlowValidators: Array<Validators> = [];
+    if (controlType !== 11) {
+      modulatingPressureValidators = [Validators.required];
+    }
+
     let noLoadPowerFMValidators: Array<Validators> = [];
     let displayNoLoadPowerFM: boolean = this.checkDisplayNoLoadPowerFM(compressorType, controlType);
     if (displayNoLoadPowerFM) {
@@ -337,7 +342,7 @@ export class InventoryService {
       serviceFactor: [designDetails.serviceFactor, [Validators.required, Validators.min(1)]],
       noLoadPowerFM: [designDetails.noLoadPowerFM, noLoadPowerFMValidators],
       noLoadPowerUL: [designDetails.noLoadPowerUL, noLoadPowerULValidators],
-      maxFullFlowPressure: [designDetails.maxFullFlowPressure, Validators.required]
+      maxFullFlowPressure: [designDetails.maxFullFlowPressure, maxFullFlowValidators]
     });
     this.markFormDirtyToDisplayValidation(form);
     form.controls.modulatingPressureRange.disable();

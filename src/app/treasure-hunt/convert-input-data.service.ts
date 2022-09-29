@@ -21,6 +21,11 @@ import { AirHeatingTreasureHuntService } from './treasure-hunt-calculator-servic
 import { HeatCascadingTreasureHuntService } from './treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
 import { WaterHeatingTreasureHuntService } from './treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
+import { CoolingTowerMakeupTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-makeup-treasure-hunt.service';
+import { ChillerStagingTreasureHuntService } from './treasure-hunt-calculator-services/chiller-staging-treasure-hunt.service';
+import { ChillerPerformanceTreasureHuntService } from './treasure-hunt-calculator-services/chiller-performance-treasure-hunt.service';
+import { CoolingTowerFanTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-fan-treasure-hunt.service';
+import { CoolingTowerBasinTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
 
 @Injectable()
 export class ConvertInputDataService {
@@ -43,7 +48,12 @@ export class ConvertInputDataService {
     private flueGasTreasureHuntService: FlueGasTreasureHuntService,
     private leakageTreasureHuntService: LeakageTreasureHuntService,
     private heatCascadingTreasureHuntService: HeatCascadingTreasureHuntService,
-    private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService
+    private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService,
+    private coolingTowerMakeupTreasureHuntService: CoolingTowerMakeupTreasureHuntService,
+    private chillerStagingTreasureHuntService: ChillerStagingTreasureHuntService,
+    private chillerPerformanceTreasureHuntService: ChillerPerformanceTreasureHuntService,
+    private coolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService,
+    private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService,
     ) { }
 
   convertTreasureHuntInputData(treasureHunt: TreasureHunt, oldSettings: Settings, newSettings: Settings): TreasureHunt {
@@ -104,6 +114,21 @@ export class ConvertInputDataService {
     }
     if (treasureHunt.waterHeatingOpportunities != undefined) {
       treasureHunt.waterHeatingOpportunities = this.waterHeatingTreasureHuntService.convertWaterHeatingOpportunities(treasureHunt.waterHeatingOpportunities, oldSettings, newSettings);
+    }
+    if (treasureHunt.coolingTowerMakeupOpportunities != undefined) {
+      treasureHunt.coolingTowerMakeupOpportunities = this.coolingTowerMakeupTreasureHuntService.convertCoolingTowerMakeups(treasureHunt.coolingTowerMakeupOpportunities, oldSettings, newSettings);
+    }
+    if (treasureHunt.chillerStagingOpportunities != undefined) {
+      treasureHunt.chillerStagingOpportunities = this.chillerStagingTreasureHuntService.convertChillerStagingOpportunities(treasureHunt.chillerStagingOpportunities, oldSettings, newSettings);
+    }
+    if (treasureHunt.chillerPerformanceOpportunities != undefined) {
+      treasureHunt.chillerPerformanceOpportunities = this.chillerPerformanceTreasureHuntService.convertChillerPerformanceOpportunities(treasureHunt.chillerPerformanceOpportunities, oldSettings, newSettings);
+    }
+    if (treasureHunt.coolingTowerFanOpportunities != undefined) {
+      treasureHunt.coolingTowerFanOpportunities = this.coolingTowerFanTreasureHuntService.convertCoolingTowerFanOpportunities(treasureHunt.coolingTowerFanOpportunities, oldSettings, newSettings);
+    }
+    if (treasureHunt.coolingTowerBasinOpportunities != undefined) {
+      treasureHunt.coolingTowerBasinOpportunities = this.coolingTowerBasinTreasureHuntService.convertCoolingTowerBasinOpportunities(treasureHunt.coolingTowerBasinOpportunities, oldSettings, newSettings);
     }
     if (treasureHunt.currentEnergyUsage != undefined) {
       treasureHunt.currentEnergyUsage = this.convertCurrentEnergyUsage(treasureHunt.currentEnergyUsage, oldSettings, newSettings);

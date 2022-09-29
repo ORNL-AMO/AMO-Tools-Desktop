@@ -25,9 +25,9 @@ export class SystemDataFormComponent implements OnInit {
     @Input()
     modificationWarnings: FieldDataWarnings;
     @Input()
-    baselineForm: FormGroup;
+    baselineFieldDataForm: FormGroup;
     @Input()
-    modificationForm: FormGroup;
+    modificationFieldDataForm: FormGroup;
     @Input()
     baselineOperationsForm: FormGroup;
     @Input()
@@ -84,7 +84,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initFlowRate() {
-        if (this.baselineForm.controls.flowRate.value != this.modificationForm.controls.flowRate.value) {
+        if (this.baselineFieldDataForm.controls.flowRate.value != this.modificationFieldDataForm.controls.flowRate.value) {
             this.currentModification.exploreOppsShowFlowRate = { hasOpportunity: true, display: 'Reduce System Flow Rate' }; 
 
         } else {
@@ -93,7 +93,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initHead() {
-        if (this.baselineForm.controls.head.value != this.modificationForm.controls.head.value) {
+        if (this.baselineFieldDataForm.controls.head.value != this.modificationFieldDataForm.controls.head.value) {
             this.currentModification.exploreOppsShowHead = { hasOpportunity: true, display: 'Reduce System Head Requirement' }; 
         } else {
             this.currentModification.exploreOppsShowHead = { hasOpportunity: false, display: 'Reduce System Head Requirement' }; 
@@ -111,22 +111,22 @@ export class SystemDataFormComponent implements OnInit {
 
     toggleSystemData() {
         if (this.currentModification.exploreOppsShowSystemData.hasOpportunity == false) {
-            this.modificationForm.controls.operatingHours.patchValue(this.baselineForm.controls.operatingHours.value);
-            this.modificationForm.controls.costKwHr.patchValue(this.baselineForm.controls.costKwHr.value);
+            this.modificationOperationsForm.controls.operatingHours.patchValue(this.baselineOperationsForm.controls.operatingHours.value);
+            this.modificationOperationsForm.controls.costKwHr.patchValue(this.baselineOperationsForm.controls.costKwHr.value);
             this.calculate();
         }
     }
 
     toggleHead() {
         if (this.currentModification.exploreOppsShowHead.hasOpportunity == false) {
-            this.modificationForm.controls.head.patchValue(this.baselineForm.controls.head.value);
+            this.modificationFieldDataForm.controls.head.patchValue(this.baselineFieldDataForm.controls.head.value);
             this.calculate();
         }
     }
 
     toggleFlowRate() {
         if (this.currentModification.exploreOppsShowFlowRate.hasOpportunity == false) {
-            this.modificationForm.controls.flowRate.patchValue(this.baselineForm.controls.flowRate.value);
+            this.modificationFieldDataForm.controls.flowRate.patchValue(this.baselineFieldDataForm.controls.flowRate.value);
             this.calculate();
         }
     }

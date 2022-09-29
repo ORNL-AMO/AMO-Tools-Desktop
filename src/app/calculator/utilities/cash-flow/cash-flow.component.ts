@@ -19,10 +19,17 @@ export class CashFlowComponent implements OnInit {
     payback: 0
   };
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
+  smallScreenTab: string = 'form';
+  containerHeight: number;
   headerHeight: number;
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
@@ -59,7 +66,7 @@ export class CashFlowComponent implements OnInit {
     this.cashFlowService.inputData = this.cashFlowForm;
   }
 
-  btnResetData() {
+  btnGenerateExample(){
     this.cashFlowForm = {
       lifeYears: 10,
       energySavings: 1000,
@@ -73,9 +80,27 @@ export class CashFlowComponent implements OnInit {
     this.calculate();
   }
 
+  btnResetData() {
+    this.cashFlowForm = {
+      lifeYears: 0,
+      energySavings: 0,
+      salvageInput: 0,
+      installationCost: 0,
+      operationCost: 0,
+      fuelCost: 0,
+      junkCost: 0
+    };
+    this.cashFlowService.inputData = this.cashFlowForm;
+    this.calculate();
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -94,6 +119,10 @@ export class CashFlowComponent implements OnInit {
     // Payback
     this.cashFlowResults.payback = (this.cashFlowForm.installationCost * 12) / this.cashFlowForm.energySavings;
     this.toggleCalculate = !this.toggleCalculate;
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 

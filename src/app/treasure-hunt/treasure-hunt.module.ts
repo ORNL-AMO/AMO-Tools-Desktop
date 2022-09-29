@@ -54,6 +54,11 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
 import { MixedCo2EmissionsModule } from '../shared/mixed-co2-emissions/mixed-co2-emissions.module';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
+import { CoolingTowerMakeupTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-makeup-treasure-hunt.service';
+import { ChillerStagingTreasureHuntService } from './treasure-hunt-calculator-services/chiller-staging-treasure-hunt.service';
+import { ChillerPerformanceTreasureHuntService } from './treasure-hunt-calculator-services/chiller-performance-treasure-hunt.service';
+import { CoolingTowerFanTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-fan-treasure-hunt.service';
+import { CoolingTowerBasinTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
 
 @NgModule({
   imports: [
@@ -115,7 +120,12 @@ import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module'
     FlueGasTreasureHuntService,
     OpeningTreasureHuntService,
     HeatCascadingTreasureHuntService,
-    WaterHeatingTreasureHuntService
+    WaterHeatingTreasureHuntService,
+    CoolingTowerMakeupTreasureHuntService,
+    ChillerStagingTreasureHuntService,
+    ChillerPerformanceTreasureHuntService,
+    CoolingTowerFanTreasureHuntService,
+    CoolingTowerBasinTreasureHuntService
   ]
 })
 export class TreasureHuntModule { }

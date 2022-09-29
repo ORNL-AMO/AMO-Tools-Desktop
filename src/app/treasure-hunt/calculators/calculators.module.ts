@@ -33,6 +33,11 @@ import { OpeningModule } from '../../calculator/furnaces/opening/opening.module'
 import { AirHeatingModule } from '../../calculator/furnaces/air-heating/air-heating.module';
 import { HeatCascadingModule } from '../../calculator/furnaces/heat-cascading/heat-cascading.module';
 import { WaterHeatingModule } from '../../calculator/steam/water-heating/water-heating.module';
+import { CoolingTowerModule } from '../../calculator/process-cooling/cooling-tower/cooling-tower.module';
+import { ChillerStagingModule } from '../../calculator/process-cooling/chiller-staging/chiller-staging.module';
+import { ChillerPerformanceModule } from '../../calculator/process-cooling/chiller-performance/chiller-performance.module';
+import { CoolingTowerFanModule } from '../../calculator/process-cooling/cooling-tower-fan/cooling-tower-fan.module';
+import { CoolingTowerBasinModule } from '../../calculator/process-cooling/cooling-tower-basin/cooling-tower-basin.module';
 
 @NgModule({
   declarations: [
@@ -68,7 +73,12 @@ import { WaterHeatingModule } from '../../calculator/steam/water-heating/water-h
     WallModule,
     FlueGasModule,
     HeatCascadingModule,
-    WaterHeatingModule
+    WaterHeatingModule,
+    CoolingTowerModule,
+    ChillerStagingModule,
+    ChillerPerformanceModule,
+    CoolingTowerFanModule,
+    CoolingTowerBasinModule
   ],
   providers: [
     CalculatorsService,

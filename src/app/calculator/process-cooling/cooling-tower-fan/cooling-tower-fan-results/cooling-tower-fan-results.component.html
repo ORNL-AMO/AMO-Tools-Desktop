@@ -23,6 +23,15 @@
         &mdash; &mdash;
       </td>
     </tr>
+    <tr>
+      <td class="bold w-50">Energy Cost</td>
+      <td *ngIf="output.baselineEnergyCost" class="text-center w-50">
+        {{output.baselineEnergyCost | currency:'USD':'symbol':'0.0-0'}}
+      </td>
+      <td *ngIf="!output.baselineEnergyCost" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
   </tbody>
 </table>
 
@@ -49,6 +58,15 @@
         &mdash; &mdash;
       </td>
     </tr>
+    <tr>
+      <td class="bold w-50">Energy Cost</td>
+      <td *ngIf="output.modEnergyCost" class="text-center w-50">
+        {{output.modEnergyCost | currency:'USD':'symbol':'0.0-0'}}
+      </td>
+      <td *ngIf="!output.modEnergyCost" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
   </tbody>
 </table>
 
@@ -62,6 +80,15 @@
         {{output.savingsEnergy}} kWh
       </td>
       <td *ngIf="!output.savingsEnergy" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Annual Energy Cost Savings</td>
+      <td *ngIf="output.annualCostSaving" class="text-center w-50">
+        {{output.annualCostSaving | currency:'USD':'symbol':'0.0-0'}}
+      </td>
+      <td *ngIf="!output.annualCostSaving" class="text-center w-50">
         &mdash; &mdash;
       </td>
     </tr>

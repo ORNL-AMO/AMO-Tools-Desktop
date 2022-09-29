@@ -239,6 +239,7 @@ export class OperationsFormComponent implements OnInit {
     } else {
       let co2SavingsData: PhastCo2SavingsData = this.phastCO2SavingService.getCo2SavingsDataFromSettingsObject(this.settings);
       this.co2SavingsData = co2SavingsData;
+      co2SavingsData.totalFuelEmissionOutputRate = 53.06;
     }
   }
 }

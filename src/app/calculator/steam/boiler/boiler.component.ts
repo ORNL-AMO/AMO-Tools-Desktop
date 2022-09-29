@@ -19,9 +19,16 @@ export class BoilerComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+
+  containerHeight: number;  
+  smallScreenTab: string = 'form';
   headerHeight: number;
   tabSelect: string = 'results';
   currentField: string = 'default';
@@ -50,7 +57,7 @@ export class BoilerComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
-    }, 50);
+    }, 100);
   }
 
   ngOnDestroy() {
@@ -62,6 +69,10 @@ export class BoilerComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -134,4 +145,9 @@ export class BoilerComponent implements OnInit {
     this.boilerForm = this.boilerService.initForm(this.settings);
     this.calculate(this.boilerForm);
   }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
 }

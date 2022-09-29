@@ -1,9 +1,11 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild, ChangeDetectorRef, EventEmitter, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { CoolingTowerBasinService } from './cooling-tower-basin.service';
-import { WeatherBinsService, WeatherDataSourceView } from '../../utilities/weather-bins/weather-bins.service';
+import { WeatherBinsInput, WeatherBinsService, WeatherDataSourceView } from '../../utilities/weather-bins/weather-bins.service';
+import { CoolingTowerBasinTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { CoolingTowerBasinInput } from '../../../shared/models/chillers';
 
 @Component({
   selector: 'app-cooling-tower-basin',
@@ -13,21 +15,34 @@ import { WeatherBinsService, WeatherDataSourceView } from '../../utilities/weath
 export class CoolingTowerBasinComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<CoolingTowerBasinTreasureHunt>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   helpPanelContainerHeight: number;
   
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   
   coolingTowerBasinInputSub: Subscription;
+  coolingTowerBasinInput: CoolingTowerBasinInput;
   weatherBinSub: Subscription;
+  weatherData: WeatherBinsInput;
   
+  containerHeight: number;
   headerHeight: number;
   tabSelect: string = 'results';
+  smallScreenTab: string = 'form';
 
   displayWeatherTab: boolean = false;
   hasWeatherBinsDataSub: Subscription;
@@ -38,14 +53,14 @@ export class CoolingTowerBasinComponent implements OnInit {
   constructor(private coolingTowerBasinService: CoolingTowerBasinService, private weatherBinService: WeatherBinsService,
     private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
     this.weatherDataSourceView = this.weatherBinService.weatherDataSourceView.getValue();
-    let existingInputs = this.coolingTowerBasinService.coolingTowerBasinInput.getValue();
-    if(!existingInputs) {
-      this.coolingTowerBasinService.initDefaultEmptyInputs();
+    this.coolingTowerBasinInput = this.coolingTowerBasinService.coolingTowerBasinInput.getValue();
+    if(!this.coolingTowerBasinInput) {
+      this.coolingTowerBasinService.initDefaultEmptyInputs(this.settings);
       this.coolingTowerBasinService.initDefaultEmptyOutputs();
     } else {
       this.coolingTowerBasinService.setHasWeatherBinsData();
@@ -55,6 +70,11 @@ export class CoolingTowerBasinComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    if(!this.inTreasureHunt){
+      this.coolingTowerBasinService.coolingTowerBasinInput.next(this.coolingTowerBasinInput);
+    } else {
+      this.coolingTowerBasinService.coolingTowerBasinInput.next(undefined);
+    }
     this.coolingTowerBasinInputSub.unsubscribe();
     this.weatherBinSub.unsubscribe();
     this.hasWeatherBinsDataSub.unsubscribe();
@@ -74,7 +94,10 @@ export class CoolingTowerBasinComponent implements OnInit {
 
   initSubscriptions() {
     this.coolingTowerBasinInputSub = this.coolingTowerBasinService.coolingTowerBasinInput.subscribe(value => {
-      this.calculate();
+      this.coolingTowerBasinInput = value;
+      if(value){
+        this.calculate();
+      }
     });
     this.hasWeatherBinsDataSub = this.coolingTowerBasinService.hasWeatherBinsData.subscribe(value => {
       this.hasWeatherBinsData = value;
@@ -83,6 +106,7 @@ export class CoolingTowerBasinComponent implements OnInit {
       }
     });
     this.weatherBinSub = this.weatherBinService.inputData.subscribe(value => {
+      this.weatherData = value;
       let getCaseLength = this.weatherBinService.inputData.getValue().cases.length;
       if(getCaseLength < 1){
         this.isShowingWeatherResults = false;
@@ -98,11 +122,14 @@ export class CoolingTowerBasinComponent implements OnInit {
   }
 
   calculate() {
+    if(this.inTreasureHunt === true){
+      this.coolingTowerBasinService.isShowingWeatherResults.next(true);
+    }
     this.coolingTowerBasinService.calculate(this.settings);
   }
 
   btnResetData() {
-    this.coolingTowerBasinService.initDefaultEmptyInputs();
+    this.coolingTowerBasinService.initDefaultEmptyInputs(this.settings);
     this.coolingTowerBasinService.resetData.next(true);
   }
 
@@ -119,6 +146,10 @@ export class CoolingTowerBasinComponent implements OnInit {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
       this.helpPanelContainerHeight = this.contentContainer.nativeElement.offsetHeight - this.headerHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
       this.cd.detectChanges();
     }
   }  
@@ -127,5 +158,17 @@ export class CoolingTowerBasinComponent implements OnInit {
     this.coolingTowerBasinService.isShowingWeatherResults.next(weatherResultsOn);
     this.coolingTowerBasinService.calculate(this.settings);
  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
+ save() {
+  this.emitSave.emit({ coolingTowerBasinData: this.coolingTowerBasinInput, weatherData: this.weatherData, opportunityType: Treasure.coolingTowerBasin });
+}
+
+cancel() {
+  this.emitCancel.emit(true);
+}
 
 }

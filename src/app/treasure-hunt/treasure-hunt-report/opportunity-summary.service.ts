@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OpportunitySheetService } from '../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
-import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, TreasureHuntOpportunity, TreasureHuntResults, OpportunitySheetResult, TreasureHuntOpportunityResults, Treasure, FlueGasTreasureHunt, WallLossTreasureHunt, LeakageLossTreasureHunt, WasteHeatTreasureHunt, OpeningLossTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt } from '../../shared/models/treasure-hunt';
+import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, TreasureHuntOpportunity, TreasureHuntResults, OpportunitySheetResult, TreasureHuntOpportunityResults, Treasure, FlueGasTreasureHunt, WallLossTreasureHunt, LeakageLossTreasureHunt, WasteHeatTreasureHunt, OpeningLossTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { processEquipmentOptions } from '../calculators/opportunity-sheet/general-details-form/processEquipmentOptions';
 import { AirLeakTreasureHuntService } from '../treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
@@ -23,6 +23,11 @@ import { OpeningTreasureHuntService } from '../treasure-hunt-calculator-services
 import { AirHeatingTreasureHuntService } from '../treasure-hunt-calculator-services/air-heating-treasure-hunt.service';
 import { HeatCascadingTreasureHuntService } from '../treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
 import { WaterHeatingTreasureHuntService } from '../treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
+import { CoolingTowerMakeupTreasureHuntService } from '../treasure-hunt-calculator-services/cooling-tower-makeup-treasure-hunt.service';
+import { ChillerStagingTreasureHuntService } from '../treasure-hunt-calculator-services/chiller-staging-treasure-hunt.service';
+import { ChillerPerformanceTreasureHuntService } from '../treasure-hunt-calculator-services/chiller-performance-treasure-hunt.service';
+import { CoolingTowerFanTreasureHuntService } from '../treasure-hunt-calculator-services/cooling-tower-fan-treasure-hunt.service';
+import { CoolingTowerBasinTreasureHuntService } from '../treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
 
 @Injectable()
 export class OpportunitySummaryService {
@@ -47,7 +52,12 @@ export class OpportunitySummaryService {
     private leakageLossTreasureHuntService: LeakageTreasureHuntService,
     private wasteHeatTreasureHuntService: WasteHeatTreasureHuntService,
     private heatCascadingTreasureHuntService: HeatCascadingTreasureHuntService,
-    private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService
+    private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService,
+    private coolingTowerMakeupTreasureHuntService: CoolingTowerMakeupTreasureHuntService,
+    private chillerStagingTreasureHuntService: ChillerStagingTreasureHuntService,
+    private chillerPerformanceTreasureHuntService: ChillerPerformanceTreasureHuntService,
+    private coolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService,
+    private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService,
     ) { }
 
   getOpportunitySummaries(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunitySummary> {
@@ -72,6 +82,11 @@ export class OpportunitySummaryService {
     opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.openingLosses, opportunitySummaries, settings);
     opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.heatCascadingOpportunities, opportunitySummaries, settings);
     opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.waterHeatingOpportunities, opportunitySummaries, settings);
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.coolingTowerMakeupOpportunities, opportunitySummaries, settings);
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.chillerStagingOpportunities, opportunitySummaries, settings);    
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.chillerPerformanceOpportunities, opportunitySummaries, settings); 
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.coolingTowerFanOpportunities, opportunitySummaries, settings);
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.coolingTowerBasinOpportunities, opportunitySummaries, settings);
     //standalone opp sheets
     opportunitySummaries = this.getOpportunitySheetSummaries(treasureHunt.opportunitySheets, opportunitySummaries, settings);
 
@@ -249,6 +264,26 @@ export class OpportunitySummaryService {
       let waterHeatingOpportunity = treasureHuntOpportunity as WaterHeatingTreasureHunt;
       treasureHuntOpportunityResults = this.waterHeatingTreasureHuntService.getTreasureHuntOpportunityResults(waterHeatingOpportunity, settings);
     
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.coolingTowerMakeup) {
+      let coolingTowerMakeupWaterTreasureHunt = treasureHuntOpportunity as CoolingTowerMakeupWaterTreasureHunt;
+      treasureHuntOpportunityResults = this.coolingTowerMakeupTreasureHuntService.getTreasureHuntOpportunityResults(coolingTowerMakeupWaterTreasureHunt, settings);
+    
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.chillerStaging) {
+      let chillerStagingTreasureHunt = treasureHuntOpportunity as ChillerStagingTreasureHunt;
+      treasureHuntOpportunityResults = this.chillerStagingTreasureHuntService.getTreasureHuntOpportunityResults(chillerStagingTreasureHunt, settings);
+      
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.chillerPerformance) {
+      let chillerPerformanceTreasureHunt = treasureHuntOpportunity as ChillerPerformanceTreasureHunt;
+      treasureHuntOpportunityResults = this.chillerPerformanceTreasureHuntService.getTreasureHuntOpportunityResults(chillerPerformanceTreasureHunt, settings);
+
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.coolingTowerFan) {
+      let coolingTowerFanTreasureHunt = treasureHuntOpportunity as CoolingTowerFanTreasureHunt;
+      treasureHuntOpportunityResults = this.coolingTowerFanTreasureHuntService.getTreasureHuntOpportunityResults(coolingTowerFanTreasureHunt, settings);
+
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.coolingTowerBasin) {
+      let coolingTowerBasinTreasureHunt = treasureHuntOpportunity as CoolingTowerBasinTreasureHunt;
+      treasureHuntOpportunityResults = this.coolingTowerBasinTreasureHuntService.getTreasureHuntOpportunityResults(coolingTowerBasinTreasureHunt, settings);
+
     }
 
     if (!treasureHuntOpportunityResults) {

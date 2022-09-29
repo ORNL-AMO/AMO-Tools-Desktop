@@ -37,6 +37,7 @@ export class CoolingTowerService {
       name: [inputObj.name, [Validators.required]],
       operationalHours: [inputObj.operationalHours],
       flowRate: [inputObj.flowRate],
+      waterCost: [inputObj.waterCost],
       userDefinedCoolingLoad:  [inputObj.userDefinedCoolingLoad],
       temperatureDifference:  [inputObj.temperatureDifference],
       coolingLoad: [inputObj.coolingLoad],
@@ -53,6 +54,7 @@ export class CoolingTowerService {
   setValidators(form: FormGroup): FormGroup {
     form.controls.operationalHours.setValidators([Validators.required, Validators.min(0), Validators.max(8760)]);
     form.controls.flowRate.setValidators([GreaterThanValidator.greaterThan(0), Validators.required]);
+    form.controls.waterCost.setValidators([Validators.required, Validators.min(0)]);
     form.controls.coolingLoad.setValidators([Validators.required, Validators.min(0)]);
     form.controls.temperatureDifference.setValidators([Validators.required, GreaterThanValidator.greaterThan(0)]);
     form.controls.lossCorrectionFactor.setValidators([Validators.required, Validators.min(0), Validators.max(150)]);
@@ -66,6 +68,7 @@ export class CoolingTowerService {
       name: form.controls.name.value,
       operationalHours: form.controls.operationalHours.value,
       flowRate: form.controls.flowRate.value,
+      waterCost: form.controls.waterCost.value,
       userDefinedCoolingLoad: form.controls.userDefinedCoolingLoad.value,
       temperatureDifference: form.controls.temperatureDifference.value,
       coolingLoad: form.controls.coolingLoad.value,
@@ -87,6 +90,7 @@ export class CoolingTowerService {
       operationalHours: hoursPerYear,
       flowRate: 1,
       userDefinedCoolingLoad: true,
+      waterCost: 0,
       temperatureDifference: 0,
       coolingLoad: 0,
       lossCorrectionFactor: 85,
@@ -116,6 +120,9 @@ export class CoolingTowerService {
       wcModification: 0,
       waterSavings: 0,
       savingsPercentage: 0,
+      annualCostSavings: 0,
+      baselineCost: 0,
+      modificationCost: 0,
       coolingTowerCaseResults: casesOutput
     };
     this.coolingTowerOutput.next(emptyOutput);
@@ -200,40 +207,57 @@ export class CoolingTowerService {
   }
 
   calculate(settings: Settings) {
-    let baselineDataCopy = JSON.parse(JSON.stringify(this.baselineData.getValue()));
-    let validBaseline: boolean = this.checkValidInputData(baselineDataCopy);
     
-    let modificationDataCopy: Array<CoolingTowerData>;
-    let validModification = true;
-    if (this.modificationData.value != undefined) {
-      modificationDataCopy = JSON.parse(JSON.stringify(this.modificationData.getValue()));
-      validModification = this.checkValidInputData(modificationDataCopy);
-    }
+    if (this.baselineData.getValue()) {
+      let baselineDataCopy: Array<CoolingTowerData> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
+      let validBaseline: boolean = this.checkValidInputData(baselineDataCopy);
 
-    if (!validBaseline || !validModification) {
-      this.initDefaultEmptyOutputs();
-    } else {
-      let coolingTowerInputs: Array<CoolingTowerInput> = this.buildInputObjects(baselineDataCopy, settings, modificationDataCopy)
-      
-      let coolingTowerOutput: CoolingTowerOutput = {
-        wcBaseline: 0,
-        wcModification: 0,
-        waterSavings: 0,
-        savingsPercentage: 0,
-        coolingTowerCaseResults: []
+      let modificationDataCopy: Array<CoolingTowerData>;
+      let validModification = true;
+      if (this.modificationData.value != undefined) {
+        modificationDataCopy = JSON.parse(JSON.stringify(this.modificationData.getValue()));
+        validModification = this.checkValidInputData(modificationDataCopy);
       }
-      let coolingTowerCaseResults: Array<CoolingTowerResult> = [];
-      coolingTowerInputs.forEach(input => {
-        let caseResultData: CoolingTowerResult = this.chillerService.coolingTowerMakeupWater(input);
-        caseResultData = this.convertResultData(caseResultData, settings);
-        coolingTowerOutput.wcBaseline += caseResultData.wcBaseline;
-        coolingTowerOutput.wcModification += caseResultData.wcModification;
-        coolingTowerCaseResults.push(caseResultData)
-      });
-      coolingTowerOutput.waterSavings = coolingTowerOutput.wcBaseline - coolingTowerOutput.wcModification;
-      coolingTowerOutput.savingsPercentage = coolingTowerOutput.waterSavings / coolingTowerOutput.wcBaseline * 100;
-      coolingTowerOutput.coolingTowerCaseResults = coolingTowerCaseResults;
-      this.coolingTowerOutput.next(coolingTowerOutput);
+
+      if (!validBaseline || !validModification) {
+        this.initDefaultEmptyOutputs();
+      } else {
+        let coolingTowerInputs: Array<CoolingTowerInput> = this.buildInputObjects(baselineDataCopy, settings, modificationDataCopy)
+        let waterCost: number = baselineDataCopy[0].waterCost;
+        let coolingTowerOutput: CoolingTowerOutput = {
+          wcBaseline: 0,
+          wcModification: 0,
+          waterSavings: 0,
+          savingsPercentage: 0,
+          annualCostSavings: 0,
+          baselineCost: 0,
+          modificationCost: 0,
+          coolingTowerCaseResults: []
+        }
+        let coolingTowerCaseResults: Array<CoolingTowerResult> = [];
+        coolingTowerInputs.forEach(input => {
+          let caseResultData: CoolingTowerResult = this.chillerService.coolingTowerMakeupWater(input);
+          caseResultData = this.convertResultData(caseResultData, settings);
+          coolingTowerOutput.wcBaseline += caseResultData.wcBaseline;
+          coolingTowerOutput.wcModification += caseResultData.wcModification;
+          coolingTowerCaseResults.push(caseResultData)
+        });
+        coolingTowerOutput.waterSavings = coolingTowerOutput.wcBaseline - coolingTowerOutput.wcModification;
+        let baselineGalConsumption: number = coolingTowerOutput.wcBaseline;
+        let modificationGalConsumption: number = coolingTowerOutput.wcModification;
+        let waterSavingsGals: number = coolingTowerOutput.waterSavings;
+        if (settings.unitsOfMeasure === 'Imperial') {
+          baselineGalConsumption = this.convertUnitsService.value(baselineGalConsumption).from('kgal').to('gal');
+          modificationGalConsumption = this.convertUnitsService.value(modificationGalConsumption).from('kgal').to('gal');
+          waterSavingsGals = this.convertUnitsService.value(waterSavingsGals).from('kgal').to('gal');
+        }
+        coolingTowerOutput.baselineCost = baselineGalConsumption * waterCost;
+        coolingTowerOutput.modificationCost = modificationGalConsumption * waterCost;
+        coolingTowerOutput.savingsPercentage = (coolingTowerOutput.waterSavings / coolingTowerOutput.wcBaseline) * 100;
+        coolingTowerOutput.annualCostSavings = waterSavingsGals * waterCost;
+        coolingTowerOutput.coolingTowerCaseResults = coolingTowerCaseResults;
+        this.coolingTowerOutput.next(coolingTowerOutput);
+      }
     }
   }
 
@@ -310,6 +334,7 @@ export class CoolingTowerService {
       name: 'Case #1',
       operationalHours: 1000,
       flowRate: 2500,
+      waterCost: .0025,
       userDefinedCoolingLoad: true,
       temperatureDifference: 0,
       coolingLoad: 10,
@@ -321,6 +346,7 @@ export class CoolingTowerService {
     let baselineExample: CoolingTowerData = {
       name: 'Case #1',
       operationalHours: 1000,
+      waterCost: .0025,
       flowRate: 2500,
       userDefinedCoolingLoad: true,
       temperatureDifference: 0,

@@ -1,6 +1,6 @@
 <!-- Shared inputs -->
-<div class="d-flex w-100 my-2">
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+<div class="d-block d-lg-flex flex-direction-column">
+  <div class="col-12 col-lg-6 mb-4">
     <form #formElement [formGroup]="form">
       <label class="group-label my-1">
         Chiller Characteristics
@@ -98,7 +98,7 @@
     </form>
   </div>
 
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+  <div class="col-12 col-lg-6 mb-4">
     <label class="group-label my-1">
       Operating Conditions
     </label>
@@ -156,15 +156,30 @@
         </span>
       </div>
 
+      <div class="form-group">
+        <label class="small" for="electricityCost">Electricity Cost</label>
+        <div class="input-group">
+          <input class="form-control" name="electricityCost" type="number" id="electricityCost"
+            formControlName="electricityCost" (input)="calculate()" onfocus="this.select();"
+            (focus)="focusField('electricityCost')">
+          <span class="units input-group-addon">$/kWh</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.electricityCost.invalid && !form.controls.electricityCost.pristine">
+          <span *ngIf="form.controls.electricityCost.errors.required">Value required.</span>
+          <span *ngIf="form.controls.electricityCost.errors.min">Value cannot not be less than
+            {{form.controls.electricityCost.errors.min.min}}.</span>
+        </span>
+      </div>
 
     </form>
   </div>
 
 </div>
 
-<div class="d-flex w-100">
+<div class="d-block d-lg-flex w-100">
   <!-- Baseline -->
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+  <div class="col-12 col-lg-6 mb-4">
     <label class="group-label my-1">
       Baseline
     </label>
@@ -188,7 +203,7 @@
     </form>
   </div>
 
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+  <div class="col-12 col-lg-6 mb-4">
     <label class="group-label my-1">
       Modification
     </label>
@@ -214,7 +229,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-auto mx-auto">
+  <div class="col-12 text-center">
     <a class="click-link small" (click)="addChiller()">Add Chiller</a>
   </div>
 </div>

@@ -5,6 +5,8 @@ import { Settings } from '../../../shared/models/settings';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StandaloneService } from '../../standalone.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { GreaterThanValidator } from '../../../shared/validators/greater-than';
+import { LessThanValidator } from '../../../shared/validators/less-than';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +45,8 @@ export class TankInsulationReductionService {
       tankMaterialSelection: 0,
       insulationMaterialSelection: 0,
       jacketMaterialSelection: 0,
-      heatedOrChilled: 0
+      heatedOrChilled: 0,
+      surfaceTemperature: 0
     };
     return obj;
   }
@@ -67,10 +70,12 @@ export class TankInsulationReductionService {
       customInsulationConductivity: [obj.customInsulationConductivity],
       jacketMaterialSelection: [obj.jacketMaterialSelection],
       heatedOrChilled: [{ value: obj.heatedOrChilled, disabled: !isBaseline }],
+      surfaceTemperature: [obj.surfaceTemperature, [Validators.required, GreaterThanValidator.greaterThan(obj.ambientTemperature), LessThanValidator.lessThan(obj.tankTemperature)]]
     });
 
     if (obj.insulationMaterialSelection != 0) {
       form.controls.insulationThickness.setValidators([Validators.required, Validators.min(0), Validators.max(1000000)]);
+      form = this.setSurfaceTempValidators(form);
       if (obj.insulationMaterialSelection == 1) {
         form.controls.customInsulationConductivity.setValidators([Validators.required, Validators.min(0)]);
       } else {
@@ -80,6 +85,7 @@ export class TankInsulationReductionService {
       form.controls.insulationThickness.clearValidators();
       form.controls.customInsulationConductivity.clearValidators();
       form.controls.jacketMaterialSelection.disable();
+      form.controls.surfaceTemperature.clearValidators();
     }
 
     return form;
@@ -98,6 +104,7 @@ export class TankInsulationReductionService {
       insulationThickness = 0;
     } else {
       insulationThickness = form.controls.insulationThickness.value;
+      form = this.setSurfaceTempValidators(form);
     }
     let obj: TankInsulationReductionInput = {
       operatingHours: form.controls.operatingHours.value,
@@ -120,7 +127,8 @@ export class TankInsulationReductionService {
       tankMaterialSelection: form.controls.tankMaterialSelection.value,
       insulationMaterialSelection: form.controls.insulationMaterialSelection.value,
       jacketMaterialSelection: form.controls.jacketMaterialSelection.value,
-      heatedOrChilled: form.controls.heatedOrChilled.value
+      heatedOrChilled: form.controls.heatedOrChilled.value,
+      surfaceTemperature: form.controls.surfaceTemperature.value
     };
     if (obj.insulationMaterialSelection == 1) {
       if (settings.unitsOfMeasure != 'Imperial') {
@@ -130,6 +138,15 @@ export class TankInsulationReductionService {
       }
     }
     return obj;
+  }
+
+  setSurfaceTempValidators(form: FormGroup): FormGroup {
+    if (form.controls.insulationMaterialSelection.value != 0) {
+      form.controls.surfaceTemperature.setValidators([Validators.required, GreaterThanValidator.greaterThan(form.controls.ambientTemperature.value), LessThanValidator.lessThan(form.controls.tankTemperature.value)]);  
+    } else {
+      form.controls.surfaceTemperature.clearValidators();
+    }
+    return form;  
   }
 
   generateExample(settings: Settings, isBaseline: boolean): TankInsulationReductionInput {
@@ -156,7 +173,8 @@ export class TankInsulationReductionService {
         tankMaterialSelection: 6,
         insulationMaterialSelection: 0,
         jacketMaterialSelection: 0,
-        heatedOrChilled: 0
+        heatedOrChilled: 0,
+        surfaceTemperature: 120
       };
     } else {
       example = {
@@ -180,8 +198,12 @@ export class TankInsulationReductionService {
         tankMaterialSelection: 6,
         insulationMaterialSelection: 22,
         jacketMaterialSelection: 8,
-        heatedOrChilled: 0
+        heatedOrChilled: 0,
+        surfaceTemperature: 120
       };
+    }
+    if(settings.unitsOfMeasure != 'Imperial'){
+      example = this.convertExampleInputs(example, settings);
     }
     return example;
   }
@@ -238,6 +260,7 @@ export class TankInsulationReductionService {
     if (settings.unitsOfMeasure == 'Imperial') {
       convertedInput.tankTemperature = convertedInput.tankTemperature + 459.67;
       convertedInput.ambientTemperature = convertedInput.ambientTemperature + 459.67;
+      convertedInput.surfaceTemperature = convertedInput.surfaceTemperature + 459.67;
     } else {
       convertedInput.tankHeight = this.convertUnitsService.value(input.tankHeight).from('m').to('ft');
       convertedInput.tankDiameter = this.convertUnitsService.value(input.tankDiameter).from('m').to('ft');
@@ -246,6 +269,7 @@ export class TankInsulationReductionService {
       convertedInput.ambientTemperature = this.convertUnitsService.value(input.ambientTemperature).from('C').to('F') + 459.67;
       convertedInput.insulationThickness = this.convertUnitsService.value(input.insulationThickness).from('m').to('ft');
       convertedInput.customInsulationConductivity = this.convertUnitsService.value(input.customInsulationConductivity).from('W/mK').to('Btu/hr-ft-R');
+      convertedInput.surfaceTemperature = this.convertUnitsService.value(input.surfaceTemperature).from('C').to('F') + 459.67;
     }
     return convertedInput;
   }
@@ -260,6 +284,21 @@ export class TankInsulationReductionService {
       results.annualHeatLoss = results.annualHeatLoss * (-1);
     }
     return results;
+  }
+
+  convertExampleInputs(input: TankInsulationReductionInput, settings: Settings): TankInsulationReductionInput {
+    let convertedInput: TankInsulationReductionInput = input;
+    
+    convertedInput.tankHeight = this.convertUnitsService.value(input.tankHeight).from('m').to('ft');
+    convertedInput.tankDiameter = this.convertUnitsService.value(input.tankDiameter).from('m').to('ft');
+    convertedInput.tankThickness = this.convertUnitsService.value(input.tankThickness).from('m').to('ft');
+    convertedInput.tankTemperature = this.convertUnitsService.value(input.tankTemperature).from('C').to('F');
+    convertedInput.ambientTemperature = this.convertUnitsService.value(input.ambientTemperature).from('C').to('F');
+    convertedInput.insulationThickness = this.convertUnitsService.value(input.insulationThickness).from('m').to('ft');
+    convertedInput.customInsulationConductivity = this.convertUnitsService.value(input.customInsulationConductivity).from('W/mK').to('Btu/hr-ft-R');
+    convertedInput.surfaceTemperature = this.convertUnitsService.value(input.surfaceTemperature).from('C').to('F');
+    
+    return convertedInput;
   }
 
   checkTankThickness(tankThickness: number, settings: Settings) {

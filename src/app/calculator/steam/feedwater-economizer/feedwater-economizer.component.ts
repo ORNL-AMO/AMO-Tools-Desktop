@@ -24,15 +24,19 @@ export class FeedwaterEconomizerComponent implements OnInit {
   @Output("emitCancel")
   emitCancel = new EventEmitter<boolean>();
 
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef; 
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   feedWaterInputSub: Subscription;
   containerHeight: number;
   tabSelect: string = 'results';
+  smallScreenTab: string = 'form';
   
   constructor(private feedwaterEconomizerService: FeedwaterEconomizerService,
               private settingsDbService: SettingsDbService) { }
@@ -112,7 +116,14 @@ export class FeedwaterEconomizerComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }

@@ -26,8 +26,8 @@
       [modificationForm]="modificationPumpFluidForm" [psat]="psat"></app-pump-data-form>
 
     <app-system-data-form [isVFD]="psat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity" (changeField)="focusField($event)"
-      (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [baselineForm]="baselineFieldDataForm"
-      [modificationForm]="modificationFieldDataForm" [baselineWarnings]="baselineFieldDataWarnings"
+      (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [baselineFieldDataForm]="baselineFieldDataForm"
+      [modificationFieldDataForm]="modificationFieldDataForm" [baselineWarnings]="baselineFieldDataWarnings"
       [modificationWarnings]="modificationFieldDataWarnings" (openHeadToolModal)="showHeadToolModal()"
       [modificationPsat]="psat.modifications[exploreModIndex].psat"
       [currentModification]="psat.modifications[exploreModIndex]"

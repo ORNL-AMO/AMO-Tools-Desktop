@@ -24,6 +24,8 @@ export class FullLoadAmpsComponent implements OnInit {
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;  
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -31,7 +33,7 @@ export class FullLoadAmpsComponent implements OnInit {
     }, 100);
   }
   
-  
+  smallScreenTab: string = 'form';
   containerHeight: number;
   tabSelect: string = 'help';
   headerHeight: number;
@@ -137,6 +139,13 @@ export class FullLoadAmpsComponent implements OnInit {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.offsetHeight;
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

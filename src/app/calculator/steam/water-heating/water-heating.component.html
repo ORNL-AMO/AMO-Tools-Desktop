@@ -1,6 +1,5 @@
-  <div class="d-flex h-100 modify-conditions steam standalone-calculator" #contentContainer>
-	<div class="d-flex flex-column w-100 mh-100 scroll-item">
-		<div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
+<div class="calculator-container modify-conditions steam standalone-calculator" #contentContainer>
+	<div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
 		[ngClass]="{'justify-content-between': inTreasureHunt}">
 		<div class="d-flex pl-2 align-items-center">
 			<div class="calc-icon-header icon-steam" [ngClass]="{'in-treasure-hunt': inTreasureHunt}">
@@ -24,49 +23,64 @@
 				<span class="fa fa-times"></span>
 			</div>
 		</div>
+	</div>
+	<div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+		<div class="nav-item" (click)="setSmallScreenTab('form')"
+			[ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+			<a class="nav-link">Vent Steam Data</a>
 		</div>
-	  <div class="d-flex">
-		<div class="scroll-item p-0 col-6 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
-				<div class="d-flex flex-column mx-2 mb-4 p-2 w-100">
-					<app-water-heating-form [inTreasureHunt]="inTreasureHunt" [settings]="settings"></app-water-heating-form>
-		
-					<div class="w-100 justify content-center btn-group btn-group-sm">
-						<button type="button" class="btn btn-secondary pull-right btn-sm btn-margin-10"
-							(click)="btnResetData()">
-							Reset Data
-						</button>
-						<button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
-							(click)="btnGenerateExample()">
-							Generate Example
-						</button>
+		<div class="nav-item" (click)="setSmallScreenTab('details')"
+			[ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+			<a class="nav-link">Details</a>
+		</div>
+	</div>
+
+	<div class="panel-group">
+		<div class="calculator-panel-container modification mh-100"
+			[ngClass]="{'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
+			<div class="d-flex flex-column m-4">
+				<app-water-heating-form [inTreasureHunt]="inTreasureHunt" [settings]="settings">
+				</app-water-heating-form>
+
+				<div class="w-100 justify content-center btn-group btn-group-sm">
+					<button type="button" class="btn btn-secondary pull-right btn-sm btn-margin-10"
+						(click)="btnResetData()">
+						Reset Data
+					</button>
+					<button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+						(click)="btnGenerateExample()">
+						Generate Example
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- help panel -->
+		<div class="calculator-panel-container help-panel"
+			[ngClass]="{'small-screen-tab': smallScreenTab === 'details'}" [ngStyle]="{'height.px': containerHeight}">
+			<div class="d-flex flex-column mh-100">
+				<div class="d-flex flex-wrap tabs primary sticky-top">
+					<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+						<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+							(click)="setTab('results')">
+							<div>Results</div>
+						</a>
+					</div>
+					<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+						<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+							<div>Help</div>
+						</a>
 					</div>
 				</div>
-		</div>
-  
-		<!-- help panel -->
-		<div class="col-6 p-0 help-panel">
-		  <div class="d-flex flex-column mh-100 scroll-item">
-			<div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
-			  <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-				<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
-				  (click)="setTab('results')">
-				  <div>Results</div>
-				</a>
-			  </div>
-			  <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-				<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-				  <div>Help</div>
-				</a>
-			  </div>
+
+				<div class="p-2">
+					<app-water-heating-help *ngIf="tabSelect == 'help'" [settings]="settings">
+					</app-water-heating-help>
+					<app-water-heating-results *ngIf="tabSelect == 'results'" [settings]="settings">
+					</app-water-heating-results>
+				</div>
 			</div>
-  
-			<div class="p-2">
-			 	<app-water-heating-help *ngIf="tabSelect == 'help'" [settings]="settings" ></app-water-heating-help>
-				<app-water-heating-results *ngIf="tabSelect == 'results'" [settings]="settings"></app-water-heating-results>	
-			</div>
-		  </div>
 		</div>
-  
-	  </div>
+
 	</div>
 </div>

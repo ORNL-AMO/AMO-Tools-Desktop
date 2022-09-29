@@ -94,6 +94,29 @@
   [settings]="settings">
 </app-standalone-opportunity-sheet>
 
+<app-cooling-tower *ngIf="selectedCalc == 'cooling-tower-makeup'"
+  [inTreasureHunt]="true" (emitSave)="saveOpportunity($event)" 
+  (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-cooling-tower>
+
+<app-chiller-staging *ngIf="selectedCalc == 'chiller-staging'" [inTreasureHunt]="true"
+  (emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)"
+  [settings]="settings">
+</app-chiller-staging>
+
+<app-chiller-performance *ngIf="selectedCalc == 'chiller-performance'" [inTreasureHunt]="true"
+  (emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)"
+  [settings]="settings">
+</app-chiller-performance>
+
+<app-cooling-tower-fan *ngIf="selectedCalc == 'cooling-tower-fan'" [inTreasureHunt]="true"
+(emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)"
+[settings]="settings"></app-cooling-tower-fan>
+
+<app-cooling-tower-basin *ngIf="selectedCalc == 'cooling-tower-basin'" [inTreasureHunt]="true"
+(emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)"
+[settings]="settings">
+</app-cooling-tower-basin>
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
