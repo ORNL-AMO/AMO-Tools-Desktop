@@ -10,7 +10,7 @@
       </div>
       <div class="modal-body scroll-item">
 
-        <h4>Release Notes v1.2.1</h4>
+        <h4>Release Notes v1.2.2</h4>
 
         <p>
           A software tool for calculating energy efficiency for a variety of industrial and manufacturing applications.
@@ -27,18 +27,93 @@
         </p>
         <label>Warnings:</label>
         <ul>
-            <li>Installing v1.2.0 or an earlier version of this tool will automatically reset your app data. Data can be imported into an earlier version from v1.2.1</li>
-            <li>Do not install an earlier version of this tool without resetting your app data (in settings).</li> 
-            <li>If MEASUR freezes during installation or fails to install, uninstall the previous version of MEASUR and repeat installation of the new installer</li>
-            <li>Assessments created in MEASUR 0.8.0 or later are not compatible with older versions.  </li>
-            <li>Exporting from v.0.8.0 and importing to a lower version will continue to work, though new features will not be available.</li>
+          <li>Installing v1.2.1 or an earlier version of this tool will automatically reset your app data. Data can be
+            imported into an earlier version from v1.2.2</li>
+          <li>Do not install an earlier version of this tool without resetting your app data (in settings).</li>
+          <li>If MEASUR freezes during installation or fails to install, uninstall the previous version of MEASUR and
+            repeat installation of the new installer</li>
+          <li>Assessments created in MEASUR 0.8.0 or later are not compatible with older versions. </li>
+          <li>Exporting from v.0.8.0 and importing to a lower version will continue to work, though new features will
+            not be available.</li>
         </ul>
 
         <label>What's New?</label>
         <ul>
-          <li>Improved UI for mobile devices for select assessments and calculators</li>
+          <li>Improved UI for mobile devices for all calculators</li>
+          <li>Added Process Cooling Calculators into Treasure Hunt</li>
+          <li>Several bug fixes in Steam Assessments</li>
         </ul>
 
+        <label>Here are the details of what's new in version 1.2.2:</label>
+        <br>
+        <label>Application</label>
+        <ul>
+          <li>Fixed: Resetting examples will no longer delete copied examples</li>
+          <li>Fixed: Several issues causing missing icons and visual artifacts on MEASUR load</li>
+          <li>Fixed: Sidebar collapses when navigating into a folder</li>
+        </ul>
+
+        <label>Calculators</label>
+        <ul>
+          <li>Enhanced: Added a new field for the Tank Insulation Calculator, Surface Temperature, for use when
+            insulation is present to better estimate energy savings</li>
+          <li>Enhanced: Improved UI for mobile devices for all remaining calculators</li>
+          <li>Fixed: Bug in web version causing calculation errors in pipe insulation calculator</li>
+          <li>Fixed: Cash Flow calculator’s reset button was not operable and added a "Generate Example" button</li>
+          <li>Fixed: Issue where lighting replacement calculator's baseline was uneditable</li>
+          <li>Fixed: Issues relating to the layout of the pre-assessment screening calculator</li>
+          <li>Fixed: Unnecessary $ units in energy use graph within Pre-assessment screening calculator</li>
+        </ul>
+
+        <label>Data Explorer</label>
+        <ul>
+          <li>Fixed: Bug relating to not being able to set y-axis data</li>
+        </ul>
+
+        <label>Process Heating</label>
+        <ul>
+          <li>Fixed: Wrong unit labels for hourly CO2 emissions (was kg instead of t)</li>
+        </ul>
+
+        <label>Steam</label>
+        <ul>
+          <li>Enhanced: Changed pressure of condensate flash tank to be atmospheric, not the deaerator pressure</li>
+          <li>Enhanced: Changed validation on Condensate Return Temperature to be based on low pressure header, instead
+            of deaerator</li>
+          <li>Fixed: Added padding on steam diagram sidebar to ensure that "Calculate Marginal Costs" button is
+            available</li>
+          <li>Fixed: Certain Explore Opportunities check boxes not saving</li>
+          <li>Fixed: Explore Opps > Adjust Boiler Conditions > Change Fuel Type was displaying outdated fields</li>
+          <li>Fixed: Incorrect validation warnings for low pressure header pressure</li>
+          <li>Fixed: Issue creating errors when start a steam assessment in imperial then switch to metric without
+            entering data</li>
+          <li>Fixed: Issue where data for medium pressure steam was not saving</li>
+        </ul>
+
+        <label>Pumps</label>
+        <ul>
+          <li>Fixed: Bug relating to the validation of VFD compressors</li>
+          <li>Fixed: Visual bug in explore Opps</li>
+        </ul>
+
+        <label>Treasure Hunt</label>
+        <ul>
+          <li>Added: Chiller Performance Calculator</li>
+          <li>Added: Chiller Staging Calculator</li>
+          <li>Added: Cooling Tower Basin heater Energy Calculator</li>
+          <li>Added: Cooling Tower Fan Calculator</li>
+          <li>Added: Cooling Tower Makeup Water Calculator</li>
+        </ul>
+
+        <label>Known Issues:</label>
+        <ul>
+          <li>The Linux release does not support Auto-updating</li>
+          <li>Renaming an export in Windows Download menu can delete the file extension (.json)</li>
+          <li>Assessments made in a previous major release may experience errors</li>
+          <li>Import files made in a previous major release may not be useable due to field additions/removals</li>
+        </ul>
+
+        <hr>
         <label>Here are the details of what's new in version 1.2.1:</label>
         <br>
         <label>Application</label>
@@ -50,9 +125,12 @@
 
         <label>Calculators</label>
         <ul>
-          <li>Enhanced: Improved UI for mobile devices for select calculators: Lighting, Process Heating Flue Gas Loss, Process Heating Wall Loss, 
-            Compressed Air Pressure Reduction, Compressed Air Leak Survey, Steam Stack Loss, Steam Pipe Insulation, Pump Head Tool, 
-            NEMA Energy Efficiency, Motor Performance, Pump Achievable Efficiency, Specific Speed, Pump Curve, Unit Converter</li>
+          <li>Enhanced: Improved UI for mobile devices for select calculators: Lighting, Process Heating Flue Gas Loss,
+            Process Heating Wall Loss,
+            Compressed Air Pressure Reduction, Compressed Air Leak Survey, Steam Stack Loss, Steam Pipe Insulation, Pump
+            Head Tool,
+            NEMA Energy Efficiency, Motor Performance, Pump Achievable Efficiency, Specific Speed, Pump Curve, Unit
+            Converter</li>
         </ul>
 
         <label>Pumps</label>
@@ -62,102 +140,6 @@
           <li>Fixed: Bug relating to pump curve calculator producing error in console</li>
         </ul>
 
-
-        <hr>
-        <label>Here are the details of what's new in version 1.2.0:</label>
-        <br>
-        <label>Application</label>
-        <ul>
-          <li>Added: Hydrogen to "Other Fuels" for carbon emissions lists</li>
-          <li>Added: Links to web and download versions in tool </li>
-          <li>Enhanced: Customized the value change of a single arrow stroke for each field across the application</li>
-          <li>Fixed: Bug keeping MEASUR from loading properly in Firefox</li>
-          <li>Fixed: Bug relating to exported custom materials not importing properly</li>
-          <li>Fixed: Bug relating to horizontal scroll bar showing up unnecessarily</li>
-          <li>Fixed: Dropdown chevrons for auxiliary pages (settings, custom materials, about, acknowledgements, etc.) all facing same direction</li>
-          <li>Fixed: General code clean relating the calculator icon CSS</li>
-          <li>Fixed: Missing assessment check for data update for new releases</li>
-          <li>Fixed: Several bugs relating to web version pages not loading properly</li>
-          <li>Fixed: Tweaks to visual style of home page and side bar</li>
-        </ul>
-
-        <label>Calculators</label>
-        <ul>
-          <li>Enhanced: Changed the background color of lighting and motor calculators</li>
-          <li>Enhanced: Improved speed to psychrometric calculator graph calculations</li>
-          <li>Fixed: Bug causing bins fields to disappear after clicking "Clear Bins" in Weather Bins Calculator</li>
-          <li>Fixed: Bug relating to psychrometric calculator freezing when entering values into barometric pressure</li>
-        </ul>
-
-        <label>Data Explorer</label>
-        <ul>
-          <li>Added: 3-second and 4-second interval for less-than-minute data intervals</li>
-          <li>Fixed: Bug relating to first datapoint for each data being removed from dataset</li>
-          <li>Fixed: Bugs related to 1-minute data intervals</li>
-        </ul>
-
-        <label>Compressed Air</label>
-        <ul>
-          <li>Added: End Uses data inputs and report</li>
-          <li>Added: End Uses/ Air Flow Sankey</li>
-          <li>Added: Energy Use Sankey</li>
-          <li>Added: Filter reset button</li>
-          <li>Added: New control type for compressors - VFD</li>
-          <li>Added: Validation for system profile, power and capacity percent maximums</li>
-          <li>Enhanced: System profile data can be entered in 15 minute and 30 minute intervals</li>
-          <li>Fixed: Bug relating to consistence use of atmospheric pressure value used in EEM calculations</li>
-          <li>Fixed: Bug relating to report graphs showing incorrect data</li>
-          <li>Fixed: Bug where new compressed air assessments always saved to "All Assessments" instead of specified folder</li>
-          <li>Removed: Field for input temperature - not used</li>
-          <li>Updated: Example to illustrate End Use and Air Flow Sankey</li>
-        </ul>
-
-        <label>Pumps</label>
-        <ul>
-          <li>Fixed: Issue with pump example not loading correctly</li>
-          <li>Fixed: Issue with Sankey rendering slowly</li>
-          <li>Fixed: Label for "Head" in Specific Speed Calculator changed to "Head per Stage"</li>
-        </ul>
-
-        <label>Fans</label>
-        <ul>
-          <li>Fixed: Bug relating to compressibility factor</li>
-          <li>Fixed: Issue with Sankey rendering slowly</li>
-        </ul>
-
-        <label>Process Heating</label>
-        <ul>
-          <li>Added: Hydrogen to common gas fuels list</li>
-          <li>Fixed: Bug causing "Common Result Unit" not correctly set results</li>
-          <li>Fixed: Extra decimals appearing in Custom Materials compositions</li>
-          <li>Removed: Unnecessary fields from Assessment Settings (Fuel, Electricity, Steam Energy Unit settings)</li>
-        </ul>
-
-        <label>Treasure Hunt</label>
-        <ul>
-          <li>Added: Filter reset button</li>
-          <li>Fixed: Cleaned up filter and sort bar buttons</li>
-        </ul>
-
-        <label>Motor Inventory</label>
-        <ul>
-          <li>Added: Filter reset button</li>
-        </ul>
-
-
-        <label>Process Cooling</label>
-        <ul>
-          <li>Added: Validation to process cooling calculators</li>
-          <li>Removed: Unnecessary sub-header in Chiller Staging</li>
-        </ul>
-
-        <label>Known Issues:</label>
-        <ul>
-          <li>The Linux release does not support Auto-updating</li>
-          <li>Renaming an export in Windows Download menu can delete the file extension (.json)</li>
-          <li>Assessments made in a previous major release may experience errors</li>
-          <li>Import files made in a previous major release may not be useable due to field additions/removals</li>
-        </ul>
       </div>
     </div>
   </div>
