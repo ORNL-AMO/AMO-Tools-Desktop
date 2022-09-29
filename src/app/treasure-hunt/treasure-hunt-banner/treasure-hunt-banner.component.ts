@@ -20,6 +20,7 @@ export class TreasureHuntBannerComponent implements OnInit {
   subTabSub: Subscription;
   calculatorTabSub: Subscription;
   disableTabs: boolean = false;
+  bannerCollapsed: boolean = true;
   constructor(private treasureHuntService: TreasureHuntService, private calculatorsService: CalculatorsService) { }
 
   ngOnInit() {
@@ -55,9 +56,15 @@ export class TreasureHuntBannerComponent implements OnInit {
         this.treasureHuntService.mainTab.next(str);
       }
     }
+    this.collapseBanner();
   }
 
   changeSubTab(str: string) {
     this.treasureHuntService.subTab.next(str)
+  }
+
+  collapseBanner() {
+    this.bannerCollapsed = !this.bannerCollapsed;
+    window.dispatchEvent(new Event("resize"));
   }
 }

@@ -1,7 +1,7 @@
 <div class="calculator-container process-cooling modify-conditions standalone-calculator" #contentContainer>
-	<div div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
+	<div div #leftPanelHeader class="d-block d-lg-flex header pb-1 pt-1 bg-white align-items-center"
 			[ngClass]="{'justify-content-between': inTreasureHunt}">
-			<div class="w-50 d-flex pl-2 align-items-center clickable-tab" (click)="setWeatherCalculatorActive(false)"
+			<div class="d-flex pl-2 align-items-center clickable-tab" (click)="setWeatherCalculatorActive(false)"
 				[ngClass]="{'active': !displayWeatherTab}">
 				<div class="calc-icon-header icon-process-cooling">
 					<img src="assets/images/calculator-icons/process-cooling-icons/cooling-tower-basin-heater.png">
@@ -10,7 +10,7 @@
 					<h3>Cooling Tower Basin Heater Energy</h3>
 				</div>
 			</div>
-			<div class="w-50 d-flex pl-2 align-items-center clickable-tab" (click)="setWeatherCalculatorActive(true)"
+			<div class="d-flex pl-2 align-items-center clickable-tab" (click)="setWeatherCalculatorActive(true)"
 				[ngClass]="{'active': displayWeatherTab}">
 				<div class="col-md-auto">
 					<img src="assets/images/calculator-icons/utilities-icons/weather-bins-icon.png"
@@ -21,7 +21,7 @@
 				</div>
 			</div>
 
-			<div class="d-flex pr-2" *ngIf="inTreasureHunt">
+			<div class="d-flex pr-2 pl-2" *ngIf="inTreasureHunt">
 				<div class="d-flex help-holder pl-2 pr-2">
 					<p class="pl-2 help-text treasure-hunt-help">Click the save icon to add the treasure to your chest!
 						Click cancel to discard the opportunity and return to method selection.</p>
