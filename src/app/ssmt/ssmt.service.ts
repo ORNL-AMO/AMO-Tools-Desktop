@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { SSMT, SSMTInputs, TurbineInput, PressureTurbine, HeaderInput, SsmtValid } from '../shared/models/steam/ssmt';
+import { SSMT, SSMTInputs, TurbineInput, PressureTurbine, HeaderInput, SsmtValid, SSMTResults } from '../shared/models/steam/ssmt';
 import { SteamService } from '../calculator/steam/steam.service';
 import { Settings } from '../shared/models/settings';
 import { SSMTOutput, SteamCo2EmissionsOutput } from '../shared/models/steam/steam-outputs';
@@ -69,7 +69,7 @@ export class SsmtService {
     }
   }
   
-  calculateModificationModel(ssmt: SSMT, settings: Settings, baselineResults: SSMTOutput): { inputData: SSMTInputs, outputData: SSMTOutput } {
+  calculateModificationModel(ssmt: SSMT, settings: Settings, baselineResults: SSMTOutput): SSMTResults {
     let ssmtCopy: SSMT = JSON.parse(JSON.stringify(ssmt));
     let baselineResultsCpy: SSMTOutput = JSON.parse(JSON.stringify(baselineResults));
     const ssmtValid: SsmtValid = this.checkValid(ssmtCopy, settings);
