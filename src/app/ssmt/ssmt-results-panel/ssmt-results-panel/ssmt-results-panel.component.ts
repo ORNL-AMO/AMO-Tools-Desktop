@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { SSMT, SSMTInputs } from '../../../shared/models/steam/ssmt';
+import { SSMT, SSMTInputs, SSMTResults, SsmtValid } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { SSMTOutput, SSMTLosses } from '../../../shared/models/steam/steam-outputs';
 import { Subscription } from 'rxjs';
 import { SsmtService } from '../../ssmt.service';
 import { CalculateLossesService } from '../../calculate-losses.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { SteamService } from '../../../calculator/steam/steam.service';
 
 @Component({
   selector: 'app-ssmt-results-panel',
@@ -37,8 +38,10 @@ export class SsmtResultsPanelComponent implements OnInit {
   annualSavings: number;
   modValid: boolean;
   baselineValid: boolean;
+
   currCurrency: string = "$";
-  constructor(private ssmtService: SsmtService, private calculateLossesService: CalculateLossesService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private ssmtService: SsmtService,
+    private steamService: SteamService, private calculateLossesService: CalculateLossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.updateDataSub = this.ssmtService.updateData.subscribe(() => { this.getResults(); });
@@ -55,47 +58,31 @@ export class SsmtResultsPanelComponent implements OnInit {
   }
 
   getResults() {
-    //baseline
     let baselineResultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateBaselineModel(this.ssmt, this.settings);
     this.baselineInputs = baselineResultData.inputData;
     this.baselineOutput = baselineResultData.outputData;
-    //modification
-    let modificationResultData = this.ssmtService.calculateModificationModel(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, this.baselineOutput);
-    this.modificationInputs = modificationResultData.inputData;
-    this.modificationOutput = modificationResultData.outputData;
-    this.checkValid();
 
-    if (this.modValid) {
-      this.getSavings(this.baselineOutput.operationsOutput.totalOperatingCost, this.modificationOutput.operationsOutput.totalOperatingCost);
-    }
-    this.getLosses();
+    let baselineSSMTCopy: SSMT = JSON.parse(JSON.stringify(this.ssmt));
+    this.baselineValid = this.ssmtService.checkValid(baselineSSMTCopy, this.settings).isValid;
+    
+    if (this.baselineValid) {
+      this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputs, this.settings, this.ssmt);
+      let modificationSsmtCopy: SSMT = JSON.parse(JSON.stringify(this.ssmt.modifications[this.modificationIndex].ssmt));
+      this.modValid = this.ssmtService.checkValid(modificationSsmtCopy, this.settings).isValid;
+      let modificationResults: SSMTResults = { inputData: undefined, outputData: this.steamService.getEmptyResults() }
+      this.modificationInputs = modificationResults.inputData;
+      this.modificationOutput = modificationResults.outputData;
 
-  }
-
-  convertCurrency(toConvert: number) {
-    return this.convertUnitsService.convertValue(toConvert, this.currCurrency, this.settings.currency);
-  }
-
-  checkValid() {
-    if (this.modificationOutput && this.modificationOutput.boilerOutput) {
-      this.modValid = true;
-    } else {
-      this.modValid = false;
-    }
-    if (this.baselineOutput.boilerOutput) {
-      this.baselineValid = true;
-    } else {
-      this.baselineValid = false;
+      if (this.modValid) {
+        modificationResults = this.ssmtService.calculateModificationModel(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, this.baselineOutput);
+        this.modificationInputs = modificationResults.inputData;
+        this.modificationOutput = modificationResults.outputData;
+        
+        this.percentSavings = Number(Math.round(((((this.baselineOutput.operationsOutput.totalOperatingCost - this.modificationOutput.operationsOutput.totalOperatingCost) * 100) / this.baselineOutput.operationsOutput.totalOperatingCost) * 100) / 100).toFixed(0));
+        this.annualSavings = this.baselineOutput.operationsOutput.totalOperatingCost - this.modificationOutput.operationsOutput.totalOperatingCost;
+        this.modificationLosses = this.calculateLossesService.calculateLosses(this.modificationOutput, this.modificationInputs, this.settings, this.ssmt.modifications[this.modificationIndex].ssmt);
+      }
     }
   }
 
-  getLosses() {
-    this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputs, this.settings, this.ssmt);
-    this.modificationLosses = this.calculateLossesService.calculateLosses(this.modificationOutput, this.modificationInputs, this.settings, this.ssmt.modifications[this.modificationIndex].ssmt);
-  }
-
-  getSavings(baselineCost: number, modificationCost: number) {
-    this.percentSavings = Number(Math.round(((((baselineCost - modificationCost) * 100) / baselineCost) * 100) / 100).toFixed(0));
-    this.annualSavings = baselineCost - modificationCost;
-  }
 }
