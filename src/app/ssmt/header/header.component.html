@@ -25,7 +25,7 @@
       [pressureLevel]="'highPressure'" [inSetup]="inSetup" [idString]="idString" [isBaseline]="isBaseline"
       [headerInput]="headerInput.highPressureHeader"></app-header-form>
     <!--medium pressure header-->
-    <app-header-form *ngIf="headerInput.numberOfHeaders == 3" [headerForm]="mediumPressureForm" [settings]="settings"
+    <app-header-form *ngIf="headerInput.numberOfHeaders == 3" [ssmt]="ssmt" [headerForm]="mediumPressureForm" [settings]="settings"
       [selected]="selected" [numberOfHeaders]="headerInput.numberOfHeaders" (emitSave)="saveMediumPressure($event)"
       [pressureLevel]="'mediumPressure'" [inSetup]="inSetup" [idString]="idString" [isBaseline]="isBaseline"
       [headerInput]="headerInput.mediumPressureHeader">

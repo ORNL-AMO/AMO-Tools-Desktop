@@ -16,13 +16,19 @@ export class FanPsychrometricComponent implements OnInit {
   @Input()
   settings: Settings;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   
   tabSelect: string = 'results';
   headerHeight: any;
+  containerHeight: number;
+  smallScreenTab: string = 'form';
 
   baseGasDensityDataSub: Subscription;
 
@@ -76,13 +82,19 @@ export class FanPsychrometricComponent implements OnInit {
 
   resizeTabs() {
     if (this.leftPanelHeader) {
-      if (this.leftPanelHeader.nativeElement.clientHeight) {
-        this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
       }
     }
   }
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

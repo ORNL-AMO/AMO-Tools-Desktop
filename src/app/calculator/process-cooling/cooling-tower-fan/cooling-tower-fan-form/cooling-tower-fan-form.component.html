@@ -1,6 +1,6 @@
 <!-- Shared inputs -->
-<div class="d-flex w-100 my-2">
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+<div class="d-block d-lg-flex flex-direction-column">
+  <div class="col-12 col-lg-6 mb-4">
     <form #formElement [formGroup]="form">
       <label class="group-label my-1">
         Cooling Tower Characteristics
@@ -48,7 +48,7 @@
     </form>
   </div>
 
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+  <div class="col-12 col-lg-6 mb-4">
     <label class="group-label my-1">
       Operating Conditions
     </label>
@@ -71,6 +71,22 @@
             {{form.controls.operatingHours.errors.max.max}}.</span>
           <span *ngIf="form.controls.operatingHours.errors.min">Value can't be less than
             {{form.controls.operatingHours.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="electricityCost">Electricity Cost</label>
+        <div class="input-group">
+          <input name="electricityCost" type="number" class="form-control" id="electricityCost"
+            formControlName="electricityCost" (input)="calculate()" onfocus="this.select();"
+            (focus)="focusField('electricityCost')">
+          <span class="input-group-addon units">$/kWh</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.electricityCost.invalid && !form.controls.electricityCost.pristine">
+          <span *ngIf="form.controls.electricityCost.errors.required">Value required.</span>
+          <span *ngIf="form.controls.electricityCost.errors.min">Value cannot not be less than
+            {{form.controls.electricityCost.errors.min.min}}.</span>
         </span>
       </div>
 
@@ -174,10 +190,10 @@
 <div class="w-100 header mx-2 mb-4">
   <h3>Optimize Cooling Tower Fan Control</h3>
 </div>
-<div class="d-flex w-100">
+<div class="d-block d-lg-flex w-100">
 
   <!-- Baseline -->
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+  <div class="col-12 col-lg-6 mb-4">
 
     <label class="group-label my-1">
       Baseline
@@ -196,7 +212,7 @@
 
   </div>
 
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+  <div class="col-12 col-lg-6 mb-4">
     <label class="group-label my-1">
       Modification
     </label>

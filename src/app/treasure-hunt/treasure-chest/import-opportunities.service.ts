@@ -149,6 +149,41 @@ export class ImportOpportunitiesService {
       this.updateLegacyOpportunities(data.waterHeatingOpportunities, Treasure.waterHeating);
       treasureHunt.waterHeatingOpportunities = treasureHunt.waterHeatingOpportunities.concat(data.waterHeatingOpportunities);
     }
+    if(data.coolingTowerMakeupOpportunities){
+      if (treasureHunt.coolingTowerMakeupOpportunities == undefined) {
+        treasureHunt.coolingTowerMakeupOpportunities = new Array();
+      }
+      this.updateLegacyOpportunities(data.coolingTowerMakeupOpportunities, Treasure.coolingTowerMakeup);
+      treasureHunt.coolingTowerMakeupOpportunities = treasureHunt.coolingTowerMakeupOpportunities.concat(data.coolingTowerMakeupOpportunities);
+    }
+    if (data.chillerStagingOpportunities) {
+      if (treasureHunt.chillerStagingOpportunities == undefined) {
+        treasureHunt.chillerStagingOpportunities = new Array();
+      }
+      this.updateLegacyOpportunities(data.chillerStagingOpportunities, Treasure.chillerStaging);
+      treasureHunt.chillerStagingOpportunities = treasureHunt.chillerStagingOpportunities.concat(data.chillerStagingOpportunities);
+    }
+    if (data.chillerPerformanceOpportunities) {
+      if (treasureHunt.chillerPerformanceOpportunities == undefined) {
+        treasureHunt.chillerPerformanceOpportunities = new Array();
+      }
+      this.updateLegacyOpportunities(data.chillerPerformanceOpportunities, Treasure.chillerPerformance);
+      treasureHunt.chillerPerformanceOpportunities = treasureHunt.chillerPerformanceOpportunities.concat(data.chillerPerformanceOpportunities);
+    }
+    if (data.coolingTowerFanOpportunities) {
+      if (treasureHunt.coolingTowerFanOpportunities == undefined) {
+        treasureHunt.coolingTowerFanOpportunities = new Array();
+      }
+      this.updateLegacyOpportunities(data.coolingTowerFanOpportunities, Treasure.coolingTowerFan);
+      treasureHunt.coolingTowerFanOpportunities = treasureHunt.coolingTowerFanOpportunities.concat(data.coolingTowerFanOpportunities);
+    }
+    if (data.coolingTowerBasinOpportunities) {
+      if (treasureHunt.coolingTowerBasinOpportunities == undefined) {
+        treasureHunt.coolingTowerBasinOpportunities = new Array();
+      }
+      this.updateLegacyOpportunities(data.coolingTowerBasinOpportunities, Treasure.coolingTowerBasin);
+      treasureHunt.coolingTowerBasinOpportunities = treasureHunt.coolingTowerBasinOpportunities.concat(data.coolingTowerBasinOpportunities);
+    }
     return treasureHunt;
   }
 

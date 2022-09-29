@@ -10,8 +10,8 @@
         </div>
 
     <ng-container *ngIf="!isCollapsed">
-    <div class="d-flex w-100 mt-2">
-        <div class="w-50 d-flex flex-column mx-3 mb-2">
+    <div class="d-block d-lg-flex w-100 mt-2">
+        <div class="col-12 col-lg-6 d-flex flex-column mx-lg-1 mb-2">
             <form #formElement [formGroup]="form">
                 <div class="form-group">
                     <label class="small" for="{{'motorPower'+index}}">Motor Power</label>
@@ -40,7 +40,7 @@
             </form>
         </div>
 
-        <div class="w-50 d-flex flex-column mx-3 mb-2">
+        <div class="col-12 col-lg-6 d-flex flex-column mx-lg-1 mb-2">
             <form [formGroup]="form">
                 <div class="form-group">
                     <label class="small" for="{{'operatingHours'+index}}">Annual Operating Hours</label>
@@ -68,7 +68,7 @@
         </div>
     </div>
 
-    <div class="d-flex w-100 mx-2">
+    <div class="d-none d-lg-flex w-100 mx-2">
         <div class="w-50">
             <label class="group-label">
                 Control
@@ -80,8 +80,14 @@
             </label>
         </div>
     </div>
-    <div class="d-flex w-100 my-1">
-        <div class="w-50 d-flex flex-column mx-3 mb-2">
+
+    <div class="d-block d-lg-flex w-100 my-1">
+        <div class="d-block d-lg-none w-100 mx-2">
+            <label class="group-label">
+                Control
+            </label>        
+        </div>
+        <div class="col-12 col-lg-6 d-flex flex-column mx-lg-1 mb-2">
             <form [formGroup]="form">
                 <div class="checkbox" (mouseenter)="focusField('motorOverloads')">
                     <label for="{{'motorOverloads'+index}}">
@@ -149,7 +155,13 @@
             </form>
         </div>
 
-        <div class="w-50 d-flex flex-column mx-3 mb-2">
+        <div class="d-block d-lg-none w-100 mx-2">
+            <label class="group-label">
+                System Effect
+            </label>
+        </div>
+
+        <div class="col-12 col-lg-6 d-flex flex-column mx-lg-1 mb-2">
             <form [formGroup]="form">
                 <div (mouseenter)="focusField('turnRight')">
                     <label for="{{'turnRight'+index}}">
@@ -197,8 +209,8 @@
 
 
     <label class="group-label mx-2">Production and Maintenance</label>
-    <div class="d-flex w-100">
-        <div class="w-50 d-flex flex-column mx-3 mb-3">
+    <div class="d-block d-lg-flex w-100">
+        <div class="col-12 col-lg-6 d-flex flex-column mx-lg-1 mb-3">
             <form [formGroup]="form">
                 <div class="form-group pb-2">
                     <label class="small w-100 mb-1" for="{{'excessFlowOrPressure'+index}}">{{checklistQuestions['excessFlowOrPressure']}}</label>
@@ -248,7 +260,7 @@
             </form>
         </div>
 
-        <div class="w-50 d-flex flex-column mx-3 mb-2">
+        <div class="col-12 col-lg-6 d-flex flex-column mx-lg-1 mb-2">
             <form [formGroup]="form">
                 <div class="form-group pb-2">
                     <label class="small w-100 mb-1" for="{{'systemNoisy'+index}}">{{checklistQuestions['systemNoisy']}}</label>

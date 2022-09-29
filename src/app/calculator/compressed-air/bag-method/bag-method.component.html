@@ -1,162 +1,178 @@
-<div class="d-flex h-100 modify-conditions compressed-air standalone-calculator">
-  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
-    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
-      <div class="calc-icon-header icon-compressed-air">
-        <img src="assets/images/calculator-icons/compressed-air-icons/leakage-loss-estimator.png">
-      </div>
-      <div class="pl-2">
-        <h3>Leak Loss Estimator - Bag Method</h3>
-      </div>
+<div #contentContainer class="calculator-container modify-conditions compressed-air standalone-calculator">
+  <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+    <div class="calc-icon-header icon-compressed-air">
+      <img src="assets/images/calculator-icons/compressed-air-icons/leakage-loss-estimator.png">
     </div>
-
-    <div class="d-flex flex-column m-4">
-      <div class="tab-content">
-        <form #formElement>
-          <div class="form-section">
-            <div class="form-group">
-              <label for="operatingHours">Annual Operating Hours</label>
-              <div class="input-group">
-                <span class="input-group-addon op-hour-addon units">
-                  <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
-                </span>
-                <input name="operatingHours" class="form-control" type="number" step="any"
-                  [(ngModel)]="inputs.operatingHours" id="operatingHours" (input)="calculateAnnualConsumption()"
-                  onfocus="this.select();" (focus)="changeField('operatingHours')">
-                <span class="input-group-addon units">hrs/yr</span>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="bold">Total Flow Rate</label>
-              <div class="text-center small">
-                <strong>{{outputs.flowRate | number: '1.0-2'}} </strong>
-                <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</strong>
-                <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</strong>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="bold">Total Annual Compressed Air Leakage</label>
-              <div class="text-center small">
-                <strong>{{outputs.annualConsumption | number:'1.0-2'}} </strong>
-                <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</strong>
-                <strong *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></strong>
-              </div>
-            </div>
-          </div>
-        </form>
-        <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
-          (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
-          [operatingHours]="bagMethodService.bagMethodOperatingHours"></app-operating-hours-modal>
-      </div>
-
-      <app-bag-method-form *ngFor="let input of inputs.inputsArray; let i = index" [settings]="settings" [index]="i"
-        [inputs]="input" [outputs]="outputsArray[i]" (calculate)="calculateAnnualConsumption($event)"
-        (deleteLeakage)="deleteLeakage($event)" (emitChangeField)="changeField($event)"></app-bag-method-form>
-
-      <div class="pt-1">
-        <a class="click-link pull-left small" (click)="addLeakage()">Add New Leak +</a>
-      </div>
-      <div class="w-100 justify-content-center btn-group btn-group-sm">
-        <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
-          Reset Data
-        </button>
-        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
-        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
-          Generate Example
-        </button>
-      </div>
-
-
+    <div class="pl-2">
+      <h3>Leak Loss Estimator - Bag Method</h3>
     </div>
   </div>
 
-  <div class="d-flex flex-column w-50 mh-100 scroll-item">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
-      <div class="flex-fill panel-tab-item h-100 active">
-        <a class="h-100 d-flex justify-content-center align-items-center">
-          <div>Help</div>
-        </a>
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link">Bag Method Data</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Details</a>
+    </div>
+  </div>
+
+  <div class="panel-group">
+    <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+      <div class="d-flex flex-column m-4">
+        <div class="tab-content">
+          <form #formElement>
+            <div class="form-section">
+              <div class="form-group">
+                <label for="operatingHours">Annual Operating Hours</label>
+                <div class="input-group">
+                  <span class="input-group-addon op-hour-addon units">
+                    <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+                  </span>
+                  <input name="operatingHours" class="form-control" type="number" step="any"
+                    [(ngModel)]="inputs.operatingHours" id="operatingHours" (input)="calculateAnnualConsumption()"
+                    onfocus="this.select();" (focus)="changeField('operatingHours')">
+                  <span class="input-group-addon units">hrs/yr</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="bold">Total Flow Rate</label>
+                <div class="text-center small">
+                  <strong>{{outputs.flowRate | number: '1.0-2'}} </strong>
+                  <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</strong>
+                  <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</strong>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="bold">Total Annual Compressed Air Leakage</label>
+                <div class="text-center small">
+                  <strong>{{outputs.annualConsumption | number:'1.0-2'}} </strong>
+                  <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</strong>
+                  <strong *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></strong>
+                </div>
+              </div>
+            </div>
+          </form>
+          <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+            (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
+            [operatingHours]="bagMethodService.bagMethodOperatingHours"></app-operating-hours-modal>
+        </div>
+
+        <app-bag-method-form *ngFor="let input of inputs.inputsArray; let i = index" [settings]="settings" [index]="i"
+          [inputs]="input" [outputs]="outputsArray[i]" (calculate)="calculateAnnualConsumption($event)"
+          (deleteLeakage)="deleteLeakage($event)" (emitChangeField)="changeField($event)"></app-bag-method-form>
+
+        <div class="pt-1">
+          <a class="click-link pull-left small" (click)="addLeakage()">Add New Leak +</a>
+        </div>
+        <div class="w-100 justify-content-center btn-group btn-group-sm">
+          <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+            Reset Data
+          </button>
+          <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+          <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+            Generate Example
+          </button>
+        </div>
+
+
       </div>
     </div>
-    <div class="d-flex">
-      <div class="p-4 pt-2 d-flex flex-column help-info">
-        <h5>
-          Leak Loss Estimator - Bag Method Help
+
+    <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+      <div class="d-flex flex-wrap tabs primary sticky-top">
+        <div class="flex-fill panel-tab-item h-100 active">
+          <a class="h-100 d-flex justify-content-center align-items-center">
+            <div>Help</div>
+          </a>
+        </div>
+      </div>
+      <div class="d-flex">
+        <div class="p-4 pt-2 d-flex flex-column help-info">
+          <h5>
+            Leak Loss Estimator - Bag Method Help
+            <br>
+            <small class="text-muted"> Use the calculator to estimate the leakage rate of orifices in your compressed
+              air
+              system. Cover a suspected leak with a trash bag and calculate the number of seconds it takes to fill the
+              bag. Once
+              done, close the bag and measure its dimensions. Compressed air leaks should be tagged and fixed at first
+              chance,
+              this calculator just helps to quantify the savings.
+            </small>
+          </h5>
+
+          <h6><u>Common Trash bag Sizes:</u></h6>
           <br>
-          <small class="text-muted"> Use the calculator to estimate the leakage rate of orifices in your compressed air
-            system. Cover a suspected leak with a trash bag and calculate the number of seconds it takes to fill the
-            bag. Once
-            done, close the bag and measure its dimensions. Compressed air leaks should be tagged and fixed at first
-            chance,
-            this calculator just helps to quantify the savings.
-          </small>
-        </h5>
+          <table class="table table-hover table-striped w-50">
+            <tr>
+              <th>Bag Dimension</th>
+              <th>Bag Size</th>
+            </tr>
+            <tr>
+              <td>40″W x 46″H</td>
+              <td>40-45 Gallon</td>
+            </tr>
+            <tr>
+              <td>40″W x 50″H</td>
+              <td>55 Gallon</td>
+            </tr>
+            <tr>
+              <td>50″W x 48″H</td>
+              <td>65 Gallon</td>
+            </tr>
+          </table>
+          <a href="https://www.tenaquip.com/resources/facility-maintenance/garbage-bag-size-chart" target="_blank">Other
+            Common Trash Bag Sizes</a>
+          <hr class="my-1 hr-spacer">
 
-        <h6><u>Common Trash bag Sizes:</u></h6>
-        <br>
-        <table class="table table-hover table-striped w-50">
-          <tr>
-            <th>Bag Dimension</th>
-            <th>Bag Size</th>
-          </tr>
-          <tr>
-            <td>40″W x 46″H</td>
-            <td>40-45 Gallon</td>
-          </tr>
-          <tr>
-            <td>40″W x 50″H</td>
-            <td>55 Gallon</td>
-          </tr>
-          <tr>
-            <td>50″W x 48″H</td>
-            <td>65 Gallon</td>
-          </tr>
-        </table>
-        <a href="https://www.tenaquip.com/resources/facility-maintenance/garbage-bag-size-chart" target="_blank">Other
-          Common Trash Bag Sizes</a>
-        <hr class="my-1 hr-spacer">
+          <div class="my-2" *ngIf="currentField == 'operatingHours'">
+            <h6>
+              Operating Time
+              <br>
+              <small class="text-muted">
+                The hours per year that the compressor system is in use.
+                <hr>
+              </small>
+            </h6>
+          </div>
 
-        <div class="my-2" *ngIf="currentField == 'operatingHours'">
-          <h6>
-            Operating Time
-            <br>
-            <small class="text-muted">
-              The hours per year that the compressor system is in use.
-              <hr>
-            </small>
-          </h6>
-        </div>
+          <div class="my-2" *ngIf="currentField == 'fillTime'">
+            <h6>
+              Bag Fill Time
+              <br>
+              <small class="text-muted">
+                The number of seconds it takes to fill the bag.
+                <hr>
+              </small>
+            </h6>
+          </div>
 
-        <div class="my-2" *ngIf="currentField == 'fillTime'">
-          <h6>
-            Bag Fill Time
-            <br>
-            <small class="text-muted">
-              The number of seconds it takes to fill the bag.
-              <hr>
-            </small>
-          </h6>
-        </div>
+          <div class="my-2" *ngIf="currentField == 'height'">
+            <h6>
+              Height of Bag
+              <br>
+              <small class="text-muted">
+                The height of the bag after inflation in inches.
+                <hr>
+              </small>
+            </h6>
+          </div>
 
-        <div class="my-2" *ngIf="currentField == 'height'">
-          <h6>
-            Height of Bag
-            <br>
-            <small class="text-muted">
-              The height of the bag after inflation in inches.
-              <hr>
-            </small>
-          </h6>
-        </div>
-
-        <div class="my-2" *ngIf="currentField == 'diameter'">
-          <h6>
-            Diameter of Bag
-            <br>
-            <small class="text-muted">
-              The diameter of the bag after inflation in inches.
-              <hr>
-            </small>
-          </h6>
+          <div class="my-2" *ngIf="currentField == 'diameter'">
+            <h6>
+              Diameter of Bag
+              <br>
+              <small class="text-muted">
+                The diameter of the bag after inflation in inches.
+                <hr>
+              </small>
+            </h6>
+          </div>
         </div>
       </div>
     </div>

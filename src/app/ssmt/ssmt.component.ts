@@ -103,30 +103,31 @@ export class SsmtComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
       if (!this.assessment || (this.assessment && this.assessment.type !== 'SSMT')) {
-        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' } });
       } else {
-        this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
-        if (this._ssmt.modifications) {
-        if (this._ssmt.modifications.length !== 0) {
-          this.modificationExists = true;
-          this.modificationIndex = 0;
-          this.compareService.setCompareVals(this._ssmt, 0);
+        this.assessment.ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
+        if (this.assessment.ssmt.modifications) {
+          if (this.assessment.ssmt.modifications.length !== 0) {
+            this.modificationExists = true;
+            this.modificationIndex = 0;
+            this.compareService.setCompareVals(this.assessment.ssmt, 0);
+          } else {
+            this.modificationExists = false;
+            this.compareService.setCompareVals(this.assessment.ssmt);
+          }
         } else {
+          this.assessment.ssmt.modifications = new Array<Modification>();
           this.modificationExists = false;
-          this.compareService.setCompareVals(this._ssmt);
+          this.compareService.setCompareVals(this.assessment.ssmt);
         }
-      } else {
-        this._ssmt.modifications = new Array<Modification>();
-        this.modificationExists = false;
-        this.compareService.setCompareVals(this._ssmt);
+        this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
+        this.getSettings();
+        this.initSankeyList();
+        let tmpTab = this.assessmentService.getTab();
+        if (tmpTab) {
+          this.ssmtService.mainTab.next(tmpTab);
+        }
       }
-      this.getSettings();
-      this.initSankeyList();
-      let tmpTab = this.assessmentService.getTab();
-      if (tmpTab) {
-        this.ssmtService.mainTab.next(tmpTab);
-      }
-    }
     });
     this.subscribeTabs();
 

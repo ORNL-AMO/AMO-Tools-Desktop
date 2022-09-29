@@ -28,7 +28,7 @@ export class CoolingTowerFanService {
     this.currentField = new BehaviorSubject<string>(undefined);
   }
 
-  initDefaultEmptyInputs() {
+  initDefaultEmptyInputs(settings: Settings) {
     let emptyInput: CoolingTowerFanInput = {
       towerType: 0,
       numCells: 1,
@@ -40,6 +40,7 @@ export class CoolingTowerFanService {
       operatingHours: 8760,
       baselineSpeedType: 0,
       modSpeedType: 0,
+      electricityCost: settings.electricityCost
     };
     this.coolingTowerFanInput.next(emptyInput);
   }
@@ -51,13 +52,23 @@ export class CoolingTowerFanService {
       modPower: 0,
       modEnergy: 0,
       savingsEnergy: 0,
+      baselineEnergyCost: 0,
+      modEnergyCost: 0,
+      annualCostSaving: 0,
     };
     this.coolingTowerFanOutput.next(emptyOutput);
   }
 
-  calculate(settings: Settings): void {
-    let coolingTowerFanInput: CoolingTowerFanInput = this.coolingTowerFanInput.getValue();
-    let inputCopy: CoolingTowerFanInput = JSON.parse(JSON.stringify(coolingTowerFanInput));
+  calculate(settings: Settings, inputs?: CoolingTowerFanInput) {
+    let coolingTowerFanInput: CoolingTowerFanInput;
+    let inputCopy: CoolingTowerFanInput;
+    if(!inputs){
+      coolingTowerFanInput = this.coolingTowerFanInput.getValue();
+      inputCopy = JSON.parse(JSON.stringify(coolingTowerFanInput));
+    } else {
+      inputCopy = JSON.parse(JSON.stringify(inputs));
+    }
+     
     let validInput: boolean;
     validInput = this.coolingTowerFanFormService.getCoolingTowerFanForm(inputCopy).valid;
     
@@ -71,8 +82,12 @@ export class CoolingTowerFanService {
       } else {
         coolingTowerFanOutput.savingsEnergy = Number(coolingTowerFanOutput.savingsEnergy.toFixed(2));
       }
+      coolingTowerFanOutput.baselineEnergyCost = coolingTowerFanOutput.baselineEnergy * inputCopy.electricityCost;
+      coolingTowerFanOutput.modEnergyCost = coolingTowerFanOutput.modEnergy * inputCopy.electricityCost;
+      coolingTowerFanOutput.annualCostSaving = coolingTowerFanOutput.baselineEnergyCost - coolingTowerFanOutput.modEnergyCost;
       coolingTowerFanOutput = this.convertResultUnits(coolingTowerFanOutput, settings);
       this.coolingTowerFanOutput.next(coolingTowerFanOutput);
+      return coolingTowerFanOutput;
     }
   }
 
@@ -88,6 +103,7 @@ export class CoolingTowerFanService {
       operatingHours: 7000,
       baselineSpeedType: 0,
       modSpeedType: 1,
+      electricityCost: settings.electricityCost
     };
 
     if (settings.unitsOfMeasure == 'Metric') {

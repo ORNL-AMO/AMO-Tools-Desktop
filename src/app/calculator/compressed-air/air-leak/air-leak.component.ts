@@ -50,7 +50,9 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   @ViewChild('panelHeader', { static: false }) panelHeader: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
   constructor(private airLeakService: AirLeakService, private calculatorDbService: CalculatorDbService,

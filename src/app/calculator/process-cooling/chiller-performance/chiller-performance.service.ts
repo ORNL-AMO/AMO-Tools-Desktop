@@ -33,7 +33,7 @@ export class ChillerPerformanceService {
     this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
-  initDefaultEmptyInputs() {
+  initDefaultEmptyInputs(settings: Settings) {
     let emptyInput: ChillerPerformanceInput = {
       chillerType: 0,
       condenserCoolingType: 0,
@@ -49,6 +49,7 @@ export class ChillerPerformanceService {
       baselineWaterEnteringTemp: 0,
       modWaterSupplyTemp: 0,
       modWaterEnteringTemp: 0,
+      electricityCost: settings.electricityCost
     };
     this.chillerPerformanceInput.next(emptyInput);
   }
@@ -64,13 +65,22 @@ export class ChillerPerformanceService {
       modPower: 0,
       modEnergy: 0,
       savingsEnergy: 0,
+      baselineEnergyCost: 0,
+      modEnergyCost: 0,
+      annualCostSaving: 0,
     };
     this.chillerPerformanceOutput.next(emptyOutput);
   }
 
-  calculate(settings: Settings): void {
-    let chillerPerformanceInput: ChillerPerformanceInput = this.chillerPerformanceInput.getValue();
-    let inputCopy: ChillerPerformanceInput = JSON.parse(JSON.stringify(chillerPerformanceInput));
+  calculate(settings: Settings, inputs?: ChillerPerformanceInput) {
+    let chillerPerformanceInput: ChillerPerformanceInput;
+    let inputCopy: ChillerPerformanceInput;
+    if (!inputs){
+      chillerPerformanceInput = this.chillerPerformanceInput.getValue();
+      inputCopy = JSON.parse(JSON.stringify(chillerPerformanceInput));
+    } else {
+      inputCopy = JSON.parse(JSON.stringify(inputs));
+    }
     let validInput: boolean;
     validInput = this.chillerPerformanceFormService.getChillerPerformanceForm(inputCopy).valid;
     
@@ -80,8 +90,11 @@ export class ChillerPerformanceService {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       let chillerPerformanceOutput: ChillerPerformanceOutput = this.chillersSuiteApiService.chillerCapacityEfficiency(inputCopy);
       chillerPerformanceOutput = this.convertResultUnits(chillerPerformanceOutput, settings);
+      chillerPerformanceOutput.baselineEnergyCost = chillerPerformanceOutput.baselineEnergy * inputCopy.electricityCost;
+      chillerPerformanceOutput.modEnergyCost = chillerPerformanceOutput.modEnergy * inputCopy.electricityCost;
+      chillerPerformanceOutput.annualCostSaving = chillerPerformanceOutput.baselineEnergyCost - chillerPerformanceOutput.modEnergyCost;
       this.chillerPerformanceOutput.next(chillerPerformanceOutput);
-      
+      return chillerPerformanceOutput;
     }
   }
 
@@ -100,7 +113,8 @@ export class ChillerPerformanceService {
       baselineWaterSupplyTemp: 42,
       baselineWaterEnteringTemp: 82.12,
       modWaterSupplyTemp: 43,
-      modWaterEnteringTemp: 81.12
+      modWaterEnteringTemp: 81.12,
+      electricityCost: settings.electricityCost
     };
 
     if (settings.unitsOfMeasure == 'Metric') {
@@ -123,7 +137,7 @@ export class ChillerPerformanceService {
     input.modWaterEnteringTemp = this.roundVal(input.modWaterEnteringTemp, 2);
 
     
-    input.waterDeltaT = this.convertUnitsService.value(input.waterDeltaT).from('F').to('C');
+    input.waterDeltaT = this.convertUnitsService.value(input.waterDeltaT).from('R').to('K');
     input.waterDeltaT = this.roundVal(input.waterDeltaT, 2);
 
     input.waterFlowRate = this.convertUnitsService.value(input.waterFlowRate).from('gpm').to('m3/s');
@@ -143,7 +157,8 @@ export class ChillerPerformanceService {
       input.modWaterSupplyTemp = this.convertUnitsService.value(input.modWaterSupplyTemp).from('C').to('F');
       input.modWaterEnteringTemp = this.convertUnitsService.value(input.modWaterEnteringTemp).from('C').to('F');
       
-      input.waterDeltaT = this.convertUnitsService.value(input.waterDeltaT).from('C').to('F');
+      input.waterDeltaT = this.convertUnitsService.value(input.waterDeltaT).from('K').to('R');
+      input.waterDeltaT = this.roundVal(input.waterDeltaT, 2);
       input.waterFlowRate = this.convertUnitsService.value(input.waterFlowRate).from('m3/s').to('gpm');
       input.ariCapacity = this.convertUnitsService.value(input.ariCapacity).from('kW').to('hp');
     }

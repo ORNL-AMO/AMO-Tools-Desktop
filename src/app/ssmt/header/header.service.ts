@@ -7,11 +7,10 @@ import { SteamService } from '../../calculator/steam/steam.service';
 import { SaturatedPropertiesOutput } from '../../shared/models/steam/steam-outputs';
 import { GreaterThanValidator } from '../../shared/validators/greater-than';
 import { LessThanValidator } from '../../shared/validators/less-than';
-import { BoilerWarnings } from '../boiler/boiler.service';
 
 @Injectable()
 export class HeaderService {
- 
+
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
   initHeaderDataObj(): HeaderInput {
@@ -21,33 +20,47 @@ export class HeaderService {
     };
   }
 
-  initHighestPressureHeaderForm(settings: Settings, ssmt:SSMT, boilerInput: BoilerInput, minPressure?: number): FormGroup {
-    let ranges: HeaderRanges = this.getRanges(settings, boilerInput, minPressure, undefined);
-
+  initHighestPressureHeaderForm(settings: Settings, boilerInput: BoilerInput, pressureMin?: number): FormGroup {
+    let ranges: HeaderRanges = this.getRanges(settings, pressureMin, undefined);
     let form: FormGroup = this.formBuilder.group({
-      pressure: [undefined, [Validators.required, GreaterThanValidator.greaterThan(ranges.pressureMin), LessThanValidator.lessThan(ranges.pressureMax), this.boilerTempValidator(boilerInput.steamTemperature, settings)]],
+      pressure: [undefined, [Validators.required, LessThanValidator.lessThan(ranges.pressureMax), this.boilerTempValidator(boilerInput.steamTemperature, settings)]],
       processSteamUsage: [undefined, [Validators.required, Validators.min(ranges.processUsageMin)]],
       condensationRecoveryRate: [undefined, [Validators.required, Validators.min(0), Validators.max(100)]],
       heatLoss: [.1, [Validators.required, Validators.min(0), Validators.max(10)]],
-      condensateReturnTemperature: [undefined, [Validators.required, Validators.min(ranges.condensateReturnTempMin), Validators.max(ranges.condensateReturnTempMax)]],
+      condensateReturnTemperature: [undefined, [Validators.required, Validators.min(ranges.condensateReturnTempMin)]],
       flashCondensateReturn: [false, Validators.required],
     });
-      return form;
-      
+
+    form.controls.pressure.addValidators(this.getPressureMinValidators(pressureMin, boilerInput.deaeratorPressure, ranges, settings));
+    form.controls.pressure.updateValueAndValidity()
+
+    for (let key in form.controls) {
+      if (form.controls[key]) {
+        form.controls[key].markAsDirty();
+      }
+    }
+    return form;
+
   }
 
-  getHighestPressureHeaderFormFromObj(obj: HeaderWithHighestPressure, ssmt:SSMT, settings: Settings, boilerInput: BoilerInput, minPressure?: number): FormGroup {
-    let ranges: HeaderRanges = this.getRanges(settings, boilerInput, minPressure, undefined);
+  getHighestPressureHeaderFormFromObj(obj: HeaderWithHighestPressure, settings: Settings, boilerInput: BoilerInput, pressureMin?: number): FormGroup {
+    let ranges: HeaderRanges = this.getRanges(settings, pressureMin, undefined);
     let form: FormGroup = this.formBuilder.group({
-      pressure: [obj.pressure, [Validators.required, GreaterThanValidator.greaterThan(ranges.pressureMin), LessThanValidator.lessThan(ranges.pressureMax), this.boilerTempValidator(boilerInput.steamTemperature, settings),]],
+      pressure: [obj.pressure, [Validators.required, LessThanValidator.lessThan(ranges.pressureMax), this.boilerTempValidator(boilerInput.steamTemperature, settings)]],
       processSteamUsage: [obj.processSteamUsage, [Validators.required, Validators.min(ranges.processUsageMin)]],
       condensationRecoveryRate: [obj.condensationRecoveryRate, [Validators.required, Validators.min(0), Validators.max(100)]],
       heatLoss: [obj.heatLoss, [Validators.required, Validators.min(0), Validators.max(10)]],
-      condensateReturnTemperature: [obj.condensateReturnTemperature, [Validators.required, Validators.min(ranges.condensateReturnTempMin), Validators.max(ranges.condensateReturnTempMax)]],
+      condensateReturnTemperature: [obj.condensateReturnTemperature, [Validators.required, Validators.min(ranges.condensateReturnTempMin)]],
       flashCondensateReturn: [obj.flashCondensateReturn, Validators.required]
     });
+
+    form.controls.pressure.addValidators(this.getPressureMinValidators(pressureMin, boilerInput.deaeratorPressure, ranges, settings));
+    form.controls.pressure.updateValueAndValidity()
+    
     for (let key in form.controls) {
-      form.controls[key].markAsDirty();
+      if (form.controls[key]) {
+        form.controls[key].markAsDirty();
+      }
     }
     return form;
   }
@@ -63,7 +76,7 @@ export class HeaderService {
     };
   }
 
-  initHeaderForm(settings: Settings, ssmt: SSMT, useBaselineProcessSteamUsage: boolean, pressureMin?: number, pressureMax?: number, pressureLevel?: string): FormGroup {
+  initHeaderForm(settings: Settings, useBaselineProcessSteamUsage: boolean, pressureMin: number, pressureMax: number, deaeratorPressure?: number): FormGroup {
     let ranges: HeaderRanges = this.getRanges(settings, undefined, pressureMin, pressureMax);
     let form: FormGroup = this.formBuilder.group({
       pressure: [undefined, [Validators.required, GreaterThanValidator.greaterThan(ranges.pressureMin), LessThanValidator.lessThan(ranges.pressureMax)]],
@@ -75,11 +88,20 @@ export class HeaderService {
       desuperheatSteamTemperature: [undefined, [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]],
       useBaselineProcessSteamUsage: [useBaselineProcessSteamUsage]
     });
+
+    form.controls.pressure.addValidators(this.getPressureMinValidators(pressureMin, deaeratorPressure, ranges, settings));
+    form.controls.pressure.updateValueAndValidity()
+
+    for (let key in form.controls) {
+      if (form.controls[key]) {
+        form.controls[key].markAsDirty();
+      }
+    }
     return form;
   }
 
-  getHeaderFormFromObj(obj: HeaderNotHighestPressure, ssmt:SSMT, settings: Settings, pressureMin: number, pressureMax: number, pressureLevel?: string): FormGroup {
-    let ranges: HeaderRanges = this.getRanges(settings, undefined, pressureMin, pressureMax, obj.pressure);
+  getHeaderFormFromObj(obj: HeaderNotHighestPressure, settings: Settings, pressureMin: number, pressureMax: number, deaeratorPressure?: number): FormGroup {
+    let ranges: HeaderRanges = this.getRanges(settings, pressureMin, pressureMax, obj.pressure);
     let tmpDesuperheatSteamTemperatureValidators: Array<ValidatorFn>;
     if (obj.desuperheatSteamIntoNextHighest) {
       tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
@@ -88,7 +110,7 @@ export class HeaderService {
     }
 
     let form: FormGroup = this.formBuilder.group({
-      pressure: [obj.pressure, [Validators.required, GreaterThanValidator.greaterThan(ranges.pressureMin), LessThanValidator.lessThan(ranges.pressureMax)]],
+      pressure: [obj.pressure, [Validators.required]],
       processSteamUsage: [obj.processSteamUsage, [Validators.required, Validators.min(ranges.processUsageMin)]],
       condensationRecoveryRate: [obj.condensationRecoveryRate, [Validators.required, Validators.min(0), Validators.max(100)]],
       heatLoss: [obj.heatLoss, [Validators.required, Validators.min(0), Validators.max(10)]],
@@ -97,11 +119,37 @@ export class HeaderService {
       desuperheatSteamTemperature: [obj.desuperheatSteamTemperature, tmpDesuperheatSteamTemperatureValidators],
       useBaselineProcessSteamUsage: [obj.useBaselineProcessSteamUsage]
     });
-    
+
+    form.controls.pressure.addValidators(this.getPressureMinValidators(pressureMin, deaeratorPressure, ranges, settings));
+    form.controls.pressure.updateValueAndValidity()
+    // only add validation if pressureMin/Max constraint fields have value
+    if (pressureMax != undefined) {
+      form.controls.pressure.addValidators(LessThanValidator.lessThan(ranges.pressureMax))
+    }
+
     for (let key in form.controls) {
-      form.controls[key].markAsDirty();
+      if (form.controls[key]) {
+        form.controls[key].markAsDirty();
+      }
     }
     return form;
+  }
+
+  getPressureMinValidators(pressureMin: number, deaeratorPressure: number, ranges: HeaderRanges, settings: Settings): Array<ValidatorFn> {
+    let validators: Array<ValidatorFn> = [];
+    if (pressureMin != undefined && deaeratorPressure != undefined) {
+      if (Math.max(pressureMin, deaeratorPressure) === pressureMin) {
+        validators.push(GreaterThanValidator.greaterThan(ranges.pressureMin));
+      } else {
+        validators.push(this.deaeratorPressureValidator(deaeratorPressure, settings))
+      }
+    } else if (pressureMin != undefined) {
+      validators.push(GreaterThanValidator.greaterThan(ranges.pressureMin));
+    } else if (deaeratorPressure != undefined) {
+      validators.push(this.deaeratorPressureValidator(deaeratorPressure, settings))
+    }
+    
+    return validators;
   }
 
   initHeaderObjFromForm(form: FormGroup): HeaderNotHighestPressure {
@@ -117,7 +165,7 @@ export class HeaderService {
     };
   }
 
-  getRanges(settings: Settings, boilerInput?: BoilerInput, pressureMin?: number, pressureMax?: number, headerPressure?: number): HeaderRanges {
+  getRanges(settings: Settings, pressureMin?: number, pressureMax?: number, headerPressure?: number): HeaderRanges {
     let tmpPressureMin: number = this.convertUnitsService.value(-14.5).from('psia').to(settings.steamPressureMeasurement);
     let tmpPressureMax: number = this.convertUnitsService.value(3185).from('psia').to(settings.steamPressureMeasurement);
     if (pressureMin > tmpPressureMin) {
@@ -131,19 +179,6 @@ export class HeaderService {
 
     let tmpCondensateReturnTempMin: number = this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement);
     tmpCondensateReturnTempMin = this.convertUnitsService.roundVal(tmpCondensateReturnTempMin, 3);
-
-    //return condensate max = saturated temp at dearator pressures
-    let tmpCondensateReturnTempMax: number = 1000000;
-    if (boilerInput && boilerInput.deaeratorPressure) {
-      let satPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(
-        {
-          saturatedPressure: boilerInput.deaeratorPressure
-        },
-        0,
-        settings
-      );
-      tmpCondensateReturnTempMax = this.convertUnitsService.roundVal(satPropertiesOutput.saturatedTemperature, 0);
-    }
     let tmpDesuperheatingTempMin: number = this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement);
 
     if (headerPressure) {
@@ -170,7 +205,6 @@ export class HeaderService {
       pressureMin: tmpPressureMin,
       pressureMax: tmpPressureMax,
       condensateReturnTempMin: tmpCondensateReturnTempMin,
-      condensateReturnTempMax: tmpCondensateReturnTempMax,
       desuperheatingTempMin: tmpDesuperheatingTempMin,
       desuperheatingTempMax: tmpDesuperheatingTempMax,
       processUsageMax: tmpProcessUsageMax,
@@ -178,71 +212,59 @@ export class HeaderService {
     };
   }
 
-
-  isHeaderValid(obj: HeaderInput, ssmt: SSMT, settings: Settings, boilerInput: BoilerInput): boolean {
-    if (obj) {
+  isHeaderValid(headerInput: HeaderInput, ssmt: SSMT, settings: Settings, boilerInput: BoilerInput): boolean {
+    let isHeaderValid: boolean;
+    if (headerInput && headerInput.highPressureHeader) {
+      isHeaderValid = true;
       let isHighPressureHeaderValid: boolean = true;
       let isMediumPressureHeaderValid: boolean = true;
       let isLowPressureHeaderValid: boolean = true;
-      if (obj.highPressureHeader) {
-        let minPressure: number;
-        if (obj.numberOfHeaders == 1) {
-          minPressure = boilerInput.deaeratorPressure;
-        }
-        let tmpHighPressureFrom: FormGroup = this.getHighestPressureHeaderFormFromObj(obj.highPressureHeader, ssmt, settings, boilerInput, minPressure);
-        if (tmpHighPressureFrom.status === 'INVALID') {
-          isHighPressureHeaderValid = false;
-        }
-      } else {
-        isHighPressureHeaderValid = false;
-      }
+      let highPressureMin: number;
 
-      if (obj.numberOfHeaders > 1) {
-        if (obj.lowPressureHeader) {
-          let pressureMax: number;
-          if (obj.numberOfHeaders == 3 && obj.mediumPressureHeader) {
-            pressureMax = obj.mediumPressureHeader.pressure;
-          } else if (obj.highPressureHeader) {
-            pressureMax = obj.highPressureHeader.pressure;
-          }
-          if (pressureMax) {
-            let tmpLowPressureHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.lowPressureHeader, ssmt, settings, boilerInput.deaeratorPressure, pressureMax);
-            if (tmpLowPressureHeaderForm.status === 'INVALID') {
-              isLowPressureHeaderValid = false;
-            }
-          } else {
-            isLowPressureHeaderValid = false;
-          }
-        }
-        else {
-          isLowPressureHeaderValid = false;
-        }
+      if (headerInput.numberOfHeaders == 2 && headerInput.lowPressureHeader) {
+        let lowPressureMax: number = headerInput.highPressureHeader.pressure;
+        isLowPressureHeaderValid = this.getHeaderFormFromObj(headerInput.lowPressureHeader, settings, undefined, lowPressureMax, ssmt.boilerInput.deaeratorPressure).valid;
+        highPressureMin = headerInput.lowPressureHeader.pressure;
+      } else if (headerInput.numberOfHeaders == 3 && headerInput.lowPressureHeader && headerInput.mediumPressureHeader) {
+        let lowPressureMax: number = headerInput.mediumPressureHeader.pressure;
+        isLowPressureHeaderValid = this.getHeaderFormFromObj(headerInput.lowPressureHeader, settings, undefined, lowPressureMax, ssmt.boilerInput.deaeratorPressure).valid;
+        
+        let mediumPressureMax: number = headerInput.highPressureHeader.pressure;
+        isMediumPressureHeaderValid = this.getHeaderFormFromObj(headerInput.mediumPressureHeader, settings, headerInput.lowPressureHeader.pressure, mediumPressureMax, ssmt.boilerInput.deaeratorPressure).valid;
+        highPressureMin = headerInput.mediumPressureHeader.pressure;
       }
+      isHighPressureHeaderValid = this.getHighestPressureHeaderFormFromObj(headerInput.highPressureHeader, settings, boilerInput, highPressureMin).valid;
 
-      if (obj.numberOfHeaders === 3) {
-        if (obj.mediumPressureHeader && obj.highPressureHeader && obj.lowPressureHeader) {
-          let pressureMax: number = obj.highPressureHeader.pressure;
-          let pressureMin: number = obj.lowPressureHeader.pressure;
-
-          let tmpMediumHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.mediumPressureHeader, ssmt, settings, pressureMin, pressureMax);
-          if (tmpMediumHeaderForm.status === 'INVALID') {
-            isMediumPressureHeaderValid = false;
-          }
-        } else {
-          isMediumPressureHeaderValid = false;
-        }
-      }
-
-      if (isHighPressureHeaderValid && isMediumPressureHeaderValid && isLowPressureHeaderValid) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
+      isHeaderValid = isHighPressureHeaderValid && isMediumPressureHeaderValid && isLowPressureHeaderValid;
+   
+    } 
+    return isHeaderValid;
   }
 
+  deaeratorPressureValidator(deaeratorPressure: number, settings: Settings): ValidatorFn {
+    return (valueControl: AbstractControl): { [key: string]: { val: number } } => {
+      if (valueControl.value !== '' && valueControl.value !== null) {
+        try {
+          // Need conversion?
+          if (valueControl.value > deaeratorPressure) {
+            return undefined;
+          }
+        }
+        catch (e) {
+          console.log(e);
+          return {
+            deaeratorPressure: { val: deaeratorPressure }
+          };
+        }
+        return {
+          deaeratorPressure: { val: deaeratorPressure }
+        };
+      }
+      else {
+        return undefined;
+      }
+    };
+  }
 
 
   boilerTempValidator(boilerTemp: number, settings: Settings): ValidatorFn {
@@ -276,15 +298,20 @@ export class HeaderService {
     };
   }
 
-  checkHeaderWarnings(ssmt: SSMT, pressureLevel: string, settings: Settings): BoilerWarnings {
+  checkHeaderWarnings(ssmt: SSMT, pressureLevel: string, settings: Settings): HeaderWarnings {
+    let condensateReturnTemperature: string;
+    if (pressureLevel == 'highPressure') {
+      condensateReturnTemperature = this.checkReturnCondensateTemperature(ssmt, settings);
+    }
     return {
-      headerPressure: this.checkHeaderPressure(ssmt, pressureLevel, settings)
+      headerPressure: this.checkHeaderPressure(ssmt, pressureLevel, settings),
+      condensateReturnTemperature: condensateReturnTemperature
     };
   }
 
 
-  checkHeaderPressure(ssmt: SSMT, pressureLevel: string, settings: Settings) {
-    let warning = null;
+  checkHeaderPressure(ssmt: SSMT, pressureLevel: string, settings: Settings): string {
+    let warning: string = null;
     if (pressureLevel && pressureLevel !== 'mediumPressure'
       && ssmt && ssmt.boilerInput.blowdownFlashed != undefined) {
 
@@ -297,12 +324,12 @@ export class HeaderService {
           headerType = 'high';
           let hasHeaderInputs: boolean = ssmt.headerInput.highPressureHeader !== undefined && ssmt.headerInput.highPressure !== undefined && ssmt.headerInput.lowPressureHeader !== undefined && ssmt.headerInput.lowPressure !== undefined;
           if (hasHeaderInputs) {
-          if (ssmt.headerInput.highPressureHeader.pressure) {
-            pressure = ssmt.headerInput.highPressureHeader.pressure;
-          } else if (ssmt.headerInput.highPressure) {
-            pressure = ssmt.headerInput.highPressure.pressure;
+            if (ssmt.headerInput.highPressureHeader.pressure) {
+              pressure = ssmt.headerInput.highPressureHeader.pressure;
+            } else if (ssmt.headerInput.highPressure) {
+              pressure = ssmt.headerInput.highPressure.pressure;
+            }
           }
-        }
         } else if (ssmt.boilerInput.blowdownFlashed == true && pressureLevel == 'lowPressure') {
           headerType = 'low';
           if (ssmt.headerInput.lowPressureHeader) {
@@ -318,14 +345,41 @@ export class HeaderService {
           let maxValue = saturatedTemperature - ssmt.generalSteamOperations.makeUpWaterTemperature;
           if (ssmt.boilerInput.approachTemperature > maxValue) {
             warning = `Approach temperature must less than the difference between the temperature into the heat exchanger (Saturation temperature of ${headerType} pressure header) and the makeup water temperature (${maxValue})`;
-          } 
+          }
         }
       }
-    } 
+    }
     return warning;
   }
 
-
+  checkReturnCondensateTemperature(ssmt: SSMT, settings: Settings): string {
+    let warning: string = null;
+    let lowPressureHeaderPressure: number;
+    if (ssmt.headerInput.numberOfHeaders == 1 && ssmt.headerInput.highPressureHeader) {
+      lowPressureHeaderPressure = ssmt.headerInput.highPressureHeader.pressure;
+    } else if (ssmt.headerInput.lowPressureHeader) {
+      lowPressureHeaderPressure = ssmt.headerInput.lowPressureHeader.pressure;
+    }
+    let tmpCondensateReturnTempMax: number;
+    if (lowPressureHeaderPressure != undefined) {
+      let satPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(
+        {
+          saturatedPressure: lowPressureHeaderPressure
+        },
+        0,
+        settings
+      );
+      tmpCondensateReturnTempMax = this.convertUnitsService.roundVal(satPropertiesOutput.saturatedTemperature, 0);
+    }
+    if (tmpCondensateReturnTempMax != undefined) {
+      if (tmpCondensateReturnTempMax && ssmt.headerInput.highPressureHeader && ssmt.headerInput.highPressureHeader.condensateReturnTemperature) {
+        if (ssmt.headerInput.highPressureHeader.condensateReturnTemperature > tmpCondensateReturnTempMax) {
+          warning = 'Value should be lower than saturation temperature at lowest pressure header. ' + tmpCondensateReturnTempMax;
+        }
+      }
+    }
+    return warning;
+  }
 
 }
 
@@ -334,10 +388,13 @@ export interface HeaderRanges {
   pressureMin: number;
   pressureMax: number;
   condensateReturnTempMin: number;
-  condensateReturnTempMax: number;
   desuperheatingTempMin: number;
   desuperheatingTempMax: number;
   processUsageMin: number;
   processUsageMax: number;
 }
 
+export interface HeaderWarnings {
+  headerPressure?: string,
+  condensateReturnTemperature?: string
+}

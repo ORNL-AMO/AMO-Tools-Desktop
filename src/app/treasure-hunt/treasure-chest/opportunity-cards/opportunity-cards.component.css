@@ -95,7 +95,7 @@ tr.active{
   padding-right: 5px;
 }
 
-.steam-calc-icon, .ca-calc-icon, .ph-calc-icon, .lighting-calc-icon, .motor-calc-icon {
+.steam-calc-icon, .ca-calc-icon, .ph-calc-icon, .lighting-calc-icon, .motor-calc-icon, .process-cooling-calc-icon {
   border-radius: 50%;
   height: 35px;
   width: 35px;
@@ -120,6 +120,10 @@ tr.active{
 
 .motor-calc-icon {
   background: linear-gradient(to bottom right, #e4dbdb57, #6b846aa6);
+}
+
+.process-cooling-calc-icon {
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #ADC8E2);
 }
 
 .circle-icon-img{

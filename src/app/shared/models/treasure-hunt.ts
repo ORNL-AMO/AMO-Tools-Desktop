@@ -15,6 +15,9 @@ import { FlueGasEnergyData } from "../../calculator/furnaces/flue-gas/energy-for
 import { FeedwaterEconomizerInput } from "./steam/feedwaterEconomizer";
 import { CondensingEconomizerInput } from "./steam/condensingEconomizer";
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
+import { ChillerPerformanceInput, CoolingTowerBasinInput, CoolingTowerData, CoolingTowerFanInput } from "./chillers";
+import { ChillerStagingInput } from "./chillers";
+import { WeatherBinsInput } from "../../calculator/utilities/weather-bins/weather-bins.service";
 
 export interface TreasureHunt {
     name: string,
@@ -40,6 +43,11 @@ export interface TreasureHunt {
     heatCascadingOpportunities?: Array<HeatCascadingTreasureHunt>;
     condensingEconomizerOpportunities?: Array<CondensingEconTreasureHunt>;
     waterHeatingOpportunities?: Array<WaterHeatingTreasureHunt>;
+    coolingTowerMakeupOpportunities?: Array<CoolingTowerMakeupWaterTreasureHunt>;
+    chillerStagingOpportunities?: Array<ChillerStagingTreasureHunt>;
+    chillerPerformanceOpportunities?: Array<ChillerPerformanceTreasureHunt>;
+    coolingTowerFanOpportunities?: Array<CoolingTowerFanTreasureHunt>;
+    coolingTowerBasinOpportunities?: Array<CoolingTowerBasinTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     existingDataUnits?: string;
@@ -70,6 +78,11 @@ export enum Treasure {
     waterHeating = 'water-heating',
     feedwaterEconomizer = 'feedWaterEconomizer',
     condensingEconomizer = 'condensing-economizer',
+    coolingTowerMakeup = 'cooling-tower-makeup',
+    chillerStaging = 'chiller-staging',
+    chillerPerformance = 'chiller-performance',
+    coolingTowerFan = 'cooling-tower-fan',
+    coolingTowerBasin = 'cooling-tower-basin'
 }
 
 export interface FilterOption {
@@ -241,6 +254,13 @@ export interface PipeInsulationReductionTreasureHunt extends TreasureHuntOpportu
     selected?: boolean;
 }
 
+export interface CoolingTowerMakeupWaterTreasureHunt extends TreasureHuntOpportunity{
+    baseline: Array<CoolingTowerData>;
+    modification: Array<CoolingTowerData>;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
 export interface TankInsulationReductionTreasureHunt extends TreasureHuntOpportunity {
     baseline: TankInsulationReductionInput;
     modification: TankInsulationReductionInput;
@@ -396,6 +416,31 @@ export interface MotorDriveInputsTreasureHunt extends TreasureHuntOpportunity{
     selected?: boolean;
 }
 
+export interface ChillerStagingTreasureHunt extends TreasureHuntOpportunity {
+    chillerStagingData?: ChillerStagingInput;
+    opportunitySheet?: OpportunitySheet
+    selected?: boolean;
+}
+
+export interface ChillerPerformanceTreasureHunt extends TreasureHuntOpportunity {
+    chillerPerformanceData?: ChillerPerformanceInput;
+    opportunitySheet?: OpportunitySheet
+    selected?: boolean;
+}
+
+export interface CoolingTowerFanTreasureHunt extends TreasureHuntOpportunity {
+    coolingTowerFanData?: CoolingTowerFanInput;    
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface CoolingTowerBasinTreasureHunt extends TreasureHuntOpportunity {
+    coolingTowerBasinData?: CoolingTowerBasinInput;  
+    weatherData?: WeatherBinsInput;  
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
 export interface TreasureHuntResults {
     totalSavings: number;
     percentSavings: number;
@@ -488,4 +533,9 @@ export interface ImportExportOpportunities {
     wasteHeatReductions?: Array<WasteHeatTreasureHunt>;
     heatCascadingOpportunities?: Array<HeatCascadingTreasureHunt>;
     waterHeatingOpportunities?: Array<WaterHeatingTreasureHunt>;
+    coolingTowerMakeupOpportunities?: Array<CoolingTowerMakeupWaterTreasureHunt>;
+    chillerStagingOpportunities?: Array<ChillerStagingTreasureHunt>;
+    chillerPerformanceOpportunities?: Array<ChillerPerformanceTreasureHunt>;
+    coolingTowerFanOpportunities?: Array<CoolingTowerFanTreasureHunt>;
+    coolingTowerBasinOpportunities?: Array<CoolingTowerBasinTreasureHunt>;
 }

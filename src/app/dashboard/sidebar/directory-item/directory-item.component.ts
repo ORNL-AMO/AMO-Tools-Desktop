@@ -77,4 +77,8 @@ export class DirectoryItemComponent implements OnInit {
       }
     });
   }
+
+  navigateSidebarLink(url: string) {
+    this.dashboardService.navigateSidebarLink(url);
+  }
 }

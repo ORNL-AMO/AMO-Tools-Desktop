@@ -72,7 +72,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
         }
         if (!this.inRollup) {
           values = valuesAndLabels.map(val => { return val.value });
-          textTemplate = '<b>%{label}: </b>%{value:$,.0f}';
+          textTemplate = '<b>%{label}: </b>%{value:,.0f}';
           if (this.settings.unitsOfMeasure != 'Metric') {
             textTemplate = textTemplate + ' MMBtu';
           } else {

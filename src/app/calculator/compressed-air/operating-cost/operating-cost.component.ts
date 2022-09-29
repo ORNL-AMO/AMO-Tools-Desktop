@@ -14,14 +14,20 @@ export class OperatingCostComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
   headerHeight: number;
+  smallScreenTab: string = 'form';
+  containerHeight: number;
 
   inputs: OperatingCostInput;
   outputs: OperatingCostOutput;
@@ -55,6 +61,10 @@ export class OperatingCostComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -71,4 +81,9 @@ export class OperatingCostComponent implements OnInit {
     this.inputs = this.operatingCostService.convertOperatingCostExample(tempInputs, this.settings);
     this.calculateOperationCost(this.inputs)
   }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
 }
