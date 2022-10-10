@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { LoadCharacteristicData } from '../../../motor-inventory';
 
 @Injectable()
 export class LoadCharacteristicDataService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromLoadCharacteristicData(loadCharacteristicData: LoadCharacteristicData): FormGroup {
+  getFormFromLoadCharacteristicData(loadCharacteristicData: LoadCharacteristicData): UntypedFormGroup {
     return this.formBuilder.group({
       efficiency75: [loadCharacteristicData.efficiency75, [Validators.min(0), Validators.max(100)]],
       efficiency50: [loadCharacteristicData.efficiency50, [Validators.min(0), Validators.max(100)]],
@@ -20,7 +20,7 @@ export class LoadCharacteristicDataService {
     });
   }
 
-  updateLoadCharacteristicDataFromForm(form: FormGroup, loadCharacteristicData: LoadCharacteristicData): LoadCharacteristicData {
+  updateLoadCharacteristicDataFromForm(form: UntypedFormGroup, loadCharacteristicData: LoadCharacteristicData): LoadCharacteristicData {
     loadCharacteristicData.efficiency75 = form.controls.efficiency75.value
     loadCharacteristicData.efficiency50 = form.controls.efficiency50.value
     loadCharacteristicData.efficiency25 = form.controls.efficiency25.value

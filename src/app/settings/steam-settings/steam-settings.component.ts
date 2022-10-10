@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { FormGroup } from "@angular/forms";
+import { UntypedFormGroup } from "@angular/forms";
 
 @Component({
   selector: 'app-steam-settings',
@@ -9,7 +9,7 @@ import { FormGroup } from "@angular/forms";
 })
 export class SteamSettingsComponent implements OnInit {
   @Input()
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
 
   @Output('startSavePolling')
   startSavePolling = new EventEmitter<boolean>();

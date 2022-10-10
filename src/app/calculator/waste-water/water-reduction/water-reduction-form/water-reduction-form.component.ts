@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Input, Output, SimpleChanges, ElementR
 import { Settings } from '../../../../shared/models/settings';
 import { WaterReductionData, WaterReductionResult } from '../../../../shared/models/standalone';
 import { WaterReductionService } from '../water-reduction.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
@@ -50,7 +50,7 @@ export class WaterReductionFormComponent implements OnInit {
     { value: true, name: 'Wastewater' }
   ];
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   idString: string;
   individualResults: WaterReductionResult;
   isEditingName: boolean = false;

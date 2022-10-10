@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FSAT } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -7,9 +7,9 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 @Injectable()
 export class FanEfficiencyService {
   fanEfficiencyInputs: FanEfficiencyInputs;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  initForm(): FormGroup {
+  initForm(): UntypedFormGroup {
     return this.formBuilder.group({
       fanType: [0, Validators.required],
       fanSpeed: [0, [Validators.required, Validators.min(0)]],
@@ -20,7 +20,7 @@ export class FanEfficiencyService {
     });
   }
 
-  initFormFromFsat(fsat: FSAT): FormGroup {
+  initFormFromFsat(fsat: FSAT): UntypedFormGroup {
     return this.formBuilder.group({
       fanType: [fsat.fanSetup.fanType, Validators.required],
       fanSpeed: [fsat.fanSetup.fanSpeed, [Validators.required, Validators.min(0)]],
@@ -31,7 +31,7 @@ export class FanEfficiencyService {
     });
   }
 
-  initFormFromObj(obj: FanEfficiencyInputs): FormGroup {
+  initFormFromObj(obj: FanEfficiencyInputs): UntypedFormGroup {
     return this.formBuilder.group({
       fanType: [obj.fanType, Validators.required],
       fanSpeed: [obj.fanSpeed, [Validators.required, Validators.min(0)]],
@@ -42,7 +42,7 @@ export class FanEfficiencyService {
     });
   }
 
-  getObjFromForm(form: FormGroup): FanEfficiencyInputs {
+  getObjFromForm(form: UntypedFormGroup): FanEfficiencyInputs {
     return {
       fanType: form.controls.fanType.value,
       fanSpeed: form.controls.fanSpeed.value,

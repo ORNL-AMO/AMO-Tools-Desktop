@@ -4,7 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FsatService } from '../../../fsat/fsat.service';
 import { FanEfficiencyService, FanEfficiencyInputs } from './fan-efficiency.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
@@ -39,7 +39,7 @@ export class FanEfficiencyComponent implements OnInit {
 
   smallScreenTab: string = 'form';
   containerHeight: number;
-  fanEfficiencyForm: FormGroup;
+  fanEfficiencyForm: UntypedFormGroup;
   headerHeight: number;
   currentField: string;
   tabSelect: string = 'results';

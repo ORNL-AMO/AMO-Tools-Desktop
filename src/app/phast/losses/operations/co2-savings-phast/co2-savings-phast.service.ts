@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { PHAST, PhastCo2EmissionsOutput, PhastCo2SavingsData, PhastResults } from '../../../../shared/models/phast/phast';
@@ -11,14 +11,14 @@ export class Co2SavingsPhastService {
   baselineCo2SavingsData: BehaviorSubject<PhastCo2SavingsData>;
   modificationCo2SavingsData: BehaviorSubject<PhastCo2SavingsData>;
 
-  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) {
+  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: UntypedFormBuilder) {
     this.co2SavingsField = new BehaviorSubject<string>(undefined);
     this.baselineCo2SavingsData = new BehaviorSubject<PhastCo2SavingsData>(undefined);
     this.modificationCo2SavingsData = new BehaviorSubject<PhastCo2SavingsData>(undefined);
   }
 
-  getEmissionsForm(inputObj: PhastCo2SavingsData): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getEmissionsForm(inputObj: PhastCo2SavingsData): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       energyType: [inputObj.energyType],
       energySource: [inputObj.energySource],
       totalEmissionOutputRate: [inputObj.totalEmissionOutputRate],
@@ -42,7 +42,7 @@ export class Co2SavingsPhastService {
     return form;
   }
 
-  getCo2SavingsData(form: FormGroup): PhastCo2SavingsData {
+  getCo2SavingsData(form: UntypedFormGroup): PhastCo2SavingsData {
     let obj: PhastCo2SavingsData = {
       energyType: form.controls.energyType.value,
       totalEmissionOutputRate: form.controls.totalEmissionOutputRate.value,
@@ -66,7 +66,7 @@ export class Co2SavingsPhastService {
     return obj;
   }
 
-  setCo2SavingsDataSettingsForm(inputObj: PhastCo2SavingsData, settingsForm: FormGroup): FormGroup {
+  setCo2SavingsDataSettingsForm(inputObj: PhastCo2SavingsData, settingsForm: UntypedFormGroup): UntypedFormGroup {
     settingsForm.patchValue({
       co2SavingsEnergyType: inputObj.energyType,
       co2SavingsEnergySource: inputObj.energySource,
@@ -91,7 +91,7 @@ export class Co2SavingsPhastService {
     return settingsForm;
   }
 
-  getCo2SavingsDataFromSettingsForm(settingsForm: FormGroup): PhastCo2SavingsData {
+  getCo2SavingsDataFromSettingsForm(settingsForm: UntypedFormGroup): PhastCo2SavingsData {
     let obj: PhastCo2SavingsData = {
       energyType: settingsForm.controls.co2SavingsEnergyType.value,
       energySource: settingsForm.controls.co2SavingsEnergySource.value,

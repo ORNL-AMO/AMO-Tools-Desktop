@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { Router } from '@angular/router';
  
@@ -24,15 +24,15 @@ import { firstValueFrom } from 'rxjs';
 export class CreateInventoryComponent implements OnInit {
 
   @ViewChild('createInventoryItemModal', { static: false }) public createInventoryItemModal: ModalDirective;
-  newInventoryItemForm: FormGroup;
+  newInventoryItemForm: UntypedFormGroup;
   canCreate: boolean;
   directories: Array<Directory>;
   showNewFolder: boolean = false;
-  newFolderForm: FormGroup;
+  newFolderForm: UntypedFormGroup;
   directory: Directory;
   settings: Settings;
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
       
     private settingsDbService: SettingsDbService,

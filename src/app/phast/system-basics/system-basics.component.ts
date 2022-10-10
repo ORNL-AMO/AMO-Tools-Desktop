@@ -5,7 +5,7 @@ import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
  
 import { ConvertPhastService } from '../convert-phast.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import * as _ from 'lodash';
 import { firstValueFrom } from 'rxjs';
@@ -31,7 +31,7 @@ export class SystemBasicsComponent implements OnInit {
   openUpdateUnitsModal = new EventEmitter<Settings>();
 
 
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
   oldSettings: Settings;
   lossesExist: boolean;
   showUpdateDataReminder: boolean = false;
@@ -91,7 +91,7 @@ export class SystemBasicsComponent implements OnInit {
   }
 
   getExistingDataSettings(): Settings {
-    let existingSettingsForm: FormGroup = _.cloneDeep(this.settingsForm);
+    let existingSettingsForm: UntypedFormGroup = _.cloneDeep(this.settingsForm);
     existingSettingsForm.patchValue({unitsOfMeasure: this.phast.lossDataUnits});
     let existingSettings = this.settingsService.setUnits(existingSettingsForm);
     return this.settingsService.getSettingsFromForm(existingSettings);

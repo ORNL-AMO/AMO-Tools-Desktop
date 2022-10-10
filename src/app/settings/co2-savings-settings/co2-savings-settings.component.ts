@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
@@ -10,7 +10,7 @@ import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings
 })
 export class Co2SavingsSettingsComponent implements OnInit {
   @Input()
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
   @Output('startSavePolling')
   startSavePolling = new EventEmitter<boolean>();
   @Input()

@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter, SimpleChanges } from '@angular/core';
 import { SlipMethod, PercentLoadEstimationService } from '../percent-load-estimation.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 
 @Component({
@@ -18,7 +18,7 @@ export class SlipMethodFormComponent implements OnInit {
   @Input()
   toggleExampleData: boolean;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   lineFrequency: number = 60;
   showSynchronousSpeed: boolean = false;

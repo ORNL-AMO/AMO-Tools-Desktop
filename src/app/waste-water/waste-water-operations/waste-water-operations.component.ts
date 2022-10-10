@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
@@ -28,7 +28,7 @@ export class WasteWaterOperationsComponent implements OnInit {
 
   co2SavingsFormDisabled: boolean = false;
   co2SavingsData: Co2SavingsData;
-  operationsForm: FormGroup;
+  operationsForm: UntypedFormGroup;
   oldSettings: WasteWaterOperations;
   
   showUpdateDataReminder: boolean = false;

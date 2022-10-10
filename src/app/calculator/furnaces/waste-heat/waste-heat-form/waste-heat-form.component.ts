@@ -1,6 +1,6 @@
 import { ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -30,7 +30,7 @@ export class WasteHeatFormComponent implements OnInit {
   onResize(event) {
     this.setOpHoursModalWidth();
   }
-  form: FormGroup;
+  form: UntypedFormGroup;
   formWidth: number;
 
   resetDataSub: Subscription;

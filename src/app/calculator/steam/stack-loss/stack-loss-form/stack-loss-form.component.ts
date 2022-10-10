@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-stack-loss-form',
@@ -11,9 +11,9 @@ export class StackLossFormComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  stackLossForm: FormGroup;
+  stackLossForm: UntypedFormGroup;
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<FormGroup>();
+  emitCalculate = new EventEmitter<UntypedFormGroup>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
   @Input()
@@ -26,7 +26,7 @@ export class StackLossFormComponent implements OnInit {
   ngOnInit() {
   }
 
-  calculate(form: FormGroup) {
+  calculate(form: UntypedFormGroup) {
     this.emitCalculate.emit(form);
   }
 

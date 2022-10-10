@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '
 import { AirLeakSurveyInput, AirLeakSurveyOutput, AirLeakSurveyData, FacilityCompressorData, OrificeMethodData } from '../../../../shared/models/standalone';
 import { Settings } from '../../../../shared/models/settings';
 import { AirLeakService } from '../air-leak.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AirLeakFormService } from './air-leak-form.service';
 
@@ -19,7 +19,7 @@ export class AirLeakFormComponent implements OnInit {
   settings: Settings;
 
   currentLeakIndex: number;
-  leakForm: FormGroup;
+  leakForm: UntypedFormGroup;
   currentLeakIndexSub: Subscription;
   airLeakInputSub: Subscription;
 

@@ -14,7 +14,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { PsatTabService } from './psat-tab.service';
 import { PumpFluidService } from './pump-fluid/pump-fluid.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
 import { PumpImperialDefaults, PumpMetricDefaults, SettingsService } from '../settings/settings.service';
@@ -250,21 +250,21 @@ export class PsatComponent implements OnInit {
       return true;
     }
     else if (this.stepTab == 'pump-fluid') {
-      let tmpForm: FormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
+      let tmpForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
       return tmpForm.valid;
     } else if (this.stepTab == 'motor') {
-      let tmpForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
+      let tmpForm: UntypedFormGroup = this.motorService.getFormFromObj(this._psat.inputs);
       return tmpForm.valid;
     } else if (this.stepTab == 'field-data') {
-      let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true, this._psat.inputs.whatIfScenario);
+      let tmpForm: UntypedFormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true, this._psat.inputs.whatIfScenario);
       return tmpForm.valid;
     }
   }
 
   async save() {
-    let tmpPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
-    let tmpMotorForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
-    let tmpFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true, this._psat.inputs.whatIfScenario);
+    let tmpPumpFluidForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
+    let tmpMotorForm: UntypedFormGroup = this.motorService.getFormFromObj(this._psat.inputs);
+    let tmpFieldDataForm: UntypedFormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true, this._psat.inputs.whatIfScenario);
     if ((tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid) || this.modificationExists) {
       this._psat.setupDone = true;
       this.initSankeyList();

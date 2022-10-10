@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { EnergyInputExhaustGasCompareService } from '../energy-input-exhaust-gas-compare.service';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 import { LossesService } from '../../losses.service';
@@ -13,7 +13,7 @@ import { LossesService } from '../../losses.service';
 })
 export class EnergyInputExhaustGasFormComponent implements OnInit {
   @Input()
-  exhaustGasForm: FormGroup;
+  exhaustGasForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

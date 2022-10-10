@@ -4,7 +4,7 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { OpeningLoss, QuadOpeningLoss, CircularOpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { OpeningFormService } from '../../../calculator/furnaces/opening/opening-form.service';
 import { OpeningService } from '../../../calculator/furnaces/opening/opening.service';
 
@@ -165,7 +165,7 @@ export class OpeningLossesComponent implements OnInit {
 }
 
 export interface OpeningLossObj {
-  form: FormGroup;
+  form: UntypedFormGroup;
   totalOpeningLosses: number;
   collapse: boolean;
 }

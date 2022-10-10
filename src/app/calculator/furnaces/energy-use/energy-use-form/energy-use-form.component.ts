@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@
 import { Settings } from '../../../../shared/models/settings';
 import { FlowCalculations, FlowCalculationsOutput } from '../../../../shared/models/phast/flowCalculations';
 import { ConvertUnitsService } from "../../../../shared/convert-units/convert-units.service";
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { EnergyUseService } from '../energy-use.service';
 
 @Component({
@@ -78,7 +78,7 @@ export class EnergyUseFormComponent implements OnInit {
   insidePipeDiameterError: string = null;
   dischargeCoefficientError: string = null;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   constructor(private convertUnitsService: ConvertUnitsService, private energyUseService: EnergyUseService) {
   }

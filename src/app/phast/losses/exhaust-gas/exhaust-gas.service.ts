@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ExhaustGasEAF } from '../../../shared/models/phast/losses/exhaustGasEAF';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 
 @Injectable()
 export class ExhaustGasService {
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder) {
   }
 
-  initForm(lossNum: number): FormGroup {
+  initForm(lossNum: number): UntypedFormGroup {
     return this.formBuilder.group({
       'offGasTemp': ['', Validators.required],
       'CO': ['', Validators.required],
@@ -20,7 +20,7 @@ export class ExhaustGasService {
     });
   }
 
-  getFormFromLoss(exhaustGas: ExhaustGasEAF): FormGroup {
+  getFormFromLoss(exhaustGas: ExhaustGasEAF): UntypedFormGroup {
     let tmpGroup = this.formBuilder.group({
       'offGasTemp': [exhaustGas.offGasTemp, Validators.required],
       'CO': [exhaustGas.CO, Validators.required],
@@ -33,7 +33,7 @@ export class ExhaustGasService {
     return tmpGroup;
   }
 
-  getLossFromForm(form: FormGroup): ExhaustGasEAF {
+  getLossFromForm(form: UntypedFormGroup): ExhaustGasEAF {
     let tmpExhaustGas: ExhaustGasEAF = {
       offGasTemp: form.controls.offGasTemp.value,
       CO: form.controls.CO.value,

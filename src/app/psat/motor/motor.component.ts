@@ -3,7 +3,7 @@ import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MotorWarnings, PsatWarningService } from '../psat-warning.service';
 import { MotorService } from './motor.service';
 import { motorEfficiencyConstants } from '../psatConstants';
@@ -35,7 +35,7 @@ export class MotorComponent implements OnInit {
     60
   ];
 
-  psatForm: FormGroup;
+  psatForm: UntypedFormGroup;
   motorWarnings: MotorWarnings;
   //disableFLAOptimized: boolean = false;
   idString: string;

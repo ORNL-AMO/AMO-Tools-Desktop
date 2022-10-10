@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FanSetupService } from './fan-setup.service';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { FanSetup, FSAT } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { FanTypes, Drives } from '../fanOptions';
@@ -40,7 +40,7 @@ export class FanSetupComponent implements OnInit {
 
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
-  fanForm: FormGroup;
+  fanForm: UntypedFormGroup;
   fanSpeedError: string = null;
   idString: string;
   constructor(private fsatWarningService: FsatWarningService, private fsatService: FsatService, private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private fanSetupService: FanSetupService, private helpPanelService: HelpPanelService) {

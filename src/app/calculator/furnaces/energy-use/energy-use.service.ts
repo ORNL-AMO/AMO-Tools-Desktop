@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FlowCalculations } from '../../../shared/models/phast/flowCalculations';
 import { Settings } from '../../../shared/models/settings';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Injectable()
 export class EnergyUseService {
@@ -23,9 +23,9 @@ export class EnergyUseService {
     operatingTime: 10
   };
 
-  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromObj(inputObj: FlowCalculations): FormGroup {
+  getFormFromObj(inputObj: FlowCalculations): UntypedFormGroup {
     let tmpForm = this.formBuilder.group({
       gasType: [inputObj.gasType],
       specificGravity: [inputObj.specificGravity, [Validators.required]],
@@ -42,7 +42,7 @@ export class EnergyUseService {
     return tmpForm;
   }
 
-  getObjFromForm(form: FormGroup): FlowCalculations {
+  getObjFromForm(form: UntypedFormGroup): FlowCalculations {
     this.flowCalculations = {
       gasType: form.controls.gasType.value,
       specificGravity: form.controls.specificGravity.value,

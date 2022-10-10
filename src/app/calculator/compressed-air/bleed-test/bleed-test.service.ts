@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
@@ -12,7 +12,7 @@ export class BleedTestService {
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
   settings: Settings;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) {
     this.bleedTestInput = new BehaviorSubject<BleedTestInput>(undefined);
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
@@ -79,8 +79,8 @@ export class BleedTestService {
     }
   }
 
-  getBleedFormFromObj(inputObj: BleedTestInput): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getBleedFormFromObj(inputObj: BleedTestInput): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       totalSystemVolume: [inputObj.totalSystemVolume],
       normalOperatingPressure: [inputObj.normalOperatingPressure],
       testPressure: [inputObj.testPressure],
@@ -91,7 +91,7 @@ export class BleedTestService {
     return form;
   }
 
-  getBleedTestObjFromForm(form: FormGroup): BleedTestInput {
+  getBleedTestObjFromForm(form: UntypedFormGroup): BleedTestInput {
     form = this.setValidators(form);
     let bleedTestInput: BleedTestInput = {
       totalSystemVolume: form.controls.totalSystemVolume.value,
@@ -102,7 +102,7 @@ export class BleedTestService {
     return bleedTestInput;
   }
 
-  setValidators(form: FormGroup): FormGroup {
+  setValidators(form: UntypedFormGroup): UntypedFormGroup {
     form.controls.totalSystemVolume.setValidators([Validators.required, Validators.min(0)]);
     form.controls.normalOperatingPressure.setValidators([Validators.required, Validators.min(0)]);
     form.controls.testPressure.setValidators([Validators.required, Validators.min(0), Validators.max(form.controls.normalOperatingPressure.value)]);

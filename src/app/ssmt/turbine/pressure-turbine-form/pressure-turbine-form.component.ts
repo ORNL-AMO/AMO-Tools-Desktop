@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { Quantity } from '../../../shared/models/steam/steam-inputs';
 import { PressureTurbineOperationTypes, PressureTurbine } from '../../../shared/models/steam/ssmt';
@@ -14,7 +14,7 @@ import { TurbineService } from '../turbine.service';
 })
 export class PressureTurbineFormComponent implements OnInit {
   @Input()
-  turbineForm: FormGroup;
+  turbineForm: UntypedFormGroup;
   @Input()
   selected: boolean;
   @Input()

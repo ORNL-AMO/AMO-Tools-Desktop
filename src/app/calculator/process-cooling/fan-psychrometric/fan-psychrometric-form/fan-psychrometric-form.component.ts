@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FanPsychrometricService } from '../fan-psychrometric.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Subscription } from 'rxjs';
@@ -23,7 +23,7 @@ export class FanPsychrometricFormComponent implements OnInit {
   ];
 
   userDefinedBarometricPressure: boolean = true;
-  gasDensityForm: FormGroup;
+  gasDensityForm: UntypedFormGroup;
 
   resetFormSubscription: Subscription;
   generateFormSubscription: Subscription;

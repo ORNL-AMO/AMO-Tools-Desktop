@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FixtureLossesCompareService } from '../../fixture-losses/fixture-losses-compare.service';
 import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
 import { Subscription } from 'rxjs';
@@ -96,7 +96,7 @@ export class FixtureTabComponent implements OnInit {
   }
 
   checkLossValid(loss: FixtureLoss) {
-    let tmpForm: FormGroup = this.fixtureFormService.getFormFromLoss(loss);
+    let tmpForm: UntypedFormGroup = this.fixtureFormService.getFormFromLoss(loss);
     if (tmpForm.status === 'VALID') {
       return true;
     } else {

@@ -5,7 +5,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { BaseGasDensity } from '../../../../shared/models/fans';
 import { FlueGasByMass, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
@@ -20,7 +20,7 @@ import { SolidLiquidMaterialDbService } from '../../../../indexedDb/solid-liquid
 })
 export class FlueGasLossesFormMassComponent implements OnInit {
   @Input()
-  flueGasLossForm: FormGroup;
+  flueGasLossForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

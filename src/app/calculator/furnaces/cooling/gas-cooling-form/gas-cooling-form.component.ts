@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CoolingLoss, CoolingLossOutput, CoolingLossResults } from '../../../../shared/models/phast/losses/coolingLoss';
 import { Settings } from '../../../../shared/models/settings';
@@ -23,7 +23,7 @@ export class GasCoolingFormComponent implements OnInit {
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   
-  coolingForm: FormGroup;
+  coolingForm: UntypedFormGroup;
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
   outputSubscription: Subscription;

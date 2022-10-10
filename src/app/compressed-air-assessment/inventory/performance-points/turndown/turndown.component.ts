@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
@@ -19,7 +19,7 @@ export class TurndownComponent implements OnInit {
 
   settings: Settings;
   selectedCompressorSub: Subscription;
-  form: FormGroup;
+  form: UntypedFormGroup;
   isFormChange: boolean = false;
   validationMessages: ValidationMessageMap;
   warnings: PerformancePointWarnings;

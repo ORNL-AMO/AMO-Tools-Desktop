@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { PumpSystemCurveData } from '../../../shared/models/system-and-equipment-curve';
@@ -7,7 +7,7 @@ import { PumpSystemCurveData } from '../../../shared/models/system-and-equipment
 @Injectable()
 export class PumpSystemCurveFormService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
   getPumpSystemCurveExample(settings: Settings): PumpSystemCurveData {
     let systemCurveFlowRate: number = 600;
@@ -56,7 +56,7 @@ export class PumpSystemCurveFormService {
     return pumpSystemCurveData;
   }
 
-  getFormFromObj(obj: PumpSystemCurveData): FormGroup {
+  getFormFromObj(obj: PumpSystemCurveData): UntypedFormGroup {
     let modificationMeasurementOption = [0, Validators.required];
     let modifiedFlow = [0, [Validators.required, Validators.min(0)]];
     let modifiedHead = [0, [Validators.required, Validators.min(0)]];
@@ -67,7 +67,7 @@ export class PumpSystemCurveFormService {
       modifiedHead = [obj.modificationCurve.modifiedHead, [Validators.required, Validators.min(0)]];
     }
     
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       specificGravity: [obj.specificGravity, [Validators.required, Validators.min(0)]],
       systemLossExponent: [obj.systemLossExponent, [Validators.required, Validators.min(0)]],
       pointOneFlowRate: [obj.pointOneFlowRate, [Validators.required, Validators.min(0)]],
@@ -82,7 +82,7 @@ export class PumpSystemCurveFormService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): PumpSystemCurveData {
+  getObjFromForm(form: UntypedFormGroup): PumpSystemCurveData {
     let data: PumpSystemCurveData = {
       specificGravity: form.controls.specificGravity.value,
       systemLossExponent: form.controls.systemLossExponent.value,

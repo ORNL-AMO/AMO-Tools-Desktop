@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { MotorPerformanceService, MotorPerformanceInputs } from './motor-performance.service';
 import { Calculator } from '../../../shared/models/calculators';
@@ -40,7 +40,7 @@ export class MotorPerformanceComponent implements OnInit {
   headerHeight: number;
 
   currentField: string;
-  performanceForm: FormGroup;
+  performanceForm: UntypedFormGroup;
   calculator: Calculator;
   toggleCalculate: boolean = false;
   tabSelect: string = 'results';

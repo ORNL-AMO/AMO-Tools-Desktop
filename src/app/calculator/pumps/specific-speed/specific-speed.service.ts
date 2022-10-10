@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { PsatInputs } from '../../../shared/models/psat';
 import { SpecificSpeedInputs } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
@@ -12,11 +12,11 @@ export class SpecificSpeedService {
   specificSpeedInputs: SpecificSpeedInputs;
   specificSpeedChart: BehaviorSubject<SimpleChart>;
   selectedDataPoints: BehaviorSubject<Array<DataPoint>>;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { 
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { 
     this.initChartData();
   }
 
-  initForm(settings: Settings): FormGroup {
+  initForm(settings: Settings): UntypedFormGroup {
     let tmpFlowRate: number = 2000;
     let tmpHead: number = 277;
     if (settings.flowMeasurement !== 'gpm') {
@@ -42,7 +42,7 @@ export class SpecificSpeedService {
     this.selectedDataPoints = new BehaviorSubject<Array<DataPoint>>(dataPoints);
   }
 
-  resetForm(settings: Settings): FormGroup {
+  resetForm(settings: Settings): UntypedFormGroup {
     let tmpFlowRate: number = 0;
     let tmpHead: number = 0;
     if (settings.flowMeasurement !== 'gpm') {
@@ -61,7 +61,7 @@ export class SpecificSpeedService {
     });
   }
 
-  initFormFromPsat(psatInputs: PsatInputs): FormGroup {
+  initFormFromPsat(psatInputs: PsatInputs): UntypedFormGroup {
     return this.formBuilder.group({
       pumpType: [psatInputs.pump_style, Validators.required],
       pumpRPM: [psatInputs.pump_rated_speed, [Validators.required, Validators.min(0)]],
@@ -71,7 +71,7 @@ export class SpecificSpeedService {
   }
 
 
-  initFormFromObj(obj: SpecificSpeedInputs): FormGroup {
+  initFormFromObj(obj: SpecificSpeedInputs): UntypedFormGroup {
     return this.formBuilder.group({
       pumpType: [obj.pumpType, Validators.required],
       pumpRPM: [obj.pumpRPM, Validators.required],
@@ -80,7 +80,7 @@ export class SpecificSpeedService {
     });
   }
 
-  getObjFromForm(form: FormGroup): SpecificSpeedInputs {
+  getObjFromForm(form: UntypedFormGroup): SpecificSpeedInputs {
     return {
       pumpType: form.controls.pumpType.value,
       pumpRPM: form.controls.pumpRPM.value,

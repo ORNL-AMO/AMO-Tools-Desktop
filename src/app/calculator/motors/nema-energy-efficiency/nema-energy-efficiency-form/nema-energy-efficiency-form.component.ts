@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 @Component({
   selector: 'app-nema-energy-efficiency-form',
@@ -9,7 +9,7 @@ import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 })
 export class NemaEnergyEfficiencyFormComponent implements OnInit {
   @Input()
-  nemaForm: FormGroup;
+  nemaForm: UntypedFormGroup;
   @Input()
   settings: Settings;
   @Output('changeField')

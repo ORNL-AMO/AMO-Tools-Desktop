@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { OtherLossesCompareService } from '../other-losses-compare.service';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-other-losses-form',
@@ -10,7 +10,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class OtherLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: FormGroup;
+  lossesForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

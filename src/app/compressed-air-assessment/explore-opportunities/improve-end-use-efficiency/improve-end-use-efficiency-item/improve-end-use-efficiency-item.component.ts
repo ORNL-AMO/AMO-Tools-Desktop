@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, AbstractControl } from '@angular/forms';
+import { UntypedFormGroup, AbstractControl } from '@angular/forms';
 import { CompressedAirAssessment, CompressedAirDayType, EndUseEfficiencyItem, ProfileSummary, ProfileSummaryTotal, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { BaselineResults } from '../../../compressed-air-assessment-results.service';
@@ -31,8 +31,8 @@ export class ImproveEndUseEfficiencyItemComponent implements OnInit {
   @Input()
   systemProfileSetup: SystemProfileSetup;
 
-  form: FormGroup;
-  dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: FormGroup }>;
+  form: UntypedFormGroup;
+  dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: UntypedFormGroup }>;
   hasInvalidForm: boolean;
   settings: Settings;
   numberPipeDecimals: string;

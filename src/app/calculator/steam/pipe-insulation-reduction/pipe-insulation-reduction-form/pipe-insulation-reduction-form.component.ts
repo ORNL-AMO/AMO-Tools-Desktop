@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, HostListener, ElementRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { PipeInsulationReductionInput, PipeInsulationReductionResult } from '../../../../shared/models/standalone';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PipeInsulationReductionService } from '../pipe-insulation-reduction.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 
@@ -28,7 +28,7 @@ export class PipeInsulationReductionFormComponent implements OnInit {
   @Input()
   heatedOrChilled: number;
   @Input()
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   formWidth: number;
   showOperatingHoursModal: boolean;

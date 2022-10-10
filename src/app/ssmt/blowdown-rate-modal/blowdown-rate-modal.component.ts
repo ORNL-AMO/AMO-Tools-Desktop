@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { BoilerBlowdownRateService } from '../../calculator/steam/boiler-blowdown-rate/boiler-blowdown-rate.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class BlowdownRateModalComponent implements OnInit {
   @Input()
   width: number;
   @Input()
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   showModal: string = 'hide';
   blowdownRate: number = 0;

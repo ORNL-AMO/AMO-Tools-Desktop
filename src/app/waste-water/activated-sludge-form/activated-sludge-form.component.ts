@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 import { ActivatedSludgeData, WasteWater, WasteWaterData } from '../../shared/models/waste-water';
@@ -20,7 +20,7 @@ export class ActivatedSludgeFormComponent implements OnInit {
   @Input()
   selected: boolean;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   modificationIndex: number;
   selectedModificationIdSub: Subscription;

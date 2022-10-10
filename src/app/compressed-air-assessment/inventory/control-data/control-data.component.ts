@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressorControls, CompressorInventoryItem, DesignDetails } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
@@ -17,7 +17,7 @@ export class ControlDataComponent implements OnInit {
   settings: Settings;
   selectedCompressorSub: Subscription;
   isFormChange: boolean = false;
-  form: FormGroup;
+  form: UntypedFormGroup;
   controlTypeOptions: Array<{ value: number, label: string, compressorTypes: Array<number> }>;
   displayUnload: boolean;
   displayAutomaticShutdown: boolean;

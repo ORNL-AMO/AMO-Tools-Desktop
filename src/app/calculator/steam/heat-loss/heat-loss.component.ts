@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamService } from '../steam.service';
@@ -31,7 +31,7 @@ export class HeatLossComponent implements OnInit {
 
   tabSelect: string = 'results';
   currentField: string = 'default';
-  heatLossForm: FormGroup;
+  heatLossForm: UntypedFormGroup;
   input: HeatLossInput;
   results: HeatLossOutput;
   constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private heatLossService: HeatLossService) { }
@@ -79,7 +79,7 @@ export class HeatLossComponent implements OnInit {
     }
   }
 
-  calculate(form: FormGroup) {
+  calculate(form: UntypedFormGroup) {
     this.input = this.heatLossService.getObjFromForm(form);
     this.heatLossService.heatLossInput = this.input;
     if (form.status === 'VALID') {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ActivatedSludgeData, AeratorPerformanceData, SystemBasics, WasteWater, WasteWaterOperations } from '../../../shared/models/waste-water';
 import { ActivatedSludgeFormService } from '../../activated-sludge-form/activated-sludge-form.service';
@@ -76,7 +76,7 @@ export class SetupTabsComponent implements OnInit {
   }
 
   setSystemBasicsStatus(systemBasics: SystemBasics) {
-    let form: FormGroup = this.systemBasicsService.getFormFromObj(systemBasics);
+    let form: UntypedFormGroup = this.systemBasicsService.getFormFromObj(systemBasics);
     if (form.invalid) {
       this.systemBasicsClassStatus = ['missing-data'];
     } else {
@@ -88,7 +88,7 @@ export class SetupTabsComponent implements OnInit {
   }
 
   setOperationsStatus(operations: WasteWaterOperations) {
-    let form: FormGroup = this.operationsService.getFormFromObj(operations);
+    let form: UntypedFormGroup = this.operationsService.getFormFromObj(operations);
     if (form.invalid) {
       this.operationsClassStatus = ['missing-data'];
     } else {
@@ -101,8 +101,8 @@ export class SetupTabsComponent implements OnInit {
 
   setActivatedSludgeStatus(systemBasics: SystemBasics, activatedSludgeData: ActivatedSludgeData, operations: WasteWaterOperations) {
    // let systemBasicsForm: FormGroup = this.systemBasicsService.getFormFromObj(systemBasics);
-    let operationForm: FormGroup = this.operationsService.getFormFromObj(operations);
-    let form: FormGroup = this.activatedSludgeFormService.getFormFromObj(activatedSludgeData);
+    let operationForm: UntypedFormGroup = this.operationsService.getFormFromObj(operations);
+    let form: UntypedFormGroup = this.activatedSludgeFormService.getFormFromObj(activatedSludgeData);
     if (operationForm.invalid) {
       this.activatedSludgeClassStatus = ['disabled'];
     } else if (form.invalid) {
@@ -117,9 +117,9 @@ export class SetupTabsComponent implements OnInit {
 
   setAeratorPerformanceStatus(systemBasics: SystemBasics, activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, operations: WasteWaterOperations) {
     //let systemBasicsForm: FormGroup = this.systemBasicsService.getFormFromObj(systemBasics);
-    let operationForm: FormGroup = this.operationsService.getFormFromObj(operations);
-    let activatedSludgeForm: FormGroup = this.activatedSludgeFormService.getFormFromObj(activatedSludgeData);
-    let form: FormGroup = this.aeratorPerformanceFormService.getFormFromObj(aeratorPerformanceData);
+    let operationForm: UntypedFormGroup = this.operationsService.getFormFromObj(operations);
+    let activatedSludgeForm: UntypedFormGroup = this.activatedSludgeFormService.getFormFromObj(activatedSludgeData);
+    let form: UntypedFormGroup = this.aeratorPerformanceFormService.getFormFromObj(aeratorPerformanceData);
     let warnings: AeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(aeratorPerformanceData);
     if (activatedSludgeForm.invalid || operationForm.invalid) {
       this.aeratorPerformanceClassStatus = ['disabled'];
