@@ -17,8 +17,11 @@
                 <div class="calc-icon d-flex p-2 justify-content-center align-items-center">
                     <img src="assets/images/multi-upload.png" class="img-width">
                 </div>
-                <input class="import-file p-2" id="importFile" type="file" #importFileRef id="importFileRef"
-                    (input)="setImportFiles($event.target.files)" multiple accept=".xlsx, .csv">
+                <button class="btn btn-primary small px-5 mx-3" (click)="importFileRef.click()">
+                    <span>Upload Files</span>
+                    <input class="import-file p-2" id="importFile" type="file" #importFileRef id="importFileRef"
+                        (input)="setImportFiles($event.target.files)" multiple accept=".xlsx, .csv">
+                </button>
             </div>
             <div class="d-block text-left alert alert-info small pl-2 pt-2 pb-0 help scroll-item">
                 <ul class="pl-3">

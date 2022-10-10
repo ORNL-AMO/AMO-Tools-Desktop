@@ -77,7 +77,6 @@ export class LogToolDataService {
         this.addLogToolDay(new Date(day.date), hourlyAverages);
       });
     });
-    console.log('logtooldays', this.logToolDays)
   }
 
   addLogToolDay(dayDate: Date, hourlyAverages: Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }>) {
@@ -155,9 +154,7 @@ export class LogToolDataService {
 
   submitIndividualCsvData(individualDataFromCsv: Array<IndividualDataFromCsv>) {
     this.isTimeSeries = true;
-    console.time('submitIndividualCSVDAta')
     individualDataFromCsv.forEach(csvData => {
-      console.log('hasDateField', csvData.hasDateField)
       if (csvData.hasDateField == false) {
         csvData.startDate = undefined;
         csvData.endDate = undefined;
@@ -167,7 +164,6 @@ export class LogToolDataService {
       else {
         //update date field format
         this.loadingSpinner.next({ show: true, msg: 'Formatting Date Fields...' });
-          console.time('formatting date fields with time')
           if (csvData.hasDateField == true && csvData.hasTimeField == true) {
             csvData.csvImportData.data.map(dataItem => {
               if (dataItem[csvData.dateField.fieldName]) {
@@ -178,17 +174,14 @@ export class LogToolDataService {
                 dataItem[csvData.dateField.fieldName] = 'Invalid date';
               }
             });
-            console.timeEnd('formatting date fields with time')
             csvData.hasTimeField = false;
             let timeIndex = csvData.fields.indexOf(csvData.timeField);
             csvData.fields.splice(timeIndex, 1);
           }
           else {
-            console.time('formatting date fields')
             csvData.csvImportData.data.map(dataItem => {
               dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName]).format('YYYY-MM-DD HH:mm:ss');
             });
-            console.timeEnd('formatting date fields')
 
           }
           //remove invalid dates
@@ -223,7 +216,6 @@ export class LogToolDataService {
       }
     });
     this.logToolService.setFields(individualDataFromCsv);
-    console.timeEnd('submitIndividualCSVDAta')
   }
 
   addLostSecondsBack(csvData: IndividualDataFromCsv, intervalIncrement: number) {
@@ -293,20 +285,16 @@ export class LogToolDataService {
     return Math.random().toString(36).substr(2, 9);
   }
 
-  importFileData() {
+  async importFileData(): Promise<Array<CsvImportData>> {
     let explorerData: ExplorerData = this.explorerData.getValue();
-    explorerData.fileData.forEach(fileData => {
-      // should not operate on json
+     return Promise.all(explorerData.fileData.map(async(fileData) => {
       if (fileData.fileType !== '.json') {
         let fileDataExistsInDataSet = explorerData.datasets.find(dataset => dataset.dataSetId === fileData.dataSetId);
         if (!fileDataExistsInDataSet) { 
-          let fileImportData = this.csvToJsonService.parseCsvWithHeaders(fileData.data, Number(fileData.headerRowIndex));
-          explorerData = this.addImportDataSet(fileImportData, fileData.name, fileData.dataSetId, explorerData);
+          return this.csvToJsonService.parseCSVasync(fileData, false, Number(fileData.headerRowIndex));
         }
       }
-    });
-    
-    this.explorerData.next(explorerData);
+    }));
   }
 
   importExistingDataSets(logToolDbData: LogToolDbData) {

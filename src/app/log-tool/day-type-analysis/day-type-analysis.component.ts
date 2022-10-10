@@ -77,7 +77,6 @@ export class DayTypeAnalysisComponent implements OnInit {
       this.dayTypeGraphService.setDayTypeScatterPlotData();
       this.dayTypeGraphService.setIndividualDayScatterPlotData();
       this.dayTypeAnalysisService.dayTypesCalculated = true;
-      console.timeEnd('runAnalysis');
       this.hasRunDayTypeAnalysis = true;
       this.loadingSpinner = {show: false}
       this.cd.detectChanges();

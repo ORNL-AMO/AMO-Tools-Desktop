@@ -4,7 +4,7 @@ import { LogToolDataService } from '../../log-tool-data.service';
 import * as XLSX from 'xlsx';
 import { ExplorerData, ExplorerFileData, StepMovement } from '../../log-tool-models';
 import { Router } from '@angular/router';
-import { CsvToJsonService } from '../../../shared/helper-services/csv-to-json.service';
+import { CsvImportData, CsvToJsonService } from '../../../shared/helper-services/csv-to-json.service';
 
 @Component({
   selector: 'app-select-data-header',
@@ -63,11 +63,13 @@ export class SelectDataHeaderComponent implements OnInit {
     }
   }
 
-  setSelectedSheet() {
+  async setSelectedSheet() {
     let xlsxRows = XLSX.utils.sheet_to_csv(this.selectedFileData.workBook.Sheets[this.selectedSheet], { dateNF: "mm/dd/yyyy hh:mm:ss" });
     this.selectedFileData.selectedSheet = this.selectedSheet;
     this.selectedFileData.data = xlsxRows;
-    this.selectedFileData.previewData = this.csvToJsonService.parseCsvWithoutHeaders(xlsxRows).data;
+    let fileParsedResults: CsvImportData = await this.csvToJsonService.parseCsvWithoutHeaders(xlsxRows);
+    this.selectedFileData.previewData = fileParsedResults.data;
+
     this.explorerData.fileData.map(xlsxData => {
       if (xlsxData.dataSetId === this.selectedFileData.dataSetId) {
         xlsxData = this.selectedFileData;

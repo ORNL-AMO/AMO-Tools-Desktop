@@ -108,14 +108,15 @@ export class ImportDataComponent implements OnInit {
     return new Promise((resolve, reject) => {
       let fr: FileReader = new FileReader();
       fr.readAsBinaryString(fileReference);
-      fr.onload = (e: any) => {
+      fr.onload = async (e: any) => {
         const bstr: string = e.target.result;
         let workBook: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary', cellDates: true, cellText: false, cellNF: false });
         // this.finishImportExcel();
         let selectedSheet: string = workBook.SheetNames[0];
         let workSheets = workBook.SheetNames;
         let xlsxRows = XLSX.utils.sheet_to_csv(workBook.Sheets[selectedSheet], { dateNF: "mm/dd/yyyy hh:mm:ss" });
-        let xlsxPreviewData: any = this.csvToJsonService.parseCsvWithoutHeaders(xlsxRows).data;
+        let importData: CsvImportData = await this.csvToJsonService.parseCsvWithoutHeaders(xlsxRows);
+        let xlsxPreviewData = importData.data;
         this.explorerData.fileData.push({ 
           dataSetId: this.logToolDataService.getUniqueId(), 
           fileType: '.xlsx',
@@ -141,9 +142,10 @@ export class ImportDataComponent implements OnInit {
     return new Promise((resolve, reject) => {
       let fr: FileReader = new FileReader();
       fr.readAsText(fileReference);
-      fr.onloadend = (e) => {
+      fr.onloadend = async (e) => {
         let fileImportData = JSON.parse(JSON.stringify(fr.result));
-        let csvFileData: any = this.csvToJsonService.parseCsvWithoutHeaders(fileImportData).data;
+        let importData: CsvImportData = await this.csvToJsonService.parseCsvWithoutHeaders(fileImportData);
+        let csvFileData = importData.data;
         this.explorerData.fileData.push({ 
           dataSetId: this.logToolDataService.getUniqueId(), 
           fileType: '.csv',
