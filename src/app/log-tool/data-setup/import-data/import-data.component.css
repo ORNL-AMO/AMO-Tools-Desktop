@@ -5,6 +5,18 @@
 
 .import-file {
     font-size: 12px;
+    display: none;
+}
+
+.btn-primary {
+    color: white;
+    background: #117A65;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    color: white;
+    background: #447f73 !important;
 }
 
 .de-description {
@@ -76,4 +88,9 @@ ul.nav.nav-tabs {
 
 .show-pointer {
  cursor: pointer;
+}
+
+.help {
+    max-width: 75vw;
+    height: 200px;
 }

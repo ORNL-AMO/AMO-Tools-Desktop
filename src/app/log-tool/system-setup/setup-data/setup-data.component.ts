@@ -122,19 +122,19 @@ export class SetupDataComponent implements OnInit {
     };
   }
 
-  parseExcel() {
-    setTimeout(() => {
-      this.logToolService.addCsvData(this.csvToJsonService.parseCsvWithHeaders(this.importData, Number(this.selectedHeaderRow)), this.fileReference.name);
-      this.importSuccesful = true;
-      this.importData = undefined;
-      this.importingData = false;
-      this.logToolService.dataSubmitted.next(true);
-      this.previousDataAvailable = undefined;
-      this.logToolDbService.saveData();
-      this.cd.detectChanges();
-      }, 100);
+  // parseExcel() {
+  //   setTimeout(() => {
+  //     this.logToolService.addCsvData(this.csvToJsonService.parseCsvWithHeaders(this.importData, Number(this.selectedHeaderRow)), this.fileReference.name);
+  //     this.importSuccesful = true;
+  //     this.importData = undefined;
+  //     this.importingData = false;
+  //     this.logToolService.dataSubmitted.next(true);
+  //     this.previousDataAvailable = undefined;
+  //     this.logToolDbService.saveData();
+  //     this.cd.detectChanges();
+  //     }, 100);
     
-  }
+  // }
 
   importExcel() {
     let fr: FileReader = new FileReader();
@@ -158,7 +158,7 @@ export class SetupDataComponent implements OnInit {
  
 
   parsePreviewData() {
-    this.previewDataFromCsv = this.csvToJsonService.parseCsvWithoutHeaders(this.importData);
+    // this.previewDataFromCsv = this.csvToJsonService.parseCsvWithoutHeaders(this.importData);
   }
 
   parseImportData() {
@@ -167,7 +167,7 @@ export class SetupDataComponent implements OnInit {
     this.canUseExampleData = false;
     this.cd.detectChanges();
     setTimeout(() => {
-      this.importDataFromCsv = this.csvToJsonService.parseCsvWithHeaders(this.importData, Number(this.selectedHeaderRow));
+      // this.importDataFromCsv = this.csvToJsonService.parseCsvWithHeaders(this.importData, Number(this.selectedHeaderRow));
       this.logToolService.addCsvData(this.importDataFromCsv, this.fileReference.name);
       this.importSuccesful = true;
       this.importData = undefined;

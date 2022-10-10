@@ -13,12 +13,12 @@ import { LogToolDbService } from '../log-tool-db.service';
 })
 export class DayTypeAnalysisComponent implements OnInit {
 
-  showContent: boolean = false;
   displayDayTypeCalanderSub: Subscription;
   displayDayTypeCalander: boolean;
+  hasRunDayTypeAnalysis: boolean = false;
+  canUpdateDayTypeAnalysis: boolean = false;
   dataViewSub: Subscription;
   dataView: string;
-  calculatingData: boolean = false;
 
   loadingSpinnerSub: Subscription;
   loadingSpinner: LoadingSpinner = {show: true, msg: 'Finalizing Data Setup...'};
@@ -29,8 +29,9 @@ export class DayTypeAnalysisComponent implements OnInit {
     private logToolDbService: LogToolDbService) { }
 
   ngOnInit() {
+    // this.checkCanUpdateDayTypeAnlysis();
     this.loadingSpinnerSub = this.logToolDataService.loadingSpinner.subscribe(loadingSpinner => {
-      this.loadingSpinner = loadingSpinner
+      this.loadingSpinner = loadingSpinner;
       this.cd.detectChanges();
     });
 
@@ -44,15 +45,11 @@ export class DayTypeAnalysisComponent implements OnInit {
       let allFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
       this.dayTypeAnalysisService.selectedDataField.next(allFields[0]);
     }
-    if (this.dayTypeAnalysisService.dayTypesCalculated == true) {
-      this.showContent = true;
-      this.cd.detectChanges();
-    }
+    this.hasRunDayTypeAnalysis = this.dayTypeAnalysisService.dayTypesCalculated == true;
     setTimeout(() => {
       this.loadingSpinner = {show: false};
       this.logToolDataService.loadingSpinner.next({show: false, msg: 'Finalizing Data Setup...'});
     }, 200);
-
   }
 
   ngOnDestroy() {
@@ -62,9 +59,15 @@ export class DayTypeAnalysisComponent implements OnInit {
     this.loadingSpinnerSub.unsubscribe();
   }
 
+  // checkCanUpdateDayTypeAnlysis() {
+  //   if (this.logToolDataService.checkHasUnprocessedFileData()) {
+  //     this.canUpdateDayTypeAnalysis = true;
+  //     console.log('canUpdate', this.canUpdateDayTypeAnalysis);
+  //   }
+  // }
   runAnalysis() {
-    this.calculatingData = true;
-    this.cd.detectChanges();
+    this.loadingSpinner = {show: true, msg: `Calculating Day Types. This may take a moment
+    depending on the amount of data you have supplied.`};
     setTimeout(() => {
       console.time('runAnalysis');
       this.logToolDataService.setLogToolDays();
@@ -74,9 +77,8 @@ export class DayTypeAnalysisComponent implements OnInit {
       this.dayTypeGraphService.setDayTypeScatterPlotData();
       this.dayTypeGraphService.setIndividualDayScatterPlotData();
       this.dayTypeAnalysisService.dayTypesCalculated = true;
-      console.timeEnd('runAnalysis');
-      this.showContent = true;
-      this.calculatingData = false;
+      this.hasRunDayTypeAnalysis = true;
+      this.loadingSpinner = {show: false}
       this.cd.detectChanges();
     }, 50)
   }

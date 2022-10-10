@@ -2,8 +2,8 @@
 <div class="data-setup d-flex flex-column justify-content-center scroll-item">
     <div *ngIf="explorerData.datasets.length !== 0" class="w-100 px-5 mt-3">
         <div *ngIf="explorerData.refineDataStepStatus.currentDatasetValid" class="text-left alert alert-info small my-2 mx-auto p-0">
-            <div *ngIf="explorerData.datasets.length > 1" class="p-1">Refine data columns and advance to the next file</div>
-            <div *ngIf="explorerData.datasets.length == 1" class="p-1">Refine data columns</div>
+            <div *ngIf="explorerData.datasets.length > 1" class="p-1">Mark the columns to be used for analysis and advance to the next file</div>
+            <div *ngIf="explorerData.datasets.length == 1" class="p-1">Mark the columns to be used for analysis</div>
         </div>
         <div *ngIf="!explorerData.refineDataStepStatus.currentDatasetValid" class="text-left alert alert-danger small my-2 mx-auto p-0">
             <div class="p-1">Check "Use Column" to mark at least one column for analysis</div>

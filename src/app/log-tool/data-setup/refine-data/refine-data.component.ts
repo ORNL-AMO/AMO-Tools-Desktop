@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CsvImportData } from '../../../shared/helper-services/csv-to-json.service';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { LogToolDbService } from '../../log-tool-db.service';
 import { DataExplorerStatus, ExplorerData, ExplorerDataSet, LogToolField, StepMovement } from '../../log-tool-models';
@@ -27,11 +28,10 @@ export class RefineDataComponent implements OnInit {
     private logToolDataService: LogToolDataService,
     private logToolService: LogToolService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.explorerData = this.logToolDataService.explorerData.getValue();
     if (!this.explorerData.isExample && !this.explorerData.isExistingImport) {
-      this.logToolDataService.loadingSpinner.next({show: true, msg: 'Loading Data...'});
-      this.parseFileDataAndSave();
+      await this.createDataSetsFromFileData();
     }
     this.setSelectedDataSet(0);
     this.changeStepSub = this.logToolDataService.changeStep.subscribe(changeStep => {
@@ -42,12 +42,7 @@ export class RefineDataComponent implements OnInit {
     });
     this.logToolDataService.loadingSpinner.next({show: false, msg: 'Loading Data...'});
   }
-  
- async parseFileDataAndSave() {
-    this.logToolDataService.importFileData();
-    await this.logToolDbService.saveData();
-    this.explorerData = this.logToolDataService.explorerData.getValue();
-  }
+
 
   ngOnDestroy(){
     this.logToolDataService.changeStep.next(undefined);
@@ -69,6 +64,23 @@ export class RefineDataComponent implements OnInit {
           this.cd.detectChanges();
         }
       }
+  }
+
+  async createDataSetsFromFileData() {
+    // set spinner spinner incase not set form 'next' click
+    this.logToolDataService.loadingSpinner.next({ show: true, msg: 'Loading Data...' });
+    await this.logToolDataService.importFileData()
+      .then((parsedFilesData) => {
+        if (parsedFilesData.some(data => data != undefined)) {
+          parsedFilesData.forEach((parsedFileData: CsvImportData) => {
+            if (parsedFileData) {
+              this.explorerData = this.logToolDataService.addImportDataSet(parsedFileData, parsedFileData.name, parsedFileData.dataSetId, this.explorerData);
+            }
+          });
+          this.logToolDataService.explorerData.next(this.explorerData);
+          this.logToolDbService.saveDataAsync();
+        }
+      });
   }
 
 

@@ -6,7 +6,23 @@
     </div>
     <span class="importing-text">{{loadingSpinner.msg}}</span>
 </div>
-<div class="d-flex w-100 h-100" *ngIf="showContent">
+<!-- <div class="d-flex w-100 h-100" *ngIf="!hasRunDayTypeAnalysis || canUpdateDayTypeAnalysis">
+    <div class="card card-body d-flex flex-column align-items-center pt-4">
+        <div class="p-2" *ngIf="canUpdateDayTypeAnalysis">Data has been added since Day Type analysis was performed.</div>
+        <button class="btn btn-secondary" (click)="runAnalysis()">
+             <span *ngIf="!hasRunDayTypeAnalysis">Run Analysis</span>
+             <span *ngIf="canUpdateDayTypeAnalysis">Update Analysis</span>
+    </button>
+    </div>
+</div> -->
+<div class="d-flex w-100 h-100" *ngIf="!hasRunDayTypeAnalysis">
+    <div class="card card-body d-flex flex-column align-items-center pt-4">
+        <button class="btn btn-secondary" (click)="runAnalysis()">
+             <span>Run Analysis</span>
+    </button>
+    </div>
+</div>
+<div class="d-flex w-100 h-100" *ngIf="hasRunDayTypeAnalysis">
     <div class="d-flex flex-column w-100 h-100">
         <app-day-type-menu></app-day-type-menu>
         <app-day-type-graph *ngIf="dataView == 'graph'"></app-day-type-graph>
@@ -17,20 +33,5 @@
                 <app-day-type-calendar *ngIf="displayDayTypeCalander"></app-day-type-calendar>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="d-flex w-100 h-100" *ngIf="!showContent">
-    <div class="card card-body d-flex flex-column align-items-center pt-4">
-        <div *ngIf="!calculatingData" class="p-2">Click here to initialize Day Type analysis.</div>
-        <button *ngIf="!calculatingData" class="btn btn-secondary" (click)="runAnalysis()">Run Analysis</button>
-        <div class="spinner" *ngIf="calculatingData">
-            <div class="bounce1"></div>
-            <div class="bounce2"></div>
-            <div class="bounce3"></div>
-        </div>
-        <span class="large text-center" *ngIf="calculatingData">Calculating Day Types<br> This may take a moment
-            depending on the amount of data you have supplied. <br>
-        </span>
     </div>
 </div>

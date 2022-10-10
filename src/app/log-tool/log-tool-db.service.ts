@@ -110,6 +110,11 @@ export class LogToolDbService {
     let allData: LogToolDbData[] = await firstValueFrom(this.dbService.updateWithObservable(logToolDbData));
   }
 
+  async saveDataAsync() {
+    let logToolDbData: LogToolDbData = this.getLogToolDbDataObj();
+    return firstValueFrom(this.dbService.updateWithObservable(logToolDbData));
+  }
+
   getSavedData(): LogToolDbData {
     let logToolDbData: LogToolDbData = this.getLogToolDbDataObj();
     return logToolDbData;

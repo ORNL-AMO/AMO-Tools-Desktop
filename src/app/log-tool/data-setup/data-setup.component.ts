@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DayTypeAnalysisService } from '../day-type-analysis/day-type-analysis.service';
+import { DayTypeGraphService } from '../day-type-analysis/day-type-graph/day-type-graph.service';
 import { LogToolDataService } from '../log-tool-data.service';
 import { DataExplorerStatus, ExplorerData, LoadingSpinner } from '../log-tool-models';
 import { LogToolService } from '../log-tool.service';
@@ -25,6 +26,7 @@ export class DataSetupComponent implements OnInit {
   constructor(private logToolService: LogToolService, 
     private logToolDataService: LogToolDataService, 
     private dayTypeAnalysisService: DayTypeAnalysisService,
+    private dayTypeGraphService: DayTypeGraphService,
     private cd: ChangeDetectorRef,
     private activatedRoute: ActivatedRoute, private router: Router) { }
 
@@ -84,6 +86,7 @@ export class DataSetupComponent implements OnInit {
   resetSetupData() {
     this.logToolDataService.resetSetupData();
     this.dayTypeAnalysisService.resetData();
+    this.dayTypeGraphService.resetData();
   }
 
   setDisableNext() {
