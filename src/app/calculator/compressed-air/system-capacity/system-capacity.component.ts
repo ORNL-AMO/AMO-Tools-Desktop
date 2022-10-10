@@ -30,14 +30,18 @@ export class SystemCapacityComponent implements OnInit {
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   saving: boolean;
   
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   
-  bodyHeight: number;
+  smallScreenTab: string = 'form';
+  containerHeight: number;
   headerHeight: number;
   inputs: AirSystemCapacityInput;
   outputs: AirSystemCapacityOutput;
@@ -81,7 +85,10 @@ export class SystemCapacityComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
-      this.bodyHeight = this.contentContainer.nativeElement.offsetHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -134,6 +141,10 @@ export class SystemCapacityComponent implements OnInit {
     let tempInputs = this.systemCapacityService.getSystemCapacityExample();
     this.inputs = this.systemCapacityService.convertAirSystemCapacityExample(tempInputs, this.settings);
     this.calculate();
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }

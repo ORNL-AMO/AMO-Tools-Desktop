@@ -21,7 +21,8 @@ export class ChillerStagingFormService {
       waterEnteringTemp: [inputObj.waterEnteringTemp, Validators.required],
       // Required validator drops when FormArray constructed this way
       baselineLoadList: this.formBuilder.array(inputObj.baselineLoadList),
-      modLoadList: this.formBuilder.array(inputObj.modLoadList)
+      modLoadList: this.formBuilder.array(inputObj.modLoadList),
+      electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]]
     });
 
     form = this.setWaterTempValidators(form);
@@ -90,6 +91,7 @@ export class ChillerStagingFormService {
       waterEnteringTemp: form.controls.waterEnteringTemp.value,
       baselineLoadList: form.controls.baselineLoadList.value,
       modLoadList: form.controls.modLoadList.value,
+      electricityCost: form.controls.electricityCost.value
     };
     return obj;
   }

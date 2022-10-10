@@ -25,9 +25,12 @@ export class HeatCascadingComponent implements OnInit {
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   
   heatCascadingInputSub: Subscription;
@@ -36,6 +39,7 @@ export class HeatCascadingComponent implements OnInit {
   containerHeight: number;
   isModalOpen: boolean;
   tabSelect: string = 'help';
+  smallScreenTab: string = 'form';
   
   constructor(private heatCascadingService: HeatCascadingService,
               private settingsDbService: SettingsDbService) { }
@@ -118,7 +122,14 @@ export class HeatCascadingComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }

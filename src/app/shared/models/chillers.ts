@@ -5,6 +5,7 @@ export interface CoolingTowerData {
     name: string;
     operationalHours: number;
     flowRate: number;
+    waterCost: number;
     userDefinedCoolingLoad: boolean;
     temperatureDifference: number;
     coolingLoad: number;
@@ -29,6 +30,9 @@ export interface CoolingTowerData {
     wcModification: number;
     waterSavings: number;
     savingsPercentage: number;
+    annualCostSavings: number;
+    baselineCost: number;
+    modificationCost: number;
     coolingTowerCaseResults: Array<CoolingTowerResult>;
   }
   
@@ -60,7 +64,8 @@ export interface CoolingTowerData {
     operatingWindSpeed: number,
     operatingHours: number,
     baselineTempSetPoint: number,
-    modTempSetPoint: number
+    modTempSetPoint: number,
+    electricityCost: number,
   }
 
   export interface CoolingTowerBasinResult {
@@ -69,6 +74,9 @@ export interface CoolingTowerData {
     modPower: number,
     modEnergy: number,
     savingsEnergy: number,
+    baselineEnergyCost: number,
+    modEnergyCost: number,
+    annualCostSaving: number,
   }
 
   export interface WeatherBinnedResult {
@@ -109,6 +117,7 @@ export interface CoolingTowerData {
     waterDeltaT: number,
     waterFlowRate: number,
     operatingHours: number,
+    electricityCost: number,
     // chilled water temperature reset
     baselineWaterSupplyTemp: number,
     baselineWaterEnteringTemp: number
@@ -127,6 +136,9 @@ export interface CoolingTowerData {
     modPower: number,
     modEnergy: number,
     savingsEnergy: number,
+    baselineEnergyCost: number,
+    modEnergyCost: number,
+    annualCostSaving: number,
   }
 
 
@@ -141,6 +153,7 @@ export interface CoolingTowerFanInput {
   operatingHours: number,
   baselineSpeedType: number,
   modSpeedType: number,
+  electricityCost: number,
 }
 
 
@@ -150,6 +163,9 @@ export interface CoolingTowerFanOutput {
   modPower: number,
   modEnergy: number,
   savingsEnergy: number,
+  baselineEnergyCost: number,
+  modEnergyCost: number,
+  annualCostSaving: number,
 }
 
 
@@ -159,7 +175,8 @@ export interface CoolingTowerFanOutput {
     chillerType: number,
     condenserCoolingType: number,
     motorDriveType: number,
-    compressorConfigType: number
+    compressorConfigType: number,
+    electricityCost: number,
     // chiller rated conditions
     ariCapacity: number,
     ariEfficiency: number,
@@ -181,6 +198,9 @@ export interface CoolingTowerFanOutput {
     modTotalPower: number,
     modTotalEnergy: number,
     savingsEnergy: number,
+    costSavings: number,
+    baselineCost: number,
+    modificationCost: number,
     baselinePowerList: Array<number>,
     modPowerList: Array<number>,
     chillerLoadResults?: Array<{baseline: number, modification: number}>

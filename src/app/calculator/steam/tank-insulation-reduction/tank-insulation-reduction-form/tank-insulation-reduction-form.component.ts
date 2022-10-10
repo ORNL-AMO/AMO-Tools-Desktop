@@ -192,6 +192,7 @@ export class TankInsulationReductionFormComponent implements OnInit {
 
   calculate() {
     //this.checkWarnings();
+    this.form = this.tankInsulationReductionService.setSurfaceTempValidators(this.form);
     if (this.form.valid) {
       if (this.isBaseline == true) {
         this.tankInsulationReductionService.baselineData = this.tankInsulationReductionService.getObjFromForm(this.form, this.tankInsulationReductionService.baselineData, this.settings);

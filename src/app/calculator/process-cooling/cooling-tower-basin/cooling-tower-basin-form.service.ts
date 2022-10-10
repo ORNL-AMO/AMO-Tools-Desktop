@@ -23,7 +23,8 @@ export class CoolingTowerBasinFormService {
       operatingTempDryBulb: [inputObj.operatingTempDryBulb, Validators.required],
       operatingWindSpeed: [inputObj.operatingWindSpeed, Validators.required],
       baselineTempSetPoint: [inputObj.baselineTempSetPoint, [Validators.required, Validators.min(minTemperature)]],
-      modTempSetPoint: [inputObj.modTempSetPoint, [Validators.required, Validators.min(minTemperature)]]
+      modTempSetPoint: [inputObj.modTempSetPoint, [Validators.required, Validators.min(minTemperature)]],
+      electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]]
     });
 
     return form;
@@ -60,7 +61,8 @@ export class CoolingTowerBasinFormService {
       operatingTempDryBulb: form.controls.operatingTempDryBulb.value,
       operatingWindSpeed: form.controls.operatingWindSpeed.value,
       baselineTempSetPoint: form.controls.baselineTempSetPoint.value,
-      modTempSetPoint: form.controls.modTempSetPoint.value
+      modTempSetPoint: form.controls.modTempSetPoint.value,
+      electricityCost: form.controls.electricityCost.value
     };
     return obj;
   }

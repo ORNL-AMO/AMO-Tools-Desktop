@@ -1,57 +1,76 @@
-<div class="d-flex h-100 modify-conditions steam standalone-calculator">
-  <div class="d-flex flex-column modification w-50 scroll-item mh-100">
-    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
-      <div class="calc-icon-header icon-steam">
-        <img src="assets/images/calculator-icons/steam-icons/prv.png">
-      </div>
-      <h3>PRV</h3>
+<div #contentContainer class="calculator-container modify-conditions steam standalone-calculator">
+  <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+    <div class="calc-icon-header icon-steam">
+      <img src="assets/images/calculator-icons/steam-icons/prv.png">
     </div>
-    <div class="d-flex flex-column m-4">
-      <app-inlet-form [inletForm]="inletForm" [settings]="settings" (emitChangeField)="changeField($event)"
-        (emitCalculate)="setInletForm($event)"></app-inlet-form>
-      <div class="form-group mt-2 mb-2">
-        <select (focus)="changeField('isSuperHeating')" class="form-control w-100" [(ngModel)]="isSuperHeating"
-          name="isSuperHeating" id="isSuperHeating">
-          <option [ngValue]="true">With Desuperheating</option>
-          <option [ngValue]="false">Without Desuperheating</option>
-        </select>
-      </div>
-      <app-feedwater-form *ngIf="isSuperHeating" [feedwaterForm]="feedwaterForm" [settings]="settings"
-        (emitChangeField)="changeField($event)" (emitCalculate)="setFeedwaterForm($event)"></app-feedwater-form>
-      <span *ngIf="warning !== null" class="alert-warning pull-right small">{{warning}}</span>
-      <div class="w-100 justify-content-center btn-group btn-group-sm">
-        <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
-          Reset Data
-        </button>
-        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
-        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
-          Generate Example
-        </button>
-      </div>
+    <h3>PRV</h3>
+  </div>
+
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link">PRV Data</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Details</a>
     </div>
   </div>
-  <div class="d-flex flex-column w-50 scroll-item mh-100">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
-          <div>Results</div>
-        </a>
-      </div>
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-          <div>Help</div>
-        </a>
+
+  <div class="panel-group">
+
+    <div class="calculator-panel-container modification mh-100"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
+      <div class="d-flex flex-column m-4">
+        <app-inlet-form [inletForm]="inletForm" [settings]="settings" (emitChangeField)="changeField($event)"
+          (emitCalculate)="setInletForm($event)"></app-inlet-form>
+        <div class="form-group mt-2 mb-2">
+          <select (focus)="changeField('isSuperHeating')" class="form-control w-100" [(ngModel)]="isSuperHeating"
+            name="isSuperHeating" id="isSuperHeating">
+            <option [ngValue]="true">With Desuperheating</option>
+            <option [ngValue]="false">Without Desuperheating</option>
+          </select>
+        </div>
+        <app-feedwater-form *ngIf="isSuperHeating" [feedwaterForm]="feedwaterForm" [settings]="settings"
+          (emitChangeField)="changeField($event)" (emitCalculate)="setFeedwaterForm($event)"></app-feedwater-form>
+        <span *ngIf="warning !== null" class="alert-warning pull-right small">{{warning}}</span>
+        <div class="w-100 justify-content-center btn-group btn-group-sm">
+          <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+            Reset Data
+          </button>
+          <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+          <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+            Generate Example
+          </button>
+        </div>
       </div>
     </div>
-    <div class="d-flex">
-      <app-prv-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings"
-        [thermodynamicQuantity]="input.thermodynamicQuantity"
-        [feedwaterThermodynamicQuantity]="input.feedwaterThermodynamicQuantity" [isSuperHeating]="isSuperHeating"
-        [outletPressure]="input.outletPressure">
-      </app-prv-help>
-      <div class="d-flex flex-column w-100 align-items-center p-4" *ngIf="tabSelect == 'results'">
-        <app-prv-results class="w-100" [results]="results" [settings]="settings"></app-prv-results>
+    <div class="calculator-panel-container help-panel" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}"
+      [ngStyle]="{'height.px': containerHeight}">
+      <div class="d-flex flex-wrap tabs primary sticky-top">
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+          <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+            <div>Results</div>
+          </a>
+        </div>
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+          <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+            <div>Help</div>
+          </a>
+        </div>
+      </div>
+      <div class="d-flex">
+        <app-prv-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings"
+          [thermodynamicQuantity]="input.thermodynamicQuantity"
+          [feedwaterThermodynamicQuantity]="input.feedwaterThermodynamicQuantity" [isSuperHeating]="isSuperHeating"
+          [outletPressure]="input.outletPressure">
+        </app-prv-help>
+        <div class="d-flex flex-column w-100 align-items-center p-4" *ngIf="tabSelect == 'results'">
+          <app-prv-results class="w-100" [results]="results" [settings]="settings"></app-prv-results>
+        </div>
       </div>
     </div>
+
   </div>
+
 </div>

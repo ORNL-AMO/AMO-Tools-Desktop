@@ -23,6 +23,7 @@ export class ChillerPerformanceFormService {
       baselineWaterEnteringTemp: [inputObj.baselineWaterEnteringTemp, Validators.required],
       modWaterSupplyTemp: [inputObj.modWaterSupplyTemp, Validators.required],
       modWaterEnteringTemp: [inputObj.modWaterEnteringTemp, Validators.required],
+      electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
     });
 
     form = this.setWaterTempValidators(form);
@@ -73,6 +74,7 @@ export class ChillerPerformanceFormService {
       baselineWaterEnteringTemp: form.controls.baselineWaterEnteringTemp.value,
       modWaterSupplyTemp: form.controls.modWaterSupplyTemp.value,
       modWaterEnteringTemp: form.controls.modWaterEnteringTemp.value,
+      electricityCost: form.controls.electricityCost.value
     };
     return obj;
   }

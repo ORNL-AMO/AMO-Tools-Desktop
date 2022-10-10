@@ -24,10 +24,14 @@ export class O2EnrichmentComponent implements OnInit {
   assessment: Assessment;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild("contentContainer", { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
   headerHeight: number;
@@ -42,6 +46,8 @@ export class O2EnrichmentComponent implements OnInit {
 
   enrichmentInputs: Array<EnrichmentInput>;
   enrichmentInputsSub: Subscription;
+  containerHeight: number;
+  smallScreenTab: string = 'form';
 
   constructor(private settingsDbService: SettingsDbService, private o2EnrichmentService: O2EnrichmentService, private o2FormService: O2EnrichmentFormService,
    private calculatorDbService: CalculatorDbService) { }
@@ -133,6 +139,10 @@ export class O2EnrichmentComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -140,5 +150,8 @@ export class O2EnrichmentComponent implements OnInit {
     this.tabSelect = str;
   }
 
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
 
 }

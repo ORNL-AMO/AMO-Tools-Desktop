@@ -28,8 +28,11 @@ export class SaturatedPropertiesComponent implements OnInit {
   }
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
-
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   headerHeight: number;
+  containerHeight: number;  
+  smallScreenTab: string = 'form';
 
   ranges: { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number };
   saturatedPropertiesForm: FormGroup;
@@ -83,6 +86,10 @@ export class SaturatedPropertiesComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -238,6 +245,10 @@ export class SaturatedPropertiesComponent implements OnInit {
     this.initForm();
     this.calculate(this.saturatedPropertiesForm);
     this.toggleExampleData = !this.toggleExampleData;
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }

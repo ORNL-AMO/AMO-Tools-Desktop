@@ -26,12 +26,18 @@ export class ReceiverTankComponent implements OnInit {
   receiverTankInputsSub: Subscription;
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
+  smallScreenTab: string = 'form';
+  containerHeight: number;
   headerHeight: number;
 
   methods: Array<{ name: string, value: number }> = [
@@ -210,6 +216,14 @@ export class ReceiverTankComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

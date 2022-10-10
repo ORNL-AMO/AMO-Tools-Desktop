@@ -22,8 +22,8 @@
     </div>
 
     <div class="panel-group" [ngStyle]="{'height.px': containerHeight}">
-      <div class="calculator-panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'baseline'}"
-      [ngStyle]="{'height.px': containerHeight}">
+      <div class="calculator-panel-container modification baseline" [ngClass]="{'disabled': baselineSelected == false, 'small-screen-tab': smallScreenTab === 'baseline'}"
+      [ngStyle]="{'height.px': containerHeight}" (click)="setBaselineSelected()">
         <div class="header mr-2 ml-2">
           <h3>Baseline</h3>
         </div>
@@ -51,8 +51,8 @@
         </div>
       </div>
 
-      <div class="calculator-panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'modification'}"
-      [ngStyle]="{'height.px': containerHeight}">
+      <div class="calculator-panel-container modification" [ngClass]="{'disabled': baselineSelected == true, 'small-screen-tab': smallScreenTab === 'modification'}"
+      [ngStyle]="{'height.px': containerHeight}" (click)="setModificationSelected()">
         <ng-container *ngIf="modificationExists">
           <div class="header mr-2 ml-2">
             <h3>Modification</h3>

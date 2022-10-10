@@ -1,35 +1,67 @@
-<label class="group-label">Water Savings</label>
+  <label class="group-label">Water Savings</label>
 <app-percent-graph [value]="coolingTowerOutput.savingsPercentage" [width]="150"></app-percent-graph>
 
-<label class="group-label pt-2"></label>
+<label class="group-label pt-2">Baseline Results</label>
   <table #savingsTable class="table table-hover table-striped">
     <tbody>
       <tr>
-        <td class="bold w-50">Baseline Consumption</td>
+        <td class="bold w-50">Water Cost</td>
         <td class="text-center w-50">
-          {{coolingTowerOutput.wcBaseline | number:'1.1-1'}} 
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'">kGal</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+          {{coolingTowerOutput.baselineCost | currency:'USD':'symbol':'1.0-0'}}
         </td>
       </tr>
       <tr>
-        <td class="bold w-50" >Modification Consumption</td>
+        <td class="bold w-50" >Water Consumption</td>
         <td class="text-center w-50">
-          {{coolingTowerOutput.wcModification | number:'1.1-1'}}
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'">kGal</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50" >Water Savings</td>
-        <td class="text-center w-50">
-          {{coolingTowerOutput.waterSavings | number: '1.1-1'}}
+          {{coolingTowerOutput.wcBaseline | number:'1.1-1'}}
           <span *ngIf="settings.unitsOfMeasure != 'Metric'">kGal</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
         </td>
       </tr>
     </tbody>
   </table>
+
+  
+<label class="group-label pt-2">Modification Results</label>
+<table #savingsTable class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="bold w-50">Water Cost</td>
+      <td class="text-center w-50">
+        {{coolingTowerOutput.modificationCost | currency:'USD':'symbol':'1.0-0'}}
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50" >Water Consumption</td>
+      <td class="text-center w-50">
+        {{coolingTowerOutput.wcModification | number:'1.1-1'}}
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'">kGal</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<label class="group-label pt-2">Annual Savings</label>
+<table #savingsTable class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="bold w-50">Cost Savings</td>
+      <td class="text-center w-50">
+        {{coolingTowerOutput.annualCostSavings | currency:'USD':'symbol':'1.0-0'}}
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50" >Water Savings</td>
+      <td class="text-center w-50">
+        {{coolingTowerOutput.waterSavings | number: '1.1-1'}}
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'">kGal</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+      </td>
+    </tr>
+  </tbody>
+</table>
   
 <app-exportable-results-table [tableString]="savingsTableString"
   (updateTableString)="updateTableString()"></app-exportable-results-table>
+

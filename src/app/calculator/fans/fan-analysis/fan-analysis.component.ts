@@ -27,6 +27,7 @@ export class FanAnalysisComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -34,6 +35,7 @@ export class FanAnalysisComponent implements OnInit {
   }
 
   // inputs: Fan203Inputs;
+  smallScreenTab: string = 'form';
   containerHeight: number;
   footerWidth: number;
   stepTabs: Array<string> = ['fan-info', 'gas-density', 'plane-data', 'fan-shaft-power', 'fan-analysis-results'];
@@ -177,13 +179,16 @@ export class FanAnalysisComponent implements OnInit {
   getContainerHeight() {
     if (this.content) {
       this.footerWidth = this.content.nativeElement.clientWidth;
-      let contentHeight = this.content.nativeElement.clientHeight;
-      let headerHeight = this.header.nativeElement.clientHeight;
+      let contentHeight = this.content.nativeElement.offsetHeight;
+      let headerHeight = this.header.nativeElement.offsetHeight;
       let footerHeight = 0;
       if (this.footer) {
         footerHeight = this.footer.nativeElement.clientHeight;
       }
       this.containerHeight = contentHeight - headerHeight - footerHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
@@ -242,5 +247,18 @@ export class FanAnalysisComponent implements OnInit {
     let gasDone: boolean = this.gasDensityFormService.getGasDensityFormFromObj(this.fanAnalysisService.inputData.BaseGasDensity, this.settings).valid;
     let shaftPowerDone: boolean = this.fanShaftPowerFormService.getShaftPowerFormFromObj(this.fanAnalysisService.inputData.FanShaftPower).valid;
     this.setupDone = planeDataDone && basicsDone && gasDone && shaftPowerDone;
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
+  changeTabNextOrBack(str: string) {
+    if (str === 'next') {
+      this.next();
+    }
+    if (str === 'back') {
+      this.back();
+    }
   }
 }
