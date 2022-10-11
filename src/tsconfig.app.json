@@ -1,8 +1,22 @@
 {
   "compilerOptions": {
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": [
+      "es2016",
+      "dom"
+    ],
     "outDir": "../out-tsc/app",
     "target": "es2020",
+    "module": "es2015",
     "baseUrl": "",
+    "types": []
   },
   "exclude": [
     "test.ts",
