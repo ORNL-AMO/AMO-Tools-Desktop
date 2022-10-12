@@ -39,7 +39,7 @@
 
   <div class="panel-group" [ngStyle]="{'height.px': containerHeight}">
     <div class="calculator-panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'baseline'}"
-      [ngStyle]="{'height.px': containerHeight}">
+      [ngStyle]="{'height.px': containerHeight}" (click)="setBaselineSelected()">
       <div class="header mr-2 ml-2">
         <h3>Baseline</h3>
         <a class="click-link pull-right small add-fixture" (click)="addBaselineFixture()">+Add Fixture</a>
@@ -75,7 +75,7 @@
     </div>
 
     <div class="calculator-panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'modification'}"
-      [ngStyle]="{'height.px': containerHeight}">
+      (click)="setModificationSelected()" [ngStyle]="{'height.px': containerHeight}">
       <ng-container *ngIf="modificationExists">
         <div class="header mr-2 ml-2">
           <h3>Modification</h3>

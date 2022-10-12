@@ -326,6 +326,32 @@
             </div>
         </div>
 
+        <!-- Surface Temperature -->
+        <div class="form-group" *ngIf="form.controls.insulationMaterialSelection.value != 0">
+            <label class="small" for="{{'surfaceTemperature'+idString}}">Surface Temperature</label>
+            <div class="input-group">
+                <input class="form-control" name="surfaceTemperature" id="{{'surfaceTemperature'+idString}}"
+                    formControlName="surfaceTemperature" type="number" (input)="calculate()"
+                    (focus)="focusField('surfaceTemperature')" (blur)="focusOut()" onfocus="this.select();">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">&#8457;</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">&#8451;</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.surfaceTemperature.invalid && !form.controls.surfaceTemperature.pristine">
+                <span *ngIf="form.controls.surfaceTemperature.errors.required">Value required.</span>
+                <span *ngIf="form.controls.surfaceTemperature.errors.greaterThan">Value must be greater than Average Ambient Temperature
+                    ({{form.controls.surfaceTemperature.errors.greaterThan}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">&#8451;</span>)
+                </span>
+                <span *ngIf="form.controls.surfaceTemperature.errors.lessThan">Value must be less than Internal Tank Temperature
+                    ({{form.controls.surfaceTemperature.errors.lessThan}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">&#8451;</span>)
+                </span>
+            </span>
+        </div>
+
     </form>
 
 </div>

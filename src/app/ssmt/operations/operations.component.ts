@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { SSMT, GeneralSteamOperations } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
@@ -57,12 +57,11 @@ export class OperationsComponent implements OnInit {
     private ssmtService: SsmtService,
     private convertUnitsService: ConvertUnitsService,
     private compareService: CompareService,
+    private cd: ChangeDetectorRef,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
 
   ngOnInit() {
-    this.co2SavingsDifferentSubscription = this.compareService.co2SavingsDifferent.subscribe(val => {
-      this.co2SavingsDifferent = val;
-    });
+    this.co2SavingsDifferent = this.compareService.co2SavingsDifferent.getValue();
     this.initForm();
     this.setCo2SavingsData();
     if (!this.isBaseline) {
@@ -79,6 +78,13 @@ export class OperationsComponent implements OnInit {
     if (this.selected === false) {
       this.disableForm();
     }
+  }
+
+  ngAfterViewInit() {
+    this.co2SavingsDifferentSubscription = this.compareService.co2SavingsDifferent.subscribe(val => {
+      this.co2SavingsDifferent = val;
+      this.cd.detectChanges();
+    });
   }
 
   ngOnDestroy() {
@@ -118,6 +124,7 @@ export class OperationsComponent implements OnInit {
       this.co2SavingsData = co2SavingsData;
     } else {
       co2SavingsData = this.assessmentCo2SavingsService.getCo2SavingsDataFromSettingsObject(this.settings);
+      co2SavingsData.totalFuelEmissionOutputRate = 53.06;
     }
     this.otherFuels = otherFuels;
     if (!co2SavingsData.energySource) {

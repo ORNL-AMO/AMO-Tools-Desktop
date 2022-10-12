@@ -1,6 +1,6 @@
 <!-- Shared inputs -->
-<div class="d-flex w-100 my-2">
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+<div class="d-block d-lg-flex flex-direction-column">
+  <div class="col-12 col-lg-6 mb-4">
     <form #formElement [formGroup]="form">
       <label class="group-label my-1">
         Chiller Characteristics
@@ -98,7 +98,7 @@
     </form>
   </div>
 
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+  <div class="col-12 col-lg-6 mb-4">
     <label class="group-label my-1">
       Operating Conditions
     </label>
@@ -177,9 +177,9 @@
 
 </div>
 
-<div class="d-flex w-100">
+<div class="d-block d-lg-flex w-100">
   <!-- Baseline -->
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+  <div class="col-12 col-lg-6 mb-4">
     <label class="group-label my-1">
       Baseline
     </label>
@@ -203,7 +203,7 @@
     </form>
   </div>
 
-  <div class="w-50 d-flex flex-column mx-4 mb-4">
+  <div class="col-12 col-lg-6 mb-4">
     <label class="group-label my-1">
       Modification
     </label>
@@ -229,7 +229,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-auto mx-auto">
+  <div class="col-12 text-center">
     <a class="click-link small" (click)="addChiller()">Add Chiller</a>
   </div>
 </div>

@@ -38,7 +38,7 @@ export class PerformancePointsFormService {
     }
 
     for (let key in form.controls) {
-      if (form.controls[key].value != undefined) {
+      if (form.controls[key]) {
         form.controls[key].markAsDirty();
       }
     }
@@ -245,8 +245,7 @@ export class PerformancePointsFormService {
       let blowoffForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.blowoff, compressor, 'blowoff');
       isValid = blowoffForm.valid;
     }
-    return true;
-    // return isValid;
+    return isValid;
   }
 
 

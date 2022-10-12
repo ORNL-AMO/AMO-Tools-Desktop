@@ -64,7 +64,8 @@ export interface CoolingTowerData {
     operatingWindSpeed: number,
     operatingHours: number,
     baselineTempSetPoint: number,
-    modTempSetPoint: number
+    modTempSetPoint: number,
+    electricityCost: number,
   }
 
   export interface CoolingTowerBasinResult {
@@ -73,6 +74,9 @@ export interface CoolingTowerData {
     modPower: number,
     modEnergy: number,
     savingsEnergy: number,
+    baselineEnergyCost: number,
+    modEnergyCost: number,
+    annualCostSaving: number,
   }
 
   export interface WeatherBinnedResult {
@@ -149,6 +153,7 @@ export interface CoolingTowerFanInput {
   operatingHours: number,
   baselineSpeedType: number,
   modSpeedType: number,
+  electricityCost: number,
 }
 
 
@@ -158,6 +163,9 @@ export interface CoolingTowerFanOutput {
   modPower: number,
   modEnergy: number,
   savingsEnergy: number,
+  baselineEnergyCost: number,
+  modEnergyCost: number,
+  annualCostSaving: number,
 }
 
 

@@ -16,11 +16,21 @@
 
     <div *ngIf="index == 0" class="form-section">
 
-      <div *ngIf="!inTreasureHunt" class="d-flex flex-column w-100 justify-content-center pb-3">
-        <div class="btn-group btn-group-sm align-self-center">
-          <button type="button" [disabled]="!isBaseline && leakageForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySourceFromToggle('Fuel')" [ngClass]="{'active': leakageForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
-          <button type="button" [disabled]="!isBaseline && leakageForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySourceFromToggle('Electricity')" [ngClass]="{'active': leakageForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
-          <button type="button" [disabled]="!isBaseline && leakageForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySourceFromToggle('Steam')" [ngClass]="{'active':  leakageForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
+      <div *ngIf="!inTreasureHunt" class="d-flex flex-wrap w-100 justify-content-center pb-3">
+        <div class="flex-fill btn-group btn-group-sm align-self-center">
+          <button type="button" [disabled]="!isBaseline && leakageForm.controls.energySourceType.value != 'Fuel'"
+            class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySourceFromToggle('Fuel')"
+            [ngClass]="{'active': leakageForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
+        </div>
+        <div class="flex-fill btn-group btn-group-sm align-self-center">
+          <button type="button" [disabled]="!isBaseline && leakageForm.controls.energySourceType.value != 'Electricity'"
+            class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySourceFromToggle('Electricity')"
+            [ngClass]="{'active': leakageForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
+        </div>
+        <div class="flex-fill btn-group btn-group-sm align-self-center">
+          <button type="button" [disabled]="!isBaseline && leakageForm.controls.energySourceType.value != 'Steam'"
+            class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySourceFromToggle('Steam')"
+            [ngClass]="{'active':  leakageForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
         </div>
       </div>
 

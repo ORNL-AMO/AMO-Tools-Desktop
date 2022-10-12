@@ -124,6 +124,10 @@ export class CalculatorTypeDropdownComponent implements OnInit {
         return 'Chiller Staging'
       case Treasure.chillerPerformance:
         return 'Chiller Performance'
+      case Treasure.coolingTowerFan:
+        return 'Cooling Tower Fan'
+      case Treasure.coolingTowerBasin:
+        return 'Cooling Tower Basin'
     }
   }
 }

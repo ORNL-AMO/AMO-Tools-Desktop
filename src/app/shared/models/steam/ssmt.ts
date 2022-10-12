@@ -199,3 +199,8 @@ export interface SsmtValid {
   outputData: SSMTOutput,
   valid: SsmtValid
 };
+
+export interface SSMTResults { 
+    inputData: SSMTInputs, 
+    outputData: SSMTOutput 
+}

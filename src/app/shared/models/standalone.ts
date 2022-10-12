@@ -698,7 +698,8 @@ export interface TankInsulationReductionInput {
   tankMaterialSelection: number,
   insulationMaterialSelection: number,
   jacketMaterialSelection: number,
-  heatedOrChilled: number
+  heatedOrChilled: number,
+  surfaceTemperature: number
 };
 
 export interface TankInsulationReductionResults {

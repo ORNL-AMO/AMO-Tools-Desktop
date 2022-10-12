@@ -25,6 +25,10 @@ export class CoolingWeatherChartComponent implements OnInit {
       this.createChart();
     }, 20);
   }
+  
+  ngOnDestroy(){
+    window.dispatchEvent(new Event("resize"));
+  }
 
   ngOnChanges() {
     if (this.barChart) {

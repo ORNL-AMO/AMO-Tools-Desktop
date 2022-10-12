@@ -41,6 +41,10 @@ export class CoolingTowerFanChartComponent implements OnInit {
     }, 100);
   }
 
+  ngOnDestroy(){
+    window.dispatchEvent(new Event("resize"));
+  }
+
   @HostListener("document:keyup", ["$event"])
   closeExpandedGraph(event) {
     if (this.expanded) {

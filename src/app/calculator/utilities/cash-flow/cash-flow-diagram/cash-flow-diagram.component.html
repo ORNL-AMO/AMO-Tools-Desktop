@@ -18,12 +18,16 @@
       <tbody>
         <tr>
           <td class="bold w-50">Benefits / Cost</td>
-          <td class="text-center w-50">{{cashFlowResults.results | currency:'USD':'symbol':'2.2-2'}}
+          <td *ngIf="cashFlowResults.results" class="text-center w-50">{{cashFlowResults.results | currency:'USD':'symbol':'2.2-2'}}
+          </td>
+          <td *ngIf="!cashFlowResults.results" class="text-center w-50">&mdash; &mdash;
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Simple Payback Period</td>
-          <td class="text-center w-50">{{cashFlowResults.payback}} months
+          <td *ngIf="cashFlowResults.payback" class="text-center w-50">{{cashFlowResults.payback}} months
+          </td>
+          <td *ngIf="!cashFlowResults.payback" class="text-center w-50">&mdash; &mdash;
           </td>
         </tr>
       </tbody>

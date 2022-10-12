@@ -15,8 +15,9 @@ import { FlueGasEnergyData } from "../../calculator/furnaces/flue-gas/energy-for
 import { FeedwaterEconomizerInput } from "./steam/feedwaterEconomizer";
 import { CondensingEconomizerInput } from "./steam/condensingEconomizer";
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
-import { ChillerPerformanceInput, CoolingTowerData } from "./chillers";
+import { ChillerPerformanceInput, CoolingTowerBasinInput, CoolingTowerData, CoolingTowerFanInput } from "./chillers";
 import { ChillerStagingInput } from "./chillers";
+import { WeatherBinsInput } from "../../calculator/utilities/weather-bins/weather-bins.service";
 
 export interface TreasureHunt {
     name: string,
@@ -45,6 +46,8 @@ export interface TreasureHunt {
     coolingTowerMakeupOpportunities?: Array<CoolingTowerMakeupWaterTreasureHunt>;
     chillerStagingOpportunities?: Array<ChillerStagingTreasureHunt>;
     chillerPerformanceOpportunities?: Array<ChillerPerformanceTreasureHunt>;
+    coolingTowerFanOpportunities?: Array<CoolingTowerFanTreasureHunt>;
+    coolingTowerBasinOpportunities?: Array<CoolingTowerBasinTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     existingDataUnits?: string;
@@ -77,7 +80,9 @@ export enum Treasure {
     condensingEconomizer = 'condensing-economizer',
     coolingTowerMakeup = 'cooling-tower-makeup',
     chillerStaging = 'chiller-staging',
-    chillerPerformance = 'chiller-performance'
+    chillerPerformance = 'chiller-performance',
+    coolingTowerFan = 'cooling-tower-fan',
+    coolingTowerBasin = 'cooling-tower-basin'
 }
 
 export interface FilterOption {
@@ -423,6 +428,19 @@ export interface ChillerPerformanceTreasureHunt extends TreasureHuntOpportunity 
     selected?: boolean;
 }
 
+export interface CoolingTowerFanTreasureHunt extends TreasureHuntOpportunity {
+    coolingTowerFanData?: CoolingTowerFanInput;    
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface CoolingTowerBasinTreasureHunt extends TreasureHuntOpportunity {
+    coolingTowerBasinData?: CoolingTowerBasinInput;  
+    weatherData?: WeatherBinsInput;  
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
 export interface TreasureHuntResults {
     totalSavings: number;
     percentSavings: number;
@@ -518,4 +536,6 @@ export interface ImportExportOpportunities {
     coolingTowerMakeupOpportunities?: Array<CoolingTowerMakeupWaterTreasureHunt>;
     chillerStagingOpportunities?: Array<ChillerStagingTreasureHunt>;
     chillerPerformanceOpportunities?: Array<ChillerPerformanceTreasureHunt>;
+    coolingTowerFanOpportunities?: Array<CoolingTowerFanTreasureHunt>;
+    coolingTowerBasinOpportunities?: Array<CoolingTowerBasinTreasureHunt>;
 }

@@ -193,8 +193,7 @@ export class VisualizeMenuService {
           });
         }
       }
-      //scatter add with corresponding csv options
-      else if (selectedGraphObj.data[0].type == 'scattergl' && selectedGraphObj.selectedXAxisDataOption.dataField.csvId == field.csvId) {
+       else if (selectedGraphObj.data[0].type == 'scattergl') {
         let data = this.visualizeService.getVisualizeData(field.fieldName);
         selectedGraphObj.yAxisDataOptions.push({
           data: data,

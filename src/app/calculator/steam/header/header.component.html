@@ -1,79 +1,102 @@
-<div class="d-flex h-100 modify-conditions steam standalone-calculator">
-  <div class="d-flex flex-column modification w-50 scroll-item mh-100">
-    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
-      <div class="calc-icon-header icon-steam">
-        <img src="assets/images/calculator-icons/steam-icons/header.png">
-      </div>
-      <h3>Header</h3>
+<div #contentContainer class="calculator-container modify-conditions steam standalone-calculator">
+  <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+    <div class="calc-icon-header icon-steam">
+      <img src="assets/images/calculator-icons/steam-icons/header.png">
     </div>
-    <div class="d-flex flex-column m-4">
-      <form [formGroup]="headerPressureForm">
-        <div class="form-group">
-          <label class="small" for="headerPressure">Header Pressure</label>
-          <div class="input-group">
-            <input class="form-control" name="headerPressure" id="headerPressure" formControlName="headerPressure" type="number"
-              (input)="calculate()" (focus)="changeField('headerPressure')"  onfocus="this.select();">
-            <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
-          </div>
-          <span class="alert-danger pull-right small" *ngIf="headerPressureForm.controls.headerPressure.invalid && !headerPressureForm.controls.headerPressure.pristine">
-            <span *ngIf="headerPressureForm.controls.headerPressure.errors.required">Value Required</span>
-            <span *ngIf="headerPressureForm.controls.headerPressure.errors.max">Value can't be greater than
-              {{headerPressureForm.controls.headerPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
-            <span *ngIf="headerPressureForm.controls.headerPressure.errors.min">Value can't be less than
-              {{headerPressureForm.controls.headerPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
-          </span>
-        </div>
-
-        <div class="form-group">
-          <label for="numInlets" class="small">Number of Inlets</label>
-          <select class="form-control" name="numInlets" id="numInlets" formControlName="numInlets" type="number"
-            (change)="getInletForms()" (focus)="changeField('numInlets')" >
-            <option *ngFor="let numInletOption of numInletOptions" [ngValue]="numInletOption">{{numInletOption}}</option>
-          </select>
-        </div>
-
-
-      </form>
-      <!-- <div class="form-group mt-2 mb-2">
-        <label for="numInlets">Number of Inlets</label>
-        <select (focus)="changeField('numInlets')" (change)="getInletForms()" class="form-control" [(ngModel)]="numInlets"
-          name="numInlets" id="numInlets">
-          <option *ngFor="let numInletOption of numInletOptions" [ngValue]="numInletOption">{{numInletOption}}</option>
-        </select>
-      </div> -->
-      <app-header-form *ngFor="let inletForm of inletForms; let index = index;" [inletForm]="inletForm" [index]="index+1"
-        [settings]="settings" (emitChangeField)="changeField($event, index)" (emitCalculate)="saveInletForm($event, index)"></app-header-form>
-      <div class="w-100 justify-content-center btn-group btn-group-sm">
-        <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
-          Reset Data
-        </button>
-        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
-        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
-          Generate Example
-        </button>
-      </div>
+    <h3>Header</h3>
+  </div>
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link">Header Data</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Details</a>
     </div>
   </div>
-  <div class="d-flex flex-column w-50 scroll-item mh-100">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
-          <div>Results</div>
-        </a>
-      </div>
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-          <div>Help</div>
-        </a>
+
+
+  <div class="panel-group">
+    <div class="calculator-panel-container modification mh-100"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
+      <div class="d-flex flex-column m-4">
+        <form [formGroup]="headerPressureForm">
+          <div class="form-group">
+            <label class="small" for="headerPressure">Header Pressure</label>
+            <div class="input-group">
+              <input class="form-control" name="headerPressure" id="headerPressure" formControlName="headerPressure"
+                type="number" (input)="calculate()" (focus)="changeField('headerPressure')" onfocus="this.select();">
+              <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
+            </div>
+            <span class="alert-danger pull-right small"
+              *ngIf="headerPressureForm.controls.headerPressure.invalid && !headerPressureForm.controls.headerPressure.pristine">
+              <span *ngIf="headerPressureForm.controls.headerPressure.errors.required">Value Required</span>
+              <span *ngIf="headerPressureForm.controls.headerPressure.errors.max">Value can't be greater than
+                {{headerPressureForm.controls.headerPressure.errors.max.max}}
+                {{settings.steamPressureMeasurement}}.</span>
+              <span *ngIf="headerPressureForm.controls.headerPressure.errors.min">Value can't be less than
+                {{headerPressureForm.controls.headerPressure.errors.min.min}}
+                {{settings.steamPressureMeasurement}}.</span>
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="numInlets" class="small">Number of Inlets</label>
+            <select class="form-control" name="numInlets" id="numInlets" formControlName="numInlets" type="number"
+              (change)="getInletForms()" (focus)="changeField('numInlets')">
+              <option *ngFor="let numInletOption of numInletOptions" [ngValue]="numInletOption">{{numInletOption}}
+              </option>
+            </select>
+          </div>
+
+
+        </form>
+        <!-- <div class="form-group mt-2 mb-2">
+          <label for="numInlets">Number of Inlets</label>
+          <select (focus)="changeField('numInlets')" (change)="getInletForms()" class="form-control" [(ngModel)]="numInlets"
+            name="numInlets" id="numInlets">
+            <option *ngFor="let numInletOption of numInletOptions" [ngValue]="numInletOption">{{numInletOption}}</option>
+          </select>
+        </div> -->
+        <app-header-form *ngFor="let inletForm of inletForms; let index = index;" [inletForm]="inletForm"
+          [index]="index+1" [settings]="settings" (emitChangeField)="changeField($event, index)"
+          (emitCalculate)="saveInletForm($event, index)"></app-header-form>
+        <div class="w-100 justify-content-center btn-group btn-group-sm">
+          <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+            Reset Data
+          </button>
+          <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+          <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+            Generate Example
+          </button>
+        </div>
       </div>
     </div>
-    <div class="d-flex">
-      <app-header-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings"
-        [thermodynamicQuantity]="inletThermoQuantity"></app-header-help>
-      <div class="d-flex flex-column w-100 align-items-center p-4" *ngIf="tabSelect == 'results'">
-        <app-header-results *ngIf="results" class="w-100" [results]="results" [settings]="settings" (tableStringEmitter)="updateTable0String($event)"
-        [numberOfInlets]="headerPressureForm.controls.numInlets.value"></app-header-results>
- </div>
+
+    <div class="calculator-panel-container help-panel" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}"
+      [ngStyle]="{'height.px': containerHeight}">
+      <div class="d-flex flex-wrap tabs primary sticky-top">
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+          <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+            <div>Results</div>
+          </a>
+        </div>
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+          <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+            <div>Help</div>
+          </a>
+        </div>
+      </div>
+      <div class="d-flex">
+        <app-header-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings"
+          [thermodynamicQuantity]="inletThermoQuantity"></app-header-help>
+        <div class="d-flex flex-column w-100 align-items-center p-4" *ngIf="tabSelect == 'results'">
+          <app-header-results *ngIf="results" class="w-100" [results]="results" [settings]="settings"
+            (tableStringEmitter)="updateTable0String($event)"
+            [numberOfInlets]="headerPressureForm.controls.numInlets.value"></app-header-results>
+        </div>
+      </div>
     </div>
   </div>
 </div>

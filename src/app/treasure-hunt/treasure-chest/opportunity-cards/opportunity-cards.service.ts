@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt } from '../../../shared/models/treasure-hunt';
 import *  as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -29,6 +29,8 @@ import { WaterHeatingTreasureHuntService } from '../../treasure-hunt-calculator-
 import { CoolingTowerMakeupTreasureHuntService } from '../../treasure-hunt-calculator-services/cooling-tower-makeup-treasure-hunt.service';
 import { ChillerStagingTreasureHuntService } from '../../treasure-hunt-calculator-services/chiller-staging-treasure-hunt.service';
 import { ChillerPerformanceTreasureHuntService } from '../../treasure-hunt-calculator-services/chiller-performance-treasure-hunt.service';
+import { CoolingTowerFanTreasureHuntService } from '../../treasure-hunt-calculator-services/cooling-tower-fan-treasure-hunt.service';
+import { CoolingTowerBasinTreasureHuntService } from '../../treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
 
 @Injectable()
 export class OpportunityCardsService {
@@ -62,7 +64,9 @@ export class OpportunityCardsService {
     private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService,
     private coolingTowerMakeupTreasureHuntService: CoolingTowerMakeupTreasureHuntService,
     private chillerStagingTreasureHuntService: ChillerStagingTreasureHuntService,
-    private chillerPerformanceTreasureHuntService : ChillerPerformanceTreasureHuntService
+    private chillerPerformanceTreasureHuntService : ChillerPerformanceTreasureHuntService,
+    private coolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService,
+    private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService
     ) {
     this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
     this.opportunityCards = new BehaviorSubject(new Array());
@@ -95,6 +99,8 @@ export class OpportunityCardsService {
     let coolingTowerMakeupData: Array<OpportunityCardData> = this.getCoolingTowerMakeupOpportunities(treasureHunt.coolingTowerMakeupOpportunities, treasureHunt.currentEnergyUsage, settings);
     let chillerStaging: Array<OpportunityCardData> = this.getChillerStagingOpportunities(treasureHunt.chillerStagingOpportunities, treasureHunt.currentEnergyUsage, settings);
     let chillerPerformance: Array<OpportunityCardData> = this.getChillerPerformanceOpportunities(treasureHunt.chillerPerformanceOpportunities, treasureHunt.currentEnergyUsage, settings);
+    let coolingTowerFan: Array<OpportunityCardData> = this.getCoolingTowerFanOpportunities(treasureHunt.coolingTowerFanOpportunities, treasureHunt.currentEnergyUsage, settings);
+    let coolingTowerBasin: Array<OpportunityCardData> = this.getCoolingTowerBasinOpportunities(treasureHunt.coolingTowerBasinOpportunities, treasureHunt.currentEnergyUsage, settings);
 
     opportunityCardsData = _.union(
       lightingReplacementsCardData, 
@@ -120,7 +126,9 @@ export class OpportunityCardsService {
       flueGasData,
       coolingTowerMakeupData,
       chillerStaging,
-      chillerPerformance
+      chillerPerformance,
+      coolingTowerFan,
+      coolingTowerBasin
       );
     let index: number = 0;
     opportunityCardsData.forEach(card => {
@@ -668,13 +676,41 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
-  getChillerPerformanceOpportunities(chillerPerformanceOpportunities: Array<ChillerPerformanceTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData[] {
+  getChillerPerformanceOpportunities(chillerPerformanceOpportunities: Array<ChillerPerformanceTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
     if (chillerPerformanceOpportunities) {
       let index: number = 0;
       chillerPerformanceOpportunities.forEach(chillerPerformance => {
         let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(chillerPerformance, settings);
         let cardData: OpportunityCardData = this.chillerPerformanceTreasureHuntService.getChillerPerformanceCardData(chillerPerformance, opportunitySummary, index, currentEnergyUsage, settings);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+  getCoolingTowerFanOpportunities(coolingTowerFanOpportunities: Array<CoolingTowerFanTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (coolingTowerFanOpportunities) {
+      let index: number = 0;
+      coolingTowerFanOpportunities.forEach(coolingTowerFan => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(coolingTowerFan, settings);
+        let cardData: OpportunityCardData = this.coolingTowerFanTreasureHuntService.getCoolingTowerFanCardData(coolingTowerFan, opportunitySummary, index, currentEnergyUsage, settings);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+  getCoolingTowerBasinOpportunities(coolingTowerBasinOpportunities: Array<CoolingTowerBasinTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (coolingTowerBasinOpportunities) {
+      let index: number = 0;
+      coolingTowerBasinOpportunities.forEach(coolingTowerBasin => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(coolingTowerBasin, settings);
+        let cardData: OpportunityCardData = this.coolingTowerBasinTreasureHuntService.getCoolingTowerBasinCardData(coolingTowerBasin, opportunitySummary, index, currentEnergyUsage, settings);
         opportunityCardsData.push(cardData);
         index++;
       });
@@ -733,6 +769,8 @@ export interface OpportunityCardData {
   coolingTowerMakeup?: CoolingTowerMakeupWaterTreasureHunt;
   chillerStaging?: ChillerStagingTreasureHunt;
   chillerPerformance?: ChillerPerformanceTreasureHunt;
+  coolingTowerFan?: CoolingTowerFanTreasureHunt;
+  coolingTowerBasin?: CoolingTowerBasinTreasureHunt;
   iconCalcType?: string;
   needBackground?: boolean;
 }

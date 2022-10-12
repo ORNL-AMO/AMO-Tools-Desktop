@@ -25,6 +25,7 @@ export class ChillerStagingComponent implements OnInit {
 
   @ViewChild('contentContainer', { static: false }) public contentContainer: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -32,12 +33,13 @@ export class ChillerStagingComponent implements OnInit {
     }, 100);
   }
 
-  chillerPerformanceInputSub: Subscription;
-  chillerPerformanceInput: ChillerStagingInput;
+  chillerStagingInputSub: Subscription;
+  chillerStagingInput: ChillerStagingInput;
   // calcFormWidth: number;
   // calcFormWidthSub: Subscription;
   // resultsHelpWidth: number;
 
+  smallScreenTab: string = 'form';
   containerHeight: number;
   headerHeight: number;
   tabSelect: string = 'results';
@@ -51,8 +53,8 @@ export class ChillerStagingComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.chillerPerformanceInput = this.chillerStagingService.chillerStagingInput.getValue();
-    if (!this.chillerPerformanceInput) {
+    this.chillerStagingInput = this.chillerStagingService.chillerStagingInput.getValue();
+    if (!this.chillerStagingInput) {
       this.chillerStagingService.initDefaultEmptyInputs(this.settings);
       this.chillerStagingService.initDefaultEmptyOutputs();
     }
@@ -61,11 +63,11 @@ export class ChillerStagingComponent implements OnInit {
 
   ngOnDestroy() {
     if(!this.inTreasureHunt){
-      this.chillerStagingService.chillerStagingInput.next(this.chillerPerformanceInput);
+      this.chillerStagingService.chillerStagingInput.next(this.chillerStagingInput);
     } else {
       this.chillerStagingService.chillerStagingInput.next(undefined);
     }
-    this.chillerPerformanceInputSub.unsubscribe();
+    this.chillerStagingInputSub.unsubscribe();
     // this.calcFormWidthSub.unsubscribe();
   }
 
@@ -76,8 +78,8 @@ export class ChillerStagingComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this.chillerPerformanceInputSub = this.chillerStagingService.chillerStagingInput.subscribe(value => {
-      this.chillerPerformanceInput = value;
+    this.chillerStagingInputSub = this.chillerStagingService.chillerStagingInput.subscribe(value => {
+      this.chillerStagingInput = value;
       if(value){
         this.calculate();
       }
@@ -114,15 +116,22 @@ export class ChillerStagingComponent implements OnInit {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
   }
 
   save() {
-    this.emitSave.emit({ chillerStagingData: this.chillerPerformanceInput, opportunityType: Treasure.chillerStaging });
+    this.emitSave.emit({ chillerStagingData: this.chillerStagingInput, opportunityType: Treasure.chillerStaging });
   }
 
   cancel() {
     this.emitCancel.emit(true);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }
