@@ -8,9 +8,28 @@
   border-right: 1px solid rgba(0, 0, 0, 0.125);
 }
 
-.opp-sheet-col .fa.fa-edit{
-  text-align: center;
-  font-size: 35px;
+.fa.fa-edit{
+  text-align: right;
+  font-size: 25px;
+  color: #007BFF;
+  margin: auto;
+}
+.fa.fa-trash{
+  text-align: right;
+  font-size: 25px;
+  color: #DC3545;
+  margin: auto;
+}
+.fa.fa-copy{
+  text-align: right;
+  font-size: 25px;
+  color: #007BFF;
+  margin: auto;
+}
+.fa.fa-chevron-up{
+  text-align: right;
+  font-size: 15px;
+  color: #2E4053;
 }
 
 .opportunity-name a, .opportunity-name .fa{
@@ -63,7 +82,7 @@ a:not([href]):not([tabindex]):hover {
 
 .modal-dialog{
   top: 0px;
-  min-width: 750px;
+  min-width: 200px;
 }
   
 
@@ -133,4 +152,20 @@ tr.active{
   margin-bottom: 6px;
   margin-left: 7px;
   margin-right: 7px;
+}
+@media screen and (max-width: 1024px) {
+  .col-item-br{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    border-right: none;
+  }
+  .card.treasure-hunt-card{
+    padding: .25rem;
+    padding-bottom: 0px;
+    font-size: small;
+    margin-bottom: .4rem;
+  }
+  td{
+    font-size: small;
+    padding: 3px;
+  }
 }

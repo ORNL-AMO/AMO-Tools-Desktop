@@ -44,6 +44,9 @@ export class TreasureChestMenuComponent implements OnInit {
   showImportModalSub: Subscription;
   showExportModal: boolean;
   showExportModalSub: Subscription;
+
+  bannerCollapsed: boolean = true;
+
   constructor(private treasureChestMenuService: TreasureChestMenuService) { }
 
   ngOnInit() {
@@ -149,6 +152,9 @@ export class TreasureChestMenuComponent implements OnInit {
     if (this.navbar) {
       setTimeout(() => {
         this.navbarWidth = this.navbar.nativeElement.clientWidth * .95;
+        if(this.navbar.nativeElement.clientWidth > 991){
+          this.bannerCollapsed = false;
+        }
       }, 100);
     }
   }
@@ -159,5 +165,9 @@ export class TreasureChestMenuComponent implements OnInit {
 
   openExportModal() {
     this.treasureChestMenuService.showExportModal.next(true);
+  }
+  collapseBanner() {
+    this.bannerCollapsed = !this.bannerCollapsed;
+    window.dispatchEvent(new Event("resize"));
   }
 }

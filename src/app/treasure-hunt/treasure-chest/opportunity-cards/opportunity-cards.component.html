@@ -1,8 +1,8 @@
 <div class="row no-gutters">
   <div class="col-12 data-card" *ngFor="let cardData of opportunityCardsData | sortCardsBy: sortByVal">
     <div class="card treasure-hunt-card" [ngClass]="{ 'not-selected': !cardData.selected }">
-      <div class="card-body d-flex w-100 p-0">
-        <div class="col-2 col-item-br pl-0 pr-0">
+      <div class="card-body d-flex flex-wrap w-100 p-0">
+        <div class="col-12 col-lg-2 col-item-br pl-0 pr-0">
           <div class="input-group h-100">
             <div class="input-group-prepend col-item-br h-100">
               <input type="checkbox" [(ngModel)]="cardData.selected" (change)="toggleSelected(cardData)" />
@@ -17,7 +17,7 @@
                                                                                   'process-cooling-calc-icon': cardData.iconCalcType == 'processCooling'}">
                   <img src="{{ cardData.iconString }}" class="calc-icon" [ngClass]="{'circle-icon-img': cardData.needBackground}" />
                 </div>                
-                <div class="text-center">
+                <div class="text-center p-md-2">
                   <a (click)="editOpportunity(cardData)">
                     {{ cardData.name }}
                   </a>
@@ -26,8 +26,8 @@
             </div>
           </div>
         </div>
-        <div class="col-4 col-item-br opportunity-name pl-1 pr-1">
-          <div class="d-flex h-100 align-items-center w-100">
+        <div class="col-12 col-lg-4 col-item-br opportunity-name pl-1 pr-1">
+          <div class="d-flex h-100 justify-content-center align-items-center">
             <table class="mb-0">
               <tbody>
                 <tr class="no-border-top" [ngClass]="{ active: sortByVal.sortBy == 'teamName'}">
@@ -65,17 +65,24 @@
             </table>
           </div>
         </div>
-        <div class="col-3 col-item-br">
-          <div class="d-flex w-100 flex-wrap justify-content-center">
+        <div class="col-12 col-lg-3 col-item-br">
+          <div class="d-none d-lg-flex w-100 flex-wrap justify-content-center">
             <div class="text-center graph-col treasure-hunt-item w-100"
               *ngFor="let percentSaving of cardData.percentSavings">
               <div class="large">{{ percentSaving.label }} Cost Savings</div>
               <app-treasure-hunt-gauge [value]="percentSaving.percent" [chartHeight]="75"></app-treasure-hunt-gauge>
             </div>
           </div>
+          <div class="d-flex d-lg-none w-100 flex-wrap justify-content-center">
+            <div class="text-center graph-col treasure-hunt-item w-100"
+              *ngFor="let percentSaving of cardData.percentSavings">
+              <div class="large">{{ percentSaving.label }} Cost Savings: <span class="bold">{{ percentSaving.percent | number:"1.0-0"}}%</span> 
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-3 pr-0">
-          <div class="d-flex flex-column h-100 align-items-center w-100 justify-content-center">
+        <div class="col-12 col-lg-3 pr-0">
+          <div class="d-none d-lg-flex flex-column h-100 align-items-center w-100 justify-content-center">
             <div class="d-flex flex-column w-100 align-items-center"
               *ngIf="cardData.opportunityType != 'opportunity-sheet'"
               [ngClass]="{'no-opp-sheet': !cardData.opportunitySheet,'opp-sheet-exists': cardData.opportunitySheet }"
@@ -88,6 +95,28 @@
             <a class="click-link text-center" (click)="editOpportunity(cardData)">Edit Calculations</a>
             <a class="click-link text-center" (click)="createCopy(cardData)">Create Copy</a>
             <a class="click-link danger" (click)="setDeleteOpportunity(cardData)">Delete</a>
+          </div>
+          <div class="d-flex d-lg-none h-100 w-100 justify-content-center">
+            <!-- <div class="d-flex flex-column w-100 align-items-center"
+              *ngIf="cardData.opportunityType != 'opportunity-sheet'"
+              [ngClass]="{'no-opp-sheet': !cardData.opportunitySheet,'opp-sheet-exists': cardData.opportunitySheet }"
+              (click)="editOpportunitySheet(cardData)">
+              <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon" />
+              <a class="text-center" *ngIf="!cardData.opportunitySheet">Add Opportunity Sheet</a>
+              <a class="text-center" *ngIf="cardData.opportunitySheet">Edit Opportunity Sheet</a>
+            </div> -->
+            <div class="px-1" (click)="editOpportunitySheet(cardData)">
+              <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon pull-right" />
+            </div>
+            <div class="px-2 pt-1" (click)="editOpportunity(cardData)">
+              <i class="fa fa-edit pull-right"></i>
+            </div>
+            <div class="px-2 pt-1" (click)="createCopy(cardData)">
+              <i class="fa fa-copy pull-right"></i>
+            </div>
+            <div class="px-2 pt-1" (click)="setDeleteOpportunity(cardData)">
+              <i class="fa fa-trash pull-right"></i>
+            </div>
           </div>
         </div>
       </div>

@@ -37,35 +37,35 @@
     </div>
     <div class="row no-gutters justify-content-center">
       <!--electricity-->
-      <div class="col-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="electricityData.baselineCost != 0">
+      <div class="col-12 col-lg-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="electricityData.baselineCost != 0">
         <app-utility-summary [summaryData]="electricityData" [label]="'Electricity'"></app-utility-summary>
       </div>
       <!--natural gas-->
-      <div class="col-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="naturalGasData.baselineCost != 0">
+      <div class="col-12 col-lg-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="naturalGasData.baselineCost != 0">
         <app-utility-summary [summaryData]="naturalGasData" [label]="'Natural Gas'"></app-utility-summary>
       </div>
       <!--water-->
-      <div class="col-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="waterData.baselineCost != 0">
+      <div class="col-12 col-lg-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="waterData.baselineCost != 0">
         <app-utility-summary [summaryData]="waterData" [label]="'Water'"></app-utility-summary>
       </div>
       <!--compressed air-->
-      <div class="col-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="compressedAirData.baselineCost != 0">
+      <div class="col-12 col-lg-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="compressedAirData.baselineCost != 0">
         <app-utility-summary [summaryData]="compressedAirData" [label]="'Compressed Air'"></app-utility-summary>
       </div>
       <!--steam-->
-      <div class="col-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="steamData.baselineCost != 0">
+      <div class="col-12 col-lg-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="steamData.baselineCost != 0">
         <app-utility-summary [summaryData]="steamData" [label]="'Steam'"></app-utility-summary>
       </div>
       <!--waste water-->
-      <div class="col-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="wasteWaterData.baselineCost != 0">
+      <div class="col-12 col-lg-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="wasteWaterData.baselineCost != 0">
         <app-utility-summary [summaryData]="wasteWaterData" [label]="'Wastewater'"></app-utility-summary>
       </div>
       <!--other fuel-->
-      <div class="col-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="otherFuelData.baselineCost != 0">
+      <div class="col-12 col-lg-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="otherFuelData.baselineCost != 0">
         <app-utility-summary [summaryData]="otherFuelData" [label]="'Other Fuel'"></app-utility-summary>
       </div>
       <!--Additional Annual Savings-->
-      <div class="col-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="additionalAnnualSavings.totalCostSavings != 0">
+      <div class="col-12 col-lg-6 pl-2 pr-2 text-center treasure-hunt-item" *ngIf="additionalAnnualSavings.totalCostSavings != 0">
         <app-utility-summary [summaryData]="additionalAnnualSavings" [label]="'Other'"></app-utility-summary>
       </div>
     </div>

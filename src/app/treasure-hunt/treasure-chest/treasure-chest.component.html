@@ -1,12 +1,27 @@
-<div class="d-flex modify-conditions panel-container skyline" [ngClass]="{'hide': selectedCalc != 'none'}">
-  <div class="scroll-item chest-column pb-3" [ngStyle]="{'height.px': containerHeight}">
-    <app-treasure-chest-menu [settings]="settings"></app-treasure-chest-menu>
-    <div class="col-12 pt-2">
-      <app-opportunity-cards [settings]="settings"></app-opportunity-cards>
+<div class="calculator-container modify-conditions skyline" [ngClass]="{'hide': selectedCalc != 'none'}">
+
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link">Opportunity Cards</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Cost Savings</a>
     </div>
   </div>
-  <div class="scroll-item result-column justify-content-center mr-3 ml-3" [ngStyle]="{'height.px': containerHeight}">
-    <app-summary-card [settings]="settings"></app-summary-card>
+  <div class="panel-group">
+    <div class="calculator-panel-container chest-column" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+      <app-treasure-chest-menu [settings]="settings"></app-treasure-chest-menu>
+      <div class="col-12 pt-2">
+        <app-opportunity-cards [settings]="settings"></app-opportunity-cards>
+      </div>
+    </div>
+    <div class="calculator-panel-container result-column" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+      <app-summary-card [settings]="settings"></app-summary-card>
+    </div>
   </div>
 </div>
 
