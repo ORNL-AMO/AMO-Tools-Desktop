@@ -14,6 +14,7 @@ export class FsatBannerComponent implements OnInit {
 
   mainTab: string;
   mainTabSubscription: Subscription;
+  bannerCollapsed: boolean = true;
   constructor(private fsatService: FsatService) { }
 
   ngOnInit() {
@@ -32,5 +33,11 @@ export class FsatBannerComponent implements OnInit {
     } else if (this.assessment.fsat.setupDone) {
       this.fsatService.mainTab.next(str);
     }
+    this.collapseBanner();
+  }
+
+  collapseBanner() {
+    this.bannerCollapsed = !this.bannerCollapsed;
+    window.dispatchEvent(new Event("resize"));
   }
 }
