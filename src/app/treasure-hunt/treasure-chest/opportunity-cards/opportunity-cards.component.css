@@ -2,6 +2,7 @@
   padding: .25rem;
   padding-bottom: 0px;
   font-size: small;
+  border-color: rgba(0, 0, 0, 0.25);
 }
 
 .col-item-br{
@@ -42,6 +43,10 @@ a:not([href]):not([tabindex]):hover {
   cursor: pointer;
 }
 
+a.card-name-link {
+  font-size: medium;
+}
+
 .card.not-selected, .card.not-selected .card-header{
   background-color: #efefef;
 }
@@ -67,6 +72,10 @@ a:not([href]):not([tabindex]):hover {
   background-color: #efefef;
 } */
 .calc-icon{
+  width: 45px;
+}
+
+.edit-sheet-icon {
   width: 35px;
 }
 
@@ -116,8 +125,8 @@ tr.active{
 
 .steam-calc-icon, .ca-calc-icon, .ph-calc-icon, .lighting-calc-icon, .motor-calc-icon, .process-cooling-calc-icon {
   border-radius: 50%;
-  height: 35px;
-  width: 35px;
+  height: 45px;
+  width: 45px;
   display: flex;
 }
 
@@ -142,12 +151,12 @@ tr.active{
 }
 
 .process-cooling-calc-icon {
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #ADC8E2);
+  background: linear-gradient(to bottom right, #e4dbdb57, #ADC8E2);
 }
 
 .circle-icon-img{
   height: auto;
-  width: 20px;
+  width: 30px;
   margin-top: 7px;
   margin-bottom: 6px;
   margin-left: 7px;
@@ -162,10 +171,13 @@ tr.active{
     padding: .25rem;
     padding-bottom: 0px;
     font-size: small;
-    margin-bottom: .4rem;
+    border-color: rgba(0, 0, 0, 0.5);
   }
-  td{
-    font-size: small;
-    padding: 3px;
+  /* a.card-name-link {
+    font-size: medium;
+  } */
+  .col-item-br.checkbox-col{
+    border-right: 1px solid rgba(0, 0, 0, 0.125) !important;
+    border-bottom: none !important;
   }
 }
