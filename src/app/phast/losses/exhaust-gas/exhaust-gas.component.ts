@@ -5,7 +5,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { ExhaustGasEAF } from '../../../shared/models/phast/losses/exhaustGasEAF';
 import { ExhaustGasService } from './exhaust-gas.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-exhaust-gas',
@@ -140,7 +140,7 @@ export class ExhaustGasComponent implements OnInit {
 }
 
 export interface ExhaustGasObj {
-  form: FormGroup;
+  form: UntypedFormGroup;
   heatLoss: number;
   collapse: boolean;
 }

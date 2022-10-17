@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { SSMT, GeneralSteamOperations } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { OperationsService } from './operations.service';
 import { OperatingHours, OperatingCosts } from '../../shared/models/operations';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
@@ -43,7 +43,7 @@ export class OperationsComponent implements OnInit {
   co2SavingsFormDisabled: boolean = false;
   co2SavingsData: Co2SavingsData;
   co2SavingsDifferent: Co2SavingsDifferent;
-  operationsForm: FormGroup;
+  operationsForm: UntypedFormGroup;
 
   otherFuels: Array<OtherFuel>;
   fuelOptions: Array<{

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, HostListener, ElementRef, ViewChild, ChangeDe
 import { EnrichmentInput, EnrichmentOutput, EnrichmentInputData } from '../../../../shared/models/phast/o2Enrichment';
 import { Settings } from '../../../../shared/models/settings';
 import { O2EnrichmentService } from '../o2-enrichment.service';
-import { FormGroup, AbstractControl } from '@angular/forms';
+import { UntypedFormGroup, AbstractControl } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { Subscription } from 'rxjs';
 import { O2EnrichmentFormService } from '../o2-enrichment-form.service';
@@ -26,7 +26,7 @@ export class O2EnrichmentFormComponent implements OnInit {
   isEditingName: boolean = false;
   showOperatingHoursModal: boolean;
   operatingHoursControl: AbstractControl;
-  o2Form: FormGroup;
+  o2Form: UntypedFormGroup;
 
   currentEnrichmentIndexSub: Subscription;
   currentEnrichmentIndex: number;

@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, ViewChild, ElementRef, HostListener} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {UntypedFormGroup} from '@angular/forms';
 import {Settings} from '../../../shared/models/settings';
 import {SettingsDbService} from '../../../indexedDb/settings-db.service';
 import {SteamService} from '../steam.service';
@@ -31,7 +31,7 @@ export class TurbineComponent implements OnInit {
   smallScreenTab: string = 'form';
   tabSelect: string = 'results';
   currentField: string = 'default';
-  turbineForm: FormGroup;
+  turbineForm: UntypedFormGroup;
   input: TurbineInput;
   results: TurbineOutput;
   toggleGenerateExample: boolean = false;
@@ -85,7 +85,7 @@ export class TurbineComponent implements OnInit {
     }
   }
 
-  calculate(form: FormGroup) {
+  calculate(form: UntypedFormGroup) {
     this.input = this.turbineService.getObjFromForm(form);
     this.turbineService.turbineInput = this.input;
     if (this.input.inletPressure < this.input.outletSteamPressure) {

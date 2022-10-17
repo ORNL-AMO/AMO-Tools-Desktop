@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { MaterialInputProperties } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
@@ -9,10 +9,10 @@ import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 @Injectable()
 export class CondensingEconomizerFormService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  getCondensingEconomizerForm(inputObj: CondensingEconomizerInput, settings: Settings): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getCondensingEconomizerForm(inputObj: CondensingEconomizerInput, settings: Settings): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       fuelCost: [inputObj.fuelCost, [Validators.required, Validators.min(0)]],
       flueGasTemperature:[inputObj.flueGasTemperature, Validators.required],
@@ -54,7 +54,7 @@ export class CondensingEconomizerFormService {
 
   
 
-  getCondensingEconomizerInput(form: FormGroup): CondensingEconomizerInput {
+  getCondensingEconomizerInput(form: UntypedFormGroup): CondensingEconomizerInput {
     let obj: CondensingEconomizerInput = {
       operatingHours: form.controls.operatingHours.value,
       fuelCost: form.controls.fuelCost.value,
@@ -85,7 +85,7 @@ export class CondensingEconomizerFormService {
     return obj;
   }
 
-  getMaterialInputProperties(form: FormGroup): MaterialInputProperties {
+  getMaterialInputProperties(form: UntypedFormGroup): MaterialInputProperties {
     let input: MaterialInputProperties;
       input = {
         CH4: form.controls.CH4.value,
@@ -106,7 +106,7 @@ export class CondensingEconomizerFormService {
     return input;
   }
 
-  checkWarnings(form: FormGroup, settings: Settings): CondensingEconomizerWarnings {
+  checkWarnings(form: UntypedFormGroup, settings: Settings): CondensingEconomizerWarnings {
     if (form) {
       return {
         moistureInCombustionAir: this.checkMoistureInCombustionAir(form),
@@ -120,7 +120,7 @@ export class CondensingEconomizerFormService {
     }
   }
 
-  checkMoistureInCombustionAir(form: FormGroup): string {
+  checkMoistureInCombustionAir(form: UntypedFormGroup): string {
     if (form.value.moistureInCombustionAir) {
       if (form.value.moistureInCombustionAir > 1) {
         return `Moisture In Combustion Air is usually 1 or lower`;
@@ -129,7 +129,7 @@ export class CondensingEconomizerFormService {
     return null;
   }
 
-  checkO2Warning(form: FormGroup): string {
+  checkO2Warning(form: UntypedFormGroup): string {
     if (form.controls.flueGasO2.value < 0 || form.controls.flueGasO2.value >= 21) {
       return 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';
     } else {

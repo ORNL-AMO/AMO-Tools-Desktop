@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { ReplaceExistingData, ReplaceExistingResults } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
@@ -12,17 +12,17 @@ export class ReplaceExistingService {
 
   replaceExistingData: ReplaceExistingData;
   operatingHours: OperatingHours;
-  constructor(private formBuilder: FormBuilder, 
+  constructor(private formBuilder: UntypedFormBuilder, 
     private assessmentCo2Service: AssessmentCo2SavingsService, private convertUnitsService: ConvertUnitsService) { }
 
-  initForm(settings: Settings, operatingHours: number): FormGroup {
+  initForm(settings: Settings, operatingHours: number): UntypedFormGroup {
     let obj: ReplaceExistingData = this.initReplaceExistingData(settings, operatingHours);
-    let tmpForm: FormGroup = this.getFormFromObj(obj);
+    let tmpForm: UntypedFormGroup = this.getFormFromObj(obj);
     return tmpForm;
   }
 
-  getFormFromObj(inputObj: ReplaceExistingData): FormGroup {
-    let tmpForm: FormGroup = this.formBuilder.group({
+  getFormFromObj(inputObj: ReplaceExistingData): UntypedFormGroup {
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0)]],
       motorSize: [inputObj.motorSize, [Validators.required, Validators.min(0)]],
       load: [inputObj.load, [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -36,7 +36,7 @@ export class ReplaceExistingService {
     return tmpForm;
   }
 
-  getObjFromForm(form: FormGroup): ReplaceExistingData {
+  getObjFromForm(form: UntypedFormGroup): ReplaceExistingData {
     return {
       operatingHours: form.controls.operatingHours.value,
       motorSize: form.controls.motorSize.value,

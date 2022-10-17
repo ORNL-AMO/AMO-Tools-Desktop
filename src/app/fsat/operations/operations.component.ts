@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FSAT, FsatInput, FsatOperations } from '../../shared/models/fans';
 import { OperatingHours } from '../../shared/models/operations';
 import { Settings } from '../../shared/models/settings';
@@ -56,7 +56,7 @@ export class OperationsComponent implements OnInit {
 
   idString: string;
 
-  operationsForm: FormGroup;
+  operationsForm: UntypedFormGroup;
 
   constructor(private fsatWarningService: FsatWarningService, private assessmentCo2SavingsService: AssessmentCo2SavingsService, private compareService: CompareService, private operationsService: OperationsService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 

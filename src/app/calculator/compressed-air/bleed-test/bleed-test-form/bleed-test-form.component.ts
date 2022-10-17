@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { BleedTestInput } from '../../../../shared/models/standalone';
@@ -16,7 +16,7 @@ export class BleedTestFormComponent implements OnInit {
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
-  bleedForm: FormGroup;
+  bleedForm: UntypedFormGroup;
   bleedTestOutput: number;
   bleedTestOutputSub: Subscription;
   resetDataSub: Subscription;

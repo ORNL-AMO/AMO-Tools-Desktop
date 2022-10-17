@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 
 @Component({
@@ -11,7 +11,7 @@ import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 })
 export class MotorPerformanceFormComponent implements OnInit {
   @Input()
-  performanceForm: FormGroup;
+  performanceForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

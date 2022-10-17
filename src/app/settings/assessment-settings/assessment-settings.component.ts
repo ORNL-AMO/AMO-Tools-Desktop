@@ -3,7 +3,7 @@ import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../settings.service'
  
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { EGridService } from '../../shared/helper-services/e-grid.service';
 import { firstValueFrom } from 'rxjs';
 
@@ -15,7 +15,7 @@ import { firstValueFrom } from 'rxjs';
 export class AssessmentSettingsComponent implements OnInit {
 
   settings: Settings;
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
 
   //add boolean for each section
   showGeneralSettings: boolean = false;

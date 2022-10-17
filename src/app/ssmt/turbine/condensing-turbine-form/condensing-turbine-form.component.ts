@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { Quantity } from '../../../shared/models/steam/steam-inputs';
 import { CondensingTurbineOperationTypes } from '../../../shared/models/steam/ssmt';
@@ -14,7 +14,7 @@ import { TurbineService } from '../turbine.service';
 })
 export class CondensingTurbineFormComponent implements OnInit {
   @Input()
-  turbineForm: FormGroup;
+  turbineForm: UntypedFormGroup;
   @Input()
   selected: boolean;
   @Input()

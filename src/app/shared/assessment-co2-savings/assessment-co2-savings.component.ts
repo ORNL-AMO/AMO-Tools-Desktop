@@ -3,7 +3,7 @@ import { eGridRegion } from '../../calculator/utilities/co2-savings/co2-savings-
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import * as _ from 'lodash';
 import { AssessmentCo2SavingsService, Co2SavingsDifferent } from './assessment-co2-savings.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { EGridService, SubRegionData, SubregionEmissions } from '../helper-services/e-grid.service';
 import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -32,7 +32,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   emitCurrentField = new EventEmitter<string>();
 
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   hasValidSubRegion: boolean;
   subregions: Array<{
     subregion: string,

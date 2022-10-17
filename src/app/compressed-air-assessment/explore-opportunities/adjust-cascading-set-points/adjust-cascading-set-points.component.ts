@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, ValidatorFn } from '@angular/forms';
+import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AdjustCascadingSetPoints, CascadingSetPointData, ReduceSystemAirPressure, CompressedAirAssessment, CompressorInventoryItem, Modification } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
@@ -29,7 +29,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   setPointView: 'baseline' | 'modification' = 'modification';
   compressorForms: Array<CompressorForm>;
   settings: Settings;
-  implementationCostForm: FormGroup;
+  implementationCostForm: UntypedFormGroup;
   hasInvalidForm: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private performancePointsFormService: PerformancePointsFormService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,

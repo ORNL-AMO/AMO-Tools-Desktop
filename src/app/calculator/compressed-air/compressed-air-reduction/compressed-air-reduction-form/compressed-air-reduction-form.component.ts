@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirReductionService } from '../compressed-air-reduction.service';
 import { CompressedAirReductionResult, CompressedAirReductionData } from '../../../../shared/models/standalone';
@@ -97,7 +97,7 @@ export class CompressedAirReductionFormComponent implements OnInit {
 
   compressorCustomControl: boolean = false;
   compressorCustomSpecificPower: boolean = false;
-  form: FormGroup;
+  form: UntypedFormGroup;
   idString: string;
   individualResults: CompressedAirReductionResult;
   compressedAirResultsSub: Subscription;

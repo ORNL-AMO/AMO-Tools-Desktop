@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -170,8 +170,8 @@ export class ChargeMaterialService {
     }
   }
 
-  getMaterialNameForm(chargeMaterial: ChargeMaterial): FormGroup {
-    let form: FormGroup;
+  getMaterialNameForm(chargeMaterial: ChargeMaterial): UntypedFormGroup {
+    let form: UntypedFormGroup;
     if(chargeMaterial.solidChargeMaterial) {
       form = this.solidMaterialFormService.getSolidChargeMaterialForm(chargeMaterial, false);
     } else if(chargeMaterial.liquidChargeMaterial) {
@@ -184,7 +184,7 @@ export class ChargeMaterialService {
     return form;
   }
 
-  getMaterialObjectFromForm(materialNameForm: FormGroup, materialType: string) {
+  getMaterialObjectFromForm(materialNameForm: UntypedFormGroup, materialType: string) {
     let chargeMaterial: ChargeMaterial;
     if(materialType == 'Solid') {
       chargeMaterial = this.solidMaterialFormService.buildSolidChargeMaterial(materialNameForm);

@@ -3,7 +3,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { OpeningLossesCompareService } from '../opening-losses-compare.service';
 import { PhastService } from '../../../phast.service';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { OpeningService } from '../../../../calculator/furnaces/opening/opening.service';
 import { OpeningFormService } from '../../../../calculator/furnaces/opening/opening-form.service';
 import { ViewFactorInput } from '../../../../shared/models/phast/losses/openingLoss';
@@ -15,7 +15,7 @@ import { ViewFactorInput } from '../../../../shared/models/phast/losses/openingL
 })
 export class OpeningLossesFormComponent implements OnInit {
   @Input()
-  openingLossesForm: FormGroup;
+  openingLossesForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

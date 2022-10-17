@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { NameplateData } from '../../../motor-inventory';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 
 @Injectable()
 export class NameplateDataService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromNameplateData(nameplateData: NameplateData): FormGroup {
+  getFormFromNameplateData(nameplateData: NameplateData): UntypedFormGroup {
     return this.formBuilder.group({
       lineFrequency: [nameplateData.lineFrequency],
       ratedMotorPower: [nameplateData.ratedMotorPower, [Validators.min(0)]],
@@ -28,7 +28,7 @@ export class NameplateDataService {
     });
   }
 
-  updateNameplateDataFromForm(form: FormGroup, nameplateData: NameplateData): NameplateData {
+  updateNameplateDataFromForm(form: UntypedFormGroup, nameplateData: NameplateData): NameplateData {
     nameplateData.lineFrequency = form.controls.lineFrequency.value;
     nameplateData.ratedMotorPower = form.controls.ratedMotorPower.value;
     nameplateData.efficiencyClass = form.controls.efficiencyClass.value;

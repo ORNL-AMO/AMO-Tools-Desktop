@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class AtmosphereFormService {
 
-  constructor(private formBuilder: FormBuilder) {}
-  initForm(lossNum?: number): FormGroup {
+  constructor(private formBuilder: UntypedFormBuilder) {}
+  initForm(lossNum?: number): UntypedFormGroup {
     let formGroup = this.formBuilder.group({
       'atmosphereGas': ['', Validators.required],
       'specificHeat': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
@@ -19,16 +19,16 @@ export class AtmosphereFormService {
     });
 
     if (!lossNum) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-      formGroup.addControl('hoursPerYear', new FormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
-      formGroup.addControl('energySourceType', new FormControl('Fuel', [Validators.required]));
-      formGroup.addControl('fuelCost', new FormControl(''));
+      formGroup.addControl('availableHeat', new UntypedFormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
+      formGroup.addControl('hoursPerYear', new UntypedFormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
+      formGroup.addControl('energySourceType', new UntypedFormControl('Fuel', [Validators.required]));
+      formGroup.addControl('fuelCost', new UntypedFormControl(''));
     }
 
     return formGroup;
   }
 
-  getAtmosphereForm(loss: AtmosphereLoss, inAssessment: boolean = true): FormGroup {
+  getAtmosphereForm(loss: AtmosphereLoss, inAssessment: boolean = true): UntypedFormGroup {
     let formGroup = this.formBuilder.group({
       'atmosphereGas': [loss.atmosphereGas, Validators.required],
       'specificHeat': [loss.specificHeat, [Validators.required, GreaterThanValidator.greaterThan(0)]],
@@ -40,16 +40,16 @@ export class AtmosphereFormService {
     });
 
     if (!inAssessment) {
-      formGroup.addControl('availableHeat', new FormControl(loss.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-      formGroup.addControl('hoursPerYear', new FormControl(loss.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
-      formGroup.addControl('energySourceType', new FormControl(loss.energySourceType, [Validators.required]));
-      formGroup.addControl('fuelCost', new FormControl(loss.fuelCost));
+      formGroup.addControl('availableHeat', new UntypedFormControl(loss.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
+      formGroup.addControl('hoursPerYear', new UntypedFormControl(loss.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
+      formGroup.addControl('energySourceType', new UntypedFormControl(loss.energySourceType, [Validators.required]));
+      formGroup.addControl('fuelCost', new UntypedFormControl(loss.fuelCost));
     }
     
     return formGroup;
   }
 
-  getLossFromForm(form: FormGroup): AtmosphereLoss {
+  getLossFromForm(form: UntypedFormGroup): AtmosphereLoss {
     let tmpLoss: AtmosphereLoss = {
       atmosphereGas: form.controls.atmosphereGas.value,
       specificHeat: form.controls.specificHeat.value,

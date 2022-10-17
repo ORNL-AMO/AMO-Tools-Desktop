@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, DayTypeEndUse, EndUse } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
@@ -20,7 +20,7 @@ export class DayTypeUseFormComponent implements OnInit {
   compressedAirAssessment: CompressedAirAssessment;
   
   dayTypeEndUseResult: EndUseResults;
-  form: FormGroup;
+  form: UntypedFormGroup;
   isFormChange: boolean = false;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, 
     private dayTypeUseFormService: DayTypeUseFormService,

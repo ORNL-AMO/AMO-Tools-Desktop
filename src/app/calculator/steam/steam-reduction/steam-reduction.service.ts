@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SteamReductionData, FlowMeterMethodData, SteamFlowMeterMethodData, SteamMassFlowNameplateData, SteamMassFlowMeasuredData, SteamMassFlowMethodData, SteamOtherMethodData, SteamReductionResults, SteamReductionResult, SteamReductionInput } from '../../../shared/models/standalone';
 import { OperatingHours } from '../../../shared/models/operations';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { StandaloneService } from '../../standalone.service';
 import { Settings } from '../../../shared/models/settings';
@@ -15,7 +15,7 @@ export class SteamReductionService {
   modificationData: Array<SteamReductionData>;
   operatingHours: OperatingHours;
 
-  constructor(private fb: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
+  constructor(private fb: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   initObject(index: number, settings: Settings, operatingHours: OperatingHours, utilityType: number, steamCost: number, naturalGasCost: number, otherCost: number): SteamReductionData {
     let hoursPerYear: number = 8760;
@@ -85,7 +85,7 @@ export class SteamReductionService {
     return defaultSteamReduction;
   }
 
-  getFormFromObj(obj: SteamReductionData, index: number, isBaseline: boolean): FormGroup {
+  getFormFromObj(obj: SteamReductionData, index: number, isBaseline: boolean): UntypedFormGroup {
     //if utilityType 0 = steam, utilityType 1 = naturalGas, utilityType 2 = other
     let utilityCost: number = obj.steamUtilityCost;
     if (obj.utilityType == 1) {
@@ -94,7 +94,7 @@ export class SteamReductionService {
       utilityCost = obj.otherUtilityCost;
     }
 
-    let form: FormGroup = this.fb.group({
+    let form: UntypedFormGroup = this.fb.group({
       name: [obj.name, Validators.required],
       operatingHours: [obj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
       utilityType: [{ value: obj.utilityType, disabled: (index != 0 || !isBaseline) }],
@@ -131,7 +131,7 @@ export class SteamReductionService {
     return form;
   }
 
-  setValidators(form: FormGroup): FormGroup {
+  setValidators(form: UntypedFormGroup): UntypedFormGroup {
     switch (form.controls.measurementMethod.value) {
       case 0:
         form.controls.flowMeterFlowRate.setValidators([Validators.required, Validators.min(0)]);
@@ -168,7 +168,7 @@ export class SteamReductionService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup, obj: SteamReductionData): SteamReductionData {
+  getObjFromForm(form: UntypedFormGroup, obj: SteamReductionData): SteamReductionData {
 
     let flowMeterData: SteamFlowMeterMethodData = {
       flowRate: form.controls.flowMeterFlowRate.value

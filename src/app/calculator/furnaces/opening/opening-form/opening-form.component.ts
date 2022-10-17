@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
@@ -38,7 +38,7 @@ export class OpeningFormComponent implements OnInit {
     this.setOpHoursModalWidth();
   }
   
-  openingLossesForm: FormGroup;
+  openingLossesForm: UntypedFormGroup;
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
   outputSubscription: Subscription;
@@ -193,7 +193,7 @@ export class OpeningFormComponent implements OnInit {
   }
 
   checkCanCalculateViewFactor() {
-    let form: FormGroup = this.openingLossesForm;
+    let form: UntypedFormGroup = this.openingLossesForm;
     if (!this.selected) {
       form = this.getReadOnlyForm();
     }
@@ -214,8 +214,8 @@ export class OpeningFormComponent implements OnInit {
     }
   }
 
-  getReadOnlyForm(): FormGroup {
-    let formCopy: FormGroup = _.cloneDeep(this.openingLossesForm);
+  getReadOnlyForm(): UntypedFormGroup {
+    let formCopy: UntypedFormGroup = _.cloneDeep(this.openingLossesForm);
     // enable to read invalid controls
     formCopy.enable();
     // cloneDeep triggers valueChanges/enabled on form

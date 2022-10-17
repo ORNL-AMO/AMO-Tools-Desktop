@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, Input, ViewChild, HostListener, ElementRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { TankInsulationReductionService } from '../tank-insulation-reduction.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
@@ -28,7 +28,7 @@ export class TankInsulationReductionFormComponent implements OnInit {
   @Input()
   heatedOrChilled: number;
   @Input()
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   energyUnit: string;
   formWidth: number;

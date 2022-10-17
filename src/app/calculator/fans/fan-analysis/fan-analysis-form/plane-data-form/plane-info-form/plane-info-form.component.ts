@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PlaneData } from '../../../../../../shared/models/fans';
 import { Settings } from '../../../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ConvertUnitsService } from '../../../../../../shared/convert-units/convert-units.service';
 import { PlaneDataFormService } from '../plane-data-form.service';
 import { FanAnalysisService } from '../../../fan-analysis.service';
@@ -16,7 +16,7 @@ export class PlaneInfoFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  planeInfoForm: FormGroup;
+  planeInfoForm: UntypedFormGroup;
   sumSEF: number;
   resetFormSubscription: Subscription;
   constructor(private planeDataFormService: PlaneDataFormService, private convertUnitsService: ConvertUnitsService, private fanAnalysisService: FanAnalysisService,

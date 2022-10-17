@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ChillerPerformanceInput } from '../../../../shared/models/chillers';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -26,7 +26,7 @@ export class ChillerPerformanceFormComponent implements OnInit {
   onResize(event) {
     this.setOpHoursModalWidth();
   }
-  form: FormGroup;
+  form: UntypedFormGroup;
   characteristics: ChillerCharacteristics;
   
   resetDataSub: Subscription;

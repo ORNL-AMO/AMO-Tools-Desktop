@@ -3,7 +3,7 @@ import { ReplaceExistingService } from './replace-existing.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { ReplaceExistingData, ReplaceExistingResults } from '../../../shared/models/calculators';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../shared/models/operations';
 import { ReplaceExistingMotorTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
@@ -42,7 +42,7 @@ export class ReplaceExistingComponent implements OnInit {
   results: ReplaceExistingResults;
   inputs: ReplaceExistingData;
 
-  replaceExistingForm: FormGroup;
+  replaceExistingForm: UntypedFormGroup;
 
   constructor(private replaceExistingService: ReplaceExistingService, private settingsDbService: SettingsDbService) { }
 

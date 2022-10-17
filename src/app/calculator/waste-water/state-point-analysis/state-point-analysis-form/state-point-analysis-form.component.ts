@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { StatePointAnalysisInput } from '../../../../shared/models/waste-water';
@@ -25,7 +25,7 @@ export class StatePointAnalysisFormComponent implements OnInit {
   generateExampleSub: Subscription;
   baselineDataSub: Subscription;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   sviParameters: Array<{ value: number, display: string }>;
   idString: string;
   

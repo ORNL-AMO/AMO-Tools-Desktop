@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { BoilerInput, SSMT } from '../../shared/models/steam/ssmt';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
@@ -9,7 +9,7 @@ import { SteamService } from '../../calculator/steam/steam.service';
 @Injectable()
 export class BoilerService {
 
-  constructor(private formBuilder: FormBuilder, private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
   initForm(settings: Settings) {
     let tmpRanges: BoilerRanges = this.getRanges(settings);
@@ -33,7 +33,7 @@ export class BoilerService {
     });
   }
 
-  initFormFromObj(obj: BoilerInput, settings: Settings): FormGroup {
+  initFormFromObj(obj: BoilerInput, settings: Settings): UntypedFormGroup {
     let tmpRanges: BoilerRanges = this.getRanges(settings);
 
     let approachTempValidators: Array<ValidatorFn> = [];
@@ -41,7 +41,7 @@ export class BoilerService {
       approachTempValidators = [Validators.min(0.000005), Validators.required];
     }
     
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       'fuelType': [obj.fuelType, Validators.required],
       'fuel': [obj.fuel, Validators.required],
       'combustionEfficiency': [obj.combustionEfficiency, [Validators.required, Validators.min(50), Validators.max(100)]],
@@ -61,7 +61,7 @@ export class BoilerService {
     return form;
   }
 
-  initObjFromForm(form: FormGroup): BoilerInput {
+  initObjFromForm(form: UntypedFormGroup): BoilerInput {
     return {
       fuelType: form.controls.fuelType.value,
       fuel: form.controls.fuel.value,
@@ -103,7 +103,7 @@ export class BoilerService {
 
   isBoilerValid(boilerInput: BoilerInput, settings: Settings): boolean {
     if (boilerInput) {
-      let form: FormGroup = this.initFormFromObj(boilerInput, settings);
+      let form: UntypedFormGroup = this.initFormFromObj(boilerInput, settings);
       if (form.status === 'VALID') {
         return true;
       } else {
@@ -114,14 +114,14 @@ export class BoilerService {
     }
   }
 
-  checkBoilerWarnings(boilerForm: FormGroup, ssmt: SSMT, settings: Settings): BoilerWarnings {
+  checkBoilerWarnings(boilerForm: UntypedFormGroup, ssmt: SSMT, settings: Settings): BoilerWarnings {
     return {
       approachTemperature: this.checkApproachTempWarning(boilerForm, ssmt, settings)
     };
   }
 
 
-  checkApproachTempWarning(boilerForm: FormGroup, ssmt: SSMT, settings: Settings) {
+  checkApproachTempWarning(boilerForm: UntypedFormGroup, ssmt: SSMT, settings: Settings) {
     let warning = null;
     if (boilerForm.controls.preheatMakeupWater.value == true) {
       let pressure: number;

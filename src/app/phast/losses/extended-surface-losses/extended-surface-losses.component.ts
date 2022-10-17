@@ -6,7 +6,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { ExtendedSurfaceLossesService } from './extended-surface-losses.service';
 import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 @Component({
   selector: 'app-extended-surface-losses',
   templateUrl: './extended-surface-losses.component.html',
@@ -167,7 +167,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
 }
 
 export interface ExtSurfaceObj {
-  form: FormGroup;
+  form: UntypedFormGroup;
   heatLoss: number;
   collapse: boolean;
 }

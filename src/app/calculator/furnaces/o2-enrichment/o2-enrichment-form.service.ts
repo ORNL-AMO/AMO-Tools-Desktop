@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { O2EnrichmentMinMax, EnrichmentInputData, EnrichmentInput } from '../../../shared/models/phast/o2Enrichment';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, Validators, UntypedFormBuilder } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Injectable({
@@ -9,9 +9,9 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 })
 export class O2EnrichmentFormService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  initFormFromObj(settings: Settings, inputData: EnrichmentInputData): FormGroup {
+  initFormFromObj(settings: Settings, inputData: EnrichmentInputData): UntypedFormGroup {
     let tmpObj = JSON.parse(JSON.stringify(inputData));
     let ranges: O2EnrichmentMinMax = this.getMinMaxRanges(settings, tmpObj);
     if (!tmpObj.isBaseline) {
@@ -36,7 +36,7 @@ export class O2EnrichmentFormService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): EnrichmentInputData {
+  getObjFromForm(form: UntypedFormGroup): EnrichmentInputData {
     return {
       name: form.controls.name.value,
       isBaseline: form.controls.isBaseline.value,
@@ -50,7 +50,7 @@ export class O2EnrichmentFormService {
     };
   }
 
-  setRanges(o2Form: FormGroup, settings: Settings): FormGroup {
+  setRanges(o2Form: UntypedFormGroup, settings: Settings): UntypedFormGroup {
     let tmpInput: EnrichmentInputData = this.getObjFromForm(o2Form);
     let tmpRanges: O2EnrichmentMinMax = this.getMinMaxRanges(settings, tmpInput);
     o2Form.controls.o2CombAir.setValidators([Validators.required, Validators.max(tmpRanges.o2CombAirMax)]);

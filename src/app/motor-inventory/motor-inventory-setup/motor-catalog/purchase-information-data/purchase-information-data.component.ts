@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PurchaseInformationOptions, MotorItem } from '../../../motor-inventory';
 import { MotorCatalogService } from '../motor-catalog.service';
@@ -13,7 +13,7 @@ import { PurchaseInformationDataService } from './purchase-information-data.serv
 })
 export class PurchaseInformationDataComponent implements OnInit {
  
-  motorForm: FormGroup;
+  motorForm: UntypedFormGroup;
   selectedMotorItemSub: Subscription;
   displayOptions: PurchaseInformationOptions;
   displayForm: boolean = true;

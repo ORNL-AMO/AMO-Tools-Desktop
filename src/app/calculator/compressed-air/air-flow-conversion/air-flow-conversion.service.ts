@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AirFlowConversionInput, AirFlowConversionOutput } from '../../../shared/models/compressed-air/compressed-air';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, Validators, UntypedFormBuilder } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { cagiConditionsImperial, cagiConditionsMetric } from '../compressed-air-constants'
 import { SaturatedPropertiesInput } from '../../../shared/models/steam/steam-inputs';
@@ -19,7 +19,7 @@ export class AirFlowConversionService {
   generateExample: BehaviorSubject<boolean>;
 
   constructor(private convertUnitsService: ConvertUnitsService,
-              private formBuilder: FormBuilder) { 
+              private formBuilder: UntypedFormBuilder) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.airFlowConversionInput = new BehaviorSubject<AirFlowConversionInput>(undefined);
     this.airFlowConversionOutput = new BehaviorSubject<AirFlowConversionOutput>(undefined);
@@ -39,8 +39,8 @@ export class AirFlowConversionService {
     this.airFlowConversionOutput.next(emptyOutput);
   }
   
-  getAirFlowConversionFormFromObj(inputObj: AirFlowConversionInput, settings: Settings): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getAirFlowConversionFormFromObj(inputObj: AirFlowConversionInput, settings: Settings): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       elevation: [inputObj.elevation ],
       userDefinedPressure: [inputObj.userDefinedPressure],
       convertToStandard: [inputObj.convertToStandard],
@@ -121,7 +121,7 @@ export class AirFlowConversionService {
     return input;
   }
 
-  getAirFlowConversionObjFromForm(form: FormGroup): AirFlowConversionInput {
+  getAirFlowConversionObjFromForm(form: UntypedFormGroup): AirFlowConversionInput {
     let obj: AirFlowConversionInput = {
       elevation: form.controls.elevation.value,
       userDefinedPressure: form.controls.userDefinedPressure.value,
@@ -140,7 +140,7 @@ export class AirFlowConversionService {
     return obj;
   }
 
-  setValidators(form: FormGroup, settings: Settings): FormGroup {
+  setValidators(form: UntypedFormGroup, settings: Settings): UntypedFormGroup {
     form.controls.elevation.setValidators([Validators.min(0)]);
     form.controls.actualAtmosphericPressure.setValidators([Validators.required, Validators.min(0)]);
     form.controls.actualRelativeHumidity.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);

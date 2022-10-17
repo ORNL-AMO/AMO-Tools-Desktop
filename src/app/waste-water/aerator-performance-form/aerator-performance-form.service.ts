@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AeratorPerformanceData } from '../../shared/models/waste-water';
 
 @Injectable()
 export class AeratorPerformanceFormService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromObj(obj: AeratorPerformanceData): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getFormFromObj(obj: AeratorPerformanceData): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       OperatingDO: [obj.OperatingDO, [Validators.required, Validators.min(0)]],
       Alpha: [obj.Alpha, [Validators.required, Validators.min(0)]],
       Beta: [obj.Beta, [Validators.required, Validators.min(0)]],
@@ -29,7 +29,7 @@ export class AeratorPerformanceFormService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): AeratorPerformanceData {
+  getObjFromForm(form: UntypedFormGroup): AeratorPerformanceData {
     return {
       OperatingDO: form.controls.OperatingDO.value,
       Alpha: form.controls.Alpha.value,

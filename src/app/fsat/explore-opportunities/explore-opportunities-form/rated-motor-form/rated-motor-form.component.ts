@@ -5,7 +5,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
 import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
 import { PsatService } from '../../../../psat/psat.service';
-import { FormGroup, ValidatorFn } from '@angular/forms';
+import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { FanMotorService } from '../../../fan-motor/fan-motor.service';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 
@@ -24,9 +24,9 @@ export class RatedMotorFormComponent implements OnInit {
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
   @Input()
-  baselineForm: FormGroup;
+  baselineForm: UntypedFormGroup;
   @Input()
-  modificationForm: FormGroup;
+  modificationForm: UntypedFormGroup;
 
   efficiencyClasses: Array<{ value: number, display: string }>;
   constructor(

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CompareService } from '../../compare.service';
 import { PsatService } from '../../psat.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PsatWarningService, FieldDataWarnings, MotorWarnings, OperationsWarnings } from '../../psat-warning.service';
 import { Settings } from '../../../shared/models/settings';
@@ -72,12 +72,12 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setFieldDataBadgeClass() {
     let badgeStr: string = 'success';
-    let tmpBaselineFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this.compareService.baselinePSAT.inputs, true);
+    let tmpBaselineFieldDataForm: UntypedFormGroup = this.fieldDataService.getFormFromObj(this.compareService.baselinePSAT.inputs, true);
     let validBaselineTest = tmpBaselineFieldDataForm.valid;
     let validModTest = true;
     let isDifferent = false;
     if (this.compareService.modifiedPSAT) {
-      let tmpModificationFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this.compareService.modifiedPSAT.inputs, false);
+      let tmpModificationFieldDataForm: UntypedFormGroup = this.fieldDataService.getFormFromObj(this.compareService.modifiedPSAT.inputs, false);
       validModTest = tmpModificationFieldDataForm.valid;
       isDifferent = this.compareService.checkFieldDataDifferent();
     }
@@ -113,12 +113,12 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setPumpFluidBadgeClass() {
     let badgeStr: string = 'success';
-    let tmpBaselinePumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this.compareService.baselinePSAT.inputs);
+    let tmpBaselinePumpFluidForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(this.compareService.baselinePSAT.inputs);
     let validBaselineTest = tmpBaselinePumpFluidForm.valid;
     let validModTest = true;
     let isDifferent = false;
     if (this.compareService.modifiedPSAT) {
-      let tmpModificationPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this.compareService.modifiedPSAT.inputs);
+      let tmpModificationPumpFluidForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(this.compareService.modifiedPSAT.inputs);
       validModTest = tmpModificationPumpFluidForm.valid;
       isDifferent = this.compareService.checkPumpDifferent(this.settings);
     }
@@ -154,13 +154,13 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setMotorBadgeClass() {
     let badgeStr: string = 'success';
-    let tmpBaselineMotorForm: FormGroup = this.motorService.getFormFromObj(this.compareService.baselinePSAT.inputs);
+    let tmpBaselineMotorForm: UntypedFormGroup = this.motorService.getFormFromObj(this.compareService.baselinePSAT.inputs);
     let validBaselineTest = tmpBaselineMotorForm.valid;
     let inputError = this.checkMotorInputError();
     let validModTest = true;
     let isDifferent = false;
     if (this.compareService.modifiedPSAT) {
-      let tmpModificationMotorForm: FormGroup = this.motorService.getFormFromObj(this.compareService.modifiedPSAT.inputs);
+      let tmpModificationMotorForm: UntypedFormGroup = this.motorService.getFormFromObj(this.compareService.modifiedPSAT.inputs);
       validModTest = tmpModificationMotorForm.valid;
       isDifferent = this.compareService.checkMotorDifferent();
     }
@@ -195,12 +195,12 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setoperationsBadgeClass() {
     let badgeStr: string = 'success';
-    let tmpBaselineOperationsForm: FormGroup = this.pumpOperationsService.getFormFromObj(this.compareService.baselinePSAT.inputs, true);
+    let tmpBaselineOperationsForm: UntypedFormGroup = this.pumpOperationsService.getFormFromObj(this.compareService.baselinePSAT.inputs, true);
     let validBaselineTest = tmpBaselineOperationsForm.valid;
     let validModTest = true;
     let isDifferent = false;
     if (this.compareService.modifiedPSAT) {
-      let tmpModificationOperationsForm: FormGroup = this.pumpOperationsService.getFormFromObj(this.compareService.modifiedPSAT.inputs, false);
+      let tmpModificationOperationsForm: UntypedFormGroup = this.pumpOperationsService.getFormFromObj(this.compareService.modifiedPSAT.inputs, false);
       validModTest = tmpModificationOperationsForm.valid;
       isDifferent = this.compareService.checkOperationsDifferent();
     }

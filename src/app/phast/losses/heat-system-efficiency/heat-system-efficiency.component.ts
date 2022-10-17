@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 import { PhastService } from '../../phast.service';
 import { Losses, PHAST } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
@@ -31,12 +31,12 @@ export class HeatSystemEfficiencyComponent implements OnInit {
 
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
-  efficiencyForm: FormGroup;
+  efficiencyForm: UntypedFormGroup;
   systemLosses: number = 0;
   grossHeat: number = 0;
   resultsUnit: string;
   idString: string;
-  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private heatSystemEfficiencyCompareService: HeatSystemEfficiencyCompareService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private phastService: PhastService, private heatSystemEfficiencyCompareService: HeatSystemEfficiencyCompareService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -62,7 +62,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     }
   }
 
-  initForm(val?: number): FormGroup {
+  initForm(val?: number): UntypedFormGroup {
     if (val) {
       return this.formBuilder.group({
         efficiency: [val, Validators.required]

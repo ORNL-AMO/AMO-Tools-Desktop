@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 @Component({
   selector: 'app-head-tool-suction-form',
   templateUrl: './head-tool-suction-form.component.html',
@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class HeadToolSuctionFormComponent implements OnInit {
   @Input()
-  headToolSuctionForm: FormGroup;
+  headToolSuctionForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

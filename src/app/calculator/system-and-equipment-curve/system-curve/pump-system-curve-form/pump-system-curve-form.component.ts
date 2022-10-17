@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PumpSystemCurveFormService } from '../pump-system-curve-form.service';
 import { Settings } from '../../../../shared/models/settings';
 import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
@@ -30,7 +30,7 @@ export class PumpSystemCurveFormComponent implements OnInit {
 
   pointOneFluidPower: number = 0;
   pointTwoFluidPower: number = 0;
-  pumpSystemCurveForm: FormGroup;
+  pumpSystemCurveForm: UntypedFormGroup;
   resetFormsSub: Subscription;
   pumpModificationCollapsed: string = 'closed';
 

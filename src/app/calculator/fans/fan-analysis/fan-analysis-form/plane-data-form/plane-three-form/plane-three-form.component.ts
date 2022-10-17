@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Plane } from '../../../../../../shared/models/fans';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PlaneDataFormService } from '../plane-data-form.service';
 import { FanAnalysisService } from '../../../fan-analysis.service';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ export class PlaneThreeFormComponent implements OnInit {
   planeNum: string;
 
   planeData: Plane;
-  pitotDataForm: FormGroup;
+  pitotDataForm: UntypedFormGroup;
   pressureReadings: Array<Array<number>>;
   resetFormSubscription: Subscription;
   updateTraverseDataSubscription: Subscription;

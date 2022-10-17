@@ -4,7 +4,7 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { CoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { CoolingLossesCompareService } from './cooling-losses-compare.service';
 import { CoolingFormService } from '../../../calculator/furnaces/cooling/cooling-form.service';
 
@@ -245,8 +245,8 @@ export class CoolingLossesComponent implements OnInit {
 
 export interface CoolingLossObj {
   coolingMedium: string;
-  gasCoolingForm: FormGroup;
-  liquidCoolingForm: FormGroup;
+  gasCoolingForm: UntypedFormGroup;
+  liquidCoolingForm: UntypedFormGroup;
   heatLoss: number;
   collapse: boolean;
 }

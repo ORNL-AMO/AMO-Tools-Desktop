@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AirHeatingInput } from '../../../shared/models/phast/airHeating';
 import { MaterialInputProperties } from '../../../shared/models/phast/losses/flueGas';
 
 @Injectable()
 export class AirHeatingFormService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getAirHeatingForm(inputObj: AirHeatingInput): FormGroup {
+  getAirHeatingForm(inputObj: AirHeatingInput): UntypedFormGroup {
     let moistureInAirCombustion: number = .0077;
     if (inputObj.moistureInAirCombustion != undefined) {
       moistureInAirCombustion = inputObj.moistureInAirCombustion;
     }
 
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       utilityType: [inputObj.utilityType],
       operatingHours: [inputObj.operatingHours, Validators.required],
       gasFuelType: [inputObj.gasFuelType],
@@ -56,7 +56,7 @@ export class AirHeatingFormService {
     return form;
   }
 
-  getAirHeatingInputGasMaterial(form: FormGroup): AirHeatingInput {
+  getAirHeatingInputGasMaterial(form: UntypedFormGroup): AirHeatingInput {
     let obj: AirHeatingInput = {
       utilityType: form.controls.utilityType.value,
       operatingHours: form.controls.operatingHours.value,
@@ -89,7 +89,7 @@ export class AirHeatingFormService {
     return obj;
   }
 
-  getAirHeatingInputSolidMaterial(form: FormGroup): AirHeatingInput {
+  getAirHeatingInputSolidMaterial(form: UntypedFormGroup): AirHeatingInput {
     let obj: AirHeatingInput = {
       operatingHours: form.controls.operatingHours.value,
       utilityType: form.controls.utilityType.value,
@@ -119,7 +119,7 @@ export class AirHeatingFormService {
     return obj;
   }
   
-  getMaterialInputProperties(form: FormGroup): MaterialInputProperties {
+  getMaterialInputProperties(form: UntypedFormGroup): MaterialInputProperties {
     let input: MaterialInputProperties;
     if (form.controls.gasFuelType.value == true) {
       input = {
@@ -155,7 +155,7 @@ export class AirHeatingFormService {
     return input;
   }
 
-  checkO2Warning(form: FormGroup): string {
+  checkO2Warning(form: UntypedFormGroup): string {
     if (form.controls.flueGasO2.value < 0 || form.controls.flueGasO2.value >= 21) {
       return 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';
     } else {

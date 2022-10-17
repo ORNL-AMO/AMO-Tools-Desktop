@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { GasLeakageCompareService } from '../../gas-leakage-losses/gas-leakage-compare.service';
 import { LeakageLoss } from '../../../../shared/models/phast/losses/leakageLoss';
 import { Subscription } from 'rxjs';
@@ -99,7 +99,7 @@ export class GasLeakageTabComponent implements OnInit {
 
 
   checkLossValid(loss: LeakageLoss) {
-      let tmpForm: FormGroup = this.leakageFormService.initFormFromLoss(loss);
+      let tmpForm: UntypedFormGroup = this.leakageFormService.initFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {

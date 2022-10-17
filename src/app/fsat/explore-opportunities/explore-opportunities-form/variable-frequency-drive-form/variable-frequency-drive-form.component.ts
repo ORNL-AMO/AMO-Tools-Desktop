@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FanFieldDataWarnings } from '../../../fsat-warning.service';
 import { FSAT } from '../../../../shared/models/fans';
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
@@ -13,17 +13,17 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class VariableFrequencyDriveFormComponent implements OnInit {
   @Input()
-  baselineFieldDataForm: FormGroup;
+  baselineFieldDataForm: UntypedFormGroup;
   @Input()
-  modificationFieldDataForm: FormGroup;
+  modificationFieldDataForm: UntypedFormGroup;
   @Input()
-  baselineMotorForm: FormGroup;
+  baselineMotorForm: UntypedFormGroup;
   @Input()
-  modificationMotorForm: FormGroup;
+  modificationMotorForm: UntypedFormGroup;
   @Input()
-  baselineFanSetupForm: FormGroup;
+  baselineFanSetupForm: UntypedFormGroup;
   @Input()
-  modificationFanSetupForm: FormGroup;
+  modificationFanSetupForm: UntypedFormGroup;
   @Input()
   baselineFanEfficiency: number;
   @Input()

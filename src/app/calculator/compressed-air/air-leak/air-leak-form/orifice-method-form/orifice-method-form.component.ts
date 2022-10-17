@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { AirLeakService } from '../../air-leak.service';
 import { AirLeakFormService } from '../air-leak-form.service';
 import { AirLeakSurveyData, AirLeakSurveyInput, OrificeMethodData } from '../../../../../shared/models/standalone';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
@@ -18,7 +18,7 @@ export class OrificeMethodFormComponent implements OnInit {
   currentLeakIndexSub: Subscription;
   currentLeakIndex: number;
 
-  orificeMethodForm: FormGroup;
+  orificeMethodForm: UntypedFormGroup;
 
   constructor(private airLeakService: AirLeakService,
     private airLeakFormService: AirLeakFormService) { }

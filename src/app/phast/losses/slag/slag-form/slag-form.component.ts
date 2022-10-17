@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { SlagCompareService } from '../slag-compare.service';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-slag-form',
@@ -10,7 +10,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class SlagFormComponent implements OnInit {
   @Input()
-  slagLossForm: FormGroup;
+  slagLossForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

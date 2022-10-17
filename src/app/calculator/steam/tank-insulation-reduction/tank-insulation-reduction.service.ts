@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { OperatingHours } from '../../../shared/models/operations';
 import { TankInsulationReductionInput, TankInsulationReductionResult, TankInsulationReductionResults } from '../../../shared/models/standalone';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { StandaloneService } from '../../standalone.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
@@ -17,7 +17,7 @@ export class TankInsulationReductionService {
   modificationData: TankInsulationReductionInput;
   operatingHours: OperatingHours;
 
-  constructor(private fb: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
+  constructor(private fb: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   initObject(settings: Settings, operatingHours: OperatingHours): TankInsulationReductionInput {
     let hoursPerYear = 8760;
@@ -51,8 +51,8 @@ export class TankInsulationReductionService {
     return obj;
   }
 
-  getFormFromObj(obj: TankInsulationReductionInput, isBaseline: boolean): FormGroup {
-    let form: FormGroup = this.fb.group({
+  getFormFromObj(obj: TankInsulationReductionInput, isBaseline: boolean): UntypedFormGroup {
+    let form: UntypedFormGroup = this.fb.group({
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       utilityType: [{ value: obj.utilityType, disabled: !isBaseline }],
       utilityCost: [{ value: obj.utilityCost, disabled: !isBaseline }, [Validators.required, Validators.min(0)]],
@@ -91,7 +91,7 @@ export class TankInsulationReductionService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup, data: TankInsulationReductionInput, settings: Settings): TankInsulationReductionInput {
+  getObjFromForm(form: UntypedFormGroup, data: TankInsulationReductionInput, settings: Settings): TankInsulationReductionInput {
     let naturalGasUtilityCost = data.naturalGasUtilityCost;
     let otherUtilityCost = data.otherUtilityCost;
     if (form.controls.utilityType.value == 0) {
@@ -140,7 +140,7 @@ export class TankInsulationReductionService {
     return obj;
   }
 
-  setSurfaceTempValidators(form: FormGroup): FormGroup {
+  setSurfaceTempValidators(form: UntypedFormGroup): UntypedFormGroup {
     if (form.controls.insulationMaterialSelection.value != 0) {
       form.controls.surfaceTemperature.setValidators([Validators.required, GreaterThanValidator.greaterThan(form.controls.ambientTemperature.value), LessThanValidator.lessThan(form.controls.tankTemperature.value)]);  
     } else {

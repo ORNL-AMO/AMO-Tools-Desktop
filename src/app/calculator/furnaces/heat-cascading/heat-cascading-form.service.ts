@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HeatCascadingInput } from '../../../shared/models/phast/heatCascading';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
@@ -7,10 +7,10 @@ import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 export class HeatCascadingFormService {
 
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getHeatCascadingForm(inputObj: HeatCascadingInput): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getHeatCascadingForm(inputObj: HeatCascadingInput): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       utilityType: [inputObj.utilityType],
       priFiringRate: [inputObj.priFiringRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       priExhaustTemperature: [inputObj.priExhaustTemperature, Validators.required],
@@ -49,7 +49,7 @@ export class HeatCascadingFormService {
     return form;
   }
 
-  getHeatCascadingInput(form: FormGroup): HeatCascadingInput {
+  getHeatCascadingInput(form: UntypedFormGroup): HeatCascadingInput {
     let obj: HeatCascadingInput = {
       utilityType: form.controls.utilityType.value,
       priFiringRate: form.controls.priFiringRate.value,

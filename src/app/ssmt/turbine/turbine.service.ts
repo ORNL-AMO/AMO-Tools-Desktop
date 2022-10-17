@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { TurbineInput, PressureTurbine, CondensingTurbine, HeaderInput } from '../../shared/models/steam/ssmt';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
@@ -7,7 +7,7 @@ import { Settings } from '../../shared/models/settings';
 @Injectable()
 export class TurbineService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
   initTurbineInputObj(): TurbineInput {
     return {
@@ -40,7 +40,7 @@ export class TurbineService {
     }
   }
 
-  initCondensingTurbineForm(settings: Settings): FormGroup {
+  initCondensingTurbineForm(settings: Settings): UntypedFormGroup {
     let tmpCondensingPressureMin: number = this.convertUnitsService.value(.2).from('psia').to(settings.steamVacuumPressure);
     tmpCondensingPressureMin = this.convertUnitsService.roundVal(tmpCondensingPressureMin, 1);
     let tmpCondensingPressureMax: number = this.convertUnitsService.value(14.6).from('psia').to(settings.steamVacuumPressure);
@@ -56,13 +56,13 @@ export class TurbineService {
     })
   }
 
-  getCondensingFormFromObj(obj: CondensingTurbine, settings: Settings): FormGroup {
+  getCondensingFormFromObj(obj: CondensingTurbine, settings: Settings): UntypedFormGroup {
     let tmpCondensingPressureMin: number = this.convertUnitsService.value(.2).from('psia').to(settings.steamVacuumPressure);
     tmpCondensingPressureMin = this.convertUnitsService.roundVal(tmpCondensingPressureMin, 1);
     let tmpCondensingPressureMax: number = this.convertUnitsService.value(14.6).from('psia').to(settings.steamVacuumPressure);
     tmpCondensingPressureMax = this.convertUnitsService.roundVal(tmpCondensingPressureMax, 1);
     let tmpOperationValueRanges: { min: number, max: number } = this.getCondensingOperationRange(obj.operationType);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       isentropicEfficiency: [obj.isentropicEfficiency, [Validators.required, Validators.min(20), Validators.max(100)]],
       generationEfficiency: [obj.generationEfficiency, [Validators.required, Validators.min(50), Validators.max(100)]],
       condenserPressure: [obj.condenserPressure, [Validators.required, Validators.min(tmpCondensingPressureMin), Validators.max(tmpCondensingPressureMax)]],
@@ -90,7 +90,7 @@ export class TurbineService {
     }
   }
 
-  getCondensingTurbineFromForm(form: FormGroup): CondensingTurbine {
+  getCondensingTurbineFromForm(form: UntypedFormGroup): CondensingTurbine {
     return {
       isentropicEfficiency: form.controls.isentropicEfficiency.value,
       generationEfficiency: form.controls.generationEfficiency.value,
@@ -101,9 +101,9 @@ export class TurbineService {
     }
   }
 
-  initPressureForm(): FormGroup {
+  initPressureForm(): UntypedFormGroup {
     let operationValidators: { operationValue1Validators: Array<ValidatorFn>, operationValue2Validators: Array<ValidatorFn> } = this.getPressureOperationValueRanges();
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       isentropicEfficiency: [, [Validators.required, Validators.min(20), Validators.max(100)]],
       generationEfficiency: [, [Validators.required, Validators.min(50), Validators.max(100)]],
       operationType: [0, Validators.required],
@@ -114,9 +114,9 @@ export class TurbineService {
     return form;
   }
 
-  getPressureFormFromObj(obj: PressureTurbine): FormGroup {
+  getPressureFormFromObj(obj: PressureTurbine): UntypedFormGroup {
     let operationValidators: { operationValue1Validators: Array<ValidatorFn>, operationValue2Validators: Array<ValidatorFn> } = this.getPressureOperationValueRanges(obj);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       isentropicEfficiency: [obj.isentropicEfficiency, [Validators.required, Validators.min(20), Validators.max(100)]],
       generationEfficiency: [obj.generationEfficiency, [Validators.required, Validators.min(50), Validators.max(100)]],
       operationType: [obj.operationType, Validators.required],
@@ -167,7 +167,7 @@ export class TurbineService {
     }
   }
 
-  getPressureTurbineFromForm(form: FormGroup): PressureTurbine {
+  getPressureTurbineFromForm(form: UntypedFormGroup): PressureTurbine {
     return {
       isentropicEfficiency: form.controls.isentropicEfficiency.value,
       generationEfficiency: form.controls.generationEfficiency.value,
@@ -186,7 +186,7 @@ export class TurbineService {
       let mediumToLowTurbineValid: boolean = true;
       if (obj.condensingTurbine) {
         if (obj.condensingTurbine.useTurbine && headerObj.numberOfHeaders >= 1) {
-          let tmpForm: FormGroup = this.getCondensingFormFromObj(obj.condensingTurbine, settings);
+          let tmpForm: UntypedFormGroup = this.getCondensingFormFromObj(obj.condensingTurbine, settings);
           if (tmpForm.invalid) {
             condensingTurbineValid = false;
           }
@@ -194,7 +194,7 @@ export class TurbineService {
       }
       if (obj.highToLowTurbine) {
         if (obj.highToLowTurbine.useTurbine && headerObj.numberOfHeaders >= 2) {
-          let tmpForm: FormGroup = this.getPressureFormFromObj(obj.highToLowTurbine);
+          let tmpForm: UntypedFormGroup = this.getPressureFormFromObj(obj.highToLowTurbine);
           if (tmpForm.invalid) {
             highToLowTurbineValid = false;
           }
@@ -202,7 +202,7 @@ export class TurbineService {
       }
       if (obj.highToMediumTurbine) {
         if (obj.highToMediumTurbine.useTurbine && headerObj.numberOfHeaders >= 3) {
-          let tmpForm: FormGroup = this.getPressureFormFromObj(obj.highToMediumTurbine);
+          let tmpForm: UntypedFormGroup = this.getPressureFormFromObj(obj.highToMediumTurbine);
           if (tmpForm.invalid) {
             highToMediumTurbineValid = false;
           }
@@ -210,7 +210,7 @@ export class TurbineService {
       }
       if (obj.mediumToLowTurbine) {
         if (obj.mediumToLowTurbine.useTurbine && headerObj.numberOfHeaders >= 3) {
-          let tmpForm: FormGroup = this.getPressureFormFromObj(obj.mediumToLowTurbine);
+          let tmpForm: UntypedFormGroup = this.getPressureFormFromObj(obj.mediumToLowTurbine);
           if (tmpForm.invalid) {
             mediumToLowTurbineValid = false;
           }

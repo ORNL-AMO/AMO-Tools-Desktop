@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
@@ -19,7 +19,7 @@ export class MaterialNameFormComponent implements OnInit {
   selected: boolean;
   @Input()
   index: number;
-  materialNameForm: FormGroup;
+  materialNameForm: UntypedFormGroup;
   isEditingName: boolean;
   materialType: string;
   

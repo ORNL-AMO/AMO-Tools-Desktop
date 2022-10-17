@@ -3,7 +3,7 @@ import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Assessment } from '../../shared/models/assessment';
 import { PsatWarningService, OperationsWarnings } from '../psat-warning.service';
 import { PsatService } from '../psat.service';
@@ -50,7 +50,7 @@ export class PumpOperationsComponent implements OnInit {
   totalEmissionOutputRateDifferent: boolean = false;
   totalEmissionOutputRateDifferentSub: Subscription;
 
-  psatForm: FormGroup;
+  psatForm: UntypedFormGroup;
   operationsWarnings: OperationsWarnings;
   idString: string;
 
