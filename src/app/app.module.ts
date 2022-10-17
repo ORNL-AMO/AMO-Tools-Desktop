@@ -18,8 +18,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
-      registrationStrategy: 'registerImmediately',
-      // registrationStrategy: 'registerWhenStable:30000'
+      // registrationStrategy: 'registerImmediately',
+      registrationStrategy: 'registerWhenStable:30000'
     }),
   ],
   entryComponents: [AppComponent],
@@ -44,9 +44,14 @@ export function loadScriptFromPath(id: string, url: string): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     script = document.createElement("script");
     document.body.appendChild(script);
-
-    script.onload = () => resolve();
-    script.onerror = (ev: ErrorEvent) => reject(ev.error);
+    // TEST main.ts error
+    // throw new WebAssembly.RuntimeError('TESTING - MODULE RUNTIME ERROR');
+    script.onload = () => {
+      resolve()
+    };
+    script.onerror = (ev: ErrorEvent) => {
+      reject(ev.error);
+    };
     script.id = id;
     script.async = true;
     script.src = url;
@@ -69,7 +74,10 @@ export function initializeWasmScript(): Promise<any> {
     // load client.js, ensure module created before app init
     loadScriptFromPath('wasmClient', `client.js`)
       .then(() => {
-        const module = <any> {locateFile: (file: string) => {}};
+        const module = <any>{ locateFile: (file: string) => { } };
       })
+      .catch(err => {
+        reject(err)
+      });
   });
 }

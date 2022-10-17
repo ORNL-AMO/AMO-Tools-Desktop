@@ -11,4 +11,9 @@ platformBrowserDynamic().bootstrapModule(AppModule).then((() => {
   if ('serviceWorker' in navigator && environment.production) {
     navigator.serviceWorker.register('ngsw-worker.js');
   }
-})).catch(err => console.log(err));
+})).catch(err => {
+  const loadingSpinnerElement = document.getElementById('loadingSpinner');
+  const loadingErrorElement = document.getElementById('loadingError');
+  loadingErrorElement.setAttribute('style', 'display: block;');
+  loadingSpinnerElement.setAttribute('style', 'display: none;');
+});
