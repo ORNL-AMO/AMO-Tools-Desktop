@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -79,7 +79,7 @@ export class OpeningService {
     this.output.next(output);
   }
 
-  getOpeningLossResult(openingLossData: OpeningLoss, openingForm: FormGroup, settings: Settings): OpeningLossResults {
+  getOpeningLossResult(openingLossData: OpeningLoss, openingForm: UntypedFormGroup, settings: Settings): OpeningLossResults {
     let energyUnit = this.getAnnualEnergyUnit(openingLossData.energySourceType, settings);
     let result: OpeningLossResults = {
       openingLoss: 0,
@@ -209,7 +209,7 @@ export class OpeningService {
     return this.phastService.viewFactorCalculation(viewFactorInput, settings);
   }
 
-  getViewFactorInput(input: FormGroup) {
+  getViewFactorInput(input: UntypedFormGroup) {
     if (input.controls.openingType.value === 'Round') {
       return {
         openingShape: 0,

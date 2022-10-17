@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, EndUseEfficiencyItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, Modification, ProfileSummary, ProfileSummaryTotal, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
@@ -189,11 +189,11 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
     this.hasInvalidForm = false;
     this.improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => {
       if (!this.hasInvalidForm) {
-        let form: FormGroup = this.improveEndUseEfficiencyService.getFormFromObj(item, this.baselineResults);
+        let form: UntypedFormGroup = this.improveEndUseEfficiencyService.getFormFromObj(item, this.baselineResults);
         if (form.invalid) {
           this.hasInvalidForm = true;
         } else {
-          let dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: FormGroup }> = this.improveEndUseEfficiencyService.getDataForms(item, this.baselineProfileSummaries);
+          let dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: UntypedFormGroup }> = this.improveEndUseEfficiencyService.getDataForms(item, this.baselineProfileSummaries);
           dataForms.forEach(dataForm => {
             if (dataForm.form.invalid) {
               this.hasInvalidForm = true;

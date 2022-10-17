@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SlagService } from '../../slag/slag.service';
 import { SlagCompareService } from '../../slag/slag-compare.service';
 import { Slag } from '../../../../shared/models/phast/losses/slag';
@@ -84,7 +84,7 @@ export class SlagTabComponent implements OnInit {
 
 
   checkLossValid(loss: Slag) {
-      let tmpForm: FormGroup = this.slagService.getFormFromLoss(loss);
+      let tmpForm: UntypedFormGroup = this.slagService.getFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {

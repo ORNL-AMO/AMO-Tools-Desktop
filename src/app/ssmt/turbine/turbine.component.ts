@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { TurbineInput, CondensingTurbine, PressureTurbine } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { TurbineService } from './turbine.service';
 import { SsmtService } from '../ssmt.service';
 
@@ -28,10 +28,10 @@ export class TurbineComponent implements OnInit {
   @Input()
   modificationIndex: number;
 
-  condensingTurbineForm: FormGroup;
-  highToLowTurbineForm: FormGroup;
-  highToMediumTurbineForm: FormGroup;
-  mediumToLowTurbineForm: FormGroup;
+  condensingTurbineForm: UntypedFormGroup;
+  highToLowTurbineForm: UntypedFormGroup;
+  highToMediumTurbineForm: UntypedFormGroup;
+  mediumToLowTurbineForm: UntypedFormGroup;
   idString: string = 'baseline_';
   constructor(private turbineService: TurbineService, private ssmtService: SsmtService) { }
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SettingsService } from '../../../settings/settings.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MotorInventoryService } from '../../motor-inventory.service';
  
 import { Co2SavingsData } from '../../../calculator/utilities/co2-savings/co2-savings.service';
@@ -17,7 +17,7 @@ import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savi
 })
 export class PlantSetupComponent implements OnInit {
 
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
   settings: Settings;
 
   co2SavingsData: Co2SavingsData;

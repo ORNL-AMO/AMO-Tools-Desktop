@@ -1,6 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PlotlyService } from 'angular-plotly.js';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
@@ -60,7 +60,7 @@ export class AirflowSankeyComponent implements OnInit {
   dayTypeBaselineProfileSummaries: Array<{dayTypeId: string, profileSummary: Array<ProfileSummary>}>;
   selectedDayTypeId: string;
   dayTypeLeakRate: number;
-  dayTypeSetupForm: FormGroup;
+  dayTypeSetupForm: UntypedFormGroup;
   unaccountedAirflow: string;
   endUseDayTypeSetup: EndUseDayTypeSetup;
   hasValidDayTypeSetup: boolean;
@@ -104,7 +104,7 @@ export class AirflowSankeyComponent implements OnInit {
   setSankeyDayTypeSetup() {
     this.selectedDayTypeId = this.endUseDayTypeSetup.selectedDayTypeId;
     this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals = this.endUsesService.getDayTypeAirflowTotals(this.compressedAirAssessment, this.selectedDayTypeId, this.settings);
-    let endUseDayTypeSetupForm: FormGroup = this.dayTypeSetupService.getDayTypeSetupFormFromObj(this.endUseDayTypeSetup, this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals);
+    let endUseDayTypeSetupForm: UntypedFormGroup = this.dayTypeSetupService.getDayTypeSetupFormFromObj(this.endUseDayTypeSetup, this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals);
     this.dayTypeLeakRate = endUseDayTypeSetupForm.controls.dayTypeLeakRate.value;
     this.hasValidDayTypeSetup = endUseDayTypeSetupForm.valid;
   }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AirFlowConversionService } from '../air-flow-conversion.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { AirFlowConversionInput } from '../../../../shared/models/compressed-air/compressed-air';
@@ -14,7 +14,7 @@ export class AirFlowConversionFormComponent implements OnInit {
   @Input()
   settings: Settings;
   
-  airFlowConversionForm: FormGroup;
+  airFlowConversionForm: UntypedFormGroup;
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ConfirmDeleteData } from '../../shared/confirm-delete-modal/confirmDeleteData';
@@ -24,7 +24,7 @@ export class DayTypesComponent implements OnInit {
 
   deleteSelectedDayTypeId: string;
   confirmDeleteDayTypeData: ConfirmDeleteData;
-  dayTypesFormArray: Array<FormGroup>;
+  dayTypesFormArray: Array<UntypedFormGroup>;
   isFormChange: boolean = false;
   hasValidDayTypes: boolean;
   hasEndUses: boolean;

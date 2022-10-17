@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { OtherOptions, MotorItem } from '../../../motor-inventory';
 import { MotorCatalogService } from '../motor-catalog.service';
@@ -14,7 +14,7 @@ import { driveConstants } from '../../../../psat/psatConstants';
 })
 export class OtherDataComponent implements OnInit {
 
-  motorForm: FormGroup;
+  motorForm: UntypedFormGroup;
   selectedMotorItemSub: Subscription;
   displayOptions: OtherOptions;
   displayForm: boolean = true;

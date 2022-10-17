@@ -181,7 +181,6 @@
       }
     }
   },
-  "defaultProject": "amo-tools-desktop",
   "schematics": {
     "@schematics/angular:component": {
       "inlineTemplate": false,

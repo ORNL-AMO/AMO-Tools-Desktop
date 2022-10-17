@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, ElementRef, ViewChild, HostListener} from '@angular/core';
 import {Settings} from '../../../shared/models/settings';
-import {FormGroup} from '@angular/forms';
+import {UntypedFormGroup} from '@angular/forms';
 import {BoilerInput} from '../../../shared/models/steam/steam-inputs';
 import {SettingsDbService} from '../../../indexedDb/settings-db.service';
 import {SteamService} from '../steam.service';
@@ -32,7 +32,7 @@ export class BoilerComponent implements OnInit {
   headerHeight: number;
   tabSelect: string = 'results';
   currentField: string = 'default';
-  boilerForm: FormGroup;
+  boilerForm: UntypedFormGroup;
   input: BoilerInput;
   results: BoilerOutput;
   isModalOpen: boolean;
@@ -92,7 +92,7 @@ export class BoilerComponent implements OnInit {
     }
   }
 
-  calculate(form: FormGroup) {
+  calculate(form: UntypedFormGroup) {
     this.input = this.boilerService.getObjFromForm(form);
     this.boilerService.boilerInput = this.input;
     if (form.status === 'VALID') {

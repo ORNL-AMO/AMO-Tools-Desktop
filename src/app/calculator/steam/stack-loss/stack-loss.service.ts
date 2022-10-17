@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 import { FlueGas, FlueGasByMass, FlueGasByVolume, FlueGasByVolumeSuiteResults } from '../../../shared/models/phast/losses/flueGas';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
@@ -17,13 +17,14 @@ export class StackLossService {
   };
 
   modalOpen: BehaviorSubject<boolean>;
-  constructor(private formBuilder: FormBuilder,
+  constructor(
     private processHeatingApiService: ProcessHeatingApiService,  
-     private convertUnitsService: ConvertUnitsService) {
+    private formBuilder: UntypedFormBuilder, 
+    private convertUnitsService: ConvertUnitsService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
-  initFormVolume(settings: Settings): FormGroup {
+  initFormVolume(settings: Settings): UntypedFormGroup {
     let ambientAirTemp: number = 60;
     if (settings.unitsOfMeasure != 'Imperial') {
       ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C')
@@ -53,7 +54,7 @@ export class StackLossService {
     });
   }
 
-  initFormMass(settings: Settings): FormGroup {
+  initFormMass(settings: Settings): UntypedFormGroup {
     let ambientAirTemp: number = 60;
     if (settings.unitsOfMeasure != 'Imperial') {
       ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C')
@@ -81,7 +82,7 @@ export class StackLossService {
     });
   }
 
-  initByVolumeFormFromLoss(loss: StackLossInput): FormGroup {
+  initByVolumeFormFromLoss(loss: StackLossInput): UntypedFormGroup {
     return this.formBuilder.group({
       'gasTypeId': [loss.flueGasByVolume.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByVolume.flueGasTemperature, Validators.required],
@@ -107,7 +108,7 @@ export class StackLossService {
     });
   }
 
-  initByMassFormFromLoss(loss: StackLossInput): FormGroup {
+  initByMassFormFromLoss(loss: StackLossInput): UntypedFormGroup {
     return this.formBuilder.group({
       'gasTypeId': [loss.flueGasByMass.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByMass.flueGasTemperature, Validators.required],
@@ -131,7 +132,7 @@ export class StackLossService {
     });
   }
 
-  buildByMassLossFromForm(form: FormGroup): FlueGasByMass {
+  buildByMassLossFromForm(form: UntypedFormGroup): FlueGasByMass {
     let flueGasByMass: FlueGasByMass = {
       gasTypeId: form.controls.gasTypeId.value,
       flueGasTemperature: form.controls.flueGasTemperature.value,
@@ -155,7 +156,7 @@ export class StackLossService {
     return flueGasByMass;
   }
 
-  buildByVolumeLossFromForm(form: FormGroup): FlueGasByVolume {
+  buildByVolumeLossFromForm(form: UntypedFormGroup): FlueGasByVolume {
     let flueGasByVolume: FlueGasByVolume = {
       gasTypeId: form.controls.gasTypeId.value,
       flueGasTemperature: form.controls.flueGasTemperature.value,

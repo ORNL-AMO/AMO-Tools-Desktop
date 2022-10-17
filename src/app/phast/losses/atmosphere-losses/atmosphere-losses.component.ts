@@ -4,7 +4,7 @@ import { PhastService } from '../../phast.service';
 import { Losses, PHAST } from '../../../shared/models/phast/phast';
 import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { AtmosphereFormService } from '../../../calculator/furnaces/atmosphere/atmosphere-form.service';
 
 @Component({
@@ -148,7 +148,7 @@ export class AtmosphereLossesComponent implements OnInit {
 
 
 export interface AtmoLossObj {
-  form: FormGroup;
+  form: UntypedFormGroup;
   heatLoss: number;
   collapse: boolean;
 }

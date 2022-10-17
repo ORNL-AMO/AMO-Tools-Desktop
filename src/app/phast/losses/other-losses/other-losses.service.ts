@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 import { OtherLoss } from '../../../shared/models/phast/losses/otherLoss';
 
 @Injectable()
 export class OtherLossesService {
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder) {
   }
 
-  initForm(): FormGroup {
+  initForm(): UntypedFormGroup {
     return this.formBuilder.group({
       description: ['', Validators.required],
       heatLoss: [0.0, Validators.required]
     });
   }
 
-  getLossFromForm(form: FormGroup): OtherLoss {
+  getLossFromForm(form: UntypedFormGroup): OtherLoss {
     let tmpLoss = {
       description: form.controls.description.value,
       heatLoss: form.controls.heatLoss.value
@@ -23,7 +23,7 @@ export class OtherLossesService {
     return tmpLoss;
   }
 
-  getFormFromLoss(loss: OtherLoss): FormGroup {
+  getFormFromLoss(loss: OtherLoss): UntypedFormGroup {
     return this.formBuilder.group({
       description: [loss.description, Validators.required],
       heatLoss: [loss.heatLoss, Validators.required]

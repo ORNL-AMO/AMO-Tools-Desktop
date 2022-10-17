@@ -5,7 +5,7 @@ import { AuxiliaryPowerLoss } from '../../../shared/models/phast/losses/auxiliar
 import { Losses } from '../../../shared/models/phast/phast';
 import { AuxiliaryPowerLossesService } from './auxiliary-power-losses.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-auxiliary-power-losses',
@@ -153,7 +153,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
 }
 
 export interface AuxPowLossObj {
-  form: FormGroup;
+  form: UntypedFormGroup;
   powerUsed: number;
   collapse: boolean;
 }

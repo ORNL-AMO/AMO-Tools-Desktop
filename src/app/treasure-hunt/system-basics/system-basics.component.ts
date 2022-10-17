@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SettingsService } from '../../settings/settings.service';
  
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
@@ -37,7 +37,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   formWidth: number;
   showOperatingHoursModal: boolean = false;
   
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
   oldSettings: Settings;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
@@ -113,7 +113,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   }
 
   getExistingDataSettings(): Settings {
-    let existingSettingsForm: FormGroup = _.cloneDeep(this.settingsForm);
+    let existingSettingsForm: UntypedFormGroup = _.cloneDeep(this.settingsForm);
     existingSettingsForm.patchValue({unitsOfMeasure: this.assessment.treasureHunt.existingDataUnits});
     let existingSettings = this.settingsService.setUnits(existingSettingsForm);
     return this.settingsService.getSettingsFromForm(existingSettings);

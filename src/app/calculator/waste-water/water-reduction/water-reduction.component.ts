@@ -5,7 +5,7 @@ import { Treasure, WaterReductionTreasureHunt } from '../../../shared/models/tre
 import { WaterReductionData, WaterReductionResults } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { WaterReductionService } from './water-reduction.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, UntypedFormBuilder } from '@angular/forms';
 import { Assessment } from '../../../shared/models/assessment';
 
 @Component({
@@ -53,7 +53,7 @@ export class WaterReductionComponent implements OnInit {
   baselineData: Array<WaterReductionData>;
   modificationData: Array<WaterReductionData>;
 
-  constructor(private settingsDbService: SettingsDbService, private waterReductionService: WaterReductionService, private formBuilder: FormBuilder) { }
+  constructor(private settingsDbService: SettingsDbService, private waterReductionService: WaterReductionService, private formBuilder: UntypedFormBuilder) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {

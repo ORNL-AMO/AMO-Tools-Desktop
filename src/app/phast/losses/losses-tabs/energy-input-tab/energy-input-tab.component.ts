@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { Losses, PHAST } from '../../../../shared/models/phast/phast';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { EnergyInputService } from '../../energy-input/energy-input.service';
 import { EnergyInputCompareService } from '../../energy-input/energy-input-compare.service';
 import { EnergyInputEAF } from '../../../../shared/models/phast/losses/energyInputEAF';
@@ -104,7 +104,7 @@ export class EnergyInputTabComponent implements OnInit {
     if (phast) {
       minElectricityInput = this.phastResultsService.getMinElectricityInputRequirement(phast, this.settings);
     }
-    let tmpForm: FormGroup = this.energyInputService.getFormFromLoss(loss, minElectricityInput);
+    let tmpForm: UntypedFormGroup = this.energyInputService.getFormFromLoss(loss, minElectricityInput);
     if (tmpForm.status === 'VALID') {
       return true;
     } else {

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FanSystemCurveFormService } from '../fan-system-curve-form.service';
 import { Settings } from '../../../../shared/models/settings';
 import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
@@ -19,7 +19,7 @@ export class FanSystemCurveFormComponent implements OnInit {
   exponentInputWarning: string = null;
   pointOneFluidPower: number = 0;
   pointTwoFluidPower: number = 0;
-  fanSystemCurveForm: FormGroup;
+  fanSystemCurveForm: UntypedFormGroup;
   resetFormsSub: Subscription;
   fanModificationCollapsed: string = 'closed';
   modificationEquipmentSub: Subscription;

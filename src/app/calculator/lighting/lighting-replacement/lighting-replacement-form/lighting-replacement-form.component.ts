@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges, HostListener, ChangeDetectorRef } from '@angular/core';
 import { LightingReplacementData } from '../../../../shared/models/lighting';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { LightingReplacementService } from '../lighting-replacement.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { LightingFixtureData, LightingFixtureCategories } from '../../lighting-fixture-data/lighting-data';
@@ -36,7 +36,7 @@ export class LightingReplacementFormComponent implements OnInit {
 
   idString: string;
   isEditingName: boolean = false;
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   showOperatingHoursModal: boolean;
 

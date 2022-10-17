@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
@@ -32,7 +32,7 @@ export class AirHeatingFormComponent implements OnInit {
   onResize(event) {
     this.setOpHoursModalWidth();
   }
-  form: FormGroup;
+  form: UntypedFormGroup;
   fuelOptions: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
 
   resetDataSub: Subscription;

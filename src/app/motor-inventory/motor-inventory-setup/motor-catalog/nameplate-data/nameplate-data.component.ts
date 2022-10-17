@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { NameplateDataOptions, MotorItem } from '../../../motor-inventory';
 import { MotorCatalogService } from '../motor-catalog.service';
@@ -18,7 +18,7 @@ export class NameplateDataComponent implements OnInit {
   settingsSub: Subscription;
   settings: Settings;
 
-  motorForm: FormGroup;
+  motorForm: UntypedFormGroup;
   selectedMotorItemSub: Subscription;
   displayOptions: NameplateDataOptions;
   displayForm: boolean = true;

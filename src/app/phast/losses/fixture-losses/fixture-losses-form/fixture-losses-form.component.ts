@@ -4,7 +4,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { SolidLoadMaterialDbService } from '../../../../indexedDb/solid-load-material-db.service';
@@ -17,7 +17,7 @@ import { firstValueFrom } from 'rxjs';
 })
 export class FixtureLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: FormGroup;
+  lossesForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

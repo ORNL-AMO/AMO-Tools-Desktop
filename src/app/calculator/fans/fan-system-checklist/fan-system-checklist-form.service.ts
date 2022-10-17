@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FanSystemChecklistInput } from '../../../shared/models/fans';
 
 @Injectable()
 export class FanSystemChecklistFormService {
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: UntypedFormBuilder) {}
 
-  getFanSystemChecklistForm(inputObj: FanSystemChecklistInput): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getFanSystemChecklistForm(inputObj: FanSystemChecklistInput): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       name: [inputObj.name],
       operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       motorPower: [inputObj.motorPower],
@@ -38,7 +38,7 @@ export class FanSystemChecklistFormService {
     return form;
   }
 
-  getFanSystemChecklistInput(form: FormGroup): FanSystemChecklistInput {
+  getFanSystemChecklistInput(form: UntypedFormGroup): FanSystemChecklistInput {
     let obj: FanSystemChecklistInput = {
       operatingHours: form.controls.operatingHours.value,
       motorPower: form.controls.motorPower.value,

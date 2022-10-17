@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class EnergyFormService {
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: UntypedFormBuilder) {}
 
-  initEnergyForm(): FormGroup {
+  initEnergyForm(): UntypedFormGroup {
     let formGroup = this.formBuilder.group({
       'energySourceType': ['Fuel'],
       'utilityType': ['Natural Gas'],
@@ -18,7 +18,7 @@ export class EnergyFormService {
     return formGroup;
   }
 
-  getEnergyForm(energyData: FlueGasEnergyData): FormGroup {
+  getEnergyForm(energyData: FlueGasEnergyData): UntypedFormGroup {
     let formGroup = this.formBuilder.group({
       'energySourceType': [energyData.energySourceType],
       'utilityType': [energyData.utilityType],
@@ -29,7 +29,7 @@ export class EnergyFormService {
     return formGroup;
   }
 
-  buildEnergyData(energyForm: FormGroup): FlueGasEnergyData {
+  buildEnergyData(energyForm: UntypedFormGroup): FlueGasEnergyData {
     let energyData: FlueGasEnergyData = {
       energySourceType: energyForm.controls.energySourceType.value,
       utilityType: energyForm.controls.utilityType.value,

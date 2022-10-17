@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SpecificSpeedService } from '../specific-speed.service';
 
 import { DataPoint, SimpleChart, TraceData } from '../../../../shared/models/plotting';
@@ -14,7 +14,7 @@ import { PlotlyService } from 'angular-plotly.js';
 })
 export class SpecificSpeedGraphComponent implements OnInit {
   @Input()
-  speedForm: FormGroup;
+  speedForm: UntypedFormGroup;
   @Input()
   inPsat: boolean;
   @Input()

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { NemaEnergyEfficiencyService, NemaInputs } from './nema-energy-efficiency.service';
 import { Assessment } from '../../../shared/models/assessment';
@@ -43,7 +43,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   smallScreenTab: string = 'form';
 
   currentField: string;
-  nemaForm: FormGroup;
+  nemaForm: UntypedFormGroup;
   tabSelect: string = 'results';
   saving: boolean;
   calculator: Calculator;

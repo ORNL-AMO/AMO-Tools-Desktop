@@ -1,6 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PlotlyService } from 'angular-plotly.js';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, EndUseDayTypeSetup, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
@@ -92,7 +92,7 @@ export class PowerSankeyComponent implements OnInit {
     this.dayTypeSetupServiceSubscription = this.dayTypeSetupService.endUseDayTypeSetup.subscribe(endUseDayTypeSetup => {
       if (endUseDayTypeSetup) {
         this.endUseDayTypeSetup = endUseDayTypeSetup;
-        let endUseDayTypeSetupForm: FormGroup = this.dayTypeSetupService.getDayTypeSetupFormFromObj(this.endUseDayTypeSetup, this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals);
+        let endUseDayTypeSetupForm: UntypedFormGroup = this.dayTypeSetupService.getDayTypeSetupFormFromObj(this.endUseDayTypeSetup, this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals);
         this.hasValidDayTypeSetup = endUseDayTypeSetupForm.valid;
         this.dayTypeLeakRate = endUseDayTypeSetupForm.controls.dayTypeLeakRate.value;
         this.renderSankey();

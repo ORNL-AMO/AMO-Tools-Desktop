@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FieldDataWarnings, OperationsWarnings } from '../../../psat-warning.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { PSAT, Modification } from '../../../../shared/models/psat';
 @Component({
@@ -25,13 +25,13 @@ export class SystemDataFormComponent implements OnInit {
     @Input()
     modificationWarnings: FieldDataWarnings;
     @Input()
-    baselineFieldDataForm: FormGroup;
+    baselineFieldDataForm: UntypedFormGroup;
     @Input()
-    modificationFieldDataForm: FormGroup;
+    modificationFieldDataForm: UntypedFormGroup;
     @Input()
-    baselineOperationsForm: FormGroup;
+    baselineOperationsForm: UntypedFormGroup;
     @Input()
-    modificationOperationsForm: FormGroup;
+    modificationOperationsForm: UntypedFormGroup;
     @Input()
     baselineOperationsWarnings: OperationsWarnings;
     @Input()

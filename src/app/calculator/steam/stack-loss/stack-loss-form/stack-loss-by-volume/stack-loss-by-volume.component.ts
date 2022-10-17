@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { PhastService } from '../../../../../phast/phast.service';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -16,9 +16,9 @@ import { SqlDbApiService } from '../../../../../tools-suite-api/sql-db-api.servi
 })
 export class StackLossByVolumeComponent implements OnInit {
   @Input()
-  stackLossForm: FormGroup;
+  stackLossForm: UntypedFormGroup;
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<FormGroup>();
+  emitCalculate = new EventEmitter<UntypedFormGroup>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Input()

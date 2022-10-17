@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CentrifugalSpecifics } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
@@ -15,7 +15,7 @@ import { InventoryService } from '../inventory.service';
 export class CentrifugalSpecificsComponent implements OnInit {
 
   selectedCompressorSub: Subscription;
-  form: FormGroup;
+  form: UntypedFormGroup;
   isFormChange: boolean = false;
   contentCollapsed: boolean;
   settings: Settings;

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ChargeMaterial, LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 
 @Injectable()
 export class LiquidMaterialFormService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  initLiquidForm(assesmentLossNum?: number): FormGroup {
+  initLiquidForm(assesmentLossNum?: number): UntypedFormGroup {
     let lossNumber = assesmentLossNum? assesmentLossNum : 0;
 
     let formGroup = this.formBuilder.group({
@@ -31,7 +31,7 @@ export class LiquidMaterialFormService {
     return formGroup;
   }
 
-  getLiquidChargeMaterialForm(chargeMaterial: ChargeMaterial, inAssessment: boolean = true): FormGroup {
+  getLiquidChargeMaterialForm(chargeMaterial: ChargeMaterial, inAssessment: boolean = true): UntypedFormGroup {
     let reactionType = 'Endothermic';
     if (chargeMaterial.liquidChargeMaterial.thermicReactionType !== 0) {
       reactionType = 'Exothermic';
@@ -57,7 +57,7 @@ export class LiquidMaterialFormService {
     return formGroup;
   }
 
-  setInitialTempValidator(formGroup: FormGroup) {
+  setInitialTempValidator(formGroup: UntypedFormGroup) {
       let dischargeTemperature = formGroup.controls.dischargeTemperature.value;
       if (dischargeTemperature) {
         formGroup.controls.initialTemperature.setValidators([Validators.required, Validators.max(dischargeTemperature)]);
@@ -67,7 +67,7 @@ export class LiquidMaterialFormService {
       return formGroup;
   }
 
-  buildLiquidChargeMaterial(liquidForm: FormGroup): ChargeMaterial {
+  buildLiquidChargeMaterial(liquidForm: UntypedFormGroup): ChargeMaterial {
     let reactionType = 0;
     if (liquidForm.controls.endothermicOrExothermic.value === 'Exothermic') {
       reactionType = 1;

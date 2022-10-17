@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { WallLossesSurface } from '../../../../shared/models/materials';
@@ -42,7 +42,7 @@ export class WallFormComponent implements OnInit {
   treasureHuntUtilityOptions: Array<string>;
   showSurfaceModal: boolean = false;
   
-  wallLossesForm: FormGroup;
+  wallLossesForm: UntypedFormGroup;
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
   showFlueGasModal: boolean;

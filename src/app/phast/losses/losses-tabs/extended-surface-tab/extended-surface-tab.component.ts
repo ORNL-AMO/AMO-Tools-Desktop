@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ExtendedSurfaceLossesService, ExtendedSurfaceWarnings } from '../../extended-surface-losses/extended-surface-losses.service';
 import { ExtendedSurfaceCompareService } from '../../extended-surface-losses/extended-surface-compare.service';
 import { ExtendedSurface } from '../../../../shared/models/phast/losses/extendedSurface';
@@ -99,7 +99,7 @@ export class ExtendedSurfaceTabComponent implements OnInit {
 
 
   checkLossValid(loss: ExtendedSurface) {
-      let tmpForm: FormGroup = this.extendedSurfaceLossesService.getSurfaceLossForm(loss);
+      let tmpForm: UntypedFormGroup = this.extendedSurfaceLossesService.getSurfaceLossForm(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {

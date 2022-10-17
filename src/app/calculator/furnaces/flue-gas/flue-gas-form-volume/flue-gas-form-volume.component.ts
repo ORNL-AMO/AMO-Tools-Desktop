@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
@@ -37,7 +37,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
 
-  byVolumeForm: FormGroup;
+  byVolumeForm: UntypedFormGroup;
 
   options: Array<FlueGasMaterial>;
   calculationMethods: Array<string> = [

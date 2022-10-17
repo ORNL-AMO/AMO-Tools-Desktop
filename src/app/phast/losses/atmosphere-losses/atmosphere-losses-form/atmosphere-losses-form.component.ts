@@ -5,7 +5,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { AtmosphereFormService, AtmosphereLossWarnings } from '../../../../calculator/furnaces/atmosphere/atmosphere-form.service';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
@@ -19,7 +19,7 @@ import { AtmosphereDbService } from '../../../../indexedDb/atmosphere-db.service
 })
 export class AtmosphereLossesFormComponent implements OnInit {
   @Input()
-  atmosphereLossForm: FormGroup;
+  atmosphereLossForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

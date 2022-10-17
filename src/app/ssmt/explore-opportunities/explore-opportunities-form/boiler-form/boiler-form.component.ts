@@ -4,7 +4,7 @@ import { SSMT, BoilerInput } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { BoilerService } from '../../../boiler/boiler.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { StackLossInput } from '../../../../shared/models/steam/steam-inputs';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
@@ -50,8 +50,8 @@ export class BoilerFormComponent implements OnInit {
   showInitialSteamTemperature: boolean = false;
   showDeaeratorConditions: boolean = false;
 
-  baselineForm: FormGroup;
-  modificationForm: FormGroup;
+  baselineForm: UntypedFormGroup;
+  modificationForm: UntypedFormGroup;
   baselineCo2SavingsData: Co2SavingsData;
   modificationCo2SavingsData: Co2SavingsData;
   isInitializingCo2SavingsData: boolean;
