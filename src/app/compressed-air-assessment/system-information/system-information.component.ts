@@ -1,6 +1,6 @@
 import { ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AltitudeCorrectionService } from '../../calculator/utilities/altitude-correction/altitude-correction.service';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
@@ -20,7 +20,7 @@ export class SystemInformationComponent implements OnInit {
   settings: Settings;
   @ViewChild('systemCapacityModal', { static: false }) public systemCapacityModal: ModalDirective;
   showSystemCapacityModal: boolean = false;
-  form: FormGroup;
+  form: UntypedFormGroup;
   co2SavingsData: Co2SavingsData;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService,

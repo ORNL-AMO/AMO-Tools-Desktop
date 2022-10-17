@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
-import { FormGroup, Validators } from "@angular/forms";
+import { UntypedFormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
 import { SaturatedPropertiesOutput } from "../../../../shared/models/steam/steam-outputs";
 
@@ -10,11 +10,11 @@ import { SaturatedPropertiesOutput } from "../../../../shared/models/steam/steam
 })
 export class SaturatedPropertiesFormComponent implements OnInit {
   @Input()
-  saturatedPropertiesForm: FormGroup;
+  saturatedPropertiesForm: UntypedFormGroup;
   @Input()
   settings: Settings;
   @Output()
-  emitCalculate = new EventEmitter<FormGroup>();
+  emitCalculate = new EventEmitter<UntypedFormGroup>();
   @Input()
   output: SaturatedPropertiesOutput;
   @Output('emitChangeField')

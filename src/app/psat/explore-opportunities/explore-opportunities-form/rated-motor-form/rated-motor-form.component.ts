@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 import { Settings } from '../../../../shared/models/settings';
 import { MotorWarnings } from '../../../psat-warning.service';
 import { MotorService } from '../../../motor/motor.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { motorEfficiencyConstants } from '../../../psatConstants';
 import { PsatService } from '../../../psat.service';
 import { Modification } from '../../../../shared/models/psat';
@@ -21,9 +21,9 @@ export class RatedMotorFormComponent implements OnInit {
   @Input()
   exploreModIndex: number;
   @Input()
-  baselineForm: FormGroup;
+  baselineForm: UntypedFormGroup;
   @Input()
-  modificationForm: FormGroup;
+  modificationForm: UntypedFormGroup;
   @Input()
   baselineWarnings: MotorWarnings;
   @Input()

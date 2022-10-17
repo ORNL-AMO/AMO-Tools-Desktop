@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ReduceAirLeaks } from '../../../shared/models/compressed-air-assessment';
 import { BaselineResults } from '../../compressed-air-assessment-results.service';
 
 @Injectable()
 export class ReduceAirLeaksService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
 
-  getFormFromObj(reduceAirLeaks: ReduceAirLeaks, baselineResults: BaselineResults): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getFormFromObj(reduceAirLeaks: ReduceAirLeaks, baselineResults: BaselineResults): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       leakFlow: [reduceAirLeaks.leakFlow, [Validators.min(0), Validators.max(baselineResults.total.maxAirFlow), Validators.required]],
       leakReduction: [reduceAirLeaks.leakReduction, [Validators.min(0), Validators.max(100), Validators.required]],
       implementationCost: [reduceAirLeaks.implementationCost, Validators.min(0)],
@@ -24,7 +24,7 @@ export class ReduceAirLeaksService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): ReduceAirLeaks {
+  getObjFromForm(form: UntypedFormGroup): ReduceAirLeaks {
     return {
       leakFlow: form.controls.leakFlow.value,
       leakReduction: form.controls.leakReduction.value,

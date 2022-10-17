@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 import { FSAT } from '../../../shared/models/fans';
 
@@ -8,9 +8,9 @@ import { FSAT } from '../../../shared/models/fans';
 export class MotorPerformanceService {
   motorPerformanceInputs: MotorPerformanceInputs;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: UntypedFormBuilder) {}
 
-  initFormFromPsat(psat: PSAT): FormGroup {
+  initFormFromPsat(psat: PSAT): UntypedFormGroup {
     return this.formBuilder.group({
       frequency: [psat.inputs.line_frequency, [Validators.required]],
       horsePower: [psat.inputs.motor_rated_power, [Validators.required]],
@@ -23,7 +23,7 @@ export class MotorPerformanceService {
     });
   }
 
-  initFormFromFsat(fsat: FSAT): FormGroup{
+  initFormFromFsat(fsat: FSAT): UntypedFormGroup{
     return this.formBuilder.group({
       frequency: [fsat.fanMotor.lineFrequency, [Validators.required]],
       horsePower: [fsat.fanMotor.motorRatedPower, [Validators.required]],
@@ -36,7 +36,7 @@ export class MotorPerformanceService {
     });
   }
 
-  initForm(): FormGroup {
+  initForm(): UntypedFormGroup {
     return this.formBuilder.group({
       frequency: [60, [Validators.required]],
       horsePower: [200, [Validators.required, Validators.min(0)]],
@@ -49,7 +49,7 @@ export class MotorPerformanceService {
     });
   }
 
-  resetForm(): FormGroup {
+  resetForm(): UntypedFormGroup {
     return this.formBuilder.group({
       frequency: [60, [Validators.required]],
       horsePower: [0, [Validators.required, Validators.min(0)]],
@@ -62,7 +62,7 @@ export class MotorPerformanceService {
     });
   }
 
-  initFormFromObj(inputs: MotorPerformanceInputs): FormGroup {
+  initFormFromObj(inputs: MotorPerformanceInputs): UntypedFormGroup {
     return this.formBuilder.group({
       frequency: [inputs.frequency, [Validators.required]],
       horsePower: [inputs.horsePower, [Validators.required]],
@@ -75,7 +75,7 @@ export class MotorPerformanceService {
     });
   }
 
-  getObjFromForm(form: FormGroup): MotorPerformanceInputs {
+  getObjFromForm(form: UntypedFormGroup): MotorPerformanceInputs {
     return {
       frequency: form.controls.frequency.value,
       horsePower: form.controls.horsePower.value,

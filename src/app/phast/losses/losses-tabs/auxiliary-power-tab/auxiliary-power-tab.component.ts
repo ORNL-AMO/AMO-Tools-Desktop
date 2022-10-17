@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { AuxiliaryPowerLossesService } from '../../auxiliary-power-losses/auxiliary-power-losses.service';
 import { AuxiliaryPowerCompareService } from '../../auxiliary-power-losses/auxiliary-power-compare.service';
 import { AuxiliaryPowerLoss } from '../../../../shared/models/phast/losses/auxiliaryPowerLoss';
@@ -97,7 +97,7 @@ export class AuxiliaryPowerTabComponent implements OnInit {
 
 
   checkLossValid(loss: AuxiliaryPowerLoss) {
-    let tmpForm: FormGroup = this.auxiliaryPowerLossesService.getFormFromLoss(loss);
+    let tmpForm: UntypedFormGroup = this.auxiliaryPowerLossesService.getFormFromLoss(loss);
     if (tmpForm.status === 'VALID') {
       return true;
     } else {

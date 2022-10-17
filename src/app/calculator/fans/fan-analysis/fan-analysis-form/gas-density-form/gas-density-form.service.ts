@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseGasDensity, PsychrometricResults } from '../../../../../shared/models/fans';
 import { Settings } from '../../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
@@ -12,14 +12,14 @@ export class GasDensityFormService {
   modificationPsychrometricResults: BehaviorSubject<PsychrometricResults>;
   baselineCalculationType: BehaviorSubject<string>;
   modificationCalculationType: BehaviorSubject<string>;
-  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) {
+  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: UntypedFormBuilder) {
     this.baselinePsychrometricResults = new BehaviorSubject<PsychrometricResults>(undefined);
     this.modificationPsychrometricResults = new BehaviorSubject<PsychrometricResults>(undefined);
     this.baselineCalculationType = new BehaviorSubject<string>(undefined);
     this.modificationCalculationType = new BehaviorSubject<string>(undefined)
   }
 
-  getGasDensityFormFromObj(obj: BaseGasDensity, settings: Settings): FormGroup {
+  getGasDensityFormFromObj(obj: BaseGasDensity, settings: Settings): UntypedFormGroup {
     let ranges: GasDensityRanges = this.getGasDensityRanges(settings, obj.dryBulbTemp);
     let form = this.formBuilder.group({
       inputType: [obj.inputType, Validators.required],
@@ -90,7 +90,7 @@ export class GasDensityFormService {
     return ranges;
   }
 
-  setCustomValidators(form: FormGroup, ranges: GasDensityRanges) {
+  setCustomValidators(form: UntypedFormGroup, ranges: GasDensityRanges) {
     if (form.controls.inputType.value === 'custom') {
       //dryBulbTemp
       form.controls.dryBulbTemp.setValidators([Validators.min(ranges.dryBulbTempMin), Validators.max(ranges.dryBulbTempMax)]);
@@ -145,7 +145,7 @@ export class GasDensityFormService {
     }
   }
 
-  setRelativeHumidityValidators(form: FormGroup) {
+  setRelativeHumidityValidators(form: UntypedFormGroup) {
     if (form.controls.inputType.value === 'relativeHumidity') {
       form.controls.relativeHumidity.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
       form.controls.relativeHumidity.reset(form.controls.relativeHumidity.value);
@@ -161,7 +161,7 @@ export class GasDensityFormService {
     }
   }
 
-  setWetBulbValidators(form: FormGroup, ranges: GasDensityRanges) {
+  setWetBulbValidators(form: UntypedFormGroup, ranges: GasDensityRanges) {
     if (form.controls.inputType.value === 'wetBulb') {
       form.controls.wetBulbTemp.setValidators([Validators.required, Validators.min(ranges.wetBulbTempMin), Validators.max(ranges.wetBulbTempMax)]);
       form.controls.wetBulbTemp.reset(form.controls.wetBulbTemp.value);
@@ -182,7 +182,7 @@ export class GasDensityFormService {
     }
   }
 
-  setDewPointValidators(form: FormGroup, ranges: GasDensityRanges) {
+  setDewPointValidators(form: UntypedFormGroup, ranges: GasDensityRanges) {
     if (form.controls.inputType.value === 'dewPoint') {
       form.controls.dewPoint.setValidators([Validators.required, Validators.min(ranges.dewPointMin), Validators.max(ranges.dewPointMax)]);
       form.controls.dewPoint.reset(form.controls.dewPoint.value);
@@ -198,7 +198,7 @@ export class GasDensityFormService {
     }
   }
 
-  getGasDensityObjFromForm(form: FormGroup): BaseGasDensity {
+  getGasDensityObjFromForm(form: UntypedFormGroup): BaseGasDensity {
     let fanGasDensity: BaseGasDensity = {
       inputType: form.controls.inputType.value,
       gasType: form.controls.gasType.value,
@@ -215,7 +215,7 @@ export class GasDensityFormService {
     return fanGasDensity;
   }
 
-  setValidators(gasDensityForm: FormGroup, settings: Settings) {
+  setValidators(gasDensityForm: UntypedFormGroup, settings: Settings) {
     let ranges: GasDensityRanges = this.getGasDensityRanges(settings, gasDensityForm.controls.dryBulbTemp.value);
     this.setRelativeHumidityValidators(gasDensityForm);
     this.setWetBulbValidators(gasDensityForm, ranges);

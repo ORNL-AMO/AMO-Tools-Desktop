@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
@@ -14,7 +14,7 @@ import { CompressedAirDataManagementService } from '../compressed-air-data-manag
 export class InventoryComponent implements OnInit {
 
   hasInventoryItems: boolean;
-  form: FormGroup;
+  form: UntypedFormGroup;
   selectedCompressorSub: Subscription;
   isFormChange: boolean = false;
   compressorType: number;

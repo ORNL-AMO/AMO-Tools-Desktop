@@ -3,7 +3,7 @@ import { ExploreOpportunitiesResults, PsatInputs, PsatOutputs, PsatValid } from 
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { BehaviorSubject } from 'rxjs';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
 import { PumpFluidService } from './pump-fluid/pump-fluid.service';
@@ -534,7 +534,7 @@ export class PsatService {
     }
   }
 
-  setFormFullLoadAmps(form: FormGroup, settings: Settings): FormGroup {
+  setFormFullLoadAmps(form: UntypedFormGroup, settings: Settings): UntypedFormGroup {
     let estEfficiency: number = this.estFLA(
       form.controls.horsePower.value,
       form.controls.motorRPM.value,
@@ -552,9 +552,9 @@ export class PsatService {
 
 
   isPsatValid(psatInputs: PsatInputs, isBaseline: boolean): PsatValid {
-    let tmpPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(psatInputs);
-    let tmpMotorForm: FormGroup = this.motorService.getFormFromObj(psatInputs);
-    let tmpFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(psatInputs, isBaseline);
+    let tmpPumpFluidForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(psatInputs);
+    let tmpMotorForm: UntypedFormGroup = this.motorService.getFormFromObj(psatInputs);
+    let tmpFieldDataForm: UntypedFormGroup = this.fieldDataService.getFormFromObj(psatInputs, isBaseline);
     return {
       isValid: tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid,
       pumpFluidValid: tmpPumpFluidForm.valid,

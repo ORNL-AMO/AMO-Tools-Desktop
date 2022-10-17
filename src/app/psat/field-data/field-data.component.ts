@@ -4,7 +4,7 @@ import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
-import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Assessment } from '../../shared/models/assessment';
 import { PsatWarningService, FieldDataWarnings } from '../psat-warning.service';
 import { FieldDataService } from './field-data.service';
@@ -58,7 +58,7 @@ export class FieldDataComponent implements OnInit {
       value: 1
     }
   ];
-  psatForm: FormGroup;
+  psatForm: UntypedFormGroup;
   fieldDataWarnings: FieldDataWarnings;
   idString: string;
 

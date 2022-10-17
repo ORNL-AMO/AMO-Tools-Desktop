@@ -3,7 +3,7 @@ import { MotorDriveService } from './motor-drive.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { MotorDriveInputs, MotorDriveOutputs } from '../../../shared/models/calculators';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MotorDriveInputsTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
@@ -35,7 +35,7 @@ export class MotorDriveComponent implements OnInit {
   }
 
   motorDriveData: MotorDriveInputs;
-  motorDriveForm: FormGroup;
+  motorDriveForm: UntypedFormGroup;
   outputData: MotorDriveOutputs;
   tabSelect: string = 'results';
   currentField: string;

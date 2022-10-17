@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PsatWarningService } from '../../../../psat/psat-warning.service';
 import { pumpTypesConstant } from '../../../../psat/psatConstants';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
@@ -12,7 +12,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 })
 export class AchievableEfficiencyFormComponent implements OnInit {
   @Input()
-  efficiencyForm: FormGroup;
+  efficiencyForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Output('changeField')

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { GasLeakageCompareService } from "../gas-leakage-compare.service";
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { LeakageLoss } from '../../../../shared/models/phast/losses/leakageLoss';
 import { LeakageFormService, LeakageWarnings } from '../../../../calculator/furnaces/leakage/leakage-form.service';
 
@@ -12,7 +12,7 @@ import { LeakageFormService, LeakageWarnings } from '../../../../calculator/furn
 })
 export class GasLeakageLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: FormGroup;
+  lossesForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

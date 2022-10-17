@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { EfficiencyImprovementInputs } from '../../../shared/models/phast/efficiencyImprovement';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { LessThanValidator } from '../../../shared/validators/less-than';
 import { OperatingHours } from '../../../shared/models/operations';
 
@@ -10,10 +10,10 @@ import { OperatingHours } from '../../../shared/models/operations';
 export class EfficiencyImprovementService {
   efficiencyImprovementInputs: EfficiencyImprovementInputs;
   operatingHours: OperatingHours;
-  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromObj(inputObj: EfficiencyImprovementInputs): FormGroup {
-    let tmpForm: FormGroup = this.formBuilder.group({
+  getFormFromObj(inputObj: EfficiencyImprovementInputs): UntypedFormGroup {
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       currentOperatingHours: [inputObj.currentOperatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       newOperatingHours: [inputObj.newOperatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       currentFlueGasOxygen: [inputObj.currentFlueGasOxygen, [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -27,7 +27,7 @@ export class EfficiencyImprovementService {
     return tmpForm;
   }
 
-  getObjFromForm(form: FormGroup): EfficiencyImprovementInputs {
+  getObjFromForm(form: UntypedFormGroup): EfficiencyImprovementInputs {
     this.efficiencyImprovementInputs = {
       currentOperatingHours: form.controls.currentOperatingHours.value,
       newOperatingHours: form.controls.newOperatingHours.value,
@@ -42,7 +42,7 @@ export class EfficiencyImprovementService {
     return this.efficiencyImprovementInputs;
   }
 
-  updateFormValidators(form: FormGroup, inputObj: EfficiencyImprovementInputs): void {
+  updateFormValidators(form: UntypedFormGroup, inputObj: EfficiencyImprovementInputs): void {
     if (inputObj.newFlueGasTemp != undefined) {
       form.controls.newCombustionAirTemp.setValidators([Validators.required, LessThanValidator.lessThan(inputObj.newFlueGasTemp)]);
     } else {

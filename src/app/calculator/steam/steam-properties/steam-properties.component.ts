@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../shared/models/settings";
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamPropertiesInput } from '../../../shared/models/steam/steam-inputs';
@@ -36,12 +36,12 @@ export class SteamPropertiesComponent implements OnInit {
   chartContainerHeight: number;
   chartContainerWidth: number;
 
-  steamPropertiesForm: FormGroup;
+  steamPropertiesForm: UntypedFormGroup;
   steamPropertiesOutput: SteamPropertiesOutput;
   tabSelect: string = 'results';
   currentField: string = 'pressure';
   graphToggle: string = '0';
-  graphToggleForm: FormGroup;
+  graphToggleForm: UntypedFormGroup;
   data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number};
 
   validPlot: boolean = false;
@@ -49,7 +49,7 @@ export class SteamPropertiesComponent implements OnInit {
   toggleResetData: boolean = false;
   toggleExampleData: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) {
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) {
   }
 
   ngOnInit() {
@@ -141,7 +141,7 @@ export class SteamPropertiesComponent implements OnInit {
     }
   }
 
-  calculate(form: FormGroup) {
+  calculate(form: UntypedFormGroup) {
     let input: SteamPropertiesInput = {
       quantityValue: form.controls.quantityValue.value,
       thermodynamicQuantity: form.controls.thermodynamicQuantity.value,

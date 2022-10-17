@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ThermodynamicQuantityOptions, Quantity } from '../../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../../steam.service';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -11,11 +11,11 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class FeedwaterFormComponent implements OnInit {
   @Input()
-  feedwaterForm: FormGroup;
+  feedwaterForm: UntypedFormGroup;
   @Input()
   settings: Settings;
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<FormGroup>();
+  emitCalculate = new EventEmitter<UntypedFormGroup>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 

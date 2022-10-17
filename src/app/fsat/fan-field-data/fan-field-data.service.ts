@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { CompressibilityFactor, FieldData, FsatOutput } from '../../shared/models/fans';
 import { Settings } from '../../shared/models/settings';
@@ -10,17 +10,17 @@ import { FansSuiteApiService } from '../../tools-suite-api/fans-suite-api.servic
 @Injectable()
 export class FanFieldDataService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService,
-    private fansSuiteApiService: FansSuiteApiService) { }
+  constructor(private fansSuiteApiService: FansSuiteApiService,
+  private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
 
-  getFormFromObj(obj: FieldData): FormGroup {
+  getFormFromObj(obj: FieldData): UntypedFormGroup {
     let userDefinedVelocityPressure: boolean = true;
     if(obj.userDefinedVelocityPressure != undefined){
       userDefinedVelocityPressure = obj.userDefinedVelocityPressure;
     }
 
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       flowRate: [obj.flowRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       inletPressure: [obj.inletPressure, [Validators.required]],
       ductArea: [obj.ductArea],
@@ -42,7 +42,7 @@ export class FanFieldDataService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): FieldData {
+  getObjFromForm(form: UntypedFormGroup): FieldData {
     let newData: FieldData = {
       flowRate: form.controls.flowRate.value,
       inletPressure: form.controls.inletPressure.value,
@@ -61,7 +61,7 @@ export class FanFieldDataService {
   }
 
   isFanFieldDataValid(obj: FieldData): boolean {
-    let form: FormGroup = this.getFormFromObj(obj);
+    let form: UntypedFormGroup = this.getFormFromObj(obj);
     return form.valid;
   }
 

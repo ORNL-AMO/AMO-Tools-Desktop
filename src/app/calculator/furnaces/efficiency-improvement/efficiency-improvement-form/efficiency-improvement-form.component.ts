@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, 
 import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../../../../shared/models/phast/efficiencyImprovement';
 import { Settings } from '../../../../shared/models/settings';
 import { EfficiencyImprovementService } from '../efficiency-improvement.service';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 @Component({
   selector: 'app-efficiency-improvement-form',
@@ -11,7 +11,7 @@ import { OperatingHours } from '../../../../shared/models/operations';
 })
 export class EfficiencyImprovementFormComponent implements OnInit {
   @Input()
-  form: FormGroup;
+  form: UntypedFormGroup;
   @Input()
   efficiencyImprovementOutputs: EfficiencyImprovementOutputs;
   @Output('calculate')

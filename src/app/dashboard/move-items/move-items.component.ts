@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { firstValueFrom } from 'rxjs';
@@ -24,18 +24,18 @@ import { DirectoryDashboardService } from '../directory-dashboard/directory-dash
 export class MoveItemsComponent implements OnInit {
 
   @ViewChild('moveModal', { static: false }) public moveModal: ModalDirective;
-  moveForm: FormGroup;
+  moveForm: UntypedFormGroup;
   allDirectories: Array<Directory>;
   directory: Directory;
   folderSelected: boolean = false;
   showNewFolder: boolean = false;
-  newFolderForm: FormGroup;
+  newFolderForm: UntypedFormGroup;
 
   constructor(
     private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService,
     private dashboardService: DashboardService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
       
     private assessmentDbService: AssessmentDbService,
     private calculatorDbService: CalculatorDbService,

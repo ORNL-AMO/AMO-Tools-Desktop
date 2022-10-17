@@ -4,7 +4,7 @@ import { Directory } from '../../../../shared/models/directory';
 import { ModalDirective } from 'ngx-bootstrap/modal';
  
 import * as _ from 'lodash';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { PreAssessmentService } from '../../../../calculator/utilities/pre-assessment/pre-assessment.service';
 import { Settings } from '../../../../shared/models/settings';
 import { CalculatorDbService } from '../../../../indexedDb/calculator-db.service';
@@ -32,8 +32,8 @@ export class PreAssessmentItemComponent implements OnInit {
 
   allDirectories: Array<Directory>;
   directory: Directory;
-  editForm: FormGroup;
-  copyForm: FormGroup;
+  editForm: UntypedFormGroup;
+  copyForm: UntypedFormGroup;
   numUnits: number = 0;
   energyUsed: number = 0;
   energyCost: number = 0;
@@ -44,7 +44,7 @@ export class PreAssessmentItemComponent implements OnInit {
   updateDashboardDataSub: Subscription;
   dashboardView: string;
   dashboardViewSub: Subscription;
-  constructor(   private settingsDbService: SettingsDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService, private calculatorDbService: CalculatorDbService,
+  constructor(   private settingsDbService: SettingsDbService, private formBuilder: UntypedFormBuilder, private preAssessmentService: PreAssessmentService, private calculatorDbService: CalculatorDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private directoryDbService: DirectoryDbService) { }
 
   ngOnInit() {

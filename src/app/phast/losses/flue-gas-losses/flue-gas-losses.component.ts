@@ -6,6 +6,8 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { FlueGasCompareService } from './flue-gas-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
+import { FlueGasService } from '../../../calculator/furnaces/flue-gas/flue-gas.service';
 import { FlueGasFormService } from '../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
@@ -295,8 +297,8 @@ export class FlueGasLossesComponent implements OnInit {
 
 export interface FlueGasObj {
   measurementType: string;
-  formByVolume: FormGroup;
-  formByMass: FormGroup;
+  formByVolume: UntypedFormGroup;
+  formByMass: UntypedFormGroup;
   calculatedExcessAir?: number;
   calculatedFlueGasO2?: number;
   availableHeat: number;

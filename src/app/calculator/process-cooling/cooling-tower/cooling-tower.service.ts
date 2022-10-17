@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
 import { BehaviorSubject } from 'rxjs';
@@ -20,7 +20,7 @@ export class CoolingTowerService {
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
 
-  constructor(private formBuilder: FormBuilder, 
+  constructor(private formBuilder: UntypedFormBuilder, 
               private convertUnitsService: ConvertUnitsService,
               private chillerService: ChillerService) { 
     this.baselineData = new BehaviorSubject<Array<CoolingTowerData>>(undefined);
@@ -32,8 +32,8 @@ export class CoolingTowerService {
     this.generateExample = new BehaviorSubject<boolean>(undefined);
   }
 
-  getFormFromObj(inputObj: CoolingTowerData): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getFormFromObj(inputObj: CoolingTowerData): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       name: [inputObj.name, [Validators.required]],
       operationalHours: [inputObj.operationalHours],
       flowRate: [inputObj.flowRate],
@@ -51,7 +51,7 @@ export class CoolingTowerService {
     return form;
   }
 
-  setValidators(form: FormGroup): FormGroup {
+  setValidators(form: UntypedFormGroup): UntypedFormGroup {
     form.controls.operationalHours.setValidators([Validators.required, Validators.min(0), Validators.max(8760)]);
     form.controls.flowRate.setValidators([GreaterThanValidator.greaterThan(0), Validators.required]);
     form.controls.waterCost.setValidators([Validators.required, Validators.min(0)]);
@@ -63,7 +63,7 @@ export class CoolingTowerService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): CoolingTowerData {
+  getObjFromForm(form: UntypedFormGroup): CoolingTowerData {
     let coolingTowerData: CoolingTowerData = {
       name: form.controls.name.value,
       operationalHours: form.controls.operationalHours.value,
@@ -315,7 +315,7 @@ export class CoolingTowerService {
     return coolingTowerInputs;
   }
 
-  calculateCoolingLoad(form: FormGroup, settings: Settings) {
+  calculateCoolingLoad(form: UntypedFormGroup, settings: Settings) {
     let {temperatureDifference, flowRate} = this.getObjFromForm(form);
     if (settings.unitsOfMeasure != "Imperial") {
       flowRate = this.convertUnitsService.value(flowRate).from('m3/s').to('gpm');

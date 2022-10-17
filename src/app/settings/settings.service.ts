@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../shared/models/settings';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -9,7 +9,7 @@ export class SettingsService {
   setDontShow: BehaviorSubject<boolean>;
   updateUnitsModalOpen: BehaviorSubject<boolean>;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder) {
     this.setDontShow = new BehaviorSubject<boolean>(false);
     this.updateUnitsModalOpen = new BehaviorSubject<boolean>(false);
 
@@ -51,7 +51,7 @@ export class SettingsService {
   //   });
   // }
 
-  getFormFromSettings(settings: Settings): FormGroup {
+  getFormFromSettings(settings: Settings): UntypedFormGroup {
     if (settings.steamPressureMeasurement === 'psi') {
       settings.steamPressureMeasurement = 'psig';
     }
@@ -162,7 +162,7 @@ export class SettingsService {
     });
   }
 
-  getSettingsFromForm(form: FormGroup) {
+  getSettingsFromForm(form: UntypedFormGroup) {
     let tmpSettings: Settings = {
       language: form.controls.language.value,
       currency: form.controls.currency.value,
@@ -374,7 +374,7 @@ export class SettingsService {
   }
 
   getNewSettingsDefaults(currentSettings: Settings): Settings {
-    let currentSettingsForm: FormGroup = this.getFormFromSettings(currentSettings);
+    let currentSettingsForm: UntypedFormGroup = this.getFormFromSettings(currentSettings);
     currentSettingsForm = this.setUnits(currentSettingsForm);
     let defaultSettings: Settings = this.getSettingsFromForm(currentSettingsForm);
     return defaultSettings;
@@ -382,7 +382,7 @@ export class SettingsService {
 
 
 
-  setUnits(settingsForm: FormGroup): FormGroup {
+  setUnits(settingsForm: UntypedFormGroup): UntypedFormGroup {
     if (settingsForm.controls.unitsOfMeasure.value === 'Imperial') {
       settingsForm.patchValue({
         powerMeasurement: PumpImperialDefaults.powerMeasurement,
@@ -505,7 +505,7 @@ export class SettingsService {
     return settingsForm;
   }
 
-  setEnergyResultUnit(settingsForm: FormGroup): FormGroup {
+  setEnergyResultUnit(settingsForm: UntypedFormGroup): UntypedFormGroup {
     if (settingsForm.controls.unitsOfMeasure.value === 'Imperial') {
       settingsForm.patchValue({
         energyResultUnit: 'MMBtu'

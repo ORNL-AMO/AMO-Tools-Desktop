@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { DayTypeAirflowTotals, EndUseDayTypeSetup } from '../../../shared/models/compressed-air-assessment';
@@ -10,13 +10,13 @@ export class DayTypeSetupService {
   endUseDayTypeSetup: BehaviorSubject<EndUseDayTypeSetup>;
   dayTypeSetupWarnings: DayTypeSetupWarnings;
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { 
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { 
     this.endUseDayTypeSetup = new BehaviorSubject<EndUseDayTypeSetup>(undefined);
   }
 
-  getDayTypeSetupFormFromObj(endUseDayTypeSetup: EndUseDayTypeSetup, dayTypeAirflowTotals: DayTypeAirflowTotals): FormGroup {
+  getDayTypeSetupFormFromObj(endUseDayTypeSetup: EndUseDayTypeSetup, dayTypeAirflowTotals: DayTypeAirflowTotals): UntypedFormGroup {
     let dayTypeLeakRate = endUseDayTypeSetup.dayTypeLeakRates.find(leakRate => leakRate.dayTypeId === endUseDayTypeSetup.selectedDayTypeId);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       selectedDayTypeId: [endUseDayTypeSetup.selectedDayTypeId],
       dayTypeLeakRate: [dayTypeLeakRate.dayTypeLeakRate],
     });
@@ -25,7 +25,7 @@ export class DayTypeSetupService {
     return form;
   }
 
-  getDayTypeSetupFromForm(form: FormGroup, endUseDayTypeSetup: EndUseDayTypeSetup): EndUseDayTypeSetup {
+  getDayTypeSetupFromForm(form: UntypedFormGroup, endUseDayTypeSetup: EndUseDayTypeSetup): EndUseDayTypeSetup {
     endUseDayTypeSetup.selectedDayTypeId = form.controls.selectedDayTypeId.value;
     let dayTypeLeakRate: number = form.controls.dayTypeLeakRate.value;
     endUseDayTypeSetup.dayTypeLeakRates.map(currentDaytypeLeakRate => {
@@ -37,7 +37,7 @@ export class DayTypeSetupService {
     return endUseDayTypeSetup;
   }
 
-  setDayTypeLeakRateValidation(form: FormGroup, dayTypeAirFlowTotals: DayTypeAirflowTotals) {
+  setDayTypeLeakRateValidation(form: UntypedFormGroup, dayTypeAirFlowTotals: DayTypeAirflowTotals) {
     let max: number = dayTypeAirFlowTotals.totalDayTypeAverageAirflow;
     let dayTypeLeakRateValidators: Array<ValidatorFn> = [Validators.required, Validators.min(0), Validators.max(max)];
     form.controls.dayTypeLeakRate.setValidators(dayTypeLeakRateValidators);
@@ -45,7 +45,7 @@ export class DayTypeSetupService {
     return form;
  }
 
-  markFormDirtyToDisplayValidation(form: FormGroup) {
+  markFormDirtyToDisplayValidation(form: UntypedFormGroup) {
     for (let key in form.controls) {
       if (form.controls[key]) {
         form.controls[key].markAsDirty();

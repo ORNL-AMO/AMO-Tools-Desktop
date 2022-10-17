@@ -2,7 +2,7 @@ import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChil
 import { Settings } from '../../shared/models/settings';
 import { BoilerService, BoilerWarnings } from './boiler.service';
 import { BoilerInput, HeaderInput, SSMT } from '../../shared/models/steam/ssmt';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompareService } from '../compare.service';
@@ -45,15 +45,16 @@ export class BoilerComponent implements OnInit {
   formWidth: number;
   showBlowdownRateModal: boolean = false;
   showBoilerEfficiencyModal: boolean = false;
-  boilerForm: FormGroup;
-  operationsForm: FormGroup;
+  boilerForm: UntypedFormGroup;
+  operationsForm: UntypedFormGroup;
   options: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
   showModal: boolean;
   idString: string = 'baseline_';
-  highPressureHeaderForm: FormGroup;
-  lowPressureHeaderForm: FormGroup;
+  highPressureHeaderForm: UntypedFormGroup;
+  lowPressureHeaderForm: UntypedFormGroup;
   constructor(private boilerService: BoilerService, private ssmtService: SsmtService,
-    private compareService: CompareService, private headerService: HeaderService, private stackLossService: StackLossService,
+    private compareService: CompareService, private headerService: HeaderService, 
+    private stackLossService: StackLossService,
     private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {

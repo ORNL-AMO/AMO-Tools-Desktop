@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CompressedAirDayType, ProfileSummary, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 
 @Injectable()
 export class SystemProfileService {
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder) {
   }
 
-  getProfileSetupFormFromObj(systemProfileSetup: SystemProfileSetup, dayTypes: Array<CompressedAirDayType>): FormGroup {
+  getProfileSetupFormFromObj(systemProfileSetup: SystemProfileSetup, dayTypes: Array<CompressedAirDayType>): UntypedFormGroup {
     let dayTypeExists: CompressedAirDayType = dayTypes.find(dayType => { return dayType.dayTypeId == systemProfileSetup.dayTypeId });
     if (!dayTypeExists && dayTypes.length != 0) {
       systemProfileSetup.dayTypeId = dayTypes[0].dayTypeId;
       systemProfileSetup.profileDataType = dayTypes[0].profileDataType;
     }
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       dayTypeId: [systemProfileSetup.dayTypeId],
       numberOfHours: [systemProfileSetup.numberOfHours, [Validators.required, Validators.min(24)]],
       dataInterval: [systemProfileSetup.dataInterval, [Validators.required]],
@@ -23,7 +23,7 @@ export class SystemProfileService {
     return form;
   }
 
-  getProfileSetupFromForm(form: FormGroup): SystemProfileSetup {
+  getProfileSetupFromForm(form: UntypedFormGroup): SystemProfileSetup {
     return {
       dayTypeId: form.controls.dayTypeId.value,
       numberOfHours: form.controls.numberOfHours.value,

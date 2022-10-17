@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { WaterHeatingInput } from '../../../shared/models/steam/waterHeating';
@@ -8,9 +8,9 @@ import { WaterHeatingInput } from '../../../shared/models/steam/waterHeating';
 export class WaterHeatingFormService {
 
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  getWaterHeatingForm(inputObj: WaterHeatingInput, settings: Settings): FormGroup {
+  getWaterHeatingForm(inputObj: WaterHeatingInput, settings: Settings): UntypedFormGroup {
     let minMakeupWater: number = 32;
     let maxMakeupWater: number = 200;
     if (settings.unitsOfMeasure != 'Imperial') {
@@ -20,7 +20,7 @@ export class WaterHeatingFormService {
       maxMakeupWater = Math.round(maxMakeupWater);
     }
 
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       boilerUtilityType: [inputObj.boilerUtilityType],
       hxUtilityType: [{value: inputObj.hxUtilityType, disabled: true}],
       operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
@@ -42,7 +42,7 @@ export class WaterHeatingFormService {
     return form;
   }
 
-  getWaterHeatingInput(form: FormGroup): WaterHeatingInput {
+  getWaterHeatingInput(form: UntypedFormGroup): WaterHeatingInput {
     let obj: WaterHeatingInput = {
       boilerUtilityType: form.controls.boilerUtilityType.value,
       hxUtilityType: form.controls.hxUtilityType.value,
@@ -64,14 +64,14 @@ export class WaterHeatingFormService {
     return obj;
   }
 
-  checkWarnings(form: FormGroup, settings: Settings): WaterHeatingWarnings {
+  checkWarnings(form: UntypedFormGroup, settings: Settings): WaterHeatingWarnings {
     return {
       temperatureWaterIn: this.checkTempInWarning(form, settings),
       tempMakeupWater: this.checkMakeupWater(form, settings)
     }
   }
 
-  checkTempInWarning(form: FormGroup, settings: Settings): string {
+  checkTempInWarning(form: UntypedFormGroup, settings: Settings): string {
     if (form.value.temperatureWaterIn) {
       let minWaterTempIn: number = 32;
       if (settings.unitsOfMeasure != 'Imperial') {
@@ -85,7 +85,7 @@ export class WaterHeatingFormService {
     return null;
   }
 
-  checkMakeupWater(form: FormGroup, settings: Settings): string {
+  checkMakeupWater(form: UntypedFormGroup, settings: Settings): string {
     if (form.value.tempMakeupWater) {
       let minMakeupWater: number = 50;
       let maxMakeupWater: number = 100;

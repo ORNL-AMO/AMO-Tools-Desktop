@@ -8,7 +8,7 @@ import { Assessment } from '../../../../shared/models/assessment';
 import { CompressedAirAssessment } from '../../../../shared/models/compressed-air-assessment';
 import { LogToolField } from '../../../log-tool-models';
 import * as _ from 'lodash';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Directory } from '../../../../shared/models/directory';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { AssessmentService } from '../../../../dashboard/assessment.service';
@@ -34,10 +34,10 @@ export class SelectAssessmentModalComponent implements OnInit {
   compressedAirAssessments: Array<Assessment>;
   directories: Array<Directory>
   addNewAssessment: boolean = false;
-  newAssessmentForm: FormGroup;
+  newAssessmentForm: UntypedFormGroup;
   constructor(private assessmentDbService: AssessmentDbService, private logToolService: LogToolService,
     private compressedAirAssessmentService: CompressedAirAssessmentService, private directoryDbService: DirectoryDbService,
-    private formBuilder: FormBuilder, private assessmentService: AssessmentService, private settingsDbService: SettingsDbService,
+    private formBuilder: UntypedFormBuilder, private assessmentService: AssessmentService, private settingsDbService: SettingsDbService,
     private dayTypeAnalysisService: DayTypeAnalysisService, private inventoryService: InventoryService) { }
 
   ngOnInit(): void {

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CoolingTowerFanInput } from '../../../shared/models/chillers';
 
 @Injectable()
 export class CoolingTowerFanFormService {
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: UntypedFormBuilder) {}
 
-  getCoolingTowerFanForm(inputObj: CoolingTowerFanInput): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getCoolingTowerFanForm(inputObj: CoolingTowerFanInput): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       towerType: [inputObj.towerType, Validators.required],
       numCells: [inputObj.numCells, [Validators.required, Validators.min(0)]],
       waterFlowRate: [inputObj.waterFlowRate, [Validators.required, Validators.min(0)]],
@@ -26,7 +26,7 @@ export class CoolingTowerFanFormService {
     return form;
   }
 
-  setWaterTempValidators(formGroup: FormGroup) {
+  setWaterTempValidators(formGroup: UntypedFormGroup) {
     let waterLeavingTemp = formGroup.controls.waterLeavingTemp.value;
     let waterEnteringTemp = formGroup.controls.waterEnteringTemp.value;
 
@@ -45,7 +45,7 @@ export class CoolingTowerFanFormService {
     return formGroup;
 }
 
-  getCoolingTowerFanInput(form: FormGroup): CoolingTowerFanInput {
+  getCoolingTowerFanInput(form: UntypedFormGroup): CoolingTowerFanInput {
     let obj: CoolingTowerFanInput = {
       towerType: form.controls.towerType.value,
       numCells: form.controls.numCells.value,

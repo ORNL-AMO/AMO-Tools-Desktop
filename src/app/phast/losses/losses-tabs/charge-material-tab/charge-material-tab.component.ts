@@ -3,7 +3,7 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { LossesService } from '../../losses.service';
 import { ChargeMaterialCompareService } from '../../charge-material/charge-material-compare.service';
 import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { LiquidMaterialFormService, LiquidMaterialWarnings } from '../../../../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
 import { GasMaterialFormService } from '../../../../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
@@ -122,21 +122,21 @@ export class ChargeMaterialTabComponent implements OnInit {
 
   checkMaterialValid(material: ChargeMaterial) {
     if (material.chargeMaterialType === 'Gas') {
-      let tmpForm: FormGroup = this.gasMaterialFormService.getGasChargeMaterialForm(material);
+      let tmpForm: UntypedFormGroup = this.gasMaterialFormService.getGasChargeMaterialForm(material);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;
       }
     } else if (material.chargeMaterialType === 'Solid') {
-      let tmpForm: FormGroup = this.solidMaterialFormService.getSolidChargeMaterialForm(material);
+      let tmpForm: UntypedFormGroup = this.solidMaterialFormService.getSolidChargeMaterialForm(material);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;
       }
     } else if (material.chargeMaterialType === 'Liquid') {
-      let tmpForm: FormGroup = this.liquidMaterialFormService.getLiquidChargeMaterialForm(material);
+      let tmpForm: UntypedFormGroup = this.liquidMaterialFormService.getLiquidChargeMaterialForm(material);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {

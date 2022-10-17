@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ReplaceExistingService } from '../replace-existing.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 @Component({
@@ -10,7 +10,7 @@ import { OperatingHours } from '../../../../shared/models/operations';
 })
 export class ReplaceExistingFormComponent implements OnInit {
   @Input()
-  replaceExistingForm: FormGroup;
+  replaceExistingForm: UntypedFormGroup;
   @Input()
   settings: Settings;
   @Output('emitCalculate')

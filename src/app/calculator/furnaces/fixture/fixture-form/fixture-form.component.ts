@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
@@ -36,7 +36,7 @@ export class FixtureFormComponent implements OnInit {
   materialTypes: Array<SolidLoadChargeMaterial>;
   showMaterialModal: boolean = false;
 
-  fixtureForm: FormGroup;
+  fixtureForm: UntypedFormGroup;
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
   showFlueGasModal: boolean;

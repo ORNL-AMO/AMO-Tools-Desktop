@@ -4,7 +4,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { GasLoadChargeMaterial } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { GasLoadMaterialDbService } from '../../../../indexedDb/gas-load-material-db.service';
@@ -17,7 +17,7 @@ import { firstValueFrom } from 'rxjs';
 })
 export class GasChargeMaterialFormComponent implements OnInit {
   @Input()
-  chargeMaterialForm: FormGroup;
+  chargeMaterialForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
