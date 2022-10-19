@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup, Validators, FormArray, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, Validators, FormArray, FormBuilder } from '@angular/forms';
 import { EquipmentCurveService } from '../equipment-curve.service';
 import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
@@ -18,7 +18,7 @@ export class ByEquationFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  byEquationForm: FormGroup;
+  byEquationForm: UntypedFormGroup;
   formLabel: string;
   flowUnit: string;
   powerUnit: string;

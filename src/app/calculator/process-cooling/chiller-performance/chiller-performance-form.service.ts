@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ChillerPerformanceInput } from '../../../shared/models/chillers';
 
 @Injectable()
 export class ChillerPerformanceFormService {
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: UntypedFormBuilder) {}
 
-  getChillerPerformanceForm(inputObj: ChillerPerformanceInput): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getChillerPerformanceForm(inputObj: ChillerPerformanceInput): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       chillerType: [inputObj.chillerType],
       condenserCoolingType: [inputObj.condenserCoolingType, Validators.required],
       motorDriveType: [inputObj.motorDriveType, Validators.required],
@@ -30,8 +30,8 @@ export class ChillerPerformanceFormService {
     return form;
   }
 
-  setWaterTempValidators(form: FormGroup) {
-    let updatedControls: Array<FormControl> = this.getValidationUpdatedControls(form.controls.baselineWaterSupplyTemp, form.controls.baselineWaterEnteringTemp);
+  setWaterTempValidators(form: UntypedFormGroup) {
+    let updatedControls: Array<UntypedFormControl> = this.getValidationUpdatedControls(form.controls.baselineWaterSupplyTemp, form.controls.baselineWaterEnteringTemp);
     form.controls.baselineWaterSupplyTemp = updatedControls[0];
     form.controls.baselineWaterEnteringTemp = updatedControls[1];
     updatedControls = this.getValidationUpdatedControls(form.controls.modWaterSupplyTemp, form.controls.modWaterEnteringTemp);
@@ -40,12 +40,12 @@ export class ChillerPerformanceFormService {
     return form;
   }
 
-  getValidationUpdatedControls(waterSupplyTempControl: AbstractControl, waterEnteringTempControl: AbstractControl): Array<FormControl> {
-    let waterSupplyTempFormControl: FormControl = waterSupplyTempControl as FormControl;
-    let waterEnteringTempFormControl: FormControl = waterEnteringTempControl as FormControl;
+  getValidationUpdatedControls(waterSupplyTempControl: AbstractControl, waterEnteringTempControl: AbstractControl): Array<UntypedFormControl> {
+    let waterSupplyTempFormControl: UntypedFormControl = waterSupplyTempControl as UntypedFormControl;
+    let waterEnteringTempFormControl: UntypedFormControl = waterEnteringTempControl as UntypedFormControl;
     let waterSupplyTemp = waterSupplyTempFormControl.value;
     let waterEnteringTemp = waterEnteringTempFormControl.value;
-    let updatedControls: Array<FormControl> = [];
+    let updatedControls: Array<UntypedFormControl> = [];
     waterSupplyTempFormControl.setValidators([Validators.required, Validators.max(waterEnteringTemp)]);
     waterSupplyTempFormControl.markAsDirty();
     waterSupplyTempFormControl.updateValueAndValidity();
@@ -58,7 +58,7 @@ export class ChillerPerformanceFormService {
     return updatedControls;
   }
 
-  getChillerPerformanceInput(form: FormGroup): ChillerPerformanceInput {
+  getChillerPerformanceInput(form: UntypedFormGroup): ChillerPerformanceInput {
     let obj: ChillerPerformanceInput = {
       operatingHours: form.controls.operatingHours.value,
       chillerType: form.controls.chillerType.value,

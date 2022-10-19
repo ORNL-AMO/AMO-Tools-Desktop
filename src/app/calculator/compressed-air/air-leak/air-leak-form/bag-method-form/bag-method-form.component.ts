@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AirLeakService } from '../../air-leak.service';
 import { AirLeakFormService } from '../air-leak-form.service';
@@ -18,7 +18,7 @@ export class BagMethodFormComponent implements OnInit {
   currentLeakIndexSub: Subscription;
   currentLeakIndex: number;
 
-  bagMethodForm: FormGroup;
+  bagMethodForm: UntypedFormGroup;
 
   constructor(private airLeakService: AirLeakService,
     private airLeakFormService: AirLeakFormService) { }

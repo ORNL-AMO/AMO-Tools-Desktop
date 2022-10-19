@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { OperationsService, OperationsWarnings } from '../../operations/operations.service';
 import { OperationsCompareService } from '../../operations/operations-compare.service';
 import { Subscription } from 'rxjs';
@@ -84,7 +84,7 @@ export class OperationsTabComponent implements OnInit {
 
 
   checkLossValid(phast: PHAST, settings: Settings) {
-    let tmpForm: FormGroup = this.operationsService.initForm(phast, settings);
+    let tmpForm: UntypedFormGroup = this.operationsService.initForm(phast, settings);
     if (tmpForm.status === 'VALID') {
       return true;
     } else {

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SteamReductionService } from '../steam-reduction.service';
 import { SteamReductionResult, SteamReductionData } from '../../../../shared/models/standalone';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -58,7 +58,7 @@ export class SteamReductionFormComponent implements OnInit {
   idString: string;
   individualResults: SteamReductionResult;
   isEditingName: boolean = false;
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   constructor(private steamReductionService: SteamReductionService) { }
 

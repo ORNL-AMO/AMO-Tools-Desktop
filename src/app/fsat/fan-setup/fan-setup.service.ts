@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { FanSetup } from '../../shared/models/fans';
 
 @Injectable()
 export class FanSetupService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
 
-  getFormFromObj(obj: FanSetup, isModification: boolean): FormGroup {
+  getFormFromObj(obj: FanSetup, isModification: boolean): UntypedFormGroup {
     let fanEfficiencyValidators: Array<ValidatorFn> = [];
     if (isModification) {
       fanEfficiencyValidators = [Validators.required, Validators.min(0), Validators.max(100)];
@@ -17,7 +17,7 @@ export class FanSetupService {
     if (obj.drive === 4) {
       specifiedDriveValidators = [Validators.required, Validators.min(0), Validators.max(100)];
     }
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       fanType: [obj.fanType, Validators.required],
       fanEfficiency: [obj.fanEfficiency, fanEfficiencyValidators],
       fanSpeed: [obj.fanSpeed, Validators.required],
@@ -32,7 +32,7 @@ export class FanSetupService {
     return form;
   }
 
-  changeFanType(form: FormGroup): FormGroup {
+  changeFanType(form: UntypedFormGroup): UntypedFormGroup {
     if (form.controls.fanType.value === 12) {
       form.controls.fanEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
       form.controls.fanEfficiency.reset(form.controls.fanEfficiency.value);
@@ -45,7 +45,7 @@ export class FanSetupService {
     return form;
   }
 
-  changeDriveType(form: FormGroup): FormGroup {
+  changeDriveType(form: UntypedFormGroup): UntypedFormGroup {
     if (form.controls.drive.value === 4) {
       form.controls.specifiedDriveEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
       form.controls.specifiedDriveEfficiency.reset(form.controls.specifiedDriveEfficiency.value);
@@ -59,7 +59,7 @@ export class FanSetupService {
   }
 
 
-  getObjFromForm(form: FormGroup): FanSetup {
+  getObjFromForm(form: UntypedFormGroup): FanSetup {
     let obj: FanSetup = {
       fanType: form.controls.fanType.value,
       fanEfficiency: form.controls.fanEfficiency.value,
@@ -71,7 +71,7 @@ export class FanSetupService {
   }
 
   isFanSetupValid(obj: FanSetup, isModification: boolean): boolean {
-    let form: FormGroup = this.getFormFromObj(obj, isModification);
+    let form: UntypedFormGroup = this.getFormFromObj(obj, isModification);
     return form.valid;
   }
 }

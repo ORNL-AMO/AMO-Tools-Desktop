@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { BaseGasDensity, PsychrometricResults } from '../../../../../shared/models/fans';
 import { Settings } from '../../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { GasDensityFormService, GasDensityRanges } from './gas-density-form.service';
 import { FsatService } from '../../../../../fsat/fsat.service';
 import { FanAnalysisService } from '../../fan-analysis.service';
@@ -17,7 +17,7 @@ export class GasDensityFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  gasDensityForm: FormGroup;
+  gasDensityForm: UntypedFormGroup;
 
   methods: Array<{ display: string, value: string }> = [
     { display: 'Relative Humidity %', value: 'relativeHumidity' },

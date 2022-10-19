@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CASystemBasics } from '../../shared/models/compressed-air-assessment';
 
 @Injectable()
 export class SystemBasicsFormService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromObj(obj: CASystemBasics): FormGroup{
+  getFormFromObj(obj: CASystemBasics): UntypedFormGroup{
     return this.formBuilder.group({
       'utilityType': [obj.utilityType, Validators.required],
       'demandCost': [obj.demandCost, [Validators.required, Validators.min(0)]],
@@ -16,7 +16,7 @@ export class SystemBasicsFormService {
     });
   }
 
-  getObjFromForm(form: FormGroup): CASystemBasics{
+  getObjFromForm(form: UntypedFormGroup): CASystemBasics{
     return {
       utilityType: form.controls.utilityType.value,
       demandCost: form.controls.demandCost.value,

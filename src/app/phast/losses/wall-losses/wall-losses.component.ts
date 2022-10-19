@@ -4,7 +4,7 @@ import { PhastService } from '../../phast.service';
 import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 import { Losses } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { WallFormService } from '../../../calculator/furnaces/wall/wall-form.service';
 
 @Component({
@@ -167,7 +167,7 @@ export class WallLossesComponent implements OnInit {
 
 
 export interface WallLossObj {
-  form: FormGroup;
+  form: UntypedFormGroup;
   heatLoss?: number;
   collapse: boolean;
 }

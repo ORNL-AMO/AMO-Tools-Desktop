@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { EnergyEquivalencyElectric, EnergyEquivalencyFuel } from '../../../shared/models/phast/energyEquivalency';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Injectable()
 export class EnergyEquivalencyService {
   energyEquivalencyElectric: EnergyEquivalencyElectric;
   energyEquivalencyFuel: EnergyEquivalencyFuel;
-  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: UntypedFormBuilder) { }
 
-  getElectricFormFromObj(inputObj: EnergyEquivalencyElectric): FormGroup {
-    let tmpForm: FormGroup = this.formBuilder.group({
+  getElectricFormFromObj(inputObj: EnergyEquivalencyElectric): UntypedFormGroup {
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       electricallyHeatedEfficiency: [inputObj.electricallyHeatedEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
       fuelFiredEfficiency: [inputObj.fuelFiredEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
       fuelFiredHeatInput: [inputObj.fuelFiredHeatInput, [Validators.required, Validators.min(0)]]
@@ -19,7 +19,7 @@ export class EnergyEquivalencyService {
     return tmpForm;
   }
 
-  getElectricObjFromForm(form: FormGroup): EnergyEquivalencyElectric {
+  getElectricObjFromForm(form: UntypedFormGroup): EnergyEquivalencyElectric {
     this.energyEquivalencyElectric = {
       fuelFiredEfficiency: form.controls.fuelFiredEfficiency.value,
       electricallyHeatedEfficiency: form.controls.electricallyHeatedEfficiency.value,
@@ -28,8 +28,8 @@ export class EnergyEquivalencyService {
     return this.energyEquivalencyElectric;
   }
 
-  getFuelFormFromObj(inputObj: EnergyEquivalencyFuel): FormGroup {
-    let tmpForm: FormGroup = this.formBuilder.group({
+  getFuelFormFromObj(inputObj: EnergyEquivalencyFuel): UntypedFormGroup {
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       electricallyHeatedEfficiency: [inputObj.electricallyHeatedEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
       fuelFiredEfficiency: [inputObj.fuelFiredEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
       electricalHeatInput: [inputObj.electricalHeatInput, [Validators.required, Validators.min(0)]]
@@ -37,7 +37,7 @@ export class EnergyEquivalencyService {
     return tmpForm;
   }
 
-  getFuelObjFromForm(form: FormGroup): EnergyEquivalencyFuel {
+  getFuelObjFromForm(form: UntypedFormGroup): EnergyEquivalencyFuel {
     this.energyEquivalencyFuel = {
       fuelFiredEfficiency: form.controls.fuelFiredEfficiency.value,
       electricallyHeatedEfficiency: form.controls.electricallyHeatedEfficiency.value,

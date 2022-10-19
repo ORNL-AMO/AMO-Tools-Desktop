@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FanShaftPower } from '../../../../../shared/models/fans';
 import { Settings } from '../../../../../shared/models/settings';
 import { GreaterThanValidator } from '../../../../../shared/validators/greater-than';
@@ -8,9 +8,9 @@ import { ConvertFanAnalysisService } from '../../convert-fan-analysis.service';
 @Injectable()
 export class FanShaftPowerFormService {
 
-  constructor(private formBuilder: FormBuilder, private convertFanAnalysisService: ConvertFanAnalysisService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertFanAnalysisService: ConvertFanAnalysisService) { }
 
-  getShaftPowerFormFromObj(obj: FanShaftPower, inStandalone?: boolean, settings?: Settings): FormGroup {
+  getShaftPowerFormFromObj(obj: FanShaftPower, inStandalone?: boolean, settings?: Settings): UntypedFormGroup {
     let motorShaftPower = obj.motorShaftPower;
     if (inStandalone && obj.motorShaftPower) {
       motorShaftPower = this.convertFanAnalysisService.convertNum(obj.motorShaftPower, settings.fanPowerMeasurement, 'kW'); 
@@ -43,7 +43,7 @@ export class FanShaftPowerFormService {
     return form;
   }
 
-  getShaftPowerObjFromForm(form: FormGroup, obj: FanShaftPower, inStandalone?: boolean, settings?: Settings): FanShaftPower {
+  getShaftPowerObjFromForm(form: UntypedFormGroup, obj: FanShaftPower, inStandalone?: boolean, settings?: Settings): FanShaftPower {
     if (inStandalone && form.controls.motorShaftPower.value) {
       obj.motorShaftPower = this.convertFanAnalysisService.convertNum(form.controls.motorShaftPower.value, 'kW', settings.fanPowerMeasurement); 
     }

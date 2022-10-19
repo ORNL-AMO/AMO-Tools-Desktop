@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../shared/models/settings';
@@ -14,7 +14,7 @@ export class AltitudeCorrectionFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   barometricPressure: number;
 
   resetFormSubscription: Subscription;

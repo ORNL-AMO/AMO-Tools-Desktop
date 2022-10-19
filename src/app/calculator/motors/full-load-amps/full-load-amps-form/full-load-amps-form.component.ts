@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { FLAMotorWarnings, FullLoadAmpsService } from '../full-load-amps.service';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ export class FullLoadAmpsFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   formWidth: number;
   idString: string = 'fla_calc';
   fullLoadAmps: number;

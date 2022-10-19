@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CoolingTowerBasinInput } from '../../../../shared/models/chillers';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -24,7 +24,7 @@ export class CoolingTowerBasinFormComponent implements OnInit {
   onResize(event) {
     this.setOpHoursModalWidth();
   }
-  form: FormGroup;
+  form: UntypedFormGroup;
   
   resetDataSub: Subscription;
   hasWeatherBinsDataSub: Subscription;

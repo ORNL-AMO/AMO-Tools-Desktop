@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
 import { PhastService } from '../../../../../phast/phast.service';
@@ -16,9 +16,9 @@ import { MaterialInputProperties } from '../../../../../shared/models/phast/loss
 })
 export class StackLossByMassComponent implements OnInit {
   @Input()
-  stackLossForm: FormGroup;
+  stackLossForm: UntypedFormGroup;
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<FormGroup>();
+  emitCalculate = new EventEmitter<UntypedFormGroup>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Input()

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FlueGas, FlueGasByMass, FlueGasByVolume, FlueGasWarnings } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
@@ -7,9 +7,9 @@ import { Settings } from '../../../shared/models/settings';
 @Injectable()
 export class FlueGasFormService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  initEmptyVolumeForm(settings: Settings, loss?: number): FormGroup {
+  initEmptyVolumeForm(settings: Settings, loss?: number): UntypedFormGroup {
     let defaultTemp: number = 65;
     let defaultFlueGasTemp: number = 212;
     if (settings.unitsOfMeasure != 'Imperial') {
@@ -48,14 +48,14 @@ export class FlueGasFormService {
     });
 
     if (!loss) {
-      formGroup.addControl('heatInput', new FormControl(0, [Validators.required, Validators.min(0)]));
+      formGroup.addControl('heatInput', new UntypedFormControl(0, [Validators.required, Validators.min(0)]));
     }
 
     formGroup = this.setValidators(formGroup);
     return formGroup;
   }
 
-  initEmptyMassForm(settings: Settings, loss?: number): FormGroup {
+  initEmptyMassForm(settings: Settings, loss?: number): UntypedFormGroup {
     let defaultMoistureInAirComp: any = .0077;
     let lossNumber: number = 0;
     if (loss) {
@@ -93,14 +93,14 @@ export class FlueGasFormService {
     });
 
     if (!loss) {
-      formGroup.addControl('heatInput', new FormControl(0, [Validators.required, Validators.min(0)]));
+      formGroup.addControl('heatInput', new UntypedFormControl(0, [Validators.required, Validators.min(0)]));
     }
 
     formGroup = this.setValidators(formGroup);
     return formGroup;
   }
 
-  initByVolumeFormFromLoss(loss: FlueGas, inAssessment = true): FormGroup {
+  initByVolumeFormFromLoss(loss: FlueGas, inAssessment = true): UntypedFormGroup {
     let formGroup = this.formBuilder.group({
       'gasTypeId': [loss.flueGasByVolume.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByVolume.flueGasTemperature, Validators.required],
@@ -129,14 +129,14 @@ export class FlueGasFormService {
     });
 
     if (!inAssessment) {
-      formGroup.addControl('heatInput', new FormControl(loss.flueGasByVolume.heatInput, [Validators.required, Validators.min(0)]));
+      formGroup.addControl('heatInput', new UntypedFormControl(loss.flueGasByVolume.heatInput, [Validators.required, Validators.min(0)]));
     }
 
     formGroup = this.setValidators(formGroup);
     return formGroup;
   }
 
-  initByMassFormFromLoss(loss: FlueGas, inAssessment = true): FormGroup {
+  initByMassFormFromLoss(loss: FlueGas, inAssessment = true): UntypedFormGroup {
       let formGroup = this.formBuilder.group({
       'gasTypeId': [loss.flueGasByMass.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByMass.flueGasTemperature, Validators.required],
@@ -161,14 +161,14 @@ export class FlueGasFormService {
     });
 
     if (!inAssessment) {
-      formGroup.addControl('heatInput', new FormControl(loss.flueGasByMass.heatInput, [Validators.required, Validators.min(0)]));
+      formGroup.addControl('heatInput', new UntypedFormControl(loss.flueGasByMass.heatInput, [Validators.required, Validators.min(0)]));
     }
 
     formGroup = this.setValidators(formGroup);
     return formGroup;
   }
 
-  setValidators(formGroup: FormGroup, inModal = false): FormGroup {
+  setValidators(formGroup: UntypedFormGroup, inModal = false): UntypedFormGroup {
     formGroup = this.setFlueGasTempValidators(formGroup);
     formGroup = this.setCombustionAirTempValidators(formGroup);
 
@@ -179,7 +179,7 @@ export class FlueGasFormService {
     return formGroup;
   }
 
-  setCombustionAirTempValidators(formGroup: FormGroup) {
+  setCombustionAirTempValidators(formGroup: UntypedFormGroup) {
     let flueGasTemp = formGroup.controls.flueGasTemperature.value;
     let validators = [Validators.required];
     if (flueGasTemp !== undefined) {
@@ -191,7 +191,7 @@ export class FlueGasFormService {
     return formGroup;
   }
 
-  setFlueGasTempValidators(formGroup: FormGroup) {
+  setFlueGasTempValidators(formGroup: UntypedFormGroup) {
     let combustionAirTemperature = formGroup.controls.combustionAirTemperature.value;
     let validators = [Validators.required];
     if (combustionAirTemperature !== undefined) {
@@ -203,7 +203,7 @@ export class FlueGasFormService {
     return formGroup;
   }
 
-  buildByMassLossFromForm(form: FormGroup): FlueGas {
+  buildByMassLossFromForm(form: UntypedFormGroup): FlueGas {
     let flueGas: FlueGas = {
       name: form.controls.name.value,
       flueGasType: "By Mass",
@@ -236,7 +236,7 @@ export class FlueGasFormService {
     return flueGas;
   }
 
-  buildByVolumeLossFromForm(form: FormGroup): FlueGas {
+  buildByVolumeLossFromForm(form: UntypedFormGroup): FlueGas {
     let flueGas: FlueGas = {
       name: form.controls.name.value,
       flueGasType: "By Volume",

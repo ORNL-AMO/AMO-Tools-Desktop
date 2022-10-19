@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PsychrometricResults, BaseGasDensity } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FsatService } from '../../../fsat/fsat.service';
 import { GasDensityFormService } from '../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 import { ConvertFanAnalysisService } from '../../fans/fan-analysis/convert-fan-analysis.service';
@@ -88,7 +88,7 @@ export class FanPsychrometricService {
     }
     return psychrometricResults;
   }
-  isWetBulbValid(gasDensityForm: FormGroup): boolean {
+  isWetBulbValid(gasDensityForm: UntypedFormGroup): boolean {
     return (gasDensityForm.controls.dryBulbTemp.valid && gasDensityForm.controls.staticPressure.valid
       && gasDensityForm.controls.specificGravity.valid && gasDensityForm.controls.wetBulbTemp.valid);
   }
@@ -101,7 +101,7 @@ export class FanPsychrometricService {
     return psychrometricResults;
   }
 
-  isRelativeHumidityValid(gasDensityForm: FormGroup): boolean {
+  isRelativeHumidityValid(gasDensityForm: UntypedFormGroup): boolean {
     return (gasDensityForm.controls.dryBulbTemp.valid && gasDensityForm.controls.staticPressure.valid && gasDensityForm.controls.barometricPressure.valid  
       && gasDensityForm.controls.specificGravity.valid && gasDensityForm.controls.relativeHumidity.valid);
   }
@@ -115,7 +115,7 @@ export class FanPsychrometricService {
     return psychrometricResults;
   }
 
-  isDewPointValid(gasDensityForm: FormGroup) {
+  isDewPointValid(gasDensityForm: UntypedFormGroup) {
     return (gasDensityForm.controls.dryBulbTemp.valid && gasDensityForm.controls.staticPressure.valid
       && gasDensityForm.controls.specificGravity.valid && gasDensityForm.controls.dewPoint.valid);
   }

@@ -1,6 +1,6 @@
 import { Injectable, Input } from '@angular/core';
 import { HeaderInput, HeaderNotHighestPressure, HeaderWithHighestPressure, BoilerInput, SSMT } from '../../shared/models/steam/ssmt';
-import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
 import { SteamService } from '../../calculator/steam/steam.service';
@@ -11,7 +11,7 @@ import { LessThanValidator } from '../../shared/validators/less-than';
 @Injectable()
 export class HeaderService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
   initHeaderDataObj(): HeaderInput {
     return {
@@ -20,9 +20,9 @@ export class HeaderService {
     };
   }
 
-  initHighestPressureHeaderForm(settings: Settings, boilerInput: BoilerInput, pressureMin?: number): FormGroup {
+  initHighestPressureHeaderForm(settings: Settings, boilerInput: BoilerInput, pressureMin?: number): UntypedFormGroup {
     let ranges: HeaderRanges = this.getRanges(settings, pressureMin, undefined);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       pressure: [undefined, [Validators.required, LessThanValidator.lessThan(ranges.pressureMax), this.boilerTempValidator(boilerInput.steamTemperature, settings)]],
       processSteamUsage: [undefined, [Validators.required, Validators.min(ranges.processUsageMin)]],
       condensationRecoveryRate: [undefined, [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -43,9 +43,9 @@ export class HeaderService {
 
   }
 
-  getHighestPressureHeaderFormFromObj(obj: HeaderWithHighestPressure, settings: Settings, boilerInput: BoilerInput, pressureMin?: number): FormGroup {
+  getHighestPressureHeaderFormFromObj(obj: HeaderWithHighestPressure, settings: Settings, boilerInput: BoilerInput, pressureMin?: number): UntypedFormGroup {
     let ranges: HeaderRanges = this.getRanges(settings, pressureMin, undefined);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       pressure: [obj.pressure, [Validators.required, LessThanValidator.lessThan(ranges.pressureMax), this.boilerTempValidator(boilerInput.steamTemperature, settings)]],
       processSteamUsage: [obj.processSteamUsage, [Validators.required, Validators.min(ranges.processUsageMin)]],
       condensationRecoveryRate: [obj.condensationRecoveryRate, [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -65,7 +65,7 @@ export class HeaderService {
     return form;
   }
 
-  getHighestPressureObjFromForm(form: FormGroup): HeaderWithHighestPressure {
+  getHighestPressureObjFromForm(form: UntypedFormGroup): HeaderWithHighestPressure {
     return {
       pressure: form.controls.pressure.value,
       processSteamUsage: form.controls.processSteamUsage.value,
@@ -76,9 +76,9 @@ export class HeaderService {
     };
   }
 
-  initHeaderForm(settings: Settings, useBaselineProcessSteamUsage: boolean, pressureMin: number, pressureMax: number, deaeratorPressure?: number): FormGroup {
+  initHeaderForm(settings: Settings, useBaselineProcessSteamUsage: boolean, pressureMin: number, pressureMax: number, deaeratorPressure?: number): UntypedFormGroup {
     let ranges: HeaderRanges = this.getRanges(settings, undefined, pressureMin, pressureMax);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       pressure: [undefined, [Validators.required, GreaterThanValidator.greaterThan(ranges.pressureMin), LessThanValidator.lessThan(ranges.pressureMax)]],
       processSteamUsage: [undefined, [Validators.required, Validators.min(ranges.processUsageMin)]],
       condensationRecoveryRate: [undefined, [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -100,7 +100,7 @@ export class HeaderService {
     return form;
   }
 
-  getHeaderFormFromObj(obj: HeaderNotHighestPressure, settings: Settings, pressureMin: number, pressureMax: number, deaeratorPressure?: number): FormGroup {
+  getHeaderFormFromObj(obj: HeaderNotHighestPressure, settings: Settings, pressureMin: number, pressureMax: number, deaeratorPressure?: number): UntypedFormGroup {
     let ranges: HeaderRanges = this.getRanges(settings, pressureMin, pressureMax, obj.pressure);
     let tmpDesuperheatSteamTemperatureValidators: Array<ValidatorFn>;
     if (obj.desuperheatSteamIntoNextHighest) {
@@ -109,7 +109,7 @@ export class HeaderService {
       tmpDesuperheatSteamTemperatureValidators = [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
     }
 
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       pressure: [obj.pressure, [Validators.required]],
       processSteamUsage: [obj.processSteamUsage, [Validators.required, Validators.min(ranges.processUsageMin)]],
       condensationRecoveryRate: [obj.condensationRecoveryRate, [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -152,7 +152,7 @@ export class HeaderService {
     return validators;
   }
 
-  initHeaderObjFromForm(form: FormGroup): HeaderNotHighestPressure {
+  initHeaderObjFromForm(form: UntypedFormGroup): HeaderNotHighestPressure {
     return {
       pressure: form.controls.pressure.value,
       processSteamUsage: form.controls.processSteamUsage.value,

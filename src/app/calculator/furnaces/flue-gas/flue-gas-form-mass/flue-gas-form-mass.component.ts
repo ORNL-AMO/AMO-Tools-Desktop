@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
@@ -29,7 +29,7 @@ export class FlueGasFormMassComponent implements OnInit {
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   resetDataSub: Subscription;
-  byMassForm: FormGroup;
+  byMassForm: UntypedFormGroup;
   options: Array<SolidLiquidFlueGasMaterial>;
 
   calculationMethods: Array<string> = [

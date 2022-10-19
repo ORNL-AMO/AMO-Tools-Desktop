@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ExtendedSurfaceLossesService } from './losses/extended-surface-losses/extended-surface-losses.service';
 import { OperationsService } from './losses/operations/operations.service';
 import { EnergyInputService } from './losses/energy-input/energy-input.service';
@@ -113,7 +113,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.exhaustGasEAF) {
       phast.losses.exhaustGasEAF.forEach(loss => {
-        let exhaustGasForm: FormGroup = this.exhaustGasService.getFormFromLoss(loss);
+        let exhaustGasForm: UntypedFormGroup = this.exhaustGasService.getFormFromLoss(loss);
         if (exhaustGasForm.status === 'INVALID') {
           valid = false;
         }
@@ -126,7 +126,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.energyInputExhaustGasLoss) {
       phast.losses.energyInputExhaustGasLoss.forEach(loss => {
-        let exhaustGasForm: FormGroup = this.energyInputExhaustGasService.getFormFromLoss(loss);
+        let exhaustGasForm: UntypedFormGroup = this.energyInputExhaustGasService.getFormFromLoss(loss);
         if (exhaustGasForm.status === 'INVALID') {
           valid = false;
         }
@@ -139,7 +139,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.auxiliaryPowerLosses) {
       phast.losses.auxiliaryPowerLosses.forEach(loss => {
-        let auxPowerForm: FormGroup = this.auxiliaryPowerLossesService.getFormFromLoss(loss);
+        let auxPowerForm: UntypedFormGroup = this.auxiliaryPowerLossesService.getFormFromLoss(loss);
         if (auxPowerForm.status === 'INVALID') {
           valid = false;
         }
@@ -150,14 +150,14 @@ export class PhastValidService {
   }
 
   checkOperationsValid(phast: PHAST, settings: Settings): boolean {
-    let operationsForm: FormGroup = this.operationsService.initForm(phast, settings);
+    let operationsForm: UntypedFormGroup = this.operationsService.initForm(phast, settings);
     return operationsForm.status === 'VALID'
   }
 
   checkChargeMaterialValid(phast: PHAST): boolean {
     let valid = true;
     if (phast.losses && phast.losses.chargeMaterials) {
-      let chargeMaterialForm: FormGroup;
+      let chargeMaterialForm: UntypedFormGroup;
       phast.losses.chargeMaterials.forEach(loss => {
         if (loss.chargeMaterialType === 'Gas') {
           chargeMaterialForm = this.gasMaterialFormService.getGasChargeMaterialForm(loss);
@@ -178,7 +178,7 @@ export class PhastValidService {
   checkFlueGasValid(phast: PHAST): boolean {
     let valid = true;
     if (phast.losses.flueGasLosses) {
-      let flueGasForm: FormGroup;
+      let flueGasForm: UntypedFormGroup;
       phast.losses.flueGasLosses.forEach(loss => {
         if (loss.flueGasByVolume) {
           flueGasForm = this.flueGasFormService.initByVolumeFormFromLoss(loss, true);
@@ -198,7 +198,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.fixtureLosses) {
       phast.losses.fixtureLosses.forEach(loss => {
-        let fixtureForm: FormGroup = this.fixtureFormService.getFormFromLoss(loss);
+        let fixtureForm: UntypedFormGroup = this.fixtureFormService.getFormFromLoss(loss);
         if (fixtureForm.status === 'INVALID') {
           valid = false;
         }
@@ -211,7 +211,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.wallLosses) {
       phast.losses.wallLosses.forEach(loss => {
-        let wallForm: FormGroup = this.wallFormService.getWallLossForm(loss);
+        let wallForm: UntypedFormGroup = this.wallFormService.getWallLossForm(loss);
         if (wallForm.status === 'INVALID') {
           valid = false;
         }
@@ -223,7 +223,7 @@ export class PhastValidService {
   checkCoolingValid(phast: PHAST): boolean {
     let valid = true;
     if (phast.losses.coolingLosses) {
-      let coolingForm: FormGroup;
+      let coolingForm: UntypedFormGroup;
       phast.losses.coolingLosses.forEach(loss => {
         if (loss.gasCoolingLoss) {
           coolingForm = this.coolingFormService.initGasFormFromLoss(loss);
@@ -243,7 +243,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.atmosphereLosses) {
       phast.losses.atmosphereLosses.forEach(loss => {
-        let atmosphereForm: FormGroup = this.atmosphereFormService.getAtmosphereForm(loss)
+        let atmosphereForm: UntypedFormGroup = this.atmosphereFormService.getAtmosphereForm(loss)
         if (atmosphereForm.status === 'INVALID') {
           valid = false;
         }
@@ -256,7 +256,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.openingLosses) {
       phast.losses.openingLosses.forEach(loss => {
-        let openingForm: FormGroup = this.openingFormService.getFormFromLoss(loss);
+        let openingForm: UntypedFormGroup = this.openingFormService.getFormFromLoss(loss);
         if (openingForm.status === 'INVALID') {
           valid = false;
         }
@@ -269,7 +269,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.leakageLosses) {
       phast.losses.leakageLosses.forEach(loss => {
-        let leakageForm: FormGroup = this.leakageFormService.initFormFromLoss(loss)
+        let leakageForm: UntypedFormGroup = this.leakageFormService.initFormFromLoss(loss)
         if (leakageForm.status === 'INVALID') {
           valid = false;
         }
@@ -283,7 +283,7 @@ export class PhastValidService {
     if (phast.losses.extendedSurfaces) {
       phast.losses.extendedSurfaces.forEach(loss => {
         // Pass in wall loss here or exetended surface?
-        let extendedSurfaceForm: FormGroup = this.extendedSurfaceLossesService.getSurfaceLossForm(loss)
+        let extendedSurfaceForm: UntypedFormGroup = this.extendedSurfaceLossesService.getSurfaceLossForm(loss)
         if (extendedSurfaceForm.status === 'INVALID') {
           valid = false;
         }
@@ -296,7 +296,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.otherLosses) {
       phast.losses.otherLosses.forEach(loss => {
-        let otherLossForm: FormGroup = this.otherLossessService.getFormFromLoss(loss)
+        let otherLossForm: UntypedFormGroup = this.otherLossessService.getFormFromLoss(loss)
         if (otherLossForm.status === 'INVALID') {
           valid = false;
         }
@@ -313,7 +313,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.slagLosses) {
       phast.losses.slagLosses.forEach(loss => {
-        let slagLossForm: FormGroup = this.slagService.getFormFromLoss(loss)
+        let slagLossForm: UntypedFormGroup = this.slagService.getFormFromLoss(loss)
         if (slagLossForm.status === 'INVALID') {
           valid = false;
         }
@@ -330,7 +330,7 @@ export class PhastValidService {
         minElectricityInput = this.phastResultsService.getMinElectricityInputRequirement(phast, settings);
       }
       phast.losses.energyInputEAF.forEach(loss => {
-        let energyInputForm: FormGroup = this.energyInputService.getFormFromLoss(loss, minElectricityInput)
+        let energyInputForm: UntypedFormGroup = this.energyInputService.getFormFromLoss(loss, minElectricityInput)
         if (energyInputForm.status === 'INVALID') {
           valid = false;
         }

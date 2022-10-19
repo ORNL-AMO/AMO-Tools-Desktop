@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { BaseGasDensity } from '../../shared/models/fans';
 import { GreaterThanValidator } from '../../shared/validators/greater-than';
 import { Settings } from '../../shared/models/settings';
@@ -8,10 +8,10 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 @Injectable()
 export class FsatFluidService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
 
-  getGasDensityFormFromObj(obj: BaseGasDensity, settings: Settings): FormGroup {
+  getGasDensityFormFromObj(obj: BaseGasDensity, settings: Settings): UntypedFormGroup {
     let barometricMin: number = this.convertUnitsService.value(10).from('inHg').to(settings.fanBarometricPressure);
     let barometricMax: number = this.convertUnitsService.value(60).from('inHg').to(settings.fanBarometricPressure);
     barometricMin = this.convertUnitsService.roundVal(barometricMin, 2);
@@ -80,7 +80,7 @@ export class FsatFluidService {
 
 
 
-  updateGasDensityForm(gasDensityForm: FormGroup): FormGroup {
+  updateGasDensityForm(gasDensityForm: UntypedFormGroup): UntypedFormGroup {
     let tmpObj: BaseGasDensity = this.getGasDensityObjFromForm(gasDensityForm);
     let gasDensityValidators: GasDensityValidators = this.getValidators(tmpObj);
     //dryBulbTempValidators
@@ -128,7 +128,7 @@ export class FsatFluidService {
     return gasDensityForm;
   }
 
-  getGasDensityObjFromForm(form: FormGroup): BaseGasDensity {
+  getGasDensityObjFromForm(form: UntypedFormGroup): BaseGasDensity {
     let fanGasDensity: BaseGasDensity = {
       inputType: form.controls.inputType.value,
       gasType: form.controls.gasType.value,
@@ -148,7 +148,7 @@ export class FsatFluidService {
   }
 
   isFanFluidValid(obj: BaseGasDensity, settings: Settings): boolean {
-    let form: FormGroup = this.getGasDensityFormFromObj(obj, settings);
+    let form: UntypedFormGroup = this.getGasDensityFormFromObj(obj, settings);
     return form.valid;
   }
 }

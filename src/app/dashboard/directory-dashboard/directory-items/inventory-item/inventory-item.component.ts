@@ -3,7 +3,7 @@ import { InventoryItem } from '../../../../shared/models/inventory/inventory';
 import { Router } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
  
 import { InventoryDbService } from '../../../../indexedDb/inventory-db.service';
@@ -31,14 +31,14 @@ export class InventoryItemComponent implements OnInit {
   dropdownOpen: boolean = false;
   dashboardViewSub: Subscription;
   dashboardView: string;
-  editForm: FormGroup;
-  copyForm: FormGroup;
+  editForm: UntypedFormGroup;
+  copyForm: UntypedFormGroup;
   allDirectories: Array<Directory>;
 
   updateDashboardDataSub: Subscription;
 
   constructor(private router: Router, private directoryDashboardService: DirectoryDashboardService,
-    private formBuilder: FormBuilder,    private inventoryDbService: InventoryDbService,
+    private formBuilder: UntypedFormBuilder,    private inventoryDbService: InventoryDbService,
     private dashboardService: DashboardService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
     private motorInventoryService: MotorInventoryService) { }
 

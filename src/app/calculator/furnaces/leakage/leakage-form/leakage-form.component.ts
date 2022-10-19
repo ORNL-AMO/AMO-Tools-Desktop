@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -33,7 +33,7 @@ export class LeakageFormComponent implements OnInit {
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   warnings: LeakageWarnings;
 
-  leakageForm: FormGroup;
+  leakageForm: UntypedFormGroup;
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
   showFlueGasModal: boolean;

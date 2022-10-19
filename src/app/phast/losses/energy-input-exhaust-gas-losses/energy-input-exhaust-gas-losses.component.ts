@@ -5,7 +5,7 @@ import { Losses, PHAST, PhastResults } from '../../../shared/models/phast/phast'
 import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { EnergyInputExhaustGasService } from './energy-input-exhaust-gas.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { EnergyInputWarnings, PhastResultsService } from '../../phast-results.service';
 
 @Component({
@@ -165,7 +165,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
 }
 
 export interface EnInputExGasObj {
-  form: FormGroup;
+  form: UntypedFormGroup;
   heatLoss: number;
   exhaustGas: number;
   collapse: boolean;

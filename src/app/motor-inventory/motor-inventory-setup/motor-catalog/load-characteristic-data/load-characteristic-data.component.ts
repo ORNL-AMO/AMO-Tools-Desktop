@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { LoadCharacteristicOptions, MotorItem, MotorPropertyDisplayOptions } from '../../../motor-inventory';
 import { MotorCatalogService } from '../motor-catalog.service';
@@ -13,7 +13,7 @@ import { PsatService } from '../../../../psat/psat.service';
   styleUrls: ['./load-characteristic-data.component.css']
 })
 export class LoadCharacteristicDataComponent implements OnInit {
-  motorForm: FormGroup;
+  motorForm: UntypedFormGroup;
   selectedMotorItemSub: Subscription;
   displayOptions: LoadCharacteristicOptions;
   displayForm: boolean = true;

@@ -3,7 +3,7 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PhastService } from '../../../phast.service';
 import { LossTab } from '../../../tabs';
 import { OpeningFormService, OpeningLossWarnings } from '../../../../calculator/furnaces/opening/opening-form.service';
@@ -289,7 +289,7 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   calculateViewFactor(loss: OpeningLoss) {
-    let openingLossform: FormGroup = this.openingFormService.getFormFromLoss(loss);
+    let openingLossform: UntypedFormGroup = this.openingFormService.getFormFromLoss(loss);
     let vfInputs = this.openingLossesService.getViewFactorInput(openingLossform);
     let viewFactor = this.phastService.viewFactorCalculation(vfInputs, this.settings);
     viewFactor = Number(viewFactor.toFixed(3));

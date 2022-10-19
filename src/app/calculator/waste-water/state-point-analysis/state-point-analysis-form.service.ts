@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { StatePointAnalysisInput } from '../../../shared/models/waste-water';
 
 @Injectable()
 export class StatePointAnalysisFormService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getEmptyForm(): FormGroup {
-    let formGroup: FormGroup = this.formBuilder.group({
+  getEmptyForm(): UntypedFormGroup {
+    let formGroup: UntypedFormGroup = this.formBuilder.group({
       sviValue: [0, [Validators.required, Validators.min(0)]],
       sviParameter: [1, [Validators.required, Validators.min(0)]],
       numberOfClarifiers: [0, [Validators.required, Validators.min(0)]],
@@ -23,7 +23,7 @@ export class StatePointAnalysisFormService {
     return formGroup;
   }
 
-  getFormFromInput(input: StatePointAnalysisInput, updatedBaselineInput?: StatePointAnalysisInput): FormGroup {
+  getFormFromInput(input: StatePointAnalysisInput, updatedBaselineInput?: StatePointAnalysisInput): UntypedFormGroup {
     let sviValue: number = input.sviValue;
     let sviParameter: number = input.sviParameter;
     let numberOfClarifiers: number = input.numberOfClarifiers;
@@ -44,7 +44,7 @@ export class StatePointAnalysisFormService {
       sludgeSettlingVelocity = updatedBaselineInput.sludgeSettlingVelocity;
     }
 
-    let formGroup: FormGroup = this.formBuilder.group({
+    let formGroup: UntypedFormGroup = this.formBuilder.group({
       sviValue: [sviValue, [Validators.required, Validators.min(0)]],
       sviParameter: [sviParameter, [Validators.required, Validators.min(0)]],
       numberOfClarifiers: [numberOfClarifiers, [Validators.required, Validators.min(0)]],
@@ -60,7 +60,7 @@ export class StatePointAnalysisFormService {
   }
 
   
-  getInputFromForm(form: FormGroup): StatePointAnalysisInput {
+  getInputFromForm(form: UntypedFormGroup): StatePointAnalysisInput {
     let input: StatePointAnalysisInput = {
       sviValue: form.controls.sviValue.value,
       sviParameter: form.controls.sviParameter.value,

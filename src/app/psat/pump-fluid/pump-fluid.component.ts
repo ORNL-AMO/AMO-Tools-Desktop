@@ -5,7 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { FormGroup, ValidatorFn } from '@angular/forms';
+import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { pumpTypesConstant, driveConstants, fluidProperties, fluidTypes } from '../psatConstants';
 import { PsatWarningService } from '../psat-warning.service';
 import { PumpFluidService } from './pump-fluid.service';
@@ -40,7 +40,7 @@ export class PumpFluidComponent implements OnInit {
   fluidProperties;
   fluidTypes: Array<string>;
 
-  psatForm: FormGroup;
+  psatForm: UntypedFormGroup;
   idString: string;
   pumpFluidWarnings: { rpmError: string, temperatureError: string };
   constructor(private psatService: PsatService, 

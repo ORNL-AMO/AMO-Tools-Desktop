@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { StandaloneService } from '../../standalone.service';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirReductionData, CompressedAirFlowMeterMethodData, BagMethodData, PressureMethodData, CompressedAirOtherMethodData, CompressorElectricityData, CompressedAirReductionResults, CompressedAirReductionInput, CompressedAirReductionResult } from '../../../shared/models/standalone';
@@ -15,7 +15,7 @@ export class CompressedAirReductionService {
   modificationData: Array<CompressedAirReductionData>;
   compressedAirResults: BehaviorSubject<CompressedAirReductionResults>;
   operatingHours: OperatingHours;
-  constructor(private formBuilder: FormBuilder, private convertCompressedAirReductionService: ConvertCompressedAirReductionService, private standaloneService: StandaloneService) {
+  constructor(private formBuilder: UntypedFormBuilder, private convertCompressedAirReductionService: ConvertCompressedAirReductionService, private standaloneService: StandaloneService) {
     this.compressedAirResults = new BehaviorSubject<CompressedAirReductionResults>(undefined);
    }
 
@@ -117,8 +117,8 @@ export class CompressedAirReductionService {
     return defaultData;
   }
 
-  getFormFromObj(inputObj: CompressedAirReductionData, index: number, isBaseline): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getFormFromObj(inputObj: CompressedAirReductionData, index: number, isBaseline): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       name: [inputObj.name, [Validators.required]],
       hoursPerYear: [inputObj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
       utilityType: [{ value: inputObj.utilityType, disabled: (index != 0 || !isBaseline) }],
@@ -159,7 +159,7 @@ export class CompressedAirReductionService {
     return form;
   }
 
-  setValidators(form: FormGroup): FormGroup {
+  setValidators(form: UntypedFormGroup): UntypedFormGroup {
     form.controls.units.setValidators([Validators.required, Validators.min(0)]);
     switch (form.controls.measurementMethod.value) {
       case 0:
@@ -196,7 +196,7 @@ export class CompressedAirReductionService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): CompressedAirReductionData {
+  getObjFromForm(form: UntypedFormGroup): CompressedAirReductionData {
     let flowMeterObj: CompressedAirFlowMeterMethodData = {
       meterReading: form.controls.meterReading.value
     };

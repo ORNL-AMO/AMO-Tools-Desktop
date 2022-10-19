@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { FixtureLoss } from '../../../shared/models/phast/losses/fixtureLoss';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class FixtureFormService {
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: UntypedFormBuilder) {}
 
 
-  initForm(lossNum?: number): FormGroup {
+  initForm(lossNum?: number): UntypedFormGroup {
     let formGroup = this.formBuilder.group({
       'materialName': [1, Validators.required],
       'feedRate': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
@@ -24,16 +24,16 @@ export class FixtureFormService {
     });
 
     if (!lossNum) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-      formGroup.addControl('hoursPerYear', new FormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
-      formGroup.addControl('energySourceType', new FormControl('Fuel', [Validators.required]));
-      formGroup.addControl('fuelCost', new FormControl(''));
+      formGroup.addControl('availableHeat', new UntypedFormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
+      formGroup.addControl('hoursPerYear', new UntypedFormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
+      formGroup.addControl('energySourceType', new UntypedFormControl('Fuel', [Validators.required]));
+      formGroup.addControl('fuelCost', new UntypedFormControl(''));
     }
 
     return formGroup;
   }
 
-  getFormFromLoss(loss: FixtureLoss, inAssessment = true): FormGroup {
+  getFormFromLoss(loss: FixtureLoss, inAssessment = true): UntypedFormGroup {
     let formGroup = this.formBuilder.group({
       'materialName': [loss.materialName, Validators.required],
       'feedRate': [loss.feedRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
@@ -48,16 +48,16 @@ export class FixtureFormService {
     });
 
     if (!inAssessment) {
-      formGroup.addControl('availableHeat', new FormControl(loss.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-      formGroup.addControl('hoursPerYear', new FormControl(loss.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
-      formGroup.addControl('energySourceType', new FormControl(loss.energySourceType, [Validators.required]));
-      formGroup.addControl('fuelCost', new FormControl(loss.fuelCost));
+      formGroup.addControl('availableHeat', new UntypedFormControl(loss.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
+      formGroup.addControl('hoursPerYear', new UntypedFormControl(loss.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
+      formGroup.addControl('energySourceType', new UntypedFormControl(loss.energySourceType, [Validators.required]));
+      formGroup.addControl('fuelCost', new UntypedFormControl(loss.fuelCost));
     }
 
     return formGroup;
   }
 
-  getLossFromForm(form: FormGroup): FixtureLoss {
+  getLossFromForm(form: UntypedFormGroup): FixtureLoss {
     let tmpLoss: FixtureLoss = {
       specificHeat: form.controls.specificHeat.value,
       feedRate: form.controls.feedRate.value,

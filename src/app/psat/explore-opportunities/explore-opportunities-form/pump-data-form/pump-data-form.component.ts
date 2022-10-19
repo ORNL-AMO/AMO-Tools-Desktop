@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PumpFluidService } from '../../../pump-fluid/pump-fluid.service';
 import { pumpTypesConstant, driveConstants } from '../../../psatConstants';
 import { PsatService } from '../../../psat.service';
@@ -23,9 +23,9 @@ export class PumpDataFormComponent implements OnInit {
   @Input()
   isVFD: boolean;
   @Input()
-  baselineForm: FormGroup;
+  baselineForm: UntypedFormGroup;
   @Input()
-  modificationForm: FormGroup;
+  modificationForm: UntypedFormGroup;
   @Input()
   psat: PSAT;
 

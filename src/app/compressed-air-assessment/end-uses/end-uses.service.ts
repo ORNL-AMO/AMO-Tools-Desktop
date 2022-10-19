@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { CompressedAirAssessment, DayTypeAirflowTotals, DayTypeEndUse, EndUse, EndUseDayTypeSetup, ProfileSummary } from '../../shared/models/compressed-air-assessment';
@@ -13,7 +13,7 @@ export class EndUsesService {
 
   selectedEndUse: BehaviorSubject<EndUse>;
   selectedDayTypeEndUse: BehaviorSubject<DayTypeEndUse>;
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
     private compressedAirResultsService: CompressedAirAssessmentResultsService,
     private dayTypeSetupService: DayTypeSetupService, 
     private dayTypeUseFormService: DayTypeUseFormService,
@@ -214,8 +214,8 @@ export class EndUsesService {
     return {hasValidEndUses: !hasInvalidEndUse, endUseEnergyData: endUseEnergyData};
   }
 
-  getEndUseFormFromObj(endUse: EndUse, endUses: Array<EndUse>): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getEndUseFormFromObj(endUse: EndUse, endUses: Array<EndUse>): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       endUseName: [endUse.endUseName],
       endUseDescription: [endUse.endUseDescription],
       location: [endUse.location],
@@ -228,7 +228,7 @@ export class EndUsesService {
     return form;
   }
 
-  setEndUseNameValidators(form: FormGroup, endUses?: Array<EndUse>) {
+  setEndUseNameValidators(form: UntypedFormGroup, endUses?: Array<EndUse>) {
     let endUseNameValidators: Array<ValidatorFn> = [Validators.required, this.duplicateNameValidator(form, endUses)];
     form.controls.endUseName.setValidators(endUseNameValidators);
     form.controls.endUseName.updateValueAndValidity();
@@ -236,7 +236,7 @@ export class EndUsesService {
  }
 
 
- duplicateNameValidator(currentEndUseForm: FormGroup, endUses?: Array<EndUse>): ValidatorFn {
+ duplicateNameValidator(currentEndUseForm: UntypedFormGroup, endUses?: Array<EndUse>): ValidatorFn {
   return (valueControl: AbstractControl): { [key: string]: { val: string } } => {
     if (valueControl.value !== '' && valueControl.value !== null) {
       let duplicateNamedUse: EndUse = endUses.find(endUse => {
@@ -263,7 +263,7 @@ export class EndUsesService {
   };
 }
 
-  getEndUseFromFrom(form: FormGroup): EndUse {
+  getEndUseFromFrom(form: UntypedFormGroup): EndUse {
     let selectedEndUse: EndUse = this.selectedEndUse.getValue();
     return {
       endUseId: selectedEndUse.endUseId,
@@ -290,7 +290,7 @@ export class EndUsesService {
     }
   }
 
-  markFormDirtyToDisplayValidation(form: FormGroup) {
+  markFormDirtyToDisplayValidation(form: UntypedFormGroup) {
     for (let key in form.controls) {
       if (form.controls[key]) {
         form.controls[key].markAsDirty();

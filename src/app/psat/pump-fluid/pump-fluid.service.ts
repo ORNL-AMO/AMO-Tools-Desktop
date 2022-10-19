@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { PsatInputs } from '../../shared/models/psat';
-import { FormGroup, FormBuilder, Validators, ValidatorFn } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, ValidatorFn } from '@angular/forms';
 
 @Injectable()
 export class PumpFluidService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromObj(psatInputs: PsatInputs): FormGroup {
+  getFormFromObj(psatInputs: PsatInputs): UntypedFormGroup {
     let specifiedPumpEfficiencyValidators: Array<ValidatorFn> = this.getSpecifiedPumpEfficiencyValidators(psatInputs.pump_style);
     let specifiedDriveEfficiencyValidators: Array<ValidatorFn> = this.getSpecifiedDriveEfficiency(psatInputs.drive);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       pumpType: [psatInputs.pump_style, Validators.required],
       specifiedPumpEfficiency: [psatInputs.pump_specified, specifiedPumpEfficiencyValidators],
       pumpRPM: [psatInputs.pump_rated_speed, Validators.required],
@@ -46,7 +46,7 @@ export class PumpFluidService {
     }
   }
 
-  updateSpecifiedPumpEfficiency(form: FormGroup): FormGroup {
+  updateSpecifiedPumpEfficiency(form: UntypedFormGroup): UntypedFormGroup {
     let specifiedPumpEfficiencyValidators: Array<ValidatorFn> = this.getSpecifiedPumpEfficiencyValidators(form.controls.pumpType.value);
     form.controls.specifiedPumpEfficiency.setValidators(specifiedPumpEfficiencyValidators);
     form.controls.specifiedPumpEfficiency.reset(form.controls.specifiedPumpEfficiency.value);
@@ -56,7 +56,7 @@ export class PumpFluidService {
     return form;
   }
 
-  updateSpecifiedDriveEfficiency(form: FormGroup): FormGroup {
+  updateSpecifiedDriveEfficiency(form: UntypedFormGroup): UntypedFormGroup {
     let specifiedDriveEfficiencyValidators: Array<ValidatorFn> = this.getSpecifiedDriveEfficiency(form.controls.drive.value);
     form.controls.specifiedDriveEfficiency.setValidators(specifiedDriveEfficiencyValidators);
     form.controls.specifiedDriveEfficiency.reset(form.controls.specifiedDriveEfficiency.value);
@@ -66,7 +66,7 @@ export class PumpFluidService {
     return form;
   }
 
-  getPsatInputsFromForm(form: FormGroup, psatInputs: PsatInputs): PsatInputs {
+  getPsatInputsFromForm(form: UntypedFormGroup, psatInputs: PsatInputs): PsatInputs {
     psatInputs.pump_style = form.controls.pumpType.value;
     psatInputs.pump_specified = form.controls.specifiedPumpEfficiency.value;
     psatInputs.pump_rated_speed = form.controls.pumpRPM.value;

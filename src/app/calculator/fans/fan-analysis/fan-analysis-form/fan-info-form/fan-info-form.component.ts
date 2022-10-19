@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FanInfoFormService } from './fan-info-form.service';
 import { FanAnalysisService } from '../../fan-analysis.service';
 import { Subscription } from 'rxjs';
@@ -16,7 +16,7 @@ export class FanInfoFormComponent implements OnInit {
   @Input()
   inModal: boolean;
 
-  ratedInfoForm: FormGroup;
+  ratedInfoForm: UntypedFormGroup;
 
   planes: Array<number> = [
     1, 2, 3

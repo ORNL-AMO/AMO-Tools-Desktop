@@ -3,7 +3,7 @@ import { PsatService } from '../../../psat/psat.service';
 import { PSAT } from '../../../shared/models/psat';
  
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -52,11 +52,11 @@ export class HeadToolComponent implements OnInit {
 
   currentField: string = 'headToolType';
 
-  headToolForm: FormGroup;
-  headToolSuctionForm: FormGroup;
+  headToolForm: UntypedFormGroup;
+  headToolSuctionForm: UntypedFormGroup;
   headToolType: string = "Suction tank elevation";
   tabSelect: string = 'results';
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
   canSave: boolean = false;
   isSavedCalc: boolean = false;
   calculator: Calculator;

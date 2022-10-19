@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Directory, DirectoryDbRef } from '../../shared/models/directory';
  
@@ -25,11 +25,11 @@ export class CreateFolderComponent implements OnInit {
   @ViewChild('createModal', { static: false }) public createModal: ModalDirective;
 
   canAdd: boolean = true;
-  newFolderForm: FormGroup;
+  newFolderForm: UntypedFormGroup;
   directories: Array<Directory>;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
       
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
