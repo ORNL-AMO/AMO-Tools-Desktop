@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FanShaftPowerFormService } from './fan-shaft-power-form.service';
 import { PsatService } from '../../../../../psat/psat.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FanShaftPower, FanShaftPowerResults } from '../../../../../shared/models/fans';
 import { Settings } from '../../../../../shared/models/settings';
 import { FanAnalysisService } from '../../fan-analysis.service';
@@ -20,7 +20,7 @@ export class FanShaftPowerFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  shaftPowerForm: FormGroup;
+  shaftPowerForm: UntypedFormGroup;
   driveTypes: Array<{ name: string, efficiency: number }> = [
     { name: 'Direct Drive', efficiency: 100 },
     { name: 'V-Belt Drive', efficiency: 93 },

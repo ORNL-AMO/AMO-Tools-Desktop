@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { FormGroup, ValidatorFn } from '@angular/forms';
+import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { FanMotorService } from './fan-motor.service';
 import { PsatService } from '../../psat/psat.service';
 import { Settings } from '../../shared/models/settings';
@@ -51,7 +51,7 @@ export class FanMotorComponent implements OnInit {
   formValid: boolean;
   warnings: FanMotorWarnings;
   disableFLAOptimized: boolean = false;
-  fanMotorForm: FormGroup;
+  fanMotorForm: UntypedFormGroup;
   idString: string;
   constructor(private compareService: CompareService, private fanMotorService: FanMotorService, private psatService: PsatService, private helpPanelService: HelpPanelService, private fsatWarningService: FsatWarningService) { }
 

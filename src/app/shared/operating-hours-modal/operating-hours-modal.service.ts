@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { OperatingHours } from '../models/operations';
 
 @Injectable()
 export class OperatingHoursModalService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromObj(obj: OperatingHours): FormGroup {
+  getFormFromObj(obj: OperatingHours): UntypedFormGroup {
     return this.formBuilder.group(
       {
         'weeksPerYear': [obj.weeksPerYear, [Validators.min(0), Validators.max(53), Validators.required]],
@@ -19,7 +19,7 @@ export class OperatingHoursModalService {
     )
   }
 
-  getObjectFromForm(form: FormGroup): OperatingHours {
+  getObjectFromForm(form: UntypedFormGroup): OperatingHours {
     let opHours: OperatingHours = {
       weeksPerYear: form.controls.weeksPerYear.value,
       daysPerWeek: form.controls.daysPerWeek.value,

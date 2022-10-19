@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { Settings } from '../../../../shared/models/settings';
@@ -24,7 +24,7 @@ export class EnergyFormComponent implements OnInit {
   selected: boolean;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   showOperatingHoursModal: boolean;
-  energyForm: FormGroup;
+  energyForm: UntypedFormGroup;
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;

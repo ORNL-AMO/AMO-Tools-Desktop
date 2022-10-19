@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CoolingTowerBasinInput } from '../../../shared/models/chillers';
 import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class CoolingTowerBasinFormService {
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: UntypedFormBuilder) {}
 
-  getCoolingTowerBasinForm(inputObj: CoolingTowerBasinInput, settings: Settings): FormGroup {
+  getCoolingTowerBasinForm(inputObj: CoolingTowerBasinInput, settings: Settings): UntypedFormGroup {
     let minTemperature: number = 32;
     if (settings.unitsOfMeasure === 'Metric') {
       minTemperature = 0;
     }
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       ratedCapacity: [inputObj.ratedCapacity, [Validators.required, Validators.min(0)]],
       ratedTempSetPoint: [inputObj.ratedTempSetPoint, [Validators.required, Validators.min(minTemperature)]],
@@ -30,7 +30,7 @@ export class CoolingTowerBasinFormService {
     return form;
   }
 
-  checkCoolingTowerBasinWarnings(form: FormGroup, settings: Settings): CoolingTowerBasinWarnings {
+  checkCoolingTowerBasinWarnings(form: UntypedFormGroup, settings: Settings): CoolingTowerBasinWarnings {
     return {
       basinTempSetPoint: this.checkBasinTempSetPoint(form.controls.ratedTempSetPoint.value, settings),
       baselineTempSetPoint: this.checkBasinTempSetPoint(form.controls.baselineTempSetPoint.value, settings),
@@ -50,7 +50,7 @@ export class CoolingTowerBasinFormService {
     }
   }
 
-  getCoolingTowerBasinInput(form: FormGroup): CoolingTowerBasinInput {
+  getCoolingTowerBasinInput(form: UntypedFormGroup): CoolingTowerBasinInput {
     let obj: CoolingTowerBasinInput = {
       operatingHours: form.controls.operatingHours.value,
       ratedCapacity: form.controls.ratedCapacity.value,

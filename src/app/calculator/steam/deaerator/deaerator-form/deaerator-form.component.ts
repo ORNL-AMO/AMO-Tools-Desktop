@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { Quantity, ThermodynamicQuantityOptions } from '../../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../../steam.service';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -11,11 +11,11 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class DeaeratorFormComponent implements OnInit {
   @Input()
-  deaeratorForm: FormGroup;
+  deaeratorForm: UntypedFormGroup;
   @Input()
   settings: Settings;
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<FormGroup>();
+  emitCalculate = new EventEmitter<UntypedFormGroup>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 

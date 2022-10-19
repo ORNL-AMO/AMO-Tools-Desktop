@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { BehaviorSubject } from 'rxjs';
@@ -17,7 +17,7 @@ export class BoilerBlowdownRateService {
   showBoiler: BehaviorSubject<boolean>;
   showOperations: BehaviorSubject<boolean>;
   operatingHours: BehaviorSubject<OperatingHours>;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) {
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) {
     this.baselineInputs = new BehaviorSubject<BoilerBlowdownRateInputs>(undefined);
     this.modificationInputs = new BehaviorSubject<BoilerBlowdownRateInputs>(undefined);
     this.setForms = new BehaviorSubject<boolean>(true);
@@ -71,17 +71,17 @@ export class BoilerBlowdownRateService {
     return { baseline: baselineInputs, modification: modificationInputs };
   }
 
-  getConductivityFormFromObj(obj: BoilerBlowdownRateInputs): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getConductivityFormFromObj(obj: BoilerBlowdownRateInputs): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       feedwaterConductivity: [obj.feedwaterConductivity, [Validators.required, Validators.min(0), Validators.max(9000)]],
       blowdownConductivity: [obj.blowdownConductivity, [Validators.required, Validators.min(0), Validators.max(9000)]],
     });
     return form;
   }
 
-  getBoilerFormFromObj(obj: BoilerBlowdownRateInputs, settings: Settings): FormGroup {
+  getBoilerFormFromObj(obj: BoilerBlowdownRateInputs, settings: Settings): UntypedFormGroup {
     let ranges: BoilerBlowdownRateRanges = this.getRanges(settings);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       steamFlow: [obj.steamFlow, [Validators.required, Validators.min(0), Validators.max(ranges.steamFlowMax)]],
       steamTemperature: [obj.steamTemperature, [Validators.required, Validators.min(ranges.steamTempMin), Validators.max(ranges.steamTempMax)]],
       boilerEfficiency: [obj.boilerEfficiency, [Validators.required, Validators.min(50), Validators.max(100)]]
@@ -89,9 +89,9 @@ export class BoilerBlowdownRateService {
     return form;
   }
 
-  getOperationsFormFromObj(obj: BoilerBlowdownRateInputs, settings: Settings): FormGroup {
+  getOperationsFormFromObj(obj: BoilerBlowdownRateInputs, settings: Settings): UntypedFormGroup {
     let ranges: BoilerBlowdownRateRanges = this.getRanges(settings);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       blowdownConductivity: [obj.blowdownConductivity, [Validators.required, Validators.required, Validators.min(0), Validators.max(9000)]],
       makeupWaterTemperature: [obj.makeupWaterTemperature, [Validators.required, Validators.min(ranges.makeupWaterMin), Validators.max(ranges.makeupWaterMax)]],
       fuelCost: [obj.fuelCost, [Validators.required, Validators.min(0)]],
@@ -101,20 +101,20 @@ export class BoilerBlowdownRateService {
     return form;
   }
 
-  updateObjFromConductivityForm(form: FormGroup, obj: BoilerBlowdownRateInputs): BoilerBlowdownRateInputs {
+  updateObjFromConductivityForm(form: UntypedFormGroup, obj: BoilerBlowdownRateInputs): BoilerBlowdownRateInputs {
     obj.feedwaterConductivity = form.controls.feedwaterConductivity.value;
     obj.blowdownConductivity = form.controls.blowdownConductivity.value;
     return obj;
   }
 
-  updateObjFromBoilerForm(form: FormGroup, obj: BoilerBlowdownRateInputs): BoilerBlowdownRateInputs {
+  updateObjFromBoilerForm(form: UntypedFormGroup, obj: BoilerBlowdownRateInputs): BoilerBlowdownRateInputs {
     obj.steamFlow = form.controls.steamFlow.value;
     obj.steamTemperature = form.controls.steamTemperature.value;
     obj.boilerEfficiency = form.controls.boilerEfficiency.value;
     return obj;
   }
 
-  updateObjFromOperationsForm(form: FormGroup, obj: BoilerBlowdownRateInputs): BoilerBlowdownRateInputs {
+  updateObjFromOperationsForm(form: UntypedFormGroup, obj: BoilerBlowdownRateInputs): BoilerBlowdownRateInputs {
     obj.makeupWaterTemperature = form.controls.makeupWaterTemperature.value;
     obj.fuelCost = form.controls.fuelCost.value;
     obj.waterCost = form.controls.waterCost.value;

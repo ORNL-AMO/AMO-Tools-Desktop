@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class WallFormService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  initForm(lossNum?: number): FormGroup {
+  initForm(lossNum?: number): UntypedFormGroup {
     let lossNumber = lossNum? lossNum : 1;
     let formGroup = this.formBuilder.group({
       'surfaceArea': ['', [Validators.required, Validators.min(0)]],
@@ -23,16 +23,16 @@ export class WallFormService {
     });
 
     if (!lossNum) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-      formGroup.addControl('hoursPerYear', new FormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
-      formGroup.addControl('energySourceType', new FormControl('Fuel', [Validators.required]));
-      formGroup.addControl('fuelCost', new FormControl(''));
+      formGroup.addControl('availableHeat', new UntypedFormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
+      formGroup.addControl('hoursPerYear', new UntypedFormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
+      formGroup.addControl('energySourceType', new UntypedFormControl('Fuel', [Validators.required]));
+      formGroup.addControl('fuelCost', new UntypedFormControl(''));
     }
 
     return formGroup;
   }
 
-  getWallLossForm(wallLoss: WallLoss, inAssessment = true): FormGroup {
+  getWallLossForm(wallLoss: WallLoss, inAssessment = true): UntypedFormGroup {
     let formGroup = this.formBuilder.group({
       'surfaceArea': [wallLoss.surfaceArea, [Validators.required, Validators.min(0)]],
       'avgSurfaceTemp': [wallLoss.surfaceTemperature, Validators.required],
@@ -46,17 +46,17 @@ export class WallFormService {
     });
 
     if (!inAssessment) {
-      formGroup.addControl('availableHeat', new FormControl(wallLoss.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-      formGroup.addControl('hoursPerYear', new FormControl(wallLoss.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
-      formGroup.addControl('energySourceType', new FormControl(wallLoss.energySourceType, [Validators.required]));
-      formGroup.addControl('fuelCost', new FormControl(wallLoss.fuelCost));
+      formGroup.addControl('availableHeat', new UntypedFormControl(wallLoss.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
+      formGroup.addControl('hoursPerYear', new UntypedFormControl(wallLoss.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
+      formGroup.addControl('energySourceType', new UntypedFormControl(wallLoss.energySourceType, [Validators.required]));
+      formGroup.addControl('fuelCost', new UntypedFormControl(wallLoss.fuelCost));
     }
 
     formGroup = this.setValidators(formGroup);
     return formGroup;
   }
 
-  getWallLossFromForm(wallLossForm: FormGroup): WallLoss {
+  getWallLossFromForm(wallLossForm: UntypedFormGroup): WallLoss {
     let tmpWallLoss: WallLoss = {
       surfaceArea: wallLossForm.controls.surfaceArea.value,
       ambientTemperature: wallLossForm.controls.ambientTemp.value,
@@ -80,12 +80,12 @@ export class WallFormService {
     return tmpWallLoss;
   }
 
-  setValidators(formGroup: FormGroup): FormGroup {
+  setValidators(formGroup: UntypedFormGroup): UntypedFormGroup {
     formGroup = this.setSurfaceTemperatureValidators(formGroup);
     return formGroup;
   }
 
-  setSurfaceTemperatureValidators(formGroup: FormGroup) {
+  setSurfaceTemperatureValidators(formGroup: UntypedFormGroup) {
     let avgSurfaceTemp = formGroup.controls.avgSurfaceTemp.value;
     if (avgSurfaceTemp) {
       formGroup.controls.avgSurfaceTemp.setValidators([Validators.required, Validators.min(formGroup.controls.ambientTemp.value)]);

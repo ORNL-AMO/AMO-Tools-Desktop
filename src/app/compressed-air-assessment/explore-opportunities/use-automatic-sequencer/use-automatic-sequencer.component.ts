@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, UseAutomaticSequencer } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
@@ -43,7 +43,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
   modificationResults: CompressedAirAssessmentResult;
   modificationResultsSub: Subscription;
   baselineHasSequencer: boolean;
-  form: FormGroup;
+  form: UntypedFormGroup;
   hasInvalidDayType: boolean;
   settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,

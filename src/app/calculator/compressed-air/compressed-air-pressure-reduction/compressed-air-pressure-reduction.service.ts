@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CompressedAirPressureReductionData, CompressedAirPressureReductionResult, CompressedAirPressureReductionResults, CompressedAirPressureReductionInput } from '../../../shared/models/standalone';
 import { OperatingHours } from '../../../shared/models/operations';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { StandaloneService } from '../../standalone.service';
 import { Settings } from '../../../shared/models/settings';
@@ -12,7 +12,7 @@ export class CompressedAirPressureReductionService {
   baselineData: Array<CompressedAirPressureReductionData>;
   modificationData: Array<CompressedAirPressureReductionData>;
   operatingHours: OperatingHours;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
 
   initObject(index: number, settings: Settings, isBaseline: boolean, operatingHours: OperatingHours): CompressedAirPressureReductionData {
@@ -39,8 +39,8 @@ export class CompressedAirPressureReductionService {
     return obj;
   }
 
-  getFormFromObj(inputObj: CompressedAirPressureReductionData, index: number, isBaseline: boolean): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getFormFromObj(inputObj: CompressedAirPressureReductionData, index: number, isBaseline: boolean): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       name: [inputObj.name, [Validators.required]],
       powerType: [inputObj.powerType],
       hoursPerYear: [inputObj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
@@ -55,7 +55,7 @@ export class CompressedAirPressureReductionService {
     return form;
   }
 
-  setValidators(form: FormGroup, isBaseline: boolean): FormGroup {
+  setValidators(form: UntypedFormGroup, isBaseline: boolean): UntypedFormGroup {
     if (isBaseline) {
       form.controls.compressorPower.setValidators([Validators.required, Validators.min(0)]);
       form.controls.pressure.setValidators([Validators.required, Validators.min(0)]);
@@ -70,7 +70,7 @@ export class CompressedAirPressureReductionService {
   }
 
   //may need some editing to accomodate specific functionality with proposed pressure
-  getObjFromForm(form: FormGroup, isBaseline: boolean): CompressedAirPressureReductionData {
+  getObjFromForm(form: UntypedFormGroup, isBaseline: boolean): CompressedAirPressureReductionData {
     let obj: CompressedAirPressureReductionData = {
       name: form.controls.name.value,
       powerType: form.controls.powerType.value,

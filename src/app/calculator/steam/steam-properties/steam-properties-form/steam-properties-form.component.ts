@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from "@angular/forms";
+import { UntypedFormGroup } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
 import { SteamPropertiesOutput } from "../../../../shared/models/steam/steam-outputs";
 
@@ -10,11 +10,11 @@ import { SteamPropertiesOutput } from "../../../../shared/models/steam/steam-out
 })
 export class SteamPropertiesFormComponent implements OnInit {
   @Input()
-  steamPropertiesForm: FormGroup;
+  steamPropertiesForm: UntypedFormGroup;
   @Input()
   settings: Settings;
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<FormGroup>();
+  emitCalculate = new EventEmitter<UntypedFormGroup>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Input()

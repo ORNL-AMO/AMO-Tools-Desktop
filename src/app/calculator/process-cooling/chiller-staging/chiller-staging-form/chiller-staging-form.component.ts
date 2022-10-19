@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ChillerStagingInput } from '../../../../shared/models/chillers';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -26,7 +26,7 @@ export class ChillerStagingFormComponent implements OnInit {
   onResize(event) {
     this.setOpHoursModalWidth();
   }
-  form: FormGroup;
+  form: UntypedFormGroup;
   characteristics: ChillerCharacteristics;
   
   resetDataSub: Subscription;
@@ -141,12 +141,12 @@ export class ChillerStagingFormComponent implements OnInit {
 
   // Can replace with ts getter when we target ecma 5 and higher
   getBaselineLoadList(): Array<AbstractControl> { 
-    let baselineLoadList: FormArray = this.form.get('baselineLoadList') as FormArray;
+    let baselineLoadList: UntypedFormArray = this.form.get('baselineLoadList') as UntypedFormArray;
     return baselineLoadList.controls; 
   }
   // Can replace with ts getter when we target ecma 5 and higher
   getModLoadList(): Array<AbstractControl> { 
-    let modLoadList: FormArray = this.form.get('modLoadList') as FormArray;
+    let modLoadList: UntypedFormArray = this.form.get('modLoadList') as UntypedFormArray;
     return modLoadList.controls; 
   }
 

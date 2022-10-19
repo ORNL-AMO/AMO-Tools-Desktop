@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { FanSystemCurveData } from '../../../shared/models/system-and-equipment-curve';
@@ -7,7 +7,7 @@ import { FanSystemCurveData } from '../../../shared/models/system-and-equipment-
 @Injectable()
 export class FanSystemCurveFormService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
   getFanSystemCurveDefaults(): FanSystemCurveData {
     let defaultFanSystemCurveData: FanSystemCurveData = {
@@ -55,7 +55,7 @@ export class FanSystemCurveFormService {
     return defaultFanSystemCurveData;
   }
 
-  getObjFromForm(form: FormGroup): FanSystemCurveData {
+  getObjFromForm(form: UntypedFormGroup): FanSystemCurveData {
     let data: FanSystemCurveData = {
       compressibilityFactor: form.controls.compressibilityFactor.value,
       systemLossExponent: form.controls.systemLossExponent.value,
@@ -73,7 +73,7 @@ export class FanSystemCurveFormService {
     return data;
   }
 
-  getFormFromObj(obj: FanSystemCurveData): FormGroup {
+  getFormFromObj(obj: FanSystemCurveData): UntypedFormGroup {
     let modificationMeasurementOption = [0, Validators.required];
     let modifiedFlow = [0, [Validators.required, Validators.min(0)]];
     let modifiedPressure = [0, [Validators.required, Validators.min(0)]];
@@ -83,7 +83,7 @@ export class FanSystemCurveFormService {
       modifiedFlow = [obj.modificationCurve.modifiedFlow, [Validators.required, Validators.min(0)]];
       modifiedPressure = [obj.modificationCurve.modifiedPressure, [Validators.required, Validators.min(0)]];
     }
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       compressibilityFactor: [obj.compressibilityFactor, [Validators.required, Validators.min(0)]],
       systemLossExponent: [obj.systemLossExponent, [Validators.required, Validators.min(0)]],
       pointOneFlowRate: [obj.pointOneFlowRate, [Validators.required, Validators.min(0)]],

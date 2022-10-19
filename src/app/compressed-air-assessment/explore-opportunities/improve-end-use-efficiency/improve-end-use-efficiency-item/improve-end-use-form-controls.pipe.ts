@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormGroup } from '@angular/forms';
 
 @Pipe({
   name: 'improveEndUseFormControls'
 })
 export class ImproveEndUseFormControlsPipe implements PipeTransform {
 
-  transform(form: FormGroup): Array<{control: AbstractControl, name: string}>{
+  transform(form: UntypedFormGroup): Array<{control: AbstractControl, name: string}>{
     let controlNames: Array<{control: AbstractControl, name: string}> = new Array();
     for (let key in form.controls) {
       controlNames.push({ control: form.controls[key], name: key});

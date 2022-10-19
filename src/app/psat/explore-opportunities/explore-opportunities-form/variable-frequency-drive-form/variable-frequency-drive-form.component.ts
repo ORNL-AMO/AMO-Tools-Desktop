@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FieldDataWarnings } from '../../../psat-warning.service';
 import { Settings } from '../../../../shared/models/settings';
 import { pumpTypesConstant, driveConstants } from '../../../psatConstants';
@@ -11,13 +11,13 @@ import { pumpTypesConstant, driveConstants } from '../../../psatConstants';
 })
 export class VariableFrequencyDriveFormComponent implements OnInit {
   @Input()
-  baselinePumpFluidForm: FormGroup;
+  baselinePumpFluidForm: UntypedFormGroup;
   @Input()
-  modificationPumpFluidForm: FormGroup;
+  modificationPumpFluidForm: UntypedFormGroup;
   @Input()
-  baselineFieldDataForm: FormGroup;
+  baselineFieldDataForm: UntypedFormGroup;
   @Input()
-  modificationFieldDataForm: FormGroup;
+  modificationFieldDataForm: UntypedFormGroup;
   @Input()
   baselineFieldDataWarnings: FieldDataWarnings;
   @Input()

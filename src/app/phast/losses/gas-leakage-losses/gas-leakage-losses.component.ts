@@ -4,7 +4,7 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { LeakageFormService } from '../../../calculator/furnaces/leakage/leakage-form.service';
 
 @Component({
@@ -151,7 +151,7 @@ export class GasLeakageLossesComponent implements OnInit {
 }
 
 export interface GasLeakageObj {
-  form: FormGroup;
+  form: UntypedFormGroup;
   heatLoss: number;
   collapse: boolean;
 }

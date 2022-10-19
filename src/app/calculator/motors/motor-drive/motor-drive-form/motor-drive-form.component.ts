@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MotorDriveService } from '../motor-drive.service';
 import { MotorDriveInputs } from '../../../../shared/models/calculators';
 import { Settings } from '../../../../shared/models/settings';
@@ -16,7 +16,7 @@ export class MotorDriveFormComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Input()
-  form: FormGroup;
+  form: UntypedFormGroup;
   @Input()
   settings: Settings;
 

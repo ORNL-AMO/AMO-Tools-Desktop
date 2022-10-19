@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MotorCatalogService } from '../motor-catalog.service';
 import { Subscription } from 'rxjs';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { MotorItem } from '../../../motor-inventory';
 import { MotorBasicsService } from './motor-basics.service';
@@ -13,7 +13,7 @@ import { MotorBasicsService } from './motor-basics.service';
 })
 export class MotorBasicsComponent implements OnInit {
 
-  motorForm: FormGroup;
+  motorForm: UntypedFormGroup;
   selectedMotorItemSub: Subscription;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
     private motorBasicsService: MotorBasicsService) { }

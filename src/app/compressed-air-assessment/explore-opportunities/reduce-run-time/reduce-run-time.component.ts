@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntime } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
@@ -41,7 +41,7 @@ export class ReduceRunTimeComponent implements OnInit {
     availableAirflow: Array<number>,
     profilePower: Array<number>,
   }
-  form: FormGroup;
+  form: UntypedFormGroup;
   hasInvalidDayType: boolean;
   settings: Settings;
   numberPipeDecimals: string;

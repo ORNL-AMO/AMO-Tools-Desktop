@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { FanRatedInfo } from '../../../../../shared/models/fans';
 import { Settings } from '../../../../../shared/models/settings';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 
 @Injectable()
 export class FanInfoFormService {
 
-  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: UntypedFormBuilder) { }
 
-  getBasicsFormFromObject(obj: FanRatedInfo, settings: Settings): FormGroup {
+  getBasicsFormFromObject(obj: FanRatedInfo, settings: Settings): UntypedFormGroup {
     let pressureMin: number = 10;
     let pressureMax: number = 60;
     if (settings.fanBarometricPressure !== 'inHg') {
@@ -38,7 +38,7 @@ export class FanInfoFormService {
     return form;
   }
 
-  getBasicsObjectFromForm(form: FormGroup): FanRatedInfo {
+  getBasicsObjectFromForm(form: UntypedFormGroup): FanRatedInfo {
     let obj: FanRatedInfo = {
       fanSpeed: form.controls.fanSpeed.value,
       motorSpeed: form.controls.motorSpeed.value,

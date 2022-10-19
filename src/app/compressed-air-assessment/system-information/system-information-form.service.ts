@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SystemInformation } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
@@ -8,15 +8,15 @@ import { GreaterThanValidator } from '../../shared/validators/greater-than';
 @Injectable()
 export class SystemInformationFormService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  getFormFromObj(obj: SystemInformation, settings: Settings): FormGroup {
+  getFormFromObj(obj: SystemInformation, settings: Settings): UntypedFormGroup {
     let maxAtmosphericPressure: number = 16;
     if(settings && settings.unitsOfMeasure == 'Metric'){
       maxAtmosphericPressure = this.convertUnitsService.value(maxAtmosphericPressure).from('psia').to('kPaa');
       maxAtmosphericPressure = this.convertUnitsService.roundVal(maxAtmosphericPressure, 2);
     }
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       systemElevation: [obj.systemElevation, [Validators.min(0), Validators.max(29000)]],
       totalAirStorage: [obj.totalAirStorage, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       isSequencerUsed: [obj.isSequencerUsed],
@@ -36,7 +36,7 @@ export class SystemInformationFormService {
     return form;
   }
 
-  setSequencerFieldValidators(form: FormGroup) {
+  setSequencerFieldValidators(form: UntypedFormGroup) {
     if (form.controls.isSequencerUsed.value === true) {
       form.controls.targetPressure.setValidators([Validators.required, Validators.min(0)]);
       form.controls.targetPressure.updateValueAndValidity();
@@ -56,7 +56,7 @@ export class SystemInformationFormService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): SystemInformation {
+  getObjFromForm(form: UntypedFormGroup): SystemInformation {
     return {
       systemElevation: form.controls.systemElevation.value,
       totalAirStorage: form.controls.totalAirStorage.value,

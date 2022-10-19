@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormArray } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { ByDataInputs, ByEquationInputs, EquipmentInputs } from '../../../shared/models/system-and-equipment-curve';
@@ -8,11 +8,11 @@ import { ByDataInputs, ByEquationInputs, EquipmentInputs } from '../../../shared
 export class EquipmentCurveService {
 
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
   //equipment curve
-  getEquipmentCurveFormFromObj(obj: EquipmentInputs): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getEquipmentCurveFormFromObj(obj: EquipmentInputs): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       measurementOption: [obj.measurementOption, Validators.required],
       baselineMeasurement: [obj.baselineMeasurement, [Validators.required, Validators.min(0)]],
       modificationMeasurementOption: [obj.modificationMeasurementOption, Validators.required],
@@ -48,7 +48,7 @@ export class EquipmentCurveService {
     return exampleEquipment;
   }
 
-  getEquipmentCurveObjFromForm(form: FormGroup): EquipmentInputs {
+  getEquipmentCurveObjFromForm(form: UntypedFormGroup): EquipmentInputs {
     return {
       measurementOption: form.controls.measurementOption.value,
       baselineMeasurement: form.controls.baselineMeasurement.value,
@@ -57,8 +57,8 @@ export class EquipmentCurveService {
   }
 
   //by equation
-  getByEquationFormFromObj(obj: ByEquationInputs): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getByEquationFormFromObj(obj: ByEquationInputs): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       maxFlow: [obj.maxFlow, [Validators.required, Validators.min(0), Validators.max(1000000)]],
       equationOrder: [obj.equationOrder, Validators.required],
       constant: [obj.constant, [Validators.required, Validators.min(0)]],
@@ -159,7 +159,7 @@ export class EquipmentCurveService {
     }
   }
 
-  getByEquationObjFromForm(form: FormGroup): ByEquationInputs {
+  getByEquationObjFromForm(form: UntypedFormGroup): ByEquationInputs {
     return {
       maxFlow: form.controls.maxFlow.value,
       equationOrder: form.controls.equationOrder.value,
@@ -303,8 +303,8 @@ export class EquipmentCurveService {
     }
   }
 
-  getByDataFormFromObj(inputObj: ByDataInputs): FormGroup {
-    let tmpFormArray: FormArray = new FormArray([]);
+  getByDataFormFromObj(inputObj: ByDataInputs): UntypedFormGroup {
+    let tmpFormArray: UntypedFormArray = new UntypedFormArray([]);
     if (inputObj.dataRows !== undefined && inputObj.dataRows !== null) {
       //iterate through dataRows and create controls for them
       inputObj.dataRows.forEach(dataRow => {
@@ -317,7 +317,7 @@ export class EquipmentCurveService {
       });
     }
 
-    let tmpForm: FormGroup = this.formBuilder.group({
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       dataRows: [tmpFormArray],
       dataOrder: [inputObj.dataOrder, Validators.required],
       powerDataOrder: [inputObj.powerDataOrder, Validators.required],
@@ -325,8 +325,8 @@ export class EquipmentCurveService {
     return tmpForm;
   }
 
-  getByDataObjFromForm(form: FormGroup): ByDataInputs {
-    let tmpFormArray: FormArray = form.controls.dataRows.value;
+  getByDataObjFromForm(form: UntypedFormGroup): ByDataInputs {
+    let tmpFormArray: UntypedFormArray = form.controls.dataRows.value;
     let dataRows: Array<{ flow: number, yValue: number, power: number }> = tmpFormArray.value;
     return {
       dataRows: dataRows,

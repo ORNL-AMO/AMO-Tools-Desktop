@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FlueGasByVolume, MaterialInputProperties } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
@@ -10,14 +10,14 @@ import { SteamService } from '../steam.service';
 @Injectable()
 export class FeedwaterEconomizerFormService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService,
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService,
     private steamService: SteamService) { }
 
-  getFeedwaterEconomizerForm(inputObj: FeedwaterEconomizerInput, settings: Settings): FormGroup {
+  getFeedwaterEconomizerForm(inputObj: FeedwaterEconomizerInput, settings: Settings): UntypedFormGroup {
     let steamTemperatureValidators: Array<ValidatorFn> = this.getSteamTemperatureValidators(inputObj.steamCondition, settings);
 
 
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       fuelCost: [inputObj.fuelCost, [Validators.required, Validators.min(0)]],
       flueGasTemperature: [inputObj.flueGasTemperature, Validators.required],
@@ -79,7 +79,7 @@ export class FeedwaterEconomizerFormService {
     return [Validators.required, Validators.min(minTempConverted)];
   }
 
-  getFeedwaterEconomizerInput(form: FormGroup): FeedwaterEconomizerInput {
+  getFeedwaterEconomizerInput(form: UntypedFormGroup): FeedwaterEconomizerInput {
     let obj: FeedwaterEconomizerInput = {
       operatingHours: form.controls.operatingHours.value,
       fuelCost: form.controls.fuelCost.value,
@@ -115,7 +115,7 @@ export class FeedwaterEconomizerFormService {
     return obj;
   }
 
-  getMaterialInputProperties(form: FormGroup): MaterialInputProperties {
+  getMaterialInputProperties(form: UntypedFormGroup): MaterialInputProperties {
     let input: MaterialInputProperties;
     input = {
       CH4: form.controls.CH4.value,
@@ -136,7 +136,7 @@ export class FeedwaterEconomizerFormService {
     return input;
   }
 
-  checkWarnings(form: FormGroup, settings: Settings): FeedwaterEconomizerWarnings {
+  checkWarnings(form: UntypedFormGroup, settings: Settings): FeedwaterEconomizerWarnings {
     if (form) {
       return {
         moistureInCombustionAir: this.checkMoistureInCombustionAir(form),
@@ -169,7 +169,7 @@ export class FeedwaterEconomizerFormService {
     }
   }
 
-  checkMoistureInCombustionAir(form: FormGroup): string {
+  checkMoistureInCombustionAir(form: UntypedFormGroup): string {
     if (form.value.moistureInCombustionAir) {
       if (form.value.moistureInCombustionAir > 1) {
         return `Moisture In Combustion Air is usually 1 or lower`;
@@ -178,7 +178,7 @@ export class FeedwaterEconomizerFormService {
     return null;
   }
 
-  checkBlowdown(form: FormGroup): string {
+  checkBlowdown(form: UntypedFormGroup): string {
     if (form.value.percBlowdown) {
       if (form.value.percBlowdown > 20) {
         return `Boiler Blowdown Percentage of Feedwater is usually 20 or lower`;
@@ -187,7 +187,7 @@ export class FeedwaterEconomizerFormService {
     return null;
   }
 
-  checkHxEfficiency(form: FormGroup): string {
+  checkHxEfficiency(form: UntypedFormGroup): string {
     if (form.value.hxEfficiency) {
       if (form.value.hxEfficiency < 40 || form.value.hxEfficiency > 65) {
         return `Heat Exchanger Effectiveness is usually between 40 and 65`;
@@ -196,7 +196,7 @@ export class FeedwaterEconomizerFormService {
     return null;
   }
 
-  checkO2Warning(form: FormGroup): string {
+  checkO2Warning(form: UntypedFormGroup): string {
     if (form.controls.flueGasO2.value < 0 || form.controls.flueGasO2.value >= 21) {
       return 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';
     } else {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
@@ -220,9 +220,9 @@ export class WasteWaterService {
   }
 
   checkWasteWaterValid(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, operations: WasteWaterOperations): WasteWaterValid {
-    let activatedSludgeForm: FormGroup = this.activatedSludgeFormService.getFormFromObj(activatedSludgeData);
-    let aeratorPerformanceForm: FormGroup = this.aeratorPerformanceFormService.getFormFromObj(aeratorPerformanceData);
-    let operationsForm: FormGroup = this.operationsService.getFormFromObj(operations);
+    let activatedSludgeForm: UntypedFormGroup = this.activatedSludgeFormService.getFormFromObj(activatedSludgeData);
+    let aeratorPerformanceForm: UntypedFormGroup = this.aeratorPerformanceFormService.getFormFromObj(aeratorPerformanceData);
+    let operationsForm: UntypedFormGroup = this.operationsService.getFormFromObj(operations);
     return {
       activatedSludgeValid: activatedSludgeForm.valid,
       aeratorPerformanceValid: aeratorPerformanceForm.valid,

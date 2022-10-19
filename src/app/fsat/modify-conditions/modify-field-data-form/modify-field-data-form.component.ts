@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { FSAT } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { HelpPanelService } from '../../help-panel/help-panel.service';
 
 @Component({
@@ -27,9 +27,9 @@ export class ModifyFieldDataFormComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<FSAT>();
 
-  modifyFieldDataForm: FormGroup;
+  modifyFieldDataForm: UntypedFormGroup;
   marginError: string = null;
-  constructor(private formBuilder: FormBuilder, private helpPanelService: HelpPanelService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     this.getForm();

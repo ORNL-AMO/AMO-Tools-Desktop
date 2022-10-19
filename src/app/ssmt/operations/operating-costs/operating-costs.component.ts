@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CompareService } from '../../compare.service';
 import { SsmtService } from '../../ssmt.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-operating-costs',
@@ -11,7 +11,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class OperatingCostsComponent implements OnInit {
   @Input()
-  form: FormGroup;
+  form: UntypedFormGroup;
   @Input()
   settings: Settings;
   @Output('emitSave')

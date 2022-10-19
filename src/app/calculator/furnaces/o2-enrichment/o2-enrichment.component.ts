@@ -6,7 +6,7 @@ import { O2EnrichmentService } from './o2-enrichment.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Calculator } from '../../../shared/models/calculators';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { O2EnrichmentFormService } from './o2-enrichment-form.service';
 
@@ -40,7 +40,7 @@ export class O2EnrichmentComponent implements OnInit {
   saving: boolean;
   calculator: Calculator;
   originalCalculator: Calculator;
-  o2Form: FormGroup;
+  o2Form: UntypedFormGroup;
   toggleResetData: boolean = true;
   toggleExampleData: boolean = false;
 

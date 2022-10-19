@@ -4,7 +4,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Directory } from '../../../../shared/models/directory';
  
 import * as _ from 'lodash';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Settings } from '../../../../shared/models/settings';
@@ -30,15 +30,15 @@ export class AssessmentItemComponent implements OnInit {
   @ViewChild('copyModal', { static: false }) public copyModal: ModalDirective;
   @ViewChild('deleteModal', { static: false }) public deleteModal: ModalDirective;
   allDirectories: Array<Directory>;
-  editForm: FormGroup;
-  copyForm: FormGroup;
+  editForm: UntypedFormGroup;
+  copyForm: UntypedFormGroup;
   dropdownOpen: boolean = false;
   updateDashboardDataSub: Subscription;
   dashboardView: string;
   dashboardViewSub: Subscription;
   isSetup: boolean;
   constructor(private assessmentService: AssessmentService,
-       private formBuilder: FormBuilder,
+       private formBuilder: UntypedFormBuilder,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService,
     private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,

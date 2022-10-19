@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { TankInsulationReductionService } from './tank-insulation-reduction.service';
 import { TankInsulationReductionResults } from '../../../shared/models/standalone';
@@ -48,8 +48,8 @@ export class TankInsulationReductionComponent implements OnInit {
 
   tankInsulationReductionResults: TankInsulationReductionResults;
 
-  baselineForm: FormGroup;
-  modificationForm: FormGroup;
+  baselineForm: UntypedFormGroup;
+  modificationForm: UntypedFormGroup;
 
   constructor(private settingsDbService: SettingsDbService, private tankInsulationReductionService: TankInsulationReductionService) { }
 

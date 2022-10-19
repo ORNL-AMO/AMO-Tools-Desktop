@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ChargeMaterial, SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 
 @Injectable()
 export class SolidMaterialFormService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  initSolidForm(assesmentLossNum?: number): FormGroup {
+  initSolidForm(assesmentLossNum?: number): UntypedFormGroup {
     let lossNumber = assesmentLossNum? assesmentLossNum : 1;
     
     let formGroup = this.formBuilder.group({
@@ -34,7 +34,7 @@ export class SolidMaterialFormService {
     return formGroup;
   }
 
-  getSolidChargeMaterialForm(chargeMaterial: ChargeMaterial, inAssessment: boolean = true): FormGroup {
+  getSolidChargeMaterialForm(chargeMaterial: ChargeMaterial, inAssessment: boolean = true): UntypedFormGroup {
     let reactionType = 'Endothermic';
     if (chargeMaterial.solidChargeMaterial.thermicReactionType !== 0) {
       reactionType = 'Exothermic';
@@ -64,7 +64,7 @@ export class SolidMaterialFormService {
     return formGroup;
   }
 
-  setInitialTempValidator(formGroup: FormGroup) {
+  setInitialTempValidator(formGroup: UntypedFormGroup) {
     let dischargeTemperature = formGroup.controls.chargeMaterialDischargeTemperature.value;
     if (dischargeTemperature) {
       formGroup.controls.initialTemperature.setValidators([Validators.required, Validators.max(dischargeTemperature)]);
@@ -75,7 +75,7 @@ export class SolidMaterialFormService {
 }
 
 
-  buildSolidChargeMaterial(solidForm: FormGroup): ChargeMaterial {
+  buildSolidChargeMaterial(solidForm: UntypedFormGroup): ChargeMaterial {
     let reactionType = 0;
     if (solidForm.controls.endothermicOrExothermic.value === 'Exothermic') {
       reactionType = 1;
