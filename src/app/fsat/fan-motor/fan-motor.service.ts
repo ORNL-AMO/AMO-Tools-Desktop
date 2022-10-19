@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { FanMotor } from '../../shared/models/fans';
 
 @Injectable()
 export class FanMotorService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromObj(obj: FanMotor): FormGroup {
+  getFormFromObj(obj: FanMotor): UntypedFormGroup {
     let specifiedEfficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(obj.efficiencyClass);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       lineFrequency: [obj.lineFrequency, Validators.required],
       motorRatedPower: [obj.motorRatedPower, Validators.required],
       motorRpm: [obj.motorRpm, Validators.required],
@@ -35,7 +35,7 @@ export class FanMotorService {
     }
   }
 
-  getObjFromForm(form: FormGroup): FanMotor {
+  getObjFromForm(form: UntypedFormGroup): FanMotor {
     let obj: FanMotor = {
       lineFrequency: form.controls.lineFrequency.value,
       motorRatedPower: form.controls.motorRatedPower.value,
@@ -49,7 +49,7 @@ export class FanMotorService {
   }
 
   isFanMotorValid(obj: FanMotor): boolean {
-    let form: FormGroup = this.getFormFromObj(obj);
+    let form: UntypedFormGroup = this.getFormFromObj(obj);
     return form.valid;
   }
 }

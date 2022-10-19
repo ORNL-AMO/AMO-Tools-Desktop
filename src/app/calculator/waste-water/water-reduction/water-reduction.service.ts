@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { WaterReductionData, VolumeMeterMethodData, MeteredFlowMethodData, BucketMethodData, WaterOtherMethodData, WaterReductionResult, WaterReductionInput, WaterReductionResults } from '../../../shared/models/standalone';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { StandaloneService } from '../../standalone.service';
 import { Settings } from '../../../shared/models/settings';
@@ -13,7 +13,7 @@ export class WaterReductionService {
   baselineData: Array<WaterReductionData>;
   modificationData: Array<WaterReductionData>;
   operatingHours: OperatingHours;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   initObject(index: number, settings: Settings, isWastewater: boolean, operatingHours: OperatingHours): WaterReductionData {
     let defaultVolumeMeterMethodData: VolumeMeterMethodData = {
@@ -79,8 +79,8 @@ export class WaterReductionService {
     return inputData;
   }
 
-  getFormFromObj(inputObj: WaterReductionData, index: number, isBaseline: boolean): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getFormFromObj(inputObj: WaterReductionData, index: number, isBaseline: boolean): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       name: [inputObj.name, [Validators.required]],
       hoursPerYear: [inputObj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
       isWastewater: [{ value: inputObj.isWastewater, disabled: (index != 0 || !isBaseline) }],
@@ -107,7 +107,7 @@ export class WaterReductionService {
     return form;
   }
 
-  setValidators(form: FormGroup): FormGroup {
+  setValidators(form: UntypedFormGroup): UntypedFormGroup {
     switch (form.controls.measurementMethod.value) {
       case 0:
         form.controls.initialMeterReading.setValidators([Validators.required, Validators.min(0)]);
@@ -128,7 +128,7 @@ export class WaterReductionService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): WaterReductionData {
+  getObjFromForm(form: UntypedFormGroup): WaterReductionData {
     let volumeMeterMethodData: VolumeMeterMethodData = {
       initialMeterReading: form.controls.initialMeterReading.value,
       finalMeterReading: form.controls.finalMeterReading.value,

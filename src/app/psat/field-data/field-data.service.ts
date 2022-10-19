@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { PsatInputs } from '../../shared/models/psat';
 
 @Injectable()
 export class FieldDataService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromObj(psatInputs: PsatInputs, isBaseline: boolean, isWhatIfScenario?: boolean): FormGroup {
+  getFormFromObj(psatInputs: PsatInputs, isBaseline: boolean, isWhatIfScenario?: boolean): UntypedFormGroup {
     let loadEstimationMethodValidators: Array<ValidatorFn> = [];
     let motorKwValidators: Array<ValidatorFn> = [];
     let motorAmpsValidators: Array<ValidatorFn> = [];
@@ -21,7 +21,7 @@ export class FieldDataService {
         motorAmpsValidators = [Validators.required]
       }
     }
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       flowRate: [psatInputs.flow_rate, [Validators.required, Validators.min(0)]],
       head: [psatInputs.head, [Validators.required, Validators.min(0.1)]],
       loadEstimatedMethod: [psatInputs.load_estimation_method, loadEstimationMethodValidators],
@@ -39,7 +39,7 @@ export class FieldDataService {
   }
 
 
-  getPsatInputsFromForm(form: FormGroup, psatInputs: PsatInputs): PsatInputs {
+  getPsatInputsFromForm(form: UntypedFormGroup, psatInputs: PsatInputs): PsatInputs {
     psatInputs.flow_rate = form.controls.flowRate.value;
     psatInputs.head = form.controls.head.value;
     psatInputs.load_estimation_method = form.controls.loadEstimatedMethod.value;

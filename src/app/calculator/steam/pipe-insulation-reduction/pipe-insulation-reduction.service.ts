@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { PipeInsulationReductionInput, PipeInsulationReductionResult, PipeInsulationReductionResults } from '../../../shared/models/standalone';
 import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { StandaloneService } from '../../standalone.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
@@ -14,7 +14,7 @@ export class PipeInsulationReductionService {
   nps: Array<{ pipeSizeIn: number, pipeSizeMM: number, pipeSizeM: number, thickness: number }>;
   operatingHours: OperatingHours;
 
-  constructor(private fb: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) {
+  constructor(private fb: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) {
     this.npsFactory();
   }
 
@@ -50,12 +50,12 @@ export class PipeInsulationReductionService {
     return obj;
   }
 
-  getFormFromObj(obj: PipeInsulationReductionInput, settings: Settings, isBaseline: boolean): FormGroup {
+  getFormFromObj(obj: PipeInsulationReductionInput, settings: Settings, isBaseline: boolean): UntypedFormGroup {
     let maxPipeTemperature: number = 1700;
     if (settings.unitsOfMeasure === 'Metric') {
       maxPipeTemperature = this.convertUnitsService.roundVal(this.convertUnitsService.value(maxPipeTemperature).from('F').to('C') + 273.15, 0);
     }
-    let form: FormGroup = this.fb.group({
+    let form: UntypedFormGroup = this.fb.group({
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       utilityType: [{ value: obj.utilityType, disabled: !isBaseline }],
       utilityCost: [{ value: obj.utilityCost, disabled: !isBaseline }, [Validators.required, Validators.min(0)]],
@@ -82,7 +82,7 @@ export class PipeInsulationReductionService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup, data: PipeInsulationReductionInput): PipeInsulationReductionInput {
+  getObjFromForm(form: UntypedFormGroup, data: PipeInsulationReductionInput): PipeInsulationReductionInput {
     let naturalGasUtilityCost = data.naturalGasUtilityCost;
     let otherUtilityCost = data.otherUtilityCost;
     if (form.controls.utilityType.value == 0) {

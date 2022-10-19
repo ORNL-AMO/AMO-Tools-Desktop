@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Slag } from '../../../shared/models/phast/losses/slag';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 @Injectable()
 export class SlagService {
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder) {
   }
 
-  initForm(lossNum: number): FormGroup {
+  initForm(lossNum: number): UntypedFormGroup {
     return this.formBuilder.group({
       'weight': ['', Validators.required],
       'inletTemperature': ['', Validators.required],
@@ -18,7 +18,7 @@ export class SlagService {
     });
   }
 
-  getFormFromLoss(slag: Slag): FormGroup {
+  getFormFromLoss(slag: Slag): UntypedFormGroup {
     return this.formBuilder.group({
       'weight': [slag.weight, Validators.required],
       'inletTemperature': [slag.inletTemperature, Validators.required],
@@ -29,7 +29,7 @@ export class SlagService {
     });
   }
 
-  getLossFromForm(form: FormGroup): Slag {
+  getLossFromForm(form: UntypedFormGroup): Slag {
     let tmpSlag: Slag = {
       weight: form.controls.weight.value,
       inletTemperature: form.controls.inletTemperature.value,

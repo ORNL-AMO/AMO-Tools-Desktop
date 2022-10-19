@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DirectoryDashboardService } from '../directory-dashboard.service';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { DashboardService } from '../../dashboard.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { Directory } from '../../../shared/models/directory';
@@ -46,7 +46,7 @@ export class DirectorySummaryComponent implements OnInit {
   wasteWaterSummary: AssessmentTypeSummary;
   compressedAirSummary: AssessmentTypeSummary;
 
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
   updateDashboardDataSub: Subscription;
   directoryIdSub: Subscription;
   counter: any;

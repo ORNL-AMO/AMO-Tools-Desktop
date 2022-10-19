@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
@@ -14,7 +14,7 @@ export class AltitudeCorrectionService {
   altitudeCorrectionInputs: BehaviorSubject<number>; 
   altitudeCorrectionOutputs: BehaviorSubject<number>;
 
-  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) {
+  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: UntypedFormBuilder) {
     this.currentField = new BehaviorSubject<string>('default');
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
@@ -22,14 +22,14 @@ export class AltitudeCorrectionService {
     this.altitudeCorrectionOutputs = new BehaviorSubject<number>(undefined);
   }
 
-  getFormFromObj(inputData: number): FormGroup {
+  getFormFromObj(inputData: number): UntypedFormGroup {
     let form = this.formBuilder.group({
       altitude: [inputData, Validators.required]
     });
     return form;
   }
 
-  getObjFromForm(form: FormGroup): number {
+  getObjFromForm(form: UntypedFormGroup): number {
     let altitude: number = form.controls.altitude.value;
     return altitude;
   }

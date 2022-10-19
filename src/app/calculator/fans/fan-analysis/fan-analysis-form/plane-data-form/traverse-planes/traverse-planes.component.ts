@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Plane, PlaneResults, VelocityResults } from '../../../../../../shared/models/fans';
 import { Settings } from '../../../../../../shared/models/settings';
@@ -21,7 +21,7 @@ export class TraversePlanesComponent implements OnInit {
   velocityResultsSub: Subscription;
   velocityResults: VelocityResults;
   planeDescription: string;
-  fanDataForm: FormGroup;
+  fanDataForm: UntypedFormGroup;
   planeData: Plane;
   planeNumber: string;
   planeResults: PlaneResults;

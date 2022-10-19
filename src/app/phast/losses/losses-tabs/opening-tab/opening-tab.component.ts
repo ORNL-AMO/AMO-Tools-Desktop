@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { OpeningLossesCompareService } from '../../opening-losses/opening-losses-compare.service';
 import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
 import { Subscription } from 'rxjs';
@@ -100,7 +100,7 @@ export class OpeningTabComponent implements OnInit {
 
 
   checkLossValid(loss: OpeningLoss) {
-      let tmpForm: FormGroup = this.openingFormService.getFormFromLoss(loss);
+      let tmpForm: UntypedFormGroup = this.openingFormService.getFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {

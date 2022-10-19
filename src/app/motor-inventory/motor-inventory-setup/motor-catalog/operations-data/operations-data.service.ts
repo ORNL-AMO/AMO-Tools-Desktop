@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { OperationData } from '../../../motor-inventory';
 
 @Injectable()
 export class OperationsDataService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromOperationData(operationData: OperationData): FormGroup {
+  getFormFromOperationData(operationData: OperationData): UntypedFormGroup {
     return this.formBuilder.group({
       location: [operationData.location],
       annualOperatingHours: [operationData.annualOperatingHours, [Validators.min(0), Validators.max(8760)]],
@@ -19,7 +19,7 @@ export class OperationsDataService {
     });
   }
 
-  updateOperationDataFromForm(form: FormGroup, operationData: OperationData): OperationData {
+  updateOperationDataFromForm(form: UntypedFormGroup, operationData: OperationData): OperationData {
     operationData.location = form.controls.location.value;
     operationData.annualOperatingHours = form.controls.annualOperatingHours.value;
     operationData.averageLoadFactor = form.controls.averageLoadFactor.value;

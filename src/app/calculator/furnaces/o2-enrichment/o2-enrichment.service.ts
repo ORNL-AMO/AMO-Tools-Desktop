@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EnrichmentOutput, EnrichmentInput, EnrichmentInputData, RawO2Output, SuiteInputAdapter } from '../../../shared/models/phast/o2Enrichment';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PhastService } from '../../../phast/phast.service';
 import { OperatingHours } from '../../../shared/models/operations';
 import { SelectedDataPoint, SimpleChart, TraceData, TraceCoordinates } from '../../../shared/models/plotting';
@@ -76,7 +76,7 @@ export class O2EnrichmentService {
     this.enrichmentInputs.next(emptyEnrichmentInput);
   }
 
-  addModification(form: FormGroup) {
+  addModification(form: UntypedFormGroup) {
     let enrichmentCopy = this.o2FormService.getObjFromForm(form);
     enrichmentCopy.name = 'Modification';
     enrichmentCopy.isBaseline = false;

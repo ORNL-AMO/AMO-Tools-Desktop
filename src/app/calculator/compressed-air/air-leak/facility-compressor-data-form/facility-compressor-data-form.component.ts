@@ -4,7 +4,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { OperatingCostService } from '../../operating-cost/operating-cost.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { AirLeakService } from '../air-leak.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AirLeakFormService } from '../air-leak-form/air-leak-form.service';
 import { ConvertAirLeakService } from '../convert-air-leak.service';
@@ -32,7 +32,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   compressorCustomSpecificPower: boolean;
   formWidth: number;
   currentElectricityUse: number;
-  facilityCompressorDataForm: FormGroup;
+  facilityCompressorDataForm: UntypedFormGroup;
 
   @ViewChild('leaksTable', { static: false }) leaksTable: ElementRef;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
@@ -130,7 +130,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   }
 
   changeCompressorControl() {
-    let compressorElectricityForm: FormGroup = (this.facilityCompressorDataForm.get("compressorElectricityData") as FormGroup);
+    let compressorElectricityForm: UntypedFormGroup = (this.facilityCompressorDataForm.get("compressorElectricityData") as UntypedFormGroup);
     if (!this.compressorCustomControl) {
       if (compressorElectricityForm.controls.compressorControl.value == 8) {
         this.compressorCustomControl = true;
@@ -154,7 +154,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   }
 
   changeCompressorType() {
-    let compressorElectricityForm: FormGroup = (this.facilityCompressorDataForm.get("compressorElectricityData") as FormGroup);
+    let compressorElectricityForm: UntypedFormGroup = (this.facilityCompressorDataForm.get("compressorElectricityData") as UntypedFormGroup);
     if (!this.compressorCustomSpecificPower) {
       if (compressorElectricityForm.controls.compressorSpecificPowerControl.value == 4) {
         this.compressorCustomSpecificPower = true;
@@ -177,7 +177,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   }
 
 
-  getSpecificPower(compressorElectricityForm: FormGroup): number {
+  getSpecificPower(compressorElectricityForm: UntypedFormGroup): number {
     let specificPower: number = this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower;
     if (this.settings.unitsOfMeasure != 'Imperial') {
       specificPower = this.convertAirLeakService.convertSpecificPower(specificPower);

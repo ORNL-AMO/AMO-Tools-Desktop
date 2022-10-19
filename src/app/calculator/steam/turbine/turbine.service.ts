@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { TurbineInput } from '../../../shared/models/steam/steam-inputs';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -8,9 +8,9 @@ import { SteamService } from '../steam.service';
 export class TurbineService {
   turbineInput: TurbineInput;
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
-  initOutletForm(settings: Settings): FormGroup {
+  initOutletForm(settings: Settings): UntypedFormGroup {
     let tmpInletPressure = 66.4;
     let tmpInletQuantityValue = 897.5;
     let tmpMassFlowOrPowerOut = 98.8;
@@ -28,7 +28,7 @@ export class TurbineService {
       tmpMassFlowOrPowerOut = Math.round(this.convertUnitsService.value(tmpMassFlowOrPowerOut).from('klb').to(settings.steamMassFlowMeasurement) * 100) / 100;
     }
     let ranges: TurbineRanges = this.getRangeValues(settings, 0, 0);
-    let tmpForm: FormGroup = this.formBuilder.group({
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       solveFor: [0, Validators.required], // (outlet properties = 0, isentropicEfficiency = 1) - unknown to solve for
       inletPressure: [tmpInletPressure, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       inletQuantity: [0, Validators.required],
@@ -44,7 +44,7 @@ export class TurbineService {
     return tmpForm;
   }
 
-  initIsentropicForm(settings: Settings): FormGroup {
+  initIsentropicForm(settings: Settings): UntypedFormGroup {
     let tmpInletPressure = 847.5;
     let tmpInletQuantityValue = 1221.4;
     let tmpMassFlowOrPowerOut = 38.2;
@@ -62,7 +62,7 @@ export class TurbineService {
       tmpMassFlowOrPowerOut = Math.round(this.convertUnitsService.value(tmpMassFlowOrPowerOut).from('klb').to(settings.steamMassFlowMeasurement) * 100) / 100;
     }
     let ranges: TurbineRanges = this.getRangeValues(settings, 0, 0);
-    let tmpForm: FormGroup = this.formBuilder.group({
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       solveFor: [1, Validators.required], // (outlet properties = 0, isentropicEfficiency = 1) - unknown to solve for
       inletPressure: [tmpInletPressure, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       inletQuantity: [0, Validators.required],
@@ -78,9 +78,9 @@ export class TurbineService {
     return tmpForm;
   }
 
-  resetForm(settings: Settings): FormGroup {
+  resetForm(settings: Settings): UntypedFormGroup {
     let ranges: TurbineRanges = this.getRangeValues(settings, 0, 0);
-    let tmpForm: FormGroup = this.formBuilder.group({
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       solveFor: [0, Validators.required], // (outlet properties = 0, isentropicEfficiency = 1) - unknown to solve for
       inletPressure: [0, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       inletQuantity: [0, Validators.required],
@@ -96,9 +96,9 @@ export class TurbineService {
     return tmpForm;
   }
 
-  getFormFromObj(inputObj: TurbineInput, settings: Settings): FormGroup {
+  getFormFromObj(inputObj: TurbineInput, settings: Settings): UntypedFormGroup {
     let ranges: TurbineRanges = this.getRangeValues(settings, inputObj.inletQuantity, inputObj.outletQuantity);
-    let tmpForm: FormGroup = this.formBuilder.group({
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       solveFor: [inputObj.solveFor, Validators.required], // (outlet properties = 0, isentropicEfficiency = 1) - unknown to solve for
       inletPressure: [inputObj.inletPressure, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       inletQuantity: [inputObj.inletQuantity, Validators.required],
@@ -114,7 +114,7 @@ export class TurbineService {
     return tmpForm;
   }
 
-  getObjFromForm(form: FormGroup): TurbineInput {
+  getObjFromForm(form: UntypedFormGroup): TurbineInput {
     let input: TurbineInput = {
       inletPressure: form.controls.inletPressure.value,
       solveFor: form.controls.solveFor.value,

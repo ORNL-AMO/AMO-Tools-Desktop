@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings, Contact, StreetAddress } from '../../shared/models/settings';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-facility-info',
@@ -13,8 +13,8 @@ export class FacilityInfoComponent implements OnInit {
   @Output('close')
   close = new EventEmitter<boolean>();
 
-  facilityForm: FormGroup;
-  constructor(private formBuilder: FormBuilder) { }
+  facilityForm: UntypedFormGroup;
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
   ngOnInit() {
     if (!this.settings.facilityInfo) {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { PsatService } from '../../../psat/psat.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -15,7 +15,7 @@ export class FullLoadAmpsService {
   generateExample: BehaviorSubject<boolean>;
   currentField: BehaviorSubject<string>;
 
-  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) {
+  constructor(private formBuilder: UntypedFormBuilder, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) {
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.fullLoadAmpsInputs = new BehaviorSubject<FanMotor>(undefined);
     this.fullLoadAmpsResult = new BehaviorSubject<number>(undefined);
@@ -23,9 +23,9 @@ export class FullLoadAmpsService {
     this.currentField = new BehaviorSubject<string>('default');
   }
 
-  getFormFromObj(obj: FanMotor): FormGroup {
+  getFormFromObj(obj: FanMotor): UntypedFormGroup {
     let specifiedEfficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(obj.efficiencyClass);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       lineFrequency: [obj.lineFrequency, Validators.required],
       motorRatedPower: [obj.motorRatedPower, Validators.required],
       motorRpm: [obj.motorRpm, Validators.required],
@@ -50,7 +50,7 @@ export class FullLoadAmpsService {
     }
   }
 
-  getObjFromForm(form: FormGroup): FanMotor {
+  getObjFromForm(form: UntypedFormGroup): FanMotor {
     let obj: FanMotor = {
       lineFrequency: form.controls.lineFrequency.value,
       motorRatedPower: form.controls.motorRatedPower.value,
@@ -64,7 +64,7 @@ export class FullLoadAmpsService {
   }
 
   isFanMotorValid(obj: FanMotor): boolean {
-    let form: FormGroup = this.getFormFromObj(obj);
+    let form: UntypedFormGroup = this.getFormFromObj(obj);
     return form.valid;
   }
 
@@ -91,7 +91,7 @@ export class FullLoadAmpsService {
     this.fullLoadAmpsResult.next(fullLoadAmpsResult);
   }
 
-  changeEfficiencyClass(form: FormGroup) {
+  changeEfficiencyClass(form: UntypedFormGroup) {
     let tmpEfficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(form.controls.efficiencyClass.value);
     form.controls.efficiencyClass.setValidators(tmpEfficiencyValidators);
     form.controls.efficiencyClass.reset(form.controls.efficiencyClass.value);

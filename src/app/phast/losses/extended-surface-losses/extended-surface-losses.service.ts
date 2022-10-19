@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 import { ExtendedSurface } from '../../../shared/models/phast/losses/extendedSurface';
 
 @Injectable()
 export class ExtendedSurfaceLossesService {
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder) {
   }
 
-  initForm(lossNum: number): FormGroup {
+  initForm(lossNum: number): UntypedFormGroup {
     return this.formBuilder.group({
       'surfaceArea': ['', Validators.required],
       'avgSurfaceTemp': ['', Validators.required],
@@ -18,7 +18,7 @@ export class ExtendedSurfaceLossesService {
     });
   }
 
-  getSurfaceLossForm(wallLoss: ExtendedSurface): FormGroup {
+  getSurfaceLossForm(wallLoss: ExtendedSurface): UntypedFormGroup {
     return this.formBuilder.group({
       'surfaceArea': [wallLoss.surfaceArea, Validators.required],
       'avgSurfaceTemp': [wallLoss.surfaceTemperature, Validators.required],
@@ -28,7 +28,7 @@ export class ExtendedSurfaceLossesService {
     });
   }
   //get WallLoss from form
-  getSurfaceLossFromForm(wallLossForm: FormGroup): ExtendedSurface {
+  getSurfaceLossFromForm(wallLossForm: UntypedFormGroup): ExtendedSurface {
     let tmpWallLoss: ExtendedSurface = {
       surfaceArea: wallLossForm.controls.surfaceArea.value,
       ambientTemperature: wallLossForm.controls.ambientTemp.value,

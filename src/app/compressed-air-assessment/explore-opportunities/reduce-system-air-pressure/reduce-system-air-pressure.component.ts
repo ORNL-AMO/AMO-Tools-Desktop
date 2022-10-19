@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, Modification, ReduceSystemAirPressure } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
@@ -21,7 +21,7 @@ export class ReduceSystemAirPressureComponent implements OnInit {
   orderOptions: Array<number>;
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
-  form: FormGroup;
+  form: UntypedFormGroup;
   settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private reduceSystemAirPressureService: ReduceSystemAirPressureService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }

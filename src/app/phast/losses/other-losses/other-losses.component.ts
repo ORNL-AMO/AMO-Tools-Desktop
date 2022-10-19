@@ -4,7 +4,7 @@ import { OtherLossesService } from './other-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { OtherLoss } from '../../../shared/models/phast/losses/otherLoss';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-other-losses',
@@ -131,7 +131,7 @@ export class OtherLossesComponent implements OnInit {
 }
 
 export interface OtherLossObj {
-  form: FormGroup;
+  form: UntypedFormGroup;
   name: string;
   collapse: boolean;
 }

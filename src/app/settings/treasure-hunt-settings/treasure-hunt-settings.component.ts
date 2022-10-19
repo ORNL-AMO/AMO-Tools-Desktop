@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-treasure-hunt-settings',
@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class TreasureHuntSettingsComponent implements OnInit {
   @Input()
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
 
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();

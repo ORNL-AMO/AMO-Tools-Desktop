@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ExhaustGasCompareService } from '../exhaust-gas-compare.service';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-exhaust-gas-form',
@@ -10,7 +10,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class ExhaustGasFormComponent implements OnInit {
   @Input()
-  exhaustGasForm: FormGroup;
+  exhaustGasForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

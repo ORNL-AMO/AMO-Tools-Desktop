@@ -4,7 +4,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { PipeInsulationReductionService } from './pipe-insulation-reduction.service';
 import { PipeInsulationReductionResults } from '../../../shared/models/standalone';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PipeInsulationReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
@@ -44,8 +44,8 @@ export class PipeInsulationReductionComponent implements OnInit {
 
   pipeInsulationReductionResults: PipeInsulationReductionResults;
 
-  baselineForm: FormGroup;
-  modificationForm: FormGroup;
+  baselineForm: UntypedFormGroup;
+  modificationForm: UntypedFormGroup;
   smallScreenTab: string = 'baseline';
 
 

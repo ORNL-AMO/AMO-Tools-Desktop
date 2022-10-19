@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -13,7 +13,7 @@ export class ElectricityReductionService {
   baselineData: Array<ElectricityReductionData>;
   modificationData: Array<ElectricityReductionData>;
   operatingHours: OperatingHours;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   initObject(index: number, settings: Settings, operatingHours: OperatingHours): ElectricityReductionData {
     let defaultMultimeterObj: MultimeterReadingData = {
@@ -69,8 +69,8 @@ export class ElectricityReductionService {
     return obj;
   }
 
-  getFormFromObj(initObj: ElectricityReductionData): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getFormFromObj(initObj: ElectricityReductionData): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       name: [initObj.name, [Validators.required]],
       operatingHours: [initObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       electricityCost: [initObj.electricityCost],
@@ -102,7 +102,7 @@ export class ElectricityReductionService {
     return form;
   }
 
-  setValidators(form: FormGroup): FormGroup {
+  setValidators(form: UntypedFormGroup): UntypedFormGroup {
     switch (form.controls.measurementMethod.value) {
       case 0:
         form.controls.electricityCost.setValidators([Validators.required, Validators.min(0)]);
@@ -131,7 +131,7 @@ export class ElectricityReductionService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): ElectricityReductionData {
+  getObjFromForm(form: UntypedFormGroup): ElectricityReductionData {
     let multimeterObj: MultimeterReadingData = {
       numberOfPhases: form.controls.numberOfPhases.value,
       supplyVoltage: form.controls.supplyVoltage.value,

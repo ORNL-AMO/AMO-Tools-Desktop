@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 
 @Injectable()
 export class GasMaterialFormService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  initGasForm(assesmentLossNum?: number): FormGroup {
+  initGasForm(assesmentLossNum?: number): UntypedFormGroup {
     let lossNumber = assesmentLossNum? assesmentLossNum : 0;
 
     let formGroup = this.formBuilder.group({
@@ -29,7 +29,7 @@ export class GasMaterialFormService {
     return formGroup;
   }
 
-  getGasChargeMaterialForm(chargeMaterial: ChargeMaterial, inAssessment: boolean = true): FormGroup {
+  getGasChargeMaterialForm(chargeMaterial: ChargeMaterial, inAssessment: boolean = true): UntypedFormGroup {
     let reactionType = 'Endothermic';
     if (chargeMaterial.gasChargeMaterial.thermicReactionType !== 0) {
       reactionType = 'Exothermic';
@@ -53,7 +53,7 @@ export class GasMaterialFormService {
     return formGroup;
   }
 
-  setInitialTempValidator(formGroup: FormGroup) {
+  setInitialTempValidator(formGroup: UntypedFormGroup) {
     let dischargeTemperature = formGroup.controls.dischargeTemperature.value;
     if (dischargeTemperature) {
       formGroup.controls.initialTemperature.setValidators([Validators.required, Validators.max(dischargeTemperature)]);
@@ -63,7 +63,7 @@ export class GasMaterialFormService {
     return formGroup;
 }
 
-  buildGasChargeMaterial(gasForm: FormGroup): ChargeMaterial {
+  buildGasChargeMaterial(gasForm: UntypedFormGroup): ChargeMaterial {
     let reactionType = 0;
     if (gasForm.controls.endothermicOrExothermic.value === 'Exothermic') {
       reactionType = 1;

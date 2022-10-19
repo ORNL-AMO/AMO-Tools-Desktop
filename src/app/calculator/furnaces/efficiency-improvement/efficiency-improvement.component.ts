@@ -8,7 +8,7 @@ import { Calculator } from '../../../shared/models/calculators';
  
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-efficiency-improvement',
@@ -43,7 +43,7 @@ export class EfficiencyImprovementComponent implements OnInit {
   saving: boolean;
   originalCalculator: Calculator;
   calculator: Calculator;
-  efficiencyImprovementForm: FormGroup;
+  efficiencyImprovementForm: UntypedFormGroup;
   constructor(private phastService: PhastService, private efficiencyImprovementService: EfficiencyImprovementService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService,  ) { }
 

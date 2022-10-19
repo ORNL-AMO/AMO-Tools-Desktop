@@ -4,7 +4,7 @@ import { Losses, PHAST, PhastResults } from '../../../shared/models/phast/phast'
 import { EnergyInputService } from './energy-input.service';
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PhastResultsService, EnergyInputWarnings } from '../../phast-results.service';
 import { PhastService } from '../../phast.service';
 
@@ -176,7 +176,7 @@ export class EnergyInputComponent implements OnInit {
 }
 
 export interface EnInputObj {
-  form: FormGroup;
+  form: UntypedFormGroup;
   results: EnInputResultsObj;
   collapse: boolean;
 }

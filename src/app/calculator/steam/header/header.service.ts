@@ -1,40 +1,40 @@
 import { Injectable } from '@angular/core';
 import { SteamService } from '../steam.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { HeaderInput, HeaderInputObj } from '../../../shared/models/steam/steam-inputs';
 
 @Injectable()
 export class HeaderService {
   headerInput: HeaderInput;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
-  initHeaderForm(settings: Settings): FormGroup {
+  initHeaderForm(settings: Settings): UntypedFormGroup {
     let tmpHeaderPressure = 357.2;
     if (settings.steamPressureMeasurement !== 'psig') {
       tmpHeaderPressure = Math.round(this.convertUnitsService.value(357.2).from('psig').to(settings.steamPressureMeasurement) * 100) / 100;
     }
     let ranges: { min: number, max: number } = this.getPressureRangeValues(settings);
-    let tmpForm: FormGroup = this.formBuilder.group({
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       headerPressure: [tmpHeaderPressure, [Validators.required, Validators.min(ranges.min), Validators.max(ranges.max)]],
       numInlets: [3, [Validators.required]]
     });
     return tmpForm;
   }
 
-  resetHeaderForm(settings: Settings): FormGroup {
+  resetHeaderForm(settings: Settings): UntypedFormGroup {
     let ranges: { min: number, max: number } = this.getPressureRangeValues(settings);
-    let tmpForm: FormGroup = this.formBuilder.group({
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       headerPressure: ['', [Validators.required, Validators.min(ranges.min), Validators.max(ranges.max)]],
       numInlets: [0, [Validators.required]]
     });
     return tmpForm;
   }
 
-  resetInletForm(settings: Settings): FormGroup {
+  resetInletForm(settings: Settings): UntypedFormGroup {
     let ranges: InletRanges = this.getInletRangeValues(settings, 0);
-    let tmpForm: FormGroup = this.formBuilder.group({
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       pressure: [0, [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
       thermodynamicQuantity: [0, [Validators.required]],
       quantityValue: [0, [Validators.required, Validators.min(ranges.quantityMin), Validators.max(ranges.quantityMax)]],
@@ -43,7 +43,7 @@ export class HeaderService {
     return tmpForm;
   }
 
-  initInletForm(settings: Settings): Array<FormGroup> {
+  initInletForm(settings: Settings): Array<UntypedFormGroup> {
     let tmpPressure1 = 586.9;
     let tmpPressure2 = 529.3;
     let tmpPressure3 = 583.7;
@@ -68,9 +68,9 @@ export class HeaderService {
       tmpMassFlow2 = Math.round(this.convertUnitsService.value(tmpMassFlow2).from('klb').to(settings.steamMassFlowMeasurement) * 100) / 100;
       tmpMassFlow3 = Math.round(this.convertUnitsService.value(tmpMassFlow3).from('klb').to(settings.steamMassFlowMeasurement) * 100) / 100;
     }
-    let inletForms = new Array<FormGroup>();
+    let inletForms = new Array<UntypedFormGroup>();
     let ranges: InletRanges = this.getInletRangeValues(settings, 0);
-    let tmpForm: FormGroup = this.formBuilder.group({
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       pressure: [tmpPressure1, [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
       thermodynamicQuantity: [0, [Validators.required]],
       quantityValue: [tmpQuantityValue1, [Validators.required, Validators.min(ranges.quantityMin), Validators.max(ranges.quantityMax)]],
@@ -94,18 +94,18 @@ export class HeaderService {
     return inletForms;
   }
 
-  getHeaderFormFromObj(inputObj: HeaderInput, settings: Settings): FormGroup {
+  getHeaderFormFromObj(inputObj: HeaderInput, settings: Settings): UntypedFormGroup {
     let ranges: { min: number, max: number } = this.getPressureRangeValues(settings);
-    let tmpForm: FormGroup = this.formBuilder.group({
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       headerPressure: [inputObj.headerPressure, [Validators.required, Validators.min(ranges.min), Validators.max(ranges.max)]],
       numInlets: [inputObj.numberOfInlets]
     });
     return tmpForm;
   }
 
-  getInletFormFromObj(inputObj: HeaderInputObj, settings: Settings): FormGroup {
+  getInletFormFromObj(inputObj: HeaderInputObj, settings: Settings): UntypedFormGroup {
     let ranges: InletRanges = this.getInletRangeValues(settings, inputObj.thermodynamicQuantity);
-    let tmpForm: FormGroup = this.formBuilder.group({
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       pressure: [inputObj.pressure, [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
       thermodynamicQuantity: [inputObj.thermodynamicQuantity, [Validators.required]],
       quantityValue: [inputObj.quantityValue, [Validators.required, Validators.min(ranges.quantityMin), Validators.max(ranges.quantityMax)]],
@@ -114,7 +114,7 @@ export class HeaderService {
     return tmpForm;
   }
 
-  getObjFromForm(headerForm: FormGroup, inletForms: Array<FormGroup>): HeaderInput {
+  getObjFromForm(headerForm: UntypedFormGroup, inletForms: Array<UntypedFormGroup>): HeaderInput {
     let input: HeaderInput = {
       headerPressure: headerForm.controls.headerPressure.value,
       inlets: new Array<HeaderInputObj>(),
@@ -127,7 +127,7 @@ export class HeaderService {
     return input;
   }
 
-  getInletObjFromForm(form: FormGroup): HeaderInputObj {
+  getInletObjFromForm(form: UntypedFormGroup): HeaderInputObj {
     return {
       pressure: form.controls.pressure.value,
       thermodynamicQuantity: form.controls.thermodynamicQuantity.value,

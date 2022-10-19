@@ -4,7 +4,7 @@ import { FlueGasCompareService } from "../flue-gas-compare.service";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
@@ -18,7 +18,7 @@ import { firstValueFrom } from 'rxjs';
 })
 export class FlueGasLossesFormVolumeComponent implements OnInit {
   @Input()
-  flueGasLossForm: FormGroup;
+  flueGasLossForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

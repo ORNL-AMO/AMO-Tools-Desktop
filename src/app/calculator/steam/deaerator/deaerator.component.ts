@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, ElementRef, ViewChild, HostListener} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {UntypedFormGroup} from '@angular/forms';
 import {Settings} from '../../../shared/models/settings';
 import {SettingsDbService} from '../../../indexedDb/settings-db.service';
 import {SteamService} from '../steam.service';
@@ -30,7 +30,7 @@ export class DeaeratorComponent implements OnInit {
   smallScreenTab: string = 'form';
   tabSelect: string = 'results';
   currentField: string = 'default';
-  deaeratorForm: FormGroup;
+  deaeratorForm: UntypedFormGroup;
   input: DeaeratorInput;
   results: DeaeratorOutput;
 
@@ -82,7 +82,7 @@ export class DeaeratorComponent implements OnInit {
     }
   }
 
-  calculate(form: FormGroup) {
+  calculate(form: UntypedFormGroup) {
     this.input = this.deaeratorService.getObjFromForm(form);
     this.deaeratorService.deaeratorInput = this.input;
     if (form.status === 'VALID') {

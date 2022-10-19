@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MotorItem, TorqueOptions } from '../../../motor-inventory';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { MotorCatalogService } from '../motor-catalog.service';
 import { MotorInventoryService } from '../../../motor-inventory.service';
@@ -17,7 +17,7 @@ export class TorqueDataComponent implements OnInit {
   settingsSub: Subscription;
   settings: Settings;
   
-  motorForm: FormGroup;
+  motorForm: UntypedFormGroup;
   selectedMotorItemSub: Subscription;
   displayOptions: TorqueOptions;
   displayForm: boolean = true;

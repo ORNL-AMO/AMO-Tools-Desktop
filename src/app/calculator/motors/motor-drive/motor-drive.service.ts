@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MotorDriveInputs, MotorDriveOutputs, DriveResult } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
@@ -8,7 +8,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 export class MotorDriveService {
   motorDriveData: MotorDriveInputs;
   operatingHours: OperatingHours;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
   generateExample(settings: Settings): MotorDriveInputs{
     return {
@@ -31,8 +31,8 @@ export class MotorDriveService {
     }
   }
 
-  getFormFromObj(inputObj: MotorDriveInputs): FormGroup {
-    let tmpForm: FormGroup = this.formBuilder.group({
+  getFormFromObj(inputObj: MotorDriveInputs): UntypedFormGroup {
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       motorPower: [inputObj.motorPower, [Validators.required, Validators.min(0)]],
       annualOperatingHours: [inputObj.annualOperatingHours, [Validators.required, Validators.min(0)]],
       averageMotorLoad: [inputObj.averageMotorLoad, [Validators.required]],
@@ -43,7 +43,7 @@ export class MotorDriveService {
     return tmpForm;
   }
 
-  getObjFromForm(form: FormGroup): MotorDriveInputs {
+  getObjFromForm(form: UntypedFormGroup): MotorDriveInputs {
     let inputs: MotorDriveInputs = {
       motorPower: form.controls.motorPower.value,
       annualOperatingHours: form.controls.annualOperatingHours.value,

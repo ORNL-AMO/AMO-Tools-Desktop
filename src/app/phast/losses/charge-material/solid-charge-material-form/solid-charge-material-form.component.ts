@@ -5,7 +5,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { SolidMaterialFormService, SolidMaterialWarnings } from '../../../../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
@@ -19,7 +19,7 @@ import { firstValueFrom } from 'rxjs';
 })
 export class SolidChargeMaterialFormComponent implements OnInit {
   @Input()
-  chargeMaterialForm: FormGroup;
+  chargeMaterialForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

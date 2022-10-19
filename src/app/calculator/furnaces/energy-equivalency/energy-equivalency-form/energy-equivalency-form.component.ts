@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { EnergyEquivalencyElectric, EnergyEquivalencyFuel, EnergyEquivalencyElectricOutput, EnergyEquivalencyFuelOutput } from '../../../../shared/models/phast/energyEquivalency';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { EnergyEquivalencyService } from '../energy-equivalency.service';
 
 @Component({
@@ -11,9 +11,9 @@ import { EnergyEquivalencyService } from '../energy-equivalency.service';
 })
 export class EnergyEquivalencyFormComponent implements OnInit {
   @Input()
-  formElectric: FormGroup;
+  formElectric: UntypedFormGroup;
   @Input()
-  formFuel: FormGroup;
+  formFuel: UntypedFormGroup;
   @Input()
   energyEquivalencyElectricOutput: EnergyEquivalencyElectricOutput;
   @Input()

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { WallLossCompareService } from '../../wall-losses/wall-loss-compare.service';
 import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
 import { Subscription } from 'rxjs';
@@ -97,7 +97,7 @@ export class WallTabComponent implements OnInit {
 
 
   checkLossValid(loss: WallLoss) {
-    let tmpForm: FormGroup = this.wallFormService.getWallLossForm(loss);
+    let tmpForm: UntypedFormGroup = this.wallFormService.getWallLossForm(loss);
     if (tmpForm.status === 'VALID') {
       return true;
     } else {

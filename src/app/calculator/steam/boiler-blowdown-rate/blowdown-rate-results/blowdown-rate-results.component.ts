@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { BoilerBlowdownRateService, BoilerBlowdownRateResults, BoilerBlowdownRateInputs } from '../boiler-blowdown-rate.service';
 import { Subscription } from 'rxjs';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-blowdown-rate-results',
@@ -72,9 +72,9 @@ export class BlowdownRateResultsComponent implements OnInit {
     let modificationInputs: BoilerBlowdownRateInputs = this.boilerBlowdownRateService.modificationInputs.getValue();
     if (modificationInputs) {
       this.modificationExists = true;
-      let conductivityForm: FormGroup = this.boilerBlowdownRateService.getConductivityFormFromObj(modificationInputs);
-      let boilerForm: FormGroup = this.boilerBlowdownRateService.getBoilerFormFromObj(modificationInputs, this.settings);
-      let operationsForm: FormGroup = this.boilerBlowdownRateService.getOperationsFormFromObj(modificationInputs, this.settings);
+      let conductivityForm: UntypedFormGroup = this.boilerBlowdownRateService.getConductivityFormFromObj(modificationInputs);
+      let boilerForm: UntypedFormGroup = this.boilerBlowdownRateService.getBoilerFormFromObj(modificationInputs, this.settings);
+      let operationsForm: UntypedFormGroup = this.boilerBlowdownRateService.getOperationsFormFromObj(modificationInputs, this.settings);
       if (conductivityForm.valid) {
         let calcBoilerResults: boolean = boilerForm.valid && this.showBoiler;
         let calcOperations: boolean = boilerForm.valid && operationsForm.valid && this.showOperations;
@@ -92,9 +92,9 @@ export class BlowdownRateResultsComponent implements OnInit {
   calculateBaselineResults() {
     let baselineInputs: BoilerBlowdownRateInputs = this.boilerBlowdownRateService.baselineInputs.getValue();
     if (baselineInputs) {
-      let conductivityForm: FormGroup = this.boilerBlowdownRateService.getConductivityFormFromObj(baselineInputs);
-      let boilerForm: FormGroup = this.boilerBlowdownRateService.getBoilerFormFromObj(baselineInputs, this.settings);
-      let operationsForm: FormGroup = this.boilerBlowdownRateService.getOperationsFormFromObj(baselineInputs, this.settings);
+      let conductivityForm: UntypedFormGroup = this.boilerBlowdownRateService.getConductivityFormFromObj(baselineInputs);
+      let boilerForm: UntypedFormGroup = this.boilerBlowdownRateService.getBoilerFormFromObj(baselineInputs, this.settings);
+      let operationsForm: UntypedFormGroup = this.boilerBlowdownRateService.getOperationsFormFromObj(baselineInputs, this.settings);
       if (conductivityForm.valid) {
         let calcBoilerResults: boolean = boilerForm.valid && this.showBoiler;
         let calcOperations: boolean = boilerForm.valid && operationsForm.valid && this.showOperations;
