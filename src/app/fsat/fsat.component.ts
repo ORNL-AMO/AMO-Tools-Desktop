@@ -48,6 +48,7 @@ export class FsatComponent implements OnInit {
 
   stepTabs: Array<string> = [
     'system-basics',
+    'fan-operations',
     'fan-setup',
     'fan-motor',
     'fan-field-data'
@@ -342,7 +343,7 @@ export class FsatComponent implements OnInit {
   }
 
   getCanContinue() {
-    if (this.stepTab === 'system-basics') {
+    if (this.stepTab === 'system-basics' || this.stepTab === 'fan-operations') {
       return true;
     } else if (this.stepTab === 'fsat-fluid') {
       let isValid: boolean = this.fsatFluidService.isFanFluidValid(this._fsat.baseGasDensity, this.settings);

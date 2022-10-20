@@ -11,6 +11,7 @@ import { ModifyConditionsService } from '../modify-conditions/modify-conditions.
 import { Settings } from '../../shared/models/settings';
 import { FsatWarningService, FanMotorWarnings, FanFieldDataWarnings } from '../fsat-warning.service';
 import { OperationsService } from '../operations/operations.service';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-fsat-tabs',
@@ -50,6 +51,18 @@ export class FsatTabsComponent implements OnInit {
   updateDataSub: Subscription;
   modifyConditionsTabSub: Subscription;
   modifyConditionsTab: string;
+
+  stepTabs: Array<string> = [
+    'system-basics',
+    'fan-operations',
+    'fan-setup',
+    'fan-motor',
+    'fan-field-data'
+  ];
+
+  
+  tabsCollapsed: boolean = true;
+  calcTabsCollapsed: boolean = true;
 
   constructor(private fsatService: FsatService, private compareService: CompareService, private cd: ChangeDetectorRef,
     private fsatFluidService: FsatFluidService,
@@ -132,10 +145,12 @@ export class FsatTabsComponent implements OnInit {
 
   changeAssessmentTab(str: string) {  
     this.fsatService.assessmentTab.next(str);
+    this.collapseTabs();
   }
 
   selectModification() {
     this.fsatService.openModificationModal.next(true);
+    this.collapseTabs();
   }
 
 
@@ -235,7 +250,8 @@ export class FsatTabsComponent implements OnInit {
   }
 
   changeCalcTab(str: string) {
-    this.fsatService.calculatorTab.next(str);
+    this.fsatService.calculatorTab.next(str);    
+    this.collapseCalcTabs();
   }
 
   showTooltip(badge: { display: boolean, hover: boolean }) {
@@ -256,5 +272,68 @@ export class FsatTabsComponent implements OnInit {
     } else {
       badge.display = false;
     }
+  }
+
+  getCanContinue() {
+    if (this.stepTab === 'system-basics' || this.stepTab === 'fan-operations') {
+      return true;
+    } else if (this.stepTab === 'fsat-fluid') {
+      let isValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity, this.settings);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (this.stepTab === 'fan-setup') {
+      let isValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, false);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (this.stepTab === 'fan-motor') {
+      let isValid: boolean = this.fanMotorService.isFanMotorValid(this.fsat.fanMotor);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (this.stepTab === 'fan-field-data') {
+      let isValid: boolean = this.fanFieldDataService.isFanFieldDataValid(this.fsat.fieldData);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  continue() {
+    let tmpStepTab: string = this.fsatService.stepTab.getValue();
+    if (tmpStepTab === 'fan-field-data') {
+      this.fsatService.mainTab.next('assessment');
+    } else {
+      let assessmentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == tmpStepTab });
+      let nextTab: string = this.stepTabs[assessmentTabIndex + 1];
+      this.fsatService.stepTab.next(nextTab);
+    }
+  }
+
+  back() {
+    let tmpStepTab: string = this.fsatService.stepTab.getValue();
+    if (tmpStepTab !== 'system-basics' && this.mainTab == 'system-setup') {
+      let assessmentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == tmpStepTab });
+      let nextTab: string = this.stepTabs[assessmentTabIndex - 1];
+      this.fsatService.stepTab.next(nextTab);
+    } else if (this.mainTab == 'assessment') {
+      this.fsatService.mainTab.next('system-setup');
+    }
+  }
+
+  collapseTabs() {
+    this.tabsCollapsed = !this.tabsCollapsed;
+  }
+  collapseCalcTabs() {
+    this.calcTabsCollapsed = !this.calcTabsCollapsed;
   }
 }
