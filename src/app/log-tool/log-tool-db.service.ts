@@ -121,12 +121,7 @@ export class LogToolDbService {
   }
 
   getLogToolDbDataObj(): LogToolDbData{
-    // remove this daytype boolean adapter after - 5839 
-    let noDayTypeAnalysis: boolean = this.logToolService.noDayTypeAnalysis.getValue();
     let explorerData: ExplorerData = this.logToolDataService.explorerData.getValue(); 
-    if (explorerData && explorerData.canRunDayTypeAnalysis) {
-      noDayTypeAnalysis = !explorerData.canRunDayTypeAnalysis;
-    }
     let newLogToolDbData: LogToolDbData = {
       id: 1,
       name: 'Latest',
@@ -138,7 +133,7 @@ export class LogToolDbService {
         fields: this.logToolService.fields,
         dataCleaned: this.logToolService.dataCleaned.getValue(),
         dataSubmitted: this.logToolService.dataSubmitted.getValue(),
-        noDayTypeAnalysis: noDayTypeAnalysis
+        noDayTypeAnalysis: !explorerData.canRunDayTypeAnalysis
       },
       visualizeData: {
         graphObjects: this.visualizeService.graphObjects.getValue(),
