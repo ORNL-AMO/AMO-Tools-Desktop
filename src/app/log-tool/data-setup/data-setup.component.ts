@@ -6,6 +6,7 @@ import { DayTypeGraphService } from '../day-type-analysis/day-type-graph/day-typ
 import { LogToolDataService } from '../log-tool-data.service';
 import { DataExplorerStatus, ExplorerData, LoadingSpinner } from '../log-tool-models';
 import { LogToolService } from '../log-tool.service';
+import { VisualizeService } from '../visualize/visualize.service';
 
 @Component({
   selector: 'app-data-setup',
@@ -27,6 +28,7 @@ export class DataSetupComponent implements OnInit {
     private logToolDataService: LogToolDataService, 
     private dayTypeAnalysisService: DayTypeAnalysisService,
     private dayTypeGraphService: DayTypeGraphService,
+    private visualizeService: VisualizeService,
     private cd: ChangeDetectorRef,
     private activatedRoute: ActivatedRoute, private router: Router) { }
 
@@ -85,6 +87,7 @@ export class DataSetupComponent implements OnInit {
   
   resetSetupData() {
     this.logToolDataService.resetSetupData();
+    this.visualizeService.resetData();
     this.dayTypeAnalysisService.resetData();
     this.dayTypeGraphService.resetData();
   }

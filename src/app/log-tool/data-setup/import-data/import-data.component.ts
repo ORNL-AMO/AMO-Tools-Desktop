@@ -177,6 +177,7 @@ export class ImportDataComponent implements OnInit {
         if (validExtensions.test(files[0].name)) {
               let fileReaderPromise: Promise<any> = this.setJSONImportFile(files[0]);
               fileReaderPromise.then((logToolDbData) => {
+                // noDayTypeAnalysis removal
                 this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis)
                 this.finishUpload();
               });
@@ -280,7 +281,6 @@ export class ImportDataComponent implements OnInit {
   }
 
   runDayTypeAnalysis() {
-    console.time('runAnalysis');
     this.dayTypeAnalysisService.resetData();
     this.visualizeService.resetData();
     this.dayTypeGraphService.resetData();
@@ -293,7 +293,6 @@ export class ImportDataComponent implements OnInit {
     this.dayTypeGraphService.setDayTypeScatterPlotData();
     this.dayTypeGraphService.setIndividualDayScatterPlotData();
     this.dayTypeAnalysisService.dayTypesCalculated = true;
-    console.timeEnd('runAnalysis');
   }
 
   setExistingDataComplete(canRunDayTypeAnalysis: boolean = true) {

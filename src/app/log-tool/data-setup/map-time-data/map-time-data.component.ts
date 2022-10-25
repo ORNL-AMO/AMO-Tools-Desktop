@@ -78,7 +78,12 @@ export class MapTimeDataComponent implements OnInit {
     this.selectedDataSet.dateField = this.selectedDataSet.fields.find(field => {
       return field.isDateField == true;
     });
-    this.selectedDataSet.hasDateField = this.selectedDataSet.dateField != undefined;
+    if (this.selectedDataSet.dateField) {
+      this.selectedDataSet.hasDateField = true;
+    } else {
+      this.selectedDataSet.intervalForSeconds = undefined;
+      this.selectedDataSet.hasDateField = false;
+    }
     this.updateExplorerData();
     this.cd.detectChanges();
   }

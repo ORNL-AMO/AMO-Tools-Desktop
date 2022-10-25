@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ExplorerData, LogToolDbData } from './log-tool-models';
+import { ExplorerData, GraphObj, LogToolDbData } from './log-tool-models';
  
 import { LogToolService } from './log-tool.service';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
@@ -120,13 +120,17 @@ export class LogToolDbService {
     return logToolDbData;
   }
 
-  getLogToolDbDataObj(): LogToolDbData{
-    // remove this daytype boolean adapter after - 5839 
-    let noDayTypeAnalysis: boolean = this.logToolService.noDayTypeAnalysis.getValue();
-    let explorerData: ExplorerData = this.logToolDataService.explorerData.getValue(); 
-    if (explorerData && explorerData.canRunDayTypeAnalysis) {
-      noDayTypeAnalysis = !explorerData.canRunDayTypeAnalysis;
+  getLogToolDbDataObj(updatedSelectedGraphObject?: GraphObj): LogToolDbData{
+    let selectedGraphObj: GraphObj = this.visualizeService.selectedGraphObj.getValue();
+    let graphObjects: Array<GraphObj> = this.visualizeService.graphObjects.getValue();
+    // Manually saved
+    if (updatedSelectedGraphObject) {
+      selectedGraphObj = updatedSelectedGraphObject;
+      let updateGraphIndex: number = graphObjects.findIndex(graph => graph.graphId === selectedGraphObj.graphId);
+      graphObjects[updateGraphIndex] = selectedGraphObj  
     }
+
+    let explorerData: ExplorerData = this.logToolDataService.explorerData.getValue(); 
     let newLogToolDbData: LogToolDbData = {
       id: 1,
       name: 'Latest',
@@ -138,11 +142,11 @@ export class LogToolDbService {
         fields: this.logToolService.fields,
         dataCleaned: this.logToolService.dataCleaned.getValue(),
         dataSubmitted: this.logToolService.dataSubmitted.getValue(),
-        noDayTypeAnalysis: noDayTypeAnalysis
+        noDayTypeAnalysis: !explorerData.canRunDayTypeAnalysis
       },
       visualizeData: {
-        graphObjects: this.visualizeService.graphObjects.getValue(),
-        selectedGraphObj: this.visualizeService.selectedGraphObj.getValue(),
+        graphObjects: graphObjects,
+        selectedGraphObj: selectedGraphObj,
         visualizeData: this.visualizeService.visualizeData,
         annotateDataPoint: this.visualizeService.annotateDataPoint.getValue()
       },

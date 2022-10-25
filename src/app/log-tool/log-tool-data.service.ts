@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { LogToolService } from './log-tool.service';
 import moment from 'moment';
 import * as _ from 'lodash';
-import { LogToolDay, LogToolField, IndividualDataFromCsv, ExplorerData, ExplorerFileData, ExplorerDataSet, StepMovement, LoadingSpinner, RefineDataStepStatus, LogToolDbData } from './log-tool-models';
+import { LogToolDay, LogToolField, IndividualDataFromCsv, ExplorerData, ExplorerFileData, ExplorerDataSet, StepMovement, LoadingSpinner, RefineDataStepStatus, LogToolDbData, HourAverage } from './log-tool-models';
 import { BehaviorSubject } from 'rxjs';
 import { CsvImportData, CsvToJsonService } from '../shared/helper-services/csv-to-json.service';
 
@@ -10,7 +10,6 @@ import { CsvImportData, CsvToJsonService } from '../shared/helper-services/csv-t
 export class LogToolDataService {
 
   logToolDays: Array<LogToolDay>;
-  isTimeSeries: boolean;
   dataIntervalValid: BehaviorSubject<boolean>;
 
   loadingSpinner: BehaviorSubject<LoadingSpinner>;
@@ -68,18 +67,18 @@ export class LogToolDataService {
 
   //seperate log tool data into days
   setLogToolDays() {
-    let individualDataFromCsv: Array<IndividualDataFromCsv> = JSON.parse(JSON.stringify(this.logToolService.individualDataFromCsv));
+    let explorerDatasets: Array<ExplorerDataSet> = JSON.parse(JSON.stringify(this.logToolService.individualDataFromCsv));
     this.logToolDays = new Array();
-    individualDataFromCsv.forEach(csvData => {
-      let dataForDays: Array<{ date: Date, data: Array<any> }> = this.divideDataIntoDays(csvData.csvImportData.data, csvData.dateField.fieldName);
+    explorerDatasets.forEach((dataset: ExplorerDataSet) => {
+      let dataForDays: Array<{ date: Date, data: Array<any> }> = this.divideDataIntoDays(dataset.csvImportData.data, dataset.dateField.fieldName);
       dataForDays.forEach(day => {
-        let hourlyAverages = this.getHourlyAverages(day.data, csvData);
+        let hourlyAverages: Array<HourAverage> = this.getHourlyAverages(day.data, dataset);
         this.addLogToolDay(new Date(day.date), hourlyAverages);
       });
     });
   }
 
-  addLogToolDay(dayDate: Date, hourlyAverages: Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }>) {
+  addLogToolDay(dayDate: Date, hourlyAverages: Array<HourAverage>) {
     let existingDayIndex = this.logToolDays.findIndex(logToolDay => { return this.checkSameDay(logToolDay.date, dayDate) });
     if (existingDayIndex != -1) {
       this.logToolDays[existingDayIndex].hourlyAverages.forEach(hourItem => {
@@ -95,8 +94,8 @@ export class LogToolDataService {
   }
 
 
-  getHourlyAverages(dayData: Array<any>, csvData: IndividualDataFromCsv): Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }> {
-    let hourlyAverages: Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }> = new Array();
+  getHourlyAverages(dayData: Array<any>, csvData: IndividualDataFromCsv): Array<HourAverage> {
+    let hourlyAverages: Array<HourAverage> = new Array();
     let fields: Array<LogToolField> = csvData.fields;
     for (let hourOfDay = 0; hourOfDay < 24; hourOfDay++) {
       //filter day data by hour
@@ -152,70 +151,81 @@ export class LogToolDataService {
     return data;
   };
 
-  submitIndividualCsvData(individualDataFromCsv: Array<IndividualDataFromCsv>) {
-    this.isTimeSeries = true;
-    individualDataFromCsv.forEach(csvData => {
-      if (csvData.hasDateField == false) {
-        csvData.startDate = undefined;
-        csvData.endDate = undefined;
-        this.isTimeSeries = false;
-        this.dataIntervalValid.next(true);
+  finalizeDataSetup(explorerData: ExplorerData): ExplorerData {
+    explorerData.canRunDayTypeAnalysis = this.setCanRunDayTypeAnalysis();
+    //  5839 patch- Eventually replace individualDataFromCsv
+    if (explorerData.canRunDayTypeAnalysis) {
+      this.loadingSpinner.next({ show: true, msg: 'Processing date and time data...' });
+      this.logToolService.individualDataFromCsv.map((dataSet: ExplorerDataSet) => {
+        dataSet.canRunDayTypeAnalysis = true;
+      });
+      this.prepareDateAndTimeData(this.logToolService.individualDataFromCsv);
+    }
+    this.logToolService.setAllAvailableFields(this.logToolService.individualDataFromCsv);
+    // explorerData and individualDataFromCSV break here
+    explorerData.isSetupDone = true;
+    return explorerData;
+  }
+
+  prepareDateAndTimeData(explorerDatasets: Array<IndividualDataFromCsv>) {
+    explorerDatasets.forEach((dataset: ExplorerDataSet) => {
+        if (dataset.hasTimeField == true) {
+          dataset = this.joinDateAndTimeFields(dataset);
+        } else {
+          dataset.csvImportData.data.map(dataItem => {
+            let dateISOFormat = new Date(dataItem[dataset.dateField.fieldName]);
+            dataItem[dataset.dateField.fieldName] = moment(dateISOFormat).format('YYYY-MM-DD HH:mm:ss');
+          });
+        }
+
+        // Optimize? reverse iterate and delete or use flag to see if anymarked
+        _.remove(dataset.csvImportData.data, (dataItem) => {
+          return dataItem[dataset.dateField.fieldName] == 'Invalid date';
+        });
+
+        dataset = this.checkIntervalSeconds(dataset);
+
+        dataset.csvImportData.data = _.sortBy(dataset.csvImportData.data, (dataItem) => {
+          return dataItem[dataset.dateField.fieldName];
+        }, ['desc']);
+        dataset.startDate = dataset.csvImportData.data[0][dataset.dateField.fieldName];
+        dataset.endDate = dataset.csvImportData.data[dataset.csvImportData.data.length - 1][dataset.dateField.fieldName];
+        dataset.dataPointsPerColumn = dataset.csvImportData.data.length;
+    });
+  }
+
+  joinDateAndTimeFields(dataset: ExplorerDataSet) {
+    dataset.csvImportData.data.map(dataItem => {
+      if (dataItem[dataset.dateField.fieldName]) {
+        dataItem[dataset.dateField.fieldName] = moment(dataItem[dataset.dateField.fieldName].toString().split(" ")[0] + " " + dataItem[dataset.timeField.fieldName]).format('YYYY-MM-DD HH:mm:ss');
+        delete dataItem[dataset.timeField.fieldName];
       }
       else {
-        //update date field format
-        this.loadingSpinner.next({ show: true, msg: 'Formatting Date Fields...' });
-          if (csvData.hasDateField == true && csvData.hasTimeField == true) {
-            csvData.csvImportData.data.map(dataItem => {
-              if (dataItem[csvData.dateField.fieldName]) {
-                dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName].toString().split(" ")[0] + " " + dataItem[csvData.timeField.fieldName]).format('YYYY-MM-DD HH:mm:ss');
-                delete dataItem[csvData.timeField.fieldName];
-              }
-              else {
-                dataItem[csvData.dateField.fieldName] = 'Invalid date';
-              }
-            });
-            csvData.hasTimeField = false;
-            let timeIndex = csvData.fields.indexOf(csvData.timeField);
-            csvData.fields.splice(timeIndex, 1);
-          }
-          else {
-            csvData.csvImportData.data.map(dataItem => {
-              dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName]).format('YYYY-MM-DD HH:mm:ss');
-            });
-
-          }
-          //remove invalid dates
-          _.remove(csvData.csvImportData.data, (dataItem) => {
-            return dataItem[csvData.dateField.fieldName] == 'Invalid date';
-          });
-
-          //checking intervals for lost seconds 
-          let date1 = new Date(csvData.csvImportData.data[0][csvData.dateField.fieldName]);
-          let date2 = new Date(csvData.csvImportData.data[1][csvData.dateField.fieldName]);
-          let intervalDifference: number = (date2.getTime() - date1.getTime()) / 1000;
-          let intervalIncrement: number = csvData.intervalForSeconds;
-          if (intervalIncrement !== undefined && intervalDifference <= 0) {
-            csvData.csvImportData.data = this.addLostSecondsBack(csvData, intervalIncrement);
-            this.dataIntervalValid.next(true);
-          } else if (intervalIncrement == undefined && intervalDifference <= 0) {
-            this.dataIntervalValid.next(false);
-          } else if (intervalDifference > 0) {
-            this.dataIntervalValid.next(true);
-          }
-
-          //order by date descending
-          csvData.csvImportData.data = _.sortBy(csvData.csvImportData.data, (dataItem) => {
-            return dataItem[csvData.dateField.fieldName];
-          }, ['desc']);
-          //set start date
-          csvData.startDate = csvData.csvImportData.data[0][csvData.dateField.fieldName];
-          //find end date
-          csvData.endDate = csvData.csvImportData.data[csvData.csvImportData.data.length - 1][csvData.dateField.fieldName];
-          //find number of points per column
-          csvData.dataPointsPerColumn = csvData.csvImportData.data.length;
+        dataItem[dataset.dateField.fieldName] = 'Invalid date';
+        console.log('***** has invalid dates');
       }
     });
-    this.logToolService.setFields(individualDataFromCsv);
+    dataset.hasTimeField = false;
+    let timeIndex = dataset.fields.indexOf(dataset.timeField);
+    dataset.fields.splice(timeIndex, 1);
+    return dataset;
+  }
+
+  checkIntervalSeconds(dataset: ExplorerDataSet) {
+    let firstRowDate = new Date(dataset.csvImportData.data[0][dataset.dateField.fieldName]);
+    let secondRowDate = new Date(dataset.csvImportData.data[1][dataset.dateField.fieldName]);
+    let intervalDifference: number = (secondRowDate.getTime() - firstRowDate.getTime()) / 1000;
+    let intervalIncrement: number = dataset.intervalForSeconds;
+    // TODO What is going on here??
+    if (intervalIncrement !== undefined && intervalDifference <= 0) {
+      dataset.csvImportData.data = this.addLostSecondsBack(dataset, intervalIncrement);
+      // this.dataIntervalValid.next(true);
+    } else if (intervalIncrement == undefined && intervalDifference <= 0) {
+      // this.dataIntervalValid.next(false);
+    } else if (intervalDifference > 0) {
+      // this.dataIntervalValid.next(true);
+    }
+    return dataset;
   }
 
   addLostSecondsBack(csvData: IndividualDataFromCsv, intervalIncrement: number) {
@@ -238,23 +248,19 @@ export class LogToolDataService {
     let individualDayData: Array<any> = new Array();
     //start date item
     let currentDate: Date = new Date(data[0][dateField]);
-    //iterage each data row
     data.forEach(dataItem => {
-      //date for datarow
       let dataItemDate: Date = new Date(dataItem[dateField]);
+      // 3777 why
       //if same day add data to individual array
       if (this.checkSameDay(currentDate, dataItemDate)) {
         individualDayData.push(dataItem);
       } else {
-        //otherwise set day summary
         dayData.push({
           date: currentDate,
           data: individualDayData
         });
-        //re initialize
         individualDayData = new Array();
         currentDate = new Date(dataItem[dateField]);
-        //add next day data item before continuing
         individualDayData.push(dataItem);
       }
     });
@@ -333,7 +339,9 @@ export class LogToolDataService {
       csvName: name, 
       fields: fields, 
       canRunDayTypeAnalysis: false,
-      hasDateField: false 
+      hasDateField: false,
+      startDate: undefined,
+      endDate: undefined
     }
     if (explorerData.isExample) {
       newDataSet.dateField = newDataSet.fields[0];
@@ -343,19 +351,6 @@ export class LogToolDataService {
     explorerData.datasets.push(newDataSet);
     // OLD MODEL
     this.logToolService.individualDataFromCsv.push(newDataSet); 
-    return explorerData;
-  }
-
-  finalizeDataSetup(explorerData: ExplorerData): ExplorerData {
-    explorerData.canRunDayTypeAnalysis = this.setCanRunDayTypeAnalysis();
-    // Eventually replace individualDataFromCsv  5839
-    if (explorerData.canRunDayTypeAnalysis) {
-      this.logToolService.individualDataFromCsv.map((dataSet: ExplorerDataSet) => {
-        dataSet.canRunDayTypeAnalysis = true;
-      });
-    }
-    this.submitIndividualCsvData(this.logToolService.individualDataFromCsv);
-    explorerData.isSetupDone = true;
     return explorerData;
   }
 
@@ -425,22 +420,18 @@ export class LogToolDataService {
     return !stepIncomplete;
   }
 
+  // 3777 EVERY dataset must have at least date field (original funcitonality)
   setCanRunDayTypeAnalysis(explorerDataSets?: Array<ExplorerDataSet>): boolean {
     if (!explorerDataSets) {
       explorerDataSets = this.explorerData.getValue().datasets;
     }
-    let hasDateOrTime: boolean = false;
+    let isAllDataTimeStamped: boolean = false;
     if (explorerDataSets.length !== 0) {
-      hasDateOrTime = explorerDataSets.every(data => {
-        return data.hasDateField || data.hasTimeField;
+      isAllDataTimeStamped = explorerDataSets.every(data => {
+        return data.hasDateField;
       });
-    } else {
-      hasDateOrTime = true;
     }
-    // 5839 patch
-    // this.dateExistsForEachCsv = this.individualDataFromCsv.find(dataItem => { return dataItem.hasDateField == false }) == undefined;
-    // this.logToolService.noDayTypeAnalysis.next(!this.dateExistsForEachCsv);
-    return hasDateOrTime;
+    return isAllDataTimeStamped;
   }
 
 

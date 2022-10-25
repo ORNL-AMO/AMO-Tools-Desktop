@@ -15,12 +15,14 @@ export interface LogToolField {
 
 export interface LogToolDay {
     date: Date,
-    hourlyAverages: Array<{
-        hour: number,
-        averages: Array<{
-            value: number,
-            field: LogToolField
-        }>
+    hourlyAverages: Array<HourAverage>
+}
+
+export interface HourAverage {
+    hour: number,
+    averages: Array<{
+        value: number,
+        field: LogToolField
     }>
 }
 
@@ -97,43 +99,33 @@ export interface DayTypeGraphItem {
     dayType?: DayType
 }
 
+export interface VisualizerGraphData {
+    x: Array<number | string>,
+    y: Array<number | string>,
+    name: string,
+    type: string,
+    mode: string,
+    yaxis: string,
+    marker: {
+        color: string
+    },
+    line: {
+        color: string,
+        width: number
+    }
+}
+
 export interface GraphObj {
     name: string,
-    data: [{
-        x: Array<number | string>,
-        y: Array<number | string>,
-        name: string,
-        type: string,
-        mode: string,
-        yaxis: string,
-        marker: {
-            color: string
-        },
-        line: {
-            color: string,
-            width: number
-        }
-    }],
-    layout: {
-        title: {
-            text: string,
-            font: {
-                size: number
-            }
-        },
-        hovermode: string,
-        xaxis: AxisObj,
-        yaxis: AxisObj,
-        yaxis2: AxisObj,
-        margin: {
-            t: number,
-            b: number,
-            l: number,
-            r: number
-        },
-        annotations: Array<AnnotationData>
-    },
-    isTimeSeries: boolean,
+    data: VisualizerGraphData[],
+    layout: GraphLayout
+    mode: {
+        modeBarButtonsToRemove?: string[],
+        plotGlPixelRatio?: number,
+        responsive?: boolean,
+        displaylogo?: boolean,
+        displayModeBar?: boolean
+      },
     selectedXAxisDataOption: { dataField: LogToolField, data: Array<number | string> }
     selectedYAxisDataOptions: Array<{
         index: number,
@@ -151,6 +143,8 @@ export interface GraphObj {
     useStandardDeviation: boolean,
     usePercentForBins: boolean,
     binningMethod: string,
+    graphInteractivity: GraphInteractivity,
+    showPerformanceWarning?: boolean,
     binSize: number,
     graphId: string,
     xAxisDataOptions: Array<{
@@ -163,9 +157,36 @@ export interface GraphObj {
     }>
 }
 
+export interface GraphLayout {
+    title: {
+        text: string,
+        font: {
+            size: number
+        }
+    },
+    hovermode: string | boolean,
+    dragmode?: string | boolean,
+    xaxis: AxisObj,
+    yaxis: AxisObj,
+    yaxis2: AxisObj,
+    margin: {
+        t: number,
+        b: number,
+        l: number,
+        r: number
+    },
+    annotations: Array<AnnotationData>
+}
+
+export interface GraphInteractivity {
+    isGraphInteractive?: boolean,
+    showPerformanceWarning?: boolean,
+}
+
 export interface AxisObj {
     autorange: boolean,
     type: string,
+    spikemode?: string,
     title: {
         text: string
     },

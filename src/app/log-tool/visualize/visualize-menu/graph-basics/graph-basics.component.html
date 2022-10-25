@@ -1,4 +1,4 @@
-<form>
+<form *ngIf="selectedGraphObj">
     <!--graph name-->
     <div class="form-group">
         <input class="form-control w-100" type="text" name="graphName" [(ngModel)]="selectedGraphObj.layout.title.text"
@@ -14,7 +14,7 @@
     </div>
     <!--display type (for scatterplots)-->
     <div class = "form-group pt-2">
-        <select *ngIf = "isTimeSeries && selectedGraphObj.data[0].type == 'scattergl'" class="form-control w-100" name="markerType" (ngModelChange) = "markerType = $event" [ngModel]="selectedGraphObj.data[0].mode"
+        <select *ngIf="canRunDayTypeAnalysis && selectedGraphObj.data[0].type == 'scattergl'" class="form-control w-100" name="markerType" (ngModelChange) = "markerType = $event" [ngModel]="selectedGraphObj.data[0].mode"
             (change)="setLinesMarkers()" (focus)="focusField()" (blur)="focusOut()">
             <option *ngFor="let markerTypeValue of markerTypes" [ngValue]="markerTypeValue.value">{{markerTypeValue.label}}
             </option>

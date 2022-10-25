@@ -1,3 +1,10 @@
-<div class="p-2">
+<div class="m-0 p-2">
+    <ng-container *ngIf="selectedGraphObj">  
+    <div *ngIf="graphInteractivity && graphInteractivity.showPerformanceWarning" class="text-left alert alert-warning small mb-1 p-2 px-3">
+        <b>Annotation creation is enabled.</b> Toggle this feature off for faster performance on large data. Existing annotations will remain visible and will not affect performance.
+        <a class="click-link" (click)="dismissPerformanceWarning()">Dismiss</a>
+    </div>
+    </ng-container>
     <div #visualizeChart id="plotlyDiv"></div>
+     
 </div>

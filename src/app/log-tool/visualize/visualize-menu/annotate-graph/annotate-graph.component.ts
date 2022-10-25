@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
+import { debounce, interval, Subscription } from 'rxjs';
 import { VisualizeService } from '../../visualize.service';
 import { GraphObj, AnnotationData } from '../../../log-tool-models';
 import * as _ from 'lodash';
@@ -11,13 +11,13 @@ import { VisualizeMenuService } from '../visualize-menu.service';
   styleUrls: ['./annotate-graph.component.css']
 })
 export class AnnotateGraphComponent implements OnInit {
-  
   annotateDataPointSub: Subscription;
   annotateDataPoint: AnnotationData;
   selectedGraphObjSub: Subscription;
   selectedGraphObj: GraphObj;
   fontSizes: Array<number> = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
   arrowSizes: Array<number> = [.5, 1, 1.5, 2, 2.5];
+  userGraphOptionsSubscription: Subscription;
   constructor(private visualizeService: VisualizeService, private cd: ChangeDetectorRef, private visualizeMenuService: VisualizeMenuService) { }
 
   ngOnInit(): void {
@@ -26,8 +26,20 @@ export class AnnotateGraphComponent implements OnInit {
       if(this.selectedGraphObj.layout.annotations.length == 0 && this.annotateDataPoint){
         this.annotateDataPoint = undefined;
       }
-      this.cd.detectChanges();
     });
+
+    this.userGraphOptionsSubscription = this.visualizeService.userGraphOptions
+      .pipe(
+        debounce((userGraphOptionsGraphObj: GraphObj) => {
+          let userInputDelay = this.visualizeService.userInputDelay.getValue()
+          return interval(userInputDelay);
+        })
+      ).subscribe((userGraphOptionsGraphObj: GraphObj) => {
+        if (userGraphOptionsGraphObj && userGraphOptionsGraphObj.layout.annotations) {
+          this.selectedGraphObj.layout.annotations = userGraphOptionsGraphObj.layout.annotations;
+          this.cd.detectChanges();
+        }
+      });
 
     this.annotateDataPointSub = this.visualizeService.annotateDataPoint.subscribe(point => {
       this.annotateDataPoint = point;      
@@ -38,10 +50,10 @@ export class AnnotateGraphComponent implements OnInit {
   ngOnDestroy() {
     this.annotateDataPointSub.unsubscribe();
     this.selectedGraphObjSub.unsubscribe();
+    this.userGraphOptionsSubscription.unsubscribe();
   }
 
   setAnnotation() {
-    this.visualizeService.plotFunctionType = 'update';
     this.visualizeMenuService.setAnnotation(this.annotateDataPoint, this.selectedGraphObj);
   }
 
@@ -66,12 +78,10 @@ export class AnnotateGraphComponent implements OnInit {
   }
 
   selectAnnotation(annotation: AnnotationData) {
-    this.visualizeService.plotFunctionType = 'update';
     this.visualizeService.annotateDataPoint.next(annotation);
   }
 
   deleteAnnotation(annotation: AnnotationData) {
-    this.visualizeService.plotFunctionType = 'update';
     this.visualizeMenuService.deleteAnnotation(annotation, this.selectedGraphObj);
   }
 
