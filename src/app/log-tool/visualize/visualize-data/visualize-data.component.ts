@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { LogToolField, GraphObj } from '../../log-tool-models';
 import { VisualizeService } from '../visualize.service';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
+import { combineLatestWith, debounce, interval, Observable, Subscription } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
 @Component({
   selector: 'app-visualize-data',
@@ -33,41 +33,33 @@ export class VisualizeDataComponent implements OnInit {
   axisRanges: { xMin: number, xMax: number, yMin: number, yMax: number, y2Min: number, y2Max: number };
   axisRangesSub: Subscription;
 
+  worker: Worker;
   calculatingSummaries: any;
+  onUpdateGraphEventsSubscription: Subscription;
   constructor(private visualizeService: VisualizeService, private cd: ChangeDetectorRef, private logToolDataService: LogToolDataService) { }
 
   ngOnInit() {
     this.calculateSummaries();
-    this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(graphObj => {
-      if (this.calculatingSummaries) {
-        clearTimeout(this.calculatingSummaries);
-      }
-      this.calculatingSummaries = setTimeout(() => {
-        this.calculateSummaries();
-      }, 1000)
+
+    let onUpdateGraphEventsObservable: Observable<any> = this.visualizeService.selectedGraphObj
+      .pipe(
+        combineLatestWith(this.visualizeService.restyleRanges),
+        debounce(obs => {
+          let userInputDelay = this.visualizeService.userInputDelay.getValue()
+          return interval(userInputDelay);
+        })
+      );
+
+    this.onUpdateGraphEventsSubscription = onUpdateGraphEventsObservable.subscribe(obs => {
+      this.calculateSummaries();
     });
-
-    this.axisRangesSub = this.visualizeService.restyleRanges.subscribe(val => {
-      this.axisRanges = val;
-      if (this.axisRanges) {
-        if (this.calculatingSummaries) {
-          clearTimeout(this.calculatingSummaries);
-        }
-        this.calculatingSummaries = setTimeout(() => {
-          this.calculateSummaries();
-        }, 1000)
-      }
-    })
-
-
   }
 
   ngOnDestroy() {
-    this.selectedGraphObjSub.unsubscribe();
-    this.axisRangesSub.unsubscribe();
+    this.onUpdateGraphEventsSubscription.unsubscribe();
   }
 
-  calculateSummaries() {
+  async calculateSummaries() {
     this.timeSummaries = new Array();
     this.axisSummaries = new Array();
     let graphObj: GraphObj = this.visualizeService.selectedGraphObj.getValue();
@@ -80,40 +72,44 @@ export class VisualizeDataComponent implements OnInit {
         y2Min: undefined,
         y2Max: undefined
       };
+    } else {
+      this.axisRanges = undefined;
     }
     if (graphObj.selectedXAxisDataOption.dataField && graphObj.selectedXAxisDataOption.dataField.alias == 'Time Series') {
-      this.setDataSummary();
+      this.setTimeSeriesSummary();
     } else if (graphObj.selectedXAxisDataOption.dataField) {
-      let xAxisSummary = this.getDataSummary(graphObj.selectedXAxisDataOption.dataField, 'X-Axis', graphObj.selectedXAxisDataOption.data)
+      let xAxisSummary = await this.getDataSummary(graphObj.selectedXAxisDataOption.dataField, 'X-Axis', graphObj.selectedXAxisDataOption.data)
       this.axisSummaries.push(xAxisSummary);
     }
     if (graphObj.data[0].type != 'bar') {
-      graphObj.selectedYAxisDataOptions.forEach(option => {
+      graphObj.selectedYAxisDataOptions.forEach(async (option) => {
         let yAxis: string = 'Y-Axis';
         if (option.yaxis == 'y2') {
           yAxis = 'Right Y-Axis'
         }
-        let summary = this.getDataSummary(option.dataOption.dataField, yAxis, option.dataOption.data);
+        let summary = await this.getDataSummary(option.dataOption.dataField, yAxis, option.dataOption.data);
         this.axisSummaries.push(summary);
       });
     }
     this.cd.detectChanges();
   }
 
-  setDataSummary() {
+  async setTimeSeriesSummary() {
     let visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }> = this.visualizeService.visualizeData;
-    visualizeData.forEach(dataItem => {
+    visualizeData.forEach(async (dataItem) => {
       if (dataItem.dataField.isDateField) {
         let fieldData: Array<any>;
         if (this.axisRanges) {
-          fieldData = this.filterXAxisData(dataItem.data, true);
+          // fieldData = this.filterXAxisData(dataItem.data, true);
+          console.log('setTimeSeriesSummary filter')
+          fieldData = await this.workerFilterAxis(dataItem.data, true);
         } else {
           fieldData = dataItem.data;
         }
         let dateFieldSummary = this.getDataSummaryItem(fieldData, dataItem.dataField.csvName);
         this.timeSummaries.push(dateFieldSummary);
       }
-    })
+    });
   }
 
   getDataSummaryItem(data: Array<number | string>, csvName: string): {
@@ -137,7 +133,7 @@ export class VisualizeDataComponent implements OnInit {
     }
   }
 
-  getDataSummary(dataField: LogToolField, axis: string, allData: Array<any>): {
+  async getDataSummary(dataField: LogToolField, axis: string, allData: Array<any>): Promise<{
     max: number,
     min: number,
     numberOfDataPoints: number,
@@ -145,18 +141,20 @@ export class VisualizeDataComponent implements OnInit {
     mean: number,
     name: string,
     axis: string
-  } {
+  }> {
     let min: number;
     let max: number;
     let mean: number;
     let standardDeviation;
 
     let filteredData: Array<any> = allData;
+
     if (this.axisRanges) {
       if (axis != 'X-Axis') {
         filteredData = this.filterData(dataField, axis);
       } else {
-        filteredData = this.filterXAxisData(allData, dataField.isDateField);
+        // filteredData = this.filterXAxisData(allData, dataField.isDateField);
+        filteredData = await this.workerFilterAxis(allData, dataField.isDateField);
       }
     }
 
@@ -196,15 +194,43 @@ export class VisualizeDataComponent implements OnInit {
     return filteredData;
   }
 
-  filterXAxisData(data: Array<any>, isDateField: boolean): Array<any> {
-    let dataCpy: Array<any> = _.filter(data, (dataItem) => {
-      if (isDateField) {
-        return (new Date(dataItem).valueOf() > new Date(this.axisRanges.xMin).valueOf() && new Date(dataItem).valueOf() < new Date(this.axisRanges.xMax).valueOf());
+  // filterXAxisData(data: Array<any>, isDateField: boolean): Array<any> {
+  //   console.time('filterXAxisData')
+  //   // 1-2s for each dataset
+  //   let filteredData: Array<any> = _.filter(data, (dataItem) => {
+  //     if (isDateField) {
+  //       return (new Date(dataItem).valueOf() > new Date(this.axisRanges.xMin).valueOf() && new Date(dataItem).valueOf() < new Date(this.axisRanges.xMax).valueOf());
+  //     } else {
+  //       return (dataItem > this.axisRanges.xMin && dataItem < this.axisRanges.xMax);
+  //     }
+  //   });
+  //   console.timeEnd('filterXAxisData')
+  //   return filteredData;
+  // }
+
+  // 3777 needs benchmark - keeping as example implementation
+  workerFilterAxis(xData: Array<any>, isDateField: boolean): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (typeof Worker !== 'undefined') {
+        this.worker = new Worker(new URL('../../../explorer-dataset.worker.ts', import.meta.url));
+        this.worker.onmessage = ({ data }) => {
+          if (data) {
+            resolve(data);
+          } else {
+            reject();
+          }
+          this.worker.terminate();
+        };
+        this.worker.postMessage({
+          xData: xData,
+          isDateField: isDateField,
+          axisRanges: this.axisRanges
+        });
       } else {
-        return (dataItem > this.axisRanges.xMin && dataItem < this.axisRanges.xMax);
+        console.log('web worker not available');
       }
-    })
-    return dataCpy;
+      
+    });
   }
 
 }

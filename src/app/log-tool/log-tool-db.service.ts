@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ExplorerData, LogToolDbData } from './log-tool-models';
+import { ExplorerData, GraphObj, LogToolDbData } from './log-tool-models';
  
 import { LogToolService } from './log-tool.service';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
@@ -110,6 +110,11 @@ export class LogToolDbService {
     let allData: LogToolDbData[] = await firstValueFrom(this.dbService.updateWithObservable(logToolDbData));
   }
 
+  async saveDataOptions(graphObj: GraphObj) {
+    let logToolDbData: LogToolDbData = this.getLogToolDbDataObj(graphObj);
+    let allData: LogToolDbData[] = await firstValueFrom(this.dbService.updateWithObservable(logToolDbData));
+  }
+
   async saveDataAsync() {
     let logToolDbData: LogToolDbData = this.getLogToolDbDataObj();
     return firstValueFrom(this.dbService.updateWithObservable(logToolDbData));
@@ -120,7 +125,16 @@ export class LogToolDbService {
     return logToolDbData;
   }
 
-  getLogToolDbDataObj(): LogToolDbData{
+  getLogToolDbDataObj(updatedSelectedGraphObject?: GraphObj): LogToolDbData{
+    let selectedGraphObj: GraphObj = this.visualizeService.selectedGraphObj.getValue();
+    let graphObjects: Array<GraphObj> = this.visualizeService.graphObjects.getValue();
+    // Manually saved
+    if (updatedSelectedGraphObject) {
+      selectedGraphObj = updatedSelectedGraphObject;
+      let updateGraphIndex: number = graphObjects.findIndex(graph => graph.graphId === selectedGraphObj.graphId);
+      graphObjects[updateGraphIndex] = selectedGraphObj  
+    }
+
     let explorerData: ExplorerData = this.logToolDataService.explorerData.getValue(); 
     let newLogToolDbData: LogToolDbData = {
       id: 1,
@@ -136,8 +150,8 @@ export class LogToolDbService {
         noDayTypeAnalysis: !explorerData.canRunDayTypeAnalysis
       },
       visualizeData: {
-        graphObjects: this.visualizeService.graphObjects.getValue(),
-        selectedGraphObj: this.visualizeService.selectedGraphObj.getValue(),
+        graphObjects: graphObjects,
+        selectedGraphObj: selectedGraphObj,
         visualizeData: this.visualizeService.visualizeData,
         annotateDataPoint: this.visualizeService.annotateDataPoint.getValue()
       },
