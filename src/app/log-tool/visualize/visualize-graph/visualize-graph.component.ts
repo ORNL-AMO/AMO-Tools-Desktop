@@ -16,7 +16,6 @@ export class VisualizeGraphComponent implements OnInit {
   @ViewChild('visualizeChart', { static: false }) visualizeChart: ElementRef;
 
   selectedGraphDataSubscription: Subscription;
-  graphInteractivitySubscription: Subscription;
   userGraphOptionsSubscription: Subscription;
   selectedGraphObj: GraphObj;
   graphInteractivity: GraphInteractivity;
@@ -49,7 +48,7 @@ export class VisualizeGraphComponent implements OnInit {
         this.logToolDbService.saveData();
         if (this.visualizeChart && graphObj) {
           this.selectedGraphObj = JSON.parse(JSON.stringify(graphObj));
-          this.setGraphInteractivity(this.selectedGraphObj);
+          this.setGraphInteractivity(this.selectedGraphObj.graphInteractivity);
           this.plotGraph();
       }
     });
@@ -61,7 +60,6 @@ export class VisualizeGraphComponent implements OnInit {
         return interval(userInputDelay);
       })
       ).subscribe((userGraphOptionsGraphObj: GraphObj) => {
-        // this.logToolDbService.saveDataOptions(userGraphOptionsGraphObj);
       if (this.visualizeChart && userGraphOptionsGraphObj) {
         this.setUserGraphOptions(userGraphOptionsGraphObj);
         this.relayoutGraph();
