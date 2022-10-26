@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
-import { GraphObj } from '../../log-tool-models';
+import { GraphInteractivity, GraphObj } from '../../log-tool-models';
 
 @Component({
   selector: 'app-visualize-menu',
@@ -15,19 +15,21 @@ export class VisualizeMenuComponent implements OnInit {
   graphObjsSub: Subscription;
   numberOfGraphs: number;
 
+  showUserGraphOptions: boolean = true;
   showGraphBasics: boolean = true;
   showXAxisOptions: boolean = true;
   showYAxisOptions: boolean = true;
-  showAnnotateGraph: boolean = false;
   showHistogramBins: boolean = true;
 
   showSidebar: boolean = true;
+  isGraphInteractive: boolean = false;
   constructor(private visualizeService: VisualizeService) { }
 
   ngOnInit() {
     this.visualizeService.focusedPanel.next('default');
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
       this.selectedGraphObj = val;
+      this.isGraphInteractive = this.selectedGraphObj.graphInteractivity.isGraphInteractive;
     });
 
     this.graphObjsSub = this.visualizeService.graphObjects.subscribe(val => {
@@ -42,6 +44,10 @@ export class VisualizeMenuComponent implements OnInit {
 
   deleteGraph() {
     this.visualizeService.removeGraphDataObj(this.selectedGraphObj.graphId);
+  }
+
+  toggleUserGraphOptions() {
+    this.showUserGraphOptions = !this.showUserGraphOptions;
   }
 
   toggleGraphBasics() {
@@ -60,7 +66,15 @@ export class VisualizeMenuComponent implements OnInit {
   }
 
   toggleAnnotateGraph() {
-    this.showAnnotateGraph = !this.showAnnotateGraph;
+    let graphInteractivity: GraphInteractivity = {
+      isGraphInteractive: this.isGraphInteractive,
+      showPerformanceWarning: false
+      // showPerformanceWarning: this.isGraphInteractive? true : false
+    }
+
+    let userGraphOptionsGraphObj = this.visualizeService.userGraphOptions.getValue();
+    userGraphOptionsGraphObj.graphInteractivity = graphInteractivity;
+    this.visualizeService.userGraphOptions.next(userGraphOptionsGraphObj);
     this.visualizeService.focusedPanel.next('annotation');
   }
 
@@ -75,7 +89,7 @@ export class VisualizeMenuComponent implements OnInit {
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
       console.log('resize')
-    }, 100)
+    }, 50)
   }
 }
 

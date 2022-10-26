@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
-import { Subscription } from 'rxjs';
-import { AnnotationData } from '../../log-tool-models';
+import { debounce, interval, Subscription } from 'rxjs';
+import { AnnotationData, GraphInteractivity, GraphObj, LoadingSpinner, VisualizerGraphData } from '../../log-tool-models';
 import { LogToolDbService } from '../../log-tool-db.service';
 import { PlotlyService } from 'angular-plotly.js';
+import { LogToolDataService } from '../../log-tool-data.service';
 
 @Component({
   selector: 'app-visualize-graph',
@@ -15,63 +16,112 @@ export class VisualizeGraphComponent implements OnInit {
   @ViewChild('visualizeChart', { static: false }) visualizeChart: ElementRef;
 
   selectedGraphDataSubscription: Subscription;
-  plotClickSubscription: any;
-  gettingRanges: any;
-  constructor(private visualizeService: VisualizeService, private logToolDbService: LogToolDbService,
+  userGraphOptionsSubscription: Subscription;
+  selectedGraphObj: GraphObj;
+  graphInteractivity: GraphInteractivity;
+  // timeSeriesSegments: Array<{segmentText: string, data: VisualizerGraphData}> = [];
+  // selectedTimeSeriesSegment: {segmentText: string, data: VisualizerGraphData};
+
+  loadingSpinnerSub: Subscription;
+  loadingSpinner: LoadingSpinner;
+  constructor(private visualizeService: VisualizeService, 
+    private logToolDbService: LogToolDbService,
+    private logToolDataService: LogToolDataService,
     private plotlyService: PlotlyService) {
   }
 
-  ngOnInit() {
-    //on init react
-    this.visualizeService.plotFunctionType = 'react';
-
-  }
-
-  ngAfterViewInit() {
-    this.selectedGraphDataSubscription = this.visualizeService.selectedGraphObj.subscribe(graphObj => {
-      this.logToolDbService.saveData();
-      let mode = {
-        modeBarButtonsToRemove: ['lasso2d'],
-        responsive: true,
-        displaylogo: false,
-        displayModeBar: true
-      }
-      if (this.visualizeChart) {
-        //first time rendering chart
-        // if (this.visualizeService.plotFunctionType == 'react') {
-        // Plotly.purge('plotlyDiv');
-        // render chart
-        //use copy of layout otherwise range value gets set and messes stuff up
-        //layoutCopy ranges used in data table
-        let layoutCopy = JSON.parse(JSON.stringify(graphObj.layout));
-        this.plotlyService.newPlot(this.visualizeChart.nativeElement, graphObj.data, layoutCopy, mode).then(chart => {
-          let newRanges: PlotlyAxisRanges = this.getRestyleRanges(layoutCopy);
-          this.visualizeService.restyleRanges.next(newRanges);
-          // subscribe to click event for annotations
-          chart.on('plotly_click', (data) => {
-            // send data point for annotations
-            let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
-            this.visualizeService.annotateDataPoint.next(newAnnotation);
-          });
-
-          chart.on('plotly_relayout', (data) => {
-            let newRanges: PlotlyAxisRanges = this.getRestyleRanges(layoutCopy);
-            this.visualizeService.restyleRanges.next(newRanges);
-          })
-        });
-        // } else {
-        //   //update chart
-        //   //use copy of layout otherwise range value gets set and messes stuff up
-        //   this.plotlyService.update(this.visualizeChart.nativeElement, graphObj.data, JSON.parse(JSON.stringify(graphObj.layout)), mode);
-        // }
-      }
-    });
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this.selectedGraphDataSubscription.unsubscribe();
+    this.userGraphOptionsSubscription.unsubscribe();
+  }
+  
+  // 3777 TODO save selectedGraphObj held in graphUserOPtions and annotatins
+  ngAfterViewInit() {
+    this.selectedGraphDataSubscription = this.visualizeService.selectedGraphObj.pipe(
+      debounce((graphObj: GraphObj) => {
+        let userInputDelay = this.visualizeService.userInputDelay.getValue()
+        return interval(userInputDelay);
+      })
+      ).subscribe((graphObj: GraphObj) => {
+        this.logToolDbService.saveData();
+        if (this.visualizeChart && graphObj) {
+          this.selectedGraphObj = JSON.parse(JSON.stringify(graphObj));
+          this.setGraphInteractivity(this.selectedGraphObj.graphInteractivity);
+          this.plotGraph();
+      }
+    });
+
+    this.userGraphOptionsSubscription = this.visualizeService.userGraphOptions
+    .pipe(
+      debounce((userGraphOptionsGraphObj: GraphObj) => {
+        let userInputDelay = this.visualizeService.userInputDelay.getValue()
+        return interval(userInputDelay);
+      })
+      ).subscribe((userGraphOptionsGraphObj: GraphObj) => {
+      if (this.visualizeChart && userGraphOptionsGraphObj) {
+        this.setUserGraphOptions(userGraphOptionsGraphObj);
+        this.relayoutGraph();
+        }
+    });
   }
 
+  plotGraph(displaySpinner: boolean = true) {
+    this.plotlyService.newPlot(this.visualizeChart.nativeElement, this.selectedGraphObj.data, this.selectedGraphObj.layout, this.selectedGraphObj.mode)
+    .then(chart => this.handlePlotlyInstanceEvents(chart, displaySpinner));
+  }
+
+  async relayoutGraph() {
+    // call update form instance to avoid resize event issues
+    let plotlyInstance = await this.plotlyService.getPlotly();
+    plotlyInstance.update(this.visualizeChart.nativeElement, this.selectedGraphObj.data, this.selectedGraphObj.layout, this.selectedGraphObj.mode);
+  }
+
+  handlePlotlyInstanceEvents(chart, displayLoadingSpinner: boolean) {
+    if (this.selectedGraphObj.data[0].type == 'bar') {
+      let newRanges: PlotlyAxisRanges = this.getRestyleRanges(this.selectedGraphObj.layout);
+      this.visualizeService.restyleRanges.next(newRanges);
+    }
+    chart.on('plotly_click', (data) => {
+      if (this.graphInteractivity.isGraphInteractive) {
+        let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
+        this.visualizeService.annotateDataPoint.next(newAnnotation);
+      }
+    });
+    if (displayLoadingSpinner) {
+      setTimeout(() => {
+        this.logToolDataService.loadingSpinner.next({show: false, msg: `Finishing Plot...`});
+      }, 1000);
+    }
+  }
+
+  dismissPerformanceWarning() {
+    this.graphInteractivity.showPerformanceWarning = false;
+  }
+
+  setGraphInteractivity(graphInteractivity: GraphInteractivity) {
+    this.graphInteractivity = graphInteractivity;
+
+    if (graphInteractivity.isGraphInteractive) {
+      this.selectedGraphObj.layout.hovermode = 'closest';
+      // 3777 hovermode: 'x' - better performance,
+      // 3777 Should we show hoverline? seen in old log tool
+      this.selectedGraphObj.layout.dragmode = true;
+    } else {
+      this.selectedGraphObj.layout.hovermode = false;
+      this.selectedGraphObj.layout.dragmode = true;
+    }
+  }
+
+  setUserGraphOptions(userGraphOptionsGraphObj: GraphObj) {
+    this.setGraphInteractivity(userGraphOptionsGraphObj.graphInteractivity);
+    this.selectedGraphObj.layout.title.text = userGraphOptionsGraphObj.layout.title.text;
+    this.selectedGraphObj.layout.xaxis.title.text = userGraphOptionsGraphObj.layout.xaxis.title.text;
+    this.selectedGraphObj.layout.yaxis.title = userGraphOptionsGraphObj.layout.yaxis.title;
+    this.selectedGraphObj.layout.yaxis2.title = userGraphOptionsGraphObj.layout.yaxis2.title;
+    this.selectedGraphObj.layout.annotations = userGraphOptionsGraphObj.layout.annotations;
+  }
 
   getRestyleRanges(layout: any): PlotlyAxisRanges {
     let xMin: number;

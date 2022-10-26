@@ -1,3 +1,16 @@
-.card{
-    box-shadow: 0 4px 8px 0 grey;
+.graph-card{
+    /* box-shadow: 0 4px 8px 0 grey; */
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 0;
+    /* padding: 0 0 1rem 0; */
+}
+
+.btn-group .btn-sm {
+    font-size: small !important;
+}
+
+.btn {
+    padding: 1rem;
 }

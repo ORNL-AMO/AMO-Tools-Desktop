@@ -84,7 +84,6 @@ export class BinDataComponent implements OnInit {
   }
 
   save() {
-    this.visualizeService.plotFunctionType = 'react';
     this.visualizeMenuService.setBarHistogramData(this.selectedGraphObj);
   }
 

@@ -162,6 +162,11 @@
     color: black;
 }
 
+.data-explorer-visualizer .btn-secondary:not([disabled]):not(.disabled).active{
+    background: #117A65;
+    transition: all .5s ease-in-out;
+    color: white;
+}
 .ssmt .btn-secondary:not([disabled]):not(.disabled).active{
     background: #F39C12;
     transition: all .5s ease-in-out;

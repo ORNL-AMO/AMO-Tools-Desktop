@@ -3,30 +3,37 @@
     <div class="d-flex w-100 h-100 tab-content">
         <app-visualize-menu class="h-100"></app-visualize-menu>
         <div class="row no-gutters w-100 scroll-item mb-5">
-            <div class="col-12">
-                <app-visualize-graph></app-visualize-graph>
+            <div class="spinner-overlay align-items-center w-100 text-center" *ngIf="loadingSpinner && loadingSpinner.show == true">
+                <div class="spinner mt-5 w-75">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+                <div class="importing-text w-75">{{loadingSpinner.msg}}</div>
             </div>
-            <div class="col-12">
-                <div class="row no-gutters tabs primary mr-2 ml-2">
-                    <div class="col-6 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+
+            <div class="d-flex flex-column w-100">
+                <app-visualize-graph></app-visualize-graph>
+                <div class="row no-gutters tabs primary mx-2">
+                    <div class="col-6 panel-tab-item h-100 p2" [ngClass]="{'active': tabSelect == 'results'}">
                         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
                             (click)="setTab('results')">
                             <div>Data Summary</div>
                         </a>
                     </div>
-                    <div class="col-6 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+                    <div class="col-6 panel-tab-item h-100 p2" [ngClass]="{'active': tabSelect == 'help'}">
                         <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
                             <div>Help</div>
                         </a>
                     </div>
                 </div>
-                <div class="row no-gutters">
-                    <div class="col-12">
-                        <app-visualize-help *ngIf="tabSelect == 'help'"></app-visualize-help>
-                        <app-visualize-data *ngIf="tabSelect == 'results'"></app-visualize-data>
-                    </div>
-                </div>
+                <app-visualize-help *ngIf="tabSelect == 'help'"></app-visualize-help>
+                <app-visualize-data *ngIf="tabSelect == 'results'"></app-visualize-data>
+
             </div>
+                
+                
+                
         </div>
     </div>
 </div>

@@ -7,9 +7,16 @@ import * as _ from 'lodash';
 import { LogToolService } from '../../log-tool.service';
 @Injectable()
 export class VisualizeMenuService {
+  selectedGraphObj: any;
   constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService, private logToolService: LogToolService) { }
 
+  saveUserGraphOptionsChange(selectedGraphObj: GraphObj) {
+    this.visualizeService.userInputDelay.next(175);
+    this.visualizeService.userGraphOptions.next(selectedGraphObj);
+  }
+
   save(selectedGraphObj: GraphObj) {
+    this.visualizeService.userInputDelay.next(0);
     this.visualizeService.selectedGraphObj.next(selectedGraphObj);
   }
 
@@ -88,8 +95,8 @@ export class VisualizeMenuService {
 
   setXAxisDataOptions(selectedGraphObj: GraphObj) {
     let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
-    let noDayTypeAnalysis: boolean = this.logToolService.noDayTypeAnalysis.getValue();
-    if (selectedGraphObj.data[0].type == 'scattergl' && noDayTypeAnalysis == false) {
+    let canRunDayTypeAnalysis: boolean = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
+    if (selectedGraphObj.data[0].type == 'scattergl' && canRunDayTypeAnalysis) {
       dataFields.push({
         fieldName: 'Time Series',
         alias: 'Time Series',
@@ -100,21 +107,25 @@ export class VisualizeMenuService {
         csvId: undefined,
         csvName: undefined,
         fieldId: undefined
-      })
+      });
     }
     selectedGraphObj.xAxisDataOptions = new Array();
     dataFields.forEach(field => {
       let data = this.visualizeService.getVisualizeData(field.fieldName);
+      // console.log('adding xAxisDataOption', {
+      //   data: data,
+      //   dataField: field
+      // });
       selectedGraphObj.xAxisDataOptions.push({
         data: data,
         dataField: field
       })
     });
+    // console.log('x options', selectedGraphObj.xAxisDataOptions)
   }
 
 
   setXAxisDataOption(selectedGraphObj: GraphObj) {
-    // selectedGraphObj.layout.annotations = [];
     if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
       selectedGraphObj.layout.xaxis.type = 'date';
       this.setYAxisDataOptions(selectedGraphObj);
@@ -179,11 +190,7 @@ export class VisualizeMenuService {
     let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
     selectedGraphObj.yAxisDataOptions = new Array();
     dataFields.forEach(field => {
-      //check can add
-      //bar doesn't matter
-      //time series, only with time data
       if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
-        //if time data exists add
         let timeData: Array<string | number> = this.visualizeService.getVisualizeDateData(field);
         if (timeData) {
           let data = this.visualizeService.getVisualizeData(field.fieldName);
@@ -193,12 +200,15 @@ export class VisualizeMenuService {
           });
         }
       }
-       else if (selectedGraphObj.data[0].type == 'scattergl') {
+      // restrict comparison from multiple files
+      // else if (selectedGraphObj.data[0].type == 'scattergl' && selectedGraphObj.selectedXAxisDataOption.dataField.csvId == field.csvId) {
+      else if (selectedGraphObj.data[0].type == 'scattergl') {
         let data = this.visualizeService.getVisualizeData(field.fieldName);
-        selectedGraphObj.yAxisDataOptions.push({
+        let yAxisOption = {
           data: data,
           dataField: field
-        });
+        }
+        selectedGraphObj.yAxisDataOptions.push(yAxisOption);
       }
     });
     //set selected option to new option array for select menus
@@ -206,6 +216,7 @@ export class VisualizeMenuService {
       let findOption = selectedGraphObj.yAxisDataOptions.find(option => { return option.dataField.fieldName == selectedOption.dataOption.dataField.fieldName });
       selectedOption.dataOption = findOption;
     });
+
   }
 
   setYAxisData(selectedGraphObj: GraphObj) {
@@ -216,10 +227,13 @@ export class VisualizeMenuService {
         if (timeData) {
           selectedGraphObj.data[index].x = timeData;
         }
-      } else if (selectedDataOption.dataOption.dataField.csvId != selectedGraphObj.selectedXAxisDataOption.dataField.csvId) {
-        selectedDataOption.dataOption = selectedGraphObj.yAxisDataOptions[0]
-        selectedDataOption.seriesName = this.getSeriesName(selectedGraphObj.yAxisDataOptions[0].dataField);
-      } else {
+      } 
+      // Restrict if selected axis data from another file
+      // else if (selectedDataOption.dataOption.dataField.csvId != selectedGraphObj.selectedXAxisDataOption.dataField.csvId) {
+      //   selectedDataOption.dataOption = selectedGraphObj.yAxisDataOptions[0];
+      //   selectedDataOption.seriesName = this.getSeriesName(selectedGraphObj.yAxisDataOptions[0].dataField);
+      // }
+      else {
         // Lines not a valid mode for non-time series
         selectedDataOption.linesOrMarkers = 'markers';
       }
@@ -294,12 +308,13 @@ export class VisualizeMenuService {
         selectedGraphObj.layout.annotations.push(annotateDataPoint);
       }
     }
-    this.save(selectedGraphObj);
+    
+    this.saveUserGraphOptionsChange(selectedGraphObj);
   }
 
   deleteAnnotation(annotation: AnnotationData, selectedGraphObj: GraphObj) {
     _.remove(selectedGraphObj.layout.annotations, (currentAnnotation) => { return currentAnnotation.annotationId == annotation.annotationId });
-    this.save(selectedGraphObj);
+    this.saveUserGraphOptionsChange(selectedGraphObj);
   }
 
   getSeriesName(logToolField: LogToolField): string {

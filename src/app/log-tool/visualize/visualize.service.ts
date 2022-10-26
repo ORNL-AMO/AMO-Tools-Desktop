@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { LogToolDataService } from '../log-tool-data.service';
 import * as _ from 'lodash';
-import { LogToolField, GraphObj, AnnotationData } from '../log-tool-models';
+import { LogToolField, GraphObj, AnnotationData, GraphInteractivity } from '../log-tool-models';
 
 @Injectable()
 export class VisualizeService {
@@ -10,8 +10,10 @@ export class VisualizeService {
   visualizeDataInitialized: boolean = false;
   graphObjects: BehaviorSubject<Array<GraphObj>>;
   selectedGraphObj: BehaviorSubject<GraphObj>;
+  userInputDelay: BehaviorSubject<number>;
   visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }>;
   annotateDataPoint: BehaviorSubject<AnnotationData>;
+  userGraphOptions: BehaviorSubject<GraphObj>;
   focusedPanel: BehaviorSubject<string>;
   plotFunctionType: string;
   restyleRanges: BehaviorSubject<{ xMin: number, xMax: number, yMin: number, yMax: number, y2Min: number, y2Max: number }>;
@@ -20,11 +22,12 @@ export class VisualizeService {
   }
 
   initializeService() {
-    this.plotFunctionType = 'react';
     this.focusedPanel = new BehaviorSubject<string>(undefined);
+    this.userInputDelay = new BehaviorSubject<number>(0);
     let initData = this.initGraphObj();
     this.graphObjects = new BehaviorSubject([initData]);
     this.selectedGraphObj = new BehaviorSubject<GraphObj>(initData);
+    this.userGraphOptions = new BehaviorSubject<GraphObj>(initData);
     this.annotateDataPoint = new BehaviorSubject<AnnotationData>(undefined);
     this.restyleRanges = new BehaviorSubject(undefined);
   }
@@ -42,6 +45,14 @@ export class VisualizeService {
   getVisualizeDateData(field: LogToolField): Array<number | string> {
     let data: Array<number | string> = _.find(this.visualizeData, (dataItem) => { return dataItem.dataField.csvId == field.csvId && dataItem.dataField.isDateField }).data;
     return data;
+  }
+
+  getDefaultGraphInteractivity(): GraphInteractivity {
+    // 3777 default off for large datasets
+    return {
+      isGraphInteractive: true,
+      showPerformanceWarning: false,
+    }
   }
 
   initGraphObj(): GraphObj {
@@ -69,11 +80,13 @@ export class VisualizeService {
             size: 22
           }
         },
-        hovermode: 'closest',
+        hovermode: false,
+        dragmode: false,
         annotations: [],
         xaxis: {
           autorange: true,
           type: undefined,
+          // spikemode: 'across',
           title: {
             text: 'X Axis Label'
           },
@@ -122,10 +135,17 @@ export class VisualizeService {
           t: 75,
           b: 100,
           l: 100,
-          r: 100
+          r: 50
         }
       },
-      isTimeSeries: false,
+      mode: {
+        modeBarButtonsToRemove: ['lasso2d'],
+        // plotGlPixelRatio: 3,
+        responsive: true,
+        displaylogo: false,
+        displayModeBar: true
+      },
+      graphInteractivity: this.getDefaultGraphInteractivity(),
       selectedXAxisDataOption: { dataField: undefined, data: [] },
       selectedYAxisDataOptions: [],
       hasSecondYAxis: false,
