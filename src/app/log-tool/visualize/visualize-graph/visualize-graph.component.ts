@@ -48,7 +48,7 @@ export class VisualizeGraphComponent implements OnInit {
         this.logToolDbService.saveData();
         if (this.visualizeChart && graphObj) {
           this.selectedGraphObj = JSON.parse(JSON.stringify(graphObj));
-          this.setGraphInteractivity(this.selectedGraphObj);
+          this.setGraphInteractivity(this.selectedGraphObj.graphInteractivity);
           this.plotGraph();
       }
     });
