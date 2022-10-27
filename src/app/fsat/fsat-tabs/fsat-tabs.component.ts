@@ -51,15 +51,6 @@ export class FsatTabsComponent implements OnInit {
   updateDataSub: Subscription;
   modifyConditionsTabSub: Subscription;
   modifyConditionsTab: string;
-
-  stepTabs: Array<string> = [
-    'system-basics',
-    'fan-operations',
-    'fan-setup',
-    'fan-motor',
-    'fan-field-data'
-  ];
-
   
   tabsCollapsed: boolean = true;
   calcTabsCollapsed: boolean = true;
@@ -309,27 +300,11 @@ export class FsatTabsComponent implements OnInit {
   }
 
   continue() {
-    let tmpStepTab: string = this.fsatService.stepTab.getValue();
-    if (tmpStepTab === 'fan-field-data') {
-      this.fsatService.mainTab.next('assessment');
-    } else {
-      //let assessmentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == tmpStepTab });
-      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
-      let nextTab: string = this.stepTabs[assessmentTabIndex + 1];
-      this.fsatService.stepTab.next(nextTab);
-    }
+    this.fsatService.continue();
   }
 
   back() {
-    let tmpStepTab: string = this.fsatService.stepTab.getValue();
-    if (tmpStepTab !== 'system-basics' && this.mainTab == 'system-setup') {
-      //let assessmentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == tmpStepTab });
-      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
-      let nextTab: string = this.stepTabs[assessmentTabIndex - 1];
-      this.fsatService.stepTab.next(nextTab);
-    } else if (this.mainTab == 'assessment') {
-      this.fsatService.mainTab.next('system-setup');
-    }
+    this.fsatService.back();
   }
 
   collapseTabs() {
