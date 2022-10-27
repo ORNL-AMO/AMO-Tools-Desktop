@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ExtendedSurfaceCompareService } from '../extended-surface-compare.service';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ExtendedSurfaceWarnings, ExtendedSurfaceLossesService } from '../extended-surface-losses.service';
 import { ExtendedSurface } from '../../../../shared/models/phast/losses/extendedSurface';
 @Component({
@@ -11,7 +11,7 @@ import { ExtendedSurface } from '../../../../shared/models/phast/losses/extended
 })
 export class ExtendedSurfaceLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: FormGroup;
+  lossesForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

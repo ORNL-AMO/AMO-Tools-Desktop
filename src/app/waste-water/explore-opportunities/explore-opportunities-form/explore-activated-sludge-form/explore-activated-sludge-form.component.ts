@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { ActivatedSludgeData, WasteWater, WasteWaterData } from '../../../../shared/models/waste-water';
@@ -13,8 +13,8 @@ import { WasteWaterService } from '../../../waste-water.service';
 })
 export class ExploreActivatedSludgeFormComponent implements OnInit {
 
-  baselineForm: FormGroup;
-  modificationForm: FormGroup;
+  baselineForm: UntypedFormGroup;
+  modificationForm: UntypedFormGroup;
   modificationData: WasteWaterData;
   baselineData: WasteWaterData;
   selectedModificationIdSub: Subscription;

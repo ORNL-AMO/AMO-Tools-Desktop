@@ -4,7 +4,7 @@ import { CompressedAirAssessment, Modification, ReduceAirLeaks } from '../../../
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import * as _ from 'lodash';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ReduceAirLeaksService } from './reduce-air-leaks.service';
 import { BaselineResults, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
@@ -24,7 +24,7 @@ export class ReduceAirLeaksComponent implements OnInit {
   orderOptions: Array<number>;
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
-  form: FormGroup;
+  form: UntypedFormGroup;
   baselineResults: BaselineResults;
   settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,

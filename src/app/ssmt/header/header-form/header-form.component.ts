@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { HeaderService, HeaderRanges, HeaderWarnings} from '../header.service';
 import { SsmtService } from '../../ssmt.service';
@@ -14,7 +14,7 @@ import { BoilerWarnings } from '../../boiler/boiler.service';
 })
 export class HeaderFormComponent implements OnInit {
   @Input()
-  headerForm: FormGroup;
+  headerForm: UntypedFormGroup;
   @Input()
   selected: boolean;
   @Input()
@@ -54,6 +54,8 @@ export class HeaderFormComponent implements OnInit {
     if (this.isBaseline == false && this.pressureLevel != 'highPressure' && this.headerForm.controls.useBaselineProcessSteamUsage.value == true) {
       this.showProcessSteamUsage = false;
     }
+    // numberOfHeaders may have changed before init. save to update ssmt-tab status - causes ngChangedAfterCheckedError
+    this.save();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -72,16 +74,16 @@ export class HeaderFormComponent implements OnInit {
 
   setErrorMsgs() {
     if (this.pressureLevel === 'highPressure') {
-      if (this.numberOfHeaders == 1) {
-        this.minPressureErrorMsg = 'Value can\'t be less than Deaerator Pressure: ';
-      } else {
+      if (this.numberOfHeaders !== 1) {
         this.minPressureErrorMsg = 'Value must be greater than Lower pressure Headers: ';
       }
       this.maxPressureErrorMsg = 'Value must be less than ';
     } else if (this.pressureLevel === 'mediumPressure') {
       this.minPressureErrorMsg = 'Value must be greater than Low Pressure Header: ';
+      this.maxPressureErrorMsg = 'Value must be less than Higher Pressure Headers: ';
+    } else if (this.pressureLevel === 'lowPressure') {
+      this.maxPressureErrorMsg = 'Value must be less than Higher Pressure Headers: ';
     } 
-    this.maxPressureErrorMsg = 'Value must be less than Higher Pressure Headers: ';
   }
 
   enableForm() {

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FanTypes } from '../../../../fsat/fanOptions';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-fan-efficiency-form',
@@ -10,7 +10,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class FanEfficiencyFormComponent implements OnInit {
   @Input()
-  fanEfficiencyForm: FormGroup;
+  fanEfficiencyForm: UntypedFormGroup;
   @Input()
   settings: Settings;
   @Output('emitChange')

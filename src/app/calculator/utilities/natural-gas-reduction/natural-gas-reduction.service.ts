@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
@@ -16,7 +16,7 @@ export class NaturalGasReductionService {
   baselineData: Array<NaturalGasReductionData>;
   modificationData: Array<NaturalGasReductionData>;
   operatingHours: OperatingHours;
-  constructor(private fb: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
+  constructor(private fb: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   // resetData(settings: Settings) {
   //   this.baselineData = new Array<NaturalGasReductionData>();
@@ -120,8 +120,8 @@ export class NaturalGasReductionService {
     return obj;
   }
 
-  getFormFromObj(obj: NaturalGasReductionData): FormGroup {
-    let form: FormGroup = this.fb.group({
+  getFormFromObj(obj: NaturalGasReductionData): UntypedFormGroup {
+    let form: UntypedFormGroup = this.fb.group({
       name: [obj.name, Validators.required],
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       fuelCost: [obj.fuelCost, [Validators.required, Validators.min(0)]],
@@ -157,7 +157,7 @@ export class NaturalGasReductionService {
     return form;
   }
 
-  setValidators(form: FormGroup): FormGroup {
+  setValidators(form: UntypedFormGroup): UntypedFormGroup {
     switch (form.controls.measurementMethod.value) {
       case 0:
         form.controls.flowRate.setValidators([Validators.required, Validators.min(0)]);
@@ -194,7 +194,7 @@ export class NaturalGasReductionService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): NaturalGasReductionData {
+  getObjFromForm(form: UntypedFormGroup): NaturalGasReductionData {
     let flowMeterMethodData: FlowMeterMethodData = {
       flowRate: form.controls.flowRate.value
     };

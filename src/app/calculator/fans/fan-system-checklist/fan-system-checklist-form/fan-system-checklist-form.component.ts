@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { fanChecklistQuestions, FanSystemChecklistInput } from '../../../../shared/models/fans';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -30,7 +30,7 @@ export class FanSystemChecklistFormComponent implements OnInit {
   onResize(event) {
     this.setOpHoursModalWidth();
   }
-  form: FormGroup;
+  form: UntypedFormGroup;
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
   

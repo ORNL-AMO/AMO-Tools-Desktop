@@ -4,7 +4,7 @@ import { SSMT, CondensingTurbineOperationTypes } from '../../../../../shared/mod
 import { Quantity } from '../../../../../shared/models/steam/steam-inputs';
 import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
 import { SsmtService } from '../../../../ssmt.service';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { TurbineService } from '../../../../turbine/turbine.service';
 
 @Component({
@@ -14,9 +14,9 @@ import { TurbineService } from '../../../../turbine/turbine.service';
 })
 export class ExploreCondensingTurbineFormComponent implements OnInit {
   @Input()
-  baselineForm: FormGroup;
+  baselineForm: UntypedFormGroup;
   @Input()
-  modificationForm: FormGroup;
+  modificationForm: UntypedFormGroup;
   @Input()
   settings: Settings;
   @Input()

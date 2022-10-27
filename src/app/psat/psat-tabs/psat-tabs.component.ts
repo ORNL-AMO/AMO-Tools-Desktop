@@ -6,7 +6,7 @@ import { CompareService } from '../compare.service';
 import { Settings } from '../../shared/models/settings';
 import { PsatTabService } from '../psat-tab.service';
 import { PsatWarningService, PumpFluidWarnings, MotorWarnings, FieldDataWarnings, OperationsWarnings } from '../psat-warning.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PumpFluidService } from '../pump-fluid/pump-fluid.service';
 import { MotorService } from '../motor/motor.service';
 import { FieldDataService } from '../field-data/field-data.service';
@@ -105,22 +105,22 @@ export class PsatTabsComponent implements OnInit {
   }
 
   checkPumpFluidInvalid(): boolean {
-    let tmpForm: FormGroup = this.pumpFluidService.getFormFromObj(this.psat.inputs);
+    let tmpForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(this.psat.inputs);
     return tmpForm.invalid;
   }
 
   checkMotorInvalid() {
-    let tmpForm: FormGroup = this.motorService.getFormFromObj(this.psat.inputs);
+    let tmpForm: UntypedFormGroup = this.motorService.getFormFromObj(this.psat.inputs);
     return tmpForm.invalid;
   }
 
   checkFieldDataInvalid(): boolean {
-    let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this.psat.inputs, true, this.psat.inputs.whatIfScenario);
+    let tmpForm: UntypedFormGroup = this.fieldDataService.getFormFromObj(this.psat.inputs, true, this.psat.inputs.whatIfScenario);
     return tmpForm.invalid;
   }
  
   checkOperationsInvalid(): boolean {
-    let tmpForm: FormGroup = this.pumpOperationsService.getFormFromObj(this.psat.inputs, true, this.psat.inputs.whatIfScenario);
+    let tmpForm: UntypedFormGroup = this.pumpOperationsService.getFormFromObj(this.psat.inputs, true, this.psat.inputs.whatIfScenario);
     return tmpForm.invalid;
   }
 
@@ -260,13 +260,13 @@ export class PsatTabsComponent implements OnInit {
       return true;
     }
     else if (this.stepTab == 'pump-fluid') {
-      let tmpForm: FormGroup = this.pumpFluidService.getFormFromObj(this.psat.inputs);
+      let tmpForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(this.psat.inputs);
       return tmpForm.valid;
     } else if (this.stepTab == 'motor') {
-      let tmpForm: FormGroup = this.motorService.getFormFromObj(this.psat.inputs);
+      let tmpForm: UntypedFormGroup = this.motorService.getFormFromObj(this.psat.inputs);
       return tmpForm.valid;
     } else if (this.stepTab == 'field-data') {
-      let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this.psat.inputs, true, this.psat.inputs.whatIfScenario);
+      let tmpForm: UntypedFormGroup = this.fieldDataService.getFormFromObj(this.psat.inputs, true, this.psat.inputs.whatIfScenario);
       return tmpForm.valid;
     }
   }

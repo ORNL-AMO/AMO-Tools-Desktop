@@ -4,7 +4,7 @@ import { FSAT } from '../../../../shared/models/fans';
 import { FanTypes, Drives } from '../../../fanOptions';
 import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FanSetupService } from '../../../fan-setup/fan-setup.service';
 import { FsatService } from '../../../fsat.service';
 import { FanEfficiencyInputs } from '../../../../calculator/fans/fan-efficiency/fan-efficiency.service';
@@ -24,9 +24,9 @@ export class FanDataFormComponent implements OnInit {
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
   @Input()
-  baselineForm: FormGroup;
+  baselineForm: UntypedFormGroup;
   @Input()
-  modificationForm: FormGroup;
+  modificationForm: UntypedFormGroup;
   @Input()
   baselineFanEfficiency: number;
   @Input()

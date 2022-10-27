@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { LossesService } from '../../losses.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FlueGasCompareService } from '../../flue-gas-losses/flue-gas-compare.service';
 import { FlueGas, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Subscription } from 'rxjs';
@@ -118,14 +118,14 @@ export class FlueGasTabComponent implements OnInit {
 
   checkMaterialValid(loss: FlueGas) {
     if (loss.flueGasType === 'By Volume') {
-      let tmpForm: FormGroup = this.flueGasFormService.initByVolumeFormFromLoss(loss);
+      let tmpForm: UntypedFormGroup = this.flueGasFormService.initByVolumeFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;
       }
     } else if (loss.flueGasType === 'By Mass') {
-      let tmpForm: FormGroup = this.flueGasFormService.initByMassFormFromLoss(loss);
+      let tmpForm: UntypedFormGroup = this.flueGasFormService.initByMassFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {

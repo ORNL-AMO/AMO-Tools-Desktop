@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { EnergyInputCompareService } from '../energy-input-compare.service';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { EnergyInputService } from '../energy-input.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { EnergyInputService } from '../energy-input.service';
 })
 export class EnergyInputFormComponent implements OnInit {
   @Input()
-  energyInputForm: FormGroup;
+  energyInputForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

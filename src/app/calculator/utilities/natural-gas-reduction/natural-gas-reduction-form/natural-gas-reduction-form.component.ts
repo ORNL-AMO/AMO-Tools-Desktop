@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { NaturalGasReductionService } from '../natural-gas-reduction.service';
 import { NaturalGasReductionResult, NaturalGasReductionData } from '../../../../shared/models/standalone';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -46,7 +46,7 @@ export class NaturalGasReductionFormComponent implements OnInit {
   idString: string;
   individualResults: NaturalGasReductionResult;
   isEditingName: boolean = false;
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   constructor(private naturalGasReductionService: NaturalGasReductionService) { }
 

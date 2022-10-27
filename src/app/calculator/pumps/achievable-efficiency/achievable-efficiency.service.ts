@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { SimpleChart, DataPoint, TraceData } from '../../../shared/models/plotting';
 import { BehaviorSubject } from 'rxjs';
 
@@ -12,7 +12,7 @@ export class AchievableEfficiencyService {
   selectedDataPoints: BehaviorSubject<Array<DataPoint>>;
   // selectedDataPoints: BehaviorSubject<Array<SelectedDataPoint>>;
   
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder) {
     this.initChartData();
    }
 
@@ -24,8 +24,8 @@ export class AchievableEfficiencyService {
   }
 
 
-  getForm(pumpType: number, flowRate: number): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getForm(pumpType: number, flowRate: number): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       pumpType: [pumpType, Validators.required],
       flowRate: [flowRate, [Validators.required, Validators.min(0)]]
     });

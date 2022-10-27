@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { WasteHeatInput, WasteHeatWarnings } from '../../../shared/models/phast/wasteHeat';
 import { Settings } from '../../../shared/models/settings';
@@ -9,10 +9,10 @@ import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 export class WasteHeatFormService {
 
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  getWasteHeatForm(inputObj: WasteHeatInput, settings: Settings): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getWasteHeatForm(inputObj: WasteHeatInput, settings: Settings): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       oppHours: [inputObj.oppHours, [Validators.required, Validators.max(8760)]],
       cost: [inputObj.cost, Validators.required],
       availableHeat: [inputObj.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]],
@@ -30,7 +30,7 @@ export class WasteHeatFormService {
     return form;
   }
 
-  getWasteHeatInput(form: FormGroup): WasteHeatInput {
+  getWasteHeatInput(form: UntypedFormGroup): WasteHeatInput {
     let obj: WasteHeatInput = {
       oppHours: form.controls.oppHours.value,
       cost: form.controls.cost.value,
@@ -46,7 +46,7 @@ export class WasteHeatFormService {
     return obj;
   }
 
-  setChillerTempValidators(formGroup: FormGroup, settings: Settings) {
+  setChillerTempValidators(formGroup: UntypedFormGroup, settings: Settings) {
     let chillerTempMin: number = 33;
     let chillerTempMax: number = 211;
 

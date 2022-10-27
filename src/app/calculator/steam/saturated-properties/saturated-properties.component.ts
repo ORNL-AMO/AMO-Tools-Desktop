@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../shared/models/settings";
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SaturatedPropertiesInput } from '../../../shared/models/steam/steam-inputs';
@@ -35,7 +35,7 @@ export class SaturatedPropertiesComponent implements OnInit {
   smallScreenTab: string = 'form';
 
   ranges: { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number };
-  saturatedPropertiesForm: FormGroup;
+  saturatedPropertiesForm: UntypedFormGroup;
   saturatedPropertiesOutput: SaturatedPropertiesOutput;
   pressureOrTemperature: number;
   tabSelect: string = 'results';
@@ -44,12 +44,12 @@ export class SaturatedPropertiesComponent implements OnInit {
   data: { pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number };
 
   graphToggle: string = '0';
-  graphToggleForm: FormGroup;
+  graphToggleForm: UntypedFormGroup;
   validPlot: boolean = false;
   toggleResetData: boolean = true;
   toggleExampleData: boolean = true;
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) {
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) {
   }
 
   ngOnInit() {
@@ -141,7 +141,7 @@ export class SaturatedPropertiesComponent implements OnInit {
     }
   }
 
-  calculate(form: FormGroup) {
+  calculate(form: UntypedFormGroup) {
     let input: SaturatedPropertiesInput = {
       saturatedTemperature: form.controls.saturatedTemperature.value,
       saturatedPressure: form.controls.saturatedPressure.value,

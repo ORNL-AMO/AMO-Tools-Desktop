@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -12,14 +12,14 @@ export class AssessmentCo2SavingsService {
   baselineCo2SavingsData: BehaviorSubject<Co2SavingsData>;
   modificationCo2SavingsData: BehaviorSubject<Co2SavingsData>;
 
-  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) {
+  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: UntypedFormBuilder) {
     this.co2SavingsField = new BehaviorSubject<string>(undefined);
     this.baselineCo2SavingsData = new BehaviorSubject<Co2SavingsData>(undefined);
     this.modificationCo2SavingsData = new BehaviorSubject<Co2SavingsData>(undefined);
    }
 
-  getEmissionsForm(inputObj: Co2SavingsData): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getEmissionsForm(inputObj: Co2SavingsData): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       energyType: [inputObj.energyType],
       energySource: [inputObj.energySource],
       totalEmissionOutputRate: [inputObj.totalEmissionOutputRate],
@@ -37,7 +37,7 @@ export class AssessmentCo2SavingsService {
     return form;
   }
 
-  getCo2SavingsData(form: FormGroup): Co2SavingsData {
+  getCo2SavingsData(form: UntypedFormGroup): Co2SavingsData {
     let obj: Co2SavingsData = {
       energyType: form.controls.energyType.value,
       totalEmissionOutputRate: form.controls.totalEmissionOutputRate.value,
@@ -55,7 +55,7 @@ export class AssessmentCo2SavingsService {
     return obj;
   }
 
-  setCo2SavingsDataSettingsForm(inputObj: Co2SavingsData, settingsForm: FormGroup): FormGroup {
+  setCo2SavingsDataSettingsForm(inputObj: Co2SavingsData, settingsForm: UntypedFormGroup): UntypedFormGroup {
     settingsForm.patchValue({
       co2SavingsEnergyType: inputObj.energyType,
       co2SavingsEnergySource: inputObj.energySource,
@@ -74,7 +74,7 @@ export class AssessmentCo2SavingsService {
     return settingsForm;
   }
 
-  getCo2SavingsDataFromSettingsForm(settingsForm: FormGroup): Co2SavingsData {
+  getCo2SavingsDataFromSettingsForm(settingsForm: UntypedFormGroup): Co2SavingsData {
     let obj: Co2SavingsData = {
       energyType: settingsForm.controls.co2SavingsEnergyType.value || 'electricity',
       energySource: settingsForm.controls.co2SavingsEnergySource.value || 'Natural Gas',

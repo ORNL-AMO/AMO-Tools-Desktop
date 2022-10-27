@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FsatService } from '../../../../fsat/fsat.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { BaseGasDensity, PsychrometricResults } from '../../../../shared/models/fans';
 import { FsatFluidService, GasDensityValidators } from '../../../../fsat/fsat-fluid/fsat-fluid.service';
 import { Settings } from '../../../../shared/models/settings';
@@ -18,7 +18,7 @@ export class FlueGasLossesMoistureComponent implements OnInit {
   @Output('hideModal')
   hideModal = new EventEmitter<number>();
 
-  gasDensityForm: FormGroup;
+  gasDensityForm: UntypedFormGroup;
 
   methods: Array<{ display: string, value: string }> = [
     { display: 'Relative Humidity %', value: 'relativeHumidity' },

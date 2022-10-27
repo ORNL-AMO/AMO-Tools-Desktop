@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { HeatLossInput } from '../../../shared/models/steam/steam-inputs';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -9,9 +9,9 @@ import { SteamService } from '../steam.service';
 export class HeatLossService {
   heatLossInput: HeatLossInput;
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
-  initForm(settings: Settings): FormGroup {
+  initForm(settings: Settings): UntypedFormGroup {
     let tmpInletPressure = 653;
     let tmpQuantityValue = 1121.9;
     let tmpInletMassFlow = 13.6;
@@ -26,7 +26,7 @@ export class HeatLossService {
       tmpInletMassFlow = Math.round(this.convertUnitsService.value(tmpInletMassFlow).from('klb').to(settings.steamMassFlowMeasurement) * 100) / 100;
     }
     let ranges: HeatLossRanges = this.getRangeValues(settings, 0);
-    let tmpForm: FormGroup = this.formBuilder.group({
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       inletPressure: [tmpInletPressure, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       thermodynamicQuantity: [0, [Validators.required]], //0 is TEMPERATURE
       quantityValue: [tmpQuantityValue, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
@@ -35,9 +35,9 @@ export class HeatLossService {
     });
     return tmpForm;
   }
-  resetForm(settings: Settings): FormGroup {
+  resetForm(settings: Settings): UntypedFormGroup {
     let ranges: HeatLossRanges = this.getRangeValues(settings, 0);
-    let tmpForm: FormGroup = this.formBuilder.group({
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       inletPressure: [0, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       thermodynamicQuantity: [0, [Validators.required]], //0 is TEMPERATURE
       quantityValue: [0, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
@@ -47,9 +47,9 @@ export class HeatLossService {
     return tmpForm;
   }
 
-  getFormFromObj(inputObj: HeatLossInput, settings: Settings): FormGroup {
+  getFormFromObj(inputObj: HeatLossInput, settings: Settings): UntypedFormGroup {
     let ranges: HeatLossRanges = this.getRangeValues(settings, inputObj.thermodynamicQuantity);
-    let tmpForm: FormGroup = this.formBuilder.group({
+    let tmpForm: UntypedFormGroup = this.formBuilder.group({
       inletPressure: [inputObj.inletPressure, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       thermodynamicQuantity: [inputObj.thermodynamicQuantity], //0 is TEMPERATURE
       quantityValue: [inputObj.quantityValue, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
@@ -59,7 +59,7 @@ export class HeatLossService {
     return tmpForm;
   }
 
-  getObjFromForm(form: FormGroup): HeatLossInput {
+  getObjFromForm(form: UntypedFormGroup): HeatLossInput {
     let input: HeatLossInput = {
       inletPressure: form.controls.inletPressure.value,
       thermodynamicQuantity: form.controls.thermodynamicQuantity.value,

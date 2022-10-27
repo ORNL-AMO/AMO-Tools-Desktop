@@ -3,7 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { FSAT, InletPressureData, OutletPressureData, PlaneData, FanRatedInfo, FsatOutput, CompressibilityFactor } from '../../../shared/models/fans';
 import { HelpPanelService } from '../../help-panel/help-panel.service';
 import { ModifyConditionsService } from '../../modify-conditions/modify-conditions.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FanFieldDataService } from '../../fan-field-data/fan-field-data.service';
 import { FanMotorService } from '../../fan-motor/fan-motor.service';
 import { FanSetupService } from '../../fan-setup/fan-setup.service';
@@ -39,17 +39,17 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
   bodyHeight: number;
 
-  baselineFieldDataForm: FormGroup;
-  modificationFieldDataForm: FormGroup;
+  baselineFieldDataForm: UntypedFormGroup;
+  modificationFieldDataForm: UntypedFormGroup;
 
-  baselineOperationsForm: FormGroup;
-  modificationOperationsForm: FormGroup;
+  baselineOperationsForm: UntypedFormGroup;
+  modificationOperationsForm: UntypedFormGroup;
 
-  baselineMotorForm: FormGroup;
-  modificationMotorForm: FormGroup;
+  baselineMotorForm: UntypedFormGroup;
+  modificationMotorForm: UntypedFormGroup;
 
-  baselineFanSetupForm: FormGroup;
-  modificationFanSetupForm: FormGroup;
+  baselineFanSetupForm: UntypedFormGroup;
+  modificationFanSetupForm: UntypedFormGroup;
   baselineFanEfficiency: number;
 
   modificationFanFieldDataWarnings: FanFieldDataWarnings;

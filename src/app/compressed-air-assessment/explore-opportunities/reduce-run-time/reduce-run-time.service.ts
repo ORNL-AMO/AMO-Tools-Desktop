@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ReduceRuntime } from '../../../shared/models/compressed-air-assessment';
 
 @Injectable()
 export class ReduceRunTimeService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
 
-  getFormFromObj(reduceRuntime: ReduceRuntime): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getFormFromObj(reduceRuntime: ReduceRuntime): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       implementationCost: [reduceRuntime.implementationCost, [Validators.min(0)]],
       order: [reduceRuntime.order]
     });
@@ -21,7 +21,7 @@ export class ReduceRunTimeService {
     return form;
   }
 
-  updateObjFromForm(form: FormGroup, reduceRuntime: ReduceRuntime): ReduceRuntime {
+  updateObjFromForm(form: UntypedFormGroup, reduceRuntime: ReduceRuntime): ReduceRuntime {
     reduceRuntime.implementationCost = form.controls.implementationCost.value;
     reduceRuntime.order = form.controls.order.value;
     return reduceRuntime;

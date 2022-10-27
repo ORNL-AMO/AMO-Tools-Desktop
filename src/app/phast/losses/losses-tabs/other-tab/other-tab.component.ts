@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { OtherLossesService } from '../../other-losses/other-losses.service';
 import { OtherLossesCompareService } from '../../other-losses/other-losses-compare.service';
 import { OtherLoss } from '../../../../shared/models/phast/losses/otherLoss';
@@ -92,7 +92,7 @@ export class OtherTabComponent implements OnInit {
 
 
   checkLossValid(loss: OtherLoss) {
-      let tmpForm: FormGroup = this.otherLossesService.getFormFromLoss(loss);
+      let tmpForm: UntypedFormGroup = this.otherLossesService.getFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {

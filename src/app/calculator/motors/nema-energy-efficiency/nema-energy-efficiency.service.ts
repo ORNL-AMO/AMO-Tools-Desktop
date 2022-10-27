@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { PSAT } from '../../../shared/models/psat';
 import { FSAT } from '../../../shared/models/fans';
 
 @Injectable()
 export class NemaEnergyEfficiencyService {
   nemaInputs: NemaInputs;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  initForm(): FormGroup {
+  initForm(): UntypedFormGroup {
     return this.formBuilder.group({
       frequency: [60, [Validators.required]],
       horsePower: [200, [Validators.required]],
@@ -17,7 +17,7 @@ export class NemaEnergyEfficiencyService {
       efficiency: ['', [Validators.min(1), Validators.max(100)]]
     });
   }
-  resetForm(): FormGroup {
+  resetForm(): UntypedFormGroup {
     return this.formBuilder.group({
       frequency: [60, [Validators.required]],
       horsePower: [0, [Validators.required]],
@@ -27,7 +27,7 @@ export class NemaEnergyEfficiencyService {
     });
   }
 
-  initFormFromPsat(psat: PSAT): FormGroup {
+  initFormFromPsat(psat: PSAT): UntypedFormGroup {
     return this.formBuilder.group({
       frequency: [psat.inputs.line_frequency, [Validators.required]],
       horsePower: [psat.inputs.motor_rated_power, [Validators.required, Validators.min(0)]],
@@ -37,7 +37,7 @@ export class NemaEnergyEfficiencyService {
     });
   }
 
-  initFormFromFsat(fsat: FSAT): FormGroup {
+  initFormFromFsat(fsat: FSAT): UntypedFormGroup {
     return this.formBuilder.group({
       frequency: [fsat.fanMotor.lineFrequency, [Validators.required]],
       horsePower: [fsat.fanMotor.motorRatedPower, [Validators.required, Validators.min(0)]],
@@ -47,7 +47,7 @@ export class NemaEnergyEfficiencyService {
     });
   }
 
-  initFormFromObj(obj: NemaInputs): FormGroup {
+  initFormFromObj(obj: NemaInputs): UntypedFormGroup {
     return this.formBuilder.group({
       frequency: [obj.frequency, [Validators.required]],
       horsePower: [obj.horsePower, [Validators.required]],
@@ -57,7 +57,7 @@ export class NemaEnergyEfficiencyService {
     });
   }
 
-  getObjFromForm(form: FormGroup): NemaInputs {
+  getObjFromForm(form: UntypedFormGroup): NemaInputs {
     return {
       frequency: form.controls.frequency.value,
       horsePower: form.controls.horsePower.value,

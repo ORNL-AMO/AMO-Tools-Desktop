@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss';
 import { Settings } from '../../../../shared/models/settings';
@@ -20,7 +20,7 @@ export class LossNameFormComponent implements OnInit {
   selected: boolean;
   @Input()
   index: number;
-  lossNameForm: FormGroup;
+  lossNameForm: UntypedFormGroup;
   isEditingName: boolean;
   coolingMedium: string;
   

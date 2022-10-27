@@ -5,7 +5,7 @@ import { Slag } from '../../../shared/models/phast/losses/slag';
 import { Losses } from '../../../shared/models/phast/phast';
 import { SlagService } from './slag.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 @Component({
   selector: 'app-slag',
   templateUrl: './slag.component.html',
@@ -135,7 +135,7 @@ export class SlagComponent implements OnInit {
 }
 
 export interface SlagLossObj {
-  form: FormGroup;
+  form: UntypedFormGroup;
   heatLoss?: number;
   collapse: boolean;
 }

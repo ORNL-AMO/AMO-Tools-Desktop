@@ -72,7 +72,7 @@
       <span class="table-text">Electricity Purchased (kWh/yr) </span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span *ngIf="baselineValid" class="table-text">{{
+      <span *ngIf="baselineValid && baselineOutput.operationsOutput" class="table-text">{{
         baselineOutput.operationsOutput.sitePowerImport *
           baselineInputs.operationsInput.operatingHoursPerYear | number: "1.0-1"
       }}</span>
@@ -92,7 +92,7 @@
       <span class="table-text">Electricity Cost ({{settings.currency}})</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span *ngIf="baselineValid" class="table-text">{{
+      <span *ngIf="baselineValid && baselineOutput.operationsOutput" class="table-text">{{
         baselineOutput.operationsOutput.powerGenerationCost 
           | number: "2.0-0"
       }}</span>
@@ -116,7 +116,7 @@
       </span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span *ngIf="baselineValid" class="table-text">{{
+      <span *ngIf="baselineValid && baselineOutput.operationsOutput" class="table-text">{{
         baselineOutput.operationsOutput.makeupWaterVolumeFlowAnnual
           | number: "1.0-1"
       }}</span>
@@ -135,7 +135,7 @@
       <span class="table-text">Water Cost ({{settings.currency}}/yr)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span *ngIf="baselineValid" class="table-text">{{
+      <span *ngIf="baselineValid && baselineOutput.operationsOutput" class="table-text">{{
         baselineOutput.operationsOutput.makeupWaterCost 
           | number: "2.0-0"
       }}</span>
@@ -159,7 +159,7 @@
       >
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span *ngIf="baselineValid" class="table-text">{{
+      <span *ngIf="baselineValid && baselineOutput.operationsOutput" class="table-text">{{
         baselineOutput.operationsOutput.powerGenerated | number: "1.0-1"
       }}</span>
       <span *ngIf="!baselineValid">&mdash;</span>
@@ -314,16 +314,16 @@
       <span class="bold table-text">Annual Emissions (<span>tonne CO<sub>2</sub></span>)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span *ngIf="baselineValid" class="bold table-text">
+      <span *ngIf="baselineValid && baselineOutput.co2EmissionsOutput && baselineOutput.co2EmissionsOutput.totalEmissionOutput != undefined" class="bold table-text">
         {{ baselineOutput.co2EmissionsOutput.totalEmissionOutput | number: "1.0-2" }}
       </span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || (baselineOutput.co2EmissionsOutput && baselineOutput.co2EmissionsOutput.totalEmissionOutput == undefined)">&mdash;</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1">
       <span
         class="bold table-text"
         *ngIf="
-          modValid && modificationOutput.co2EmissionsOutput.totalEmissionOutput
+          modValid && modificationOutput.co2EmissionsOutput && modificationOutput.co2EmissionsOutput.totalEmissionOutput != undefined
         ">{{
           modificationOutput.co2EmissionsOutput.totalEmissionOutput 
             | number: "1.0-2"
@@ -332,7 +332,7 @@
       <span
         class="bold table-text"
         *ngIf="
-          !modValid || !modificationOutput.co2EmissionsOutput.totalEmissionOutput
+          !modValid || (modificationOutput.co2EmissionsOutput && modificationOutput.co2EmissionsOutput.totalEmissionOutput == undefined)
         "
         >&mdash;</span
       >
@@ -347,23 +347,15 @@
       <span class="bold table-text">&mdash;</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1">
-      <span
-        class="bold table-text"
-        *ngIf="
-          modValid && modificationOutput.co2EmissionsOutput.emissionsSavings
-        "
-        >{{
-          modificationOutput.co2EmissionsOutput.emissionsSavings 
-            | number: "1.0-2"
-        }}</span
-      >
-      <span
-        class="bold table-text"
-        *ngIf="
-          !modValid || !modificationOutput.co2EmissionsOutput.emissionsSavings
-        "
-        >&mdash;</span
-      >
+      <span class="bold table-text" *ngIf="
+              modValid && modificationOutput.co2EmissionsOutput && modificationOutput.co2EmissionsOutput.emissionsSavings != undefined
+            ">{{
+        modificationOutput.co2EmissionsOutput.emissionsSavings
+        | number: "1.0-2"
+        }}</span>
+      <span class="bold table-text" *ngIf="
+              !modValid || (modificationOutput.co2EmissionsOutput && modificationOutput.co2EmissionsOutput.emissionsSavings == undefined)
+            ">&mdash;</span>
     </div>
   </div>
 
@@ -382,7 +374,7 @@
       <span
         class="bold table-text"
         *ngIf="
-          modValid && modificationOutput.operationsOutput.totalOperatingCost
+          modValid
         "
         [ngClass]="{ 'positive-savings': percentSavings > 10 }"
         >{{
@@ -393,7 +385,7 @@
       <span
         class="bold table-text"
         *ngIf="
-          !modValid || !modificationOutput.operationsOutput.totalOperatingCost
+          !modValid
         "
         >&mdash;</span
       >

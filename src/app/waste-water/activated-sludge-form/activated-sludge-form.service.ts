@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedSludgeData } from '../../shared/models/waste-water';
 import { GreaterThanValidator } from '../../shared/validators/greater-than';
 
 @Injectable()
 export class ActivatedSludgeFormService {
 
-  constructor(private formBuilder: FormBuilder,) { }
+  constructor(private formBuilder: UntypedFormBuilder,) { }
 
-  getFormFromObj(obj: ActivatedSludgeData): FormGroup {
+  getFormFromObj(obj: ActivatedSludgeData): UntypedFormGroup {
     let MLSSparValidators: Array<ValidatorFn> = [];
     let DefinedSRTValidators: Array<ValidatorFn> = [];
     if(obj.CalculateGivenSRT == true){
@@ -17,7 +17,7 @@ export class ActivatedSludgeFormService {
       MLSSparValidators = [Validators.required, Validators.min(0)];
     }
 
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       Temperature: [obj.Temperature, [Validators.required, Validators.min(0)]],
       So: [obj.So, [Validators.required, Validators.min(0)]],
       isUserDefinedSo: [obj.isUserDefinedSo],
@@ -50,7 +50,7 @@ export class ActivatedSludgeFormService {
     return form;
   }
 
-  setSoCalculateValidators(form: FormGroup) {
+  setSoCalculateValidators(form: UntypedFormGroup) {
     if (form.controls.isUserDefinedSo.value === true) {
       form.controls.influentCBODBefore.setValidators([]);
       form.controls.influentCBODBefore.updateValueAndValidity();
@@ -65,7 +65,7 @@ export class ActivatedSludgeFormService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): ActivatedSludgeData {
+  getObjFromForm(form: UntypedFormGroup): ActivatedSludgeData {
     return {
       Temperature: form.controls.Temperature.value,
       So: form.controls.So.value,

@@ -6,7 +6,7 @@ import { Settings } from '../../shared/models/settings';
  
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatService } from '../psat.service';
 import * as _ from 'lodash';
@@ -33,7 +33,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   @Output('openUpdateUnitsModal') 
   openUpdateUnitsModal = new EventEmitter<Settings>();
 
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
   oldSettings: Settings;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
@@ -87,7 +87,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   }
 
   getExistingDataSettings(): Settings {
-    let existingSettingsForm: FormGroup = _.cloneDeep(this.settingsForm);
+    let existingSettingsForm: UntypedFormGroup = _.cloneDeep(this.settingsForm);
     existingSettingsForm.patchValue({unitsOfMeasure: this.assessment.psat.existingDataUnits});
     let existingSettings = this.settingsService.setUnits(existingSettingsForm);
     return this.settingsService.getSettingsFromForm(existingSettings);
