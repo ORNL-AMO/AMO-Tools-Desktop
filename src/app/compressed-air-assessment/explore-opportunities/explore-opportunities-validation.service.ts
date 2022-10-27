@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ImproveEndUseEfficiency, Modification, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemProfileSetup, UseAutomaticSequencer } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
@@ -65,7 +65,7 @@ export class ExploreOpportunitiesValidationService {
   checkAddReceiverVolumeValid(addPrimaryReceiverVolume: AddPrimaryReceiverVolume): boolean {
     let isValid: boolean = true;
     if (addPrimaryReceiverVolume.order != 100) {
-      let form: FormGroup = this.addReceiverVolumeService.getFormFromObj(addPrimaryReceiverVolume);
+      let form: UntypedFormGroup = this.addReceiverVolumeService.getFormFromObj(addPrimaryReceiverVolume);
       isValid = form.valid;
     }
     return isValid;
@@ -74,7 +74,7 @@ export class ExploreOpportunitiesValidationService {
   checkAdjustCascadingPointsValid(adjustCascadingSetPoints: AdjustCascadingSetPoints): boolean {
     let isValid: boolean = true;
     if (adjustCascadingSetPoints.order != 100) {
-      let implementationCostForm: FormGroup = this.adjustCascadingSetPointsService.getImplementationCostForm(adjustCascadingSetPoints);
+      let implementationCostForm: UntypedFormGroup = this.adjustCascadingSetPointsService.getImplementationCostForm(adjustCascadingSetPoints);
       isValid = implementationCostForm.valid;
       if (isValid) {
         let compressorForms: Array<CompressorForm> = this.adjustCascadingSetPointsService.getFormFromObj(adjustCascadingSetPoints.setPointData);
@@ -93,10 +93,10 @@ export class ExploreOpportunitiesValidationService {
     if (improveEndUseEfficiency.order != 100) {
       improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => {
         if (isValid) {
-          let form: FormGroup = this.improveEndUseEfficiencyService.getFormFromObj(item, baselineResults);
+          let form: UntypedFormGroup = this.improveEndUseEfficiencyService.getFormFromObj(item, baselineResults);
           isValid = form.valid;
           if (isValid) {
-            let dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: FormGroup }> = this.improveEndUseEfficiencyService.getDataForms(item, baselineProfileSummaries);
+            let dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: UntypedFormGroup }> = this.improveEndUseEfficiencyService.getDataForms(item, baselineProfileSummaries);
             dataForms.forEach(dataForm => {
               if (isValid) {
                 isValid = dataForm.form.valid;
@@ -112,7 +112,7 @@ export class ExploreOpportunitiesValidationService {
   checkReduceAirLeaksValid(reduceAirLeaks: ReduceAirLeaks, baselineResults: BaselineResults): boolean {
     let isValid: boolean = true;
     if (reduceAirLeaks.order != 100) {
-      let form: FormGroup = this.reduceAirLeaksService.getFormFromObj(reduceAirLeaks, baselineResults);
+      let form: UntypedFormGroup = this.reduceAirLeaksService.getFormFromObj(reduceAirLeaks, baselineResults);
       isValid = form.valid;
     }
     return isValid;
@@ -121,7 +121,7 @@ export class ExploreOpportunitiesValidationService {
   checkReduceRuntimeValid(compressedAirAssessment: CompressedAirAssessment, modification: Modification, modificationResults: CompressedAirAssessmentResult): boolean {
     let isValid: boolean = true;
     if (modification.reduceRuntime.order != 100) {
-      let form: FormGroup = this.reduceRunTimeService.getFormFromObj(modification.reduceRuntime);
+      let form: UntypedFormGroup = this.reduceRunTimeService.getFormFromObj(modification.reduceRuntime);
       isValid = form.valid;
       if (isValid) {
         compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
@@ -140,7 +140,7 @@ export class ExploreOpportunitiesValidationService {
   checkReduceSystemAirPressureValid(reduceSystemAirPressure: ReduceSystemAirPressure, compressorInventoryItems: Array<CompressorInventoryItem>): boolean {
     let isValid: boolean = true;
     if (reduceSystemAirPressure.order != 100) {
-      let form: FormGroup = this.reduceSystemAirPressureService.getFormFromObj(reduceSystemAirPressure, compressorInventoryItems);
+      let form: UntypedFormGroup = this.reduceSystemAirPressureService.getFormFromObj(reduceSystemAirPressure, compressorInventoryItems);
       isValid = form.valid;
     }
     return isValid;
@@ -149,7 +149,7 @@ export class ExploreOpportunitiesValidationService {
   checkUseAutomaticSequencerValid(compressedAirAssessment: CompressedAirAssessment, modification: Modification, modificationResults: CompressedAirAssessmentResult, settings: Settings): boolean {
     let isValid: boolean = true;
     if (modification.useAutomaticSequencer.order != 100) {
-      let form: FormGroup = this.useAutomaticSequencerService.getFormFromObj(modification.useAutomaticSequencer);
+      let form: UntypedFormGroup = this.useAutomaticSequencerService.getFormFromObj(modification.useAutomaticSequencer);
       isValid = form.valid;
       if (isValid) {
         compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {

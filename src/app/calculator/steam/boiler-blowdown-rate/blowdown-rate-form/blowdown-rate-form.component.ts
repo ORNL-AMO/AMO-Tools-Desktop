@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { BoilerBlowdownRateService, BoilerBlowdownRateInputs } from '../boiler-blowdown-rate.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
 
@@ -26,9 +26,9 @@ export class BlowdownRateFormComponent implements OnInit {
 
   formWidth: number;
 
-  conductivityForm: FormGroup;
-  boilerForm: FormGroup;
-  operationsForm: FormGroup;
+  conductivityForm: UntypedFormGroup;
+  boilerForm: UntypedFormGroup;
+  operationsForm: UntypedFormGroup;
   setFormSub: Subscription;
   showBoiler: boolean;
   showBoilerSubscription: Subscription;

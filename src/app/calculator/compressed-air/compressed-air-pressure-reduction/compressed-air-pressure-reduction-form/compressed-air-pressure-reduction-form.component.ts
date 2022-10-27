@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirPressureReductionData, CompressedAirPressureReductionResult } from '../../../../shared/models/standalone';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { CompressedAirPressureReductionService } from '../compressed-air-pressure-reduction.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 
@@ -47,7 +47,7 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
   formWidth: number;
   showOperatingHoursModal: boolean;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   idString: string;
   individualResults: CompressedAirPressureReductionResult;
   isEditingName: boolean = false;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AddPrimaryReceiverVolume, CompressedAirAssessment, Modification } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
@@ -26,7 +26,7 @@ export class AddReceiverVolumeComponent implements OnInit {
   settings: Settings;
   increasedVolumeError: string;
 
-  form: FormGroup
+  form: UntypedFormGroup
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private addReceiverVolumeService: AddReceiverVolumeService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 

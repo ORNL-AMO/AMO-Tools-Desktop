@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { LightingReplacementResults, LightingReplacementData, LightingReplacementResult } from '../../../shared/models/lighting';
 import { LightingReplacementTreasureHunt } from '../../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../../shared/models/operations';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { LightingFixtureData } from '../lighting-fixture-data/lighting-data';
 import { MetalHalideFixtures } from '../lighting-fixture-data/metal-halide';
@@ -19,7 +19,7 @@ export class LightingReplacementService {
   operatingHours: OperatingHours;
   selectedFixtureTypes: BehaviorSubject<Array<LightingFixtureData>>;
   showAdditionalDetails: boolean = false;
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: UntypedFormBuilder) {
     this.selectedFixtureTypes = new BehaviorSubject(undefined);
   }
 
@@ -47,8 +47,8 @@ export class LightingReplacementService {
     }
   }
 
-  getFormFromObj(obj: LightingReplacementData): FormGroup {
-    let form: FormGroup = this.fb.group({
+  getFormFromObj(obj: LightingReplacementData): UntypedFormGroup {
+    let form: UntypedFormGroup = this.fb.group({
       name: [obj.name, Validators.required],
       hoursPerYear: [obj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
       wattsPerLamp: [obj.wattsPerLamp, [Validators.required, Validators.min(0)]],
@@ -66,7 +66,7 @@ export class LightingReplacementService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): LightingReplacementData {
+  getObjFromForm(form: UntypedFormGroup): LightingReplacementData {
     let tmpData: LightingReplacementData = {
       name: form.controls.name.value,
       hoursPerYear: form.controls.hoursPerYear.value,

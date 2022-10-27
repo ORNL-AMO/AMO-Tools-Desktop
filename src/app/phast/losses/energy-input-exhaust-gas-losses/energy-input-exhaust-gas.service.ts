@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/energyInputExhaustGasLosses';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 @Injectable()
 export class EnergyInputExhaustGasService {
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder) {
   }
 
-  initForm(lossNum: number): FormGroup {
+  initForm(lossNum: number): UntypedFormGroup {
     return this.formBuilder.group({
       'totalHeatInput': [0, Validators.required],
       'name': ['Loss #' + lossNum],
@@ -17,7 +17,7 @@ export class EnergyInputExhaustGasService {
     });
   }
 
-  getFormFromLoss(energyInputExhaustGas: EnergyInputExhaustGasLoss): FormGroup {
+  getFormFromLoss(energyInputExhaustGas: EnergyInputExhaustGasLoss): UntypedFormGroup {
     let tmpGroup = this.formBuilder.group({
       'totalHeatInput': [energyInputExhaustGas.totalHeatInput, Validators.required],
       'name': [energyInputExhaustGas.name],
@@ -26,7 +26,7 @@ export class EnergyInputExhaustGasService {
     return tmpGroup;
   }
 
-  getLossFromForm(form: FormGroup): EnergyInputExhaustGasLoss {
+  getLossFromForm(form: UntypedFormGroup): EnergyInputExhaustGasLoss {
     let tmpExhaustGas: EnergyInputExhaustGasLoss = {
       totalHeatInput: form.controls.totalHeatInput.value,
       otherLosses: 0.0,

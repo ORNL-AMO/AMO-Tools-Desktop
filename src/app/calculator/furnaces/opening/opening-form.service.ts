@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { CircularOpeningLoss, OpeningLoss, QuadOpeningLoss, ViewFactorInput } from '../../../shared/models/phast/losses/openingLoss';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class OpeningFormService {
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder) {
   }
 
-  initForm(lossNum?: number): FormGroup {
+  initForm(lossNum?: number): UntypedFormGroup {
     let formGroup =  this.formBuilder.group({
       'numberOfOpenings': [1, [Validators.required, Validators.min(0)]],
       'openingType': ['Round', Validators.required],
@@ -24,16 +24,16 @@ export class OpeningFormService {
     });
 
     if (!lossNum) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-      formGroup.addControl('hoursPerYear', new FormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
-      formGroup.addControl('energySourceType', new FormControl('Fuel', [Validators.required]));
-      formGroup.addControl('fuelCost', new FormControl(''));
+      formGroup.addControl('availableHeat', new UntypedFormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
+      formGroup.addControl('hoursPerYear', new UntypedFormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
+      formGroup.addControl('energySourceType', new UntypedFormControl('Fuel', [Validators.required]));
+      formGroup.addControl('fuelCost', new UntypedFormControl(''));
     }
 
     return formGroup;
   }
 
-  getFormFromLoss(loss: OpeningLoss, inAssessment = true): FormGroup {
+  getFormFromLoss(loss: OpeningLoss, inAssessment = true): UntypedFormGroup {
     let formGroup = this.formBuilder.group({
       'numberOfOpenings': [loss.numberOfOpenings, [Validators.required, Validators.min(0)]],
       'openingType': [loss.openingType, Validators.required],
@@ -49,17 +49,17 @@ export class OpeningFormService {
     });
 
     if (!inAssessment) {
-      formGroup.addControl('availableHeat', new FormControl(loss.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-      formGroup.addControl('hoursPerYear', new FormControl(loss.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
-      formGroup.addControl('energySourceType', new FormControl(loss.energySourceType, [Validators.required]));
-      formGroup.addControl('fuelCost', new FormControl(loss.fuelCost));
+      formGroup.addControl('availableHeat', new UntypedFormControl(loss.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
+      formGroup.addControl('hoursPerYear', new UntypedFormControl(loss.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
+      formGroup.addControl('energySourceType', new UntypedFormControl(loss.energySourceType, [Validators.required]));
+      formGroup.addControl('fuelCost', new UntypedFormControl(loss.fuelCost));
     }
 
     formGroup = this.setValidators(formGroup);
     return formGroup
   }
 
-  getLossFromForm(form: FormGroup): OpeningLoss {
+  getLossFromForm(form: UntypedFormGroup): OpeningLoss {
     let openingLoss: OpeningLoss = {
       numberOfOpenings: form.controls.numberOfOpenings.value,
       emissivity: form.controls.emissivity.value,
@@ -86,13 +86,13 @@ export class OpeningFormService {
   }
 
   
-  setValidators(formGroup: FormGroup): FormGroup {
+  setValidators(formGroup: UntypedFormGroup): UntypedFormGroup {
     formGroup = this.setAmbientTempValidators(formGroup);
     formGroup = this.setDimensionValidators(formGroup);
     return formGroup;
   }
 
-  setAmbientTempValidators(formGroup: FormGroup) {
+  setAmbientTempValidators(formGroup: UntypedFormGroup) {
     let ambientTemp = formGroup.controls.ambientTemp.value;
     if (ambientTemp) {
       formGroup.controls.ambientTemp.setValidators([Validators.required, Validators.max(formGroup.controls.insideTemp.value)]);
@@ -102,7 +102,7 @@ export class OpeningFormService {
     return formGroup;
   }
 
-  setDimensionValidators(formGroup: FormGroup) {
+  setDimensionValidators(formGroup: UntypedFormGroup) {
     let isSquare: boolean = formGroup.controls.openingType.value != 'Round';
     if (isSquare) {
       formGroup.controls.heightOfOpening.setValidators([Validators.required, GreaterThanValidator.greaterThan(0)]);
@@ -116,7 +116,7 @@ export class OpeningFormService {
     return formGroup;
   }
 
-  getViewFactorInput(input: FormGroup): ViewFactorInput {
+  getViewFactorInput(input: UntypedFormGroup): ViewFactorInput {
     if (input.controls.openingType.value === 'Round') {
       return {
         openingShape: 0,
@@ -132,7 +132,7 @@ export class OpeningFormService {
     };
   }
 
-  getQuadLossFromForm(form: FormGroup): QuadOpeningLoss {
+  getQuadLossFromForm(form: UntypedFormGroup): QuadOpeningLoss {
     const ratio = Math.min(form.controls.lengthOfOpening.value, form.controls.heightOfOpening.value) / form.controls.wallThickness.value;
     let quadOpeningLoss: QuadOpeningLoss = {
       emissivity: form.controls.emissivity.value,
@@ -149,7 +149,7 @@ export class OpeningFormService {
     return quadOpeningLoss;
   }
 
-  getCircularLossFromForm(form: FormGroup): CircularOpeningLoss {
+  getCircularLossFromForm(form: UntypedFormGroup): CircularOpeningLoss {
     const ratio = form.controls.lengthOfOpening.value / form.controls.wallThickness.value;
     let circularOpeningLoss: CircularOpeningLoss = {
       emissivity: form.controls.emissivity.value,

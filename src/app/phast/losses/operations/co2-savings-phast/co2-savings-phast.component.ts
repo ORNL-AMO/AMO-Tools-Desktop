@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
@@ -37,7 +37,7 @@ export class Co2SavingsPhastComponent implements OnInit {
   mixedCO2EmissionsOutputRate: number;
 
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   hasValidSubRegion: boolean;
   subregions: Array<{
     subregion: string,

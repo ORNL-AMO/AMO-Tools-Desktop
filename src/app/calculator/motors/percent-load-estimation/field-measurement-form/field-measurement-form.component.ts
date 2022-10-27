@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { FieldMeasurementInputs, PercentLoadEstimationService } from '../percent-load-estimation.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-field-measurement-form',
@@ -13,7 +13,7 @@ export class FieldMeasurementFormComponent implements OnInit {
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<FieldMeasurementInputs>();
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   amps: string = 'Amps';
   volts: string = 'Volts';

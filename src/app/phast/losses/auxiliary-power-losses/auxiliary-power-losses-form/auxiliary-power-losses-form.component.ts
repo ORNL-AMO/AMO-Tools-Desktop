@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { AuxiliaryPowerCompareService } from '../auxiliary-power-compare.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { AuxiliaryPowerLossesService } from '../auxiliary-power-losses.service';
 import { AuxiliaryPowerLoss } from '../../../../shared/models/phast/losses/auxiliaryPowerLoss';
 @Component({
@@ -10,7 +10,7 @@ import { AuxiliaryPowerLoss } from '../../../../shared/models/phast/losses/auxil
 })
 export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @Input()
-  auxLossesForm: FormGroup;
+  auxLossesForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

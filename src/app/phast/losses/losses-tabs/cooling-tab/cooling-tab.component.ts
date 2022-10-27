@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { CoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss';
 import { CoolingLossesCompareService } from '../../cooling-losses/cooling-losses-compare.service';
 import { Subscription } from 'rxjs';
@@ -108,14 +108,14 @@ export class CoolingTabComponent implements OnInit {
 
   checkLossValid(loss: CoolingLoss) {
     if (loss.coolingLossType === 'Gas') {
-      let tmpForm: FormGroup = this.coolingFormService.initGasFormFromLoss(loss);
+      let tmpForm: UntypedFormGroup = this.coolingFormService.initGasFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;
       }
     } else if (loss.coolingLossType === 'Liquid') {
-      let tmpForm: FormGroup = this.coolingFormService.initLiquidFormFromLoss(loss);
+      let tmpForm: UntypedFormGroup = this.coolingFormService.initLiquidFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {

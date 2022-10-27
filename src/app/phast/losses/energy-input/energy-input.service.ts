@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -7,9 +7,9 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 @Injectable()
 export class EnergyInputService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) {
   }
-  initForm(lossNum: number, settings: Settings): FormGroup {
+  initForm(lossNum: number, settings: Settings): UntypedFormGroup {
     let coalHeatingDefault: number = 12000;
     let electrodeHeatingDefault: number = 14000;
     if (settings.unitsOfMeasure != 'Imperial') {
@@ -29,7 +29,7 @@ export class EnergyInputService {
     })
   }
 
-  getLossFromForm(form: FormGroup): EnergyInputEAF {
+  getLossFromForm(form: UntypedFormGroup): EnergyInputEAF {
     let tmpEnergyInput: EnergyInputEAF = {
       naturalGasHeatInput: form.controls.naturalGasHeatInput.value,
       flowRateInput: form.controls.flowRateInput.value,
@@ -44,7 +44,7 @@ export class EnergyInputService {
     return tmpEnergyInput;
   }
 
-  getFormFromLoss(loss: EnergyInputEAF, minElectricityInput: number): FormGroup {
+  getFormFromLoss(loss: EnergyInputEAF, minElectricityInput: number): UntypedFormGroup {
     let electricityInputValidators = this.getElectricityInputValidators(minElectricityInput);
     return this.formBuilder.group({
       naturalGasHeatInput: [loss.naturalGasHeatInput, Validators.required],

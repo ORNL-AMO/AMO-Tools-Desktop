@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FieldDataWarnings, PsatWarningService, MotorWarnings, OperationsWarnings } from '../../psat-warning.service';
 import { FieldDataService } from '../../field-data/field-data.service';
 import { PumpFluidService } from '../../pump-fluid/pump-fluid.service';
@@ -44,23 +44,23 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     pumpHead: 0.0
   };
 
-  baselinePumpFluidForm: FormGroup;
-  modificationPumpFluidForm: FormGroup;
+  baselinePumpFluidForm: UntypedFormGroup;
+  modificationPumpFluidForm: UntypedFormGroup;
 
-  baselineMotorForm: FormGroup;
-  modificationMotorForm: FormGroup;
+  baselineMotorForm: UntypedFormGroup;
+  modificationMotorForm: UntypedFormGroup;
 
   baselineMotorWarnings: MotorWarnings;
   modificationMotorWarnings: MotorWarnings;
 
-  baselineFieldDataForm: FormGroup;
-  modificationFieldDataForm: FormGroup;
+  baselineFieldDataForm: UntypedFormGroup;
+  modificationFieldDataForm: UntypedFormGroup;
 
   baselineFieldDataWarnings: FieldDataWarnings;
   modificationFieldDataWarnings: FieldDataWarnings;
 
-  baselineOperationsForm: FormGroup;
-  modificationOperationsForm: FormGroup;
+  baselineOperationsForm: UntypedFormGroup;
+  modificationOperationsForm: UntypedFormGroup;
 
   baselineOperationsWarnings: OperationsWarnings;
   modificationOperationsaWarnings: OperationsWarnings;

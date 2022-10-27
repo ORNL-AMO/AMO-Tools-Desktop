@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Directory } from '../../shared/models/directory';
 import { Router } from '@angular/router';
  
 import { Settings } from '../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
@@ -26,15 +26,15 @@ export class AssessmentCreateComponent implements OnInit {
 
 
   @ViewChild('createModal', { static: false }) public createModal: ModalDirective;
-  newAssessmentForm: FormGroup;
+  newAssessmentForm: UntypedFormGroup;
   canCreate: boolean;
   directories: Array<Directory>;
   showNewFolder: boolean = false;
-  newFolderForm: FormGroup;
+  newFolderForm: UntypedFormGroup;
   directory: Directory;
   settings: Settings;
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private assessmentService: AssessmentService,
     private router: Router,
     private settingsDbService: SettingsDbService,

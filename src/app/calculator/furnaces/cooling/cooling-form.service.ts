@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CoolingLoss, GasCoolingLoss, LiquidCoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
 import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class CoolingFormService {
 
-  constructor(private formBuilder: FormBuilder){}
+  constructor(private formBuilder: UntypedFormBuilder){}
 
-  initLiquidCoolingForm(settings: Settings, assesmentLossNum?: number): FormGroup {
+  initLiquidCoolingForm(settings: Settings, assesmentLossNum?: number): UntypedFormGroup {
     let lossNumber = assesmentLossNum? assesmentLossNum : 1;
 
     let defaultDensity: number = 8.338;
@@ -31,7 +31,7 @@ export class CoolingFormService {
     });
   }
 
-  initGasCoolingForm(settings: Settings, assesmentLossNum?: number): FormGroup {
+  initGasCoolingForm(settings: Settings, assesmentLossNum?: number): UntypedFormGroup {
     let lossNumber = assesmentLossNum? assesmentLossNum : 1;
     
     let defaultDensity: number = .074887;
@@ -54,7 +54,7 @@ export class CoolingFormService {
     });
   }
 
-  initLiquidFormFromLoss(loss: CoolingLoss): FormGroup {
+  initLiquidFormFromLoss(loss: CoolingLoss): UntypedFormGroup {
     let formGroup = this.formBuilder.group({
       'avgSpecificHeat': [loss.liquidCoolingLoss.specificHeat,  [Validators.required, Validators.min(0)]],
       'density': [loss.liquidCoolingLoss.density, [Validators.required, Validators.min(0)]],
@@ -69,7 +69,7 @@ export class CoolingFormService {
     return formGroup;
   }
 
-  initLiquidLossFromForm(form: FormGroup): CoolingLoss {
+  initLiquidLossFromForm(form: UntypedFormGroup): CoolingLoss {
     let tmpLoss: CoolingLoss = {
       name: form.controls.name.value,
       coolingMedium: form.controls.coolingMedium.value,
@@ -85,7 +85,7 @@ export class CoolingFormService {
     return tmpLoss;
   }
 
-  initGasFormFromLoss(loss: CoolingLoss): FormGroup {
+  initGasFormFromLoss(loss: CoolingLoss): UntypedFormGroup {
     return this.formBuilder.group({
       'avgSpecificHeat': [loss.gasCoolingLoss.specificHeat,  [Validators.required, Validators.min(0)]],
       'gasFlow': [loss.gasCoolingLoss.flowRate,  [Validators.required, Validators.min(0)]],
@@ -98,7 +98,7 @@ export class CoolingFormService {
     });
   }
 
-  initGasLossFromForm(form: FormGroup): CoolingLoss {
+  initGasLossFromForm(form: UntypedFormGroup): CoolingLoss {
     let tmpLoss: CoolingLoss = {
       name: form.controls.name.value,
       coolingMedium: form.controls.coolingMedium.value,

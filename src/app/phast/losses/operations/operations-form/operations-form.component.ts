@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener, SimpleChanges } from '@angular/core';
 import { OperationsCompareService } from '../operations-compare.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { OperationsService, OperationsWarnings } from '../operations.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { PHAST, PhastCo2SavingsData } from '../../../../shared/models/phast/phast';
@@ -21,7 +21,7 @@ export class OperationsFormComponent implements OnInit {
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
   @Input()
-  operationsForm: FormGroup;
+  operationsForm: UntypedFormGroup;
   @Input()
   baselineSelected: boolean;
   @Input()

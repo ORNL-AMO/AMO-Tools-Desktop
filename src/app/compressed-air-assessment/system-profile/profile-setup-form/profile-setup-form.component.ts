@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
@@ -14,7 +14,7 @@ import { SystemProfileService } from '../system-profile.service';
 })
 export class ProfileSetupFormComponent implements OnInit {
   settings: Settings;
-  form: FormGroup;
+  form: UntypedFormGroup;
   compressedAirAssessmentSub: Subscription;
   isFormChange: boolean = false;
   dayTypes: Array<CompressedAirDayType>;

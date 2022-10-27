@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
 
 @Injectable()
 export class AtmosphereLossesService {
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder) {
   }
 
   //get empty atmosphere form
-  initForm(lossNum: number): FormGroup {
+  initForm(lossNum: number): UntypedFormGroup {
     return this.formBuilder.group({
       'atmosphereGas': ['', Validators.required],
       'specificHeat': ['', Validators.required],
@@ -22,7 +22,7 @@ export class AtmosphereLossesService {
   }
 
   //get form from object
-  getAtmosphereForm(loss: AtmosphereLoss): FormGroup {
+  getAtmosphereForm(loss: AtmosphereLoss): UntypedFormGroup {
     return this.formBuilder.group({
       'atmosphereGas': [loss.atmosphereGas, Validators.required],
       'specificHeat': [loss.specificHeat, Validators.required],
@@ -34,7 +34,7 @@ export class AtmosphereLossesService {
     });
   }
 
-  getLossFromForm(form: FormGroup): AtmosphereLoss {
+  getLossFromForm(form: UntypedFormGroup): AtmosphereLoss {
     let tmpLoss: AtmosphereLoss = {
       atmosphereGas: form.controls.atmosphereGas.value,
       specificHeat: form.controls.specificHeat.value,

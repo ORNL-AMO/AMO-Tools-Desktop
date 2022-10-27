@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { CoolingLossesCompareService } from '../cooling-losses-compare.service';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { GasCoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss';
 import { CoolingFormService, GasCoolingWarnings } from '../../../../calculator/furnaces/cooling/cooling-form.service';
 
@@ -12,7 +12,7 @@ import { CoolingFormService, GasCoolingWarnings } from '../../../../calculator/f
 })
 export class GasCoolingLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: FormGroup;
+  lossesForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

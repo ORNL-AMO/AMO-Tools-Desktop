@@ -2,7 +2,7 @@ import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@
 import { PHAST } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { OperationsService } from './operations.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { OperatingHours, OperatingCosts } from '../../../shared/models/operations';
 import { Subscription } from 'rxjs';
 @Component({
@@ -30,7 +30,7 @@ export class OperationsComponent implements OnInit {
   @Input()
   selected: boolean;
 
-  operationsForm: FormGroup;
+  operationsForm: UntypedFormGroup;
   isFirstChange: boolean = true;
   constructor(private operationsService: OperationsService) { }
 

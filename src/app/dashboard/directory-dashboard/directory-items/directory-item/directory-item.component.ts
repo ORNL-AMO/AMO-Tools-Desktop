@@ -4,7 +4,7 @@ import { Directory } from '../../../../shared/models/directory';
 import { Assessment } from '../../../../shared/models/assessment';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as _ from 'lodash';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
 import { AssessmentService } from '../../../assessment.service';
@@ -22,7 +22,7 @@ export class DirectoryItemComponent implements OnInit {
   @Input()
   directory: Directory;
 
-  editForm: FormGroup;
+  editForm: UntypedFormGroup;
   allDirectories: Array<Directory>;
   @ViewChild('editModal', { static: false }) public editModal: ModalDirective;
   updateDashboardDataSub: Subscription;
@@ -34,7 +34,7 @@ export class DirectoryItemComponent implements OnInit {
   sortBy: { value: string, direction: string };
   sortBySub: Subscription;
   constructor(   private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService, 
-    private formBuilder: FormBuilder, private dashboardService: DashboardService, private directoryDashboardService: DirectoryDashboardService) { }
+    private formBuilder: UntypedFormBuilder, private dashboardService: DashboardService, private directoryDashboardService: DirectoryDashboardService) { }
 
   ngOnInit() {    
     this.directory.selected = false;

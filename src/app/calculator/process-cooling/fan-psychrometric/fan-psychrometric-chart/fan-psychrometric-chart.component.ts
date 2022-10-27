@@ -1,6 +1,6 @@
 
 import { Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PlotlyService } from 'angular-plotly.js';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
@@ -17,7 +17,7 @@ import { GasDensityFormService } from '../../../fans/fan-analysis/fan-analysis-f
 })
 export class FanPsychrometricChartComponent implements OnInit {
   @Input()
-  gasDensityForm: FormGroup;
+  gasDensityForm: UntypedFormGroup;
   @Input()
   settings: Settings;
 
@@ -61,7 +61,7 @@ export class FanPsychrometricChartComponent implements OnInit {
 
   initRenderChart() {
     this.chart = this.getEmptyChart();
-    let form: FormGroup = this.gasDensityFormService.getGasDensityFormFromObj(this.inputData, this.settings);
+    let form: UntypedFormGroup = this.gasDensityFormService.getGasDensityFormFromObj(this.inputData, this.settings);
     if (form.valid && this.psychrometricResults) {
       let relativeHumiditiesCurves: Array<TraceData> = this.addRelativeHumidityCurves();
       let topCurveTraceData: TraceData = relativeHumiditiesCurves[relativeHumiditiesCurves.length - 1]; 

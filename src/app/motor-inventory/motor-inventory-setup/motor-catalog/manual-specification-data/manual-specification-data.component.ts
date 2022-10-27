@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ManualSpecificationOptions, MotorItem } from '../../../motor-inventory';
 import { MotorCatalogService } from '../motor-catalog.service';
@@ -13,7 +13,7 @@ import { ManualSpecificationDataService } from './manual-specification-data.serv
 })
 export class ManualSpecificationDataComponent implements OnInit {
 
-  motorForm: FormGroup;
+  motorForm: UntypedFormGroup;
   selectedMotorItemSub: Subscription;
   motorInventoryDataSub: Subscription;
   displayOptions: ManualSpecificationOptions;

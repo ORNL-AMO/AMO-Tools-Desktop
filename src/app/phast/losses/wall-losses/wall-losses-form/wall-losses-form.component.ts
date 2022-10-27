@@ -5,7 +5,7 @@ import { WallLossesSurface } from '../../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { WallFormService } from '../../../../calculator/furnaces/wall/wall-form.service';
 import { firstValueFrom } from 'rxjs';
 import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
@@ -17,7 +17,7 @@ import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-su
 })
 export class WallLossesFormComponent implements OnInit {
   @Input()
-  wallLossesForm: FormGroup;
+  wallLossesForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

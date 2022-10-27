@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, ElementRef, ViewChild, HostListener} from '@angular/core';
 import {PSAT} from '../../../shared/models/psat';
 import {Settings} from '../../../shared/models/settings';
-import {FormGroup} from '@angular/forms';
+import {UntypedFormGroup} from '@angular/forms';
 import {SettingsDbService} from '../../../indexedDb/settings-db.service';
 import {SpecificSpeedService} from './specific-speed.service';
 import {Assessment} from '../../../shared/models/assessment';
@@ -39,7 +39,7 @@ export class SpecificSpeedComponent implements OnInit {
   smallScreenTab: string = 'form';
 
   currentField: string;
-  speedForm: FormGroup;
+  speedForm: UntypedFormGroup;
   specificSpeed: number;
   efficiencyCorrection: number;
   toggleCalculate: boolean = true;

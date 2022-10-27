@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { HeaderService, HeaderRanges, HeaderWarnings} from '../header.service';
 import { SsmtService } from '../../ssmt.service';
@@ -14,7 +14,7 @@ import { BoilerWarnings } from '../../boiler/boiler.service';
 })
 export class HeaderFormComponent implements OnInit {
   @Input()
-  headerForm: FormGroup;
+  headerForm: UntypedFormGroup;
   @Input()
   selected: boolean;
   @Input()

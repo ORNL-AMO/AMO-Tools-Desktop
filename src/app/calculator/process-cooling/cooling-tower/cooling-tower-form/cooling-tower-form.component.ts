@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, HostListener, Input, ElementRef, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { CoolingTowerService } from '../cooling-tower.service';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -37,7 +37,7 @@ export class CoolingTowerFormComponent implements OnInit {
   formWidth: number;
   showOperatingHoursModal: boolean;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   idString: string;
   caseResultData: CoolingTowerResult;
   isEditingName: boolean = false;

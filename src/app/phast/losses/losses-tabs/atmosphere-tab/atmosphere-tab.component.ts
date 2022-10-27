@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { AtmosphereLossesCompareService } from '../../atmosphere-losses/atmosphere-losses-compare.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { Subscription } from 'rxjs';
 import { AtmosphereFormService, AtmosphereLossWarnings } from '../../../../calculator/furnaces/atmosphere/atmosphere-form.service';
@@ -104,7 +104,7 @@ export class AtmosphereTabComponent implements OnInit {
   }
 
   checkLossValid(loss: AtmosphereLoss) {
-    let tmpForm: FormGroup = this.atmosphereFormService.getAtmosphereForm(loss);
+    let tmpForm: UntypedFormGroup = this.atmosphereFormService.getAtmosphereForm(loss);
     if (tmpForm.status === 'VALID') {
       return true;
     } else {

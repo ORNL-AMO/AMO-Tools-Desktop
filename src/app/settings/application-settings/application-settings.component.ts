@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsService } from '../settings.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { CoreService } from '../../core/core.service';
 declare var google: any;
 
@@ -12,7 +12,7 @@ declare var google: any;
 })
 export class ApplicationSettingsComponent implements OnInit {
   @Input()
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
   @Output('startSavePolling')
   startSavePolling = new EventEmitter<boolean>();
   @Input()

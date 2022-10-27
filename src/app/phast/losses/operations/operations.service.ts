@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PHAST } from '../../../shared/models/phast/phast';
 import { OperatingCosts, OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
@@ -8,10 +8,10 @@ import { Settings } from '../../../shared/models/settings';
 @Injectable()
 export class OperationsService {
 
-  constructor(private formBuilder: FormBuilder) { 
+  constructor(private formBuilder: UntypedFormBuilder) { 
   }
 
-  initForm(phast: PHAST, settings: Settings): FormGroup {
+  initForm(phast: PHAST, settings: Settings): UntypedFormGroup {
     let form = this.formBuilder.group({
       hoursPerYear: [phast.operatingHours.hoursPerYear, Validators.required],
       fuelCost: [phast.operatingCosts.fuelCost, Validators.required],
@@ -39,7 +39,7 @@ export class OperationsService {
     return form;
   }
 
-  getOperatingDataFromForm(form: FormGroup): { costs: OperatingCosts, hours: OperatingHours } {
+  getOperatingDataFromForm(form: UntypedFormGroup): { costs: OperatingCosts, hours: OperatingHours } {
     let costs: OperatingCosts = {
       electricityCost: form.controls.electricityCost.value,
       steamCost: form.controls.steamCost.value,

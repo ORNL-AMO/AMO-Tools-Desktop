@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { firstValueFrom, Subscription } from 'rxjs';
@@ -191,9 +191,9 @@ export class WasteWaterComponent implements OnInit {
   }
 
   setDisableNext(wasteWater: WasteWater) {
-    let systemBasicsForm: FormGroup = this.systemBasicsService.getFormFromObj(wasteWater.systemBasics);
-    let aeratorPerformanceForm: FormGroup = this.aeratorPerformanceFormService.getFormFromObj(wasteWater.baselineData.aeratorPerformanceData);
-    let activatedSludgeForm: FormGroup = this.activatedSludgeFormService.getFormFromObj(wasteWater.baselineData.activatedSludgeData);
+    let systemBasicsForm: UntypedFormGroup = this.systemBasicsService.getFormFromObj(wasteWater.systemBasics);
+    let aeratorPerformanceForm: UntypedFormGroup = this.aeratorPerformanceFormService.getFormFromObj(wasteWater.baselineData.aeratorPerformanceData);
+    let activatedSludgeForm: UntypedFormGroup = this.activatedSludgeFormService.getFormFromObj(wasteWater.baselineData.activatedSludgeData);
     if (this.setupTab == 'system-basics' && systemBasicsForm.valid) {
       this.disableNext = false;
     } else if (this.setupTab == 'activated-sludge' && activatedSludgeForm.valid && systemBasicsForm.valid) {

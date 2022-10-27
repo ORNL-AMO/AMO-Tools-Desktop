@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
@@ -18,7 +18,7 @@ export class NoLoadComponent implements OnInit {
 
   settings: Settings;
   selectedCompressorSub: Subscription;
-  form: FormGroup;
+  form: UntypedFormGroup;
   isFormChange: boolean = false;
   noLoadLabel: string;
   validationMessages: ValidationMessageMap;

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-fsat-settings',
@@ -8,7 +8,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 })
 export class FsatSettingsComponent implements OnInit {
   @Input()
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
   @Output('save')
   save = new EventEmitter<boolean>();
 

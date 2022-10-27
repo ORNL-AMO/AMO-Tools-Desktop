@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 import { PressureTurbine, CondensingTurbine } from '../../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SsmtService } from '../../../../ssmt.service';
 
 
@@ -13,11 +13,11 @@ import { SsmtService } from '../../../../ssmt.service';
 })
 export class ExploreTurbineFormComponent implements OnInit {
   @Input()
-  baselineForm: FormGroup;
+  baselineForm: UntypedFormGroup;
   @Input()
   settings: Settings;
   @Input()
-  modificationForm: FormGroup;
+  modificationForm: UntypedFormGroup;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
   @Input()

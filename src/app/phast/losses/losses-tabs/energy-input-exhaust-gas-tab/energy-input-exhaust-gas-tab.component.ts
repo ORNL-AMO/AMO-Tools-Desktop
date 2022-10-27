@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { EnergyInputExhaustGasService } from '../../energy-input-exhaust-gas-losses/energy-input-exhaust-gas.service';
 import { EnergyInputExhaustGasCompareService } from '../../energy-input-exhaust-gas-losses/energy-input-exhaust-gas-compare.service';
 import { EnergyInputExhaustGasLoss } from '../../../../shared/models/phast/losses/energyInputExhaustGasLosses';
@@ -101,7 +101,7 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
 
 
   checkLossValid(loss: EnergyInputExhaustGasLoss) {
-    let tmpForm: FormGroup = this.energyInputExhaustGasService.getFormFromLoss(loss);
+    let tmpForm: UntypedFormGroup = this.energyInputExhaustGasService.getFormFromLoss(loss);
     if (tmpForm.status === 'VALID') {
       return true;
     } else {

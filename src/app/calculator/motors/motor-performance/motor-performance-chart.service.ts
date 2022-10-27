@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TraceCoordinates, SimpleChart, TraceData, DataPoint } from '../../../shared/models/plotting';
 import { PsatService } from '../../../psat/psat.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { BehaviorSubject } from 'rxjs';
 
@@ -24,7 +24,7 @@ export class MotorPerformanceChartService {
     this.selectedDataPoints = new BehaviorSubject<Array<MotorPoint>>(selectedDataPoints);
   }
 
-  buildLineData(performanceForm: FormGroup, settings: Settings): Array<TraceCoordinates> {
+  buildLineData(performanceForm: UntypedFormGroup, settings: Settings): Array<TraceCoordinates> {
     let currentData: TraceCoordinates = {x: [], y: []};
     let powerData: TraceCoordinates = {x: [], y: []};
     let efficiencyData: TraceCoordinates = {x: [], y: []};
@@ -51,7 +51,7 @@ export class MotorPerformanceChartService {
     return [currentData, powerData, efficiencyData];
   }
 
-  calculateMotorPerformance(loadFactor: number, performanceForm: FormGroup, settings: Settings) {
+  calculateMotorPerformance(loadFactor: number, performanceForm: UntypedFormGroup, settings: Settings) {
       if (performanceForm.valid) {
         let results = this.psatService.motorPerformance(
           performanceForm.controls.frequency.value,

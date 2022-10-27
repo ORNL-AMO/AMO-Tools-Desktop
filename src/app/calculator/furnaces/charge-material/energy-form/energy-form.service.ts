@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { EnergyData } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 
 @Injectable()
 export class EnergyFormService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
   
-  initEnergyForm(): FormGroup {
+  initEnergyForm(): UntypedFormGroup {
     let formGroup = this.formBuilder.group({
       'energySourceType': ['Fuel'],
       'hoursPerYear': [8760,  [Validators.required, Validators.min(0), Validators.max(8760)]],
@@ -18,7 +18,7 @@ export class EnergyFormService {
     return formGroup;
   }
 
-  getEnergyForm(energyData: EnergyData): FormGroup {
+  getEnergyForm(energyData: EnergyData): UntypedFormGroup {
     let formGroup = this.formBuilder.group({
       'energySourceType': [energyData.energySourceType],
       'hoursPerYear': [energyData.hoursPerYear,  [Validators.required, Validators.min(0), Validators.max(8760)]],
@@ -28,7 +28,7 @@ export class EnergyFormService {
     return formGroup;
   }
 
-  buildEnergyData(energyForm: FormGroup): EnergyData {
+  buildEnergyData(energyForm: UntypedFormGroup): EnergyData {
     let energyData: EnergyData = {
       energySourceType: energyForm.controls.energySourceType.value,
       hoursPerYear: energyForm.controls.hoursPerYear.value,
