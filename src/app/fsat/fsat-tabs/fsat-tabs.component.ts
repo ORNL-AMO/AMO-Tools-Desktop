@@ -313,7 +313,8 @@ export class FsatTabsComponent implements OnInit {
     if (tmpStepTab === 'fan-field-data') {
       this.fsatService.mainTab.next('assessment');
     } else {
-      let assessmentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == tmpStepTab });
+      //let assessmentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == tmpStepTab });
+      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
       let nextTab: string = this.stepTabs[assessmentTabIndex + 1];
       this.fsatService.stepTab.next(nextTab);
     }
@@ -322,7 +323,8 @@ export class FsatTabsComponent implements OnInit {
   back() {
     let tmpStepTab: string = this.fsatService.stepTab.getValue();
     if (tmpStepTab !== 'system-basics' && this.mainTab == 'system-setup') {
-      let assessmentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == tmpStepTab });
+      //let assessmentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == tmpStepTab });
+      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
       let nextTab: string = this.stepTabs[assessmentTabIndex - 1];
       this.fsatService.stepTab.next(nextTab);
     } else if (this.mainTab == 'assessment') {
