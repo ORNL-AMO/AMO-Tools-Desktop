@@ -133,12 +133,20 @@
       <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add
         Scenarios</button>
     </div>
-    <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseTabs()">
-      <span *ngIf="!tabsCollapsed" class="fa fa-caret-up pr-2"></span>
-      <span *ngIf="tabsCollapsed" class="fa fa-caret-down pr-2"></span>
+    <div *ngIf="tabsCollapsed" class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseTabs()">
+      <span class="fa fa-caret-down pr-2"></span>
       <span class="small text-uppercase">Menu</span>
     </div>  
   </div>
+
+  <div *ngIf="!tabsCollapsed" class="d-flex d-md-none flex-fill align-items-center justify-content-center tabs subtabs psat" [ngClass]="{'br-color-white': selectedModification}">
+    <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseTabs()">
+      <span class="fa fa-caret-up pr-2"></span>
+      <span class="small text-uppercase">Menu</span>
+    </div>
+  </div>
+
+
 
   <nav *ngIf="currentTab == 'modify-conditions'" class="hide-print w-100">
     <app-modify-conditions-tabs [settings]="settings"></app-modify-conditions-tabs>
