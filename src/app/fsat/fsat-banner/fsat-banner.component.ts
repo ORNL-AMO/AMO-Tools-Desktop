@@ -40,4 +40,32 @@ export class FsatBannerComponent implements OnInit {
     this.bannerCollapsed = !this.bannerCollapsed;
     window.dispatchEvent(new Event("resize"));
   }
+
+  back(){
+    if (this.mainTab == 'calculators') {
+      this.fsatService.mainTab.next('sankey');
+    } else if (this.mainTab == 'sankey') {
+      this.fsatService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.fsatService.mainTab.next('diagram');
+    } else if (this.mainTab == 'diagram') {
+      this.fsatService.mainTab.next('assessment');
+    } else if (this.mainTab == 'assessment') {
+      this.fsatService.mainTab.next('system-setup');
+    }
+  }
+
+  continue() {
+    if (this.mainTab == 'system-setup') {
+      this.fsatService.mainTab.next('assessment');
+    } else if (this.mainTab == 'assessment') {
+      this.fsatService.mainTab.next('diagram');
+    } else if (this.mainTab == 'diagram') {
+      this.fsatService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.fsatService.mainTab.next('sankey');
+    } else if (this.mainTab == 'sankey') {
+      this.fsatService.mainTab.next('calculators');
+    }
+  }
 }

@@ -23,3 +23,20 @@
     border-left: solid 1px;
     border-right: none;
   }
+
+
+@media screen and (max-width: 1024px) {
+    .modal-dialog{
+        top: 0;
+        max-width: none;
+        margin: 5px;
+    }
+    .modal-body{
+        padding-top: 0px;
+        padding-bottom: 0px;
+        padding-left: 15px;
+        padding-right: 15px;
+        background-color: #ececec;
+        height: 100vh;
+    }
+}
