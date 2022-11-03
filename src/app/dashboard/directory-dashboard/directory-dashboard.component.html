@@ -6,10 +6,12 @@
             </div>
             <div class="card-body p-2">
                 <app-directory-dashboard-menu [dashboardCollapsed]="dashboardCollapsed"></app-directory-dashboard-menu>
-                <hr class="my-1" [ngClass]="{'collapse': dashboardCollapsed}">
-                <app-directory-contact-info [ngClass]="{'collapse': dashboardCollapsed}"></app-directory-contact-info>
-                <hr class="my-1" [ngClass]="{'collapse': dashboardCollapsed}">
-                <app-directory-summary [ngClass]="{'collapse': dashboardCollapsed}"></app-directory-summary>
+                <ng-container *ngIf="!dashboardCollapsed">
+                    <hr class="my-1">
+                    <app-directory-contact-info></app-directory-contact-info>
+                    <hr class="my-1">
+                    <app-directory-summary></app-directory-summary>
+                </ng-container>
             </div>
         </div>
         <div [ngClass]="{'row': dashboardView == 'grid', 'list-view': dashboardView == 'list'}">
