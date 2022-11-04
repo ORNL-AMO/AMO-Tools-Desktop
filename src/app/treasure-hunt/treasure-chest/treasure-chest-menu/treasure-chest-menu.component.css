@@ -97,7 +97,7 @@ a.list-group-item.active:hover{
       padding-right: 2px;
   }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 992px) {
     .nav-btn{
         background: #2E4053;
         color: white;

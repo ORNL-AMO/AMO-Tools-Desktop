@@ -58,23 +58,22 @@
 		</div>
 	</div>
 
-	<div class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto"
-		[ngClass]="{'collapse': bannerCollapsed}">
-		<div class="nav-item" [ngClass]="{'collapse': bannerCollapsed}">
+	<div *ngIf="!bannerCollapsed" class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">
+		<div class="nav-item">
 			<a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup', 'disabled':disableTabs == true}"
 				(click)="changeTab('system-setup')">Facility Basics</a>
 		</div>
-		<div class="nav-item" [ngClass]="{'collapse': bannerCollapsed}">
+		<div class="nav-item">
 			<a class="nav-link"
 				[ngClass]="{'active': mainTab == 'find-treasure', 'disabled': assessment.treasureHunt.setupDone != true || disableTabs == true}"
 				(click)="changeTab('find-treasure')">Find Treasure</a>
 		</div>
-		<div class="nav-item" [ngClass]="{'collapse': bannerCollapsed}">
+		<div class="nav-item">
 			<a class="nav-link"
 				[ngClass]="{'active': mainTab == 'treasure-chest', 'disabled': assessment.treasureHunt.setupDone != true || disableTabs == true}"
 				(click)="changeTab('treasure-chest')">Treasure Chest</a>
 		</div>
-		<div class="nav-item" [ngClass]="{'collapse': bannerCollapsed}">
+		<div class="nav-item">
 			<a class="nav-link"
 				[ngClass]="{'active': mainTab == 'report', 'disabled': assessment.treasureHunt.setupDone != true || disableTabs == true}"
 				(click)="changeTab('report')">Report</a>
@@ -108,7 +107,7 @@
 	</div>
 
 	<div *ngIf="bannerCollapsed" class="d-block d-lg-none ml-2 pr-2 h-100 flex-wrap">
-		<div *ngIf="bannerCollapsed" class="pl-2 border-left home-nav-item d-block" (click)="collapseBanner()">
+		<div class="pl-2 border-left home-nav-item d-block" (click)="collapseBanner()">
 			<span class="fa fa-bars"></span>
 		</div>
 	</div>
@@ -117,22 +116,20 @@
 		<div *ngIf="!bannerCollapsed" class="pl-2 border-left home-nav-item d-block" (click)="collapseBanner()">
 			<span class="fa fa-bars"></span>
 		</div>
-		<div class="pl-2 border-left home-nav-item d-block" [ngClass]="{'collapse': bannerCollapsed}">
+		<div class="pl-2 border-left home-nav-item d-block">
 			<a class="user-manual" href="assets/user-manuals/Treasure-Hunt-User-Manual.pdf" target="_blank">
-				<span class="fa fa-book" [ngClass]="{'collapse': bannerCollapsed}"></span>
+				<span class="fa fa-book"></span>
 			</a>
 		</div>
-		<div class="pl-2 border-left home-nav-item d-block" [routerLink]="['/settings']"
-			[ngClass]="{'collapse': bannerCollapsed}">
-			<span class="fa fa-cog" [ngClass]="{'collapse': bannerCollapsed}"></span>
+		<div class="pl-2 border-left home-nav-item d-block" [routerLink]="['/settings']">
+			<span class="fa fa-cog"></span>
 		</div>
 		<div class="pl-2 border-left home-nav-item d-block"
-			[routerLink]="['/directory-dashboard', assessment.directoryId]" [ngClass]="{'collapse': bannerCollapsed}">
-			<span class="fa fa-folder-open" [ngClass]="{'collapse': bannerCollapsed}"></span>
+			[routerLink]="['/directory-dashboard', assessment.directoryId]">
+			<span class="fa fa-folder-open"></span>
 		</div>
-		<div class="pl-2 border-left home-nav-item d-block" [routerLink]="['/landing-screen']"
-			[ngClass]="{'collapse': bannerCollapsed}">
-			<span class="fa fa-home" [ngClass]="{'collapse': bannerCollapsed}"></span>
+		<div class="pl-2 border-left home-nav-item d-block" [routerLink]="['/landing-screen']">
+			<span class="fa fa-home"></span>
 		</div>
 	</div>
 
