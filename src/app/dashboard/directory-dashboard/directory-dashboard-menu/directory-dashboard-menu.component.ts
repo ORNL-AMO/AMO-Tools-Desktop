@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { Directory } from '../../../shared/models/directory';
@@ -17,6 +17,9 @@ import { InventoryItem } from '../../../shared/models/inventory/inventory';
   styleUrls: ['./directory-dashboard-menu.component.css']
 })
 export class DirectoryDashboardMenuComponent implements OnInit { 
+
+  @Input()
+  dashboardCollapsed: boolean;
   
   breadCrumbs: Array<Directory>;
   directory: Directory;
