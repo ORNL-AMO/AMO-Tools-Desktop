@@ -64,29 +64,29 @@
 	</div>
 
 
-	<div class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto" [ngClass]="{'collapse': bannerCollapsed}">
+	<div *ngIf="!bannerCollapsed" class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">
 		
-		<div class="nav-item" [ngClass]="{'collapse': bannerCollapsed}">
+		<div class="nav-item">
 			<a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')">System
 				Setup</a>
 		</div>
-		<div class="nav-item" [ngClass]="{'collapse': bannerCollapsed}">
+		<div class="nav-item">
 			<a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.psat.setupDone}"
 				(click)="changeTab('assessment')">Assessment</a>
 		</div>
-		<div class="nav-item" [ngClass]="{'collapse': bannerCollapsed}">
+		<div class="nav-item">
 			<a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !assessment.psat.setupDone}"
 				(click)="changeTab('diagram')">Diagram</a>
 		</div>
-		<div class="nav-item" [ngClass]="{'collapse': bannerCollapsed}">
+		<div class="nav-item">
 			<a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !assessment.psat.setupDone}"
 				(click)="changeTab('report')">Report</a>
 		</div>
-		<div class="nav-item" [ngClass]="{'collapse': bannerCollapsed}">
+		<div class="nav-item">
 			<a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !assessment.psat.setupDone}"
 				(click)="changeTab('sankey')">Sankey</a>
 		</div>
-		<div class="nav-item" [ngClass]="{'collapse': bannerCollapsed}">
+		<div class="nav-item">
 			<a class="nav-link" [ngClass]="{'active': mainTab == 'calculators'}"
 				(click)="changeTab('calculators')">Calculators</a>
 		</div>
@@ -120,30 +120,30 @@
 	</div>
 
 	<div *ngIf="bannerCollapsed" class="d-block d-lg-none ml-2 pr-2 h-100 flex-wrap">
-		<div *ngIf="bannerCollapsed" class="pl-2 border-left home-nav-item d-block" (click)="collapseBanner()">
+		<div class="pl-2 border-left home-nav-item d-block" (click)="collapseBanner()">
 			<span class="fa fa-bars"></span>
 		</div>
 	</div>
 
 	
 	<div *ngIf="!bannerCollapsed" class="d-block d-lg-none ml-auto pr-2 h-100 flex-wrap">
-		<div *ngIf="!bannerCollapsed" class="pl-2 pr-2 border-left home-nav-item d-block" (click)="collapseBanner()">
+		<div  class="pl-2 pr-2 border-left home-nav-item d-block" (click)="collapseBanner()">
 			<span class="fa fa-bars"></span>
 		</div>
-		<div class="pl-2 pr-2 border-left home-nav-item d-block" [ngClass]="{'collapse': bannerCollapsed}">
+		<div class="pl-2 pr-2 border-left home-nav-item d-block">
 			<a class="user-manual" href="assets/user-manuals/Pumps-User-Manual.pdf" target="_blank">
-				<span class="fa fa-book" [ngClass]="{'collapse': bannerCollapsed}"></span>
+				<span class="fa fa-book"></span>
 			</a>
 		</div>
-		<div class="pl-2 pr-2 border-left home-nav-item d-block" [routerLink]="['/settings']" [ngClass]="{'collapse': bannerCollapsed}">
-			<span class="fa fa-cog" [ngClass]="{'collapse': bannerCollapsed}"></span>
+		<div class="pl-2 pr-2 border-left home-nav-item d-block" [routerLink]="['/settings']">
+			<span class="fa fa-cog"></span>
 		</div>
 		<div class="pl-2 pr-2 border-left home-nav-item d-block"
-			[routerLink]="['/directory-dashboard', assessment.directoryId]" [ngClass]="{'collapse': bannerCollapsed}">
-			<span class="fa fa-folder-open" [ngClass]="{'collapse': bannerCollapsed}"></span>
+			[routerLink]="['/directory-dashboard', assessment.directoryId]">
+			<span class="fa fa-folder-open"></span>
 		</div>
-		<div class="pl-2 pr-2 border-left home-nav-item d-block" [routerLink]="['/landing-screen']" [ngClass]="{'collapse': bannerCollapsed}">
-			<span class="fa fa-home" [ngClass]="{'collapse': bannerCollapsed}"></span>
+		<div class="pl-2 pr-2 border-left home-nav-item d-block" [routerLink]="['/landing-screen']">
+			<span class="fa fa-home"></span>
 		</div>
 	</div>
 </nav>
