@@ -50,9 +50,8 @@ ul.nav.nav-tabs {
 }
 
 .preview-data {
-    height: 600px;
+    height: 40vh;
 }
-
 
 input[type='checkbox'] {
     transform: scale(1.25);
