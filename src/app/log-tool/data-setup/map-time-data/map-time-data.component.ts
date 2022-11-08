@@ -17,12 +17,12 @@ export class MapTimeDataComponent implements OnInit {
   selectedDataSet: ExplorerDataSet;
   selectedDataSetIndex: number = 0;
   changeStepSub: Subscription;
+  applyToAll: boolean = false;
   secondsIntervalOptions: Array<number> = [ undefined, 1, 2, 3, 4, 5, 15, 20, 30 ];
 
   constructor(
     private cd: ChangeDetectorRef,
     private router: Router,
-    private logToolService: LogToolService,
     private logToolDbService: LogToolDbService,
     private logToolDataService: LogToolDataService) { }
 
@@ -67,64 +67,6 @@ export class MapTimeDataComponent implements OnInit {
       }
   }
 
-  async finalizeDataSetup() {
-    this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
-    await this.logToolDbService.saveData();
-    this.logToolDataService.explorerData.next(this.explorerData);
-  }
-
-  
-  setDateField() {
-    this.selectedDataSet.dateField = this.selectedDataSet.fields.find(field => {
-      return field.isDateField == true;
-    });
-    if (this.selectedDataSet.dateField) {
-      this.selectedDataSet.hasDateField = true;
-    } else {
-      this.selectedDataSet.intervalForSeconds = undefined;
-      this.selectedDataSet.hasDateField = false;
-    }
-    this.updateExplorerData();
-    this.cd.detectChanges();
-  }
-
-  setTimeField() {
-    this.selectedDataSet.timeField = this.selectedDataSet.fields.find(field => {
-      return field.isTimeField == true;
-    });
-    this.selectedDataSet.hasTimeField = this.selectedDataSet.timeField != undefined;
-    //this split causing issues for "2:19:00 PM" ending up "PM"
-    //removing for issue-5574 but leaving if we find out data that drove this decision
-    // csvData.csvImportData.data.map(dataItem => {
-    //   if (dataItem[csvData.timeField.fieldName]) {
-    //     let splitTime = dataItem[csvData.timeField.fieldName].toString().split(" ");
-    //     if (splitTime.length > 1) {
-    //       dataItem[csvData.timeField.fieldName] = splitTime[1];
-    //     }
-    //   }
-    // });
-    this.updateExplorerData();
-    this.cd.detectChanges();
-  }
-  
-
-  updateExplorerData() {
-    this.explorerData.datasets.map((dataset, index) => {
-      if (index === this.selectedDataSetIndex) {
-        dataset = this.selectedDataSet;
-      }
-      return dataset;
-    });
-
-    // If day type parameters need to be shown, call finalize logic here.
-    this.logToolDataService.explorerData.next(this.explorerData);
-  }
-
-  
-  setSecondsInterval() {
-    this.updateExplorerData();
-  }
-  
   setSelectedDataSet(index: number) {
     this.selectedDataSetIndex = index;
     this.selectedDataSet = this.explorerData.datasets[index];
@@ -135,5 +77,84 @@ export class MapTimeDataComponent implements OnInit {
     }
   }
 
+
+  async finalizeDataSetup() {
+    this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
+    await this.logToolDbService.saveData();
+    this.logToolDataService.explorerData.next(this.explorerData);
+  }
+
+  updateExplorerData() {
+    this.explorerData.datasets.map((dataset, index) => {
+      if (index === this.selectedDataSetIndex) {
+        dataset = this.selectedDataSet;
+      } else if (this.applyToAll) {
+        dataset = this.applyDateFieldToAll(dataset);
+        dataset = this.applyTimeFieldToAll(dataset);
+      }
+      return dataset;
+    });
+    this.logToolDataService.explorerData.next(this.explorerData);
+  }
+
+  applyDateFieldToAll(dataSet: ExplorerDataSet) {
+    let selectedDateFieldName: string = this.selectedDataSet.fields.find(field => field.isDateField === true)?.fieldName;
+    dataSet.fields.map(field => field.isDateField = selectedDateFieldName === field.fieldName);
+    dataSet.hasDateField = selectedDateFieldName != undefined;
+    dataSet.intervalForSeconds = this.selectedDataSet.intervalForSeconds;
+    return dataSet;
+  }
+
+  applyTimeFieldToAll(dataSet: ExplorerDataSet) {
+    let selectedTimeFieldName: string = this.selectedDataSet.fields.find(field => field.isTimeField === true)?.fieldName;
+    dataSet.fields.map(field => field.isTimeField = selectedTimeFieldName === field.fieldName);
+    dataSet.hasTimeField = selectedTimeFieldName != undefined;
+    return dataSet;
+  }
+
+  updateDateField() {
+    this.selectedDataSet = this.setDateField(this.selectedDataSet);
+    this.updateExplorerData();
+    this.cd.detectChanges();
+  }
+
+  updateTimeField() {
+    this.selectedDataSet = this.setTimeField(this.selectedDataSet);
+    this.updateExplorerData();
+    this.cd.detectChanges();
+  }
+
+  setDateField(dataSet: ExplorerDataSet) {
+    dataSet.dateField = dataSet.fields.find(field => field.isDateField)
+    if (dataSet.dateField) {
+      dataSet.hasDateField = true;
+    } else {
+      dataSet.intervalForSeconds = undefined;
+      dataSet.hasDateField = false;
+    }
+    return dataSet;
+  }
+
+  setTimeField(dataSet: ExplorerDataSet) {
+    this.selectedDataSet.timeField = this.selectedDataSet.fields.find(field => {
+      return field.isTimeField == true;
+    });
+    this.selectedDataSet.hasTimeField = this.selectedDataSet.timeField != undefined;
+
+    //this split causing issues for "2:19:00 PM" ending up "PM"
+    //removing for issue-5574 but leaving if we find out data that drove this decision
+    // csvData.csvImportData.data.map(dataItem => {
+    //   if (dataItem[csvData.timeField.fieldName]) {
+    //     let splitTime = dataItem[csvData.timeField.fieldName].toString().split(" ");
+    //     if (splitTime.length > 1) {
+    //       dataItem[csvData.timeField.fieldName] = splitTime[1];
+    //     }
+    //   }
+    // });
+  return dataSet;
+}
+  setSecondsInterval() {
+    this.updateExplorerData();
+  }
 
 }
