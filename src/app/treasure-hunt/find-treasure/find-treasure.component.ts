@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { TreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { CalculatorsService } from '../calculators/calculators.service';
@@ -14,6 +14,13 @@ export class FindTreasureComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  @ViewChild('content', { static: false }) content: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resize();
+  }
+
   showOpportunitySheetOnSave: boolean;
   displayCalculatorType: string = 'All';
 
@@ -21,6 +28,7 @@ export class FindTreasureComponent implements OnInit {
   selectedCalc: string;
   treasureHunt: TreasureHunt;
   treasureHuntSub: Subscription;
+  infoCardCollapsed: boolean = false;
   constructor(private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
@@ -39,6 +47,20 @@ export class FindTreasureComponent implements OnInit {
 
   openCalculator(calculatorType: string) {
     this.calculatorsService.displaySelectedCalculator(calculatorType);
+  }
+
+  collapseInfoCard() {
+    this.infoCardCollapsed = !this.infoCardCollapsed;
+    window.dispatchEvent(new Event("resize"));
+  }
+
+  resize(){
+    if(this.content){
+      let screenWidth = this.content.nativeElement.clientWidth;
+      if (screenWidth >= 992){
+        this.infoCardCollapsed = false;
+      }
+    }
   }
 
 }

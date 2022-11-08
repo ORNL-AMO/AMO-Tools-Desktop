@@ -1,5 +1,5 @@
 <div class="calculator-container modify-conditions process-cooling standalone-calculator" #contentContainer>
-  <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
+  <div #leftPanelHeader class="d-block d-lg-flex header pb-1 pt-1 bg-white align-items-center"
     [ngClass]="{'justify-content-between': inTreasureHunt}">
     <div class="d-flex pl-2 align-items-center">
       <div class="calc-icon-header icon-process-cooling">
@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <div class="d-flex pr-2" *ngIf="inTreasureHunt">
+    <div class="d-flex pr-2 pl-2" *ngIf="inTreasureHunt">
       <div class="d-flex help-holder">
         <p class="help-text treasure-hunt-help">Click the save icon to add the treasure to your chest!
           Click cancel to discard the opportunity and return to method selection.</p>
