@@ -52,7 +52,7 @@ export class GraphBasicsComponent implements OnInit {
       this.markerTypes = [{label: "Markers", value: "markers"}];
     }
     this.markerType = "markers";
-    this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
+    this.canRunDayTypeAnalysis = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
   }
   
   ngOnDestroy() {
@@ -64,6 +64,7 @@ export class GraphBasicsComponent implements OnInit {
   }
 
   setLinesMarkers() {
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`});
     this.selectedGraphObj.selectedYAxisDataOptions.forEach((option) => {
       option.linesOrMarkers = this.markerType;
     });

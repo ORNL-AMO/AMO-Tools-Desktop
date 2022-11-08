@@ -1,10 +1,13 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, EventEmitter, Output, Renderer2, Inject } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { debounce, interval, Subscription } from 'rxjs';
-import { AnnotationData, GraphInteractivity, GraphObj, LoadingSpinner, VisualizerGraphData } from '../../log-tool-models';
+import { AnnotationData, GraphLayout, GraphObj, LoadingSpinner, VisualizerGraphData } from '../../log-tool-models';
 import { LogToolDbService } from '../../log-tool-db.service';
 import { PlotlyService } from 'angular-plotly.js';
 import { LogToolDataService } from '../../log-tool-data.service';
+import moment from 'moment';
+import * as _ from 'lodash';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-visualize-graph',
@@ -14,68 +17,89 @@ import { LogToolDataService } from '../../log-tool-data.service';
 export class VisualizeGraphComponent implements OnInit {
 
   @ViewChild('visualizeChart', { static: false }) visualizeChart: ElementRef;
+  @Output('emitHeight')
+  emitHeight = new EventEmitter<number>();
+
+  @ViewChild('graphContainer', { static: false }) graphContainer: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    setTimeout(() => {
+      this.emitHeight.emit(this.graphContainer.nativeElement.offsetHeight);
+    }, 50);
+  }
 
   selectedGraphDataSubscription: Subscription;
   userGraphOptionsSubscription: Subscription;
   selectedGraphObj: GraphObj;
-  graphInteractivity: GraphInteractivity;
-  // timeSeriesSegments: Array<{segmentText: string, data: VisualizerGraphData}> = [];
-  // selectedTimeSeriesSegment: {segmentText: string, data: VisualizerGraphData};
+  timeSeriesSegments: Array<{segmentText: string, data: VisualizerGraphData}> = [];
+  selectedTimeSeriesSegment: TimeSeriesSegment;
 
   loadingSpinnerSub: Subscription;
   loadingSpinner: LoadingSpinner;
+  toolTipHoldTimeout;
+  showTooltipHover: boolean = false;
+  showTooltipClick: boolean = false;
+
   constructor(private visualizeService: VisualizeService, 
+    @Inject(DOCUMENT) private document: Document,
     private logToolDbService: LogToolDbService,
     private logToolDataService: LogToolDataService,
     private plotlyService: PlotlyService) {
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`});
+  }
 
   ngOnDestroy() {
     this.selectedGraphDataSubscription.unsubscribe();
     this.userGraphOptionsSubscription.unsubscribe();
   }
   
-  // 3777 TODO save selectedGraphObj held in graphUserOPtions and annotatins
   ngAfterViewInit() {
     this.selectedGraphDataSubscription = this.visualizeService.selectedGraphObj.pipe(
       debounce((graphObj: GraphObj) => {
-        let userInputDelay = this.visualizeService.userInputDelay.getValue()
+        let userInputDelay: number = this.visualizeService.userInputDelay.getValue()
         return interval(userInputDelay);
       })
       ).subscribe((graphObj: GraphObj) => {
         this.logToolDbService.saveData();
         if (this.visualizeChart && graphObj) {
           this.selectedGraphObj = JSON.parse(JSON.stringify(graphObj));
-          this.setGraphInteractivity(this.selectedGraphObj.graphInteractivity);
-          this.plotGraph();
+          this.visualizeService.setDefaultGraphInteractivity(this.selectedGraphObj, this.selectedGraphObj.data[0].x.length)
+          this.setGraphInteractivity(this.selectedGraphObj);
+          this.setTimeSeriesSegments(this.selectedGraphObj);
+          this.plotGraph(this.selectedGraphObj);
+          window.dispatchEvent(new Event("resize"));
       }
     });
 
     this.userGraphOptionsSubscription = this.visualizeService.userGraphOptions
     .pipe(
       debounce((userGraphOptionsGraphObj: GraphObj) => {
-        let userInputDelay = this.visualizeService.userInputDelay.getValue()
+        let userInputDelay: number = this.visualizeService.userInputDelay.getValue()
         return interval(userInputDelay);
       })
       ).subscribe((userGraphOptionsGraphObj: GraphObj) => {
-      if (this.visualizeChart && userGraphOptionsGraphObj) {
+      if (this.visualizeChart && this.selectedGraphObj && userGraphOptionsGraphObj) {
         this.setUserGraphOptions(userGraphOptionsGraphObj);
         this.relayoutGraph();
-        }
+      } 
     });
   }
 
-  plotGraph(displaySpinner: boolean = true) {
-    this.plotlyService.newPlot(this.visualizeChart.nativeElement, this.selectedGraphObj.data, this.selectedGraphObj.layout, this.selectedGraphObj.mode)
+  plotGraph(graphObj: GraphObj, displaySpinner: boolean = true) {
+    this.plotlyService.newPlot(this.visualizeChart.nativeElement, graphObj.data, graphObj.layout, graphObj.mode)
     .then(chart => this.handlePlotlyInstanceEvents(chart, displaySpinner));
+    window.dispatchEvent(new Event("resize"));
   }
 
   async relayoutGraph() {
     // call update form instance to avoid resize event issues
     let plotlyInstance = await this.plotlyService.getPlotly();
     plotlyInstance.update(this.visualizeChart.nativeElement, this.selectedGraphObj.data, this.selectedGraphObj.layout, this.selectedGraphObj.mode);
+    window.dispatchEvent(new Event("resize"));
   }
 
   handlePlotlyInstanceEvents(chart, displayLoadingSpinner: boolean) {
@@ -83,30 +107,23 @@ export class VisualizeGraphComponent implements OnInit {
       let newRanges: PlotlyAxisRanges = this.getRestyleRanges(this.selectedGraphObj.layout);
       this.visualizeService.restyleRanges.next(newRanges);
     }
-    chart.on('plotly_click', (data) => {
-      if (this.graphInteractivity.isGraphInteractive) {
-        let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
+    chart.on('plotly_click', async (data) => {
+      let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
+      if (this.selectedGraphObj.graphInteractivity.isGraphInteractive) {
         this.visualizeService.annotateDataPoint.next(newAnnotation);
       }
     });
     if (displayLoadingSpinner) {
       setTimeout(() => {
-        this.logToolDataService.loadingSpinner.next({show: false, msg: `Finishing Plot...`});
+        this.logToolDataService.loadingSpinner.next({show: false, msg: `Graphing Data...`});
       }, 1000);
     }
   }
 
-  dismissPerformanceWarning() {
-    this.graphInteractivity.showPerformanceWarning = false;
-  }
-
-  setGraphInteractivity(graphInteractivity: GraphInteractivity) {
-    this.graphInteractivity = graphInteractivity;
-
-    if (graphInteractivity.isGraphInteractive) {
+  setGraphInteractivity(graphObj: GraphObj) {
+    if (graphObj.graphInteractivity.isGraphInteractive) {
+      this.selectedGraphObj.graphInteractivity = graphObj.graphInteractivity;
       this.selectedGraphObj.layout.hovermode = 'closest';
-      // 3777 hovermode: 'x' - better performance,
-      // 3777 Should we show hoverline? seen in old log tool
       this.selectedGraphObj.layout.dragmode = true;
     } else {
       this.selectedGraphObj.layout.hovermode = false;
@@ -115,12 +132,122 @@ export class VisualizeGraphComponent implements OnInit {
   }
 
   setUserGraphOptions(userGraphOptionsGraphObj: GraphObj) {
-    this.setGraphInteractivity(userGraphOptionsGraphObj.graphInteractivity);
+    // Keep current layout and any zooms/drags
+    let graphElement: any = this.document.getElementById('plotlyDiv');
+    this.selectedGraphObj.layout = graphElement.layout;
+
+    this.visualizeService.setCustomGraphInteractivity(userGraphOptionsGraphObj, userGraphOptionsGraphObj.data[0].x.length);
+    this.setGraphInteractivity(userGraphOptionsGraphObj);
     this.selectedGraphObj.layout.title.text = userGraphOptionsGraphObj.layout.title.text;
     this.selectedGraphObj.layout.xaxis.title.text = userGraphOptionsGraphObj.layout.xaxis.title.text;
     this.selectedGraphObj.layout.yaxis.title = userGraphOptionsGraphObj.layout.yaxis.title;
     this.selectedGraphObj.layout.yaxis2.title = userGraphOptionsGraphObj.layout.yaxis2.title;
     this.selectedGraphObj.layout.annotations = userGraphOptionsGraphObj.layout.annotations;
+
+    if (this.selectedTimeSeriesSegment && this.selectedTimeSeriesSegment !== this.timeSeriesSegments[0]) {
+      this.selectedGraphObj.layout.annotations = this.checkRemoveAnnotationsFromSegment(this.selectedGraphObj);
+    } 
+  }
+
+  setSelectedTimeSeriesSegment(segment: { segmentText: string, data: VisualizerGraphData }) {
+    this.selectedTimeSeriesSegment = segment;
+    this.selectedGraphObj.data[0] = this.selectedTimeSeriesSegment.data;
+
+    let userGraphOptionsObj: GraphObj = this.visualizeService.userGraphOptions.getValue()
+    if (userGraphOptionsObj) {
+      this.selectedGraphObj.layout = userGraphOptionsObj.layout;
+      this.selectedGraphObj.graphInteractivity = userGraphOptionsObj.graphInteractivity;
+    }
+    let resetLayoutRanges: GraphLayout = JSON.parse(JSON.stringify(this.visualizeService.selectedGraphObj.getValue().layout));
+    this.selectedGraphObj.layout.xaxis = resetLayoutRanges.xaxis;
+    this.selectedGraphObj.layout.yaxis = resetLayoutRanges.yaxis;
+    this.selectedGraphObj.layout.yaxis2 = resetLayoutRanges.yaxis2;
+
+    this.setGraphInteractivity(this.selectedGraphObj);
+
+    let graphObj: GraphObj = JSON.parse(JSON.stringify(this.selectedGraphObj))
+    graphObj.layout.annotations = this.checkRemoveAnnotationsFromSegment(graphObj)
+    
+    this.plotGraph(graphObj, false);
+  }
+
+  // currently only works for single chart
+  setTimeSeriesSegments(graphObj: GraphObj) {
+    this.timeSeriesSegments = [];
+    if (this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName === 'Time Series' &&
+      this.selectedGraphObj.graphInteractivity.hasLargeDataset) {
+      this.timeSeriesSegments = this.createTimeSeriesSegments(graphObj);
+      if (this.selectedTimeSeriesSegment) {
+        this.selectedGraphObj.data[0] = this.selectedTimeSeriesSegment.data;
+      } else {
+        this.selectedTimeSeriesSegment = this.timeSeriesSegments[0];
+      }
+    }
+  }
+
+  createTimeSeriesSegments(graphObj: GraphObj): Array<TimeSeriesSegment> {
+    this.selectedTimeSeriesSegment = undefined;
+    let segmentSize: number = Math.floor(graphObj.data[0].x.length / 5);
+    let xVals = graphObj.data[0].x;
+    let yVals = graphObj.data[0].y;
+
+    let timeSeriesSegments: Array<{ segmentText: string, data: VisualizerGraphData }> = [
+      {
+        segmentText: 'All Datapoints',
+        data: graphObj.data[0]
+      }
+    ];
+
+    for (let i = 0; i < xVals.length; i += segmentSize) {
+      let XtimeSeriesSegment: Array<(string | number)> = xVals.slice(i, i + segmentSize);
+      let YtimeSeriesSegment: Array<(string | number)> = yVals.slice(i, i + segmentSize);
+      let timeSeriesData = JSON.parse(JSON.stringify(graphObj.data[0]));
+      timeSeriesData.x = XtimeSeriesSegment;
+      timeSeriesData.y = YtimeSeriesSegment;
+      
+      let startDate: string = moment(XtimeSeriesSegment[0]).format("MMM Do");
+      let endDate: string = moment(XtimeSeriesSegment[XtimeSeriesSegment.length - 1]).format("MMM Do");
+      let segmentText: string = `${startDate} - ${endDate}`;
+      let timeSeriesSegment: TimeSeriesSegment = {
+        segmentText: segmentText,
+        data: timeSeriesData
+      }
+      let chunkDifferrence: number = (xVals.length - 1) - i;
+      if (segmentSize > chunkDifferrence) {
+        // add last chunk leftovers to previous segment
+        let lastSegment = timeSeriesSegments[timeSeriesSegments.length - 1];
+        lastSegment.segmentText = `${lastSegment.segmentText.split('-')[0]} - ${endDate}`;
+        lastSegment.data.x.push(timeSeriesData.x);
+        lastSegment.data.y.push(timeSeriesData.y);
+      } else {
+        timeSeriesSegments.push(timeSeriesSegment);
+      }
+    }
+
+    return timeSeriesSegments;
+  }
+
+  checkRemoveAnnotationsFromSegment(graphObj: GraphObj): AnnotationData[] {
+    if (graphObj.layout.annotations && graphObj.layout.annotations.length > 0) {
+      let annotationsInRange: AnnotationData[] = []
+      graphObj.layout.annotations.forEach(annotation => {
+        let matchingYIndicies: number[] = [];
+        graphObj.data[0].y.forEach((yVal, index) => {
+          if (yVal === annotation.y) {
+            matchingYIndicies.push(index)
+          };
+        });
+        
+        matchingYIndicies.forEach(i => {
+          if (graphObj.data[0].x[i] === annotation.x) {
+            annotationsInRange.push(annotation);
+          }
+        })
+      })
+      
+      graphObj.layout.annotations = annotationsInRange;
+    }
+    return graphObj.layout.annotations;
   }
 
   getRestyleRanges(layout: any): PlotlyAxisRanges {
@@ -151,6 +278,25 @@ export class VisualizeGraphComponent implements OnInit {
       y2Max: y2Max
     }
   }
+
+  hideTooltipHover() {
+    // Allow user to hover on tip text
+    this.toolTipHoldTimeout = setTimeout(() => {
+      this.showTooltipHover = false;
+    }, 200)
+  }
+
+  displayTooltipHover(hoverOnInfo: boolean = false) {
+    if (hoverOnInfo) {
+      clearTimeout(this.toolTipHoldTimeout);
+    }
+    this.showTooltipHover = true;
+  }
+
+  toggleClickTooltip(){
+    this.showTooltipClick = !this.showTooltipClick;
+  }
+
 }
 
 
@@ -162,3 +308,5 @@ export interface PlotlyAxisRanges {
   y2Min: number,
   y2Max: number
 }
+
+export interface TimeSeriesSegment {segmentText: string, data: VisualizerGraphData}

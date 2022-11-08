@@ -16,3 +16,13 @@
     animation: sk-bouncedelay 1.4s infinite ease-in-out both;
     
 }
+
+
+.visualize-height-wrapper {
+    height: 100%;
+    overflow-y: hidden;
+}
+
+.tab-info{
+    background-color: white;
+}

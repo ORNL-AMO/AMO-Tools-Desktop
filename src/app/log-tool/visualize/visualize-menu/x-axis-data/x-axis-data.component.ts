@@ -33,7 +33,7 @@ export class XAxisDataComponent implements OnInit {
   }
 
   setXAxisDataOption() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Plotting Data...`});
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`});
     this.visualizeMenuService.setXAxisDataOption(this.selectedGraphObj);
   }
 

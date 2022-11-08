@@ -284,7 +284,7 @@ export class ImportDataComponent implements OnInit {
     this.dayTypeAnalysisService.resetData();
     this.visualizeService.resetData();
     this.dayTypeGraphService.resetData();
-    let allFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
+    let allFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
     this.dayTypeAnalysisService.selectedDataField.next(allFields[0]);
     this.logToolDataService.setLogToolDays();
     this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();

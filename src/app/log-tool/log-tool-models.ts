@@ -26,6 +26,22 @@ export interface HourAverage {
     }>
 }
 
+export interface GraphDataOption { 
+    dataField: LogToolField, 
+    numberOfDataPoints?: number,
+    data: Array<number | string> 
+}
+
+export interface GraphDataSummary {
+    max: number,
+    min: number,
+    numberOfDataPoints: number,
+    standardDeviation: number,
+    mean: number,
+    name: string,
+    axis: string
+  }
+
 export interface GraphDataObj {
     graphType: { label: string, value: string },
     scatterPlotMode: string,
@@ -126,10 +142,10 @@ export interface GraphObj {
         displaylogo?: boolean,
         displayModeBar?: boolean
       },
-    selectedXAxisDataOption: { dataField: LogToolField, data: Array<number | string> }
+    selectedXAxisDataOption: GraphDataOption,
     selectedYAxisDataOptions: Array<{
         index: number,
-        dataOption: { dataField: LogToolField, data: Array<number | string> },
+        dataOption: GraphDataOption,
         seriesColor: string,
         seriesName: string,
         yaxis: string,
@@ -144,17 +160,12 @@ export interface GraphObj {
     usePercentForBins: boolean,
     binningMethod: string,
     graphInteractivity: GraphInteractivity,
-    showPerformanceWarning?: boolean,
+    isTimeSeries?: boolean,
+    showDefaultPerformanceWarning?: boolean,
     binSize: number,
     graphId: string,
-    xAxisDataOptions: Array<{
-        dataField: LogToolField,
-        data: Array<number | string>
-    }>;
-    yAxisDataOptions: Array<{
-        dataField: LogToolField,
-        data: Array<number | string>
-    }>
+    xAxisDataOptions: Array<GraphDataOption>;
+    yAxisDataOptions: Array<GraphDataOption>
 }
 
 export interface GraphLayout {
@@ -164,6 +175,7 @@ export interface GraphLayout {
             size: number
         }
     },
+    autosize?: boolean,
     hovermode: string | boolean,
     dragmode?: string | boolean,
     xaxis: AxisObj,
@@ -180,7 +192,9 @@ export interface GraphLayout {
 
 export interface GraphInteractivity {
     isGraphInteractive?: boolean,
-    showPerformanceWarning?: boolean,
+    showDefaultPerformanceWarning?: boolean,
+    showUserToggledPerformanceWarning?: boolean,
+    hasLargeDataset?: boolean
 }
 
 export interface AxisObj {

@@ -4,6 +4,7 @@ import { LogToolService } from '../log-tool.service';
 import { BehaviorSubject } from 'rxjs';
 import { LogToolDataService } from '../log-tool-data.service';
 import { LogToolField, DayType, DayTypeSummary, LogToolDay, HourlyAverage } from '../log-tool-models';
+import { VisualizeService } from '../visualize/visualize.service';
 @Injectable()
 export class DayTypeAnalysisService {
 
@@ -19,7 +20,10 @@ export class DayTypeAnalysisService {
   dataView: BehaviorSubject<string>;
 
   dataDisplayType: BehaviorSubject<string>;
-  constructor(private logToolDataService: LogToolDataService, private logToolService: LogToolService) {
+  constructor(private logToolDataService: LogToolDataService, 
+    private logToolService: LogToolService,
+    private visualizeService: VisualizeService) {
+
     this.dayTypes = new BehaviorSubject<Array<DayType>>(new Array());
     this.dayTypeSummaries = new BehaviorSubject<Array<DayTypeSummary>>(new Array());
     this.selectedDataField = new BehaviorSubject<LogToolField>(undefined);
@@ -224,7 +228,7 @@ export class DayTypeAnalysisService {
   calculateDayTypeHourlyAverages(hourlyAverages: Array<HourlyAverage>): Array<HourlyAverage> {
     let summedHourlyAverages: Array<HourlyAverage> = new Array();
     for (let hourOfDay = 0; hourOfDay < 24; hourOfDay++) {
-      let fields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
+      let fields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
       let fieldAverages: Array<{ field: LogToolField, value: number }> = new Array();
       fields.forEach(field => {
         let combinedDaysHourlyAverage: number = this.getCombinedHourlyAverage(hourlyAverages, field, hourOfDay);

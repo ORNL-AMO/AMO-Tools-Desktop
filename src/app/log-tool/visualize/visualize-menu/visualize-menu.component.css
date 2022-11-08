@@ -66,12 +66,25 @@ span.fa.fa-chevron-circle-right {
 }
 
 
+.detail-tooltip {
+    background-color: white;
+    border-color: #117A65;
+    color: black;
+    left: 315px;
+    z-index: 999;
+    width: 300px;
+    right: 0px;
+}
+
+.fa{
+    font-size: larger;
+    padding-top: 3px;
+}
 
 
-
-
-
-
+.options-border {
+    border-bottom: #117A65 solid 2px;
+}
 
 
 

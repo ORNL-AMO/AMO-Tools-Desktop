@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { LogToolField, GraphObj } from '../../log-tool-models';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
+import { LogToolField, GraphObj, GraphDataSummary, GraphDataOption } from '../../log-tool-models';
 import { VisualizeService } from '../visualize.service';
 import * as _ from 'lodash';
 import { combineLatestWith, debounce, interval, Observable, Subscription } from 'rxjs';
@@ -10,8 +10,6 @@ import { LogToolDataService } from '../../log-tool-data.service';
   styleUrls: ['./visualize-data.component.css']
 })
 export class VisualizeDataComponent implements OnInit {
-
-
   timeSummaries: Array<{
     csvName: string,
     startDate: Date,
@@ -20,16 +18,12 @@ export class VisualizeDataComponent implements OnInit {
     numberOfDataPoints: number
   }>;
 
+  @Input()
+  containerHeight: number;
+
   selectedGraphObjSub: Subscription;
 
-  axisSummaries: Array<{
-    max: number,
-    min: number,
-    numberOfDataPoints: number,
-    standardDeviation: number,
-    mean: number,
-    name: string
-  }>;
+  axisSummaries: Array<GraphDataSummary>;
   axisRanges: { xMin: number, xMax: number, yMin: number, yMax: number, y2Min: number, y2Max: number };
   axisRangesSub: Subscription;
 
@@ -40,7 +34,6 @@ export class VisualizeDataComponent implements OnInit {
 
   ngOnInit() {
     this.calculateSummaries();
-
     let onUpdateGraphEventsObservable: Observable<any> = this.visualizeService.selectedGraphObj
       .pipe(
         combineLatestWith(this.visualizeService.restyleRanges),
@@ -59,7 +52,7 @@ export class VisualizeDataComponent implements OnInit {
     this.onUpdateGraphEventsSubscription.unsubscribe();
   }
 
-  async calculateSummaries() {
+  calculateSummaries() {
     this.timeSummaries = new Array();
     this.axisSummaries = new Array();
     let graphObj: GraphObj = this.visualizeService.selectedGraphObj.getValue();
@@ -78,7 +71,7 @@ export class VisualizeDataComponent implements OnInit {
     if (graphObj.selectedXAxisDataOption.dataField && graphObj.selectedXAxisDataOption.dataField.alias == 'Time Series') {
       this.setTimeSeriesSummary();
     } else if (graphObj.selectedXAxisDataOption.dataField) {
-      let xAxisSummary = await this.getDataSummary(graphObj.selectedXAxisDataOption.dataField, 'X-Axis', graphObj.selectedXAxisDataOption.data)
+      let xAxisSummary = this.getDataSummary(graphObj.selectedXAxisDataOption.dataField, 'X-Axis', graphObj.selectedXAxisDataOption.data)
       this.axisSummaries.push(xAxisSummary);
     }
     if (graphObj.data[0].type != 'bar') {
@@ -87,22 +80,20 @@ export class VisualizeDataComponent implements OnInit {
         if (option.yaxis == 'y2') {
           yAxis = 'Right Y-Axis'
         }
-        let summary = await this.getDataSummary(option.dataOption.dataField, yAxis, option.dataOption.data);
+        let summary = this.getDataSummary(option.dataOption.dataField, yAxis, option.dataOption.data);
         this.axisSummaries.push(summary);
       });
     }
     this.cd.detectChanges();
   }
 
-  async setTimeSeriesSummary() {
-    let visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }> = this.visualizeService.visualizeData;
-    visualizeData.forEach(async (dataItem) => {
+  setTimeSeriesSummary() {
+    let visualizeData: Array<GraphDataOption> = this.visualizeService.visualizeData;
+    visualizeData.forEach((dataItem) => {
       if (dataItem.dataField.isDateField) {
         let fieldData: Array<any>;
         if (this.axisRanges) {
-          // fieldData = this.filterXAxisData(dataItem.data, true);
-          console.log('setTimeSeriesSummary filter')
-          fieldData = await this.workerFilterAxis(dataItem.data, true);
+          fieldData = this.filterXAxisData(dataItem.data, true);
         } else {
           fieldData = dataItem.data;
         }
@@ -133,28 +124,18 @@ export class VisualizeDataComponent implements OnInit {
     }
   }
 
-  async getDataSummary(dataField: LogToolField, axis: string, allData: Array<any>): Promise<{
-    max: number,
-    min: number,
-    numberOfDataPoints: number,
-    standardDeviation: number,
-    mean: number,
-    name: string,
-    axis: string
-  }> {
+  getDataSummary(dataField: LogToolField, axis: string, allData: Array<any>): GraphDataSummary {
     let min: number;
     let max: number;
     let mean: number;
     let standardDeviation;
-
     let filteredData: Array<any> = allData;
 
     if (this.axisRanges) {
       if (axis != 'X-Axis') {
         filteredData = this.filterData(dataField, axis);
       } else {
-        // filteredData = this.filterXAxisData(allData, dataField.isDateField);
-        filteredData = await this.workerFilterAxis(allData, dataField.isDateField);
+        filteredData = this.filterXAxisData(allData, dataField.isDateField);
       }
     }
 
@@ -194,43 +175,16 @@ export class VisualizeDataComponent implements OnInit {
     return filteredData;
   }
 
-  // filterXAxisData(data: Array<any>, isDateField: boolean): Array<any> {
-  //   console.time('filterXAxisData')
-  //   // 1-2s for each dataset
-  //   let filteredData: Array<any> = _.filter(data, (dataItem) => {
-  //     if (isDateField) {
-  //       return (new Date(dataItem).valueOf() > new Date(this.axisRanges.xMin).valueOf() && new Date(dataItem).valueOf() < new Date(this.axisRanges.xMax).valueOf());
-  //     } else {
-  //       return (dataItem > this.axisRanges.xMin && dataItem < this.axisRanges.xMax);
-  //     }
-  //   });
-  //   console.timeEnd('filterXAxisData')
-  //   return filteredData;
-  // }
-
-  // 3777 needs benchmark - keeping as example implementation
-  workerFilterAxis(xData: Array<any>, isDateField: boolean): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (typeof Worker !== 'undefined') {
-        this.worker = new Worker(new URL('../../../explorer-dataset.worker.ts', import.meta.url));
-        this.worker.onmessage = ({ data }) => {
-          if (data) {
-            resolve(data);
-          } else {
-            reject();
-          }
-          this.worker.terminate();
-        };
-        this.worker.postMessage({
-          xData: xData,
-          isDateField: isDateField,
-          axisRanges: this.axisRanges
-        });
+  filterXAxisData(data: Array<any>, isDateField: boolean): Array<any> {
+    let filteredData: Array<any> = _.filter(data, (dataItem) => {
+      if (isDateField) {
+        return (new Date(dataItem).valueOf() > new Date(this.axisRanges.xMin).valueOf() && new Date(dataItem).valueOf() < new Date(this.axisRanges.xMax).valueOf());
       } else {
-        console.log('web worker not available');
+        return (dataItem > this.axisRanges.xMin && dataItem < this.axisRanges.xMax);
       }
-      
     });
+    return filteredData;
   }
+
 
 }

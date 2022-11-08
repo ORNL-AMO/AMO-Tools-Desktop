@@ -6,6 +6,7 @@ import { DayTypeGraphService } from './day-type-graph/day-type-graph.service';
 import { LoadingSpinner, LogToolField } from '../log-tool-models';
 import { LogToolDataService } from '../log-tool-data.service';
 import { LogToolDbService } from '../log-tool-db.service';
+import { VisualizeService } from '../visualize/visualize.service';
 @Component({
   selector: 'app-day-type-analysis',
   templateUrl: './day-type-analysis.component.html',
@@ -25,6 +26,7 @@ export class DayTypeAnalysisComponent implements OnInit {
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService, 
     private dayTypeGraphService: DayTypeGraphService,
     private cd: ChangeDetectorRef, 
+    private visualizeService: VisualizeService,
     private logToolDataService: LogToolDataService, 
     private logToolDbService: LogToolDbService) { }
 
@@ -42,7 +44,7 @@ export class DayTypeAnalysisComponent implements OnInit {
       this.dataView = val;
     });
     if (this.dayTypeAnalysisService.selectedDataField.getValue() == undefined) {
-      let allFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
+      let allFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
       this.dayTypeAnalysisService.selectedDataField.next(allFields[0]);
     }
     this.hasRunDayTypeAnalysis = this.dayTypeAnalysisService.dayTypesCalculated == true;
