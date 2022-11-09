@@ -15,6 +15,10 @@
         </div>
 
         <div class="py-2 px-0 mx-auto" *ngIf="selectedDataSet">
+            <div *ngIf="explorerData.datasets.length > 1" class="d-flex flex-row mb-2">
+                <input class="mb-0 mt-1" type="checkbox" id="applyToAll" [(ngModel)]="applyToAll" (change)="updateExplorerData()">
+                <label for="applyToAll">Apply my selections for all datasets</label>
+            </div>
             <ul class="nav nav-tabs">
                 <li class="nav-item" *ngFor="let dataset of explorerData.datasets; let index=index;">
                     <a class="nav-link" [ngClass]="{'active': selectedDataSetIndex == index}"
@@ -41,12 +45,12 @@
                                 <td>
                                     <input type="checkbox" id="{{'isDateField'+i}}" [(ngModel)]="field.isDateField"
                                         [disabled]="dataExists == true || (selectedDataSet.hasDateField && !field.isDateField) || field.isTimeField"
-                                        (change)="setDateField()">
+                                        (change)="updateDateField()">
                                 </td>
                                 <td>
                                     <input type="checkbox" id="{{'isTimeField'+i}}" [(ngModel)]="field.isTimeField"
                                         [disabled]="dataExists == true || (selectedDataSet.hasTimeField && !field.isTimeField) || field.isDateField"
-                                        (change)="setTimeField()">
+                                        (change)="updateTimeField()">
                                 </td>
                             </tr>
                         </ng-container>

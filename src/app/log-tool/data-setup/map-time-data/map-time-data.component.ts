@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { LogToolDbService } from '../../log-tool-db.service';
 import { ExplorerData, ExplorerDataSet, StepMovement } from '../../log-tool-models';
-import { LogToolService } from '../../log-tool.service';
 
 @Component({
   selector: 'app-map-time-data',
@@ -17,12 +16,12 @@ export class MapTimeDataComponent implements OnInit {
   selectedDataSet: ExplorerDataSet;
   selectedDataSetIndex: number = 0;
   changeStepSub: Subscription;
+  applyToAll: boolean = false;
   secondsIntervalOptions: Array<number> = [ undefined, 1, 2, 3, 4, 5, 15, 20, 30 ];
 
   constructor(
     private cd: ChangeDetectorRef,
     private router: Router,
-    private logToolService: LogToolService,
     private logToolDbService: LogToolDbService,
     private logToolDataService: LogToolDataService) { }
 
@@ -67,32 +66,87 @@ export class MapTimeDataComponent implements OnInit {
       }
   }
 
+  setSelectedDataSet(index: number) {
+    this.selectedDataSetIndex = index;
+    this.selectedDataSet = this.explorerData.datasets[index];
+    this.explorerData.datasets[index].mapTimeDataTabVisited = true;
+    this.explorerData.isStepMapTimeDataComplete = this.logToolDataService.checkStepMapDatesComplete(this.explorerData.datasets);
+    if (this.explorerData.isStepMapTimeDataComplete) {
+      this.logToolDataService.explorerData.next(this.explorerData);
+    }
+  }
   async finalizeDataSetup() {
     this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
     await this.logToolDbService.saveData();
     this.logToolDataService.explorerData.next(this.explorerData);
   }
 
-  
-  setDateField() {
-    this.selectedDataSet.dateField = this.selectedDataSet.fields.find(field => {
-      return field.isDateField == true;
+  updateExplorerData() {
+    this.explorerData.datasets.map((dataset, index) => {
+      if (index === this.selectedDataSetIndex) {
+        dataset = this.selectedDataSet;
+      } else if (this.applyToAll) {
+        dataset.mapTimeDataTabVisited = true;
+        dataset = this.applyDateFieldToAll(dataset);
+        dataset = this.applyTimeFieldToAll(dataset);
+      }
+      return dataset;
     });
-    if (this.selectedDataSet.dateField) {
-      this.selectedDataSet.hasDateField = true;
-    } else {
-      this.selectedDataSet.intervalForSeconds = undefined;
-      this.selectedDataSet.hasDateField = false;
+
+    if (this.applyToAll) {
+      this.explorerData.isStepMapTimeDataComplete = this.logToolDataService.checkStepMapDatesComplete(this.explorerData.datasets);
     }
+    this.logToolDataService.explorerData.next(this.explorerData);
+  }
+
+  applyDateFieldToAll(dataSet: ExplorerDataSet) {
+    let selectedDataSetDateFieldName: string = this.selectedDataSet.fields.find(field => field.isDateField === true)?.fieldName;
+        // keep csvId field id and name from current data set fields
+    dataSet.dateField = dataSet.fields.find(field => field.fieldName === selectedDataSetDateFieldName);
+    dataSet.fields.map(field => field.isDateField = selectedDataSetDateFieldName === field.fieldName);
+    dataSet.hasDateField = dataSet.dateField != undefined;
+    dataSet.intervalForSeconds = this.selectedDataSet.intervalForSeconds;
+    return dataSet;
+  }
+
+  applyTimeFieldToAll(dataSet: ExplorerDataSet) {
+    let selectedDataSetTimeFieldName: string = this.selectedDataSet.fields.find(field => field.isTimeField === true)?.fieldName;
+    // keep csvId field id and name from current data set fields
+    dataSet.timeField = dataSet.fields.find(field => field.fieldName === selectedDataSetTimeFieldName);
+    dataSet.fields.map(field => field.isTimeField = selectedDataSetTimeFieldName === field.fieldName);
+    dataSet.hasTimeField = dataSet.timeField != undefined;
+    return dataSet;
+  }
+
+  updateDateField() {
+    this.selectedDataSet = this.setDateField(this.selectedDataSet);
     this.updateExplorerData();
     this.cd.detectChanges();
   }
 
-  setTimeField() {
+  updateTimeField() {
+    this.selectedDataSet = this.setTimeField(this.selectedDataSet);
+    this.updateExplorerData();
+    this.cd.detectChanges();
+  }
+
+  setDateField(dataSet: ExplorerDataSet) {
+    dataSet.dateField = dataSet.fields.find(field => field.isDateField)
+    if (dataSet.dateField) {
+      dataSet.hasDateField = true;
+    } else {
+      dataSet.intervalForSeconds = undefined;
+      dataSet.hasDateField = false;
+    }
+    return dataSet;
+  }
+
+  setTimeField(dataSet: ExplorerDataSet) {
     this.selectedDataSet.timeField = this.selectedDataSet.fields.find(field => {
       return field.isTimeField == true;
     });
     this.selectedDataSet.hasTimeField = this.selectedDataSet.timeField != undefined;
+
     //this split causing issues for "2:19:00 PM" ending up "PM"
     //removing for issue-5574 but leaving if we find out data that drove this decision
     // csvData.csvImportData.data.map(dataItem => {
@@ -103,37 +157,10 @@ export class MapTimeDataComponent implements OnInit {
     //     }
     //   }
     // });
-    this.updateExplorerData();
-    this.cd.detectChanges();
-  }
-  
-
-  updateExplorerData() {
-    this.explorerData.datasets.map((dataset, index) => {
-      if (index === this.selectedDataSetIndex) {
-        dataset = this.selectedDataSet;
-      }
-      return dataset;
-    });
-
-    // If day type parameters need to be shown, call finalize logic here.
-    this.logToolDataService.explorerData.next(this.explorerData);
-  }
-
-  
+  return dataSet;
+}
   setSecondsInterval() {
     this.updateExplorerData();
   }
-  
-  setSelectedDataSet(index: number) {
-    this.selectedDataSetIndex = index;
-    this.selectedDataSet = this.explorerData.datasets[index];
-    this.explorerData.datasets[index].mapTimeDataTabVisited = true;
-    this.explorerData.isStepMapTimeDataComplete = this.logToolDataService.checkStepMapDatesComplete(this.explorerData.datasets);
-    if (this.explorerData.isStepMapTimeDataComplete) {
-      this.logToolDataService.explorerData.next(this.explorerData);
-    }
-  }
-
 
 }

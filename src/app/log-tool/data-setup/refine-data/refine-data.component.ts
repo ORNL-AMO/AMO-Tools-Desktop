@@ -21,6 +21,8 @@ export class RefineDataComponent implements OnInit {
   selectedDataSetIndex: number = 0;
   previewRowIndicies: Array<number> = [0, 1];
   changeStepSub: Subscription;
+  applyToAll: boolean = false;
+
   constructor(
     private logToolDbService: LogToolDbService,
     private cd: ChangeDetectorRef,
@@ -93,6 +95,7 @@ export class RefineDataComponent implements OnInit {
 
   closeEditModal() {
     this.logToolService.isModalOpen.next(false);
+    this.updateExplorerData()
     this.showEditModal = false;
   }
 
@@ -100,11 +103,26 @@ export class RefineDataComponent implements OnInit {
     this.explorerData.datasets.map((dataset, index) => {
       if (index === this.selectedDataSetIndex) {
         dataset = this.selectedDataSet;
+      } else if (this.applyToAll) {
+        this.applySelectionsToAll(dataset)
       }
       return dataset;
     });
     this.explorerData.refineDataStepStatus = this.logToolDataService.checkStepRefineDataComplete(this.explorerData.datasets, this.selectedDataSetIndex);
     this.logToolDataService.explorerData.next(this.explorerData);
+  }
+
+  applySelectionsToAll(dataSet: ExplorerDataSet) {
+    dataSet.refineDataTabVisited = true;
+    dataSet.fields.map((field, i) => {
+      // Only if fields have same original name
+      if (field.fieldName === this.selectedDataSet.fields[i].fieldName) {
+        field.alias = this.selectedDataSet.fields[i].alias;
+      }
+      field.useField = this.selectedDataSet.fields[i].useField;
+      field.unit = this.selectedDataSet.fields[i].unit;
+    })
+    return dataSet;
   }
 
   setSelectedDataSet(index: number) {

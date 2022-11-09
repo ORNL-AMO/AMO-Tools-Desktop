@@ -10,6 +10,10 @@
         </div>
 
         <div class="py-2 px-0 mx-auto" *ngIf="selectedDataSet">
+            <div *ngIf="explorerData.datasets.length > 1" class="d-flex flex-row mb-2">
+                <input class="mb-0 mt-1" type="checkbox" id="applyToAll" [(ngModel)]="applyToAll" (change)="updateExplorerData()">
+                <label for="applyToAll">Apply my selections for all datasets</label>
+            </div>
             <ul class="nav nav-tabs">
                 <li class="nav-item" *ngFor="let dataset of explorerData.datasets; let index=index;">
                     <a class="nav-link" [ngClass]="{'active': selectedDataSetIndex == index}"
