@@ -58,3 +58,7 @@ input[type='checkbox'] {
 input[type='checkbox']:hover {
  cursor: pointer;
 }
+
+.preview-data {
+    height: 40vh;
+}

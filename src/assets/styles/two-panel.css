@@ -414,6 +414,25 @@
 } */
 
 
+.scroll-item-x::-webkit-scrollbar-thumb {
+    background-color: #156739;
+}
+
+.scroll-item-x::-webkit-scrollbar-track {
+    background-color: rgba(0,0,0,0.3);
+}
+
+.scroll-item-x::-webkit-scrollbar {
+    width: .5em;
+    height: .5rem;
+}
+
+.scroll-item-x {
+    overflow-x: scroll;
+}
+
+
+
 .card-container form .form-section {
     padding-top: 10px;
     padding-bottom: 10px;

@@ -55,28 +55,31 @@
                 </table>
 
                 
-                <table class="table table-sm table-bordered my-5">
-                    <thead>
-                        <tr>
-                            <td class="bold" colspan="100%">
-                                Original Data
-                            </td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td *ngFor="let field of selectedDataSet.fields">
-                                {{field.fieldName}}
-                            </td>
-                        </tr>
-                        <tr *ngFor="let rowIndex of previewRowIndicies">
-                            <td *ngFor="let field of selectedDataSet.csvImportData.meta.fields">
-                                {{selectedDataSet.csvImportData.data[rowIndex][field]}}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
+
+            <div class="scroll-item-x">
+                <table class="table table-sm table-bordered my-2">
+                    <thead>
+                    <tr>
+                        <td class="bold" colspan="100%">
+                            Original Data
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td *ngFor="let field of selectedDataSet.fields">
+                            {{field.fieldName}}
+                        </td>
+                    </tr>
+                    <tr *ngFor="let rowIndex of previewRowIndicies">
+                        <td *ngFor="let field of selectedDataSet.csvImportData.meta.fields">
+                            {{selectedDataSet.csvImportData.data[rowIndex][field]}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
             
         </div>
         </div>
