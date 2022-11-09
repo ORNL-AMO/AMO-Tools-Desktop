@@ -79,6 +79,7 @@ export class LogToolDbService {
     let logToolDbData: LogToolDbData = this.logToolDbData[0];
     if (importedLogToolDbData) {
       logToolDbData = importedLogToolDbData;
+      this.visualizeService.userGraphOptions.next(logToolDbData.visualizeData.selectedGraphObj);
     } 
     this.logToolDataService.logToolDays = logToolDbData.setupData.logToolDays;
     this.logToolService.individualDataFromCsv = logToolDbData.setupData.individualDataFromCsv;
@@ -107,6 +108,11 @@ export class LogToolDbService {
 
  async saveData() {
     let logToolDbData: LogToolDbData = this.getLogToolDbDataObj();
+    let allData: LogToolDbData[] = await firstValueFrom(this.dbService.updateWithObservable(logToolDbData));
+  }
+
+  async saveDataWithOptions(graphObj: GraphObj) {
+    let logToolDbData: LogToolDbData = this.getLogToolDbDataObj(graphObj);
     let allData: LogToolDbData[] = await firstValueFrom(this.dbService.updateWithObservable(logToolDbData));
   }
 

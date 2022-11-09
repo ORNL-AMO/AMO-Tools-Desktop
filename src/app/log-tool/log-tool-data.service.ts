@@ -47,19 +47,6 @@ export class LogToolDataService {
     this.logToolDays = new Array();
   }
 
-  getDataFieldOptions(): Array<LogToolField> {
-    //non date and used fields
-    let tmpFields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));
-    _.remove(tmpFields, (field) => { return field.useField == false || field.isDateField == true });
-    return tmpFields;
-  }
-
-  getDataFieldOptionsWithDate() {
-    let tmpFields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));
-    _.remove(tmpFields, (field) => { return field.useField == false });
-    return tmpFields;
-  }
-
   getLogToolDayFromDate(date: Date) {
     let logToolDay: LogToolDay = this.logToolDays.find(logToolDay => { return this.checkSameDay(logToolDay.date, date) });
     return logToolDay
@@ -132,24 +119,6 @@ export class LogToolDataService {
   checkSameDay(day1: Date, day2: Date) {
     return moment(day1).isSame(day2, 'day');
   }
-
-  getAllFieldData(fieldName: string): Array<number> {
-    let data: Array<any> = this.getData(fieldName);
-    let mappedValues: Array<any> = _.mapValues(data, (dataItem) => { return dataItem[fieldName] });
-    let valueArr = _.values(mappedValues);
-    return valueArr;
-  }
-
-  getData(fieldName: string): Array<any> {
-    let data: Array<any> = new Array();
-    this.logToolService.individualDataFromCsv.forEach(individualDataItem => {
-      let foundData = individualDataItem.csvImportData.meta.fields.find(field => { return field == fieldName });
-      if (foundData) {
-        data = _.concat(data, individualDataItem.csvImportData.data);
-      }
-    });
-    return data;
-  };
 
   finalizeDataSetup(explorerData: ExplorerData): ExplorerData {
     explorerData.canRunDayTypeAnalysis = this.setCanRunDayTypeAnalysis();

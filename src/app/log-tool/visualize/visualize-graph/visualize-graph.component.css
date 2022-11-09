@@ -14,3 +14,28 @@
 .btn {
     padding: 1rem;
 }
+
+
+span.fa.fa-chevron-circle-left,
+span.fa.fa-chevron-circle-right {
+    cursor: pointer;
+    color: #117A65;
+}
+
+
+
+.detail-tooltip {
+    background-color: white;
+    border-color: #117A65;
+    color: black;
+    top: -15px;
+    right: 50px;
+    z-index: 999;
+    width: 300px;
+}
+
+.fa{
+    font-size: larger;
+    padding-top: 3px;
+}
+

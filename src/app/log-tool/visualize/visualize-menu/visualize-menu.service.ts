@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
-import { GraphObj, LogToolField, AnnotationData } from '../../log-tool-models';
+import { GraphObj, LogToolField, AnnotationData, GraphDataOption } from '../../log-tool-models';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
-import { LogToolService } from '../../log-tool.service';
+
 @Injectable()
 export class VisualizeMenuService {
   selectedGraphObj: any;
-  constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService, private logToolService: LogToolService) { }
+  constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
 
-  saveUserGraphOptionsChange(selectedGraphObj: GraphObj) {
+  saveUserGraphOptionsChange(userGraphOptionsGraph: GraphObj) {
     this.visualizeService.userInputDelay.next(175);
-    this.visualizeService.userGraphOptions.next(selectedGraphObj);
+    this.visualizeService.userGraphOptions.next(userGraphOptionsGraph);
   }
 
   save(selectedGraphObj: GraphObj) {
@@ -41,6 +41,8 @@ export class VisualizeMenuService {
     } else {
       selectedGraphObj.selectedXAxisDataOption = selectedGraphObj.xAxisDataOptions[0];
     }
+    
+    // 3777 TODO Didn't we just set  above?
     this.setXAxisDataOption(selectedGraphObj);
     this.setYAxisDataOptions(selectedGraphObj);
     let tmpSelectedYAxisDataOptions = new Array();
@@ -94,7 +96,7 @@ export class VisualizeMenuService {
 
 
   setXAxisDataOptions(selectedGraphObj: GraphObj) {
-    let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
+    let dataFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
     let canRunDayTypeAnalysis: boolean = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
     if (selectedGraphObj.data[0].type == 'scattergl' && canRunDayTypeAnalysis) {
       dataFields.push({
@@ -111,7 +113,7 @@ export class VisualizeMenuService {
     }
     selectedGraphObj.xAxisDataOptions = new Array();
     dataFields.forEach(field => {
-      let data = this.visualizeService.getVisualizeData(field.fieldName);
+      let data = this.visualizeService.getGraphData(field.fieldName);
       // console.log('adding xAxisDataOption', {
       //   data: data,
       //   dataField: field
@@ -119,13 +121,15 @@ export class VisualizeMenuService {
       selectedGraphObj.xAxisDataOptions.push({
         data: data,
         dataField: field
-      })
+      });
     });
     // console.log('x options', selectedGraphObj.xAxisDataOptions)
   }
 
 
   setXAxisDataOption(selectedGraphObj: GraphObj) {
+    this.visualizeService.annotateDataPoint.next(undefined);
+    selectedGraphObj.layout.annotations = [];
     if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
       selectedGraphObj.layout.xaxis.type = 'date';
       this.setYAxisDataOptions(selectedGraphObj);
@@ -187,13 +191,13 @@ export class VisualizeMenuService {
   }
 
   setYAxisDataOptions(selectedGraphObj: GraphObj) {
-    let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
+    let dataFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
     selectedGraphObj.yAxisDataOptions = new Array();
     dataFields.forEach(field => {
       if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
         let timeData: Array<string | number> = this.visualizeService.getVisualizeDateData(field);
         if (timeData) {
-          let data = this.visualizeService.getVisualizeData(field.fieldName);
+          let data: (string | number)[]  = this.visualizeService.getGraphData(field.fieldName);
           selectedGraphObj.yAxisDataOptions.push({
             data: data,
             dataField: field
@@ -203,8 +207,8 @@ export class VisualizeMenuService {
       // restrict comparison from multiple files
       // else if (selectedGraphObj.data[0].type == 'scattergl' && selectedGraphObj.selectedXAxisDataOption.dataField.csvId == field.csvId) {
       else if (selectedGraphObj.data[0].type == 'scattergl') {
-        let data = this.visualizeService.getVisualizeData(field.fieldName);
-        let yAxisOption = {
+        let data = this.visualizeService.getGraphData(field.fieldName);
+        let yAxisOption: GraphDataOption = {
           data: data,
           dataField: field
         }
@@ -237,6 +241,8 @@ export class VisualizeMenuService {
         // Lines not a valid mode for non-time series
         selectedDataOption.linesOrMarkers = 'markers';
       }
+      selectedGraphObj.isTimeSeries = selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series';
+      selectedGraphObj = this.visualizeService.setDefaultGraphInteractivity(selectedGraphObj, selectedGraphObj.data[index].x.length);
       selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
       selectedGraphObj.data[index].name = selectedDataOption.seriesName;
       selectedGraphObj.data[index].marker.color = selectedDataOption.seriesColor;

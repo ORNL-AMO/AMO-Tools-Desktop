@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LogToolDataService } from '../log-tool-data.service';
 import { LogToolDbService } from '../log-tool-db.service';
@@ -14,39 +14,47 @@ import { VisualizeService } from './visualize.service';
 export class VisualizeComponent implements OnInit {
 
   tabSelect: string = 'results';
-  constructor(private logToolDataService: LogToolDataService, 
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('tabHeaders', { static: false }) tabHeaders: ElementRef;
+  resultsHelpTabHeight: number;
+  graphContainerHeight: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    setTimeout(() => {
+      this.setResultsTabheight();
+    }, 50);
+  }
+
+  constructor(private logToolDataService: LogToolDataService,
     private visualizeMenuService: VisualizeMenuService,
     private logToolDbService: LogToolDbService,
+    private cd: ChangeDetectorRef,
     private visualizeService: VisualizeService) { }
-
   loadingSpinnerSub: Subscription;
+  tabSelectSubscription: Subscription;
   loadingSpinner: LoadingSpinner;
+
   ngOnInit() {
-    this.logToolDataService.loadingSpinner.next({show: false, msg: undefined});
     this.loadingSpinnerSub = this.logToolDataService.loadingSpinner.subscribe(loadingSpinner => {
       this.loadingSpinner = loadingSpinner;
+      this.cd.detectChanges();
     });
 
-    this.visualizeService.visualizeDataInitialized = true;
-    this.visualizeService.visualizeData = new Array();
-    let dataFields = this.logToolDataService.getDataFieldOptionsWithDate();
-    dataFields.forEach(field => {
-      let data = this.logToolDataService.getAllFieldData(field.fieldName);
-      this.visualizeService.visualizeData.push({
-        data: data,
-        dataField: field
-      });
+    this.tabSelectSubscription = this.visualizeService.tabSelect.subscribe(tabSelect => {
+      if (tabSelect) {
+        this.tabSelect = tabSelect
+      }
     });
-
+    this.visualizeService.buildGraphData();
     this.setInitialGraphData();
   }
 
   ngOnDestroy() {
-    this.saveUserOptionsChanges() 
-  }
-
-  setTab(str: string) {
-    this.tabSelect = str;
+    this.visualizeService.saveUserOptionsChanges();
+    this.logToolDbService.saveData();
+    this.loadingSpinnerSub.unsubscribe();
+    this.tabSelectSubscription.unsubscribe();
   }
 
   setInitialGraphData() {
@@ -59,14 +67,18 @@ export class VisualizeComponent implements OnInit {
     this.visualizeMenuService.setGraphType(initialGraphObj);
   }
 
-  saveUserOptionsChanges() {
-    let selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
-    let userGraphObj = this.visualizeService.userGraphOptions.getValue();
-    if (selectedGraphObj && userGraphObj) {
-      selectedGraphObj.graphInteractivity = userGraphObj.graphInteractivity;
-      selectedGraphObj.layout = userGraphObj.layout;
-      this.visualizeService.selectedGraphObj.next(selectedGraphObj);
-      this.logToolDbService.saveData();
+  setGraphHeight(graphHeight: number) {
+    this.graphContainerHeight = graphHeight;
+    this.setResultsTabheight();
+  }
+
+  setResultsTabheight() {
+    if (this.graphContainerHeight !== undefined && this.contentContainer && this.tabHeaders) {
+      this.resultsHelpTabHeight = this.contentContainer.nativeElement.offsetHeight - this.graphContainerHeight - this.tabHeaders.nativeElement.offsetHeight - 50;
     }
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
   }
 }

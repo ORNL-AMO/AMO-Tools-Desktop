@@ -3,7 +3,7 @@ import { DayTypeSummary, LogToolField } from '../../../log-tool-models';
 import { Subscription } from 'rxjs';
 import { DayTypeAnalysisService } from '../../day-type-analysis.service';
 import * as _ from 'lodash';
-import { LogToolDataService } from '../../../log-tool-data.service';
+import { VisualizeService } from '../../../visualize/visualize.service';
 
 @Component({
   selector: 'app-day-type-summary-table',
@@ -18,10 +18,11 @@ export class DayTypeSummaryTableComponent implements OnInit {
   dayTypeSummaries: Array<DayTypeSummary>;
   dayTypeSummariesSub: Subscription;
   fields: Array<LogToolField>;
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolDataService: LogToolDataService) { }
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, 
+    private visualizeService: VisualizeService) { }
 
   ngOnInit(): void {
-    this.fields = this.logToolDataService.getDataFieldOptions();
+    this.fields = this.visualizeService.getDataFieldOptions();
     this.dayTypeSummariesSub = this.dayTypeAnalysisService.dayTypeSummaries.subscribe(dayTypeSummaries => {
       this.dayTypeSummaries = dayTypeSummaries;
     });

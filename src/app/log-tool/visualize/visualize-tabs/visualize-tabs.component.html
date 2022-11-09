@@ -1,6 +1,6 @@
 <nav class="navbar assessment-bar p-0">
     <div class="d-flex tabs subtabs log-tool mr-auto w-100 flex-wrap">
-        <div class="assessment-tab" *ngFor="let graphDataObj of graphData" (click)="selectGraph(graphDataObj)"
+        <div class="assessment-tab" *ngFor="let graphDataObj of graphObjects" (click)="selectGraph(graphDataObj)"
             [ngClass]="{'active': graphDataObj.graphId == selectedGraphData.graphId}">
             <a>{{graphDataObj.layout.title.text}}</a>
         </div>

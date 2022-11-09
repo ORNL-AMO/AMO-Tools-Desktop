@@ -5,3 +5,7 @@
 .help-info{
     background-color: white;
 }
+
+.scroll-container {
+    min-height: 200px;
+}

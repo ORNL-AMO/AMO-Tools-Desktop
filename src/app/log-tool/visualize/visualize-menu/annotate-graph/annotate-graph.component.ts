@@ -15,6 +15,7 @@ export class AnnotateGraphComponent implements OnInit {
   annotateDataPoint: AnnotationData;
   selectedGraphObjSub: Subscription;
   selectedGraphObj: GraphObj;
+  // graphInteractivitySubscription: Subscription;
   fontSizes: Array<number> = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
   arrowSizes: Array<number> = [.5, 1, 1.5, 2, 2.5];
   userGraphOptionsSubscription: Subscription;

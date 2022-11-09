@@ -1,10 +1,6 @@
-<div class="mr-2 ml-2 d-flex flex-column help-info">
-    <!--defaul help-->
+<div class="scroll-container scroll-item" [ngStyle]="{'height.px': containerHeight}">
     <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'default'">
         <div class="h6">
-            <small class="text-muted">Use the menu on the left to setup the plot, it can be hidden using the "<span
-                    class="fa fa-chevron-left"></span>Collapse" option at the top
-            </small>
             <hr class="mt-2 mb-2">
             <small class="text-muted">
                 Using the menu on the top right you can:
@@ -29,7 +25,6 @@
             </small>
         </div>
     </div>
-    <!--graph basics-->
     <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'graphBasics'">
         <div class="h6">
             Graph Basics
@@ -47,12 +42,21 @@
             </small>
         </div>
     </div>
-    <!--x axis-->
-    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'xAxis'">
+
+    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'xAxis' || focusedPanel == 'highlight-timeseries-info'">
         <div class="h6">
             X Axis
             <br>
             <hr class="mt-2 mb-2">
+            <div [@focusedPanelState]="focusedPanel" class="text-left alert alert-warning small py-0 pt-2 px-3 mb-0">
+                <div>
+                    Some large datasets may cause slow graph performance. Using the date range filters increases graph speed by reducing the amount of datapoints the graph must handle at once. 
+                    MEASUR considers a large dataset to be greater than 200,000 datapoints, or roughly 7 days at 3 second intervals.
+
+                    For more performance tips, visit the Annotations help section.
+                </div>
+                <br>
+            </div>
             <small class="text-muted">Set x-axis label
                 <br>
                 Add &lt;br&gt; to create a new line
@@ -71,7 +75,6 @@
             </small>
         </div>
     </div>
-    <!--y axis-->
     <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'yAxis'">
         <div class="h6">
             Y-Axis
@@ -112,14 +115,28 @@
 
         </div>
     </div>
-    <!--annotation-->
-    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'annotation'">
+    <div class="p-2 d-flex flex-column" *ngIf="annotationHelpStrings.includes(this.focusedPanel)">
         <div class="h6">
             Annotations
             <br>
             <hr class="mt-2 mb-2">
+            
             <small class="text-muted">Click the chart to select the data you want to annotate
             </small>
+            <!-- <ng-container *ngIf="graphInteractivity && graphInteractivity.hasLargeDataset"> -->
+                <div [@focusedPanelState]="focusedPanel" class="d-flex flex-column text-left alert alert-warning small py-0 pt-2 px-3 mb-0">
+                        The annotation feature may cause slow graph performance on some large datasets.
+                        By default, annotations are turned off for these datasets.
+                        MEASUR considers a large dataset to be greater than 200,000 datapoints, or roughly 7 days of log data at 3 second intervals.
+                        <br>
+                        <span class="mt-2 bold">Large Dataset Tips</span>
+                        <ul class="mt-1">
+                            <li class="bold">Existing annotations will remain visible and will not affect performance. </li>
+                            <li>Narrowing the range of the graph by clicking and dragging an area before turning on annotations will increase graph speed and usability</li>
+                            <li>Annotations can be turned off/on at any time in the sidebar options.</li>
+                        </ul>
+                </div>
+            <!-- </ng-container> -->
             <hr class="mt-2 mb-2">
             <small class="text-muted">Fill the text box with the desired annotation
                 <br>
@@ -147,7 +164,6 @@
             </small>
         </div>
     </div>
-    <!--histogram-->
     <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'histogramBins'">
         <div class="h6">
             Histogram Bins
@@ -168,4 +184,3 @@
             </small>
         </div>
     </div>
-</div>

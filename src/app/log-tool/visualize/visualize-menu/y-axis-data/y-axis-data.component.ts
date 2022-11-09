@@ -37,20 +37,23 @@ export class YAxisDataComponent implements OnInit {
   }
 
   removeAxis() {
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`})
     this.visualizeMenuService.removeAxis(this.selectedGraphObj);
   }
 
 
   setYAxisData() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Plotting Data...`})
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`})
     this.visualizeMenuService.setYAxisData(this.selectedGraphObj);
   }
 
   removeYAxisData(index: number) {
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`})
     this.visualizeMenuService.removeYAxisData(index, this.selectedGraphObj);
   }
 
   addData(){
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`})
     this.visualizeMenuService.addData(this.selectedGraphObj);
   }
 

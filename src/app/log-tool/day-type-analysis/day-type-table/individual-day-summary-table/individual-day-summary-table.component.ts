@@ -1,9 +1,9 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { LogToolField, DayType } from '../../../log-tool-models';
-import { LogToolDataService } from '../../../log-tool-data.service';
 import { DayTypeAnalysisService } from '../../day-type-analysis.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
+import { VisualizeService } from '../../../visualize/visualize.service';
 
 @Component({
   selector: 'app-individual-day-summary-table',
@@ -18,10 +18,10 @@ export class IndividualDaySummaryTableComponent implements OnInit {
   fields: Array<LogToolField>;
   dayTypesSub: Subscription;
   dayTypes: Array<DayType>;
-  constructor(private logToolDataService: LogToolDataService, private dayTypeAnalysisService: DayTypeAnalysisService) { }
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService) { }
 
   ngOnInit(): void {
-    this.fields = this.logToolDataService.getDataFieldOptions();
+    this.fields = this.visualizeService.getDataFieldOptions();
     this.dayTypesSub = this.dayTypeAnalysisService.dayTypes.subscribe(dayTypes => {
       this.dayTypes = dayTypes;
     });
