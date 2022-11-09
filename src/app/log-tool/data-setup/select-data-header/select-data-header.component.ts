@@ -20,6 +20,7 @@ export class SelectDataHeaderComponent implements OnInit {
   previewRowIndicies: Array<number> = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   selectedFileDataIndex: number = 0;
   changeStepSub: Subscription;
+  applyToAll: boolean = false;
   
   constructor(
     private logToolDataService: LogToolDataService, 
@@ -78,6 +79,16 @@ export class SelectDataHeaderComponent implements OnInit {
     this.logToolDataService.explorerData.next(this.explorerData);
   }
 
+  updateHeaderRowIndex() {
+    if (this.applyToAll && this.selectedFileData.headerRowIndex !== undefined) {
+      this.explorerData.fileData.map(fileData => {
+        fileData.headerRowIndex = this.selectedFileData.headerRowIndex;
+        fileData.headerRowVisited = true;
+      });
+      this.updateCompletionStatus();
+    }
+  }
+
       
   setSelectedFileData(index: number) {
     this.selectedFileDataIndex = index;
@@ -86,6 +97,10 @@ export class SelectDataHeaderComponent implements OnInit {
       this.selectedSheet = this.selectedFileData.selectedSheet;
     }
     this.explorerData.fileData[index].headerRowVisited = true;
+    this.updateCompletionStatus();
+  }
+
+  updateCompletionStatus() {
     this.explorerData.isStepHeaderRowComplete = this.logToolDataService.checkStepSelectedHeaderComplete(this.explorerData.fileData);
     if (this.explorerData.isStepHeaderRowComplete) {
         this.logToolDataService.explorerData.next(this.explorerData);

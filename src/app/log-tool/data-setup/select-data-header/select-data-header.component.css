@@ -51,6 +51,15 @@ input[type='radio']:hover {
  cursor: pointer;
 }
 
+input[type='checkbox'] {
+    transform: scale(1.25);
+    margin: .5em 1em;
+}
+
+input[type='checkbox']:hover {
+ cursor: pointer;
+}
+
 .nav-tabs{
     background-color: #efefef;
     border-left: #efefef;

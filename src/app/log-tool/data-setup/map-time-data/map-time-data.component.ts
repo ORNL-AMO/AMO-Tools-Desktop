@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { LogToolDbService } from '../../log-tool-db.service';
 import { ExplorerData, ExplorerDataSet, StepMovement } from '../../log-tool-models';
-import { LogToolService } from '../../log-tool.service';
 
 @Component({
   selector: 'app-map-time-data',
@@ -76,8 +75,6 @@ export class MapTimeDataComponent implements OnInit {
       this.logToolDataService.explorerData.next(this.explorerData);
     }
   }
-
-
   async finalizeDataSetup() {
     this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
     await this.logToolDbService.saveData();
@@ -89,26 +86,35 @@ export class MapTimeDataComponent implements OnInit {
       if (index === this.selectedDataSetIndex) {
         dataset = this.selectedDataSet;
       } else if (this.applyToAll) {
+        dataset.mapTimeDataTabVisited = true;
         dataset = this.applyDateFieldToAll(dataset);
         dataset = this.applyTimeFieldToAll(dataset);
       }
       return dataset;
     });
+
+    if (this.applyToAll) {
+      this.explorerData.isStepMapTimeDataComplete = this.logToolDataService.checkStepMapDatesComplete(this.explorerData.datasets);
+    }
     this.logToolDataService.explorerData.next(this.explorerData);
   }
 
   applyDateFieldToAll(dataSet: ExplorerDataSet) {
-    let selectedDateFieldName: string = this.selectedDataSet.fields.find(field => field.isDateField === true)?.fieldName;
-    dataSet.fields.map(field => field.isDateField = selectedDateFieldName === field.fieldName);
-    dataSet.hasDateField = selectedDateFieldName != undefined;
+    let selectedDataSetDateFieldName: string = this.selectedDataSet.fields.find(field => field.isDateField === true)?.fieldName;
+        // keep csvId field id and name from current data set fields
+    dataSet.dateField = dataSet.fields.find(field => field.fieldName === selectedDataSetDateFieldName);
+    dataSet.fields.map(field => field.isDateField = selectedDataSetDateFieldName === field.fieldName);
+    dataSet.hasDateField = dataSet.dateField != undefined;
     dataSet.intervalForSeconds = this.selectedDataSet.intervalForSeconds;
     return dataSet;
   }
 
   applyTimeFieldToAll(dataSet: ExplorerDataSet) {
-    let selectedTimeFieldName: string = this.selectedDataSet.fields.find(field => field.isTimeField === true)?.fieldName;
-    dataSet.fields.map(field => field.isTimeField = selectedTimeFieldName === field.fieldName);
-    dataSet.hasTimeField = selectedTimeFieldName != undefined;
+    let selectedDataSetTimeFieldName: string = this.selectedDataSet.fields.find(field => field.isTimeField === true)?.fieldName;
+    // keep csvId field id and name from current data set fields
+    dataSet.timeField = dataSet.fields.find(field => field.fieldName === selectedDataSetTimeFieldName);
+    dataSet.fields.map(field => field.isTimeField = selectedDataSetTimeFieldName === field.fieldName);
+    dataSet.hasTimeField = dataSet.timeField != undefined;
     return dataSet;
   }
 
