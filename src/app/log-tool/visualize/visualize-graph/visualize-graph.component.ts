@@ -187,10 +187,10 @@ export class VisualizeGraphComponent implements OnInit {
 
   createTimeSeriesSegments(graphObj: GraphObj): Array<TimeSeriesSegment> {
     this.selectedTimeSeriesSegment = undefined;
-    let segmentSize: number = Math.floor(graphObj.data[0].x.length / 5);
     let xVals = graphObj.data[0].x;
     let yVals = graphObj.data[0].y;
-
+    
+    let segmentSize: number = Math.floor(yVals.length / 5);
     let timeSeriesSegments: Array<{ segmentText: string, data: VisualizerGraphData }> = [
       {
         segmentText: 'All Datapoints',
@@ -198,13 +198,19 @@ export class VisualizeGraphComponent implements OnInit {
       }
     ];
 
-    for (let i = 0; i < xVals.length; i += segmentSize) {
-      let XtimeSeriesSegment: Array<(string | number)> = xVals.slice(i, i + segmentSize);
-      let YtimeSeriesSegment: Array<(string | number)> = yVals.slice(i, i + segmentSize);
+    for (let i = 0; i < yVals.length; i += segmentSize) {
+      let segmentStart: number = i;
+      let segmentEnd: number = i + segmentSize;
+      let lastSegment: boolean = i + segmentSize > yVals.length;
+      if (lastSegment) {
+        segmentEnd = yVals.length - 1;
+      }
+      let YtimeSeriesSegment: Array<(string | number)> = yVals.slice(segmentStart, segmentEnd);
+      let XtimeSeriesSegment: Array<(string | number)> = xVals.slice(segmentStart, segmentEnd);
       let timeSeriesData = JSON.parse(JSON.stringify(graphObj.data[0]));
       timeSeriesData.x = XtimeSeriesSegment;
       timeSeriesData.y = YtimeSeriesSegment;
-      
+
       let startDate: string = moment(XtimeSeriesSegment[0]).format("MMM Do");
       let endDate: string = moment(XtimeSeriesSegment[XtimeSeriesSegment.length - 1]).format("MMM Do");
       let segmentText: string = `${startDate} - ${endDate}`;
@@ -212,13 +218,12 @@ export class VisualizeGraphComponent implements OnInit {
         segmentText: segmentText,
         data: timeSeriesData
       }
-      let chunkDifferrence: number = (xVals.length - 1) - i;
-      if (segmentSize > chunkDifferrence) {
-        // add last chunk leftovers to previous segment
-        let lastSegment = timeSeriesSegments[timeSeriesSegments.length - 1];
-        lastSegment.segmentText = `${lastSegment.segmentText.split('-')[0]} - ${endDate}`;
-        lastSegment.data.x.push(timeSeriesData.x);
-        lastSegment.data.y.push(timeSeriesData.y);
+
+      if (lastSegment) {
+        let previousSegment = timeSeriesSegments[timeSeriesSegments.length - 1];
+        previousSegment.segmentText = `${previousSegment.segmentText.split('-')[0]} - ${endDate}`;
+        previousSegment.data.x.push(timeSeriesData.x);
+        previousSegment.data.y.push(timeSeriesData.y);
       } else {
         timeSeriesSegments.push(timeSeriesSegment);
       }

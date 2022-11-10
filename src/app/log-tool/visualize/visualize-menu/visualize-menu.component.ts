@@ -117,7 +117,6 @@ export class VisualizeMenuComponent implements OnInit {
     //need to call resize so that responsive graph resizes properly.
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
-      console.log('resize')
     }, 50)
   }
   
