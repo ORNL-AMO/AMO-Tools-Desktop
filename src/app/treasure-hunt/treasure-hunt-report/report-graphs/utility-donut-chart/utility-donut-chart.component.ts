@@ -13,6 +13,8 @@ export class UtilityDonutChartComponent implements OnInit {
   savingsItem: SavingsItem;
   @Input()
   showPrint: boolean;
+  @Input()
+  graphTab: string;
 
   @ViewChild('utilityDonutChart', { static: false }) utilityDonutChart: ElementRef;
   constructor(private plotlyService: PlotlyService) { }
@@ -38,11 +40,23 @@ export class UtilityDonutChartComponent implements OnInit {
   ngOnDestroy() { }
 
   createChart() {
+    let labels: Array<string> = new Array<string>();
+    let text: string;
+    if (this.graphTab === 'carbon'){
+      labels = ['Emissions Savings', 'Projected Emissions'];
+      text = "Emissions";
+    } else if (this.graphTab === 'cost') {
+      labels = ['Utility Savings', 'Projected Cost'];
+      text = "Cost";
+    } else if (this.graphTab === 'energy') {
+      labels = ['Utility Savings', 'Projected Utility Usage'];
+      text = "Utility Usage";
+    }
     let rotationAmount: number = (this.savingsItem.savings / (this.savingsItem.savings + this.savingsItem.newCost)) / 2 * 360;
     var data = [{
       width: this.utilityDonutChart.nativeElement.clientWidth,
       values: [this.savingsItem.savings, this.savingsItem.newCost],
-      labels: ['Utility Savings', 'Projected Cost'],
+      labels: labels,
       marker: {
         colors: graphColors
       },
@@ -67,7 +81,7 @@ export class UtilityDonutChartComponent implements OnInit {
             size: 12
           },
           showarrow: false,
-          text: `<b>Current Cost</b> <br>${this.savingsItem.currentCost}`,
+          text: `<b>Current ${text}</b> <br>${this.savingsItem.currentCost}`,
           x: .5,
           y: 0.5
         },
@@ -86,11 +100,23 @@ export class UtilityDonutChartComponent implements OnInit {
   }
 
   createPrintChart() {
+    let labels: Array<string> = new Array<string>();
+    let text: string;
+    if (this.graphTab === 'carbon'){
+      labels = ['Emissions Savings', 'Projected Emissions'];
+      text = "Emissions";
+    } else if (this.graphTab === 'cost') {
+      labels = ['Utility Savings', 'Projected Cost'];
+      text = "Cost";
+    } else if (this.graphTab === 'energy') {
+      labels = ['Utility Savings', 'Projected Utility Usage'];
+      text = "Utility Usage";
+    }
     let rotationAmount: number = (this.savingsItem.savings / (this.savingsItem.savings + this.savingsItem.newCost)) / 2 * 360;
     var data = [{
       width: this.utilityDonutChart.nativeElement.clientWidth,
       values: [this.savingsItem.savings, this.savingsItem.newCost],
-      labels: ['Utility Savings', 'Projected Cost'],
+      labels: labels,
       marker: {
         colors: graphColors
       },
@@ -115,7 +141,7 @@ export class UtilityDonutChartComponent implements OnInit {
             size: 12
           },
           showarrow: false,
-          text: `<b>Current Cost</b> <br>${this.savingsItem.currentCost}`,
+          text: `<b>Current ${text}</b> <br>${this.savingsItem.currentCost}`,
           x: 0,
           y: 0.5
         },

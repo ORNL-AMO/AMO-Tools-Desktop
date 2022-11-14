@@ -7,8 +7,9 @@ import { TreasureChestMenuService } from '../treasure-chest-menu/treasure-chest-
 import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
 import { SortCardsService } from '../opportunity-cards/sort-cards.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
-import { TreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, TreasureHuntCo2EmissionsResults, TreasureHuntResults } from '../../../shared/models/treasure-hunt';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { TreasureHuntReportService } from '../../treasure-hunt-report/treasure-hunt-report.service';
 
 @Component({
   selector: 'app-summary-card',
@@ -27,6 +28,9 @@ export class SummaryCardComponent implements OnInit {
   steamData: UtilityTotal;
   otherFuelData: UtilityTotal;
   additionalAnnualSavings: UtilityTotal;
+  carbonData: UtilityTotal;
+  carbonResults: TreasureHuntCo2EmissionsResults;
+  treasureHuntResults: TreasureHuntResults;
 
   totals: UtilityTotal;
   opportunityCardsSub: Subscription;
@@ -34,7 +38,7 @@ export class SummaryCardComponent implements OnInit {
   sortCardsData: SortCardsData;
   opportunityCards: Array<OpportunityCardData>;
   currCurrency: string = "$";
-  constructor(private opportunityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService,
+  constructor(private opportunityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService, private treasureHuntReportService: TreasureHuntReportService,
     private sortCardsService: SortCardsService, private treasureHuntService: TreasureHuntService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -57,7 +61,7 @@ export class SummaryCardComponent implements OnInit {
   }
 
   setSavingsData() {
-    if (this.sortCardsData != undefined && this.opportunityCards != undefined) {
+    if (this.sortCardsData != undefined && this.opportunityCards != undefined) {      
       let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
       let opportunityCards: Array<OpportunityCardData> = this.opportunityCards;
       opportunityCards = this.sortCardsService.sortCards(opportunityCards, this.sortCardsData);
@@ -71,6 +75,16 @@ export class SummaryCardComponent implements OnInit {
       this.currCurrency = this.settings.currency;
       let baselineCost: number = this.electricityData.baselineCost + this.naturalGasData.baselineCost + this.waterData.baselineCost + this.compressedAirData.baselineCost + this.steamData.baselineCost + this.wasteWaterData.baselineCost + this.otherFuelData.baselineCost;
       this.additionalAnnualSavings = this.calculateAdditionalSavings(baselineCost, opportunityCards);
+      
+      this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(treasureHunt, this.settings);
+      this.carbonResults = this.treasureHuntResults.co2EmissionsResults;
+      this.carbonData = {
+        totalPercentSavings: (this.carbonResults.totalCO2Savings / this.carbonResults.totalCO2CurrentUse * 100),
+        totalCostSavings: this.carbonResults.totalCO2Savings,
+        baselineCost: this.carbonResults.totalCO2CurrentUse,
+        modificationCost: this.carbonResults.totalCO2ProjectedUse
+      }
+
       if (this.settings.currency !== '$') {
         this.additionalAnnualSavings.totalCostSavings = this.convertUnitsService.value(this.additionalAnnualSavings.totalCostSavings).from("$").to(this.settings.currency);
         this.additionalAnnualSavings.baselineCost = this.convertUnitsService.value(this.additionalAnnualSavings.baselineCost).from("$").to(this.settings.currency);

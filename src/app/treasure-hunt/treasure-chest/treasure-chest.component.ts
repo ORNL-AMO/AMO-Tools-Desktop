@@ -24,7 +24,6 @@ export class TreasureChestComponent implements OnInit {
   }
 
   smallScreenTab: string = 'form';
-
   selectedCalc: string = 'none';
   selectedCalcSubscription: Subscription;
   constructor(private calculatorsService: CalculatorsService) { }
