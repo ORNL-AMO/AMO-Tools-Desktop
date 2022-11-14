@@ -187,6 +187,16 @@ export interface GraphLayout {
         l: number,
         r: number
     },
+    legend?: {
+        orientation: string,
+        y: number,
+        margin?: {
+            t?: number,
+            l?: number,
+            r?: number,
+            b?: number
+          }
+    },
     annotations: Array<AnnotationData>
 }
 

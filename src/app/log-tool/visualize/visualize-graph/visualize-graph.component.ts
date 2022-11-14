@@ -32,7 +32,7 @@ export class VisualizeGraphComponent implements OnInit {
   selectedGraphDataSubscription: Subscription;
   userGraphOptionsSubscription: Subscription;
   selectedGraphObj: GraphObj;
-  timeSeriesSegments: Array<{segmentText: string, data: VisualizerGraphData}> = [];
+  timeSeriesSegments: Array<TimeSeriesSegment> = [];
   selectedTimeSeriesSegment: TimeSeriesSegment;
 
   loadingSpinnerSub: Subscription;
@@ -90,6 +90,7 @@ export class VisualizeGraphComponent implements OnInit {
   }
 
   plotGraph(graphObj: GraphObj, displaySpinner: boolean = true) {
+    this.checkLegendDisplay(graphObj);
     this.plotlyService.newPlot(this.visualizeChart.nativeElement, graphObj.data, graphObj.layout, graphObj.mode)
     .then(chart => this.handlePlotlyInstanceEvents(chart, displaySpinner));
     window.dispatchEvent(new Event("resize"));
@@ -100,6 +101,22 @@ export class VisualizeGraphComponent implements OnInit {
     let plotlyInstance = await this.plotlyService.getPlotly();
     plotlyInstance.update(this.visualizeChart.nativeElement, this.selectedGraphObj.data, this.selectedGraphObj.layout, this.selectedGraphObj.mode);
     window.dispatchEvent(new Event("resize"));
+  }
+
+  checkLegendDisplay(graphObj: GraphObj) {
+    if (graphObj.data.length > 1) {
+      let hasLongName: boolean = graphObj.data.some(dataSeries => dataSeries.name.length > 20);
+      if (hasLongName) {
+        graphObj.layout.legend = {
+          orientation: "h",
+          y: -.25,
+          margin: {
+            t: 75,
+            b: 50
+          }
+        }
+      }
+    }
   }
 
   handlePlotlyInstanceEvents(chart, displayLoadingSpinner: boolean) {
@@ -149,15 +166,18 @@ export class VisualizeGraphComponent implements OnInit {
     } 
   }
 
-  setSelectedTimeSeriesSegment(segment: { segmentText: string, data: VisualizerGraphData }) {
+  setSelectedTimeSeriesSegment(segment: TimeSeriesSegment) {
     this.selectedTimeSeriesSegment = segment;
-    this.selectedGraphObj.data[0] = this.selectedTimeSeriesSegment.data;
-
+    this.selectedGraphObj.data.forEach((graphDataSeries, seriesIndex) => {
+      this.selectedGraphObj.data[seriesIndex] = this.selectedTimeSeriesSegment.data[seriesIndex];
+    });
+    
     let userGraphOptionsObj: GraphObj = this.visualizeService.userGraphOptions.getValue()
     if (userGraphOptionsObj) {
       this.selectedGraphObj.layout = userGraphOptionsObj.layout;
       this.selectedGraphObj.graphInteractivity = userGraphOptionsObj.graphInteractivity;
     }
+
     let resetLayoutRanges: GraphLayout = JSON.parse(JSON.stringify(this.visualizeService.selectedGraphObj.getValue().layout));
     this.selectedGraphObj.layout.xaxis = resetLayoutRanges.xaxis;
     this.selectedGraphObj.layout.yaxis = resetLayoutRanges.yaxis;
@@ -178,53 +198,69 @@ export class VisualizeGraphComponent implements OnInit {
       this.selectedGraphObj.graphInteractivity.hasLargeDataset) {
       this.timeSeriesSegments = this.createTimeSeriesSegments(graphObj);
       if (this.selectedTimeSeriesSegment) {
-        this.selectedGraphObj.data[0] = this.selectedTimeSeriesSegment.data;
+        this.selectedGraphObj.data = this.selectedTimeSeriesSegment.data;
       } else {
         this.selectedTimeSeriesSegment = this.timeSeriesSegments[0];
       }
     }
   }
 
+
+  // Update for 3781 multiple files compare
   createTimeSeriesSegments(graphObj: GraphObj): Array<TimeSeriesSegment> {
     this.selectedTimeSeriesSegment = undefined;
-    let xVals = graphObj.data[0].x;
-    let yVals = graphObj.data[0].y;
     
-    let segmentSize: number = Math.floor(yVals.length / 5);
-    let timeSeriesSegments: Array<{ segmentText: string, data: VisualizerGraphData }> = [
+    let timeSeriesSegments: Array<TimeSeriesSegment> = [
       {
         segmentText: 'All Datapoints',
-        data: graphObj.data[0]
+        data: [...graphObj.data]
       }
     ];
 
-    for (let i = 0; i < yVals.length; i += segmentSize) {
+    // Assume same data length for all series
+    let dataSetLength = graphObj.data[0].y.length;
+    let segmentSize: number = Math.floor(dataSetLength / 5);
+    
+    for (let i = 0; i < dataSetLength; i += segmentSize) {  
       let segmentStart: number = i;
       let segmentEnd: number = i + segmentSize;
-      let lastSegment: boolean = i + segmentSize > yVals.length;
+      let lastSegment: boolean = i + segmentSize > dataSetLength;
       if (lastSegment) {
-        segmentEnd = yVals.length - 1;
+        segmentEnd = dataSetLength - 1;
       }
-      let YtimeSeriesSegment: Array<(string | number)> = yVals.slice(segmentStart, segmentEnd);
-      let XtimeSeriesSegment: Array<(string | number)> = xVals.slice(segmentStart, segmentEnd);
-      let timeSeriesData = JSON.parse(JSON.stringify(graphObj.data[0]));
-      timeSeriesData.x = XtimeSeriesSegment;
-      timeSeriesData.y = YtimeSeriesSegment;
-
-      let startDate: string = moment(XtimeSeriesSegment[0]).format("MMM Do");
-      let endDate: string = moment(XtimeSeriesSegment[XtimeSeriesSegment.length - 1]).format("MMM Do");
-      let segmentText: string = `${startDate} - ${endDate}`;
+      
       let timeSeriesSegment: TimeSeriesSegment = {
-        segmentText: segmentText,
-        data: timeSeriesData
+        segmentText: undefined,
+        data: []
       }
 
-      if (lastSegment) {
-        let previousSegment = timeSeriesSegments[timeSeriesSegments.length - 1];
-        previousSegment.segmentText = `${previousSegment.segmentText.split('-')[0]} - ${endDate}`;
-        previousSegment.data.x.push(timeSeriesData.x);
-        previousSegment.data.y.push(timeSeriesData.y);
-      } else {
+      graphObj.data.forEach((graphDataSeries, seriesIndex) => {
+        let xVals = graphDataSeries.x;
+        let yVals = graphDataSeries.y;
+        let YtimeSeriesSegment: Array<(string | number)> = yVals.slice(segmentStart, segmentEnd);
+        let XtimeSeriesSegment: Array<(string | number)> = xVals.slice(segmentStart, segmentEnd);
+        let timeSeriesData = JSON.parse(JSON.stringify(graphDataSeries));
+        timeSeriesData.x = XtimeSeriesSegment;
+        timeSeriesData.y = YtimeSeriesSegment;
+
+        let startDate: string = moment(XtimeSeriesSegment[0]).format("MMM Do");
+        let endDate: string = moment(XtimeSeriesSegment[XtimeSeriesSegment.length - 1]).format("MMM Do");
+        
+        if (seriesIndex === 0) {
+          let segmentText: string = `${startDate} - ${endDate}`;
+          timeSeriesSegment.segmentText = segmentText
+        } 
+        timeSeriesSegment.data.push(timeSeriesData)
+  
+        if (lastSegment) {
+          let previousSegment = timeSeriesSegments[timeSeriesSegments.length - 1];
+          previousSegment.segmentText = `${previousSegment.segmentText.split('-')[0]} - ${endDate}`;
+          previousSegment.data[seriesIndex].x.push(timeSeriesData.x);
+          previousSegment.data[seriesIndex].y.push(timeSeriesData.y);
+        }
+      });
+      
+      if (!lastSegment) {
         timeSeriesSegments.push(timeSeriesSegment);
       }
     }
@@ -314,4 +350,4 @@ export interface PlotlyAxisRanges {
   y2Max: number
 }
 
-export interface TimeSeriesSegment {segmentText: string, data: VisualizerGraphData}
+export interface TimeSeriesSegment {segmentText: string, data: Array<VisualizerGraphData>}
