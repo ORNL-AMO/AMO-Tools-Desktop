@@ -127,3 +127,12 @@ span.alert-warning {
     max-height: 100%;
     overflow-y: scroll;
 }
+
+@media screen and (max-width: 575px) {
+    .fa-save, .fa-times, .fa-edit {
+        font-size: large;
+    }
+    .header h3 {
+        font-size: 14px !important;
+    }
+}

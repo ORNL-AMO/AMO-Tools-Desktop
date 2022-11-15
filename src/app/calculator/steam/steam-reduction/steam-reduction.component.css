@@ -66,3 +66,13 @@
 .opp-sheet-icon{
     width: 35px;
 }
+
+
+@media screen and (max-width: 575px) {
+    .fa-save, .fa-times, .fa-edit {
+        font-size: large;
+    }
+    .header h3 {
+        font-size: 14px !important;
+    }
+}

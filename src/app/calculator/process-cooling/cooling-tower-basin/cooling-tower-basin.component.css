@@ -135,3 +135,12 @@ div.clickable-tab.active{
         display: none;
     }
 }
+
+@media screen and (max-width: 575px) {
+    .fa-save, .fa-times, .fa-edit {
+        font-size: large;
+    }
+    .header h3 {
+        font-size: 14px !important;
+    }
+}
