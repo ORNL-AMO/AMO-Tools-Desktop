@@ -88,8 +88,8 @@ export class VisualizeDataComponent implements OnInit {
   }
 
   setTimeSeriesSummary() {
-    let visualizeData: Array<GraphDataOption> = this.visualizeService.visualizeData;
-    visualizeData.forEach((dataItem) => {
+    let allDataByAxisField: Array<GraphDataOption> = this.visualizeService.allDataByAxisField;
+    allDataByAxisField.forEach((dataItem) => {
       if (dataItem.dataField.isDateField) {
         let fieldData: Array<any>;
         if (this.axisRanges) {

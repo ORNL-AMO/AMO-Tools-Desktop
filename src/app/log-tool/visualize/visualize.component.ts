@@ -46,7 +46,6 @@ export class VisualizeComponent implements OnInit {
         this.tabSelect = tabSelect
       }
     });
-    this.visualizeService.buildGraphData();
     this.setInitialGraphData();
   }
 
@@ -58,6 +57,7 @@ export class VisualizeComponent implements OnInit {
   }
 
   setInitialGraphData() {
+    this.visualizeService.buildGraphData();
     let initialGraphObj: GraphObj = this.visualizeService.selectedGraphObj.getValue();
     if (initialGraphObj.data[0].type == 'bar') {
       if (initialGraphObj.binnedField == undefined || initialGraphObj.binnedField.fieldName != initialGraphObj.selectedXAxisDataOption.dataField.fieldName || initialGraphObj.bins == undefined) {

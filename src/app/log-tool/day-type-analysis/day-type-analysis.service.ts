@@ -14,6 +14,8 @@ export class DayTypeAnalysisService {
   displayDayTypeCalander: BehaviorSubject<boolean>;
 
   calendarStartDate: { year: number, month: number, day: number };
+  allDataMinDate: Date;
+  allDataMaxDate: Date;
   numberOfMonths: number;
   dayTypesCalculated: boolean = false;
 
@@ -275,15 +277,17 @@ export class DayTypeAnalysisService {
   setStartDateAndNumberOfMonths() {
     let startDates: Array<Date> = this.logToolService.individualDataFromCsv.map(csvItem => { return new Date(csvItem.startDate) });
     let endDates: Array<Date> = this.logToolService.individualDataFromCsv.map(csvItem => { return new Date(csvItem.endDate) });
-    let startDate: Date = new Date(_.min(startDates));
-    let endDate: Date = new Date(_.max(endDates));
+    this.allDataMinDate = new Date(_.min(startDates));
+    this.allDataMaxDate = new Date(_.max(endDates));
     this.calendarStartDate = {
-      year: startDate.getFullYear(),
-      month: startDate.getMonth() + 1,
-      day: startDate.getDate()
+      year: this.allDataMinDate.getFullYear(),
+      month: this.allDataMinDate.getMonth() + 1,
+      day: this.allDataMinDate.getDate()
     };
-    let startMonth: number = startDate.getMonth();
-    let endMonth: number = endDate.getMonth();
+
+
+    let startMonth: number = this.allDataMinDate.getMonth();
+    let endMonth: number = this.allDataMaxDate.getMonth();
     this.numberOfMonths = endMonth - startMonth + 1;
   }
 }
