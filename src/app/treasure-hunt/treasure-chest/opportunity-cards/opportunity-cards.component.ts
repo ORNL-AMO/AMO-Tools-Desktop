@@ -47,7 +47,9 @@ export class OpportunityCardsComponent implements OnInit {
     });
     this.updatedOpportunityCardSub = this.opportunityCardsService.updatedOpportunityCard.subscribe(val => {
       if (val) {
-        this.opportunityCardsData[this.modifyDataIndex] = val;
+        let opportunityCardData = Array.from(this.opportunityCardsData);
+        opportunityCardData[this.modifyDataIndex] = val;
+        this.opportunityCardsData = opportunityCardData;
         this.updateAllIndexes();
         this.opportunityCardsService.updatedOpportunityCard.next(undefined);
         this.updateOpportunityCardsData();
@@ -59,6 +61,8 @@ export class OpportunityCardsComponent implements OnInit {
       }
     });
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
+      // Trigger pipe input change from new input ref
+      this.opportunityCardsData = Array.from(this.opportunityCardsData);
       this.sortByVal = val;
     });
     this.deselectAllSub = this.treasureChestMenuService.deselectAll.subscribe(val => {
