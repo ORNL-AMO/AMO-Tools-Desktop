@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SavingsItem, TreasureHuntResults } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-report-graphs',
   templateUrl: './report-graphs.component.html',
@@ -17,11 +16,10 @@ export class ReportGraphsComponent implements OnInit {
 
   graphTab: string = 'cost';
 
-  savingsItems: Array<SavingsItem>;
   costSavingsItems: Array<SavingsItem>;
   energySavingsItems: Array<SavingsItem>;
   carbonSavingsItems: Array<SavingsItem>;
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor() { }
 
   ngOnInit() {
 
@@ -32,20 +30,16 @@ export class ReportGraphsComponent implements OnInit {
   }
 
   setSavingsItems() {
-    this.savingsItems = new Array();
     this.costSavingsItems = new Array();
     this.energySavingsItems = new Array();
     this.carbonSavingsItems = new Array();
     if (!this.showPrint) {
       if (this.graphTab === 'carbon') {
         this.setCarbonSavingsItems();
-        this.savingsItems = this.carbonSavingsItems;
       } else if (this.graphTab === 'cost') {
         this.setCostSavingsItems();
-        this.savingsItems = this.costSavingsItems;
       } else if (this.graphTab === 'energy') {
         this.setEnergySavingsItems();
-        this.savingsItems = this.energySavingsItems;
       }
     } else {
       this.setCostSavingsItems();

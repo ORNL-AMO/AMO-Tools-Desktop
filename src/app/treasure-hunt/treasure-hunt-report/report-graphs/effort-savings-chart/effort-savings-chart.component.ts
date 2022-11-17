@@ -6,7 +6,6 @@ import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { Settings } from "../../../../shared/models/settings";
 import { PlotlyService } from 'angular-plotly.js';
-import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
 
 export interface ChartOpportunity {
   curveNumber: number,
