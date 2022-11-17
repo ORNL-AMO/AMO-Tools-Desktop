@@ -332,9 +332,15 @@ export class TreasureHuntPptService {
     slide10.addChart("pie", paybackBarData, pieChartOptions);
     slide10.addText('Payback Details', slideTitleProperties);
 
-    let slide11 = pptx.addSlide();
-    slide11.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
-    slide11.addText('Opportunity Summaries', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
+    let slide11 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide11.addText('Best Practices', slideTitleProperties);
+
+    let slide12 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide12.addText('Other Opportunities Not Evaluated', slideTitleProperties);
+
+    let slide13 = pptx.addSlide();
+    slide13.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
+    slide13.addText('Opportunity Summaries', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
 
     let counter: number = 0;
     opportunityCardsData.forEach(opp => {
@@ -897,6 +903,11 @@ export class TreasureHuntPptService {
       "Less than 1 year",
       this.roundValToFormatString(opportunitiesPaybackDetails.lessThanOneYear.numOpportunities),
       this.roundValToCurrency(opportunitiesPaybackDetails.lessThanOneYear.totalSavings)
+    ]);
+    rows.push([
+      "1 to 2 years",
+      this.roundValToFormatString(opportunitiesPaybackDetails.oneToTwoYears.numOpportunities),
+      this.roundValToCurrency(opportunitiesPaybackDetails.oneToTwoYears.totalSavings)
     ]);
     rows.push([
       "2 to 3 years",
