@@ -219,7 +219,6 @@ export class LogToolDataService {
     let currentDate: Date = new Date(data[0][dateField]);
     data.forEach(dataItem => {
       let dataItemDate: Date = new Date(dataItem[dateField]);
-      // 3777 why
       //if same day add data to individual array
       if (this.checkSameDay(currentDate, dataItemDate)) {
         individualDayData.push(dataItem);
@@ -389,7 +388,7 @@ export class LogToolDataService {
     return !stepIncomplete;
   }
 
-  // 3777 EVERY dataset must have at least date field (original funcitonality)
+  // EVERY dataset must have at least date field (original funcitonality)
   setCanRunDayTypeAnalysis(explorerDataSets?: Array<ExplorerDataSet>): boolean {
     if (!explorerDataSets) {
       explorerDataSets = this.explorerData.getValue().datasets;

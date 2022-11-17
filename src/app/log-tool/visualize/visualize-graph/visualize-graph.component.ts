@@ -168,6 +168,20 @@ export class VisualizeGraphComponent implements OnInit {
     } 
   }
 
+  // currently only works for single chart
+  setTimeSeriesSegments(graphObj: GraphObj) {
+    this.timeSeriesSegments = [];
+    if (this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName === 'Time Series' &&
+      this.selectedGraphObj.graphInteractivity.hasLargeDataset) {
+      this.timeSeriesSegments = this.createTimeSeriesSegments(graphObj);
+      if (this.selectedTimeSeriesSegment) {
+        this.selectedGraphObj.data = this.selectedTimeSeriesSegment.data;
+      } else {
+        this.selectedTimeSeriesSegment = this.timeSeriesSegments[0];
+      }
+    }
+  }
+
   setSelectedTimeSeriesSegment(segment: TimeSeriesSegment) {
     this.selectedTimeSeriesSegment = segment;
     this.selectedGraphObj.data.forEach((graphDataSeries, seriesIndex) => {
@@ -193,161 +207,111 @@ export class VisualizeGraphComponent implements OnInit {
     this.plotGraph(graphObj, false);
   }
 
-  // currently only works for single chart
-  setTimeSeriesSegments(graphObj: GraphObj) {
-    this.timeSeriesSegments = [];
-    if (this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName === 'Time Series' &&
-      this.selectedGraphObj.graphInteractivity.hasLargeDataset) {
-      this.timeSeriesSegments = this.createTimeSeriesSegments(graphObj);
-      if (this.selectedTimeSeriesSegment) {
-        this.selectedGraphObj.data = this.selectedTimeSeriesSegment.data;
-      } else {
-        this.selectedTimeSeriesSegment = this.timeSeriesSegments[0];
-      }
-    }
-  }
 
-
-  // Update for 3781 multiple files compare
-  // createTimeSeriesSegments(graphObj: GraphObj): Array<TimeSeriesSegment> {
-  //   this.selectedTimeSeriesSegment = undefined;
-    
-  //   let timeSeriesSegments: Array<TimeSeriesSegment> = [
-  //     {
-  //       segmentText: 'All Datapoints',
-  //       data: [...graphObj.data]
-  //     }
-  //   ];
-
-  //   // Assume same data length for all series
-  //   let dataSetLength = graphObj.data[0].y.length;
-  //   let segmentSize: number = Math.floor(dataSetLength / 5);
-    
-  //   for (let i = 0; i < dataSetLength; i += segmentSize) {  
-  //     let segmentStart: number = i;
-  //     let segmentEnd: number = i + segmentSize;
-  //     let lastSegment: boolean = i + segmentSize > dataSetLength;
-  //     if (lastSegment) {
-  //       segmentEnd = dataSetLength - 1;
-  //     }
-      
-  //     let timeSeriesSegment: TimeSeriesSegment = {
-  //       segmentText: undefined,
-  //       data: []
-  //     }
-
-  //     graphObj.data.forEach((graphDataSeries, seriesIndex) => {
-  //       let xVals = graphDataSeries.x;
-  //       let yVals = graphDataSeries.y;
-  //       let YtimeSeriesSegment: Array<(string | number)> = yVals.slice(segmentStart, segmentEnd);
-  //       let XtimeSeriesSegment: Array<(string | number)> = xVals.slice(segmentStart, segmentEnd);
-  //       let timeSeriesData = JSON.parse(JSON.stringify(graphDataSeries));
-  //       timeSeriesData.x = XtimeSeriesSegment;
-  //       timeSeriesData.y = YtimeSeriesSegment;
-
-  //       debugger;
-  //       let startDate: string = moment(XtimeSeriesSegment[0]).format("MMM Do");
-  //       let endDate: string = moment(XtimeSeriesSegment[XtimeSeriesSegment.length - 1]).format("MMM Do");
-        
-  //       if (seriesIndex === 0) {
-  //         let segmentText: string = `${startDate} - ${endDate}`;
-  //         timeSeriesSegment.segmentText = segmentText
-  //       } 
-  //       timeSeriesSegment.data.push(timeSeriesData)
-  
-  //       if (lastSegment) {
-  //         let previousSegment = timeSeriesSegments[timeSeriesSegments.length - 1];
-  //         previousSegment.segmentText = `${previousSegment.segmentText.split('-')[0]} - ${endDate}`;
-  //         previousSegment.data[seriesIndex].x.push(timeSeriesData.x);
-  //         previousSegment.data[seriesIndex].y.push(timeSeriesData.y);
-  //       }
-  //     });
-      
-  //     if (!lastSegment) {
-  //       timeSeriesSegments.push(timeSeriesSegment);
-  //     }
-  //   }
-
-  //   return timeSeriesSegments;
-  // }
-
+  // Multiple Datasets with different time series not supported yet
+  // Assume same time series for now
   createTimeSeriesSegments(graphObj: GraphObj): Array<TimeSeriesSegment> {
     this.selectedTimeSeriesSegment = undefined;
-    
-    let timeSeriesSegments: Array<TimeSeriesSegment> = [
-      {
-        segmentText: 'All Datapoints',
-        data: [...graphObj.data]
-      }
-    ];
 
-
-    let config: SegmentConfig = this.setSeriesSegmentConfig(graphObj);
-    
-    // Assume same data length for all series
-    for (let i = 0; i < config.dataSetLength; i += config.segmentSize) {  
-      let segmentStart: number = i;
-      let segmentEnd: number = i + config.segmentSize;
-      let lastSegment: boolean = i + config.segmentSize > config.dataSetLength;
-      if (lastSegment) {
-        segmentEnd = config.dataSetLength - 1;
-      }
-
-      let timeSeriesSegment: TimeSeriesSegment = {
-        segmentText: undefined,
-        data: []
-      }
-
-      graphObj.data.forEach((graphDataSeries, seriesIndex) => {
-        let xVals = graphDataSeries.x;
-        let yVals = graphDataSeries.y;
-        let YtimeSeriesSegment: Array<(string | number)> = yVals.slice(segmentStart, segmentEnd);
-        let XtimeSeriesSegment: Array<(string | number)> = xVals.slice(segmentStart, segmentEnd);
-        let timeSeriesData = JSON.parse(JSON.stringify(graphDataSeries));
-        timeSeriesData.x = XtimeSeriesSegment;
-        timeSeriesData.y = YtimeSeriesSegment;
-
-        let startDate: string = moment(XtimeSeriesSegment[0]).format("MMM Do");
-        let endDate: string = moment(XtimeSeriesSegment[XtimeSeriesSegment.length - 1]).format("MMM Do");
-        
-        if (seriesIndex === 0) {
-          let segmentText: string = `${startDate} - ${endDate}`;
-          timeSeriesSegment.segmentText = segmentText
-        } 
-        timeSeriesSegment.data.push(timeSeriesData)
-  
-        if (lastSegment) {
-          let previousSegment = timeSeriesSegments[timeSeriesSegments.length - 1];
-          previousSegment.segmentText = `${previousSegment.segmentText.split('-')[0]} - ${endDate}`;
-          previousSegment.data[seriesIndex].x.push(timeSeriesData.x);
-          previousSegment.data[seriesIndex].y.push(timeSeriesData.y);
-        }
-      });
-      
-      if (!lastSegment) {
-        timeSeriesSegments.push(timeSeriesSegment);
-      }
-    }
-
-    return timeSeriesSegments;
-  }
-
-  setSeriesSegmentConfig(graphObj: GraphObj) {
     let config: SegmentConfig = {
       dataSetLength: graphObj.data[0].y.length,
-      totalSegments: 5,
-      segmentSize: Math.floor(graphObj.data[0].y.length / 5),
+      segmentSize: Math.floor(graphObj.data[0].y.length * .15),
       allDataMinDate: this.dayTypeAnalysisService.allDataMinDate,
       allDataMaxDate: this.dayTypeAnalysisService.allDataMaxDate,
-      dataSeriesStarts: [],
-      dataSeriesEnds: []
     }
+    
+    let segmentDays: Array<TimeSeriesSegment> = [];
+    graphObj.data.forEach((graphDataSeries: VisualizerGraphData, seriesIndex) => {
+      let currentDay: string = moment(graphDataSeries.x[0]).format("MMM Do");
 
-    // graphObj.data.forEach((graphDataSeries, seriesIndex) => {
+      //======
+      // 6040 band aid until changing time series setup
+      // use only the time series data for this series, DE logic currently concats all time series data. 
+      let previousSeriesEnd: number = 0;
+      if (seriesIndex !== 0) {
+        previousSeriesEnd = graphObj.data[seriesIndex - 1].y.length;
+      }
+      graphDataSeries.x = graphDataSeries.x.slice(previousSeriesEnd, previousSeriesEnd + graphDataSeries.y.length);
+      //======
 
-    // });
+      let currentDayData: VisualizerGraphData = JSON.parse(JSON.stringify(graphDataSeries));
+      currentDayData.x = [];
+      currentDayData.y = [];
 
-    return config;
+      graphDataSeries.x.forEach((dateStamp, coordinateIndex) => {
+        let monthDay: string = moment(dateStamp).format("MMM Do");
+        let isLastDay: boolean = coordinateIndex === graphDataSeries.x.length - 1;
+        if (monthDay !== currentDay || isLastDay) {
+          if (isLastDay) {
+            currentDayData.x.push(dateStamp);
+            currentDayData.y.push(graphDataSeries.y[coordinateIndex]);
+          }
+          
+          if (seriesIndex === 0) {
+            segmentDays.push({
+              segmentText: currentDay,
+              data: [currentDayData]
+            });
+          } 
+          else {
+            let existingSegment: TimeSeriesSegment = segmentDays[segmentDays.findIndex(day => day.segmentText === currentDay)];
+            existingSegment.data.push(currentDayData);
+          }
+          
+          currentDay = monthDay;
+          currentDayData = JSON.parse(JSON.stringify(graphDataSeries));
+          currentDayData.x = [];
+          currentDayData.y = [];
+
+        } else {
+          currentDayData.x.push(dateStamp);
+          currentDayData.y.push(graphDataSeries.y[coordinateIndex]);
+        }
+
+      });
+    });
+
+    // Group day segments into reasonable amount of segments until day selection is implemented
+    return this.groupTimeSeriesDaySegments(segmentDays, graphObj, config);
+  }
+
+  groupTimeSeriesDaySegments(segmentDays: Array<TimeSeriesSegment>, graphObj: GraphObj, config: SegmentConfig): Array<TimeSeriesSegment> {
+    let timeSeriesSegments: Array<TimeSeriesSegment> = [{segmentText: 'All Datapoints', data: [...graphObj.data]}];
+    let groupedSegment: TimeSeriesSegment = {segmentText: undefined, data: []}
+
+    let startDate: string = segmentDays[0].segmentText;
+    let endDate: string;
+
+    segmentDays.forEach((daySegment, index) => {
+      if (!startDate) {
+        startDate = daySegment.segmentText
+      }
+
+      daySegment.data.forEach((dataSeries, index) => {
+        if (!groupedSegment.data[index]) {
+          groupedSegment.data.push(dataSeries);
+        } else {
+          groupedSegment.data[index].x = groupedSegment.data[index].x.concat(dataSeries.x)
+          groupedSegment.data[index].y = groupedSegment.data[index].y.concat(dataSeries.y)
+        }
+      });
+
+      let isSegmentLengthLimit: boolean = groupedSegment.data[0].y.length >= config.segmentSize;
+      if (isSegmentLengthLimit || index === segmentDays.length - 1) {
+        endDate = daySegment.segmentText;
+        let segmentText: string = `${startDate} - ${endDate}`;
+        groupedSegment.segmentText = segmentText;
+        startDate = undefined;
+        timeSeriesSegments.push(groupedSegment);
+        groupedSegment = {
+          segmentText: undefined,
+          data: []
+        }
+      } 
+    });
+
+    console.log(timeSeriesSegments);
+    return timeSeriesSegments;
   }
 
   checkRemoveAnnotationsFromSegment(graphObj: GraphObj): AnnotationData[] {
@@ -434,15 +398,10 @@ export interface PlotlyAxisRanges {
 
 export interface SegmentConfig {
   dataSetLength: number;
-  totalSegments: number;
   segmentSize: number;
-
   // below in date ms
   allDataMinDate: Date;
   allDataMaxDate: Date;
-  dataSeriesStarts: Array<number>;
-  dataSeriesEnds: Array<number>;
-
 }
 
 export interface TimeSeriesSegment {segmentText: string, data: Array<VisualizerGraphData>}

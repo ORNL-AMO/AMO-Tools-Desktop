@@ -29,7 +29,6 @@ export class VisualizeMenuService {
   }
 
   setScatterGraphDataOptions(selectedGraphObj: GraphObj) {
-    console.log('setScatterGraphDataOptions')
     this.setXAxisDataOptions(selectedGraphObj);
     this.setSelectedXAxisDataOption(selectedGraphObj);
 
@@ -50,7 +49,7 @@ export class VisualizeMenuService {
           tmpSelectedYAxisDataOptions.push(option);
         }
       } {
-        debugger// 6040 no dataOption.. When is this??
+        // 6040 no dataOption.. When is this??
       }
     });
 
@@ -284,7 +283,6 @@ export class VisualizeMenuService {
   }
 
   addData(selectedGraphObj: GraphObj) {
-    debugger;
     let currentSelections: Array<string> = selectedGraphObj.selectedYAxisDataOptions.map(option => { return option.dataOption.dataField.fieldName });
     let unusedSelections: Array<{ dataField: LogToolField }> = JSON.parse(JSON.stringify(selectedGraphObj.yAxisDataOptions))
     _.remove(unusedSelections, (option) => { return currentSelections.includes(option.dataField.fieldName) });

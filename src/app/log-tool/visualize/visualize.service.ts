@@ -38,7 +38,6 @@ export class VisualizeService {
     this.allDataByAxisFieldsInitialized = true;
     this.allDataByAxisField = new Array();
     let graphAxisOptions = this.getDataFieldOptionsWithDate();
-    // 6040 Can this be set to the service somewhere?
     graphAxisOptions.forEach(field => {
       let data = this.getAxisOptionGraphData(field.fieldName);
       this.allDataByAxisField.push({
@@ -76,7 +75,7 @@ export class VisualizeService {
   // field == axis
   getAxisOptionGraphData(fieldName: string): Array<number> {
     let data: Array<any> = new Array();
-    // 6040 Perform different operation if is datefield? don't concat
+    // 6040 Perform different operation if is datefield - don't concat
     this.logToolService.individualDataFromCsv.forEach(individualDataItem => {
       let foundData = individualDataItem.csvImportData.meta.fields.find(field => { return field == fieldName });
       if (foundData) {
@@ -86,14 +85,13 @@ export class VisualizeService {
     
     let mappedValues: Array<any> = _.mapValues(data, (dataItem) => { return dataItem[fieldName] });
     let valueArr = _.values(mappedValues);
-    console.log('axis option graph data valuesArr', valueArr);
     return valueArr;
   }
 
   getGraphData(fieldName: string) {
     let data: Array<number | string>;
     if (fieldName == 'Time Series') {
-      // 6040 Why not return time series here when setXAxisDataOptionts
+      // 6040 rework for setXAxisDataOptionts call?
     } else {
       data = _.find(this.allDataByAxisField, (dataItem) => { return dataItem.dataField.fieldName == fieldName }).data;
     }
