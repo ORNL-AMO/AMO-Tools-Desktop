@@ -168,12 +168,19 @@ export class VisualizeGraphComponent implements OnInit {
     } 
   }
 
-  // currently only works for single chart
   setTimeSeriesSegments(graphObj: GraphObj) {
     this.timeSeriesSegments = [];
-    if (this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName === 'Time Series' &&
-      this.selectedGraphObj.graphInteractivity.hasLargeDataset) {
-      this.timeSeriesSegments = this.createTimeSeriesSegments(graphObj);
+    if (this.selectedGraphObj.graphInteractivity.hasLargeDataset) {
+      if (this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName === 'Time Series') {
+        this.timeSeriesSegments = this.createTimeSeriesSegments(graphObj);
+      } else {
+        // A non time-series axis is selected
+        let timeSeriesData: Array<number | string> = this.visualizeService.getTimeSeriesData(graphObj.selectedXAxisDataOption.dataField);
+        if (timeSeriesData) {
+          this.timeSeriesSegments = this.createTimeSeriesSegments(graphObj, timeSeriesData);
+        }
+      }
+
       if (this.selectedTimeSeriesSegment) {
         this.selectedGraphObj.data = this.selectedTimeSeriesSegment.data;
       } else {
@@ -208,9 +215,7 @@ export class VisualizeGraphComponent implements OnInit {
   }
 
 
-  // Multiple Datasets with different time series not supported yet
-  // Assume same time series for now
-  createTimeSeriesSegments(graphObj: GraphObj): Array<TimeSeriesSegment> {
+  createTimeSeriesSegments(graphObj: GraphObj, notSelectedTimeSeriesData?: Array<number | string>): Array<TimeSeriesSegment> {
     this.selectedTimeSeriesSegment = undefined;
 
     let config: SegmentConfig = {
@@ -222,28 +227,40 @@ export class VisualizeGraphComponent implements OnInit {
     
     let segmentDays: Array<TimeSeriesSegment> = [];
     graphObj.data.forEach((graphDataSeries: VisualizerGraphData, seriesIndex) => {
-      let currentDay: string = moment(graphDataSeries.x[0]).format("MMM Do");
+      let timeSeriesData: Array<string | number> = graphDataSeries.x;
+
+      if (notSelectedTimeSeriesData) {
+        timeSeriesData = notSelectedTimeSeriesData;
+      }
+
+      let currentDay: string = moment(timeSeriesData[0]).format("MMM Do");
 
       //======
-      // 6040 band aid until changing time series setup
-      // use only the time series data for this series, DE logic currently concats all time series data. 
+      // 6040 band aid until file/dataset processing supports multi files better
+      // use only the time series data for the selected series (y axis), DE logic currently concats all time series data. 
       let previousSeriesEnd: number = 0;
       if (seriesIndex !== 0) {
         previousSeriesEnd = graphObj.data[seriesIndex - 1].y.length;
       }
-      graphDataSeries.x = graphDataSeries.x.slice(previousSeriesEnd, previousSeriesEnd + graphDataSeries.y.length);
+      timeSeriesData = timeSeriesData.slice(previousSeriesEnd, previousSeriesEnd + graphDataSeries.y.length);
       //======
 
       let currentDayData: VisualizerGraphData = JSON.parse(JSON.stringify(graphDataSeries));
       currentDayData.x = [];
       currentDayData.y = [];
 
-      graphDataSeries.x.forEach((dateStamp, coordinateIndex) => {
+      timeSeriesData.forEach((dateStamp, coordinateIndex) => {
         let monthDay: string = moment(dateStamp).format("MMM Do");
-        let isLastDay: boolean = coordinateIndex === graphDataSeries.x.length - 1;
+
+        let xValue: string | number = dateStamp;
+        if (notSelectedTimeSeriesData) {
+          xValue = graphDataSeries.x[coordinateIndex];
+        }
+
+        let isLastDay: boolean = coordinateIndex === timeSeriesData.length - 1;
         if (monthDay !== currentDay || isLastDay) {
           if (isLastDay) {
-            currentDayData.x.push(dateStamp);
+            currentDayData.x.push(xValue);
             currentDayData.y.push(graphDataSeries.y[coordinateIndex]);
           }
           
@@ -264,7 +281,7 @@ export class VisualizeGraphComponent implements OnInit {
           currentDayData.y = [];
 
         } else {
-          currentDayData.x.push(dateStamp);
+          currentDayData.x.push(xValue);
           currentDayData.y.push(graphDataSeries.y[coordinateIndex]);
         }
 

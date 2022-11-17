@@ -88,7 +88,7 @@ export class VisualizeService {
     return valueArr;
   }
 
-  getGraphData(fieldName: string) {
+  getGraphDataByField(fieldName: string) {
     let data: Array<number | string>;
     if (fieldName == 'Time Series') {
       // 6040 rework for setXAxisDataOptionts call?

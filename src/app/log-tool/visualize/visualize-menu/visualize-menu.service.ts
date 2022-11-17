@@ -108,7 +108,7 @@ export class VisualizeMenuService {
     }
     selectedGraphObj.xAxisDataOptions = new Array();
     dataFields.forEach(field => {
-      let data = this.visualizeService.getGraphData(field.fieldName);
+      let data = this.visualizeService.getGraphDataByField(field.fieldName);
       selectedGraphObj.xAxisDataOptions.push({
         data: data,
         dataField: field
@@ -171,7 +171,7 @@ export class VisualizeMenuService {
       if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
         let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(field);
         if (timeData) {
-          let data: (string | number)[]  = this.visualizeService.getGraphData(field.fieldName);
+          let data: (string | number)[]  = this.visualizeService.getGraphDataByField(field.fieldName);
           selectedGraphObj.yAxisDataOptions.push({
             data: data,
             dataField: field
@@ -179,7 +179,7 @@ export class VisualizeMenuService {
         }
       }
       else if (selectedGraphObj.data[0].type == 'scattergl') {
-        let data = this.visualizeService.getGraphData(field.fieldName);
+        let data = this.visualizeService.getGraphDataByField(field.fieldName);
         let yAxisOption: GraphDataOption = {
           data: data,
           dataField: field
@@ -201,7 +201,6 @@ export class VisualizeMenuService {
       if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
         let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(selectedDataOption.dataOption.dataField);
         if (timeData) {
-          debugger;
           selectedGraphObj.data[index].x = timeData;
         }
       } 

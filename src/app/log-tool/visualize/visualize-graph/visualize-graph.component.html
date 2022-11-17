@@ -1,8 +1,7 @@
 <div class="m-0 p-2" #graphContainer>
     <ng-container *ngIf="selectedGraphObj">  
     <div class="data-explorer-visualizer graph-card m-0 pt-2 pb-0">
-        <div *ngIf="selectedGraphObj.selectedXAxisDataOption.dataField.fieldName === 'Time Series' 
-                    && selectedGraphObj.graphInteractivity.hasLargeDataset" 
+        <div *ngIf="selectedGraphObj.graphInteractivity.hasLargeDataset" 
         class="justify-content-center pt-0 pb-1 px-3 btn-group btn-group-sm align-self-center">
             <ng-container *ngFor="let option of timeSeriesSegments; let i = index;">
                 <button type="button" id="timeSeriesSegments" class="btn btn-secondary btn-sm toggle-btn py-1 px-3"
