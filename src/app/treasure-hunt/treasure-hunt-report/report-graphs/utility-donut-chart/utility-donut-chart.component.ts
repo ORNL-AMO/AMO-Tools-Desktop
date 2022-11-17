@@ -42,14 +42,12 @@ export class UtilityDonutChartComponent implements OnInit {
   createChart() {
     let labels: Array<string> = new Array<string>();
     let text: string;
+    labels = ['Savings', 'Projection'];
     if (this.graphTab === 'carbon'){
-      labels = ['Emissions Savings', 'Projected Emissions'];
-      text = "Emissions";
+      text = "CO<sub>2</sub> Emissions";
     } else if (this.graphTab === 'cost') {
-      labels = ['Utility Savings', 'Projected Cost'];
       text = "Cost";
     } else if (this.graphTab === 'energy') {
-      labels = ['Utility Savings', 'Projected Utility Usage'];
       text = "Utility Usage";
     }
     let rotationAmount: number = (this.savingsItem.savings / (this.savingsItem.savings + this.savingsItem.newCost)) / 2 * 360;
@@ -62,11 +60,10 @@ export class UtilityDonutChartComponent implements OnInit {
       },
       type: 'pie',
       hole: .5,
-      textposition: 'outside',
+      textposition: "auto",
       insidetextorientation: "horizontal",
-      automargin: true,
       hoverformat: '.2r',
-      texttemplate: `<b>%{label}</b> <br> %{value:,.0f} (%{percent})`,
+      texttemplate: `<b>%{label}</b> <br> %{value:,.0f} <br> (%{percent})`,
       hoverinfo: 'label+percent',
       direction: "clockwise",
       rotation: rotationAmount
@@ -87,7 +84,7 @@ export class UtilityDonutChartComponent implements OnInit {
         },
       ],
       showlegend: false,
-      margin: { t: 15, b: 5, l: 25, r: 25 },
+      margin: { t: 10, b: 10, l: 10, r: 10 },
     };
 
     var modebarBtns = {
@@ -102,14 +99,12 @@ export class UtilityDonutChartComponent implements OnInit {
   createPrintChart() {
     let labels: Array<string> = new Array<string>();
     let text: string;
+    labels = ['Savings', 'Projection'];
     if (this.graphTab === 'carbon'){
-      labels = ['Emissions Savings', 'Projected Emissions'];
-      text = "Emissions";
+      text = "CO<sub>2</sub> Emissions";
     } else if (this.graphTab === 'cost') {
-      labels = ['Utility Savings', 'Projected Cost'];
       text = "Cost";
     } else if (this.graphTab === 'energy') {
-      labels = ['Utility Savings', 'Projected Utility Usage'];
       text = "Utility Usage";
     }
     let rotationAmount: number = (this.savingsItem.savings / (this.savingsItem.savings + this.savingsItem.newCost)) / 2 * 360;
@@ -122,10 +117,10 @@ export class UtilityDonutChartComponent implements OnInit {
       },
       type: 'pie',
       hole: .5,
-      textposition: 'outside',
+      textposition: "auto",
       insidetextorientation: "horizontal",
       hoverformat: '.2r',
-      texttemplate: `<b>%{label}</b> <br> %{value:$,.0f} (%{percent})`,
+      texttemplate: `<b>%{label}</b> <br> %{value:,.0f} <br> (%{percent})`,
       hoverinfo: 'label+percent',
       direction: "clockwise",
       rotation: rotationAmount
@@ -147,7 +142,7 @@ export class UtilityDonutChartComponent implements OnInit {
         },
       ],
       showlegend: false,
-      margin: { t: 15, b: 5, l: 35, r: 35 },
+      margin: { t: 10, b: 10, l: 10, r: 10 },
     };
 
     var modebarBtns = {

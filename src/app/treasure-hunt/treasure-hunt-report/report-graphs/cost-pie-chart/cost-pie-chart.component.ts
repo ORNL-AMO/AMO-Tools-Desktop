@@ -68,10 +68,10 @@ export class CostPieChartComponent implements OnInit {
     }];
     var layout = {
       font: {
-        size: 16,
+        size: 12,
       },
       showlegend: false,
-      margin: { t: 50, b: 110, l: 110, r: 110 },
+      margin: { t: 50, b: 80, l: 95, r: 95 },
     };
 
     var modebarBtns = {
@@ -107,10 +107,10 @@ export class CostPieChartComponent implements OnInit {
     var layout = {
       width: 450,
       font: {
-        size: 16,
+        size: 12,
       },
       showlegend: false,
-      margin: { t: 50, b: 110, l: 50, r: 110 },
+      margin: { t: 50, b: 80, l: 95, r: 95 },
     };
 
     var modebarBtns = {

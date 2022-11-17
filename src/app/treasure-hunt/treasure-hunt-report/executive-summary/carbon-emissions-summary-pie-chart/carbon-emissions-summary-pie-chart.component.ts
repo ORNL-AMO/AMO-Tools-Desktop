@@ -92,7 +92,7 @@ export class CarbonEmissionsSummaryPieChartComponent implements OnInit {
       textposition: 'auto',
       insidetextorientation: "horizontal",
       hoverformat: '.2r',
-      texttemplate: '<b>%{label}: </b>%{value:,.0f}',
+      texttemplate: '<b>%{label}</b> <br> %{value:,.0f}',
       hoverinfo: 'label+percent',
       direction: "clockwise",
       rotation: 115
@@ -104,7 +104,7 @@ export class CarbonEmissionsSummaryPieChartComponent implements OnInit {
         size: 10,
       },
       showlegend: false,
-      margin: { t: 60, b: 120, l: 135, r: 135 },
+      margin: { t: 50, b: 80, l: 95, r: 95 },
     };
 
     var modebarBtns = {
@@ -127,7 +127,7 @@ export class CarbonEmissionsSummaryPieChartComponent implements OnInit {
       type: 'pie',
       textposition: 'auto',
       insidetextorientation: "horizontal",
-      texttemplate: '<b>%{label}: </b>%{value:$,.0f}',
+      texttemplate: '<b>%{label}</b> <br> %{value:,.0f}',
       hoverformat: '.2r',
       direction: "clockwise",
       rotation: 125
@@ -139,7 +139,7 @@ export class CarbonEmissionsSummaryPieChartComponent implements OnInit {
         size: 16,
       },
       showlegend: false,
-      margin: { t: 150, b: 150, l: 150, r: 150 }
+      margin: { t: 50, b: 80, l: 95, r: 95 },
     };
     var modebarBtns = {
       displaylogo: false,

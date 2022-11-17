@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
 
 import * as Plotly from 'plotly.js-dist';
@@ -6,6 +6,7 @@ import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { Settings } from "../../../../shared/models/settings";
 import { PlotlyService } from 'angular-plotly.js';
+import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
 
 export interface ChartOpportunity {
   curveNumber: number,
@@ -43,12 +44,28 @@ export class EffortSavingsChartComponent implements OnInit {
   effortChartId: string = 'effortChartDiv';
   effortChart: SimpleChart;
 
+  showlegend: boolean = true;
+
   @ViewChild('dataSummaryTable', { static: false }) dataSummaryTable: ElementRef;
   @ViewChild('effortChartDiv', { static: false }) effortChartDiv: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    setTimeout(() => {
+      this.resize();
+    }, 100);
+  }
   dataSummaryTableString: any;
   constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
+  }
+
+  resize() {
+    if (!this.showPrint) {
+      this.initRenderChart();
+    } else {
+      this.initRenderPrintChart();
+    }
   }
 
   ngAfterViewInit(){
@@ -60,12 +77,18 @@ export class EffortSavingsChartComponent implements OnInit {
   }
 
   initRenderChart() {
-    // Plotly.purge(this.effortChartId);
-
+    if(this.effortChartDiv) {
+      if (this.effortChartDiv.nativeElement.offsetWidth < 786 ) {
+        this.showlegend = false;
+      } else {
+        this.showlegend = true;
+      }
+    }
     this.effortChart = {
       name: 'Payback vs. Effort to Implement',
       data: [],
-      layout: {
+      layout: {        
+        showlegend: this.showlegend,
         height: 600,
         hovermode: 'closest',
         xaxis: {
@@ -90,8 +113,8 @@ export class EffortSavingsChartComponent implements OnInit {
         margin: {
           t: 50,
           b: 50,
-          l: 75,
-          r: 100
+          l: 50,
+          r: 5
         }
       },
       config: {
@@ -125,12 +148,11 @@ export class EffortSavingsChartComponent implements OnInit {
   }
 
   initRenderPrintChart() {
-    // Plotly.purge(this.effortChartId);
-
     this.effortChart = {
       name: 'Payback vs. Effort to Implement',
       data: [],
       layout: {
+        showlegend: true,
         height: 600,
         width: 1000,
         hovermode: 'closest',
@@ -156,8 +178,8 @@ export class EffortSavingsChartComponent implements OnInit {
         margin: {
           t: 50,
           b: 50,
-          l: 75,
-          r: 100
+          l: 50,
+          r: 5
         }
       },
       config: {
