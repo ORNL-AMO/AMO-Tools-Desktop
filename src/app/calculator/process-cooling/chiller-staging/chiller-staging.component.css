@@ -38,10 +38,6 @@
     background-color: #fff;
 }
 
-.fa-save, .fa-times, .fa-edit {
-    font-size: xx-large;
-}
-
 .action-item:hover {
     cursor: pointer;
     background: #efefef;
@@ -126,13 +122,4 @@ span.alert-warning {
     width: 23%;
     max-height: 100%;
     overflow-y: scroll;
-}
-
-@media screen and (max-width: 575px) {
-    .fa-save, .fa-times, .fa-edit {
-        font-size: large;
-    }
-    .header h3 {
-        font-size: 14px !important;
-    }
 }

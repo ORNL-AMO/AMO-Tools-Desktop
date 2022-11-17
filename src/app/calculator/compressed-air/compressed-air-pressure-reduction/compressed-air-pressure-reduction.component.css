@@ -43,10 +43,6 @@
     background-color: #fff;
 }
 
-.fa-save, .fa-times, .fa-edit {
-    font-size: xx-large;
-}
-
 .action-item:hover {
     cursor: pointer;
     background: #efefef;
@@ -90,13 +86,4 @@
 
 .btn-edit-name:hover {
     cursor: pointer;
-}
-
-@media screen and (max-width: 575px) {
-    .fa-save, .fa-times, .fa-edit {
-        font-size: large;
-    }
-    .header h3 {
-        font-size: 14px !important;
-    }
 }

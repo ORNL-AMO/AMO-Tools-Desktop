@@ -7,11 +7,6 @@
     cursor: pointer;
 }
 
-.fa-save,
-.fa-times,
-.fa-edit {
-    font-size: xx-large;
-}
 .leak-form-width {
     width: 67%;
 }
@@ -49,13 +44,4 @@
         width: 100%;
     }
     
-}
-
-@media screen and (max-width: 575px) {
-    .fa-save, .fa-times, .fa-edit {
-        font-size: large;
-    }
-    .header h3 {
-        font-size: 14px !important;
-    }
 }
