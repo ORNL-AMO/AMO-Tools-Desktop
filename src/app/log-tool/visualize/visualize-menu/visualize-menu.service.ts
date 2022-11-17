@@ -79,6 +79,7 @@ export class VisualizeMenuService {
         // let uniqueDates: Set<string | number> = new Set(timeData);
         // timeData = Array.from(uniqueDates);
         selectedGraphObj.data[index].x = timeData;
+        selectedGraphObj.data[index].mode = 'lines'
       } else {
         //delete if no time data
         selectedGraphObj.data.splice(index, 1);
@@ -202,6 +203,7 @@ export class VisualizeMenuService {
         let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(selectedDataOption.dataOption.dataField);
         if (timeData) {
           selectedGraphObj.data[index].x = timeData;
+          selectedGraphObj.data[index].mode = 'lines'
         }
       } 
       // Restrict if selected axis data from another file
