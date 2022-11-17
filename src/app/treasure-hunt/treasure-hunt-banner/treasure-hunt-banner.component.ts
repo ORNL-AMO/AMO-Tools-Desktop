@@ -20,6 +20,7 @@ export class TreasureHuntBannerComponent implements OnInit {
   subTabSub: Subscription;
   calculatorTabSub: Subscription;
   disableTabs: boolean = false;
+  bannerCollapsed: boolean = true;
   constructor(private treasureHuntService: TreasureHuntService, private calculatorsService: CalculatorsService) { }
 
   ngOnInit() {
@@ -55,9 +56,48 @@ export class TreasureHuntBannerComponent implements OnInit {
         this.treasureHuntService.mainTab.next(str);
       }
     }
+    this.collapseBanner();
   }
 
   changeSubTab(str: string) {
     this.treasureHuntService.subTab.next(str)
   }
+
+  collapseBanner() {
+    this.bannerCollapsed = !this.bannerCollapsed;
+    window.dispatchEvent(new Event("resize"));
+  } 
+
+  back() {
+    if (this.mainTab == 'report') {
+      this.treasureHuntService.mainTab.next('treasure-chest');
+    } else if (this.mainTab == 'treasure-chest') {
+      this.treasureHuntService.mainTab.next('find-treasure');
+    } else if (this.mainTab == 'find-treasure') {
+      this.treasureHuntService.mainTab.next('system-setup');
+    } else if (this.mainTab == 'system-setup') {
+      if (this.subTab == 'operation-costs') {
+        this.treasureHuntService.subTab.next('settings');
+      } else if (this.subTab == 'settings') {
+        this.treasureHuntService.subTab.next('settings');
+      }
+    }
+  }
+
+  continue() {
+    if (this.mainTab == 'system-setup') {
+      if (this.subTab == 'settings') {
+        this.treasureHuntService.subTab.next('operation-costs');
+      } else if (this.subTab == 'operation-costs') {
+        this.treasureHuntService.mainTab.next('find-treasure');
+      }
+    } else if (this.mainTab == 'find-treasure') {
+      this.treasureHuntService.mainTab.next('treasure-chest');
+    } else if (this.mainTab == 'treasure-chest') {
+      this.treasureHuntService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.treasureHuntService.mainTab.next('report');
+    }
+  }
+
 }

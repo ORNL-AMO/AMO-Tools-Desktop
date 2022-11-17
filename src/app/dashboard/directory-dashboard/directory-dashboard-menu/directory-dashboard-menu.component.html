@@ -1,4 +1,4 @@
-<div class="d-flex no-gutters p-1 w-100">
+<div class="d-flex flex-column flex-lg-row no-gutters p-1 w-100">
     <div class="d-flex flex-fill">
         <nav>
             <ol class="breadcrumb">
@@ -11,37 +11,37 @@
             </ol>
         </nav>
     </div>
-    <div class="pl-2">
+    <div class="pl-lg-2" [ngClass]="{'collapse': dashboardCollapsed}">
         <app-content-controls></app-content-controls>
     </div>
 </div>
-<hr class="my-1">
+<hr class="my-1" [ngClass]="{'collapse': dashboardCollapsed}">
 <div class="d-flex no-gutters">
-    <div class="col-12">
-        <div class="actions d-flex align-items-center">
-            <div class="d-flex flex-wrap">
-                <button class="btn btn-secondary action-btn" (click)="showCreateAssessment()" type="button">Add
+    <div class="col-12" [ngClass]="{'collapse': dashboardCollapsed}">
+        <div class="actions d-block d-lg-flex align-items-center">
+            <div class="d-flex flex-wrap align-items-center">
+                <button class="btn btn-secondary action-btn menu-btn" (click)="showCreateAssessment()" type="button">Add
                     Assessment</button>
-                <button class="btn btn-secondary action-btn" (click)="showPreAssessment()" type="button">Add
+                <button class="btn btn-secondary action-btn menu-btn" (click)="showPreAssessment()" type="button">Add
                     Pre-Assessment</button>
-                <button class="btn btn-secondary action-btn" (click)="showCreateFolder()" type="button">Add
+                <button class="btn btn-secondary action-btn menu-btn" (click)="showCreateFolder()" type="button">Add
                     Folder</button>
-                <button class="btn btn-secondary action-btn" (click)="showAddInventory()" type="button">
+                <button class="btn btn-secondary action-btn menu-btn" (click)="showAddInventory()" type="button">
                     Add Inventory
                 </button>
-                <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button"
+                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!checkSelected()" type="button"
                     (click)="moveToFolder()">Move Items</button>
-                <button class="btn btn-secondary action-btn" [disabled]="!checkIfCopyItem()" type="button"
+                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!checkIfCopyItem()" type="button"
                     (click)="showCopyItems()">Copy Items
                 </button>
                 <!-- <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()"></app-create-folder> -->
-                <button class="btn btn-secondary action-btn" [disabled]="!checkReport()" type="button"
+                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!checkReport()" type="button"
                     (click)="generateReport()">Generate Report</button>
-                <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button"
+                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!checkSelected()" type="button"
                     (click)="showDeleteItemsModal()">Delete</button>
-                <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button"
+                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!checkSelected()" type="button"
                     (click)="showExportModal()">Export</button>
-                <button class="btn btn-secondary action-btn" type="button" (click)="showImportModal()">Import</button>
+                <button class="btn btn-secondary action-btn menu-btn" type="button" (click)="showImportModal()">Import</button>
             </div>
             <label class="ml-auto select-all">
                 <input type="checkbox" [(ngModel)]="isAllSelected" (change)="toggleSelectAll()" />

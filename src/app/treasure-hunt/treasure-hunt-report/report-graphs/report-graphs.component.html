@@ -1,10 +1,10 @@
 <div class="row">
-  <div class="print-avoid-break col-6">
+  <div class="print-avoid-break col-12 col-lg-6">
     <label class="group-label w-100">Current Cost Status ({{settings.currency}})</label>
     <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="true" [showPrint]="showPrint" [settings]="settings">
     </app-cost-pie-chart>
   </div>
-  <div class="print-avoid-break col-6">
+  <div class="print-avoid-break col-12 col-lg-6">
     <label class="group-label w-100">Projected Cost Status ({{settings.currency}})</label>
     <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="false" [showPrint]="showPrint">
     </app-cost-pie-chart>
@@ -12,7 +12,7 @@
 </div>
 <div class="row">
   <div class="print-avoid-break d-flex flex-column justify-content-end"
-    [ngClass]="{'col-lg-3 col-md-4': !showPrint, 'col-4': showPrint}" *ngFor="let savingsItem of savingsItems">
+    [ngClass]="{'col-lg-3 col-12': !showPrint, 'col-4': showPrint}" *ngFor="let savingsItem of savingsItems">
     <div class="p-0">
       <label class="group-label w-100">{{savingsItem.label}} ({{settings.currency}})</label>
       <app-utility-donut-chart [showPrint]="showPrint" [savingsItem]="savingsItem">

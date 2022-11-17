@@ -44,20 +44,12 @@ export class FsatComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.getContainerHeight();
-  }
-
-  stepTabs: Array<string> = [
-    'system-basics',
-    'fan-setup',
-    'fan-motor',
-    'fan-field-data'
-  ];
+  }  
 
   _fsat: FSAT;
   assessment: Assessment;
   mainTab: string;
   stepTab: string;
-  stepTabIndex: number;
   settings: Settings;
   assessmentTab: string;
   mainTabSub: Subscription;
@@ -136,7 +128,6 @@ export class FsatComponent implements OnInit {
     });
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
-      this.stepTabIndex = _.findIndex(this.stepTabs, function (tab) { return tab === val; });
       this.getContainerHeight();
     });
     this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
@@ -342,7 +333,7 @@ export class FsatComponent implements OnInit {
   }
 
   getCanContinue() {
-    if (this.stepTab === 'system-basics') {
+    if (this.stepTab === 'system-basics' || this.stepTab === 'fan-operations') {
       return true;
     } else if (this.stepTab === 'fsat-fluid') {
       let isValid: boolean = this.fsatFluidService.isFanFluidValid(this._fsat.baseGasDensity, this.settings);
@@ -376,23 +367,11 @@ export class FsatComponent implements OnInit {
   }
 
   continue() {
-    if (this.stepTab === 'fan-field-data') {
-      this.fsatService.mainTab.next('assessment');
-    } else {
-      let assessmentTabIndex: number = this.stepTabIndex + 1;
-      let nextTab: string = this.stepTabs[assessmentTabIndex];
-      this.fsatService.stepTab.next(nextTab);
-    }
+    this.fsatService.continue();
   }
 
   back() {
-    if (this.stepTab !== 'system-basics' && this.mainTab == 'system-setup') {
-      let assessmentTabIndex: number = this.stepTabIndex - 1;
-      let nextTab: string = this.stepTabs[assessmentTabIndex];
-      this.fsatService.stepTab.next(nextTab);
-    } else if (this.mainTab == 'assessment') {
-      this.fsatService.mainTab.next('system-setup');
-    }
+    this.fsatService.back();
   }
 
   goToReport() {

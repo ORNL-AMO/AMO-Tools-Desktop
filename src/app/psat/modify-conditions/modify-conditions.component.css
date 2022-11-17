@@ -89,7 +89,7 @@
 
     .assessment-content-container {
         display: flex;
-        overflow-y: hidden;
+        overflow-y: auto;
     }
 
     .assessment-panel-group {
@@ -102,7 +102,7 @@
     }
 
     .modify-results-panel{
-        overflow-y: hidden;
+        overflow-y: auto;
     }
     
     .assessment-small-screen-tab {
