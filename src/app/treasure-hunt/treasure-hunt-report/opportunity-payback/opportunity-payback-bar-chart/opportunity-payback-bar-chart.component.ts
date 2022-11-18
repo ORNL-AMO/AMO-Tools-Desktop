@@ -147,19 +147,19 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
   getLabelsAndData(): Array<{ label: string, data: number }> {
     return [
       {
-        label: "Less than 1 Year (" + this.settings.currency + ")",
+        label: "< 1 yr (" + this.settings.currency + ")",
         data: this.opportunitiesPaybackDetails.lessThanOneYear.totalSavings
       },
       {
-        label: "1 to 2 Years (" + this.settings.currency + ")",
+        label: "1-2 ysr (" + this.settings.currency + ")",
         data: this.opportunitiesPaybackDetails.oneToTwoYears.totalSavings
       },
       {
-        label: "2 to 3 Years (" + this.settings.currency + ")",
+        label: "2-3 yrs (" + this.settings.currency + ")",
         data: this.opportunitiesPaybackDetails.twoToThreeYears.totalSavings
       },
       {
-        label: "More than 3 Years (" + this.settings.currency + ")",
+        label: "> 3 yrs (" + this.settings.currency + ")",
         data: this.opportunitiesPaybackDetails.moreThanThreeYears.totalSavings
       }
     ]

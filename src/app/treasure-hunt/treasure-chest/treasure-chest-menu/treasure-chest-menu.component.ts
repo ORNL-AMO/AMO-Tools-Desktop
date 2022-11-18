@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { TreasureChestMenuService } from './treasure-chest-menu.service';
@@ -47,7 +47,7 @@ export class TreasureChestMenuComponent implements OnInit {
 
   bannerCollapsed: boolean = true;
 
-  constructor(private treasureChestMenuService: TreasureChestMenuService) { }
+  constructor(private treasureChestMenuService: TreasureChestMenuService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
@@ -150,13 +150,12 @@ export class TreasureChestMenuComponent implements OnInit {
 
   getNavbarWidth() {
     if (this.navbar) {
-      setTimeout(() => {
-        this.navbarWidth = this.navbar.nativeElement.clientWidth * .95;
-        if(this.navbar.nativeElement.clientWidth > 991){
-          this.bannerCollapsed = false;
-        }
-      }, 100);
+      this.navbarWidth = this.navbar.nativeElement.clientWidth * .95;
+      if(window.innerWidth > 991){
+        this.bannerCollapsed = false;
+      } 
     }
+    this.cd.detectChanges();
   }
 
   openImportModal() {

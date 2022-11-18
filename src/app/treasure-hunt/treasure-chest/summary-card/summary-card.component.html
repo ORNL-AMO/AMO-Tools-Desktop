@@ -1,9 +1,9 @@
 <div class="mt-2 card" *ngIf="totals">
   <div class="card-body justify-content-center">
     <div class="row m-0 justify-content-center">
-      <div class="col-12 text-center treasure-hunt-item">
+      <div class="col-12 col-lg-6 text-center treasure-hunt-item">
         <label class="mb-0 group-label">Total Cost Savings ({{settings.currency}})</label>
-        <app-treasure-hunt-gauge [value]="totals.totalPercentSavings" [chartHeight]="125">
+        <app-treasure-hunt-gauge [value]="totals.totalPercentSavings" [chartHeight]="125" [chartWidth]="165">
         </app-treasure-hunt-gauge>
         <table class="mx-auto">
           <tbody>
@@ -29,6 +29,39 @@
               </td>
               <td>
                 {{ totals.totalCostSavings | number:"1.0-0" }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-12 col-lg-6 text-center treasure-hunt-item">
+        <label class="mb-0 group-label">Carbon Data (tonne CO<sub>2</sub>)</label>
+        <app-treasure-hunt-gauge [value]="carbonData.totalPercentSavings" [chartHeight]="125" [chartWidth]="165">
+        </app-treasure-hunt-gauge>
+        <table class="mx-auto">
+          <tbody>
+            <tr>
+              <td>
+                Baseline
+              </td>
+              <td>
+                {{ carbonData.baselineCost | number:"1.0-0" }}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Modified
+              </td>
+              <td>
+                {{ carbonData.modificationCost | number:"1.0-0" }}
+              </td>
+            </tr>
+            <tr class="bold">
+              <td>
+                Annual Savings
+              </td>
+              <td>
+                {{ carbonData.totalCostSavings | number:"1.0-0" }}
               </td>
             </tr>
           </tbody>
