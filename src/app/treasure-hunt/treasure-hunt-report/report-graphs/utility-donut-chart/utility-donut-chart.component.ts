@@ -52,7 +52,6 @@ export class UtilityDonutChartComponent implements OnInit {
     }
     let rotationAmount: number = (this.savingsItem.savings / (this.savingsItem.savings + this.savingsItem.newCost)) / 2 * 360;
     var data = [{
-      width: this.utilityDonutChart.nativeElement.clientWidth,
       values: [this.savingsItem.savings, this.savingsItem.newCost],
       labels: labels,
       marker: {

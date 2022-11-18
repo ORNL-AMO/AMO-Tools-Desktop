@@ -173,6 +173,14 @@ export class SettingsDbService {
       settings.compressedAirRollupUnit = 'MWh';
     }
 
+    if (!settings.coalFuelType) {
+      settings.coalFuelType = 'Mixed - Industrial Sector';
+    }
+
+    if (!settings.eafOtherFuelSource) {
+      settings.eafOtherFuelSource = "None"
+    }
+
     if (!settings.unitsOfMeasure) {
       settings.unitsOfMeasure = 'Imperial';
     }
