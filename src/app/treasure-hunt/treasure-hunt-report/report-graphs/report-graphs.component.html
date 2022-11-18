@@ -1,29 +1,104 @@
 <div class="row">
-  <div class="print-avoid-break col-6">
+  <div class="hide-print col-12">
+    <div class="btn-col d-flex flex-column">
+      <div class="btn-group align-self-center">
+        <button type="button" class="btn btn-light btn-sm toggle-btn" (click)="changeGraphTab('cost')"
+          [ngClass]="{'active':  graphTab == 'cost'}">$</button>
+        <button type="button" class="btn btn-light btn-sm toggle-btn" (click)="changeGraphTab('energy')"
+          [ngClass]="{'active':  graphTab == 'energy'}">Utility</button>
+        <button type="button" class="btn btn-light btn-sm toggle-btn" (click)="changeGraphTab('carbon')"
+          [ngClass]="{'active':  graphTab == 'carbon'}">CO<sub>2</sub></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="graphTab == 'cost' || showPrint" class="row">
+  <div class="print-avoid-break col-12 col-lg-6">
     <label class="group-label w-100">Current Cost Status ({{settings.currency}})</label>
-    <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="true" [showPrint]="showPrint" [settings]="settings">
+    <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="true" [showPrint]="showPrint"
+      [settings]="settings" [graphTab]="'cost'">
     </app-cost-pie-chart>
   </div>
-  <div class="print-avoid-break col-6">
+  <div class="print-avoid-break col-12 col-lg-6">
     <label class="group-label w-100">Projected Cost Status ({{settings.currency}})</label>
-    <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="false" [showPrint]="showPrint">
+    <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="false" [showPrint]="showPrint"
+      [settings]="settings" [graphTab]="'cost'">
     </app-cost-pie-chart>
   </div>
 </div>
-<div class="row">
+<div *ngIf="graphTab == 'energy' || showPrint" class="row">
+  <div class="print-avoid-break col-12 col-lg-6">
+    <label class="group-label w-100">Current Energy Use (<span
+        *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span><span
+        *ngIf="settings.unitsOfMeasure != 'Imperial'">GJ</span>)</label>
+    <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="true" [showPrint]="showPrint"
+      [settings]="settings" [graphTab]="'energy'">
+    </app-cost-pie-chart>
+  </div>
+  <div class="print-avoid-break col-12 col-lg-6">
+    <label class="group-label w-100">Projected Energy Use (<span
+        *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span><span
+        *ngIf="settings.unitsOfMeasure != 'Imperial'">GJ</span>)</label>
+    <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="false" [showPrint]="showPrint"
+      [settings]="settings" [graphTab]="'energy'">
+    </app-cost-pie-chart>
+  </div>
+</div>
+<div *ngIf="graphTab == 'carbon' || showPrint" class="row">
+  <div class="print-avoid-break col-12 col-lg-6">
+    <label class="group-label w-100">Current CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)</label>
+    <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="true" [showPrint]="showPrint"
+      [settings]="settings" [graphTab]="'carbon'">
+    </app-cost-pie-chart>
+  </div>
+  <div class="print-avoid-break col-12 col-lg-6">
+    <label class="group-label w-100">Projected CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)</label>
+    <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="false" [showPrint]="showPrint"
+      [settings]="settings" [graphTab]="'carbon'">
+    </app-cost-pie-chart>
+  </div>
+</div>
+
+<div *ngIf="graphTab == 'cost' || showPrint" class="row">
   <div class="print-avoid-break d-flex flex-column justify-content-end"
-    [ngClass]="{'col-lg-3 col-md-4': !showPrint, 'col-4': showPrint}" *ngFor="let savingsItem of savingsItems">
+    [ngClass]="{'col-lg-3 col-12': !showPrint, 'col-4': showPrint}" *ngFor="let savingsItem of costSavingsItems">
     <div class="p-0">
-      <label class="group-label w-100">{{savingsItem.label}} ({{settings.currency}})</label>
-      <app-utility-donut-chart [showPrint]="showPrint" [savingsItem]="savingsItem">
+      <label class="group-label w-100">{{savingsItem.label}}
+        ({{settings.currency}})</label>
+      <app-utility-donut-chart [showPrint]="showPrint" [savingsItem]="savingsItem" [graphTab]="cost">
       </app-utility-donut-chart>
     </div>
   </div>
 </div>
+
+<div *ngIf="graphTab == 'energy' || showPrint" class="row">
+  <div class="print-avoid-break d-flex flex-column justify-content-end"
+    [ngClass]="{'col-lg-3 col-12': !showPrint, 'col-4': showPrint}" *ngFor="let savingsItem of energySavingsItems">
+    <div class="p-0">
+      <label *ngIf="graphTab == 'energy'" class="group-label w-100">{{savingsItem.label}}</label>
+      <app-utility-donut-chart [showPrint]="showPrint" [savingsItem]="savingsItem" [graphTab]="energy">
+      </app-utility-donut-chart>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="graphTab == 'carbon' || showPrint" class="row">
+  <div class="print-avoid-break d-flex flex-column justify-content-end"
+    [ngClass]="{'col-lg-3 col-12': !showPrint, 'col-4': showPrint}" *ngFor="let savingsItem of carbonSavingsItems">
+    <div class="p-0">
+      <label class="group-label w-100">{{savingsItem.label}} (tonne
+        CO<sub>2</sub>)</label>
+      <app-utility-donut-chart [showPrint]="showPrint" [savingsItem]="savingsItem" [graphTab]="carbon">
+      </app-utility-donut-chart>
+    </div>
+  </div>
+</div>
+
 <div class="row">
   <div class="print-break-before col-12">
     <label class="group-label w-100">Payback Period vs. Effort to Implement</label>
-    <app-effort-savings-chart class="m-3" [treasureHuntResults]="treasureHuntResults" [showPrint]="showPrint" [settings] = "settings">
+    <app-effort-savings-chart class="m-3" [treasureHuntResults]="treasureHuntResults" [showPrint]="showPrint"
+      [settings]="settings">
     </app-effort-savings-chart>
   </div>
 </div>

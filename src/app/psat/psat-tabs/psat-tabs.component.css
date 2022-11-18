@@ -42,6 +42,11 @@
     display: none;
 }
 
+
+li.page-item{
+    background-color: #ECECEC !important;
+}
+
 /* Screens above  1024 */
 .calculator-container {
     display: flex;

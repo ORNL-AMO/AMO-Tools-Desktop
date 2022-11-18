@@ -1,47 +1,142 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { LogToolDataService } from '../log-tool-data.service';
 import * as _ from 'lodash';
-import { LogToolField, GraphObj, AnnotationData } from '../log-tool-models';
+import { LogToolField, GraphObj, AnnotationData, GraphDataOption } from '../log-tool-models';
+import { LogToolService } from '../log-tool.service';
 
 @Injectable()
 export class VisualizeService {
 
-  visualizeDataInitialized: boolean = false;
+  allDataByAxisFieldsInitialized: boolean = false;
+  allDataByAxisField: Array<GraphDataOption>;
   graphObjects: BehaviorSubject<Array<GraphObj>>;
   selectedGraphObj: BehaviorSubject<GraphObj>;
-  visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }>;
+  userInputDelay: BehaviorSubject<number>;
   annotateDataPoint: BehaviorSubject<AnnotationData>;
+  userGraphOptions: BehaviorSubject<GraphObj>;
+  tabSelect: BehaviorSubject<string>;
   focusedPanel: BehaviorSubject<string>;
   plotFunctionType: string;
   restyleRanges: BehaviorSubject<{ xMin: number, xMax: number, yMin: number, yMax: number, y2Min: number, y2Max: number }>;
-  constructor(private logToolDataService: LogToolDataService) {
+  constructor(private logToolService: LogToolService) {
     this.initializeService();
   }
 
   initializeService() {
-    this.plotFunctionType = 'react';
     this.focusedPanel = new BehaviorSubject<string>(undefined);
+    this.userInputDelay = new BehaviorSubject<number>(0);
     let initData = this.initGraphObj();
     this.graphObjects = new BehaviorSubject([initData]);
     this.selectedGraphObj = new BehaviorSubject<GraphObj>(initData);
+    this.userGraphOptions = new BehaviorSubject<GraphObj>(undefined);
     this.annotateDataPoint = new BehaviorSubject<AnnotationData>(undefined);
     this.restyleRanges = new BehaviorSubject(undefined);
+    this.tabSelect = new BehaviorSubject(undefined);
   }
 
-  getVisualizeData(fieldName: string) {
+  buildGraphData() {
+    this.allDataByAxisFieldsInitialized = true;
+    this.allDataByAxisField = new Array();
+    let graphAxisOptions = this.getDataFieldOptionsWithDate();
+    graphAxisOptions.forEach(field => {
+      let data = this.getAxisOptionGraphData(field.fieldName);
+      this.allDataByAxisField.push({
+        data: data,
+        numberOfDataPoints: data.length,
+        dataField: field
+      });
+    });
+  }
+
+  displayAnnotationHelp() {
+    this.tabSelect.next('help');
+    this.focusedPanel.next('highlight-performance-info');
+  }
+
+  displayTimeSeriesHelp() {
+    this.tabSelect.next('help');
+    this.focusedPanel.next('highlight-timeseries-info');
+  }
+
+  getDataFieldOptions(): Array<LogToolField> {
+    //non date and used fields
+    let tmpFields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));
+    _.remove(tmpFields, (field) => { return field.useField == false || field.isDateField == true });
+    return tmpFields;
+  }
+
+  // field == axis
+  getDataFieldOptionsWithDate() {
+    let tmpFields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));
+    _.remove(tmpFields, (field) => { return field.useField == false });
+    return tmpFields;
+  }
+
+  // field == axis
+  getAxisOptionGraphData(fieldName: string): Array<number> {
+    let data: Array<any> = new Array();
+    // 6040 Perform different operation if is datefield - don't concat
+    this.logToolService.individualDataFromCsv.forEach(individualDataItem => {
+      let foundData = individualDataItem.csvImportData.meta.fields.find(field => { return field == fieldName });
+      if (foundData) {
+        data = _.concat(data, individualDataItem.csvImportData.data);
+      }
+    });
+    
+    let mappedValues: Array<any> = _.mapValues(data, (dataItem) => { return dataItem[fieldName] });
+    let valueArr = _.values(mappedValues);
+    return valueArr;
+  }
+
+  getGraphDataByField(fieldName: string) {
     let data: Array<number | string>;
     if (fieldName == 'Time Series') {
-      //
+      // 6040 rework for setXAxisDataOptionts call?
     } else {
-      data = _.find(this.visualizeData, (dataItem) => { return dataItem.dataField.fieldName == fieldName }).data;
+      data = _.find(this.allDataByAxisField, (dataItem) => { return dataItem.dataField.fieldName == fieldName }).data;
     }
     return data;
   }
 
-  getVisualizeDateData(field: LogToolField): Array<number | string> {
-    let data: Array<number | string> = _.find(this.visualizeData, (dataItem) => { return dataItem.dataField.csvId == field.csvId && dataItem.dataField.isDateField }).data;
+  getTimeSeriesData(field: LogToolField): Array<number | string> {
+    let data: Array<number | string> = _.find(this.allDataByAxisField, (dataItem) => { return dataItem.dataField.csvId == field.csvId && dataItem.dataField.isDateField }).data;
     return data;
+  }
+
+  setDefaultGraphInteractivity(graphObj: GraphObj, dataPoints: number) {
+    graphObj.graphInteractivity.hasLargeDataset = dataPoints > 200000;
+    graphObj.graphInteractivity.showUserToggledPerformanceWarning = false;
+
+    if (graphObj.graphInteractivity.hasLargeDataset) {
+      graphObj.graphInteractivity.showDefaultPerformanceWarning = true;
+      graphObj.graphInteractivity.isGraphInteractive = false;
+      
+      let userGraphObj: GraphObj = this.userGraphOptions.getValue();
+      if (userGraphObj) {
+        userGraphObj.graphInteractivity.showDefaultPerformanceWarning = true;
+        userGraphObj.graphInteractivity.isGraphInteractive = false;
+        this.userGraphOptions.next(userGraphObj);
+      }
+    }
+
+
+    return graphObj;
+  }
+
+  setCustomGraphInteractivity(graphObj: GraphObj, dataPoints: number) {
+    graphObj.graphInteractivity.hasLargeDataset = dataPoints > 200000;
+    graphObj.graphInteractivity.showUserToggledPerformanceWarning = false;
+
+    if (graphObj.graphInteractivity.hasLargeDataset) {
+      if (graphObj.graphInteractivity.isGraphInteractive) {
+          graphObj.graphInteractivity.showUserToggledPerformanceWarning = true;
+          graphObj.graphInteractivity.showDefaultPerformanceWarning = false;
+      } else if (!graphObj.graphInteractivity.isGraphInteractive) {
+        graphObj.graphInteractivity.showUserToggledPerformanceWarning = false;
+      }
+    }
+
+    return graphObj;
   }
 
   initGraphObj(): GraphObj {
@@ -69,11 +164,13 @@ export class VisualizeService {
             size: 22
           }
         },
-        hovermode: 'closest',
+        hovermode: false,
+        dragmode: false,
         annotations: [],
         xaxis: {
           autorange: true,
           type: undefined,
+          // spikemode: 'across',
           title: {
             text: 'X Axis Label'
           },
@@ -122,10 +219,20 @@ export class VisualizeService {
           t: 75,
           b: 100,
           l: 100,
-          r: 100
+          r: 50
         }
       },
-      isTimeSeries: false,
+      mode: {
+        modeBarButtonsToRemove: ['lasso2d'],
+        // plotGlPixelRatio: 3,
+        responsive: true,
+        displaylogo: false,
+        displayModeBar: true
+      },
+      graphInteractivity: {
+        isGraphInteractive: true,
+        showDefaultPerformanceWarning: false,
+      },
       selectedXAxisDataOption: { dataField: undefined, data: [] },
       selectedYAxisDataOptions: [],
       hasSecondYAxis: false,
@@ -144,8 +251,21 @@ export class VisualizeService {
 
   resetData() {
     this.initializeService();
-    this.visualizeDataInitialized = false;
+    this.allDataByAxisFieldsInitialized = false;
   }
+
+  saveUserOptionsChanges() {
+    let selectedGraphObj = this.selectedGraphObj.getValue();
+    let userGraphObj = this.userGraphOptions.getValue();
+    if (selectedGraphObj && userGraphObj) {
+      selectedGraphObj.graphInteractivity = userGraphObj.graphInteractivity;
+      selectedGraphObj.layout = userGraphObj.layout;
+      // restore original zoom/range
+      selectedGraphObj.layout.autosize = true;
+      this.selectedGraphObj.next(selectedGraphObj);
+    }
+  }
+
 
   addNewGraphDataObj() {
     let currentGraphData: Array<GraphObj> = this.graphObjects.getValue();
@@ -154,6 +274,7 @@ export class VisualizeService {
     newGraphDataObj.layout.title.text = 'Data Visualization ' + (currentGraphData.length + 1);
     currentGraphData.push(newGraphDataObj);
     this.selectedGraphObj.next(newGraphDataObj);
+    this.userGraphOptions.next(newGraphDataObj);
     this.graphObjects.next(currentGraphData);
   }
 
@@ -165,7 +286,7 @@ export class VisualizeService {
   }
 
   getNumberOfBinsBarChartData(dataField: LogToolField, bins: Array<{ max: number, min: number }>, calculatePercentage: boolean): { xLabels: Array<string>, yValues: Array<number> } {
-    let graphData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
+    let graphData: Array<number> = this.getAxisOptionGraphData(dataField.fieldName);
     let xLabels: Array<string> = new Array();
     let yValues: Array<number> = new Array();
     bins.forEach(bin => {
@@ -189,7 +310,7 @@ export class VisualizeService {
   }
 
   getStandardDevBarChartData(dataField: LogToolField, calculatePercentage: boolean, binStart: number): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
-    let graphData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
+    let graphData: Array<number> = this.getAxisOptionGraphData(dataField.fieldName);
     let graphDataMin: number;
     if (binStart != undefined) {
       graphDataMin = binStart;

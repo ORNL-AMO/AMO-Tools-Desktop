@@ -15,14 +15,32 @@ export interface LogToolField {
 
 export interface LogToolDay {
     date: Date,
-    hourlyAverages: Array<{
-        hour: number,
-        averages: Array<{
-            value: number,
-            field: LogToolField
-        }>
+    hourlyAverages: Array<HourAverage>
+}
+
+export interface HourAverage {
+    hour: number,
+    averages: Array<{
+        value: number,
+        field: LogToolField
     }>
 }
+
+export interface GraphDataOption { 
+    dataField: LogToolField, 
+    numberOfDataPoints?: number,
+    data: Array<number | string> 
+}
+
+export interface GraphDataSummary {
+    max: number,
+    min: number,
+    numberOfDataPoints: number,
+    standardDeviation: number,
+    mean: number,
+    name: string,
+    axis: string
+  }
 
 export interface GraphDataObj {
     graphType: { label: string, value: string },
@@ -97,47 +115,37 @@ export interface DayTypeGraphItem {
     dayType?: DayType
 }
 
+export interface VisualizerGraphData {
+    x: Array<number | string>,
+    y: Array<number | string>,
+    name: string,
+    type: string,
+    mode: string,
+    yaxis: string,
+    marker: {
+        color: string
+    },
+    line: {
+        color: string,
+        width: number
+    }
+}
+
 export interface GraphObj {
     name: string,
-    data: [{
-        x: Array<number | string>,
-        y: Array<number | string>,
-        name: string,
-        type: string,
-        mode: string,
-        yaxis: string,
-        marker: {
-            color: string
-        },
-        line: {
-            color: string,
-            width: number
-        }
-    }],
-    layout: {
-        title: {
-            text: string,
-            font: {
-                size: number
-            }
-        },
-        hovermode: string,
-        xaxis: AxisObj,
-        yaxis: AxisObj,
-        yaxis2: AxisObj,
-        margin: {
-            t: number,
-            b: number,
-            l: number,
-            r: number
-        },
-        annotations: Array<AnnotationData>
-    },
-    isTimeSeries: boolean,
-    selectedXAxisDataOption: { dataField: LogToolField, data: Array<number | string> }
+    data: VisualizerGraphData[],
+    layout: GraphLayout
+    mode: {
+        modeBarButtonsToRemove?: string[],
+        plotGlPixelRatio?: number,
+        responsive?: boolean,
+        displaylogo?: boolean,
+        displayModeBar?: boolean
+      },
+    selectedXAxisDataOption: GraphDataOption,
     selectedYAxisDataOptions: Array<{
         index: number,
-        dataOption: { dataField: LogToolField, data: Array<number | string> },
+        dataOption: GraphDataOption,
         seriesColor: string,
         seriesName: string,
         yaxis: string,
@@ -151,21 +159,58 @@ export interface GraphObj {
     useStandardDeviation: boolean,
     usePercentForBins: boolean,
     binningMethod: string,
+    graphInteractivity: GraphInteractivity,
+    isTimeSeries?: boolean,
+    showDefaultPerformanceWarning?: boolean,
     binSize: number,
     graphId: string,
-    xAxisDataOptions: Array<{
-        dataField: LogToolField,
-        data: Array<number | string>
-    }>;
-    yAxisDataOptions: Array<{
-        dataField: LogToolField,
-        data: Array<number | string>
-    }>
+    xAxisDataOptions: Array<GraphDataOption>;
+    yAxisDataOptions: Array<GraphDataOption>
+}
+
+export interface GraphLayout {
+    title: {
+        text: string,
+        font: {
+            size: number
+        }
+    },
+    autosize?: boolean,
+    hovermode: string | boolean,
+    dragmode?: string | boolean,
+    xaxis: AxisObj,
+    yaxis: AxisObj,
+    yaxis2: AxisObj,
+    margin: {
+        t: number,
+        b: number,
+        l: number,
+        r: number
+    },
+    legend?: {
+        orientation: string,
+        y: number,
+        margin?: {
+            t?: number,
+            l?: number,
+            r?: number,
+            b?: number
+          }
+    },
+    annotations: Array<AnnotationData>
+}
+
+export interface GraphInteractivity {
+    isGraphInteractive?: boolean,
+    showDefaultPerformanceWarning?: boolean,
+    showUserToggledPerformanceWarning?: boolean,
+    hasLargeDataset?: boolean
 }
 
 export interface AxisObj {
     autorange: boolean,
     type: string,
+    spikemode?: string,
     title: {
         text: string
     },
@@ -243,3 +288,81 @@ export interface LogToolDbData {
         individualDayScatterPlotData: Array<DayTypeGraphItem>
     }
 }
+
+
+export interface DataExplorerStatus {
+    hasFilesUploaded: boolean,
+    isStepHeaderRowComplete: boolean, 
+    isStepRefineComplete: boolean, 
+    isStepMapTimeDataComplete: boolean, 
+    showLoadingSpinner: boolean,
+    showLoadingMessage: string,
+    invalidFiles: Array<InvalidFile>
+  }
+
+export interface LoadingSpinner {
+    show: boolean,
+    msg?: string
+}
+  
+  export interface InvalidFile {
+    name: string;
+    message?: string;
+  }
+  
+  export interface ExplorerData {
+    fileData: Array<ExplorerFileData>,
+    datasets: Array<ExplorerDataSet>,
+    isStepHeaderRowComplete: boolean,
+    isStepFileUploadComplete: boolean,
+    refineDataStepStatus: RefineDataStepStatus,
+    isStepMapTimeDataComplete: boolean,
+    isSetupDone: boolean,
+    isExample?: boolean,
+    isExistingImport?: boolean,
+    canRunDayTypeAnalysis: boolean
+  }
+
+  export interface RefineDataStepStatus {
+    isComplete: boolean,
+    currentDatasetValid?: boolean,
+    hasInvalidDataset?: boolean,
+  }
+  
+  export interface ExplorerFileData {
+    dataSetId: string, 
+    fileType: string,
+    name: string, 
+    data: any,
+    previewData: any,
+    workSheets?: Array<any>,
+    workBook?: any,
+    selectedSheet?: string,
+    headerRowVisited?: boolean,
+    headerRowIndex?: number,
+}
+
+// OLD IndividualDataFromCSV
+export interface ExplorerDataSet {
+    dataSetId: string, 
+    refineDataTabVisited?: boolean,
+    mapTimeDataTabVisited?: boolean
+    csvImportData: CsvImportData,
+    csvName: string,
+    fields: Array<LogToolField>;
+    startDate?: string,
+    endDate?: string,
+    dataPointsPerColumn?: number,
+    hasDateField: boolean,
+    hasTimeField?: boolean,
+    dateField?: LogToolField,
+    timeField?: LogToolField,
+    intervalForSeconds?: number;
+    canRunDayTypeAnalysis: boolean
+
+  }
+
+  export interface StepMovement {
+    direction: 'forward' | 'back';
+    url: string
+  }

@@ -4,12 +4,8 @@ import { LogToolComponent } from './log-tool.component';
 import { LogToolBannerComponent } from './log-tool-banner/log-tool-banner.component';
 import { RouterModule } from '@angular/router';
 import { LogToolService } from './log-tool.service';
-import { SystemSetupComponent } from './system-setup/system-setup.component';
-import { HelpPanelComponent } from './system-setup/help-panel/help-panel.component';
 import { VisualizeComponent } from './visualize/visualize.component';
-import { SetupDataComponent } from './system-setup/setup-data/setup-data.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CleanDataComponent } from './system-setup/clean-data/clean-data.component';
 import { DayTypeAnalysisComponent } from './day-type-analysis/day-type-analysis.component';
 import { DayTypesComponent } from './day-type-analysis/day-types/day-types.component';
 import { DayTypeGraphComponent } from './day-type-analysis/day-type-graph/day-type-graph.component';
@@ -25,7 +21,6 @@ import { VisualizeMenuComponent } from './visualize/visualize-menu/visualize-men
 import { LogToolDataService } from './log-tool-data.service';
 import { DayTypeTableComponent } from './day-type-analysis/day-type-table/day-type-table.component';
 import { DayTypeMenuComponent } from './day-type-analysis/day-type-menu/day-type-menu.component';
-import { DataTableComponent } from './system-setup/setup-data/data-table/data-table.component';
 import { FieldUnitsModalComponent } from './system-setup/clean-data/field-units-modal/field-units-modal.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
@@ -44,16 +39,17 @@ import { LogToolDbService } from './log-tool-db.service';
 import { SelectAssessmentModalComponent } from './day-type-analysis/day-type-menu/select-assessment-modal/select-assessment-modal.component';
 import { ExportModalComponent } from './export-modal/export-modal.component';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
+import { DataSetupComponent } from './data-setup/data-setup.component';
+import { ImportDataComponent } from './data-setup/import-data/import-data.component';
+import { RefineDataComponent } from './data-setup/refine-data/refine-data.component';
+import { SelectDataHeaderComponent } from './data-setup/select-data-header/select-data-header.component';
+import { MapTimeDataComponent } from './data-setup/map-time-data/map-time-data.component';
 
 @NgModule({
   declarations: [
     LogToolComponent,
     LogToolBannerComponent,
-    SystemSetupComponent,
-    HelpPanelComponent,
     VisualizeComponent,
-    SetupDataComponent,
-    CleanDataComponent,
     DayTypeAnalysisComponent,
     DayTypesComponent,
     DayTypeGraphComponent,
@@ -64,7 +60,6 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
     VisualizeMenuComponent,
     DayTypeTableComponent,
     DayTypeMenuComponent,
-    DataTableComponent,
     FieldUnitsModalComponent,
     AnnotateGraphComponent,
     GraphBasicsComponent,
@@ -77,7 +72,12 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
     BinDataComponent,
     SelectAssessmentModalComponent,
     ExportModalComponent,
-    WelcomeScreenComponent
+    WelcomeScreenComponent,
+    DataSetupComponent,
+    ImportDataComponent,
+    RefineDataComponent,
+    SelectDataHeaderComponent,
+    MapTimeDataComponent
   ],
   imports: [
     CommonModule,

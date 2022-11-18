@@ -1,0 +1,96 @@
+
+.img-width {
+    max-width: 100px;
+}
+
+.import-file {
+    font-size: 12px;
+    display: none;
+}
+
+.btn-primary {
+    color: white;
+    background: #117A65;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    color: white;
+    background: #447f73 !important;
+}
+
+.de-description {
+    font-size: 16px;
+    margin-top: 2em;
+}
+
+.no-border-top{
+    border-top: none;
+  }
+
+.collapse-label  {
+    font-size: 14px;
+    padding: .5em 0; 
+}
+
+.collapse-chevron {
+    font-size: .75em;
+    padding: .25em
+}
+
+.btn-sm {
+    font-size: small !important;
+}
+
+.header .click-link{
+    margin-top: 10px;
+}
+
+.table{
+    font-size: small;
+}
+
+.select-header{
+    font-size: 16px;
+}
+
+
+.preview-file-data {
+    max-height: 500px;
+}
+
+
+ul.nav.nav-tabs {
+    border-right: 1px solid #dee2e6;
+    border-left: 1px solid #dee2e6;
+}
+
+.de-active {
+  background-color: #117A65;
+}
+
+.nav-link{
+    font-size: 14px;
+}
+
+.nav-link.active {   
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff;
+}
+
+.nav-tabs{
+    background-color: #efefef;
+}
+
+.font-reset {
+    font: unset
+}
+
+.show-pointer {
+ cursor: pointer;
+}
+
+.help {
+    max-width: 75vw;
+    height: 200px;
+}

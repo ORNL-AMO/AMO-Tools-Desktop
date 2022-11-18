@@ -2,10 +2,6 @@
     font-size: 20px;
 }
 
-.data-summary{
-    background-color: white;
-}
-
 td{
     font-size: small;
     padding: 3px;
@@ -18,4 +14,8 @@ table{
 
 .group-label{
     width: fit-content;
+}
+
+.scroll-container {
+    min-height: 200px;
 }

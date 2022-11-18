@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LogToolDbData } from './log-tool-models';
+import { ExplorerData, GraphObj, LogToolDbData } from './log-tool-models';
  
 import { LogToolService } from './log-tool.service';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
@@ -75,8 +75,12 @@ export class LogToolDbService {
     await firstValueFrom(this.dbService.addWithObservable(logToolDbData));
   }
 
-  setLogToolData() {
+  setLogToolData(importedLogToolDbData?: LogToolDbData) {
     let logToolDbData: LogToolDbData = this.logToolDbData[0];
+    if (importedLogToolDbData) {
+      logToolDbData = importedLogToolDbData;
+      this.visualizeService.userGraphOptions.next(logToolDbData.visualizeData.selectedGraphObj);
+    } 
     this.logToolDataService.logToolDays = logToolDbData.setupData.logToolDays;
     this.logToolService.individualDataFromCsv = logToolDbData.setupData.individualDataFromCsv;
     this.logToolService.fields = logToolDbData.setupData.fields;
@@ -85,7 +89,7 @@ export class LogToolDbService {
     this.logToolService.noDayTypeAnalysis.next(logToolDbData.setupData.noDayTypeAnalysis);
     this.visualizeService.graphObjects.next(logToolDbData.visualizeData.graphObjects);
     this.visualizeService.selectedGraphObj.next(logToolDbData.visualizeData.selectedGraphObj);
-    this.visualizeService.visualizeData = logToolDbData.visualizeData.visualizeData;
+    this.visualizeService.allDataByAxisField = logToolDbData.visualizeData.visualizeData;
     this.visualizeService.annotateDataPoint.next(logToolDbData.visualizeData.annotateDataPoint);
     this.dayTypeAnalysisService.selectedDataField.next(logToolDbData.dayTypeData.selectedDataField);
     this.dayTypeAnalysisService.dayTypes.next(logToolDbData.dayTypeData.dayTypes);
@@ -107,12 +111,32 @@ export class LogToolDbService {
     let allData: LogToolDbData[] = await firstValueFrom(this.dbService.updateWithObservable(logToolDbData));
   }
 
+  async saveDataWithOptions(graphObj: GraphObj) {
+    let logToolDbData: LogToolDbData = this.getLogToolDbDataObj(graphObj);
+    let allData: LogToolDbData[] = await firstValueFrom(this.dbService.updateWithObservable(logToolDbData));
+  }
+
+  async saveDataAsync() {
+    let logToolDbData: LogToolDbData = this.getLogToolDbDataObj();
+    return firstValueFrom(this.dbService.updateWithObservable(logToolDbData));
+  }
+
   getSavedData(): LogToolDbData {
     let logToolDbData: LogToolDbData = this.getLogToolDbDataObj();
     return logToolDbData;
   }
 
-  getLogToolDbDataObj(): LogToolDbData{
+  getLogToolDbDataObj(updatedSelectedGraphObject?: GraphObj): LogToolDbData{
+    let selectedGraphObj: GraphObj = this.visualizeService.selectedGraphObj.getValue();
+    let graphObjects: Array<GraphObj> = this.visualizeService.graphObjects.getValue();
+    // Manually saved
+    if (updatedSelectedGraphObject) {
+      selectedGraphObj = updatedSelectedGraphObject;
+      let updateGraphIndex: number = graphObjects.findIndex(graph => graph.graphId === selectedGraphObj.graphId);
+      graphObjects[updateGraphIndex] = selectedGraphObj  
+    }
+
+    let explorerData: ExplorerData = this.logToolDataService.explorerData.getValue(); 
     let newLogToolDbData: LogToolDbData = {
       id: 1,
       name: 'Latest',
@@ -120,16 +144,16 @@ export class LogToolDbService {
       origin: 'AMO-LOG-TOOL-DATA',
       setupData: {
         logToolDays: this.logToolDataService.logToolDays,
-        individualDataFromCsv: this.logToolService.individualDataFromCsv,
+        individualDataFromCsv: this.logToolDataService.explorerData.getValue().datasets,
         fields: this.logToolService.fields,
         dataCleaned: this.logToolService.dataCleaned.getValue(),
         dataSubmitted: this.logToolService.dataSubmitted.getValue(),
-        noDayTypeAnalysis: this.logToolService.noDayTypeAnalysis.getValue()
+        noDayTypeAnalysis: !explorerData.canRunDayTypeAnalysis
       },
       visualizeData: {
-        graphObjects: this.visualizeService.graphObjects.getValue(),
-        selectedGraphObj: this.visualizeService.selectedGraphObj.getValue(),
-        visualizeData: this.visualizeService.visualizeData,
+        graphObjects: graphObjects,
+        selectedGraphObj: selectedGraphObj,
+        visualizeData: this.visualizeService.allDataByAxisField,
         annotateDataPoint: this.visualizeService.annotateDataPoint.getValue()
       },
       dayTypeData: {
