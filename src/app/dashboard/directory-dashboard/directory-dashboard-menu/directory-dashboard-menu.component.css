@@ -51,4 +51,15 @@ Breadcrumb
     padding: 8px 10px 6px;
     font-size: 15px;
   }
+
+
+@media screen and (max-width: 991px) {
+  .menu-btn{
+    width: 100%;
+  }   
+  
+  .select-all{
+    text-align: center;
+  }
+}
   

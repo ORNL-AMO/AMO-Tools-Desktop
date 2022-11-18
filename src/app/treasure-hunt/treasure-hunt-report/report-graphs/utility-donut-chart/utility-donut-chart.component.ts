@@ -13,6 +13,8 @@ export class UtilityDonutChartComponent implements OnInit {
   savingsItem: SavingsItem;
   @Input()
   showPrint: boolean;
+  @Input()
+  graphTab: string;
 
   @ViewChild('utilityDonutChart', { static: false }) utilityDonutChart: ElementRef;
   constructor(private plotlyService: PlotlyService) { }
@@ -38,19 +40,29 @@ export class UtilityDonutChartComponent implements OnInit {
   ngOnDestroy() { }
 
   createChart() {
+    let labels: Array<string> = new Array<string>();
+    let text: string;
+    labels = ['Savings', 'Projection'];
+    if (this.graphTab === 'carbon'){
+      text = "CO<sub>2</sub> Emissions";
+    } else if (this.graphTab === 'cost') {
+      text = "Cost";
+    } else if (this.graphTab === 'energy') {
+      text = "Utility Usage";
+    }
     let rotationAmount: number = (this.savingsItem.savings / (this.savingsItem.savings + this.savingsItem.newCost)) / 2 * 360;
     var data = [{
       values: [this.savingsItem.savings, this.savingsItem.newCost],
-      labels: ['Utility Savings', 'Projected Cost'],
+      labels: labels,
       marker: {
         colors: graphColors
       },
       type: 'pie',
       hole: .5,
-      textposition: 'outside',
+      textposition: "auto",
       insidetextorientation: "horizontal",
       hoverformat: '.2r',
-      texttemplate: `<b>%{label}</b> <br> %{value:,.0f} (%{percent})`,
+      texttemplate: `<b>%{label}</b> <br> %{value:,.0f} <br> (%{percent})`,
       hoverinfo: 'label+percent',
       direction: "clockwise",
       rotation: rotationAmount
@@ -65,13 +77,13 @@ export class UtilityDonutChartComponent implements OnInit {
             size: 12
           },
           showarrow: false,
-          text: `<b>Current Cost</b> <br>${this.savingsItem.currentCost}`,
+          text: `<b>Current ${text}</b> <br>${this.savingsItem.currentCost}`,
           x: .5,
           y: 0.5
         },
       ],
       showlegend: false,
-      margin: { t: 75, b: 75, l: 25, r: 25 },
+      margin: { t: 10, b: 10, l: 10, r: 10 },
     };
 
     var modebarBtns = {
@@ -84,20 +96,30 @@ export class UtilityDonutChartComponent implements OnInit {
   }
 
   createPrintChart() {
+    let labels: Array<string> = new Array<string>();
+    let text: string;
+    labels = ['Savings', 'Projection'];
+    if (this.graphTab === 'carbon'){
+      text = "CO<sub>2</sub> Emissions";
+    } else if (this.graphTab === 'cost') {
+      text = "Cost";
+    } else if (this.graphTab === 'energy') {
+      text = "Utility Usage";
+    }
     let rotationAmount: number = (this.savingsItem.savings / (this.savingsItem.savings + this.savingsItem.newCost)) / 2 * 360;
     var data = [{
       width: this.utilityDonutChart.nativeElement.clientWidth,
       values: [this.savingsItem.savings, this.savingsItem.newCost],
-      labels: ['Utility Savings', 'Projected Cost'],
+      labels: labels,
       marker: {
         colors: graphColors
       },
       type: 'pie',
       hole: .5,
-      textposition: 'outside',
+      textposition: "auto",
       insidetextorientation: "horizontal",
       hoverformat: '.2r',
-      texttemplate: `<b>%{label}</b> <br> %{value:$,.0f} (%{percent})`,
+      texttemplate: `<b>%{label}</b> <br> %{value:,.0f} <br> (%{percent})`,
       hoverinfo: 'label+percent',
       direction: "clockwise",
       rotation: rotationAmount
@@ -113,13 +135,13 @@ export class UtilityDonutChartComponent implements OnInit {
             size: 12
           },
           showarrow: false,
-          text: `<b>Current Cost</b> <br>${this.savingsItem.currentCost}`,
+          text: `<b>Current ${text}</b> <br>${this.savingsItem.currentCost}`,
           x: 0,
           y: 0.5
         },
       ],
       showlegend: false,
-      margin: { t: 15, b: 5, l: 35, r: 35 },
+      margin: { t: 10, b: 10, l: 10, r: 10 },
     };
 
     var modebarBtns = {

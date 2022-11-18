@@ -1,12 +1,12 @@
 <div class="d-flex flex-column">
-    <div class="d-flex justify-content-end">
-        <div class="mr-1">
-            <a class="btn btn-secondary action-btn" href="assets/user-manuals/MEASUR-User-Manual.pdf" target="_blank">
+    <div class="d-flex flex-column flex-lg-row justify-content-center justify-content-lg-end">
+        <div class="mr-lg-1 text-center">
+            <a class="btn btn-secondary action-btn menu-btn" href="assets/user-manuals/MEASUR-User-Manual.pdf" target="_blank">
                 <span class="fa fa-book"></span> Manual
             </a>
         </div>
-        <div class="mr-1">
-            <div class="btn-group" role="group">
+        <div class="mr-lg-1 text-center">
+            <div class="btn-group menu-btn" role="group">
                 <button class="btn btn-secondary action-btn pull-right" (click)="toggleSortDropdown()"
                     [ngClass]="{'active': sortByDropdown == true}">
                     Sort By: {{sortByLabel}}
@@ -43,8 +43,8 @@
             </div>
         </div>
 
-        <div class="mr-1">
-            <button class="btn btn-secondary action-btn" (click)="toggleFilterDropdown()"
+        <div class="mr-lg-1 text-center">
+            <button class="btn btn-secondary action-btn menu-btn" (click)="toggleFilterDropdown()"
                 [ngClass]="{'active': filterDropdown == true}">
                 <span class="fa fa-filter"></span> Filter
             </button>

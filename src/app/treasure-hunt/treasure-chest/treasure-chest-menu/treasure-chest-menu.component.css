@@ -96,3 +96,34 @@ a.list-group-item.active:hover{
       padding-left: 2px;
       padding-right: 2px;
   }
+
+@media screen and (max-width: 991px) {
+    .nav-btn{
+        background: #2E4053;
+        color: white;
+        border: none;
+        line-height: 2;
+        width: 100% !important;
+    }
+    
+    .nav-btn-clear{
+        background: #6D757C;
+        color: white;
+        border: none;
+        line-height: 2;
+    }
+    
+    .nav-btn.middle{
+        border: none !important;
+    }   
+    
+    .navbar.second-nav {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .navbar.second-nav .nav-item:not(:first-child) {
+        padding: 0px !important;
+    }
+    
+}

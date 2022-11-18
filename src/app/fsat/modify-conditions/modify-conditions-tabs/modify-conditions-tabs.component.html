@@ -1,4 +1,4 @@
-<div class="d-flex tabs subtabs progress-tabs fsat flex-wrap">
+<div class="d-none d-lg-flex tabs subtabs progress-tabs fsat flex-wrap">
 
   <div class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'fan-operations'}">
     <a class="nav-link small" (click)="changeModTab('fan-operations')">Operations
@@ -29,4 +29,41 @@
     </a>
     <app-tabs-tooltip [display]="fieldDataBadgeHover" [reveal]="displayFieldDataTooltip" [badgeClass]="fieldDataBadgeClass"></app-tabs-tooltip>
   </div>
+</div>
+
+<div class="d-flex d-lg-none tabs subtabs progress-tabs fsat flex-wrap flex-fill">
+  <ul class="pagination d-flex justify-content-between tabs fsat subtabs progress-tabs flex-fill">
+    <li class="page-item" [ngClass]="{'active': modifyConditionsTab == 'fan-operations'}">
+      <a class="nav-link small" (click)="changeModTab('fan-operations')">
+        <span *ngIf="modifyConditionsTab != 'fan-operations'">1</span><span *ngIf="modifyConditionsTab == 'fan-operations'">Operations</span>
+        <span (mouseenter)="showTooltip('operations')" (mouseleave)="hideTooltip('operations')" class="badge gray-badge" [ngClass]="fanOperationsBadgeClass">
+        </span>
+      </a>
+      <app-tabs-tooltip [display]="fanOperationsBadgeHover" [reveal]="displayFanOperationsTooltip" [badgeClass]="fanOperationsBadgeClass"></app-tabs-tooltip>
+    </li>
+    <li class="page-item" [ngClass]="{'active': modifyConditionsTab == 'fan-setup'}">
+      <a class="nav-link small" (click)="changeModTab('fan-setup')">
+        <span *ngIf="modifyConditionsTab != 'fan-setup'">2</span><span *ngIf="modifyConditionsTab == 'fan-setup'">Fan &amp; Fluid</span>
+        <span (mouseenter)="showTooltip('fanSetup')" (mouseleave)="hideTooltip('fanSetup')" class="badge gray-badge" [ngClass]="fanSetupBadgeClass">
+        </span>
+      </a>
+      <app-tabs-tooltip [display]="fanSetupBadgeHover" [reveal]="displayFanSetupTooltip" [badgeClass]="fanSetupBadgeClass"></app-tabs-tooltip>
+    </li>
+    <li class="page-item" [ngClass]="{'active': modifyConditionsTab == 'fan-motor'}">
+      <a class="nav-link small" (click)="changeModTab('fan-motor')">
+        <span *ngIf="modifyConditionsTab != 'fan-motor'">3</span><span *ngIf="modifyConditionsTab == 'fan-motor'">Motor</span>
+        <span (mouseenter)="showTooltip('fanMotor')" (mouseleave)="hideTooltip('fanMotor')" class="badge gray-badge" [ngClass]="fanMotorBadgeClass">
+        </span>
+      </a>
+      <app-tabs-tooltip [display]="fanMotorBadgeHover" [reveal]="displayFanMotorTooltip" [badgeClass]="fanMotorBadgeClass"></app-tabs-tooltip>
+    </li>
+    <li class="page-item" [ngClass]="{'active': modifyConditionsTab == 'fan-field-data'}">
+      <a class="nav-link small" (click)="changeModTab('fan-field-data')">
+        <span *ngIf="modifyConditionsTab != 'fan-field-data'">4</span><span *ngIf="modifyConditionsTab == 'fan-field-data'">Field Data</span>
+        <span (mouseenter)="showTooltip('fieldData')" (mouseleave)="hideTooltip('fieldData')" class="badge gray-badge" [ngClass]="fieldDataBadgeClass">
+        </span>
+      </a>
+      <app-tabs-tooltip [display]="fieldDataBadgeHover" [reveal]="displayFieldDataTooltip" [badgeClass]="fieldDataBadgeClass"></app-tabs-tooltip>
+    </li>
+  </ul>
 </div>

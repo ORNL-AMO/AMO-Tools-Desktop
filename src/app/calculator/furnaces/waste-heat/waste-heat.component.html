@@ -1,16 +1,16 @@
 <div class="calculator-container modify-conditions phast standalone-calculator" #contentContainer>
 	<div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
 		[ngClass]="{'justify-content-between': inTreasureHunt}">
-		<div class="d-flex pl-2 align-items-center">
-			<div class="calc-icon-header icon-phast" [ngClass]="{'in-treasure-hunt': inTreasureHunt}">
+		<div class="d-flex align-items-center">
+			<div class="calc-icon-header icon-phast d-none d-sm-flex" [ngClass]="{'in-treasure-hunt': inTreasureHunt}">
 				<img src="assets/images/calculator-icons/furnace-icons/waste-heat-icon.png">
 			</div>
-			<div class="pl-2">
+			<div class="mx-auto">
 				<h3>Waste Heat for Absorption Chillers</h3>
 			</div>
 		</div>
-		<div class="d-flex pr-2" *ngIf="inTreasureHunt">
-			<div class="d-flex help-holder">
+		<div class="d-flex pr-2 pl-2" *ngIf="inTreasureHunt">
+			<div class="d-none d-lg-flex help-holder">
 				<p class="help-text treasure-hunt-help">Click the save icon to add the
 					treasure to your chest! Click cancel to discard the opportunity and return
 					to method selection.

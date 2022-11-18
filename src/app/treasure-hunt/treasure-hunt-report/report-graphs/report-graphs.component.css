@@ -1,6 +1,24 @@
 .group-label{
     font-size: 22px;
 }
+.btn-light:not(:disabled):not(.disabled):active, .btn-light:not(:disabled):not(.disabled).active,
+.show > .btn-light.dropdown-toggle {
+    color: white;
+    background-color: #2E4053;
+    border-color: #56667941;
+}
+.btn.btn-light {
+    color: black;
+    border-color: rgba(0, 0, 0, 0.25);
+}
+.btn-group {
+    border-color: rgba(0, 0, 0, 0.25);
+}
+
+.btn {
+    box-shadow: none !important;
+}
+
 @media print {
     .print-break-before {
         page-break-before: always;
@@ -14,5 +32,8 @@
     }
     .print-avoid-break {
         page-break-inside: avoid;
+    }
+    .hide-print {
+        display: none;
     }
 }
