@@ -4,6 +4,7 @@ import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import { LogToolField } from '../../log-tool-models';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
+import { VisualizeService } from '../../visualize/visualize.service';
 
 @Component({
   selector: 'app-day-type-menu',
@@ -23,10 +24,12 @@ export class DayTypeMenuComponent implements OnInit {
   dataDisplayType: string;
   dataDisplayTypeSub: Subscription;
   showAssessmentModal: boolean = false;
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolDataService: LogToolDataService, private dayTypeGraphService: DayTypeGraphService) { }
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, 
+    private dayTypeGraphService: DayTypeGraphService,
+    private visualizeService: VisualizeService) { }
 
   ngOnInit() {
-    this.dataFields = this.logToolDataService.getDataFieldOptions();
+    this.dataFields = this.visualizeService.getDataFieldOptions();
     this.dataViewSub = this.dayTypeAnalysisService.dataView.subscribe(val => {
       this.dataView = val;
     });

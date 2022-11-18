@@ -18,4 +18,5 @@ import 'core-js/es/regexp';
 import 'core-js/es/map';
 import 'core-js/es/set';
 import 'core-js/es/reflect';
+import './zone-flags';
 import 'zone.js/dist/zone';

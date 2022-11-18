@@ -10,7 +10,7 @@
     <div class="form-group">
         <label>Data</label>
         <select class="form-control" name="xDatafield" [(ngModel)]="selectedGraphObj.selectedXAxisDataOption"
-            (change)="setXAxisDataOption()" [disabled]="selectedGraphObj.isTimeSeries" (focus)="focusField()"
+            (change)="setXAxisDataOption()" (focus)="focusField()"
             (blur)="focusOut()">
             <option *ngFor="let xAxisDataOption of selectedGraphObj.xAxisDataOptions" [ngValue]="xAxisDataOption">
                 {{xAxisDataOption.dataField.alias}}</option>
