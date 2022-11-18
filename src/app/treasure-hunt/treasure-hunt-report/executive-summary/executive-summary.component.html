@@ -25,10 +25,15 @@
       [settings]="settings" [title]="'Detailed Summary'">
     </app-executive-summary-table>
   </div>
-  <div class="col-12">
+  <div class="col-12 col-lg-6">
     <app-carbon-emissions-summary-table
       [settings]="settings" [treasureHuntResults]="treasureHuntResults">
     </app-carbon-emissions-summary-table>
+  </div>
+  <div class="col-12 col-lg-6">
+    <app-carbon-emissions-summary-pie-chart
+      [settings]="settings" [carbonResults]="treasureHuntResults.co2EmissionsResults" [showPrintView]="showPrintView">
+    </app-carbon-emissions-summary-pie-chart>
   </div>
 </div>
 <div class="row no-gutters mb-4 print-avoid-break" *ngIf="teamData.length > 0">

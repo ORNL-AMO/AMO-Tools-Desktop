@@ -13,7 +13,7 @@
     <!-- <p class="report-notes">{{reportNotes}}</p> -->
   </div>
 
-  <div #reportHeader class="report-header d-none d-lg-bloc" [ngClass]="{'hide-print': inTHunt}">
+  <div #reportHeader class="report-header d-none d-lg-block" [ngClass]="{'hide-print': inTHunt}">
     <app-treasure-chest-menu [settings]="settings" [inReport]="true" *ngIf="!inRollup && !showPrintView">
     </app-treasure-chest-menu>
     <div *ngIf="!inRollup" class="btn-group hide-print">
