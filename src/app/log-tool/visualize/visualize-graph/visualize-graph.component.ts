@@ -8,6 +8,7 @@ import { LogToolDataService } from '../../log-tool-data.service';
 import moment from 'moment';
 import * as _ from 'lodash';
 import { DOCUMENT } from '@angular/common';
+import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysis.service';
 
 @Component({
   selector: 'app-visualize-graph',
@@ -32,7 +33,7 @@ export class VisualizeGraphComponent implements OnInit {
   selectedGraphDataSubscription: Subscription;
   userGraphOptionsSubscription: Subscription;
   selectedGraphObj: GraphObj;
-  timeSeriesSegments: Array<{segmentText: string, data: VisualizerGraphData}> = [];
+  timeSeriesSegments: Array<TimeSeriesSegment> = [];
   selectedTimeSeriesSegment: TimeSeriesSegment;
 
   loadingSpinnerSub: Subscription;
@@ -45,6 +46,7 @@ export class VisualizeGraphComponent implements OnInit {
     @Inject(DOCUMENT) private document: Document,
     private logToolDbService: LogToolDbService,
     private logToolDataService: LogToolDataService,
+    private dayTypeAnalysisService: DayTypeAnalysisService,
     private plotlyService: PlotlyService) {
   }
 
@@ -90,6 +92,7 @@ export class VisualizeGraphComponent implements OnInit {
   }
 
   plotGraph(graphObj: GraphObj, displaySpinner: boolean = true) {
+    this.checkLegendDisplay(graphObj);
     this.plotlyService.newPlot(this.visualizeChart.nativeElement, graphObj.data, graphObj.layout, graphObj.mode)
     .then(chart => this.handlePlotlyInstanceEvents(chart, displaySpinner));
     window.dispatchEvent(new Event("resize"));
@@ -100,6 +103,22 @@ export class VisualizeGraphComponent implements OnInit {
     let plotlyInstance = await this.plotlyService.getPlotly();
     plotlyInstance.update(this.visualizeChart.nativeElement, this.selectedGraphObj.data, this.selectedGraphObj.layout, this.selectedGraphObj.mode);
     window.dispatchEvent(new Event("resize"));
+  }
+
+  checkLegendDisplay(graphObj: GraphObj) {
+    if (graphObj.data.length > 1) {
+      let hasLongName: boolean = graphObj.data.some(dataSeries => dataSeries.name.length > 20);
+      if (hasLongName) {
+        graphObj.layout.legend = {
+          orientation: "h",
+          y: -.25,
+          margin: {
+            t: 75,
+            b: 50
+          }
+        }
+      }
+    }
   }
 
   handlePlotlyInstanceEvents(chart, displayLoadingSpinner: boolean) {
@@ -149,15 +168,39 @@ export class VisualizeGraphComponent implements OnInit {
     } 
   }
 
-  setSelectedTimeSeriesSegment(segment: { segmentText: string, data: VisualizerGraphData }) {
-    this.selectedTimeSeriesSegment = segment;
-    this.selectedGraphObj.data[0] = this.selectedTimeSeriesSegment.data;
+  setTimeSeriesSegments(graphObj: GraphObj) {
+    this.timeSeriesSegments = [];
+    if (this.selectedGraphObj.graphInteractivity.hasLargeDataset) {
+      if (this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName === 'Time Series') {
+        this.timeSeriesSegments = this.createTimeSeriesSegments(graphObj);
+      } else {
+        // A non time-series axis is selected
+        let timeSeriesData: Array<number | string> = this.visualizeService.getTimeSeriesData(graphObj.selectedXAxisDataOption.dataField);
+        if (timeSeriesData) {
+          this.timeSeriesSegments = this.createTimeSeriesSegments(graphObj, timeSeriesData);
+        }
+      }
 
+      if (this.selectedTimeSeriesSegment) {
+        this.selectedGraphObj.data = this.selectedTimeSeriesSegment.data;
+      } else {
+        this.selectedTimeSeriesSegment = this.timeSeriesSegments[0];
+      }
+    }
+  }
+
+  setSelectedTimeSeriesSegment(segment: TimeSeriesSegment) {
+    this.selectedTimeSeriesSegment = segment;
+    this.selectedGraphObj.data.forEach((graphDataSeries, seriesIndex) => {
+      this.selectedGraphObj.data[seriesIndex] = this.selectedTimeSeriesSegment.data[seriesIndex];
+    });
+    
     let userGraphOptionsObj: GraphObj = this.visualizeService.userGraphOptions.getValue()
     if (userGraphOptionsObj) {
       this.selectedGraphObj.layout = userGraphOptionsObj.layout;
       this.selectedGraphObj.graphInteractivity = userGraphOptionsObj.graphInteractivity;
     }
+
     let resetLayoutRanges: GraphLayout = JSON.parse(JSON.stringify(this.visualizeService.selectedGraphObj.getValue().layout));
     this.selectedGraphObj.layout.xaxis = resetLayoutRanges.xaxis;
     this.selectedGraphObj.layout.yaxis = resetLayoutRanges.yaxis;
@@ -171,64 +214,120 @@ export class VisualizeGraphComponent implements OnInit {
     this.plotGraph(graphObj, false);
   }
 
-  // currently only works for single chart
-  setTimeSeriesSegments(graphObj: GraphObj) {
-    this.timeSeriesSegments = [];
-    if (this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName === 'Time Series' &&
-      this.selectedGraphObj.graphInteractivity.hasLargeDataset) {
-      this.timeSeriesSegments = this.createTimeSeriesSegments(graphObj);
-      if (this.selectedTimeSeriesSegment) {
-        this.selectedGraphObj.data[0] = this.selectedTimeSeriesSegment.data;
-      } else {
-        this.selectedTimeSeriesSegment = this.timeSeriesSegments[0];
-      }
+
+  createTimeSeriesSegments(graphObj: GraphObj, notSelectedTimeSeriesData?: Array<number | string>): Array<TimeSeriesSegment> {
+    this.selectedTimeSeriesSegment = undefined;
+
+    let config: SegmentConfig = {
+      dataSetLength: graphObj.data[0].y.length,
+      segmentSize: Math.floor(graphObj.data[0].y.length * .15),
+      allDataMinDate: this.dayTypeAnalysisService.allDataMinDate,
+      allDataMaxDate: this.dayTypeAnalysisService.allDataMaxDate,
     }
+    
+    let segmentDays: Array<TimeSeriesSegment> = [];
+    graphObj.data.forEach((graphDataSeries: VisualizerGraphData, seriesIndex) => {
+      let timeSeriesData: Array<string | number> = graphDataSeries.x;
+
+      if (notSelectedTimeSeriesData) {
+        timeSeriesData = notSelectedTimeSeriesData;
+      }
+
+      let currentDay: string = moment(timeSeriesData[0]).format("MMM Do");
+
+      //======
+      // 6040 band aid until file/dataset processing supports multi files better
+      // use only the time series data for the selected series (y axis), DE logic currently concats all time series data. 
+      let previousSeriesEnd: number = 0;
+      if (seriesIndex !== 0) {
+        previousSeriesEnd = graphObj.data[seriesIndex - 1].y.length;
+      }
+      timeSeriesData = timeSeriesData.slice(previousSeriesEnd, previousSeriesEnd + graphDataSeries.y.length);
+      //======
+
+      let currentDayData: VisualizerGraphData = JSON.parse(JSON.stringify(graphDataSeries));
+      currentDayData.x = [];
+      currentDayData.y = [];
+
+      timeSeriesData.forEach((dateStamp, coordinateIndex) => {
+        let monthDay: string = moment(dateStamp).format("MMM Do");
+
+        let xValue: string | number = dateStamp;
+        if (notSelectedTimeSeriesData) {
+          xValue = graphDataSeries.x[coordinateIndex];
+        }
+
+        let isLastDay: boolean = coordinateIndex === timeSeriesData.length - 1;
+        if (monthDay !== currentDay || isLastDay) {
+          if (isLastDay) {
+            currentDayData.x.push(xValue);
+            currentDayData.y.push(graphDataSeries.y[coordinateIndex]);
+          }
+          
+          if (seriesIndex === 0) {
+            segmentDays.push({
+              segmentText: currentDay,
+              data: [currentDayData]
+            });
+          } 
+          else {
+            let existingSegment: TimeSeriesSegment = segmentDays[segmentDays.findIndex(day => day.segmentText === currentDay)];
+            existingSegment.data.push(currentDayData);
+          }
+          
+          currentDay = monthDay;
+          currentDayData = JSON.parse(JSON.stringify(graphDataSeries));
+          currentDayData.x = [];
+          currentDayData.y = [];
+
+        } else {
+          currentDayData.x.push(xValue);
+          currentDayData.y.push(graphDataSeries.y[coordinateIndex]);
+        }
+
+      });
+    });
+
+    // Group day segments into reasonable amount of segments until day selection is implemented
+    return this.groupTimeSeriesDaySegments(segmentDays, graphObj, config);
   }
 
-  createTimeSeriesSegments(graphObj: GraphObj): Array<TimeSeriesSegment> {
-    this.selectedTimeSeriesSegment = undefined;
-    let xVals = graphObj.data[0].x;
-    let yVals = graphObj.data[0].y;
-    
-    let segmentSize: number = Math.floor(yVals.length / 5);
-    let timeSeriesSegments: Array<{ segmentText: string, data: VisualizerGraphData }> = [
-      {
-        segmentText: 'All Datapoints',
-        data: graphObj.data[0]
-      }
-    ];
+  groupTimeSeriesDaySegments(segmentDays: Array<TimeSeriesSegment>, graphObj: GraphObj, config: SegmentConfig): Array<TimeSeriesSegment> {
+    let timeSeriesSegments: Array<TimeSeriesSegment> = [{segmentText: 'All Datapoints', data: [...graphObj.data]}];
+    let groupedSegment: TimeSeriesSegment = {segmentText: undefined, data: []}
 
-    for (let i = 0; i < yVals.length; i += segmentSize) {
-      let segmentStart: number = i;
-      let segmentEnd: number = i + segmentSize;
-      let lastSegment: boolean = i + segmentSize > yVals.length;
-      if (lastSegment) {
-        segmentEnd = yVals.length - 1;
-      }
-      let YtimeSeriesSegment: Array<(string | number)> = yVals.slice(segmentStart, segmentEnd);
-      let XtimeSeriesSegment: Array<(string | number)> = xVals.slice(segmentStart, segmentEnd);
-      let timeSeriesData = JSON.parse(JSON.stringify(graphObj.data[0]));
-      timeSeriesData.x = XtimeSeriesSegment;
-      timeSeriesData.y = YtimeSeriesSegment;
+    let startDate: string = segmentDays[0].segmentText;
+    let endDate: string;
 
-      let startDate: string = moment(XtimeSeriesSegment[0]).format("MMM Do");
-      let endDate: string = moment(XtimeSeriesSegment[XtimeSeriesSegment.length - 1]).format("MMM Do");
-      let segmentText: string = `${startDate} - ${endDate}`;
-      let timeSeriesSegment: TimeSeriesSegment = {
-        segmentText: segmentText,
-        data: timeSeriesData
+    segmentDays.forEach((daySegment, index) => {
+      if (!startDate) {
+        startDate = daySegment.segmentText
       }
 
-      if (lastSegment) {
-        let previousSegment = timeSeriesSegments[timeSeriesSegments.length - 1];
-        previousSegment.segmentText = `${previousSegment.segmentText.split('-')[0]} - ${endDate}`;
-        previousSegment.data.x.push(timeSeriesData.x);
-        previousSegment.data.y.push(timeSeriesData.y);
-      } else {
-        timeSeriesSegments.push(timeSeriesSegment);
-      }
-    }
+      daySegment.data.forEach((dataSeries, index) => {
+        if (!groupedSegment.data[index]) {
+          groupedSegment.data.push(dataSeries);
+        } else {
+          groupedSegment.data[index].x = groupedSegment.data[index].x.concat(dataSeries.x)
+          groupedSegment.data[index].y = groupedSegment.data[index].y.concat(dataSeries.y)
+        }
+      });
 
+      let isSegmentLengthLimit: boolean = groupedSegment.data[0].y.length >= config.segmentSize;
+      if (isSegmentLengthLimit || index === segmentDays.length - 1) {
+        endDate = daySegment.segmentText;
+        let segmentText: string = `${startDate} - ${endDate}`;
+        groupedSegment.segmentText = segmentText;
+        startDate = undefined;
+        timeSeriesSegments.push(groupedSegment);
+        groupedSegment = {
+          segmentText: undefined,
+          data: []
+        }
+      } 
+    });
+
+    console.log(timeSeriesSegments);
     return timeSeriesSegments;
   }
 
@@ -314,4 +413,12 @@ export interface PlotlyAxisRanges {
   y2Max: number
 }
 
-export interface TimeSeriesSegment {segmentText: string, data: VisualizerGraphData}
+export interface SegmentConfig {
+  dataSetLength: number;
+  segmentSize: number;
+  // below in date ms
+  allDataMinDate: Date;
+  allDataMaxDate: Date;
+}
+
+export interface TimeSeriesSegment {segmentText: string, data: Array<VisualizerGraphData>}

@@ -7,11 +7,11 @@ import { LogToolService } from '../log-tool.service';
 @Injectable()
 export class VisualizeService {
 
-  visualizeDataInitialized: boolean = false;
+  allDataByAxisFieldsInitialized: boolean = false;
+  allDataByAxisField: Array<GraphDataOption>;
   graphObjects: BehaviorSubject<Array<GraphObj>>;
   selectedGraphObj: BehaviorSubject<GraphObj>;
   userInputDelay: BehaviorSubject<number>;
-  visualizeData: Array<GraphDataOption>;
   annotateDataPoint: BehaviorSubject<AnnotationData>;
   userGraphOptions: BehaviorSubject<GraphObj>;
   tabSelect: BehaviorSubject<string>;
@@ -35,12 +35,12 @@ export class VisualizeService {
   }
 
   buildGraphData() {
-    this.visualizeDataInitialized = true;
-    this.visualizeData = new Array();
+    this.allDataByAxisFieldsInitialized = true;
+    this.allDataByAxisField = new Array();
     let graphAxisOptions = this.getDataFieldOptionsWithDate();
     graphAxisOptions.forEach(field => {
       let data = this.getAxisOptionGraphData(field.fieldName);
-      this.visualizeData.push({
+      this.allDataByAxisField.push({
         data: data,
         numberOfDataPoints: data.length,
         dataField: field
@@ -75,30 +75,31 @@ export class VisualizeService {
   // field == axis
   getAxisOptionGraphData(fieldName: string): Array<number> {
     let data: Array<any> = new Array();
+    // 6040 Perform different operation if is datefield - don't concat
     this.logToolService.individualDataFromCsv.forEach(individualDataItem => {
       let foundData = individualDataItem.csvImportData.meta.fields.find(field => { return field == fieldName });
       if (foundData) {
         data = _.concat(data, individualDataItem.csvImportData.data);
       }
     });
-
+    
     let mappedValues: Array<any> = _.mapValues(data, (dataItem) => { return dataItem[fieldName] });
     let valueArr = _.values(mappedValues);
     return valueArr;
   }
 
-  getGraphData(fieldName: string) {
+  getGraphDataByField(fieldName: string) {
     let data: Array<number | string>;
     if (fieldName == 'Time Series') {
-      //
+      // 6040 rework for setXAxisDataOptionts call?
     } else {
-      data = _.find(this.visualizeData, (dataItem) => { return dataItem.dataField.fieldName == fieldName }).data;
+      data = _.find(this.allDataByAxisField, (dataItem) => { return dataItem.dataField.fieldName == fieldName }).data;
     }
     return data;
   }
 
-  getVisualizeDateData(field: LogToolField): Array<number | string> {
-    let data: Array<number | string> = _.find(this.visualizeData, (dataItem) => { return dataItem.dataField.csvId == field.csvId && dataItem.dataField.isDateField }).data;
+  getTimeSeriesData(field: LogToolField): Array<number | string> {
+    let data: Array<number | string> = _.find(this.allDataByAxisField, (dataItem) => { return dataItem.dataField.csvId == field.csvId && dataItem.dataField.isDateField }).data;
     return data;
   }
 
@@ -250,7 +251,7 @@ export class VisualizeService {
 
   resetData() {
     this.initializeService();
-    this.visualizeDataInitialized = false;
+    this.allDataByAxisFieldsInitialized = false;
   }
 
   saveUserOptionsChanges() {

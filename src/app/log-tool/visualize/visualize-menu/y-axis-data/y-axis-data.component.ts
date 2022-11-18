@@ -44,7 +44,7 @@ export class YAxisDataComponent implements OnInit {
 
   setYAxisData() {
     this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`})
-    this.visualizeMenuService.setYAxisData(this.selectedGraphObj);
+    this.visualizeMenuService.setGraphYAxisData(this.selectedGraphObj);
   }
 
   removeYAxisData(index: number) {

@@ -22,29 +22,22 @@ export class VisualizeMenuService {
 
   setGraphType(selectedGraphObj: GraphObj) {
     if (selectedGraphObj.data[0].type == 'scattergl') {
-      this.setScatterPlotType(selectedGraphObj);
+      this.setScatterGraphDataOptions(selectedGraphObj);
     } else if (selectedGraphObj.data[0].type == 'bar') {
-      this.setBarChartType(selectedGraphObj);
+      this.setBarChartDataOptions(selectedGraphObj);
     }
   }
 
-  setScatterPlotType(selectedGraphObj: GraphObj) {
+  setScatterGraphDataOptions(selectedGraphObj: GraphObj) {
     this.setXAxisDataOptions(selectedGraphObj);
-    if (selectedGraphObj.selectedXAxisDataOption && selectedGraphObj.selectedXAxisDataOption.dataField) {
-      //check still exists after updating x axis options
-      let testOptionExists = selectedGraphObj.xAxisDataOptions.find(option => { return selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == option.dataField.fieldName });
-      if (testOptionExists) {
-        selectedGraphObj.selectedXAxisDataOption = testOptionExists;
-      } else {
-        selectedGraphObj.selectedXAxisDataOption = selectedGraphObj.xAxisDataOptions[0];
-      }
-    } else {
-      selectedGraphObj.selectedXAxisDataOption = selectedGraphObj.xAxisDataOptions[0];
-    }
-    
-    // 3777 TODO Didn't we just set  above?
-    this.setXAxisDataOption(selectedGraphObj);
-    this.setYAxisDataOptions(selectedGraphObj);
+    this.setSelectedXAxisDataOption(selectedGraphObj);
+
+    this.setSelectedYAxisDataOption(selectedGraphObj);
+    this.setGraphYAxisData(selectedGraphObj);
+  }
+
+  setSelectedYAxisDataOption(selectedGraphObj: GraphObj) {
+    this.resetYAxisRelatedData(selectedGraphObj);
     let tmpSelectedYAxisDataOptions = new Array();
     selectedGraphObj.selectedYAxisDataOptions.forEach(option => {
       if (option.dataOption) {
@@ -55,35 +48,38 @@ export class VisualizeMenuService {
           option.dataOption = testOptionExists;
           tmpSelectedYAxisDataOptions.push(option);
         }
+      } {
+        // 6040 no dataOption.. When is this??
       }
     });
+
     if (tmpSelectedYAxisDataOptions.length != 0) {
       selectedGraphObj.selectedYAxisDataOptions = tmpSelectedYAxisDataOptions;
     } else {
-      this.setDefaultYAxisDataOptions(selectedGraphObj);
+      selectedGraphObj.selectedYAxisDataOptions = [{
+        index: 0,
+        dataOption: selectedGraphObj.yAxisDataOptions[0],
+        seriesColor: graphColors[0],
+        seriesName: this.getSeriesName(selectedGraphObj.yAxisDataOptions[0].dataField),
+        yaxis: 'y',
+        linesOrMarkers: 'markers'
+      }];
     }
-    selectedGraphObj.layout.yaxis.ticksuffix = '';
-    this.setYAxisData(selectedGraphObj);
   }
 
-  setDefaultYAxisDataOptions(selectedGraphObj: GraphObj) {
-    selectedGraphObj.selectedYAxisDataOptions = [{
-      index: 0,
-      dataOption: selectedGraphObj.yAxisDataOptions[0],
-      seriesColor: graphColors[0],
-      seriesName: this.getSeriesName(selectedGraphObj.yAxisDataOptions[0].dataField),
-      yaxis: 'y',
-      linesOrMarkers: 'markers'
-    }];
-  }
 
   setTimeSeriesData(selectedGraphObj: GraphObj) {
     let index: number = 0;
     selectedGraphObj.selectedYAxisDataOptions.forEach(option => {
-      let timeData: Array<string | number> = this.visualizeService.getVisualizeDateData(option.dataOption.dataField);
-      //if found set time data
+      // already called in setYAxisDataOptions
+      let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(option.dataOption.dataField);
       if (timeData) {
+        // timeData will have overlapping values - i.e. 3 datasets with same time logs concatenated together
+        // Should this go in getAxisOptionGraphData?
+        // let uniqueDates: Set<string | number> = new Set(timeData);
+        // timeData = Array.from(uniqueDates);
         selectedGraphObj.data[index].x = timeData;
+        selectedGraphObj.data[index].mode = 'lines'
       } else {
         //delete if no time data
         selectedGraphObj.data.splice(index, 1);
@@ -113,23 +109,19 @@ export class VisualizeMenuService {
     }
     selectedGraphObj.xAxisDataOptions = new Array();
     dataFields.forEach(field => {
-      let data = this.visualizeService.getGraphData(field.fieldName);
-      // console.log('adding xAxisDataOption', {
-      //   data: data,
-      //   dataField: field
-      // });
+      let data = this.visualizeService.getGraphDataByField(field.fieldName);
       selectedGraphObj.xAxisDataOptions.push({
         data: data,
         dataField: field
       });
     });
-    // console.log('x options', selectedGraphObj.xAxisDataOptions)
   }
 
 
-  setXAxisDataOption(selectedGraphObj: GraphObj) {
-    this.visualizeService.annotateDataPoint.next(undefined);
-    selectedGraphObj.layout.annotations = [];
+  setSelectedXAxisDataOption(selectedGraphObj: GraphObj) {
+    this.setDefaultSelectedXAxis(selectedGraphObj);
+    this.resetXAxisRelatedData(selectedGraphObj);
+
     if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
       selectedGraphObj.layout.xaxis.type = 'date';
       this.setYAxisDataOptions(selectedGraphObj);
@@ -144,11 +136,99 @@ export class VisualizeMenuService {
         dataItem.x = selectedGraphObj.selectedXAxisDataOption.data;
       });
       this.setYAxisDataOptions(selectedGraphObj);
-      this.setYAxisData(selectedGraphObj);
+      this.setGraphYAxisData(selectedGraphObj);
     }
   }
 
-  setBarChartType(selectedGraphObj: GraphObj) {
+  resetXAxisRelatedData(selectedGraphObj: GraphObj) {
+    this.visualizeService.annotateDataPoint.next(undefined);
+    selectedGraphObj.layout.annotations = [];
+    selectedGraphObj.layout.yaxis.ticksuffix = '';
+  }
+
+  resetYAxisRelatedData(selectedGraphObj: GraphObj) {
+    selectedGraphObj.layout.yaxis.ticksuffix = '';
+  }
+
+  setDefaultSelectedXAxis(selectedGraphObj: GraphObj) {
+    if (selectedGraphObj.selectedXAxisDataOption && selectedGraphObj.selectedXAxisDataOption.dataField) {
+      //check still exists after updating x axis options
+      // 6040 was this for multiple file/column compares restriction?
+      let testOptionExists = selectedGraphObj.xAxisDataOptions.find(option => { return selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == option.dataField.fieldName });
+      if (testOptionExists) {
+        selectedGraphObj.selectedXAxisDataOption = testOptionExists;
+      } else {
+        selectedGraphObj.selectedXAxisDataOption = selectedGraphObj.xAxisDataOptions[0];
+      }
+    } else {
+      selectedGraphObj.selectedXAxisDataOption = selectedGraphObj.xAxisDataOptions[0];
+    }
+  }
+
+  setYAxisDataOptions(selectedGraphObj: GraphObj) {
+    let dataFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
+    selectedGraphObj.yAxisDataOptions = new Array();
+    dataFields.forEach(field => {
+      if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
+        let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(field);
+        if (timeData) {
+          let data: (string | number)[]  = this.visualizeService.getGraphDataByField(field.fieldName);
+          selectedGraphObj.yAxisDataOptions.push({
+            data: data,
+            dataField: field
+          });
+        }
+      }
+      else if (selectedGraphObj.data[0].type == 'scattergl') {
+        let data = this.visualizeService.getGraphDataByField(field.fieldName);
+        let yAxisOption: GraphDataOption = {
+          data: data,
+          dataField: field
+        }
+        selectedGraphObj.yAxisDataOptions.push(yAxisOption);
+      }
+    });
+    //set selected option to new option array for select menus
+    selectedGraphObj.selectedYAxisDataOptions.forEach(selectedOption => {
+      let findOption = selectedGraphObj.yAxisDataOptions.find(option => { return option.dataField.fieldName == selectedOption.dataOption.dataField.fieldName });
+      selectedOption.dataOption = findOption;
+    });
+
+  }
+
+  setGraphYAxisData(selectedGraphObj: GraphObj) {
+    let index: number = 0;
+    selectedGraphObj.selectedYAxisDataOptions.forEach(selectedDataOption => {
+      if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
+        let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(selectedDataOption.dataOption.dataField);
+        if (timeData) {
+          selectedGraphObj.data[index].x = timeData;
+          selectedGraphObj.data[index].mode = 'lines'
+        }
+      } 
+      // Restrict if selected axis data from another file
+      // else if (selectedDataOption.dataOption.dataField.csvId != selectedGraphObj.selectedXAxisDataOption.dataField.csvId) {
+      //   selectedDataOption.dataOption = selectedGraphObj.yAxisDataOptions[0];
+      //   selectedDataOption.seriesName = this.getSeriesName(selectedGraphObj.yAxisDataOptions[0].dataField);
+      // }
+      else {
+        // Lines not a valid mode for non-time series
+        selectedDataOption.linesOrMarkers = 'markers';
+      }
+      selectedGraphObj.isTimeSeries = selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series';
+      selectedGraphObj = this.visualizeService.setDefaultGraphInteractivity(selectedGraphObj, selectedGraphObj.data[index].x.length);
+      selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
+      selectedGraphObj.data[index].name = selectedDataOption.seriesName;
+      selectedGraphObj.data[index].marker.color = selectedDataOption.seriesColor;
+      selectedGraphObj.data[index].line.color = selectedDataOption.seriesColor;
+      selectedGraphObj.data[index].yaxis = selectedDataOption.yaxis;
+      selectedGraphObj.data[index].mode = selectedDataOption.linesOrMarkers;
+      index++;
+    })
+    this.save(selectedGraphObj);
+  }
+
+  setBarChartDataOptions(selectedGraphObj: GraphObj) {
     selectedGraphObj.layout.xaxis.type = 'category';
     this.setXAxisDataOptions(selectedGraphObj);
     if (selectedGraphObj.selectedXAxisDataOption && selectedGraphObj.selectedXAxisDataOption.dataField) {
@@ -190,70 +270,6 @@ export class VisualizeMenuService {
     this.save(selectedGraphObj);
   }
 
-  setYAxisDataOptions(selectedGraphObj: GraphObj) {
-    let dataFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
-    selectedGraphObj.yAxisDataOptions = new Array();
-    dataFields.forEach(field => {
-      if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
-        let timeData: Array<string | number> = this.visualizeService.getVisualizeDateData(field);
-        if (timeData) {
-          let data: (string | number)[]  = this.visualizeService.getGraphData(field.fieldName);
-          selectedGraphObj.yAxisDataOptions.push({
-            data: data,
-            dataField: field
-          });
-        }
-      }
-      // restrict comparison from multiple files
-      // else if (selectedGraphObj.data[0].type == 'scattergl' && selectedGraphObj.selectedXAxisDataOption.dataField.csvId == field.csvId) {
-      else if (selectedGraphObj.data[0].type == 'scattergl') {
-        let data = this.visualizeService.getGraphData(field.fieldName);
-        let yAxisOption: GraphDataOption = {
-          data: data,
-          dataField: field
-        }
-        selectedGraphObj.yAxisDataOptions.push(yAxisOption);
-      }
-    });
-    //set selected option to new option array for select menus
-    selectedGraphObj.selectedYAxisDataOptions.forEach(selectedOption => {
-      let findOption = selectedGraphObj.yAxisDataOptions.find(option => { return option.dataField.fieldName == selectedOption.dataOption.dataField.fieldName });
-      selectedOption.dataOption = findOption;
-    });
-
-  }
-
-  setYAxisData(selectedGraphObj: GraphObj) {
-    let index: number = 0;
-    selectedGraphObj.selectedYAxisDataOptions.forEach(selectedDataOption => {
-      if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
-        let timeData: Array<string | number> = this.visualizeService.getVisualizeDateData(selectedDataOption.dataOption.dataField);
-        if (timeData) {
-          selectedGraphObj.data[index].x = timeData;
-        }
-      } 
-      // Restrict if selected axis data from another file
-      // else if (selectedDataOption.dataOption.dataField.csvId != selectedGraphObj.selectedXAxisDataOption.dataField.csvId) {
-      //   selectedDataOption.dataOption = selectedGraphObj.yAxisDataOptions[0];
-      //   selectedDataOption.seriesName = this.getSeriesName(selectedGraphObj.yAxisDataOptions[0].dataField);
-      // }
-      else {
-        // Lines not a valid mode for non-time series
-        selectedDataOption.linesOrMarkers = 'markers';
-      }
-      selectedGraphObj.isTimeSeries = selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series';
-      selectedGraphObj = this.visualizeService.setDefaultGraphInteractivity(selectedGraphObj, selectedGraphObj.data[index].x.length);
-      selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
-      selectedGraphObj.data[index].name = selectedDataOption.seriesName;
-      selectedGraphObj.data[index].marker.color = selectedDataOption.seriesColor;
-      selectedGraphObj.data[index].line.color = selectedDataOption.seriesColor;
-      selectedGraphObj.data[index].yaxis = selectedDataOption.yaxis;
-      selectedGraphObj.data[index].mode = selectedDataOption.linesOrMarkers;
-      index++;
-    })
-    this.save(selectedGraphObj);
-  }
-
   addAxis(selectedGraphObj: GraphObj) {
     selectedGraphObj.hasSecondYAxis = true;
     this.save(selectedGraphObj);
@@ -264,13 +280,14 @@ export class VisualizeMenuService {
     selectedGraphObj.selectedYAxisDataOptions.forEach(option => {
       option.yaxis = 'y';
     });
-    this.setYAxisData(selectedGraphObj);
+    this.setGraphYAxisData(selectedGraphObj);
   }
 
   addData(selectedGraphObj: GraphObj) {
     let currentSelections: Array<string> = selectedGraphObj.selectedYAxisDataOptions.map(option => { return option.dataOption.dataField.fieldName });
     let unusedSelections: Array<{ dataField: LogToolField }> = JSON.parse(JSON.stringify(selectedGraphObj.yAxisDataOptions))
     _.remove(unusedSelections, (option) => { return currentSelections.includes(option.dataField.fieldName) });
+    // Easier way to do above?
     let dataOption;
     if (unusedSelections.length != 0) {
       dataOption = selectedGraphObj.yAxisDataOptions.find(dataOption => { return dataOption.dataField.fieldName == unusedSelections[0].dataField.fieldName });
@@ -286,7 +303,7 @@ export class VisualizeMenuService {
       linesOrMarkers: selectedGraphObj.data[0].mode
     });
     selectedGraphObj.data.push(JSON.parse(JSON.stringify(selectedGraphObj.data[0])));
-    this.setYAxisData(selectedGraphObj);
+    this.setGraphYAxisData(selectedGraphObj);
   }
 
   removeYAxisData(index: number, selectedGraphObj: GraphObj) {
@@ -295,7 +312,7 @@ export class VisualizeMenuService {
     if (selectedGraphObj.data.length == 1 && selectedGraphObj.hasSecondYAxis == true) {
       this.removeAxis(selectedGraphObj);
     } else {
-      this.setYAxisData(selectedGraphObj);
+      this.setGraphYAxisData(selectedGraphObj);
     }
   }
 

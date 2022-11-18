@@ -1,7 +1,5 @@
 import { Routes } from "@angular/router";
-import { SystemSetupComponent } from "./system-setup/system-setup.component";
 import { VisualizeComponent } from "./visualize/visualize.component";
-import { SetupDataComponent } from "./system-setup/setup-data/setup-data.component";
 import { DayTypeAnalysisComponent } from "./day-type-analysis/day-type-analysis.component";
 import { DataSetupComponent } from "./data-setup/data-setup.component";
 import { ImportDataComponent } from "./data-setup/import-data/import-data.component";

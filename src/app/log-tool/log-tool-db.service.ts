@@ -89,7 +89,7 @@ export class LogToolDbService {
     this.logToolService.noDayTypeAnalysis.next(logToolDbData.setupData.noDayTypeAnalysis);
     this.visualizeService.graphObjects.next(logToolDbData.visualizeData.graphObjects);
     this.visualizeService.selectedGraphObj.next(logToolDbData.visualizeData.selectedGraphObj);
-    this.visualizeService.visualizeData = logToolDbData.visualizeData.visualizeData;
+    this.visualizeService.allDataByAxisField = logToolDbData.visualizeData.visualizeData;
     this.visualizeService.annotateDataPoint.next(logToolDbData.visualizeData.annotateDataPoint);
     this.dayTypeAnalysisService.selectedDataField.next(logToolDbData.dayTypeData.selectedDataField);
     this.dayTypeAnalysisService.dayTypes.next(logToolDbData.dayTypeData.dayTypes);
@@ -153,7 +153,7 @@ export class LogToolDbService {
       visualizeData: {
         graphObjects: graphObjects,
         selectedGraphObj: selectedGraphObj,
-        visualizeData: this.visualizeService.visualizeData,
+        visualizeData: this.visualizeService.allDataByAxisField,
         annotateDataPoint: this.visualizeService.annotateDataPoint.getValue()
       },
       dayTypeData: {
