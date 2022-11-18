@@ -21,7 +21,7 @@
 
   <div *ngIf="mainTab == 'find-treasure'" class="assessment-container tab-content justify-content-center"
     [ngStyle]="{'height.px': containerHeight}">
-    <app-find-treasure class="w-100" [settings]="settings"></app-find-treasure>
+    <app-find-treasure class="w-100 scroll-item" [settings]="settings"></app-find-treasure>
   </div>
 
   <div *ngIf="mainTab == 'treasure-chest'" class="assessment-container tab-content">
