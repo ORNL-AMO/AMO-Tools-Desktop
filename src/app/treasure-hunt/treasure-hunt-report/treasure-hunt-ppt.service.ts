@@ -101,38 +101,57 @@ export class TreasureHuntPptService {
     return data;
   }
 
-  getCarbonData(cardonData: TreasureHuntCo2EmissionsResults): PptxgenjsChartData[] {    
+  getCarbonEmissionData(cardonData: TreasureHuntCo2EmissionsResults): PptxgenjsChartData[] {    
     let labels: Array<string> = new Array();
     let values: Array<number> = new Array();
 
     if (cardonData.electricityCO2Savings){
       labels.push("Electricity");
-      values.push(cardonData.electricityCO2Savings)
+      values.push(cardonData.electricityCO2Savings);
     }
     if (cardonData.naturalGasCO2Savings){
       labels.push("Natural Gas");
-      values.push(cardonData.naturalGasCO2Savings)
+      values.push(cardonData.naturalGasCO2Savings);
     }
     if (cardonData.otherFuelCO2Savings){
       labels.push("Other Fuel");
-      values.push(cardonData.otherFuelCO2Savings)
+      values.push(cardonData.otherFuelCO2Savings);
     }
     if (cardonData.waterCO2Savings){
       labels.push("Water");
-      values.push(cardonData.waterCO2Savings)
+      values.push(cardonData.waterCO2Savings);
     }
     if (cardonData.wasteWaterCO2Savings){
       labels.push("Wastewater");
-      values.push(cardonData.wasteWaterCO2Savings)
+      values.push(cardonData.wasteWaterCO2Savings);
     }
     if (cardonData.compressedAirCO2Savings){
       labels.push("Compressed Air");
-      values.push(cardonData.compressedAirCO2Savings)
+      values.push(cardonData.compressedAirCO2Savings);
     }
     if (cardonData.steamCO2Savings){
       labels.push("Steam");
-      values.push(cardonData.steamCO2Savings)
+      values.push(cardonData.steamCO2Savings);
     }
+    
+    let data: PptxgenjsChartData[] = [{
+      name: "Carbon",
+      labels: labels,
+      values: values
+    }];
+    return data;
+  }
+
+  getCarbonSavingsData(cardonData: TreasureHuntCo2EmissionsResults): PptxgenjsChartData[] {    
+    let labels: Array<string> = new Array();
+    let values: Array<number> = new Array();
+
+    if (cardonData.totalCO2Savings){
+      labels.push("Projected Emissions");
+      values.push(cardonData.totalCO2ProjectedUse);
+      labels.push("Emissions Savings");
+      values.push(cardonData.totalCO2Savings);
+    }  
     
     let data: PptxgenjsChartData[] = [{
       name: "Carbon",
@@ -167,7 +186,7 @@ export class TreasureHuntPptService {
       h: 5.7,
       showPercent: false,
       showValue: true,
-      dataLabelFormatCode: '$#,##0',
+      dataLabelFormatCode: '#,##0',
       chartColors: ['1E7640', '2ABDDA', '84B641', 'BC8FDD', '#E1CD00', '#306DBE', '#A03123', '#7FD7E9', '#DE762D', '#948A54', '#A9D58B', '#FFE166', '#DD7164', '#3f4a7d'],
       dataLabelPosition: 'bestFit',
       dataLabelFontSize: 14,
@@ -180,6 +199,28 @@ export class TreasureHuntPptService {
       firstSliceAng: 330
     };
     return pieChartOptions;
+  }
+
+  getDoughnutChartProperties() {
+    let doughnutChartOptions: pptxgen.IChartOpts = {
+      x: 0,
+      y: 1.2,
+      w: 5.54,
+      h: 5.7,
+      holeSize: 50,
+      showPercent: true,
+      showValue: false,
+      showLabel: true,
+      dataLabelFormatCode: '#%',
+      chartColors: ['1E7640', '2ABDDA', '84B641', 'BC8FDD', '#E1CD00', '#306DBE', '#A03123', '#7FD7E9', '#DE762D', '#948A54', '#A9D58B', '#FFE166', '#DD7164', '#3f4a7d'],
+      dataLabelPosition: 'bestFit',
+      dataLabelFontSize: 14,
+      dataLabelColor: '000000',
+      dataLabelFontBold: true,
+      showLegend: false,
+      firstSliceAng: 0
+    };
+    return doughnutChartOptions;
   }
 
   getBarChartProperties() {
@@ -318,10 +359,8 @@ export class TreasureHuntPptService {
     });
 
     let slideTitleProperties: pptxgen.TextPropsOptions = this.getSlideTitleProperties();
-    let costBarChartOptions: pptxgen.IChartOpts = this.getCostBarChartProperties();
-    let barChartOptions: pptxgen.IChartOpts = this.getBarChartProperties();
     let pieChartOptions: pptxgen.IChartOpts = this.getPieChartProperties();
-    let costSumBarData: PptxgenjsChartData[] = this.getCostSummaryData(treasureHuntResults);
+    let doughnutChartOptions: pptxgen.IChartOpts = this.getDoughnutChartProperties();
     let teamSummaryData: PptxgenjsChartData[] = this.getTeamSummaryData(opportunityCardsData);
     let paybackBarData: PptxgenjsChartData[] = this.getPaybackData(opportunitiesPaybackDetails, settings);
 
@@ -346,24 +385,28 @@ export class TreasureHuntPptService {
 
     let slide4 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide4.addText('Carbon Emission Results', slideTitleProperties);
-    //let cardonData = this.getCarbonData(treasureHuntResults.co2EmissionsResults);
     slide4 = this.getCarbonSummaryTable(slide4, treasureHuntResults.co2EmissionsResults);
-    //slide4.addChart("pie", cardonData, pieChartOptions);
 
     let slide5 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide5.addText('Carbon Emission Savings', slideTitleProperties);
-    let cardonData: PptxgenjsChartData[] = this.getCarbonData(treasureHuntResults.co2EmissionsResults);
-    slide5.addChart("pie", cardonData, pieChartOptions);
+    slide5.addText('Carbon Emission Savings (tonne CO2)', slideTitleProperties);
+    let carbonEmissionData: PptxgenjsChartData[] = this.getCarbonEmissionData(treasureHuntResults.co2EmissionsResults);
+    let carbonSavingsData: PptxgenjsChartData[] = this.getCarbonSavingsData(treasureHuntResults.co2EmissionsResults);
+    slide5.addChart("doughnut", carbonSavingsData, doughnutChartOptions);
+    slide5.addChart("pie", carbonEmissionData, pieChartOptions);
+    let totalEmissions: string = this.roundValToFormatString(treasureHuntResults.co2EmissionsResults.totalCO2CurrentUse)
+    slide5.addText("Total Current CO2 Emissions", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    slide5.addText(`${totalEmissions}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+
 
     if (this.treasureHuntReportService.getTeamData(opportunityCardsData).length > 0) {
       let slide6 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-      slide6.addText('Team Summary', slideTitleProperties);
+      slide6.addText('Team Summary ($)', slideTitleProperties);
       slide6 = this.getTeamSummaryTable(slide6, opportunityCardsData);
       slide6.addChart("pie", teamSummaryData, pieChartOptions);
     }
 
     let slide8 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide8.addText('Opportunity Payback Details', slideTitleProperties);
+    slide8.addText('Opportunity Payback Details ($)', slideTitleProperties);
     slide8 = this.getOppPaybackTable(slide8, opportunitiesPaybackDetails);    
     slide8.addChart("pie", paybackBarData, pieChartOptions);    
 
