@@ -40,7 +40,6 @@ export class UtilityDonutChartComponent implements OnInit {
   createChart() {
     let rotationAmount: number = (this.savingsItem.savings / (this.savingsItem.savings + this.savingsItem.newCost)) / 2 * 360;
     var data = [{
-      width: this.utilityDonutChart.nativeElement.clientWidth,
       values: [this.savingsItem.savings, this.savingsItem.newCost],
       labels: ['Utility Savings', 'Projected Cost'],
       marker: {
@@ -50,7 +49,6 @@ export class UtilityDonutChartComponent implements OnInit {
       hole: .5,
       textposition: 'outside',
       insidetextorientation: "horizontal",
-      automargin: true,
       hoverformat: '.2r',
       texttemplate: `<b>%{label}</b> <br> %{value:,.0f} (%{percent})`,
       hoverinfo: 'label+percent',
@@ -73,7 +71,7 @@ export class UtilityDonutChartComponent implements OnInit {
         },
       ],
       showlegend: false,
-      margin: { t: 15, b: 5, l: 25, r: 25 },
+      margin: { t: 75, b: 75, l: 25, r: 25 },
     };
 
     var modebarBtns = {
