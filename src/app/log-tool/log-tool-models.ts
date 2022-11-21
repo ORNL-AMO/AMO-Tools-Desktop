@@ -122,6 +122,7 @@ export interface VisualizerGraphData {
     type: string,
     mode: string,
     yaxis: string,
+    dataSeriesId?: string,
     marker: {
         color: string
     },
@@ -229,6 +230,7 @@ export interface AxisObj {
 export interface AnnotationData {
     x: number | string,
     y: number | string,
+    dataSeriesId?: string,
     text: string,
     showarrow: boolean,
     font: {
@@ -302,6 +304,7 @@ export interface DataExplorerStatus {
 
 export interface LoadingSpinner {
     show: boolean,
+    eventName?: string,
     msg?: string
 }
   

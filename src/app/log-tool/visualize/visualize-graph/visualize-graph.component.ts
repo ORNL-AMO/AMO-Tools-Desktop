@@ -127,7 +127,7 @@ export class VisualizeGraphComponent implements OnInit {
       this.visualizeService.restyleRanges.next(newRanges);
     }
     chart.on('plotly_click', async (data) => {
-      let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
+      let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data);
       if (this.selectedGraphObj.graphInteractivity.isGraphInteractive) {
         this.visualizeService.annotateDataPoint.next(newAnnotation);
       }
@@ -164,7 +164,7 @@ export class VisualizeGraphComponent implements OnInit {
     this.selectedGraphObj.layout.annotations = userGraphOptionsGraphObj.layout.annotations;
 
     if (this.selectedTimeSeriesSegment && this.selectedTimeSeriesSegment !== this.timeSeriesSegments[0]) {
-      this.selectedGraphObj.layout.annotations = this.checkRemoveAnnotationsFromSegment(this.selectedGraphObj);
+      this.selectedGraphObj.layout.annotations = this.setAnnotationsInCurrentRange(this.selectedGraphObj);
     } 
   }
 
@@ -209,7 +209,7 @@ export class VisualizeGraphComponent implements OnInit {
     this.setGraphInteractivity(this.selectedGraphObj);
 
     let graphObj: GraphObj = JSON.parse(JSON.stringify(this.selectedGraphObj))
-    graphObj.layout.annotations = this.checkRemoveAnnotationsFromSegment(graphObj)
+    graphObj.layout.annotations = this.setAnnotationsInCurrentRange(graphObj)
     
     this.plotGraph(graphObj, false);
   }
@@ -327,25 +327,34 @@ export class VisualizeGraphComponent implements OnInit {
       } 
     });
 
-    console.log(timeSeriesSegments);
     return timeSeriesSegments;
   }
 
-  checkRemoveAnnotationsFromSegment(graphObj: GraphObj): AnnotationData[] {
+  setAnnotationsInCurrentRange(graphObj: GraphObj): AnnotationData[] {
     if (graphObj.layout.annotations && graphObj.layout.annotations.length > 0) {
       let annotationsInRange: AnnotationData[] = []
       graphObj.layout.annotations.forEach(annotation => {
-        let matchingYIndicies: number[] = [];
-        graphObj.data[0].y.forEach((yVal, index) => {
-          if (yVal === annotation.y) {
-            matchingYIndicies.push(index)
-          };
-        });
+        graphObj.data.forEach(dataSeries => {
+
+          let matchingYIndicies: number[] = [];
+          dataSeries.y.forEach((yVal, index) => {
+            if (yVal === annotation.y) {
+              matchingYIndicies.push(index)
+            };
+          });
+          
+          matchingYIndicies.forEach(i => {
+            if (dataSeries.x[i] === annotation.x) {
+              let existingAnnotation = annotationsInRange.find(existing => {
+                return existing.x === annotation.x && existing.y === annotation.y;
+              });
+              // Only add point once - some annotation point values/intersecitons appear many times in data
+              if (!existingAnnotation) {
+                annotationsInRange.push(annotation);
+              }
+            }
+          })
         
-        matchingYIndicies.forEach(i => {
-          if (graphObj.data[0].x[i] === annotation.x) {
-            annotationsInRange.push(annotation);
-          }
         })
       })
       

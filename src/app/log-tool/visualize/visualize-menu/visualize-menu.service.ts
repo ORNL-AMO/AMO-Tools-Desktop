@@ -199,6 +199,7 @@ export class VisualizeMenuService {
   setGraphYAxisData(selectedGraphObj: GraphObj) {
     let index: number = 0;
     selectedGraphObj.selectedYAxisDataOptions.forEach(selectedDataOption => {
+      selectedGraphObj.data[index].mode = selectedDataOption.linesOrMarkers;
       if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
         let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(selectedDataOption.dataOption.dataField);
         if (timeData) {
@@ -219,10 +220,10 @@ export class VisualizeMenuService {
       selectedGraphObj = this.visualizeService.setDefaultGraphInteractivity(selectedGraphObj, selectedGraphObj.data[index].x.length);
       selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
       selectedGraphObj.data[index].name = selectedDataOption.seriesName;
+      selectedGraphObj.data[index].dataSeriesId = Math.random().toString(36).substr(2, 9);
       selectedGraphObj.data[index].marker.color = selectedDataOption.seriesColor;
       selectedGraphObj.data[index].line.color = selectedDataOption.seriesColor;
       selectedGraphObj.data[index].yaxis = selectedDataOption.yaxis;
-      selectedGraphObj.data[index].mode = selectedDataOption.linesOrMarkers;
       index++;
     })
     this.save(selectedGraphObj);
@@ -307,11 +308,17 @@ export class VisualizeMenuService {
   }
 
   removeYAxisData(index: number, selectedGraphObj: GraphObj) {
+    let removeDataSeriesId: string = selectedGraphObj.data[index].dataSeriesId;
     selectedGraphObj.selectedYAxisDataOptions.splice(index, 1);
     selectedGraphObj.data.splice(index, 1);
     if (selectedGraphObj.data.length == 1 && selectedGraphObj.hasSecondYAxis == true) {
       this.removeAxis(selectedGraphObj);
     } else {
+      selectedGraphObj.layout.annotations.forEach((annotation: AnnotationData) => {
+        if (annotation.dataSeriesId === removeDataSeriesId) {
+          this.deleteAnnotation(annotation, selectedGraphObj);
+        }
+      });
       this.setGraphYAxisData(selectedGraphObj);
     }
   }
