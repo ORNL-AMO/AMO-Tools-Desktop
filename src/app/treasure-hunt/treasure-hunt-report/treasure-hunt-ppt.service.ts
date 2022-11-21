@@ -101,6 +101,66 @@ export class TreasureHuntPptService {
     return data;
   }
 
+  getCarbonEmissionData(cardonData: TreasureHuntCo2EmissionsResults): PptxgenjsChartData[] {    
+    let labels: Array<string> = new Array();
+    let values: Array<number> = new Array();
+
+    if (cardonData.electricityCO2Savings){
+      labels.push("Electricity");
+      values.push(cardonData.electricityCO2Savings);
+    }
+    if (cardonData.naturalGasCO2Savings){
+      labels.push("Natural Gas");
+      values.push(cardonData.naturalGasCO2Savings);
+    }
+    if (cardonData.otherFuelCO2Savings){
+      labels.push("Other Fuel");
+      values.push(cardonData.otherFuelCO2Savings);
+    }
+    if (cardonData.waterCO2Savings){
+      labels.push("Water");
+      values.push(cardonData.waterCO2Savings);
+    }
+    if (cardonData.wasteWaterCO2Savings){
+      labels.push("Wastewater");
+      values.push(cardonData.wasteWaterCO2Savings);
+    }
+    if (cardonData.compressedAirCO2Savings){
+      labels.push("Compressed Air");
+      values.push(cardonData.compressedAirCO2Savings);
+    }
+    if (cardonData.steamCO2Savings){
+      labels.push("Steam");
+      values.push(cardonData.steamCO2Savings);
+    }
+    
+    let data: PptxgenjsChartData[] = [{
+      name: "Carbon",
+      labels: labels,
+      values: values
+    }];
+    return data;
+  }
+
+  getCarbonSavingsData(cardonData: TreasureHuntCo2EmissionsResults): PptxgenjsChartData[] {    
+    let labels: Array<string> = new Array();
+    let values: Array<number> = new Array();
+
+    if (cardonData.totalCO2Savings){
+      labels.push("Projected Emissions");
+      values.push(cardonData.totalCO2ProjectedUse);
+      labels.push("Emissions Savings");
+      values.push(cardonData.totalCO2Savings);
+    }  
+    
+    let data: PptxgenjsChartData[] = [{
+      name: "Carbon",
+      labels: labels,
+      values: values
+    }];
+    return data;
+  }
+
   getTeamSummaryData(opportunityCardsData: Array<OpportunityCardData>): PptxgenjsChartData[] {
     let teamData = this.treasureHuntReportService.getTeamData(opportunityCardsData);
     teamData = _.orderBy(teamData, 'costSavings', 'desc');
@@ -120,24 +180,47 @@ export class TreasureHuntPptService {
 
   getPieChartProperties() {
     let pieChartOptions: pptxgen.IChartOpts = {
-      x: 1.6,
+      x: 5.54,
       y: 1.2,
-      w: '76%',
-      h: '76%',
+      w: 7.79,
+      h: 5.7,
       showPercent: false,
       showValue: true,
-      dataLabelFormatCode: '$#,##0',
+      dataLabelFormatCode: '#,##0',
       chartColors: ['1E7640', '2ABDDA', '84B641', 'BC8FDD', '#E1CD00', '#306DBE', '#A03123', '#7FD7E9', '#DE762D', '#948A54', '#A9D58B', '#FFE166', '#DD7164', '#3f4a7d'],
       dataLabelPosition: 'bestFit',
-      dataLabelFontSize: 18,
+      dataLabelFontSize: 14,
       dataLabelColor: '000000',
       dataLabelFontBold: true,
       showLegend: true,
       legendFontSize: 16,
       legendColor: '2E4053',
-      firstSliceAng: 90
+      legendPos: 'l',
+      firstSliceAng: 330
     };
     return pieChartOptions;
+  }
+
+  getDoughnutChartProperties() {
+    let doughnutChartOptions: pptxgen.IChartOpts = {
+      x: 0,
+      y: 1.2,
+      w: 5.54,
+      h: 5.7,
+      holeSize: 50,
+      showPercent: true,
+      showValue: false,
+      showLabel: true,
+      dataLabelFormatCode: '#%',
+      chartColors: ['1E7640', '2ABDDA', '84B641', 'BC8FDD', '#E1CD00', '#306DBE', '#A03123', '#7FD7E9', '#DE762D', '#948A54', '#A9D58B', '#FFE166', '#DD7164', '#3f4a7d'],
+      dataLabelPosition: 'bestFit',
+      dataLabelFontSize: 14,
+      dataLabelColor: '000000',
+      dataLabelFontBold: true,
+      showLegend: false,
+      firstSliceAng: 0
+    };
+    return doughnutChartOptions;
   }
 
   getBarChartProperties() {
@@ -276,10 +359,8 @@ export class TreasureHuntPptService {
     });
 
     let slideTitleProperties: pptxgen.TextPropsOptions = this.getSlideTitleProperties();
-    let costBarChartOptions: pptxgen.IChartOpts = this.getCostBarChartProperties();
-    let barChartOptions: pptxgen.IChartOpts = this.getBarChartProperties();
     let pieChartOptions: pptxgen.IChartOpts = this.getPieChartProperties();
-    let costSumBarData: PptxgenjsChartData[] = this.getCostSummaryData(treasureHuntResults);
+    let doughnutChartOptions: pptxgen.IChartOpts = this.getDoughnutChartProperties();
     let teamSummaryData: PptxgenjsChartData[] = this.getTeamSummaryData(opportunityCardsData);
     let paybackBarData: PptxgenjsChartData[] = this.getPaybackData(opportunitiesPaybackDetails, settings);
 
@@ -299,42 +380,45 @@ export class TreasureHuntPptService {
     slide2 = this.getCostSummaryTable(slide2, treasureHuntResults);
 
     let slide3 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide3.addChart("bar", costSumBarData, costBarChartOptions);
-    slide3.addText('Cost Summary', slideTitleProperties);
+    slide3.addText('Detailed Summary', slideTitleProperties);
+    slide3 = this.getDetailedSummaryTable(slide3, treasureHuntResults, settings);
 
     let slide4 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide4.addText('Detailed Summary', slideTitleProperties);
-    slide4 = this.getDetailedSummaryTable(slide4, treasureHuntResults, settings);
+    slide4.addText('Carbon Emission Results', slideTitleProperties);
+    slide4 = this.getCarbonSummaryTable(slide4, treasureHuntResults.co2EmissionsResults);
 
     let slide5 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide5.addText('Carbon Emission Results', slideTitleProperties);
-    slide5 = this.getCarbonSummaryTable(slide5, treasureHuntResults.co2EmissionsResults);
+    slide5.addText('Carbon Emission Savings (tonne CO2)', slideTitleProperties);
+    let carbonEmissionData: PptxgenjsChartData[] = this.getCarbonEmissionData(treasureHuntResults.co2EmissionsResults);
+    let carbonSavingsData: PptxgenjsChartData[] = this.getCarbonSavingsData(treasureHuntResults.co2EmissionsResults);
+    slide5.addChart("doughnut", carbonSavingsData, doughnutChartOptions);
+    slide5.addChart("pie", carbonEmissionData, pieChartOptions);
+    let totalEmissions: string = this.roundValToFormatString(treasureHuntResults.co2EmissionsResults.totalCO2CurrentUse)
+    slide5.addText("Total Current CO2 Emissions", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    slide5.addText(`${totalEmissions}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+
 
     if (this.treasureHuntReportService.getTeamData(opportunityCardsData).length > 0) {
       let slide6 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-      slide6.addText('Team Summary', slideTitleProperties);
+      slide6.addText('Team Summary ($)', slideTitleProperties);
       slide6 = this.getTeamSummaryTable(slide6, opportunityCardsData);
+      slide6.addChart("pie", teamSummaryData, pieChartOptions);
     }
 
-    let slide7 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide7.addChart("pie", teamSummaryData, pieChartOptions);
-    slide7.addText('Team Summary', slideTitleProperties);
-
     let slide8 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide8.addText('Opportunity Payback Details', slideTitleProperties);
-    slide8 = this.getOppPaybackTable(slide8, opportunitiesPaybackDetails);
+    slide8.addText('Opportunity Payback Details ($)', slideTitleProperties);
+    slide8 = this.getOppPaybackTable(slide8, opportunitiesPaybackDetails);    
+    slide8.addChart("pie", paybackBarData, pieChartOptions);    
 
-    let slide9 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide9.addChart("bar", paybackBarData, barChartOptions);
-    slide9.addText('Payback Details', slideTitleProperties);
+    let slide11 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide11.addText('Best Practices', slideTitleProperties);
 
-    let slide10 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide10.addChart("pie", paybackBarData, pieChartOptions);
-    slide10.addText('Payback Details', slideTitleProperties);
+    let slide12 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide12.addText('Other Opportunities Not Evaluated', slideTitleProperties);
 
-    let slide11 = pptx.addSlide();
-    slide11.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
-    slide11.addText('Opportunity Summaries', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
+    let slide13 = pptx.addSlide();
+    slide13.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
+    slide13.addText('Opportunity Summaries', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
 
     let counter: number = 0;
     opportunityCardsData.forEach(opp => {
@@ -881,7 +965,7 @@ export class TreasureHuntPptService {
       ]);
     });
 
-    slide.addTable(rows, { x: 3.42, y: 1.6, w: 6.5, colW: [1.5, 1.5, 2, 1.5], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
+    slide.addTable(rows, { x: 0.12, y: 1.32, w: 6.5, colW: [1.5, 1.5, 2, 1.5], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
 
     return slide;
   }
@@ -899,6 +983,11 @@ export class TreasureHuntPptService {
       this.roundValToCurrency(opportunitiesPaybackDetails.lessThanOneYear.totalSavings)
     ]);
     rows.push([
+      "1 to 2 years",
+      this.roundValToFormatString(opportunitiesPaybackDetails.oneToTwoYears.numOpportunities),
+      this.roundValToCurrency(opportunitiesPaybackDetails.oneToTwoYears.totalSavings)
+    ]);
+    rows.push([
       "2 to 3 years",
       this.roundValToFormatString(opportunitiesPaybackDetails.twoToThreeYears.numOpportunities),
       this.roundValToCurrency(opportunitiesPaybackDetails.twoToThreeYears.totalSavings)
@@ -914,7 +1003,7 @@ export class TreasureHuntPptService {
       this.roundValToCurrency(opportunitiesPaybackDetails.totals.totalSavings)
     ]);
 
-    slide.addTable(rows, { x: 3.96, y: 1.6, w: 5.42, colW: [1.6, 2.22, 1.6], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
+    slide.addTable(rows, { x: 0.12, y: 1.32, w: 5.42, colW: [1.6, 2.22, 1.6], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
 
     return slide;
   }
