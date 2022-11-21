@@ -84,13 +84,9 @@ export class EnergyInputTabComponent implements OnInit {
       });
     }
     if (this.energyInputCompareService.modifiedEnergyInput && !this.inSetup) {
-      let selectedModification = this.phastCompareService.selectedModification.getValue();
-      let losses: Losses;
-      if (selectedModification) {
-        losses = selectedModification.losses;
-      }
+      let selectedModification: PHAST = this.phastCompareService.selectedModification.getValue();
       this.energyInputCompareService.modifiedEnergyInput.forEach(loss => {
-        if (this.checkLossValid(loss, this.phast) === false) {
+        if (this.checkLossValid(loss, selectedModification) === false) {
           testVal = true;
         }
       });
