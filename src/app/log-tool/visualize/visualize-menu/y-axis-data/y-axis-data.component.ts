@@ -53,7 +53,7 @@ export class YAxisDataComponent implements OnInit {
   }
 
   addData(){
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`})
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Adding Data Series...`});
     this.visualizeMenuService.addData(this.selectedGraphObj);
   }
 

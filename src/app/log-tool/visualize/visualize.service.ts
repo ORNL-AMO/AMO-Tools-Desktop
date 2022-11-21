@@ -359,15 +359,15 @@ export class VisualizeService {
     return Number(squareRootOfAverageSquareDiff.toFixed(3));
   }
 
-  getAnnotationPoint(x: number | string, y: number | string, yref: string, seriesName: string): AnnotationData {
+  getAnnotationPoint(data): AnnotationData {
     let selectedGraphObj: GraphObj = this.selectedGraphObj.getValue();
-    let findAnnotation: AnnotationData = selectedGraphObj.layout.annotations.find(annotation => { return (annotation.x == x && annotation.y == y) });
+    let findAnnotation: AnnotationData = selectedGraphObj.layout.annotations.find(annotation => { return (annotation.x == data.points[0].x && annotation.y == data.points[0].y) });
     if (findAnnotation) {
       return findAnnotation;
     } else {
       return {
-        x: x,
-        y: y,
+        x: data.points[0].x,
+        y: data.points[0].y,
         text: '',
         showarrow: true,
         font: {
@@ -388,8 +388,9 @@ export class VisualizeService {
         bgcolor: '#ffffff',
         // opacity: number
         annotationId: Math.random().toString(36).substr(2, 9),
-        yref: yref,
-        seriesName: seriesName
+        yref: data.points[0].fullData.yaxis,
+        seriesName: data.points[0].fullData.name,
+        dataSeriesId: data.points[0].data.dataSeriesId
       }
     }
   }
