@@ -41,13 +41,13 @@ export class UtilityDonutChartComponent implements OnInit {
 
   createChart() {
     let labels: Array<string> = new Array<string>();
-    let text: string;
+    let text: string = "Cost";
     labels = ['Savings', 'Projection'];
-    if (this.graphTab === 'carbon'){
+    if (this.graphTab == 'carbon'){
       text = "CO<sub>2</sub> Emissions";
-    } else if (this.graphTab === 'cost') {
+    } else if (this.graphTab == 'cost') {
       text = "Cost";
-    } else if (this.graphTab === 'energy') {
+    } else if (this.graphTab == 'energy') {
       text = "Utility Usage";
     }
     let rotationAmount: number = (this.savingsItem.savings / (this.savingsItem.savings + this.savingsItem.newCost)) / 2 * 360;
