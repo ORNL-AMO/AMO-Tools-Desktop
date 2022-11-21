@@ -456,7 +456,7 @@ export class CalculatorSuiteApiService {
     let rawOutput = InsulatedTankCalculator.calculate();
     let tankInsulationReductionResult: TankInsulationReductionResult = {
       heatLoss: rawOutput.getHeatLoss(),
-      annualHeatLoss: rawOutput.getAnnualHeatLoss(),
+      annualHeatLoss: rawOutput.getAnnualHeatLoss() * 100,
       energyCost: undefined,
     }
     rawOutput.delete();
