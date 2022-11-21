@@ -65,7 +65,7 @@
     <div class="p-0">
       <label class="group-label w-100">{{savingsItem.label}}
         ({{settings.currency}})</label>
-      <app-utility-donut-chart [showPrint]="showPrint" [savingsItem]="savingsItem" [graphTab]="cost">
+      <app-utility-donut-chart [showPrint]="showPrint" [savingsItem]="savingsItem" [graphTab]="'cost'">
       </app-utility-donut-chart>
     </div>
   </div>
@@ -76,7 +76,7 @@
     [ngClass]="{'col-lg-3 col-12': !showPrint, 'col-4': showPrint}" *ngFor="let savingsItem of energySavingsItems">
     <div class="p-0">
       <label *ngIf="graphTab == 'energy'" class="group-label w-100">{{savingsItem.label}}</label>
-      <app-utility-donut-chart [showPrint]="showPrint" [savingsItem]="savingsItem" [graphTab]="energy">
+      <app-utility-donut-chart [showPrint]="showPrint" [savingsItem]="savingsItem" [graphTab]="'energy'">
       </app-utility-donut-chart>
     </div>
   </div>
@@ -88,7 +88,7 @@
     <div class="p-0">
       <label class="group-label w-100">{{savingsItem.label}} (tonne
         CO<sub>2</sub>)</label>
-      <app-utility-donut-chart [showPrint]="showPrint" [savingsItem]="savingsItem" [graphTab]="carbon">
+      <app-utility-donut-chart [showPrint]="showPrint" [savingsItem]="savingsItem" [graphTab]="'carbon'">
       </app-utility-donut-chart>
     </div>
   </div>
