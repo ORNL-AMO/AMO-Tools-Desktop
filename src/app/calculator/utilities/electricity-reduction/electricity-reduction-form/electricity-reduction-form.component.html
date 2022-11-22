@@ -140,13 +140,19 @@
     <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1">
 
       <div class="form-group">
-        <label class="small" for="{{'ratedMotorPower_'+idString}}">Rated Motor Power</label>
+        <label class="small" for="{{'ratedMotorPower_'+idString}}">
+          Rated Motor Power
+          <a class="form-text small click-link" (click)="toggleUserSelectedHP()">
+            <span *ngIf="userSelectedHP">Enter Rated Motor Power in kW</span>
+            <span *ngIf="!userSelectedHP">Enter Rated Motor Power in hp</span>
+          </a>
+        </label>        
         <div class="input-group">
           <input class="form-control" name="ratedMotorPower" id="{{'ratedMotorPower_'+idString}}"
             formControlName="ratedMotorPower" type="number" (input)="calculate()"
             (focus)="focusField('ratedMotorPower')" (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
+          <span class="units input-group-addon" *ngIf="userSelectedHP">hp</span>
+          <span class="units input-group-addon" *ngIf="!userSelectedHP">kW</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.ratedMotorPower.invalid && !form.controls.ratedMotorPower.pristine">

@@ -96,7 +96,7 @@ export class ElectricityReductionTreasureHuntService {
 
   convertElectricityReduction(reduction: ElectricityReductionData, oldSettings: Settings, newSettings: Settings): ElectricityReductionData {
     //imperial: hp, metric: kW
-    reduction.nameplateData.ratedMotorPower = this.convertUnitsService.convertPowerValue(reduction.nameplateData.ratedMotorPower, oldSettings, newSettings);
+    //reduction.nameplateData.ratedMotorPower = this.convertUnitsService.convertPowerValue(reduction.nameplateData.ratedMotorPower, oldSettings, newSettings);
     return reduction;
   }
 

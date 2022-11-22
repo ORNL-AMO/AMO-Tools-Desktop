@@ -28,6 +28,8 @@ export class ElectricityReductionFormComponent implements OnInit {
   @Input()
   selected: boolean;
 
+  userSelectedHP: boolean;
+
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -58,6 +60,7 @@ export class ElectricityReductionFormComponent implements OnInit {
       this.idString = 'modification_' + this.index;
     }
     this.form = this.electricityReductionService.getFormFromObj(this.data);
+    this.userSelectedHP = this.data.userSelectedHP
     if (this.selected == false) {
       this.form.disable();
     }
@@ -91,7 +94,7 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   calculate() {
-    let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form);
+    let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form, this.userSelectedHP);
     this.calculateIndividualResult();
     this.emitCalculate.emit(tmpObj);
   }
@@ -101,7 +104,7 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   calculateIndividualResult() {
-    let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form);
+    let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form, this.userSelectedHP);
     this.individualResults = this.electricityReductionService.calculateIndividualEquipment(tmpObj, this.settings);
   }
 
@@ -145,6 +148,11 @@ export class ElectricityReductionFormComponent implements OnInit {
     if (this.form.controls.variableSpeedMotor.value == false) {
       this.form.controls.operationalFrequency.patchValue(this.form.controls.lineFrequency.value);
     }
+    this.calculate();
+  }
+
+  toggleUserSelectedHP(){
+    this.userSelectedHP = !this.userSelectedHP;
     this.calculate();
   }
 }

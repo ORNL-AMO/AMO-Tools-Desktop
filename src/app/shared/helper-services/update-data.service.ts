@@ -3,10 +3,10 @@ import { Assessment } from '../models/assessment';
 import { Settings } from '../models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../models/steam/ssmt';
-import { CompressedAirPressureReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
+import { CompressedAirPressureReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
-import { CompressedAirPressureReductionData } from '../models/standalone';
+import { CompressedAirPressureReductionData, ElectricityReductionData } from '../models/standalone';
 import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -377,6 +377,7 @@ export class UpdateDataService {
             }
             if (assessment.treasureHunt.electricityReductions) {
                 assessment.treasureHunt.electricityReductions.forEach(opportunity => {
+                    opportunity = this.updateElectricityReductionTreasureHunt(opportunity);
                     opportunity.opportunityType = Treasure.electricityReduction;
                 });
             }
@@ -490,5 +491,26 @@ export class UpdateDataService {
             }
         }
         return heatCascadingTH;
+    }
+
+    updateElectricityReductionTreasureHunt(electricityReductionTreasureHunt: ElectricityReductionTreasureHunt): ElectricityReductionTreasureHunt {
+        if (electricityReductionTreasureHunt.baseline) {
+            electricityReductionTreasureHunt.baseline.forEach(reduction => {
+                reduction = this.updateElectricityReduction(reduction);
+            });
+        }
+        if (electricityReductionTreasureHunt.modification) {
+            electricityReductionTreasureHunt.modification.forEach(reduction => {
+                reduction = this.updateElectricityReduction(reduction);
+            });
+        }
+        return electricityReductionTreasureHunt;
+    }
+
+    updateElectricityReduction(electricityReduction: ElectricityReductionData): ElectricityReductionData {
+        if (electricityReduction.userSelectedHP == undefined) {
+            electricityReduction.userSelectedHP = true;
+        }
+        return electricityReduction;
     }
 }
