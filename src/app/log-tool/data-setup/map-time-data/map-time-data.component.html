@@ -67,10 +67,10 @@
                 </div>
                 <div class="mx-2">
                     <label>Time Interval in Seconds</label>
-                    <select class="form-control" name="intervalForSeconds" 
+                    <select class="form-control" name="dataCollectionInterval" 
                     [disabled]="!selectedDataSet.hasDateField && !selectedDataSet.hasTimeField" 
                     (change)="setSecondsInterval(option)" 
-                    [(ngModel)]="selectedDataSet.intervalForSeconds">
+                    [(ngModel)]="selectedDataSet.dataCollectionInterval">
                         <option  *ngFor="let option of secondsIntervalOptions" [ngValue]="option">
                             {{option}}</option>
                         </select>

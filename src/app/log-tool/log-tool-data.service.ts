@@ -184,15 +184,9 @@ export class LogToolDataService {
     let firstRowDate = new Date(dataset.csvImportData.data[0][dataset.dateField.fieldName]);
     let secondRowDate = new Date(dataset.csvImportData.data[1][dataset.dateField.fieldName]);
     let intervalDifference: number = (secondRowDate.getTime() - firstRowDate.getTime()) / 1000;
-    let intervalIncrement: number = dataset.intervalForSeconds;
-    // TODO What is going on here??
+    let intervalIncrement: number = dataset.dataCollectionInterval;
     if (intervalIncrement !== undefined && intervalDifference <= 0) {
       dataset.csvImportData.data = this.addLostSecondsBack(dataset, intervalIncrement);
-      // this.dataIntervalValid.next(true);
-    } else if (intervalIncrement == undefined && intervalDifference <= 0) {
-      // this.dataIntervalValid.next(false);
-    } else if (intervalDifference > 0) {
-      // this.dataIntervalValid.next(true);
     }
     return dataset;
   }

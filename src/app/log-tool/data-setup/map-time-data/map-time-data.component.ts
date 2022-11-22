@@ -105,7 +105,7 @@ export class MapTimeDataComponent implements OnInit {
     dataSet.dateField = dataSet.fields.find(field => field.fieldName === selectedDataSetDateFieldName);
     dataSet.fields.map(field => field.isDateField = selectedDataSetDateFieldName === field.fieldName);
     dataSet.hasDateField = dataSet.dateField != undefined;
-    dataSet.intervalForSeconds = this.selectedDataSet.intervalForSeconds;
+    dataSet.dataCollectionInterval = this.selectedDataSet.dataCollectionInterval;
     return dataSet;
   }
 
@@ -135,7 +135,7 @@ export class MapTimeDataComponent implements OnInit {
     if (dataSet.dateField) {
       dataSet.hasDateField = true;
     } else {
-      dataSet.intervalForSeconds = undefined;
+      dataSet.dataCollectionInterval = undefined;
       dataSet.hasDateField = false;
     }
     return dataSet;

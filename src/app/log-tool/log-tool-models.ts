@@ -95,7 +95,7 @@ export interface IndividualDataFromCsv {
     hasTimeField?: boolean,
     dateField?: LogToolField,
     timeField?: LogToolField,
-    intervalForSeconds?: number;
+    dataCollectionInterval?: number;
 }
 
 export interface HourlyAverage {
@@ -360,7 +360,7 @@ export interface ExplorerDataSet {
     hasTimeField?: boolean,
     dateField?: LogToolField,
     timeField?: LogToolField,
-    intervalForSeconds?: number;
+    dataCollectionInterval?: number;
     canRunDayTypeAnalysis: boolean
 
   }
