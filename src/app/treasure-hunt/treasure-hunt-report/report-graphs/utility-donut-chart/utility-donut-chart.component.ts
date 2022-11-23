@@ -1,3 +1,4 @@
+import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
@@ -17,7 +18,7 @@ export class UtilityDonutChartComponent implements OnInit {
   graphTab: string;
 
   @ViewChild('utilityDonutChart', { static: false }) utilityDonutChart: ElementRef;
-  constructor(private plotlyService: PlotlyService) { }
+  constructor(private plotlyService: PlotlyService, private currencyPipe: CurrencyPipe) { }
 
   ngOnInit() { }
 
@@ -42,13 +43,14 @@ export class UtilityDonutChartComponent implements OnInit {
   createChart() {
     let labels: Array<string> = new Array<string>();
     let text: string = "Cost";
+    let annotationText: string = this.currencyPipe.transform(this.savingsItem.currentCost, undefined, undefined, "1.0-0", "en-US");
     labels = ['Savings', 'Projection'];
     if (this.graphTab == 'carbon'){
       text = "CO<sub>2</sub> Emissions";
-    } else if (this.graphTab == 'cost') {
-      text = "Cost";
+      annotationText = Number(this.savingsItem.currentEnergyUse.toFixed(2)).toLocaleString(); 
     } else if (this.graphTab == 'energy') {
       text = "Utility Usage";
+      annotationText = Number(this.savingsItem.currentEnergyUse.toFixed(2)).toLocaleString(); 
     }
     let rotationAmount: number = (this.savingsItem.savings / (this.savingsItem.savings + this.savingsItem.newCost)) / 2 * 360;
     var data = [{
@@ -77,7 +79,7 @@ export class UtilityDonutChartComponent implements OnInit {
             size: 12
           },
           showarrow: false,
-          text: `<b>Current ${text}</b> <br>${this.savingsItem.currentCost}`,
+          text: `<b>Current ${text}</b> <br>${annotationText}`,
           x: .5,
           y: 0.5
         },

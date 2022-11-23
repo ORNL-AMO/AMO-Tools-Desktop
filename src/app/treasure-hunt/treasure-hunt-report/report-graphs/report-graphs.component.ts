@@ -57,19 +57,21 @@ export class ReportGraphsComponent implements OnInit {
     });
   }
 
-  addEnergySavingsItem(savings: number, currentCost: number, newCost: number, label: string, unitLabel?: string) {
+  addEnergySavingsItem(savings: number, currentEnergyUse: number, newCost: number, label: string, unitLabel?: string) {
     this.energySavingsItems.push({
       savings: savings,
-      currentCost: currentCost,
+      currentEnergyUse: currentEnergyUse,
+      currentCost: undefined,
       newCost: newCost,
       label: label + ' Utility Saving (' + unitLabel + ')'
     });
   }
 
-  addCarbonSavingsItem(savings: number, currentCost: number, newCost: number, label: string) {
+  addCarbonSavingsItem(savings: number, currentEnergyUse: number, newCost: number, label: string) {
     this.carbonSavingsItems.push({
       savings: savings,
-      currentCost: currentCost,
+      currentEnergyUse: currentEnergyUse,
+      currentCost: undefined,
       newCost: newCost,
       label: label + ' Carbon Emissions Savings'
     });
