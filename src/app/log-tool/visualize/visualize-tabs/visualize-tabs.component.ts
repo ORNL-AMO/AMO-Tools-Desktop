@@ -54,7 +54,8 @@ export class VisualizeTabsComponent implements OnInit {
   }
 
   addNewGraphDataObj() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Adding New Graph...`});
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Adding New Graph.. This may take a moment
+    depending on the amount of data you have supplied...`});
     this.visualizeService.saveUserOptionsChanges();
     let updatedSelectedGraphObject: GraphObj = this.visualizeService.selectedGraphObj.getValue();
     this.visualizeService.annotateDataPoint.next(undefined);
@@ -63,7 +64,8 @@ export class VisualizeTabsComponent implements OnInit {
   }
 
   selectGraph(graphObj: GraphObj) {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`});
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
+    depending on the amount of data you have supplied...`});
     this.visualizeService.selectedGraphObj.next(graphObj);
     this.visualizeService.annotateDataPoint.next(undefined);
     this.visualizeService.userGraphOptions.next(graphObj);

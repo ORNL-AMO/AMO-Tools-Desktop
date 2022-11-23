@@ -64,7 +64,8 @@ export class CsvToJsonService {
         dynamicTyping: true,
         download: true,
         complete: results => {
-          console.log(results);
+           //last item ends up as null
+           results.data.pop();
           resolve(results);
         },
         error: results => {

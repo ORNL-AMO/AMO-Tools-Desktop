@@ -51,7 +51,8 @@ export class VisualizeGraphComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`});
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
+    depending on the amount of data you have supplied...`});
   }
 
   ngOnDestroy() {
@@ -134,7 +135,8 @@ export class VisualizeGraphComponent implements OnInit {
     });
     if (displayLoadingSpinner) {
       setTimeout(() => {
-        this.logToolDataService.loadingSpinner.next({show: false, msg: `Graphing Data...`});
+        this.logToolDataService.loadingSpinner.next({show: false, msg: `Graphing Data. This may take a moment
+        depending on the amount of data you have supplied...`});
       }, 1000);
     }
   }
@@ -200,18 +202,30 @@ export class VisualizeGraphComponent implements OnInit {
       this.selectedGraphObj.layout = userGraphOptionsObj.layout;
       this.selectedGraphObj.graphInteractivity = userGraphOptionsObj.graphInteractivity;
     }
-
     let resetLayoutRanges: GraphLayout = JSON.parse(JSON.stringify(this.visualizeService.selectedGraphObj.getValue().layout));
     this.selectedGraphObj.layout.xaxis = resetLayoutRanges.xaxis;
     this.selectedGraphObj.layout.yaxis = resetLayoutRanges.yaxis;
     this.selectedGraphObj.layout.yaxis2 = resetLayoutRanges.yaxis2;
 
     this.setGraphInteractivity(this.selectedGraphObj);
-
     let graphObj: GraphObj = JSON.parse(JSON.stringify(this.selectedGraphObj))
-    graphObj.layout.annotations = this.setAnnotationsInCurrentRange(graphObj)
-    
-    this.plotGraph(graphObj, false);
+    graphObj.layout.annotations = this.setAnnotationsInCurrentRange(graphObj);
+    if (this.selectedTimeSeriesSegment.segmentText === 'All Datapoints' && this.selectedGraphObj.graphInteractivity.hasLargeDataset) {
+      this.setInteractivityOffAndUpdate(graphObj);
+    } else {
+      this.plotGraph(graphObj, false);
+    }
+  }
+
+  setInteractivityOffAndUpdate(graphObj: GraphObj) {
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment depending on the amount of data you have supplied...`});
+    graphObj.graphInteractivity.isGraphInteractive = false;
+    graphObj.graphInteractivity.showUserToggledPerformanceWarning = false;
+    graphObj.graphInteractivity.showDefaultPerformanceWarning = true;
+    this.setGraphInteractivity(graphObj);
+
+    this.visualizeService.selectedGraphObj.next(graphObj);
+    this.visualizeService.userGraphOptions.next(graphObj);
   }
 
 

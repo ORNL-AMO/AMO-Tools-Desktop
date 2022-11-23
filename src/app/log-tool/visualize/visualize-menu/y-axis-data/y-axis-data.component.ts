@@ -37,23 +37,27 @@ export class YAxisDataComponent implements OnInit {
   }
 
   removeAxis() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`})
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
+    depending on the amount of data you have supplied...`})
     this.visualizeMenuService.removeAxis(this.selectedGraphObj);
   }
 
 
   setYAxisData() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`})
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
+    depending on the amount of data you have supplied...`})
     this.visualizeMenuService.setGraphYAxisData(this.selectedGraphObj);
   }
 
   removeYAxisData(index: number) {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`})
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
+    depending on the amount of data you have supplied...`})
     this.visualizeMenuService.removeYAxisData(index, this.selectedGraphObj);
   }
 
   addData(){
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Adding Data Series...`});
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Adding Data Series. This may take a moment
+    depending on the amount of data you have supplied...`});
     this.visualizeMenuService.addData(this.selectedGraphObj);
   }
 
