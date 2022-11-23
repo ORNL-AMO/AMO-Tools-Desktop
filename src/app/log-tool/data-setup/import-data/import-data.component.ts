@@ -239,14 +239,14 @@ export class ImportDataComponent implements OnInit {
     this.explorerData.datasets.splice(dataSetIndex, 1);
     this.logToolService.individualDataFromCsv.splice(dataSetIndex, 1);
     if (this.explorerData.isSetupDone) {
-      this.logToolDataService.loadingSpinner.next({show: true, msg: 'Re-calculating Analyzed Data...'});
+      this.logToolDataService.loadingSpinner.next({show: true, msg: 'Re-calculating Data. This may take a moment depending on the amount of data you have supplied.'});
       // set delay to display spinner before blocked thread
       setTimeout(async () => {
         // need to pull out existing data sets
         await this.finalizeDataSetup();
         if (this.dayTypeAnalysisService.dayTypesCalculated) {
           this.runDayTypeAnalysis();
-          this.logToolDataService.loadingSpinner.next({show: false, msg: 'Re-calculating Analyzed Data...'});
+          this.logToolDataService.loadingSpinner.next({show: false, msg: 'Re-calculating Data. This may take a moment depending on the amount of data you have supplied.'});
         }
       }, 25);
     }

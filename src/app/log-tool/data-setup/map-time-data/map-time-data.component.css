@@ -62,3 +62,25 @@ input[type='checkbox']:hover {
 .preview-data {
     height: 40vh;
 }
+
+
+.detail-tooltip {
+    background-color: white;
+    border-color: #117A65;
+    color: black;
+    top: 355px;
+    right: 50px;
+    z-index: 999;
+    width: 300px;
+}
+
+.tooltip-arrow-up {
+    left: unset;
+    right: 25px;
+}
+
+.fa{
+    font-size: large;
+    padding-top: 3px;
+}
+

@@ -19,6 +19,10 @@ export class MapTimeDataComponent implements OnInit {
   applyToAll: boolean = false;
   secondsIntervalOptions: Array<number> = [ undefined, 1, 2, 3, 4, 5, 15, 20, 30 ];
 
+  toolTipHoldTimeout;
+  showTooltipHover: boolean = false;
+  showTooltipClick: boolean = false;
+
   constructor(
     private cd: ChangeDetectorRef,
     private router: Router,
@@ -159,6 +163,25 @@ export class MapTimeDataComponent implements OnInit {
     // });
   return dataSet;
 }
+
+hideTooltipHover() {
+  // Allow user to hover on tip text
+  this.toolTipHoldTimeout = setTimeout(() => {
+    this.showTooltipHover = false;
+  }, 200)
+}
+
+displayTooltipHover(hoverOnInfo: boolean = false) {
+  if (hoverOnInfo) {
+    clearTimeout(this.toolTipHoldTimeout);
+  }
+  this.showTooltipHover = true;
+}
+
+toggleClickTooltip(){
+  this.showTooltipClick = !this.showTooltipClick;
+}
+
   setSecondsInterval() {
     this.updateExplorerData();
   }

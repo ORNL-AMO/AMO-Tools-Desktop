@@ -62,7 +62,8 @@ export class VisualizeMenuComponent implements OnInit {
   }
 
   deleteGraph() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`})
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
+    depending on the amount of data you have supplied...`})
     this.visualizeService.removeGraphDataObj(this.selectedGraphObj.graphId);
   }
 

@@ -124,7 +124,7 @@ export class LogToolDataService {
     explorerData.canRunDayTypeAnalysis = this.setCanRunDayTypeAnalysis();
     //  5839 patch- Eventually replace individualDataFromCsv
     if (explorerData.canRunDayTypeAnalysis) {
-      this.loadingSpinner.next({ show: true, msg: 'Processing date and time data...' });
+      this.loadingSpinner.next({ show: true, msg: 'Processing date and time data' });
       this.logToolService.individualDataFromCsv.map((dataSet: ExplorerDataSet) => {
         dataSet.canRunDayTypeAnalysis = true;
       });
