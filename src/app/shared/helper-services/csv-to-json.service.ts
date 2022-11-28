@@ -6,32 +6,57 @@ export class CsvToJsonService {
 
   constructor() { }
 
-  parseCsvWithHeaders(csvData: any, headerRow: number): CsvImportData {
-    let results: CsvImportData;
-    if (headerRow == 0) {
-      results = Papa.parse(csvData, {
-        header: true,
-        dynamicTyping: true
+  parseCSVasync(fileData, shouldDownload: boolean, headerRow: number): Promise<CsvImportData> {
+    return new Promise((resolve, reject) => {
+      // With worker true, papa returns async
+      return Papa.parse(fileData.data, {
+        header: headerRow == 0,
+        dynamicTyping: true,
+        worker: true,
+        download: shouldDownload,
+        complete: results => {
+          results.name = fileData.name;
+          results.dataSetId = fileData.dataSetId;
+          if (headerRow != 0) {
+            results.meta.fields = results.data[headerRow];
+            results.data = results.data.splice(headerRow + 1);
+            results.data = results.data.map(dataItem => {
+              let element = {};
+              results.meta.fields.forEach((field, index) => {
+                element[field] = dataItem[index];
+              });
+              return element;
+            });
+          }
+          //last item ends up as null
+          results.data.pop();
+          resolve(results);
+        },
+        error: error => {
+          console.log('error', error)
+        },
       });
-    } else {
-      results = Papa.parse(csvData, {
-        dynamicTyping: true
-      });
-      results.meta.fields = results.data[headerRow];
-      results.data = results.data.splice(headerRow + 1);
-      results.data = results.data.map(dataItem => {
-        let element = {};
-        results.meta.fields.forEach((field, index) => {
-          element[field] = dataItem[index];
-        });
-        return element;
-      })
-    }
-    //last item ends up as null
-    results.data.pop();
-    return results;
+    });
   }
+  
+  parseCsvWithoutHeaders(csvData: any): Promise<CsvImportData> {
+    return new Promise((resolve, reject) => {
+      return Papa.parse(csvData, {
+        dynamicTyping: true,
+        worker: true,
+        complete: results => {
+          //last item ends up as null
+          results.data.pop();
+          resolve(results);
+        },
+        error: error => {
+          console.log('error', error)
+        },
+      });
+    });
 
+  }
+  
   parseExampleCSV(): Promise<any> {
     return new Promise((resolve, reject) => {
       Papa.parse("assets/data-explorer-example.csv", {
@@ -39,7 +64,8 @@ export class CsvToJsonService {
         dynamicTyping: true,
         download: true,
         complete: results => {
-          console.log(results);
+           //last item ends up as null
+           results.data.pop();
           resolve(results);
         },
         error: results => {
@@ -49,17 +75,6 @@ export class CsvToJsonService {
     });
   }
 
-
-  parseCsvWithoutHeaders(csvData: any): CsvImportData {
-    let results: CsvImportData;
-    results = Papa.parse(csvData, {
-      dynamicTyping: true
-    });
-    //last item ends up as null
-    results.data.pop();
-    return results;
-
-  }
 
   parseWeatherCSV(csvData: any): CsvImportData {
     let results: CsvImportData = Papa.parse(csvData, {
@@ -97,6 +112,8 @@ export interface CsvImportData {
     linebreak: string,
     truncated: boolean;
   },
+  name?: string,
+  dataSetId?: string,
   errors: Array<{ code: string, message: string, row: number, type: string }>,
   data: Array<any>,
 }

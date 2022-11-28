@@ -7,11 +7,6 @@
     cursor: pointer;
 }
 
-.fa-save,
-.fa-times,
-.fa-edit {
-    font-size: xx-large;
-}
 .leak-form-width {
     width: 67%;
 }

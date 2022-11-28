@@ -162,6 +162,11 @@
     color: black;
 }
 
+.data-explorer-visualizer .btn-secondary:not([disabled]):not(.disabled).active{
+    background: #117A65;
+    transition: all .5s ease-in-out;
+    color: white;
+}
 .ssmt .btn-secondary:not([disabled]):not(.disabled).active{
     background: #F39C12;
     transition: all .5s ease-in-out;
@@ -407,6 +412,25 @@
     margin: 0 !important;
     font-size: 16px !important;
 } */
+
+
+.scroll-item-x::-webkit-scrollbar-thumb {
+    background-color: #156739;
+}
+
+.scroll-item-x::-webkit-scrollbar-track {
+    background-color: rgba(0,0,0,0.3);
+}
+
+.scroll-item-x::-webkit-scrollbar {
+    width: .5em;
+    height: .5rem;
+}
+
+.scroll-item-x {
+    overflow-x: scroll;
+}
+
 
 
 .card-container form .form-section {

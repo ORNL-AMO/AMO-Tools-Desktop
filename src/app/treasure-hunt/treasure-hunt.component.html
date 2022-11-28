@@ -5,9 +5,8 @@
     <app-treasure-hunt-banner [assessment]="assessment"></app-treasure-hunt-banner>
   </div>
   <!--end header-->
-  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
-    <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
-      [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'system-setup'" class="assessment-container tab-content">
+    <div class="assessment-panel-container lookup-form modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}" [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="subTab == 'settings'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)" [(settings)]="settings" [assessment]="assessment"
         (updateSettings)="getSettings()">
       </app-system-basics>
@@ -15,22 +14,22 @@
       </app-operation-costs>
 
     </div>
-    <div class="w-50">
+    <div class="assessment-panel-container" [ngStyle]="{'height.px': containerHeight}">
       <app-help-panel [currentTab]="subTab"></app-help-panel>
     </div>
   </div>
 
-  <div *ngIf="mainTab == 'find-treasure'" class="w-100 d-flex tab-content justify-content-center scroll-item"
+  <div *ngIf="mainTab == 'find-treasure'" class="assessment-container tab-content justify-content-center"
     [ngStyle]="{'height.px': containerHeight}">
-    <app-find-treasure class="w-100" [settings]="settings"></app-find-treasure>
+    <app-find-treasure class="w-100 scroll-item" [settings]="settings"></app-find-treasure>
   </div>
 
-  <div *ngIf="mainTab == 'treasure-chest'" class="d-flex tab-content h-100">
+  <div *ngIf="mainTab == 'treasure-chest'" class="assessment-container tab-content">
     <app-treasure-chest class="w-100" [settings]="settings" [containerHeight]="containerHeight"></app-treasure-chest>
   </div>
 
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
-    <div class="col-11 report-column">
+    <div class="col-12 col-lg-11 report-column">
       <app-treasure-hunt-report [assessment]="assessment" [settings]="settings" [directory]="directory" [containerHeight]="containerHeight">
       </app-treasure-hunt-report>
     </div>
@@ -39,7 +38,7 @@
 
 
   <!--footer-->
-  <div #footer id="thuntFooter" class="footer hide-print"
+  <div #footer id="thuntFooter" class="footer hide-print d-none d-lg-block"
     *ngIf="mainTab == 'system-setup' && selectedCalc == 'none'">
     <div class="pull-left" *ngIf="subTab != 'settings'">
       <button class="btn btn-default" (click)="back()">Back</button>

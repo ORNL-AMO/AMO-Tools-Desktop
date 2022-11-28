@@ -1,5 +1,5 @@
-<div class="d-flex fsat modify-conditions panel-container">
-	<div *ngIf="modificationExists" class="w-50 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+<div class="assessment-container fsat modify-conditions panel-container">
+	<div *ngIf="modificationExists" class="assessment-panel-container lookup-form panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
 		<div *ngIf="fsat.modifications[modificationIndex].fsat.whatIfScenario == true">
 			<div class="header mr-2 ml-2">
 				<h3>Select Potential Adjustment Projects</h3>
@@ -27,7 +27,7 @@
 		</div>
 
 	</div>
-	<div *ngIf="!modificationExists" class="no-data w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}">
+	<div *ngIf="!modificationExists" class="no-data assessment-panel-container lookup-form scroll-item" [ngStyle]="{'height.px': containerHeight}">
 		<h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to
 			find efficiency
 			opportunities.
@@ -35,7 +35,7 @@
 		<button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
 		<p>Data will be copied from your current baseline condition.</p>
 	</div>
-	<div class="w-50 d-flex flex-column mr-2 ml-2">
+	<div class="assessment-panel-container">
 		<div class="d-flex flex-wrap tabs primary" #resultTabs>
 			<div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
 				<a class="border-left-0" (click)="setTab('results')">Results</a>

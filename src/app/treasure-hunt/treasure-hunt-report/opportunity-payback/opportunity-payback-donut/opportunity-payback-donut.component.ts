@@ -50,12 +50,14 @@ export class OpportunityPaybackDonutComponent implements OnInit {
       textposition: 'auto',
       insidetextorientation: "horizontal",
       hoverformat: '.2r',
-      texttemplate: '<b>%{label}</b> <br> %{value:,.0f}',
+      texttemplate: '<b>%{label}</b> <br> %{value:$.0f}',
       hoverinfo: 'label+percent',
+      direction: "clockwise",
+      rotation: 90
     }];
     var layout = {
       showlegend: false,
-      // margin: { t: 30, b: 30, l: 40, r: 40 },
+      margin: { t: 10, b: 10, l: 60, r: 60 },
     };
 
     var modebarBtns = {
@@ -83,7 +85,7 @@ export class OpportunityPaybackDonutComponent implements OnInit {
       texttemplate: '<b>%{label}</b> <br> %{value:,.0f}',
       hoverinfo: 'label+percent',
       direction: "clockwise",
-      rotation: 45
+      rotation: 90
     }];
     var layout = {
       width: 900,
@@ -91,7 +93,7 @@ export class OpportunityPaybackDonutComponent implements OnInit {
         size: 16,
       },
       showlegend: false,
-      margin: { t: 70, b: 110, l: 130, r: 130 },
+      margin: { t: 10, b: 10, l: 60, r: 60 },
     };
 
     var modebarBtns = {
@@ -112,10 +114,10 @@ export class OpportunityPaybackDonutComponent implements OnInit {
         this.opportunitiesPaybackDetails.moreThanThreeYears.totalSavings
       ],
       labels: [
-        'Less than 1 Year (' + this.settings.currency + ')',
-        '1 to 2 Years (' + this.settings.currency + ')',
-        '2 to 3 Years (' + this.settings.currency + ')',
-        'More than 3 Years (' + this.settings.currency + ')'
+        '< 1 yr',
+        '1-2 yrs',
+        '2-3 yrs',
+        '> 3 yrs'
       ]
     };
   }

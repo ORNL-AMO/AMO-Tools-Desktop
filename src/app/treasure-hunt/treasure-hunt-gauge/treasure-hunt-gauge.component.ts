@@ -24,7 +24,10 @@ export class TreasureHuntGaugeComponent implements OnInit {
   ngOnInit() { }
 
   ngAfterViewInit() {
-    this.initChart();
+    setTimeout(() => {
+      this.initChart();
+    }, 100);
+    
   }
 
   ngOnDestroy() { }
@@ -83,7 +86,7 @@ export class TreasureHuntGaugeComponent implements OnInit {
       },
       size: {
         height: this.chartHeight,
-        width: undefined
+        width: this.chartWidth
       }
     });
   }

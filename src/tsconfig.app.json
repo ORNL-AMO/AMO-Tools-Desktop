@@ -2,7 +2,7 @@
   "compilerOptions": {
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
@@ -14,7 +14,7 @@
     ],
     "outDir": "../out-tsc/app",
     "target": "es2020",
-    "module": "es2015",
+    "module": "esnext",
     "baseUrl": "",
     "types": []
   },

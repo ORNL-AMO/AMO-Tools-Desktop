@@ -5,7 +5,7 @@ import { SortCardsService } from './sort-cards.service';
 
 @Pipe({
   name: 'sortCardsBy',
-  pure: false
+  pure: true
 })
 export class SortCardsByPipe implements PipeTransform {
 

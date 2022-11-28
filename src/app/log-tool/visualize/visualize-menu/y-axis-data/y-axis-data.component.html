@@ -24,9 +24,8 @@
                 [(ngModel)]="selectedGraphObj.layout.yaxis2.title.text" (input)="saveChanges()" (focus)="focusField()"
                 (blur)="focusOut()"></textarea>
         </div>
-        <hr>
         <!--y axis data options-->
-        <div class="y-axis-data d-flex flex-column pb-2"
+        <div class="y-axis-data d-flex flex-column"
             *ngFor="let selectedDataOption of selectedGraphObj.selectedYAxisDataOptions;">
             <div class="form-group">
                 <input class="form-control w-100" type="text" name="{{'seriesName'+selectedDataOption.index}}"
@@ -73,7 +72,6 @@
                     Data Series</a>
             </div>
         </div>
-        <hr>
         <!--add data-->
         <a class="click-link pull-right small" (click)="addData()" (focus)="focusField()" (blur)="focusOut()">+Add
             Another Data Series</a>
@@ -82,9 +80,9 @@
     <div *ngIf="selectedGraphObj.data[0].type == 'bar'">
         <div class="form-group">
             <label>Y Axis Label</label>
-            <input class="form-control" type="text" name="yAxisLabel"
-                [(ngModel)]="selectedGraphObj.layout.yaxis.title.text" (input)="saveChanges()" (focus)="focusField()"
-                (blur)="focusOut()">
+            <textarea rows="2" class="form-control w-100" [(ngModel)]="selectedGraphObj.layout.yaxis.title.text"
+            name="yAxisLabel" id="yAxisLabel" (input)="saveChanges()" (focus)="focusField()"
+            (blur)="focusOut()"></textarea>
         </div>
     </div>
 </form>

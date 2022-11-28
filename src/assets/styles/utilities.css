@@ -370,3 +370,73 @@ a:not([href]):not([tabindex]).disabled-link:hover {
 .ngb-dp-weekdays {
     background-color: white !important;
 }
+
+.detail-tooltip-box {
+    z-index: 9999;
+    font-size: small;
+    color: black;
+}
+
+.detail-tooltip {
+    opacity: 1 !important;
+    box-shadow: 1px 4px 10px 0px #0000003d;
+    background-color: #2980b9;
+    border: 1px solid #2f96da;
+    padding: 3px 10px;
+    border-radius: 4px;
+    color: white;
+    position: absolute;
+  }
+
+  .detail-tooltip.up {
+    box-shadow: 1px -4px 10px 0px #0000003d;
+  }
+  .detail-tooltip.left {
+    box-shadow: -4px 1px 10px 0px #0000003d;
+  }
+  .detail-tooltip.right {
+    box-shadow: 4px 1px 10px 0px #0000003d;
+  }
+  .detail-tooltip-arrow {
+    width: 0;
+    height: 0;
+    position: absolute;
+  }
+  .tooltip-arrow-up {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #2980b9;
+    top: -8px;
+    left: calc(50% - 10px);
+  }
+  .tooltip-arrow-down {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #2980b9;
+    bottom: -8px;
+    left: calc(50% - 10px);
+  }
+  
+  .tooltip-arrow-right {
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid #2980b9;
+    right: -8px;
+    top: calc(50% - 10px);
+  }
+  
+  .tooltip-arrow-left {
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid #2980b9;
+    left: -8px;
+    top:0;
+  }
+
+  .tooltip-icon.fa-question-circle {
+      color: #117A65 !important;
+  }
+
+  .tooltip-icon.fa-question-circle:hover {
+      cursor: pointer;
+  }
