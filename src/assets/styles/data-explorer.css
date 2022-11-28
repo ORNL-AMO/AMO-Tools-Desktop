@@ -1,0 +1,58 @@
+.log-tool-container.log-tool > .data-setup
+.table{
+    font-size: small;
+}
+
+.log-tool-container.log-tool > .data-setup
+.select-header{
+    font-size: 16px;
+}
+
+.log-tool-container.log-tool > .data-setup
+.header .click-link{
+    margin-top: 10px;
+}
+
+.log-tool-container.log-tool > .data-setup
+ul.nav.nav-tabs {
+    border-right: 1px solid #dee2e6;
+    border-left: 1px solid #dee2e6;
+}
+
+.log-tool-container.log-tool > .data-setup
+.de-active {
+    background-color: #117A65;
+  }
+
+.log-tool-container.log-tool > .data-setup
+.nav-link {   
+    font-size: 14px;
+    background-color: #efefef;
+    border-color: #adb1b5 #adb1b5 #fff;
+    border-width: 1px;
+}
+
+.log-tool-container.log-tool > .data-setup
+.nav-link.active {   
+    background-color: #fff;
+    border-color: #adb1b5 #adb1b5 #fff;
+}
+
+.log-tool-container.log-tool > .data-setup
+.nav-tabs{
+    background-color: #efefef;
+    border-left: #efefef;
+    border-right: #efefef;
+    border-top: #efefef;
+}
+
+.log-tool-container.log-tool > .data-setup
+.font-reset {
+    font: unset
+}
+
+.log-tool-container.log-tool > .data-setup
+.show-pointer {
+    cursor: pointer;
+   }
+   

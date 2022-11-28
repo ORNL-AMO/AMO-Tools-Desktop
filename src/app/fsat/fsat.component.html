@@ -4,15 +4,18 @@
     <app-fsat-tabs [settings]="settings" [fsat]="_fsat"></app-fsat-tabs>
   </div>
 
-  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content scroll-item"
-    [ngStyle]="{'height.px': containerHeight}">
-    <div class="w-50 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
+  <!--system setup-->
+  <div *ngIf="mainTab == 'system-setup'" class="assessment-container tab-content">
+    <div class="assessment-panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
-        (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
-        
+        (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)"
+        (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
+  
       <app-operations *ngIf="stepTab == 'fan-operations'" [settings]="settings" [inSetup]="true" [selected]="true"
-      [fsatOperations]="_fsat.fsatOperations" [baseline]="true" (emitSave)="saveFsatOperations($event)" [fsat]="_fsat"></app-operations>
-
+        [fsatOperations]="_fsat.fsatOperations" [baseline]="true" (emitSave)="saveFsatOperations($event)" [fsat]="_fsat">
+      </app-operations>
+  
       <app-fan-setup *ngIf="stepTab == 'fan-setup'" [containerHeight]="containerHeight" [settings]="settings"
         [inSetup]="true" [selected]="true" [fanSetup]="_fsat.fanSetup" [fsat]="_fsat" [baseline]="true"
         (emitSave)="saveFanSetup($event)"></app-fan-setup>
@@ -26,10 +29,13 @@
         [fieldData]="_fsat.fieldData" [baseline]="true" (emitSave)="saveFieldData($event)" [fsat]="_fsat">
       </app-fan-field-data>
     </div>
-    <div class="w-50" [ngClass]="{'pl-0': stepTab == 'fan-field-data'}">
-      <app-help-panel [modificationIndex]="modificationIndex" [settings]="settings" [inSetup]="true" [fsat]="_fsat"></app-help-panel>
+    <div class="assessment-panel-container scroll-item" [ngClass]="{'pl-0': stepTab == 'fan-field-data'}" [ngStyle]="{'height.px': containerHeight}">
+      <app-help-panel [modificationIndex]="modificationIndex" [settings]="settings" [inSetup]="true" [fsat]="_fsat">
+      </app-help-panel>
     </div>
   </div>
+
+
   <!--Assessment-->
   <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [fsat]="_fsat" [assessment]="assessment"
@@ -43,7 +49,7 @@
 
   <!--report-->
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
-    <div class="col-11 report-column">
+    <div class="col-12 col-lg-11 report-column">
       <app-fsat-report [settings]="settings" [assessment]="assessment" [inFsat]="true" (closeReport)="closeReport()"
         [containerHeight]="containerHeight"></app-fsat-report>
     </div>
@@ -90,7 +96,7 @@
     </div>
   </div>
 
-  <div #footer id="fsatFooter" class="footer hide-print" *ngIf="mainTab == 'assessment' || mainTab == 'system-setup'">
+  <div #footer id="fsatFooter" class="footer hide-print d-none d-lg-block" *ngIf="mainTab == 'assessment' || mainTab == 'system-setup'">
     <div class="pull-left" *ngIf="stepTab != 'system-basics' || mainTab == 'assessment'">
       <button class="btn btn-default" (click)="back()">Back</button>
     </div>
@@ -124,7 +130,7 @@
 <div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="changeModificationModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}"
   *ngIf="_fsat && _fsat.modifications">
-  <div class="modal-dialog modal-lg list-modal">
+  <div class="modal-dialog modal-lg list-modal modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <h3>Select Scenario</h3>

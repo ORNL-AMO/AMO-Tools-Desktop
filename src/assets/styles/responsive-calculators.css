@@ -128,3 +128,20 @@
     }
     
 }
+
+.fa-save, .fa-times, .fa-edit {
+    font-size: 33px;
+}
+.calculator-container .header h3 {
+    font-size: 18px;
+}
+
+@media screen and (max-width: 575px) {
+    .fa-save, .fa-times, .fa-edit {
+        font-size: 18px;
+    }
+    .calculator-container .header h3 {
+        font-size: 14px !important;
+    }
+
+}

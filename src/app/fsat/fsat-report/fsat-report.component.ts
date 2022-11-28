@@ -51,6 +51,8 @@ export class FsatReportComponent implements OnInit {
   createdDate: Date;
   reportContainerHeight: number;
   printOptions: PrintOptions;
+  tabsCollapsed: boolean = true;
+
   constructor(private fsatService: FsatService, private printOptionsMenuService: PrintOptionsMenuService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private settingsService: SettingsService) { }
 
   ngOnInit() {
@@ -116,6 +118,7 @@ export class FsatReportComponent implements OnInit {
 
   setTab(str: string) {
     this.currentTab = str;
+    this.collapseTabs();
   }
 
   getSettings() {
@@ -149,6 +152,7 @@ export class FsatReportComponent implements OnInit {
   print() {
     this.printOptionsMenuService.printContext.next('fsat');
     this.printOptionsMenuService.showPrintMenu.next(true);
+    this.collapseTabs();
   }
 
   setOutputs() {
@@ -169,5 +173,9 @@ export class FsatReportComponent implements OnInit {
   getSavingsPercentage(baseline: FSAT, modification: FSAT): number {
     let tmpSavingsPercent: number = Number(Math.round(((((baseline.outputs.annualCost - modification.outputs.annualCost) * 100) / baseline.outputs.annualCost) * 100) / 100).toFixed(0));
     return tmpSavingsPercent;
+  }
+
+  collapseTabs() {
+    this.tabsCollapsed = !this.tabsCollapsed;
   }
 }

@@ -25,6 +25,15 @@ export class FsatService {
   modalOpen: BehaviorSubject<boolean>;
   updateData: BehaviorSubject<boolean>;
   calculatorTab: BehaviorSubject<string>;
+  //system setup tabs
+  stepTabs: Array<string> = [
+    'system-basics',
+    'fan-operations',
+    'fan-setup',
+    'fan-motor',
+    'fan-field-data'
+  ];
+
   constructor
   (private convertFsatService: ConvertFsatService, private fansSuiteApiService: FansSuiteApiService, private assessmentCo2Service: AssessmentCo2SavingsService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private convertFanAnalysisService: ConvertFanAnalysisService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService, private fanOperationsService: OperationsService) {
     this.initData();
@@ -40,6 +49,28 @@ export class FsatService {
     this.openModificationModal = new BehaviorSubject<boolean>(false);
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.updateData = new BehaviorSubject<boolean>(false);
+  }
+
+  continue() {
+    let tmpStepTab: string = this.stepTab.getValue();
+    if (tmpStepTab === 'fan-field-data') {
+      this.mainTab.next('assessment');
+    } else {
+      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
+      let nextTab: string = this.stepTabs[assessmentTabIndex + 1];
+      this.stepTab.next(nextTab);
+    }
+  }
+
+  back() {
+    let tmpStepTab: string = this.stepTab.getValue();
+    if (tmpStepTab !== 'system-basics' && this.mainTab.getValue() == 'system-setup') {
+      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
+      let nextTab: string = this.stepTabs[assessmentTabIndex - 1];
+      this.stepTab.next(nextTab);
+    } else if (this.mainTab.getValue() == 'assessment') {
+      this.mainTab.next('system-setup');
+    }
   }
 
   fan203(input: Fan203Inputs, settings: Settings): Fan203Results {

@@ -20,13 +20,13 @@ export class GraphBasicsComponent implements OnInit {
   selectedGraphObjSub: Subscription;
   markerTypes: Array<Object>;
   markerType: string;
-  isTimeSeries: boolean;
-
+  canRunDayTypeAnalysis: boolean;
   constructor(private visualizeService: VisualizeService, private visualizeMenuService: VisualizeMenuService, private logToolDataService: LogToolDataService) { }
 
   ngOnInit(): void {
+    this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
-      if (this.selectedGraphObj == undefined || val.graphId != this.selectedGraphObj.graphId) {
+      if (val.graphId != this.selectedGraphObj.graphId) {
         this.selectedGraphObj = val;
         this.setGraphType();
       } else {
@@ -35,36 +35,37 @@ export class GraphBasicsComponent implements OnInit {
           this.checkBarHistogramData();
         }
       }
-      
+
       if (this.selectedGraphObj.layout.xaxis.type == "date") {
         this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
       }
       else {
-          this.markerTypes = [{label: "Markers", value: "markers"}];
-          this.markerType = "markers";
+        this.markerTypes = [{label: "Markers", value: "markers"}];
+        this.markerType = "markers";
       }
-        
+      
     });
     if (this.selectedGraphObj.layout.xaxis.type == "date") {
-    this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
+      this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
     }
     else {
       this.markerTypes = [{label: "Markers", value: "markers"}];
     }
     this.markerType = "markers";
-    this.isTimeSeries = this.logToolDataService.isTimeSeries;
+    this.canRunDayTypeAnalysis = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
   }
-
+  
   ngOnDestroy() {
     this.selectedGraphObjSub.unsubscribe();
   }
 
   saveChanges() {
-    this.visualizeMenuService.save(this.selectedGraphObj);
+    this.visualizeMenuService.saveUserGraphOptionsChange(this.selectedGraphObj);
   }
 
   setLinesMarkers() {
-    this.visualizeService.plotFunctionType = 'update';
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
+    depending on the amount of data you have supplied...`});
     this.selectedGraphObj.selectedYAxisDataOptions.forEach((option) => {
       option.linesOrMarkers = this.markerType;
     });
@@ -72,7 +73,6 @@ export class GraphBasicsComponent implements OnInit {
   }
 
   setGraphType() {
-    this.visualizeService.plotFunctionType = 'react';
     if (this.selectedGraphObj.data[0].type == 'bar') {
       this.checkBarHistogramData();
     }
@@ -103,13 +103,11 @@ export class GraphBasicsComponent implements OnInit {
   }
 
   setBarHistogramData() {
-    this.visualizeService.plotFunctionType = 'react';
     this.visualizeMenuService.setBarHistogramData(this.selectedGraphObj);
   }
 
   checkBarHistogramData() {
     if (this.selectedGraphObj.binnedField == undefined || this.selectedGraphObj.binnedField.fieldName != this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName || this.selectedGraphObj.bins == undefined) {
-      this.visualizeService.plotFunctionType = 'react';
       this.selectedGraphObj = this.visualizeMenuService.initializeBinData(this.selectedGraphObj);
     }
   }

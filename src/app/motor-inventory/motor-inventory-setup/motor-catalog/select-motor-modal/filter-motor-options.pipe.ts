@@ -3,7 +3,7 @@ import { SuiteDbMotor } from '../../../../shared/models/materials';
 import * as _ from 'lodash';
 @Pipe({
   name: 'filterMotorOptions',
-  pure: false
+  pure: true
 })
 export class FilterMotorOptionsPipe implements PipeTransform {
 

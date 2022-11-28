@@ -41,3 +41,17 @@ td, a{
   font-size: 14px;
   padding-bottom: 0px;
 }
+
+.table.responsive-table{
+  min-width: 545px;
+}
+
+.table-responsive-lg::-webkit-scrollbar-thumb{
+	background-color: #156739;
+}
+
+.table-responsive-lg::-webkit-scrollbar{
+	background-color: #9da19f;
+	width: .3em;
+  height: .3rem;
+}

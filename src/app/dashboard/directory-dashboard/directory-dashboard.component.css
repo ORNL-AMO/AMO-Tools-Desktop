@@ -5,3 +5,8 @@
 .scroll-item{
     overflow-y: scroll;
 }
+
+.fa.fa-bars {
+    text-align: right;
+    font-size: 25px;
+}

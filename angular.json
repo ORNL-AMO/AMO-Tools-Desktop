@@ -84,7 +84,8 @@
               "node_modules/plotly.js-dist/plotly.js"
             ],
             "serviceWorker": true,
-            "ngswConfigPath": "ngsw-config.json"
+            "ngswConfigPath": "ngsw-config.json",
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "production": {
@@ -165,7 +166,8 @@
                 "output": "./assets/"
               },
               "src/manifest.webmanifest"
-            ]
+            ],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           }
         },
         "lint": {

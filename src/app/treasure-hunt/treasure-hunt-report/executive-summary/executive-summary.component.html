@@ -1,10 +1,10 @@
 <div class="row no-gutters">
-  <div class="col-md-6 col-sm-12 pb-5">
+  <div class="col-12 col-lg-6 pb-5">
     <app-executive-summary-table [treasureHuntResults]="treasureHuntResults" [showFullSummary]="false"
       [settings]="settings" [title]="'Cost Summary'">
     </app-executive-summary-table>
   </div>
-  <div class="col-lg-6 col-md-6 col-sm-12">
+  <div class="col-12 col-lg-6">
     <app-utility-bar-chart [treasureHuntResults]="treasureHuntResults" [showPrintView]="showPrintView" [settings]="settings">
     </app-utility-bar-chart>
   </div>
@@ -25,17 +25,22 @@
       [settings]="settings" [title]="'Detailed Summary'">
     </app-executive-summary-table>
   </div>
-  <div class="col-12">
+  <div class="col-12 col-lg-6">
     <app-carbon-emissions-summary-table
       [settings]="settings" [treasureHuntResults]="treasureHuntResults">
     </app-carbon-emissions-summary-table>
   </div>
+  <div class="col-12 col-lg-6">
+    <app-carbon-emissions-summary-pie-chart
+      [settings]="settings" [carbonResults]="treasureHuntResults.co2EmissionsResults" [showPrintView]="showPrintView">
+    </app-carbon-emissions-summary-pie-chart>
+  </div>
 </div>
 <div class="row no-gutters mb-4 print-avoid-break" *ngIf="teamData.length > 0">
-  <div class="col-lg-6 col-sm-12">
+  <div class="col-12 col-lg-6">
     <app-team-summary-table [teamData]="teamData"></app-team-summary-table>
   </div>
-  <div class="col-lg-6 col-sm-12 pie-chart" [ngClass]="{'col-12': showPrintView}">
+  <div class=" col-12 col-lg-6 pie-chart" [ngClass]="{'col-12': showPrintView}">
     <app-team-summary-pie-chart class="w-100" [teamData]="teamData" [showPrintView]="showPrintView"></app-team-summary-pie-chart>
   </div>
 </div>

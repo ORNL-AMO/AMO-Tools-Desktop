@@ -33,6 +33,9 @@ export class DirectoryDashboardComponent implements OnInit {
   filterDashboardBySub: Subscription;
   sortBy: { value: string, direction: string };
   sortBySub: Subscription;
+
+  dashboardCollapsed: boolean = false;
+
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private settingsDbService: SettingsDbService, private assessmentService: AssessmentService) { }
@@ -89,6 +92,11 @@ export class DirectoryDashboardComponent implements OnInit {
     } else {
       this.displayAddPreAssessment = false;
     }
+  }
+
+  collapseDashboard() {
+    this.dashboardCollapsed = !this.dashboardCollapsed;
+    window.dispatchEvent(new Event("resize"));
   }
 }
 

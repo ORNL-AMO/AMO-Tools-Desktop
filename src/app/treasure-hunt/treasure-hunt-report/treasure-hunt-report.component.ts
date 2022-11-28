@@ -49,6 +49,8 @@ export class TreasureHuntReportComponent implements OnInit {
   showPrintMenuSub: Subscription;
   showPrintDiv: boolean = false;
   selectAll: boolean = false;
+  
+  tabsCollapsed: boolean = true;
 
   fileName: string;
 
@@ -145,6 +147,7 @@ export class TreasureHuntReportComponent implements OnInit {
 
   setTab(str: string) {
     this.currentTab = str;
+    this.collapseTabs();
   }
 
   getDirectoryList(id: number) {
@@ -173,6 +176,7 @@ export class TreasureHuntReportComponent implements OnInit {
   print() {
     this.printOptionsMenuService.printContext.next('treasureHunt');
     this.printOptionsMenuService.showPrintMenu.next(true);
+    this.collapseTabs();
   }
 
   showExportModal() {
@@ -200,6 +204,10 @@ export class TreasureHuntReportComponent implements OnInit {
       pptx.writeFile({ fileName: this.fileName + '.pptx' });
     }
     this.hideExportModal();
+  }
+
+  collapseTabs() {
+    this.tabsCollapsed = !this.tabsCollapsed;
   }
 
 

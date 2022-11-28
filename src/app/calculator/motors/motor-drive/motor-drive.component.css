@@ -12,10 +12,6 @@
 }
 
 
-.fa-save, .fa-times, .fa-edit{
-    font-size: xx-large;
-}
-
 .action-item:hover{
     cursor: pointer;
     background: #efefef;

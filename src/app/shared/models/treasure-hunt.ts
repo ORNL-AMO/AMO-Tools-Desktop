@@ -485,6 +485,7 @@ export interface OpportunitySummary {
 export interface SavingsItem { 
     savings: number, 
     currentCost: number,
+    currentEnergyUse?: number,
     newCost: number, 
     label: string 
 }

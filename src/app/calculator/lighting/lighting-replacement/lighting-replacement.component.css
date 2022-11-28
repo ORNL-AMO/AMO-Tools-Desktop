@@ -27,10 +27,6 @@
     border-radius: 4px !important;
 }
 
-.fa-save, .fa-times, .fa-edit {
-    font-size: xx-large;
-}
-
 .action-item:hover {
     cursor: pointer;
     background: #efefef;
@@ -67,3 +63,4 @@
 .opp-sheet-icon {
     width: 35px;
 }
+

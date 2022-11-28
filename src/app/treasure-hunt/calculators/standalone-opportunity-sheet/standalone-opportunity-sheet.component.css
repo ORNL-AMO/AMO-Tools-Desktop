@@ -36,18 +36,28 @@
     background: #efefef;
 }
 
-.form-width{
+/* .form-width{
     width: 60%;
-}
+} */
 
-.help-panel{
+/* .help-panel{
     width: 40%;
 }
 
 .help-holder{
     max-width: 500px;
-}
+} */
 
 .opp-sheet-icon{
     height: 55px;
+}
+
+@media screen and (max-width: 575px) {
+    .fa-save, .fa-times, .fa-edit {
+        font-size: 18px;
+    }
+    .calculator-container .header h3 {
+        font-size: 14px !important;
+    }
+
 }

@@ -23,6 +23,7 @@ export class MotorOptionsTableComponent implements OnInit {
     this.motorOptions = this.sqlDbApiService.selectMotors();
     this.filterMotorOptionsSub = this.motorCatalogService.filterMotorOptions.subscribe(val => {
       this.filterMotorOptions = val;
+      this.motorOptions = Array.from(this.motorOptions);
     });
   }
 
