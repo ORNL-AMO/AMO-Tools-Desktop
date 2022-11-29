@@ -40,4 +40,32 @@ export class PsatBannerComponent implements OnInit {
     }
     this.collapseBanner();
   }
+
+  back(){
+    if (this.mainTab == 'calculators') {
+      this.psatTabService.mainTab.next('sankey');
+    } else if (this.mainTab == 'sankey') {
+      this.psatTabService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.psatTabService.mainTab.next('diagram');
+    } else if (this.mainTab == 'diagram') {
+      this.psatTabService.mainTab.next('assessment');
+    } else if (this.mainTab == 'assessment') {
+      this.psatTabService.mainTab.next('system-setup');
+    }
+  }
+
+  continue() {
+    if (this.mainTab == 'system-setup') {
+      this.psatTabService.mainTab.next('assessment');
+    } else if (this.mainTab == 'assessment') {
+      this.psatTabService.mainTab.next('diagram');
+    } else if (this.mainTab == 'diagram') {
+      this.psatTabService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.psatTabService.mainTab.next('sankey');
+    } else if (this.mainTab == 'sankey') {
+      this.psatTabService.mainTab.next('calculators');
+    }
+  }
 }

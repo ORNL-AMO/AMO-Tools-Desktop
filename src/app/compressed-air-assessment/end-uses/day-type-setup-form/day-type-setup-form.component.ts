@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, DayTypeEndUse, EndUseDayTypeSetup } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
@@ -17,7 +17,7 @@ export class DayTypeSetupFormComponent implements OnInit {
   inReportSankey: boolean;
   
   settings: Settings;
-  form: FormGroup;
+  form: UntypedFormGroup;
   compressedAirAssessment: CompressedAirAssessment;
   isFormChange: boolean = false;
   dayTypeOptions: Array<CompressedAirDayType>;

@@ -4,7 +4,7 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { FixtureLoss } from '../../../shared/models/phast/losses/fixtureLoss';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FixtureFormService } from '../../../calculator/furnaces/fixture/fixture-form.service';
 
 @Component({
@@ -152,7 +152,7 @@ export class FixtureLossesComponent implements OnInit {
 }
 
 export interface FixtureLossObj {
-  form: FormGroup;
+  form: UntypedFormGroup;
   heatLoss: number;
   collapse: boolean;
 }

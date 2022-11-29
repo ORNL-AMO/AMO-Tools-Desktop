@@ -1,8 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { LogToolField, GraphObj } from '../../log-tool-models';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
+import { LogToolField, GraphObj, GraphDataSummary, GraphDataOption } from '../../log-tool-models';
 import { VisualizeService } from '../visualize.service';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
+import { combineLatestWith, debounce, interval, Observable, Subscription } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
 @Component({
   selector: 'app-visualize-data',
@@ -10,8 +10,6 @@ import { LogToolDataService } from '../../log-tool-data.service';
   styleUrls: ['./visualize-data.component.css']
 })
 export class VisualizeDataComponent implements OnInit {
-
-
   timeSummaries: Array<{
     csvName: string,
     startDate: Date,
@@ -20,51 +18,38 @@ export class VisualizeDataComponent implements OnInit {
     numberOfDataPoints: number
   }>;
 
+  @Input()
+  containerHeight: number;
+
   selectedGraphObjSub: Subscription;
 
-  axisSummaries: Array<{
-    max: number,
-    min: number,
-    numberOfDataPoints: number,
-    standardDeviation: number,
-    mean: number,
-    name: string
-  }>;
+  axisSummaries: Array<GraphDataSummary>;
   axisRanges: { xMin: number, xMax: number, yMin: number, yMax: number, y2Min: number, y2Max: number };
   axisRangesSub: Subscription;
 
+  worker: Worker;
   calculatingSummaries: any;
+  onUpdateGraphEventsSubscription: Subscription;
   constructor(private visualizeService: VisualizeService, private cd: ChangeDetectorRef, private logToolDataService: LogToolDataService) { }
 
   ngOnInit() {
     this.calculateSummaries();
-    this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(graphObj => {
-      if (this.calculatingSummaries) {
-        clearTimeout(this.calculatingSummaries);
-      }
-      this.calculatingSummaries = setTimeout(() => {
-        this.calculateSummaries();
-      }, 1000)
+    let onUpdateGraphEventsObservable: Observable<any> = this.visualizeService.selectedGraphObj
+      .pipe(
+        combineLatestWith(this.visualizeService.restyleRanges),
+        debounce(obs => {
+          let userInputDelay = this.visualizeService.userInputDelay.getValue()
+          return interval(userInputDelay);
+        })
+      );
+
+    this.onUpdateGraphEventsSubscription = onUpdateGraphEventsObservable.subscribe(obs => {
+      this.calculateSummaries();
     });
-
-    this.axisRangesSub = this.visualizeService.restyleRanges.subscribe(val => {
-      this.axisRanges = val;
-      if (this.axisRanges) {
-        if (this.calculatingSummaries) {
-          clearTimeout(this.calculatingSummaries);
-        }
-        this.calculatingSummaries = setTimeout(() => {
-          this.calculateSummaries();
-        }, 1000)
-      }
-    })
-
-
   }
 
   ngOnDestroy() {
-    this.selectedGraphObjSub.unsubscribe();
-    this.axisRangesSub.unsubscribe();
+    this.onUpdateGraphEventsSubscription.unsubscribe();
   }
 
   calculateSummaries() {
@@ -80,15 +65,17 @@ export class VisualizeDataComponent implements OnInit {
         y2Min: undefined,
         y2Max: undefined
       };
+    } else {
+      this.axisRanges = undefined;
     }
     if (graphObj.selectedXAxisDataOption.dataField && graphObj.selectedXAxisDataOption.dataField.alias == 'Time Series') {
-      this.setDataSummary();
+      this.setTimeSeriesSummary();
     } else if (graphObj.selectedXAxisDataOption.dataField) {
       let xAxisSummary = this.getDataSummary(graphObj.selectedXAxisDataOption.dataField, 'X-Axis', graphObj.selectedXAxisDataOption.data)
       this.axisSummaries.push(xAxisSummary);
     }
     if (graphObj.data[0].type != 'bar') {
-      graphObj.selectedYAxisDataOptions.forEach(option => {
+      graphObj.selectedYAxisDataOptions.forEach(async (option) => {
         let yAxis: string = 'Y-Axis';
         if (option.yaxis == 'y2') {
           yAxis = 'Right Y-Axis'
@@ -100,9 +87,9 @@ export class VisualizeDataComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  setDataSummary() {
-    let visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }> = this.visualizeService.visualizeData;
-    visualizeData.forEach(dataItem => {
+  setTimeSeriesSummary() {
+    let allDataByAxisField: Array<GraphDataOption> = this.visualizeService.allDataByAxisField;
+    allDataByAxisField.forEach((dataItem) => {
       if (dataItem.dataField.isDateField) {
         let fieldData: Array<any>;
         if (this.axisRanges) {
@@ -113,7 +100,7 @@ export class VisualizeDataComponent implements OnInit {
         let dateFieldSummary = this.getDataSummaryItem(fieldData, dataItem.dataField.csvName);
         this.timeSummaries.push(dateFieldSummary);
       }
-    })
+    });
   }
 
   getDataSummaryItem(data: Array<number | string>, csvName: string): {
@@ -137,21 +124,13 @@ export class VisualizeDataComponent implements OnInit {
     }
   }
 
-  getDataSummary(dataField: LogToolField, axis: string, allData: Array<any>): {
-    max: number,
-    min: number,
-    numberOfDataPoints: number,
-    standardDeviation: number,
-    mean: number,
-    name: string,
-    axis: string
-  } {
+  getDataSummary(dataField: LogToolField, axis: string, allData: Array<any>): GraphDataSummary {
     let min: number;
     let max: number;
     let mean: number;
     let standardDeviation;
-
     let filteredData: Array<any> = allData;
+
     if (this.axisRanges) {
       if (axis != 'X-Axis') {
         filteredData = this.filterData(dataField, axis);
@@ -197,14 +176,15 @@ export class VisualizeDataComponent implements OnInit {
   }
 
   filterXAxisData(data: Array<any>, isDateField: boolean): Array<any> {
-    let dataCpy: Array<any> = _.filter(data, (dataItem) => {
+    let filteredData: Array<any> = _.filter(data, (dataItem) => {
       if (isDateField) {
         return (new Date(dataItem).valueOf() > new Date(this.axisRanges.xMin).valueOf() && new Date(dataItem).valueOf() < new Date(this.axisRanges.xMax).valueOf());
       } else {
         return (dataItem > this.axisRanges.xMin && dataItem < this.axisRanges.xMax);
       }
-    })
-    return dataCpy;
+    });
+    return filteredData;
   }
+
 
 }

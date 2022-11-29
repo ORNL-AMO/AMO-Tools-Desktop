@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { AdjustCascadingSetPoints, CascadingSetPointData } from '../../../shared/models/compressed-air-assessment';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 import { PerformancePointsFormService } from '../../inventory/performance-points/performance-points-form.service';
@@ -7,12 +7,12 @@ import { PerformancePointsFormService } from '../../inventory/performance-points
 @Injectable()
 export class AdjustCascadingSetPointsService {
 
-  constructor(private formBuilder: FormBuilder, private performancePointsFormService: PerformancePointsFormService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private performancePointsFormService: PerformancePointsFormService) { }
 
 
   getFormFromObj(setPointData: Array<CascadingSetPointData>): Array<CompressorForm> {
     let formData: Array<{
-      form: FormGroup,
+      form: UntypedFormGroup,
       compressorId: string,
       controlType: number,
       compressorType: number,
@@ -20,7 +20,7 @@ export class AdjustCascadingSetPointsService {
       maxFullFlowDischargePressure: number
     }> = new Array();
     setPointData.forEach(dataPoint => {
-      let form: FormGroup = this.getForm(dataPoint);
+      let form: UntypedFormGroup = this.getForm(dataPoint);
       formData.push({
         form: form,
         compressorId: dataPoint.compressorId,
@@ -33,9 +33,9 @@ export class AdjustCascadingSetPointsService {
     return formData;
   }
 
-  getForm(dataPoint: CascadingSetPointData): FormGroup {
+  getForm(dataPoint: CascadingSetPointData): UntypedFormGroup {
     let fullFlowValidators: Array<ValidatorFn> = this.getMaxFullFlowValidators(dataPoint);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       fullLoadDischargePressure: [dataPoint.fullLoadDischargePressure, [Validators.required, Validators.min(0)]],
       maxFullFlowDischargePressure: [dataPoint.maxFullFlowDischargePressure, fullFlowValidators]
     });
@@ -75,8 +75,8 @@ export class AdjustCascadingSetPointsService {
     return setPointData;
   }
 
-  getImplementationCostForm(adjustCascadingSetPoints: AdjustCascadingSetPoints): FormGroup{
-    let form: FormGroup = this.formBuilder.group({
+  getImplementationCostForm(adjustCascadingSetPoints: AdjustCascadingSetPoints): UntypedFormGroup{
+    let form: UntypedFormGroup = this.formBuilder.group({
       implementationCost: [adjustCascadingSetPoints.implementationCost, [Validators.min(0)]],      
     });
     if(form.controls.implementationCost.value){
@@ -85,7 +85,7 @@ export class AdjustCascadingSetPointsService {
     return form;
   }
 
-  updateObjImplmentationCost(form: FormGroup, adjustCascadingSetPoints: AdjustCascadingSetPoints): AdjustCascadingSetPoints{
+  updateObjImplmentationCost(form: UntypedFormGroup, adjustCascadingSetPoints: AdjustCascadingSetPoints): AdjustCascadingSetPoints{
     adjustCascadingSetPoints.implementationCost = form.controls.implementationCost.value;
     return adjustCascadingSetPoints;
   }
@@ -93,7 +93,7 @@ export class AdjustCascadingSetPointsService {
 
 
 export interface CompressorForm {
-  form: FormGroup,
+  form: UntypedFormGroup,
   compressorId: string,
   controlType: number,
   compressorType: number,

@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { OperatingHours } from '../models/operations';
 import { OperatingHoursModalService } from './operating-hours-modal.service';
-import { FormGroup, AbstractControl } from '@angular/forms';
+import { UntypedFormGroup, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-operating-hours-modal',
@@ -31,7 +31,7 @@ export class OperatingHoursModalComponent implements OnInit {
   showMinutesSeconds: boolean;
 
   showModal: string = 'hide';
-  operatingHoursForm: FormGroup;
+  operatingHoursForm: UntypedFormGroup;
   constructor(private operatingHoursModalService: OperatingHoursModalService) { }
 
   ngOnInit() {

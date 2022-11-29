@@ -1,0 +1,59 @@
+<div class="d-flex flex-column h-100 w-100">
+    <nav class="hide-print hidden" routerLinkActive="show" [routerLinkActiveOptions]="{exact:false}">
+        <div class="d-flex tabs subtabs progress-tabs flex-wrap log-tool">
+            <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                <a [routerLink]="['/log-tool/data-setup/import-data']">
+                    <span class="step-number">1</span> Import Data</a>
+            </div>
+
+            <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                <a [routerLink]="['/log-tool/data-setup/select-header-data']" 
+                [ngClass]="{'disabled': !explorerData.isStepFileUploadComplete}"
+                routerLinkActive="active">
+                    <span class="step-number">2</span>Select Header Row</a>
+            </div>
+
+            <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                <a [routerLink]="['/log-tool/data-setup/refine-data']" 
+                [ngClass]="{'disabled': !explorerData.isStepHeaderRowComplete}"
+                routerLinkActive="active">
+                    <span class="step-number">3</span>Refine Data</a>
+            </div>
+
+            <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                <a [routerLink]="['/log-tool/data-setup/map-time-data']"
+                [ngClass]="{'disabled': !explorerData.refineDataStepStatus.isComplete}"
+                 routerLinkActive="active">
+                    <span class="step-number">4</span>Map Date and Time</a>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="d-flex w-100 h-100 tab-content">
+        <div class="scroll-item modification w-100" [ngClass]="{'modal-open': isModalOpen == true}">
+            <div class="spinner-overlay align-items-center vw-100 text-center" *ngIf="loadingSpinner && loadingSpinner.show == true">
+                <div class="spinner mt-5">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+                <span class="importing-text">{{loadingSpinner.msg}}</span>
+            </div>
+            <router-outlet ></router-outlet>
+        </div>
+    </div>
+
+    <div #footer id="logToolFooter" class="footer hide-print">
+        <div class="pull-left">
+            <button class="btn btn-default" *ngIf="dataSetupTab === 'import-data'" (click)="resetSetupData()">Reset Data</button>
+            <button class="btn btn-default" *ngIf="dataSetupTab !== 'import-data'" (click)="back()">Back</button>
+        </div>
+        <div class="pull-right">
+            <button class="btn btn-primary" (click)="continue()" [disabled]="disableNext">
+                <span *ngIf="dataSetupTab != 'map-time-data' || (dataSetupTab == 'map-time-data' && !this.explorerData.isStepMapTimeDataComplete)">Next</span>
+                <span *ngIf="dataSetupTab == 'map-time-data' && this.explorerData.isStepMapTimeDataComplete">Finish</span>
+            </button>
+        </div>
+    </div>
+</div>

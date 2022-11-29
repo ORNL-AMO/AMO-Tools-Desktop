@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { CompressedAirDayType } from '../../shared/models/compressed-air-assessment';
 
 @Injectable()
 export class DayTypeService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getDayTypeFormArray(inputList: Array<CompressedAirDayType>): Array<FormGroup> {
-    let formGroupList: Array<FormGroup> = inputList.map(dayType => {
+  getDayTypeFormArray(inputList: Array<CompressedAirDayType>): Array<UntypedFormGroup> {
+    let formGroupList: Array<UntypedFormGroup> = inputList.map(dayType => {
       return this.getDayTypeForm(dayType);
     });
     return formGroupList;
   }
 
-  getDayTypeForm(dayType: CompressedAirDayType): FormGroup{
+  getDayTypeForm(dayType: CompressedAirDayType): UntypedFormGroup{
     return this.formBuilder.group({
       dayTypeId: [dayType.dayTypeId],
       name: [dayType.name, [Validators.required]],
@@ -24,7 +24,7 @@ export class DayTypeService {
   }
 
 
-  getDayTypesFromForm(dayTypesFormArray: Array<FormGroup>): Array<CompressedAirDayType> {
+  getDayTypesFromForm(dayTypesFormArray: Array<UntypedFormGroup>): Array<CompressedAirDayType> {
     let dayTypes: Array<CompressedAirDayType> = new Array();
     dayTypesFormArray.forEach(form => {
       dayTypes.push({

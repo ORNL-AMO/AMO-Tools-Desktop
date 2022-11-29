@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { Settings } from '../../../../shared/models/settings';
@@ -23,7 +23,7 @@ export class WaterHeatingFormComponent implements OnInit {
   onResize(event) {
     this.setOpHoursModalWidth();
   }
-  form: FormGroup;
+  form: UntypedFormGroup;
   
   resetDataSub: Subscription;
   generateExampleSub: Subscription;

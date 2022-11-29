@@ -17,3 +17,14 @@
 .hide{
     display: none !important;
 }
+
+@media screen and (max-width: 1024px) {
+    .chest-column {
+        width: 100%;
+    }
+    
+    .result-column {        
+        width: 100%;
+    }
+
+}

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { OtherData } from '../../../motor-inventory';
 
 @Injectable()
 export class OtherDataService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromOtherData(otherData: OtherData): FormGroup {
+  getFormFromOtherData(otherData: OtherData): UntypedFormGroup {
     return this.formBuilder.group({
       driveType: [otherData.driveType],
       isVFD: [otherData.isVFD],
@@ -16,7 +16,7 @@ export class OtherDataService {
     });
   }
 
-  updateOtherDataFromForm(form: FormGroup, otherData: OtherData): OtherData {
+  updateOtherDataFromForm(form: UntypedFormGroup, otherData: OtherData): OtherData {
     otherData.driveType = form.controls.driveType.value;
     otherData.isVFD = form.controls.isVFD.value;
     otherData.hasLoggerData = form.controls.hasLoggerData.value;

@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { PsatInputs } from '../../shared/models/psat';
 
 @Injectable()
 export class MotorService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromObj(psatInput: PsatInputs): FormGroup {
+  getFormFromObj(psatInput: PsatInputs): UntypedFormGroup {
     let efficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(psatInput.efficiency_class);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       frequency: [psatInput.line_frequency, Validators.required],
       horsePower: [psatInput.motor_rated_power, Validators.required],
       motorRPM: [psatInput.motor_rated_speed, Validators.required],
@@ -35,7 +35,7 @@ export class MotorService {
   }
 
 
-  getInputsFromFrom(form: FormGroup, psatInputs: PsatInputs): PsatInputs {
+  getInputsFromFrom(form: UntypedFormGroup, psatInputs: PsatInputs): PsatInputs {
     psatInputs.line_frequency = form.controls.frequency.value;
     psatInputs.motor_rated_power = form.controls.horsePower.value;
     psatInputs.motor_rated_speed = form.controls.motorRPM.value;
@@ -47,7 +47,7 @@ export class MotorService {
   }
 
 
-  disableFLA(form: FormGroup): boolean {
+  disableFLA(form: UntypedFormGroup): boolean {
     if (
       form.controls.frequency.valid &&
       form.controls.horsePower.valid &&
@@ -70,7 +70,7 @@ export class MotorService {
     }
   }
 
-  updateFormEfficiencyValidators(form: FormGroup): FormGroup {
+  updateFormEfficiencyValidators(form: UntypedFormGroup): UntypedFormGroup {
     let tmpEfficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(form.controls.efficiencyClass.value);
     form.controls.efficiency.setValidators(tmpEfficiencyValidators);
     form.controls.efficiency.reset(form.controls.efficiency.value);

@@ -49,7 +49,8 @@ export class LogToolService {
     this.individualDataFromCsv.push({ csvImportData: JSON.parse(JSON.stringify(data)), csvName: csvName, fields: fields, hasDateField: false });
   }
 
-  setFields(individualDataFromCsv: Array<IndividualDataFromCsv>) {
+  setAllAvailableFields(individualDataFromCsv: Array<IndividualDataFromCsv>) {
+    // All fields regardless of marked for use
     this.fields = _.flatMap(individualDataFromCsv, csvDataItem => { return csvDataItem.fields });
   }
 }

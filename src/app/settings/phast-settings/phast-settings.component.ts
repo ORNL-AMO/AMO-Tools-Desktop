@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-phast-settings',
@@ -9,7 +9,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class PhastSettingsComponent implements OnInit {
   @Input()
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
   @Output('startSavePolling')
   startSavePolling = new EventEmitter<boolean>();
   @Input()

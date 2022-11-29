@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { SSMT, GeneralSteamOperations } from '../../shared/models/steam/ssmt';
 import { OperatingHours, OperatingCosts } from '../../shared/models/operations';
 import { Settings } from '../../shared/models/settings';
@@ -10,15 +10,15 @@ import { BoilerWarnings } from '../boiler/boiler.service';
 @Injectable()
 export class OperationsService {
 
-  constructor(private formBuilder: FormBuilder, private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
-  getForm(ssmt: SSMT, settings: Settings): FormGroup {
+  getForm(ssmt: SSMT, settings: Settings): UntypedFormGroup {
     let makeupWaterTempMin: number = this.convertUnitsService.value(40).from('F').to(settings.steamTemperatureMeasurement);
     let makeupWaterTempMax: number = this.convertUnitsService.value(160).from('F').to(settings.steamTemperatureMeasurement);
     makeupWaterTempMin = this.convertUnitsService.roundVal(makeupWaterTempMin, 1);
     makeupWaterTempMax = this.convertUnitsService.roundVal(makeupWaterTempMax, 1);
 
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       sitePowerImport: [ssmt.generalSteamOperations.sitePowerImport, [Validators.required]],
       makeUpWaterTemperature: [ssmt.generalSteamOperations.makeUpWaterTemperature, [Validators.required, Validators.min(makeupWaterTempMin)]],
       fuelCost: [ssmt.operatingCosts.fuelCost, [Validators.required, Validators.min(.00000001)]],
@@ -33,7 +33,7 @@ export class OperationsService {
     return form;
   }
 
-  getOperationsDataFromForm(form: FormGroup): { operatingHours: OperatingHours, operatingCosts: OperatingCosts, generalSteamOperations: GeneralSteamOperations } {
+  getOperationsDataFromForm(form: UntypedFormGroup): { operatingHours: OperatingHours, operatingCosts: OperatingCosts, generalSteamOperations: GeneralSteamOperations } {
     let operatingHours: OperatingHours = {
       hoursPerYear: form.controls.hoursPerYear.value
     }
@@ -56,13 +56,13 @@ export class OperationsService {
     }
   }
 
-  checkOperationsWarnings(operationsForm: FormGroup, ssmt: SSMT, settings: Settings): BoilerWarnings {
+  checkOperationsWarnings(operationsForm: UntypedFormGroup, ssmt: SSMT, settings: Settings): BoilerWarnings {
     return {
       makeUpWaterTemperature: this.checkMakeupWaterTemperatureWarnings(operationsForm, ssmt, settings)
     };
   }
 
-  checkMakeupWaterTemperatureWarnings(formGroup: FormGroup, ssmt: SSMT, settings: Settings) {
+  checkMakeupWaterTemperatureWarnings(formGroup: UntypedFormGroup, ssmt: SSMT, settings: Settings) {
     let warning = null;
     if (ssmt.boilerInput && ssmt.boilerInput.preheatMakeupWater == true) {
       let pressure: number;

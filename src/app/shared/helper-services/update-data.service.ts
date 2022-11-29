@@ -325,38 +325,6 @@ export class UpdateDataService {
         return phast;
     }
 
-    checkSettingsVersionDifferent(settings: Settings): boolean {
-        if (settings.appVersion !== packageJson.version) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    checkSettings(settings: Settings): Settings {
-        if (this.checkSettingsVersionDifferent(settings) === false) {
-            return settings;
-        } else {
-            return this.updateSettings(settings);
-        }
-    }
-
-    updateSettings(settings: Settings): Settings {
-        settings = this.settingsService.setEnergyResultUnitSetting(settings);
-        settings = this.settingsService.setTemperatureUnit(settings);
-        if (!settings.fuelCost) {
-            settings.fuelCost = 3.99;
-        }
-        if (!settings.steamCost) {
-            settings.steamCost = 4.69;
-        }
-        if (!settings.electricityCost) {
-            settings.electricityCost = .066;
-        }
-        settings.appVersion = packageJson.version;
-        return settings;
-    }
-
     updateSSMT(assessment: Assessment): Assessment {
         assessment.ssmt = this.updateHeaders(assessment.ssmt);
         if (assessment.ssmt.modifications) {

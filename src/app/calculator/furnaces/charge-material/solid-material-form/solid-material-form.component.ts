@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
@@ -30,7 +30,7 @@ export class SolidMaterialFormComponent implements OnInit {
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
 
-  chargeMaterialForm: FormGroup;
+  chargeMaterialForm: UntypedFormGroup;
   warnings: SolidMaterialWarnings;
   materialTypes: Array<SolidLoadChargeMaterial>;
   showModal: boolean;

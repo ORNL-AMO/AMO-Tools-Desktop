@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { OperationDataOptions, MotorItem, MotorPropertyDisplayOptions } from '../../../motor-inventory';
 import { MotorCatalogService } from '../motor-catalog.service';
@@ -28,7 +28,7 @@ export class OperationsDataComponent implements OnInit {
   @ViewChild('loadFactorModal', { static: false }) public loadFactorModal: ModalDirective;
 
 
-  motorForm: FormGroup;
+  motorForm: UntypedFormGroup;
   selectedMotorItemSub: Subscription;
   displayOptions: OperationDataOptions;
   displayForm: boolean = true;

@@ -4,7 +4,7 @@ import { Settings } from '../../../../../shared/models/settings';
 import { Quantity } from '../../../../../shared/models/steam/steam-inputs';
 import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
 import { SsmtService } from '../../../../ssmt.service';
-import { FormGroup, ValidatorFn } from '@angular/forms';
+import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { TurbineService } from '../../../../turbine/turbine.service';
 
 @Component({
@@ -20,9 +20,9 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
   @Input()
-  baselineForm: FormGroup;
+  baselineForm: UntypedFormGroup;
   @Input()
-  modificationForm: FormGroup;
+  modificationForm: UntypedFormGroup;
   @Output('emitShowTurbine')
   emitShowTurbine = new EventEmitter<boolean>();
   @Input()

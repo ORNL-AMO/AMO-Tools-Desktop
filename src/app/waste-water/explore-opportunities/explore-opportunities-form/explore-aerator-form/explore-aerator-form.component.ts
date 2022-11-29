@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { AeratorPerformanceData, WasteWater, WasteWaterData, WasteWaterValid } from '../../../../shared/models/waste-water';
@@ -14,8 +14,8 @@ import { WasteWaterService } from '../../../waste-water.service';
 })
 export class ExploreAeratorFormComponent implements OnInit {
 
-  baselineForm: FormGroup;
-  modificationForm: FormGroup;
+  baselineForm: UntypedFormGroup;
+  modificationForm: UntypedFormGroup;
   modificationData: WasteWaterData;
   baselineData: WasteWaterData;
   selectedModificationIdSub: Subscription;

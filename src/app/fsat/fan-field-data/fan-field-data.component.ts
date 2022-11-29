@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -56,7 +56,7 @@ export class FanFieldDataComponent implements OnInit {
   ];
 
   warnings: FanFieldDataWarnings;
-  fieldDataForm: FormGroup;
+  fieldDataForm: UntypedFormGroup;
   pressureCalcType: string;
   pressureModalSub: Subscription;
   modalFsatCopy: FSAT;

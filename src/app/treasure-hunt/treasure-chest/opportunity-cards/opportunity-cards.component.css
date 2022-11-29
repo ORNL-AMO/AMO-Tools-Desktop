@@ -2,15 +2,35 @@
   padding: .25rem;
   padding-bottom: 0px;
   font-size: small;
+  border-color: rgba(0, 0, 0, 0.25);
 }
 
 .col-item-br{
   border-right: 1px solid rgba(0, 0, 0, 0.125);
 }
 
-.opp-sheet-col .fa.fa-edit{
-  text-align: center;
-  font-size: 35px;
+.fa.fa-edit{
+  text-align: right;
+  font-size: 25px;
+  color: #007BFF;
+  margin: auto;
+}
+.fa.fa-trash{
+  text-align: right;
+  font-size: 25px;
+  color: #DC3545;
+  margin: auto;
+}
+.fa.fa-copy{
+  text-align: right;
+  font-size: 25px;
+  color: #007BFF;
+  margin: auto;
+}
+.fa.fa-chevron-up{
+  text-align: right;
+  font-size: 15px;
+  color: #2E4053;
 }
 
 .opportunity-name a, .opportunity-name .fa{
@@ -21,6 +41,10 @@ a:not([href]):not([tabindex]):hover {
   color: blue;
   text-decoration: underline;
   cursor: pointer;
+}
+
+a.card-name-link {
+  font-size: medium;
 }
 
 .card.not-selected, .card.not-selected .card-header{
@@ -48,6 +72,10 @@ a:not([href]):not([tabindex]):hover {
   background-color: #efefef;
 } */
 .calc-icon{
+  width: 45px;
+}
+
+.edit-sheet-icon {
   width: 35px;
 }
 
@@ -63,7 +91,7 @@ a:not([href]):not([tabindex]):hover {
 
 .modal-dialog{
   top: 0px;
-  min-width: 750px;
+  min-width: 200px;
 }
   
 
@@ -97,8 +125,8 @@ tr.active{
 
 .steam-calc-icon, .ca-calc-icon, .ph-calc-icon, .lighting-calc-icon, .motor-calc-icon, .process-cooling-calc-icon {
   border-radius: 50%;
-  height: 35px;
-  width: 35px;
+  height: 45px;
+  width: 45px;
   display: flex;
 }
 
@@ -123,14 +151,33 @@ tr.active{
 }
 
 .process-cooling-calc-icon {
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #ADC8E2);
+  background: linear-gradient(to bottom right, #e4dbdb57, #ADC8E2);
 }
 
 .circle-icon-img{
   height: auto;
-  width: 20px;
+  width: 30px;
   margin-top: 7px;
   margin-bottom: 6px;
   margin-left: 7px;
   margin-right: 7px;
+}
+@media screen and (max-width: 1024px) {
+  .col-item-br{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    border-right: none;
+  }
+  .card.treasure-hunt-card{
+    padding: .25rem;
+    padding-bottom: 0px;
+    font-size: small;
+    border-color: rgba(0, 0, 0, 0.5);
+  }
+  /* a.card-name-link {
+    font-size: medium;
+  } */
+  .col-item-br.checkbox-col{
+    border-right: 1px solid rgba(0, 0, 0, 0.125) !important;
+    border-bottom: none !important;
+  }
 }

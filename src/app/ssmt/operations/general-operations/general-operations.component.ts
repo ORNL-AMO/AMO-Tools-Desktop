@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { Settings } from '../../../shared/models/settings';
 import { CompareService } from '../../compare.service';
 import { SsmtService } from '../../ssmt.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SSMT } from '../../../shared/models/steam/ssmt';
 import { OperatingHours } from '../../../shared/models/operations';
 import { OperationsService } from '../operations.service';
@@ -15,7 +15,7 @@ import { BoilerWarnings } from '../../boiler/boiler.service';
 })
 export class GeneralOperationsComponent implements OnInit {
   @Input()
-  form: FormGroup;
+  form: UntypedFormGroup;
   @Input()
   settings: Settings;
   @Output('emitSave')

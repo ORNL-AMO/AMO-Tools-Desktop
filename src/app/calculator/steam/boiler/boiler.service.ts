@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BoilerInput } from '../../../shared/models/steam/steam-inputs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
@@ -11,11 +11,11 @@ export class BoilerService {
 
   boilerInput: BoilerInput;
   modalOpen: BehaviorSubject<boolean>;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { 
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { 
     this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
-  initForm(settings: Settings): FormGroup {
+  initForm(settings: Settings): UntypedFormGroup {
     let tmpDeaeratorPressure = 2;
     let tmpSteamPressure = 462.1;
     let tmpQuantityValue = 740.6;
@@ -31,7 +31,7 @@ export class BoilerService {
       tmpSteamMassFlow = Math.round(this.convertUnitsService.value(tmpSteamMassFlow).from('klb').to(settings.steamMassFlowMeasurement) * 100) / 100;
     }
     let ranges: BoilerRanges = this.getRangeValues(settings, 1);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       deaeratorPressure: [tmpDeaeratorPressure, [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
       combustionEfficiency: [70.6, [Validators.required, Validators.min(ranges.combustionEfficiencyMin), Validators.max(ranges.combustionEfficiencyMax)]],
       blowdownRate: [1.7, [Validators.required, Validators.min(ranges.blowdownRateMin), Validators.max(ranges.blowdownRateMax)]],
@@ -43,9 +43,9 @@ export class BoilerService {
     return form;
   }
 
-  resetForm(settings: Settings): FormGroup {
+  resetForm(settings: Settings): UntypedFormGroup {
     let ranges: BoilerRanges = this.getRangeValues(settings, 1);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       deaeratorPressure: [0, [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
       combustionEfficiency: [0, [Validators.required, Validators.min(ranges.combustionEfficiencyMin), Validators.max(ranges.combustionEfficiencyMax)]],
       blowdownRate: [0, [Validators.required, Validators.min(ranges.blowdownRateMin), Validators.max(ranges.blowdownRateMax)]],
@@ -57,9 +57,9 @@ export class BoilerService {
     return form;
   }
 
-  getFormFromObj(inputs: BoilerInput, settings: Settings): FormGroup {
+  getFormFromObj(inputs: BoilerInput, settings: Settings): UntypedFormGroup {
     let ranges: BoilerRanges = this.getRangeValues(settings, inputs.thermodynamicQuantity);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       deaeratorPressure: [inputs.deaeratorPressure, [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
       combustionEfficiency: [inputs.combustionEfficiency, [Validators.required, Validators.min(ranges.combustionEfficiencyMin), Validators.max(ranges.combustionEfficiencyMax)]],
       blowdownRate: [inputs.blowdownRate, [Validators.required, Validators.min(ranges.blowdownRateMin), Validators.max(ranges.blowdownRateMax)]],
@@ -71,7 +71,7 @@ export class BoilerService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): BoilerInput {
+  getObjFromForm(form: UntypedFormGroup): BoilerInput {
     let input: BoilerInput = {
       deaeratorPressure: form.controls.deaeratorPressure.value,
       combustionEfficiency: form.controls.combustionEfficiency.value,

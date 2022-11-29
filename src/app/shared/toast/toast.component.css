@@ -31,7 +31,8 @@
 
 
   .explore-opps.card{
-    width: 400px;
+    min-width: 150px;
+    max-width: 400px;
     animation-name: explore-opps-toast;
     animation-duration: 1s;
     animation-iteration-count: infinite;

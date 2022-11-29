@@ -3,7 +3,7 @@ import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { FilterDashboardBy, DirectoryItem } from '../../shared/models/directory-dashboard';
 import * as _ from 'lodash';
 import { Directory } from '../../shared/models/directory';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { Settings } from '../../shared/models/settings';
@@ -100,7 +100,7 @@ export class DirectoryDashboardService {
     return directoryItems;
   }
 
-  async addDirectoryAndSettings(form: FormGroup): Promise<number> {
+  async addDirectoryAndSettings(form: UntypedFormGroup): Promise<number> {
     let newDirectory: Directory = {
       name: form.controls.folderName.value,
       parentDirectoryId: form.controls.directoryId.value,

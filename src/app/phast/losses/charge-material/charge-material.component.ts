@@ -4,7 +4,7 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { ChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { LiquidMaterialFormService } from '../../../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
 import { GasMaterialFormService } from '../../../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 import { SolidMaterialFormService } from '../../../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
@@ -302,9 +302,9 @@ export class ChargeMaterialComponent implements OnInit {
 
 export interface ChargeMaterialObj {
   chargeMaterialType: string;
-  solidForm: FormGroup;
-  liquidForm: FormGroup;
-  gasForm: FormGroup;
+  solidForm: UntypedFormGroup;
+  liquidForm: UntypedFormGroup;
+  gasForm: UntypedFormGroup;
   heatRequired: number;
   netHeatLoss: number;
   endoExoHeat: number;

@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Input, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { DataPoint, SimpleChart, TraceCoordinates, TraceData } from '../../../../shared/models/plotting';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 
 import { MotorPerformanceChartService, MotorPoint } from '../motor-performance-chart.service';
@@ -15,7 +15,7 @@ import { PlotlyService } from 'angular-plotly.js';
 })
 export class MotorPerformanceChartComponent implements OnInit {
   @Input()
-  performanceForm: FormGroup;
+  performanceForm: UntypedFormGroup;
   @Input()
   toggleCalculate: boolean;
   @Input()

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AirLeakSurveyInput, AirLeakSurveyData } from '../../../../../shared/models/standalone';
 import { AirLeakService } from '../../air-leak.service';
@@ -18,7 +18,7 @@ export class EstimateMethodFormComponent implements OnInit {
   currentLeakIndexSub: Subscription;
   currentLeakIndex: number;
 
-  estimateMethodForm: FormGroup;
+  estimateMethodForm: UntypedFormGroup;
 
   constructor(private airLeakService: AirLeakService,
     private airLeakFormService: AirLeakFormService) { }

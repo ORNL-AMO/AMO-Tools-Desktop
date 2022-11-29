@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
@@ -35,7 +35,7 @@ export class ChargeMaterialComponent implements OnInit {
   
   containerHeight: number;
   isModalOpen: boolean;
-  lossNameForm: FormGroup;
+  lossNameForm: UntypedFormGroup;
   
   baselineData: Array<ChargeMaterial>;
   modificationData: Array<ChargeMaterial>;

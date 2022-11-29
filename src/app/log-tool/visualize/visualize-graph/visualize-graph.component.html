@@ -1,3 +1,31 @@
-<div class="p-2">
-    <div #visualizeChart id="plotlyDiv"></div>
+<div class="m-0 p-2" #graphContainer>
+    <ng-container *ngIf="selectedGraphObj">  
+    <div class="data-explorer-visualizer graph-card m-0 pt-2 pb-0">
+        <div *ngIf="selectedGraphObj.graphInteractivity.hasLargeDataset" 
+        class="justify-content-center pt-0 pb-1 px-3 btn-group btn-group-sm align-self-center">
+            <ng-container *ngFor="let option of timeSeriesSegments; let i = index;">
+                <button type="button" id="timeSeriesSegments" class="btn btn-secondary btn-sm toggle-btn py-1 px-3"
+                    (click)="setSelectedTimeSeriesSegment(option)"
+                    [ngClass]="{'active':  selectedTimeSeriesSegment && selectedTimeSeriesSegment.segmentText === option.segmentText}">
+                    {{option.segmentText}}</button>
+            </ng-container>
+            <div>
+                <span class="ml-3 pull-right">
+                    <span class="tooltip-icon fa fa-question-circle" (mouseenter)="displayTooltipHover()" 
+                    (mouseleave)="hideTooltipHover()" (click)="toggleClickTooltip()"></span>
+                </span>
+                <span class="detail-tooltip-box" *ngIf="showTooltipHover || showTooltipClick"
+                    (mouseenter)="displayTooltipHover(true)" (mouseleave)="hideTooltipHover()">
+                    <div class="detail-tooltip down"><span class="detail-tooltip-arrow tooltip-arrow-right"></span>
+                        <div class="p-2">
+                            Use the date range filters to increase graph performance
+                            <a class="click-link" (click)="visualizeService.displayTimeSeriesHelp()">Learn more</a>
+                        </div>
+                    </div>
+                </span>
+            </div>
+        </div>
+    </div>
+    </ng-container>
+    <div #visualizeChart id="plotlyDiv"></div>  
 </div>

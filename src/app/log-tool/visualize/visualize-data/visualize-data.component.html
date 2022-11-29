@@ -1,4 +1,4 @@
-<div class="mr-2 ml-2 d-flex flex-wrap data-summary">
+<div class="scroll-container scroll-item" [ngStyle]="{'height.px': containerHeight}">
     <div class="d-flex flex-column p-2 scroll-item">
         <label class="group-label" *ngIf="timeSummaries.length != 0">Time Data</label>
         <table class="table d-flex" *ngIf="timeSummaries.length != 0">

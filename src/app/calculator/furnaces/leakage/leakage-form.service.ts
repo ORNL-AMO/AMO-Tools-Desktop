@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class LeakageFormService {
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder) {
   }
-  initForm(lossNum?: number): FormGroup {
+  initForm(lossNum?: number): UntypedFormGroup {
     let formGroup = this.formBuilder.group({
       draftPressure: ['', Validators.required],
       openingArea: ['', [Validators.required, Validators.min(0)]],
@@ -21,16 +21,16 @@ export class LeakageFormService {
     });
 
     if (!lossNum) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-      formGroup.addControl('hoursPerYear', new FormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
-      formGroup.addControl('energySourceType', new FormControl('Fuel', [Validators.required]));
-      formGroup.addControl('fuelCost', new FormControl(''));
+      formGroup.addControl('availableHeat', new UntypedFormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
+      formGroup.addControl('hoursPerYear', new UntypedFormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
+      formGroup.addControl('energySourceType', new UntypedFormControl('Fuel', [Validators.required]));
+      formGroup.addControl('fuelCost', new UntypedFormControl(''));
     }
 
     return formGroup;
   }
 
-  initFormFromLoss(loss: LeakageLoss, inAssessment: boolean = true): FormGroup {
+  initFormFromLoss(loss: LeakageLoss, inAssessment: boolean = true): UntypedFormGroup {
     let formGroup = this.formBuilder.group({
       draftPressure: [loss.draftPressure, Validators.required],
       openingArea: [loss.openingArea, [Validators.required, Validators.min(0)]],
@@ -43,16 +43,16 @@ export class LeakageFormService {
     });
 
     if (!inAssessment) {
-      formGroup.addControl('availableHeat', new FormControl(loss.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-      formGroup.addControl('hoursPerYear', new FormControl(loss.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
-      formGroup.addControl('energySourceType', new FormControl(loss.energySourceType, [Validators.required]));
-      formGroup.addControl('fuelCost', new FormControl(loss.fuelCost));
+      formGroup.addControl('availableHeat', new UntypedFormControl(loss.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
+      formGroup.addControl('hoursPerYear', new UntypedFormControl(loss.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
+      formGroup.addControl('energySourceType', new UntypedFormControl(loss.energySourceType, [Validators.required]));
+      formGroup.addControl('fuelCost', new UntypedFormControl(loss.fuelCost));
     }
     
     return formGroup;
   }
 
-  initLossFromForm(form: FormGroup): LeakageLoss {
+  initLossFromForm(form: UntypedFormGroup): LeakageLoss {
     let tmpLoss: LeakageLoss = {
       draftPressure: form.controls.draftPressure.value,
       openingArea: form.controls.openingArea.value,

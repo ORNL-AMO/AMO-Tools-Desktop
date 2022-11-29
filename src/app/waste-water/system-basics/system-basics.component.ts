@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
  
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SettingsService } from '../../settings/settings.service';
@@ -26,9 +26,9 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   @Output('openUpdateUnitsModal') 
   openUpdateUnitsModal = new EventEmitter<Settings>();
   
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
   oldSettings: Settings;
-  systemBasicsForm: FormGroup;
+  systemBasicsForm: UntypedFormGroup;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
   constructor(private settingsService: SettingsService, private systemBasicsService: SystemBasicsService,
@@ -107,7 +107,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   }
 
   getExistingDataSettings(wasteWater: WasteWater): Settings {
-    let existingSettingsForm: FormGroup = _.cloneDeep(this.settingsForm);
+    let existingSettingsForm: UntypedFormGroup = _.cloneDeep(this.settingsForm);
     existingSettingsForm.patchValue({unitsOfMeasure: wasteWater.existingDataUnits});
     let existingSettings = this.settingsService.setUnits(existingSettingsForm);
     return this.settingsService.getSettingsFromForm(existingSettings);

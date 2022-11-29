@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ChillerStagingInput } from '../../../shared/models/chillers';
 
 @Injectable()
 export class ChillerStagingFormService {
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: UntypedFormBuilder) {}
 
-  getChillerStagingForm(inputObj: ChillerStagingInput): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getChillerStagingForm(inputObj: ChillerStagingInput): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       chillerType: [inputObj.chillerType, ],
       condenserCoolingType: [inputObj.condenserCoolingType, Validators.required],
       motorDriveType: [inputObj.motorDriveType, Validators.required],
@@ -26,14 +26,14 @@ export class ChillerStagingFormService {
     });
 
     form = this.setWaterTempValidators(form);
-    let baselineLoadList: FormArray = this.getLoadFormArray(form.controls.baselineLoadList);
-    let modLoadList: FormArray = this.getLoadFormArray(form.controls.modLoadList);
+    let baselineLoadList: UntypedFormArray = this.getLoadFormArray(form.controls.baselineLoadList);
+    let modLoadList: UntypedFormArray = this.getLoadFormArray(form.controls.modLoadList);
     this.setLoadValidators(baselineLoadList);
     this.setLoadValidators(modLoadList);
     return form;
   }
 
-  setWaterTempValidators(formGroup: FormGroup) {
+  setWaterTempValidators(formGroup: UntypedFormGroup) {
     let waterSupplyTemp = formGroup.controls.waterSupplyTemp.value;
     let waterEnteringTemp = formGroup.controls.waterEnteringTemp.value;
     formGroup.controls.waterSupplyTemp.setValidators([Validators.required, Validators.max(waterEnteringTemp)]);
@@ -47,11 +47,11 @@ export class ChillerStagingFormService {
     return formGroup;
 }
 
-  getLoadFormArray(loadListControl: AbstractControl): FormArray {
-    return loadListControl as FormArray;
+  getLoadFormArray(loadListControl: AbstractControl): UntypedFormArray {
+    return loadListControl as UntypedFormArray;
   }
 
-  setLoadValidators(loadList: FormArray) {
+  setLoadValidators(loadList: UntypedFormArray) {
     loadList.controls.forEach(control => {
       control.setValidators([Validators.required, Validators.min(0)]);
       control.updateValueAndValidity();
@@ -59,24 +59,24 @@ export class ChillerStagingFormService {
     });
   }
 
-  addChillerInputs(form: FormGroup): FormGroup {
-    let baselineLoadList: FormArray = this.getLoadFormArray(form.controls.baselineLoadList);
-    let modLoadList: FormArray = this.getLoadFormArray(form.controls.modLoadList);
-    baselineLoadList.push(new FormControl(0, [Validators.required, Validators.min(0)]));
-    modLoadList.push(new FormControl(0, [Validators.required, Validators.min(0)]));
+  addChillerInputs(form: UntypedFormGroup): UntypedFormGroup {
+    let baselineLoadList: UntypedFormArray = this.getLoadFormArray(form.controls.baselineLoadList);
+    let modLoadList: UntypedFormArray = this.getLoadFormArray(form.controls.modLoadList);
+    baselineLoadList.push(new UntypedFormControl(0, [Validators.required, Validators.min(0)]));
+    modLoadList.push(new UntypedFormControl(0, [Validators.required, Validators.min(0)]));
     return form;
   }
 
-  removeChillerInputs(form: FormGroup, index: number): FormGroup {
-    let baselineLoadList: FormArray = this.getLoadFormArray(form.controls.baselineLoadList);
-    let modLoadList: FormArray = this.getLoadFormArray(form.controls.modLoadList);
+  removeChillerInputs(form: UntypedFormGroup, index: number): UntypedFormGroup {
+    let baselineLoadList: UntypedFormArray = this.getLoadFormArray(form.controls.baselineLoadList);
+    let modLoadList: UntypedFormArray = this.getLoadFormArray(form.controls.modLoadList);
     baselineLoadList.removeAt(index);
     modLoadList.removeAt(index);
     return form;
   }
 
 
-  getChillerStagingInput(form: FormGroup): ChillerStagingInput {
+  getChillerStagingInput(form: UntypedFormGroup): ChillerStagingInput {
     let obj: ChillerStagingInput = {
       operatingHours: form.controls.operatingHours.value,
       chillerType: form.controls.chillerType.value,

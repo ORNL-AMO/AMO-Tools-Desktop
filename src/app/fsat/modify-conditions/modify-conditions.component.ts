@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { ModifyConditionsService } from './modify-conditions.service';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
@@ -24,14 +24,18 @@ export class ModifyConditionsComponent implements OnInit {
   emitSaveAssessment = new EventEmitter<FSAT>();
   @Input()
   containerHeight: number;
+
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  
   
   modifyConditionsTab: string;
   modifyConditionsTabSub: Subscription;
   baselineSelected: boolean = false;
   modifiedSelected: boolean = true;
   isModalOpen: boolean = false;
-  modalOpenSubscription: Subscription;
-  constructor(private modifyConditionsService: ModifyConditionsService, private fsatService: FsatService) { }
+  modalOpenSubscription: Subscription;  
+  smallScreenTab: string = 'baseline';
+  constructor(private modifyConditionsService: ModifyConditionsService, private fsatService: FsatService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.modifyConditionsTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
@@ -43,7 +47,17 @@ export class ModifyConditionsComponent implements OnInit {
     });
   }
 
-  ngOnChanges() {
+  getContainerHeight() {
+    if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+      this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      this.cd.detectChanges();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight && !changes.containerHeight.firstChange) {
+      this.getContainerHeight();
+    }
   }
 
   ngOnDestroy() {
@@ -126,5 +140,17 @@ export class ModifyConditionsComponent implements OnInit {
   saveModExtra(newFsat: FSAT) {
     this.assessment.fsat.modifications[this.modificationIndex].fsat = newFsat;
     this.saveAssessment();
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+    if (selectedTab === 'baseline') {
+      this.baselineSelected = true;
+      this.modifiedSelected = false;
+    }
+    else if (selectedTab === 'modification') {
+      this.modifiedSelected = true;
+      this.baselineSelected = false;
+    }
   }
 }

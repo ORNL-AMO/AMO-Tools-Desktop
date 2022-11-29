@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { ElectricityReductionService } from '../electricity-reduction.service';
 import { ElectricityReductionResult, ElectricityReductionData } from '../../../../shared/models/standalone';
@@ -46,7 +46,7 @@ export class ElectricityReductionFormComponent implements OnInit {
   idString: string;
   individualResults: ElectricityReductionResult;
   isEditingName: boolean = false;
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   constructor(private electricityReductionService: ElectricityReductionService) { }
 

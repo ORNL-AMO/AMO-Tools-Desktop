@@ -1,5 +1,5 @@
 <div class="d-flex flex-wrap" *ngIf="!printView">
-  <div class="d-flex w-50 flex-column">
+  <div class="d-flex col-12 col-lg-6 flex-column">
     <div class="pl-2 pr-2">
       <select name="selectedBaselineData" class="form-control mx-auto" id="selectedBaselineData"
         [(ngModel)]="selectedBaselineData">
@@ -11,7 +11,7 @@
       </app-plotly-pie-chart>
     </div>
   </div>
-  <div *ngIf="selectedModificationData" class="d-flex w-50 flex-column">
+  <div *ngIf="selectedModificationData" class="d-flex col-12 col-lg-6 flex-column">
     <div class="pl-2 pr-2">
       <select name="selectedModificationData" class="form-control mx-auto" id="selectedModificationData"
         [(ngModel)]="selectedModificationData">

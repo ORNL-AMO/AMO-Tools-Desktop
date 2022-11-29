@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PlaneData, Plane, FanRatedInfo } from '../../../../../shared/models/fans';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 // import { PlaneRanges } from '../../../fsat-203/fsat-203.service';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../../shared/models/settings';
@@ -12,13 +12,13 @@ export class PlaneDataFormService {
   planeStep: BehaviorSubject<string>;
   planeShape: BehaviorSubject<string>;
   staticPressureValue: BehaviorSubject<number>;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) {
     this.planeStep = new BehaviorSubject<string>('plane-info');
     this.planeShape = new BehaviorSubject<string>(undefined);
     this.staticPressureValue = new BehaviorSubject<number>(undefined);
   }
 
-  getPlaneInfoFormFromObj(obj: PlaneData): FormGroup {
+  getPlaneInfoFormFromObj(obj: PlaneData): UntypedFormGroup {
     let form = this.formBuilder.group({
       // variationInBarometricPressure: [obj.variationInBarometricPressure, Validators.required],
       // globalBarometricPressure: [obj.globalBarometricPressure, Validators.required],
@@ -37,7 +37,7 @@ export class PlaneDataFormService {
     return form;
   }
 
-  getPlaneInfoObjFromForm(form: FormGroup, obj: PlaneData): PlaneData {
+  getPlaneInfoObjFromForm(form: UntypedFormGroup, obj: PlaneData): PlaneData {
     // obj.estimate2and5TempFrom1 = form.controls.estimate2and5TempFrom1.value;
     obj.totalPressureLossBtwnPlanes1and4 = form.controls.totalPressureLossBtwnPlanes1and4.value;
     obj.totalPressureLossBtwnPlanes2and5 = form.controls.totalPressureLossBtwnPlanes2and5.value;
@@ -48,8 +48,8 @@ export class PlaneDataFormService {
 
   }
 
-  getTraversePlaneFormFromObj(obj: Plane): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getTraversePlaneFormFromObj(obj: Plane): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       pitotTubeType: [obj.pitotTubeType, Validators.required],
       pitotTubeCoefficient: [obj.pitotTubeCoefficient, [Validators.required, Validators.max(1)]],
       numTraverseHoles: [obj.numTraverseHoles, [Validators.required, Validators.min(1), Validators.max(10)]],
@@ -63,7 +63,7 @@ export class PlaneDataFormService {
     return form;
   }
 
-  getTraversePlaneObjFromForm(form: FormGroup, planeData: Plane): Plane {
+  getTraversePlaneObjFromForm(form: UntypedFormGroup, planeData: Plane): Plane {
     planeData.pitotTubeType = form.controls.pitotTubeType.value;
     planeData.pitotTubeCoefficient = form.controls.pitotTubeCoefficient.value;
     planeData.numTraverseHoles = form.controls.numTraverseHoles.value;
@@ -71,9 +71,9 @@ export class PlaneDataFormService {
     return planeData;
   }
 
-  getPlaneFormFromObj(obj: Plane, settings: Settings, planeNum: string): FormGroup {
+  getPlaneFormFromObj(obj: Plane, settings: Settings, planeNum: string): UntypedFormGroup {
     let ranges: PlaneRanges = this.getPlaneRanges(settings);
-    let form: FormGroup = this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       planeType: [obj.planeType, Validators.required],
       length: [obj.length, [Validators.required, Validators.min(0)]],
       width: [obj.width, [Validators.required, Validators.min(0)]],
@@ -93,7 +93,7 @@ export class PlaneDataFormService {
     return form;
   }
 
-  setPlaneValidators(form: FormGroup, planeNum: string, planeType: string, ranges: PlaneRanges) {
+  setPlaneValidators(form: UntypedFormGroup, planeNum: string, planeType: string, ranges: PlaneRanges) {
     //1, 4
     if (planeNum === '1' || planeNum === '4') {
       form.controls.numInletBoxes.setValidators([Validators.required, Validators.min(1)]);
@@ -177,7 +177,7 @@ export class PlaneDataFormService {
     return ranges;
   }
 
-  getPlaneObjFromForm(form: FormGroup, obj: Plane): Plane {
+  getPlaneObjFromForm(form: UntypedFormGroup, obj: Plane): Plane {
     obj.planeType = form.controls.planeType.value;
     obj.length = form.controls.length.value;
     obj.width = form.controls.width.value;
@@ -195,7 +195,7 @@ export class PlaneDataFormService {
     let isValid: boolean = true;
     if (planeData !== undefined) {
       //i
-      let form: FormGroup = this.getPlaneInfoFormFromObj(planeData);
+      let form: UntypedFormGroup = this.getPlaneInfoFormFromObj(planeData);
       if (form.valid == false) {
         isValid = false;
       }

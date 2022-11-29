@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { HeadToolSuction, HeadTool } from '../../../shared/models/calculators';
@@ -10,7 +10,7 @@ export class HeadToolService {
   headToolInputs: HeadTool;
   headToolSuctionInputs: HeadToolSuction;
   headToolType: string;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
   getExampleHeadToolSuctionForm(settings: Settings) {
     let smallUnit, pressureUnit;
@@ -112,7 +112,7 @@ export class HeadToolService {
     });
   }
 
-  getHeadToolSuctionFormFromObj(headToolSuction: HeadToolSuction): FormGroup {
+  getHeadToolSuctionFormFromObj(headToolSuction: HeadToolSuction): UntypedFormGroup {
     return this.formBuilder.group({
       suctionPipeDiameter: [headToolSuction.suctionPipeDiameter, [Validators.required, Validators.min(0)]],
       suctionTankGasOverPressure: [headToolSuction.suctionTankGasOverPressure, Validators.required],
@@ -127,7 +127,7 @@ export class HeadToolService {
     });
   }
 
-  getHeadToolFromForm(form: FormGroup): HeadTool {
+  getHeadToolFromForm(form: UntypedFormGroup): HeadTool {
     let headTool: HeadTool = {
       specificGravity: form.controls.specificGravity.value,
       flowRate: form.controls.flowRate.value,
@@ -143,7 +143,7 @@ export class HeadToolService {
     return headTool;
   }
 
-  getHeadToolSuctionFromForm(form: FormGroup): HeadToolSuction {
+  getHeadToolSuctionFromForm(form: UntypedFormGroup): HeadToolSuction {
     let headToolSuction: HeadToolSuction = {
       specificGravity: form.controls.specificGravity.value,
       flowRate: form.controls.flowRate.value,

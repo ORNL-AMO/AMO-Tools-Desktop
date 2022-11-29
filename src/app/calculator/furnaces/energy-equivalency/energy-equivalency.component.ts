@@ -7,7 +7,7 @@ import { EnergyEquivalencyService } from './energy-equivalency.service';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-energy-equivalency',
@@ -49,8 +49,8 @@ export class EnergyEquivalencyComponent implements OnInit {
   saving: boolean;
   calculator: Calculator;
   originalCalculator: Calculator;
-  formElectric: FormGroup;
-  formFuel: FormGroup;
+  formElectric: UntypedFormGroup;
+  formFuel: UntypedFormGroup;
   constructor(private phastService: PhastService, private energyEquivalencyService: EnergyEquivalencyService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService) { }
 

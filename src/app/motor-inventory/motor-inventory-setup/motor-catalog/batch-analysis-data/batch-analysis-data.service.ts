@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BatchAnalysisData } from '../../../motor-inventory';
 
 @Injectable()
 export class BatchAnalysisDataService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromBatchAnalysisData(batchAnalysisData: BatchAnalysisData): FormGroup {
+  getFormFromBatchAnalysisData(batchAnalysisData: BatchAnalysisData): UntypedFormGroup {
     return this.formBuilder.group({
       modifiedCost: [batchAnalysisData.modifiedCost, [Validators.min(0)]],
       modifiedPower: [batchAnalysisData.modifiedPower, [Validators.min(0)]],
@@ -18,7 +18,7 @@ export class BatchAnalysisDataService {
     });
   }
 
-  updateBatchAnalysisDataFromForm(form: FormGroup, batchAnalysisData: BatchAnalysisData): BatchAnalysisData {
+  updateBatchAnalysisDataFromForm(form: UntypedFormGroup, batchAnalysisData: BatchAnalysisData): BatchAnalysisData {
     batchAnalysisData.modifiedCost = form.controls.modifiedCost.value
     batchAnalysisData.modifiedPower = form.controls.modifiedPower.value
     batchAnalysisData.modifiedEfficiency = form.controls.modifiedEfficiency.value

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FsatService } from '../fsat.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FSAT, BaseGasDensity, PsychrometricResults } from '../../shared/models/fans';
 import { FsatFluidService, GasDensityValidators } from './fsat-fluid.service';
 import { Settings } from '../../shared/models/settings';
@@ -33,7 +33,7 @@ export class FsatFluidComponent implements OnInit {
   @Input()
   fsat: FSAT;
 
-  gasDensityForm: FormGroup;
+  gasDensityForm: UntypedFormGroup;
 
   methods: Array<{ display: string, value: string }> = [
     { display: 'Relative Humidity %', value: 'relativeHumidity' },

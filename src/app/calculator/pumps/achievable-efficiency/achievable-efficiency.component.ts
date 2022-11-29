@@ -3,7 +3,7 @@ import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { AchievableEfficiencyService } from './achievable-efficiency.service';
 @Component({
@@ -33,7 +33,7 @@ export class AchievableEfficiencyComponent implements OnInit {
   headerHeight: number;
 
   currentField:string;
-  efficiencyForm: FormGroup;
+  efficiencyForm: UntypedFormGroup;
   toggleCalculate: boolean = true;
   toggleResetData: boolean = true;
   toggleExampleData: boolean = true;

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 import { AeratorPerformanceData, WasteWater, WasteWaterData, WasteWaterValid } from '../../shared/models/waste-water';
@@ -24,7 +24,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
   aerationRanges: AerationRanges;
   SOTRDefaults: Array<{ label: string, value: number }>;
   aeratorTypes: Array<{ value: number, display: string }>;
-  form: FormGroup;
+  form: UntypedFormGroup;
   modificationIndex: number;
   selectedModificationIdSub: Subscription;
   aeratorPerformanceDifferent: AeratorPerformanceDifferent;

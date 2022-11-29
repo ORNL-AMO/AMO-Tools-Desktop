@@ -3,7 +3,7 @@ import { SSMT, PressureTurbine, CondensingTurbine } from '../../../../shared/mod
 import { Settings } from '../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { TurbineService } from '../../../turbine/turbine.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-turbine-form',
@@ -20,17 +20,17 @@ export class TurbineFormComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<SSMT>();
 
-  baselineCondensingTurbineForm: FormGroup;
-  modificationCondensingTurbineForm: FormGroup;
+  baselineCondensingTurbineForm: UntypedFormGroup;
+  modificationCondensingTurbineForm: UntypedFormGroup;
   
-  baselineHighToLowTurbineForm: FormGroup;
-  modificationHighToLowTurbineForm: FormGroup;
+  baselineHighToLowTurbineForm: UntypedFormGroup;
+  modificationHighToLowTurbineForm: UntypedFormGroup;
   
-  baselineHighToMediumForm: FormGroup;
-  modificationHighToMediumForm: FormGroup;
+  baselineHighToMediumForm: UntypedFormGroup;
+  modificationHighToMediumForm: UntypedFormGroup;
   
-  baselineMediumToLowForm: FormGroup;
-  modificationMediumToLowForm: FormGroup;
+  baselineMediumToLowForm: UntypedFormGroup;
+  modificationMediumToLowForm: UntypedFormGroup;
   constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private cd: ChangeDetectorRef, private turbineService: TurbineService) { }
   ngOnInit() {
     this.initForm();

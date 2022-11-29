@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, DayTypeEndUse, EndUse, EndUseDayTypeSetup } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
@@ -15,7 +15,7 @@ import { DayTypeSetupService } from './day-type-setup-form/day-type-setup.servic
 })
 export class EndUsesComponent implements OnInit {
   hasEndUses: boolean;
-  form: FormGroup;
+  form: UntypedFormGroup;
   isFormChange: boolean = false;
   selectedEndUseSubscription: Subscription;
   settings: Settings;

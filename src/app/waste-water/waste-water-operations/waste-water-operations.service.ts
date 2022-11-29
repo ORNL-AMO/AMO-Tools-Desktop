@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { WasteWaterOperations } from '../../shared/models/waste-water';
 
 @Injectable()
 export class WasteWaterOperationsService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromObj(obj: WasteWaterOperations): FormGroup{
-    let form: FormGroup = this.formBuilder.group({
+  getFormFromObj(obj: WasteWaterOperations): UntypedFormGroup{
+    let form: UntypedFormGroup = this.formBuilder.group({
       MaxDays: [obj.MaxDays, [Validators.required, Validators.min(0)]],
       TimeIncrement: [obj.TimeIncrement, [Validators.required, Validators.min(0)]],
       operatingMonths: [obj.operatingMonths, [Validators.min(1), Validators.max(12)]],
@@ -17,7 +17,7 @@ export class WasteWaterOperationsService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): WasteWaterOperations{
+  getObjFromForm(form: UntypedFormGroup): WasteWaterOperations{
     return {
       MaxDays: form.controls.MaxDays.value,
       TimeIncrement: form.controls.TimeIncrement.value,

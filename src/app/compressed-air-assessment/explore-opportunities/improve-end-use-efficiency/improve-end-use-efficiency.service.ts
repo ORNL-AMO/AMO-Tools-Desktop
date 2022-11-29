@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CompressedAirDayType, EndUseEfficiencyItem, EndUseEfficiencyReductionData, ProfileSummaryTotal, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
 import { BaselineResults } from '../../compressed-air-assessment-results.service';
 
 @Injectable()
 export class ImproveEndUseEfficiencyService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
 
-  getFormFromObj(endUseEfficiencyItem: EndUseEfficiencyItem, baselineResults: BaselineResults): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getFormFromObj(endUseEfficiencyItem: EndUseEfficiencyItem, baselineResults: BaselineResults): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       name: [endUseEfficiencyItem.name, [Validators.required]],
       implementationCost: [endUseEfficiencyItem.implementationCost, [Validators.min(0)]],
       reductionType: [endUseEfficiencyItem.reductionType],
@@ -28,7 +28,7 @@ export class ImproveEndUseEfficiencyService {
     return form;
   }
 
-  setFormValidators(form: FormGroup, baselineResults: BaselineResults): FormGroup{
+  setFormValidators(form: UntypedFormGroup, baselineResults: BaselineResults): UntypedFormGroup{
     if(form.controls.reductionType.value == 'Fixed'){
       form.controls.airflowReduction.setValidators([Validators.required, Validators.min(0), Validators.max(baselineResults.total.maxAirFlow)])
       form.controls.airflowReduction.updateValueAndValidity();
@@ -47,7 +47,7 @@ export class ImproveEndUseEfficiencyService {
   }
 
 
-  updateObjFromForm(form: FormGroup, endUseEfficiencyItem: EndUseEfficiencyItem): EndUseEfficiencyItem {
+  updateObjFromForm(form: UntypedFormGroup, endUseEfficiencyItem: EndUseEfficiencyItem): EndUseEfficiencyItem {
     endUseEfficiencyItem.name = form.controls.name.value;
     endUseEfficiencyItem.implementationCost = form.controls.implementationCost.value;
     endUseEfficiencyItem.reductionType = form.controls.reductionType.value;
@@ -58,11 +58,11 @@ export class ImproveEndUseEfficiencyService {
     return endUseEfficiencyItem
   }
 
-  getDataForms(endUseEfficiencyItem: EndUseEfficiencyItem, baselineProfileSummaries: Array<{ dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal> }>,): Array<{ dayTypeName: string, dayTypeId: string, form: FormGroup }> {
-    let dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: FormGroup }> = new Array();
+  getDataForms(endUseEfficiencyItem: EndUseEfficiencyItem, baselineProfileSummaries: Array<{ dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal> }>,): Array<{ dayTypeName: string, dayTypeId: string, form: UntypedFormGroup }> {
+    let dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: UntypedFormGroup }> = new Array();
     endUseEfficiencyItem.reductionData.forEach((dataItem: EndUseEfficiencyReductionData, dataRowIndex: number) => {
       let dayTypeSummaryTotal: Array<ProfileSummaryTotal> = baselineProfileSummaries.find(summary => { return summary.dayType.dayTypeId == dataItem.dayTypeId }).profileSummaryTotals;
-      let form: FormGroup = this.formBuilder.group({});
+      let form: UntypedFormGroup = this.formBuilder.group({});
       dataItem.data.forEach((d: { hourInterval: number, applyReduction: boolean, reductionAmount: number }, dataIndex: number) => {
         let name: string = "reductionData_" + dataRowIndex + '_' + d.hourInterval;
         let control: AbstractControl = this.getControlFromData(d, dayTypeSummaryTotal, endUseEfficiencyItem.reductionType);
@@ -85,7 +85,7 @@ export class ImproveEndUseEfficiencyService {
   }
 
 
-  updateDataFromForm(dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: FormGroup }>, endUseEfficiencyItem: EndUseEfficiencyItem, systemProfileSetup: SystemProfileSetup): EndUseEfficiencyItem {
+  updateDataFromForm(dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: UntypedFormGroup }>, endUseEfficiencyItem: EndUseEfficiencyItem, systemProfileSetup: SystemProfileSetup): EndUseEfficiencyItem {
     dataForms.forEach(dataForm => {
       let endUseIndex: number = endUseEfficiencyItem.reductionData.findIndex(data => { return data.dayTypeId == dataForm.dayTypeId });
       let keyIndex: number = 0;

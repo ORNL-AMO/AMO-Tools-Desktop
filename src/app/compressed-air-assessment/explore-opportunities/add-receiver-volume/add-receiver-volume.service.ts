@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AddPrimaryReceiverVolume } from '../../../shared/models/compressed-air-assessment';
 
 @Injectable()
 export class AddReceiverVolumeService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
 
-  getFormFromObj(addPrimaryReceiverVolume: AddPrimaryReceiverVolume): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
+  getFormFromObj(addPrimaryReceiverVolume: AddPrimaryReceiverVolume): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
       increasedVolume: [addPrimaryReceiverVolume.increasedVolume, [Validators.min(0), Validators.required]],
       implementationCost: [addPrimaryReceiverVolume.implementationCost, [Validators.min(0)]],
       order: [addPrimaryReceiverVolume.order]
@@ -22,7 +22,7 @@ export class AddReceiverVolumeService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): AddPrimaryReceiverVolume {
+  getObjFromForm(form: UntypedFormGroup): AddPrimaryReceiverVolume {
     return {
       increasedVolume: form.controls.increasedVolume.value,
       implementationCost: form.controls.implementationCost.value,

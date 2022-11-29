@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@
 import { SSMT } from '../../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SsmtService } from '../../../../ssmt.service';
 import { HeaderService, HeaderWarnings } from '../../../../header/header.service';
 
@@ -21,17 +21,17 @@ export class CondensateHandlingFormComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
   @Input()
-  baselineHighPressureForm: FormGroup;
+  baselineHighPressureForm: UntypedFormGroup;
   @Input()
-  modificationHighPressureForm: FormGroup;
+  modificationHighPressureForm: UntypedFormGroup;
   @Input()
-  baselineLowPressureForm: FormGroup;
+  baselineLowPressureForm: UntypedFormGroup;
   @Input()
-  modificationLowPressureForm: FormGroup;
+  modificationLowPressureForm: UntypedFormGroup;
   @Input()
-  baselineMediumPressureForm: FormGroup;
+  baselineMediumPressureForm: UntypedFormGroup;
   @Input()
-  modificationMediumPressureForm: FormGroup;
+  modificationMediumPressureForm: UntypedFormGroup;
   @Input()
   baselineWarnings: HeaderWarnings;
   @Input()

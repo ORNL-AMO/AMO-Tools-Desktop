@@ -1,0 +1,1 @@
+// (window as any)['__zone_symbol__PASSIVE_EVENTS'] = ['success', 'setTimeout', 'setInterval'];

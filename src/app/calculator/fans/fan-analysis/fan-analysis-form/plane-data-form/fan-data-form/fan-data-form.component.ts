@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Plane } from '../../../../../../shared/models/fans';
 import { Settings } from '../../../../../../shared/models/settings';
 import { PlaneDataFormService } from '../plane-data-form.service';
@@ -23,7 +23,7 @@ export class FanDataFormComponent implements OnInit, OnDestroy {
 
   showInternalDimensionModal = false;
   currentDimension: string;
-  dataForm: FormGroup;
+  dataForm: UntypedFormGroup;
   planeData: Plane;
   resetFormSubscription: Subscription;
   getResultsSubscription: Subscription;

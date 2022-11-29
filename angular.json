@@ -76,7 +76,8 @@
             ],
             "scripts": [
               "node_modules/plotly.js-dist/plotly.js"
-            ]
+            ],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "production": {
@@ -151,7 +152,8 @@
             "assets": [
               "src/assets",
               "src/favicon.ico"
-            ]
+            ],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           }
         },
         "lint": {
@@ -167,7 +169,6 @@
       }
     }
   },
-  "defaultProject": "amo-tools-desktop",
   "schematics": {
     "@schematics/angular:component": {
       "inlineTemplate": false,

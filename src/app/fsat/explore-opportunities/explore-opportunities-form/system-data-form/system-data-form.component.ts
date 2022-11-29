@@ -4,7 +4,7 @@ import { FSAT } from '../../../../shared/models/fans';
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
 import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
 import { FanFieldDataWarnings, FanOperationsWarnings } from '../../../fsat-warning.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
@@ -22,13 +22,13 @@ export class SystemDataFormComponent implements OnInit {
     @Output('emitCalculate')
     emitCalculate = new EventEmitter<boolean>();
     @Input()
-    baselineOperationsForm: FormGroup;
+    baselineOperationsForm: UntypedFormGroup;
     @Input()
-    modificationOperationsForm: FormGroup;
+    modificationOperationsForm: UntypedFormGroup;
     @Input()
-    baselineForm: FormGroup;
+    baselineForm: UntypedFormGroup;
     @Input()
-    modificationForm: FormGroup;
+    modificationForm: UntypedFormGroup;
     @Input()
     modificationWarnings: FanFieldDataWarnings;
     @Input()
