@@ -28,7 +28,6 @@ export class ElectricityReductionFormComponent implements OnInit {
   @Input()
   selected: boolean;
 
-  userSelectedHP: boolean;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -60,7 +59,6 @@ export class ElectricityReductionFormComponent implements OnInit {
       this.idString = 'modification_' + this.index;
     }
     this.form = this.electricityReductionService.getFormFromObj(this.data);
-    this.userSelectedHP = this.data.userSelectedHP
     if (this.selected == false) {
       this.form.disable();
     }
@@ -94,7 +92,7 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   calculate() {
-    let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form, this.userSelectedHP);
+    let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form, this.data.userSelectedHP);
     this.calculateIndividualResult();
     this.emitCalculate.emit(tmpObj);
   }
@@ -104,7 +102,7 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   calculateIndividualResult() {
-    let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form, this.userSelectedHP);
+    let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form, this.data.userSelectedHP);
     this.individualResults = this.electricityReductionService.calculateIndividualEquipment(tmpObj, this.settings);
   }
 
@@ -152,7 +150,7 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   toggleUserSelectedHP(){
-    this.userSelectedHP = !this.userSelectedHP;
+    this.data.userSelectedHP = !this.data.userSelectedHP;
     this.calculate();
   }
 }

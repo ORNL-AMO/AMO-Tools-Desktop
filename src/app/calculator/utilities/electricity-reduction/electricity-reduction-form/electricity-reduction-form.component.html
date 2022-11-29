@@ -143,8 +143,8 @@
         <label class="small" for="{{'ratedMotorPower_'+idString}}">
           Rated Motor Power
           <a class="form-text small click-link" (click)="toggleUserSelectedHP()">
-            <span *ngIf="userSelectedHP">Enter Rated Motor Power in kW</span>
-            <span *ngIf="!userSelectedHP">Enter Rated Motor Power in hp</span>
+            <span *ngIf="data.userSelectedHP">Enter Rated Motor Power in kW</span>
+            <span *ngIf="!data.userSelectedHP">Enter Rated Motor Power in hp</span>
           </a>
         </label>        
         <div class="input-group">

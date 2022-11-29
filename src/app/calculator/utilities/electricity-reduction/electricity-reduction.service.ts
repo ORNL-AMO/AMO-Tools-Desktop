@@ -301,8 +301,9 @@ export class ElectricityReductionService {
     //need to loop through for conversions prior to calculation
 
       for (let i = 0; i < inputArray.length; i++) {
-        if(inputArray[i].userSelectedHP === true)
-        inputArray[i].nameplateData.ratedMotorPower = this.convertUnitsService.value(inputArray[i].nameplateData.ratedMotorPower).from('hp').to('kW');
+        if(inputArray[i].userSelectedHP === true){
+          inputArray[i].nameplateData.ratedMotorPower = this.convertUnitsService.value(inputArray[i].nameplateData.ratedMotorPower).from('hp').to('kW');
+        }
       }
     return inputArray;
   }

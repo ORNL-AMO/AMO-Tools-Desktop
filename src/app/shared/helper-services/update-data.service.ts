@@ -509,7 +509,7 @@ export class UpdateDataService {
 
     updateElectricityReduction(electricityReduction: ElectricityReductionData): ElectricityReductionData {
         if (electricityReduction.userSelectedHP == undefined) {
-            electricityReduction.userSelectedHP = true;
+            electricityReduction.userSelectedHP = false;
         }
         return electricityReduction;
     }

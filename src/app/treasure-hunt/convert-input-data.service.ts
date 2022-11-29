@@ -71,7 +71,7 @@ export class ConvertInputDataService {
       treasureHunt.naturalGasReductions = this.naturalGasTreasureHuntService.convertNaturalGasReductions(treasureHunt.naturalGasReductions, oldSettings, newSettings);
     }
     if (treasureHunt.electricityReductions != undefined) {
-      treasureHunt.electricityReductions = this.electricityReductionTreasureHuntService.convertElectricityReductions(treasureHunt.electricityReductions, oldSettings, newSettings);
+      treasureHunt.electricityReductions = treasureHunt.electricityReductions;
     }
     if (treasureHunt.compressedAirReductions != undefined) {
       treasureHunt.compressedAirReductions = this.compressedAirTreasureHuntService.convertCompressedAirReductions(treasureHunt.compressedAirReductions, oldSettings, newSettings);

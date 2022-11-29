@@ -80,25 +80,5 @@ export class ElectricityReductionTreasureHuntService {
     return cardData;
   }
 
-  convertElectricityReductions(electricityReductions: Array<ElectricityReductionTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<ElectricityReductionTreasureHunt> {
-    electricityReductions.forEach(electricityReduction => {
-      electricityReduction.baseline.forEach(reduction => {
-        reduction = this.convertElectricityReduction(reduction, oldSettings, newSettings);
-      });
-      if (electricityReduction.modification && electricityReduction.modification.length > 0) { 
-        electricityReduction.modification.forEach(reduction => {
-          reduction = this.convertElectricityReduction(reduction, oldSettings, newSettings);
-        })
-      }
-    });
-    return electricityReductions;
-  }
-
-  convertElectricityReduction(reduction: ElectricityReductionData, oldSettings: Settings, newSettings: Settings): ElectricityReductionData {
-    //imperial: hp, metric: kW
-    //reduction.nameplateData.ratedMotorPower = this.convertUnitsService.convertPowerValue(reduction.nameplateData.ratedMotorPower, oldSettings, newSettings);
-    return reduction;
-  }
-
 
 }
