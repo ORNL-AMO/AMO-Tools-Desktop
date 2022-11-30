@@ -27,6 +27,8 @@ export class ElectricityReductionFormComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   selected: boolean;
+  @Input()
+  userSelectedHP: boolean;
 
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
@@ -66,6 +68,10 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if(changes.userSelectedHP && !changes.userSelectedHP.firstChange){
+      this.data.userSelectedHP = this.userSelectedHP;
+      this.calculate();
+    }
     if (changes.selected && !changes.selected.firstChange) {
       if (this.selected == false) {
         this.form.disable();
