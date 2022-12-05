@@ -384,18 +384,13 @@ export class TreasureHuntPptService {
     slide3 = this.getDetailedSummaryTable(slide3, treasureHuntResults, settings);
 
     let slide4 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide4.addText('Carbon Emission Results', slideTitleProperties);
+    slide4.addText('Carbon Emission Results (tonne CO2)', slideTitleProperties);
     slide4 = this.getCarbonSummaryTable(slide4, treasureHuntResults.co2EmissionsResults);
-
-    let slide5 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide5.addText('Carbon Emission Savings (tonne CO2)', slideTitleProperties);
-    let carbonEmissionData: PptxgenjsChartData[] = this.getCarbonEmissionData(treasureHuntResults.co2EmissionsResults);
     let carbonSavingsData: PptxgenjsChartData[] = this.getCarbonSavingsData(treasureHuntResults.co2EmissionsResults);
-    slide5.addChart("doughnut", carbonSavingsData, doughnutChartOptions);
-    slide5.addChart("pie", carbonEmissionData, pieChartOptions);
+    slide4.addChart("doughnut", carbonSavingsData, doughnutChartOptions);
     let totalEmissions: string = this.roundValToFormatString(treasureHuntResults.co2EmissionsResults.totalCO2CurrentUse)
-    slide5.addText("Total Current CO2 Emissions", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
-    slide5.addText(`${totalEmissions}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    slide4.addText("Total Current CO2 Emissions", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    slide4.addText(`${totalEmissions}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
 
 
     if (this.treasureHuntReportService.getTeamData(opportunityCardsData).length > 0) {
@@ -412,9 +407,17 @@ export class TreasureHuntPptService {
 
     let slide11 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide11.addText('Best Practices', slideTitleProperties);
+    slide11.addText(
+      "Outline key best practices identified in Treasure Hunt here\ntype here\ntype here",
+      { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial', valign: 'top', bullet: true }
+    );
 
     let slide12 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide12.addText('Other Opportunities Not Evaluated', slideTitleProperties);
+    slide12.addText(
+      "Outline any major opportunities identified, but not evaluated here\ntype here\ntype here",
+      { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial', valign: 'top', bullet: true }
+    );
 
     let slide13 = pptx.addSlide();
     slide13.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
@@ -942,7 +945,7 @@ export class TreasureHuntPptService {
       this.roundValToFormatString(carbonResults.totalCO2Savings)
     ]);
 
-    slide.addTable(rows, { x: 0.97, y: 1.6, w: 11.39, colW: [1.5, 3.27, 3.42, 3.2], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: "left", valign: "middle" });
+    slide.addTable(rows, { x: 5.54, y: 1.22, w: 7.77, colW: [1.5, 2.04, 2.23, 2], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: "left", valign: "middle" });
 
     return slide;
   }
