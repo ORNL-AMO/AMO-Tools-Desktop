@@ -1,0 +1,13 @@
+<div class="mt-5 px-5 py-2 alert alert-danger w-75 mx-auto">
+    <div class="h5 bold pt-3">{{measurMessageData.msg}}</div>
+    <span class="mt-2 small" [innerHTML]="measurMessageData.detailHTML"></span>
+    <div *ngIf="measurMessageData.objectRefs && measurMessageData.objectRefs.length > 0"
+        class="align-self-center mx-auto w-75">
+        <ul class="p1 mt-1 small">
+            <li *ngFor="let data of measurMessageData.objectRefs; let index = index;">
+                {{data.name}}
+            </li>
+        </ul>
+    </div>
+    <a class="d-block click-link mt-2" (click)="dismissMessageOverlay()">{{measurMessageData.dismissButtonText}}</a>
+</div>

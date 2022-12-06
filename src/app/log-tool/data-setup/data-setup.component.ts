@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { MeasurMessageData } from '../../shared/models/utilities';
 import { DayTypeAnalysisService } from '../day-type-analysis/day-type-analysis.service';
 import { DayTypeGraphService } from '../day-type-analysis/day-type-graph/day-type-graph.service';
 import { LogToolDataService } from '../log-tool-data.service';
-import { DataExplorerStatus, ExplorerData, LoadingSpinner } from '../log-tool-models';
+import { ExplorerData, LoadingSpinner } from '../log-tool-models';
 import { LogToolService } from '../log-tool.service';
 import { VisualizeService } from '../visualize/visualize.service';
 
@@ -23,6 +24,9 @@ export class DataSetupComponent implements OnInit {
   explorerDataSub: Subscription;
   loadingSpinnerSub: Subscription;
   loadingSpinner: LoadingSpinner;
+
+  errorOverlaySub: Subscription;
+  errorMessageData: MeasurMessageData;
   changeExplorerStepSub: Subscription;
   constructor(private logToolService: LogToolService, 
     private logToolDataService: LogToolDataService, 
@@ -55,12 +59,22 @@ export class DataSetupComponent implements OnInit {
       this.loadingSpinner = loadingSpinner;
       this.cd.detectChanges();
     });
+
+    this.errorOverlaySub = this.logToolDataService.errorMessageData.subscribe(errorMessageData => {
+      this.errorMessageData = errorMessageData;
+      this.cd.detectChanges();
+    });
   }
 
   ngOnDestroy() {
     this.isModalOpenSub.unsubscribe();
     this.explorerDataSub.unsubscribe();
     this.loadingSpinnerSub.unsubscribe();
+    this.errorOverlaySub.unsubscribe();
+  }
+
+  dismissMessageOverlay() {
+    this.logToolDataService.errorMessageData.next({show: false, msg: undefined});
   }
 
   back() {

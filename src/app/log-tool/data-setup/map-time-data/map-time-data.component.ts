@@ -54,11 +54,13 @@ export class MapTimeDataComponent implements OnInit {
           // set delay to display spinner before blocked thread thread
           setTimeout(async () => {
             await this.finalizeDataSetup();
-            let nextURL: string = changeStep.url;
-            if (!this.explorerData.canRunDayTypeAnalysis) {
-              nextURL = '/log-tool/visualize';
-            } 
-            this.router.navigateByUrl(nextURL);
+            if (this.explorerData.valid.isValid) {
+              let nextURL: string = changeStep.url;
+              if (!this.explorerData.canRunDayTypeAnalysis) {
+                nextURL = '/log-tool/visualize';
+              } 
+              this.router.navigateByUrl(nextURL);
+            }
           }, 25);
         }
         if (changeStep.direction == 'back') {
@@ -81,8 +83,19 @@ export class MapTimeDataComponent implements OnInit {
   }
   async finalizeDataSetup() {
     this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
-    await this.logToolDbService.saveData();
-    this.logToolDataService.explorerData.next(this.explorerData);
+    if (this.explorerData.valid.isValid) {
+      await this.logToolDbService.saveData();
+      this.logToolDataService.explorerData.next(this.explorerData);
+    } else {
+      this.logToolDataService.loadingSpinner.next({show: false});
+      this.logToolDataService.errorMessageData.next({
+        show: true, 
+        msg: this.explorerData.valid.message, 
+        detailHTML: this.explorerData.valid.detailHTML,
+        objectRefs: this.explorerData.valid.invalidDatasets,
+        dismissButtonText: 'Return to Setup'
+      });
+    }
   }
 
   updateExplorerData() {
