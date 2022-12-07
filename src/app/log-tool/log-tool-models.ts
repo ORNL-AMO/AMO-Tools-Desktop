@@ -1,4 +1,5 @@
 import { CsvImportData } from "../shared/helper-services/csv-to-json.service";
+import { MeasurObjectRef } from "../shared/models/utilities";
 
 export interface LogToolField {
     fieldName: string,
@@ -304,8 +305,7 @@ export interface DataExplorerStatus {
 
 export interface LoadingSpinner {
     show: boolean,
-    eventName?: string,
-    msg?: string
+    msg?: string,
 }
   
   export interface InvalidFile {
@@ -323,8 +323,16 @@ export interface LoadingSpinner {
     isSetupDone: boolean,
     isExample?: boolean,
     isExistingImport?: boolean,
-    canRunDayTypeAnalysis: boolean
+    canRunDayTypeAnalysis: boolean,
+    valid?: ExplorerDataValid
   }
+
+export interface ExplorerDataValid {
+    isValid: boolean;
+    invalidDatasets?: Array<MeasurObjectRef>;
+    message?: string,
+    detailHTML?: string
+}
 
   export interface RefineDataStepStatus {
     isComplete: boolean,
@@ -362,7 +370,6 @@ export interface ExplorerDataSet {
     timeField?: LogToolField,
     intervalForSeconds?: number;
     canRunDayTypeAnalysis: boolean
-
   }
 
   export interface StepMovement {
