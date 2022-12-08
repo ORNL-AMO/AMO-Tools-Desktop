@@ -524,7 +524,7 @@ export class TreasureHuntPptService {
     doughnutChartOptions = this.getDoughnutChartProperties();
     slide2.addChart("doughnut", costSavingsData, doughnutChartOptions);
     let totalCurrentCost: string = this.roundValToCurrency(treasureHuntResults.totalBaselineCost);
-    slide2.addText("Total Current CO2 Emissions", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    slide2.addText("Total Current Cost", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
     slide2.addText(`${totalCurrentCost}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
 
 
