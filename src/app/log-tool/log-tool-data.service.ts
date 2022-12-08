@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { LogToolService } from './log-tool.service';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import * as _ from 'lodash';
-import { LogToolDay, LogToolField, IndividualDataFromCsv, ExplorerData, ExplorerFileData, ExplorerDataSet, StepMovement, LoadingSpinner, RefineDataStepStatus, LogToolDbData, HourAverage } from './log-tool-models';
+import { LogToolDay, LogToolField, IndividualDataFromCsv, ExplorerData, ExplorerFileData, ExplorerDataSet, StepMovement, LoadingSpinner, RefineDataStepStatus, LogToolDbData, HourAverage, ExplorerDataValid } from './log-tool-models';
 import { BehaviorSubject } from 'rxjs';
 import { CsvImportData, CsvToJsonService } from '../shared/helper-services/csv-to-json.service';
+import { MeasurMessageData } from '../shared/models/utilities';
 
 @Injectable()
 export class LogToolDataService {
@@ -13,6 +14,7 @@ export class LogToolDataService {
   dataIntervalValid: BehaviorSubject<boolean>;
 
   loadingSpinner: BehaviorSubject<LoadingSpinner>;
+  errorMessageData: BehaviorSubject<MeasurMessageData>;
   explorerData: BehaviorSubject<ExplorerData>;
   changeStep: BehaviorSubject<StepMovement>;
   constructor(private logToolService: LogToolService, 
@@ -20,6 +22,10 @@ export class LogToolDataService {
     this.dataIntervalValid = new BehaviorSubject<boolean>(undefined);
     this.explorerData = new BehaviorSubject<ExplorerData>(this.getDefaultExplorerData());
     this.loadingSpinner = new BehaviorSubject<LoadingSpinner>({
+      show: false,
+      msg: undefined,
+    });
+    this.errorMessageData = new BehaviorSubject<MeasurMessageData>({
       show: false,
       msg: undefined,
     });
@@ -39,7 +45,11 @@ export class LogToolDataService {
       },
       isStepMapTimeDataComplete: false,
       fileData: [],
-      datasets: []
+      datasets: [],
+      valid: {
+        isValid: true,
+        invalidDatasets: []
+      }
     }
   }
 
@@ -121,45 +131,91 @@ export class LogToolDataService {
   }
 
   finalizeDataSetup(explorerData: ExplorerData): ExplorerData {
+    explorerData.valid.isValid = true;
+    explorerData.valid.invalidDatasets = [];
     explorerData.canRunDayTypeAnalysis = this.setCanRunDayTypeAnalysis();
     //  5839 patch- Eventually replace individualDataFromCsv
+    // explorerData and individualDataFromCSV split below
     if (explorerData.canRunDayTypeAnalysis) {
-      this.loadingSpinner.next({ show: true, msg: 'Processing date and time data...' });
+      this.loadingSpinner.next({ show: true, msg: 'Processing date and time data' });
       this.logToolService.individualDataFromCsv.map((dataSet: ExplorerDataSet) => {
         dataSet.canRunDayTypeAnalysis = true;
       });
-      this.prepareDateAndTimeData(this.logToolService.individualDataFromCsv);
+      this.prepareDateAndTimeData(this.logToolService.individualDataFromCsv, explorerData.valid);
     }
     this.logToolService.setAllAvailableFields(this.logToolService.individualDataFromCsv);
-    // explorerData and individualDataFromCSV break here
-    explorerData.isSetupDone = true;
+
+    explorerData.isSetupDone = explorerData.valid.isValid;
     return explorerData;
   }
 
-  prepareDateAndTimeData(explorerDatasets: Array<IndividualDataFromCsv>) {
-    explorerDatasets.forEach((dataset: ExplorerDataSet) => {
+  parseAlternateDateFormat(dateString: string): Moment {
+    let formats: Array<string> = [
+      'DD/MM/YYYY HH:mm:ss',
+      'DD/MM/YYYY hh:mm:ss a',
+      'DD-MM-YYYY HH:mm:ss', 
+      'DD-MM-YYYY hh:mm:ss a', 
+      'MM/DD/YYYY HH:mm:ss',
+      'MM/DD/YYYY hh:mm:ss a',
+      'MM-DD-YYYY HH:mm:ss', 
+      'MM-DD-YYYY hh:mm:ss a', 
+      'DD-MM-YYYY', 
+      'MM-DD-YYYY', 
+      'HH:mm:ss',
+      'hh:mm:ss a',
+    ];
+
+    let dateMoment: Moment = moment(dateString, formats, true);
+    return dateMoment;
+  }
+
+  isValidDate(dateISOFormat: any) {
+    return dateISOFormat instanceof Date && !isNaN(dateISOFormat.getTime());
+  }
+
+  formatDates(dataset: ExplorerDataSet) {
+    dataset.csvImportData.data.map(dataItem => {
+      let dateISOFormat = new Date(dataItem[dataset.dateField.fieldName]);
+      let validDate: boolean = this.isValidDate(dateISOFormat);
+      let dateMoment: Moment;
+      if (validDate) {
+        dateMoment = moment(dataItem[dataset.dateField.fieldName]);
+      } else {
+        dateMoment = this.parseAlternateDateFormat(dataItem[dataset.dateField.fieldName]);
+      }
+      dataItem[dataset.dateField.fieldName] = dateMoment.format('YYYY-MM-DD HH:mm:ss');
+    });
+  }
+  
+
+  prepareDateAndTimeData(explorerDatasets: Array<IndividualDataFromCsv>, valid: ExplorerDataValid) {
+    explorerDatasets.forEach((dataset: ExplorerDataSet, index) => {
+      let unProcessedDataCopy: Array<any> = JSON.parse(JSON.stringify(dataset.csvImportData.data));
         if (dataset.hasTimeField == true) {
           dataset = this.joinDateAndTimeFields(dataset);
         } else {
-          dataset.csvImportData.data.map(dataItem => {
-            let dateISOFormat = new Date(dataItem[dataset.dateField.fieldName]);
-            dataItem[dataset.dateField.fieldName] = moment(dateISOFormat).format('YYYY-MM-DD HH:mm:ss');
-          });
+          this.formatDates(dataset);
         }
-
-        // Optimize? reverse iterate and delete or use flag to see if anymarked
         _.remove(dataset.csvImportData.data, (dataItem) => {
           return dataItem[dataset.dateField.fieldName] == 'Invalid date';
         });
 
-        dataset = this.checkIntervalSeconds(dataset);
-
-        dataset.csvImportData.data = _.sortBy(dataset.csvImportData.data, (dataItem) => {
-          return dataItem[dataset.dateField.fieldName];
-        }, ['desc']);
-        dataset.startDate = dataset.csvImportData.data[0][dataset.dateField.fieldName];
-        dataset.endDate = dataset.csvImportData.data[dataset.csvImportData.data.length - 1][dataset.dateField.fieldName];
-        dataset.dataPointsPerColumn = dataset.csvImportData.data.length;
+        // has at least one valid date
+        if (dataset.csvImportData.data.length !== 0) {
+          dataset = this.checkIntervalSeconds(dataset);
+          dataset.csvImportData.data = _.sortBy(dataset.csvImportData.data, (dataItem) => {
+            return dataItem[dataset.dateField.fieldName];
+          }, ['desc']);
+          dataset.startDate = dataset.csvImportData.data[0][dataset.dateField.fieldName];
+          dataset.endDate = dataset.csvImportData.data[dataset.csvImportData.data.length - 1][dataset.dateField.fieldName];
+          dataset.dataPointsPerColumn = dataset.csvImportData.data.length;
+        } else {
+          dataset.csvImportData.data = unProcessedDataCopy;
+          valid.isValid = false;
+          valid.invalidDatasets.push({id: dataset.dataSetId, name: dataset.csvName});
+          valid.message = 'Unable to process date/time data.';
+          valid.detailHTML = 'Please verify your date/time setup and file data are formatted correctly for the datasets below:';
+        }
     });
   }
 

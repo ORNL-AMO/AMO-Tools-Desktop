@@ -35,9 +35,39 @@
                 <table class="table table-sm">
                     <tbody>
                         <tr>
-                            <td class="bold">Column Name</td>
-                            <td class="bold">Is Date</td>
-                            <td class="bold">Is Time</td>
+                            <td class="bold">Column Name
+                                
+                            </td>
+                            <td class="bold">Includes Date</td>
+                            <td><span class="bold mr-1">Includes Time Only</span>
+                            <span class="ml-3 pull-right">
+                                <span class="tooltip-icon fa fa-question-circle" (mouseenter)="displayTooltipHover()" 
+                                (mouseleave)="hideTooltipHover()" (click)="toggleClickTooltip()"></span>
+                            </span>
+                            <span class="detail-tooltip-box" *ngIf="showTooltipHover || showTooltipClick"
+                                (mouseenter)="displayTooltipHover(true)" (mouseleave)="hideTooltipHover()">
+                                <div class="detail-tooltip down"><span class="detail-tooltip-arrow tooltip-arrow-up"></span>
+                                    <div class="p-2">
+                                        <ul class="pl-2">
+                                            <li>
+                                                <span class="bold">Includes Date</span> - Column contains a date and time <span class="bold">or</span> a date only.
+                                             </li>
+                                             <li>
+                                                <span class="bold">Includes Time Only</span> - Column contains a time only.
+                                             </li>
+                                            <li>
+                                               <span class="bold">Example date/time stamp formats</span>
+                                               <ul class="">
+                                                <li>5/1/2022 1:00</li>
+                                                <li>5/1/2022 5:01:00 AM</li>
+                                                <li>5:01:00 AM</li>
+                                               </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </span>
+                        </td>
                         </tr>
                         <ng-container *ngFor="let field of selectedDataSet.fields; let i = index;">
                             <tr *ngIf="field.useField">

@@ -19,6 +19,10 @@ export class MapTimeDataComponent implements OnInit {
   applyToAll: boolean = false;
   secondsIntervalOptions: Array<number> = [ undefined, 1, 2, 3, 4, 5, 15, 20, 30 ];
 
+  toolTipHoldTimeout;
+  showTooltipHover: boolean = false;
+  showTooltipClick: boolean = false;
+
   constructor(
     private cd: ChangeDetectorRef,
     private router: Router,
@@ -50,11 +54,13 @@ export class MapTimeDataComponent implements OnInit {
           // set delay to display spinner before blocked thread thread
           setTimeout(async () => {
             await this.finalizeDataSetup();
-            let nextURL: string = changeStep.url;
-            if (!this.explorerData.canRunDayTypeAnalysis) {
-              nextURL = '/log-tool/visualize';
-            } 
-            this.router.navigateByUrl(nextURL);
+            if (this.explorerData.valid.isValid) {
+              let nextURL: string = changeStep.url;
+              if (!this.explorerData.canRunDayTypeAnalysis) {
+                nextURL = '/log-tool/visualize';
+              } 
+              this.router.navigateByUrl(nextURL);
+            }
           }, 25);
         }
         if (changeStep.direction == 'back') {
@@ -77,8 +83,19 @@ export class MapTimeDataComponent implements OnInit {
   }
   async finalizeDataSetup() {
     this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
-    await this.logToolDbService.saveData();
-    this.logToolDataService.explorerData.next(this.explorerData);
+    if (this.explorerData.valid.isValid) {
+      await this.logToolDbService.saveData();
+      this.logToolDataService.explorerData.next(this.explorerData);
+    } else {
+      this.logToolDataService.loadingSpinner.next({show: false});
+      this.logToolDataService.errorMessageData.next({
+        show: true, 
+        msg: this.explorerData.valid.message, 
+        detailHTML: this.explorerData.valid.detailHTML,
+        objectRefs: this.explorerData.valid.invalidDatasets,
+        dismissButtonText: 'Return to Setup'
+      });
+    }
   }
 
   updateExplorerData() {
@@ -159,6 +176,25 @@ export class MapTimeDataComponent implements OnInit {
     // });
   return dataSet;
 }
+
+hideTooltipHover() {
+  // Allow user to hover on tip text
+  this.toolTipHoldTimeout = setTimeout(() => {
+    this.showTooltipHover = false;
+  }, 200)
+}
+
+displayTooltipHover(hoverOnInfo: boolean = false) {
+  if (hoverOnInfo) {
+    clearTimeout(this.toolTipHoldTimeout);
+  }
+  this.showTooltipHover = true;
+}
+
+toggleClickTooltip(){
+  this.showTooltipClick = !this.showTooltipClick;
+}
+
   setSecondsInterval() {
     this.updateExplorerData();
   }

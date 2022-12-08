@@ -44,6 +44,7 @@ import { ImportDataComponent } from './data-setup/import-data/import-data.compon
 import { RefineDataComponent } from './data-setup/refine-data/refine-data.component';
 import { SelectDataHeaderComponent } from './data-setup/select-data-header/select-data-header.component';
 import { MapTimeDataComponent } from './data-setup/map-time-data/map-time-data.component';
+import { UserMessageOverlayModule } from '../shared/user-message-overlay/user-message-overlay.module';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,7 @@ import { MapTimeDataComponent } from './data-setup/map-time-data/map-time-data.c
     ImportDataComponent,
     RefineDataComponent,
     SelectDataHeaderComponent,
-    MapTimeDataComponent
+    MapTimeDataComponent,
   ],
   imports: [
     CommonModule,
@@ -87,6 +88,7 @@ import { MapTimeDataComponent } from './data-setup/map-time-data/map-time-data.c
     NgbDatepickerModule,
     ModalModule,
     ExportableResultsTableModule,
+    UserMessageOverlayModule,
     SharedPipesModule
   ],
   providers: [

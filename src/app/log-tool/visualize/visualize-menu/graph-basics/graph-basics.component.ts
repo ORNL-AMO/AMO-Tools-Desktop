@@ -64,7 +64,8 @@ export class GraphBasicsComponent implements OnInit {
   }
 
   setLinesMarkers() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data...`});
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
+    depending on the amount of data you have supplied...`});
     this.selectedGraphObj.selectedYAxisDataOptions.forEach((option) => {
       option.linesOrMarkers = this.markerType;
     });
