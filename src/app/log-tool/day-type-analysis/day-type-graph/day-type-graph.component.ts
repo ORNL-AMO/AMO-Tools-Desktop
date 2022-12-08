@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { DayTypeGraphItem, LogToolField } from '../../log-tool-models';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PlotlyService } from 'angular-plotly.js';
+import { LogToolDataService } from '../../log-tool-data.service';
 @Component({
   selector: 'app-day-type-graph',
   templateUrl: './day-type-graph.component.html',
@@ -21,15 +22,23 @@ export class DayTypeGraphComponent implements OnInit {
       title: undefined,
       hovermode: "closest",
       xaxis: {
+        autorange: true,
         title: {
           text: 'x axis'
         },
-        range: [1, 24]
+        tickangle: '45',
       },
       yaxis: {
+        autorange: true,
         title: {
           text: 'y axis'
         }
+      },
+      margin: {
+        t: 50,
+        b: 50,
+        l: 50,
+        r: 50,
       }
     }
   };
@@ -39,7 +48,10 @@ export class DayTypeGraphComponent implements OnInit {
   selectedGraphType: string;
   individualDayScatterPlotDataSub: Subscription;
   individualDayScatterPlotData: Array<DayTypeGraphItem>;
-  constructor(private dayTypeGraphService: DayTypeGraphService, private dayTypeAnalysisService: DayTypeAnalysisService, private convertUnitsService: ConvertUnitsService,
+  constructor(private dayTypeGraphService: DayTypeGraphService, 
+    private dayTypeAnalysisService: DayTypeAnalysisService, 
+    private convertUnitsService: ConvertUnitsService,
+    private logToolDataService: LogToolDataService,
     private plotlyService: PlotlyService) { }
 
   ngOnInit() {
@@ -76,13 +88,15 @@ export class DayTypeGraphComponent implements OnInit {
   setGraphData() {
     this.graph.data = new Array();
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
-    let labelStr: string = selectedDataField.alias;
+    let labelStr: string = this.truncate(selectedDataField.alias, 30);
     if (selectedDataField.unit) {
       let displayUnit: string = this.getUnitDisplay(selectedDataField.unit);
       labelStr = labelStr + ' ' + displayUnit;
     }
-    this.graph.layout.title = 'Hourly ' + labelStr + ' Data';
-    this.graph.layout.xaxis.title.text = 'Hour of day';
+    let intervalTitle: string = this.logToolDataService.selectedDayTypeAverageInterval.display;
+    this.graph.layout.title = `${labelStr} (${intervalTitle} Data Average)`
+    this.graph.layout.xaxis.title.text  = `${intervalTitle}`;
+
     this.graph.layout.yaxis.title.text = labelStr;
     let graphData: Array<DayTypeGraphItem> = this.getGraphData();
     graphData.forEach(entry => {
@@ -90,6 +104,14 @@ export class DayTypeGraphComponent implements OnInit {
     });
     if (this.dayTypeGraph) {
       this.plotlyService.newPlot(this.dayTypeGraph.nativeElement, this.graph.data, this.graph.layout, { responsive: true });
+    }
+  }
+
+  truncate(text: string, limit: number) {
+    if (text.length > limit) {
+      return text.slice(0, limit) + '...'
+    } else {
+      return text;
     }
   }
 

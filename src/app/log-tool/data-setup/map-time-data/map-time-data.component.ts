@@ -17,7 +17,20 @@ export class MapTimeDataComponent implements OnInit {
   selectedDataSetIndex: number = 0;
   changeStepSub: Subscription;
   applyToAll: boolean = false;
-  secondsIntervalOptions: Array<number> = [ undefined, 1, 2, 3, 4, 5, 15, 20, 30 ];
+  dataCollectionIntervalOptions: Array<{display: string, value: number}> = [ 
+    {display: '1 seconds', value: 1}, 
+    {display: '2 seconds', value: 2}, 
+    {display: '3 seconds', value: 3}, 
+    {display: '4 seconds', value: 4}, 
+    {display: '5 seconds', value: 5}, 
+    {display: '15 seconds', value: 15}, 
+    {display: '20 seconds', value: 20}, 
+    {display: '30 seconds', value: 30}, 
+    {display: '15 minute', value: 900}, 
+    {display: '30 minute', value: 1800}, 
+    {display: 'Hourly', value: 3600},
+    {display: '24 Hour', value: 86400}, 
+  ];
 
   toolTipHoldTimeout;
   showTooltipHover: boolean = false;
@@ -195,7 +208,7 @@ toggleClickTooltip(){
   this.showTooltipClick = !this.showTooltipClick;
 }
 
-  setSecondsInterval() {
+setDataCollectionInterval() {
     this.updateExplorerData();
   }
 

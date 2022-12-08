@@ -92,17 +92,14 @@
                 <hr>
             </div>
             <div *ngIf="!explorerData.isExample" class="form-group my-1">
-                <div class="alert alert-info text-left small">
-                    If your data was taken in LESS than one minute intervals, please specify the time interval below.
-                </div>
                 <div class="mx-2">
-                    <label>Time Interval in Seconds</label>
+                    <label>Data Collection Interval</label>
                     <select class="form-control" name="dataCollectionInterval" 
                     [disabled]="!selectedDataSet.hasDateField && !selectedDataSet.hasTimeField" 
-                    (change)="setSecondsInterval(option)" 
+                    (change)="setDataCollectionInterval(option)" 
                     [(ngModel)]="selectedDataSet.dataCollectionInterval">
-                        <option  *ngFor="let option of secondsIntervalOptions" [ngValue]="option">
-                            {{option}}</option>
+                        <option  *ngFor="let option of dataCollectionIntervalOptions" [ngValue]="option.value">
+                            {{option.display}}</option>
                         </select>
                 </div>
             </div>

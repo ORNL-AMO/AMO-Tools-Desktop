@@ -6,20 +6,25 @@
     </div>
     <span class="importing-text">{{loadingSpinner.msg}}</span>
 </div>
-<!-- <div class="d-flex w-100 h-100" *ngIf="!hasRunDayTypeAnalysis || canUpdateDayTypeAnalysis">
-    <div class="card card-body d-flex flex-column align-items-center pt-4">
-        <div class="p-2" *ngIf="canUpdateDayTypeAnalysis">Data has been added since Day Type analysis was performed.</div>
-        <button class="btn btn-secondary" (click)="runAnalysis()">
-             <span *ngIf="!hasRunDayTypeAnalysis">Run Analysis</span>
-             <span *ngIf="canUpdateDayTypeAnalysis">Update Analysis</span>
-    </button>
-    </div>
-</div> -->
+
+
 <div class="d-flex w-100 h-100" *ngIf="!hasRunDayTypeAnalysis">
     <div class="card card-body d-flex flex-column align-items-center pt-4">
-        <button class="btn btn-secondary" (click)="runAnalysis()">
-             <span>Run Analysis</span>
-    </button>
+        <form class="p-2 w-50" [formGroup]="form">
+            <div class="form-group d-flex justify-content-center">
+                <label class="mr-3" for="dayTypeAverageInterval">Day Type Average Interval</label>
+                <select class="form-control" id="dayTypeAverageInterval" formControlName="dayTypeAverageInterval"
+                    (focus)="focusField('dayTypeAverageInterval')" (change)="changeDayTypeAverageInterval()">
+                    <option *ngFor="let option of dayTypeAverageIntervalOptions" [ngValue]="option.seconds">
+                        {{option.display}}
+                    </option>
+                </select>
+            </div>
+            <div class="alert-danger small px-4 py-2 mx-auto" *ngIf="conflictingIntervalsWarning">{{ conflictingIntervalsWarning}}</div>
+        </form>
+        <button class="btn btn-secondary" [disabled]="this.conflictingIntervalsWarning" (click)="runAnalysis()">
+            <span>Run Analysis</span>
+        </button>
     </div>
 </div>
 <div class="d-flex w-100 h-100" *ngIf="hasRunDayTypeAnalysis">

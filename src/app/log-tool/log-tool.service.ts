@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { CsvImportData } from '../shared/helper-services/csv-to-json.service';
 import * as _ from 'lodash';
-import { LogToolField, IndividualDataFromCsv } from './log-tool-models';
+import { LogToolField, IndividualDataFromCsv, ExplorerDataSet } from './log-tool-models';
 import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class LogToolService {
 
-  individualDataFromCsv: Array<IndividualDataFromCsv>;
+  individualDataFromCsv: Array<IndividualDataFromCsv | ExplorerDataSet>;
   fields: Array<LogToolField>;
   dataCleaned: BehaviorSubject<boolean>;
   dataSubmitted: BehaviorSubject<boolean>;

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { LogToolService } from './log-tool.service';
 import moment, { Moment } from 'moment';
 import * as _ from 'lodash';
-import { LogToolDay, LogToolField, IndividualDataFromCsv, ExplorerData, ExplorerFileData, ExplorerDataSet, StepMovement, LoadingSpinner, RefineDataStepStatus, LogToolDbData, HourAverage, ExplorerDataValid } from './log-tool-models';
+import { LogToolDay, LogToolField, IndividualDataFromCsv, ExplorerData, ExplorerFileData, ExplorerDataSet, StepMovement, LoadingSpinner, RefineDataStepStatus, LogToolDbData, AverageByInterval, DayTypeAverageInterval, ExplorerDataValid } from './log-tool-models';
 import { BehaviorSubject } from 'rxjs';
 import { CsvImportData, CsvToJsonService } from '../shared/helper-services/csv-to-json.service';
 import { MeasurMessageData } from '../shared/models/utilities';
@@ -12,6 +12,8 @@ export class LogToolDataService {
 
   logToolDays: Array<LogToolDay>;
   dataIntervalValid: BehaviorSubject<boolean>;
+  selectedDayTypeAverageInterval: DayTypeAverageInterval;
+  intervalTotalSecondsPerDay: number = 86400;
 
   loadingSpinner: BehaviorSubject<LoadingSpinner>;
   errorMessageData: BehaviorSubject<MeasurMessageData>;
@@ -62,68 +64,140 @@ export class LogToolDataService {
     return logToolDay
   }
 
-  //seperate log tool data into days
   setLogToolDays() {
     let explorerDatasets: Array<ExplorerDataSet> = JSON.parse(JSON.stringify(this.logToolService.individualDataFromCsv));
     this.logToolDays = new Array();
     explorerDatasets.forEach((dataset: ExplorerDataSet) => {
       let dataForDays: Array<{ date: Date, data: Array<any> }> = this.divideDataIntoDays(dataset.csvImportData.data, dataset.dateField.fieldName);
       dataForDays.forEach(day => {
-        let hourlyAverages: Array<HourAverage> = this.getHourlyAverages(day.data, dataset);
-        this.addLogToolDay(new Date(day.date), hourlyAverages);
+        let dayAveragesByInterval: Array<AverageByInterval> = this.calculateDayAveragesByInterval(day.data, dataset);
+        this.addLogToolDay(new Date(day.date), dayAveragesByInterval);
       });
     });
   }
 
-  addLogToolDay(dayDate: Date, hourlyAverages: Array<HourAverage>) {
+  addLogToolDay(dayDate: Date, dayAveragesByInterval: Array<AverageByInterval>) {
     let existingDayIndex = this.logToolDays.findIndex(logToolDay => { return this.checkSameDay(logToolDay.date, dayDate) });
     if (existingDayIndex != -1) {
-      this.logToolDays[existingDayIndex].hourlyAverages.forEach(hourItem => {
-        let addtionalAverages = hourlyAverages.find(hourlyAverage => { return hourlyAverage.hour == hourItem.hour });
-        hourItem.averages = _.union(hourItem.averages, addtionalAverages.averages);
+      this.logToolDays[existingDayIndex].dayAveragesByInterval.forEach(averageItem => {
+        let addtionalAverages = dayAveragesByInterval.find(hourlyAverage => { return hourlyAverage.interval == averageItem.interval });
+        averageItem.averages = _.union(averageItem.averages, addtionalAverages.averages);
       });
     } else {
       this.logToolDays.push({
         date: dayDate,
-        hourlyAverages: hourlyAverages
+        dayAveragesByInterval: dayAveragesByInterval
       });
     }
   }
+  
+  // * dayData: Array of objects where key/val is fileData fields/vals
+  calculateDayAveragesByInterval(dayData: Array<any>, dataset: ExplorerDataSet): Array<AverageByInterval> {
+    let dayAveragesByInterval: Array<AverageByInterval> = new Array();
+    let intervalByTimeUnit: number = 0;
+    // * only averaging data fields
+    let fields: Array<LogToolField> = dataset.fields.filter(field => !field.isDateField && field.useField == true);
+    let startingDate: Date = new Date(new Date(dayData[0][dataset.dateField.fieldName]).setHours(0,0,0,0));
+    let endingDate: Date = new Date(new Date(dayData[0][dataset.dateField.fieldName]).setHours(0,0,0,0));
+    endingDate = new Date(endingDate.setSeconds(endingDate.getSeconds() + this.selectedDayTypeAverageInterval.seconds));
+    let isSameDay: boolean = true;
 
-
-  getHourlyAverages(dayData: Array<any>, csvData: IndividualDataFromCsv): Array<HourAverage> {
-    let hourlyAverages: Array<HourAverage> = new Array();
-    let fields: Array<LogToolField> = csvData.fields;
-    for (let hourOfDay = 0; hourOfDay < 24; hourOfDay++) {
-      //filter day data by hour
-      let filteredDaysByHour = _.filter(dayData, (dayItem) => {
-        if (dayItem[csvData.dateField.fieldName]) {
-          let date = new Date(dayItem[csvData.dateField.fieldName]);
-          let dayDataHourVal = date.getHours();
-          return hourOfDay == dayDataHourVal;
+    if (this.selectedDayTypeAverageInterval.unitOfTimeString === 'day') {
+      let dayAverages = _.filter(dayData, (dayItem) => {
+        if (dayItem[dataset.dateField.fieldName]) {
+          let date = new Date(dayItem[dataset.dateField.fieldName]);
+          let isIntervalRange: boolean = date >= startingDate && date <= endingDate;
+          return isIntervalRange;
         };
       });
-      let averages: Array<{ value: number, field: LogToolField }> = new Array();
-      //iterate each field and get averages for the hour
-      fields.forEach(field => {
-        if (field.isDateField == false && field.useField == true) {
-          let hourFieldMean: number;
-          if (filteredDaysByHour.length != 0) {
-            hourFieldMean = _.meanBy(filteredDaysByHour, (filteredDay) => { return filteredDay[field.fieldName] });
-          }
-          averages.push({
-            value: hourFieldMean,
-            field: field
-          })
-        }
-      })
-      hourlyAverages.push({
-        hour: hourOfDay,
+      let averages: Array<{ value: number, field: LogToolField }> = this.getIntervalAverages(dayAverages, fields);
+      let startDateString: string = moment(startingDate).format('YYYY-MM-DD');
+
+      dayAveragesByInterval.push({
+        interval: this.selectedDayTypeAverageInterval.seconds,
+        intervalDateString: startDateString,
+        intervalDateRange: {
+          startDate: startDateString,
+          endDate: undefined
+        },
         averages: averages
       });
+    } else {
+      let unitOfTime: number = this.getUnitOfTime();
+      for (let interval = 0; interval < this.intervalTotalSecondsPerDay && isSameDay;) {
+        let currentIntervalDataForDay = _.filter(dayData, (dayItem) => {
+          if (dayItem[dataset.dateField.fieldName]) {
+            let date = new Date(dayItem[dataset.dateField.fieldName]);
+            let isIntervalRange: boolean = date >= startingDate && date <= endingDate;
+            return isIntervalRange;
+          };
+        });
 
+        let averages: Array<{ value: number, field: LogToolField }> = this.getIntervalAverages(currentIntervalDataForDay, fields)
+        let intervalDateString: string = this.getIntervalDateString(intervalByTimeUnit);
+        intervalByTimeUnit += unitOfTime;
+        dayAveragesByInterval.push({
+          interval: interval,
+          intervalDateString: intervalDateString,
+          intervalDateRange: {
+            startDate: moment(startingDate).format('YYYY-MM-DD HH:mm:ss'),
+            endDate: moment(endingDate).format('YYYY-MM-DD HH:mm:ss')
+          },
+          averages: averages
+        });
+        interval += this.selectedDayTypeAverageInterval.seconds;
+        // Use moment - native dates setSeconds wrong if they go into the next day
+        let newStartingIntervalDate: Moment = moment(startingDate).add(this.selectedDayTypeAverageInterval.seconds, 'seconds');
+        isSameDay = this.isSameDay(startingDate, newStartingIntervalDate.toDate());
+        startingDate = newStartingIntervalDate.toDate();
+        let newEndingDate: Moment = moment(endingDate).add(this.selectedDayTypeAverageInterval.seconds, 'seconds');
+        endingDate = newEndingDate.toDate();
+      }
     }
-    return hourlyAverages;
+
+    return dayAveragesByInterval;
+  }
+
+  getIntervalAverages(currentIntervalDataForDay, fields) {
+    let averages: Array<{ value: number, field: LogToolField }> = new Array();
+    fields.forEach(field => {
+      let intervalFieldMean: number;
+      if (currentIntervalDataForDay.length != 0) {
+        intervalFieldMean = _.meanBy(currentIntervalDataForDay, (filteredDay) => { return filteredDay[field.fieldName] });
+      }
+      averages.push({
+        value: intervalFieldMean,
+        field: field
+      });
+    });
+    return averages;
+  }
+  
+  isSameDay(firstDate: Date, secondDate: Date) {
+    return firstDate.getFullYear() === secondDate.getFullYear() &&
+    firstDate.getMonth() === secondDate.getMonth() &&
+    firstDate.getDate() === secondDate.getDate();
+  }
+
+  getIntervalDateString(currentInterval: number): string {
+    let intervalDateString: string;
+    let day: Date = new Date(new Date().setHours(0,0,0,0));
+    if (this.selectedDayTypeAverageInterval.unitOfTimeString === 'hour') {
+      day.setHours(currentInterval, 0, 0, 0);
+      intervalDateString = moment(day).format('H');
+    } else if (this.selectedDayTypeAverageInterval.unitOfTimeString === 'minutes') {
+      day.setMinutes(currentInterval, 0, 0);
+      intervalDateString = moment(day).format('H:mm');
+    }
+    return intervalDateString;
+  }
+
+  getUnitOfTime(): number {
+    if (this.selectedDayTypeAverageInterval.seconds === 3600) {
+      return 1;
+    } else {
+      return this.selectedDayTypeAverageInterval.seconds / 60;
+    }
   }
 
   checkSameDay(day1: Date, day2: Date) {
@@ -227,7 +301,6 @@ export class LogToolDataService {
       }
       else {
         dataItem[dataset.dateField.fieldName] = 'Invalid date';
-        console.log('***** has invalid dates');
       }
     });
     dataset.hasTimeField = false;
@@ -348,7 +421,7 @@ export class LogToolDataService {
         invalidField: false,
         csvId: dataSetId,
         csvName: name,
-        fieldId: Math.random().toString(36).substr(2, 9)
+        fieldId: this.getUniqueId()
       }
     });
     let newDataSet: ExplorerDataSet = {
