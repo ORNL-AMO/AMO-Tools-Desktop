@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  weatherApiUrl: 'https://weather.ornl.gov/'
+  measurUtilitiesApi: 'http://127.0.0.1:3000/'
 };
