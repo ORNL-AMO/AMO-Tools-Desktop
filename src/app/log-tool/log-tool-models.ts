@@ -16,11 +16,16 @@ export interface LogToolField {
 
 export interface LogToolDay {
     date: Date,
-    hourlyAverages: Array<HourAverage>
+    dayAveragesByInterval: Array<AverageByInterval>
 }
 
-export interface HourAverage {
-    hour: number,
+export interface AverageByInterval {
+    interval: number,
+    intervalDateString: string,
+    intervalDateRange?: {
+        startDate: string,
+        endDate: string
+    }
     averages: Array<{
         value: number,
         field: LogToolField
@@ -75,13 +80,7 @@ export interface DayType {
 export interface DayTypeSummary {
     dayType: DayType,
     data: Array<any>,
-    hourlyAverages: Array<{
-        hour: number,
-        averages: Array<{
-            value: number,
-            field: LogToolField
-        }>
-    }>
+    dayAveragesByInterval: Array<AverageByInterval>
 }
 
 
@@ -96,16 +95,9 @@ export interface IndividualDataFromCsv {
     hasTimeField?: boolean,
     dateField?: LogToolField,
     timeField?: LogToolField,
-    intervalForSeconds?: number;
+    dataCollectionInterval?: number;
 }
 
-export interface HourlyAverage {
-    hour: number,
-    averages: Array<{
-        value: number,
-        field: LogToolField
-    }>
-}
 
 export interface DayTypeGraphItem {
     xData: Array<any>,
@@ -368,11 +360,17 @@ export interface ExplorerDataSet {
     hasTimeField?: boolean,
     dateField?: LogToolField,
     timeField?: LogToolField,
-    intervalForSeconds?: number;
+    dataCollectionInterval?: number;
     canRunDayTypeAnalysis: boolean
   }
 
   export interface StepMovement {
     direction: 'forward' | 'back';
     url: string
+  }
+
+  export interface DayTypeAverageInterval {
+    display: string, 
+    seconds: number,
+    unitOfTimeString: 'minutes' | 'hour' | 'day'
   }
