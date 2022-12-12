@@ -172,6 +172,7 @@ export class StackLossByMassComponent implements OnInit {
     }
   }
   calculate() {
+    this.stackLossForm.controls.combustionAirTemperature.patchValue(this.stackLossForm.controls.ambientAirTemp.value);
     this.checkStackLossTemp();
     this.emitCalculate.emit(this.stackLossForm);
   }
