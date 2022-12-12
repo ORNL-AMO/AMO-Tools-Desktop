@@ -161,6 +161,140 @@ export class TreasureHuntPptService {
     return data;
   }
 
+  getCostSavingsData(treasureHunt: TreasureHuntResults): PptxgenjsChartData[] {    
+    let labels: Array<string> = new Array();
+    let values: Array<number> = new Array();
+    
+    if (treasureHunt.totalSavings){
+      labels.push("Projected Cost");
+      values.push(treasureHunt.totalModificationCost);
+      labels.push("Cost Savings");
+      values.push(treasureHunt.totalSavings);
+    }  
+    
+    let data: PptxgenjsChartData[] = [{
+      name: "Cost",
+      labels: labels,
+      values: values
+    }];
+    return data;
+  }
+
+  getElectricitySavingsData(treasureHunt: TreasureHuntResults): PptxgenjsChartData[] {    
+    let labels: Array<string> = new Array();
+    let values: Array<number> = new Array();
+    
+    if (treasureHunt.electricity.energySavings){
+      labels.push("Projected Electricity Usage");
+      values.push(treasureHunt.electricity.modifiedEnergyUsage);
+      labels.push("Electricity Savings");
+      values.push(treasureHunt.electricity.energySavings);
+    }  
+    
+    let data: PptxgenjsChartData[] = [{
+      name: "Electricity",
+      labels: labels,
+      values: values
+    }];
+    return data;
+  }
+
+  getNaturalGasSavingsData(treasureHunt: TreasureHuntResults): PptxgenjsChartData[] {    
+    let labels: Array<string> = new Array();
+    let values: Array<number> = new Array();
+    
+    if (treasureHunt.naturalGas.energySavings){
+      labels.push("Projected Natural Gas Usage");
+      values.push(treasureHunt.naturalGas.modifiedEnergyUsage);
+      labels.push("Natural Gas Savings");
+      values.push(treasureHunt.naturalGas.energySavings);
+    }  
+    
+    let data: PptxgenjsChartData[] = [{
+      name: "Natural Gas",
+      labels: labels,
+      values: values
+    }];
+    return data;
+  }
+
+  getWaterSavingsData(treasureHunt: TreasureHuntResults): PptxgenjsChartData[] {    
+    let labels: Array<string> = new Array();
+    let values: Array<number> = new Array();
+    
+    if (treasureHunt.water.energySavings){
+      labels.push("Projected Water Usage");
+      values.push(treasureHunt.water.modifiedEnergyUsage);
+      labels.push("Water Savings");
+      values.push(treasureHunt.water.energySavings);
+    }  
+    
+    let data: PptxgenjsChartData[] = [{
+      name: "Water",
+      labels: labels,
+      values: values
+    }];
+    return data;
+  }
+
+  getWastewaterSavingsData(treasureHunt: TreasureHuntResults): PptxgenjsChartData[] {    
+    let labels: Array<string> = new Array();
+    let values: Array<number> = new Array();
+    
+    if (treasureHunt.wasteWater.energySavings){
+      labels.push("Projected Wastewater Usage");
+      values.push(treasureHunt.wasteWater.modifiedEnergyUsage);
+      labels.push("Wastewater Savings");
+      values.push(treasureHunt.wasteWater.energySavings);
+    }  
+    
+    let data: PptxgenjsChartData[] = [{
+      name: "Wastewater",
+      labels: labels,
+      values: values
+    }];
+    return data;
+  }
+
+
+  getCompAirSavingsData(treasureHunt: TreasureHuntResults): PptxgenjsChartData[] {    
+    let labels: Array<string> = new Array();
+    let values: Array<number> = new Array();
+    
+    if (treasureHunt.compressedAir.energySavings){
+      labels.push("Projected Compressed Air Usage");
+      values.push(treasureHunt.compressedAir.modifiedEnergyUsage);
+      labels.push("Compressed Air Savings");
+      values.push(treasureHunt.compressedAir.energySavings);
+    }  
+    
+    let data: PptxgenjsChartData[] = [{
+      name: "Compressed Air",
+      labels: labels,
+      values: values
+    }];
+    return data;
+  }
+
+  getSteamSavingsData(treasureHunt: TreasureHuntResults): PptxgenjsChartData[] {    
+    let labels: Array<string> = new Array();
+    let values: Array<number> = new Array();
+    
+    if (treasureHunt.steam.energySavings){
+      labels.push("Projected Steam Usage");
+      values.push(treasureHunt.steam.modifiedEnergyUsage);
+      labels.push("Steam Savings");
+      values.push(treasureHunt.steam.energySavings);
+    }  
+    
+    let data: PptxgenjsChartData[] = [{
+      name: "Steam",
+      labels: labels,
+      values: values
+    }];
+    return data;
+  }
+
   getTeamSummaryData(opportunityCardsData: Array<OpportunityCardData>): PptxgenjsChartData[] {
     let teamData = this.treasureHuntReportService.getTeamData(opportunityCardsData);
     teamData = _.orderBy(teamData, 'costSavings', 'desc');
@@ -218,7 +352,12 @@ export class TreasureHuntPptService {
       dataLabelColor: '000000',
       dataLabelFontBold: true,
       showLegend: false,
-      firstSliceAng: 0
+      firstSliceAng: 0,
+      showTitle: false,
+      legendFontSize: 14,
+      legendFontFace: 'Arial',   
+      titleFontSize: 18,
+      titleFontFace: 'Arial',
     };
     return doughnutChartOptions;
   }
@@ -275,10 +414,18 @@ export class TreasureHuntPptService {
 
   getOpportunitySlideText(opportunityData: OpportunitySheet): { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } {
     let equipmentName: string = this.getEquipmentName(opportunityData.equipment);
+    let team: string = "";
+    let owner: string = "";
+    if(opportunityData.owner != undefined){
+      team = opportunityData.owner;
+    }
+    if(opportunityData.businessUnits != undefined){
+      owner = opportunityData.businessUnits;
+    }
     let slideText: pptxgen.TextProps[] = [
       { text: "Process / Equipment: " + equipmentName, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
-      { text: "Team: " + opportunityData.owner, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
-      { text: "Owner/Lead: " + opportunityData.businessUnits, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
+      { text: "Team: " + team, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
+      { text: "Owner/Lead: " + owner, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
       { text: "Description: " + opportunityData.description, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
     ];
     let slideTextProps = this.getOppSlideProperties();
@@ -360,65 +507,171 @@ export class TreasureHuntPptService {
 
     let slideTitleProperties: pptxgen.TextPropsOptions = this.getSlideTitleProperties();
     let pieChartOptions: pptxgen.IChartOpts = this.getPieChartProperties();
-    let doughnutChartOptions: pptxgen.IChartOpts = this.getDoughnutChartProperties();
+    let doughnutChartOptions: pptxgen.IChartOpts;
     let teamSummaryData: PptxgenjsChartData[] = this.getTeamSummaryData(opportunityCardsData);
     let paybackBarData: PptxgenjsChartData[] = this.getPaybackData(opportunitiesPaybackDetails, settings);
 
-    let slide0 = pptx.addSlide();
-    slide0.background = { data: betterPlantsPPTimg.betterPlantsTitleSlide };
-    slide0.addText(pptTitle, { x: 0.3, y: 2.1, w: 5.73, h: 1.21, align: 'center', bold: true, color: '1D428A', fontSize: 26, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
-    slide0.addText(date, { x: 0.3, y: 4.19, w: 4.34, h: 0.74, align: 'left', color: '8B93B1', fontSize: 20, fontFace: 'Arial (Body)', valign: 'top', isTextBox: true, autoFit: true });
-
-    let slide1 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide1.addText('Energy Utility Usage & Cost', slideTitleProperties);
-    if (treasureHunt.currentEnergyUsage) {
-      slide1 = this.getEnergyUtilityTable(slide1, treasureHunt.currentEnergyUsage, settings);
-    }
+    let slide1 = pptx.addSlide();
+    slide1.background = { data: betterPlantsPPTimg.betterPlantsTitleSlide };
+    slide1.addText(pptTitle, { x: 0.3, y: 2.1, w: 5.73, h: 1.21, align: 'center', bold: true, color: '1D428A', fontSize: 26, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
+    slide1.addText(date, { x: 0.3, y: 4.19, w: 4.34, h: 0.74, align: 'left', color: '8B93B1', fontSize: 20, fontFace: 'Arial (Body)', valign: 'top', isTextBox: true, autoFit: true });
+  
 
     let slide2 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide2.addText('Cost Summary', slideTitleProperties);
     slide2 = this.getCostSummaryTable(slide2, treasureHuntResults);
+    let costSavingsData: PptxgenjsChartData[] = this.getCostSavingsData(treasureHuntResults);
+    doughnutChartOptions = this.getDoughnutChartProperties();
+    slide2.addChart("doughnut", costSavingsData, doughnutChartOptions);
+    let totalCurrentCost: string = this.roundValToCurrency(treasureHuntResults.totalBaselineCost);
+    slide2.addText("Total Current Cost", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    slide2.addText(`${totalCurrentCost}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+
 
     let slide3 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide3.addText('Detailed Summary', slideTitleProperties);
     slide3 = this.getDetailedSummaryTable(slide3, treasureHuntResults, settings);
 
     let slide4 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide4.addText('Carbon Emission Results', slideTitleProperties);
-    slide4 = this.getCarbonSummaryTable(slide4, treasureHuntResults.co2EmissionsResults);
+    slide4.addText('Energy Utility Usage & Cost', slideTitleProperties);
+    if (treasureHunt.currentEnergyUsage) {
+      slide4 = this.getEnergyUtilityTable(slide4, treasureHunt.currentEnergyUsage, settings);
+    }
 
     let slide5 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide5.addText('Carbon Emission Savings (tonne CO2)', slideTitleProperties);
-    let carbonEmissionData: PptxgenjsChartData[] = this.getCarbonEmissionData(treasureHuntResults.co2EmissionsResults);
+    slide5.addText('Electricity & Natural Gas Usage', slideTitleProperties);
+    if(treasureHuntResults.electricity.energySavings){      
+      let electricitySavingsData: PptxgenjsChartData[] = this.getElectricitySavingsData(treasureHuntResults);
+      slide5.addChart("doughnut", electricitySavingsData, doughnutChartOptions);
+      let totalElectricity: string = this.returnValAsString(treasureHuntResults.electricity.baselineEnergyUsage);
+      slide5.addText("Total Current Electricity Usage (kWh)", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+      slide5.addText(`${totalElectricity}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    }
+    if(treasureHuntResults.naturalGas.energySavings){
+      let naturalGasSavingsData: PptxgenjsChartData[] = this.getNaturalGasSavingsData(treasureHuntResults);
+      doughnutChartOptions = this.getDoughnutChartProperties();
+      doughnutChartOptions.x = 7.17;
+      slide5.addChart("doughnut", naturalGasSavingsData, doughnutChartOptions);
+      let totalNaturalGas: string = this.returnValAsString(treasureHuntResults.naturalGas.baselineEnergyUsage);
+      let unit: string = this.getUtilityUnit('Natural Gas', settings);
+      slide5.addText("Total Current Natural Gas Usage ("+`${unit}`+")", { w: 2.27, h: 0.57, x: 8.81, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+      slide5.addText(`${totalNaturalGas}`, { w: 2, h: 0.34, x: 8.95, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    }    
+    
+    let slide6 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide6.addText('Utility Usage & Savings', slideTitleProperties);
+    if(treasureHuntResults.water.energySavings){
+      let waterSavingsData: PptxgenjsChartData[] = this.getWaterSavingsData(treasureHuntResults);
+      doughnutChartOptions = this.getDoughnutChartProperties();
+      doughnutChartOptions.w = 6.66;
+      doughnutChartOptions.h = 2.9;
+      doughnutChartOptions.x = 0.01;
+      doughnutChartOptions.y = 1.2;
+      doughnutChartOptions.showLegend = true;
+      doughnutChartOptions.showLabel = false;      
+      doughnutChartOptions.showTitle = true;      
+      doughnutChartOptions.title = "Water";
+      slide6.addChart("doughnut", waterSavingsData, doughnutChartOptions);
+      let totalWater: string = this.returnValAsString(treasureHuntResults.water.baselineEnergyUsage);
+      let unit: string = this.getUtilityUnit('Water', settings);
+      slide6.addText("Total Current Water Usage ("+`${unit}`+")", { w: 2.27, h: 0.57, x: 4.39, y: 1.3, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+      slide6.addText(`${totalWater}`, { w: 2, h: 0.34, x: 4.53, y: 1.98, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    }
+    if(treasureHuntResults.wasteWater.energySavings){
+      let wastewaterSavingsData: PptxgenjsChartData[] = this.getWastewaterSavingsData(treasureHuntResults);
+      doughnutChartOptions = this.getDoughnutChartProperties();
+      doughnutChartOptions.w = 6.66;
+      doughnutChartOptions.h = 2.9;
+      doughnutChartOptions.x = 6.66;
+      doughnutChartOptions.y = 1.2;      
+      doughnutChartOptions.showLegend = true;
+      doughnutChartOptions.showLabel = false;      
+      doughnutChartOptions.showTitle = true;    
+      doughnutChartOptions.title = "Wastewater";
+      slide6.addChart("doughnut", wastewaterSavingsData, doughnutChartOptions);
+      let totalWastewater: string = this.returnValAsString(treasureHuntResults.wasteWater.baselineEnergyUsage);
+      let unit: string = this.getUtilityUnit('Waste Water', settings);
+      slide6.addText("Total Current Wastewater Usage ("+`${unit}`+")", { w: 2.27, h: 0.57, x: 11.06, y: 1.3, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+      slide6.addText(`${totalWastewater}`, { w: 2, h: 0.34, x: 11.19, y: 1.98, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    }
+    if(treasureHuntResults.compressedAir.energySavings){
+      let compressedAirSavingsData: PptxgenjsChartData[] = this.getCompAirSavingsData(treasureHuntResults);
+      doughnutChartOptions = this.getDoughnutChartProperties();
+      doughnutChartOptions.w = 6.66;
+      doughnutChartOptions.h = 2.9;
+      doughnutChartOptions.x = 0.01;
+      doughnutChartOptions.y = 4.1;
+      doughnutChartOptions.showLegend = true;
+      doughnutChartOptions.showLabel = false;      
+      doughnutChartOptions.showTitle = true;    
+      doughnutChartOptions.title = "Compressed Air";
+      slide6.addChart("doughnut", compressedAirSavingsData, doughnutChartOptions);
+      let totalCompressedAir: string = this.returnValAsString(treasureHuntResults.compressedAir.baselineEnergyUsage);
+      let unit: string = this.getUtilityUnit('Compressed Air', settings);
+      slide6.addText("Total Current Compressed Air Usage ("+`${unit}`+")", { w: 2.27, h: 0.57, x: 4.39, y: 4.2, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+      slide6.addText(`${totalCompressedAir}`, { w: 2, h: 0.34, x: 4.53, y: 4.88, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    }
+    if(treasureHuntResults.steam.energySavings){
+      let steamSavingsData: PptxgenjsChartData[] = this.getSteamSavingsData(treasureHuntResults);
+      doughnutChartOptions = this.getDoughnutChartProperties();
+      doughnutChartOptions.w = 6.66;
+      doughnutChartOptions.h = 2.9;
+      doughnutChartOptions.x = 6.66;
+      doughnutChartOptions.y = 4.1;
+      doughnutChartOptions.showLegend = true;
+      doughnutChartOptions.showLabel = false;      
+      doughnutChartOptions.showTitle = true;    
+      doughnutChartOptions.title = "Steam";
+      slide6.addChart("doughnut", steamSavingsData, doughnutChartOptions);
+      let totalSteam: string = this.returnValAsString(treasureHuntResults.steam.baselineEnergyUsage);
+      let unit: string = this.getUtilityUnit('Steam', settings);
+      slide6.addText("Total Current Steam Usage ("+`${unit}`+")", { w: 2.27, h: 0.57, x: 11.06, y: 4.2, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+      slide6.addText(`${totalSteam}`, { w: 2, h: 0.34, x: 11.19, y: 4.88, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    }
+    
+
+
+
+    let slide7 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide7.addText('Carbon Emission Results (tonne CO2)', slideTitleProperties);
+    doughnutChartOptions = this.getDoughnutChartProperties();
+    slide7 = this.getCarbonSummaryTable(slide7, treasureHuntResults.co2EmissionsResults);
     let carbonSavingsData: PptxgenjsChartData[] = this.getCarbonSavingsData(treasureHuntResults.co2EmissionsResults);
-    slide5.addChart("doughnut", carbonSavingsData, doughnutChartOptions);
-    slide5.addChart("pie", carbonEmissionData, pieChartOptions);
-    let totalEmissions: string = this.roundValToFormatString(treasureHuntResults.co2EmissionsResults.totalCO2CurrentUse)
-    slide5.addText("Total Current CO2 Emissions", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
-    slide5.addText(`${totalEmissions}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    slide7.addChart("doughnut", carbonSavingsData, doughnutChartOptions);
+    let totalEmissions: string = this.roundValToFormatString(treasureHuntResults.co2EmissionsResults.totalCO2CurrentUse);
+    slide7.addText("Total Current CO2 Emissions", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    slide7.addText(`${totalEmissions}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
 
 
     if (this.treasureHuntReportService.getTeamData(opportunityCardsData).length > 0) {
-      let slide6 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-      slide6.addText('Team Summary ($)', slideTitleProperties);
-      slide6 = this.getTeamSummaryTable(slide6, opportunityCardsData);
-      slide6.addChart("pie", teamSummaryData, pieChartOptions);
+      let slide8 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+      slide8.addText('Team Summary ($)', slideTitleProperties);
+      slide8 = this.getTeamSummaryTable(slide8, opportunityCardsData);
+      slide8.addChart("pie", teamSummaryData, pieChartOptions);
     }
 
-    let slide8 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide8.addText('Opportunity Payback Details ($)', slideTitleProperties);
-    slide8 = this.getOppPaybackTable(slide8, opportunitiesPaybackDetails);    
-    slide8.addChart("pie", paybackBarData, pieChartOptions);    
+    let slide9 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide9.addText('Opportunity Payback Details ($)', slideTitleProperties);
+    slide9 = this.getOppPaybackTable(slide9, opportunitiesPaybackDetails);    
+    slide9.addChart("pie", paybackBarData, pieChartOptions);    
+
+    let slide10 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide10.addText('Best Practices', slideTitleProperties);
+    slide10.addText(
+      "Outline key best practices identified in Treasure Hunt here\ntype here\ntype here",
+      { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial', valign: 'top', bullet: true }
+    );
 
     let slide11 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide11.addText('Best Practices', slideTitleProperties);
+    slide11.addText('Other Opportunities Not Evaluated', slideTitleProperties);
+    slide11.addText(
+      "Outline any major opportunities identified, but not evaluated here\ntype here\ntype here",
+      { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial', valign: 'top', bullet: true }
+    );
 
-    let slide12 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-    slide12.addText('Other Opportunities Not Evaluated', slideTitleProperties);
-
-    let slide13 = pptx.addSlide();
-    slide13.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
-    slide13.addText('Opportunity Summaries', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
+    let slide12 = pptx.addSlide();
+    slide12.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
+    slide12.addText('Opportunity Summaries', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
 
     let counter: number = 0;
     opportunityCardsData.forEach(opp => {
@@ -506,7 +759,7 @@ export class TreasureHuntPptService {
       } else {
         utilityUnit = 'Nm<sup>3</sup>';
       }
-    } else if (utilityType == 'Water' || utilityType == 'Waste Water') {
+    } else if (utilityType == 'Water' || utilityType == 'Waste Water' || utilityType == 'Waste-Water') {
       if (settings.unitsOfMeasure == 'Imperial') {
         utilityUnit = 'kgal';
       } else {
@@ -864,7 +1117,7 @@ export class TreasureHuntPptService {
     ]);
 
 
-    slide.addTable(rows, { x: 3.42, y: 1.6, w: 6.5, colW: [1.5, 1.5, 2, 1.5], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: "middle" });
+    slide.addTable(rows, { x: 6.5, y: 1.6, w: 6.5, colW: [1.5, 1.5, 2, 1.5], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: "middle" });
     if (treasureHuntResults.hasMixed) {
       slide.addText('* * * Savings for opportunities with mixed utilities are under their respective utilities; implementation costs and payback are under "Mixed“ * * *', { x: 1.26, y: 6.58, w: 10.82, h: 0.3, align: 'center', fill: { color: 'D0FCBA' }, color: '1D428A', fontSize: 12, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
     }
@@ -942,7 +1195,7 @@ export class TreasureHuntPptService {
       this.roundValToFormatString(carbonResults.totalCO2Savings)
     ]);
 
-    slide.addTable(rows, { x: 0.97, y: 1.6, w: 11.39, colW: [1.5, 3.27, 3.42, 3.2], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: "left", valign: "middle" });
+    slide.addTable(rows, { x: 5.54, y: 1.22, w: 7.77, colW: [1.5, 2.04, 2.23, 2], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: "left", valign: "middle" });
 
     return slide;
   }
