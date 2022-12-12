@@ -1,16 +1,18 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { filter, firstValueFrom, Subscription } from 'rxjs';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
-import { Router } from '../../../node_modules/@angular/router';
+import { NavigationEnd, Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
+import { v4 as uuidv4 } from 'uuid';
 
 declare var google: any;
 @Component({
@@ -43,7 +45,7 @@ export class CoreComponent implements OnInit {
   tutorialType: string;
   inTutorialsView: boolean;
   updateError: boolean = false;
-
+  isOnline: boolean;
   info: any;
   updateAvailableSubscription: Subscription;
   showTranslateModalSub: Subscription;
@@ -55,11 +57,20 @@ export class CoreComponent implements OnInit {
     private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, 
     private directoryDbService: DirectoryDbService,
-    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private router: Router,
+    private analyticsService: AnalyticsService,
+    private calculatorDbService: CalculatorDbService, 
+    private coreService: CoreService, 
+    private router: Router,
+
     private inventoryDbService: InventoryDbService) {
   }
 
   ngOnInit() {
+   this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+     .subscribe((event: NavigationEnd) => {
+      this.sendAnalyticsPageView(event);
+     });
+
     this.electronService.ipcRenderer.once('available', (event, arg) => {
       if (arg === true) {
         this.showUpdateModal = true;
@@ -88,10 +99,7 @@ export class CoreComponent implements OnInit {
       this.suiteDbService.startup();
     }
 
-    // const start = performance.now(); 
     window.indexedDB.databases().then(db => {
-      // const duration = performance.now() - start;
-      // console.log(db, duration);
       this.initData();
     });
 
@@ -119,6 +127,22 @@ export class CoreComponent implements OnInit {
 
   }
 
+  initAnalyticsSession() {
+    // for users/sessions, replace with UUID/CLIENT ID LOGIC from IDB
+    let clientId = uuidv4();
+    this.analyticsService.setClientId(clientId);
+    this.analyticsService.postEventToMeasurementProtocol('page_view', { 
+      page_path: '/testing',
+      engagement_time_msec: '100',
+      session_id: 'testing'
+    })
+  }
+
+  sendAnalyticsPageView(event) {
+    if (this.idbStarted) {
+      this.analyticsService.postEventToMeasurementProtocol('page_view', { page_path: event.urlAfterRedirects })
+     } 
+  }
 
   ngOnDestroy() {
     if (this.openingTutorialSub) this.openingTutorialSub.unsubscribe();
@@ -151,6 +175,7 @@ export class CoreComponent implements OnInit {
         this.suiteDbService.initCustomDbMaterials();
       }
       this.idbStarted = true;
+      this.initAnalyticsSession();
       this.changeDetectorRef.detectChanges();
     });
   }

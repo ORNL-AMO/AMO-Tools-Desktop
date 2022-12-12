@@ -38,6 +38,7 @@ import { WasteWaterModule } from '../waste-water/waste-water.module';
 import { CompressedAirAssessmentModule } from '../compressed-air-assessment/compressed-air-assessment.module';
 import { PlotlyViaWindowModule } from 'angular-plotly.js';
 import { IndexedDbModule } from '../indexedDb/indexed-db.module';
+import { AnalyticsModule } from '../shared/analytics/analytics.module';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { IndexedDbModule } from '../indexedDb/indexed-db.module';
     WasteWaterModule,
     CompressedAirAssessmentModule,
     PlotlyViaWindowModule,
-    IndexedDbModule
+    IndexedDbModule,
+    AnalyticsModule
   ],
   providers: [
     AssessmentService,
