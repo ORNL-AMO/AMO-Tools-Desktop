@@ -172,6 +172,7 @@ export class OperatingProfileTableComponent implements OnInit {
     this.isFormChange = true;
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
+    this.profileSummaryValid = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment);
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
