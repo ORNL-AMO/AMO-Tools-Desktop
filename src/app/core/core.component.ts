@@ -11,8 +11,9 @@ import { CoreService } from './core.service';
 import { NavigationEnd, Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
-import { AnalyticsService } from '../shared/analytics/analytics.service';
+import { AnalyticsService, AppAnalyticsData } from '../shared/analytics/analytics.service';
 import { v4 as uuidv4 } from 'uuid';
+import { AnalyticsDataIdbService } from '../indexedDb/analytics-data-idb.service';
 
 declare var google: any;
 @Component({
@@ -49,7 +50,10 @@ export class CoreComponent implements OnInit {
   info: any;
   updateAvailableSubscription: Subscription;
   showTranslateModalSub: Subscription;
+  routerSubscription: Subscription;
   showTranslate: string = 'hide';
+  analyticsSessionId: string;
+
   constructor(private electronService: ElectronService, 
     private assessmentService: AssessmentService, 
     private changeDetectorRef: ChangeDetectorRef,
@@ -61,12 +65,13 @@ export class CoreComponent implements OnInit {
     private calculatorDbService: CalculatorDbService, 
     private coreService: CoreService, 
     private router: Router,
-
+    private analyticsDataIdbService: AnalyticsDataIdbService,
     private inventoryDbService: InventoryDbService) {
   }
 
   ngOnInit() {
-   this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+   this.analyticsSessionId = uuidv4();
+   this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
      .subscribe((event: NavigationEnd) => {
       this.sendAnalyticsPageView(event);
      });
@@ -127,25 +132,42 @@ export class CoreComponent implements OnInit {
 
   }
 
-  initAnalyticsSession() {
-    // for users/sessions, replace with UUID/CLIENT ID LOGIC from IDB
-    let clientId = uuidv4();
-    this.analyticsService.setClientId(clientId);
+ async initAnalyticsSession() {
+    await this.setClientAnalyticsId();
     this.analyticsService.postEventToMeasurementProtocol('page_view', { 
-      page_path: '/testing',
+      page_path: '/landing-screen',
+      // engagement_time_msec required to begin an analytics session but not used again
       engagement_time_msec: '100',
-      session_id: 'testing'
+      session_id: this.analyticsSessionId
     })
+  }
+  
+  async setClientAnalyticsId() {
+    let appAnalyticsData: Array<AppAnalyticsData> = await firstValueFrom(this.analyticsDataIdbService.getAppAnalyticsData());
+    let clientId: string;
+    if (appAnalyticsData.length == 0) {
+      clientId = uuidv4();
+      await firstValueFrom(this.analyticsDataIdbService.addWithObservable({
+        clientId: clientId,
+        modifiedDate: new Date()
+      }));
+    } else {
+      clientId = appAnalyticsData[0].clientId;
+    }
+    this.analyticsService.setClientId(clientId);
   }
 
   sendAnalyticsPageView(event) {
     if (this.idbStarted) {
-      this.analyticsService.postEventToMeasurementProtocol('page_view', { page_path: event.urlAfterRedirects })
+      this.analyticsService.postEventToMeasurementProtocol('page_view', { page_path: event.urlAfterRedirects, session_id: this.analyticsSessionId })
      } 
   }
 
   ngOnDestroy() {
-    if (this.openingTutorialSub) this.openingTutorialSub.unsubscribe();
+    if (this.openingTutorialSub) {
+      this.openingTutorialSub.unsubscribe();
+    }
+    this.routerSubscription.unsubscribe();
     this.updateAvailableSubscription.unsubscribe();
     this.showTranslateModalSub.unsubscribe();
   }
