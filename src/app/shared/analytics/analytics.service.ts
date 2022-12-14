@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { catchError } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
 @Injectable()
@@ -60,17 +60,6 @@ export class AnalyticsService {
     return eventParams;
   }
 
-  // handleError(error: HttpErrorResponse, callOrigin: string) {
-  //   let customError: AnalyticsHttpError = new AnalyticsHttpError('An error occured. Please try again');
-  //   if (error.error instanceof ErrorEvent) {
-  //     customError.message = 'server error';
-  //   } else if (error.error instanceof ProgressEvent && error.status === 0) {
-  //     customError.message = 'A network error occured. Please check your internet connection.';
-  //   } 
-  //   return throwError(() => customError);
-  // }
-
-
 }
 
 export class AnalyticsHttpError extends Error {}
@@ -89,3 +78,8 @@ export interface EventParameters {
 }
 
 export type AnalyticsEventString = 'page_view';
+
+export interface AppAnalyticsData {
+  clientId: string,
+  modifiedDate: Date
+}
