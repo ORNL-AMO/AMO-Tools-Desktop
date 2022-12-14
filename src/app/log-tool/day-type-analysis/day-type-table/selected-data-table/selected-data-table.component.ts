@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { LogToolField, DayTypeSummary, DayType, LogToolDay } from '../../../log-tool-models';
+import { LogToolField, DayTypeSummary, DayType, LogToolDay, AverageByInterval } from '../../../log-tool-models';
 import { Subscription } from 'rxjs';
 import { DayTypeAnalysisService } from '../../day-type-analysis.service';
 import * as _ from 'lodash';
@@ -25,7 +25,7 @@ export class SelectedDataTableComponent implements OnInit {
   dayTypesSub: Subscription;
 
   dayTypeDaySummaries: Array<{ dayType: DayType, logToolDays: Array<LogToolDay> }>
-  hourLabels: Array<number> = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+  intervalDisplayStrings: Array<string> = [];
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService) { }
 
   ngOnInit() {
@@ -38,6 +38,9 @@ export class SelectedDataTableComponent implements OnInit {
     });
     this.dayTypesSub = this.dayTypeAnalysisService.dayTypes.subscribe(dayTypes => {
       this.dayTypes = dayTypes;
+      if (this.dayTypes && this.dayTypes.length > 0) {
+        this.intervalDisplayStrings = this.dayTypes[0].logToolDays[0].dayAveragesByInterval.map(average => average.intervalDisplayString);
+      }
     });
     
   }

@@ -115,7 +115,7 @@ export class LogToolDataService {
 
       dayAveragesByInterval.push({
         interval: this.selectedDayTypeAverageInterval.seconds,
-        intervalDateString: startDateString,
+        intervalDisplayString: startDateString,
         intervalDateRange: {
           startDate: startDateString,
           endDate: undefined
@@ -134,11 +134,12 @@ export class LogToolDataService {
         });
 
         let averages: Array<{ value: number, field: LogToolField }> = this.getIntervalAverages(currentIntervalDataForDay, fields)
-        let intervalDateString: string = this.getIntervalDateString(intervalByTimeUnit);
+        let {intervalDisplayString, intervalOffsetString} = this.getCurrentIntervalStrings(intervalByTimeUnit);
         intervalByTimeUnit += unitOfTime;
         dayAveragesByInterval.push({
           interval: interval,
-          intervalDateString: intervalDateString,
+          intervalDisplayString: intervalDisplayString,
+          intervalOffsetString: intervalOffsetString,
           intervalDateRange: {
             startDate: moment(startingDate).format('YYYY-MM-DD HH:mm:ss'),
             endDate: moment(endingDate).format('YYYY-MM-DD HH:mm:ss')
@@ -179,17 +180,31 @@ export class LogToolDataService {
     firstDate.getDate() === secondDate.getDate();
   }
 
-  getIntervalDateString(currentInterval: number): string {
-    let intervalDateString: string;
+getCurrentIntervalStrings(currentInterval: number): {intervalDisplayString: string, intervalOffsetString: string } {
+    let intervalDisplayString: string;
+    let intervalOffsetString: string;
     let day: Date = new Date(new Date().setHours(0,0,0,0));
     if (this.selectedDayTypeAverageInterval.unitOfTimeString === 'hour') {
       day.setHours(currentInterval, 0, 0, 0);
-      intervalDateString = moment(day).format('H');
+      intervalDisplayString = moment(day).format('H');
+      intervalOffsetString = moment(day).add(1, 'hours').format('H');
+      if (currentInterval === 23) {
+        intervalOffsetString = '24';
+      }
     } else if (this.selectedDayTypeAverageInterval.unitOfTimeString === 'minutes') {
       day.setMinutes(currentInterval, 0, 0);
-      intervalDateString = moment(day).format('H:mm');
+      intervalDisplayString = moment(day).format('H:mm');
+      let offsetDay: Date = new Date(new Date().setHours(0,0,0,0));
+      let offsetSeconds: number = currentInterval + this.getUnitOfTime();
+      offsetDay.setMinutes(offsetSeconds, 0, 0);
+      intervalOffsetString = moment(offsetDay).format('H:mm');
+      if (!this.checkSameDay(day, offsetDay)) {
+        //is last interval
+        intervalOffsetString = '24';
+      }
     }
-    return intervalDateString;
+    
+    return {intervalDisplayString: intervalDisplayString, intervalOffsetString: intervalOffsetString };
   }
 
   getUnitOfTime(): number {
