@@ -220,7 +220,7 @@ export class DayTypeAnalysisService {
         {
           interval: dayAverage.interval, 
           intervalDateRange: dayAverage.intervalDateRange,
-          intervalDateString: dayAverage.intervalDateString,
+          intervalDisplayString: dayAverage.intervalDisplayString,
           averages: []
         });
       return {interval: dayAverage.interval, allDayAverages: []};

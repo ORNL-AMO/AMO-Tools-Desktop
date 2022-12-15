@@ -11,8 +11,8 @@
                             <td class="bold">
                                 &nbsp;
                             </td>
-                            <td class="bold text-center" *ngFor="let hourLabel of hourLabels">
-                                {{hourLabel + 1}}
+                            <td class="bold text-center" *ngFor="let intervalDisplay of intervalDisplayStrings">
+                                {{intervalDisplay}}
                             </td>
                         </tr>
                         <tr *ngFor="let dayTypeSummary of dayTypeSummaries">
@@ -50,8 +50,8 @@
                             <td class="bold">
                                 &nbsp;
                             </td>
-                            <td class="bold text-center" *ngFor="let hourLabel of hourLabels">
-                                {{hourLabel + 1}}
+                            <td class="bold text-center" *ngFor="let intervalDisplay of intervalDisplayStrings">
+                                {{intervalDisplay}}
                             </td>
                         </tr>
                         <tr>

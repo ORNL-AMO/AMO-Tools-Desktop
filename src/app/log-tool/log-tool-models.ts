@@ -21,7 +21,8 @@ export interface LogToolDay {
 
 export interface AverageByInterval {
     interval: number,
-    intervalDateString: string,
+    intervalDisplayString: string,
+    intervalOffsetString?: string,
     intervalDateRange?: {
         startDate: string,
         endDate: string
