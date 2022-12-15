@@ -12,7 +12,11 @@ export class LogToolDataService {
 
   logToolDays: Array<LogToolDay>;
   dataIntervalValid: BehaviorSubject<boolean>;
-  selectedDayTypeAverageInterval: DayTypeAverageInterval;
+  selectedDayTypeAverageInterval: DayTypeAverageInterval = {
+    display: 'Hourly', 
+    seconds: 3600,
+    unitOfTimeString: 'hour'
+  };
   intervalTotalSecondsPerDay: number = 86400;
 
   loadingSpinner: BehaviorSubject<LoadingSpinner>;
