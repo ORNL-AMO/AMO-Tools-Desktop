@@ -137,7 +137,7 @@ export class ElectricityReductionService {
     return form;
   }
 
-  getObjFromForm(form: UntypedFormGroup, userSelectedHP: boolean ): ElectricityReductionData {
+  getObjFromForm(form: UntypedFormGroup): ElectricityReductionData {
     let multimeterObj: MultimeterReadingData = {
       numberOfPhases: form.controls.numberOfPhases.value,
       supplyVoltage: form.controls.supplyVoltage.value,
@@ -172,7 +172,7 @@ export class ElectricityReductionService {
       powerMeterData: powerMeterObj,
       otherMethodData: otherMethodData,
       units: form.controls.units.value,
-      userSelectedHP: userSelectedHP
+      userSelectedHP: form.controls.userSelectedHP.value
     };
     return obj;
   }

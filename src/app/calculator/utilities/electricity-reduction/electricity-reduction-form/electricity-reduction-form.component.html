@@ -143,16 +143,16 @@
         <label class="small" for="{{'ratedMotorPower_'+idString}}">
           Rated Motor Power
           <a *ngIf="isBaseline" class="form-text small click-link" (click)="toggleUserSelectedHP()">
-            <span *ngIf="data.userSelectedHP">Enter Rated Motor Power in kW</span>
-            <span *ngIf="!data.userSelectedHP">Enter Rated Motor Power in hp</span>
+            <span *ngIf="form.controls.userSelectedHP.value == true">Enter Rated Motor Power in kW</span>
+            <span *ngIf="form.controls.userSelectedHP.value == false">Enter Rated Motor Power in hp</span>
           </a>
         </label>        
         <div class="input-group">
           <input class="form-control" name="ratedMotorPower" id="{{'ratedMotorPower_'+idString}}"
             formControlName="ratedMotorPower" type="number" (input)="calculate()"
             (focus)="focusField('ratedMotorPower')" (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon" *ngIf="userSelectedHP">hp</span>
-          <span class="units input-group-addon" *ngIf="!userSelectedHP">kW</span>
+          <span class="units input-group-addon" *ngIf="form.controls.userSelectedHP.value == true">hp</span>
+          <span class="units input-group-addon" *ngIf="form.controls.userSelectedHP.value == false">kW</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.ratedMotorPower.invalid && !form.controls.ratedMotorPower.pristine">

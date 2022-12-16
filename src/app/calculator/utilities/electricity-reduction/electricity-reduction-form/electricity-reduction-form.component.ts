@@ -69,7 +69,7 @@ export class ElectricityReductionFormComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if(changes.userSelectedHP && !changes.userSelectedHP.firstChange){
-      this.data.userSelectedHP = this.userSelectedHP;
+      this.form.controls.userSelectedHP.patchValue(this.userSelectedHP);
       this.calculate();
     }
     if (changes.selected && !changes.selected.firstChange) {
@@ -98,7 +98,7 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   calculate() {
-    let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form, this.data.userSelectedHP);
+    let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form);
     this.calculateIndividualResult();
     this.emitCalculate.emit(tmpObj);
   }
@@ -108,7 +108,7 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   calculateIndividualResult() {
-    let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form, this.data.userSelectedHP);
+    let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form);
     this.individualResults = this.electricityReductionService.calculateIndividualEquipment(tmpObj, this.settings);
   }
 
@@ -156,7 +156,8 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   toggleUserSelectedHP(){
-    this.data.userSelectedHP = !this.data.userSelectedHP;
+    let toggleValue: boolean = !this.form.controls.userSelectedHP.value;
+    this.form.controls.userSelectedHP.patchValue(toggleValue);
     this.calculate();
   }
 }
