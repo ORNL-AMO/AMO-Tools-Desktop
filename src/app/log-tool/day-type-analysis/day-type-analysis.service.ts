@@ -228,6 +228,7 @@ export class DayTypeAnalysisService {
 
     dayType.logToolDays.forEach(logToolDay => {
       logToolDay.dayAveragesByInterval.forEach((intervalAverage, intervalIndex) => {
+        // each will have multiple all listings
         allDayAveragesByInterval[intervalIndex].allDayAverages.push(intervalAverage);
       });
     });
@@ -243,8 +244,9 @@ export class DayTypeAnalysisService {
 
   getCombinedDayTypeAverages(allDayAveragesByInterval: Array<{interval: number, allDayAverages: Array<AverageByInterval>}>, summedDayAveragesByInterval: Array<AverageByInterval>): Array<AverageByInterval> {
     allDayAveragesByInterval.forEach((intervalDayAverages, intervalIndex: number) => {
-      let fields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
+      let fields: Array<LogToolField> = this.visualizeService.getDataFieldOptions(true);
       fields.forEach(field => {
+    // todo this should not act on fields that are unused or dates?
         let combinedDaysHourlyAverage: number = this.getCombinedIntervalAverage(intervalDayAverages.allDayAverages, field, intervalDayAverages.interval);
         summedDayAveragesByInterval[intervalIndex].averages.push({
           field: field,
@@ -301,5 +303,13 @@ export class DayTypeAnalysisService {
     let startMonth: number = this.allDataMinDate.getMonth();
     let endMonth: number = this.allDataMaxDate.getMonth();
     this.numberOfMonths = endMonth - startMonth + 1;
+  }
+
+  truncate(text: string, limit: number) {
+    if (text.length > limit) {
+      return text.slice(0, limit) + '...'
+    } else {
+      return text;
+    }
   }
 }

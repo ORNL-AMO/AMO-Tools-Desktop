@@ -5,6 +5,7 @@ export interface LogToolField {
     fieldName: string,
     alias: string,
     useField: boolean,
+    useForDayTypeAnalysis?: boolean,
     isDateField: boolean,
     isTimeField?: boolean,
     unit: string,
@@ -369,6 +370,11 @@ export interface ExplorerDataSet {
     direction: 'forward' | 'back';
     url: string
   }
+
+ export interface LogToolAverage {
+    value: number,
+    field: LogToolField
+}
 
   export interface DayTypeAverageInterval {
     display: string, 

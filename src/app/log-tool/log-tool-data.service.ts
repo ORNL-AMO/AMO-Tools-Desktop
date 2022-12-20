@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { LogToolService } from './log-tool.service';
 import moment, { Moment } from 'moment';
 import * as _ from 'lodash';
-import { LogToolDay, LogToolField, IndividualDataFromCsv, ExplorerData, ExplorerFileData, ExplorerDataSet, StepMovement, LoadingSpinner, RefineDataStepStatus, LogToolDbData, AverageByInterval, DayTypeAverageInterval, ExplorerDataValid } from './log-tool-models';
+import { LogToolDay, LogToolField, IndividualDataFromCsv, ExplorerData, ExplorerFileData, ExplorerDataSet, StepMovement, LoadingSpinner, RefineDataStepStatus, LogToolDbData, AverageByInterval, DayTypeAverageInterval, ExplorerDataValid, LogToolAverage } from './log-tool-models';
 import { BehaviorSubject } from 'rxjs';
 import { CsvImportData, CsvToJsonService } from '../shared/helper-services/csv-to-json.service';
 import { MeasurMessageData } from '../shared/models/utilities';
@@ -86,6 +86,7 @@ export class LogToolDataService {
       this.logToolDays[existingDayIndex].dayAveragesByInterval.forEach(averageItem => {
         let addtionalAverages = dayAveragesByInterval.find(hourlyAverage => { return hourlyAverage.interval == averageItem.interval });
         averageItem.averages = _.union(averageItem.averages, addtionalAverages.averages);
+        averageItem.averages = this.combineTotalAggregateAverages(averageItem.averages);
       });
     } else {
       this.logToolDays.push({
@@ -94,13 +95,29 @@ export class LogToolDataService {
       });
     }
   }
+  // combine 'all' field for daytype day averages of all equipment
+  combineTotalAggregateAverages(averages: LogToolAverage[]) {
+    let averagesUnique: LogToolAverage[] = [];
+    for(let i = 0; i< averages.length; i++){
+      // to filter by any duplicate fieldname
+      // let idx = averagesUnique.findIndex(x => x.field.fieldName === averages[i].field.fieldName);
+      let idx = averagesUnique.findIndex(x => x.field.fieldId === 'all' && averages[i].field.fieldId === 'all');
+      if(idx < 0){
+        averagesUnique.push(averages[i]);
+      } else {
+        averagesUnique[idx].value = averagesUnique[idx].value + averages[i].value;
+      }
+    }
+
+    return averagesUnique;
+  }
   
   // * dayData: Array of objects where key/val is fileData fields/vals
   calculateDayAveragesByInterval(dayData: Array<any>, dataset: ExplorerDataSet): Array<AverageByInterval> {
     let dayAveragesByInterval: Array<AverageByInterval> = new Array();
     let intervalByTimeUnit: number = 0;
     // * only averaging data fields
-    let fields: Array<LogToolField> = dataset.fields.filter(field => !field.isDateField && field.useField == true);
+    let fields: Array<LogToolField> = dataset.fields.filter(field => !field.isDateField && field.useForDayTypeAnalysis == true);
     let startingDate: Date = new Date(new Date(dayData[0][dataset.dateField.fieldName]).setHours(0,0,0,0));
     let endingDate: Date = new Date(new Date(dayData[0][dataset.dateField.fieldName]).setHours(0,0,0,0));
     endingDate = new Date(endingDate.setSeconds(endingDate.getSeconds() + this.selectedDayTypeAverageInterval.seconds));
@@ -163,8 +180,9 @@ export class LogToolDataService {
     return dayAveragesByInterval;
   }
 
-  getIntervalAverages(currentIntervalDataForDay, fields) {
+  getIntervalAverages(currentIntervalDataForDay, fields: Array<LogToolField>) {
     let averages: Array<{ value: number, field: LogToolField }> = new Array();
+    let fieldIdsToAggregate: Array<string> = [];
     fields.forEach(field => {
       let intervalFieldMean: number;
       if (currentIntervalDataForDay.length != 0) {
@@ -174,7 +192,38 @@ export class LogToolDataService {
         value: intervalFieldMean,
         field: field
       });
+
+      if (field.useForDayTypeAnalysis) {
+        fieldIdsToAggregate.push(field.fieldId);
+      }
     });
+
+    let allDataCollectionUnitsAverage: { value: number, field: LogToolField } = 
+    {
+      value: undefined,
+      field: {
+        fieldName: 'all',
+        alias: 'Total Aggregated Equipment Data',
+        useField: true,
+        useForDayTypeAnalysis: true,
+        isDateField: undefined,
+        isTimeField: undefined,
+        unit: undefined,
+        invalidField: undefined,
+        csvId: undefined,
+        csvName: undefined,
+        fieldId: 'all'
+      }
+    };
+    allDataCollectionUnitsAverage.value = _.sumBy(averages, (average) => { 
+      if (average.value !== undefined && fieldIdsToAggregate.includes(average.field.fieldId)) {
+        return average.value;
+      } else {
+        return undefined;
+      }
+    });
+
+    averages.unshift(allDataCollectionUnitsAverage);
     return averages;
   }
   
