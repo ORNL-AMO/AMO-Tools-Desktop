@@ -28,3 +28,99 @@
     animation: sk-bouncedelay 1.4s infinite ease-in-out both;
     
 }
+
+
+.header .click-link{
+    margin-top: 10px;
+}
+
+.table{
+    font-size: small;
+    margin-bottom: 0;
+}
+
+.select-header{
+    font-size: 16px;
+}
+
+
+ul.nav.nav-tabs {
+    border-right: 1px solid #dee2e6;
+    border-left: 1px solid #dee2e6;
+}
+
+.de-active {
+  background-color: #117A65;
+}
+
+.nav-link {   
+    font-size: 14px;
+    background-color: #efefef;
+    border-color: #adb1b5 #adb1b5 #fff;
+    border-width: 1px;
+}
+
+.nav-link.active {   
+    background-color: #fff;
+    border-color: #adb1b5 #adb1b5 #fff;
+}
+
+.nav-tabs{
+    background-color: #efefef;
+    border-left: #efefef;
+    border-right: #efefef;
+    border-top: #efefef;
+}
+
+.font-reset {
+    font: unset
+}
+
+.show-pointer {
+ cursor: pointer;
+}
+
+.options {
+    flex-grow: 1
+}
+
+.preview-data {
+    height: 15vh;
+}
+
+input[type='checkbox'] {
+    transform: scale(1.25);
+    margin: .5em 1em;
+}
+
+input[type='checkbox']:hover {
+ cursor: pointer;
+}
+
+form {
+    flex-grow: 1;
+}
+
+.calendar-container {
+    min-width: 300px;
+}
+
+.disabled {
+    color: #c5c5c5 !important;
+    background: #ffffff !important;
+    border-color: #d8d8d8;
+    box-shadow: none;
+}
+
+.select-for-all-disabled {
+    height: 100%;
+    width: 100% !important;
+    z-index: 111;
+    position: absolute;
+    background: rgba(255, 255, 255, 1);
+}
+
+.graph-setup {
+    overflow: hidden;
+    position: relative;
+}

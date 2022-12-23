@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DayTypeGraphService } from './day-type-graph.service';
 import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import { Subscription } from 'rxjs';
-import { DayTypeGraphItem, LogToolField } from '../../log-tool-models';
+import { DayTypeGraphItem, GraphObj, LogToolField } from '../../log-tool-models';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PlotlyService } from 'angular-plotly.js';
 import { LogToolDataService } from '../../log-tool-data.service';
@@ -16,32 +16,7 @@ export class DayTypeGraphComponent implements OnInit {
   @ViewChild("dayTypeGraph", { static: false }) dayTypeGraph: ElementRef;
 
 
-  graph = {
-    data: [],
-    layout: {
-      title: undefined,
-      hovermode: "closest",
-      xaxis: {
-        autorange: true,
-        title: {
-          text: 'x axis'
-        },
-        tickangle: '45',
-      },
-      yaxis: {
-        autorange: true,
-        title: {
-          text: 'y axis'
-        }
-      },
-      margin: {
-        t: 50,
-        b: 50,
-        l: 50,
-        r: 50,
-      }
-    }
-  };
+  graph;
   dayTypeScatterPlotDataSub: Subscription;
   dayTypeScatterPlotData: Array<DayTypeGraphItem>;
   selectedGraphTypeSub: Subscription;
@@ -86,9 +61,9 @@ export class DayTypeGraphComponent implements OnInit {
   }
 
   setGraphData() {
-    this.graph.data = new Array();
+    this.graph = this.getDefaultGraph()
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
-    let labelStr: string = this.truncate(selectedDataField.alias, 30);
+    let labelStr: string = this.dayTypeAnalysisService.truncate(selectedDataField.alias, 50);
     if (selectedDataField.unit) {
       let displayUnit: string = this.getUnitDisplay(selectedDataField.unit);
       labelStr = labelStr + ' ' + displayUnit;
@@ -107,14 +82,6 @@ export class DayTypeGraphComponent implements OnInit {
     }
   }
 
-  truncate(text: string, limit: number) {
-    if (text.length > limit) {
-      return text.slice(0, limit) + '...'
-    } else {
-      return text;
-    }
-  }
-
   getGraphData(): Array<DayTypeGraphItem> {
     if (this.selectedGraphType == 'individualDay') {
       return this.individualDayScatterPlotData;
@@ -127,5 +94,60 @@ export class DayTypeGraphComponent implements OnInit {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
     }
+  }
+
+  getDefaultGraph() {
+    return {
+      data: [],
+      layout: {
+        hovermode: "closest",
+        title: {
+          text: undefined,
+          font: {
+            size: 22
+          }
+        },
+        annotations: [],
+        xaxis: {
+          autorange: true,
+          type: undefined,
+          // spikemode: 'across',
+          title: {
+            text: 'X Axis'
+          },
+          side: undefined,
+          tickangle: '45',
+          overlaying: undefined,
+          titlefont: {
+            color: undefined
+          },
+          tickfont: {
+            color: undefined
+          }
+        },
+        yaxis: {
+          autorange: true,
+          type: undefined,
+          // spikemode: 'across',
+          title: {
+            text: 'Y Axis'
+          },
+          side: undefined,
+          overlaying: undefined,
+          titlefont: {
+            color: undefined
+          },
+          tickfont: {
+            color: undefined
+          }
+        },
+        margin: {
+          t: 50,
+          b: 50,
+          l: 50,
+          r: 50,
+        }
+      }
+    };
   }
 }

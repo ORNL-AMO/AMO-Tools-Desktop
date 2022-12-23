@@ -106,6 +106,11 @@ export class RefineDataComponent implements OnInit {
       } else if (this.applyToAll) {
         this.applySelectionsToAll(dataset)
       }
+
+      dataset.fields.forEach(field => {
+        // auto populate choices for day type analysis
+        field.useForDayTypeAnalysis = field.useField;
+      });
       return dataset;
     });
     this.explorerData.refineDataStepStatus = this.logToolDataService.checkStepRefineDataComplete(this.explorerData.datasets, this.selectedDataSetIndex);
@@ -119,6 +124,7 @@ export class RefineDataComponent implements OnInit {
       if (field.fieldName === this.selectedDataSet.fields[i].fieldName) {
         field.alias = this.selectedDataSet.fields[i].alias;
       }
+      field.useForDayTypeAnalysis = this.selectedDataSet.fields[i].useField;
       field.useField = this.selectedDataSet.fields[i].useField;
       field.unit = this.selectedDataSet.fields[i].unit;
     })
