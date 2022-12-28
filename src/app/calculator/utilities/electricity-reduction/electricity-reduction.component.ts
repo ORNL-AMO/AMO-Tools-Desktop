@@ -161,6 +161,7 @@ export class ElectricityReductionComponent implements OnInit {
     dataArray[index].powerMeterData = data.powerMeterData;
     dataArray[index].nameplateData = data.nameplateData;
     dataArray[index].units = data.units;
+    dataArray[index].userSelectedHP = data.userSelectedHP;
   }
 
 

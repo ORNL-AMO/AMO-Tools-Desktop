@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Assessment } from '../models/assessment';
-import { Settings } from '../models/settings';
-import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../models/steam/ssmt';
-import { CompressedAirPressureReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
+import { CompressedAirPressureReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
-import { CompressedAirPressureReductionData } from '../models/standalone';
+import { CompressedAirPressureReductionData, ElectricityReductionData } from '../models/standalone';
 import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -16,7 +14,7 @@ declare const packageJson;
 @Injectable()
 export class UpdateDataService {
 
-    constructor(private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
+    constructor(private convertUnitsService: ConvertUnitsService) { }
 
     checkAssessment(assessment: Assessment): Assessment {
         if (this.checkAssessmentVersionDifferent(assessment) === false) {
@@ -377,6 +375,7 @@ export class UpdateDataService {
             }
             if (assessment.treasureHunt.electricityReductions) {
                 assessment.treasureHunt.electricityReductions.forEach(opportunity => {
+                    opportunity = this.updateElectricityReductionTreasureHunt(opportunity, assessment.treasureHunt.existingDataUnits);
                     opportunity.opportunityType = Treasure.electricityReduction;
                 });
             }
@@ -490,5 +489,30 @@ export class UpdateDataService {
             }
         }
         return heatCascadingTH;
+    }
+
+    updateElectricityReductionTreasureHunt(electricityReductionTreasureHunt: ElectricityReductionTreasureHunt, settingTH: string): ElectricityReductionTreasureHunt {
+        if (electricityReductionTreasureHunt.baseline) {
+            electricityReductionTreasureHunt.baseline.forEach(reduction => {
+                reduction = this.updateElectricityReduction(reduction, settingTH);
+            });
+        }
+        if (electricityReductionTreasureHunt.modification) {
+            electricityReductionTreasureHunt.modification.forEach(reduction => {
+                reduction = this.updateElectricityReduction(reduction, settingTH);
+            });
+        }
+        return electricityReductionTreasureHunt;
+    }
+
+    updateElectricityReduction(electricityReduction: ElectricityReductionData, settingTH: string): ElectricityReductionData {
+        if (electricityReduction.userSelectedHP === undefined) {
+            if(settingTH === 'Metric'){
+                electricityReduction.userSelectedHP = false;
+            } else if (settingTH === 'Imperial') {
+                electricityReduction.userSelectedHP = true;
+            }
+        } 
+        return electricityReduction;
     }
 }
