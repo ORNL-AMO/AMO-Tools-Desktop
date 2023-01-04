@@ -15,7 +15,7 @@ export class CompressorOrderingTableComponent implements OnInit {
   orderingOptions: Array<number>;
   profileSummary: Array<ProfileSummary>
   hourIntervals: Array<number>;
-  isSequencerUsed: boolean;
+  multiCompressorSystemControls: 'cascading' | 'isentropicEfficiency' | 'loadSharing' | 'targetPressureSequencer' | 'baseTrim';
   selectedDayTypeId: string;
   fillRight: boolean = false;
   inventoryItems: Array<CompressorInventoryItem>;
@@ -27,7 +27,7 @@ export class CompressorOrderingTableComponent implements OnInit {
       if (val && this.isFormChange == false) {
         this.inventoryItems = val.compressorInventoryItems;
         this.selectedDayTypeId = val.systemProfile.systemProfileSetup.dayTypeId;
-        this.isSequencerUsed = val.systemInformation.isSequencerUsed;
+        this.multiCompressorSystemControls = val.systemInformation.multiCompressorSystemControls;
         this.profileSummary = val.systemProfile.profileSummary;
         this.setHourIntervals(val.systemProfile.systemProfileSetup);
         this.setOrderingOptions(val.compressorInventoryItems);

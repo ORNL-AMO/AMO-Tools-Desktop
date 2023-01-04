@@ -1,10 +1,19 @@
 <label class="group-label w-100">
     Compressor Ordering
-    <span *ngIf="isSequencerUsed">
-        (Has Sequencer)
+    <span *ngIf="multiCompressorSystemControls == 'targetPressureSequencer'">
+        (Target Pressure Sequencer)
     </span>
-    <span *ngIf="!isSequencerUsed">
-        (No Sequencer)
+    <span *ngIf="multiCompressorSystemControls == 'cascading'">
+        (Cascading)
+    </span>
+    <span *ngIf="multiCompressorSystemControls == 'isentropicEfficiency'">
+        (Isentropic Efficiency)
+    </span>
+    <span *ngIf="multiCompressorSystemControls == 'loadSharing'">
+        (Centrifugal Load Sharing)
+    </span>
+    <span *ngIf="multiCompressorSystemControls == 'baseTrim'">
+        (Base/Trim)
     </span>
 </label>
 <div class="w-100 d-flex justify-content-start mb-1 mt-1">
@@ -37,7 +46,7 @@
                 </th>
             </tr>
         </thead>
-        <tbody *ngIf="isSequencerUsed">
+        <tbody *ngIf="multiCompressorSystemControls == 'targetPressureSequencer'">
             <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
                 <td class="bold text-center">
                     {{summary.compressorId|compressorName:inventoryItems}}
@@ -63,7 +72,26 @@
                 </td>
             </tr>
         </tbody>
-        <tbody *ngIf="!isSequencerUsed">
+        <tbody *ngIf="multiCompressorSystemControls == 'cascading'">
+            <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
+                <td class="bold text-center">
+                    {{summary.compressorId|compressorName:inventoryItems}}
+                </td>
+                <td class="text-center">
+                    {{summary.fullLoadPressure}}
+                </td>
+                <td class="input-cell"
+                    *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">
+                    <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
+                        class="btn btn-sm" *ngIf="summaryData.order == 0"
+                        (click)="toggleOn(summary, orderIndex)">Off</button>
+                    <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
+                        class="btn btn-sm btn-active" *ngIf="summaryData.order != 0"
+                        (click)="toggleOn(summary, orderIndex)">{{summaryData.order}}</button>
+                </td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="multiCompressorSystemControls == 'isentropicEfficiency'">
             <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
                 <td class="bold text-center">
                     {{summary.compressorId|compressorName:inventoryItems}}
