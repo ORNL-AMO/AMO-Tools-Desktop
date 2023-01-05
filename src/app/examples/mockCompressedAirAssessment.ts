@@ -12324,7 +12324,7 @@ export const MockCompressedAirAssessment: Assessment =  {
                 "zipcode": "37830"
             },
             "plantMaxPressure": undefined,
-            "multiCompressorSystemControls": undefined
+            "multiCompressorSystemControls": "cascading"
         },
         "compressorInventoryItems": [
             {
