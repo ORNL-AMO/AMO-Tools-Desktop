@@ -55,22 +55,22 @@ export interface ImproveEndUseEfficiency {
 export interface EndUseData {
     endUses: Array<EndUse>,
     endUseDayTypeSetup: EndUseDayTypeSetup,
-    dayTypeAirFlowTotals: DayTypeAirflowTotals 
+    dayTypeAirFlowTotals: DayTypeAirflowTotals
 }
 
 export interface DayTypeAirflowTotals {
-        unaccountedAirflow?: number,
-        unaccountedAirflowPercent: number,
-        exceededAirflow?: number,
-        exceededAirflowPercent?: number,
-        totalDayTypeEndUseAirflow: number,
-        totalDayTypeEndUseAirflowPercent: number,
-        totalDayTypeAverageAirflow: number
+    unaccountedAirflow?: number,
+    unaccountedAirflowPercent: number,
+    exceededAirflow?: number,
+    exceededAirflowPercent?: number,
+    totalDayTypeEndUseAirflow: number,
+    totalDayTypeEndUseAirflowPercent: number,
+    totalDayTypeAverageAirflow: number
 }
 
 export interface EndUseDayTypeSetup {
     selectedDayTypeId: string,
-    dayTypeLeakRates: Array<{dayTypeId: string, dayTypeLeakRate: number}>,
+    dayTypeLeakRates: Array<{ dayTypeId: string, dayTypeLeakRate: number }>,
 }
 
 export interface EndUse {
@@ -187,7 +187,8 @@ export interface SystemInformation {
     variance: number,
     co2SavingsData?: Co2SavingsData,
     plantMaxPressure: number,
-    multiCompressorSystemControls:  'cascading' | 'isentropicEfficiency' | 'loadSharing' | 'targetPressureSequencer' | 'baseTrim'
+    multiCompressorSystemControls: 'cascading' | 'isentropicEfficiency' | 'loadSharing' | 'targetPressureSequencer' | 'baseTrim',
+    trimSelection?: string
 }
 
 export interface CompressorInventoryItem {

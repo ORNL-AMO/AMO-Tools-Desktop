@@ -145,10 +145,10 @@ export class SystemProfileService {
     return profileSummary;
   }
   //base/trim
-  updateCompressorOrderingBaseTrim(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, numberOfHourIntervals: number): Array<ProfileSummary> {
+  // updateCompressorOrderingBaseTrim(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, numberOfHourIntervals: number): Array<ProfileSummary> {
 
-    return profileSummary;
-  }
+  //   return profileSummary;
+  // }
 
 
 }

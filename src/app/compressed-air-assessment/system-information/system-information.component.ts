@@ -77,12 +77,12 @@ export class SystemInformationComponent implements OnInit {
     let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
     compressedAirAssessment.systemInformation = systemInformation;
     //TODO: double check other types
-    if (systemInformation.multiCompressorSystemControls == 'cascading') {
+    if (systemInformation.multiCompressorSystemControls == 'cascading' || systemInformation.multiCompressorSystemControls == 'baseTrim') {
       let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
       })
-    }  if (systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
+    } if (systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
       let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingIsentropicEfficiency(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals, compressedAirAssessment.compressorInventoryItems, this.settings, systemInformation);

@@ -16,6 +16,9 @@
         (Base/Trim)
     </span>
 </label>
+<div class="alert alert-danger text-center small" *ngIf="multiCompressorSystemControls == 'baseTrim' && !trimSelection">
+    Trim compressor selection required for Base/Trim.
+</div>
 <div class="w-100 d-flex justify-content-start mb-1 mt-1">
     <div class="pl-2 pr-2 border-left" *ngIf="hourIntervals.length != 1">
         <label class="small" for="fillRightOrdering">
@@ -43,6 +46,9 @@
                 </th>
                 <th *ngIf="multiCompressorSystemControls == 'isentropicEfficiency'" class="text-center">
                     Adj. Eff
+                </th>
+                <th class="text-center" *ngIf="multiCompressorSystemControls == 'baseTrim'" [ngClass]="{'red': !trimSelection}">
+                    Trim
                 </th>
                 <th class="text-center" *ngFor="let interval of hourIntervals">
                     {{interval | intervalHourLabel}}
@@ -110,6 +116,29 @@
                     <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
                         class="btn btn-sm btn-active" *ngIf="summaryData.order != 0"
                         (click)="toggleOn(summary, orderIndex)">{{summaryData.order}}</button>
+                </td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="multiCompressorSystemControls == 'baseTrim'">
+            <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
+                <td class="bold text-center">
+                    {{summary.compressorId|compressorName:inventoryItems}}
+                </td>
+                <td class="text-center">
+                    {{summary.fullLoadPressure}}
+                </td>
+                <td class="text-center radio-td">
+                    <input type="radio" id="trimSelection" name="trimSelection" [value]="summary.compressorId"
+                        [(ngModel)]="trimSelection" (change)="setTrimSelection()">
+                </td>
+                <td class="input-cell"
+                    *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">
+                    <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
+                        class="btn btn-sm" *ngIf="summaryData.order == 0"
+                        (click)="toggleOn(summary, orderIndex)">Off</button>
+                    <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
+                        class="btn btn-sm btn-active" *ngIf="summaryData.order != 0"
+                        (click)="toggleOn(summary, orderIndex)">On</button>
                 </td>
             </tr>
         </tbody>

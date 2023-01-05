@@ -20,11 +20,13 @@ export class CompressorOrderingTableComponent implements OnInit {
   fillRight: boolean = false;
   inventoryItems: Array<CompressorInventoryItem>;
   dataInterval: number;
+  trimSelection: string;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val && this.isFormChange == false) {
+        this.trimSelection = val.systemInformation.trimSelection;
         this.inventoryItems = val.compressorInventoryItems;
         this.selectedDayTypeId = val.systemProfile.systemProfileSetup.dayTypeId;
         this.multiCompressorSystemControls = val.systemInformation.multiCompressorSystemControls;
@@ -103,6 +105,7 @@ export class CompressorOrderingTableComponent implements OnInit {
     this.isFormChange = true;
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
+    compressedAirAssessment.systemInformation.trimSelection = this.trimSelection;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
@@ -134,7 +137,7 @@ export class CompressorOrderingTableComponent implements OnInit {
     changedSummary.profileSummaryData[orderIndex].order = 1;
     dayTypeSummaries.forEach((summary, index) => {
       if (summary.compressorId != changedSummary.compressorId) {
-        if (this.multiCompressorSystemControls == 'cascading') {
+        if (this.multiCompressorSystemControls == 'cascading' || this.multiCompressorSystemControls == 'baseTrim') {
           if (summary.profileSummaryData[orderIndex].order != 0) {
             if (summary.fullLoadPressure < changedSummary.fullLoadPressure) {
               summary.profileSummaryData[orderIndex].order++;
@@ -249,5 +252,10 @@ export class CompressorOrderingTableComponent implements OnInit {
 
   trackByIdx(index: number, obj: any): any {
     return index;
+  }
+
+  setTrimSelection() {
+    //todo update ordering
+    this.save();
   }
 }
