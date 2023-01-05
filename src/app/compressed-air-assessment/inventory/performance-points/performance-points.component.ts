@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressorInventoryItem } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem } from '../../../shared/models/compressed-air-assessment';
 import { InventoryService } from '../inventory.service';
 import { PerformancePointsFormService } from './performance-points-form.service';
-
+import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service'
 @Component({
   selector: 'app-performance-points',
   templateUrl: './performance-points.component.html',
@@ -20,13 +20,15 @@ export class PerformancePointsComponent implements OnInit {
   showBlowoff: boolean;
   contentCollapsed: boolean;
   hasValidPerformancePoints: boolean = true;
-  constructor(private inventoryService: InventoryService, private performancePointsFormService: PerformancePointsFormService) { }
+  constructor(private inventoryService: InventoryService, private performancePointsFormService: PerformancePointsFormService,
+    private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.contentCollapsed = this.inventoryService.collapsePerformancePoints;
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
-        this.hasValidPerformancePoints = this.performancePointsFormService.checkPerformancePointsValid(val);
+        let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+        this.hasValidPerformancePoints = this.performancePointsFormService.checkPerformancePointsValid(val, compressedAirAssessment.systemInformation);
         this.setShowMidTurndown(val);
         this.setShowTurndown(val);
         this.setShowMaxFlow(val);

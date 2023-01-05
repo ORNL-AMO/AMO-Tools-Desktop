@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceRuntimeData, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceRuntimeData, SystemInformation, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 import { GreaterThanValidator } from '../../shared/validators/greater-than';
 import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
@@ -428,12 +428,12 @@ export class InventoryService {
     }
   }
 
-  isCompressorValid(compressor: CompressorInventoryItem): boolean {
+  isCompressorValid(compressor: CompressorInventoryItem, systemInformation: SystemInformation): boolean {
     let nameplateForm: UntypedFormGroup = this.getNameplateDataFormFromObj(compressor.nameplateData);
     let compressorControlsForm: UntypedFormGroup = this.getCompressorControlsFormFromObj(compressor.compressorControls, compressor.nameplateData.compressorType);
     let designDetailsForm: UntypedFormGroup = this.getDesignDetailsFormFromObj(compressor.designDetails, compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
     let centrifugalSpecsValid: boolean = this.checkCentrifugalSpecsValid(compressor);
-    let performancePointsValid: boolean = this.performancePointsFormService.checkPerformancePointsValid(compressor);
+    let performancePointsValid: boolean = this.performancePointsFormService.checkPerformancePointsValid(compressor, systemInformation);
     return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsValid && performancePointsValid;
   }
 
@@ -441,7 +441,7 @@ export class InventoryService {
     // let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let hasValidCompressors: boolean = false;
     if (compressedAirAssessment.compressorInventoryItems && compressedAirAssessment.compressorInventoryItems.length > 0) {
-      hasValidCompressors = compressedAirAssessment.compressorInventoryItems.every(compressorInventoryItem => this.isCompressorValid(compressorInventoryItem));
+      hasValidCompressors = compressedAirAssessment.compressorInventoryItems.every(compressorInventoryItem => this.isCompressorValid(compressorInventoryItem, compressedAirAssessment.systemInformation));
     }
     return hasValidCompressors;
   }
