@@ -38,8 +38,11 @@
                 <th>
                     <!-- Compressor Name -->
                 </th>
-                <th class="text-center">
+                <th class="text-center" *ngIf="multiCompressorSystemControls != 'isentropicEfficiency'">
                     FLP
+                </th>
+                <th *ngIf="multiCompressorSystemControls == 'isentropicEfficiency'" class="text-center">
+                    Adj. Eff
                 </th>
                 <th class="text-center" *ngFor="let interval of hourIntervals">
                     {{interval | intervalHourLabel}}
@@ -97,7 +100,7 @@
                     {{summary.compressorId|compressorName:inventoryItems}}
                 </td>
                 <td class="text-center">
-                    {{summary.fullLoadPressure}}
+                    {{summary.adjustedIsentropicEfficiency | number}} %
                 </td>
                 <td class="input-cell"
                     *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">

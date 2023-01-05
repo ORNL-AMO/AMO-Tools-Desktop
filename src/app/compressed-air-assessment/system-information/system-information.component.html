@@ -133,7 +133,7 @@
                 </select>
             </div>
         </div>
-        <!-- Target Pressure -->
+        <!-- Target Pressure (targetPressureSequencer)-->
         <div class="form-group" *ngIf="form.controls.multiCompressorSystemControls.value == 'targetPressureSequencer'"
             [ngClass]="{'invalid': form.controls.targetPressure.invalid}">
             <label for="targetPressure">Target Pressure
@@ -155,7 +155,7 @@
                 </span>
             </span>
         </div>
-        <!--Variance (+/-)-->
+        <!--Variance (+/-) (targetPressureSequencer)-->
         <div class="form-group" *ngIf="form.controls.multiCompressorSystemControls.value == 'targetPressureSequencer'"
             [ngClass]="{'invalid': form.controls.variance.invalid}">
             <label for="variance">Variance (+/-)
@@ -181,7 +181,7 @@
                 </span>
             </span>
         </div>
-        <!--plantMaxPressure-->
+        <!--plantMaxPressure (isentropicEfficiency)-->
         <div class="form-group" *ngIf="form.controls.multiCompressorSystemControls.value == 'isentropicEfficiency'"
             [ngClass]="{'invalid': form.controls.plantMaxPressure.invalid}">
             <label for="plantMaxPressure">Max Plant Compressed Air Pressure Requirement
@@ -190,23 +190,23 @@
                 <input name="plantMaxPressure" type="number" step="any" class="form-control" id="plantMaxPressure"
                     formControlName="plantMaxPressure" (input)="save()" (focus)="focusField('plantMaxPressure')"
                     min="0">
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psia</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">bara</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
             </div>
-            <!-- <span class="alert-danger pull-right small"
+            <span class="alert-danger pull-right small"
                 *ngIf="form.controls.plantMaxPressure.invalid && !form.controls.plantMaxPressure.pristine">
                 <span *ngIf="form.controls.plantMaxPressure.errors.required">Value Required</span>
                 <span *ngIf="form.controls.plantMaxPressure.errors.min">Value can't be less than
                     {{form.controls.plantMaxPressure.errors.min.min}}
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">bara</span>.
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>.
                 </span>
-                <span *ngIf="form.controls.plantMaxPressure.errors.max">Value can't be greater than 50% of target pressure
+                <!-- <span *ngIf="form.controls.plantMaxPressure.errors.max">Value can't be greater than 50% of target pressure
                     ({{form.controls.plantMaxPressure.errors.max.max | number:'1.0-0'}}
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">bara</span>).
-                </span>
-            </span> -->
+                </span> -->
+            </span>
         </div>
     </form>
 

@@ -25,7 +25,7 @@ export class SystemInformationFormService {
       atmosphericPressure: [obj.atmosphericPressure, [Validators.required, Validators.min(0), Validators.max(maxAtmosphericPressure)]],
       atmosphericPressureKnown: [obj.atmosphericPressureKnown],
       plantMaxPressure: [obj.plantMaxPressure],
-      multiCompressorSystemControls: [obj.multiCompressorSystemControls]
+      multiCompressorSystemControls: [obj.multiCompressorSystemControls, [Validators.required]]
 
     });
 
@@ -50,12 +50,22 @@ export class SystemInformationFormService {
       }
       form.controls.variance.setValidators(varianceValidators);
       form.controls.variance.updateValueAndValidity();
-    } else {
+    }else {
       form.controls.targetPressure.setValidators([]);
       form.controls.targetPressure.updateValueAndValidity();
       form.controls.variance.setValidators([]);
       form.controls.variance.updateValueAndValidity();
     }
+
+    if(form.controls.multiCompressorSystemControls.value == 'isentropicEfficiency'){
+      form.controls.plantMaxPressure.setValidators([Validators.required, Validators.min(0)])
+      form.controls.plantMaxPressure.updateValueAndValidity();
+    }else {
+      form.controls.plantMaxPressure.setValidators([])
+      form.controls.plantMaxPressure.updateValueAndValidity();
+    }
+
+
     return form;
   }
 
