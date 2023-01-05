@@ -372,7 +372,9 @@ export class AssessmentService {
         targetPressure: undefined,
         variance: undefined,
         atmosphericPressure: 14.7,
-        atmosphericPressureKnown: true
+        atmosphericPressureKnown: true,
+        plantMaxPressure: undefined,
+        multiCompressorSystemControls: "cascading"
       },
       compressorInventoryItems: new Array(),
       systemProfile: {

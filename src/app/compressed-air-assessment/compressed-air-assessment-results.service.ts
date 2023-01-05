@@ -172,7 +172,7 @@ export class CompressedAirAssessmentResultsService {
     modificationOrders = modificationOrders.filter(order => { return order != 100 });
     let modificationResults: Array<DayTypeModificationResult> = new Array();
     let compressedAirAssessmentCopy: CompressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
-    if (compressedAirAssessmentCopy.systemInformation.isSequencerUsed) {
+    if (compressedAirAssessmentCopy.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
       compressedAirAssessmentCopy.compressorInventoryItems.forEach(item => {
         item = this.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessmentCopy.systemInformation.targetPressure, compressedAirAssessmentCopy.systemInformation.variance, item, compressedAirAssessmentCopy.systemInformation.atmosphericPressure, settings)
       });
@@ -585,7 +585,7 @@ export class CompressedAirAssessmentResultsService {
   calculateBaselineDayTypeProfileSummary(compressedAirAssessment: CompressedAirAssessment, dayType: CompressedAirDayType, settings: Settings): Array<ProfileSummary> {
     let inventoryItems: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(compressedAirAssessment.compressorInventoryItems));
     //Adjust perfomance points for sequencer
-    if (compressedAirAssessment.systemInformation.isSequencerUsed) {
+    if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
       inventoryItems.forEach(item => {
         item = this.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessment.systemInformation.targetPressure, compressedAirAssessment.systemInformation.variance, item, compressedAirAssessment.systemInformation.atmosphericPressure, settings)
       });

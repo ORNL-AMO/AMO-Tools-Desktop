@@ -39,7 +39,7 @@ export class InventoryTableComponent implements OnInit {
       if (val) {
         this.compressorInventoryItems = val.compressorInventoryItems;
         this.compressorInventoryItems.forEach(compressor => {
-          compressor.isValid = this.inventoryService.isCompressorValid(compressor);
+          compressor.isValid = this.inventoryService.isCompressorValid(compressor, val.systemInformation);
         });
         this.hasInvalidCompressors = this.compressorInventoryItems.some(compressor => !compressor.isValid);
       }
@@ -77,10 +77,16 @@ export class InventoryTableComponent implements OnInit {
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       itemIndex = compressedAirAssessment.systemProfile.profileSummary.findIndex(summary => { return summary.compressorId == this.deleteSelectedId && summary.dayTypeId == dayType.dayTypeId });
       let removedSummary: Array<ProfileSummary> = compressedAirAssessment.systemProfile.profileSummary.splice(itemIndex, 1);
-      if (compressedAirAssessment.systemInformation.isSequencerUsed) {
+      if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType, removedSummary[0], numberOfHourIntervals);
-      } else {
-        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
+      } else if(compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'cascading') {
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
+      } else if(compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingIsentropicEfficiency(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals, compressedAirAssessment.compressorInventoryItems, this.settings, compressedAirAssessment.systemInformation);
+      } else if(compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'loadSharing') {
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingLoadSharing(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
+      } else if(compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingBaseTrim(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
       }
     });
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);

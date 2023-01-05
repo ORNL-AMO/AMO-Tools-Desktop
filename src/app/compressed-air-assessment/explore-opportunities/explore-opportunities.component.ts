@@ -126,7 +126,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   setHasSequencer() {
     if (this.compressedAirAssessment) {
-      this.hasSequencerOn = this.compressedAirAssessment.systemInformation.isSequencerUsed;
+      this.hasSequencerOn = this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer';
       if (!this.hasSequencerOn && this.modification) {
         this.hasSequencerOn = (this.modification.useAutomaticSequencer.order != 100)
       }

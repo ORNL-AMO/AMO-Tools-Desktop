@@ -185,7 +185,9 @@ export interface SystemInformation {
     isSequencerUsed: boolean,
     targetPressure: number,
     variance: number,
-    co2SavingsData?: Co2SavingsData
+    co2SavingsData?: Co2SavingsData,
+    plantMaxPressure: number,
+    multiCompressorSystemControls:  'cascading' | 'isentropicEfficiency' | 'loadSharing' | 'targetPressureSequencer' | 'baseTrim'
 }
 
 export interface CompressorInventoryItem {
@@ -294,6 +296,7 @@ export interface ProfileSummary {
     avgPercentCapacity?: number,
     profileSummaryValid?: ProfileSummaryValid
     profileSummaryForPrint?: Array<Array<ProfileSummaryData>>,
+    adjustedIsentropicEfficiency?: number
 }
 
 export interface ProfileSummaryData {

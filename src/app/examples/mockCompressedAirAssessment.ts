@@ -12322,7 +12322,9 @@ export const MockCompressedAirAssessment: Assessment =  {
                 "userEnteredBaselineEmissions": false,
                 "userEnteredModificationEmissions": false,
                 "zipcode": "37830"
-            }
+            },
+            "plantMaxPressure": undefined,
+            "multiCompressorSystemControls": "cascading"
         },
         "compressorInventoryItems": [
             {
