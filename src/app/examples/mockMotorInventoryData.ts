@@ -1182,7 +1182,7 @@ export const MockMotorInventory: InventoryItem = {
     "createdDate": new Date(),
     "modifiedDate": new Date(),
     "type": "motorInventory",
-    "name": "Toy Factory",
+    "name": "Motor Inventory Example",
     "appVersion": "0.7.0-beta",
     "isExample": true,
 }
