@@ -175,7 +175,7 @@ export class AssessmentService {
   getNewFsat(settings: Settings): FSAT {
     let newFsat: FSAT = {
       fieldData: {
-        
+
         flowRate: null,
         inletPressure: null,
         inletVelocityPressure: null,
@@ -183,7 +183,7 @@ export class AssessmentService {
         usingStaticPressure: true,
         loadEstimatedMethod: 0,
         motorPower: null,
-       
+
         compressibilityFactor: 0.988,
         measuredVoltage: 460
       },
@@ -374,7 +374,11 @@ export class AssessmentService {
         atmosphericPressure: 14.7,
         atmosphericPressureKnown: true,
         plantMaxPressure: undefined,
-        multiCompressorSystemControls: "cascading"
+        multiCompressorSystemControls: "cascading",
+        trimSelections: [{
+          dayTypeId: initDayTypeId,
+          compressorId: undefined
+        }]
       },
       compressorInventoryItems: new Array(),
       systemProfile: {

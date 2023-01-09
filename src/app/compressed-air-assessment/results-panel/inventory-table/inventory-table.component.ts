@@ -91,9 +91,11 @@ export class InventoryTableComponent implements OnInit {
     });
 
     if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
-      if (compressedAirAssessment.systemInformation.trimSelection == this.deleteSelectedId) {
-        compressedAirAssessment.systemInformation.trimSelection = undefined;
-      }
+      compressedAirAssessment.systemInformation.trimSelections.forEach(selection => {
+        if (selection.compressorId == this.deleteSelectedId) {
+          selection.compressorId = undefined;
+        }
+      })
     }
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     this.inventoryService.selectedCompressor.next(compressedAirAssessment.compressorInventoryItems[0]);

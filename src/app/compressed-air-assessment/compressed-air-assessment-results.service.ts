@@ -722,7 +722,8 @@ export class CompressedAirAssessmentResultsService {
 
     if (systemInformation.multiCompressorSystemControls == 'baseTrim') {
       //set base trim ordering
-      intervalData = this.setBaseTrimOrdering(intervalData, adjustedCompressors, neededAirFlow, systemInformation.trimSelection, dayType, reduceRuntime);
+      let trimSelection: {dayTypeId: string, compressorId: string} = systemInformation.trimSelections.find(selection => {return selection.dayTypeId == dayType.dayTypeId});
+      intervalData = this.setBaseTrimOrdering(intervalData, adjustedCompressors, neededAirFlow, trimSelection.compressorId, dayType, reduceRuntime);
     }
     //calc totals for system percentages
     let totalFullLoadCapacity: number = this.getTotalCapacity(adjustedCompressors);

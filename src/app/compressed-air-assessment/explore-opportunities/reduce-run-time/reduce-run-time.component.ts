@@ -59,9 +59,9 @@ export class ReduceRunTimeComponent implements OnInit {
     }
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment) {
-        if(compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim'){
-          this.trimCompressorId = compressedAirAssessment.systemInformation.trimSelection;
-        }
+        // if(compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim'){
+        //   this.trimCompressorId = compressedAirAssessment.systemInformation.trimSelection;
+        // }
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
         this.intervalAmount = this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
         this.setOrderOptions();

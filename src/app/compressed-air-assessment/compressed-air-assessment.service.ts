@@ -165,8 +165,9 @@ export class CompressedAirAssessmentService {
       }
     });
     if (compressedAirAssessment.systemInformation && compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
-      profileSummaryValid.trimSelection = (compressedAirAssessment.systemInformation.trimSelection != undefined);
-      if (compressedAirAssessment.systemInformation.trimSelection == undefined) {
+      let undefinedSelections = compressedAirAssessment.systemInformation.trimSelections.find(selection => {return selection.compressorId == undefined});
+      profileSummaryValid.trimSelection = (undefinedSelections == undefined);
+      if (profileSummaryValid.trimSelection == false) {
         profileSummaryValid.isValid = false;
       }
     } else {

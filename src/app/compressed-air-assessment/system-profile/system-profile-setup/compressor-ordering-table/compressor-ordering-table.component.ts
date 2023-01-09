@@ -21,14 +21,23 @@ export class CompressorOrderingTableComponent implements OnInit {
   inventoryItems: Array<CompressorInventoryItem>;
   dataInterval: number;
   trimSelection: string;
+  hasMissingTrimSelection: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val && this.isFormChange == false) {
-        this.trimSelection = val.systemInformation.trimSelection;
         this.inventoryItems = val.compressorInventoryItems;
         this.selectedDayTypeId = val.systemProfile.systemProfileSetup.dayTypeId;
+        this.hasMissingTrimSelection = false;
+        val.systemInformation.trimSelections.forEach(selection => {
+          if(selection.dayTypeId == this.selectedDayTypeId){
+            this.trimSelection = selection.compressorId;
+          }
+          if(selection.compressorId == undefined){
+            this.hasMissingTrimSelection = true;
+          }
+        });
         this.multiCompressorSystemControls = val.systemInformation.multiCompressorSystemControls;
         this.profileSummary = val.systemProfile.profileSummary;
         this.setHourIntervals(val.systemProfile.systemProfileSetup);
@@ -105,7 +114,14 @@ export class CompressorOrderingTableComponent implements OnInit {
     this.isFormChange = true;
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
-    compressedAirAssessment.systemInformation.trimSelection = this.trimSelection;
+    compressedAirAssessment.systemInformation.trimSelections.forEach(selection => {
+      if(selection.dayTypeId == this.selectedDayTypeId){
+        selection.compressorId = this.trimSelection;
+      }
+      if(selection.compressorId == undefined){
+        this.hasMissingTrimSelection = true;
+      }
+    });
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 

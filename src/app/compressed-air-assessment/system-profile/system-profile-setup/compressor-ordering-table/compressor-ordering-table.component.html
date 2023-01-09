@@ -16,8 +16,8 @@
         (Base/Trim)
     </span>
 </label>
-<div class="alert alert-danger text-center small" *ngIf="multiCompressorSystemControls == 'baseTrim' && !trimSelection">
-    Trim compressor selection required for Base/Trim.
+<div class="alert alert-danger text-center small" *ngIf="multiCompressorSystemControls == 'baseTrim' && hasMissingTrimSelection">
+    Trim compressor selection required for all day types using Base/Trim system controls.
 </div>
 <div class="w-100 d-flex justify-content-start mb-1 mt-1">
     <div class="pl-2 pr-2 border-left" *ngIf="hourIntervals.length != 1">

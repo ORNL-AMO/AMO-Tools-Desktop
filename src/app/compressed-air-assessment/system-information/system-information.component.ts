@@ -36,7 +36,7 @@ export class SystemInformationComponent implements OnInit {
 
   save(co2SavingsData?: Co2SavingsData) {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
+    let systemInformation: SystemInformation = this.systemInformationFormService.updateObjFromForm(this.form, compressedAirAssessment.systemInformation);
     if (co2SavingsData) {
       systemInformation.co2SavingsData = co2SavingsData;
       this.co2SavingsData = co2SavingsData;
@@ -74,7 +74,7 @@ export class SystemInformationComponent implements OnInit {
   changeCompressorOrderingMethod() {
     this.form = this.systemInformationFormService.setSequencerFieldValidators(this.form);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
+    let systemInformation: SystemInformation = this.systemInformationFormService.updateObjFromForm(this.form, compressedAirAssessment.systemInformation);
     compressedAirAssessment.systemInformation = systemInformation;
     //TODO: double check other types
     if (systemInformation.multiCompressorSystemControls == 'cascading' || systemInformation.multiCompressorSystemControls == 'baseTrim') {

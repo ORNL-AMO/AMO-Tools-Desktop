@@ -561,7 +561,11 @@ export class InventoryService {
       modification.reduceRuntime.runtimeData.push(reduceRuntimeData);
       modification.useAutomaticSequencer.order = 100;
       modification.useAutomaticSequencer.profileSummary = new Array();
-    })
+    });
+    compressedAirAssessment.systemInformation.trimSelections.push({
+      dayTypeId: dayTypeId,
+      compressorId: undefined
+    });
     return compressedAirAssessment;
   }
 

@@ -1,6 +1,5 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 import { ProfileSummaryValid } from "../../compressed-air-assessment/compressed-air-assessment.service";
-import { SankeySystemInputs } from "../../compressed-air-assessment/compressed-air-sankey/power-sankey/power-sankey.service";
 import { DayTypeSummary, LogToolField } from "../../log-tool/log-tool-models";
 
 export interface CompressedAirAssessment {
@@ -188,7 +187,10 @@ export interface SystemInformation {
     co2SavingsData?: Co2SavingsData,
     plantMaxPressure: number,
     multiCompressorSystemControls: 'cascading' | 'isentropicEfficiency' | 'loadSharing' | 'targetPressureSequencer' | 'baseTrim',
-    trimSelection?: string
+    trimSelections?: Array<{
+        dayTypeId: string,
+        compressorId: string
+    }>
 }
 
 export interface CompressorInventoryItem {
