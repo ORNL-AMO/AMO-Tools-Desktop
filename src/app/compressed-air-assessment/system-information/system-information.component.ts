@@ -95,6 +95,15 @@ export class SystemInformationComponent implements OnInit {
         modification.reduceRuntime.order = 100;
       });
     }
+
+
+    if (compressedAirAssessment.modifications && (systemInformation.multiCompressorSystemControls != 'targetPressureSequencer' || systemInformation.multiCompressorSystemControls != 'targetPressureSequencer')) {
+      //if not sequencer or cascading on baseline cannot have these modifications. Turn off
+      compressedAirAssessment.modifications.forEach(modification => {
+        modification.useAutomaticSequencer.order = 100;
+        modification.adjustCascadingSetPoints.order = 100;
+      });
+    }
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
