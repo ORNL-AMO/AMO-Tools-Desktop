@@ -12324,7 +12324,17 @@ export const MockCompressedAirAssessment: Assessment =  {
                 "zipcode": "37830"
             },
             "plantMaxPressure": undefined,
-            "multiCompressorSystemControls": "cascading"
+            "multiCompressorSystemControls": "cascading",
+            "trimSelections": [
+                {
+                    "dayTypeId": "hopx028cf",
+                    "compressorId": undefined
+                },
+                {
+                    "dayTypeId": "mufcn7yvy",
+                    "compressorId": undefined
+                }
+            ]
         },
         "compressorInventoryItems": [
             {
