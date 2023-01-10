@@ -50,17 +50,17 @@ export class SystemInformationFormService {
       }
       form.controls.variance.setValidators(varianceValidators);
       form.controls.variance.updateValueAndValidity();
-    }else {
+    } else {
       form.controls.targetPressure.setValidators([]);
       form.controls.targetPressure.updateValueAndValidity();
       form.controls.variance.setValidators([]);
       form.controls.variance.updateValueAndValidity();
     }
 
-    if(form.controls.multiCompressorSystemControls.value == 'isentropicEfficiency'){
+    if (form.controls.multiCompressorSystemControls.value == 'isentropicEfficiency') {
       form.controls.plantMaxPressure.setValidators([Validators.required, Validators.min(0)])
       form.controls.plantMaxPressure.updateValueAndValidity();
-    }else {
+    } else {
       form.controls.plantMaxPressure.setValidators([])
       form.controls.plantMaxPressure.updateValueAndValidity();
     }
@@ -69,17 +69,16 @@ export class SystemInformationFormService {
     return form;
   }
 
-  getObjFromForm(form: UntypedFormGroup): SystemInformation {
-    return {
-      systemElevation: form.controls.systemElevation.value,
-      totalAirStorage: form.controls.totalAirStorage.value,
-      isSequencerUsed: form.controls.isSequencerUsed.value,
-      targetPressure: form.controls.targetPressure.value,
-      variance: form.controls.variance.value,
-      atmosphericPressure: form.controls.atmosphericPressure.value,
-      atmosphericPressureKnown: form.controls.atmosphericPressureKnown.value,
-      plantMaxPressure: form.controls.plantMaxPressure.value,
-      multiCompressorSystemControls: form.controls.multiCompressorSystemControls.value
-    }
+  updateObjFromForm(form: UntypedFormGroup, systemInformation: SystemInformation): SystemInformation {
+    systemInformation.systemElevation = form.controls.systemElevation.value;
+    systemInformation.totalAirStorage = form.controls.totalAirStorage.value;
+    systemInformation.isSequencerUsed = form.controls.isSequencerUsed.value;
+    systemInformation.targetPressure = form.controls.targetPressure.value;
+    systemInformation.variance = form.controls.variance.value;
+    systemInformation.atmosphericPressure = form.controls.atmosphericPressure.value;
+    systemInformation.atmosphericPressureKnown = form.controls.atmosphericPressureKnown.value;
+    systemInformation.plantMaxPressure = form.controls.plantMaxPressure.value;
+    systemInformation.multiCompressorSystemControls = form.controls.multiCompressorSystemControls.value;
+    return systemInformation;
   }
 }

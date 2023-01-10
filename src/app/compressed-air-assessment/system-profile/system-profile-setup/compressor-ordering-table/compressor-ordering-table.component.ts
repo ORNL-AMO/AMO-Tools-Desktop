@@ -20,6 +20,8 @@ export class CompressorOrderingTableComponent implements OnInit {
   fillRight: boolean = false;
   inventoryItems: Array<CompressorInventoryItem>;
   dataInterval: number;
+  trimSelection: string;
+  hasMissingTrimSelection: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -27,6 +29,15 @@ export class CompressorOrderingTableComponent implements OnInit {
       if (val && this.isFormChange == false) {
         this.inventoryItems = val.compressorInventoryItems;
         this.selectedDayTypeId = val.systemProfile.systemProfileSetup.dayTypeId;
+        this.hasMissingTrimSelection = false;
+        val.systemInformation.trimSelections.forEach(selection => {
+          if(selection.dayTypeId == this.selectedDayTypeId){
+            this.trimSelection = selection.compressorId;
+          }
+          if(selection.compressorId == undefined){
+            this.hasMissingTrimSelection = true;
+          }
+        });
         this.multiCompressorSystemControls = val.systemInformation.multiCompressorSystemControls;
         this.profileSummary = val.systemProfile.profileSummary;
         this.setHourIntervals(val.systemProfile.systemProfileSetup);
@@ -103,6 +114,14 @@ export class CompressorOrderingTableComponent implements OnInit {
     this.isFormChange = true;
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
+    compressedAirAssessment.systemInformation.trimSelections.forEach(selection => {
+      if(selection.dayTypeId == this.selectedDayTypeId){
+        selection.compressorId = this.trimSelection;
+      }
+      if(selection.compressorId == undefined){
+        this.hasMissingTrimSelection = true;
+      }
+    });
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
@@ -134,7 +153,7 @@ export class CompressorOrderingTableComponent implements OnInit {
     changedSummary.profileSummaryData[orderIndex].order = 1;
     dayTypeSummaries.forEach((summary, index) => {
       if (summary.compressorId != changedSummary.compressorId) {
-        if (this.multiCompressorSystemControls == 'cascading') {
+        if (this.multiCompressorSystemControls == 'cascading' || this.multiCompressorSystemControls == 'baseTrim') {
           if (summary.profileSummaryData[orderIndex].order != 0) {
             if (summary.fullLoadPressure < changedSummary.fullLoadPressure) {
               summary.profileSummaryData[orderIndex].order++;
@@ -249,5 +268,10 @@ export class CompressorOrderingTableComponent implements OnInit {
 
   trackByIdx(index: number, obj: any): any {
     return index;
+  }
+
+  setTrimSelection() {
+    //todo update ordering
+    this.save();
   }
 }

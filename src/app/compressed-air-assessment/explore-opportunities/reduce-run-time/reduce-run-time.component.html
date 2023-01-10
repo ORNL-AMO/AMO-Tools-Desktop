@@ -74,6 +74,7 @@
                     *ngFor="let rData of reduceRuntime.runtimeData | dayTypeFilter:selectedDayType.dayType.dayTypeId; let rDataIndex = index;">
                     <td class="bold text-center">
                         {{rData.compressorId | compressorName:compressedAirAssessment.compressorInventoryItems}}
+                        <span class="pl-2" *ngIf="rData.compressorId == trimCompressorId">(Trim)</span>
                     </td>
                     <td class="text-center">
                         {{rData.fullLoadCapacity}}
@@ -87,7 +88,8 @@
                     <td class="text-center" *ngFor="let data of rData.intervalData; let dataIndex = index;">
                         <input type="checkbox" id="{{'isCompressorOn_'+rDataIndex+dataIndex}}"
                             name="{{'isCompressorOn_'+rDataIndex+dataIndex}}" [(ngModel)]="data.isCompressorOn"
-                            (focus)="helpTextField('checkbox')" (change)="save(false)">
+                            (focus)="helpTextField('checkbox')" (change)="save(false)"
+                            [disabled]="rData.compressorId == trimCompressorId">
                     </td>
                 </tr>
             </tbody>

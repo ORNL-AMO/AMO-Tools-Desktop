@@ -36,7 +36,7 @@ export class SystemInformationComponent implements OnInit {
 
   save(co2SavingsData?: Co2SavingsData) {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
+    let systemInformation: SystemInformation = this.systemInformationFormService.updateObjFromForm(this.form, compressedAirAssessment.systemInformation);
     if (co2SavingsData) {
       systemInformation.co2SavingsData = co2SavingsData;
       this.co2SavingsData = co2SavingsData;
@@ -74,15 +74,15 @@ export class SystemInformationComponent implements OnInit {
   changeCompressorOrderingMethod() {
     this.form = this.systemInformationFormService.setSequencerFieldValidators(this.form);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
+    let systemInformation: SystemInformation = this.systemInformationFormService.updateObjFromForm(this.form, compressedAirAssessment.systemInformation);
     compressedAirAssessment.systemInformation = systemInformation;
     //TODO: double check other types
-    if (systemInformation.multiCompressorSystemControls == 'cascading') {
+    if (systemInformation.multiCompressorSystemControls == 'cascading' || systemInformation.multiCompressorSystemControls == 'baseTrim') {
       let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
       })
-    }  if (systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
+    } if (systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
       let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingIsentropicEfficiency(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals, compressedAirAssessment.compressorInventoryItems, this.settings, systemInformation);
@@ -93,6 +93,15 @@ export class SystemInformationComponent implements OnInit {
         modification.reduceSystemAirPressure.order = 100;
         modification.adjustCascadingSetPoints.order = 100;
         modification.reduceRuntime.order = 100;
+      });
+    }
+
+
+    if (compressedAirAssessment.modifications && (systemInformation.multiCompressorSystemControls != 'targetPressureSequencer' || systemInformation.multiCompressorSystemControls != 'targetPressureSequencer')) {
+      //if not sequencer or cascading on baseline cannot have these modifications. Turn off
+      compressedAirAssessment.modifications.forEach(modification => {
+        modification.useAutomaticSequencer.order = 100;
+        modification.adjustCascadingSetPoints.order = 100;
       });
     }
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
