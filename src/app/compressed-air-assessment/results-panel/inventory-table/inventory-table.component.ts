@@ -83,8 +83,6 @@ export class InventoryTableComponent implements OnInit {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
       } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingIsentropicEfficiency(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals, compressedAirAssessment.compressorInventoryItems, this.settings, compressedAirAssessment.systemInformation);
-      } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'loadSharing') {
-        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingLoadSharing(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
       } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
       }

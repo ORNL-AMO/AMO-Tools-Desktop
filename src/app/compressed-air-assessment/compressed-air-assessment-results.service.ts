@@ -726,7 +726,7 @@ export class CompressedAirAssessmentResultsService {
       intervalData = this.setBaseTrimOrdering(intervalData, adjustedCompressors, neededAirFlow, trimSelection.compressorId, dayType, reduceRuntime);
     } else if (systemInformation.multiCompressorSystemControls == 'loadSharing') {
       //share load..
-      this.shareLoad(adjustedCompressors, neededAirFlow, settings, additionalRecieverVolume, atmosphericPressure, totalAirStorage);
+      return this.shareLoad(intervalData, adjustedProfileSummary, adjustedCompressors, neededAirFlow, settings, additionalRecieverVolume, atmosphericPressure, totalAirStorage, reduceRuntime, dayType);
     }
     //calc totals for system percentages
     let totalFullLoadCapacity: number = this.getTotalCapacity(adjustedCompressors);
@@ -905,15 +905,37 @@ export class CompressedAirAssessmentResultsService {
   }
 
 
-  shareLoad(adjustedCompressors: Array<CompressorInventoryItem>, neededAirFlow: number, settings: Settings, additionalRecieverVolume: number, atmosphericPressure: number, totalAirStorage: number,) {
-    let compressorIds: Array<string> = adjustedCompressors.map(compressor => { return compressor.itemId });
+  shareLoad(intervalData: Array<{ compressorId: string, summaryData: ProfileSummaryData }>, adjustedProfileSummary: Array<ProfileSummary>, adjustedCompressors: Array<CompressorInventoryItem>, neededAirFlow: number, settings: Settings,
+    additionalRecieverVolume: number, atmosphericPressure: number, totalAirStorage: number, reduceRuntime: ReduceRuntime, dayType: CompressedAirDayType): Array<ProfileSummary> {
+    let compressorIds: Array<string> = new Array();
+    let order: number = 1;
+    intervalData.forEach(iDataItem => {
+      if (reduceRuntime) {
+        let reduceRuntimeData: ReduceRuntimeData = reduceRuntime.runtimeData.find(dataItem => {
+          return dataItem.compressorId == iDataItem.compressorId && dataItem.dayTypeId == dayType.dayTypeId;
+        });
+        let reduceRuntimeDataItem: { isCompressorOn: boolean, timeInterval: number } = reduceRuntimeData.intervalData.find(iData => { return iData.timeInterval == iDataItem.summaryData.timeInterval });
+        if (!reduceRuntimeDataItem.isCompressorOn) {
+          iDataItem.summaryData.order = 0;
+        } else if (reduceRuntimeDataItem.isCompressorOn && iDataItem.summaryData.order == 0) {
+          iDataItem.summaryData.order = order;
+          order++;
+        }
+
+      }
+      if (iDataItem.summaryData.order != 0) {
+        compressorIds.push(iDataItem.compressorId);
+      }
+    })
+
     let compressorCombinations: Array<Array<string>> = this.getCombinations(compressorIds);
     let validCombinations: Array<{
       load: number,
       operatingCompressors: Array<{
         compressorId: string,
         airflow: number,
-        power: number
+        power: number,
+        compressorResult: CompressorCalcResult
       }>
     }> = new Array();
     for (let compressorIds of compressorCombinations) {
@@ -934,7 +956,8 @@ export class CompressedAirAssessmentResultsService {
             return {
               compressorId: compressor.itemId,
               airflow: resultsAtLoad.capacityCalculated,
-              power: resultsAtLoad.powerCalculated
+              power: resultsAtLoad.powerCalculated,
+              compressorResult: resultsAtLoad
             }
           })
         })
@@ -944,8 +967,11 @@ export class CompressedAirAssessmentResultsService {
     let selectedOperatingCombonation: Array<{
       compressorId: string,
       airflow: number,
-      power: number
-    }>;
+      power: number,
+      compressorResult: CompressorCalcResult
+    }> = [];
+    let totalFullLoadCapacity: number = this.getTotalCapacity(adjustedCompressors);
+    let totalFullLoadPower: number = this.getTotalPower(adjustedCompressors);
     let minPower: number = Infinity;
     for (let validCombination of validCombinations) {
       let totalCombinationPower: number = _.sumBy(validCombination.operatingCompressors, (compressor) => {
@@ -956,9 +982,43 @@ export class CompressedAirAssessmentResultsService {
         minPower = totalCombinationPower;
       }
     }
-    console.log(selectedOperatingCombonation);
 
-
+    let orderCount: number = 1;
+    intervalData.forEach(data => {
+      let selectedCompressorAtLoad: {
+        compressorId: string,
+        airflow: number,
+        power: number,
+        compressorResult: CompressorCalcResult
+      } = selectedOperatingCombonation.find(item => { return item.compressorId == data.compressorId });
+      let adjustedIndex: number = adjustedProfileSummary.findIndex(summary => { return summary.compressorId == data.compressorId && summary.dayTypeId == dayType.dayTypeId });
+      let adjustedSummaryIndex: number = adjustedProfileSummary[adjustedIndex].profileSummaryData.findIndex(summaryData => { return summaryData.order == data.summaryData.order && summaryData.timeInterval == data.summaryData.timeInterval });
+      if (selectedCompressorAtLoad) {
+        adjustedProfileSummary[adjustedIndex].profileSummaryData[adjustedSummaryIndex] = {
+          power: selectedCompressorAtLoad.compressorResult.powerCalculated,
+          airflow: selectedCompressorAtLoad.compressorResult.capacityCalculated,
+          percentCapacity: selectedCompressorAtLoad.compressorResult.percentageCapacity,
+          timeInterval: data.summaryData.timeInterval,
+          percentPower: selectedCompressorAtLoad.compressorResult.percentagePower,
+          percentSystemCapacity: (selectedCompressorAtLoad.compressorResult.capacityCalculated / totalFullLoadCapacity) * 100,
+          percentSystemPower: (selectedCompressorAtLoad.compressorResult.powerCalculated / totalFullLoadPower) * 100,
+          order: orderCount,
+        };
+        orderCount++;
+      } else {
+        adjustedProfileSummary[adjustedIndex].profileSummaryData[adjustedSummaryIndex] = {
+          power: 0,
+          airflow: 0,
+          percentCapacity: 0,
+          timeInterval: data.summaryData.timeInterval,
+          percentPower: 0,
+          percentSystemCapacity: 0,
+          percentSystemPower: 0,
+          order: 0,
+        };
+      }
+    });
+    return adjustedProfileSummary;
   }
 
 

@@ -188,7 +188,7 @@
             </label>
             <div class="input-group">
                 <input name="plantMaxPressure" type="number" step="any" class="form-control" id="plantMaxPressure"
-                    formControlName="plantMaxPressure" (input)="save()" (focus)="focusField('plantMaxPressure')"
+                    formControlName="plantMaxPressure" (input)="changeMaxPlantPressure()" (focus)="focusField('plantMaxPressure')"
                     min="0">
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>

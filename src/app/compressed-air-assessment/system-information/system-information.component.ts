@@ -107,6 +107,20 @@ export class SystemInformationComponent implements OnInit {
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
+  changeMaxPlantPressure() {
+    this.form = this.systemInformationFormService.setSequencerFieldValidators(this.form);
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let systemInformation: SystemInformation = this.systemInformationFormService.updateObjFromForm(this.form, compressedAirAssessment.systemInformation);
+    compressedAirAssessment.systemInformation = systemInformation;
+    let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+    compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+      compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingIsentropicEfficiency(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals, compressedAirAssessment.compressorInventoryItems, this.settings, systemInformation);
+    });
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
+  }
+
+
+
   changeTargetPressure() {
     this.form = this.systemInformationFormService.setSequencerFieldValidators(this.form);
     this.save()
