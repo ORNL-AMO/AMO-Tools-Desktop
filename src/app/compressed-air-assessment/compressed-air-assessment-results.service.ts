@@ -722,8 +722,11 @@ export class CompressedAirAssessmentResultsService {
 
     if (systemInformation.multiCompressorSystemControls == 'baseTrim') {
       //set base trim ordering
-      let trimSelection: {dayTypeId: string, compressorId: string} = systemInformation.trimSelections.find(selection => {return selection.dayTypeId == dayType.dayTypeId});
+      let trimSelection: { dayTypeId: string, compressorId: string } = systemInformation.trimSelections.find(selection => { return selection.dayTypeId == dayType.dayTypeId });
       intervalData = this.setBaseTrimOrdering(intervalData, adjustedCompressors, neededAirFlow, trimSelection.compressorId, dayType, reduceRuntime);
+    } else if (systemInformation.multiCompressorSystemControls == 'loadSharing') {
+      //share load..
+      this.shareLoad(adjustedCompressors, neededAirFlow, settings, additionalRecieverVolume, atmosphericPressure, totalAirStorage);
     }
     //calc totals for system percentages
     let totalFullLoadCapacity: number = this.getTotalCapacity(adjustedCompressors);
@@ -900,6 +903,64 @@ export class CompressedAirAssessmentResultsService {
     }
     return intervalData;
   }
+
+
+  shareLoad(adjustedCompressors: Array<CompressorInventoryItem>, neededAirFlow: number, settings: Settings, additionalRecieverVolume: number, atmosphericPressure: number, totalAirStorage: number,) {
+    let compressorIds: Array<string> = adjustedCompressors.map(compressor => { return compressor.itemId });
+    let compressorCombinations: Array<Array<string>> = this.getCombinations(compressorIds);
+    let validCombinations: Array<{
+      load: number,
+      operatingCompressors: Array<{
+        compressorId: string,
+        airflow: number,
+        power: number
+      }>
+    }> = new Array();
+    for (let compressorIds of compressorCombinations) {
+      let compressorsInCombo: Array<CompressorInventoryItem> = compressorIds.map(cId => {
+        return adjustedCompressors.find(adjustedCompressor => { return adjustedCompressor.itemId == cId });
+      });
+      let totalRatedAirflow: number = 0;
+      compressorsInCombo.forEach(compressor => {
+        totalRatedAirflow += compressor.performancePoints.fullLoad.airflow;
+      });
+      let load = (neededAirFlow / totalRatedAirflow);
+      if (load <= 1) {
+        validCombinations.push({
+          load: load,
+          operatingCompressors: compressorsInCombo.map(compressor => {
+            let airflow: number = load * compressor.performancePoints.fullLoad.airflow;
+            let resultsAtLoad: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, settings, 3, airflow, atmosphericPressure, totalAirStorage, additionalRecieverVolume, true);
+            return {
+              compressorId: compressor.itemId,
+              airflow: resultsAtLoad.capacityCalculated,
+              power: resultsAtLoad.powerCalculated
+            }
+          })
+        })
+      }
+    }
+
+    let selectedOperatingCombonation: Array<{
+      compressorId: string,
+      airflow: number,
+      power: number
+    }>;
+    let minPower: number = Infinity;
+    for (let validCombination of validCombinations) {
+      let totalCombinationPower: number = _.sumBy(validCombination.operatingCompressors, (compressor) => {
+        return compressor.power
+      });
+      if (totalCombinationPower < minPower) {
+        selectedOperatingCombonation = validCombination.operatingCompressors;
+        minPower = totalCombinationPower;
+      }
+    }
+    console.log(selectedOperatingCombonation);
+
+
+  }
+
 
 
   getCombinations(combinations: Array<string>): Array<Array<string>> {

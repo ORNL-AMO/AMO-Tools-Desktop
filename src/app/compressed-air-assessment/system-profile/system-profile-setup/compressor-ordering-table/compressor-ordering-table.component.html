@@ -142,5 +142,24 @@
                 </td>
             </tr>
         </tbody>
+        <tbody *ngIf="multiCompressorSystemControls == 'loadSharing'">
+            <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
+                <td class="bold text-center">
+                    {{summary.compressorId|compressorName:inventoryItems}}
+                </td>
+                <td class="text-center">
+                    {{summary.fullLoadPressure}}
+                </td>
+                <td class="input-cell"
+                    *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">
+                    <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
+                        class="btn btn-sm" *ngIf="summaryData.order == 0"
+                        (click)="toggleOn(summary, orderIndex)">Off</button>
+                    <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
+                        class="btn btn-sm btn-active" *ngIf="summaryData.order != 0"
+                        (click)="toggleOn(summary, orderIndex)">On</button>
+                </td>
+            </tr>
+        </tbody>
     </table>
 </div>
