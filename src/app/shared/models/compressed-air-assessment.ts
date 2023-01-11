@@ -1,6 +1,5 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 import { ProfileSummaryValid } from "../../compressed-air-assessment/compressed-air-assessment.service";
-import { SankeySystemInputs } from "../../compressed-air-assessment/compressed-air-sankey/power-sankey/power-sankey.service";
 import { DayTypeSummary, LogToolField } from "../../log-tool/log-tool-models";
 
 export interface CompressedAirAssessment {
@@ -25,7 +24,9 @@ export interface CompressedAirAssessment {
 export interface Modification {
     name: string,
     modificationId: string,
+    modifiedCompressorInventoryItems?: Array<CompressorInventoryItem>,
     // flowReallocation: FlowReallocation,
+    replaceCompressorsEEM: ReplaceCompressorsEEM,
     reduceAirLeaks: ReduceAirLeaks,
     improveEndUseEfficiency: ImproveEndUseEfficiency,
     reduceSystemAirPressure: ReduceSystemAirPressure,
@@ -39,6 +40,13 @@ export interface Modification {
 // export interface FlowReallocation {
 //     // selected: boolean
 // }
+
+export interface ReplaceCompressorsEEM {
+    implementationCost: number,
+    replacementCompressors?: Array<CompressorInventoryItem>,
+    replacedCompressors?: Array<CompressorInventoryItem>,
+    order: number
+}
 
 export interface ReduceAirLeaks {
     leakFlow: number,
@@ -194,13 +202,23 @@ export interface CompressorInventoryItem {
     name: string,
     description: string,
     isValid?: boolean,
+    isNewModified?: boolean,
     nameplateData: CompressorNameplateData,
     compressorControls: CompressorControls,
     designDetails: DesignDetails,
     performancePoints: PerformancePoints,
     centrifugalSpecifics: CentrifugalSpecifics,
+    isModificationCompressor?: boolean,
+    compressorReplacement?: CompressorReplacement
     modifiedDate: Date
 
+}
+
+export interface CompressorReplacement {
+    isReplacement?: boolean,
+    isReplaced?: boolean
+    replacedByCompressorId?: string,
+    replacesCompressorId?: string,
 }
 
 export interface CompressorNameplateData {

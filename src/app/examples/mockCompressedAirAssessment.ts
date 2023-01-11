@@ -17,6 +17,12 @@ export const MockCompressedAirAssessment: Assessment =  {
             {
                 "name": "Scenario 1",
                 "modificationId": "wsth9ineg",
+                "replaceCompressorsEEM": {
+                    "implementationCost": 0,
+                    "replacementCompressors": [],
+                    "replacedCompressors": [],
+                    "order": 4
+                },
                 "reduceAirLeaks": {
                     "leakFlow": 2000,
                     "leakReduction": 10,
@@ -6156,6 +6162,12 @@ export const MockCompressedAirAssessment: Assessment =  {
             {
                 "name": "Scenario 2",
                 "modificationId": "14hjlw1kc",
+                "replaceCompressorsEEM": {
+                    "implementationCost": 0,
+                    "replacementCompressors": [],
+                    "replacedCompressors": [],
+                    "order": 4
+                },
                 "reduceAirLeaks": {
                     "leakFlow": 2000,
                     "leakReduction": 15,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
@@ -8,7 +8,8 @@ import { CompressedAirAssessmentService } from '../compressed-air-assessment.ser
   styleUrls: ['./results-panel.component.css']
 })
 export class ResultsPanelComponent implements OnInit {
-
+  @Input()
+  isShowingModified: boolean;
   setupTabSub: Subscription;
   tabSelect: CompressedAirSetupTab = 'help';
   displayEndUses: boolean;
@@ -24,7 +25,6 @@ export class ResultsPanelComponent implements OnInit {
       } else {
         this.tabSelect = 'help';
       }
-
     });
   }
 

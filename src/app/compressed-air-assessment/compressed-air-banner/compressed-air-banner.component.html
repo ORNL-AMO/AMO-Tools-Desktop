@@ -74,6 +74,10 @@
         <li [ngClass]="{'active': secondaryAssessmentTab == 'graphs', 'disabled': !selectedModification}">
             <a (click)="changeSecondaryAssessmentTab('graphs')">Profile Summary Graphs</a>
         </li>
+        <li [ngClass]="{'active': secondaryAssessmentTab == 'modified-inventory',
+             'disabled': !selectedModification || !hasModifiedInventory}">
+            <a (click)="changeSecondaryAssessmentTab('modified-inventory')">Modified Inventory</a>
+        </li>
     </ul>
 
 

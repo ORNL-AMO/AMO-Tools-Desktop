@@ -39,6 +39,8 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   improveEndUseEfficiencyValidSub: Subscription;
   reduceAirLeaksValid: boolean;
   reduceAirLeaksValidSub: Subscription;
+  replaceCompressorsValid: boolean;
+  replaceCompressorsValidSub: Subscription;
   reduceRuntimeValid: boolean;
   reduceRuntimeValidSub: Subscription;
   reduceSystemAirPressureValid: boolean;
@@ -66,6 +68,7 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
 
     this.modificationResultsSub = this.exploreOpportunitiesService.modificationResults.subscribe(val => {
       this.modificationResults = val;
+      debugger;
       if (this.modificationResults) {
         // Do this to pick up on modification change
         this.modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == this.modificationResults.modification.modificationId });
@@ -92,6 +95,7 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
     this.adjustCascadingSetPointsValidSub.unsubscribe();
     this.improveEndUseEfficiencyValidSub.unsubscribe();
     this.reduceAirLeaksValidSub.unsubscribe();
+    this.replaceCompressorsValidSub.unsubscribe();
     this.reduceRuntimeValidSub.unsubscribe();
     this.reduceSystemAirPressureValidSub.unsubscribe();
     this.useAutomaticSequencerValidSub.unsubscribe();
@@ -99,8 +103,10 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
 
   setResults() {
     if (this.modificationResults && this.selectedDayType) {
+      debugger;
       this.dayTypeModificationResult = this.modificationResults.dayTypeModificationResults.find(modResult => { return modResult.dayTypeId == this.selectedDayType.dayTypeId });
     } else if (this.modificationResults && !this.selectedDayType) {
+      debugger;
       this.dayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(this.modificationResults, this.baselineResults);
     }
   }
@@ -126,6 +132,12 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
     });
     this.reduceAirLeaksValidSub = this.exploreOpportunitiesValidationService.reduceAirLeaksValid.subscribe(val => {
       this.reduceAirLeaksValid = val;
+      if (!this.isInit) {
+        this.setHasInvalidData();
+      }
+    });
+    this.replaceCompressorsValidSub = this.exploreOpportunitiesValidationService.replaceCompressorsValid.subscribe(val => {
+      this.replaceCompressorsValid = val;
       if (!this.isInit) {
         this.setHasInvalidData();
       }
@@ -162,6 +174,8 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
         } else if (this.modification.improveEndUseEfficiency.order != 100 && this.improveEndUseEfficiencyValid == false) {
           this.hasInvalidData = true;
         } else if (this.modification.reduceAirLeaks.order != 100 && this.reduceAirLeaksValid == false) {
+          this.hasInvalidData = true;
+        } else if (this.modification.replaceCompressorsEEM.order != 100 && this.replaceCompressorsValid == false) {
           this.hasInvalidData = true;
         } else if (this.modification.reduceRuntime.order != 100 && this.reduceRuntimeValid == false) {
           this.hasInvalidData = true;

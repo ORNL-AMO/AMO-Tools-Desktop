@@ -23,6 +23,7 @@ export class CompressedAirBannerComponent implements OnInit {
   secondaryAssessmentTabSub: Subscription;
   secondaryAssessmentTab: string;
   compresssedAirAssessmentSub: Subscription;
+  hasModifiedInventory: boolean = false;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -36,6 +37,11 @@ export class CompressedAirBannerComponent implements OnInit {
         this.changeSecondaryAssessmentTab('modifications');
       }
       this.selectedModification = compressedAirAssessment.modifications.find(modification => { return modification.modificationId == val });
+      if (this.selectedModification) {
+        this.hasModifiedInventory = true;
+        // this.hasModifiedInventory = this.selectedModification.modifiedCompressorInventoryItems && this.selectedModification.modifiedCompressorInventoryItems.length != 0;
+      
+      }
     });
 
     this.assessmentTabSub = this.compressedAirAssessmentService.assessmentTab.subscribe(val => {
@@ -76,7 +82,9 @@ export class CompressedAirBannerComponent implements OnInit {
 
   changeSecondaryAssessmentTab(str: string) {
     if (this.selectedModification) {
-      this.compressedAirAssessmentService.secondaryAssessmentTab.next(str);
+      if (str != 'modified-inventory' || (str == 'modified-inventory' && this.hasModifiedInventory)) {
+        this.compressedAirAssessmentService.secondaryAssessmentTab.next(str);
+      }
     }
   }
 }

@@ -3,7 +3,7 @@
         <span class="alert-danger pull-right small" *ngIf="hasInvalidCompressors">
             One or more compressor is invalid - Review inventory and make changes to continue
         </span>
-        <table class="table table-sm table-striped table-hover mb-0" *ngIf="selectedCompressor && compressorInventoryItems">
+        <table class="table table-sm table-striped table-hover mb-0" *ngIf="(selectedCompressor || isSelectingReplacement || isSelectingReplaced) && compressorInventoryItems">
             <thead>
                 <tr>
                     <th>
@@ -12,19 +12,28 @@
                     <th>Compressor Type</th>
                     <th>Control Type</th>
                     <th>Pressure Range</th>
-                    <th></th>
-                    <th></th>
+                    <th *ngIf="isSelectingReplacement || isSelectingReplaced">Motor Power</th>
+                    <th *ngIf="isSelectingReplacement || isSelectingReplaced">Rated Capacity</th>
+                    <th *ngIf="!isSelectingReplacement || isSelectingReplaced"></th>
+                    <th *ngIf="!isSelectingReplacement || isSelectingReplaced"></th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let compressorInventoryItem of compressorInventoryItems"
-                    [ngClass]="{'selected-item':compressorInventoryItem.itemId == selectedCompressor.itemId,
+                <ng-container *ngIf="!isShowingModifiedInventory">
+                <tr *ngFor="let compressorInventoryItem of compressorInventoryItems; let i = index;"
+                    [ngClass]="{'selected-item': compressorInventoryItem.itemId == selectedCompressor.itemId,
                                 'invalid-compressor': !compressorInventoryItem.isValid}">
                     <td>
-                        <span *ngIf="compressorInventoryItem.itemId == selectedCompressor.itemId"
-                            class="fa fa-chevron-right danger"></span>
-                        <a class="click-link"
-                            (click)="selectItem(compressorInventoryItem)">{{compressorInventoryItem.name}}</a>
+                        <span *ngIf="compressorInventoryItem.itemId == selectedCompressor.itemId" class="fa fa-chevron-right danger"></span>
+                        <a class="click-link" (click)="selectItem(compressorInventoryItem)">{{compressorInventoryItem.name}}</a>
+                        <!-- testing -->
+                        <ng-container *ngIf="isShowingModifiedInventory">
+                            <span *ngIf="i == 5" class="badge badge-primary new-badge">New</span>
+                            <span *ngIf="i == 0" class="badge badge-primary replacement-badge">Replacement</span>
+                            <!-- <span *ngIf="compressorInventoryItem.isNewModified" class="badge badge-primary new-badge">New</span> -->
+                            <!-- <span *ngIf="compressorInventoryItem.compressorReplacement && compressorInventoryItem.isReplacement" class="badge badge-primary replacement-badge">Replacement</span> -->
+                        </ng-container>
+                            
                     </td>
                     <td>
                         {{compressorInventoryItem.nameplateData.compressorType | compressorType}}
@@ -35,17 +44,94 @@
                     <td>
                         {{getPressureMinMax(compressorInventoryItem)}}
                     </td>
-                    <td>
+                    <td *ngIf="isSelectingReplacement || isSelectingReplaced">
+                        {{compressorInventoryItem.nameplateData.motorPower}} 
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" >hp</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'" >kW</span>
+                    </td>
+                    <td *ngIf="isSelectingReplacement || isSelectingReplaced">
+                        {{compressorInventoryItem.nameplateData.fullLoadRatedCapacity}}
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" >acfm</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'" >m<sup>3</sup>/min</span>
+                    </td>
+                    <td *ngIf="!isSelectingReplacement || isSelectingReplaced">
                         <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(compressorInventoryItem)"></a>
                         
                     </td>
-                    <td>
+                    <td *ngIf="!isSelectingReplacement || isSelectingReplaced">
                         <a class="fa fa-copy" (click)="createCopy(compressorInventoryItem)"></a>
                     </td>
                 </tr>
+            </ng-container>
+
+
+
+
+
+
+
+
+
+
+
+
+            <ng-container *ngIf="isShowingModifiedInventory">
+                <ng-container *ngFor="let compressorInventoryItem of compressorInventoryItems; let i = index;">
+                <!-- <tr *ngIf="compressorInventoryItem.compressorReplacement && compressorInventoryItem.isReplacement" -->
+                <tr [ngClass]="{'selected-item': compressorInventoryItem.itemId == selectedCompressor.itemId,
+                                'invalid-compressor': !compressorInventoryItem.isValid}">
+                    <td>
+                        <span *ngIf="compressorInventoryItem.itemId == selectedCompressor.itemId" class="fa fa-chevron-right danger"></span>
+                        <a class="click-link" (click)="selectItem(compressorInventoryItem)">{{compressorInventoryItem.name}}</a>
+                        <!-- testing -->
+                            <span *ngIf="i == 5" class="badge badge-primary new-badge">New</span>
+                            <span *ngIf="i == 0" class="badge badge-primary replacement-badge" (click)="expandReplacedCompressorData()">
+                                <a data-toggle="collapse" href="#npm ">
+                                    Replacement
+                                </a>
+                            </span>
+                            <!-- <span *ngIf="compressorInventoryItem.isNewModified" class="badge badge-primary new-badge">New</span> -->
+                            <!-- <span *ngIf="compressorInventoryItem.compressorReplacement && compressorInventoryItem.isReplacement" class="badge badge-primary replacement-badge">Replacement</span> -->
+                    </td>
+                    <td>
+                        {{compressorInventoryItem.nameplateData.compressorType | compressorType}}
+                    </td>
+                    <td>
+                        {{compressorInventoryItem.compressorControls.controlType | controlType}}
+                    </td>
+                    <td>
+                        {{getPressureMinMax(compressorInventoryItem)}}
+                    </td>
+                    <td *ngIf="isSelectingReplacement || isSelectingReplaced">
+                        {{compressorInventoryItem.nameplateData.motorPower}} 
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" >hp</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'" >kW</span>
+                    </td>
+                    <td *ngIf="isSelectingReplacement || isSelectingReplaced">
+                        {{compressorInventoryItem.nameplateData.fullLoadRatedCapacity}}
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" >acfm</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'" >m<sup>3</sup>/min</span>
+                    </td>
+                    <td *ngIf="!isSelectingReplacement || isSelectingReplaced">
+                        <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(compressorInventoryItem)"></a>
+                        
+                    </td>
+                    <td *ngIf="!isSelectingReplacement || isSelectingReplaced">
+                        <a class="fa fa-copy" (click)="createCopy(compressorInventoryItem)"></a>
+                    </td>
+                </tr>
+                <tr [ngStyle]="{'background-color': 'lightgrey'}" class="collapse multi-collapse" id="multiCollapseExample1">
+                    <td class="card card-body">
+                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                    </td>
+                </tr>
+            
+            
+            </ng-container>
+        </ng-container>
             </tbody>
         </table>
-        <div class="w-100 text-right">
+        <div *ngIf="!isSelectingReplaced" class="w-100 text-right">
             <a class="click-link small" (click)="addNewCompressor()">+Add New Compressor</a>
         </div>
     </div>

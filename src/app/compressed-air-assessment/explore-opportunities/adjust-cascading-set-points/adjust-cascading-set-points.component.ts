@@ -98,6 +98,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
         let allOrders: Array<number> = [
           modification.addPrimaryReceiverVolume.order,
           modification.reduceAirLeaks.order,
+          modification.replaceCompressorsEEM.order,
           modification.improveEndUseEfficiency.order,
           modification.reduceRuntime.order,
           modification.reduceSystemAirPressure.order,

@@ -77,6 +77,12 @@ export class ExploreOpportunitiesService {
       name: 'Modification',
       modificationId: Math.random().toString(36).substr(2, 9),
       notes: undefined,
+      replaceCompressorsEEM: {
+        implementationCost: 0,
+        replacementCompressors: [],
+        replacedCompressors: [],
+        order: 100
+      },
       reduceAirLeaks: {
         leakReduction: undefined,
         leakFlow: undefined,
@@ -149,6 +155,7 @@ export class ExploreOpportunitiesService {
         modification.improveEndUseEfficiency.order,
         modification.reduceRuntime.order,
         modification.reduceAirLeaks.order,
+        modification.replaceCompressorsEEM.order,
         modification.reduceSystemAirPressure.order,
         modification.useAutomaticSequencer.order
       ]
@@ -190,6 +197,13 @@ export class ExploreOpportunitiesService {
           modification.reduceAirLeaks.order++;
         }
       }
+      if (modification.replaceCompressorsEEM.order != 100 && changedOpportunity != 'replaceCompressors' && modification.replaceCompressorsEEM.order >= newOrder) {
+        if (hasDuplicate && modification.replaceCompressorsEEM.order == newOrder && previousOrder != 100) {
+          modification.replaceCompressorsEEM.order = previousOrder;
+        } else if (!hasDuplicate || previousOrder == 100) {
+          modification.replaceCompressorsEEM.order++;
+        }
+      }
       if (modification.reduceSystemAirPressure.order != 100 && changedOpportunity != 'reduceSystemAirPressure' && modification.reduceSystemAirPressure.order >= newOrder) {
         if (hasDuplicate && modification.reduceSystemAirPressure.order == newOrder && previousOrder != 100) {
           modification.reduceSystemAirPressure.order = previousOrder;
@@ -220,6 +234,9 @@ export class ExploreOpportunitiesService {
       if (modification.reduceAirLeaks.order != 100 && changedOpportunity != 'reduceAirLeaks' && modification.reduceAirLeaks.order > previousOrder) {
         modification.reduceAirLeaks.order--;
       }
+      if (modification.replaceCompressorsEEM.order != 100 && changedOpportunity != 'replaceCompressors' && modification.replaceCompressorsEEM.order > previousOrder) {
+        modification.replaceCompressorsEEM.order--;
+      }
       if (modification.reduceSystemAirPressure.order != 100 && changedOpportunity != 'reduceSystemAirPressure' && modification.reduceSystemAirPressure.order > previousOrder) {
         modification.reduceSystemAirPressure.order--;
       }
@@ -241,6 +258,8 @@ export class ExploreOpportunitiesService {
       return dayTypeModificationResults.improveEndUseEfficiencyProfileSummary;
     } else if (modification.reduceAirLeaks.order == order - 1) {
       return dayTypeModificationResults.reduceAirLeaksProfileSummary;
+    } else if (modification.replaceCompressorsEEM.order == order - 1) {
+      return dayTypeModificationResults.replaceCompressorsProfileSummary;
     } else if (modification.reduceRuntime.order == order - 1) {
       return dayTypeModificationResults.reduceRunTimeProfileSummary;
     } else if (modification.reduceSystemAirPressure.order == order - 1) {

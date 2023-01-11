@@ -137,6 +137,9 @@ export class ModificationListModalComponent implements OnInit {
     if (modification.reduceAirLeaks.order != 100) {
       badges.push('Reduce Air Leaks');
     }
+    if (modification.replaceCompressorsEEM.order != 100) {
+      badges.push('Replace Compressors');
+    }
     if (modification.reduceRuntime.order != 100) {
       badges.push('Reduce Run Time');
     }

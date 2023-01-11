@@ -87,6 +87,7 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
           modification.addPrimaryReceiverVolume.order,
           modification.adjustCascadingSetPoints.order,
           modification.reduceAirLeaks.order,
+          modification.replaceCompressorsEEM.order,
           modification.reduceRuntime.order,
           modification.reduceSystemAirPressure.order,
           modification.useAutomaticSequencer.order

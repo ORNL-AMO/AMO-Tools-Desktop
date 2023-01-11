@@ -127,6 +127,7 @@ export class ReduceRunTimeComponent implements OnInit {
           modification.adjustCascadingSetPoints.order,
           modification.improveEndUseEfficiency.order,
           modification.reduceAirLeaks.order,
+          modification.replaceCompressorsEEM.order,
           modification.reduceSystemAirPressure.order,
           modification.useAutomaticSequencer.order
         ];

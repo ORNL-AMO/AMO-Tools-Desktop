@@ -129,7 +129,8 @@ export class UseAutomaticSequencerComponent implements OnInit {
           modification.improveEndUseEfficiency.order,
           modification.reduceRuntime.order,
           modification.reduceSystemAirPressure.order,
-          modification.reduceAirLeaks.order
+          modification.reduceAirLeaks.order,
+          modification.replaceCompressorsEEM.order
         ];
         allOrders = allOrders.filter(order => { return order != 100 });
         let numOrdersOn: number = allOrders.length;

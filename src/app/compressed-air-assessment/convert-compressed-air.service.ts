@@ -320,6 +320,8 @@ export class ConvertCompressedAirService {
     modification.adjustCascadingSetPoints = this.convertAdjustCascadingSetPoints(modification.adjustCascadingSetPoints, oldSettings, newSettings);
     modification.improveEndUseEfficiency = this.convertImproveEndUseEfficiency(modification.improveEndUseEfficiency, oldSettings, newSettings);
     modification.reduceAirLeaks = this.convertAirLeaks(modification.reduceAirLeaks, oldSettings, newSettings);
+    // 4841
+    // modification.replaceCompressors = this.convertReplaceCompressors(modification.replaceCompressors, oldSettings, newSettings);
     modification.reduceRuntime = this.convertReduceRuntime(modification.reduceRuntime, oldSettings, newSettings);
     modification.reduceSystemAirPressure = this.convertReduceSystemAirPressure(modification.reduceSystemAirPressure, oldSettings, newSettings);
     modification.useAutomaticSequencer = this.convertUseAutomaticSequencer(modification.useAutomaticSequencer, oldSettings, newSettings);

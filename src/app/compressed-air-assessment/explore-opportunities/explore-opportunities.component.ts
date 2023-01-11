@@ -71,10 +71,16 @@ export class ExploreOpportunitiesComponent implements OnInit {
       }
     });
     this.secondaryAssessmentTabSub = this.compressedAirAssessmentService.secondaryAssessmentTab.subscribe(val => {
-      if (val == 'graphs' || val == 'table') {
+      if (val == 'graphs' || val == 'table' || 'modified-inventory') {
         if (!this.selectedDayType && this.dayTypeOptions) {
           this.exploreOpportunitiesService.selectedDayType.next(this.dayTypeOptions[0]);
         }
+
+        if ('modified-inventory') {
+          // show results panel compressor table and help
+          this.compressedAirAssessmentService.setupTab.next('inventory')
+        }
+
       } else if (val == 'modifications') {
         if (this.dayTypeOptions && this.dayTypeOptions.length == 1) {
           this.exploreOpportunitiesService.selectedDayType.next(undefined);

@@ -83,6 +83,7 @@ export class AddReceiverVolumeComponent implements OnInit {
       if (modification) {
         let allOrders: Array<number> = [
           modification.reduceAirLeaks.order,
+          modification.replaceCompressorsEEM.order,
           modification.adjustCascadingSetPoints.order,
           modification.improveEndUseEfficiency.order,
           modification.reduceRuntime.order,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
@@ -14,11 +14,18 @@ import { SystemProfileService } from '../../system-profile/system-profile.servic
   styleUrls: ['./inventory-table.component.css']
 })
 export class InventoryTableComponent implements OnInit {
+  @Input()
+  isSelectingReplacement: boolean;
+  @Input()
+  isSelectingReplaced: boolean;
+  @Input()
+  isShowingModifiedInventory: boolean;
 
   compressedAirAssessmentSub: Subscription;
   compressorInventoryItems: Array<CompressorInventoryItem>;
 
   selectedCompressor: CompressorInventoryItem;
+  selectedReplacement: CompressorInventoryItem;
   selectedCompressorSub: Subscription;
 
   showConfirmDeleteModal: boolean = false;
@@ -26,22 +33,34 @@ export class InventoryTableComponent implements OnInit {
   hasInvalidCompressors: boolean = false;
   confirmDeleteCompressorInventoryData: ConfirmDeleteData;
 
+  showExpandedTableRow: boolean;
+
   settings: Settings;
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
+  constructor(private inventoryService: InventoryService, 
+    private cd: ChangeDetectorRef, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private systemProfileService: SystemProfileService, private performancePointsFormService: PerformancePointsFormService) { }
 
   ngOnInit(): void {
+    console.log(this.isShowingModifiedInventory);
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       this.selectedCompressor = val;
+      this.cd.detectChanges();
     })
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
+      console.log('sub compressedAirAssessment', val)
       if (val) {
         this.compressorInventoryItems = val.compressorInventoryItems;
+        
+        if (this.isSelectingReplaced || this.isSelectingReplacement) {
+          this.inventoryService.selectedCompressor.next(this.compressorInventoryItems[0]);
+        }
+
         this.compressorInventoryItems.forEach(compressor => {
           compressor.isValid = this.inventoryService.isCompressorValid(compressor);
         });
         this.hasInvalidCompressors = this.compressorInventoryItems.some(compressor => !compressor.isValid);
+        console.log((this.selectedCompressor || this.isSelectingReplacement || this.isSelectingReplaced) && this.compressorInventoryItems)
       }
     });
   }
@@ -59,6 +78,7 @@ export class InventoryTableComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let result: { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } = this.inventoryService.addNewCompressor(compressedAirAssessment);
     this.compressedAirAssessmentService.updateCompressedAir(result.compressedAirAssessment, true);
+    debugger;
     this.inventoryService.selectedCompressor.next(result.newInventoryItem);
   }
 
@@ -103,6 +123,10 @@ export class InventoryTableComponent implements OnInit {
     }
     this.showConfirmDeleteModal = false;
     this.compressedAirAssessmentService.modalOpen.next(false);
+  }
+
+  expandReplacedCompressorData() {
+    this.showExpandedTableRow
   }
 
   getPressureMinMax(compressor: CompressorInventoryItem): string {

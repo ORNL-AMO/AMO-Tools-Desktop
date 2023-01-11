@@ -21,3 +21,14 @@ a.danger{
     background-color: #f8d7da !important;
     border-color: #f8d7da !important;
 }
+
+.replacement-badge {
+    margin: .5rem;
+    /* background-color: rgba(112, 48, 160, .4); */
+    background-color: rgb(112, 48, 160);
+}
+
+.new-badge {
+    margin: .5rem;
+    background-color: rgb(112, 48, 160);
+}

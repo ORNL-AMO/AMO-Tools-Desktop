@@ -1,0 +1,74 @@
+<div class="modal-content">
+    <div class="modal-header p-2">
+        Replace Compressor
+        <button class="close" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div #modalBody class="modal-body p-0">
+        <div class="panel-container d-block d-lg-flex w-100">
+            <div class="panel-column col-12 col-lg-12 scroll-item pl-1 pr-1">
+                <!-- <div class="panel-column col-12 col-lg-12 scroll-item pl-1 pr-1" [ngStyle]="{'height.px': bodyHeight}"> -->
+                <nav class="hide-print w-100 justify-content-center">
+                    <div class="d-flex tabs subtabs progress-tabs compressed-air flex-wrap">
+                        <div class="w-50" [ngClass]="{'active': stepTab === 'select-old'}">
+                            <a (click)="changeStepTab('select-old')">
+                                <span class="step-number">1</span>Select Compressor to Replace</a>
+                        </div>
+                        <div class="w-50" [ngClass]="{'active': stepTab === 'select-new'}">
+                            <a (click)="changeStepTab('select-new')">
+                                <span class="step-number">2</span>Select Replacement</a>
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="my-2">
+                    <app-inventory-table *ngIf="stepTab == 'select-old'" [isSelectingReplaced]="true"></app-inventory-table>
+
+                    <ng-container *ngIf="stepTab == 'select-new'">
+
+                        <div class="mb-3 p-2 form-card">
+                            <div class="d-flex w-100">
+                                <label class="group-label bold my-1 mx-2 w-100" (click)="toggleInventoryCollapse()"
+                                [ngClass]="{'collapsed-border': isInventoryCollapsed === true}">
+                                <span *ngIf="isInventoryCollapsed" class="fa fa-chevron-right collapse-icon"></span>
+                                <span *ngIf="!isInventoryCollapsed" class="fa fa-chevron-down collapse-icon"></span>
+                                Inventory
+                            </label>
+                        </div>
+                        <ng-container *ngIf="!isInventoryCollapsed">
+                                <app-inventory-table [isSelectingReplacement]="true"></app-inventory-table>
+                            </ng-container>
+                        </div>
+
+
+                        <div *ngIf="isNewCompressor" class="mb-3 p-2 form-card">
+                            <div class="d-flex w-100">
+                                <label class="group-label bold my-1 mx-2 w-100" (click)="toggleIsAddFromExistingCollapsed()"
+                                    [ngClass]="{'collapsed-border': isAddFromExistingCollapsed === true}">
+                                    <span *ngIf="isAddFromExistingCollapsed" class="fa fa-chevron-right collapse-icon"></span>
+                                    <span *ngIf="!isAddFromExistingCollapsed" class="fa fa-chevron-down collapse-icon"></span>
+                                    Set New Compressor Data From Existing
+                                </label>
+                            </div>
+                            <ng-container *ngIf="!isAddFromExistingCollapsed">
+                                <app-filter-compressors></app-filter-compressors>
+                                <app-compressor-options-table [modalHeight]="bodyHeight" (emitClose)="close()"></app-compressor-options-table>
+                            </ng-container>
+                        </div>
+   
+                    </ng-container>
+                </div>
+                
+            </div>
+        </div>
+
+
+    </div>
+    <div class="modal-footer p-2">
+        <!-- <button *ngIf="stepTab === 'select-old'" type="button" class="btn btn-secondary btn-sm mr-2" (click)="closeModal()">Cancel</button> -->
+        <button *ngIf="stepTab === 'select-new'" type="button" class="btn btn-secondary btn-sm mr-2" (click)="stepTab = 'select-old'">Back</button>
+        <button *ngIf="stepTab === 'select-old'" type="button" class="btn btn-primary btn-sm" (click)="stepTab = 'select-new'" [disabled]="!compressorToReplace">Next</button>
+        <button *ngIf="stepTab === 'select-new'" type="button" class="btn btn-primary btn-sm" (click)="saveReplacementData()" [disabled]="!replacementCompressor">Finish</button>
+    </div>
+</div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ReduceSystemAirPressure, Modification, ProfileSummary, ReduceRuntime, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntimeData, ImproveEndUseEfficiency, ReduceAirLeaks, UseAutomaticSequencer, AdjustCascadingSetPoints, CascadingSetPointData, EndUseEfficiencyReductionData, CompressorSummary, ProfilesForPrint } from '../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ReduceSystemAirPressure, Modification, ProfileSummary, ReduceRuntime, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntimeData, ImproveEndUseEfficiency, ReduceAirLeaks, UseAutomaticSequencer, AdjustCascadingSetPoints, CascadingSetPointData, EndUseEfficiencyReductionData, CompressorSummary, ProfilesForPrint, ReplaceCompressorsEEM } from '../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from './compressed-air-calculation.service';
 import * as _ from 'lodash';
 import { PerformancePointCalculationsService } from './inventory/performance-points/calculations/performance-point-calculations.service';
@@ -166,12 +166,16 @@ export class CompressedAirAssessmentResultsService {
       modification.improveEndUseEfficiency.order,
       modification.reduceRuntime.order,
       modification.reduceAirLeaks.order,
+      modification.replaceCompressorsEEM.order,
       modification.reduceSystemAirPressure.order,
       modification.useAutomaticSequencer.order,
     ]
+
+
     modificationOrders = modificationOrders.filter(order => { return order != 100 });
     let modificationResults: Array<DayTypeModificationResult> = new Array();
     let compressedAirAssessmentCopy: CompressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
+
     if (compressedAirAssessmentCopy.systemInformation.isSequencerUsed) {
       compressedAirAssessmentCopy.compressorInventoryItems.forEach(item => {
         item = this.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessmentCopy.systemInformation.targetPressure, compressedAirAssessmentCopy.systemInformation.variance, item, compressedAirAssessmentCopy.systemInformation.atmosphericPressure, settings)
@@ -189,6 +193,15 @@ export class CompressedAirAssessmentResultsService {
       }
 
       let adjustedCompressors: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(compressedAirAssessmentCopy.compressorInventoryItems));
+
+      if (modification.modifiedCompressorInventoryItems) {
+        // app has copied all compressors to modified compressor inv items
+        adjustedCompressors = JSON.parse(JSON.stringify(modification.modifiedCompressorInventoryItems));
+        // remove replacements here
+      }
+
+      
+
       let adjustedData: AdjustProfileResults = this.adjustProfileSummary(dayType, settings, baselineProfileSummary, adjustedCompressors, modification, modificationOrders, compressedAirAssessmentCopy.systemInformation.atmosphericPressure, numberOfSummaryIntervals, compressedAirAssessmentCopy.systemInformation.totalAirStorage, compressedAirAssessmentCopy.systemBasics.electricityCost);
       let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedData.adjustedProfileSummary, numberOfSummaryIntervals, modification.improveEndUseEfficiency);
       let totalImplementationCost: number = this.getTotalImplementationCost(modification);
@@ -224,6 +237,8 @@ export class CompressedAirAssessmentResultsService {
         improveEndUseEfficiencyProfileSummary: adjustedData.improveEndUseEfficiencyProfileSummary,
         reduceAirLeaksSavings: adjustedData.reduceAirLeaksSavings,
         reduceAirLeaksProfileSummary: adjustedData.reduceAirLeaksProfileSummary,
+        replaceCompressorsSavings: adjustedData.replaceCompressorsSavings,
+        replaceCompressorsProfileSummary: adjustedData.replaceCompressorsProfileSummary,
         reduceRunTimeSavings: adjustedData.reduceRunTimeSavings,
         reduceRunTimeProfileSummary: adjustedData.reduceRunTimeProfileSummary,
         reduceSystemAirPressureSavings: adjustedData.reduceSystemAirPressureSavings,
@@ -265,6 +280,9 @@ export class CompressedAirAssessmentResultsService {
     if (modification.reduceAirLeaks.order != 100) {
       implementationCost += modification.reduceAirLeaks.implementationCost;
     }
+    if (modification.replaceCompressorsEEM.order != 100) {
+      implementationCost += modification.replaceCompressorsEEM.implementationCost;
+    }
     if (modification.reduceRuntime.order != 100) {
       implementationCost += modification.reduceRuntime.implementationCost;
     }
@@ -289,12 +307,14 @@ export class CompressedAirAssessmentResultsService {
       adjustCascadingSetPointsSavings: this.getEmptyEemSavings(),
       improveEndUseEfficiencySavings: this.getEmptyEemSavings(),
       reduceAirLeaksSavings: this.getEmptyEemSavings(),
+      replaceCompressorsSavings: this.getEmptyEemSavings(),
       reduceRunTimeSavings: this.getEmptyEemSavings(),
       reduceSystemAirPressureSavings: this.getEmptyEemSavings(),
       useAutomaticSequencerSavings: this.getEmptyEemSavings(),
       reduceRunTimeProfileSummary: undefined,
       flowAllocationProfileSummary: undefined,
       reduceAirLeaksProfileSummary: undefined,
+      replaceCompressorsProfileSummary: undefined,
       addReceiverVolumeProfileSummary: undefined,
       useAutomaticSequencerProfileSummary: undefined,
       improveEndUseEfficiencyProfileSummary: undefined,
@@ -336,6 +356,9 @@ export class CompressedAirAssessmentResultsService {
       dayTypeModificationResult.reduceAirLeaksSavings.savings.cost += modResult.reduceAirLeaksSavings.savings.cost;
       dayTypeModificationResult.reduceAirLeaksSavings.savings.power += modResult.reduceAirLeaksSavings.savings.power;
 
+      dayTypeModificationResult.replaceCompressorsSavings.savings.cost += modResult.replaceCompressorsSavings.savings.cost;
+      dayTypeModificationResult.replaceCompressorsSavings.savings.power += modResult.replaceCompressorsSavings.savings.power;
+
       dayTypeModificationResult.reduceRunTimeSavings.savings.cost += modResult.reduceRunTimeSavings.savings.cost;
       dayTypeModificationResult.reduceRunTimeSavings.savings.power += modResult.reduceRunTimeSavings.savings.power;
 
@@ -359,6 +382,7 @@ export class CompressedAirAssessmentResultsService {
       dayTypeModificationResult.adjustCascadingSetPointsSavings.implementationCost = modificationResults.dayTypeModificationResults[0].adjustCascadingSetPointsSavings.implementationCost;
       dayTypeModificationResult.improveEndUseEfficiencySavings.implementationCost = modificationResults.dayTypeModificationResults[0].improveEndUseEfficiencySavings.implementationCost;
       dayTypeModificationResult.reduceAirLeaksSavings.implementationCost = modificationResults.dayTypeModificationResults[0].reduceAirLeaksSavings.implementationCost;
+      dayTypeModificationResult.replaceCompressorsSavings.implementationCost = modificationResults.dayTypeModificationResults[0].replaceCompressorsSavings.implementationCost;
       dayTypeModificationResult.reduceRunTimeSavings.implementationCost = modificationResults.dayTypeModificationResults[0].reduceRunTimeSavings.implementationCost;
       dayTypeModificationResult.reduceSystemAirPressureSavings.implementationCost = modificationResults.dayTypeModificationResults[0].reduceSystemAirPressureSavings.implementationCost;
       dayTypeModificationResult.useAutomaticSequencerSavings.implementationCost = modificationResults.dayTypeModificationResults[0].useAutomaticSequencerSavings.implementationCost;
@@ -371,6 +395,7 @@ export class CompressedAirAssessmentResultsService {
     improveEndUseEfficiencySavingsCpy.savings.cost = improveEndUseEfficiencySavingsCpy.savings.cost - dayTypeModificationResult.auxiliaryPowerUsage.cost;
     dayTypeModificationResult.improveEndUseEfficiencySavings.paybackPeriod = this.getPaybackPeriod(improveEndUseEfficiencySavingsCpy);
     dayTypeModificationResult.reduceAirLeaksSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.reduceAirLeaksSavings);
+    dayTypeModificationResult.replaceCompressorsSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.replaceCompressorsSavings);
     dayTypeModificationResult.reduceRunTimeSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.reduceRunTimeSavings);
     dayTypeModificationResult.reduceSystemAirPressureSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.reduceSystemAirPressureSavings);
     dayTypeModificationResult.useAutomaticSequencerSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.useAutomaticSequencerSavings);
@@ -406,6 +431,7 @@ export class CompressedAirAssessmentResultsService {
     let adjustCascadingSetPointsSavings: EemSavingsResults = this.getEmptyEemSavings();
     let improveEndUseEfficiencySavings: EemSavingsResults = this.getEmptyEemSavings();
     let reduceAirLeaksSavings: EemSavingsResults = this.getEmptyEemSavings();
+    let replaceCompressorsSavings: EemSavingsResults = this.getEmptyEemSavings();
     let reduceRunTimeSavings: EemSavingsResults = this.getEmptyEemSavings();
     let reduceSystemAirPressureSavings: EemSavingsResults = this.getEmptyEemSavings();
     let useAutomaticSequencerSavings: EemSavingsResults = this.getEmptyEemSavings();
@@ -416,6 +442,7 @@ export class CompressedAirAssessmentResultsService {
     let adjustCascadingSetPointsProfileSummary: Array<ProfileSummary>;
     let improveEndUseEfficiencyProfileSummary: Array<ProfileSummary>;
     let reduceAirLeaksProfileSummary: Array<ProfileSummary>;
+    let replaceCompressorsSummary: Array<ProfileSummary>;
     let reduceSystemAirPressureProfileSummary: Array<ProfileSummary>;
     let useAutomaticSequencerProfileSummary: Array<ProfileSummary>;
     let auxiliaryPowerUsage: { cost: number, energyUse: number } = { cost: 0, energyUse: 0 };
@@ -487,6 +514,12 @@ export class CompressedAirAssessmentResultsService {
         if (electricityCost) {
           reduceAirLeaksSavings = this.calculateSavings(adjustedProfileCopy, adjustedProfileSummary, dayType, electricityCost, modification.reduceAirLeaks.implementationCost, numberOfSummaryIntervals)
         }
+      } else if (modification.replaceCompressorsEEM.order == orderIndex) {
+        adjustedProfileSummary = this.replaceCompressors(adjustedProfileSummary, settings, dayType, modification.replaceCompressorsEEM, adjustedCompressors, atmosphericPressure, numberOfSummaryIntervals, totalAirStorage, reduceRuntime);
+        replaceCompressorsSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
+        if (electricityCost) {
+          replaceCompressorsSavings = this.calculateSavings(adjustedProfileCopy, adjustedProfileSummary, dayType, electricityCost, modification.replaceCompressorsEEM.implementationCost, numberOfSummaryIntervals)
+        }
       } else if (modification.reduceSystemAirPressure.order == orderIndex) {
         //REDUCE SYSTEM AIR PRESSURE
         let compressorPriorToAdjustement: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(adjustedCompressors));
@@ -519,6 +552,7 @@ export class CompressedAirAssessmentResultsService {
       adjustCascadingSetPointsSavings: adjustCascadingSetPointsSavings,
       improveEndUseEfficiencySavings: improveEndUseEfficiencySavings,
       reduceAirLeaksSavings: reduceAirLeaksSavings,
+      replaceCompressorsSavings: replaceCompressorsSavings,
       reduceRunTimeSavings: reduceRunTimeSavings,
       reduceSystemAirPressureSavings: reduceSystemAirPressureSavings,
       useAutomaticSequencerSavings: useAutomaticSequencerSavings,
@@ -529,6 +563,7 @@ export class CompressedAirAssessmentResultsService {
       adjustCascadingSetPointsProfileSummary: adjustCascadingSetPointsProfileSummary,
       improveEndUseEfficiencyProfileSummary: improveEndUseEfficiencyProfileSummary,
       reduceAirLeaksProfileSummary: reduceAirLeaksProfileSummary,
+      replaceCompressorsProfileSummary: replaceCompressorsSummary,
       reduceSystemAirPressureProfileSummary: reduceSystemAirPressureProfileSummary,
       useAutomaticSequencerProfileSummary: useAutomaticSequencerProfileSummary,
       auxiliaryPowerUsage: auxiliaryPowerUsage
@@ -897,6 +932,22 @@ export class CompressedAirAssessmentResultsService {
     });
     return adjustedProfileSummary;
   }
+
+  replaceCompressors(profileSummary: Array<ProfileSummary>, settings: Settings, dayType: CompressedAirDayType, replaceCompressors: ReplaceCompressorsEEM, adjustedCompressors: Array<CompressorInventoryItem>, atmosphericPressure: number, numberOfSummaryIntervals: number, totalAirStorage: number, reduceRuntime?: ReduceRuntime): Array<ProfileSummary> {
+    let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, profileSummary, numberOfSummaryIntervals);
+    let adjustedProfileSummary: Array<ProfileSummary> = JSON.parse(JSON.stringify(profileSummary));
+    adjustedProfileSummary = adjustedProfileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
+    totals.forEach(total => {
+      // total.airflow = total.airflow - (reduceAirLeaks.leakReduction / 100 * reduceAirLeaks.leakFlow);
+      if (total.airflow < 0) {
+        total.airflow = 0;
+      }
+      // adjustedProfileSummary = this.adjustProfile(total.airflow, settings, total.timeInterval, adjustedCompressors, adjustedProfileSummary, dayType, 0, atmosphericPressure, totalAirStorage, reduceRuntime);
+    });
+    return adjustedProfileSummary;
+  }
+
+
   //reduceSystemAirPressure
   reduceSystemAirPressureAdjustCompressors(adjustedCompressors: Array<CompressorInventoryItem>, reduceSystemAirPressure: ReduceSystemAirPressure, atmosphericPressure: number, settings: Settings): Array<CompressorInventoryItem> {
     adjustedCompressors.forEach(compressor => {
@@ -1248,6 +1299,8 @@ export interface DayTypeModificationResult {
   improveEndUseEfficiencyProfileSummary: Array<ProfileSummary>,
   reduceAirLeaksSavings: EemSavingsResults,
   reduceAirLeaksProfileSummary: Array<ProfileSummary>,
+  replaceCompressorsSavings: EemSavingsResults,
+  replaceCompressorsProfileSummary: Array<ProfileSummary>,
   reduceRunTimeSavings: EemSavingsResults,
   reduceRunTimeProfileSummary: Array<ProfileSummary>,
   reduceSystemAirPressureSavings: EemSavingsResults,
@@ -1318,6 +1371,8 @@ export interface AdjustProfileResults {
   improveEndUseEfficiencyProfileSummary: Array<ProfileSummary>,
   reduceAirLeaksSavings: EemSavingsResults,
   reduceAirLeaksProfileSummary: Array<ProfileSummary>,
+  replaceCompressorsSavings: EemSavingsResults,
+  replaceCompressorsProfileSummary: Array<ProfileSummary>,
   reduceRunTimeSavings: EemSavingsResults,
   reduceRunTimeProfileSummary: Array<ProfileSummary>,
   reduceSystemAirPressureSavings: EemSavingsResults,

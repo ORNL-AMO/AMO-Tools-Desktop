@@ -21,6 +21,7 @@ export class ExploreOpportunitiesValidationService {
   improveEndUseEfficiencyValid: BehaviorSubject<boolean>;
   reduceAirLeaksValid: BehaviorSubject<boolean>;
   reduceRuntimeValid: BehaviorSubject<boolean>;
+  replaceCompressorsValid: BehaviorSubject<boolean>;
   reduceSystemAirPressureValid: BehaviorSubject<boolean>;
   useAutomaticSequencerValid: BehaviorSubject<boolean>;
   constructor(private addReceiverVolumeService: AddReceiverVolumeService, private adjustCascadingSetPointsService: AdjustCascadingSetPointsService,
@@ -33,6 +34,7 @@ export class ExploreOpportunitiesValidationService {
     this.improveEndUseEfficiencyValid = new BehaviorSubject<boolean>(true);
     this.reduceAirLeaksValid = new BehaviorSubject<boolean>(true);
     this.reduceRuntimeValid = new BehaviorSubject<boolean>(true);
+    this.replaceCompressorsValid = new BehaviorSubject<boolean>(true);
     this.reduceSystemAirPressureValid = new BehaviorSubject<boolean>(true);
     this.useAutomaticSequencerValid = new BehaviorSubject<boolean>(true);
   }
@@ -48,6 +50,7 @@ export class ExploreOpportunitiesValidationService {
     let improveEndUseEfficiency: boolean = this.checkImproveEndUseEfficiencyValid(modification.improveEndUseEfficiency, baselineResults, baselineProfileSummaries);
     let reduceAirLeaks: boolean = this.checkReduceAirLeaksValid(modification.reduceAirLeaks, baselineResults);
     let reduceRuntime: boolean = this.checkReduceRuntimeValid(compressedAirAssessment, modification, compressedAirAssessmentResult);
+    let replaceCompressors: boolean = this.checkReplaceCompressorsValid(compressedAirAssessment, modification, compressedAirAssessmentResult);
     let reduceSystemPressure: boolean = this.checkReduceSystemAirPressureValid(modification.reduceSystemAirPressure, compressedAirAssessment.compressorInventoryItems);
     let useAutomaticSequencer: boolean = this.checkUseAutomaticSequencerValid(compressedAirAssessment, modification, compressedAirAssessmentResult, settings);
     return {
@@ -56,6 +59,7 @@ export class ExploreOpportunitiesValidationService {
       adjustCascadingSetPoints: adjustCascadingSetPoints,
       improveEndUseEfficiency: improveEndUseEfficiency,
       reduceAirLeaks: reduceAirLeaks,
+      replaceCompressors: replaceCompressors,
       reduceRuntime: reduceRuntime,
       reduceSystemPressure: reduceSystemPressure,
       useAutomaticSequencer: useAutomaticSequencer
@@ -132,6 +136,18 @@ export class ExploreOpportunitiesValidationService {
             isValid = dataArrays.isValid;
           }
         });
+      }
+    }
+    return isValid;
+  }
+
+  checkReplaceCompressorsValid(compressedAirAssessment: CompressedAirAssessment, modification: Modification, modificationResults: CompressedAirAssessmentResult): boolean {
+    let isValid: boolean = true;
+    if (modification.reduceRuntime.order != 100) {
+      let form: UntypedFormGroup = this.reduceRunTimeService.getFormFromObj(modification.reduceRuntime);
+      isValid = form.valid;
+      if (isValid) {
+        
       }
     }
     return isValid;
@@ -232,6 +248,7 @@ export interface CompressedAirModificationValid {
   adjustCascadingSetPoints: boolean,
   improveEndUseEfficiency: boolean,
   reduceAirLeaks: boolean,
+  replaceCompressors: boolean,
   reduceRuntime: boolean,
   reduceSystemPressure: boolean,
   useAutomaticSequencer: boolean
