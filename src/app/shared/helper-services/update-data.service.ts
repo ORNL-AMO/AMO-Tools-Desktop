@@ -128,6 +128,11 @@ export class UpdateDataService {
             };
             if (assessment.compressedAirAssessment.compressedAirDayTypes && assessment.compressedAirAssessment.compressedAirDayTypes.length > 0) {
                 assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates = []
+                if (assessment.compressedAirAssessment && assessment.compressedAirAssessment.systemInformation) {
+                    if (!assessment.compressedAirAssessment.systemInformation.trimSelections) {
+                        assessment.compressedAirAssessment.systemInformation.trimSelections = [];
+                    }
+                }
                 assessment.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
                     assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates.push(
                         {
@@ -135,6 +140,10 @@ export class UpdateDataService {
                             dayTypeLeakRate: 0
                         }
                     )
+                    assessment.compressedAirAssessment.systemInformation.trimSelections.push({
+                        dayTypeId: dayType.dayTypeId,
+                        compressorId: undefined
+                    });
                 });
             }
         };

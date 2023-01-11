@@ -128,7 +128,7 @@
                     <option [ngValue]="'cascading'">Cascading Pressure</option>
                     <option [ngValue]="'targetPressureSequencer'">Target Pressure Sequencer</option>
                     <option [ngValue]="'isentropicEfficiency'">Isentropic Efficiency</option>
-                    <option [ngValue]="'loadSharing'">Load Sharing</option>
+                    <option [ngValue]="'loadSharing'">Centrifugal Load Sharing</option>
                     <option [ngValue]="'baseTrim'">Base/Trim</option>
                 </select>
             </div>
@@ -188,7 +188,7 @@
             </label>
             <div class="input-group">
                 <input name="plantMaxPressure" type="number" step="any" class="form-control" id="plantMaxPressure"
-                    formControlName="plantMaxPressure" (input)="save()" (focus)="focusField('plantMaxPressure')"
+                    formControlName="plantMaxPressure" (input)="changeMaxPlantPressure()" (focus)="focusField('plantMaxPressure')"
                     min="0">
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>

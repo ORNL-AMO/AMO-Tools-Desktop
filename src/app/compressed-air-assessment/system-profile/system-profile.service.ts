@@ -80,7 +80,6 @@ export class SystemProfileService {
     let dayTypeSummaries: Array<ProfileSummary> = profileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
     dayTypeSummaries = this.setAdjustedIsentropicEfficiencies(dayTypeSummaries, compressorInventory, settings, systemInformation);
     //set adjusted efficiencies
-    console.log(dayTypeSummaries);
     for (let compressorIndex = 0; compressorIndex < dayTypeSummaries.length; compressorIndex++) {
       for (let orderIndex = 0; orderIndex < numberOfHourIntervals; orderIndex++) {
         let order: number = 1;
@@ -107,7 +106,6 @@ export class SystemProfileService {
       let compressor: CompressorInventoryItem = compressorInventory.find(item => { return item.itemId == summary.compressorId });
       console.log(compressor.name)
       if (compressor.performancePoints.fullLoad.dischargePressure == systemInformation.plantMaxPressure) {
-        console.log('is equal')
         //calculate rated specific power
         let ratedSpecificPower: number = this.compressedAirAssessmentResultsService.calculateRatedSpecificPower(compressor);
         //calculate rated isentropic efficiency
@@ -119,14 +117,13 @@ export class SystemProfileService {
         summary.adjustedIsentropicEfficiency = ratedIsentropicEfficiency;
         let adjustedSpecPower: number = ratedSpecificPower;
       } else {
-        console.log('not equal');
         let adjustedPressure: number = systemInformation.plantMaxPressure;
         let a: number = ((adjustedPressure + systemInformation.atmosphericPressure) / systemInformation.atmosphericPressure);
         a = Math.pow(a, .283);
         let b: number = ((compressor.performancePoints.fullLoad.dischargePressure + 14.7) / 14.7);
         b = Math.pow(b, .283);
         let adjustedCompressorPower: number = compressor.performancePoints.fullLoad.power * ((a - 1) / (b - 1));
-        let adjustedAirFlow: number = this.sharedPointCalculationsService.calculateAirFlow(compressor.performancePoints.fullLoad.airflow, adjustedPressure, compressor.nameplateData.fullLoadOperatingPressure, systemInformation.atmosphericPressure, settings)
+        let adjustedAirFlow: number = this.sharedPointCalculationsService.calculateAirFlow(compressor.performancePoints.fullLoad.airflow, adjustedPressure, compressor.performancePoints.fullLoad.dischargePressure, systemInformation.atmosphericPressure, settings)
         //calculate adjustedSpecPower
         let adjustedSpecPower: number = (adjustedCompressorPower / adjustedAirFlow) * 100;
         //calculate adjustedIsentropicEfficiency
@@ -134,21 +131,8 @@ export class SystemProfileService {
         c = Math.pow(c, .2857);
         summary.adjustedIsentropicEfficiency = ((16.52 * (c - 1)) / adjustedSpecPower) * 100;
       }
-      console.log(summary.adjustedIsentropicEfficiency);
     });
     return dayTypeSummaries;
   }
-
-  //load sharing
-  updateCompressorOrderingLoadSharing(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, numberOfHourIntervals: number): Array<ProfileSummary> {
-
-    return profileSummary;
-  }
-  //base/trim
-  updateCompressorOrderingBaseTrim(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, numberOfHourIntervals: number): Array<ProfileSummary> {
-
-    return profileSummary;
-  }
-
 
 }

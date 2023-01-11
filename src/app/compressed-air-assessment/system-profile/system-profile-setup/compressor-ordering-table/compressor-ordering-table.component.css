@@ -48,3 +48,13 @@ td, th{
   table.table.single-entry{
     width: inherit;
   }
+
+  .radio-td{
+    vertical-align: bottom;
+  }
+
+  th.red{
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+  }
