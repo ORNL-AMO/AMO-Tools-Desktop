@@ -104,7 +104,6 @@ export class SystemProfileService {
   setAdjustedIsentropicEfficiencies(dayTypeSummaries: Array<ProfileSummary>, compressorInventory: Array<CompressorInventoryItem>, settings: Settings, systemInformation: SystemInformation): Array<ProfileSummary> {
     dayTypeSummaries.forEach(summary => {
       let compressor: CompressorInventoryItem = compressorInventory.find(item => { return item.itemId == summary.compressorId });
-      console.log(compressor.name)
       if (compressor.performancePoints.fullLoad.dischargePressure == systemInformation.plantMaxPressure) {
         //calculate rated specific power
         let ratedSpecificPower: number = this.compressedAirAssessmentResultsService.calculateRatedSpecificPower(compressor);

@@ -224,7 +224,14 @@ export class CompressedAirDataManagementService {
       compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
       })
-    };
+    } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
+      let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+      let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
+      compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingIsentropicEfficiency(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals, compressedAirAssessment.compressorInventoryItems, settings, compressedAirAssessment.systemInformation);
+      })
+
+    }
     //update assessment
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     //update selected compressor
