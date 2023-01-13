@@ -815,6 +815,7 @@ export class CompressedAirAssessmentResultsService {
     }
     //check base compressors to turn on
     let baseCompressors: Array<string> = new Array();
+    let order: number = 1;
     intervalData.forEach(iDataItem => {
       if (reduceRuntime) {
         let reduceRuntimeData: ReduceRuntimeData = reduceRuntime.runtimeData.find(dataItem => {
@@ -824,7 +825,9 @@ export class CompressedAirAssessmentResultsService {
         if (!reduceRuntimeDataItem.isCompressorOn) {
           iDataItem.summaryData.order = 0;
         } else if (reduceRuntimeDataItem.isCompressorOn && iDataItem.summaryData.order == 0) {
-          iDataItem.summaryData.order = 1;
+          iDataItem.summaryData.order = order++;
+        }else if(iDataItem.summaryData.order != 0){
+          order++;
         }
 
       }
