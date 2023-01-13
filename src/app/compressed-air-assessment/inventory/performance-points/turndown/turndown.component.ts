@@ -45,7 +45,7 @@ export class TurndownComponent implements OnInit {
         this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.turndown.power, compressor);
 
         if (this.isFormChange == false) {
-          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.turndown, compressor, 'turndown');
+          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.turndown, compressor, 'turndown', compressedAirAssessment.systemInformation);
           // this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
           this.updateForm(this.selectedCompressor.performancePoints.turndown);

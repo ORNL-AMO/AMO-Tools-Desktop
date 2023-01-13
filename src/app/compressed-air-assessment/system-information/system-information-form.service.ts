@@ -12,7 +12,7 @@ export class SystemInformationFormService {
 
   getFormFromObj(obj: SystemInformation, settings: Settings): UntypedFormGroup {
     let maxAtmosphericPressure: number = 16;
-    if(settings && settings.unitsOfMeasure == 'Metric'){
+    if (settings && settings.unitsOfMeasure == 'Metric') {
       maxAtmosphericPressure = this.convertUnitsService.value(maxAtmosphericPressure).from('psia').to('kPaa');
       maxAtmosphericPressure = this.convertUnitsService.roundVal(maxAtmosphericPressure, 2);
     }
@@ -23,7 +23,9 @@ export class SystemInformationFormService {
       targetPressure: [obj.targetPressure],
       variance: [obj.variance],
       atmosphericPressure: [obj.atmosphericPressure, [Validators.required, Validators.min(0), Validators.max(maxAtmosphericPressure)]],
-      atmosphericPressureKnown: [obj.atmosphericPressureKnown]
+      atmosphericPressureKnown: [obj.atmosphericPressureKnown],
+      plantMaxPressure: [obj.plantMaxPressure],
+      multiCompressorSystemControls: [obj.multiCompressorSystemControls, [Validators.required]]
 
     });
 
@@ -37,7 +39,8 @@ export class SystemInformationFormService {
   }
 
   setSequencerFieldValidators(form: UntypedFormGroup) {
-    if (form.controls.isSequencerUsed.value === true) {
+    //TODO: set validators based on multiCompressorSystemControls
+    if (form.controls.multiCompressorSystemControls.value === 'targetPressureSequencer') {
       form.controls.targetPressure.setValidators([Validators.required, Validators.min(0)]);
       form.controls.targetPressure.updateValueAndValidity();
       let varianceValidators: Array<ValidatorFn> = [Validators.required, Validators.min(0)];
@@ -53,18 +56,29 @@ export class SystemInformationFormService {
       form.controls.variance.setValidators([]);
       form.controls.variance.updateValueAndValidity();
     }
+
+    if (form.controls.multiCompressorSystemControls.value == 'isentropicEfficiency') {
+      form.controls.plantMaxPressure.setValidators([Validators.required, Validators.min(0)])
+      form.controls.plantMaxPressure.updateValueAndValidity();
+    } else {
+      form.controls.plantMaxPressure.setValidators([])
+      form.controls.plantMaxPressure.updateValueAndValidity();
+    }
+
+
     return form;
   }
 
-  getObjFromForm(form: UntypedFormGroup): SystemInformation {
-    return {
-      systemElevation: form.controls.systemElevation.value,
-      totalAirStorage: form.controls.totalAirStorage.value,
-      isSequencerUsed: form.controls.isSequencerUsed.value,
-      targetPressure: form.controls.targetPressure.value,
-      variance: form.controls.variance.value,
-      atmosphericPressure: form.controls.atmosphericPressure.value,
-      atmosphericPressureKnown: form.controls.atmosphericPressureKnown.value
-    }
+  updateObjFromForm(form: UntypedFormGroup, systemInformation: SystemInformation): SystemInformation {
+    systemInformation.systemElevation = form.controls.systemElevation.value;
+    systemInformation.totalAirStorage = form.controls.totalAirStorage.value;
+    systemInformation.isSequencerUsed = form.controls.isSequencerUsed.value;
+    systemInformation.targetPressure = form.controls.targetPressure.value;
+    systemInformation.variance = form.controls.variance.value;
+    systemInformation.atmosphericPressure = form.controls.atmosphericPressure.value;
+    systemInformation.atmosphericPressureKnown = form.controls.atmosphericPressureKnown.value;
+    systemInformation.plantMaxPressure = form.controls.plantMaxPressure.value;
+    systemInformation.multiCompressorSystemControls = form.controls.multiCompressorSystemControls.value;
+    return systemInformation;
   }
 }
