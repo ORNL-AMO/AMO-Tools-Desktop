@@ -55,7 +55,7 @@ export class TankInsulationReductionService {
     let form: UntypedFormGroup = this.fb.group({
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       utilityType: [{ value: obj.utilityType, disabled: !isBaseline }],
-      utilityCost: [{ value: obj.utilityCost, disabled: !isBaseline }, [Validators.required, Validators.min(0)]],
+      utilityCost: [obj.utilityCost, [Validators.required, Validators.min(0)]],
       systemEfficiency: [obj.systemEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
       tankHeight: [obj.tankHeight, [Validators.required, Validators.min(0)]],
       tankDiameter: [obj.tankDiameter, [Validators.required, Validators.min(0)]],
