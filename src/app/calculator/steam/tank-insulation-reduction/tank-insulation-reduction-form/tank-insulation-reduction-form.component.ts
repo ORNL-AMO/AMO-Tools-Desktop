@@ -24,8 +24,6 @@ export class TankInsulationReductionFormComponent implements OnInit {
   @Input()
   utilityType: number;
   @Input()
-  utilityCost: number;
-  @Input()
   heatedOrChilled: number;
   @Input()
   form: UntypedFormGroup;
@@ -149,9 +147,6 @@ export class TankInsulationReductionFormComponent implements OnInit {
     if (changes.utilityType && !changes.utilityType.firstChange) {
       this.form.patchValue({ utilityType: this.utilityType });
       this.changeUtilityType();
-    }
-    if (changes.utilityCost && !changes.utilityCost.firstChange) {
-      this.form.patchValue({ utilityCost: this.utilityCost });
     }
     if (changes.heatedOrChilled && !changes.heatedOrChilled.firstChange) {
       this.form.patchValue({ heatedOrChilled: this.heatedOrChilled });
