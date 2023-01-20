@@ -28,6 +28,7 @@ export class DataSetupComponent implements OnInit {
   errorOverlaySub: Subscription;
   errorMessageData: MeasurMessageData;
   changeExplorerStepSub: Subscription;
+  continueButtonAction: string = 'Next';
   constructor(private logToolService: LogToolService, 
     private logToolDataService: LogToolDataService, 
     private dayTypeAnalysisService: DayTypeAnalysisService,
@@ -41,6 +42,7 @@ export class DataSetupComponent implements OnInit {
     this.explorerDataSub = this.logToolDataService.explorerData.subscribe(data => {
       // only emits updates if multiple files
       this.explorerData = data;
+      this.setContinueButton();
       this.cd.detectChanges();
       this.setDisableNext();
     });
@@ -51,7 +53,7 @@ export class DataSetupComponent implements OnInit {
     
     this.activatedRoute.url.subscribe(url => {
       this.dataSetupTab = this.activatedRoute.firstChild.routeConfig.path;
-      // ngchangedafterchecked when only one file has been uploaded (this.explorerData fires)
+      this.setContinueButton();
       this.cd.detectChanges();
     });
 
@@ -96,6 +98,13 @@ export class DataSetupComponent implements OnInit {
       this.logToolDataService.changeStep.next({direction: 'forward', url:'/log-tool/data-setup/map-time-data'});
     }  else if (this.dataSetupTab == 'map-time-data') {
       this.logToolDataService.changeStep.next({direction: 'forward', url:'/log-tool/day-type-analysis'});
+    }
+  }
+
+  setContinueButton() {
+    this.continueButtonAction = 'Next';
+    if (this.dataSetupTab == 'map-time-data' && this.explorerData.isStepMapTimeDataComplete && this.explorerData.isLastTab) {
+      this.continueButtonAction = 'Finish';
     }
   }
   

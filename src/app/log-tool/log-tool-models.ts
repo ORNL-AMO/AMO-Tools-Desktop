@@ -315,6 +315,7 @@ export interface LoadingSpinner {
     refineDataStepStatus: RefineDataStepStatus,
     isStepMapTimeDataComplete: boolean,
     isSetupDone: boolean,
+    isLastTab?: boolean,
     isExample?: boolean,
     isExistingImport?: boolean,
     canRunDayTypeAnalysis: boolean,
@@ -351,7 +352,7 @@ export interface ExplorerDataValid {
 export interface ExplorerDataSet {
     dataSetId: string, 
     refineDataTabVisited?: boolean,
-    mapTimeDataTabVisited?: boolean
+    mapTimeDataTabVisited?: boolean,
     csvImportData: CsvImportData,
     csvName: string,
     fields: Array<LogToolField>;
