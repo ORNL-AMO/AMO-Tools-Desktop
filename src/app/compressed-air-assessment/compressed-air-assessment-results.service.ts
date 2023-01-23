@@ -178,6 +178,7 @@ export class CompressedAirAssessmentResultsService {
       console.log('calculateModificationResults', compressedAirAssessmentCopy.compressorInventoryItems);
       // todo 4841 - deal with reflow allocation and profile ordering
     }
+
     if (compressedAirAssessmentCopy.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
       compressedAirAssessmentCopy.compressorInventoryItems.forEach(item => {
         item = this.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessmentCopy.systemInformation.targetPressure, compressedAirAssessmentCopy.systemInformation.variance, item, compressedAirAssessmentCopy.systemInformation.atmosphericPressure, settings)
@@ -194,8 +195,8 @@ export class CompressedAirAssessmentResultsService {
 
       // todo 4841 - Seems like this can be moved above forEach
       let adjustedCompressors: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(compressedAirAssessmentCopy.compressorInventoryItems));
-      let adjustedData: AdjustProfileResults = this.adjustProfileSummary(dayType, settings, baselineProfileSummary, compressedAirAssessmentCopy.compressorInventoryItems, modification, modificationOrders, compressedAirAssessmentCopy.systemInformation.atmosphericPressure, numberOfSummaryIntervals, compressedAirAssessmentCopy.systemInformation.totalAirStorage, compressedAirAssessmentCopy.systemBasics.electricityCost, compressedAirAssessmentCopy.systemInformation);
-      let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(compressedAirAssessmentCopy.compressorInventoryItems, dayType, adjustedData.adjustedProfileSummary, numberOfSummaryIntervals, modification.improveEndUseEfficiency);
+      let adjustedData: AdjustProfileResults = this.adjustProfileSummary(dayType, settings, baselineProfileSummary, adjustedCompressors, modification, modificationOrders, compressedAirAssessmentCopy.systemInformation.atmosphericPressure, numberOfSummaryIntervals, compressedAirAssessmentCopy.systemInformation.totalAirStorage, compressedAirAssessmentCopy.systemBasics.electricityCost, compressedAirAssessmentCopy.systemInformation);
+      let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedData.adjustedProfileSummary, numberOfSummaryIntervals, modification.improveEndUseEfficiency);
       let totalImplementationCost: number = this.getTotalImplementationCost(modification);
       let allSavingsResults: EemSavingsResults = this.calculateSavings(baselineProfileSummary, adjustedData.adjustedProfileSummary, dayType, compressedAirAssessmentCopy.systemBasics.electricityCost, totalImplementationCost, numberOfSummaryIntervals, adjustedData.auxiliaryPowerUsage);
       if (baselineResults && compressedAirAssessment.systemInformation.co2SavingsData) {
