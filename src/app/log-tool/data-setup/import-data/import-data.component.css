@@ -55,11 +55,6 @@
 }
 
 
-.preview-file-data {
-    max-height: 500px;
-}
-
-
 ul.nav.nav-tabs {
     border-right: 1px solid #dee2e6;
     border-left: 1px solid #dee2e6;
@@ -90,7 +85,7 @@ ul.nav.nav-tabs {
  cursor: pointer;
 }
 
-.help {
+.help-container {
     max-width: 75vw;
     height: 200px;
 }

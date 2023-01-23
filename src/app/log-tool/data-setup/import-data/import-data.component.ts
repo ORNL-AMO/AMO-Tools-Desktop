@@ -13,10 +13,9 @@ import { LogToolService } from '../../log-tool.service';
 @Component({
   selector: 'app-import-data',
   templateUrl: './import-data.component.html',
-  styleUrls: ['./import-data.component.css']
+  styleUrls: ['./import-data.component.css'],
 })
 export class ImportDataComponent implements OnInit {
-  displayTimeDetails: boolean;
   invalidFileReferences: Array<InvalidFile> = [];
   explorerData: ExplorerData;
   explorerDataSub: Subscription;
@@ -42,10 +41,6 @@ export class ImportDataComponent implements OnInit {
 
   ngOnDestroy() {
     this.explorerDataSub.unsubscribe();
-  }
-
-  toggleTimeDetails() {
-    this.displayTimeDetails = !this.displayTimeDetails;
   }
 
   checkResetFileInput() {

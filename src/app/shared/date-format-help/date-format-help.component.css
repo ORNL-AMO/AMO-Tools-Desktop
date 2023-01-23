@@ -1,0 +1,15 @@
+.font-reset {
+    font: unset
+}
+
+.collapsible {
+    overflow: hidden;
+  }
+  
+.toggle-help:hover {
+    cursor: pointer;
+}
+
+.timestamp-formats {
+    border: 1px solid grey;
+}

@@ -11,6 +11,7 @@
     <div class="d-block">
         <hr>
     </div>
+
     <div>
         <div class="d-flex flex-row justify-content-center py-2 px-5 w-100">
             <div class="d-block p-2 align-items-center">
@@ -23,51 +24,13 @@
                         (input)="setImportFiles($event.target.files)" multiple accept=".xlsx, .csv">
                 </button>
             </div>
-            <div class="d-block text-left alert alert-info small pl-2 pt-2 pb-0 help scroll-item">
+            <div class="d-block text-left alert alert-info small pl-2 pt-2 pb-0 help-container scroll-item">
+                <label class="bold m-1">Import .csv or .xlsx files from your file system.</label>
                 <ul class="pl-3">
-                    <li class="">Import .csv or .xlsx files from your file system. </li>
                     <li class="">The Refine Data and Map Data steps will allow you to modify imported data.</li>
-                    <li class="">
-                        Time stamps are required for Day Type Analysis.
-                        <label class="d-block pt-1 show-pointer" (click)="toggleTimeDetails()">
-                            <span class="collapse-label">
-                              Day Type Analysis Details
-                            </span>
-                            <span class="fa fa-chevron-down collapse-chevron" *ngIf="displayTimeDetails"></span>
-                            <span class="fa fa-chevron-right collapse-chevron" *ngIf="!displayTimeDetails"></span>
-                        </label>
-                        <ul *ngIf="displayTimeDetails">
-                            <li>
-                                Valid single-column time stamps will contain a date and time.
-                             </li>
-                             <li>
-                                Valid multi-column time stamps will have a separate date column as well as a time column.
-                             </li>
-                            <li>
-                               Example time stamp format:
-                               <ul>
-                                <li>5/1/2022 1:00</li>
-                                <li>5/1/2022 5:01:00 AM</li>
-                               </ul>
-                            </li>
-                            <li>
-                                Time stamps with seconds are required for some additional functionality of the module.
-                                Some
-                                loggers do not save time stamps in this format. To correct this, open the file in
-                                another
-                                data
-                                analysis software and change the format of the column to an appropriate format. (This is
-                                NOT
-                                required for the Day Type analysis)
-                            </li>
-                            <li>
-                                Data files with a large time stamp gap (i.e., months) will take a long time to parse. If
-                                your
-                                data file takes several minutes to parse, there could be an error in your data (a single
-                                time
-                                stamp from the year 1999). You may need to manually edit in a spreadsheet/text editor
-                                software.
-                            </li>
+                    <li class="">Time stamps are required for Day Type Analysis.
+                        <ul>
+                            <li>Click <i>Show Day Type Analysis Help</i> for more information.</li>
                         </ul>
                     </li>
                 </ul>
@@ -75,22 +38,27 @@
         </div>
 
         <div class="d-flex justify-content-center mt-2">
-            <label *ngIf="!explorerData.isStepFileUploadComplete" for="importJson" class="font-reset">
-                <a class="click-link">
-                    Import Existing Data Exploration
-                </a>
-            </label>
-            <label *ngIf="explorerData.isStepFileUploadComplete" class="font-reset disabled-link"><a>Import Existing Data Exploration</a></label>
+            <label *ngIf="!explorerData.isStepFileUploadComplete" for="importJson" class="font-reset"><a
+                    class="click-link">Import Existing Data Exploration</a></label>
+            <label *ngIf="explorerData.isStepFileUploadComplete" class="font-reset disabled-link"><a>Import Existing
+                    Data Exploration</a></label>
             <input id="importJson" class="d-none" type="file" (input)="importExistingExplorerJson($event.target.files)"
                 accept=".json">
-
+        
             <div class="pl-2 mr-2 border-right"></div>
-            <a class="click-link" (click)="useExampleData()" [ngClass]="{'disabled-link': explorerData.isStepFileUploadComplete}">Load Example Data</a>
+        
+            <a class="click-link" (click)="useExampleData()"
+                [ngClass]="{'disabled-link': explorerData.isStepFileUploadComplete}">Load Example Data</a>
         </div>
-        <div class="d-block">
-            <hr>
+        <div class="w-75 mx-auto">
+            <app-date-format-help></app-date-format-help>
+            <div class="d-block">
+                <hr class="my-1">
+            </div>
         </div>
-    </div>
+    
+</div>
+
 
     <div *ngIf="invalidFileReferences.length !== 0" class="w-75 align-self-center alert alert-danger small px-0">
         <table class="table table-hover">
@@ -116,7 +84,7 @@
         </table>
     </div>
 
-    <div *ngIf="explorerData.isStepFileUploadComplete" class="w-75 align-self-center px-5">
+    <div *ngIf="explorerData.isStepFileUploadComplete" class="w-75 align-self-center px-5 mb-5">
         <table class="table table-hover">
             <thead>
                 <tr>
