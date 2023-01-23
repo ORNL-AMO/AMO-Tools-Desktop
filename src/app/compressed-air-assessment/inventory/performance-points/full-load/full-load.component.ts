@@ -47,7 +47,7 @@ export class FullLoadComponent implements OnInit {
         this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.fullLoad.power, compressor);
         if (this.isFormChange == false) {
           this.setFullLoadLabel(compressor.compressorControls.controlType);
-          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.fullLoad, compressor, 'fullLoad')
+          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.fullLoad, compressor, 'fullLoad', compressedAirAssessment.systemInformation)
           this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
           this.updateForm(compressor.performancePoints.fullLoad);

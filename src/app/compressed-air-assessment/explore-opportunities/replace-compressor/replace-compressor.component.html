@@ -1,0 +1,83 @@
+<form [formGroup]="form" class="p-0">
+    <div class="checkbox">
+        <label class="group-label" for="replaceCompressors">
+            Add or Replace Compressors
+            <select id="replaceCompressorsOrder" formControlName="order" class="form-control pull-right"
+                (change)="save(true)">
+                <option [ngValue]=100>Off</option>
+                <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
+            </select>
+        </label>
+    </div>
+
+    <div *ngIf="form.controls.order.value != 100" class="py-2">
+        <div class="d-flex flex-row justify-content-center">
+            <a class="click-link small form-text" (click)="manageModificationCompressors()">Replace or Manage Modified
+                Compressors</a>
+        </div>
+        <hr class="mt-2">
+        <ng-container *ngIf="compressorInventoryItems.length > 0">
+        <label class="bold">Modified Compressors</label>
+                <table class="table table-striped table-sm mb-2">
+                    <thead>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>Compressor Type</th>
+                            <th>Control Type</th>
+                            <th>Pressure Range</th>
+                            <th>Motor Power</th>
+                            <th>Rated Capacity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let compressorInventoryItem of compressorInventoryItems; let i = index;">
+                            <td>
+                                {{compressorInventoryItem.name}}
+                                <span
+                                    *ngIf="compressorInventoryItem.compressorReplacementData && compressorInventoryItem.compressorReplacementData.isReplacement"
+                                    (click)="expandReplacedCompressorData(i)"
+                                    class="badge badge-primary inventory-badge">Replacement</span>
+                            </td>
+                            <td>
+                                {{compressorInventoryItem.nameplateData.compressorType | compressorType}}
+                            </td>
+                            <td>
+                                {{compressorInventoryItem.compressorControls.controlType | controlType}}
+                            </td>
+                            <td>
+                                {{compressorInventoryItem.nameplateData.motorPower}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+                            </td>
+                            <td>
+                                {{compressorInventoryItem.nameplateData.fullLoadRatedCapacity}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                            </td>
+                            <td>
+                                {{getPressureMinMax(compressorInventoryItem)}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ng-container>
+
+            <div class="form-group my-1" [ngClass]="{'invalid': form.controls.implementationCost.invalid}">
+                <label for="replaceCompressorImplementationCost">Implementation Cost</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" formControlName="implementationCost"
+                        name="replaceCompressorImplementationCost" id="replaceCompressorImplementationCost"
+                        (input)="save(false)" (focus)="helpTextField('implementationCost')" min="0">
+                    <span class="input-group-addon units">$</span>
+                </div>
+                <span class="alert-danger pull-right small"
+                    *ngIf="form.controls.implementationCost.invalid && !form.controls.implementationCost.pristine">
+                    <span *ngIf="form.controls.implementationCost.errors.min">Value can't be negative.
+                    </span>
+                </span>
+            </div>
+        
+    </div>
+</form>

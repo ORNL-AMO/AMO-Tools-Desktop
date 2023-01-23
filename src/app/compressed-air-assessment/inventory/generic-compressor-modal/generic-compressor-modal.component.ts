@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
@@ -12,6 +12,8 @@ import { GenericCompressorDbService } from '../../generic-compressor-db.service'
 export class GenericCompressorModalComponent implements OnInit {
   @Output('emitClose')
   emitClose = new EventEmitter<boolean>();
+  @Input()
+  inModifiedInventory: boolean
 
   @ViewChild('compressorModal', { static: false }) public compressorModal: ModalDirective;
 

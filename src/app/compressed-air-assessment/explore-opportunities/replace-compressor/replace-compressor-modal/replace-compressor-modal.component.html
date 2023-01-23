@@ -1,0 +1,41 @@
+<div class="modal-content">
+    <div class="modal-header p-2">
+        Replace Compressor
+        <button class="close" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div #modalBody class="modal-body p-0">
+        <div class="panel-container d-block d-lg-flex w-100">
+            <div class="panel-column col-12 col-lg-12 scroll-item pl-1 pr-1">
+                <!-- <div class="panel-column col-12 col-lg-12 scroll-item pl-1 pr-1" [ngStyle]="{'height.px': bodyHeight}"> -->
+                <nav class="hide-print w-100 justify-content-center">
+                    <div class="d-flex tabs subtabs progress-tabs compressed-air flex-wrap">
+                        <div class="w-50" [ngClass]="{'active': stepTab === 'select-old'}">
+                            <a (click)="changeStepTab('select-old')">
+                                <span class="step-number">1</span>Select Compressor to Replace</a>
+                        </div>
+                        <div class="w-50" [ngClass]="{'active': stepTab === 'select-new'}">
+                            <a (click)="changeStepTab('select-new')">
+                                <span class="step-number">2</span>Select Replacement</a>
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="my-2">
+                    <app-inventory-table [isSelectingReplaced]="stepTab == 'select-old'"
+                        [isSelectingReplacement]="stepTab == 'select-new'">
+                    </app-inventory-table>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="modal-footer p-2">
+        <button *ngIf="stepTab === 'select-new'" type="button" class="btn btn-secondary btn-sm mr-2" (click)="changeStepTab('select-old')">Back</button>
+        <button *ngIf="stepTab === 'select-old'" type="button" class="btn btn-primary btn-sm" (click)="changeStepTab('select-new')">Next</button>
+        <button *ngIf="stepTab === 'select-new'" type="button" class="btn btn-primary btn-sm" (click)="saveReplacementData()" [disabled]="replacementCompressorId === compressorToReplaceId || compressorToReplaceId === selectedCompressor.itemId">Finish</button>
+    </div>
+</div>

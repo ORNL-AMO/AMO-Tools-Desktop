@@ -16,7 +16,7 @@ export class CompressedAirDataManagementService {
 
 
   //update from generic compressor
-  setCompressorDataFromGenericCompressorDb(genericCompressor: GenericCompressor) {
+  setCompressorDataFromGenericCompressorDb(genericCompressor: GenericCompressor, isModificationCompressor: boolean = false) {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.compressorLibId = genericCompressor.IDCompLib;
@@ -57,7 +57,7 @@ export class CompressedAirDataManagementService {
     selectedCompressor.performancePoints.maxFullFlow.isDefaultPower = true;
     selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure = true;
 
-    
+
     selectedCompressor.performancePoints.midTurndown = {
       isDefaultAirFlow: true,
       airflow: undefined,
@@ -83,7 +83,7 @@ export class CompressedAirDataManagementService {
     selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow = true;
     selectedCompressor.performancePoints.unloadPoint.isDefaultPower = true;
     selectedCompressor.performancePoints.unloadPoint.isDefaultPressure = true;
-    this.updateAssessmentFromDependentCompressorItem(selectedCompressor, true, true)
+    this.updateAssessmentFromDependentCompressorItem(selectedCompressor, true, true, isModificationCompressor);
   }
 
   overrideGenericDbValueForDisplay(databaseVal: number) {
@@ -194,7 +194,7 @@ export class CompressedAirDataManagementService {
     this.updateAssessmentFromDependentCompressorItem(selectedCompressor, false, false);
   }
 
-  updateAssessmentFromDependentCompressorItem(selectedCompressor: CompressorInventoryItem, modificationsNeedUpdate: boolean, performancePointUpdateNeeded: boolean) {
+  updateAssessmentFromDependentCompressorItem(selectedCompressor: CompressorInventoryItem, modificationsNeedUpdate: boolean, performancePointUpdateNeeded: boolean, isModificationCompressor: boolean = false) {
     //update performance points
     if (performancePointUpdateNeeded) {
       let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
@@ -203,8 +203,19 @@ export class CompressedAirDataManagementService {
     }
     //update assessment
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
-    compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
+    
+    if (isModificationCompressor) {
+      let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
+      if (selectedModificationId) {
+        let selectedModification: Modification = compressedAirAssessment.modifications.find(modification => { return modification.modificationId == selectedModificationId});
+        let compressorIndex: number = selectedModification.modifiedCompressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
+        selectedModification.modifiedCompressorInventoryItems[compressorIndex] = selectedCompressor;
+      }
+    } else {
+      let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
+      compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
+    }
+    
     if (modificationsNeedUpdate) {
       compressedAirAssessment.modifications = this.updateModifications(selectedCompressor, compressedAirAssessment.modifications);
     };
@@ -218,12 +229,20 @@ export class CompressedAirDataManagementService {
         }
       }
     });
-    if (recalculateOrdering && !compressedAirAssessment.systemInformation.isSequencerUsed) {
+    //TODO: Recalculate other control types??
+    if (recalculateOrdering && compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'cascading') {
       let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
       })
-    };
+    } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
+      let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+      let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
+      compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingIsentropicEfficiency(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals, compressedAirAssessment.compressorInventoryItems, settings, compressedAirAssessment.systemInformation);
+      })
+
+    }
     //update assessment
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     //update selected compressor

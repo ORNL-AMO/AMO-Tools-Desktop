@@ -451,3 +451,12 @@ a:not([href]):not([tabindex]).disabled-link:hover {
 
 }
 
+
+.disabled-link {
+    color: gray;
+    pointer-events: none;
+}
+
+.disabled-link :hover {
+    text-decoration: none;
+}

@@ -79,6 +79,7 @@ export class ReduceSystemAirPressureComponent implements OnInit {
           modification.improveEndUseEfficiency.order,
           modification.reduceRuntime.order,
           modification.reduceAirLeaks.order,
+          modification.replaceCompressorsEEM.order,
           modification.useAutomaticSequencer.order,
         ];
         allOrders = allOrders.filter(order => { return order != 100 });

@@ -3,14 +3,13 @@ import { CompressorInventoryItem, PerformancePoint } from '../../../../shared/mo
 import * as regression from 'regression';
 import { SharedPointCalculationsService } from './shared-point-calculations.service';
 import { ConvertCompressedAirService } from '../../../convert-compressed-air.service';
-import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Injectable()
 export class FullLoadCalculationsService {
 
   constructor(private sharedPointCalculationsService: SharedPointCalculationsService,
-    private convertCompressedAirService: ConvertCompressedAirService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+    private convertCompressedAirService: ConvertCompressedAirService,) { }
 
   setFullLoad(selectedCompressor: CompressorInventoryItem, atmosphericPressure: number, settings: Settings): PerformancePoint {
     selectedCompressor.performancePoints.fullLoad.dischargePressure = this.getFullLoadDischargePressure(selectedCompressor, selectedCompressor.performancePoints.fullLoad.isDefaultPressure, settings);

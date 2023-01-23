@@ -60,7 +60,8 @@
                         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                     </th>
-                    <th class="text-center" [ngClass]="{'w-25': reduceRuntime.runtimeData[0].intervalData.length == 1}">
+                    <th *ngIf="displayShutdownTimer" class="text-center"
+                        [ngClass]="{'w-25': reduceRuntime.runtimeData[0].intervalData.length == 1}">
                         Shutdown <br>
                         Timer
                     </th>
@@ -74,20 +75,22 @@
                     *ngFor="let rData of reduceRuntime.runtimeData | dayTypeFilter:selectedDayType.dayType.dayTypeId; let rDataIndex = index;">
                     <td class="bold text-center">
                         {{rData.compressorId | compressorName:compressedAirAssessment.compressorInventoryItems}}
+                        <span class="pl-2" *ngIf="rData.compressorId == trimCompressorId">(Trim)</span>
                     </td>
                     <td class="text-center">
                         {{rData.fullLoadCapacity}}
                         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                     </td>
-                    <td class="text-center">
+                    <td *ngIf="displayShutdownTimer" class="text-center">
                         <input *ngIf="checkShowShutdownTimer(rData.compressorId)" type="checkbox"
                             [(ngModel)]="rData.automaticShutdownTimer" (change)="save()">
                     </td>
                     <td class="text-center" *ngFor="let data of rData.intervalData; let dataIndex = index;">
                         <input type="checkbox" id="{{'isCompressorOn_'+rDataIndex+dataIndex}}"
                             name="{{'isCompressorOn_'+rDataIndex+dataIndex}}" [(ngModel)]="data.isCompressorOn"
-                            (focus)="helpTextField('checkbox')" (change)="save(false)">
+                            (focus)="helpTextField('checkbox')" (change)="save(false)"
+                            [disabled]="rData.compressorId == trimCompressorId">
                     </td>
                 </tr>
             </tbody>
@@ -99,7 +102,7 @@
                     <td>
 
                     </td>
-                    <td>
+                    <td *ngIf="displayShutdownTimer">
 
                     </td>
                     <td *ngFor="let airflow of selectedDayType.availableAirflow; let index = index"
@@ -114,7 +117,7 @@
                     <td>
 
                     </td>
-                    <td>
+                    <td *ngIf="displayShutdownTimer">
 
                     </td>
                     <td *ngFor="let airflow of selectedDayType.requiredAirflow">
@@ -128,7 +131,7 @@
                     <td>
 
                     </td>
-                    <td>
+                    <td *ngIf="displayShutdownTimer">
 
                     </td>
                     <td *ngFor="let power of selectedDayType.profilePower">

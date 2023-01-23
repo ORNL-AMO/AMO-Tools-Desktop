@@ -21,3 +21,43 @@ a.danger{
     background-color: #f8d7da !important;
     border-color: #f8d7da !important;
 }
+
+.inventory-badge {
+    background-color: rgb(112, 48, 160);
+    margin: 0;
+    margin-left: .5rem;
+}
+
+table.table-modified tbody tr {
+    background-color: white;
+}
+
+table.table-modified tbody tr.collapse-row {
+    position: absolute;
+    background-color:#e4e2e7f5;
+    margin-right:.5rem;
+    padding: 1rem;
+}
+
+.drawer {
+  border-radius: 2px;
+}
+
+.drawer-shadow {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  }
+  
+
+.collapse-cell {
+    border-top: none;
+    /* background-color: #dee2e6 !important; */
+}
+
+.divider {
+    width: 2px;
+    background: lightgray;
+  }
+
+.replacement-badge:hover {
+    cursor: pointer;
+}

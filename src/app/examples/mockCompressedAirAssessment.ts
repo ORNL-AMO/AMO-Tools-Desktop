@@ -17,6 +17,13 @@ export const MockCompressedAirAssessment: Assessment =  {
             {
                 "name": "Scenario 1",
                 "modificationId": "wsth9ineg",
+                "modifiedCompressorInventoryItems": [],
+                "replaceCompressorsEEM": {
+                    "implementationCost": 0,
+                    "replacementCompressors": [],
+                    "replacedCompressors": [],
+                    "order": 4
+                },
                 "reduceAirLeaks": {
                     "leakFlow": 2000,
                     "leakReduction": 10,
@@ -6156,6 +6163,13 @@ export const MockCompressedAirAssessment: Assessment =  {
             {
                 "name": "Scenario 2",
                 "modificationId": "14hjlw1kc",
+                "modifiedCompressorInventoryItems": [],
+                "replaceCompressorsEEM": {
+                    "implementationCost": 0,
+                    "replacementCompressors": [],
+                    "replacedCompressors": [],
+                    "order": 4
+                },
                 "reduceAirLeaks": {
                     "leakFlow": 2000,
                     "leakReduction": 15,
@@ -12322,7 +12336,19 @@ export const MockCompressedAirAssessment: Assessment =  {
                 "userEnteredBaselineEmissions": false,
                 "userEnteredModificationEmissions": false,
                 "zipcode": "37830"
-            }
+            },
+            "plantMaxPressure": undefined,
+            "multiCompressorSystemControls": "cascading",
+            "trimSelections": [
+                {
+                    "dayTypeId": "hopx028cf",
+                    "compressorId": undefined
+                },
+                {
+                    "dayTypeId": "mufcn7yvy",
+                    "compressorId": undefined
+                }
+            ]
         },
         "compressorInventoryItems": [
             {

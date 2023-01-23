@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { isNull, isUndefined } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { CompressedAirAssessment, CompressorInventoryItem, Modification, ProfileSummaryData } from '../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { DayTypeService } from './day-types/day-type.service';
 import { InventoryService } from './inventory/inventory.service';
@@ -67,7 +67,8 @@ export class CompressedAirAssessmentService {
       ampError: undefined,
       voltError: undefined,
       isValid: true,
-      summaryInputValidationData: []
+      summaryInputValidationData: [],
+      trimSelection: undefined
     };
   }
 
@@ -79,6 +80,8 @@ export class CompressedAirAssessmentService {
     let profileSummary = compressedAirAssessment.systemProfile.profileSummary;
     let profileDataType = compressedAirAssessment.systemProfile.systemProfileSetup.profileDataType;
     let selectedDayTypeId = compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId;
+
+
 
     let hasValidSummary: boolean = true;
     profileSummary.forEach(summary => {
@@ -161,6 +164,15 @@ export class CompressedAirAssessmentService {
         profileSummaryValid.summaryInputValidationData.push(summaryInputValidationData);
       }
     });
+    if (compressedAirAssessment.systemInformation && compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
+      let undefinedSelections = compressedAirAssessment.systemInformation.trimSelections.find(selection => {return selection.compressorId == undefined});
+      profileSummaryValid.trimSelection = (undefinedSelections == undefined);
+      if (profileSummaryValid.trimSelection == false) {
+        profileSummaryValid.isValid = false;
+      }
+    } else {
+      profileSummaryValid.trimSelection = false;
+    }
     return profileSummaryValid;
   }
 
@@ -247,6 +259,7 @@ export interface ProfileSummaryValid {
   summaryInputValidationData?: Array<SummaryInputValidationData>
   profileDataInputValidity?: Array<boolean>
   isValid?: boolean,
+  trimSelection?: boolean
 }
 
 export interface SummaryInputValidationData {

@@ -33,6 +33,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
   hasSequencerOn: boolean;
   displayAddStorage: boolean;
   settings: Settings;
+  showCascadingAndSequencer: boolean;
+  isModalOpen: boolean;
+  isModalOpenSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -46,6 +49,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
       if (val) {
         this.compressedAirAssessment = val;
         this.setBaselineResults();
+        this.showCascadingAndSequencer = (this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'cascading' || this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer');
         this.showCascadingSetPoints = this.compressedAirAssessment.compressorInventoryItems.length > 1;
         this.dayTypeOptions = val.compressedAirDayTypes;
         this.modificationExists = (val.modifications && val.modifications.length != 0);
@@ -56,6 +60,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
       }
     });
 
+    this.isModalOpenSub = this.compressedAirAssessmentService.modalOpen.subscribe(modalOpen => {
+      this.isModalOpen = modalOpen;
+    });
     this.selectedModificationSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
       if (!val && this.modificationExists) {
         this.compressedAirAssessmentService.selectedModificationId.next(this.compressedAirAssessment.modifications[0].modificationId);
@@ -71,10 +78,15 @@ export class ExploreOpportunitiesComponent implements OnInit {
       }
     });
     this.secondaryAssessmentTabSub = this.compressedAirAssessmentService.secondaryAssessmentTab.subscribe(val => {
-      if (val == 'graphs' || val == 'table') {
+      if (val == 'graphs' || val == 'table' || 'modified-inventory') {
         if (!this.selectedDayType && this.dayTypeOptions) {
           this.exploreOpportunitiesService.selectedDayType.next(this.dayTypeOptions[0]);
         }
+
+        if ('modified-inventory') {
+          this.compressedAirAssessmentService.setupTab.next('inventory')
+        }
+
       } else if (val == 'modifications') {
         if (this.dayTypeOptions && this.dayTypeOptions.length == 1) {
           this.exploreOpportunitiesService.selectedDayType.next(undefined);
@@ -89,6 +101,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.compressedAirAssessmentSub.unsubscribe();
     this.selectedModificationSub.unsubscribe();
     this.secondaryAssessmentTabSub.unsubscribe();
+    this.isModalOpenSub.unsubscribe();
     this.selectedDayTypeSub.unsubscribe();
     this.inventoryService.selectedCompressor.next(undefined);
     this.exploreOpportunitiesService.baselineResults = undefined;
@@ -110,7 +123,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
       });
       //set baseline results
       this.exploreOpportunitiesService.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.compressedAirAssessment, this.settings, this.exploreOpportunitiesService.baselineDayTypeProfileSummarries);
-      //set flow reallocation data      
       this.compressedAirAssessmentResultsService.setFlowReallocationSummaries(
         this.compressedAirAssessment.compressedAirDayTypes,
         this.settings,
@@ -119,14 +131,15 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.compressedAirAssessment.systemInformation.atmosphericPressure,
         this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval,
         this.compressedAirAssessment.systemInformation.totalAirStorage,
-        this.settings.electricityCost
+        this.settings.electricityCost,
+        this.compressedAirAssessment.systemInformation
       );
     }
   }
 
   setHasSequencer() {
     if (this.compressedAirAssessment) {
-      this.hasSequencerOn = this.compressedAirAssessment.systemInformation.isSequencerUsed;
+      this.hasSequencerOn = this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer';
       if (!this.hasSequencerOn && this.modification) {
         this.hasSequencerOn = (this.modification.useAutomaticSequencer.order != 100)
       }
@@ -161,6 +174,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   setCompressedAirAssessmentResults() {
     if (this.modification && this.compressedAirAssessmentResultsService.flowReallocationSummaries) {
+      // todo 4841 rerun bl profile summaries - or something not right with flow reallocation
+      this.setBaselineResults();
       let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, this.modification, this.settings, this.exploreOpportunitiesService.baselineDayTypeProfileSummarries, this.exploreOpportunitiesService.baselineResults);
       this.exploreOpportunitiesService.modificationResults.next(compressedAirAssessmentResult);
     } else {

@@ -13,7 +13,7 @@
                 </div>
                 <div class="card-block scroll-item">
                     <app-filter-compressors></app-filter-compressors>
-                    <app-compressor-options-table (emitClose)="close()"></app-compressor-options-table>
+                    <app-compressor-options-table [inModifiedInventory]="inModifiedInventory" (emitClose)="close()"></app-compressor-options-table>
                 </div>
             </div>
         </div>

@@ -1,8 +1,6 @@
 <div class="d-flex flex-column panel-container pb-4">
     <div class="header mr-2 ml-2">
         <h3>Compressor Inventory
-            <!-- <a *ngIf="hasInventoryItems" class="click-link small pull-right" (click)="addInventoryItem()">+Add
-                New</a> -->
         </h3>
         <br>
     </div>
@@ -11,6 +9,14 @@
         <button type="button" class="btn btn-primary active" (click)="addInventoryItem()">+Add Compressor</button>
     </div>
     <div class="mr-2 ml-2" *ngIf="hasInventoryItems">
+        <ng-container *ngIf="inModifiedInventory && selectedCompressor.compressorReplacementData">
+            <span *ngIf="selectedCompressor.compressorReplacementData.replacesCompressorName" class="alert alert-compressor small">
+                <span class="ml-2 text-center">Replaces compressor: <b>{{selectedCompressor.compressorReplacementData.replacesCompressorName}}</b></span>
+            </span>
+            <span *ngIf="selectedCompressor.compressorReplacementData.replacedByCompressorName" class="alert alert-warning small d-flex m-0 mt-1 p-1 w-100">
+                <span class="ml-2 text-center">Replaced by compressor: <b>{{selectedCompressor.compressorReplacementData.replacedByCompressorName}}</b></span>
+            </span>
+        </ng-container>
         <form [formGroup]="form">
             <div class="form-group">
                 <label for="name">Compressor Name</label>
@@ -31,5 +37,5 @@
     </div>
 </div>
 
-<app-generic-compressor-modal *ngIf="showCompressorModal" (emitClose)="closeCompressorModal()">
+<app-generic-compressor-modal *ngIf="showCompressorModal" [inModifiedInventory]="inModifiedInventory" (emitClose)="closeCompressorModal()">
 </app-generic-compressor-modal>

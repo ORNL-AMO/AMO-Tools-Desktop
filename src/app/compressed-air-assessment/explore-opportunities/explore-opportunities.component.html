@@ -16,17 +16,20 @@
                         [(ngModel)]="modification.name" (input)="save()" />
                 </div>
                 <hr>
+                <app-replace-compressor [style.order]="modification.replaceCompressorsEEM.order"></app-replace-compressor>
                 <app-reduce-air-leaks [style.order]="modification.reduceAirLeaks.order"></app-reduce-air-leaks>
                 <app-improve-end-use-efficiency [style.order]="modification.improveEndUseEfficiency.order">
                 </app-improve-end-use-efficiency>
                 <app-reduce-system-air-pressure [style.order]="modification.reduceSystemAirPressure.order"
                     *ngIf="!hasSequencerOn"></app-reduce-system-air-pressure>
-                <app-adjust-cascading-set-points [style.order]="modification.adjustCascadingSetPoints.order"
-                    *ngIf="showCascadingSetPoints && !hasSequencerOn">
-                </app-adjust-cascading-set-points>
-                <app-use-automatic-sequencer [style.order]="modification.useAutomaticSequencer.order"
-                    *ngIf="modification.reduceRuntime.order == 100 && modification.reduceSystemAirPressure.order == 100 && modification.adjustCascadingSetPoints.order == 100">
-                </app-use-automatic-sequencer>
+                <ng-container *ngIf="showCascadingAndSequencer">
+                    <app-adjust-cascading-set-points [style.order]="modification.adjustCascadingSetPoints.order"
+                        *ngIf="showCascadingSetPoints && !hasSequencerOn">
+                    </app-adjust-cascading-set-points>
+                    <app-use-automatic-sequencer [style.order]="modification.useAutomaticSequencer.order"
+                        *ngIf="modification.reduceRuntime.order == 100 && modification.reduceSystemAirPressure.order == 100 && modification.adjustCascadingSetPoints.order == 100">
+                    </app-use-automatic-sequencer>
+                </ng-container>
                 <app-reduce-run-time [style.order]="modification.reduceRuntime.order" *ngIf="!hasSequencerOn">
                 </app-reduce-run-time>
                 <app-add-receiver-volume [style.order]="modification.addPrimaryReceiverVolume.order"
@@ -120,6 +123,19 @@
             <app-system-profile-graphs class="w-100" [inModification]="true" [isBaseline]="false"
                 [labelName]="modification.name">
             </app-system-profile-graphs>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex tab-content" *ngIf="secondaryAssessmentTab == 'modified-inventory'">
+    <div class="w-100 d-flex">
+        <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
+            [ngClass]="{'modal-open': isModalOpen}">
+            <app-inventory class="w-100" [inModifiedInventory]="true">
+            </app-inventory>
+        </div>
+        <div class="scroll-item w-50" [ngStyle]="{'height.px': containerHeight}">
+            <app-results-panel [inModifiedInventory]="true"></app-results-panel>
         </div>
     </div>
 </div>

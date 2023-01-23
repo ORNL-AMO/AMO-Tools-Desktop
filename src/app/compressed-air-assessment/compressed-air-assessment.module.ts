@@ -150,6 +150,9 @@ import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-lab
 import { EndUseHelpComponent } from './results-panel/help-panel/end-use-help/end-use-help.component';
 import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-air-sankey.module';
 import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use-day-type-setup.module';
+import { ReplaceCompressorComponent } from './explore-opportunities/replace-compressor/replace-compressor.component';
+import { ReplaceCompressorsService } from './explore-opportunities/replace-compressor/replace-compressors.service';
+import { ReplaceCompressorModalComponent } from './explore-opportunities/replace-compressor/replace-compressor-modal/replace-compressor-modal.component';
 
 @NgModule({
   declarations: [
@@ -235,7 +238,9 @@ import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use
     ImproveEndUseFormControlsPipe,
     TurndownComponent,
     MidTurndownComponent,
-    EndUseHelpComponent
+    EndUseHelpComponent,
+    ReplaceCompressorComponent,
+    ReplaceCompressorModalComponent
   ],
   imports: [
     CommonModule,
@@ -307,7 +312,8 @@ import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use
     EndUsesService,
     DayTypeUseFormService,
     MidTurndownCalculationService,
-    TurndownCalculationService
+    TurndownCalculationService,
+    ReplaceCompressorsService
   ],
 })
 export class CompressedAirAssessmentModule { }

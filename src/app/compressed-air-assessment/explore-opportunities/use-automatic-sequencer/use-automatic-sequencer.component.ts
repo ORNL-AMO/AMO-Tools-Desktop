@@ -55,7 +55,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
-        this.baselineHasSequencer = this.compressedAirAssessment.systemInformation.isSequencerUsed;
+        this.baselineHasSequencer = this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer';
         this.setOrderOptions();
       }
     });
@@ -129,7 +129,8 @@ export class UseAutomaticSequencerComponent implements OnInit {
           modification.improveEndUseEfficiency.order,
           modification.reduceRuntime.order,
           modification.reduceSystemAirPressure.order,
-          modification.reduceAirLeaks.order
+          modification.reduceAirLeaks.order,
+          modification.replaceCompressorsEEM.order
         ];
         allOrders = allOrders.filter(order => { return order != 100 });
         let numOrdersOn: number = allOrders.length;

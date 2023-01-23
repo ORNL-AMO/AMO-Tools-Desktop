@@ -1,9 +1,8 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { CompressorNameplateData } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorNameplateData } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../compressed-air-data-management.service';
@@ -18,7 +17,7 @@ import { CompressorTypeOptions } from '../inventoryOptions';
 export class NameplateDataComponent implements OnInit {
   settings: Settings;
   selectedCompressorSub: Subscription;
-  
+
   form: UntypedFormGroup;
   isFormChange: boolean = false;
   @ViewChild('fullLoadAmpsModal', { static: false }) public fullLoadAmpsModal: ModalDirective;
@@ -26,8 +25,8 @@ export class NameplateDataComponent implements OnInit {
   showFullLoadAmpsModal: boolean = false;
 
   compressorTypeOptions: Array<{ value: number, label: string }> = CompressorTypeOptions;
+  invalidCompressorType: boolean;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private convertUnitsService: ConvertUnitsService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
@@ -38,6 +37,7 @@ export class NameplateDataComponent implements OnInit {
         } else {
           this.isFormChange = false;
         }
+        this.setInvalidCompressorType();
       }
     });
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -62,7 +62,7 @@ export class NameplateDataComponent implements OnInit {
     this.compressedAirAssessmentService.modalOpen.next(true);
     this.showFullLoadAmpsModal = true;
   }
-  
+
   closeFullLoadAmpsModal(fullLoadAmps?: number) {
     if (fullLoadAmps) {
       this.form.patchValue({
@@ -73,5 +73,14 @@ export class NameplateDataComponent implements OnInit {
     this.showFullLoadAmpsModal = false;
     this.fullLoadAmpsModal.hide();
     this.save();
+  }
+
+  setInvalidCompressorType() {
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'loadSharing' && this.form.controls.compressorType.value) {
+      this.invalidCompressorType = (this.form.controls.compressorType.value != 6);
+    } else {
+      this.invalidCompressorType = false;
+    }
   }
 }

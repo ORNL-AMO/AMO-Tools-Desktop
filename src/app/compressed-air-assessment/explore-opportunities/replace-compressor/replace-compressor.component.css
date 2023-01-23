@@ -1,0 +1,77 @@
+.group-label{
+	font-size: 16px;
+    text-transform: none;
+	letter-spacing: 1px;
+	padding-top: 6.5px;
+	padding-bottom: 6.5px;
+}
+
+.group-label:hover{
+	cursor: pointer;
+	background-color: lightgray;
+}
+
+
+.group-label .form-control{
+	width: fit-content;
+	display: inherit;
+    background-color: #7030A0;
+    color: white;
+}
+
+.fa-exclamation-circle {
+    color: red !important;
+    font-size: .75rem;
+    padding-right: .5rem;
+}
+
+.supply-demand{
+	padding-left: .25rem;
+    border-left: solid #ddd 2px;
+    font-size: 11px;
+    font-style: italic;
+}
+
+.replace-modal { 
+    /* min-height: 600px; */
+    background-color: white;
+}
+
+.divider {
+    width: 2px;
+    background: lightgray;
+  }
+
+  .table{
+    font-size: 12px;
+    background: white;
+}
+
+.selected-item{
+    border: solid;
+}
+
+.fa-chevron-right{
+    padding-right: 3px;
+}
+
+
+a.danger{
+    color: red;
+}
+
+.invalid-compressor {
+    color: #721c24 !important;
+    background-color: #f8d7da !important;
+    border-color: #f8d7da !important;
+}
+
+.inventory-badge {
+    background-color: rgb(112, 48, 160);
+    margin: 0;
+    margin-left: .5rem;
+}
+
+.replacement-badge:hover {
+    cursor: pointer;
+}

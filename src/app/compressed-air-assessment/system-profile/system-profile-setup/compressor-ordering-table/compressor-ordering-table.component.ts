@@ -15,11 +15,13 @@ export class CompressorOrderingTableComponent implements OnInit {
   orderingOptions: Array<number>;
   profileSummary: Array<ProfileSummary>
   hourIntervals: Array<number>;
-  isSequencerUsed: boolean;
+  multiCompressorSystemControls: 'cascading' | 'isentropicEfficiency' | 'loadSharing' | 'targetPressureSequencer' | 'baseTrim';
   selectedDayTypeId: string;
   fillRight: boolean = false;
   inventoryItems: Array<CompressorInventoryItem>;
   dataInterval: number;
+  trimSelection: string;
+  hasMissingTrimSelection: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -27,7 +29,16 @@ export class CompressorOrderingTableComponent implements OnInit {
       if (val && this.isFormChange == false) {
         this.inventoryItems = val.compressorInventoryItems;
         this.selectedDayTypeId = val.systemProfile.systemProfileSetup.dayTypeId;
-        this.isSequencerUsed = val.systemInformation.isSequencerUsed;
+        this.hasMissingTrimSelection = false;
+        val.systemInformation.trimSelections.forEach(selection => {
+          if(selection.dayTypeId == this.selectedDayTypeId){
+            this.trimSelection = selection.compressorId;
+          }
+          if(selection.compressorId == undefined){
+            this.hasMissingTrimSelection = true;
+          }
+        });
+        this.multiCompressorSystemControls = val.systemInformation.multiCompressorSystemControls;
         this.profileSummary = val.systemProfile.profileSummary;
         this.setHourIntervals(val.systemProfile.systemProfileSetup);
         this.setOrderingOptions(val.compressorInventoryItems);
@@ -75,10 +86,18 @@ export class CompressorOrderingTableComponent implements OnInit {
       let order: number = 1;
       for (let compressorOrderIndex = 0; compressorOrderIndex < dayTypeSummaries.length; compressorOrderIndex++) {
         if (compressorOrderIndex != compressorIndex) {
-          if (dayTypeSummaries[compressorIndex].fullLoadPressure < dayTypeSummaries[compressorOrderIndex].fullLoadPressure) {
-            order++;
-          } else if (dayTypeSummaries[compressorOrderIndex].fullLoadPressure == dayTypeSummaries[compressorIndex].fullLoadPressure && compressorOrderIndex < compressorIndex) {
-            order++;
+          if (this.multiCompressorSystemControls == 'cascading') {
+            if (dayTypeSummaries[compressorIndex].fullLoadPressure < dayTypeSummaries[compressorOrderIndex].fullLoadPressure) {
+              order++;
+            } else if (dayTypeSummaries[compressorOrderIndex].fullLoadPressure == dayTypeSummaries[compressorIndex].fullLoadPressure && compressorOrderIndex < compressorIndex) {
+              order++;
+            }
+          } else if (this.multiCompressorSystemControls == 'isentropicEfficiency') {
+            if (dayTypeSummaries[compressorIndex].adjustedIsentropicEfficiency < dayTypeSummaries[compressorOrderIndex].adjustedIsentropicEfficiency) {
+              order++;
+            } else if (dayTypeSummaries[compressorOrderIndex].adjustedIsentropicEfficiency == dayTypeSummaries[compressorIndex].adjustedIsentropicEfficiency && compressorOrderIndex < compressorIndex) {
+              order++;
+            }
           }
         }
       }
@@ -95,6 +114,14 @@ export class CompressorOrderingTableComponent implements OnInit {
     this.isFormChange = true;
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
+    compressedAirAssessment.systemInformation.trimSelections.forEach(selection => {
+      if(selection.dayTypeId == this.selectedDayTypeId){
+        selection.compressorId = this.trimSelection;
+      }
+      if(selection.compressorId == undefined){
+        this.hasMissingTrimSelection = true;
+      }
+    });
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
@@ -126,13 +153,25 @@ export class CompressorOrderingTableComponent implements OnInit {
     changedSummary.profileSummaryData[orderIndex].order = 1;
     dayTypeSummaries.forEach((summary, index) => {
       if (summary.compressorId != changedSummary.compressorId) {
-        if (summary.profileSummaryData[orderIndex].order != 0) {
-          if (summary.fullLoadPressure < changedSummary.fullLoadPressure) {
-            summary.profileSummaryData[orderIndex].order++;
-          } else if (summary.fullLoadPressure == changedSummary.fullLoadPressure && summaryIndex < index) {
-            summary.profileSummaryData[orderIndex].order++;
-          } else {
-            changedSummary.profileSummaryData[orderIndex].order++;
+        if (this.multiCompressorSystemControls == 'cascading' || this.multiCompressorSystemControls == 'baseTrim') {
+          if (summary.profileSummaryData[orderIndex].order != 0) {
+            if (summary.fullLoadPressure < changedSummary.fullLoadPressure) {
+              summary.profileSummaryData[orderIndex].order++;
+            } else if (summary.fullLoadPressure == changedSummary.fullLoadPressure && summaryIndex < index) {
+              summary.profileSummaryData[orderIndex].order++;
+            } else {
+              changedSummary.profileSummaryData[orderIndex].order++;
+            }
+          }
+        } else if (this.multiCompressorSystemControls == 'isentropicEfficiency') {
+          if (summary.profileSummaryData[orderIndex].order != 0) {
+            if (summary.adjustedIsentropicEfficiency < changedSummary.adjustedIsentropicEfficiency) {
+              summary.profileSummaryData[orderIndex].order++;
+            } else if (summary.adjustedIsentropicEfficiency == changedSummary.adjustedIsentropicEfficiency && summaryIndex < index) {
+              summary.profileSummaryData[orderIndex].order++;
+            } else {
+              changedSummary.profileSummaryData[orderIndex].order++;
+            }
           }
         }
       }
@@ -229,5 +268,10 @@ export class CompressorOrderingTableComponent implements OnInit {
 
   trackByIdx(index: number, obj: any): any {
     return index;
+  }
+
+  setTrimSelection() {
+    //todo update ordering
+    this.save();
   }
 }

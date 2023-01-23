@@ -27,6 +27,9 @@ export class ElectricityReductionFormComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   selected: boolean;
+  @Input()
+  userSelectedHP: boolean;
+
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -65,6 +68,10 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if(changes.userSelectedHP && !changes.userSelectedHP.firstChange){
+      this.form.controls.userSelectedHP.patchValue(this.userSelectedHP);
+      this.calculate();
+    }
     if (changes.selected && !changes.selected.firstChange) {
       if (this.selected == false) {
         this.form.disable();
@@ -145,6 +152,12 @@ export class ElectricityReductionFormComponent implements OnInit {
     if (this.form.controls.variableSpeedMotor.value == false) {
       this.form.controls.operationalFrequency.patchValue(this.form.controls.lineFrequency.value);
     }
+    this.calculate();
+  }
+
+  toggleUserSelectedHP(){
+    let toggleValue: boolean = !this.form.controls.userSelectedHP.value;
+    this.form.controls.userSelectedHP.patchValue(toggleValue);
     this.calculate();
   }
 }

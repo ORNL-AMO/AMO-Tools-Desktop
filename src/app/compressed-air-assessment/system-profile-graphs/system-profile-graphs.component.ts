@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData } from '../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentService } from '../compressed-air-assessment.service'; 
+import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
 import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
 import * as _ from 'lodash';
@@ -102,7 +102,7 @@ export class SystemProfileGraphsComponent implements OnInit {
   ngAfterViewInit() {
     this.drawCharts();
     setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));      
+      window.dispatchEvent(new Event('resize'));
     }, 100)
   }
 
@@ -150,7 +150,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         x: [xAxisRange[0] - 1, xAxisRange[1] + 1],
         y: [yMaxvalue, yMaxvalue],
         type: 'scatter',
-        showlegend: this.isBaseline === false ? false : true,
+        // showlegend: this.isBaseline === false ? false : true,
         mode: 'lines',
         name: name,
         line: {
@@ -280,7 +280,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let yAxisRange: Array<number> = this.getYAxisRange(true, this.totalFullLoadCapacity);
       let xRangeMax: number = 24;
       let xRangeMin: number = this.timeInterval;
-      if(this.profileSummary[0].profileSummaryData.length == 1){
+      if (this.profileSummary[0].profileSummaryData.length == 1) {
         xRangeMax = 1;
         xRangeMin = 0;
       }
@@ -357,7 +357,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       });
       let xRangeMax: number = 24;
       let xRangeMin: number = this.timeInterval;
-      if(this.profileSummary[0].profileSummaryData.length == 1){
+      if (this.profileSummary[0].profileSummaryData.length == 1) {
         xRangeMax = 1;
         xRangeMin = 0;
       }
@@ -403,7 +403,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let yAxisRange: Array<number> = this.getYAxisRange(false, this.totalFullLoadPower);
       let xRangeMax: number = 24;
       let xRangeMin: number = this.timeInterval;
-      if(this.profileSummary[0].profileSummaryData.length == 1){
+      if (this.profileSummary[0].profileSummaryData.length == 1) {
         xRangeMax = 1;
         xRangeMin = 0;
       }
@@ -466,7 +466,16 @@ export class SystemProfileGraphsComponent implements OnInit {
 
   getCompressorName(compressorId: string): string {
     let compressor: CompressorInventoryItem = this.inventoryItems.find(item => { return item.itemId == compressorId });
+
     if (compressor) {
+      if (this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
+        let selection = this.compressedAirAssessment.systemInformation.trimSelections.find(selection => { return selection.dayTypeId == this.selectedDayType.dayTypeId && selection.compressorId == compressorId });
+        if (selection != undefined) {
+          return compressor.name + ' (Trim)';
+        } else {
+          return compressor.name;
+        }
+      }
       return compressor.name
     } else {
       return '';

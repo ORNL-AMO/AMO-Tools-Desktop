@@ -948,7 +948,8 @@ export const MockTreasureHunt: Assessment = {
                 "otherMethodData": {
                     "energy": 400000
                 },
-                "units": 1
+                "units": 1,
+                "userSelectedHP": true
             },
             {
                 "name": "Cooling Tower Pump 2",
@@ -975,7 +976,8 @@ export const MockTreasureHunt: Assessment = {
                 "otherMethodData": {
                     "energy": 400000
                 },
-                "units": 1
+                "units": 1,
+                "userSelectedHP": true
             }],
             "modification": [{
                 "name": "Cooling Tower Pump 1",
@@ -1002,7 +1004,8 @@ export const MockTreasureHunt: Assessment = {
                 "otherMethodData": {
                     "energy": 400000
                 },
-                "units": 1
+                "units": 1,
+                "userSelectedHP": true
             },
             {
                 "name": "Cooling Tower Pump 2",
@@ -1029,7 +1032,8 @@ export const MockTreasureHunt: Assessment = {
                 "otherMethodData": {
                     "energy": 400000
                 },
-                "units": 1
+                "units": 1,
+                "userSelectedHP": true
             }],
             "selected": true,
             "opportunitySheet": {
@@ -1087,7 +1091,8 @@ export const MockTreasureHunt: Assessment = {
                 "otherMethodData": {
                     "energy": 400000
                 },
-                "units": 1
+                "units": 1,
+                "userSelectedHP": true
             }],
             "modification": [{
                 "name": "Equipment #1",
@@ -1114,7 +1119,8 @@ export const MockTreasureHunt: Assessment = {
                 "otherMethodData": {
                     "energy": 400000
                 },
-                "units": 1
+                "units": 1,
+                "userSelectedHP": true
             }],
             "selected": true,
             "opportunitySheet": {

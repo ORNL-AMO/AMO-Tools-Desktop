@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
@@ -13,6 +13,8 @@ import { FilterCompressorOptions, FilterCompressorsPipe } from '../filter-compre
   styleUrls: ['./compressor-options-table.component.css']
 })
 export class CompressorOptionsTableComponent implements OnInit {
+  @Input()
+  inModifiedInventory: boolean
   @Output('emitClose')
   emitClose: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -41,7 +43,7 @@ export class CompressorOptionsTableComponent implements OnInit {
   }
 
   selectCompressor(genericCompressor: GenericCompressor) {
-    this.compressedAirDataManagementService.setCompressorDataFromGenericCompressorDb(genericCompressor);
+    this.compressedAirDataManagementService.setCompressorDataFromGenericCompressorDb(genericCompressor, this.inModifiedInventory);
     this.emitClose.emit(true);
   }
 }

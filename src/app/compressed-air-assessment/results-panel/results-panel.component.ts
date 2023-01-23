@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ReplaceCompressorsEEM } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
 @Component({
@@ -8,7 +9,8 @@ import { CompressedAirAssessmentService } from '../compressed-air-assessment.ser
   styleUrls: ['./results-panel.component.css']
 })
 export class ResultsPanelComponent implements OnInit {
-
+  @Input()
+  inModifiedInventory: boolean;
   setupTabSub: Subscription;
   tabSelect: CompressedAirSetupTab = 'help';
   displayEndUses: boolean;
@@ -19,12 +21,11 @@ export class ResultsPanelComponent implements OnInit {
     this.setupTabSub = this.compressedAirAssessmentService.setupTab.subscribe(val => {
       this.displayEndUses = (val == 'end-uses');
       this.displayInventory = (val == 'inventory');
-      if(this.displayInventory || this.displayEndUses){
+      if (this.displayInventory || this.displayEndUses) {
         this.tabSelect = val as CompressedAirSetupTab;
       } else {
         this.tabSelect = 'help';
       }
-
     });
   }
 
@@ -38,4 +39,4 @@ export class ResultsPanelComponent implements OnInit {
 }
 
 
-  export type CompressedAirSetupTab = 'help' | 'performance-profile' | 'inventory' | 'end-uses';
+export type CompressedAirSetupTab = 'help' | 'performance-profile' | 'inventory' | 'end-uses';

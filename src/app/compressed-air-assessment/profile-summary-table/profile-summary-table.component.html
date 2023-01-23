@@ -14,7 +14,12 @@
         </thead>
         <tbody *ngFor="let summary of profileSummary">
             <tr class="compressor-name-row">
-                <td colspan="100" class="bold">{{summary.compressorId | compressorName:inventoryItems}}</td>
+                <td colspan="100" class="bold">{{summary.compressorId | compressorName:inventoryItems}}
+                    <span *ngIf="checkIsTrim(summary.compressorId)">
+                        (Trim)
+                    </span>
+
+                </td>
             </tr>
             <tr>
                 <td class="pl-2">
