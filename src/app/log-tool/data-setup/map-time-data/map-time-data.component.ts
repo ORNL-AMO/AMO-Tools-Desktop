@@ -81,6 +81,10 @@ export class MapTimeDataComponent implements OnInit {
         }
       } else {
         this.setSelectedDataSet(changeStepIndex);
+        if (this.selectedDataSetIndex === this.explorerData.datasets.length - 1) {
+          this.explorerData.isLastTab = true;
+          this.logToolDataService.explorerData.next(this.explorerData);
+        }
         this.cd.detectChanges();
       }
   }
@@ -91,6 +95,7 @@ export class MapTimeDataComponent implements OnInit {
     this.explorerData.datasets[index].mapTimeDataTabVisited = true;
     this.explorerData.isStepMapTimeDataComplete = this.logToolDataService.checkStepMapDatesComplete(this.explorerData.datasets);
     if (this.explorerData.isStepMapTimeDataComplete) {
+      this.explorerData.isLastTab = this.selectedDataSetIndex === this.explorerData.datasets.length - 1;
       this.logToolDataService.explorerData.next(this.explorerData);
     }
   }

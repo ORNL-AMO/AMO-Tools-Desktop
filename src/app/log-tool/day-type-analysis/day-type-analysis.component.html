@@ -64,12 +64,12 @@
 
                 <div *ngIf="selectedDataSet" class="graph-setup pt-2">
                     <div class="select-for-all-disabled align-items-center vw-100 text-center"
-                        *ngIf="selectedDataField.fieldName !== 'all'">
+                        *ngIf="selectedDataField.fieldId !== 'all'">
                         <span class="d-block alert alert-info m-5 p-4 small">Set Data to 'Total Aggregated Equipment Data' to filter
                             aggregated columns</span>
                     </div>
                     <div class="mt-3 mx-3">
-                        <label class="pt-0 my-0 pb-2 bold">Select Columns for "Total Aggregated Equipment Data": </label>
+                        <label class="pt-0 my-0 pb-2 bold">Select Columns for Total Aggregated Equipment Data: </label>
                         <div *ngIf="explorerData.datasets.length > 1" class="d-flex flex-row mb-2">
                             <input class="m-0 mt-1 mr-2" type="checkbox" id="applyToAll" [(ngModel)]="applyToAll"
                                 (change)="updateExplorerData()">
@@ -94,7 +94,11 @@
                                 <tbody>
                                     <ng-container *ngFor="let field of selectedDataSet.fields; let i = index;">
                                         <tr *ngIf="field.useField && !field.isDateField && !field.isTimeField">
-                                            <td>{{field.fieldName}}</td>
+                                            <td>
+                                                <span *ngIf="field.alias">{{field.alias}}</span>
+                                                <span *ngIf="!field.alias">{{field.fieldName}}</span>
+            
+                                            </td>
                                             <td>
                                                 <input type="checkbox" [(ngModel)]="field.useForDayTypeAnalysis"
                                                     (change)="updateExplorerData()">

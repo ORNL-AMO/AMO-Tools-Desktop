@@ -71,7 +71,11 @@
                         </tr>
                         <ng-container *ngFor="let field of selectedDataSet.fields; let i = index;">
                             <tr *ngIf="field.useField">
-                                <td>{{field.fieldName}}</td>
+                                <td>
+                                    <span *ngIf="field.alias">{{field.alias}}</span>
+                                    <span *ngIf="!field.alias">{{field.fieldName}}</span>
+
+                                </td>
                                 <td>
                                     <input type="checkbox" id="{{'isDateField'+i}}" [(ngModel)]="field.isDateField"
                                         [disabled]="dataExists == true || (selectedDataSet.hasDateField && !field.isDateField) || field.isTimeField"
