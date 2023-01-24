@@ -21,6 +21,7 @@ import { CreateInventoryComponent } from './create-inventory/create-inventory.co
 import { InventoryService } from './inventory.service';
 import { MoveItemsComponent } from './move-items/move-items.component';
 import { CopyItemsComponent } from './copy-items/copy-items.component';
+import { DisclaimerComponent } from './disclaimer/disclaimer.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { CopyItemsComponent } from './copy-items/copy-items.component';
     CreateInventoryComponent,
     MoveItemsComponent,
     CopyItemsComponent,
+    DisclaimerComponent,
   ],
   imports: [
     CommonModule,
