@@ -52,9 +52,6 @@
             <button class="btn btn-default" *ngIf="dataSetupTab !== 'import-data'" (click)="back()">Back</button>
         </div>
         <div class="pull-right">
-            <button class="btn btn-primary" (click)="continue()" [disabled]="disableNext">
-                <span *ngIf="dataSetupTab != 'map-time-data' || (dataSetupTab == 'map-time-data' && !this.explorerData.isStepMapTimeDataComplete)">Next</span>
-                <span *ngIf="dataSetupTab == 'map-time-data' && this.explorerData.isStepMapTimeDataComplete">Finish</span>
-            </button>
+            <button class="btn btn-primary" (click)="continue()" [disabled]="disableNext">{{continueButtonAction}}</button>
         </div>
     </div>
