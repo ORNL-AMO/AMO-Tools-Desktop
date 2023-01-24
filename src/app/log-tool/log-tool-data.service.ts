@@ -300,20 +300,25 @@ getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean
 
   parseAlternateDateFormat(dateString: string): Moment {
     let formats: Array<string> = [
-      'DD/MM/YYYY HH:mm:ss',
-      'DD/MM/YYYY hh:mm:ss a',
-      'DD-MM-YYYY HH:mm:ss', 
-      'DD-MM-YYYY hh:mm:ss a', 
-      'MM/DD/YYYY HH:mm:ss',
-      'MM/DD/YYYY hh:mm:ss a',
-      'MM-DD-YYYY HH:mm:ss', 
       'MM-DD-YYYY hh:mm:ss a', 
-      'DD-MM-YYYY', 
+      'MM/DD/YYYY hh:mm:ss a',
+      'MM/DD/YYYY HH:mm:ss',
+      'MM-DD-YYYY HH:mm:ss', 
       'MM-DD-YYYY', 
       'HH:mm:ss',
       'hh:mm:ss a',
+      // 'DD-MM-YYYY hh:mm:ss a', 
+      // 'DD/MM/YYYY hh:mm:ss a',
+      // 'DD/MM/YYYY HH:mm:ss',
+      // 'DD-MM-YYYY HH:mm:ss', 
+      // 'DD/MM/YYYY h:mm:ss',
+      // 'DD-MM-YYYY', 
     ];
 
+    // moment - format array traversing priority
+    // Prefer formats resulting in valid dates over invalid ones.
+    // Prefer formats that parse more of the string than less and use more of the format than less, i.e. prefer stricter parsing.
+    // Prefer formats earlier in the array than later.
     let dateMoment: Moment = moment(dateString, formats, true);
     return dateMoment;
   }

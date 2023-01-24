@@ -13,6 +13,7 @@ export class LogToolService {
   isModalOpen: BehaviorSubject<boolean>;
   noDayTypeAnalysis: BehaviorSubject<boolean>;
   openExportData: BehaviorSubject<boolean>;
+  setupContainerHeight: BehaviorSubject<number>;
   constructor() {
     this.dataSubmitted = new BehaviorSubject<boolean>(false);
     this.dataCleaned = new BehaviorSubject<boolean>(false);
@@ -20,6 +21,7 @@ export class LogToolService {
     this.noDayTypeAnalysis = new BehaviorSubject<boolean>(false);
     this.individualDataFromCsv = new Array();
     this.openExportData = new BehaviorSubject<boolean>(false);
+    this.setupContainerHeight = new BehaviorSubject<number>(undefined);
   }
 
   resetData() {
