@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { CompressorInventoryItem, ProfileSummary, ProfileSummaryTotal, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
+import { CompressorInventoryItem, ProfileSummary, ProfileSummaryTotal, SystemInformation, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
@@ -22,6 +22,8 @@ export class ProfileSummaryTableComponent implements OnInit {
   totalsForPrint: Array<Array<ProfileSummaryTotal>>;
   @Input()
   systemProfileSetup: SystemProfileSetup;
+  @Input()
+  systemInformation: SystemInformation;
 
 
 
@@ -37,8 +39,17 @@ export class ProfileSummaryTableComponent implements OnInit {
   }
 
 
-  checkShowAuxiliary(){
-    let auxTotal: ProfileSummaryTotal =  this.totals.find(totalData => {return totalData.auxiliaryPower != 0});
+  checkShowAuxiliary() {
+    let auxTotal: ProfileSummaryTotal = this.totals.find(totalData => { return totalData.auxiliaryPower != 0 });
     return auxTotal != undefined;
+  }
+
+  checkIsTrim(compressorId: string): boolean {
+    if (this.systemInformation.multiCompressorSystemControls == 'baseTrim' && this.systemInformation.trimSelections && this.systemProfileSetup.dayTypeId) {
+      let selection = this.systemInformation.trimSelections.find(selection => { return selection.dayTypeId == this.systemProfileSetup.dayTypeId && selection.compressorId == compressorId });
+      return selection != undefined;
+    } else {
+      return false;
+    }
   }
 }

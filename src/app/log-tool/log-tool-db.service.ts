@@ -77,10 +77,6 @@ export class LogToolDbService {
 
   setLogToolData(importedLogToolDbData?: LogToolDbData) {
     let logToolDbData: LogToolDbData = this.logToolDbData[0];
-    if (importedLogToolDbData) {
-      logToolDbData = importedLogToolDbData;
-      this.visualizeService.userGraphOptions.next(logToolDbData.visualizeData.selectedGraphObj);
-    } 
     this.logToolDataService.logToolDays = logToolDbData.setupData.logToolDays;
     this.logToolService.individualDataFromCsv = logToolDbData.setupData.individualDataFromCsv;
     this.logToolService.fields = logToolDbData.setupData.fields;
@@ -103,7 +99,22 @@ export class LogToolDbService {
     this.dayTypeGraphService.selectedGraphType.next(logToolDbData.dayTypeData.selectedGraphType);
     this.dayTypeGraphService.dayTypeScatterPlotData.next(logToolDbData.dayTypeData.dayTypeScatterPlotData);
     this.dayTypeGraphService.individualDayScatterPlotData.next(logToolDbData.dayTypeData.individualDayScatterPlotData);
+    if (importedLogToolDbData) {
+      logToolDbData = this.updateLegacyInterfaceImportData(importedLogToolDbData);
+    } 
+  }
 
+  updateLegacyInterfaceImportData(logToolDbData: LogToolDbData) {
+    this.visualizeService.userGraphOptions.next(logToolDbData.visualizeData.selectedGraphObj);
+    this.logToolDataService.loadingSpinner.next({show: true, msg: 'Updating Day Type Analysis...'});
+    // update data containing only 1 hr intervals
+    this.logToolDataService.setLogToolDays();
+    this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
+    this.dayTypeAnalysisService.initDayTypes();
+    this.dayTypeAnalysisService.setDayTypeSummaries();
+    this.dayTypeGraphService.setDayTypeScatterPlotData();
+    this.dayTypeGraphService.setIndividualDayScatterPlotData();
+    return logToolDbData;
   }
 
  async saveData() {

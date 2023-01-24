@@ -40,7 +40,7 @@ export class BlowoffComponent implements OnInit {
         this.checkShowCalc();
         this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.blowoff.power, compressor);
         if (this.isFormChange == false) {
-          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.blowoff, compressor, 'blowoff');
+          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.blowoff, compressor, 'blowoff', undefined);
           this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
           this.updateForm(compressor.performancePoints.blowoff);

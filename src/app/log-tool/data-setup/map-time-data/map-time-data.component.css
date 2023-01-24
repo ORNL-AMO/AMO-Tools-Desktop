@@ -63,20 +63,23 @@ input[type='checkbox']:hover {
     height: 40vh;
 }
 
+.tooltip-container {
+    position: relative;
+}
 
 .detail-tooltip {
     background-color: white;
     border-color: #117A65;
     color: black;
-    top: 355px;
-    right: 50px;
+    top: 35px;
+    left: -80px;
     z-index: 999;
     width: 300px;
 }
 
 .tooltip-arrow-up {
     left: unset;
-    right: 25px;
+    right: 200px;
 }
 
 .fa{

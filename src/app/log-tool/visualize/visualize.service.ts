@@ -58,11 +58,34 @@ export class VisualizeService {
     this.focusedPanel.next('highlight-timeseries-info');
   }
 
-  getDataFieldOptions(): Array<LogToolField> {
+  getDataFieldOptions(isDayTypeAnalysisChart: boolean = false): Array<LogToolField> {
     //non date and used fields
-    let tmpFields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));
-    _.remove(tmpFields, (field) => { return field.useField == false || field.isDateField == true });
-    return tmpFields;
+    let fields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));
+    fields = this.filterFieldsForPresentation(fields);
+    if (isDayTypeAnalysisChart) {
+      fields.push(
+      {
+        fieldName: 'all',
+        alias: 'Total Aggregated Equipment Data',
+        useField: true,
+        useForDayTypeAnalysis: true,
+        isDateField: undefined,
+        isTimeField: undefined,
+        unit: undefined,
+        invalidField: undefined,
+        csvId: undefined,
+        csvName: undefined,
+        fieldId: 'all'
+    });
+    }
+    return fields;
+  }
+
+  filterFieldsForPresentation(fields: LogToolField[], isDaytypeAnalysis: boolean = false) {
+    return fields.filter((field, index, self) => {
+      let useField: boolean = (isDaytypeAnalysis && field.useForDayTypeAnalysis) || (!isDaytypeAnalysis && field.useField);
+      return useField && field.isDateField != true;
+    });
   }
 
   // field == axis

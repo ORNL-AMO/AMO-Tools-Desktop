@@ -36,10 +36,6 @@ tbody tr{
     background-color: white;
 }
 
-.card{
-    box-shadow: 0 4px 8px 0 grey;
-}
-
 .badge{
     color: white;
     font-size: 16px;

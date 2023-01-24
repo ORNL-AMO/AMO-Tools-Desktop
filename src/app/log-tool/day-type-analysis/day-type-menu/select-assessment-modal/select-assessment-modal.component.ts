@@ -6,7 +6,7 @@ import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service
  
 import { Assessment } from '../../../../shared/models/assessment';
 import { CompressedAirAssessment } from '../../../../shared/models/compressed-air-assessment';
-import { LogToolField } from '../../../log-tool-models';
+import { DayTypeSummary, LogToolField } from '../../../log-tool-models';
 import * as _ from 'lodash';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Directory } from '../../../../shared/models/directory';
@@ -18,6 +18,7 @@ import { DayTypeAnalysisService } from '../../day-type-analysis.service';
 import { LogToolService } from '../../../log-tool.service';
 import { InventoryService } from '../../../../compressed-air-assessment/inventory/inventory.service';
 import { firstValueFrom } from 'rxjs';
+import { LogToolDataService } from '../../../log-tool-data.service';
 
 @Component({
   selector: 'app-select-assessment-modal',
@@ -36,6 +37,7 @@ export class SelectAssessmentModalComponent implements OnInit {
   addNewAssessment: boolean = false;
   newAssessmentForm: UntypedFormGroup;
   constructor(private assessmentDbService: AssessmentDbService, private logToolService: LogToolService,
+    private logToolDataService: LogToolDataService,
     private compressedAirAssessmentService: CompressedAirAssessmentService, private directoryDbService: DirectoryDbService,
     private formBuilder: UntypedFormBuilder, private assessmentService: AssessmentService, private settingsDbService: SettingsDbService,
     private dayTypeAnalysisService: DayTypeAnalysisService, private inventoryService: InventoryService) { }
@@ -96,7 +98,6 @@ export class SelectAssessmentModalComponent implements OnInit {
   }
 
   setDayTypesFromLogTool(compressedAirAssessment: CompressedAirAssessment): CompressedAirAssessment {
-    this.dayTypeAnalysisService.dayTypeSummaries.getValue();
     let logToolFields: Array<LogToolField> = new Array();
     let fields: Array<LogToolField> = this.logToolService.fields;
     fields.forEach(field => {
@@ -104,9 +105,10 @@ export class SelectAssessmentModalComponent implements OnInit {
         logToolFields.push(field);
       }
     });
+    let logToolSummaries: Array<DayTypeSummary> = this.getLogToolSummariesForCompressedAir();
     compressedAirAssessment.logToolData = {
       logToolFields: logToolFields,
-      dayTypeSummaries: this.dayTypeAnalysisService.dayTypeSummaries.getValue()
+      dayTypeSummaries: logToolSummaries
     }
     compressedAirAssessment.logToolData.dayTypeSummaries.forEach(summary => {
       delete summary.data
@@ -119,6 +121,24 @@ export class SelectAssessmentModalComponent implements OnInit {
       }
     });
     return compressedAirAssessment;
+  }
+
+  // Translate log tool intervals (seconds) to Ca intervals
+  getLogToolSummariesForCompressedAir(): Array<DayTypeSummary> {
+    let logToolSummaries: Array<DayTypeSummary> = this.dayTypeAnalysisService.dayTypeSummaries.getValue()
+    let unitOfTime: string = this.logToolDataService.selectedDayTypeAverageInterval.unitOfTimeString;
+    logToolSummaries.forEach(summary => {
+      summary.dayAveragesByInterval.map(average => {
+        if (unitOfTime === 'day') {
+          average.interval = 0;
+        } else {
+          average.interval = average.interval / 3600;
+        } 
+        return average.interval;
+      });
+    });
+
+    return logToolSummaries;
   }
 
   async createAssessment() {

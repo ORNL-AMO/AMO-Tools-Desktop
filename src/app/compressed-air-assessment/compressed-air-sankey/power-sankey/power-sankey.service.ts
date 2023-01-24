@@ -116,7 +116,7 @@ export class PowerSankeyService {
     let temperature1: number = 75;
     let temperature2: number = temperature1;
 
-    if (compressedAirAssessment.systemInformation.isSequencerUsed) {
+    if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
       // this will be zero if field not modified. Add to setupDone?
       pressure2 = compressedAirAssessment.systemInformation.targetPressure;
     } else {
