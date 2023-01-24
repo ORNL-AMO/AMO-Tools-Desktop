@@ -19,6 +19,7 @@ export class ImportDataComponent implements OnInit {
   invalidFileReferences: Array<InvalidFile> = [];
   explorerData: ExplorerData;
   explorerDataSub: Subscription;
+  showDateFormatHelp: boolean = false;
   @ViewChild('importFileRef', { static: false }) importFileRef: ElementRef;
 
   constructor(
@@ -47,6 +48,13 @@ export class ImportDataComponent implements OnInit {
     if (!this.explorerData.isStepFileUploadComplete && this.importFileRef) {
       this.importFileRef.nativeElement.value = "";
     }
+  }
+
+  showDateFormatHelpDrawer() {
+    this.showDateFormatHelp = true;
+    setTimeout(() => {
+      this.showDateFormatHelp = false;
+    }, 100);
   }
 
   finishUpload() {

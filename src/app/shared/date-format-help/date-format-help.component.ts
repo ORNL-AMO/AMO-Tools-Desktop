@@ -1,5 +1,5 @@
 import { animate, AUTO_STYLE, state, style, transition, trigger } from '@angular/animations';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-date-format-help',
@@ -14,14 +14,25 @@ import { Component, Input, OnInit } from '@angular/core';
     ])
   ]
 })
-export class DateFormatHelpComponent implements OnInit {
+export class DateFormatHelpComponent implements OnInit, OnChanges {
+  @Input()
+  forceShowHelp: boolean;
+
   showDateHelpDrawer: boolean = false;
 
   constructor() {
 
   }
-  
+
   ngOnInit(): void {
+    
+  }
+  
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.forceShowHelp && !changes.forceShowHelp.firstChange 
+      && changes.forceShowHelp.currentValue === true) {
+      this.showDateHelpDrawer = true;
+    }
   }
 
   toggleDateAndTimeHelp() {

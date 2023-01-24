@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MeasurMessageData } from '../../shared/models/utilities';
@@ -28,6 +28,18 @@ export class DataSetupComponent implements OnInit {
   errorOverlaySub: Subscription;
   errorMessageData: MeasurMessageData;
   changeExplorerStepSub: Subscription;
+
+  @ViewChild('nav', { static: false }) nav: ElementRef;
+  @ViewChild('container', { static: false }) container: ElementRef;
+  containerHeight: number;
+  setupContainerHeightSub: Subscription;
+  setupContainerHeight: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getContainerHeight();
+  }
+
   constructor(private logToolService: LogToolService, 
     private logToolDataService: LogToolDataService, 
     private dayTypeAnalysisService: DayTypeAnalysisService,
@@ -64,17 +76,41 @@ export class DataSetupComponent implements OnInit {
       this.errorMessageData = errorMessageData;
       this.cd.detectChanges();
     });
+
+    this.setupContainerHeightSub = this.logToolService.setupContainerHeight.subscribe(setupContainerHeight => {
+      this.setupContainerHeight = setupContainerHeight
+      this.getContainerHeight();
+    });
   }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
+  }
+
 
   ngOnDestroy() {
     this.isModalOpenSub.unsubscribe();
     this.explorerDataSub.unsubscribe();
     this.loadingSpinnerSub.unsubscribe();
     this.errorOverlaySub.unsubscribe();
+    this.setupContainerHeightSub.unsubscribe();
   }
 
   dismissMessageOverlay() {
     this.logToolDataService.errorMessageData.next({show: false, msg: undefined});
+  }
+
+  getContainerHeight() {
+    if (this.nav && this.container && this.setupContainerHeight) {
+      setTimeout(() => {
+        let navHeight = this.nav.nativeElement.clientHeight;
+        this.containerHeight = this.setupContainerHeight - navHeight;
+        let heightBuffer: number = 43;
+        this.containerHeight = this.containerHeight - heightBuffer;
+      }, 100);
+    }
   }
 
   back() {
