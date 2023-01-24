@@ -121,6 +121,9 @@ export class DayTypeAnalysisComponent implements OnInit {
 
   initDayTypeAverageIntervalForm() {
     let defaultHourlyInterval: DayTypeAverageInterval = this.dayTypeAverageIntervalOptions[2];
+    if (!this.logToolDataService.selectedDayTypeAverageInterval) {
+      this.logToolDataService.selectedDayTypeAverageInterval = defaultHourlyInterval;
+    }
     this.logToolDataService.selectedDayTypeAverageInterval = defaultHourlyInterval;
     let explorerDatasets: Array<ExplorerDataSet | IndividualDataFromCsv> = this.logToolService.individualDataFromCsv;
     this.checkValidInterval(explorerDatasets[0].dataCollectionInterval, defaultHourlyInterval.seconds)

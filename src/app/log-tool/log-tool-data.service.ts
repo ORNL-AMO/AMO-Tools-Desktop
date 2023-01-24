@@ -233,27 +233,34 @@ export class LogToolDataService {
     firstDate.getDate() === secondDate.getDate();
   }
 
-getCurrentIntervalStrings(currentInterval: number): {intervalDisplayString: string, intervalOffsetString: string } {
+getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean = false): {intervalDisplayString: string, intervalOffsetString: string} {
     let intervalDisplayString: string;
     let intervalOffsetString: string;
     let day: Date = new Date(new Date().setHours(0,0,0,0));
     if (this.selectedDayTypeAverageInterval.unitOfTimeString === 'hour') {
       day.setHours(currentInterval, 0, 0, 0);
       intervalDisplayString = moment(day).format('H');
-      intervalOffsetString = moment(day).add(1, 'hours').format('H');
-      if (currentInterval === 23) {
-        intervalOffsetString = '24';
+      if (useDayStartEndOffset) {
+        // offset displays 0:30 - 24
+        intervalOffsetString = moment(day).add(1, 'hours').format('H');
+        if (currentInterval === 23) {
+          //is last interval
+          intervalOffsetString = '24';
+        }
       }
     } else if (this.selectedDayTypeAverageInterval.unitOfTimeString === 'minutes') {
       day.setMinutes(currentInterval, 0, 0);
       intervalDisplayString = moment(day).format('H:mm');
-      let offsetDay: Date = new Date(new Date().setHours(0,0,0,0));
-      let offsetSeconds: number = currentInterval + this.getUnitOfTime();
-      offsetDay.setMinutes(offsetSeconds, 0, 0);
-      intervalOffsetString = moment(offsetDay).format('H:mm');
-      if (!this.checkSameDay(day, offsetDay)) {
-        //is last interval
-        intervalOffsetString = '24';
+      if (useDayStartEndOffset) {
+        let offsetDay: Date = new Date(new Date().setHours(0,0,0,0));
+        let offsetSeconds: number = currentInterval + this.getUnitOfTime();
+        offsetDay.setMinutes(offsetSeconds, 0, 0);
+        // offset displays 0:30 - 24
+        intervalOffsetString = moment(offsetDay).format('H:mm');
+        if (!this.checkSameDay(day, offsetDay)) {
+          //is last interval
+          intervalOffsetString = '24';
+        }
       }
     }
     
