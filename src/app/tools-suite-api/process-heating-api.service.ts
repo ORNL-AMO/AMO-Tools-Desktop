@@ -69,7 +69,7 @@ export class ProcessHeatingApiService {
   }
 
   liquidCoolingLosses(input: LiquidCoolingLoss): number {
-    let LiquidCoolingInstance = new Module.GasCoolingLosses(
+    let LiquidCoolingInstance = new Module.LiquidCoolingLosses(
       input.flowRate, input.density,
       input.initialTemperature, input.outletTemperature,
       input.specificHeat, input.correctionFactor,
