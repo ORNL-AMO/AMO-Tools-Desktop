@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleChanges } from '@angular/core';
-import * as c3 from 'c3';
+import bb, {gauge} from "billboard.js";
 
 @Component({
   selector: 'app-percent-graph',
   templateUrl: './percent-graph.component.html',
-  styleUrls: ['./percent-graph.component.css']
+  styleUrls: ['./percent-graph.component.css'],
 })
 export class PercentGraphComponent implements OnInit {
   @Input()
@@ -21,16 +21,10 @@ export class PercentGraphComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     this.initChart();
-  }
-
-  ngOnDestroy() {
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -56,39 +50,40 @@ export class PercentGraphComponent implements OnInit {
     if(this.width == undefined){
       this.width = 115;
     }
-    this.chart = c3.generate({
-      bindto: this.ngChart.nativeElement,
+
+    this.chart = bb.generate({
       data: {
         columns: [
-          ['data', this.value]
+      ["data", this.value]
         ],
-        type: 'gauge',
+        type: gauge(),
       },
-      legend: {
-        show: false
-      },
+      oninit: () => {},
       gauge: {
         label: {
-          show: false
+          extents: function() { return ""; }
         }
       },
       color: {
-        pattern: ['#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'], // the three color levels for the percentage values.
+        pattern: [
+          '#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'
+        ],
         threshold: {
-          values: [25, 50, 75, 101]
+          values: [
+            25, 50, 75, 101
+          ]
         }
+      },
+      legend: {
+        show: false
       },
       tooltip: {
         show: false
       },
       size: {
-        height: this.width,
-        // width: this.chartWidth
-      }
+        height: this.width
+      },
+      bindto: this.ngChart.nativeElement
     });
-
-    // if (this.value && this.chart) {
-    //   this.updateChart();
-    // }
   }
 }
