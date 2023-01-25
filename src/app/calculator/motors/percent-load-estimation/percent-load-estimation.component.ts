@@ -33,6 +33,7 @@ export class PercentLoadEstimationComponent implements OnInit {
   toggleExampleData = false;
   loadEstimationMethod: number;
   percentLoadEstimation: number;
+  currentField: string;
 
   slipMethodData: SlipMethod;
 
@@ -50,10 +51,10 @@ export class PercentLoadEstimationComponent implements OnInit {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
     this.fieldMeasurementData = this.percentLoadEstimationService.fieldMeasurementInputs;
-    this.slipMethodData = this.percentLoadEstimationService.slipMethodInputs;
-    this.loadEstimationMethod = this.percentLoadEstimationService.loadEstimationMethod;
+    //this.slipMethodData = this.percentLoadEstimationService.slipMethodInputs;
+    //this.loadEstimationMethod = this.percentLoadEstimationService.loadEstimationMethod;
     this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
-    this.calculateSlipMethod(this.slipMethodData);
+    //this.calculateSlipMethod(this.slipMethodData);
   }
 
   ngAfterViewInit() {
@@ -63,7 +64,7 @@ export class PercentLoadEstimationComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.percentLoadEstimationService.loadEstimationMethod = this.loadEstimationMethod;
+    //this.percentLoadEstimationService.loadEstimationMethod = this.loadEstimationMethod;
   }
 
   resizeTabs() {
@@ -98,26 +99,30 @@ export class PercentLoadEstimationComponent implements OnInit {
   }
 
   btnResetData() {
-    this.slipMethodData = this.percentLoadEstimationService.initSlipMethodInputs();
+    //this.slipMethodData = this.percentLoadEstimationService.initSlipMethodInputs();
     this.fieldMeasurementData = this.percentLoadEstimationService.initFieldMeasurementInputs();
     this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
-    this.calculateSlipMethod(this.slipMethodData);
-    this.toggleResetData = !this.toggleResetData;
+    //this.calculateSlipMethod(this.slipMethodData);
+    //this.toggleResetData = !this.toggleResetData;
   }
 
   btnGenerateExample() {
     this.fieldMeasurementData = this.percentLoadEstimationService.generateFieldMeasurementInputsExample();
-    this.slipMethodData = this.percentLoadEstimationService.generateSlipMethodInputsExample();
-    if (this.loadEstimationMethod == 0) {
-      this.calculateSlipMethod(this.slipMethodData);
-    } else {
-      this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
-    }
-    this.toggleExampleData = !this.toggleExampleData;
+    //this.slipMethodData = this.percentLoadEstimationService.generateSlipMethodInputsExample();
+    // if (this.loadEstimationMethod == 0) {
+    //   this.calculateSlipMethod(this.slipMethodData);
+    // } else {
+    // }
+    this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
+    //this.toggleExampleData = !this.toggleExampleData;
   }
 
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
+  }
+
+  changeField(str: string) {
+    this.currentField = str;
   }
 }
 

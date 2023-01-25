@@ -4,7 +4,7 @@
     <label>Average Power Factor</label>
     <div class="input-group">
     <input type="number" step="any" class="form-control" name="powerFactor" formControlName="powerFactor"
-      (input)="calculate()" onfocus="this.select();">
+      (input)="calculate()" onfocus="this.select();" (focus)="focusField('powerFactor')">
       <span class="input-group-addon units">%</span>
       </div>
     <span class="alert-danger pull-right small"
@@ -38,9 +38,9 @@
         <span class="input-group-text pt-0 pb-0">A</span>
       </div>
       <input type="number" step="any" class="form-control auto-width" name="phase1Amps" formControlName="phase1Amps"
-        (input)="calculate()" onfocus="this.select();">
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('amps')">
       <input type="number" step="any" class="form-control auto-width" name="phase1Voltage"
-        formControlName="phase1Voltage" (input)="calculate()" onfocus="this.select();">
+        formControlName="phase1Voltage" (input)="calculate()" onfocus="this.select();" (focus)="focusField('volts')">
     </div>
     <div class="input-group d-flex flex-nowrap">
       <div class="input-group-prepend">
@@ -48,18 +48,18 @@
         </span>
       </div>
       <input type="number" step="any" class="form-control auto-width" name="phase2Amps" formControlName="phase2Amps"
-        (input)="calculate()" onfocus="this.select();">
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('amps')">
       <input type="number" step="any" class="form-control auto-width" name="phase2Voltage"
-        formControlName="phase2Voltage" (input)="calculate()" onfocus="this.select();">
+        formControlName="phase2Voltage" (input)="calculate()" onfocus="this.select();" (focus)="focusField('volts')">
     </div>
     <div class="input-group d-flex flex-nowrap">
       <div class="input-group-prepend">
         <span class="input-group-text pt-0 pb-0">C</span>
       </div>
       <input type="number" step="any" class="form-control auto-width" name="phase3Amps" formControlName="phase3Amps"
-        (input)="calculate()" onfocus="this.select();">
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('amps')">
       <input type="number" step="any" class="form-control auto-width" name="phase3Voltage"
-        formControlName="phase3Voltage" (input)="calculate()" onfocus="this.select();">
+        formControlName="phase3Voltage" (input)="calculate()" onfocus="this.select();" (focus)="focusField('volts')">
     </div>
   </div>
   <label class="group-label">Motor Rated Data</label>
@@ -67,7 +67,7 @@
     <label>Rated Current</label>
     <div class="input-group">
       <input type="number" step="any" class="form-control" name="ratedCurrent" formControlName="ratedCurrent"
-        (input)="calculate()" onfocus="this.select();">
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('ratedCurrent')">
       <span class="input-group-addon units">A</span>
     </div>
     <span class="alert-danger pull-right small"
@@ -79,7 +79,7 @@
     <label>Rated Voltage</label>
     <div class="input-group">
       <input type="number" step="any" class="form-control" name="ratedVoltage" formControlName="ratedVoltage"
-        (input)="calculate()" onfocus="this.select();">
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('ratedVoltage')">
       <span class="input-group-addon units">V</span>
     </div>
     <span class="alert-danger pull-right small"

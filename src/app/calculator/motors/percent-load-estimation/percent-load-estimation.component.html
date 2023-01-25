@@ -21,7 +21,7 @@
     <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
       <div class="d-flex flex-column m-4">
-        <form>
+        <!-- <form>
           <div class="form-group">
             <label>Load Estimation Method</label>
             <select name="loadEstimationMethod" class="form-control" [(ngModel)]="loadEstimationMethod">
@@ -29,12 +29,12 @@
               <option [ngValue]="1">Field Measurement Method</option>
             </select>
           </div>
-        </form>
+        </form> -->
         <div class="form-section">
-          <app-slip-method-form *ngIf="loadEstimationMethod == 0" [data]="slipMethodData"
+          <!-- <app-slip-method-form *ngIf="loadEstimationMethod == 0" [data]="slipMethodData"
             [toggleResetData]="toggleResetData" [toggleExampleData]="toggleExampleData"
-            (emitCalculate)="calculateSlipMethod($event)"></app-slip-method-form>
-          <app-field-measurement-form *ngIf="loadEstimationMethod == 1" [data]="fieldMeasurementData"
+            (emitCalculate)="calculateSlipMethod($event)"></app-slip-method-form> -->
+          <app-field-measurement-form [(data)]="fieldMeasurementData" (emitChangeField)="changeField($event)"
             (emitCalculate)="calculateFieldMeasurementMethod($event)"></app-field-measurement-form>
         </div>
         <div class="w-100 justify-content-center btn-group btn-group-sm">
@@ -74,9 +74,80 @@
               rated load and maximum efficiency is usually near 75% of rated load.
             </small>
           </h5>
-          <div class="p-1" *ngIf="loadEstimationMethod == 1">
+          <div class="p-1">
             <img class="w-100" src="assets/images/load-estimation-help.png">
           </div>
+
+          <hr class="my-1 hr-spacer">
+          <div class="my-2" *ngIf="currentField == 'powerFactor'">
+            <h6>
+              Average Power Factor
+              <br>
+              <small class="text-muted">
+                Use the uncorrected power factor of the plant as an average value. This number is available from the plant
+                electrical specialist. For the modified case this value should be the same as the baseline unless specific
+                actions were taken to improve power factor.
+                <hr>
+              </small>
+            </h6>
+          </div>
+          <div class="my-2" *ngIf="currentField == 'ratedCurrent'">
+            <h6>
+              Rated Current
+              <br>
+              <small class="text-muted">
+                Either Motor Power (kW) or Motor Current (amps) will be displayed, depending on the Load Estimation Method selected.
+                Power is the preferred measurement, but unless a permanently-installed power meter is available, is much more intrusive
+                and challenging.
+                <hr>
+              </small>
+            </h6>
+          </div>
+          <div class="my-2" *ngIf="currentField == 'ratedVoltage'">
+            <h6>
+              Rated Voltage
+              <br>
+              <small class="text-muted">
+                This voltage is the motor design (nameplate) voltage.
+                <hr>
+              </small>
+            </h6>
+            <div class="w-100 justify-content-center">
+              <table class="table table-hover table-striped">
+                <tbody>
+                  <tr>
+                    <th class="text-center">Minimum</th>
+                    <th class="text-center">Maximum</th>
+                  </tr>
+                  <tr>
+                    <td class="text-center">208 V</td>
+                    <td class="text-center">15180 V</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="my-2" *ngIf="currentField == 'amps'">
+            <h6>
+              Table: Amps
+              <br>
+              <small class="text-muted">
+                Field current measurement for each phase.
+                <hr>
+              </small>
+            </h6>
+          </div>
+          <div class="my-2" *ngIf="currentField == 'volts'">
+            <h6>
+              Table: Volts
+              <br>
+              <small class="text-muted">
+                Field Voltage measurement for each phase.
+                <hr>
+              </small>
+            </h6>
+          </div>
+
         </div>
 
         <div class="d-flex flex-column w-100 align-items-center pt-3" *ngIf="tabSelect == 'results'">
@@ -84,7 +155,7 @@
           </app-percent-load-estimation-graph>
         </div>
         <div class="d-flex flex-column w-100 align-items-center pt-2"
-          *ngIf="tabSelect == 'results' &&  loadEstimationMethod == 1">
+          *ngIf="tabSelect == 'results'">
           <app-field-measurement-table class="w-75" [fieldMeasurementResults]="fieldMeasurementResults">
           </app-field-measurement-table>
         </div>

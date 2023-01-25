@@ -12,6 +12,8 @@ export class FieldMeasurementFormComponent implements OnInit {
   data: FieldMeasurementInputs;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<FieldMeasurementInputs>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
   form: UntypedFormGroup;
 
@@ -28,7 +30,10 @@ export class FieldMeasurementFormComponent implements OnInit {
       this.form = this.percentLoadEstimationService.getFieldMeasurementFormFromObj(this.data);
     }
   }
-
+  
+  focusField(str: string) {
+    this.emitChangeField.emit(str);
+  }
 
   calculate() {
     this.data = this.percentLoadEstimationService.getFieldMeasurementObjFromForm(this.form);
