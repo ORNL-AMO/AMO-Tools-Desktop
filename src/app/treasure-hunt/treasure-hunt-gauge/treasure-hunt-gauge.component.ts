@@ -61,6 +61,7 @@ export class TreasureHuntGaugeComponent implements OnInit {
         type: gauge(),
       },
       gauge: {
+        background: '#DEE2E6',
         label: {
           extents: function() { return ""; }
         }
