@@ -114,6 +114,7 @@ export class MoveItemsComponent implements OnInit {
       let updatedAssessments: Assessment[] = [];
       for (let i = 0; i < this.directory.assessments.length; i++) {
         if (this.directory.assessments[i].selected) {
+          this.directoryDbService.setIsMovedExample(this.directory.assessments[i], this.moveForm);
           this.directory.assessments[i].directoryId = this.moveForm.controls.directoryId.value;
           updatedAssessments = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.directory.assessments[i]));
         }
@@ -146,8 +147,9 @@ export class MoveItemsComponent implements OnInit {
       let updatedInventoryItems: InventoryItem[];
       if (this.directory.inventories.length > 0) {
         for (let i = 0; i < this.directory.inventories.length; i++) {
-          let inventory: InventoryItem = this.directory.inventories[i];
+          let inventory: InventoryItem = this.directory.inventories[i];          
           if (inventory.selected) {
+            this.directoryDbService.setIsMovedExample(inventory, this.moveForm);
             inventory.directoryId = this.moveForm.controls.directoryId.value;
             updatedInventoryItems = await firstValueFrom(this.inventoryDbService.updateWithObservable(inventory));
             inventory.selected = false;

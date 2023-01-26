@@ -7,6 +7,9 @@ import { InventoryDbService } from './inventory-db.service';
 import { firstValueFrom, Observable } from 'rxjs';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { DirectoryStoreMeta } from './dbConfig';
+import { Assessment } from '../shared/models/assessment';
+import { InventoryItem } from '../shared/models/inventory/inventory';
+import { FormGroup } from '@angular/forms';
 @Injectable()
 export class DirectoryDbService {
 
@@ -28,6 +31,15 @@ export class DirectoryDbService {
     } else {
       this.allDirectories = await firstValueFrom(this.getAllDirectories());
     }
+  }
+
+  setIsMovedExample(item: Assessment | InventoryItem, form: FormGroup) {
+    let exampleDirectory: Directory = this.getExample();
+    if (exampleDirectory 
+      && exampleDirectory.id === item.directoryId
+      && item.directoryId !== form.controls.directoryId.value) {
+        item.isExample = false;
+      }
   }
 
   getAllDirectories(): Observable<Array<Directory>> {

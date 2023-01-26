@@ -177,13 +177,13 @@ export class ResetDataModalComponent implements OnInit {
     }
   }
 
-getAssessmentsAndDataIds(deleteExamples: boolean = false): DirectoryDataIds {
+getAssessmentsAndDataIds(deleteExamples: boolean = false, dirId?: number): DirectoryDataIds {
   let assessmentsIds: Array<number> = [];
   let settingsIds: Array<number> = [];
   let calculatorIds: Array<number> = [];
   for (let index: number = 0; index < this.assessmentDbService.allAssessments.length; index++) {
     let assessment: Assessment = this.assessmentDbService.allAssessments[index];
-    if (deleteExamples && assessment.isExample) {
+    if (deleteExamples && assessment.isExample && dirId === assessment.directoryId) {
       assessmentsIds.push(assessment.id);
       settingsIds.push(this.settingsDbService.allSettings.find(settings => { return settings.assessmentId == assessment.id }).id);
       let assessmentCalculator = this.calculatorDbService.allCalculators.find(calculator => { return calculator.assessmentId == assessment.id });
@@ -208,16 +208,19 @@ getAssessmentsAndDataIds(deleteExamples: boolean = false): DirectoryDataIds {
 
 async resetAllExampleAssessments(dirId: number) {
   // Delete all
-  let directoryDataIds: DirectoryDataIds = this.getAssessmentsAndDataIds(true);
-  let updatedInventoryItems: Array<InventoryItem> = await firstValueFrom(this.inventoryDbService.getAllInventory());
-  this.inventoryDbService.setAll(updatedInventoryItems);
-  let exampleInventoryId: number = this.inventoryDbService.allInventoryItems.find(item => { return item.isExample}).id;
+  let directoryDataIds: DirectoryDataIds = this.getAssessmentsAndDataIds(true, dirId);
   let allAssessments: Array<Assessment[]> = await firstValueFrom(this.assessmentDbService.bulkDeleteWithObservable(directoryDataIds.assessments));
   let allSettings: Array<Settings[]> = await firstValueFrom(this.settingsDbService.bulkDeleteWithObservable(directoryDataIds.settings));
   let allCalculators: Array<Calculator[]> = await firstValueFrom(this.calculatorDbService.bulkDeleteWithObservable(directoryDataIds.calculators));
-  let allInventoryItems: Array<InventoryItem> = await firstValueFrom(this.inventoryDbService.deleteByIdWithObservable(exampleInventoryId));
+  
+  let updatedInventoryItems: Array<InventoryItem> = await firstValueFrom(this.inventoryDbService.getAllInventory());
+  this.inventoryDbService.setAll(updatedInventoryItems);
+  let exampleInventory: InventoryItem = this.inventoryDbService.allInventoryItems.find(item => { return item.isExample && item.directoryId === dirId});
+  if (exampleInventory) {
+    let allInventoryItems: Array<InventoryItem> = await firstValueFrom(this.inventoryDbService.deleteByIdWithObservable(exampleInventory.id));
+    this.inventoryDbService.setAll(allInventoryItems);
+  }
   this.assessmentDbService.setAll(allAssessments[0]);
-  this.inventoryDbService.setAll(allInventoryItems);
   this.settingsDbService.setAll(allSettings[0]);
   this.calculatorDbService.setAll(allCalculators[0]);
 
