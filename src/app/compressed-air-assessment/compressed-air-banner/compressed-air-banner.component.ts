@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { CompressedAirAssessment, Modification } from '../../shared/models/compressed-air-assessment';
+import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
 @Component({
@@ -23,7 +24,7 @@ export class CompressedAirBannerComponent implements OnInit {
   secondaryAssessmentTabSub: Subscription;
   secondaryAssessmentTab: string;
   compresssedAirAssessmentSub: Subscription;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit(): void {
     this.mainTabSub = this.compressedAirAssessmentService.mainTab.subscribe(val => {
@@ -58,6 +59,11 @@ export class CompressedAirBannerComponent implements OnInit {
     this.assessmentTabSub.unsubscribe();
     this.secondaryAssessmentTabSub.unsubscribe();
     this.compresssedAirAssessmentSub.unsubscribe();
+  }
+
+  showSecurityAndPrivacyModal() {
+    this.securityAndPrivacyService.modalOpen.next(true);
+    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
   }
 
   changeTab(str: string) {

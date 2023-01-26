@@ -111,6 +111,7 @@ import { AltitudeCorrectionComponent } from '../calculator/utilities/altitude-co
 import { FeedwaterEconomizerComponent } from '../calculator/steam/feedwater-economizer/feedwater-economizer.component';
 import { CondensingEconomizerComponent } from '../calculator/steam/condensing-economizer/condensing-economizer.component';
 import { BleedTestComponent } from '../calculator/compressed-air/bleed-test/bleed-test.component';
+import { DisclaimerComponent } from '../dashboard/disclaimer/disclaimer.component';
 
 export const coreRoutes: Routes = [
   {
@@ -137,6 +138,10 @@ export const coreRoutes: Routes = [
       {
         component: AboutPageComponent,
         path: 'about'
+      },
+      {
+        component: DisclaimerComponent,
+        path: 'privacy'
       },
       {
         component: ContactPageComponent,
