@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { FieldMeasurementInputs, SlipMethod, FieldMeasurementOutputs, PercentLoadEstimationService } from './percent-load-estimation.service';
+import { FieldMeasurementInputs, FieldMeasurementOutputs, PercentLoadEstimationService } from './percent-load-estimation.service';
 
 @Component({
   selector: 'app-percent-load-estimation',
@@ -29,8 +29,6 @@ export class PercentLoadEstimationComponent implements OnInit {
   tabSelect: string = 'results';
   percentLoadEstimation: number;
   currentField: string;
-
-  slipMethodData: SlipMethod;
 
   fieldMeasurementData: FieldMeasurementInputs;
   fieldMeasurementResults: FieldMeasurementOutputs;
@@ -68,12 +66,6 @@ export class PercentLoadEstimationComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
-  }
-
-  calculateSlipMethod(data: SlipMethod) {
-    this.slipMethodData = data;
-    this.percentLoadEstimationService.slipMethodInputs = this.slipMethodData;
-    this.percentLoadEstimation = this.percentLoadEstimationService.calculateSlipMethod(data);
   }
 
   calculateFieldMeasurementMethod(data: FieldMeasurementInputs) {
