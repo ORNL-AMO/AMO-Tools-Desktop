@@ -455,3 +455,7 @@ a:not([href]):not([tabindex]).disabled-link:hover {
 .bb-chart-arcs-background {
     fill: white;
   }
+
+.treasure-hunt .bb-chart-arcs-background {
+    fill: #ABB2B9;
+  }
