@@ -21,19 +21,7 @@
     <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
       <div class="d-flex flex-column m-4">
-        <!-- <form>
-          <div class="form-group">
-            <label>Load Estimation Method</label>
-            <select name="loadEstimationMethod" class="form-control" [(ngModel)]="loadEstimationMethod">
-              <option [ngValue]="0">Slip Method</option>
-              <option [ngValue]="1">Field Measurement Method</option>
-            </select>
-          </div>
-        </form> -->
         <div class="form-section">
-          <!-- <app-slip-method-form *ngIf="loadEstimationMethod == 0" [data]="slipMethodData"
-            [toggleResetData]="toggleResetData" [toggleExampleData]="toggleExampleData"
-            (emitCalculate)="calculateSlipMethod($event)"></app-slip-method-form> -->
           <app-field-measurement-form [(data)]="fieldMeasurementData" (emitChangeField)="changeField($event)"
             (emitCalculate)="calculateFieldMeasurementMethod($event)"></app-field-measurement-form>
         </div>
@@ -41,7 +29,6 @@
           <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
             Reset Data
           </button>
-          <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
           <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
             Generate Example
           </button>

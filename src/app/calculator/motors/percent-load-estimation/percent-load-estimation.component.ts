@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FieldMeasurementInputs, SlipMethod, FieldMeasurementOutputs, PercentLoadEstimationService } from './percent-load-estimation.service';
-import { MotorItem } from '../../../motor-inventory/motor-inventory';
 
 @Component({
   selector: 'app-percent-load-estimation',
@@ -28,10 +27,6 @@ export class PercentLoadEstimationComponent implements OnInit {
   containerHeight: number;
   headerHeight: number;
   tabSelect: string = 'results';
-  toggleCalculate = false;
-  toggleResetData = false;
-  toggleExampleData = false;
-  loadEstimationMethod: number;
   percentLoadEstimation: number;
   currentField: string;
 
@@ -51,10 +46,7 @@ export class PercentLoadEstimationComponent implements OnInit {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
     this.fieldMeasurementData = this.percentLoadEstimationService.fieldMeasurementInputs;
-    //this.slipMethodData = this.percentLoadEstimationService.slipMethodInputs;
-    //this.loadEstimationMethod = this.percentLoadEstimationService.loadEstimationMethod;
     this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
-    //this.calculateSlipMethod(this.slipMethodData);
   }
 
   ngAfterViewInit() {
@@ -63,9 +55,6 @@ export class PercentLoadEstimationComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy() {
-    //this.percentLoadEstimationService.loadEstimationMethod = this.loadEstimationMethod;
-  }
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
@@ -99,22 +88,13 @@ export class PercentLoadEstimationComponent implements OnInit {
   }
 
   btnResetData() {
-    //this.slipMethodData = this.percentLoadEstimationService.initSlipMethodInputs();
     this.fieldMeasurementData = this.percentLoadEstimationService.initFieldMeasurementInputs();
     this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
-    //this.calculateSlipMethod(this.slipMethodData);
-    //this.toggleResetData = !this.toggleResetData;
   }
 
   btnGenerateExample() {
     this.fieldMeasurementData = this.percentLoadEstimationService.generateFieldMeasurementInputsExample();
-    //this.slipMethodData = this.percentLoadEstimationService.generateSlipMethodInputsExample();
-    // if (this.loadEstimationMethod == 0) {
-    //   this.calculateSlipMethod(this.slipMethodData);
-    // } else {
-    // }
     this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
-    //this.toggleExampleData = !this.toggleExampleData;
   }
 
   setSmallScreenTab(selectedTab: string) {
