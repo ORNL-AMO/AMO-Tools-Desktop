@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { WasteWaterData } from '../../shared/models/waste-water';
+import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { WasteWaterService } from '../waste-water.service';
 
 @Component({
@@ -12,9 +13,6 @@ import { WasteWaterService } from '../waste-water.service';
 export class WasteWaterBannerComponent implements OnInit {
   @Input()
   assessment: Assessment;
-
-
-
   mainTab: string;
   mainTabSub: Subscription;
   wasteWaterSub: Subscription;
@@ -23,7 +21,8 @@ export class WasteWaterBannerComponent implements OnInit {
   isBaselineValid: boolean;
   selectedModificationIdSub: Subscription;
   selectedModification: WasteWaterData;
-  constructor(private wasteWaterService: WasteWaterService) { }
+  
+  constructor(private wasteWaterService: WasteWaterService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit(): void {
     this.wasteWaterSub = this.wasteWaterService.wasteWater.subscribe(val => {
@@ -52,6 +51,10 @@ export class WasteWaterBannerComponent implements OnInit {
     this.selectedModificationIdSub.unsubscribe();
   }
 
+  showSecurityAndPrivacyModal() {
+    this.securityAndPrivacyService.modalOpen.next(true);
+    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+  }
 
   changeTab(str: string) {
     if (str == 'system-setup' || this.isBaselineValid) {

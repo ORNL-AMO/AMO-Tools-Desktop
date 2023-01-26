@@ -1,0 +1,21 @@
+<div bsModal #noticeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="noticeModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header p-2">
+                    <span class="card-header-text">
+                        Privacy Notice
+                    </span>
+                    <button class="close" aria-label="Close" (click)="close()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                    <app-security-and-privacy class="p-4"></app-security-and-privacy>
+                <div class="modal-footer p-2">
+                    <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="close()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

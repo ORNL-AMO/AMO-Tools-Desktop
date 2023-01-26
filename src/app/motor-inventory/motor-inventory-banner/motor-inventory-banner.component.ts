@@ -4,6 +4,7 @@ import { MotorInventoryService } from '../motor-inventory.service';
 import { MotorCatalogService } from '../motor-inventory-setup/motor-catalog/motor-catalog.service';
 import { MotorInventoryData } from '../motor-inventory';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
+import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 
 @Component({
   selector: 'app-motor-inventory-banner',
@@ -24,7 +25,7 @@ export class MotorInventoryBannerComponent implements OnInit {
   motorInventoryDataSub: Subscription;
   selectedDepartmentId: string;
   selectedDepartmentIdSub: Subscription;
-  constructor(private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService) { }
+  constructor(private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService, private securityAndPrivacyService: SecurityAndPrivacyService ) { }
 
   ngOnInit(): void {
     this.mainTabSub = this.motorInventoryService.mainTab.subscribe(val => {
@@ -46,6 +47,11 @@ export class MotorInventoryBannerComponent implements OnInit {
     this.summaryTabSub = this.motorInventoryService.summaryTab.subscribe(val => {
       this.summaryTab = val;
     });
+  }
+
+  showSecurityAndPrivacyModal() {
+    this.securityAndPrivacyService.modalOpen.next(true);
+    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
   }
 
   ngOnDestroy() {
