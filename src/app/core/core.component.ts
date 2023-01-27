@@ -19,13 +19,6 @@ declare var google: any;
   templateUrl: './core.component.html',
   styleUrls: ['./core.component.css'],
   animations: [
-    trigger('survey', [
-      state('show', style({
-        bottom: '20px'
-      })),
-      transition('hide => show', animate('.5s ease-in')),
-      transition('show => hide', animate('.5s ease-out'))
-    ]),
     trigger('translate', [
       state('show', style({
         top: '40px'
@@ -37,7 +30,8 @@ declare var google: any;
 })
 
 export class CoreComponent implements OnInit {
-  showUpdateModal: boolean;
+  showUpdateToast: boolean;
+  showBrowsingDataToast: boolean;
   hideTutorial: boolean = true;
   openingTutorialSub: Subscription;
   idbStarted: boolean = false;
@@ -68,9 +62,12 @@ export class CoreComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!window.navigator.cookieEnabled) {
+      this.showBrowsingDataToast = true;
+    }
     this.electronService.ipcRenderer.once('available', (event, arg) => {
       if (arg === true) {
-        this.showUpdateModal = true;
+        this.showUpdateToast = true;
         this.assessmentService.updateAvailable.next(true);
         this.changeDetectorRef.detectChanges();
       }
@@ -106,7 +103,7 @@ export class CoreComponent implements OnInit {
 
     this.updateAvailableSubscription = this.assessmentService.updateAvailable.subscribe(val => {
       if (val == true) {
-        this.showUpdateModal = true;
+        this.showUpdateToast = true;
         this.changeDetectorRef.detectChanges();
       }
     });
@@ -174,7 +171,12 @@ export class CoreComponent implements OnInit {
   }
 
   hideUpdateToast() {
-    this.showUpdateModal = false;
+    this.showUpdateToast = false;
+    this.changeDetectorRef.detectChanges();
+  }
+
+  hideBrowsingDataToast() {
+    this.showBrowsingDataToast = false;
     this.changeDetectorRef.detectChanges();
   }
 

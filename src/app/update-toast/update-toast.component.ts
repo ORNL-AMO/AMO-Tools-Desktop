@@ -29,7 +29,7 @@ export class UpdateToastComponent implements OnInit {
 
   error: any;
 
-  showToast: string = 'hide';
+  showUpdateToast: string = 'hide';
   showReleaseNotesCard: string = 'hide';
   destroyToast: boolean = false;
   destroyReleaseNotesCard: boolean = false;
@@ -57,12 +57,12 @@ export class UpdateToastComponent implements OnInit {
   }
 
   ngAfterViewInit(){
-    this.showToast = 'show';
+    this.showUpdateToast = 'show';
     this.cd.detectChanges();
   }
 
   closeToast() {
-    this.showToast = 'hide';
+    this.showUpdateToast = 'hide';
     this.cd.detectChanges();
     setTimeout(() => {
       this.destroyToast = true;

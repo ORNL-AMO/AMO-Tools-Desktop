@@ -1,0 +1,46 @@
+.toasty-card{
+    position: fixed;
+    z-index: 8000;
+    right: 15px;
+    top: -100%;
+  }
+
+  .update-toast{
+    min-width: 300px;
+    max-width: 500px;
+  }
+
+  .toast-text {
+    font-size: 14px;
+  }
+
+  .close{
+      padding-left: 1rem;
+      color: white;
+    }
+
+    a.click-link.danger{
+        color: red;
+    }
+
+    a.click-link{
+        font-size: small;
+    }
+
+    .card-body{
+        padding: .25rem;
+    }
+
+    .card-header{
+        background-color: #145A32;
+        color: white;
+        padding: 6px;
+    }
+
+    h1{
+        font-size: 1.5rem !important;
+    }
+
+    p{
+        margin-bottom: .25rem;
+    }
