@@ -106,7 +106,7 @@
                     {{summary.compressorId|compressorName:inventoryItems}}
                 </td>
                 <td class="text-center">
-                    {{summary.adjustedIsentropicEfficiency | number}} %
+                    {{summary.adjustedIsentropicEfficiency | number:'1.0-1'}} %
                 </td>
                 <td class="input-cell"
                     *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">
