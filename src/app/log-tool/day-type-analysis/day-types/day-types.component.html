@@ -1,14 +1,17 @@
-<div class="card-header p-2">
-    Day Types:
+<div class="card-header p-2 d-flex flex-wrap">
+    <span class="mx-1">Day Types:</span>
     <!--Day Types-->
     <span *ngFor="let dayType of dayTypes" [ngStyle]="{'background-color': dayType.color}"
-        class="badge badge-pill secondary-day-type" (click)="removeDayType(dayType)"><span class="fa fa-close"
-            *ngIf="dayType.label != 'Excluded'"></span>
+        class="badge badge-pill secondary-day-type py-1 px-2" (click)="removeDayType(dayType)">
+        <span class="fa fa-close" *ngIf="dayType.label != 'Excluded'"></span>
         {{dayType.label}}</span>
     <!--reset-->
-    <a class="click-link pull-right pl-2 border-left danger" (click)="resetDayTypes()" *ngIf="addNewDayType == false">Reset</a>
-    <!--add new-->
-    <a class="click-link pull-right pr-2" (click)="showAddNewDayType()" *ngIf="addNewDayType == false">+Add New</a>
+    <span class="ml-3">
+
+        <a class="click-link pull-right pl-2 border-left danger" (click)="resetDayTypes()" *ngIf="addNewDayType == false">Reset</a>
+        <!--add new-->
+        <a class="click-link pull-right pr-2" (click)="showAddNewDayType()" *ngIf="addNewDayType == false">+Add New</a>
+    </span>
 </div>
 
 <!--add new Day Type-->

@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { SsmtService } from '../ssmt.service';
 import { Subscription } from 'rxjs';
+import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 
 @Component({
   selector: 'app-ssmt-banner',
@@ -14,7 +15,8 @@ export class SsmtBannerComponent implements OnInit {
 
   mainTab: string;
   mainTabSub: Subscription;
-  constructor(private ssmtService: SsmtService) { }
+  
+  constructor(private ssmtService: SsmtService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit() {
     this.mainTabSub = this.ssmtService.mainTab.subscribe(val => {
@@ -24,6 +26,11 @@ export class SsmtBannerComponent implements OnInit {
 
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
+  }
+
+  showSecurityAndPrivacyModal() {
+    this.securityAndPrivacyService.modalOpen.next(true);
+    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
   }
 
   changeTab(str: string) {

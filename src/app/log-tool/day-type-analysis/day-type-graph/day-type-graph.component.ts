@@ -2,9 +2,10 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DayTypeGraphService } from './day-type-graph.service';
 import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import { Subscription } from 'rxjs';
-import { DayTypeGraphItem, LogToolField } from '../../log-tool-models';
+import { DayTypeGraphItem, GraphObj, LogToolField } from '../../log-tool-models';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PlotlyService } from 'angular-plotly.js';
+import { LogToolDataService } from '../../log-tool-data.service';
 @Component({
   selector: 'app-day-type-graph',
   templateUrl: './day-type-graph.component.html',
@@ -15,31 +16,17 @@ export class DayTypeGraphComponent implements OnInit {
   @ViewChild("dayTypeGraph", { static: false }) dayTypeGraph: ElementRef;
 
 
-  graph = {
-    data: [],
-    layout: {
-      title: undefined,
-      hovermode: "closest",
-      xaxis: {
-        title: {
-          text: 'x axis'
-        },
-        range: [1, 24]
-      },
-      yaxis: {
-        title: {
-          text: 'y axis'
-        }
-      }
-    }
-  };
+  graph;
   dayTypeScatterPlotDataSub: Subscription;
   dayTypeScatterPlotData: Array<DayTypeGraphItem>;
   selectedGraphTypeSub: Subscription;
   selectedGraphType: string;
   individualDayScatterPlotDataSub: Subscription;
   individualDayScatterPlotData: Array<DayTypeGraphItem>;
-  constructor(private dayTypeGraphService: DayTypeGraphService, private dayTypeAnalysisService: DayTypeAnalysisService, private convertUnitsService: ConvertUnitsService,
+  constructor(private dayTypeGraphService: DayTypeGraphService, 
+    private dayTypeAnalysisService: DayTypeAnalysisService, 
+    private convertUnitsService: ConvertUnitsService,
+    private logToolDataService: LogToolDataService,
     private plotlyService: PlotlyService) { }
 
   ngOnInit() {
@@ -74,15 +61,17 @@ export class DayTypeGraphComponent implements OnInit {
   }
 
   setGraphData() {
-    this.graph.data = new Array();
+    this.graph = this.getDefaultGraph()
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
-    let labelStr: string = selectedDataField.alias;
+    let labelStr: string = this.dayTypeAnalysisService.truncate(selectedDataField.alias, 50);
     if (selectedDataField.unit) {
       let displayUnit: string = this.getUnitDisplay(selectedDataField.unit);
       labelStr = labelStr + ' ' + displayUnit;
     }
-    this.graph.layout.title = 'Hourly ' + labelStr + ' Data';
-    this.graph.layout.xaxis.title.text = 'Hour of day';
+    let intervalTitle: string = this.logToolDataService.selectedDayTypeAverageInterval.display;
+    this.graph.layout.title = `${labelStr} (${intervalTitle} Data Average)`
+    this.graph.layout.xaxis.title.text  = `${intervalTitle}`;
+
     this.graph.layout.yaxis.title.text = labelStr;
     let graphData: Array<DayTypeGraphItem> = this.getGraphData();
     graphData.forEach(entry => {
@@ -105,5 +94,60 @@ export class DayTypeGraphComponent implements OnInit {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
     }
+  }
+
+  getDefaultGraph() {
+    return {
+      data: [],
+      layout: {
+        hovermode: "closest",
+        title: {
+          text: undefined,
+          font: {
+            size: 22
+          }
+        },
+        annotations: [],
+        xaxis: {
+          autorange: true,
+          type: undefined,
+          // spikemode: 'across',
+          title: {
+            text: 'X Axis'
+          },
+          side: undefined,
+          tickangle: '45',
+          overlaying: undefined,
+          titlefont: {
+            color: undefined
+          },
+          tickfont: {
+            color: undefined
+          }
+        },
+        yaxis: {
+          autorange: true,
+          type: undefined,
+          // spikemode: 'across',
+          title: {
+            text: 'Y Axis'
+          },
+          side: undefined,
+          overlaying: undefined,
+          titlefont: {
+            color: undefined
+          },
+          tickfont: {
+            color: undefined
+          }
+        },
+        margin: {
+          t: 50,
+          b: 50,
+          l: 50,
+          r: 50,
+        }
+      }
+    };
   }
 }

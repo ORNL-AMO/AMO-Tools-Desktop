@@ -17,7 +17,20 @@ export class MapTimeDataComponent implements OnInit {
   selectedDataSetIndex: number = 0;
   changeStepSub: Subscription;
   applyToAll: boolean = false;
-  secondsIntervalOptions: Array<number> = [ undefined, 1, 2, 3, 4, 5, 15, 20, 30 ];
+  dataCollectionIntervalOptions: Array<{display: string, value: number}> = [ 
+    {display: '1 seconds', value: 1}, 
+    {display: '2 seconds', value: 2}, 
+    {display: '3 seconds', value: 3}, 
+    {display: '4 seconds', value: 4}, 
+    {display: '5 seconds', value: 5}, 
+    {display: '15 seconds', value: 15}, 
+    {display: '20 seconds', value: 20}, 
+    {display: '30 seconds', value: 30}, 
+    {display: '15 minute', value: 900}, 
+    {display: '30 minute', value: 1800}, 
+    {display: 'Hourly', value: 3600},
+    {display: '24 Hour', value: 86400}, 
+  ];
 
   toolTipHoldTimeout;
   showTooltipHover: boolean = false;
@@ -68,6 +81,10 @@ export class MapTimeDataComponent implements OnInit {
         }
       } else {
         this.setSelectedDataSet(changeStepIndex);
+        if (this.selectedDataSetIndex === this.explorerData.datasets.length - 1) {
+          this.explorerData.isLastTab = true;
+          this.logToolDataService.explorerData.next(this.explorerData);
+        }
         this.cd.detectChanges();
       }
   }
@@ -78,6 +95,7 @@ export class MapTimeDataComponent implements OnInit {
     this.explorerData.datasets[index].mapTimeDataTabVisited = true;
     this.explorerData.isStepMapTimeDataComplete = this.logToolDataService.checkStepMapDatesComplete(this.explorerData.datasets);
     if (this.explorerData.isStepMapTimeDataComplete) {
+      this.explorerData.isLastTab = this.selectedDataSetIndex === this.explorerData.datasets.length - 1;
       this.logToolDataService.explorerData.next(this.explorerData);
     }
   }
@@ -122,7 +140,7 @@ export class MapTimeDataComponent implements OnInit {
     dataSet.dateField = dataSet.fields.find(field => field.fieldName === selectedDataSetDateFieldName);
     dataSet.fields.map(field => field.isDateField = selectedDataSetDateFieldName === field.fieldName);
     dataSet.hasDateField = dataSet.dateField != undefined;
-    dataSet.intervalForSeconds = this.selectedDataSet.intervalForSeconds;
+    dataSet.dataCollectionInterval = this.selectedDataSet.dataCollectionInterval;
     return dataSet;
   }
 
@@ -152,7 +170,7 @@ export class MapTimeDataComponent implements OnInit {
     if (dataSet.dateField) {
       dataSet.hasDateField = true;
     } else {
-      dataSet.intervalForSeconds = undefined;
+      dataSet.dataCollectionInterval = undefined;
       dataSet.hasDateField = false;
     }
     return dataSet;
@@ -195,7 +213,7 @@ toggleClickTooltip(){
   this.showTooltipClick = !this.showTooltipClick;
 }
 
-  setSecondsInterval() {
+setDataCollectionInterval() {
     this.updateExplorerData();
   }
 

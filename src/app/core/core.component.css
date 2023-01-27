@@ -33,3 +33,7 @@
   left: 35%;
   width: 400px;
 }
+
+.modal-open {
+  z-index: initial !important;
+}

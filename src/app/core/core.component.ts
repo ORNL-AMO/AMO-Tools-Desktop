@@ -14,6 +14,7 @@ import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { AnalyticsService, AppAnalyticsData } from '../shared/analytics/analytics.service';
 import { v4 as uuidv4 } from 'uuid';
 import { AnalyticsDataIdbService } from '../indexedDb/analytics-data-idb.service';
+import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 
 declare var google: any;
 @Component({
@@ -53,6 +54,11 @@ export class CoreComponent implements OnInit {
   routerSubscription: Subscription;
   showTranslate: string = 'hide';
   analyticsSessionId: string;
+  modalOpenSub: Subscription;
+  showSecurityAndPrivacyModalSub: Subscription;
+  isModalOpen: boolean;
+  showSecurityAndPrivacyModal: boolean;
+
 
   constructor(private electronService: ElectronService, 
     private assessmentService: AssessmentService, 
@@ -66,6 +72,7 @@ export class CoreComponent implements OnInit {
     private coreService: CoreService, 
     private router: Router,
     private analyticsDataIdbService: AnalyticsDataIdbService,
+    private securityAndPrivacyService: SecurityAndPrivacyService,
     private inventoryDbService: InventoryDbService) {
   }
 
@@ -130,6 +137,14 @@ export class CoreComponent implements OnInit {
       }
     })
 
+    this.modalOpenSub = this.securityAndPrivacyService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    });
+
+    this.showSecurityAndPrivacyModalSub = this.securityAndPrivacyService.showSecurityAndPrivacyModal.subscribe(showSecurityAndPrivacyModal => {
+      this.showSecurityAndPrivacyModal = showSecurityAndPrivacyModal;
+    });
+
   }
 
  async initAnalyticsSession() {
@@ -170,6 +185,8 @@ export class CoreComponent implements OnInit {
     this.routerSubscription.unsubscribe();
     this.updateAvailableSubscription.unsubscribe();
     this.showTranslateModalSub.unsubscribe();
+    this.showSecurityAndPrivacyModalSub.unsubscribe();
+    this.modalOpenSub.unsubscribe();
   }
 
   async initData() {
@@ -214,6 +231,11 @@ export class CoreComponent implements OnInit {
 
   closeTranslate() {
     this.showTranslate = 'hide';
+  }
+
+  closeNoticeModal(isClosedEvent?: boolean) {
+    this.securityAndPrivacyService.modalOpen.next(false)
+    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(false);
   }
 
 }

@@ -45,6 +45,7 @@ import { RefineDataComponent } from './data-setup/refine-data/refine-data.compon
 import { SelectDataHeaderComponent } from './data-setup/select-data-header/select-data-header.component';
 import { MapTimeDataComponent } from './data-setup/map-time-data/map-time-data.component';
 import { UserMessageOverlayModule } from '../shared/user-message-overlay/user-message-overlay.module';
+import { DateFormatHelpModule } from '../shared/date-format-help/date-format-help.module';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import { UserMessageOverlayModule } from '../shared/user-message-overlay/user-me
     ModalModule,
     ExportableResultsTableModule,
     UserMessageOverlayModule,
-    SharedPipesModule
+    SharedPipesModule,
+    DateFormatHelpModule
   ],
   providers: [
     LogToolService,

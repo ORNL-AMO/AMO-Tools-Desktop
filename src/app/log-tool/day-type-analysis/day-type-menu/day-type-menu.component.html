@@ -1,10 +1,24 @@
 <div class="navbar assessment-bar">
-    <div class="d-flex tabs subtabs log-tool mr-auto">
+    <div class="d-flex tabs subtabs log-tool mr-3">
         <div class="assessment-tab" [ngClass]="{'active': dataView == 'graph'}">
             <a (click)="changeDataView('graph')">Graph</a>
         </div>
         <div class="assessment-tab" [ngClass]="{'active': dataView == 'dataTable'}">
             <a (click)="changeDataView('dataTable')">Data Table</a>
+        </div>
+    </div>
+
+    <div class="nav-item dropdown pull-left pr-2 mr-auto">
+        <a class="nav-link dropdown-toggle" (click)="toggleSelectedDataFieldDropdown()"
+        [ngClass]="{'disabled': dataView != 'graph' && dataDisplayType != 'selected'}">
+            Data: {{selectedDataField.alias}}
+    </a>
+        <div class="dropdown-menu p-0" [ngClass]="{'show': selectedDataFieldDropdown == true}">
+            <div class="list-group">
+                <a *ngFor="let dataField of dataFieldOptions" class="list-group-item list-group-item-action"
+                    (click)="setSelectedDataField(dataField)"
+                    [ngClass]="{'active': dataField.fieldId == selectedDataField.fieldId}">{{dataField.alias}}</a>
+            </div>
         </div>
     </div>
 
@@ -17,27 +31,15 @@
         </div>
     </div>
 
-    <div class="nav-item pr-2" *ngIf="dataView == 'graph' || dataDisplayType == 'All'">
+    <div class="nav-item pr-2">
         <div class="btn-group">
             <button class="btn" (click)="setSelectedGraphType('dayType')"
-                [ngClass]="{'active': selectedGraphType == 'dayType'}">Day Types</button>
+                [ngClass]="{'active': selectedGraphType == 'dayType', 'disabled': dataView != 'graph' && dataDisplayType != 'selected'}">Day Types</button>
             <button class="btn" (click)="setSelectedGraphType('individualDay')"
-                [ngClass]="{'active': selectedGraphType == 'individualDay'}">Days</button>
+                [ngClass]="{'active': selectedGraphType == 'individualDay', 'disabled': dataView != 'graph' && dataDisplayType != 'selected'}">Days</button>
         </div>
     </div>
 
-    <div class="nav-item dropdown pr-2" *ngIf="dataView == 'graph' || dataDisplayType == 'selected'">
-        <a class="nav-link dropdown-toggle" (click)="toggleSelectedDataFieldDropdown()">
-            Selected Data: {{selectedDataField.alias}}
-        </a>
-        <div class="dropdown-menu p-0" [ngClass]="{'show': selectedDataFieldDropdown == true}">
-            <div class="list-group">
-                <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
-                    (click)="setSelectedDataField(dataField)"
-                    [ngClass]="{'active': dataField.fieldName == selectedDataField.fieldName}">{{dataField.alias}}</a>
-            </div>
-        </div>
-    </div>
     <div class="nav-item pr-2">
         <button class="btn active" (click)="applyToAssessment()">Apply To Assessment</button>
     </div>

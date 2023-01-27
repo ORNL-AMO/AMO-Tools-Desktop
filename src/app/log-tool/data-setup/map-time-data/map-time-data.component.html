@@ -3,16 +3,17 @@
         <div class="text-left alert alert-info small my-2 mx-auto p-0">
             <div class="p-1">
                 <ul class="m-2">
-                    <li>Time stamps are required for Day Type analysis.
-                        Advance ahead if you don't require Day Type analysis.
+                    <li>Time stamps are required for Day Type Analysis and some data visualizations.
+                        Advance ahead if you don't be working with time data.
                     </li>
                     <ul class="pl-3">
-                        <li>Mark "Is Date" if the column has both a date and a time</li>
-                        <li>Mark "Is Time" if the column is a time</li>
+                        <li>Mark "Includes Date" if the column contains a date and time <span class="bold">or</span> a date only</li>
+                        <li>Mark "Includes Time Only" if the column contains a time only</li>
                     </ul>
                 </ul>
             </div>
         </div>
+        <app-date-format-help></app-date-format-help>
 
         <div class="py-2 px-0 mx-auto" *ngIf="selectedDataSet">
             <div *ngIf="explorerData.datasets.length > 1" class="d-flex flex-row mb-2">
@@ -40,12 +41,10 @@
                             </td>
                             <td class="bold">Includes Date</td>
                             <td><span class="bold mr-1">Includes Time Only</span>
-                            <span class="ml-3 pull-right">
+                            <span class="ml-3 tooltip-container">
                                 <span class="tooltip-icon fa fa-question-circle" (mouseenter)="displayTooltipHover()" 
                                 (mouseleave)="hideTooltipHover()" (click)="toggleClickTooltip()"></span>
-                            </span>
-                            <span class="detail-tooltip-box" *ngIf="showTooltipHover || showTooltipClick"
-                                (mouseenter)="displayTooltipHover(true)" (mouseleave)="hideTooltipHover()">
+                            <span class="detail-tooltip-box" *ngIf="showTooltipHover || showTooltipClick" (mouseenter)="displayTooltipHover(true)" (mouseleave)="hideTooltipHover()">
                                 <div class="detail-tooltip down"><span class="detail-tooltip-arrow tooltip-arrow-up"></span>
                                     <div class="p-2">
                                         <ul class="pl-2">
@@ -55,23 +54,21 @@
                                              <li>
                                                 <span class="bold">Includes Time Only</span> - Column contains a time only.
                                              </li>
-                                            <li>
-                                               <span class="bold">Example date/time stamp formats</span>
-                                               <ul class="">
-                                                <li>5/1/2022 1:00</li>
-                                                <li>5/1/2022 5:01:00 AM</li>
-                                                <li>5:01:00 AM</li>
-                                               </ul>
-                                            </li>
                                         </ul>
                                     </div>
                                 </div>
                             </span>
+                        </span>
+
                         </td>
                         </tr>
                         <ng-container *ngFor="let field of selectedDataSet.fields; let i = index;">
                             <tr *ngIf="field.useField">
-                                <td>{{field.fieldName}}</td>
+                                <td>
+                                    <span *ngIf="field.alias">{{field.alias}}</span>
+                                    <span *ngIf="!field.alias">{{field.fieldName}}</span>
+
+                                </td>
                                 <td>
                                     <input type="checkbox" id="{{'isDateField'+i}}" [(ngModel)]="field.isDateField"
                                         [disabled]="dataExists == true || (selectedDataSet.hasDateField && !field.isDateField) || field.isTimeField"
@@ -91,18 +88,15 @@
             <div class="d-block">
                 <hr>
             </div>
-            <div *ngIf="!explorerData.isExample" class="form-group my-1">
-                <div class="alert alert-info text-left small">
-                    If your data was taken in LESS than one minute intervals, please specify the time interval below.
-                </div>
+            <div *ngIf="!explorerData.isExample" class="form-group mt-1 mb-3">
                 <div class="mx-2">
-                    <label>Time Interval in Seconds</label>
-                    <select class="form-control" name="intervalForSeconds" 
+                    <label>Data Collection Interval</label>
+                    <select class="form-control" name="dataCollectionInterval" 
                     [disabled]="!selectedDataSet.hasDateField && !selectedDataSet.hasTimeField" 
-                    (change)="setSecondsInterval(option)" 
-                    [(ngModel)]="selectedDataSet.intervalForSeconds">
-                        <option  *ngFor="let option of secondsIntervalOptions" [ngValue]="option">
-                            {{option}}</option>
+                    (change)="setDataCollectionInterval(option)" 
+                    [(ngModel)]="selectedDataSet.dataCollectionInterval">
+                        <option  *ngFor="let option of dataCollectionIntervalOptions" [ngValue]="option.value">
+                            {{option.display}}</option>
                         </select>
                 </div>
             </div>

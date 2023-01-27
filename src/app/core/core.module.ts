@@ -39,6 +39,7 @@ import { CompressedAirAssessmentModule } from '../compressed-air-assessment/comp
 import { PlotlyViaWindowModule } from 'angular-plotly.js';
 import { IndexedDbModule } from '../indexedDb/indexed-db.module';
 import { AnalyticsModule } from '../shared/analytics/analytics.module';
+import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/security-and-privacy.module';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { AnalyticsModule } from '../shared/analytics/analytics.module';
     CompressedAirAssessmentModule,
     PlotlyViaWindowModule,
     IndexedDbModule,
-    AnalyticsModule
+    AnalyticsModule,
+    SecurityAndPrivacyModule
   ],
   providers: [
     AssessmentService,

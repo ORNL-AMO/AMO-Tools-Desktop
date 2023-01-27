@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { Subscription } from 'rxjs';
 import { PsatTabService } from '../psat-tab.service';
+import { PsatService } from '../psat.service';
+import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 
 @Component({
   selector: 'app-psat-banner',
@@ -15,7 +17,7 @@ export class PsatBannerComponent implements OnInit {
   bannerCollapsed: boolean = true;
   mainTab: string;
   mainTabSub: Subscription;
-  constructor(private psatTabService: PsatTabService) { }
+  constructor(private psatTabService: PsatTabService, private psatService: PsatService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit() {
     this.mainTabSub = this.psatTabService.mainTab.subscribe(val => {
@@ -32,6 +34,11 @@ export class PsatBannerComponent implements OnInit {
     window.dispatchEvent(new Event("resize"));
   }
 
+  showSecurityAndPrivacyModal() {
+    this.securityAndPrivacyService.modalOpen.next(true);
+    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+  }
+  
   changeTab(str: string) {
     if (str == 'system-setup' || str == 'calculators') {
       this.psatTabService.mainTab.next(str);

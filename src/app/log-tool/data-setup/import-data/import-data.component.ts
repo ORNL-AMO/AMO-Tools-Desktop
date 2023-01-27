@@ -13,13 +13,13 @@ import { LogToolService } from '../../log-tool.service';
 @Component({
   selector: 'app-import-data',
   templateUrl: './import-data.component.html',
-  styleUrls: ['./import-data.component.css']
+  styleUrls: ['./import-data.component.css'],
 })
 export class ImportDataComponent implements OnInit {
-  displayTimeDetails: boolean;
   invalidFileReferences: Array<InvalidFile> = [];
   explorerData: ExplorerData;
   explorerDataSub: Subscription;
+  showDateFormatHelp: boolean = false;
   @ViewChild('importFileRef', { static: false }) importFileRef: ElementRef;
 
   constructor(
@@ -44,14 +44,17 @@ export class ImportDataComponent implements OnInit {
     this.explorerDataSub.unsubscribe();
   }
 
-  toggleTimeDetails() {
-    this.displayTimeDetails = !this.displayTimeDetails;
-  }
-
   checkResetFileInput() {
     if (!this.explorerData.isStepFileUploadComplete && this.importFileRef) {
       this.importFileRef.nativeElement.value = "";
     }
+  }
+
+  showDateFormatHelpDrawer() {
+    this.showDateFormatHelp = true;
+    setTimeout(() => {
+      this.showDateFormatHelp = false;
+    }, 100);
   }
 
   finishUpload() {

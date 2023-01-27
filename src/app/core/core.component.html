@@ -1,6 +1,6 @@
 <!-- <div #coreContainer> -->
 <app-update-toast *ngIf="showUpdateModal && info" (emitCloseToast)="hideUpdateToast()" [info]="info"></app-update-toast>
-<div *ngIf="idbStarted">
+<div *ngIf="idbStarted" [ngClass]="{'modal-open': isModalOpen == true}" >
     <div *ngIf="!hideTutorial" class="opening-tutorial">
         <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" [idbStarted]="idbStarted" (closeTutorial)="closeTutorial()">
         </app-opening-tutorial>
@@ -30,3 +30,6 @@
         </div>
     </div>
 </div>
+
+<app-security-and-privacy-modal *ngIf="showSecurityAndPrivacyModal === true && isModalOpen === true" 
+(emitModalClosed)="closeNoticeModal($event)"></app-security-and-privacy-modal>

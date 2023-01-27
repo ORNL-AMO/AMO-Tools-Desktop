@@ -7,15 +7,11 @@
     color: white;
 }
 
-.card{
-    box-shadow: 0 4px 8px 0 grey;
-}
-
 .ngb-dp-month-name{
   background-color: white;
 }
 
-ngb-datepicker{
+.ngb-datepicker{
   border-top: none;
   border-bottom: none;
 }

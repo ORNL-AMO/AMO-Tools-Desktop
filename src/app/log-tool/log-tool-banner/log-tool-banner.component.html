@@ -27,6 +27,9 @@
 
     </div>
     <div class="d-flex ml-auto pr-2 h-100">
+        <div class="pl-2 pr-2 border-left border-right home-nav-item" (click)="showSecurityAndPrivacyModal()">
+            <span class="fa fa-lock"></span>
+        </div>
         <div [ngClass]="{'disabled': !explorerData.isSetupDone}" class="pl-2 pr-2 border-left download-nav-item home-nav-item"
             (click)="openExportData()">
             <span class="fa fa-download"></span>

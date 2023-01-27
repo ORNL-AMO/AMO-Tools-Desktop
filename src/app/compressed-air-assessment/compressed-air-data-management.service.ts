@@ -57,7 +57,7 @@ export class CompressedAirDataManagementService {
     selectedCompressor.performancePoints.maxFullFlow.isDefaultPower = true;
     selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure = true;
 
-    
+
     selectedCompressor.performancePoints.midTurndown = {
       isDefaultAirFlow: true,
       airflow: undefined,
@@ -218,12 +218,20 @@ export class CompressedAirDataManagementService {
         }
       }
     });
-    if (recalculateOrdering && !compressedAirAssessment.systemInformation.isSequencerUsed) {
+    //TODO: Recalculate other control types??
+    if (recalculateOrdering && compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'cascading') {
       let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
       })
-    };
+    } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
+      let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+      let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
+      compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingIsentropicEfficiency(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals, compressedAirAssessment.compressorInventoryItems, settings, compressedAirAssessment.systemInformation);
+      })
+
+    }
     //update assessment
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     //update selected compressor

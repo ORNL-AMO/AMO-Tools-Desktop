@@ -5,13 +5,16 @@
 </label>
 <form [formGroup]="form">
     <!-- compressorType -->
-    <div class="form-group" [ngClass]="{'invalid': form.controls.compressorType.invalid}">
+    <div class="form-group" [ngClass]="{'invalid': form.controls.compressorType.invalid || invalidCompressorType}">
         <label for="compressorType">Compressor Type</label>
         <select id="compressorType" name="compressorType" formControlName="compressorType" (change)="save()"
             (focus)="focusField('compressorType')" class="form-control">
             <option *ngFor="let compressorTypeOption of compressorTypeOptions" [ngValue]="compressorTypeOption.value">
                 {{compressorTypeOption.label}}</option>
         </select>
+        <span class="alert-danger pull-right small" *ngIf="invalidCompressorType">
+            Centrifugal control type required for Load Sharing.
+        </span>
     </div>
     <!-- motorPower -->
     <div class="form-group" [ngClass]="{'invalid': form.controls.motorPower.invalid}">
@@ -76,7 +79,7 @@
     <div class="form-group" [ngClass]="{'invalid': form.controls.fullLoadAmps.invalid}">
         <label for="fullLoadAmps">Full Load Amps
             <a class="form-text small click-link" (click)="openFullLoadAmpsModal()">Calculate Full Load Amps
-                </a>
+            </a>
         </label>
         <div class="input-group">
             <input name="fullLoadAmps" type="number" step="any" class="form-control" id="fullLoadAmps"
@@ -114,8 +117,9 @@
 
 
 <div bsModal #fullLoadAmpsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
-  aria-labelledby="fullLoadAmpsModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
-  <div class="modal-dialog modal-lg">
-    <app-fla-modal *ngIf="showFullLoadAmpsModal" [settings]="settings" (closeModal)="closeFullLoadAmpsModal($event)"></app-fla-modal>
-  </div>
+    aria-labelledby="fullLoadAmpsModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
+    <div class="modal-dialog modal-lg">
+        <app-fla-modal *ngIf="showFullLoadAmpsModal" [settings]="settings"
+            (closeModal)="closeFullLoadAmpsModal($event)"></app-fla-modal>
+    </div>
 </div>
