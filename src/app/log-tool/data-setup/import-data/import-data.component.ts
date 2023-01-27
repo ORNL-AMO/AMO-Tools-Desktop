@@ -278,17 +278,21 @@ export class ImportDataComponent implements OnInit {
     this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
     await this.logToolDbService.saveData();
     this.logToolDataService.explorerData.next(this.explorerData);
-    this.runDayTypeAnalysis();
+    this.runDayTypeAnalysis(true);
     this.setExistingDataComplete();
     this.logToolDataService.loadingSpinner.next({show: false, msg: 'Loading Example...'});
   }
 
-  runDayTypeAnalysis() {
+  runDayTypeAnalysis(setDisplayTotalAggregatedId?: boolean) {
     this.dayTypeAnalysisService.resetData();
     this.visualizeService.resetData();
     this.dayTypeGraphService.resetData();
-    let allFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
-    this.dayTypeAnalysisService.selectedDataField.next(allFields[0]);
+    let allFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions(true);
+    let defaultSelectedDataField: LogToolField = allFields[0];
+    if (setDisplayTotalAggregatedId) {
+      defaultSelectedDataField = allFields.find(field => field.fieldId === 'all');
+    }
+    this.dayTypeAnalysisService.selectedDataField.next(defaultSelectedDataField);
     this.logToolDataService.setLogToolDays();
     this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
     this.dayTypeAnalysisService.initDayTypes();

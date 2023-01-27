@@ -233,7 +233,7 @@ export class LogToolDataService {
     firstDate.getDate() === secondDate.getDate();
   }
 
-getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean = false): {intervalDisplayString: string, intervalOffsetString: string} {
+getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean = true): {intervalDisplayString: string, intervalOffsetString: string} {
     let intervalDisplayString: string;
     let intervalOffsetString: string;
     let day: Date = new Date(new Date().setHours(0,0,0,0));
@@ -245,7 +245,7 @@ getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean
         intervalOffsetString = moment(day).add(1, 'hours').format('H');
         if (currentInterval === 23) {
           //is last interval
-          intervalOffsetString = '24';
+          intervalOffsetString = '24:00';
         }
       }
     } else if (this.selectedDayTypeAverageInterval.unitOfTimeString === 'minutes') {
@@ -259,11 +259,10 @@ getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean
         intervalOffsetString = moment(offsetDay).format('H:mm');
         if (!this.checkSameDay(day, offsetDay)) {
           //is last interval
-          intervalOffsetString = '24';
+          intervalOffsetString = '24:00';
         }
       }
     }
-    
     return {intervalDisplayString: intervalDisplayString, intervalOffsetString: intervalOffsetString };
   }
 
@@ -496,6 +495,7 @@ getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean
         fieldName: field,
         alias: field,
         useField: true,
+        useForDayTypeAnalysis: true,
         isDateField: false,
         unit: '',
         invalidField: false,
