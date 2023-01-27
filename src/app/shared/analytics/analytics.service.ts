@@ -31,7 +31,8 @@ export class AnalyticsService {
     }
 
     let url: string = environment.measurUtilitiesApi + 'gamp';
-    this.httpClient.post<any>(url, postBody, this.httpOptions)
+    if (environment.production) {
+      this.httpClient.post<any>(url, postBody, this.httpOptions)
       .pipe(catchError(error => [])).subscribe({
         next: (resp) => {
           // only GA debugging endpoint returns a response
@@ -41,6 +42,7 @@ export class AnalyticsService {
           // for now all errors fail silently
         }
       });
+    }
   }
 
   setClientId(uuid: string) {
