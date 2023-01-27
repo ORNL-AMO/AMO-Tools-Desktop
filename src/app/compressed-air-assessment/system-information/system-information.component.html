@@ -86,15 +86,15 @@
             </span>
         </div>
         <!--Is a target pressure sequencer used?-->
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="isSequencerUsed">Is a target pressure sequencer used?</label>
             <select class="form-control" name="isSequencerUsed" formControlName="isSequencerUsed"
                 (change)="changeIsSequencerUsed()" (focus)="focusField('isSequencerUsed')">
                 <option [ngValue]="true">Yes</option>
                 <option [ngValue]="false">No</option>
             </select>
-        </div>
-        <!--Target Pressure-->
+        </div> -->
+        <!-- Target Pressure
         <div class="form-group" *ngIf="form.controls.isSequencerUsed.value == true"
             [ngClass]="{'invalid': form.controls.targetPressure.invalid}">
             <label for="targetPressure">Target Pressure
@@ -115,9 +115,48 @@
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
                 </span>
             </span>
+        </div> -->
+
+        <!--plantMaxPressure-->
+        <div class="form-group" [ngClass]="{'invalid': form.controls.multiCompressorSystemControls.invalid}">
+            <label for="multiCompressorSystemControls">Multi Compressor System Controls Method
+            </label>
+            <div class="input-group">
+                <select class="form-control" name="multiCompressorSystemControls"
+                    formControlName="multiCompressorSystemControls" (change)="changeCompressorOrderingMethod()"
+                    (focus)="focusField('multiCompressorSystemControls')">
+                    <option [ngValue]="'cascading'">Cascading Pressure</option>
+                    <option [ngValue]="'targetPressureSequencer'">Target Pressure Sequencer</option>
+                    <option [ngValue]="'isentropicEfficiency'">Isentropic Efficiency</option>
+                    <!-- <option [ngValue]="'loadSharing'">Centrifugal Load Sharing</option> -->
+                    <option [ngValue]="'baseTrim'">Base/Trim</option>
+                </select>
+            </div>
         </div>
-        <!--Variance (+/-)-->
-        <div class="form-group" *ngIf="form.controls.isSequencerUsed.value == true"
+        <!-- Target Pressure (targetPressureSequencer)-->
+        <div class="form-group" *ngIf="form.controls.multiCompressorSystemControls.value == 'targetPressureSequencer'"
+            [ngClass]="{'invalid': form.controls.targetPressure.invalid}">
+            <label for="targetPressure">Target Pressure
+            </label>
+            <div class="input-group">
+                <input name="targetPressure" type="number" step="any" class="form-control" id="targetPressure"
+                    formControlName="targetPressure" (input)="changeTargetPressure()"
+                    (focus)="focusField('targetPressure')" min="0">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.targetPressure.invalid && !form.controls.targetPressure.pristine">
+                <span *ngIf="form.controls.targetPressure.errors.required">Value Required</span>
+                <span *ngIf="form.controls.targetPressure.errors.min">Value can't be less than
+                    {{form.controls.targetPressure.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                </span>
+            </span>
+        </div>
+        <!--Variance (+/-) (targetPressureSequencer)-->
+        <div class="form-group" *ngIf="form.controls.multiCompressorSystemControls.value == 'targetPressureSequencer'"
             [ngClass]="{'invalid': form.controls.variance.invalid}">
             <label for="variance">Variance (+/-)
             </label>
@@ -142,22 +181,45 @@
                 </span>
             </span>
         </div>
+        <!--plantMaxPressure (isentropicEfficiency)-->
+        <div class="form-group" *ngIf="form.controls.multiCompressorSystemControls.value == 'isentropicEfficiency'"
+            [ngClass]="{'invalid': form.controls.plantMaxPressure.invalid}">
+            <label for="plantMaxPressure">Max Plant Compressed Air Pressure Requirement
+            </label>
+            <div class="input-group">
+                <input name="plantMaxPressure" type="number" step="any" class="form-control" id="plantMaxPressure"
+                    formControlName="plantMaxPressure" (input)="changeMaxPlantPressure()" (focus)="focusField('plantMaxPressure')"
+                    min="0">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.plantMaxPressure.invalid && !form.controls.plantMaxPressure.pristine">
+                <span *ngIf="form.controls.plantMaxPressure.errors.required">Value Required</span>
+                <span *ngIf="form.controls.plantMaxPressure.errors.min">Value can't be less than
+                    {{form.controls.plantMaxPressure.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>.
+                </span>
+                <!-- <span *ngIf="form.controls.plantMaxPressure.errors.max">Value can't be greater than 50% of target pressure
+                    ({{form.controls.plantMaxPressure.errors.max.max | number:'1.0-0'}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">bara</span>).
+                </span> -->
+            </span>
+        </div>
     </form>
 
-      <div class="header mr-2 ml-2">
+    <div class="header mr-2 ml-2">
         <h3>Carbon Emissions</h3>
         <br>
     </div>
-    
-      <div *ngIf="co2SavingsData">
-        <app-assessment-co2-savings 
-        [co2SavingsData]="co2SavingsData"
-        [isFormDisabled]="false"
-        [inBaseline]="true"
-        (emitCurrentField)="focusField($event)"
-        (emitUpdateCo2SavingsData)="save($event)"
-        ></app-assessment-co2-savings>
-      </div>
+
+    <div *ngIf="co2SavingsData">
+        <app-assessment-co2-savings [co2SavingsData]="co2SavingsData" [isFormDisabled]="false" [inBaseline]="true"
+            (emitCurrentField)="focusField($event)"
+            (emitUpdateCo2SavingsData)="save($event)"></app-assessment-co2-savings>
+    </div>
 </div>
 
 <div bsModal #systemCapacityModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"

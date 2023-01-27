@@ -49,32 +49,38 @@ export class ReportGraphsComponent implements OnInit {
   }
 
   addCostSavingsItem(savings: number, currentCost: number, newCost: number, label: string) {
-    this.costSavingsItems.push({
-      savings: savings,
-      currentCost: currentCost,
-      newCost: newCost,
-      label: label + ' Utility Expenditures'
-    });
+    if(newCost > 0){
+      this.costSavingsItems.push({
+        savings: savings,
+        currentCost: currentCost,
+        newCost: newCost,
+        label: label + ' Utility Expenditures'
+      });
+    }
   }
 
   addEnergySavingsItem(savings: number, currentEnergyUse: number, newCost: number, label: string, unitLabel?: string) {
-    this.energySavingsItems.push({
-      savings: savings,
-      currentEnergyUse: currentEnergyUse,
-      currentCost: undefined,
-      newCost: newCost,
-      label: label + ' Utility Saving (' + unitLabel + ')'
-    });
+    if(newCost > 0){
+      this.energySavingsItems.push({
+        savings: savings,
+        currentEnergyUse: currentEnergyUse,
+        currentCost: undefined,
+        newCost: newCost,
+        label: label + ' Utility Saving (' + unitLabel + ')'
+      });
+    }
   }
 
   addCarbonSavingsItem(savings: number, currentEnergyUse: number, newCost: number, label: string) {
-    this.carbonSavingsItems.push({
-      savings: savings,
-      currentEnergyUse: currentEnergyUse,
-      currentCost: undefined,
-      newCost: newCost,
-      label: label + ' Carbon Emissions Savings'
-    });
+    if(newCost > 0){
+      this.carbonSavingsItems.push({
+        savings: savings,
+        currentEnergyUse: currentEnergyUse,
+        currentCost: undefined,
+        newCost: newCost,
+        label: label + ' Carbon Emissions Savings'
+      });
+    }
   }
 
   changeGraphTab(str: string) {

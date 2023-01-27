@@ -11,8 +11,8 @@
                             <td class="bold">
                                 &nbsp;
                             </td>
-                            <td class="bold text-center" *ngFor="let hourLabel of hourLabels">
-                                {{hourLabel + 1}}
+                            <td class="bold text-center" *ngFor="let intervalDisplay of intervalDisplayStrings">
+                                {{intervalDisplay}}
                             </td>
                         </tr>
                         <tr *ngFor="let dayTypeSummary of dayTypeSummaries">
@@ -20,7 +20,7 @@
                                 [ngStyle]="{'background-color': dayTypeSummary.dayType.color}">
                                 {{dayTypeSummary.dayType.label}}
                             </td>
-                            <td *ngFor="let hourlyAverage of dayTypeSummary.hourlyAverages">
+                            <td *ngFor="let hourlyAverage of dayTypeSummary.dayAveragesByInterval">
                                 {{getAverageValue(hourlyAverage.averages) | number}}
                             </td>
                         </tr>
@@ -50,8 +50,8 @@
                             <td class="bold">
                                 &nbsp;
                             </td>
-                            <td class="bold text-center" *ngFor="let hourLabel of hourLabels">
-                                {{hourLabel + 1}}
+                            <td class="bold text-center" *ngFor="let intervalDisplay of intervalDisplayStrings">
+                                {{intervalDisplay}}
                             </td>
                         </tr>
                         <tr>
@@ -66,7 +66,7 @@
                             <td class="bold">
                                 {{logToolDay.date | date}}
                             </td>
-                            <td *ngFor="let hourlyAverage of logToolDay.hourlyAverages">
+                            <td *ngFor="let hourlyAverage of logToolDay.dayAveragesByInterval">
                                 {{getAverageValue(hourlyAverage.averages) | number}}
                             </td>
                         </tr>

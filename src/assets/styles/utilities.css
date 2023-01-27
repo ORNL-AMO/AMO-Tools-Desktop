@@ -440,3 +440,22 @@ a:not([href]):not([tabindex]).disabled-link:hover {
   .tooltip-icon.fa-question-circle:hover {
       cursor: pointer;
   }
+
+  .message-overlay {
+    height: 100%;
+    width: 100vw;
+    z-index: 999;
+    position: absolute;
+    background: white;
+    text-align: center;
+
+}
+
+
+.bb-chart-arcs-background {
+    fill: white;
+  }
+
+.treasure-hunt .bb-chart-arcs-background {
+    fill: #ABB2B9;
+  }

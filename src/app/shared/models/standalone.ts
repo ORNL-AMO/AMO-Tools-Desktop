@@ -232,7 +232,8 @@ export interface ElectricityReductionData {
   nameplateData: NameplateData,
   powerMeterData: PowerMeterData,
   otherMethodData: OtherMethodData,
-  units: number
+  units: number,
+  userSelectedHP: boolean
 };
 
 export interface MultimeterReadingData {

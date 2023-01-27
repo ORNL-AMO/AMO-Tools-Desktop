@@ -17,6 +17,7 @@ import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { ElectronService } from 'ngx-electron';
+import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 @Injectable()
 export class CoreService {
 
@@ -36,6 +37,7 @@ export class CoreService {
     private assessmentDbService: AssessmentDbService,
     private inventoryDbService: InventoryDbService,
     private electronService: ElectronService,
+    private securityAndPrivacyService: SecurityAndPrivacyService,
     private directoryDbService: DirectoryDbService) {
   }
 

@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { CsvImportData } from '../shared/helper-services/csv-to-json.service';
 import * as _ from 'lodash';
-import { LogToolField, IndividualDataFromCsv } from './log-tool-models';
+import { LogToolField, IndividualDataFromCsv, ExplorerDataSet } from './log-tool-models';
 import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class LogToolService {
 
-  individualDataFromCsv: Array<IndividualDataFromCsv>;
+  individualDataFromCsv: Array<IndividualDataFromCsv | ExplorerDataSet>;
   fields: Array<LogToolField>;
   dataCleaned: BehaviorSubject<boolean>;
   dataSubmitted: BehaviorSubject<boolean>;
   isModalOpen: BehaviorSubject<boolean>;
   noDayTypeAnalysis: BehaviorSubject<boolean>;
   openExportData: BehaviorSubject<boolean>;
+  setupContainerHeight: BehaviorSubject<number>;
   constructor() {
     this.dataSubmitted = new BehaviorSubject<boolean>(false);
     this.dataCleaned = new BehaviorSubject<boolean>(false);
@@ -20,6 +21,7 @@ export class LogToolService {
     this.noDayTypeAnalysis = new BehaviorSubject<boolean>(false);
     this.individualDataFromCsv = new Array();
     this.openExportData = new BehaviorSubject<boolean>(false);
+    this.setupContainerHeight = new BehaviorSubject<number>(undefined);
   }
 
   resetData() {

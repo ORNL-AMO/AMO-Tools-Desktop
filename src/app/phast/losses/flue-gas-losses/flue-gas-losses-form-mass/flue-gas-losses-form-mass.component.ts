@@ -202,7 +202,6 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       o2: this.flueGasLossForm.controls.o2.value,
       sulphur: this.flueGasLossForm.controls.sulphur.value,
       heatingValue: this.flueGasLossForm.controls.heatingValue.value,
-      ambientAirTempF: this.flueGasLossForm.controls.ambientAirTemp.value,
       substance: "Custom Material"
     };
     let suiteDbResult = this.sqlDbApiService.insertSolidLiquidFlueGasMaterial(customMaterial);
@@ -269,7 +268,6 @@ export class FlueGasLossesFormMassComponent implements OnInit {
         o2: this.flueGasLossForm.controls.o2.value,
         sulphur: this.flueGasLossForm.controls.sulphur.value,
         heatingValue: this.flueGasLossForm.controls.heatingValue.value,
-        ambientAirTempF: this.flueGasLossForm.controls.ambientAirTemp.value,
         id: this.flueGasLossForm.controls.gasTypeId.value,
         substance: "Custom Material"
       };

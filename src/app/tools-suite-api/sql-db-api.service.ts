@@ -379,7 +379,6 @@ export class SqlDbApiService {
       substance: solidLiquidFlueGasMaterialPointer.getSubstance(),
       sulphur: solidLiquidFlueGasMaterialPointer.getSulphur(),
       heatingValue: undefined,
-      ambientAirTempF: undefined
     };
     return solidLiquidFlueGasMaterial;
   }

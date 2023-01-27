@@ -23,9 +23,11 @@ export class ElectricityReductionService {
       powerFactor: 0.85
     };
     let ratedMotorPower: number = 200;
+    let hpSelected: boolean = true;
     if (settings.unitsOfMeasure != 'Imperial') {
       ratedMotorPower = this.convertUnitsService.value(ratedMotorPower).from('hp').to(settings.powerMeasurement);
       ratedMotorPower = Number(ratedMotorPower.toFixed(2));
+      hpSelected = false;
     }
 
     let defaultNameplateObj: NameplateData = {
@@ -63,7 +65,8 @@ export class ElectricityReductionService {
       nameplateData: defaultNameplateObj,
       powerMeterData: defaultPowerMeterObj,
       otherMethodData: defaultOtherMethodData,
-      units: 1
+      units: 1,
+      userSelectedHP: hpSelected
     };
 
     return obj;
@@ -81,6 +84,7 @@ export class ElectricityReductionService {
       supplyVoltage: [initObj.multimeterData.supplyVoltage],
       averageCurrent: [initObj.multimeterData.averageCurrent],
       powerFactor: [initObj.multimeterData.powerFactor],
+    
 
       // nameplate data
       ratedMotorPower: [initObj.nameplateData.ratedMotorPower],
@@ -96,7 +100,9 @@ export class ElectricityReductionService {
       // offsheet / other data
       energy: [initObj.otherMethodData.energy],
 
-      units: [initObj.units]
+      units: [initObj.units],
+      
+      userSelectedHP: [initObj.userSelectedHP]
     });
     form = this.setValidators(form);
     return form;
@@ -165,7 +171,8 @@ export class ElectricityReductionService {
       nameplateData: nameplateObj,
       powerMeterData: powerMeterObj,
       otherMethodData: otherMethodData,
-      units: form.controls.units.value
+      units: form.controls.units.value,
+      userSelectedHP: form.controls.userSelectedHP.value
     };
     return obj;
   }
@@ -173,9 +180,11 @@ export class ElectricityReductionService {
   generateExample(settings: Settings, isBaseline: boolean): ElectricityReductionData {
     let defaultData: ElectricityReductionData
     let ratedMotorPower: number = 200;
+    let hpSelected: boolean = true;
     if (settings.unitsOfMeasure != 'Imperial') {
       ratedMotorPower = this.convertUnitsService.value(ratedMotorPower).from('hp').to(settings.powerMeasurement);
       ratedMotorPower = Number(ratedMotorPower.toFixed(2));
+      hpSelected = false
     }
 
     if (isBaseline) {
@@ -204,7 +213,8 @@ export class ElectricityReductionService {
         otherMethodData: {
           energy: 0
         },
-        units: 1
+        units: 1,
+        userSelectedHP: hpSelected
       };
     }
     else {
@@ -233,7 +243,8 @@ export class ElectricityReductionService {
         otherMethodData: {
           energy: 0
         },
-        units: 1
+        units: 1,
+        userSelectedHP: hpSelected
       };
     }
 
@@ -288,11 +299,12 @@ export class ElectricityReductionService {
 
   convertInputs(inputArray: Array<ElectricityReductionData>, settings: Settings): Array<ElectricityReductionData> {
     //need to loop through for conversions prior to calculation
-    if (settings.unitsOfMeasure == 'Imperial') {
+
       for (let i = 0; i < inputArray.length; i++) {
-        inputArray[i].nameplateData.ratedMotorPower = this.convertUnitsService.value(inputArray[i].nameplateData.ratedMotorPower).from('hp').to('kW');
+        if(inputArray[i].userSelectedHP === true){
+          inputArray[i].nameplateData.ratedMotorPower = this.convertUnitsService.value(inputArray[i].nameplateData.ratedMotorPower).from('hp').to('kW');
+        }
       }
-    }
     return inputArray;
   }
 }

@@ -48,14 +48,14 @@ export class DayTypesComponent implements OnInit {
   }
 
   checkLockDayTypes() {
-    if(this.compressedAirAssessment.modifications && this.compressedAirAssessment.modifications.length != 0){
+    if (this.compressedAirAssessment.modifications && this.compressedAirAssessment.modifications.length != 0) {
       this.hasModifications = true;
-    }else{
+    } else {
       this.hasModifications = false;
     }
-    if(this.compressedAirAssessment.endUseData.endUses.length != 0){
+    if (this.compressedAirAssessment.endUseData.endUses.length != 0) {
       this.hasEndUses = true;
-    }else{
+    } else {
       this.hasEndUses = false;
     }
   }
@@ -112,15 +112,20 @@ export class DayTypesComponent implements OnInit {
         item.reductionData.splice(dayTypeIndex, 1)
       })
     }
-    let deleteSelectedIndex: number = this.compressedAirAssessment.compressedAirDayTypes.findIndex(dayType => {return dayType.dayTypeId == this.deleteSelectedDayTypeId})
+    let deleteSelectedIndex: number = this.compressedAirAssessment.compressedAirDayTypes.findIndex(dayType => { return dayType.dayTypeId == this.deleteSelectedDayTypeId })
     this.compressedAirAssessment.compressedAirDayTypes.splice(deleteSelectedIndex, 1);
     this.dayTypesFormArray = this.dayTypeService.getDayTypeFormArray(this.compressedAirAssessment.compressedAirDayTypes);
+
+    this.compressedAirAssessment.systemInformation.trimSelections = this.compressedAirAssessment.systemInformation.trimSelections.filter(selection => {
+      return selection.dayTypeId != this.deleteSelectedDayTypeId;
+    });
+
     this.deleteSelectedDayTypeId = undefined;
     this.save();
   }
 
   openConfirmDeleteModal(dayTypeId: string) {
-    let deleteDayType: CompressedAirDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => {return dayType.dayTypeId == dayTypeId});
+    let deleteDayType: CompressedAirDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == dayTypeId });
     this.confirmDeleteDayTypeData = {
       modalTitle: 'Delete Day Type',
       confirmMessage: `Are you sure you want to delete '${deleteDayType.name}'?`
