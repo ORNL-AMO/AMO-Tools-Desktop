@@ -65,13 +65,14 @@ export class CoreComponent implements OnInit {
     if (!window.navigator.cookieEnabled) {
       this.showBrowsingDataToast = true;
     }
-   this.analyticsSessionId = uuidv4();
-   this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-     .subscribe((event: NavigationEnd) => {
-      this.sendAnalyticsPageView(event);
-     });
-     
-    if (this.electronService.isElectronApp) {
+
+    
+  if (this.electronService.isElectronApp) {
+      this.analyticsSessionId = uuidv4();
+      this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+        .subscribe((event: NavigationEnd) => {
+         this.sendAnalyticsPageView(event);
+        });
       this.electronService.ipcRenderer.once('available', (event, arg) => {
         if (arg === true) {
           this.showUpdateToast = true;
@@ -160,7 +161,9 @@ export class CoreComponent implements OnInit {
     if (this.openingTutorialSub) {
       this.openingTutorialSub.unsubscribe();
     }
-    this.routerSubscription.unsubscribe();
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
     this.updateAvailableSubscription.unsubscribe();
     this.showSecurityAndPrivacyModalSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
