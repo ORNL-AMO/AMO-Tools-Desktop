@@ -11,5 +11,5 @@ import packageInfo from '../../package.json';
 export const environment = {
   production: false,
   version: packageInfo.version,
-  weatherApiUrl: 'https://weather.ornl.gov/'
+  measurUtilitiesApi: 'http://127.0.0.1:3000/'
 };

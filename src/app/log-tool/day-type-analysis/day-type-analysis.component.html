@@ -1,4 +1,5 @@
-<div class="spinner-overlay align-items-center vw-100 text-center" *ngIf="loadingSpinner && loadingSpinner.show == true">
+<div class="spinner-overlay align-items-center vw-100 text-center pt-5"
+    *ngIf="loadingSpinner && loadingSpinner.show == true">
     <div class="spinner mt-5">
         <div class="bounce1"></div>
         <div class="bounce2"></div>
@@ -6,31 +7,110 @@
     </div>
     <span class="importing-text">{{loadingSpinner.msg}}</span>
 </div>
-<!-- <div class="d-flex w-100 h-100" *ngIf="!hasRunDayTypeAnalysis || canUpdateDayTypeAnalysis">
-    <div class="card card-body d-flex flex-column align-items-center pt-4">
-        <div class="p-2" *ngIf="canUpdateDayTypeAnalysis">Data has been added since Day Type analysis was performed.</div>
-        <button class="btn btn-secondary" (click)="runAnalysis()">
-             <span *ngIf="!hasRunDayTypeAnalysis">Run Analysis</span>
-             <span *ngIf="canUpdateDayTypeAnalysis">Update Analysis</span>
-    </button>
-    </div>
-</div> -->
+
+
 <div class="d-flex w-100 h-100" *ngIf="!hasRunDayTypeAnalysis">
     <div class="card card-body d-flex flex-column align-items-center pt-4">
-        <button class="btn btn-secondary" (click)="runAnalysis()">
-             <span>Run Analysis</span>
-    </button>
+        <form class="p-2 w-50" [formGroup]="form">
+            <div class="form-group d-flex justify-content-center">
+                <label class="mr-3" for="dayTypeAverageInterval">Day Type Average Interval</label>
+                <select class="form-control" id="dayTypeAverageInterval" formControlName="dayTypeAverageInterval"
+                    (focus)="focusField('dayTypeAverageInterval')" (change)="changeDayTypeAverageInterval()">
+                    <option *ngFor="let option of dayTypeAverageIntervalOptions" [ngValue]="option.seconds">
+                        {{option.display}}
+                    </option>
+                </select>
+            </div>
+            <div class="alert-danger small px-4 py-2 mx-auto" *ngIf="conflictingIntervalsWarning">{{ conflictingIntervalsWarning}}</div>
+        </form>
+        <button class="btn btn-secondary" [disabled]="this.conflictingIntervalsWarning" (click)="runAnalysis()">
+            <span>Run Analysis</span>
+        </button>
     </div>
 </div>
 <div class="d-flex w-100 h-100" *ngIf="hasRunDayTypeAnalysis">
-    <div class="d-flex flex-column w-100 h-100">
+    <div class="d-flex flex-column w-100 h-100 scroll-item">
         <app-day-type-menu></app-day-type-menu>
         <app-day-type-graph *ngIf="dataView == 'graph'"></app-day-type-graph>
         <app-day-type-table *ngIf="dataView == 'dataTable'"></app-day-type-table>
-        <div class="p-2">
-            <div class="card p-0">
+        <div class="p-2 d-flex">
+            <div class="calendar-container card p-3 d-flex">
                 <app-day-types></app-day-types>
-                <app-day-type-calendar *ngIf="displayDayTypeCalander"></app-day-type-calendar>
+                <app-day-type-calendar class="scroll-item-x" *ngIf="displayDayTypeCalander"></app-day-type-calendar>
+            </div>
+
+            <div class="card options p-2 m-0 ml-3">
+                <div class="d-flex justify-content-end mx-2">
+                    <form class="p-2 w-50" [formGroup]="form">
+                        <div class="form-group d-flex justify-content-start">
+                            <label class="mr-3" for="dayTypeAverageInterval">Day Type Average Interval</label>
+                            <select class="form-control" id="dayTypeAverageInterval"
+                                formControlName="dayTypeAverageInterval" (focus)="focusField('dayTypeAverageInterval')"
+                                (change)="changeDayTypeAverageInterval()">
+                                <option *ngFor="let option of dayTypeAverageIntervalOptions" [ngValue]="option.seconds">
+                                    {{option.display}}
+                                </option>
+                            </select>
+                            <div class="alert-danger small px-4 py-2 mx-auto" *ngIf="conflictingIntervalsWarning">
+                                {{conflictingIntervalsWarning}}</div>
+                        </div>
+                    </form>
+
+                    <button class="btn btn-secondary btn-sm w-50"
+                        [disabled]="!hasSelectedChanges || this.conflictingIntervalsWarning" (click)="runAnalysis()">
+                        <span>Update Analysis</span>
+                    </button>
+                </div>
+
+                <div *ngIf="selectedDataSet" class="graph-setup pt-2">
+                    <div class="select-for-all-disabled align-items-center vw-100 text-center"
+                        *ngIf="selectedDataField.fieldId !== 'all'">
+                        <span class="d-block alert alert-info m-5 p-4 small">Set Data to 'Total Aggregated Equipment Data' to filter
+                            aggregated columns</span>
+                    </div>
+                    <div class="mt-3 mx-3">
+                        <label class="pt-0 my-0 pb-2 bold">Select Columns for Total Aggregated Equipment Data: </label>
+                        <div *ngIf="explorerData.datasets.length > 1" class="d-flex flex-row mb-2">
+                            <input class="m-0 mt-1 mr-2" type="checkbox" id="applyToAll" [(ngModel)]="applyToAll"
+                                (change)="updateExplorerData()">
+                            <label for="applyToAll">Apply my selections for all datasets</label>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item" *ngFor="let dataset of explorerData.datasets; let index=index;">
+                                <a class="nav-link" [ngClass]="{'active': selectedDataSetIndex == index}"
+                                    (click)="setSelectedDataSet(index)">
+                                    <span class="p-2">
+                                        {{dataset.csvName}}
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="m-1 preview-data scroll-item">
+                            <table class="table table-condensed table-sm">
+                                <thead>
+                                    <td class="bold">Column Name</td>
+                                    <td class="bold">Include in Aggregated Data</td>
+                                </thead>
+                                <tbody>
+                                    <ng-container *ngFor="let field of selectedDataSet.fields; let i = index;">
+                                        <tr *ngIf="field.useField && !field.isDateField && !field.isTimeField">
+                                            <td>
+                                                <span *ngIf="field.alias">{{field.alias}}</span>
+                                                <span *ngIf="!field.alias">{{field.fieldName}}</span>
+            
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" [(ngModel)]="field.useForDayTypeAnalysis"
+                                                    (change)="updateExplorerData()">
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                        </div>
+                
+                    </div>
+                </div>
             </div>
         </div>
     </div>

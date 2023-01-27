@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Assessment } from '../models/assessment';
-import { Settings } from '../models/settings';
-import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../models/steam/ssmt';
-import { CompressedAirPressureReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
+import { CompressedAirPressureReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
-import { CompressedAirPressureReductionData } from '../models/standalone';
+import { CompressedAirPressureReductionData, ElectricityReductionData } from '../models/standalone';
 import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -16,7 +14,7 @@ import { environment } from '../../../environments/environment';
 @Injectable()
 export class UpdateDataService {
 
-    constructor(private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
+    constructor(private convertUnitsService: ConvertUnitsService) { }
 
     checkAssessment(assessment: Assessment): Assessment {
         if (this.checkAssessmentVersionDifferent(assessment) === false) {
@@ -35,7 +33,7 @@ export class UpdateDataService {
                 return this.updateTreasureHunt(assessment);
             } else if (assessment.type === 'WasteWater') {
                 return this.updateWasteWater(assessment);
-            }  else if (assessment.type === 'CompressedAir') {
+            } else if (assessment.type === 'CompressedAir') {
                 return this.updateCompressedAir(assessment);
             } else {
                 return assessment;
@@ -99,7 +97,7 @@ export class UpdateDataService {
                         isDefaultAirFlow: true,
                         power: undefined,
                         isDefaultPressure: true
-                      };
+                    };
                 }
                 if (!item.performancePoints.turndown) {
                     item.performancePoints.turndown = {
@@ -109,7 +107,7 @@ export class UpdateDataService {
                         isDefaultAirFlow: true,
                         power: undefined,
                         isDefaultPressure: true
-                      }
+                    }
                 }
             });
         };
@@ -120,26 +118,47 @@ export class UpdateDataService {
                     selectedDayTypeId: undefined,
                     dayTypeLeakRates: [
                         {
-                            dayTypeId: undefined, 
+                            dayTypeId: undefined,
                             dayTypeLeakRate: 0
                         }
                     ],
                 },
                 dayTypeAirFlowTotals: undefined,
                 endUses: new Array(),
-              };
+            };
             if (assessment.compressedAirAssessment.compressedAirDayTypes && assessment.compressedAirAssessment.compressedAirDayTypes.length > 0) {
                 assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates = []
+                if (assessment.compressedAirAssessment && assessment.compressedAirAssessment.systemInformation) {
+                    if (!assessment.compressedAirAssessment.systemInformation.trimSelections) {
+                        assessment.compressedAirAssessment.systemInformation.trimSelections = [];
+                    }
+                }
                 assessment.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
                     assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates.push(
                         {
-                            dayTypeId: dayType.dayTypeId, 
+                            dayTypeId: dayType.dayTypeId,
                             dayTypeLeakRate: 0
                         }
                     )
+                    assessment.compressedAirAssessment.systemInformation.trimSelections.push({
+                        dayTypeId: dayType.dayTypeId,
+                        compressorId: undefined
+                    });
                 });
             }
         };
+
+        if (assessment.compressedAirAssessment && assessment.compressedAirAssessment.systemInformation) {
+            if (!assessment.compressedAirAssessment.systemInformation.multiCompressorSystemControls) {
+                if (assessment.compressedAirAssessment.systemInformation.isSequencerUsed) {
+                    assessment.compressedAirAssessment.systemInformation.multiCompressorSystemControls = 'targetPressureSequencer';
+                } else {
+                    assessment.compressedAirAssessment.systemInformation.multiCompressorSystemControls = 'cascading';
+                }
+            }
+        }
+
+
         return assessment;
     }
 
@@ -150,19 +169,19 @@ export class UpdateDataService {
 
         if (assessment.psat.inputs.line_frequency === 0){
             assessment.psat.inputs.line_frequency = 50;
-        }         
-        if (assessment.psat.inputs.line_frequency === 1){
+        }
+        if (assessment.psat.inputs.line_frequency === 1) {
             assessment.psat.inputs.line_frequency = 60;
-        } 
+        }
         if (assessment.psat.modifications) {
             assessment.psat.modifications.forEach(mod => {
                 mod.psat = this.addWhatIfScenarioPsat(mod.psat);
-                if (mod.psat.inputs.line_frequency === 0){
+                if (mod.psat.inputs.line_frequency === 0) {
                     mod.psat.inputs.line_frequency = 50;
-                }         
-                if (mod.psat.inputs.line_frequency === 1){
+                }
+                if (mod.psat.inputs.line_frequency === 1) {
                     mod.psat.inputs.line_frequency = 60;
-                } 
+                }
             })
         }
 
@@ -282,7 +301,7 @@ export class UpdateDataService {
                     fg.flueGasByMass.moistureInAirCombustion = fg.flueGasByMass['moistureInAirComposition'];
                 } else if (fg.flueGasByMass && !fg.flueGasByMass.moistureInAirCombustion) {
                     fg.flueGasByMass.moistureInAirCombustion = 0;
-                }  else if (fg.flueGasByVolume && !fg.flueGasByVolume.moistureInAirCombustion) {
+                } else if (fg.flueGasByVolume && !fg.flueGasByVolume.moistureInAirCombustion) {
                     fg.flueGasByVolume.moistureInAirCombustion = 0;
                 }
             });
@@ -310,15 +329,15 @@ export class UpdateDataService {
         if (unitsOfMeasure == 'Metric') {
             ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C');
             ambientAirTemp = Number(ambientAirTemp.toFixed(2));
-        } 
+        }
         fg.ambientAirTemp = ambientAirTemp;
         return fg;
     }
 
-    updateEnergyInputExhaustGasLoss(phast: PHAST): PHAST{
+    updateEnergyInputExhaustGasLoss(phast: PHAST): PHAST {
         if (phast.losses && phast.losses.energyInputExhaustGasLoss && phast.losses.energyInputExhaustGasLoss.length > 0) {
             phast.losses.energyInputExhaustGasLoss.forEach(input => {
-                if(!input.availableHeat){
+                if (!input.availableHeat) {
                     input.availableHeat = 100;
                 }
             });
@@ -378,6 +397,7 @@ export class UpdateDataService {
             }
             if (assessment.treasureHunt.electricityReductions) {
                 assessment.treasureHunt.electricityReductions.forEach(opportunity => {
+                    opportunity = this.updateElectricityReductionTreasureHunt(opportunity, assessment.treasureHunt.existingDataUnits);
                     opportunity.opportunityType = Treasure.electricityReduction;
                 });
             }
@@ -491,5 +511,30 @@ export class UpdateDataService {
             }
         }
         return heatCascadingTH;
+    }
+
+    updateElectricityReductionTreasureHunt(electricityReductionTreasureHunt: ElectricityReductionTreasureHunt, settingTH: string): ElectricityReductionTreasureHunt {
+        if (electricityReductionTreasureHunt.baseline) {
+            electricityReductionTreasureHunt.baseline.forEach(reduction => {
+                reduction = this.updateElectricityReduction(reduction, settingTH);
+            });
+        }
+        if (electricityReductionTreasureHunt.modification) {
+            electricityReductionTreasureHunt.modification.forEach(reduction => {
+                reduction = this.updateElectricityReduction(reduction, settingTH);
+            });
+        }
+        return electricityReductionTreasureHunt;
+    }
+
+    updateElectricityReduction(electricityReduction: ElectricityReductionData, settingTH: string): ElectricityReductionData {
+        if (electricityReduction.userSelectedHP === undefined) {
+            if (settingTH === 'Metric') {
+                electricityReduction.userSelectedHP = false;
+            } else if (settingTH === 'Imperial') {
+                electricityReduction.userSelectedHP = true;
+            }
+        }
+        return electricityReduction;
     }
 }

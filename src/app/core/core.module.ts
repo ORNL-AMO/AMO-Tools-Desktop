@@ -40,6 +40,9 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { CompressedAirAssessmentModule } from '../compressed-air-assessment/compressed-air-assessment.module';
 import { PlotlyViaWindowModule } from 'angular-plotly.js';
 import { IndexedDbModule } from '../indexedDb/indexed-db.module';
+import { AnalyticsModule } from '../shared/analytics/analytics.module';
+import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/security-and-privacy.module';
+import { BrowsingDataToastModule } from '../shared/browsing-data-toast/browsing-data-toast.module';
 
 @NgModule({
   declarations: [
@@ -74,7 +77,11 @@ import { IndexedDbModule } from '../indexedDb/indexed-db.module';
     ToolsSuiteApiModule,
     CompressedAirAssessmentModule,
     PlotlyViaWindowModule,
-    IndexedDbModule
+    IndexedDbModule,
+    SecurityAndPrivacyModule,
+    BrowsingDataToastModule,
+    AnalyticsModule,
+    SecurityAndPrivacyModule
   ],
   providers: [
     AssessmentService,

@@ -3,6 +3,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { Subscription } from 'rxjs';
 import { CalculatorsService } from '../calculators/calculators.service';
+import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 
 @Component({
   selector: 'app-treasure-hunt-banner',
@@ -21,7 +22,7 @@ export class TreasureHuntBannerComponent implements OnInit {
   calculatorTabSub: Subscription;
   disableTabs: boolean = false;
   bannerCollapsed: boolean = true;
-  constructor(private treasureHuntService: TreasureHuntService, private calculatorsService: CalculatorsService) { }
+  constructor(private treasureHuntService: TreasureHuntService, private calculatorsService: CalculatorsService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit() {
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
@@ -45,6 +46,11 @@ export class TreasureHuntBannerComponent implements OnInit {
     this.subTabSub.unsubscribe();
     this.mainTabSub.unsubscribe();
     this.calculatorTabSub.unsubscribe();
+  }
+
+  showSecurityAndPrivacyModal() {
+    this.securityAndPrivacyService.modalOpen.next(true);
+    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
   }
 
 

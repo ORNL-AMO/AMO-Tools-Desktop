@@ -396,7 +396,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     let chartData: Array<ProfileChartData> = new Array();
     if (this.showAllCompressors) {
       compressorInventory.forEach(item => {
-        let isValid: boolean = this.inventoryService.isCompressorValid(item)
+        let isValid: boolean = this.inventoryService.isCompressorValid(item, this.compressedAirAssessment.systemInformation)
         if (isValid) {
           let compressorData: Array<CompressorCalcResult> = this.getCompressorData(item);
           let unloadingData: UnloadingData = this.getUnloadingData(item);
@@ -409,7 +409,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
         }
       });
     } else {
-      let isValid: boolean = this.inventoryService.isCompressorValid(this.selectedCompressor);
+      let isValid: boolean = this.inventoryService.isCompressorValid(this.selectedCompressor, this.compressedAirAssessment.systemInformation);
       if (isValid) {
         let compressorData: Array<CompressorCalcResult> = this.getCompressorData(this.selectedCompressor);
         let unloadingData: UnloadingData = this.getUnloadingData(this.selectedCompressor);
@@ -443,7 +443,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
         });
       });
     } else {
-      let isValid: boolean = this.inventoryService.isCompressorValid(this.selectedCompressor);
+      let isValid: boolean = this.inventoryService.isCompressorValid(this.selectedCompressor, this.compressedAirAssessment.systemInformation);
       if (isValid && this.showAvgOpPoints && !this.showAllCompressors) {
         profileSummary.forEach(profile => {
           if (profile.compressorId == this.selectedCompressor.itemId) {
@@ -511,7 +511,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   getAssessmentChartData(): Array<ProfileChartData> {
     let chartData: Array<ProfileChartData> = new Array();
     this.compressedAirAssessment.compressorInventoryItems.forEach(compressor => {
-      let isValid: boolean = this.inventoryService.isCompressorValid(compressor)
+      let isValid: boolean = this.inventoryService.isCompressorValid(compressor, this.compressedAirAssessment.systemInformation)
       if (isValid) {
         let compressorData: Array<CompressorCalcResult> = this.getCompressorData(compressor);
         let unloadingData: UnloadingData = this.getUnloadingData(compressor);
@@ -524,7 +524,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
       }
     });
     this.adjustedCompressors.forEach(compressor => {
-      let isValid: boolean = this.inventoryService.isCompressorValid(compressor)
+      let isValid: boolean = this.inventoryService.isCompressorValid(compressor, this.compressedAirAssessment.systemInformation)
       if (isValid) {
         let compressorData: Array<CompressorCalcResult> = this.getCompressorData(compressor);
         let unloadingData: UnloadingData = this.getUnloadingData(compressor);
@@ -541,7 +541,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
 
   getCompressorData(compressor: CompressorInventoryItem): Array<CompressorCalcResult> {
     let compressorData: Array<CompressorCalcResult> = new Array();
-    let isCompressorValid: boolean = this.inventoryService.isCompressorValid(compressor)
+    let isCompressorValid: boolean = this.inventoryService.isCompressorValid(compressor, this.compressedAirAssessment.systemInformation)
     for (let airFlow = 0; airFlow <= 100;) {
       if (isCompressorValid) {
         let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, this.settings, 1, airFlow, this.compressedAirAssessment.systemInformation.atmosphericPressure, this.compressedAirAssessment.systemInformation.totalAirStorage, 0, false);

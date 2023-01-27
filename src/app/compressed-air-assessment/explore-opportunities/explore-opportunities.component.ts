@@ -33,6 +33,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   hasSequencerOn: boolean;
   displayAddStorage: boolean;
   settings: Settings;
+  showCascadingAndSequencer: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -46,6 +47,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
       if (val) {
         this.compressedAirAssessment = val;
         this.setBaselineResults();
+        this.showCascadingAndSequencer = (this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'cascading' || this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer');
         this.showCascadingSetPoints = this.compressedAirAssessment.compressorInventoryItems.length > 1;
         this.dayTypeOptions = val.compressedAirDayTypes;
         this.modificationExists = (val.modifications && val.modifications.length != 0);
@@ -119,14 +121,15 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.compressedAirAssessment.systemInformation.atmosphericPressure,
         this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval,
         this.compressedAirAssessment.systemInformation.totalAirStorage,
-        this.settings.electricityCost
+        this.settings.electricityCost,
+        this.compressedAirAssessment.systemInformation
       );
     }
   }
 
   setHasSequencer() {
     if (this.compressedAirAssessment) {
-      this.hasSequencerOn = this.compressedAirAssessment.systemInformation.isSequencerUsed;
+      this.hasSequencerOn = this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer';
       if (!this.hasSequencerOn && this.modification) {
         this.hasSequencerOn = (this.modification.useAutomaticSequencer.order != 100)
       }

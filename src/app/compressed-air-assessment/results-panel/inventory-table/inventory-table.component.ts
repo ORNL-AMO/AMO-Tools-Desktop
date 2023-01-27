@@ -39,7 +39,7 @@ export class InventoryTableComponent implements OnInit {
       if (val) {
         this.compressorInventoryItems = val.compressorInventoryItems;
         this.compressorInventoryItems.forEach(compressor => {
-          compressor.isValid = this.inventoryService.isCompressorValid(compressor);
+          compressor.isValid = this.inventoryService.isCompressorValid(compressor, val.systemInformation);
         });
         this.hasInvalidCompressors = this.compressorInventoryItems.some(compressor => !compressor.isValid);
       }
@@ -72,17 +72,29 @@ export class InventoryTableComponent implements OnInit {
       modification.adjustCascadingSetPoints.setPointData = modification.adjustCascadingSetPoints.setPointData.filter(data => { return data.compressorId != this.deleteSelectedId });
       modification.useAutomaticSequencer.profileSummary = modification.useAutomaticSequencer.profileSummary.filter(summary => { return summary.compressorId != this.deleteSelectedId })
     });
-    
+
     let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       itemIndex = compressedAirAssessment.systemProfile.profileSummary.findIndex(summary => { return summary.compressorId == this.deleteSelectedId && summary.dayTypeId == dayType.dayTypeId });
       let removedSummary: Array<ProfileSummary> = compressedAirAssessment.systemProfile.profileSummary.splice(itemIndex, 1);
-      if (compressedAirAssessment.systemInformation.isSequencerUsed) {
+      if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType, removedSummary[0], numberOfHourIntervals);
-      } else {
-        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
+      } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'cascading') {
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
+      } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingIsentropicEfficiency(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals, compressedAirAssessment.compressorInventoryItems, this.settings, compressedAirAssessment.systemInformation);
+      } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
       }
     });
+
+    if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
+      compressedAirAssessment.systemInformation.trimSelections.forEach(selection => {
+        if (selection.compressorId == this.deleteSelectedId) {
+          selection.compressorId = undefined;
+        }
+      })
+    }
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     this.inventoryService.selectedCompressor.next(compressedAirAssessment.compressorInventoryItems[0]);
   }
@@ -108,14 +120,14 @@ export class InventoryTableComponent implements OnInit {
   getPressureMinMax(compressor: CompressorInventoryItem): string {
     let minMax: { min: number, max: number } = this.performancePointsFormService.getCompressorPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
     let unit: string = ' psig';
-    if(this.settings.unitsOfMeasure == 'Metric'){
+    if (this.settings.unitsOfMeasure == 'Metric') {
       unit = ' barg';
     }
-    
+
     return minMax.min + ' - ' + minMax.max + unit;
   }
 
-  createCopy(compressor: CompressorInventoryItem){
+  createCopy(compressor: CompressorInventoryItem) {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorCpy: CompressorInventoryItem = JSON.parse(JSON.stringify(compressor));
     compressorCpy.itemId = Math.random().toString(36).substr(2, 9);

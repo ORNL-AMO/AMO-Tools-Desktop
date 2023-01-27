@@ -11,7 +11,7 @@
                             <td class="bold">
                                 &nbsp;
                             </td>
-                            <td class="bold text-center" *ngFor="let hourlyAverage of dayTypeSummary.hourlyAverages">
+                            <td class="bold text-center" *ngFor="let hourlyAverage of dayTypeSummary.dayAveragesByInterval">
                                 {{hourlyAverage.hour+1}}
                             </td>
                         </tr>
@@ -19,7 +19,7 @@
                             <td class="bold day-type-label">
                                 {{field.alias}}
                             </td>
-                            <td *ngFor="let hourlyAverage of dayTypeSummary.hourlyAverages">
+                            <td *ngFor="let hourlyAverage of dayTypeSummary.dayAveragesByInterval">
                                 {{getAverageValue(hourlyAverage.averages, field) | number}}
                             </td>
                         </tr>

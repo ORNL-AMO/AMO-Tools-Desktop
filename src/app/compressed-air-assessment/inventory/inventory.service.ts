@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceRuntimeData, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceRuntimeData, SystemInformation, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 import { GreaterThanValidator } from '../../shared/validators/greater-than';
 import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
@@ -428,20 +428,26 @@ export class InventoryService {
     }
   }
 
-  isCompressorValid(compressor: CompressorInventoryItem): boolean {
+  isCompressorValid(compressor: CompressorInventoryItem, systemInformation: SystemInformation): boolean {
     let nameplateForm: UntypedFormGroup = this.getNameplateDataFormFromObj(compressor.nameplateData);
+    let compressorTypeValid: boolean = true;
+    if (systemInformation.multiCompressorSystemControls == 'loadSharing') {
+      //load sharing must be centrifugal
+      compressorTypeValid = (compressor.nameplateData.compressorType == 6);
+    }
     let compressorControlsForm: UntypedFormGroup = this.getCompressorControlsFormFromObj(compressor.compressorControls, compressor.nameplateData.compressorType);
     let designDetailsForm: UntypedFormGroup = this.getDesignDetailsFormFromObj(compressor.designDetails, compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
     let centrifugalSpecsValid: boolean = this.checkCentrifugalSpecsValid(compressor);
-    let performancePointsValid: boolean = this.performancePointsFormService.checkPerformancePointsValid(compressor);
-    return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsValid && performancePointsValid;
+    let performancePointsValid: boolean = this.performancePointsFormService.checkPerformancePointsValid(compressor, systemInformation);
+
+    return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsValid && performancePointsValid && compressorTypeValid;
   }
 
   hasValidCompressors(compressedAirAssessment: CompressedAirAssessment) {
     // let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let hasValidCompressors: boolean = false;
     if (compressedAirAssessment.compressorInventoryItems && compressedAirAssessment.compressorInventoryItems.length > 0) {
-      hasValidCompressors = compressedAirAssessment.compressorInventoryItems.every(compressorInventoryItem => this.isCompressorValid(compressorInventoryItem));
+      hasValidCompressors = compressedAirAssessment.compressorInventoryItems.every(compressorInventoryItem => this.isCompressorValid(compressorInventoryItem, compressedAirAssessment.systemInformation));
     }
     return hasValidCompressors;
   }
@@ -454,7 +460,7 @@ export class InventoryService {
     return true;
   }
 
-  addNewCompressor(compressedAirAssessment: CompressedAirAssessment, newInventoryItem?: CompressorInventoryItem): {newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment} {
+  addNewCompressor(compressedAirAssessment: CompressedAirAssessment, newInventoryItem?: CompressorInventoryItem): { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } {
     if (!newInventoryItem) {
       newInventoryItem = this.getNewInventoryItem();
     }
@@ -561,7 +567,11 @@ export class InventoryService {
       modification.reduceRuntime.runtimeData.push(reduceRuntimeData);
       modification.useAutomaticSequencer.order = 100;
       modification.useAutomaticSequencer.profileSummary = new Array();
-    })
+    });
+    compressedAirAssessment.systemInformation.trimSelections.push({
+      dayTypeId: dayTypeId,
+      compressorId: undefined
+    });
     return compressedAirAssessment;
   }
 

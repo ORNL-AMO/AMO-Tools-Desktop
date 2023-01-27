@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
 import moment from 'moment';
-import { DayType, DayTypeGraphItem, LogToolDay, LogToolField, DayTypeSummary, HourlyAverage } from '../../log-tool-models';
+import { DayType, DayTypeGraphItem, LogToolDay, LogToolField, DayTypeSummary } from '../../log-tool-models';
 
 @Injectable()
 export class DayTypeGraphService {
@@ -28,33 +28,31 @@ export class DayTypeGraphService {
     let dayTypeScatterPlotData = new Array();
     let dayTypeSummaries = this.dayTypeAnalysisService.dayTypeSummaries.getValue();
     dayTypeSummaries.forEach(summary => {
-      let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayTypeSummaryAverages(summary);
-      let color: string = summary.dayType.color;
-      dayTypeScatterPlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: summary.dayType.label, color: color, dayType: summary.dayType });
+      let dayAveragesGraphData: DayTypeGraphItem = this.getDayTypeSummaryAvgGraphData(summary);
+      dayTypeScatterPlotData.push(dayAveragesGraphData);
     });
     this.dayTypeScatterPlotData.next(dayTypeScatterPlotData);
   }
 
-  getDayTypeSummaryAverages(dayTypeSummary: DayTypeSummary): { xData: Array<number>, yData: Array<number> } {
-    let xData: Array<number> = new Array();
+  getDayTypeSummaryAvgGraphData(dayTypeSummary: DayTypeSummary): DayTypeGraphItem {
+    let xData: Array<any> = new Array();
     let yData: Array<number> = new Array();
-
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
-    dayTypeSummary.hourlyAverages.forEach(hourlyAverage => {
-      let currentFieldAverageValue: number = _.find(hourlyAverage.averages, (averageObj) => { return averageObj.field.fieldName == selectedDataField.fieldName }).value;
-      xData.push(hourlyAverage.hour+1);
+    dayTypeSummary.dayAveragesByInterval.forEach(intervalAverage => {
+      let currentFieldAverageValue: number = _.find(intervalAverage.averages, (averageObj) => { return averageObj.field.fieldName == selectedDataField.fieldName }).value;
+      xData.push(intervalAverage.intervalOffsetString);
       yData.push(currentFieldAverageValue);
     });
-    return { xData: xData, yData: yData }
+    
+    let graphData: DayTypeGraphItem = { xData: xData, yData: yData, name: dayTypeSummary.dayType.label, color: dayTypeSummary.dayType.color, dayType: dayTypeSummary.dayType } 
+    return graphData;
   }
 
   setIndividualDayScatterPlotData() {
     let individualDayScatterPlotData = new Array();
     this.logToolDataService.logToolDays.forEach((logToolDay) => {
-      let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayAverages(logToolDay);
-      let color: string = this.getDateColorFromDay(logToolDay);
-      let formatedDate: string = moment(logToolDay.date).format("MMM D, YYYY").toString();
-      individualDayScatterPlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: formatedDate, color: color, date: logToolDay.date });
+      let dayAverages: DayTypeGraphItem = this.getGraphDayAverages(logToolDay);
+      individualDayScatterPlotData.push(dayAverages);
     });
     this.individualDayScatterPlotData.next(individualDayScatterPlotData);
   }
@@ -67,23 +65,21 @@ export class DayTypeGraphService {
     this.individualDayScatterPlotData.next(individualDayScatterPlotData);
   }
 
-  //calculates averages per hour in a day
-  getDayAverages(logToolDay: LogToolDay): { xData: Array<any>, yData: Array<number> } {
+  getGraphDayAverages(logToolDay: LogToolDay): DayTypeGraphItem {
     let xData: Array<any> = new Array();
     let yData: Array<number> = new Array();
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
-    //24 hrs in a day (0 -> 23)
-    for (let hourOfDay = 0; hourOfDay < 24; hourOfDay++) {
-      let hourAverageObj: HourlyAverage = _.find(logToolDay.hourlyAverages, (hourlyAverageObj) => { return hourlyAverageObj.hour == hourOfDay })
-      if (hourAverageObj) {
-        let hourAverage: { value: number, field: LogToolField } = _.find(hourAverageObj.averages, (averageObj) => { return averageObj.field.fieldName == selectedDataField.fieldName });
-        if (hourAverage) {
-          yData.push(hourAverage.value);
-          xData.push(hourOfDay+1);
+    logToolDay.dayAveragesByInterval.forEach(averageByInterval => {
+      let average: { value: number, field: LogToolField } = _.find(averageByInterval.averages, (averageObj) => { return averageObj.field.fieldName == selectedDataField.fieldName });
+        if (average) {
+          xData.push(averageByInterval.intervalOffsetString);
+          yData.push(average.value);
         }
-      }
-    }
-    return { xData: xData, yData: yData };
+    })
+    let color: string = this.getDateColorFromDay(logToolDay);
+    let formatedDate: string = moment(logToolDay.date).format("MMM D, YYYY").toString();
+    let graphData: DayTypeGraphItem = { xData: xData, yData: yData,  name: formatedDate, color: color, date: logToolDay.date  }
+    return graphData;
   }
 
   getDateColorFromDay(logToolDay: LogToolDay): string {
