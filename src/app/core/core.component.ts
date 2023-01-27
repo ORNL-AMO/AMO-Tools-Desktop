@@ -1,16 +1,19 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { filter, firstValueFrom, Subscription } from 'rxjs';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
-import { Router } from '../../../node_modules/@angular/router';
+import { NavigationEnd, Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
+import { AnalyticsService, AppAnalyticsData } from '../shared/analytics/analytics.service';
+import { v4 as uuidv4 } from 'uuid';
+import { AnalyticsDataIdbService } from '../indexedDb/analytics-data-idb.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 
 declare var google: any;
@@ -44,11 +47,13 @@ export class CoreComponent implements OnInit {
   tutorialType: string;
   inTutorialsView: boolean;
   updateError: boolean = false;
-
+  isOnline: boolean;
   info: any;
   updateAvailableSubscription: Subscription;
   showTranslateModalSub: Subscription;
+  routerSubscription: Subscription;
   showTranslate: string = 'hide';
+  analyticsSessionId: string;
   modalOpenSub: Subscription;
   showSecurityAndPrivacyModalSub: Subscription;
   isModalOpen: boolean;
@@ -62,12 +67,22 @@ export class CoreComponent implements OnInit {
     private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, 
     private directoryDbService: DirectoryDbService,
-    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private router: Router,
+    private analyticsService: AnalyticsService,
+    private calculatorDbService: CalculatorDbService, 
+    private coreService: CoreService, 
+    private router: Router,
+    private analyticsDataIdbService: AnalyticsDataIdbService,
     private securityAndPrivacyService: SecurityAndPrivacyService,
     private inventoryDbService: InventoryDbService) {
   }
 
   ngOnInit() {
+   this.analyticsSessionId = uuidv4();
+   this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+     .subscribe((event: NavigationEnd) => {
+      this.sendAnalyticsPageView(event);
+     });
+
     this.electronService.ipcRenderer.once('available', (event, arg) => {
       if (arg === true) {
         this.showUpdateModal = true;
@@ -96,10 +111,7 @@ export class CoreComponent implements OnInit {
       this.suiteDbService.startup();
     }
 
-    // const start = performance.now(); 
     window.indexedDB.databases().then(db => {
-      // const duration = performance.now() - start;
-      // console.log(db, duration);
       this.initData();
     });
 
@@ -135,9 +147,42 @@ export class CoreComponent implements OnInit {
 
   }
 
+ async initAnalyticsSession() {
+    await this.setClientAnalyticsId();
+    this.analyticsService.postEventToMeasurementProtocol('page_view', { 
+      page_path: '/landing-screen',
+      // engagement_time_msec required to begin an analytics session but not used again
+      engagement_time_msec: '100',
+      session_id: this.analyticsSessionId
+    })
+  }
+  
+  async setClientAnalyticsId() {
+    let appAnalyticsData: Array<AppAnalyticsData> = await firstValueFrom(this.analyticsDataIdbService.getAppAnalyticsData());
+    let clientId: string;
+    if (appAnalyticsData.length == 0) {
+      clientId = uuidv4();
+      await firstValueFrom(this.analyticsDataIdbService.addWithObservable({
+        clientId: clientId,
+        modifiedDate: new Date()
+      }));
+    } else {
+      clientId = appAnalyticsData[0].clientId;
+    }
+    this.analyticsService.setClientId(clientId);
+  }
+
+  sendAnalyticsPageView(event) {
+    if (this.idbStarted) {
+      this.analyticsService.postEventToMeasurementProtocol('page_view', { page_path: event.urlAfterRedirects, session_id: this.analyticsSessionId })
+     } 
+  }
 
   ngOnDestroy() {
-    if (this.openingTutorialSub) this.openingTutorialSub.unsubscribe();
+    if (this.openingTutorialSub) {
+      this.openingTutorialSub.unsubscribe();
+    }
+    this.routerSubscription.unsubscribe();
     this.updateAvailableSubscription.unsubscribe();
     this.showTranslateModalSub.unsubscribe();
     this.showSecurityAndPrivacyModalSub.unsubscribe();
@@ -169,6 +214,7 @@ export class CoreComponent implements OnInit {
         this.suiteDbService.initCustomDbMaterials();
       }
       this.idbStarted = true;
+      this.initAnalyticsSession();
       this.changeDetectorRef.detectChanges();
     });
   }
