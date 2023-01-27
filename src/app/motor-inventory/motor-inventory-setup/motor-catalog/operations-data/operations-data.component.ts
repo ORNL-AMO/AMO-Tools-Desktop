@@ -144,7 +144,6 @@ export class OperationsDataComponent implements OnInit {
 
   showLoadFactorModal() {
     let selectedMotorItem = this.motorCatalogService.getUpdatedSelectedMotorItem();
-    this.percentLoadEstimationService.loadEstimationMethod = 1;
     this.percentLoadEstimationService.fieldMeasurementInputs = {
       phase1Voltage: 0,
       phase1Amps: 0,
@@ -168,11 +167,7 @@ export class OperationsDataComponent implements OnInit {
 
   applyModalData() {
     let percentLoad: number;
-    if (this.percentLoadEstimationService.loadEstimationMethod == 1) {
-      percentLoad = this.percentLoadEstimationService.getResults(this.percentLoadEstimationService.fieldMeasurementInputs).percentLoad;
-    } else if (this.percentLoadEstimationService.loadEstimationMethod == 0) {
-      percentLoad = this.percentLoadEstimationService.calculateSlipMethod(this.percentLoadEstimationService.slipMethodInputs);
-    }
+    percentLoad = this.percentLoadEstimationService.getResults(this.percentLoadEstimationService.fieldMeasurementInputs).percentLoad;
     this.motorForm.controls.averageLoadFactor.patchValue(Number(percentLoad.toFixed(1)));
     this.save();
     this.hideLoadFactorModal();

@@ -40,7 +40,7 @@ export class DayTypeGraphService {
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
     dayTypeSummary.dayAveragesByInterval.forEach(intervalAverage => {
       let currentFieldAverageValue: number = _.find(intervalAverage.averages, (averageObj) => { return averageObj.field.fieldName == selectedDataField.fieldName }).value;
-      xData.push(intervalAverage.intervalDisplayString);
+      xData.push(intervalAverage.intervalOffsetString);
       yData.push(currentFieldAverageValue);
     });
     
@@ -72,7 +72,7 @@ export class DayTypeGraphService {
     logToolDay.dayAveragesByInterval.forEach(averageByInterval => {
       let average: { value: number, field: LogToolField } = _.find(averageByInterval.averages, (averageObj) => { return averageObj.field.fieldName == selectedDataField.fieldName });
         if (average) {
-          xData.push(averageByInterval.intervalDisplayString);
+          xData.push(averageByInterval.intervalOffsetString);
           yData.push(average.value);
         }
     })

@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  weatherApiUrl: 'https://weather.ornl.gov/'
+  measurUtilitiesApi: 'https://weather.ornl.gov/'
 };
