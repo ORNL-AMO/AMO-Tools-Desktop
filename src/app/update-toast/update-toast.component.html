@@ -1,4 +1,4 @@
-<div class="card toasty-card update-toast" [@toast]="showToast" *ngIf="!destroyToast">
+<div class="card toasty-card update-toast" [@toast]="showUpdateToast" *ngIf="!destroyToast">
   <div class="card-header">
     {{releaseName}} is now available!!
     <button class="close pull-right" (click)="closeToast()" *ngIf="!downloadingUpdate">
