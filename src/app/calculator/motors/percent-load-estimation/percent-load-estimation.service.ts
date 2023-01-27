@@ -7,11 +7,6 @@ import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class PercentLoadEstimationService {
-  slipMethodInputs: SlipMethod = {
-    synchronousSpeed: 0,
-    measuredSpeed: 0,
-    nameplateFullLoadSpeed: 0
-  };
   fieldMeasurementInputs: FieldMeasurementInputs = {
     phase1Voltage: 0,
     phase1Amps: 0,
@@ -25,16 +20,7 @@ export class PercentLoadEstimationService {
   };
   loadEstimationMethod: number = 1;
   constructor(private formBuilder: UntypedFormBuilder) { }
-
-  initSlipMethodInputs(): SlipMethod {
-    this.slipMethodInputs = {
-      synchronousSpeed: 0,
-      measuredSpeed: 0,
-      nameplateFullLoadSpeed: 0
-    };
-    return this.slipMethodInputs;
-  }
-
+  
   generateFieldMeasurementInputsExample(): FieldMeasurementInputs {
     let fieldMeasurementInputs = {
       phase1Voltage: 467,
@@ -50,58 +36,12 @@ export class PercentLoadEstimationService {
     this.fieldMeasurementInputs = fieldMeasurementInputs;
     return fieldMeasurementInputs;
   }
-
-  generateSlipMethodInputsExample(): SlipMethod {
-    this.slipMethodInputs = {
-      synchronousSpeed: 0,
-      measuredSpeed: 1780,
-      nameplateFullLoadSpeed: 1770
-    };
-    return this.slipMethodInputs;
-  }
-
-  initSlipMethodForm(): UntypedFormGroup {
-    let tmpForm: UntypedFormGroup = this.formBuilder.group({
-      lineFrequency: [60],
-      synchronousSpeed: [0],
-      measuredSpeed: [0, [Validators.required]],
-      nameplateFullLoadSpeed: [0, [Validators.required]]
-    });
-    return tmpForm;
-  }
+  
 
   updateMeasuredSpeedValidator(form: UntypedFormGroup, val: number): UntypedFormGroup {
     form.controls.measuredSpeed.clearValidators();
     form.controls.measuredSpeed.setValidators([Validators.required, LessThanValidator.lessThan(val)]);
     return form;
-  }
-
-  getSlipMethodFormFromObj(inputObj: SlipMethod, lineFrequency: number, synchronousSpeeds: Array<number>): UntypedFormGroup {
-    let tmpForm: UntypedFormGroup = this.formBuilder.group({
-      lineFrequency: [lineFrequency],
-      synchronousSpeed: [inputObj.synchronousSpeed],
-      measuredSpeed: [inputObj.measuredSpeed, [Validators.required, LessThanValidator.lessThan(synchronousSpeeds[synchronousSpeeds.length - 1])]],
-      nameplateFullLoadSpeed: [inputObj.nameplateFullLoadSpeed, [Validators.required, ValueNotInListValidator.valueNotInList(synchronousSpeeds), LessThanValidator.lessThan(synchronousSpeeds[synchronousSpeeds.length - 1])]]
-    });
-    return tmpForm;
-  }
-
-  getSlipMethodObjFromForm(form: UntypedFormGroup): SlipMethod {
-    let tmpSlipMethodInputs = {
-      synchronousSpeed: form.controls.synchronousSpeed.value,
-      measuredSpeed: form.controls.measuredSpeed.value,
-      nameplateFullLoadSpeed: form.controls.nameplateFullLoadSpeed.value
-    };
-    return tmpSlipMethodInputs;
-  }
-
-  updateSlipMethodValidation(synchronousSpeeds: Array<number>, form: UntypedFormGroup): UntypedFormGroup {
-    let tmpForm = form;
-    tmpForm.controls.nameplateFullLoadSpeed.clearValidators();
-    tmpForm.controls.measuredSpeed.clearValidators();
-    tmpForm.controls.nameplateFullLoadSpeed.setValidators([Validators.required, Validators.max(synchronousSpeeds[synchronousSpeeds.length - 1])]);
-    tmpForm.controls.measuredSpeed.setValidators([Validators.required, Validators.max(synchronousSpeeds[synchronousSpeeds.length - 1])]);
-    return tmpForm;
   }
 
   initFieldMeasurementInputs(): FieldMeasurementInputs {
@@ -206,16 +146,7 @@ export class PercentLoadEstimationService {
     return (deviation / avgVoltage) * 100;
   }
 
-  calculateSlipMethod(data: SlipMethod): number {
-    return ((data.synchronousSpeed - data.measuredSpeed)
-      / (data.synchronousSpeed - data.nameplateFullLoadSpeed)) * 100;
-  }
-}
-
-export interface SlipMethod {
-  synchronousSpeed: number;
-  measuredSpeed: number;
-  nameplateFullLoadSpeed: number;
+ 
 }
 
 
