@@ -17,7 +17,7 @@
 ## Package
 - To build a package:`npm install && npm run ng-high-memory` and then: `npm run dist`
 - The packages will be placed in `../output`
-- Example: `npm install && npm run build-prod && npm run dist` will make a production-build installer for Windows
+- Example: `npm install && npm run ng-high-memory && npm run dist` will make a production-build installer for Windows
 
 ## For Developers
 - To generate a new angular module: `npm run ng g module path/to/module`
