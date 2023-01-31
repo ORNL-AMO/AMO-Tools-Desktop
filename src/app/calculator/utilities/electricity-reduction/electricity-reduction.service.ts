@@ -307,4 +307,15 @@ export class ElectricityReductionService {
       }
     return inputArray;
   }
+
+  checkWarnings(index: number, modificationExists: boolean): boolean{
+    if(modificationExists){
+      if((this.baselineData[index].multimeterData.powerFactor === this.modificationData[index].multimeterData.powerFactor) && (this.baselineData[index].multimeterData.averageCurrent <= this.modificationData[index].multimeterData.averageCurrent)){
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
+
 }

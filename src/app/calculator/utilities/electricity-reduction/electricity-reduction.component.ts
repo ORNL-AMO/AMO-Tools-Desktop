@@ -166,6 +166,8 @@ export class ElectricityReductionComponent implements OnInit {
 
 
   getResults() {
+    this.electricityReductionService.baselineData = this.baselineData;
+    this.electricityReductionService.modificationData = this.modificationData;
     this.electricityReductionResults = this.electricityReductionService.getResults(this.settings, this.baselineData, this.modificationData);
   }
 
