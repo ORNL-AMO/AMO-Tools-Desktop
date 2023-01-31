@@ -3,6 +3,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { PhastService } from '../phast.service';
 import { Settings } from '../../shared/models/settings';
 import { Subscription } from 'rxjs';
+import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 @Component({
   selector: 'app-phast-banner',
   templateUrl: './phast-banner.component.html',
@@ -16,7 +17,7 @@ export class PhastBannerComponent implements OnInit {
 
   mainTab: string;
   mainTabSub: Subscription;
-  constructor(private phastService: PhastService) { }
+  constructor(private phastService: PhastService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit() {
     this.mainTabSub = this.phastService.mainTab.subscribe(val => {
@@ -26,6 +27,11 @@ export class PhastBannerComponent implements OnInit {
 
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
+  }
+
+  showSecurityAndPrivacyModal() {
+    this.securityAndPrivacyService.modalOpen.next(true);
+    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
   }
 
   changeTab(str: string) {

@@ -172,6 +172,7 @@ export class OperatingProfileTableComponent implements OnInit {
     this.isFormChange = true;
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
+    this.profileSummaryValid = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment);
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
@@ -228,9 +229,10 @@ export class OperatingProfileTableComponent implements OnInit {
         profileSummary.logToolFieldId = selectedProfileSummary.logToolFieldId;
         this.logToolDayTypeSummaries.forEach(summary => {
           if (summary.dayType.dayTypeId == profileSummary.dayTypeId) {
-            summary.hourlyAverages.forEach(hourlyAverage => {
+            summary.dayAveragesByInterval.forEach(hourlyAverage => {
               let average = hourlyAverage.averages.find(average => { return average.field.fieldId == profileSummary.logToolFieldId });
-              let profileSummaryData = profileSummary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == hourlyAverage.hour });
+              let profileSummaryData = profileSummary.profileSummaryData.find(summaryData => { 
+                return summaryData.timeInterval == hourlyAverage.interval });
               if (average && profileSummaryData) {
                 let assessmentDayType: CompressedAirDayType = this.assessmentDayTypes.find(dayType => { return dayType.dayTypeId == profileSummary.dayTypeId });
                 if (assessmentDayType) {
@@ -260,9 +262,9 @@ export class OperatingProfileTableComponent implements OnInit {
         profileSummary.logToolFieldIdPowerFactor = selectedProfileSummary.logToolFieldIdPowerFactor;
         this.logToolDayTypeSummaries.forEach(summary => {
           if (summary.dayType.dayTypeId == profileSummary.dayTypeId) {
-            summary.hourlyAverages.forEach(hourlyAverage => {
+            summary.dayAveragesByInterval.forEach(hourlyAverage => {
               let average = hourlyAverage.averages.find(average => { return average.field.fieldId == profileSummary.logToolFieldIdPowerFactor });
-              let profileSummaryData = profileSummary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == hourlyAverage.hour });
+              let profileSummaryData = profileSummary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == hourlyAverage.interval });
               if (average && profileSummaryData) {
                 let assessmentDayType: CompressedAirDayType = this.assessmentDayTypes.find(dayType => { return dayType.dayTypeId == profileSummary.dayTypeId });
                 if (assessmentDayType) {
@@ -283,9 +285,9 @@ export class OperatingProfileTableComponent implements OnInit {
         profileSummary.logToolFieldIdAmps = selectedProfileSummary.logToolFieldIdAmps;
         this.logToolDayTypeSummaries.forEach(summary => {
           if (summary.dayType.dayTypeId == profileSummary.dayTypeId) {
-            summary.hourlyAverages.forEach(hourlyAverage => {
+            summary.dayAveragesByInterval.forEach(hourlyAverage => {
               let average = hourlyAverage.averages.find(average => { return average.field.fieldId == profileSummary.logToolFieldIdAmps });
-              let profileSummaryData = profileSummary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == hourlyAverage.hour });
+              let profileSummaryData = profileSummary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == hourlyAverage.interval });
               if (average && profileSummaryData) {
                 let assessmentDayType: CompressedAirDayType = this.assessmentDayTypes.find(dayType => { return dayType.dayTypeId == profileSummary.dayTypeId });
                 if (assessmentDayType) {
@@ -306,9 +308,9 @@ export class OperatingProfileTableComponent implements OnInit {
         profileSummary.logToolFieldIdVolts = selectedProfileSummary.logToolFieldIdVolts;
         this.logToolDayTypeSummaries.forEach(summary => {
           if (summary.dayType.dayTypeId == profileSummary.dayTypeId) {
-            summary.hourlyAverages.forEach(hourlyAverage => {
+            summary.dayAveragesByInterval.forEach(hourlyAverage => {
               let average = hourlyAverage.averages.find(average => { return average.field.fieldId == profileSummary.logToolFieldIdVolts });
-              let profileSummaryData = profileSummary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == hourlyAverage.hour });
+              let profileSummaryData = profileSummary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == hourlyAverage.interval });
               if (average && profileSummaryData) {
                 let assessmentDayType: CompressedAirDayType = this.assessmentDayTypes.find(dayType => { return dayType.dayTypeId == profileSummary.dayTypeId });
                 if (assessmentDayType) {

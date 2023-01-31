@@ -1,6 +1,5 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 import { ProfileSummaryValid } from "../../compressed-air-assessment/compressed-air-assessment.service";
-import { SankeySystemInputs } from "../../compressed-air-assessment/compressed-air-sankey/power-sankey/power-sankey.service";
 import { DayTypeSummary, LogToolField } from "../../log-tool/log-tool-models";
 
 export interface CompressedAirAssessment {
@@ -55,22 +54,22 @@ export interface ImproveEndUseEfficiency {
 export interface EndUseData {
     endUses: Array<EndUse>,
     endUseDayTypeSetup: EndUseDayTypeSetup,
-    dayTypeAirFlowTotals: DayTypeAirflowTotals 
+    dayTypeAirFlowTotals: DayTypeAirflowTotals
 }
 
 export interface DayTypeAirflowTotals {
-        unaccountedAirflow?: number,
-        unaccountedAirflowPercent: number,
-        exceededAirflow?: number,
-        exceededAirflowPercent?: number,
-        totalDayTypeEndUseAirflow: number,
-        totalDayTypeEndUseAirflowPercent: number,
-        totalDayTypeAverageAirflow: number
+    unaccountedAirflow?: number,
+    unaccountedAirflowPercent: number,
+    exceededAirflow?: number,
+    exceededAirflowPercent?: number,
+    totalDayTypeEndUseAirflow: number,
+    totalDayTypeEndUseAirflowPercent: number,
+    totalDayTypeAverageAirflow: number
 }
 
 export interface EndUseDayTypeSetup {
     selectedDayTypeId: string,
-    dayTypeLeakRates: Array<{dayTypeId: string, dayTypeLeakRate: number}>,
+    dayTypeLeakRates: Array<{ dayTypeId: string, dayTypeLeakRate: number }>,
 }
 
 export interface EndUse {
@@ -185,7 +184,13 @@ export interface SystemInformation {
     isSequencerUsed: boolean,
     targetPressure: number,
     variance: number,
-    co2SavingsData?: Co2SavingsData
+    co2SavingsData?: Co2SavingsData,
+    plantMaxPressure: number,
+    multiCompressorSystemControls: 'cascading' | 'isentropicEfficiency' | 'loadSharing' | 'targetPressureSequencer' | 'baseTrim',
+    trimSelections?: Array<{
+        dayTypeId: string,
+        compressorId: string
+    }>
 }
 
 export interface CompressorInventoryItem {
@@ -294,6 +299,7 @@ export interface ProfileSummary {
     avgPercentCapacity?: number,
     profileSummaryValid?: ProfileSummaryValid
     profileSummaryForPrint?: Array<Array<ProfileSummaryData>>,
+    adjustedIsentropicEfficiency?: number
 }
 
 export interface ProfileSummaryData {

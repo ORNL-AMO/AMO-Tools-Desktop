@@ -12,15 +12,15 @@
                             <td class="bold">
                                 &nbsp;
                             </td>
-                            <td class="bold text-center" *ngFor="let hourlyAverage of logToolDay.hourlyAverages">
-                                {{hourlyAverage.hour+1}}
+                            <td class="bold text-center" *ngFor="let intervalAverage of logToolDay.dayAveragesByInterval">
+                                {{intervalAverage.intervalDisplayString}}
                             </td>
                         </tr>
                         <tr *ngFor="let field of fields">
                             <td class="bold day-type-label">
                                 {{field.alias}}
                             </td>
-                            <td *ngFor="let hourlyAverage of logToolDay.hourlyAverages">
+                            <td *ngFor="let hourlyAverage of logToolDay.dayAveragesByInterval">
                                 {{getAverageValue(hourlyAverage.averages, field) | number}}
                             </td>
                         </tr>

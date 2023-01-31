@@ -46,6 +46,7 @@ export class ReduceRunTimeComponent implements OnInit {
   settings: Settings;
   numberPipeDecimals: string;
   intervalAmount: number;
+  displayShutdownTimer: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService, private reduceRunTimeService: ReduceRunTimeService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
@@ -58,6 +59,7 @@ export class ReduceRunTimeComponent implements OnInit {
     }
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment) {
+        this.displayShutdownTimer = compressedAirAssessment.systemInformation.multiCompressorSystemControls != 'loadSharing';
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
         this.intervalAmount = this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
         this.setOrderOptions();

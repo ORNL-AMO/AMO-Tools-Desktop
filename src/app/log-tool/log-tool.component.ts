@@ -54,6 +54,7 @@ export class LogToolComponent implements OnInit {
         let contentHeight = this.content.nativeElement.clientHeight;
         let headerHeight = this.header.nativeElement.clientHeight;
         this.containerHeight = contentHeight - headerHeight;
+        this.logToolService.setupContainerHeight.next(this.containerHeight);
       }, 100);
     }
   }

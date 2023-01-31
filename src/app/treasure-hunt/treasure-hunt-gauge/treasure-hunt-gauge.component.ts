@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleChanges } from '@angular/core';
-import * as c3 from 'c3';
+import bb, {gauge} from "billboard.js";
+
 @Component({
   selector: 'app-treasure-hunt-gauge',
   templateUrl: './treasure-hunt-gauge.component.html',
@@ -52,42 +53,39 @@ export class TreasureHuntGaugeComponent implements OnInit {
   }
 
   initChart() {
-    this.chart = c3.generate({
-      bindto: this.tHuntChart.nativeElement,
+        this.chart = bb.generate({
       data: {
         columns: [
-          ['data', this.value]
+      ["data", this.value]
         ],
-        type: 'gauge',
-        min: 0,
-        max: 50
-      },
-      legend: {
-        show: false
+        type: gauge(),
       },
       gauge: {
         label: {
-          show: false,
-          format: function (value: number, ratio) {
-            return value.toFixed(2) + '%'; //returning here the value and not the ratio
-          }
-        },
-        min: 0,
-        max: 50
+          extents: function() { return ""; }
+        }
       },
       color: {
-        pattern: ['#52489C','#27AE60'], // the three color levels for the percentage values.
+        pattern: [
+          '#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'
+        ],
         threshold: {
-          values: [25, 50]
+          values: [
+            25, 50, 75, 101
+          ]
         }
+      },
+      legend: {
+        show: false
       },
       tooltip: {
         show: false
       },
       size: {
+        width: this.chartWidth,
         height: this.chartHeight,
-        width: this.chartWidth
-      }
+      },
+      bindto: this.tHuntChart.nativeElement
     });
   }
 }

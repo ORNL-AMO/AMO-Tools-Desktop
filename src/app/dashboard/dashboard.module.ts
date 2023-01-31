@@ -21,6 +21,8 @@ import { CreateInventoryComponent } from './create-inventory/create-inventory.co
 import { InventoryService } from './inventory.service';
 import { MoveItemsComponent } from './move-items/move-items.component';
 import { CopyItemsComponent } from './copy-items/copy-items.component';
+import { DisclaimerComponent } from './disclaimer/disclaimer.component';
+import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/security-and-privacy.module';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,7 @@ import { CopyItemsComponent } from './copy-items/copy-items.component';
     CreateInventoryComponent,
     MoveItemsComponent,
     CopyItemsComponent,
+    DisclaimerComponent,
   ],
   imports: [
     CommonModule,
@@ -46,7 +49,8 @@ import { CopyItemsComponent } from './copy-items/copy-items.component';
     RouterModule,
     ImportExportModule,
     DirectoryDashboardModule,
-    ToastModule
+    ToastModule,
+    SecurityAndPrivacyModule
   ],
   providers: [
     DashboardService,

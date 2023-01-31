@@ -234,6 +234,7 @@ export class VisualizeGraphComponent implements OnInit {
 
     let config: SegmentConfig = {
       dataSetLength: graphObj.data[0].y.length,
+      // .15 arbitrary value set for development - could have user pick size
       segmentSize: Math.floor(graphObj.data[0].y.length * .15),
       allDataMinDate: this.dayTypeAnalysisService.allDataMinDate,
       allDataMaxDate: this.dayTypeAnalysisService.allDataMaxDate,
@@ -248,22 +249,14 @@ export class VisualizeGraphComponent implements OnInit {
       }
 
       let currentDay: string = moment(timeSeriesData[0]).format("MMM Do");
-
-      //======
-      // 6040 band aid until file/dataset processing supports multi files better
-      // use only the time series data for the selected series (y axis), DE logic currently concats all time series data. 
-      let previousSeriesEnd: number = 0;
-      if (seriesIndex !== 0) {
-        previousSeriesEnd = graphObj.data[seriesIndex - 1].y.length;
-      }
-      timeSeriesData = timeSeriesData.slice(previousSeriesEnd, previousSeriesEnd + graphDataSeries.y.length);
-      //======
+      timeSeriesData = this.filterTimeSeriesForSelectedY(graphObj, seriesIndex, timeSeriesData);
 
       let currentDayData: VisualizerGraphData = JSON.parse(JSON.stringify(graphDataSeries));
       currentDayData.x = [];
       currentDayData.y = [];
 
-      timeSeriesData.forEach((dateStamp, coordinateIndex) => {
+      for (let coordinateIndex = 0; coordinateIndex < timeSeriesData.length; coordinateIndex++) {
+        let dateStamp: number | string = timeSeriesData[coordinateIndex];
         let monthDay: string = moment(dateStamp).format("MMM Do");
 
         let xValue: string | number = dateStamp;
@@ -298,12 +291,24 @@ export class VisualizeGraphComponent implements OnInit {
           currentDayData.x.push(xValue);
           currentDayData.y.push(graphDataSeries.y[coordinateIndex]);
         }
-
-      });
+      }
     });
 
     // Group day segments into reasonable amount of segments until day selection is implemented
     return this.groupTimeSeriesDaySegments(segmentDays, graphObj, config);
+  }
+
+  filterTimeSeriesForSelectedY(graphObj: GraphObj, seriesIndex: number, timeSeriesData: Array<string | number>) {
+    //======
+      // 6040 band aid until file/dataset processing supports multi files better
+      // use only the time series data for the selected series (y axis), DE logic currently concats all time series data. 
+      let previousSeriesEnd: number = 0;
+      if (seriesIndex !== 0) {
+        previousSeriesEnd = graphObj.data[seriesIndex - 1].y.length;
+      }
+      timeSeriesData = timeSeriesData.slice(previousSeriesEnd, previousSeriesEnd + graphObj.data[seriesIndex].y.length);
+      return timeSeriesData;
+      //======
   }
 
   groupTimeSeriesDaySegments(segmentDays: Array<TimeSeriesSegment>, graphObj: GraphObj, config: SegmentConfig): Array<TimeSeriesSegment> {
@@ -348,19 +353,28 @@ export class VisualizeGraphComponent implements OnInit {
     if (graphObj.layout.annotations && graphObj.layout.annotations.length > 0) {
       let annotationsInRange: AnnotationData[] = []
       graphObj.layout.annotations.forEach(annotation => {
-        graphObj.data.forEach(dataSeries => {
-
+        graphObj.data.forEach((dataSeries, index) => {
           let matchingYIndicies: number[] = [];
-          dataSeries.y.forEach((yVal, index) => {
+
+      for (let i = 0; i < dataSeries.y.length; i++) {
+          let yVal: number | string = dataSeries.y[i];
             if (yVal === annotation.y) {
-              matchingYIndicies.push(index)
-            };
-          });
-          
+              matchingYIndicies.push(i)
+          };
+      }
+          let timeSeriesData: Array<string | number> = dataSeries.x;
+          if (this.selectedTimeSeriesSegment.segmentText === 'All Datapoints') {
+            timeSeriesData = this.filterTimeSeriesForSelectedY(graphObj, index, dataSeries.x);
+          }
           matchingYIndicies.forEach(i => {
-            if (dataSeries.x[i] === annotation.x) {
+            // see if it's x pair === annotaiton x
+            if (timeSeriesData[i] === annotation.x) {
               let existingAnnotation = annotationsInRange.find(existing => {
-                return existing.x === annotation.x && existing.y === annotation.y;
+                if (existing.x === annotation.x && existing.y === annotation.y) {
+                  return true;
+                } else {
+                  return false;
+                }
               });
               // Only add point once - some annotation point values/intersecitons appear many times in data
               if (!existingAnnotation) {
@@ -368,8 +382,7 @@ export class VisualizeGraphComponent implements OnInit {
               }
             }
           })
-        
-        })
+        });
       })
       
       graphObj.layout.annotations = annotationsInRange;

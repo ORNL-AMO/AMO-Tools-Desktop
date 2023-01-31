@@ -231,6 +231,15 @@ export const WeatherDataStoreMeta = {
   ]
 };
 
+export const AnalyticStoreMeta = {
+  store: 'analyticsData',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'clientId', keypath: 'clientId', options: {unique: false } },
+    { name: 'modifiedDate', keypath: 'modifiedDate', options: {unique: false } },
+  ]
+};
+
 
 export const GasLoadMaterialStoreMeta = {
   store: 'gasLoadChargeMaterial',
@@ -332,7 +341,7 @@ export const SolidLiquidFlueGasMaterialStoreMeta = {
 
 export const dbConfig: DBConfig = {
   name: 'CrudDB',
-  version: 6,
+  version: 7,
   objectStoresMeta: [
     AssessmentStoreMeta,
     DirectoryStoreMeta,
@@ -341,13 +350,14 @@ export const dbConfig: DBConfig = {
     InventoryStoreMeta,
     LogToolStoreMeta,
     WeatherDataStoreMeta,
+    AnalyticStoreMeta,
     GasLoadMaterialStoreMeta,
     SolidLoadMaterialStoreMeta,
     LiquidLoadMaterialStoreMeta,
     AtmosphereStoreMeta,
     WallLossesSurfaceStoreMeta,
     FlueGasMaterialStoreMeta,
-    SolidLiquidFlueGasMaterialStoreMeta
+    SolidLiquidFlueGasMaterialStoreMeta,
   ]
 };
 

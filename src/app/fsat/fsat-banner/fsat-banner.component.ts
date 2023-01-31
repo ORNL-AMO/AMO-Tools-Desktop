@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { FsatService } from '../fsat.service';
 import { Subscription } from 'rxjs';
+import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 
 @Component({
   selector: 'app-fsat-banner',
@@ -15,7 +16,7 @@ export class FsatBannerComponent implements OnInit {
   mainTab: string;
   mainTabSubscription: Subscription;
   bannerCollapsed: boolean = true;
-  constructor(private fsatService: FsatService) { }
+  constructor(private fsatService: FsatService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit() {
     this.mainTabSubscription = this.fsatService.mainTab.subscribe(val => {
@@ -34,6 +35,11 @@ export class FsatBannerComponent implements OnInit {
       this.fsatService.mainTab.next(str);
     }
     this.collapseBanner();
+  }
+
+  showSecurityAndPrivacyModal() {
+    this.securityAndPrivacyService.modalOpen.next(true);
+    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
   }
 
   collapseBanner() {

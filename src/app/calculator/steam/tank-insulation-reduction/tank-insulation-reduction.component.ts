@@ -103,7 +103,8 @@ export class TankInsulationReductionComponent implements OnInit {
     if (this.tankInsulationReductionService.modificationData) {
       this.modificationForm = this.tankInsulationReductionService.getFormFromObj(this.tankInsulationReductionService.modificationData, false);
       this.modificationExists = true;
-      this.modificationForm.disable();
+      this.modificationForm.controls.energySourceType.disable();
+      this.modificationForm.controls.heatedOrChilled.disable();
     }
   }
 
@@ -136,7 +137,6 @@ export class TankInsulationReductionComponent implements OnInit {
     if (this.modificationExists) {
       this.modificationForm.enable();
       this.modificationForm.controls.utilityType.disable();
-      this.modificationForm.controls.utilityCost.disable();
       this.modificationForm.controls.heatedOrChilled.disable();
       if (this.modificationForm.controls.insulationMaterialSelection.value == 0) {
         this.modificationForm.controls.jacketMaterialSelection.disable();
