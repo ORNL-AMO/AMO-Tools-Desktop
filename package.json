@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "main": "main.js",
   "license": "MIT",
   "description": "MEASUR",
@@ -8,8 +8,8 @@
   "repository": "https://github.com/ORNL-AMO/AMO-Tools-Desktop.git",
   "angular-cli": {},
   "engines": {
-    "node": "14.15.0",
-    "npm": "6.14.8"
+    "node": "14.20.1",
+    "npm": "6.14.17"
   },
   "scripts": {
     "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --configuration production",
@@ -125,7 +125,7 @@
     "angular-plotly.js": "^4.0.4",
     "axios": "^0.27.2",
     "electron": "^13.6.6",
-    "electron-builder": "^23.6.0",
+    "electron-builder": "22.9.1",
     "electron-download-tf": "4.3.4",
     "electron-packager": "15.2.0",
     "jasmine-spec-reporter": "~5.0.0",
