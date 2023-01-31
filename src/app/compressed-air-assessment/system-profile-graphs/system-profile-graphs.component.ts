@@ -501,9 +501,10 @@ export class SystemProfileGraphsComponent implements OnInit {
       xaxis: {
         autotick: false,
         range: xAxisRange,
-        tickmode: "linear", //  If "linear", the placement of the ticks is determined by a starting position `tick0` and a tick step `dtick`
-        tick0: xAxisRange[0],
-        dtick: this.timeInterval,
+        //  Uncomment for ticks per interval
+        // tickmode: "linear", 
+        // tick0: xAxisRange[0],
+        // dtick: this.timeInterval,
         title: {
           text: 'Hour',
           font: {
