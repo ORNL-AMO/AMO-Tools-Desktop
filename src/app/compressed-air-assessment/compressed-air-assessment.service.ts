@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { isNull, isUndefined } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { CompressedAirAssessment, CompressorInventoryItem, Modification, ProfileSummaryData } from '../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, Modification, ProfileSummaryData, SystemProfileSetup } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { DayTypeService } from './day-types/day-type.service';
 import { InventoryService } from './inventory/inventory.service';
@@ -208,6 +208,19 @@ export class CompressedAirAssessmentService {
       profileSummaryValid.airFlowError = `Airflow must be 0 or greater`;
     }
     return airFlowValidation;
+  }
+
+  getHourIntervals(systemProfileSetup: SystemProfileSetup, hours?: number) {
+    let hourIntervals = new Array();
+    if (hours === undefined) {
+      hours = systemProfileSetup.numberOfHours
+    }
+    
+    for (let index = 0; index < hours;) {
+      hourIntervals.push(index);
+      index = index + systemProfileSetup.dataInterval;
+    }
+    return hourIntervals;
   }
 
   checkIsPowerFactorValid(powerFactor: number, amps: number, volts: number, compressor: CompressorInventoryItem, profileSummaryValid: ProfileSummaryValid): PowerFactorInputValidationData {

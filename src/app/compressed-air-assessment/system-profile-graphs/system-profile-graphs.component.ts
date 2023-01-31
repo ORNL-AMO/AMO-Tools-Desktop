@@ -254,7 +254,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       this.profileSummary.forEach(compressorProfile => {
         let percentOfSystem: Array<number> = [];
         let trace = {
-          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval + this.timeInterval }),
+          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
           y: compressorProfile.profileSummaryData.map(data => {
             if (data.order != 0) {
               percentOfSystem.push(data.percentSystemCapacity);
@@ -278,8 +278,8 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(trace);
       });
       let yAxisRange: Array<number> = this.getYAxisRange(true, this.totalFullLoadCapacity);
-      let xRangeMax: number = 24;
-      let xRangeMin: number = this.timeInterval;
+      let xRangeMax: number = traceData[0].x[traceData[0].x.length - 1];
+      let xRangeMin: number = traceData[0].x[0];
       if (this.profileSummary[0].profileSummaryData.length == 1) {
         xRangeMax = 1;
         xRangeMin = 0;
@@ -336,7 +336,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let traceData = new Array();
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
-          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval + this.timeInterval }),
+          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
           y: compressorProfile.profileSummaryData.map(data => {
             if (data.order != 0) {
               return data.percentCapacity;
@@ -355,8 +355,8 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       });
-      let xRangeMax: number = 24;
-      let xRangeMin: number = this.timeInterval;
+      let xRangeMax: number = traceData[0].x[traceData[0].x.length - 1];
+      let xRangeMin: number = traceData[0].x[0];
       if (this.profileSummary[0].profileSummaryData.length == 1) {
         xRangeMax = 1;
         xRangeMin = 0;
@@ -401,8 +401,8 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(trace);
       });
       let yAxisRange: Array<number> = this.getYAxisRange(false, this.totalFullLoadPower);
-      let xRangeMax: number = 24;
-      let xRangeMin: number = this.timeInterval;
+      let xRangeMax: number = traceData[0].x[traceData[0].x.length - 1];
+      let xRangeMin: number = traceData[0].x[0];
       if (this.profileSummary[0].profileSummaryData.length == 1) {
         xRangeMax = 1;
         xRangeMin = 0;
@@ -433,7 +433,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let traceData = new Array();
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
-          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval + this.timeInterval }),
+          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
           y: compressorProfile.profileSummaryData.map(data => {
             if (data.order != 0) {
               return data.percentPower
@@ -452,7 +452,13 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       });
-      var layout = this.getLayout("Compressor Power %", undefined, [0, 100], '%');
+      let xRangeMax: number = traceData[0].x[traceData[0].x.length - 1];
+      let xRangeMin: number = traceData[0].x[0];
+      if (this.profileSummary[0].profileSummaryData.length == 1) {
+        xRangeMax = 1;
+        xRangeMin = 0;
+      }
+      var layout = this.getLayout("Compressor Power %", [xRangeMin, xRangeMax], [0, 100], '%');
       var config = {
         responsive: !this.printView,
         displaylogo: false
@@ -487,6 +493,7 @@ export class SystemProfileGraphsComponent implements OnInit {
     if (this.printView) {
       width = 1000;
     }
+
     return {
       width: width,
       showlegend: true,
@@ -494,6 +501,9 @@ export class SystemProfileGraphsComponent implements OnInit {
       xaxis: {
         autotick: false,
         range: xAxisRange,
+        tickmode: "linear", //  If "linear", the placement of the ticks is determined by a starting position `tick0` and a tick step `dtick`
+        tick0: xAxisRange[0],
+        dtick: this.timeInterval,
         title: {
           text: 'Hour',
           font: {

@@ -233,7 +233,7 @@ export class LogToolDataService {
     firstDate.getDate() === secondDate.getDate();
   }
 
-getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean = true): {intervalDisplayString: string, intervalOffsetString: string} {
+getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean = false): {intervalDisplayString: string, intervalOffsetString: string} {
     let intervalDisplayString: string;
     let intervalOffsetString: string;
     let day: Date = new Date(new Date().setHours(0,0,0,0));

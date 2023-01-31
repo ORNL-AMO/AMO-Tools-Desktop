@@ -46,7 +46,7 @@ export class OperatingProfileTableComponent implements OnInit {
         this.selectedDayTypeId = val.systemProfile.systemProfileSetup.dayTypeId;
         this.profileSummary = val.systemProfile.profileSummary;
         this.profileSummaryValid = this.compressedAirAssessmentService.hasValidProfileSummaryData(val);
-        this.setHourIntervals(val.systemProfile.systemProfileSetup);
+        this.hourIntervals = this.compressedAirAssessmentService.getHourIntervals(val.systemProfile.systemProfileSetup);
         this.inventoryItems = val.compressorInventoryItems;
         if (this.profileDataType) {
           this.initializeProfileSummary(val.compressorInventoryItems, val.systemProfile.systemProfileSetup, val.compressedAirDayTypes);
@@ -136,14 +136,6 @@ export class OperatingProfileTableComponent implements OnInit {
   findIsValidAmps(compressorId: string, dataIndex: number): boolean { 
     let summaryInputValidationData = this.profileSummaryValid.summaryInputValidationData.find(summary => summary.compressorId === compressorId);
     return summaryInputValidationData.powerFactorInputValidity.find((dataInputValue, index) => index === dataIndex).ampsValid;
-  }
-
-  setHourIntervals(systemProfileSetup: SystemProfileSetup) {
-    this.hourIntervals = new Array();
-    for (let index = 0; index < systemProfileSetup.numberOfHours;) {
-      this.hourIntervals.push(index + systemProfileSetup.dataInterval)
-      index = index + systemProfileSetup.dataInterval;
-    }
   }
 
   initializeProfileSummary(compressorInventoryItems: Array<CompressorInventoryItem>, systemProfileSetup: SystemProfileSetup, dayTypes: Array<CompressedAirDayType>) {
