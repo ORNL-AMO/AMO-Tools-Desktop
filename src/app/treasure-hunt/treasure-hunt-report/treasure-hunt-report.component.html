@@ -13,17 +13,17 @@
     <!-- <p class="report-notes">{{reportNotes}}</p> -->
   </div>
 
-  <div #reportHeader class="report-header d-none d-lg-block" [ngClass]="{'hide-print': inTHunt}">
+  <div #reportHeader class="report-header d-none d-lg-block px-0" [ngClass]="{'hide-print': inTHunt}">
     <app-treasure-chest-menu [settings]="settings" [inReport]="true" *ngIf="!inRollup && !showPrintView">
     </app-treasure-chest-menu>
-    <div *ngIf="!inRollup" class="btn-group hide-print">
+    <div *ngIf="!inRollup" class="btn-group hide-print mr-3">
       <button class="btn btn-secondary ml-2" (click)="print()">Print</button>
       <button class="btn btn-secondary ml-2" (click)="showExportModal()">Export to PPT</button>
     </div>
 
     <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
 
-    <div *ngIf="assessment" class="row assessment-name">
+    <div *ngIf="assessment" class="ml-2 assessment-name">
       <div class="col-12">
         <h2 class="assessment-title">
           <div class="d-flex">
@@ -145,7 +145,7 @@
       </app-opportunity-summary>
     </div>
 
-    <div class="results scroll-item print-height print-break-before"
+    <div class="results scroll-item print-height print-break-before px-0"
       *ngIf="((currentTab == 'opportunityPayback' && !showPrintView) || (showPrintView && printOptions.printReportOpportunityPayback)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <h4 class="show-print">Payback Details</h4>

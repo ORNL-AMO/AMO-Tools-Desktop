@@ -64,7 +64,7 @@ export class InventoryItemComponent implements OnInit {
     if (inventoryPage) {
       this.motorInventoryService.mainTab.next(inventoryPage);
     }
-    this.router.navigateByUrl('/motor-inventory/' + this.inventoryItem.id);
+    this.dashboardService.navigateWithSidebarOptions('/motor-inventory/' + this.inventoryItem.id, {shouldCollapse: true})
   }
 
   showDropdown() {

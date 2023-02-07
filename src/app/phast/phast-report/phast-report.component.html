@@ -1,7 +1,5 @@
 <div class="assessment-report report-in-phast" *ngIf="phast && settings"
     [ngClass]="{'assessment-report-padding': inPhast, 'report-in-rollup': inRollup}">
-
-
     <div *ngIf="inPhast" class="report-cover">
         <img src="assets/images/DOE-banner-color.svg" class="doe-logo">
 
@@ -17,14 +15,20 @@
 
 
     <div #reportHeader class="report-header" [ngClass]="{'hide-print': inPhast}">
-
-        <div *ngIf="inPhast && !quickReport" class="btn-group hide-print">
-            <button class="btn btn-secondary" (click)="print()">Print</button>
-        </div>
-
         <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
 
-        <div *ngIf="assessment" class="row assessment-name">
+        <!-- Assessment view -->
+        <div *ngIf="assessment && inPhast" class="row">
+            <div class="col-12 p-2">
+                    <span class="pl-2" *ngFor="let directory of assessmentDirectories">
+                        {{directory.name}} / {{assessment.name}}
+                    </span>
+                    <span class="ml-3 date-modified">Last Modified {{assessment.modifiedDate | date:'short'}}</span>
+                    <button class="mt-0 btn btn-secondary pull-right hide-print" (click)="print()">Print</button>
+            </div>
+        </div>
+        <!-- Rollup view -->
+        <div *ngIf="assessment && !inPhast" class="row assessment-name">
             <div class="col-12">
                 <h2 class="assessment-title">
                     <span class="dir-list-item" *ngFor="let directory of assessmentDirectories">

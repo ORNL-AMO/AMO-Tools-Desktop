@@ -1,6 +1,7 @@
 .results {
     padding-top: 20px;
     overflow-x: auto;
+    background: #fff;
 }
 
 .assessment-title {

@@ -1,6 +1,12 @@
 .ssmt-container{
     height: 100vh;
+    background: #ececec;
 }
+
+.ssmt-container div#ssmtFooter.footer {
+    position: relative;
+}
+
 
 .modal-open {
     z-index: initial !important;

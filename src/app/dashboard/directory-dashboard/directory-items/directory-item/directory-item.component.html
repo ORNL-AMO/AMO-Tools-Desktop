@@ -34,8 +34,7 @@
                 </span>
                 <span *ngIf="directoryItem.type == 'inventory'">
                     <img class="fsat icon-image pl-1 pr-1" src="assets/images/motor-inventory-icon.png">
-                    <a
-                        [routerLink]="['/motor-inventory', directoryItem.inventoryItem.id]">{{directoryItem.inventoryItem.name}}</a>
+                    <a (click)="navigateWithSidebarOptions('/motor-inventory', directoryItem.inventoryItem.id)">{{directoryItem.inventoryItem.name}}</a>
                 </span>
             </li>
         </ul>

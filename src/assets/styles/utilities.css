@@ -459,3 +459,9 @@ a:not([href]):not([tabindex]).disabled-link:hover {
 .treasure-hunt .bb-chart-arcs-background {
     fill: #ABB2B9;
   }
+
+  .sidebar-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }

@@ -111,7 +111,7 @@ export class PsatReportComponent implements OnInit {
     if (this.reportBtns && this.reportHeader) {
       let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
       let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-      this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+      this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 2;
     }
   }
 

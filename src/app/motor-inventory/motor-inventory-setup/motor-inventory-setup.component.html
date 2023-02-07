@@ -7,7 +7,7 @@
             <app-motor-catalog *ngIf="setupTab == 'motor-catalog'"></app-motor-catalog>
             <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup>
         </div>
-        <div class="row no-gutters w-50 mh-100">
+        <div class="row no-gutters w-50 mh-100 scroll-item" [ngStyle]="{'height.px': containerHeight}">
             <div class="col-12">
                 <div class="row no-gutters">
                     <div class="col-12">

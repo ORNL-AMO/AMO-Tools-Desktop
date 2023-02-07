@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { DashboardService } from '../../dashboard/dashboard.service';
 import { Assessment } from '../../shared/models/assessment';
 import { WasteWaterData } from '../../shared/models/waste-water';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
@@ -22,7 +23,8 @@ export class WasteWaterBannerComponent implements OnInit {
   selectedModificationIdSub: Subscription;
   selectedModification: WasteWaterData;
   
-  constructor(private wasteWaterService: WasteWaterService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
+  constructor(private wasteWaterService: WasteWaterService, 
+    private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit(): void {
     this.wasteWaterSub = this.wasteWaterService.wasteWater.subscribe(val => {
@@ -54,6 +56,10 @@ export class WasteWaterBannerComponent implements OnInit {
   showSecurityAndPrivacyModal() {
     this.securityAndPrivacyService.modalOpen.next(true);
     this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+  }
+
+  navigateHome() {
+    this.dashboardService.navigateWithSidebarOptions('/landing-screen', {shouldCollapse: false});
   }
 
   changeTab(str: string) {

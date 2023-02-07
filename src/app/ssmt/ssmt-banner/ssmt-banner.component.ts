@@ -3,6 +3,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { SsmtService } from '../ssmt.service';
 import { Subscription } from 'rxjs';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { DashboardService } from '../../dashboard/dashboard.service';
 
 @Component({
   selector: 'app-ssmt-banner',
@@ -16,7 +17,8 @@ export class SsmtBannerComponent implements OnInit {
   mainTab: string;
   mainTabSub: Subscription;
   
-  constructor(private ssmtService: SsmtService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
+  constructor(private ssmtService: SsmtService,
+    private dashboardService: DashboardService,  private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit() {
     this.mainTabSub = this.ssmtService.mainTab.subscribe(val => {
@@ -26,6 +28,10 @@ export class SsmtBannerComponent implements OnInit {
 
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
+  }
+
+  navigateHome() {
+    this.dashboardService.navigateWithSidebarOptions('/landing-screen', {shouldCollapse: false});
   }
 
   showSecurityAndPrivacyModal() {

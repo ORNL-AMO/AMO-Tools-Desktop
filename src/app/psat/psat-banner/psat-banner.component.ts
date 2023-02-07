@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { PsatTabService } from '../psat-tab.service';
 import { PsatService } from '../psat.service';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { DashboardService } from '../../dashboard/dashboard.service';
 
 @Component({
   selector: 'app-psat-banner',
@@ -17,7 +18,8 @@ export class PsatBannerComponent implements OnInit {
   bannerCollapsed: boolean = true;
   mainTab: string;
   mainTabSub: Subscription;
-  constructor(private psatTabService: PsatTabService, private psatService: PsatService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
+  constructor(private psatTabService: PsatTabService, 
+    private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit() {
     this.mainTabSub = this.psatTabService.mainTab.subscribe(val => {
@@ -46,6 +48,10 @@ export class PsatBannerComponent implements OnInit {
       this.psatTabService.mainTab.next(str);
     }
     this.collapseBanner();
+  }
+
+  navigateHome() {
+    this.dashboardService.navigateWithSidebarOptions('/landing-screen', {shouldCollapse: false});
   }
 
   back(){

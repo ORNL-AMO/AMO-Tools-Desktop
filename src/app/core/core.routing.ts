@@ -131,6 +131,56 @@ export const coreRoutes: Routes = [
         component: DirectoryDashboardComponent,
         path: 'directory-dashboard/:id',
       },
+      // todo 6169 TEST save to own object - use in dashboard
+      {
+        path: 'phast/:id',
+        component: PhastComponent
+      },
+      {
+        path: 'psat/:id',
+        component: PsatComponent
+      },
+      {
+        path: 'fsat/:id',
+        component: FsatComponent
+      },
+      {
+        path: 'ssmt/:id',
+        component: SsmtComponent
+      },
+      {
+        path: 'treasure-hunt/:id',
+        component: TreasureHuntComponent
+      },
+      {
+        path: 'compressed-air/:id',
+        component: CompressedAirAssessmentComponent
+      },
+      {
+        path: 'report-rollup',
+        component: ReportRollupComponent,
+        children: [
+          {
+            path: '',
+            component: AssessmentReportsComponent
+          }
+        ]
+      },
+      {
+        path: 'log-tool',
+        component: LogToolComponent,
+        children: logToolRoutes
+      },
+      {
+        component: MotorInventoryComponent,
+        path: 'motor-inventory/:id',
+        children: motorInventoryRoutes
+      },
+      {
+        component: WasteWaterComponent,
+        path: 'waste-water/:id',
+      },
+      // todo 6127
       {
         component: TutorialsComponent,
         path: 'tutorials'
@@ -533,52 +583,52 @@ export const coreRoutes: Routes = [
     pathMatch: 'full',
     redirectTo: ''
   },
-  {
-    path: 'phast/:id',
-    component: PhastComponent
-  },
-  {
-    path: 'psat/:id',
-    component: PsatComponent
-  },
-  {
-    path: 'fsat/:id',
-    component: FsatComponent
-  },
-  {
-    path: 'ssmt/:id',
-    component: SsmtComponent
-  },
-  {
-    path: 'treasure-hunt/:id',
-    component: TreasureHuntComponent
-  },
-  {
-    path: 'compressed-air/:id',
-    component: CompressedAirAssessmentComponent
-  },
-  {
-    path: 'report-rollup',
-    component: ReportRollupComponent,
-    children: [
-      {
-        path: '',
-        component: AssessmentReportsComponent
-      }
-    ]
-  },
-  {
-    path: 'log-tool',
-    component: LogToolComponent,
-    children: logToolRoutes
-  },
-  {
-    component: MotorInventoryComponent,
-    path: 'motor-inventory/:id',
-    children: motorInventoryRoutes
-  },
-  {
-    component: WasteWaterComponent,
-    path: 'waste-water/:id',
-  }
+  // {
+  //   path: 'phast/:id',
+  //   component: PhastComponent
+  // },
+  // {
+  //   path: 'psat/:id',
+  //   component: PsatComponent
+  // },
+  // {
+  //   path: 'fsat/:id',
+  //   component: FsatComponent
+  // },
+  // {
+  //   path: 'ssmt/:id',
+  //   component: SsmtComponent
+  // },
+  // {
+  //   path: 'treasure-hunt/:id',
+  //   component: TreasureHuntComponent
+  // },
+  // {
+  //   path: 'compressed-air/:id',
+  //   component: CompressedAirAssessmentComponent
+  // },
+  // {
+  //   path: 'report-rollup',
+  //   component: ReportRollupComponent,
+  //   children: [
+  //     {
+  //       path: '',
+  //       component: AssessmentReportsComponent
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: 'log-tool',
+  //   component: LogToolComponent,
+  //   children: logToolRoutes
+  // },
+  // {
+  //   component: MotorInventoryComponent,
+  //   path: 'motor-inventory/:id',
+  //   children: motorInventoryRoutes
+  // },
+  // {
+  //   component: WasteWaterComponent,
+  //   path: 'waste-water/:id',
+  // }
 ];

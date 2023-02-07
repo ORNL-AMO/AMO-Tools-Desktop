@@ -3,7 +3,7 @@
     <i class="fa" aria-hidden="true"
       [ngClass]="{'fa-folder': directory.collapsed == true, 'fa-folder-open': !directory.collapsed}"
       (click)="toggleDirectoryCollapse(directory)"></i>
-    <a class="ml-1" [routerLink]="['/directory-dashboard', directory.id]" (click)="navigateSidebarLink('/directory-dashboard/' + directory.id)"
+    <a class="ml-1" [routerLink]="['/directory-dashboard', directory.id]" (click)="navigateWithSidebarOptions('/directory-dashboard/' + directory.id)"
       routerLinkActive="selected">{{directory.name}}</a>
   </span>
   <div class="directory-item"

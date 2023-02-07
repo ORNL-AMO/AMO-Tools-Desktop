@@ -110,7 +110,7 @@
       [routerLink]="['/directory-dashboard', assessment.directoryId]">
       <span class="fa fa-folder-open"></span>
     </div>
-    <div class="pl-2 pr-2 border-right home-nav-item d-none d-lg-inline-block" [routerLink]="['/landing-screen']">
+    <div class="pl-2 pr-2 border-right home-nav-item d-none d-lg-inline-block" (click)="navigateHome()">
       <span class="fa fa-home"></span>
     </div>
   </div>
@@ -149,7 +149,7 @@
 			[routerLink]="['/directory-dashboard', assessment.directoryId]">
 			<span class="fa fa-folder-open"></span>
 		</div>
-		<div class="pl-2 pr-2 border-left home-nav-item d-block" [routerLink]="['/landing-screen']">
+		<div class="pl-2 pr-2 border-left home-nav-item d-block" (click)="navigateHome()">
 			<span class="fa fa-home"></span>
 		</div>
 	</div>

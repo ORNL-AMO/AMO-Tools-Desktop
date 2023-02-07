@@ -55,11 +55,9 @@
     </div>
   </div>
   <!--Report-->
-  <div *ngIf="mainTab == 'report'" class="row justify-content-center">
-    <div class="col-11">
+  <div *ngIf="mainTab == 'report'" class="mx-0">
       <app-phast-report [phast]="_phast" [settings]="settings" [assessment]="assessment" [inPhast]="true"
         [containerHeight]="containerHeight"></app-phast-report>
-    </div>
   </div>
   <!--Sankey-->
   <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item"
