@@ -28,7 +28,12 @@ export class ElectricityReductionFormComponent implements OnInit {
   @Input()
   selected: boolean;
   @Input()
-  userSelectedHP: boolean;
+  userSelectedHP: boolean;  
+  @Input()
+  modificationExists: boolean;
+
+  isValid: boolean = true;
+
 
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
@@ -108,6 +113,7 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   calculateIndividualResult() {
+    this.isValid = this.electricityReductionService.checkWarnings(this.index, this.modificationExists);
     let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form);
     this.individualResults = this.electricityReductionService.calculateIndividualEquipment(tmpObj, this.settings);
   }

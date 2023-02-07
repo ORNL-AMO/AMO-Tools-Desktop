@@ -84,7 +84,7 @@
           <div *ngFor="let data of modificationData; let index = index;">
             <app-electricity-reduction-form [index]="index" [settings]="settings" [data]="data" [isBaseline]="false"
               (emitCalculate)="updateModificationData($event, index)" (emitChangeField)="changeField($event)"
-              (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected" [userSelectedHP]="baselineData[0].userSelectedHP">
+              (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected" [userSelectedHP]="baselineData[0].userSelectedHP" [modificationExists]="modificationExists">
             </app-electricity-reduction-form>
           </div>
         </div>
