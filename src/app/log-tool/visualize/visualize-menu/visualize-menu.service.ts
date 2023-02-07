@@ -141,8 +141,6 @@ export class VisualizeMenuService {
   }
 
   resetXAxisRelatedData(selectedGraphObj: GraphObj) {
-    this.visualizeService.annotateDataPoint.next(undefined);
-    selectedGraphObj.layout.annotations = [];
     selectedGraphObj.layout.yaxis.ticksuffix = '';
   }
 
