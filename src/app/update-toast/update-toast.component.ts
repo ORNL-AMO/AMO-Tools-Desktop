@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, Input } fro
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
  
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import { ElectronService, ReleaseData } from '../electron/electron.service';
 
@@ -38,9 +38,9 @@ export class UpdateToastComponent implements OnInit {
   downloadingUpdate: boolean = false;
   updateDownloaded: boolean = false;
   version: string;
-  updateErrorSub: any;
+  updateErrorSub: Subscription;
   updateError: boolean;
-  updateDownloadedSub: any;
+  updateDownloadedSub: Subscription;
   constructor(private electronService: ElectronService, private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService,  ) { }
 
   ngOnInit() {
@@ -63,6 +63,10 @@ export class UpdateToastComponent implements OnInit {
     })
   }
 
+  ngOnDestroy() {
+    this.updateDownloadedSub.unsubscribe();
+    this.updateErrorSub.unsubscribe();
+  }
   ngAfterViewInit(){
     this.showUpdateToast = 'show';
     this.cd.detectChanges();

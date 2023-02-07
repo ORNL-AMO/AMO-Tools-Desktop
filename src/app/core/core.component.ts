@@ -33,7 +33,6 @@ export class CoreComponent implements OnInit {
   isOnline: boolean;
   releaseData: ReleaseData;
 
-  updateAvailableSubscription: Subscription;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean;
   showWebDisclaimerToast: boolean = false;
@@ -44,7 +43,8 @@ export class CoreComponent implements OnInit {
   showSecurityAndPrivacyModalSub: Subscription;
   isModalOpen: boolean;
   showSecurityAndPrivacyModal: boolean;
-  updateAvailableSub: Subscription;
+  electronUpdateAvailableSub: Subscription;
+  assessmentUpdateAvailableSub: Subscription;
   updateAvailable: boolean;
   releaseDataSub: Subscription;
 
@@ -79,7 +79,7 @@ export class CoreComponent implements OnInit {
         });
 
 
-      this.updateAvailableSub = this.electronService.updateAvailable.subscribe(val => {
+      this.electronUpdateAvailableSub = this.electronService.updateAvailable.subscribe(val => {
         this.updateAvailable = val;
         if (this.updateAvailable) {
           this.showUpdateToast = true;
@@ -92,13 +92,14 @@ export class CoreComponent implements OnInit {
         this.releaseData = val;
       });
 
-      this.updateAvailableSubscription = this.assessmentService.updateAvailable.subscribe(val => {
-        if (val == true && this.electronService.isElectron) {
-          this.showUpdateToast = true;
-          this.changeDetectorRef.detectChanges();
-        }
-      });
     }
+
+    this.assessmentUpdateAvailableSub = this.assessmentService.updateAvailable.subscribe(val => {
+      if (val == true) {
+        this.showUpdateToast = true;
+        this.changeDetectorRef.detectChanges();
+      }
+    });
 
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
@@ -154,13 +155,13 @@ export class CoreComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.openingTutorialSub) {
-      this.openingTutorialSub.unsubscribe();
-    }
-    if (this.routerSubscription) {
+    if (this.electronService.isElectron) {
       this.routerSubscription.unsubscribe();
+      this.electronUpdateAvailableSub.unsubscribe();
+      this.releaseDataSub.unsubscribe();
     }
-    this.updateAvailableSubscription.unsubscribe();
+    this.assessmentUpdateAvailableSub.unsubscribe();
+    this.openingTutorialSub.unsubscribe();
     this.showSecurityAndPrivacyModalSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
   }
