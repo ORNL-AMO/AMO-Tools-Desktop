@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgxElectronModule } from 'ngx-electron';
 import { PhastModule } from '../phast/phast.module';
 import { PsatModule } from '../psat/psat.module';
 import { CalculatorModule } from '../calculator/calculator.module';
@@ -57,7 +56,7 @@ import { BrowsingDataToastModule } from '../shared/browsing-data-toast/browsing-
     PhastModule,
     CalculatorModule,
     ModalModule,
-    NgxElectronModule,
+    // NgxElectronModule,
     FormsModule,
     ReactiveFormsModule,
     SettingsModule,

@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { filter, firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -8,13 +7,13 @@ import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
 import { NavigationEnd, Router } from '../../../node_modules/@angular/router';
-import { trigger, state, style, animate, transition } from '@angular/animations';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
 import { AnalyticsService, AppAnalyticsData } from '../shared/analytics/analytics.service';
 import { v4 as uuidv4 } from 'uuid';
 import { AnalyticsDataIdbService } from '../indexedDb/analytics-data-idb.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
+import { ElectronService, ReleaseData } from '../electron/electron.service';
 
 @Component({
   selector: 'app-core',
@@ -32,8 +31,8 @@ export class CoreComponent implements OnInit {
   inTutorialsView: boolean;
   updateError: boolean = false;
   isOnline: boolean;
-  info: any;
-  updateAvailableSubscription: Subscription;
+  releaseData: ReleaseData;
+
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean;
   showWebDisclaimerToast: boolean = false;
@@ -44,9 +43,13 @@ export class CoreComponent implements OnInit {
   showSecurityAndPrivacyModalSub: Subscription;
   isModalOpen: boolean;
   showSecurityAndPrivacyModal: boolean;
+  electronUpdateAvailableSub: Subscription;
+  assessmentUpdateAvailableSub: Subscription;
+  updateAvailable: boolean;
+  releaseDataSub: Subscription;
 
 
-  constructor(private electronService: ElectronService, 
+  constructor(private electronService: ElectronService , 
     private assessmentService: AssessmentService, 
     private changeDetectorRef: ChangeDetectorRef,
     private assessmentDbService: AssessmentDbService,
@@ -66,37 +69,38 @@ export class CoreComponent implements OnInit {
       this.showBrowsingDataToast = true;
     }
 
-    
-  if (this.electronService.isElectronApp) {
+    if (this.electronService.isElectron) {
+      this.electronService.sendAppReady('ready');
+
       this.analyticsSessionId = uuidv4();
       this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
         .subscribe((event: NavigationEnd) => {
-         this.sendAnalyticsPageView(event);
+          this.sendAnalyticsPageView(event);
         });
-      this.electronService.ipcRenderer.once('available', (event, arg) => {
-        if (arg === true) {
+
+
+      this.electronUpdateAvailableSub = this.electronService.updateAvailable.subscribe(val => {
+        this.updateAvailable = val;
+        if (this.updateAvailable) {
           this.showUpdateToast = true;
           this.assessmentService.updateAvailable.next(true);
           this.changeDetectorRef.detectChanges();
         }
       });
 
+      this.releaseDataSub = this.electronService.releaseData.subscribe(val => {
+        this.releaseData = val;
+      });
 
-    this.electronService.ipcRenderer.once('available', (event, arg) => {
-      if (arg === true) {
+    }
+
+    this.assessmentUpdateAvailableSub = this.assessmentService.updateAvailable.subscribe(val => {
+      if (val == true) {
         this.showUpdateToast = true;
-        this.assessmentService.updateAvailable.next(true);
         this.changeDetectorRef.detectChanges();
       }
     });
 
-      //send signal to main.js to check for update
-      this.electronService.ipcRenderer.send('ready', null);
-
-      this.electronService.ipcRenderer.once('release-info', (event, info) => {
-        this.info = info;
-      })
-    }
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
       this.inTutorialsView = (this.router.url === '/tutorials');
@@ -108,13 +112,6 @@ export class CoreComponent implements OnInit {
     });
 
     this.initData();
-
-    this.updateAvailableSubscription = this.assessmentService.updateAvailable.subscribe(val => {
-      if (val == true && this.electronService.isElectronApp) {
-        this.showUpdateToast = true;
-        this.changeDetectorRef.detectChanges();
-      }
-    });
 
     this.modalOpenSub = this.securityAndPrivacyService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
@@ -158,13 +155,13 @@ export class CoreComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.openingTutorialSub) {
-      this.openingTutorialSub.unsubscribe();
-    }
-    if (this.routerSubscription) {
+    if (this.electronService.isElectron) {
       this.routerSubscription.unsubscribe();
+      this.electronUpdateAvailableSub.unsubscribe();
+      this.releaseDataSub.unsubscribe();
     }
-    this.updateAvailableSubscription.unsubscribe();
+    this.assessmentUpdateAvailableSub.unsubscribe();
+    this.openingTutorialSub.unsubscribe();
     this.showSecurityAndPrivacyModalSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
   }
