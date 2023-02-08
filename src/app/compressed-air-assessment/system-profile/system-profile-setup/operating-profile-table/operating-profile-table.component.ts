@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { DayTypeSummary, LogToolField } from '../../../../log-tool/log-tool-models';
@@ -31,7 +32,8 @@ export class OperatingProfileTableComponent implements OnInit {
   profileSummaryValid: ProfileSummaryValid;
   assessmentDayTypes: Array<CompressedAirDayType>
   inventoryItems: Array<CompressorInventoryItem>;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileService: SystemProfileService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, 
+    private router: Router, private systemProfileService: SystemProfileService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
@@ -209,6 +211,10 @@ export class OperatingProfileTableComponent implements OnInit {
 
   showDataFromExplorer() {
     this.showSelectField = true;
+  }
+
+  visitDataExplorer() {
+    this.router.navigateByUrl('log-tool');
   }
 
   hideDataFromExplorer() {

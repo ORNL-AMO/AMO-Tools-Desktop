@@ -29,6 +29,7 @@ export class DayTypesComponent implements OnInit {
   hasValidDayTypes: boolean;
   hasEndUses: boolean;
   hasModifications: boolean;
+  hasDataExplorerData: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private dayTypeService: DayTypeService, private router: Router,
     private inventoryService: InventoryService) { }
@@ -36,6 +37,7 @@ export class DayTypesComponent implements OnInit {
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.compressedAirAssessment = val;
+      this.hasDataExplorerData = (val.logToolData != undefined);
       this.checkLockDayTypes()
       this.setTotalDays();
       this.hasValidDayTypes = this.dayTypeService.hasValidDayTypes(val.compressedAirDayTypes);
