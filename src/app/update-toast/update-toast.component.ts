@@ -1,10 +1,10 @@
 import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, Input } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { ElectronService } from 'ngx-electron';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
  
-import { firstValueFrom, Subscription } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { ElectronService, ReleaseData } from '../electron/electron.service';
 
 @Component({
   selector: 'app-update-toast',
@@ -24,7 +24,7 @@ export class UpdateToastComponent implements OnInit {
   @Output('emitCloseToast')
   emitCloseToast = new EventEmitter<boolean>();
   @Input()
-  releaseData: ReleaseData
+  info: any;
 
 
   error: any;
@@ -38,35 +38,24 @@ export class UpdateToastComponent implements OnInit {
   downloadingUpdate: boolean = false;
   updateDownloaded: boolean = false;
   version: string;
-  updateErrorSub: Subscription;
-  updateError: boolean;
-  updateDownloadedSub: Subscription;
   constructor(private electronService: ElectronService, private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService,  ) { }
 
   ngOnInit() {
-    this.releaseName = this.releaseData.releaseName;
-    this.releaseNotes = this.releaseData.releaseNotes.substring(this.releaseData.releaseNotes.indexOf('</h1>') + 5);
-    this.version = this.releaseData.version;
+    this.releaseName = this.info.releaseName;
+    this.releaseNotes = this.info.releaseNotes.substring(this.info.releaseNotes.indexOf('</h1>') + 5);
+    this.version = this.info.version;
 
-    this.updateDownloadedSub = this.electronService.updateDownloaded.subscribe(val => {
-      this.updateDownloaded = val;
+    this.electronService.ipcRenderer.once('update-downloaded', (event, args) => {
+      this.updateDownloaded = true;
       this.cd.detectChanges();
     })
 
-    
-    this.updateErrorSub = this.electronService.updateError.subscribe(val => {
-      this.updateError = val;
-      if (this.updateError) {
-        this.error = true;
-        this.cd.detectChanges();
-      }
+    this.electronService.ipcRenderer.once('error', (event, args) => {
+      this.error = true;
+      this.cd.detectChanges();
     })
   }
 
-  ngOnDestroy() {
-    this.updateDownloadedSub.unsubscribe();
-    this.updateErrorSub.unsubscribe();
-  }
   ngAfterViewInit(){
     this.showUpdateToast = 'show';
     this.cd.detectChanges();
@@ -100,13 +89,13 @@ export class UpdateToastComponent implements OnInit {
     this.settingsDbService.setAll(updatedSettings);
     this.downloadingUpdate = true;
     this.cd.detectChanges();
-    this.electronService.sendUpdateSignal();
+    this.electronService.ipcRenderer.send('update', null);
     setTimeout(() => {
       this.error = true;
     }, 120000)
   }
 
   quitAndInstall() {
-    this.electronService.sendQuitAndInstall();
+    this.electronService.ipcRenderer.send('quit-and-install');
   }
 }
