@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { filter, firstValueFrom, Subscription } from 'rxjs';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
@@ -9,12 +8,13 @@ import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
 import { NavigationEnd, Router } from '../../../node_modules/@angular/router';
-import { trigger, state, style, animate, transition } from '@angular/animations';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { AnalyticsService, AppAnalyticsData } from '../shared/analytics/analytics.service';
 import { v4 as uuidv4 } from 'uuid';
 import { AnalyticsDataIdbService } from '../indexedDb/analytics-data-idb.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
+import { ElectronService, ReleaseData } from '../electron/electron.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 declare var google: any;
 @Component({
@@ -42,7 +42,8 @@ export class CoreComponent implements OnInit {
   inTutorialsView: boolean;
   updateError: boolean = false;
   isOnline: boolean;
-  info: any;
+  releaseData: ReleaseData;
+
   updateAvailableSubscription: Subscription;
   showTranslateModalSub: Subscription;
   routerSubscription: Subscription;
@@ -52,9 +53,13 @@ export class CoreComponent implements OnInit {
   showSecurityAndPrivacyModalSub: Subscription;
   isModalOpen: boolean;
   showSecurityAndPrivacyModal: boolean;
+  electronUpdateAvailableSub: Subscription;
+  assessmentUpdateAvailableSub: Subscription;
+  updateAvailable: boolean;
+  releaseDataSub: Subscription;
 
 
-  constructor(private electronService: ElectronService, 
+  constructor(private electronService: ElectronService , 
     private assessmentService: AssessmentService, 
     private changeDetectorRef: ChangeDetectorRef,
     private suiteDbService: SuiteDbService, 
@@ -74,26 +79,33 @@ export class CoreComponent implements OnInit {
     if (!window.navigator.cookieEnabled) {
       this.showBrowsingDataToast = true;
     }
-   this.analyticsSessionId = uuidv4();
-   this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-     .subscribe((event: NavigationEnd) => {
-      this.sendAnalyticsPageView(event);
-     });
 
-    this.electronService.ipcRenderer.once('available', (event, arg) => {
-      if (arg === true) {
-        this.showUpdateToast = true;
-        this.assessmentService.updateAvailable.next(true);
-        this.changeDetectorRef.detectChanges();
-      }
-    });
+    
+    if (this.electronService.isElectron) {
+      this.electronService.sendAppReady('ready');
+      
+      this.analyticsSessionId = uuidv4();
+      this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+        .subscribe((event: NavigationEnd) => {
+          this.sendAnalyticsPageView(event);
+        });
 
-    //send signal to main.js to check for update
-    this.electronService.ipcRenderer.send('ready', null);
 
-    this.electronService.ipcRenderer.once('release-info', (event, info) => {
-      this.info = info;
-    })
+      this.electronUpdateAvailableSub = this.electronService.updateAvailable.subscribe(val => {
+        this.updateAvailable = val;
+        if (this.updateAvailable) {
+          this.showUpdateToast = true;
+          this.assessmentService.updateAvailable.next(true);
+          this.changeDetectorRef.detectChanges();
+        }
+      });
+
+      this.releaseDataSub = this.electronService.releaseData.subscribe(val => {
+        this.releaseData = val;
+      });
+
+    }
+
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
       this.inTutorialsView = (this.router.url === '/tutorials');
@@ -113,7 +125,7 @@ export class CoreComponent implements OnInit {
     });
 
 
-    this.updateAvailableSubscription = this.assessmentService.updateAvailable.subscribe(val => {
+    this.assessmentUpdateAvailableSub = this.assessmentService.updateAvailable.subscribe(val => {
       if (val == true) {
         this.showUpdateToast = true;
         this.changeDetectorRef.detectChanges();
@@ -176,14 +188,16 @@ export class CoreComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.openingTutorialSub) {
-      this.openingTutorialSub.unsubscribe();
+    if (this.electronService.isElectron) {
+      this.routerSubscription.unsubscribe();
+      this.electronUpdateAvailableSub.unsubscribe();
+      this.releaseDataSub.unsubscribe();
     }
-    this.routerSubscription.unsubscribe();
-    this.updateAvailableSubscription.unsubscribe();
+    this.assessmentUpdateAvailableSub.unsubscribe();
+    this.openingTutorialSub.unsubscribe();
     this.showTranslateModalSub.unsubscribe();
-    this.showSecurityAndPrivacyModalSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
+    this.showSecurityAndPrivacyModalSub.unsubscribe();
   }
 
   async initData() {
