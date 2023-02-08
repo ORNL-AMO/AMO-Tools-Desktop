@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ElectronService } from '../../electron/electron.service';
+import { ElectronService } from 'ngx-electron';
 
 
 @Component({
@@ -23,7 +23,7 @@ export class AboutPageComponent implements OnInit {
   constructor(private electronService: ElectronService) { }
 
   ngOnInit() {
-    this.isElectronApp = this.electronService.isElectron;
+    this.isElectronApp = this.electronService.isElectronApp;
   }
   toggleShowPSAT() {
     this.showPSAT = !this.showPSAT;
