@@ -133,10 +133,11 @@
           <span *ngIf="form.controls.powerFactor.errors.max">Value can't be greater than
             {{form.controls.powerFactor.errors.max.max}}.</span>
         </span>
-        <span class="alert-warning pull-right small" *ngIf="!isValid && !isBaseline">
-          Power factor should not be reduced without also reducing the average current
-        </span>
       </div>
+
+      <span class="alert-warning pull-right small" *ngIf="warningMessage">
+        {{warningMessage}}
+      </span>
 
     </div>
 

@@ -29,10 +29,8 @@ export class ElectricityReductionFormComponent implements OnInit {
   selected: boolean;
   @Input()
   userSelectedHP: boolean;  
-  @Input()
-  modificationExists: boolean;
 
-  isValid: boolean = true;
+  warningMessage: string;
 
 
 
@@ -106,6 +104,7 @@ export class ElectricityReductionFormComponent implements OnInit {
     let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form);
     this.calculateIndividualResult();
     this.emitCalculate.emit(tmpObj);
+    this.warningMessage = this.electricityReductionService.checkWarnings(this.index, this.isBaseline);
   }
 
   removeEquipment() {
@@ -113,7 +112,6 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   calculateIndividualResult() {
-    this.isValid = this.electricityReductionService.checkWarnings(this.index, this.modificationExists);
     let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form);
     this.individualResults = this.electricityReductionService.calculateIndividualEquipment(tmpObj, this.settings);
   }

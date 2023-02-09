@@ -308,13 +308,19 @@ export class ElectricityReductionService {
     return inputArray;
   }
 
-  checkWarnings(index: number, modificationExists: boolean): boolean{
-    if(modificationExists){
-      if((this.baselineData[index].multimeterData.powerFactor === this.modificationData[index].multimeterData.powerFactor) && (this.baselineData[index].multimeterData.averageCurrent <= this.modificationData[index].multimeterData.averageCurrent)){
-        return false;
-      } else {
-        return true;
+  checkWarnings(index: number, isBaseline: boolean): string{
+    if (!isBaseline) {
+      if (this.baselineData[index].multimeterData.powerFactor != this.modificationData[index].multimeterData.powerFactor) {
+        if (this.baselineData[index].multimeterData.averageCurrent <= this.modificationData[index].multimeterData.averageCurrent) {
+          return 'Power factor should not be reduced without also reducing the average current';
+        } else {
+          return null;
+        }
+      } else if (this.baselineData[index].multimeterData.powerFactor == this.modificationData[index].multimeterData.powerFactor) {
+        return null;
       }
+    } else {
+      return null;
     }
   }
 

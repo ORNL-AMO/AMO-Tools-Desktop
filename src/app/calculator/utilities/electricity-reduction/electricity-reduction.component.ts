@@ -143,11 +143,13 @@ export class ElectricityReductionComponent implements OnInit {
 
   updateBaselineData(data: ElectricityReductionData, index: number) {
     this.updateDataArray(this.baselineData, data, index);
+    this.electricityReductionService.baselineData = this.baselineData;
     this.getResults();
   }
 
   updateModificationData(data: ElectricityReductionData, index: number) {
     this.updateDataArray(this.modificationData, data, index);
+    this.electricityReductionService.modificationData = this.modificationData;
     this.getResults();
   }
 
@@ -166,8 +168,6 @@ export class ElectricityReductionComponent implements OnInit {
 
 
   getResults() {
-    this.electricityReductionService.baselineData = this.baselineData;
-    this.electricityReductionService.modificationData = this.modificationData;
     this.electricityReductionResults = this.electricityReductionService.getResults(this.settings, this.baselineData, this.modificationData);
   }
 
