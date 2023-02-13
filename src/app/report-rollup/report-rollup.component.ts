@@ -41,7 +41,6 @@ export class ReportRollupComponent implements OnInit {
 
   ngOnInit() {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
-    // todo 6169 fix timeouts?
     this.reportRollupService.setReportRollupSettings(directoryId);
     setTimeout(() => {
       this.gatheringAssessments = false;
