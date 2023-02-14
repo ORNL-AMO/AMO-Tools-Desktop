@@ -10,12 +10,14 @@ export class PrintOptionsMenuService {
   showPrintView: BehaviorSubject<boolean>;
   printContext: BehaviorSubject<string>;
   showPrintMenu: BehaviorSubject<boolean>;
+  isPowerSankeyPrintViewReady: BehaviorSubject<boolean>;
   constructor(private settingsDbService: SettingsDbService) {
     let initPrintOptions: PrintOptions = this.setPrintOptionsFromSettings();
     this.printOptions = new BehaviorSubject<PrintOptions>(initPrintOptions);
     this.showPrintView = new BehaviorSubject<boolean>(false);
     this.printContext = new BehaviorSubject<string>(undefined);
     this.showPrintMenu = new BehaviorSubject<boolean>(false);
+    this.isPowerSankeyPrintViewReady = new BehaviorSubject<boolean>(false);
   }
 
   setPrintOptionsFromSettings() {

@@ -3,8 +3,10 @@ import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, Vie
 import { UntypedFormGroup } from '@angular/forms';
 import { PlotlyService } from 'angular-plotly.js';
 import { Subscription } from 'rxjs';
+import { AirPropertiesCsvService } from '../../../shared/helper-services/air-properties-csv.service';
 import { CompressedAirAssessment, EndUseDayTypeSetup, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
+import { PrintOptionsMenuService } from '../../../shared/print-options-menu/print-options-menu.service';
 import { BaselineResults, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { DayTypeSetupService } from '../../end-uses/day-type-setup-form/day-type-setup.service';
@@ -68,6 +70,7 @@ export class PowerSankeyComponent implements OnInit {
   hasValidDayTypeSetup: boolean;
   dayTypeSetupServiceSubscription: Subscription;
   dayTypeLeakRate: number;
+  showPrintViewSub: Subscription;
 
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
@@ -77,18 +80,29 @@ export class PowerSankeyComponent implements OnInit {
     private decimalPipe: DecimalPipe,
     private powerSankeyService: PowerSankeyService,
     private dayTypeSetupService: DayTypeSetupService,
+    private airPropertiesService: AirPropertiesCsvService,
     private resultsService: CompressedAirAssessmentResultsService,
-    private plotlyService: PlotlyService
+    private plotlyService: PlotlyService,
+    private printOptionsMenuService: PrintOptionsMenuService
   ) { }
 
-  ngOnInit() {
+ ngOnInit() {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.dayTypeBaselineProfileSummaries = this.getDayTypeProfileSummaries();
     this.baselineResults = this.resultsService.calculateBaselineResults(this.compressedAirAssessment, this.settings, this.dayTypeBaselineProfileSummaries);
+    this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(showPrintView => {
+      this.printView = showPrintView;
+    });
   }
 
-  ngAfterViewInit() {
+  async ngAfterViewInit() {
+    if (!this.airPropertiesService.airPropertiesData || this.airPropertiesService.airPropertiesData.length === 0) {
+      await this.airPropertiesService.initAirPropertiesData();
+      if (this.printView) {
+        this.printOptionsMenuService.isPowerSankeyPrintViewReady.next(true);
+      }
+    }
     this.dayTypeSetupServiceSubscription = this.dayTypeSetupService.endUseDayTypeSetup.subscribe(endUseDayTypeSetup => {
       if (endUseDayTypeSetup) {
         this.endUseDayTypeSetup = endUseDayTypeSetup;
@@ -102,6 +116,7 @@ export class PowerSankeyComponent implements OnInit {
 
   ngOnDestroy() {
     this.dayTypeSetupServiceSubscription.unsubscribe();
+    this.showPrintViewSub.unsubscribe();
   }
   
   getDayTypeProfileSummaries() {
