@@ -34,6 +34,8 @@ export class PrintOptionsMenuComponent implements OnInit {
   showTHReportOptions: boolean = false;
   showWasteWaterOptions: boolean = false;
   showCompressedAirOptions: boolean = false;
+  isPowerSankeyPrintViewReadySub: Subscription;
+  printProcessTimeout;
   constructor(private printOptionsMenuService: PrintOptionsMenuService, private windowRefService: WindowRefService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
     private psatReportRollupService: PsatReportRollupService, private phastReportRollupService: PhastReportRollupService, private fsatReportRollupService: FsatReportRollupService,
     private ssmtReportRollupService: SsmtReportRollupService, private wasteWaterReportRollupService: WasteWaterReportRollupService,
@@ -43,6 +45,13 @@ export class PrintOptionsMenuComponent implements OnInit {
     this.printOptionsSub = this.printOptionsMenuService.printOptions.subscribe(val => {
       this.printOptions = val;
     });
+
+    this.isPowerSankeyPrintViewReadySub = this.printOptionsMenuService.isPowerSankeyPrintViewReady.subscribe(isReady => {
+      if (this.printOptionsMenuService.showPrintView.getValue() === true && isReady) {
+        this.print();
+      }
+    });
+
     this.setContext();
     this.printOptions = this.printOptionsMenuService.setPrintOptionsFromSettings();
   }
@@ -53,6 +62,7 @@ export class PrintOptionsMenuComponent implements OnInit {
 
   ngOnDestroy() {
     this.printOptionsSub.unsubscribe();
+    this.isPowerSankeyPrintViewReadySub.unsubscribe();
   }
 
   setContext() {
@@ -99,27 +109,31 @@ export class PrintOptionsMenuComponent implements OnInit {
     });
   }
 
-  setPrintViewThenPrint() {
+  setPrintView() {
     this.printMenuModal.hide();
     this.printMenuModal.onHidden.subscribe(() => {
       this.printOptionsMenuService.showPrintView.next(true);
-      let tmpPrintBuildTime: number = 2000;
-      setTimeout(() => {
-        this.print();
-      }, tmpPrintBuildTime);
+      // wait for sankey data dependency via subscription, or cancel
+      // if multiple dependencies come up, use forkJoin to wait for all observables
+      this.printProcessTimeout = setTimeout(() => {
+        this.hidePrintView();
+      }, 45000)
+      
     });
   }
 
   print() {
-    // this.showPrintMenu = false;
-    //set timeout for delay to print call. May want to do this differently later but for now should work
+    clearTimeout(this.printProcessTimeout);
     setTimeout(() => {
       let win = this.windowRefService.nativeWindow;
       win.print();
-      //after printing hide content again
-      this.printOptionsMenuService.showPrintView.next(false);
-      this.printOptionsMenuService.showPrintMenu.next(false);
+      this.hidePrintView()
     }, 200);
+  }
+
+  hidePrintView() {
+    this.printOptionsMenuService.showPrintView.next(false);
+    this.printOptionsMenuService.showPrintMenu.next(false);
   }
 
 }

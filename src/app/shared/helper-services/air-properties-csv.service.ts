@@ -10,13 +10,19 @@ export class AirPropertiesCsvService {
 
   constructor() {}
   
-  initAirPropertiesData() {
-    Papa.parse("assets/airpropertiescsv_final.csv", {
-      header: true,
-      download: true,
-      complete: results => {
-        this.setAirPropertiesData(results.data);
-      }
+  initAirPropertiesData(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      Papa.parse("assets/airpropertiescsv_final.csv", {
+        header: true,
+        download: true,
+        complete: results => {
+          this.setAirPropertiesData(results.data);
+          resolve(true);
+        },
+        error: results => {
+          reject(true);
+        },
+      });
     });
 
   }
