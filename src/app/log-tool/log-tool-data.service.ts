@@ -105,13 +105,15 @@ export class LogToolDataService {
       if(idx < 0){
         averagesUnique.push(averages[i]);
       } else {
-        averagesUnique[idx].value = averagesUnique[idx].value + averages[i].value;
+        let average = averagesUnique[idx].value + averages[i].value;
+        if(average !== undefined && !isNaN(average))  {
+          averagesUnique[idx].value = average;
+        }
       }
     }
 
     return averagesUnique;
   }
-  
   // * dayData: Array of objects where key/val is fileData fields/vals
   calculateDayAveragesByInterval(dayData: Array<any>, dataset: ExplorerDataSet): Array<AverageByInterval> {
     let dayAveragesByInterval: Array<AverageByInterval> = new Array();
@@ -154,7 +156,8 @@ export class LogToolDataService {
           };
         });
 
-        let averages: Array<{ value: number, field: LogToolField }> = this.getIntervalAverages(currentIntervalDataForDay, fields)
+
+        let averages: Array<{ value: number, field: LogToolField }> = this.getIntervalAverages(currentIntervalDataForDay, fields);
         let {intervalDisplayString, intervalOffsetString} = this.getCurrentIntervalStrings(intervalByTimeUnit);
         intervalByTimeUnit += unitOfTime;
         dayAveragesByInterval.push({
@@ -198,6 +201,7 @@ export class LogToolDataService {
       }
     });
 
+    // * Sum of value/reading at given interval for all days
     let allDataCollectionUnitsAverage: { value: number, field: LogToolField } = 
     {
       value: undefined,
