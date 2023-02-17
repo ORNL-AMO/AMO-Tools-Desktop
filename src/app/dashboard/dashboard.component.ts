@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit {
     'motor-inventory',
     'waste-water'
   ];
-  showPrintViewSub: any;
+  showPrintViewSub: Subscription;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -142,6 +142,7 @@ export class DashboardComponent implements OnInit {
     this.createInventorySub.unsubscribe();
     this.copyItemsSub.unsubscribe();
     this.routerSubscription.unsubscribe();
+    this.showPrintViewSub.unsubscribe();
   }
 
   ngAfterViewInit() {
