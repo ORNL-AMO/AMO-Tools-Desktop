@@ -187,7 +187,9 @@ export class CoreComponent implements OnInit {
       this.calculatorDbService.setAll(initializedData.calculators);
       this.inventoryDbService.setAll(initializedData.inventoryItems);
       this.idbStarted = true;
-      this.initAnalyticsSession();
+      if (this.electronService.isElectron) { 
+        this.initAnalyticsSession();
+      }
       this.changeDetectorRef.detectChanges();
     });
   }
