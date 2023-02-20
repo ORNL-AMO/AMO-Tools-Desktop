@@ -95,14 +95,22 @@ export class VisualizeService {
     return tmpFields;
   }
 
-  // field == axis
+  
+  isValidDate(dateItem: any) {
+    let dateISOFormat = new Date(dateItem);
+    return dateISOFormat instanceof Date && !isNaN(dateISOFormat.getTime());
+  }
+  
   getAxisOptionGraphData(fieldName: string): Array<number> {
     let data: Array<any> = new Array();
-    // 6040 Perform different operation if is datefield - don't concat
     this.logToolService.individualDataFromCsv.forEach(individualDataItem => {
       let foundData = individualDataItem.csvImportData.meta.fields.find(field => { return field == fieldName });
-      if (foundData) {
+      // 6108 continue to concat time, don't allow concat of other data fields (breaks time segment display in non time-series visualizer)
+      if (foundData && fieldName === individualDataItem.dateField.fieldName) {
         data = _.concat(data, individualDataItem.csvImportData.data);
+      }
+      if (foundData) {
+        data = individualDataItem.csvImportData.data;
       }
     });
     
@@ -121,8 +129,12 @@ export class VisualizeService {
     return data;
   }
 
+  // Need to filter by unique identifiers for data fields here
   getTimeSeriesData(field: LogToolField): Array<number | string> {
-    let data: Array<number | string> = _.find(this.allDataByAxisField, (dataItem) => { return dataItem.dataField.csvId == field.csvId && dataItem.dataField.isDateField }).data;
+    let data: Array<number | string> = _.find(this.allDataByAxisField, (dataItem) => { 
+      let fieldData = dataItem.dataField.csvId == field.csvId && dataItem.dataField.isDateField
+      return fieldData;
+    }).data;
     return data;
   }
 
