@@ -1,6 +1,12 @@
 .compressed-air-container{
     height: 100vh;
+    background: #ececec
 }
+
+.compressed-air-container div#compressedAirFooter.footer {
+    position: relative;
+}
+
 
 .modal-open {
     z-index: initial !important;

@@ -41,7 +41,7 @@
             [routerLink]="['/directory-dashboard', motorInventoryItem.directoryId]">
             <span class="fa fa-folder-open"></span>
         </div>
-        <div class="pl-2 pr-2 home-nav-item border-right" [routerLink]="['/landing-screen']">
+        <div class="pl-2 pr-2 home-nav-item border-right" (click)="navigateHome()">
             <span class="fa fa-home"></span>
         </div>
     </div>

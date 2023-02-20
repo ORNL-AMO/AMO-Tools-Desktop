@@ -27,10 +27,18 @@ export class DashboardService {
     this.totalScreenWidth = new BehaviorSubject<number>(undefined);
   }
 
-  navigateSidebarLink(routeURL: string) {
+  navigateWithSidebarOptions(routeURL: string, sidebarOptions?: SidebarDisplayOptions) {
+    if (sidebarOptions) {
+      this.collapseSidebar.next(sidebarOptions.shouldCollapse);
+    }
+    
     if (this.totalScreenWidth.getValue() < 1024) {
       this.collapseSidebar.next(true);
     }
     this.router.navigateByUrl(routeURL);
   }
+}
+
+export interface SidebarDisplayOptions {
+  shouldCollapse?: boolean,
 }

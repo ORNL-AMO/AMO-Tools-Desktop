@@ -1,5 +1,10 @@
 .waste-water-container{
     height: 100vh;
+    background: #ececec;
+}
+
+.waste-water-container div#wasteWaterFooter.footer {
+    position: relative;
 }
 
 .modal-open {

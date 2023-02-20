@@ -28,11 +28,10 @@
     <app-treasure-chest class="w-100" [settings]="settings" [containerHeight]="containerHeight"></app-treasure-chest>
   </div>
 
-  <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
-    <div class="col-12 col-lg-11 report-column">
+  
+  <div class="report-container mx-0" *ngIf="mainTab == 'report'">
       <app-treasure-hunt-report [assessment]="assessment" [settings]="settings" [directory]="directory" [containerHeight]="containerHeight">
       </app-treasure-hunt-report>
-    </div>
   </div>
 
 

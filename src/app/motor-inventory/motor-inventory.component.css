@@ -1,5 +1,10 @@
 .motor-inventory-container{
     height: 100vh;
+    background: #ececec;
+}
+
+.motor-inventory-container div#motorInventoryFooter.footer {
+    position: relative;
 }
 
 .motor-inventory .btn-primary{

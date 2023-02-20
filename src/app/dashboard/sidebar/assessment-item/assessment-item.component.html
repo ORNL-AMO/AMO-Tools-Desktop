@@ -1,4 +1,4 @@
-<span class="sidebar-item assessment-item" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT',  
+<span class="sidebar-item assessment-item sidebar-truncate" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT',  
 	'ssmt': assessment.type == 'SSMT', 'treasure-hunt': assessment.type == 'TreasureHunt' }"
 	(click)="goToAssessment(assessment)">
 	<!-- <i class="fa fa-file" aria-hidden="true"></i> -->

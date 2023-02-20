@@ -1,6 +1,12 @@
 .phast-container{
     height: 100vh;
+    background: #ececec;
 }
+
+.phast-container div.footer {
+    position: relative;
+}
+
 
 .modal-open {
     z-index: initial !important;
