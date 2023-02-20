@@ -326,14 +326,14 @@ getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean
     return dateMoment;
   }
 
-  isValidDate(dateISOFormat: any) {
+  isValidDate(dateItem: any) {
+    let dateISOFormat = new Date(dateItem);
     return dateISOFormat instanceof Date && !isNaN(dateISOFormat.getTime());
   }
 
   formatDates(dataset: ExplorerDataSet) {
     dataset.csvImportData.data.map(dataItem => {
-      let dateISOFormat = new Date(dataItem[dataset.dateField.fieldName]);
-      let validDate: boolean = this.isValidDate(dateISOFormat);
+      let validDate: boolean = this.isValidDate(dataItem[dataset.dateField.fieldName]);
       let dateMoment: Moment;
       if (validDate) {
         dateMoment = moment(dataItem[dataset.dateField.fieldName]);

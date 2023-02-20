@@ -170,27 +170,6 @@ export class VisualizeGraphComponent implements OnInit {
     } 
   }
 
-  setTimeSeriesSegments(graphObj: GraphObj) {
-    this.timeSeriesSegments = [];
-    if (this.selectedGraphObj.graphInteractivity.hasLargeDataset) {
-      if (this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName === 'Time Series') {
-        this.timeSeriesSegments = this.createTimeSeriesSegments(graphObj);
-      } else {
-        // A non time-series axis is selected
-        let timeSeriesData: Array<number | string> = this.visualizeService.getTimeSeriesData(graphObj.selectedXAxisDataOption.dataField);
-        if (timeSeriesData) {
-          this.timeSeriesSegments = this.createTimeSeriesSegments(graphObj, timeSeriesData);
-        }
-      }
-
-      if (this.selectedTimeSeriesSegment) {
-        this.selectedGraphObj.data = this.selectedTimeSeriesSegment.data;
-      } else {
-        this.selectedTimeSeriesSegment = this.timeSeriesSegments[0];
-      }
-    }
-  }
-
   setSelectedTimeSeriesSegment(segment: TimeSeriesSegment) {
     this.selectedTimeSeriesSegment = segment;
     this.selectedGraphObj.data.forEach((graphDataSeries, seriesIndex) => {
@@ -228,61 +207,73 @@ export class VisualizeGraphComponent implements OnInit {
     this.visualizeService.userGraphOptions.next(graphObj);
   }
 
+  setTimeSeriesSegments(graphObj: GraphObj) {
+    this.timeSeriesSegments = [];
+    if (this.selectedGraphObj.graphInteractivity.hasLargeDataset) {
+        this.timeSeriesSegments = this.createTimeSeriesSegments(graphObj);
+      if (this.selectedTimeSeriesSegment) {
+        this.selectedGraphObj.data = this.selectedTimeSeriesSegment.data;
+      } else {
+        this.selectedTimeSeriesSegment = this.timeSeriesSegments[0];
+      }
+    }
+  }
 
-  createTimeSeriesSegments(graphObj: GraphObj, notSelectedTimeSeriesData?: Array<number | string>): Array<TimeSeriesSegment> {
+
+  // * this method creates time series segments for ANY axis selection, 'Time series' or not
+  createTimeSeriesSegments(graphObj: GraphObj): Array<TimeSeriesSegment> {
     this.selectedTimeSeriesSegment = undefined;
-
     let config: SegmentConfig = {
       dataSetLength: graphObj.data[0].y.length,
-      // .15 arbitrary value set for development - could have user pick size
+      // * .15 arbitrary value set to create the number of segments
       segmentSize: Math.floor(graphObj.data[0].y.length * .15),
       allDataMinDate: this.dayTypeAnalysisService.allDataMinDate,
       allDataMaxDate: this.dayTypeAnalysisService.allDataMaxDate,
     }
-    
     let segmentDays: Array<TimeSeriesSegment> = [];
     graphObj.data.forEach((graphDataSeries: VisualizerGraphData, seriesIndex) => {
-      let timeSeriesData: Array<string | number> = graphDataSeries.x;
-
-      if (notSelectedTimeSeriesData) {
-        timeSeriesData = notSelectedTimeSeriesData;
-      }
-
-      let currentDay: string = moment(timeSeriesData[0]).format("MMM Do");
-      timeSeriesData = this.filterTimeSeriesForSelectedY(graphObj, seriesIndex, timeSeriesData);
-
       let currentDayData: VisualizerGraphData = JSON.parse(JSON.stringify(graphDataSeries));
       currentDayData.x = [];
       currentDayData.y = [];
+      let timeSeriesDataX: Array<string | number> = graphDataSeries.x;
+      if (this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName !== 'Time Series') {
+        // * A non time-series axis is selected - get x dates to use as range for each segment
+        timeSeriesDataX = this.visualizeService.getTimeSeriesData(graphObj.selectedXAxisDataOption.dataField);
+      }
 
-      for (let coordinateIndex = 0; coordinateIndex < timeSeriesData.length; coordinateIndex++) {
-        let dateStamp: number | string = timeSeriesData[coordinateIndex];
-        let monthDay: string = moment(dateStamp).format("MMM Do");
+      // * if multiple data series how does non time series data change? 
+      let currentDayText: string = moment(timeSeriesDataX[0]).format("MMM Do");
+      timeSeriesDataX = this.filterTimeSeriesForSelectedY(graphObj, seriesIndex, timeSeriesDataX);
 
+      for (let coordinateIndex = 0; coordinateIndex < timeSeriesDataX.length; coordinateIndex++) {
+        let dateStamp: number | string = timeSeriesDataX[coordinateIndex];
         let xValue: string | number = dateStamp;
-        if (notSelectedTimeSeriesData) {
+        if (this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName !== 'Time Series') {
+          // * graph actual x data, not datetime values
           xValue = graphDataSeries.x[coordinateIndex];
-        }
+        }  
+        let monthDay: string = moment(dateStamp).format("MMM Do");
+        let isLastDay: boolean = coordinateIndex === timeSeriesDataX.length - 1;
+        if (monthDay !== currentDayText || isLastDay) {
 
-        let isLastDay: boolean = coordinateIndex === timeSeriesData.length - 1;
-        if (monthDay !== currentDay || isLastDay) {
           if (isLastDay) {
             currentDayData.x.push(xValue);
             currentDayData.y.push(graphDataSeries.y[coordinateIndex]);
-          }
-          
+          } 
+          let existingSegmentDayIndex = segmentDays.findIndex(day => day.segmentText === currentDayText);
           if (seriesIndex === 0) {
             segmentDays.push({
-              segmentText: currentDay,
+              segmentText: currentDayText,
               data: [currentDayData]
             });
           } 
           else {
-            let existingSegment: TimeSeriesSegment = segmentDays[segmentDays.findIndex(day => day.segmentText === currentDay)];
+            // if we are on next series, time segments have been added
+            let existingSegment: TimeSeriesSegment = segmentDays[existingSegmentDayIndex];
             existingSegment.data.push(currentDayData);
           }
           
-          currentDay = monthDay;
+          currentDayText = monthDay;
           currentDayData = JSON.parse(JSON.stringify(graphDataSeries));
           currentDayData.x = [];
           currentDayData.y = [];
@@ -311,6 +302,7 @@ export class VisualizeGraphComponent implements OnInit {
       //======
   }
 
+  // create groupings, ex Jun 20 - Jul 2
   groupTimeSeriesDaySegments(segmentDays: Array<TimeSeriesSegment>, graphObj: GraphObj, config: SegmentConfig): Array<TimeSeriesSegment> {
     let timeSeriesSegments: Array<TimeSeriesSegment> = [{segmentText: 'All Datapoints', data: [...graphObj.data]}];
     let groupedSegment: TimeSeriesSegment = {segmentText: undefined, data: []}
@@ -327,8 +319,8 @@ export class VisualizeGraphComponent implements OnInit {
         if (!groupedSegment.data[index]) {
           groupedSegment.data.push(dataSeries);
         } else {
-          groupedSegment.data[index].x = groupedSegment.data[index].x.concat(dataSeries.x)
-          groupedSegment.data[index].y = groupedSegment.data[index].y.concat(dataSeries.y)
+          groupedSegment.data[index].x = groupedSegment.data[index].x.concat(dataSeries.x);
+          groupedSegment.data[index].y = groupedSegment.data[index].y.concat(dataSeries.y);
         }
       });
 
