@@ -308,8 +308,8 @@ export class ElectricityReductionService {
     return inputArray;
   }
 
-  checkWarnings(index: number, isBaseline: boolean): string{
-    if (!isBaseline) {
+  checkWarnings(index: number): string{
+    if (this.modificationData) {
       if (this.baselineData[index].multimeterData.powerFactor != this.modificationData[index].multimeterData.powerFactor) {
         if (this.baselineData[index].multimeterData.averageCurrent <= this.modificationData[index].multimeterData.averageCurrent) {
           return 'Power factor should not be reduced without also reducing the average current';

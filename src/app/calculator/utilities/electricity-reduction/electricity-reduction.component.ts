@@ -44,6 +44,8 @@ export class ElectricityReductionComponent implements OnInit {
 
   modificationExists = false;
 
+  warningMessage: string;
+
   electricityReductionResults: ElectricityReductionResults;
   baselineData: Array<ElectricityReductionData>;
   modificationData: Array<ElectricityReductionData>;
@@ -144,12 +146,14 @@ export class ElectricityReductionComponent implements OnInit {
   updateBaselineData(data: ElectricityReductionData, index: number) {
     this.updateDataArray(this.baselineData, data, index);
     this.electricityReductionService.baselineData = this.baselineData;
+    this.warningMessage = this.electricityReductionService.checkWarnings(index);
     this.getResults();
   }
 
   updateModificationData(data: ElectricityReductionData, index: number) {
     this.updateDataArray(this.modificationData, data, index);
     this.electricityReductionService.modificationData = this.modificationData;
+    this.warningMessage = this.electricityReductionService.checkWarnings(index);
     this.getResults();
   }
 

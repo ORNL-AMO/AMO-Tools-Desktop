@@ -29,7 +29,7 @@ export class ElectricityReductionFormComponent implements OnInit {
   selected: boolean;
   @Input()
   userSelectedHP: boolean;  
-
+  @Input()
   warningMessage: string;
 
 
@@ -104,7 +104,6 @@ export class ElectricityReductionFormComponent implements OnInit {
     let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form);
     this.calculateIndividualResult();
     this.emitCalculate.emit(tmpObj);
-    this.warningMessage = this.electricityReductionService.checkWarnings(this.index, this.isBaseline);
   }
 
   removeEquipment() {

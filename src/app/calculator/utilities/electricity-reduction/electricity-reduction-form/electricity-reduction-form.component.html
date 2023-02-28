@@ -135,7 +135,7 @@
         </span>
       </div>
 
-      <span class="alert-warning pull-right small" *ngIf="warningMessage">
+      <span class="alert-warning pull-right small" *ngIf="warningMessage && !isBaseline">
         {{warningMessage}}
       </span>
 
