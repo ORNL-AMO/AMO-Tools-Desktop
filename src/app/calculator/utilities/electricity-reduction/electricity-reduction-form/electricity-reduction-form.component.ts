@@ -28,7 +28,10 @@ export class ElectricityReductionFormComponent implements OnInit {
   @Input()
   selected: boolean;
   @Input()
-  userSelectedHP: boolean;
+  userSelectedHP: boolean;  
+  @Input()
+  warningMessage: string;
+
 
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
