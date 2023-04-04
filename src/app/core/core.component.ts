@@ -36,7 +36,6 @@ export class CoreComponent implements OnInit {
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean;
   showWebDisclaimerToast: boolean = false;
-  showTranslateModalSub: Subscription;
   routerSubscription: Subscription;
   analyticsSessionId: string;
   modalOpenSub: Subscription;
