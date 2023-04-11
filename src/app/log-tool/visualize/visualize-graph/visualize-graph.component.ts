@@ -243,7 +243,8 @@ export class VisualizeGraphComponent implements OnInit {
 
       // * if multiple data series how does non time series data change? 
       let currentDayText: string = moment(timeSeriesDataX[0]).format("MMM Do");
-      timeSeriesDataX = this.filterTimeSeriesForSelectedY(graphObj, seriesIndex, timeSeriesDataX);
+      // 6225 not needed anymore? check if series differ in length.. when were these concattenated?
+      // timeSeriesDataX = this.filterTimeSeriesForSelectedY(graphObj, seriesIndex, timeSeriesDataX);
 
       for (let coordinateIndex = 0; coordinateIndex < timeSeriesDataX.length; coordinateIndex++) {
         let dateStamp: number | string = timeSeriesDataX[coordinateIndex];
@@ -255,20 +256,20 @@ export class VisualizeGraphComponent implements OnInit {
         let monthDay: string = moment(dateStamp).format("MMM Do");
         let isLastDay: boolean = coordinateIndex === timeSeriesDataX.length - 1;
         if (monthDay !== currentDayText || isLastDay) {
-
           if (isLastDay) {
+            // * add remaining coordinates to last series
             currentDayData.x.push(xValue);
             currentDayData.y.push(graphDataSeries.y[coordinateIndex]);
           } 
           let existingSegmentDayIndex = segmentDays.findIndex(day => day.segmentText === currentDayText);
           if (seriesIndex === 0) {
+            // * add segment day
             segmentDays.push({
               segmentText: currentDayText,
               data: [currentDayData]
             });
           } 
           else {
-            // if we are on next series, time segments have been added
             let existingSegment: TimeSeriesSegment = segmentDays[existingSegmentDayIndex];
             existingSegment.data.push(currentDayData);
           }
@@ -289,13 +290,14 @@ export class VisualizeGraphComponent implements OnInit {
     return this.groupTimeSeriesDaySegments(segmentDays, graphObj, config);
   }
 
+  // 6225 this method may no longer be needed
   filterTimeSeriesForSelectedY(graphObj: GraphObj, seriesIndex: number, timeSeriesData: Array<string | number>) {
     //======
       // 6040 band aid until file/dataset processing supports multi files better
       // use only the time series data for the selected series (y axis), DE logic currently concats all time series data. 
       let previousSeriesEnd: number = 0;
       if (seriesIndex !== 0) {
-        previousSeriesEnd = graphObj.data[seriesIndex - 1].y.length;
+        previousSeriesEnd = graphObj.data[seriesIndex - 1].y.length - 1;
       }
       timeSeriesData = timeSeriesData.slice(previousSeriesEnd, previousSeriesEnd + graphObj.data[seriesIndex].y.length);
       return timeSeriesData;
