@@ -20,7 +20,7 @@ export class VisualizeMenuService {
     this.visualizeService.selectedGraphObj.next(selectedGraphObj);
   }
 
-  setGraphType(selectedGraphObj: GraphObj) {
+  setGraphData(selectedGraphObj: GraphObj) {
     if (selectedGraphObj.data[0].type == 'scattergl') {
       this.setScatterGraphDataOptions(selectedGraphObj);
     } else if (selectedGraphObj.data[0].type == 'bar') {
@@ -118,10 +118,11 @@ export class VisualizeMenuService {
   }
 
 
+  // * called on graph init and user select change event
   setSelectedXAxisDataOption(selectedGraphObj: GraphObj) {
     this.setDefaultSelectedXAxis(selectedGraphObj);
+    // * reset to avoid annotations/custom layout showing on incorrect axis
     this.resetXAxisRelatedData(selectedGraphObj);
-
     if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
       selectedGraphObj.layout.xaxis.type = 'date';
       this.setYAxisDataOptions(selectedGraphObj);
@@ -141,6 +142,7 @@ export class VisualizeMenuService {
   }
 
   resetXAxisRelatedData(selectedGraphObj: GraphObj) {
+    // * also changes userGraphObj
     this.visualizeService.annotateDataPoint.next(undefined);
     selectedGraphObj.layout.annotations = [];
     selectedGraphObj.layout.yaxis.ticksuffix = '';
@@ -338,7 +340,6 @@ export class VisualizeMenuService {
         selectedGraphObj.layout.annotations.push(annotateDataPoint);
       }
     }
-    
     this.saveUserGraphOptionsChange(selectedGraphObj);
   }
 

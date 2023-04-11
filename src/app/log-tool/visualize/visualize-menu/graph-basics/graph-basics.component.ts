@@ -69,14 +69,14 @@ export class GraphBasicsComponent implements OnInit {
     this.selectedGraphObj.selectedYAxisDataOptions.forEach((option) => {
       option.linesOrMarkers = this.markerType;
     });
-    this.visualizeMenuService.setGraphType(this.selectedGraphObj);
+    this.visualizeMenuService.setGraphData(this.selectedGraphObj);
   }
 
   setGraphType() {
     if (this.selectedGraphObj.data[0].type == 'bar') {
       this.checkBarHistogramData();
     }
-    this.visualizeMenuService.setGraphType(this.selectedGraphObj);
+    this.visualizeMenuService.setGraphData(this.selectedGraphObj);
   }
 
   focusField() {
