@@ -5,6 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { NaturalGasReductionData, NaturalGasReductionResults } from '../../shared/models/standalone';
 import { EnergyUsage, NaturalGasReductionTreasureHunt, OpportunitySummary, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
+import * as _ from 'lodash';
 
 @Injectable()
 export class NaturalGasReductionTreasureHuntService {
@@ -17,8 +18,8 @@ export class NaturalGasReductionTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(naturalGasReduction: NaturalGasReductionTreasureHunt) {
-    this.naturalGasReductionService.baselineData = naturalGasReduction.baseline;
-    this.naturalGasReductionService.modificationData = naturalGasReduction.modification;
+    this.naturalGasReductionService.baselineData = _.cloneDeep(naturalGasReduction.baseline);
+    this.naturalGasReductionService.modificationData = _.cloneDeep(naturalGasReduction.modification);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {

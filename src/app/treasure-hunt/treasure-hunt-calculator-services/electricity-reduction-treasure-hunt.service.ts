@@ -5,6 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { ElectricityReductionData, ElectricityReductionResults } from '../../shared/models/standalone';
 import { ElectricityReductionTreasureHunt, EnergyUsage, OpportunitySummary, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
+import * as _ from 'lodash';
 
 @Injectable()
 export class ElectricityReductionTreasureHuntService {
@@ -15,8 +16,8 @@ export class ElectricityReductionTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(electricityReduction: ElectricityReductionTreasureHunt) {
-    this.electricityReductionService.baselineData = electricityReduction.baseline;
-    this.electricityReductionService.modificationData = electricityReduction.modification;
+    this.electricityReductionService.baselineData = _.cloneDeep(electricityReduction.baseline);
+    this.electricityReductionService.modificationData = _.cloneDeep(electricityReduction.modification);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {

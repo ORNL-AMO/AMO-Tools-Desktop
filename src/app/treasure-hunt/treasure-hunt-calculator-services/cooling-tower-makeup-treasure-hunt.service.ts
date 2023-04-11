@@ -5,6 +5,7 @@ import { CoolingTowerData, CoolingTowerOutput } from '../../shared/models/chille
 import { Settings } from '../../shared/models/settings';
 import { CoolingTowerMakeupWaterTreasureHunt, EnergyUsage, OpportunitySummary, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
+import * as _ from 'lodash';
 
 @Injectable()
 export class CoolingTowerMakeupTreasureHuntService {
@@ -18,8 +19,8 @@ export class CoolingTowerMakeupTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(coolingTowerMakeupWaterTreasureHunt: CoolingTowerMakeupWaterTreasureHunt) {
-    this.coolingTowerMakeupService.baselineData.next(coolingTowerMakeupWaterTreasureHunt.baseline);
-    this.coolingTowerMakeupService.modificationData.next(coolingTowerMakeupWaterTreasureHunt.modification);
+    this.coolingTowerMakeupService.baselineData.next(_.cloneDeep(coolingTowerMakeupWaterTreasureHunt.baseline));
+    this.coolingTowerMakeupService.modificationData.next(_.cloneDeep(coolingTowerMakeupWaterTreasureHunt.modification));
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {

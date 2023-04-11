@@ -5,6 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { SteamReductionData, SteamReductionResults } from '../../shared/models/standalone';
 import { EnergyUsage, OpportunitySummary, SteamReductionTreasureHunt, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
+import * as _ from 'lodash';
 
 @Injectable()
 export class SteamReductionTreasureHuntService {
@@ -17,8 +18,8 @@ export class SteamReductionTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(steamReduction: SteamReductionTreasureHunt) {
-    this.steamReductionService.baselineData = steamReduction.baseline;
-    this.steamReductionService.modificationData = steamReduction.modification;
+    this.steamReductionService.baselineData = _.cloneDeep(steamReduction.baseline);
+    this.steamReductionService.modificationData = _.cloneDeep(steamReduction.modification);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
