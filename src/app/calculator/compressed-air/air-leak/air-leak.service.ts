@@ -83,8 +83,8 @@ export class AirLeakService {
 
   deleteLeak(index: number) {
     if(this.airLeakInput.value.compressedAirLeakSurveyInputVec.length == 1 && index == 0){
-      this.initDefaultEmptyInputs(this.settings);
       this.currentLeakIndex.next(0);
+      this.initDefaultEmptyInputs(this.settings);
     }else {
       this.airLeakInput.value.compressedAirLeakSurveyInputVec.splice(index, 1);
       this.airLeakOutput.value.leakResults.splice(index, 1);
