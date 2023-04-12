@@ -74,6 +74,7 @@ export class VisualizeMenuService {
       // already called in setYAxisDataOptions
       let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(option.dataOption.dataField);
       if (timeData) {
+        // todo 6225 - this no longer happens? What conditions were making this happen?
         // timeData will have overlapping values - i.e. 3 datasets with same time logs concatenated together
         // Should this go in getAxisOptionGraphData?
         // let uniqueDates: Set<string | number> = new Set(timeData);
@@ -284,7 +285,7 @@ export class VisualizeMenuService {
     this.setGraphYAxisData(selectedGraphObj);
   }
 
-  addData(selectedGraphObj: GraphObj) {
+  addDataSeries(selectedGraphObj: GraphObj) {
     let currentSelections: Array<string> = selectedGraphObj.selectedYAxisDataOptions.map(option => { return option.dataOption.dataField.fieldName });
     let unusedSelections: Array<{ dataField: LogToolField }> = JSON.parse(JSON.stringify(selectedGraphObj.yAxisDataOptions))
     _.remove(unusedSelections, (option) => { return currentSelections.includes(option.dataField.fieldName) });

@@ -55,10 +55,10 @@ export class YAxisDataComponent implements OnInit {
     this.visualizeMenuService.removeYAxisData(index, this.selectedGraphObj);
   }
 
-  addData(){
+  addDataSeries(){
     this.logToolDataService.loadingSpinner.next({show: true, msg: `Adding Data Series. This may take a moment
     depending on the amount of data you have supplied...`});
-    this.visualizeMenuService.addData(this.selectedGraphObj);
+    this.visualizeMenuService.addDataSeries(this.selectedGraphObj);
   }
 
   focusField(){
