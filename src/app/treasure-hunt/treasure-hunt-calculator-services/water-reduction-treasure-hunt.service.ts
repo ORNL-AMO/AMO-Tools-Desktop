@@ -5,6 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { WaterReductionData, WaterReductionResults } from '../../shared/models/standalone';
 import { EnergyUsage, OpportunitySummary, TreasureHunt, TreasureHuntOpportunityResults, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
+import * as _ from 'lodash';
 
 @Injectable()
 export class WaterReductionTreasureHuntService {
@@ -16,8 +17,8 @@ export class WaterReductionTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(waterReduction: WaterReductionTreasureHunt) {
-    this.waterReductionService.baselineData = waterReduction.baseline;
-    this.waterReductionService.modificationData = waterReduction.modification;
+    this.waterReductionService.baselineData = _.cloneDeep(waterReduction.baseline);
+    this.waterReductionService.modificationData = _.cloneDeep(waterReduction.modification);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {

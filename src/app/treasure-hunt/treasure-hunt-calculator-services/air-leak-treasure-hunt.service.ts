@@ -5,6 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { AirLeakSurveyInput, AirLeakSurveyOutput } from '../../shared/models/standalone';
 import { AirLeakSurveyTreasureHunt, EnergyUsage, OpportunitySummary, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
+import * as _ from 'lodash';
 
 @Injectable()
 export class AirLeakTreasureHuntService {
@@ -20,7 +21,7 @@ export class AirLeakTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(airLeakSurvey: AirLeakSurveyTreasureHunt) {
-    this.airLeakService.airLeakInput.next(airLeakSurvey.airLeakSurveyInput);
+    this.airLeakService.airLeakInput.next(_.cloneDeep(airLeakSurvey.airLeakSurveyInput));
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
