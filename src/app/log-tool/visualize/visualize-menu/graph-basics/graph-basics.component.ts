@@ -13,6 +13,7 @@ import { LogToolDataService } from '../../../log-tool-data.service';
 export class GraphBasicsComponent implements OnInit {
 
   graphTypes: Array<{ label: string, value: string }> = [
+    { value: 'time-series', label: 'Time Series' },
     { value: 'scattergl', label: 'Scatter Plot' },
     { value: 'bar', label: 'Histogram' }
   ]
@@ -36,22 +37,14 @@ export class GraphBasicsComponent implements OnInit {
         }
       }
 
-      if (this.selectedGraphObj.layout.xaxis.type == "date") {
-        this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
+      // 'scattergl' represents MEASUR scatter graph type, but plotly graph type for time series must be set 'scattergl'
+      if (this.selectedGraphObj.isTimeSeries === true) {
+        this.selectedGraphObj.data[0].type = 'time-series';
+        this.markerTypes = [{ label: "Lines & Markers", value: "lines+markers" }, { label: "Lines", value: "lines" }, { label: "Markers", value: "markers" }];
+      } else if (this.selectedGraphObj.data[0].type !== 'bar') {
+        this.selectedGraphObj.data[0].type = 'scattergl';
       }
-      else {
-        this.markerTypes = [{label: "Markers", value: "markers"}];
-        this.markerType = "markers";
-      }
-      
     });
-    if (this.selectedGraphObj.layout.xaxis.type == "date") {
-      this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
-    }
-    else {
-      this.markerTypes = [{label: "Markers", value: "markers"}];
-    }
-    this.markerType = "markers";
     this.canRunDayTypeAnalysis = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
   }
   
@@ -73,8 +66,14 @@ export class GraphBasicsComponent implements OnInit {
   }
 
   setGraphType() {
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment depending on the amount of data you have supplied...`});
+    this.selectedGraphObj.isTimeSeries = false;
     if (this.selectedGraphObj.data[0].type == 'bar') {
       this.checkBarHistogramData();
+    } else if (this.selectedGraphObj.data[0].type == 'time-series') {
+      this.selectedGraphObj.isTimeSeries = true;
+      // plotly type for time-series == scattergl
+      this.selectedGraphObj.data[0].type = 'scattergl';
     }
     this.visualizeMenuService.setGraphType(this.selectedGraphObj);
   }

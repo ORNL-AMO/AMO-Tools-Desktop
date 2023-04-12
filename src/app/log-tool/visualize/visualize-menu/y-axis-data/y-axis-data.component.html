@@ -1,6 +1,6 @@
 <form>
     <!--scatter plot-->
-    <div *ngIf="selectedGraphObj.data[0].type == 'scattergl'">
+    <div *ngIf="selectedGraphObj.data[0].type == 'scattergl' || selectedGraphObj.isTimeSeries" >
         <!--left axis label, option to add axis-->
         <div class="form-group">
             <label class="w-100"><span *ngIf="selectedGraphObj.hasSecondYAxis">Left </span>Axis Label

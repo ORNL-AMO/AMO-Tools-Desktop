@@ -21,7 +21,9 @@ export class VisualizeMenuService {
   }
 
   setGraphType(selectedGraphObj: GraphObj) {
-    if (selectedGraphObj.data[0].type == 'scattergl') {
+    if (selectedGraphObj.isTimeSeries) {
+      this.setScatterGraphDataOptions(selectedGraphObj);
+    } else if (selectedGraphObj.data[0].type == 'scattergl') {
       this.setScatterGraphDataOptions(selectedGraphObj);
     } else if (selectedGraphObj.data[0].type == 'bar') {
       this.setBarChartDataOptions(selectedGraphObj);
@@ -94,7 +96,7 @@ export class VisualizeMenuService {
   setXAxisDataOptions(selectedGraphObj: GraphObj) {
     let dataFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
     let canRunDayTypeAnalysis: boolean = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
-    if (selectedGraphObj.data[0].type == 'scattergl' && canRunDayTypeAnalysis) {
+    if (selectedGraphObj.isTimeSeries && canRunDayTypeAnalysis) {
       dataFields.push({
         fieldName: 'Time Series',
         alias: 'Time Series',
@@ -122,7 +124,7 @@ export class VisualizeMenuService {
     this.setDefaultSelectedXAxis(selectedGraphObj);
     this.resetXAxisRelatedData(selectedGraphObj);
 
-    if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
+    if (selectedGraphObj.isTimeSeries) {
       selectedGraphObj.layout.xaxis.type = 'date';
       this.setYAxisDataOptions(selectedGraphObj);
       this.setTimeSeriesData(selectedGraphObj);
@@ -130,7 +132,7 @@ export class VisualizeMenuService {
       selectedGraphObj.layout.xaxis.type = 'category';
       this.setYAxisDataOptions(selectedGraphObj);
       this.setBarHistogramData(selectedGraphObj);
-    } else {
+    } else if (selectedGraphObj.data[0].type == 'scattergl') {
       selectedGraphObj.layout.xaxis.type = 'linear';
       selectedGraphObj.data.forEach(dataItem => {
         dataItem.x = selectedGraphObj.selectedXAxisDataOption.data;
@@ -169,7 +171,7 @@ export class VisualizeMenuService {
     let dataFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
     selectedGraphObj.yAxisDataOptions = new Array();
     dataFields.forEach(field => {
-      if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
+      if (selectedGraphObj.isTimeSeries) {
         let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(field);
         if (timeData) {
           let data: (string | number)[]  = this.visualizeService.getGraphDataByField(field.fieldName);
@@ -200,7 +202,7 @@ export class VisualizeMenuService {
     let index: number = 0;
     selectedGraphObj.selectedYAxisDataOptions.forEach(selectedDataOption => {
       selectedGraphObj.data[index].mode = selectedDataOption.linesOrMarkers;
-      if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
+      if (selectedGraphObj.isTimeSeries) {
         let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(selectedDataOption.dataOption.dataField);
         if (timeData) {
           selectedGraphObj.data[index].x = timeData;
@@ -216,7 +218,7 @@ export class VisualizeMenuService {
         // Lines not a valid mode for non-time series
         selectedDataOption.linesOrMarkers = 'markers';
       }
-      selectedGraphObj.isTimeSeries = selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series';
+      selectedGraphObj.isTimeSeries = selectedGraphObj.isTimeSeries;
       selectedGraphObj = this.visualizeService.setDefaultGraphInteractivity(selectedGraphObj, selectedGraphObj.data[index].x.length);
       selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
       selectedGraphObj.data[index].name = selectedDataOption.seriesName;
