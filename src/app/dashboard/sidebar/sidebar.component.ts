@@ -26,7 +26,6 @@ export class SidebarComponent implements OnInit {
   rootDirectory: Directory;
   selectedDirectoryId: number;
   selectedDirectoryIdSub: Subscription;
-  googleTranslateAvailable: boolean;
   showNewDropdown: boolean = false;
   isSidebarCollapsed: boolean = false;
   collapseSidebarSub: Subscription;
@@ -58,12 +57,7 @@ export class SidebarComponent implements OnInit {
         this.collapseSidebar(shouldCollapse);
       }  
     })
-    try {
-      google;
-      this.googleTranslateAvailable = true;
-    } catch{
-      this.googleTranslateAvailable = false;
-    }
+
     this.initSidebarView();
   }
 
@@ -139,10 +133,6 @@ export class SidebarComponent implements OnInit {
   closeVersionModal() {
     this.openModal.emit(false);
     this.showVersionModal = false;
-  }
-
-  emitTranslate(){
-    this.coreService.showTranslateModal.next(true);
   }
 
   toggleNewDropdown(){

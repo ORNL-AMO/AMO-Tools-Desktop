@@ -21,7 +21,6 @@ import { SecurityAndPrivacyService } from '../shared/security-and-privacy/securi
 @Injectable()
 export class CoreService {
 
-  showTranslateModal: BehaviorSubject<boolean>;
 
   exampleDirectoryId: number;
   examplePhastId: number;
@@ -40,7 +39,6 @@ export class CoreService {
     private electronService: ElectronService,
     private securityAndPrivacyService: SecurityAndPrivacyService,
     private directoryDbService: DirectoryDbService) {
-    this.showTranslateModal = new BehaviorSubject<boolean>(false);
   }
 
   getDefaultSettingsObject(): Settings {
