@@ -7,7 +7,7 @@
             (blur)="focusOut()"></textarea>
     </div>
     <!--axis data-->
-    <div class="form-group">
+    <div class="form-group" *ngIf="selectedGraphObj.data[0].type !== 'time-series'">
         <label>Data</label>
         <select class="form-control" name="xDatafield" [(ngModel)]="selectedGraphObj.selectedXAxisDataOption"
             (change)="setXAxisDataOption()" (focus)="focusField()"
