@@ -4,6 +4,7 @@ import { LightingReplacementResults } from '../../shared/models/lighting';
 import { Settings } from '../../shared/models/settings';
 import { EnergyUsage, LightingReplacementTreasureHunt, OpportunitySummary, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
+import * as _ from 'lodash';
 
 @Injectable()
 export class LightingReplacementTreasureHuntService {
@@ -15,10 +16,10 @@ export class LightingReplacementTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(lightingReplacementTreasureHunt: LightingReplacementTreasureHunt) {
-    this.lightingReplacementService.baselineData = lightingReplacementTreasureHunt.baseline;
-    this.lightingReplacementService.modificationData = lightingReplacementTreasureHunt.modifications;
-    this.lightingReplacementService.baselineElectricityCost = lightingReplacementTreasureHunt.baselineElectricityCost;
-    this.lightingReplacementService.modificationElectricityCost = lightingReplacementTreasureHunt.modificationElectricityCost;
+    this.lightingReplacementService.baselineData = _.cloneDeep(lightingReplacementTreasureHunt.baseline);
+    this.lightingReplacementService.modificationData = _.cloneDeep(lightingReplacementTreasureHunt.modifications);
+    this.lightingReplacementService.baselineElectricityCost = _.cloneDeep(lightingReplacementTreasureHunt.baselineElectricityCost);
+    this.lightingReplacementService.modificationElectricityCost = _.cloneDeep(lightingReplacementTreasureHunt.modificationElectricityCost);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {

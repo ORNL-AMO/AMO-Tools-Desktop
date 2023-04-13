@@ -174,6 +174,10 @@ export class VisualizeService {
     return graphObj;
   }
 
+  getDeepCloneGraphObj(graphObj: GraphObj) {
+    return _.cloneDeep(graphObj);
+  }
+
   initGraphObj(): GraphObj {
     return {
       name: 'Data Visualization',
@@ -405,6 +409,7 @@ export class VisualizeService {
         y: data.points[0].y,
         text: '',
         showarrow: true,
+        selectedXAxis: selectedGraphObj.selectedXAxisDataOption.dataField.fieldName,
         font: {
           // family: string,
           size: 16,

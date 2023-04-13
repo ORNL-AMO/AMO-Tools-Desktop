@@ -42,9 +42,7 @@ export class CoreComponent implements OnInit {
   isOnline: boolean;
   info: any;
   updateAvailableSubscription: Subscription;
-  showTranslateModalSub: Subscription;
   routerSubscription: Subscription;
-  showTranslate: string = 'hide';
   modalOpenSub: Subscription;
   showSecurityAndPrivacyModalSub: Subscription;
   isModalOpen: boolean;
@@ -117,20 +115,6 @@ export class CoreComponent implements OnInit {
       }
     });
 
-    this.showTranslateModalSub = this.coreService.showTranslateModal.subscribe(val => {
-      if (val == true) {
-        try {
-          let instance = google.translate.TranslateElement.getInstance();
-          if (!instance) {
-            let element = new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
-          }
-          this.showTranslate = 'show';
-        } catch (err) {
-
-        }
-      }
-    })
-
     this.modalOpenSub = this.securityAndPrivacyService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     });
@@ -147,7 +131,6 @@ export class CoreComponent implements OnInit {
     }
     this.routerSubscription.unsubscribe();
     this.updateAvailableSubscription.unsubscribe();
-    this.showTranslateModalSub.unsubscribe();
     this.showSecurityAndPrivacyModalSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
   }
@@ -197,9 +180,6 @@ export class CoreComponent implements OnInit {
     this.hideTutorial = true;
   }
 
-  closeTranslate() {
-    this.showTranslate = 'hide';
-  }
 
   closeNoticeModal(isClosedEvent?: boolean) {
     this.securityAndPrivacyService.modalOpen.next(false)

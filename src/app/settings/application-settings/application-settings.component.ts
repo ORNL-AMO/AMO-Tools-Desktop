@@ -48,7 +48,6 @@ export class ApplicationSettingsComponent implements OnInit {
   ];
 
   energyResultOptions: Array<any>;
-  googleTranslateAvailable: boolean;
   constructor(private convertUnitsService: ConvertUnitsService, private settingsService: SettingsService, private coreService: CoreService) { }
 
   ngOnInit() {
@@ -63,13 +62,6 @@ export class ApplicationSettingsComponent implements OnInit {
       };
       this.energyResultOptions.push(tmpPossibility);
     });
-
-    try {
-      google;
-      this.googleTranslateAvailable = true;
-    } catch{
-      this.googleTranslateAvailable = false;
-    }
   }
 
   setUnits() {
@@ -90,9 +82,5 @@ export class ApplicationSettingsComponent implements OnInit {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
     }
-  }
-
-  emitTranslate() {
-    this.coreService.showTranslateModal.next(true);
   }
 }

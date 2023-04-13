@@ -226,6 +226,7 @@ export interface AnnotationData {
     x: number | string,
     y: number | string,
     dataSeriesId?: string,
+    selectedXAxis: string,
     text: string,
     showarrow: boolean,
     font: {

@@ -64,8 +64,10 @@ export class VisualizeComponent implements OnInit {
         initialGraphObj = this.visualizeMenuService.initializeBinData(initialGraphObj);
       }
     }
-    this.visualizeMenuService.setGraphType(initialGraphObj);
+    let existingGraph: GraphObj = this.visualizeService.getDeepCloneGraphObj(initialGraphObj);
+    this.visualizeMenuService.setGraphData(initialGraphObj, existingGraph);
   }
+
 
   setGraphHeight(graphHeight: number) {
     this.graphContainerHeight = graphHeight;

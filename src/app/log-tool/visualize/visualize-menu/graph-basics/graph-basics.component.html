@@ -5,7 +5,7 @@
     </div>
     <div class="form-group pt-2">
         <select class="form-control w-100" name="graphType" [(ngModel)]="selectedGraphObj.data[0].type"
-            (change)="setGraphType()" (focus)="focusField()" (blur)="focusOut()">
+            (change)="changeSelectedGraphData()" (focus)="focusField()" (blur)="focusOut()">
             <option *ngFor="let graphType of graphTypes" [ngValue]="graphType.value">{{graphType.label}}
             </option>
         </select>
