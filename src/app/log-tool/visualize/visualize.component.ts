@@ -64,26 +64,10 @@ export class VisualizeComponent implements OnInit {
         initialGraphObj = this.visualizeMenuService.initializeBinData(initialGraphObj);
       }
     }
-      // * setGraphData methods will reset graph data that we want to save from this session
-      // * userGraphOptions would be used for this, but currently is shared ref of visualizeService.selectedGraphObj
     let existingGraph: GraphObj = this.visualizeService.getDeepCloneGraphObj(initialGraphObj);
-    this.visualizeMenuService.setGraphData(initialGraphObj);
-    this.reApplyGraphState(existingGraph);
+    this.visualizeMenuService.setGraphData(initialGraphObj, existingGraph);
   }
 
-  reApplyGraphState(existingGraph: GraphObj) {
-    let initialGraphObj: GraphObj = this.visualizeService.selectedGraphObj.getValue();
-    if (existingGraph.layout && existingGraph.layout.annotations) {
-      let currentXAxis: string = initialGraphObj.selectedXAxisDataOption.dataField.fieldName; 
-      existingGraph.layout.annotations.map(annotation => {
-        let yAxisSeriesExists = initialGraphObj.selectedYAxisDataOptions.find(yAxis => yAxis.dataOption.dataField.fieldName === annotation.seriesName);
-        return currentXAxis === annotation.selectedXAxis && yAxisSeriesExists;
-      });
-      if (existingGraph.layout.annotations.length > 0) {
-        initialGraphObj.layout.annotations = existingGraph.layout.annotations;
-      }
-    }
-  }
 
   setGraphHeight(graphHeight: number) {
     this.graphContainerHeight = graphHeight;
