@@ -8,6 +8,9 @@
   margin: 10px 0px;
 }
 
+input[type='checkbox']:hover {
+  cursor: pointer;
+}
 
 .col-item-br{
   border-right: 1px solid rgba(0, 0, 0, 0.125);
