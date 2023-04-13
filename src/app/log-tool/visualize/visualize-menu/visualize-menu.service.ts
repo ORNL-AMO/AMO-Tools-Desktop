@@ -20,11 +20,35 @@ export class VisualizeMenuService {
     this.visualizeService.selectedGraphObj.next(selectedGraphObj);
   }
 
-  setGraphType(selectedGraphObj: GraphObj) {
+  setGraphData(selectedGraphObj: GraphObj, existingGraph?: GraphObj) {
     if (selectedGraphObj.data[0].type == 'scattergl') {
       this.setScatterGraphDataOptions(selectedGraphObj);
     } else if (selectedGraphObj.data[0].type == 'bar') {
       this.setBarChartDataOptions(selectedGraphObj);
+    }
+
+    if (existingGraph) {
+      this.reApplyGraphState(existingGraph);
+    }
+  }
+  
+  // * setGraphData() implicitly resets much of the GraphObj
+  // * if we setGraphData() on in-memory graph or user graph change event (not a new graph), check to reapply any data we'd like saved
+  reApplyGraphState(existingGraph: GraphObj) {
+    this.applyExistingGraphAnnotations(existingGraph);
+  }
+
+  applyExistingGraphAnnotations(existingGraph: GraphObj) {
+    let initialGraphObj: GraphObj = this.visualizeService.selectedGraphObj.getValue();
+    if (existingGraph.layout && existingGraph.layout.annotations) {
+      let currentXAxis: string = initialGraphObj.selectedXAxisDataOption.dataField.fieldName; 
+      existingGraph.layout.annotations.map(annotation => {
+        let yAxisSeriesExists = initialGraphObj.selectedYAxisDataOptions.find(yAxis => yAxis.dataOption.dataField.fieldName === annotation.seriesName);
+        return currentXAxis === annotation.selectedXAxis && yAxisSeriesExists;
+      });
+      if (existingGraph.layout.annotations.length > 0) {
+        initialGraphObj.layout.annotations = existingGraph.layout.annotations;
+      }
     }
   }
 
@@ -119,10 +143,11 @@ export class VisualizeMenuService {
   }
 
 
+  // * called on graph init and user select change event
   setSelectedXAxisDataOption(selectedGraphObj: GraphObj) {
     this.setDefaultSelectedXAxis(selectedGraphObj);
+    // * reset to avoid annotations/custom layout showing on incorrect axis
     this.resetXAxisRelatedData(selectedGraphObj);
-
     if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
       selectedGraphObj.layout.xaxis.type = 'date';
       this.setYAxisDataOptions(selectedGraphObj);
@@ -142,6 +167,7 @@ export class VisualizeMenuService {
   }
 
   resetXAxisRelatedData(selectedGraphObj: GraphObj) {
+    // * also changes userGraphObj
     this.visualizeService.annotateDataPoint.next(undefined);
     selectedGraphObj.layout.annotations = [];
     selectedGraphObj.layout.yaxis.ticksuffix = '';
@@ -339,7 +365,6 @@ export class VisualizeMenuService {
         selectedGraphObj.layout.annotations.push(annotateDataPoint);
       }
     }
-    
     this.saveUserGraphOptionsChange(selectedGraphObj);
   }
 

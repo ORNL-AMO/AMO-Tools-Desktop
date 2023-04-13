@@ -26,9 +26,10 @@ export class GraphBasicsComponent implements OnInit {
   ngOnInit(): void {
     this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
-      if (val.graphId != this.selectedGraphObj.graphId) {
+      let isSelectedGraphChange = val.graphId != this.selectedGraphObj.graphId;
+      if (isSelectedGraphChange) {
         this.selectedGraphObj = val;
-        this.setGraphType();
+        this.changeSelectedGraphData();
       } else {
         this.selectedGraphObj = val;
         if (this.selectedGraphObj.data[0].type == 'bar') {
@@ -69,14 +70,15 @@ export class GraphBasicsComponent implements OnInit {
     this.selectedGraphObj.selectedYAxisDataOptions.forEach((option) => {
       option.linesOrMarkers = this.markerType;
     });
-    this.visualizeMenuService.setGraphType(this.selectedGraphObj);
+    this.visualizeMenuService.setGraphData(this.selectedGraphObj);
   }
 
-  setGraphType() {
+  changeSelectedGraphData() {
     if (this.selectedGraphObj.data[0].type == 'bar') {
       this.checkBarHistogramData();
     }
-    this.visualizeMenuService.setGraphType(this.selectedGraphObj);
+    let existingGraph: GraphObj = this.visualizeService.getDeepCloneGraphObj(this.selectedGraphObj);
+    this.visualizeMenuService.setGraphData(this.selectedGraphObj, existingGraph);
   }
 
   focusField() {

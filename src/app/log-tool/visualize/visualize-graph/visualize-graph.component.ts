@@ -349,13 +349,12 @@ export class VisualizeGraphComponent implements OnInit {
       graphObj.layout.annotations.forEach(annotation => {
         graphObj.data.forEach((dataSeries, index) => {
           let matchingYIndicies: number[] = [];
-
-      for (let i = 0; i < dataSeries.y.length; i++) {
-          let yVal: number | string = dataSeries.y[i];
+          for (let i = 0; i < dataSeries.y.length; i++) {
+            let yVal: number | string = dataSeries.y[i];
             if (yVal === annotation.y) {
-              matchingYIndicies.push(i)
-          };
-      }
+              matchingYIndicies.push(i);
+            };
+          }
           let timeSeriesData: Array<string | number> = dataSeries.x;
           if (this.selectedTimeSeriesSegment.segmentText === 'All Datapoints') {
             timeSeriesData = this.filterTimeSeriesForSelectedY(graphObj, index, dataSeries.x);
@@ -375,10 +374,10 @@ export class VisualizeGraphComponent implements OnInit {
                 annotationsInRange.push(annotation);
               }
             }
-          })
+          });
         });
       })
-      
+
       graphObj.layout.annotations = annotationsInRange;
     }
     return graphObj.layout.annotations;
