@@ -1,0 +1,16 @@
+.table{
+    font-size: 12px;
+    background: white;
+}
+
+.selected-item{
+    border: solid;
+}
+
+.fa-chevron-right{
+    padding-right: 3px;
+}
+
+a.danger{
+    color: red;
+}

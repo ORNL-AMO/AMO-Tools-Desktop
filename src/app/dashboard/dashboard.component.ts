@@ -60,6 +60,7 @@ export class DashboardComponent implements OnInit {
     'report-rollup',
     'log-tool',
     'motor-inventory',
+    'pump-inventory',
     'waste-water'
   ];
   showPrintViewSub: Subscription;

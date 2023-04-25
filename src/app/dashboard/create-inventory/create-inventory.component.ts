@@ -16,6 +16,8 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsService } from '../../settings/settings.service';
 import { MotorInventoryService } from '../../motor-inventory/motor-inventory.service';
 import { firstValueFrom } from 'rxjs';
+import { PumpInventoryService } from '../../pump-inventory/pump-inventory.service';
+
 @Component({
   selector: 'app-create-inventory',
   templateUrl: './create-inventory.component.html',
@@ -42,7 +44,8 @@ export class CreateInventoryComponent implements OnInit {
     private inventoryDbService: InventoryDbService,
     private inventoryService: InventoryService,
     private settingsService: SettingsService,
-    private motorInventoryService: MotorInventoryService) { }
+    private motorInventoryService: MotorInventoryService,
+    private pumpInventoryService: PumpInventoryService) { }
 
   ngOnInit() {
     this.setDirectories();
@@ -80,33 +83,47 @@ export class CreateInventoryComponent implements OnInit {
     this.dashboardService.createInventory.next(false);
   }
 
+  setInventoryName() {
+    if (this.newInventoryItemForm.controls.inventoryType.value === 'motorInventory') {
+      this.newInventoryItemForm.controls.inventoryName.patchValue('New Motor Inventory');
+    } else if (this.newInventoryItemForm.controls.inventoryType.value === 'pumpInventory') {
+      this.newInventoryItemForm.controls.inventoryName.patchValue('New Pump Inventory');
+    }
+  }
+
   async create() {
     if (this.newInventoryItemForm.valid && this.canCreate) {
       this.canCreate = false;
       this.hideCreateModal();
       this.createInventoryItemModal.onHidden.subscribe(async () => {
+        this.motorInventoryService.mainTab.next('setup');
+        this.motorInventoryService.setupTab.next('plant-setup');
+        let inventoryRoute: string = 'motor-inventory';
+        let inventoryItem: InventoryItem;
         if (this.newInventoryItemForm.controls.inventoryType.value === 'motorInventory') {
-          this.motorInventoryService.mainTab.next('setup');
-          this.motorInventoryService.setupTab.next('plant-setup');
-          let tmpInventoryItem: InventoryItem = this.inventoryService.getNewMotorInventoryItem();
-          tmpInventoryItem.name = this.newInventoryItemForm.controls.inventoryName.value;
-          tmpInventoryItem.directoryId = this.newInventoryItemForm.controls.directoryId.value;
-
-
-          let newInventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(tmpInventoryItem));
-          let settingsForm = this.settingsService.getFormFromSettings(this.settings);
-          this.settings = this.settingsService.getSettingsFromForm(settingsForm);
-          this.settings.createdDate = new Date();
-          this.settings.modifiedDate = new Date();
-          this.settings.inventoryId = newInventory.id;
-          await firstValueFrom(this.settingsDbService.addWithObservable(this.settings));
-
-          let updatedInventories: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
-          let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
-          this.inventoryDbService.setAll(updatedInventories);
-          this.settingsDbService.setAll(updatedSettings);
-          this.router.navigateByUrl('/motor-inventory/' + newInventory.id);
+           inventoryItem = this.inventoryService.getNewMotorInventoryItem();
         }
+        if (this.newInventoryItemForm.controls.inventoryType.value === 'pumpInventory') {
+          inventoryItem = this.inventoryService.getNewPumpInventoryItem();
+          inventoryRoute = 'pump-inventory';
+        }
+        inventoryItem.name = this.newInventoryItemForm.controls.inventoryName.value;
+        inventoryItem.directoryId = this.newInventoryItemForm.controls.directoryId.value;
+
+        let newInventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(inventoryItem));
+        let settingsForm = this.settingsService.getFormFromSettings(this.settings);
+        this.settings = this.settingsService.getSettingsFromForm(settingsForm);
+        this.settings.createdDate = new Date();
+        this.settings.modifiedDate = new Date();
+        this.settings.inventoryId = newInventory.id;
+        await firstValueFrom(this.settingsDbService.addWithObservable(this.settings));
+
+        let updatedInventories: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
+        let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+        this.inventoryDbService.setAll(updatedInventories);
+        this.settingsDbService.setAll(updatedSettings);
+        this.router.navigateByUrl(`/${inventoryRoute}/${newInventory.id}`);
+
       });
     }
   }

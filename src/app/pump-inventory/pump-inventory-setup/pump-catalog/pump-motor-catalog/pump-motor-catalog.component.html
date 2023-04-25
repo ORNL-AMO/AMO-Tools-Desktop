@@ -1,0 +1,71 @@
+<label class="group-label" (click)="toggleForm()">
+    <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+    Motor
+</label>
+<form *ngIf="displayForm" class="p-1" #formElement [formGroup]="form">
+    <div class="form-group" *ngIf="displayOptions.lineFrequency">
+        <label for="lineFrequency">Line Frequency</label>
+        <select class="form-control" (focus)="focusField('lineFrequency')" (change)="save()" formControlName="lineFrequency"
+            id="lineFrequency">
+            <option *ngFor="let lineFrequency of lineFrequencies" [ngValue]="lineFrequency.value">{{lineFrequency.display}}</option>
+        </select>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.motorEfficiencyClass">
+        <label for="motorEfficiencyClass">Efficiency Class</label>
+        <select class="form-control" (focus)="focusField('motorEfficiencyClass')" (change)="save()" formControlName="motorEfficiencyClass"
+            id="motorEfficiencyClass">
+            <option *ngFor="let motorEfficiencyClass of motorEfficiencyClasses" [ngValue]="motorEfficiencyClass.value">{{motorEfficiencyClass.display}}</option>
+        </select>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.motorRPM">
+        <label for="motorRPM">RPM</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('motorRPM')" (input)="save()"
+                formControlName="motorRPM" id="motorRPM">
+            <span class="input-group-addon units">rpm</span>
+                
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.motorRatedPower">
+        <label for="motorRatedPower">Rated Power</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('motorRatedPower')" (input)="save()"
+                formControlName="motorRatedPower" id="motorRatedPower">
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.motorRatedVoltage">
+        <label for="motorRatedVoltage">Rated Voltage</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('motorRatedVoltage')" (input)="save()"
+                formControlName="motorRatedVoltage" id="motorRatedVoltage">
+            <span class="input-group-addon units">V</span>
+
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.motorFullLoadAmps">
+        <label for="motorFullLoadAmps">Full Load Amps</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('motorFullLoadAmps')" (input)="save()"
+                formControlName="motorFullLoadAmps" id="motorFullLoadAmps">
+            <span class="input-group-addon units">A</span>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.motorEfficiency && form.controls.motorEfficiencyClass.value == 3">
+        <label for="motorEfficiency">Motor Efficiency</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('motorEfficiency')" (input)="save()"
+                formControlName="motorEfficiency" id="motorEfficiency">
+            <span class="input-group-addon units">%</span>
+        </div>
+    </div>
+   
+</form>

@@ -110,6 +110,11 @@ Tabs
     border-bottom: #84b641 solid 3px;
   }
 
+  .pump-inventory .tabs.primary .active a {
+    border: none;
+    border-bottom: #2980b9 solid 3px;
+  }
+
   .waste-water .tabs.primary .active a {
     border: none;
     border-bottom: #003087 solid 3px;
@@ -177,6 +182,10 @@ Tabs
 
   .tabs.subtabs.motor-inventory {
     border-bottom: #84b641 solid 3px;
+  }
+
+  .tabs.subtabs.pump-inventory {
+    border-bottom: #2980b9 solid 3px;
   }
   
   .tabs.subtabs.waste-water {
@@ -276,6 +285,10 @@ Tabs
 
       .tabs.subtabs.motor-inventory .active .step-number {
         background: #84b641;
+      }
+
+      .tabs.subtabs.pump-inventory .active .step-number {
+        background: #2980b9;
       }
 
       .tabs.subtabs.waste-water .active .step-number {

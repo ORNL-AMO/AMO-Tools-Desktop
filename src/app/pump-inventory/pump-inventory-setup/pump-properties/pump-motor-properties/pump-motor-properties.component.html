@@ -1,0 +1,68 @@
+<div class="d-flex w-100" (mouseenter)="focusGroup()">
+    <div class="d-flex flex-fill">
+        <label class="group-label" (click)="toggleForm()">
+            <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+            <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+            Motor
+        </label>
+    </div>
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
+            [(ngModel)]="pumpMotorPropertiesOptions.displayPumpMotorProperties" name="displayPumpMotorProperties"
+            id="displayPumpMotorProperties">
+        <label class="custom-control-label" for="displayPumpMotorProperties"></label>
+    </div>
+</div>
+
+<form class="p-1" *ngIf="displayForm">
+    <div class="checkbox" (mouseenter)="focusField('motorRPM')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpMotorPropertiesOptions.motorRPM" name="motorRPM"
+                id="motorRPM">
+            Motor RPM
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('lineFrequency')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpMotorPropertiesOptions.lineFrequency" name="lineFrequency"
+                id="lineFrequency">
+            Line Frequency
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('motorRatedPower')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpMotorPropertiesOptions.motorRatedPower" name="motorRatedPower"
+                id="motorRatedPower">
+            Motor Rated Power
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('motorEfficiencyClass')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpMotorPropertiesOptions.motorEfficiencyClass" name="motorEfficiencyClass"
+                id="motorEfficiencyClass">
+            Motor Efficiency Class
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('motorRatedVoltage')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpMotorPropertiesOptions.motorRatedVoltage" name="motorRatedVoltage"
+                id="motorRatedVoltage">
+            Motor Rated Voltage
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('motorFullLoadAmps')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpMotorPropertiesOptions.motorFullLoadAmps" name="motorFullLoadAmps"
+                id="motorFullLoadAmps">
+            Motor Full Load Amps
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('motorEfficiency')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpMotorPropertiesOptions.motorEfficiency" name="motorEfficiency"
+                id="motorEfficiency">
+            Motor Efficiency
+        </label>
+    </div>
+
+</form>

@@ -14,6 +14,7 @@ import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { MotorInventoryService } from '../../../../motor-inventory/motor-inventory.service';
+import { PumpInventoryService } from '../../../../pump-inventory/pump-inventory.service';
 
 @Component({
   selector: 'app-inventory-item',
@@ -37,10 +38,14 @@ export class InventoryItemComponent implements OnInit {
 
   updateDashboardDataSub: Subscription;
 
-  constructor(private router: Router, private directoryDashboardService: DirectoryDashboardService,
-    private formBuilder: UntypedFormBuilder,    private inventoryDbService: InventoryDbService,
-    private dashboardService: DashboardService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
-    private motorInventoryService: MotorInventoryService) { }
+  constructor(private directoryDashboardService: DirectoryDashboardService,
+    private formBuilder: UntypedFormBuilder,    
+    private inventoryDbService: InventoryDbService,
+    private dashboardService: DashboardService, 
+    private directoryDbService: DirectoryDbService, 
+    private settingsDbService: SettingsDbService,
+    private motorInventoryService: MotorInventoryService,
+    private pumpInventoryService: PumpInventoryService) { }
 
   ngOnInit(): void {
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
@@ -61,10 +66,19 @@ export class InventoryItemComponent implements OnInit {
   }
 
   goToInventoryItem(inventoryPage?: string) {
-    if (inventoryPage) {
-      this.motorInventoryService.mainTab.next(inventoryPage);
+    let inventoryRoute: string = 'motor-inventory';
+    if (this.inventoryItem.motorInventoryData) {
+      if (inventoryPage) {
+        this.motorInventoryService.mainTab.next(inventoryPage);
+      }
+    } else if (this.inventoryItem.pumpInventoryData) {
+      inventoryRoute = 'pump-inventory';
+      if (inventoryPage) {
+        this.pumpInventoryService.mainTab.next(inventoryPage);
+      }
     }
-    this.dashboardService.navigateWithSidebarOptions('/motor-inventory/' + this.inventoryItem.id, {shouldCollapse: true})
+    this.dashboardService.navigateWithSidebarOptions(`/${inventoryRoute}/${this.inventoryItem.id}`, {shouldCollapse: true})
+
   }
 
   showDropdown() {

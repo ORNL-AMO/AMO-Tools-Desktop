@@ -86,6 +86,10 @@
     .banner.motor-inventory{
       background: #84b641;
     }
+
+    .banner.pump-inventory{
+      background: #2980b9;
+    }
   
     .banner.waste-water{
       background: #003087;

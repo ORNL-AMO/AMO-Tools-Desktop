@@ -1,0 +1,122 @@
+<div class="d-flex w-100" (mouseenter)="focusGroup()">
+    <div class="d-flex flex-fill">
+        <label class="group-label" (click)="toggleForm()">
+            <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+            <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+            Field Measurements
+        </label>
+    </div>
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
+            [(ngModel)]="fieldMeasurementOptions.displayFieldMeasurements" name="displayFieldMeasurements"
+            id="displayFieldMeasurements">
+        <label class="custom-control-label" for="displayFieldMeasurements"></label>
+    </div>
+</div>
+
+<form class="p-1" *ngIf="displayForm">
+    <div class="checkbox" (mouseenter)="focusField('pumpSpeed')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementOptions.pumpSpeed" name="pumpSpeed"
+                id="pumpSpeed">
+                Pump Speed
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('yearlyOperatingHours')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementOptions.yearlyOperatingHours" name="yearlyOperatingHours"
+                id="yearlyOperatingHours">
+                Yearly Operating Hours
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('staticSuctionHead')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementOptions.staticSuctionHead" name="staticSuctionHead"
+                id="staticSuctionHead">
+                Static Suction Head
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('staticDischargeHead')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementOptions.staticDischargeHead" name="staticDischargeHead"
+                id="staticDischargeHead">
+                Static Discharge Head
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('assessmentDate')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementOptions.assessmentDate" name="assessmentDate"
+                id="assessmentDate">
+                Assessment Date
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('operatingFlowRate')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementOptions.operatingFlowRate" name="operatingFlowRate"
+                id="operatingFlowRate">
+                Operating Flow Rate
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('operatingHead')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementOptions.operatingHead" name="operatingHead"
+                id="operatingHead">
+                Operating Head
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('measuredPower')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementOptions.measuredPower" name="measuredPower"
+                id="measuredPower">
+                Measured Power
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('measuredVoltage')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementOptions.measuredVoltage" name="measuredVoltage"
+                id="measuredVoltage">
+                Measured Voltage
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('measuredCurrent')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementOptions.measuredCurrent" name="measuredCurrent"
+                id="measuredCurrent">
+                Measured Current
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('system')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementOptions.system" name="system"
+                id="system">
+                System
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('location')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementOptions.location" name="location"
+                id="location">
+                Location
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('efficiency')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementOptions.efficiency" name="efficiency"
+                id="efficiency">
+                Efficiency
+        </label>
+    </div>
+
+</form>

@@ -52,6 +52,7 @@ import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
 import { Settings } from '../models/settings';
+import { torque } from './definitions/torque';
 @Injectable()
 export class ConvertUnitsService {
   _measures = {
@@ -72,6 +73,7 @@ export class ConvertUnitsService {
     cost: cost,
     energy: energy,
     voltage: voltage,
+    torque: torque,
     apparentPower: apparentPower,
     reactiveEnergy: reactiveEnergy,
     reactivePower: reactivePower,

@@ -1,0 +1,179 @@
+<label class="group-label" (click)="toggleForm()">
+    <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+    Pump
+</label>
+<form *ngIf="displayForm" class="p-1" #formElement [formGroup]="form">
+    <div class="form-group" *ngIf="displayOptions.pumpType">
+        <label for="pumpType">Pump Type</label>
+        <select class="form-control" (focus)="focusField('pumpType')" (change)="save()" formControlName="pumpType"
+            id="pumpType">
+            <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType.value">{{pumpType.display}}</option>
+        </select>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.shaftOrientation">
+        <label for="shaftOrientation">Shaft Orientation</label>
+        <select class="form-control" (focus)="focusField('shaftOrientation')" (change)="save()" formControlName="shaftOrientation"
+            id="shaftOrientation">
+            <option *ngFor="let shaftOrientation of shaftOrientations" [ngValue]="shaftOrientation.value">{{shaftOrientation.display}}</option>
+        </select>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.shaftSealType">
+        <label for="shaftSealType">Shaft Seal Type</label>
+        <select class="form-control" (focus)="focusField('shaftSealType')" (change)="save()" formControlName="shaftSealType"
+            id="shaftSealType">
+            <option *ngFor="let shaftSealType of shaftSealTypes" [ngValue]="shaftSealType.value">{{shaftSealType.display}}</option>
+        </select>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.ratedSpeed">
+        <label for="ratedSpeed">Rated Speed</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('ratedSpeed')" (input)="save()"
+                formControlName="ratedSpeed" id="ratedSpeed">
+        </div>
+    </div>
+
+
+    <div class="form-group" *ngIf="displayOptions.numStages">
+        <label for="numStages">Number of Stages</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('numStages')" (input)="save()"
+                formControlName="numStages" id="numStages">
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.inletDiameter">
+        <label for="inletDiameter">Inlet Diameter</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('inletDiameter')" (input)="save()"
+                formControlName="inletDiameter" id="inletDiameter">
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.outletDiameter">
+        <label for="outletDiameter">Outlet Diameter</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('outletDiameter')" (input)="save()"
+                formControlName="outletDiameter" id="outletDiameter">
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.maxWorkingPressure">
+        <label for="maxWorkingPressure">Max Working Pressure</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('maxWorkingPressure')" (input)="save()"
+                formControlName="maxWorkingPressure" id="maxWorkingPressure">
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">Pa</span>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.maxAmbientTemperature">
+        <label for="maxAmbientTemperature">Max Ambient Temperature</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('maxAmbientTemperature')" (input)="save()"
+                formControlName="maxAmbientTemperature" id="maxAmbientTemperature">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">&#8451;</span>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.maxSuctionLift">
+        <label for="maxSuctionLift">Max Suction Lift</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('maxSuctionLift')" (input)="save()"
+                formControlName="maxSuctionLift" id="maxSuctionLift">
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.displacement">
+        <label for="displacement">Displacement</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('displacement')" (input)="save()"
+                formControlName="displacement" id="displacement">
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">%</span>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.startingTorque">
+        <label for="startingTorque">Starting Torque</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('startingTorque')" (input)="save()"
+                formControlName="startingTorque" id="startingTorque">
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>
+        </div>
+    </div>
+
+
+    <div class="form-group" *ngIf="displayOptions.impellerDiameter">
+        <label for="impellerDiameter">Impeller Diameter</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('impellerDiameter')" (input)="save()"
+                formControlName="impellerDiameter" id="impellerDiameter">
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.minFlowSize">
+        <label for="minFlowSize">Min Flow Size</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('minFlowSize')" (input)="save()"
+                formControlName="minFlowSize" id="minFlowSize">
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">gpm</span>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.minPumpSize">
+        <label for="minPumpSize">Min Pump Size</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('minPumpSize')" (input)="save()"
+                formControlName="minPumpSize" id="minPumpSize">
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span>
+        </div>
+
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.designHead">
+        <label for="designHead">Design Head</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('designHead')" (input)="save()"
+                formControlName="designHead" id="designHead">
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.designFlow">
+        <label for="designFlow">Design Flow</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('designFlow')" (input)="save()"
+                formControlName="designFlow" id="designFlow">
+            <!-- todo 3798 get settings flowrate - do settings units need conv? -->
+            <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
+        </div>
+
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.designEfficiency">
+        <label for="designEfficiency">Design Efficiency</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('designEfficiency')" (input)="save()"
+                formControlName="designEfficiency" id="designEfficiency">
+            <span class="input-group-addon units">%</span>
+        </div>
+    </div>
+
+   
+</form>

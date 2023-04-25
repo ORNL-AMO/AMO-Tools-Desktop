@@ -21,7 +21,7 @@ import { MockWasteWater, MockWasteWaterSettings } from '../../../examples/mockWa
 import { MockCompressedAirAssessment, MockCompressedAirAssessmentSettings } from '../../../examples/mockCompressedAirAssessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { WallLossesSurfaceDbService } from '../../../indexedDb/wall-losses-surface-db.service';
-import { catchError, firstValueFrom, forkJoin, Observable, throwError } from 'rxjs';
+import { catchError, firstValueFrom} from 'rxjs';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { AtmosphereDbService } from '../../../indexedDb/atmosphere-db.service';
 import { FlueGasMaterialDbService } from '../../../indexedDb/flue-gas-material-db.service';
@@ -29,6 +29,7 @@ import { GasLoadMaterialDbService } from '../../../indexedDb/gas-load-material-d
 import { LiquidLoadMaterialDbService } from '../../../indexedDb/liquid-load-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
 import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-material-db.service';
+import { MockPumpInventory } from '../../../examples/mockPumpInventoryData';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -220,6 +221,8 @@ async resetAllExampleAssessments(dirId: number) {
     let allInventoryItems: Array<InventoryItem> = await firstValueFrom(this.inventoryDbService.deleteByIdWithObservable(exampleInventory.id));
     this.inventoryDbService.setAll(allInventoryItems);
   }
+
+
   this.assessmentDbService.setAll(allAssessments[0]);
   this.settingsDbService.setAll(allSettings[0]);
   this.calculatorDbService.setAll(allCalculators[0]);
@@ -267,10 +270,17 @@ async resetAllExampleAssessments(dirId: number) {
   await firstValueFrom(this.settingsDbService.addWithObservable(MockCompressedAirAssessmentSettings));
 
   MockMotorInventory.directoryId = dirId;
-  let inventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(MockMotorInventory));
+  let motorInventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(MockMotorInventory));
   delete MockPsatSettings.directoryId;
   delete MockPsatSettings.assessmentId;
-  MockPsatSettings.assessmentId = inventory.id;
+  MockPsatSettings.assessmentId = motorInventory.id;
+  await firstValueFrom(this.settingsDbService.addWithObservable(MockPsatSettings));
+
+  MockPumpInventory.directoryId = dirId;
+  let pumpInventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(MockPumpInventory));
+  delete MockPsatSettings.directoryId;
+  delete MockPsatSettings.assessmentId;
+  MockPsatSettings.assessmentId = pumpInventory.id;
   await firstValueFrom(this.settingsDbService.addWithObservable(MockPsatSettings));
 
   let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
