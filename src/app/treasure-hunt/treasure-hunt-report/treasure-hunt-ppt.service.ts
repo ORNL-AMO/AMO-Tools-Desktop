@@ -660,6 +660,10 @@ export class TreasureHuntPptService {
 
         let slideTeamTopOpps = pptx.addSlide({ masterName: "MASTER_SLIDE" });
         slideTeamTopOpps.addText('Team ' + team.team + ' - Top Opportunities', slideTitleProperties);
+        slideTeamTopOpps.addText(
+          "additional notes here",
+          { x: 2.17, y: 6, w: 9, h: 1, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial', valign: 'top', bullet: true }
+        );
         let teamOpportunities: OpportunitySummary[] = [];
         treasureHuntResults.opportunitySummaries.forEach(teamOpp => {
           if(teamOpp.team == team.team){
