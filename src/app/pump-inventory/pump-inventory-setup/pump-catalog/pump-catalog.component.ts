@@ -25,13 +25,12 @@ export class PumpCatalogComponent implements OnInit {
 
   ngOnInit(): void {
     this.pumpInventoryDataSub = this.pumpInventoryService.pumpInventoryData.subscribe(val => {
-      
       this.pumpInventoryData = val;
       let selectedDepartmentId: string = this.pumpCatalogService.selectedDepartmentId.getValue();
       if (selectedDepartmentId) {
         let findDepartment: PumpInventoryDepartment = this.pumpInventoryData.departments.find(department => { return department.id == selectedDepartmentId });
         if (findDepartment) {
-          this.showDeletePumpButton = (findDepartment.catalog.length != 1);
+          this.showDeletePumpButton = (findDepartment.catalog.length > 1);
         }
       }
     });
@@ -42,9 +41,8 @@ export class PumpCatalogComponent implements OnInit {
       } else {
         let findDepartment: PumpInventoryDepartment = this.pumpInventoryData.departments.find(department => { return department.id == val });
         if (findDepartment) {
-          this.showDeletePumpButton = (findDepartment.catalog.length != 1);
+          this.showDeletePumpButton = (findDepartment.catalog.length > 1);
           let selectedPumpItem: PumpItem = this.pumpCatalogService.selectedPumpItem.getValue();
-
           if (selectedPumpItem) {
             let findItemInDepartment: PumpItem = findDepartment.catalog.find(pumpItem => { return pumpItem.id == selectedPumpItem.id });
             if (!findItemInDepartment) {

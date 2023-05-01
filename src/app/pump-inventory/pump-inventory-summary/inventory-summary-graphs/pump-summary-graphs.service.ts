@@ -84,7 +84,7 @@ export class PumpSummaryGraphsService {
         label = 'N/A';
       }
     }
-      else if (key == 'null') {
+      else if (key == 'null' || key == 'undefined') {
         label = 'N/A';
       } else if (key == 'true') {
         label = 'Yes';

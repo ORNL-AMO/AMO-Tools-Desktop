@@ -83,32 +83,8 @@
                         &mdash;
                     </span>
                 </td>
-                <!-- <td>
-                    <span *ngIf="tableDataItem.energyUsage">
-                        {{tableDataItem.energyUsage | number:'1.0-0'}}
-                    </span>
-                    <span *ngIf="!tableDataItem.energyUsage">
-                        &mdash;
-                    </span>
-                </td>
                 <td>
-                    <span *ngIf="tableDataItem.energyCost">
-                        {{tableDataItem.energyCost | number :'2.0-0'}}
-                    </span>
-                    <span *ngIf="!tableDataItem.energyCost">
-                        &mdash;
-                    </span>
-                </td>
-                <td>
-                    <span *ngIf="tableDataItem.co2EmissionOutput">
-                        {{tableDataItem.co2EmissionOutput | number :'1.0-2'}}
-                    </span>
-                    <span *ngIf="!tableDataItem.co2EmissionOutput">
-                        &mdash;
-                    </span>
-                </td> -->
-                <td>
-                    <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(tableDataItem.pumpItem)"></a>
+                    <a class="fa fa-trash danger" [ngClass]="{'disabled': tableDataItems.length <= 1}" (click)="openConfirmDeleteModal(tableDataItem.pumpItem)"></a>
                     
                 </td>
                 <td>

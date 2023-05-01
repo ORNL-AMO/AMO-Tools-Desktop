@@ -92,7 +92,6 @@ export class DepartmentCatalogTableComponent implements OnInit {
   }
 
   getPumpItemData(pumpItem: PumpItem): DepartmentCatalogTableDataItem {
-    // let batchAnalysisDataAndResults = this.batchAnalysisService.getDataAndResultsFromPumpItem(pumpItem, this.settings);
     let status = statusTypes.find(status => status.value == pumpItem.pumpStatus.status).display;
     let pumpType = pumpTypesConstant.find(pumpType => pumpType.value == pumpItem.pumpEquipment.pumpType).display;
     let tableDataItem: DepartmentCatalogTableDataItem = {
@@ -102,9 +101,6 @@ export class DepartmentCatalogTableComponent implements OnInit {
       pumpStatus: status,
       ratedSpeed: pumpItem.pumpEquipment.ratedSpeed,
       designEfficiency: pumpItem.pumpEquipment.designEfficiency,
-      // energyUsage: batchAnalysisDataAndResults.results.existingEnergyUse,
-      // energyCost: batchAnalysisDataAndResults.results.existingEnergyCost,
-      // co2EmissionOutput: batchAnalysisDataAndResults.results.existingEmissionOutput,
       pumpItem: pumpItem
     }
     return tableDataItem;
@@ -126,13 +122,15 @@ export class DepartmentCatalogTableComponent implements OnInit {
   }
 
   openConfirmDeleteModal(pumpItem: PumpItem){
-    this.confirmDeletePumpInventoryData = {
-      modalTitle: 'Delete Pump Inventory Item',
-      confirmMessage: `Are you sure you want to delete '${pumpItem.name}'?`
+    if (this.tableDataItems.length > 1) {
+      this.confirmDeletePumpInventoryData = {
+        modalTitle: 'Delete Pump Inventory Item',
+        confirmMessage: `Are you sure you want to delete '${pumpItem.name}'?`
+      }
+      this.showConfirmDeleteModal = true;
+      this.pumpItemToDelete = pumpItem;
+      this.pumpInventoryService.modalOpen.next(true);
     }
-    this.showConfirmDeleteModal = true;
-    this.pumpItemToDelete = pumpItem;
-    this.pumpInventoryService.modalOpen.next(true);
   }
 
   onConfirmDeleteClose(deleteInventoryItem: boolean) {

@@ -26,7 +26,7 @@ export const MockPumpInventory: InventoryItem = {
                 "catalog": [
                     {
                         "id": "59264rw8x",
-                        "departmentId": "a2jd7ua9i",
+                        "departmentId": "l6rd7tt1i",
                         "description": "Main pump",
                         "name": "Pump A",
 
@@ -97,7 +97,7 @@ export const MockPumpInventory: InventoryItem = {
                     },
                     {
                         "id": "19163yw8i",
-                        "departmentId": "a2jd7ua9i",
+                        "departmentId": "l6rd7tt1i",
                         "description": "New Pump installed 2021",
                         "name": "Pump B",
 

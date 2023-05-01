@@ -14,3 +14,7 @@
 a.danger{
     color: red;
 }
+
+a.disabled {
+    color: grey
+}
