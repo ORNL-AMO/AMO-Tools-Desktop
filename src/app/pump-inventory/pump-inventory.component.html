@@ -3,7 +3,7 @@
         <app-pump-inventory-banner [pumpInventoryItem]="pumpInventoryItem"></app-pump-inventory-banner>
     </div>
         <div class="d-flex tab-content" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'scroll-item': mainTab == 'summary' || mainTab == 'analysis'}">
-        <div class="w-100 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
+        <div class="w-100" [ngClass]="{'modal-open': isModalOpen == true}">
             <app-pump-inventory-setup *ngIf="mainTab == 'setup'" [containerHeight]="containerHeight"></app-pump-inventory-setup>
             <app-pump-inventory-summary *ngIf="mainTab == 'summary'"></app-pump-inventory-summary>
         </div>

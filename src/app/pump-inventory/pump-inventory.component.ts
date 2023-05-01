@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription, firstValueFrom } from 'rxjs';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-// import { BatchAnalysisService, BatchAnalysisSettings } from '../motor-inventory/batch-analysis/batch-analysis.service';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { Settings } from '../shared/models/settings';
 import { PumpCatalogService } from './pump-inventory-setup/pump-catalog/pump-catalog.service';
@@ -37,13 +36,11 @@ export class PumpInventoryComponent implements OnInit {
 
   pumpInventoryDataSub: Subscription;
   pumpInventoryItem: InventoryItem;
-  // batchAnalysisSettingsSub: Subscription;
   constructor(private pumpInventoryService: PumpInventoryService, 
     private activatedRoute: ActivatedRoute,
     private settingsDbService: SettingsDbService, 
     private inventoryDbService: InventoryDbService,
     private pumpCatalogService: PumpCatalogService, 
-    // private batchAnalysisService: BatchAnalysisService, 
     private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -53,9 +50,6 @@ export class PumpInventoryComponent implements OnInit {
       let settings: Settings = this.settingsDbService.getByInventoryId(this.pumpInventoryItem);
       this.pumpInventoryService.settings.next(settings);
       this.pumpInventoryService.pumpInventoryData.next(this.pumpInventoryItem.pumpInventoryData);
-      // if (this.pumpInventoryItem.batchAnalysisSettings) {
-      //   this.batchAnalysisService.batchAnalysisSettings.next(this.pumpInventoryItem.batchAnalysisSettings);
-      // }
     });
     this.mainTabSub = this.pumpInventoryService.mainTab.subscribe(val => {
       this.mainTab = val;
@@ -68,9 +62,6 @@ export class PumpInventoryComponent implements OnInit {
     this.pumpInventoryDataSub = this.pumpInventoryService.pumpInventoryData.subscribe(data => {
       this.saveDbData();
     });
-    // this.batchAnalysisSettingsSub = this.batchAnalysisService.batchAnalysisSettings.subscribe(batchSettings => {
-    //   this.saveDbData();
-    // });
     this.modalOpenSub = this.pumpInventoryService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
       this.cd.detectChanges();
@@ -81,7 +72,6 @@ export class PumpInventoryComponent implements OnInit {
     this.setupTabSub.unsubscribe();
     this.mainTabSub.unsubscribe();
     this.pumpInventoryDataSub.unsubscribe();
-    // this.batchAnalysisSettingsSub.unsubscribe();
     this.pumpCatalogService.selectedPumpItem.next(undefined);
     this.pumpCatalogService.selectedDepartmentId.next(undefined);
     this.modalOpenSub.unsubscribe();
@@ -107,17 +97,14 @@ export class PumpInventoryComponent implements OnInit {
 
   async saveDbData() {
     let inventoryData: PumpInventoryData = this.pumpInventoryService.pumpInventoryData.getValue();
-    // let batchAnalysisSettings: BatchAnalysisSettings = this.batchAnalysisService.batchAnalysisSettings.getValue();
     this.pumpInventoryItem.modifiedDate = new Date();
     this.pumpInventoryItem.appVersion = packageJson.version;
     this.pumpInventoryItem.pumpInventoryData = inventoryData;
-    // this.pumpInventoryItem.batchAnalysisSettings = batchAnalysisSettings;
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.pumpInventoryItem));
     this.inventoryDbService.setAll(updatedInventoryItems);
   }
 
   continue() {
-    // PUMP TODO
     if (this.setupTab == 'plant-setup') {
       this.pumpInventoryService.setupTab.next('department-setup');
     } else if (this.setupTab == 'department-setup') {
@@ -130,7 +117,6 @@ export class PumpInventoryComponent implements OnInit {
   }
 
   back(){
-    // PUMP TODO
     if (this.setupTab == 'department-setup') {
       this.pumpInventoryService.setupTab.next('plant-setup');
     } else if (this.setupTab == 'pump-properties') {

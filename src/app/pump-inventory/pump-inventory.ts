@@ -154,8 +154,6 @@ export interface FieldMeasurements {
   measuredPower: number;
   measuredCurrent: number;
   measuredVoltage: number;
-  system: string;
-  location: string;
 }
 export interface FieldMeasurementsOptions {
   displayFieldMeasurements: boolean,
@@ -171,9 +169,6 @@ export interface FieldMeasurementsOptions {
   measuredPower: boolean;
   measuredCurrent: boolean;
   measuredVoltage: boolean;
-  system: boolean;
-  location: boolean;
-
 }
 
 export interface PumpMotorProperties {
@@ -195,13 +190,3 @@ export interface PumpMotorPropertiesOptions {
   motorFullLoadAmps: boolean,
   motorEfficiency: boolean,
 }
-
-
-
-
-// export interface FilterInventorySummary {
-//   selectedDepartmentIds: Array<string>,
-//   efficiencyClasses: Array<number>,
-//   ratedPower: Array<number>,
-//   ratedVoltage: Array<number>
-// }

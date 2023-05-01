@@ -18,9 +18,9 @@
         <div class="nav-item" (click)="setMainTab('setup')">
             <a class="nav-link" [ngClass]="{'active': mainTab == 'setup'}">Setup</a>
         </div>
-         <!-- <div class="nav-item" (click)="setMainTab('summary')">
+         <div class="nav-item" (click)="setMainTab('summary')">
             <a class="nav-link" [ngClass]="{'active': mainTab == 'summary'}">Summary</a>
-        </div> -->
+        </div>
     </div>
     <div class="d-flex ml-auto pr-2 h-100">
         <div class="pl-2 pr-2 border-left home-nav-item" [routerLink]="['/settings']">
@@ -70,13 +70,9 @@
     </div>
 </nav>
 
-<!-- <app-summary-filter *ngIf="mainTab == 'summary' || mainTab == 'analysis'"></app-summary-filter> -->
-<nav class="navbar justify-content-start"
-    *ngIf="mainTab == 'summary' || mainTab == 'analysis'" #navbar>
-    <app-department-dropdown></app-department-dropdown>
-</nav>
+<app-summary-filter *ngIf="mainTab == 'summary' || mainTab == 'analysis'"></app-summary-filter>
 
-<!-- <nav class="hide-print" *ngIf="mainTab == 'summary'">
+<nav class="hide-print" *ngIf="mainTab == 'summary'">
     <div class="d-flex tabs subtabs progress-tabs flex-wrap pump-inventory">
         <div class="fixed-tab-size" [ngClass]="{'active': summaryTab == 'overview'}"
             (click)="setSummaryTab('overview')">
@@ -88,9 +84,5 @@
         <div class="fixed-tab-size" [ngClass]="{'active': summaryTab == 'table'}" (click)="setSummaryTab('table')">
             <a>Table</a>
         </div>
-        <div class="fixed-tab-size" [ngClass]="{'active': summaryTab == 'pump-details'}"
-            (click)="setSummaryTab('pump-details')">
-            <a>pump Details</a>
-        </div>
     </div>
-</nav> -->
+</nav>

@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { driveConstants, pumpTypesConstant } from '../../../../psat/psatConstants';
 import { Settings } from '../../../../shared/models/settings';
 import { PumpItem, PumpPropertiesOptions } from '../../../pump-inventory';
-import { PumpInventoryService } from '../../../pump-inventory.service';
+import { PumpInventoryService, pumpInventoryShaftOrientations, pumpInventoryShaftSealTypes } from '../../../pump-inventory.service';
 import { FieldMeasurementsCatalogService } from '../field-measurements-catalog/field-measurements-catalog.service';
 import { PumpCatalogService } from '../pump-catalog.service';
 import { PumpEquipmentCatalogService } from './pump-equipment-catalog.service';
@@ -24,20 +24,16 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   displayForm: boolean = true;
 
   pumpTypes: Array<{value: number, display: string}>;
-  shaftOrientations: Array<{value: number, display: string}> = [
-    {value: 0, display: 'Vertical'}, 
-    {value: 1, display: 'Horizontal'}, 
-  ];
-  shaftSealTypes: Array<{value: number, display: string}> = [
-    {value: 0, display: 'Parking Seals'}, 
-    {value: 1, display: 'Mechanical Seals'}, 
-  ];
+  shaftOrientations: Array<{value: number, display: string}>;
+  shaftSealTypes: Array<{value: number, display: string}>;
 
 
   constructor(private pumpCatalogService: PumpCatalogService, private pumpInventoryService: PumpInventoryService,
     private pumpEquipmentCatalogService: PumpEquipmentCatalogService) { }
 
   ngOnInit(): void {
+    this.shaftOrientations = pumpInventoryShaftOrientations;
+    this.shaftSealTypes = pumpInventoryShaftSealTypes;
     this.pumpTypes = pumpTypesConstant;
     this.settingsSub = this.pumpInventoryService.settings.subscribe(val => {
       this.settings = val;

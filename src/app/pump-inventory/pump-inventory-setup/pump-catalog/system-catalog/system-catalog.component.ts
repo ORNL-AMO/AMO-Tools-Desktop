@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { PumpItem, SystemPropertiesOptions } from '../../../pump-inventory';
-import { PumpInventoryService } from '../../../pump-inventory.service';
+import { PumpInventoryService, pumpInventoryDriveConstants } from '../../../pump-inventory.service';
 import { PumpCatalogService } from '../pump-catalog.service';
 import { SystemCatalogService } from './system-catalog.service';
 
@@ -21,16 +21,12 @@ export class SystemCatalogComponent implements OnInit {
   selectedPumpItemSub: Subscription;
   displayOptions: SystemPropertiesOptions;
   displayForm: boolean = true;
-  driveTypes: Array<{value: number, display: string}> = [
-    {value: 0, display: 'Direct Drive'}, 
-    {value: 1, display: 'VSD'}, 
-    {value: 2, display: 'Belt Drive'}, 
-    {value: 3, display: 'Gear Box/Transmission'}, 
-  ];
+  driveTypes: Array<{value: number, display: string}>;
   constructor(private pumpCatalogService: PumpCatalogService, private pumpInventoryService: PumpInventoryService,
     private systemCatalogService: SystemCatalogService) { }
 
   ngOnInit(): void {
+    this.driveTypes = pumpInventoryDriveConstants;
     this.settingsSub = this.pumpInventoryService.settings.subscribe(val => {
       this.settings = val;
     });

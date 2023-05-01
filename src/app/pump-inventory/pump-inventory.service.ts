@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import { FieldMeasurements, PumpInventoryData, PumpInventoryDepartment, PumpItem, PumpPropertyDisplayOptions } from './pump-inventory';
 import * as _ from 'lodash';
+import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
 
 @Injectable()
 export class PumpInventoryService {
@@ -19,7 +20,7 @@ export class PumpInventoryService {
 
   filterInventorySummary: BehaviorSubject<FilterInventorySummary>;
 
-  constructor() { 
+  constructor(private helperFunctionsService: HelperFunctionsService) { 
     this.setupTab = new BehaviorSubject<string>('plant-setup');
     this.mainTab = new BehaviorSubject<string>('setup');
     let inventoryData: PumpInventoryData = this.initInventoryData();
@@ -32,9 +33,9 @@ export class PumpInventoryService {
     this.helpPanelTab = new BehaviorSubject<string>(undefined);
     this.filterInventorySummary = new BehaviorSubject({
       selectedDepartmentIds: new Array(),
-      efficiencyClasses: new Array(),
-      ratedPower: new Array(),
-      ratedVoltage: new Array()
+      pumpTypes: new Array(),
+      motorRatedPowerValues: new Array(),
+      statusValues: new Array()
     });
   }
 
@@ -95,8 +96,6 @@ export class PumpInventoryService {
         measuredPower: undefined,
         measuredCurrent: undefined,
         measuredVoltage: undefined,
-        system: undefined,
-        location: undefined,
       },
       fluid: {
         fluidType: 'Water',
@@ -198,8 +197,8 @@ export class PumpInventoryService {
         flangeConnectionClass: false,
         flangeConnectionSize: false,
         componentId: false,
-        system: false,
-        location: false
+        system: true,
+        location: true
       },
       fieldMeasurementOptions: {
         displayFieldMeasurements: true,
@@ -214,8 +213,6 @@ export class PumpInventoryService {
         measuredPower: true,
         measuredCurrent: true,
         measuredVoltage: true,
-        system: true,
-        location: true,
       },
       pumpMotorPropertiesOptions: {
         displayPumpMotorProperties: true,
@@ -232,33 +229,33 @@ export class PumpInventoryService {
   }
 
   filterPumpInventoryData(inventoryData: PumpInventoryData, filterInventorySummary: FilterInventorySummary): PumpInventoryData {
-    let filteredInventoryData: PumpInventoryData = JSON.parse(JSON.stringify(inventoryData));
-    // if (filterInventorySummary.selectedDepartmentIds.length != 0) {
-    //   filteredInventoryData.departments = _.filter(filteredInventoryData.departments, (department) => {
-    //     return _.find(filterInventorySummary.selectedDepartmentIds, (id) => { return department.id == id }) != undefined;
-    //   });
-    // }
-    // if (filterInventorySummary.efficiencyClasses.length != 0) {
-    //   filteredInventoryData.departments.forEach(department => {
-    //     department.catalog = _.filter(department.catalog, (pumpItem) => {
-    //       return _.includes(filterInventorySummary.manufacturer, pumpItem.nameplateData.manufacturer);
-    //     })
-    //   });
-    // }
-    // if (filterInventorySummary.ratedPower.length != 0) {
-    //   filteredInventoryData.departments.forEach(department => {
-    //     department.catalog = _.filter(department.catalog, (pumpItem) => {
-    //       return _.includes(filterInventorySummary.ratedPower, pumpItem.nameplateData.ratedMotorPower);
-    //     })
-    //   });
-    // }
-    // if (filterInventorySummary.ratedVoltage.length != 0) {
-    //   filteredInventoryData.departments.forEach(department => {
-    //     department.catalog = _.filter(department.catalog, (pumpItem) => {
-    //       return _.includes(filterInventorySummary.ratedVoltage, pumpItem.nameplateData.ratedVoltage);
-    //     })
-    //   });
-    // }
+    let filteredInventoryData: PumpInventoryData = this.helperFunctionsService.copyObject(inventoryData);
+    if (filterInventorySummary.selectedDepartmentIds.length != 0) {
+      filteredInventoryData.departments = _.filter(filteredInventoryData.departments, (department) => {
+        return _.find(filterInventorySummary.selectedDepartmentIds, (id) => { return department.id == id }) != undefined;
+      });
+    }
+    if (filterInventorySummary.pumpTypes.length != 0) {
+      filteredInventoryData.departments.forEach(department => {
+        department.catalog = _.filter(department.catalog, (pumpItem) => {
+          return _.includes(filterInventorySummary.pumpTypes, pumpItem.pumpEquipment.pumpType);
+        })
+      });
+    }
+    if (filterInventorySummary.motorRatedPowerValues.length != 0) {
+      filteredInventoryData.departments.forEach(department => {
+        department.catalog = _.filter(department.catalog, (pumpItem) => {
+          return _.includes(filterInventorySummary.motorRatedPowerValues, pumpItem.pumpMotor.motorRatedPower);
+        })
+      });
+    }
+    if (filterInventorySummary.statusValues.length != 0) {
+      filteredInventoryData.departments.forEach(department => {
+        department.catalog = _.filter(department.catalog, (pumpItem) => {
+          return _.includes(filterInventorySummary.statusValues, pumpItem.pumpStatus.status);
+        })
+      });
+    }
     return filteredInventoryData;
   }
 
@@ -267,7 +264,25 @@ export class PumpInventoryService {
 
 export interface FilterInventorySummary {
   selectedDepartmentIds: Array<string>,
-  efficiencyClasses: Array<number>,
-  ratedPower: Array<number>,
-  ratedVoltage: Array<number>
+  pumpTypes: Array<number>,
+  motorRatedPowerValues: Array<number>,
+  statusValues: Array<number>
 }
+
+
+export const pumpInventoryDriveConstants: Array<{value: number, display: string}> = [
+  {value: 0, display: 'Direct Drive'}, 
+  {value: 1, display: 'VSD'}, 
+  {value: 2, display: 'Belt Drive'}, 
+  {value: 3, display: 'Gear Box/Transmission'}, 
+];
+
+export const pumpInventoryShaftOrientations: Array<{value: number, display: string}> = [
+  {value: 0, display: 'Vertical'}, 
+  {value: 1, display: 'Horizontal'}, 
+];
+
+export const pumpInventoryShaftSealTypes: Array<{value: number, display: string}> = [
+  {value: 0, display: 'Parking Seals'}, 
+  {value: 1, display: 'Mechanical Seals'}, 
+];

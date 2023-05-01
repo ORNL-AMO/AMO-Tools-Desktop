@@ -33,6 +33,8 @@
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('ratedSpeed')" (input)="save()"
                 formControlName="ratedSpeed" id="ratedSpeed">
+            <span class="input-group-addon units">rpm</span>
+
         </div>
     </div>
 
@@ -160,7 +162,6 @@
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('designFlow')" (input)="save()"
                 formControlName="designFlow" id="designFlow">
-            <!-- todo 3798 get settings flowrate - do settings units need conv? -->
             <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
         </div>
 

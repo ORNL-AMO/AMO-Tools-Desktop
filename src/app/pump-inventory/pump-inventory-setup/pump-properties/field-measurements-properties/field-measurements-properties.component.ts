@@ -40,8 +40,6 @@ export class FieldMeasurementsPropertiesComponent implements OnInit {
     this.fieldMeasurementOptions.measuredCurrent = this.fieldMeasurementOptions.displayFieldMeasurements;    
     this.fieldMeasurementOptions.measuredPower = this.fieldMeasurementOptions.displayFieldMeasurements;    
     this.fieldMeasurementOptions.measuredVoltage = this.fieldMeasurementOptions.displayFieldMeasurements;    
-    this.fieldMeasurementOptions.system = this.fieldMeasurementOptions.displayFieldMeasurements;    
-    this.fieldMeasurementOptions.location = this.fieldMeasurementOptions.displayFieldMeasurements;    
     this.save();
   }
 
@@ -57,9 +55,7 @@ export class FieldMeasurementsPropertiesComponent implements OnInit {
       this.fieldMeasurementOptions.operatingHead ||
       this.fieldMeasurementOptions.measuredCurrent ||
       this.fieldMeasurementOptions.measuredPower ||
-      this.fieldMeasurementOptions.measuredVoltage ||
-      this.fieldMeasurementOptions.system ||
-      this.fieldMeasurementOptions.location
+      this.fieldMeasurementOptions.measuredVoltage
     );
   }
   focusField(str: string){

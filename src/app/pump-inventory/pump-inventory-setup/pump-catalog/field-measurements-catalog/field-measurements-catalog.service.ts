@@ -20,8 +20,6 @@ export class FieldMeasurementsCatalogService {
       measuredPower: [fieldMeasurements.measuredPower, [Validators.min(0)]], 
       measuredCurrent: [fieldMeasurements.measuredCurrent, [Validators.min(0)]], 
       measuredVoltage: [fieldMeasurements.measuredVoltage, [Validators.min(0)]], 
-      system: [fieldMeasurements.system],
-      location: [fieldMeasurements.location],
      });
   }
 
@@ -37,8 +35,6 @@ export class FieldMeasurementsCatalogService {
     fieldMeasurements.measuredPower = form.controls.measuredPower.value;
     fieldMeasurements.measuredCurrent = form.controls.measuredCurrent.value;
     fieldMeasurements.measuredVoltage = form.controls.measuredVoltage.value;
-    fieldMeasurements.system = form.controls.system.value;
-    fieldMeasurements.location = form.controls.location.value;
     return fieldMeasurements;
   }
 }

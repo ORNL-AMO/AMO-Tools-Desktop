@@ -44,6 +44,7 @@ export class PumpCatalogComponent implements OnInit {
         if (findDepartment) {
           this.showDeletePumpButton = (findDepartment.catalog.length != 1);
           let selectedPumpItem: PumpItem = this.pumpCatalogService.selectedPumpItem.getValue();
+
           if (selectedPumpItem) {
             let findItemInDepartment: PumpItem = findDepartment.catalog.find(pumpItem => { return pumpItem.id == selectedPumpItem.id });
             if (!findItemInDepartment) {

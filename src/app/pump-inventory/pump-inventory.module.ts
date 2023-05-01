@@ -15,11 +15,24 @@ import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm
 import { PumpInventorySetupModule } from './pump-inventory-setup/pump-inventory-setup.module';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { ConvertPumpInventoryService } from './convert-pump-inventory.service';
+import { PumpInventorySummaryModule } from './pump-inventory-summary/pump-inventory-summary.module';
+import { SummaryFilterComponent } from './pump-inventory-banner/summary-filter/summary-filter.component';
+import { DepartmentDropdownComponent } from './pump-inventory-banner/summary-filter/department-dropdown/department-dropdown.component';
+import { PumpTypesDropdownComponent } from './pump-inventory-banner/summary-filter/pump-types-dropdown/pump-types-dropdown.component';
+import { RatedPowerDropdownComponent } from './pump-inventory-banner/summary-filter/rated-power-dropdown/rated-power-dropdown.component';
+import { StatusDropdownComponent } from './pump-inventory-banner/summary-filter/status-dropdown/status-dropdown.component';
+import { SelectedOptionsComponent } from './pump-inventory-banner/summary-filter/selected-options/selected-options.component';
 
 @NgModule({
   declarations: [
     PumpInventoryComponent,
     PumpInventoryBannerComponent,
+    SummaryFilterComponent,
+    DepartmentDropdownComponent,
+    PumpTypesDropdownComponent,
+    RatedPowerDropdownComponent,
+    StatusDropdownComponent,
+    SelectedOptionsComponent,
   ],
   imports: [
     CommonModule,
@@ -34,6 +47,7 @@ import { ConvertPumpInventoryService } from './convert-pump-inventory.service';
     AssessmentCo2SavingsModule,
     HelpPanelModule,
     ConfirmDeleteModalModule,
+    PumpInventorySummaryModule
   ],
   providers: [
     PumpInventoryService,

@@ -34,7 +34,7 @@ export class PumpEquipmentCatalogService {
     pumpEquipmentProperties.pumpType = form.controls.pumpType.value; 
     pumpEquipmentProperties.shaftOrientation = form.controls.shaftOrientation.value; 
     pumpEquipmentProperties.shaftSealType = form.controls.shaftSealType.value; 
-    pumpEquipmentProperties.numStages = form.controls.numStages.value;  
+    pumpEquipmentProperties.numStages = form.controls.numStages.value;
     pumpEquipmentProperties.inletDiameter = form.controls.inletDiameter.value; 
     pumpEquipmentProperties.outletDiameter = form.controls.outletDiameter.value;
     pumpEquipmentProperties.maxWorkingPressure = form.controls.maxWorkingPressure.value;
