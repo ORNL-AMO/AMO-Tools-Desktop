@@ -46,13 +46,12 @@ import { massPerPower } from './definitions/massPerPower';
 import { massFlux } from './definitions/massFlux';
 import { volumeFlux } from './definitions/volumeFlux';
 import { hourlyHeatCapacity } from './definitions/hourlyHeatCapacity';
-
+import { torque } from './definitions/torque';
 
 import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
 import { Settings } from '../models/settings';
-import { torque } from './definitions/torque';
 @Injectable()
 export class ConvertUnitsService {
   _measures = {
