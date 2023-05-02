@@ -686,16 +686,7 @@ export class TreasureHuntPptService {
         ]);
         for(let i = 0; i < 3; i++){
           let x: OpportunitySummary = teamOpportunities[i];
-          let utilityUnit: string;
-          if (x.mixedIndividualResults) {
-            x.mixedIndividualResults.forEach(x => {
-              utilityUnit = this.getUtilityUnit(x.utilityType, settings);
-              rows.push([x.opportunityName, x.utilityType, this.roundValToFormatString(x.totalEnergySavings), utilityUnit, this.roundValToCurrency(x.costSavings), this.roundValToCurrency(x.opportunityCost.material), this.roundValToCurrency(x.opportunityCost.labor), this.getOtherCost(x.opportunityCost), this.roundValToCurrency(x.totalCost), this.roundValToFormatString(x.payback)]);
-            });
-          } else {
-            utilityUnit = this.getUtilityUnit(x.utilityType, settings);
-            rows.push([x.opportunityName, x.utilityType, this.roundValToFormatString(x.totalEnergySavings), utilityUnit, this.roundValToCurrency(x.costSavings), this.roundValToCurrency(x.opportunityCost.material), this.roundValToCurrency(x.opportunityCost.labor), this.getOtherCost(x.opportunityCost), this.roundValToCurrency(x.totalCost), this.roundValToFormatString(x.payback)]);
-          }
+          rows = this.getOpportunityTableRows(rows, x, settings);
         }
         slideTeamTopOpps.addTable(rows, { x: 0.14, y: 2.5, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
       
@@ -703,16 +694,8 @@ export class TreasureHuntPptService {
         slideTeamAllOpps.addText('Team ' + team.team + ' - All Opportunities', slideTitleProperties);
         for(let i = 3; i < teamOpportunities.length; i++){
           let x: OpportunitySummary = teamOpportunities[i];
-          let utilityUnit: string;
-          if (x.mixedIndividualResults) {
-            x.mixedIndividualResults.forEach(x => {
-              utilityUnit = this.getUtilityUnit(x.utilityType, settings);
-              rows.push([x.opportunityName, x.utilityType, this.roundValToFormatString(x.totalEnergySavings), utilityUnit, this.roundValToCurrency(x.costSavings), this.roundValToCurrency(x.opportunityCost.material), this.roundValToCurrency(x.opportunityCost.labor), this.getOtherCost(x.opportunityCost), this.roundValToCurrency(x.totalCost), this.roundValToFormatString(x.payback)]);
-            });
-          } else {
-            utilityUnit = this.getUtilityUnit(x.utilityType, settings);
-            rows.push([x.opportunityName, x.utilityType, this.roundValToFormatString(x.totalEnergySavings), utilityUnit, this.roundValToCurrency(x.costSavings), this.roundValToCurrency(x.opportunityCost.material), this.roundValToCurrency(x.opportunityCost.labor), this.getOtherCost(x.opportunityCost), this.roundValToCurrency(x.totalCost), this.roundValToFormatString(x.payback)]);
-          }
+          rows = this.getOpportunityTableRows(rows, x, settings);         
+         
         }
         slideTeamAllOpps.addTable(rows, { x: 0.14, y: 1.2, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
       
@@ -788,6 +771,20 @@ export class TreasureHuntPptService {
     });
 
     return pptx;
+  }
+
+  getOpportunityTableRows(rows: any[], opportunity: OpportunitySummary, settings: Settings) {
+    let utilityUnit: string;
+    if (opportunity.mixedIndividualResults) {
+      opportunity.mixedIndividualResults.forEach(opp => {
+        utilityUnit = this.getUtilityUnit(opp.utilityType, settings);
+        rows.push([opp.opportunityName, opp.utilityType, this.roundValToFormatString(opp.totalEnergySavings), utilityUnit, this.roundValToCurrency(opp.costSavings), this.roundValToCurrency(opp.opportunityCost.material), this.roundValToCurrency(opp.opportunityCost.labor), this.getOtherCost(opp.opportunityCost), this.roundValToCurrency(opp.totalCost), this.roundValToFormatString(opp.payback)]);
+      });
+    } else {
+      utilityUnit = this.getUtilityUnit(opportunity.utilityType, settings);
+      rows.push([opportunity.opportunityName, opportunity.utilityType, this.roundValToFormatString(opportunity.totalEnergySavings), utilityUnit, this.roundValToCurrency(opportunity.costSavings), this.roundValToCurrency(opportunity.opportunityCost.material), this.roundValToCurrency(opportunity.opportunityCost.labor), this.getOtherCost(opportunity.opportunityCost), this.roundValToCurrency(opportunity.totalCost), this.roundValToFormatString(opportunity.payback)]);
+    }
+    return rows;
   }
 
   roundValToFormatString(num: number): string {
