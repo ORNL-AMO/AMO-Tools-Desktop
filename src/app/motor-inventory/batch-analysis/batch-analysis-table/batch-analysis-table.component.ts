@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { BatchAnalysisService, BatchAnalysisSettings, BatchAnalysisResults } from '../batch-analysis.service';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { MotorCatalogService } from '../../motor-inventory-setup/motor-catalog/motor-catalog.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-batch-analysis-table',
@@ -19,10 +20,12 @@ export class BatchAnalysisTableComponent implements OnInit {
   sortByDirection: string = 'desc';
   batchAnalysisSettings: BatchAnalysisSettings;
   batchAnalysisSettingsSub: Subscription;
+  settings: Settings;
 
   constructor(private batchAnalysisService: BatchAnalysisService, private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService) { }
 
   ngOnInit(): void {
+    this.settings = this.motorInventoryService.settings.getValue();
     this.batchAnalysisSettingsSub = this.batchAnalysisService.batchAnalysisSettings.subscribe(val => {
       this.batchAnalysisSettings = val;
     });

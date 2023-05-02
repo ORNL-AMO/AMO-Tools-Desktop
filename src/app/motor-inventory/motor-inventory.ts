@@ -3,6 +3,7 @@ import { OperatingHours } from "../shared/models/operations";
 
 export interface MotorInventoryData {
   co2SavingsData?: Co2SavingsData,
+  existingDataUnits?: string,
   departments: Array<MotorInventoryDepartment>,
   displayOptions: MotorPropertyDisplayOptions
 }
