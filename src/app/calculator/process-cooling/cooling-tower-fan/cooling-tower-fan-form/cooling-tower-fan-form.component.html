@@ -45,6 +45,21 @@
             {{form.controls.ratedFanPower.errors.min.min}}.</span>
         </span>
       </div>
+      <div class="form-group">
+        <label class="small" for="waterFlowRate">Rated Cooling Tower Water Flow Rate</label>
+        <div class="input-group">
+          <input class="form-control" name="waterFlowRate" id="waterFlowRate" formControlName="waterFlowRate"
+            type="number" (input)="calculate()" (focus)="focusField('waterFlowRate')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">GPM</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/s</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.waterFlowRate.invalid && !form.controls.waterFlowRate.pristine">
+          <span *ngIf="form.controls.waterFlowRate.errors.required">Value required.</span>
+            <span *ngIf="form.controls.waterFlowRate.errors.min">Value can't be less than
+              {{form.controls.waterFlowRate.errors.min.min}}.</span>
+        </span>
+      </div>
     </form>
   </div>
 
@@ -137,22 +152,6 @@
           <span *ngIf="form.controls.operatingTempWetBulb.errors.required">Value required.</span>
           <span *ngIf="form.controls.operatingTempWetBulb.errors.max">Value can't be greater than Entering Water Temperature
             ({{form.controls.operatingTempWetBulb.errors.max.max}}).</span>
-        </span>
-      </div>
-
-      <div class="form-group">
-        <label class="small" for="waterFlowRate">Water Flow Rate</label>
-        <div class="input-group">
-          <input class="form-control" name="waterFlowRate" id="waterFlowRate" formControlName="waterFlowRate"
-            type="number" (input)="calculate()" (focus)="focusField('waterFlowRate')" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">GPM</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/s</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.waterFlowRate.invalid && !form.controls.waterFlowRate.pristine">
-          <span *ngIf="form.controls.waterFlowRate.errors.required">Value required.</span>
-            <span *ngIf="form.controls.waterFlowRate.errors.min">Value can't be less than
-              {{form.controls.waterFlowRate.errors.min.min}}.</span>
         </span>
       </div>
 
