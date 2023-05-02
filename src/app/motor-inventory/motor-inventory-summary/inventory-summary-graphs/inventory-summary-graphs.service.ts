@@ -18,7 +18,6 @@ export class InventorySummaryGraphsService {
 
   getBinData(motorInventoryData: MotorInventoryData, motorField: MotorField): { xData: Array<any>, yData: Array<any> } {
     let motors: Array<MotorItem> = this.motorInventorySummaryService.getAllMotors(motorInventoryData);
-    debugger;
     let count = _.countBy(motors, (motor) => { return motor[motorField.group][motorField.value] });
     let xData: Array<any> = new Array();
     let yData: Array<any> = new Array();
