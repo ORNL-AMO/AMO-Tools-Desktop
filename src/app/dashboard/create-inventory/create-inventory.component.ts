@@ -122,8 +122,7 @@ export class CreateInventoryComponent implements OnInit {
         let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
         this.inventoryDbService.setAll(updatedInventories);
         this.settingsDbService.setAll(updatedSettings);
-        this.router.navigateByUrl(`/${inventoryRoute}/${newInventory.id}`);
-
+        this.dashboardService.navigateWithSidebarOptions(`/${inventoryRoute}/${newInventory.id}`, {shouldCollapse: true})
       });
     }
   }
