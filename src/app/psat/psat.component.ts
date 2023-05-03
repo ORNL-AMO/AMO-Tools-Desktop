@@ -19,6 +19,7 @@ import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
 import { PumpImperialDefaults, PumpMetricDefaults, SettingsService } from '../settings/settings.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
+import { PumpOperationsService } from './pump-operations/pump-operations.service';
 
 @Component({
   selector: 'app-psat',
@@ -81,7 +82,7 @@ export class PsatComponent implements OnInit {
   constructor(
     private assessmentService: AssessmentService,
     private psatService: PsatService,
-      
+    private pumpOperationsService: PumpOperationsService,
     private activatedRoute: ActivatedRoute,
     private compareService: CompareService,
     private settingsDbService: SettingsDbService,
@@ -248,6 +249,10 @@ export class PsatComponent implements OnInit {
   getCanContinue() {
     if (this.stepTab == 'system-basics') {
       return true;
+    }
+    else if (this.stepTab == 'operations') {
+      let tmpForm: UntypedFormGroup = this.pumpOperationsService.getFormFromObj(this._psat.inputs);
+      return tmpForm.valid;
     }
     else if (this.stepTab == 'pump-fluid') {
       let tmpForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);

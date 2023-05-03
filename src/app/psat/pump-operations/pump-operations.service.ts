@@ -7,7 +7,7 @@ import { PsatInputs } from '../../shared/models/psat';
 export class PumpOperationsService {
     constructor(private formBuilder: UntypedFormBuilder) { }
 
-  getFormFromObj(psatInputs: PsatInputs, isBaseline: boolean, isWhatIfScenario?: boolean): UntypedFormGroup {
+  getFormFromObj(psatInputs: PsatInputs, isBaseline?: boolean, isWhatIfScenario?: boolean): UntypedFormGroup {
     if (!psatInputs.operating_hours && psatInputs.operating_fraction) {
       psatInputs.operating_hours = psatInputs.operating_fraction * 8760;
     }
