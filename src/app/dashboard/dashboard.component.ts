@@ -22,8 +22,8 @@ export class DashboardComponent implements OnInit {
   createAssessment: boolean;
   createAssessmentSub: Subscription;
 
-  createInventory: boolean;
-  createInventorySub: Subscription;
+  showCreateInventory: string;
+  showCreateInventorySub: Subscription;
 
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
@@ -128,8 +128,8 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    this.createInventorySub = this.dashboardService.createInventory.subscribe(val => {
-      this.createInventory = val;
+    this.showCreateInventorySub = this.dashboardService.showCreateInventory.subscribe(showCreateInventory => {
+      this.showCreateInventory = showCreateInventory;
     })
   }
 
@@ -140,7 +140,7 @@ export class DashboardComponent implements OnInit {
     this.createFolderSub.unsubscribe();
     this.showImportModalSub.unsubscribe();
     this.sidebarWidthSub.unsubscribe();
-    this.createInventorySub.unsubscribe();
+    this.showCreateInventorySub.unsubscribe();
     this.copyItemsSub.unsubscribe();
     this.routerSubscription.unsubscribe();
     this.showPrintViewSub.unsubscribe();

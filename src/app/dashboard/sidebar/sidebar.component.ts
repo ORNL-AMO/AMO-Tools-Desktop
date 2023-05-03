@@ -69,7 +69,7 @@ export class SidebarComponent implements OnInit {
 
   showCreateAssessment() {
     this.directoryDashboardService.createFolder.next(false);
-    this.dashboardService.createInventory.next(false);
+    this.dashboardService.showCreateInventory.next(undefined);
     this.showNewDropdown = false;
     this.dashboardService.createAssessment.next(true);
   }
@@ -78,12 +78,12 @@ export class SidebarComponent implements OnInit {
     this.dashboardService.createAssessment.next(false);
     this.directoryDashboardService.createFolder.next(false);
     this.showNewDropdown = false;
-    this.dashboardService.createInventory.next(true);
+    this.dashboardService.showCreateInventory.next('motorInventory');
   }
 
   showCreateFolder(){
     this.dashboardService.createAssessment.next(false);
-    this.dashboardService.createInventory.next(false);
+    this.dashboardService.showCreateInventory.next(undefined);
     this.showNewDropdown = false;
     this.directoryDashboardService.createFolder.next(true);
   }

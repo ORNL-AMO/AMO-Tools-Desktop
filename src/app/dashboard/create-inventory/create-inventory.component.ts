@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
@@ -24,7 +24,8 @@ import { PumpInventoryService } from '../../pump-inventory/pump-inventory.servic
   styleUrls: ['./create-inventory.component.css']
 })
 export class CreateInventoryComponent implements OnInit {
-
+  @Input()
+  defaultInventoryType: string;
   @ViewChild('createInventoryItemModal', { static: false }) public createInventoryItemModal: ModalDirective;
   newInventoryItemForm: UntypedFormGroup;
   canCreate: boolean;
@@ -66,9 +67,13 @@ export class CreateInventoryComponent implements OnInit {
   }
 
   initForm() {
+    let defaultInventoryName: string = 'New Motor Inventory'; 
+    if (this.defaultInventoryType === 'pumpInventory') {
+      defaultInventoryName = 'New Pump Inventory'; 
+    }
     return this.formBuilder.group({
-      'inventoryName': ['New Motor Inventory', Validators.required],
-      'inventoryType': ['motorInventory', Validators.required],
+      'inventoryName': [defaultInventoryName, Validators.required],
+      'inventoryType': [this.defaultInventoryType, Validators.required],
       'directoryId': [this.directory.id, Validators.required]
     });
   }
@@ -80,7 +85,7 @@ export class CreateInventoryComponent implements OnInit {
 
   hideCreateModal() {
     this.createInventoryItemModal.hide();
-    this.dashboardService.createInventory.next(false);
+    this.dashboardService.showCreateInventory.next(undefined);
   }
 
   setInventoryName() {
@@ -96,14 +101,17 @@ export class CreateInventoryComponent implements OnInit {
       this.canCreate = false;
       this.hideCreateModal();
       this.createInventoryItemModal.onHidden.subscribe(async () => {
-        this.motorInventoryService.mainTab.next('setup');
-        this.motorInventoryService.setupTab.next('plant-setup');
-        let inventoryRoute: string = 'motor-inventory';
+        let inventoryRoute: string;
         let inventoryItem: InventoryItem;
         if (this.newInventoryItemForm.controls.inventoryType.value === 'motorInventory') {
-           inventoryItem = this.inventoryService.getNewMotorInventoryItem();
+          this.motorInventoryService.mainTab.next('setup');
+          this.motorInventoryService.setupTab.next('plant-setup');
+          inventoryItem = this.inventoryService.getNewMotorInventoryItem();
+          inventoryRoute = 'motor-inventory';
         }
         if (this.newInventoryItemForm.controls.inventoryType.value === 'pumpInventory') {
+          this.pumpInventoryService.mainTab.next('setup');
+          this.pumpInventoryService.setupTab.next('plant-setup');
           inventoryItem = this.inventoryService.getNewPumpInventoryItem();
           inventoryRoute = 'pump-inventory';
         }
