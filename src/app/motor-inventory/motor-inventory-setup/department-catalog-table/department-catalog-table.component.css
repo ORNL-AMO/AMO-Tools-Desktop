@@ -10,3 +10,11 @@
 .fa-chevron-right{
     padding-right: 3px;
 }
+
+a.danger{
+    color: red;
+}
+
+a.disabled {
+    color: grey
+}

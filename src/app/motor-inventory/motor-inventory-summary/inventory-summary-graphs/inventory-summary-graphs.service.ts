@@ -54,7 +54,7 @@ export class InventorySummaryGraphsService {
     //   label = label + ' ' + motorField.unit;
     //   console.log(label);
     // 
-    else if (key == 'null') {
+    else if (key == 'null' || key == 'undefined') {
       label = 'N/A';
     } else if (key == 'true') {
       label = 'Yes';
