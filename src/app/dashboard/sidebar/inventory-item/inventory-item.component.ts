@@ -12,12 +12,17 @@ export class InventoryItemComponent implements OnInit {
   @Input()
   inventoryItem: InventoryItem;
 
-  constructor(private router: Router, private dashboardService: DashboardService) { }
+  constructor(private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
   }
 
   goToInventoryItem() {
-    this.dashboardService.navigateWithSidebarOptions('/motor-inventory/' + this.inventoryItem.id, {shouldCollapse: true})
+    if (this.inventoryItem.type === 'pumpInventory') {
+      this.dashboardService.navigateWithSidebarOptions('/pump-inventory/' + this.inventoryItem.id, {shouldCollapse: true})
+    }
+    if (this.inventoryItem.type === 'motorInventory') {
+      this.dashboardService.navigateWithSidebarOptions('/motor-inventory/' + this.inventoryItem.id, {shouldCollapse: true})
+    }
   }
 }

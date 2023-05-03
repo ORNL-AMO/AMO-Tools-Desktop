@@ -1,0 +1,88 @@
+<nav class="pump-inventory navbar banner d-flex mr-auto p-0 flex-nowrap">
+    <div class="d-flex align-items-center p-1">
+        <div class="img-col col-sm-auto col-md-auto col-lg-auto">
+            <img class="img-icon" src="assets/images/psat-diagram.png">
+        </div>
+        <div class="d-flex flex-column pl-2">
+            <div class="h2-name">
+                {{pumpInventoryItem.name}}
+            </div>
+            <div class="h2-name">
+                <span class="small">
+                    Last modified: {{pumpInventoryItem.modifiedDate | date:'mediumDate'}}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex nav-pills nav-fill flex-wrap mx-auto">
+        <div class="nav-item" (click)="setMainTab('setup')">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'setup'}">Setup</a>
+        </div>
+         <div class="nav-item" (click)="setMainTab('summary')">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'summary'}">Summary</a>
+        </div>
+    </div>
+    <div class="d-flex ml-auto pr-2 h-100">
+        <div class="pl-2 pr-2 border-left home-nav-item" [routerLink]="['/settings']">
+     	   <span class="fa fa-cog"></span>
+  	  </div>
+        <div class="pl-2 pr-2 border-right border-left home-nav-item"
+            [routerLink]="['/directory-dashboard', pumpInventoryItem.directoryId]">
+            <span class="fa fa-folder-open"></span>
+        </div>
+        <div class="pl-2 pr-2 border-left home-nav-item" [routerLink]="['/landing-screen']">
+            <span class="fa fa-home"></span>
+        </div>
+    </div>
+</nav>
+
+<nav class="hide-print" *ngIf="mainTab == 'setup'">
+    <div class="d-flex tabs subtabs progress-tabs flex-wrap pump-inventory">
+        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'plant-setup'}"
+            (click)="setSetupTab('plant-setup')">
+            <a><span class="step-number">1</span>Plant Setup</a>
+        </div>
+        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'department-setup'}"
+            (click)="setSetupTab('department-setup')">
+            <a><span class="step-number">2</span>Departments</a>
+        </div>
+        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'pump-properties'}"
+            (click)="setSetupTab('pump-properties')">
+            <a><span class="step-number">3</span>Pump Properties</a>
+        </div>
+        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'pump-catalog'}"
+            (click)="setSetupTab('pump-catalog')">
+            <a><span class="step-number">4</span>Catalog</a>
+        </div>
+    </div>
+</nav>
+
+<nav class="hide-print" *ngIf="setupTab == 'pump-catalog' && mainTab == 'setup'">
+    <div class="d-flex tabs subtabs progress-tabs flex-wrap pump-inventory">
+        <div *ngFor="let department of pumpInventoryData.departments"
+            [ngClass]="{'active': selectedDepartmentId == department.id}" (click)="selectedDepartment(department.id)">
+            <a>{{department.name}}
+                <span class="badge gray-badge">
+                    <strong>{{department.catalog.length}}</strong>
+                </span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<app-summary-filter *ngIf="mainTab == 'summary' || mainTab == 'analysis'"></app-summary-filter>
+
+<nav class="hide-print" *ngIf="mainTab == 'summary'">
+    <div class="d-flex tabs subtabs progress-tabs flex-wrap pump-inventory">
+        <div class="fixed-tab-size" [ngClass]="{'active': summaryTab == 'overview'}"
+            (click)="setSummaryTab('overview')">
+            <a>Overview</a>
+        </div>
+        <div class="fixed-tab-size" [ngClass]="{'active': summaryTab == 'graphs'}" (click)="setSummaryTab('graphs')">
+            <a>Graphs</a>
+        </div>
+        <div class="fixed-tab-size" [ngClass]="{'active': summaryTab == 'table'}" (click)="setSummaryTab('table')">
+            <a>Table</a>
+        </div>
+    </div>
+</nav>

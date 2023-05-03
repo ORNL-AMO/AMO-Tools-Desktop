@@ -18,6 +18,7 @@ import { DirectoryDashboardModule } from './directory-dashboard/directory-dashbo
 import { ToastModule } from '../shared/toast/toast.module';
 import { DragBarComponent } from './drag-bar/drag-bar.component';
 import { CreateInventoryComponent } from './create-inventory/create-inventory.component';
+
 import { InventoryService } from './inventory.service';
 import { MoveItemsComponent } from './move-items/move-items.component';
 import { CopyItemsComponent } from './copy-items/copy-items.component';

@@ -10,6 +10,7 @@ import { WasteWaterOptionsDisplayPipe } from './waste-water-options-display.pipe
 import { RemoveCommasPipe } from './remove-commas.pipe';
 import { SortByPipe } from './sort-by.pipe';
 import { CurrencyThousandsPipe } from './currency-thousands.pipe';
+import { PumpSelectFieldPipe } from './pump-select-field.pipe';
 
 
 
@@ -25,6 +26,7 @@ import { CurrencyThousandsPipe } from './currency-thousands.pipe';
     RemoveCommasPipe,
     SortByPipe,
     CurrencyThousandsPipe,
+    PumpSelectFieldPipe,
   ],
   imports: [
     CommonModule
@@ -39,7 +41,8 @@ import { CurrencyThousandsPipe } from './currency-thousands.pipe';
     WasteWaterOptionsDisplayPipe,
     RemoveCommasPipe,
     SortByPipe,
-    CurrencyThousandsPipe
+    CurrencyThousandsPipe,
+    PumpSelectFieldPipe
   ]
 })
 export class SharedPipesModule { }

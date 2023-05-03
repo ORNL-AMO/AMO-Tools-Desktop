@@ -1,0 +1,31 @@
+.h2-name{
+    font-weight: 400;
+    font-size: 20px;
+}
+
+.hidden{
+    display: none;
+}
+
+.hidden.show{
+    display: inherit;
+}
+
+
+.nav-item{
+    color: white;
+}
+
+.banner .nav-link:not(.disabled):not(.active){
+    color: white;
+}
+
+.img-icon{
+    width: 100px;
+}
+
+
+.gray-badge{
+    background-color: #2980b9;
+}
+

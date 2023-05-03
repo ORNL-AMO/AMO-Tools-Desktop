@@ -465,3 +465,9 @@ a:not([href]):not([tabindex]).disabled-link:hover {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  .pump-inventory .pump-catalog label.group-label:hover,
+.checkbox:hover {
+    background-color: #efefef;
+    cursor: pointer;
+}
