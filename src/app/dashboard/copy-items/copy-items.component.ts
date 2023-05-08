@@ -173,6 +173,7 @@ export class CopyItemsComponent implements OnInit {
       this.calculatorDbService.setAll(updatedCalculators);
       this.dashboardService.updateDashboardData.next(true);
     }
+    this.copyDirectoryCalculators();
   }
 
   async copyDirectoryCalculators() {
@@ -196,6 +197,7 @@ export class CopyItemsComponent implements OnInit {
       
       this.dashboardService.updateDashboardData.next(true);
     }
+    this.copyDirectoryInventory();
   }
 
   async copyDirectoryInventory() {
@@ -229,8 +231,6 @@ export class CopyItemsComponent implements OnInit {
 
   createCopy(){
     this.copyDirectoryAssessmentsAndSettings();
-    this.copyDirectoryCalculators();
-    this.copyDirectoryInventory();
     this.hideCopyModal();
   }
 
