@@ -212,7 +212,6 @@ export class WasteWaterComponent implements OnInit {
   }
 
   continue() {
-    //operations
     if (this.setupTab == 'system-basics') {
       this.wasteWaterService.setupTab.next('operations');
     } else if (this.setupTab == 'operations') {

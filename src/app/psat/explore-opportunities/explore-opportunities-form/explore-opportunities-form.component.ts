@@ -108,9 +108,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.baselinePumpFluidForm.disable();
     this.modificationPumpFluidForm = this.pumpFluidService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
 
-    this.baselineOperationsForm = this.pumpOperationsService.getFormFromObj(this.psat.inputs, true);
+    this.baselineOperationsForm = this.pumpOperationsService.getFormFromObj(this.psat.inputs);
     this.baselineOperationsForm.disable();
-    this.modificationOperationsForm = this.pumpOperationsService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs, false);
+    this.modificationOperationsForm = this.pumpOperationsService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
   }
 
   focusField(str: string) {
