@@ -195,12 +195,12 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setoperationsBadgeClass() {
     let badgeStr: string = 'success';
-    let tmpBaselineOperationsForm: UntypedFormGroup = this.pumpOperationsService.getFormFromObj(this.compareService.baselinePSAT.inputs, true);
+    let tmpBaselineOperationsForm: UntypedFormGroup = this.pumpOperationsService.getFormFromObj(this.compareService.baselinePSAT.inputs);
     let validBaselineTest = tmpBaselineOperationsForm.valid;
     let validModTest = true;
     let isDifferent = false;
     if (this.compareService.modifiedPSAT) {
-      let tmpModificationOperationsForm: UntypedFormGroup = this.pumpOperationsService.getFormFromObj(this.compareService.modifiedPSAT.inputs, false);
+      let tmpModificationOperationsForm: UntypedFormGroup = this.pumpOperationsService.getFormFromObj(this.compareService.modifiedPSAT.inputs);
       validModTest = tmpModificationOperationsForm.valid;
       isDifferent = this.compareService.checkOperationsDifferent();
     }
