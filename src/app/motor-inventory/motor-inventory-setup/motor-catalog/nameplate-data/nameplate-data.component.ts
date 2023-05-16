@@ -8,6 +8,8 @@ import { NameplateDataService } from './nameplate-data.service';
 import { Settings } from '../../../../shared/models/settings';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 import { PsatService } from '../../../../psat/psat.service';
+import { IntegrationStateService } from '../../../../shared/assessment-integration/integration-state.service';
+import { ConnectedInventoryData, ConnectedItem } from '../../../../shared/assessment-integration/integrations';
 
 @Component({
   selector: 'app-nameplate-data',
@@ -25,12 +27,12 @@ export class NameplateDataComponent implements OnInit {
   frequencies: Array<number> = [50, 60];
   efficiencyClasses: Array<{ value: number, display: string }>;
   voltageRatingOptions: Array<number> = [200, 208, 220, 230, 440, 460, 575, 796, 2300, 4000, 6600];
+  connectedItem: ConnectedItem;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
     private nameplateDataService: NameplateDataService, private psatService: PsatService) { }
 
   ngOnInit(): void {
     //TODO: add warnings for FLA
-
     this.settingsSub = this.motorInventoryService.settings.subscribe(val => {
       this.settings = val;
     });
@@ -39,6 +41,11 @@ export class NameplateDataComponent implements OnInit {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
         this.motorForm = this.nameplateDataService.getFormFromNameplateData(selectedMotor.nameplateData);
+        if (selectedMotor.connectedItem) {
+          this.connectedItem = selectedMotor.connectedItem;
+        } else {
+          this.connectedItem = undefined;
+        }
       }
     });
     this.displayOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.nameplateDataOptions;
@@ -62,13 +69,9 @@ export class NameplateDataComponent implements OnInit {
 
   toggleForm() {
     this.displayForm = !this.displayForm;
-    // this.focusOut();
   }
 
-  // focusOut() {
-  //   this.motorInventoryService.focusedDataGroup.next('nameplate-data')
-  //   this.motorInventoryService.focusedField.next('default');
-  // }
+
 
   estimateEfficiency() {
     if (this.displayOptions.fullLoadSpeed) {

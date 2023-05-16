@@ -46,7 +46,8 @@ import { ConvertMotorInventoryService } from './convert-motor-inventory.service'
     AssessmentCo2SavingsModule,
     HelpPanelModule,
     BatchAnalysisModule,
-    ConfirmDeleteModalModule
+    ConfirmDeleteModalModule,
+    RouterModule
   ],
   providers: [
     MotorInventoryService,

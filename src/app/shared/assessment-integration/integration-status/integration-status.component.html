@@ -1,0 +1,13 @@
+<div *ngIf="showIntegrationStatus" class="integration-status small" 
+  [ngClass]="{'alert-success': integrationState.status === 'success','alert-danger': integrationState.state === 'fail',
+    'alert-warning': integrationState.status === 'settings-differ'
+  }">
+  <div class="text-right mt-0 pr-3">
+    <a (click)="clearIntegrationState()"><span class="fa fa-times"></span></a>
+  </div>
+  <div class="text-center mx-auto w-75 message" [innerHTML]="integrationState.msgHTML"></div>
+  <div *ngIf="integrationState.status === 'settings-differ'" class="d-flex flex-row justify-content-end mt-2">
+      <button class="btn btn-link p-2" (click)="clearIntegrationState()">Cancel</button>
+      <button class="btn btn-primary p-2 mx-3" (click)="convertItemUnits()">Convert Item Units</button>
+  </div>
+</div>

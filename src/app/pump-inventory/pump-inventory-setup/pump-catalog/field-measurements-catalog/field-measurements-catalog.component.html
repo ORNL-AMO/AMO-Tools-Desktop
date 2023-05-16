@@ -113,6 +113,14 @@
         </div>
     </div>
 
+    <div class="form-group" *ngIf="displayOptions.assessmentDate">
+        <label for="assessmentDate">Assessment Date</label>
+        <div class="input-group">
+            <input type="date" class="form-control" (focus)="focusField('assessmentDate')" (change)="setAssessmentDate($event)"
+            formControlName="assessmentDate" id="assessmentDate">
+        </div>
+    </div>
+
    
 </form>
 

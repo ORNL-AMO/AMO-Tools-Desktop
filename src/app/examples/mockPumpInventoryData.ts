@@ -25,7 +25,7 @@ export const MockPumpInventory: InventoryItem = {
                 "id": "l6rd7tt1i",
                 "catalog": [
                     {
-                        "id": "59264rw8x",
+                        "id": "66334rw8x",
                         "departmentId": "l6rd7tt1i",
                         "description": "Main pump",
                         "name": "Pump A",
@@ -41,7 +41,7 @@ export const MockPumpInventory: InventoryItem = {
                             "staticSuctionHead": 333,
                             "staticDischargeHead": 234,
                             "efficiency": 70,
-                            "assessmentDate": '3333',
+                            "assessmentDate": null,
                             "operatingFlowRate": 2500,
                             "operatingHead": 410,
                             "measuredPower": 88.2,
@@ -96,7 +96,7 @@ export const MockPumpInventory: InventoryItem = {
                         }
                     },
                     {
-                        "id": "19163yw8i",
+                        "id": "11343yw8i",
                         "departmentId": "l6rd7tt1i",
                         "description": "New Pump installed 2021",
                         "name": "Pump B",
@@ -112,7 +112,7 @@ export const MockPumpInventory: InventoryItem = {
                             "staticSuctionHead": 333,
                             "staticDischargeHead": 333,
                             "efficiency": 33,
-                            "assessmentDate": '3333',
+                            "assessmentDate": null,
                             "operatingFlowRate": 2500,
                             "operatingHead": 410,
                             "measuredPower": 88.2,
@@ -191,7 +191,7 @@ export const MockPumpInventory: InventoryItem = {
                             "staticSuctionHead": 333,
                             "staticDischargeHead": 333,
                             "efficiency": null,
-                            "assessmentDate": '3333',
+                            "assessmentDate": null,
                             "operatingFlowRate": 2500,
                             "operatingHead": 410,
                             "measuredPower": 88.2,
@@ -262,7 +262,7 @@ export const MockPumpInventory: InventoryItem = {
                             "staticSuctionHead": 333,
                             "staticDischargeHead": 333,
                             "efficiency": 33,
-                            "assessmentDate": '3333',
+                            "assessmentDate": null,
                             "operatingFlowRate": 2500,
                             "operatingHead": 410,
                             "measuredPower": 88.2,

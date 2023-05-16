@@ -1,4 +1,5 @@
 import { Co2SavingsData } from "../calculator/utilities/co2-savings/co2-savings.service";
+import { ConnectedItem } from "../shared/assessment-integration/integrations";
 import { OperatingHours } from "../shared/models/operations";
 
 export interface MotorInventoryData {
@@ -24,7 +25,7 @@ export interface MotorItem {
   name: string,
   description: string,
   voltageLimit?: number,
-
+  connectedItem?: ConnectedItem,
   batchAnalysisData: BatchAnalysisData,
   loadCharacteristicData: LoadCharacteristicData,
   manualSpecificationData: ManualSpecificationData,

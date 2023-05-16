@@ -3,6 +3,11 @@
     <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
     Motor
 </label>
+
+<app-inventory-integration *ngIf="displayForm && inventorySelectOptions" 
+    [selectOptions]="inventorySelectOptions">
+</app-inventory-integration>
+
 <form *ngIf="displayForm" class="p-1" #formElement [formGroup]="form">
     <div class="form-group" *ngIf="displayOptions.lineFrequency">
         <label for="lineFrequency">Line Frequency</label>

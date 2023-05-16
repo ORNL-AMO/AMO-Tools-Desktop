@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener, ViewChild, ElementRef, ChangeDetectorR
 import { MotorInventoryService } from './motor-inventory.service';
 import { firstValueFrom, Subscription } from 'rxjs';
  
-import { MotorInventoryData } from './motor-inventory';
+import { MotorInventoryData, MotorInventoryDepartment, MotorItem } from './motor-inventory';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { ActivatedRoute } from '@angular/router';
@@ -54,7 +54,14 @@ export class MotorInventoryComponent implements OnInit {
       if (this.motorInventoryItem.batchAnalysisSettings) {
         this.batchAnalysisService.batchAnalysisSettings.next(this.motorInventoryItem.batchAnalysisSettings);
       }
+      let departmentId = this.activatedRoute.snapshot.queryParamMap.get('departmentId');
+      let itemId = this.activatedRoute.snapshot.queryParamMap.get('itemId');
+      if (departmentId && itemId) {
+        this.redirectFromConnectedInventory(departmentId, itemId);
+      }
     });
+
+
     this.mainTabSub = this.motorInventoryService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
@@ -143,6 +150,14 @@ export class MotorInventoryComponent implements OnInit {
       this.showWelcomeScreen = true;
       this.motorInventoryService.modalOpen.next(true);
     }
+  }
+
+  redirectFromConnectedInventory(departmentId: string, itemId: string) {
+    this.motorCatalogService.selectedDepartmentId.next(departmentId)
+    let department: MotorInventoryDepartment = this.motorInventoryItem.motorInventoryData.departments.find(department => { return department.id == departmentId });
+    let selectedItem: MotorItem = department.catalog.find(motorItem => { return motorItem.id ==  itemId});
+    this.motorCatalogService.selectedMotorItem.next(selectedItem);
+    this.motorInventoryService.setupTab.next('motor-catalog');
   }
 
   async closeWelcomeScreen() {
