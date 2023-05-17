@@ -1,5 +1,5 @@
-<ul class="tabs subtabs ssmt">
-  <li [ngClass]="{'active': modelTab == 'operations'}">
+<div class="d-none d-lg-flex tabs subtabs progress-tabs ssmt flex-wrap">
+  <div class="fixed-tab-size" [ngClass]="{'active': modelTab == 'operations'}">
     <a class="nav-link small" (click)="changeModelTab('operations')">
       Operations
       <span (mouseenter)="showTooltip('operations')" (mouseleave)="hideTooltip('operations')" class="badge gray-badge"
@@ -7,8 +7,8 @@
       </span>
     </a>
     <app-tabs-tooltip [display]="operationsBadgeHover" [reveal]="displayOperationsTooltip" [badgeClass]="operationsBadgeClass"></app-tabs-tooltip>
-  </li>
-  <li [ngClass]="{'active': modelTab == 'boiler'}">
+  </div>
+  <div class="fixed-tab-size" [ngClass]="{'active': modelTab == 'boiler'}">
     <a class="nav-link small" (click)="changeModelTab('boiler')">
       Boiler
       <span (mouseenter)="showTooltip('boiler')" (mouseleave)="hideTooltip('boiler')" class="badge gray-badge"
@@ -16,8 +16,8 @@
       </span>
     </a>
     <app-tabs-tooltip [display]="boilerBadgeHover" [reveal]="displayBoilerToolTip" [badgeClass]="boilerBadgeClass"></app-tabs-tooltip>
-  </li>
-  <li [ngClass]="{'active': modelTab == 'header'}">
+  </div>
+  <div class="fixed-tab-size" [ngClass]="{'active': modelTab == 'header'}">
     <a class="nav-link small" (click)="changeModelTab('header')">
       Header
       <span (mouseenter)="showTooltip('header')" (mouseleave)="hideTooltip('header')" class="badge gray-badge"
@@ -25,8 +25,8 @@
       </span>
     </a>
     <app-tabs-tooltip [display]="headerBadgeHover" [reveal]="displayHeaderTooltip" [badgeClass]="headerBadgeClass"></app-tabs-tooltip>
-  </li>
-  <li [ngClass]="{'active': modelTab == 'turbine'}">
+  </div>
+  <div class="fixed-tab-size" [ngClass]="{'active': modelTab == 'turbine'}">
     <a class="nav-link small" (click)="changeModelTab('turbine')">
       Turbine
       <span (mouseenter)="showTooltip('turbine')" (mouseleave)="hideTooltip('turbine')" class="badge gray-badge"
@@ -34,5 +34,46 @@
       </span>
     </a>
     <app-tabs-tooltip [display]="turbineBadgeHover" [reveal]="displayTurbineTooltip" [badgeClass]="turbineBadgeClass"></app-tabs-tooltip>
-  </li>
-</ul>
+  </div>
+</div>
+
+<div class="d-flex d-lg-none tabs subtabs progress-tabs ssmt flex-wrap flex-fill">
+  <ul class="pagination d-flex justify-content-between tabs ssmt subtabs progress-tabs flex-fill">
+    <li class="page-item" [ngClass]="{'active': modelTab == 'operations'}">
+      <a class="nav-link small" (click)="changeModelTab('operations')">
+        Operations
+        <span (mouseenter)="showTooltip('operations')" (mouseleave)="hideTooltip('operations')" class="badge gray-badge"
+          [ngClass]="operationsBadgeClass">
+        </span>
+      </a>
+      <app-tabs-tooltip [display]="operationsBadgeHover" [reveal]="displayOperationsTooltip" [badgeClass]="operationsBadgeClass"></app-tabs-tooltip>
+    </li>
+    <li class="page-item" [ngClass]="{'active': modelTab == 'boiler'}">
+      <a class="nav-link small" (click)="changeModelTab('boiler')">
+        Boiler
+        <span (mouseenter)="showTooltip('boiler')" (mouseleave)="hideTooltip('boiler')" class="badge gray-badge"
+          [ngClass]="boilerBadgeClass">
+        </span>
+      </a>
+      <app-tabs-tooltip [display]="boilerBadgeHover" [reveal]="displayBoilerToolTip" [badgeClass]="boilerBadgeClass"></app-tabs-tooltip>
+    </li>
+    <li class="page-item" [ngClass]="{'active': modelTab == 'header'}">
+      <a class="nav-link small" (click)="changeModelTab('header')">
+        Header
+        <span (mouseenter)="showTooltip('header')" (mouseleave)="hideTooltip('header')" class="badge gray-badge"
+          [ngClass]="headerBadgeClass">
+        </span>
+      </a>
+      <app-tabs-tooltip [display]="headerBadgeHover" [reveal]="displayHeaderTooltip" [badgeClass]="headerBadgeClass"></app-tabs-tooltip>
+    </li>
+    <li class="page-item" [ngClass]="{'active': modelTab == 'turbine'}">
+      <a class="nav-link small" (click)="changeModelTab('turbine')">
+        Turbine
+        <span (mouseenter)="showTooltip('turbine')" (mouseleave)="hideTooltip('turbine')" class="badge gray-badge"
+          [ngClass]="turbineBadgeClass">
+        </span>
+      </a>
+      <app-tabs-tooltip [display]="turbineBadgeHover" [reveal]="displayTurbineTooltip" [badgeClass]="turbineBadgeClass"></app-tabs-tooltip>
+    </li>
+  </ul>
+</div>

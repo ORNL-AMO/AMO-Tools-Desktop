@@ -16,6 +16,7 @@ export class SsmtBannerComponent implements OnInit {
 
   mainTab: string;
   mainTabSub: Subscription;
+  bannerCollapsed: boolean = true;
   
   constructor(private ssmtService: SsmtService,
     private dashboardService: DashboardService,  private securityAndPrivacyService: SecurityAndPrivacyService) { }
@@ -44,6 +45,40 @@ export class SsmtBannerComponent implements OnInit {
       this.ssmtService.mainTab.next(str);
     } else if (this.assessment.ssmt.setupDone) {
       this.ssmtService.mainTab.next(str);
+    }    
+    this.collapseBanner();
+  }
+
+  collapseBanner() {
+    this.bannerCollapsed = !this.bannerCollapsed;
+    window.dispatchEvent(new Event("resize"));
+  }
+
+  back(){
+    if (this.mainTab == 'calculators') {
+      this.ssmtService.mainTab.next('sankey');
+    } else if (this.mainTab == 'sankey') {
+      this.ssmtService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.ssmtService.mainTab.next('diagram');
+    } else if (this.mainTab == 'diagram') {
+      this.ssmtService.mainTab.next('assessment');
+    } else if (this.mainTab == 'assessment') {
+      this.ssmtService.mainTab.next('system-setup');
+    }
+  }
+
+  continue() {
+    if (this.mainTab == 'system-setup') {
+      this.ssmtService.mainTab.next('assessment');
+    } else if (this.mainTab == 'assessment') {
+      this.ssmtService.mainTab.next('diagram');
+    } else if (this.mainTab == 'diagram') {
+      this.ssmtService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.ssmtService.mainTab.next('sankey');
+    } else if (this.mainTab == 'sankey') {
+      this.ssmtService.mainTab.next('calculators');
     }
   }
 }
