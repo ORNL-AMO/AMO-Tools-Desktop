@@ -235,10 +235,10 @@ export class CopyItemsComponent implements OnInit {
     }
   }
 
-  createCopy(){
-    this.copyDirectoryAssessmentsAndSettings();
-    this.copyDirectoryCalculators();
-    this.copyDirectoryInventory();
+  async createCopy(){
+    await this.copyDirectoryAssessmentsAndSettings();
+    await this.copyDirectoryCalculators();
+    await this.copyDirectoryInventory();
     this.hideCopyModal();
   }
 

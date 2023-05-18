@@ -16,6 +16,7 @@ import { CompareService } from './modify-conditions/compare.service';
 import { SystemBasicsService } from './system-basics/system-basics.service';
 import { WasteWaterService } from './waste-water.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
+import { WasteWaterOperationsService } from './waste-water-operations/waste-water-operations.service';
 
 @Component({
   selector: 'app-waste-water',
@@ -64,7 +65,7 @@ export class WasteWaterComponent implements OnInit {
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
     private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService,
     private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
-    private systemBasicsService: SystemBasicsService, private assessmentService: AssessmentService) { }
+    private systemBasicsService: SystemBasicsService, private assessmentService: AssessmentService, private wasteWaterOperationsService: WasteWaterOperationsService) { }
 
   ngOnInit(): void {
     this.egridService.getAllSubRegions();
@@ -99,7 +100,7 @@ export class WasteWaterComponent implements OnInit {
     this.wasteWaterSub = this.wasteWaterService.wasteWater.subscribe(val => {
       if (val && this.assessment) {
         this.saveWasteWater(val);
-        this.setDisableNext(val);
+        this.setDisableNext();
       }
     });
 
@@ -190,23 +191,30 @@ export class WasteWaterComponent implements OnInit {
     this.settingsDbService.setAll(allSettings);
   }
 
-  setDisableNext(wasteWater: WasteWater) {
-    let systemBasicsForm: UntypedFormGroup = this.systemBasicsService.getFormFromObj(wasteWater.systemBasics);
-    let aeratorPerformanceForm: UntypedFormGroup = this.aeratorPerformanceFormService.getFormFromObj(wasteWater.baselineData.aeratorPerformanceData);
-    let activatedSludgeForm: UntypedFormGroup = this.activatedSludgeFormService.getFormFromObj(wasteWater.baselineData.activatedSludgeData);
-    if (this.setupTab == 'system-basics' && systemBasicsForm.valid) {
-      this.disableNext = false;
-    } else if (this.setupTab == 'activated-sludge' && activatedSludgeForm.valid && systemBasicsForm.valid) {
-      this.disableNext = false;
-    } else if (this.setupTab == 'aerator-performance' && aeratorPerformanceForm.valid && activatedSludgeForm.valid && systemBasicsForm.valid) {
-      this.disableNext = false;
-    } else {
-      this.disableNext = true;
-    }
+  setDisableNext() {
+    let systemBasicsForm: UntypedFormGroup = this.systemBasicsService.getFormFromObj(this.assessment.wasteWater.systemBasics);
+    let operationsForm: UntypedFormGroup = this.wasteWaterOperationsService.getFormFromObj(this.assessment.wasteWater.baselineData.operations);
+    let aeratorPerformanceForm: UntypedFormGroup = this.aeratorPerformanceFormService.getFormFromObj(this.assessment.wasteWater.baselineData.aeratorPerformanceData);
+    let activatedSludgeForm: UntypedFormGroup = this.activatedSludgeFormService.getFormFromObj(this.assessment.wasteWater.baselineData.activatedSludgeData);
+    if (this.setupTab == 'system-basics') {
+      this.disableNext = systemBasicsForm.valid;
+      return systemBasicsForm.valid;
+    } else if (this.setupTab == 'operations') {
+      this.disableNext = operationsForm.valid;
+      return operationsForm.valid;
+    } else if (this.setupTab == 'activated-sludge') {
+      this.disableNext = activatedSludgeForm.valid;
+      return activatedSludgeForm.valid;
+    } else if (this.setupTab == 'aerator-performance') {
+      this.disableNext = aeratorPerformanceForm.valid;
+      return aeratorPerformanceForm.valid;
+    } 
   }
 
   continue() {
     if (this.setupTab == 'system-basics') {
+      this.wasteWaterService.setupTab.next('operations');
+    } else if (this.setupTab == 'operations') {
       this.wasteWaterService.setupTab.next('activated-sludge');
     } else if (this.setupTab == 'activated-sludge') {
       this.wasteWaterService.setupTab.next('aerator-performance');

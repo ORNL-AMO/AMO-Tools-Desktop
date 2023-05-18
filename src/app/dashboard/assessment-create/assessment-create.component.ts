@@ -157,7 +157,7 @@ export class AssessmentCreateComponent implements OnInit {
     this.assessmentDbService.setAll();
     this.hideCreateModal();
     this.createModal.onHidden.subscribe(() => {
-      this.router.navigateByUrl(navigationUrl + createdAssessment.id);
+      this.dashboardService.navigateWithSidebarOptions(navigationUrl + createdAssessment.id, {shouldCollapse: true})
     });
   }
 
