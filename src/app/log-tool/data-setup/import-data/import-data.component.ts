@@ -277,9 +277,9 @@ export class ImportDataComponent implements OnInit {
     this.explorerData = this.logToolDataService.addImportDataSet(exampleDataSet, exampleName, exampleName, this.explorerData);
     this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
     await this.logToolDbService.saveData();
-    this.logToolDataService.explorerData.next(this.explorerData);
     this.runDayTypeAnalysis(true);
     this.setExistingDataComplete();
+    this.logToolDataService.explorerData.next(this.explorerData);
     this.logToolDataService.loadingSpinner.next({show: false, msg: 'Loading Example...'});
   }
 

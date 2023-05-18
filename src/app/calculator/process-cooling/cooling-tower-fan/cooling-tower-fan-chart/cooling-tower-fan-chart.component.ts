@@ -4,6 +4,7 @@ import { ChillerPerformanceOutput } from '../../../../shared/models/chillers';
 import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
 
 import * as Plotly from 'plotly.js-dist';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-cooling-tower-fan-chart',
@@ -13,7 +14,8 @@ import * as Plotly from 'plotly.js-dist';
 export class CoolingTowerFanChartComponent implements OnInit {
   @Input()
   output: ChillerPerformanceOutput;
-
+  @Input()
+  settings: Settings;
   @ViewChild("ngChartContainer", { static: false })
   ngChartContainer: ElementRef;
 
@@ -62,15 +64,15 @@ export class CoolingTowerFanChartComponent implements OnInit {
 
   initRenderChart() {
     Plotly.purge(this.currentChartId);
-    this.chillerPerformanceChart = this.getEmptyChart();
-
+    let powerUnit = this.settings.unitsOfMeasure == 'Imperial'? 'hp' : 'kW'; 
+    this.chillerPerformanceChart = this.getEmptyChart(powerUnit);
     let traces: Array<TraceData> = [
       {
         x: ['Baseline'],
         y: [this.output.baselinePower],
         type: "bar",
         name: 'Baseline',
-        hovertemplate: `%{y:,.2r} %`,
+        hovertemplate: `%{y:,.2r} % ${powerUnit}`,
         showlegend: false,
       },
       {
@@ -78,7 +80,7 @@ export class CoolingTowerFanChartComponent implements OnInit {
         y: [this.output.modPower],
         type: "bar",
         name: 'Modification',
-        hovertemplate: `%{y:,.2r} %`,
+        hovertemplate: `%{y:,.2r} ${powerUnit}`,
         showlegend: false,
       },
     ];
@@ -92,7 +94,7 @@ export class CoolingTowerFanChartComponent implements OnInit {
     );
   }
 
-  getEmptyChart(): SimpleChart {
+  getEmptyChart(powerUnit: string): SimpleChart {
     return {
       name: 'Power Consumption',
       data: [],
@@ -111,7 +113,7 @@ export class CoolingTowerFanChartComponent implements OnInit {
           showgrid: false,
           showticksuffix: '',
           title: {
-            text: 'Power Consumption (%)'
+            text: `Power Consumption (${powerUnit})`
           },
         },
         margin: {

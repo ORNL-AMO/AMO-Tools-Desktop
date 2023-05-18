@@ -20,6 +20,7 @@ import { BatchAnalysisModule } from './batch-analysis/batch-analysis.module';
 import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
+import { ConvertMotorInventoryService } from './convert-motor-inventory.service';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
     ConfirmDeleteModalModule
   ],
   providers: [
-    MotorInventoryService
+    MotorInventoryService,
+    ConvertMotorInventoryService
   ]
 })
 export class MotorInventoryModule { }

@@ -38,7 +38,7 @@ export class MotorCatalogComponent implements OnInit {
       } else {
         let findDepartment: MotorInventoryDepartment = this.motorInventoryData.departments.find(department => { return department.id == val });
         if (findDepartment) {
-          this.showDeleteMotorButton = (findDepartment.catalog.length != 1);
+          this.showDeleteMotorButton = (findDepartment.catalog.length > 1);
           let selectedMotorItem: MotorItem = this.motorCatalogService.selectedMotorItem.getValue();
           if (selectedMotorItem) {
             let findItemInDepartment: MotorItem = findDepartment.catalog.find(motorItem => { return motorItem.id == selectedMotorItem.id });
@@ -49,7 +49,7 @@ export class MotorCatalogComponent implements OnInit {
             this.motorCatalogService.selectedMotorItem.next(findDepartment.catalog[0]);
           }
         } else {
-          this.showDeleteMotorButton = (this.motorInventoryData.departments[0].catalog.length != 1);
+          this.showDeleteMotorButton = (this.motorInventoryData.departments[0].catalog.length > 1);
           this.motorCatalogService.selectedDepartmentId.next(this.motorInventoryData.departments[0].id);
           this.motorCatalogService.selectedMotorItem.next(this.motorInventoryData.departments[0].catalog[0]);
         }
