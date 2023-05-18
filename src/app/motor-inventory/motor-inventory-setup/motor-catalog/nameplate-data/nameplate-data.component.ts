@@ -8,8 +8,8 @@ import { NameplateDataService } from './nameplate-data.service';
 import { Settings } from '../../../../shared/models/settings';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 import { PsatService } from '../../../../psat/psat.service';
-import { IntegrationStateService } from '../../../../shared/assessment-integration/integration-state.service';
-import { ConnectedInventoryData, ConnectedItem } from '../../../../shared/assessment-integration/integrations';
+import { ConnectedItem } from '../../../../shared/assessment-integration/integrations';
+import { MotorIntegrationService } from '../../../../shared/assessment-integration/motor-integration.service';
 
 @Component({
   selector: 'app-nameplate-data',
@@ -28,7 +28,9 @@ export class NameplateDataComponent implements OnInit {
   efficiencyClasses: Array<{ value: number, display: string }>;
   voltageRatingOptions: Array<number> = [200, 208, 220, 230, 440, 460, 575, 796, 2300, 4000, 6600];
   connectedItem: ConnectedItem;
+  connectedItems: Array<ConnectedItem>;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
+    private motorIntegrationService: MotorIntegrationService,
     private nameplateDataService: NameplateDataService, private psatService: PsatService) { }
 
   ngOnInit(): void {
@@ -41,11 +43,8 @@ export class NameplateDataComponent implements OnInit {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
         this.motorForm = this.nameplateDataService.getFormFromNameplateData(selectedMotor.nameplateData);
-        if (selectedMotor.connectedItem) {
-          this.connectedItem = selectedMotor.connectedItem;
-        } else {
-          this.connectedItem = undefined;
-        }
+        this.motorIntegrationService.setConnectedPumpItems(selectedMotor);
+        this.connectedItems = selectedMotor.connectedItems;
       }
     });
     this.displayOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.nameplateDataOptions;
@@ -62,8 +61,12 @@ export class NameplateDataComponent implements OnInit {
     this.motorInventoryService.updateMotorItem(selectedMotor);
   }
 
-  focusField(str: string) {
-    this.motorInventoryService.focusedDataGroup.next('nameplate-data');
+  focusField(str: string, integrationDataGroup?: boolean) {
+    let focusedDataGroup: string = 'nameplate-data';
+    if (integrationDataGroup) {
+      focusedDataGroup = 'motor-integration'
+    }
+    this.motorInventoryService.focusedDataGroup.next(focusedDataGroup);
     this.motorInventoryService.focusedField.next(str);
   }
 

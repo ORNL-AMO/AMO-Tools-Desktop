@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { InventoryIntegrationComponent } from './inventory-integration/inventory-integration.component';
 import { IntegrationStateComponent } from './integration-status/integration-status.component';
 import { IntegrationStateService } from './integration-state.service';
+import { IntegrationHelpComponent } from './integration-help/integration-help.component';
 
 
 
@@ -12,6 +13,7 @@ import { IntegrationStateService } from './integration-state.service';
   declarations: [
     InventoryIntegrationComponent,
     IntegrationStateComponent,
+    IntegrationHelpComponent,
   ],
   imports: [
     CommonModule,
@@ -23,7 +25,8 @@ import { IntegrationStateService } from './integration-state.service';
   ],
   exports: [
     IntegrationStateComponent, 
-    InventoryIntegrationComponent
+    InventoryIntegrationComponent,
+    IntegrationHelpComponent
   ]
 })
 export class AssessmentIntegrationModule { }

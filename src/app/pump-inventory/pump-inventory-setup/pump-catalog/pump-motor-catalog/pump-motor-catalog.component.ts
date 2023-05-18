@@ -57,13 +57,14 @@ export class PumpMotorCatalogComponent implements OnInit {
     this.selectedPumpItemSub = this.pumpCatalogService.selectedPumpItem.subscribe(selectedPump => {
       if (selectedPump) {
         if (selectedPump.connectedItem) {
-          this.motorIntegrationService.setFromConnectedItem(selectedPump, this.pumpInventoryService.currentInventoryId);
+          this.motorIntegrationService.setFromConnectedMotorItem(selectedPump, this.pumpInventoryService.currentInventoryId);
           this.form = this.pumpMotorCatalogService.getFormFromPumpMotor(selectedPump.pumpMotor);
           this.form.disable();
         } else {
           this.form = this.pumpMotorCatalogService.getFormFromPumpMotor(selectedPump.pumpMotor);
           this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
         }
+        this.integrationStateService.integrationState.next(this.integrationStateService.getEmptyIntegrationState());
       }
     });
     this.displayOptions = this.pumpInventoryService.pumpInventoryData.getValue().displayOptions.pumpMotorPropertiesOptions;
@@ -117,8 +118,14 @@ export class PumpMotorCatalogComponent implements OnInit {
     this.pumpInventoryService.updatePumpItem(selectedPump);
   }
 
-  focusField(str: string) {
-    this.pumpInventoryService.focusedDataGroup.next('pump-motor');
+
+
+  focusField(str: string, integrationDataGroup?: boolean) {
+    let focusedDataGroup: string = 'pump-motor';
+    if (integrationDataGroup) {
+      focusedDataGroup = 'motor-integration';
+    }
+    this.pumpInventoryService.focusedDataGroup.next(focusedDataGroup);
     this.pumpInventoryService.focusedField.next(str);
   }
 

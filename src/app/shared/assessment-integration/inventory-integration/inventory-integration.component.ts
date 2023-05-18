@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { InventorySelectOptions, ConnectedInventoryData, ConnectedItem } from '../integrations';
 import { IntegrationStateService } from '../integration-state.service';
@@ -18,7 +18,9 @@ export class InventoryIntegrationComponent {
   @Input()
   selectOptions: InventorySelectOptions;
   @Input()
-  connectedItem: ConnectedItem;
+  connectedItems: Array<ConnectedItem>;
+  @Output('focusedField')
+  focusedField = new EventEmitter();
 
   connectedInventoryData: ConnectedInventoryData;
   inventoryIntegrationForm: FormGroup;
@@ -29,13 +31,16 @@ export class InventoryIntegrationComponent {
   ngOnInit() {
     this.setInventoryOptions();
     this.integrationStateSub = this.integrationStateService.integrationState.subscribe(integrationState => {
-      if (!integrationState.status || integrationState.status === 'fail') {
+      if (!integrationState.status) {
         this.resetForm();
       }
     });
 
     this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
       if (connectedInventoryData.shouldDisconnect) {
+        this.resetForm();
+      } else if (connectedInventoryData.isConnected) {
+        this.connectedInventoryData = connectedInventoryData;
         this.resetForm();
       } else {
         this.connectedInventoryData = connectedInventoryData;
@@ -88,7 +93,9 @@ export class InventoryIntegrationComponent {
     this.integrationStateService.connectedInventoryData.next(this.connectedInventoryData);
   }
 
-  focusField() {}
+  focusField(focusedField: string) {
+    this.focusedField.emit(focusedField);
+  }
 
   resetForm() {
     this.inventoryIntegrationForm.controls.selectedInventoryId.patchValue(null);

@@ -1,6 +1,6 @@
 <div class="integration-container">
     <!-- show in item OWNER inventory  -->
-    <div *ngIf="connectedInventoryData.isConnected" class="p-2 px-3">
+    <div (click)="focusField('connected-item')" *ngIf="connectedInventoryData.isConnected" class="p-2 px-3">
         <div class="d-flex flex-row">
             <label class="w-50">
                 <span class="integration-label">
@@ -20,26 +20,26 @@
         </div>
     </div>
 
-    <!-- show in item inventory  -->
-    <div *ngIf="connectedItem" class="p-2 px-3">
-        <div class="d-flex flex-row">
-            <label class="w-50">
-                <span class="integration-label">
-                    Connected to Inventory Item
-                </span>
-            </label>
-            <div class="w-50 input-group justify-content-between">
-                <div>
-                    <a class="click-link connected-inventory p-1" (click)="goToInventory(connectedItem)">
-                        <span class="">{{connectedItem.name}}</span>
-                    </a>
+    <ng-container *ngIf="connectedItems && connectedItems.length > 0">
+        <div *ngFor="let item of connectedItems" (click)="focusField('connected-owner-inventory')" class="p-2 px-3">
+            <div class="d-flex flex-row">
+                <label class="w-50">
+                    <span class="integration-label">
+                        Connected to Inventory Item
+                    </span>
+                </label>
+                <div class="w-50 input-group justify-content-between">
+                    <div>
+                        <a class="click-link connected-inventory p-1" (click)="goToInventory(item)">
+                            <span class="">{{item.name}}</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </ng-container>
 
-
-    <form *ngIf="!connectedInventoryData.isConnected && selectOptions && selectOptions.inventoryOptions"
+    <form (click)="focusField('select-item')" *ngIf="!connectedInventoryData.isConnected && selectOptions && selectOptions.inventoryOptions"
         [formGroup]="inventoryIntegrationForm">
         <label for="selectedInventoryId" class="integration-label">{{selectOptions.label}}</label>
         <div class="form-group">
@@ -54,8 +54,7 @@
         <div class="form-group">
             <label for="selectedCatalogItem">Select {{selectOptions.itemName}} Item</label>
             <select class="form-control" name="selectedCatalogItem" id="selectedCatalogItem"
-                formControlName="selectedCatalogItem" (change)="setSelectedCatalogItem()"
-                (focus)="focusField('selectedCatalogItem')">
+                formControlName="selectedCatalogItem" (change)="setSelectedCatalogItem()">
                 <option selected [ngValue]="null">Select {{selectOptions.itemName}} Item</option>
                 <optgroup *ngFor="let option of selectOptions.catalogItemOptions" label="{{option.department}}">
                     <option *ngFor="let item of option.catalog" [ngValue]="item">{{item.name}}</option>

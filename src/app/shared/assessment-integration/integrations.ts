@@ -22,7 +22,7 @@ export interface CatalogItemOptions {
 
 export interface IntegrationState {
   status: IntegrationStatusString,
-  msgHTML: string,
+  msgHTML?: string,
 }
 
 export interface ConnectedItem {
@@ -50,5 +50,5 @@ export interface AssessmentOption {
 }
 
 
-type IntegrationStatusString = 'success' | 'settings-differ' | 'invalid' | 'fail';
+type IntegrationStatusString = 'success' | 'settings-differ' | 'connected-items';
 type InventoryType = 'motor' | 'pump';

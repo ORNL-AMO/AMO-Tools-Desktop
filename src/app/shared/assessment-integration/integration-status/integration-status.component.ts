@@ -27,9 +27,9 @@ export class IntegrationStateComponent {
   }
 
   showStatus() {
-    if (this.integrationState && this.integrationState.msgHTML) {
+    if (this.integrationState) {
       this.showIntegrationStatus = true;
-      if (this.integrationState.status !== 'settings-differ') {
+      if (this.integrationState.status === 'success') {
         setTimeout(() => {
           this.showIntegrationStatus = false;
         }, 5000);
@@ -49,7 +49,7 @@ export class IntegrationStateComponent {
   }
 
   clearIntegrationState() {
-    this.integrationStateService.resetIntegrationState();
+    this.integrationStateService.integrationState.next(this.integrationStateService.getEmptyIntegrationState());
     this.showIntegrationStatus = false;
   }
 }

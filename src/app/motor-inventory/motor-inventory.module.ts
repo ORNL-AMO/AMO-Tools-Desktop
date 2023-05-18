@@ -21,6 +21,7 @@ import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { ConvertMotorInventoryService } from './convert-motor-inventory.service';
+import { AssessmentIntegrationModule } from '../shared/assessment-integration/assessment-integration.module';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { ConvertMotorInventoryService } from './convert-motor-inventory.service'
     HelpPanelModule,
     BatchAnalysisModule,
     ConfirmDeleteModalModule,
-    RouterModule
+    RouterModule,
+    AssessmentIntegrationModule
   ],
   providers: [
     MotorInventoryService,

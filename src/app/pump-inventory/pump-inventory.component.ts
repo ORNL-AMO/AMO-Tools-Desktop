@@ -8,6 +8,7 @@ import { Settings } from '../shared/models/settings';
 import { PumpCatalogService } from './pump-inventory-setup/pump-catalog/pump-catalog.service';
 import { PumpInventoryData, PumpInventoryDepartment, PumpItem } from './pump-inventory';
 import { PumpInventoryService } from './pump-inventory.service';
+import { MotorIntegrationService } from '../shared/assessment-integration/motor-integration.service';
 
 declare const packageJson;
 
@@ -42,6 +43,7 @@ export class PumpInventoryComponent implements OnInit {
     private settingsDbService: SettingsDbService, 
     private inventoryDbService: InventoryDbService,
     private pumpCatalogService: PumpCatalogService, 
+    private motorIntegrationService: MotorIntegrationService,
     private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -50,6 +52,7 @@ export class PumpInventoryComponent implements OnInit {
       this.pumpInventoryItem = this.inventoryDbService.getById(tmpItemId);
       let settings: Settings = this.settingsDbService.getByInventoryId(this.pumpInventoryItem);
       this.pumpInventoryService.settings.next(settings);
+      this.pumpInventoryItem.pumpInventoryData.hasConnectedItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
       this.pumpInventoryService.pumpInventoryData.next(this.pumpInventoryItem.pumpInventoryData);
       this.pumpInventoryService.currentInventoryId = tmpItemId;
 
@@ -110,6 +113,7 @@ export class PumpInventoryComponent implements OnInit {
     this.pumpInventoryItem.modifiedDate = new Date();
     this.pumpInventoryItem.appVersion = packageJson.version;
     this.pumpInventoryItem.pumpInventoryData = inventoryData;
+    this.pumpInventoryItem.pumpInventoryData.hasConnectedItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.pumpInventoryItem));
     this.inventoryDbService.setAll(updatedInventoryItems);
   }
@@ -141,6 +145,7 @@ export class PumpInventoryComponent implements OnInit {
     let department: PumpInventoryDepartment = this.pumpInventoryItem.pumpInventoryData.departments.find(department => { return department.id == departmentId });
     let selectedItem: PumpItem = department.catalog.find(pumpItem => { return pumpItem.id ==  itemId});
     this.pumpCatalogService.selectedPumpItem.next(selectedItem);
+    this.pumpInventoryService.mainTab.next('setup');
     this.pumpInventoryService.setupTab.next('pump-catalog');
   }
 }

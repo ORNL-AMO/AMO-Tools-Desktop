@@ -4,8 +4,9 @@
     Nameplate Data
 </label>
 
-<app-inventory-integration *ngIf="connectedItem"
-    [connectedItem]="connectedItem"
+<app-inventory-integration *ngIf="displayForm && connectedItems"
+    [connectedItems]="connectedItems"
+    (focusedField)="focusField($event, true)"
     [selectOptions]="inventorySelectOptions">
 </app-inventory-integration>
 

@@ -4,6 +4,7 @@ import { OperatingHours } from "../shared/models/operations";
 
 export interface MotorInventoryData {
   co2SavingsData?: Co2SavingsData,
+  hasConnectedItems?: boolean,
   existingDataUnits?: string,
   departments: Array<MotorInventoryDepartment>,
   displayOptions: MotorPropertyDisplayOptions
@@ -25,7 +26,7 @@ export interface MotorItem {
   name: string,
   description: string,
   voltageLimit?: number,
-  connectedItem?: ConnectedItem,
+  connectedItems?: Array<ConnectedItem>,
   batchAnalysisData: BatchAnalysisData,
   loadCharacteristicData: LoadCharacteristicData,
   manualSpecificationData: ManualSpecificationData,

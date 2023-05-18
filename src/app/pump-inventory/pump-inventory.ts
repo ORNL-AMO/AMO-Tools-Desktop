@@ -5,7 +5,8 @@ import { OperatingHours } from "../shared/models/operations";
 export interface PumpInventoryData {
   co2SavingsData?: Co2SavingsData,
   departments: Array<PumpInventoryDepartment>,
-  displayOptions: PumpPropertyDisplayOptions
+  displayOptions: PumpPropertyDisplayOptions,
+  hasConnectedItems?: boolean,
   existingDataUnits?: string
 }
 

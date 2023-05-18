@@ -55,7 +55,7 @@ export class PumpInventoryService {
     let pumpItemIndex: number = pumpInventoryData.departments[selectedDepartmentIndex].catalog.findIndex(pumpItem => {return pumpItem.id == selectedPump.id});
     pumpInventoryData.departments[selectedDepartmentIndex].catalog.splice(pumpItemIndex, 1);
     if (selectedPump.connectedItem) {
-     await this.motorIntegrationService.removeMotorConnectedItem(selectedPump.connectedItem);
+     await this.motorIntegrationService.removeMotorConnectedItem(selectedPump);
     }
     this.pumpInventoryData.next(pumpInventoryData);
   }

@@ -11,6 +11,7 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { ConvertMotorInventoryService } from '../../convert-motor-inventory.service';
 import * as _ from 'lodash';
+import { IntegrationStateService } from '../../../shared/assessment-integration/integration-state.service';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class PlantSetupComponent implements OnInit {
 
   constructor(private settingsDbService: SettingsDbService, private settingsService: SettingsService, private convertMotorInventoryService: ConvertMotorInventoryService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService,
+    private integrationStateService: IntegrationStateService,
     private motorInventoryService: MotorInventoryService,  ) { }
 
   ngOnInit(): void {
@@ -39,6 +41,9 @@ export class PlantSetupComponent implements OnInit {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
     this.motorInventoryDataSub = this.motorInventoryService.motorInventoryData.subscribe(inventoryData => {
       this.motorInventoryData = inventoryData;
+      if (this.motorInventoryData.hasConnectedItems) {
+        this.integrationStateService.integrationState.next({status: 'connected-items'});
+      }
     });    
     
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);

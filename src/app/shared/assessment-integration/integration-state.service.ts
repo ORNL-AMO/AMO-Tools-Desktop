@@ -8,10 +8,7 @@ export class IntegrationStateService {
   connectedInventoryData: BehaviorSubject<ConnectedInventoryData>;
 
   constructor() { 
-    this.integrationState = new BehaviorSubject<IntegrationState>({
-      status: undefined,
-      msgHTML: undefined,
-    });
+    this.integrationState = new BehaviorSubject<IntegrationState>(this.getEmptyIntegrationState());
     this.connectedInventoryData = new BehaviorSubject(this.getEmptyConnectedInventoryData());
   }
 
@@ -21,12 +18,11 @@ export class IntegrationStateService {
     }
   }
 
-
-  resetIntegrationState() {
-    let integrationState: IntegrationState = this.integrationState.getValue();
-    integrationState.msgHTML = undefined;
-    integrationState.status = undefined;
-    this.integrationState.next(integrationState);
+  getEmptyIntegrationState(): IntegrationState {
+    return {
+      msgHTML: undefined,
+      status: undefined
+    }
   }
   
 }
