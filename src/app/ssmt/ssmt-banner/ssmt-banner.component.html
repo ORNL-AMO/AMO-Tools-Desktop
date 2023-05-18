@@ -74,11 +74,10 @@
 			<a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.ssmt.setupDone}"
 				(click)="changeTab('assessment')">Assessment</a>
 		</div>
-    <!-- Hiding Diagram in Mobile UI -->
-		<!-- <div class="nav-item">
+		<div class="nav-item">
 			<a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !assessment.ssmt.setupDone}"
 				(click)="changeTab('diagram')">Diagram</a>
-		</div> -->
+		</div>
 		<div class="nav-item">
 			<a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !assessment.ssmt.setupDone}"
 				(click)="changeTab('report')">Report</a>

@@ -111,10 +111,9 @@
         <div (click)="setTab('losses')" [ngClass]="{'active': currentTab == 'losses', 'collapse': tabsCollapsed}">
           <a>Losses</a>
         </div>
-        <!-- hiding Diagram in Mobile UI -->
-        <!-- <div (click)="setTab('diagram')" [ngClass]="{'active': currentTab == 'diagram', 'collapse': tabsCollapsed}">
+        <div (click)="setTab('diagram')" [ngClass]="{'active': currentTab == 'diagram', 'collapse': tabsCollapsed}">
           <a>Diagram</a>
-        </div> -->
+        </div>
         <div (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs', 'collapse': tabsCollapsed}">
           <a>Report Graphs</a>
         </div>
@@ -166,6 +165,12 @@
       <app-report-diagram [baselineOutput]="baselineOutput" [inputData]="baselineInputData" [settings]="settings"
         [modificationOutputs]="modificationOutputs" [assessment]="assessment" [modificationInputData]="modificationInputData">
       </app-report-diagram>
+      <div class="d-flex d-md-none">
+        <span class="alert-warning pull-right small">
+          Steam Diagram is unavailable to view on your current device. 
+          Please export the assessment and upload to a desktop or a device with a screen size of at least 768px to view the Steam Diagram.
+        </span>          
+      </div>
     </div>
     <div class="results scroll-item print-height"
       *ngIf="((currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && printOptions.printReportGraphs)) && dataCalculated"
