@@ -124,28 +124,26 @@ export class DepartmentCatalogTableComponent implements OnInit {
   }
 
   openConfirmDeleteModal(motorItem: MotorItem){
-    this.confirmDeleteMotorInventoryData = {
-      modalTitle: 'Delete Compressor Inventory Item',
-      confirmMessage: `Are you sure you want to delete '${motorItem.name}'?`
+    if (this.tableDataItems.length > 1) {
+      this.confirmDeleteMotorInventoryData = {
+        modalTitle: 'Delete Compressor Inventory Item',
+        confirmMessage: `Are you sure you want to delete '${motorItem.name}'?`
+      }
+      this.showConfirmDeleteModal = true;
+      this.deleteSelectedId = motorItem.id;
+      this.motorItemToDelete = motorItem;
+      this.motorInventoryService.modalOpen.next(true);
     }
-    this.showConfirmDeleteModal = true;
-    this.deleteSelectedId = motorItem.id;
-    this.motorItemToDelete = motorItem;
-    this.motorInventoryService.modalOpen.next(true);
   }
 
   onConfirmDeleteClose(deleteInventoryItem: boolean) {
     if (deleteInventoryItem) {
-      this.deleteItem();
+      this.motorInventoryService.deleteMotorItem(this.motorItemToDelete);
+      let selectedDepartmentId: string = this.motorCatalogService.selectedDepartmentId.getValue();
+      this.motorCatalogService.selectedDepartmentId.next(selectedDepartmentId);
     }
     this.showConfirmDeleteModal = false;
     this.motorInventoryService.modalOpen.next(false);
-  }
-
-  deleteItem() {
-
-    this.motorInventoryService.deleteMotorItem(this.motorItemToDelete);
-    
   }
 
 }

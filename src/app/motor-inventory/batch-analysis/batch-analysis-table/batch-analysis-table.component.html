@@ -200,7 +200,9 @@
                 </td>
                 <td>
                     <span *ngIf="batchAnalysisDataItem.motorSize">
-                        {{batchAnalysisDataItem.motorSize}} hp
+                        {{batchAnalysisDataItem.motorSize}} 
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
+                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
                     </span>
                     <span *ngIf="!batchAnalysisDataItem.motorSize">
                         &mdash;

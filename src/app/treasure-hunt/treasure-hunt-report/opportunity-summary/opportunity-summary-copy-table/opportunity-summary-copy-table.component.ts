@@ -241,8 +241,8 @@ export class OpportunitySummaryCopyTableComponent implements OnInit {
     headerRow.eachCell(cell => {
       cell.style = this.setHeaderStyle();
     });
-    table1Rows.forEach(d => {
-      worksheet1.addRow(Object.values(d));
+    table1Rows.forEach(row => {
+      worksheet1.addRow(Object.values(row));
     });
 
     const imageId = workbook.addImage({
