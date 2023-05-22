@@ -34,6 +34,16 @@ export class SsmtService {
   currCurrency: string = "$";
 
   iterationCount: number;
+
+   //system setup tabs
+   stepTabs: Array<string> = [
+    'system-basics',
+    'operations',
+    'boiler',
+    'header',
+    'turbine'
+  ];
+
   constructor(private steamService: SteamService, 
     private assessmentCo2SavingsService: AssessmentCo2SavingsService, private convertSteamService: ConvertSteamService, private boilerService: BoilerService, private headerService: HeaderService,
     private turbineService: TurbineService, private operationsService: OperationsService, private convertUnitsService: ConvertUnitsService) {
@@ -372,5 +382,27 @@ export class SsmtService {
       operationsValid: isOperationsValid
     };
   }
+
+  continue() {
+    let tmpStepTab: string = this.stepTab.getValue();
+    if (tmpStepTab === 'turbine') {
+      this.mainTab.next('assessment');
+    } else {
+      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
+      let nextTab: string = this.stepTabs[assessmentTabIndex + 1];
+      this.stepTab.next(nextTab);
+    }
+  }
+
+  back() {
+    let tmpStepTab: string = this.stepTab.getValue();
+    if (tmpStepTab !== 'system-basics' && this.mainTab.getValue() == 'system-setup') {
+      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
+      let nextTab: string = this.stepTabs[assessmentTabIndex - 1];
+      this.stepTab.next(nextTab);
+    } else if (this.mainTab.getValue() == 'assessment') {
+      this.mainTab.next('system-setup');
+    }
+  }  
 
 }
