@@ -31,7 +31,7 @@ export interface ConnectedItem {
   inventoryId: number,
   inventoryName?: string,
   departmentId: string,
-  inventoryType: InventoryType,
+  inventoryType?: InventoryType,
 }
 
 export interface ConnectedInventoryData {
@@ -50,5 +50,5 @@ export interface AssessmentOption {
 }
 
 
-type IntegrationStatusString = 'success' | 'settings-differ' | 'connected-items';
-type InventoryType = 'motor' | 'pump';
+export type IntegrationStatusString = 'success' | 'settings-differ' | 'connected-items';
+export type InventoryType = 'motor' | 'pump';

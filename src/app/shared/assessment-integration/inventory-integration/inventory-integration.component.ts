@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { InventorySelectOptions, ConnectedInventoryData, ConnectedItem } from '../integrations';
+import { InventorySelectOptions, ConnectedInventoryData, ConnectedItem, InventoryType } from '../integrations';
 import { IntegrationStateService } from '../integration-state.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -19,6 +19,9 @@ export class InventoryIntegrationComponent {
   selectOptions: InventorySelectOptions;
   @Input()
   connectedItems: Array<ConnectedItem>;
+  @Input()
+  connectedInventoryType: InventoryType;
+
   @Output('focusedField')
   focusedField = new EventEmitter();
 
@@ -121,7 +124,7 @@ export class InventoryIntegrationComponent {
       connectedItem: {
         id: selectedCatalogItem.id,
         name: selectedCatalogItem.name,
-        inventoryType: 'motor',
+        inventoryType: this.connectedInventoryType,
         inventoryId: this.inventoryIntegrationForm.controls.selectedInventoryId.value,
         departmentId: selectedCatalogItem.departmentId,
         inventoryName: this.selectOptions.inventoryOptions.find(option => option.id === selectedInventoryId).display,

@@ -6,6 +6,7 @@
 
 <app-inventory-integration *ngIf="displayForm && inventorySelectOptions" 
     (focusedField)="focusField($event, true)"
+    [connectedInventoryType]="'motor'"
     [selectOptions]="inventorySelectOptions">
 </app-inventory-integration>
 
