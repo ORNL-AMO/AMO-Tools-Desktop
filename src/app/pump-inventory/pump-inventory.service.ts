@@ -4,6 +4,7 @@ import { Settings } from '../shared/models/settings';
 import { FieldMeasurements, PumpInventoryData, PumpInventoryDepartment, PumpItem, PumpPropertyDisplayOptions } from './pump-inventory';
 import * as _ from 'lodash';
 import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
+import { MotorIntegrationService } from '../shared/assessment-integration/motor-integration.service';
 
 @Injectable()
 export class PumpInventoryService {
@@ -17,10 +18,11 @@ export class PumpInventoryService {
   modalOpen: BehaviorSubject<boolean>;
   settings: BehaviorSubject<Settings>;
   helpPanelTab: BehaviorSubject<string>;
+  currentInventoryId: number;
 
   filterInventorySummary: BehaviorSubject<FilterInventorySummary>;
 
-  constructor(private helperFunctionsService: HelperFunctionsService) { 
+  constructor(private helperFunctionsService: HelperFunctionsService, private motorIntegrationService: MotorIntegrationService) { 
     this.setupTab = new BehaviorSubject<string>('plant-setup');
     this.mainTab = new BehaviorSubject<string>('setup');
     let inventoryData: PumpInventoryData = this.initInventoryData();
@@ -47,11 +49,14 @@ export class PumpInventoryService {
     this.pumpInventoryData.next(pumpInventoryData);
   }
 
-  deletePumpItem(selectedPump: PumpItem) {
+  async deletePumpItem(selectedPump: PumpItem) {
     let pumpInventoryData: PumpInventoryData = this.pumpInventoryData.getValue();
     let selectedDepartmentIndex: number = pumpInventoryData.departments.findIndex(department => { return department.id == selectedPump.departmentId });
     let pumpItemIndex: number = pumpInventoryData.departments[selectedDepartmentIndex].catalog.findIndex(pumpItem => {return pumpItem.id == selectedPump.id});
     pumpInventoryData.departments[selectedDepartmentIndex].catalog.splice(pumpItemIndex, 1);
+    if (selectedPump.connectedItem) {
+     await this.motorIntegrationService.removeMotorConnectedItem(selectedPump);
+    }
     this.pumpInventoryData.next(pumpInventoryData);
   }
 

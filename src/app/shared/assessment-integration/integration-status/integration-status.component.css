@@ -1,0 +1,20 @@
+.integration-status {
+    margin: .5rem auto .25rem auto;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+}
+
+.fa.fa-times {
+    font-size: 20px !important;
+}
+
+.message {
+    font-size: 16px;
+}
+
+.btn-primary{
+    background: #2980b9;
+    color: white;
+}

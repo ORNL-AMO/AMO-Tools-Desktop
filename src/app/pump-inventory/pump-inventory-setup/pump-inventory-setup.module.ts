@@ -12,6 +12,7 @@ import { AssessmentCo2SavingsModule } from '../../shared/assessment-co2-savings/
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SettingsModule } from '../../settings/settings.module';
+import { AssessmentIntegrationModule } from '../../shared/assessment-integration/assessment-integration.module';
 
 
 
@@ -32,7 +33,8 @@ import { SettingsModule } from '../../settings/settings.module';
     ReactiveFormsModule,
     SharedPipesModule,
     AssessmentCo2SavingsModule,
-    ConfirmDeleteModalModule
+    ConfirmDeleteModalModule,
+    AssessmentIntegrationModule
   ], 
   exports: [PumpInventorySetupComponent]
 })

@@ -1,10 +1,12 @@
 import { Co2SavingsData } from "../calculator/utilities/co2-savings/co2-savings.service";
+import { ConnectedInventoryData, ConnectedItem } from "../shared/assessment-integration/integrations";
 import { OperatingHours } from "../shared/models/operations";
 
 export interface PumpInventoryData {
   co2SavingsData?: Co2SavingsData,
   departments: Array<PumpInventoryDepartment>,
-  displayOptions: PumpPropertyDisplayOptions
+  displayOptions: PumpPropertyDisplayOptions,
+  hasConnectedItems?: boolean,
   existingDataUnits?: string
 }
 
@@ -18,6 +20,7 @@ export interface PumpInventoryDepartment {
 
 export interface PumpItem {
   id: string,
+  connectedItem?: ConnectedItem,
   suiteDbItemId?: number,
   departmentId: string,
   name: string,

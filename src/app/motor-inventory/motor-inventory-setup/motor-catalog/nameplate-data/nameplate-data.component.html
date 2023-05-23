@@ -3,6 +3,14 @@
     <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
     Nameplate Data
 </label>
+
+<app-inventory-integration *ngIf="displayForm && connectedItems"
+    [connectedItems]="connectedItems"
+    (focusedField)="focusField($event, true)"
+    [selectOptions]="inventorySelectOptions">
+</app-inventory-integration>
+
+
 <form *ngIf="displayForm" class="p-1" [formGroup]="motorForm">
     <!--Efficiency type: efficiencyClass-->
     <div class="form-group">

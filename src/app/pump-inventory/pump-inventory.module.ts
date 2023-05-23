@@ -22,6 +22,7 @@ import { PumpTypesDropdownComponent } from './pump-inventory-banner/summary-filt
 import { RatedPowerDropdownComponent } from './pump-inventory-banner/summary-filter/rated-power-dropdown/rated-power-dropdown.component';
 import { StatusDropdownComponent } from './pump-inventory-banner/summary-filter/status-dropdown/status-dropdown.component';
 import { SelectedOptionsComponent } from './pump-inventory-banner/summary-filter/selected-options/selected-options.component';
+import { AssessmentIntegrationModule } from '../shared/assessment-integration/assessment-integration.module';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { SelectedOptionsComponent } from './pump-inventory-banner/summary-filter
     AssessmentCo2SavingsModule,
     HelpPanelModule,
     ConfirmDeleteModalModule,
-    PumpInventorySummaryModule
+    PumpInventorySummaryModule,
+    AssessmentIntegrationModule
   ],
   providers: [
     PumpInventoryService,

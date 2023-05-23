@@ -15,6 +15,7 @@ import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { MotorInventoryService } from '../../../../motor-inventory/motor-inventory.service';
 import { PumpInventoryService } from '../../../../pump-inventory/pump-inventory.service';
+import { MotorIntegrationService } from '../../../../shared/assessment-integration/motor-integration.service';
 
 @Component({
   selector: 'app-inventory-item',
@@ -45,6 +46,7 @@ export class InventoryItemComponent implements OnInit {
     private directoryDbService: DirectoryDbService, 
     private settingsDbService: SettingsDbService,
     private motorInventoryService: MotorInventoryService,
+    private motorIntegrationService: MotorIntegrationService,
     private pumpInventoryService: PumpInventoryService) { }
 
   ngOnInit(): void {
@@ -154,6 +156,12 @@ export class InventoryItemComponent implements OnInit {
     let tmpSettings: Settings = this.settingsDbService.getByInventoryId(this.inventoryItem);
     let settingsCopy: Settings = JSON.parse(JSON.stringify(tmpSettings));
     delete settingsCopy.id;
+    if (inventoryCopy.motorInventoryData) {
+      this.motorIntegrationService.removeAllMotorConnectedItems(inventoryCopy);
+    } else if (inventoryCopy.pumpInventoryData) {
+      this.motorIntegrationService.removeAllPumpConnectedItems(inventoryCopy);
+    }
+    
     inventoryCopy.name = this.copyForm.controls.name.value;
     inventoryCopy.directoryId = this.copyForm.controls.directoryId.value;
 

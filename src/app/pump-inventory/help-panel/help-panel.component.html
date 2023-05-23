@@ -17,6 +17,11 @@
             <small class="text-muted">Select pump properties you want to track in this pump inventory.
             </small>
         </h5>
+
+        <app-integration-help 
+            *ngIf="focusedDataGroup == 'motor-integration'" 
+            [focusedField]="focusedField" 
+            [isMotorInventory]="true"></app-integration-help>
     </div>
     <div class="p-2 pt-3" *ngIf="setupTab == 'department-setup'">
         <h5>

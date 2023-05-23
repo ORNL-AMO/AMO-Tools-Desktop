@@ -11,6 +11,7 @@ import { PumpInventoryService } from '../../pump-inventory.service';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
 import * as _ from 'lodash';
 import { ConvertPumpInventoryService } from '../../convert-pump-inventory.service';
+import { IntegrationStateService } from '../../../shared/assessment-integration/integration-state.service';
 
 
 @Component({
@@ -35,6 +36,7 @@ export class PlantSetupComponent implements OnInit {
   constructor(private settingsDbService: SettingsDbService, private settingsService: SettingsService,
     private convertPumpInventoryService: ConvertPumpInventoryService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService,
+    private integrationStateService: IntegrationStateService,
     private pumpInventoryService: PumpInventoryService) { }
 
   ngOnInit(): void {
@@ -43,6 +45,9 @@ export class PlantSetupComponent implements OnInit {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
     this.pumpInventoryDataSub = this.pumpInventoryService.pumpInventoryData.subscribe(inventoryData => {
       this.pumpInventoryData = inventoryData;
+       if (this.pumpInventoryData.hasConnectedItems) {
+        this.integrationStateService.integrationState.next({status: 'connected-items'});
+      }
     });
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
 

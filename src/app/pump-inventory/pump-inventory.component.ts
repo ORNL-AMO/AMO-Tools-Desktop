@@ -1,13 +1,14 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, firstValueFrom } from 'rxjs';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { Settings } from '../shared/models/settings';
 import { PumpCatalogService } from './pump-inventory-setup/pump-catalog/pump-catalog.service';
-import { PumpInventoryData } from './pump-inventory';
+import { PumpInventoryData, PumpInventoryDepartment, PumpItem } from './pump-inventory';
 import { PumpInventoryService } from './pump-inventory.service';
+import { MotorIntegrationService } from '../shared/assessment-integration/motor-integration.service';
 
 declare const packageJson;
 
@@ -38,9 +39,11 @@ export class PumpInventoryComponent implements OnInit {
   pumpInventoryItem: InventoryItem;
   constructor(private pumpInventoryService: PumpInventoryService, 
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private settingsDbService: SettingsDbService, 
     private inventoryDbService: InventoryDbService,
     private pumpCatalogService: PumpCatalogService, 
+    private motorIntegrationService: MotorIntegrationService,
     private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -49,8 +52,18 @@ export class PumpInventoryComponent implements OnInit {
       this.pumpInventoryItem = this.inventoryDbService.getById(tmpItemId);
       let settings: Settings = this.settingsDbService.getByInventoryId(this.pumpInventoryItem);
       this.pumpInventoryService.settings.next(settings);
+      this.pumpInventoryItem.pumpInventoryData.hasConnectedItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
       this.pumpInventoryService.pumpInventoryData.next(this.pumpInventoryItem.pumpInventoryData);
+      this.pumpInventoryService.currentInventoryId = tmpItemId;
+
+      let departmentId = this.activatedRoute.snapshot.queryParamMap.get('departmentId');
+      let itemId = this.activatedRoute.snapshot.queryParamMap.get('itemId');
+      if (departmentId && itemId) {
+        this.redirectFromConnectedInventory(departmentId, itemId);
+      }
     });
+
+
     this.mainTabSub = this.pumpInventoryService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
@@ -100,6 +113,7 @@ export class PumpInventoryComponent implements OnInit {
     this.pumpInventoryItem.modifiedDate = new Date();
     this.pumpInventoryItem.appVersion = packageJson.version;
     this.pumpInventoryItem.pumpInventoryData = inventoryData;
+    this.pumpInventoryItem.pumpInventoryData.hasConnectedItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.pumpInventoryItem));
     this.inventoryDbService.setAll(updatedInventoryItems);
   }
@@ -124,5 +138,14 @@ export class PumpInventoryComponent implements OnInit {
     } else if (this.setupTab == 'pump-catalog') {
       this.pumpInventoryService.setupTab.next('pump-properties');
     }
+  }
+
+  redirectFromConnectedInventory(departmentId: string, itemId: string) {
+    this.pumpCatalogService.selectedDepartmentId.next(departmentId)
+    let department: PumpInventoryDepartment = this.pumpInventoryItem.pumpInventoryData.departments.find(department => { return department.id == departmentId });
+    let selectedItem: PumpItem = department.catalog.find(pumpItem => { return pumpItem.id ==  itemId});
+    this.pumpCatalogService.selectedPumpItem.next(selectedItem);
+    this.pumpInventoryService.mainTab.next('setup');
+    this.pumpInventoryService.setupTab.next('pump-catalog');
   }
 }

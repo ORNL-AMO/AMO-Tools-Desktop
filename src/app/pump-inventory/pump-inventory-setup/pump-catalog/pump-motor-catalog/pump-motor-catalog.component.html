@@ -3,6 +3,13 @@
     <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
     Motor
 </label>
+
+<app-inventory-integration *ngIf="displayForm && inventorySelectOptions" 
+    (focusedField)="focusField($event, true)"
+    [connectedInventoryType]="'motor'"
+    [selectOptions]="inventorySelectOptions">
+</app-inventory-integration>
+
 <form *ngIf="displayForm" class="p-1" #formElement [formGroup]="form">
     <div class="form-group" *ngIf="displayOptions.lineFrequency">
         <label for="lineFrequency">Line Frequency</label>
@@ -51,7 +58,7 @@
     </div>
 
     <div class="form-group" *ngIf="displayOptions.motorFullLoadAmps">
-        <label for="motorFullLoadAmps">Full Load Amps</label>
+        <label for="motorFullLoadAmps">Full-Load Amps</label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('motorFullLoadAmps')" (input)="save()"
                 formControlName="motorFullLoadAmps" id="motorFullLoadAmps">
