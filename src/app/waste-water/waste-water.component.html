@@ -4,8 +4,8 @@
     <app-waste-water-banner [assessment]="assessment"></app-waste-water-banner>
   </div>
   <!--end header-->
-  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
-    <div class="w-50 panel-column modification scroll-item"
+  <div *ngIf="mainTab == 'system-setup'" class="assessment-container tab-content">
+    <div class="assessment-panel-container lookup-form modification scroll-item"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
       [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="setupTab == 'system-basics'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
@@ -17,7 +17,7 @@
       <app-aerator-performance-form *ngIf="setupTab == 'aerator-performance'" [inSetup]="true" [selected]="true">
       </app-aerator-performance-form>
     </div>
-    <div class="w-50">
+    <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}">
       <app-results-panel></app-results-panel>
     </div>
   </div>

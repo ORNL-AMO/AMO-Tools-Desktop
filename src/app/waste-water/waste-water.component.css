@@ -10,3 +10,42 @@
 .modal-open {
     z-index: initial !important;
 }
+
+.btn-sm.active{
+    background-color: #003087;
+}
+
+.waste-water .assessment-panel-container::-webkit-scrollbar-thumb{
+    background-color: #003087;
+}
+
+/* Screens above  1024 */
+.assessment-container {
+    display: flex;
+    height: 100%;
+}
+
+.assessment-panel-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+ /* Screens below 1024 */
+@media screen and (max-width: 1024px) {
+    .assessment-container {
+        display: block;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .assessment-panel-container {
+        display: block;
+        width: 100%;
+    }
+
+    .lookup-form {
+        height: 100%;
+    }
+
+}
