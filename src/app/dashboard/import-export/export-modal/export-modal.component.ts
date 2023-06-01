@@ -80,11 +80,6 @@ export class ExportModalComponent implements OnInit {
   }
 
   buildExportJSON() {
-    if (this.noDirectoryAssessments.length == 1)
-    {
-      let assessmentName: string = this.noDirectoryAssessments[0].assessment.name;
-      this.exportName = assessmentName;
-    }
     this.importExportService.downloadData(this.exportData, this.exportName);
     this.hideExportModal();
   }
