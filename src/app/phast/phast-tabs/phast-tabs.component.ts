@@ -28,6 +28,7 @@ export class PhastTabsComponent implements OnInit {
 
   specTabSub: Subscription;
   currentTabSub: Subscription;
+  canContinue: boolean = true;
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
@@ -103,4 +104,42 @@ export class PhastTabsComponent implements OnInit {
     
   }
 
+  getCanContinue() {
+    if(this.currentTab.step == 1){
+      if (this.tab1Status == 'input-error') {
+        this.canContinue = false;
+      } else if (this.tab1Status == 'missing-data') {
+        this.canContinue = false;
+      } else if (this.tab1Status == 'success') {
+        this.canContinue = true;
+      }
+    } else if(this.currentTab.step == 2){
+      if (this.tab2Status == 'input-error') {
+        this.canContinue = false;
+      } else if (this.tab2Status == 'missing-data') {
+        this.canContinue = false;
+      } else if (this.tab2Status == 'success') {
+        this.canContinue = true;
+      }
+    } else {
+      this.canContinue = true;
+    }
+
+    return this.canContinue;
+  }
+
+  continue() {
+    this.phastService.continue();
+  }
+
+  back() {
+    this.phastService.back();
+  }
+
 }
+/*
+[ngClass]="{'active': currentTab.step == tab.step
+, 'input-error': (tab.step == 1 && tab1Status == 'input-error') || (tab.step == 2 && tab2Status == 'input-error')
+, 'missing-data': (tab.step == 1 && tab1Status == 'missing-data') || (tab.step == 2 && tab2Status == 'missing-data')
+, 'success': (tab.step == 1 && tab1Status == 'success') || (tab.step == 2 && tab2Status == 'success')}">
+*/ 

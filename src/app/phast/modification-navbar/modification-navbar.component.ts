@@ -19,6 +19,7 @@ export class ModificationNavbarComponent implements OnInit {
  // updateTabsSubscription: Subscription;
   badges: Array<string>;
   assessmentTab: string;
+  tabsCollapsed: boolean = true;
   constructor(private phastCompareService: PhastCompareService, private cd: ChangeDetectorRef, private lossesService: LossesService, private phastService: PhastService) { }
 
   ngOnInit() {
@@ -45,6 +46,7 @@ export class ModificationNavbarComponent implements OnInit {
 
   selectModification() {
     this.lossesService.openModificationModal.next(true);
+    this.collapseTabs();
   }
 
   // getBadges() {
@@ -58,5 +60,10 @@ export class ModificationNavbarComponent implements OnInit {
 
   changeAssessmentTab(str: string) {
     this.phastService.assessmentTab.next(str);
+    this.collapseTabs();
+  }
+
+  collapseTabs() {
+    this.tabsCollapsed = !this.tabsCollapsed;
   }
 }

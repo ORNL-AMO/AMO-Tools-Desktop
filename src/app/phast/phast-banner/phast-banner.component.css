@@ -14,3 +14,16 @@
 a.user-manual{
     color: white;
   }
+
+.btn.chevron-btn{
+    border: none !important;
+    width: 20px;
+    height: 28px;
+    color: white;
+    box-shadow: none !important;
+}
+
+.fa.fa-chevron-right,
+.fa.fa-chevron-left {
+    font-size: 28px;
+}

@@ -1,24 +1,50 @@
-<div class="row">
-    <div class="col-12 calc-col">
-      <ul class="tabs subtabs phast">
-        <li [ngClass]="{'active': calcTab == 'o2-enrichment'}">
-        <a (click)="changeCalcTab('o2-enrichment')">O<sub>2</sub> Enrichment</a>
-        </li><!--
-        --><li [ngClass]="{'active': calcTab == 'energy-equivalency'}">
-          <a (click)="changeCalcTab('energy-equivalency')">Energy Equivalency</a>
-        </li><!--
-        --><li [ngClass]="{'active': calcTab == 'energy-use'}">
-          <a (click)="changeCalcTab('energy-use')">Flow and Energy Used</a>
-        </li><!--
-        --><li [ngClass]="{'active': calcTab == 'pre-assessment'}">
-          <a (click)="changeCalcTab('pre-assessment')">Pre-assessment Screening</a>
-        </li><!--
-        --><li [ngClass]="{'active': calcTab == 'convert-units'}">
-          <a (click)="changeCalcTab('convert-units')">Unit Converter</a>
-          </li><!--
-        --><li [ngClass]="{'active': calcTab == 'operating-cost'}">
-          <a (click)="changeCalcTab('operating-cost')">Operating Costs</a>
-        </li>
-    </ul>
+<div class="d-none d-lg-block">
+  <ul class="tabs subtabs phast">
+    <li [ngClass]="{'active': calcTab == 'o2-enrichment'}">
+      <a (click)="changeCalcTab('o2-enrichment')">O<sub>2</sub> Enrichment</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'energy-equivalency'}">
+      <a (click)="changeCalcTab('energy-equivalency')">Energy Equivalency</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'energy-use'}">
+      <a (click)="changeCalcTab('energy-use')">Flow and Energy Used</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'pre-assessment'}">
+      <a (click)="changeCalcTab('pre-assessment')">Pre-assessment Screening</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'convert-units'}">
+      <a (click)="changeCalcTab('convert-units')">Unit Converter</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'operating-cost'}">
+      <a (click)="changeCalcTab('operating-cost')">Operating Costs</a>
+    </li>
+  </ul>
+</div>
+
+<div class="d-flex d-lg-none flex-column">
+  <div class="tabs subtabs phast">
+    <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseCalcTabs()">
+      <span *ngIf="!calcTabsCollapsed" class="fa fa-caret-up pr-2"></span>
+      <span *ngIf="calcTabsCollapsed" class="fa fa-caret-down pr-2"></span>
+      <span class="small text-uppercase">Menu</span>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'o2-enrichment', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('o2-enrichment')">O<sub>2</sub> Enrichment</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'energy-equivalency', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('energy-equivalency')">Energy Equivalency</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'energy-use', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('energy-use')">Flow and Energy Used</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'pre-assessment', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('pre-assessment')">Pre-assessment Screening</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'convert-units', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('convert-units')">Unit Converter</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'operating-cost', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('operating-cost')">Operating Costs</a>
+    </div>
   </div>
 </div>
