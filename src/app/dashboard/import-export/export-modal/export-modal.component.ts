@@ -21,6 +21,7 @@ export class ExportModalComponent implements OnInit {
   canExport: boolean = false;
   noDirectoryAssessments: Array<ImportExportAssessment>;
   exportName: string;
+  directory: Directory;
   constructor(private exportService: ExportService, private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
     private importExportService: ImportExportService) { }
 
@@ -30,6 +31,14 @@ export class ExportModalComponent implements OnInit {
     } else {
       this.exportDirectoryData();
     }
+    if (this.noDirectoryAssessments.length == 1 && this.exportData.directories.length == 0) {
+      let assessmentName: string = this.noDirectoryAssessments[0].assessment.name;
+      this.exportName = assessmentName;
+    } else {
+      let folderName: string = this.directory.name;
+      this.exportName = folderName;
+    }
+    
   }
 
   ngAfterViewInit() {
@@ -50,17 +59,17 @@ export class ExportModalComponent implements OnInit {
 
   exportAllData() {
     let directoryId: number = 1;
-    let directory: Directory = this.directoryDbService.getById(directoryId);
-    this.exportData = this.exportService.getSelected(directory, true);
+    this.directory = this.directoryDbService.getById(directoryId);
+    this.exportData = this.exportService.getSelected(this.directory, true);
     this.getNoDirectoryAssessments();
     this.canExport = this.importExportService.test(this.exportData);
   }
 
   exportDirectoryData() {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
-    let directory: Directory = this.directoryDbService.getById(directoryId);
-    let isSelectAllFolder: boolean = directory.selected;
-    this.exportData = this.exportService.getSelected(directory, isSelectAllFolder);
+    this.directory = this.directoryDbService.getById(directoryId);
+    let isSelectAllFolder: boolean = this.directory.selected;
+    this.exportData = this.exportService.getSelected(this.directory, isSelectAllFolder);
     this.getNoDirectoryAssessments();
     this.canExport = this.importExportService.test(this.exportData);
   }
@@ -80,13 +89,7 @@ export class ExportModalComponent implements OnInit {
   }
 
   buildExportJSON() {
-    if (this.noDirectoryAssessments.length == 1)
-    {
-      let assessmentName: string = this.noDirectoryAssessments[0].assessment.name;
-      this.exportName = assessmentName;
-    }
     this.importExportService.downloadData(this.exportData, this.exportName);
     this.hideExportModal();
   }
-
 }
