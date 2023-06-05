@@ -1,8 +1,8 @@
-<div class="d-flex modify-conditions">
-    <div class="flex-column w-50 modification panel-column scroll-item pb-3" [ngStyle]="{'height.px': containerHeight}">
+<div class="assessment-container tab-content modify-conditions">
+    <div class="assessment-panel-container lookup-form modification scroll-item pb-3" [ngStyle]="{'height.px': containerHeight}">
         <div class="header ml-2 mr-2">
             <h3>Auxiliary Equipment</h3>
-            <h5 class="pull-right panel-add">
+            <h5 class="d-flex justify-content-end panel-add">
                 <a class="small">
                     <span (click)="addEquipment()">+Add Equipment</span>
                 </a>
@@ -24,7 +24,7 @@
             </form>
         </div>
     </div>
-    <div class="w-50 d-flex flex-column help-panel pl-2 pr-2">
+    <div class="assessment-panel-container scroll-item">
         <div class="d-flex flex-wrap tabs primary">
             <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
                 <a class="border-left-0" (click)="setTab('results')">Results</a>
