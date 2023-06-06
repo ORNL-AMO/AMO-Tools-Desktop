@@ -38,7 +38,7 @@
 </div> -->
 
 <div class="navbar assessment-bar">
-  <div class="d-flex tabs subtabs phast mr-auto">
+  <div class="d-none d-md-flex subtabs phast mr-auto">
     <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
       <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
         <br>
@@ -53,7 +53,8 @@
     </div>
   </div>
 
-  <div class="d-flex align-items-center tabs subtabs phast ml-auto" [ngClass]="{'br-color-white': selectedModification}">
+  <div class="d-none d-md-flex align-items-center tabs subtabs phast ml-auto"
+    [ngClass]="{'br-color-white': selectedModification}">
     <div class="mod-name active border-right" *ngIf="selectedModification">
       <a>{{selectedModification.name}}
         <br>
@@ -71,3 +72,56 @@
         Scenarios</button>
     </div>
   </div>
+
+  <div *ngIf="!tabsCollapsed"
+    class="d-flex d-md-none flex-fill align-items-center justify-content-center tabs subtabs phast"
+    [ngClass]="{'collapse': tabsCollapsed}">
+    <div class="assessment-tab flex-fill"
+      [ngClass]="{'active': assessmentTab == 'explore-opportunities', 'collapse': tabsCollapsed}">
+      <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
+        <br>
+        <span class="help-text phast-view">Novice View</span>
+      </a>
+    </div>
+    <div class="assessment-tab flex-fill"
+      [ngClass]="{'active': assessmentTab == 'modify-conditions', 'collapse': tabsCollapsed}">
+      <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
+        <br>
+        <span class="help-text phast-view">Expert View</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="d-flex d-md-none flex-fill align-items-center justify-content-center tabs subtabs phast"
+    [ngClass]="{'br-color-white': selectedModification, 'collapse': tabsCollapsed}">
+    <div class="mod-name active border-right" *ngIf="selectedModification" [ngClass]="{'collapse': tabsCollapsed}">
+      <a>{{selectedModification.name}}
+        <br>
+        <span class="help-text psat-view">Selected Scenario</span>
+      </a>
+    </div>
+    <div class="mod-name border-right" *ngIf="!selectedModification" [ngClass]="{'collapse': tabsCollapsed}">
+      <a>&mdash; &mdash;
+        <br>
+        <span class="help-text psat-view">Selected Scenario</span>
+      </a>
+    </div>
+    <div class="pl-2 pr-2" [ngClass]="{'collapse': tabsCollapsed}">
+      <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add
+        Scenarios</button>
+    </div>
+    <div *ngIf="tabsCollapsed" class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseTabs()">
+      <span class="fa fa-caret-down pr-2"></span>
+      <span class="small text-uppercase">Menu</span>
+    </div>
+  </div>
+  <div *ngIf="!tabsCollapsed"
+    class="d-flex d-md-none flex-fill align-items-center justify-content-center tabs subtabs phast"
+    [ngClass]="{'br-color-white': selectedModification}">
+    <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseTabs()">
+      <span class="fa fa-caret-up pr-2"></span>
+      <span class="small text-uppercase">Menu</span>
+    </div>
+  </div>
+
+</div>
