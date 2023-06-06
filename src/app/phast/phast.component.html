@@ -27,7 +27,7 @@
       <app-help-panel [settingsTab]="specTab"></app-help-panel>
     </div>
   </div>
-  <div *ngIf="mainTab == 'system-setup' && stepTab.step != 1" class="tab-content">
+  <div *ngIf="mainTab == 'system-setup' && stepTab.step != 1" class="assessment-container tab-content">
     <!--Step: 4 Heat Balance-->
     <app-losses *ngIf="stepTab.step  == 2 && hasEgridDataInit" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="true"
       [containerHeight]="containerHeight"></app-losses>
@@ -43,7 +43,7 @@
   </div>
 
   <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" class="assessment-container tab-content" [ngStyle]="{'height.px': containerHeight}">
     <div *ngIf="assessmentTab == 'explore-opportunities'">
       <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings"
         [assessment]="assessment" (save)="saveDb()" [exploreModIndex]="modificationIndex" (emitAddNewMod)="addNewMod()">
