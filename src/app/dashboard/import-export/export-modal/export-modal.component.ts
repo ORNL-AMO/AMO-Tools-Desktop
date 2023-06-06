@@ -34,7 +34,13 @@ export class ExportModalComponent implements OnInit {
     if (this.noDirectoryAssessments.length == 1 && this.exportData.directories.length == 0) {
       let assessmentName: string = this.noDirectoryAssessments[0].assessment.name;
       this.exportName = assessmentName;
-    } else {
+    } else if (this.exportData.directories.length == 1) {
+    // } else if (this.exportService.getSelected(this.directory, false).) {
+      let folderName: string = this.exportData.directories[0].directory.name;
+      this.exportName = folderName;
+      // this.exportName = this.exportService.getSelected(this.exportData.directories[0].directory, false).directories[0].directory.name;
+    } 
+    else {
       let folderName: string = this.directory.name;
       this.exportName = folderName;
     }
