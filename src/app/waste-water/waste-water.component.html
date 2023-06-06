@@ -55,7 +55,7 @@
     [ngStyle]="{'height.px': containerHeight}" [assessment]="assessment"></app-waste-water-calculators>
 
   <!--footer-->
-  <div #footer id="wasteWaterFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup'">
+  <div #footer id="wasteWaterFooter" class="d-none d-lg-block footer hide-print" *ngIf="mainTab == 'system-setup'">
     <div class="pull-left">
       <button class="btn btn-default" [disabled]="setupTab == 'system-basics'" (click)="back()">Back</button>
     </div>
