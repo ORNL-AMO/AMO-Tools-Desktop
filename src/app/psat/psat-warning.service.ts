@@ -197,8 +197,8 @@ export class PsatWarningService {
   }
   //Motor Warning: voltageError
   checkMotorVoltage(psat: PSAT) {
-    if (psat.inputs.motor_rated_voltage < 208) {
-      return "Voltage should be greater than 208 V."
+    if (psat.inputs.motor_rated_voltage < 200) {
+      return "Voltage should be greater than 200 V."
     } else if (psat.inputs.motor_rated_voltage > 15180) {
       return "Voltage should be less than 15180 V.";
     } else {
