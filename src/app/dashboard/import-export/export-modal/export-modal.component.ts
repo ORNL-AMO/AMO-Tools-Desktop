@@ -71,11 +71,17 @@ export class ExportModalComponent implements OnInit {
     this.canExport = this.importExportService.test(this.exportData);
   }
 
+  // can change method name to be more specific since we're not ONLY exporting DIR data
   exportDirectoryData() {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     this.directory = this.directoryDbService.getById(directoryId);
     let isSelectAllFolder: boolean = this.directory.selected;
     this.exportData = this.exportService.getSelected(this.directory, isSelectAllFolder);
+
+    // if exportData has any directories
+    //    exportName is first directory name
+    // else if exportData has any assessments or inventories
+    //    export name is first of any selected (this is fine for our purposes)
     this.getNoDirectoryAssessments();
     this.canExport = this.importExportService.test(this.exportData);
   }
