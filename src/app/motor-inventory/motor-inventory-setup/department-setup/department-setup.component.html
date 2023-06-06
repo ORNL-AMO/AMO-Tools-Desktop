@@ -28,7 +28,7 @@
                     [(ngModel)]="department.description" (input)="save()"></textarea>
             </div>
         </form>
-        <a class="click-link danger pull-right small" (click)="deleteDepartment(department)"
+        <a class="click-link danger pull-right small" (click)="deleteDepartment(department.id)"
             *ngIf="motorInventoryData.departments.length != 1">Delete</a>
     </div>
 </div>
