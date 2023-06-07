@@ -31,20 +31,6 @@ export class ExportModalComponent implements OnInit {
     } else {
       this.exportDirectoryData();
     }
-    if (this.noDirectoryAssessments.length == 1 && this.exportData.directories.length == 0) {
-      let assessmentName: string = this.noDirectoryAssessments[0].assessment.name;
-      this.exportName = assessmentName;
-    } else if (this.exportData.directories.length == 1) {
-    // } else if (this.exportService.getSelected(this.directory, false).) {
-      let folderName: string = this.exportData.directories[0].directory.name;
-      this.exportName = folderName;
-      // this.exportName = this.exportService.getSelected(this.exportData.directories[0].directory, false).directories[0].directory.name;
-    } 
-    else {
-      let folderName: string = this.directory.name;
-      this.exportName = folderName;
-    }
-    
   }
 
   ngAfterViewInit() {
@@ -78,12 +64,25 @@ export class ExportModalComponent implements OnInit {
     let isSelectAllFolder: boolean = this.directory.selected;
     this.exportData = this.exportService.getSelected(this.directory, isSelectAllFolder);
 
-    // if exportData has any directories
-    //    exportName is first directory name
-    // else if exportData has any assessments or inventories
-    //    export name is first of any selected (this is fine for our purposes)
+
     this.getNoDirectoryAssessments();
     this.canExport = this.importExportService.test(this.exportData);
+
+    // if exportData has any directories
+    if (this.exportData.directories.length != 0) {
+      //    exportName is first directory name
+        this.exportName = this.exportData.directories[0].directory.name;
+      }
+      // else if exportData has any assessments or inventories
+      else if (this.noDirectoryAssessments.length != 0 || this.exportData.inventories.length!= 0) {
+      //    export name is first of any selected (this is fine for our purposes)
+        if (this.noDirectoryAssessments.length != 0) {
+          this.exportName = this.noDirectoryAssessments[0].assessment.name;
+        }
+        else {
+          this.exportName = this.exportData.inventories[0].inventoryItem.name;
+        }
+      }
   }
 
 
