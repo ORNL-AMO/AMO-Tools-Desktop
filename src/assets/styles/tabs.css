@@ -300,7 +300,7 @@ Tabs
       }
       .tabs.subtabs.fsat .active .step-number{
         background: #FFE400;
-        color: black;
+        color: white;
         transition: all .1s ease-in-out;
       }
 
