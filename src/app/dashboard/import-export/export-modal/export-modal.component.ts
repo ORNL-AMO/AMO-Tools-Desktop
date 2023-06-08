@@ -63,8 +63,18 @@ export class ExportModalComponent implements OnInit {
     this.exportData = this.exportService.getSelected(directory, isSelectAllFolder);
     this.getNoDirectoryAssessments();
     this.canExport = this.importExportService.test(this.exportData);
+    if (this.exportData.directories.length != 0) {
+        this.exportName = this.exportData.directories[0].directory.name;
+      }
+      else if (this.noDirectoryAssessments.length != 0 || this.exportData.inventories.length!= 0) {
+        if (this.noDirectoryAssessments.length != 0) {
+          this.exportName = this.noDirectoryAssessments[0].assessment.name;
+        }
+        else {
+          this.exportName = this.exportData.inventories[0].inventoryItem.name;
+        }
+      }
   }
-
 
   getNoDirectoryAssessments() {
     this.noDirectoryAssessments = new Array();
