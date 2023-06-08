@@ -21,7 +21,6 @@ export class ExportModalComponent implements OnInit {
   canExport: boolean = false;
   noDirectoryAssessments: Array<ImportExportAssessment>;
   exportName: string;
-  directory: Directory;
   constructor(private exportService: ExportService, private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
     private importExportService: ImportExportService) { }
 
@@ -51,31 +50,23 @@ export class ExportModalComponent implements OnInit {
 
   exportAllData() {
     let directoryId: number = 1;
-    this.directory = this.directoryDbService.getById(directoryId);
-    this.exportData = this.exportService.getSelected(this.directory, true);
+    let directory: Directory = this.directoryDbService.getById(directoryId);
+    this.exportData = this.exportService.getSelected(directory, true);
     this.getNoDirectoryAssessments();
     this.canExport = this.importExportService.test(this.exportData);
   }
 
-  // can change method name to be more specific since we're not ONLY exporting DIR data
   exportDirectoryData() {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
-    this.directory = this.directoryDbService.getById(directoryId);
-    let isSelectAllFolder: boolean = this.directory.selected;
-    this.exportData = this.exportService.getSelected(this.directory, isSelectAllFolder);
-
-
+    let directory: Directory = this.directoryDbService.getById(directoryId);
+    let isSelectAllFolder: boolean = directory.selected;
+    this.exportData = this.exportService.getSelected(directory, isSelectAllFolder);
     this.getNoDirectoryAssessments();
     this.canExport = this.importExportService.test(this.exportData);
-
-    // if exportData has any directories
     if (this.exportData.directories.length != 0) {
-      //    exportName is first directory name
         this.exportName = this.exportData.directories[0].directory.name;
       }
-      // else if exportData has any assessments or inventories
       else if (this.noDirectoryAssessments.length != 0 || this.exportData.inventories.length!= 0) {
-      //    export name is first of any selected (this is fine for our purposes)
         if (this.noDirectoryAssessments.length != 0) {
           this.exportName = this.noDirectoryAssessments[0].assessment.name;
         }
@@ -84,7 +75,6 @@ export class ExportModalComponent implements OnInit {
         }
       }
   }
-
 
   getNoDirectoryAssessments() {
     this.noDirectoryAssessments = new Array();
@@ -103,4 +93,5 @@ export class ExportModalComponent implements OnInit {
     this.importExportService.downloadData(this.exportData, this.exportName);
     this.hideExportModal();
   }
+
 }
