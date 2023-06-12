@@ -26,12 +26,21 @@ export class EnergyEquivalencyFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Input()
   settings: Settings;
-
+  energyEquivalencyElectric : EnergyEquivalencyElectric = {
+    fuelFiredEfficiency: 0,
+    electricallyHeatedEfficiency: 0,
+    fuelFiredHeatInput: 0,
+  };
+  energyEquivalencyFuel : EnergyEquivalencyFuel = {
+    fuelFiredEfficiency: 0,
+    electricallyHeatedEfficiency: 0,
+    electricalHeatInput: 0,
+  };
   constructor(private energyEquivalencyService: EnergyEquivalencyService) { }
 
   ngOnInit() {
-    // this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
-    // this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
+    this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
+    this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
   }
 
   calcElectric() {
