@@ -42,8 +42,8 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   options: Array<FlueGasMaterial>;
   calculationMethods: Array<string> = [
     'Excess Air',
-    'Oxygen in Flue Gas'
-  ];
+    'O' + '\u2082' + ' In Flue Gas'
+    ];
   calculationExcessAir: number = 0.0;
   calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
