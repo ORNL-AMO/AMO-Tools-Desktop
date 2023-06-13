@@ -3,7 +3,6 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { AssessmentService } from '../assessment.service';
 import { DashboardService } from '../dashboard.service';
 import { Settings } from '../../shared/models/settings';
-import { AssessmentSettingsComponent } from '../../settings/assessment-settings/assessment-settings.component';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -20,7 +19,7 @@ export class LandingScreenComponent implements OnInit {
     if (!environment.production)
     {
       let settings : Settings = this.settingsDbService.globalSettings;
-      if (!settings.disableTutorial)
+      if (settings.disableTutorial == undefined)
       {
         settings.disableTutorial = true;
         settings.disableDashboardTutorial = true;
@@ -30,7 +29,7 @@ export class LandingScreenComponent implements OnInit {
         settings.disableWasteWaterTutorial = true;
         settings.disableSteamTutorial = true;
         settings.disableMotorInventoryTutorial = true;
-        settings.disableTreasureHuntTutorial = false;
+        settings.disableTreasureHuntTutorial = true;
         settings.disableDataExplorerTutorial = true;
         settings.disableCompressedAirTutorial = true;
         this.settingsDbService.globalSettings = settings;
