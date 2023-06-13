@@ -39,8 +39,6 @@ export class LandingScreenComponent implements OnInit {
     if(!this.settingsDbService.globalSettings.disableTutorial){
       this.assessmentService.showTutorial.next('landing-screen');
     }
-
-
   }
 
   createAssessment(str?: string) {
