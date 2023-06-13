@@ -20,23 +20,28 @@ export class LandingScreenComponent implements OnInit {
     if (!environment.production)
     {
       let settings : Settings = this.settingsDbService.globalSettings;
-      settings.disableTutorial = true;
-      settings.disableDashboardTutorial = true;
-      settings.disablePsatTutorial = true;
-      settings.disableFansTutorial = true;
-      settings.disablePhastTutorial = true;
-      settings.disableWasteWaterTutorial = true;
-      settings.disableSteamTutorial = true;
-      settings.disableMotorInventoryTutorial = true;
-      settings.disableTreasureHuntTutorial = true;
-      settings.disableDataExplorerTutorial = true;
-      settings.disableCompressedAirTutorial = true;
-      this.settingsDbService.globalSettings = settings;
-      console.log('Running in development mode - turned off tutorials');
+      if (!settings.disableTutorial)
+      {
+        settings.disableTutorial = true;
+        settings.disableDashboardTutorial = true;
+        settings.disablePsatTutorial = true;
+        settings.disableFansTutorial = true;
+        settings.disablePhastTutorial = true;
+        settings.disableWasteWaterTutorial = true;
+        settings.disableSteamTutorial = true;
+        settings.disableMotorInventoryTutorial = true;
+        settings.disableTreasureHuntTutorial = false;
+        settings.disableDataExplorerTutorial = true;
+        settings.disableCompressedAirTutorial = true;
+        this.settingsDbService.globalSettings = settings;
+        console.log('Running in development mode - turned off tutorials');
+      }
     }
     if(!this.settingsDbService.globalSettings.disableTutorial){
       this.assessmentService.showTutorial.next('landing-screen');
     }
+
+
   }
 
   createAssessment(str?: string) {
