@@ -31,8 +31,8 @@
         <span class="step-name">{{currentTab.tabName}}</span>
       </a>
     </li>
-    <li class="page-item">
-      <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled': !canContinue}">
+    <li class="page-item" [ngClass]="{'disabled': !getCanContinue()}">
+      <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled': !getCanContinue()}">
         <span class="fa fa-chevron-right"></span></a>
     </li>
   </ul>

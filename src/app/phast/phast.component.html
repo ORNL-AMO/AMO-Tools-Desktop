@@ -3,7 +3,7 @@
   <div #header class="hide-print sticky-top">
     <app-phast-banner [assessment]="assessment" [settings]="settings"></app-phast-banner>
     <!-- phast-tabs = step tabs -->
-    <app-phast-tabs [tab1Status]="tab1Status" [tab2Status]="tab2Status" *ngIf="mainTab == 'system-setup'">
+    <app-phast-tabs [assessment]="assessment" [tab1Status]="tab1Status" [tab2Status]="tab2Status" *ngIf="mainTab == 'system-setup'">
     </app-phast-tabs>
     <app-modification-navbar *ngIf="mainTab == 'assessment'" [phast]="_phast"></app-modification-navbar>
     <!--losses-tabs are tabs for heat balance/assessment, both inSetup and !inSetup -->
