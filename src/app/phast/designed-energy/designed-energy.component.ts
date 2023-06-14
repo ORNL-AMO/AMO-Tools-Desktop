@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../../shared/models/phast/phast';
 import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam, DesignedEnergyResults, DesignedZone } from '../../shared/models/phast/designedEnergy';
@@ -22,6 +22,12 @@ export class DesignedEnergyComponent implements OnInit {
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getContainerHeight();
+  }
+
   results: DesignedEnergyResults = {
     designed: {
       hourlyEnergy: 0,
@@ -44,7 +50,8 @@ export class DesignedEnergyComponent implements OnInit {
 
   isModalOpenSub: Subscription;
   isModalOpen: boolean;
-  constructor(private designedEnergyService: DesignedEnergyService, private phastService: PhastService) { }
+  smallScreenTab: string = 'baseline';
+  constructor(private designedEnergyService: DesignedEnergyService, private phastService: PhastService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.isModalOpenSub = this.phastService.modalOpen.subscribe(val => {
@@ -54,11 +61,18 @@ export class DesignedEnergyComponent implements OnInit {
     if (!this.phast.designedEnergy) {
       this.initializeNew();
     }
-    this.calculate();
+    this.calculate();    
+    this.getContainerHeight();
   }
 
   ngOnDestroy() {
     this.isModalOpenSub.unsubscribe();
+  }
+  
+  ngOnChanges(changes: SimpleChanges) {    
+    if (changes.containerHeight && !changes.containerHeight.firstChange) {
+      this.getContainerHeight();
+    }
   }
 
   initializeNew() {
@@ -170,6 +184,17 @@ export class DesignedEnergyComponent implements OnInit {
       percentCapacityUsed: 0,
       operatingHours: 0
     };
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
+  getContainerHeight() {
+    if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+      this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      this.cd.detectChanges();
+    }
   }
 
 }

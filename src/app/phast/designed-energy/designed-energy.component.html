@@ -1,64 +1,81 @@
-<div class="assessment-container tab-content modify-conditions">
-    <div class="assessment-panel-container lookup-form modification scroll-item pb-3" [ngStyle]="{'height.px': containerHeight}"
-        [ngClass]="{'modal-open': isModalOpen}">
-        <div class="header ml-2 mr-2">
-            <h3>Designed Energy</h3>
-            <h5 class="d-flex justify-content-end panel-add">
-                <a class="small">
-                    <span (click)="addZone()">+Add Zone</span>
-                </a>
-            </h5>
+<div class="modify-conditions assessment-content-container phast">
+    <div class="assessment-small-tab-select nav-pills nav-fill" #smallTabSelect>
+        <div class="nav-item" (click)="setSmallScreenTab('baseline')"
+            [ngClass]="{'assessment-small-screen-active': smallScreenTab === 'baseline'}">
+            <a class="nav-link">Auxiliary Equipment</a>
         </div>
-        <div class="card-form d-flex flex-column mr-3 ml-3" *ngIf="phast.designedEnergy">
-            <div class="btn-col d-flex flex-column">
-                <div class="btn-group btn-group-sm align-self-center">
-                    <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setElectricity()"
-                        [ngClass]="{'active':  phast.designedEnergy.electricity == true}">Electric</button>
-                    <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFuel()"
-                        [ngClass]="{'active': phast.designedEnergy.fuel == true}">Fuel</button>
-                    <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setSteam()"
-                        [ngClass]="{'active':  phast.designedEnergy.steam == true}">Steam-based</button>
-                </div>
-                <div class="pl-1 pr-1 pb-1 text-center">
-                    <span class="text-muted small">Select multiple energy source types for hybrid
-                        units.</span>
-                </div>
-            </div>
-            <div class="zone" *ngFor="let zone of phast.designedEnergy.zones; let index=index;">
-                <div class="form-group form-section">
-                    <div class="input-group">
-                        <span class="input-group-addon units left" (click)="removeZone(index)">
-                            <i class="fa fa-times"></i></span>
-                        <input name="name" type="text" id="text" class="form-control" (focus)="setField('name')"
-                            [(ngModel)]="zone.name" (input)="calculate()" onfocus="this.select();" />
-                    </div>
-                </div>
-                <app-designed-energy-steam-form *ngIf="phast.designedEnergy.steam" [inputs]="zone.designedEnergySteam"
-                    (emitCalculate)="calculate()" (emitSave)="emitSave()" (emitChangeField)="setField($event, 'steam')"
-                    [settings]="settings"></app-designed-energy-steam-form>
-                <app-designed-energy-fuel-form *ngIf="phast.designedEnergy.fuel" [inputs]="zone.designedEnergyFuel"
-                    (emitCalculate)="calculate()" (emitSave)="emitSave()" (emitChangeField)="setField($event, 'fuel')"
-                    [settings]="settings">
-                </app-designed-energy-fuel-form>
-                <app-designed-energy-electricity-form *ngIf="phast.designedEnergy.electricity"
-                    [inputs]="zone.designedEnergyElectricity" (emitCalculate)="calculate()" (emitSave)="emitSave()"
-                    (emitChangeField)="setField($event, 'electricity')">
-                </app-designed-energy-electricity-form>
-            </div>
+        <div class="nav-item" (click)="setSmallScreenTab('details')"
+            [ngClass]="{'assessment-small-screen-active': smallScreenTab === 'details'}">
+            <a class="nav-link">Details</a>
         </div>
     </div>
-    <div class="assessment-panel-container scroll-item">
-        <div class="d-flex flex-wrap tabs primary">
-            <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
-                <a class="border-left-0" (click)="setTab('results')">Results</a>
+    <div class="assessment-panel-group" [ngStyle]="{'height.px': containerHeight}"
+        [ngClass]="{'modal-open': isModalOpen}">
+        <div class="modification baseline assessment-content-panel p-3"
+            [ngClass]="{'assessment-small-screen-tab': smallScreenTab === 'baseline'}"
+            [ngStyle]="{'height.px': containerHeight}">
+            <div class="header ml-2 mr-2">
+                <h3>Designed Energy</h3>
+                <h5 class="d-flex justify-content-end panel-add">
+                    <a class="small">
+                        <span (click)="addZone()">+Add Zone</span>
+                    </a>
+                </h5>
             </div>
-            <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
-                <a (click)="setTab('help')">Help</a>
+            <div class="card-form d-flex flex-column mr-3 ml-3" *ngIf="phast.designedEnergy">
+                <div class="btn-col d-flex flex-column">
+                    <div class="btn-group btn-group-sm align-self-center">
+                        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setElectricity()"
+                            [ngClass]="{'active':  phast.designedEnergy.electricity == true}">Electric</button>
+                        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFuel()"
+                            [ngClass]="{'active': phast.designedEnergy.fuel == true}">Fuel</button>
+                        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setSteam()"
+                            [ngClass]="{'active':  phast.designedEnergy.steam == true}">Steam-based</button>
+                    </div>
+                    <div class="pl-1 pr-1 pb-1 text-center">
+                        <span class="text-muted small">Select multiple energy source types for hybrid
+                            units.</span>
+                    </div>
+                </div>
+                <div class="zone" *ngFor="let zone of phast.designedEnergy.zones; let index=index;">
+                    <div class="form-group form-section">
+                        <div class="input-group">
+                            <span class="input-group-addon units left" (click)="removeZone(index)">
+                                <i class="fa fa-times"></i></span>
+                            <input name="name" type="text" id="text" class="form-control" (focus)="setField('name')"
+                                [(ngModel)]="zone.name" (input)="calculate()" onfocus="this.select();" />
+                        </div>
+                    </div>
+                    <app-designed-energy-steam-form *ngIf="phast.designedEnergy.steam"
+                        [inputs]="zone.designedEnergySteam" (emitCalculate)="calculate()" (emitSave)="emitSave()"
+                        (emitChangeField)="setField($event, 'steam')"
+                        [settings]="settings"></app-designed-energy-steam-form>
+                    <app-designed-energy-fuel-form *ngIf="phast.designedEnergy.fuel" [inputs]="zone.designedEnergyFuel"
+                        (emitCalculate)="calculate()" (emitSave)="emitSave()"
+                        (emitChangeField)="setField($event, 'fuel')" [settings]="settings">
+                    </app-designed-energy-fuel-form>
+                    <app-designed-energy-electricity-form *ngIf="phast.designedEnergy.electricity"
+                        [inputs]="zone.designedEnergyElectricity" (emitCalculate)="calculate()" (emitSave)="emitSave()"
+                        (emitChangeField)="setField($event, 'electricity')">
+                    </app-designed-energy-electricity-form>
+                </div>
             </div>
         </div>
-        <app-designed-energy-help *ngIf="tabSelect == 'help'" [currentField]="currentField">
-        </app-designed-energy-help>
-        <app-designed-energy-results *ngIf="tabSelect == 'results'" [results]="results" [settings]="settings">
-        </app-designed-energy-results>
+        <div class="assessment-content-panel modify-results-panel help-panel"
+            [ngClass]="{'assessment-small-screen-tab': smallScreenTab === 'details'}"
+            [ngStyle]="{'height.px': containerHeight}">
+            <div class="d-flex flex-wrap tabs primary">
+                <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+                    <a class="border-left-0" (click)="setTab('results')">Results</a>
+                </div>
+                <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+                    <a (click)="setTab('help')">Help</a>
+                </div>
+            </div>
+            <app-designed-energy-help *ngIf="tabSelect == 'help'" [currentField]="currentField">
+            </app-designed-energy-help>
+            <app-designed-energy-results *ngIf="tabSelect == 'results'" [results]="results" [settings]="settings">
+            </app-designed-energy-results>
+        </div>
     </div>
 </div>
