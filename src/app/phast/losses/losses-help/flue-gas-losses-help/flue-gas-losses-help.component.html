@@ -98,6 +98,26 @@
     </h6>
   </div>
 
+  <div class="my-2" *ngIf="currentField == 'ambientAirTemp' && settings.unitsOfMeasure == 'Imperial'">
+    <h6>
+      Ambient Air Temperature
+      <br>
+      <small class="text-muted">
+        Temperature of the air near the process heating unit. This is very likely to be less than 150&#8457;.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'ambientAirTemp' && settings.unitsOfMeasure == 'Metric'">
+    <h6>
+      Ambient Air Temperature
+      <br>
+      <small class="text-muted">
+        Temperature of the air near the process heating unit. This is very likely to be less than 65&#8451;.
+      </small>
+    </h6>
+  </div>
+
   <div class="my-2" *ngIf="currentField == 'oxygenCalculationMethod'">
     <h6>
       O<sub>2</sub> in Flue Gas / Excess Air Dropdown
@@ -116,7 +136,6 @@
       </small>
     </h6>
   </div>
-
 
   <div class="my-2" *ngIf="currentField == 'excessAirPercentage'">
     <h6>
