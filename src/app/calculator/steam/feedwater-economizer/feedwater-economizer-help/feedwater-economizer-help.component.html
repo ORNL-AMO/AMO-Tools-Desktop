@@ -94,23 +94,47 @@
       </div>
     </div>
 
-    <div class="my-2" *ngIf="currentField == 'fuelTemp'">
+    <div class="my-2" *ngIf="currentField == 'fuelTemp' && settings.unitsOfMeasure == 'Imperial'">
       <h6>
         Fuel Temperature
         <br>
         <small class="text-muted">
           Temperature of the incoming fuel. For solid fuels, this can often be estimated to be ambient temperature. For
-          gases, this can often be estimated to be slightly less than ambient temperature (about 10&#8457; or 5&#8451;)
+          gases, this can often be estimated to be slightly less than ambient temperature (about 10&#8457;)
           due to the
           Joule-Thompson Effect. It will be higher if preheating is used.
+          <br>
+          When preheating fuels, the maximum temperature depends on various various factors, 
+          including the specific fuel type, industry standards, safety considerations, and regulatory requirements. 
+          For natural gas, typically it is not recommended and the maximum temperature is 300&#8457;. 
+          For heavy fuels (fuel oil and residual oils) the max is near 400&#8457;. Other gaseous fuels, 
+          preheating is not recommended, with a maximum temperature of 150&#8457;.
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'fuelTemp' && settings.unitsOfMeasure == 'Metric'">
+      <h6>
+        Fuel Temperature
+        <br>
+        <small class="text-muted">
+          Temperature of the incoming fuel. For solid fuels, this can often be estimated to be ambient temperature. For
+          gases, this can often be estimated to be slightly less than ambient temperature (about 5&#8451;)
+          due to the
+          Joule-Thompson Effect. It will be higher if preheating is used.
+          <br>
+          When preheating fuels, the maximum temperature depends on various various factors, 
+          including the specific fuel type, industry standards, safety considerations, and regulatory requirements. 
+          For natural gas, typically it is not recommended and the maximum temperature is 150&#8451;. 
+          For heavy fuels (fuel oil and residual oils) the max is near 200&#8451;. Other gaseous fuels, 
+          preheating is not recommended, with a maximum temperature of 65&#8451;.
         </small>
       </h6>
     </div>
 
     <div class="my-2" *ngIf="currentField == 'o2InFlueGas'">
       <h6>
-        O
-        <sub>2</sub> in Flue Gas
+        O<sub>2</sub> in Flue Gas
         <br>
         <small class="text-muted">
           This is the percentage of oxygen in the flue gases of the boiler. This is usually determined using flue gas analysis using external combustion analyzer (dry basis) or in stack oxygen sensor (wet basis) measurement. An average value should be used.  
