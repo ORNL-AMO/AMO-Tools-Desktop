@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../../../shared/models/settings';
+
 
 @Component({
   selector: 'app-stack-loss-help',
@@ -9,6 +11,8 @@ export class StackLossHelpComponent implements OnInit {
   @Input()
   currentField: string;
   displaySuggestions: boolean = false;
+  @Input()
+  settings: Settings;
 
   constructor() { }
 
