@@ -102,7 +102,10 @@ export class FlueGasComponent implements OnInit {
   initSubscriptions() {
     this.modalSubscription = this.flueGasService.modalOpen.subscribe(modalOpen => {
       this.isModalOpen = modalOpen;
+      console.log(this.isModalOpen);
+      console.log(this.modalSubscription);
     });
+
     this.baselineDataSub = this.flueGasService.baselineData.subscribe(baselineData => {
       if (baselineData) {
         this.setBaselineSelected();

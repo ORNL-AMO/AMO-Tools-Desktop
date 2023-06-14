@@ -83,6 +83,8 @@ export class AirHeatingComponent implements OnInit {
     });
     this.modalSubscription = this.airHeatingService.modalOpen.subscribe(modalOpen => {
       this.isModalOpen = modalOpen;
+      console.log(this.isModalOpen);
+      console.log(this.modalSubscription);
     });
   }
 
