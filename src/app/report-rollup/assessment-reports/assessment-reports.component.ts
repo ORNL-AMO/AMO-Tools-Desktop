@@ -14,6 +14,10 @@ import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.
 import { WasteWaterReportRollupService } from '../waste-water-report-rollup.service';
 import { CompressedAirReportRollupService } from '../compressed-air-report-rollup.service';
 import { ReportSummaryGraphsService } from '../report-summary-graphs/report-summary-graphs.service';
+import { Assessment } from '../../shared/models/assessment';
+import { DashboardService } from '../../dashboard/dashboard.service';
+import { Directory } from '../../shared/models/directory';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 
 @Component({
   selector: 'app-assessment-reports',
@@ -49,7 +53,7 @@ export class AssessmentReportsComponent implements OnInit {
 
   constructor(private reportRollupService: ReportRollupService, private printOptionsMenuService: PrintOptionsMenuService, private psatReportRollupService: PsatReportRollupService, private phastReportRollupService: PhastReportRollupService,
     private fsatReportRollupService: FsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
-    private wasteWaterReportRollupService: WasteWaterReportRollupService, private compressedAirReportRollupService: CompressedAirReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService) { }
+    private wasteWaterReportRollupService: WasteWaterReportRollupService, private compressedAirReportRollupService: CompressedAirReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService, private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
     this.settings = this.reportRollupService.settings.getValue();
@@ -124,4 +128,49 @@ export class AssessmentReportsComponent implements OnInit {
     this.selectedPhastCalcs = selectedCalcs.filter(item => { return item.type == 'furnace' });
     this.selectedFsatCalcs = selectedCalcs.filter(item => { return item.type == 'fan' });
   }
+
+  goToAssessment(assessment: Assessment, mainTab?: string, subTab?: string) {
+    let tab: string;
+    let itemSegment: string;
+    if (assessment.type === 'PSAT') {
+      if (assessment.psat.setupDone && !mainTab && (!assessment.isExample)) {
+        tab = 'assessment';
+      }
+      itemSegment = '/psat/';
+    } else if (assessment.type === 'PHAST') {
+      if (assessment.phast.setupDone && !mainTab && (!assessment.isExample)) {
+        tab = 'assessment';
+      }
+      itemSegment = '/phast/';
+    } else if (assessment.type === 'FSAT') {
+      if (assessment.fsat.setupDone && !mainTab && !assessment.isExample) {
+        tab = 'assessment';
+      }
+      itemSegment = '/fsat/';
+    } else if (assessment.type === 'SSMT') {
+      if (assessment.ssmt.setupDone && !mainTab && !assessment.isExample) {
+        tab = 'assessment';
+      }
+      itemSegment = '/ssmt/';
+    } else if (assessment.type == 'TreasureHunt') {
+      if (assessment.treasureHunt.setupDone && !mainTab && !assessment.isExample) {
+        tab = 'treasure-chest';
+      }
+      itemSegment = '/treasure-hunt/';
+    } else if (assessment.type == 'WasteWater') {
+      if (assessment.wasteWater.setupDone && !mainTab && !assessment.isExample) {
+        tab = 'assessment';
+      }
+      itemSegment = '/waste-water/';
+    } else if (assessment.type == 'CompressedAir') {
+      if (assessment.compressedAirAssessment.setupDone && !mainTab && !assessment.isExample) {
+        tab = 'assessment';
+      }
+      itemSegment = '/compressed-air/';
+    }
+
+    this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, {shouldCollapse: true})
+  }
+
+
 }

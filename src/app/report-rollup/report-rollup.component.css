@@ -190,6 +190,14 @@ font-size: 150px;
     padding-top: 1rem;
 }
 
+@media screen and (max-width: 1024px) {
+    .assessment-padding{
+        padding-left: .25rem;
+        padding-right: .25rem;
+        padding-top: 1rem;
+    }
+}
+
 .skyline{
     background-image: url('../../assets/images/industrial-skyline.svg');
     background-repeat: no-repeat;

@@ -1,6 +1,14 @@
 <div class="report-summary">
     <div class="row no-gutters">
         <div class="col-12">
+            <a *ngIf="showSummary == 'open'" class="click-link pull-right" (click)="collapseSummary('closed')">-
+                Collapse Summaries</a>
+            <a *ngIf="showSummary == 'closed'" class="click-link pull-right" (click)="collapseSummary('open')">+ Show
+                Summaries</a>
+        </div>
+    </div>
+    <div class="row no-gutters">
+        <div class="col-12">
             <ul [hidden]="showSummary == 'closed'">
                 <li *ngIf="showPsatSummary" class="pump-summary"
                     (click)="showAssessmentModal('psat')">
@@ -34,14 +42,6 @@
             </ul>
         </div>
     </div>
-
-    <div class="row no-gutters">
-        <div class="col-12">
-            <a *ngIf="showSummary == 'open'" class="click-link pull-right" (click)="collapseSummary('closed')">-
-                Collapse Summaries</a>
-            <a *ngIf="showSummary == 'closed'" class="click-link pull-right" (click)="collapseSummary('open')">+ Show
-                Summaries</a>
-        </div>
-    </div>
+    
 
 </div>

@@ -9,7 +9,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body scroll-item" *ngIf="displayModalContent">
+            <div class="modal-body scroll-item d-none d-lg-flex" *ngIf="displayModalContent">
                 <app-psat-rollup *ngIf="assessmentModalType == 'psat'" [calculators]="selectedCalculators">
                 </app-psat-rollup>
                 <app-phast-rollup *ngIf="assessmentModalType == 'phast'" [calculators]="selectedCalculators">
@@ -24,6 +24,14 @@
                 </app-treasure-hunt-rollup>
                 <app-waste-water-rollup *ngIf="assessmentModalType == 'waste-water'"></app-waste-water-rollup>
                 <app-compressed-air-rollup *ngIf="assessmentModalType == 'compressed-air'"></app-compressed-air-rollup>
+            </div>
+
+            <div class="modal-body scroll-item d-flex d-lg-none" *ngIf="displayModalContent">
+                <h4 class="alert alert-danger">
+                    {{assessmentModalLabel}} is unavailable to view on your current device. 
+                    Please export the assessment(s) and upload to a desktop or a device with a screen size of at least 992px to view the Roll {{assessmentModalLabel}}. 
+                </h4>
+
             </div>
         </div>
     </div>

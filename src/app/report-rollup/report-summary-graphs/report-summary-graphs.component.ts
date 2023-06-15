@@ -33,6 +33,8 @@ export class ReportSummaryGraphsComponent implements OnInit {
 
   settings: Settings;
   settingsSub: Subscription;
+
+  graphsCollapsed: boolean = false;
   
   constructor(private reportRollupService: ReportRollupService,
     private reportSummaryGraphService: ReportSummaryGraphsService) { }
@@ -66,6 +68,10 @@ export class ReportSummaryGraphsComponent implements OnInit {
     this.costBarChartSub.unsubscribe();
     this.energyBarChartSub.unsubscribe();
     this.costBarChartSub.unsubscribe();    
+  }
+
+  collapseGraphs(){
+    this.graphsCollapsed = !this.graphsCollapsed;
   }
 
 }
