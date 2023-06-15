@@ -24,17 +24,15 @@
       <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': currentTab.step == 1}">
         <span class="fa fa-chevron-left"></span></a>
     </li>
-    <li class="page-item" *ngFor="let tab of stepTabs" [ngClass]="{'active': currentTab.step == tab.step
-    , 'input-error': (tab.step == 1 && tab1Status == 'input-error') || (tab.step == 2 && tab2Status == 'input-error')
-    , 'missing-data': (tab.step == 1 && tab1Status == 'missing-data') || (tab.step == 2 && tab2Status == 'missing-data')
-    , 'success': (tab.step == 1 && tab1Status == 'success') || (tab.step == 2 && tab2Status == 'success')}">
-      <a class="nav-link small" (click)="changeTab(tab.step)">
-        <span class="step-number">{{tab.step}}</span> <br>
-        <span class="step-name" *ngIf="tab.step == currentTab.step">{{tab.tabName}}</span>
+    <li class="page-item active"
+      [ngClass]="{'input-error': (currentTab.step == 1 && tab1Status == 'input-error') || (currentTab.step == 2 && tab2Status == 'input-error'), 'missing-data': (currentTab.step == 1 && tab1Status == 'missing-data') || (currentTab.step == 2 && tab2Status == 'missing-data'), 'success': (currentTab.step == 1 && tab1Status == 'success') || (currentTab.step == 2 && tab2Status == 'success')}">
+      <a class="nav-link small" (click)="changeTab(currentTab.step)">
+        <span class="step-number">{{currentTab.step}}</span> <br>
+        <span class="step-name">{{currentTab.tabName}}</span>
       </a>
     </li>
-    <li class="page-item">
-      <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled': !canContinue}">
+    <li class="page-item" [ngClass]="{'disabled': !getCanContinue()}">
+      <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled': !getCanContinue()}">
         <span class="fa fa-chevron-right"></span></a>
     </li>
   </ul>

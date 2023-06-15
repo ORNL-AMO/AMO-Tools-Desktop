@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PhastService } from '../phast.service';
 import { StepTab, stepTabs, specTabs } from '../tabs';
 import { Subscription } from 'rxjs';
+import { Assessment } from '../../shared/models/assessment';
 @Component({
   selector: 'app-phast-tabs',
   templateUrl: './phast-tabs.component.html',
@@ -16,6 +17,8 @@ export class PhastTabsComponent implements OnInit {
   tab1Status: string;
   @Input()
   tab2Status: string;
+  @Input()
+  assessment: Assessment;
 
   currentTab: StepTab;
   stepTabs: Array<StepTab>;
@@ -28,7 +31,6 @@ export class PhastTabsComponent implements OnInit {
 
   specTabSub: Subscription;
   currentTabSub: Subscription;
-  canContinue: boolean = true;
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
@@ -104,28 +106,12 @@ export class PhastTabsComponent implements OnInit {
     
   }
 
-  getCanContinue() {
-    if(this.currentTab.step == 1){
-      if (this.tab1Status == 'input-error') {
-        this.canContinue = false;
-      } else if (this.tab1Status == 'missing-data') {
-        this.canContinue = false;
-      } else if (this.tab1Status == 'success') {
-        this.canContinue = true;
-      }
-    } else if(this.currentTab.step == 2){
-      if (this.tab2Status == 'input-error') {
-        this.canContinue = false;
-      } else if (this.tab2Status == 'missing-data') {
-        this.canContinue = false;
-      } else if (this.tab2Status == 'success') {
-        this.canContinue = true;
-      }
+  getCanContinue(): boolean {
+    if (this.currentTab.step == 5) {
+      return this.assessment.phast.setupDone;
     } else {
-      this.canContinue = true;
+      return true;
     }
-
-    return this.canContinue;
   }
 
   continue() {

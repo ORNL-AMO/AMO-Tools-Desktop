@@ -55,7 +55,6 @@ export class LossesTabsComponent implements OnInit {
 
   tabNext(){
     this.lossesService.lossesTab.next(this.selectedTab.step + 1);
-    console.log(this.selectedTab.step);
   }
 
   tabBack(){

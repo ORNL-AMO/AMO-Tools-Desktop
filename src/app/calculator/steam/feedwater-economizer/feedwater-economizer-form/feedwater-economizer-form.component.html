@@ -113,7 +113,7 @@
 
   <div *ngIf="!calcMethodExcessAir">
     <div class="form-group">
-      <label class="small" for="flueGasO2">Oxygen In Flue Gas</label>
+      <label class="small" for="flueGasO2">O<sub>2</sub> In Flue Gas</label>
       <div class="input-group">
         <input name="flueGasO2" type="number" step="0.5" min="0" max="20.5" class="form-control"
           formControlName="flueGasO2" id="flueGasO2" onfocus="this.select();" (input)="calcExcessAir()"
@@ -137,7 +137,7 @@
 
   <div class="form-group" *ngIf="calcMethodExcessAir">
     <div class="form-group">
-      <label class="small">Oxygen In Flue Gas</label>
+      <label class="small">O<sub>2</sub> In Flue Gas</label>
       <div class="text-center small">
         {{calculationFlueGasO2 | number:'2.2-2'}} %
       </div>
