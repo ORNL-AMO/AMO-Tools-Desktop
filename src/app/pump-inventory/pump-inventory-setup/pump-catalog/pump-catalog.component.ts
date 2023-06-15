@@ -4,6 +4,10 @@ import { PumpInventoryData, PumpInventoryDepartment, PumpItem } from '../../pump
 import { PumpInventoryService } from '../../pump-inventory.service';
 import { PumpCatalogService } from './pump-catalog.service';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
+import { FormGroup } from '@angular/forms';
+import { PsatIntegrationService } from '../../../shared/assessment-integration/psat-integration.service';
+import { IntegrationStateService } from '../../../shared/assessment-integration/integration-state.service';
+import { ConnectedItem } from '../../../shared/assessment-integration/integrations';
 
 @Component({
   selector: 'app-pump-catalog',
@@ -20,10 +24,18 @@ export class PumpCatalogComponent implements OnInit {
   showConfirmDeleteModal: boolean = false;
   confirmDeletePumpInventoryData: ConfirmDeleteData;
   pumpItemToDelete: PumpItem;
+  selectedPumpItem: PumpItem;
+  connectedPumpItem: ConnectedItem;
+  form: FormGroup;
+  selectedPumpItemSub: Subscription;
   
-  constructor(private pumpInventoryService: PumpInventoryService, private pumpCatalogService: PumpCatalogService) { }
+  constructor(private pumpInventoryService: PumpInventoryService, private integrationStateService: IntegrationStateService, private pumpCatalogService: PumpCatalogService) { }
 
   ngOnInit(): void {
+    let selectedPump = this.pumpCatalogService.selectedPumpItem.getValue();
+    if (selectedPump)  {
+      this.selectedPumpItem = selectedPump;
+    }
     this.pumpInventoryDataSub = this.pumpInventoryService.pumpInventoryData.subscribe(val => {
       this.pumpInventoryData = val;
       let selectedDepartmentId: string = this.pumpCatalogService.selectedDepartmentId.getValue();
@@ -58,11 +70,32 @@ export class PumpCatalogComponent implements OnInit {
         }
       }
     });
+
+    this.selectedPumpItemSub = this.pumpCatalogService.selectedPumpItem.subscribe(selectedPump => {
+      if (selectedPump) {
+        this.selectedPumpItem = selectedPump;
+        this.connectedPumpItem = {
+          id: selectedPump.id,
+          name: selectedPump.name,
+          inventoryId: this.pumpInventoryService.currentInventoryId,
+          departmentId: this.pumpCatalogService.selectedDepartmentId.getValue(),
+          inventoryType: 'pump',
+        }
+      }
+    });
   }
 
   ngOnDestroy() {
     this.selectedDepartmentIdSub.unsubscribe();
     this.pumpInventoryDataSub.unsubscribe();
+    this.selectedPumpItemSub.unsubscribe();
+    this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData())
+
+  }
+
+  focusField(str: string) {
+    this.pumpInventoryService.focusedDataGroup.next('pump-basics');
+    this.pumpInventoryService.focusedField.next(str);
   }
 
   openDeletePumpModal(){
@@ -86,6 +119,10 @@ export class PumpCatalogComponent implements OnInit {
     
     this.showConfirmDeleteModal = false;
     this.pumpInventoryService.modalOpen.next(false);
+  }
+
+  setModalOpenView(event) {
+    this.pumpInventoryService.modalOpen.next(true);
   }
 
 }

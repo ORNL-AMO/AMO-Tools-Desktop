@@ -32,6 +32,7 @@ export class PumpFluidComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modificationIndex: number;
+  hasConnectedInventories: boolean;
 
   //Arrays holding <select> form data
   pumpTypes: Array<{ display: string, value: number }>;
@@ -78,7 +79,8 @@ export class PumpFluidComponent implements OnInit {
         this.enableForm();
       }
     }
-    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange() ||
+      changes.psat && !changes.psat.isFirstChange()) {
       this.initForm();
     }
   }

@@ -6,6 +6,10 @@ import { InventoryIntegrationComponent } from './inventory-integration/inventory
 import { IntegrationStateComponent } from './integration-status/integration-status.component';
 import { IntegrationStateService } from './integration-state.service';
 import { IntegrationHelpComponent } from './integration-help/integration-help.component';
+import { PsatIntegrationService } from './psat-integration.service';
+import { AssessmentIntegrationComponent } from './assessment-integration/assessment-integration.component';
+import { AssessmentIntegrationStatusComponent } from './assessment-integration-status/assessment-integration-status.component';
+import { CreateAssessmentModalModule } from '../create-assessment-modal/create-assessment-modal.module';
 
 
 
@@ -14,19 +18,25 @@ import { IntegrationHelpComponent } from './integration-help/integration-help.co
     InventoryIntegrationComponent,
     IntegrationStateComponent,
     IntegrationHelpComponent,
+    AssessmentIntegrationComponent,
+    AssessmentIntegrationStatusComponent,
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CreateAssessmentModalModule
   ],
   providers: [
     MotorIntegrationService,
+    PsatIntegrationService,
     IntegrationStateService
   ],
   exports: [
     IntegrationStateComponent, 
     InventoryIntegrationComponent,
-    IntegrationHelpComponent
+    IntegrationHelpComponent,
+    AssessmentIntegrationComponent,
+    AssessmentIntegrationStatusComponent
   ]
 })
 export class AssessmentIntegrationModule { }

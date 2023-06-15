@@ -90,7 +90,7 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
   }
 
   setOpHoursModalWidth() {
-    if (this.formElement.nativeElement.clientWidth) {
+    if (this.formElement && this.formElement.nativeElement.clientWidth) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
   }

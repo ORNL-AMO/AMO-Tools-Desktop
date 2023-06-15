@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { AssessmentType, InventoryType } from '../integrations';
 
 @Component({
   selector: 'app-integration-help',
@@ -7,7 +8,7 @@ import { Component, Input } from '@angular/core';
 })
 export class IntegrationHelpComponent {
 @Input()
-isMotorInventory: boolean;
+connectionType: InventoryType | AssessmentType;
 @Input()
 focusedField: string;
 

@@ -21,6 +21,7 @@ export class FluidCatalogComponent implements OnInit {
   selectedPumpItemSub: Subscription;
   displayOptions: FluidPropertiesOptions;
   displayForm: boolean = true;
+  hasConnectedInventories: boolean;
 
   fluidTypes: Array<string>;
   constructor(private pumpCatalogService: PumpCatalogService, private pumpInventoryService: PumpInventoryService,
@@ -34,6 +35,8 @@ export class FluidCatalogComponent implements OnInit {
     this.selectedPumpItemSub = this.pumpCatalogService.selectedPumpItem.subscribe(selectedPump => {
       if (selectedPump) {
         this.form = this.fluidCatalogService.getFormFromFluidProperties(selectedPump.fluid);
+        this.hasConnectedInventories = Boolean(selectedPump.connectedItem);
+        ;
       }
     });
     this.displayOptions = this.pumpInventoryService.pumpInventoryData.getValue().displayOptions.fluidPropertiesOptions;

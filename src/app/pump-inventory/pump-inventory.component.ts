@@ -9,6 +9,9 @@ import { PumpCatalogService } from './pump-inventory-setup/pump-catalog/pump-cat
 import { PumpInventoryData, PumpInventoryDepartment, PumpItem } from './pump-inventory';
 import { PumpInventoryService } from './pump-inventory.service';
 import { MotorIntegrationService } from '../shared/assessment-integration/motor-integration.service';
+import { PsatIntegrationService } from '../shared/assessment-integration/psat-integration.service';
+import { IntegrationStateService } from '../shared/assessment-integration/integration-state.service';
+import { ConnectedInventoryData } from '../shared/assessment-integration/integrations';
 
 declare const packageJson;
 
@@ -26,24 +29,26 @@ export class PumpInventoryComponent implements OnInit {
   @ViewChild('content', { static: false }) content: ElementRef;
   @ViewChild('footer', { static: false }) footer: ElementRef;
   containerHeight: number;
-
+  
   setupTabSub: Subscription;
   setupTab: string;
   mainTab: string;
   mainTabSub: Subscription;
-
+  
   modalOpenSub: Subscription;
   isModalOpen: boolean;
-
+  
   pumpInventoryDataSub: Subscription;
   pumpInventoryItem: InventoryItem;
+  integrationStateSub: Subscription;
   constructor(private pumpInventoryService: PumpInventoryService, 
     private activatedRoute: ActivatedRoute,
-    private router: Router,
     private settingsDbService: SettingsDbService, 
     private inventoryDbService: InventoryDbService,
     private pumpCatalogService: PumpCatalogService, 
     private motorIntegrationService: MotorIntegrationService,
+    private integrationStateService: IntegrationStateService,
+    private psatIntegrationService: PsatIntegrationService,
     private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -52,7 +57,7 @@ export class PumpInventoryComponent implements OnInit {
       this.pumpInventoryItem = this.inventoryDbService.getById(tmpItemId);
       let settings: Settings = this.settingsDbService.getByInventoryId(this.pumpInventoryItem);
       this.pumpInventoryService.settings.next(settings);
-      this.pumpInventoryItem.pumpInventoryData.hasConnectedItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
+      this.pumpInventoryItem.pumpInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
       this.pumpInventoryService.pumpInventoryData.next(this.pumpInventoryItem.pumpInventoryData);
       this.pumpInventoryService.currentInventoryId = tmpItemId;
 
@@ -62,17 +67,23 @@ export class PumpInventoryComponent implements OnInit {
         this.redirectFromConnectedInventory(departmentId, itemId);
       }
     });
-
-
     this.mainTabSub = this.pumpInventoryService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
     });
     this.setupTabSub = this.pumpInventoryService.setupTab.subscribe(val => {
       this.setupTab = val;
+      this.handleConnectedItemChanges();
       this.getContainerHeight();
     });
-    this.pumpInventoryDataSub = this.pumpInventoryService.pumpInventoryData.subscribe(data => {
+
+    this.integrationStateSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
+      if (connectedInventoryData.shouldRestoreConnectedValues) {
+        this.restoreConnectedInventoryValues(connectedInventoryData);
+      }
+    });
+    this.pumpInventoryDataSub = this.pumpInventoryService.pumpInventoryData.subscribe(pumpInventoryData => {
+      this.handleConnectedItemChanges();
       this.saveDbData();
     });
     this.modalOpenSub = this.pumpInventoryService.modalOpen.subscribe(val => {
@@ -85,6 +96,7 @@ export class PumpInventoryComponent implements OnInit {
     this.setupTabSub.unsubscribe();
     this.mainTabSub.unsubscribe();
     this.pumpInventoryDataSub.unsubscribe();
+    this.integrationStateSub.unsubscribe();
     this.pumpCatalogService.selectedPumpItem.next(undefined);
     this.pumpCatalogService.selectedDepartmentId.next(undefined);
     this.modalOpenSub.unsubscribe();
@@ -113,7 +125,8 @@ export class PumpInventoryComponent implements OnInit {
     this.pumpInventoryItem.modifiedDate = new Date();
     this.pumpInventoryItem.appVersion = packageJson.version;
     this.pumpInventoryItem.pumpInventoryData = inventoryData;
-    this.pumpInventoryItem.pumpInventoryData.hasConnectedItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
+    this.pumpInventoryItem.pumpInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
+    this.pumpInventoryItem.pumpInventoryData.hasConnectedPsat = this.psatIntegrationService.getHasConnectedPSAT(this.pumpInventoryItem);
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.pumpInventoryItem));
     this.inventoryDbService.setAll(updatedInventoryItems);
   }
@@ -139,6 +152,21 @@ export class PumpInventoryComponent implements OnInit {
       this.pumpInventoryService.setupTab.next('pump-properties');
     }
   }
+
+  handleConnectedItemChanges() {
+    let selectedPump = this.pumpCatalogService.selectedPumpItem.getValue();
+    if (selectedPump && selectedPump.connectedAssessments) {
+      this.psatIntegrationService.checkConnectedAssessmentDiffers(selectedPump);
+    }
+  }
+
+  restoreConnectedInventoryValues(connectedInventoryData: ConnectedInventoryData) {
+    let selectedPump = this.pumpCatalogService.selectedPumpItem.getValue();
+    this.psatIntegrationService.restoreConnectedInventoryValues(selectedPump, connectedInventoryData);
+    this.pumpCatalogService.selectedPumpItem.next(selectedPump);
+    this.pumpInventoryService.updatePumpItem(selectedPump);
+  }
+
 
   redirectFromConnectedInventory(departmentId: string, itemId: string) {
     this.pumpCatalogService.selectedDepartmentId.next(departmentId)

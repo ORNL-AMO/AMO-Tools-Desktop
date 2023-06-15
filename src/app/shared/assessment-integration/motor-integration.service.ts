@@ -3,19 +3,21 @@ import { InventoryDbService } from '../../indexedDb/inventory-db.service';
 import { firstValueFrom } from 'rxjs';
 import { InventoryItem } from '../models/inventory/inventory';
 import * as _ from 'lodash';
-import { PumpInventoryData, PumpInventoryDepartment, PumpItem } from '../../pump-inventory/pump-inventory';
+import { PumpInventoryData, PumpInventoryDepartment, PumpItem, PumpMotorProperties } from '../../pump-inventory/pump-inventory';
 import { MotorInventoryData, MotorInventoryDepartment, MotorItem } from '../../motor-inventory/motor-inventory';
 import { Settings } from '../models/settings';
 import { ConnectedInventoryData, ConnectedItem, IntegrationState, InventoryOption } from './integrations';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { IntegrationStateService } from './integration-state.service';
 import { ConvertMotorInventoryService } from '../../motor-inventory/convert-motor-inventory.service';
+import { HelperFunctionsService } from '../helper-services/helper-functions.service';
 
 @Injectable()
 export class MotorIntegrationService {
   constructor(private inventoryDbService: InventoryDbService, 
     private settingsDbService: SettingsDbService,
     private convertMotorInventoryService: ConvertMotorInventoryService,
+    private helperService: HelperFunctionsService,
     private integrationStateService: IntegrationStateService) { }
 
   async initInventoriesAndOptions(): Promise<Array<InventoryOption>> {
@@ -41,9 +43,9 @@ export class MotorIntegrationService {
   }
 
   async setPumpConnectedItem(selectedPump: PumpItem, connectedInventoryData: ConnectedInventoryData, currentSettings: Settings) {
-    let selectedMotorItem: MotorItem = this.getConnectedMotorItem(connectedInventoryData.connectedItem);
+    let selectedMotorItem: MotorItem = this.getConnectedMotorItem(connectedInventoryData.connectedItem, currentSettings);
     let integrationState: IntegrationState = {
-      status: 'success',
+      status: undefined,
       msgHTML: undefined,
     }
     let motorInventory: InventoryItem = this.inventoryDbService.getById(connectedInventoryData.connectedItem.inventoryId);
@@ -51,8 +53,7 @@ export class MotorIntegrationService {
 
     if (motorInventorySettings.unitsOfMeasure !== currentSettings.unitsOfMeasure) {
       if (connectedInventoryData.shouldConvertItemUnits) {
-        selectedMotorItem = _.cloneDeep(selectedMotorItem);
-        selectedMotorItem.nameplateData = this.convertMotorInventoryService.convertNameplateData(selectedMotorItem.nameplateData, motorInventorySettings, currentSettings);
+        // resolve warning, conversion handled in setFromConnectedMotorItem-> getConnectedMotorIcon
         connectedInventoryData.shouldConvertItemUnits = false;
         connectedInventoryData.canConnect = true;
       } else {
@@ -64,11 +65,22 @@ export class MotorIntegrationService {
     }
 
     if (connectedInventoryData.canConnect) {
-      this.setPumpFieldsFromMotor(selectedPump, selectedMotorItem);
+      selectedPump.pumpMotor = this.setPumpFieldsFromMotor(selectedPump.pumpMotor, selectedMotorItem);
       connectedInventoryData.ownerItemId = selectedPump.id;
       connectedInventoryData.isConnected = true;
       connectedInventoryData.canConnect = false;
       selectedPump.connectedItem = connectedInventoryData.connectedItem;
+
+      if (selectedPump.connectedAssessments && selectedPump.connectedAssessments.length > 0) {
+        selectedPump.connectedAssessments.map(connectedAssessment => {
+            let newConnectedFromState: MotorItem = this.helperService.copyObject(selectedMotorItem);
+            connectedAssessment.connectedFromState.pumpMotor = this.setPumpFieldsFromMotor(connectedAssessment.connectedFromState.pumpMotor, newConnectedFromState);
+            let assessmentIntegrationState = this.integrationStateService.assessmentIntegrationState.getValue();
+            assessmentIntegrationState.hasThreeWayConnection = true;
+            console.log('3 way connection', assessmentIntegrationState);
+            this.integrationStateService.assessmentIntegrationState.next(assessmentIntegrationState)
+        });
+      }
       motorInventory.motorInventoryData.departments.forEach(dept => {
         dept.catalog.map(motorItem => {
           if (motorItem.id === connectedInventoryData.connectedItem.id) {
@@ -94,23 +106,32 @@ export class MotorIntegrationService {
     }
   }
 
-  setPumpFieldsFromMotor(selectedPump: PumpItem, selectedMotorItem: MotorItem) {
-    selectedPump.pumpMotor.lineFrequency = selectedMotorItem.nameplateData.lineFrequency;
-    selectedPump.pumpMotor.motorRatedPower = selectedMotorItem.nameplateData.ratedMotorPower;
-    selectedPump.pumpMotor.motorEfficiencyClass = selectedMotorItem.nameplateData.efficiencyClass;
-    selectedPump.pumpMotor.motorRatedVoltage = selectedMotorItem.nameplateData.ratedVoltage;
-    selectedPump.pumpMotor.motorFullLoadAmps = selectedMotorItem.nameplateData.fullLoadAmps;
-    selectedPump.pumpMotor.motorRPM = selectedMotorItem.nameplateData.fullLoadSpeed;
-    selectedPump.pumpMotor.motorEfficiency = selectedMotorItem.nameplateData.nominalEfficiency;
+  setPumpFieldsFromMotor(pumpMotor: PumpMotorProperties, selectedMotorItem: MotorItem): PumpMotorProperties {
+    pumpMotor.lineFrequency = selectedMotorItem.nameplateData.lineFrequency;
+    pumpMotor.motorRatedPower = selectedMotorItem.nameplateData.ratedMotorPower;
+    pumpMotor.motorEfficiencyClass = selectedMotorItem.nameplateData.efficiencyClass;
+    pumpMotor.motorRatedVoltage = selectedMotorItem.nameplateData.ratedVoltage;
+    pumpMotor.motorFullLoadAmps = selectedMotorItem.nameplateData.fullLoadAmps;
+    pumpMotor.motorRPM = selectedMotorItem.nameplateData.fullLoadSpeed;
+    pumpMotor.motorEfficiency = selectedMotorItem.nameplateData.nominalEfficiency;
+    return pumpMotor;
   }
 
-  getConnectedMotorItem(connectedItem: ConnectedItem) {
+  getConnectedMotorItem(connectedItem: ConnectedItem, currentSettings: Settings) {
     let motorItem: MotorItem;
     let motorInventoryItem: InventoryItem = this.inventoryDbService.getById(connectedItem.inventoryId);
+    
     if (motorInventoryItem) {
       let department: MotorInventoryDepartment = motorInventoryItem.motorInventoryData.departments.find(department => department.id === connectedItem.departmentId);
       if (department) {
         motorItem = department.catalog.find(motorItem => motorItem.id === connectedItem.id);
+        if (motorItem) {
+          let motorInventorySettings: Settings = this.settingsDbService.getByInventoryId(motorInventoryItem);  
+          if (motorInventorySettings.unitsOfMeasure !== currentSettings.unitsOfMeasure) {
+            motorItem = this.helperService.copyObject(motorItem);
+            motorItem.nameplateData = this.convertMotorInventoryService.convertNameplateData(motorItem.nameplateData, motorInventorySettings, currentSettings);
+          }
+        }
       }
     }
     return motorItem;
@@ -142,8 +163,8 @@ export class MotorIntegrationService {
   }
   
 
-  setFromConnectedMotorItem(selectedPump: PumpItem, ownerInventoryId: number) {
-    let motorItem = this.getConnectedMotorItem(selectedPump.connectedItem);
+  setFromConnectedMotorItem(selectedPump: PumpItem, ownerInventoryId: number, settings: Settings) {
+    let motorItem = this.getConnectedMotorItem(selectedPump.connectedItem, settings);
     let connectedInventoryData: ConnectedInventoryData = this.integrationStateService.getEmptyConnectedInventoryData();
     connectedInventoryData.connectedItem = selectedPump.connectedItem;
     connectedInventoryData.ownerItemId = selectedPump.id;
@@ -151,12 +172,23 @@ export class MotorIntegrationService {
     connectedInventoryData.isConnected = true;
     
     if (motorItem) {
-      this.setPumpFieldsFromMotor(selectedPump, motorItem);
+      selectedPump.pumpMotor = this.setPumpFieldsFromMotor(selectedPump.pumpMotor, motorItem);
+      if (selectedPump.connectedAssessments) {
+        this.updateConnectedFromState(selectedPump, motorItem);
+      }
       this.integrationStateService.connectedInventoryData.next(connectedInventoryData);
     } else {
       // item or inventory was deleted
       this.removePumpConnectedItem(selectedPump, connectedInventoryData)
     }
+  }
+
+  // updated connectedFromState (values at assessmnet to inventory connection)
+  updateConnectedFromState(selectedPump: PumpItem, connectedMotorItem: MotorItem) {
+    selectedPump.connectedAssessments.map(connectedAssessment => {
+        let newConnectedFromState: MotorItem = this.helperService.copyObject(connectedMotorItem);
+        connectedAssessment.connectedFromState.pumpMotor = this.setPumpFieldsFromMotor(connectedAssessment.connectedFromState.pumpMotor, newConnectedFromState);
+        });
   }
 
   getHasConnectedPumpItems(inventoryItem: InventoryItem) {

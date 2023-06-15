@@ -3,6 +3,8 @@
     <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
     System
 </label>
+<app-assessment-integration-status *ngIf="displayForm" [connectedToType]="'assessment'" [hasConnectedInventories]="hasConnectedInventories" [connectedFormGroupName]="'system'"></app-assessment-integration-status>
+
 <form *ngIf="displayForm" class="p-1" #formElement [formGroup]="form">
     <div class="form-group" *ngIf="displayOptions.driveType">
         <label for="driveType">Drive Type</label>

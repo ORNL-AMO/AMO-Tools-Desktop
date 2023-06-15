@@ -26,7 +26,7 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   pumpTypes: Array<{value: number, display: string}>;
   shaftOrientations: Array<{value: number, display: string}>;
   shaftSealTypes: Array<{value: number, display: string}>;
-
+  hasConnectedInventories: boolean;
 
   constructor(private pumpCatalogService: PumpCatalogService, private pumpInventoryService: PumpInventoryService,
     private pumpEquipmentCatalogService: PumpEquipmentCatalogService) { }
@@ -40,6 +40,7 @@ export class PumpEquipmentCatalogComponent implements OnInit {
     });
     this.selectedPumpItemSub = this.pumpCatalogService.selectedPumpItem.subscribe(selectedPump => {
       if (selectedPump) {
+        this.hasConnectedInventories = Boolean(selectedPump.connectedItem);
         this.form = this.pumpEquipmentCatalogService.getFormFromPumpEquipmentProperties(selectedPump.pumpEquipment);
       }
     });

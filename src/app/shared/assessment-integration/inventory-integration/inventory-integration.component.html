@@ -1,10 +1,10 @@
 <div class="integration-container">
-    <!-- show in item OWNER inventory  -->
+    <!--  DISPLAY CONNECTED ITEMS -->
     <div (click)="focusField('connected-item')" *ngIf="connectedInventoryData.isConnected" class="p-2 px-3">
         <div class="d-flex flex-row">
             <label class="w-50">
                 <span class="integration-label">
-                    Connected Inventory Item
+                    <span *ngIf="connectedInventoryData.connectedItem">Connected Inventory Item</span>
                 </span>
             </label>
             <div class="w-50 input-group justify-content-between">
@@ -65,5 +65,4 @@
 </div>
 
 
-<app-integration-status></app-integration-status>
 

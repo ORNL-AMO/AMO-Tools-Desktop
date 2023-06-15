@@ -8,7 +8,7 @@
         <input type="checkbox" [(ngModel)]="inventoryItem.selected">
         <div class="d-flex align-items-center">
             <img class="icon-image pl-1 pr-1" *ngIf="inventoryItem.motorInventoryData" src="assets/images/motor-inventory-icon.png">
-            <img class="icon-image pl-1 pr-1" *ngIf="inventoryItem.pumpInventoryData" src="assets/images/pump.png">
+            <img class="icon-image pl-1 pr-1" *ngIf="inventoryItem.pumpInventoryData" src="assets/images/pump-inventory-icon.png">
             <a (click)="goToInventoryItem()">{{inventoryItem.name}}</a>
         </div>
         <div class="btn-group">
@@ -43,7 +43,7 @@
         <div class="d-flex flex-column">
             <div class="d-flex">
                 <img class="icon-image pl-1 pr-1" *ngIf="inventoryItem.motorInventoryData" src="assets/images/motor-inventory-icon.png">
-                <img class="icon-image pl-1 pr-1" *ngIf="inventoryItem.pumpInventoryData" src="assets/images/pump.png">
+                <img class="icon-image pl-1 pr-1" *ngIf="inventoryItem.pumpInventoryData" src="assets/images/pump-inventory-icon.png">
                 <a (click)="goToInventoryItem()">{{inventoryItem.name}}</a>
             </div>
             <div class="last-updated">Last updated {{inventoryItem.modifiedDate | date }}</div>
