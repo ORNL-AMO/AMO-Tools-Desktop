@@ -172,13 +172,13 @@
         <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
             <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
                 <br>
-                <span class="help-text">Novice View</span>
+                <span class="help-text font-italic">Novice View</span>
             </a>
         </div>
         <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
             <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
                 <br>
-                <span class="help-text">Expert View</span>
+                <span class="help-text font-italic">Expert View</span>
             </a>
         </div>
     </div>
@@ -187,13 +187,13 @@
         <div class="mod-name active border-right" *ngIf="selectedModification">
             <a>{{selectedModification.name}}
                 <br>
-                <span class="help-text">Selected Scenario</span>
+                <span class="help-text font-italic">Selected Scenario</span>
             </a>
         </div>
         <div class="mod-name border-right" *ngIf="!selectedModification">
             <a>&mdash; &mdash;
                 <br>
-                <span class="help-text">Selected Scenario</span>
+                <span class="help-text font-italic">Selected Scenario</span>
             </a>
         </div>
         <div class="pl-2 pr-2">
@@ -210,14 +210,14 @@
             [ngClass]="{'active': assessmentTab == 'explore-opportunities', 'collapse': tabsCollapsed}">
             <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
                 <br>
-                <span class="help-text">Novice View</span>
+                <span class="help-text font-italic">Novice View</span>
             </a>
         </div>
         <div class="assessment-tab"
             [ngClass]="{'active': assessmentTab == 'modify-conditions', 'collapse': tabsCollapsed}">
             <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
                 <br>
-                <span class="help-text">Expert View</span>
+                <span class="help-text font-italic">Expert View</span>
             </a>
         </div>
     </div>
@@ -227,13 +227,13 @@
         <div class="mod-name active border-right" *ngIf="selectedModification" [ngClass]="{'collapse': tabsCollapsed}">
             <a>{{selectedModification.name}}
                 <br>
-                <span class="help-text">Selected Scenario</span>
+                <span class="help-text font-italic">Selected Scenario</span>
             </a>
         </div>
         <div class="mod-name border-right" *ngIf="!selectedModification" [ngClass]="{'collapse': tabsCollapsed}">
             <a>&mdash; &mdash;
                 <br>
-                <span class="help-text">Selected Scenario</span>
+                <span class="help-text font-italic">Selected Scenario</span>
             </a>
         </div>
         <div class="pl-2 pr-2" [ngClass]="{'collapse': tabsCollapsed}">

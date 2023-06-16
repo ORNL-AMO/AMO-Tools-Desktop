@@ -518,6 +518,12 @@ Modals
 .psat-view {
   font-style: italic;
 }
+.fsat-view{
+  font-style: italic;
+}
+.ssmt-view{
+  font-style: italic;
+}
 .modal h3 {
   /* font-size: 22px; */
   margin-bottom: 0;
