@@ -42,13 +42,13 @@
     <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
         <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
             <br>
-            <span class="help-text">Novice View</span>
+            <span class="help-text font-italic">Novice View</span>
         </a>
     </div>
     <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
         <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
             <br>
-            <span class="help-text">Expert View</span>
+            <span class="help-text font-italic">Expert View</span>
         </a>
     </div>
   </div>
@@ -80,14 +80,14 @@
       [ngClass]="{'active': assessmentTab == 'explore-opportunities', 'collapse': tabsCollapsed}">
       <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
         <br>
-        <span class="help-text">Novice View</span>
+        <span class="help-text font-italic">Novice View</span>
       </a>
     </div>
     <div class="assessment-tab"
       [ngClass]="{'active': assessmentTab == 'modify-conditions', 'collapse': tabsCollapsed}">
       <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
         <br>
-        <span class="help-text">Expert View</span>
+        <span class="help-text font-italic">Expert View</span>
       </a>
     </div>
   </div>
