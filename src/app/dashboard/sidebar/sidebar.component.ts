@@ -110,7 +110,7 @@ export class SidebarComponent implements OnInit {
 
     let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
     if (totalScreenWidth < 1024) {
-      this.expandedXWidth = totalScreenWidth;
+      this.expandedXWidth = totalScreenWidth/4;
     } 
   
     if (this.isSidebarCollapsed == true) {
@@ -119,6 +119,7 @@ export class SidebarComponent implements OnInit {
       this.dashboardService.sidebarX.next(this.expandedXWidth);
     }
     window.dispatchEvent(new Event("resize"));
+
   }
 
   openUpdateModal() {
