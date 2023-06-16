@@ -108,10 +108,13 @@ export class SidebarComponent implements OnInit {
       this.isSidebarCollapsed = !this.isSidebarCollapsed;
     }
 
-    // let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
-    // if (totalScreenWidth < 1024) {
-    //   this.expandedXWidth = totalScreenWidth/4;
-    // } 
+    let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
+    if (totalScreenWidth < 1024) {
+      this.expandedXWidth = totalScreenWidth;
+    }
+    else {
+      this.expandedXWidth = 300;
+    } 
   
     if (this.isSidebarCollapsed == true) {
       this.dashboardService.sidebarX.next(this.collapsedXWidth);
