@@ -10,6 +10,7 @@ import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 import { MotorIntegrationService } from '../../../../shared/assessment-integration/motor-integration.service';
 import { InventoryOption, InventorySelectOptions, ConnectedInventoryData } from '../../../../shared/assessment-integration/integrations';
 import { IntegrationStateService } from '../../../../shared/assessment-integration/integration-state.service';
+import { PsatIntegrationService } from '../../../../shared/assessment-integration/psat-integration.service';
 
 @Component({
   selector: 'app-pump-motor-catalog',
@@ -36,6 +37,7 @@ export class PumpMotorCatalogComponent implements OnInit {
 
   inventorySelectOptions: InventorySelectOptions;
   connectedInventoryDataSub: Subscription;
+  hasConnectedInventories: boolean;
 
   constructor(private pumpCatalogService: PumpCatalogService, 
     private pumpInventoryService: PumpInventoryService,
@@ -56,25 +58,16 @@ export class PumpMotorCatalogComponent implements OnInit {
 
     this.selectedPumpItemSub = this.pumpCatalogService.selectedPumpItem.subscribe(selectedPump => {
       if (selectedPump) {
-        if (selectedPump.connectedItem) {
-          this.motorIntegrationService.setFromConnectedMotorItem(selectedPump, this.pumpInventoryService.currentInventoryId);
-          this.form = this.pumpMotorCatalogService.getFormFromPumpMotor(selectedPump.pumpMotor);
-          this.form.disable();
-        } else {
-          this.form = this.pumpMotorCatalogService.getFormFromPumpMotor(selectedPump.pumpMotor);
-          this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
-        }
-        this.integrationStateService.integrationState.next(this.integrationStateService.getEmptyIntegrationState());
+        this.initSelectedPump(selectedPump);
       }
     });
-    this.displayOptions = this.pumpInventoryService.pumpInventoryData.getValue().displayOptions.pumpMotorPropertiesOptions;
+    this.displayOptions = this.pumpInventoryService.pumpInventoryData.getValue()?.displayOptions.pumpMotorPropertiesOptions;
   }
 
   ngOnDestroy() {
     this.selectedPumpItemSub.unsubscribe();
     this.settingsSub.unsubscribe();
     this.connectedInventoryDataSub.unsubscribe();
-    this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData())
   }
 
   async setInventorySelectOptions() {
@@ -87,19 +80,36 @@ export class PumpMotorCatalogComponent implements OnInit {
     }
   }
 
+  initSelectedPump(selectedPump: PumpItem) {
+    this.hasConnectedInventories = Boolean(selectedPump.connectedItem);
+    if (selectedPump.connectedItem) {
+      this.motorIntegrationService.setFromConnectedMotorItem(selectedPump, this.pumpInventoryService.currentInventoryId, this.settings);
+      this.form = this.pumpMotorCatalogService.getFormFromPumpMotor(selectedPump.pumpMotor);
+      if (this.integrationStateService.connectedInventoryData.getValue()?.isConnected) {
+        this.form.disable();
+      } else {
+        this.form.enable();
+      }
+    } else {
+      this.form = this.pumpMotorCatalogService.getFormFromPumpMotor(selectedPump.pumpMotor);
+      this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
+    }
+    this.integrationStateService.integrationState.next(this.integrationStateService.getEmptyIntegrationState());
+  }
+
   handleConnectedInventoryEvents(connectedInventoryData: ConnectedInventoryData) {
     let selectedPump: PumpItem = this.pumpCatalogService.selectedPumpItem.getValue();
     if (!connectedInventoryData.isConnected) {
       if (connectedInventoryData.canConnect || connectedInventoryData.shouldConvertItemUnits) {
         this.connectInventoryItem(connectedInventoryData);
+        this.pumpInventoryService.updatePumpItem(selectedPump);
       }
     } 
     if (connectedInventoryData.shouldDisconnect) {
       this.motorIntegrationService.removePumpConnectedItem(selectedPump, connectedInventoryData);
       this.form.enable();
+      this.pumpInventoryService.updatePumpItem(selectedPump);
     }
-
-    this.pumpInventoryService.updatePumpItem(selectedPump);
   }
 
   connectInventoryItem(connectedInventoryData: ConnectedInventoryData) {
@@ -109,7 +119,9 @@ export class PumpMotorCatalogComponent implements OnInit {
     this.motorIntegrationService.setPumpConnectedItem(selectedPumpItem, connectedInventoryData, this.settings);
     
     this.form = this.pumpMotorCatalogService.getFormFromPumpMotor(selectedPumpItem.pumpMotor);
-    this.form.disable();
+    if (connectedInventoryData.isConnected) {
+      this.form.disable();
+    }
   }
 
   async save() {
@@ -117,8 +129,6 @@ export class PumpMotorCatalogComponent implements OnInit {
     selectedPump.pumpMotor = this.pumpMotorCatalogService.updatePumpMotorFromForm(this.form, selectedPump.pumpMotor);
     this.pumpInventoryService.updatePumpItem(selectedPump);
   }
-
-
 
   focusField(str: string, integrationDataGroup?: boolean) {
     let focusedDataGroup: string = 'pump-motor';

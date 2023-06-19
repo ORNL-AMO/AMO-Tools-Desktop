@@ -4,6 +4,7 @@ import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { PumpCatalogService } from '../pump-inventory-setup/pump-catalog/pump-catalog.service';
 import { PumpInventoryData } from '../pump-inventory';
 import { PumpInventoryService } from '../pump-inventory.service';
+import { IntegrationStateService } from '../../shared/assessment-integration/integration-state.service';
 
 @Component({
   selector: 'app-pump-inventory-banner',
@@ -24,7 +25,9 @@ export class PumpInventoryBannerComponent implements OnInit {
   pumpInventoryDataSub: Subscription;
   selectedDepartmentId: string;
   selectedDepartmentIdSub: Subscription;
-  constructor(private pumpInventoryService: PumpInventoryService, private pumpCatalogService: PumpCatalogService) { }
+  connectedInventoryDataSub: Subscription;
+  showConnectedItemBadge: boolean;
+    constructor(private pumpInventoryService: PumpInventoryService, private integrationStateService: IntegrationStateService, private pumpCatalogService: PumpCatalogService) { }
 
   ngOnInit(): void {
     this.mainTabSub = this.pumpInventoryService.mainTab.subscribe(val => {
@@ -46,6 +49,10 @@ export class PumpInventoryBannerComponent implements OnInit {
     this.summaryTabSub = this.pumpInventoryService.summaryTab.subscribe(val => {
       this.summaryTab = val;
     });
+
+    this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
+      this.showConnectedItemBadge = connectedInventoryData.connectedItem !== undefined;
+    });
   }
 
   ngOnDestroy() {
@@ -54,6 +61,7 @@ export class PumpInventoryBannerComponent implements OnInit {
     this.selectedDepartmentIdSub.unsubscribe();
     this.mainTabSub.unsubscribe();
     this.summaryTabSub.unsubscribe();
+    this.connectedInventoryDataSub.unsubscribe();
   }
 
   setSetupTab(str: string) {

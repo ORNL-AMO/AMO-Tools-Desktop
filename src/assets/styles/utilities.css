@@ -471,16 +471,3 @@ a:not([href]):not([tabindex]).disabled-link:hover {
     background-color: #efefef;
     cursor: pointer;
 }
-
-.integration-container {
-    background-color:#ececec;
-    padding: .25rem 0 .5rem 0;
-    margin: .5rem 0;
-    border-radius: 8px;
-    -moz-border-radius: 8px;
-}
-
-.integration-label {
-    border-bottom: #a1a1a1 solid 2px;
-    font-size: 16px;
-  }

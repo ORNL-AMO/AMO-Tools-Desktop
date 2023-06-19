@@ -22,6 +22,8 @@ export class SystemCatalogComponent implements OnInit {
   displayOptions: SystemPropertiesOptions;
   displayForm: boolean = true;
   driveTypes: Array<{value: number, display: string}>;
+  hasConnectedInventories: boolean;
+
   constructor(private pumpCatalogService: PumpCatalogService, private pumpInventoryService: PumpInventoryService,
     private systemCatalogService: SystemCatalogService) { }
 
@@ -32,6 +34,7 @@ export class SystemCatalogComponent implements OnInit {
     });
     this.selectedPumpItemSub = this.pumpCatalogService.selectedPumpItem.subscribe(selectedPump => {
       if (selectedPump) {
+        this.hasConnectedInventories = Boolean(selectedPump.connectedItem);
         this.form = this.systemCatalogService.getFormFromPumpMotor(selectedPump.systemProperties);
       }
     });
