@@ -94,22 +94,22 @@
 
   
   <div class="d-lg-flex ml-auto pr-2 h-100 flex-wrap d-none d-lg-inline-block">
-    <div class="pl-2 pr-2 border-left border-right home-nav-item" (click)="showSecurityAndPrivacyModal()">
+    <div class="pl-2 pr-2 home-nav-item" (click)="showSecurityAndPrivacyModal()">
 			<span class="fa fa-lock"></span>
 		</div>
-		<div class="pl-2 pr-2 border-left home-nav-item">
+		<div class="pl-2 pr-2 home-nav-item">
 			<a class="user-manual" href="assets/user-manuals/Steam-User-Manual.pdf" target="_blank">
 				<span class="fa fa-book"></span>
 			</a>
 		</div>
-		<div class="pl-2 pr-2 border-left border-right home-nav-item" [routerLink]="['/settings']">
+		<div class="pl-2 pr-2 home-nav-item" [routerLink]="['/settings']">
 			<span class="fa fa-cog"></span>
 		</div>
-    <div class="pl-2 pr-2 border-right border-left home-nav-item"
+    <div class="pl-2 pr-2 home-nav-item"
       [routerLink]="['/directory-dashboard', assessment.directoryId]">
       <span class="fa fa-folder-open"></span>
     </div>
-    <div class="pl-2 pr-2 border-right home-nav-item" (click)="navigateHome()">
+    <div class="pl-2 pr-2 home-nav-item" (click)="navigateHome()">
       <span class="fa fa-home"></span>
     </div>
   </div>
@@ -132,23 +132,23 @@
 		<div class="pl-2 pr-2 border-left home-nav-item d-block" (click)="collapseBanner()">
 			<span class="fa fa-bars"></span>
 		</div>
-    <div class="pl-2 pr-2 border-left home-nav-item d-block" 
+    <div class="pl-2 pr-2 home-nav-item d-block" 
     (click)="showSecurityAndPrivacyModal()">
       <span class="fa fa-lock"></span>
     </div>
-		<div class="pl-2 pr-2 border-left home-nav-item d-block">
+		<div class="pl-2 pr-2 home-nav-item d-block">
 			<a class="user-manual" href="assets/user-manuals/Steam-User-Manual.pdf" target="_blank">
 				<span class="fa fa-book"></span>
 			</a>
 		</div>
-		<div class="pl-2 pr-2 border-left home-nav-item d-block" [routerLink]="['/settings']">
+		<div class="pl-2 pr-2 home-nav-item d-block" [routerLink]="['/settings']">
 			<span class="fa fa-cog"></span>
 		</div>
-		<div class="pl-2 pr-2 border-left home-nav-item d-block"
+		<div class="pl-2 pr-2 home-nav-item d-block"
 			[routerLink]="['/directory-dashboard', assessment.directoryId]">
 			<span class="fa fa-folder-open"></span>
 		</div>
-		<div class="pl-2 pr-2 border-left home-nav-item d-block" (click)="navigateHome()">
+		<div class="pl-2 pr-2 home-nav-item d-block" (click)="navigateHome()">
 			<span class="fa fa-home"></span>
 		</div>
 	</div>
