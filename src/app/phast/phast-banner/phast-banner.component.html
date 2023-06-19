@@ -118,22 +118,22 @@
   </div>
 
   <div class="d-flex ml-auto pr-2 h-100 d-none d-lg-inline-block">
-    <div class="pl-2 pr-2 border-left border-right home-nav-item d-none d-lg-inline-block" (click)="showSecurityAndPrivacyModal()">
-      <span class="fa fa-lock"></span>
+    <div class="pl-2 pr-2 border-left home-nav-item d-none d-lg-inline-block" (click)="showSecurityAndPrivacyModal()">
+      <span class="fa fa-lock" ></span>
     </div>
     <div class="pl-2 pr-2 border-left home-nav-item d-none d-lg-inline-block">
       <a class="user-manual" href="assets/user-manuals/Process-Heating-User-Manual.pdf" target="_blank">
         <span class="fa fa-book"></span>
       </a>
     </div>
-    <div class="pl-2 pr-2 border-left border-right home-nav-item d-none d-lg-inline-block" [routerLink]="['/settings']">
+    <div class="pl-2 pr-2 border-left home-nav-item d-none d-lg-inline-block" [routerLink]="['/settings']">
       <span class="fa fa-cog"></span>
     </div>
-    <div class="pl-2 pr-2 border-right border-left home-nav-item d-none d-lg-inline-block"
+    <div class="pl-2 pr-2 border-left home-nav-item d-none d-lg-inline-block"
       [routerLink]="['/directory-dashboard', assessment.directoryId]">
       <span class="fa fa-folder-open"></span>
     </div>
-    <div class="pl-2 pr-2 border-right home-nav-item d-none d-lg-inline-block" (click)="navigateHome()">
+    <div class="pl-2 pr-2 border-left home-nav-item d-none d-lg-inline-block" (click)="navigateHome()">
       <span class="fa fa-home"></span>
     </div>
   </div>
