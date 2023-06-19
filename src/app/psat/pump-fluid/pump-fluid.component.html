@@ -5,8 +5,8 @@
     </div>
   </div>
 
-  <div class="mx-3 my-0">
-    <app-assessment-integration-status class="p-3" *ngIf="inSetup || baseline" [connectedToType]="'inventory'" 
+  <div *ngIf="inSetup || baseline" class="mx-3 my-0">
+    <app-assessment-integration-status class="p-3" [connectedToType]="'inventory'" 
     [hasConnectedInventories]="hasConnectedInventories"
     [connectedFormGroupName]="'pump'"></app-assessment-integration-status>
   </div>

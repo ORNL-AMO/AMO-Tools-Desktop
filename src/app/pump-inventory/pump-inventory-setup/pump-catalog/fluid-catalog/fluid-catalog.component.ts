@@ -36,7 +36,6 @@ export class FluidCatalogComponent implements OnInit {
       if (selectedPump) {
         this.form = this.fluidCatalogService.getFormFromFluidProperties(selectedPump.fluid);
         this.hasConnectedInventories = Boolean(selectedPump.connectedItem);
-        ;
       }
     });
     this.displayOptions = this.pumpInventoryService.pumpInventoryData.getValue().displayOptions.fluidPropertiesOptions;

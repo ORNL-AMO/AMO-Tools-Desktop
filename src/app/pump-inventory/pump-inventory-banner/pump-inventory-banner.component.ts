@@ -61,6 +61,7 @@ export class PumpInventoryBannerComponent implements OnInit {
     this.selectedDepartmentIdSub.unsubscribe();
     this.mainTabSub.unsubscribe();
     this.summaryTabSub.unsubscribe();
+    this.connectedInventoryDataSub.unsubscribe();
   }
 
   setSetupTab(str: string) {

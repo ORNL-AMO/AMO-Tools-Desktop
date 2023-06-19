@@ -9,6 +9,7 @@ import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { pumpTypesConstant, driveConstants, fluidProperties, fluidTypes } from '../psatConstants';
 import { PsatWarningService } from '../psat-warning.service';
 import { PumpFluidService } from './pump-fluid.service';
+import { IntegrationStateService } from '../../shared/assessment-integration/integration-state.service';
 
 @Component({
   selector: 'app-pump-fluid',
@@ -48,6 +49,7 @@ export class PumpFluidComponent implements OnInit {
               private psatWarningService: PsatWarningService, 
               private compareService: CompareService, 
               private helpPanelService: HelpPanelService, 
+              private integrationStateService: IntegrationStateService,
               private convertUnitsService: ConvertUnitsService, 
               private pumpFluidService: PumpFluidService) { }
 
@@ -86,6 +88,7 @@ export class PumpFluidComponent implements OnInit {
   }
 
   initForm() {
+    this.hasConnectedInventories = this.integrationStateService.assessmentIntegrationState.getValue().hasThreeWayConnection;
     this.psatForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
     this.checkWarnings();
   }

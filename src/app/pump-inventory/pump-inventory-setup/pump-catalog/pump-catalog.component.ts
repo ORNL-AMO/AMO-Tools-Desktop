@@ -32,10 +32,6 @@ export class PumpCatalogComponent implements OnInit {
   constructor(private pumpInventoryService: PumpInventoryService, private integrationStateService: IntegrationStateService, private pumpCatalogService: PumpCatalogService) { }
 
   ngOnInit(): void {
-    let selectedPump = this.pumpCatalogService.selectedPumpItem.getValue();
-    if (selectedPump)  {
-      this.selectedPumpItem = selectedPump;
-    }
     this.pumpInventoryDataSub = this.pumpInventoryService.pumpInventoryData.subscribe(val => {
       this.pumpInventoryData = val;
       let selectedDepartmentId: string = this.pumpCatalogService.selectedDepartmentId.getValue();

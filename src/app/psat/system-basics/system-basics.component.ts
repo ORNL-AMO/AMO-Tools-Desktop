@@ -17,7 +17,7 @@ import { IntegrationState } from '../../shared/assessment-integration/integratio
   templateUrl: './system-basics.component.html',
   styleUrls: ['./system-basics.component.css']
 })
-export class SystemBasicsComponent implements OnInit, OnDestroy {
+export class SystemBasicsComponent implements OnDestroy {
   @Input()
   assessment: Assessment;
   @Input()
@@ -43,10 +43,6 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   @ViewChild('settingsModal', { static: false }) public settingsModal: ModalDirective;
 
   constructor(private settingsService: SettingsService, private settingsDbService: SettingsDbService, private psatService: PsatService) { }
-
-  ngOnInit() {
-    this.initSettings();
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.assessmentPsat) {
