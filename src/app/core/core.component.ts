@@ -58,7 +58,6 @@ export class CoreComponent implements OnInit {
     private calculatorDbService: CalculatorDbService, 
     private coreService: CoreService, 
     private router: Router,
-    private analyticsDataIdbService: AnalyticsDataIdbService,
     private securityAndPrivacyService: SecurityAndPrivacyService,
     private inventoryDbService: InventoryDbService, private sqlDbApiService: SqlDbApiService) {
   }
