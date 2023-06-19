@@ -129,43 +129,22 @@ export class AssessmentReportsComponent implements OnInit {
     this.selectedFsatCalcs = selectedCalcs.filter(item => { return item.type == 'fan' });
   }
 
-  goToAssessment(assessment: Assessment, mainTab?: string, subTab?: string) {
+  goToAssessment(assessment: Assessment) {
     let tab: string;
     let itemSegment: string;
     if (assessment.type === 'PSAT') {
-      if (assessment.psat.setupDone && !mainTab && (!assessment.isExample)) {
-        tab = 'assessment';
-      }
       itemSegment = '/psat/';
     } else if (assessment.type === 'PHAST') {
-      if (assessment.phast.setupDone && !mainTab && (!assessment.isExample)) {
-        tab = 'assessment';
-      }
       itemSegment = '/phast/';
     } else if (assessment.type === 'FSAT') {
-      if (assessment.fsat.setupDone && !mainTab && !assessment.isExample) {
-        tab = 'assessment';
-      }
       itemSegment = '/fsat/';
     } else if (assessment.type === 'SSMT') {
-      if (assessment.ssmt.setupDone && !mainTab && !assessment.isExample) {
-        tab = 'assessment';
-      }
       itemSegment = '/ssmt/';
     } else if (assessment.type == 'TreasureHunt') {
-      if (assessment.treasureHunt.setupDone && !mainTab && !assessment.isExample) {
-        tab = 'treasure-chest';
-      }
       itemSegment = '/treasure-hunt/';
     } else if (assessment.type == 'WasteWater') {
-      if (assessment.wasteWater.setupDone && !mainTab && !assessment.isExample) {
-        tab = 'assessment';
-      }
       itemSegment = '/waste-water/';
     } else if (assessment.type == 'CompressedAir') {
-      if (assessment.compressedAirAssessment.setupDone && !mainTab && !assessment.isExample) {
-        tab = 'assessment';
-      }
       itemSegment = '/compressed-air/';
     }
 
