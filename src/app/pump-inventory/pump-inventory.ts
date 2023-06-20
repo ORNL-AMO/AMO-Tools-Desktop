@@ -25,6 +25,7 @@ export interface PumpItem extends ConnectedInventoryProperties {
   departmentId: string,
   name: string,
   description: string,
+  notes: string,
   fieldMeasurements: FieldMeasurements,
   fluid: FluidProperties,
   nameplateData: NameplateData,

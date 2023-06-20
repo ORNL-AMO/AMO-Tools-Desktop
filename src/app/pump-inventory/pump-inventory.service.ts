@@ -90,6 +90,7 @@ export class PumpInventoryService {
       departmentId: departmentId,
       suiteDbItemId: undefined,
       description: '',
+      notes: '',
       name: 'New Pump',
       fieldMeasurements: {
         pumpSpeed: undefined,

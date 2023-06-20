@@ -29,7 +29,7 @@ export const MockPumpInventory: InventoryItem = {
                         "departmentId": "l6rd7tt1i",
                         "description": "Main pump",
                         "name": "Pump A",
-
+                        "notes": "",
                         "nameplateData": {
                             "manufacturer": "Pumps inc.",
                             "model": "A",
@@ -100,7 +100,7 @@ export const MockPumpInventory: InventoryItem = {
                         "departmentId": "l6rd7tt1i",
                         "description": "New Pump installed 2021",
                         "name": "Pump B",
-
+                        "notes": "",
                         "nameplateData": {
                             "manufacturer": "Pumps Inc.",
                             "model": "B",
@@ -179,7 +179,7 @@ export const MockPumpInventory: InventoryItem = {
                         "departmentId": "a2jd7ua9i",
                         "description": "Other pump",
                         "name": "Pump C",
-
+                        "notes": "",
                         "nameplateData": {
                             "manufacturer": "Pumps inc.",
                             "model": "C",
@@ -249,6 +249,7 @@ export const MockPumpInventory: InventoryItem = {
                         "id": "54n63yw8i",
                         "departmentId": "a2jd7ua9i",
                         "description": "Another pump",
+                        "notes": "",
                         "name": "Pump D",
 
                         "nameplateData": {
