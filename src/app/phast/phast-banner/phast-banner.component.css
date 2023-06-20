@@ -27,3 +27,8 @@ a.user-manual{
 .fa.fa-chevron-left {
     font-size: 28px;
 }
+
+.fa.fa-lock, .fa.fa-book, .fa.fa-cog, .fa.fa-folder-open, .fa.fa-home{
+    width: 28px;
+    font-size: 28px;
+}
