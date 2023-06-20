@@ -5,6 +5,7 @@ import { FieldMeasurements, PumpInventoryData, PumpInventoryDepartment, PumpItem
 import * as _ from 'lodash';
 import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
 import { MotorIntegrationService } from '../shared/assessment-integration/motor-integration.service';
+import { PsatIntegrationService } from '../shared/assessment-integration/psat-integration.service';
 
 @Injectable()
 export class PumpInventoryService {
@@ -22,7 +23,8 @@ export class PumpInventoryService {
 
   filterInventorySummary: BehaviorSubject<FilterInventorySummary>;
 
-  constructor(private helperFunctionsService: HelperFunctionsService, private motorIntegrationService: MotorIntegrationService) { 
+  constructor(private helperFunctionsService: HelperFunctionsService,
+    private psatIntegrationService: PsatIntegrationService, private motorIntegrationService: MotorIntegrationService) { 
     this.setupTab = new BehaviorSubject<string>('plant-setup');
     this.mainTab = new BehaviorSubject<string>('setup');
     let inventoryData: PumpInventoryData = this.initInventoryData();

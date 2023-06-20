@@ -4,11 +4,14 @@
     Motor
 </label>
 
+<app-assessment-integration-status *ngIf="displayForm" [connectedToType]="'assessment'" [hasConnectedInventories]="hasConnectedInventories" [connectedFormGroupName]="'motor'"></app-assessment-integration-status>
+
 <app-inventory-integration *ngIf="displayForm && inventorySelectOptions" 
     (focusedField)="focusField($event, true)"
     [connectedInventoryType]="'motor'"
     [selectOptions]="inventorySelectOptions">
 </app-inventory-integration>
+<app-integration-status></app-integration-status>
 
 <form *ngIf="displayForm" class="p-1" #formElement [formGroup]="form">
     <div class="form-group" *ngIf="displayOptions.lineFrequency">

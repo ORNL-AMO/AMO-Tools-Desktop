@@ -1,14 +1,4 @@
 <ng-container *ngIf="showIntegrationStatus">
-
-  <div *ngIf="integrationState.status === 'success' && integrationState.msgHTML" class="integration-status alert-success small">
-    <div class="text-right mt-0 pr-3">
-      <a (click)="clearIntegrationState()"><span class="fa fa-times"></span></a>
-    </div>
-    <div *ngIf="integrationState.msgHTML" class="text-center mx-auto w-75 message"
-      [innerHTML]="integrationState.msgHTML">
-    </div>
-  </div>
-
   <div *ngIf="integrationState.status === 'settings-differ'" class="integration-status alert-warning small">
     <div class="text-right mt-0 pr-3">
       <a (click)="clearIntegrationState()"><span class="fa fa-times"></span></a>
@@ -22,12 +12,12 @@
     </div>
   </div>
 
-<div *ngIf="showIntegrationStatus && integrationState.status === 'connected-items'"
+<div *ngIf="showIntegrationStatus && integrationState.status === 'connected-to-inventory'"
   class="integration-status alert-info small">
   <div class=" text-center mx-auto w-75 message">
   This inventory is connected to items in another inventory.
   <br>
-  Settings changes <b>will not</b> be applied to the connected inventory.
+  Settings changes will <b>not</b> be applied to the connected inventory.
 </div>
 </div>
 

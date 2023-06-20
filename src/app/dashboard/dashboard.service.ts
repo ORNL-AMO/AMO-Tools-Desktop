@@ -27,7 +27,7 @@ export class DashboardService {
     this.totalScreenWidth = new BehaviorSubject<number>(undefined);
   }
 
-  navigateWithSidebarOptions(routeURL: string, sidebarOptions?: SidebarDisplayOptions) {
+  navigateWithSidebarOptions(routeURL: string, sidebarOptions?: SidebarDisplayOptions, queryParams?) {
     if (sidebarOptions) {
       this.collapseSidebar.next(sidebarOptions.shouldCollapse);
     }
@@ -35,7 +35,7 @@ export class DashboardService {
     if (this.totalScreenWidth.getValue() < 1024) {
       this.collapseSidebar.next(true);
     }
-    this.router.navigateByUrl(routeURL);
+    this.router.navigate([routeURL], { queryParams: queryParams});
   }
 }
 

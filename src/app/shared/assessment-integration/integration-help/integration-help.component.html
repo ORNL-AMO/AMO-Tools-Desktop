@@ -1,5 +1,5 @@
 <hr class="my-1 hr-spacer">
-<ng-container *ngIf="isMotorInventory">
+<ng-container *ngIf="connectionType === 'motor'">
     <div class="my-2">
         <h6>
             <span *ngIf="focusedField == 'select-item'">Connect an Existing Motor Inventory</span>
@@ -36,5 +36,46 @@
             </table>
         </div>
     </div>
+
+</ng-container>
+
+<ng-container *ngIf="connectionType === 'PSAT'">
+    PUMP HELP
+    <!-- <div class="my-2">
+        <h6>
+            <span *ngIf="focusedField == 'select-item'">Connect an Existing Motor Inventory</span>
+            <span *ngIf="focusedField != 'select-item'">Connected Inventory</span>
+            <br>
+            <small class="text-muted">
+            <span *ngIf="focusedField == 'select-item'">
+                Connect this pump to an existing motor inventory item. Changes made to the connected motor item Nameplate Data will be reflected in Pump Motor fields:
+            </span>
+            <div *ngIf="focusedField == 'connected-owner-inventory'" class="alert-info p-2 mt-2 w-100">
+                 This motor is connected to a pump inventory item. 
+                 Changes made to Nameplate Data will be reflected in the pump item's Pump Motor fields: 
+            </div>
+            <div *ngIf="focusedField == 'connected-item'" class="alert-info p-2 mt-2 w-100">
+                This pump is connected to a motor inventory item. 
+                Changes made to the motor item Nameplate Data will be reflected in the Pump Motor fields: 
+           </div>
+           </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th class="text-center">Motor Field </th>
+                        <th class="text-center">Pump Field</th>
+                    </tr>
+                    <tr><td class="text-center">Efficiency Class</td><td class="text-center">Efficiency Class</td></tr>
+                    <tr><td class="text-center">Rated Motor Power</td><td class="text-center">Rated Power</td></tr>
+                    <tr><td class="text-center">Line Frequency</td><td class="text-center">Line Frequency</td></tr>
+                    <tr><td class="text-center">Rated Voltage</td><td class="text-center">Rated Voltage</td></tr>
+                    <tr><td class="text-center">Full-Load Speed</td><td class="text-center">RPM</td></tr>
+                    <tr><td class="text-center">Full-Load Amps</td><td class="text-center">Full-Load Amps</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div> -->
 
 </ng-container>

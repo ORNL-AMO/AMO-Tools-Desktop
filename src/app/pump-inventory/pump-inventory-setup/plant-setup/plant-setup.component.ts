@@ -12,6 +12,7 @@ import { InventoryItem } from '../../../shared/models/inventory/inventory';
 import * as _ from 'lodash';
 import { ConvertPumpInventoryService } from '../../convert-pump-inventory.service';
 import { IntegrationStateService } from '../../../shared/assessment-integration/integration-state.service';
+import { IntegrationState } from '../../../shared/assessment-integration/integrations';
 
 
 @Component({
@@ -31,7 +32,7 @@ export class PlantSetupComponent implements OnInit {
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
   oldSettings: Settings;
-
+  assessmentIntegrationState: IntegrationState;
 
   constructor(private settingsDbService: SettingsDbService, private settingsService: SettingsService,
     private convertPumpInventoryService: ConvertPumpInventoryService,
@@ -45,9 +46,7 @@ export class PlantSetupComponent implements OnInit {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
     this.pumpInventoryDataSub = this.pumpInventoryService.pumpInventoryData.subscribe(inventoryData => {
       this.pumpInventoryData = inventoryData;
-       if (this.pumpInventoryData.hasConnectedItems) {
-        this.integrationStateService.integrationState.next({status: 'connected-items'});
-      }
+      this.setConnectedItemInfo();
     });
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
 
@@ -61,6 +60,26 @@ export class PlantSetupComponent implements OnInit {
 
   ngOnDestroy() {
     this.pumpInventoryDataSub.unsubscribe();
+  }
+
+  setConnectedItemInfo() {
+    if (this.pumpInventoryData.hasConnectedInventoryItems && this.pumpInventoryData.hasConnectedPsat) {
+        this.assessmentIntegrationState = {
+          assessmentIntegrationStatus: 'three-way-connected'
+        }
+    } else if (this.pumpInventoryData.hasConnectedInventoryItems) {
+      this.integrationStateService.integrationState.next({status: 'connected-to-inventory'});
+
+    } else if (this.pumpInventoryData.hasConnectedPsat) {
+      this.assessmentIntegrationState = {
+        assessmentIntegrationStatus: 'connected-to-assessment'
+      }
+    } else {
+      this.assessmentIntegrationState = {
+        assessmentIntegrationStatus: undefined
+      }
+      
+    }
   }
 
   async save() {

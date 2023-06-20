@@ -52,7 +52,7 @@ export class MotorInventoryComponent implements OnInit {
       this.motorInventoryItem = this.inventoryDbService.getById(tmpItemId);
       let settings: Settings = this.settingsDbService.getByInventoryId(this.motorInventoryItem);
       this.motorInventoryService.settings.next(settings);
-      this.motorInventoryItem.motorInventoryData.hasConnectedItems = this.motorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
+      this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
       this.motorInventoryService.motorInventoryData.next(this.motorInventoryItem.motorInventoryData);
       if (this.motorInventoryItem.batchAnalysisSettings) {
         this.batchAnalysisService.batchAnalysisSettings.next(this.motorInventoryItem.batchAnalysisSettings);
@@ -122,7 +122,7 @@ export class MotorInventoryComponent implements OnInit {
     this.motorInventoryItem.appVersion = packageJson.version;
     this.motorInventoryItem.motorInventoryData = inventoryData;
     this.motorInventoryItem.batchAnalysisSettings = batchAnalysisSettings;
-    this.motorInventoryItem.motorInventoryData.hasConnectedItems = this.motorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
+    this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.motorInventoryItem));
     this.inventoryDbService.setAll(updatedInventoryItems);
   }

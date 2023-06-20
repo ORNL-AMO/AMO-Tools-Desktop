@@ -29,11 +29,6 @@ export class IntegrationStateComponent {
   showStatus() {
     if (this.integrationState) {
       this.showIntegrationStatus = true;
-      if (this.integrationState.status === 'success') {
-        setTimeout(() => {
-          this.showIntegrationStatus = false;
-        }, 5000);
-      }
     } else {
       this.showIntegrationStatus = false;
     }

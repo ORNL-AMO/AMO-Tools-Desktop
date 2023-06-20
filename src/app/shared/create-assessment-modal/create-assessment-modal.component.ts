@@ -1,33 +1,37 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, Validators } from '@angular/forms';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Directory } from '../../shared/models/directory';
+import { Component, Input, ViewChild } from '@angular/core';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
- 
-import { Settings } from '../../shared/models/settings';
-import { UntypedFormGroup } from '@angular/forms';
-import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
-import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import * as _ from 'lodash';
-import { AssessmentService } from '../assessment.service';
-import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
-import { DashboardService } from '../dashboard.service';
-import { Assessment } from '../../shared/models/assessment';
-import { ConvertFanAnalysisService } from '../../calculator/fans/fan-analysis/convert-fan-analysis.service';
+import _ from 'lodash';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { firstValueFrom } from 'rxjs';
+import { ConvertFanAnalysisService } from '../../calculator/fans/fan-analysis/convert-fan-analysis.service';
+import { AssessmentService } from '../../dashboard/assessment.service';
+import { DashboardService } from '../../dashboard/dashboard.service';
+import { DirectoryDashboardService } from '../../dashboard/directory-dashboard/directory-dashboard.service';
+import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { Assessment } from '../models/assessment';
+import { Directory } from '../models/directory';
+import { Settings } from '../models/settings';
+import { ConnectedInventoryData, ConnectedItem } from '../assessment-integration/integrations';
+import { PumpItem } from '../../pump-inventory/pump-inventory';
+import { PsatIntegrationService } from '../assessment-integration/psat-integration.service';
+import { IntegrationStateService } from '../assessment-integration/integration-state.service';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
-  selector: 'app-assessment-create',
-  templateUrl: './assessment-create.component.html',
-  styleUrls: ['./assessment-create.component.css']
+  selector: 'app-create-assessment-modal',
+  templateUrl: './create-assessment-modal.component.html',
+  styleUrls: ['./create-assessment-modal.component.css']
 })
-export class AssessmentCreateComponent implements OnInit {
-
-
+export class CreateAssessmentModalComponent {
   @ViewChild('createModal', { static: false }) public createModal: ModalDirective;
+  @Input()
+  connectedInventoryItem: ConnectedItem;
+  @Input() 
+  integratedCreateType: string;
   newAssessmentForm: UntypedFormGroup;
-  canCreate: boolean;
   directories: Array<Directory>;
   showNewFolder: boolean = false;
   newFolderForm: UntypedFormGroup;
@@ -36,13 +40,16 @@ export class AssessmentCreateComponent implements OnInit {
   constructor(
     private formBuilder: UntypedFormBuilder,
     private assessmentService: AssessmentService,
-    private router: Router,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
     private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService,
     private dashboardService: DashboardService,
-    private convertFanAnalysisService: ConvertFanAnalysisService) { }
+    private convertFanAnalysisService: ConvertFanAnalysisService,
+    private psatIntegrationService: PsatIntegrationService,
+    private integrationStateService: IntegrationStateService,
+    private settingsService: SettingsService,
+    ) { }
 
   ngOnInit() {
     this.setDirectories();
@@ -51,7 +58,6 @@ export class AssessmentCreateComponent implements OnInit {
     this.settings = this.settingsDbService.getByDirectoryId(directoryId);
     this.newAssessmentForm = this.initForm();
     this.newFolderForm = this.initFolderForm();
-    this.canCreate = true;
     if (this.dashboardService.newAssessmentType) {
       this.newAssessmentForm.patchValue({
         assessmentType: this.dashboardService.newAssessmentType
@@ -68,9 +74,12 @@ export class AssessmentCreateComponent implements OnInit {
   }
 
   initForm() {
+    let defaultName: string = 'New Assessment';
+    let defaultType: string = this.integratedCreateType? this.integratedCreateType : 'Pump';
+    let disableAssessmentType: boolean = Boolean(this.integratedCreateType);
     return this.formBuilder.group({
-      'assessmentName': ['New Assessment', Validators.required],
-      'assessmentType': ['Pump', Validators.required],
+      'assessmentName': [defaultName, Validators.required],
+      'assessmentType': [{ value: defaultType, disabled: disableAssessmentType }, Validators.required],
       'directoryId': [this.directory.id, Validators.required]
     });
   }
@@ -86,20 +95,25 @@ export class AssessmentCreateComponent implements OnInit {
     this.dashboardService.createAssessment.next(false);
   }
 
-  createAssessment() {
-    if (this.newAssessmentForm.valid && this.canCreate) {
-      this.canCreate = false;
+  async createAssessment() {
+    if (this.newAssessmentForm.valid) {
       this.assessmentService.tab = 'system-setup';
-      //psat
       if (this.newAssessmentForm.controls.assessmentType.value === 'Pump') {
-        let tmpAssessment = this.assessmentService.getNewAssessment('PSAT');
-        tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
-        let tmpPsat = this.assessmentService.getNewPsat(this.settings);
-        tmpAssessment.psat = tmpPsat;
-        tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
-        this.addAssessment(tmpAssessment, '/psat/');
+        let psatAssessment: Assessment = this.assessmentService.getNewAssessment('PSAT');
+        psatAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
+        let newPsat = this.assessmentService.getNewPsat(this.settings);
+
+        psatAssessment.psat = newPsat;
+        psatAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
+        let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(psatAssessment));
+        let queryParams;
+        if (this.connectedInventoryItem) {
+          await this.createFromPumpInventoryItem(createdAssessment);
+          queryParams = { connectedInventory: true };
+        }
+        let navigationUrl: string = '/psat/' + createdAssessment.id;
+        this.finishAndNavigate(createdAssessment, navigationUrl, queryParams);
       }
-      //phast
       else if (this.newAssessmentForm.controls.assessmentType.value === 'Furnace') {
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('PHAST');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
@@ -107,59 +121,83 @@ export class AssessmentCreateComponent implements OnInit {
         tmpAssessment.phast = tmpPhast;
         tmpAssessment.phast.setupDone = false;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
-        this.addAssessment(tmpAssessment, '/phast/');
+        let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
+        this.finishAndNavigate(createdAssessment, '/phast/');
       }
-      //fsat
       else if (this.newAssessmentForm.controls.assessmentType.value === 'Fan') {
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('FSAT');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         tmpAssessment.fsat = this.assessmentService.getNewFsat(this.settings);
         tmpAssessment.fsat.baseGasDensity = this.convertFanAnalysisService.convertBaseGasDensityDefaults(tmpAssessment.fsat.baseGasDensity, this.settings)
-        this.addAssessment(tmpAssessment, '/fsat/');
+        let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
+        this.finishAndNavigate(createdAssessment, '/fsat/');
       }
-      //ssmt
       else if (this.newAssessmentForm.controls.assessmentType.value === 'Steam') {
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('SSMT');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         tmpAssessment.ssmt = this.assessmentService.getNewSsmt();
-        this.addAssessment(tmpAssessment, '/ssmt/');
+        let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
+        this.finishAndNavigate(createdAssessment, '/ssmt/');
       }
-      //treasure hunt
       else if (this.newAssessmentForm.controls.assessmentType.value == 'TreasureHunt') {
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('TreasureHunt');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
-        this.addAssessment(tmpAssessment, '/treasure-hunt/');
+        let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
+        this.finishAndNavigate(createdAssessment, '/treasure-hunt/');
       } 
-      // Waste Water
       else if (this.newAssessmentForm.controls.assessmentType.value == 'WasteWater') {
         let tmpAssessment = this.assessmentService.getNewAssessment('WasteWater');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         tmpAssessment.wasteWater = this.assessmentService.getNewWasteWater(this.settings);
-        this.addAssessment(tmpAssessment, '/waste-water/');
+        let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
+        this.finishAndNavigate(createdAssessment, '/waste-water/');
       }
-      // Compressed Air
       else if (this.newAssessmentForm.controls.assessmentType.value == 'CompressedAir') {
         let tmpAssessment = this.assessmentService.getNewAssessment('CompressedAir');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         tmpAssessment.compressedAirAssessment = this.assessmentService.getNewCompressedAirAssessment(this.settings);
-        this.addAssessment(tmpAssessment, '/compressed-air/');
+        let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
+        this.finishAndNavigate(createdAssessment, '/compressed-air/');
       }
     }
   }
 
-  async addAssessment(assessment: Assessment, navigationUrl: string) {
-    let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(assessment));
+  async createFromPumpInventoryItem(createdAssessment: Assessment) {
+    let connectedInventoryData: ConnectedInventoryData = this.integrationStateService.connectedInventoryData.getValue();
+    connectedInventoryData.connectedItem = this.connectedInventoryItem;
+    connectedInventoryData.canConnect = true;
+
+    let assessmentSettings = this.settingsDbService.getByAssessmentId(createdAssessment, false);
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(assessmentSettings);
+    newSettings = this.settingsService.setPumpSettingsUnitType(newSettings);
+    await this.psatIntegrationService.setPSATFromExistingPumpItem(connectedInventoryData, createdAssessment.psat, createdAssessment, newSettings);
+    await this.saveAssessmentAndSettings(newSettings, createdAssessment)
+  }
+
+  async saveAssessmentAndSettings(settings: Settings, assessment: Assessment) {
+    let settingsForm = this.settingsService.getFormFromSettings(settings);
+    settingsForm = this.settingsService.setUnits(settingsForm);
+    settings = this.settingsService.getSettingsFromForm(settingsForm);
+    settings.assessmentId = assessment.id;
+    await firstValueFrom(this.settingsDbService.addWithObservable(settings));
+    let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
+    await this.settingsDbService.setAll(updatedSettings);
+    let allAssessments = await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
+  }
+
+  async finishAndNavigate(assessment: Assessment, navigationUrl: string, queryParams?) {
     this.assessmentDbService.setAll();
     this.hideCreateModal();
     this.createModal.onHidden.subscribe(() => {
-      this.dashboardService.navigateWithSidebarOptions(navigationUrl + createdAssessment.id, {shouldCollapse: true})
+      this.dashboardService.navigateWithSidebarOptions(navigationUrl, {shouldCollapse: true}, queryParams)
     });
   }
+
 
   getParentDirStr(id: number) {
     let parentDir = _.find(this.directories, (dir) => { return dir.id === id; });

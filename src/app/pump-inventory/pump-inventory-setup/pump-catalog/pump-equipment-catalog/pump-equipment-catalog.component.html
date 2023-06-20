@@ -3,6 +3,8 @@
     <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
     Pump
 </label>
+<app-assessment-integration-status *ngIf="displayForm" [connectedToType]="'assessment'" [hasConnectedInventories]="hasConnectedInventories" [connectedFormGroupName]="'pump'"></app-assessment-integration-status>
+
 <form *ngIf="displayForm" class="p-1" #formElement [formGroup]="form">
     <div class="form-group" *ngIf="displayOptions.pumpType">
         <label for="pumpType">Pump Type</label>

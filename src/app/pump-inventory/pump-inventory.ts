@@ -6,7 +6,8 @@ export interface PumpInventoryData {
   co2SavingsData?: Co2SavingsData,
   departments: Array<PumpInventoryDepartment>,
   displayOptions: PumpPropertyDisplayOptions,
-  hasConnectedItems?: boolean,
+  hasConnectedInventoryItems?: boolean,
+  hasConnectedPsat?: boolean,
   existingDataUnits?: string
 }
 
@@ -18,9 +19,8 @@ export interface PumpInventoryDepartment {
   catalog: Array<PumpItem>
 }
 
-export interface PumpItem {
+export interface PumpItem extends ConnectedInventoryProperties {
   id: string,
-  connectedItem?: ConnectedItem,
   suiteDbItemId?: number,
   departmentId: string,
   name: string,
@@ -32,6 +32,12 @@ export interface PumpItem {
   pumpMotor: PumpMotorProperties,
   pumpStatus: PumpStatus,
   systemProperties: SystemProperties
+}
+
+export interface ConnectedInventoryProperties {
+  connectedItem?: ConnectedItem,
+  connectedItems?: Array<ConnectedItem>,
+  connectedAssessments?: Array<ConnectedItem>,
 }
 
 export interface PumpPropertyDisplayOptions {

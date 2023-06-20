@@ -41,9 +41,10 @@ export class PlantSetupComponent implements OnInit {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
     this.motorInventoryDataSub = this.motorInventoryService.motorInventoryData.subscribe(inventoryData => {
       this.motorInventoryData = inventoryData;
-      if (this.motorInventoryData.hasConnectedItems) {
-        this.integrationStateService.integrationState.next({status: 'connected-items'});
+      if (this.motorInventoryData.hasConnectedInventoryItems) {
+        this.integrationStateService.integrationState.next({status: 'connected-to-inventory'});
       }
+
     });    
     
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);

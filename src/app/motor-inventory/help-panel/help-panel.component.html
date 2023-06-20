@@ -20,7 +20,7 @@
         <app-integration-help 
             *ngIf="focusedDataGroup == 'motor-integration'" 
             [focusedField]="focusedField" 
-            [isMotorInventory]="true"></app-integration-help>
+            [connectionType]="'motor'"></app-integration-help>
         <app-batch-analysis-help *ngIf="focusedDataGroup == 'batch-analysis'"></app-batch-analysis-help>
         <app-load-characteristics-help *ngIf="focusedDataGroup == 'load-characteristics'">
         </app-load-characteristics-help>

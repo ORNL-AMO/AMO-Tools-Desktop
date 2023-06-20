@@ -19,9 +19,9 @@
         </h5>
 
         <app-integration-help 
-            *ngIf="focusedDataGroup == 'motor-integration'" 
-            [focusedField]="focusedField" 
-            [isMotorInventory]="true"></app-integration-help>
+            *ngIf="focusedDataGroup == 'motor-integration'"
+            [connectionType]="'motor'"
+            [focusedField]="focusedField"></app-integration-help>
     </div>
     <div class="p-2 pt-3" *ngIf="setupTab == 'department-setup'">
         <h5>
