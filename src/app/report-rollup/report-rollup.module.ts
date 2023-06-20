@@ -68,6 +68,7 @@ import { ReportSummaryGraphsService } from './report-summary-graphs/report-summa
 import { ReportSummaryPieChartComponent } from './report-summary-graphs/report-summary-pie-chart/report-summary-pie-chart.component';
 import { ReportSummaryBarChartComponent } from './report-summary-graphs/report-summary-bar-chart/report-summary-bar-chart.component';
 import { ReportSummaryGraphsPrintComponent } from './report-summary-graphs/report-summary-graphs-print/report-summary-graphs-print.component';
+import { DashboardService } from '../dashboard/dashboard.service';
 
 @NgModule({
   imports: [
@@ -143,7 +144,8 @@ import { ReportSummaryGraphsPrintComponent } from './report-summary-graphs/repor
     TreasureHuntReportRollupService,
     WasteWaterReportRollupService,
     CompressedAirReportRollupService,
-    ReportSummaryGraphsService
+    ReportSummaryGraphsService,
+    DashboardService
   ],
   exports: [ReportRollupComponent]
 })

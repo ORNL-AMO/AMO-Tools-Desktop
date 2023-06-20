@@ -1,62 +1,68 @@
 <div class="d-flex w-100 assessment-report flex-column p-3">
-        <div class="w-100 text-center">
+        <div class="col-12">
+                <a *ngIf="!graphsCollapsed" class="small click-link pull-right" (click)="collapseGraphs()">
+                        - Collapse Graphs
+                </a>
+                <a *ngIf="graphsCollapsed" class="small click-link pull-right" (click)="collapseGraphs()">
+                        + Show Graphs
+                </a>
+        </div>
+        <div class="w-100 text-center" [ngClass]="{'collapse': graphsCollapsed}">
                 <h4>Annual Energy Usage</h4>
         </div>
-        <div class="d-flex no-gutters w-100">
-                <div class="w-50" *ngIf="pieChartData">
+        <div class="row no-gutters justify-content-center" [ngClass]="{'collapse': graphsCollapsed}">
+                <div class="col-12 col-lg-6" *ngIf="pieChartData">
                         <app-report-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="pieChartDataOption"
                                 [energyUnit]="reportSummaryEnergyUnit">
                         </app-report-summary-pie-chart>
                 </div>
-                <div class="w-50" *ngIf="energyBarChart">
+                <div class="col-12 col-lg-6" *ngIf="energyBarChart">
                         <app-report-summary-bar-chart [barChartData]="energyBarChart"
                                 [yAxisLabel]="'Annual Energy Usage (' + settings.commonRollupUnit +')'"
                                 [tickFormat]="'.2s'">
                         </app-report-summary-bar-chart>
                 </div>
         </div>
-        <hr>
-        <div class="w-100 text-center">
+        <hr [ngClass]="{'collapse': graphsCollapsed}">
+        <div class="w-100 text-center" [ngClass]="{'collapse': graphsCollapsed}">
                 <h4>Annual Costs</h4>
         </div>
-        <div class="d-flex w-100">
-                <div class="w-50" *ngIf="pieChartData">
+        <div class="row no-gutters justify-content-center" [ngClass]="{'collapse': graphsCollapsed}">
+                <div class="col-12 col-lg-6" *ngIf="pieChartData">
                         <app-report-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'cost'"
                                 [energyUnit]="reportSummaryEnergyUnit">
                         </app-report-summary-pie-chart>
                 </div>
-                <div class="w-50" *ngIf="costBarChart">
+                <div class="col-12 col-lg-6" *ngIf="costBarChart">
                         <app-report-summary-bar-chart [barChartData]="costBarChart"
                                 [yAxisLabel]="'Annual Energy Usage (' + settings.currency +'/yr)'"
                                 [tickFormat]="'$.2s'">
                         </app-report-summary-bar-chart>
                 </div>
         </div>
-        <hr>
-
-        <div class="w-100 text-center">
+        <hr [ngClass]="{'collapse': graphsCollapsed}">
+        <div class="w-100 text-center" [ngClass]="{'collapse': graphsCollapsed}">
                 <h4>Annual Carbon Emissions</h4>
         </div>
-        <div class="d-flex w-100">
-                <div class="w-50" *ngIf="pieChartData">
+        <div class="row no-gutters justify-content-center" [ngClass]="{'collapse': graphsCollapsed}">
+                <div class="col-12 col-lg-6" *ngIf="pieChartData">
                         <app-report-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'carbon'"
                                 [energyUnit]="reportSummaryEnergyUnit">
                         </app-report-summary-pie-chart>
                 </div>
-                <div class="w-50" *ngIf="carbonBarChart">
+                <div class="col-12 col-lg-6" *ngIf="carbonBarChart">
                         <app-report-summary-bar-chart [barChartData]="carbonBarChart"
                                 [yAxisLabel]="'Annual CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)'"
                                 [tickFormat]="'.2s'">
                         </app-report-summary-bar-chart>
                 </div>
         </div>
-        <hr>
-
-        <div class="d-flex flex-column w-100 align-items-center">
-                <div class="w-50">
-                        <h4>Fuel vs Electricity Energy Usage</h4>
-                </div>
-                <div class="w-50" *ngIf="energyChartData">
+        <hr [ngClass]="{'collapse': graphsCollapsed}">
+        <div class="w-100 text-center" [ngClass]="{'collapse': graphsCollapsed}">
+                <h4>Fuel vs Electricity Energy Usage</h4>
+        </div>
+        <div class="row no-gutters justify-content-center" [ngClass]="{'collapse': graphsCollapsed}">
+                <div class="col-12" *ngIf="energyChartData">
                         <app-report-summary-pie-chart [pieChartData]="energyChartData" [dataOption]="pieChartDataOption"
                                 [energyUnit]="reportSummaryEnergyUnit">
                         </app-report-summary-pie-chart>
