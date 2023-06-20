@@ -122,7 +122,7 @@ export class CreateAssessmentModalComponent {
         tmpAssessment.phast.setupDone = false;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
-        this.finishAndNavigate(createdAssessment, '/phast/');
+        this.finishAndNavigate(createdAssessment, '/phast/' + createdAssessment.id);
       }
       else if (this.newAssessmentForm.controls.assessmentType.value === 'Fan') {
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('FSAT');
@@ -131,7 +131,7 @@ export class CreateAssessmentModalComponent {
         tmpAssessment.fsat = this.assessmentService.getNewFsat(this.settings);
         tmpAssessment.fsat.baseGasDensity = this.convertFanAnalysisService.convertBaseGasDensityDefaults(tmpAssessment.fsat.baseGasDensity, this.settings)
         let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
-        this.finishAndNavigate(createdAssessment, '/fsat/');
+        this.finishAndNavigate(createdAssessment, '/fsat/' + createdAssessment.id);
       }
       else if (this.newAssessmentForm.controls.assessmentType.value === 'Steam') {
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('SSMT');
@@ -139,14 +139,14 @@ export class CreateAssessmentModalComponent {
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         tmpAssessment.ssmt = this.assessmentService.getNewSsmt();
         let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
-        this.finishAndNavigate(createdAssessment, '/ssmt/');
+        this.finishAndNavigate(createdAssessment, '/ssmt/' + createdAssessment.id);
       }
       else if (this.newAssessmentForm.controls.assessmentType.value == 'TreasureHunt') {
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('TreasureHunt');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
-        this.finishAndNavigate(createdAssessment, '/treasure-hunt/');
+        this.finishAndNavigate(createdAssessment, '/treasure-hunt/' + createdAssessment.id);
       } 
       else if (this.newAssessmentForm.controls.assessmentType.value == 'WasteWater') {
         let tmpAssessment = this.assessmentService.getNewAssessment('WasteWater');
@@ -154,7 +154,7 @@ export class CreateAssessmentModalComponent {
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         tmpAssessment.wasteWater = this.assessmentService.getNewWasteWater(this.settings);
         let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
-        this.finishAndNavigate(createdAssessment, '/waste-water/');
+        this.finishAndNavigate(createdAssessment, '/waste-water/' + createdAssessment.id);
       }
       else if (this.newAssessmentForm.controls.assessmentType.value == 'CompressedAir') {
         let tmpAssessment = this.assessmentService.getNewAssessment('CompressedAir');
@@ -162,7 +162,7 @@ export class CreateAssessmentModalComponent {
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         tmpAssessment.compressedAirAssessment = this.assessmentService.getNewCompressedAirAssessment(this.settings);
         let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
-        this.finishAndNavigate(createdAssessment, '/compressed-air/');
+        this.finishAndNavigate(createdAssessment, '/compressed-air/' + createdAssessment.id);
       }
     }
   }
