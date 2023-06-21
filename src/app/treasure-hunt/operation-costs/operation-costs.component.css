@@ -1,6 +1,5 @@
 .group-label{
     font-size: 20px;
-    cursor: pointer;
 }
 
 .btn{
@@ -18,4 +17,8 @@
 
 .btn-primary{
     color: white;
+}
+
+.fa-check{
+    color: rgb(0, 181, 45);
 }

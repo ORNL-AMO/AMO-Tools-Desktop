@@ -5,6 +5,9 @@
   <div class="p-2 card-form">
     <div class="d-flex">
       <div class="p-1">
+        <div class="text-center"  *ngIf = "treasureHuntResults.electricity.energySavings">
+          <i class="fa fa-check"></i>
+        </div>
         <app-animated-checkmark [active]="treasureHunt.currentEnergyUsage.electricityUsed"
           (click)="toggleElectricityUsed()" *ngIf = "!treasureHuntResults.electricity.energySavings">
         </app-animated-checkmark>
@@ -65,6 +68,9 @@
     </div>
     <div class="d-flex">
       <div class="p-1">
+        <div class="text-center"  *ngIf = "treasureHuntResults.naturalGas.energySavings">
+          <i class="fa fa-check"></i>
+        </div>
         <app-animated-checkmark [active]="treasureHunt.currentEnergyUsage.naturalGasUsed"
           (click)="toggleNaturalGasUsed()" *ngIf = "!treasureHuntResults.naturalGas.energySavings">
         </app-animated-checkmark>
@@ -124,6 +130,9 @@
     </div>
     <div class="d-flex">
       <div class="p-1">
+        <div class="text-center"  *ngIf = "treasureHuntResults.otherFuel.energySavings">
+          <i class="fa fa-check"></i>
+        </div>
         <app-animated-checkmark [active]="treasureHunt.currentEnergyUsage.otherFuelUsed"
           (click)="toggleOtherFuelUsed()" *ngIf = "!treasureHuntResults.otherFuel.energySavings" >
         </app-animated-checkmark>
@@ -204,6 +213,9 @@
       </div>
     <div class="d-flex">
       <div class="p-1">
+        <div class="text-center"  *ngIf = "treasureHuntResults.water.energySavings">
+          <i class="fa fa-check"></i>
+        </div>
         <app-animated-checkmark [active]="treasureHunt.currentEnergyUsage.waterUsed" 
           (click)="toggleWaterUsed()" *ngIf = "!treasureHuntResults.water.energySavings">
         </app-animated-checkmark>
@@ -264,6 +276,9 @@
       </div>
     <div class="d-flex">
       <div class="p-1">
+        <div class="text-center"  *ngIf = "treasureHuntResults.wasteWater.energySavings">
+          <i class="fa fa-check"></i>
+        </div>
         <app-animated-checkmark [active]="treasureHunt.currentEnergyUsage.wasteWaterUsed"
           (click)="toggleWasteWaterUsed()"  *ngIf = "!treasureHuntResults.wasteWater.energySavings">
         </app-animated-checkmark>
@@ -324,6 +339,9 @@
       </div>
     <div class="d-flex">
       <div class="p-1">
+        <div class="text-center"  *ngIf = "treasureHuntResults.compressedAir.energySavings">
+          <i class="fa fa-check"></i>
+        </div>
         <app-animated-checkmark [active]="treasureHunt.currentEnergyUsage.compressedAirUsed"
           (click)="toggleCompressedAirUsed()"  *ngIf = "!treasureHuntResults.compressedAir.energySavings">
         </app-animated-checkmark>
@@ -386,6 +404,9 @@
 
     <div class="d-flex">
       <div class="p-1">
+        <div class="text-center"  *ngIf = "treasureHuntResults.steam.energySavings">
+          <i class="fa fa-check"></i>
+        </div>
         <app-animated-checkmark [active]="treasureHunt.currentEnergyUsage.steamUsed"
          (click)="toggleSteamUsed()"  *ngIf = "!treasureHuntResults.steam.energySavings">
         </app-animated-checkmark>
