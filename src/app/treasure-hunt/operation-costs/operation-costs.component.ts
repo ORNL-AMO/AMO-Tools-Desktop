@@ -55,6 +55,16 @@ export class OperationCostsComponent implements OnInit {
   saveSettingsOnDestroy: boolean = false;
   electricityModalShown: boolean = false;
   naturalGasEmissionsShown: boolean = false;
+  formNotFilledErrorElectricityUnitCosts: boolean = false;
+  formNotFilledErrorElectricityAnnualConsumption: boolean = false;
+  formNotFilledErrorElectricityAnnualCosts: boolean = false;
+  formNotFilledErrorNaturalGasUnitCosts: boolean = false;
+  formNotFilledErrorNaturalGasAnnualConsumption: boolean = false;
+  formNotFilledErrorNaturalGasAnnualCosts: boolean = false;
+  formNotFilledErrorOtherFuelUnitCosts: boolean = false;
+  formNotFilledErrorOtherFuelAnnualConsumption: boolean = false;
+  formNotFilledErrorOtherFuelAnnualCosts: boolean = false;
+
   constructor(private treasureHuntReportService: TreasureHuntReportService, private treasureHuntService: TreasureHuntService,
        private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -178,6 +188,7 @@ export class OperationCostsComponent implements OnInit {
     } else if (this.treasureHuntResults.electricity.energySavings == 0) {
       this.treasureHunt.currentEnergyUsage.electricityUsed = false;
       this.treasureHunt.currentEnergyUsage.electricityUsage = 0;
+      this.treasureHunt.currentEnergyUsage.electricityCosts = 0;
     }
     this.save();
   }
@@ -425,4 +436,138 @@ export class OperationCostsComponent implements OnInit {
     this.save();
   }
 
+  calculateElectricityUnitCosts(){
+    let annualElectricityCosts: number = this.treasureHunt.currentEnergyUsage.electricityCosts;
+    let annualElectricityUsage: number = this.treasureHunt.currentEnergyUsage.electricityUsage;
+    if (!annualElectricityCosts || !annualElectricityUsage)
+    {
+      this.formNotFilledErrorElectricityUnitCosts = true;
+    }
+    else
+    {
+      this.formNotFilledErrorElectricityUnitCosts = false;
+      this.settings.electricityCost = annualElectricityCosts/annualElectricityUsage;
+    }
+    this.save();
+  }
+
+  calculateElectricityAnnualConsumption(){
+    let electricityCost: number = this.settings.electricityCost;
+    let annualElectricityCosts: number = this.treasureHunt.currentEnergyUsage.electricityCosts;
+    if (!annualElectricityCosts || !electricityCost)
+    {
+      this.formNotFilledErrorElectricityAnnualConsumption = true;
+    }
+    else
+    {
+      this.formNotFilledErrorElectricityAnnualConsumption = false;
+      this.treasureHunt.currentEnergyUsage.electricityUsage = annualElectricityCosts/electricityCost;
+    }
+    this.save();
+  }
+
+  calculateElectricityAnnualCosts(){
+    let electricityCost: number = this.settings.electricityCost;
+    let annualElectricityUsage: number = this.treasureHunt.currentEnergyUsage.electricityUsage;
+    if (!electricityCost || !annualElectricityUsage)
+    {
+      this.formNotFilledErrorElectricityAnnualCosts = true;
+    }
+    else
+    {
+      this.formNotFilledErrorElectricityAnnualCosts = false;
+      this.treasureHunt.currentEnergyUsage.electricityCosts = electricityCost * annualElectricityUsage;
+    }
+    this.save();
+  }
+
+  calculateNaturalGasUnitCosts(){
+    let annualNaturalGasUsage: number = this.treasureHunt.currentEnergyUsage.naturalGasUsage;
+    let annualNaturalGasCosts: number = this.treasureHunt.currentEnergyUsage.naturalGasCosts;
+    if (!annualNaturalGasUsage || !annualNaturalGasCosts)
+    {
+      this.formNotFilledErrorNaturalGasUnitCosts = true;
+    }
+    else
+    {
+      this.formNotFilledErrorNaturalGasUnitCosts = false;
+      this.settings.fuelCost = annualNaturalGasCosts/annualNaturalGasUsage;
+    }
+    this.save();
+  }
+
+  calculateNaturalGasAnnualConsumption(){
+    let naturalGasCost: number = this.settings.fuelCost;
+    let annualNaturalGasCosts: number = this.treasureHunt.currentEnergyUsage.naturalGasCosts;
+    if (!annualNaturalGasCosts || !naturalGasCost)
+    {
+      this.formNotFilledErrorNaturalGasAnnualConsumption = true;
+    }
+    else
+    {
+      this.formNotFilledErrorNaturalGasAnnualConsumption = false;
+      this.treasureHunt.currentEnergyUsage.naturalGasUsage = annualNaturalGasCosts/naturalGasCost;
+    }
+    this.save();
+  }
+
+  calculateNaturalGasAnnualCosts(){
+    let naturalGasCost: number = this.settings.fuelCost;
+    let annualNaturalGasUsage: number = this.treasureHunt.currentEnergyUsage.naturalGasUsage;
+    if (!naturalGasCost || !annualNaturalGasUsage)
+    {
+      this.formNotFilledErrorNaturalGasAnnualCosts = true;
+    }
+    else
+    {
+      this.formNotFilledErrorNaturalGasAnnualCosts = false;
+      this.treasureHunt.currentEnergyUsage.naturalGasCosts = naturalGasCost * annualNaturalGasUsage;
+    }
+    this.save();
+  }
+  
+  calculateOtherFuelUnitCosts(){
+    let annualOtherFuelCosts: number = this.treasureHunt.currentEnergyUsage.otherFuelCosts;
+    let annualOtherFuelUsage: number = this.treasureHunt.currentEnergyUsage.otherFuelUsage;
+    if (!annualOtherFuelCosts || !annualOtherFuelUsage)
+    {
+      this.formNotFilledErrorOtherFuelUnitCosts = true;
+    }
+    else
+    {
+      this.formNotFilledErrorOtherFuelUnitCosts = false;
+      this.settings.otherFuelCost = annualOtherFuelCosts/annualOtherFuelUsage;
+    }
+    this.save();
+  }
+
+  calculateOtherFuelAnnualConsumption(){
+    let otherFuelCost: number = this.settings.otherFuelCost;
+    let annualOtherFuelCosts: number = this.treasureHunt.currentEnergyUsage.otherFuelCosts;
+    if (!annualOtherFuelCosts || !otherFuelCost)
+    {
+      this.formNotFilledErrorOtherFuelAnnualConsumption = true;
+    }
+    else
+    {
+      this.formNotFilledErrorOtherFuelAnnualConsumption = false;
+      this.treasureHunt.currentEnergyUsage.otherFuelUsage = annualOtherFuelCosts/otherFuelCost;
+    }
+    this.save();
+  }
+
+  calculateOtherFuelAnnualCosts(){
+    let otherFuelCost: number = this.settings.otherFuelCost;
+    let annualOtherFuelUsage: number = this.treasureHunt.currentEnergyUsage.otherFuelUsage;
+    if (!otherFuelCost || !annualOtherFuelUsage)
+    {
+      this.formNotFilledErrorOtherFuelAnnualCosts = true;
+    }
+    else
+    {
+      this.formNotFilledErrorOtherFuelAnnualCosts = false;
+      this.treasureHunt.currentEnergyUsage.otherFuelCosts = otherFuelCost * annualOtherFuelUsage;
+    }
+    this.save();
+  }
 }
