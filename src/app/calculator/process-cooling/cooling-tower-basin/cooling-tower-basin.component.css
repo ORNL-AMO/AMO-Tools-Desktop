@@ -131,3 +131,12 @@ div.clickable-tab.active{
 .header > div {
     width: calc(50%);
 }
+
+@media screen and (max-width: 1024px) {
+    .header{
+        display: block; 
+    }
+    .header > div {
+        width: calc(100%);
+    }
+}
