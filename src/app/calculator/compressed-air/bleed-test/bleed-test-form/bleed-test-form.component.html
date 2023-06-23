@@ -58,7 +58,7 @@
                 <div class="input-group">
                     <input class="form-control" name="time" type="number" id="time" formControlName="time"
                         (input)="save()" onfocus="this.select();" (focus)="changeField('time')">
-                    <span class="input-group-addon units">s</span>
+                    <span class="input-group-addon units">min</span>
                     <span class="alert-danger pull-right small"
                         *ngIf="bleedForm.controls.time.invalid && !bleedForm.controls.time.pristine">
                         <span *ngIf="bleedForm.controls.time.errors.required">Value required.</span>
