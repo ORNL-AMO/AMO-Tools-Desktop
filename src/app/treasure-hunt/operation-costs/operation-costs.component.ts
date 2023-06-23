@@ -449,11 +449,14 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateElectricityUnitCosts(){
+    this.checkElectricityForm();
     let annualElectricityCosts: number = this.treasureHunt.currentEnergyUsage.electricityCosts;
     let annualElectricityUsage: number = this.treasureHunt.currentEnergyUsage.electricityUsage;
     if (!annualElectricityCosts || !annualElectricityUsage)
     {
       this.formNotFilledErrorElectricityUnitCosts = true;
+      this.formNotFilledErrorElectricityAnnualConsumption = false;
+      this.formNotFilledErrorElectricityAnnualCosts = false;
     }
     else
     {
@@ -464,11 +467,14 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateElectricityAnnualConsumption(){
+    this.checkElectricityForm();
     let electricityCost: number = this.settings.electricityCost;
     let annualElectricityCosts: number = this.treasureHunt.currentEnergyUsage.electricityCosts;
     if (!annualElectricityCosts || !electricityCost)
     {
       this.formNotFilledErrorElectricityAnnualConsumption = true;
+      this.formNotFilledErrorElectricityUnitCosts = false;
+      this.formNotFilledErrorElectricityAnnualCosts = false;
     }
     else
     {
@@ -479,11 +485,14 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateElectricityAnnualCosts(){
+    this.checkElectricityForm();
     let electricityCost: number = this.settings.electricityCost;
     let annualElectricityUsage: number = this.treasureHunt.currentEnergyUsage.electricityUsage;
     if (!electricityCost || !annualElectricityUsage)
     {
       this.formNotFilledErrorElectricityAnnualCosts = true;
+      this.formNotFilledErrorElectricityUnitCosts = false;
+      this.formNotFilledErrorElectricityAnnualConsumption = false;
     }
     else
     {
@@ -493,12 +502,26 @@ export class OperationCostsComponent implements OnInit {
     this.save();
   }
 
+  checkElectricityForm(){
+    let electricityCost: number = this.settings.electricityCost;
+    let annualElectricityUsage: number = this.treasureHunt.currentEnergyUsage.electricityUsage;
+    let annualElectricityCosts: number = this.treasureHunt.currentEnergyUsage.electricityCosts;
+    if ((electricityCost && annualElectricityUsage) || (electricityCost && annualElectricityCosts) || (annualElectricityUsage && annualElectricityCosts)){
+      this.formNotFilledErrorElectricityUnitCosts = false;
+      this.formNotFilledErrorElectricityAnnualConsumption = false;
+      this.formNotFilledErrorElectricityAnnualCosts = false;
+    }
+    this.save();
+  }
+
   calculateNaturalGasUnitCosts(){
+    this.checkNaturalGasForm();
     let annualNaturalGasUsage: number = this.treasureHunt.currentEnergyUsage.naturalGasUsage;
     let annualNaturalGasCosts: number = this.treasureHunt.currentEnergyUsage.naturalGasCosts;
-    if (!annualNaturalGasUsage || !annualNaturalGasCosts)
-    {
+    if (!annualNaturalGasUsage || !annualNaturalGasCosts){
       this.formNotFilledErrorNaturalGasUnitCosts = true;
+      this.formNotFilledErrorNaturalGasAnnualConsumption = false;
+      this.formNotFilledErrorNaturalGasAnnualCosts = false;    
     }
     else
     {
@@ -509,11 +532,13 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateNaturalGasAnnualConsumption(){
+    this.checkNaturalGasForm();
     let naturalGasCost: number = this.settings.fuelCost;
     let annualNaturalGasCosts: number = this.treasureHunt.currentEnergyUsage.naturalGasCosts;
-    if (!annualNaturalGasCosts || !naturalGasCost)
-    {
+    if (!annualNaturalGasCosts || !naturalGasCost){
+      this.formNotFilledErrorNaturalGasUnitCosts = false;
       this.formNotFilledErrorNaturalGasAnnualConsumption = true;
+      this.formNotFilledErrorNaturalGasAnnualCosts = false;    
     }
     else
     {
@@ -524,11 +549,13 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateNaturalGasAnnualCosts(){
+    this.checkNaturalGasForm();
     let naturalGasCost: number = this.settings.fuelCost;
     let annualNaturalGasUsage: number = this.treasureHunt.currentEnergyUsage.naturalGasUsage;
-    if (!naturalGasCost || !annualNaturalGasUsage)
-    {
-      this.formNotFilledErrorNaturalGasAnnualCosts = true;
+    if (!naturalGasCost || !annualNaturalGasUsage){
+      this.formNotFilledErrorNaturalGasUnitCosts = false;
+      this.formNotFilledErrorNaturalGasAnnualConsumption = false;
+      this.formNotFilledErrorNaturalGasAnnualCosts = true;    
     }
     else
     {
@@ -537,13 +564,28 @@ export class OperationCostsComponent implements OnInit {
     }
     this.save();
   }
+
+  checkNaturalGasForm(){
+    let naturalGasCost: number = this.settings.fuelCost;
+    let annualNaturalGasUsage: number = this.treasureHunt.currentEnergyUsage.naturalGasUsage;
+    let annualNaturalGasCosts: number = this.treasureHunt.currentEnergyUsage.naturalGasCosts;
+    if ((naturalGasCost && annualNaturalGasUsage) || (naturalGasCost && annualNaturalGasCosts) || (annualNaturalGasUsage && annualNaturalGasCosts)) {
+      this.formNotFilledErrorNaturalGasUnitCosts = false;
+      this.formNotFilledErrorNaturalGasAnnualConsumption = false;
+      this.formNotFilledErrorNaturalGasAnnualCosts = false;
+    }
+    this.save();
+  }
   
   calculateOtherFuelUnitCosts(){
+    this.checkOtherFuelForm();
     let annualOtherFuelCosts: number = this.treasureHunt.currentEnergyUsage.otherFuelCosts;
     let annualOtherFuelUsage: number = this.treasureHunt.currentEnergyUsage.otherFuelUsage;
     if (!annualOtherFuelCosts || !annualOtherFuelUsage)
     {
       this.formNotFilledErrorOtherFuelUnitCosts = true;
+      this.formNotFilledErrorOtherFuelAnnualConsumption = false;
+      this.formNotFilledErrorOtherFuelAnnualCosts = false;
     }
     else
     {
@@ -554,11 +596,14 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateOtherFuelAnnualConsumption(){
+    this.checkOtherFuelForm();
     let otherFuelCost: number = this.settings.otherFuelCost;
     let annualOtherFuelCosts: number = this.treasureHunt.currentEnergyUsage.otherFuelCosts;
     if (!annualOtherFuelCosts || !otherFuelCost)
     {
+      this.formNotFilledErrorOtherFuelUnitCosts = false;
       this.formNotFilledErrorOtherFuelAnnualConsumption = true;
+      this.formNotFilledErrorOtherFuelAnnualCosts = false;
     }
     else
     {
@@ -569,10 +614,13 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateOtherFuelAnnualCosts(){
+    this.checkOtherFuelForm();
     let otherFuelCost: number = this.settings.otherFuelCost;
     let annualOtherFuelUsage: number = this.treasureHunt.currentEnergyUsage.otherFuelUsage;
     if (!otherFuelCost || !annualOtherFuelUsage)
     {
+      this.formNotFilledErrorOtherFuelUnitCosts = false;
+      this.formNotFilledErrorOtherFuelAnnualConsumption = false;
       this.formNotFilledErrorOtherFuelAnnualCosts = true;
     }
     else
@@ -583,12 +631,27 @@ export class OperationCostsComponent implements OnInit {
     this.save();
   }
 
-    calculateWaterUnitCosts(){
+  checkOtherFuelForm(){
+    let otherFuelCost: number = this.settings.otherFuelCost;
+    let annualOtherFuelUsage: number = this.treasureHunt.currentEnergyUsage.otherFuelUsage;
+    let annualOtherFuelCosts: number = this.treasureHunt.currentEnergyUsage.otherFuelCosts;
+    if ((otherFuelCost && annualOtherFuelUsage) || (otherFuelCost && annualOtherFuelCosts) || (annualOtherFuelUsage && annualOtherFuelCosts)){
+      this.formNotFilledErrorOtherFuelUnitCosts = false;
+      this.formNotFilledErrorOtherFuelAnnualConsumption = false;
+      this.formNotFilledErrorOtherFuelAnnualCosts = false;
+    }
+    this.save();
+  }
+
+  calculateWaterUnitCosts(){
+    this.checkWaterForm();
     let annualWaterCosts: number = this.treasureHunt.currentEnergyUsage.waterCosts;
     let annualWaterUsage: number = this.treasureHunt.currentEnergyUsage.waterUsage;
     if (!annualWaterCosts || !annualWaterUsage)
     {
       this.formNotFilledErrorWaterUnitCosts = true;
+      this.formNotFilledErrorWaterAnnualConsumption = false;
+      this.formNotFilledErrorWaterAnnualCosts = false;
     }
     else
     {
@@ -599,11 +662,14 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateWaterAnnualConsumption(){
+    this.checkWaterForm();
     let waterCost: number = this.settings.waterCost;
     let annualWaterCosts: number = this.treasureHunt.currentEnergyUsage.waterCosts;
     if (!annualWaterCosts || !waterCost)
     {
+      this.formNotFilledErrorWaterUnitCosts = false;
       this.formNotFilledErrorWaterAnnualConsumption = true;
+      this.formNotFilledErrorWaterAnnualCosts = false;
     }
     else
     {
@@ -614,10 +680,13 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateWaterAnnualCosts(){
+    this.checkWaterForm();
     let waterCost: number = this.settings.waterCost;
     let annualWaterUsage: number = this.treasureHunt.currentEnergyUsage.waterUsage;
     if (!waterCost || !annualWaterUsage)
     {
+      this.formNotFilledErrorWaterUnitCosts = false;
+      this.formNotFilledErrorWaterAnnualConsumption = false;
       this.formNotFilledErrorWaterAnnualCosts = true;
     }
     else
@@ -628,12 +697,27 @@ export class OperationCostsComponent implements OnInit {
     this.save();
   }
 
+  checkWaterForm(){
+    let waterCost: number = this.settings.waterCost;
+    let annualWaterUsage: number = this.treasureHunt.currentEnergyUsage.waterUsage;
+    let annualWaterCosts: number = this.treasureHunt.currentEnergyUsage.waterCosts;
+    if ((waterCost && annualWaterUsage) || (waterCost && annualWaterCosts) || (annualWaterUsage && annualWaterCosts)){
+      this.formNotFilledErrorWaterUnitCosts = false;
+      this.formNotFilledErrorWaterAnnualConsumption = false;
+      this.formNotFilledErrorWaterAnnualCosts = false;
+    }
+    this.save();
+  }
+
   calculateWastewaterUnitCosts(){
+    this.checkWastewaterForm();
     let annualWastewaterCosts: number = this.treasureHunt.currentEnergyUsage.wasteWaterCosts;
     let annualWastewaterUsage: number = this.treasureHunt.currentEnergyUsage.wasteWaterUsage;
     if (!annualWastewaterCosts || !annualWastewaterUsage)
     {
       this.formNotFilledErrorWastewaterUnitCosts = true;
+      this.formNotFilledErrorWastewaterAnnualConsumption = false;
+      this.formNotFilledErrorWastewaterAnnualCosts = false;    
     }
     else
     {
@@ -644,11 +728,14 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateWastewaterAnnualConsumption(){
+    this.checkWastewaterForm();
     let wastewaterCost: number = this.settings.waterWasteCost;
     let annualWastewaterCosts: number = this.treasureHunt.currentEnergyUsage.wasteWaterCosts;
     if (!annualWastewaterCosts || !wastewaterCost)
     {
+      this.formNotFilledErrorWastewaterUnitCosts = false;
       this.formNotFilledErrorWastewaterAnnualConsumption = true;
+      this.formNotFilledErrorWastewaterAnnualCosts = false;    
     }
     else
     {
@@ -659,11 +746,14 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateWastewaterAnnualCosts(){
+    this.checkWastewaterForm();
     let wastewaterCost: number = this.settings.waterWasteCost;
     let annualWastewaterUsage: number = this.treasureHunt.currentEnergyUsage.wasteWaterUsage;
     if (!wastewaterCost || !annualWastewaterUsage)
     {
-      this.formNotFilledErrorWastewaterAnnualCosts = true;
+      this.formNotFilledErrorWastewaterUnitCosts = false;
+      this.formNotFilledErrorWastewaterAnnualConsumption = false;
+      this.formNotFilledErrorWastewaterAnnualCosts = true;    
     }
     else
     {
@@ -673,12 +763,28 @@ export class OperationCostsComponent implements OnInit {
     this.save();
   }
 
+  checkWastewaterForm()
+  {
+    let wastewaterCost: number = this.settings.waterWasteCost;
+    let annualWastewaterUsage: number = this.treasureHunt.currentEnergyUsage.wasteWaterUsage;
+    let annualWastewaterCosts: number = this.treasureHunt.currentEnergyUsage.wasteWaterCosts;
+    if ((wastewaterCost && annualWastewaterUsage) || (wastewaterCost && annualWastewaterCosts) || (annualWastewaterUsage && annualWastewaterCosts)){
+      this.formNotFilledErrorWastewaterUnitCosts = false;
+      this.formNotFilledErrorWastewaterAnnualConsumption = false;
+      this.formNotFilledErrorWastewaterAnnualCosts = false;
+    }
+    this.save();
+  }
+
   calculateCompressedAirUnitCosts(){
+    this.checkCompressedAirForm();
     let annualCompressedAirCosts: number = this.treasureHunt.currentEnergyUsage.compressedAirCosts;
     let annualCompressedAirUsage: number = this.treasureHunt.currentEnergyUsage.compressedAirUsage;
     if (!annualCompressedAirCosts || !annualCompressedAirUsage)
     {
       this.formNotFilledErrorCompressedAirUnitCosts = true;
+      this.formNotFilledErrorCompressedAirAnnualConsumption = false;
+      this.formNotFilledErrorCompressedAirAnnualCosts = false;
     }
     else
     {
@@ -689,11 +795,14 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateCompressedAirAnnualConsumption(){
+    this.checkCompressedAirForm();
     let compressedAirCost: number = this.settings.compressedAirCost;
     let annualCompressedAirCosts: number = this.treasureHunt.currentEnergyUsage.compressedAirCosts;
     if (!annualCompressedAirCosts || !compressedAirCost)
     {
+      this.formNotFilledErrorCompressedAirUnitCosts = false;
       this.formNotFilledErrorCompressedAirAnnualConsumption = true;
+      this.formNotFilledErrorCompressedAirAnnualCosts = false;
     }
     else
     {
@@ -704,10 +813,13 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateCompressedAirAnnualCosts(){
+    this.checkCompressedAirForm();
     let compressedAirCost: number = this.settings.compressedAirCost;
     let annualCompressedAirUsage: number = this.treasureHunt.currentEnergyUsage.compressedAirUsage;
     if (!compressedAirCost || !annualCompressedAirUsage)
     {
+      this.formNotFilledErrorCompressedAirUnitCosts = false;
+      this.formNotFilledErrorCompressedAirAnnualConsumption = false;
       this.formNotFilledErrorCompressedAirAnnualCosts = true;
     }
     else
@@ -718,12 +830,27 @@ export class OperationCostsComponent implements OnInit {
     this.save();
   }
 
+  checkCompressedAirForm(){
+    let compressedAirCost: number = this.settings.compressedAirCost;
+    let annualCompressedAirUsage: number = this.treasureHunt.currentEnergyUsage.compressedAirUsage;
+    let annualCompressedAirCosts: number = this.treasureHunt.currentEnergyUsage.compressedAirCosts;
+    if ((compressedAirCost && annualCompressedAirUsage) || (compressedAirCost && annualCompressedAirCosts) || (annualCompressedAirUsage && annualCompressedAirCosts)){
+      this.formNotFilledErrorCompressedAirUnitCosts = false;
+      this.formNotFilledErrorCompressedAirAnnualConsumption = false;
+      this.formNotFilledErrorCompressedAirAnnualCosts = false;
+    }
+    this.save();
+  }
+
   calculateSteamUnitCosts(){
+    this.checkSteamForm();
     let annualSteamCosts: number = this.treasureHunt.currentEnergyUsage.steamCosts;
     let annualSteamUsage: number = this.treasureHunt.currentEnergyUsage.steamUsage;
     if (!annualSteamCosts || !annualSteamUsage)
     {
       this.formNotFilledErrorSteamUnitCosts = true;
+      this.formNotFilledErrorSteamAnnualConsumption = false;
+      this.formNotFilledErrorSteamAnnualCosts = false;
     }
     else
     {
@@ -734,11 +861,14 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateSteamAnnualConsumption(){
+    this.checkSteamForm();
     let steamCost: number = this.settings.steamCost;
     let annualSteamCosts: number = this.treasureHunt.currentEnergyUsage.steamCosts;
     if (!annualSteamCosts || !steamCost)
     {
+      this.formNotFilledErrorSteamUnitCosts = false;
       this.formNotFilledErrorSteamAnnualConsumption = true;
+      this.formNotFilledErrorSteamAnnualCosts = false;
     }
     else
     {
@@ -749,16 +879,31 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateSteamAnnualCosts(){
+    this.checkSteamForm();
     let steamCost: number = this.settings.steamCost;
     let annualSteamUsage: number = this.treasureHunt.currentEnergyUsage.steamUsage;
     if (!steamCost || !annualSteamUsage)
     {
+      this.formNotFilledErrorSteamUnitCosts = false;
+      this.formNotFilledErrorSteamAnnualConsumption = false;
       this.formNotFilledErrorSteamAnnualCosts = true;
     }
     else
     {
       this.formNotFilledErrorSteamAnnualCosts = false;
       this.treasureHunt.currentEnergyUsage.steamCosts = steamCost * annualSteamUsage;
+    }
+    this.save();
+  }
+
+  checkSteamForm(){
+    let steamCost: number = this.settings.steamCost;
+    let annualSteamUsage: number = this.treasureHunt.currentEnergyUsage.steamUsage;
+    let annualSteamCosts: number = this.treasureHunt.currentEnergyUsage.steamCosts;
+    if ((steamCost && annualSteamUsage) || (steamCost && annualSteamCosts) || (annualSteamUsage && annualSteamCosts)){
+      this.formNotFilledErrorSteamUnitCosts = false;
+      this.formNotFilledErrorSteamAnnualConsumption = false;
+      this.formNotFilledErrorSteamAnnualCosts = false;
     }
     this.save();
   }
