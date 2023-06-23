@@ -1,23 +1,29 @@
 <div class="calculator-container process-cooling modify-conditions standalone-calculator" #contentContainer>
-	<div div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
+	<div #leftPanelHeader class="d-lg-flex d-block header pb-1 pt-1 bg-white align-items-center"
 			[ngClass]="{'justify-content-between': inTreasureHunt}">
 			<div class="d-flex pl-2 align-items-center clickable-tab" (click)="setWeatherCalculatorActive(false)"
 				[ngClass]="{'active': !displayWeatherTab}">
-				<div class="calc-icon-header icon-process-cooling d-none d-sm-flex">
+				<div class="calc-icon-header icon-process-cooling d-none d-lg-flex">
 					<img src="assets/images/calculator-icons/process-cooling-icons/cooling-tower-basin-heater.png">
 				</div>
 				<div class="mx-auto">
-					<h3>Cooling Tower Basin Heater Energy</h3>
+					<a class="border-left-0 h-100 d-flex justify-content-center align-items-center">
+						<h3>Cooling Tower Basin Heater Energy</h3>				
+					</a>
+					
 				</div>
 			</div>
 			<div class="d-flex pl-2 align-items-center clickable-tab" (click)="setWeatherCalculatorActive(true)"
 				[ngClass]="{'active': displayWeatherTab}">
-				<div class="col-md-auto">
+				<div class="col-md-auto d-none d-lg-flex">
 					<img src="assets/images/calculator-icons/utilities-icons/weather-bins-icon.png"
 						class="weather-icon p-1">
 				</div>
 				<div class="pl-2">
-					<h3>Weather Data</h3>
+					<a class="border-left-0 h-100 d-flex justify-content-center align-items-center">
+						<h3>Weather Data</h3>					
+					</a>
+
 				</div>
 			</div>
 
