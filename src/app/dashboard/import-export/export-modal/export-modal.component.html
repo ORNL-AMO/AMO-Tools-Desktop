@@ -86,9 +86,18 @@
                                             </div>
                                         </li>
                                         <li *ngFor="let inventoryItem of dirItem.directory.inventories">
-                                            <span class="p-1">
-                                                <a>{{inventoryItem.name}}</a>
-                                            </span>
+                                            <div class="d-flex align-items-center">
+                                                <span
+                                                class="p-1 d-flex align-items-center justify-content-center icon-image">
+                                                <img *ngIf="inventoryItem.type == 'pumpInventory'" class="icon"
+                                                    src="assets/images/pump-inventory-icon.png">
+                                                <img *ngIf="inventoryItem.type == 'motorInventory'" class="icon"
+                                                    src="assets/images/motor-inventory-icon.png">
+                                                </span>
+                                                <span class="p-1">
+                                                    <a>{{inventoryItem.name}}</a>
+                                                </span>
+                                            </div>
                                         </li>
                                     </ul>
                                 </li>
@@ -98,9 +107,18 @@
                             <span class="bold">Inventories</span>
                             <ul>
                                 <li *ngFor="let inventory of exportData.inventories">
-                                    <span class="p-1">
-                                        <a>{{inventory.inventoryItem.name}}</a>
-                                    </span>
+                                    <div class="d-flex align-items-center">
+                                        <span
+                                        class="p-1 d-flex align-items-center justify-content-center icon-image">
+                                        <img *ngIf="inventory.inventoryItem.type == 'pumpInventory'" class="icon"
+                                            src="assets/images/pump-inventory-icon.png">
+                                        <img *ngIf="inventory.inventoryItem.type == 'motorInventory'" class="icon"
+                                            src="assets/images/motor-inventory-icon.png">
+                                        </span>
+                                        <span class="p-1">
+                                            <a>{{inventory.inventoryItem.name}}</a>
+                                        </span>
+                                    </div>
                                 </li>
                             </ul>
                         </li>
