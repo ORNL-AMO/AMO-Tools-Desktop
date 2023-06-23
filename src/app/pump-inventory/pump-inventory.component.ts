@@ -58,6 +58,7 @@ export class PumpInventoryComponent implements OnInit {
       let settings: Settings = this.settingsDbService.getByInventoryId(this.pumpInventoryItem);
       this.pumpInventoryService.settings.next(settings);
       this.pumpInventoryItem.pumpInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
+      this.pumpInventoryService.setIsValidInventory(this.pumpInventoryItem.pumpInventoryData);
       this.pumpInventoryService.pumpInventoryData.next(this.pumpInventoryItem.pumpInventoryData);
       this.pumpInventoryService.currentInventoryId = tmpItemId;
 

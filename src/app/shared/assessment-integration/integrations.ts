@@ -73,7 +73,7 @@ export interface AssessmentOption {
 
 
 export type IntegrationStatusString = 'settings-differ' | 'connected-to-inventory';
-export type AssessmentStatusString = 'connected-to-assessment' | 'connected-assessment-differs' | 'three-way-connected';
+export type AssessmentStatusString = 'connected-to-assessment' | 'connected-assessment-differs' | 'three-way-connected' | 'invalid';
 export type InventoryType = 'motor' | 'pump';
 // Do we have this anywhere else? create intern issue to force existing assessment.types throughout app to use type
 

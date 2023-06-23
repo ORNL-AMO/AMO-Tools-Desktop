@@ -18,6 +18,8 @@ export class AssessmentIntegrationComponent {
   connectedInventoryItem: ConnectedItem;
   @Input()
   connectedAssessmentItems: Array<ConnectedItem>;
+  @Input()
+  isItemValid: boolean;
   @Output('focusedField')
   focusedField = new EventEmitter();  
   @Output('modalOpen')
@@ -43,7 +45,9 @@ export class AssessmentIntegrationComponent {
     if (this.connectedAssessmentItems) {
       this.connectedAssessmentItems.forEach((item: ConnectedItem) => {
         let assessment = this.assessmentDbService.findById(item.assessmentId);
-        this.connectedAssessments.push(assessment);
+        if (assessment) {
+          this.connectedAssessments.push(assessment);
+        }
       });
       this.connectedAssessments = _.orderBy(this.connectedAssessments, 'modifiedDate');
     }

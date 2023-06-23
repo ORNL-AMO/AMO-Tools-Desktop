@@ -50,7 +50,7 @@
                 </label>
                 <div class="w-50 input-group justify-content-center m-1 mb-0">
                     <div>
-                        <button class="btn btn-primary p-1 px-2" (click)="showCreateAssessmentModal()"> 
+                        <button class="btn btn-primary p-1 px-2" [disabled]="!isItemValid" (click)="showCreateAssessmentModal()"> 
                             Create Assessment From Item
                         </button>
                     </div>

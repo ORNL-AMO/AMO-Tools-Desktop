@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { FieldMeasurements, PumpInventoryData, PumpInventoryDepartment, PumpItem, PumpPropertyDisplayOptions } from './pump-inventory';
+import { PumpInventoryData, PumpInventoryDepartment, PumpItem, PumpPropertyDisplayOptions, ValidPump } from './pump-inventory';
 import * as _ from 'lodash';
 import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
 import { MotorIntegrationService } from '../shared/assessment-integration/motor-integration.service';
-import { PsatIntegrationService } from '../shared/assessment-integration/psat-integration.service';
+import { FieldMeasurementsCatalogService } from './pump-inventory-setup/pump-catalog/field-measurements-catalog/field-measurements-catalog.service';
+import { PumpEquipmentCatalogService } from './pump-inventory-setup/pump-catalog/pump-equipment-catalog/pump-equipment-catalog.service';
+import { UntypedFormGroup } from '@angular/forms';
+import { PumpMotorCatalogService } from './pump-inventory-setup/pump-catalog/pump-motor-catalog/pump-motor-catalog.service';
 
 @Injectable()
 export class PumpInventoryService {
@@ -24,7 +27,10 @@ export class PumpInventoryService {
   filterInventorySummary: BehaviorSubject<FilterInventorySummary>;
 
   constructor(private helperFunctionsService: HelperFunctionsService,
-    private psatIntegrationService: PsatIntegrationService, private motorIntegrationService: MotorIntegrationService) { 
+    private fieldCatalogService: FieldMeasurementsCatalogService,
+    private motorCatalogService: PumpMotorCatalogService,
+    private pumpEquipmentService: PumpEquipmentCatalogService,
+    private motorIntegrationService: MotorIntegrationService) { 
     this.setupTab = new BehaviorSubject<string>('plant-setup');
     this.mainTab = new BehaviorSubject<string>('setup');
     let inventoryData: PumpInventoryData = this.initInventoryData();
@@ -45,9 +51,23 @@ export class PumpInventoryService {
 
   updatePumpItem(selectedPump: PumpItem) {
     let pumpInventoryData: PumpInventoryData = this.pumpInventoryData.getValue();
-    let selectedDepartmentIndex: number = pumpInventoryData.departments.findIndex(department => { return department.id == selectedPump.departmentId });
-    let catalogItemIndex: number = pumpInventoryData.departments[selectedDepartmentIndex].catalog.findIndex(pumpItem => { return pumpItem.id == selectedPump.id; });
-    pumpInventoryData.departments[selectedDepartmentIndex].catalog[catalogItemIndex] = selectedPump;
+      let isValid: boolean = true;
+      pumpInventoryData.departments.map(dept => {
+        let isValidDepartment: boolean = true;
+        dept.catalog.map(pumpItem => {
+          if (selectedPump.id === pumpItem.id) {
+            pumpItem = selectedPump;
+          }
+          let isValidPump = this.isPumpValid(pumpItem);
+          pumpItem.validPump = isValidPump;
+          if (!isValidPump.isValid) {
+            isValid = false;
+            isValidDepartment = false;
+          }
+        })
+        dept.isValid = isValidDepartment;
+      });
+      pumpInventoryData.isValid = isValid;
     this.pumpInventoryData.next(pumpInventoryData);
   }
 
@@ -58,7 +78,9 @@ export class PumpInventoryService {
     pumpInventoryData.departments[selectedDepartmentIndex].catalog.splice(pumpItemIndex, 1);
     if (selectedPump.connectedItem) {
      await this.motorIntegrationService.removeMotorConnectedItem(selectedPump);
+     pumpInventoryData.hasConnectedInventoryItems = false;
     }
+    this.setIsValidInventory(pumpInventoryData);
     this.pumpInventoryData.next(pumpInventoryData);
   }
 
@@ -70,6 +92,37 @@ export class PumpInventoryService {
       displayOptions: displayOptions
     }
   }
+
+  isPumpValid(pump: PumpItem): ValidPump {
+    let pumpMotorForm: UntypedFormGroup = this.motorCatalogService.getFormFromPumpMotor(pump.pumpMotor);
+    let fieldMeasurementsForm: UntypedFormGroup = this.fieldCatalogService.getFormFromFieldMeasurements(pump.fieldMeasurements);
+    let equipmentForm: UntypedFormGroup = this.pumpEquipmentService.getFormFromPumpEquipmentProperties(pump.pumpEquipment);
+    return {
+      isValid: pumpMotorForm.valid && fieldMeasurementsForm.valid && equipmentForm.valid,
+      pumpMotorValid: pumpMotorForm.valid,
+      fieldMeasurementsValid: fieldMeasurementsForm.valid,
+      equipmentValid: equipmentForm.valid
+    }
+  }
+
+  setIsValidInventory(pumpInventoryData: PumpInventoryData) {
+    let isValid: boolean = true;
+    if (pumpInventoryData) {
+      pumpInventoryData.departments.forEach(dept => {
+        let isValidDepartment: boolean = true;
+        dept.catalog.map(pumpItem => {
+          pumpItem.validPump = this.isPumpValid(pumpItem);
+          if (!pumpItem.validPump.isValid) {
+            isValid = false;
+            isValidDepartment = false;
+          }
+        })
+        dept.isValid = isValidDepartment
+      });
+    }
+    pumpInventoryData.isValid = isValid;
+  }
+ 
  
 
   getNewDepartment(departmentNum: number): PumpInventoryDepartment {
@@ -100,6 +153,7 @@ export class PumpInventoryService {
         efficiency: undefined,
         assessmentDate: undefined,
         operatingFlowRate: undefined,
+        loadEstimationMethod: 1,
         operatingHead: undefined,
         measuredPower: undefined,
         measuredCurrent: undefined,

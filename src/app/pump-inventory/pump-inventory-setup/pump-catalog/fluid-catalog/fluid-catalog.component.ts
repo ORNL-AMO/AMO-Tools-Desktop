@@ -53,7 +53,7 @@ export class FluidCatalogComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.pumpInventoryService.focusedDataGroup.next('fluid-properties');
+    this.pumpInventoryService.focusedDataGroup.next('pump-fluid');
     this.pumpInventoryService.focusedField.next(str);
   }
 

@@ -234,7 +234,8 @@ Tabs
     .tabs.subtabs.waste-water .missing-data .step-number,
     .tabs.subtabs.waste-water .active.missing-data .step-number,
     .tabs.subtabs.compressed-air .missing-data .step-number,
-    .tabs.subtabs.compressed-air .active.missing-data .step-number {
+    .tabs.subtabs.compressed-air .active.missing-data .step-number,
+    .tabs.subtabs.progress-tabs.pump-inventory.missing-data {
       background: red;
     }
 

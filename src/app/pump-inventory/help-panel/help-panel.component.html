@@ -22,6 +22,13 @@
             *ngIf="focusedDataGroup == 'motor-integration'"
             [connectionType]="'motor'"
             [focusedField]="focusedField"></app-integration-help>
+        <app-pump-equipment-help *ngIf="focusedDataGroup == 'pump-equipment'"></app-pump-equipment-help>
+        <app-pump-field-help *ngIf="focusedDataGroup == 'field-measurements'"></app-pump-field-help>
+        <app-pump-motor-help *ngIf="focusedDataGroup == 'pump-motor'"></app-pump-motor-help>
+        <app-pump-fluid-help *ngIf="focusedDataGroup == 'pump-fluid'"></app-pump-fluid-help>
+        <app-pump-nameplate-data-help *ngIf="focusedDataGroup == 'nameplate-data'"></app-pump-nameplate-data-help>
+        <app-pump-status-help *ngIf="focusedDataGroup == 'pump-status'"></app-pump-status-help>
+        <app-pump-system-help *ngIf="focusedDataGroup == 'pump-system'"></app-pump-system-help>
     </div>
     <div class="p-2 pt-3" *ngIf="setupTab == 'department-setup'">
         <h5>

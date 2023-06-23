@@ -18,8 +18,8 @@
         <div class="nav-item" (click)="setMainTab('setup')">
             <a class="nav-link" [ngClass]="{'active': mainTab == 'setup'}">Setup</a>
         </div>
-         <div class="nav-item" (click)="setMainTab('summary')">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'summary'}">Summary</a>
+         <div class="nav-item" >
+            <a class="nav-link" (click)="setMainTab('summary')" [ngClass]="{'active': mainTab == 'summary', 'disabled': !pumpInventoryData.isValid}" >Summary</a>
         </div>
     </div>
 
@@ -52,9 +52,9 @@
             (click)="setSetupTab('pump-properties')">
             <a><span class="step-number">3</span>Pump Properties</a>
         </div>
-        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'pump-catalog'}"
+        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'pump-catalog' && pumpInventoryData && pumpInventoryData.isValid}"
             (click)="setSetupTab('pump-catalog')">
-            <a><span class="step-number">4</span>Catalog</a>
+            <a><span class="step-number" [ngClass]="{'missing-data-tab': pumpInventoryData && !pumpInventoryData.isValid}">4</span>Catalog</a>
         </div>
     </div>
 </nav>
@@ -64,7 +64,7 @@
         <div *ngFor="let department of pumpInventoryData.departments"
             [ngClass]="{'active': selectedDepartmentId == department.id}" (click)="selectedDepartment(department.id)">
             <a>{{department.name}}
-                <span class="badge gray-badge">
+                <span class="badge gray-badge" [ngClass]="{'missing-data': !department.isValid}">
                     <strong>{{department.catalog.length}}</strong>
                 </span>
             </a>

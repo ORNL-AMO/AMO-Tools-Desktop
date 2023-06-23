@@ -11,6 +11,13 @@
     display: inherit;
 }
 
+.gray-badge.missing-data {
+    background-color: red !important;
+}
+
+.missing-data-tab {
+    background: red;
+  }
 
 .nav-item{
     color: white;
@@ -28,4 +35,3 @@
 .gray-badge{
     background-color: #2980b9;
 }
-

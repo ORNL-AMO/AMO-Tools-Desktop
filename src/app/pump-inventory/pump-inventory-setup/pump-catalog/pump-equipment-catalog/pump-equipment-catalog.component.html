@@ -44,8 +44,22 @@
     <div class="form-group" *ngIf="displayOptions.numStages">
         <label for="numStages">Number of Stages</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('numStages')" (input)="save()"
-                formControlName="numStages" id="numStages">
+                <div name="numStages" class="incrementor form-control input-group">
+                    <button class="btn input-group-btn" (click)="subtractStage()">
+                      <i class="fa fa-minus"></i>
+                    </button>
+                    <button class="btn input-group-btn" (click)="addStage()">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                    <input type="number" min="1" step="any" class="form-control" formControlName="numStages"
+                      id="{{'numStages'+idString}}" (input)="save()" (focus)="focusField('numStages')">
+                  </div>
+                <span class="alert-danger pull-right small"
+                *ngIf="form.controls.numStages.invalid && !form.controls.numStages.pristine">
+                <span *ngIf="form.controls.numStages.errors.required">Value Required</span>
+                  <span *ngIf="form.controls.numStages.errors.min">Value can't be less than
+                    {{form.controls.numStages.errors.min.min}}.</span>
+              </span>
         </div>
     </div>
 
@@ -141,7 +155,7 @@
     </div>
 
     <div class="form-group" *ngIf="displayOptions.minPumpSize">
-        <label for="minPumpSize">Min Pump Size</label>
+        <label for="minPumpSize">Minimum Pump Size</label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('minPumpSize')" (input)="save()"
                 formControlName="minPumpSize" id="minPumpSize">

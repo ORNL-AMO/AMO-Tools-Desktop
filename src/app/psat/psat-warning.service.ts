@@ -22,11 +22,11 @@ export class PsatWarningService {
   //warnings for field data form
   checkFieldData(psat: PSAT, settings: Settings, isBaseline?: boolean): FieldDataWarnings {
     let flowError: string = this.checkFlowRate(psat.inputs.pump_style, psat.inputs.flow_rate, settings);
-    let voltageError: string = this.checkVoltage(psat);
+    let voltageError: string = this.checkVoltage(psat.inputs.motor_field_voltage);
     let suggestedVoltage: string = this.checkSuggestedVoltage(psat, isBaseline);
     let ratedPowerError: string = null;
     if (isBaseline) {
-      ratedPowerError = this.checkRatedPower(psat);
+      ratedPowerError = this.checkRatedPower(psat.inputs.motor_field_power, psat.inputs.motor_field_current, psat.inputs.motor_rated_power, psat.inputs.load_estimation_method);
     }
     return {
       flowError: flowError,
@@ -117,31 +117,34 @@ export class PsatWarningService {
     }
   }
   //Field Data Warning: voltageError
-  checkVoltage(psat: PSAT) {
-    if (psat.inputs.motor_field_voltage < 1) {
+  checkVoltage(motorFieldVoltage: number) {
+    if (motorFieldVoltage < 1) {
       return "Voltage shouldn't be less than 1 V";
-    } else if (psat.inputs.motor_field_voltage > 13800) {
+    } else if (motorFieldVoltage > 13800) {
       return "Voltage shouldn't be greater than 13800 V";
     } else {
       return null;
     }
   }
   //Field Data Warning: ratedPowerError
-  checkRatedPower(psat: PSAT) {
+  checkRatedPower(measuredPower: number, measuredCurrent: number, motorRatedPower: number, loadEstimationMethod: number, inInventory = false) {
     let tmpVal: number;
-    if (psat.inputs.load_estimation_method == 0) {
-      tmpVal = psat.inputs.motor_field_power;
+    let field: string;
+    if (loadEstimationMethod == 0) {
+      tmpVal = measuredPower;
+      field = inInventory? 'Measured Power' : 'Motor Power';
     } else {
-      tmpVal = psat.inputs.motor_field_current;
+      tmpVal = measuredCurrent;
+      field = inInventory? 'Measured Current' : 'Motor Current';
     }
 
-    if (psat.inputs.motor_rated_power && tmpVal) {
+    if (motorRatedPower && tmpVal) {
       let val, compare;
       val = tmpVal;
-      compare = psat.inputs.motor_rated_power;
+      compare = motorRatedPower;
       compare = compare * 1.5;
       if (val > compare) {
-        return 'The Field Data Motor Current is too high compared to the Rated Motor Power, please adjust the input values.';
+        return `The Field Data ${field} is too high compared to the Rated Motor Power, please adjust the input values.`;
       } else {
         return null
       }
@@ -152,8 +155,8 @@ export class PsatWarningService {
   //MOTOR
   //checks for warnings in motor setup form
   checkMotorWarnings(psat: PSAT, settings: Settings, isModification: boolean): MotorWarnings {
-    let rpmError: string = this.checkMotorRpm(psat);
-    let voltageError: string = this.checkMotorVoltage(psat);
+    let rpmError: string = this.checkMotorRpm(psat.inputs.line_frequency, psat.inputs.efficiency_class, psat.inputs.motor_rated_speed);
+    let voltageError: string = this.checkMotorVoltage(psat.inputs.motor_rated_voltage);
     let flaError: string = this.checkFLA(psat, settings);
     let ratedPowerError: string;
     ratedPowerError = this.checkMotorRatedPower(psat, settings, isModification);
@@ -164,12 +167,14 @@ export class PsatWarningService {
       ratedPowerError: ratedPowerError
     }
   }
+
   //Motor Warning: rpmError
-  checkMotorRpm(psat: PSAT) {
-    let range: { min: number, max: number } = this.getMotorRpmMinMax(psat.inputs.line_frequency, psat.inputs.efficiency_class)
-    if (psat.inputs.motor_rated_speed < range.min) {
+  checkMotorRpm(lineFrequency: number, efficiencyClass: number, motorRatedSpeed: number) {
+    let lineFrequencyEnum: number = lineFrequency === 50? 0 : 1;
+    let range: { min: number, max: number } = this.getMotorRpmMinMax(lineFrequencyEnum, efficiencyClass)
+    if (motorRatedSpeed < range.min) {
       return 'Motor RPM too small for selected efficiency class';
-    } else if (psat.inputs.motor_rated_speed > range.max) {
+    } else if (motorRatedSpeed > range.max) {
       return 'Motor RPM too large for selected efficiency class';
     } else {
       return null;
@@ -196,10 +201,10 @@ export class PsatWarningService {
     return rpmRange;
   }
   //Motor Warning: voltageError
-  checkMotorVoltage(psat: PSAT) {
-    if (psat.inputs.motor_rated_voltage < 200) {
+  checkMotorVoltage(motorRatedVoltage: number) {
+    if (motorRatedVoltage < 200) {
       return "Voltage should be greater than 200 V."
-    } else if (psat.inputs.motor_rated_voltage > 15180) {
+    } else if (motorRatedVoltage > 15180) {
       return "Voltage should be less than 15180 V.";
     } else {
       return null;
@@ -219,7 +224,6 @@ export class PsatWarningService {
 
     let min: number = 5;
     let max: number = 10000;
-    // let isModificationValid: boolean;
     if (psat.inputs.motor_rated_power < this.convertUnitsService.value(min).from('hp').to(settings.powerMeasurement)) {
       return 'Rated motor power is too small.';
     } else if (psat.inputs.motor_rated_power > this.convertUnitsService.value(max).from('hp').to(settings.powerMeasurement)) {
@@ -315,7 +319,7 @@ export class PsatWarningService {
   //PUMP FLUID
   //warnings for pump fluid form
   checkPumpFluidWarnings(psat: PSAT, settings: Settings): PumpFluidWarnings {
-    let rpmError: string = this.checkPumpRpm(psat);
+    let rpmError: string = this.checkPumpRpm(psat.inputs.drive, psat.inputs.pump_rated_speed);
     let temperatureError: string;
     if(psat.inputs.fluidType !== 'Other'){
       temperatureError = this.checkTemperatureError(psat, settings);
@@ -329,19 +333,19 @@ export class PsatWarningService {
     }
   }
   //Pump Fluid Warning: rpmError
-  checkPumpRpm(psat: PSAT): string {
+  checkPumpRpm(driveType: number, pumpRatedSpeed: number): string {
     let min = 1;
     let max = 0;
-    if (psat.inputs.drive == 0) {
+    if (driveType == 0) {
       min = 540;
       max = 3960;
     } else {
       // TODO UPDATE WITH BELT DRIVE VALS
       max = Infinity;
     }
-    if (psat.inputs.pump_rated_speed < min) {
+    if (pumpRatedSpeed < min) {
       return 'Pump Speed should be greater than ' + min + ' rpm';
-    } else if (psat.inputs.pump_rated_speed > max) {
+    } else if (pumpRatedSpeed > max) {
       return 'Pump Speed should be less than ' + max + ' rpm';
     } else {
       return null;

@@ -70,6 +70,7 @@ export class PumpCatalogComponent implements OnInit {
     this.selectedPumpItemSub = this.pumpCatalogService.selectedPumpItem.subscribe(selectedPump => {
       if (selectedPump) {
         this.selectedPumpItem = selectedPump;
+        this.selectedPumpItem.validPump = this.pumpInventoryService.isPumpValid(selectedPump);
         this.connectedPumpItem = {
           id: selectedPump.id,
           name: selectedPump.name,

@@ -8,7 +8,15 @@ export interface PumpInventoryData {
   displayOptions: PumpPropertyDisplayOptions,
   hasConnectedInventoryItems?: boolean,
   hasConnectedPsat?: boolean,
+  isValid?: boolean,
   existingDataUnits?: string
+}
+
+export interface ValidPump {
+  isValid: boolean,
+  pumpMotorValid: boolean,
+  fieldMeasurementsValid: boolean,
+  equipmentValid: boolean
 }
 
 export interface PumpInventoryDepartment {
@@ -16,7 +24,8 @@ export interface PumpInventoryDepartment {
   operatingHours: number,
   description: string,
   id: string,
-  catalog: Array<PumpItem>
+  catalog: Array<PumpItem>,
+  isValid?: boolean,
 }
 
 export interface PumpItem extends ConnectedInventoryProperties {
@@ -32,7 +41,8 @@ export interface PumpItem extends ConnectedInventoryProperties {
   pumpEquipment: PumpProperties,
   pumpMotor: PumpMotorProperties,
   pumpStatus: PumpStatus,
-  systemProperties: SystemProperties
+  systemProperties: SystemProperties,
+  validPump?: ValidPump
 }
 
 export interface ConnectedInventoryProperties {
@@ -161,6 +171,7 @@ export interface FieldMeasurements {
   operatingFlowRate: number,
   operatingHead: number,
   operatingHours?: OperatingHours,
+  loadEstimationMethod: number,
   measuredPower: number;
   measuredCurrent: number;
   measuredVoltage: number;
@@ -200,3 +211,17 @@ export interface PumpMotorPropertiesOptions {
   motorFullLoadAmps: boolean,
   motorEfficiency: boolean,
 }
+
+export interface PumpInventoryMotorWarnings {
+  rpmError: string;
+  voltageError: string;
+  ratedPowerError: string;
+}
+
+export interface PumpInventoryFieldWarnings {
+  flowError: string,
+  voltageError: string,
+  ratedPowerError: string,
+  rpmError: string,
+}
+

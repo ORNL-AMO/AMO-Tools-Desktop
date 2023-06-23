@@ -63,6 +63,22 @@ export class PumpEquipmentCatalogComponent implements OnInit {
     this.pumpInventoryService.focusedField.next(str);
   }
 
+  addStage() {
+      this.form.patchValue({
+        numStages: this.form.controls.numStages.value + 1
+      })
+    this.save();
+  }
+
+  subtractStage() {
+      if (this.form.controls.numStages.value != 0) {
+        this.form.patchValue({
+          numStages: this.form.controls.numStages.value - 1
+        })
+    }
+    this.save();
+  }
+
   toggleForm() {
     this.displayForm = !this.displayForm;
   }

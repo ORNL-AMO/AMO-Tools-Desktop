@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
-import { PumpItem, PumpMotorPropertiesOptions } from '../../../pump-inventory';
+import { PumpInventoryMotorWarnings, PumpItem, PumpMotorPropertiesOptions } from '../../../pump-inventory';
 import { PumpInventoryService } from '../../../pump-inventory.service';
 import { PumpCatalogService } from '../pump-catalog.service';
 import { PumpMotorCatalogService } from './pump-motor-catalog.service';
@@ -10,7 +10,6 @@ import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 import { MotorIntegrationService } from '../../../../shared/assessment-integration/motor-integration.service';
 import { InventoryOption, InventorySelectOptions, ConnectedInventoryData } from '../../../../shared/assessment-integration/integrations';
 import { IntegrationStateService } from '../../../../shared/assessment-integration/integration-state.service';
-import { PsatIntegrationService } from '../../../../shared/assessment-integration/psat-integration.service';
 
 @Component({
   selector: 'app-pump-motor-catalog',
@@ -38,6 +37,7 @@ export class PumpMotorCatalogComponent implements OnInit {
   inventorySelectOptions: InventorySelectOptions;
   connectedInventoryDataSub: Subscription;
   hasConnectedInventories: boolean;
+  motorWarnings: PumpInventoryMotorWarnings;
 
   constructor(private pumpCatalogService: PumpCatalogService, 
     private pumpInventoryService: PumpInventoryService,
@@ -94,6 +94,7 @@ export class PumpMotorCatalogComponent implements OnInit {
       this.form = this.pumpMotorCatalogService.getFormFromPumpMotor(selectedPump.pumpMotor);
       this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
     }
+    this.motorWarnings = this.pumpCatalogService.checkMotorWarnings(selectedPump, this.settings);
     this.integrationStateService.integrationState.next(this.integrationStateService.getEmptyIntegrationState());
   }
 
@@ -127,6 +128,7 @@ export class PumpMotorCatalogComponent implements OnInit {
   async save() {
     let selectedPump: PumpItem = this.pumpCatalogService.selectedPumpItem.getValue();
     selectedPump.pumpMotor = this.pumpMotorCatalogService.updatePumpMotorFromForm(this.form, selectedPump.pumpMotor);
+    this.motorWarnings = this.pumpCatalogService.checkMotorWarnings(selectedPump, this.settings);
     this.pumpInventoryService.updatePumpItem(selectedPump);
   }
 
@@ -137,6 +139,11 @@ export class PumpMotorCatalogComponent implements OnInit {
     }
     this.pumpInventoryService.focusedDataGroup.next(focusedDataGroup);
     this.pumpInventoryService.focusedField.next(str);
+  }
+
+  changeEfficiencyClass() {
+    this.form = this.pumpMotorCatalogService.updateFormEfficiencyValidators(this.form);
+    this.save();
   }
 
   toggleForm() {

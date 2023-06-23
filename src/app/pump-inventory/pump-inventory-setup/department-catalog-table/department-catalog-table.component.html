@@ -38,7 +38,8 @@
         </thead>
         <tbody>
             <tr *ngFor="let tableDataItem of tableDataItems"
-                [ngClass]="{'selected-item':tableDataItem.pumpItem.id == selectedPumpItem.id}">
+                [ngClass]="{'selected-item':tableDataItem.pumpItem.id == selectedPumpItem.id,
+                'invalid-item': !tableDataItem.pumpItem.validPump.isValid}">
                 <td>
                     <span *ngIf="tableDataItem.pumpItem.id == selectedPumpItem.id" class="fa fa-chevron-right"></span>
                     <a class="click-link" (click)="selectPump(tableDataItem.pumpItem)">{{tableDataItem.name}}</a>

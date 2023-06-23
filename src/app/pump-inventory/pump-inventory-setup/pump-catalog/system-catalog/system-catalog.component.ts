@@ -53,7 +53,7 @@ export class SystemCatalogComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.pumpInventoryService.focusedDataGroup.next('system-catalog');
+    this.pumpInventoryService.focusedDataGroup.next('pump-system');
     this.pumpInventoryService.focusedField.next(str);
   }
 

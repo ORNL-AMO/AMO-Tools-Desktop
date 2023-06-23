@@ -27,6 +27,8 @@ export class PumpInventoryBannerComponent implements OnInit {
   selectedDepartmentIdSub: Subscription;
   connectedInventoryDataSub: Subscription;
   showConnectedItemBadge: boolean;
+  catalogClassStatus: string[];
+  // hasInvalidPumpItem: boolean;
     constructor(private pumpInventoryService: PumpInventoryService, private integrationStateService: IntegrationStateService, private pumpCatalogService: PumpCatalogService) { }
 
   ngOnInit(): void {
@@ -40,6 +42,11 @@ export class PumpInventoryBannerComponent implements OnInit {
 
     this.pumpInventoryDataSub = this.pumpInventoryService.pumpInventoryData.subscribe(val => {
       this.pumpInventoryData = val;
+      // if (!this.pumpInventoryData.isValid) {
+      //   this.hasInvalidPumpItem = true;
+      // } else {
+      //   this.hasInvalidPumpItem = false;
+      // }
     });
 
     this.selectedDepartmentIdSub = this.pumpCatalogService.selectedDepartmentId.subscribe(val => {

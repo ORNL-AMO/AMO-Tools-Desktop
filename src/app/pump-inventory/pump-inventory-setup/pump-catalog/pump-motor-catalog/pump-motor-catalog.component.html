@@ -24,7 +24,7 @@
 
     <div class="form-group" *ngIf="displayOptions.motorEfficiencyClass">
         <label for="motorEfficiencyClass">Efficiency Class</label>
-        <select class="form-control" (focus)="focusField('motorEfficiencyClass')" (change)="save()" formControlName="motorEfficiencyClass"
+        <select class="form-control" (focus)="focusField('motorEfficiencyClass')" (change)="changeEfficiencyClass()" formControlName="motorEfficiencyClass"
             id="motorEfficiencyClass">
             <option *ngFor="let motorEfficiencyClass of motorEfficiencyClasses" [ngValue]="motorEfficiencyClass.value">{{motorEfficiencyClass.display}}</option>
         </select>
@@ -35,8 +35,13 @@
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('motorRPM')" (input)="save()"
                 formControlName="motorRPM" id="motorRPM">
-            <span class="input-group-addon units">rpm</span>
-                
+            <span class="input-group-addon units">rpm</span> 
+            <span class="alert-danger pull-right small"
+            *ngIf="form.controls.motorRPM.invalid && !form.controls.motorRPM.pristine">
+            <span *ngIf="form.controls.motorRPM.errors.required">Value Required</span>
+          </span>
+          <span class="alert-warning pull-right small"
+          *ngIf="motorWarnings.rpmError !== null && !form.controls.motorRPM.invalid && !form.controls.motorRPM.pristine">{{motorWarnings.rpmError}}</span>
         </div>
     </div>
 
@@ -47,6 +52,12 @@
                 formControlName="motorRatedPower" id="motorRatedPower">
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
+            <span class="alert-danger pull-right small"
+            *ngIf="form.controls.motorRatedPower.invalid && !form.controls.motorRatedPower.pristine">
+            <span *ngIf="form.controls.motorRatedPower.errors.required">Value Required</span>
+            <span class="alert-warning pull-right small"
+            *ngIf="motorWarnings.ratedPowerError !== null && !form.controls.motorRatedPower.invalid && !form.controls.motorRatedPower.pristine">{{motorWarnings.ratedPowerError}}</span>
+        </span>
         </div>
     </div>
 
@@ -56,7 +67,12 @@
             <input type="number" class="form-control" (focus)="focusField('motorRatedVoltage')" (input)="save()"
                 formControlName="motorRatedVoltage" id="motorRatedVoltage">
             <span class="input-group-addon units">V</span>
-
+            <span class="alert-danger pull-right small"
+            *ngIf="form.controls.motorRatedVoltage.invalid && !form.controls.motorRatedVoltage.pristine">
+            <span *ngIf="form.controls.motorRatedVoltage.errors.required">Value Required</span>
+          </span>
+          <span class="alert-warning pull-right small"
+          *ngIf="motorWarnings.voltageError !== null && !form.controls.motorRatedVoltage.invalid && !form.controls.motorRatedVoltage.pristine">{{motorWarnings.voltageError}}</span>
         </div>
     </div>
 
@@ -66,6 +82,10 @@
             <input type="number" class="form-control" (focus)="focusField('motorFullLoadAmps')" (input)="save()"
                 formControlName="motorFullLoadAmps" id="motorFullLoadAmps">
             <span class="input-group-addon units">A</span>
+            <span class="alert-danger pull-right small"
+            *ngIf="form.controls.motorFullLoadAmps.invalid && !form.controls.motorFullLoadAmps.pristine">
+            <span *ngIf="form.controls.motorFullLoadAmps.errors.required">Value Required</span>
+          </span>
         </div>
     </div>
 
@@ -75,6 +95,14 @@
             <input type="number" class="form-control" (focus)="focusField('motorEfficiency')" (input)="save()"
                 formControlName="motorEfficiency" id="motorEfficiency">
             <span class="input-group-addon units">%</span>
+            <span class="alert-danger pull-right small"
+            *ngIf="form.controls.motorEfficiency.invalid && !form.controls.motorEfficiency.pristine">
+            <span *ngIf="form.controls.motorEfficiency.errors.required">Value Required</span>
+            <span *ngIf="form.controls.motorEfficiency.errors.max">Value can't be greater than
+                {{form.controls.motorEfficiency.errors.max.max}} %.</span>
+              <span *ngIf="form.controls.motorEfficiency.errors.min">Value can't be less than
+                {{form.controls.motorEfficiency.errors.min.min}} %.</span>
+          </span>
         </div>
     </div>
    

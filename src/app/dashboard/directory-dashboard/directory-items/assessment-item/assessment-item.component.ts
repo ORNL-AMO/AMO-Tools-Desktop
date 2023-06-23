@@ -15,7 +15,7 @@ import { DashboardService } from '../../../dashboard.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
-import { WasteWaterService } from '../../../../waste-water/waste-water.service';
+import { PsatIntegrationService } from '../../../../shared/assessment-integration/psat-integration.service';
 
 @Component({
   selector: 'app-assessment-item',
@@ -41,8 +41,8 @@ export class AssessmentItemComponent implements OnInit {
        private formBuilder: UntypedFormBuilder,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService,
-    private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
-    private wasteWaterService: WasteWaterService) { }
+    private psatIntegrationService: PsatIntegrationService,
+    private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService) { }
 
 
   ngOnInit() {
@@ -202,6 +202,7 @@ export class AssessmentItemComponent implements OnInit {
   async deleteAssessment() {
     let deleteSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
 
+    this.deleteConnectedInventoryItem(this.assessment);
     let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(this.assessment.id)); 
     this.assessmentDbService.setAll(assessments);
     let settings: Settings[] = await firstValueFrom(this.settingsDbService.deleteByIdWithObservable(deleteSettings.id)); 
@@ -215,6 +216,12 @@ export class AssessmentItemComponent implements OnInit {
 
     this.dashboardService.updateDashboardData.next(true);
     this.hideDeleteModal();
+  }
+
+  deleteConnectedInventoryItem(assessment: Assessment) {
+    if (assessment.psat && assessment.psat.connectedItem) {
+      this.psatIntegrationService.removeConnectedInventory(assessment.psat.connectedItem, assessment.id);
+    }
   }
 
 }
