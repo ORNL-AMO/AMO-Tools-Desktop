@@ -44,8 +44,22 @@
     <div class="form-group" *ngIf="displayOptions.numStages">
         <label for="numStages">Number of Stages</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('numStages')" (input)="save()"
-                formControlName="numStages" id="numStages">
+                <div name="numStages" class="incrementor form-control input-group">
+                    <button class="btn input-group-btn" (click)="subtractStage()">
+                      <i class="fa fa-minus"></i>
+                    </button>
+                    <button class="btn input-group-btn" (click)="addStage()">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                    <input type="number" min="1" step="any" class="form-control" formControlName="numStages"
+                      id="{{'numStages'+idString}}" (input)="save()" (focus)="focusField('numStages')">
+                  </div>
+                <span class="alert-danger pull-right small"
+                *ngIf="form.controls.numStages.invalid && !form.controls.numStages.pristine">
+                <span *ngIf="form.controls.numStages.errors.required">Value Required</span>
+                  <span *ngIf="form.controls.numStages.errors.min">Value can't be less than
+                    {{form.controls.numStages.errors.min.min}}.</span>
+              </span>
         </div>
     </div>
 
@@ -54,8 +68,8 @@
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('inletDiameter')" (input)="save()"
                 formControlName="inletDiameter" id="inletDiameter">
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">cm</span>
         </div>
     </div>
 
@@ -64,8 +78,8 @@
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('outletDiameter')" (input)="save()"
                 formControlName="outletDiameter" id="outletDiameter">
-                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
-                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span>
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">cm</span>
         </div>
     </div>
 
@@ -99,14 +113,15 @@
         </div>
     </div>
 
-    <div class="form-group" *ngIf="displayOptions.displacement">
+    <!-- 6311 hiding for now -->
+    <!-- <div class="form-group" *ngIf="displayOptions.displacement">
         <label for="displacement">Displacement</label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('displacement')" (input)="save()"
                 formControlName="displacement" id="displacement">
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">%</span>
+            <span class="input-group-addon units">%</span>
         </div>
-    </div>
+    </div> -->
 
     <div class="form-group" *ngIf="displayOptions.startingTorque">
         <label for="startingTorque">Starting Torque</label>
@@ -124,22 +139,23 @@
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('impellerDiameter')" (input)="save()"
                 formControlName="impellerDiameter" id="impellerDiameter">
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ln</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span>
         </div>
     </div>
 
     <div class="form-group" *ngIf="displayOptions.minFlowSize">
-        <label for="minFlowSize">Min Flow Size</label>
+        <label for="minFlowSize">Minimum Flow Rate</label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('minFlowSize')" (input)="save()"
                 formControlName="minFlowSize" id="minFlowSize">
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">gpm</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>
         </div>
     </div>
 
     <div class="form-group" *ngIf="displayOptions.minPumpSize">
-        <label for="minPumpSize">Min Pump Size</label>
+        <label for="minPumpSize">Minimum Pump Size</label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('minPumpSize')" (input)="save()"
                 formControlName="minPumpSize" id="minPumpSize">
@@ -164,7 +180,8 @@
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('designFlow')" (input)="save()"
                 formControlName="designFlow" id="designFlow">
-            <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">gpm</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/h</span>
         </div>
 
     </div>

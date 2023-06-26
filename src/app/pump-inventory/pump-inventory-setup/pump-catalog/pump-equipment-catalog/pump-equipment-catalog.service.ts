@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { PumpProperties } from '../../../pump-inventory';
 
 @Injectable()
@@ -8,11 +8,11 @@ export class PumpEquipmentCatalogService {
   constructor(private formBuilder: FormBuilder) { }
 
   getFormFromPumpEquipmentProperties(pumpEquipmentProperties: PumpProperties): FormGroup {
-    return this.formBuilder.group({
+    let form: UntypedFormGroup = this.formBuilder.group({
       pumpType: [pumpEquipmentProperties.pumpType],
       shaftOrientation: [pumpEquipmentProperties.shaftOrientation],
       shaftSealType: [pumpEquipmentProperties.shaftSealType],
-      numStages: [pumpEquipmentProperties.numStages],
+      numStages: [pumpEquipmentProperties.numStages, [Validators.required, Validators.min(1)]],
       inletDiameter: [pumpEquipmentProperties.inletDiameter],
       outletDiameter: [pumpEquipmentProperties.outletDiameter],
       maxWorkingPressure: [pumpEquipmentProperties.maxWorkingPressure],
@@ -28,6 +28,10 @@ export class PumpEquipmentCatalogService {
       designFlow: [pumpEquipmentProperties.designFlow],
       designEfficiency: [pumpEquipmentProperties.designEfficiency],
      });
+     for (let key in form.controls) {
+      form.controls[key].markAsDirty();
+    }
+    return form;
   }
 
   updatePumpEquipmentPropertiesFromForm(form: FormGroup, pumpEquipmentProperties: PumpProperties): PumpProperties {

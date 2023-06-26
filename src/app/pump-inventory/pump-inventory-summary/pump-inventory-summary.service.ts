@@ -106,7 +106,7 @@ export class PumpInventorySummaryService {
       fields.push({display: 'Impeller Diameter', value: 'impellerDiameter', group: 'pumpEquipment', unit: units.impellerDiameter});
     } 
     if (pumpPropertiesOptions.minFlowSize) {
-      fields.push({display: 'Min Flow Size', value: 'minFlowSize', group: 'pumpEquipment', unit: units.minFlowSize});
+      fields.push({display: 'Minimum Flow Rate', value: 'minFlowSize', group: 'pumpEquipment', unit: units.minFlowSize});
     } 
     if (pumpPropertiesOptions.pumpSize) {
       fields.push({display: 'Pump Size', value: 'pumpSize', group: 'pumpEquipment', unit: units.pumpSize});
@@ -271,27 +271,27 @@ export const PumpSummaryUnitsImperial = {
       efficiency: '%',
       operatingFlowRate: 'gpm',
       operatingHead: 'ft',
-      measuredPower: 'A',
-      measuredCurrent: 'kW',
+      measuredPower: 'kW',
+      measuredCurrent: 'A',
       measuredVoltage: 'V',
   },
   fluid: {
       fluidDensity: 'lb/ft<sup>3</sup>'
   },
   pumpEquipment: {
-      inletDiameter: 'ft',
-      outletDiameter: 'ft',
+      inletDiameter: 'in',
+      outletDiameter: 'in',
       maxWorkingPressure: 'psig',
       maxAmbientTemperature: '&#8457;',
       maxSuctionLift: 'ft',
       displacement: '%',
       startingTorque: 'ft-lb',
       ratedSpeed: 'rpm',
-      impellerDiameter: 'ft',
+      impellerDiameter: 'in',
       minFlowSize: 'gpm',
       pumpSize: 'ft',
       designHead: 'ft',
-      designFlow: undefined,
+      designFlow: 'gpm',
       designEfficiency: '%',
   },
   pumpMotor: {
@@ -322,8 +322,8 @@ export const PumpSummaryUnitsMetric = {
       fluidDensity: 'kg/m<sup>3</sup>'
   },
   pumpEquipment: {
-      inletDiameter: 'm',
-      outletDiameter: 'm',
+      inletDiameter: 'cm',
+      outletDiameter: 'cm',
       maxWorkingPressure: 'Pa',
       maxAmbientTemperature: '&#8451;',
       maxSuctionLift: 'm',
@@ -331,10 +331,10 @@ export const PumpSummaryUnitsMetric = {
       startingTorque: 'N-m',
       ratedSpeed: 'rpm',
       impellerDiameter: 'm',
-      minFlowSize: 'gpm',
+      minFlowSize: 'm<sup>3</sup>/min',
       pumpSize: 'm',
       designHead: 'm',
-      designFlow: undefined,
+      designFlow: 'm<sup>3</sup>/h',
       designEfficiency: '%',
   },
   pumpMotor: {

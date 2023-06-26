@@ -1,9 +1,9 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { Settings } from '../../../../shared/models/settings';
-import { FieldMeasurementsOptions, PumpItem } from '../../../pump-inventory';
+import { FieldMeasurementsOptions, PumpInventoryFieldWarnings, PumpItem } from '../../../pump-inventory';
 import { PumpInventoryService } from '../../../pump-inventory.service';
 import { PumpCatalogService } from '../pump-catalog.service';
 import { FieldMeasurementsCatalogService } from './field-measurements-catalog.service';
@@ -26,6 +26,17 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
   formWidth: number;
   operatingHours: OperatingHours;
 
+  loadEstimateMethods: Array<{ display: string, value: number }> = [
+    {
+      display: 'Power',
+      value: 0
+    },
+    {
+      display: 'Current',
+      value: 1
+    }
+  ];
+
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -33,6 +44,7 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
   }
   
   showOperatingHoursModal: boolean = false;
+  fieldDataWarnings: PumpInventoryFieldWarnings;
 
   constructor(private pumpCatalogService: PumpCatalogService, private pumpInventoryService: PumpInventoryService,
     private fieldMeasurementsCatalogService: FieldMeasurementsCatalogService) { }
@@ -41,12 +53,13 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
     this.settingsSub = this.pumpInventoryService.settings.subscribe(val => {
       this.settings = val;
     });
+    this.displayOptions = this.pumpInventoryService.pumpInventoryData.getValue().displayOptions.fieldMeasurementOptions;
     this.selectedPumpItemSub = this.pumpCatalogService.selectedPumpItem.subscribe(selectedPump => {
       if (selectedPump) {
         this.form = this.fieldMeasurementsCatalogService.getFormFromFieldMeasurements(selectedPump.fieldMeasurements);
+        this.fieldDataWarnings = this.pumpCatalogService.checkFieldWarnings(selectedPump, this.settings);
       }
     });
-    this.displayOptions = this.pumpInventoryService.pumpInventoryData.getValue().displayOptions.fieldMeasurementOptions;
   }
 
   ngOnDestroy() {
@@ -57,6 +70,7 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
   save() {
     let selectedPump: PumpItem = this.pumpCatalogService.selectedPumpItem.getValue();
     selectedPump.fieldMeasurements = this.fieldMeasurementsCatalogService.updateFieldMeasurementsFromForm(this.form, selectedPump.fieldMeasurements);
+    this.fieldDataWarnings = this.pumpCatalogService.checkFieldWarnings(selectedPump, this.settings);
     this.pumpInventoryService.updatePumpItem(selectedPump);
   }
 
@@ -72,6 +86,11 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
   closeOperatingHoursModal() {
     this.showOperatingHoursModal = false;
     this.pumpInventoryService.modalOpen.next(false);
+  }
+
+  changeLoadMethod() {
+    this.fieldMeasurementsCatalogService.changeLoadMethod(this.form);
+    this.save();
   }
 
   openOperatingHoursModal() {

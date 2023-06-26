@@ -10,4 +10,11 @@
         <textarea class="form-control" type="text" id="description" formControlName="description"
             (input)="save()"></textarea>
     </div>
+
+    <div class="form-group pt-0">
+        <label class="group-label w-100">Notes</label>
+        <textarea name="notes" rows="2" id="notes" (input)="save()" formControlName="notes"
+          placeholder="Add additional information for your equipment" (focus)="focusField('notes')"
+          class="w-100"></textarea>
+      </div>
 </form>

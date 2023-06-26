@@ -8,7 +8,6 @@ import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savi
 import { Settings } from '../../../shared/models/settings';
 import { PumpInventoryData } from '../../pump-inventory';
 import { PumpInventoryService } from '../../pump-inventory.service';
-import { InventoryItem } from '../../../shared/models/inventory/inventory';
 import * as _ from 'lodash';
 import { ConvertPumpInventoryService } from '../../convert-pump-inventory.service';
 import { IntegrationStateService } from '../../../shared/assessment-integration/integration-state.service';

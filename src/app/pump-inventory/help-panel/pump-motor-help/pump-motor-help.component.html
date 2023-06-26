@@ -1,0 +1,202 @@
+<hr class="my-1 hr-spacer">
+<div class="my-2">
+    <h6>
+        Pump Motor
+        <br>
+        <small class="text-muted">
+            <!-- Enter information for a potential motor replacemnt, used in the batch analysis. -->
+            <hr>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'lineFrequency'">
+    <h6>
+        Line Frequency
+        <br>
+        <small class="text-muted">
+            Line Frequency is the mains supply frequency. In North America, the standard frequency is 60 HZ. Elsewhere,
+            50 HZ is often
+            the standard.
+            <br> The only use of this input is to determine the number of poles, based on the specified motor speed.
+            <hr> Line Frequency options include
+            <u>50 Hz</u> or
+            <u>60 Hz</u>.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'motorRatedPower'">
+    <h6>
+         Motor Power
+        <br>
+        <small class="text-muted">
+             Motor Power represents the rated power for the motor.
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'motorRPM'">
+    <h6>
+        RPM
+        <br>
+        <small class="text-muted">
+            Motor RPM is the nameplate speed of the motor.
+            <hr>
+            <p>This value is used with the line frequency to determine the number of motor poles. This, in turn, is
+                used (along
+                with motor class and size) to estimate motor efficiency and output shaft power for the measured
+                electrical power
+                or current conditions.
+            </p>
+            <p>
+                These calculators are based on curve fits to actual purchasable motors and motors in the original
+                MotorMaster Database.
+                At the time of data collection, premium motors were only available in 2-, 4-, or 6- poles:
+                rpms lower than 900/1080 rpm extend past the bounds of the models and results may be inaccurate.
+            </p>
+            <hr>
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="text-center">Efficiency Class</th>
+                    <th class="text-center">Line Frequency</th>
+                    <th class="text-center">Minimum</th>
+                    <th class="text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="text-center">Standard Efficient</td>
+                    <td class="text-center">60 Hz</td>
+                    <td class="text-center">540 rpm</td>
+                    <td class="text-center">3600 rpm</td>
+                </tr>
+                <tr>
+                    <td class="text-center">Standard Efficient</td>
+                    <td class="text-center">50 Hz</td>
+                    <td class="text-center">450 rpm</td>
+                    <td class="text-center">3000 rpm</td>
+                </tr>
+                <tr>
+                    <td class="text-center">Energy Efficient</td>
+                    <td class="text-center">60 Hz</td>
+                    <td class="text-center">540 rpm</td>
+                    <td class="text-center">3600 rpm</td>
+                </tr>
+                <tr>
+                    <td class="text-center">Energy Efficient</td>
+                    <td class="text-center">50 Hz</td>
+                    <td class="text-center">450 rpm</td>
+                    <td class="text-center">3000 rpm</td>
+                </tr>
+                <tr>
+                    <td class="text-center">Premium Efficient</td>
+                    <td class="text-center">60 Hz</td>
+                    <td class="text-center">1080 rpm</td>
+                    <td class="text-center">3600 rpm</td>
+                </tr>
+                <tr>
+                    <td class="text-center">Premium Efficient</td>
+                    <td class="text-center">50 Hz</td>
+                    <td class="text-center">900 rpm</td>
+                    <td class="text-center">3000 rpm</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'motorEfficiencyClass'">
+    <h6>
+        Efficiency Class
+        <br>
+        <small class="text-muted">
+            Efficiency Class is the classification of efficiency given to motor. This can be found either on the
+            nameplate or based on
+            how the motor compares with the NEMA MG 1-2003.
+            <hr> Efficiency Class options include
+            <u>Standard Efficiency</u>,
+            <u>Energy Efficient</u>,
+            <u>Premium Efficient</u>, or
+            <u>Specified</u>.
+            <br><br>
+            The Premium (IE3) and Energy Efficient (IE2) classes are based on motors that match those NEMA classes.
+            Standard motors should be used if the efficiency is below Energy Efficient (IE2).
+            Efficiency values can also be directly input using User Specified.
+        </small>
+    </h6>
+</div>
+
+
+<div class="my-2" *ngIf="focusedField == 'motorEfficiency'">
+    <h6>
+        Efficiency
+        <br>
+        <small class="text-muted">
+            Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical
+            power it consumes
+            to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric
+            motor
+            efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power
+            quality, and
+            operating conditions. Enter this value as a percentage.
+            <hr>
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="text-center">Minimum</th>
+                    <th class="text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="text-center">1%</td>
+                    <td class="text-center">100%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'motorRatedVoltage'">
+    <h6>
+      Rated Voltage
+      <br>
+      <small class="text-muted">
+        This voltage is the motor design (nameplate) voltage.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">200 V</td>
+            <td class="text-center">15180 V</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="focusedField == 'motorFullLoadAmps'">
+    <h6>
+      Full Load Amps
+      <br>
+      <small class="text-muted">
+        Full Load Amps represent either the known or estimated amps. This value will be used as a normalizing value in the Field
+        Data section if Current is the selected Load estimation method.
+        <br> If the Full-Load Amps is not known, an estimate can be made by clicking the
+        <u>"Estimate Full-Load Amps"
+        </u> button. 
+        <br><br>
+        <hr>
+      </small>
+    </h6>
+  </div>

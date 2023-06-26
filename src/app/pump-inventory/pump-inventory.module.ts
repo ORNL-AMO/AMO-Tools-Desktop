@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PumpInventoryComponent } from './pump-inventory.component';
 import { PumpInventoryService } from './pump-inventory.service';
-import { PumpInventorySetupComponent } from './pump-inventory-setup/pump-inventory-setup.component';
 import { PumpInventoryBannerComponent } from './pump-inventory-banner/pump-inventory-banner.component';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { RouterModule } from '@angular/router';

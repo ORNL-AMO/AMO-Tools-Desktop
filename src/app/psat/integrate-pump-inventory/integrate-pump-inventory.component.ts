@@ -58,7 +58,7 @@ export class IntegratePumpInventoryComponent {
     }
 
     if (connectedInventoryData.shouldDisconnect) {
-      this.psatIntegrationService.removeConnectedInventory(connectedInventoryData);
+      this.psatIntegrationService.removeConnectedInventory(connectedInventoryData.connectedItem, connectedInventoryData.ownerAssessmentId);
       delete this.psat.connectedItem;
       this.saved.emit(true);
     }

@@ -200,7 +200,17 @@ export class MotorIntegrationService {
 
   getHasConnectedMotorItems(inventoryItem: InventoryItem) {
     return inventoryItem.pumpInventoryData.departments.some(department => {
-      return department.catalog.some(item => item.connectedItem);
+      let pumpItem = department.catalog.find(item => item.connectedItem);
+      if (pumpItem) {
+        let motorInventory: InventoryItem = this.inventoryDbService.getById(pumpItem.connectedItem.inventoryId);
+        if (motorInventory) {
+          let department = motorInventory.motorInventoryData.departments.find(dept => pumpItem.connectedItem.departmentId === dept.id);
+          if (department) {
+            let motorItem = department.catalog.find(item => item.id === pumpItem.connectedItem.id);
+            return Boolean(motorItem);
+          }
+        }
+      }
     }
     );
   }

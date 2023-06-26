@@ -26,6 +26,7 @@ export class DepartmentSetupComponent implements OnInit {
     let departmentIndex: number = this.pumpInventoryData.departments.findIndex((department) => { return department.id == id })
     this.motorIntegrationService.removeDepartmentMotorConnections(this.pumpInventoryData, departmentIndex);
     this.pumpInventoryData.departments.splice(departmentIndex, 1);
+    this.pumpInventoryService.setIsValidInventory(this.pumpInventoryData);
     this.pumpInventoryService.pumpInventoryData.next(this.pumpInventoryData);
   }
 

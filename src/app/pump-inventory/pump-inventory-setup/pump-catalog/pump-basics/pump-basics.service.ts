@@ -11,12 +11,14 @@ export class PumpBasicsService {
     return this.formBuilder.group({
       name: [pumpItem.name],
       description: [pumpItem.description],
+      notes: [pumpItem.notes],
     });
   }
 
   updatepumpItemFromForm(form: FormGroup, pumpItem: PumpItem): PumpItem {
     pumpItem.name = form.controls.name.value
     pumpItem.description = form.controls.description.value
+    pumpItem.notes = form.controls.notes.value
     return pumpItem;
   }
 }

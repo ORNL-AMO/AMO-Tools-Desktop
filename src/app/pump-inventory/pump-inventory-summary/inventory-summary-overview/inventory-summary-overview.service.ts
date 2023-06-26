@@ -8,7 +8,7 @@ import { Co2SavingsData } from '../../../calculator/utilities/co2-savings/co2-sa
 import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { PsatService } from '../../../psat/psat.service';
 import { PsatInputs, PsatOutputs } from '../../../shared/models/psat';
-import { HelperFunctionsService } from '../../../shared/helper-services/helper-functions.service';
+import { ConvertPumpInventoryService } from '../../convert-pump-inventory.service';
 
 declare var psatAddon: any;
 
@@ -16,7 +16,7 @@ declare var psatAddon: any;
 export class InventorySummaryOverviewService {
 
   inventorySummary: BehaviorSubject<InventorySummary>;
-  constructor(private pumpInventoryService: PumpInventoryService, private helperFunctionsService: HelperFunctionsService,
+  constructor(private pumpInventoryService: PumpInventoryService, private convertPumpInventoryService: ConvertPumpInventoryService,
     private psatService: PsatService, private assessmentCo2SavingsService: AssessmentCo2SavingsService) {
     this.inventorySummary = new BehaviorSubject<InventorySummary>({
       totalEnergyUse: 0,
@@ -106,51 +106,54 @@ export class InventorySummaryOverviewService {
       energyCost: 0,
       emissionsOutput: 0,
     };
-    if (settings.unitsOfMeasure != 'Imperial') {
-      // conversions
-      // inputCpy.motorSize = this.convertUnitsService.value(inputCpy.motorSize).from('kW').to('hp');
+    if (this.pumpInventoryService.isPumpValid(pumpItem)) {
+      let psatInputs: PsatInputs = {
+        pump_style: pumpItem.pumpEquipment.pumpType,
+        pump_specified: pumpItem.fieldMeasurements.efficiency ? pumpItem.fieldMeasurements.efficiency : null,
+        pump_rated_speed: pumpItem.pumpEquipment.ratedSpeed,
+        drive: pumpItem.systemProperties.driveType,
+        kinematic_viscosity: 1.107,
+        specific_gravity: 1.002,
+        stages: pumpItem.pumpEquipment.numStages,
+        fixed_speed: 0,
+        line_frequency: pumpItem.pumpMotor.lineFrequency,
+        motor_rated_power: pumpItem.pumpMotor.motorRatedPower,
+        motor_rated_speed: pumpItem.pumpMotor.motorRPM,
+        efficiency_class: pumpItem.pumpMotor.motorEfficiencyClass,
+        efficiency: pumpItem.pumpMotor.motorEfficiency,
+        motor_rated_voltage: pumpItem.pumpMotor.motorRatedVoltage,
+        load_estimation_method: 1,
+
+        motor_rated_fla: pumpItem.pumpMotor.motorFullLoadAmps,
+        operating_hours: pumpItem.fieldMeasurements.yearlyOperatingHours,
+        flow_rate: pumpItem.fieldMeasurements.operatingFlowRate,
+        head: pumpItem.fieldMeasurements.operatingHead,
+        //  is motorKW in psat "motor power"
+        motor_field_power: pumpItem.fieldMeasurements.measuredPower,
+        // in psat motorAmps "Motor Power"
+        motor_field_current: pumpItem.fieldMeasurements.measuredCurrent,
+        // in psat "measured voltage"
+        motor_field_voltage: pumpItem.fieldMeasurements.measuredVoltage,
+        cost_kw_hour: settings.electricityCost,
+        fluidType: pumpItem.fluid.fluidType,
+        fluidTemperature: 68
+      };
+
+      this.psatService.convertInputs(psatInputs, settings);
+      let psatResults: PsatOutputs = this.psatService.resultsExisting(psatInputs, settings);
+      results.energyUse = psatResults.annual_energy;
+      results.energyCost = results.energyUse * settings.electricityCost;
+      if (co2SavingsData) {
+        co2SavingsData.electricityUse = results.energyUse;
+        results.emissionsOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(co2SavingsData, settings);
+
+      }
+    } else {
+      let pumpInventoryData = this.pumpInventoryService.pumpInventoryData.getValue();
+      pumpInventoryData.isValid = false;
+      this.pumpInventoryService.pumpInventoryData.next(pumpInventoryData);
     }
 
-    // todo had to make educated guesses on these mappings
-    let psatInputs: PsatInputs = {
-      pump_style: pumpItem.pumpEquipment.pumpType,
-      pump_specified: pumpItem.fieldMeasurements.efficiency? pumpItem.fieldMeasurements.efficiency : null,
-      pump_rated_speed: pumpItem.pumpEquipment.ratedSpeed,
-      drive: pumpItem.systemProperties.driveType,
-      kinematic_viscosity: 1.107,
-      specific_gravity: 1.002,
-      stages: pumpItem.pumpEquipment.numStages,
-      fixed_speed: 0,
-      line_frequency: pumpItem.pumpMotor.lineFrequency,
-      motor_rated_power: pumpItem.pumpMotor.motorRatedPower,
-      motor_rated_speed: pumpItem.pumpMotor.motorRPM,
-      efficiency_class: pumpItem.pumpMotor.motorEfficiencyClass,
-      efficiency: pumpItem.pumpMotor.motorEfficiency,
-      motor_rated_voltage: pumpItem.pumpMotor.motorRatedVoltage,
-      load_estimation_method: 1,
-
-      motor_rated_fla: pumpItem.pumpMotor.motorFullLoadAmps,
-      operating_hours: pumpItem.fieldMeasurements.yearlyOperatingHours,
-      flow_rate: pumpItem.fieldMeasurements.operatingFlowRate,
-      head: pumpItem.fieldMeasurements.operatingHead,
-      //  is motorKW in psat "motor power"
-      motor_field_power: pumpItem.fieldMeasurements.measuredPower,
-      // in psat motorAmps "Motor Power"
-      motor_field_current: pumpItem.fieldMeasurements.measuredCurrent,
-      // in psat "measured voltage"
-      motor_field_voltage: pumpItem.fieldMeasurements.measuredVoltage,
-      cost_kw_hour: settings.electricityCost,
-      fluidType: pumpItem.fluid.fluidType,
-      fluidTemperature: 68
-    };
-    let psatResults: PsatOutputs = this.psatService.resultsExisting(psatInputs, settings);
-    results.energyUse = psatResults.annual_energy;
-    results.energyCost = results.energyUse * settings.electricityCost;
-    if (co2SavingsData) {
-      co2SavingsData.electricityUse = results.energyUse;
-      results.emissionsOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(co2SavingsData, settings);
-
-    }
     return results;
   }
 

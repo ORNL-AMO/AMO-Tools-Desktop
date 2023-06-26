@@ -15,6 +15,7 @@ import { Settings } from '../models/settings';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { SettingsService } from '../../settings/settings.service';
 import { PsatService } from '../../psat/psat.service';
+import { PumpInventoryService } from '../../pump-inventory/pump-inventory.service';
 
 @Injectable()
 export class PsatIntegrationService {
@@ -27,6 +28,7 @@ export class PsatIntegrationService {
     private helperService: HelperFunctionsService,
     private settingsDbService: SettingsDbService,
     private psatService: PsatService,
+    private pumpInventoryService: PumpInventoryService,
     private settingsService: SettingsService,
     private convertUnitsService: ConvertUnitsService
   ) { }
@@ -74,41 +76,48 @@ export class PsatIntegrationService {
       assessmentIntegrationStatus: undefined,
       msgHTML: undefined
     }
-
     let pumpInventory: InventoryItem = this.inventoryDbService.getById(connectedInventoryData.connectedItem.inventoryId);
-    let pumpInventorySettings: Settings = this.settingsDbService.getByInventoryId(pumpInventory);  
+    let pumpInventorySettings: Settings = this.settingsDbService.getByInventoryId(pumpInventory);
     let selectedPumpItem: PumpItem = this.getConnectedPumpItem(connectedInventoryData.connectedItem);
-
     let psat: PSAT = assessmentPsat;
-    if (newAssessmentSettings) {
-      newAssessmentSettings.unitsOfMeasure = pumpInventorySettings.unitsOfMeasure;
+
+    if (selectedPumpItem.validPump && !selectedPumpItem.validPump.isValid) {
+      assessmentIntegrationState.assessmentIntegrationStatus = 'invalid';
+      assessmentIntegrationState.msgHTML = `<b>${selectedPumpItem.name}</b> is invalid. Verify pump catalog data and try again.`;
+      connectedInventoryData.canConnect = false;
+      this.integrationStateService.assessmentIntegrationState.next(assessmentIntegrationState);
     } else {
-      let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(assessment, true);
-      if (pumpInventorySettings.unitsOfMeasure !== assessmentSettings.unitsOfMeasure) {
-        if (connectedInventoryData.shouldConvertItemUnits) {
-          connectedInventoryData.shouldConvertItemUnits = false;
-          // * convert to handle all non integrated fields, let selectedPumpItem assignments take care of the rest
-          psat = this.psatService.convertExistingData(psat, assessmentSettings, pumpInventorySettings);
+      connectedInventoryData.canConnect = true;
+      if (newAssessmentSettings) {
+        newAssessmentSettings.unitsOfMeasure = pumpInventorySettings.unitsOfMeasure;
+      } else {
+        let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(assessment, true);
+        if (pumpInventorySettings.unitsOfMeasure !== assessmentSettings.unitsOfMeasure) {
+          if (connectedInventoryData.shouldConvertItemUnits) {
+            connectedInventoryData.shouldConvertItemUnits = false;
+            // * convert to handle all non integrated fields, let selectedPumpItem assignments take care of the rest
+            psat = this.psatService.convertExistingData(psat, assessmentSettings, pumpInventorySettings);
 
-          // * convert to pump inventory settings
-          let assessmentSettingsId: number = assessmentSettings.id;
-          let assessmentId: number = assessmentSettings.assessmentId;
-          assessmentSettings.unitsOfMeasure = pumpInventorySettings.unitsOfMeasure
-          let settingsForm = this.settingsService.getFormFromSettings(assessmentSettings);
-          settingsForm = this.settingsService.setUnits(settingsForm);
-          assessmentSettings = this.settingsService.getSettingsFromForm(settingsForm);
-          assessmentSettings.id = assessmentSettingsId;
-          assessmentSettings.assessmentId = assessmentId;
+            // * convert to pump inventory settings
+            let assessmentSettingsId: number = assessmentSettings.id;
+            let assessmentId: number = assessmentSettings.assessmentId;
+            assessmentSettings.unitsOfMeasure = pumpInventorySettings.unitsOfMeasure
+            let settingsForm = this.settingsService.getFormFromSettings(assessmentSettings);
+            settingsForm = this.settingsService.setUnits(settingsForm);
+            assessmentSettings = this.settingsService.getSettingsFromForm(settingsForm);
+            assessmentSettings.id = assessmentSettingsId;
+            assessmentSettings.assessmentId = assessmentId;
 
-          let allSettings = await firstValueFrom(this.settingsDbService.updateWithObservable(assessmentSettings))
-          this.settingsDbService.setAll(allSettings);
-          connectedInventoryData.canConnect = true;
-        } else {
-          assessmentIntegrationState.assessmentIntegrationStatus = 'settings-differ';
-          assessmentIntegrationState.msgHTML = `Selected units of measure for inventory <b>${pumpInventory.name}</b> differ from this assessment`;
-          connectedInventoryData.canConnect = false;
+            let allSettings = await firstValueFrom(this.settingsDbService.updateWithObservable(assessmentSettings))
+            this.settingsDbService.setAll(allSettings);
+            connectedInventoryData.canConnect = true;
+          } else {
+            assessmentIntegrationState.assessmentIntegrationStatus = 'settings-differ';
+            assessmentIntegrationState.msgHTML = `Selected units of measure for inventory <b>${pumpInventory.name}</b> differ from this assessment`;
+            connectedInventoryData.canConnect = false;
+          }
+          this.integrationStateService.assessmentIntegrationState.next(assessmentIntegrationState);
         }
-        this.integrationStateService.assessmentIntegrationState.next(assessmentIntegrationState);
       }
     }
 
@@ -128,6 +137,7 @@ export class PsatIntegrationService {
       psat.inputs.operating_hours = selectedPumpItem.fieldMeasurements.yearlyOperatingHours;
       psat.inputs.flow_rate = selectedPumpItem.fieldMeasurements.operatingFlowRate;
       psat.inputs.head = selectedPumpItem.fieldMeasurements.operatingHead;
+      psat.inputs.load_estimation_method = selectedPumpItem.fieldMeasurements.loadEstimationMethod;
       psat.inputs.motor_field_power = selectedPumpItem.fieldMeasurements.measuredPower;
       psat.inputs.motor_field_current = selectedPumpItem.fieldMeasurements.measuredCurrent;
       psat.inputs.motor_field_voltage = selectedPumpItem.fieldMeasurements.measuredVoltage;
@@ -180,16 +190,15 @@ export class PsatIntegrationService {
     }
   }
 
-
   setPumpConnectedInventoryData(assessment: Assessment) {
     let connectedInventoryData: ConnectedInventoryData = this.integrationStateService.getEmptyConnectedInventoryData();
+    let assessmentIntegrationState = this.integrationStateService.assessmentIntegrationState.getValue();
     if (assessment.psat.connectedItem) {
       let connectedPumpItem = this.getConnectedPumpItem(assessment.psat.connectedItem);
       if (connectedPumpItem) {
         connectedInventoryData.connectedItem = assessment.psat.connectedItem;
         connectedInventoryData.isConnected = true;
         this.integrationStateService.connectedInventoryData.next(connectedInventoryData);
-        let assessmentIntegrationState = this.integrationStateService.assessmentIntegrationState.getValue();
         if (connectedPumpItem.connectedItem && connectedPumpItem.connectedAssessments) {
           assessmentIntegrationState.hasThreeWayConnection = true;
           this.integrationStateService.assessmentIntegrationState.next(assessmentIntegrationState);
@@ -197,6 +206,7 @@ export class PsatIntegrationService {
       } else {
         // item was deleted
         delete assessment.psat.connectedItem;
+        this.integrationStateService.assessmentIntegrationState.next(assessmentIntegrationState);
       }
     }
   }
@@ -208,12 +218,12 @@ export class PsatIntegrationService {
     );
   }
 
-  async removeConnectedInventory(connectedInventoryData: ConnectedInventoryData) {
-    let pumpInventory: InventoryItem = this.inventoryDbService.getById(connectedInventoryData.connectedItem.inventoryId);
+  async removeConnectedInventory(connectedItem: ConnectedItem, ownerAssessmentId: number) {
+    let pumpInventory: InventoryItem = this.inventoryDbService.getById(connectedItem.inventoryId);
     pumpInventory.pumpInventoryData.departments.forEach(dept => {
       dept.catalog.map(pumpItem => {
-        if (pumpItem.id === connectedInventoryData.connectedItem.id && pumpItem.connectedAssessments) {
-          let connectedPumpIndex = pumpItem.connectedAssessments.findIndex(item => item.assessmentId === connectedInventoryData.ownerAssessmentId);
+        if (pumpItem.id === connectedItem.id && pumpItem.connectedAssessments) {
+          let connectedPumpIndex = pumpItem.connectedAssessments.findIndex(item => item.assessmentId === ownerAssessmentId);
           pumpItem.connectedAssessments.splice(connectedPumpIndex, 1);
           if (pumpItem.connectedAssessments.length === 0) {
             pumpItem.connectedAssessments = undefined;
@@ -225,7 +235,8 @@ export class PsatIntegrationService {
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(pumpInventory));
     this.inventoryDbService.setAll(updatedInventoryItems);
     this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
-    }
+    this.integrationStateService.assessmentIntegrationState.next(this.integrationStateService.getEmptyIntegrationState());
+  }
 
 
   checkConnectedAssessmentDiffers(selectedPump: PumpItem) {
@@ -240,14 +251,14 @@ export class PsatIntegrationService {
         let newValue = selectedPump.pumpMotor[key];
         let connectedFromValue = connectedAssessment.connectedFromState.pumpMotor[key];
         if (settingsDiffer && key === 'motorRatedPower') {
-          let assessmentUnit: string = assessmentSettings.unitsOfMeasure === 'Imperial'? 'hp' : 'kW';
-          let inventoryUnit: string = pumpInventorySettings.unitsOfMeasure === 'Imperial'? 'hp' : 'kW';
+          let assessmentUnit: string = assessmentSettings.unitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
+          let inventoryUnit: string = pumpInventorySettings.unitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
           connectedFromValue = this.convertUnitsService.value(connectedFromValue).from(assessmentUnit).to(inventoryUnit);
           connectedFromValue = this.convertUnitsService.roundVal(connectedFromValue, 2)
         }
         let valuesEqual: boolean = newValue === connectedFromValue;
         if (!valuesEqual) {
-          let motorField: ConnectedValueFormField ={
+          let motorField: ConnectedValueFormField = {
             formGroup: 'motor',
           }
           differingConnectedValues.push(motorField);
@@ -260,24 +271,24 @@ export class PsatIntegrationService {
       let isSystemPropertiesMatch: boolean = true;
       if (selectedPump.fluid.fluidType !== connectedAssessment.connectedFromState.pumpFluid.fluidType) {
         isFluidMatch = false;
-        let fluidFormField: ConnectedValueFormField ={
+        let fluidFormField: ConnectedValueFormField = {
           formGroup: 'fluid',
         }
         differingConnectedValues.push(fluidFormField);
       }
 
-      if (selectedPump.pumpEquipment.numStages !== connectedAssessment.connectedFromState.pumpEquipment.numStages 
+      if (selectedPump.pumpEquipment.numStages !== connectedAssessment.connectedFromState.pumpEquipment.numStages
         || selectedPump.pumpEquipment.pumpType !== connectedAssessment.connectedFromState.pumpEquipment.pumpType) {
         isEquipmentMatch = false;
-        let numStagesField: ConnectedValueFormField ={
+        let numStagesField: ConnectedValueFormField = {
           formGroup: 'pump',
         }
         differingConnectedValues.push(numStagesField);
       }
-      
+
       if (selectedPump.systemProperties.driveType !== connectedAssessment.connectedFromState.pumpSystem.driveType) {
         isSystemPropertiesMatch = false;
-        let driveTypeField: ConnectedValueFormField ={
+        let driveTypeField: ConnectedValueFormField = {
           formGroup: 'system',
         }
         differingConnectedValues.push(driveTypeField);
@@ -361,13 +372,14 @@ export class PsatIntegrationService {
       let department: PumpInventoryDepartment = inventoryItem.pumpInventoryData.departments.find(department => department.id === connectedItem.departmentId);
       if (department) {
         pumpItem = department.catalog.find(pumpItem => pumpItem.id === connectedItem.id);
+        pumpItem.validPump = this.pumpInventoryService.isPumpValid(pumpItem);
       }
     }
     return pumpItem;
   }
 
   restoreConnectedAssessmentValues(connectedInventoryData: ConnectedInventoryData, psat: PSAT): PSAT {
-     // * we don't care which connected assessment
+    // * we don't care which connected assessment
     let connectedPumpItem: PumpItem = this.getConnectedPumpItem(psat.connectedItem);
     let currentAssessment = connectedPumpItem.connectedAssessments.find((connectedAssessment: ConnectedItem) => {
       return connectedAssessment.assessmentId === psat.connectedItem.assessmentId;
@@ -392,7 +404,7 @@ export class PsatIntegrationService {
   }
 
   restoreConnectedInventoryValues(selectedPump: PumpItem, connectedInventoryData: ConnectedInventoryData) {
-     // * we don't care which connected assessment
+    // * we don't care which connected assessment
     let currentAssessment = selectedPump.connectedAssessments[0];
     selectedPump.pumpEquipment.pumpType = currentAssessment.connectedFromState.pumpEquipment.pumpType;
     selectedPump.systemProperties.driveType = currentAssessment.connectedFromState.pumpSystem.driveType;
