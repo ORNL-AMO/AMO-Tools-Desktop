@@ -58,7 +58,6 @@ export class CoreComponent implements OnInit {
     private calculatorDbService: CalculatorDbService, 
     private coreService: CoreService, 
     private router: Router,
-    private analyticsDataIdbService: AnalyticsDataIdbService,
     private securityAndPrivacyService: SecurityAndPrivacyService,
     private inventoryDbService: InventoryDbService, private sqlDbApiService: SqlDbApiService) {
   }
@@ -71,11 +70,12 @@ export class CoreComponent implements OnInit {
     if (this.electronService.isElectron) {
       this.electronService.sendAppReady('ready');
 
-      this.analyticsSessionId = uuidv4();
-      this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-        .subscribe((event: NavigationEnd) => {
-          this.sendAnalyticsPageView(event);
-        });
+      if (this.electronService.isElectron) {
+        this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+          .subscribe((event: NavigationEnd) => {
+              this.analyticsService.sendAnalyticsPageView(event.urlAfterRedirects);
+            });
+      }
 
 
       this.electronUpdateAvailableSub = this.electronService.updateAvailable.subscribe(val => {
@@ -122,36 +122,6 @@ export class CoreComponent implements OnInit {
 
   }
 
- async initAnalyticsSession() {
-    await this.setClientAnalyticsId();
-    this.analyticsService.postEventToMeasurementProtocol('page_view', { 
-      page_path: '/landing-screen',
-      // engagement_time_msec required to begin an analytics session but not used again
-      engagement_time_msec: '100',
-      session_id: this.analyticsSessionId
-    })
-  }
-  
-  async setClientAnalyticsId() {
-    let appAnalyticsData: Array<AppAnalyticsData> = await firstValueFrom(this.analyticsDataIdbService.getAppAnalyticsData());
-    let clientId: string;
-    if (appAnalyticsData.length == 0) {
-      clientId = uuidv4();
-      await firstValueFrom(this.analyticsDataIdbService.addWithObservable({
-        clientId: clientId,
-        modifiedDate: new Date()
-      }));
-    } else {
-      clientId = appAnalyticsData[0].clientId;
-    }
-    this.analyticsService.setClientId(clientId);
-  }
-
-  sendAnalyticsPageView(event) {
-    if (this.idbStarted) {
-      this.analyticsService.postEventToMeasurementProtocol('page_view', { page_path: event.urlAfterRedirects, session_id: this.analyticsSessionId })
-     } 
-  }
 
   ngOnDestroy() {
     if (this.electronService.isElectron) {
@@ -167,7 +137,6 @@ export class CoreComponent implements OnInit {
 
   async initData() {
     let existingDirectories: number = await firstValueFrom(this.directoryDbService.count());
-
     if (existingDirectories === 0) {
       await this.coreService.createDefaultDirectories();
       await this.coreService.createExamples();
@@ -186,9 +155,6 @@ export class CoreComponent implements OnInit {
       this.calculatorDbService.setAll(initializedData.calculators);
       this.inventoryDbService.setAll(initializedData.inventoryItems);
       this.idbStarted = true;
-      if (this.electronService.isElectron) { 
-        this.initAnalyticsSession();
-      }
       this.changeDetectorRef.detectChanges();
     });
   }
