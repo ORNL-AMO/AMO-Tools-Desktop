@@ -55,6 +55,7 @@ export class OperationCostsComponent implements OnInit {
   saveSettingsOnDestroy: boolean = false;
   electricityModalShown: boolean = false;
   naturalGasEmissionsShown: boolean = false;
+
   formNotFilledErrorElectricityUnitCosts: boolean = false;
   formNotFilledErrorElectricityAnnualConsumption: boolean = false;
   formNotFilledErrorElectricityAnnualCosts: boolean = false;
@@ -76,6 +77,15 @@ export class OperationCostsComponent implements OnInit {
   formNotFilledErrorSteamUnitCosts: boolean = false;
   formNotFilledErrorSteamAnnualConsumption: boolean = false;
   formNotFilledErrorSteamAnnualCosts: boolean = false;
+
+  electrictyFormErrorText: string;
+  naturalGasFormErrorText: string;
+  otherFuelFormErrorText: string;
+  waterFormErrorText: string;
+  wastewaterFormErrorText: string;
+  compressedAirFormErrorText: string;
+  steamFormErrorText: string;
+
 
   constructor(private treasureHuntReportService: TreasureHuntReportService, private treasureHuntService: TreasureHuntService,
        private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
@@ -475,6 +485,7 @@ export class OperationCostsComponent implements OnInit {
 
   calculateValue(type: string,  value: string)
   {
+    this.updateErrorText(type, value);
     const values: [number, number, number, string] = this.getFormValues(type);
     let unitCosts: number = values[0];
     let annualUsage: number = values[1];
@@ -553,6 +564,74 @@ export class OperationCostsComponent implements OnInit {
       this[('formNotFilledError' + capitalized + 'AnnualCosts')] = false;    
     }
     this.save();
+  }
+
+  updateErrorText(type: string, value: string){
+    const values: [number, number, number, string] = this.getFormValues(type);
+    let unitCosts: number = values[0];
+    let annualUsage: number = values[1];
+    let annualCosts: number = values[2];
+    let capitalized: string = values[3];
+    if (type == 'naturalGas'){
+      capitalized = 'Natural Gas';
+    }
+    else if (type == 'otherFuel'){
+      capitalized = 'Other Fuel';
+    }
+    else if (type == 'compressedAir'){
+      capitalized = 'Compressed Air';
+    }
+    if (value == 'unit_costs'){
+      if (!annualUsage || !annualCosts){
+        this[(type + 'FormErrorText')] = 'Please fill out ';
+        if (!annualUsage)
+        {
+          this[(type + 'FormErrorText')] += (capitalized + ' Annual Consumption');
+        }
+        if (!annualUsage && !annualCosts){
+          this[(type + 'FormErrorText')] += (' and ')
+        }
+        if (!annualCosts)
+        {
+          this[(type + 'FormErrorText')] += (capitalized + ' Annual Costs');
+        }
+        this[(type + 'FormErrorText')] += ' before making an estimate.'
+      }
+    }
+    else if (value == 'annual_consumption'){
+      if (!unitCosts || !annualCosts){
+        this[(type + 'FormErrorText')] = 'Please fill out ';
+        if (!unitCosts)
+        {
+          this[(type + 'FormErrorText')] += (capitalized + ' Unit Cost');
+        }
+        if (!unitCosts && !annualCosts){
+          this[(type + 'FormErrorText')] += (' and ')
+        }
+        if (!annualCosts)
+        {
+          this[(type + 'FormErrorText')] += (capitalized + ' Annual Costs');
+        }
+        this[(type + 'FormErrorText')] += ' before making an estimate.'
+      }
+    }
+    else if (value == 'annual_costs'){
+      if (!unitCosts || !annualUsage){
+        this[(type + 'FormErrorText')] = 'Please fill out ';
+        if (!unitCosts)
+        {
+          this[(type + 'FormErrorText')] += (capitalized + ' Unit Cost');
+        }
+        if (!unitCosts && !annualUsage){
+          this[(type + 'FormErrorText')] += (' and ')
+        }
+        if (!annualUsage)
+        {
+          this[(type + 'FormErrorText')] += (capitalized + ' Annual Consumption');
+        }
+        this[(type + 'FormErrorText')] += ' before making an estimate.'
+      }
+    }
   }
 
 }
