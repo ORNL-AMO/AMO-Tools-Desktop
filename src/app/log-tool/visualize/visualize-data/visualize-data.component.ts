@@ -68,7 +68,7 @@ export class VisualizeDataComponent implements OnInit {
     } else {
       this.axisRanges = undefined;
     }
-    if (graphObj.selectedXAxisDataOption.dataField && graphObj.selectedXAxisDataOption.dataField.alias == 'Time Series') {
+    if (graphObj.data[0].type == 'time-series') {
       this.setTimeSeriesSummary();
     } else if (graphObj.selectedXAxisDataOption.dataField) {
       let xAxisSummary = this.getDataSummary(graphObj.selectedXAxisDataOption.dataField, 'X-Axis', graphObj.selectedXAxisDataOption.data)
