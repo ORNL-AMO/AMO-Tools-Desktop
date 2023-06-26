@@ -551,7 +551,7 @@ export class OperationCostsComponent implements OnInit {
     this.save();
   }
 
-  checkForm(type: string, value: string){
+  checkForm(type: string){
     const values: [number, number, number, string] = this.getFormValues(type);
     let unitCosts: number = values[0];
     let annualUsage: number = values[1];
@@ -566,7 +566,7 @@ export class OperationCostsComponent implements OnInit {
     if (annualUsage && annualCosts){
       this[('formNotFilledError' + capitalized + 'UnitCosts')] = false;
     }
-    this.updateErrorText(type, value);
+
     this.save();
   }
 
@@ -579,28 +579,25 @@ export class OperationCostsComponent implements OnInit {
     if (type == 'naturalGas'){
       capitalized = 'Natural Gas';
     }
-    if (type == 'otherFuel'){
+    else if (type == 'otherFuel'){
       capitalized = 'Other Fuel';
     }
-    if (type == 'compressedAir'){
+    else if (type == 'compressedAir'){
       capitalized = 'Compressed Air';
     }
-    // if (type == 'wastewater'){
-    //   console.log(unitCosts + ''+ annualUsage + ''+ annualCosts + capitalized);
-    // }
     if (value == 'unit_costs'){
       if (!annualUsage || !annualCosts){
         this[(type + 'FormErrorText')] = 'Please fill out ';
         if (!annualUsage)
         {
-          this[(type + 'FormErrorText')] += ('"' + capitalized + ' Annual Consumption' + '"');
+          this[(type + 'FormErrorText')] += (capitalized + ' Annual Consumption');
         }
         if (!annualUsage && !annualCosts){
           this[(type + 'FormErrorText')] += (' and ')
         }
         if (!annualCosts)
         {
-          this[(type + 'FormErrorText')] += ('"' + capitalized + ' Annual Costs' + '"');
+          this[(type + 'FormErrorText')] += (capitalized + ' Annual Costs');
         }
         this[(type + 'FormErrorText')] += ' before making an estimate.'
       }
@@ -610,14 +607,14 @@ export class OperationCostsComponent implements OnInit {
         this[(type + 'FormErrorText')] = 'Please fill out ';
         if (!unitCosts)
         {
-          this[(type + 'FormErrorText')] += ('"' + capitalized + ' Unit Cost' + '"');
+          this[(type + 'FormErrorText')] += (capitalized + ' Unit Cost');
         }
         if (!unitCosts && !annualCosts){
           this[(type + 'FormErrorText')] += (' and ')
         }
         if (!annualCosts)
         {
-          this[(type + 'FormErrorText')] += ('"' + capitalized + ' Annual Costs' + '"');
+          this[(type + 'FormErrorText')] += (capitalized + ' Annual Costs');
         }
         this[(type + 'FormErrorText')] += ' before making an estimate.'
       }
@@ -627,14 +624,14 @@ export class OperationCostsComponent implements OnInit {
         this[(type + 'FormErrorText')] = 'Please fill out ';
         if (!unitCosts)
         {
-          this[(type + 'FormErrorText')] += ('"' + capitalized + ' Unit Cost' + '"');
+          this[(type + 'FormErrorText')] += (capitalized + ' Unit Cost');
         }
         if (!unitCosts && !annualUsage){
           this[(type + 'FormErrorText')] += (' and ')
         }
         if (!annualUsage)
         {
-          this[(type + 'FormErrorText')] += ('"' + capitalized + ' Annual Consumption' + '"');
+          this[(type + 'FormErrorText')] += (capitalized + ' Annual Consumption');
         }
         this[(type + 'FormErrorText')] += ' before making an estimate.'
       }
