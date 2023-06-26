@@ -558,11 +558,16 @@ export class OperationCostsComponent implements OnInit {
     let annualUsage: number = values[1];
     let annualCosts: number = values[2];
     let capitalized: string = values[3];
-    if ((unitCosts && annualUsage) || (unitCosts && annualUsage) || (annualUsage && annualCosts)) {
-      this[('formNotFilledError' + capitalized + 'UnitCosts')] = false;
-      this[('formNotFilledError' + capitalized + 'AnnualConsumption')] = false;
+    if (unitCosts && annualUsage){
       this[('formNotFilledError' + capitalized + 'AnnualCosts')] = false;    
     }
+    if (unitCosts && annualCosts){
+      this[('formNotFilledError' + capitalized + 'AnnualConsumption')] = false;
+    }
+    if (annualUsage && annualCosts){
+      this[('formNotFilledError' + capitalized + 'UnitCosts')] = false;
+    }
+
     this.save();
   }
 
