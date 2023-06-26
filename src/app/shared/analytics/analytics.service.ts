@@ -103,16 +103,20 @@ export class AnalyticsService {
   }
 
   setPageViewEventUrl(pageViewEvent: GAEvent) {
-    let pathWithoutId: string = pageViewEvent.params.page_path.replace(/[0-9]/g, '');
-    pathWithoutId = pathWithoutId.replace(/\/$/, "");
-    if (pageViewEvent.params.page_path.includes('inventory')) {
-      pathWithoutId = pathWithoutId.replace('//', "/");
-    }
-    pageViewEvent.params.page_path = pathWithoutId;
+    pageViewEvent.params.page_path = this.getPageWithoutId(pageViewEvent.params.page_path);
     // Never send real paths while in dev
     if (!environment.production) {
       pageViewEvent.params.page_path = '/testing'
     }
+  }
+
+  getPageWithoutId(pagePath: string) {
+    let pathWithoutId: string = pagePath.replace(/[0-9]/g, '');
+    pathWithoutId = pathWithoutId.replace(/\/$/, "");
+    if (pathWithoutId.includes('inventory')) {
+      pathWithoutId = pathWithoutId.replace('//', "/");
+    }
+    return pathWithoutId;
   }
 
 }
