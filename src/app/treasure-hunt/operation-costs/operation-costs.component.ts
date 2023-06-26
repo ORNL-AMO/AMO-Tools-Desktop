@@ -548,7 +548,6 @@ export class OperationCostsComponent implements OnInit {
         }
       }
     }
-    console.log(unitCosts + ' ' + annualUsage + ' ' + annualCosts + ' ' + capitalized);
     this.save();
   }
 
