@@ -579,61 +579,61 @@ export class OperationCostsComponent implements OnInit {
     if (type == 'naturalGas'){
       capitalized = 'Natural Gas';
     }
-    else if (type == 'otherFuel'){
+    if (type == 'otherFuel'){
       capitalized = 'Other Fuel';
     }
-    else if (type == 'compressedAir'){
+    if (type == 'compressedAir'){
       capitalized = 'Compressed Air';
     }
     if (value == 'unit_costs'){
       if (!annualUsage || !annualCosts){
-        this[(type + 'FormErrorText')] = 'Please fill out ';
+        this[(type + 'FormErrorText')] = '';
         if (!annualUsage)
         {
           this[(type + 'FormErrorText')] += (capitalized + ' Annual Consumption');
         }
         if (!annualUsage && !annualCosts){
-          this[(type + 'FormErrorText')] += (' and ')
+          this[(type + 'FormErrorText')] += (' & ')
         }
         if (!annualCosts)
         {
           this[(type + 'FormErrorText')] += (capitalized + ' Annual Costs');
         }
-        this[(type + 'FormErrorText')] += ' before making an estimate.'
+        // this[(type + 'FormErrorText')] += ' before making an estimate.'
       }
     }
     else if (value == 'annual_consumption'){
       if (!unitCosts || !annualCosts){
-        this[(type + 'FormErrorText')] = 'Please fill out ';
+        this[(type + 'FormErrorText')] = '';
         if (!unitCosts)
         {
           this[(type + 'FormErrorText')] += (capitalized + ' Unit Cost');
         }
         if (!unitCosts && !annualCosts){
-          this[(type + 'FormErrorText')] += (' and ')
+          this[(type + 'FormErrorText')] += (' & ')
         }
         if (!annualCosts)
         {
           this[(type + 'FormErrorText')] += (capitalized + ' Annual Costs');
         }
-        this[(type + 'FormErrorText')] += ' before making an estimate.'
+        // this[(type + 'FormErrorText')] += ' before making an estimate.'
       }
     }
     else if (value == 'annual_costs'){
       if (!unitCosts || !annualUsage){
-        this[(type + 'FormErrorText')] = 'Please fill out ';
+        this[(type + 'FormErrorText')] = '';
         if (!unitCosts)
         {
           this[(type + 'FormErrorText')] += (capitalized + ' Unit Cost');
         }
         if (!unitCosts && !annualUsage){
-          this[(type + 'FormErrorText')] += (' and ')
+          this[(type + 'FormErrorText')] += (' & ')
         }
         if (!annualUsage)
         {
           this[(type + 'FormErrorText')] += (capitalized + ' Annual Consumption');
         }
-        this[(type + 'FormErrorText')] += ' before making an estimate.'
+        // this[(type + 'FormErrorText')] += ' before making an estimate.'
       }
     }
   }
