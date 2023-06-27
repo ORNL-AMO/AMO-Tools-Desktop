@@ -28,19 +28,23 @@ export class ProfileSetupFormComponent implements OnInit {
   halfHourIntervalData: Array<ProfileSummary>;
   quarterHourIntervalData: Array<ProfileSummary>;
   isProfileDataTypeChange: boolean = false;
+  dayTypesWarningMessage: string = 'is valid';
+  compressedAirAssessment: CompressedAirAssessment;
   constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointsFormService: PerformancePointsFormService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.dayTypes = val.compressedAirDayTypes;
+      this.compressedAirAssessment = val;
       this.setPressureMinAndMax(val.compressorInventoryItems);
       if (val && this.isFormChange == false) {
         this.form = this.systemProfileService.getProfileSetupFormFromObj(val.systemProfile.systemProfileSetup, this.dayTypes);
         this.enableDisableForm();
       } else {
         this.isFormChange = false;
-      }
+      }  
+      this.checkDayTypesForData();
     });
 
     this.profileTabSub = this.compressedAirAssessmentService.profileTab.subscribe(val => {
@@ -78,6 +82,8 @@ export class ProfileSetupFormComponent implements OnInit {
       });
       this.isProfileDataTypeChange = false;
     }
+
+    this.checkDayTypesForData();
 
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
@@ -147,6 +153,16 @@ export class ProfileSetupFormComponent implements OnInit {
   changeProfileDataType() {
     this.isProfileDataTypeChange = true;
     this.save();
+  }
+
+  checkDayTypesForData() {
+    this.dayTypesWarningMessage = 'is valid';
+    this.dayTypes.forEach(day => {
+      day.hasValidData = this.compressedAirAssessmentService.checkDayTypesDataValid(this.compressedAirAssessment, day.dayTypeId);
+      if (day.hasValidData == false) {
+        this.dayTypesWarningMessage = 'There are Day Types with missing data.';
+      }
+    });
   }
 
 }
