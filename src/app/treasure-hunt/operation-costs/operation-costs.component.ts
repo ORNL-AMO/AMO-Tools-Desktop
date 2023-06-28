@@ -599,7 +599,6 @@ export class OperationCostsComponent implements OnInit {
         {
           this[(type + 'FormErrorText')] += (capitalized + ' Annual Costs');
         }
-        // this[(type + 'FormErrorText')] += ' before making an estimate.'
       }
     }
     else if (value == 'annual_consumption'){
@@ -616,7 +615,6 @@ export class OperationCostsComponent implements OnInit {
         {
           this[(type + 'FormErrorText')] += (capitalized + ' Annual Costs');
         }
-        // this[(type + 'FormErrorText')] += ' before making an estimate.'
       }
     }
     else if (value == 'annual_costs'){
@@ -633,7 +631,6 @@ export class OperationCostsComponent implements OnInit {
         {
           this[(type + 'FormErrorText')] += (capitalized + ' Annual Consumption');
         }
-        // this[(type + 'FormErrorText')] += ' before making an estimate.'
       }
     }
   }
