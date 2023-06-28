@@ -160,7 +160,7 @@ export class ProfileSetupFormComponent implements OnInit {
     this.dayTypes.forEach(day => {
       day.hasValidData = this.compressedAirAssessmentService.checkDayTypesDataValid(this.compressedAirAssessment, day.dayTypeId);
       if (day.hasValidData == false) {
-        this.dayTypesWarningMessage = 'There are Day Types with missing data.';
+        this.dayTypesWarningMessage = 'There are Day Types with missing or invalid data.';
       }
     });
   }
