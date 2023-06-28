@@ -142,7 +142,7 @@
           </label>
           <div class="input-group">
             <input type="number" step="0.01" class="form-control" [(ngModel)]="settings.otherFuelCost" id="otherFuelCost"
-              (input)="checkForm('otherFuel'); setSaveSettings()" (focus)="focusField('operation-costs')">
+              (input)="checkForm('otherFuel'); updateErrorText('otherFuel', 'unit_costs'); setSaveSettings()" (focus)="focusField('operation-costs')">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/GJ</span>
           </div>
@@ -154,7 +154,7 @@
             </label>
             <div class="input-group">
               <input class="form-control" name="annualOtherFuelUsage" type="number" step="100" (focus)="focusField('operation-costs')"
-                [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelUsage" (input)="checkForm('otherFuel')">
+                [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelUsage" (input)="checkForm('otherFuel'); updateErrorText('otherFuel', 'annual_consumption')">
               <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
               <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">GJ</span>
             </div>
@@ -166,7 +166,7 @@
             </label>
             <div class="input-group">
               <input class="form-control" name="annualOtherFuelCosts" type="number" step="100" (focus)="focusField('operation-costs')"
-                [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelCosts" (input)="checkForm('otherFuel')">
+                [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelCosts" (input)="checkForm('otherFuel'); updateErrorText('otherFuel', 'annual_costs')">
               <span class="input-group-addon units">$</span>
             </div>
           </div>
@@ -222,7 +222,7 @@
           </label>
           <div class="input-group">
             <input type="number" step="0.01" class="form-control" [(ngModel)]="settings.waterCost" id="waterCost"
-              (input)="checkForm('water'); setSaveSettings()" (focus)="focusField('operation-costs')">
+              (input)="checkForm('water'); updateErrorText('water', 'unit_costs'); setSaveSettings()" (focus)="focusField('operation-costs')">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/gal</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/L</span>
           </div>
@@ -234,7 +234,7 @@
             </label>
             <div class="input-group">
               <input class="form-control" name="annualWaterUsage" type="number" step="100" (focus)="focusField('operation-costs')"
-                [(ngModel)]="treasureHunt.currentEnergyUsage.waterUsage" (input)="checkForm('water')">
+                [(ngModel)]="treasureHunt.currentEnergyUsage.waterUsage" (input)="checkForm('water'); updateErrorText('water', 'annual_consumption')">
               <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">L</span>
               <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
             </div>
@@ -246,7 +246,7 @@
             </label>
             <div class="input-group">
               <input class="form-control" name="annualWaterCosts" type="number" step="100" (focus)="focusField('operation-costs')"
-                [(ngModel)]="treasureHunt.currentEnergyUsage.waterCosts" (input)="checkForm('water')">
+                [(ngModel)]="treasureHunt.currentEnergyUsage.waterCosts" (input)="checkForm('water'); updateErrorText('water', 'annual_costs')">
               <span class="input-group-addon units">$</span>
             </div>
           </div>
@@ -282,7 +282,7 @@
           </label>
           <div class="input-group">
             <input type="number" class="form-control" step="0.01" [(ngModel)]="settings.waterWasteCost" id="waterWasteCost"
-              (input)="checkForm('wastewater'); setSaveSettings()" (focus)="focusField('operation-costs')">
+              (input)="checkForm('wastewater'); updateErrorText('wastewater', 'unit_costs'); setSaveSettings()" (focus)="focusField('operation-costs')">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/gal</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/L</span>
           </div>
@@ -294,7 +294,7 @@
             </label>
             <div class="input-group">
               <input class="form-control" name="annualWasteWaterUsage" type="number" step="0.01" (focus)="focusField('operation-costs')"
-                [(ngModel)]="treasureHunt.currentEnergyUsage.wasteWaterUsage" (input)="checkForm('wastewater')">
+                [(ngModel)]="treasureHunt.currentEnergyUsage.wasteWaterUsage" (input)="checkForm('wastewater'); updateErrorText('wastewater', 'annual_consumption')">
               <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">L</span>
               <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
             </div>
@@ -306,7 +306,7 @@
             </label>
             <div class="input-group">
               <input class="form-control" name="annualWasteWaterCosts" type="number" step="100" (focus)="focusField('operation-costs')"
-                [(ngModel)]="treasureHunt.currentEnergyUsage.wasteWaterCosts" (input)="checkForm('wastewater')">
+                [(ngModel)]="treasureHunt.currentEnergyUsage.wasteWaterCosts" (input)="checkForm('wastewater'); updateErrorText('wastewater', 'annual_costs')">
               <span class="input-group-addon units">$</span>
             </div>
           </div>
@@ -342,7 +342,7 @@
           </label>
           <div class="input-group">
             <input type="number" step="0.01" class="form-control" [(ngModel)]="settings.compressedAirCost" id="compressedAirCost"
-              (input)="checkForm('compressedAir'); setSaveSettings()" (focus)="focusField('operation-costs')">
+              (input)="checkForm('compressedAir'); updateErrorText('compressedAir', 'unit_costs'); setSaveSettings()" (focus)="focusField('operation-costs')">
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/SCF</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/m<sup>3</sup></span>
           </div>
@@ -354,7 +354,7 @@
             </label>
             <div class="input-group">
               <input class="form-control" name="annualCompressedAirUsage" type="number" step="100" (focus)="focusField('operation-costs')"
-                [(ngModel)]="treasureHunt.currentEnergyUsage.compressedAirUsage" (input)="checkForm('compressedAir')">
+                [(ngModel)]="treasureHunt.currentEnergyUsage.compressedAirUsage" (input)="checkForm('compressedAir'); updateErrorText('compressedAir', 'annual_consumption')">
               <span class="units input-group-addon"
                 *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup></span>
               <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kSCF</span>
@@ -367,7 +367,7 @@
             </label>
             <div class="input-group">
               <input class="form-control" name="annualCompressedAirCosts" type="number" step="100" (focus)="focusField('operation-costs')"
-                [(ngModel)]="treasureHunt.currentEnergyUsage.compressedAirCosts" (input)="checkForm('compressedAir')">
+                [(ngModel)]="treasureHunt.currentEnergyUsage.compressedAirCosts" (input)="checkForm('compressedAir'); updateErrorText('compressedAir', 'annual_costs')">
               <span class="input-group-addon units">$</span>
             </div>
           </div>
@@ -404,7 +404,7 @@
           </label>
           <div class="input-group">
             <input name="steamCost" type="number" step="0.01" class="form-control" id="steamCost"
-              [(ngModel)]="settings.steamCost" (input)="checkForm('steam'); setSaveSettings()" (focus)="focusField('operation-costs')">
+              [(ngModel)]="settings.steamCost" (input)="checkForm('steam'); updateErrorText('steam', 'unit_costs'); setSaveSettings()" (focus)="focusField('operation-costs')">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/klb</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/tonne</span>
           </div>
@@ -416,7 +416,7 @@
             </label>
             <div class="input-group">
               <input class="form-control" name="annualSteamUsage" type="number" step="100" (focus)="focusField('operation-costs')"
-                [(ngModel)]="treasureHunt.currentEnergyUsage.steamUsage" (input)="checkForm('steam');">
+                [(ngModel)]="treasureHunt.currentEnergyUsage.steamUsage" (input)="checkForm('steam'); updateErrorText('steam', 'annual_consumption')">
               <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">klb</span>
               <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">tonne</span>
             </div>
@@ -428,7 +428,7 @@
             </label>
             <div class="input-group">
               <input class="form-control" name="annualSteamCosts" type="number" step="100" (focus)="focusField('operation-costs')"
-                [(ngModel)]="treasureHunt.currentEnergyUsage.steamCosts" (input)="checkForm('steam');">
+                [(ngModel)]="treasureHunt.currentEnergyUsage.steamCosts" (input)="checkForm('steam'); updateErrorText('steam', 'annual_costs');">
               <span class="input-group-addon units">$</span>
             </div>
           </div>

@@ -11,6 +11,7 @@ import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savin
 import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { current } from '../../shared/convert-units/definitions/current';
 
 @Component({
   selector: 'app-operation-costs',
@@ -86,6 +87,7 @@ export class OperationCostsComponent implements OnInit {
   compressedAirFormErrorText: string;
   steamFormErrorText: string;
 
+  currentError: string;
 
   constructor(private treasureHuntReportService: TreasureHuntReportService, private treasureHuntService: TreasureHuntService,
        private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
@@ -485,7 +487,7 @@ export class OperationCostsComponent implements OnInit {
 
   calculateValue(type: string,  value: string)
   {
-    this.updateErrorText(type, value);
+    this.updateErrorText(type, value, true);
     const values: [number, number, number, string] = this.getFormValues(type);
     let unitCosts: number = values[0];
     let annualUsage: number = values[1];
@@ -570,7 +572,7 @@ export class OperationCostsComponent implements OnInit {
     this.save();
   }
 
-  updateErrorText(type: string, value: string){
+  updateErrorText(type: string, value: string, clickedButton?: boolean){
     const values: [number, number, number, string] = this.getFormValues(type);
     let unitCosts: number = values[0];
     let annualUsage: number = values[1];
@@ -585,6 +587,11 @@ export class OperationCostsComponent implements OnInit {
     if (type == 'compressedAir'){
       capitalized = 'Compressed Air';
     }
+    if (!clickedButton && this[(type + 'FormErrorText')] && this.currentError)
+    {
+      value = this.currentError;
+    }
+    this.currentError = value;
     if (value == 'unit_costs'){
       if (!annualUsage || !annualCosts){
         this[(type + 'FormErrorText')] = '';
