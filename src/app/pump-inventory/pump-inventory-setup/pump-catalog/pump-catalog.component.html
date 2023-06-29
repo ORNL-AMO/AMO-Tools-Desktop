@@ -24,10 +24,10 @@
         <app-fluid-catalog *ngIf="pumpInventoryData.displayOptions.fluidPropertiesOptions.displayFluidProperties"></app-fluid-catalog>
     </div>
     <div class="col-12">
-        <app-field-measurements-catalog *ngIf="pumpInventoryData.displayOptions.fieldMeasurementOptions.displayFieldMeasurements"></app-field-measurements-catalog>
+        <app-pump-motor-catalog *ngIf="pumpInventoryData.displayOptions.pumpMotorPropertiesOptions.displayPumpMotorProperties"></app-pump-motor-catalog>
     </div>
     <div class="col-12">
-        <app-pump-motor-catalog *ngIf="pumpInventoryData.displayOptions.pumpMotorPropertiesOptions.displayPumpMotorProperties"></app-pump-motor-catalog>
+        <app-field-measurements-catalog *ngIf="pumpInventoryData.displayOptions.fieldMeasurementOptions.displayFieldMeasurements"></app-field-measurements-catalog>
     </div>
     <div class="col-12">
         <app-pump-status-catalog *ngIf="pumpInventoryData.displayOptions.pumpStatusOptions.displayPumpStatus"></app-pump-status-catalog>

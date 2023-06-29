@@ -190,7 +190,7 @@ export class PsatWarningService {
       rpmRange.max = 3600;
     } else if (lineFreqEnum == 1 && (effClass == 0 || effClass == 1)) { // if 50Hz and Standard or Energy Efficiency
       rpmRange.min = 450;
-      rpmRange.max = 3300;
+      rpmRange.max = 3600;
     } else if (lineFreqEnum == 0 && effClass == 2) { // if 60Hz and Premium Efficiency
       rpmRange.min = 1080;
       rpmRange.max = 3600;
