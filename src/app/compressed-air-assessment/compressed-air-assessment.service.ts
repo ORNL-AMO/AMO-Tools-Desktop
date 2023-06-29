@@ -313,6 +313,13 @@ export class CompressedAirAssessmentService {
         });                
       }
     });
+    if (compressedAirAssessment.systemInformation && compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
+      let undefinedSelections = compressedAirAssessment.systemInformation.trimSelections.find(selection => {return selection.compressorId == undefined});
+      profileSummaryValid.trimSelection = (undefinedSelections == undefined);
+      if (profileSummaryValid.trimSelection == false) {
+        isDayTypeValid = false;
+      }
+    } 
     return isDayTypeValid;
   }
 
