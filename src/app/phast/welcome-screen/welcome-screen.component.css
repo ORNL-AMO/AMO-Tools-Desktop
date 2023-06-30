@@ -1,6 +1,7 @@
 .book-item{
     background-color: #BF3D00;
-    margin-right: 5px;
+    position: absolute;
+    right: 189px;
 }
 
 .welcome-screen .welcome-content a.user-manual{
@@ -14,5 +15,5 @@
     position: absolute;
     height: 300px;
     top: 45px;
-    right: 160px;
+    right: 0px;
 }
