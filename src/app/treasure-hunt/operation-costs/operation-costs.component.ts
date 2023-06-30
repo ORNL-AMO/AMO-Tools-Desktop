@@ -460,6 +460,20 @@ export class OperationCostsComponent implements OnInit {
     this.save();
   }
 
+  calculateElectricityUnitCosts(){
+    this.settings.electricityCost = this.treasureHunt.currentEnergyUsage.electricityCosts / this.treasureHunt.currentEnergyUsage.electricityUsage;
+    this.save();
+  }
+  calculateElectricityAnnualConsumption(){
+    this.treasureHunt.currentEnergyUsage.electricityUsage = this.treasureHunt.currentEnergyUsage.electricityCosts / this.settings.electricityCost;
+    this.save();
+  }
+  calculateElectricityAnnualCosts(){
+    this.treasureHunt.currentEnergyUsage.electricityCosts = this.settings.electricityCost * this.treasureHunt.currentEnergyUsage.electricityUsage;
+    this.save();
+  }
+  
+
   getFormValues(type: string): [number, number, number, string]{
     let unitCosts: number;
     let annualUsage: number;

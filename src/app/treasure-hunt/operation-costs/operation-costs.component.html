@@ -16,7 +16,7 @@
         <label class="group-label" (click)="toggleElectricityUsed()">
           Electricity
         </label>
-        <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.electricityUsed == true">
+        <!-- <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.electricityUsed == true">
           <label for="electricityCost">Electricity Unit Cost
             <a class="form-text small click-link" (click)="calculateValue('electricity', 'unit_costs')">Estimate Electricity Unit Cost</a>
             <span class="alert-danger form-text small" *ngIf="formNotFilledErrorElectricityUnitCosts">Please fill out <b>{{electricityFormErrorText}}</b> before making an estimate.</span>
@@ -60,7 +60,48 @@
               [(ngModel)]="treasureHunt.currentEnergyUsage.electricityCO2SavingsData.totalEmissionOutputRate">
             <span class="input-group-addon units small">kg CO<sub>2</sub>/kWh</span>
           </div>
+        </div> -->
+
+
+
+
+        <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.electricityUsed == true">
+          <label for="electricityCost">Electricity Unit Costs
+            <a class="form-text small click-link" (click)="calculateElectricityUnitCosts()"
+            [ngClass]="{'disabled-link': !treasureHunt.currentEnergyUsage.electricityCosts || !treasureHunt.currentEnergyUsage.electricityUsage}">
+            Estimate Electricity Unit Costs</a>
+          </label>
+          <div class="input-group">
+            <input name="electricityCost" type="number" step="0.01" class="form-control" id="electricityCost"
+              [(ngModel)]="settings.electricityCost" (focus)="focusField('operation-costs')">
+            <span class="units input-group-addon">$/kWh</span>
+          </div>
         </div>
+        <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.electricityUsed == true">
+          <label for="annualElectricityUsage">Electricity Annual Consumption
+            <a class="form-text small click-link" (click)="calculateElectricityAnnualConsumption()" 
+            [ngClass]="{'disabled-link': !treasureHunt.currentEnergyUsage.electricityCosts || !settings.electricityCost}">
+            Estimate Electricity Annual Consumption</a>
+          </label>
+          <div class="input-group">
+            <input class="form-control" name="annualElectricityUsage" type="number" step="100" (focus)="focusField('operation-costs')" 
+              [(ngModel)]="treasureHunt.currentEnergyUsage.electricityUsage" >
+            <span class="input-group-addon units">kWh</span>
+          </div>
+        </div>
+        <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.electricityUsed == true">
+          <label for="annualElectricityCosts">Electricity Annual Costs
+            <a class="form-text small click-link" (click)="calculateElectricityAnnualCosts()" 
+            [ngClass]="{'disabled-link': !settings.electricityCost || !treasureHunt.currentEnergyUsage.electricityUsage}">
+            Estimate Electricity Annual Costs</a>
+          </label>
+          <div class="input-group">
+            <input class="form-control" name="annualElectricityCosts" type="number" step="100" (focus)="focusField('operation-costs')"
+              [(ngModel)]="treasureHunt.currentEnergyUsage.electricityCosts">
+            <span class="input-group-addon units">$</span>
+          </div>
+        </div>
+
       </div>
     </div>
     <div class="d-flex">
