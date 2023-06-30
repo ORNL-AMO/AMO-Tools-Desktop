@@ -41,10 +41,10 @@ export class ProfileSetupFormComponent implements OnInit {
       if (val && this.isFormChange == false) {
         this.form = this.systemProfileService.getProfileSetupFormFromObj(val.systemProfile.systemProfileSetup, this.dayTypes);
         this.enableDisableForm();
+        this.checkDayTypesForData();
       } else {
         this.isFormChange = false;
       }  
-      this.checkDayTypesForData();
     });
 
     this.profileTabSub = this.compressedAirAssessmentService.profileTab.subscribe(val => {
