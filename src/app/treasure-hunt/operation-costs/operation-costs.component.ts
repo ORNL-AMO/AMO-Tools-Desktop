@@ -57,38 +57,6 @@ export class OperationCostsComponent implements OnInit {
   electricityModalShown: boolean = false;
   naturalGasEmissionsShown: boolean = false;
 
-  formNotFilledErrorElectricityUnitCosts: boolean = false;
-  formNotFilledErrorElectricityAnnualConsumption: boolean = false;
-  formNotFilledErrorElectricityAnnualCosts: boolean = false;
-  formNotFilledErrorNaturalGasUnitCosts: boolean = false;
-  formNotFilledErrorNaturalGasAnnualConsumption: boolean = false;
-  formNotFilledErrorNaturalGasAnnualCosts: boolean = false;
-  formNotFilledErrorOtherFuelUnitCosts: boolean = false;
-  formNotFilledErrorOtherFuelAnnualConsumption: boolean = false;
-  formNotFilledErrorOtherFuelAnnualCosts: boolean = false;
-  formNotFilledErrorWaterUnitCosts: boolean = false;
-  formNotFilledErrorWaterAnnualConsumption: boolean = false;
-  formNotFilledErrorWaterAnnualCosts: boolean = false;
-  formNotFilledErrorWastewaterUnitCosts: boolean = false;
-  formNotFilledErrorWastewaterAnnualConsumption: boolean = false;
-  formNotFilledErrorWastewaterAnnualCosts: boolean = false;
-  formNotFilledErrorCompressedAirUnitCosts: boolean = false;
-  formNotFilledErrorCompressedAirAnnualConsumption: boolean = false;
-  formNotFilledErrorCompressedAirAnnualCosts: boolean = false;
-  formNotFilledErrorSteamUnitCosts: boolean = false;
-  formNotFilledErrorSteamAnnualConsumption: boolean = false;
-  formNotFilledErrorSteamAnnualCosts: boolean = false;
-
-  electrictyFormErrorText: string;
-  naturalGasFormErrorText: string;
-  otherFuelFormErrorText: string;
-  waterFormErrorText: string;
-  wastewaterFormErrorText: string;
-  compressedAirFormErrorText: string;
-  steamFormErrorText: string;
-
-  currentError: string;
-
   constructor(private treasureHuntReportService: TreasureHuntReportService, private treasureHuntService: TreasureHuntService,
        private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -474,186 +442,125 @@ export class OperationCostsComponent implements OnInit {
   }
   
 
-  getFormValues(type: string): [number, number, number, string]{
+  getFormValues(type: string): [number, number, number]{
     let unitCosts: number;
     let annualUsage: number;
     let annualCosts: number;
-    let capitalized: string;
-    if (type == 'wastewater'){
+
+    if (type == 'electricity'){
+      unitCosts = this.settings.electricityCost;
+      annualUsage = this.treasureHunt.currentEnergyUsage.electricityUsage;
+      annualCosts = this.treasureHunt.currentEnergyUsage.electricityCosts;
+    }
+    else if (type == 'naturalGas'){
+      unitCosts = this.settings.fuelCost;
+      annualUsage = this.treasureHunt.currentEnergyUsage.naturalGasUsage;
+      annualCosts = this.treasureHunt.currentEnergyUsage.naturalGasCosts;
+    }
+    else if (type == 'otherFuel'){
+      unitCosts = this.settings.otherFuelCost;
+      annualUsage = this.treasureHunt.currentEnergyUsage.otherFuelUsage;
+      annualCosts = this.treasureHunt.currentEnergyUsage.otherFuelCosts;
+    }
+    else if (type == 'water'){
+      unitCosts = this.settings.waterCost;
+      annualUsage = this.treasureHunt.currentEnergyUsage.waterUsage;
+      annualCosts = this.treasureHunt.currentEnergyUsage.waterCosts;
+    }
+    else if (type == 'wastewater'){
       unitCosts = this.settings.waterWasteCost;
       annualUsage = this.treasureHunt.currentEnergyUsage.wasteWaterUsage;
       annualCosts = this.treasureHunt.currentEnergyUsage.wasteWaterCosts;
-      capitalized = 'Wastewater';
     }
-    else {
-      if (type == 'naturalGas'){
-        unitCosts = this.settings.fuelCost;
-      }
-      else {
-        unitCosts = this.settings[(type + 'Cost')];
-      }
-      annualUsage = this.treasureHunt.currentEnergyUsage[(type + 'Usage')];
-      annualCosts = this.treasureHunt.currentEnergyUsage[(type + 'Costs')];
-      capitalized = type.charAt(0).toUpperCase() + type.slice(1);
+    else if (type == 'compressedAir'){
+      unitCosts = this.settings.compressedAirCost;
+      annualUsage = this.treasureHunt.currentEnergyUsage.compressedAirUsage;
+      annualCosts = this.treasureHunt.currentEnergyUsage.compressedAirCosts;
     }
-    return [unitCosts, annualUsage, annualCosts, capitalized];
+    else if (type == 'steam'){
+      unitCosts = this.settings.steamCost;
+      annualUsage = this.treasureHunt.currentEnergyUsage.steamUsage;
+      annualCosts = this.treasureHunt.currentEnergyUsage.steamCosts;
+    }
+    return [unitCosts, annualUsage, annualCosts];
   }
 
   calculateValue(type: string,  value: string)
   {
-    this.updateErrorText(type, value, true);
-    const values: [number, number, number, string] = this.getFormValues(type);
+    const values: [number, number, number] = this.getFormValues(type);
     let unitCosts: number = values[0];
     let annualUsage: number = values[1];
     let annualCosts: number = values[2];
-    let capitalized: string = values[3];
     if (value == 'unit_costs'){
-      if (!annualUsage || !annualCosts){
-        this[('formNotFilledError' + capitalized + 'UnitCosts')] = true;
-        this[('formNotFilledError' + capitalized + 'AnnualConsumption')] = false;
-        this[('formNotFilledError' + capitalized + 'AnnualCosts')] = false;
+      if (type == 'electricity'){
+        this.settings.electricityCost = annualCosts/annualUsage;
       }
-      else {
-        this[('formNotFilledError' + capitalized + 'UnitCosts')] = false;
-        this[('formNotFilledError' + capitalized + 'AnnualConsumption')] = false;
-        this[('formNotFilledError' + capitalized + 'AnnualCosts')] = false;
-        if (type == 'wastewater') {
-          this.settings.waterWasteCost = annualCosts/annualUsage;
-        }
-        else if (type == 'naturalGas'){
-          this.settings.fuelCost = annualCosts/annualUsage;
-        }
-        else {       
-          this.settings[(type + 'Cost')] = annualCosts/annualUsage;
-        }
+      else if (type == 'naturalGas'){
+        this.settings.fuelCost = annualCosts/annualUsage;
+      }
+      else if (type == 'otherFuel'){
+        this.settings.otherFuelCost = annualCosts/annualUsage;
+      }
+      else if (type == 'water'){
+        this.settings.waterCost = annualCosts/annualUsage;
+      }
+      else if (type == 'wastewater'){
+        this.settings.waterWasteCost = annualCosts/annualUsage;
+      }
+      else if (type == 'compressedAir'){
+        this.settings.compressedAirCost = annualCosts/annualUsage;
+      }
+      else if (type == 'steam'){
+        this.settings.steamCost = annualCosts/annualUsage;
       }
     }
-    if (value == 'annual_consumption'){
-      if (!unitCosts || !annualCosts){
-        this[('formNotFilledError' + capitalized + 'UnitCosts')] = false;
-        this[('formNotFilledError' + capitalized + 'AnnualConsumption')] = true;
-        this[('formNotFilledError' + capitalized + 'AnnualCosts')] = false;
+    if (value == 'annual_consumption'){   
+      if (type == 'electricity'){
+        this.treasureHunt.currentEnergyUsage.electricityUsage = annualCosts/unitCosts;
       }
-      else {
-        this[('formNotFilledError' + capitalized + 'UnitCosts')] = false;
-        this[('formNotFilledError' + capitalized + 'AnnualConsumption')] = false;
-        this[('formNotFilledError' + capitalized + 'AnnualCosts')] = false;        
-        if (type == 'wastewater') {
-          this.treasureHunt.currentEnergyUsage.wasteWaterUsage = annualCosts/unitCosts;
-        }
-        else {
-          this.treasureHunt.currentEnergyUsage[(type + 'Usage')] = annualCosts/unitCosts;
-        }
+      else if (type == 'naturalGas'){
+        this.treasureHunt.currentEnergyUsage.naturalGasUsage = annualCosts/unitCosts;
+      }
+      else if (type == 'otherFuel'){
+        this.treasureHunt.currentEnergyUsage.otherFuelUsage = annualCosts/unitCosts;
+      }
+      else if (type == 'water'){
+        this.treasureHunt.currentEnergyUsage.waterUsage = annualCosts/unitCosts;
+      }
+      else if (type == 'wastewater'){
+        this.treasureHunt.currentEnergyUsage.wasteWaterUsage = annualCosts/unitCosts;
+      }
+      else if (type == 'compressedAir'){
+        this.treasureHunt.currentEnergyUsage.compressedAirUsage = annualCosts/unitCosts;
+      }
+      else if (type == 'steam'){
+        this.treasureHunt.currentEnergyUsage.steamUsage = annualCosts/unitCosts;
       }
     }
     if (value == 'annual_costs'){
-      if (!unitCosts || !annualUsage){
-        this[('formNotFilledError' + capitalized + 'UnitCosts')] = false;
-        this[('formNotFilledError' + capitalized + 'AnnualConsumption')] = false;
-        this[('formNotFilledError' + capitalized + 'AnnualCosts')] = true;
+      if (type == 'electricity'){
+        this.treasureHunt.currentEnergyUsage.electricityCosts = unitCosts*annualUsage;
       }
-      else {
-        this[('formNotFilledError' + capitalized + 'UnitCosts')] = false;
-        this[('formNotFilledError' + capitalized + 'AnnualConsumption')] = false;
-        this[('formNotFilledError' + capitalized + 'AnnualCosts')] = false;
-        if (type == 'wastewater') {
-          this.treasureHunt.currentEnergyUsage.wasteWaterCosts = unitCosts * annualUsage;
-        }
-        else {
-          this.treasureHunt.currentEnergyUsage[(type + 'Costs')] = unitCosts*annualUsage;
-        }
+      else if (type == 'naturalGas'){
+        this.treasureHunt.currentEnergyUsage.naturalGasCosts = unitCosts*annualUsage;
+      }
+      else if (type == 'otherFuel'){
+        this.treasureHunt.currentEnergyUsage.otherFuelCosts = unitCosts*annualUsage;
+      }
+      else if (type == 'water'){
+        this.treasureHunt.currentEnergyUsage.waterCosts = unitCosts*annualUsage;
+      }
+      else if (type == 'wastewater'){
+        this.treasureHunt.currentEnergyUsage.wasteWaterCosts = unitCosts*annualUsage;
+      }
+      else if (type == 'compressedAir'){
+        this.treasureHunt.currentEnergyUsage.compressedAirCosts = unitCosts*annualUsage;
+      }
+      else if (type == 'steam'){
+        this.treasureHunt.currentEnergyUsage.steamCosts = unitCosts*annualUsage;
       }
     }
     this.save();
-  }
-
-  checkForm(type: string){
-    const values: [number, number, number, string] = this.getFormValues(type);
-    let unitCosts: number = values[0];
-    let annualUsage: number = values[1];
-    let annualCosts: number = values[2];
-    let capitalized: string = values[3];
-    if (unitCosts && annualUsage){
-      this[('formNotFilledError' + capitalized + 'AnnualCosts')] = false;    
-    }
-    if (unitCosts && annualCosts){
-      this[('formNotFilledError' + capitalized + 'AnnualConsumption')] = false;
-    }
-    if (annualUsage && annualCosts){
-      this[('formNotFilledError' + capitalized + 'UnitCosts')] = false;
-    }
-
-    this.save();
-  }
-
-  updateErrorText(type: string, value: string, clickedButton?: boolean){
-    const values: [number, number, number, string] = this.getFormValues(type);
-    let unitCosts: number = values[0];
-    let annualUsage: number = values[1];
-    let annualCosts: number = values[2];
-    let capitalized: string = values[3];
-    if (type == 'naturalGas'){
-      capitalized = 'Natural Gas';
-    }
-    if (type == 'otherFuel'){
-      capitalized = 'Other Fuel';
-    }
-    if (type == 'compressedAir'){
-      capitalized = 'Compressed Air';
-    }
-    if (!clickedButton && this[(type + 'FormErrorText')] && this.currentError)
-    {
-      value = this.currentError;
-    }
-    this.currentError = value;
-    if (value == 'unit_costs'){
-      if (!annualUsage || !annualCosts){
-        this[(type + 'FormErrorText')] = '';
-        if (!annualUsage)
-        {
-          this[(type + 'FormErrorText')] += (capitalized + ' Annual Consumption');
-        }
-        if (!annualUsage && !annualCosts){
-          this[(type + 'FormErrorText')] += (' & ')
-        }
-        if (!annualCosts)
-        {
-          this[(type + 'FormErrorText')] += (capitalized + ' Annual Costs');
-        }
-      }
-    }
-    else if (value == 'annual_consumption'){
-      if (!unitCosts || !annualCosts){
-        this[(type + 'FormErrorText')] = '';
-        if (!unitCosts)
-        {
-          this[(type + 'FormErrorText')] += (capitalized + ' Unit Cost');
-        }
-        if (!unitCosts && !annualCosts){
-          this[(type + 'FormErrorText')] += (' & ')
-        }
-        if (!annualCosts)
-        {
-          this[(type + 'FormErrorText')] += (capitalized + ' Annual Costs');
-        }
-      }
-    }
-    else if (value == 'annual_costs'){
-      if (!unitCosts || !annualUsage){
-        this[(type + 'FormErrorText')] = '';
-        if (!unitCosts)
-        {
-          this[(type + 'FormErrorText')] += (capitalized + ' Unit Cost');
-        }
-        if (!unitCosts && !annualUsage){
-          this[(type + 'FormErrorText')] += (' & ')
-        }
-        if (!annualUsage)
-        {
-          this[(type + 'FormErrorText')] += (capitalized + ' Annual Consumption');
-        }
-      }
-    }
   }
 
 }
