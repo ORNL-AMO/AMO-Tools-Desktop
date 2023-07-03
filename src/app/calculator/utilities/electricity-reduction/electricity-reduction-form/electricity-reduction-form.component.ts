@@ -45,7 +45,7 @@ export class ElectricityReductionFormComponent implements OnInit {
 
   measurementOptions: Array<{ value: number, name: string }> = [
     { value: 0, name: 'Multimeter Reading' },
-    { value: 1, name: 'Name Plate Data' },
+    { value: 1, name: 'Nameplate Data' },
     { value: 2, name: 'Power Meter Method' },
     { value: 3, name: 'Offsheet / Other Method' }
   ];
