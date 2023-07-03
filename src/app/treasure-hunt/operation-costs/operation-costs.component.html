@@ -18,10 +18,10 @@
         </label>
 
         <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.electricityUsed == true">
-          <label for="electricityCost">Electricity Unit Costs
+          <label for="electricityCost">Electricity Unit Cost
             <a class="form-text small click-link" (click)="calculateElectricityUnitCosts()"
             [ngClass]="{'disabled-link': !treasureHunt.currentEnergyUsage.electricityCosts || !treasureHunt.currentEnergyUsage.electricityUsage}">
-            Estimate Unit Costs</a>
+            Estimate Unit Cost</a>
           </label>
           <div class="input-group">
             <input name="electricityCost" type="number" step="0.01" class="form-control" id="electricityCost"
@@ -42,10 +42,10 @@
           </div>
         </div>
         <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.electricityUsed == true">
-          <label for="annualElectricityCosts">Electricity Annual Costs
+          <label for="annualElectricityCosts">Electricity Annual Cost
             <a class="form-text small click-link" (click)="calculateElectricityAnnualCosts()" 
             [ngClass]="{'disabled-link': !settings.electricityCost || !treasureHunt.currentEnergyUsage.electricityUsage}">
-            Estimate Annual Costs</a>
+            Estimate Annual Cost</a>
           </label>
           <div class="input-group">
             <input class="form-control" name="annualElectricityCosts" type="number" step="100" (focus)="focusField('operation-costs')"
@@ -95,9 +95,9 @@
             </div>
           </div>
           <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.naturalGasUsed == true">
-            <label for="annualNaturalGasCosts">Natural Gas Annual Costs
+            <label for="annualNaturalGasCosts">Natural Gas Annual Cost
               <a class="form-text small click-link" (click)="calculateValue('naturalGas', 'annual_costs')" 
-              [ngClass]="{'disabled-link': !treasureHunt.currentEnergyUsage.naturalGasUsage || !settings.fuelCost}">Estimate Annual Costs</a>
+              [ngClass]="{'disabled-link': !treasureHunt.currentEnergyUsage.naturalGasUsage || !settings.fuelCost}">Estimate Annual Cost</a>
               <span class="alert-danger form-text small" *ngIf="formNotFilledErrorNaturalGasAnnualCosts">Please fill out <b>{{naturalGasFormErrorText}}</b> before making an estimate.</span>
             </label>
             <div class="input-group">
@@ -155,9 +155,9 @@
             </div>
           </div>
           <div class="form-group"  *ngIf="treasureHunt.currentEnergyUsage.otherFuelUsed == true">
-            <label for="annualOtherFuelCosts">Other Fuel Annual Costs
+            <label for="annualOtherFuelCosts">Other Fuel Annual Cost
               <a class="form-text small click-link" (click)="calculateValue('otherFuel', 'annual_costs')"
-              [ngClass]="{'disabled-link': !treasureHunt.currentEnergyUsage.otherFuelUsage || !settings.otherFuelCost}">Estimate Annual Costs</a>
+              [ngClass]="{'disabled-link': !treasureHunt.currentEnergyUsage.otherFuelUsage || !settings.otherFuelCost}">Estimate Annual Cost</a>
             </label>
             <div class="input-group">
               <input class="form-control" name="annualOtherFuelCosts" type="number" step="100" (focus)="focusField('operation-costs')"
@@ -235,9 +235,9 @@
             </div>
           </div>
           <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.waterUsed == true">
-            <label for="annualWaterCosts">Water Annual Costs
+            <label for="annualWaterCosts">Water Annual Cost
               <a class="form-text small click-link" (click)="calculateValue('water', 'annual_costs')"
-              [ngClass]="{'disabled-link': !treasureHunt.currentEnergyUsage.waterUsage || !settings.waterCost }" >Estimate Annual Costs</a>
+              [ngClass]="{'disabled-link': !treasureHunt.currentEnergyUsage.waterUsage || !settings.waterCost }" >Estimate Annual Cost</a>
             </label>
             <div class="input-group">
               <input class="form-control" name="annualWaterCosts" type="number" step="100" (focus)="focusField('operation-costs')"
@@ -295,9 +295,9 @@
             </div>
           </div>
           <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.wasteWaterUsed == true">
-            <label for="annualWasteWaterCosts">Wastewater Annual Costs
+            <label for="annualWasteWaterCosts">Wastewater Annual Cost
               <a class="form-text small click-link" (click)="calculateValue('wastewater', 'annual_costs')"
-              [ngClass]="{'disabled-link': !treasureHunt.currentEnergyUsage.wasteWaterUsage || !settings.waterWasteCost}">Estimate Annual Costs</a>
+              [ngClass]="{'disabled-link': !treasureHunt.currentEnergyUsage.wasteWaterUsage || !settings.waterWasteCost}">Estimate Annual Cost</a>
             </label>
             <div class="input-group">
               <input class="form-control" name="annualWasteWaterCosts" type="number" step="100" (focus)="focusField('operation-costs')"
@@ -356,9 +356,9 @@
             </div>
           </div>
           <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.compressedAirUsed == true">
-            <label for="annualCompressedAirCosts">Compressed Air Annual Costs
+            <label for="annualCompressedAirCosts">Compressed Air Annual Cost
               <a class="form-text small click-link" (click)="calculateValue('compressedAir', 'annual_costs')"
-              [ngClass]="{'disabled-link': !treasureHunt.currentEnergyUsage.compressedAirUsage || !settings.compressedAirCost}">Estimate Annual Costs</a>
+              [ngClass]="{'disabled-link': !treasureHunt.currentEnergyUsage.compressedAirUsage || !settings.compressedAirCost}">Estimate Annual Cost</a>
             </label>
             <div class="input-group">
               <input class="form-control" name="annualCompressedAirCosts" type="number" step="100" (focus)="focusField('operation-costs')"
@@ -417,9 +417,9 @@
             </div>
           </div>
           <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.steamUsed == true">
-            <label for="annualSteamCosts">Steam Annual Costs
+            <label for="annualSteamCosts">Steam Annual Cost
               <a class="form-text small click-link" (click)="calculateValue('steam', 'annual_costs')"
-              [ngClass]="{'disabled-link': !settings.steamCost || !treasureHunt.currentEnergyUsage.steamUsage}">Estimate Annual Costs</a>
+              [ngClass]="{'disabled-link': !settings.steamCost || !treasureHunt.currentEnergyUsage.steamUsage}">Estimate Annual Cost</a>
             </label>
             <div class="input-group">
               <input class="form-control" name="annualSteamCosts" type="number" step="100" (focus)="focusField('operation-costs')"
