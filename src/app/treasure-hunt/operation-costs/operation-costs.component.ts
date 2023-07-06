@@ -11,6 +11,7 @@ import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savin
 import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { current } from '../../shared/convert-units/definitions/current';
 
 @Component({
   selector: 'app-operation-costs',
@@ -55,6 +56,7 @@ export class OperationCostsComponent implements OnInit {
   saveSettingsOnDestroy: boolean = false;
   electricityModalShown: boolean = false;
   naturalGasEmissionsShown: boolean = false;
+
   constructor(private treasureHuntReportService: TreasureHuntReportService, private treasureHuntService: TreasureHuntService,
        private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -178,6 +180,7 @@ export class OperationCostsComponent implements OnInit {
     } else if (this.treasureHuntResults.electricity.energySavings == 0) {
       this.treasureHunt.currentEnergyUsage.electricityUsed = false;
       this.treasureHunt.currentEnergyUsage.electricityUsage = 0;
+      this.treasureHunt.currentEnergyUsage.electricityCosts = 0;
     }
     this.save();
   }
@@ -422,6 +425,110 @@ export class OperationCostsComponent implements OnInit {
   
   saveOtherFuelsMixedList(mixedFuelsList: Array<Co2SavingsData>) {
     this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData = mixedFuelsList;
+    this.save();
+  }
+
+  calculateElectricityUnitCosts(){
+    this.settings.electricityCost = this.treasureHunt.currentEnergyUsage.electricityCosts / this.treasureHunt.currentEnergyUsage.electricityUsage;
+    this.save();
+  }
+  calculateElectricityAnnualConsumption(){
+    this.treasureHunt.currentEnergyUsage.electricityUsage = this.treasureHunt.currentEnergyUsage.electricityCosts / this.settings.electricityCost;
+    this.save();
+  }
+  calculateElectricityAnnualCosts(){
+    this.treasureHunt.currentEnergyUsage.electricityCosts = this.settings.electricityCost * this.treasureHunt.currentEnergyUsage.electricityUsage;
+    this.save();
+  }
+
+  calculateNaturalGasUnitCosts(){
+    this.settings.fuelCost = this.treasureHunt.currentEnergyUsage.naturalGasCosts / this.treasureHunt.currentEnergyUsage.naturalGasUsage;
+    this.save();
+  }
+
+  calculateNaturalGasAnnualConsumption(){
+    this.treasureHunt.currentEnergyUsage.naturalGasUsage = this.treasureHunt.currentEnergyUsage.naturalGasCosts / this.settings.fuelCost;
+    this.save();
+  }
+
+  calculateNaturalGasAnnualCosts(){
+    this.treasureHunt.currentEnergyUsage.naturalGasCosts = this.treasureHunt.currentEnergyUsage.naturalGasUsage * this.settings.fuelCost;
+    this.save();
+  }
+
+  calculateOtherFuelUnitCosts(){
+    this.settings.otherFuelCost = this.treasureHunt.currentEnergyUsage.otherFuelCosts/this.treasureHunt.currentEnergyUsage.otherFuelUsage;
+    this.save();
+  }
+
+  calculateOtherFuelAnnualConsumption(){
+    this.treasureHunt.currentEnergyUsage.otherFuelUsage = this.treasureHunt.currentEnergyUsage.otherFuelCosts/this.settings.otherFuelCost;
+    this.save();
+  }
+
+  calculateOtherFuelAnnualCosts(){
+    this.treasureHunt.currentEnergyUsage.otherFuelCosts = this.treasureHunt.currentEnergyUsage.otherFuelUsage*this.settings.otherFuelCost;
+    this.save();
+  }
+  
+  calculateWaterUnitCosts(){
+    this.settings.waterCost = this.treasureHunt.currentEnergyUsage.waterCosts / this.treasureHunt.currentEnergyUsage.waterUsage;
+    this.save();
+  }
+
+  calculateWaterAnnualConsumption(){
+    this.treasureHunt.currentEnergyUsage.waterUsage = this.treasureHunt.currentEnergyUsage.waterCosts/ this.settings.waterCost;
+    this.save();
+  }
+
+  calculateWaterAnnualCosts(){
+    this.treasureHunt.currentEnergyUsage.waterCosts = this.settings.waterCost * this.treasureHunt.currentEnergyUsage.waterUsage;
+
+    this.save();
+  }
+
+  calculateWastewaterUnitCosts(){
+    this.settings.waterWasteCost = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.treasureHunt.currentEnergyUsage.wasteWaterUsage;
+    this.save();
+  }
+
+  calculateWastewaterAnnualConsumption(){
+    this.treasureHunt.currentEnergyUsage.wasteWaterUsage = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.settings.waterWasteCost;
+    this.save();
+  }
+
+  calculateWastewaterAnnualCosts(){
+    this.treasureHunt.currentEnergyUsage.wasteWaterCosts = this.treasureHunt.currentEnergyUsage.wasteWaterUsage * this.settings.waterWasteCost;
+    this.save();
+  }
+
+  calculateCompressedAirUnitCosts(){
+    this.settings.compressedAirCost = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.treasureHunt.currentEnergyUsage.compressedAirUsage;
+    this.save();
+  }
+
+  calculateCompressedAirAnnualConsumption(){
+    this.treasureHunt.currentEnergyUsage.compressedAirUsage = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.settings.compressedAirCost;
+    this.save();
+  }
+
+  calculateCompressedAirAnnualCosts(){
+    this.treasureHunt.currentEnergyUsage.compressedAirCosts = this.treasureHunt.currentEnergyUsage.compressedAirUsage * this.settings.compressedAirCost;
+    this.save();
+  }
+
+  calculateSteamUnitCosts(){
+    this.settings.steamCost = this.treasureHunt.currentEnergyUsage.steamCosts / this.treasureHunt.currentEnergyUsage.steamUsage;
+    this.save();
+  }
+
+  calculateSteamAnnualConsumption(){
+    this.treasureHunt.currentEnergyUsage.steamUsage = this.treasureHunt.currentEnergyUsage.steamCosts / this.settings.steamCost;
+    this.save();
+  }
+
+  calculateSteamAnnualCosts(){
+    this.treasureHunt.currentEnergyUsage.steamCosts = this.settings.steamCost * this.treasureHunt.currentEnergyUsage.steamUsage;
     this.save();
   }
 
