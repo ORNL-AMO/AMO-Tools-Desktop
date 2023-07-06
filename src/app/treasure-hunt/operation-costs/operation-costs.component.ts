@@ -440,126 +440,95 @@ export class OperationCostsComponent implements OnInit {
     this.treasureHunt.currentEnergyUsage.electricityCosts = this.settings.electricityCost * this.treasureHunt.currentEnergyUsage.electricityUsage;
     this.save();
   }
-  
 
-  getFormValues(type: string): [number, number, number]{
-    let unitCosts: number;
-    let annualUsage: number;
-    let annualCosts: number;
-
-    if (type == 'electricity'){
-      unitCosts = this.settings.electricityCost;
-      annualUsage = this.treasureHunt.currentEnergyUsage.electricityUsage;
-      annualCosts = this.treasureHunt.currentEnergyUsage.electricityCosts;
-    }
-    else if (type == 'naturalGas'){
-      unitCosts = this.settings.fuelCost;
-      annualUsage = this.treasureHunt.currentEnergyUsage.naturalGasUsage;
-      annualCosts = this.treasureHunt.currentEnergyUsage.naturalGasCosts;
-    }
-    else if (type == 'otherFuel'){
-      unitCosts = this.settings.otherFuelCost;
-      annualUsage = this.treasureHunt.currentEnergyUsage.otherFuelUsage;
-      annualCosts = this.treasureHunt.currentEnergyUsage.otherFuelCosts;
-    }
-    else if (type == 'water'){
-      unitCosts = this.settings.waterCost;
-      annualUsage = this.treasureHunt.currentEnergyUsage.waterUsage;
-      annualCosts = this.treasureHunt.currentEnergyUsage.waterCosts;
-    }
-    else if (type == 'wastewater'){
-      unitCosts = this.settings.waterWasteCost;
-      annualUsage = this.treasureHunt.currentEnergyUsage.wasteWaterUsage;
-      annualCosts = this.treasureHunt.currentEnergyUsage.wasteWaterCosts;
-    }
-    else if (type == 'compressedAir'){
-      unitCosts = this.settings.compressedAirCost;
-      annualUsage = this.treasureHunt.currentEnergyUsage.compressedAirUsage;
-      annualCosts = this.treasureHunt.currentEnergyUsage.compressedAirCosts;
-    }
-    else if (type == 'steam'){
-      unitCosts = this.settings.steamCost;
-      annualUsage = this.treasureHunt.currentEnergyUsage.steamUsage;
-      annualCosts = this.treasureHunt.currentEnergyUsage.steamCosts;
-    }
-    return [unitCosts, annualUsage, annualCosts];
+  calculateNaturalGasUnitCosts(){
+    this.settings.fuelCost = this.treasureHunt.currentEnergyUsage.naturalGasCosts / this.treasureHunt.currentEnergyUsage.naturalGasUsage;
+    this.save();
   }
 
-  calculateValue(type: string,  value: string)
-  {
-    const values: [number, number, number] = this.getFormValues(type);
-    let unitCosts: number = values[0];
-    let annualUsage: number = values[1];
-    let annualCosts: number = values[2];
-    if (value == 'unit_costs'){
-      if (type == 'electricity'){
-        this.settings.electricityCost = annualCosts/annualUsage;
-      }
-      else if (type == 'naturalGas'){
-        this.settings.fuelCost = annualCosts/annualUsage;
-      }
-      else if (type == 'otherFuel'){
-        this.settings.otherFuelCost = annualCosts/annualUsage;
-      }
-      else if (type == 'water'){
-        this.settings.waterCost = annualCosts/annualUsage;
-      }
-      else if (type == 'wastewater'){
-        this.settings.waterWasteCost = annualCosts/annualUsage;
-      }
-      else if (type == 'compressedAir'){
-        this.settings.compressedAirCost = annualCosts/annualUsage;
-      }
-      else if (type == 'steam'){
-        this.settings.steamCost = annualCosts/annualUsage;
-      }
-    }
-    if (value == 'annual_consumption'){   
-      if (type == 'electricity'){
-        this.treasureHunt.currentEnergyUsage.electricityUsage = annualCosts/unitCosts;
-      }
-      else if (type == 'naturalGas'){
-        this.treasureHunt.currentEnergyUsage.naturalGasUsage = annualCosts/unitCosts;
-      }
-      else if (type == 'otherFuel'){
-        this.treasureHunt.currentEnergyUsage.otherFuelUsage = annualCosts/unitCosts;
-      }
-      else if (type == 'water'){
-        this.treasureHunt.currentEnergyUsage.waterUsage = annualCosts/unitCosts;
-      }
-      else if (type == 'wastewater'){
-        this.treasureHunt.currentEnergyUsage.wasteWaterUsage = annualCosts/unitCosts;
-      }
-      else if (type == 'compressedAir'){
-        this.treasureHunt.currentEnergyUsage.compressedAirUsage = annualCosts/unitCosts;
-      }
-      else if (type == 'steam'){
-        this.treasureHunt.currentEnergyUsage.steamUsage = annualCosts/unitCosts;
-      }
-    }
-    if (value == 'annual_costs'){
-      if (type == 'electricity'){
-        this.treasureHunt.currentEnergyUsage.electricityCosts = unitCosts*annualUsage;
-      }
-      else if (type == 'naturalGas'){
-        this.treasureHunt.currentEnergyUsage.naturalGasCosts = unitCosts*annualUsage;
-      }
-      else if (type == 'otherFuel'){
-        this.treasureHunt.currentEnergyUsage.otherFuelCosts = unitCosts*annualUsage;
-      }
-      else if (type == 'water'){
-        this.treasureHunt.currentEnergyUsage.waterCosts = unitCosts*annualUsage;
-      }
-      else if (type == 'wastewater'){
-        this.treasureHunt.currentEnergyUsage.wasteWaterCosts = unitCosts*annualUsage;
-      }
-      else if (type == 'compressedAir'){
-        this.treasureHunt.currentEnergyUsage.compressedAirCosts = unitCosts*annualUsage;
-      }
-      else if (type == 'steam'){
-        this.treasureHunt.currentEnergyUsage.steamCosts = unitCosts*annualUsage;
-      }
-    }
+  calculateNaturalGasAnnualConsumption(){
+    this.treasureHunt.currentEnergyUsage.naturalGasUsage = this.treasureHunt.currentEnergyUsage.naturalGasCosts / this.settings.fuelCost;
+    this.save();
+  }
+
+  calculateNaturalGasAnnualCosts(){
+    this.treasureHunt.currentEnergyUsage.naturalGasCosts = this.treasureHunt.currentEnergyUsage.naturalGasUsage * this.settings.fuelCost;
+    this.save();
+  }
+
+  calculateOtherFuelUnitCosts(){
+    this.settings.otherFuelCost = this.treasureHunt.currentEnergyUsage.otherFuelCosts/this.treasureHunt.currentEnergyUsage.otherFuelUsage;
+    this.save();
+  }
+
+  calculateOtherFuelAnnualConsumption(){
+    this.treasureHunt.currentEnergyUsage.otherFuelUsage = this.treasureHunt.currentEnergyUsage.otherFuelCosts/this.settings.otherFuelCost;
+    this.save();
+  }
+
+  calculateOtherFuelAnnualCosts(){
+    this.treasureHunt.currentEnergyUsage.otherFuelCosts = this.treasureHunt.currentEnergyUsage.otherFuelUsage*this.settings.otherFuelCost;
+    this.save();
+  }
+  
+  calculateWaterUnitCosts(){
+    this.settings.waterCost = this.treasureHunt.currentEnergyUsage.waterCosts / this.treasureHunt.currentEnergyUsage.waterUsage;
+    this.save();
+  }
+
+  calculateWaterAnnualConsumption(){
+    this.treasureHunt.currentEnergyUsage.waterUsage = this.treasureHunt.currentEnergyUsage.waterCosts/ this.settings.waterCost;
+    this.save();
+  }
+
+  calculateWaterAnnualCosts(){
+    this.treasureHunt.currentEnergyUsage.waterCosts = this.settings.waterCost * this.treasureHunt.currentEnergyUsage.waterUsage;
+
+    this.save();
+  }
+
+  calculateWastewaterUnitCosts(){
+    this.settings.waterWasteCost = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.treasureHunt.currentEnergyUsage.wasteWaterUsage;
+    this.save();
+  }
+
+  calculateWastewaterAnnualConsumption(){
+    this.treasureHunt.currentEnergyUsage.wasteWaterUsage = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.settings.waterWasteCost;
+    this.save();
+  }
+
+  calculateWastewaterAnnualCosts(){
+    this.treasureHunt.currentEnergyUsage.wasteWaterCosts = this.treasureHunt.currentEnergyUsage.wasteWaterUsage * this.settings.waterWasteCost;
+    this.save();
+  }
+
+  calculateCompressedAirUnitCosts(){
+    this.settings.compressedAirCost = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.treasureHunt.currentEnergyUsage.compressedAirUsage;
+    this.save();
+  }
+
+  calculateCompressedAirAnnualConsumption(){
+    this.treasureHunt.currentEnergyUsage.compressedAirUsage = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.settings.compressedAirCost;
+    this.save();
+  }
+
+  calculateCompressedAirAnnualCosts(){
+    this.treasureHunt.currentEnergyUsage.compressedAirCosts = this.treasureHunt.currentEnergyUsage.compressedAirUsage * this.settings.compressedAirCost;
+    this.save();
+  }
+
+  calculateSteamUnitCosts(){
+    this.settings.steamCost = this.treasureHunt.currentEnergyUsage.steamCosts / this.treasureHunt.currentEnergyUsage.steamUsage;
+    this.save();
+  }
+
+  calculateSteamAnnualConsumption(){
+    this.treasureHunt.currentEnergyUsage.steamUsage = this.treasureHunt.currentEnergyUsage.steamCosts / this.settings.steamCost;
+    this.save();
+  }
+
+  calculateSteamAnnualCosts(){
+    this.treasureHunt.currentEnergyUsage.steamCosts = this.settings.steamCost * this.treasureHunt.currentEnergyUsage.steamUsage;
     this.save();
   }
 
