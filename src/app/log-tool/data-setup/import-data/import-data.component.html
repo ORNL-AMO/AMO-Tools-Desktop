@@ -40,7 +40,7 @@
             <label *ngIf="explorerData.isStepFileUploadComplete" class="font-reset disabled-link"><a>Import Existing
                     Data Exploration</a></label>
             <input id="importJson" class="d-none" type="file" (input)="importExistingExplorerJson($event.target.files)"
-                accept=".json">
+                accept=".json, .gz">
         
             <div class="pl-2 mr-2 border-right"></div>
         

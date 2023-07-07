@@ -9,6 +9,8 @@ import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysi
 import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-type-graph.service';
 import { VisualizeService } from '../../visualize/visualize.service';
 import { LogToolService } from '../../log-tool.service';
+import * as pako from 'pako'
+
 
 @Component({
   selector: 'app-import-data',
@@ -175,17 +177,65 @@ export class ImportDataComponent implements OnInit {
     this.dayTypeGraphService.resetData();
     this.invalidFileReferences = new Array();
     if (files[0]) {
-        let extensionPattern: string = '.(json|JSON)$';
+        // console.log(files[0]);
+        let extensionPattern: string = '.(json|JSON|gz|GZ)$';
         let validExtensions: RegExp = new RegExp(extensionPattern, 'i');
         if (validExtensions.test(files[0].name)) {
-              let fileReaderPromise: Promise<any> = this.setJSONImportFile(files[0]);
-              fileReaderPromise.then((logToolDbData) => {
-                // noDayTypeAnalysis removal
-                this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis)
-                this.finishUpload();
-              });
+              let importFile = files[0];
+              if (importFile.name.endsWith('.gz')) {
+                let blob = new Blob([importFile], { type: 'application/octet-stream' });
+                let arrayBuffer;
+                let obj : any;
+                let result;
+                let fileReader = new FileReader();
+                const outer = this;
+                fileReader.onload = function () {
+                  arrayBuffer = this.result;
+                  result = pako.ungzip(new Uint8Array(arrayBuffer), { to: 'string' });
+                  obj = JSON.parse(result);
+                  let name = importFile.name;
+                  let fileReaderPromise: Promise<any> = outer.setJSONImportFileFromZip(result, name);
+                  fileReaderPromise.then((logToolDbData) => {
+                    outer.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis)
+                    outer.finishUpload();
+                  });
+                };
+                fileReader.readAsArrayBuffer(blob);
+              }
+              else{
+                let fileReaderPromise: Promise<any> = this.setJSONImportFile(importFile);
+                fileReaderPromise.then((logToolDbData) => {
+                  // noDayTypeAnalysis removal
+                  this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis)
+                  this.finishUpload();
+                });
+              }
         } 
     }
+  }
+
+  setJSONImportFileFromZip(jsonData: any, fileName: any) {
+    return new Promise((resolve, reject) => {
+        let importData: LogToolDbData = JSON.parse(jsonData);
+        if (importData.origin === "AMO-LOG-TOOL-DATA") {
+          this.explorerData.isExistingImport = true;
+          this.logToolDbService.logToolDbData = [importData];
+          this.logToolDbService.setDataFromImport(importData);
+          this.explorerData.fileData.push({ 
+            dataSetId: this.logToolDataService.getUniqueId(), 
+            fileType: '.json',
+            name: fileName, 
+            data: importData.setupData.individualDataFromCsv,
+            previewData: importData.setupData.individualDataFromCsv
+          });
+          this.logToolDataService.importExistingDataSets(importData);
+          resolve(importData);
+        } else {
+          let name = importData.name ? importData.name : undefined;
+          this.invalidFileReferences.push({ name: name, message: 'The uploaded JSON file does not contain AMO-Tools Data Explorer data' });
+          resolve(importData);
+        }
+    });
   }
 
   setJSONImportFile(fileReference: any) {

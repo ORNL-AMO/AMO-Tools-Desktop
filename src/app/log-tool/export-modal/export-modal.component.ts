@@ -4,6 +4,7 @@ import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { LogToolDbService } from '../log-tool-db.service';
 import { LogToolDbData } from '../log-tool-models';
 import { LogToolService } from '../log-tool.service';
+import * as pako from 'pako'
 
 @Component({
   selector: 'app-export-modal',
@@ -55,6 +56,11 @@ export class ExportModalComponent implements OnInit {
     this.closeExportData();
   }
 
+  buildExportZip() {    
+    this.downloadZipData(this.data, this.exportName);
+    this.closeExportData();
+  }
+
   downloadData(data: any, name: string) {
     data.origin = 'AMO-LOG-TOOL-DATA';
     let stringifyData = JSON.stringify(data);
@@ -68,6 +74,23 @@ export class ExportModalComponent implements OnInit {
       name = 'ExplorerData_' + dateStr;
     }
     dlLink.setAttribute('download', name + '.json');
+    dlLink.click();
+  }
+
+  downloadZipData(data: any, name: string) {
+    data.origin = 'AMO-LOG-TOOL-DATA';
+    let stringifyData = JSON.stringify(data);
+    let gzip = pako.gzip(stringifyData , {to: 'string'});
+    let blob = new Blob([gzip], { type: 'application/octet-stream' });
+    let url = URL.createObjectURL(blob);
+    let dlLink = document.createElement('a');
+    dlLink.href = url;
+    if (!name) {
+      const date = new Date();
+      const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+      name = 'ExplorerData_' + dateStr;
+    }
+    dlLink.setAttribute('download', name + '.gz');
     dlLink.click();
   }
 
