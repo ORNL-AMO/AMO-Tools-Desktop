@@ -76,6 +76,7 @@ export class AirLeakService {
     if (settings.unitsOfMeasure != 'Imperial') {
       airLeakInputExample = this.convertAirleakService.convertExample(airLeakInputExample);
     }
+    this.currentLeakIndex.next(0);
     this.airLeakInput.next(airLeakInputExample);
     this.generateExample.next(true);
     this.generateExample.next(false);
