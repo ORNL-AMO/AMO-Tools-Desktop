@@ -79,4 +79,9 @@ export class ExportModalComponent implements OnInit {
     this.hideExportModal();
   }
 
+  buildExportZip() {
+    this.importExportService.downloadZipData(this.exportData, this.exportName);
+    this.hideExportModal();
+  }
+
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { Directory } from '../../shared/models/directory';
-
+import * as pako from 'pako'
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
@@ -43,6 +43,23 @@ export class ImportExportService {
       name = 'ExportedData_' + dateStr;
     }
     dlLink.setAttribute('download', name + '.json');
+    dlLink.click();
+  }
+
+  downloadZipData(data: any, name: string) {
+    data.origin = 'AMO-TOOLS-DESKTOP';
+    let stringifyData = JSON.stringify(data);
+    let gzip = pako.gzip(stringifyData , {to: 'string'});
+    let blob = new Blob([gzip], { type: 'application/octet-stream' });
+    let url = URL.createObjectURL(blob);
+    let dlLink = document.createElement('a');
+    dlLink.href = url;
+    if (!name) {
+      const date = new Date();
+      const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+      name = 'ExportedData_' + dateStr;
+    }
+    dlLink.setAttribute('download', name + '.gz');
     dlLink.click();
   }
 

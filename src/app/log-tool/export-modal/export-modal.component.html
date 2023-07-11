@@ -28,10 +28,13 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button class="btn btn-secondary" (click)="closeExportData()">Cancel</button>
+                <div class = "d-flex">
                 <button class="btn btn-primary ml-2" [disabled]="!dataExists" (click)="buildExportJSON()">Export
                     as .json</button>
                 <button class="btn btn-primary ml-2" [disabled]="!dataExists" (click)="buildExportZip()">Export
                         as .gz</button>
+                </div>
+
             </div>
         </div>
     </div>
