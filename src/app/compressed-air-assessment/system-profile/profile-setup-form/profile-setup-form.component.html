@@ -1,8 +1,11 @@
 <div class="row justify-content-center m-0">
-    <div class="col-10">
+    <div class="alert alert-info d-lg-none p-3 m-2 small">
+        The device currently being used is not the optimal size to fill out and/or view this page. It is recommended to use a device of 992px or lager.
+    </div>
+    <div class="col-12">
         <form class="p-2" [formGroup]="form">
             <div class="row m-0 bg-white">
-                <div class="col-6">
+                <div class="col-lg-6 col-12">
                     <div class="form-group">
                         <label for="dayType">Select Day Type</label>
                         <select class="form-control" id="dayTypeId" formControlName="dayTypeId"
@@ -30,7 +33,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-lg-6 col-12">
                     <div class="form-group">
                         <label for="dataInterval">Data Interval</label>
                         <select class="form-control" id="dataInterval" formControlName="dataInterval"
