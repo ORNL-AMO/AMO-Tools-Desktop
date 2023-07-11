@@ -1,4 +1,4 @@
-<div class="d-flex p-3 align-self-stretch ssmt-diagram" [ngClass]="hoveredEquipment" *ngIf="outputData">
+<div class="d-none d-md-flex p-3 align-self-stretch ssmt-diagram" [ngClass]="hoveredEquipment" *ngIf="outputData">
   <div class="d-flex flex-grow">
     <app-feedwater-diagram [deaerator]="outputData.deaeratorOutput" (emitSetHover)="setHover($event)"
       [settings]="settings" (emitSelectEquipment)="selectTable($event)"></app-feedwater-diagram>
@@ -243,3 +243,11 @@
     </div>
   </div>
 </div>
+
+<!-- <div class="d-flex d-md-none">
+  <span class="alert-warning pull-right small">
+    Steam Diagram is unavailable to view on your current device. 
+    Please export the assessment and upload to a desktop or a device with a screen size of at least 768px to view the Steam Diagram.
+  </span>
+    
+</div> -->

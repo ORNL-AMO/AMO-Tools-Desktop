@@ -1,8 +1,11 @@
 import { Co2SavingsData } from "../calculator/utilities/co2-savings/co2-savings.service";
+import { ConnectedInventoryProperties } from "../pump-inventory/pump-inventory";
+import { ConnectedItem } from "../shared/assessment-integration/integrations";
 import { OperatingHours } from "../shared/models/operations";
 
 export interface MotorInventoryData {
   co2SavingsData?: Co2SavingsData,
+  hasConnectedInventoryItems?: boolean,
   existingDataUnits?: string,
   departments: Array<MotorInventoryDepartment>,
   displayOptions: MotorPropertyDisplayOptions
@@ -16,7 +19,7 @@ export interface MotorInventoryDepartment {
   catalog: Array<MotorItem>
 }
 
-export interface MotorItem {
+export interface MotorItem extends ConnectedInventoryProperties {
   id: string,
   suiteDbItemId?: number,
   nemaTable?: string,
@@ -24,7 +27,6 @@ export interface MotorItem {
   name: string,
   description: string,
   voltageLimit?: number,
-
   batchAnalysisData: BatchAnalysisData,
   loadCharacteristicData: LoadCharacteristicData,
   manualSpecificationData: ManualSpecificationData,
@@ -34,6 +36,8 @@ export interface MotorItem {
   purchaseInformationData: PurchaseInformationData,
   torqueData: TorqueData
 }
+
+
 
 export interface BatchAnalysisData {
   modifiedCost: number,

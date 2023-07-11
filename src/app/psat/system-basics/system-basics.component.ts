@@ -1,25 +1,27 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnDestroy, SimpleChanges } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { PSAT } from '../../shared/models/psat';
 import { SettingsService } from '../../settings/settings.service';
 import { Settings } from '../../shared/models/settings';
  
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatService } from '../psat.service';
 import * as _ from 'lodash';
 import { firstValueFrom } from 'rxjs';
+import { IntegrationState } from '../../shared/assessment-integration/integrations';
 
 @Component({
   selector: 'app-system-basics',
   templateUrl: './system-basics.component.html',
   styleUrls: ['./system-basics.component.css']
 })
-export class SystemBasicsComponent implements OnInit, OnDestroy {
+export class SystemBasicsComponent implements OnDestroy {
   @Input()
   assessment: Assessment;
+  @Input()
+  assessmentPsat: PSAT;
   @Input()
   settings: Settings;
   @Output('updateSettings')
@@ -37,22 +39,44 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   oldSettings: Settings;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
+  assessmentIntegrationState: IntegrationState;
   @ViewChild('settingsModal', { static: false }) public settingsModal: ModalDirective;
 
-  constructor(private settingsService: SettingsService,    private settingsDbService: SettingsDbService, private psatService: PsatService) { }
+  constructor(private settingsService: SettingsService, private settingsDbService: SettingsDbService, private psatService: PsatService) { }
 
-  ngOnInit() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.assessmentPsat) {
+      this.setConnectedInventoryWarning();
+    }
+    if (changes.settings) {
+      this.initSettings();
+    }
+  }
+  
+  ngOnDestroy() {
+    if(this.showUpdateDataReminder && this.oldSettings) {
+      this.openUpdateUnitsModal.emit(this.oldSettings);
+    }
+  }
+
+  setConnectedInventoryWarning() {
+    if (this.assessmentPsat.connectedItem) {
+      this.assessmentIntegrationState = {
+        assessmentIntegrationStatus: 'connected-to-inventory'
+      }
+    } else {
+      this.assessmentIntegrationState = {
+        assessmentIntegrationStatus: undefined
+      }
+    }
+  }
+
+  initSettings() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     if (this.assessment.psat.existingDataUnits && this.assessment.psat.existingDataUnits != this.oldSettings.unitsOfMeasure) {
       this.oldSettings = this.getExistingDataSettings();
       this.showUpdateDataReminder = true;
-    }
-  }
-
-  ngOnDestroy() {
-    if(this.showUpdateDataReminder && this.oldSettings) {
-      this.openUpdateUnitsModal.emit(this.oldSettings);
     }
   }
 

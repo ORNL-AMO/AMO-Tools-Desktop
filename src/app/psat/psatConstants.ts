@@ -46,7 +46,10 @@ export const pumpTypesConstant: Array<{ value: number, display: string }> = [
     {
         value: 11,
         display: 'Specified Optimal Efficiency'
-    }
+    },
+    { value: 12, display: 'Direct Drive' },
+    { value: 13, display: 'Belt Drive' },
+    { value: 14, display: 'Gear Box/Transmission' }, 
     // When user selects below they need a way to provide the optimal efficiency
     // 'Specified Optimal Efficiency'
 ];
@@ -121,7 +124,20 @@ export const motorEfficiencyConstants: Array<{ value: number, display: string }>
         value: 3,
         display: 'Specified'
     }
-]
+];
+
+export const statusTypes: Array<{value: number, display: string}> = [
+    {value: 0, display: 'In service'},
+    {value: 1, display: 'Out of service'},
+    {value: 2, display: 'Standby'},
+    {value: 3, display: 'Spare'},
+  ];
+  export const priorityTypes: Array<{value: number, display: string}> = [
+    {value: 0, display: 'Low'},
+    {value: 1, display: 'Medium'},
+    {value: 2, display: 'High'},
+    {value: 3, display: 'Critical'},
+  ];
 
 // Ordered by pumpTypeConstants
 export const pumpTypeRanges: Array<{ range: {min: number, max: number}, value: number }> = [

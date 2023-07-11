@@ -1,0 +1,66 @@
+<div class="d-flex w-100" (mouseenter)="focusGroup()">
+    <div class="d-flex flex-fill">
+        <label class="group-label" (click)="toggleForm()">
+            <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+            <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+            System
+        </label>
+    </div>
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
+            [(ngModel)]="systemPropertiesOptions.displaySystemProperties" name="displaySystemProperties"
+            id="displaySystemProperties">
+        <label class="custom-control-label" for="displaySystemProperties"></label>
+    </div>
+</div>
+
+<form class="p-1" *ngIf="displayForm">
+    <div class="checkbox" (mouseenter)="focusField('driveType')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="systemPropertiesOptions.driveType" name="driveType"
+                id="driveType">
+            Drive Type
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('flangeConnectionClass')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="systemPropertiesOptions.flangeConnectionClass" name="flangeConnectionClass"
+                id="flangeConnectionClass">
+            Flange Connection Class
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('flangeConnectionSize')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="systemPropertiesOptions.flangeConnectionSize" name="flangeConnectionSize"
+                id="flangeConnectionSize">
+            Flange Connection Size
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('componentId')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="systemPropertiesOptions.componentId" name="componentId"
+                id="componentId">
+            Component ID
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('system')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="systemPropertiesOptions.system" name="system"
+                id="system">
+            System
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('location')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="systemPropertiesOptions.location" name="location"
+                id="location">
+            Location
+        </label>
+    </div>
+
+</form>

@@ -312,7 +312,7 @@ export class ElectricityReductionService {
     if (this.modificationData) {
       if (this.baselineData[index].multimeterData.powerFactor != this.modificationData[index].multimeterData.powerFactor) {
         if (this.baselineData[index].multimeterData.averageCurrent <= this.modificationData[index].multimeterData.averageCurrent) {
-          return 'Power factor should not be reduced without also reducing the average current';
+          return 'Power factor should not be increased without also reducing the average current';
         } else {
           return null;
         }

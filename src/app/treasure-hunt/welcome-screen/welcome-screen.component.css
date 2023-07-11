@@ -1,7 +1,7 @@
 .book-item{
     background-color: #2E4053;
     position: absolute;
-    right: 185px;
+    right: 184px;
 }
 .manual-arrow{
     position: absolute;
@@ -10,6 +10,6 @@
     right: 0;
 }
 
-.welcome-screen {
+/* .welcome-screen {
     width: 100vw;
-}
+} */

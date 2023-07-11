@@ -37,7 +37,7 @@
 	<div class="panel-group" [ngStyle]="{'height.px': containerHeight}">
 		<!-- baseline -->
 		<div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
-			[ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+			[ngClass]="{'small-screen-tab': smallScreenTab === 'form', 'modal-open' : isModalOpen}">
 			<div class="d-flex flex-column mx-4 my-4">
 				<app-heat-cascading-form [settings]="settings" [inTreasureHunt]="inTreasureHunt"
 					[inModal]="isModalOpen"></app-heat-cascading-form>

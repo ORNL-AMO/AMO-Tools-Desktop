@@ -41,6 +41,7 @@ export class WasteWaterReportComponent implements OnInit {
   showPrintView: boolean;
   showPrintDiv: boolean;
   printOptions: PrintOptions;
+  tabsCollapsed: boolean = true;
   constructor(private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService,
     private wasteWaterAnalysisService: WasteWaterAnalysisService, private printOptionsMenuService: PrintOptionsMenuService) { }
 
@@ -110,6 +111,7 @@ export class WasteWaterReportComponent implements OnInit {
 
   setTab(str: string) {
     this.currentTab = str;
+    this.collapseTabs();
   }
 
   getContainerHeight() {
@@ -123,5 +125,10 @@ export class WasteWaterReportComponent implements OnInit {
   print() {
     this.printOptionsMenuService.printContext.next('wasteWater');
     this.printOptionsMenuService.showPrintMenu.next(true);
+    this.collapseTabs();
+  }
+  
+  collapseTabs() {
+    this.tabsCollapsed = !this.tabsCollapsed;
   }
 }

@@ -1,5 +1,13 @@
 <nav class="waste-water navbar banner d-flex mr-auto p-0 flex-nowrap">
-    <div class="d-flex align-items-center p-1">
+    <div class="d-block d-lg-none mr-0 mr-2 pl-2 h-100">
+        <div class="pr-2 border-right home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
+            <button type="button" class="btn chevron-btn p-0" (click)="back()"
+                [disabled]="(!assessment.wasteWater.setupDone || mainTab == 'system-setup')">
+                <span class="fa fa-chevron-left"></span>
+            </button>
+        </div>
+    </div>
+    <div class="d-none d-lg-flex align-items-center p-1">
         <div class="img-col col-sm-auto col-md-auto col-lg-auto">
             <img class="img-icon" src="assets/images/waste-water-icon.png">
         </div>
@@ -14,13 +22,58 @@
             </div>
         </div>
     </div>
-    <div class="d-flex nav-pills nav-fill flex-wrap mx-auto">
-        <div class="nav-item">
+    <div class="d-block d-lg-none align-items-center p-1">
+        <div class="img-col col-sm-auto col-md-auto col-lg-auto" [ngClass]="{'collapse': bannerCollapsed}">
+            <img class="img-icon" src="assets/images/waste-water-icon.png">
+        </div>
+        <div class="d-flex flex-column pl-2">
+            <div class="h2-name">
+                {{assessment.name}}
+            </div>
+            <div class="h2-name" [ngClass]="{'collapse': bannerCollapsed}">
+                <span class="small">
+                    Last modified: {{assessment.modifiedDate | date:'mediumDate'}}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex nav-pills nav-fill flex-wrap mx-auto d-none d-lg-inline-block">
+        <div class="nav-item d-none d-lg-inline-block">
             <a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup'}"
                 (click)="changeTab('system-setup')">System Basics</a>
         </div>
+        <div class="nav-item d-none d-lg-inline-block">
+            <a class="nav-link"
+                [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid && mainTab !== 'assessment'}"
+                (click)="changeTab('assessment')">Assessment</a>
+        </div>
+        <div class="nav-item d-none d-lg-inline-block">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'analysis', 'disabled': !isBaselineValid}"
+                (click)="changeTab('analysis')">Analysis</a>
+        </div>
+        <div class="nav-item d-none d-lg-inline-block">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !isBaselineValid}"
+                (click)="changeTab('diagram')">Diagram</a>
+        </div>
+        <div class="nav-item d-none d-lg-inline-block">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !isBaselineValid}"
+                (click)="changeTab('report')">Report</a>
+        </div>
+        <div class="nav-item d-none d-lg-inline-block">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators', 'disabled': !isBaselineValid}"
+                (click)="changeTab('calculators')">Calculators</a>
+        </div>
+    </div>
+
+    <div *ngIf="!bannerCollapsed" class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid && mainTab !== 'assessment'}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup'}"
+                (click)="changeTab('system-setup')">System
+                Setup</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid}"
                 (click)="changeTab('assessment')">Assessment</a>
         </div>
         <div class="nav-item">
@@ -36,30 +89,77 @@
                 (click)="changeTab('report')">Report</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators', 'disabled': !isBaselineValid}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators'}"
                 (click)="changeTab('calculators')">Calculators</a>
         </div>
     </div>
-    <div class="d-flex ml-auto pr-2 h-100">
-        <div class="pl-2 pr-2 border-left home-nav-item" (click)="showSecurityAndPrivacyModal()">
-     	   <span class="fa fa-lock"></span>
-  	  </div>
-		<div class="pl-2 pr-2 border-left home-nav-item">
-			<a class="user-manual" href="assets/user-manuals/Waste-Water-User-Manual.pdf" target="_blank">
-				<span class="fa fa-book"></span>
-			</a>
-		</div>
-        <div class="pl-2 pr-2 border-left home-nav-item" [routerLink]="['/settings']">
-     	   <span class="fa fa-cog"></span>
-  	  </div>
-        <div class="pl-2 pr-2 border-right border-left home-nav-item"
+
+
+
+    <div class="d-flex ml-auto pr-2 d-none d-lg-inline-block">
+        <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block"
+            (click)="showSecurityAndPrivacyModal()">
+            <span class="fa fa-lock"></span>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block">
+            <a class="user-manual" href="assets/user-manuals/Waste-Water-User-Manual.pdf" target="_blank">
+                <span class="fa fa-book"></span>
+            </a>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" [routerLink]="['/settings']">
+            <span class="fa fa-cog"></span>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block"
             [routerLink]="['/directory-dashboard', assessment.directoryId]">
             <span class="fa fa-folder-open"></span>
         </div>
-        <div class="pl-2 pr-2 border-right home-nav-item" (click)="navigateHome()">
+        <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" (click)="navigateHome()">
             <span class="fa fa-home"></span>
         </div>
     </div>
+
+    <div class="d-block d-lg-none ml-2 mr-0 pr-1 h-100">
+        <div class="pl-2 border-left home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
+            <button type="button" class="btn chevron-btn p-0" (click)="continue()"
+                [disabled]="(!isBaselineValid || mainTab == 'calculators')">
+                <span class="fa fa-chevron-right"></span>
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="bannerCollapsed" class="d-block d-lg-none ml-2 pr-2 h-100 flex-wrap">
+        <div class="pl-2 border-left home-nav-item d-block" (click)="collapseBanner()">
+            <span class="fa fa-bars"></span>
+        </div>
+    </div>
+
+    <div *ngIf="!bannerCollapsed" class="d-block d-lg-none ml-auto pr-2 h-100 flex-wrap">
+        <div class="pl-2 pr-2 border-left home-nav-item d-block" (click)="collapseBanner()">
+            <span class="fa fa-bars"></span>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-block" (click)="showSecurityAndPrivacyModal()">
+            <span class="fa fa-lock"></span>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-block">
+            <a class="user-manual" href="assets/user-manuals/Waste-Water-User-Manual.pdf" target="_blank">
+                <span class="fa fa-book"></span>
+            </a>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-block" [routerLink]="['/settings']">
+            <span class="fa fa-cog"></span>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-block"
+            [routerLink]="['/directory-dashboard', assessment.directoryId]">
+            <span class="fa fa-folder-open"></span>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-block" (click)="navigateHome()">
+            <span class="fa fa-home"></span>
+        </div>
+    </div>
+
+
+
+
 </nav>
 
 
@@ -68,33 +168,32 @@
 
 
 <div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
-    <div class="d-flex tabs subtabs waste-water mr-auto">
+    <div class="d-none d-md-flex tabs subtabs waste-water mr-auto">
         <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
             <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
                 <br>
-                <span class="help-text">Novice View</span>
+                <span class="help-text font-italic">Novice View</span>
             </a>
         </div>
         <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
             <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
                 <br>
-                <span class="help-text">Expert View</span>
+                <span class="help-text font-italic">Expert View</span>
             </a>
         </div>
     </div>
-
-    <div class="d-flex align-items-center tabs subtabs waste-water ml-auto"
+    <div class="d-none d-md-flex align-items-center tabs subtabs waste-water ml-auto"
         [ngClass]="{'br-color-white': selectedModification}">
         <div class="mod-name active border-right" *ngIf="selectedModification">
             <a>{{selectedModification.name}}
                 <br>
-                <span class="help-text">Selected Scenario</span>
+                <span class="help-text font-italic">Selected Scenario</span>
             </a>
         </div>
         <div class="mod-name border-right" *ngIf="!selectedModification">
             <a>&mdash; &mdash;
                 <br>
-                <span class="help-text">Selected Scenario</span>
+                <span class="help-text font-italic">Selected Scenario</span>
             </a>
         </div>
         <div class="pl-2 pr-2">
@@ -102,6 +201,61 @@
                 Scenarios</button>
         </div>
     </div>
+
+
+    <div *ngIf="!tabsCollapsed"
+        class="d-flex d-md-none flex-fill align-items-center justify-content-center tabs subtabs waste-water"
+        [ngClass]="{'collapse': tabsCollapsed}">
+        <div class="assessment-tab"
+            [ngClass]="{'active': assessmentTab == 'explore-opportunities', 'collapse': tabsCollapsed}">
+            <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
+                <br>
+                <span class="help-text font-italic">Novice View</span>
+            </a>
+        </div>
+        <div class="assessment-tab"
+            [ngClass]="{'active': assessmentTab == 'modify-conditions', 'collapse': tabsCollapsed}">
+            <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
+                <br>
+                <span class="help-text font-italic">Expert View</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="d-flex d-md-none flex-fill align-items-center justify-content-center tabs subtabs waste-water"
+        [ngClass]="{'br-color-white': selectedModification, 'collapse': tabsCollapsed}">
+        <div class="mod-name active border-right" *ngIf="selectedModification" [ngClass]="{'collapse': tabsCollapsed}">
+            <a>{{selectedModification.name}}
+                <br>
+                <span class="help-text font-italic">Selected Scenario</span>
+            </a>
+        </div>
+        <div class="mod-name border-right" *ngIf="!selectedModification" [ngClass]="{'collapse': tabsCollapsed}">
+            <a>&mdash; &mdash;
+                <br>
+                <span class="help-text font-italic">Selected Scenario</span>
+            </a>
+        </div>
+        <div class="pl-2 pr-2" [ngClass]="{'collapse': tabsCollapsed}">
+            <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add
+                Scenarios</button>
+        </div>
+        <div *ngIf="tabsCollapsed" class="mx-auto pl-2 align-items-center justify-content-center"
+            (click)="collapseTabs()">
+            <span class="fa fa-caret-down pr-2"></span>
+            <span class="small text-uppercase">Menu</span>
+        </div>
+    </div>
+    <div *ngIf="!tabsCollapsed"
+        class="d-flex d-md-none flex-fill align-items-center justify-content-center tabs subtabs waste-water"
+        [ngClass]="{'br-color-white': selectedModification}">
+        <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseTabs()">
+            <span class="fa fa-caret-up pr-2"></span>
+            <span class="small text-uppercase">Menu</span>
+        </div>
+    </div>
+
+
 
     <nav *ngIf="assessmentTab == 'modify-conditions'" class="hide-print w-100">
         <app-modify-conditions-tabs></app-modify-conditions-tabs>

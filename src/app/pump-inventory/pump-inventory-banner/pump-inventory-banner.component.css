@@ -1,0 +1,37 @@
+.h2-name{
+    font-weight: 400;
+    font-size: 20px;
+}
+
+.hidden{
+    display: none;
+}
+
+.hidden.show{
+    display: inherit;
+}
+
+.gray-badge.missing-data {
+    background-color: red !important;
+}
+
+.missing-data-tab {
+    background: red;
+  }
+
+.nav-item{
+    color: white;
+}
+
+.banner .nav-link:not(.disabled):not(.active){
+    color: white;
+}
+
+.img-icon{
+    width: 65px;
+}
+
+
+.gray-badge{
+    background-color: #2980b9;
+}

@@ -22,6 +22,7 @@ export class PrintOptionsMenuService {
 
   setPrintOptionsFromSettings() {
     let globalSettings = this.settingsDbService.globalSettings;
+    
     let printOptions: PrintOptions = this.setValuesFromSettings(globalSettings);
     return printOptions;
   }
@@ -122,6 +123,8 @@ export class PrintOptionsMenuService {
   }
 
   setValuesFromSettings(settings: Settings): PrintOptions {
+    
+    // printpsatrollup
     return {
       printPsatRollup: settings.printPsatRollup,
       printPhastRollup: settings.printPhastRollup,

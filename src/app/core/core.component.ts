@@ -149,7 +149,7 @@ export class CoreComponent implements OnInit {
     }
   }
 
-  async setAllDbData() {
+  setAllDbData() {
     this.coreService.getAllAppData().subscribe(initializedData => {
       this.directoryDbService.setAll(initializedData.directories);
       this.settingsDbService.setAll(initializedData.settings);
@@ -160,7 +160,6 @@ export class CoreComponent implements OnInit {
         this.suiteDbService.initCustomDbMaterials();
       }
       this.idbStarted = true;
-      this.analyticsService.initAnalyticsSession();
       this.changeDetectorRef.detectChanges();
     });
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ElementRef, ViewChild, HostListener, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 
@@ -30,6 +30,8 @@ export class LossesComponent implements OnInit {
   @Input()
   modificationIndex: number;
 
+  
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @ViewChild('modificationHeader', { static: false }) modificationHeader: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -50,8 +52,9 @@ export class LossesComponent implements OnInit {
   lossTabSubscription: Subscription;
   modalOpenSubscription: Subscription;
   isModalOpen: boolean = false;
-  headerHeight: number;
-  constructor(private lossesService: LossesService, private phastCompareService: PhastCompareService) {
+  headerHeight: number; 
+  smallScreenTab: string = 'baseline';
+  constructor(private lossesService: LossesService, private phastCompareService: PhastCompareService, private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -80,6 +83,13 @@ export class LossesComponent implements OnInit {
     this.saveModifications(true);
   }
 
+  getContainerHeight() {
+    if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+      this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      this.cd.detectChanges();
+    }
+  }
+
 
   ngOnDestroy() {
     if (this.lossTabSubscription) this.lossTabSubscription.unsubscribe();
@@ -89,6 +99,9 @@ export class LossesComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.modificationIndex) {
       this.toggleCalculate = !this.toggleCalculate;
+    }
+    if (changes.containerHeight && !changes.containerHeight.firstChange) {
+      this.getContainerHeight();
     }
   }
 
@@ -175,5 +188,17 @@ export class LossesComponent implements OnInit {
 
   newModification() {
     this.lossesService.openNewModal.next(true);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+    if (selectedTab === 'baseline') {
+      this.baselineSelected = true;
+      this.modificationSelected = false;
+    }
+    else if (selectedTab === 'modification') {
+      this.modificationSelected = true;
+      this.baselineSelected = false;
+    }
   }
 }

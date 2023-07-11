@@ -1,0 +1,3 @@
+a:not([href]):not([tabindex]).click-link.danger{
+    color: red;
+}

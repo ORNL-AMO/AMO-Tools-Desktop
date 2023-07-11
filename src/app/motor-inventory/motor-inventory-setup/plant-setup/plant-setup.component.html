@@ -3,8 +3,8 @@
         <div class="header">
             <div class="h3">Settings</div>
         </div>
-    </div>
-
+    </div>  
+    <app-integration-status class="col-12 py-1 px-3"></app-integration-status>
     <div class="col-12">
       <div class="alert-warning mt-3 small mx-auto" *ngIf="showUpdateDataReminder">
         <div>Units of measure were changed after assessment data was entered.
@@ -22,7 +22,6 @@
             (startSavePolling)="save()" [inInventory]="true">
         </app-application-settings>
     </div>
-    
     <div class="col-12"
     *ngIf="co2SavingsData">
       <app-assessment-co2-savings 

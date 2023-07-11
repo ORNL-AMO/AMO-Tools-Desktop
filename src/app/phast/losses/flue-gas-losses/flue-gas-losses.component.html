@@ -59,7 +59,7 @@
   </div>
   <div class="d-flex flex-column loss-total" [ngClass]="{'input-error': (showError == true || availableHeatError)}">
         <div class="form-group m-0">
-        <label class="bold">Oxygen In Flue Gas</label>
+        <label class="bold">O<sub>2</sub> In Flue Gas</label>
         <div *ngIf="loss.calculatedFlueGasO2" class="text-center bold">
           {{loss.calculatedFlueGasO2 | number:'0.1-2'}} %
         </div>

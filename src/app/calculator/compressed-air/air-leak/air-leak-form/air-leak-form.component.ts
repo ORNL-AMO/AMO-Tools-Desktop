@@ -52,6 +52,7 @@ export class AirLeakFormComponent implements OnInit {
     })
     this.airLeakInputSub = this.airLeakService.airLeakInput.subscribe(airLeakInput => {
       if (airLeakInput) {
+        this.currentLeakIndex = this.airLeakService.currentLeakIndex.getValue();
         let tempLeak = airLeakInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex]
         this.leakForm = this.airLeakFormService.getLeakFormFromObj(tempLeak);
       }

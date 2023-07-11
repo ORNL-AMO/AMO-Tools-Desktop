@@ -1,40 +1,57 @@
-<div class="d-flex modify-conditions">
-    <div class="flex-column w-50 modification panel-column scroll-item pb-3" [ngStyle]="{'height.px': containerHeight}">
-        <div class="header ml-2 mr-2">
-            <h3>Auxiliary Equipment</h3>
-            <h5 class="pull-right panel-add">
-                <a class="small">
-                    <span (click)="addEquipment()">+Add Equipment</span>
-                </a>
-            </h5>
+<div class="modify-conditions assessment-content-container phast">
+    <div class="assessment-small-tab-select nav-pills nav-fill" #smallTabSelect>
+        <div class="nav-item" (click)="setSmallScreenTab('baseline')"
+            [ngClass]="{'assessment-small-screen-active': smallScreenTab === 'baseline'}">
+            <a class="nav-link">Auxiliary Equipment</a>
         </div>
-        <div class="card-form d-flex flex-column mr-3 ml-3"
-            *ngFor="let equipment of phast.auxEquipment; let index = index;">
-            <form class="name-input-form">
-                <div class="input-group">
-                    <input name="name" type="text" id="text" class="form-control name-input" (focus)="setField('name')"
-                        [(ngModel)]="equipment.name" (input)="calculate()" onfocus="this.select();">
-                    <span class="input-group-addon units" (click)="removeEquipment(index)">
-                        <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
-                    </span>
-                </div>
-                <app-aux-equipment-form [equipment]="equipment" (emitCalculate)="calculate()" (emitSave)="emitSave()"
-                    (changeField)="setField($event)" [settings]="settings">
-                </app-aux-equipment-form>
-            </form>
+        <div class="nav-item" (click)="setSmallScreenTab('details')"
+            [ngClass]="{'assessment-small-screen-active': smallScreenTab === 'details'}">
+            <a class="nav-link">Details</a>
         </div>
     </div>
-    <div class="w-50 d-flex flex-column help-panel pl-2 pr-2">
-        <div class="d-flex flex-wrap tabs primary">
-            <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
-                <a class="border-left-0" (click)="setTab('results')">Results</a>
+    <div class="assessment-panel-group" [ngStyle]="{'height.px': containerHeight}">
+        <div class="modification baseline assessment-content-panel p-3"
+            [ngClass]="{'assessment-small-screen-tab': smallScreenTab === 'baseline'}"
+            [ngStyle]="{'height.px': containerHeight}">
+            <div class="header ml-2 mr-2">
+                <h3>Auxiliary Equipment</h3>
+                <h5 class="d-flex justify-content-end panel-add">
+                    <a class="small">
+                        <span (click)="addEquipment()">+Add Equipment</span>
+                    </a>
+                </h5>
             </div>
-            <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
-                <a (click)="setTab('help')">Help</a>
+            <div class="card-form d-flex flex-column mr-3 ml-3"
+                *ngFor="let equipment of phast.auxEquipment; let index = index;">
+                <form class="name-input-form">
+                    <div class="input-group">
+                        <input name="name" type="text" id="text" class="form-control name-input"
+                            (focus)="setField('name')" [(ngModel)]="equipment.name" (input)="calculate()"
+                            onfocus="this.select();">
+                        <span class="input-group-addon units" (click)="removeEquipment(index)">
+                            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+                        </span>
+                    </div>
+                    <app-aux-equipment-form [equipment]="equipment" (emitCalculate)="calculate()"
+                        (emitSave)="emitSave()" (changeField)="setField($event)" [settings]="settings">
+                    </app-aux-equipment-form>
+                </form>
             </div>
         </div>
-        <app-aux-equipment-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-aux-equipment-help>
-        <app-aux-equipment-results *ngIf="tabSelect == 'results'" [results]="results" [resultsSum]="resultsSum">
-        </app-aux-equipment-results>
+        <div class="assessment-content-panel modify-results-panel help-panel"
+            [ngClass]="{'assessment-small-screen-tab': smallScreenTab === 'details'}"
+            [ngStyle]="{'height.px': containerHeight}">
+            <div class="d-flex flex-wrap tabs primary">
+                <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+                    <a class="border-left-0" (click)="setTab('results')">Results</a>
+                </div>
+                <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+                    <a (click)="setTab('help')">Help</a>
+                </div>
+            </div>
+            <app-aux-equipment-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-aux-equipment-help>
+            <app-aux-equipment-results *ngIf="tabSelect == 'results'" [results]="results" [resultsSum]="resultsSum">
+            </app-aux-equipment-results>
+        </div>
     </div>
 </div>

@@ -10,6 +10,7 @@ import { PurchaseInformationHelpComponent } from './purchase-information-help/pu
 import { TorqueHelpComponent } from './torque-help/torque-help.component';
 import { HelpPanelComponent } from './help-panel.component';
 import { Co2HelpTextModule } from '../../shared/co2-help-text/co2-help-text.module';
+import { AssessmentIntegrationModule } from '../../shared/assessment-integration/assessment-integration.module';
 
 
 
@@ -27,7 +28,8 @@ import { Co2HelpTextModule } from '../../shared/co2-help-text/co2-help-text.modu
   ],
   imports: [
     CommonModule,
-    Co2HelpTextModule
+    Co2HelpTextModule,
+    AssessmentIntegrationModule
   ],
   exports: [
     HelpPanelComponent

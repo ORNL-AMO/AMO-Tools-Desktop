@@ -49,6 +49,21 @@ export class InventoryDbService {
     return tmpExample;
   }
 
+  getPumpInventoryExample(): InventoryItem {
+    let examples: Array<InventoryItem> = _.filter(JSON.parse(JSON.stringify(this.allInventoryItems)), (inventoryItem: InventoryItem) => {
+      return inventoryItem.isExample
+    });
+    let tmpExample: InventoryItem;
+    if (examples) {
+      examples.forEach(example => {
+        if (example.type == 'pumpInventory') {
+          tmpExample = example;
+        }
+      })
+    }
+    return tmpExample;
+  }
+
   deleteByIdWithObservable(inventoryId: number): Observable<any> {
     return this.dbService.delete(this.storeName, inventoryId);
   }

@@ -12,10 +12,12 @@ import { Calculator } from '../shared/models/calculators';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { InventoryDbService } from './inventory-db.service';
 import { firstValueFrom } from 'rxjs';
+import { PsatIntegrationService } from '../shared/assessment-integration/psat-integration.service';
 @Injectable()
 export class DeleteDataService {
 
-  constructor(   private calculatorDbService: CalculatorDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
+  constructor(   private calculatorDbService: CalculatorDbService, 
+    private psatIntegrationService: PsatIntegrationService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
     private inventoryDbService: InventoryDbService) { }
 
   async deleteDirectory(directory: Directory, isWorkingDir?: boolean) {
@@ -94,8 +96,16 @@ export class DeleteDataService {
       let calculators: Calculator[] = await firstValueFrom(this.calculatorDbService.deleteByIdWithObservable(calculator.id)); 
       this.calculatorDbService.setAll(calculators); 
     }
+
+    this.deleteConnectedInventoryItem(assessment);
     let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(assessment.id));
     this.assessmentDbService.setAll(updatedAssessments);
+  }
+
+  deleteConnectedInventoryItem(assessment: Assessment) {
+    if (assessment.psat && assessment.psat.connectedItem) {
+      this.psatIntegrationService.removeConnectedInventory(assessment.psat.connectedItem, assessment.id);
+    }
   }
 
   async deleteInventory(inventory: InventoryItem){

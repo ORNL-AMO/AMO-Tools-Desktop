@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AnalyticsService {
-
+  
   private clientId: string;
   analyticsSessionId: string;
   httpOptions = {
@@ -15,23 +15,11 @@ export class AnalyticsService {
       'Content-Type':  'application/json',
     })
   };
-
+  
   constructor(private httpClient: HttpClient, private analyticsDataIdbService: AnalyticsDataIdbService) {
-   this.analyticsSessionId = uuidv4();
+    this.analyticsSessionId = uuidv4();
   }
-
-  async initAnalyticsSession() {
-    await this.setClientAnalyticsId();
-    this.sendAnalyticsPageView('/landing-screen', '100');
-    let measurOpenEvent: GAEvent = {
-      name:'measur_app_open', 
-      params: { 
-        measur_platform: 'measur-desktop',
-        session_id: this.analyticsSessionId 
-      }}
-    this.postEventToMeasurementProtocol(measurOpenEvent)
-  }
-
+    
   async setClientAnalyticsId() {
     let appAnalyticsData: Array<AppAnalyticsData> = await firstValueFrom(this.analyticsDataIdbService.getAppAnalyticsData());
     let clientId: string;
@@ -46,18 +34,38 @@ export class AnalyticsService {
     }
     this.setClientId(clientId);
   }
-  
-  sendAnalyticsPageView(path: string, engagementTimeMsec?: string) {
-    let pageViewEvent: GAEvent = {
-      name:'page_view', 
-      params: { 
+
+  async initAnalyticsSession(path: string) {
+    await this.setClientAnalyticsId();
+    let measurOpenEvent: GAEvent = {
+      name: 'measur_app_open',
+      params: {
         measur_platform: 'measur-desktop',
-        page_path: path, 
+        session_id: this.analyticsSessionId,
         // engagement_time_msec required to begin an analytics session but not used again
-        engagement_time_msec: engagementTimeMsec,
-        session_id: this.analyticsSessionId 
-      }}
-    this.postEventToMeasurementProtocol(pageViewEvent)
+        engagement_time_msec: '100',
+      }
+    };
+    this.postEventToMeasurementProtocol(measurOpenEvent);
+    if (path) {
+      this.sendAnalyticsPageView(path);
+    }
+  }
+
+  async sendAnalyticsPageView(path: string) {
+    if (!this.clientId) {
+      await this.initAnalyticsSession(path);
+    } else {
+      let pageViewEvent: GAEvent = {
+        name: 'page_view',
+        params: {
+          measur_platform: 'measur-desktop',
+          page_path: path,
+          session_id: this.analyticsSessionId
+        }
+      }
+      this.postEventToMeasurementProtocol(pageViewEvent)
+    }
   }
 
   postEventToMeasurementProtocol(gaEvent: GAEvent) {
@@ -78,12 +86,12 @@ export class AnalyticsService {
     }
 
     let url: string = environment.measurUtilitiesApi + 'gamp';
-    if (environment.production) {
+    if (environment.production) { 
       this.httpClient.post<any>(url, postBody, this.httpOptions)
       .pipe(catchError(error => [])).subscribe({
         next: (resp) => {
-          // only GA debugging endpoint returns a response
-          console.log(resp);
+          // GA Debugging endpoint returns response
+          // GA prod endpoint returns null on success
         },
         error: (error: AnalyticsHttpError) => {
           // for now all errors fail silently
@@ -97,15 +105,20 @@ export class AnalyticsService {
   }
 
   setPageViewEventUrl(pageViewEvent: GAEvent) {
-      if (!pageViewEvent.params.page_path.includes('inventory')) {
-        let pathWithoutId: string = pageViewEvent.params.page_path.replace(/[0-9]/g, '');
-        pathWithoutId = pathWithoutId.replace(/\/$/, "");
-        pageViewEvent.params.page_path = pathWithoutId;
-      }
-      // Never send real paths while in dev
-      if (!environment.production) { 
-        pageViewEvent.params.page_path = '/testing'
-      } 
+    pageViewEvent.params.page_path = this.getPageWithoutId(pageViewEvent.params.page_path);
+    // Never send real paths while in dev
+    if (!environment.production) {
+      pageViewEvent.params.page_path = '/testing'
+    }
+  }
+
+  getPageWithoutId(pagePath: string) {
+    let pathWithoutId: string = pagePath.replace(/[0-9]/g, '');
+    pathWithoutId = pathWithoutId.replace(/\/$/, "");
+    if (pathWithoutId.includes('inventory')) {
+      pathWithoutId = pathWithoutId.replace('//', "/");
+    }
+    return pathWithoutId;
   }
 
 }

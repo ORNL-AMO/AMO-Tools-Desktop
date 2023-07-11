@@ -54,10 +54,6 @@ export class ExportService {
     if (subDirs) {
       subDirs.forEach(dir => {
         this.addDirectoryObj(dir);
-        let objs = this.getSubDirAssessmentData(dir, this.exportAssessments);
-        this.exportAssessments.concat(objs);
-        let inventoryObjs = this.getSubDirInventoryData(dir, this.exportInventories);
-        this.exportInventories.concat(inventoryObjs);
       });
     }
     if (inventories) {

@@ -23,6 +23,9 @@ export class WasteWaterBannerComponent implements OnInit {
   selectedModificationIdSub: Subscription;
   selectedModification: WasteWaterData;
   
+  bannerCollapsed: boolean = true;
+  tabsCollapsed: boolean = true;
+  
   constructor(private wasteWaterService: WasteWaterService, 
     private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
@@ -66,13 +69,53 @@ export class WasteWaterBannerComponent implements OnInit {
     if (str == 'system-setup' || this.isBaselineValid) {
       this.wasteWaterService.mainTab.next(str);
     }
+    this.collapseBanner();
   }
 
   changeAssessmentTab(str: string) {
     this.wasteWaterService.assessmentTab.next(str);
+    this.collapseTabs();
   }
 
   selectModification() {
     this.wasteWaterService.showModificationListModal.next(true);
+    this.collapseTabs();
+  }
+
+  collapseBanner() {
+    this.bannerCollapsed = !this.bannerCollapsed;
+    window.dispatchEvent(new Event("resize"));
+  }
+
+  back(){
+    if (this.mainTab == 'calculators') {
+      this.wasteWaterService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.wasteWaterService.mainTab.next('diagram');
+    } else if (this.mainTab == 'diagram') {
+      this.wasteWaterService.mainTab.next('analysis');
+    } else if (this.mainTab == 'analysis') {
+      this.wasteWaterService.mainTab.next('assessment');
+    } else if (this.mainTab == 'assessment') {
+      this.wasteWaterService.mainTab.next('system-setup');
+    }
+  }
+
+  continue() {
+    if (this.mainTab == 'system-setup') {
+      this.wasteWaterService.mainTab.next('assessment');
+    } else if (this.mainTab == 'assessment') {
+      this.wasteWaterService.mainTab.next('analysis');
+    } else if (this.mainTab == 'analysis') {
+      this.wasteWaterService.mainTab.next('diagram');
+    } else if (this.mainTab == 'diagram') {
+      this.wasteWaterService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.wasteWaterService.mainTab.next('calculators');
+    }
+  }
+
+  collapseTabs() {
+    this.tabsCollapsed = !this.tabsCollapsed;
   }
 }

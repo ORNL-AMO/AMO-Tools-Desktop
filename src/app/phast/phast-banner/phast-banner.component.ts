@@ -18,6 +18,7 @@ export class PhastBannerComponent implements OnInit {
 
   mainTab: string;
   mainTabSub: Subscription;
+  bannerCollapsed: boolean = true;
   constructor(private phastService: PhastService,
     private dashboardService: DashboardService,  private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
@@ -45,6 +46,40 @@ export class PhastBannerComponent implements OnInit {
       this.phastService.mainTab.next(str);
     } else if (this.assessment.phast.setupDone) {
       this.phastService.mainTab.next(str);
+    }
+    this.collapseBanner();
+  }
+
+  collapseBanner() {
+    this.bannerCollapsed = !this.bannerCollapsed;
+    window.dispatchEvent(new Event("resize"));
+  }
+
+  back(){
+    if (this.mainTab == 'calculators') {
+      this.phastService.mainTab.next('sankey');
+    } else if (this.mainTab == 'sankey') {
+      this.phastService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.phastService.mainTab.next('diagram');
+    } else if (this.mainTab == 'diagram') {
+      this.phastService.mainTab.next('assessment');
+    } else if (this.mainTab == 'assessment') {
+      this.phastService.mainTab.next('system-setup');
+    }
+  }
+
+  continue() {
+    if (this.mainTab == 'system-setup') {
+      this.phastService.mainTab.next('assessment');
+    } else if (this.mainTab == 'assessment') {
+      this.phastService.mainTab.next('diagram');
+    } else if (this.mainTab == 'diagram') {
+      this.phastService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.phastService.mainTab.next('sankey');
+    } else if (this.mainTab == 'sankey') {
+      this.phastService.mainTab.next('calculators');
     }
   }
 }

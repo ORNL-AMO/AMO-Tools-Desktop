@@ -3,42 +3,154 @@
     <div class="assessment-item" id="rollup_graphs">
         <app-report-summary-graphs class="w-100"></app-report-summary-graphs>
     </div>
-    <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
+    
+    <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item hide-small-screen">
         <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true"
             [settings]="item.settings">
         </app-psat-report>
     </div>
+    <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item d-flex d-lg-none" (click)="goToAssessment(item.assessment)">
+        <div class="img-col col-4">
+            <img class="img-icon" src="assets/images/ico-psat-diagram.png">
+		</div>
+		<div class="col-8">
+            <div class="h2-name">
+                {{item.assessment.name}}
+			</div>
+			<div class="h2-name">
+                <span class="small">
+                    Last modified: {{item.assessment.modifiedDate | date:'mediumDate'}}
+				</span>
+			</div>
+		</div>
+    </div>
 
-    <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
+
+    <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item hide-small-screen">
         <app-phast-report *ngIf="item.assessment.phast" [phast]="item.assessment.phast" [assessment]="item.assessment"
             [inRollup]="true" [settings]="item.settings">
         </app-phast-report>
     </div>
-    <div *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
+    <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item d-flex d-lg-none" (click)="goToAssessment(item.assessment)">
+        <div class="img-col col-4">
+            <img class="img-icon" src="assets/images/ico-phast-diagram.png">
+		</div>
+		<div class="col-8">
+            <div class="h2-name">
+                {{item.assessment.name}}
+			</div>
+			<div class="h2-name">
+                <span class="small">
+                    Last modified: {{item.assessment.modifiedDate | date:'mediumDate'}}
+				</span>
+			</div>
+		</div>
+    </div>
+
+    <div *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item hide-small-screen">
         <app-fsat-report *ngIf="item.assessment.fsat" [assessment]="item.assessment" [inRollup]="true"
             [settings]="item.settings">
         </app-fsat-report>
     </div>
-    <div *ngFor="let item of _ssmtAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
+    <div *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item d-flex d-lg-none" (click)="goToAssessment(item.assessment)">
+        <div class="img-col col-4">
+            <img class="img-icon" src="assets/images/ico-fsat-diagram.png">
+		</div>
+		<div class="col-8">
+            <div class="h2-name">
+                {{item.assessment.name}}
+			</div>
+			<div class="h2-name">
+                <span class="small">
+                    Last modified: {{item.assessment.modifiedDate | date:'mediumDate'}}
+				</span>
+			</div>
+		</div>
+    </div>
+
+    <div *ngFor="let item of _ssmtAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item hide-small-screen">
         <app-ssmt-report *ngIf="item.assessment.ssmt" [assessment]="item.assessment" [settings]="item.settings"
             [inRollup]="true">
         </app-ssmt-report>
     </div>
-    <div class="assessment-item" *ngFor="let item of _treasureHuntAssessments"
+    <div *ngFor="let item of _ssmtAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item d-flex d-lg-none" (click)="goToAssessment(item.assessment)">
+        <div class="img-col col-4">
+            <img class="img-icon" src="assets/images/ico-ssmt-diagram.png">
+		</div>
+		<div class="col-8">
+            <div class="h2-name">
+                {{item.assessment.name}}
+			</div>
+			<div class="h2-name">
+                <span class="small">
+                    Last modified: {{item.assessment.modifiedDate | date:'mediumDate'}}
+				</span>
+			</div>
+		</div>
+    </div>
+
+    <div class="assessment-item hide-small-screen" *ngFor="let item of _treasureHuntAssessments"
         id="{{'assessment_'+item.assessment.id}}">
         <app-treasure-hunt-report *ngIf="item.assessment.treasureHunt" [assessment]="item.assessment"
             [settings]="item.settings" [inRollup]="true">
         </app-treasure-hunt-report>
     </div>
-    <div class="assessment-item" *ngFor="let item of _wasteWaterAssessments" id="{{'assessment_'+item.assessment.id}}">
+    <div *ngFor="let item of _treasureHuntAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item d-flex d-lg-none" (click)="goToAssessment(item.assessment)">
+        <div class="img-col col-4">
+            <img class="img-icon" src="assets/images/treasure-hunt.png">
+		</div>
+		<div class="col-8">
+            <div class="h2-name">
+                {{item.assessment.name}}
+			</div>
+			<div class="h2-name">
+                <span class="small">
+                    Last modified: {{item.assessment.modifiedDate | date:'mediumDate'}}
+				</span>
+			</div>
+		</div>
+    </div>
+
+    <div class="assessment-item hide-small-screen" *ngFor="let item of _wasteWaterAssessments" id="{{'assessment_'+item.assessment.id}}">
         <app-waste-water-report *ngIf="item.assessment.wasteWater" [assessment]="item.assessment" [inRollup]="true">
         </app-waste-water-report>
     </div>
-    <div class="assessment-item" *ngFor="let item of _compressedAirAssessments"
+    <div *ngFor="let item of _wasteWaterAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item d-flex d-lg-none" (click)="goToAssessment(item.assessment)">
+        <div class="img-col col-4">
+            <img class="img-icon" src="assets/images/waste-water-icon.png">
+		</div>
+		<div class="col-8">
+            <div class="h2-name">
+                {{item.assessment.name}}
+			</div>
+			<div class="h2-name">
+                <span class="small">
+                    Last modified: {{item.assessment.modifiedDate | date:'mediumDate'}}
+				</span>
+			</div>
+		</div>
+    </div>
+
+    <div class="assessment-item hide-small-screen" *ngFor="let item of _compressedAirAssessments"
         id="{{'assessment_'+item.assessment.id}}">
         <app-compressed-air-report *ngIf="item.assessment.compressedAirAssessment" [assessment]="item.assessment"
             [inRollup]="true">
         </app-compressed-air-report>
+    </div>
+    <div *ngFor="let item of _compressedAirAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item d-flex d-lg-none" (click)="goToAssessment(item.assessment)">
+        <div class="img-col col-4">
+            <img class="img-icon" src="assets/images/ca-icon.png">
+		</div>
+		<div class="col-8">
+            <div class="h2-name">
+                {{item.assessment.name}}
+			</div>
+			<div class="h2-name">
+                <span class="small">
+                    Last modified: {{item.assessment.modifiedDate | date:'mediumDate'}}
+				</span>
+			</div>
+		</div>
     </div>
 </div>
 <!--END NOT PRINT-->

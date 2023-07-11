@@ -116,6 +116,17 @@ img.treasure-hunt-image {
     padding-left: 3px;
 }
 
+.pump-inventory-background{
+    background-image: linear-gradient(white, rgb(41,128,185));
+    border-radius: 12px;
+    padding: 3px;
+    box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);
+	width: 80px;
+	height: 70px;
+    padding-top: 10px;
+    padding-left: 3px;
+}
+
 .data-explorer-icon{
     width: 78px;
     height: 60px;

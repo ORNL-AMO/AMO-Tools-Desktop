@@ -96,7 +96,11 @@
 }
 
 .get-started{
-    height: 75%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
 }
 
 input.dont-show{

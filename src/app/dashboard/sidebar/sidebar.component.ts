@@ -69,7 +69,7 @@ export class SidebarComponent implements OnInit {
 
   showCreateAssessment() {
     this.directoryDashboardService.createFolder.next(false);
-    this.dashboardService.createInventory.next(false);
+    this.dashboardService.showCreateInventory.next(undefined);
     this.showNewDropdown = false;
     this.dashboardService.createAssessment.next(true);
   }
@@ -78,12 +78,12 @@ export class SidebarComponent implements OnInit {
     this.dashboardService.createAssessment.next(false);
     this.directoryDashboardService.createFolder.next(false);
     this.showNewDropdown = false;
-    this.dashboardService.createInventory.next(true);
+    this.dashboardService.showCreateInventory.next('motorInventory');
   }
 
   showCreateFolder(){
     this.dashboardService.createAssessment.next(false);
-    this.dashboardService.createInventory.next(false);
+    this.dashboardService.showCreateInventory.next(undefined);
     this.showNewDropdown = false;
     this.directoryDashboardService.createFolder.next(true);
   }
@@ -111,6 +111,9 @@ export class SidebarComponent implements OnInit {
     let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
     if (totalScreenWidth < 1024) {
       this.expandedXWidth = totalScreenWidth;
+    }
+    else {
+      this.expandedXWidth = 300;
     } 
   
     if (this.isSidebarCollapsed == true) {
@@ -119,6 +122,7 @@ export class SidebarComponent implements OnInit {
       this.dashboardService.sidebarX.next(this.expandedXWidth);
     }
     window.dispatchEvent(new Event("resize"));
+
   }
 
   openUpdateModal() {

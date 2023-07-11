@@ -1,35 +1,34 @@
-<div class="phast">
-  <div class="d-flex modify-conditions">
-    <!--modExists-->
-    <div class="d-flex w-50 flex-column scroll-item modification" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'modal-open': isModalOpen == true}">
-      <div class="header ml-2 mr-2">
-        <h3>Select Potential Adjustment Projects</h3>
-      </div>
-      <p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of
-        your
-        system.
-      </p>
-      <app-explore-phast-opportunities-form *ngIf="modExists" [phast]="phast" (emitCalculate)="getResults()"
-        [settings]="settings" [exploreModIndex]="exploreModIndex" (changeField)="focusField($event)"
-        (changeTab)="changeTab($event)" (emitAddNewMod)="addNewMod()"></app-explore-phast-opportunities-form>
-
-      <div class="no-data" *ngIf="!modExists">
-        <h3>Now that your baseline set up, click below to start exploring potential opportunities.</h3>
-        <button type="button" class="btn btn-primary" (click)="addModification()">Explore Opportunities</button>
-      </div>
-
+<div class="assessment-container modify-conditions panel-container phast">
+  <!--modExists-->
+  <div *ngIf="modExists" class="assessment-panel-container lookup-form panel-column scroll-item"
+    [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'modal-open': isModalOpen == true}">
+    <div class="header ml-2 mr-2">
+      <h3>Select Potential Adjustment Projects</h3>
     </div>
-    <div class="w-50 scroll-item ml-2 mr-2" [ngStyle]="{'height.px': containerHeight}" *ngIf="modExists">
+    <p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of
+      your
+      system.
+    </p>
+    <app-explore-phast-opportunities-form [phast]="phast" (emitCalculate)="getResults()" [settings]="settings"
+      [exploreModIndex]="exploreModIndex" (changeField)="focusField($event)" (changeTab)="changeTab($event)"
+      (emitAddNewMod)="addNewMod()">
+    </app-explore-phast-opportunities-form>
+  </div>
+
+  <div *ngIf="!modExists" class="no-data assessment-panel-container lookup-form scroll-item"
+    [ngStyle]="{'height.px': containerHeight}">
+    <h3>Now that your baseline set up, click below to start exploring potential opportunities.</h3>
+    <button type="button" class="btn btn-primary" (click)="addModification()">Explore Opportunities</button>
+  </div>
+
+  <div class="assessment-panel-container">
+    <div class="scroll-item" [ngStyle]="{'height.px': containerHeight}" *ngIf="modExists">
       <app-losses-result-panel [inSetup]="false" [currentField]="currentField" [settings]="settings" [phast]="phast"
         [toggleCalculate]="toggleCalculate" [modification]="phast.modifications[exploreModIndex]"
         [modificationIndex]="exploreModIndex" [lossesTab]="lossTab" [containerHeight]="containerHeight">
       </app-losses-result-panel>
     </div>
-    <!--!modExists-->
-
-
-    <div class="w-50 scroll-item ml-2 mr-2" [ngStyle]="{'height.px': containerHeight}" *ngIf="!modExists">
+    <div class="scroll-item" [ngStyle]="{'height.px': containerHeight}" *ngIf="!modExists">
       <div class="header">
         <h3>Help</h3>
       </div>
@@ -40,6 +39,7 @@
         creating a scenario.</p>
     </div>
   </div>
+
 </div>
 
 

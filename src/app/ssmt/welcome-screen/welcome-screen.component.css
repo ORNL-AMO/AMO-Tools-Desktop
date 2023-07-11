@@ -1,5 +1,7 @@
 .book-item{
     background-color: #F39C12;
+    position: absolute;
+    right: 184px;
 }
 
 .home-nav-item.book-item a{
@@ -9,5 +11,5 @@
     position: absolute;
     height: 300px;
     top: 45px;
-    right: 155px;
+    right: 0px;
 }

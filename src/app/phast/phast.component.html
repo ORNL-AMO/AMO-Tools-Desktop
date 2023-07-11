@@ -1,9 +1,9 @@
-<div #content *ngIf="assessment && settings" class="phast-container phast">
+<div #content *ngIf="assessment && settings" class="phast-container d-flex flex-column phast">
   <!--header content, sticks to top on scroll-->
   <div #header class="hide-print sticky-top">
     <app-phast-banner [assessment]="assessment" [settings]="settings"></app-phast-banner>
     <!-- phast-tabs = step tabs -->
-    <app-phast-tabs [tab1Status]="tab1Status" [tab2Status]="tab2Status" *ngIf="mainTab == 'system-setup'">
+    <app-phast-tabs [assessment]="assessment" [tab1Status]="tab1Status" [tab2Status]="tab2Status" *ngIf="mainTab == 'system-setup'">
     </app-phast-tabs>
     <app-modification-navbar *ngIf="mainTab == 'assessment'" [phast]="_phast"></app-modification-navbar>
     <!--losses-tabs are tabs for heat balance/assessment, both inSetup and !inSetup -->
@@ -15,15 +15,15 @@
   </div>
 
   <!--Furnace Setup -->
-  <div *ngIf="mainTab == 'system-setup' && stepTab.step == 1" class="tab-content d-flex">
-    <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
+  <div *ngIf="mainTab == 'system-setup' && stepTab.step == 1" class="assessment-container tab-content">
+    <div class="assessment-panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'modal-open': isModalOpen || showUpdateUnitsModal}">
       <!--Step: 1 System Basics (Settings)-->
       <app-system-basics *ngIf="specTab.step == 1" [phast]="_phast" [settings]="settings" [assessment]="assessment"
         (updateSettings)="getSettings()" (save)="saveDb()" (openUpdateUnitsModal)="initUpdateUnitsModal($event)">
       </app-system-basics>
     </div>
-    <div class="w-50">
+    <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}">
       <app-help-panel [settingsTab]="specTab"></app-help-panel>
     </div>
   </div>
@@ -55,7 +55,7 @@
     </div>
   </div>
   <!--Report-->
-  <div *ngIf="mainTab == 'report'" class="mx-0">
+  <div *ngIf="mainTab == 'report'" class="report-container mx-0">
       <app-phast-report [phast]="_phast" [settings]="settings" [assessment]="assessment" [inPhast]="true"
         [containerHeight]="containerHeight"></app-phast-report>
   </div>
@@ -103,7 +103,7 @@
       [inAssessment]="true" [assessment]="assessment"></app-pre-assessment>
     <app-unit-converter *ngIf="calcTab == 'convert-units'" [inAssessment]="true"></app-unit-converter>
   </div>
-  <div #footer class="footer" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
+  <div #footer class="d-none d-lg-block footer" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
     <div class="pull-left" *ngIf="stepTab.back || selectedLossTab.back || specTab.back || (mainTab == 'assessment')">
       <button class="btn btn-secondary" (click)="lastStep()">Back</button>
     </div>

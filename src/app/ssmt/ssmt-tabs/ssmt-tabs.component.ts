@@ -46,6 +46,10 @@ export class SsmtTabsComponent implements OnInit {
   turbineBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   calcTab: string;
   calcTabSubscription: Subscription;
+
+  tabsCollapsed: boolean = true;
+  calcTabsCollapsed: boolean = true;
+
   constructor(private ssmtService: SsmtService, private compareService: CompareService, private cd: ChangeDetectorRef,
     private turbineService: TurbineService, private boilerService: BoilerService, private headerService: HeaderService,
     private operationsService: OperationsService) { }
@@ -94,6 +98,7 @@ export class SsmtTabsComponent implements OnInit {
 
   changeAssessmentTab(str: string) {
     this.ssmtService.assessmentTab.next(str);
+    this.collapseTabs();
   }
 
   changeStepTab(str: string) {
@@ -203,6 +208,7 @@ export class SsmtTabsComponent implements OnInit {
 
   selectModification() {
     this.ssmtService.openModificationSelectModal.next(true);
+    this.collapseTabs();
   }
 
   showTooltip(badge: { display: boolean, hover: boolean }) {
@@ -226,6 +232,57 @@ export class SsmtTabsComponent implements OnInit {
   }
 
   changeCalcTab(str: string) {
-    this.ssmtService.calcTab.next(str);
+    this.ssmtService.calcTab.next(str);  
+    this.collapseCalcTabs();
   }
+
+  collapseTabs() {
+    this.tabsCollapsed = !this.tabsCollapsed;
+  }
+  collapseCalcTabs() {
+    this.calcTabsCollapsed = !this.calcTabsCollapsed;
+  }
+
+  continue() {
+    this.ssmtService.continue();
+  }
+
+  back() {
+    this.ssmtService.back();
+  }
+
+  getCanContinue() {
+    if (this.stepTab === 'system-basics') {
+      return true;
+    } else if (this.stepTab === 'operations') {
+      let isValid: boolean = this.operationsService.getForm(this.ssmt, this.settings).valid;
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (this.stepTab === 'boiler') {
+      let isValid: boolean = this.boilerService.isBoilerValid(this.ssmt.boilerInput, this.settings);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (this.stepTab === 'header') {
+      let isValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.ssmt, this.settings, this.ssmt.boilerInput);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (this.stepTab === 'turbine') {
+      let isValid: boolean = this.turbineService.isTurbineValid(this.ssmt.turbineInput, this.ssmt.headerInput, this.settings);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
 }

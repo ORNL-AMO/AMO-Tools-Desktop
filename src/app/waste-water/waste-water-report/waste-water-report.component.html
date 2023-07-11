@@ -12,17 +12,17 @@
         <p class="report-notes">{{reportNotes}}</p>
     </div>
 
-    <div #reportHeader class="report-header" [ngClass]="{'hide-print': inAssessment}">
+    <div #reportHeader class="report-header d-none d-lg-block" [ngClass]="{'hide-print': inAssessment}">
 
         <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
-           <!-- Assessment view -->
+        <!-- Assessment view -->
         <div *ngIf="assessment && inAssessment" class="row">
             <div class="col-12 p-2">
-                    <span class="pl-2" *ngFor="let directory of assessmentDirectories">
-                        {{directory.name}} / {{assessment.name}}
-                    </span>
-                    <span class="ml-3 date-modified">Last Modified {{assessment.modifiedDate | date:'short'}}</span>
-                    <button class="mt-0 btn btn-secondary pull-right hide-print" (click)="print()">Print</button>
+                <span class="pl-2" *ngFor="let directory of assessmentDirectories">
+                    {{directory.name}} / {{assessment.name}}
+                </span>
+                <span class="ml-3 date-modified">Last Modified {{assessment.modifiedDate | date:'short'}}</span>
+                <button class="mt-0 btn btn-secondary pull-right hide-print" (click)="print()">Print</button>
             </div>
         </div>
         <!-- Rollup view -->
@@ -63,20 +63,48 @@
     <div class="report-data"
         *ngIf="assessment.wasteWater.setupDone && assessment.wasteWater.baselineData.valid.isValid">
 
-        <ul #reportBtns class="tabs primary hide-print">
-            <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
-                <a>Result Data</a>
-            </li>
-            <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
-                <a>Report Graphs</a>
-            </li>
-            <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
-                <a>Input Summary</a>
-            </li>
-            <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
-                <a>Facility Info</a>
-            </li>
-        </ul>
+        <div class="d-none d-lg-flex">
+            <ul #reportBtns class="tabs primary hide-print">
+                <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
+                    <a>Result Data</a>
+                </li>
+                <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
+                    <a>Report Graphs</a>
+                </li>
+                <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
+                    <a>Input Summary</a>
+                </li>
+                <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+                    <a>Facility Info</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="d-flex d-lg-none flex-column">
+            <div #reportBtns class="tabs primary hide-print">
+                <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseTabs()">
+                    <span *ngIf="!tabsCollapsed" class="fa fa-caret-up pr-2"></span>
+                    <span *ngIf="tabsCollapsed" class="fa fa-caret-down pr-2"></span>
+                    <span class="small text-uppercase">Menu</span>
+                </div>
+                <div (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results', 'collapse': tabsCollapsed}">
+                    <a>Result Data</a>
+                </div>
+                <div (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs', 'collapse': tabsCollapsed}">
+                    <a>Report Graphs</a>
+                </div>
+                <div (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData', 'collapse': tabsCollapsed}">
+                    <a>Input Summary</a>
+                </div>
+                <div (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo', 'collapse': tabsCollapsed}">
+                    <a>Facility Info</a>
+                </div>
+                <div (click)="print()" class="hide-print"
+                    [ngClass]="{'collapse': tabsCollapsed}">
+                    <a>Print</a>
+                </div>
+            </div>
+        </div>
 
         <div class="results scroll-item print-height" *ngIf="currentTab == 'facilityInfo' || showPrintView"
             [ngStyle]="{'height.px':reportContainerHeight}">

@@ -1,26 +1,43 @@
-<div class="row modify-conditions no-gutters">
-    <div class="scroll-item col-8" [ngStyle]="{'height.px': containerHeight}">
-        <div class="row h-100 no-gutters">
-            <div class="modification baseline w-50 panel-column" (click)="togglePanel(baselineSelected)"
-                [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
-                <div class="header mr-2 ml-2">
-                    <h3>Baseline</h3>
-                </div>
-                <app-waste-water-operations *ngIf="selectedTab == 'operations'" [inSetup]="false"
-                    [selected]="baselineSelected">
-                </app-waste-water-operations>
-                <app-activated-sludge-form *ngIf="selectedTab == 'activated-sludge'" [inSetup]="false"
-                    [selected]="baselineSelected">
-                </app-activated-sludge-form>
-                <app-aerator-performance-form *ngIf="selectedTab == 'aerator-performance'" [inSetup]="false"
-                    [selected]="baselineSelected">
-                </app-aerator-performance-form>
-            </div>
+<div class="modify-conditions assessment-content-container waste-water">
 
-            <!-- Modifications Start -->
-            <div *ngIf="modificationExists" class="modification w-50 panel-column"
-                (click)="togglePanel(modificationSelected)"
-                [ngClass]="{'disabled': modificationSelected == false, 'modal-open': isModalOpen == true}">
+    <div class="assessment-small-tab-select nav-pills nav-fill" #smallTabSelect>
+        <div class="nav-item" (click)="setSmallScreenTab('baseline')"
+            [ngClass]="{'assessment-small-screen-active': smallScreenTab === 'baseline'}">
+            <a class="nav-link">Baseline</a>
+        </div>
+        <div class="nav-item" (click)="setSmallScreenTab('modification')"
+            [ngClass]="{'assessment-small-screen-active': smallScreenTab === 'modification'}">
+            <a class="nav-link">Modification</a>
+        </div>
+        <div class="nav-item" (click)="setSmallScreenTab('details')"
+            [ngClass]="{'assessment-small-screen-active': smallScreenTab === 'details'}">
+            <a class="nav-link">Details</a>
+        </div>
+    </div>
+
+    <div class="assessment-panel-group" [ngStyle]="{'height.px': containerHeight}">
+
+        <!-- baseline -->
+        <div class="modification baseline assessment-content-panel" (click)="togglePanel(baselineSelected)"
+            [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true, 'assessment-small-screen-tab': smallScreenTab === 'baseline'}"
+            [ngStyle]="{'height.px': containerHeight}">
+            <div class="header mr-2 ml-2">
+                <h3>Baseline</h3>
+            </div>
+            <app-waste-water-operations *ngIf="selectedTab == 'operations'" [inSetup]="false"
+                [selected]="baselineSelected">
+            </app-waste-water-operations>
+            <app-activated-sludge-form *ngIf="selectedTab == 'activated-sludge'" [inSetup]="false"
+                [selected]="baselineSelected">
+            </app-activated-sludge-form>
+            <app-aerator-performance-form *ngIf="selectedTab == 'aerator-performance'" [inSetup]="false"
+                [selected]="baselineSelected">
+            </app-aerator-performance-form>
+        </div>
+
+        <!-- Modifications Start -->
+        <div class="modification assessment-content-panel panel-column" (click)="togglePanel(modificationSelected)"
+            [ngClass]="{'disabled': modificationSelected == false, 'modal-open': isModalOpen == true, 'assessment-small-screen-tab': smallScreenTab === 'modification'}">            <ng-container *ngIf="modificationExists">
                 <!-- Modification Header -->
                 <div class="header mr-2 ml-2">
                     <h3>{{selectedModification.name}}</h3>
@@ -34,10 +51,10 @@
                 <app-aerator-performance-form *ngIf="selectedTab == 'aerator-performance'" [inSetup]="false"
                     [selected]="modificationSelected" [isModification]="true">
                 </app-aerator-performance-form>
-            </div>
+            </ng-container>
+
             <!-- No content message -->
-            <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()"
-                [ngClass]="{'modal-open': isModalOpen == true}">
+            <div *ngIf="!modificationExists" (click)="addModification()">
                 <div class="header mr-2 ml-2">
                     <h3>Modification</h3>
                 </div>
@@ -50,17 +67,21 @@
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Help Panel -->
-    <div class="col-4 p-0 help-panel scroll-item" [ngStyle]="{'height.px': containerHeight}">
-        <app-results-panel *ngIf="modificationExists"></app-results-panel>
-        <div *ngIf="!modificationExists">
-            <div class="header mr-2 ml-2">
-                <h3>Help</h3>
-            </div>
-            <div class="p-4">
-                <p>Add Modification to view results and get additional help.</p>
+
+
+        <!-- Help Panel -->
+        <div class="assessment-content-panel modify-results-panel help-panel" [ngClass]="{'assessment-small-screen-tab': smallScreenTab === 'details'}">
+            <app-results-panel *ngIf="modificationExists"></app-results-panel>
+            <div *ngIf="!modificationExists">
+                <div class="header mr-2 ml-2">
+                    <h3>Help</h3>
+                </div>
+                <div class="p-4">
+                    <p>Add Modification to view results and get additional help.</p>
+                </div>
             </div>
         </div>
+
+
     </div>
 </div>
