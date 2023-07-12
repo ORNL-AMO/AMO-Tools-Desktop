@@ -76,6 +76,37 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   }
 
   checkSelected() {
+    this.init();
+    let itemNumber : number = this.directory.assessments.length + this.directory.calculators.length + this.directory.inventories.length + this.directory.subDirectory.length;
+    let selectedNumber : number = 0;
+    this.directory.assessments.forEach(assessment => {
+      if (assessment.selected === true){
+        selectedNumber = selectedNumber + 1;
+      }
+    });
+    this.directory.subDirectory.forEach(subDir => {
+      if (subDir.selected === true){
+        selectedNumber = selectedNumber + 1;
+      }    
+    });
+    this.directory.calculators.forEach(calculator => {
+      if (calculator.selected === true){
+        selectedNumber = selectedNumber + 1;
+      }    
+    });
+    this.directory.inventories.forEach(inventory => {
+      if (inventory.selected === true){
+        selectedNumber = selectedNumber + 1;
+      }    
+    });
+    if (selectedNumber == itemNumber){
+      this.isAllSelected = true;
+      this.directory.selected = true;
+    }
+    else {
+      this.isAllSelected = false;
+      this.directory.selected = false;
+    }
     let hasAssessmentSelected: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
     let hasDirectorySelected: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == true });
     let hasInventorySelected: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == true });
