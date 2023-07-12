@@ -4,7 +4,7 @@
             <div class="p-1">
                 <ul class="m-2">
                     <li>Timestamps are required for Day Type Analysis and some data visualizations.
-                        Advance ahead if you don't be working with time data.
+                        Advance ahead if you won't be working with time data.
                     </li>
                     <ul class="pl-3">
                         <li>Mark "Includes Date" if the column contains a date and time <span class="bold">or</span> a date only</li>
@@ -42,10 +42,12 @@
                             <td class="bold">Includes Date</td>
                             <td><span class="bold mr-1">Includes Time Only</span>
                             <span class="ml-3 tooltip-container">
-                                <span class="tooltip-icon fa fa-question-circle" (mouseenter)="displayTooltipHover()" 
-                                (mouseleave)="hideTooltipHover()" (click)="toggleClickTooltip()"></span>
+                                <span class="tooltip-icon fa fa-question-circle" id = "question_circle" (mouseenter)="displayTooltipHover()" 
+                                (mouseleave)="hideTooltipHover()" (click)="toggleClickTooltip()">
+                                    <span class = "detail-tooltip-arrow tooltip-arrow-up" *ngIf="showTooltipHover || showTooltipClick" ></span>
+                                </span>
                             <span class="detail-tooltip-box" *ngIf="showTooltipHover || showTooltipClick" (mouseenter)="displayTooltipHover(true)" (mouseleave)="hideTooltipHover()">
-                                <div class="detail-tooltip down"><span class="detail-tooltip-arrow tooltip-arrow-up"></span>
+                                <div class="detail-tooltip" [ngClass]="{'regular-tooltip' : normalTooltipDimensions}">
                                     <div class="p-2">
                                         <ul class="pl-2">
                                             <li>

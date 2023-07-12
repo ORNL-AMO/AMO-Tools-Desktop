@@ -218,7 +218,7 @@ export class CustomMaterialsService {
     let sdbMaterials: Array<GasLoadChargeMaterial> = this.suiteDbService.selectGasLoadChargeMaterials();
     for (let i = 0; i < data.length; i++) {
       let material: GasLoadChargeMaterial = data[i];
-      this.gasLoadDbService.deleteByIdWithObservable(material.id);
+      await firstValueFrom(this.gasLoadDbService.deleteByIdWithObservable(material.id));
       let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
       this.suiteDbService.deleteGasLoadChargeMaterial(sdbId);
     };
