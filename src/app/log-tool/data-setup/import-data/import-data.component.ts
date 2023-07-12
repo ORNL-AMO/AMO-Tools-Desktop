@@ -244,7 +244,7 @@ export class ImportDataComponent implements OnInit {
           resolve(importData);
         } else {
           let name = importData.name ? importData.name : undefined;
-          this.invalidFileReferences.push({ name: name, message: 'The uploaded JSON file does not contain AMO-Tools Data Explorer data.' });
+          this.invalidFileReferences.push({ name: name, message: 'The uploaded GZ file does not contain AMO-Tools Data Explorer data.' });
           resolve(importData);
         }
       } catch (error) {

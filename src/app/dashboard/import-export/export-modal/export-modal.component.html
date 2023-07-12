@@ -138,13 +138,13 @@
                 <button class="btn btn-secondary" (click)="hideExportModal()">Cancel</button>
                 <div class="d-flex">
                     <div class="form-group d-flex mr-2">
-                        <label for="exportName"> Name your file:</label>
+                        <label for="exportName"> Name your file:&nbsp;</label>
                         <input type="text" class="form-control" id="exportName" [(ngModel)]="exportName">
                     </div>
-                    <button class="btn btn-primary ml-2" [disabled]="!canExport" (click)="buildExportJSON()">Export
-                        as .json</button>
                     <button class="btn btn-primary ml-2" (click)="buildExportZip()">Export
                         as .gz</button>
+                    <button class="btn btn-primary ml-2" [disabled]="!canExport" (click)="buildExportJSON()">Export
+                        as .json</button>
                 </div>
             </div>
         </div>
