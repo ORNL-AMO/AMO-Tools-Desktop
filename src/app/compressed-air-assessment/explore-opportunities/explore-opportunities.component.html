@@ -100,7 +100,7 @@
     </div>
 </div>
 
-<div class="assessment-container compressed-air modify-conditions panel-container"
+<div class="d-flex flex-column compressed-air modify-conditions panel-container"
     *ngIf="secondaryAssessmentTab == 'table' || secondaryAssessmentTab == 'graphs'">
     <div class="p-2 text-center" *ngIf="dayTypeOptions.length > 1">
         <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"

@@ -188,11 +188,4 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.displayAddStorage = displayAddStorage;
   }
 
-  continue() {
-    //this.compressedAirAssessmentService.continue();
-  }
-
-  back() {
-    //this.compressedAirAssessmentService.back();
-  }
 }
