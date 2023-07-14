@@ -1,4 +1,4 @@
-.compressed-air-container{
+.compressed-air-container {
     height: 100vh;
     background: #ececec
 }
@@ -10,4 +10,58 @@
 
 .modal-open {
     z-index: initial !important;
+}
+
+
+.list-modal {
+    top: .5rem;
+    max-width: 95%;
+    height: 90%;
+}
+
+.list-modal .modal-content {
+    height: 100%;
+}
+
+.list-modal .modal-body {
+    max-height: 80vh;
+}
+
+.btn-sm.active {
+    background-color: #7030A0;
+}
+
+.compressed-air .assessment-panel-container::-webkit-scrollbar-thumb {
+    background-color: #7030A0;
+}
+
+/* Screens above  1024 */
+.assessment-container {
+    display: flex;
+    height: 100%;
+}
+
+.assessment-panel-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+/* Screens below 1024 */
+@media screen and (max-width: 1024px) {
+    .assessment-container {
+        display: block;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .assessment-panel-container {
+        display: block;
+        width: 100%;
+    }
+
+    .lookup-form {
+        height: 100%;
+    }
+
 }

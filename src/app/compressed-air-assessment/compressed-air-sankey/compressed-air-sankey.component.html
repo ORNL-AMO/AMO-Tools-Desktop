@@ -1,19 +1,24 @@
+<div class="alert alert-info d-lg-none p-1 m-1 small">
+  This page is optimized to be viewed on a tablet-sized device or larger.
+</div>
 <ng-container *ngIf="!inReport">
-  <ul class="tabs subtabs progress-tabs compressed-air">
-    <li [ngClass]="{'active': sankeyTab == 'power'}">
-      <a (click)="changeSankeyTab('power')">Power Sankey</a>
-    </li>
-    <li [ngClass]="{'active': sankeyTab == 'airflow'}">
-      <a (click)="changeSankeyTab('airflow')"
-      [ngClass]="{'disabled': assessment.compressedAirAssessment.endUseData.endUses.length === 0}">Airflow Sankey</a>
-    </li>
-  </ul>
-  <app-power-sankey [inReport]="inReport" *ngIf="sankeyTab === 'power'"></app-power-sankey>
-  <app-airflow-sankey [inReport]="inReport" *ngIf="sankeyTab === 'airflow'"></app-airflow-sankey>
+  <div class="d-none d-lg-block">
+    <ul class="tabs subtabs progress-tabs compressed-air">
+      <li [ngClass]="{'active': sankeyTab == 'power'}">
+        <a (click)="changeSankeyTab('power')">Power Sankey</a>
+      </li>
+      <li [ngClass]="{'active': sankeyTab == 'airflow'}">
+        <a (click)="changeSankeyTab('airflow')"
+        [ngClass]="{'disabled': assessment.compressedAirAssessment.endUseData.endUses.length === 0}">Airflow Sankey</a>
+      </li>
+    </ul>
+    <app-power-sankey [inReport]="inReport" *ngIf="sankeyTab === 'power'"></app-power-sankey>
+    <app-airflow-sankey [inReport]="inReport" *ngIf="sankeyTab === 'airflow'"></app-airflow-sankey>
+  </div>
 </ng-container>
 
 
-<div *ngIf="inReport" class="output-summary">
+<div *ngIf="inReport" class="output-summary d-none d-lg-block">
   <div class="d-flex flex-column">
     <div class="d-flex">
       <div class="w-100 m-3">
