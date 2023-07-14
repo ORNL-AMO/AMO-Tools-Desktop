@@ -23,13 +23,14 @@
 
                         <ng-container *ngIf="!isSelectAllFolder">
                             <li *ngIf="exportData.assessments.length != 0">
-                                <span class="bold">Assessments</span>
+                                <span class="bold" *ngIf = "checkDirectoryAssessmentSize() != 0">Assessments</span>
                                 <ul>
                                     <li *ngFor="let assessmentItem of exportData.assessments">
                                         <div class="d-flex align-items-center"
                                             [ngClass]="{ 'phast' : assessmentItem.assessment.type == 'PHAST', 'psat': assessmentItem.assessment.type == 'PSAT', 'fsat': assessmentItem.assessment.type == 'FSAT',
                                          'treasure-hunt': assessmentItem.assessment.type == 'TreasureHunt', 'ssmt': assessmentItem.assessment.type == 'SSMT', 
-                                         'compressedAir': assessmentItem.assessment.type == 'CompressedAir', 'wasteWater': assessmentItem.assessment.type == 'WasteWater'}">
+                                         'compressedAir': assessmentItem.assessment.type == 'CompressedAir', 'wasteWater': assessmentItem.assessment.type == 'WasteWater'}"
+                                            *ngIf = "!checkIfDuplicateAssessment(assessmentItem)">
                                             <span
                                                 class="p-1 d-flex align-items-center justify-content-center icon-image">
                                                 <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon"
@@ -55,10 +56,10 @@
                                 </ul>
                             </li>
                             <li *ngIf="exportData.inventories.length != 0">
-                                <span class="bold">Inventories</span>
+                                <span class="bold" *ngIf = "checkDirectoryInventorySize() != 0">Inventories</span>
                                 <ul>
                                     <li *ngFor="let inventory of exportData.inventories">
-                                        <div class="d-flex align-items-center">
+                                        <div class="d-flex align-items-center" *ngIf = "!checkIfDuplicateInventory(inventory)" >
                                             <span
                                                 class="p-1 d-flex align-items-center justify-content-center icon-image">
                                                 <img *ngIf="inventory.inventoryItem.type == 'pumpInventory'"

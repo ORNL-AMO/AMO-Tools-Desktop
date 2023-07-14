@@ -22,6 +22,8 @@ export class ExportService {
   exportDirectories: Array<ImportExportDirectory>;
   exportAssessments: Array<ImportExportAssessment>;
   exportInventories: Array<ImportExportInventory>;
+  directoryAssessments: Array<ImportExportAssessment>;
+  directoryInventories: Array<ImportExportInventory>;
   constructor(private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
     private inventoryDbService: InventoryDbService) {
   }
@@ -31,11 +33,15 @@ export class ExportService {
     this.exportAssessments = new Array<ImportExportAssessment>();
     this.exportDirectories = new Array<ImportExportDirectory>();
     this.exportInventories = new Array<ImportExportInventory>();
+    this.directoryAssessments = new Array<ImportExportAssessment>();
+    this.directoryInventories = new Array<ImportExportInventory>();
     let assessments: Array<Assessment>;
     let subDirs: Array<Directory>;
     let calculators: Array<Calculator> = new Array<Calculator>();
     let inventories: Array<InventoryItem> = new Array<InventoryItem>();
     if (!isSelectAll) {
+
+
       assessments = _.filter(dir.assessments, (assessment) => { return assessment.selected === true; });
       subDirs = _.filter(dir.subDirectory, (subDir) => { return subDir.selected === true; });
       calculators = _.filter(dir.calculators, (calc) => { return calc.selected === true; });
@@ -54,6 +60,14 @@ export class ExportService {
     if (subDirs) {
       subDirs.forEach(dir => {
         this.addDirectoryObj(dir);
+        let objs = this.getSubDirAssessmentData(dir, this.exportAssessments);
+        this.exportAssessments.concat(objs);
+        objs = this.getSubDirSelectedAssessments(dir, this.directoryAssessments);
+        this.directoryAssessments.concat(objs);
+        let inventoryObjs = this.getSubDirInventoryData(dir, this.exportInventories);
+        inventoryObjs = this.getSubDirInventoryData(dir, this.directoryInventories);
+        this.directoryInventories.concat(inventoryObjs);
+        this.exportInventories.concat(inventoryObjs);
       });
     }
     if (inventories) {
@@ -204,4 +218,21 @@ export class ExportService {
       settings: this.settingsDbService.getByInventoryId(inventory)
     }
   }
+
+  checkDirectoryInventories(inventory: ImportExportInventory) {
+    const exists = this.directoryInventories.some(obj => obj.inventoryItem.id === inventory.inventoryItem.id);
+    if (exists){
+      return true;
+    }
+    return false; 
+  }
+
+  checkDirectoryAssessments(assessment: ImportExportAssessment) {
+    const exists = this.directoryAssessments.some(obj => obj.assessment.id === assessment.assessment.id);
+    if (exists){
+      return true;
+    }
+    return false; 
+  }
+
 }

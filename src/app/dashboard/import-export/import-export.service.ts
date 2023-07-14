@@ -32,6 +32,7 @@ export class ImportExportService {
 
   downloadData(data: any, name: string) {
     data.origin = 'AMO-TOOLS-DESKTOP';
+    console.log(data);
     let stringifyData = JSON.stringify(data);
     let doc = this.windowRefService.getDoc();
     let dlLink = doc.createElement("a");

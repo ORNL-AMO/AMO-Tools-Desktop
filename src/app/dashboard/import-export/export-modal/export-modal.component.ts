@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ExportService } from '../export.service';
 import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';
-import { ImportExportData, ImportExportDirectory, ImportExportAssessment } from '../importExportModel';
+import { ImportExportData, ImportExportDirectory, ImportExportAssessment, ImportExportInventory } from '../importExportModel';
 import { Directory } from '../../../shared/models/directory';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { ImportExportService } from '../import-export.service';
@@ -61,6 +61,8 @@ export class ExportModalComponent implements OnInit {
     this.isSelectAllFolder = directory.selected;
     this.exportData = this.exportService.getSelected(directory, this.isSelectAllFolder);
     this.setExportDefaultName();
+    console.log(this.exportData);
+    console.log(this.exportData.assessments);
   }
 
   setExportDefaultName() {
@@ -77,6 +79,22 @@ export class ExportModalComponent implements OnInit {
   buildExportJSON() {
     this.importExportService.downloadData(this.exportData, this.exportName);
     this.hideExportModal();
+  }
+
+  checkDirectoryInventorySize(){
+    return this.exportData.inventories.length - this.exportService.directoryInventories.length;
+  }
+
+  checkDirectoryAssessmentSize(){
+    return this.exportData.assessments.length - this.exportService.directoryAssessments.length;
+  }
+
+  checkIfDuplicateInventory(inventory: ImportExportInventory){
+    return this.exportService.checkDirectoryInventories(inventory);
+  }
+
+  checkIfDuplicateAssessment(assessment: ImportExportAssessment){
+    return this.exportService.checkDirectoryAssessments(assessment);
   }
 
 }
