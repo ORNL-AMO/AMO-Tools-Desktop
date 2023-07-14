@@ -9,7 +9,7 @@ import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysi
 import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-type-graph.service';
 import { VisualizeService } from '../../visualize/visualize.service';
 import { LogToolService } from '../../log-tool.service';
-import * as pako from 'pako'
+import * as pako from 'pako';
 
 
 @Component({
@@ -199,7 +199,7 @@ export class ImportDataComponent implements OnInit {
                       this.logToolDataService.loadingSpinner.next({show: false, msg: ''});
                     }
                     else {
-                      this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis)
+                      this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis);
                       this.finishUpload();
                     }
                   });
@@ -215,7 +215,7 @@ export class ImportDataComponent implements OnInit {
                     this.logToolDataService.loadingSpinner.next({show: false, msg: ''});
                   }
                   else {
-                    this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis)
+                    this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis);
                     this.finishUpload();
                   }
                 });

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { Directory } from '../../shared/models/directory';
-import * as pako from 'pako'
+import * as pako from 'pako';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()

@@ -4,7 +4,7 @@ import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { LogToolDbService } from '../log-tool-db.service';
 import { LogToolDbData } from '../log-tool-models';
 import { LogToolService } from '../log-tool.service';
-import * as pako from 'pako'
+import * as pako from 'pako';
 
 @Component({
   selector: 'app-export-modal',

@@ -4,7 +4,7 @@ import { ImportService } from '../import.service';
 import { ImportExportData } from '../importExportModel';
 import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';
 import { DashboardService } from '../../dashboard.service';
-import * as pako from 'pako'
+import * as pako from 'pako';
 
 @Component({
   selector: 'app-import-modal',
