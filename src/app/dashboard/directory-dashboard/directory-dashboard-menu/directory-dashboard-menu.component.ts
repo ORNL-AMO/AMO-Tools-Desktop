@@ -10,6 +10,7 @@ import { ExportService } from '../../import-export/export.service';
 import { DashboardService } from '../../dashboard.service';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-directory-dashboard-menu',
@@ -25,18 +26,33 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   directory: Directory;
   view: string = 'grid';
   isAllSelected: boolean;
+  hasSelectedItem: boolean;
+  canCopyItem: boolean;
+  activatedRouteSub: Subscription;
+  updateSelectedStatusSub: Subscription;
   
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
     private exportService: ExportService, private dashboardService: DashboardService, private reportRollupService: ReportRollupService, private router: Router) { }
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe(params => {
+    this.activatedRouteSub = this.activatedRoute.params.subscribe(params => {
       let id: number = Number(params['id']);
       this.breadCrumbs = new Array();
       this.directory = this.directoryDbService.getById(id);
       this.isAllSelected = false;
       this.getBreadcrumbs(id);
     });
+
+    this.updateSelectedStatusSub = this.directoryDashboardService.updateSelectedStatus.subscribe(shouldUpdate => {
+      this.updateSelectedStatus();
+    });
+
+
+  }
+
+  ngOnDestroy() {
+    this.activatedRouteSub.unsubscribe();
+    this.updateSelectedStatusSub.unsubscribe();
   }
 
   getBreadcrumbs(dirId: number) {
@@ -63,19 +79,14 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     this.directory.inventories.forEach(inventory => {
       inventory.selected = this.isAllSelected;
     })
-    this.init();
   }
 
-  init(){
-    this.activatedRoute.params.subscribe(params => {
-      let id: number = Number(params['id']);
-      this.breadCrumbs = new Array();
-      this.directory = this.directoryDbService.getById(id);
-      this.getBreadcrumbs(id);
-    });
+  updateSelectedStatus() {
+    this.setSelectedStatus();
+    this.setIsAllSelected();
   }
 
-  checkSelected() {
+  setSelectedStatus() {
     let hasAssessmentSelected: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
     let hasDirectorySelected: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == true });
     let hasInventorySelected: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == true });
@@ -83,8 +94,22 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     if (this.directory.calculators) {
       hasCalculatorSelected = _.find(this.directory.calculators, (value) => { return value.selected == true });
     }
-    let hasSelectedItems: boolean = hasAssessmentSelected != undefined || hasDirectorySelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined;
-    return hasSelectedItems;
+    this.hasSelectedItem = hasAssessmentSelected != undefined || hasDirectorySelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined;
+    this.canCopyItem = (hasAssessmentSelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined) && hasDirectorySelected == undefined;
+    console.log('hasSelectedItem', this.hasSelectedItem);
+    console.log('canCopyItem', this.canCopyItem);
+  }
+  
+  setIsAllSelected() {
+    let hasAssessmentUnselected: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == false });
+    let hasDirUnselected: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == false });
+    let hasInventoryUnselected: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == false });
+    let hasCalculatorUnselected: Calculator;
+    if (this.directory.calculators) {
+      hasCalculatorUnselected = _.find(this.directory.calculators, (value) => { return value.selected == false });
+    }
+    this.isAllSelected = hasAssessmentUnselected !== undefined && hasDirUnselected !== undefined && hasInventoryUnselected !== undefined && hasCalculatorUnselected !== undefined;
+    console.log('isAllSelected', this.isAllSelected);
   }
 
   checkReport() {
@@ -97,18 +122,6 @@ export class DirectoryDashboardMenuComponent implements OnInit {
       }
     });
     return (assessmentSelectedTest != undefined) || (directorySelectedTest != undefined);
-  }
-
-  checkIfCopyItem(){
-    let hasAssessmentSelected: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
-    let hasDirectorySelected: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == true });
-    let hasInventorySelected: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == true });
-    let hasCalculatorSelected: Calculator;
-    if (this.directory.calculators) {
-      hasCalculatorSelected = _.find(this.directory.calculators, (value) => { return value.selected == true });
-    }
-    let canCopyItem: boolean = (hasAssessmentSelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined) && hasDirectorySelected == undefined;
-    return canCopyItem;
   }
 
   showCreateAssessment() {
