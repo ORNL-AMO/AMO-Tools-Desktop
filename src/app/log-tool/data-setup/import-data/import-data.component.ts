@@ -171,57 +171,53 @@ export class ImportDataComponent implements OnInit {
   }
 
   importExistingExplorerJson(files: FileList) {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: 'Uploading File Data...'});
+    this.logToolDataService.loadingSpinner.next({show: true, msg: 'Uploading file data... this may take a while depending on the size of your input file.'});
     this.dayTypeAnalysisService.resetData();
     this.visualizeService.resetData();
     this.dayTypeGraphService.resetData();
     this.invalidFileReferences = new Array();
     if (files[0]) {
-        let extensionPattern: string = '.(json|JSON|gz|GZ)$';
-        let validExtensions: RegExp = new RegExp(extensionPattern, 'i');
-        if (validExtensions.test(files[0].name)) {
-              let importFile = files[0];
-              if (importFile.name.endsWith('.gz')) {
-                let blob = new Blob([importFile], { type: 'application/octet-stream' });
-                let arrayBuffer;
-                let obj : any;
-                let result;
-                let fileReader = new FileReader();
-                fileReader.onload = () => {
-                  arrayBuffer = fileReader.result as ArrayBuffer;
-                  result = pako.ungzip(new Uint8Array(arrayBuffer), { to: 'string' });
-                  obj = JSON.parse(result);
-                  let name = importFile.name;
-                  let fileReaderPromise: Promise<any> = this.setJSONImportFileFromZip(result, name);
-                  fileReaderPromise.then((logToolDbData) => {
-                    if (!logToolDbData.setupData)
-                    {
-                      this.logToolDataService.loadingSpinner.next({show: false, msg: ''});
-                    }
-                    else {
-                      this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis);
-                      this.finishUpload();
-                    }
-                  });
-                };
-                fileReader.readAsArrayBuffer(blob);
-              }
-              else{
-                let fileReaderPromise: Promise<any> = this.setJSONImportFile(importFile);
-                fileReaderPromise.then((logToolDbData) => {
-                  // noDayTypeAnalysis removal
-                  if (!logToolDbData.setupData)
-                  {
-                    this.logToolDataService.loadingSpinner.next({show: false, msg: ''});
-                  }
-                  else {
-                    this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis);
-                    this.finishUpload();
-                  }
-                });
-              }
-        } 
-    }
+      let importFile = files[0];
+      if (importFile.name.endsWith('.gz')) {
+        let blob = new Blob([importFile], { type: 'application/octet-stream' });
+        let arrayBuffer;
+        let obj : any;
+        let result;
+        let fileReader = new FileReader();
+        fileReader.onload = () => {
+          arrayBuffer = fileReader.result as ArrayBuffer;
+          result = pako.ungzip(new Uint8Array(arrayBuffer), { to: 'string' });
+          obj = JSON.parse(result);
+          let name = importFile.name;
+          let fileReaderPromise: Promise<any> = this.setJSONImportFileFromZip(result, name);
+          fileReaderPromise.then((logToolDbData) => {
+            if (!logToolDbData.setupData)
+            {
+              this.logToolDataService.loadingSpinner.next({show: false, msg: ''});
+            }
+            else {
+              this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis);
+              this.finishUpload();
+            }
+          });
+        };
+        fileReader.readAsArrayBuffer(blob);
+      }
+      else{
+        let fileReaderPromise: Promise<any> = this.setJSONImportFile(importFile);
+        fileReaderPromise.then((logToolDbData) => {
+          // noDayTypeAnalysis removal
+          if (!logToolDbData.setupData)
+          {
+            this.logToolDataService.loadingSpinner.next({show: false, msg: ''});
+          }
+          else {
+            this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis);
+            this.finishUpload();
+          }
+        });
+      }
+    } 
   }
 
   // not very good code since I don't know to use Promise's reject

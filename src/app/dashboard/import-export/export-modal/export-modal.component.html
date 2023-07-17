@@ -133,7 +133,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <div *ngIf="!canExport" class="w-100">
-                    <p class="text-center small danger">Too much data to export, please compress your data by exporting as a .gz file.</p>
+                    <p class="text-center small danger">Exporting to a zipped file - this may take some time depending on the size of your data.</p>
                 </div>
                 <button class="btn btn-secondary" (click)="hideExportModal()">Cancel</button>
                 <div class="d-flex">
@@ -141,10 +141,12 @@
                         <label for="exportName"> Name your file:&nbsp;</label>
                         <input type="text" class="form-control" id="exportName" [(ngModel)]="exportName">
                     </div>
-                    <button class="btn btn-primary ml-2" (click)="buildExportZip()">Export
+                    <button class="btn btn-primary ml-2" *ngIf = "canExport" (click)="buildExportZip()">Export
                         as .gz</button>
-                    <button class="btn btn-primary ml-2" [disabled]="!canExport" (click)="buildExportJSON()">Export
+                    <button class="btn btn-primary ml-2" *ngIf ="canExport" (click)="buildExportJSON()">Export
                         as .json</button>
+                    <button class="btn btn-primary ml-2" *ngIf ="!canExport" (click)="buildExportZip()">Export
+                        </button>
                 </div>
             </div>
         </div>
