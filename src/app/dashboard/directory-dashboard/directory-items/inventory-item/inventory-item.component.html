@@ -5,7 +5,7 @@
     <div class="summary-card-header d-flex justify-content-between align-items-center"
     [ngClass]="{'motor-header': inventoryItem.motorInventoryData,
                 'pump-header': inventoryItem.pumpInventoryData}">
-        <input type="checkbox" [(ngModel)]="inventoryItem.selected">
+        <input type="checkbox" [(ngModel)]="inventoryItem.selected" (change)="updateSelectedStatus()">
         <div class="d-flex align-items-center">
             <img class="icon-image pl-1 pr-1" *ngIf="inventoryItem.motorInventoryData" src="assets/images/motor-inventory-icon.png">
             <img class="icon-image pl-1 pr-1" *ngIf="inventoryItem.pumpInventoryData" src="assets/images/pump-inventory-icon.png">
