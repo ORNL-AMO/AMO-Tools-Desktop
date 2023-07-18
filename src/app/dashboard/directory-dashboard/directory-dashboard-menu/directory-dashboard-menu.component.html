@@ -3,9 +3,9 @@
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item disabled"><span class="fa fa-folder"></span></li>
-                <li class="breadcrumb-item" *ngFor="let directory of breadCrumbs; let first = first;">
-                    <a *ngIf="first" [routerLink]="['/directory-dashboard', directory.id]">All Assessments</a>
-                    <a *ngIf="!first" [routerLink]="['/directory-dashboard', directory.id]">{{directory.name}}</a>
+                <li class="breadcrumb-item" *ngFor="let directory of breadCrumbs; let isTopLevel = first;">
+                    <a *ngIf="isTopLevel" [routerLink]="['/directory-dashboard', directory.id]">All Assessments</a>
+                    <a *ngIf="!isTopLevel" [routerLink]="['/directory-dashboard', directory.id]">{{directory.name}}</a>
                 </li>
                 <li class="breadcrumb-item active">{{directory.name}}</li>
             </ol>
@@ -29,17 +29,17 @@
                 <button class="btn btn-secondary action-btn menu-btn" (click)="showAddInventory()" type="button">
                     Add Inventory
                 </button>
-                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!checkSelected()" type="button"
+                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!hasSelectedItem" type="button"
                     (click)="moveToFolder()">Move Items</button>
-                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!checkIfCopyItem()" type="button"
+                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!canCopyItem" type="button"
                     (click)="showCopyItems()">Copy Items
                 </button>
                 <!-- <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()"></app-create-folder> -->
                 <button class="btn btn-secondary action-btn menu-btn" [disabled]="!checkReport()" type="button"
                     (click)="generateReport()">Generate Report</button>
-                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!checkSelected()" type="button"
+                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!hasSelectedItem" type="button"
                     (click)="showDeleteItemsModal()">Delete</button>
-                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!checkSelected()" type="button"
+                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!hasSelectedItem" type="button"
                     (click)="showExportModal()">Export</button>
                 <button class="btn btn-secondary action-btn menu-btn" type="button" (click)="showImportModal()">Import</button>
             </div>
