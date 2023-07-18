@@ -10,7 +10,7 @@
                     Axis</a>
             </label>
             <textarea rows="2" class="form-control w-100" [(ngModel)]="selectedGraphObj.layout.yaxis.title.text"
-                name="yAxisLabel" id="yAxisLabel" (input)="saveChanges()" (focus)="focusField()"
+                name="yAxisLabel" id="yAxisLabel" (input)="saveUserInput()" (focus)="focusField()"
                 (blur)="focusOut()"></textarea>
         </div>
         <!--right axis label, option to remove axis-->
@@ -21,12 +21,12 @@
                     Axis</a>
             </label>
             <textarea rows="2" class="form-control w-100" type="text" name="yAxisLabel2"
-                [(ngModel)]="selectedGraphObj.layout.yaxis2.title.text" (input)="saveChanges()" (focus)="focusField()"
+                [(ngModel)]="selectedGraphObj.layout.yaxis2.title.text" (input)="saveUserInput()" (focus)="focusField()"
                 (blur)="focusOut()"></textarea>
         </div>
         <!--y axis data options-->
         <div class="y-axis-data d-flex flex-column"
-            *ngFor="let selectedDataOption of selectedGraphObj.selectedYAxisDataOptions;">
+            *ngFor="let selectedDataOption of selectedGraphObj.selectedYAxisDataOptions; let i = index;">
             <div class="form-group">
                 <input class="form-control w-100" type="text" name="{{'seriesName'+selectedDataOption.index}}"
                     [(ngModel)]="selectedDataOption.seriesName" (input)="setYAxisData()" (focus)="focusField()"
@@ -49,8 +49,9 @@
                     Series Color
                 </label>
                 <input class="w-50 form-control color-picker" type="color"
+                    [disabled]="selectedGraphObj.hasChanges && i !== 0"
                     name="{{'seriesColor'+selectedDataOption.index}}" [(ngModel)]="selectedDataOption.seriesColor"
-                    [ngStyle]="{'background-color': selectedDataOption.seriesColor}" (input)="setYAxisData()"
+                    [ngStyle]="{'background-color': selectedDataOption.seriesColor}" (input)="setSeriesColor(i, selectedDataOption.seriesColor)"
                     (focus)="focusField()" (blur)="focusOut()">
             </div>
             <!--which axis to use-->
@@ -81,7 +82,7 @@
         <div class="form-group">
             <label>Y Axis Label</label>
             <textarea rows="2" class="form-control w-100" [(ngModel)]="selectedGraphObj.layout.yaxis.title.text"
-            name="yAxisLabel" id="yAxisLabel" (input)="saveChanges()" (focus)="focusField()"
+            name="yAxisLabel" id="yAxisLabel" (input)="saveUserInput()" (focus)="focusField()"
             (blur)="focusOut()"></textarea>
         </div>
     </div>

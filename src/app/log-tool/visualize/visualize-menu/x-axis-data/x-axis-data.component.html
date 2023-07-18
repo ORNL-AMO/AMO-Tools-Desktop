@@ -3,7 +3,7 @@
     <div class="form-group">
         <label>Axis Label</label>
         <textarea rows="2" class="form-control w-100" [(ngModel)]="selectedGraphObj.layout.xaxis.title.text"
-            name="xAxisLabel" id="xAxisLabel" (input)="saveChanges()" (focus)="focusField()"
+            name="xAxisLabel" id="xAxisLabel" (input)="saveUserInput()" (focus)="focusField()"
             (blur)="focusOut()"></textarea>
     </div>
     <!--axis data-->

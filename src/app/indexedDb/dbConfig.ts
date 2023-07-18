@@ -360,39 +360,3 @@ export const dbConfig: DBConfig = {
     SolidLiquidFlueGasMaterialStoreMeta,
   ]
 };
-
-
-
-// OLD INTERFACE
-// var myDb: any = {
-//   name: 'CrudDB',
-//   version: 6,
-//   instance: {},
-//   storeNames: {
-//     assessments: 'assessments',
-//     directories: 'directories',
-//     settings: 'settings',
-//     gasLoadChargeMaterial: 'gasLoadChargeMaterial',
-//     solidLoadChargeMaterial: 'solidLoadChargeMaterial',
-//     liquidLoadChargeMaterial: 'liquidLoadChargeMaterial',
-//     atmosphereSpecificHeat: 'atmosphereSpecificHeat',
-//     wallLossesSurface: 'wallLossesSurface',
-//     flueGasMaterial: 'flueGasMaterial',
-//     solidLiquidFlueGasMaterial: 'solidLiquidFlueGasMaterial',
-//     calculator: 'calculator',
-//     logTool: 'logTool',
-//     inventoryItems: 'inventoryItems'
-//   },
-//   defaultErrorHandler: function (e) {
-//     //todo: implement error handling
-//     console.log(e);
-//   },
-//   setDefaultErrorHandler: function (request, db) {
-//     if ('onerror' in request) {
-//       request.onerror = db.defaultErrorHandler;
-//     }
-//     if ('onblocked' in request) {
-//       request.onblocked = db.defaultErrorHandler;
-//     }
-//   }
-// };

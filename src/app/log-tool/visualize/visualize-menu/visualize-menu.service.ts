@@ -10,54 +10,47 @@ export class VisualizeMenuService {
   selectedGraphObj: any;
   constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
 
-  saveUserGraphOptionsChange(userGraphOptionsGraph: GraphObj) {
-    this.visualizeService.userInputDelay.next(175);
-    this.visualizeService.userGraphOptions.next(userGraphOptionsGraph);
-  }
-
-  save(selectedGraphObj: GraphObj) {
-    this.visualizeService.userInputDelay.next(0);
+  // * update axis names, titles, series color
+  saveUserInputChange(selectedGraphObj: GraphObj) {
+    if (selectedGraphObj.isGraphInitialized) {
+      selectedGraphObj.shouldRenderNewPlot = false;
+      this.visualizeService.userInputDelay.next(100);
+    }
     this.visualizeService.selectedGraphObj.next(selectedGraphObj);
   }
 
-    setGraphData(selectedGraphObj: GraphObj, existingGraph?: GraphObj) {
+  // * Update layout, add axis data
+  saveExistingPlotChange(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
+    selectedGraphObj.shouldRenderNewPlot = false;
+    selectedGraphObj.hasChanges = shouldRenderGraph? false : true;
+    this.visualizeService.selectedGraphObj.next(selectedGraphObj);
+    if (shouldRenderGraph) {
+      this.visualizeService.shouldRenderGraph.next(true);
+    }
+  }
+
+  // * Create new graph, update with new graph data
+  saveGraphDataChange(selectedGraphObj: GraphObj) {
+    this.visualizeService.userInputDelay.next(0);
+    selectedGraphObj.shouldRenderNewPlot = true;
+    selectedGraphObj.hasChanges = true;
+    this.visualizeService.selectedGraphObj.next(selectedGraphObj);
+  }
+
+  setGraphData(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
     if (selectedGraphObj.isTimeSeries || selectedGraphObj.data[0].type == 'scattergl') {
-      this.setScatterGraphDataOptions(selectedGraphObj);
+      this.setScatterGraphDataOptions(selectedGraphObj, shouldRenderGraph);
     } else if (selectedGraphObj.data[0].type == 'bar') {
-      this.setBarChartDataOptions(selectedGraphObj);
-    }
-
-    if (existingGraph) {
-      this.reApplyGraphState(existingGraph);
-    }
-  }
-  
-  // * setGraphData() implicitly resets much of the GraphObj
-  // * if we setGraphData() on in-memory graph or user graph change event (not a new graph), check to reapply any data we'd like saved
-  reApplyGraphState(existingGraph: GraphObj) {
-    this.applyExistingGraphAnnotations(existingGraph);
-  }
-
-  applyExistingGraphAnnotations(existingGraph: GraphObj) {
-    let initialGraphObj: GraphObj = this.visualizeService.selectedGraphObj.getValue();
-    if (existingGraph.layout && existingGraph.layout.annotations) {
-      let currentXAxis: string = initialGraphObj.selectedXAxisDataOption.dataField.fieldName; 
-      existingGraph.layout.annotations.map(annotation => {
-        let yAxisSeriesExists = initialGraphObj.selectedYAxisDataOptions.find(yAxis => yAxis.dataOption.dataField.fieldName === annotation.seriesName);
-        return currentXAxis === annotation.selectedXAxis && yAxisSeriesExists;
-      });
-      if (existingGraph.layout.annotations.length > 0) {
-        initialGraphObj.layout.annotations = existingGraph.layout.annotations;
-      }
+      this.setBarChartDataOptions(selectedGraphObj, shouldRenderGraph);
     }
   }
 
-  setScatterGraphDataOptions(selectedGraphObj: GraphObj) {
+  setScatterGraphDataOptions(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
     this.setXAxisDataOptions(selectedGraphObj);
     this.setSelectedXAxisDataOption(selectedGraphObj);
 
     this.setSelectedYAxisDataOption(selectedGraphObj);
-    this.setGraphYAxisData(selectedGraphObj);
+    this.setGraphYAxisData(selectedGraphObj, shouldRenderGraph);
   }
 
   setSelectedYAxisDataOption(selectedGraphObj: GraphObj) {
@@ -112,7 +105,7 @@ export class VisualizeMenuService {
       }
       index++;
     });
-    this.save(selectedGraphObj);
+    this.saveGraphDataChange(selectedGraphObj);
   }
 
 
@@ -146,8 +139,6 @@ export class VisualizeMenuService {
   // * called on graph init and user select change event
   setSelectedXAxisDataOption(selectedGraphObj: GraphObj) {
     this.setDefaultSelectedXAxis(selectedGraphObj);
-    // * reset to avoid annotations/custom layout showing on incorrect axis
-    this.resetXAxisRelatedData(selectedGraphObj);
 
     if (selectedGraphObj.isTimeSeries) {
       selectedGraphObj.layout.xaxis.type = 'date';
@@ -167,11 +158,16 @@ export class VisualizeMenuService {
     }
   }
 
-  resetXAxisRelatedData(selectedGraphObj: GraphObj) {
-    // * also changes userGraphObj
+    // * reset to avoid annotations/custom layout showing on incorrect axis
+  resetLayoutRelatedData(selectedGraphObj: GraphObj) {
     this.visualizeService.annotateDataPoint.next(undefined);
     selectedGraphObj.layout.annotations = [];
     selectedGraphObj.layout.yaxis.ticksuffix = '';
+    
+    selectedGraphObj.layout.autosize = true;
+    selectedGraphObj.layout.xaxis.autorange = true;
+    selectedGraphObj.layout.yaxis.autorange = true;
+    selectedGraphObj.layout.yaxis2.autorange = true;
   }
 
   resetYAxisRelatedData(selectedGraphObj: GraphObj) {
@@ -200,7 +196,7 @@ export class VisualizeMenuService {
       if (selectedGraphObj.isTimeSeries) {
         let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(field);
         if (timeData) {
-          let data: (string | number)[]  = this.visualizeService.getGraphDataByField(field.fieldName);
+          let data: (string | number)[] = this.visualizeService.getGraphDataByField(field.fieldName);
           selectedGraphObj.yAxisDataOptions.push({
             data: data,
             dataField: field
@@ -224,7 +220,7 @@ export class VisualizeMenuService {
 
   }
 
-  setGraphYAxisData(selectedGraphObj: GraphObj) {
+  setGraphYAxisData(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
     let index: number = 0;
     selectedGraphObj.selectedYAxisDataOptions.forEach(selectedDataOption => {
       selectedGraphObj.data[index].mode = selectedDataOption.linesOrMarkers;
@@ -232,9 +228,9 @@ export class VisualizeMenuService {
         let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(selectedDataOption.dataOption.dataField);
         if (timeData) {
           selectedGraphObj.data[index].x = timeData;
-          selectedGraphObj.data[index].mode = 'lines'
+          selectedGraphObj.data[index].mode = 'lines';
         }
-      } 
+      }
       // Restrict if selected axis data from another file
       // else if (selectedDataOption.dataOption.dataField.csvId != selectedGraphObj.selectedXAxisDataOption.dataField.csvId) {
       //   selectedDataOption.dataOption = selectedGraphObj.yAxisDataOptions[0];
@@ -254,10 +250,16 @@ export class VisualizeMenuService {
       selectedGraphObj.data[index].yaxis = selectedDataOption.yaxis;
       index++;
     })
-    this.save(selectedGraphObj);
+
+    if (shouldRenderGraph) {
+      this.saveGraphDataChange(selectedGraphObj);
+      this.visualizeService.shouldRenderGraph.next(true)
+    } else {
+      this.saveGraphDataChange(selectedGraphObj);
+    }
   }
 
-  setBarChartDataOptions(selectedGraphObj: GraphObj) {
+  setBarChartDataOptions(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
     selectedGraphObj.layout.xaxis.type = 'category';
     this.setXAxisDataOptions(selectedGraphObj);
     if (selectedGraphObj.selectedXAxisDataOption && selectedGraphObj.selectedXAxisDataOption.dataField) {
@@ -276,10 +278,10 @@ export class VisualizeMenuService {
     } else {
       selectedGraphObj.layout.yaxis.ticksuffix = '';
     }
-    this.setBarHistogramData(selectedGraphObj);
+    this.setBarHistogramData(selectedGraphObj, shouldRenderGraph);
   }
 
-  setBarHistogramData(selectedGraphObj: GraphObj) {
+  setBarHistogramData(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
     if (selectedGraphObj.useStandardDeviation == true && selectedGraphObj.bins.length != 0) {
       //get std deviation
       let stdDeviationBarData = this.visualizeService.getStandardDevBarChartData(selectedGraphObj.selectedXAxisDataOption.dataField, selectedGraphObj.usePercentForBins, selectedGraphObj.bins[0].min);
@@ -296,12 +298,18 @@ export class VisualizeMenuService {
     //set to first value for bar charts
     selectedGraphObj.data = [selectedGraphObj.data[0]];
     selectedGraphObj.selectedYAxisDataOptions = [selectedGraphObj.selectedYAxisDataOptions[0]];
-    this.save(selectedGraphObj);
+
+    if (shouldRenderGraph) {
+      this.saveGraphDataChange(selectedGraphObj);
+      this.visualizeService.shouldRenderGraph.next(true)
+    } else {
+      this.saveGraphDataChange(selectedGraphObj);
+    }
   }
 
   addAxis(selectedGraphObj: GraphObj) {
     selectedGraphObj.hasSecondYAxis = true;
-    this.save(selectedGraphObj);
+    this.saveGraphDataChange(selectedGraphObj);
   }
 
   removeAxis(selectedGraphObj: GraphObj) {
@@ -366,12 +374,14 @@ export class VisualizeMenuService {
         selectedGraphObj.layout.annotations.push(annotateDataPoint);
       }
     }
-    this.saveUserGraphOptionsChange(selectedGraphObj);
-  }
 
+    this.saveUserInputChange(selectedGraphObj);
+    
+  }
+  
   deleteAnnotation(annotation: AnnotationData, selectedGraphObj: GraphObj) {
     _.remove(selectedGraphObj.layout.annotations, (currentAnnotation) => { return currentAnnotation.annotationId == annotation.annotationId });
-    this.saveUserGraphOptionsChange(selectedGraphObj);
+    this.saveExistingPlotChange(selectedGraphObj, true);
   }
 
   getSeriesName(logToolField: LogToolField): string {

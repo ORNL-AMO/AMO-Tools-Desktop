@@ -83,7 +83,6 @@ export class DayTypeAnalysisComponent implements OnInit {
   ngOnDestroy() {
     this.displayDayTypeCalanderSub.unsubscribe();
     this.dataViewSub.unsubscribe();
-    this.logToolDbService.saveData();
     this.loadingSpinnerSub.unsubscribe();
     this.selectedDataFieldSub.unsubscribe();
   }

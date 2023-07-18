@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { VisualizeService } from '../../visualize.service';
 import { VisualizeMenuService } from '../visualize-menu.service';
 import { LogToolDataService } from '../../../log-tool-data.service';
+import { HelperFunctionsService } from '../../../../shared/helper-services/helper-functions.service';
 
 @Component({
   selector: 'app-graph-basics',
@@ -22,7 +23,7 @@ export class GraphBasicsComponent implements OnInit {
   markerTypes: Array<Object>;
   markerType: string;
   canRunDayTypeAnalysis: boolean;
-  constructor(private visualizeService: VisualizeService, private visualizeMenuService: VisualizeMenuService, private logToolDataService: LogToolDataService) { }
+  constructor(private visualizeService: VisualizeService, private visualizeMenuService: VisualizeMenuService, private logToolDataService: LogToolDataService, private helperFunctionService: HelperFunctionsService) { }
 
   ngOnInit(): void {
     this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
@@ -30,7 +31,7 @@ export class GraphBasicsComponent implements OnInit {
       let isSelectedGraphChange = val.graphId != this.selectedGraphObj.graphId;
       if (isSelectedGraphChange) {
         this.selectedGraphObj = val;
-        this.changeSelectedGraphData();
+        this.changeSelectedGraphData(isSelectedGraphChange);
       } else {
         this.selectedGraphObj = val;
         if (this.selectedGraphObj.data[0].type == 'bar') {
@@ -54,20 +55,17 @@ export class GraphBasicsComponent implements OnInit {
   }
 
   saveChanges() {
-    this.visualizeMenuService.saveUserGraphOptionsChange(this.selectedGraphObj);
+    this.visualizeMenuService.saveUserInputChange(this.selectedGraphObj)
   }
 
   setLinesMarkers() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
-    depending on the amount of data you have supplied...`});
-    this.selectedGraphObj.selectedYAxisDataOptions.forEach((option) => {
+    this.selectedGraphObj.selectedYAxisDataOptions.map((option) => {
       option.linesOrMarkers = this.markerType;
     });
     this.visualizeMenuService.setGraphData(this.selectedGraphObj);
   }
 
-  changeSelectedGraphData() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment depending on the amount of data you have supplied...`});
+  changeSelectedGraphData(isSelectedGraphChange: boolean) {
     this.selectedGraphObj.isTimeSeries = false;
     if (this.selectedGraphObj.data[0].type == 'bar') {
       this.checkBarHistogramData();
@@ -76,8 +74,11 @@ export class GraphBasicsComponent implements OnInit {
       // plotly type for time-series == scattergl
       this.selectedGraphObj.data[0].type = 'scattergl';
     }
-    let existingGraph: GraphObj = this.visualizeService.getDeepCloneGraphObj(this.selectedGraphObj);
-    this.visualizeMenuService.setGraphData(this.selectedGraphObj, existingGraph);
+    if (!isSelectedGraphChange) {
+      // We don't need to reset because we're changing to an entirely different graph
+      this.visualizeMenuService.resetLayoutRelatedData(this.selectedGraphObj);
+    }
+    this.visualizeMenuService.setGraphData(this.selectedGraphObj);
   }
 
   focusField() {
