@@ -49,23 +49,19 @@ export class VisualizeHelpComponent implements OnInit {
   ngOnInit(): void {
     this.onUpdateGraphEventsSubscription = this.visualizeService.selectedGraphObj
     .pipe(
-      combineLatestWith(this.visualizeService.userGraphOptions, this.visualizeService.focusedPanel),
+      combineLatestWith(this.visualizeService.focusedPanel),
       debounceTime(25)
-      ).subscribe(([selectedGraphObj, userGraphOptionsObj, focusedPanel]: any) => {
+      ).subscribe(([selectedGraphObj, focusedPanel]: any) => {
       if (focusedPanel) {
         this.focusedPanel = focusedPanel;
       }
       selectedGraphObj = selectedGraphObj? selectedGraphObj : this.visualizeService.selectedGraphObj.getValue();
-      userGraphOptionsObj = userGraphOptionsObj? userGraphOptionsObj : this.visualizeService.userGraphOptions.getValue();
-      this.updateHelpInformation(selectedGraphObj, userGraphOptionsObj);
+      this.updateHelpInformation(selectedGraphObj);
     });
   }
 
-  updateHelpInformation(selectedGraphObj: GraphObj, userGraphOptionsObj: GraphObj) {
+  updateHelpInformation(selectedGraphObj: GraphObj) {
     this.graphInteractivity = selectedGraphObj.graphInteractivity;
-    if (userGraphOptionsObj && userGraphOptionsObj.graphInteractivity) {
-      this.graphInteractivity = userGraphOptionsObj.graphInteractivity;
-    }
     this.cd.detectChanges();
   }
 

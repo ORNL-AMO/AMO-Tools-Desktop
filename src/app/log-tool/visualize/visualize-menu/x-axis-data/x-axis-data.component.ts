@@ -28,13 +28,12 @@ export class XAxisDataComponent implements OnInit {
     this.selectedGraphObjSub.unsubscribe();
   }
 
-  saveChanges() {
-    this.visualizeMenuService.saveUserGraphOptionsChange(this.selectedGraphObj);
+  saveUserInput() {
+    this.visualizeMenuService.saveUserInputChange(this.selectedGraphObj);
   }
 
   setXAxisDataOption() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
-    depending on the amount of data you have supplied...`});
+    this.visualizeMenuService.resetLayoutRelatedData(this.selectedGraphObj)
     this.visualizeMenuService.setSelectedXAxisDataOption(this.selectedGraphObj);
   }
 

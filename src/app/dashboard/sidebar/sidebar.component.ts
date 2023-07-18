@@ -97,8 +97,9 @@ export class SidebarComponent implements OnInit {
     } 
   }
 
-  navigateWithSidebarOptions(url: string) {
-    this.dashboardService.navigateWithSidebarOptions(url);
+  navigateWithSidebarOptions(url: string, shouldCollapse?: boolean) {
+    this.dashboardService.navigateWithSidebarOptions(url, {shouldCollapse: shouldCollapse})
+
   }
 
   collapseSidebar(isNavigationCollapse?: boolean) {

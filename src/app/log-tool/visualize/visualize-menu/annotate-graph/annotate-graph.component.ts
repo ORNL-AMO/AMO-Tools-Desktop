@@ -18,7 +18,6 @@ export class AnnotateGraphComponent implements OnInit {
   // graphInteractivitySubscription: Subscription;
   fontSizes: Array<number> = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
   arrowSizes: Array<number> = [.5, 1, 1.5, 2, 2.5];
-  userGraphOptionsSubscription: Subscription;
   constructor(private visualizeService: VisualizeService, private cd: ChangeDetectorRef, private visualizeMenuService: VisualizeMenuService) { }
 
   ngOnInit(): void {
@@ -29,19 +28,6 @@ export class AnnotateGraphComponent implements OnInit {
       }
     });
 
-    this.userGraphOptionsSubscription = this.visualizeService.userGraphOptions
-      .pipe(
-        debounce((userGraphOptionsGraphObj: GraphObj) => {
-          let userInputDelay = this.visualizeService.userInputDelay.getValue()
-          return interval(userInputDelay);
-        })
-      ).subscribe((userGraphOptionsGraphObj: GraphObj) => {
-        if (userGraphOptionsGraphObj && userGraphOptionsGraphObj.layout.annotations) {
-          this.selectedGraphObj.layout.annotations = userGraphOptionsGraphObj.layout.annotations;
-          this.cd.detectChanges();
-        }
-      });
-
     this.annotateDataPointSub = this.visualizeService.annotateDataPoint.subscribe(point => {
       this.annotateDataPoint = point;      
       this.cd.detectChanges();
@@ -51,7 +37,6 @@ export class AnnotateGraphComponent implements OnInit {
   ngOnDestroy() {
     this.annotateDataPointSub.unsubscribe();
     this.selectedGraphObjSub.unsubscribe();
-    this.userGraphOptionsSubscription.unsubscribe();
   }
 
   setAnnotation() {
