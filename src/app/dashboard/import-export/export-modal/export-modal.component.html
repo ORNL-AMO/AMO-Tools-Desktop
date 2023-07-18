@@ -77,7 +77,7 @@
 
 
                         <li *ngIf="isSelectAllFolder || exportData.directories.length != 0">
-                            <span class="bold">Directories</span>
+                            <span class="bold">Directories (details)</span>
                             <ul>
                                 <li *ngFor="let dirItem of exportData.directories">
                                     <span class="fa fa-folder p-1"></span>{{dirItem.directory.name}}
@@ -121,6 +121,11 @@
                                                 <span class="p-1">
                                                     <a>{{inventoryItem.name}}</a>
                                                 </span>
+                                            </div>
+                                        </li>
+                                        <li *ngFor="let subDir of dirItem.directory.subDirectory">
+                                            <div class="d-flex align-items-center">
+                                                <span class="fa fa-folder p-1"></span>{{subDir.name}}
                                             </div>
                                         </li>
                                     </ul>

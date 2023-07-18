@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { Directory } from '../../../shared/models/directory';
@@ -30,8 +30,10 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   canCopyItem: boolean;
   activatedRouteSub: Subscription;
   updateSelectedStatusSub: Subscription;
+  updateDashboardDataSub: Subscription;
   
-  constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
+  constructor(private activatedRoute: ActivatedRoute, 
+    private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
     private exportService: ExportService, private dashboardService: DashboardService, private reportRollupService: ReportRollupService, private router: Router) { }
 
   ngOnInit() {
@@ -47,12 +49,20 @@ export class DirectoryDashboardMenuComponent implements OnInit {
       this.updateSelectedStatus();
     });
 
+    this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
+      this.directory = this.directoryDbService.getById(this.directory.id);  
+      if(this.directory){
+        this.directory.selected = false;    
+      }
+    });
+
 
   }
 
   ngOnDestroy() {
     this.activatedRouteSub.unsubscribe();
     this.updateSelectedStatusSub.unsubscribe();
+    this.updateDashboardDataSub.unsubscribe();
   }
 
   getBreadcrumbs(dirId: number) {
@@ -67,6 +77,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
 
   toggleSelectAll() {
     this.directory.selected = this.isAllSelected;
+    this.hasSelectedItem = this.isAllSelected;
     this.directory.assessments.forEach(assessment => {
       assessment.selected = this.isAllSelected;
     });
@@ -78,7 +89,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     });
     this.directory.inventories.forEach(inventory => {
       inventory.selected = this.isAllSelected;
-    })
+    });
   }
 
   updateSelectedStatus() {
@@ -96,8 +107,6 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     }
     this.hasSelectedItem = hasAssessmentSelected != undefined || hasDirectorySelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined;
     this.canCopyItem = (hasAssessmentSelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined) && hasDirectorySelected == undefined;
-    console.log('hasSelectedItem', this.hasSelectedItem);
-    console.log('canCopyItem', this.canCopyItem);
   }
   
   setIsAllSelected() {
@@ -109,7 +118,6 @@ export class DirectoryDashboardMenuComponent implements OnInit {
       hasCalculatorUnselected = _.find(this.directory.calculators, (value) => { return value.selected == false });
     }
     this.isAllSelected = hasAssessmentUnselected !== undefined && hasDirUnselected !== undefined && hasInventoryUnselected !== undefined && hasCalculatorUnselected !== undefined;
-    console.log('isAllSelected', this.isAllSelected);
   }
 
   checkReport() {
