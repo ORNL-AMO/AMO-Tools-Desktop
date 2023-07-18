@@ -5,6 +5,7 @@ import { PumpCatalogService } from '../pump-inventory-setup/pump-catalog/pump-ca
 import { PumpInventoryData } from '../pump-inventory';
 import { PumpInventoryService } from '../pump-inventory.service';
 import { IntegrationStateService } from '../../shared/assessment-integration/integration-state.service';
+import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 
 @Component({
   selector: 'app-pump-inventory-banner',
@@ -29,7 +30,8 @@ export class PumpInventoryBannerComponent implements OnInit {
   showConnectedItemBadge: boolean;
   catalogClassStatus: string[];
   // hasInvalidPumpItem: boolean;
-    constructor(private pumpInventoryService: PumpInventoryService, private integrationStateService: IntegrationStateService, private pumpCatalogService: PumpCatalogService) { }
+    constructor(private pumpInventoryService: PumpInventoryService, private integrationStateService: IntegrationStateService, 
+      private pumpCatalogService: PumpCatalogService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit(): void {
     this.mainTabSub = this.pumpInventoryService.mainTab.subscribe(val => {
@@ -85,5 +87,10 @@ export class PumpInventoryBannerComponent implements OnInit {
 
   setSummaryTab(str: string) {
     this.pumpInventoryService.summaryTab.next(str);
+  }
+
+  showSecurityAndPrivacyModal() {
+    this.securityAndPrivacyService.modalOpen.next(true);
+    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
   }
 }

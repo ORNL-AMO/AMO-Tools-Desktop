@@ -23,6 +23,10 @@
     color: white;
 }
 
+.nav-item, .home-nav-item a{
+    color: white;
+}
+
 .banner .nav-link:not(.disabled):not(.active){
     color: white;
 }
