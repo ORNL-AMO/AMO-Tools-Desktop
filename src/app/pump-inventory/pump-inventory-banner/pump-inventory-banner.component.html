@@ -25,6 +25,14 @@
 
 
     <div class="d-flex ml-auto pr-2 h-100">
+        <div class="pl-2 pr-2 home-nav-item" (click)="showSecurityAndPrivacyModal()">
+     	   <span class="fa fa-lock"></span>
+  	  </div>
+		<div class="pl-2 pr-2 home-nav-item">
+			<a class="user-manual" href="assets/user-manuals/Pump-Inventory-User-Manual.pdf" target="_blank">
+				<span class="fa fa-book"></span>
+			</a>
+		</div>
         <div class="pl-2 pr-2 home-nav-item" [routerLink]="['/settings']">
      	   <span class="fa fa-cog"></span>
   	  </div>
