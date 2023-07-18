@@ -12,7 +12,7 @@ import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { SSMT } from '../../shared/models/steam/ssmt';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { InventoryDbService } from '../../indexedDb/inventory-db.service';
-import { DayTypeSummary, LogToolField } from '../../log-tool/log-tool-models';
+import { DayTypeSummary } from '../../log-tool/log-tool-models';
 
 @Injectable()
 export class ExportService {
@@ -22,6 +22,9 @@ export class ExportService {
   exportDirectories: Array<ImportExportDirectory>;
   exportAssessments: Array<ImportExportAssessment>;
   exportInventories: Array<ImportExportInventory>;
+
+  directoryAssessments: Array<ImportExportAssessment>;
+  directoryInventories: Array<ImportExportInventory>;
   constructor(private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
     private inventoryDbService: InventoryDbService) {
   }
@@ -35,6 +38,8 @@ export class ExportService {
     let subDirs: Array<Directory>;
     let calculators: Array<Calculator> = new Array<Calculator>();
     let inventories: Array<InventoryItem> = new Array<InventoryItem>();
+    this.directoryAssessments = new Array<ImportExportAssessment>();
+    this.directoryInventories = new Array<ImportExportInventory>();
     if (!isSelectAll) {
       assessments = _.filter(dir.assessments, (assessment) => { return assessment.selected === true; });
       subDirs = _.filter(dir.subDirectory, (subDir) => { return subDir.selected === true; });
@@ -54,6 +59,16 @@ export class ExportService {
     if (subDirs) {
       subDirs.forEach(dir => {
         this.addDirectoryObj(dir);
+        // todo 6380 - temp fix from 5535 
+        let objs = this.getSubDirAssessmentData(dir, this.exportAssessments);
+        this.exportAssessments.concat(objs);
+        objs = this.getSubDirSelectedAssessments(dir, this.directoryAssessments);
+        this.directoryAssessments.concat(objs);
+        let inventoryObjs = this.getSubDirInventoryData(dir, this.exportInventories);
+        inventoryObjs = this.getSubDirInventoryData(dir, this.directoryInventories);
+        this.directoryInventories.concat(inventoryObjs);
+        this.exportInventories.concat(inventoryObjs);
+        // todo - end temp fix from 5535
       });
     }
     if (inventories) {
