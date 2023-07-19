@@ -40,16 +40,16 @@
     </div>
   </div>
   
-  <div class="sidebar-group secondary" (click)="navigateSidebarLink('/landing-screen')">
+  <div class="sidebar-group secondary" (click)="navigateWithSidebarOptions('/landing-screen')">
     <span class="sidebar-item" [routerLink]="['/landing-screen']" routerLinkActive="selected">Home</span>
 </div>
 
-<div class="sidebar-group secondary pl-1 horizontal scroll-item">
+<div class="sidebar-group secondary pl-1 scroll-item">
   <app-directory-item [directory]="rootDirectory"></app-directory-item>
 </div>
 
 <div class="sidebar-group secondary">
-  <span routerLink="/log-tool" routerLinkActive="selected" class="sidebar-item">Data Exploration</span>
+  <span routerLinkActive="selected" class="sidebar-item" (click)="navigateWithSidebarOptions('/log-tool', true)">Data Exploration</span>
 </div>
 
 <div class="sidebar-group secondary">
@@ -57,13 +57,13 @@
 </div>
 
 <div class="sidebar-group secondary">
-  <span (click)="navigateSidebarLink('/settings')" routerLinkActive="selected" class="sidebar-item">Settings</span>
-  <span (click)="navigateSidebarLink('/custom-materials')" routerLinkActive="selected" class="sidebar-item">Custom Materials</span>
-  <span (click)="navigateSidebarLink('/tutorials')" routerLinkActive="selected" class="sidebar-item">User Manuals</span>
-  <span (click)="navigateSidebarLink('/about')" routerLinkActive="selected" class="sidebar-item">About</span>
-  <span (click)="navigateSidebarLink('/contact')" routerLinkActive="selected" class="sidebar-item">Feedback</span>
-  <span (click)="navigateSidebarLink('/privacy')" routerLinkActive="selected" class="sidebar-item">Privacy Notice</span>
-  <span (click)="navigateSidebarLink('/acknowledgments')" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
+  <span (click)="navigateWithSidebarOptions('/settings')" routerLinkActive="selected" class="sidebar-item">Settings</span>
+  <span (click)="navigateWithSidebarOptions('/custom-materials')" routerLinkActive="selected" class="sidebar-item">Custom Materials</span>
+  <span (click)="navigateWithSidebarOptions('/tutorials')" routerLinkActive="selected" class="sidebar-item">User Manuals</span>
+  <span (click)="navigateWithSidebarOptions('/about')" routerLinkActive="selected" class="sidebar-item">About</span>
+  <span (click)="navigateWithSidebarOptions('/contact')" routerLinkActive="selected" class="sidebar-item">Feedback</span>
+  <span (click)="navigateWithSidebarOptions('/privacy')" routerLinkActive="selected" class="sidebar-item">Privacy Notice</span>
+  <span (click)="navigateWithSidebarOptions('/acknowledgments')" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
   </div>
   
   <div class="sidebar-group">

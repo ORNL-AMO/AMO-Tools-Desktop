@@ -28,6 +28,9 @@ export class SidebarComponent implements OnInit {
   showNewDropdown: boolean = false;
   isSidebarCollapsed: boolean = false;
   collapseSidebarSub: Subscription;
+
+  collapsedXWidth: number = 40;
+  expandedXWidth: number = 300;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private cd: ChangeDetectorRef,
@@ -49,11 +52,12 @@ export class SidebarComponent implements OnInit {
     });
 
     this.collapseSidebarSub = this.dashboardService.collapseSidebar.subscribe(shouldCollapse => {
-      if (shouldCollapse) {
-        this.collapseSidebar();
-      }
+      if (shouldCollapse !== undefined) {
+        this.collapseSidebar(shouldCollapse);
+      }  
     })
-    this.checkShouldCollapseSidebar();
+
+    this.initSidebarView();
   }
 
   ngOnDestroy() {
@@ -64,7 +68,7 @@ export class SidebarComponent implements OnInit {
 
   showCreateAssessment() {
     this.directoryDashboardService.createFolder.next(false);
-    this.dashboardService.createInventory.next(false);
+    this.dashboardService.showCreateInventory.next(undefined);
     this.showNewDropdown = false;
     this.dashboardService.createAssessment.next(true);
   }
@@ -73,17 +77,17 @@ export class SidebarComponent implements OnInit {
     this.dashboardService.createAssessment.next(false);
     this.directoryDashboardService.createFolder.next(false);
     this.showNewDropdown = false;
-    this.dashboardService.createInventory.next(true);
+    this.dashboardService.showCreateInventory.next('motorInventory');
   }
 
   showCreateFolder(){
     this.dashboardService.createAssessment.next(false);
-    this.dashboardService.createInventory.next(false);
+    this.dashboardService.showCreateInventory.next(undefined);
     this.showNewDropdown = false;
     this.directoryDashboardService.createFolder.next(true);
   }
 
-  checkShouldCollapseSidebar() {
+  initSidebarView() {
     let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
     if (totalScreenWidth < 1024) {
       this.dashboardService.sidebarX.next(40);
@@ -92,25 +96,33 @@ export class SidebarComponent implements OnInit {
     } 
   }
 
-  navigateSidebarLink(url: string) {
-    this.dashboardService.navigateSidebarLink(url);
+  navigateWithSidebarOptions(url: string, shouldCollapse?: boolean) {
+    this.dashboardService.navigateWithSidebarOptions(url, {shouldCollapse: shouldCollapse})
+
   }
 
-  collapseSidebar() {
-    this.isSidebarCollapsed = !this.isSidebarCollapsed;
-    let collapsedXWidth: number = 40;
-    let expandedXWidth: number = 300;
+  collapseSidebar(isNavigationCollapse?: boolean) {
+    if (isNavigationCollapse !== undefined) {
+      this.isSidebarCollapsed = isNavigationCollapse;
+    } else {
+      this.isSidebarCollapsed = !this.isSidebarCollapsed;
+    }
+
     let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
     if (totalScreenWidth < 1024) {
-      expandedXWidth = totalScreenWidth;
+      this.expandedXWidth = totalScreenWidth;
+    }
+    else {
+      this.expandedXWidth = 300;
     } 
-    
+  
     if (this.isSidebarCollapsed == true) {
-      this.dashboardService.sidebarX.next(collapsedXWidth);
+      this.dashboardService.sidebarX.next(this.collapsedXWidth);
     } else {
-      this.dashboardService.sidebarX.next(expandedXWidth);
+      this.dashboardService.sidebarX.next(this.expandedXWidth);
     }
     window.dispatchEvent(new Event("resize"));
+
   }
 
   openUpdateModal() {

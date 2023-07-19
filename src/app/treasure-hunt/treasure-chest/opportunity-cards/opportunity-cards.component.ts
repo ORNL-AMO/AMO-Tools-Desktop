@@ -21,7 +21,7 @@ export class OpportunityCardsComponent implements OnInit {
   @ViewChild('deletedOpportunityModal', { static: false }) public deletedOpportunityModal: ModalDirective;
   @ViewChild('opportunitySheetModal', { static: false }) public opportunitySheetModal: ModalDirective;
 
-  opportunityCardsData: Array<OpportunityCardData>;
+  opportunityCardList: Array<OpportunityCardData>;
   treasureHuntSub: Subscription;
   treasureHunt: TreasureHunt;
   deleteOpportunityCard: OpportunityCardData;
@@ -40,19 +40,20 @@ export class OpportunityCardsComponent implements OnInit {
     this.updateOpportunityCardsSub = this.opportunityCardsService.updateOpportunityCards.subscribe(val => {
       if (val == true) {
         this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
-        this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.treasureHunt, this.settings);
-        this.opportunityCardsService.opportunityCards.next(this.opportunityCardsData);
+        this.opportunityCardList = this.opportunityCardsService.getOpportunityCardsData(this.treasureHunt, this.settings);
+        this.opportunityCardsService.opportunityCards.next(this.opportunityCardList);
         this.opportunityCardsService.updateOpportunityCards.next(false);
       }
     });
-    this.updatedOpportunityCardSub = this.opportunityCardsService.updatedOpportunityCard.subscribe(val => {
-      if (val) {
-        let opportunityCardData = Array.from(this.opportunityCardsData);
-        opportunityCardData[this.modifyDataIndex] = val;
-        this.opportunityCardsData = opportunityCardData;
+    this.updatedOpportunityCardSub = this.opportunityCardsService.updatedOpportunityCard.subscribe(updatedOpportunityCard => {
+      if (updatedOpportunityCard) {
+        // must create new array ref to rerender pipe
+        let opportunityCardList: OpportunityCardData[] = Array.from(this.opportunityCardList);
+        opportunityCardList[this.modifyDataIndex] = updatedOpportunityCard;
+        this.opportunityCardList = opportunityCardList;
         this.updateAllIndexes();
         this.opportunityCardsService.updatedOpportunityCard.next(undefined);
-        this.updateOpportunityCardsData();
+        this.updateopportunityCardList();
       }
     });
     this.selectAllSub = this.treasureChestMenuService.selectAll.subscribe(val => {
@@ -62,7 +63,7 @@ export class OpportunityCardsComponent implements OnInit {
     });
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
       // Trigger pipe input change from new input ref
-      this.opportunityCardsData = Array.from(this.opportunityCardsData);
+      this.opportunityCardList = Array.from(this.opportunityCardList);
       this.sortByVal = val;
     });
     this.deselectAllSub = this.treasureChestMenuService.deselectAll.subscribe(val => {
@@ -83,8 +84,8 @@ export class OpportunityCardsComponent implements OnInit {
     this.opportunityCardsService.updatedOpportunityCard.next(undefined);
   }
 
-  updateOpportunityCardsData() {
-    this.opportunityCardsService.opportunityCards.next(this.opportunityCardsData);
+  updateopportunityCardList() {
+    this.opportunityCardsService.opportunityCards.next(this.opportunityCardList);
   }
 
   editOpportunity(opportunityCard: OpportunityCardData) {
@@ -107,18 +108,21 @@ export class OpportunityCardsComponent implements OnInit {
   }
 
   deleteOpportunity() {
-    this.opportunityCardsData.splice(this.modifyDataIndex, 1);
+    this.opportunityCardList.splice(this.modifyDataIndex, 1);
+        // must create new array ref to rerender pipe
+    let updatedOpportunityCards: OpportunityCardData[] = Array.from(this.opportunityCardList);
+    this.opportunityCardList = updatedOpportunityCards;
     this.updateOpportunityIndexesAfterDelete();
     let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
     treasureHunt = this.calculatorsService.deleteOpportunity(this.deleteOpportunityCard, treasureHunt);
 
     this.treasureHuntService.treasureHunt.next(treasureHunt);
     this.hideDeleteOpportunityModal();
-    this.updateOpportunityCardsData();
+    this.updateopportunityCardList();
   }
 
   updateOpportunityIndexesAfterDelete() {
-    this.opportunityCardsData.forEach(card => {
+    this.opportunityCardList.forEach(card => {
       if (card.opportunityType == this.deleteOpportunityCard.opportunityType && card.opportunityIndex > this.deleteOpportunityCard.opportunityIndex) {
         card.opportunityIndex = card.opportunityIndex - 1;
       }
@@ -128,7 +132,7 @@ export class OpportunityCardsComponent implements OnInit {
 
   updateAllIndexes() {
     let index: number = 0;
-    this.opportunityCardsData.forEach(card => {
+    this.opportunityCardList.forEach(card => {
       card.index = index;
       index++;
     })
@@ -150,7 +154,7 @@ export class OpportunityCardsComponent implements OnInit {
 
   saveOpportunitySheet(updatedOpportunitySheet: OpportunitySheet) {
     this.editOpportunitySheetCardData.opportunitySheet = updatedOpportunitySheet;
-    this.opportunityCardsData[this.modifyDataIndex] = this.editOpportunitySheetCardData;
+    this.opportunityCardList[this.modifyDataIndex] = this.editOpportunitySheetCardData;
     this.saveOpportunityChanges(this.editOpportunitySheetCardData);
     this.hideOpportunitySheetModal();
   }
@@ -168,7 +172,7 @@ export class OpportunityCardsComponent implements OnInit {
 
 
   selectAll() {
-    this.opportunityCardsData.forEach(card => {
+    this.opportunityCardList.forEach(card => {
       if (card.selected == false) {
         card.selected = true;
         this.toggleSelected(card);
@@ -177,7 +181,7 @@ export class OpportunityCardsComponent implements OnInit {
   }
 
   deselectAll() {
-    this.opportunityCardsData.forEach(card => {
+    this.opportunityCardList.forEach(card => {
       if (card.selected == true) {
         card.selected = false;
         this.toggleSelected(card);
@@ -189,10 +193,10 @@ export class OpportunityCardsComponent implements OnInit {
     let newOpportunityCard: OpportunityCardData = JSON.parse(JSON.stringify(cardData));
     let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
     newOpportunityCard = this.calculatorsService.copyOpportunity(newOpportunityCard, treasureHunt, this.settings);
-    this.opportunityCardsData.push(newOpportunityCard);
+    this.opportunityCardList.push(newOpportunityCard);
     this.treasureHuntService.treasureHunt.next(treasureHunt);
     this.updateAllIndexes();
-    this.updateOpportunityCardsData();
+    this.updateopportunityCardList();
   }
 
 }

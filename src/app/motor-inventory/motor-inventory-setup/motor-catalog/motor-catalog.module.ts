@@ -30,6 +30,7 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { PercentLoadEstimationModule } from '../../../calculator/motors/percent-load-estimation/percent-load-estimation.module';
 import { DeleteMotorModalComponent } from './delete-motor-modal/delete-motor-modal.component';
+import { AssessmentIntegrationModule } from '../../../shared/assessment-integration/assessment-integration.module';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { DeleteMotorModalComponent } from './delete-motor-modal/delete-motor-mod
     ModalModule,
     SharedPipesModule,
     OperatingHoursModalModule,
-    PercentLoadEstimationModule
+    PercentLoadEstimationModule,
+    AssessmentIntegrationModule
   ],
   providers: [
     BatchAnalysisDataService,

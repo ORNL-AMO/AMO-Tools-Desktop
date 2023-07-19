@@ -105,13 +105,15 @@ export class LogToolDataService {
       if(idx < 0){
         averagesUnique.push(averages[i]);
       } else {
-        averagesUnique[idx].value = averagesUnique[idx].value + averages[i].value;
+        let average = averagesUnique[idx].value + averages[i].value;
+        if(average !== undefined && !isNaN(average))  {
+          averagesUnique[idx].value = average;
+        }
       }
     }
 
     return averagesUnique;
   }
-  
   // * dayData: Array of objects where key/val is fileData fields/vals
   calculateDayAveragesByInterval(dayData: Array<any>, dataset: ExplorerDataSet): Array<AverageByInterval> {
     let dayAveragesByInterval: Array<AverageByInterval> = new Array();
@@ -154,7 +156,8 @@ export class LogToolDataService {
           };
         });
 
-        let averages: Array<{ value: number, field: LogToolField }> = this.getIntervalAverages(currentIntervalDataForDay, fields)
+
+        let averages: Array<{ value: number, field: LogToolField }> = this.getIntervalAverages(currentIntervalDataForDay, fields);
         let {intervalDisplayString, intervalOffsetString} = this.getCurrentIntervalStrings(intervalByTimeUnit);
         intervalByTimeUnit += unitOfTime;
         dayAveragesByInterval.push({
@@ -198,6 +201,7 @@ export class LogToolDataService {
       }
     });
 
+    // * Sum of value/reading at given interval for all days
     let allDataCollectionUnitsAverage: { value: number, field: LogToolField } = 
     {
       value: undefined,
@@ -233,7 +237,7 @@ export class LogToolDataService {
     firstDate.getDate() === secondDate.getDate();
   }
 
-getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean = true): {intervalDisplayString: string, intervalOffsetString: string} {
+getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean = false): {intervalDisplayString: string, intervalOffsetString: string} {
     let intervalDisplayString: string;
     let intervalOffsetString: string;
     let day: Date = new Date(new Date().setHours(0,0,0,0));
@@ -322,14 +326,14 @@ getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean
     return dateMoment;
   }
 
-  isValidDate(dateISOFormat: any) {
+  isValidDate(dateItem: any) {
+    let dateISOFormat = new Date(dateItem);
     return dateISOFormat instanceof Date && !isNaN(dateISOFormat.getTime());
   }
 
   formatDates(dataset: ExplorerDataSet) {
     dataset.csvImportData.data.map(dataItem => {
-      let dateISOFormat = new Date(dataItem[dataset.dateField.fieldName]);
-      let validDate: boolean = this.isValidDate(dateISOFormat);
+      let validDate: boolean = this.isValidDate(dataItem[dataset.dateField.fieldName]);
       let dateMoment: Moment;
       if (validDate) {
         dateMoment = moment(dataItem[dataset.dateField.fieldName]);

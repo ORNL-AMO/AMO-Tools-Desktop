@@ -34,3 +34,7 @@
 .assessment-bar{
     background-color: #e5e5e5;
 }
+
+li.page-item{
+    background-color: #ECECEC !important;
+}

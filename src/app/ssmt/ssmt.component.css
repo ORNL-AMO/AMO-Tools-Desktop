@@ -1,6 +1,12 @@
 .ssmt-container{
     height: 100vh;
+    background: #ececec;
 }
+
+.ssmt-container div#ssmtFooter.footer {
+    position: relative;
+}
+
 
 .modal-open {
     z-index: initial !important;
@@ -29,4 +35,40 @@
 .btn-sm.active{
     color: white;
     background-color: #F39C12;
+}
+
+
+.ssmt .assessment-panel-container::-webkit-scrollbar-thumb{
+    background-color: #F39C12;
+}
+
+/* Screens above  1024 */
+.assessment-container {
+    display: flex;
+    height: 100%;
+}
+
+.assessment-panel-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+ /* Screens below 1024 */
+@media screen and (max-width: 1024px) {
+    .assessment-container {
+        display: block;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .assessment-panel-container {
+        display: block;
+        width: 100%;
+    }
+
+    .lookup-form {
+        height: 100%;
+    }
+
 }

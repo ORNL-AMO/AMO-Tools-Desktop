@@ -2,35 +2,51 @@
     <h5>
       Flue Gas Loss Help
       <br>
-      <div class="my-1">
-      
-        <label class="p-1">
+        <label class="p-1" (click)="toggleSuggestions()">
+          <span class="fa fa-chevron-down" *ngIf="displaySuggestions"></span>
+          <span class="fa fa-chevron-right" *ngIf="!displaySuggestions"></span>
           <span class="h6 pl-1">
             Savings Suggestions
           </span>
         </label>
-        <small class="text-muted">
-          <ul>
-      
-            <li>Maintain appropriate level of oxygen in flue gases by controlling air-fuel ratio for the burners</li>
-            <li> Maintain and control burner operations to eliminate formation of soot or combustible gases such as carbon
-              monoxide and hydrogen in flue gases</li>
-            <li> Eliminate or reduce air leakage in the furnace. See "Opening Losses" section </li>
-            <li> Consider use of heat recovery from flue gases.
-              Consider use of various methods of heat recovery to reduce flue gas temperature leaving the heating system </li>
-            <li> Use preheated combustion air through use of recuperators or regenerators </li>
-            <li> Where appropriate, consider use of oxygen enrichment of combustion air to reduce mass of flue gases </li>
-            <li> Review process temperature settings and lower it where possible during part-load operations. This can reduce
-              flue gas temperature leaving the heating system</li>
-          </ul>
-          <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all
-          operating conditions.
-          There may additional measures when considering specific situations and the user is encouraged to review and
-          apply
-          the appropriate measures
-        </small>
-      </div>
-      </h5>
+      <div class="my-2" *ngIf="displaySuggestions">
+          <h6>
+            <ul>
+              <small class="text-muted">
+                <li>
+                  Maintain appropriate level of oxygen in stack gases by controlling air-fuel ratio for the burners.
+                </li>
+                <li>
+                  Maintain and control burner operations to eliminate formation of soot or combustible gases such as carbon
+                  monoxide and hydrogen in stack gases.
+                </li>
+                <li>
+                  Consider use of heat recovery from stack gases. Consider use of various methods of heat recovery to reduce
+                  stack
+                  gas temperature leaving the heating system.
+                </li>
+                <li>
+                  Use recuperators or regenerators to preheat combustion air
+                </li>
+                <li>
+                  Where appropriate, consider use of oxygen enrichment of combustion air to reduce mass of stack gases.
+                </li>
+                <li>
+                  Review process temperature settings and lower it where possible during part-load operations. This can reduce
+                  stack gas temperature leaving the heating system.
+                </li>
+                <div class="alert alert-info">
+                  Note: These energy saving measures are for guidance only. Not all measures are applicable under all
+                  operating conditions.
+                  There may additional measures when considering specific situations and the user is encouraged to review and
+                  apply
+                  the appropriate measures.
+                </div>
+              </small>
+            </ul>
+          </h6>
+        </div>
+
     <hr class="my-1 hr-spacer">
   
     <div class="my-2" *ngIf="currentField == 'operationHours'">
@@ -139,42 +155,67 @@
       </h6>
     </div>
 
-  
-  
-    <div class="my-2" *ngIf="currentField == 'flueGasTemperature'">
+    <div class="my-2" *ngIf="currentField == 'flueGasTemperature' && settings.unitsOfMeasure == 'Imperial'">
       <h6>
-        Gas Temperature
+        Flue Gas Temperature
         <br>
         <small class="text-muted">
-          Measure flue gas temperature by using "proper" temperature probe. Type of temperature probe depends on flue gas
-          temperature
-          and composition at the point of measurement. In most cases a commercially available thermocouple probe is used.
+          The temperature of the gas exiting the system. This value must be greater than the combustion air temperature. 
+          If your flue gas temperature is less than 212&#8457; 
+          then vapor may be condensing in the flue and the calculated available heat may be incorrect. 
+          <br>
+          Measure flue gas temperature by using "proper" temperature probe. 
+          Type of temperature probe depends on flue gas temperature and composition at the point of measurement. 
+          In most cases a commercially available thermocouple probe is used. Placement of the probe depends on the system setup.
         </small>
       </h6>
     </div>
 
-    <div class="my-2" *ngIf="currentField == 'ambientAirTemp'">
+    <div class="my-2" *ngIf="currentField == 'flueGasTemperature' && settings.unitsOfMeasure == 'Metric'">
+      <h6>
+        Flue Gas Temperature
+        <br>
+        <small class="text-muted">
+          The temperature of the gas exiting the system. This value must be greater than the combustion air temperature. 
+          If your flue gas temperature is less than 100&#8451; 
+          then vapor may be condensing in the flue and the calculated available heat may be incorrect. 
+          <br>
+          Measure flue gas temperature by using "proper" temperature probe. 
+          Type of temperature probe depends on flue gas temperature and composition at the point of measurement. 
+          In most cases a commercially available thermocouple probe is used. Placement of the probe depends on the system setup.
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'ambientAirTemp' && settings.unitsOfMeasure == 'Imperial'">
       <h6>
         Ambient Air Temperature
         <br>
         <small class="text-muted">
-          Temperature around your process heating unit (building temperature). Used as a reference temperature for calculations.
+          Temperature of the air near the process heating unit. This is very likely to be less than 150&#8457;.
         </small>
       </h6>
     </div>
   
+    <div class="my-2" *ngIf="currentField == 'ambientAirTemp' && settings.unitsOfMeasure == 'Metric'">
+      <h6>
+        Ambient Air Temperature
+        <br>
+        <small class="text-muted">
+          Temperature of the air near the process heating unit. This is very likely to be less than 65&#8451;.
+        </small>
+      </h6>
+    </div>
   
     <div class="my-2" *ngIf="currentField == 'oxygenCalculationMethod'">
       <h6>
-        O
-        <sub>2</sub> in Flue Gas / Excess Air Dropdown
+        O<sub>2</sub> in Flue Gas / Excess Air Dropdown
         <br>
         <small class="text-muted">
           Choose which value is known for the calculation of Available heat. Using Excess Air is recommended (for higher
           accuracy)
           if known.
-          <hr> O
-          <sub>2</sub> in Flue Gas / Excess Air Dropdown options include
+          <hr> O<sub>2</sub> in Flue Gas / Excess Air Dropdown options include
           <u>
             Excess Air
           </u> or
@@ -191,9 +232,12 @@
         Excess Air
         <br>
         <small class="text-muted">
-          The excess air value represents excess air used in burners plus all air entering the furnace and going as flue
-          gases form
-          the furnace. The value is expressed in terms of percentage of stoichiometric air required for the fuel used.
+          The excess air value represents excess air used in burners plus all air entering the furnace and going as flue gases form the furnace. 
+          The value is expressed in terms of percentage of stoichiometric air required for the fuel used and can be calculated as the difference 
+          between the measured O<sub>2</sub> and stoichiometric O<sub>2</sub> divided by the stoichiometric O<sub>2</sub>. 
+          <br>
+          This should be minimized while still ensuring adequate air for complete combustion. 
+          The absolute maximum value depends on the fuel, with some natural gas mixes near 500% and coal closer to 100%.
           <hr>
         </small>
       </h6>
@@ -202,13 +246,14 @@
   
     <div class="my-2" *ngIf="currentField == 'o2InFlueGas'">
       <h6>
-        O
-        <sub>2</sub> in Flue Gas
+        O<sub>2</sub> in Flue Gas
         <br>
         <small class="text-muted">
-          The volumetric percentage of oxygen present in the flue gas. Flue gas O2 (dry basis) reading is taken at the
-          same location
-          where flue gas temperature is measured to maintain accuracy of the calculations.
+          Molar (or volumetric) fraction (% Dry) of O<sub>2</sub> in outgoing flue gas (ignoring moisture content). 
+          Higher O<sub>2</sub> in the exhaust indicates higher excess air and a greater amount of heat contained within the flue gas (lowering the available heat). 
+          <br>
+          Flue gas O<sub>2</sub> (dry basis) reading is taken at the same location where flue gas temperature is measured to maintain accuracy of the calculations. 
+          For many applications this is less than 10%, though a few systems (e.g., thermal oxidizers, paint shop ovens) it may be higher, but still below 21%.
           <hr>
         </small>
       </h6>
@@ -237,20 +282,46 @@
           Combustion air temperature (Celsius) entering the burners. Use temperature recorder/indicator reading or actual
           asurement
           using a temperature gage, thermocouple or estimate based on the furnace supplier's specification.
+          <br>
+          This value must be less than the flue gas temperature.
         </small>
       </h6>
     </div>
   
-  
-    <div class="my-2" *ngIf="currentField == 'fuelTemperature'">
+    <div class="my-2" *ngIf="currentField == 'fuelTemperature' && settings.unitsOfMeasure == 'Imperial'">
       <h6>
         Fuel Temperature
         <br>
         <small class="text-muted">
           Temperature of the incoming fuel. For solid fuels, this can often be estimated to be ambient temperature. For
-          gases, this can often be estimated to be slightly less than ambient temperature (about 10&#8457; or 5&#8451;)
+          gases, this can often be estimated to be slightly less than ambient temperature (about 10&#8457;)
           due to the
           Joule-Thompson Effect. It will be higher if preheating is used.
+          <br>
+          When preheating fuels, the maximum temperature depends on various various factors, 
+          including the specific fuel type, industry standards, safety considerations, and regulatory requirements. 
+          For natural gas, typically it is not recommended and the maximum temperature is 300&#8457;. 
+          For heavy fuels (fuel oil and residual oils) the max is near 400&#8457;. Other gaseous fuels, 
+          preheating is not recommended, with a maximum temperature of 150&#8457;.
+        </small>
+      </h6>
+    </div>
+    
+    <div class="my-2" *ngIf="currentField == 'fuelTemperature' && settings.unitsOfMeasure == 'Metric'">
+      <h6>
+        Fuel Temperature
+        <br>
+        <small class="text-muted">
+          Temperature of the incoming fuel. For solid fuels, this can often be estimated to be ambient temperature. For
+          gases, this can often be estimated to be slightly less than ambient temperature (about 5&#8451;)
+          due to the
+          Joule-Thompson Effect. It will be higher if preheating is used.
+          <br>
+          When preheating fuels, the maximum temperature depends on various various factors, 
+          including the specific fuel type, industry standards, safety considerations, and regulatory requirements. 
+          For natural gas, typically it is not recommended and the maximum temperature is 150&#8451;. 
+          For heavy fuels (fuel oil and residual oils) the max is near 200&#8451;. Other gaseous fuels, 
+          preheating is not recommended, with a maximum temperature of 65&#8451;.
         </small>
       </h6>
     </div>
@@ -263,6 +334,8 @@
         <br>
         <small class="text-muted">
           The moisture of the air (mass water / mass dry air). Can be determined with a psychrometric chart.
+          <br>
+          Generally, a moisture content of up to 5% is considered acceptable for combustion air in typical industrial applications.
           <hr>
         </small>
       </h6>
@@ -282,17 +355,29 @@
       </div>
     </div>
   
-  
-    <div class="my-2" *ngIf="currentField == 'ashDischargeTemperature'">
+    <div class="my-2" *ngIf="currentField == 'ashDischargeTemperature' && settings.unitsOfMeasure == 'Imperial'">
       <h6>
         Ash Discharge Temperature
         <br>
         <small class="text-muted">
           Temperature of the ash in the flue gas outlet.
+          <br>
+          This can be anywhere between the flue gas temperature and the ash fusion temperature (2700&#8457;).
         </small>
       </h6>
     </div>
-  
+
+    <div class="my-2" *ngIf="currentField == 'ashDischargeTemperature' && settings.unitsOfMeasure == 'Metric'">
+      <h6>
+        Ash Discharge Temperature
+        <br>
+        <small class="text-muted">
+          Temperature of the ash in the flue gas outlet.
+          <br>
+          This can be anywhere between the flue gas temperature and the ash fusion temperature (1500&#8451;).
+        </small>
+      </h6>
+    </div>
   
     <div class="my-2" *ngIf="currentField == 'unburnedCarbonInAsh'">
       <h6>
@@ -327,8 +412,8 @@
       <img src="assets/images/flue-gas-help-2.png" class="help-img mx-auto"><br>
       <h6>
         <small class="text-muted">
-          When measuring the Combustion Air and Flue Gas temperatures and composition with a combustion air preheater or
-          recuperator, one measurement must be before the unit and the other after (A - Flue gas before and combustion air
+          When measuring the Combustion Air and Flue Gas temperatures and composition with a combustion air preheater or 
+          recuperator, one measurement must be before the unit and the other after (A - Flue gas before and combustion air 
           after the preheater or B - Combustion Air before and Flue gas after)
         </small>
       </h6>

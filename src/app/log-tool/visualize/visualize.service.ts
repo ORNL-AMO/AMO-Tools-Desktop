@@ -11,9 +11,9 @@ export class VisualizeService {
   allDataByAxisField: Array<GraphDataOption>;
   graphObjects: BehaviorSubject<Array<GraphObj>>;
   selectedGraphObj: BehaviorSubject<GraphObj>;
+  shouldRenderGraph: BehaviorSubject<boolean>;
   userInputDelay: BehaviorSubject<number>;
   annotateDataPoint: BehaviorSubject<AnnotationData>;
-  userGraphOptions: BehaviorSubject<GraphObj>;
   tabSelect: BehaviorSubject<string>;
   focusedPanel: BehaviorSubject<string>;
   plotFunctionType: string;
@@ -28,7 +28,7 @@ export class VisualizeService {
     let initData = this.initGraphObj();
     this.graphObjects = new BehaviorSubject([initData]);
     this.selectedGraphObj = new BehaviorSubject<GraphObj>(initData);
-    this.userGraphOptions = new BehaviorSubject<GraphObj>(undefined);
+    this.shouldRenderGraph = new BehaviorSubject<boolean>(undefined);
     this.annotateDataPoint = new BehaviorSubject<AnnotationData>(undefined);
     this.restyleRanges = new BehaviorSubject(undefined);
     this.tabSelect = new BehaviorSubject(undefined);
@@ -95,14 +95,22 @@ export class VisualizeService {
     return tmpFields;
   }
 
-  // field == axis
+  
+  isValidDate(dateItem: any) {
+    let dateISOFormat = new Date(dateItem);
+    return dateISOFormat instanceof Date && !isNaN(dateISOFormat.getTime());
+  }
+  
   getAxisOptionGraphData(fieldName: string): Array<number> {
     let data: Array<any> = new Array();
-    // 6040 Perform different operation if is datefield - don't concat
     this.logToolService.individualDataFromCsv.forEach(individualDataItem => {
       let foundData = individualDataItem.csvImportData.meta.fields.find(field => { return field == fieldName });
-      if (foundData) {
+      // 6108 continue to concat time, don't allow concat of other data fields (breaks time segment display in non time-series visualizer)
+      if (foundData && fieldName === individualDataItem.dateField.fieldName) {
         data = _.concat(data, individualDataItem.csvImportData.data);
+      }
+      if (foundData) {
+        data = individualDataItem.csvImportData.data;
       }
     });
     
@@ -121,8 +129,12 @@ export class VisualizeService {
     return data;
   }
 
+  // Need to filter by unique identifiers for data fields here
   getTimeSeriesData(field: LogToolField): Array<number | string> {
-    let data: Array<number | string> = _.find(this.allDataByAxisField, (dataItem) => { return dataItem.dataField.csvId == field.csvId && dataItem.dataField.isDateField }).data;
+    let data: Array<number | string> = _.find(this.allDataByAxisField, (dataItem) => { 
+      let fieldData = dataItem.dataField.csvId == field.csvId && dataItem.dataField.isDateField
+      return fieldData;
+    }).data;
     return data;
   }
 
@@ -130,121 +142,14 @@ export class VisualizeService {
     graphObj.graphInteractivity.hasLargeDataset = dataPoints > 200000;
     graphObj.graphInteractivity.showUserToggledPerformanceWarning = false;
 
-    if (graphObj.graphInteractivity.hasLargeDataset) {
-      graphObj.graphInteractivity.showDefaultPerformanceWarning = true;
-      graphObj.graphInteractivity.isGraphInteractive = false;
-      
-      let userGraphObj: GraphObj = this.userGraphOptions.getValue();
-      if (userGraphObj) {
-        userGraphObj.graphInteractivity.showDefaultPerformanceWarning = true;
-        userGraphObj.graphInteractivity.isGraphInteractive = false;
-        this.userGraphOptions.next(userGraphObj);
-      }
-    }
-
-
-    return graphObj;
-  }
-
-  setCustomGraphInteractivity(graphObj: GraphObj, dataPoints: number) {
-    graphObj.graphInteractivity.hasLargeDataset = dataPoints > 200000;
-    graphObj.graphInteractivity.showUserToggledPerformanceWarning = false;
-
-    if (graphObj.graphInteractivity.hasLargeDataset) {
-      if (graphObj.graphInteractivity.isGraphInteractive) {
-          graphObj.graphInteractivity.showUserToggledPerformanceWarning = true;
-          graphObj.graphInteractivity.showDefaultPerformanceWarning = false;
-      } else if (!graphObj.graphInteractivity.isGraphInteractive) {
-        graphObj.graphInteractivity.showUserToggledPerformanceWarning = false;
-      }
-    }
-
     return graphObj;
   }
 
   initGraphObj(): GraphObj {
     return {
       name: 'Data Visualization',
-      data: [{
-        x: [],
-        y: [],
-        name: '',
-        type: 'scattergl',
-        mode: 'markers',
-        yaxis: undefined,
-        marker: {
-          color: undefined
-        },
-        line: {
-          color: undefined,
-          width: 1
-        }
-      }],
-      layout: {
-        title: {
-          text: 'Data Visualization 1',
-          font: {
-            size: 22
-          }
-        },
-        hovermode: false,
-        dragmode: false,
-        annotations: [],
-        xaxis: {
-          autorange: true,
-          type: undefined,
-          // spikemode: 'across',
-          title: {
-            text: 'X Axis Label'
-          },
-          side: undefined,
-          overlaying: undefined,
-          titlefont: {
-            color: undefined
-          },
-          tickfont: {
-            color: undefined
-          }
-        },
-        yaxis: {
-          autorange: true,
-          type: undefined,
-          title: {
-            text: 'Y Axis Label'
-          },
-          side: undefined,
-          overlaying: undefined,
-          titlefont: {
-            color: undefined
-          },
-          tickfont: {
-            color: undefined
-          },
-          rangemode: 'tozero'
-        },
-        yaxis2: {
-          autorange: true,
-          type: undefined,
-          title: {
-            text: 'Y Axis 2 Label'
-          },
-          side: 'right',
-          overlaying: 'y',
-          titlefont: {
-            color: undefined
-          },
-          tickfont: {
-            color: undefined
-          },
-          rangemode: 'tozero'
-        },
-        margin: {
-          t: 75,
-          b: 100,
-          l: 100,
-          r: 50
-        }
-      },
+      data: this.getEmptyGraphData(),
+      layout: this.getEmptyLayout(),
       mode: {
         modeBarButtonsToRemove: ['lasso2d'],
         // plotGlPixelRatio: 3,
@@ -258,6 +163,9 @@ export class VisualizeService {
       },
       selectedXAxisDataOption: { dataField: undefined, data: [] },
       selectedYAxisDataOptions: [],
+      shouldRenderNewPlot: true,
+      hasChanges: false,
+      isTimeSeries: true,
       hasSecondYAxis: false,
       numberOfBins: undefined,
       bins: undefined,
@@ -272,33 +180,105 @@ export class VisualizeService {
     }
   }
 
+  getEmptyLayout() {
+    return {
+      title: {
+        text: 'Data Visualization 1',
+        font: {
+          size: 22
+        }
+      },
+      hovermode: false,
+      dragmode: false,
+      annotations: [],
+      xaxis: {
+        autorange: true,
+        type: undefined,
+        // spikemode: 'across',
+        title: {
+          text: 'X Axis Label'
+        },
+        side: undefined,
+        overlaying: undefined,
+        titlefont: {
+          color: undefined
+        },
+        tickfont: {
+          color: undefined
+        }
+      },
+      yaxis: {
+        autorange: true,
+        type: undefined,
+        title: {
+          text: 'Y Axis Label'
+        },
+        side: undefined,
+        overlaying: undefined,
+        titlefont: {
+          color: undefined
+        },
+        tickfont: {
+          color: undefined
+        },
+        rangemode: 'tozero'
+      },
+      yaxis2: {
+        autorange: true,
+        type: undefined,
+        title: {
+          text: 'Y Axis 2 Label'
+        },
+        side: 'right',
+        overlaying: 'y',
+        titlefont: {
+          color: undefined
+        },
+        tickfont: {
+          color: undefined
+        },
+        rangemode: 'tozero'
+      },
+      margin: {
+        t: 75,
+        b: 100,
+        l: 100,
+        r: 50
+      }
+    }
+  }
+
+  getEmptyGraphData() {
+    return [{
+      x: [],
+      y: [],
+      name: 'empty',
+      // type: 'time-series',
+      type: 'scattergl',
+      mode: 'markers',
+      yaxis: undefined,
+      marker: {
+        color: undefined
+      },
+      line: {
+        color: undefined,
+        width: 1
+      }
+    }]
+  }
+
   resetData() {
     this.initializeService();
     this.allDataByAxisFieldsInitialized = false;
   }
 
-  saveUserOptionsChanges() {
-    let selectedGraphObj = this.selectedGraphObj.getValue();
-    let userGraphObj = this.userGraphOptions.getValue();
-    if (selectedGraphObj && userGraphObj) {
-      selectedGraphObj.graphInteractivity = userGraphObj.graphInteractivity;
-      selectedGraphObj.layout = userGraphObj.layout;
-      // restore original zoom/range
-      selectedGraphObj.layout.autosize = true;
-      this.selectedGraphObj.next(selectedGraphObj);
-    }
-  }
-
-
   addNewGraphDataObj() {
-    let currentGraphData: Array<GraphObj> = this.graphObjects.getValue();
+    let currentGraphs: Array<GraphObj> = this.graphObjects.getValue();
     let newGraphDataObj: GraphObj = this.initGraphObj();
-    newGraphDataObj.graphId = Math.random().toString(36).substr(2, 9);
-    newGraphDataObj.layout.title.text = 'Data Visualization ' + (currentGraphData.length + 1);
-    currentGraphData.push(newGraphDataObj);
+    newGraphDataObj.layout.title.text = 'Data Visualization ' + (currentGraphs.length + 1);
     this.selectedGraphObj.next(newGraphDataObj);
-    this.userGraphOptions.next(newGraphDataObj);
-    this.graphObjects.next(currentGraphData);
+    currentGraphs.push(newGraphDataObj);
+    this.graphObjects.next(currentGraphs);
   }
 
   removeGraphDataObj(graphId: string) {
@@ -306,6 +286,7 @@ export class VisualizeService {
     _.remove(currentGraphData, (graphDataObj) => { return graphDataObj.graphId == graphId });
     this.graphObjects.next(currentGraphData);
     this.selectedGraphObj.next(currentGraphData[0]);
+    this.shouldRenderGraph.next(true)
   }
 
   getNumberOfBinsBarChartData(dataField: LogToolField, bins: Array<{ max: number, min: number }>, calculatePercentage: boolean): { xLabels: Array<string>, yValues: Array<number> } {
@@ -393,6 +374,7 @@ export class VisualizeService {
         y: data.points[0].y,
         text: '',
         showarrow: true,
+        selectedXAxis: selectedGraphObj.selectedXAxisDataOption.dataField.fieldName,
         font: {
           // family: string,
           size: 16,

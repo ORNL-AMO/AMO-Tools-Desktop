@@ -38,7 +38,7 @@
 	<div class="panel-group" [ngStyle]="{'height.px': containerHeight}">
 		<!-- baseline -->
 		<div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
-			[ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+			[ngClass]="{'small-screen-tab': smallScreenTab === 'form', 'modal-open' : isModalOpen}">
 			<div class="d-flex flex-column m-4">
 				<app-air-heating-form [settings]="settings" [inTreasureHunt]="inTreasureHunt">
 				</app-air-heating-form>

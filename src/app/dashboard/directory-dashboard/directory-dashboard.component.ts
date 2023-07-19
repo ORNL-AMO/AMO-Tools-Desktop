@@ -41,7 +41,6 @@ export class DirectoryDashboardComponent implements OnInit {
     private settingsDbService: SettingsDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
-
     this.activatedRoute.params.subscribe(params => {
       this.directoryId = Number(params['id']);
       this.directoryDashboardService.selectedDirectoryId.next(this.directoryId);

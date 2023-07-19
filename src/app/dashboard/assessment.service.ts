@@ -11,6 +11,7 @@ import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
 import { environment } from '../../environments/environment';
 
+import { DashboardService } from './dashboard.service';
 
 @Injectable()
 export class AssessmentService {
@@ -23,7 +24,7 @@ export class AssessmentService {
   updateAvailable: BehaviorSubject<boolean>;
   showTutorial: BehaviorSubject<string>;
   tutorialShown: boolean = false;
-  constructor(private router: Router) {
+  constructor(private router: Router, private dashboardService: DashboardService) {
     this.updateAvailable = new BehaviorSubject<boolean>(null);
     this.showTutorial = new BehaviorSubject<string>(null);
   }
@@ -38,42 +39,47 @@ export class AssessmentService {
     if (subTab) {
       this.subTab = subTab;
     }
+
+    let itemSegment: string;
     if (assessment.type === 'PSAT') {
       if (assessment.psat.setupDone && !mainTab && (!assessment.isExample)) {
         this.tab = 'assessment';
       }
-      this.router.navigateByUrl('/psat/' + assessment.id);
+      itemSegment = '/psat/';
     } else if (assessment.type === 'PHAST') {
       if (assessment.phast.setupDone && !mainTab && (!assessment.isExample)) {
         this.tab = 'assessment';
       }
-      this.router.navigateByUrl('/phast/' + assessment.id);
+      itemSegment = '/phast/';
     } else if (assessment.type === 'FSAT') {
       if (assessment.fsat.setupDone && !mainTab && !assessment.isExample) {
         this.tab = 'assessment';
       }
-      this.router.navigateByUrl('/fsat/' + assessment.id);
+      itemSegment = '/fsat/';
     } else if (assessment.type === 'SSMT') {
       if (assessment.ssmt.setupDone && !mainTab && !assessment.isExample) {
         this.tab = 'assessment';
       }
-      this.router.navigateByUrl('/ssmt/' + assessment.id);
+      itemSegment = '/ssmt/';
     } else if (assessment.type == 'TreasureHunt') {
       if (assessment.treasureHunt.setupDone && !mainTab && !assessment.isExample) {
         this.tab = 'treasure-chest';
       }
-      this.router.navigateByUrl('/treasure-hunt/' + assessment.id);
+      itemSegment = '/treasure-hunt/';
     } else if (assessment.type == 'WasteWater') {
       if (assessment.wasteWater.setupDone && !mainTab && !assessment.isExample) {
         this.tab = 'assessment';
       }
-      this.router.navigateByUrl('/waste-water/' + assessment.id);
+      itemSegment = '/waste-water/';
     } else if (assessment.type == 'CompressedAir') {
       if (assessment.compressedAirAssessment.setupDone && !mainTab && !assessment.isExample) {
         this.tab = 'assessment';
       }
-      this.router.navigateByUrl('/compressed-air/' + assessment.id);
+      itemSegment = '/compressed-air/';
     }
+
+    this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, {shouldCollapse: true})
+
   }
 
   getNewAssessment(assessmentType: string): Assessment {

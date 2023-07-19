@@ -172,8 +172,8 @@ export class FullLoadAmpsService {
   }
 
   checkMotorVoltage(motor: FanMotor) {
-    if (motor.motorRatedVoltage < 208) {
-      return "Voltage must be greater than 208";
+    if (motor.motorRatedVoltage < 200) {
+      return "Voltage must be greater than 200";
     } else if (motor.motorRatedVoltage > 15180) {
       return "Voltage must be less than 15,180";
     } else {

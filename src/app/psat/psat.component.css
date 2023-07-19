@@ -1,6 +1,12 @@
 .psat-container {
     height: 100vh;
+    background: #ececec;
 }
+
+.psat-container div#psatFooter.footer {
+    position: relative;
+}
+
 
 .modal-open {
     z-index: initial !important;

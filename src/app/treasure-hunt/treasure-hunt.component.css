@@ -1,6 +1,12 @@
 .treasure-hunt-container{
     height: 100vh;
+    background: #ececec;
 }
+
+.treasure-hunt-container div#thuntFooter.footer {
+    position: relative;
+}
+
 
 .modal-open {
     z-index: initial !important;

@@ -1,0 +1,96 @@
+<div class="p-2">
+    <table #copyTable class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Department
+                </th>
+                <th>
+                    Num. Pumps
+                </th>
+                <th>
+                    Annual Energy Use
+                </th>
+                <th>
+                    Annual Energy Cost
+                </th>
+                <th>
+                    Emissions Output
+                </th>
+            </tr>
+
+        </thead>
+        <tbody>
+            <tr class="department-item-row"
+                *ngFor="let departmentSummaryItem of inventorySummary.departmentSummaryItems"
+                [ngStyle]="{'background-color': 'rgb('+departmentSummaryItem.departmentColor+')'}">
+                <td>
+                    {{departmentSummaryItem.departmentName}}
+                </td>
+                <td>
+                    {{departmentSummaryItem.numberOfPumps}}
+                </td>
+                <td>
+                    <span *ngIf="departmentSummaryItem.energyUse">
+                        {{departmentSummaryItem.energyUse | number:'1.0-0'}} kWh/yr
+                    </span>
+                    <span *ngIf="!departmentSummaryItem.energyUse">
+                        &mdash; kWh/yr
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="departmentSummaryItem.energyCost">
+                        {{departmentSummaryItem.energyCost | currency:'USD':'symbol':'2.0-0'}}
+                    </span>
+                    <span *ngIf="!departmentSummaryItem.energyCost">
+                        $ &mdash;
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="departmentSummaryItem.co2EmissionOutput">
+                        {{departmentSummaryItem.co2EmissionOutput | number :'1.0-0'}} tonne CO<sub>2</sub>
+                    </span>
+                    <span *ngIf="!departmentSummaryItem.co2EmissionOutput">
+                        &mdash; tonne CO<sub>2</sub>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="bold">
+                <td>
+                    Total Inventory
+                </td>
+                <td>
+                    {{inventorySummary.totalPumps}}
+                </td>
+                <td>
+                    <span *ngIf="inventorySummary.totalEnergyUse">
+                        {{inventorySummary.totalEnergyUse | number:'1.0-0'}} kWh/yr
+                    </span>
+                    <span *ngIf="!inventorySummary.totalEnergyUse">
+                        &mdash; kWh/yr
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="inventorySummary.totalEnergyCost">
+                        {{inventorySummary.totalEnergyCost | currency:'USD':'symbol':'2.0-0'}}
+                    </span>
+                    <span *ngIf="!inventorySummary.totalEnergyCost">
+                        $ &mdash;
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="inventorySummary.totalEmissions">
+                        {{inventorySummary.totalEmissions | number :'1.0-0'}} tonne CO<sub>2</sub>
+                    </span>
+                    <span *ngIf="!inventorySummary.totalEmissions">
+                        &mdash; tonne CO<sub>2</sub>
+                    </span>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>

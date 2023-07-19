@@ -1,0 +1,43 @@
+<div class="row ml-0 mr-0 pump-catalog">
+    <div class="col-12">
+        <div class="header">
+            <div class="h3">Edit Pump</div>
+            <a *ngIf="showDeletePumpButton" class="click-link danger small pull-right"
+                (click)="openDeletePumpModal()">Delete</a>
+        </div>
+    </div>
+    <div class="col-12">
+        <app-pump-basics></app-pump-basics>
+        <app-assessment-integration [assessmentType]="'PSAT'" 
+            [connectedInventoryItem]="connectedPumpItem" 
+            [connectedAssessmentItems]="selectedPumpItem.connectedAssessments" 
+            [isItemValid]="selectedPumpItem.validPump.isValid" 
+            (modalOpen)="setModalOpenView($event)"></app-assessment-integration>
+    </div>
+    <div class="col-12">
+        <app-nameplate-data-catalog *ngIf="pumpInventoryData.displayOptions.nameplateDataOptions.displayNameplateData"></app-nameplate-data-catalog>
+    </div>
+    <div class="col-12">
+        <app-pump-equipment-catalog *ngIf="pumpInventoryData.displayOptions.pumpPropertiesOptions.displayPumpProperties"></app-pump-equipment-catalog>
+    </div>
+    <div class="col-12">
+        <app-fluid-catalog *ngIf="pumpInventoryData.displayOptions.fluidPropertiesOptions.displayFluidProperties"></app-fluid-catalog>
+    </div>
+    <div class="col-12">
+        <app-pump-motor-catalog *ngIf="pumpInventoryData.displayOptions.pumpMotorPropertiesOptions.displayPumpMotorProperties"></app-pump-motor-catalog>
+    </div>
+    <div class="col-12">
+        <app-field-measurements-catalog *ngIf="pumpInventoryData.displayOptions.fieldMeasurementOptions.displayFieldMeasurements"></app-field-measurements-catalog>
+    </div>
+    <div class="col-12">
+        <app-pump-status-catalog *ngIf="pumpInventoryData.displayOptions.pumpStatusOptions.displayPumpStatus"></app-pump-status-catalog>
+    </div>
+    <div class="col-12">
+        <app-system-catalog *ngIf="pumpInventoryData.displayOptions.systemPropertiesOptions.displaySystemProperties"></app-system-catalog>
+    </div>
+</div>
+
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeletePumpInventoryData"
+    (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>

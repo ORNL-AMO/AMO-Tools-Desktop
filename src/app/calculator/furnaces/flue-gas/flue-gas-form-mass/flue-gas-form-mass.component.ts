@@ -34,7 +34,7 @@ export class FlueGasFormMassComponent implements OnInit {
 
   calculationMethods: Array<string> = [
     'Excess Air',
-    'Oxygen in Flue Gas'
+    'Oxygen In Flue Gas'
   ];
 
   calculationExcessAir: number = 0.0;

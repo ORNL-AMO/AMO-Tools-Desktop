@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, ViewChild, ElementRef, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { SsmtService } from '../ssmt.service';
 import { SSMT, BoilerInput, HeaderInput, TurbineInput } from '../../shared/models/steam/ssmt';
 import { Subscription } from 'rxjs';
@@ -23,13 +23,16 @@ export class ModifyConditionsComponent implements OnInit {
   @Input()
   containerHeight: number;
 
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  
   modelTab: string;
   modelTabSub: Subscription;
   baselineSelected: boolean = false;
   modifiedSelected: boolean = true;
   isModalOpen: boolean;
   modalOpenSubscription: Subscription;
-  constructor(private ssmtService: SsmtService) { }
+  smallScreenTab: string = 'baseline';
+  constructor(private ssmtService: SsmtService,  private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.modelTabSub = this.ssmtService.steamModelTab.subscribe(val => {
@@ -41,7 +44,17 @@ export class ModifyConditionsComponent implements OnInit {
     });
   }
 
-  ngOnChanges() {
+  getContainerHeight() {
+    if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+      this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      this.cd.detectChanges();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight && !changes.containerHeight.firstChange) {
+      this.getContainerHeight();
+    }
   }
 
   ngOnDestroy() {
@@ -111,5 +124,17 @@ export class ModifyConditionsComponent implements OnInit {
   saveModSsmt(newSSMT: SSMT){
     this.ssmt.modifications[this.modificationIndex].ssmt = newSSMT;
     this.saveAssessment();
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+    if (selectedTab === 'baseline') {
+      this.baselineSelected = true;
+      this.modifiedSelected = false;
+    }
+    else if (selectedTab === 'modification') {
+      this.modifiedSelected = true;
+      this.baselineSelected = false;
+    }
   }
 }

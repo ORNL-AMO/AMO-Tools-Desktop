@@ -49,26 +49,50 @@
         </tr>
         <tr *ngFor="let opportunity of individualOpportunitySummaries">
             <!--name-->
-            <td>
+            <td *ngIf="opportunity.opportunityName">
                 {{ opportunity.opportunityName }}
             </td>
+            <td *ngIf="!opportunity.opportunityName">
+                &mdash;
+            </td>
+
             <!--type-->
-            <td>
+            <td *ngIf="opportunity.utilityType">
                 {{ opportunity.utilityType }}
             </td>
-            <td>
+            <td *ngIf="!opportunity.utilityType">
+                &mdash;
+            </td>
+
+            <td *ngIf="opportunity.team">
                 {{ opportunity.team }}
             </td>
-            <td>
+            <td *ngIf="!opportunity.team">
+                &mdash;
+            </td>
+
+            <td *ngIf="opportunity.equipment">
                 {{ opportunity.equipment }}
             </td>
-            <td>
+            <td *ngIf="!opportunity.equipment">
+                &mdash;
+            </td>
+
+            <td *ngIf="opportunity.owner">
                 {{ opportunity.owner }}
             </td>
+            <td *ngIf="!opportunity.owner">
+                &mdash;
+            </td> 
+
             <!--energy savings-->
-            <td *ngIf="opportunity.utilityType != 'Mixed'">
+            <td *ngIf="opportunity.utilityType && opportunity.utilityType != 'Mixed'">
                 {{ opportunity.totalEnergySavings | number: "1.0-0" }}
             </td>
+            <td *ngIf="!opportunity.utilityType && opportunity.utilityType != 'Mixed'">
+                &mdash;
+            </td>
+
             <!--unit-->
             <td>
                 <span *ngIf="opportunity.utilityType == 'Electricity'">kWh</span>
@@ -120,10 +144,15 @@
                     </span>
                 </span>
             </td>
+
             <!--cost savings-->
-            <td>
+            <td *ngIf="opportunity.costSavings">
                 {{ opportunity.costSavings | number: "1.0-0" }}
             </td>
+            <td *ngIf="!opportunity.costSavings">
+                &mdash;
+            </td> 
+            
             <!--material cost-->
             <td>
                 {{getMaterialCost(opportunity.opportunityCost) | number: "1.0-0" }}
@@ -140,18 +169,30 @@
             <td>
                 {{getOtherCost(opportunity.opportunityCost) | number: "1.0-0" }}
             </td>
+
             <!--total cost-->
-            <td>
+            <td *ngIf="opportunity.totalCost">
                 {{ opportunity.totalCost | number: "1.0-0" }}
             </td>
+            <td *ngIf="!opportunity.totalCost">
+                &mdash;
+            </td> 
+
             <!--payback-->
-            <td>
+            <td *ngIf="opportunity.payback">
                 {{ opportunity.payback | number: "1.0-2" }}
             </td>
+            <td *ngIf="!opportunity.payback">
+                &mdash;
+            </td> 
+
             <!--Effort to Implement-->
-            <td>
+            <td *ngIf="getEffortToImplement(opportunity.opportunityCost)">
                 {{getEffortToImplement(opportunity.opportunityCost) | number: "1.0-0" }}
             </td>
+            <td *ngIf="!getEffortToImplement(opportunity.opportunityCost)">
+                &mdash;
+            </td> 
         </tr>
     </tbody>
 </table>
@@ -219,24 +260,47 @@
 
         </tr>
         <tr *ngFor="let opportunity of individualOpportunitySummaries">
-            <td>
+            <td *ngIf="opportunity.opportunityName">
                 {{ opportunity.opportunityName }}
             </td>
-            <td>
+            <td *ngIf="!opportunity.opportunityName">
+                &mdash;
+            </td>
+
+            <td *ngIf="opportunity.utilityType">
                 {{ opportunity.utilityType }}
             </td>
-            <td>
+            <td *ngIf="!opportunity.utilityType">
+                &mdash;
+            </td>
+
+            <td *ngIf="opportunity.team">
                 {{ opportunity.team }}
             </td>
-            <td>
+            <td *ngIf="!opportunity.team">
+                &mdash;
+            </td>
+
+            <td *ngIf="opportunity.equipment">
                 {{ opportunity.equipment }}
             </td>
-            <td>
+            <td *ngIf="!opportunity.equipment">
+                &mdash;
+            </td>
+
+            <td *ngIf="opportunity.owner">
                 {{ opportunity.owner }}
             </td>
-            <td>
+            <td *ngIf="!opportunity.owner">
+                &mdash;
+            </td>
+            
+            <td *ngIf="getEffortToImplement(opportunity.opportunityCost)">
                 {{getEffortToImplement(opportunity.opportunityCost) | number: "1.0-0" }}
             </td>
+            <td *ngIf="!getEffortToImplement(opportunity.opportunityCost)">
+                &mdash;
+            </td> 
 
             <td>
                 &mdash;
@@ -253,15 +317,27 @@
             <td>
                 &mdash;
             </td>
-            <td>
+
+            <td *ngIf="opportunity.totalCost">
                 {{ opportunity.totalCost | number: "1.0-0" }}
             </td>
-            <td>
+            <td *ngIf="!opportunity.totalCost">
+                &mdash;
+            </td> 
+
+            <td *ngIf="opportunity.costSavings">
                 {{ opportunity.costSavings | number: "1.0-0" }}
             </td>
-            <td>
-                {{ opportunity.payback | number: "1.0-2" }}
+            <td *ngIf="!opportunity.costSavings">
+                &mdash;
+            </td> 
+
+            <td *ngIf="opportunity.payback">
+                {{ opportunity.payback | number: "1.0-0" }}
             </td>
+            <td *ngIf="!opportunity.payback">
+                &mdash;
+            </td> 
 
             <td>
                 &mdash;
@@ -276,9 +352,13 @@
             </td>
 
             <!--Estimated energy savings-->
-            <td *ngIf="opportunity.utilityType != 'Mixed'">
+            <td *ngIf="opportunity.utilityType && opportunity.utilityType != 'Mixed'">
                 {{ opportunity.totalEnergySavings | number: "1.0-0" }}
             </td>
+            <td *ngIf="!opportunity.utilityType && opportunity.utilityType != 'Mixed'">
+                &mdash;
+            </td>
+
             <!--unit-->
             <td>
                 <span *ngIf="opportunity.utilityType == 'Electricity'">kWh</span>

@@ -16,8 +16,12 @@ import { PumpFluidService } from './pump-fluid/pump-fluid.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
-import { PumpImperialDefaults, PumpMetricDefaults, SettingsService } from '../settings/settings.service';
+import { SettingsService } from '../settings/settings.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
+import { PumpOperationsService } from './pump-operations/pump-operations.service';
+import { PsatIntegrationService } from '../shared/assessment-integration/psat-integration.service';
+import { IntegrationStateService } from '../shared/assessment-integration/integration-state.service';
+import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
 
 @Component({
   selector: 'app-psat',
@@ -37,25 +41,23 @@ export class PsatComponent implements OnInit {
   oldSettings: Settings;
   containerHeight: number;
   modListOpen: boolean = false;
-
+  
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.getContainerHeight();
   }
-
+  
   assessment: Assessment;
   currentTab: string = 'system-setup';
-
-  //used for sankey
-  //TODO: move this and sankey choosing logic oput of this component
+  
   psatOptions: Array<any>;
   psatOptionsLength: number;
   psat1: { name: string, psat: PSAT };
   psat2: { name: string, psat: PSAT };
-
+  
   sankeyLabelStyle: string = 'both';
   showSankeyLabelOptions: boolean;
-
+  
   _psat: PSAT;
   settings: Settings;
   isModalOpen: boolean = false;
@@ -63,6 +65,7 @@ export class PsatComponent implements OnInit {
   calcTab: string;
   modificationIndex: number = 0;
   selectedModSubscription: Subscription;
+  connectedInventoryDataSub: Subscription;
   addNewSub: Subscription;
   modificationExists: boolean = false;
   mainTabSub: Subscription;
@@ -81,7 +84,9 @@ export class PsatComponent implements OnInit {
     private assessmentService: AssessmentService,
     private router: Router,
     private psatService: PsatService,
-      
+    private psatIntegrationService: PsatIntegrationService,
+    private integrationStateService: IntegrationStateService,
+    private pumpOperationsService: PumpOperationsService,
     private activatedRoute: ActivatedRoute,
     private compareService: CompareService,
     private settingsDbService: SettingsDbService,
@@ -92,18 +97,24 @@ export class PsatComponent implements OnInit {
     private fieldDataService: FieldDataService,
     private cd: ChangeDetectorRef,
     private egridService: EGridService,
+    private helperFunctionService: HelperFunctionsService,
     private settingsService: SettingsService) {
   }
 
   ngOnInit() {
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
+      this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       this.getSettings();
       if (!this.assessment || (this.assessment && this.assessment.type !== 'PSAT')) {
         this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
       } else { 
         this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
+        let connectedInventory = this.activatedRoute.snapshot.queryParamMap.get('connectedInventory');
+        if (connectedInventory) {
+          this.save();
+        }
+
         if (this._psat.modifications) {
           if (this._psat.modifications.length != 0) {
             this.modificationExists = true;
@@ -166,10 +177,21 @@ export class PsatComponent implements OnInit {
       if (val) {
         this.showAddNewModal();
       }
-    })
+    });
+
+    this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
+      if (connectedInventoryData.shouldRestoreConnectedValues) {
+        let updatedPsat: PSAT = this.psatIntegrationService.restoreConnectedAssessmentValues(connectedInventoryData, this._psat);
+        this._psat = this.helperFunctionService.copyObject(updatedPsat);
+        this.save();
+      }
+    });
 
     this.stepTabSubscription = this.psatTabService.stepTab.subscribe(val => {
       this.stepTab = val;
+      if (this.assessment.psat.connectedItem) {
+        this.psatIntegrationService.checkConnectedInventoryDiffers(this.assessment);
+      }
     })
 
     this.modalOpenSub = this.psatService.modalOpen.subscribe(isOpen => {
@@ -193,6 +215,8 @@ export class PsatComponent implements OnInit {
     this.psatTabService.mainTab.next('system-setup');
     this.psatTabService.stepTab.next('system-basics');
     this.psatTabService.modifyConditionsTab.next('pump-fluid');
+    this.connectedInventoryDataSub.unsubscribe();
+    this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
   }
 
   ngAfterViewInit() {
@@ -253,6 +277,10 @@ export class PsatComponent implements OnInit {
     if (this.stepTab == 'system-basics') {
       return true;
     }
+    else if (this.stepTab == 'operations') {
+      let tmpForm: UntypedFormGroup = this.pumpOperationsService.getFormFromObj(this._psat.inputs);
+      return tmpForm.valid;
+    }
     else if (this.stepTab == 'pump-fluid') {
       let tmpForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
       return tmpForm.valid;
@@ -266,15 +294,7 @@ export class PsatComponent implements OnInit {
   }
 
   async save() {
-    let tmpPumpFluidForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
-    let tmpMotorForm: UntypedFormGroup = this.motorService.getFormFromObj(this._psat.inputs);
-    let tmpFieldDataForm: UntypedFormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true, this._psat.inputs.whatIfScenario);
-    if ((tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid) || this.modificationExists) {
-      this._psat.setupDone = true;
-      this.initSankeyList();
-    } else {
-      this._psat.setupDone = false;
-    }
+    this.checkSetupDone();
 
     if (this._psat.modifications) {
       if (this._psat.modifications.length == 0) {
@@ -295,12 +315,32 @@ export class PsatComponent implements OnInit {
     }
     this.compareService.setCompareVals(this._psat, this.modificationIndex);
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
+    this.psatIntegrationService.setPumpConnectedInventoryData(this.assessment);
+    if (this.assessment.psat.connectedItem) {
+      this.psatIntegrationService.checkConnectedInventoryDiffers(this.assessment);
+    }
 
     let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
     this.assessmentDbService.setAll(assessments);
     this.psatService.getResults.next(true);
-
     this.cd.detectChanges();
+  }
+
+  checkSetupDone() {
+    let tmpPumpFluidForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
+    let tmpMotorForm: UntypedFormGroup = this.motorService.getFormFromObj(this._psat.inputs);
+    let tmpFieldDataForm: UntypedFormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true, this._psat.inputs.whatIfScenario);
+    if ((tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid) || this.modificationExists) {
+      this._psat.setupDone = true;
+      this.initSankeyList();
+    } else {
+      this._psat.setupDone = false;
+    }
+  }
+
+  saveAndUpdateSettings() {
+    this.getSettings();
+    this.save();
   }
 
   updateModificationCO2Savings(modPsat: PSAT) {
@@ -379,42 +419,12 @@ export class PsatComponent implements OnInit {
 
   async addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
-    newSettings = this.setSettingsUnitType(newSettings);
+    newSettings = this.settingsService.setPumpSettingsUnitType(newSettings);
     newSettings.assessmentId = this.assessment.id;
     await firstValueFrom(this.settingsDbService.addWithObservable(newSettings));
     let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-  }
-
-  setSettingsUnitType(settings: Settings): Settings {
-    let hasImperialUnits: boolean = this.checkHasMatchingUnitTypes(settings, PumpImperialDefaults);
-    let hasMetricUnits: boolean = this.checkHasMatchingUnitTypes(settings, PumpMetricDefaults);
-
-    if (settings.unitsOfMeasure === 'Custom' && hasImperialUnits) {
-      settings.unitsOfMeasure = 'Imperial';
-    } else if (settings.unitsOfMeasure === 'Custom' && hasMetricUnits) {
-      settings.unitsOfMeasure = 'Metric';
-    } else if (!hasMetricUnits && !hasImperialUnits) {
-      settings.unitsOfMeasure = 'Custom';
-    }
-    return settings;
-  }
-
-  checkHasMatchingUnitTypes(settings: Settings, unitDefaults: any): boolean {
-    let hasMatchingPowerMeasurement: boolean = settings.powerMeasurement === unitDefaults.powerMeasurement; 
-    let hasMatchingFlowMeasurement: boolean = settings.flowMeasurement === unitDefaults.flowMeasurement; 
-    let hasMatchingDistanceMeasurement: boolean = settings.distanceMeasurement === unitDefaults.distanceMeasurement; 
-    let hasMatchingPressureMeasurement: boolean = settings.pressureMeasurement === unitDefaults.pressureMeasurement; 
-    let hasMatchingTemperatureMeasurement: boolean = settings.temperatureMeasurement === unitDefaults.temperatureMeasurement; 
-    
-    let hasMatchingUnitTypes: boolean = hasMatchingPowerMeasurement
-    && hasMatchingFlowMeasurement
-    && hasMatchingDistanceMeasurement
-    && hasMatchingPressureMeasurement
-    && hasMatchingTemperatureMeasurement;
-
-    return hasMatchingUnitTypes;
   }
 
   initUpdateUnitsModal(oldSettings: Settings) {

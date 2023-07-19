@@ -1,0 +1,34 @@
+<div class="row ml-0 mr-0">
+    <div class="col-12">
+        <div class="header">
+            <div class="h3">Departments Setup</div>
+        </div>
+        <a class="click-link small pull-right" (click)="addDepartment()">+Add Department</a>
+    </div>
+    <div class="col-12 pt-1 pb-2 form-section" *ngFor="let department of pumpInventoryData.departments">
+        <form class="p-0">
+            <div class="form-group">
+                <label>Department Name</label>
+                <input class="form-control" type="text" id="name" name="name" [(ngModel)]="department.name"
+                    (input)="save()">
+            </div>
+            <div class="form-group">
+                <label>Operating Hours</label>
+                <div class="input-group">
+                    <input class="form-control" type="text" id="operatingHours" name="operatingHours"
+                        [(ngModel)]="department.operatingHours" (input)="save()">
+                    <span class="input-group-addon units">
+                        hr/yr
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea class="form-control" type="text" id="description" name="description"
+                    [(ngModel)]="department.description" (input)="save()"></textarea>
+            </div>
+        </form>
+        <a class="click-link danger pull-right small" (click)="deleteDepartment(department.id)"
+            *ngIf="pumpInventoryData.departments.length != 1">Delete</a>
+    </div>
+</div>

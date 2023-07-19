@@ -89,8 +89,7 @@
                     </span>
                 </td>
                 <td>
-                    <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(tableDataItem.motorItem)"></a>
-                    
+                    <a class="fa fa-trash danger" [ngClass]="{'disabled': tableDataItems.length <= 1}" (click)="openConfirmDeleteModal(tableDataItem.motorItem)"></a>                    
                 </td>
                 <td>
                     <a class="fa fa-copy" (click)="createCopy(tableDataItem.motorItem)"></a>

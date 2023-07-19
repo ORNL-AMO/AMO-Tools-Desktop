@@ -1,0 +1,201 @@
+<label class="group-label" (click)="toggleForm()">
+  <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+  <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+  Field Measurements
+</label>
+<form *ngIf="displayForm" class="p-1" #formElement [formGroup]="form">
+  <div class="form-group" *ngIf="displayOptions.pumpSpeed">
+    <label for="pumpSpeed">Pump Speed</label>
+    <div class="input-group">
+      <input type="number" class="form-control" (focus)="focusField('pumpSpeed')" (input)="save()"
+        formControlName="pumpSpeed" id="pumpSpeed">
+      <span class="input-group-addon units">rpm</span>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.pumpSpeed.invalid && !form.controls.pumpSpeed.pristine">
+        <span *ngIf="form.controls.pumpSpeed.errors.required">Value Required</span>
+        <span *ngIf="form.controls.pumpSpeed.errors.min">Value can't be less than
+          {{form.controls.pumpSpeed.errors.min.min}}.</span>
+      </span>
+      <span class="alert-warning pull-right small"
+      *ngIf="fieldDataWarnings.rpmError !== null && !form.controls.pumpSpeed.invalid && !form.controls.pumpSpeed.pristine">{{fieldDataWarnings.rpmError}}</span>
+
+    </div>
+  </div>
+
+  <div class="form-group" *ngIf="displayOptions.yearlyOperatingHours">
+    <label for="yearlyOperatingHours">Operating Hours</label>
+    <div class="input-group">
+      <span class="input-group-addon op-hour-addon units">
+        <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+      </span>
+      <input name="yearlyOperatingHours" type="number" class="form-control" formControlName="yearlyOperatingHours"
+        id="{{'yearlyOperatingHours_'+idString}}" (input)="save()" (focus)="focusField('yearlyOperatingHours')"
+        onfocus="this.select();">
+      <span class="input-group-addon units">hrs/yr</span>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.yearlyOperatingHours.invalid && !form.controls.yearlyOperatingHours.pristine">
+        <span *ngIf="form.controls.yearlyOperatingHours.errors.required">Value Required</span>
+        <span *ngIf="form.controls.yearlyOperatingHours.errors.max">Value can't be greater than
+          {{form.controls.yearlyOperatingHours.errors.max.max}} hrs/yr.</span>
+        <span *ngIf="form.controls.yearlyOperatingHours.errors.min">Value can't be less than
+          {{form.controls.yearlyOperatingHours.errors.min.min}} hrs/yr.</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group" *ngIf="displayOptions.staticSuctionHead">
+    <label for="staticSuctionHead">Static Suction Head</label>
+    <div class="input-group">
+      <input type="number" class="form-control" (focus)="focusField('staticSuctionHead')" (input)="save()"
+        formControlName="staticSuctionHead" id="yearlyOperatingHours">
+      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.staticSuctionHead.invalid && !form.controls.staticSuctionHead.pristine">
+        <span *ngIf="form.controls.staticSuctionHead.errors.min">Value can't be less than
+          {{form.controls.staticSuctionHead.errors.min.min}}.</span>
+      </span>
+    </div>
+
+  </div>
+
+  <div class="form-group" *ngIf="displayOptions.staticDischargeHead">
+    <label for="staticDischargeHead">Static Discharge Head</label>
+    <div class="input-group">
+      <input type="number" class="form-control" (focus)="focusField('staticDischargeHead')" (input)="save()"
+        formControlName="staticDischargeHead" id="staticDischargeHead">
+      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.staticDischargeHead.invalid && !form.controls.staticDischargeHead.pristine">
+        <span *ngIf="form.controls.staticDischargeHead.errors.min">Value can't be less than
+          {{form.controls.staticDischargeHead.errors.min.min}}.</span>
+      </span>
+    </div>
+
+  </div>
+
+  <div class="form-group" *ngIf="displayOptions.operatingFlowRate">
+    <label for="operatingFlowRate">Operating Flow Rate</label>
+    <div class="input-group">
+      <input type="number" class="form-control" (focus)="focusField('operatingFlowRate')" (input)="save()"
+        formControlName="operatingFlowRate" id="operatingFlowRate">
+      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">gpm</span>
+      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/hr</span>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.operatingFlowRate.invalid && !form.controls.operatingFlowRate.pristine">
+        <span *ngIf="form.controls.operatingFlowRate.errors.required">Value Required</span>
+        <span *ngIf="form.controls.operatingFlowRate.errors.max">Value can't be greater than
+          {{form.controls.operatingFlowRate.errors.max.max}}.</span>
+        <span *ngIf="form.controls.operatingFlowRate.errors.min">Value can't be less than
+          {{form.controls.operatingFlowRate.errors.min.min}}.</span>
+      </span>
+      <span class="alert-warning pull-right small"
+        *ngIf="fieldDataWarnings.flowError !== null && !form.controls.operatingFlowRate.invalid && !form.controls.operatingFlowRate.pristine">{{fieldDataWarnings.flowError}}
+        <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
+    </div>
+  </div>
+
+  <div class="form-group" *ngIf="displayOptions.operatingHead">
+    <label for="operatingHead">Operating Head</label>
+    <div class="input-group">
+      <input type="number" class="form-control" (focus)="focusField('operatingHead')" (input)="save()"
+        formControlName="operatingHead" id="operatingHead">
+      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.operatingHead.invalid && !form.controls.operatingHead.pristine">
+        <span *ngIf="form.controls.operatingHead.errors.required">Value Required</span>
+        <span *ngIf="form.controls.operatingHead.errors.max">Value can't be greater than
+          {{form.controls.operatingHead.errors.max.max}}.</span>
+        <span *ngIf="form.controls.operatingHead.errors.min">Value can't be less than
+          {{form.controls.operatingHead.errors.min.min}}</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="{{'loadEstimatedMethod_'+idString}}">Load Estimation Method</label>
+    <select name="loadEstimatedMethod" class="form-control" formControlName="loadEstimatedMethod"
+      id="{{'loadEstimatedMethod_'+idString}}" (change)="changeLoadMethod()"
+      (focus)="focusField('loadEstimatedMethod')">
+      <option *ngFor="let method of loadEstimateMethods" [ngValue]="method.value">{{method.display}}</option>
+    </select>
+  </div>
+
+  <div class="form-group" *ngIf="form.controls.loadEstimatedMethod.value === 0 && displayOptions.measuredPower">
+    <label for="measuredPower">Measured Power</label>
+    <div class="input-group">
+      <input type="number" class="form-control" (focus)="focusField('measuredPower')" (input)="save()"
+        formControlName="measuredPower" id="measuredPower">
+      <span class="input-group-addon units">kW</span>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.measuredPower.invalid && !form.controls.measuredPower.pristine">
+        <span *ngIf="form.controls.measuredPower.errors.required">Value Required</span>
+      </span>
+      <span class="alert-warning pull-right small"
+        *ngIf="fieldDataWarnings.ratedPowerError !== null && !form.controls.measuredPower.invalid && !form.controls.measuredPower.pristine">{{fieldDataWarnings.ratedPowerError}}</span>
+    </div>
+  </div>
+
+  <div class="form-group" *ngIf="form.controls.loadEstimatedMethod.value === 1 && displayOptions.measuredCurrent">
+    <label for="measuredCurrent">Measured Current</label>
+    <div class="input-group">
+      <input type="number" class="form-control" (focus)="focusField('measuredCurrent')" (input)="save()"
+        formControlName="measuredCurrent" id="measuredCurrent">
+      <span class="input-group-addon units">A</span>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.measuredCurrent.invalid && !form.controls.measuredCurrent.pristine">
+        <span *ngIf="form.controls.measuredCurrent.errors.required">Value Required</span>
+      </span>
+      <span class="alert-warning pull-right small"
+        *ngIf="fieldDataWarnings.ratedPowerError !== null && !form.controls.measuredCurrent.invalid && !form.controls.measuredCurrent.pristine">{{fieldDataWarnings.ratedPowerError}}</span>
+    </div>
+  </div>
+
+  <div class="form-group" *ngIf="displayOptions.measuredVoltage">
+    <label for="measuredVoltage">Measured Voltage</label>
+    <div class="input-group">
+      <input type="number" class="form-control" (focus)="focusField('measuredVoltage')" (input)="save()"
+        formControlName="measuredVoltage" id="measuredVoltage">
+      <span class="input-group-addon units">V</span>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.measuredVoltage.invalid && !form.controls.measuredVoltage.pristine">
+        <span *ngIf="form.controls.measuredVoltage.errors.required">Value Required</span>
+      </span>
+      <span class="alert-warning pull-right small"
+        *ngIf="fieldDataWarnings.voltageError !== null && !form.controls.measuredVoltage.invalid && !form.controls.measuredVoltage.pristine">{{fieldDataWarnings.voltageError}}</span>
+
+    </div>
+  </div>
+
+  <div class="form-group" *ngIf="displayOptions.efficiency">
+    <label for="efficiency">Efficiency</label>
+    <div class="input-group">
+      <input type="number" class="form-control" (focus)="focusField('efficiency')" (input)="save()"
+        formControlName="efficiency" id="efficiency">
+      <span class="input-group-addon units">%</span>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.efficiency.invalid && !form.controls.efficiency.pristine">
+        <span *ngIf="form.controls.efficiency.errors.required">Value Required</span>
+        <span *ngIf="form.controls.efficiency.errors.min">Value can't be less than
+          {{form.controls.efficiency.errors.min.min}} %.</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group" *ngIf="displayOptions.assessmentDate">
+    <label for="assessmentDate">Assessment Date</label>
+    <div class="input-group">
+      <input type="date" class="form-control" (focus)="focusField('assessmentDate')"
+        (change)="save()" formControlName="assessmentDate" id="assessmentDate">
+    </div>
+  </div>
+
+
+</form>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="operatingHours">
+</app-operating-hours-modal>

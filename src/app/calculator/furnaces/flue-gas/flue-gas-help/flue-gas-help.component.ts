@@ -13,6 +13,8 @@ export class FlueGasHelpComponent implements OnInit {
   settings: Settings;
   currentFieldSub: Subscription;
   currentField: string;
+  displaySuggestions: boolean = false;
+
 
   constructor(private flueGasService: FlueGasService) { }
   
@@ -24,5 +26,9 @@ export class FlueGasHelpComponent implements OnInit {
   
   ngOnDestroy(): void {
     this.currentFieldSub.unsubscribe();
+  }
+
+  toggleSuggestions() {
+    this.displaySuggestions = !this.displaySuggestions;
   }
 }

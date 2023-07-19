@@ -1,3 +1,4 @@
+/* Screens above  1024 */
 .report-banner .btn {
     font-size: 12px;
     line-height: 14px;
@@ -28,10 +29,40 @@
     box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4); */
     width: 24.5%;
 }
+.report-summary ul li.coming-soon {
+    background: transparent;
+    color: #afafaf;
+}
+
+@media screen and (max-width: 1024px) {
+    .report-summary {
+        padding: 2px;
+        background: #f5f5f5;
+    }
+    
+    .report-summary ul {
+        padding: 0;
+        margin: 0;
+        display: block;
+        justify-content: space-between;
+    }
+    
+    .report-summary ul li {
+        /* padding: 0;
+        margin: 0; */
+        list-style: none;
+        /* border-radius: 2px;
+        background: #fff;
+        -webkit-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4);
+        -moz-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4);
+        box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4); */
+        width: 100%;
+    }
     .report-summary ul li.coming-soon {
         background: transparent;
         color: #afafaf;
     }
+}
 
 .furnace-summary:hover{
     cursor: pointer;
@@ -295,3 +326,7 @@ dl.summary-list {
 .click-link{
     font-size: 14px;
 }
+
+
+
+/* Screens above  1024 */

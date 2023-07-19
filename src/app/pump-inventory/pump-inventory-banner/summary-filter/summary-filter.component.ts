@@ -1,0 +1,10 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-summary-filter',
+  templateUrl: './summary-filter.component.html',
+  styleUrls: ['./summary-filter.component.css']
+})
+export class SummaryFilterComponent {
+
+}

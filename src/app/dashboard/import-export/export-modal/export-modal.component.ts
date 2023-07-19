@@ -19,8 +19,8 @@ export class ExportModalComponent implements OnInit {
 
   exportData: ImportExportData;
   canExport: boolean = false;
-  noDirectoryAssessments: Array<ImportExportAssessment>;
   exportName: string;
+  isSelectAllFolder: boolean;
   constructor(private exportService: ExportService, private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
     private importExportService: ImportExportService) { }
 
@@ -30,6 +30,7 @@ export class ExportModalComponent implements OnInit {
     } else {
       this.exportDirectoryData();
     }
+    this.canExport = this.importExportService.test(this.exportData);
   }
 
   ngAfterViewInit() {
@@ -52,32 +53,26 @@ export class ExportModalComponent implements OnInit {
     let directoryId: number = 1;
     let directory: Directory = this.directoryDbService.getById(directoryId);
     this.exportData = this.exportService.getSelected(directory, true);
-    this.getNoDirectoryAssessments();
-    this.canExport = this.importExportService.test(this.exportData);
   }
 
   exportDirectoryData() {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     let directory: Directory = this.directoryDbService.getById(directoryId);
-    let isSelectAllFolder: boolean = directory.selected;
-    this.exportData = this.exportService.getSelected(directory, isSelectAllFolder);
-    this.getNoDirectoryAssessments();
-    this.canExport = this.importExportService.test(this.exportData);
+    this.isSelectAllFolder = directory.selected;
+    this.exportData = this.exportService.getSelected(directory, this.isSelectAllFolder);
+    this.setExportDefaultName();
   }
 
-
-  getNoDirectoryAssessments() {
-    this.noDirectoryAssessments = new Array();
-    let allAssessments: Array<ImportExportAssessment> = JSON.parse(JSON.stringify(this.exportData.assessments));
-    if (allAssessments != undefined && allAssessments.length != 0) {
-      this.noDirectoryAssessments = _.filter(allAssessments, (assessment) => {
-        let testVal: ImportExportDirectory = _.find(this.exportData.directories, (directory => { return directory.directory.id == assessment.assessment.directoryId }));
-        if (testVal == undefined) {
-          return true;
-        }
-      });
+  setExportDefaultName() {
+    if (this.isSelectAllFolder && this.exportData.directories.length != 0) {
+      this.exportName = this.exportData.directories[0].directory.name;
+    } else if (this.exportData.assessments.length != 0) {
+      this.exportName = this.exportData.assessments[0].assessment.name;
+    } else if (this.exportData.inventories.length != 0) {
+      this.exportName = this.exportData.inventories[0].inventoryItem.name;
     }
-  }
+}
+
 
   buildExportJSON() {
     this.importExportService.downloadData(this.exportData, this.exportName);

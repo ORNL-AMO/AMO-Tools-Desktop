@@ -2,6 +2,11 @@
     margin-bottom: 2rem;
 }
 
+.h2-name{
+    font-weight: 400;
+    font-size: 20px;
+}
+
 @media print {
     .page-break-before{
         page-break-before: always;
@@ -18,5 +23,33 @@
 
     .print-container {
         overflow: hidden;
+    }
+}
+
+.img-icon {
+    width: 70px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.img-col {    
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.hide-small-screen {
+    display: block;
+}
+
+
+@media screen and (max-width: 1024px) {
+    .hide-small-screen {
+        display: none;
+    }
+
+    .assessment-item{
+        padding: 5px;
+        margin-bottom: 2rem;
+        background-color: white;
     }
 }

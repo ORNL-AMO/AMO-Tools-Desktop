@@ -120,7 +120,7 @@ export class PsatTabsComponent implements OnInit {
   }
  
   checkOperationsInvalid(): boolean {
-    let tmpForm: UntypedFormGroup = this.pumpOperationsService.getFormFromObj(this.psat.inputs, true, this.psat.inputs.whatIfScenario);
+    let tmpForm: UntypedFormGroup = this.pumpOperationsService.getFormFromObj(this.psat.inputs);
     return tmpForm.invalid;
   }
 

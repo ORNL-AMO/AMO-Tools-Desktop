@@ -1,0 +1,12 @@
+<div class="header mr-2 ml-2">
+    <h3>Connect Pump Inventory</h3>
+</div>
+<div class="m-3">
+    <app-inventory-integration class="assessment-integration" *ngIf="inventorySelectOptions"
+    (focusedField)="focusedField($event, true)" 
+    [connectedInventoryType]="'pump'"
+    [selectOptions]="inventorySelectOptions">
+    </app-inventory-integration>
+<app-assessment-integration-status></app-assessment-integration-status>
+
+</div>

@@ -28,6 +28,7 @@ export class SetupTabsComponent implements OnInit {
   activatedSludgeBadge: { display: boolean, hover: boolean } = { display: false, hover: false }
 
   wasteWaterSub: Subscription;
+  canContinue: boolean = true;
   constructor(private wasteWaterService: WasteWaterService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
     private activatedSludgeFormService: ActivatedSludgeFormService, private systemBasicsService: SystemBasicsService, private operationsService: WasteWaterOperationsService) { }
 
@@ -39,6 +40,7 @@ export class SetupTabsComponent implements OnInit {
       this.setActivatedSludgeStatus(wasteWater.systemBasics, wasteWater.baselineData.activatedSludgeData, wasteWater.baselineData.operations);
       this.setAeratorPerformanceStatus(wasteWater.systemBasics, wasteWater.baselineData.activatedSludgeData, wasteWater.baselineData.aeratorPerformanceData, wasteWater.baselineData.operations);
       this.setOperationsStatus(wasteWater.baselineData.operations);
+      this.getCanContinue();
     });
 
     this.wasteWaterSub = this.wasteWaterService.wasteWater.subscribe(val => {
@@ -46,6 +48,7 @@ export class SetupTabsComponent implements OnInit {
       this.setActivatedSludgeStatus(val.systemBasics, val.baselineData.activatedSludgeData, val.baselineData.operations);
       this.setAeratorPerformanceStatus(val.systemBasics, val.baselineData.activatedSludgeData, val.baselineData.aeratorPerformanceData, val.baselineData.operations);
       this.setOperationsStatus(val.baselineData.operations);
+      this.getCanContinue();
     });
   }
 
@@ -73,6 +76,7 @@ export class SetupTabsComponent implements OnInit {
         this.wasteWaterService.setupTab.next(str);
       }
     }
+    this.getCanContinue();
   }
 
   setSystemBasicsStatus(systemBasics: SystemBasics) {
@@ -153,5 +157,26 @@ export class SetupTabsComponent implements OnInit {
     } else {
       badge.display = false;
     }
+  }
+
+  continue() {
+    this.wasteWaterService.continue();
+  }
+
+  back() {
+    this.wasteWaterService.back();
+  }
+
+  getCanContinue(): boolean {
+    if (this.setupTab === 'system-basics') {
+      this.canContinue = true;
+    } else if (this.setupTab === 'operations') {
+      this.canContinue = (this.operationsClassStatus.includes("missing-data") == false);
+    } else if (this.setupTab === 'activated-sludge') {
+      this.canContinue = (this.activatedSludgeClassStatus.includes("missing-data") == false);
+    } else if (this.setupTab === 'aerator-performance') {
+      this.canContinue = (this.aeratorPerformanceClassStatus.includes("missing-data") == false);
+    } 
+    return this.canContinue;
   }
 }

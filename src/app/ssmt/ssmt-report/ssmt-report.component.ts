@@ -49,6 +49,8 @@ export class SsmtReportComponent implements OnInit {
   tableCellWidth: number;
   assessmentDirectories: Directory[];
   printOptions: PrintOptions;
+  tabsCollapsed: boolean = true;
+
   constructor(private ssmtService: SsmtService, private calculateLossesService: CalculateLossesService, private directoryDbService: DirectoryDbService, private printOptionsMenuService: PrintOptionsMenuService) { }
 
   ngOnInit() {
@@ -139,12 +141,13 @@ export class SsmtReportComponent implements OnInit {
     if (this.assessment.ssmt.setupDone) {
       let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
       let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-      this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+      this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 2;
     }
   }
 
   setTab(str: string) {
     this.currentTab = str;
+    this.collapseTabs();
   }
 
   getTableCellWidth() {
@@ -163,6 +166,7 @@ export class SsmtReportComponent implements OnInit {
   print() {
     this.printOptionsMenuService.printContext.next('ssmt');
     this.printOptionsMenuService.showPrintMenu.next(true);
+    this.collapseTabs();
   }
 
   calculateResultsWithMarginalCosts(ssmt: SSMT, outputData: SSMTOutput, baselineResults?: SSMTOutput): SSMTOutput {
@@ -179,5 +183,8 @@ export class SsmtReportComponent implements OnInit {
     return outputData;
   }
 
+  collapseTabs() {
+    this.tabsCollapsed = !this.tabsCollapsed;
+  }
 
 }

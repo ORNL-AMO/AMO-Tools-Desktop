@@ -40,7 +40,7 @@ export class CompressorOrderingTableComponent implements OnInit {
         });
         this.multiCompressorSystemControls = val.systemInformation.multiCompressorSystemControls;
         this.profileSummary = val.systemProfile.profileSummary;
-        this.setHourIntervals(val.systemProfile.systemProfileSetup);
+        this.hourIntervals = this.compressedAirAssessmentService.getHourIntervals(val.systemProfile.systemProfileSetup);
         this.setOrderingOptions(val.compressorInventoryItems);
       } else {
         this.isFormChange = false;
@@ -50,14 +50,6 @@ export class CompressorOrderingTableComponent implements OnInit {
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
-  }
-
-  setHourIntervals(systemProfileSetup: SystemProfileSetup) {
-    this.hourIntervals = new Array();
-    for (let index = 0; index < systemProfileSetup.numberOfHours;) {
-      this.hourIntervals.push(index + systemProfileSetup.dataInterval)
-      index = index + systemProfileSetup.dataInterval;
-    }
   }
 
   setOrderingOptions(compressorInventoryItems: Array<CompressorInventoryItem>) {

@@ -18,10 +18,6 @@ export class InventorySummaryGraphsService {
 
   getBinData(motorInventoryData: MotorInventoryData, motorField: MotorField): { xData: Array<any>, yData: Array<any> } {
     let motors: Array<MotorItem> = this.motorInventorySummaryService.getAllMotors(motorInventoryData);
-    // let sorted = _.sortBy(motors, [(motor) => { return motor[motorField.group][motorField.value] }]);
-    // sorted.forEach(item => {
-    //   console.log(item[motorField.group][motorField.value])
-    // });
     let count = _.countBy(motors, (motor) => { return motor[motorField.group][motorField.value] });
     let xData: Array<any> = new Array();
     let yData: Array<any> = new Array();
@@ -54,7 +50,7 @@ export class InventorySummaryGraphsService {
     //   label = label + ' ' + motorField.unit;
     //   console.log(label);
     // 
-    else if (key == 'null') {
+    else if (key == 'null' || key == 'undefined') {
       label = 'N/A';
     } else if (key == 'true') {
       label = 'Yes';

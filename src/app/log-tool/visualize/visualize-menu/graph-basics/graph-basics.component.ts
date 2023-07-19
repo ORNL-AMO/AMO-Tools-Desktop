@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { VisualizeService } from '../../visualize.service';
 import { VisualizeMenuService } from '../visualize-menu.service';
 import { LogToolDataService } from '../../../log-tool-data.service';
+import { HelperFunctionsService } from '../../../../shared/helper-services/helper-functions.service';
 
 @Component({
   selector: 'app-graph-basics',
@@ -13,6 +14,7 @@ import { LogToolDataService } from '../../../log-tool-data.service';
 export class GraphBasicsComponent implements OnInit {
 
   graphTypes: Array<{ label: string, value: string }> = [
+    { value: 'time-series', label: 'Time Series' },
     { value: 'scattergl', label: 'Scatter Plot' },
     { value: 'bar', label: 'Histogram' }
   ]
@@ -21,14 +23,15 @@ export class GraphBasicsComponent implements OnInit {
   markerTypes: Array<Object>;
   markerType: string;
   canRunDayTypeAnalysis: boolean;
-  constructor(private visualizeService: VisualizeService, private visualizeMenuService: VisualizeMenuService, private logToolDataService: LogToolDataService) { }
+  constructor(private visualizeService: VisualizeService, private visualizeMenuService: VisualizeMenuService, private logToolDataService: LogToolDataService, private helperFunctionService: HelperFunctionsService) { }
 
   ngOnInit(): void {
     this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
-      if (val.graphId != this.selectedGraphObj.graphId) {
+      let isSelectedGraphChange = val.graphId != this.selectedGraphObj.graphId;
+      if (isSelectedGraphChange) {
         this.selectedGraphObj = val;
-        this.setGraphType();
+        this.changeSelectedGraphData(isSelectedGraphChange);
       } else {
         this.selectedGraphObj = val;
         if (this.selectedGraphObj.data[0].type == 'bar') {
@@ -36,22 +39,14 @@ export class GraphBasicsComponent implements OnInit {
         }
       }
 
-      if (this.selectedGraphObj.layout.xaxis.type == "date") {
-        this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
+      // 'scattergl' represents MEASUR scatter graph type, but plotly graph type for time series must be set 'scattergl'
+      if (this.selectedGraphObj.isTimeSeries === true) {
+        this.selectedGraphObj.data[0].type = 'time-series';
+        this.markerTypes = [{ label: "Lines & Markers", value: "lines+markers" }, { label: "Lines", value: "lines" }, { label: "Markers", value: "markers" }];
+      } else if (this.selectedGraphObj.data[0].type !== 'bar') {
+        this.selectedGraphObj.data[0].type = 'scattergl';
       }
-      else {
-        this.markerTypes = [{label: "Markers", value: "markers"}];
-        this.markerType = "markers";
-      }
-      
     });
-    if (this.selectedGraphObj.layout.xaxis.type == "date") {
-      this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
-    }
-    else {
-      this.markerTypes = [{label: "Markers", value: "markers"}];
-    }
-    this.markerType = "markers";
     this.canRunDayTypeAnalysis = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
   }
   
@@ -60,23 +55,30 @@ export class GraphBasicsComponent implements OnInit {
   }
 
   saveChanges() {
-    this.visualizeMenuService.saveUserGraphOptionsChange(this.selectedGraphObj);
+    this.visualizeMenuService.saveUserInputChange(this.selectedGraphObj)
   }
 
   setLinesMarkers() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
-    depending on the amount of data you have supplied...`});
-    this.selectedGraphObj.selectedYAxisDataOptions.forEach((option) => {
+    this.selectedGraphObj.selectedYAxisDataOptions.map((option) => {
       option.linesOrMarkers = this.markerType;
     });
-    this.visualizeMenuService.setGraphType(this.selectedGraphObj);
+    this.visualizeMenuService.setGraphData(this.selectedGraphObj);
   }
 
-  setGraphType() {
+  changeSelectedGraphData(isSelectedGraphChange: boolean) {
+    this.selectedGraphObj.isTimeSeries = false;
     if (this.selectedGraphObj.data[0].type == 'bar') {
       this.checkBarHistogramData();
+    } else if (this.selectedGraphObj.data[0].type == 'time-series') {
+      this.selectedGraphObj.isTimeSeries = true;
+      // plotly type for time-series == scattergl
+      this.selectedGraphObj.data[0].type = 'scattergl';
     }
-    this.visualizeMenuService.setGraphType(this.selectedGraphObj);
+    if (!isSelectedGraphChange) {
+      // We don't need to reset because we're changing to an entirely different graph
+      this.visualizeMenuService.resetLayoutRelatedData(this.selectedGraphObj);
+    }
+    this.visualizeMenuService.setGraphData(this.selectedGraphObj);
   }
 
   focusField() {

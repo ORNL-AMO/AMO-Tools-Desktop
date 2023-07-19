@@ -1,0 +1,42 @@
+<div class="d-flex flex-column h-100 w-100">
+    <div class="d-flex w-100 h-100 tab-content">
+        <div class="w-50 panel-column panel-container modification scroll-item"
+            [ngClass]="{'modal-open': isModalOpen == true}" [ngStyle]="{'height.px': containerHeight}">
+            <app-plant-setup *ngIf="setupTab == 'plant-setup' && initPlantSetup"></app-plant-setup>
+            <app-pump-properties *ngIf="setupTab == 'pump-properties'"></app-pump-properties>
+            <app-pump-catalog *ngIf="setupTab == 'pump-catalog'"></app-pump-catalog>
+            <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup>
+        </div>
+        <div class="row no-gutters w-50 mh-100 scroll-item" [ngStyle]="{'height.px': containerHeight}">
+            <div class="col-12">
+                <div class="row no-gutters">
+                    <div class="col-12">
+                        <div class="d-flex flex-wrap tabs primary mr-2 ml-2"
+                            *ngIf="setupTab == 'pump-catalog'">
+                            <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+                                <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                                    (click)="setTab('results')">
+                                    <div>Department Catalog</div>
+                                </a>
+                            </div>
+                            <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+                                <a class="h-100 d-flex justify-content-center align-items-center"
+                                    (click)="setTab('help')">
+                                    <div>Help</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-12">
+                        <app-help-panel *ngIf="(tabSelect == 'help' && setupTab == 'pump-catalog') || setupTab != 'pump-catalog'">
+                        </app-help-panel>
+                        <app-department-catalog-table *ngIf="tabSelect == 'results' && setupTab == 'pump-catalog'">
+                        </app-department-catalog-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

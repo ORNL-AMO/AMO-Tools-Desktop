@@ -52,6 +52,7 @@ export class PhastService {
   calcTab: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
   assessmentTab: BehaviorSubject<string>;
+
   constructor(
     private openingFormService: OpeningFormService,
     private convertUnitsService: ConvertUnitsService,
@@ -78,6 +79,27 @@ export class PhastService {
     this.specTab = new BehaviorSubject<StepTab>(specTabs[0]);
     this.calcTab = new BehaviorSubject<string>('o2-enrichment');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
+  }
+
+
+  continue() {
+    let tmpStepTab: StepTab = this.stepTab.getValue();
+    if (tmpStepTab.tabName === 'Metered Energy') {
+      this.mainTab.next('assessment');
+    } else {
+      let nextTab: StepTab = stepTabs[tmpStepTab.next - 1];
+      this.stepTab.next(nextTab);
+    }
+  }
+
+  back() {
+    let tmpStepTab: StepTab = this.stepTab.getValue();
+    if (tmpStepTab.tabName !== 'Assessment Settings' && this.mainTab.getValue() == 'system-setup') {
+      let nextTab: StepTab = stepTabs[tmpStepTab.back - 1];
+      this.stepTab.next(nextTab);
+    } else if (this.mainTab.getValue() == 'assessment') {
+      this.mainTab.next('system-setup');
+    }
   }
 
   goToStep(newStepNum: number) {

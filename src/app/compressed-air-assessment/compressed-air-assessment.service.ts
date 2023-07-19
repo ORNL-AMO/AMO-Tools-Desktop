@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { isNull, isUndefined } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { CompressedAirAssessment, CompressorInventoryItem, Modification, ProfileSummaryData } from '../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummaryData, SystemProfileSetup } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { DayTypeService } from './day-types/day-type.service';
 import { InventoryService } from './inventory/inventory.service';
@@ -210,6 +210,19 @@ export class CompressedAirAssessmentService {
     return airFlowValidation;
   }
 
+  getHourIntervals(systemProfileSetup: SystemProfileSetup, hours?: number) {
+    let hourIntervals = new Array();
+    if (hours === undefined) {
+      hours = systemProfileSetup.numberOfHours
+    }
+    
+    for (let index = 0; index < hours;) {
+      hourIntervals.push(index);
+      index = index + systemProfileSetup.dataInterval;
+    }
+    return hourIntervals;
+  }
+
   checkIsPowerFactorValid(powerFactor: number, amps: number, volts: number, compressor: CompressorInventoryItem, profileSummaryValid: ProfileSummaryValid): PowerFactorInputValidationData {
     let powerFactorInputValidationData: PowerFactorInputValidationData = {
       powerFactorValid: true,
@@ -245,6 +258,71 @@ export class CompressedAirAssessmentService {
     powerFactorInputValidationData.isValid = powerFactorInputValidationData.ampsValid && powerFactorInputValidationData.voltsValid && powerFactorInputValidationData.powerFactorValid;
     return powerFactorInputValidationData;
   }
+
+  checkDayTypesDataValid(compressedAirAssessment: CompressedAirAssessment, dayTypeId: string): boolean {
+    let isDayTypeValid: boolean;
+    let profileSummaryValid: ProfileSummaryValid = this.getDefaultProfileSummaryValid();
+    let profileSummary = compressedAirAssessment.systemProfile.profileSummary;   
+
+    profileSummary.forEach(summary => {          
+      if (summary.dayTypeId == dayTypeId) {
+        let profileSummaryDayType: CompressedAirDayType = this.compressedAirAssessment.getValue().compressedAirDayTypes.find(dayType => dayType.dayTypeId === summary.dayTypeId);
+        let profileDataType = profileSummaryDayType.profileDataType;
+        let currentCompressor: CompressorInventoryItem = this.compressedAirAssessment.getValue().compressorInventoryItems.find(compressor => compressor.itemId === summary.compressorId);
+        isDayTypeValid = true;
+        summary.profileSummaryData.forEach((data, index) => {
+          if (data.order != 0) {
+            if (profileDataType == 'percentCapacity') {
+              let isPercentCapacityValid = this.checkIsInvalidNumber(data.percentCapacity) !== true;
+              if (!isPercentCapacityValid) {
+                isDayTypeValid = false;
+              } else {
+                if (data.percentCapacity > 150) {
+                  isDayTypeValid = false;
+                }
+              }
+            } else if (profileDataType == 'power') {
+              let isPowerValid = this.checkIsPowerValid(data.power, currentCompressor, profileSummaryValid);             
+              if (isPowerValid == false){
+                isDayTypeValid = false;
+              } 
+            } else if (profileDataType == 'airflow') {
+              let airFlowValidation: AirflowValidation = this.checkIsAirflowValid(data.airflow, currentCompressor, profileSummaryValid);
+              if (airFlowValidation.airFlowValid == false){
+                isDayTypeValid = false;
+              } 
+            } else if (profileDataType == 'percentPower') {
+              let isPercentPowerValid = this.checkIsInvalidNumber(data.percentPower) !== true;
+              if (isPercentPowerValid) {
+                let serviceFactorPercent: number = 100 * currentCompressor.designDetails.serviceFactor;
+                if (serviceFactorPercent < data.percentPower) {
+                  isDayTypeValid = false;
+                }
+              } else {
+                isDayTypeValid = false;
+              }
+            } else if (profileDataType == 'powerFactor') {
+              let powerFactorValid: PowerFactorInputValidationData = this.checkIsPowerFactorValid(data.powerFactor, data.amps, data.volts, currentCompressor, profileSummaryValid);
+              if(powerFactorValid.isValid == false){ 
+                isDayTypeValid = false;
+              } 
+            }
+          } else {
+            isDayTypeValid = true;
+          }
+        });                
+      }
+    });
+    if (compressedAirAssessment.systemInformation && compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
+      let undefinedSelections = compressedAirAssessment.systemInformation.trimSelections.find(selection => {return selection.compressorId == undefined});
+      profileSummaryValid.trimSelection = (undefinedSelections == undefined);
+      if (profileSummaryValid.trimSelection == false) {
+        isDayTypeValid = false;
+      }
+    } 
+    return isDayTypeValid;
+  }
+
 
 }
 

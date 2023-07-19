@@ -1,4 +1,5 @@
-<ul class="tabs subtabs waste-water">
+<div class="d-none d-lg-block">
+  <ul class="tabs subtabs waste-water">
     <li [ngClass]="{'active': calcTab == 'o2-utilization-rate'}">
       <a (click)="changeCalcTab('o2-utilization-rate')">O<sub>2</sub> Utilization Rate</a>
     </li>
@@ -8,4 +9,24 @@
     <li [ngClass]="{'active': calcTab == 'water-reduction'}">
       <a (click)="changeCalcTab('water-reduction')">Water/Wastewater Reduction</a>
     </li>
-</ul>
+  </ul>
+</div>
+
+<div class="d-flex d-lg-none flex-column">
+  <div class="tabs subtabs waste-water">
+    <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseCalcTabs()">
+      <span *ngIf="!calcTabsCollapsed" class="fa fa-caret-up pr-2"></span>
+      <span *ngIf="calcTabsCollapsed" class="fa fa-caret-down pr-2"></span>
+      <span class="small text-uppercase">Menu</span>
+    </div> 
+    <div [ngClass]="{'active': calcTab == 'o2-utilization-rate', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('o2-utilization-rate')">O<sub>2</sub> Utilization Rate</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'state-point-analysis', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('state-point-analysis')">State Point Analysis Tool</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'water-reduction', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('water-reduction')">Water/Wastewater Reduction</a>
+    </div>
+  </div>
+</div>

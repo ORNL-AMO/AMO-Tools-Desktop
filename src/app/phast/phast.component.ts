@@ -281,6 +281,8 @@ export class PhastComponent implements OnInit {
         let footerHeight = 0;
         if (this.footer) {
           footerHeight = this.footer.nativeElement.clientHeight;
+          // offset footer 1px for scrollbar height
+          // footerHeight = this.footer.nativeElement.clientHeight + 1;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
       }, 100);

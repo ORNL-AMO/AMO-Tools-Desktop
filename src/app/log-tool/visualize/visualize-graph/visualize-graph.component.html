@@ -1,31 +1,43 @@
 <div class="m-0 p-2" #graphContainer>
-    <ng-container *ngIf="selectedGraphObj">  
-    <div class="data-explorer-visualizer graph-card m-0 pt-2 pb-0">
-        <div *ngIf="selectedGraphObj.graphInteractivity.hasLargeDataset" 
-        class="justify-content-center pt-0 pb-1 px-3 btn-group btn-group-sm align-self-center">
-            <ng-container *ngFor="let option of timeSeriesSegments; let i = index;">
-                <button type="button" id="timeSeriesSegments" class="btn btn-secondary btn-sm toggle-btn py-1 px-3"
-                    (click)="setSelectedTimeSeriesSegment(option)"
-                    [ngClass]="{'active':  selectedTimeSeriesSegment && selectedTimeSeriesSegment.segmentText === option.segmentText}">
-                    {{option.segmentText}}</button>
-            </ng-container>
-            <div>
-                <span class="ml-3 pull-right">
-                    <span class="tooltip-icon fa fa-question-circle" (mouseenter)="displayTooltipHover()" 
-                    (mouseleave)="hideTooltipHover()" (click)="toggleClickTooltip()"></span>
-                </span>
-                <span class="detail-tooltip-box" *ngIf="showTooltipHover || showTooltipClick"
-                    (mouseenter)="displayTooltipHover(true)" (mouseleave)="hideTooltipHover()">
-                    <div class="detail-tooltip down"><span class="detail-tooltip-arrow tooltip-arrow-right"></span>
-                        <div class="p-2">
-                            Use the date range filters to increase graph performance
-                            <a class="click-link" (click)="visualizeService.displayTimeSeriesHelp()">Learn more</a>
+    <ng-container *ngIf="selectedGraphObj && selectedGraphObj.isGraphInitialized">
+        <div class="data-explorer-visualizer graph-card m-0 pt-2 pb-0">
+            <div *ngIf="selectedGraphObj.graphInteractivity.hasLargeDataset && timeSeriesSegments.length != 0"
+                class="justify-content-center pt-0 pb-1 px-3 btn-group btn-group-sm align-self-center">
+                <ng-container *ngFor="let option of timeSeriesSegments; let i = index;">
+                    <button type="button" id="timeSeriesSegments" class="btn btn-secondary btn-sm toggle-btn py-1 px-3"
+                        (click)="setSelectedTimeSeriesSegment(option)"
+                        [ngClass]="{'active':  selectedTimeSeriesSegment && selectedTimeSeriesSegment.segmentText === option.segmentText}">
+                        {{option.segmentText}}</button>
+                </ng-container>
+                <div>
+                    <span class="ml-3 pull-right">
+                        <span class="tooltip-icon fa fa-question-circle" (mouseenter)="displayTooltipHover()"
+                            (mouseleave)="hideTooltipHover()" (click)="toggleClickTooltip()"></span>
+                    </span>
+                    <span class="detail-tooltip-box" *ngIf="showTooltipHover || showTooltipClick"
+                        (mouseenter)="displayTooltipHover(true)" (mouseleave)="hideTooltipHover()">
+                        <div class="detail-tooltip down"><span class="detail-tooltip-arrow tooltip-arrow-right"></span>
+                            <div class="p-2">
+                                Use the date range filters to increase graph performance
+                                <a class="click-link" (click)="visualizeService.displayTimeSeriesHelp()">Learn more</a>
+                            </div>
                         </div>
-                    </div>
-                </span>
+                    </span>
+                </div>
             </div>
         </div>
-    </div>
     </ng-container>
-    <div #visualizeChart id="plotlyDiv"></div>  
-</div>
+    
+    <div #visualizeGraph id="plotlyDiv"></div>
+    <ng-container *ngIf="!selectedGraphObj || (selectedGraphObj && !selectedGraphObj.isGraphInitialized)">
+        <div class="data-explorer-visualizer graph-card m-0 p-0 justify-content-center" style="height: 450px;">
+            <div class="alert alert-info align-items-center mx-auto my-0 w-75 pr-2">
+                <ul class="placeholder mt-1 mx-auto">
+                    <li>Choose plot type (Scatter Plot, Time Series, or Histogram)</li>
+                    <li>Select x and y axis data</li>
+                    <li>Click <span class="bold">Create Graph</span> to begin</li>
+                </ul>
+            </div>
+        </div>
+    </ng-container>
+    </div>

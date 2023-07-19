@@ -135,6 +135,10 @@
         </span>
       </div>
 
+      <span class="alert-warning pull-right small" *ngIf="warningMessage && !isBaseline">
+        {{warningMessage}}
+      </span>
+
     </div>
 
     <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1">

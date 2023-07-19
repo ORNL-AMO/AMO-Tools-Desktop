@@ -12,7 +12,10 @@
                     </h3>
                 </div>
                 <!--select assessment-->
-                <div class="p-2" *ngIf="!addNewAssessment">
+                <div class="p-2" *ngIf="!addingNewAssessment">
+                    <div class="p-2 small">
+                        Day Type data will be imported and applied in the Day Types and Setup Profile tabs.
+                    </div>
                     <table class="table table-striped mb-0">
                         <thead>
                             <th>
@@ -36,13 +39,17 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="alert alert-warning p-2">
-                        Assessments with modifications cannot change their Day Types and are not shown.
+                    <div class="alert alert-info p-2 small">
+                        Assessments with existing scenarios cannot change their Day Types and are not shown.
                     </div>
                 </div>
                 <!--create new assessment-->
-                <div class="p-2" *ngIf="addNewAssessment">
-                    <form [formGroup]="newAssessmentForm" (ngSubmit)="createAssessment()" *ngIf="!showNewFolder">
+                <div class="p-2" *ngIf="addingNewAssessment">
+                    <div class="w-100 p-2 pl-0 small" *ngIf="addingNewAssessment">
+                        <a class="click-link" (click)="hideAddingNewAssessment()"><span class="fa fa-chevron-left"></span> 
+                            Select Existing Assessment</a>
+                    </div>
+                    <form [formGroup]="newAssessmentForm" class="px-2" (ngSubmit)="createAssessment()" *ngIf="!showNewFolder">
                         <div class="form-group">
                             <label class="form-control-label" for="assessmentName">Assessment Name</label>
                             <input #assessmentName class="form-control w-100" formControlName="assessmentName"
@@ -74,13 +81,9 @@
                 </div>
             </div>
             <hr>
-            <div class="w-100 p-2 small text-right" *ngIf="!addNewAssessment">
-                <a class="click-link" (click)="showAddNewAssessment()">+ Create New
+            <div class="w-100 p-2 small text-right" *ngIf="!addingNewAssessment">
+                <a class="click-link" (click)="showAddingNewAssessment()">+ Create New
                     Assessment</a>
-            </div>
-            <div class="w-100 p-2 small" *ngIf="addNewAssessment">
-                <a class="click-link" (click)="hideAddNewAssessment()"><span class="fa fa-chevron-left"></span> Select
-                    Existing Assessment</a>
             </div>
         </div>
     </div>

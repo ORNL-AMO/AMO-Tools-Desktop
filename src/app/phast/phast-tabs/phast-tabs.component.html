@@ -1,16 +1,39 @@
 <!--step tabs-->
-<nav>
+<nav class="hide-print d-none d-lg-block">
   <ul class="tabs subtabs progress-tabs phast">
     <li class="fixed-tab-size" *ngFor="let tab of stepTabs" [ngClass]="{'active': currentTab.step == tab.step
     , 'input-error': (tab.step == 1 && tab1Status == 'input-error') || (tab.step == 2 && tab2Status == 'input-error')
     , 'missing-data': (tab.step == 1 && tab1Status == 'missing-data') || (tab.step == 2 && tab2Status == 'missing-data')
     , 'success': (tab.step == 1 && tab1Status == 'success') || (tab.step == 2 && tab2Status == 'success')}">
       <a (click)="changeTab(tab.step)">
-        <span *ngIf="tab.step == 1 || tab.step == 2" (mouseenter)="showTooltip(tab.step)" (mouseleave)="hideTooltip(tab.step)" class="step-number">{{tab.step}}</span>
+        <span *ngIf="tab.step == 1 || tab.step == 2" (mouseenter)="showTooltip(tab.step)"
+          (mouseleave)="hideTooltip(tab.step)" class="step-number">{{tab.step}}</span>
         <span *ngIf="tab.step > 2" class="step-number">{{tab.step}}</span>
         {{tab.tabName}}</a>
-      <app-tabs-tooltip *ngIf="tab.step == 1" [badgeClass]="tab1Status" [reveal]="display1" [display]="badge1Hover"></app-tabs-tooltip>
-      <app-tabs-tooltip *ngIf="tab.step == 2" [badgeClass]="tab2Status" [reveal]="display2" [display]="badge2Hover"></app-tabs-tooltip>
+      <app-tabs-tooltip *ngIf="tab.step == 1" [badgeClass]="tab1Status" [reveal]="display1"
+        [display]="badge1Hover"></app-tabs-tooltip>
+      <app-tabs-tooltip *ngIf="tab.step == 2" [badgeClass]="tab2Status" [reveal]="display2"
+        [display]="badge2Hover"></app-tabs-tooltip>
+    </li>
+  </ul>
+</nav>
+
+<nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs phast flex-wrap flex-fill">
+  <ul class="pagination d-flex justify-content-between tabs phast subtabs progress-tabs flex-fill">
+    <li class="page-item" [ngClass]="{'disabled': currentTab.step == 1}">
+      <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': currentTab.step == 1}">
+        <span class="fa fa-chevron-left"></span></a>
+    </li>
+    <li class="page-item active"
+      [ngClass]="{'input-error': (currentTab.step == 1 && tab1Status == 'input-error') || (currentTab.step == 2 && tab2Status == 'input-error'), 'missing-data': (currentTab.step == 1 && tab1Status == 'missing-data') || (currentTab.step == 2 && tab2Status == 'missing-data'), 'success': (currentTab.step == 1 && tab1Status == 'success') || (currentTab.step == 2 && tab2Status == 'success')}">
+      <a class="nav-link small" (click)="changeTab(currentTab.step)">
+        <span class="step-number">{{currentTab.step}}</span> <br>
+        <span class="step-name">{{currentTab.tabName}}</span>
+      </a>
+    </li>
+    <li class="page-item" [ngClass]="{'disabled': !getCanContinue()}">
+      <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled': !getCanContinue()}">
+        <span class="fa fa-chevron-right"></span></a>
     </li>
   </ul>
 </nav>

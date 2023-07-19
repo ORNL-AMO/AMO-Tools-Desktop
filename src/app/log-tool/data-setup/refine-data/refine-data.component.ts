@@ -3,8 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CsvImportData } from '../../../shared/helper-services/csv-to-json.service';
 import { LogToolDataService } from '../../log-tool-data.service';
-import { LogToolDbService } from '../../log-tool-db.service';
-import { DataExplorerStatus, ExplorerData, ExplorerDataSet, LogToolField, StepMovement } from '../../log-tool-models';
+import { ExplorerData, ExplorerDataSet, LogToolField, StepMovement } from '../../log-tool-models';
 import { LogToolService } from '../../log-tool.service';
 
 @Component({
@@ -24,7 +23,6 @@ export class RefineDataComponent implements OnInit {
   applyToAll: boolean = false;
 
   constructor(
-    private logToolDbService: LogToolDbService,
     private cd: ChangeDetectorRef,
     private router: Router,
     private logToolDataService: LogToolDataService,
@@ -80,7 +78,6 @@ export class RefineDataComponent implements OnInit {
             }
           });
           this.logToolDataService.explorerData.next(this.explorerData);
-          this.logToolDbService.saveDataAsync();
         }
       });
   }

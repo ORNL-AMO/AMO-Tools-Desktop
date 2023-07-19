@@ -68,10 +68,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
     private exploreOpportunitiesService: ExploreOpportunitiesService, private assessmentService: AssessmentService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.egridService.getAllSubRegions();
-    // this.compressedAirCalculationService.test();
-    this.airPropertiesService.initAirPropertiesData();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);

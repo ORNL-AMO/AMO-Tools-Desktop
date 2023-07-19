@@ -81,7 +81,13 @@
         greater than 0 and less than or equal to 365.
     </div>
     <div class="p-2 w-100 text-center" *ngIf="!hasModifications">
-        <button class="btn btn-primary btn-sm" (click)="openDataExplorer()">Find Day Types With Data Explorer</button>
+        <button class="btn btn-primary btn-sm" (click)="openDataExplorer()">
+            Find Day Types With Data Explorer</button>
+    </div>
+    <div class="p-2" *ngIf="!hasModifications && hasDataExplorerData">
+        <div class="alert-info text-center small p-2">
+            Imported Data Explorer data is available in System Profile Setup
+        </div>
     </div>
     <div class="p-2" *ngIf="hasEndUses">
         <div class="alert-info small p-2">

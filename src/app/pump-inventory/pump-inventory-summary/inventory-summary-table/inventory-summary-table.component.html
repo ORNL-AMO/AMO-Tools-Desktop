@@ -1,0 +1,40 @@
+<div class="d-flex flex-column w-100 h-100 max-height scroll-item">
+    <div class="row no-gutters">
+        <table #copyTable class="table table-sm table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="header-cell" *ngFor="let field of inventorySummaryData.fields; let index = index;"
+                        [ngClass]="{'sticky-left': index == 0}"><a
+                            [ngClass]="{'sort-by-active': field.value == sortByField}"
+                            (click)="setSortByField(field.value)">
+                            <span class="fa fa-chevron-up"
+                                *ngIf="sortByField == field.value && sortByDirection == 'desc'"></span>
+                            <span class="fa fa-chevron-down"
+                                *ngIf="sortByField == field.value && sortByDirection == 'asc'"></span>
+                            {{field.display}}</a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of inventorySummaryData.pumpData | pumpSummaryTable:sortByField:sortByDirection">
+                    <td *ngFor="let d of data; let index = index;" [ngClass]="{'sticky-left name-cell': index == 0}">
+                        <span *ngIf="!d.pipe">{{d.value}} <span *ngIf="d.unit" [innerHTML]="d.unit"></span></span>
+                        <span *ngIf="d.pipe && d.pipe == 'motorEfficiencyClass'">{{d.value | pumpSelectField:d.pipe}}</span>
+                        <span *ngIf="d.pipe && d.pipe == 'driveType'">{{d.value | pumpSelectField:d.pipe}}</span>
+                        <span *ngIf="d.pipe && d.pipe == 'pumpType'">{{d.value | pumpSelectField:d.pipe}}</span>
+                        <span *ngIf="d.pipe && d.pipe == 'shaftOrientation'">{{d.value | pumpSelectField:d.pipe}}</span>
+                        <span *ngIf="d.pipe && d.pipe == 'shaftSealType'">{{d.value | pumpSelectField:d.pipe}}</span>
+                        <span *ngIf="d.pipe && d.pipe == 'statusType'">{{d.value | pumpSelectField:d.pipe}}</span>
+                        <span *ngIf="d.pipe && d.pipe == 'priorityType'">{{d.value | pumpSelectField:d.pipe}}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="sticky-left">
+        <app-exportable-results-table class="pull-right" [tableString]="tableString"
+            (updateTableString)="updateTableString()">
+        </app-exportable-results-table>
+    </div>
+</div>

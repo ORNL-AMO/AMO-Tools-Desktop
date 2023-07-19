@@ -1,4 +1,4 @@
-<div class="d-flex ssmt modify-conditions panel-container ssmt-diagram w-100" *ngIf="outputData && dataCalculated">
+<div class="d-none d-md-flex ssmt modify-conditions panel-container ssmt-diagram w-100" *ngIf="outputData && dataCalculated">
   <div class="panel-column scroll-item diagram-container justify-content-center"
     [ngStyle]="{'height.px': containerHeight}" #diagramContainer [ngClass]="{'col-11': this.sidebarCollapsed, 'col-md-8 col-sm-6': !sidebarCollapsed}">
     <div class="row no-gutters justify-content-between">
@@ -97,7 +97,7 @@
     </div>
 </div>
 
-<div class="d-flex flex-column w-100 h-100 justify-content-center align-items-center"
+<div class="d-none d-md-flex flex-column w-100 h-100 justify-content-center align-items-center"
   *ngIf="!outputData || !dataCalculated">
   <div class="d-flex spinner">
     <div class="bounce1"></div>
@@ -105,4 +105,11 @@
     <div class="bounce3"></div>
   </div>
   <h5> Calculating...</h5>
+</div>
+
+<div class="d-flex d-md-none">
+  <span class="alert-warning pull-right small">
+    Steam Diagram is unavailable to view on your current device. 
+    Please export the assessment and upload to a desktop or a device with a screen size of at least 768px to view the Steam Diagram.
+  </span>    
 </div>

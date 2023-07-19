@@ -11,6 +11,7 @@ export class PhastCalculatorTabsComponent implements OnInit {
   //same as PhastTabsComponent, BehaviorSubject for calculator tabs
   calcTab: string;
   calcTabSub: Subscription;
+  calcTabsCollapsed: boolean = true;
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
@@ -24,6 +25,11 @@ export class PhastCalculatorTabsComponent implements OnInit {
   }
 
   changeCalcTab(str: string) {
-    this.phastService.calcTab.next(str);
+    this.phastService.calcTab.next(str);   
+    this.collapseCalcTabs();
+  }
+
+  collapseCalcTabs() {
+    this.calcTabsCollapsed = !this.calcTabsCollapsed;
   }
 }

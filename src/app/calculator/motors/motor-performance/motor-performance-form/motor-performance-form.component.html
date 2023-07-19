@@ -45,7 +45,7 @@
   <div class="form-group">
     <label for="efficiencyClass">Efficiency Class</label>
     <select name="efficiencyClass" class="form-control" id="efficiencyClass" formControlName="efficiencyClass"
-      (change)="changePowerArrays()">
+      (change)="changePowerArrays()" (focus)="focusField('efficiencyClass')">
       <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">
         {{efficiencyClass.display}}</option>
     </select>

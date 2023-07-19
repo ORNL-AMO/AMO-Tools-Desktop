@@ -20,15 +20,15 @@
         <div class="col-12">
             <div class="report-header hide-print">
                 <app-report-banner></app-report-banner>
-                <app-report-summary id="reportSummary" (hideSummary)="setSidebarHeight()">
+                <app-report-summary id="reportSummary" (hideSummary)="setContainerHeight()">
                 </app-report-summary>
             </div>
         </div>
     </div>
     <!-- SIDEBAR AND REPORTS -->
     <div class="d-flex">
-        <app-sidebar [sidebarHeight]="sidebarHeight" [bannerHeight]="bannerHeight"></app-sidebar>
-        <div #assessmentReportsDiv class="assessment-padding d-flex flex-column scroll-item print-height w-100 skyline">
+        <div class="assessment-padding d-flex flex-column print-height w-100 skyline scroll-item" 
+        [ngStyle]="{'height.px': containerHeight}">
             <router-outlet></router-outlet>
         </div>
     </div>

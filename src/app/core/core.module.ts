@@ -42,6 +42,7 @@ import { IndexedDbModule } from '../indexedDb/indexed-db.module';
 import { AnalyticsModule } from '../shared/analytics/analytics.module';
 import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/security-and-privacy.module';
 import { BrowsingDataToastModule } from '../shared/browsing-data-toast/browsing-data-toast.module';
+import { PumpInventoryModule } from '../pump-inventory/pump-inventory.module';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { BrowsingDataToastModule } from '../shared/browsing-data-toast/browsing-
     DashboardModule,
     LogToolModule,
     MotorInventoryModule,
+    PumpInventoryModule,
     WasteWaterModule,
     ToolsSuiteApiModule,
     CompressedAirAssessmentModule,

@@ -51,6 +51,37 @@ export class SettingsService {
   //   });
   // }
 
+  setPumpSettingsUnitType(settings: Settings): Settings {
+    let hasImperialUnits: boolean = this.checkHasPumpMatchingUnitTypes(settings, PumpImperialDefaults);
+    let hasMetricUnits: boolean = this.checkHasPumpMatchingUnitTypes(settings, PumpMetricDefaults);
+
+    if (settings.unitsOfMeasure === 'Custom' && hasImperialUnits) {
+      settings.unitsOfMeasure = 'Imperial';
+    } else if (settings.unitsOfMeasure === 'Custom' && hasMetricUnits) {
+      settings.unitsOfMeasure = 'Metric';
+    } else if (!hasMetricUnits && !hasImperialUnits) {
+      settings.unitsOfMeasure = 'Custom';
+    }
+    return settings;
+  }
+
+  checkHasPumpMatchingUnitTypes(settings: Settings, unitDefaults: any): boolean {
+    let hasMatchingPowerMeasurement: boolean = settings.powerMeasurement === unitDefaults.powerMeasurement; 
+    let hasMatchingFlowMeasurement: boolean = settings.flowMeasurement === unitDefaults.flowMeasurement; 
+    let hasMatchingDistanceMeasurement: boolean = settings.distanceMeasurement === unitDefaults.distanceMeasurement; 
+    let hasMatchingPressureMeasurement: boolean = settings.pressureMeasurement === unitDefaults.pressureMeasurement; 
+    let hasMatchingTemperatureMeasurement: boolean = settings.temperatureMeasurement === unitDefaults.temperatureMeasurement; 
+    
+    let hasMatchingUnitTypes: boolean = hasMatchingPowerMeasurement
+    && hasMatchingFlowMeasurement
+    && hasMatchingDistanceMeasurement
+    && hasMatchingPressureMeasurement
+    && hasMatchingTemperatureMeasurement;
+
+    return hasMatchingUnitTypes;
+  }
+
+
   getFormFromSettings(settings: Settings): UntypedFormGroup {
     if (settings.steamPressureMeasurement === 'psi') {
       settings.steamPressureMeasurement = 'psig';

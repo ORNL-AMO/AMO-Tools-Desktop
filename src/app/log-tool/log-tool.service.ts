@@ -8,15 +8,11 @@ export class LogToolService {
 
   individualDataFromCsv: Array<IndividualDataFromCsv | ExplorerDataSet>;
   fields: Array<LogToolField>;
-  dataCleaned: BehaviorSubject<boolean>;
-  dataSubmitted: BehaviorSubject<boolean>;
   isModalOpen: BehaviorSubject<boolean>;
   noDayTypeAnalysis: BehaviorSubject<boolean>;
   openExportData: BehaviorSubject<boolean>;
   setupContainerHeight: BehaviorSubject<number>;
   constructor() {
-    this.dataSubmitted = new BehaviorSubject<boolean>(false);
-    this.dataCleaned = new BehaviorSubject<boolean>(false);
     this.isModalOpen = new BehaviorSubject<boolean>(false);
     this.noDayTypeAnalysis = new BehaviorSubject<boolean>(false);
     this.individualDataFromCsv = new Array();
@@ -26,8 +22,6 @@ export class LogToolService {
 
   resetData() {
     this.fields = new Array();
-    this.dataCleaned.next(false);
-    this.dataSubmitted.next(false);
     this.noDayTypeAnalysis.next(false);
     this.individualDataFromCsv = new Array();
     this.openExportData.next(false);
