@@ -13,6 +13,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
+import { environment } from '../../environments/environment';
 
 declare var google: any;
 @Component({
@@ -153,6 +154,7 @@ export class CoreComponent implements OnInit {
     this.coreService.getAllAppData().subscribe(initializedData => {
       this.directoryDbService.setAll(initializedData.directories);
       this.settingsDbService.setAll(initializedData.settings);
+
       this.assessmentDbService.setAll(initializedData.assessments);
       this.calculatorDbService.setAll(initializedData.calculators);
       this.inventoryDbService.setAll(initializedData.inventoryItems);
@@ -161,6 +163,13 @@ export class CoreComponent implements OnInit {
       }
       this.idbStarted = true;
       this.changeDetectorRef.detectChanges();
+      if (!environment.production)
+      {
+        if (this.settingsDbService.turnOffTutorials())
+        {
+          console.log('Running in development mode - turned off tutorials');
+        }
+      }
     });
   }
 

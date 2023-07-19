@@ -193,5 +193,24 @@ export class SettingsDbService {
     return settings;
   }
 
+  turnOffTutorials(): boolean
+  {
+    let settings : Settings = this.globalSettings;
+    let areSettingsOn = !(settings.disableTutorial);
+    settings.disableTutorial = true;
+    settings.disableDashboardTutorial = true;
+    settings.disablePsatTutorial = true;
+    settings.disableFansTutorial = true;
+    settings.disablePhastTutorial = true;
+    settings.disableWasteWaterTutorial = true;
+    settings.disableSteamTutorial = true;
+    settings.disableMotorInventoryTutorial = true;
+    settings.disableTreasureHuntTutorial = true;
+    settings.disableDataExplorerTutorial = true;
+    settings.disableCompressedAirTutorial = true;    
+    this.globalSettings = settings;
+    return areSettingsOn;
+  }
+
 
 }
