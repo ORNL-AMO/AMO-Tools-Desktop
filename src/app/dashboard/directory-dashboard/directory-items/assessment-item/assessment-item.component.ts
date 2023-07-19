@@ -81,6 +81,10 @@ export class AssessmentItemComponent implements OnInit {
     this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
+  updateSelectedStatus() {
+    this.directoryDashboardService.updateSelectedStatus.next(true);
+  }
+
   goToAssessment(assessment: Assessment) {
     this.assessmentService.goToAssessment(assessment);
   }

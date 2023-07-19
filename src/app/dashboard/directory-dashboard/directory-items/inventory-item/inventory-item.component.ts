@@ -50,6 +50,7 @@ export class InventoryItemComponent implements OnInit {
     private pumpInventoryService: PumpInventoryService) { }
 
   ngOnInit(): void {
+    this.inventoryItem.selected = false;
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
       this.dashboardView = val;
     });
@@ -66,6 +67,11 @@ export class InventoryItemComponent implements OnInit {
   async setDirectories() {
     this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
+
+  updateSelectedStatus() {
+    this.directoryDashboardService.updateSelectedStatus.next(true);
+  }
+
 
   goToInventoryItem(inventoryPage?: string) {
     let inventoryRoute: string = 'motor-inventory';

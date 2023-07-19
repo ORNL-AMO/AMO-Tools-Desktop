@@ -48,6 +48,7 @@ export class CompressedAirReportComponent implements OnInit {
   assessmentResults: Array<CompressedAirAssessmentResult>;
   combinedDayTypeResults: Array<{modification: Modification, combinedResults: DayTypeModificationResult, validation: CompressedAirModificationValid}>;
   baselineProfileSummaries: Array<{profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal>}>;
+  tabsCollapsed: boolean = true;
   constructor(private settingsDbService: SettingsDbService, private printOptionsMenuService: PrintOptionsMenuService, private directoryDbService: DirectoryDbService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
@@ -137,6 +138,7 @@ export class CompressedAirReportComponent implements OnInit {
 
   setTab(str: "executiveSummary" | "systemProfiles" | "reportGraphs" | "reportSankey" | "inputData" | "facilityInfo" | "paybackPeriod") {
     this.currentTab = str;
+    this.collapseTabs();
   }
 
   getContainerHeight() {
@@ -150,5 +152,10 @@ export class CompressedAirReportComponent implements OnInit {
   print() {
     this.printOptionsMenuService.printContext.next('compressedAir');
     this.printOptionsMenuService.showPrintMenu.next(true);
+    this.collapseTabs();
+  }
+
+  collapseTabs() {
+    this.tabsCollapsed = !this.tabsCollapsed;
   }
 }

@@ -1,4 +1,5 @@
-<ul class="tabs subtabs compressed-air">
+<div class="d-none d-lg-block">
+  <ul class="tabs subtabs compressed-air">
     <li [ngClass]="{'active': calcTab == 'air-flow-conversion'}">
       <a (click)="changeCalcTab('air-flow-conversion')">Air-Flow Conversion</a>
     </li>
@@ -7,8 +8,8 @@
     </li>
     <!-- Altitude correction -->
     <!-- <li [ngClass]="{'active': calcTab == 'receiver-tank'}">
-        <a (click)="changeCalcTab('receiver-tank')">Receiver Tank Sizing</a>
-      </li> -->
+          <a (click)="changeCalcTab('receiver-tank')">Receiver Tank Sizing</a>
+        </li> -->
     <li [ngClass]="{'active': calcTab == 'system-capacity'}">
       <a (click)="changeCalcTab('system-capacity')">System Capacity</a>
     </li>
@@ -33,5 +34,51 @@
     <li [ngClass]="{'active': calcTab == 'bleed-test'}">
       <a (click)="changeCalcTab('bleed-test')">Bleed Test</a>
     </li>
- 
+
   </ul>
+</div>
+
+
+<div class="d-flex d-lg-none flex-column">
+  <div class="tabs subtabs compressed-air">
+    <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseCalcTabs()">
+      <span *ngIf="!calcTabsCollapsed" class="fa fa-caret-up pr-2"></span>
+      <span *ngIf="calcTabsCollapsed" class="fa fa-caret-down pr-2"></span>
+      <span class="small text-uppercase">Menu</span>
+    </div> 
+    <div [ngClass]="{'active': calcTab == 'air-flow-conversion', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('air-flow-conversion')">Air-Flow Conversion</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'receiver-tank', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('receiver-tank')">Receiver Tank Sizing</a>
+    </div>
+    <!-- Altitude correction -->
+    <!-- <li [ngClass]="{'active': calcTab == 'receiver-tank', 'collapse': calcTabsCollapsed}">
+          <a (click)="changeCalcTab('receiver-tank')">Receiver Tank Sizing</a>
+        </li> -->
+    <div [ngClass]="{'active': calcTab == 'system-capacity', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('system-capacity')">System Capacity</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'pipe-sizing', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('pipe-sizing')">Pipe Sizing</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'air-velocity', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('air-velocity')">Velocity in the Piping</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'air-leak-survey', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('air-leak-survey')">Air Leak Survey</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'compressed-air-pressure-reduction', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('compressed-air-pressure-reduction')">Compressed Air Pressure Reduction</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'full-load-amps', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('full-load-amps')">Full-Load Amps</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'altitude-correction', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('altitude-correction')">Altitude Correction</a>
+    </div>
+    <div [ngClass]="{'active': calcTab == 'bleed-test', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('bleed-test')">Bleed Test</a>
+    </div>
+  </div>
+</div>

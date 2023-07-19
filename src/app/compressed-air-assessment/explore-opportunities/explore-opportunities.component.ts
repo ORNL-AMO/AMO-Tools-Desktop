@@ -187,4 +187,5 @@ export class ExploreOpportunitiesComponent implements OnInit {
     });
     this.displayAddStorage = displayAddStorage;
   }
+
 }
