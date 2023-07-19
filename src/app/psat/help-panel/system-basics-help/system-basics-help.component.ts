@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { HelpPanelService } from '../help-panel.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-system-basics-help',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SystemBasicsHelpComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(private helpPanelService: HelpPanelService) { }
+  currentField: string;
+  currentFieldSub: Subscription;
   ngOnInit() {
+    this.currentFieldSub = this.helpPanelService.currentField.subscribe((val) => {
+      this.currentField = val;
+    });
+  }
+  ngOnDestroy(){
+    this.currentFieldSub.unsubscribe();
   }
 
 }

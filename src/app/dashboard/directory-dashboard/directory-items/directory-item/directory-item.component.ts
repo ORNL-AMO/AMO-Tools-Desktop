@@ -12,6 +12,7 @@ import { DashboardService } from '../../../dashboard.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { DirectoryItem, FilterDashboardBy } from '../../../../shared/models/directory-dashboard';
+import { InventoryItem } from '../../../../shared/models/inventory/inventory';
 
 @Component({
   selector: 'app-directory-item',
@@ -67,6 +68,10 @@ export class DirectoryItemComponent implements OnInit {
     this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
+  updateSelectedStatus() {
+    this.directoryDashboardService.updateSelectedStatus.next(true);
+  }
+
   goToAssessment(assessment: Assessment) {
     this.assessmentService.goToAssessment(assessment);
   }
@@ -99,6 +104,15 @@ export class DirectoryItemComponent implements OnInit {
       return str;
     } else {
       return '';
+    }
+  }
+
+  navigateWithSidebarOptions(item: InventoryItem) {
+    if (item.type === 'pumpInventory') {
+      this.dashboardService.navigateWithSidebarOptions('/pump-inventory/' + item.id, {shouldCollapse: true})
+    }
+    if (item.type === 'motorInventory') {
+      this.dashboardService.navigateWithSidebarOptions('/motor-inventory/' + item.id, {shouldCollapse: true})
     }
   }
 

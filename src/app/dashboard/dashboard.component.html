@@ -1,8 +1,9 @@
  <div class="d-flex dashboard-content w-100" #dashboardContent>
-    <div class="sidebar-bg" [ngStyle]="{'width.px': sidebarWidth}">
+    <div class="sidebar-bg" [ngStyle]="{'width.px': sidebarWidth}" *ngIf="!inPrintView">
         <app-sidebar *ngIf="contentWidth !== undefined"></app-sidebar>
     </div>
-    <div class="flex-fill scroll-item dashboard-scroll skyline" [ngStyle]="{'width.px': contentWidth}">
+    <div class="flex-fill skyline" [ngStyle]="{'width.px': contentWidth}"
+    [ngClass]="{'scroll-item dashboard-scroll': useContainerScroll}">
         <router-outlet></router-outlet>
     </div>
 </div>
@@ -11,11 +12,11 @@
 
 
 <app-move-items *ngIf="moveItems"></app-move-items>
-<app-assessment-create *ngIf="createAssessment"></app-assessment-create>
+<app-create-assessment-modal *ngIf="createAssessment"></app-create-assessment-modal>
 <app-create-folder *ngIf="createFolder"></app-create-folder>
 <app-import-modal *ngIf="showImportModal"></app-import-modal>
 <app-export-modal *ngIf="showExportModal"></app-export-modal>
 <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
     [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'warning'"></app-toast>
-<app-create-inventory *ngIf="createInventory"></app-create-inventory>
+<app-create-inventory *ngIf="showCreateInventory" [defaultInventoryType]="showCreateInventory"></app-create-inventory>
 <app-copy-items *ngIf="copyItems"></app-copy-items>

@@ -157,6 +157,9 @@ export interface GraphObj {
     binningMethod: string,
     graphInteractivity: GraphInteractivity,
     isTimeSeries?: boolean,
+    shouldRenderNewPlot?: boolean,
+    isGraphInitialized?: boolean,
+    hasChanges?: boolean,
     showDefaultPerformanceWarning?: boolean,
     binSize: number,
     graphId: string,
@@ -226,6 +229,7 @@ export interface AnnotationData {
     x: number | string,
     y: number | string,
     dataSeriesId?: string,
+    selectedXAxis: string,
     text: string,
     showarrow: boolean,
     font: {
@@ -260,8 +264,6 @@ export interface LogToolDbData {
         logToolDays: Array<LogToolDay>,
         individualDataFromCsv: Array<IndividualDataFromCsv>,
         fields: Array<LogToolField>,
-        dataCleaned: boolean,
-        dataSubmitted: boolean,
         noDayTypeAnalysis: boolean
     }
     visualizeData: {

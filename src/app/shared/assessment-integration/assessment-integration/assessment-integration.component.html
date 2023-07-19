@@ -1,0 +1,64 @@
+
+<div class="integration-container">
+    <ng-container *ngIf="connectedAssessments.length !== 0">
+        <div (click)="focusField('connected-owner-assessment')" class="p-2 px-3">
+            <div class="">
+                <label class="w-100 mb-2">
+                    <span class="integration-label">
+                        Connected Assessments
+                    </span>
+                </label>
+                <table class="w-100 table table-striped mb-0 small">
+                    <thead>
+                        <th class="p-1">
+                            Assessment Name
+                        </th>
+                        <th class="p-1">
+                            Created 
+                        </th>
+                        <th class="p-1">
+                            Last Modified
+                        </th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let assessment of connectedAssessments">
+                            <td class="p-1">
+                                <a class="click-link" (click)="goToAssessment(assessment)">
+                                    {{assessment.name}}
+                                </a>
+                            </td>
+                            <td class="p-1">
+                                {{assessment.createdDate | date}}
+                            </td>
+                            <td class="p-1">
+                                {{assessment.modifiedDate | date}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="connectedAssessments.length === 0">
+        <div (click)="focusField('create-assessment')" class="p-2 px-3">
+            <div class="d-flex flex-row">
+                <label class="w-50">
+                    <span class="integration-label border-0">
+                        This item can be connected to pump assessment System Setup data
+                    </span>
+                </label>
+                <div class="w-50 input-group justify-content-center m-1 mb-0">
+                    <div>
+                        <button class="btn btn-primary p-1 px-2" [disabled]="!isItemValid" (click)="showCreateAssessmentModal()"> 
+                            Create Assessment From Item
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<app-create-assessment-modal *ngIf="displayCreateAssessmentModal" [connectedInventoryItem]="connectedInventoryItem" [integratedCreateType]="'Pump'"></app-create-assessment-modal>
+

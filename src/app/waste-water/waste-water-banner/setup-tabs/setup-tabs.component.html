@@ -1,30 +1,71 @@
-<ul class="tabs subtabs progress-tabs waste-water">
-    <li [ngClass]="systemBasicsClassStatus">
-        <a (click)="changeSetupTab('system-basics')">
-            <span (mouseenter)="showTooltip(systemBasicsBadge)" (mouseleave)="hideTooltip(systemBasicsBadge)"
-                class="step-number">1</span>Assessment Basics</a>
-        <app-tabs-tooltip [badgeClass]="systemBasicsClassStatus[0]" [reveal]="systemBasicsBadge.display"
-            [display]="systemBasicsBadge.hover"></app-tabs-tooltip>
-    </li>
-    <li [ngClass]="operationsClassStatus">
-        <a (click)="changeSetupTab('operations')">
-            <span (mouseenter)="showTooltip(operationsBadge)" (mouseleave)="hideTooltip(operationsBadge)"
-                class="step-number">2</span>Operations</a>
-        <app-tabs-tooltip [badgeClass]="operationsClassStatus[0]" [reveal]="operationsBadge.display"
-            [display]="operationsBadge.hover"></app-tabs-tooltip>
-    </li>
-    <li [ngClass]="activatedSludgeClassStatus">
-        <a (click)="changeSetupTab('activated-sludge')">
-            <span (mouseenter)="showTooltip(activatedSludgeBadge)" (mouseleave)="hideTooltip(activatedSludgeBadge)"
-                class="step-number">3</span>Activated Sludge</a>
-        <app-tabs-tooltip [badgeClass]="activatedSludgeClassStatus[0]" [reveal]="activatedSludgeBadge.display"
-            [display]="activatedSludgeBadge.hover"></app-tabs-tooltip>
-    </li>
-    <li [ngClass]="aeratorPerformanceClassStatus">
-        <a (click)="changeSetupTab('aerator-performance')">
-            <span (mouseenter)="showTooltip(aeratorPerformanceBadge)"
-                (mouseleave)="hideTooltip(aeratorPerformanceBadge)" class="step-number">4</span>Aeration Performance</a>
-        <app-tabs-tooltip [badgeClass]="aeratorPerformanceClassStatus[0]" [reveal]="aeratorPerformanceBadge.display"
-            [display]="aeratorPerformanceBadge.hover"></app-tabs-tooltip>
-    </li>
-</ul>
+<nav class="hide-print d-none d-lg-block">
+    <ul class="tabs subtabs progress-tabs waste-water">
+        <li [ngClass]="systemBasicsClassStatus">
+            <a (click)="changeSetupTab('system-basics')">
+                <span (mouseenter)="showTooltip(systemBasicsBadge)" (mouseleave)="hideTooltip(systemBasicsBadge)"
+                    class="step-number">1</span>Assessment Basics</a>
+            <app-tabs-tooltip [badgeClass]="systemBasicsClassStatus[0]" [reveal]="systemBasicsBadge.display"
+                [display]="systemBasicsBadge.hover"></app-tabs-tooltip>
+        </li>
+        <li [ngClass]="operationsClassStatus">
+            <a (click)="changeSetupTab('operations')">
+                <span (mouseenter)="showTooltip(operationsBadge)" (mouseleave)="hideTooltip(operationsBadge)"
+                    class="step-number">2</span>Operations</a>
+            <app-tabs-tooltip [badgeClass]="operationsClassStatus[0]" [reveal]="operationsBadge.display"
+                [display]="operationsBadge.hover"></app-tabs-tooltip>
+        </li>
+        <li [ngClass]="activatedSludgeClassStatus">
+            <a (click)="changeSetupTab('activated-sludge')">
+                <span (mouseenter)="showTooltip(activatedSludgeBadge)" (mouseleave)="hideTooltip(activatedSludgeBadge)"
+                    class="step-number">3</span>Activated Sludge</a>
+            <app-tabs-tooltip [badgeClass]="activatedSludgeClassStatus[0]" [reveal]="activatedSludgeBadge.display"
+                [display]="activatedSludgeBadge.hover"></app-tabs-tooltip>
+        </li>
+        <li [ngClass]="aeratorPerformanceClassStatus">
+            <a (click)="changeSetupTab('aerator-performance')">
+                <span (mouseenter)="showTooltip(aeratorPerformanceBadge)"
+                    (mouseleave)="hideTooltip(aeratorPerformanceBadge)" class="step-number">4</span>Aeration
+                Performance</a>
+            <app-tabs-tooltip [badgeClass]="aeratorPerformanceClassStatus[0]" [reveal]="aeratorPerformanceBadge.display"
+                [display]="aeratorPerformanceBadge.hover"></app-tabs-tooltip>
+        </li>
+    </ul>
+</nav>
+
+<nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs waste-water flex-wrap flex-fill">
+    <ul class="pagination d-flex justify-content-between tabs waste-water subtabs progress-tabs flex-fill">
+        <li class="page-item" [ngClass]="{'disabled': setupTab == 'system-basics'}">
+            <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': setupTab == 'system-basics'}">
+                <span class="fa fa-chevron-left"></span></a>
+        </li>
+        <li class="page-item" [ngClass]="{'active': setupTab == 'system-basics'}">
+            <a class="nav-link small" (click)="changeSetupTab('system-basics')" [ngClass]="systemBasicsClassStatus">
+                <span *ngIf="setupTab != 'system-basics'" class="step-number">1</span>
+                <span *ngIf="setupTab == 'system-basics'">Assessment Basics</span>
+            </a>
+        </li>
+        <li class="page-item" [ngClass]="{'active': setupTab == 'operations'}">
+            <a class="nav-link small" (click)="changeSetupTab('operations')" [ngClass]="operationsClassStatus">
+                <span *ngIf="setupTab != 'operations'" class="step-number">2</span>
+                <span *ngIf="setupTab == 'operations'">Operations</span>
+            </a>
+        </li>
+        <li class="page-item" [ngClass]="{'active': setupTab == 'activated-sludge'}">
+            <a class="nav-link small" (click)="changeSetupTab('activated-sludge')" [ngClass]="activatedSludgeClassStatus">
+                <span *ngIf="setupTab != 'activated-sludge'" class="step-number">3</span>
+                <span *ngIf="setupTab == 'activated-sludge'">Activated Sludge</span>
+            </a>
+        </li>
+        <li class="page-item" [ngClass]="{'active': setupTab == 'aerator-performance'}">
+            <a class="nav-link small" (click)="changeSetupTab('aerator-performance')" [ngClass]="aeratorPerformanceClassStatus">
+                <span *ngIf="setupTab != 'aerator-performance'" class="step-number">4</span>
+                <span *ngIf="setupTab == 'aerator-performance'">Aeration Performance</span>
+            </a>
+        </li>
+        <li class="page-item" [ngClass]="{'disabled': !canContinue}">
+            <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled': !canContinue}">
+                <span class="fa fa-chevron-right"></span>
+            </a>
+        </li>
+    </ul>
+</nav>

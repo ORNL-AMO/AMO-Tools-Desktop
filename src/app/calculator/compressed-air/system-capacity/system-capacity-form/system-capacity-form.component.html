@@ -118,9 +118,10 @@
         <label class="bold">Total Pipe Volume</label>
         <div class="text-center small">
           <span *ngIf="outputs.totalPipeVolume">
-            <strong *ngIf="settings.unitsOfMeasure != 'Metric'">
-              {{outputs.totalPipeVolume | number:'1.0-0'}}
-              gal</strong>
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'">
+              <strong>{{outputs.totalPipeVolume | number:'1.0-0'}} gal</strong>
+               ({{outputs.totalPipeVolumeCubicFeet | number:'1.0-0'}} ft<sup>3</sup>)
+            </span>
             <strong *ngIf="settings.unitsOfMeasure == 'Metric'">
               {{outputs.totalPipeVolume | number:'1.0-2'}}
               m<sup>3</sup></strong>
@@ -134,9 +135,10 @@
         <label class="bold">Total Receiver Volume</label>
         <div class="text-center small">
           <span *ngIf="outputs.totalReceiverVolume">
-            <strong *ngIf="settings.unitsOfMeasure != 'Metric'">
-              {{outputs.totalReceiverVolume | number:'1.0-0'}}
-              gal</strong>
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'">
+                <strong>{{outputs.totalReceiverVolume | number:'1.0-0'}} gal</strong>
+                 ({{outputs.totalReceiverVolumeCubicFeet | number:'1.0-0'}} ft<sup>3</sup>)
+              </span>
             <strong *ngIf="settings.unitsOfMeasure == 'Metric'">
               {{outputs.totalReceiverVolume | number:'1.0-2'}}
               m<sup>3</sup></strong>
@@ -150,9 +152,10 @@
         <label class="bold">Total Capacity of Compressed Air System</label>
         <div class="text-center small">
           <span *ngIf="outputs.totalCapacityOfCompressedAirSystem">
-            <strong *ngIf="settings.unitsOfMeasure != 'Metric'">
-              {{outputs.totalCapacityOfCompressedAirSystem | number:'1.0-0'}}
-              gal</strong>
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'">
+              <strong>{{outputs.totalCapacityOfCompressedAirSystem | number:'1.0-0'}} gal</strong>
+               ({{outputs.totalCapacityOfCompressedAirSystemCubicFeet | number:'1.0-0'}} ft<sup>3</sup>)
+            </span>
             <strong *ngIf="settings.unitsOfMeasure == 'Metric'">
               {{outputs.totalCapacityOfCompressedAirSystem | number:'1.0-2'}}
               m<sup>3</sup></strong>

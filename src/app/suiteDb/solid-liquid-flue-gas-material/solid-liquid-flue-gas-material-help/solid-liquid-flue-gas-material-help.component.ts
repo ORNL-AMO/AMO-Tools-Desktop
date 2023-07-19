@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-solid-liquid-flue-gas-material-help',
@@ -8,6 +9,9 @@ import { Component, OnInit, Input } from '@angular/core';
 export class SolidLiquidFlueGasMaterialHelpComponent implements OnInit {
   @Input()
   currentField: string;
+  @Input()
+  settings: Settings;
+    
   constructor() { }
 
   ngOnInit() {

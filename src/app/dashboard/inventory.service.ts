@@ -3,10 +3,12 @@ import { InventoryItem } from '../shared/models/inventory/inventory';
 import { MotorInventoryService } from '../motor-inventory/motor-inventory.service';
 import { environment } from '../../environments/environment';
 
+import { PumpInventoryService } from '../pump-inventory/pump-inventory.service';
+declare const packageJson;
 @Injectable()
 export class InventoryService {
 
-  constructor(private motorInventoryService: MotorInventoryService) { }
+  constructor(private motorInventoryService: MotorInventoryService, private pumpInventoryService: PumpInventoryService) { }
 
 
   getNewMotorInventoryItem(): InventoryItem{
@@ -17,6 +19,18 @@ export class InventoryService {
       type: 'motorInventory',
       name: null,
       appVersion:  environment.version,
+      isExample: false
+    }
+  }
+
+  getNewPumpInventoryItem(): InventoryItem {
+    return {
+      pumpInventoryData: this.pumpInventoryService.initInventoryData(),
+      createdDate: new Date(),
+      modifiedDate: new Date(),
+      type: 'pumpInventory',
+      name: null,
+      appVersion:  packageJson.version,
       isExample: false
     }
   }

@@ -96,7 +96,7 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
       groupLabel: 'Other',
       showGroup: false
     });
-
+    
   }
 
   setSelectedField(option: { display: string, value: string, group: string }) {

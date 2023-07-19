@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../../shared/models/phast/phast';
 import { MeteredEnergyResults, MeteredEnergySteam, MeteredEnergyFuel, MeteredEnergyElectricity } from '../../shared/models/phast/meteredEnergy';
@@ -23,7 +23,12 @@ export class MeteredEnergyComponent implements OnInit {
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
-
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getContainerHeight();
+  }
+  
   results: MeteredEnergyResults = {
     metered: {
       hourlyEnergy: 0,
@@ -44,8 +49,9 @@ export class MeteredEnergyComponent implements OnInit {
   currentField: string;
   energySource: string;
   isModalOpenSub: Subscription;
-  isModalOpen: boolean;
-  constructor(private meteredEnergyService: MeteredEnergyService, private phastService: PhastService) { }
+  isModalOpen: boolean;  
+  smallScreenTab: string = 'baseline';
+  constructor(private meteredEnergyService: MeteredEnergyService, private phastService: PhastService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.isModalOpenSub = this.phastService.modalOpen.subscribe(val => {
@@ -54,8 +60,14 @@ export class MeteredEnergyComponent implements OnInit {
     if (!this.phast.meteredEnergy) {
       this.initializeNew();
     }
+    this.getContainerHeight();
   }
 
+  ngOnChanges(changes: SimpleChanges) {    
+    if (changes.containerHeight && !changes.containerHeight.firstChange) {
+      this.getContainerHeight();
+    }
+  }
   ngOnDestroy(){
     this.isModalOpenSub.unsubscribe();
   }
@@ -159,5 +171,16 @@ export class MeteredEnergyComponent implements OnInit {
       auxElectricityCollectionTime: 0,
       operatingHours: 0
     };
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
+  getContainerHeight() {
+    if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+      this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      this.cd.detectChanges();
+    }
   }
 }

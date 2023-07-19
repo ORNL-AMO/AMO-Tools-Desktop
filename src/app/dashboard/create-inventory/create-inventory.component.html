@@ -29,8 +29,9 @@
 
           <div class="form-group">
             <label>Inventory Type</label>
-            <select class="form-control type-select" formControlName="inventoryType">
+            <select class="form-control type-select" formControlName="inventoryType" (change)="setInventoryName()">
               <option [ngValue]="'motorInventory'">Motor</option>
+              <option [ngValue]="'pumpInventory'">Pump</option>
             </select>
           </div>
 
@@ -50,12 +51,13 @@
         <!-- End .modal-body -->
 
         <div class="d-flex justify-content-between" [ngClass]="{
-          'motor-inventory': newInventoryItemForm.controls.inventoryType.value == 'motorInventory'}">
+          'motor-inventory': newInventoryItemForm.controls.inventoryType.value == 'motorInventory',
+          'pump-inventory': newInventoryItemForm.controls.inventoryType.value == 'pumpInventory'}">
           <div class="p-2">
             <button class="btn btn-secondary" type="button" (click)="hideCreateModal()">Close</button>
           </div>
           <div class="p-2">
-            <button class="btn btn-primary" type="submit" [disabled]="!newInventoryItemForm.valid"
+            <button class="btn btn-primary" type="button" [disabled]="!newInventoryItemForm.valid"
               (click)="create()">Add Inventory</button>
           </div>
         </div>

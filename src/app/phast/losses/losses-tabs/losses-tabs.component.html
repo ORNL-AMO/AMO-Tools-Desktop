@@ -1,4 +1,4 @@
-<ul class="tabs subtabs phast">
+<ul class="tabs subtabs phast d-none d-lg-block">
   <li *ngFor="let tab of lossTabs" [ngClass]="{'active': selectedTab.step == tab.step}" (click)="tabChange(tab)">
     <app-operations-tab *ngIf="tab.componentStr == 'operations'" [phast]="phast" [inSetup]="inSetup" [settings]="settings"></app-operations-tab>
     <app-charge-material-tab *ngIf="tab.componentStr == 'charge-material'" [phast]="phast" [inSetup]="inSetup"></app-charge-material-tab>
@@ -19,3 +19,35 @@
     <app-exhaust-gas-tab *ngIf="tab.componentStr == 'exhaust-gas'" [phast]="phast" [inSetup]="inSetup"></app-exhaust-gas-tab>
   </li>
 </ul>
+
+<div class="d-flex d-lg-none tabs subtabs progress-tabs phast flex-wrap flex-fill">  
+  <ul class="pagination d-flex justify-content-between tabs phast subtabs progress-tabs flex-fill">
+    <li class="page-item" [ngClass]="{'disabled': selectedTab.componentStr == 'operations'}">
+      <a class="nav-link small" (click)="tabBack()" [ngClass]="{'disabled': selectedTab.componentStr == 'operations'}">
+        <span class="fa fa-chevron-left"></span></a>
+    </li>
+    <li class="page-item">
+      <app-operations-tab *ngIf="selectedTab.componentStr == 'operations'" [phast]="phast" [inSetup]="inSetup" [settings]="settings"></app-operations-tab>
+      <app-charge-material-tab *ngIf="selectedTab.componentStr == 'charge-material'" [phast]="phast" [inSetup]="inSetup"></app-charge-material-tab>
+      <app-atmosphere-tab *ngIf="selectedTab.componentStr == 'atmosphere-losses'" [phast]="phast" [inSetup]="inSetup"></app-atmosphere-tab>
+      <app-auxiliary-power-tab *ngIf="selectedTab.componentStr == 'auxiliary-power'" [phast]="phast" [inSetup]="inSetup"></app-auxiliary-power-tab>
+      <app-cooling-tab *ngIf="selectedTab.componentStr == 'cooling-losses'" [phast]="phast" [inSetup]="inSetup"></app-cooling-tab>
+      <app-energy-input-exhaust-gas-tab *ngIf="selectedTab.componentStr == 'energy-input-exhaust-gas'" [phast]="phast" [inSetup]="inSetup" [settings]="settings"></app-energy-input-exhaust-gas-tab>
+      <app-energy-input-tab *ngIf="selectedTab.componentStr == 'energy-input'" [phast]="phast" [inSetup]="inSetup" [settings]="settings"></app-energy-input-tab>
+      <app-extended-surface-tab *ngIf="selectedTab.componentStr == 'extended-surface-losses'" [phast]="phast" [inSetup]="inSetup"></app-extended-surface-tab>
+      <app-fixture-tab *ngIf="selectedTab.componentStr == 'fixture-losses'" [phast]="phast" [inSetup]="inSetup"></app-fixture-tab>
+      <app-flue-gas-tab *ngIf="selectedTab.componentStr == 'flue-gas-losses'" [phast]="phast" [inSetup]="inSetup" [settings]="settings"></app-flue-gas-tab>
+      <app-gas-leakage-tab *ngIf="selectedTab.componentStr == 'gas-leakage-losses'" [phast]="phast" [inSetup]="inSetup"></app-gas-leakage-tab>
+      <app-opening-tab *ngIf="selectedTab.componentStr == 'opening-losses'" [phast]="phast" [inSetup]="inSetup"></app-opening-tab>
+      <app-other-tab *ngIf="selectedTab.componentStr == 'other-losses'" [phast]="phast" [inSetup]="inSetup"></app-other-tab>
+      <app-slag-tab *ngIf="selectedTab.componentStr == 'slag'" [phast]="phast" [inSetup]="inSetup"></app-slag-tab>
+      <app-system-efficiency-tab *ngIf="selectedTab.componentStr == 'heat-system-efficiency'" [phast]="phast" [inSetup]="inSetup"></app-system-efficiency-tab>
+      <app-wall-tab *ngIf="selectedTab.componentStr == 'wall-losses'" [phast]="phast" [inSetup]="inSetup"></app-wall-tab>
+      <app-exhaust-gas-tab *ngIf="selectedTab.componentStr == 'exhaust-gas'" [phast]="phast" [inSetup]="inSetup"></app-exhaust-gas-tab>
+    </li>
+    <li class="page-item" [ngClass]="{'disabled': selectedTab.step == lossTabs.length}">
+      <a class="nav-link small" (click)="tabNext()" [ngClass]="{'disabled': selectedTab.step == lossTabs.length}">
+        <span class="fa fa-chevron-right"></span></a>
+    </li>
+  </ul>
+</div>

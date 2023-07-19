@@ -16,8 +16,8 @@ export class CalculatorListComponent implements OnInit {
   ngOnInit() {
   }
 
-  navigateSidebarLink(url: string) {
-    this.dashboardService.navigateSidebarLink(url)
+  navigateWithSidebarOptions(url: string) {
+    this.dashboardService.navigateWithSidebarOptions(url)
   }
 
 

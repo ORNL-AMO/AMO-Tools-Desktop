@@ -1,9 +1,15 @@
 .book-item{
     background-color: #2E4053;
+    position: absolute;
+    right: 184px;
 }
 .manual-arrow{
     position: absolute;
     height: 300px;
     top: 45px;
-    right: 155px;
+    right: 0;
 }
+
+/* .welcome-screen {
+    width: 100vw;
+} */

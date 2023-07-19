@@ -96,10 +96,10 @@ export class DayTypeAnalysisService {
 
   getPrimaryDayType(date: Date): string {
     let logToolDay: LogToolDay = this.logToolDataService.logToolDays.find(day => { return this.logToolDataService.checkSameDay(day.date, date) });
-    let testExcluded = logToolDay.dayAveragesByInterval.find(averageItem => {
+    let shouldExclude = logToolDay.dayAveragesByInterval.find(averageItem => {
       return averageItem.averages.find(item => { return item.value == undefined });
     });
-    if (testExcluded != undefined) {
+    if (shouldExclude != undefined) {
       return 'Excluded';
     } else {
       let dayCode: number = date.getDay();
@@ -213,9 +213,13 @@ export class DayTypeAnalysisService {
     this.dayTypeSummaries.next(dayTypeSummaries);
   }
 
+  // * each day type's average by interval
   getDayTypeSummary(dayType: DayType): DayTypeSummary {
     let summedDayAveragesByInterval: Array<AverageByInterval> = new Array();
-    let allDayAveragesByInterval: Array<{interval: number, allDayAverages: Array<AverageByInterval>}> = dayType.logToolDays[0].dayAveragesByInterval.map(dayAverage => {
+    let intervalAveragesForAllDayTypeDays: Array<{interval: number, allDayTypeDayAverages: Array<AverageByInterval>}>;
+    // * Below just populating arrays intervalAveragesForAllDayTypeDays and summedDayAveragesByInterval from first index
+    
+    intervalAveragesForAllDayTypeDays = dayType.logToolDays[0].dayAveragesByInterval.map(dayAverage => {
       summedDayAveragesByInterval.push(
         {
           interval: dayAverage.interval, 
@@ -223,17 +227,17 @@ export class DayTypeAnalysisService {
           intervalDisplayString: dayAverage.intervalDisplayString,
           averages: []
         });
-      return {interval: dayAverage.interval, allDayAverages: []};
-    });
-
-    dayType.logToolDays.forEach(logToolDay => {
+        return {interval: dayAverage.interval, allDayTypeDayAverages: []};
+      });
+      
+      dayType.logToolDays.forEach(logToolDay => {
       logToolDay.dayAveragesByInterval.forEach((intervalAverage, intervalIndex) => {
         // each will have multiple all listings
-        allDayAveragesByInterval[intervalIndex].allDayAverages.push(intervalAverage);
+        intervalAveragesForAllDayTypeDays[intervalIndex].allDayTypeDayAverages.push(intervalAverage);
       });
     });
 
-    let dayAveragesByInterval: Array<AverageByInterval> = this.getCombinedDayTypeAverages(allDayAveragesByInterval, summedDayAveragesByInterval);
+    let dayAveragesByInterval: Array<AverageByInterval> = this.getCombinedDayTypeAverages(intervalAveragesForAllDayTypeDays, summedDayAveragesByInterval);
 
     return {
       dayType: dayType,
@@ -242,37 +246,38 @@ export class DayTypeAnalysisService {
     }
   }
 
-  getCombinedDayTypeAverages(allDayAveragesByInterval: Array<{interval: number, allDayAverages: Array<AverageByInterval>}>, summedDayAveragesByInterval: Array<AverageByInterval>): Array<AverageByInterval> {
-    allDayAveragesByInterval.forEach((intervalDayAverages, intervalIndex: number) => {
+
+  getCombinedDayTypeAverages(intervalAveragesForAllDayTypeDays: Array<{interval: number, allDayTypeDayAverages: Array<AverageByInterval>}>, summedDayAveragesByInterval: Array<AverageByInterval>): Array<AverageByInterval> {
+    intervalAveragesForAllDayTypeDays.forEach((intervalDayAverages, intervalIndex: number) => {
       let fields: Array<LogToolField> = this.visualizeService.getDataFieldOptions(true);
       fields.forEach(field => {
-    // todo this should not act on fields that are unused or dates?
-        let combinedDaysHourlyAverage: number = this.getCombinedIntervalAverage(intervalDayAverages.allDayAverages, field, intervalDayAverages.interval);
+        let combinedDaysHourlyAverage: number = this.getCombinedIntervalAverage(intervalDayAverages.allDayTypeDayAverages, field, intervalDayAverages.interval);
         summedDayAveragesByInterval[intervalIndex].averages.push({
           field: field,
           value: combinedDaysHourlyAverage
         });
       });
     });
-
+    
     return summedDayAveragesByInterval;
   }
 
   getCombinedIntervalAverage(dayAveragesByInterval: Array<AverageByInterval>, field: LogToolField, interval: number) {
-    // array of objects containing only interval
-    let filteredIntervalAverageObj = _.filter(dayAveragesByInterval, (intervalAverage) => { 
+    let allDayTypeDaysAveragesAtCurrentInterval: Array<AverageByInterval> = _.filter(dayAveragesByInterval, (intervalAverage) => { 
       return intervalAverage.interval == interval });
-    let combinedAverages: Array<{ field: LogToolField, value: number }> = new Array();
-    filteredIntervalAverageObj.forEach(obj => {
-      combinedAverages = _.union(combinedAverages, obj.averages);
+
+    let allFieldValuesForInterval: Array<{ field: LogToolField, value: number }> = new Array();
+    allDayTypeDaysAveragesAtCurrentInterval.forEach(obj => {
+      allFieldValuesForInterval = _.union(allFieldValuesForInterval, obj.averages);
     });
-    _.remove(combinedAverages, (averageObj) => {
+
+    _.remove(allFieldValuesForInterval, (averageObj) => {
       if (averageObj.field.fieldName == field.fieldName && averageObj.value == undefined || averageObj.field.fieldName != field.fieldName) {
         return true;
       }
     });
 
-    let intervalAverage: number = _.meanBy(combinedAverages, (averageObj) => {
+    let intervalAverage: number = _.meanBy(allFieldValuesForInterval, (averageObj) => {
       if (averageObj.field.fieldName == field.fieldName) {
         return averageObj.value
       }

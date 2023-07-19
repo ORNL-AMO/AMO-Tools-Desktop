@@ -203,8 +203,8 @@ export class FsatWarningService {
   }
 
   checkMotorVoltage(fsat: FSAT) {
-    if (fsat.fanMotor.motorRatedVoltage < 208) {
-      return "Voltage must be greater than 208";
+    if (fsat.fanMotor.motorRatedVoltage < 200) {
+      return "Voltage must be greater than 200";
     } else if (fsat.fanMotor.motorRatedVoltage > 15180) {
       return "Voltage must be less than 15,180";
     } else {

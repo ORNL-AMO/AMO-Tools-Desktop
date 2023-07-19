@@ -10,6 +10,7 @@ import { WasteWaterService } from '../../waste-water.service';
 export class WasteWaterCalculatorTabsComponent implements OnInit {
   calcTabSub: Subscription;
   calcTab: string;
+  calcTabsCollapsed: boolean = true;
   constructor(private wasteWaterService: WasteWaterService) { }
 
   ngOnInit(): void {
@@ -23,6 +24,11 @@ export class WasteWaterCalculatorTabsComponent implements OnInit {
   }
 
   changeCalcTab(str: string) {
-    this.wasteWaterService.calcTab.next(str);
+    this.wasteWaterService.calcTab.next(str);  
+    this.collapseCalcTabs();
+  }
+
+  collapseCalcTabs() {
+    this.calcTabsCollapsed = !this.calcTabsCollapsed;
   }
 }

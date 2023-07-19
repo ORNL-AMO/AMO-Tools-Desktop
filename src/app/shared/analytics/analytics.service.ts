@@ -86,6 +86,7 @@ export class AnalyticsService {
     }
 
     let url: string = environment.measurUtilitiesApi + 'gamp';
+    if (environment.production) { 
       this.httpClient.post<any>(url, postBody, this.httpOptions)
       .pipe(catchError(error => [])).subscribe({
         next: (resp) => {
@@ -96,6 +97,7 @@ export class AnalyticsService {
           // for now all errors fail silently
         }
       });
+    }
   }
 
   setClientId(uuid: string) {

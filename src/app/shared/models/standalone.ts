@@ -148,6 +148,9 @@ export interface AirSystemCapacityOutput extends PipeSizes {
   totalPipeVolume: number;
   totalReceiverVolume: number;
   totalCapacityOfCompressedAirSystem: number;
+  totalPipeVolumeCubicFeet?: number;
+  totalReceiverVolumeCubicFeet?: number;
+  totalCapacityOfCompressedAirSystemCubicFeet?: number;
   receiverCapacities: Array<number>;
   leakRate?: number;
 }

@@ -1,0 +1,53 @@
+.integration-container {
+    background-color: #ececec;
+    padding: .25rem 0 .5rem 0;
+    margin: .5rem 0;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+}
+
+.assessment-integration .integration-container {
+    padding: .75rem;
+}
+
+.integration-label {
+    border-bottom: #a1a1a1 solid 2px;
+    font-size: 16px;
+}
+
+.integration-status-badge {
+    border-radius: .25rem !important;
+}
+
+.integration-status-badge .fa {
+    color: #28a745 !important;
+    font-size: 25px !important;
+    font-weight: bold !important;
+}
+
+.integration-status-title {
+    font-size: 16px;
+    color: black;
+}
+
+
+.integration-status {
+    margin: .5rem auto .25rem auto;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+}
+
+.integration-status .fa.fa-times {
+    font-size: 20px !important;
+}
+
+.integration-status .message {
+    font-size: 16px;
+}
+
+.integration-status .btn-primary {
+    background: #2980b9 !important;
+    color: white !important;
+}

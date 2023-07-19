@@ -352,8 +352,14 @@ export class SsmtComponent implements OnInit {
   getCanContinue() {
     let ssmtValid: SsmtValid = this.ssmtService.checkValid(this._ssmt, this.settings);
 
-    if (this.stepTab === 'operations' || this.stepTab === 'system-basics') {
+    if (this.stepTab === 'system-basics') {
       return true;
+    } else if (this.stepTab === 'operations') {
+      if (ssmtValid.operationsValid) {
+        return true;
+      } else {
+        return false;
+      }
     } else if (this.stepTab === 'boiler') {
       if (ssmtValid.boilerValid && ssmtValid.operationsValid) {
         return true;

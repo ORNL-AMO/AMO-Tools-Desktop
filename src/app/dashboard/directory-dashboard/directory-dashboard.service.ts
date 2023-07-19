@@ -12,6 +12,7 @@ import { Settings } from '../../shared/models/settings';
 export class DirectoryDashboardService {
 
   dashboardView: BehaviorSubject<string>;
+  updateSelectedStatus: BehaviorSubject<boolean>;
   createFolder: BehaviorSubject<boolean>;
   selectedDirectoryId: BehaviorSubject<number>;
   showDeleteItemsModal: BehaviorSubject<boolean>;
@@ -23,6 +24,7 @@ export class DirectoryDashboardService {
   constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService) {
     this.dashboardView = new BehaviorSubject<string>('grid');
     this.createFolder = new BehaviorSubject<boolean>(false);
+    this.updateSelectedStatus = new BehaviorSubject<boolean>(true);
     this.selectedDirectoryId = new BehaviorSubject<number>(1);
     this.showDeleteItemsModal = new BehaviorSubject<boolean>(false);
     this.showImportModal = new BehaviorSubject<boolean>(false);

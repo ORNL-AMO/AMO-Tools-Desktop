@@ -331,7 +331,8 @@ export interface CompressedAirDayType {
     dayTypeId: string,
     name: string,
     numberOfDays: number,
-    profileDataType: "power" | "percentCapacity" | "airflow" | "powerFactor" | "percentPower"
+    profileDataType: "power" | "percentCapacity" | "airflow" | "powerFactor" | "percentPower",
+    hasValidData?: boolean
 }
 
 export interface CompressorSummary {

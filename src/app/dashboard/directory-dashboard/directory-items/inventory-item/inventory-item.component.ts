@@ -14,6 +14,8 @@ import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { MotorInventoryService } from '../../../../motor-inventory/motor-inventory.service';
+import { PumpInventoryService } from '../../../../pump-inventory/pump-inventory.service';
+import { MotorIntegrationService } from '../../../../shared/assessment-integration/motor-integration.service';
 
 @Component({
   selector: 'app-inventory-item',
@@ -37,12 +39,18 @@ export class InventoryItemComponent implements OnInit {
 
   updateDashboardDataSub: Subscription;
 
-  constructor(private router: Router, private directoryDashboardService: DirectoryDashboardService,
-    private formBuilder: UntypedFormBuilder,    private inventoryDbService: InventoryDbService,
-    private dashboardService: DashboardService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
-    private motorInventoryService: MotorInventoryService) { }
+  constructor(private directoryDashboardService: DirectoryDashboardService,
+    private formBuilder: UntypedFormBuilder,    
+    private inventoryDbService: InventoryDbService,
+    private dashboardService: DashboardService, 
+    private directoryDbService: DirectoryDbService, 
+    private settingsDbService: SettingsDbService,
+    private motorInventoryService: MotorInventoryService,
+    private motorIntegrationService: MotorIntegrationService,
+    private pumpInventoryService: PumpInventoryService) { }
 
   ngOnInit(): void {
+    this.inventoryItem.selected = false;
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
       this.dashboardView = val;
     });
@@ -60,11 +68,25 @@ export class InventoryItemComponent implements OnInit {
     this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
+  updateSelectedStatus() {
+    this.directoryDashboardService.updateSelectedStatus.next(true);
+  }
+
+
   goToInventoryItem(inventoryPage?: string) {
-    if (inventoryPage) {
-      this.motorInventoryService.mainTab.next(inventoryPage);
+    let inventoryRoute: string = 'motor-inventory';
+    if (this.inventoryItem.motorInventoryData) {
+      if (inventoryPage) {
+        this.motorInventoryService.mainTab.next(inventoryPage);
+      }
+    } else if (this.inventoryItem.pumpInventoryData) {
+      inventoryRoute = 'pump-inventory';
+      if (inventoryPage) {
+        this.pumpInventoryService.mainTab.next(inventoryPage);
+      }
     }
-    this.router.navigateByUrl('/motor-inventory/' + this.inventoryItem.id);
+    this.dashboardService.navigateWithSidebarOptions(`/${inventoryRoute}/${this.inventoryItem.id}`, {shouldCollapse: true})
+
   }
 
   showDropdown() {
@@ -140,6 +162,12 @@ export class InventoryItemComponent implements OnInit {
     let tmpSettings: Settings = this.settingsDbService.getByInventoryId(this.inventoryItem);
     let settingsCopy: Settings = JSON.parse(JSON.stringify(tmpSettings));
     delete settingsCopy.id;
+    if (inventoryCopy.motorInventoryData) {
+      this.motorIntegrationService.removeAllMotorConnectedItems(inventoryCopy);
+    } else if (inventoryCopy.pumpInventoryData) {
+      this.motorIntegrationService.removeAllPumpConnectedItems(inventoryCopy);
+    }
+    
     inventoryCopy.name = this.copyForm.controls.name.value;
     inventoryCopy.directoryId = this.copyForm.controls.directoryId.value;
 

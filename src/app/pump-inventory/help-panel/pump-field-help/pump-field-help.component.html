@@ -1,0 +1,188 @@
+<hr class="my-1 hr-spacer">
+<div class="my-2">
+    <h6>
+        Pump Field Measurements
+        <br>
+        <small class="text-muted">
+            <!-- Enter information for a potential motor replacemnt, used in the batch analysis. -->
+            <hr>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'pumpSpeed'">
+  <h6>
+    Pump Speed
+    <br>
+    <small class="text-muted">
+      The operating or nameplate speed at which the pump is running at. Used along with the measure/required flow
+      rate, head, and
+      number of stages, to calculate the pump specific speed. The specific speed is used to determine efficiency
+      penalty
+      associated with the particular pump application.
+      <hr>
+    </small>
+  </h6>
+  <div class="w-100 justify-content-center">
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <th class="text-center">Drive Type</th>
+          <th class="text-center">Minimum</th>
+          <th class="text-center">Maximum</th>
+        </tr>
+        <tr>
+          <td class="text-center">Direct Drive</td>
+          <td class="text-center">540 rpm</td>
+          <td class="text-center">3960 rpm</td>
+        </tr>
+        <tr>
+          <td class="text-center">Belt Drives</td>
+          <td class="text-center">1 rpm</td>
+          <td class="text-center">&mdash;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="my-2" *ngIf="focusedField == 'yearlyOperatingHours'">
+  <h6>
+    Operating Hours
+    <br>
+    <small class="text-muted">
+      Annual operating hours of the pump.
+      <hr>
+    </small>
+  </h6>
+  <div class="w-100 justify-content-center">
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <th class="text-center">Minimum</th>
+          <th class="text-center">Maximum</th>
+        </tr>
+        <tr>
+          <td class="text-center">0 hrs/yr</td>
+          <td class="text-center">8760 hrs/yr</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+  <div class="my-2" *ngIf="focusedField == 'operatingFlowRate'">
+    <h6>
+      Operating Flow Rate
+      <br>
+      <small class="text-muted">
+        Flow Rate represents either the
+        <u>measured</u> or
+        <u>required</u> rate of flow.
+        <br> The Flow Rate value is used by the software to calculate the fluid power and to estimate the optimal pump
+        operating
+        efficiency.
+        <hr>
+        Flow rate for modified scenario. Should be determined from an analysis of required/desired modification flow
+        rate or head, using manufacturer’s pump curve and the pump affinity laws to find accurate values.
+        This is also used to calculate the optimal pump efficiency, if activated (must change the flow rate before
+        calculating optimal pump efficiency).
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">
+              {{minFlowRate | number:'2.2-2'}}
+              <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+            </td>
+            <td class="text-center">
+              {{maxFlowRate | number:'2.2-2'}}
+              <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="focusedField == 'operatingHead'">
+    <h6>
+      Operating Head
+      <br>
+      <small class="text-muted">
+        Head represents either the
+        <u>measured</u> or
+        <u>required</u> pump head in feet or meters.
+        <br> Head, Flow Rate, and Specific Gravity are used to calculate fluid power for the Existing condition.
+        <br> To assist in calculating measured pump head, the
+        <strong>"Calculate Head"</strong> button can be clicked to bring up a head calculation panel.
+        <hr>
+        Pump head for modified scenario. Should be determined from an analysis of required/desired modification flow
+        rate or head, using manufacturer’s pump curve and the pump affinity laws to find accurate values.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="focusedField == 'loadEstimatedMethod'">
+    <h6>
+      Load Estimation Method
+      <br>
+      <small class="text-muted">
+        Load Estimation Method can either be one of two choices:
+        <u>Power</u> or
+        <u>Current</u>. Both of which calculate
+        <u>Motor Input</u> which will be used for efficiency calculations.
+        <br> The preferred load estimation method is power. However, if a power measurement is not practical, current
+        can be
+        used.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="focusedField == 'measuredCurrent' || focusedField == 'measuredPower'">
+    <h6>
+      Measured Power or Measured Current
+      <br>
+      <small class="text-muted">
+        Either Measured Power (kW) or Measured Current (amps) will be displayed, depending on the Load Estimation Method
+        selected. Power
+        is the preferred measurement, but unless a permanently-installed power meter is available, is much more
+        intrusive
+        and challenging.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="focusedField == 'measuredVoltage'">
+    <h6>
+      Measured Voltage
+      <br>
+      <small class="text-muted">
+        The measured bus voltage is used, along with measured current, to estimate input motor power if Current is the
+        specified
+        Load estimation method. If Power is the Load estimation method, the current is estimated from power and voltage.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Suggested Minimum</th>
+            <th class="text-center">Suggested Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">1 V</td>
+            <td class="text-center">13800 V</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

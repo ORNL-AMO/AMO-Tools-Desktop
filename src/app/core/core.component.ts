@@ -9,9 +9,7 @@ import { CoreService } from './core.service';
 import { NavigationEnd, Router } from '../../../node_modules/@angular/router';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
-import { AnalyticsService, AppAnalyticsData } from '../shared/analytics/analytics.service';
-import { v4 as uuidv4 } from 'uuid';
-import { AnalyticsDataIdbService } from '../indexedDb/analytics-data-idb.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 import { ElectronService, ReleaseData } from '../electron/electron.service';
 
@@ -147,7 +145,7 @@ export class CoreComponent implements OnInit {
     }
   }
 
-  async setAllDbData() {
+  setAllDbData() {
     this.coreService.getAllAppData().subscribe(initializedData => {
       this.directoryDbService.setAll(initializedData.directories);
       this.settingsDbService.setAll(initializedData.settings);

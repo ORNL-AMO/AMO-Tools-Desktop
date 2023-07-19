@@ -123,3 +123,20 @@ div.clickable-tab.active{
     padding-top: 3px;
     padding-bottom: 3px;
 }
+
+.header{
+    display: flex; 
+}
+
+.header > div {
+    width: calc(50%);
+}
+
+@media screen and (max-width: 1024px) {
+    .header{
+        display: block; 
+    }
+    .header > div {
+        width: calc(100%);
+    }
+}

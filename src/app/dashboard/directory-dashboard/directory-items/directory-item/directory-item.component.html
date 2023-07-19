@@ -1,7 +1,7 @@
 <!--grid view-->
 <div class="card card-item" *ngIf="dashboardView == 'grid'">
     <div class="card-header summary-card-header">
-        <input type="checkbox" [(ngModel)]="directory.selected">
+        <input type="checkbox" [(ngModel)]="directory.selected" (change)="updateSelectedStatus()">
         <span class="fa fa-folder pl-1 pr-1"></span>
         <a [routerLink]="['/directory-dashboard', directory.id]">{{directory.name}}</a>
         <i class="fa fa-edit pull-right" (click)="showEditModal()"></i>
@@ -17,7 +17,7 @@
                 </span>
                 <span *ngIf="directoryItem.type == 'assessment'">
                     <img *ngIf="directoryItem.assessment.type == 'PSAT'" class="psat icon-image pl-1 pr-1"
-                        src="assets/images/ico-psat-diagram.png">
+                        src="assets/images/pump-icon.png">
                     <img *ngIf="directoryItem.assessment.type == 'PHAST'" class="phast icon-image pl-1 pr-1"
                         src="assets/images/ico-phast-diagram.png">
                     <img *ngIf="directoryItem.assessment.type == 'FSAT'" class="fsat icon-image pl-1 pr-1"
@@ -34,8 +34,7 @@
                 </span>
                 <span *ngIf="directoryItem.type == 'inventory'">
                     <img class="fsat icon-image pl-1 pr-1" src="assets/images/motor-inventory-icon.png">
-                    <a
-                        [routerLink]="['/motor-inventory', directoryItem.inventoryItem.id]">{{directoryItem.inventoryItem.name}}</a>
+                    <a (click)="navigateWithSidebarOptions('/motor-inventory/', directoryItem.inventoryItem)">{{directoryItem.inventoryItem.name}}</a>
                 </span>
             </li>
         </ul>

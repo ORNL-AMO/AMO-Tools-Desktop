@@ -112,6 +112,8 @@ import { FeedwaterEconomizerComponent } from '../calculator/steam/feedwater-econ
 import { CondensingEconomizerComponent } from '../calculator/steam/condensing-economizer/condensing-economizer.component';
 import { BleedTestComponent } from '../calculator/compressed-air/bleed-test/bleed-test.component';
 import { DisclaimerComponent } from '../dashboard/disclaimer/disclaimer.component';
+import { PumpInventoryComponent } from '../pump-inventory/pump-inventory.component';
+import { pumpInventoryRoutes } from '../pump-inventory/pump-inventory.routing';
 
 export const coreRoutes: Routes = [
   {
@@ -575,6 +577,11 @@ export const coreRoutes: Routes = [
     component: MotorInventoryComponent,
     path: 'motor-inventory/:id',
     children: motorInventoryRoutes
+  },
+  {
+    component: PumpInventoryComponent,
+    path: 'pump-inventory/:id',
+    children: pumpInventoryRoutes
   },
   {
     component: WasteWaterComponent,

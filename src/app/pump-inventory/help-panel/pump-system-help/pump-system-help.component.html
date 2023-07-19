@@ -1,0 +1,33 @@
+<hr class="my-1 hr-spacer">
+<div class="my-2">
+    <h6>
+        Pump System
+        <br>
+        <small class="text-muted">
+            <!-- Enter information for a potential motor replacemnt, used in the batch analysis. -->
+            <hr>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'driveType'">
+    <h6>
+      Drive
+      <br>
+      <small class="text-muted">
+        This drop-down selection menu allows the user to define whether the pump is direct driven by the motor or
+        belt-driven. There
+        are three options for belt drives: V-Belt, Notched V-Belt and Synchronous Belt Drives. Of the three, V-Belt
+        drives
+        are the least efficient, Notched V-Belts are slightly better, and Synchronous Belts are the most efficient
+        belts.
+        <br> This value is used in the Load Estimation calculation. Note: The current estimating method should NOT be
+        used if
+        adjustable frequency drives are used.
+        <hr> Drive options include
+        <u>Direct Drive</u>,
+        <u>VSD</u>,
+        <u>Belt Drive</u>, or
+        <u>Gear Box/Transmission</u>.
+      </small>
+    </h6>
+  </div>

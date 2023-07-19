@@ -10,16 +10,19 @@ export class PrintOptionsMenuService {
   showPrintView: BehaviorSubject<boolean>;
   printContext: BehaviorSubject<string>;
   showPrintMenu: BehaviorSubject<boolean>;
+  isPowerSankeyPrintViewReady: BehaviorSubject<boolean>;
   constructor(private settingsDbService: SettingsDbService) {
     let initPrintOptions: PrintOptions = this.setPrintOptionsFromSettings();
     this.printOptions = new BehaviorSubject<PrintOptions>(initPrintOptions);
     this.showPrintView = new BehaviorSubject<boolean>(false);
     this.printContext = new BehaviorSubject<string>(undefined);
     this.showPrintMenu = new BehaviorSubject<boolean>(false);
+    this.isPowerSankeyPrintViewReady = new BehaviorSubject<boolean>(false);
   }
 
   setPrintOptionsFromSettings() {
     let globalSettings = this.settingsDbService.globalSettings;
+    
     let printOptions: PrintOptions = this.setValuesFromSettings(globalSettings);
     return printOptions;
   }
@@ -120,6 +123,8 @@ export class PrintOptionsMenuService {
   }
 
   setValuesFromSettings(settings: Settings): PrintOptions {
+    
+    // printpsatrollup
     return {
       printPsatRollup: settings.printPsatRollup,
       printPhastRollup: settings.printPhastRollup,

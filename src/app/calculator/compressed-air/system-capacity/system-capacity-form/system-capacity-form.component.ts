@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { AirSystemCapacityInput, AirSystemCapacityOutput } from "../../../../shared/models/standalone";
 import { Settings } from '../../../../shared/models/settings';
 import { standardSizesConstant, metricSizesConstant } from '../../compressed-air-constants';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-system-capacity-form',
@@ -22,7 +23,7 @@ export class SystemCapacityFormComponent implements OnInit {
 
   pipeSizeOptions: Array<{ display: string, size: string }>;
 
-  constructor() { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     let sizeOptions = this.settings.unitsOfMeasure == 'Metric'? metricSizesConstant : standardSizesConstant;  
@@ -30,6 +31,18 @@ export class SystemCapacityFormComponent implements OnInit {
     if(!this.inputs.allPipes){
       this.addPipe();
     }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.outputs && this.settings.unitsOfMeasure === 'Imperial') {
+      this.setCubicFeetResults();
+    }
+  }
+
+  setCubicFeetResults() {
+    this.outputs.totalPipeVolumeCubicFeet = this.convertUnitsService.value(this.outputs.totalPipeVolume).from('gal').to('ft3');
+    this.outputs.totalReceiverVolumeCubicFeet = this.convertUnitsService.value(this.outputs.totalReceiverVolume).from('gal').to('ft3');
+    this.outputs.totalCapacityOfCompressedAirSystemCubicFeet = this.convertUnitsService.value(this.outputs.totalCapacityOfCompressedAirSystem).from('gal').to('ft3');
   }
 
   emitChange() {

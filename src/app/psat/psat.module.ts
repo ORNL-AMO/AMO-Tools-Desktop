@@ -59,6 +59,8 @@ import { PumpOperationsComponent } from './pump-operations/pump-operations.compo
 import { PumpOperationsService } from './pump-operations/pump-operations.service';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
+import { AssessmentIntegrationModule } from '../shared/assessment-integration/assessment-integration.module';
+import { IntegratePumpInventoryComponent } from './integrate-pump-inventory/integrate-pump-inventory.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +83,8 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
     PsatReportGraphsComponent,
     PsatReportGraphsPrintComponent,
     PumpOperationsComponent,
-    WelcomeScreenComponent
+    WelcomeScreenComponent,
+    IntegratePumpInventoryComponent
   ],
   exports: [
     PsatReportComponent
@@ -114,7 +117,8 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
     SystemAndEquipmentCurveModule,
     PsatSankeyModule,
     UpdateUnitsModalModule,
-    AssessmentCo2SavingsModule
+    AssessmentCo2SavingsModule,
+    AssessmentIntegrationModule
   ],
   providers: [
     PsatService,

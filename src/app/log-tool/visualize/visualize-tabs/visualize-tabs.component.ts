@@ -16,9 +16,7 @@ export class VisualizeTabsComponent implements OnInit {
   graphObjects: Array<GraphObj>;
   selectedGraphDataSub: Subscription;
   selectedGraphData: GraphObj;
-  userGraphOptionsSubscription: Subscription;
   constructor(private visualizeService: VisualizeService, 
-    private logToolDbService: LogToolDbService,
     private logToolDataService: LogToolDataService) { }
 
 
@@ -28,23 +26,6 @@ export class VisualizeTabsComponent implements OnInit {
     });
     this.selectedGraphDataSub = this.visualizeService.selectedGraphObj.subscribe(selectedGraphData => {
       this.selectedGraphData = selectedGraphData;
-    });
-
-    this.userGraphOptionsSubscription = this.visualizeService.userGraphOptions
-    .pipe(
-      debounce((userGraphOptionsGraphObj: GraphObj) => {
-        let userInputDelay: number = this.visualizeService.userInputDelay.getValue()
-        return interval(userInputDelay);
-      })
-      ).subscribe((userGraphOptionsGraphObj: GraphObj) => {
-        if (userGraphOptionsGraphObj) {
-          this.graphObjects.map(graph => {
-            if (graph.graphId === userGraphOptionsGraphObj.graphId) {
-              graph.layout.title.text = userGraphOptionsGraphObj.layout.title.text;
-            } 
-            return graph;
-          });
-        }
     });
   }
 
@@ -56,11 +37,9 @@ export class VisualizeTabsComponent implements OnInit {
   addNewGraphDataObj() {
     this.logToolDataService.loadingSpinner.next({show: true, msg: `Adding New Graph.. This may take a moment
     depending on the amount of data you have supplied...`});
-    this.visualizeService.saveUserOptionsChanges();
-    let updatedSelectedGraphObject: GraphObj = this.visualizeService.selectedGraphObj.getValue();
     this.visualizeService.annotateDataPoint.next(undefined);
-    this.logToolDbService.saveDataWithOptions(updatedSelectedGraphObject);
     this.visualizeService.addNewGraphDataObj();
+    this.visualizeService.shouldRenderGraph.next(true);
   }
 
   selectGraph(graphObj: GraphObj) {
@@ -68,6 +47,6 @@ export class VisualizeTabsComponent implements OnInit {
     depending on the amount of data you have supplied...`});
     this.visualizeService.selectedGraphObj.next(graphObj);
     this.visualizeService.annotateDataPoint.next(undefined);
-    this.visualizeService.userGraphOptions.next(graphObj);
+    this.visualizeService.shouldRenderGraph.next(true);
   }
 }

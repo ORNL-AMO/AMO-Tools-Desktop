@@ -19,6 +19,7 @@ import { FanImperialDefaults, SettingsService } from '../settings/settings.servi
 import { ConvertFsatService } from './convert-fsat.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import * as _ from 'lodash';
+import { OperationsService } from './operations/operations.service';
 
 @Component({
   selector: 'app-fsat',
@@ -93,7 +94,8 @@ export class FsatComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private settingsService: SettingsService,
     private egridService: EGridService,
-    private convertFsatService: ConvertFsatService) {
+    private convertFsatService: ConvertFsatService,
+    private fsatOperationsService: OperationsService) {
   }
 
   ngOnInit() {
@@ -337,8 +339,11 @@ export class FsatComponent implements OnInit {
   }
 
   getCanContinue() {
-    if (this.stepTab === 'system-basics' || this.stepTab === 'fan-operations') {
+    if (this.stepTab === 'system-basics' ) {
       return true;
+    } else if (this.stepTab === 'fan-operations'){
+      let tmpForm = this.fsatOperationsService.getFormFromObj(this._fsat.fsatOperations);
+      return tmpForm.valid;
     } else if (this.stepTab === 'fsat-fluid') {
       let isValid: boolean = this.fsatFluidService.isFanFluidValid(this._fsat.baseGasDensity, this.settings);
       if (isValid) {

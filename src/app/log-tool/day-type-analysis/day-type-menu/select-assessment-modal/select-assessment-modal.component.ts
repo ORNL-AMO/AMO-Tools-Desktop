@@ -34,7 +34,7 @@ export class SelectAssessmentModalComponent implements OnInit {
 
   compressedAirAssessments: Array<Assessment>;
   directories: Array<Directory>
-  addNewAssessment: boolean = false;
+  addingNewAssessment: boolean = false;
   newAssessmentForm: UntypedFormGroup;
   constructor(private assessmentDbService: AssessmentDbService, private logToolService: LogToolService,
     private logToolDataService: LogToolDataService,
@@ -157,12 +157,12 @@ export class SelectAssessmentModalComponent implements OnInit {
     }
   }
 
-  showAddNewAssessment() {
-    this.addNewAssessment = true;
+  showAddingNewAssessment() {
+    this.addingNewAssessment = true;
   }
 
-  hideAddNewAssessment() {
-    this.addNewAssessment = false;
+  hideAddingNewAssessment() {
+    this.addingNewAssessment = false;
   }
 
   getParentDirStr(id: number) {

@@ -194,24 +194,24 @@ export class ImportDataComponent implements OnInit {
       fr.readAsText(fileReference);
       fr.onloadend = (e) => {
         let jsonData = JSON.parse(JSON.stringify(fr.result));
-        let logToolDbData: LogToolDbData = JSON.parse(jsonData);
-        if (logToolDbData.origin === "AMO-LOG-TOOL-DATA") {
+        let importData: LogToolDbData = JSON.parse(jsonData);
+        if (importData.origin === "AMO-LOG-TOOL-DATA") {
           this.explorerData.isExistingImport = true;
-          this.logToolDbService.logToolDbData = [logToolDbData];
-          this.logToolDbService.setLogToolData(logToolDbData);
+          this.logToolDbService.logToolDbData = [importData];
+          this.logToolDbService.setDataFromImport(importData);
           this.explorerData.fileData.push({ 
             dataSetId: this.logToolDataService.getUniqueId(), 
             fileType: '.json',
             name: fileReference.name, 
-            data: logToolDbData.setupData.individualDataFromCsv,
-            previewData: logToolDbData.setupData.individualDataFromCsv
+            data: importData.setupData.individualDataFromCsv,
+            previewData: importData.setupData.individualDataFromCsv
           });
-          this.logToolDataService.importExistingDataSets(logToolDbData);
-          resolve(logToolDbData);
+          this.logToolDataService.importExistingDataSets(importData);
+          resolve(importData);
         } else {
-          let name = logToolDbData.name ? logToolDbData.name : undefined;
+          let name = importData.name ? importData.name : undefined;
           this.invalidFileReferences.push({ name: name, message: 'The uploaded JSON file does not contain AMO-Tools Data Explorer data' });
-          resolve(logToolDbData);
+          resolve(importData);
         }
       };
 
@@ -257,7 +257,6 @@ export class ImportDataComponent implements OnInit {
 
   async finalizeDataSetup() {
     this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
-    await this.logToolDbService.saveData();
     this.logToolDataService.explorerData.next(this.explorerData);
   }
 
@@ -276,10 +275,9 @@ export class ImportDataComponent implements OnInit {
     this.explorerData.isExample = true;
     this.explorerData = this.logToolDataService.addImportDataSet(exampleDataSet, exampleName, exampleName, this.explorerData);
     this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
-    await this.logToolDbService.saveData();
-    this.logToolDataService.explorerData.next(this.explorerData);
     this.runDayTypeAnalysis(true);
     this.setExistingDataComplete();
+    this.logToolDataService.explorerData.next(this.explorerData);
     this.logToolDataService.loadingSpinner.next({show: false, msg: 'Loading Example...'});
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectorRef, HostListener, SimpleChanges } from '@angular/core';
 import { AuxEquipment } from '../../shared/models/phast/auxEquipment';
 import { PHAST } from '../../shared/models/phast/phast';
 import { AuxEquipmentService } from './aux-equipment.service';
@@ -19,12 +19,20 @@ export class AuxEquipmentComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getContainerHeight();
+  }
+  
+
   tabSelect: string = 'results';
   currentField: string = 'fuelType';
 
   results: Array<{name: string, totalPower: number, motorPower: string}>;
   resultsSum: number = 0;
-  constructor(private auxEquipmentService: AuxEquipmentService, private settingsDbService: SettingsDbService) { }
+  smallScreenTab: string = 'baseline';
+  constructor(private auxEquipmentService: AuxEquipmentService, private settingsDbService: SettingsDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     if (!this.phast.auxEquipment) {
@@ -36,6 +44,13 @@ export class AuxEquipmentComponent implements OnInit {
     
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }    
+    this.getContainerHeight();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {    
+    if (changes.containerHeight && !changes.containerHeight.firstChange) {
+      this.getContainerHeight();
     }
   }
 
@@ -80,4 +95,16 @@ export class AuxEquipmentComponent implements OnInit {
     this.phast.auxEquipment.splice(index, 1);
     this.calculate();
   }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
+  getContainerHeight() {
+    if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+      this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      this.cd.detectChanges();
+    }
+  }
+
 }

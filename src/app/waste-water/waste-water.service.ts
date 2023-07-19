@@ -28,6 +28,15 @@ export class WasteWaterService {
   modifyConditionsTab: BehaviorSubject<string>;
   selectedModificationId: BehaviorSubject<string>;
   focusedField: BehaviorSubject<string>;
+
+  //system setup tabs
+  setupTabs: Array<string> = [
+    'system-basics',
+    'operations',
+    'activated-sludge',
+    'aerator-performance'
+  ];
+
   constructor(private activatedSludgeFormService: ActivatedSludgeFormService,
     private systemBasicsService: SystemBasicsService,
     private assessmentCo2Service: AssessmentCo2SavingsService,
@@ -433,6 +442,29 @@ export class WasteWaterService {
       return startingValue;
     } else {
       return Number((speed).toFixed(1));
+    }
+  }
+
+
+  continue() {
+    let tmpStepTab: string = this.setupTab.getValue();
+    if (tmpStepTab === 'aerator-performance') {
+      this.mainTab.next('assessment');
+    } else {
+      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpStepTab);
+      let nextTab: string = this.setupTabs[assessmentTabIndex + 1];
+      this.setupTab.next(nextTab);
+    }
+  }
+
+  back() {
+    let tmpStepTab: string = this.setupTab.getValue();
+    if (tmpStepTab !== 'system-basics' && this.mainTab.getValue() == 'system-setup') {
+      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpStepTab);
+      let nextTab: string = this.setupTabs[assessmentTabIndex - 1];
+      this.setupTab.next(nextTab);
+    } else if (this.mainTab.getValue() == 'assessment') {
+      this.mainTab.next('system-setup');
     }
   }
 }

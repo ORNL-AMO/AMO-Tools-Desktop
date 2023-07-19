@@ -4,6 +4,7 @@ import { TreasureHuntService } from '../treasure-hunt.service';
 import { Subscription } from 'rxjs';
 import { CalculatorsService } from '../calculators/calculators.service';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { DashboardService } from '../../dashboard/dashboard.service';
 
 @Component({
   selector: 'app-treasure-hunt-banner',
@@ -22,7 +23,8 @@ export class TreasureHuntBannerComponent implements OnInit {
   calculatorTabSub: Subscription;
   disableTabs: boolean = false;
   bannerCollapsed: boolean = true;
-  constructor(private treasureHuntService: TreasureHuntService, private calculatorsService: CalculatorsService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
+  constructor(private treasureHuntService: TreasureHuntService, 
+    private dashboardService: DashboardService, private calculatorsService: CalculatorsService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit() {
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
@@ -73,6 +75,10 @@ export class TreasureHuntBannerComponent implements OnInit {
     this.bannerCollapsed = !this.bannerCollapsed;
     window.dispatchEvent(new Event("resize"));
   } 
+
+  navigateHome() {
+    this.dashboardService.navigateWithSidebarOptions('/landing-screen', {shouldCollapse: false});
+  }
 
   back() {
     if (this.mainTab == 'report') {

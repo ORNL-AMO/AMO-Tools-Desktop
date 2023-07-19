@@ -65,6 +65,7 @@
               "src/assets/styles/two-panel.css",
               "src/assets/styles/tabs.css",
               "src/assets/styles/utilities.css",
+              "src/assets/styles/integrations.css",
               "src/assets/styles/graphs.css",
               "src/assets/styles/forms.css",
               "src/assets/styles/help.css",

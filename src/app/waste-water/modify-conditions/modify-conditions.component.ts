@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WasteWater, WasteWaterData } from '../../shared/models/waste-water';
 import { WasteWaterService } from '../waste-water.service';
@@ -12,6 +12,8 @@ import { CompareService, WasteWaterDifferent } from './compare.service';
 export class ModifyConditionsComponent implements OnInit {
   @Input()
   containerHeight: number;
+
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;  
 
   wasteWaterSub: Subscription;
 
@@ -27,7 +29,9 @@ export class ModifyConditionsComponent implements OnInit {
 
   selectedModification: WasteWaterData;
   selectedModificationIdSub: Subscription;
-  constructor(private wasteWaterService: WasteWaterService, private compareService: CompareService) { }
+  
+  smallScreenTab: string = 'baseline';
+  constructor(private wasteWaterService: WasteWaterService, private compareService: CompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.isModalOpenSub = this.wasteWaterService.isModalOpen.subscribe(val => {
@@ -60,6 +64,18 @@ export class ModifyConditionsComponent implements OnInit {
     this.wasteWaterSub.unsubscribe();
   }
 
+  getContainerHeight() {
+    if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+      this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      this.cd.detectChanges();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight && !changes.containerHeight.firstChange) {
+      this.getContainerHeight();
+    }
+  }
 
   showModificationList() {
     this.wasteWaterService.showModificationListModal.next(true);
@@ -75,6 +91,18 @@ export class ModifyConditionsComponent implements OnInit {
       this.modificationSelected = false;
     }
     else if (bool === this.modificationSelected) {
+      this.modificationSelected = true;
+      this.baselineSelected = false;
+    }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+    if (selectedTab === 'baseline') {
+      this.baselineSelected = true;
+      this.modificationSelected = false;
+    }
+    else if (selectedTab === 'modification') {
       this.modificationSelected = true;
       this.baselineSelected = false;
     }
