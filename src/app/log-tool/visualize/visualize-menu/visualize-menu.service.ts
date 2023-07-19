@@ -73,10 +73,11 @@ export class VisualizeMenuService {
     if (tmpSelectedYAxisDataOptions.length != 0) {
       selectedGraphObj.selectedYAxisDataOptions = tmpSelectedYAxisDataOptions;
     } else {
+      let defaultColor: string = '#351e76';
       selectedGraphObj.selectedYAxisDataOptions = [{
         index: 0,
         dataOption: selectedGraphObj.yAxisDataOptions[0],
-        seriesColor: graphColors[0],
+        seriesColor: defaultColor,
         seriesName: this.getSeriesName(selectedGraphObj.yAxisDataOptions[0].dataField),
         yaxis: 'y',
         linesOrMarkers: 'markers'
