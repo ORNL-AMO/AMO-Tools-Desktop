@@ -2,15 +2,15 @@
     <div #header class="w-100 hide-print sticky-top">
         <app-motor-inventory-banner [motorInventoryItem]="motorInventoryItem"></app-motor-inventory-banner>
     </div>
-    <div class="d-flex tab-content" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'scroll-item': mainTab == 'summary' || mainTab == 'analysis'}">
+    <div class="assessment-container" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'scroll-item': mainTab == 'summary' || mainTab == 'analysis'}">
         <div class="w-100" [ngClass]="{'modal-open': isModalOpen == true}">
             <app-motor-inventory-setup *ngIf="mainTab == 'setup'" [containerHeight]="containerHeight"></app-motor-inventory-setup>
             <app-motor-inventory-summary *ngIf="mainTab == 'summary'"></app-motor-inventory-summary>
             <app-batch-analysis *ngIf="mainTab == 'analysis'"></app-batch-analysis>
         </div>
     </div>
-    <div *ngIf="mainTab == 'setup'" #footer id="motorInventoryFooter" class="footer hide-print">
-        <div class="d-flex w-100 justify-content-between">
+    <div class="d-none d-lg-block" *ngIf="mainTab == 'setup'" #footer id="motorInventoryFooter" class="footer hide-print">
+        <div class="d-lg-flex d-none w-100 justify-content-between">
             <button class="btn btn-default" (click)="back()" [disabled]="setupTab == 'plant-setup'">Back</button>
             <button class="btn btn-primary" (click)="continue()">Next</button>
         </div>
