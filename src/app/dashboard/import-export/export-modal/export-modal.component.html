@@ -146,10 +146,8 @@
                         <label for="exportName"> Name your file:&nbsp;</label>
                         <input type="text" class="form-control" id="exportName" [(ngModel)]="exportName">
                     </div>
-                    <button class="btn btn-primary ml-2" *ngIf = "canExport" (click)="buildExportZip()">Export
-                        as .gz</button>
                     <button class="btn btn-primary ml-2" *ngIf ="canExport" (click)="buildExportJSON()">Export
-                        as .json</button>
+                        </button>
                     <button class="btn btn-primary ml-2" *ngIf ="!canExport" (click)="buildExportZip()">Export
                         </button>
                 </div>
