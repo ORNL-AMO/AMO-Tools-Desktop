@@ -3,9 +3,11 @@ import { Directory } from '../shared/models/directory';
 import { Settings } from '../shared/models/settings';
 import { Assessment } from '../shared/models/assessment';
 import { Calculator } from '../shared/models/calculators';
-import { Subscription } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { DirectoryDashboardService } from './directory-dashboard/directory-dashboard.service';
 import { DashboardService } from './dashboard.service';
+import { NavigationEnd, Router } from '@angular/router';
+import { PrintOptionsMenuService } from '../shared/print-options-menu/print-options-menu.service';
 
 
 @Component({
@@ -20,8 +22,8 @@ export class DashboardComponent implements OnInit {
   createAssessment: boolean;
   createAssessmentSub: Subscription;
 
-  createInventory: boolean;
-  createInventorySub: Subscription;
+  showCreateInventory: string;
+  showCreateInventorySub: Subscription;
 
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
@@ -45,15 +47,46 @@ export class DashboardComponent implements OnInit {
   sidebarWidth: number;
   sidebarWidthSub: Subscription;
   contentWidth: number;
+  routerSubscription: any;
+  useContainerScroll: boolean = true;
+  inPrintView: boolean = false;
+  noScrollContainerView: Array<string> = [
+    'phast',
+    'psat',
+    'fsat',
+    'ssmt',
+    'treasure-hunt',
+    'compressed-air',
+    'report-rollup',
+    'log-tool',
+    'motor-inventory',
+    'pump-inventory',
+    'waste-water'
+  ];
+  showPrintViewSub: Subscription;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setContentWidth();
   }
-  constructor(private dashboardService: DashboardService, private directoryDashboardService: DirectoryDashboardService, private cd: ChangeDetectorRef) {
+  constructor(private dashboardService: DashboardService, 
+    private router: Router,
+    private printOptionsMenuService: PrintOptionsMenuService,
+    private directoryDashboardService: DirectoryDashboardService, private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
+    this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+    .subscribe((event: NavigationEnd) => {
+      let firstUrlSegment: string = event.urlAfterRedirects.split('/')[1];
+      // /phast
+      if(this.noScrollContainerView.includes(firstUrlSegment)) {
+        this.useContainerScroll = false;
+      } else {
+        this.useContainerScroll = true;
+      }
+    });
+    
     this.createFolderSub = this.directoryDashboardService.createFolder.subscribe(val => {
       this.createFolder = val;
     });
@@ -63,6 +96,10 @@ export class DashboardComponent implements OnInit {
 
     this.moveItemsSub = this.dashboardService.moveItems.subscribe(val => {
       this.moveItems = val;
+    });
+
+    this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
+      this.inPrintView = val;
     });
 
     this.copyItemsSub = this.dashboardService.copyItems.subscribe(val => {
@@ -91,8 +128,8 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    this.createInventorySub = this.dashboardService.createInventory.subscribe(val => {
-      this.createInventory = val;
+    this.showCreateInventorySub = this.dashboardService.showCreateInventory.subscribe(showCreateInventory => {
+      this.showCreateInventory = showCreateInventory;
     })
   }
 
@@ -103,8 +140,10 @@ export class DashboardComponent implements OnInit {
     this.createFolderSub.unsubscribe();
     this.showImportModalSub.unsubscribe();
     this.sidebarWidthSub.unsubscribe();
-    this.createInventorySub.unsubscribe();
+    this.showCreateInventorySub.unsubscribe();
     this.copyItemsSub.unsubscribe();
+    this.routerSubscription.unsubscribe();
+    this.showPrintViewSub.unsubscribe();
   }
 
   ngAfterViewInit() {

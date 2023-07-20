@@ -11,9 +11,7 @@ import { CoreService } from './core.service';
 import { NavigationEnd, Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
-import { AnalyticsService, AppAnalyticsData } from '../shared/analytics/analytics.service';
-import { v4 as uuidv4 } from 'uuid';
-import { AnalyticsDataIdbService } from '../indexedDb/analytics-data-idb.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 
 declare var google: any;
@@ -44,10 +42,7 @@ export class CoreComponent implements OnInit {
   isOnline: boolean;
   info: any;
   updateAvailableSubscription: Subscription;
-  showTranslateModalSub: Subscription;
   routerSubscription: Subscription;
-  showTranslate: string = 'hide';
-  analyticsSessionId: string;
   modalOpenSub: Subscription;
   showSecurityAndPrivacyModalSub: Subscription;
   isModalOpen: boolean;
@@ -65,7 +60,6 @@ export class CoreComponent implements OnInit {
     private calculatorDbService: CalculatorDbService, 
     private coreService: CoreService, 
     private router: Router,
-    private analyticsDataIdbService: AnalyticsDataIdbService,
     private securityAndPrivacyService: SecurityAndPrivacyService,
     private inventoryDbService: InventoryDbService) {
   }
@@ -74,10 +68,11 @@ export class CoreComponent implements OnInit {
     if (!window.navigator.cookieEnabled) {
       this.showBrowsingDataToast = true;
     }
-   this.analyticsSessionId = uuidv4();
    this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
      .subscribe((event: NavigationEnd) => {
-      this.sendAnalyticsPageView(event);
+      if (this.idbStarted) {
+        this.analyticsService.sendAnalyticsPageView(event.urlAfterRedirects);
+      }
      });
 
     this.electronService.ipcRenderer.once('available', (event, arg) => {
@@ -120,20 +115,6 @@ export class CoreComponent implements OnInit {
       }
     });
 
-    this.showTranslateModalSub = this.coreService.showTranslateModal.subscribe(val => {
-      if (val == true) {
-        try {
-          let instance = google.translate.TranslateElement.getInstance();
-          if (!instance) {
-            let element = new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
-          }
-          this.showTranslate = 'show';
-        } catch (err) {
-
-        }
-      }
-    })
-
     this.modalOpenSub = this.securityAndPrivacyService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     });
@@ -144,44 +125,12 @@ export class CoreComponent implements OnInit {
 
   }
 
- async initAnalyticsSession() {
-    await this.setClientAnalyticsId();
-    this.analyticsService.postEventToMeasurementProtocol('page_view', { 
-      page_path: '/landing-screen',
-      // engagement_time_msec required to begin an analytics session but not used again
-      engagement_time_msec: '100',
-      session_id: this.analyticsSessionId
-    })
-  }
-  
-  async setClientAnalyticsId() {
-    let appAnalyticsData: Array<AppAnalyticsData> = await firstValueFrom(this.analyticsDataIdbService.getAppAnalyticsData());
-    let clientId: string;
-    if (appAnalyticsData.length == 0) {
-      clientId = uuidv4();
-      await firstValueFrom(this.analyticsDataIdbService.addWithObservable({
-        clientId: clientId,
-        modifiedDate: new Date()
-      }));
-    } else {
-      clientId = appAnalyticsData[0].clientId;
-    }
-    this.analyticsService.setClientId(clientId);
-  }
-
-  sendAnalyticsPageView(event) {
-    if (this.idbStarted) {
-      this.analyticsService.postEventToMeasurementProtocol('page_view', { page_path: event.urlAfterRedirects, session_id: this.analyticsSessionId })
-     } 
-  }
-
   ngOnDestroy() {
     if (this.openingTutorialSub) {
       this.openingTutorialSub.unsubscribe();
     }
     this.routerSubscription.unsubscribe();
     this.updateAvailableSubscription.unsubscribe();
-    this.showTranslateModalSub.unsubscribe();
     this.showSecurityAndPrivacyModalSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
   }
@@ -200,7 +149,7 @@ export class CoreComponent implements OnInit {
     }
   }
 
-  async setAllDbData() {
+  setAllDbData() {
     this.coreService.getAllAppData().subscribe(initializedData => {
       this.directoryDbService.setAll(initializedData.directories);
       this.settingsDbService.setAll(initializedData.settings);
@@ -211,7 +160,6 @@ export class CoreComponent implements OnInit {
         this.suiteDbService.initCustomDbMaterials();
       }
       this.idbStarted = true;
-      this.initAnalyticsSession();
       this.changeDetectorRef.detectChanges();
     });
   }
@@ -231,9 +179,6 @@ export class CoreComponent implements OnInit {
     this.hideTutorial = true;
   }
 
-  closeTranslate() {
-    this.showTranslate = 'hide';
-  }
 
   closeNoticeModal(isClosedEvent?: boolean) {
     this.securityAndPrivacyService.modalOpen.next(false)

@@ -1,0 +1,24 @@
+.pump-inventory-container{
+    height: 100vh;
+    background: #ececec;
+}
+
+.pump-inventory-container div#pumpInventoryFooter.footer {
+    position: relative;
+}
+
+.pump-inventory .btn-primary{
+    background: #2980b9;
+    color: white;
+}
+
+@media print{
+    .scroll-item{
+        overflow-y: visible;
+    }
+}
+
+.modal-open{
+    z-index: initial !important;
+}
+

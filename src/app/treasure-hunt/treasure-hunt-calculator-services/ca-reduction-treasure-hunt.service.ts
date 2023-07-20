@@ -5,6 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { CompressedAirReductionData, CompressedAirReductionResults } from '../../shared/models/standalone';
 import { CompressedAirReductionTreasureHunt, EnergyUsage, OpportunitySummary, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
+import * as _ from 'lodash';
 
 @Injectable()
 export class CaReductionTreasureHuntService {
@@ -18,8 +19,8 @@ export class CaReductionTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(compressedAirReduction: CompressedAirReductionTreasureHunt) {
-    this.compressedAirReductionService.baselineData = compressedAirReduction.baseline;
-    this.compressedAirReductionService.modificationData = compressedAirReduction.modification;
+    this.compressedAirReductionService.baselineData = _.cloneDeep(compressedAirReduction.baseline);
+    this.compressedAirReductionService.modificationData = _.cloneDeep(compressedAirReduction.modification);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {

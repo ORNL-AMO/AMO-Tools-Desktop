@@ -1,5 +1,5 @@
-<div class="row w-100 justify-content-center" *ngIf="!printView">
-  <div class="d-flex" [ngClass]="{'col-6 flex-column': selectedSsmt2, 'col-12': !selectedSsmt2}">
+<div class="d-flex flex-wrap justify-content-center" *ngIf="!printView">
+  <div class="d-flex" [ngClass]="{'col-12 col-lg-6 flex-column': selectedSsmt2, 'col-12': !selectedSsmt2}">
     <select *ngIf="selectedSsmt2" name="selectedSsmt1" class="form-control w-100" id="selectedSsmt1"
       [(ngModel)]="selectedSsmt1">
       <option [ngValue]="ssmt">Baseline</option>
@@ -17,7 +17,7 @@
       </app-ssmt-pie-chart>
     </div>
   </div>
-  <div class="col-6 d-flex flex-column" *ngIf="selectedSsmt2">
+  <div class="col-12 col-lg-6 flex-column" *ngIf="selectedSsmt2">
     <select name="selectedSsmt2" class="form-control w-100" id="selectedSsmt2" [(ngModel)]="selectedSsmt2">
       <option [ngValue]="ssmt">Baseline</option>
       <option *ngFor="let modification of ssmt.modifications" [ngValue]="modification.ssmt">{{modification.ssmt.name}}

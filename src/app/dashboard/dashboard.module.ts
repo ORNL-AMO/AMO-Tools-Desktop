@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { CreateFolderComponent } from './create-folder/create-folder.component';
-import { AssessmentCreateComponent } from './assessment-create/assessment-create.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardService } from './dashboard.service';
 import { SidebarModule } from './sidebar/sidebar.module';
@@ -18,17 +17,18 @@ import { DirectoryDashboardModule } from './directory-dashboard/directory-dashbo
 import { ToastModule } from '../shared/toast/toast.module';
 import { DragBarComponent } from './drag-bar/drag-bar.component';
 import { CreateInventoryComponent } from './create-inventory/create-inventory.component';
+
 import { InventoryService } from './inventory.service';
 import { MoveItemsComponent } from './move-items/move-items.component';
 import { CopyItemsComponent } from './copy-items/copy-items.component';
 import { DisclaimerComponent } from './disclaimer/disclaimer.component';
 import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/security-and-privacy.module';
+import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/create-assessment-modal.module';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     CreateFolderComponent,
-    AssessmentCreateComponent,
     LandingScreenComponent,
     MeasurComponent,
     AboutPageComponent,
@@ -50,7 +50,8 @@ import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/securit
     ImportExportModule,
     DirectoryDashboardModule,
     ToastModule,
-    SecurityAndPrivacyModule
+    SecurityAndPrivacyModule,
+    CreateAssessmentModalModule
   ],
   providers: [
     DashboardService,

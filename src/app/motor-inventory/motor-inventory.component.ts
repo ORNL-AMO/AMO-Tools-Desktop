@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener, ViewChild, ElementRef, ChangeDetectorR
 import { MotorInventoryService } from './motor-inventory.service';
 import { firstValueFrom, Subscription } from 'rxjs';
  
-import { MotorInventoryData } from './motor-inventory';
+import { MotorInventoryData, MotorInventoryDepartment, MotorItem } from './motor-inventory';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { ActivatedRoute } from '@angular/router';
@@ -10,6 +10,7 @@ import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { MotorCatalogService } from './motor-inventory-setup/motor-catalog/motor-catalog.service';
 import { BatchAnalysisService, BatchAnalysisSettings } from './batch-analysis/batch-analysis.service';
+import { MotorIntegrationService } from '../shared/assessment-integration/motor-integration.service';
 
 declare const packageJson;
 
@@ -42,6 +43,7 @@ export class MotorInventoryComponent implements OnInit {
   showWelcomeScreen: boolean = false;
   constructor(private motorInventoryService: MotorInventoryService, private activatedRoute: ActivatedRoute,
        private settingsDbService: SettingsDbService, private inventoryDbService: InventoryDbService,
+       private motorIntegrationService: MotorIntegrationService,
     private motorCatalogService: MotorCatalogService, private batchAnalysisService: BatchAnalysisService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -50,11 +52,19 @@ export class MotorInventoryComponent implements OnInit {
       this.motorInventoryItem = this.inventoryDbService.getById(tmpItemId);
       let settings: Settings = this.settingsDbService.getByInventoryId(this.motorInventoryItem);
       this.motorInventoryService.settings.next(settings);
+      this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
       this.motorInventoryService.motorInventoryData.next(this.motorInventoryItem.motorInventoryData);
       if (this.motorInventoryItem.batchAnalysisSettings) {
         this.batchAnalysisService.batchAnalysisSettings.next(this.motorInventoryItem.batchAnalysisSettings);
       }
+      let departmentId = this.activatedRoute.snapshot.queryParamMap.get('departmentId');
+      let itemId = this.activatedRoute.snapshot.queryParamMap.get('itemId');
+      if (departmentId && itemId) {
+        this.redirectFromConnectedInventory(departmentId, itemId);
+      }
     });
+
+
     this.mainTabSub = this.motorInventoryService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
@@ -112,6 +122,7 @@ export class MotorInventoryComponent implements OnInit {
     this.motorInventoryItem.appVersion = packageJson.version;
     this.motorInventoryItem.motorInventoryData = inventoryData;
     this.motorInventoryItem.batchAnalysisSettings = batchAnalysisSettings;
+    this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.motorInventoryItem));
     this.inventoryDbService.setAll(updatedInventoryItems);
   }
@@ -143,6 +154,15 @@ export class MotorInventoryComponent implements OnInit {
       this.showWelcomeScreen = true;
       this.motorInventoryService.modalOpen.next(true);
     }
+  }
+
+  redirectFromConnectedInventory(departmentId: string, itemId: string) {
+    this.motorCatalogService.selectedDepartmentId.next(departmentId)
+    let department: MotorInventoryDepartment = this.motorInventoryItem.motorInventoryData.departments.find(department => { return department.id == departmentId });
+    let selectedItem: MotorItem = department.catalog.find(motorItem => { return motorItem.id ==  itemId});
+    this.motorCatalogService.selectedMotorItem.next(selectedItem);
+    this.motorInventoryService.mainTab.next('setup');
+    this.motorInventoryService.setupTab.next('motor-catalog');
   }
 
   async closeWelcomeScreen() {

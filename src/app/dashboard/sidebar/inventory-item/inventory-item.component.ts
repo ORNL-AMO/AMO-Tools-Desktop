@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
 import { Router } from '@angular/router';
+import { DashboardService } from '../../dashboard.service';
 
 @Component({
   selector: 'app-inventory-item',
@@ -11,12 +12,17 @@ export class InventoryItemComponent implements OnInit {
   @Input()
   inventoryItem: InventoryItem;
 
-  constructor(private router: Router) { }
+  constructor(private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
   }
 
   goToInventoryItem() {
-    this.router.navigateByUrl('/motor-inventory/' + this.inventoryItem.id);
+    if (this.inventoryItem.type === 'pumpInventory') {
+      this.dashboardService.navigateWithSidebarOptions('/pump-inventory/' + this.inventoryItem.id, {shouldCollapse: true})
+    }
+    if (this.inventoryItem.type === 'motorInventory') {
+      this.dashboardService.navigateWithSidebarOptions('/motor-inventory/' + this.inventoryItem.id, {shouldCollapse: true})
+    }
   }
 }

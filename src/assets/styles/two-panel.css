@@ -109,6 +109,10 @@
     border-bottom: #84b641 solid 2px;
 }
 
+.pump-inventory .header{
+    border-bottom: #2980b9 solid 2px;
+}
+
 .waste-water .header{
     border-bottom: #003087 solid 2px;
 }
@@ -174,6 +178,12 @@
 }
 .motor-inventory .btn-secondary:not([disabled]):not(.disabled).active{
     background: #84b641;
+    transition: all .5s ease-in-out;
+    color: black;
+}
+
+.pump-inventory .btn-secondary:not([disabled]):not(.disabled).active{
+    background: #2980b9;
     transition: all .5s ease-in-out;
     color: black;
 }
@@ -323,6 +333,10 @@
 
 .motor-inventory .group-label{
     border-bottom: #84b641 solid 2px;
+}
+
+.pump-inventory .group-label{
+    border-bottom: #2980b9 solid 2px;
 }
 
 .waste-water .group-label{
@@ -507,6 +521,15 @@
 
 .motor-inventory .scroll-item::-webkit-scrollbar-thumb{
 	background-color: #84b641;
+}
+
+.pump-inventory .scroll-item::-webkit-scrollbar-thumb{
+    background-color: #2980b9;
+    outline: 1px solid slategrey;
+}
+.waste-water .scroll-item::-webkit-scrollbar-thumb{
+    background-color: #003087;
+    outline: 1px solid slategrey;
 }
 
 .waste-water .scroll-item::-webkit-scrollbar-thumb{

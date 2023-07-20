@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { DashboardService } from '../../dashboard/dashboard.service';
 import { Assessment } from '../../shared/models/assessment';
 import { CompressedAirAssessment, Modification } from '../../shared/models/compressed-air-assessment';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
@@ -24,7 +25,8 @@ export class CompressedAirBannerComponent implements OnInit {
   secondaryAssessmentTabSub: Subscription;
   secondaryAssessmentTab: string;
   compresssedAirAssessmentSub: Subscription;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private dashboardService: DashboardService,  private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit(): void {
     this.mainTabSub = this.compressedAirAssessmentService.mainTab.subscribe(val => {
@@ -59,6 +61,10 @@ export class CompressedAirBannerComponent implements OnInit {
     this.assessmentTabSub.unsubscribe();
     this.secondaryAssessmentTabSub.unsubscribe();
     this.compresssedAirAssessmentSub.unsubscribe();
+  }
+
+  navigateHome() {
+    this.dashboardService.navigateWithSidebarOptions('/landing-screen', {shouldCollapse: false});
   }
 
   showSecurityAndPrivacyModal() {

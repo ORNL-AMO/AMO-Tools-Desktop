@@ -8,6 +8,7 @@ import { MotorWarnings, PsatWarningService } from '../psat-warning.service';
 import { MotorService } from './motor.service';
 import { motorEfficiencyConstants } from '../psatConstants';
 import { PsatService } from '../psat.service';
+import { IntegrationStateService } from '../../shared/assessment-integration/integration-state.service';
 @Component({
   selector: 'app-motor',
   templateUrl: './motor.component.html',
@@ -39,7 +40,14 @@ export class MotorComponent implements OnInit {
   motorWarnings: MotorWarnings;
   //disableFLAOptimized: boolean = false;
   idString: string;
-  constructor(private psatWarningService: PsatWarningService, private psatService: PsatService, private compareService: CompareService, private helpPanelService: HelpPanelService, private motorService: MotorService) { }
+  hasConnectedInventories: boolean;
+
+  constructor(private psatWarningService: PsatWarningService, 
+    private psatService: PsatService, 
+    private integrationStateService: IntegrationStateService,
+    private compareService: CompareService, 
+    private helpPanelService: HelpPanelService, 
+    private motorService: MotorService) { }
 
   ngOnInit() {
     this.efficiencyClasses = motorEfficiencyConstants;
@@ -64,12 +72,14 @@ export class MotorComponent implements OnInit {
         this.enableForm();
       }
     }
-    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange() ||
+      changes.psat && !changes.psat.isFirstChange()) {
       this.init();
     }
   }
 
   init() {
+    this.hasConnectedInventories = this.integrationStateService.assessmentIntegrationState.getValue().hasThreeWayConnection;
     this.psatForm = this.motorService.getFormFromObj(this.psat.inputs);
     this.helpPanelService.currentField.next('lineFrequency');
     this.checkWarnings();

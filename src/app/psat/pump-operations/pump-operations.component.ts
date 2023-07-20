@@ -100,7 +100,7 @@ export class PumpOperationsComponent implements OnInit {
 
   init() {
     this.setCo2SavingsData();
-    this.psatForm = this.pumpOperationsService.getFormFromObj(this.psat.inputs, this.baseline, this.psat.inputs.whatIfScenario);
+    this.psatForm = this.pumpOperationsService.getFormFromObj(this.psat.inputs);
     this.helpPanelService.currentField.next('operatingHours');
     this.checkWarnings();
   }

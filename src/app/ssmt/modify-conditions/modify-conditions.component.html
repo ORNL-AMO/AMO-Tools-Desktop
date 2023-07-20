@@ -1,14 +1,31 @@
-<div class="modify-conditions d-flex ssmt" *ngIf="settings">
-  <div class="scroll-item col-8 p-0 d-flex" [ngStyle]="{'height.px': containerHeight}">
-    <div class="modification baseline w-50 panel-column" (click)="togglePanel(baselineSelected)"
-      [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
+<div class="modify-conditions assessment-content-container ssmt" *ngIf="settings">
+
+  <div class="assessment-small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('baseline')" [ngClass]="{'assessment-small-screen-active': smallScreenTab === 'baseline'}">
+      <a class="nav-link">Baseline</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('modification')"
+    [ngClass]="{'assessment-small-screen-active': smallScreenTab === 'modification'}">
+      <a class="nav-link">Modification</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')" [ngClass]="{'assessment-small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Details</a>
+    </div>
+  </div>
+
+  <div class="assessment-panel-group" [ngStyle]="{'height.px': containerHeight}">
+
+    <!--Baseline-->
+    <div class="modification baseline assessment-content-panel" (click)="togglePanel(baselineSelected)"
+      [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true, 'assessment-small-screen-tab': smallScreenTab === 'baseline'}"
+      [ngStyle]="{'height.px': containerHeight}">
       <div class="header mr-2 ml-2">
         <h3>Baseline</h3>
       </div>
       <app-operations *ngIf="modelTab == 'operations'" [ssmt]="ssmt" [settings]="settings"
         (emitSave)="saveBaselineSsmt($event)" [selected]="baselineSelected" [isBaseline]="true"></app-operations>
       <app-boiler *ngIf="modelTab == 'boiler'" [selected]="baselineSelected" [settings]="settings"
-         (emitSave)="saveBaselineBoiler($event)" [isBaseline]="true" [ssmt]="ssmt"
+          (emitSave)="saveBaselineBoiler($event)" [isBaseline]="true" [ssmt]="ssmt"
         ></app-boiler>
       <app-header *ngIf="modelTab == 'header'" [selected]="baselineSelected" [settings]="settings"
         (emitSave)="saveBaselineHeader($event)" [isBaseline]="true"
@@ -19,59 +36,62 @@
     </div>
 
     <!-- Modifications Start -->
-    <div *ngIf="modificationExists" class="modification w-50 panel-column" (click)="togglePanel(modifiedSelected)"
-      [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
-      <!-- Modification Header -->
-      <div class="header mr-2 ml-2">
-        <h3>{{ssmt.modifications[modificationIndex].ssmt.name}}</h3>
+    <div class="modification assessment-content-panel panel-column" (click)="togglePanel(modifiedSelected)"
+      [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true, 'assessment-small-screen-tab': smallScreenTab === 'modification'}">
+    
+      <ng-container *ngIf="modificationExists">
+        <div class="header mr-2 ml-2">
+          <h3>{{ssmt.modifications[modificationIndex].ssmt.name}}</h3>
+        </div>
+        <app-operations *ngIf="modelTab == 'operations'" [ssmt]="ssmt.modifications[modificationIndex].ssmt"
+          [settings]="settings" (emitSave)="saveModSsmt($event)" [selected]="modifiedSelected"
+          [modificationIndex]="modificationIndex" [isBaseline]="false"></app-operations>
+        <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings"
+          [ssmt]="ssmt.modifications[modificationIndex].ssmt" (emitSave)="saveModBoiler($event)"
+          [modificationIndex]="modificationIndex" [isBaseline]="false">
+        </app-boiler>
+        <app-header *ngIf="modelTab == 'header'" [selected]="modifiedSelected" [settings]="settings"
+          [ssmt]="ssmt.modifications[modificationIndex].ssmt" (emitSave)="saveModHeader($event)"
+          [modificationIndex]="modificationIndex" [isBaseline]="false">
+        </app-header>
+        <app-turbine *ngIf="modelTab == 'turbine'" [selected]="modifiedSelected" [settings]="settings"
+          [turbineInput]="ssmt.modifications[modificationIndex].ssmt.turbineInput"
+          [numberOfHeaders]="ssmt.modifications[modificationIndex].ssmt.headerInput.numberOfHeaders"
+          (emitSave)="saveModTurbine($event)" [modificationIndex]="modificationIndex" [isBaseline]="false">
+        </app-turbine>    
+      </ng-container>
+      <!-- No content message -->
+      <div *ngIf="!modificationExists" (click)="addModification()">
+        <div class="header mr-2 ml-2">
+          <h3>Modification</h3>
+        </div>
+        <div class="p-3 no-data">
+          <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to
+            find efficiency
+            opportunities.
+          </h3>
+          <button type="button" class="btn btn-primary">Add Modified Condition</button>
+          <p>Data will be copied from your current baseline condition.</p>
+        </div>
       </div>
-      <app-operations *ngIf="modelTab == 'operations'" [ssmt]="ssmt.modifications[modificationIndex].ssmt"
-        [settings]="settings" (emitSave)="saveModSsmt($event)" [selected]="modifiedSelected"
-        [modificationIndex]="modificationIndex" [isBaseline]="false"></app-operations>
-      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings"
-        [ssmt]="ssmt.modifications[modificationIndex].ssmt" (emitSave)="saveModBoiler($event)"
-        [modificationIndex]="modificationIndex"
-        [isBaseline]="false">
-      </app-boiler>
-      <app-header *ngIf="modelTab == 'header'" [selected]="modifiedSelected" [settings]="settings"
-        [ssmt]="ssmt.modifications[modificationIndex].ssmt" (emitSave)="saveModHeader($event)"
-        [modificationIndex]="modificationIndex"
-        [isBaseline]="false">
-      </app-header>
-      <app-turbine *ngIf="modelTab == 'turbine'" [selected]="modifiedSelected" [settings]="settings"
-        [turbineInput]="ssmt.modifications[modificationIndex].ssmt.turbineInput"
-        [numberOfHeaders]="ssmt.modifications[modificationIndex].ssmt.headerInput.numberOfHeaders"
-        (emitSave)="saveModTurbine($event)" [modificationIndex]="modificationIndex" [isBaseline]="false">
-      </app-turbine>
+    </div>    
+      
+
+
+    <!-- Help Panel -->
+    <div class="assessment-content-panel modify-results-panel help-panel" [ngClass]="{'assessment-small-screen-tab': smallScreenTab === 'details'}">
+      <app-help-panel *ngIf="modificationExists" [ssmt]="ssmt" [settings]="settings"
+        [modificationIndex]="modificationIndex" [containerHeight]="containerHeight"></app-help-panel>
+      <div *ngIf="!modificationExists">
+        <div class="header mr-2 ml-2">
+          <h3>Help</h3>
+        </div>
+        <div class="p-4">
+          <p>Add Modification to view results and get additional help.</p>
+        </div>
+      </div>
     </div>
-    <!-- No content message -->
-    <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()"
-      [ngClass]="{'modal-open': isModalOpen == true}">
-      <div class="header mr-2 ml-2">
-        <h3>Modification</h3>
-      </div>
-      <div class="p-3 no-data">
-        <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions
-          to
-          find efficiency
-          opportunities.
-        </h3>
-        <button type="button" class="btn btn-primary">Add Modified Condition</button>
-        <p>Data will be copied from your current baseline condition.</p>
-      </div>
-    </div>
-  </div>
-  <!-- Help Panel -->
-  <div class="col-4 p-0 help-panel scroll-item" [ngStyle]="{'height.px': containerHeight}">
-    <app-help-panel *ngIf="modificationExists" [ssmt]="ssmt" [settings]="settings"
-      [modificationIndex]="modificationIndex" [containerHeight]="containerHeight"></app-help-panel>
-    <div *ngIf="!modificationExists">
-      <div class="header mr-2 ml-2">
-        <h3>Help</h3>
-      </div>
-      <div class="p-4">
-        <p>Add Modification to view results and get additional help.</p>
-      </div>
-    </div>
+
+
   </div>
 </div>

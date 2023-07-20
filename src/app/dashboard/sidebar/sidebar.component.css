@@ -21,13 +21,6 @@
     width: 10px;
 }
 
-
-.horizontal.scroll-item{
-    max-width: 100%;
-    overflow-y: auto;
-    white-space: nowrap;
-}
-
 .selected-directory{
     border-left: .5px solid gray;
 }

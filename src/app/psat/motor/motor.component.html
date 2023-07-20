@@ -5,6 +5,14 @@
     </div>
   </div>
 
+  <div class="mx-3 my-0">
+    <app-assessment-integration-status *ngIf="inSetup || baseline"
+      [hasConnectedInventories]="hasConnectedInventories"
+      [connectedToType]="'inventory'" 
+      [connectedFormGroupName]="'motor'"
+    ></app-assessment-integration-status>
+  </div>
+
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
     <div class="form-group" [ngClass]="{'indicate-different': isLineFreqDifferent()}">
       <label for="{{'frequency_'+idString}}">Line Frequency</label>

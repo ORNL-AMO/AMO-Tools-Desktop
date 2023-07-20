@@ -17,6 +17,5 @@ const routerOptions: ExtraOptions = {
   anchorScrolling: 'enabled',
   onSameUrlNavigation: 'reload',
   scrollPositionRestoration: 'enabled',
-  // paramsInheritanceStrategy: 'always'
 };
 export const routing: ModuleWithProviders<RouterModule> = RouterModule.forRoot(appRoutes, routerOptions);

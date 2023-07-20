@@ -18,7 +18,12 @@
             Hide Data Explorer Options
         </a>
     </div>
-    <div *ngIf="displayLogToolLink && showSelectField" class="pl-2 pr-2 border-right border-left">
+    <div *ngIf="displayLogToolLink" class="pl-2 pr-2 border-right border-left">
+        <a class="click-link small" (click)="visitDataExplorer()">
+            Visit Data Explorer
+        </a>
+    </div>
+    <div *ngIf="displayLogToolLink && !showSelectField" class="pl-2 pr-2 border-right border-left">
         <p class="alert-warning small m-0">
             Select "Profile Data Type" for all Day Type's before setting Data Explorer Options
         </p>

@@ -2,7 +2,7 @@
     <div #header class="w-100 hide-print sticky-top">
         <app-motor-inventory-banner [motorInventoryItem]="motorInventoryItem"></app-motor-inventory-banner>
     </div>
-    <div class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <div class="d-flex tab-content" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'scroll-item': mainTab == 'summary' || mainTab == 'analysis'}">
         <div class="w-100" [ngClass]="{'modal-open': isModalOpen == true}">
             <app-motor-inventory-setup *ngIf="mainTab == 'setup'" [containerHeight]="containerHeight"></app-motor-inventory-setup>
             <app-motor-inventory-summary *ngIf="mainTab == 'summary'"></app-motor-inventory-summary>

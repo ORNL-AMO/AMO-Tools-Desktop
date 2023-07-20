@@ -1,5 +1,7 @@
 .book-item{
     background-color: #2980b9;
+    position: absolute;
+    right: 184px;
 }
 
 
@@ -7,5 +9,5 @@
     position: absolute;
     height: 300px;
     top: 45px;
-    right: 155px;
+    right: 0px;
 }

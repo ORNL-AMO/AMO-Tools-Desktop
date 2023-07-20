@@ -9,6 +9,7 @@ import { ReportRollupService } from '../report-rollup.service';
 import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
 import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.service';
 import { WasteWaterReportRollupService } from '../waste-water-report-rollup.service';
+import { WindowRefService } from '../../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-report-summary',
@@ -40,7 +41,7 @@ export class ReportSummaryComponent implements OnInit {
   constructor(public reportRollupService: ReportRollupService, private psatReportRollupService: PsatReportRollupService,
     private phastReportRollupService: PhastReportRollupService, private fsatReportRollupService: FsatReportRollupService,
     private ssmtReportRollupService: SsmtReportRollupService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
-    private wasteWaterReportRollupService: WasteWaterReportRollupService, private compressedAirReportRollupService: CompressedAirReportRollupService) { }
+    private wasteWaterReportRollupService: WasteWaterReportRollupService, private compressedAirReportRollupService: CompressedAirReportRollupService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
     this.settingsSub = this.reportRollupService.settings.subscribe(settings => {
@@ -71,7 +72,21 @@ export class ReportSummaryComponent implements OnInit {
     });
     this.compressedAirAssessmentsSub = this.compressedAirReportRollupService.compressedAirAssessments.subscribe(val => {
       this.showCompressedAir = val.length != 0;
-    })
+    });
+
+    this.getScreenSizeForShowSummary();
+  
+
+  }
+
+  getScreenSizeForShowSummary(){
+    let window = this.windowRefService.nativeWindow;
+    let windowWidth = window.innerWidth;
+    if(windowWidth < 1024){
+      this.showSummary = 'closed';
+    } else {
+      this.showSummary = 'open';
+    }
   }
 
   ngOnDestroy() {

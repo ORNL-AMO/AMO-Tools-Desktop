@@ -1,6 +1,7 @@
 import { OperatingHours } from "./operations";
 import { SavingsOpportunity } from "./explore-opps";
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
+import { ConnectedItem } from "../assessment-integration/integrations";
 
 export interface PSAT {
   inputs?: PsatInputs;
@@ -12,6 +13,7 @@ export interface PSAT {
   optimizationRating?: number;
   setupDone?: boolean;
   operatingHours?: OperatingHours;
+  connectedItem?: ConnectedItem,
   valid?: PsatValid;
   existingDataUnits?: string;
 }

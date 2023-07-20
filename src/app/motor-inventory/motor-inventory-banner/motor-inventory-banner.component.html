@@ -26,22 +26,22 @@
         </div>
     </div>
     <div class="d-flex ml-auto pr-2 h-100">
-        <div class="pl-2 pr-2 border-left home-nav-item" (click)="showSecurityAndPrivacyModal()">
+        <div class="pl-2 pr-2 home-nav-item" (click)="showSecurityAndPrivacyModal()">
      	   <span class="fa fa-lock"></span>
   	  </div>
-		<div class="pl-2 pr-2 border-left home-nav-item">
+		<div class="pl-2 pr-2 home-nav-item">
 			<a class="user-manual" href="assets/user-manuals/Motor-Inventory-User-Manual.pdf" target="_blank">
 				<span class="fa fa-book"></span>
 			</a>
 		</div>
-        <div class="pl-2 pr-2 border-left home-nav-item" [routerLink]="['/settings']">
+        <div class="pl-2 pr-2 home-nav-item" [routerLink]="['/settings']">
      	   <span class="fa fa-cog"></span>
   	  </div>
-        <div class="pl-2 pr-2 border-right border-left home-nav-item"
+        <div class="pl-2 pr-2 home-nav-item"
             [routerLink]="['/directory-dashboard', motorInventoryItem.directoryId]">
             <span class="fa fa-folder-open"></span>
         </div>
-        <div class="pl-2 pr-2 home-nav-item border-right" [routerLink]="['/landing-screen']">
+        <div class="pl-2 pr-2 home-nav-item" (click)="navigateHome()">
             <span class="fa fa-home"></span>
         </div>
     </div>

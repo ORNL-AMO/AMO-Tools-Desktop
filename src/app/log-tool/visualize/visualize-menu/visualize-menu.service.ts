@@ -10,30 +10,47 @@ export class VisualizeMenuService {
   selectedGraphObj: any;
   constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
 
-  saveUserGraphOptionsChange(userGraphOptionsGraph: GraphObj) {
-    this.visualizeService.userInputDelay.next(175);
-    this.visualizeService.userGraphOptions.next(userGraphOptionsGraph);
-  }
-
-  save(selectedGraphObj: GraphObj) {
-    this.visualizeService.userInputDelay.next(0);
+  // * update axis names, titles, series color
+  saveUserInputChange(selectedGraphObj: GraphObj) {
+    if (selectedGraphObj.isGraphInitialized) {
+      selectedGraphObj.shouldRenderNewPlot = false;
+      this.visualizeService.userInputDelay.next(100);
+    }
     this.visualizeService.selectedGraphObj.next(selectedGraphObj);
   }
 
-  setGraphType(selectedGraphObj: GraphObj) {
-    if (selectedGraphObj.data[0].type == 'scattergl') {
-      this.setScatterGraphDataOptions(selectedGraphObj);
-    } else if (selectedGraphObj.data[0].type == 'bar') {
-      this.setBarChartDataOptions(selectedGraphObj);
+  // * Update layout, add axis data
+  saveExistingPlotChange(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
+    selectedGraphObj.shouldRenderNewPlot = false;
+    selectedGraphObj.hasChanges = shouldRenderGraph? false : true;
+    this.visualizeService.selectedGraphObj.next(selectedGraphObj);
+    if (shouldRenderGraph) {
+      this.visualizeService.shouldRenderGraph.next(true);
     }
   }
 
-  setScatterGraphDataOptions(selectedGraphObj: GraphObj) {
+  // * Create new graph, update with new graph data
+  saveGraphDataChange(selectedGraphObj: GraphObj) {
+    this.visualizeService.userInputDelay.next(0);
+    selectedGraphObj.shouldRenderNewPlot = true;
+    selectedGraphObj.hasChanges = true;
+    this.visualizeService.selectedGraphObj.next(selectedGraphObj);
+  }
+
+  setGraphData(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
+    if (selectedGraphObj.isTimeSeries || selectedGraphObj.data[0].type == 'scattergl') {
+      this.setScatterGraphDataOptions(selectedGraphObj, shouldRenderGraph);
+    } else if (selectedGraphObj.data[0].type == 'bar') {
+      this.setBarChartDataOptions(selectedGraphObj, shouldRenderGraph);
+    }
+  }
+
+  setScatterGraphDataOptions(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
     this.setXAxisDataOptions(selectedGraphObj);
     this.setSelectedXAxisDataOption(selectedGraphObj);
 
     this.setSelectedYAxisDataOption(selectedGraphObj);
-    this.setGraphYAxisData(selectedGraphObj);
+    this.setGraphYAxisData(selectedGraphObj, shouldRenderGraph);
   }
 
   setSelectedYAxisDataOption(selectedGraphObj: GraphObj) {
@@ -56,10 +73,11 @@ export class VisualizeMenuService {
     if (tmpSelectedYAxisDataOptions.length != 0) {
       selectedGraphObj.selectedYAxisDataOptions = tmpSelectedYAxisDataOptions;
     } else {
+      let defaultColor: string = '#351e76';
       selectedGraphObj.selectedYAxisDataOptions = [{
         index: 0,
         dataOption: selectedGraphObj.yAxisDataOptions[0],
-        seriesColor: graphColors[0],
+        seriesColor: defaultColor,
         seriesName: this.getSeriesName(selectedGraphObj.yAxisDataOptions[0].dataField),
         yaxis: 'y',
         linesOrMarkers: 'markers'
@@ -74,6 +92,7 @@ export class VisualizeMenuService {
       // already called in setYAxisDataOptions
       let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(option.dataOption.dataField);
       if (timeData) {
+        // todo 6225 - this no longer happens? What conditions were making this happen?
         // timeData will have overlapping values - i.e. 3 datasets with same time logs concatenated together
         // Should this go in getAxisOptionGraphData?
         // let uniqueDates: Set<string | number> = new Set(timeData);
@@ -87,14 +106,14 @@ export class VisualizeMenuService {
       }
       index++;
     });
-    this.save(selectedGraphObj);
+    this.saveGraphDataChange(selectedGraphObj);
   }
 
 
   setXAxisDataOptions(selectedGraphObj: GraphObj) {
     let dataFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
     let canRunDayTypeAnalysis: boolean = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
-    if (selectedGraphObj.data[0].type == 'scattergl' && canRunDayTypeAnalysis) {
+    if (selectedGraphObj.isTimeSeries && canRunDayTypeAnalysis) {
       dataFields.push({
         fieldName: 'Time Series',
         alias: 'Time Series',
@@ -118,11 +137,11 @@ export class VisualizeMenuService {
   }
 
 
+  // * called on graph init and user select change event
   setSelectedXAxisDataOption(selectedGraphObj: GraphObj) {
     this.setDefaultSelectedXAxis(selectedGraphObj);
-    this.resetXAxisRelatedData(selectedGraphObj);
 
-    if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
+    if (selectedGraphObj.isTimeSeries) {
       selectedGraphObj.layout.xaxis.type = 'date';
       this.setYAxisDataOptions(selectedGraphObj);
       this.setTimeSeriesData(selectedGraphObj);
@@ -130,7 +149,7 @@ export class VisualizeMenuService {
       selectedGraphObj.layout.xaxis.type = 'category';
       this.setYAxisDataOptions(selectedGraphObj);
       this.setBarHistogramData(selectedGraphObj);
-    } else {
+    } else if (selectedGraphObj.data[0].type == 'scattergl') {
       selectedGraphObj.layout.xaxis.type = 'linear';
       selectedGraphObj.data.forEach(dataItem => {
         dataItem.x = selectedGraphObj.selectedXAxisDataOption.data;
@@ -140,10 +159,16 @@ export class VisualizeMenuService {
     }
   }
 
-  resetXAxisRelatedData(selectedGraphObj: GraphObj) {
+    // * reset to avoid annotations/custom layout showing on incorrect axis
+  resetLayoutRelatedData(selectedGraphObj: GraphObj) {
     this.visualizeService.annotateDataPoint.next(undefined);
     selectedGraphObj.layout.annotations = [];
     selectedGraphObj.layout.yaxis.ticksuffix = '';
+    
+    selectedGraphObj.layout.autosize = true;
+    selectedGraphObj.layout.xaxis.autorange = true;
+    selectedGraphObj.layout.yaxis.autorange = true;
+    selectedGraphObj.layout.yaxis2.autorange = true;
   }
 
   resetYAxisRelatedData(selectedGraphObj: GraphObj) {
@@ -169,10 +194,10 @@ export class VisualizeMenuService {
     let dataFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
     selectedGraphObj.yAxisDataOptions = new Array();
     dataFields.forEach(field => {
-      if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
+      if (selectedGraphObj.isTimeSeries) {
         let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(field);
         if (timeData) {
-          let data: (string | number)[]  = this.visualizeService.getGraphDataByField(field.fieldName);
+          let data: (string | number)[] = this.visualizeService.getGraphDataByField(field.fieldName);
           selectedGraphObj.yAxisDataOptions.push({
             data: data,
             dataField: field
@@ -196,17 +221,17 @@ export class VisualizeMenuService {
 
   }
 
-  setGraphYAxisData(selectedGraphObj: GraphObj) {
+  setGraphYAxisData(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
     let index: number = 0;
     selectedGraphObj.selectedYAxisDataOptions.forEach(selectedDataOption => {
       selectedGraphObj.data[index].mode = selectedDataOption.linesOrMarkers;
-      if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
+      if (selectedGraphObj.isTimeSeries) {
         let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(selectedDataOption.dataOption.dataField);
         if (timeData) {
           selectedGraphObj.data[index].x = timeData;
-          selectedGraphObj.data[index].mode = 'lines'
+          selectedGraphObj.data[index].mode = 'lines';
         }
-      } 
+      }
       // Restrict if selected axis data from another file
       // else if (selectedDataOption.dataOption.dataField.csvId != selectedGraphObj.selectedXAxisDataOption.dataField.csvId) {
       //   selectedDataOption.dataOption = selectedGraphObj.yAxisDataOptions[0];
@@ -216,7 +241,7 @@ export class VisualizeMenuService {
         // Lines not a valid mode for non-time series
         selectedDataOption.linesOrMarkers = 'markers';
       }
-      selectedGraphObj.isTimeSeries = selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series';
+      selectedGraphObj.isTimeSeries = selectedGraphObj.isTimeSeries;
       selectedGraphObj = this.visualizeService.setDefaultGraphInteractivity(selectedGraphObj, selectedGraphObj.data[index].x.length);
       selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
       selectedGraphObj.data[index].name = selectedDataOption.seriesName;
@@ -226,10 +251,16 @@ export class VisualizeMenuService {
       selectedGraphObj.data[index].yaxis = selectedDataOption.yaxis;
       index++;
     })
-    this.save(selectedGraphObj);
+
+    if (shouldRenderGraph) {
+      this.saveGraphDataChange(selectedGraphObj);
+      this.visualizeService.shouldRenderGraph.next(true)
+    } else {
+      this.saveGraphDataChange(selectedGraphObj);
+    }
   }
 
-  setBarChartDataOptions(selectedGraphObj: GraphObj) {
+  setBarChartDataOptions(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
     selectedGraphObj.layout.xaxis.type = 'category';
     this.setXAxisDataOptions(selectedGraphObj);
     if (selectedGraphObj.selectedXAxisDataOption && selectedGraphObj.selectedXAxisDataOption.dataField) {
@@ -248,10 +279,10 @@ export class VisualizeMenuService {
     } else {
       selectedGraphObj.layout.yaxis.ticksuffix = '';
     }
-    this.setBarHistogramData(selectedGraphObj);
+    this.setBarHistogramData(selectedGraphObj, shouldRenderGraph);
   }
 
-  setBarHistogramData(selectedGraphObj: GraphObj) {
+  setBarHistogramData(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
     if (selectedGraphObj.useStandardDeviation == true && selectedGraphObj.bins.length != 0) {
       //get std deviation
       let stdDeviationBarData = this.visualizeService.getStandardDevBarChartData(selectedGraphObj.selectedXAxisDataOption.dataField, selectedGraphObj.usePercentForBins, selectedGraphObj.bins[0].min);
@@ -268,12 +299,18 @@ export class VisualizeMenuService {
     //set to first value for bar charts
     selectedGraphObj.data = [selectedGraphObj.data[0]];
     selectedGraphObj.selectedYAxisDataOptions = [selectedGraphObj.selectedYAxisDataOptions[0]];
-    this.save(selectedGraphObj);
+
+    if (shouldRenderGraph) {
+      this.saveGraphDataChange(selectedGraphObj);
+      this.visualizeService.shouldRenderGraph.next(true)
+    } else {
+      this.saveGraphDataChange(selectedGraphObj);
+    }
   }
 
   addAxis(selectedGraphObj: GraphObj) {
     selectedGraphObj.hasSecondYAxis = true;
-    this.save(selectedGraphObj);
+    this.saveGraphDataChange(selectedGraphObj);
   }
 
   removeAxis(selectedGraphObj: GraphObj) {
@@ -284,7 +321,7 @@ export class VisualizeMenuService {
     this.setGraphYAxisData(selectedGraphObj);
   }
 
-  addData(selectedGraphObj: GraphObj) {
+  addDataSeries(selectedGraphObj: GraphObj) {
     let currentSelections: Array<string> = selectedGraphObj.selectedYAxisDataOptions.map(option => { return option.dataOption.dataField.fieldName });
     let unusedSelections: Array<{ dataField: LogToolField }> = JSON.parse(JSON.stringify(selectedGraphObj.yAxisDataOptions))
     _.remove(unusedSelections, (option) => { return currentSelections.includes(option.dataField.fieldName) });
@@ -338,13 +375,14 @@ export class VisualizeMenuService {
         selectedGraphObj.layout.annotations.push(annotateDataPoint);
       }
     }
-    
-    this.saveUserGraphOptionsChange(selectedGraphObj);
-  }
 
+    this.saveUserInputChange(selectedGraphObj);
+    
+  }
+  
   deleteAnnotation(annotation: AnnotationData, selectedGraphObj: GraphObj) {
     _.remove(selectedGraphObj.layout.annotations, (currentAnnotation) => { return currentAnnotation.annotationId == annotation.annotationId });
-    this.saveUserGraphOptionsChange(selectedGraphObj);
+    this.saveExistingPlotChange(selectedGraphObj, true);
   }
 
   getSeriesName(logToolField: LogToolField): string {

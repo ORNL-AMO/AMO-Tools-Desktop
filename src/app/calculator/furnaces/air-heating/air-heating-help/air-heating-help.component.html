@@ -53,6 +53,8 @@
         <br>
         <small class="text-muted">
           The moisture of the air (mass water / mass dry air). Can be determined with a psychrometric chart.
+          <br>
+          Generally, a moisture content of up to 5% is considered acceptable for combustion air in typical industrial applications.
           <hr>
         </small>
       </h6>
@@ -72,15 +74,34 @@
       </div>
     </div>
   
-  
-    <div class="my-2" *ngIf="currentField == 'flueTemperature'">
+    <div class="my-2" *ngIf="currentField == 'flueTemperature' && settings.unitsOfMeasure == 'Imperial'">
       <h6>
         Furnace Flue Gas Temperature
         <br>
         <small class="text-muted">
-          Measure flue gas temperature by using "proper" temperature probe. Type of temperature probe depends on flue gas
-          temperature
-          and composition at the point of measurement. In most cases a commercially available thermocouple probe is used.
+          The temperature of the gas exiting the system. This value must be greater than the combustion air temperature. 
+          If your flue gas temperature is less than 212&#8457; 
+          then vapor may be condensing in the flue and the calculated available heat may be incorrect. 
+          <br>
+          Measure flue gas temperature by using "proper" temperature probe. 
+          Type of temperature probe depends on flue gas temperature and composition at the point of measurement. 
+          In most cases a commercially available thermocouple probe is used. Placement of the probe depends on the system setup.
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'flueTemperature' && settings.unitsOfMeasure == 'Metric'">
+      <h6>
+        Furnace Flue Gas Temperature
+        <br>
+        <small class="text-muted">
+          The temperature of the gas exiting the system. This value must be greater than the combustion air temperature. 
+          If your flue gas temperature is less than 100&#8451; 
+          then vapor may be condensing in the flue and the calculated available heat may be incorrect. 
+          <br>
+          Measure flue gas temperature by using "proper" temperature probe. 
+          Type of temperature probe depends on flue gas temperature and composition at the point of measurement. 
+          In most cases a commercially available thermocouple probe is used. Placement of the probe depends on the system setup.
         </small>
       </h6>
     </div>
@@ -90,9 +111,12 @@
         Excess Air
         <br>
         <small class="text-muted">
-          The excess air value represents excess air used in burners plus all air entering the furnace and going as flue
-          gases form
-          the furnace. The value is expressed in terms of percentage of stoichiometric air required for the fuel used.
+          The excess air value represents excess air used in burners plus all air entering the furnace and going as flue gases form the furnace. 
+          The value is expressed in terms of percentage of stoichiometric air required for the fuel used and can be calculated as the difference 
+          between the measured O<sub>2</sub> and stoichiometric O<sub>2</sub> divided by the stoichiometric O<sub>2</sub>. 
+          <br>
+          This should be minimized while still ensuring adequate air for complete combustion. 
+          The absolute maximum value depends on the fuel, with some natural gas mixes near 500% and coal closer to 100%.
           <hr>
         </small>
       </h6>
@@ -101,13 +125,14 @@
   
     <div class="my-2" *ngIf="currentField == 'flueGasO2'">
       <h6>
-        O
-        <sub>2</sub> in Flue Gas
+        O<sub>2</sub> in Flue Gas
         <br>
         <small class="text-muted">
-          The volumetric percentage of oxygen present in the flue gas. Flue gas O2 (dry basis) reading is taken at the
-          same location
-          where flue gas temperature is measured to maintain accuracy of the calculations.
+          Molar (or volumetric) fraction (% Dry) of O<sub>2</sub> in outgoing flue gas (ignoring moisture content). 
+          Higher O<sub>2</sub> in the exhaust indicates higher excess air and a greater amount of heat contained within the flue gas (lowering the available heat). 
+          <br>
+          Flue gas O<sub>2</sub> (dry basis) reading is taken at the same location where flue gas temperature is measured to maintain accuracy of the calculations. 
+          For many applications this is less than 10%, though a few systems (e.g., thermal oxidizers, paint shop ovens) it may be higher, but still below 21%.
           <hr>
         </small>
       </h6>
@@ -136,7 +161,10 @@
           Combustion air temperature (Celsius) entering the burners. Use temperature recorder/indicator reading or actual
           asurement
           using a temperature gage, thermocouple or estimate based on the furnace supplier's specification.
+          <br>
+          This value must be less than the flue gas temperature.
         </small>
+
       </h6>
     </div>
 

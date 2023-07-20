@@ -113,7 +113,7 @@ export class FsatReportComponent implements OnInit {
   getContainerHeight() {
     let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
     let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 2;
   }
 
   setTab(str: string) {

@@ -8,13 +8,13 @@
 
                 </th>
                 <th *ngFor="let data of profileSummary[0].profileSummaryData">
-                    {{data.timeInterval + systemProfileSetup.dataInterval | intervalHourLabel}}
+                    {{data.timeInterval | intervalHourLabel }}
                 </th>
             </tr>
         </thead>
         <tbody *ngFor="let summary of profileSummary">
             <tr class="compressor-name-row">
-                <td colspan="100" class="bold">{{summary.compressorId | compressorName:inventoryItems}}
+                <td colspan="100" class="bold">{{(summary.compressorId | compressorName: inventoryItems)}}
                     <span *ngIf="checkIsTrim(summary.compressorId)">
                         (Trim)
                     </span>
@@ -156,14 +156,14 @@
 <div class="pl-2 pt-3 pr-2" *ngIf="profileSummary && printView">
     <table class="table table-hover bg-white print-container"
         *ngFor="let profileData of profileSummary[0].profileSummaryForPrint; let index = index;">
-        <caption *ngIf="profileSummary[0].profileSummaryData.length !== 1">Intervals:{{profileData[0].timeInterval+1}}-{{profileData[profileData.length-1].timeInterval+1}}</caption>
+        <caption *ngIf="profileSummary[0].profileSummaryData.length !== 1">Intervals:{{profileData[0].timeInterval}}-{{profileData[profileData.length-1].timeInterval}}</caption>
         <thead>
             <tr>
                 <th [ngClass]="{'w-50': profileSummary[0].profileSummaryData.length == 1}">
                     <!-- Compressor Name -->
                 </th>
                 <th *ngFor="let data of profileSummary[0].profileSummaryForPrint[index]">
-                    {{data.timeInterval + 1}}
+                    {{data.timeInterval}}
                 </th>
             </tr>
         </thead>

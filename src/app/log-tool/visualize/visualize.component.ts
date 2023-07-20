@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LogToolDataService } from '../log-tool-data.service';
-import { LogToolDbService } from '../log-tool-db.service';
 import { GraphObj, LoadingSpinner } from '../log-tool-models';
 import { VisualizeMenuService } from './visualize-menu/visualize-menu.service';
 import { VisualizeService } from './visualize.service';
@@ -21,14 +20,11 @@ export class VisualizeComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    setTimeout(() => {
       this.setResultsTabheight();
-    }, 50);
   }
 
   constructor(private logToolDataService: LogToolDataService,
     private visualizeMenuService: VisualizeMenuService,
-    private logToolDbService: LogToolDbService,
     private cd: ChangeDetectorRef,
     private visualizeService: VisualizeService) { }
   loadingSpinnerSub: Subscription;
@@ -50,8 +46,6 @@ export class VisualizeComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.visualizeService.saveUserOptionsChanges();
-    this.logToolDbService.saveData();
     this.loadingSpinnerSub.unsubscribe();
     this.tabSelectSubscription.unsubscribe();
   }
@@ -64,8 +58,10 @@ export class VisualizeComponent implements OnInit {
         initialGraphObj = this.visualizeMenuService.initializeBinData(initialGraphObj);
       }
     }
-    this.visualizeMenuService.setGraphType(initialGraphObj);
+    let shouldRenderGraph = initialGraphObj.isGraphInitialized || this.logToolDataService.explorerData.getValue().isExample;
+    this.visualizeMenuService.setGraphData(initialGraphObj, shouldRenderGraph);
   }
+
 
   setGraphHeight(graphHeight: number) {
     this.graphContainerHeight = graphHeight;

@@ -1,0 +1,163 @@
+<div class="d-flex w-100" (mouseenter)="focusGroup()">
+    <div class="d-flex flex-fill">
+        <label class="group-label" (click)="toggleForm()">
+            <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+            <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+            Pump
+        </label>
+    </div>
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
+            [(ngModel)]="pumpPropertiesOptions.displayPumpProperties" name="displayPumpProperties"
+            id="displayPumpProperties">
+        <label class="custom-control-label" for="displayPumpProperties"></label>
+    </div>
+</div>
+
+<form class="p-1" *ngIf="displayForm">
+    <div class="checkbox" (mouseenter)="focusField('pumpType')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.pumpType" name="pumpType"
+                id="pumpType">
+            Pump Type
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('shaftOrientation')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.shaftOrientation" name="shaftOrientation"
+                id="shaftOrientation">
+            Shaft Orientation
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('shaftSealType')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.shaftSealType" name="shaftSealType"
+                id="shaftSealType">
+            Shaft Seal Type
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('numStages')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.numStages" name="numStages"
+                id="numStages">
+            Number of Stages
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('inletDiameter')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.inletDiameter" name="inletDiameter"
+                id="inletDiameter">
+            Inlet Diameter
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('outletDiameter')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.outletDiameter" name="outletDiameter"
+                id="outletDiameter">
+            Outlet Diameter
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('maxWorkingPressure')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.maxWorkingPressure" name="maxWorkingPressure"
+                id="maxWorkingPressure">
+            Max Working Pressure
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('maxAmbientTemperature')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.maxAmbientTemperature" name="maxAmbientTemperature"
+                id="maxAmbientTemperature">
+            Max Ambient Temperature
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('maxSuctionLift')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.maxSuctionLift" name="maxSuctionLift"
+                id="maxSuctionLift">
+            Max Suction Lift
+        </label>
+    </div>
+
+    <!--  6311 hiding for now -->
+    <!-- <div class="checkbox" (mouseenter)="focusField('displacement')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.displacement" name="displacement"
+                id="displacement">
+            Displacement
+        </label>
+    </div> -->
+
+    <div class="checkbox" (mouseenter)="focusField('startingTorque')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.startingTorque" name="startingTorque"
+                id="startingTorque">
+            Starting Torque
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('ratedSpeed')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.ratedSpeed" name="ratedSpeed"
+                id="ratedSpeed">
+            Rated Speed
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('impellerDiameter')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.impellerDiameter" name="impellerDiameter"
+                id="impellerDiameter">
+            Impeller Diameter
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('minFlowSize')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.minFlowSize" name="minFlowSize"
+                id="minFlowSize">
+            Min Flow Size
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('pumpSize')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.pumpSize" name="pumpSize"
+                id="pumpSize">
+            Pump Size
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('designHead')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.designHead" name="designHead"
+                id="designHead">
+            Design Head
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('designFlow')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.designFlow" name="designFlow"
+                id="designFlow">
+            Design Flow
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('designEfficiency')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpPropertiesOptions.designEfficiency" name="designEfficiency"
+                id="designEfficiency">
+            Design Efficiency
+        </label>
+    </div>
+
+</form>

@@ -42,7 +42,9 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
         this.systemProfileSetup = this.compressedAirAssessment.systemProfile.systemProfileSetup;
         this.setOrderOptions();
         this.setData()
-        this.setHourIntervals();
+        if (!this.hourIntervals || (this.hourIntervals && this.hourIntervals.length != this.systemProfileSetup.numberOfHours)) {
+          this.hourIntervals = this.compressedAirAssessmentService.getHourIntervals(this.systemProfileSetup, 24);
+        }
       } else {
         this.isFormChange = false;
       }
@@ -119,15 +121,6 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
     this.save(false);
   }
 
-  setHourIntervals() {
-    if (!this.hourIntervals || (this.hourIntervals && this.hourIntervals.length != this.systemProfileSetup.numberOfHours)) {
-      this.hourIntervals = new Array();
-      for (let i = 0; i < 24;) {
-        this.hourIntervals.push(i + this.systemProfileSetup.dataInterval);
-        i = i + this.systemProfileSetup.dataInterval;
-      }
-    }
-  }
 
   toggleAll(itemIndex: number) {
     let toggleValue: boolean = !this.improveEndUseEfficiency.endUseEfficiencyItems[itemIndex].reductionData[0].data[0].applyReduction;

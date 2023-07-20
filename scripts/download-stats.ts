@@ -4,6 +4,7 @@ import { promises as fs, existsSync } from 'fs';
 import * as path from 'path';
 
 const API_URL_MEASUR = 'https://api.github.com/repos/ORNL-AMO/AMO-Tools-Desktop';
+const API_URL_VERIFI = 'https://api.github.com/repos/ORNL-AMO/VERIFI';
 const MAX_PAGES = 10;
 const OUTPUT_DIR = path.join(__dirname, 'download-stats');
 
@@ -20,24 +21,29 @@ const MacDMG = 'Mac .DMG';
 main();
 
 async function main() {
-    
+
     if (!existsSync(OUTPUT_DIR)) {
         console.log('Output directory does not exist. Creating...');
         fs.mkdir(OUTPUT_DIR);
     }
-    
+
     const headers = getHeaders();
-    const releases = await getReleases(headers);
+    const releases = await getReleases(headers, API_URL_MEASUR, 'raw_MEASUR_data.json');
     // const releases = require('./download-stats/raw-data.json');
     const csv = parseReleases(releases);
-    outputCsv(csv);
+    outputCsv(csv, 'MEASUR_downloads.csv');
+
+    const releasesVERIFI = await getReleases(headers, API_URL_VERIFI, 'raw_VERIFI_data.json');
+    // const releases = require('./download-stats/raw-data.json');
+    const csvVERIFI = parseReleases(releasesVERIFI);
+    outputCsv(csvVERIFI, 'VERIFI_downloads.csv');
 }
 
 function getHeaders() {
     let headers = {};
-    
+
     if (process.env.git_token) {
-        headers = {'Authorization': process.env.git_token};
+        headers = { 'Authorization': process.env.git_token };
     }
     else {
         console.log(
@@ -50,12 +56,12 @@ function getHeaders() {
     return headers;
 }
 
-async function getReleases(reqHeaders) {
+async function getReleases(reqHeaders, URL, jsonURL) {
     let releases = [];
-    
+
     for (let pageNum = 1; pageNum <= MAX_PAGES; pageNum++) {
         console.log(`Requesting page ${pageNum} from the GitHub API...`);
-        let response = await getUrl(API_URL_MEASUR + `/releases`, {
+        let response = await getUrl(URL + `/releases`, {
             params: {
                 page: pageNum,
                 per_page: 100
@@ -71,18 +77,18 @@ async function getReleases(reqHeaders) {
         releases.push(...response.data);
         printLimits(headers);
     }
-    
+
     console.log(`Found ${releases.length} releases in total.`);
-    
-    let outPath = path.join(OUTPUT_DIR, 'raw-data.json');
-    await fs.writeFile(outPath, JSON.stringify(releases), {encoding: 'utf-8'});
+
+    let outPath = path.join(OUTPUT_DIR, jsonURL);
+    await fs.writeFile(outPath, JSON.stringify(releases), { encoding: 'utf-8' });
     console.log(`Wrote raw output to ${outPath}`);
     return releases;
 }
 
 function parseReleases(releases) {
     const jsonData = [];
-    
+
     for (let release of releases) {
         let newDatum = {};
         newDatum['Name'] = release.name;
@@ -90,27 +96,27 @@ function parseReleases(releases) {
         for (let asset of release.assets) {
             let name = asset.name.toLowerCase();
             let count = asset.download_count;
-            if (name === 'latest-linux.yml')        newDatum[LatestLinux] = count;
-            else if (name === 'latest-mac.yml')     newDatum[LatestMac] = count;
-            else if (name === 'latest.yml')         newDatum[Latest] = count;
-            else if (name.endsWith('.appimage'))    newDatum[AppImage] = count;
-            else if (name.endsWith('.tar.gz'))      newDatum[TarGz] = count;
-            else if (name.endsWith('.exe'))         newDatum[Windows] = count;
-            else if (name.endsWith('.dmg'))         newDatum[MacDMG] = count;
-            else if (name.endsWith('mac.zip'))      newDatum[MacZip] = count;
+            if (name === 'latest-linux.yml') newDatum[LatestLinux] = count;
+            else if (name === 'latest-mac.yml') newDatum[LatestMac] = count;
+            else if (name === 'latest.yml') newDatum[Latest] = count;
+            else if (name.endsWith('.appimage')) newDatum[AppImage] = count;
+            else if (name.endsWith('.tar.gz')) newDatum[TarGz] = count;
+            else if (name.endsWith('.exe')) newDatum[Windows] = count;
+            else if (name.endsWith('.dmg')) newDatum[MacDMG] = count;
+            else if (name.endsWith('mac.zip')) newDatum[MacZip] = count;
         }
         jsonData.push(newDatum);
     }
-    
+
     const columns = ['Name', 'Date', Windows, MacDMG, MacZip, AppImage, TarGz, Latest, LatestMac, LatestLinux];
     const csv = Papa.unparse(jsonData, { columns: columns, quotes: true });
-    
+
     return csv;
 }
 
-function outputCsv(csv) {
-    let outPath = path.join(OUTPUT_DIR, 'downloads.csv');
-    fs.writeFile(outPath, csv, {encoding: 'utf-8'});
+function outputCsv(csv, downloadURL) {
+    let outPath = path.join(OUTPUT_DIR, downloadURL);
+    fs.writeFile(outPath, csv, { encoding: 'utf-8' });
     console.log(`Wrote CSV output to ${outPath}`);
 }
 
@@ -127,7 +133,7 @@ function getNumber(thing) {
     return parseFloat(String(thing));
 }
 
-async function getUrl(url, params?): Promise<AxiosResponse<any, any> >{
+async function getUrl(url, params?): Promise<AxiosResponse<any, any>> {
     try {
         const response = await axios.get(url, params);
         if (typeof response.data !== 'object') {

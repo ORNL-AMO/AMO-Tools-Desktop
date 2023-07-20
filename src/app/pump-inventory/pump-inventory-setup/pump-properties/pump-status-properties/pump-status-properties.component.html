@@ -1,0 +1,42 @@
+<div class="d-flex w-100" (mouseenter)="focusGroup()">
+    <div class="d-flex flex-fill">
+        <label class="group-label" (click)="toggleForm()">
+            <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+            <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+            Status
+        </label>
+    </div>
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
+            [(ngModel)]="pumpStatusOptions.displayPumpStatus" name="displayPumpStatus"
+            id="displayPumpStatus">
+        <label class="custom-control-label" for="displayPumpStatus"></label>
+    </div>
+</div>
+
+<form class="p-1" *ngIf="displayForm">
+    <div class="checkbox" (mouseenter)="focusField('status')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpStatusOptions.status" name="status"
+                id="status">
+            Status
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('priority')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpStatusOptions.priority" name="priority"
+                id="priority">
+            Priority
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('yearInstalled')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="pumpStatusOptions.yearInstalled" name="yearInstalled"
+                id="yearInstalled">
+            Year Installed
+        </label>
+    </div>
+
+</form>

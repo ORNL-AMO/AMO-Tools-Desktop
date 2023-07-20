@@ -17,12 +17,12 @@
     <app-losses-help [lossesTab]="lossesTab" [currentField]="currentField" [settings]="settings"></app-losses-help>
   </div>
 
-  <div class="scroll-item" *ngIf="tabSelect == 'results'" [ngStyle]="{'height.px': helpHeight}">
+  <div *ngIf="tabSelect == 'results'" [ngStyle]="{'height.px': helpHeight}">
     <app-results-data [phast]="phast" [inPhast]="true" [settings]="settings" [inSetup]="inSetup"
       [toggleCalculate]="toggleCalculate" [modification]="modification" [inReport]="false"
       [modificationIndex]="modificationIndex"></app-results-data>
   </div>
-  <div class="scroll-item" [ngStyle]="{'height.px': helpHeight}" *ngIf="tabSelect == 'sankey'">
+  <div [ngStyle]="{'height.px': helpHeight}" *ngIf="tabSelect == 'sankey'">
     <div *ngIf="modification" class="scroll-item"
 			[ngStyle]="{'height.px': helpHeight}">
 				<div class="d-flex flex-column w-100">
@@ -35,7 +35,7 @@
 				  </div>
 		</div>
   </div>
-  <div class="scroll-item" *ngIf="tabSelect == 'notes'" [ngStyle]="{'height.px': helpHeight}">
+  <div *ngIf="tabSelect == 'notes'" [ngStyle]="{'height.px': helpHeight}">
     <app-notes *ngIf="modification" [(notes)]="modification.notes" [currentTab]="lossesTab" (emitSave)="save()">
     </app-notes>
     <div class="alert alert-info mx-auto pt-5" *ngIf="!modification">

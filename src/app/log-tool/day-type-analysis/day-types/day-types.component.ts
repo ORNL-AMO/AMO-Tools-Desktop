@@ -31,7 +31,6 @@ export class DayTypesComponent implements OnInit {
   ngOnInit() {
     this.dayTypesSub = this.dayTypeAnalysisService.dayTypes.subscribe(val => {
       this.dayTypes = val;
-      this.logToolDbService.saveData();
     });
     this.startDate = this.dayTypeAnalysisService.calendarStartDate;
     this.numberOfMonths = this.dayTypeAnalysisService.numberOfMonths;

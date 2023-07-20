@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { LogToolDbService } from '../../log-tool-db.service';
 import { ExplorerData, ExplorerDataSet, StepMovement } from '../../log-tool-models';
+import { WindowRefService } from '../../../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-map-time-data',
@@ -35,12 +36,18 @@ export class MapTimeDataComponent implements OnInit {
   toolTipHoldTimeout;
   showTooltipHover: boolean = false;
   showTooltipClick: boolean = false;
+  normalTooltipDimensions: boolean = true;
+
+  tooltip_left_margin: number = 200;
+  windowWidth: number;
+  windowHeight: number;
 
   constructor(
     private cd: ChangeDetectorRef,
     private router: Router,
     private logToolDbService: LogToolDbService,
-    private logToolDataService: LogToolDataService) { }
+    private logToolDataService: LogToolDataService,
+    private windowRefService: WindowRefService) { }
 
   ngOnInit() {
     this.explorerData = this.logToolDataService.explorerData.getValue();
@@ -52,6 +59,7 @@ export class MapTimeDataComponent implements OnInit {
         this.changeStepOrNavigate(changeStep, changeStepIndex);
       }
     });
+    this.getWindowDimensions();
   }
   
   ngOnDestroy(){
@@ -64,7 +72,7 @@ export class MapTimeDataComponent implements OnInit {
       // is first or last file/dataset
         if (this.explorerData.isStepMapTimeDataComplete && changeStep.direction == 'forward') {
           this.logToolDataService.loadingSpinner.next({show: true, msg: 'Finalizing Data Setup...'});
-          // set delay to display spinner before blocked thread thread
+          // set delay to display spinner before blocked thread
           setTimeout(async () => {
             await this.finalizeDataSetup();
             if (this.explorerData.valid.isValid) {
@@ -102,7 +110,6 @@ export class MapTimeDataComponent implements OnInit {
   async finalizeDataSetup() {
     this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
     if (this.explorerData.valid.isValid) {
-      await this.logToolDbService.saveData();
       this.logToolDataService.explorerData.next(this.explorerData);
     } else {
       this.logToolDataService.loadingSpinner.next({show: false});
@@ -206,11 +213,39 @@ displayTooltipHover(hoverOnInfo: boolean = false) {
   if (hoverOnInfo) {
     clearTimeout(this.toolTipHoldTimeout);
   }
+  this.checkTooltipDimensions();
   this.showTooltipHover = true;
 }
 
 toggleClickTooltip(){
   this.showTooltipClick = !this.showTooltipClick;
+}
+
+checkTooltipDimensions(){
+  const tooltip = document.getElementById('question_circle');
+  if (tooltip){
+    const box = tooltip.getBoundingClientRect();
+    this.tooltip_left_margin = box.left;
+    if ((this.tooltip_left_margin + 275) > this.windowWidth)
+    {
+      this.normalTooltipDimensions = false;
+    }
+    else
+    {
+      this.normalTooltipDimensions = true;
+    }
+  }
+}
+
+@HostListener('window:resize')
+onWindowResize() {
+  this.getWindowDimensions();
+}
+
+getWindowDimensions() {
+  let window = this.windowRefService.nativeWindow;
+  this.windowWidth = window.innerWidth;
+  this.windowHeight = window.innerHeight;
 }
 
 setDataCollectionInterval() {

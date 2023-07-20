@@ -4,6 +4,7 @@ import { PhastService } from '../phast.service';
 import { Settings } from '../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { DashboardService } from '../../dashboard/dashboard.service';
 @Component({
   selector: 'app-phast-banner',
   templateUrl: './phast-banner.component.html',
@@ -17,7 +18,9 @@ export class PhastBannerComponent implements OnInit {
 
   mainTab: string;
   mainTabSub: Subscription;
-  constructor(private phastService: PhastService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
+  bannerCollapsed: boolean = true;
+  constructor(private phastService: PhastService,
+    private dashboardService: DashboardService,  private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit() {
     this.mainTabSub = this.phastService.mainTab.subscribe(val => {
@@ -27,6 +30,10 @@ export class PhastBannerComponent implements OnInit {
 
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
+  }
+
+  navigateHome() {
+    this.dashboardService.navigateWithSidebarOptions('/landing-screen', {shouldCollapse: false});
   }
 
   showSecurityAndPrivacyModal() {
@@ -39,6 +46,40 @@ export class PhastBannerComponent implements OnInit {
       this.phastService.mainTab.next(str);
     } else if (this.assessment.phast.setupDone) {
       this.phastService.mainTab.next(str);
+    }
+    this.collapseBanner();
+  }
+
+  collapseBanner() {
+    this.bannerCollapsed = !this.bannerCollapsed;
+    window.dispatchEvent(new Event("resize"));
+  }
+
+  back(){
+    if (this.mainTab == 'calculators') {
+      this.phastService.mainTab.next('sankey');
+    } else if (this.mainTab == 'sankey') {
+      this.phastService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.phastService.mainTab.next('diagram');
+    } else if (this.mainTab == 'diagram') {
+      this.phastService.mainTab.next('assessment');
+    } else if (this.mainTab == 'assessment') {
+      this.phastService.mainTab.next('system-setup');
+    }
+  }
+
+  continue() {
+    if (this.mainTab == 'system-setup') {
+      this.phastService.mainTab.next('assessment');
+    } else if (this.mainTab == 'assessment') {
+      this.phastService.mainTab.next('diagram');
+    } else if (this.mainTab == 'diagram') {
+      this.phastService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.phastService.mainTab.next('sankey');
+    } else if (this.mainTab == 'sankey') {
+      this.phastService.mainTab.next('calculators');
     }
   }
 }

@@ -2,6 +2,11 @@
     z-index: initial !important;
 }
 
+div#logToolFooter.footer {
+    position: relative !important;
+}
+
+
 .disabled {
     color: gray;
     pointer-events: none;

@@ -49,6 +49,7 @@ export class PhastReportComponent implements OnInit {
   showPrintMenuSub: Subscription;
   printOptions: PrintOptions;
   showPrintViewSub: Subscription;
+  tabsCollapsed: boolean = true;
   constructor(private settingsDbService: SettingsDbService, 
               private directoryDbService: DirectoryDbService, 
               private printOptionsMenuService: PrintOptionsMenuService, 
@@ -128,12 +129,13 @@ export class PhastReportComponent implements OnInit {
     if (this.reportBtns && this.reportHeader) {
       let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
       let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-      this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+      this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 2;
     }
   }
 
   setTab(str: string): void {
     this.currentTab = str;
+    this.collapseTabs();
   }
 
   setPhastValidity() {
@@ -169,5 +171,9 @@ export class PhastReportComponent implements OnInit {
   print() {
     this.printOptionsMenuService.printContext.next('phast');
     this.printOptionsMenuService.showPrintMenu.next(true);
+    this.collapseTabs();
+  }
+  collapseTabs() {
+    this.tabsCollapsed = !this.tabsCollapsed;
   }
 }
