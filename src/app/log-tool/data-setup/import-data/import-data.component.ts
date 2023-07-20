@@ -318,7 +318,6 @@ export class ImportDataComponent implements OnInit {
 
   async finalizeDataSetup() {
     this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
-    await this.logToolDbService.saveData();
     this.logToolDataService.explorerData.next(this.explorerData);
   }
 
@@ -337,7 +336,6 @@ export class ImportDataComponent implements OnInit {
     this.explorerData.isExample = true;
     this.explorerData = this.logToolDataService.addImportDataSet(exampleDataSet, exampleName, exampleName, this.explorerData);
     this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
-    await this.logToolDbService.saveData();
     this.runDayTypeAnalysis(true);
     this.setExistingDataComplete();
     this.logToolDataService.explorerData.next(this.explorerData);

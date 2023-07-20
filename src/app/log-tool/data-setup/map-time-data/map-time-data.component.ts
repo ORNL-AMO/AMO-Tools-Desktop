@@ -72,7 +72,7 @@ export class MapTimeDataComponent implements OnInit {
       // is first or last file/dataset
         if (this.explorerData.isStepMapTimeDataComplete && changeStep.direction == 'forward') {
           this.logToolDataService.loadingSpinner.next({show: true, msg: 'Finalizing Data Setup...'});
-          // set delay to display spinner before blocked thread thread
+          // set delay to display spinner before blocked thread
           setTimeout(async () => {
             await this.finalizeDataSetup();
             if (this.explorerData.valid.isValid) {
@@ -110,7 +110,6 @@ export class MapTimeDataComponent implements OnInit {
   async finalizeDataSetup() {
     this.explorerData = this.logToolDataService.finalizeDataSetup(this.explorerData);
     if (this.explorerData.valid.isValid) {
-      await this.logToolDbService.saveData();
       this.logToolDataService.explorerData.next(this.explorerData);
     } else {
       this.logToolDataService.loadingSpinner.next({show: false});
