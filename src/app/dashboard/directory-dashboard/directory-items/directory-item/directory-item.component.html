@@ -1,7 +1,7 @@
 <!--grid view-->
 <div class="card card-item" *ngIf="dashboardView == 'grid'">
     <div class="card-header summary-card-header">
-        <input type="checkbox" [(ngModel)]="directory.selected">
+        <input type="checkbox" [(ngModel)]="directory.selected" (change)="updateSelectedStatus()">
         <span class="fa fa-folder pl-1 pr-1"></span>
         <a [routerLink]="['/directory-dashboard', directory.id]">{{directory.name}}</a>
         <i class="fa fa-edit pull-right" (click)="showEditModal()"></i>

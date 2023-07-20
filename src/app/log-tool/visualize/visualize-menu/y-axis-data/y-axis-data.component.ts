@@ -14,13 +14,18 @@ export class YAxisDataComponent implements OnInit {
 
   selectedGraphObj: GraphObj;
   selectedGraphObjSub: Subscription;
+  isFormChangeEvent: boolean;
 
   yAxisOptions: Array<{ axis: string, label: string }> = [{ axis: 'y', label: 'Left' }, { axis: 'y2', label: 'Right' }];
   constructor(private visualizeService: VisualizeService, 
     private logToolDataService: LogToolDataService, private visualizeMenuService: VisualizeMenuService) { }
   ngOnInit(): void {
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
-      this.selectedGraphObj = val;
+      if (this.isFormChangeEvent) {
+        this.isFormChangeEvent = false;
+      } else {
+        this.selectedGraphObj = val;
+      }
     });
   }
 
@@ -29,35 +34,41 @@ export class YAxisDataComponent implements OnInit {
   }
 
   saveChanges() {
-    this.visualizeMenuService.saveUserGraphOptionsChange(this.selectedGraphObj);
+    this.visualizeMenuService.saveExistingPlotChange(this.selectedGraphObj);
+  }
+  
+  saveUserInput() {
+    this.visualizeMenuService.saveUserInputChange(this.selectedGraphObj);
   }
 
   addAxis() {
-    this.visualizeMenuService.addAxis(this.selectedGraphObj);
+    this.visualizeMenuService.saveExistingPlotChange(this.selectedGraphObj);
+
   }
 
   removeAxis() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
-    depending on the amount of data you have supplied...`})
     this.visualizeMenuService.removeAxis(this.selectedGraphObj);
   }
 
-
+  setSeriesColor(index: number, seriesColor: string) {
+    this.selectedGraphObj.data[index].marker.color = seriesColor;
+    this.selectedGraphObj.data[index].line.color = seriesColor;
+    this.isFormChangeEvent = true;
+    this.visualizeMenuService.saveUserInputChange(this.selectedGraphObj);
+  }
+  
   setYAxisData() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
-    depending on the amount of data you have supplied...`})
+    if (this.selectedGraphObj.data[0].type == 'time-series' || this.selectedGraphObj.data[0].type == 'scattergl')  {
+      this.visualizeMenuService.resetLayoutRelatedData(this.selectedGraphObj)
+    }
     this.visualizeMenuService.setGraphYAxisData(this.selectedGraphObj);
   }
-
+  
   removeYAxisData(index: number) {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
-    depending on the amount of data you have supplied...`})
     this.visualizeMenuService.removeYAxisData(index, this.selectedGraphObj);
   }
 
   addDataSeries(){
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Adding Data Series. This may take a moment
-    depending on the amount of data you have supplied...`});
     this.visualizeMenuService.addDataSeries(this.selectedGraphObj);
   }
 

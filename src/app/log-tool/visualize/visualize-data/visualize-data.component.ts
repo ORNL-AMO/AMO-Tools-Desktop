@@ -89,18 +89,20 @@ export class VisualizeDataComponent implements OnInit {
 
   setTimeSeriesSummary() {
     let allDataByAxisField: Array<GraphDataOption> = this.visualizeService.allDataByAxisField;
-    allDataByAxisField.forEach((dataItem) => {
-      if (dataItem.dataField.isDateField) {
-        let fieldData: Array<any>;
-        if (this.axisRanges) {
-          fieldData = this.filterXAxisData(dataItem.data, true);
-        } else {
-          fieldData = dataItem.data;
+    if (allDataByAxisField) {
+      allDataByAxisField.forEach((dataItem) => {
+        if (dataItem.dataField.isDateField) {
+          let fieldData: Array<any>;
+          if (this.axisRanges) {
+            fieldData = this.filterXAxisData(dataItem.data, true);
+          } else {
+            fieldData = dataItem.data;
+          }
+          let dateFieldSummary = this.getDataSummaryItem(fieldData, dataItem.dataField.csvName);
+          this.timeSummaries.push(dateFieldSummary);
         }
-        let dateFieldSummary = this.getDataSummaryItem(fieldData, dataItem.dataField.csvName);
-        this.timeSummaries.push(dateFieldSummary);
-      }
-    });
+      });
+    }
   }
 
   getDataSummaryItem(data: Array<number | string>, csvName: string): {

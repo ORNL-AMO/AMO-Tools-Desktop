@@ -3,6 +3,7 @@ import { VisualizeService } from '../visualize.service';
 import { combineLatestWith, debounceTime, Subscription } from 'rxjs';
 import { GraphInteractivity, GraphObj } from '../../log-tool-models';
 import { LogToolDataService } from '../../log-tool-data.service';
+import { VisualizeMenuService } from './visualize-menu.service';
 
 @Component({
   selector: 'app-visualize-menu',
@@ -28,24 +29,23 @@ export class VisualizeMenuComponent implements OnInit {
   toolTipHoldTimeout;
   showTooltipHover: boolean = false;
   showTooltipClick: boolean = false;
-  onUpdateGraphEventsSubscription: Subscription;
+  selectedGraphObjSubscription: Subscription;
 
-  constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService,) { }
+  constructor(private visualizeService: VisualizeService, private visualizeMenuService: VisualizeMenuService, private logToolDataService: LogToolDataService,) { }
 
   ngOnInit() {
     this.visualizeService.focusedPanel.next('default');
     this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
-    this.onUpdateGraphEventsSubscription = this.visualizeService.selectedGraphObj
+    this.selectedGraphObjSubscription = this.visualizeService.selectedGraphObj
     .pipe(
-      combineLatestWith(this.visualizeService.userGraphOptions),
-      debounceTime(25)
-      ).subscribe(([selectedGraphObj, userGraphOptionsObj]: any) => {
-        if (selectedGraphObj || userGraphOptionsObj) {
-          this.selectedGraphObj = selectedGraphObj? selectedGraphObj : userGraphOptionsObj;
+      // debounceTime(25)
+      ).subscribe((selectedGraphObj: GraphObj) => {
+        if (selectedGraphObj) {
+          this.selectedGraphObj = selectedGraphObj;
           this.isGraphInteractive = this.selectedGraphObj.graphInteractivity.isGraphInteractive;
-          this.graphInteractivity = this.selectedGraphObj.graphInteractivity;
         } 
     });
+
 
     this.graphObjsSub = this.visualizeService.graphObjects.subscribe(val => {
       this.numberOfGraphs = val.length;
@@ -57,14 +57,25 @@ export class VisualizeMenuComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.onUpdateGraphEventsSubscription.unsubscribe();
+    this.selectedGraphObjSubscription.unsubscribe();
     this.graphObjsSub.unsubscribe();
   }
 
+  renderGraph() {
+    this.logToolDataService.loadingSpinner.next({
+      show: true, msg: `Graphing Data. This may take a moment
+    depending on the amount of data you have supplied...`});
+    setTimeout(() => {
+      this.visualizeService.shouldRenderGraph.next(true);
+    }, 100);
+  }
+
   deleteGraph() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment
+    this.logToolDataService.loadingSpinner.next({show: true, msg: `Deleting Graph. This may take a moment
     depending on the amount of data you have supplied...`})
+    setTimeout(() => {
     this.visualizeService.removeGraphDataObj(this.selectedGraphObj.graphId);
+  }, 100);
   }
 
   toggleUserGraphOptions() {
@@ -95,17 +106,11 @@ export class VisualizeMenuComponent implements OnInit {
   }
 
   toggleAnnotateGraph() {
-    let graphInteractivity: GraphInteractivity = {
-      isGraphInteractive: this.isGraphInteractive,
-    }
-
-    let userGraphOptionsGraphObj = this.visualizeService.userGraphOptions.getValue();
-    if (!userGraphOptionsGraphObj) {
-      userGraphOptionsGraphObj = this.visualizeService.selectedGraphObj.getValue();
-    }
-    userGraphOptionsGraphObj.graphInteractivity = graphInteractivity;
-    this.visualizeService.userGraphOptions.next(userGraphOptionsGraphObj);
-    this.visualizeService.focusedPanel.next('annotation');
+    this.selectedGraphObj.graphInteractivity.isGraphInteractive = this.isGraphInteractive;
+    setTimeout(() => {
+      this.visualizeMenuService.saveExistingPlotChange(this.selectedGraphObj, true);
+      this.visualizeService.focusedPanel.next('annotation');
+    }, 10);
   }
 
   toggleHistogramBins() {

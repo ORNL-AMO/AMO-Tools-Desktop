@@ -18,6 +18,19 @@
                     <app-x-axis-data *ngIf="showXAxisOptions"></app-x-axis-data>
                     <app-y-axis-data *ngIf="showYAxisOptions"></app-y-axis-data>
                     <div class="mt-2 d-flex w-100 options-border"></div>
+
+                    <button [disabled]="!selectedGraphObj.hasChanges"
+                        [ngClass]="{'disabled': !selectedGraphObj.hasChanges}" 
+                        class="btn btn-primary small px-3 w-100 my-2 mr-2" (click)="renderGraph()">
+                            <span *ngIf="!selectedGraphObj.isGraphInitialized">
+                                Create Graph
+                            </span>
+                            <span *ngIf="selectedGraphObj.isGraphInitialized">
+                                <span class="fa fa-refresh pt-0 pr-3"></span><span>Apply Graph Changes</span>
+                            </span> 
+
+                    </button>
+                    
                     <a class="danger mt-1 click-link small pull-right" (click)="deleteGraph()" *ngIf="numberOfGraphs != 1">Delete
                         Graph</a>
                 </ng-container>

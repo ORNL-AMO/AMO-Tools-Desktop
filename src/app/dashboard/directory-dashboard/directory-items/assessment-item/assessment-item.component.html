@@ -3,7 +3,7 @@
     'ssmt': assessment.type == 'SSMT', 'treasure-hunt': assessment.type == 'TreasureHunt', 'waste-water': assessment.type == 'WasteWater',
     'compressed-air': assessment.type == 'CompressedAir'}">
     <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
-        <input type="checkbox" [(ngModel)]="assessment.selected">
+        <input type="checkbox" [(ngModel)]="assessment.selected" (change)="updateSelectedStatus()">
         <div class="d-flex align-items-center">
             <img *ngIf="assessment.type == 'PSAT'" class="icon-image pl-1 pr-1"
                 src="assets/images/pump-icon.png">
