@@ -179,7 +179,7 @@ export class ImportDataComponent implements OnInit {
     if (files[0]) {
       let importFile = files[0];
       if (importFile.name.endsWith('.gz')) {
-        let blob = new Blob([importFile], { type: 'application/octet-stream' });
+        let blob = new Blob([importFile], { type: 'application/gzip' });
         let arrayBuffer;
         let obj : any;
         let result;

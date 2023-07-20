@@ -45,7 +45,7 @@ export class ImportModalComponent implements OnInit {
       if ($event.target.files.length !== 0) {
         let regex = /.gz$/;
         if (regex.test($event.target.files[0].name)) {
-          let blob = new Blob([$event.target.files[0]], { type: 'application/octet-stream' });
+          let blob = new Blob([$event.target.files[0]], { type: 'application/gzip' });
           let arrayBuffer;
           let result;
           let fileReader = new FileReader();

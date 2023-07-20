@@ -50,7 +50,7 @@ export class ImportExportService {
     data.origin = 'AMO-TOOLS-DESKTOP';
     let stringifyData = JSON.stringify(data);
     let gzip = pako.gzip(stringifyData , {to: 'string'});
-    let blob = new Blob([gzip], { type: 'application/octet-stream' });
+    let blob = new Blob([gzip], { type: 'application/gzip' });
     let url = URL.createObjectURL(blob);
     let dlLink = document.createElement('a');
     dlLink.href = url;
