@@ -8,8 +8,8 @@
   "repository": "https://github.com/ORNL-AMO/AMO-Tools-Desktop.git",
   "angular-cli": {},
   "engines": {
-    "node": "14.20.1",
-    "npm": "6.14.17"
+    "node": "18.17.0",
+    "npm": "9.6.7"
   },
   "scripts": {
     "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --configuration production",
@@ -49,7 +49,7 @@
     "@angular/service-worker": "^15.1.2",
     "@popperjs/core": "^2.11.2",
     "ajv": "8.12.0",
-    "amo-tools-suite": "1.0.3",
+    "amo-tools-suite": "../AMO-Tools-Suite",
     "billboard.js": "^3.7.2",
     "bootstrap": "4.3.1",
     "core-js": "3.21.1",
@@ -124,7 +124,7 @@
     "angular-plotly.js": "^4.0.4",
     "axios": "^0.27.2",
     "electron": "^13.6.6",
-    "electron-builder": "22.9.1",
+    "electron-builder": "23.0.1",
     "electron-download-tf": "4.3.4",
     "electron-packager": "15.2.0",
     "jasmine-spec-reporter": "~5.0.0",
