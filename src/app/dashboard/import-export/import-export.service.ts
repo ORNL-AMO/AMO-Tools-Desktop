@@ -17,7 +17,7 @@ export class ImportExportService {
     this.toggleDownload = new BehaviorSubject<boolean>(null);
    }
 
-  test(data: any) { 
+  testIfOverLimit(data: any) { 
     data.origin = 'AMO-TOOLS-DESKTOP';
     let stringifyData = JSON.stringify(data);
     let doc = this.windowRefService.getDoc();
