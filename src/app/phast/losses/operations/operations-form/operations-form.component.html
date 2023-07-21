@@ -6,7 +6,7 @@
       <span class="input-group-addon op-hour-addon units">
         <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
       </span>
-      <input [readonly]="!baselineSelected" name="hoursPerYear" type="number" step="any" class="form-control"
+      <input [readonly]="!baselineSelected" name="hoursPerYear" type="number" step="10" class="form-control"
         id="{{'hoursPerYear_'+idString}}" (input)="save()" formControlName="hoursPerYear"
         (focus)="focusField('operatingHours')" >
       <span class="units input-group-addon">hrs/yr</span>
@@ -23,7 +23,7 @@
       [ngClass]="{'indicate-different': compareFuelCost(), 'invalid': operationsForm.controls.fuelCost.invalid}">
       <input [readonly]="!baselineSelected" name="fuelCost" type="number" step="any" class="form-control"
         id="{{'fuelCost_'+idString}}" (input)="save()" formControlName="fuelCost" (focus)="focusField('operatingCosts')"
-        >
+        step = "0.1">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'"  class="units input-group-addon">$/MMBtu</span>
         <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">$/GJ</span>
     </div>
@@ -34,7 +34,7 @@
       <label for="{{'coalCarbonCost'+idString}}">Coal Carbon Costs</label>
       <div class="input-group"
         [ngClass]="{'indicate-different': compareCoalCarbonCost(), 'invalid': operationsForm.controls.coalCarbonCost.invalid}">
-        <input [readonly]="!baselineSelected" name="coalCarbonCost" type="number" step="any" class="form-control"
+        <input [readonly]="!baselineSelected" name="coalCarbonCost" type="number" step="0.01" class="form-control"
           id="{{'coalCarbonCost'+idString}}" (input)="save()" formControlName="coalCarbonCost" (focus)="focusField('coalCarbonCost')"
           >
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'"  class="units input-group-addon">$/lb</span>
@@ -45,7 +45,7 @@
       <label for="{{'electrodeCost'+idString}}">Electrode Costs</label>
       <div class="input-group"
         [ngClass]="{'indicate-different': compareElectrodeCost(), 'invalid': operationsForm.controls.electrodeCost.invalid}">
-        <input [readonly]="!baselineSelected" name="electrodeCost" type="number" step="any" class="form-control"
+        <input [readonly]="!baselineSelected" name="electrodeCost" type="number" step="0.1" class="form-control"
           id="{{'electrodeCost'+idString}}" (input)="save()" formControlName="electrodeCost" (focus)="focusField('electrodeCost')"
           >
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'"  class="units input-group-addon">$/lb</span>
@@ -56,7 +56,7 @@
       <label for="{{'otherFuelCost'+idString}}">Other Fuel Costs</label>
       <div class="input-group"
         [ngClass]="{'indicate-different': compareOtherFuelCost(), 'invalid': operationsForm.controls.otherFuelCost.invalid}">
-        <input [readonly]="!baselineSelected" name="otherFuelCost" type="number" step="any" class="form-control"
+        <input [readonly]="!baselineSelected" name="otherFuelCost" type="number" step="0.1" class="form-control"
           id="{{'otherFuelCost'+idString}}" (input)="save()" formControlName="otherFuelCost" (focus)="focusField('otherFuelCost')"
           >
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'"  class="units input-group-addon">$/MMBtu</span>
@@ -70,9 +70,9 @@
     <label for="{{'steamCost_'+idString}}">Steam Costs</label>
     <div class="input-group"
       [ngClass]="{'indicate-different': compareSteamCost(), 'invalid': operationsForm.controls.steamCost.invalid}">
-      <input [readonly]="!baselineSelected" name="steamCost" type="number" step="any" class="form-control"
+      <input [readonly]="!baselineSelected" name="steamCost" type="number" class="form-control"
         id="{{'steamCost_'+idString}}" (input)="save()" formControlName="steamCost"
-        (focus)="focusField('operatingCosts')" >
+        (focus)="focusField('operatingCosts')" step = "0.1">
       <span *ngIf="settings.unitsOfMeasure == 'Imperial'"  class="units input-group-addon">$/MMBtu</span>
       <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">$/GJ</span>
     </div>
@@ -82,7 +82,7 @@
     <label for="{{'electricityCost_'+idString}}">Electricity Costs</label>
     <div class="input-group"
       [ngClass]="{'indicate-different': compareElectricityCost(), 'invalid': operationsForm.controls.electricityCost.invalid}">
-      <input [readonly]="!baselineSelected" name="electricityCost" type="number" step="any" class="form-control"
+      <input [readonly]="!baselineSelected" name="electricityCost" type="number" step="0.01" class="form-control"
         id="{{'electricityCost_'+idString}}" (input)="save()" formControlName="electricityCost"
         (focus)="focusField('operatingCosts')" >
       <span class="units input-group-addon">$/kWh</span>
