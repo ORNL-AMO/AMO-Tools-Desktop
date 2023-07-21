@@ -12,9 +12,8 @@ import { MotorIntegrationService } from '../shared/assessment-integration/motor-
 import { PsatIntegrationService } from '../shared/assessment-integration/psat-integration.service';
 import { IntegrationStateService } from '../shared/assessment-integration/integration-state.service';
 import { ConnectedInventoryData } from '../shared/assessment-integration/integrations';
-
+import { environment } from '../../environments/environment';
 declare const packageJson;
-
 @Component({
   selector: 'app-pump-inventory',
   templateUrl: './pump-inventory.component.html',
@@ -124,7 +123,7 @@ export class PumpInventoryComponent implements OnInit {
   async saveDbData() {
     let inventoryData: PumpInventoryData = this.pumpInventoryService.pumpInventoryData.getValue();
     this.pumpInventoryItem.modifiedDate = new Date();
-    this.pumpInventoryItem.appVersion = packageJson.version;
+    this.pumpInventoryItem.appVersion = environment.version;
     this.pumpInventoryItem.pumpInventoryData = inventoryData;
     this.pumpInventoryItem.pumpInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
     this.pumpInventoryItem.pumpInventoryData.hasConnectedPsat = this.psatIntegrationService.getHasConnectedPSAT(this.pumpInventoryItem);
