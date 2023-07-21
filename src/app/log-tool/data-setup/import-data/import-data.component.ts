@@ -9,8 +9,6 @@ import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysi
 import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-type-graph.service';
 import { VisualizeService } from '../../visualize/visualize.service';
 import { LogToolService } from '../../log-tool.service';
-import * as pako from 'pako';
-
 
 @Component({
   selector: 'app-import-data',
@@ -93,7 +91,7 @@ export class ImportDataComponent implements OnInit {
             fileReaderPromises.push(this.setCSVImportFile(files[index]));
           }
         } else {
-          this.invalidFileReferences.push({ name: files[index].name, message: 'File must be of type .csv or .xlsx. Use "Import Existing Data Exploration" to upload .json or .gz.' });
+          this.invalidFileReferences.push({ name: files[index].name, message: 'File must be of type .csv or .xlsx. Use "Import Existing Data Exploration" to upload .json' });
         }
       }
       Promise.all(fileReaderPromises).then((values) => {
@@ -171,82 +169,23 @@ export class ImportDataComponent implements OnInit {
   }
 
   importExistingExplorerJson(files: FileList) {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: 'Uploading file data... this may take a while depending on the size of your input file.'});
+    this.logToolDataService.loadingSpinner.next({show: true, msg: 'Uploading File Data...'});
     this.dayTypeAnalysisService.resetData();
     this.visualizeService.resetData();
     this.dayTypeGraphService.resetData();
     this.invalidFileReferences = new Array();
     if (files[0]) {
-      let importFile = files[0];
-      if (importFile.name.endsWith('.gz')) {
-        let blob = new Blob([importFile], { type: 'application/gzip' });
-        let arrayBuffer;
-        let obj : any;
-        let result;
-        let fileReader = new FileReader();
-        fileReader.onload = () => {
-          arrayBuffer = fileReader.result as ArrayBuffer;
-          result = pako.ungzip(new Uint8Array(arrayBuffer), { to: 'string' });
-          obj = JSON.parse(result);
-          let name = importFile.name;
-          let fileReaderPromise: Promise<any> = this.setJSONImportFileFromZip(result, name);
-          fileReaderPromise.then((logToolDbData) => {
-            if (!logToolDbData.setupData)
-            {
-              this.logToolDataService.loadingSpinner.next({show: false, msg: ''});
-            }
-            else {
-              this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis);
-              this.finishUpload();
-            }
-          });
-        };
-        fileReader.readAsArrayBuffer(blob);
-      }
-      else{
-        let fileReaderPromise: Promise<any> = this.setJSONImportFile(importFile);
-        fileReaderPromise.then((logToolDbData) => {
-          // noDayTypeAnalysis removal
-          if (!logToolDbData.setupData)
-          {
-            this.logToolDataService.loadingSpinner.next({show: false, msg: ''});
-          }
-          else {
-            this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis);
-            this.finishUpload();
-          }
-        });
-      }
-    } 
-  }
-
-  // not very good code since I don't know to use Promise's reject
-  setJSONImportFileFromZip(jsonData: any, fileName: any) {
-    return new Promise((resolve, reject) => {
-      try {
-        let importData: LogToolDbData = JSON.parse(jsonData);
-        if (importData.origin === "AMO-LOG-TOOL-DATA") {
-          this.explorerData.isExistingImport = true;
-          this.logToolDbService.logToolDbData = [importData];
-          this.logToolDbService.setDataFromImport(importData);
-          this.explorerData.fileData.push({ 
-            dataSetId: this.logToolDataService.getUniqueId(), 
-            fileType: '.json',
-            name: fileName, 
-            data: importData.setupData.individualDataFromCsv,
-            previewData: importData.setupData.individualDataFromCsv
-          });
-          this.logToolDataService.importExistingDataSets(importData);
-          resolve(importData);
-        } else {
-          let name = importData.name ? importData.name : undefined;
-          this.invalidFileReferences.push({ name: name, message: 'The uploaded GZ file does not contain AMO-Tools Data Explorer data.' });
-          resolve(importData);
-        }
-      } catch (error) {
-        reject(error);
-      }
-    });
+        let extensionPattern: string = '.(json|JSON)$';
+        let validExtensions: RegExp = new RegExp(extensionPattern, 'i');
+        if (validExtensions.test(files[0].name)) {
+              let fileReaderPromise: Promise<any> = this.setJSONImportFile(files[0]);
+              fileReaderPromise.then((logToolDbData) => {
+                // noDayTypeAnalysis removal
+                this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis)
+                this.finishUpload();
+              });
+        } 
+    }
   }
 
   setJSONImportFile(fileReference: any) {
@@ -271,7 +210,7 @@ export class ImportDataComponent implements OnInit {
           resolve(importData);
         } else {
           let name = importData.name ? importData.name : undefined;
-          this.invalidFileReferences.push({ name: name, message: 'The uploaded JSON file does not contain AMO-Tools Data Explorer data.' });
+          this.invalidFileReferences.push({ name: name, message: 'The uploaded JSON file does not contain AMO-Tools Data Explorer data' });
           resolve(importData);
         }
       };
