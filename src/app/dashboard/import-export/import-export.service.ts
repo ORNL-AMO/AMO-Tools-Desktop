@@ -49,7 +49,7 @@ export class ImportExportService {
   downloadZipData(data: any, name: string) {
     data.origin = 'AMO-TOOLS-DESKTOP';
     let stringifyData = JSON.stringify(data);
-    let gzip = pako.gzip(stringifyData , {to: 'string'});
+    let gzip = pako.gzip(stringifyData);
     let blob = new Blob([gzip], { type: 'application/gzip' });
     let url = URL.createObjectURL(blob);
     let dlLink = document.createElement('a');
