@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header" *ngIf="!importInProgress">
-                <h4 class="mb-0">Choose .json File to be Imported</h4>
+                <h4 class="mb-0">Choose .json or .gz File to be Imported</h4>
                 <button class="close pull-right" aria-label="Close" (click)="hideImportModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -14,11 +14,10 @@
                 </p>
                 <div class="row" *ngIf="!importInProgress">
                     <div class="col-12 form-group">
-                        <input type="file" class="form-control-file" (change)="setImportFile($event)">
+                        <input type="file" class="form-control-file" (change)="setImportFile($event)" accept=".json, .gz">
                         <span class="alert-danger small" *ngIf="treasureFile == true">Invalid File Destination - This 
                             is a treasure hunt opportunites file and must be imported from within a treasure hunt.</span>
-                        <span class="alert-danger small" *ngIf="validFile == false && treasureFile == false">Invalid File Type - Must have a
-                            .json file extension</span>
+                        <span class="alert-danger small" *ngIf="validFile == false && treasureFile == false">Invalid File Type</span>
                     </div>
                 </div>
 

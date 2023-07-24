@@ -57,6 +57,7 @@
     "font-awesome": "^4.7.0",
     "ngx-electron": "2.2.0",
     "ngx-indexed-db": "^9.4.2",
+    "pako": "^2.1.0",
     "pptxgenjs": "^3.10.0",
     "regression": "^2.0.0",
     "rxjs": "^7.5.5",

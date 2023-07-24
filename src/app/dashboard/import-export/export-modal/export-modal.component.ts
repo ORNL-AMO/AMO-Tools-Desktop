@@ -18,7 +18,7 @@ export class ExportModalComponent implements OnInit {
   @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
 
   exportData: ImportExportData;
-  canExport: boolean = false;
+  canExportJson: boolean = false;
   exportName: string;
   isSelectAllFolder: boolean;
   constructor(private exportService: ExportService, private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
@@ -30,7 +30,7 @@ export class ExportModalComponent implements OnInit {
     } else {
       this.exportDirectoryData();
     }
-    this.canExport = this.importExportService.test(this.exportData);
+    this.canExportJson = this.importExportService.testIfOverLimit(this.exportData);
   }
 
   ngAfterViewInit() {
@@ -76,6 +76,11 @@ export class ExportModalComponent implements OnInit {
 
   buildExportJSON() {
     this.importExportService.downloadData(this.exportData, this.exportName);
+    this.hideExportModal();
+  }
+
+  buildExportZip() {
+    this.importExportService.downloadZipData(this.exportData, this.exportName);
     this.hideExportModal();
   }
 
