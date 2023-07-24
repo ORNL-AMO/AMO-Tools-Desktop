@@ -42,3 +42,7 @@
 .fa.fa-chevron-left {
     font-size: 28px;
 }
+
+li.page-item{
+    background-color:#ECECEC !important;
+}
