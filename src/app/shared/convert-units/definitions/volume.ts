@@ -209,7 +209,7 @@ export const volume = {
             name: {
                 singular: 'Thousand Standard Cubic foot'
                 , plural: 'Thousand Standard Cubic feet' ,
-                 display:  '(kSCF;)'
+                 display:  '(kscf;)'
             }
             , to_anchor: 957.506 / 1000
         }

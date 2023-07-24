@@ -5,7 +5,7 @@
       <td class="bold w-50">Consumption</td>
       <td class="text-center w-50">
         {{airLeakOutput.baselineData.totalFlowRate | number:'1.0-1'}}
-        <span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'">scfm</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
       </td>
     </tr>
@@ -13,7 +13,7 @@
       <td class="bold w-50">Compressed Air Use</td>
       <td class="text-center w-50">
         {{airLeakOutput.baselineData.annualTotalFlowRate  | number:'1.0-1'}}
-        <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF</span>
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'">kscf</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
       </td>
     </tr>
@@ -39,7 +39,7 @@
       <td class="bold w-50">Consumption</td>
       <td class="text-center w-50">
         {{airLeakOutput.modificationData.totalFlowRate | number:'1.0-1'}}
-        <span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'">scfm</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
       </td>
     </tr>
@@ -47,7 +47,7 @@
       <td class="bold w-50">Compressed Air Use</td>
       <td class="text-center w-50">
         {{airLeakOutput.modificationData.annualTotalFlowRate  | number:'1.0-1'}}
-        <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF</span>
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'">kscf</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
       </td>
     </tr>
@@ -73,7 +73,7 @@
       <td class="bold w-50">Consumption</td>
       <td class="text-center w-50">
         {{airLeakOutput.savingsData.totalFlowRate | number:'1.0-1'}}
-        <span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'">scfm</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
       </td>
     </tr>
@@ -81,7 +81,7 @@
       <td class="bold w-50">Compressed Air Use</td>
       <td class="text-center w-50">
         {{airLeakOutput.savingsData.annualTotalFlowRate  | number:'1.0-1'}}
-        <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF</span>
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'">kscf</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
       </td>
     </tr>

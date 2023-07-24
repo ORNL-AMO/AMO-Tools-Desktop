@@ -2,7 +2,7 @@
   <div class="form-group">
     <label for="totalHeat">Heat Content of Steam</label>
     <div class="input-group">
-      <input name="totalHeat" type="number" step="any" id="totalHeat" class="form-control"
+      <input name="totalHeat" type="number" step="100" id="totalHeat" class="form-control"
         (focus)="changeField('steamTotalHeat')" [(ngModel)]="inputs.totalHeat" (input)="calculate()"
         onfocus="this.select();" />
       <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
@@ -12,7 +12,7 @@
   <div class="form-group">
     <label for="steamFlow">Steam Flow Rate</label>
     <div class="input-group">
-      <input name="steamFlow" type="number" step="any" id="steamFlow" class="form-control"
+      <input name="steamFlow" type="number" step="100" id="steamFlow" class="form-control"
         (focus)="changeField('steamFlow')" [(ngModel)]="inputs.steamFlow" (input)="calculate()"
         onfocus="this.select();" />
       <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
@@ -25,7 +25,7 @@
       <span class="input-group-addon op-hour-addon units">
         <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
       </span>
-      <input name="operatingHours" type="number" step="any" id="operatingHours" class="form-control"
+      <input name="operatingHours" type="number" step="10" id="operatingHours" class="form-control"
         (focus)="changeField('operatingHours')" [(ngModel)]="inputs.operatingHours" (input)="calculate()"
         onfocus="this.select();" />
       <span class="input-group-addon units">hrs/yr</span>

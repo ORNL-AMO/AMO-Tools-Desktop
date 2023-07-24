@@ -22,7 +22,7 @@
       <div class="input-group">
         <input name="heatingValue" type="number" step="any" id="heatingValue" class="form-control" (focus)="changeField('fuelHeatingValue')"
           [(ngModel)]="inputs.heatingValue" (input)="calculate()" onfocus="this.select();" />
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial' && inputs.fuelDescription == 'gas'" class="input-group-addon units">Btu/SCF</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial' && inputs.fuelDescription == 'gas'" class="input-group-addon units">Btu/scf</span>
         <span *ngIf="settings.unitsOfMeasure == 'Imperial' && inputs.fuelDescription == 'solidLiquid'" class="input-group-addon units">Btu/lb</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric' && inputs.fuelDescription == 'gas'" class="input-group-addon units">kJ/Nm
           <sup>3</sup>

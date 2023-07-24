@@ -2,7 +2,7 @@
   <div class="form-group">
     <label for="totalBurnerCapacity">Total Burner Rated Capacity</label>
     <div class="input-group">
-      <input name="totalBurnerCapacity" type="number" step="any" id="totalBurnerCapacity" class="form-control"
+      <input name="totalBurnerCapacity" type="number" step="10" id="totalBurnerCapacity" class="form-control"
         (focus)="changeField('fuelTotalBurnerCapacity')" [(ngModel)]="inputs.totalBurnerCapacity" (input)="calculate()"
         onfocus="this.select();" />
       <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MMBtu/hr</span>
@@ -24,7 +24,7 @@
       <span class="input-group-addon op-hour-addon units">
         <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
       </span>
-      <input name="operatingHours" type="number" step="any" id="operatingHours" class="form-control"
+      <input name="operatingHours" type="number" step="10" id="operatingHours" class="form-control"
         (focus)="changeField('operatingHours')" [(ngModel)]="inputs.operatingHours" (input)="calculate()"
         onfocus="this.select();" />
       <span class="input-group-addon units">hrs/yr</span>

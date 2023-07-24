@@ -63,7 +63,7 @@
                   <td *ngIf="flowCalculationResults.flow" class="text-center w-50"> {{flowCalculationResults.flow |
                     number:'2.0-0'}}
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                      SCFH
+                      scfh
                     </span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">
                       Nm<sup>3</sup>/hr
@@ -78,7 +78,7 @@
                   <td *ngIf="flowCalculationResults.totalFlow" class="text-center w-50">
                     {{flowCalculationResults.totalFlow | number:'2.0-0'}}
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                      SCF
+                      scf
                     </span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">
                       Nm<sup>3</sup>

@@ -22,7 +22,7 @@ export const volumetricEnergy = {
             name: {
                 singular: 'Btu per Standard Cubic Foot'
                 , plural: 'Btu per Standard Cubic Foot',
-                display: '(Btu/SCF)'
+                display: '(Btu/scf)'
             }
             , to_anchor: 37.2586
         }
