@@ -10,7 +10,7 @@
   <div class="form-group">
     <label class="small" for="{{'heatLoss'+idString}}">Heat Loss</label>
     <div class="input-group" [ngClass]="{'indicate-different': compareHeatLoss(), 'invalid': lossesForm.controls.heatLoss.invalid}">
-      <input [readonly]="!baselineSelected" name="{{'heatLoss_'+lossIndex}}" type="number" step="any" class="form-control"
+      <input [readonly]="!baselineSelected" name="{{'heatLoss_'+lossIndex}}" type="number" step="10" class="form-control"
         formControlName="heatLoss" id="{{'heatLoss'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('heatLoss')">
       <span class="input-group-addon units">{{resultsUnit}}</span>
     </div>

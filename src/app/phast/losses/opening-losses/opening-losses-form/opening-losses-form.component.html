@@ -50,7 +50,7 @@
       <label *ngIf="openingLossesForm.controls.openingType.value == 'Round'" class="small" for="{{'lengthOfOpening'+idString}}">Diameter
         of Openings</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareLengthOfOpening(), 'invalid': openingLossesForm.controls.lengthOfOpening.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'lengthOfOpening_'+lossIndex}}" type="number" step="any" min="0"
+        <input [readonly]="!baselineSelected" name="{{'lengthOfOpening_'+lossIndex}}" type="number" step="10" min="0"
           class="form-control" formControlName="lengthOfOpening" id="{{'lengthOfOpening'+idString}}" onfocus="this.select();"
           (input)="getArea(); checkCanCalculateViewFactor();" (focus)="focusField('lengthOfOpening')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
@@ -66,7 +66,7 @@
     <div class="form-group" *ngIf="openingLossesForm.controls.openingType.value != 'Round'">
       <label class="small" for="{{'heightOfOpening'+idString}}">Height of Openings</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareHeightOfOpening(), 'invalid': openingLossesForm.controls.heightOfOpening.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'heightOfOpening_'+lossIndex}}" type="number" step="any" min="0"
+        <input [readonly]="!baselineSelected" name="{{'heightOfOpening_'+lossIndex}}" type="number" step="10" min="0"
           class="form-control" formControlName="heightOfOpening" id="{{'heightOfOpening'+idString}}" onfocus="this.select();"
           (input)="getArea(); checkCanCalculateViewFactor();" (focus)="focusField('heightOfOpening')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
