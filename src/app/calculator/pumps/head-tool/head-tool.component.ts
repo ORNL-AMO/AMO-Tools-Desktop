@@ -162,7 +162,8 @@ export class HeadToolComponent implements OnInit {
         this.calculator.headToolSuction = this.headToolService.getHeadToolSuctionFromForm(this.headToolSuctionForm);
         this.calculator.headToolType = this.headToolType;
 
-        let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(this.calculator)) 
+        await firstValueFrom(this.calculatorDbService.updateWithObservable(this.calculator));
+        let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators()); 
         this.calculatorDbService.setAll(updatedCalculators);
         this.closeTool();
       } else {

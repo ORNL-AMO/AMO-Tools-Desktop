@@ -96,7 +96,8 @@ export class UpdateToastComponent implements OnInit {
   }
 
   async updateNow() {
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.downloadingUpdate = true;
     this.cd.detectChanges();

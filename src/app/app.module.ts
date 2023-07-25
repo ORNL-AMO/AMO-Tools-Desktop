@@ -22,7 +22,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       registrationStrategy: 'registerWhenStable:30000'
     }),
   ],
-  entryComponents: [AppComponent],
   bootstrap: [AppComponent],
   providers: [
    {

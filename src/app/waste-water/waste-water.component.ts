@@ -166,7 +166,8 @@ export class WasteWaterComponent implements OnInit {
   async saveWasteWater(wasteWater: WasteWater) {
     wasteWater = this.updateModificationCO2Savings(wasteWater);
     this.assessment.wasteWater = wasteWater;
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment)) 
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
   }
 
@@ -275,7 +276,8 @@ export class WasteWaterComponent implements OnInit {
 
  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableWasteWaterTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.wasteWaterService.isModalOpen.next(false);

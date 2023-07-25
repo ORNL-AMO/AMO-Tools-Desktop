@@ -48,7 +48,8 @@ export class OpeningTutorialComponent implements OnInit {
 
   async sendDontShow() {
       this.settingsDbService.globalSettings.disableTutorial = this.dontShow;
-      let settings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+      await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+      let settings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
       this.settingsDbService.setAll(settings);
   }
 }

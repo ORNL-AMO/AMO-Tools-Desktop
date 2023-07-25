@@ -130,7 +130,8 @@ export class MotorInventoryComponent implements OnInit {
     this.motorInventoryItem.motorInventoryData = inventoryData;
     this.motorInventoryItem.batchAnalysisSettings = batchAnalysisSettings;
     this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
-    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.motorInventoryItem));
+    await firstValueFrom(this.inventoryDbService.updateWithObservable(this.motorInventoryItem));
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);
   }
 
@@ -174,7 +175,8 @@ export class MotorInventoryComponent implements OnInit {
 
   async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableMotorInventoryTutorial = true;
-    let settings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let settings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(settings);
     this.showWelcomeScreen = false;
     this.motorInventoryService.modalOpen.next(false);

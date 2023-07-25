@@ -105,7 +105,8 @@ export class PlantSetupComponent implements OnInit {
     this.settings.inventoryId = inventoryId;
     this.pumpInventoryService.settings.next(this.settings);
     
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
   }
 

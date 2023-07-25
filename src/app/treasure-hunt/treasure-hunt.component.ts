@@ -180,7 +180,8 @@ export class TreasureHuntComponent implements OnInit {
     this.assessment.treasureHunt = treasureHunt;
     this.assessment.treasureHunt.setupDone = this.checkSetupDone();
 
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
     this.treasureHuntService.getResults.next(true);
   }
@@ -271,7 +272,8 @@ export class TreasureHuntComponent implements OnInit {
 
  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableTreasureHuntTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.treasureHuntService.modalOpen.next(false);

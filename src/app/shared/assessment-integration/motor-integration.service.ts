@@ -100,7 +100,8 @@ export class MotorIntegrationService {
         })
       });
 
-      let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(motorInventory));
+      await firstValueFrom(this.inventoryDbService.updateWithObservable(motorInventory));
+      let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
       this.inventoryDbService.setAll(updatedInventoryItems);
       this.integrationStateService.connectedInventoryData.next(connectedInventoryData);
     }
@@ -228,7 +229,8 @@ export class MotorIntegrationService {
         })
       });
     }
-    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(pumpInventory));
+    await firstValueFrom(this.inventoryDbService.updateWithObservable(pumpInventory));
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);
     this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
   }
@@ -249,7 +251,8 @@ export class MotorIntegrationService {
           });
         }
       });
-      let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(motorInventoryItem));
+      await firstValueFrom(this.inventoryDbService.updateWithObservable(motorInventoryItem));
+      let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
       this.inventoryDbService.setAll(updatedInventoryItems);
     }
   }

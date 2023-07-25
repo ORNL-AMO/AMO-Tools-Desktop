@@ -108,7 +108,8 @@ export class PsatIntegrationService {
             assessmentSettings.id = assessmentSettingsId;
             assessmentSettings.assessmentId = assessmentId;
 
-            let allSettings = await firstValueFrom(this.settingsDbService.updateWithObservable(assessmentSettings))
+            await firstValueFrom(this.settingsDbService.updateWithObservable(assessmentSettings));
+            let allSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
             this.settingsDbService.setAll(allSettings);
             connectedInventoryData.canConnect = true;
           } else {
@@ -184,7 +185,8 @@ export class PsatIntegrationService {
         })
       });
 
-      let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(pumpInventory));
+      await firstValueFrom(this.inventoryDbService.updateWithObservable(pumpInventory));
+      let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
       this.inventoryDbService.setAll(updatedInventoryItems);
       this.integrationStateService.connectedInventoryData.next(connectedInventoryData);
     }
@@ -232,7 +234,8 @@ export class PsatIntegrationService {
       });
     });
 
-    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(pumpInventory));
+    await firstValueFrom(this.inventoryDbService.updateWithObservable(pumpInventory));
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);
     this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
     this.integrationStateService.assessmentIntegrationState.next(this.integrationStateService.getEmptyIntegrationState());

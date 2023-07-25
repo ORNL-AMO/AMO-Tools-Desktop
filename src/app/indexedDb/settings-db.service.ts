@@ -51,7 +51,8 @@ export class SettingsDbService {
 
   updateWithObservable(settings: Settings): Observable<any> {
     settings.modifiedDate = new Date();
-    return this.dbService.update(this.storeName, settings);
+    let result = this.dbService.update(this.storeName, settings);
+    return result;
   }
 
   findById(id: number): Settings {

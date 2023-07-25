@@ -26,7 +26,7 @@ export class AtmosphereDbService {
     return this.dbService.delete(this.storeName, materialId);
   }
 
-  updateWithObservable(material: AtmosphereSpecificHeat): Observable<Array<AtmosphereSpecificHeat>> {
+  updateWithObservable(material: AtmosphereSpecificHeat): Observable<any> {
     return this.dbService.update(this.storeName, material);
   }
 

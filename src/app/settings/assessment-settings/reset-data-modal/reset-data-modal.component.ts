@@ -152,7 +152,8 @@ export class ResetDataModalComponent implements OnInit {
     defaultSettings.disableTutorial = this.settingsDbService.globalSettings.disableTutorial;
     defaultSettings.printAll = this.settingsDbService.globalSettings.printAll;
     delete defaultSettings.facilityInfo;
-    let settings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(defaultSettings));
+    await firstValueFrom(this.settingsDbService.updateWithObservable(defaultSettings));
+    let settings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(settings);
     this.hideResetSystemSettingsModal();
   }
