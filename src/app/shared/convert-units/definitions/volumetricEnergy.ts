@@ -18,7 +18,7 @@ export const volumetricEnergy = {
         }
     },
     imperial: {
-        btuSCF: {
+        btuscf: {
             name: {
                 singular: 'Btu per Standard Cubic Foot'
                 , plural: 'Btu per Standard Cubic Foot',
@@ -33,7 +33,7 @@ export const volumetricEnergy = {
             , ratio: 1
         }
         , imperial: {
-            unit: 'btuSCF'
+            unit: 'btuscf'
             , ratio: 1
         }
     }

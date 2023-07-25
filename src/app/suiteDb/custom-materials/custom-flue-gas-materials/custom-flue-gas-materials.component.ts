@@ -72,7 +72,7 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   convertAllMaterials() {
     for (let i = 0; i < this.flueGasMaterials.length; i++) {
       this.flueGasMaterials[i].heatingValue = this.convertUnitsService.value(this.flueGasMaterials[i].heatingValue).from('btuLb').to('kJkg');
-      this.flueGasMaterials[i].heatingValueVolume = this.convertUnitsService.value(this.flueGasMaterials[i].heatingValueVolume).from('btuSCF').to('kJNm3');
+      this.flueGasMaterials[i].heatingValueVolume = this.convertUnitsService.value(this.flueGasMaterials[i].heatingValueVolume).from('btuscf').to('kJNm3');
     }
   }
 

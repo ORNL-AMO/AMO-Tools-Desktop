@@ -1,6 +1,6 @@
 export const volumetricHeat = {
   // Volumetric Specific Heat
-  // 1 kJ/(m3- K) = 1 kJ/(m3- C) = 0.160496 Btu/(SCF- F) = 0.239 kcal/(m3-C)
+  // 1 kJ/(m3- K) = 1 kJ/(m3- C) = 0.160496 Btu/(scf- F) = 0.239 kcal/(m3-C)
   volumetricHeat: {
     kJm3C: {
       name: {
@@ -30,7 +30,7 @@ export const volumetricHeat = {
       name: {
         singular: 'Btu per Standard Cubic Foot Fahrenheit'
         , plural: 'Btu per Standard Cubic Feet Fahrenheit',
-        display: '(Btu/SCF - &#x2109;)'
+        display: '(Btu/scf - &#x2109;)'
       }
       , to_anchor: 1 / 14.921
     }
