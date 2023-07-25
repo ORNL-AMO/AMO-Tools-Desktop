@@ -6,7 +6,7 @@
     <div class="form-group">
       <label for="{{idString+pressureLevel+'_condensateReturnTemperature'}}">Condensate Return Temperature</label>
       <div class="input-group">
-        <input name="condensateReturnTemperature" type="number" step="any" class="form-control"
+        <input name="condensateReturnTemperature" type="number" step="10" class="form-control"
           id="{{idString+pressureLevel+'_condensateReturnTemperature'}}" (input)="save()" [readonly]="!selected"
           formControlName="condensateReturnTemperature" (focus)="focusField('condensateReturnTemperature')"
           [ngClass]="{'indicate-different': isCondensateReturnTemperatureDifferent()}">
@@ -49,7 +49,7 @@
   <div class="form-group">
     <label for="{{idString+pressureLevel+'_pressure'}}">Pressure</label>
     <div class="input-group">
-      <input name="pressure" type="number" step="any" class="form-control" id="{{idString+pressureLevel+'_pressure'}}"
+      <input name="pressure" type="number" step="10" class="form-control" id="{{idString+pressureLevel+'_pressure'}}"
         (input)="setDesuperheatSteam()" [readonly]="!selected" formControlName="pressure"
         (focus)="focusField('pressure')" [ngClass]="{'indicate-different': isPressureDifferent()}">
       <span class="units input-group-addon" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
@@ -86,7 +86,7 @@
         custom process steam usage.</a>
     </label>
     <div class="input-group" *ngIf="showProcessSteamUsage == true">
-      <input name="processSteamUsage" type="number" step="any" class="form-control"
+      <input name="processSteamUsage" type="number" step="10" class="form-control"
         id="{{idString+pressureLevel+'_processSteamUsage'}}" (input)="save()" [readonly]="!selected"
         formControlName="processSteamUsage" (focus)="focusField('processSteamUsage')"
         [ngClass]="{'indicate-different': isProcessSteamUsageDifferent()}">
@@ -111,7 +111,7 @@
   <div class="form-group">
     <label for="{{idString+pressureLevel+'_condensationRecoveryRate'}}">Condensate Recovery Rate</label>
     <div class="input-group">
-      <input name="condensationRecoveryRate" type="number" step="any" class="form-control"
+      <input name="condensationRecoveryRate" type="number" step="1" class="form-control"
         id="{{idString+pressureLevel+'_condensationRecoveryRate'}}" (input)="save()" [readonly]="!selected"
         formControlName="condensationRecoveryRate" (focus)="focusField('condensationRecoveryRate')"
         [ngClass]="{'indicate-different': isCondensationRecoveryRateDifferent()}">
@@ -143,7 +143,7 @@
   <div class="form-group">
     <label for="heatLoss">Heat Loss</label>
     <div class="input-group">
-      <input name="{{idString+pressureLevel+'_heatLoss'}}" type="number" step="any" class="form-control"
+      <input name="{{idString+pressureLevel+'_heatLoss'}}" type="number" step="0.1" class="form-control"
         id="{{idString+pressureLevel+'_heatLoss'}}" (input)="save()" [readonly]="!selected" formControlName="heatLoss"
         (focus)="focusField('heatLoss')" [ngClass]="{'indicate-different': isHeatLossDifferent()}">
       <span class="units input-group-addon">%</span>
@@ -178,7 +178,7 @@
     *ngIf="pressureLevel != 'highPressure' && headerForm.controls.desuperheatSteamIntoNextHighest.value == true">
     <label for="{{idString+pressureLevel+'_desuperheatSteamTemperature'}}">Desuperheat Temperature</label>
     <div class="input-group">
-      <input name="desuperheatSteamTemperature" type="number" step="any" class="form-control"
+      <input name="desuperheatSteamTemperature" type="number" step="10" class="form-control"
         id="{{idString+pressureLevel+'_desuperheatSteamTemperature'}}" (input)="save()" [readonly]="!selected"
         formControlName="desuperheatSteamTemperature" (focus)="focusField('desuperheatSteamTemperature')"
         [ngClass]="{'indicate-different': isDesuperheatSteamTemperatureDifferent()}">
