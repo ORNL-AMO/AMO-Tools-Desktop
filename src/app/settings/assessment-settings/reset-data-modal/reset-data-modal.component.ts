@@ -43,7 +43,7 @@ export class ResetDataModalComponent implements OnInit {
 
   resetAll: boolean = false;
   resetAppSettings: boolean = false;
-  resetExampleAssessments: boolean = false;
+  resetExampleItems: boolean = false;
   resetUserAssessments: boolean = false;
   resetCustomMaterials: boolean = false;
   deleting: boolean = false;
@@ -87,13 +87,13 @@ export class ResetDataModalComponent implements OnInit {
         this.resetAll = !this.resetAll;
         if (this.resetAll) {
           this.resetAppSettings = true;
-          this.resetExampleAssessments = true;
+          this.resetExampleItems = true;
           this.resetUserAssessments = true;
           this.resetCustomMaterials = true;
         }
         else {
           this.resetAppSettings = false;
-          this.resetExampleAssessments = false;
+          this.resetExampleItems = false;
           this.resetUserAssessments = false;
           this.resetCustomMaterials = false;
         }
@@ -103,8 +103,8 @@ export class ResetDataModalComponent implements OnInit {
         this.resetAppSettings = !this.resetAppSettings;
         break;
       }
-      case "example-assessments": {
-        this.resetExampleAssessments = !this.resetExampleAssessments;
+      case "example-items": {
+        this.resetExampleItems = !this.resetExampleItems;
         break;
       }
       case "user-assessments": {
@@ -129,8 +129,8 @@ export class ResetDataModalComponent implements OnInit {
       this.resetAllUserAssessments();
     } else if (this.resetAppSettings) {
       this.resetFactorySystemSettings();
-    } else if (this.resetExampleAssessments) {
-      this.resetFactoryExampleAssessments();
+    } else if (this.resetExampleItems) {
+      this.resetFactoryExampleItems();
     } else if (this.resetCustomMaterials) {
       this.resetFactoryCustomMaterials();
     }
@@ -157,7 +157,7 @@ export class ResetDataModalComponent implements OnInit {
     this.hideResetSystemSettingsModal();
   }
 
-  async resetFactoryExampleAssessments() {
+  async resetFactoryExampleItems() {
     let exampleDirectory: Directory = this.directoryDbService.getExample();
     if (exampleDirectory) {
       this.resetAllExampleAssessments(exampleDirectory.id);
@@ -216,13 +216,10 @@ async resetAllExampleAssessments(dirId: number) {
   
   let updatedInventoryItems: Array<InventoryItem> = await firstValueFrom(this.inventoryDbService.getAllInventory());
   this.inventoryDbService.setAll(updatedInventoryItems);
-  let exampleInventory: InventoryItem = this.inventoryDbService.allInventoryItems.find(item => { return item.isExample && item.directoryId === dirId});
-  if (exampleInventory) {
-    let allInventoryItems: Array<InventoryItem> = await firstValueFrom(this.inventoryDbService.deleteByIdWithObservable(exampleInventory.id));
-    this.inventoryDbService.setAll(allInventoryItems);
-  }
+  let exampleInventories: Array<InventoryItem> = this.inventoryDbService.allInventoryItems.filter(item => { return item.isExample && item.directoryId === dirId});
+  let allInventoryItems: Array<InventoryItem[]> = await firstValueFrom(this.inventoryDbService.bulkDeleteWithObservable(exampleInventories.map(inventory => inventory.id)));
 
-
+  this.inventoryDbService.setAll(allInventoryItems[0]);
   this.assessmentDbService.setAll(allAssessments[0]);
   this.settingsDbService.setAll(allSettings[0]);
   this.calculatorDbService.setAll(allCalculators[0]);
