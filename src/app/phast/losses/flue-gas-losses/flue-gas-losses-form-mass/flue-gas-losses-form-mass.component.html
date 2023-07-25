@@ -163,7 +163,7 @@
       <label class="small" for="{{'ashDischargeTemperature'+idString}}">Ash Discharge Temperature</label>
       <div class="input-group"
         [ngClass]="{'indicate-different': compareMassAshDischargeTemperature(), 'invalid': flueGasLossForm.controls.ashDischargeTemperature.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'ashDischargeTemperature_'+lossIndex}}" type="number" step="any"
+        <input [readonly]="!baselineSelected" name="{{'ashDischargeTemperature_'+lossIndex}}" type="number" step="10"
           class="form-control" formControlName="ashDischargeTemperature" id="{{'ashDischargeTemperature'+idString}}"
           onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('ashDischargeTemperature')">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
