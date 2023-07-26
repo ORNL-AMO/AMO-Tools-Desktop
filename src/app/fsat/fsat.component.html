@@ -4,10 +4,26 @@
     <app-fsat-tabs [settings]="settings" [fsat]="_fsat"></app-fsat-tabs>
   </div>
 
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'system-setup'">
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link" *ngIf="stepTab == 'system-basics'">Assessment Settings</a>
+      <a class="nav-link" *ngIf="stepTab == 'fan-operations'">Operations</a>
+      <a class="nav-link" *ngIf="stepTab == 'fan-setup'">Fan and Fluid</a>
+      <a class="nav-link" *ngIf="stepTab == 'fan-motor'">Motor</a>
+      <a class="nav-link" *ngIf="stepTab == 'fan-field-data'">Field Data</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link" *ngIf="stepTab != 'fan-setup' && stepTab != 'fan-field-data'">Help</a>
+      <a class="nav-link" *ngIf="stepTab == 'fan-setup' || stepTab == 'fan-field-data'">Details</a>
+    </div>
+  </div>
+
   <!--system setup-->
   <div *ngIf="mainTab == 'system-setup'" class="assessment-container tab-content">
     <div class="assessment-panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
+      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
         (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)"
         (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
@@ -29,7 +45,7 @@
         [fieldData]="_fsat.fieldData" [baseline]="true" (emitSave)="saveFieldData($event)" [fsat]="_fsat">
       </app-fan-field-data>
     </div>
-    <div class="assessment-panel-container scroll-item" [ngClass]="{'pl-0': stepTab == 'fan-field-data'}" [ngStyle]="{'height.px': containerHeight}">
+    <div class="assessment-panel-container scroll-item" [ngClass]="{'pl-0': stepTab == 'fan-field-data', 'small-screen-tab': smallScreenTab === 'details'}" [ngStyle]="{'height.px': containerHeight}">
       <app-help-panel [modificationIndex]="modificationIndex" [settings]="settings" [inSetup]="true" [fsat]="_fsat">
       </app-help-panel>
     </div>
