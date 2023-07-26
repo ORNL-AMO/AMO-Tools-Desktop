@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { ExploreOpportunitiesResults, PSAT, PsatOutputs, PsatValid } from '../../shared/models/psat';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
@@ -30,6 +30,13 @@ export class ExploreOpportunitiesComponent implements OnInit {
   emitAddNewMod = new EventEmitter<boolean>();
 
   @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
 
   annualSavings: number = 0;
   co2EmissionsSavings: number = 0;
@@ -46,7 +53,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   currentField: string;
   helpHeight: number;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
-  showToast: boolean = false;
+  showToast: boolean = false;  
+  smallScreenTab: string = 'form';
   constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private compareService: CompareService) { }
 
   ngOnInit() {
@@ -64,6 +72,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
+      this.resizeTabs();
       this.getContainerHeight();
       this.checkExploreOpps();
     }, 100);
@@ -82,10 +91,20 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
   getContainerHeight() {
-    if (this.containerHeight && this.resultTabs) {
+    if (this.containerHeight && this.resultTabs) {       
       let tabHeight = this.resultTabs.nativeElement.clientHeight;
       this.helpHeight = this.containerHeight - tabHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.helpHeight = this.containerHeight - tabHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }     
     }
+  }
+
+  resizeTabs(){
+    if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+      this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+    }
+    
   }
 
   addExploreOpp() {
@@ -157,5 +176,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
       body: '',
       setTimeoutVal: undefined
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }
