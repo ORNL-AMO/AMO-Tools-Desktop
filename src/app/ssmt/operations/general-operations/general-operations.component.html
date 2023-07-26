@@ -7,7 +7,7 @@
         <span class="input-group-addon op-hour-addon units">
           <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
         </span>
-        <input name="hoursPerYear" type="number" step="any" class="form-control" id="{{'hoursPerYear_'+idString}}"
+        <input name="hoursPerYear" type="number" step="10" class="form-control" id="{{'hoursPerYear_'+idString}}"
           (input)="save()" formControlName="hoursPerYear" (focus)="focusField('operatingHours')">
         <span class="units input-group-addon">hrs/yr</span>
       </div>
@@ -24,7 +24,7 @@
     <div class="form-group" [ngClass]="{'assessment-padding': isBaseline && !inSetup}">
       <label for="{{idString+'sitePowerImport'}}">Site Power Import</label>
       <div class="input-group" *ngIf="isBaseline">
-        <input name="sitePowerImport" type="number" step="any" class="form-control" id="{{idString+'sitePowerImport'}}"
+        <input name="sitePowerImport" type="number" step="100" class="form-control" id="{{idString+'sitePowerImport'}}"
           (input)="save()" formControlName="sitePowerImport" (focus)="focusField('sitePowerImport')">
         <span class="units input-group-addon" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
       </div>
@@ -39,7 +39,7 @@
     <div class="form-group">
       <label for="{{idString+'makeUpWaterTemperature'}}">Make-up Water Temperature</label>
       <div class="input-group">
-        <input name="makeUpWaterTemperature" type="number" step="any" class="form-control"
+        <input name="makeUpWaterTemperature" type="number" step="10" class="form-control"
           id="{{idString+'makeUpWaterTemperature'}}" (input)="save()" formControlName="makeUpWaterTemperature"
           [ngClass]="{'indicate-different': isMakeUpWaterTemperatureDifferent()}"
           (focus)="focusField('makeUpWaterTemperature')" min="0">
