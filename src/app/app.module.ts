@@ -6,6 +6,7 @@ import { CoreModule } from './core/core.module';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { ElectronService } from './electron/electron.service';
 
 
 @NgModule({
@@ -17,7 +18,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     CoreModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
+      enabled: environment.production && environment.useServiceWorker,
       // registrationStrategy: 'registerImmediately',
       registrationStrategy: 'registerWhenStable:30000'
     }),
