@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { InventorySummary, InventorySummaryOverviewService } from '../inventory-summary-overview.service';
 
 @Component({
-  selector: 'app-inventory-overview-table',
+  selector: 'app-pump-inventory-overview-table',
   templateUrl: './inventory-overview-table.component.html',
   styleUrls: ['./inventory-overview-table.component.css']
 })

@@ -5,7 +5,7 @@ import { InventorySummaryOverviewService } from './inventory-summary-overview.se
 
 
 @Component({
-  selector: 'app-inventory-summary-overview',
+  selector: 'app-pump-inventory-summary-overview',
   templateUrl: './inventory-summary-overview.component.html',
   styleUrls: ['./inventory-summary-overview.component.css']
 })
