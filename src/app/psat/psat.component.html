@@ -55,7 +55,7 @@
   <!--End system-setup-->
 
   <!--assessment tab-->
-  <div class="tab-content"
+  <div class="assessment-tab-container tab-content"
     *ngIf="mainTab == 'assessment' && !modificationModalOpen && (currentTab == 'explore-opportunities' || currentTab == 'modify-conditions')"
     [ngStyle]="{'height.px': containerHeight}">
     <!--Explore opportunities-->
@@ -71,7 +71,7 @@
   <!--end assessment-->
 
   <!--calculators tab-->
-  <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
+  <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
     <app-achievable-efficiency *ngIf="calcTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings"
       [psat]="_psat"></app-achievable-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [inAssessment]="true" [assessment]="assessment"
@@ -87,7 +87,7 @@
   <!--end calculators-->
 
   <!--Diagram-->
-  <div class="tab-content" *ngIf="mainTab =='diagram'">
+  <div class="assessment-tab-container tab-content" *ngIf="mainTab =='diagram'">
     <app-psat-diagram [psat]="_psat" [settings]="settings"></app-psat-diagram>
   </div>
   <!--end diagram-->
@@ -123,7 +123,7 @@
   <!--end sankey-->
 
   <!--report-->
-  <div class="report-container mx-0" *ngIf="mainTab == 'report'">
+  <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
       <app-psat-report [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
         [containerHeight]="containerHeight"></app-psat-report>
   </div>

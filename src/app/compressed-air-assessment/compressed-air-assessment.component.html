@@ -55,27 +55,27 @@
 
   <!--Assessment-->
   <div *ngIf="mainTab == 'assessment' && !showModificationList" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
-    class="tab-content">
+    class="assessment-tab-container tab-content">
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight">
     </app-explore-opportunities>
   </div>
   <!--diagram-->
-  <div class="tab-content" *ngIf="mainTab == 'diagram'">
+  <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'diagram'">
     <app-compressed-air-diagram></app-compressed-air-diagram>
   </div>
 
-  <div class="tab-content" *ngIf="mainTab == 'sankey'">
+  <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'sankey'">
     <app-compressed-air-sankey [assessment]="assessment"></app-compressed-air-sankey>
   </div>
 
 
   <!--Report-->
-  <div class="report-container mx-0" *ngIf="mainTab == 'report'">
+  <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
       <app-compressed-air-report [assessment]="assessment" [inAssessment]="true" [containerHeight]="containerHeight">
       </app-compressed-air-report>
   </div>
   <!--calculators-->
-  <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
+  <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
     <app-compressed-air-calculators [assessment]="assessment">
     </app-compressed-air-calculators>
   </div>

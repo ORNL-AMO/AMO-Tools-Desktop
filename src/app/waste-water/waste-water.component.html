@@ -41,7 +41,7 @@
 
   <!--Assessment-->
   <div *ngIf="mainTab == 'assessment' && !showModificationList"
-    [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}" class="tab-content"
+    [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}" class="assessment-tab-container tab-content"
     [ngStyle]="{'height.px': containerHeight}">
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [containerHeight]="containerHeight">
     </app-modify-conditions>
@@ -50,16 +50,16 @@
   </div>
 
   <!--Analysis-->
-  <div class="tab-content" *ngIf="mainTab == 'analysis'" [ngStyle]="{'height.px': containerHeight}">
+  <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'analysis'" [ngStyle]="{'height.px': containerHeight}">
     <app-waste-water-analysis [containerHeight]="containerHeight"></app-waste-water-analysis>
   </div>
 
-  <div class="tab-content" *ngIf="mainTab == 'diagram'">
+  <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'diagram'">
     <app-waste-water-diagram></app-waste-water-diagram>
   </div>
 
   <!--Report-->
-  <div class="report-container mx-0" *ngIf="mainTab == 'report'">
+  <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
     <!-- <div class="col-11 report-column"> -->
       <app-waste-water-report [assessment]="assessment" [inAssessment]="true" [containerHeight]="containerHeight">
       </app-waste-water-report>
@@ -67,7 +67,7 @@
   </div>
 
   <!--calculators-->
-  <app-waste-water-calculators class="d-flex tab-content" *ngIf="mainTab == 'calculators'"
+  <app-waste-water-calculators class="assessment-tab-container tab-content" *ngIf="mainTab == 'calculators'"
     [ngStyle]="{'height.px': containerHeight}" [assessment]="assessment"></app-waste-water-calculators>
 
   <!--footer-->

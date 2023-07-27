@@ -80,6 +80,12 @@
         width: 100%;
     }
 
+    .assessment-tab-container {
+        display: block;
+        height: 100%;
+        overflow-y: auto;
+    }
+
     .lookup-form {
         height: 100%;
     }

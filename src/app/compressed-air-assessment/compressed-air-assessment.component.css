@@ -65,6 +65,12 @@
         overflow-y: auto;
     }
 
+    .assessment-tab-container {
+        display: block;
+        height: 100%;
+        overflow-y: auto;
+    }
+
     .assessment-panel-container {
         display: none;
         width: 100%;

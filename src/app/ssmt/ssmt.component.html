@@ -41,7 +41,7 @@
     </div>
   </div>
   <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" [ngClass]="{'modal-open': isModalOpen == true}" class="tab-content"
+  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" [ngClass]="{'modal-open': isModalOpen == true}" class="assessment-tab-container tab-content"
     [ngStyle]="{'height.px': containerHeight}">
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [ssmt]="_ssmt"
       [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitSaveAssessment)="save()"
@@ -53,18 +53,18 @@
   </div>
 
   <!--report-->
-  <div class="report-container mx-0" *ngIf="mainTab == 'report'">
+  <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
       <app-ssmt-report [assessment]="assessment" [settings]="settings" [containerHeight]="containerHeight">
       </app-ssmt-report>
   </div>
   <!--diagram-->
-  <div class="tab-content scroll-item diagram-content" [ngStyle]="{'height.px': containerHeight}"
+  <div class="assessment-tab-container tab-content scroll-item diagram-content" [ngStyle]="{'height.px': containerHeight}"
     *ngIf="mainTab == 'diagram'">
     <app-ssmt-diagram-tab [settings]="settings" [ssmt]="_ssmt" [containerHeight]="containerHeight">
     </app-ssmt-diagram-tab>
   </div>
   <!--calculators-->
-  <div *ngIf="mainTab == 'calculators'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'calculators'" class="assessment-tab-container tab-content" [ngStyle]="{'height.px': containerHeight}">
     <app-steam-properties-calculator *ngIf="calcTab == 'steam-properties'" [settings]="settings">
     </app-steam-properties-calculator>
     <app-saturated-properties-calculator *ngIf="calcTab == 'saturated-properties'" [settings]="settings">

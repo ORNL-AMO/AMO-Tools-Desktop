@@ -38,7 +38,7 @@
       <app-help-panel [settingsTab]="specTab"></app-help-panel>
     </div>
   </div>
-  <div *ngIf="mainTab == 'system-setup' && stepTab.step != 1" class="tab-content">
+  <div *ngIf="mainTab == 'system-setup' && stepTab.step != 1" class="assessment-tab-container tab-content">
     <!--Step: 4 Heat Balance-->
     <app-losses *ngIf="stepTab.step  == 2 && hasEgridDataInit" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="true"
       [containerHeight]="containerHeight"></app-losses>
@@ -54,7 +54,7 @@
   </div>
 
   <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" class="assessment-tab-container tab-content" [ngStyle]="{'height.px': containerHeight}">
     <div *ngIf="assessmentTab == 'explore-opportunities'">
       <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings"
         [assessment]="assessment" (save)="saveDb()" [exploreModIndex]="modificationIndex" (emitAddNewMod)="addNewMod()">
@@ -66,7 +66,7 @@
     </div>
   </div>
   <!--Report-->
-  <div *ngIf="mainTab == 'report'" class="report-container mx-0">
+  <div *ngIf="mainTab == 'report'" class="assessment-tab-container report-container mx-0">
       <app-phast-report [phast]="_phast" [settings]="settings" [assessment]="assessment" [inPhast]="true"
         [containerHeight]="containerHeight"></app-phast-report>
   </div>
@@ -99,12 +99,12 @@
   </div>
 
   <!--Diagram-->
-  <div *ngIf="mainTab =='diagram'" class="tab-content">
+  <div *ngIf="mainTab =='diagram'" class="assessment-tab-container tab-content">
     <app-phast-diagram></app-phast-diagram>
   </div>
 
   <!--Calculators-->
-  <div *ngIf="mainTab =='calculators'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab =='calculators'" class="assessment-tab-container tab-content" [ngStyle]="{'height.px': containerHeight}">
     <app-energy-equivalency *ngIf="calcTab == 'energy-equivalency'" [inAssessment]="true" [assessment]="assessment"
       [settings]="settings"></app-energy-equivalency>
     <app-energy-use *ngIf="calcTab == 'energy-use'" [inAssessment]="true" [assessment]="assessment" [settings]="settings"></app-energy-use>
