@@ -33,6 +33,7 @@ export class PhastComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   containerHeight: number;
   sankeyLabelStyle: string = 'both';
   phastOptions: Array<{ name: string, phast: PHAST }>;
@@ -79,6 +80,7 @@ export class PhastComponent implements OnInit {
   showToast: boolean = false;
   showWelcomeScreen: boolean = false;
   modificationModalOpen: boolean = false;
+  smallScreenTab: string = 'form';
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
@@ -281,6 +283,9 @@ export class PhastComponent implements OnInit {
           // footerHeight = this.footer.nativeElement.clientHeight + 1;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
+        if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+          this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+        }
       }, 100);
     }
   }
@@ -557,6 +562,10 @@ export class PhastComponent implements OnInit {
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.phastService.modalOpen.next(false);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 
 }
