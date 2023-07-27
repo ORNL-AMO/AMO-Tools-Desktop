@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="assessment-container compressed-air modify-conditions panel-container">
-        <div *ngIf="modificationExists" class="assessment-panel-container lookup-form panel-column" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+        <div *ngIf="modificationExists" class="assessment-panel-container lookup-form panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
             <div class="header mr-2 ml-2">
                 <h3>Select Potential Adjustment Projects</h3>
             </div>
@@ -114,7 +114,7 @@
 </div>
 
 <div class="d-flex flex-column compressed-air modify-conditions panel-container"
-    *ngIf="secondaryAssessmentTab == 'table' || secondaryAssessmentTab == 'graphs'">
+    *ngIf="secondaryAssessmentTab == 'table' || secondaryAssessmentTab == 'graphs'" [ngStyle]="{'height.px': containerHeight}">
     <div class="p-2 text-center" *ngIf="dayTypeOptions.length > 1">
         <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
             (change)="changeDayType()">
