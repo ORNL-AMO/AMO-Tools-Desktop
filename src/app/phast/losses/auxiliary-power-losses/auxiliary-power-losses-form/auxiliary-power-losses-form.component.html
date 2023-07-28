@@ -11,7 +11,7 @@
     <div class="form-group">
       <label class="small" for="{{'supplyVoltage'+idString}}">Supply Voltage</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareSupplyVoltage(), 'error': voltageWarning !== null, 'invalid': auxLossesForm.controls.supplyVoltage.status == 'INVALID'}">
-        <input [readonly]="!baselineSelected" name="{{'supplyVoltage_'+lossIndex}}" type="number" min="0" step="any"
+        <input [readonly]="!baselineSelected" name="{{'supplyVoltage_'+lossIndex}}" type="number" min="0" step="10"
           class="form-control" formControlName="supplyVoltage" id="{{'supplyVoltage'+idString}}" onfocus="this.select();"
           (input)="save()" (focus)="focusField('supplyVoltage')" >
         <span class="input-group-addon units">V</span>
@@ -22,7 +22,7 @@
     <div class="form-group">
       <label class="small" for="{{'avgCurrent'+idString}}">Average Current</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareAvgCurrent(), 'invalid': auxLossesForm.controls.avgCurrent.status == 'INVALID'}">
-        <input [readonly]="!baselineSelected" name="{{'avgCurrent_'+lossIndex}}" type="number" min="0" step="any" class="form-control"
+        <input [readonly]="!baselineSelected" name="{{'avgCurrent_'+lossIndex}}" type="number" min="0" step="10" class="form-control"
           formControlName="avgCurrent" id="{{'avgCurrent'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('avgCurrent')"
           >
         <span class="input-group-addon units">A</span>
@@ -31,7 +31,7 @@
 
     <div class="form-group">
       <label class="small" for="{{'powerFactor'+idString}}">Power Factor</label>
-      <input [readonly]="!baselineSelected" name="{{'powerFactor_'+lossIndex}}" type="number" step="any" min="0" max="1"
+      <input [readonly]="!baselineSelected" name="{{'powerFactor_'+lossIndex}}" type="number" step="0.1" min="0" max="1"
         class="form-control" formControlName="powerFactor" id="{{'powerFactor'+idString}}" onfocus="this.select();"
         (input)="save()" (focus)="focusField('powerFactor')"  [ngClass]="{'indicate-different': comparePowerFactor(), 'invalid': auxLossesForm.controls.powerFactor.status == 'INVALID'}">
     </div>
@@ -39,7 +39,7 @@
     <div class="form-group">
       <label class="small" for="{{'operatingTime'+idString}}">Operating Time</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareOperatingTime(), 'invalid': auxLossesForm.controls.operatingTime.status == 'INVALID'}">
-        <input [readonly]="!baselineSelected" name="{{'operatingTime_'+lossIndex}}" type="number" min="0" max="100"
+        <input [readonly]="!baselineSelected" name="{{'operatingTime_'+lossIndex}}" type="number" step="any" min="0" max="100"
           step="any" class="form-control" formControlName="operatingTime" id="{{'operatingTime'+idString}}" onfocus="this.select();"
           (input)="save()" (focus)="focusField('operatingTime')" >
         <span class="input-group-addon units">%</span>

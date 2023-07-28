@@ -182,7 +182,7 @@
       <div class="input-group">
         <input name="fuelHV" type="number" step="10" class="form-control" formControlName="fuelHV" id="fuelHV"
           onfocus="this.select();" (input)="calculate()" (focus)="focusField('fuelHV')">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/SCF</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/scf</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">MJ/m<sup>3</sup>
         </span>
       </div>

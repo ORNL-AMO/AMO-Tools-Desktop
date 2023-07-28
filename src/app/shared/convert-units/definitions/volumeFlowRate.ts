@@ -288,7 +288,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Actual cubic foot per minute'
                 , plural: 'Actual cubic feet per minute' ,
-                 display:  '(ACFM)'
+                 display:  '(acfm)'
             }
             , to_anchor: 957.506 / 60
         }

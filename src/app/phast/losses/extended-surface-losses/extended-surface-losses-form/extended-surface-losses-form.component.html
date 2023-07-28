@@ -3,7 +3,7 @@
     <div class="form-group">
       <label class="small" for="{{'surfaceArea'+idString}}">Total Outside Surface Area</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareSurfaceArea(), 'error': warnings.surfaceAreaWarning !== null, 'invalid': lossesForm.controls.surfaceArea.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'surfaceArea_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="surfaceArea"
+        <input [readonly]="!baselineSelected" name="{{'surfaceArea_'+lossIndex}}" type="number" step="10" min="0" class="form-control" formControlName="surfaceArea"
           id="{{'surfaceArea'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('surfaceArea')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">
           <span>ft
@@ -22,7 +22,7 @@
     <div class="form-group">
       <label class="small" for="{{'avgSurfaceTemp'+idString}}">Average Surface Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareSurfaceTemperature(), 'error': warnings.temperatureWarning !== null, 'invalid': lossesForm.controls.avgSurfaceTemp.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSurfaceTemp"
+        <input [readonly]="!baselineSelected" name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="avgSurfaceTemp"
           id="{{'avgSurfaceTemp'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('avgSurfaceTemp')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
@@ -33,7 +33,7 @@
     <div class="form-group">
       <label class="small" for="{{'ambientTemp'+idString}}">Ambient Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareAmbientTemperature(), 'error': warnings.temperatureWarning !== null, 'invalid': lossesForm.controls.ambientTemp.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'ambientTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemp" id="{{'ambientTemp'+idString}}"
+        <input [readonly]="!baselineSelected" name="{{'ambientTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="ambientTemp" id="{{'ambientTemp'+idString}}"
           onfocus="this.select();" (input)="save()" (focus)="focusField('ambientTemp')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>

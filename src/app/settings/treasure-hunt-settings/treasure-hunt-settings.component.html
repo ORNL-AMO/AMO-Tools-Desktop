@@ -8,7 +8,7 @@
       <input type="number" class="form-control" formControlName="compressedAirCost" id="compressedAirCost"
         (input)="save()">
       <span class="input-group-addon units"
-        *ngIf="settingsForm.controls.unitsOfMeasure.value == 'Imperial'">$/SCF</span>
+        *ngIf="settingsForm.controls.unitsOfMeasure.value == 'Imperial'">$/scf</span>
       <span class="input-group-addon units"
         *ngIf="settingsForm.controls.unitsOfMeasure.value == 'Metric'">$/m<sup>3</sup></span>
     </div>

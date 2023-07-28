@@ -50,7 +50,7 @@ export class EnergyUseFormComponent implements OnInit {
       } else if (str == 'Water' || str == 'WWT') {
         return 'gal';
       } else if (str == 'Compressed Air') {
-        return 'SCF';
+        return 'scf';
       } else if (str == 'Steam') {
         return 'klb';
       }
