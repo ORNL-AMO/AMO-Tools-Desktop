@@ -26,6 +26,7 @@ export class TreasureHuntComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   containerHeight: number;
   oldSettings: Settings;
   showUpdateUnitsModal: boolean;
@@ -51,6 +52,7 @@ export class TreasureHuntComponent implements OnInit {
   selectedCalcSub: Subscription;
   selectedCalc: string;
   showWelcomeScreen: boolean = false;
+  smallScreenTab: string = 'form';
   constructor(
     private assessmentService: AssessmentService,
       
@@ -168,6 +170,9 @@ export class TreasureHuntComponent implements OnInit {
           footerHeight = this.footer.nativeElement.clientHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
+        if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+          this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+        }
       }, 100);
     }
   }
@@ -271,5 +276,9 @@ export class TreasureHuntComponent implements OnInit {
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.treasureHuntService.modalOpen.next(false);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }
