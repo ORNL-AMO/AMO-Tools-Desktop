@@ -19,6 +19,7 @@
     "build-prod": "ng build --configuration production",
     "build-prod-windows": "./scripts/ng.sh build --configuration production",
     "clean": "rm -rf node_modules && rm -rf dist && rm -f package-lock.json",
+    "windows-clean": "powershell Remove-Item -Path \"package-lock.json\" && powershell Remove-Item -Path \"node_modules\", \"dist\" -Recurse",
     "electron": "electron .",
     "electron-watch": "echo Type \"rs\" to manually restart. && nodemon --exec \"electron\" . --delay 1.5 --watch dist/main.js --watch dist/index.html --verbose true",
     "lint": "ng lint",
