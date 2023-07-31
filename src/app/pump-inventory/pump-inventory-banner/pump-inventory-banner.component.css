@@ -39,3 +39,20 @@
 .gray-badge{
     background-color: #2980b9;
 }
+
+.btn.chevron-btn{
+    border: none !important;
+    width: 20px;
+    height: 28px;
+    color: white;
+    box-shadow: none !important;
+}
+
+.fa.fa-chevron-right,
+.fa.fa-chevron-left {
+    font-size: 28px;
+}
+
+li.page-item{
+    background-color:#ECECEC !important;
+}
