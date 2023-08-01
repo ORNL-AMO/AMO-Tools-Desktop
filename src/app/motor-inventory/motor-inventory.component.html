@@ -9,7 +9,7 @@
             <app-batch-analysis *ngIf="mainTab == 'analysis'"></app-batch-analysis>
         </div>
     </div>
-    <div class="d-none d-lg-block" *ngIf="mainTab == 'setup'" #footer id="motorInventoryFooter" class="footer hide-print">
+    <div *ngIf="mainTab == 'setup'" #footer id="motorInventoryFooter" class="d-none d-lg-block footer hide-print">
         <div class="d-lg-flex d-none w-100 justify-content-between">
             <button class="btn btn-default" (click)="back()" [disabled]="setupTab == 'plant-setup'">Back</button>
             <button class="btn btn-primary" (click)="continue()">Next</button>
