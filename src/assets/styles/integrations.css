@@ -10,6 +10,11 @@
     padding: .75rem;
 }
 
+.assessment-panel-container .integration-container form {
+    padding: 15px;
+    padding-bottom: 0;
+}
+
 .integration-label {
     border-bottom: #a1a1a1 solid 2px;
     font-size: 16px;

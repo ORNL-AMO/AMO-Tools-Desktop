@@ -34,7 +34,14 @@ export interface MotorItem extends ConnectedInventoryProperties {
   operationData: OperationData
   otherData: OtherData,
   purchaseInformationData: PurchaseInformationData,
-  torqueData: TorqueData
+  torqueData: TorqueData,
+  validMotor?: ValidMotor
+}
+
+
+export interface ValidMotor {
+  isValid: boolean,
+  motorValid: boolean,
 }
 
 

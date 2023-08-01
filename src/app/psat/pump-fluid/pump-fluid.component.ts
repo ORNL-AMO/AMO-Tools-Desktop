@@ -33,7 +33,6 @@ export class PumpFluidComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modificationIndex: number;
-  hasConnectedInventories: boolean;
 
   //Arrays holding <select> form data
   pumpTypes: Array<{ display: string, value: number }>;
@@ -45,6 +44,7 @@ export class PumpFluidComponent implements OnInit {
   psatForm: UntypedFormGroup;
   idString: string;
   pumpFluidWarnings: { rpmError: string, temperatureError: string };
+  hasConnectedPumpInventory: boolean;
   constructor(private psatService: PsatService, 
               private psatWarningService: PsatWarningService, 
               private compareService: CompareService, 
@@ -88,7 +88,8 @@ export class PumpFluidComponent implements OnInit {
   }
 
   initForm() {
-    this.hasConnectedInventories = this.integrationStateService.assessmentIntegrationState.getValue().hasThreeWayConnection;
+    let connectedInventoryData = this.integrationStateService.connectedInventoryData.getValue();
+    this.hasConnectedPumpInventory = connectedInventoryData.connectedItem && connectedInventoryData.connectedItem.inventoryType === 'pump';
     this.psatForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
     this.checkWarnings();
   }
@@ -199,11 +200,8 @@ export class PumpFluidComponent implements OnInit {
 
 
   save() {
-    //update object values from form values
     this.psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
-    //check warnings
     this.checkWarnings();
-    //save
     this.saved.emit(this.selected);
   }
 

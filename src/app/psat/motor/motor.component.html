@@ -1,4 +1,4 @@
-<form #formRef [formGroup]="psatForm">
+<form *ngIf="psatForm" #formRef [formGroup]="psatForm">
   <div *ngIf="inSetup" class="d-flex flex-column">
     <div class="header mr-2 ml-2">
       <h3>Motor</h3>
@@ -6,14 +6,21 @@
   </div>
 
   <div class="mx-3 my-0">
-    <app-assessment-integration-status *ngIf="inSetup || baseline"
-      [hasConnectedInventories]="hasConnectedInventories"
-      [connectedToType]="'inventory'" 
-      [connectedFormGroupName]="'motor'"
-    ></app-assessment-integration-status>
+    <app-assessment-integration-status
+      [connectedToType]="'inventory'" [connectedFormGroupName]="'motor'">
+    </app-assessment-integration-status>
   </div>
 
-  <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
+  <div class="mx-3 my-0" *ngIf="!hasConnectedPumpInventory && (inSetup || baseline)">
+    <app-inventory-integration class="mx-3" *ngIf="inventorySelectOptions" (focusedField)="focusField($event, true)"
+      [connectedInventoryType]="'motor'" [selectOptions]="inventorySelectOptions">
+    </app-inventory-integration>
+    <app-integration-status></app-integration-status>
+  </div>
+
+  <div [ngClass]="{'p-4': inSetup && hasConnectedPumpInventory, 
+                   'px-4 pb-4 pt-0': inSetup && !hasConnectedPumpInventory, 
+                   'p-3': !inSetup }">
     <div class="form-group" [ngClass]="{'indicate-different': isLineFreqDifferent()}">
       <label for="{{'frequency_'+idString}}">Line Frequency</label>
       <select name="frequency" class="form-control number-input-field" id="{{'frequency_'+idString}}"
@@ -24,12 +31,6 @@
 
     <div class="form-group"
       [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': motorWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.horsePower.invalid}">
-      <!-- <label for="horsePower">Rated Motor Power</label>
-      <select name="horsePower" class="form-control number-input-field" id="horsePower" formControlName="horsePower" (change)="save()"
-        (focus)="focusField('horsePower')" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': motorWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.horsePower.invalid}">
-        <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
-      </select>
-      <span class="alert-warning pull-right small" *ngIf="motorWarnings.ratedPowerError !== null && !psat.inputs.optimize_calculation">{{motorWarnings.ratedPowerError}}</span>-->
       <label for="{{'horsePower_'+idString}}">Rated Motor Power</label>
       <div name="horsePower" class="input-group">
         <input [readonly]="!selected" type="number" step="10" min="0" class="form-control number-input-field"
