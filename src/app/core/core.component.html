@@ -2,14 +2,12 @@
 <app-browsing-data-toast *ngIf="showBrowsingDataToast" (emitClose)="hideBrowsingDataToast()"></app-browsing-data-toast>
 <div *ngIf="idbStarted" [ngClass]="{'modal-open': isModalOpen == true}" >
     <div *ngIf="!hideTutorial" class="opening-tutorial">
-        <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" [idbStarted]="idbStarted" (closeTutorial)="closeTutorial()">
+        <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" (closeTutorial)="closeTutorial()">
         </app-opening-tutorial>
-        <app-dashboard-tutorial *ngIf="tutorialType == 'dashboard-tutorial'"  [idbStarted]="idbStarted" (closeTutorial)="closeTutorial()"
+        <app-dashboard-tutorial *ngIf="tutorialType == 'dashboard-tutorial'" (closeTutorial)="closeTutorial()"
             [inTutorials]="inTutorialsView"></app-dashboard-tutorial>
     </div>
-
     <router-outlet></router-outlet>
-
 </div>
 
 <app-security-and-privacy-modal *ngIf="showSecurityAndPrivacyModal === true && isModalOpen === true" 
