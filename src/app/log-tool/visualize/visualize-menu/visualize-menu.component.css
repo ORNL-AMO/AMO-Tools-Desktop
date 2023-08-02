@@ -14,17 +14,6 @@
     border-bottom: #117A65 solid 2px
 }
 
-.btn-primary {
-    color: white;
-    background: #117A65;
-}
-
-.btn-primary:hover:enabled,
-.btn-primary:focus:enabled {
-    color: white;
-    background: #447f73 !important;
-}
-
 .custom-switch .custom-control-label::before,
 .custom-switch .custom-control-label::after {
     cursor: pointer !important;

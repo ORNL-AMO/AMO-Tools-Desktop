@@ -106,7 +106,7 @@ export class VisualizeService {
     this.logToolService.individualDataFromCsv.forEach(individualDataItem => {
       let foundData = individualDataItem.csvImportData.meta.fields.find(field => { return field == fieldName });
       // 6108 continue to concat time, don't allow concat of other data fields (breaks time segment display in non time-series visualizer)
-      if (foundData && fieldName === individualDataItem.dateField.fieldName) {
+      if (foundData && individualDataItem.dateField && fieldName === individualDataItem.dateField.fieldName) {
         data = _.concat(data, individualDataItem.csvImportData.data);
       }
       if (foundData) {
