@@ -369,4 +369,24 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
   }
 
+  back(){
+    if (this.modifyConditionsTab == 'fan-field-data'){      
+      this.modifyConditionsService.modifyConditionsTab.next('fan-motor');
+    } else if (this.modifyConditionsTab == 'fan-motor'){      
+      this.modifyConditionsService.modifyConditionsTab.next('fan-setup');
+    } else if (this.modifyConditionsTab == 'fan-setup'){      
+      this.modifyConditionsService.modifyConditionsTab.next('fan-operations');
+    }
+  } 
+
+  continue(){
+    if (this.modifyConditionsTab == 'fan-operations'){      
+      this.modifyConditionsService.modifyConditionsTab.next('fan-setup');
+    } else if (this.modifyConditionsTab == 'fan-setup'){      
+      this.modifyConditionsService.modifyConditionsTab.next('fan-motor');
+    } else if (this.modifyConditionsTab == 'fan-motor'){      
+      this.modifyConditionsService.modifyConditionsTab.next('fan-field-data');
+    }
+  }
+
 }
