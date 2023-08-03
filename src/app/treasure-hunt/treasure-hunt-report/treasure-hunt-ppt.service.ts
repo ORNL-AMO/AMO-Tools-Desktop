@@ -694,7 +694,6 @@ export class TreasureHuntPptService {
       
         let slideTeamAllOpps = pptx.addSlide({ masterName: "MASTER_SLIDE" });
         slideTeamAllOpps.addText('Team ' + team.team + ' - All Opportunities', slideTitleProperties);
-        if(teamOpportunities.length > 0)
         for(let i = 3; i < teamOpportunities.length; i++){
           let x: OpportunitySummary = teamOpportunities[i];
           if (x) {
