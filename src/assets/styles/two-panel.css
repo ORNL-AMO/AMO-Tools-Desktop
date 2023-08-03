@@ -539,3 +539,15 @@
 .compressed-air .scroll-item::-webkit-scrollbar-thumb{
 	background-color: #7030A0;
 }
+
+.log-tool-container .btn-primary {
+    color: white;
+    background: #117A65;
+}
+
+.log-tool-container  
+.btn-primary:hover:enabled,
+.btn-primary:focus:enabled {
+    color: white;
+    background: #447f73 !important;
+}
