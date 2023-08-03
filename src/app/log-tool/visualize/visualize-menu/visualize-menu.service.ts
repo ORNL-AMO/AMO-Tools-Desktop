@@ -65,8 +65,6 @@ export class VisualizeMenuService {
           option.dataOption = testOptionExists;
           tmpSelectedYAxisDataOptions.push(option);
         }
-      } {
-        // 6040 no dataOption.. When is this??
       }
     });
 
@@ -92,11 +90,6 @@ export class VisualizeMenuService {
       // already called in setYAxisDataOptions
       let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(option.dataOption.dataField);
       if (timeData) {
-        // todo 6225 - this no longer happens? What conditions were making this happen?
-        // timeData will have overlapping values - i.e. 3 datasets with same time logs concatenated together
-        // Should this go in getAxisOptionGraphData?
-        // let uniqueDates: Set<string | number> = new Set(timeData);
-        // timeData = Array.from(uniqueDates);
         selectedGraphObj.data[index].x = timeData;
         selectedGraphObj.data[index].mode = 'lines'
       } else {
@@ -140,7 +133,6 @@ export class VisualizeMenuService {
   // * called on graph init and user select change event
   setSelectedXAxisDataOption(selectedGraphObj: GraphObj) {
     this.setDefaultSelectedXAxis(selectedGraphObj);
-
     if (selectedGraphObj.isTimeSeries) {
       selectedGraphObj.layout.xaxis.type = 'date';
       this.setYAxisDataOptions(selectedGraphObj);
@@ -213,12 +205,17 @@ export class VisualizeMenuService {
         selectedGraphObj.yAxisDataOptions.push(yAxisOption);
       }
     });
-    //set selected option to new option array for select menus
     selectedGraphObj.selectedYAxisDataOptions.forEach(selectedOption => {
-      let findOption = selectedGraphObj.yAxisDataOptions.find(option => { return option.dataField.fieldName == selectedOption.dataOption.dataField.fieldName });
-      selectedOption.dataOption = findOption;
+      let optionFound: GraphDataOption;
+      if (selectedOption.dataOption) {
+      optionFound = selectedGraphObj.yAxisDataOptions.find(option => { 
+          return option.dataField.fieldName == selectedOption.dataOption.dataField.fieldName 
+        });
+      }
+      if (optionFound) {
+        selectedOption.dataOption = optionFound;
+      }
     });
-
   }
 
   setGraphYAxisData(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
@@ -232,11 +229,6 @@ export class VisualizeMenuService {
           selectedGraphObj.data[index].mode = 'lines';
         }
       }
-      // Restrict if selected axis data from another file
-      // else if (selectedDataOption.dataOption.dataField.csvId != selectedGraphObj.selectedXAxisDataOption.dataField.csvId) {
-      //   selectedDataOption.dataOption = selectedGraphObj.yAxisDataOptions[0];
-      //   selectedDataOption.seriesName = this.getSeriesName(selectedGraphObj.yAxisDataOptions[0].dataField);
-      // }
       else {
         // Lines not a valid mode for non-time series
         selectedDataOption.linesOrMarkers = 'markers';
@@ -252,12 +244,12 @@ export class VisualizeMenuService {
       index++;
     })
 
-    if (shouldRenderGraph) {
-      this.saveGraphDataChange(selectedGraphObj);
-      this.visualizeService.shouldRenderGraph.next(true)
-    } else {
-      this.saveGraphDataChange(selectedGraphObj);
-    }
+      if (shouldRenderGraph) {
+        this.saveGraphDataChange(selectedGraphObj);
+        this.visualizeService.shouldRenderGraph.next(true)
+      } else {
+        this.saveGraphDataChange(selectedGraphObj);
+      }
   }
 
   setBarChartDataOptions(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
