@@ -34,13 +34,19 @@
         <app-system-basics [settings]="settings" [assessmentPsat]="assessment.psat" [assessment]="assessment" (updateSettings)="getSettings($event)"
           (updateAssessment)="savePsat($event)" (openModal)="modalOpen()" (closeModal)="modalClose()"
           (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
-        <app-integrate-pump-inventory [(assessment)]="assessment" [(psat)]="_psat" (saved)="saveAndUpdateSettings()" [settings]="settings"></app-integrate-pump-inventory>
+        <app-integrate-pump-inventory *ngIf="!hasConnectedMotorItem"
+          [(assessment)]="assessment" 
+          [(psat)]="_psat" 
+          (savePsat)="savePsat($event)"
+          (saved)="saveAndUpdateSettings()" 
+          [settings]="settings">
+        </app-integrate-pump-inventory>
       </ng-container>
       <app-pump-operations *ngIf="stepTab == 'operations'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
       <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
-      <app-motor *ngIf="stepTab == 'motor'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
+      <app-motor *ngIf="stepTab == 'motor'" [(assessment)]="assessment" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
         [baseline]="true" [inSetup]="true"></app-motor>
       <app-field-data *ngIf="stepTab == 'field-data'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data>

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, SimpleChanges } from '@angular/core';
-import { AssessmentStatusString, ConnectedInventoryData, ConnectedValueFormField, IntegrationFormGroupString, IntegrationState, IntegrationStatusString } from '../integrations';
+import { ConnectedInventoryData, IntegrationFormGroupString, IntegrationState } from '../integrations';
 import { Subscription } from 'rxjs';
 import { IntegrationStateService } from '../integration-state.service';
 import * as _ from 'lodash';
@@ -14,9 +14,6 @@ export class AssessmentIntegrationStatusComponent {
   connectedFormGroupName: IntegrationFormGroupString;
   @Input()
   connectedToType: 'assessment' | 'inventory';
-  @Input()
-  // has Inventory to inventory connection
-  hasConnectedInventories: boolean;
   @Input()
   // has priority over integrationStateService state
   parentIntegrationState: IntegrationState;
@@ -72,16 +69,6 @@ export class AssessmentIntegrationStatusComponent {
       return field.formGroup === this.connectedFormGroupName;
     });
     if (differingField) {
-      // if (this.integrationState.differingConnectedValues && differingField) {
-      // 6250 - turning this off for now but leaving the flag in case we ever want to message this situation differently
-      // this.hasConnectedInventories = false;
-      // if (this.hasConnectedInventories) {
-      //   // is connected to an assessment AND an inventory item
-      //   // this.connectedFieldMsgHTML = `A three-way connection exists between this pump, a motor inventory, and a pump assessment.
-      //   // <b>Ensure connected assessment values match these inventory items to avoid data inconsistency </b>`;
-      // } 
-      // this.hasConnectedInventories = false;
-      // if (!this.hasConnectedInventories) {
         if (this.connectedToType === 'assessment') {
           this.connectedFieldMsgHTML = `${_.capitalize(differingField.formGroup)} field value differs from the connected ${this.connectedToType}. 
           <b>Changing connected values in motor, equipment, system, or fluid will end the ${this.connectedToType} connection. </b>`;
@@ -90,7 +77,6 @@ export class AssessmentIntegrationStatusComponent {
           <b>Changing connected values in pump, fluid, or motor will end the ${this.connectedToType} connection. </b>`;
         }
         this.showIntegrationStatus = true;
-      // }
     }
   }
 

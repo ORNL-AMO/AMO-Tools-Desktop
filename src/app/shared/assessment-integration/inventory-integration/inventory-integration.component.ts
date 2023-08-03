@@ -66,8 +66,8 @@ export class InventoryIntegrationComponent {
     }
   }
 
-  goToInventory(connectedItem: ConnectedItem) {
-    if (connectedItem.inventoryId) {
+  goToConnectedItem(connectedItem: ConnectedItem) {
+    if (connectedItem.inventoryType && connectedItem.inventoryId) {
       let url: string;
       switch(connectedItem.inventoryType) {
         case 'motor':
@@ -87,6 +87,23 @@ export class InventoryIntegrationComponent {
           }
         }
         );
+      }
+    } else if (connectedItem.assessmentType && connectedItem.assessmentId) {
+      let url: string;
+      switch(connectedItem.assessmentType) {
+        case 'PSAT':
+          url = `/psat/${connectedItem.assessmentId}`;
+          break;
+        default:
+          url = undefined;
+      }
+      
+      if (url) {
+        this.router.navigate([url], {
+          queryParams: {
+            fromConnectedItem: 'motor',
+          }
+        });
       }
     }
   }
