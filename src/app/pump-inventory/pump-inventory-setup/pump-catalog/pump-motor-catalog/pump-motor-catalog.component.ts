@@ -36,7 +36,6 @@ export class PumpMotorCatalogComponent implements OnInit {
 
   inventorySelectOptions: InventorySelectOptions;
   connectedInventoryDataSub: Subscription;
-  hasConnectedInventories: boolean;
   motorWarnings: PumpInventoryMotorWarnings;
 
   constructor(private pumpCatalogService: PumpCatalogService, 
@@ -81,7 +80,6 @@ export class PumpMotorCatalogComponent implements OnInit {
   }
 
   initSelectedPump(selectedPump: PumpItem) {
-    this.hasConnectedInventories = Boolean(selectedPump.connectedItem);
     if (selectedPump.connectedItem) {
       this.motorIntegrationService.setFromConnectedMotorItem(selectedPump, this.pumpInventoryService.currentInventoryId, this.settings);
       this.form = this.pumpMotorCatalogService.getFormFromPumpMotor(selectedPump.pumpMotor);

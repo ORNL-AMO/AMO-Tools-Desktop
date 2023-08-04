@@ -45,7 +45,8 @@ export class VisualizeGraphComponent implements OnInit {
     private plotlyService: PlotlyService) {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   ngOnDestroy() {
     this.selectedGraphDataSubscription.unsubscribe();
@@ -58,7 +59,7 @@ export class VisualizeGraphComponent implements OnInit {
         let userInputDelay: number = this.visualizeService.userInputDelay.getValue();
         return interval(userInputDelay);
       })
-    ).subscribe((graphObj: GraphObj) => {
+      ).subscribe((graphObj: GraphObj) => {
       // todo 6284 save data is creating zone.js lag
       // this.logToolDbService.saveData();
       this.selectedGraphObj = graphObj;
@@ -71,6 +72,9 @@ export class VisualizeGraphComponent implements OnInit {
         this.renderGraph();
       }
     });
+
+    // if navigating from map data/time without day type analysis
+    this.logToolDataService.loadingSpinner.next({show: false, msg: 'Finalizing Data Setup...'});
     window.dispatchEvent(new Event("resize"));
   }
 

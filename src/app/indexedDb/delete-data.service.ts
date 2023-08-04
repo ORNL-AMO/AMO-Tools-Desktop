@@ -104,7 +104,7 @@ export class DeleteDataService {
 
   deleteConnectedInventoryItem(assessment: Assessment) {
     if (assessment.psat && assessment.psat.connectedItem) {
-      this.psatIntegrationService.removeConnectedInventory(assessment.psat.connectedItem, assessment.id);
+      this.psatIntegrationService.removeConnectedPumpInventory(assessment.psat.connectedItem, assessment.id);
     }
   }
 

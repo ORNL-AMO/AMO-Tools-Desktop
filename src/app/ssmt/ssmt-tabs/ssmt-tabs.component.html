@@ -34,25 +34,25 @@
       <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': stepTab == 'system-basics'}">
         <span class="fa fa-chevron-left"></span></a>
     </li>
-    <li class="page-item" [ngClass]="{'active': stepTab == 'system-basics'}">
+    <li class="page-item" [ngClass]="{'active': stepTab == 'system-basics'}" *ngIf="stepTab == 'system-basics'">
       <a class="nav-link small" (click)="changeStepTab('system-basics')" [ngClass]="settingsStatus">
-        <span *ngIf="stepTab != 'system-basics'" class="step-number">1</span><span *ngIf="stepTab == 'system-basics'">Assessment Settings</span></a>
+        <span class="step-number">1</span>Assessment Settings</a>
     </li>
-    <li class="page-item" [ngClass]="{'active': stepTab == 'operations'}">
+    <li class="page-item" [ngClass]="{'active': stepTab == 'operations'}" *ngIf="stepTab == 'operations'">
       <a class="nav-link small" (click)="changeStepTab('operations')" [ngClass]="operationsTabStatus">
-        <span *ngIf="stepTab != 'operations'" class="step-number">2</span><span *ngIf="stepTab == 'operations'">Operations</span></a>
+        <span class="step-number">2</span>Operations</a>
     </li>
-    <li class="page-item" [ngClass]="{'active': stepTab == 'boiler'}">
+    <li class="page-item" [ngClass]="{'active': stepTab == 'boiler'}" *ngIf="stepTab == 'boiler'">
       <a class="nav-link small" (click)="changeStepTab('boiler')" [ngClass]="boilerTabStatus">
-        <span *ngIf="stepTab != 'boiler'" class="step-number">3</span><span *ngIf="stepTab == 'boiler'">Boiler</span></a>
+        <span class="step-number">3</span>Boiler</a>
     </li>
-    <li class="page-item" [ngClass]="{'active': stepTab == 'header'}">
+    <li class="page-item" [ngClass]="{'active': stepTab == 'header'}" *ngIf="stepTab == 'header'">
       <a class="nav-link small" (click)="changeStepTab('header')" [ngClass]="headerTabStatus">
-        <span *ngIf="stepTab != 'header'" class="step-number">4</span><span *ngIf="stepTab == 'header'">Header</span></a>
+        <span class="step-number">4</span>Header</a>
     </li>
-    <li class="page-item" [ngClass]="{'active': stepTab == 'turbine'}">
+    <li class="page-item" [ngClass]="{'active': stepTab == 'turbine'}" *ngIf="stepTab == 'turbine'">
       <a class="nav-link small" (click)="changeStepTab('turbine')" [ngClass]="turbineTabStatus">
-        <span *ngIf="stepTab != 'turbine'" class="step-number">5</span><span *ngIf="stepTab == 'turbine'">Turbine</span></a>
+        <span class="step-number">5</span>Turbine</a>
     </li>
     <li class="page-item">
       <a class="nav-link small" (click)="continue()" [disabled]="!getCanContinue()">

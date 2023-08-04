@@ -60,7 +60,7 @@ input[type='checkbox']:hover {
 }
 
 .preview-data {
-    height: 40vh;
+    max-height: 40vh;
 }
 
 .tooltip-container {

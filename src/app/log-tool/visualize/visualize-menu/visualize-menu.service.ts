@@ -105,8 +105,8 @@ export class VisualizeMenuService {
 
   setXAxisDataOptions(selectedGraphObj: GraphObj) {
     let dataFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
-    let canRunDayTypeAnalysis: boolean = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
-    if (selectedGraphObj.isTimeSeries && canRunDayTypeAnalysis) {
+    selectedGraphObj.isTimeSeries = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
+    if (selectedGraphObj.isTimeSeries) {
       dataFields.push({
         fieldName: 'Time Series',
         alias: 'Time Series',
@@ -141,7 +141,10 @@ export class VisualizeMenuService {
       selectedGraphObj.layout.xaxis.type = 'category';
       this.setYAxisDataOptions(selectedGraphObj);
       this.setBarHistogramData(selectedGraphObj);
-    } else if (selectedGraphObj.data[0].type == 'scattergl') {
+    } else {
+      selectedGraphObj.data.map(series => {
+        series.type = 'scattergl'
+      });
       selectedGraphObj.layout.xaxis.type = 'linear';
       selectedGraphObj.data.forEach(dataItem => {
         dataItem.x = selectedGraphObj.selectedXAxisDataOption.data;

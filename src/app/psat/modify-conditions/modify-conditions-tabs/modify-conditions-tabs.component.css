@@ -26,3 +26,7 @@
 .tooltip-td {
     vertical-align: middle;
 }
+
+li.page-item {
+    background-color: #ECECEC !important;
+}

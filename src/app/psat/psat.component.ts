@@ -83,6 +83,7 @@ export class PsatComponent implements OnInit {
   showWelcomeScreen: boolean = false;
   modificationModalOpen: boolean = false;
   smallScreenTab: string = 'form';
+  hasConnectedMotorItem: boolean;
   constructor(
     private assessmentService: AssessmentService,
     private psatService: PsatService,
@@ -110,6 +111,13 @@ export class PsatComponent implements OnInit {
       this.getSettings();
       this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
       
+      let fromConnectedItem = this.activatedRoute.snapshot.queryParamMap.get('fromConnectedItem');
+      if (fromConnectedItem) {
+        this.redirectFromConnectedInventory();
+      } else {
+        this.psatIntegrationService.setPSATConnectedInventoryData(this.assessment, this.settings);
+      }
+
       let connectedInventory = this.activatedRoute.snapshot.queryParamMap.get('connectedInventory');
       if (connectedInventory) {
         this.save();
@@ -180,16 +188,17 @@ export class PsatComponent implements OnInit {
     });
 
     this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
-      if (connectedInventoryData.shouldRestoreConnectedValues) {
-        let updatedPsat: PSAT = this.psatIntegrationService.restoreConnectedAssessmentValues(connectedInventoryData, this._psat);
-        this._psat = this.helperFunctionService.copyObject(updatedPsat);
-        this.save();
-      }
+      this.hasConnectedMotorItem = this._psat.connectedItem && this._psat.connectedItem.inventoryType === 'motor';
+        if (connectedInventoryData.shouldRestoreConnectedValues) {
+          let updatedPsat: PSAT = this.psatIntegrationService.restoreConnectedAssessmentValues(connectedInventoryData, this._psat);
+          this._psat = this.helperFunctionService.copyObject(updatedPsat);
+          this.save();
+        }
     });
 
     this.stepTabSubscription = this.psatTabService.stepTab.subscribe(val => {
       this.stepTab = val;
-      if (this.assessment.psat.connectedItem) {
+      if (this.assessment.psat.connectedItem && this.assessment.psat.connectedItem.inventoryType === 'pump') {
         this.psatIntegrationService.checkConnectedInventoryDiffers(this.assessment);
       }
     })
@@ -199,6 +208,11 @@ export class PsatComponent implements OnInit {
     });
 
     this.checkShowWelcomeScreen();
+  }
+
+  redirectFromConnectedInventory() {
+    this.psatTabService.mainTab.next('system-setup');
+    this.psatTabService.stepTab.next('motor');
   }
 
   ngOnDestroy() {
@@ -298,7 +312,6 @@ export class PsatComponent implements OnInit {
 
   async save() {
     this.checkSetupDone();
-
     if (this._psat.modifications) {
       if (this._psat.modifications.length == 0) {
         this.modificationExists = false;
@@ -318,11 +331,11 @@ export class PsatComponent implements OnInit {
     }
     this.compareService.setCompareVals(this._psat, this.modificationIndex);
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
-    this.psatIntegrationService.setPumpConnectedInventoryData(this.assessment);
-    if (this.assessment.psat.connectedItem) {
+    this.psatIntegrationService.setPSATConnectedInventoryData(this.assessment, this.settings);
+    if (this.assessment.psat.connectedItem && this.assessment.psat.connectedItem.inventoryType === 'pump') {
       this.psatIntegrationService.checkConnectedInventoryDiffers(this.assessment);
     }
-
+    
     let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
     this.assessmentDbService.setAll(assessments);
     this.psatService.getResults.next(true);
