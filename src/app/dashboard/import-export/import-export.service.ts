@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { Directory } from '../../shared/models/directory';
 import * as pako from 'pako';
@@ -10,11 +10,19 @@ export class ImportExportService {
   exportData: Array<any>;
   allDirectories: Directory;
   selectedItems: Array<any>;
-
+  
   toggleDownload: BehaviorSubject<boolean>;
+  exportInProgress: BehaviorSubject<boolean>;
+  renderer: Renderer2;
+  removeDownloadListener: () => void;
 
-  constructor(private windowRefService: WindowRefService) {
+  constructor(private windowRefService: WindowRefService, 
+    private rendererFactory: RendererFactory2
+    ) {
     this.toggleDownload = new BehaviorSubject<boolean>(null);
+    this.exportInProgress = new BehaviorSubject<boolean>(false);
+    this.renderer = rendererFactory.createRenderer(null, null);
+
    }
 
   testIfOverLimit(data: any) { 
@@ -43,7 +51,7 @@ export class ImportExportService {
       name = 'ExportedData_' + dateStr;
     }
     dlLink.setAttribute('download', name + '.json');
-    dlLink.click();
+    this.setupDownloadEvent(dlLink);
   }
 
   downloadZipData(data: any, name: string) {
@@ -60,6 +68,15 @@ export class ImportExportService {
       name = 'ExportedData_' + dateStr;
     }
     dlLink.setAttribute('download', name + '.gz');
+    this.setupDownloadEvent(dlLink);
+  }
+
+  setupDownloadEvent(dlLink) {
+    this.renderer.setAttribute(dlLink, 'id', 'downloadAnchor');
+    this.removeDownloadListener = this.renderer.listen(dlLink, 'click', (event) => {
+      this.exportInProgress.next(false);  
+    })
+
     dlLink.click();
   }
 

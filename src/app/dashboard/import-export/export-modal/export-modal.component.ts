@@ -75,12 +75,18 @@ export class ExportModalComponent implements OnInit {
 
 
   buildExportJSON() {
-    this.importExportService.downloadData(this.exportData, this.exportName);
+    this.importExportService.exportInProgress.next(true);
+    setTimeout(() => {
+      this.importExportService.downloadData(this.exportData, this.exportName);
+    }, 1000);
     this.hideExportModal();
   }
 
   buildExportZip() {
-    this.importExportService.downloadZipData(this.exportData, this.exportName);
+    this.importExportService.exportInProgress.next(true);
+    setTimeout(() => {
+      this.importExportService.downloadZipData(this.exportData, this.exportName);
+    }, 1000);
     this.hideExportModal();
   }
 
