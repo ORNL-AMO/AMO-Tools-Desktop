@@ -42,6 +42,7 @@ export class YAxisDataComponent implements OnInit {
   }
 
   addAxis() {
+    this.selectedGraphObj.hasSecondYAxis = true;
     this.visualizeMenuService.saveExistingPlotChange(this.selectedGraphObj);
 
   }
