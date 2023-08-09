@@ -1,6 +1,7 @@
 .nav-item .dropdown-toggle{
     color: white;
     background: #2E4053;
+    border: 1px solid #5b7591;
 }
 
 .nav-link{
