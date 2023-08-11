@@ -7,9 +7,7 @@ import { PlotlyService } from 'angular-plotly.js';
 import { LogToolDataService } from '../../log-tool-data.service';
 import * as _ from 'lodash';
 import { DOCUMENT } from '@angular/common';
-import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysis.service';
-import { HelperFunctionsService } from '../../../shared/helper-services/helper-functions.service';
-import { VisualizeMenuService } from '../visualize-menu/visualize-menu.service';
+
 
 @Component({
   selector: 'app-visualize-graph',
