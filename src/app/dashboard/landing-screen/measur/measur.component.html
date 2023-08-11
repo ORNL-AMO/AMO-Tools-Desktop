@@ -7,7 +7,10 @@
     </ul>
   </div>
   <div class="text-block">
-    <div class="d-flex flex-wrap" (mouseenter)="showText()" (mouseleave)="hideText();">
+    <div class="d-lg-none d-flex justify-content-center">
+      <span class="text">MEASUR</span>
+    </div>
+    <div class="d-lg-flex d-none flex-wrap" (mouseenter)="showText()" (mouseleave)="hideText();">
       <div class="p-0">
         <ul class="text" [ngClass]="{'hidden-text': !textShow}">
           <li class="spaced capitol">M</li>
