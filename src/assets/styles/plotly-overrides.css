@@ -235,3 +235,20 @@ text.node-label {
     text-shadow: none !important;
   }
 
+
+app-visualize-graph >
+div >
+div#plotlyDiv.js-plotly-plot >
+div.plot-container.plotly >
+div.user-select-none.svg-container > 
+svg.main-svg >
+g.infolayer >
+g.rangeslider-container >
+g.rangeslider-rangeplot >
+g.plot >
+g.scatterlayer >
+g.trace.scatter >
+g.lines >
+path.js-line {
+    stroke: rgb(177, 162, 219) !important;
+}

@@ -97,6 +97,8 @@ export class VisualizeGraphComponent implements OnInit {
   renderGraph() {
     // * For banner events (add New Graph, select graph) need to grab updated value due to race condition --> selectedGraphObj event vs shouldRenderGraph event
     this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
+    this.setTimeSeriesRangeSlider();
+
     // this.setTimeSeriesSegments(this.selectedGraphObj);
     if (this.visualizeGraph && this.selectedGraphObj) {
       this.setGraphInteractivity();
@@ -173,6 +175,14 @@ export class VisualizeGraphComponent implements OnInit {
       this.selectedGraphObj.layout.hovermode = false;
       this.selectedGraphObj.layout.dragmode = true;
     }
+  }
+
+  setTimeSeriesRangeSlider() {
+      this.selectedGraphObj.layout.xaxis.rangeslider = {
+        autorange: true,
+        visible: true
+      }
+    this.selectedGraphObj.layout.xaxis.type = 'date';
   }
 
 
