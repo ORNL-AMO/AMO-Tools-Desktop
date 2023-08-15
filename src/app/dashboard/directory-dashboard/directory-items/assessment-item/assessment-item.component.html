@@ -55,7 +55,7 @@
     'treasure-hunt': assessment.type == 'TreasureHunt', 'waste-water': assessment.type == 'WasteWater', 'compressed-air': assessment.type == 'CompressedAir'}">
     <div class="d-flex">
         <div class="p-1">
-            <input type="checkbox" [(ngModel)]="assessment.selected" />
+            <input type="checkbox" [(ngModel)]="assessment.selected" (change)="updateSelectedStatus()"/>
         </div>
         <div class="d-flex flex-column">
             <div class="d-flex">

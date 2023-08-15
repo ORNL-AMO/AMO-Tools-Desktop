@@ -5,7 +5,7 @@ import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { Subscription } from 'rxjs';
 import { DirectoryDashboardService } from './directory-dashboard.service';
 import { DashboardService } from '../dashboard.service';
-import { DirectoryItem, FilterDashboardBy } from '../../shared/models/directory-dashboard';
+import { DirectoryItem, FilterDashboardBy, ShowPreAssessmentModalState } from '../../shared/models/directory-dashboard';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { AssessmentService } from '../assessment.service';
 
@@ -23,7 +23,7 @@ export class DirectoryDashboardComponent implements OnInit {
   showDeleteItemsModal: boolean;
   showDeleteItemsModalSub: Subscription;
   showPreAssessmentModalSub: Subscription;
-  showPreAssessmentModalIndex: { index: number, isNew: boolean };
+  showPreAssessmentModalIndex: ShowPreAssessmentModalState;
   updateDashboardDataSub: Subscription;
 
   directoryItems: Array<DirectoryItem>;

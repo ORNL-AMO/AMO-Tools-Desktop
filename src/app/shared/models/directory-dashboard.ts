@@ -30,3 +30,7 @@ export interface FilterDashboardBy {
     showWasteWater: boolean,
     showCompressedAir: boolean
 }
+
+
+export interface ShowPreAssessmentModalState 
+{ index: number, isNew: boolean, subDirectoryId?: number }

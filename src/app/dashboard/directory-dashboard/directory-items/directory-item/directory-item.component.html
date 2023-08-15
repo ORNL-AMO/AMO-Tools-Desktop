@@ -32,6 +32,10 @@
                             src="assets/images/ca-icon.png">
                         <a (click)="goToAssessment(directoryItem.assessment)">{{directoryItem.assessment.name}}</a>
                     </span>
+                    <span *ngIf="directoryItem.type == 'calculator' && directoryItem.preAssessments">
+                        <span class="px-1"><i class="fa fa-pie-chart" aria-hidden="true"></i></span>
+                        <a (click)="showPreAssessment(directoryItem)">{{directoryItem.calculator.name}}</a>
+                    </span>
                     <span *ngIf="directoryItem.type == 'inventory'">
                         <img *ngIf="directoryItem.inventoryItem.type === 'pumpInventory'" class="icon-image pl-1 pr-1"
                             src="assets/images/pump-inventory-icon.png">
@@ -50,7 +54,7 @@
 <!--list view-->
 <div class="list-row folder" *ngIf="dashboardView == 'list'">
     <div class="assessment-name">
-        <input type="checkbox" [(ngModel)]="directory.selected" (change)="setDelete()" />
+        <input type="checkbox" [(ngModel)]="directory.selected" (change)="updateSelectedStatus()" />
         <i class="fa fa-folder" aria-hidden="true"></i>
         <a [routerLink]="['/directory-dashboard', directory.id]">{{directory.name}}</a>
     </div>

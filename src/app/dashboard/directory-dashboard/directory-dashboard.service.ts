@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
-import { FilterDashboardBy, DirectoryItem } from '../../shared/models/directory-dashboard';
+import { FilterDashboardBy, DirectoryItem, ShowPreAssessmentModalState } from '../../shared/models/directory-dashboard';
 import * as _ from 'lodash';
 import { Directory } from '../../shared/models/directory';
 import { UntypedFormGroup } from '@angular/forms';
@@ -18,7 +18,7 @@ export class DirectoryDashboardService {
   showDeleteItemsModal: BehaviorSubject<boolean>;
   showImportModal: BehaviorSubject<boolean>;
   showExportModal: BehaviorSubject<boolean>;
-  showPreAssessmentModalIndex: BehaviorSubject<{ index: number, isNew: boolean }>;
+  showPreAssessmentModalIndex: BehaviorSubject<ShowPreAssessmentModalState>;
   filterDashboardBy: BehaviorSubject<FilterDashboardBy>;
   sortBy: BehaviorSubject<{ value: string, direction: string }>;
   constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService) {
@@ -29,7 +29,7 @@ export class DirectoryDashboardService {
     this.showDeleteItemsModal = new BehaviorSubject<boolean>(false);
     this.showImportModal = new BehaviorSubject<boolean>(false);
     this.showExportModal = new BehaviorSubject<boolean>(false);
-    this.showPreAssessmentModalIndex = new BehaviorSubject<{ index: number, isNew: boolean }>(undefined);
+    this.showPreAssessmentModalIndex = new BehaviorSubject<ShowPreAssessmentModalState>(undefined);
     this.filterDashboardBy = new BehaviorSubject<FilterDashboardBy>({
       showPumps: true,
       showFans: true,

@@ -11,124 +11,69 @@
             <div class="modal-body pb-0">
                 <div class="export-content scroll-item">
                     <ul>
-                        <li *ngIf="exportData.calculators.length != 0">
+                        <li *ngIf="exportDisplayData.calculators.length != 0">
                             <span class="bold">Pre-Assessments</span>
                             <ul>
-                                <li *ngFor="let calculator of exportData.calculators">
+                                <li *ngFor="let calculator of exportDisplayData.calculators">
                                     <span class="fa fa-pie-chart"></span>
                                     {{calculator.name}}
                                 </li>
                             </ul>
                         </li>
-
-                        <ng-container *ngIf="!isSelectAllFolder">
-                            <li *ngIf="exportData.assessments.length != 0">
-                                <span class="bold">Assessments</span>
-                                <ul>
-                                    <li *ngFor="let assessmentItem of exportData.assessments">
-                                        <div class="d-flex align-items-center"
-                                            [ngClass]="{ 'phast' : assessmentItem.assessment.type == 'PHAST', 'psat': assessmentItem.assessment.type == 'PSAT', 'fsat': assessmentItem.assessment.type == 'FSAT',
-                                         'treasure-hunt': assessmentItem.assessment.type == 'TreasureHunt', 'ssmt': assessmentItem.assessment.type == 'SSMT', 
-                                         'compressedAir': assessmentItem.assessment.type == 'CompressedAir', 'wasteWater': assessmentItem.assessment.type == 'WasteWater'}">
-                                            <span
-                                                class="p-1 d-flex align-items-center justify-content-center icon-image">
-                                                <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon"
-                                                    src="assets/images/pump-icon.png">
-                                                <img *ngIf="assessmentItem.assessment.type == 'PHAST'" class="icon"
-                                                    src="assets/images/ico-phast-diagram.png">
-                                                <img *ngIf="assessmentItem.assessment.type == 'FSAT'" class="icon"
-                                                    src="assets/images/ico-fsat-diagram.png">
-                                                <img *ngIf="assessmentItem.assessment.type == 'SSMT'" class="icon"
-                                                    src="assets/images/ico-ssmt-diagram.png">
-                                                <img *ngIf="assessmentItem.assessment.type == 'TreasureHunt'"
-                                                    class="icon" src="assets/images/treasure-hunt.png">
-                                                <img *ngIf="assessmentItem.assessment.type == 'CompressedAir'"
-                                                    class="icon" src="assets/images/ca-icon.png">
-                                                <img *ngIf="assessmentItem.assessment.type == 'WasteWater'" class="icon"
-                                                    src="assets/images/waste-water-icon.png">
-                                            </span>
-                                            <span class="p-1">
-                                                <a>{{assessmentItem.assessment.name}}</a>
-                                            </span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li *ngIf="exportData.inventories.length != 0">
-                                <span class="bold">Inventories</span>
-                                <ul>
-                                    <li *ngFor="let inventory of exportData.inventories">
-                                        <div class="d-flex align-items-center">
-                                            <span
-                                                class="p-1 d-flex align-items-center justify-content-center icon-image">
-                                                <img *ngIf="inventory.inventoryItem.type == 'pumpInventory'"
-                                                    class="icon" src="assets/images/pump-inventory-icon.png">
-                                                <img *ngIf="inventory.inventoryItem.type == 'motorInventory'"
-                                                    class="icon" src="assets/images/motor-inventory-icon.png">
-                                            </span>
-                                            <span class="p-1">
-                                                <a>{{inventory.inventoryItem.name}}</a>
-                                            </span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ng-container>
-
-
-                        <li *ngIf="isSelectAllFolder || exportData.directories.length != 0">
-                            <span class="bold">Directories (details)</span>
+                        <li *ngIf="exportDisplayData.assessments.length != 0">
+                            <span class="bold">Assessments</span>
                             <ul>
-                                <li *ngFor="let dirItem of exportData.directories">
-                                    <span class="fa fa-folder p-1"></span>{{dirItem.directory.name}}
-                                    <ul>
-                                        <li *ngFor="let assessmentItem of dirItem.directory.assessments">
-                                            <div class="d-flex align-items-center" [ngClass]="{ 'phast' : assessmentItem.type == 'PHAST', 'psat': assessmentItem.type == 'PSAT', 'fsat': assessmentItem.type == 'FSAT', 
-                                                'treasure-hunt': assessmentItem.type == 'TreasureHunt', 'ssmt': assessmentItem.type == 'SSMT', 'compressedAir': assessmentItem.type == 'CompressedAir',
-                                                'wasteWater': assessmentItem.type == 'WasteWater'}">
-                                                <span
-                                                    class="p-1 d-flex align-items-center justify-content-center icon-image">
-                                                    <img *ngIf="assessmentItem.type == 'PSAT'" class="icon"
-                                                        src="assets/images/pump-icon.png">
-                                                    <img *ngIf="assessmentItem.type == 'PHAST'" class="icon"
-                                                        src="assets/images/ico-phast-diagram.png">
-                                                    <img *ngIf="assessmentItem.type == 'FSAT'" class="icon"
-                                                        src="assets/images/ico-fsat-diagram.png">
-                                                    <img *ngIf="assessmentItem.type == 'SSMT'" class="icon"
-                                                        src="assets/images/ico-ssmt-diagram.png">
-                                                    <img *ngIf="assessmentItem.type == 'TreasureHunt'" class="icon"
-                                                        src="assets/images/treasure-hunt.png">
-                                                    <img *ngIf="assessmentItem.type == 'CompressedAir'" class="icon"
-                                                        src="assets/images/ca-icon.png">
-                                                    <img *ngIf="assessmentItem.type == 'WasteWater'" class="icon"
-                                                        src="assets/images/waste-water-icon.png">
-
-                                                </span>
-                                                <span class="p-1">
-                                                    <a>{{assessmentItem.name}}</a>
-                                                </span>
-                                            </div>
-                                        </li>
-                                        <li *ngFor="let inventoryItem of dirItem.directory.inventories">
-                                            <div class="d-flex align-items-center">
-                                                <span
-                                                    class="p-1 d-flex align-items-center justify-content-center icon-image">
-                                                    <img *ngIf="inventoryItem.type == 'pumpInventory'" class="icon"
-                                                        src="assets/images/pump-inventory-icon.png">
-                                                    <img *ngIf="inventoryItem.type == 'motorInventory'" class="icon"
-                                                        src="assets/images/motor-inventory-icon.png">
-                                                </span>
-                                                <span class="p-1">
-                                                    <a>{{inventoryItem.name}}</a>
-                                                </span>
-                                            </div>
-                                        </li>
-                                        <li *ngFor="let subDir of dirItem.directory.subDirectory">
-                                            <div class="d-flex align-items-center">
-                                                <span class="fa fa-folder p-1"></span>{{subDir.name}}
-                                            </div>
-                                        </li>
-                                    </ul>
+                                <li *ngFor="let assessmentItem of exportDisplayData.assessments">
+                                    <div class="d-flex align-items-center"
+                                        [ngClass]="{ 'phast' : assessmentItem.assessment.type == 'PHAST', 'psat': assessmentItem.assessment.type == 'PSAT', 'fsat': assessmentItem.assessment.type == 'FSAT',
+                                             'treasure-hunt': assessmentItem.assessment.type == 'TreasureHunt', 'ssmt': assessmentItem.assessment.type == 'SSMT', 
+                                             'compressedAir': assessmentItem.assessment.type == 'CompressedAir', 'wasteWater': assessmentItem.assessment.type == 'WasteWater'}">
+                                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
+                                            <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon"
+                                                src="assets/images/pump-icon.png">
+                                            <img *ngIf="assessmentItem.assessment.type == 'PHAST'" class="icon"
+                                                src="assets/images/ico-phast-diagram.png">
+                                            <img *ngIf="assessmentItem.assessment.type == 'FSAT'" class="icon"
+                                                src="assets/images/ico-fsat-diagram.png">
+                                            <img *ngIf="assessmentItem.assessment.type == 'SSMT'" class="icon"
+                                                src="assets/images/ico-ssmt-diagram.png">
+                                            <img *ngIf="assessmentItem.assessment.type == 'TreasureHunt'" class="icon"
+                                                src="assets/images/treasure-hunt.png">
+                                            <img *ngIf="assessmentItem.assessment.type == 'CompressedAir'" class="icon"
+                                                src="assets/images/ca-icon.png">
+                                            <img *ngIf="assessmentItem.assessment.type == 'WasteWater'" class="icon"
+                                                src="assets/images/waste-water-icon.png">
+                                        </span>
+                                        <span class="p-1">
+                                            {{assessmentItem.assessment.name}}
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li *ngIf="exportDisplayData.inventories.length != 0">
+                            <span class="bold">Inventories</span>
+                            <ul>
+                                <li *ngFor="let inventory of exportDisplayData.inventories">
+                                    <div class="d-flex align-items-center">
+                                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
+                                            <img *ngIf="inventory.inventoryItem.type == 'pumpInventory'" class="icon"
+                                                src="assets/images/pump-inventory-icon.png">
+                                            <img *ngIf="inventory.inventoryItem.type == 'motorInventory'" class="icon"
+                                                src="assets/images/motor-inventory-icon.png">
+                                        </span>
+                                        <span class="p-1">
+                                            {{inventory.inventoryItem.name}}
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li *ngIf="exportDisplayData.directories.length != 0">
+                            <span class="bold">Directories</span>
+                            <ul>
+                                <li *ngFor="let dir of exportDisplayData.directories">
+                                    <span class="fa fa-folder p-1"></span>{{dir.directory.name}}
                                 </li>
                             </ul>
                         </li>
@@ -138,7 +83,8 @@
             </div>
             <div class="modal-footer d-flex">
                 <div *ngIf="!canExportJson" class="export-modal-left">
-                    <p class="text-center small danger export-text">Exporting to a zipped file - this may take some time depending on the size of your data.</p>
+                    <p class="text-center small danger export-text">Exporting to a zipped file - this may take some time
+                        depending on the size of your data.</p>
                 </div>
                 <div class="d-flex export-modal-right">
                     <button class="btn btn-secondary mr-2" (click)="hideExportModal()">Cancel</button>
@@ -147,10 +93,10 @@
                         <label for="exportName"> Name your file:&nbsp;</label>
                         <input type="text" class="form-control" id="exportName" [(ngModel)]="exportName">
                     </div>
-                    <button class="btn btn-primary ml-2" *ngIf ="canExportJson" (click)="buildExportJSON()">Export
-                        </button>
-                    <button class="btn btn-primary ml-2" *ngIf ="!canExportJson" (click)="buildExportZip()">Export
-                        </button>
+                    <button class="btn btn-primary ml-2" *ngIf="canExportJson" (click)="buildExportJSON()">Export
+                    </button>
+                    <button class="btn btn-primary ml-2" *ngIf="!canExportJson" (click)="buildExportZip()">Export
+                    </button>
                 </div>
             </div>
         </div>

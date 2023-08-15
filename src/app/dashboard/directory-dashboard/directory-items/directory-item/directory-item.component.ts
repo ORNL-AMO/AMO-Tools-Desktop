@@ -76,8 +76,8 @@ export class DirectoryItemComponent implements OnInit {
     this.assessmentService.goToAssessment(assessment);
   }
 
-  showEditModal() {
-    this.setDirectories();
+  async showEditModal() {
+    await this.setDirectories();
     _.remove(this.allDirectories, (dir) => { return dir.id === this.directory.id; });
     _.remove(this.allDirectories, (dir) => { return dir.parentDirectoryId === this.directory.id; });
     this.editForm = this.formBuilder.group({
@@ -85,6 +85,10 @@ export class DirectoryItemComponent implements OnInit {
       'directoryId': [this.directory.parentDirectoryId]
     });
     this.editModal.show();
+  }
+
+  showPreAssessment(directoryItem: DirectoryItem) {
+    this.directoryDashboardService.showPreAssessmentModalIndex.next({ index: directoryItem.calculatorIndex, isNew: false, subDirectoryId: directoryItem.calculator.directoryId });
   }
   
 

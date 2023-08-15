@@ -2,7 +2,7 @@
 <div *ngIf="dashboardView == 'grid'" class="card card-item"
     [ngClass]="{'psat': calculator.type =='pump', 'fsat': calculator.type =='fan', 'phast': calculator.type == 'furnace', 'general': calculator.type == 'general'}">
     <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
-        <input type="checkbox" [(ngModel)]="calculator.selected">
+        <input type="checkbox" [(ngModel)]="calculator.selected" (change)="updateSelectedStatus()">
         <div class="d-flex align-items-center">
             <span class="fa fa-pie-chart pl-1 pr-1"></span>
             <a (click)="showPreAssessment()">{{calculator.name}}</a>
@@ -61,7 +61,7 @@
 <div *ngIf="dashboardView == 'list'" class="list-row pre-assessment"
     [ngClass]="{'pump': calculator.type =='pump', 'fan': calculator.type =='fan', 'furnace': calculator.type == 'furnace', 'general': calculator.type == 'general'}">
     <div class="assessment-name">
-        <input type="checkbox" [(ngModel)]="calculator.selected" />
+        <input type="checkbox" [(ngModel)]="calculator.selected" (change)="updateSelectedStatus()"/>
         <i class="fa fa-pie-chart" aria-hidden="true"></i>
         <a (click)="showPreAssessment()">{{calculator.name}}</a>
     </div>

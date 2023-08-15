@@ -102,8 +102,8 @@ export class ImportModalComponent implements OnInit {
 
     if (importData.origin === "AMO-TOOLS-DESKTOP") {
       this.importInProgress = true;
-      let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
-      this.importService.importData(importData, directoryId);
+      let workingDirectoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
+      this.importService.importData(importData, workingDirectoryId);
       setTimeout(() => {
         this.hideImportModal();
         this.importInProgress = false;

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ExportService } from '../export.service';
 import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';
-import { ImportExportData, ImportExportDirectory, ImportExportAssessment } from '../importExportModel';
+import { ImportExportData } from '../importExportModel';
 import { Directory } from '../../../shared/models/directory';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { ImportExportService } from '../import-export.service';
@@ -18,9 +18,11 @@ export class ExportModalComponent implements OnInit {
   @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
 
   exportData: ImportExportData;
+  exportDisplayData: ImportExportData;
   canExportJson: boolean = false;
   exportName: string;
-  isSelectAllFolder: boolean;
+  isSelectAllDirectory: boolean;
+  workingDirectoryId: number;
   constructor(private exportService: ExportService, private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
     private importExportService: ImportExportService) { }
 
@@ -50,21 +52,35 @@ export class ExportModalComponent implements OnInit {
   }
 
   exportAllData() {
-    let directoryId: number = 1;
-    let directory: Directory = this.directoryDbService.getById(directoryId);
+    this.workingDirectoryId = 1;
+    let directory: Directory = this.directoryDbService.getById(this.workingDirectoryId);
     this.exportData = this.exportService.getSelected(directory, true);
   }
-
+  
   exportDirectoryData() {
-    let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
-    let directory: Directory = this.directoryDbService.getById(directoryId);
-    this.isSelectAllFolder = directory.selected;
-    this.exportData = this.exportService.getSelected(directory, this.isSelectAllFolder);
+    this.workingDirectoryId = this.directoryDashboardService.selectedDirectoryId.getValue();
+    let directory: Directory = this.directoryDbService.getById(this.workingDirectoryId);
+    this.isSelectAllDirectory = directory.selected;
+    this.exportData = this.exportService.getSelected(directory, this.isSelectAllDirectory);
+    this.setDisplayFilteredData();
     this.setExportDefaultName();
   }
 
+  setDisplayFilteredData() {
+    this.exportDisplayData = {
+      assessments: this.exportData.assessments.filter(assessment => assessment.assessment.directoryId === this.workingDirectoryId),
+      inventories: this.exportData.inventories.filter(inventory => inventory.inventoryItem.directoryId === this.workingDirectoryId),
+      calculators: this.exportData.calculators.filter(calculator => calculator.directoryId === this.workingDirectoryId),
+      directories: this.exportData.directories.filter(directory => {
+        let isNotCurrentDirectory: boolean = directory.directory.id !== this.workingDirectoryId;
+        let inCurrentDirectory: boolean = directory.directory.parentDirectoryId === this.workingDirectoryId;
+        return isNotCurrentDirectory && inCurrentDirectory;
+      }),
+    }
+  }
+
   setExportDefaultName() {
-    if (this.isSelectAllFolder && this.exportData.directories.length != 0) {
+    if (this.isSelectAllDirectory && this.exportData.directories.length != 0) {
       this.exportName = this.exportData.directories[0].directory.name;
     } else if (this.exportData.assessments.length != 0) {
       this.exportName = this.exportData.assessments[0].assessment.name;

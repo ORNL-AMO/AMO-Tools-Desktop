@@ -51,8 +51,9 @@ export class DirectoryDashboardMenuComponent implements OnInit {
 
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.directory = this.directoryDbService.getById(this.directory.id);  
-      if(this.directory){
+      if (this.directory){
         this.directory.selected = false;    
+        this.isAllSelected = false;
       }
     });
 
@@ -117,7 +118,8 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     if (this.directory.calculators) {
       hasCalculatorUnselected = _.find(this.directory.calculators, (value) => { return value.selected == false });
     }
-    this.isAllSelected = hasAssessmentUnselected !== undefined && hasDirUnselected !== undefined && hasInventoryUnselected !== undefined && hasCalculatorUnselected !== undefined;
+    this.isAllSelected = hasAssessmentUnselected == undefined && hasDirUnselected == undefined && hasInventoryUnselected == undefined && hasCalculatorUnselected == undefined;
+    this.directory.selected = this.isAllSelected;
   }
 
   checkReport() {
