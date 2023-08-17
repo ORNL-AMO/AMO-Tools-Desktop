@@ -32,7 +32,8 @@
                             src="assets/images/ca-icon.png">
                         <a (click)="goToAssessment(directoryItem.assessment)">{{directoryItem.assessment.name}}</a>
                     </span>
-                    <span *ngIf="directoryItem.type == 'calculator' && directoryItem.preAssessments">
+                    <span *ngIf="directoryItem.type == 'calculator' && directoryItem.calculator.preAssessments"
+                    [ngClass]="{'psat': directoryItem.calculator.type =='pump', 'fsat': directoryItem.calculator.type =='fan', 'phast': directoryItem.calculator.type == 'furnace', 'general': directoryItem.calculator.type == 'general'}">
                         <span class="px-1"><i class="fa fa-pie-chart" aria-hidden="true"></i></span>
                         <a (click)="showPreAssessment(directoryItem)">{{directoryItem.calculator.name}}</a>
                     </span>

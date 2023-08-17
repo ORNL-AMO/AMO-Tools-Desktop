@@ -80,12 +80,29 @@ export class ExportModalComponent implements OnInit {
   }
 
   setExportDefaultName() {
+    let hasAssessments: boolean = this.exportData.assessments.length != 0;
+    let hasInventories: boolean = this.exportData.inventories.length != 0;
+    let hasCalculators: boolean = this.exportData.calculators.length != 0;
+    let hasMultipleItemTypes: boolean = [
+      hasAssessments, 
+      hasInventories, 
+      hasCalculators,
+    ].filter(Boolean).length >= 2;
+
+    let date = new Date();
+    let dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+    let dateName = 'ExportedData_' + dateStr;
+
     if (this.isSelectAllDirectory && this.exportData.directories.length != 0) {
       this.exportName = this.exportData.directories[0].directory.name;
-    } else if (this.exportData.assessments.length != 0) {
+    } else if (!this.isSelectAllDirectory && hasMultipleItemTypes) {
+      this.exportName = dateName;
+    } else if (hasAssessments) {
       this.exportName = this.exportData.assessments[0].assessment.name;
-    } else if (this.exportData.inventories.length != 0) {
+    } else if (hasInventories) {
       this.exportName = this.exportData.inventories[0].inventoryItem.name;
+    } else if (hasCalculators) {
+      this.exportName = this.exportData.calculators[0].name;
     }
 }
 

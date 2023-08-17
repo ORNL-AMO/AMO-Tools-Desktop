@@ -42,6 +42,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
       this.breadCrumbs = new Array();
       this.directory = this.directoryDbService.getById(id);
       this.isAllSelected = false;
+      this.setSelectedStatus();
       this.getBreadcrumbs(id);
     });
 
@@ -50,10 +51,11 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     });
 
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
-      this.directory = this.directoryDbService.getById(this.directory.id);  
+      this.directory = this.directoryDbService.getById(this.directory.id); 
       if (this.directory){
         this.directory.selected = false;    
         this.isAllSelected = false;
+        this.setSelectedStatus();
       }
     });
 

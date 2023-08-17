@@ -118,11 +118,9 @@ export class CopyItemsComponent implements OnInit {
   }
 
   async copyDirectoryAssessmentsAndSettings() {
-    let hasSelectedToCopy: boolean = this.directory.assessments.some(assessment => assessment.selected);
-    if (hasSelectedToCopy) {
-      for (let i = 0; i < this.directory.assessments.length; i++) {
-        let assessment: Assessment = this.directory.assessments[i];
-        if (assessment.selected) {
+    let selectedAssessments: Assessment[] = this.directory.assessments.filter(assessment => assessment.selected);
+    if (selectedAssessments.length !== 0) {
+      for await (let assessment of selectedAssessments) {
           let assessmentCopy: Assessment = JSON.parse(JSON.stringify(assessment));
           delete assessmentCopy.id;
           let tempCalculator: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
@@ -164,7 +162,6 @@ export class CopyItemsComponent implements OnInit {
           if (this.copyForm.controls.copyCalculators.value === true) {
             assessmentCalculatorCopy.assessmentId = addedAssessment.id;
             await firstValueFrom(this.calculatorDbService.addWithObservable(assessmentCalculatorCopy));
-          }
         }
       };
       let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
@@ -178,11 +175,9 @@ export class CopyItemsComponent implements OnInit {
   }
 
   async copyDirectoryCalculators() {
-    let hasSelectedToCopy: boolean = this.directory.calculators.some(calculator => calculator.selected);
-    if (hasSelectedToCopy) {
-      for (let i = 0; i < this.directory.calculators.length; i++) {
-        let calculator: Calculator = this.directory.calculators[i];
-        if (calculator.selected) {
+    let selectedCalculators: Calculator[] = this.directory.calculators.filter(calculator => calculator.selected);
+    if (selectedCalculators.length !== 0) {
+      for await (let calculator of selectedCalculators) {
           let calculatorCopy: Calculator = JSON.parse(JSON.stringify(calculator));
           delete calculatorCopy.id;
           calculatorCopy.selected = false;
@@ -191,21 +186,17 @@ export class CopyItemsComponent implements OnInit {
           
           await firstValueFrom(this.calculatorDbService.addWithObservable(calculatorCopy));
           calculator.selected = false;
-        }
       };
       let updatedCalculators = await firstValueFrom(this.calculatorDbService.getAllCalculators());
       this.calculatorDbService.setAll(updatedCalculators);
-      
       this.dashboardService.updateDashboardData.next(true);
     }
   }
 
   async copyDirectoryInventory() {
-    let hasSelectedToCopy: boolean = this.directory.inventories.some(inventory => inventory.selected);
-    if (hasSelectedToCopy) {
-      for (let i = 0; i < this.directory.inventories.length; i++) {
-        let inventory = this.directory.inventories[i];
-        if (inventory.selected) {
+    let selectedInventories: InventoryItem[] = this.directory.inventories.filter(inventory => inventory.selected);
+    if (selectedInventories.length !== 0) {
+      for await (let inventory of selectedInventories) {
           let inventoryCopy: InventoryItem = JSON.parse(JSON.stringify(inventory));
           delete inventoryCopy.id;
           let tmpSettings: Settings = this.settingsDbService.getByInventoryId(inventory);
@@ -225,7 +216,6 @@ export class CopyItemsComponent implements OnInit {
           settingsCopy.inventoryId = newInventory.id;
           await firstValueFrom(this.settingsDbService.addWithObservable(settingsCopy));
           inventory.selected = false;
-        }
       }
       let updatedInventories: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
       let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());

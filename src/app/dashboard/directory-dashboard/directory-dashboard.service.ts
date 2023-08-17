@@ -51,17 +51,19 @@ export class DirectoryDashboardService {
     let directoryItems = new Array<DirectoryItem>();
     let calculatorIndex: number = 0;
     if(directory){
-        directory.calculators.forEach(calculator => {
-        directoryItems.push({
-          type: 'calculator',
-          calculator: calculator,
-          calculatorIndex: calculatorIndex,
-          isShown: true,
-          createdDate: calculator.createdDate,
-          modifiedDate: calculator.modifiedDate,
-          name: calculator.name
-        });
-        calculatorIndex++;
+      directory.calculators.forEach(calculator => {
+        if (calculator.preAssessments) {
+          directoryItems.push({
+            type: 'calculator',
+            calculator: calculator,
+            calculatorIndex: calculatorIndex,
+            isShown: true,
+            createdDate: calculator.createdDate,
+            modifiedDate: calculator.modifiedDate,
+            name: calculator.name
+          });
+          calculatorIndex++;
+        }
       });
       
       directory.assessments.forEach(assessment => {

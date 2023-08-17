@@ -44,8 +44,17 @@ export class DirectoryDashboardComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.directoryId = Number(params['id']);
       this.directoryDashboardService.selectedDirectoryId.next(this.directoryId);
+      
       this.directory = this.directoryDbService.getById(this.directoryId);
       this.setDirectoryItems();
+
+      let showPreAssessmentIndex = this.activatedRoute.snapshot.queryParamMap.get('showPreAssessmentIndex');
+      if (showPreAssessmentIndex) {
+        let index = Number(showPreAssessmentIndex);
+        if (index !== undefined) {
+          this.directoryDashboardService.showPreAssessmentModalIndex.next({ index: index, isNew: false });
+        }
+      }
     });
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       if (val) {

@@ -43,8 +43,8 @@ export class DirectoryItemComponent implements OnInit {
       this.directory = this.directoryDbService.getById(this.directory.id);  
       if(this.directory){
         this.directory.selected = false;    
+        this.directoryItems = this.directoryDashboardService.getDirectoryItems(this.directory);
       }
-      this.directoryItems = this.directoryDashboardService.getDirectoryItems(this.directory);
     });
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
       this.dashboardView = val;

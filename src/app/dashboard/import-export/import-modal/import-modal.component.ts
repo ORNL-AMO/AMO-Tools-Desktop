@@ -97,18 +97,15 @@ export class ImportModalComponent implements OnInit {
     }
   }
 
-  runImport(data: string) {
+ async runImport(data: string) {
     let importData: ImportExportData = JSON.parse(data);
-
     if (importData.origin === "AMO-TOOLS-DESKTOP") {
       this.importInProgress = true;
       let workingDirectoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
-      this.importService.importData(importData, workingDirectoryId);
-      setTimeout(() => {
-        this.hideImportModal();
-        this.importInProgress = false;
-        this.dashboardService.updateDashboardData.next(true);
-      }, 1500);
+      await this.importService.importData(importData, workingDirectoryId);
+      this.hideImportModal();
+      this.importInProgress = false;
+      this.dashboardService.updateDashboardData.next(true);
     }
     else if (importData.origin === "AMO-TOOLS-DESKTOP-OPPORTUNITIES") {
       this.treasureFile = true;
