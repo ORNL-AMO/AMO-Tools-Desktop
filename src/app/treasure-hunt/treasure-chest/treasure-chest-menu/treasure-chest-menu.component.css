@@ -31,15 +31,24 @@
 
 .navbar-nav .dropdown-menu{
     position: absolute;
-    font-size: small;
+    font-size: medium;
 }
 
 .navbar{
     background: white;
     border-bottom: solid 4px;
-    font-size: small;
+    font-size: medium;
 }
 
+.dropdown-menu .nav-item.dropdown {
+    font-size: medium;
+}
+
+.btn-manage {
+    /* height: 30px;
+    width: 180px; */
+    font-size: medium;
+}
 
 .nav-link, .btn{
     padding: 4px;

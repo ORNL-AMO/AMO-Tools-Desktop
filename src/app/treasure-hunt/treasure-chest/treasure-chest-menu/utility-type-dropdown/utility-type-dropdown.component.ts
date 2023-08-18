@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { FilterOption, TreasureHunt } from '../../../../shared/models/treasure-hunt';
 import { OpportunityCardsService, OpportunityCardData } from '../../opportunity-cards/opportunity-cards.service';
 import { TreasureChestMenuService } from '../treasure-chest-menu.service';
@@ -16,6 +16,8 @@ import * as _ from 'lodash';
 export class UtilityTypeDropdownComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  dropdownShown: boolean
 
   utilityTypeOptions: Array<FilterOption> = [];
   sortBySub: Subscription;
@@ -31,6 +33,12 @@ export class UtilityTypeDropdownComponent implements OnInit {
       let oppData = this.opportuntityCardsService.getOpportunityCardsData(treasureHunt, this.settings);
       this.setUtilityTypeOptions(oppData);
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    if (!this.dropdownShown && !changes.dropdownShown.firstChange){
+      this.displayUtilityTypeDropdown = false;
+    }
   }
 
   ngOnDestroy() {
