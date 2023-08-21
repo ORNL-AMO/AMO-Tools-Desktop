@@ -10,10 +10,11 @@
     line-height: 2;
 }
 
-.nav-btn-clear{
-    background: #6D757C;
+.nav-btn-selections{
+    background: #808B96;
     color: white;
     border: none;
+    border-radius: 12px;
     line-height: 2;
 }
 
@@ -125,14 +126,16 @@ a.list-group-item.active:hover{
         margin-bottom: 5px;
         font-size: large;
     }
-    
-    .nav-btn-clear{
-        background: #6D757C;
+
+    .nav-btn-selections{
+        background: #808B96;
         color: white;
-        border: none;
+        margin-bottom: 2px;
+        border-radius: 12px;
         line-height: 2;
+        width: 100% !important;
     }
-    
+        
     .nav-btn.middle{
         border: none !important;
     }   

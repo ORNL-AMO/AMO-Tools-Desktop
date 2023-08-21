@@ -98,23 +98,23 @@
 <nav class="navbar second-nav d-block d-lg-flex" [ngClass]="{'collapse': bannerCollapsed}"
   *ngIf="(sortCardsData.teams.length != 0 || sortCardsData.equipments.length != 0 || sortCardsData.calculatorTypes.length != 0 || sortCardsData.utilityTypes.length != 0)">
   <div [ngClass]="{'collapse': bannerCollapsed}" class="nav-item" *ngFor="let team of sortCardsData.teams; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeTeam(index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn-selections" (click)="removeTeam(index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{team.display}}</button>
   </div>
   <div [ngClass]="{'collapse': bannerCollapsed}" class="nav-item" *ngFor="let equipment of sortCardsData.equipments; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeEquipment(index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn-selections" (click)="removeEquipment(index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{equipment.display}}</button>
   </div>
   <div [ngClass]="{'collapse': bannerCollapsed}" class="nav-item" *ngFor="let calculator of sortCardsData.calculatorTypes; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeCalculator(index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn-selections" (click)="removeCalculator(index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{calculator.display}}</button>
   </div>
   <div [ngClass]="{'collapse': bannerCollapsed}" class="nav-item" *ngFor="let utilityType of sortCardsData.utilityTypes; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeUtilityType( index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn-selections" (click)="removeUtilityType( index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{utilityType.display}}</button>
   </div>
   <div class="nav-item" [ngClass]="{'collapse': bannerCollapsed}">
-    <button class="nav-btn" (click)="clearAllFilters()">Clear All</button>
+    <button class="nav-btn-selections" (click)="clearAllFilters()">Clear All</button>
   </div>
 </nav>
 
