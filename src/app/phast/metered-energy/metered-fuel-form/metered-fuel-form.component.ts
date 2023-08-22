@@ -78,7 +78,7 @@ export class MeteredFuelFormComponent implements OnInit {
       let fuel: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(this.inputs.fuelType);
       if (fuel) {
         if (this.settings.unitsOfMeasure === 'Metric') {
-          fuel.heatingValueVolume = this.convertPhastService.convertVal(fuel.heatingValueVolume, 'btuSCF', 'kJNm3');
+          fuel.heatingValueVolume = this.convertPhastService.convertVal(fuel.heatingValueVolume, 'btuscf', 'kJNm3');
         }
         this.inputs.heatingValue = fuel.heatingValueVolume;
       }

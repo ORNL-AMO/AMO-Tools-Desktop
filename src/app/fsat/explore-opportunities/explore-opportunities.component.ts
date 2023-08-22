@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ElementRef, ViewChild, SimpleChanges, HostListener } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { FsatService } from '../fsat.service';
@@ -28,6 +28,13 @@ export class ExploreOpportunitiesComponent implements OnInit {
   emitAddNewMod = new EventEmitter<boolean>();
 
   @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
 
   tabSelect: string = 'results';
   currentField: string;
@@ -36,6 +43,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   baselineSankey: FSAT;
   modificationSankey: FSAT;
   sankeyView: string = 'Baseline';
+  smallScreenTab: string = 'form';
 
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
@@ -63,6 +71,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
+      this.resizeTabs();
       this.getContainerHeight();
     }, 100);
   }
@@ -87,7 +96,17 @@ export class ExploreOpportunitiesComponent implements OnInit {
     if (this.containerHeight && this.resultTabs) {
       let tabHeight = this.resultTabs.nativeElement.clientHeight;
       this.helpHeight = this.containerHeight - tabHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.helpHeight = this.containerHeight - tabHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
     }
+  }
+
+  resizeTabs(){
+    if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+      this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+    }
+    
   }
 
   getSankeyData() {
@@ -127,5 +146,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
       body: '',
       setTimeoutVal: undefined
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

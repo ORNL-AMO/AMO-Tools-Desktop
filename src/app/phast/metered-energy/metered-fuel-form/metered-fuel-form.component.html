@@ -20,9 +20,9 @@
     <div class="form-group">
       <label for="heatingValue">Heating Value - HHV</label>
       <div class="input-group">
-        <input name="heatingValue" type="number" step="any" id="heatingValue" class="form-control" (focus)="changeField('fuelHeatingValue')"
+        <input name="heatingValue" type="number" step="100" id="heatingValue" class="form-control" (focus)="changeField('fuelHeatingValue')"
           [(ngModel)]="inputs.heatingValue" (input)="calculate()" onfocus="this.select();" />
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial' && inputs.fuelDescription == 'gas'" class="input-group-addon units">Btu/SCF</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial' && inputs.fuelDescription == 'gas'" class="input-group-addon units">Btu/scf</span>
         <span *ngIf="settings.unitsOfMeasure == 'Imperial' && inputs.fuelDescription == 'solidLiquid'" class="input-group-addon units">Btu/lb</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric' && inputs.fuelDescription == 'gas'" class="input-group-addon units">kJ/Nm
           <sup>3</sup>
@@ -36,7 +36,7 @@
         <!-- <a class="click-link small" (click)="showHideInputField()">Calculate using flow rate</a> -->
       </label>
       <div class="input-group">
-        <input id="fuelFlowRateInput" name="fuelFlowRateInput" type="number" step="any" class="form-control" (focus)="changeField('fuelFlowRateInput')"
+        <input id="fuelFlowRateInput" name="fuelFlowRateInput" type="number" step="100" class="form-control" (focus)="changeField('fuelFlowRateInput')"
           [(ngModel)]="inputs.fuelFlowRateInput" (input)="calculate()" onfocus="this.select();">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">scf/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm

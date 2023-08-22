@@ -73,7 +73,7 @@
         <span *ngIf="turbineForm.controls.operationType.value == 1">Fixed Power</span>
       </label>
       <div class="input-group">
-        <input name="operationValue" type="number" step="any" class="form-control" id="{{idString+'operationValue'}}"
+        <input name="operationValue" type="number" step="10" class="form-control" id="{{idString+'operationValue'}}"
           (input)="save()" [readonly]="!selected" formControlName="operationValue" (focus)="focusField('operationValue')"
            [ngClass]="{'indicate-different': isOperationValueDifferent()}">
         <span class="units input-group-addon">

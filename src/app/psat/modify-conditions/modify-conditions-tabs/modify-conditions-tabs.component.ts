@@ -303,4 +303,26 @@ export class ModifyConditionsTabsComponent implements OnInit {
       this.displayOperationsTooltip = false;
     }
   }
+
+  back(){
+    if (this.modifyTab == 'field-data'){      
+      this.psatTabService.modifyConditionsTab.next('motor');
+    } else if (this.modifyTab == 'motor'){      
+      this.psatTabService.modifyConditionsTab.next('pump-fluid');
+    } else if (this.modifyTab == 'pump-fluid'){      
+      this.psatTabService.modifyConditionsTab.next('operations');
+    }
+  } 
+
+  continue(){
+    if (this.modifyTab == 'operations'){      
+      this.psatTabService.modifyConditionsTab.next('pump-fluid');
+    } else if (this.modifyTab == 'pump-fluid'){      
+      this.psatTabService.modifyConditionsTab.next('motor');
+    } else if (this.modifyTab == 'motor'){      
+      this.psatTabService.modifyConditionsTab.next('field-data');
+    }
+  }
+
+  
 }

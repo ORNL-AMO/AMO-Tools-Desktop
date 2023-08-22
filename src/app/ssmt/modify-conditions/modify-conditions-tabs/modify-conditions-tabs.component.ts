@@ -229,4 +229,24 @@ export class ModifyConditionsTabsComponent implements OnInit {
       this.displayTurbineTooltip = false;
     }
   }
+
+  back(){
+    if (this.modelTab == 'turbine'){      
+      this.ssmtService.steamModelTab.next('header');
+    } else if (this.modelTab == 'header'){      
+      this.ssmtService.steamModelTab.next('boiler');
+    } else if (this.modelTab == 'boiler'){      
+      this.ssmtService.steamModelTab.next('operations');
+    }
+  } 
+
+  continue(){
+    if (this.modelTab == 'operations'){      
+      this.ssmtService.steamModelTab.next('boiler');
+    } else if (this.modelTab == 'boiler'){      
+      this.ssmtService.steamModelTab.next('header');
+    } else if (this.modelTab == 'header'){      
+      this.ssmtService.steamModelTab.next('turbine');
+    }
+  }
 }

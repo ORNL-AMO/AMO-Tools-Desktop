@@ -4,6 +4,7 @@ import { ImportService } from '../import.service';
 import { ImportExportData } from '../importExportModel';
 import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';
 import { DashboardService } from '../../dashboard.service';
+import * as pako from 'pako';
 
 @Component({
   selector: 'app-import-modal',
@@ -42,21 +43,41 @@ export class ImportModalComponent implements OnInit {
   setImportFile($event) {
     if ($event.target.files) {
       if ($event.target.files.length !== 0) {
-        let regex = /.json$/;
+        let regex = /.gz$/;
         if (regex.test($event.target.files[0].name)) {
-          this.fileReference = $event;
-          this.validFile = true;
-        } else {
-          let fr: FileReader = new FileReader();
-          fr.readAsText($event.target.files[0]);
-          fr.onloadend = (e) => {
+          let blob = new Blob([$event.target.files[0]], { type: 'application/gzip' });
+          let arrayBuffer;
+          let result;
+          let fileReader = new FileReader();
+          fileReader.onload = () => {
+            arrayBuffer = fileReader.result as ArrayBuffer;
+            result = pako.ungzip(new Uint8Array(arrayBuffer), { to: 'string' });
             try {
-              this.importJson = JSON.parse(JSON.stringify(fr.result));
+              this.importJson = JSON.parse(JSON.stringify(result));
               this.validFile = true;
             } catch (err) {
               this.validFile = false;
             }
           };
+          fileReader.readAsArrayBuffer(blob);
+        }
+        else {
+          regex = /.json$/;
+          if (regex.test($event.target.files[0].name)) {
+            this.fileReference = $event;
+            this.validFile = true;
+          } else {
+            let fr: FileReader = new FileReader();
+            fr.readAsText($event.target.files[0]);
+            fr.onloadend = (e) => {
+              try {
+                this.importJson = JSON.parse(JSON.stringify(fr.result));
+                this.validFile = true;
+              } catch (err) { 
+                this.validFile = false;
+              }
+            };
+          }
         }
       }
     }
@@ -78,6 +99,7 @@ export class ImportModalComponent implements OnInit {
 
   runImport(data: string) {
     let importData: ImportExportData = JSON.parse(data);
+
     if (importData.origin === "AMO-TOOLS-DESKTOP") {
       this.importInProgress = true;
       let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();

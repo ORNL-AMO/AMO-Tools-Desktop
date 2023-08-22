@@ -12,8 +12,6 @@ import { Settings } from '../../shared/models/settings';
 export class OpeningTutorialComponent implements OnInit {
   @Output('closeTutorial')
   closeTutorial = new EventEmitter<boolean>();
-  @Input()
-  idbStarted: boolean;
 
   showItem: Array<boolean> = [true, false, false, false, false, false, false];
 

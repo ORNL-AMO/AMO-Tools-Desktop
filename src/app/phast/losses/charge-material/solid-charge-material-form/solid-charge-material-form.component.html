@@ -25,7 +25,7 @@
     <div class="form-group">
       <label class="small" for="{{'materialSpecificHeatOfSolidMaterial_'+idString}}">Average Specific Heat of Solid</label>
       <div class="input-group" [ngClass]="{'indicate-different-db': checkSpecificHeatOfSolid(), 'invalid': chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'materialSpecificHeatOfSolidMaterial_'+lossIndex}}" type="number" step="any" min="0" class="form-control"
+        <input [readonly]="!baselineSelected" name="{{'materialSpecificHeatOfSolidMaterial_'+lossIndex}}" type="number" step="0.1" min="0" class="form-control"
           formControlName="materialSpecificHeatOfSolidMaterial" id="{{'materialSpecificHeatOfSolidMaterial_'+idString}}" onfocus="this.select();"
           (input)="save()" (focus)="focusField('materialSpecificHeatOfSolidMaterial')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
@@ -45,7 +45,7 @@
     <div class="form-group">
       <label class="small" for="{{'materialLatentHeatOfFusion_'+idString}}">Latent Heat of Fusion</label>
       <div class="input-group" [ngClass]="{'indicate-different-db': checkLatentHeatOfFusion(), 'invalid': chargeMaterialForm.controls.materialLatentHeatOfFusion.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'materialLatentHeatOfFusion_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="materialLatentHeatOfFusion"
+        <input [readonly]="!baselineSelected" name="{{'materialLatentHeatOfFusion_'+lossIndex}}" type="number" step="10" min="0" class="form-control" formControlName="materialLatentHeatOfFusion"
           id="{{'materialLatentHeatOfFusion_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('materialLatentHeatOfFusion')"
           >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
@@ -65,7 +65,7 @@
     <div class="form-group">
       <label class="small" for="{{'materialHeatOfLiquid_'+idString}}">Average Specific Heat of Molten Material</label>
       <div class="input-group" [ngClass]="{'indicate-different-db': checkHeatOfLiquid(), 'invalid': chargeMaterialForm.controls.materialHeatOfLiquid.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'materialHeatOfLiquid_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="materialHeatOfLiquid"
+        <input [readonly]="!baselineSelected" name="{{'materialHeatOfLiquid_'+lossIndex}}" type="number" step="0.1" min="0" class="form-control" formControlName="materialHeatOfLiquid"
           id="{{'materialHeatOfLiquid_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('materialHeatOfLiquid')"
           >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
@@ -85,7 +85,7 @@
     <div class="form-group">
       <label class="small" for="{{'materialMeltingPoint_'+idString}}">Melting Point</label>
       <div class="input-group" [ngClass]="{'indicate-different-db': checkMeltingPoint(), 'invalid': chargeMaterialForm.controls.materialMeltingPoint.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'materialMeltingPoint_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="materialMeltingPoint"
+        <input [readonly]="!baselineSelected" name="{{'materialMeltingPoint_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="materialMeltingPoint"
           id="{{'materialMeltingPoint_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('materialMeltingPoint')"
           >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -102,7 +102,7 @@
     <div class="form-group">
       <label class="small" for="{{'feedRate_'+idString}}">Charge Feed Rate (Wet)</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareSolidChargeFeedRate(), 'invalid': chargeMaterialForm.controls.feedRate.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'feedRate_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="feedRate"
+        <input [readonly]="!baselineSelected" name="{{'feedRate_'+lossIndex}}" type="number" step="100" min="0" class="form-control" formControlName="feedRate"
           id="{{'feedRate_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('feedRate')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
@@ -121,7 +121,7 @@
     <div class="form-group">
       <label class="small" for="{{'initialTemperature_'+idString}}">Charge Inlet Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareSolidInitialTemperature(), 'invalid': chargeMaterialForm.controls.initialTemperature.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'initialTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemperature"
+        <input [readonly]="!baselineSelected" name="{{'initialTemperature_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="initialTemperature"
           id="{{'initialTemperature_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('initialTemperature')"
           >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -142,7 +142,7 @@
     <div class="form-group">
       <label class="small" for="{{'chargeMaterialDischargeTemperature_'+idString}}">Charge Outlet Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareSolidDischargeTemperature(), 'error': warnings.dischargeTempWarning !== null, 'invalid': chargeMaterialForm.controls.chargeMaterialDischargeTemperature.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'chargeMaterialDischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="chargeMaterialDischargeTemperature"
+        <input [readonly]="!baselineSelected" name="{{'chargeMaterialDischargeTemperature_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="chargeMaterialDischargeTemperature"
           id="{{'chargeMaterialDischargeTemperature_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('chargeMaterialDischargeTemperature')"
           >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -194,7 +194,7 @@
     <div class="form-group">
       <label class="small" for="{{'waterVaporDischargeTemperature_'+idString}}">Water Vapor Discharge Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareSolidWaterVaporDischargeTemperature(), 'invalid': chargeMaterialForm.controls.waterVaporDischargeTemperature.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'waterVaporDischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="waterVaporDischargeTemperature"
+        <input [readonly]="!baselineSelected" name="{{'waterVaporDischargeTemperature_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="waterVaporDischargeTemperature"
           id="{{'waterVaporDischargeTemperature_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('waterVaporDischargeTemperature')"
           >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -246,7 +246,7 @@
     <div class="form-group">
       <label class="small" for="{{'heatOfReaction_'+idString}}">Heat of Reaction</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareSolidReactionHeat(), 'invalid': chargeMaterialForm.controls.heatOfReaction.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'heatOfReaction_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="heatOfReaction"
+        <input [readonly]="!baselineSelected" name="{{'heatOfReaction_'+lossIndex}}" type="number" step="10" min="10" class="form-control" formControlName="heatOfReaction"
           id="{{'heatOfReaction_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('heatOfReaction')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>

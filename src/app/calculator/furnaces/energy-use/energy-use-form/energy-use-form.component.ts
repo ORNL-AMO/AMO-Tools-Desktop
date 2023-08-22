@@ -151,7 +151,7 @@ export class EnergyUseFormComponent implements OnInit {
     }
 
     if (this.settings.unitsOfMeasure === 'Metric') {
-      this.flowCalculations.gasHeatingValue = this.convertUnitsService.roundVal(this.convertUnitsService.value(this.flowCalculations.gasHeatingValue).from('btuSCF').to('kJNm3'), 2);
+      this.flowCalculations.gasHeatingValue = this.convertUnitsService.roundVal(this.convertUnitsService.value(this.flowCalculations.gasHeatingValue).from('btuscf').to('kJNm3'), 2);
     }
     this.form = this.energyUseService.getFormFromObj(this.flowCalculations);
     this.calculate();

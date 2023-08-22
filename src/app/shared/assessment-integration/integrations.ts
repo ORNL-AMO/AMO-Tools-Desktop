@@ -24,7 +24,6 @@ export interface IntegrationState {
   status?: IntegrationStatusString,
   assessmentIntegrationStatus?: IntegrationStatusString | AssessmentStatusString,
   differingConnectedValues?: Array<ConnectedValueFormField>,
-  hasThreeWayConnection?: boolean;
   msgHTML?: string,
 }
 

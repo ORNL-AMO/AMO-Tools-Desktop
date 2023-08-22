@@ -3,7 +3,7 @@
     <div class="form-group">
       <label class="small" for="{{'totalHeatInput_'+idString}}">Total Heat Input for Burners</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareTotalHeatInput(), 'invalid': exhaustGasForm.controls.totalHeatInput.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'totalHeatInput_'+lossIndex}}" type="number" step="any" min="0"
+        <input [readonly]="!baselineSelected" name="{{'totalHeatInput_'+lossIndex}}" type="number" step="100" min="0"
           class="form-control" formControlName="totalHeatInput" id="{{'totalHeatInput_'+idString}}" onfocus="this.select();"
           (input)="save()" (focus)="focusField('totalHeatInput')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MMBtu/hr</span>

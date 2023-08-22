@@ -53,7 +53,7 @@
           <input class="form-control" type="number" name="compressedAirCost" id="{{'compressedAirCost_'+idString}}"
             formControlName="compressedAirCost" (input)="calculate()" (focus)="focusField('compressedAirCost')"
             (blur)="focusOut()">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/SCF</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/scf</span>
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/m<sup>3</sup></span>
         </div>
         <span class="alert-danger pull-right small"
@@ -104,7 +104,7 @@
           <input class="form-control" name="meterReading" id="{{'meterReading_'+idString}}"
             formControlName="meterReading" type="number" (input)="calculate()" (focus)="focusField('meterReading')"
             (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">scfm</span>
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>
         </div>
         <span class="alert-danger pull-right small"
@@ -222,7 +222,7 @@
         </div>
         <div class="col-6 text-center">
           <span class="small bold">{{individualResults.singleNozzleFlowRate | number:'.0-1'}}
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">scfm</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>
           </span>
         </div>
@@ -239,7 +239,7 @@
           <input class="form-control" name="consumption" id="{{'consumption_'+idString}}" formControlName="consumption"
             type="number" (input)="calculate()" (focus)="focusField('consumption')" (blur)="focusOut()"
             onfocus="this.select();">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kSCF/yr</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kscf/yr</span>
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
         </div>
         <span class="alert-danger pull-right small"
@@ -259,7 +259,7 @@
         </div>
         <div class="col-6 text-center">
           <span class="small bold">{{individualResults.flowRate | number:'1.0-1'}}
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">scfm</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>
           </span>
         </div>
@@ -365,7 +365,7 @@
           </div>
           <div class="col-6 text-center">
             <span class="small bold">{{form.controls.compressorSpecificPower.value | number:'1.0-2'}}
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/(100 SCFM)</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/(100 scfm)</span>
               <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
             </span>
           </div>
@@ -377,7 +377,7 @@
             <input class="form-control" name="compressorSpecificPower" id="{{'compressorSpecificPower_'+idString}}"
               formControlName="compressorSpecificPower" type="number" (input)="calculate()"
               (focus)="focusField('compressorSpecificPower')" (blur)="focusOut()" onfocus="this.select();">
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/(100 SCFM)</span>
+            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/(100 scfm)</span>
             <span class="units input-group-addon"
               *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
           </div>

@@ -124,7 +124,7 @@
       <div class="form-group">
         <label class="small" for="{{'avgSurfaceTemp'+idString}}">Average Surface Temperature</label>
         <div class="input-group">
-          <input  name="{{'avgSurfaceTemp_'+idString}}" type="number" step="any" class="form-control"
+          <input  name="{{'avgSurfaceTemp_'+idString}}" type="number" step="10" class="form-control"
             formControlName="avgSurfaceTemp" id="{{'avgSurfaceTemp'+idString}}" onfocus="this.select();" (input)="calculate()"
             (focus)="focusField('avgSurfaceTemp')" >
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -144,7 +144,7 @@
       <div class="form-group">
         <label class="small" for="{{'ambientTemp'+idString}}">Ambient Temperature</label>
         <div class="input-group">
-          <input  name="{{'ambientTemp_'+idString}}" type="number" step="any" class="form-control"
+          <input  name="{{'ambientTemp_'+idString}}" type="number" step="10" class="form-control"
             formControlName="ambientTemp" id="{{'ambientTemp'+idString}}" onfocus="this.select();" (input)="calculate()"
             (focus)="focusField('ambientTemp')" >
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -159,7 +159,7 @@
       <div class="form-group">
         <label class="small" for="{{'windVelocity'+idString}}">Wind Velocity</label>
         <div class="input-group">
-          <input  name="{{'windVelocity_'+idString}}" type="number" step="any" min="0"
+          <input  name="{{'windVelocity_'+idString}}" type="number" step="1" min="0"
             class="form-control" formControlName="windVelocity" id="{{'windVelocity'+idString}}" onfocus="this.select();"
             (input)="calculate()" (focus)="focusField('windVelocity')" >
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">mph</span>
@@ -215,7 +215,7 @@
       <div class="form-group">
         <label class="small" for="{{'surfaceArea'+idString}}">Total Outside Surface Area</label>
         <div class="input-group" >
-          <input  name="{{'surfaceArea_'+idString}}" type="number" step="any" min="0"
+          <input  name="{{'surfaceArea_'+idString}}" type="number" step="100" min="0"
             class="form-control" formControlName="surfaceArea" id="{{'surfaceArea'+idString}}" onfocus="this.select();"
             (input)="calculate()" (focus)="focusField('surfaceArea')" >
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft<sup>2</sup></span>
@@ -235,7 +235,7 @@
   
       <div class="form-group">
         <label class="small" for="{{'correctionFactor'+idString}}">Correction Factor</label>
-        <input  name="{{'correctionFactor_'+idString}}" type="number" step="any" class="form-control"
+        <input  name="{{'correctionFactor_'+idString}}" type="number" step="1" class="form-control"
           formControlName="correctionFactor" id="{{'correctionFactor'+idString}}" onfocus="this.select();" (input)="calculate()"
           (focus)="focusField('correctionFactor')">
       </div>

@@ -105,7 +105,7 @@
             Openings
           </label>
           <div class="input-group mod-max-width">
-            <input name="{{'lengthOfOpeningMod_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].lengthOfOpening"
+            <input name="{{'lengthOfOpeningMod_'+lossIndex}}" type="number" step="10" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].lengthOfOpening"
               id="lengthOfOpening" onfocus="this.select();" (input)="getArea(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
               (focus)="focusField('lengthOfOpening')" (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
@@ -131,7 +131,7 @@
         <div class="form-group explore-opps-formgroup" *ngIf="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].openingType != 'Round'">
           <label class="mod-value-label" for="{{'heightOfOpeningMod_'+lossIndex}}">Height of Openings</label>
           <div class="input-group mod-max-width">
-            <input name="{{'heightOfOpeningMod_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].heightOfOpening"
+            <input name="{{'heightOfOpeningMod_'+lossIndex}}" type="number" step="10" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].heightOfOpening"
               id="{{'heightOfOpeningMod_'+lossIndex}}" onfocus="this.select();" (input)="getArea(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
               (focus)="focusField('heightOfOpening')" (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>

@@ -686,7 +686,9 @@ export class TreasureHuntPptService {
         ]);
         for(let i = 0; i < 3; i++){
           let x: OpportunitySummary = teamOpportunities[i];
-          rows = this.getOpportunityTableRows(rows, x, settings);
+          if (x) {
+            rows = this.getOpportunityTableRows(rows, x, settings);
+          }
         }
         slideTeamTopOpps.addTable(rows, { x: 0.14, y: 2.5, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
       
@@ -694,8 +696,9 @@ export class TreasureHuntPptService {
         slideTeamAllOpps.addText('Team ' + team.team + ' - All Opportunities', slideTitleProperties);
         for(let i = 3; i < teamOpportunities.length; i++){
           let x: OpportunitySummary = teamOpportunities[i];
-          rows = this.getOpportunityTableRows(rows, x, settings);         
-         
+          if (x) {
+            rows = this.getOpportunityTableRows(rows, x, settings);    
+          }         
         }
         slideTeamAllOpps.addTable(rows, { x: 0.14, y: 1.2, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
       
@@ -831,7 +834,7 @@ export class TreasureHuntPptService {
       utilityUnit = 'kWh';
     } else if (utilityType == 'Compressed Air') {
       if (settings.unitsOfMeasure == 'Imperial') {
-        utilityUnit = 'kSCF';
+        utilityUnit = 'kscf';
       } else {
         utilityUnit = 'Nm<sup>3</sup>';
       }
@@ -1410,8 +1413,8 @@ export class TreasureHuntPptService {
       let utilityUnit: string;
       let utilityCostUnit: string;
       if (settings.unitsOfMeasure == 'Imperial') {
-        utilityUnit = 'kSCF';
-        utilityCostUnit = 'SCF';
+        utilityUnit = 'kscf';
+        utilityCostUnit = 'scf';
       } else {
         utilityUnit = 'm<sup>3</sup>';
         utilityCostUnit = 'm<sup>3</sup>';

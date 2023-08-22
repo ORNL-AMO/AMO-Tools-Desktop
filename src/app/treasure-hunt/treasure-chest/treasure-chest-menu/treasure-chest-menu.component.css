@@ -101,9 +101,20 @@ a.list-group-item.active:hover{
     .nav-btn{
         background: #2E4053;
         color: white;
-        border: none;
+        border: 1px solid #5b7591;
         line-height: 2;
         width: 100% !important;
+    }
+
+    .export-btn {
+        background: #2E4053;
+        color: white;
+        border: 1px solid #5b7591;
+        line-height: 2;
+        height: 45px;
+        width: 100% !important;
+        margin-bottom: 5px;
+        font-size: large;
     }
     
     .nav-btn-clear{

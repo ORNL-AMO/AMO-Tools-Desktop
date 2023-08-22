@@ -42,7 +42,7 @@
                 <label class="bold">Total Flow Rate</label>
                 <div class="text-center small">
                   <strong>{{outputs.flowRate | number: '1.0-2'}} </strong>
-                  <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</strong>
+                  <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">scfm</strong>
                   <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</strong>
                 </div>
               </div>
@@ -50,7 +50,7 @@
                 <label class="bold">Total Annual Compressed Air Leakage</label>
                 <div class="text-center small">
                   <strong>{{outputs.annualConsumption | number:'1.0-2'}} </strong>
-                  <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</strong>
+                  <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">scf</strong>
                   <strong *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></strong>
                 </div>
               </div>

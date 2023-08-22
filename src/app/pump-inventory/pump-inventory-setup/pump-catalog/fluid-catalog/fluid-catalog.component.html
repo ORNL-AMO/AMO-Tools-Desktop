@@ -3,7 +3,7 @@
     <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
     Fluid
 </label>
-<app-assessment-integration-status *ngIf="displayForm" [connectedToType]="'assessment'" [hasConnectedInventories]="hasConnectedInventories" [connectedFormGroupName]="'fluid'"></app-assessment-integration-status>
+<app-assessment-integration-status *ngIf="displayForm" [connectedToType]="'assessment'" [connectedFormGroupName]="'fluid'"></app-assessment-integration-status>
 
 <form *ngIf="displayForm" class="p-1" #formElement [formGroup]="form">
     <div class="form-group" *ngIf="displayOptions.fluidType">

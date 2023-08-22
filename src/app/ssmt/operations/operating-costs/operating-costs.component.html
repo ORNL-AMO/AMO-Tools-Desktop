@@ -4,7 +4,7 @@
     <div class="form-group">
       <label for="{{idString+'fuelCost'}}">Fuel</label>
       <div class="input-group">
-        <input name="fuelCost" min="0" type="number" step="any" class="form-control" id="{{idString+'fuelCost'}}"
+        <input name="fuelCost" min="0" type="number" step="0.1" class="form-control" id="{{idString+'fuelCost'}}"
           (input)="save()" formControlName="fuelCost" [ngClass]="{'indicate-different': isFuelCostDifferent()}"
           (focus)="focusField('fuelCost')" >
         <span class="units input-group-addon">$/{{settings.steamEnergyMeasurement}}</span>
@@ -19,7 +19,7 @@
     <div class="form-group">
       <label for="electricityCost">Electricity</label>
       <div class="input-group">
-        <input name="electricityCost" min="0" type="number" step="any" class="form-control" id="electricityCost"
+        <input name="electricityCost" min="0" type="number" step="0.01" class="form-control" id="electricityCost"
           (input)="save()" formControlName="electricityCost"
           [ngClass]="{'indicate-different': isElectricityCostDifferent()}" (focus)="focusField('electricityCost')"
           >
@@ -35,7 +35,7 @@
       <label for="{{idString+'makeUpWaterCost'}}">Make-Up Water Cost
       </label>
       <div class="input-group">
-        <input name="makeUpWaterCost" min="0" type="number" step="any" class="form-control"
+        <input name="makeUpWaterCost" min="0" type="number" step="0.01" class="form-control"
           id="{{idString+'makeUpWaterCost'}}" (input)="save()" formControlName="makeUpWaterCost"
           [ngClass]="{'indicate-different': isMakeUpWaterCostsDifferent()}" (focus)="focusField('makeUpWaterCost')"
           >

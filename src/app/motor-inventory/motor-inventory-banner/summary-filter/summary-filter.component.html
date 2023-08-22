@@ -1,15 +1,40 @@
-<nav class="navbar justify-content-start" #navbar>
+<nav class="navbar d-none d-lg-flex justify-content-start" #navbar>
     <app-department-dropdown></app-department-dropdown>
-    <div class="pl-1">
+    <div class="pl-1 pt-1">
         <app-efficiency-class-dropdown></app-efficiency-class-dropdown>
     </div>
-    <div class="pl-1">
+    <div class="pl-1 pt-1">
         <app-rated-power-dropdown></app-rated-power-dropdown>
     </div>
-    <div class="pl-1">
+    <div class="pl-1 pt-1">
         <app-rated-voltage-dropdown></app-rated-voltage-dropdown>
     </div>
-    <div class="ml-auto">
+    <div class="ml-auto pt-1">
         <app-selected-options></app-selected-options>
+    </div>
+</nav>
+
+<nav class="navbar d-block d-lg-none" #navbar>
+    <div class="nav-item flex-fill pl-1 pt-1" [ngClass]="{'dropup': !filtersCollaped}">
+        <span class="nav-link dropdown-toggle" (click)="collapseFilters()">
+            Filters
+        </span>
+    </div>
+    <div class="flex-fill pl-1 pt-1" [ngClass]="{'collapse': filtersCollaped}">
+        <app-department-dropdown></app-department-dropdown>
+    </div>
+    <div class="flex-fill pl-1 pt-1" [ngClass]="{'collapse': filtersCollaped}">
+        <app-efficiency-class-dropdown></app-efficiency-class-dropdown>
+    </div>
+    <div class="flex-fill pl-1 pt-1" [ngClass]="{'collapse': filtersCollaped}">
+        <app-rated-power-dropdown></app-rated-power-dropdown>
+    </div>
+    <div class="flex-fill pl-1 pt-1" [ngClass]="{'collapse': filtersCollaped}">
+        <app-rated-voltage-dropdown></app-rated-voltage-dropdown>
+    </div>
+    <div class="d-flex justify-content-end">
+        <div class="pt-1">
+            <app-selected-options></app-selected-options>
+        </div>
     </div>
 </nav>

@@ -29,6 +29,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   containerHeight: number;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -56,6 +57,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   assessmentTab: string;
   assessmentTabSub: Subscription;
   showWelcomeScreen: boolean = false;
+  smallScreenTab: string = 'form';
   constructor(private activatedRoute: ActivatedRoute,
     private airPropertiesService: AirPropertiesCsvService,
     private endUseDayTypeSetupService: DayTypeSetupService,
@@ -240,6 +242,9 @@ export class CompressedAirAssessmentComponent implements OnInit {
           footerHeight = this.footer.nativeElement.offsetHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
+        if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+          this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+        }
       }, 100);
     }
   }
@@ -294,5 +299,9 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.compressedAirAssessmentService.modalOpen.next(false);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

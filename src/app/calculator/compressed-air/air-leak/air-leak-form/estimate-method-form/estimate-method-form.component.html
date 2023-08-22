@@ -6,7 +6,7 @@
                 formControlName="leakRateEstimate" id="leakRateEstimate" onfocus="this.select();"
                 (input)="save()"
                 (focus)="changeField('leakRateEstimate')">
-                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">scfm</span>
                 <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>
                 <span class="alert-danger pull-right small"
                 *ngIf="estimateMethodForm.controls.leakRateEstimate.invalid && !estimateMethodForm.controls.leakRateEstimate.pristine">

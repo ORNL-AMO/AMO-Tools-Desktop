@@ -168,7 +168,7 @@
         <label *ngIf="openingLossesForm.controls.openingType.value == 'Round'" class="small" for="{{'lengthOfOpening'+idString}}">Diameter
           of Openings</label>
         <div class="input-group">
-          <input  name="{{'lengthOfOpening_'+idString}}" type="number" step="any" min="0"
+          <input  name="{{'lengthOfOpening_'+idString}}" type="number" step="10" min="0"
             class="form-control" formControlName="lengthOfOpening" id="{{'lengthOfOpening'+idString}}" onfocus="this.select();"
             (input)="calculate()" (focus)="focusField('lengthOfOpening')" >
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
@@ -184,7 +184,7 @@
       <div class="form-group" *ngIf="openingLossesForm.controls.openingType.value != 'Round'">
         <label class="small" for="{{'heightOfOpening'+idString}}">Height of Openings</label>
         <div class="input-group">
-          <input  name="{{'heightOfOpening_'+idString}}" type="number" step="any" min="0"
+          <input  name="{{'heightOfOpening_'+idString}}" type="number" step="10" min="0"
             class="form-control" formControlName="heightOfOpening" id="{{'heightOfOpening'+idString}}" onfocus="this.select();"
             (input)="calculate()" (focus)="focusField('heightOfOpening')" >
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>

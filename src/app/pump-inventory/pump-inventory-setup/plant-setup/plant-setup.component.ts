@@ -50,7 +50,6 @@ export class PlantSetupComponent implements OnInit {
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
 
     if (this.pumpInventoryData.existingDataUnits && this.pumpInventoryData.existingDataUnits != this.oldSettings.unitsOfMeasure) {
-      
       this.oldSettings = this.getExistingDataSettings();
       this.showUpdateDataReminder = true;
     }

@@ -5,8 +5,21 @@
     <app-treasure-hunt-banner [assessment]="assessment"></app-treasure-hunt-banner>
   </div>
   <!--end header-->
+
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'system-setup'">
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link" *ngIf="subTab == 'settings'">Assessment Basics</a>
+      <a class="nav-link" *ngIf="subTab == 'operation-costs'">Energy Usage and Cost</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Help</a>
+    </div>
+  </div>
+
   <div *ngIf="mainTab == 'system-setup'" class="assessment-container tab-content">
-    <div class="assessment-panel-container lookup-form modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}" [ngStyle]="{'height.px': containerHeight}">
+    <div class="assessment-panel-container lookup-form modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="subTab == 'settings'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)" [(settings)]="settings" [assessment]="assessment"
         (updateSettings)="getSettings()">
       </app-system-basics>
@@ -14,7 +27,7 @@
       </app-operation-costs>
 
     </div>
-    <div class="assessment-panel-container" [ngStyle]="{'height.px': containerHeight}">
+    <div class="assessment-panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}" [ngStyle]="{'height.px': containerHeight}">
       <app-help-panel [currentTab]="subTab"></app-help-panel>
     </div>
   </div>
@@ -29,7 +42,7 @@
   </div>
 
   
-  <div class="report-container mx-0" *ngIf="mainTab == 'report'">
+  <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
       <app-treasure-hunt-report [assessment]="assessment" [settings]="settings" [directory]="directory" [containerHeight]="containerHeight">
       </app-treasure-hunt-report>
   </div>

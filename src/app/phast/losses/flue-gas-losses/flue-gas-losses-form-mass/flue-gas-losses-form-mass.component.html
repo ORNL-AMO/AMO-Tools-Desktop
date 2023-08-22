@@ -63,7 +63,7 @@
     <div class="form-group">
       <label class="small" for="{{'oxygenCalculationMethod'+idString}}">Percent Oxygen Or Excess Air?</label>
       <select name="{{'oxygenCalculationMethod_'+lossIndex}}" class="form-control" (change)="changeMethod()"
-        formControlName="oxygenCalculationMethod" id="{{'oxygenCalculationMethod'+idString}}"
+        formControlName="oxygenCalculationMethod" id="{{'oxygenCalculationMethod'+idString}}" step = "any"
         (focus)="focusField('oxygenCalculationMethod')"
         [ngClass]="{'indicate-different': compareMassOxygenCalculationMethod(), 'invalid': flueGasLossForm.controls.oxygenCalculationMethod.invalid}">
         <option *ngFor="let method of calculationMethods" [ngValue]="method">{{method}}</option>
@@ -75,7 +75,7 @@
         <label class="small" for="{{'o2InFlueGas'+idString}}">O<sub>2</sub> In Flue Gas</label>
         <div class="input-group"
           [ngClass]="{'indicate-different': compareMassExcessAirPercentage(), 'error': warnings.o2Warning !== null, 'invalid': flueGasLossForm.controls.o2InFlueGas.invalid}">
-          <input [readonly]="!baselineSelected" name="{{'o2InFlueGas_'+lossIndex}}" type="number" step="0.5" min="0"
+          <input [readonly]="!baselineSelected" name="{{'o2InFlueGas_'+lossIndex}}" type="number" step="1" min="0"
             max="20.5" class="form-control" formControlName="o2InFlueGas" id="{{'o2InFlueGas'+idString}}"
             onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('o2InFlueGas')">
           <span class="input-group-addon units">%</span>
@@ -163,7 +163,7 @@
       <label class="small" for="{{'ashDischargeTemperature'+idString}}">Ash Discharge Temperature</label>
       <div class="input-group"
         [ngClass]="{'indicate-different': compareMassAshDischargeTemperature(), 'invalid': flueGasLossForm.controls.ashDischargeTemperature.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'ashDischargeTemperature_'+lossIndex}}" type="number" step="any"
+        <input [readonly]="!baselineSelected" name="{{'ashDischargeTemperature_'+lossIndex}}" type="number" step="10"
           class="form-control" formControlName="ashDischargeTemperature" id="{{'ashDischargeTemperature'+idString}}"
           onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('ashDischargeTemperature')">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
