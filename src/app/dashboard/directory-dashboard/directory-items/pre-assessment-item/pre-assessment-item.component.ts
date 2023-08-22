@@ -48,6 +48,7 @@ export class PreAssessmentItemComponent implements OnInit {
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private directoryDbService: DirectoryDbService) { }
 
   ngOnInit() {
+    this.calculator.selected = false;
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.directory = this.directoryDbService.getById(this.calculator.directoryId);
       this.setDirectories();
@@ -67,6 +68,10 @@ export class PreAssessmentItemComponent implements OnInit {
 
   async setDirectories() {
     this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
+  }
+
+  updateSelectedStatus() {
+    this.directoryDashboardService.updateSelectedStatus.next(true);
   }
 
 

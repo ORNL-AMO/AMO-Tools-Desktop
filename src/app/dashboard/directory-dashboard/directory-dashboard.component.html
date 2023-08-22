@@ -27,7 +27,7 @@
                     'list-item': (dashboardView == 'list'),
                     'hidden': (directoryItem.isShown == false)
             }">
-                <app-pre-assessment-item *ngIf="directoryItem.type == 'calculator' && directory.calculators.length > 0"
+                <app-pre-assessment-item *ngIf="directory.calculators.length > 0 && directoryItem.type == 'calculator' && directoryItem.calculator.preAssessments"
                     [calculator]="directoryItem.calculator" [index]="directoryItem.calculatorIndex">
                 </app-pre-assessment-item>
                 <app-assessment-item *ngIf="directoryItem.type == 'assessment'" [assessment]="directoryItem.assessment">

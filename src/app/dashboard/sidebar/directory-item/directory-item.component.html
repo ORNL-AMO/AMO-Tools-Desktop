@@ -9,6 +9,8 @@
   <div class="directory-item"
     *ngFor="let directoryItem of directoryItems | directoryDashboardFilter:sortBy:filterDashboardBy"
     [ngClass]="{'hidden': (directoryItem.isShown == false && directoryItem.type != 'directory') || directory.collapsed == true, 'selected-directory': directory.id == selectedDirectoryId}">
+    <app-pre-assessment-item *ngIf="directoryItem.type == 'calculator' && directoryItem.calculator.preAssessments" [directoryItem]="directoryItem">
+    </app-pre-assessment-item>
     <app-assessment-item *ngIf="directoryItem.type == 'assessment'" [assessment]="directoryItem.assessment">
     </app-assessment-item>
     <app-directory-item *ngIf="directoryItem.type == 'directory'" [directory]="directoryItem.subDirectory">

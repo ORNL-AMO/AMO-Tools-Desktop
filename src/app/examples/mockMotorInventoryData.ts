@@ -1185,4 +1185,5 @@ export const MockMotorInventory: InventoryItem = {
     "name": "Motor Inventory Example",
     "appVersion": "0.7.0-beta",
     "isExample": true,
+    "selected": false,
 }
