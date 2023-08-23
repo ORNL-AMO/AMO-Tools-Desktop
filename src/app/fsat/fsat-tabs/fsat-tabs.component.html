@@ -42,25 +42,25 @@
       <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': stepTab == 'system-basics'}">
         <span class="fa fa-chevron-left"></span></a>
     </li>
-    <li class="page-item" [ngClass]="{'active': stepTab == 'system-basics'}">
+    <li class="page-item" [ngClass]="{'active': stepTab == 'system-basics'}" *ngIf="stepTab == 'system-basics'">
       <a class="nav-link small" (click)="changeStepTab('system-basics')" [ngClass]="settingsClassStatus">
-        <span *ngIf="stepTab != 'system-basics'" class="step-number">1</span><span *ngIf="stepTab == 'system-basics'">Assessment Settings</span></a>
+        <span class="step-number">1</span>Assessment Settings</a>
     </li>
-    <li class="page-item" [ngClass]="{'active': stepTab == 'fan-operations'}">
+    <li class="page-item" [ngClass]="{'active': stepTab == 'fan-operations'}" *ngIf="stepTab == 'fan-operations'">
       <a class="nav-link small" (click)="changeStepTab('fan-operations')" [ngClass]="operationsTabStatus">
-        <span *ngIf="stepTab != 'fan-operations'" class="step-number">2</span><span *ngIf="stepTab == 'fan-operations'">Operations</span></a>
+        <span class="step-number">2</span>Operations</a>
     </li>
-    <li class="page-item" [ngClass]="{'active': stepTab == 'fan-setup'}">
+    <li class="page-item" [ngClass]="{'active': stepTab == 'fan-setup'}" *ngIf="stepTab == 'fan-setup'">
       <a class="nav-link small" (click)="changeStepTab('fan-setup')" [ngClass]="fanClassStatus">
-        <span *ngIf="stepTab != 'fan-setup'" class="step-number">3</span><span *ngIf="stepTab == 'fan-setup'">Fan &amp; Fluid</span></a>
+        <span class="step-number">3</span>Fan &amp; Fluid</a>
     </li>
-    <li class="page-item" [ngClass]="{'active': stepTab == 'fan-motor'}">
+    <li class="page-item" [ngClass]="{'active': stepTab == 'fan-motor'}" *ngIf="stepTab == 'fan-motor'">
       <a class="nav-link small" (click)="changeStepTab('fan-motor')" [ngClass]="motorClassStatus">
-        <span *ngIf="stepTab != 'fan-motor'" class="step-number">4</span><span *ngIf="stepTab == 'fan-motor'">Motor</span></a>
+        <span class="step-number">4</span>Motor</a>
     </li>
-    <li class="page-item" [ngClass]="{'active': stepTab == 'fan-field-data'}">
+    <li class="page-item" [ngClass]="{'active': stepTab == 'fan-field-data'}" *ngIf="stepTab == 'fan-field-data'">
       <a class="nav-link small" (click)="changeStepTab('fan-field-data')" [ngClass]="fieldDataClassStatus">
-        <span *ngIf="stepTab != 'fan-field-data'" class="step-number">5</span><span *ngIf="stepTab == 'fan-field-data'">Field Data</span></a>
+        <span class="step-number">5</span>Field Data</a>
     </li>
     <li class="page-item">
       <a class="nav-link small" (click)="continue()" [disabled]="!getCanContinue()">

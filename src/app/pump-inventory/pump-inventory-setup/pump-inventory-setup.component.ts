@@ -20,6 +20,7 @@ export class PumpInventorySetupComponent implements OnInit {
   isModalOpen: boolean;
   helpPanelTabSub: Subscription;
   initPlantSetup: boolean = false;
+  smallScreenTab: string = 'form';
   constructor(private pumpInventoryService: PumpInventoryService, private egridService: EGridService,
     private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
 
@@ -53,5 +54,9 @@ export class PumpInventorySetupComponent implements OnInit {
 
   setTab(str: string) {
     this.pumpInventoryService.helpPanelTab.next(str);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

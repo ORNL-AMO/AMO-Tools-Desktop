@@ -4,3 +4,12 @@
     background-color: #ececec;
 }
 
+.nav-item .dropdown-toggle{
+    color: white;
+    background: #84b641;
+}
+
+.nav-link{
+    padding: 4px;
+}
+

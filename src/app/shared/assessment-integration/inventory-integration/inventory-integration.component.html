@@ -4,13 +4,14 @@
         <div class="d-flex flex-row">
             <label class="w-50">
                 <span class="integration-label">
-                    <span *ngIf="connectedInventoryData.connectedItem">Connected Inventory Item</span>
+                    <span *ngIf="connectedInventoryData.connectedItem.inventoryType === 'motor'">Connected Motor Item</span>
+                    <span *ngIf="connectedInventoryData.connectedItem.inventoryType === 'pump'">Connected Pump Item</span>
                 </span>
             </label>
             <div class="w-50 input-group justify-content-between">
                 <div>
-                    <a class="click-link connected-inventory p-1" (click)="goToInventory(connectedInventoryData.connectedItem)">
-                        <span class="">{{connectedInventoryData.connectedItem.name}}</span>
+                    <a class="click-link connected-inventory p-1" (click)="goToConnectedItem(connectedInventoryData.connectedItem)">
+                        <span>{{connectedInventoryData.connectedItem.name}}</span>
                     </a>
                 </div>
                 <button class="btn btn-outline-danger p-1 px-2" (click)="disconnectInventory()"> 
@@ -24,14 +25,14 @@
         <div *ngFor="let item of connectedItems" (click)="focusField('connected-owner-inventory')" class="p-2 px-3">
             <div class="d-flex flex-row">
                 <label class="w-50">
-                    <span class="integration-label">
-                        Connected to Inventory Item
-                    </span>
+                    <span *ngIf="item.inventoryType === 'pump'" class="integration-label">Connected Motor Item</span>
+                    <span *ngIf="item.assessmentName" class="integration-label">Connected Pump Assessment</span>
                 </label>
                 <div class="w-50 input-group justify-content-between">
                     <div>
-                        <a class="click-link connected-inventory p-1" (click)="goToInventory(item)">
-                            <span class="">{{item.name}}</span>
+                        <a class="click-link connected-inventory p-1" (click)="goToConnectedItem(item)">
+                            <span *ngIf="item.inventoryType === 'pump'">{{item.name}}</span>
+                            <span *ngIf="item.assessmentName">{{item.assessmentName}}</span>
                         </a>
                     </div>
                 </div>

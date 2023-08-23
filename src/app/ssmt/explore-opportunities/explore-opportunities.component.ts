@@ -37,6 +37,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   baselineSankey: SSMT;
   modificationSankey: SSMT;
   sankeyView: string = 'Baseline';
+  smallScreenTab: string = 'form';
 
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
@@ -128,5 +129,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
       body: '',
       setTimeoutVal: undefined
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

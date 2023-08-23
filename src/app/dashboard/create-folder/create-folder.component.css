@@ -1,3 +1,9 @@
 .btn{
   padding: 6px;
 }
+
+@media screen and (max-width: 1024px) {
+  .modal {
+    width: 100vw;
+  }
+}

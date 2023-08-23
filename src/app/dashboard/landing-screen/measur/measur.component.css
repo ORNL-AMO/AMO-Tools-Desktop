@@ -74,3 +74,27 @@
       from {font-size: 3rem}
       to {font-size: 6rem}
   }
+
+
+  @media screen and (max-width: 992px) {
+
+    .text-block{
+      margin-right: auto !important;
+      margin-left: auto !important;
+    }
+  
+    .image-block{
+      margin-right: auto !important;
+      margin-left: auto !important;
+  
+    }
+
+    .text {
+      font-weight: 700;
+      font-size: 2em;
+      color:#156739;
+      opacity: 1;
+      transition: all 1.5s ease-in-out;
+    }
+
+  }

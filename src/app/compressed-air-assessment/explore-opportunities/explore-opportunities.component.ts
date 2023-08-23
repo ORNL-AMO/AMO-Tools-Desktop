@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfileSummary } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
@@ -16,6 +16,14 @@ import { ExploreOpportunitiesService } from './explore-opportunities.service';
 export class ExploreOpportunitiesComponent implements OnInit {
   @Input()
   containerHeight: number;
+  
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
 
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment
@@ -34,6 +42,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   displayAddStorage: boolean;
   settings: Settings;
   showCascadingAndSequencer: boolean;
+  smallScreenTab: string = 'form';
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -85,6 +94,12 @@ export class ExploreOpportunitiesComponent implements OnInit {
       this.secondaryAssessmentTab = val;
     });
 
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
   ngOnDestroy() {
@@ -187,4 +202,15 @@ export class ExploreOpportunitiesComponent implements OnInit {
     });
     this.displayAddStorage = displayAddStorage;
   }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
+  resizeTabs() {
+    if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+      this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+    }    
+  }
+
 }

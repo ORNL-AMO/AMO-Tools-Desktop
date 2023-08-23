@@ -44,7 +44,6 @@ export interface SimpleChart {
         xaxis2?: AxisObj,
         yaxis2?: AxisObj,
         xaxis3?: AxisObj,
-        yaxis3?: AxisObj,
         margin: {
             t: number,
             b: number,

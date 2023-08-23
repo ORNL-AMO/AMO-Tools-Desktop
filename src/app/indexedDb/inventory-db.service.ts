@@ -78,4 +78,9 @@ export class InventoryDbService {
     inventory.modifiedDate = new Date();
     return this.dbService.add(this.storeName, inventory);
   }
+
+  bulkDeleteWithObservable(inventoryIds: Array<number>): Observable<any> {
+    // ngx-indexed-db returns Array<Array<T>>
+    return this.dbService.bulkDelete(this.storeName, inventoryIds);
+  }
 }

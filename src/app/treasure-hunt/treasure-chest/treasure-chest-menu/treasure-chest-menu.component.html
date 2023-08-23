@@ -1,6 +1,7 @@
 <nav class="navbar d-block d-lg-flex" #navbar>
   <div class="d-lg-none nav-item dropdown">
-    <button type="button" class="nav-btn" (click)="collapseBanner()">Sort & Filter 
+    <button type="button" class="export-btn" (click)="openExportModal()">Export Opportunities</button>
+    <button type="button" class="nav-btn" (click)="collapseBanner()">Options 
       <span *ngIf="!bannerCollapsed" class="fa fa-chevron-up"></span>
       <span *ngIf="bannerCollapsed" class="fa fa-chevron-down"></span>
     </button>
@@ -58,8 +59,7 @@
     <div class="btn-group-vertical d-lg-none w-100">
       <button type="button" class="nav-btn" (click)="selectAll()">Select All</button>
       <button type="button" class="nav-btn middle" (click)="deselectAll()">Deselect All</button>
-      <button type="button" class="nav-btn middle" (click)="openImportModal()">Import</button>
-      <button type="button" class="nav-btn" (click)="openExportModal()">Export</button>
+      <button type="button" class="nav-btn" (click)="openImportModal()">Import</button>
     </div>
   </div>
 

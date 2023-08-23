@@ -15,7 +15,7 @@
 
         </label>
         <div class="input-group">
-          <input name="combustionEfficiency" type="number" step="any" class="form-control"
+          <input name="combustionEfficiency" type="number" step="1" class="form-control"
             id="{{idString+'combustionEfficiency'}}" (input)="save()" [readonly]="!selected"
             formControlName="combustionEfficiency" (focus)="focusField('combustionEfficiency')" 
             [ngClass]="{'indicate-different': isCombustionEfficiencyDifferent()}">
@@ -36,7 +36,7 @@
           <a class="form-text small click-link" (click)="openBlowdownRateModal()">Calculate Blowdown Rate</a>
         </label>
         <div class="input-group">
-          <input name="blowdownRate" type="number" step="any" class="form-control" id="{{idString+'blowdownRate'}}"
+          <input name="blowdownRate" type="number" step="1" class="form-control" id="{{idString+'blowdownRate'}}"
             (input)="save()" [readonly]="!selected" formControlName="blowdownRate" (focus)="focusField('blowdownRate')"
              [ngClass]="{'indicate-different': isBlowdownRateDifferent()}">
           <span class="units input-group-addon">%</span>
@@ -99,7 +99,7 @@
       <div class="form-group">
         <label for="{{idString+'steamTemperature'}}">Steam Temperature</label>
         <div class="input-group">
-          <input name="steamTemperature" type="number" step="any" class="form-control"
+          <input name="steamTemperature" type="number" step="10" class="form-control"
             id="{{idString+'steamTemperature'}}" (input)="save()" [readonly]="!selected"
             formControlName="steamTemperature" (focus)="focusField('steamTemperature')" 
             [ngClass]="{'indicate-different': isSteamTemperatureDifferent()}">
@@ -128,7 +128,7 @@
       <div class="form-group">
         <label for="{{idString+'deaeratorVentRate'}}">Deaerator Vent Rate</label>
         <div class="input-group">
-          <input name="deaeratorVentRate" type="number" step="any" class="form-control"
+          <input name="deaeratorVentRate" type="number" step="0.1" class="form-control"
             id="{{idString+'deaeratorVentRate'}}" (input)="save()" [readonly]="!selected"
             formControlName="deaeratorVentRate" (focus)="focusField('deaeratorVentRate')" 
             [ngClass]="{'indicate-different': isDeaeratorVentRateDifferent()}">
@@ -147,7 +147,7 @@
       <div class="form-group">
         <label for="{{idString+'deaeratorPressure'}}">Deaerator Pressure</label>
         <div class="input-group">
-          <input name="deaeratorPressure" type="number" step="any" class="form-control"
+          <input name="deaeratorPressure" type="number" step="1" class="form-control"
             id="{{idString+'deaeratorPressure'}}" (input)="save()" [readonly]="!selected"
             formControlName="deaeratorPressure" (focus)="focusField('deaeratorPressure')" 
             [ngClass]="{'indicate-different': isDeaeratorPressureDifferent()}">

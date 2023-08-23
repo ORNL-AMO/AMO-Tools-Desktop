@@ -35,12 +35,12 @@
                             Reset Application Settings
                         </div>
                     </div>
-                    <div class="row toggle-btn pad-top-10" (click)="toggleResetSystemSettingsOption('example-assessments')">
+                    <div class="row toggle-btn pad-top-10" (click)="toggleResetSystemSettingsOption('example-items')">
                         <div class="col-2">
-                            <app-animated-checkmark [active]="resetExampleAssessments"></app-animated-checkmark>
+                            <app-animated-checkmark [active]="resetExampleItems"></app-animated-checkmark>
                         </div>
                         <div class="col-8 bottom-divider">
-                            Reset Example Assessments
+                            Reset Example Items
                         </div>
                     </div>
                     <div class="row toggle-btn pad-top-10" (click)="toggleResetSystemSettingsOption('user-assessments')">
@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger pull-right" (click)="resetSystemSettingsAccept()" [disabled]="!resetCustomMaterials && !resetUserAssessments && !resetExampleAssessments && !resetAppSettings" data-dismiss="modal">Accept</button>
+                <button type="button" class="btn btn-danger pull-right" (click)="resetSystemSettingsAccept()" [disabled]="!resetCustomMaterials && !resetUserAssessments && !resetExampleItems && !resetAppSettings" data-dismiss="modal">Accept</button>
                 <button type="button" class="btn btn-secondary pull-left" (click)="hideResetSystemSettingsModal()" data-dismiss="modal">Cancel</button>
             </div>
         </div>

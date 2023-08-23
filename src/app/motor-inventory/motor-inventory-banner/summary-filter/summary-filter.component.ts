@@ -6,9 +6,16 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./summary-filter.component.css']
 })
 export class SummaryFilterComponent implements OnInit {
+
+  filtersCollaped: boolean = true;
   
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  collapseFilters(){
+    this.filtersCollaped = !this.filtersCollaped;
+    window.dispatchEvent(new Event("resize"));
   }
 }

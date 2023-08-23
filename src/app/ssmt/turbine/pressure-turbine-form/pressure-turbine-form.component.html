@@ -64,7 +64,7 @@
         <span *ngIf="turbineForm.controls.operationType.value == 4">Minimum Flow</span>
       </label>
       <div class="input-group">
-        <input name="operationValue1" type="number" step="any" class="form-control"
+        <input name="operationValue1" type="number" step="10" class="form-control"
           id="{{idString+pressureTurbineString+'_operationValue1'}}" (input)="changeOperation2Validators()"
           [readonly]="!selected" formControlName="operationValue1" (focus)="focusField('operationValue1')"
            [ngClass]="{'indicate-different': isOperationValue1Different()}">

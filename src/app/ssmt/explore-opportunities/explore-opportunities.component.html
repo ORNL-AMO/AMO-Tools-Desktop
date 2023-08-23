@@ -1,66 +1,80 @@
-<div class="assessment-container ssmt modify-conditions panel-container">
-  <div *ngIf="modificationExists" class="assessment-panel-container lookup-form panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
-    <div class="header mr-2 ml-2">
-      <h3>Select Potential Adjustment Projects</h3>
+<div class="d-flex flex-column h-100 w-100">
+
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+        [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+        <a>Select Projects</a>
     </div>
-    <p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of
-      your system.</p>
-    <app-explore-opportunities-form [settings]="settings" (emitSave)="save($event)"
-      (changeField)="focusField($event)" [exploreModIndex]="modificationIndex" [(ssmt)]="assessment.ssmt">
-    </app-explore-opportunities-form>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+        [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+        <a>Details</a>
+    </div>
   </div>
-  <div *ngIf="!modificationExists" class="no-data assessment-panel-container lookup-form scroll-item" [ngStyle]="{'height.px': containerHeight}">
-    <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to find
-      efficiency
-      opportunities.
-    </h3>
-    <button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
-    <p>Data will be copied from your current baseline condition.</p>
+  <div class="assessment-container ssmt modify-conditions panel-container">
+    <div *ngIf="modificationExists" class="assessment-panel-container lookup-form panel-column scroll-item" [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
+      <div class="header mr-2 ml-2">
+        <h3>Select Potential Adjustment Projects</h3>
+      </div>
+      <p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of
+        your system.</p>
+      <app-explore-opportunities-form [settings]="settings" (emitSave)="save($event)"
+        (changeField)="focusField($event)" [exploreModIndex]="modificationIndex" [(ssmt)]="assessment.ssmt">
+      </app-explore-opportunities-form>
+    </div>
+    <div *ngIf="!modificationExists" class="no-data assessment-panel-container lookup-form scroll-item" [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
+      <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to find
+        efficiency
+        opportunities.
+      </h3>
+      <button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
+      <p>Data will be copied from your current baseline condition.</p>
+    </div>
+  
+  
+    <div class="assessment-panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+      <div class="d-flex flex-wrap tabs primary" #resultTabs>
+        <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+          <a class="border-left-0" (click)="setTab('results')">Results</a>
+        </div>
+        <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'sankey'}">
+          <a (click)="setTab('sankey')">Sankey</a>
+        </div>
+        <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+          <a (click)="setTab('help')">Help</a>
+        </div>
+      </div>
+      <div class="scroll-item" [ngStyle]="{'height.px': helpHeight}" *ngIf="tabSelect == 'help'">
+        <app-explore-opportunities-help>
+        </app-explore-opportunities-help>
+      </div>
+  
+      <div *ngIf="tabSelect == 'sankey' && modificationExists" class="scroll-item"
+        [ngStyle]="{'height.px': helpHeight}">
+          <div class="d-flex flex-column w-100">
+            <div class="btn-group mt-2 justify-content-center">
+              <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Baseline'" [ngClass]="{'active': sankeyView == 'Baseline'}">Baseline</button>
+              <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Modified'" [ngClass]="{'active': sankeyView == 'Modified'}">Modification</button>
+            </div>
+            <app-ssmt-sankey *ngIf="sankeyView == 'Baseline'" [appBackground]="true" [ssmt]="baselineSankey" [settings]="settings"
+              [isBaseline]="true"></app-ssmt-sankey>
+            
+            <app-ssmt-sankey *ngIf="sankeyView == 'Modified'" [appBackground]="true" [ssmt]="modificationSankey" [assessment]="assessment" [settings]="settings"
+              [isBaseline]="false"></app-ssmt-sankey>
+            </div>
+      </div>
+  
+      <div class="scroll-item" *ngIf="modificationExists && tabSelect == 'results'" [ngStyle]="{'height.px': helpHeight}">
+        <app-ssmt-results-panel [ssmt]="ssmt" [settings]="settings" [modificationIndex]="modificationIndex"></app-ssmt-results-panel>
+      </div>
+      <div *ngIf="!modificationExists && tabSelect != 'help'">
+        <!--Placeholder for help text -->
+        <p>Explore Opportunities to view results</p>
+      </div>
+  
+      <!-- End .help-panel -->
+    </div>
   </div>
 
-
-  <div class="assessment-panel-container">
-    <div class="d-flex flex-wrap tabs primary" #resultTabs>
-      <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
-        <a class="border-left-0" (click)="setTab('results')">Results</a>
-      </div>
-      <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'sankey'}">
-        <a (click)="setTab('sankey')">Sankey</a>
-      </div>
-      <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
-        <a (click)="setTab('help')">Help</a>
-      </div>
-    </div>
-    <div class="scroll-item" [ngStyle]="{'height.px': helpHeight}" *ngIf="tabSelect == 'help'">
-      <app-explore-opportunities-help>
-      </app-explore-opportunities-help>
-    </div>
-
-    <div *ngIf="tabSelect == 'sankey' && modificationExists" class="scroll-item"
-			[ngStyle]="{'height.px': helpHeight}">
-				<div class="d-flex flex-column w-100">
-					<div class="btn-group mt-2 justify-content-center">
-					  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Baseline'" [ngClass]="{'active': sankeyView == 'Baseline'}">Baseline</button>
-					  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Modified'" [ngClass]="{'active': sankeyView == 'Modified'}">Modification</button>
-					</div>
-					<app-ssmt-sankey *ngIf="sankeyView == 'Baseline'" [appBackground]="true" [ssmt]="baselineSankey" [settings]="settings"
-					  [isBaseline]="true"></app-ssmt-sankey>
-				  
-					<app-ssmt-sankey *ngIf="sankeyView == 'Modified'" [appBackground]="true" [ssmt]="modificationSankey" [assessment]="assessment" [settings]="settings"
-					  [isBaseline]="false"></app-ssmt-sankey>
-				  </div>
-		</div>
-
-    <div class="scroll-item" *ngIf="modificationExists && tabSelect == 'results'" [ngStyle]="{'height.px': helpHeight}">
-      <app-ssmt-results-panel [ssmt]="ssmt" [settings]="settings" [modificationIndex]="modificationIndex"></app-ssmt-results-panel>
-    </div>
-    <div *ngIf="!modificationExists && tabSelect != 'help'">
-      <!--Placeholder for help text -->
-      <p>Explore Opportunities to view results</p>
-    </div>
-
-    <!-- End .help-panel -->
-  </div>
 </div>
 
 <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"

@@ -421,11 +421,11 @@ export class ConvertUnitsService {
     }
   }
 
-  convertKSCFAndM3Value(val: number, oldSettings: Settings, newSettings: Settings): number {
+  convertKscfAndM3Value(val: number, oldSettings: Settings, newSettings: Settings): number {
     if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      return this.convertValue(val, 'kSCF', 'm3');
+      return this.convertValue(val, 'kscf', 'm3');
     } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      return this.convertValue(val, 'm3', 'kSCF');
+      return this.convertValue(val, 'm3', 'kscf');
     }
   }
 
@@ -553,7 +553,7 @@ export class ConvertUnitsService {
     newSettings.otherFuelCost = this.convertDollarsPerMMBtuAndGJ(newSettings.otherFuelCost, oldSettings, newSettings);
     //imperial: $/gal, metric: $/L
     newSettings.waterWasteCost = this.convertDollarsPerGalAndLiter(newSettings.waterWasteCost, oldSettings, newSettings);
-    //imperial: $/SCF, metric: $/m2
+    //imperial: $/scf, metric: $/m2
     newSettings.compressedAirCost = this.convertDollarsPerFt3AndM3(newSettings.compressedAirCost, oldSettings, newSettings);
     return newSettings;
   }

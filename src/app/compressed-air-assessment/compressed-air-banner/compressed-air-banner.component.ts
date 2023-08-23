@@ -25,6 +25,7 @@ export class CompressedAirBannerComponent implements OnInit {
   secondaryAssessmentTabSub: Subscription;
   secondaryAssessmentTab: string;
   compresssedAirAssessmentSub: Subscription;
+  bannerCollapsed: boolean = true;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private dashboardService: DashboardService,  private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
@@ -55,6 +56,39 @@ export class CompressedAirBannerComponent implements OnInit {
     });
   }
 
+  collapseBanner() {
+    this.bannerCollapsed = !this.bannerCollapsed;
+    window.dispatchEvent(new Event("resize"));
+  }
+
+  back(){
+    if (this.mainTab == 'calculators') {
+      this.compressedAirAssessmentService.mainTab.next('sankey');
+    } else if (this.mainTab == 'sankey') {
+      this.compressedAirAssessmentService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.compressedAirAssessmentService.mainTab.next('diagram');
+    } else if (this.mainTab == 'diagram') {
+      this.compressedAirAssessmentService.mainTab.next('assessment');
+    } else if (this.mainTab == 'assessment') {
+      this.compressedAirAssessmentService.mainTab.next('system-setup');
+    }
+  }
+
+  continue() {
+    if (this.mainTab == 'system-setup') {
+      this.compressedAirAssessmentService.mainTab.next('assessment');
+    } else if (this.mainTab == 'assessment') {
+      this.compressedAirAssessmentService.mainTab.next('diagram');
+    } else if (this.mainTab == 'diagram') {
+      this.compressedAirAssessmentService.mainTab.next('report');
+    } else if (this.mainTab == 'report') {
+      this.compressedAirAssessmentService.mainTab.next('sankey');
+    } else if (this.mainTab == 'sankey') {
+      this.compressedAirAssessmentService.mainTab.next('calculators');
+    }
+  }
+
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
     this.selectedModificationSub.unsubscribe();
@@ -76,6 +110,7 @@ export class CompressedAirBannerComponent implements OnInit {
     if (str == 'system-setup' || str == 'diagram' || this.isBaselineValid) {
       this.compressedAirAssessmentService.mainTab.next(str);
     }
+    this.collapseBanner();
   }
 
   selectModification() {
@@ -91,4 +126,25 @@ export class CompressedAirBannerComponent implements OnInit {
       this.compressedAirAssessmentService.secondaryAssessmentTab.next(str);
     }
   }
+
+  backAssessmentTab(){
+    if (this.selectedModification) {
+      if (this.secondaryAssessmentTab == 'graphs') {
+        this.compressedAirAssessmentService.secondaryAssessmentTab.next('table');
+      } else if (this.secondaryAssessmentTab == 'table') {
+        this.compressedAirAssessmentService.secondaryAssessmentTab.next('modifications');
+      }
+    }
+  }
+
+  continueAssessmentTab() {
+    if (this.selectedModification) {
+      if (this.secondaryAssessmentTab == 'modifications') {
+        this.compressedAirAssessmentService.secondaryAssessmentTab.next('table');
+      } else if (this.secondaryAssessmentTab == 'table') {
+        this.compressedAirAssessmentService.secondaryAssessmentTab.next('graphs');
+      }
+    }
+  }
+
 }

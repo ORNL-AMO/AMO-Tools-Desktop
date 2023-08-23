@@ -72,7 +72,7 @@ export class AirLeakTreasureHuntService {
       currentCosts = currentEnergyUsage.compressedAirCosts;
       unitStr = 'm3';
       if (settings.unitsOfMeasure == 'Imperial') {
-        unitStr = 'kSCF';
+        unitStr = 'kscf';
       }
     } else if (airLeakSurvey.airLeakSurveyInput.facilityCompressorData.utilityType == 1) {
       currentCosts = currentEnergyUsage.electricityCosts;

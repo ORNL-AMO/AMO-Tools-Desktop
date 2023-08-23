@@ -11,11 +11,14 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { IntegrationStateService } from './integration-state.service';
 import { ConvertMotorInventoryService } from '../../motor-inventory/convert-motor-inventory.service';
 import { HelperFunctionsService } from '../helper-services/helper-functions.service';
+import { PSAT } from '../models/psat';
+import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 
 @Injectable()
 export class MotorIntegrationService {
   constructor(private inventoryDbService: InventoryDbService, 
     private settingsDbService: SettingsDbService,
+    private assessmentDbService: AssessmentDbService,
     private convertMotorInventoryService: ConvertMotorInventoryService,
     private helperService: HelperFunctionsService,
     private integrationStateService: IntegrationStateService) { }
@@ -75,10 +78,6 @@ export class MotorIntegrationService {
         selectedPump.connectedAssessments.map(connectedAssessment => {
             let newConnectedFromState: MotorItem = this.helperService.copyObject(selectedMotorItem);
             connectedAssessment.connectedFromState.pumpMotor = this.setPumpFieldsFromMotor(connectedAssessment.connectedFromState.pumpMotor, newConnectedFromState);
-            let assessmentIntegrationState = this.integrationStateService.assessmentIntegrationState.getValue();
-            assessmentIntegrationState.hasThreeWayConnection = true;
-            console.log('3 way connection', assessmentIntegrationState);
-            this.integrationStateService.assessmentIntegrationState.next(assessmentIntegrationState)
         });
       }
       motorInventory.motorInventoryData.departments.forEach(dept => {
@@ -149,12 +148,21 @@ export class MotorIntegrationService {
     return pumpItem;
   }
 
+  getConnectedPsatItem(connectedItem: ConnectedItem) {
+    let existingAssessment = this.assessmentDbService.findById(connectedItem.assessmentId);
+    return existingAssessment;
+  }
 
-  setConnectedPumpItems(motorItem: MotorItem) {
+  setConnectedItems(motorItem: MotorItem) {
     if (motorItem.connectedItems && motorItem.connectedItems.length > 0) {
-      motorItem.connectedItems = motorItem.connectedItems.filter(connectedPump => {
-        let existingPump = this.getConnectedPumpItem(connectedPump);
-        return existingPump;
+      motorItem.connectedItems = motorItem.connectedItems.filter(connectedItem => {
+        let existingItem: PumpItem | PSAT;
+        if (connectedItem.inventoryType === 'pump' && connectedItem.inventoryId) {
+          existingItem = this.getConnectedPumpItem(connectedItem);
+        } else if (connectedItem.inventoryType === 'motor' && connectedItem.assessmentId) {
+          existingItem = this.getConnectedPsatItem(connectedItem);
+        }
+        return existingItem;
       });
       if (motorItem.connectedItems.length === 0) {
         motorItem.connectedItems = undefined;

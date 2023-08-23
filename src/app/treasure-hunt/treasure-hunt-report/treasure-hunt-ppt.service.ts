@@ -834,7 +834,7 @@ export class TreasureHuntPptService {
       utilityUnit = 'kWh';
     } else if (utilityType == 'Compressed Air') {
       if (settings.unitsOfMeasure == 'Imperial') {
-        utilityUnit = 'kSCF';
+        utilityUnit = 'kscf';
       } else {
         utilityUnit = 'Nm<sup>3</sup>';
       }
@@ -1413,8 +1413,8 @@ export class TreasureHuntPptService {
       let utilityUnit: string;
       let utilityCostUnit: string;
       if (settings.unitsOfMeasure == 'Imperial') {
-        utilityUnit = 'kSCF';
-        utilityCostUnit = 'SCF';
+        utilityUnit = 'kscf';
+        utilityCostUnit = 'scf';
       } else {
         utilityUnit = 'm<sup>3</sup>';
         utilityCostUnit = 'm<sup>3</sup>';

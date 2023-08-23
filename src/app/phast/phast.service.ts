@@ -628,7 +628,7 @@ export class PhastService {
       //kPa -> Psig
       inputs.gasPressure = this.convertUnitsService.value(inputs.gasPressure).from('kPa').to('psi');
       //kJNm3 -> btuSCF
-      inputs.gasHeatingValue = this.convertUnitsService.value(inputs.gasHeatingValue).from('kJNm3').to('btuSCF');
+      inputs.gasHeatingValue = this.convertUnitsService.value(inputs.gasHeatingValue).from('kJNm3').to('btuscf');
       let results: FlowCalculationsOutput = this.processHeatingApiService.flowCalculations(inputs);
       results.flow = this.convertUnitsService.value(results.flow).from('ft3').to('m3');
       results.totalFlow = this.convertUnitsService.value(results.totalFlow).from('ft3').to('m3');
