@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { FilterOption, Treasure, TreasureHunt } from '../../../../shared/models/treasure-hunt';
 import { Settings } from '../../../../shared/models/settings';
 import { TreasureChestMenuService } from '../treasure-chest-menu.service';
@@ -17,6 +17,8 @@ import { TreasureHuntService } from '../../../treasure-hunt.service';
 export class CalculatorTypeDropdownComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  dropdownShown: boolean
 
   displayCalculatorTypeDropdown: boolean = false;
   calculatorTypeOptions: Array<FilterOption> = [];
@@ -32,6 +34,12 @@ export class CalculatorTypeDropdownComponent implements OnInit {
       let oppData = this.opportuntityCardsService.getOpportunityCardsData(treasureHunt, this.settings);
       this.setCalculatorOptions(oppData);
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    if (!this.dropdownShown && !changes.dropdownShown.firstChange){
+      this.displayCalculatorTypeDropdown = false;
+    }
   }
 
   ngOnDestroy() {
