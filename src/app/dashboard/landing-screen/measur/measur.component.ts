@@ -15,9 +15,11 @@ export class MeasurComponent implements OnInit {
 
   showText() {
     this.textShow = true;
+    window.dispatchEvent(new Event("resize"));
   }
 
   hideText() {
     this.textShow = false;
+    window.dispatchEvent(new Event("resize"));
   }
 }

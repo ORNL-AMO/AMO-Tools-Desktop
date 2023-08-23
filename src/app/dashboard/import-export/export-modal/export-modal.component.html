@@ -136,19 +136,21 @@
                     </ul>
                 </div>
             </div>
-            <div class="modal-footer justify-content-between">
-                <div *ngIf="!canExport" class="w-100">
-                    <p class="text-center small danger">Too much data to export, please choose less data to
-                        export.</p>
+            <div class="modal-footer d-flex">
+                <div *ngIf="!canExportJson" class="export-modal-left">
+                    <p class="text-center small danger export-text">Exporting to a zipped file - this may take some time depending on the size of your data.</p>
                 </div>
-                <button class="btn btn-secondary" (click)="hideExportModal()">Cancel</button>
-                <div class="d-flex">
-                    <div class="form-group d-flex mr-2">
-                        <label for="exportName"> Name your file:</label>
+                <div class="d-flex export-modal-right">
+                    <button class="btn btn-secondary mr-2" (click)="hideExportModal()">Cancel</button>
+
+                    <div class="form-group d-flex">
+                        <label for="exportName"> Name your file:&nbsp;</label>
                         <input type="text" class="form-control" id="exportName" [(ngModel)]="exportName">
                     </div>
-                    <button class="btn btn-primary ml-2" [disabled]="!canExport" (click)="buildExportJSON()">Export
-                        as .json</button>
+                    <button class="btn btn-primary ml-2" *ngIf ="canExportJson" (click)="buildExportJSON()">Export
+                        </button>
+                    <button class="btn btn-primary ml-2" *ngIf ="!canExportJson" (click)="buildExportZip()">Export
+                        </button>
                 </div>
             </div>
         </div>

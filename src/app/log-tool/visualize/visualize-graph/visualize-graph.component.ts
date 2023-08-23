@@ -7,9 +7,7 @@ import { PlotlyService } from 'angular-plotly.js';
 import { LogToolDataService } from '../../log-tool-data.service';
 import * as _ from 'lodash';
 import { DOCUMENT } from '@angular/common';
-import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysis.service';
-import { HelperFunctionsService } from '../../../shared/helper-services/helper-functions.service';
-import { VisualizeMenuService } from '../visualize-menu/visualize-menu.service';
+
 
 @Component({
   selector: 'app-visualize-graph',
@@ -45,7 +43,8 @@ export class VisualizeGraphComponent implements OnInit {
     private plotlyService: PlotlyService) {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   ngOnDestroy() {
     this.selectedGraphDataSubscription.unsubscribe();
@@ -58,7 +57,7 @@ export class VisualizeGraphComponent implements OnInit {
         let userInputDelay: number = this.visualizeService.userInputDelay.getValue();
         return interval(userInputDelay);
       })
-    ).subscribe((graphObj: GraphObj) => {
+      ).subscribe((graphObj: GraphObj) => {
       // todo 6284 save data is creating zone.js lag
       // this.logToolDbService.saveData();
       this.selectedGraphObj = graphObj;
@@ -71,6 +70,9 @@ export class VisualizeGraphComponent implements OnInit {
         this.renderGraph();
       }
     });
+
+    // if navigating from map data/time without day type analysis
+    this.logToolDataService.loadingSpinner.next({show: false, msg: 'Finalizing Data Setup...'});
     window.dispatchEvent(new Event("resize"));
   }
 

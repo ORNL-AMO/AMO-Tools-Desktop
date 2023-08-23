@@ -224,7 +224,11 @@ export class AssessmentItemComponent implements OnInit {
 
   deleteConnectedInventoryItem(assessment: Assessment) {
     if (assessment.psat && assessment.psat.connectedItem) {
-      this.psatIntegrationService.removeConnectedInventory(assessment.psat.connectedItem, assessment.id);
+      if (assessment.psat.connectedItem.inventoryType === 'pump') {
+        this.psatIntegrationService.removeConnectedPumpInventory(assessment.psat.connectedItem, assessment.id);
+      } else if (assessment.psat.connectedItem.inventoryType === 'motor') {
+        this.psatIntegrationService.removeMotorConnectedItem(assessment.psat.connectedItem);
+      }
     }
   }
 

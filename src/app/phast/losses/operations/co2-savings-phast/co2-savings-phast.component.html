@@ -33,7 +33,7 @@
           <div class="input-group">
             <input class="form-control" name="totalFuelEmissionOutputRate" 
             [ngClass]="{'indicate-different': co2SavingsDifferent.totalFuelEmissionOutputRate}"
-            formControlName="totalFuelEmissionOutputRate" type="number"
+            formControlName="totalFuelEmissionOutputRate" type="number" step="1"
             (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
               CO<sub>2</sub>/MMBtu</span>
@@ -50,7 +50,7 @@
       <div class="input-group">
         <input class="form-control" name="totalNaturalGasEmissionOutputRate"
         [ngClass]="{'indicate-different': co2SavingsDifferent.totalNaturalGasEmissionOutputRate}"
-          formControlName="totalNaturalGasEmissionOutputRate" type="number"
+          formControlName="totalNaturalGasEmissionOutputRate" type="number" step="1"
           (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
         <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
           CO<sub>2</sub>/MMBtu</span>
@@ -75,7 +75,7 @@
       <div class="input-group">
         <input class="form-control" name="totalCoalEmissionOutputRate"
         [ngClass]="{'indicate-different': co2SavingsDifferent.totalCoalEmissionOutputRate}"
-          formControlName="totalCoalEmissionOutputRate" type="number"
+          formControlName="totalCoalEmissionOutputRate" type="number" step="1"
           (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
         <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
           CO<sub>2</sub>/MMBtu</span>
@@ -114,7 +114,7 @@
       <div class="input-group">
         <input class="form-control" name="totalOtherEmissionOutputRate"
         [ngClass]="{'indicate-different': co2SavingsDifferent.totalOtherEmissionOutputRate}"
-          formControlName="totalOtherEmissionOutputRate" type="number"
+          formControlName="totalOtherEmissionOutputRate" type="number" step="1"
           (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
         <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
           CO<sub>2</sub>/MMBtu</span>
@@ -133,7 +133,7 @@
                 Zip code
             </label>
             <div class="input-group">
-                <input name="zipcode" type="text" class="form-control" formControlName="zipcode" id="zipcode"
+                <input name="zipcode" type="text" step="1" class="form-control" formControlName="zipcode" id="zipcode"
                 onfocus="this.select();" (input)="setZipcode()" (focus)="focusField('zipcode')">
             </div>
             <span class="alert-danger pull-right small" *ngIf="zipCodeSubRegionData.length === 0 && isBaseline">
@@ -163,7 +163,7 @@
             Total Emission Output Rate
         </label>
         <div class="input-group">
-            <input name="totalEmissionOutputRate" type="number" class="form-control"
+            <input name="totalEmissionOutputRate" type="number" step="1" class="form-control"
             [ngClass]="{'indicate-different': co2SavingsDifferent.totalEmissionOutputRate}"
             formControlName="totalEmissionOutputRate" id="totalEmissionOutputRate" onfocus="this.select();"
             (input)="setUserEmissionsOutput()" (focus)="focusField('totalEmissionOutputRate')">

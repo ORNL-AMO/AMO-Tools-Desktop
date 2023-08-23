@@ -44,7 +44,7 @@
     <div class="form-group">
       <label class="small" for="{{'vfr'+idString}}">Total Volumetric Flow Rate</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareVfr(), 'invalid': exhaustGasForm.controls.vfr.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'vfr_'+lossIndex}}" type="number" step="any" min="0" class="form-control"
+        <input [readonly]="!baselineSelected" name="{{'vfr_'+lossIndex}}" type="number" step="10" min="0" class="form-control"
           formControlName="vfr" id="{{'vfr'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('vfr')"
           >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">cfm</span>

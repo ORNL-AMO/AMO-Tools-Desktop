@@ -14,8 +14,6 @@ export class DashboardTutorialComponent implements OnInit {
   closeTutorial = new EventEmitter<boolean>();
   @Input()
   inTutorials: boolean;
-  @Input()
-  idbStarted: boolean;
 
   showItem: Array<boolean> = [true, false, false, false, false, false, false, false, false, false, false, false];
 

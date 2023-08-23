@@ -121,7 +121,7 @@
       <div class="form-group">
         <label class="small" for="{{'draftPressure'+idString}}">Furnace Draft Pressure</label>
         <div class="input-group">
-          <input  name="{{'draftPressure_'+idString}}" type="number" min="0" class="form-control" formControlName="draftPressure" id="{{'draftPressure'+idString}}"
+          <input  name="{{'draftPressure_'+idString}}" type="number" min="0" step ="0.1" class="form-control" formControlName="draftPressure" id="{{'draftPressure'+idString}}"
             onfocus="this.select();" (input)="calculate()" (focus)="focusField('draftPressure')" >
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in. H
             <sub>2</sub>O</span>
@@ -160,7 +160,7 @@
       <div class="form-group">
         <label class="small" for="{{'leakageGasTemperature'+idString}}">Temperature of Leaking Gases</label>
         <div class="input-group" >
-          <input  name="{{'leakageGasTemperature_'+idString}}" type="number" step="any" class="form-control" formControlName="leakageGasTemperature"
+          <input  name="{{'leakageGasTemperature_'+idString}}" type="number" step="10" class="form-control" formControlName="leakageGasTemperature"
             id="{{'leakageGasTemperature'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('leakageGasTemperature')"
             >
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -188,7 +188,7 @@
       <div class="form-group">
         <label class="small" for="{{'ambientTemperature'+idString}}">Ambient Temperature</label>
         <div class="input-group" >
-          <input  name="{{'ambientTemperature_'+idString}}" type="number" step="any" class="form-control" formControlName="ambientTemperature"
+          <input  name="{{'ambientTemperature_'+idString}}" type="number" step="10" class="form-control" formControlName="ambientTemperature"
             id="{{'ambientTemperature'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('ambientTemperature')"
             >
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>

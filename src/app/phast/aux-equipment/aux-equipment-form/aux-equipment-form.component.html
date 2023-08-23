@@ -36,7 +36,7 @@
   <div class="form-group" *ngIf="equipment.motorPower == 'Calculated'">
     <label for="supplyVoltage">Supply Voltage</label>
     <div class="input-group">
-      <input name="supplyVoltage" type="number" step="any" id="supplyVoltage" class="form-control"
+      <input name="supplyVoltage" type="number" step="10" id="supplyVoltage" class="form-control"
         (focus)="focusField('supplyVoltage')" [(ngModel)]="equipment.supplyVoltage" (input)="calculate()"
         onfocus="this.select();" />
       <span class="input-group-addon units">V</span>
@@ -45,7 +45,7 @@
   <div class="form-group" *ngIf="equipment.motorPower == 'Calculated'">
     <label for="averageCurrent">Average Current</label>
     <div class="input-group">
-      <input name="averageCurrent" type="number" step="any" id="averageCurrent" class="form-control"
+      <input name="averageCurrent" type="number" step="10" id="averageCurrent" class="form-control"
         (focus)="focusField('averageCurrent')" [(ngModel)]="equipment.averageCurrent" (input)="calculate()"
         onfocus="this.select();" />
       <span class="input-group-addon units">A</span>
@@ -53,14 +53,14 @@
   </div>
   <div class="form-group" *ngIf="equipment.motorPower == 'Calculated'">
     <label for="powerFactor">Power Factor</label>
-    <input name="powerFactor" type="number" step="any" id="powerFactor" class="form-control"
+    <input name="powerFactor" type="number" step="0.1" id="powerFactor" class="form-control"
       (focus)="focusField('powerFactor')" [(ngModel)]="equipment.powerFactor" (input)="calculate()"
       onfocus="this.select();" />
   </div>
   <div class="form-group" *ngIf="equipment.motorPower == 'Rated'">
     <label for="totalConnectedPower">Total Connected Power</label>
     <div class="input-group">
-      <input name="totalConnectedPower" type="number" step="any" id="totalConnectedPower" class="form-control"
+      <input name="totalConnectedPower" type="number" step="10" id="totalConnectedPower" class="form-control"
         (focus)="focusField('totalConnectedPower')" [(ngModel)]="equipment.totalConnectedPower" (input)="calculate()"
         onfocus="this.select();" />
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>

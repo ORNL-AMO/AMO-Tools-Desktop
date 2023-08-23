@@ -5,13 +5,14 @@
     </div>
   </div>
 
-  <div *ngIf="inSetup || baseline" class="mx-3 my-0">
+  <div *ngIf="hasConnectedPumpInventory && inSetup" class="mx-3 my-0">
     <app-assessment-integration-status class="p-3" [connectedToType]="'inventory'" 
-    [hasConnectedInventories]="hasConnectedInventories"
     [connectedFormGroupName]="'pump'"></app-assessment-integration-status>
   </div>
 
-  <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
+  <div [ngClass]="{'p-4': inSetup && !hasConnectedPumpInventory,
+                  'px-4 pb-4 pt-0': inSetup && hasConnectedPumpInventory,
+                   'p-3': !inSetup }">
     <div *ngIf="psatForm.controls.pumpType.value != 11" class="form-group"
       [ngClass]="{'indicate-different': isPumpTypeDifferent()}">
       <label for="{{'pumpType_'+idString}}">Pump Type</label>
@@ -110,8 +111,8 @@
     </div>
   </div>
 
-  <div class="mx-3 my-0">
-    <app-assessment-integration-status class="p-3" *ngIf="inSetup" [connectedToType]="'inventory'" [connectedFormGroupName]="'fluid'"></app-assessment-integration-status>
+  <div class="mx-3 my-0" *ngIf="hasConnectedPumpInventory && inSetup">
+    <app-assessment-integration-status class="p-3" [connectedToType]="'inventory'" [connectedFormGroupName]="'fluid'"></app-assessment-integration-status>
   </div>
 
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">

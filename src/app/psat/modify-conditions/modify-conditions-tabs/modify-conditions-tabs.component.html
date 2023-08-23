@@ -31,37 +31,45 @@
 
 <div class="d-flex d-lg-none tabs subtabs progress-tabs psat flex-wrap flex-fill">
   <ul class="pagination d-flex justify-content-between tabs psat subtabs progress-tabs flex-fill">
-    <li class="page-item" [ngClass]="{'active': modifyTab == 'operations'}">
+    <li class="page-item" [ngClass]="{'disabled':  modifyTab == 'operations'}">
+      <a class="nav-link small" (click)="back()" [ngClass]="{'disabled':  modifyTab == 'operations'}">
+        <span class="fa fa-chevron-left"></span></a>
+    </li>
+    <li class="page-item" [ngClass]="{'active': modifyTab == 'operations'}" *ngIf="modifyTab == 'operations'">
       <a class="nav-link small" (click)="tabChange('operations')">
-        <span *ngIf="modifyTab != 'operations'">1</span><span *ngIf="modifyTab == 'operations'">Operations</span>
+        Operations
         <span (mouseenter)="showTooltip('operations')" (mouseleave)="hideTooltip('operations')" class="badge gray-badge" [ngClass]="operationsBadgeClass">
         </span>
       </a>
       <app-tabs-tooltip [display]="operationsBadgeHover" [reveal]="displayOperationsTooltip" [badgeClass]="operationsBadgeClass"></app-tabs-tooltip>
     </li>
-    <li class="page-item" [ngClass]="{'active': modifyTab == 'pump-fluid'}">
+    <li class="page-item" [ngClass]="{'active': modifyTab == 'pump-fluid'}" *ngIf="modifyTab == 'pump-fluid'">
       <a class="nav-link small" (click)="tabChange('pump-fluid')">
-        <span *ngIf="modifyTab != 'pump-fluid'">2</span><span *ngIf="modifyTab == 'pump-fluid'">Pump &amp; Fluid</span>
+        Pump &amp; Fluid
         <span (mouseenter)="showTooltip('pumpFluid')" (mouseleave)="hideTooltip('pumpFluid')" class="badge gray-badge" [ngClass]="pumpFluidBadgeClass">
         </span>
       </a>
       <app-tabs-tooltip [display]="pumpFluidBadgeHover" [reveal]="displayPumpFluidTooltip" [badgeClass]="pumpFluidBadgeClass"></app-tabs-tooltip>
     </li>
-    <li class="page-item" [ngClass]="{'active': modifyTab == 'motor'}">
+    <li class="page-item" [ngClass]="{'active': modifyTab == 'motor'}" *ngIf="modifyTab == 'motor'">
       <a class="nav-link small" (click)="tabChange('motor')">
-        <span *ngIf="modifyTab != 'motor'">3</span><span *ngIf="modifyTab == 'motor'">Motor</span>
+        Motor
         <span (mouseenter)="showTooltip('motor')" (mouseleave)="hideTooltip('motor')" class="badge gray-badge" [ngClass]="motorBadgeClass">
         </span>
       </a>
       <app-tabs-tooltip [display]="motorBadgeHover" [reveal]="displayMotorTooltip" [badgeClass]="motorBadgeClass"></app-tabs-tooltip>
     </li>
-    <li class="page-item" [ngClass]="{'active': modifyTab == 'field-data'}">
+    <li class="page-item" [ngClass]="{'active': modifyTab == 'field-data'}" *ngIf="modifyTab == 'field-data'">
       <a class="nav-link small" (click)="tabChange('field-data')">
-        <span *ngIf="modifyTab != 'field-data'">4</span><span *ngIf="modifyTab == 'field-data'">Field Data</span>
+        Field Data
         <span (mouseenter)="showTooltip('fieldData')" (mouseleave)="hideTooltip('fieldData')" class="badge gray-badge" [ngClass]="fieldDataBadgeClass">
         </span>
       </a>
       <app-tabs-tooltip [display]="fieldDataBadgeHover" [reveal]="displayFieldDataTooltip" [badgeClass]="fieldDataBadgeClass"></app-tabs-tooltip>
+    </li>
+    <li class="page-item" [ngClass]="{'disabled':  modifyTab == 'field-data'}">
+      <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled':  modifyTab == 'field-data'}">
+        <span class="fa fa-chevron-right"></span></a>
     </li>
   </ul>
 </div>

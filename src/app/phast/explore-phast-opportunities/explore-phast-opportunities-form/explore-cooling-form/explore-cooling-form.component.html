@@ -60,7 +60,7 @@
         <div class="text-center">
           <label for="baselineGasFlow" class="baseline-value-label">Baseline Gas Flow</label>
           <div class="text-muted text-center baseline-value-input">{{ obj.loss.flowRate | number: '1.0-0' }}
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">scfm</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm
               <sup>3</sup>/min</span>
           </div>
@@ -74,7 +74,7 @@
             <input name="{{'gasFlowMod_'+index}}" type="number" step="any" min="0" class="form-control" id="{{'gasFlowMod_'+index}}"
               onfocus="this.select();" (input)="checkModificationWarning(modifiedLosses[index], index)" (focus)="focusField('gasFlow')"
               (blur)="focusOut()" [(ngModel)]="modifiedLosses[index].loss.flowRate">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCFM</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">scfm</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm
               <sup>3</sup>/min</span>
           </div>

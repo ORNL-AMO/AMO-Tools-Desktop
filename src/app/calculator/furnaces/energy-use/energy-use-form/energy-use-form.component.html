@@ -114,7 +114,7 @@
   <div class="form-group">
     <label class="small" for="gasHeatingValue">Gas Heating Value - HHV</label>
     <div class="input-group">
-      <input name="gasHeatingValue" formControlName="gasHeatingValue" type="number" step="any" class="form-control" id="gasHeatingValue"
+      <input name="gasHeatingValue" formControlName="gasHeatingValue" type="number" step="100" class="form-control" id="gasHeatingValue"
         (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasHeatingValue')">
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">
         <span>Btu/ft<sup>3</sup>

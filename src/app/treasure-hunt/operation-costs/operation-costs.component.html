@@ -338,7 +338,7 @@
           <div class="input-group">
             <input type="number" step="0.01" class="form-control" [(ngModel)]="settings.compressedAirCost" id="compressedAirCost"
               (input)="setSaveSettings()" (focus)="focusField('operation-costs')">
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/SCF</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/scf</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/m<sup>3</sup></span>
           </div>
         </div>
@@ -352,7 +352,7 @@
                 [(ngModel)]="treasureHunt.currentEnergyUsage.compressedAirUsage" (input)="save()">
               <span class="units input-group-addon"
                 *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup></span>
-              <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kSCF</span>
+              <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kscf</span>
             </div>
           </div>
           <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.compressedAirUsed == true">
@@ -372,7 +372,7 @@
               <input name="totalEmissionOutputRate" type="number" class="form-control" 
                 [(ngModel)]="treasureHunt.currentEnergyUsage.compressedAirCO2OutputRate"
                 id="totalEmissionOutputRate" (input)="save()" (focus)="focusField('totalEmissionOutputRate')">
-              <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg CO<sub>2</sub>/SCF</span>
+              <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg CO<sub>2</sub>/scf</span>
               <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg CO<sub>2</sub>/m<sup>3</sup></span>
             </div>
           </div>

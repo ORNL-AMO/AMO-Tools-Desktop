@@ -10,6 +10,7 @@ import { CompressedAirAssessmentService } from '../../compressed-air-assessment.
 export class CalculatorTabsComponent implements OnInit {
   calcTabSub: Subscription;
   calcTab: string;
+  calcTabsCollapsed: boolean = true;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -23,6 +24,11 @@ export class CalculatorTabsComponent implements OnInit {
   }
 
   changeCalcTab(str: string) {
-    this.compressedAirAssessmentService.calcTab.next(str);
+    this.compressedAirAssessmentService.calcTab.next(str);    
+    this.collapseCalcTabs();
+  }
+
+  collapseCalcTabs() {
+    this.calcTabsCollapsed = !this.calcTabsCollapsed;
   }
 }

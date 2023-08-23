@@ -5,39 +5,42 @@
         <span class="fa fa-folder pl-1 pr-1"></span>
         <a [routerLink]="['/directory-dashboard', directory.id]">{{directory.name}}</a>
         <i class="fa fa-edit pull-right" (click)="showEditModal()"></i>
-    </div>
-    <div class="card-body summary-card-body scroll-item">
-        <ul>
-            <li class="pb-2"
-                *ngFor="let directoryItem of directoryItems | directoryDashboardFilter:sortBy:filterDashboardBy"
-                [ngClass]="{'hidden': directoryItem.isShown == false}">
-                <span *ngIf="directoryItem.type == 'directory'">
-                    <i class="fa fa-folder pl-1 pr-1" aria-hidden="true"></i> <a
-                        [routerLink]="['/directory-dashboard', directoryItem.subDirectory.id]">{{directoryItem.subDirectory.name}}</a>
-                </span>
-                <span *ngIf="directoryItem.type == 'assessment'">
-                    <img *ngIf="directoryItem.assessment.type == 'PSAT'" class="psat icon-image pl-1 pr-1"
-                        src="assets/images/pump-icon.png">
-                    <img *ngIf="directoryItem.assessment.type == 'PHAST'" class="phast icon-image pl-1 pr-1"
-                        src="assets/images/ico-phast-diagram.png">
-                    <img *ngIf="directoryItem.assessment.type == 'FSAT'" class="fsat icon-image pl-1 pr-1"
-                        src="assets/images/ico-fsat-diagram.png">
-                    <img *ngIf="directoryItem.assessment.type == 'SSMT'" class="fsat icon-image pl-1 pr-1"
-                        src="assets/images/ico-ssmt-diagram.png">
-                    <img *ngIf="directoryItem.assessment.type == 'TreasureHunt'" class="fsat icon-image pl-1 pr-1"
-                        src="assets/images/treasure-hunt.png">
-                    <img *ngIf="directoryItem.assessment.type == 'WasteWater'" class="fsat icon-image pl-1 pr-1"
-                        src="assets/images/waste-water-icon.png">
-                    <img *ngIf="directoryItem.assessment.type == 'CompressedAir'" class="fsat icon-image pl-1 pr-1"
-                        src="assets/images/ca-icon.png">
-                    <a (click)="goToAssessment(directoryItem.assessment)">{{directoryItem.assessment.name}}</a>
-                </span>
-                <span *ngIf="directoryItem.type == 'inventory'">
-                    <img class="fsat icon-image pl-1 pr-1" src="assets/images/motor-inventory-icon.png">
-                    <a (click)="navigateWithSidebarOptions('/motor-inventory/', directoryItem.inventoryItem)">{{directoryItem.inventoryItem.name}}</a>
-                </span>
-            </li>
-        </ul>
+        </div>
+        <div class="card-body summary-card-body scroll-item">
+            <ul>
+                <li class="pb-2"
+                    *ngFor="let directoryItem of directoryItems | directoryDashboardFilter:sortBy:filterDashboardBy"
+                    [ngClass]="{'hidden': directoryItem.isShown == false}">
+                    <span *ngIf="directoryItem.type == 'directory'">
+                        <i class="fa fa-folder pl-1 pr-1" aria-hidden="true"></i> <a
+                            [routerLink]="['/directory-dashboard', directoryItem.subDirectory.id]">{{directoryItem.subDirectory.name}}</a>
+                    </span>
+                    <span *ngIf="directoryItem.type == 'assessment'">
+                        <img *ngIf="directoryItem.assessment.type == 'PSAT'" class="psat icon-image pl-1 pr-1"
+                            src="assets/images/pump-icon.png">
+                        <img *ngIf="directoryItem.assessment.type == 'PHAST'" class="phast icon-image pl-1 pr-1"
+                            src="assets/images/ico-phast-diagram.png">
+                        <img *ngIf="directoryItem.assessment.type == 'FSAT'" class="fsat icon-image pl-1 pr-1"
+                            src="assets/images/ico-fsat-diagram.png">
+                        <img *ngIf="directoryItem.assessment.type == 'SSMT'" class="fsat icon-image pl-1 pr-1"
+                            src="assets/images/ico-ssmt-diagram.png">
+                        <img *ngIf="directoryItem.assessment.type == 'TreasureHunt'" class="fsat icon-image pl-1 pr-1"
+                            src="assets/images/treasure-hunt.png">
+                        <img *ngIf="directoryItem.assessment.type == 'WasteWater'" class="fsat icon-image pl-1 pr-1"
+                            src="assets/images/waste-water-icon.png">
+                        <img *ngIf="directoryItem.assessment.type == 'CompressedAir'" class="fsat icon-image pl-1 pr-1"
+                            src="assets/images/ca-icon.png">
+                        <a (click)="goToAssessment(directoryItem.assessment)">{{directoryItem.assessment.name}}</a>
+                    </span>
+                    <span *ngIf="directoryItem.type == 'inventory'">
+                        <img *ngIf="directoryItem.inventoryItem.type === 'pumpInventory'" class="icon-image pl-1 pr-1"
+                            src="assets/images/pump-inventory-icon.png">
+                        <img *ngIf="directoryItem.inventoryItem.type === 'motorInventory'" class="icon-image pl-1 pr-1"
+                            src="assets/images/motor-inventory-icon.png">
+                        <a (click)="navigateWithSidebarOptions(directoryItem.inventoryItem)">{{directoryItem.inventoryItem.name}}</a>
+                    </span>
+                </li>
+            </ul>
     </div>
     <div class="card-footer summary-card-footer">
         <div class="last-updated pull-right">Last updated {{directory.modifiedDate | date }}</div>

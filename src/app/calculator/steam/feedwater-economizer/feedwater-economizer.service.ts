@@ -182,7 +182,7 @@ export class FeedwaterEconomizerService {
     input.fuelTemp = this.convertUnitsService.value(input.fuelTemp).from('F').to('C');
     input.ambientAirTemperature = this.convertUnitsService.value(input.ambientAirTemperature).from('F').to('C');
     //todo
-    input.higherHeatingVal = this.convertUnitsService.value(input.higherHeatingVal).from('btuSCF').to('kJNm3');
+    input.higherHeatingVal = this.convertUnitsService.value(input.higherHeatingVal).from('btuscf').to('kJNm3');
 
     return input;
   }
@@ -196,7 +196,7 @@ export class FeedwaterEconomizerService {
     if (settings.unitsOfMeasure == 'Imperial') {
       input.energyRateInput = this.convertUnitsService.value(input.energyRateInput).from('MMBtu').to('GJ');
       input.steamPressure = this.convertUnitsService.value(input.steamPressure).from('psig').to('MPaa');
-      input.higherHeatingVal = this.convertUnitsService.value(input.higherHeatingVal).from('btuSCF').to('kJNm3');
+      input.higherHeatingVal = this.convertUnitsService.value(input.higherHeatingVal).from('btuscf').to('kJNm3');
     }
     if (settings.unitsOfMeasure == "Metric") {
       input.fuelTemp = this.convertUnitsService.value(input.fuelTemp).from('C').to('F');

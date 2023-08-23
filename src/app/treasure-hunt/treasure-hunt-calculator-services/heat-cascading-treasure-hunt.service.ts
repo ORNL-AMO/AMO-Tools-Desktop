@@ -100,9 +100,9 @@ export class HeatCascadingTreasureHuntService {
 
   convertHeatCascadingOpportunity(heatCascadingOpportunity: HeatCascadingInput, oldSettings: Settings, newSettings: Settings): HeatCascadingInput {
     if (oldSettings.unitsOfMeasure == 'Metric'){
-      heatCascadingOpportunity.fuelHV = this.convertUnitsService.value(heatCascadingOpportunity.fuelHV).from('MJNm3').to('btuSCF');
+      heatCascadingOpportunity.fuelHV = this.convertUnitsService.value(heatCascadingOpportunity.fuelHV).from('MJNm3').to('btuscf');
     } else if (oldSettings.unitsOfMeasure == 'Imperial') {
-      heatCascadingOpportunity.fuelHV = this.convertUnitsService.value(heatCascadingOpportunity.fuelHV).from('btuSCF').to('MJNm3');
+      heatCascadingOpportunity.fuelHV = this.convertUnitsService.value(heatCascadingOpportunity.fuelHV).from('btuscf').to('MJNm3');
     }
     heatCascadingOpportunity.priExhaustTemperature = this.convertUnitsService.convertTemperatureValue(heatCascadingOpportunity.priExhaustTemperature, oldSettings, newSettings);
     heatCascadingOpportunity.priCombAirTemperature = this.convertUnitsService.convertTemperatureValue(heatCascadingOpportunity.priCombAirTemperature, oldSettings, newSettings);

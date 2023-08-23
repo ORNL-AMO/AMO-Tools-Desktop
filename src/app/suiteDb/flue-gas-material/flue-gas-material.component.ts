@@ -8,10 +8,6 @@ import { firstValueFrom } from 'rxjs';
 import * as _ from 'lodash';
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 
-
-
-
-
 @Component({
   selector: 'app-flue-gas-material',
   templateUrl: './flue-gas-material.component.html',
@@ -126,7 +122,7 @@ export class FlueGasMaterialComponent implements OnInit {
       this.canAdd = false;
       if (this.settings.unitsOfMeasure == 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
-        this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.newMaterial.heatingValueVolume).from('kJNm3').to('btuSCF');
+        this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.newMaterial.heatingValueVolume).from('kJNm3').to('btuscf');
       }
       let suiteDbResult = this.sqlDbApiService.insertGasFlueGasMaterial(this.newMaterial);
       if (suiteDbResult == true) {
@@ -139,7 +135,7 @@ export class FlueGasMaterialComponent implements OnInit {
   async updateMaterial() {
     if (this.settings.unitsOfMeasure == 'Metric') {
       this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
-      this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.newMaterial.heatingValueVolume).from('kJNm3').to('btuSCF');
+      this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.newMaterial.heatingValueVolume).from('kJNm3').to('btuscf');
     }
     this.newMaterial.id = this.sdbEditMaterialId;
     let suiteDbResult = this.sqlDbApiService.updateGasFlueGasMaterial(this.newMaterial);
@@ -196,7 +192,7 @@ export class FlueGasMaterialComponent implements OnInit {
       }
       if (this.settings.unitsOfMeasure == 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.existingMaterial.heatingValue).from('btuLb').to('kJkg');
-        this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.existingMaterial.heatingValueVolume).from('btuSCF').to('kJNm3');
+        this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.existingMaterial.heatingValueVolume).from('btuscf').to('kJNm3');
       }
       this.getTotalOfFlueGasses();
       this.setHHV();
@@ -221,7 +217,7 @@ export class FlueGasMaterialComponent implements OnInit {
       }
       if (this.settings.unitsOfMeasure == 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('btuLb').to('kJkg');
-        this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.newMaterial.heatingValueVolume).from('btuSCF').to('kJNm3');
+        this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.newMaterial.heatingValueVolume).from('btuscf').to('kJNm3');
       }
       this.getTotalOfFlueGasses();
       this.checkMaterialName();
@@ -248,7 +244,7 @@ export class FlueGasMaterialComponent implements OnInit {
 
         if (this.settings.unitsOfMeasure === 'Metric') {
           this.newMaterial.heatingValue = this.convertUnitsService.value(vals.heatingValue).from('btuLb').to('kJkg');
-          this.newMaterial.heatingValueVolume = this.convertUnitsService.value(vals.heatingValueVolume).from('btuSCF').to('kJNm3');
+          this.newMaterial.heatingValueVolume = this.convertUnitsService.value(vals.heatingValueVolume).from('btuscf').to('kJNm3');
         }
       } else {
         this.isValidHHVResult = false;

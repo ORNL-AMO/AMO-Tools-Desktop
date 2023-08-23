@@ -214,7 +214,7 @@ export class HeatCascadingService {
     input.secFiringRate = this.roundVal(input.secFiringRate, 2);
 
     //kJNm3?
-    input.fuelHV = this.convertUnitsService.value(input.fuelHV).from('btuSCF').to('MJNm3');
+    input.fuelHV = this.convertUnitsService.value(input.fuelHV).from('btuscf').to('MJNm3');
     input.fuelHV = this.roundVal(input.fuelHV, 2);
 
     return input;
@@ -247,7 +247,7 @@ export class HeatCascadingService {
       input.ambientAirTempF = this.roundVal(input.ambientAirTempF, 2);
 
       //kJNm3?
-      input.fuelHV = this.convertUnitsService.value(input.fuelHV).from('MJNm3').to('btuSCF');
+      input.fuelHV = this.convertUnitsService.value(input.fuelHV).from('MJNm3').to('btuscf');
       input.fuelHV = this.roundVal(input.fuelHV, 2);
 
     }

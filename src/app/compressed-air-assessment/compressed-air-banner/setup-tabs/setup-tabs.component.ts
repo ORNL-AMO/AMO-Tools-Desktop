@@ -18,6 +18,7 @@ export class SetupTabsComponent implements OnInit {
   setupTab: string;
   disabledSetupTabs: Array<string>;
   disableTabs: boolean;
+  canContinue: boolean;
 
   systemBasicsClassStatus: Array<string> = [];
   systemBasicsBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
@@ -92,6 +93,13 @@ export class SetupTabsComponent implements OnInit {
     this.setDayTypesStatus(hasValidDayTypes, canViewDayTypes);
     this.setSystemProfileStatus(hasValidSystemProfile, canViewSystemProfile);
     this.setEndUsesStatus(hasValidEndUses, canViewEndUses);
+
+    if ((hasValidDayTypes && hasValidSystemInformation && hasValidCompressors && hasValidSystemProfile && hasValidEndUses) || (this.setupTab == 'system-basics')) {
+      this.canContinue = true;
+    } else {
+      this.canContinue = false;
+    }
+
   }
 
   ngOnDestroy() {
@@ -205,6 +213,38 @@ export class SetupTabsComponent implements OnInit {
 
   changeProfileTab(str: string) {
     this.compressedAirAssessmentService.profileTab.next(str);
+  }
+
+  continue() {
+    this.compressedAirAssessmentService.continue();
+  }
+
+  back() {
+    this.compressedAirAssessmentService.back();
+  }
+
+  continueProfileTab() {
+    if(this.profileTab == 'setup') {
+      this.changeProfileTab('summary');
+    } else if (this.profileTab == 'summary') {      
+      this.changeProfileTab('graphs');
+    } else if (this.profileTab == 'graphs') {
+      this.changeProfileTab('annual-summary');
+    } else if (this.profileTab == 'annual-summary') {
+      this.changeProfileTab('compressor-summary');
+    } 
+  }
+
+  backProfileTab() {
+    if(this.profileTab == 'compressor-summary') {
+      this.changeProfileTab('annual-summary');
+    } else if (this.profileTab == 'annual-summary') {      
+      this.changeProfileTab('graphs');
+    } else if (this.profileTab == 'graphs') {
+      this.changeProfileTab('summary');
+    } else if (this.profileTab == 'summary') {
+      this.changeProfileTab('setup');
+    } 
   }
 
 }

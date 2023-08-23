@@ -140,7 +140,7 @@ export class DataSetupComponent implements OnInit {
   setContinueButton() {
     this.continueButtonAction = 'Next';
     if (this.dataSetupTab == 'map-time-data' && this.explorerData.isStepMapTimeDataComplete && this.explorerData.isLastTab) {
-      this.continueButtonAction = 'Finish';
+      this.continueButtonAction = 'Finish Setup';
     }
   }
   

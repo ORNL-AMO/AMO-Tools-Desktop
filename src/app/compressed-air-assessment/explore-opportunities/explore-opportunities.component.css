@@ -1,15 +1,83 @@
 p {
-	font-size: small;
+    font-size: small;
     text-align: center;
     font-style: italic;
     margin-bottom: 0px;
     padding-top: .25rem;
 }
 
-.btn.btn-primary{
+.btn.btn-primary {
     padding: 6px;
 }
 
-.day-type-select{
+.day-type-select {
     font-size: 22px;
+}
+
+
+.compressed-air .assessment-panel-container::-webkit-scrollbar-thumb {
+    background-color: #7030A0;
+}
+
+/* Screens above  1024 */
+.assessment-container {
+    display: flex;
+    height: 100%;
+}
+
+.assessment-panel-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    overflow-y: auto;
+}
+
+
+.small-tab-select {
+    display: none;
+}
+
+.small-screen-active {
+    background: #fff;
+    color: black;
+    transition: all .1s ease-in-out;
+}
+
+
+/* Screens below 1024 */
+@media screen and (max-width: 1024px) {
+    .assessment-container {
+        display: flex;
+        height: 100%;
+    }
+
+    .assessment-panel-container {
+        display: none;
+        width: 100%;
+        overflow-y: auto;
+    }
+
+    .lookup-form {
+        height: 100%;
+    }
+
+    
+    .small-screen-hide {
+        display: none;
+    }
+
+    .small-screen-tab {
+        display: flex;
+        min-height: 100%;
+        height: 100%;
+        width: 100%;
+    }
+
+    .small-tab-select {
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap;
+        margin: auto;
+    }
+
 }

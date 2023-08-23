@@ -65,7 +65,7 @@
       <div class="form-group">
         <label class="small" for="o2InFlueGas">O<sub>2</sub> In Flue Gas</label>
         <div class="input-group">
-          <input name="o2InFlueGas" type="number" step="0.5" min="0" max="20.5" class="form-control"
+          <input name="o2InFlueGas" type="number" step="1" min="0" max="20.5" class="form-control"
           formControlName="o2InFlueGas" id="o2InFlueGas" onfocus="this.select();" (input)="calcExcessAir()"
           (focus)="focusField('o2InFlueGas')" >
           <span class="input-group-addon units">%</span>
@@ -148,7 +148,7 @@
     <div class="form-group">
       <label class="small" for="ashDischargeTemperature">Ash Discharge Temperature</label>
       <div class="input-group">
-        <input name="ashDischargeTemperature" type="number" step="any" class="form-control"
+        <input name="ashDischargeTemperature" type="number" step="10" class="form-control"
           formControlName="ashDischargeTemperature" id="ashDischargeTemperature" onfocus="this.select();"
           (input)="calculate()" (focus)="focusField('ashDischargeTemperature')" >
         <span class="input-group-addon units"><span

@@ -160,4 +160,20 @@ export class ModifyConditionsTabsComponent implements OnInit {
       this.displayAeratorPerformanceTooltip = false;
     }
   }
+
+  back(){
+    if (this.modifyConditionsTab == 'aerator-performance'){      
+      this.wasteWaterService.modifyConditionsTab.next('activated-sludge');
+    } else if (this.modifyConditionsTab == 'activated-sludge'){      
+      this.wasteWaterService.modifyConditionsTab.next('operations');
+    } 
+  } 
+
+  continue(){
+    if (this.modifyConditionsTab == 'operations'){      
+      this.wasteWaterService.modifyConditionsTab.next('activated-sludge');
+    } else if (this.modifyConditionsTab == 'activated-sludge'){      
+      this.wasteWaterService.modifyConditionsTab.next('aerator-performance');
+    } 
+  }
 }
