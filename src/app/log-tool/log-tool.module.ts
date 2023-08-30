@@ -46,6 +46,11 @@ import { SelectDataHeaderComponent } from './data-setup/select-data-header/selec
 import { MapTimeDataComponent } from './data-setup/map-time-data/map-time-data.component';
 import { UserMessageOverlayModule } from '../shared/user-message-overlay/user-message-overlay.module';
 import { DateFormatHelpModule } from '../shared/date-format-help/date-format-help.module';
+import { VisualizeSidebarComponent } from './visualize/visualize-sidebar/visualize-sidebar.component';
+import { GraphDataSelectionComponent } from './visualize/visualize-sidebar/graph-data-selection/graph-data-selection.component';
+import { GraphSeriesComponent } from './visualize/visualize-sidebar/graph-series/graph-series.component';
+import { GraphAnnotationsComponent } from './visualize/visualize-sidebar/graph-annotations/graph-annotations.component';
+import { GraphSeriesManagementComponent } from './visualize/visualize-sidebar/graph-series-management/graph-series-management.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +85,11 @@ import { DateFormatHelpModule } from '../shared/date-format-help/date-format-hel
     RefineDataComponent,
     SelectDataHeaderComponent,
     MapTimeDataComponent,
+    VisualizeSidebarComponent,
+    GraphDataSelectionComponent,
+    GraphSeriesComponent,
+    GraphAnnotationsComponent,
+    GraphSeriesManagementComponent,
   ],
   imports: [
     CommonModule,

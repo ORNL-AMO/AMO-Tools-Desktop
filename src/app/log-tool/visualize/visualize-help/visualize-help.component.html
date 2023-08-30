@@ -1,182 +1,149 @@
 <div class="scroll-container scroll-item" [ngStyle]="{'height.px': containerHeight}">
-    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'default'">
+    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'graph-data'">
         <div class="h6">
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">
-                Using the menu on the top right you can:
-                <ul>
-                    <li>Download the plot as a png</li>
-                    <li>Change cursor types to manipulate the plot</li>
-                    <li>Zoom in, out and scale</li>
-                    <li>Choose method in which hover data is displayed</li>
-                </ul>
-            </small>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">
-                Use the "+ Add Graph" tab to create a copy of the current plot
-            </small>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">
-                Click and drag the axis of the plot to change the scale
-            </small>
-        </div>
-    </div>
-    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'graphBasics'">
-        <div class="h6">
-            Graph Basics
+            Graph Data
             <br>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">Set chart title and plot type
-            </small>
-            <hr class="mt-2 mb-2">
             <small class="text-muted">
-                For Histogram plot's select if data should use a standard deviation or a specific number of bins
+                Set graph data, plot options, and customize axes for the primary data series.
             </small>
             <hr class="mt-2 mb-2">
-            <small class="text-muted">
-                To create a time series use a scatter plot and select a date field for the x-axis
-            </small>
         </div>
+        <small class="text-muted">
+            For Histogram plots select if data should use a standard deviation or a specific number of bins
+            <br>
+            Additional data series' can be added in the 'Other Series' tab.
+        </small>
     </div>
 
-    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'xAxis' || focusedPanel == 'highlight-timeseries-info'">
-        <div class="h6">
-            X Axis
+    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'histogram'">
+        <div class="h5">
+            Histogram Bins
             <br>
             <hr class="mt-2 mb-2">
-            <div [@focusedPanelState]="focusedPanel" class="text-left alert alert-warning small py-0 pt-2 px-3 mb-0">
-                <div>
-                    Some large datasets may cause slow graph performance. Using the date range filters increases graph speed by reducing the amount of datapoints the graph must handle at once. 
-                    MEASUR considers a large dataset to be greater than 200,000 datapoints, or roughly 7 days at 3 second intervals.
-
-                    For more performance tips, visit the Annotations help section.
-                </div>
-                <br>
-            </div>
-            <small class="text-muted">Set x-axis label
-                <br>
-                Add &lt;br&gt; to create a new line
-                <br>
-                Wrap your text in &lt;b&gt;&lt;/b&gt; to <b>bold</b> it
-                <br>
-                &lt;b&gt;example&lt;/b&gt; = <b>example</b>
-                <br>
-                Wrap your text in &lt;i&gt;&lt;/i&gt; to <i>italicize</i> it
-                <br>
-                &lt;i&gt;example&lt;/i&gt; = <i>example</i>
-            </small>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">
-                Choose the data you wish to use for the x-axis
-            </small>
         </div>
+        <small class="text-muted">The histogram will display the percentage of data points within each bin
+        </small>
+        <hr class="mt-2 mb-2">
+        <small class="text-muted">Bins will be auto generated based on Bin Size or Number of Bins
+        </small>
+        <hr class="mt-2 mb-2">
+        <small class="text-muted">
+            The min and max of each bin can then be modified
+        </small>
+        <hr class="mt-2 mb-2">
+        <small class="text-muted">
+            Initial bin size will use the standard deviation of the data set
+        </small>
     </div>
-    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'yAxis'">
+
+    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'primary-series'">
         <div class="h6">
-            Y-Axis
+            Primary Series
             <br>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">Set y-axis label
-                <br>
-                Add &lt;br&gt; to create a new line
-                <br>
-                Wrap your text in &lt;b&gt;&lt;/b&gt; to <b>bold</b> it
-                <br>
-                &lt;b&gt;example&lt;/b&gt; = <b>example</b>
-                <br>
-                Wrap your text in &lt;i&gt;&lt;/i&gt; to <i>italicize</i> it
-                <br>
-                &lt;i&gt;example&lt;/i&gt; = <i>example</i>
-            </small>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">Use the text box to set a name for the corresponding data
-            </small>
-            <hr class="mt-2 mb-2">
             <small class="text-muted">
-                Choose the data you wish to use for the x-axis
+                The primary x and y data series for the graph.
             </small>
             <hr class="mt-2 mb-2">
-            <small class="text-muted">
-                Click "+Add Another Data Series" to add additional y-axis data
-            </small>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">
-                When additional data is added, a second y-axis with a different scale can be used on the right hand side
-                of the plot
-            </small>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">
-                Click the series color box to choose what color you want the corresponding data to appear on the plot
-            </small>
-
         </div>
+        <small class="text-muted">
+            Additional data series' can be added in the 'Other Series' tab.
+        </small>
     </div>
+
+    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'other-series'">
+        <div class="h6">
+            Other Data Series
+            <br>
+            <small class="text-muted">
+                Manage additional y-axis series based off the selected x-axis data from the primary data series
+                (shown in the 'Data' tab)
+            </small>
+            <hr class="mt-2 mb-2">
+        </div>
+        <small class="text-muted">
+            A second y-axis with a different scale can added on the right hand side
+            of the plot.
+        </small>
+    </div>
+
     <div class="p-2 d-flex flex-column" *ngIf="annotationHelpStrings.includes(this.focusedPanel)">
         <div class="h6">
             Annotations
             <br>
+            <small class="text-muted">
+                Click the chart to select the data you want to annotate
+            </small>
             <hr class="mt-2 mb-2">
+        </div>
+        <div class="d-flex flex-row">
+            <div class="help-item">
+
+                <small [@focusedPanelState]="focusedPanel"
+                    class="d-flex flex-column text-left alert alert-warning py-0 pt-2 px-3 mb-0">
+                    The annotation feature may cause slow graph performance on some large datasets.
+                    MEASUR considers a large dataset to be greater than 200,000 datapoints, or roughly 7 days of log data at 3 second intervals.
+                    <br>
+                    <span class="mt-2 bold">Large Dataset Tips</span>
+                    <ul class="mt-1">
+                        <li>Use the 'Manage Annotations' toggle to turn annotations off/on at any time 
+                            <span class="bold">(Existing annotations will remain visible and will not affect performance) </span></li>
+                        <li>Narrowing the range of the graph by clicking and dragging an area before turning on annotations will increase graph speed and usability</li>
+                    </ul>
+                </small>
+            </div>
             
-            <small class="text-muted">Click the chart to select the data you want to annotate
-            </small>
-            <!-- <ng-container *ngIf="graphInteractivity && graphInteractivity.hasLargeDataset"> -->
-                <div [@focusedPanelState]="focusedPanel" class="d-flex flex-column text-left alert alert-warning small py-0 pt-2 px-3 mb-0">
-                        The annotation feature may cause slow graph performance on some large datasets.
-                        By default, annotations are turned off for these datasets.
-                        MEASUR considers a large dataset to be greater than 200,000 datapoints, or roughly 7 days of log data at 3 second intervals.
-                        <br>
-                        <span class="mt-2 bold">Large Dataset Tips</span>
-                        <ul class="mt-1">
-                            <li class="bold">Existing annotations will remain visible and will not affect performance. </li>
-                            <li>Narrowing the range of the graph by clicking and dragging an area before turning on annotations will increase graph speed and usability</li>
-                            <li>Annotations can be turned off/on at any time in the sidebar options.</li>
-                        </ul>
-                </div>
-            <!-- </ng-container> -->
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">Fill the text box with the desired annotation
-                <br>
-                Add &lt;br&gt; to create a new line
-                <br>
-                Wrap your text in &lt;b&gt;&lt;/b&gt; to <b>bold</b> it
-                <br>
-                &lt;b&gt;example&lt;/b&gt; = <b>example</b>
-                <br>
-                Wrap your text in &lt;i&gt;&lt;/i&gt; to <i>italicize</i> it
-                <br>
-                &lt;i&gt;example&lt;/i&gt; = <i>example</i>
-            </small>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">
-                You can customize the font size, font color, background color, arrow color and arrow size
-            </small>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">
-                Use the arrow buttons to move the location of the annotation
-            </small>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">
-                Existing annotations can be deleted or selected to be edited from the list at the bottom of the menu
-            </small>
+            <div class="help-item ml-2">
+                <small class="text-muted">Fill the text box with the desired annotation
+                    <ul>
+                        <li>Add &lt;br&gt; to create a new line</li>
+                        <li>Wrap your text in &lt;b&gt;&lt;/b&gt; to <b>bold</b> it</li>
+                        <li>&lt;b&gt;example&lt;/b&gt; = <b>example</b></li>
+                        <li>Wrap your text in &lt;i&gt;&lt;/i&gt; to <i>italicize</i> it</li>
+                        <li>&lt;i&gt;example&lt;/i&gt; = <i>example</i></li>
+                    </ul>
+                </small>
+                <hr class="mt-2 mb-2">
+                <small class="text-muted">
+                    Use the arrow buttons to move the location of the annotation
+                </small>
+                <small class="text-muted">
+                    Existing annotations can be deleted or selected to be edited from the list at the bottom of the menu
+                </small>
+            </div>
         </div>
     </div>
-    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'histogramBins'">
+
+    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'default' || focusedPanel == 'visualize-graph'">
         <div class="h6">
-            Histogram Bins
-            <br>
+            Visualize Graph
             <hr class="mt-2 mb-2">
-            <small class="text-muted">The histogram will display the percentage of data points within each bin
-            </small>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">Bins will be auto generated based on Bin Size or Number of Bins
-            </small>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">
-                The min and max of each bin can then be modified
-            </small>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">
-                Initial bin size will use the standard deviation of the data set
-            </small>
+        </div>
+        <div class="d-flex flex-column">
+            <img class="w-25 p-1 pull-left" src="assets/images/plot-menu.png">
+            <div>
+                <small class="text-muted">
+                    Using the graph toolbar (top-right of graph) you can:
+                    <ul>
+                        <li>Download the plot as a png</li>
+                        <li>Change cursor types to manipulate the plot</li>
+                        <li>Zoom in, out and scale</li>
+                        <li>Choose method in which hover data is displayed</li>
+                    </ul>
+                </small>
+                <hr class="mt-2 mb-2">
+                <small class="text-muted">
+                    Click and drag the axis of the plot to change the scale
+                </small>
+                <hr class="mt-2 mb-2">
+                <small class="text-muted">
+                    Double-click inside the graph to reset zoom orientation
+                </small>
+                <hr class="mt-2 mb-2">
+                <small class="text-muted">
+                    Use the "+ Add Graph" tab to create a copy of the current plot
+                </small>
+            </div>
         </div>
     </div>
+
+</div>

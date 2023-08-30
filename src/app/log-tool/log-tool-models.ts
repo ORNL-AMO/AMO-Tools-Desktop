@@ -34,10 +34,19 @@ export interface AverageByInterval {
     }>
 }
 
-export interface GraphDataOption { 
+export interface XAxisDataOption { 
     dataField: LogToolField, 
     numberOfDataPoints?: number,
     data: Array<number | string> 
+}
+
+export interface YAxisDataOption {
+    index: number,
+    dataOption: XAxisDataOption,
+    seriesColor: string,
+    seriesName: string,
+    yaxis: string,
+    linesOrMarkers: string
 }
 
 export interface GraphDataSummary {
@@ -138,15 +147,8 @@ export interface GraphObj {
         displaylogo?: boolean,
         displayModeBar?: boolean
       },
-    selectedXAxisDataOption: GraphDataOption,
-    selectedYAxisDataOptions: Array<{
-        index: number,
-        dataOption: GraphDataOption,
-        seriesColor: string,
-        seriesName: string,
-        yaxis: string,
-        linesOrMarkers: string
-    }>,
+    selectedXAxisDataOption: XAxisDataOption,
+    selectedYAxisDataOptions: Array<YAxisDataOption>,
     hasSecondYAxis: boolean,
     //histogram
     numberOfBins: number,
@@ -163,8 +165,9 @@ export interface GraphObj {
     showDefaultPerformanceWarning?: boolean,
     binSize: number,
     graphId: string,
-    xAxisDataOptions: Array<GraphDataOption>;
-    yAxisDataOptions: Array<GraphDataOption>
+    xAxisDataOptions: Array<XAxisDataOption>;
+    // todo same as x axis data options?
+    yAxisDataOptions: Array<XAxisDataOption>
 }
 
 export interface GraphLayout {

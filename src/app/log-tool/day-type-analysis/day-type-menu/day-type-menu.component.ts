@@ -34,7 +34,7 @@ export class DayTypeMenuComponent implements OnInit {
     private visualizeService: VisualizeService) { }
 
   ngOnInit() {
-    this.setGraphDataOptions();
+    this.setXAxisDataOptions();
     this.dataViewSub = this.dayTypeAnalysisService.dataView.subscribe(val => {
       this.dataView = val;
     });
@@ -49,7 +49,7 @@ export class DayTypeMenuComponent implements OnInit {
     });
     this.explorerDataSubscription = this.logToolDataService.explorerData.subscribe(explorerData => {
       this.explorerData = explorerData;
-      this.setGraphDataOptions();
+      this.setXAxisDataOptions();
     });
   }
 
@@ -61,7 +61,7 @@ export class DayTypeMenuComponent implements OnInit {
     this.explorerDataSubscription.unsubscribe();
   }
 
-  setGraphDataOptions() {
+  setXAxisDataOptions() {
     if (this.explorerData) {
       let fields: Array<LogToolField> = _.flatMap(this.explorerData.datasets, dataset => { return dataset.fields });
       fields = fields.filter(field => !field.isDateField && field.useForDayTypeAnalysis == true);

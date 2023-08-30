@@ -6,6 +6,7 @@
 
 .fa-info-circle, .fa-chevron-circle-right, .fa-chevron-circle-left{
     cursor: pointer;
+    font-size: 25px;
 }
 
 .update-available{

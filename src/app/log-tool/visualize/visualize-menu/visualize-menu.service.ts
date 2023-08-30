@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
-import { GraphObj, LogToolField, AnnotationData, GraphDataOption } from '../../log-tool-models';
+import { GraphObj, LogToolField, AnnotationData, XAxisDataOption } from '../../log-tool-models';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
@@ -39,18 +39,40 @@ export class VisualizeMenuService {
 
   setGraphData(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
     if (selectedGraphObj.isTimeSeries || selectedGraphObj.data[0].type == 'scattergl') {
-      this.setScatterGraphDataOptions(selectedGraphObj, shouldRenderGraph);
+      this.setScatterXAxisDataOptions(selectedGraphObj, shouldRenderGraph);
     } else if (selectedGraphObj.data[0].type == 'bar') {
       this.setBarChartDataOptions(selectedGraphObj, shouldRenderGraph);
     }
   }
 
-  setScatterGraphDataOptions(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
+  setScatterXAxisDataOptions(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
     this.setXAxisDataOptions(selectedGraphObj);
     this.setSelectedXAxisDataOption(selectedGraphObj);
 
     this.setSelectedYAxisDataOption(selectedGraphObj);
     this.setGraphYAxisData(selectedGraphObj, shouldRenderGraph);
+  }
+
+  changeSelectedGraphData(selectedGraphObj: GraphObj, isSelectedGraphChange?: boolean) {
+    selectedGraphObj.isTimeSeries = false;
+    if (selectedGraphObj.data[0].type == 'bar') {
+      this.checkBarHistogramData(selectedGraphObj);
+    } else if (selectedGraphObj.data[0].type == 'time-series') {
+      selectedGraphObj.isTimeSeries = true;
+      // plotly type for time-series == scattergl
+      selectedGraphObj.data[0].type = 'scattergl';
+    }
+    if (!isSelectedGraphChange) {
+      // We don't need to reset because we're changing to an entirely different graph
+      this.resetLayoutRelatedData(selectedGraphObj);
+    }
+    this.setGraphData(selectedGraphObj);
+  }
+
+  checkBarHistogramData(selectedGraphObj: GraphObj) {
+    if (selectedGraphObj.binnedField == undefined || selectedGraphObj.binnedField.fieldName != selectedGraphObj.selectedXAxisDataOption.dataField.fieldName || selectedGraphObj.bins == undefined) {
+      selectedGraphObj = this.initializeBinData(selectedGraphObj);
+    }
   }
 
   setSelectedYAxisDataOption(selectedGraphObj: GraphObj) {
@@ -63,6 +85,7 @@ export class VisualizeMenuService {
         if (testOptionExists) {
           //set to current option value for data binding
           option.dataOption = testOptionExists;
+          console.log('adding yaxis option', option.seriesName, option.index)
           tmpSelectedYAxisDataOptions.push(option);
         }
       }
@@ -105,8 +128,8 @@ export class VisualizeMenuService {
 
   setXAxisDataOptions(selectedGraphObj: GraphObj) {
     let dataFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
-    selectedGraphObj.isTimeSeries = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
-    if (selectedGraphObj.isTimeSeries) {
+    let canRunDayTypeAnalysis: boolean = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
+    if (selectedGraphObj.isTimeSeries && canRunDayTypeAnalysis) {
       dataFields.push({
         fieldName: 'Time Series',
         alias: 'Time Series',
@@ -201,7 +224,7 @@ export class VisualizeMenuService {
       }
       else if (selectedGraphObj.data[0].type == 'scattergl') {
         let data = this.visualizeService.getGraphDataByField(field.fieldName);
-        let yAxisOption: GraphDataOption = {
+        let yAxisOption: XAxisDataOption = {
           data: data,
           dataField: field
         }
@@ -209,7 +232,7 @@ export class VisualizeMenuService {
       }
     });
     selectedGraphObj.selectedYAxisDataOptions.forEach(selectedOption => {
-      let optionFound: GraphDataOption;
+      let optionFound: XAxisDataOption;
       if (selectedOption.dataOption) {
       optionFound = selectedGraphObj.yAxisDataOptions.find(option => { 
           return option.dataField.fieldName == selectedOption.dataOption.dataField.fieldName 

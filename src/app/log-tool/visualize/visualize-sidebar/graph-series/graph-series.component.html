@@ -1,0 +1,100 @@
+<div *ngIf="currentYAxisOption" (click)="focusField()" class="card">
+    <div *ngIf="yAxisOptionIndex !== 0" class="d-flex flex-row p-0 justify-content-end">
+        <span class="fa fa-times remove-series" (click)="removeYAxisData()"></span>
+    </div>
+
+    <div class="card-body p-2">
+        <form>
+            <!-- Time Series, Scatter -->
+            <ng-container *ngIf="selectedGraphObj.data[0].type !== 'bar'">
+                <div class="form-group">
+                    <label>Series Name</label>
+                    <input class="form-control" type="text" name="{{'seriesName'+yAxisOptionIndex}}"
+                        [(ngModel)]="currentYAxisOption.seriesName" (input)="saveUserInput()"
+                        (focus)="focusField()" (blur)="focusOut()">
+                </div>
+                <div class="form-group"
+                    *ngIf="yAxisOptionIndex === 0 && selectedGraphObj.data[0].type !== 'time-series'">
+                    <label>X Axis Data</label>
+                    <select class="form-control" name="xDatafield"
+                        [(ngModel)]="selectedGraphObj.selectedXAxisDataOption" (change)="setXAxisDataOption()"
+                        (focus)="focusField()" (blur)="focusOut()">
+                        <option *ngFor="let xAxisDataOption of selectedGraphObj.xAxisDataOptions"
+                            [ngValue]="xAxisDataOption">
+                            {{xAxisDataOption.dataField.alias}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Y Axis Data</label>
+                    <select class="form-control" name="{{'yDatafield'+yAxisOptionIndex}}"
+                        [(ngModel)]="currentYAxisOption.dataOption" (change)="setYAxisData()" (focus)="focusField()"
+                        (blur)="focusOut()">
+                        <option *ngFor="let yAxisDataOption of selectedGraphObj.yAxisDataOptions"
+                            [ngValue]="yAxisDataOption">
+                            {{yAxisDataOption.dataField.alias}}</option>
+                    </select>
+                </div>
+                <div class="form-group" *ngIf="selectedGraphObj.hasSecondYAxis">
+                    <label>
+                        Use Y Axis
+                    </label>
+                    <select class="form-control" name="{{'axisOption'+yAxisOptionIndex}}"
+                        [(ngModel)]="currentYAxisOption.yaxis" (change)="setYAxisData()" (focus)="focusField()"
+                        (blur)="focusOut()">
+                        <option *ngFor="let axisOption of yAxisOptions" [ngValue]="axisOption.axis">
+                            {{axisOption.label}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>
+                        Series Color
+                    </label>
+                    <input class="w-50 form-control color-picker" type="color"
+                        name="{{'seriesColor'+yAxisOptionIndex}}" [(ngModel)]="currentYAxisOption.seriesColor"
+                        [ngStyle]="{'background-color': currentYAxisOption.seriesColor}"
+                        (input)="setSeriesColor()" (focus)="focusField()"
+                        (blur)="focusOut()">
+                </div>
+            </ng-container>
+
+            <!-- HISTOGRAM / BAR-->
+            <ng-container *ngIf="selectedGraphObj.data[0].type == 'bar'">
+                <div class="form-group">
+                    <label>X Axis</label>
+                    <select class="form-control" name="xDatafield"
+                        [(ngModel)]="selectedGraphObj.selectedXAxisDataOption" (change)="setXAxisDataOption()"
+                        (focus)="focusField()" (blur)="focusOut()">
+                        <option *ngFor="let xAxisDataOption of selectedGraphObj.xAxisDataOptions"
+                            [ngValue]="xAxisDataOption">
+                            {{xAxisDataOption.dataField.alias}}</option>
+                    </select>
+                </div>
+                <!--% vs # of poitns-->
+                <div class="btn-group pt-2 pb-2 w-100">
+                    <button type="button" class="btn btn-secondary w-50" (click)="setHistogramUsePercent(true)"
+                        [ngClass]="{'active': selectedGraphObj.usePercentForBins == true}">% of Points</button>
+                    <button type="button" class="btn btn-secondary w-50" (click)="setHistogramUsePercent(false)"
+                        [ngClass]="{'active': selectedGraphObj.usePercentForBins == false}"># of Points</button>
+                </div>
+                <!--std deviation vs bins if histogram-->
+                <div class="btn-group pt-2 pb-2 w-100">
+                    <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(true)"
+                        [ngClass]="{'active': selectedGraphObj.useStandardDeviation == true}">Std. Deviation</button>
+                    <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(false)"
+                        [ngClass]="{'active': selectedGraphObj.useStandardDeviation == false}">Bins</button>
+                </div>
+                <span class="form-text text-help">
+                    *Calculates
+                    <span *ngIf="selectedGraphObj.usePercentForBins == false">#</span>
+                    <span *ngIf="selectedGraphObj.usePercentForBins == true">%</span>
+                    of data points within bin
+                </span>
+
+<!-- *ngIf="(showHistogramBins && !selectedGraphObj.useStandardDeviation) || (showGraphBasics && selectedGraphObj.useStandardDeviation)" -->
+                <app-bin-data></app-bin-data>
+            </ng-container>
+
+        </form>
+
+    </div>
+</div>

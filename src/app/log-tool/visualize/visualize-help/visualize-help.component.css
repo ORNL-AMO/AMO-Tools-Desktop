@@ -9,3 +9,8 @@
 .scroll-container {
     min-height: 200px;
 }
+
+.help-item {
+        flex:1;
+        min-width: 0;
+}
