@@ -6,7 +6,6 @@ import { CoreModule } from './core/core.module';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { ElectronService } from './electron/electron.service';
 
 
 @NgModule({

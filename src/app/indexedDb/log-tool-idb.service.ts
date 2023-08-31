@@ -19,7 +19,7 @@ export class LogToolIdbService {
     return this.dbService.add(this.storeName, data);
   }
 
-  updateWithObservable(data: LogToolDbData): Observable<any> {
+  updateWithObservable(data: LogToolDbData): Observable<LogToolDbData> {
     data.modifiedDate = new Date(new Date().toLocaleDateString());
     return this.dbService.update(this.storeName, data);
   }

@@ -188,7 +188,7 @@ export class CreateAssessmentModalComponent {
     await this.settingsDbService.setAll(updatedSettings);
     await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
     let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
-    // todo 6259 setAll assessments here?
+    this.assessmentDbService.setAll(allAssessments);
   }
 
   async finishAndNavigate(assessment: Assessment, navigationUrl: string, queryParams?) {

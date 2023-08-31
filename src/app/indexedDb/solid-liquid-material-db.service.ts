@@ -26,7 +26,7 @@ export class SolidLiquidMaterialDbService {
     return this.dbService.delete(this.storeName, materialId);
   }
 
-  updateWithObservable(material: SolidLiquidFlueGasMaterial): Observable<any> {
+  updateWithObservable(material: SolidLiquidFlueGasMaterial): Observable<SolidLiquidFlueGasMaterial> {
     return this.dbService.update(this.storeName, material);
   }
 

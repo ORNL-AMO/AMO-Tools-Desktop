@@ -68,7 +68,7 @@ export class InventoryDbService {
     return this.dbService.delete(this.storeName, inventoryId);
   }
 
-  updateWithObservable(inventory: InventoryItem): Observable<any> {
+  updateWithObservable(inventory: InventoryItem): Observable<InventoryItem> {
     inventory.modifiedDate = new Date();
     return this.dbService.update(this.storeName, inventory);
   }

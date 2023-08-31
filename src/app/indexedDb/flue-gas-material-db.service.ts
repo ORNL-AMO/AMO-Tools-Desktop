@@ -27,7 +27,7 @@ export class FlueGasMaterialDbService {
     return this.dbService.delete(this.storeName, materialId);
   }
 
-  updateWithObservable(material: FlueGasMaterial): Observable<any> {
+  updateWithObservable(material: FlueGasMaterial): Observable<FlueGasMaterial> {
     return this.dbService.update(this.storeName, material);
   }
 

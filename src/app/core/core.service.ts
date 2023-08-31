@@ -96,6 +96,7 @@ export class CoreService {
     MockCompressedAirAssessment.directoryId = this.exampleDirectoryId;
 
     let examplePhast: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockPhast));
+    debugger;
     let exampleSsmt: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockSsmt));
     let exampleTreasureHunt: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockTreasureHunt));
     let exampleMotorInventory: Assessment = await firstValueFrom(this.inventoryDbService.addWithObservable(MockMotorInventory));

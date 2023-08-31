@@ -27,7 +27,7 @@ export class WallLossesSurfaceDbService {
     return this.dbService.delete(this.storeName, materialId);
   }
 
-  updateWithObservable(material: WallLossesSurface): Observable<any> {
+  updateWithObservable(material: WallLossesSurface): Observable<WallLossesSurface> {
     return this.dbService.update(this.storeName, material);
   }
 

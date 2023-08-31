@@ -78,7 +78,7 @@ export class DirectoryDbService {
     return this.dbService.add(this.storeName, directory);
   }
 
-  updateWithObservable(directory: Directory): Observable<any> {
+  updateWithObservable(directory: Directory): Observable<Directory> {
     directory.modifiedDate = new Date();
     return this.dbService.update(this.storeName, directory);
   }
