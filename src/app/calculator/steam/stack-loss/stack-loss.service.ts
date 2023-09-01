@@ -33,7 +33,7 @@ export class StackLossService {
       'excessAirPercentage': ['', [Validators.required, Validators.min(0)]],
       'o2InFlueGas': ['', [Validators.required, Validators.min(0), Validators.max(21)]],
       'combustionAirTemperature': ['', [Validators.required]],
-      'moistureInAirCombustion': [.0077, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'moistureInAirCombustion': [.73, [Validators.required, Validators.min(0), Validators.max(100)]],
       'fuelTemperature': [''],
       'ambientAirTemp': [ambientAirTemp, Validators.required],
       'CH4': ['', Validators.required],
@@ -65,7 +65,7 @@ export class StackLossService {
       'combustionAirTemperature': ['', [Validators.required]],
       'fuelTemperature': [''],
       'ambientAirTemp': [ambientAirTemp, Validators.required],
-      'moistureInAirCombustion': [.0077, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'moistureInAirCombustion': [.73, [Validators.required, Validators.min(0), Validators.max(100)]],
       'ashDischargeTemperature': ['', Validators.required],
       'unburnedCarbonInAsh': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
       'carbon': ['', Validators.required],
@@ -195,7 +195,7 @@ export class StackLossService {
   flueGasByMass(input: FlueGasByMass, settings: Settings) {
     let inputs: FlueGasByMass = JSON.parse(JSON.stringify(input));
     inputs.ambientAirTempF = inputs.ambientAirTemp;
-    inputs.combAirMoisturePerc = inputs.moistureInAirCombustion;
+    inputs.combAirMoisturePerc = inputs.moistureInAirCombustion / 100;
     inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.ashDischargeTemperature = this.convertUnitsService.value(inputs.ashDischargeTemperature).from(settings.temperatureMeasurement).to('F');
@@ -235,7 +235,7 @@ export class StackLossService {
         SO2: 0,
         combustionAirTemperature: ambientAirTemp,
         excessAirPercentage: 15,
-        moistureInAirCombustion: 0,
+        moistureInAirCombustion: .73,
         ambientAirTemp: ambientAirTemp,
         flueGasTemperature: exampleFlueGasTemp,
         fuelTemperature: ambientAirTemp,

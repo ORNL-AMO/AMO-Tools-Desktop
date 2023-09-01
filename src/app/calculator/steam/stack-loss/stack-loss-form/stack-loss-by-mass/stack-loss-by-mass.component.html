@@ -107,35 +107,6 @@
       </span>
     </div>
 
-    <!-- <div class="form-group">
-        <label class="small" for="fuelTemperature">Fuel Temperature</label>
-        <div class="input-group">
-          <input name="fuelTemperature" type="number" step="10" class="form-control" formControlName="fuelTemperature"
-            id="fuelTemperature" onfocus="this.select();" (input)="calculate()" (focus)="focusField('fuelTemperature')"
-            >
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
-        </div>
-      </div> -->
-
-    <div class="form-group">
-      <label class="small" for="moistureInAirCombustion">Moisture in Combustion Air</label>
-      <div class="input-group">
-        <input name="moistureInAirCombustion" type="number" step="any" min="0" max="100" class="form-control"
-          formControlName="moistureInAirCombustion" id="moistureInAirCombustion" onfocus="this.select();"
-          (input)="calculate()" (focus)="focusField('moistureInAirCombustion')" >
-        <span class="input-group-addon units">%</span>
-      </div>
-      <!-- <span class="alert-warning pull-right small" *ngIf="moistureInAirCombustionError !== null">{{moistureInAirCombustionError}}</span> -->
-      <span class="alert-danger pull-right small"
-        *ngIf="stackLossForm.controls.moistureInAirCombustion.invalid && !stackLossForm.controls.moistureInAirCombustion.pristine">
-        <span *ngIf="stackLossForm.controls.moistureInAirCombustion.errors.required">Value Required</span>
-        <span *ngIf="stackLossForm.controls.moistureInAirCombustion.errors.max">Value can't be greater than
-          {{stackLossForm.controls.moistureInAirCombustion.errors.max.max}} %.</span>
-        <span *ngIf="stackLossForm.controls.moistureInAirCombustion.errors.min">Value can't be less than
-          {{stackLossForm.controls.moistureInAirCombustion.errors.min.min}} %.</span>
-      </span>
-    </div>
 
     <div class="form-group">
       <label class="small" for="ashDischargeTemperature">Ash Discharge Temperature</label>
