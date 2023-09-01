@@ -74,7 +74,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
-      debugger;
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       if (!settings) {
         settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
@@ -254,7 +253,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.assessment.compressedAirAssessment = compressedAirAssessment;
     await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
     let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
-    debugger;
     this.assessmentDbService.setAll(assessments);
   }
 

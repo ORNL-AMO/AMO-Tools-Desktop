@@ -212,7 +212,6 @@ async resetAllExampleAssessments(dirId: number) {
   // Delete all
   let directoryDataIds: DirectoryDataIds = this.getAssessmentsAndDataIds(true, dirId);
   let allAssessments: Array<Assessment[]> = await firstValueFrom(this.assessmentDbService.bulkDeleteWithObservable(directoryDataIds.assessments));
-  debugger;
   let allSettings: Array<Settings[]> = await firstValueFrom(this.settingsDbService.bulkDeleteWithObservable(directoryDataIds.settings));
   let allCalculators: Array<Calculator[]> = await firstValueFrom(this.calculatorDbService.bulkDeleteWithObservable(directoryDataIds.calculators));
   

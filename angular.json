@@ -62,7 +62,6 @@
             ],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json",
-            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "web": {
@@ -114,8 +113,8 @@
             "browserTarget": "amo-tools-desktop:build"
           },
           "configurations": {
-            "production": {
-              "browserTarget": "amo-tools-desktop:build:production"
+            "web": {
+              "browserTarget": "amo-tools-desktop:build:web"
             },
             "development": {
               "browserTarget": "amo-tools-desktop:build:development"
@@ -160,7 +159,6 @@
               },
               "src/manifest.webmanifest"
             ],
-            "webWorkerTsConfig": "tsconfig.worker.json"
           }
         },
         "lint": {

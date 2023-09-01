@@ -1038,7 +1038,6 @@ export class SteamSuiteApiService {
       outletTemperature: undefined,
     };
     if (prv) {
-      // debugger
       let inletProperties = prv.getInletProperties();
       prvOutput.inletEnergyFlow = prv.getInletEnergyFlow();
       prvOutput.inletMassFlow = prv.getInletMassFlow();

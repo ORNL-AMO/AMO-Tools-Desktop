@@ -209,7 +209,6 @@ export class AssessmentItemComponent implements OnInit {
 
     this.deleteConnectedInventoryItem(this.assessment);
     let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(this.assessment.id)); 
-    debugger;
     this.assessmentDbService.setAll(assessments);
     let settings: Settings[] = await firstValueFrom(this.settingsDbService.deleteByIdWithObservable(deleteSettings.id)); 
     this.settingsDbService.setAll(settings); 
