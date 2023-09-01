@@ -14,7 +14,9 @@ export class PumpOperationsService {
 
     let form: UntypedFormGroup = this.formBuilder.group({
       operatingHours: [psatInputs.operating_hours, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      costKwHr: [psatInputs.cost_kw_hour, [Validators.required, Validators.min(0), Validators.max(1)]]
+      costKwHr: [psatInputs.cost_kw_hour, [Validators.required, Validators.min(0)]]
+      // 5994 
+      // costKwHr: [psatInputs.cost_kw_hour, [Validators.required, Validators.min(0), Validators.max(1)]]
     });
     for (let key in form.controls) {
       if (form.controls[key].value) {
