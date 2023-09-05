@@ -8,11 +8,11 @@
     </div>
     <div class="col-12">
         <app-pump-basics></app-pump-basics>
-        <app-assessment-integration [assessmentType]="'PSAT'" 
+        <app-connected-assessment [assessmentType]="'PSAT'" 
             [connectedInventoryItem]="connectedPumpItem" 
             [connectedAssessmentItems]="selectedPumpItem.connectedAssessments" 
             [isItemValid]="selectedPumpItem.validPump.isValid" 
-            (modalOpen)="setModalOpenView($event)"></app-assessment-integration>
+            (modalOpen)="setModalOpenView($event)"></app-connected-assessment>
     </div>
     <div class="col-12">
         <app-nameplate-data-catalog *ngIf="pumpInventoryData.displayOptions.nameplateDataOptions.displayNameplateData"></app-nameplate-data-catalog>

@@ -59,7 +59,7 @@ import { PumpOperationsComponent } from './pump-operations/pump-operations.compo
 import { PumpOperationsService } from './pump-operations/pump-operations.service';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
-import { AssessmentIntegrationModule } from '../shared/assessment-integration/assessment-integration.module';
+import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
 import { IntegratePumpInventoryComponent } from './integrate-pump-inventory/integrate-pump-inventory.component';
 
 @NgModule({
@@ -118,7 +118,7 @@ import { IntegratePumpInventoryComponent } from './integrate-pump-inventory/inte
     PsatSankeyModule,
     UpdateUnitsModalModule,
     AssessmentCo2SavingsModule,
-    AssessmentIntegrationModule
+    ConnectedInventoryModule
   ],
   providers: [
     PsatService,

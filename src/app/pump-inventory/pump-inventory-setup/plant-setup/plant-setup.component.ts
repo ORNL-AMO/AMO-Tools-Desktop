@@ -10,8 +10,8 @@ import { PumpInventoryData } from '../../pump-inventory';
 import { PumpInventoryService } from '../../pump-inventory.service';
 import * as _ from 'lodash';
 import { ConvertPumpInventoryService } from '../../convert-pump-inventory.service';
-import { IntegrationStateService } from '../../../shared/assessment-integration/integration-state.service';
-import { IntegrationState } from '../../../shared/assessment-integration/integrations';
+import { IntegrationStateService } from '../../../shared/connected-inventory/integration-state.service';
+import { IntegrationState } from '../../../shared/connected-inventory/integrations';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class PlantSetupComponent implements OnInit {
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
   oldSettings: Settings;
-  assessmentIntegrationState: IntegrationState;
+  connectedAssessmentState: IntegrationState;
 
   constructor(private settingsDbService: SettingsDbService, private settingsService: SettingsService,
     private convertPumpInventoryService: ConvertPumpInventoryService,
@@ -62,19 +62,19 @@ export class PlantSetupComponent implements OnInit {
 
   setConnectedItemInfo() {
     if (this.pumpInventoryData.hasConnectedInventoryItems && this.pumpInventoryData.hasConnectedPsat) {
-        this.assessmentIntegrationState = {
-          assessmentIntegrationStatus: 'three-way-connected'
+        this.connectedAssessmentState = {
+          connectedAssessmentStatus: 'three-way-connected'
         }
     } else if (this.pumpInventoryData.hasConnectedInventoryItems) {
       this.integrationStateService.integrationState.next({status: 'connected-to-inventory'});
 
     } else if (this.pumpInventoryData.hasConnectedPsat) {
-      this.assessmentIntegrationState = {
-        assessmentIntegrationStatus: 'connected-to-assessment'
+      this.connectedAssessmentState = {
+        connectedAssessmentStatus: 'connected-to-assessment'
       }
     } else {
-      this.assessmentIntegrationState = {
-        assessmentIntegrationStatus: undefined
+      this.connectedAssessmentState = {
+        connectedAssessmentStatus: undefined
       }
       
     }

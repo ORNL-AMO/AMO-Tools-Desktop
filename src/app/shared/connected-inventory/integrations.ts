@@ -22,7 +22,7 @@ export interface CatalogItemOptions {
 
 export interface IntegrationState {
   status?: IntegrationStatusString,
-  assessmentIntegrationStatus?: IntegrationStatusString | AssessmentStatusString,
+  connectedAssessmentStatus?: IntegrationStatusString | AssessmentStatusString,
   differingConnectedValues?: Array<ConnectedValueFormField>,
   msgHTML?: string,
 }

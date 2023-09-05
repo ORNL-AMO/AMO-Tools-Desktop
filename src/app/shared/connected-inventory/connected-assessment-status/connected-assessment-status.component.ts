@@ -1,15 +1,15 @@
 import { ChangeDetectorRef, Component, Input, SimpleChanges } from '@angular/core';
-import { ConnectedInventoryData, IntegrationFormGroupString, IntegrationState } from '../integrations';
+import _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { IntegrationStateService } from '../integration-state.service';
-import * as _ from 'lodash';
+import { IntegrationFormGroupString, IntegrationState, ConnectedInventoryData } from '../integrations';
 
 @Component({
-  selector: 'app-assessment-integration-status',
-  templateUrl: './assessment-integration-status.component.html',
-  styleUrls: ['./assessment-integration-status.component.css']
+  selector: 'app-connected-assessment-status',
+  templateUrl: './connected-assessment-status.component.html',
+  styleUrls: ['./connected-assessment-status.component.css']
 })
-export class AssessmentIntegrationStatusComponent {
+export class ConnectedAssessmentStatusComponent {
   @Input()
   connectedFormGroupName: IntegrationFormGroupString;
   @Input()
@@ -22,14 +22,14 @@ export class AssessmentIntegrationStatusComponent {
 
   integrationState: IntegrationState;
   showIntegrationStatus: boolean;
-  assessmentIntegrationStateSub: Subscription;
+  connectedAssessmentStateSub: Subscription;
 
   constructor(private integrationStateService: IntegrationStateService, 
     private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
     if (!this.parentIntegrationState) {
-      this.assessmentIntegrationStateSub = this.integrationStateService.assessmentIntegrationState.subscribe(integrationState => {
+      this.connectedAssessmentStateSub = this.integrationStateService.connectedAssessmentState.subscribe(integrationState => {
         this.integrationState = integrationState;
         this.showStatus();
         this.cd.detectChanges();
@@ -48,15 +48,15 @@ export class AssessmentIntegrationStatusComponent {
   }
 
   ngOnDestroy() {
-    if (this.assessmentIntegrationStateSub) {
-      this.assessmentIntegrationStateSub.unsubscribe();
+    if (this.connectedAssessmentStateSub) {
+      this.connectedAssessmentStateSub.unsubscribe();
     }
   }
 
   showStatus() {
     this.showIntegrationStatus = false;
     if (this.integrationState) {
-      if (this.integrationState.assessmentIntegrationStatus === 'connected-assessment-differs') {
+      if (this.integrationState.connectedAssessmentStatus === 'connected-assessment-differs') {
         this.setDifferingValuesMessage();
       } else {
         this.showIntegrationStatus = true;
@@ -82,7 +82,7 @@ export class AssessmentIntegrationStatusComponent {
 
   convertItemUnits() {
     this.integrationState.msgHTML = undefined;
-    this.integrationStateService.assessmentIntegrationState.next(this.integrationState);
+    this.integrationStateService.connectedAssessmentState.next(this.integrationState);
 
     let connectedInventoryData: ConnectedInventoryData = this.integrationStateService.connectedInventoryData.getValue();
     connectedInventoryData.shouldConvertItemUnits = true;
@@ -97,7 +97,7 @@ export class AssessmentIntegrationStatusComponent {
 
   updateIntegrationStates(connectedInventoryData: ConnectedInventoryData) {
     this.integrationState.msgHTML = undefined;
-    this.integrationStateService.assessmentIntegrationState.next(this.integrationState);
+    this.integrationStateService.connectedAssessmentState.next(this.integrationState);
     this.integrationStateService.connectedInventoryData.next(connectedInventoryData);
   }
 
@@ -106,7 +106,7 @@ export class AssessmentIntegrationStatusComponent {
   }
 
   clearIntegrationState() {
-    this.integrationStateService.assessmentIntegrationState.next(this.integrationStateService.getEmptyIntegrationState());
+    this.integrationStateService.connectedAssessmentState.next(this.integrationStateService.getEmptyIntegrationState());
     this.showIntegrationStatus = false;
   }
 }

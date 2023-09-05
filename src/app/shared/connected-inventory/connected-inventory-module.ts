@@ -7,9 +7,9 @@ import { IntegrationStateComponent } from './integration-status/integration-stat
 import { IntegrationStateService } from './integration-state.service';
 import { IntegrationHelpComponent } from './integration-help/integration-help.component';
 import { PsatIntegrationService } from './psat-integration.service';
-import { AssessmentIntegrationComponent } from './assessment-integration/assessment-integration.component';
-import { AssessmentIntegrationStatusComponent } from './assessment-integration-status/assessment-integration-status.component';
 import { CreateAssessmentModalModule } from '../create-assessment-modal/create-assessment-modal.module';
+import { ConnectedAssessmentComponent } from './connected-assessment/connected-assessment.component';
+import { ConnectedAssessmentStatusComponent } from './connected-assessment-status/connected-assessment-status.component';
 
 
 
@@ -18,8 +18,8 @@ import { CreateAssessmentModalModule } from '../create-assessment-modal/create-a
     InventoryIntegrationComponent,
     IntegrationStateComponent,
     IntegrationHelpComponent,
-    AssessmentIntegrationComponent,
-    AssessmentIntegrationStatusComponent,
+    ConnectedAssessmentComponent,
+    ConnectedAssessmentStatusComponent,
   ],
   imports: [
     CommonModule,
@@ -35,8 +35,8 @@ import { CreateAssessmentModalModule } from '../create-assessment-modal/create-a
     IntegrationStateComponent, 
     InventoryIntegrationComponent,
     IntegrationHelpComponent,
-    AssessmentIntegrationComponent,
-    AssessmentIntegrationStatusComponent
+    ConnectedAssessmentComponent,
+    ConnectedAssessmentStatusComponent,
   ]
 })
-export class AssessmentIntegrationModule { }
+export class ConnectedInventoryModule { }

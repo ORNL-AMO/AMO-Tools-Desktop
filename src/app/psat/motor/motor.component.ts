@@ -8,11 +8,11 @@ import { MotorWarnings, PsatWarningService } from '../psat-warning.service';
 import { MotorService } from './motor.service';
 import { motorEfficiencyConstants } from '../psatConstants';
 import { PsatService } from '../psat.service';
-import { IntegrationStateService } from '../../shared/assessment-integration/integration-state.service';
-import { ConnectedInventoryData, InventoryOption, InventorySelectOptions } from '../../shared/assessment-integration/integrations';
-import { MotorIntegrationService } from '../../shared/assessment-integration/motor-integration.service';
+import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
+import { ConnectedInventoryData, InventoryOption, InventorySelectOptions } from '../../shared/connected-inventory/integrations';
+import { MotorIntegrationService } from '../../shared/connected-inventory/motor-integration.service';
 import { Subscription } from 'rxjs';
-import { PsatIntegrationService } from '../../shared/assessment-integration/psat-integration.service';
+import { PsatIntegrationService } from '../../shared/connected-inventory/psat-integration.service';
 import { Assessment } from '../../shared/models/assessment';
 @Component({
   selector: 'app-motor',

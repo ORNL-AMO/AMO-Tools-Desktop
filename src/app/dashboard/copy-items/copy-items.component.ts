@@ -16,7 +16,7 @@ import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { Settings } from '../../shared/models/settings';
 import { DashboardService } from '../dashboard.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
-import { MotorIntegrationService } from '../../shared/assessment-integration/motor-integration.service';
+import { MotorIntegrationService } from '../../shared/connected-inventory/motor-integration.service';
 
 
 @Component({

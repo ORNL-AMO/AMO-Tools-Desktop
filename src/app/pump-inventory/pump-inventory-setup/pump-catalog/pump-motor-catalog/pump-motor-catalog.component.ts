@@ -7,9 +7,9 @@ import { PumpInventoryService } from '../../../pump-inventory.service';
 import { PumpCatalogService } from '../pump-catalog.service';
 import { PumpMotorCatalogService } from './pump-motor-catalog.service';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
-import { MotorIntegrationService } from '../../../../shared/assessment-integration/motor-integration.service';
-import { InventoryOption, InventorySelectOptions, ConnectedInventoryData } from '../../../../shared/assessment-integration/integrations';
-import { IntegrationStateService } from '../../../../shared/assessment-integration/integration-state.service';
+import { MotorIntegrationService } from '../../../../shared/connected-inventory/motor-integration.service';
+import { InventoryOption, InventorySelectOptions, ConnectedInventoryData } from '../../../../shared/connected-inventory/integrations';
+import { IntegrationStateService } from '../../../../shared/connected-inventory/integration-state.service';
 
 @Component({
   selector: 'app-pump-motor-catalog',

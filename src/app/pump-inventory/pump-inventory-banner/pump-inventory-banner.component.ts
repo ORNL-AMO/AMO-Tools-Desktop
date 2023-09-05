@@ -4,7 +4,7 @@ import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { PumpCatalogService } from '../pump-inventory-setup/pump-catalog/pump-catalog.service';
 import { PumpInventoryData } from '../pump-inventory';
 import { PumpInventoryService } from '../pump-inventory.service';
-import { IntegrationStateService } from '../../shared/assessment-integration/integration-state.service';
+import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import _ from 'lodash';
 

@@ -12,14 +12,14 @@ import { FormsModule } from '@angular/forms';
 import { ExploreOpportunitiesModule } from '../explore-opportunities/explore-opportunities.module';
 import { PumpOperationsHelpComponent } from './pump-operations-help/pump-operations-help.component';
 import { Co2HelpTextModule } from '../../shared/co2-help-text/co2-help-text.module';
-import { AssessmentIntegrationModule } from '../../shared/assessment-integration/assessment-integration.module';
+import { ConnectedInventoryModule } from '../../shared/connected-inventory/connected-inventory-module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ExploreOpportunitiesModule,
     Co2HelpTextModule,
-    AssessmentIntegrationModule
+    ConnectedInventoryModule
   ],
   declarations: [
     HelpPanelComponent,

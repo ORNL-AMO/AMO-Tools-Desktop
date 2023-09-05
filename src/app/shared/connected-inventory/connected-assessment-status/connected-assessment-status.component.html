@@ -1,5 +1,5 @@
 <ng-container *ngIf="showIntegrationStatus">
-    <div *ngIf="integrationState.assessmentIntegrationStatus === 'settings-differ'" class="integration-status alert-warning small">
+    <div *ngIf="integrationState.connectedAssessmentStatus === 'settings-differ'" class="integration-status alert-warning small">
         <div class="text-right mt-0 pr-3">
             <a (click)="clearIntegrationState()"><span class="fa fa-times"></span></a>
         </div>
@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    <div *ngIf="integrationState.assessmentIntegrationStatus === 'invalid'" class="integration-status alert-danger small">
+    <div *ngIf="integrationState.connectedAssessmentStatus === 'invalid'" class="integration-status alert-danger small">
         <div class="text-right mt-0 pr-3">
             <a (click)="clearIntegrationState()"><span class="fa fa-times"></span></a>
         </div>
@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <div *ngIf="integrationState.assessmentIntegrationStatus === 'connected-assessment-differs'"
+    <div *ngIf="integrationState.connectedAssessmentStatus === 'connected-assessment-differs'"
         class="integration-status alert-danger small">
         <div class="text-right mt-1 pr-3">
             <a (click)="dismiss()"><span class="fa fa-times"></span></a>
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <div *ngIf="integrationState.assessmentIntegrationStatus === 'connected-to-inventory'" class="integration-status alert-info small">
+    <div *ngIf="integrationState.connectedAssessmentStatus === 'connected-to-inventory'" class="integration-status alert-info small">
         <div class=" text-center mx-auto w-75 message">
             This assessment is connected to an inventory.
             <br>
@@ -47,7 +47,7 @@
         </div>
     </div>
 
-    <div *ngIf="integrationState.assessmentIntegrationStatus === 'connected-to-assessment'" class="integration-status alert-info small">
+    <div *ngIf="integrationState.connectedAssessmentStatus === 'connected-to-assessment'" class="integration-status alert-info small">
         <div class=" text-center mx-auto w-75 message">
             This inventory is connected to an assessment.
             <br>
@@ -55,7 +55,7 @@
         </div>
     </div>
 
-    <div *ngIf="integrationState.assessmentIntegrationStatus === 'three-way-connected'" class="integration-status alert-info small">
+    <div *ngIf="integrationState.connectedAssessmentStatus === 'three-way-connected'" class="integration-status alert-info small">
         <div class=" text-center mx-auto w-75 message">
             This inventory is connected to an assessment and another inventory.
             <br>
