@@ -8,6 +8,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGasFormService } from '../flue-gas-form.service';
 import { FlueGasService } from '../flue-gas.service';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-flue-gas-form-volume',
@@ -53,6 +54,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   higherHeatingValue: number;
 
   constructor(private flueGasService: FlueGasService,
+    private convertUnitsService: ConvertUnitsService,
     private flueGasFormService: FlueGasFormService,
     private suiteDbService: SuiteDbService) {
   }
@@ -169,7 +171,11 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.checkWarnings();
     let currentDataByVolume: FlueGas = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm)
     let tmpFlueGas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(currentDataByVolume.flueGasByVolume.gasTypeId);
+    if (this.settings.unitsOfMeasure === 'Metric') {
+      tmpFlueGas.heatingValue = this.convertUnitsService.value(tmpFlueGas.heatingValue).from('btuLb').to('kJkg');
+    }
     this.higherHeatingValue = tmpFlueGas.heatingValue;
+    
     if (this.isBaseline) {
       this.flueGasService.baselineData.next(currentDataByVolume);
     } else {

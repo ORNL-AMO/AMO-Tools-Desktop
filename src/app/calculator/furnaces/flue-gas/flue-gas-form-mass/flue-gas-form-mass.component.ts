@@ -9,6 +9,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGasFormService } from '../flue-gas-form.service';
 import { FlueGasService } from '../flue-gas.service';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-flue-gas-form-mass',
@@ -46,6 +47,7 @@ export class FlueGasFormMassComponent implements OnInit {
 
   constructor(private flueGasService: FlueGasService,
     private flueGasFormService: FlueGasFormService,
+    private convertUnitsService: ConvertUnitsService,
     private phastService: PhastService,
     private cd: ChangeDetectorRef,
     private suiteDbService: SuiteDbService) { }
@@ -170,6 +172,9 @@ export class FlueGasFormMassComponent implements OnInit {
     this.byMassForm = this.flueGasFormService.setValidators(this.byMassForm);
     let tmpFlueGas: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.byMassForm.controls.gasTypeId.value);
     this.higherHeatingValue = this.phastService.flueGasByMassCalculateHeatingValue(tmpFlueGas);
+    if (this.settings.unitsOfMeasure === 'Metric') {
+      this.higherHeatingValue = this.convertUnitsService.value(this.higherHeatingValue).from('btuLb').to('kJkg');
+    }
     this.checkWarnings();
     let currentDataByMass: FlueGas = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
     if (this.isBaseline) {
