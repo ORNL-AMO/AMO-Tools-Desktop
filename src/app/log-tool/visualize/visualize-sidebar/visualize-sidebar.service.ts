@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
-import { GraphObj, LogToolField, AnnotationData, XAxisDataOption } from '../../log-tool-models';
+import { AnnotationData, GraphObj, LogToolField, XAxisDataOption } from '../../log-tool-models';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
 
-@Injectable()
-export class VisualizeMenuService {
+@Injectable({
+  providedIn: 'root'
+})
+export class VisualizeSidebarService {
   selectedGraphObj: any;
   constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
 

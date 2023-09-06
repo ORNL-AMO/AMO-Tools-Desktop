@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { AnnotationData, GraphInteractivity, GraphObj } from '../../../log-tool-models';
 import { VisualizeService } from '../../visualize.service';
-import { VisualizeMenuService } from '../../visualize-menu/visualize-menu.service';
 import { Subscription } from 'rxjs';
 import { HelperFunctionsService } from '../../../../shared/helper-services/helper-functions.service';
+import { VisualizeSidebarService } from '../visualize-sidebar.service';
 
 @Component({
   selector: 'app-graph-annotations',
@@ -26,7 +26,7 @@ export class GraphAnnotationsComponent {
   showTooltipClick: boolean = false;
   showUserGraphOptions: boolean = true;
 
-  constructor(private visualizeService: VisualizeService, private helperFunctionService: HelperFunctionsService, private cd: ChangeDetectorRef, private visualizeMenuService: VisualizeMenuService) { }
+  constructor(private visualizeService: VisualizeService, private helperFunctionService: HelperFunctionsService, private cd: ChangeDetectorRef, private visualizeSidebarService: VisualizeSidebarService) { }
 
   ngOnInit(): void {
     this.visualizeService.focusedPanel.next('annotations');
@@ -53,7 +53,7 @@ export class GraphAnnotationsComponent {
   }
 
   setAnnotation() {
-    this.visualizeMenuService.setAnnotation(this.annotateDataPoint, this.selectedGraphObj);
+    this.visualizeSidebarService.setAnnotation(this.annotateDataPoint, this.selectedGraphObj);
   }
 
    dismissPerformanceWarning() {
@@ -67,7 +67,7 @@ export class GraphAnnotationsComponent {
   toggleAnnotateGraph() {
     this.selectedGraphObj.graphInteractivity.isGraphInteractive = this.isGraphInteractive;
     setTimeout(() => {
-      this.visualizeMenuService.saveExistingPlotChange(this.selectedGraphObj, true);
+      this.visualizeSidebarService.saveExistingPlotChange(this.selectedGraphObj, true);
       this.visualizeService.focusedPanel.next('annotations');
     }, 10);
   }
@@ -115,7 +115,7 @@ export class GraphAnnotationsComponent {
   }
 
   deleteAnnotation(annotation: AnnotationData) {
-    this.visualizeMenuService.deleteAnnotation(annotation, this.selectedGraphObj);
+    this.visualizeSidebarService.deleteAnnotation(annotation, this.selectedGraphObj);
   }
 
 

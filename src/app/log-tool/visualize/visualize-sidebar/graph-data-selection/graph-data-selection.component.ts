@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { GraphObj, YAxisDataOption } from '../../../log-tool-models';
 import { Subscription } from 'rxjs';
-import { VisualizeMenuService } from '../../visualize-menu/visualize-menu.service';
 import { VisualizeService } from '../../visualize.service';
 import { LogToolDataService } from '../../../log-tool-data.service';
+import { VisualizeSidebarService } from '../visualize-sidebar.service';
 
 @Component({
   selector: 'app-graph-data-selection',
@@ -24,7 +24,7 @@ export class GraphDataSelectionComponent {
   selectedYAxisDataOptions: YAxisDataOption[];
   canRunDayTypeAnalysis: boolean;
   constructor(private visualizeService: VisualizeService, 
-    private visualizeMenuService: VisualizeMenuService, 
+    private visualizeSidebarService: VisualizeSidebarService, 
     private logToolDataService: LogToolDataService) { }
 
   ngOnInit(): void {
@@ -51,18 +51,18 @@ export class GraphDataSelectionComponent {
   }
 
   changeSelectedGraphData() {
-    this.visualizeMenuService.changeSelectedGraphData(this.selectedGraphObj);
+    this.visualizeSidebarService.changeSelectedGraphData(this.selectedGraphObj);
   }
 
   setLinesMarkers() {
     this.selectedGraphObj.selectedYAxisDataOptions.map((option) => {
       option.linesOrMarkers = this.markerType;
     });
-    this.visualizeMenuService.setGraphData(this.selectedGraphObj);
+    this.visualizeSidebarService.setGraphData(this.selectedGraphObj);
   }
 
   saveUserInput() {
-    this.visualizeMenuService.saveUserInputChange(this.selectedGraphObj);
+    this.visualizeSidebarService.saveUserInputChange(this.selectedGraphObj);
   }
 
   focusField(field: string) {

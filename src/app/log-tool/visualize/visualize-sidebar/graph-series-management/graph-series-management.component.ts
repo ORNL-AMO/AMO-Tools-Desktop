@@ -1,7 +1,7 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { VisualizeService } from '../../visualize.service';
-import { VisualizeMenuService } from '../../visualize-menu/visualize-menu.service';
 import { GraphObj, YAxisDataOption } from '../../../log-tool-models';
+import { VisualizeSidebarService } from '../visualize-sidebar.service';
 
 @Component({
   selector: 'app-graph-series-management',
@@ -15,7 +15,7 @@ export class GraphSeriesManagementComponent {
   selectedYAxisDataOptions: YAxisDataOption[];
 
   constructor(private visualizeService: VisualizeService,
-    private visualizeMenuService: VisualizeMenuService) { }
+    private visualizeSidebarService: VisualizeSidebarService) { }
 
   ngOnInit() {
     this.visualizeService.focusedPanel.next('other-series');
@@ -28,7 +28,7 @@ export class GraphSeriesManagementComponent {
   }
 
   addDataSeries() {
-    this.visualizeMenuService.addDataSeries(this.selectedGraphObj);
+    this.visualizeSidebarService.addDataSeries(this.selectedGraphObj);
   }
 
   focusField() {
@@ -41,11 +41,11 @@ export class GraphSeriesManagementComponent {
 
   addAxis() {
     this.selectedGraphObj.hasSecondYAxis = true;
-    this.visualizeMenuService.saveExistingPlotChange(this.selectedGraphObj);
+    this.visualizeSidebarService.saveExistingPlotChange(this.selectedGraphObj);
   }
 
   removeAxis() {
-    this.visualizeMenuService.removeAxis(this.selectedGraphObj);
+    this.visualizeSidebarService.removeAxis(this.selectedGraphObj);
   }
 
 }

@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { GraphObj } from '../../log-tool-models';
 import { Subscription } from 'rxjs';
 import { VisualizeService } from '../visualize.service';
-import { VisualizeMenuService } from '../visualize-menu/visualize-menu.service';
 import { LogToolDataService } from '../../log-tool-data.service';
+import { VisualizeSidebarService } from './visualize-sidebar.service';
 
 @Component({
   selector: 'app-visualize-sidebar',
@@ -21,7 +21,7 @@ export class VisualizeSidebarComponent {
   selectedSidebarTab: SidebarTab = 'graph-data';
 
   constructor(private visualizeService: VisualizeService,
-    private visualizeMenuService: VisualizeMenuService,
+    private visualizeSidebarService: VisualizeSidebarService,
     private logToolDataService: LogToolDataService) { }
 
   ngOnInit() {
@@ -32,9 +32,9 @@ export class VisualizeSidebarComponent {
         let isSelectedGraphChange = selectedGraphObj.graphId != this.selectedGraphObj.graphId;
         this.selectedGraphObj = selectedGraphObj;
         if (isSelectedGraphChange) {
-          this.visualizeMenuService.changeSelectedGraphData(this.selectedGraphObj, isSelectedGraphChange);
+          this.visualizeSidebarService.changeSelectedGraphData(this.selectedGraphObj, isSelectedGraphChange);
         } else if (this.selectedGraphObj.data[0].type == 'bar') {
-          this.visualizeMenuService.checkBarHistogramData(this.selectedGraphObj);
+          this.visualizeSidebarService.checkBarHistogramData(this.selectedGraphObj);
         }
 
         // 'scattergl' represents MEASUR scatter graph type, but plotly graph type for time series must be set 'scattergl'
@@ -65,7 +65,7 @@ export class VisualizeSidebarComponent {
   }
   
   saveChanges() {
-    this.visualizeMenuService.saveUserInputChange(this.selectedGraphObj)
+    this.visualizeSidebarService.saveUserInputChange(this.selectedGraphObj)
   }
 
   setSidebarTab(tab: SidebarTab) {

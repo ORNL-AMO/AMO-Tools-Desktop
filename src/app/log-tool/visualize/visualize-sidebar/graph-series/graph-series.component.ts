@@ -1,7 +1,7 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { VisualizeService } from '../../visualize.service';
-import { VisualizeMenuService } from '../../visualize-menu/visualize-menu.service';
 import { GraphObj, YAxisDataOption } from '../../../log-tool-models';
+import { VisualizeSidebarService } from '../visualize-sidebar.service';
 
 @Component({
   selector: 'app-graph-series',
@@ -20,7 +20,8 @@ export class GraphSeriesComponent {
   yAxisOptions: Array<{ axis: string, label: string }> = [{ axis: 'y', label: 'Left' }, { axis: 'y2', label: 'Right' }];
   
   constructor(private visualizeService: VisualizeService,
-    private visualizeMenuService: VisualizeMenuService) { }
+    private visualizeSidebarService: VisualizeSidebarService
+    ) { }
 
   ngOnInit(): void {}
   
@@ -31,30 +32,30 @@ export class GraphSeriesComponent {
   }
 
   saveChanges() {
-    this.visualizeMenuService.saveExistingPlotChange(this.selectedGraphObj);
+    this.visualizeSidebarService.saveExistingPlotChange(this.selectedGraphObj);
   }
   
   saveUserInput() {
-    this.visualizeMenuService.saveUserInputChange(this.selectedGraphObj);
+    this.visualizeSidebarService.saveUserInputChange(this.selectedGraphObj);
   }
 
   setSeriesColor() {
     this.selectedGraphObj.data[this.currentYAxisOption.index].marker.color = this.currentYAxisOption.seriesColor;
     this.selectedGraphObj.data[this.currentYAxisOption.index].line.color = this.currentYAxisOption.seriesColor;
-    this.visualizeMenuService.saveExistingPlotChange(this.selectedGraphObj);
+    this.visualizeSidebarService.saveExistingPlotChange(this.selectedGraphObj);
   }
   
   setYAxisData() {
     if (this.selectedGraphObj.data[0].type == 'time-series' || this.selectedGraphObj.data[0].type == 'scattergl')  {
-      this.visualizeMenuService.resetLayoutRelatedData(this.selectedGraphObj)
+      this.visualizeSidebarService.resetLayoutRelatedData(this.selectedGraphObj)
     }
-    this.visualizeMenuService.setGraphYAxisData(this.selectedGraphObj);
+    this.visualizeSidebarService.setGraphYAxisData(this.selectedGraphObj);
   }
 
   
   setXAxisDataOption() {
-    this.visualizeMenuService.resetLayoutRelatedData(this.selectedGraphObj)
-    this.visualizeMenuService.setSelectedXAxisDataOption(this.selectedGraphObj);
+    this.visualizeSidebarService.resetLayoutRelatedData(this.selectedGraphObj)
+    this.visualizeSidebarService.setSelectedXAxisDataOption(this.selectedGraphObj);
   }
 
   setHistogramStdDeviation(bool: boolean) {
@@ -73,12 +74,12 @@ export class GraphSeriesComponent {
   }
 
   setBarHistogramData() {
-    this.visualizeMenuService.setBarHistogramData(this.selectedGraphObj);
+    this.visualizeSidebarService.setBarHistogramData(this.selectedGraphObj);
   }
 
 
   removeYAxisData() {
-    this.visualizeMenuService.removeYAxisData(this.yAxisOptionIndex, this.selectedGraphObj);
+    this.visualizeSidebarService.removeYAxisData(this.yAxisOptionIndex, this.selectedGraphObj);
   }
 
   focusField(){
