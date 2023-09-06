@@ -258,7 +258,7 @@ export class VisualizeService {
       mode: 'markers',
       yaxis: undefined,
       marker: {
-        color: undefined
+        color: '#351e76'
       },
       line: {
         color: undefined,

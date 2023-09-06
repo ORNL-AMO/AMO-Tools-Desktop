@@ -24,3 +24,7 @@ div.card {
     color: gray;
     text-align: center;
 }
+
+.card-body.scroll-item {
+    max-height: 500px;
+}

@@ -2,15 +2,12 @@
     font-size: 20px;
 }
 
-.help-info{
-    background-color: white;
-}
-
-.scroll-container {
-    min-height: 200px;
-}
-
 .help-item {
-        flex:1;
-        min-width: 0;
+    flex:1;
+    min-width: 0;
+}
+
+.scroll-container.scroll-item {
+    min-height: 200px;
+    background: #ececec;
 }

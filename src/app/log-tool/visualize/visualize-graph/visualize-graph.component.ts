@@ -57,8 +57,6 @@ export class VisualizeGraphComponent implements OnInit {
         return interval(userInputDelay);
       })
     ).subscribe((graphObj: GraphObj) => {
-      // todo 6284 save data is creating zone.js lag
-      // this.logToolDbService.saveData();
       this.selectedGraphObj = graphObj;
       this.updateGraphObjects();
       this.renderUserInputEvents();

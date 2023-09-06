@@ -2,7 +2,6 @@ import { Component, Input, SimpleChanges } from '@angular/core';
 import { VisualizeService } from '../../visualize.service';
 import { VisualizeMenuService } from '../../visualize-menu/visualize-menu.service';
 import { GraphObj, YAxisDataOption } from '../../../log-tool-models';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-graph-series-management',
@@ -12,13 +11,20 @@ import { Subscription } from 'rxjs';
 export class GraphSeriesManagementComponent {
   @Input()
   selectedGraphObj: GraphObj;
-  selectedGraphObjSubscription: Subscription;
+  @Input()
+  selectedYAxisDataOptions: YAxisDataOption[];
 
   constructor(private visualizeService: VisualizeService,
     private visualizeMenuService: VisualizeMenuService) { }
 
   ngOnInit() {
     this.visualizeService.focusedPanel.next('other-series');
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.selectedGraphObj) {
+      this.selectedYAxisDataOptions = this.selectedGraphObj.selectedYAxisDataOptions;
+    }
   }
 
   addDataSeries() {

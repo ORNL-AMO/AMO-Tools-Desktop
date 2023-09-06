@@ -16,6 +16,7 @@ table{
     width: fit-content;
 }
 
-.scroll-container {
+.scroll-item.scroll-container {
     min-height: 200px;
+    background-color: #ececec;
 }

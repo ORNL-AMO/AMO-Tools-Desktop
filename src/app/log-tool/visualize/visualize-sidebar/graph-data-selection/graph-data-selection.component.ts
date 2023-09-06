@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { GraphObj } from '../../../log-tool-models';
+import { GraphObj, YAxisDataOption } from '../../../log-tool-models';
 import { Subscription } from 'rxjs';
 import { VisualizeMenuService } from '../../visualize-menu/visualize-menu.service';
 import { VisualizeService } from '../../visualize.service';
@@ -21,6 +21,7 @@ export class GraphDataSelectionComponent {
   selectedGraphObjSub: Subscription;
   markerTypes: Array<Object>;
   markerType: string;
+  selectedYAxisDataOptions: YAxisDataOption[];
   canRunDayTypeAnalysis: boolean;
   constructor(private visualizeService: VisualizeService, 
     private visualizeMenuService: VisualizeMenuService, 
@@ -31,12 +32,12 @@ export class GraphDataSelectionComponent {
     this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(selectedGraphObj => {
       this.selectedGraphObj = selectedGraphObj;
-      debugger;
+      this.selectedYAxisDataOptions = this.selectedGraphObj.selectedYAxisDataOptions;
 
       // 'scattergl' represents MEASUR scatter graph type, but plotly graph type for time series must be set 'scattergl'
       if (this.selectedGraphObj.isTimeSeries === true) {
         this.selectedGraphObj.data[0].type = 'time-series';
-        this.markerTypes = [{ label: "Lines & Markers", value: "lines+markers" }, { label: "Lines", value: "lines" }, { label: "Markers", value: "markers" }];
+        this.markerTypes = [{ label: "Lines", value: "lines" }, { label: "Lines & Markers", value: "lines+markers" }, { label: "Markers", value: "markers" }];
       } else if (this.selectedGraphObj.data[0].type !== 'bar') {
         this.selectedGraphObj.data[0].type = 'scattergl';
       }

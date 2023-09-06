@@ -1,9 +1,9 @@
-<div *ngIf="currentYAxisOption" (click)="focusField()" class="card">
+<div *ngIf="currentYAxisOption !== undefined" (click)="focusField()" class="card">
     <div *ngIf="yAxisOptionIndex !== 0" class="d-flex flex-row p-0 justify-content-end">
         <span class="fa fa-times remove-series" (click)="removeYAxisData()"></span>
     </div>
 
-    <div class="card-body p-2">
+    <div class="card-body p-2 scroll-item">
         <form>
             <!-- Time Series, Scatter -->
             <ng-container *ngIf="selectedGraphObj.data[0].type !== 'bar'">

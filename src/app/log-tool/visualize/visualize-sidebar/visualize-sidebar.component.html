@@ -19,7 +19,7 @@
           <a class="nav-link px-2" (click)="setSidebarTab('graph-data')" [ngClass]="{'active': selectedSidebarTab === 'graph-data'}" >Data</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link px-2" (click)="setSidebarTab('other-series')" [ngClass]="{'active': selectedSidebarTab === 'other-series'}">Other Series</a>
+          <a class="nav-link px-2" (click)="setSidebarTab('other-series')" [ngClass]="{'active': selectedSidebarTab === 'other-series', 'disabled': selectedGraphObj.data[0].type === 'bar'}">Other Series</a>
         </li>
         <li class="nav-item">
           <a class="nav-link px-2" (click)="setSidebarTab('annotations')" [ngClass]="{'active': selectedSidebarTab === 'annotations'}">Annotations</a>

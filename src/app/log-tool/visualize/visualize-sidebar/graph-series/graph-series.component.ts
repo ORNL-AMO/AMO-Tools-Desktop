@@ -12,6 +12,8 @@ export class GraphSeriesComponent {
   @Input()
   selectedGraphObj: GraphObj;
   @Input()
+  selectedYAxisDataOptions: YAxisDataOption[];
+  @Input()
   yAxisOptionIndex: number;
   
   currentYAxisOption: YAxisDataOption
@@ -21,10 +23,11 @@ export class GraphSeriesComponent {
     private visualizeMenuService: VisualizeMenuService) { }
 
   ngOnInit(): void {}
-
+  
   ngOnChanges(changes: SimpleChanges) {
-    debugger;
-    this.currentYAxisOption = this.selectedGraphObj.selectedYAxisDataOptions.find((option, index) => index === this.yAxisOptionIndex);
+    if (this.selectedYAxisDataOptions) {
+      this.currentYAxisOption = this.selectedYAxisDataOptions.find((option, index) => index === this.yAxisOptionIndex);
+    }
   }
 
   saveChanges() {

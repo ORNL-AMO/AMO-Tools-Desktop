@@ -59,12 +59,18 @@ export class VisualizeMenuService {
       this.checkBarHistogramData(selectedGraphObj);
     } else if (selectedGraphObj.data[0].type == 'time-series') {
       selectedGraphObj.isTimeSeries = true;
+      selectedGraphObj.selectedYAxisDataOptions.map(selectedYOption => selectedYOption.linesOrMarkers = 'lines');
       // plotly type for time-series == scattergl
       selectedGraphObj.data[0].type = 'scattergl';
     }
     if (!isSelectedGraphChange) {
       // We don't need to reset because we're changing to an entirely different graph
       this.resetLayoutRelatedData(selectedGraphObj);
+      // reset series any added series related data
+      let graphType = selectedGraphObj.data[0].type;
+      selectedGraphObj.data = this.visualizeService.getEmptyGraphData();
+      selectedGraphObj.data[0].type = graphType;
+      selectedGraphObj.selectedYAxisDataOptions = [selectedGraphObj.selectedYAxisDataOptions[0]];
     }
     this.setGraphData(selectedGraphObj);
   }
@@ -85,7 +91,6 @@ export class VisualizeMenuService {
         if (testOptionExists) {
           //set to current option value for data binding
           option.dataOption = testOptionExists;
-          console.log('adding yaxis option', option.seriesName, option.index)
           tmpSelectedYAxisDataOptions.push(option);
         }
       }
@@ -95,13 +100,14 @@ export class VisualizeMenuService {
       selectedGraphObj.selectedYAxisDataOptions = tmpSelectedYAxisDataOptions;
     } else {
       let defaultColor: string = '#351e76';
+      let defaultMarkerType: string = selectedGraphObj.isTimeSeries? 'lines' : 'markers';
       selectedGraphObj.selectedYAxisDataOptions = [{
         index: 0,
         dataOption: selectedGraphObj.yAxisDataOptions[0],
         seriesColor: defaultColor,
         seriesName: this.getSeriesName(selectedGraphObj.yAxisDataOptions[0].dataField),
         yaxis: 'y',
-        linesOrMarkers: 'markers'
+        linesOrMarkers: defaultMarkerType
       }];
     }
   }
@@ -245,37 +251,36 @@ export class VisualizeMenuService {
   }
 
   setGraphYAxisData(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
-    let index: number = 0;
-    selectedGraphObj.selectedYAxisDataOptions.forEach(selectedDataOption => {
-      selectedGraphObj.data[index].mode = selectedDataOption.linesOrMarkers;
-      if (selectedGraphObj.isTimeSeries) {
-        let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(selectedDataOption.dataOption.dataField);
-        if (timeData) {
-          selectedGraphObj.data[index].x = timeData;
-          selectedGraphObj.data[index].mode = 'lines';
+    selectedGraphObj.selectedYAxisDataOptions.forEach((selectedDataOption, index) => {
+      if (selectedGraphObj.data[index]) {
+        if (selectedGraphObj.isTimeSeries) {
+          let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(selectedDataOption.dataOption.dataField);
+          if (timeData) {
+            selectedGraphObj.data[index].x = timeData;
+            selectedGraphObj.data[index].mode = selectedDataOption.linesOrMarkers;
+          }
+        } else {
+          // Lines not a valid mode for non-time series
+          selectedGraphObj.data[index].mode = 'markers';
+          selectedDataOption.linesOrMarkers = 'markers';
         }
+        selectedGraphObj.isTimeSeries = selectedGraphObj.isTimeSeries;
+        selectedGraphObj = this.visualizeService.setDefaultGraphInteractivity(selectedGraphObj, selectedGraphObj.data[index].x.length);
+        selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
+        selectedGraphObj.data[index].name = selectedDataOption.seriesName;
+        selectedGraphObj.data[index].dataSeriesId = Math.random().toString(36).substr(2, 9);
+        selectedGraphObj.data[index].marker.color = selectedDataOption.seriesColor;
+        selectedGraphObj.data[index].line.color = selectedDataOption.seriesColor;
+        selectedGraphObj.data[index].yaxis = selectedDataOption.yaxis;
       }
-      else {
-        // Lines not a valid mode for non-time series
-        selectedDataOption.linesOrMarkers = 'markers';
-      }
-      selectedGraphObj.isTimeSeries = selectedGraphObj.isTimeSeries;
-      selectedGraphObj = this.visualizeService.setDefaultGraphInteractivity(selectedGraphObj, selectedGraphObj.data[index].x.length);
-      selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
-      selectedGraphObj.data[index].name = selectedDataOption.seriesName;
-      selectedGraphObj.data[index].dataSeriesId = Math.random().toString(36).substr(2, 9);
-      selectedGraphObj.data[index].marker.color = selectedDataOption.seriesColor;
-      selectedGraphObj.data[index].line.color = selectedDataOption.seriesColor;
-      selectedGraphObj.data[index].yaxis = selectedDataOption.yaxis;
-      index++;
     })
-
-      if (shouldRenderGraph) {
-        this.saveGraphDataChange(selectedGraphObj);
-        this.visualizeService.shouldRenderGraph.next(true)
-      } else {
-        this.saveGraphDataChange(selectedGraphObj);
-      }
+    console.log(selectedGraphObj);
+    if (shouldRenderGraph) {
+      this.saveGraphDataChange(selectedGraphObj);
+      this.visualizeService.shouldRenderGraph.next(true)
+    } else {
+      this.saveGraphDataChange(selectedGraphObj);
+    }
   }
 
   setBarChartDataOptions(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {

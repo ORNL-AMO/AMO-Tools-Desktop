@@ -11,7 +11,7 @@
             </select>
         </div>
     </form>
-    <app-graph-series [selectedGraphObj]="selectedGraphObj" [yAxisOptionIndex]="0"></app-graph-series>
+    <app-graph-series [selectedGraphObj]="selectedGraphObj" [selectedYAxisDataOptions]="selectedYAxisDataOptions" [yAxisOptionIndex]="0"></app-graph-series>
     <form>
         <!--  todo marker type goes on each series? -->
         <div class="form-group pt-2" *ngIf="canRunDayTypeAnalysis && selectedGraphObj.data[0].type == 'time-series'">
