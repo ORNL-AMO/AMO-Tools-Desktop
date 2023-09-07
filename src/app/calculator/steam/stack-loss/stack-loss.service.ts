@@ -179,28 +179,40 @@ export class StackLossService {
     return flueGasByVolume;
   }
 
+  // * property matched to NAN bindings is "ambientAirTemp" 
+  // * both "ambientAirTemp", "ambientAirTempF" are sent to wasm bindings, but getProcessHeatProperties() param ambientAirTempF is hardcoded to 60
+  
+  // WASM suite method - "ambientAirTempF" param is hardcoded at 60
+  // double GasFlueGasMaterial::getHeatLoss() {
+    // return compositions.getProcessHeatProperties(flueGasTemperature, excessAirPercentage/100, combustionAirTemperature, fuelTemperature, 60, 0).availableHeat;
+
   flueGasByVolume(input: FlueGasByVolume, settings: Settings): FlueGasByVolumeSuiteResults {
     let inputs: FlueGasByVolume = JSON.parse(JSON.stringify(input));
-    inputs.ambientAirTempF = inputs.ambientAirTemp;
     inputs.combAirMoisturePerc = inputs.moistureInAirCombustion / 100;
     inputs.flueGasO2Percentage = inputs.o2InFlueGas;
+    // todo ambientAirTemp vs ambientairTempF might cause dev to wasm merge conflict until wasm branch is integrated - then remove
+    inputs.ambientAirTemp = this.convertUnitsService.value(inputs.ambientAirTemp).from(settings.temperatureMeasurement).to('F');
+    inputs.ambientAirTempF = inputs.ambientAirTemp;
     inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from(settings.temperatureMeasurement).to('F');
-    inputs.ambientAirTempF = this.convertUnitsService.value(inputs.ambientAirTempF).from(settings.temperatureMeasurement).to('F');
     inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from(settings.temperatureMeasurement).to('F');
+    console.log('inputs', inputs);
     let results: FlueGasByVolumeSuiteResults = phastAddon.flueGasLossesByVolume(inputs);
+    console.log('results', results);
     return results;
   }
-
+  
+   // * property matched to both NAN and wasm bindings is "ambientAirTempF" 
+   // suite method SolidLiquidFlueGasMaterial default is 60
   flueGasByMass(input: FlueGasByMass, settings: Settings) {
     let inputs: FlueGasByMass = JSON.parse(JSON.stringify(input));
-    inputs.ambientAirTempF = inputs.ambientAirTemp;
     inputs.combAirMoisturePerc = inputs.moistureInAirCombustion;
+    inputs.ambientAirTemp = this.convertUnitsService.value(inputs.ambientAirTemp).from(settings.temperatureMeasurement).to('F');
+    inputs.ambientAirTempF = inputs.ambientAirTemp;
     inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.ashDischargeTemperature = this.convertUnitsService.value(inputs.ashDischargeTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from(settings.temperatureMeasurement).to('F');
-    inputs.ambientAirTempF = this.convertUnitsService.value(inputs.ambientAirTempF).from(settings.temperatureMeasurement).to('F');
     let results = phastAddon.flueGasLossesByMass(inputs);
     return results;
   }
