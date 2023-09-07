@@ -1,0 +1,37 @@
+<ng-container *ngIf="selectedGraphObj">
+    <label class="group-label d-flex flex-row p-0 justify-content-between mt-3 mb-2">
+        <span>Primary Data Series</span>
+    </label>
+    <form>
+        <div class="form-group pt-2">
+            <select class="form-control w-100" name="graphType" [(ngModel)]="selectedGraphObj.data[0].type"
+                (change)="changeSelectedGraphData()" (focus)="focusField()" (blur)="focusOut()">
+                <option *ngFor="let graphType of graphTypes" [ngValue]="graphType.value">{{graphType.label}}
+                </option>
+            </select>
+        </div>
+    </form>
+    <app-graph-series [selectedGraphObj]="selectedGraphObj" [selectedYAxisDataOptions]="selectedYAxisDataOptions" [yAxisOptionIndex]="0"></app-graph-series>
+    <form>
+        <!--  todo marker type goes on each series? -->
+        <div class="form-group pt-2" *ngIf="canRunDayTypeAnalysis && selectedGraphObj.data[0].type == 'time-series'">
+            <select class="form-control w-100" name="markerType" (ngModelChange)="markerType = $event"
+                [ngModel]="selectedGraphObj.data[0].mode" (change)="setLinesMarkers()" (focus)="focusField()"
+                (blur)="focusOut()">
+                <option *ngFor="let markerTypeValue of markerTypes" [ngValue]="markerTypeValue.value">
+                    {{markerTypeValue.label}}
+                </option>
+            </select>
+        </div>
+        <div class="form-group pt-2">
+            <textarea rows="1" class="form-control w-100" [(ngModel)]="selectedGraphObj.layout.xaxis.title.text"
+                name="xAxisLabel" id="xAxisLabel" (input)="saveUserInput()" (focus)="focusField()"
+                (blur)="focusOut()"></textarea>
+        </div>
+        <div class="form-group pt-2">
+            <textarea rows="1" class="form-control w-100" [(ngModel)]="selectedGraphObj.layout.yaxis.title.text"
+                name="yAxisLabel" id="yAxisLabel" (input)="saveUserInput()" (focus)="focusField()"
+                (blur)="focusOut()"></textarea>
+        </div>
+    </form>
+</ng-container>

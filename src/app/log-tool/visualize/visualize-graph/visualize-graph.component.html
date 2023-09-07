@@ -1,4 +1,4 @@
-<div class="m-0 p-2" #graphContainer>
+<div (click)="focusGraph()" class="m-0 p-2" #graphContainer>
     <ng-container *ngIf="selectedGraphObj && selectedGraphObj.isGraphInitialized">
         <div class="data-explorer-visualizer graph-card m-0 pt-2 pb-0">
             <div *ngIf="selectedGraphObj.graphInteractivity.hasLargeDataset && timeSeriesSegments.length != 0"
@@ -27,7 +27,7 @@
             </div>
         </div>
     </ng-container>
-    
+
     <div #visualizeGraph id="plotlyDiv"></div>
     <ng-container *ngIf="!selectedGraphObj || (selectedGraphObj && !selectedGraphObj.isGraphInitialized)">
         <div class="data-explorer-visualizer graph-card m-0 p-0 justify-content-center" style="height: 450px;">
@@ -40,4 +40,4 @@
             </div>
         </div>
     </ng-container>
-    </div>
+</div>

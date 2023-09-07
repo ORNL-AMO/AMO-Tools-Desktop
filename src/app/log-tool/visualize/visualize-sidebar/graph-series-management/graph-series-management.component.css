@@ -1,0 +1,6 @@
+label.group-label {
+    font-size: 14px; 
+    display: inline-block;
+    width: 100%;
+    border-bottom: #c0c0c0 solid 1px;
+}
