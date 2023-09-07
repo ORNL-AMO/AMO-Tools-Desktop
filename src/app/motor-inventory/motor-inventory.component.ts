@@ -10,7 +10,7 @@ import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { MotorCatalogService } from './motor-inventory-setup/motor-catalog/motor-catalog.service';
 import { BatchAnalysisService, BatchAnalysisSettings } from './batch-analysis/batch-analysis.service';
-import { MotorIntegrationService } from '../shared/assessment-integration/motor-integration.service';
+import { MotorIntegrationService } from '../shared/connected-inventory/motor-integration.service';
 
 declare const packageJson;
 

@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IntegrationState, InventorySelectOptions, InventoryOption, ConnectedInventoryData, ConnectedItem } from '../../shared/assessment-integration/integrations';
-import { PsatIntegrationService } from '../../shared/assessment-integration/psat-integration.service';
+import { IntegrationState, InventorySelectOptions, InventoryOption, ConnectedInventoryData, ConnectedItem } from '../../shared/connected-inventory/integrations';
+import { PsatIntegrationService } from '../../shared/connected-inventory/psat-integration.service';
 import { Subscription } from 'rxjs';
-import { IntegrationStateService } from '../../shared/assessment-integration/integration-state.service';
+import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { Assessment } from '../../shared/models/assessment';
 import { PSAT } from '../../shared/models/psat';
@@ -27,7 +27,7 @@ export class IntegratePumpInventoryComponent {
   @Input()
   selected: boolean;
 
-  assessmentIntegrationState: IntegrationState;
+  connectedAssessmentState: IntegrationState;
   inventorySelectOptions: InventorySelectOptions;
   connectedInventoryDataSub: Subscription;
 

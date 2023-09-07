@@ -12,7 +12,7 @@ import { AssessmentCo2SavingsModule } from '../../shared/assessment-co2-savings/
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SettingsModule } from '../../settings/settings.module';
-import { AssessmentIntegrationModule } from '../../shared/assessment-integration/assessment-integration.module';
+import { ConnectedInventoryModule } from '../../shared/connected-inventory/connected-inventory-module';
 
 
 
@@ -34,7 +34,7 @@ import { AssessmentIntegrationModule } from '../../shared/assessment-integration
     SharedPipesModule,
     AssessmentCo2SavingsModule,
     ConfirmDeleteModalModule,
-    AssessmentIntegrationModule
+    ConnectedInventoryModule
   ], 
   exports: [PumpInventorySetupComponent]
 })

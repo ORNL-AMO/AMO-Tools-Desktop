@@ -14,7 +14,9 @@ export class FsatWarningService {
 
   checkOperationsWarnings(fsat: FSAT, settings: Settings, isModification: boolean): FanOperationsWarnings{
     let warnings: FanOperationsWarnings = {
-      costError: this.checkCost(fsat),
+      costError: null,
+      // 5994 
+      // costError: this.checkCost(fsat),
     };
 
     return warnings;
@@ -342,7 +344,7 @@ export class FsatWarningService {
   checkWarningsExist(warnings: FanFieldDataWarnings | FanMotorWarnings | { fanSpeedError: string }): boolean {
     let hasWarning: boolean = false;
     for (var key in warnings) {
-      if (warnings[key] !== null) {
+      if (warnings[key] !== null && warnings[key] !== undefined) {
         hasWarning = true;
       }
     }

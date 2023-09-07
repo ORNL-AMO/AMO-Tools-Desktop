@@ -10,7 +10,7 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatService } from '../psat.service';
 import * as _ from 'lodash';
 import { firstValueFrom } from 'rxjs';
-import { IntegrationState } from '../../shared/assessment-integration/integrations';
+import { IntegrationState } from '../../shared/connected-inventory/integrations';
 
 @Component({
   selector: 'app-system-basics',
@@ -39,7 +39,7 @@ export class SystemBasicsComponent implements OnDestroy {
   oldSettings: Settings;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
-  assessmentIntegrationState: IntegrationState;
+  connectedAssessmentState: IntegrationState;
   @ViewChild('settingsModal', { static: false }) public settingsModal: ModalDirective;
 
   constructor(private settingsService: SettingsService, private settingsDbService: SettingsDbService, private psatService: PsatService) { }
@@ -61,12 +61,12 @@ export class SystemBasicsComponent implements OnDestroy {
 
   setConnectedInventoryWarning() {
     if (this.assessmentPsat.connectedItem) {
-      this.assessmentIntegrationState = {
-        assessmentIntegrationStatus: 'connected-to-inventory'
+      this.connectedAssessmentState = {
+        connectedAssessmentStatus: 'connected-to-inventory'
       }
     } else {
-      this.assessmentIntegrationState = {
-        assessmentIntegrationStatus: undefined
+      this.connectedAssessmentState = {
+        connectedAssessmentStatus: undefined
       }
     }
   }

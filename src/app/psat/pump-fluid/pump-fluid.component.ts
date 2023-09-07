@@ -9,7 +9,7 @@ import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { pumpTypesConstant, driveConstants, fluidProperties, fluidTypes } from '../psatConstants';
 import { PsatWarningService } from '../psat-warning.service';
 import { PumpFluidService } from './pump-fluid.service';
-import { IntegrationStateService } from '../../shared/assessment-integration/integration-state.service';
+import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 
 @Component({
   selector: 'app-pump-fluid',

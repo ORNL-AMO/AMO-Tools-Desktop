@@ -30,7 +30,7 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { PercentLoadEstimationModule } from '../../../calculator/motors/percent-load-estimation/percent-load-estimation.module';
 import { DeleteMotorModalComponent } from './delete-motor-modal/delete-motor-modal.component';
-import { AssessmentIntegrationModule } from '../../../shared/assessment-integration/assessment-integration.module';
+import { ConnectedInventoryModule } from '../../../shared/connected-inventory/connected-inventory-module';
 
 @NgModule({
   declarations: [
@@ -58,7 +58,7 @@ import { AssessmentIntegrationModule } from '../../../shared/assessment-integrat
     SharedPipesModule,
     OperatingHoursModalModule,
     PercentLoadEstimationModule,
-    AssessmentIntegrationModule
+    ConnectedInventoryModule
   ],
   providers: [
     BatchAnalysisDataService,
