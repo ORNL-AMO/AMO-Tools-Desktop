@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef, OnChanges } from '@angular/core';
 import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
@@ -14,7 +14,7 @@ import { MaterialInputProperties } from '../../../../../shared/models/phast/loss
   templateUrl: './stack-loss-by-mass.component.html',
   styleUrls: ['./stack-loss-by-mass.component.css']
 })
-export class StackLossByMassComponent implements OnInit {
+export class StackLossByMassComponent implements OnChanges {
   @Input()
   stackLossForm: UntypedFormGroup;
   @Output('emitCalculate')
@@ -48,7 +48,7 @@ export class StackLossByMassComponent implements OnInit {
     private stackLossService: StackLossService) { }
 
 
-  ngOnInit() {
+    ngOnChanges() {
     this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     if (this.stackLossForm) {
       if (this.stackLossForm.controls.gasTypeId.value && this.stackLossForm.controls.gasTypeId.value !== '') {
