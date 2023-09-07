@@ -180,12 +180,7 @@ export class StackLossService {
   }
 
   // * property matched to NAN bindings is "ambientAirTemp" 
-  // * both "ambientAirTemp", "ambientAirTempF" are sent to wasm bindings, but getProcessHeatProperties() param ambientAirTempF is hardcoded to 60
-  
-  // WASM suite method - "ambientAirTempF" param is hardcoded at 60
-  // double GasFlueGasMaterial::getHeatLoss() {
-    // return compositions.getProcessHeatProperties(flueGasTemperature, excessAirPercentage/100, combustionAirTemperature, fuelTemperature, 60, 0).availableHeat;
-
+  // * property matched to wasm bindings is "ambientAirTempF" - used in getProcessHeatProperties()
   flueGasByVolume(input: FlueGasByVolume, settings: Settings): FlueGasByVolumeSuiteResults {
     let inputs: FlueGasByVolume = JSON.parse(JSON.stringify(input));
     inputs.combAirMoisturePerc = inputs.moistureInAirCombustion / 100;
@@ -196,9 +191,7 @@ export class StackLossService {
     inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from(settings.temperatureMeasurement).to('F');
-    console.log('inputs', inputs);
     let results: FlueGasByVolumeSuiteResults = phastAddon.flueGasLossesByVolume(inputs);
-    console.log('results', results);
     return results;
   }
   
