@@ -20,8 +20,8 @@ import { FieldDataService } from './field-data/field-data.service';
 import { SettingsService } from '../settings/settings.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import { PumpOperationsService } from './pump-operations/pump-operations.service';
-import { PsatIntegrationService } from '../shared/assessment-integration/psat-integration.service';
-import { IntegrationStateService } from '../shared/assessment-integration/integration-state.service';
+import { PsatIntegrationService } from '../shared/connected-inventory/psat-integration.service';
+import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
 import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
 
 @Component({

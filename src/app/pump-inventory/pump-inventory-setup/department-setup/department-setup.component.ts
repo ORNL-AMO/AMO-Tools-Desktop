@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PumpInventoryData, PumpInventoryDepartment } from '../../pump-inventory';
 import { PumpInventoryService } from '../../pump-inventory.service';
-import { MotorIntegrationService } from '../../../shared/assessment-integration/motor-integration.service';
+import { MotorIntegrationService } from '../../../shared/connected-inventory/motor-integration.service';
 
 @Component({
   selector: 'app-department-setup',

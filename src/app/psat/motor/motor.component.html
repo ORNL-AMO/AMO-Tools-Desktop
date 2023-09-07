@@ -6,9 +6,9 @@
   </div>
 
   <div class="mx-3 my-0">
-    <app-assessment-integration-status
+    <app-connected-assessment-status
       [connectedToType]="'inventory'" [connectedFormGroupName]="'motor'">
-    </app-assessment-integration-status>
+    </app-connected-assessment-status>
   </div>
 
   <div class="mx-3 my-0" *ngIf="!hasConnectedPumpInventory && (inSetup || baseline)">

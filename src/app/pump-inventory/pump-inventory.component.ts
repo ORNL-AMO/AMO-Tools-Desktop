@@ -8,10 +8,10 @@ import { Settings } from '../shared/models/settings';
 import { PumpCatalogService } from './pump-inventory-setup/pump-catalog/pump-catalog.service';
 import { PumpInventoryData, PumpInventoryDepartment, PumpItem } from './pump-inventory';
 import { PumpInventoryService } from './pump-inventory.service';
-import { MotorIntegrationService } from '../shared/assessment-integration/motor-integration.service';
-import { PsatIntegrationService } from '../shared/assessment-integration/psat-integration.service';
-import { IntegrationStateService } from '../shared/assessment-integration/integration-state.service';
-import { ConnectedInventoryData } from '../shared/assessment-integration/integrations';
+import { MotorIntegrationService } from '../shared/connected-inventory/motor-integration.service';
+import { PsatIntegrationService } from '../shared/connected-inventory/psat-integration.service';
+import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
+import { ConnectedInventoryData } from '../shared/connected-inventory/integrations';
 
 declare const packageJson;
 

@@ -12,7 +12,7 @@ import { Calculator } from '../shared/models/calculators';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { InventoryDbService } from './inventory-db.service';
 import { firstValueFrom } from 'rxjs';
-import { PsatIntegrationService } from '../shared/assessment-integration/psat-integration.service';
+import { PsatIntegrationService } from '../shared/connected-inventory/psat-integration.service';
 @Injectable()
 export class DeleteDataService {
 
