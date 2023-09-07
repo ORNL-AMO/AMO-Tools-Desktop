@@ -442,7 +442,9 @@ export class PhastService {
       inputCopy.fuelTemperature = this.convertUnitsService.value(inputCopy.fuelTemperature).from('C').to('F');
       inputCopy.ambientAirTempF = this.convertUnitsService.value(inputCopy.ambientAirTempF).from('C').to('F');
     }
-    return this.processHeatingApiService.flueGasLossesByMass(inputCopy);;
+    
+    let results = this.processHeatingApiService.flueGasLossesByMass(inputCopy);
+    return results
   }
 
   flueGasCalculateExcessAir(input: MaterialInputProperties): number {
