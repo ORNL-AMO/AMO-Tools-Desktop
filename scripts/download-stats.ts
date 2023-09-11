@@ -1,158 +1,161 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import * as Papa from 'papaparse';
-import { promises as fs, existsSync } from 'fs';
-import * as path from 'path';
+// Use JS file -- Module imports with current node versions causing some circular errors here when troubleshooting tsconfig and package.json settings
 
-const API_URL_MEASUR = 'https://api.github.com/repos/ORNL-AMO/AMO-Tools-Desktop';
-const API_URL_VERIFI = 'https://api.github.com/repos/ORNL-AMO/VERIFI';
-const MAX_PAGES = 10;
-const OUTPUT_DIR = path.join(__dirname, 'download-stats');
+// import axios, { AxiosError, AxiosResponse } from 'axios';
+// // const (axios, AxiosError, AxiosResponse } = require('axios')
+// import * as Papa from 'papaparse';
+// import { promises as fs, existsSync } from 'fs';
+// import * as path from 'path';
 
-// Field name strings
-const LatestLinux = 'latest-linux.yml';
-const LatestMac = 'latest-mac.yml';
-const Latest = 'latest.yml';
-const AppImage = 'Linux AppImage';
-const TarGz = 'Linux Tar.GZ';
-const Windows = 'Windows';
-const MacZip = 'Mac .ZIP';
-const MacDMG = 'Mac .DMG';
+// const API_URL_MEASUR = 'https://api.github.com/repos/ORNL-AMO/AMO-Tools-Desktop';
+// const API_URL_VERIFI = 'https://api.github.com/repos/ORNL-AMO/VERIFI';
+// const MAX_PAGES = 10;
+// const OUTPUT_DIR = path.join(__dirname, 'download-stats');
 
-main();
+// // Field name strings
+// const LatestLinux = 'latest-linux.yml';
+// const LatestMac = 'latest-mac.yml';
+// const Latest = 'latest.yml';
+// const AppImage = 'Linux AppImage';
+// const TarGz = 'Linux Tar.GZ';
+// const Windows = 'Windows';
+// const MacZip = 'Mac .ZIP';
+// const MacDMG = 'Mac .DMG';
 
-async function main() {
+// main();
 
-    if (!existsSync(OUTPUT_DIR)) {
-        console.log('Output directory does not exist. Creating...');
-        fs.mkdir(OUTPUT_DIR);
-    }
+// async function main() {
 
-    const headers = getHeaders();
-    const releases = await getReleases(headers, API_URL_MEASUR, 'raw_MEASUR_data.json');
-    // const releases = require('./download-stats/raw-data.json');
-    const csv = parseReleases(releases);
-    outputCsv(csv, 'MEASUR_downloads.csv');
+//     if (!existsSync(OUTPUT_DIR)) {
+//         console.log('Output directory does not exist. Creating...');
+//         fs.mkdir(OUTPUT_DIR);
+//     }
 
-    const releasesVERIFI = await getReleases(headers, API_URL_VERIFI, 'raw_VERIFI_data.json');
-    // const releases = require('./download-stats/raw-data.json');
-    const csvVERIFI = parseReleases(releasesVERIFI);
-    outputCsv(csvVERIFI, 'VERIFI_downloads.csv');
-}
+//     const headers = getHeaders();
+//     const releases = await getReleases(headers, API_URL_MEASUR, 'raw_MEASUR_data.json');
+//     // const releases = require('./download-stats/raw-data.json');
+//     const csv = parseReleases(releases);
+//     outputCsv(csv, 'MEASUR_downloads.csv');
 
-function getHeaders() {
-    let headers = {};
+//     const releasesVERIFI = await getReleases(headers, API_URL_VERIFI, 'raw_VERIFI_data.json');
+//     // const releases = require('./download-stats/raw-data.json');
+//     const csvVERIFI = parseReleases(releasesVERIFI);
+//     outputCsv(csvVERIFI, 'VERIFI_downloads.csv');
+// }
 
-    if (process.env.git_token) {
-        headers = { 'Authorization': process.env.git_token };
-    }
-    else {
-        console.log(
-            'WARNING: Could not find a GitHub user access token in the system environment variables. Web requests may be limited without one.' +
-            ' If you encounter issues, please create a GitHub access token' +
-            ' (https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)' +
-            ' and then set it as an environment variable called "git_token".\n'
-        );
-    }
-    return headers;
-}
+// function getHeaders() {
+//     let headers = {};
 
-async function getReleases(reqHeaders, URL, jsonURL) {
-    let releases = [];
+//     if (process.env.git_token) {
+//         headers = { 'Authorization': process.env.git_token };
+//     }
+//     else {
+//         console.log(
+//             'WARNING: Could not find a GitHub user access token in the system environment variables. Web requests may be limited without one.' +
+//             ' If you encounter issues, please create a GitHub access token' +
+//             ' (https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)' +
+//             ' and then set it as an environment variable called "git_token".\n'
+//         );
+//     }
+//     return headers;
+// }
 
-    for (let pageNum = 1; pageNum <= MAX_PAGES; pageNum++) {
-        console.log(`Requesting page ${pageNum} from the GitHub API...`);
-        let response = await getUrl(URL + `/releases`, {
-            params: {
-                page: pageNum,
-                per_page: 100
-            },
-            headers: reqHeaders,
-        });
-        let headers = response.headers;
-        let data = response.data;
-        if (data.length === 0) {
-            console.log('Reached last page.');
-            break;
-        }
-        releases.push(...response.data);
-        printLimits(headers);
-    }
+// async function getReleases(reqHeaders, URL, jsonURL) {
+//     let releases = [];
 
-    console.log(`Found ${releases.length} releases in total.`);
+//     for (let pageNum = 1; pageNum <= MAX_PAGES; pageNum++) {
+//         console.log(`Requesting page ${pageNum} from the GitHub API...`);
+//         let response = await getUrl(URL + `/releases`, {
+//             params: {
+//                 page: pageNum,
+//                 per_page: 100
+//             },
+//             headers: reqHeaders,
+//         });
+//         let headers = response.headers;
+//         let data = response.data;
+//         if (data.length === 0) {
+//             console.log('Reached last page.');
+//             break;
+//         }
+//         releases.push(...response.data);
+//         printLimits(headers);
+//     }
 
-    let outPath = path.join(OUTPUT_DIR, jsonURL);
-    await fs.writeFile(outPath, JSON.stringify(releases), { encoding: 'utf-8' });
-    console.log(`Wrote raw output to ${outPath}`);
-    return releases;
-}
+//     console.log(`Found ${releases.length} releases in total.`);
 
-function parseReleases(releases) {
-    const jsonData = [];
+//     let outPath = path.join(OUTPUT_DIR, jsonURL);
+//     await fs.writeFile(outPath, JSON.stringify(releases), { encoding: 'utf-8' });
+//     console.log(`Wrote raw output to ${outPath}`);
+//     return releases;
+// }
 
-    for (let release of releases) {
-        let newDatum = {};
-        newDatum['Name'] = release.name;
-        newDatum['Date'] = release.published_at.replace('T', ' ').replace('Z', ''); // ISO string -> yyyy-MM-dd HH:mm:ss
-        for (let asset of release.assets) {
-            let name = asset.name.toLowerCase();
-            let count = asset.download_count;
-            if (name === 'latest-linux.yml') newDatum[LatestLinux] = count;
-            else if (name === 'latest-mac.yml') newDatum[LatestMac] = count;
-            else if (name === 'latest.yml') newDatum[Latest] = count;
-            else if (name.endsWith('.appimage')) newDatum[AppImage] = count;
-            else if (name.endsWith('.tar.gz')) newDatum[TarGz] = count;
-            else if (name.endsWith('.exe')) newDatum[Windows] = count;
-            else if (name.endsWith('.dmg')) newDatum[MacDMG] = count;
-            else if (name.endsWith('mac.zip')) newDatum[MacZip] = count;
-        }
-        jsonData.push(newDatum);
-    }
+// function parseReleases(releases) {
+//     const jsonData = [];
 
-    const columns = ['Name', 'Date', Windows, MacDMG, MacZip, AppImage, TarGz, Latest, LatestMac, LatestLinux];
-    const csv = Papa.unparse(jsonData, { columns: columns, quotes: true });
+//     for (let release of releases) {
+//         let newDatum = {};
+//         newDatum['Name'] = release.name;
+//         newDatum['Date'] = release.published_at.replace('T', ' ').replace('Z', ''); // ISO string -> yyyy-MM-dd HH:mm:ss
+//         for (let asset of release.assets) {
+//             let name = asset.name.toLowerCase();
+//             let count = asset.download_count;
+//             if (name === 'latest-linux.yml') newDatum[LatestLinux] = count;
+//             else if (name === 'latest-mac.yml') newDatum[LatestMac] = count;
+//             else if (name === 'latest.yml') newDatum[Latest] = count;
+//             else if (name.endsWith('.appimage')) newDatum[AppImage] = count;
+//             else if (name.endsWith('.tar.gz')) newDatum[TarGz] = count;
+//             else if (name.endsWith('.exe')) newDatum[Windows] = count;
+//             else if (name.endsWith('.dmg')) newDatum[MacDMG] = count;
+//             else if (name.endsWith('mac.zip')) newDatum[MacZip] = count;
+//         }
+//         jsonData.push(newDatum);
+//     }
 
-    return csv;
-}
+//     const columns = ['Name', 'Date', Windows, MacDMG, MacZip, AppImage, TarGz, Latest, LatestMac, LatestLinux];
+//     const csv = Papa.unparse(jsonData, { columns: columns, quotes: true });
 
-function outputCsv(csv, downloadURL) {
-    let outPath = path.join(OUTPUT_DIR, downloadURL);
-    fs.writeFile(outPath, csv, { encoding: 'utf-8' });
-    console.log(`Wrote CSV output to ${outPath}`);
-}
+//     return csv;
+// }
 
-function printLimits(headers) {
-    let limitTotal = getNumber(headers['x-ratelimit-limit']);
-    let limitLeft = getNumber(headers['x-ratelimit-remaining']);
-    let limitReset = getNumber(headers['x-ratelimit-reset']);
-    let resetDate = new Date(limitReset * 1000);
+// function outputCsv(csv, downloadURL) {
+//     let outPath = path.join(OUTPUT_DIR, downloadURL);
+//     fs.writeFile(outPath, csv, { encoding: 'utf-8' });
+//     console.log(`Wrote CSV output to ${outPath}`);
+// }
 
-    console.log(`API rate limit: ${limitLeft}/${limitTotal} API requests remaining until ${resetDate.toLocaleTimeString()}`);
-}
+// function printLimits(headers) {
+//     let limitTotal = getNumber(headers['x-ratelimit-limit']);
+//     let limitLeft = getNumber(headers['x-ratelimit-remaining']);
+//     let limitReset = getNumber(headers['x-ratelimit-reset']);
+//     let resetDate = new Date(limitReset * 1000);
 
-function getNumber(thing) {
-    return parseFloat(String(thing));
-}
+//     console.log(`API rate limit: ${limitLeft}/${limitTotal} API requests remaining until ${resetDate.toLocaleTimeString()}`);
+// }
 
-async function getUrl(url, params?): Promise<AxiosResponse<any, any>> {
-    try {
-        const response = await axios.get(url, params);
-        if (typeof response.data !== 'object') {
-            console.warn('API didn\'t return JSON. Did it change since this script was written? Maybe tweak the provided headers in getHeaders().');
-            process.exit(1);
-        }
-        return response;
-    }
-    catch (err) {
-        if (err instanceof AxiosError) {
-            console.error(`Error: ${err.code}, Message: ${err.message}, Url: ${url}`);
-            if (err.response && err.response.data) {
-                console.log(err.response.data);
-            }
-        }
-        else {
-            console.log('Unrecognized error:');
-            console.error(err);
-        }
-        process.exit(1);
-    }
-}
+// function getNumber(thing) {
+//     return parseFloat(String(thing));
+// }
+
+// async function getUrl(url, params?): Promise<AxiosResponse<any, any>> {
+//     try {
+//         const response = await axios.get(url, params);
+//         if (typeof response.data !== 'object') {
+//             console.warn('API didn\'t return JSON. Did it change since this script was written? Maybe tweak the provided headers in getHeaders().');
+//             process.exit(1);
+//         }
+//         return response;
+//     }
+//     catch (err) {
+//         if (err instanceof AxiosError) {
+//             console.error(`Error: ${err.code}, Message: ${err.message}, Url: ${url}`);
+//             if (err.response && err.response.data) {
+//                 console.log(err.response.data);
+//             }
+//         }
+//         else {
+//             console.log('Unrecognized error:');
+//             console.error(err);
+//         }
+//         process.exit(1);
+//     }
+// }
