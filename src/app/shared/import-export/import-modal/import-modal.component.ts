@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ImportService } from '../import.service';
 import { ImportExportData } from '../importExportModel';
-import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';
-import { DashboardService } from '../../dashboard.service';
+import { DirectoryDashboardService } from '../../../dashboard/directory-dashboard/directory-dashboard.service';
+import { DashboardService } from '../../../dashboard/dashboard.service';
 import * as pako from 'pako';
 
 @Component({
