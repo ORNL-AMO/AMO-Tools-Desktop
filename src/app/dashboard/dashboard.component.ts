@@ -8,7 +8,7 @@ import { DirectoryDashboardService } from './directory-dashboard/directory-dashb
 import { DashboardService } from './dashboard.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { PrintOptionsMenuService } from '../shared/print-options-menu/print-options-menu.service';
-import { ImportExportService } from './import-export/import-export.service';
+import { ImportExportService } from '../shared/import-export/import-export.service';
 
 
 @Component({

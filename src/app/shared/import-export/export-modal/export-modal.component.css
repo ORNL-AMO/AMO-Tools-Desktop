@@ -1,0 +1,44 @@
+
+#name-export{
+    position: absolute;
+    right: 150px;
+    font-weight: bold;
+}
+
+.icon-image{
+    width: 26px;
+  }
+  
+  .icon{
+    width: 100%;
+  }
+
+  .btn{
+    padding: 6px;
+}
+
+.export-content li {
+    list-style: none;
+}
+
+
+.modal-dialog{
+    top: .75rem;
+}
+
+.export-text {
+  margin-bottom: 0rem;
+  margin-top: 0rem;
+}
+
+.modal-footer {
+  justify-content: space-around;
+}
+
+.export-modal-left {
+  flex: 1;
+}
+
+.export-modal-right {
+  margin-left: auto;
+}

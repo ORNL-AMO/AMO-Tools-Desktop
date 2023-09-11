@@ -6,7 +6,7 @@ import { DirectoryDashboardService } from '../directory-dashboard.service';
 import * as _ from 'lodash';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
-import { ExportService } from '../../import-export/export.service';
+import { ExportService } from '../../../shared/import-export/export.service';
 import { DashboardService } from '../../dashboard.service';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
