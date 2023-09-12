@@ -21,7 +21,8 @@ export class AirLeakTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(airLeakSurvey: AirLeakSurveyTreasureHunt) {
-    this.airLeakService.airLeakInput.next(_.cloneDeep(airLeakSurvey.airLeakSurveyInput));
+    let airLeakInput: AirLeakSurveyInput = _.cloneDeep(airLeakSurvey.airLeakSurveyInput)
+    this.airLeakService.airLeakInput.next(airLeakInput);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
