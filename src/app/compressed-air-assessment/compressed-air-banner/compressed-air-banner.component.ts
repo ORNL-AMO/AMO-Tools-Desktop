@@ -147,4 +147,8 @@ export class CompressedAirBannerComponent implements OnInit {
     }
   }
 
+  exportCompressedAirAssessment(){
+    
+  }
+
 }
