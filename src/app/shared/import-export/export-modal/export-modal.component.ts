@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ExportService } from '../export.service';
-import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';
+import { DirectoryDashboardService } from '../../../dashboard/directory-dashboard/directory-dashboard.service';
 import { ImportExportData } from '../importExportModel';
 import { Directory } from '../../../shared/models/directory';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
@@ -29,6 +29,8 @@ export class ExportModalComponent implements OnInit {
   ngOnInit() {
     if (this.exportService.exportAll == true) {
       this.exportAllData();
+      this.setDisplayFilteredData();
+      this.setExportDefaultName();
     } else {
       this.exportDirectoryData();
     }
