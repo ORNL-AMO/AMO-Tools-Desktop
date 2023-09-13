@@ -29,6 +29,8 @@ export class ExportModalComponent implements OnInit {
   ngOnInit() {
     if (this.exportService.exportAll == true) {
       this.exportAllData();
+      this.setDisplayFilteredData();
+      this.setExportDefaultName();
     } else {
       this.exportDirectoryData();
     }
