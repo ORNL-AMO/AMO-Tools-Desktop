@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Output, ViewChild, EventEmitter} from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ExportService } from '../export.service';
 import { DirectoryDashboardService } from '../../../dashboard/directory-dashboard/directory-dashboard.service';
@@ -7,6 +7,7 @@ import { Directory } from '../../../shared/models/directory';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { ImportExportService } from '../import-export.service';
 import * as _ from 'lodash';
+import { Assessment } from '../../models/assessment';
 
 @Component({
   selector: 'app-export-modal',
@@ -14,6 +15,13 @@ import * as _ from 'lodash';
   styleUrls: ['./export-modal.component.css']
 })
 export class ExportModalComponent implements OnInit {
+
+  @Input()
+  assessment: Assessment;
+  @Input()
+  inAssessment: boolean;
+  @Output('close')
+  close = new EventEmitter<boolean>();
 
   @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
 
@@ -49,7 +57,11 @@ export class ExportModalComponent implements OnInit {
     this.exportModal.hide();
     this.exportModal.onHidden.subscribe(val => {
       this.exportService.exportAll = false;
-      this.directoryDashboardService.showExportModal.next(false);
+      if (this.inAssessment) {
+        this.close.emit(false);
+      } else {
+        this.directoryDashboardService.showExportModal.next(false);
+      }
     })
   }
 
@@ -60,7 +72,11 @@ export class ExportModalComponent implements OnInit {
   }
   
   exportDirectoryData() {
-    this.workingDirectoryId = this.directoryDashboardService.selectedDirectoryId.getValue();
+    if (this.inAssessment && this.assessment){
+      this.workingDirectoryId = this.assessment.directoryId;
+    } else {
+      this.workingDirectoryId = this.directoryDashboardService.selectedDirectoryId.getValue();
+    }
     let directory: Directory = this.directoryDbService.getById(this.workingDirectoryId);
     this.isSelectAllDirectory = directory.selected;
     this.exportData = this.exportService.getSelected(directory, this.isSelectAllDirectory);

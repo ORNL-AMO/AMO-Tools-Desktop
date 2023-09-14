@@ -150,6 +150,7 @@ import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-lab
 import { EndUseHelpComponent } from './results-panel/help-panel/end-use-help/end-use-help.component';
 import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-air-sankey.module';
 import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use-day-type-setup.module';
+import { ImportExportModule } from '../shared/import-export/import-export.module';
 
 @NgModule({
   declarations: [
@@ -273,6 +274,7 @@ import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use
     IntervalHourLabelModule,
     CompressedAirSankeyModule,
     EndUseDayTypeSetupModule,
+    ImportExportModule
   ],
   providers: [
     CompressedAirAssessmentService,
