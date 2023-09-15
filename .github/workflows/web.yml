@@ -1,0 +1,44 @@
+name: Web
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Node setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+          cache: "npm"
+      - name: Build
+        run: |
+          npm install && npm run build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: ./dist
+  
+  deploy:
+    runs-on: [self-hosted, amo-tools]
+    needs: build
+    env:
+      APACHE_DIR: /var/www/html
+      BACKUP_DIR: /opt/actions-runner/backups
+    steps:
+      - name: Get artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+      - name: Deploy
+        run: |
+          tar -czf $BACKUP_DIR/measur_$(printf '%(%Y-%m-%d)T\n' -1)_${GITHUB_SHA::7}.tar.gz $APACHE_DIR/measur
+          rm -rf $APACHE_DIR/measur/*
+          chgrp -R apache ./
+          mv -v ./* $APACHE_DIR/measur/
+
+
