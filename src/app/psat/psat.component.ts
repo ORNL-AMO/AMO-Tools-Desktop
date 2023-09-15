@@ -84,6 +84,8 @@ export class PsatComponent implements OnInit {
   modificationModalOpen: boolean = false;
   smallScreenTab: string = 'form';
   hasConnectedMotorItem: boolean;
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
   constructor(
     private assessmentService: AssessmentService,
     private psatService: PsatService,
@@ -207,6 +209,10 @@ export class PsatComponent implements OnInit {
       this.isModalOpen = isOpen;
     });
 
+    this.showExportModalSub = this.psatTabService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
+
     this.checkShowWelcomeScreen();
   }
 
@@ -224,7 +230,8 @@ export class PsatComponent implements OnInit {
     if (this.calcTabSub) this.calcTabSub.unsubscribe();
     if (this.secondaryTabSub) this.secondaryTabSub.unsubscribe();
     if (this.mainTabSub) this.mainTabSub.unsubscribe();
-    if (this.stepTabSubscription) this.stepTabSubscription.unsubscribe()
+    if (this.stepTabSubscription) this.stepTabSubscription.unsubscribe();    
+    this.showExportModalSub.unsubscribe();
     this.psatTabService.secondaryTab.next('explore-opportunities');
     this.psatTabService.mainTab.next('system-setup');
     this.psatTabService.stepTab.next('system-basics');
@@ -492,5 +499,9 @@ export class PsatComponent implements OnInit {
 
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
+  }
+
+  closeExportModal(input: boolean){
+    this.psatTabService.showExportModal.next(input);
   }
 }
