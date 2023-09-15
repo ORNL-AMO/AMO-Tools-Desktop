@@ -74,12 +74,15 @@ export class ExportModalComponent implements OnInit {
   exportDirectoryData() {
     if (this.inAssessment && this.assessment){
       this.workingDirectoryId = this.assessment.directoryId;
+      let directory: Directory = this.directoryDbService.getById(this.workingDirectoryId);
+      this.isSelectAllDirectory = directory.selected;
+      this.exportData = this.exportService.getSelectedAssessment(this.assessment);
     } else {
       this.workingDirectoryId = this.directoryDashboardService.selectedDirectoryId.getValue();
+      let directory: Directory = this.directoryDbService.getById(this.workingDirectoryId);
+      this.isSelectAllDirectory = directory.selected;
+      this.exportData = this.exportService.getSelected(directory, this.isSelectAllDirectory);
     }
-    let directory: Directory = this.directoryDbService.getById(this.workingDirectoryId);
-    this.isSelectAllDirectory = directory.selected;
-    this.exportData = this.exportService.getSelected(directory, this.isSelectAllDirectory);
     this.setDisplayFilteredData();
     this.setExportDefaultName();
   }

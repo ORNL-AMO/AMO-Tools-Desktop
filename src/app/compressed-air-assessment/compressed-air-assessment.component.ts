@@ -140,7 +140,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.checkShowWelcomeScreen();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy() {    
     this.mainTabSub.unsubscribe();
     this.setupTabSub.unsubscribe();
     this.profileTabSub.unsubscribe();
