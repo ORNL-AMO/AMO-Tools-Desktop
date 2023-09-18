@@ -24,3 +24,14 @@ a.user-manual{
 .fa.fa-chevron-left {
     font-size: 28px;
 }
+
+.download-nav-item .fa.fa-download{
+    border: none !important;
+    background-color: inherit;
+    opacity: 1;
+}
+
+.download-nav-item{
+    border: none !important;
+    background-color: #2980b9;
+}

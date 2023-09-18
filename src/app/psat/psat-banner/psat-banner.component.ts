@@ -91,4 +91,8 @@ export class PsatBannerComponent implements OnInit {
       this.psatTabService.mainTab.next('calculators');
     }
   }
+
+  openExportModal(){
+    this.psatTabService.showExportModal.next(true);
+  }
 }

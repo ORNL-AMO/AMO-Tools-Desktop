@@ -135,7 +135,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
     this.showExportModalSub = this.compressedAirAssessmentService.showExportModal.subscribe(val => {
       this.showExportModal = val;
-    })
+    });
 
     this.checkShowWelcomeScreen();
   }

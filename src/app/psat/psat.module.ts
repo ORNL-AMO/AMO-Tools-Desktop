@@ -61,6 +61,7 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
 import { IntegratePumpInventoryComponent } from './integrate-pump-inventory/integrate-pump-inventory.component';
+import { ImportExportModule } from '../shared/import-export/import-export.module';
 
 @NgModule({
   declarations: [
@@ -118,7 +119,8 @@ import { IntegratePumpInventoryComponent } from './integrate-pump-inventory/inte
     PsatSankeyModule,
     UpdateUnitsModalModule,
     AssessmentCo2SavingsModule,
-    ConnectedInventoryModule
+    ConnectedInventoryModule,    
+    ImportExportModule
   ],
   providers: [
     PsatService,
