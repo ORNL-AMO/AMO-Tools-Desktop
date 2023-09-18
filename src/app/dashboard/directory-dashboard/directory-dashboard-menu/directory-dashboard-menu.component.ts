@@ -92,7 +92,8 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     });
     this.directory.inventories.forEach(inventory => {
       inventory.selected = this.isAllSelected;
-    });
+    });    
+    this.setSelectedStatus();
   }
 
   updateSelectedStatus() {
