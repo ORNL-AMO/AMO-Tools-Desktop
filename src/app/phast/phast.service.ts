@@ -461,7 +461,8 @@ export class PhastService {
       inputCopy.fuelTemperature = this.convertUnitsService.value(inputCopy.fuelTemperature).from('C').to('F');
       inputCopy.ambientAirTempF = this.convertUnitsService.value(inputCopy.ambientAirTempF).from('C').to('F');
     }
-    return phastAddon.flueGasLossesByMass(inputCopy);
+    let results = phastAddon.flueGasLossesByMass(inputCopy);
+    return results
   }
 
   flueGasCalculateExcessAir(input: MaterialInputProperties) {
