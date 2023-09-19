@@ -7,16 +7,23 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       - name: Node setup
         uses: actions/setup-node@v3
         with:
-          node-version: 14
-          cache: "npm"
+          node-version: 14.20.1
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+      - name: Install dependencies
+        run: npm ci
       - name: Build
-        run: |
-          npm install && npm run build
+        run: npm run ng-high-memory
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
