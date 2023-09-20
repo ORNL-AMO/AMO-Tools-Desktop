@@ -118,4 +118,8 @@ export class WasteWaterBannerComponent implements OnInit {
   collapseTabs() {
     this.tabsCollapsed = !this.tabsCollapsed;
   }
+
+  openExportModal(){
+    this.wasteWaterService.showExportModal.next(true);
+  }
 }
