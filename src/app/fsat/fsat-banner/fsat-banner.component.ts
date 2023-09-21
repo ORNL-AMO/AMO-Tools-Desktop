@@ -80,4 +80,8 @@ export class FsatBannerComponent implements OnInit {
       this.fsatService.mainTab.next('calculators');
     }
   }
+
+  openExportModal(){
+    this.fsatService.showExportModal.next(true);
+  }
 }

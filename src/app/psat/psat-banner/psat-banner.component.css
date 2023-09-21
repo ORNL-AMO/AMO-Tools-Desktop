@@ -25,6 +25,10 @@ a.user-manual{
     font-size: 28px;
 }
 
+span.fa.fa-download{
+    padding: 0px !important;
+}
+
 .download-nav-item .fa.fa-download{
     border: none !important;
     background-color: inherit;
