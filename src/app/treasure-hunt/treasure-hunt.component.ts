@@ -53,6 +53,8 @@ export class TreasureHuntComponent implements OnInit {
   selectedCalc: string;
   showWelcomeScreen: boolean = false;
   smallScreenTab: string = 'form';
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
   constructor(
     private assessmentService: AssessmentService,
       
@@ -129,6 +131,10 @@ export class TreasureHuntComponent implements OnInit {
       this.getContainerHeight();
     });
 
+    this.showExportModalSub = this.treasureHuntService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
+
     this.checkShowWelcomeScreen();
   }
 
@@ -142,7 +148,8 @@ export class TreasureHuntComponent implements OnInit {
     this.treasureHuntSub.unsubscribe();
     this.selectedCalcSub.unsubscribe();
     let defaultData: SortCardsData = this.treasureChestMenuService.getDefaultSortByData();
-    this.treasureChestMenuService.sortBy.next(defaultData);
+    this.treasureChestMenuService.sortBy.next(defaultData); 
+    this.showExportModalSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -280,5 +287,9 @@ export class TreasureHuntComponent implements OnInit {
 
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
+  }
+
+  closeExportModal(input: boolean){
+    this.treasureHuntService.showExportModal.next(input);
   }
 }

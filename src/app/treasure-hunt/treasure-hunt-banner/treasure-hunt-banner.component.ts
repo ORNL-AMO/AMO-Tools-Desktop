@@ -112,4 +112,8 @@ export class TreasureHuntBannerComponent implements OnInit {
     }
   }
 
+  openExportModal(){
+    this.treasureHuntService.showExportModal.next(true);
+  }
+
 }
