@@ -92,3 +92,5 @@
 <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()"
   [assessmentType]="'waste-water'" (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings">
 </app-update-units-modal>
+
+<app-export-modal *ngIf="showExportModal" [inAssessment]="true" [assessment]="assessment" (close)="closeExportModal($event)"></app-export-modal>
