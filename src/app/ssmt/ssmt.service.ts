@@ -32,6 +32,7 @@ export class SsmtService {
   saveSSMT: BehaviorSubject<SSMT>;
   isBaselineFocused: BehaviorSubject<boolean>;
   currCurrency: string = "$";
+  showExportModal: BehaviorSubject<boolean>;
 
   iterationCount: number;
 
@@ -63,6 +64,7 @@ export class SsmtService {
     this.calcTab = new BehaviorSubject<string>('boiler');
     this.saveSSMT = new BehaviorSubject<SSMT>(undefined);
     this.isBaselineFocused = new BehaviorSubject<boolean>(true);
+    this.showExportModal = new BehaviorSubject<boolean>(false);
   }
 
   calculateBaselineModel(ssmt: SSMT, settings: Settings): { inputData: SSMTInputs, outputData: SSMTOutput } {
