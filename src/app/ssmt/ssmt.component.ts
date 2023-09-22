@@ -86,6 +86,8 @@ export class SsmtComponent implements OnInit {
   showWelcomeScreen: boolean = false;
   modificationModalOpen: boolean = false;
   smallScreenTab: string = 'form';
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
   constructor(
     private egridService: EGridService,
     private activatedRoute: ActivatedRoute,
@@ -173,6 +175,11 @@ export class SsmtComponent implements OnInit {
         this.saveSsmt(newSSMT);
       }
     });
+
+    this.showExportModalSub = this.ssmtService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
+
     this.checkShowWelcomeScreen();
   }
 
@@ -199,6 +206,7 @@ export class SsmtComponent implements OnInit {
     this.ssmtService.saveSSMT.next(undefined);
     this.saveSsmtSub.unsubscribe();
     this.steamModelerErrorSubscription.unsubscribe();
+    this.showExportModalSub.unsubscribe();
   }
 
   subscribeTabs() {
@@ -545,6 +553,10 @@ export class SsmtComponent implements OnInit {
 
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
+  }
+
+  closeExportModal(input: boolean){
+    this.ssmtService.showExportModal.next(input);
   }
 
 }

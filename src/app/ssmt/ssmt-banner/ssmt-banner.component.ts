@@ -81,4 +81,8 @@ export class SsmtBannerComponent implements OnInit {
       this.ssmtService.mainTab.next('calculators');
     }
   }
+
+  openExportModal(){
+    this.ssmtService.showExportModal.next(true);
+  }
 }
