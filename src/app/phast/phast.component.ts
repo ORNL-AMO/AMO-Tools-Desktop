@@ -81,6 +81,8 @@ export class PhastComponent implements OnInit {
   showWelcomeScreen: boolean = false;
   modificationModalOpen: boolean = false;
   smallScreenTab: string = 'form';
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
@@ -189,6 +191,11 @@ export class PhastComponent implements OnInit {
         this.showAddNewModal();
       }
     });
+
+    this.showExportModalSub = this.phastService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
+
     this.checkShowWelcomeScreen();
   }
 
@@ -262,7 +269,8 @@ export class PhastComponent implements OnInit {
     this.calcTabSubscription.unsubscribe();
     this.openModListSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
-    this.addNewSubscription.unsubscribe();
+    this.addNewSubscription.unsubscribe();   
+    this.showExportModalSub.unsubscribe();
 
     //reset services
     this.lossesService.lossesTab.next(1);
@@ -566,6 +574,10 @@ export class PhastComponent implements OnInit {
 
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
+  }
+
+  closeExportModal(input: boolean){
+    this.phastService.showExportModal.next(input);
   }
 
 }

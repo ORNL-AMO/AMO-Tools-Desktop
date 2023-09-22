@@ -82,4 +82,8 @@ export class PhastBannerComponent implements OnInit {
       this.phastService.mainTab.next('calculators');
     }
   }
+
+  openExportModal(){
+    this.phastService.showExportModal.next(true);
+  }
 }
