@@ -8,6 +8,7 @@ import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { ImportExportService } from '../import-export.service';
 import * as _ from 'lodash';
 import { Assessment } from '../../models/assessment';
+import { InventoryItem } from '../../models/inventory/inventory';
 
 @Component({
   selector: 'app-export-modal',
@@ -18,6 +19,8 @@ export class ExportModalComponent implements OnInit {
 
   @Input()
   assessment: Assessment;
+  @Input()
+  inventoryItem: InventoryItem;
   @Input()
   inAssessment: boolean;
   @Output('close')
@@ -72,11 +75,18 @@ export class ExportModalComponent implements OnInit {
   }
   
   exportDirectoryData() {
-    if (this.inAssessment && this.assessment){
-      this.workingDirectoryId = this.assessment.directoryId;
-      let directory: Directory = this.directoryDbService.getById(this.workingDirectoryId);
-      this.isSelectAllDirectory = directory.selected;
-      this.exportData = this.exportService.getSelectedAssessment(this.assessment);
+    if (this.inAssessment) {
+      if (this.assessment) {
+        this.workingDirectoryId = this.assessment.directoryId;
+        let directory: Directory = this.directoryDbService.getById(this.workingDirectoryId);
+        this.isSelectAllDirectory = directory.selected;
+        this.exportData = this.exportService.getSelectedAssessment(this.assessment);
+      } else if (this.inventoryItem) {
+        this.workingDirectoryId = this.inventoryItem.directoryId;
+        let directory: Directory = this.directoryDbService.getById(this.workingDirectoryId);
+        this.isSelectAllDirectory = directory.selected;
+        this.exportData = this.exportService.getSelectedInventory(this.inventoryItem);
+      }
     } else {
       this.workingDirectoryId = this.directoryDashboardService.selectedDirectoryId.getValue();
       let directory: Directory = this.directoryDbService.getById(this.workingDirectoryId);

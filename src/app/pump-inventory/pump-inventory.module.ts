@@ -22,6 +22,7 @@ import { RatedPowerDropdownComponent } from './pump-inventory-banner/summary-fil
 import { StatusDropdownComponent } from './pump-inventory-banner/summary-filter/status-dropdown/status-dropdown.component';
 import { SelectedOptionsComponent } from './pump-inventory-banner/summary-filter/selected-options/selected-options.component';
 import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
+import { ImportExportModule } from '../shared/import-export/import-export.module';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { ConnectedInventoryModule } from '../shared/connected-inventory/connecte
     HelpPanelModule,
     ConfirmDeleteModalModule,
     PumpInventorySummaryModule,
-    ConnectedInventoryModule
+    ConnectedInventoryModule,    
+    ImportExportModule
   ],
   providers: [
     PumpInventoryService,

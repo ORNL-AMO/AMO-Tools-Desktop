@@ -22,6 +22,7 @@ export class PumpInventoryService {
   modalOpen: BehaviorSubject<boolean>;
   settings: BehaviorSubject<Settings>;
   helpPanelTab: BehaviorSubject<string>;
+  showExportModal: BehaviorSubject<boolean>;
   currentInventoryId: number;
 
   filterInventorySummary: BehaviorSubject<FilterInventorySummary>;
@@ -41,6 +42,7 @@ export class PumpInventoryService {
     this.summaryTab = new BehaviorSubject<string>('overview');
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.helpPanelTab = new BehaviorSubject<string>(undefined);
+    this.showExportModal = new BehaviorSubject<boolean>(false);
     this.filterInventorySummary = new BehaviorSubject({
       selectedDepartmentIds: new Array(),
       pumpTypes: new Array(),

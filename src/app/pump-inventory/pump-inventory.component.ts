@@ -41,6 +41,8 @@ export class PumpInventoryComponent implements OnInit {
   pumpInventoryDataSub: Subscription;
   pumpInventoryItem: InventoryItem;
   integrationStateSub: Subscription;
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
   constructor(private pumpInventoryService: PumpInventoryService, 
     private activatedRoute: ActivatedRoute,
     private settingsDbService: SettingsDbService, 
@@ -91,6 +93,10 @@ export class PumpInventoryComponent implements OnInit {
       this.isModalOpen = val;
       this.cd.detectChanges();
     });
+
+    this.showExportModalSub = this.pumpInventoryService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
   }
 
   ngOnDestroy() {
@@ -100,7 +106,8 @@ export class PumpInventoryComponent implements OnInit {
     this.integrationStateSub.unsubscribe();
     this.pumpCatalogService.selectedPumpItem.next(undefined);
     this.pumpCatalogService.selectedDepartmentId.next(undefined);
-    this.modalOpenSub.unsubscribe();
+    this.modalOpenSub.unsubscribe();   
+    this.showExportModalSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -176,5 +183,9 @@ export class PumpInventoryComponent implements OnInit {
     this.pumpCatalogService.selectedPumpItem.next(selectedItem);
     this.pumpInventoryService.mainTab.next('setup');
     this.pumpInventoryService.setupTab.next('pump-catalog');
+  }
+  
+  closeExportModal(input: boolean){
+    this.pumpInventoryService.showExportModal.next(input);
   }
 }

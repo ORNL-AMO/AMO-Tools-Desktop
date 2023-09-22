@@ -99,6 +99,26 @@ export class ExportService {
     return this.exportData;
   }
 
+  getSelectedInventory(inventoryItem: InventoryItem): ImportExportData {
+    this.exportAssessments = new Array<ImportExportAssessment>();
+    this.exportDirectories = new Array<ImportExportDirectory>();
+    this.exportInventories = new Array<ImportExportInventory>();
+    this.exportPreAssessments = new Array<Calculator>(); 
+
+    if (inventoryItem) {
+      let obj = this.getInventoryObj(inventoryItem);
+      this.exportInventories.push(obj);     
+    }  
+        
+    this.exportData = {
+      directories: this.exportDirectories,
+      assessments: this.exportAssessments,
+      calculators: this.exportPreAssessments,
+      inventories: this.exportInventories
+    };
+    return this.exportData;
+  }
+
 
   
   getAssessmentObj(assessment: Assessment): ImportExportAssessment {
