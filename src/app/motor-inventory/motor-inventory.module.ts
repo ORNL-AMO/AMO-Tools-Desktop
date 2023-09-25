@@ -22,6 +22,7 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { ConvertMotorInventoryService } from './convert-motor-inventory.service';
 import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
+import { ImportExportModule } from '../shared/import-export/import-export.module';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { ConnectedInventoryModule } from '../shared/connected-inventory/connecte
     BatchAnalysisModule,
     ConfirmDeleteModalModule,
     RouterModule,
-    ConnectedInventoryModule
+    ConnectedInventoryModule,    
+    ImportExportModule
   ],
   providers: [
     MotorInventoryService,

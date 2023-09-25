@@ -163,5 +163,9 @@ export class MotorInventoryBannerComponent implements OnInit {
       this.motorInventoryService.summaryTab.next('overview');
     }
   }
+  
+  openExportModal(){
+    this.motorInventoryService.showExportModal.next(true);
+  }
 
 }

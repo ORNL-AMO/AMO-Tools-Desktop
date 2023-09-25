@@ -165,4 +165,8 @@ export class PumpInventoryBannerComponent implements OnInit {
       this.pumpInventoryService.summaryTab.next('overview');
     }
   }
+
+  openExportModal(){
+    this.pumpInventoryService.showExportModal.next(true);
+  }
 }
