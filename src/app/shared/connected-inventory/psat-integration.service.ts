@@ -78,8 +78,8 @@ export class PsatIntegrationService {
 
   // * take separate assessment, psat args so _psat can be saved to assessment in psat.component
   async setPSATFromExistingPumpItem(connectedInventoryData: ConnectedInventoryData, assessmentPsat: PSAT, assessment: Assessment, newAssessmentSettings?: Settings) {
-    let assessmentIntegrationState: IntegrationState = {
-      assessmentIntegrationStatus: undefined,
+    let connectedAssessmentState: IntegrationState = {
+      connectedAssessmentStatus: undefined,
       msgHTML: undefined
     }
     let pumpInventory: InventoryItem = this.inventoryDbService.getById(connectedInventoryData.connectedItem.inventoryId);
@@ -88,10 +88,10 @@ export class PsatIntegrationService {
     let psat: PSAT = assessmentPsat;
 
     if (selectedPumpItem.validPump && !selectedPumpItem.validPump.isValid) {
-      assessmentIntegrationState.assessmentIntegrationStatus = 'invalid';
-      assessmentIntegrationState.msgHTML = `<b>${selectedPumpItem.name}</b> is invalid. Verify pump catalog data and try again.`;
+      connectedAssessmentState.connectedAssessmentStatus = 'invalid';
+      connectedAssessmentState.msgHTML = `<b>${selectedPumpItem.name}</b> is invalid. Verify pump catalog data and try again.`;
       connectedInventoryData.canConnect = false;
-      this.integrationStateService.assessmentIntegrationState.next(assessmentIntegrationState);
+      this.integrationStateService.connectedAssessmentState.next(connectedAssessmentState);
     } else {
       connectedInventoryData.canConnect = true;
       if (newAssessmentSettings) {
@@ -119,11 +119,11 @@ export class PsatIntegrationService {
             this.settingsDbService.setAll(allSettings);
             connectedInventoryData.canConnect = true;
           } else {
-            assessmentIntegrationState.assessmentIntegrationStatus = 'settings-differ';
-            assessmentIntegrationState.msgHTML = `Selected units of measure for inventory <b>${pumpInventory.name}</b> differ from this assessment`;
+            connectedAssessmentState.connectedAssessmentStatus = 'settings-differ';
+            connectedAssessmentState.msgHTML = `Selected units of measure for inventory <b>${pumpInventory.name}</b> differ from this assessment`;
             connectedInventoryData.canConnect = false;
           }
-          this.integrationStateService.assessmentIntegrationState.next(assessmentIntegrationState);
+          this.integrationStateService.connectedAssessmentState.next(connectedAssessmentState);
         }
       }
     }
@@ -194,8 +194,8 @@ export class PsatIntegrationService {
   
     // * take separate assessment, psat args so _psat can be saved to assessment in psat.component
     async setPSATFromExistingMotorItem(connectedInventoryData: ConnectedInventoryData, assessmentPsat: PSAT, assessment: Assessment) {
-      let assessmentIntegrationState: IntegrationState = {
-        assessmentIntegrationStatus: undefined,
+      let connectedAssessmentState: IntegrationState = {
+        connectedAssessmentStatus: undefined,
         msgHTML: undefined
       }
 
@@ -205,10 +205,10 @@ export class PsatIntegrationService {
       let psat: PSAT = assessmentPsat;
   
       if (selectedMotoritem.validMotor && !selectedMotoritem.validMotor.isValid) {
-        assessmentIntegrationState.assessmentIntegrationStatus = 'invalid';
-        assessmentIntegrationState.msgHTML = `<b>${selectedMotoritem.name}</b> is invalid. Verify pump catalog data and try again.`;
+        connectedAssessmentState.connectedAssessmentStatus = 'invalid';
+        connectedAssessmentState.msgHTML = `<b>${selectedMotoritem.name}</b> is invalid. Verify pump catalog data and try again.`;
         connectedInventoryData.canConnect = false;
-        this.integrationStateService.assessmentIntegrationState.next(assessmentIntegrationState);
+        this.integrationStateService.connectedAssessmentState.next(connectedAssessmentState);
       } else {
         let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(assessment, true);
         if (motorInventorySettings.unitsOfMeasure !== assessmentSettings.unitsOfMeasure) {
@@ -218,11 +218,11 @@ export class PsatIntegrationService {
             selectedMotoritem.nameplateData = this.convertMotorInventoryService.convertNameplateData(selectedMotoritem.nameplateData, motorInventorySettings, assessmentSettings);
             connectedInventoryData.canConnect = true;
           } else {
-            assessmentIntegrationState.assessmentIntegrationStatus = 'settings-differ';
-            assessmentIntegrationState.msgHTML = `Selected units of measure for inventory <b>${motorInventory.name}</b> differ from this assessment`;
+            connectedAssessmentState.connectedAssessmentStatus = 'settings-differ';
+            connectedAssessmentState.msgHTML = `Selected units of measure for inventory <b>${motorInventory.name}</b> differ from this assessment`;
             connectedInventoryData.canConnect = false;
           }
-          this.integrationStateService.assessmentIntegrationState.next(assessmentIntegrationState);
+          this.integrationStateService.connectedAssessmentState.next(connectedAssessmentState);
         }
       }
 
@@ -283,7 +283,7 @@ export class PsatIntegrationService {
     } else {
       // item or inventory was deleted
       delete psat.connectedItem;
-      this.integrationStateService.assessmentIntegrationState.next(this.integrationStateService.getEmptyIntegrationState());
+      this.integrationStateService.connectedAssessmentState.next(this.integrationStateService.getEmptyIntegrationState());
       await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
       let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
       this.assessmentDbService.setAll(allAssessments);
@@ -318,7 +318,7 @@ export class PsatIntegrationService {
       } else {
         // item was deleted
         delete assessment.psat.connectedItem;
-        this.integrationStateService.assessmentIntegrationState.next(this.integrationStateService.getEmptyIntegrationState());
+        this.integrationStateService.connectedAssessmentState.next(this.integrationStateService.getEmptyIntegrationState());
       }   
     }
   }
@@ -348,7 +348,7 @@ export class PsatIntegrationService {
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);
     this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
-    this.integrationStateService.assessmentIntegrationState.next(this.integrationStateService.getEmptyIntegrationState());
+    this.integrationStateService.connectedAssessmentState.next(this.integrationStateService.getEmptyIntegrationState());
   }
 
   async removeMotorConnectedItem(connectedItem: ConnectedItem) {
@@ -373,7 +373,7 @@ export class PsatIntegrationService {
       this.inventoryDbService.setAll(allInventoryItems);
 
       this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
-      this.integrationStateService.assessmentIntegrationState.next(this.integrationStateService.getEmptyIntegrationState());
+      this.integrationStateService.connectedAssessmentState.next(this.integrationStateService.getEmptyIntegrationState());
     }
   }
 
@@ -491,17 +491,17 @@ export class PsatIntegrationService {
   }
 
   setConnectionDiffers(connectionDiffers: boolean, differingConnectedValues: Array<ConnectedValueFormField>) {
-    let integrationState: IntegrationState = this.integrationStateService.assessmentIntegrationState.getValue();
+    let integrationState: IntegrationState = this.integrationStateService.connectedAssessmentState.getValue();
     if (connectionDiffers) {
-      integrationState.assessmentIntegrationStatus = 'connected-assessment-differs'
+      integrationState.connectedAssessmentStatus = 'connected-assessment-differs'
       integrationState.differingConnectedValues = differingConnectedValues
       integrationState.msgHTML = undefined
     } else {
-      integrationState.assessmentIntegrationStatus = undefined
+      integrationState.connectedAssessmentStatus = undefined
       integrationState.differingConnectedValues = differingConnectedValues
       integrationState.msgHTML = undefined
     }
-    this.integrationStateService.assessmentIntegrationState.next(integrationState);
+    this.integrationStateService.connectedAssessmentState.next(integrationState);
   }
 
   getConnectedPumpItem(connectedItem: ConnectedItem) {

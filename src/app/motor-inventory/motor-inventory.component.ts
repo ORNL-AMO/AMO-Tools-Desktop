@@ -11,7 +11,7 @@ import { InventoryItem } from '../shared/models/inventory/inventory';
 import { MotorCatalogService } from './motor-inventory-setup/motor-catalog/motor-catalog.service';
 import { BatchAnalysisService, BatchAnalysisSettings } from './batch-analysis/batch-analysis.service';
 import { environment } from '../../environments/environment';
-import { MotorIntegrationService } from '../shared/assessment-integration/motor-integration.service';
+import { MotorIntegrationService } from '../shared/connected-inventory/motor-integration.service';
 
 
 @Component({
@@ -41,6 +41,8 @@ export class MotorInventoryComponent implements OnInit {
   motorInventoryItem: InventoryItem;
   batchAnalysisSettingsSub: Subscription;
   showWelcomeScreen: boolean = false;
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
   constructor(private motorInventoryService: MotorInventoryService, private activatedRoute: ActivatedRoute,
     private router: Router,
     private inventoryDbService: InventoryDbService,
@@ -90,6 +92,9 @@ export class MotorInventoryComponent implements OnInit {
       this.isModalOpen = val;
       this.cd.detectChanges();
     });
+    this.showExportModalSub = this.motorInventoryService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
     this.checkShowWelcomeScreen();
   }
 
@@ -102,6 +107,7 @@ export class MotorInventoryComponent implements OnInit {
     this.motorCatalogService.selectedDepartmentId.next(undefined);
     this.motorCatalogService.filterMotorOptions.next(undefined);
     this.modalOpenSub.unsubscribe();
+    this.showExportModalSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -180,5 +186,9 @@ export class MotorInventoryComponent implements OnInit {
     this.settingsDbService.setAll(settings);
     this.showWelcomeScreen = false;
     this.motorInventoryService.modalOpen.next(false);
+  }
+
+  closeExportModal(input: boolean){
+    this.motorInventoryService.showExportModal.next(input);
   }
 }

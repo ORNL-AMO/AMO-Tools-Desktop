@@ -58,6 +58,9 @@ export class WasteWaterComponent implements OnInit {
   isModalOpenSub: Subscription;
   disableNext: boolean;
 
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
+
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   showWelcomeScreen: boolean;
@@ -131,6 +134,10 @@ export class WasteWaterComponent implements OnInit {
       this.isModalOpen = val;
     });
 
+    this.showExportModalSub = this.wasteWaterService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
+
     this.checkShowWelcomeScreen();
   }
 
@@ -143,6 +150,7 @@ export class WasteWaterComponent implements OnInit {
     this.showAddModificationSub.unsubscribe();
     this.showModificationListSub.unsubscribe();
     this.isModalOpenSub.unsubscribe();
+    this.showExportModalSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -291,4 +299,9 @@ export class WasteWaterComponent implements OnInit {
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
   }
+
+  closeExportModal(input: boolean){
+    this.wasteWaterService.showExportModal.next(input);
+  }
+
 }

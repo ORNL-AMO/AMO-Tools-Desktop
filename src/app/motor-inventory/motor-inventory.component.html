@@ -19,3 +19,5 @@
 
 
 <app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>
+
+<app-export-modal *ngIf="showExportModal" [inAssessment]="true" [inventoryItem]="motorInventoryItem" (close)="closeExportModal($event)"></app-export-modal>

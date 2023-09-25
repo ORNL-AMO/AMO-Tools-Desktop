@@ -15,7 +15,7 @@ import { DashboardService } from '../../../dashboard.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
-import { PsatIntegrationService } from '../../../../shared/assessment-integration/psat-integration.service';
+import { PsatIntegrationService } from '../../../../shared/connected-inventory/psat-integration.service';
 
 @Component({
   selector: 'app-assessment-item',

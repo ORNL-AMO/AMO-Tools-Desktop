@@ -82,6 +82,8 @@ export class FsatComponent implements OnInit {
   showWelcomeScreen: boolean = false;
   modificationModalOpen: boolean = false;
   smallScreenTab: string = 'form';
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private fsatService: FsatService,
@@ -170,6 +172,9 @@ export class FsatComponent implements OnInit {
     this.calcTabSubscription = this.fsatService.calculatorTab.subscribe(val => {
       this.calcTab = val;
     });
+    this.showExportModalSub = this.fsatService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
     this.checkShowWelcomeScreen();
   }
 
@@ -186,6 +191,7 @@ export class FsatComponent implements OnInit {
     this.fsatService.initData();
     this.modalOpenSubscription.unsubscribe();
     this.calcTabSubscription.unsubscribe();
+    this.showExportModalSub.unsubscribe();
   }
   ngAfterViewInit() {
     setTimeout(() => {
@@ -494,5 +500,9 @@ export class FsatComponent implements OnInit {
 
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
+  }
+
+  closeExportModal(input: boolean){
+    this.fsatService.showExportModal.next(input);
   }
 }

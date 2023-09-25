@@ -46,7 +46,7 @@ a.list-group-item.active:hover{
   }
 
   .teams-dropdown{
-      left: auto;
-      right: 0;
+      left: 0;
+      right: auto;
       
   }

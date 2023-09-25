@@ -13,62 +13,55 @@ import { SSMT } from '../../shared/models/steam/ssmt';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { InventoryDbService } from '../../indexedDb/inventory-db.service';
 import { DayTypeSummary } from '../../log-tool/log-tool-models';
-
 @Injectable()
 export class ExportService {
-
   exportAll: boolean = false;
   exportData: ImportExportData;
   exportDirectories: Array<ImportExportDirectory>;
   exportAssessments: Array<ImportExportAssessment>;
+  exportPreAssessments: Array<Calculator>;
   exportInventories: Array<ImportExportInventory>;
-
   directoryAssessments: Array<ImportExportAssessment>;
   directoryInventories: Array<ImportExportInventory>;
   constructor(private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
     private inventoryDbService: InventoryDbService) {
   }
-
-
   getSelected(dir: Directory, isSelectAll: boolean): ImportExportData {
     this.exportAssessments = new Array<ImportExportAssessment>();
     this.exportDirectories = new Array<ImportExportDirectory>();
     this.exportInventories = new Array<ImportExportInventory>();
+    this.exportPreAssessments = new Array<Calculator>();
+    
     let assessments: Array<Assessment>;
-    let subDirs: Array<Directory>;
-    let calculators: Array<Calculator> = new Array<Calculator>();
+    let selectedDirectories: Array<Directory>;
+    let preAssessments: Array<Calculator> = new Array<Calculator>();
     let inventories: Array<InventoryItem> = new Array<InventoryItem>();
-    this.directoryAssessments = new Array<ImportExportAssessment>();
-    this.directoryInventories = new Array<ImportExportInventory>();
     if (!isSelectAll) {
       assessments = _.filter(dir.assessments, (assessment) => { return assessment.selected === true; });
-      subDirs = _.filter(dir.subDirectory, (subDir) => { return subDir.selected === true; });
-      calculators = _.filter(dir.calculators, (calc) => { return calc.selected === true; });
+      selectedDirectories = _.filter(dir.subDirectory, (subDir) => { return subDir.selected === true; });
+      preAssessments = _.filter(dir.calculators, (calc) => { return calc.preAssessments && calc.selected === true; });
       inventories = _.filter(dir.inventories, (inventory) => { return inventory.selected === true });
     } else {
-      subDirs = [dir];
+      selectedDirectories = [dir];
     }
-    //ToDo: make sure these calcs are exported
-    //  need to add multiple calcs functionality
+
     if (assessments) {
       assessments.forEach(assessment => {
         let obj = this.getAssessmentObj(assessment);
         this.exportAssessments.push(obj);
       });
     }
-    if (subDirs) {
-      subDirs.forEach(dir => {
+
+    if (preAssessments) {
+      this.exportPreAssessments = preAssessments;
+    }
+    // todo change order
+    if (selectedDirectories) {
+      selectedDirectories.forEach(dir => {
         this.addDirectoryObj(dir);
-        // todo 6380 - temp fix from 5535 
-        let objs = this.getSubDirAssessmentData(dir, this.exportAssessments);
-        this.exportAssessments.concat(objs);
-        objs = this.getSubDirSelectedAssessments(dir, this.directoryAssessments);
-        this.directoryAssessments.concat(objs);
-        let inventoryObjs = this.getSubDirInventoryData(dir, this.exportInventories);
-        inventoryObjs = this.getSubDirInventoryData(dir, this.directoryInventories);
-        this.directoryInventories.concat(inventoryObjs);
-        this.exportInventories.concat(inventoryObjs);
-        // todo - end temp fix from 5535
+        this.setDirectoryExportAssessments(dir);
+        this.setDirectoryExportedInventories(dir)
+        this.setDirectoryExportPreAssessmentCalcs(dir);
       });
     }
     if (inventories) {
@@ -80,12 +73,54 @@ export class ExportService {
     this.exportData = {
       directories: this.exportDirectories,
       assessments: this.exportAssessments,
-      calculators: calculators,
+      calculators: this.exportPreAssessments,
       inventories: this.exportInventories
     };
     return this.exportData;
   }
 
+  getSelectedAssessment(assessment: Assessment): ImportExportData {
+    this.exportAssessments = new Array<ImportExportAssessment>();
+    this.exportDirectories = new Array<ImportExportDirectory>();
+    this.exportInventories = new Array<ImportExportInventory>();
+    this.exportPreAssessments = new Array<Calculator>(); 
+
+    if (assessment) {
+      let obj = this.getAssessmentObj(assessment);
+      this.exportAssessments.push(obj);     
+    }  
+        
+    this.exportData = {
+      directories: this.exportDirectories,
+      assessments: this.exportAssessments,
+      calculators: this.exportPreAssessments,
+      inventories: this.exportInventories
+    };
+    return this.exportData;
+  }
+
+  getSelectedInventory(inventoryItem: InventoryItem): ImportExportData {
+    this.exportAssessments = new Array<ImportExportAssessment>();
+    this.exportDirectories = new Array<ImportExportDirectory>();
+    this.exportInventories = new Array<ImportExportInventory>();
+    this.exportPreAssessments = new Array<Calculator>(); 
+
+    if (inventoryItem) {
+      let obj = this.getInventoryObj(inventoryItem);
+      this.exportInventories.push(obj);     
+    }  
+        
+    this.exportData = {
+      directories: this.exportDirectories,
+      assessments: this.exportAssessments,
+      calculators: this.exportPreAssessments,
+      inventories: this.exportInventories
+    };
+    return this.exportData;
+  }
+
+
+  
   getAssessmentObj(assessment: Assessment): ImportExportAssessment {
     if (assessment.ssmt) {
       assessment = this.removeSsmtResults(assessment);
@@ -115,15 +150,12 @@ export class ExportService {
     }
     return assessment;
   }
-
   deleteSsmtResults(ssmt: SSMT): SSMT {
     if (ssmt.outputData) {
       delete ssmt.outputData;
     }
     return ssmt;
   }
-
-
   removeDataExplorerData(assessment: Assessment): Assessment {
     if (assessment.compressedAirAssessment.logToolData) {
       let excludedDayTypeIndex: number;
@@ -147,7 +179,6 @@ export class ExportService {
     }
     return assessment;
   }
-
   addDirectoryObj(directory: Directory) {
     let testDirAdded = _.find(this.exportDirectories, (item) => { return item.directory.id === directory.id; });
     if (!testDirAdded) {
@@ -162,57 +193,55 @@ export class ExportService {
     }
   }
 
-  getSubDirAssessmentData(subDir: Directory, assessmentObjs: Array<ImportExportAssessment>): Array<ImportExportAssessment> {
-    this.addDirectoryObj(subDir);
-    let subDirAssessments: Array<ImportExportAssessment> = this.getSubDirSelectedAssessments(subDir, assessmentObjs);
-    return subDirAssessments;
-  }
-
-  getSubDirSelectedAssessments(dir: Directory, assessmentObjs: Array<ImportExportAssessment>): Array<ImportExportAssessment> {
+  setDirectoryExportAssessments(dir: Directory) {
     let assessments = this.assessmentDbService.getByDirectoryId(dir.id);
     if (assessments) {
       assessments.forEach(assessment => {
         let obj = this.getAssessmentObj(assessment);
-        assessmentObjs.push(obj);
+        this.exportAssessments.push(obj);
       });
     }
     let subDirs = this.directoryDbService.getSubDirectoriesById(dir.id);
     if (subDirs) {
       subDirs.forEach(subDir => {
         this.addDirectoryObj(subDir);
-        let objs = this.getSubDirSelectedAssessments(subDir, assessmentObjs);
-        assessmentObjs.concat(objs);
+        this.setDirectoryExportAssessments(subDir);
       });
     }
-    return assessmentObjs;
   }
 
-  getSubDirInventoryData(subDir: Directory, inventoryObjs: Array<ImportExportInventory>): Array<ImportExportInventory> {
-    this.addDirectoryObj(subDir);
-    let subDirInventories: Array<ImportExportInventory> = this.getSubDirSelectedInventory(subDir, inventoryObjs);
-    return subDirInventories;
+  setDirectoryExportPreAssessmentCalcs(dir: Directory) {
+    let preAssessmentCalcs: Calculator[] = this.calculatorDbService.getByDirectoryId(dir.id);
+    if (preAssessmentCalcs) {
+      preAssessmentCalcs.forEach(calc => {
+        this.exportPreAssessments.push(calc);
+      });
+    }
+    let subDirs = this.directoryDbService.getSubDirectoriesById(dir.id);
+    if (subDirs) {
+      subDirs.forEach(subDir => {
+        this.addDirectoryObj(subDir);
+        this.setDirectoryExportPreAssessmentCalcs(subDir);
+      });
+    }
   }
 
-  getSubDirSelectedInventory(dir: Directory, inventoryObjs: Array<ImportExportInventory>): Array<ImportExportInventory> {
+  setDirectoryExportedInventories(dir: Directory) {
     let inventories = this.inventoryDbService.getByDirectoryId(dir.id);
     if (inventories) {
       inventories.forEach(inventory => {
         let obj = this.getInventoryObj(inventory);
-        inventoryObjs.push(obj);
+        this.exportInventories.push(obj);
       });
     }
     let subDirs = this.directoryDbService.getSubDirectoriesById(dir.id);
     if (subDirs) {
       subDirs.forEach(subDir => {
         this.addDirectoryObj(subDir);
-        let objs = this.getSubDirSelectedInventory(subDir, inventoryObjs);
-        inventoryObjs.concat(objs);
+        this.setDirectoryExportedInventories(subDir);
       });
     }
-    return inventoryObjs;
   }
-
-
   getInventoryObj(inventory: InventoryItem): ImportExportInventory {
     return {
       inventoryItem: inventory,

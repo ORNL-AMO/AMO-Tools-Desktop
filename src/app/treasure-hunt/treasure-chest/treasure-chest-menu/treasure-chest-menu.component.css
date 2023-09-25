@@ -10,10 +10,11 @@
     line-height: 2;
 }
 
-.nav-btn-clear{
-    background: #6D757C;
+.nav-btn-selections{
+    background: #808B96;
     color: white;
     border: none;
+    border-radius: 12px;
     line-height: 2;
 }
 
@@ -31,15 +32,24 @@
 
 .navbar-nav .dropdown-menu{
     position: absolute;
-    font-size: small;
+    font-size: medium;
 }
 
 .navbar{
     background: white;
     border-bottom: solid 4px;
-    font-size: small;
+    font-size: medium;
 }
 
+.dropdown-menu .nav-item.dropdown {
+    font-size: medium;
+}
+
+.btn-manage {
+    /* height: 30px;
+    width: 180px; */
+    font-size: medium;
+}
 
 .nav-link, .btn{
     padding: 4px;
@@ -116,14 +126,16 @@ a.list-group-item.active:hover{
         margin-bottom: 5px;
         font-size: large;
     }
-    
-    .nav-btn-clear{
-        background: #6D757C;
+
+    .nav-btn-selections{
+        background: #808B96;
         color: white;
-        border: none;
+        margin-bottom: 2px;
+        border-radius: 12px;
         line-height: 2;
+        width: 100% !important;
     }
-    
+        
     .nav-btn.middle{
         border: none !important;
     }   

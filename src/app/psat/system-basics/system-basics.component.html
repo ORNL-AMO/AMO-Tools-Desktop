@@ -3,7 +3,7 @@
     <h3>{{assessment.name}} Settings</h3>
     <br>
   </div>
-  <app-assessment-integration-status class="col-12 py-1 px-3" [parentIntegrationState]="assessmentIntegrationState"></app-assessment-integration-status>
+  <app-connected-assessment-status class="col-12 py-1 px-3" [parentIntegrationState]="connectedAssessmentState"></app-connected-assessment-status>
   <div class="alert-warning mt-3 small mx-auto" *ngIf="showUpdateDataReminder">
     <div>Units of measure were changed after assessment data was entered. 
       <br>Please update your assessment data for accurate results.

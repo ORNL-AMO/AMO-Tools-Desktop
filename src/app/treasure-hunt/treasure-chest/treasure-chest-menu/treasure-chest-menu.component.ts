@@ -46,7 +46,7 @@ export class TreasureChestMenuComponent implements OnInit {
   showExportModalSub: Subscription;
 
   bannerCollapsed: boolean = true;
-  dropdownCollapsed: boolean = true;
+  dropdownShown: boolean = false;
 
   constructor(private treasureChestMenuService: TreasureChestMenuService, private cd: ChangeDetectorRef) { }
 
@@ -168,11 +168,13 @@ export class TreasureChestMenuComponent implements OnInit {
   }
   collapseBanner() {
     this.bannerCollapsed = !this.bannerCollapsed;
+    this.sortByDropdown = false;
     window.dispatchEvent(new Event("resize"));
   }
 
   collapseDropdown(){
-    this.dropdownCollapsed = !this.dropdownCollapsed;
+    this.dropdownShown = !this.dropdownShown;
+    this.sortByDropdown = false;
   }
 
 }

@@ -210,7 +210,6 @@ export class SettingsDbService {
     this.globalSettings.disableTreasureHuntTutorial = true;
     this.globalSettings.disableDataExplorerTutorial = true;
     this.globalSettings.disableCompressedAirTutorial = true;  
-    console.log('Tutorials Off');
   }
 
 

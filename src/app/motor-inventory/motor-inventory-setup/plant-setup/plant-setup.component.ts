@@ -11,7 +11,7 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { ConvertMotorInventoryService } from '../../convert-motor-inventory.service';
 import * as _ from 'lodash';
-import { IntegrationStateService } from '../../../shared/assessment-integration/integration-state.service';
+import { IntegrationStateService } from '../../../shared/connected-inventory/integration-state.service';
 
 
 @Component({

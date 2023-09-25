@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ImportService } from '../import.service';
 import { ImportExportData } from '../importExportModel';
-import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';
-import { DashboardService } from '../../dashboard.service';
+import { DirectoryDashboardService } from '../../../dashboard/directory-dashboard/directory-dashboard.service';
+import { DashboardService } from '../../../dashboard/dashboard.service';
 import * as pako from 'pako';
 
 @Component({
@@ -97,18 +97,15 @@ export class ImportModalComponent implements OnInit {
     }
   }
 
-  runImport(data: string) {
+ async runImport(data: string) {
     let importData: ImportExportData = JSON.parse(data);
-
     if (importData.origin === "AMO-TOOLS-DESKTOP") {
       this.importInProgress = true;
-      let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
-      this.importService.importData(importData, directoryId);
-      setTimeout(() => {
-        this.hideImportModal();
-        this.importInProgress = false;
-        this.dashboardService.updateDashboardData.next(true);
-      }, 1500);
+      let workingDirectoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
+      await this.importService.importData(importData, workingDirectoryId);
+      this.hideImportModal();
+      this.importInProgress = false;
+      this.dashboardService.updateDashboardData.next(true);
     }
     else if (importData.origin === "AMO-TOOLS-DESKTOP-OPPORTUNITIES") {
       this.treasureFile = true;

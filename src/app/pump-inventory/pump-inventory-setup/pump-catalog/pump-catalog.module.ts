@@ -23,7 +23,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { ConfirmDeleteModalModule } from '../../../shared/confirm-delete-modal/confirm-delete-modal.module';
-import { AssessmentIntegrationModule } from '../../../shared/assessment-integration/assessment-integration.module';
+import { ConnectedInventoryModule } from '../../../shared/connected-inventory/connected-inventory-module';
 import { RouterModule } from '@angular/router';
 
 
@@ -48,7 +48,7 @@ import { RouterModule } from '@angular/router';
     SharedPipesModule,
     OperatingHoursModalModule,
     ConfirmDeleteModalModule, 
-    AssessmentIntegrationModule,
+    ConnectedInventoryModule,
     RouterModule
   ],
   providers: [
