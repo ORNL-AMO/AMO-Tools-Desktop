@@ -52,6 +52,7 @@ export class PhastService {
   calcTab: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
   assessmentTab: BehaviorSubject<string>;
+  showExportModal: BehaviorSubject<boolean>;
 
   constructor(
     private openingFormService: OpeningFormService,
@@ -78,6 +79,7 @@ export class PhastService {
     this.specTab = new BehaviorSubject<StepTab>(specTabs[0]);
     this.calcTab = new BehaviorSubject<string>('o2-enrichment');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
+    this.showExportModal = new BehaviorSubject<boolean>(false);
   }
 
 
