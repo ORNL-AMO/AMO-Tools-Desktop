@@ -36,15 +36,13 @@ export class DeleteItemsModalComponent implements OnInit {
     });
   }
 
-  deleteSelected() {
+  async deleteSelected() {
     this.deleting = true;
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     let directory: Directory = this.directoryDbService.getById(directoryId)
-    this.deleteDataService.deleteDirectory(directory, true);
-    setTimeout(() => {
-      this.dashboardService.updateDashboardData.next(true);
-      this.deleting = false;
-      this.hideDeleteItemsModal();
-    }, 1500);
+    await this.deleteDataService.deleteDirectory(directory, true);
+    this.dashboardService.updateDashboardData.next(true);
+    this.deleting = false;
+    this.hideDeleteItemsModal();
   }
 }

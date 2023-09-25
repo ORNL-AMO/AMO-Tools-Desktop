@@ -21,8 +21,8 @@ export class DeleteDataService {
     private inventoryDbService: InventoryDbService) { }
 
   async deleteDirectory(directory: Directory, isWorkingDir?: boolean) {
-    let assessments: Array<Assessment>;
-    let inventories: Array<InventoryItem>;
+    let assessments: Array<Assessment> =  [];
+    let inventories: Array<InventoryItem> = [];
     if (!isWorkingDir) {
       assessments = this.assessmentDbService.getByDirectoryId(directory.id);
       inventories = this.inventoryDbService.getByDirectoryId(directory.id);
@@ -34,23 +34,23 @@ export class DeleteDataService {
         inventories = _.filter(directory.inventories, (inventory) => { return inventory.selected === true; });
       }
     }
-    if (assessments) {
-      assessments.forEach(assessment => {
-        this.deleteAssessment(assessment);
-      });
+    if (assessments.length !== 0) {
+      for (let i = 0; i < assessments.length; i++) {
+        await this.deleteAssessment(assessments[i]);
+      }
     }
 
-    if(inventories){
-      inventories.forEach(inventory => {
-        this.deleteInventory(inventory)
-      })
+    if(inventories.length !== 0){
+      for (let i = 0; i < inventories.length; i++) {
+        await this.deleteInventory(inventories[i])
+      }
     }
 
     if (!isWorkingDir) {
       let dirSettings: Settings = this.settingsDbService.getByDirectoryId(directory.id);
       if (dirSettings) {
         let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.deleteByIdWithObservable(dirSettings.id))
-        this.settingsDbService.setAll(updatedSettings);
+        await this.settingsDbService.setAll(updatedSettings);
       }
       let calculators: Array<Calculator> = this.calculatorDbService.getByDirectoryId(directory.id);
       if (calculators) {
@@ -58,10 +58,10 @@ export class DeleteDataService {
         for (let i = 0; i < calculators.length; i++) {
           updatedCalculators = await firstValueFrom(this.calculatorDbService.deleteByIdWithObservable(calculators[i].id)); 
         };
-        this.calculatorDbService.setAll(updatedCalculators); 
+        await this.calculatorDbService.setAll(updatedCalculators); 
       }
       let updatedDirectories: Directory[] = await firstValueFrom(this.directoryDbService.deleteByIdWithObservable(directory.id));
-      this.directoryDbService.setAll(updatedDirectories);
+      await this.directoryDbService.setAll(updatedDirectories);
     } else if (directory.calculators && directory.calculators.length !== 0) {
       let updatedCalculators: Calculator[];
       for (let i = 0; i < directory.calculators.length; i++){
@@ -72,16 +72,16 @@ export class DeleteDataService {
       this.calculatorDbService.setAll(updatedCalculators);
     }
 
-    let subDirectories: Array<Directory>;
+    let subDirectories: Array<Directory> = [];
     if (!isWorkingDir) {
       subDirectories = this.directoryDbService.getSubDirectoriesById(directory.id);
     } else {
       subDirectories = _.filter(directory.subDirectory, (dir) => { return dir.selected === true; });
     }
-    if (subDirectories) {
-      subDirectories.forEach(dir => {
-        this.deleteDirectory(dir);
-      });
+    if (subDirectories.length !== 0) {
+      for (let i = 0; i < subDirectories.length; i++) {
+        await this.deleteDirectory(subDirectories[i]);
+      }
     }
   }
 
