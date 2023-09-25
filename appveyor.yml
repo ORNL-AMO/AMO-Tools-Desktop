@@ -7,6 +7,6 @@ install:
 - ps: Install-Product node 16
 build_script:
 - cmd: >-
-    npm ci
+    npm ci --legacy-peer-deps
     npm run build
 test: off
