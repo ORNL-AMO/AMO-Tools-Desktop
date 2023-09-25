@@ -8,6 +8,7 @@ export class PsatTabService {
   mainTab: BehaviorSubject<string>;
   secondaryTab: BehaviorSubject<string>;
   calcTab: BehaviorSubject<string>;
+  showExportModal: BehaviorSubject<boolean>;
 
   //system setup tabs
   stepTabs: Array<string> = [
@@ -24,6 +25,7 @@ export class PsatTabService {
     this.calcTab = new BehaviorSubject<string>('achievable-efficiency');
     this.modifyConditionsTab = new BehaviorSubject<string>('pump-fluid');
     this.stepTab = new BehaviorSubject<string>('system-basics');
+    this.showExportModal = new BehaviorSubject<boolean>(false);
   }
 
 

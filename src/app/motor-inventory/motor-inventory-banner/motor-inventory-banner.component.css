@@ -46,3 +46,18 @@
 li.page-item{
     background-color:#ECECEC !important;
 }
+
+span.fa.fa-download{
+    padding: 0px !important;
+}
+
+.download-nav-item .fa.fa-download{
+    border: none !important;
+    background-color: inherit;
+    opacity: 1;
+}
+
+.download-nav-item{
+    border: none !important;
+    background-color: #84b641;
+}

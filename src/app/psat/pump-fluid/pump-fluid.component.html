@@ -6,8 +6,8 @@
   </div>
 
   <div *ngIf="hasConnectedPumpInventory && inSetup" class="mx-3 my-0">
-    <app-assessment-integration-status class="p-3" [connectedToType]="'inventory'" 
-    [connectedFormGroupName]="'pump'"></app-assessment-integration-status>
+    <app-connected-assessment-status class="p-3" [connectedToType]="'inventory'" 
+    [connectedFormGroupName]="'pump'"></app-connected-assessment-status>
   </div>
 
   <div [ngClass]="{'p-4': inSetup && !hasConnectedPumpInventory,
@@ -112,7 +112,7 @@
   </div>
 
   <div class="mx-3 my-0" *ngIf="hasConnectedPumpInventory && inSetup">
-    <app-assessment-integration-status class="p-3" [connectedToType]="'inventory'" [connectedFormGroupName]="'fluid'"></app-assessment-integration-status>
+    <app-connected-assessment-status class="p-3" [connectedToType]="'inventory'" [connectedFormGroupName]="'fluid'"></app-connected-assessment-status>
   </div>
 
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">

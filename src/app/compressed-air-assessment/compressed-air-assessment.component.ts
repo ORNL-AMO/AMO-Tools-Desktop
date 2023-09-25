@@ -58,6 +58,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
   assessmentTabSub: Subscription;
   showWelcomeScreen: boolean = false;
   smallScreenTab: string = 'form';
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
     private airPropertiesService: AirPropertiesCsvService,
     private endUseDayTypeSetupService: DayTypeSetupService,
@@ -130,10 +132,15 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.assessmentTabSub = this.compressedAirAssessmentService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
     });
+
+    this.showExportModalSub = this.compressedAirAssessmentService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
+
     this.checkShowWelcomeScreen();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy() {    
     this.mainTabSub.unsubscribe();
     this.setupTabSub.unsubscribe();
     this.profileTabSub.unsubscribe();
@@ -142,6 +149,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.assessmentTabSub.unsubscribe();
     this.showAddModificationSub.unsubscribe();
     this.showModificationListSub.unsubscribe();
+    this.showExportModalSub.unsubscribe();
     this.compressedAirAssessmentService.mainTab.next('system-setup');
     this.compressedAirAssessmentService.setupTab.next('system-basics');
     this.compressedAirAssessmentService.profileTab.next('setup');
@@ -303,5 +311,9 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
+  }
+
+  closeExportModal(input: boolean){
+    this.compressedAirAssessmentService.showExportModal.next(input);
   }
 }

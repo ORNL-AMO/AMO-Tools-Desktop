@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef, OnChanges } from '@angular/core';
 import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 import { PhastService } from '../../../../../phast/phast.service';
@@ -14,7 +14,7 @@ import { SqlDbApiService } from '../../../../../tools-suite-api/sql-db-api.servi
   templateUrl: './stack-loss-by-mass.component.html',
   styleUrls: ['./stack-loss-by-mass.component.css']
 })
-export class StackLossByMassComponent implements OnInit {
+export class StackLossByMassComponent implements OnChanges {
   @Input()
   stackLossForm: UntypedFormGroup;
   @Output('emitCalculate')
@@ -49,7 +49,7 @@ export class StackLossByMassComponent implements OnInit {
     private stackLossService: StackLossService) { }
 
 
-  ngOnInit() {
+  ngOnChanges() {
     this.options = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     if (this.stackLossForm) {
       if (this.stackLossForm.controls.gasTypeId.value && this.stackLossForm.controls.gasTypeId.value !== '') {

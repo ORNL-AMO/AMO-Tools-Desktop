@@ -47,6 +47,7 @@ import { OperationsComponent } from './operations/operations.component';
 import { OperationsService } from './operations/operations.service';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
+import { ImportExportModule } from '../shared/import-export/import-export.module';
 
 @NgModule({
   imports: [
@@ -72,7 +73,8 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
     SharedPipesModule,
     SystemAndEquipmentCurveModule,
     UpdateUnitsModalModule,
-    AssessmentCo2SavingsModule
+    AssessmentCo2SavingsModule,    
+    ImportExportModule
   ],
   declarations: [
     FsatComponent,

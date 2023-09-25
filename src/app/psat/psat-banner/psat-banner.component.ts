@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { PsatTabService } from '../psat-tab.service';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
-import { IntegrationStateService } from '../../shared/assessment-integration/integration-state.service';
+import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 
 @Component({
   selector: 'app-psat-banner',
@@ -90,5 +90,9 @@ export class PsatBannerComponent implements OnInit {
     } else if (this.mainTab == 'sankey') {
       this.psatTabService.mainTab.next('calculators');
     }
+  }
+
+  openExportModal(){
+    this.psatTabService.showExportModal.next(true);
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ImportExportService } from '../../dashboard/import-export/import-export.service';
+import { ImportExportService } from '../../shared/import-export/import-export.service';
 
 @Component({
   selector: 'app-not-found',

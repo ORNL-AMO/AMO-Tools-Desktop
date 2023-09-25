@@ -116,3 +116,25 @@
 li.page-item{
     background-color:#ECECEC !important;
 }
+
+span.fa.fa-download{
+    padding: 0px !important;
+}
+
+.download-nav-item .fa.fa-download{
+    border: none !important;
+    background-color: inherit;
+    opacity: 1;
+}
+
+.download-nav-item{
+    border: none !important;
+    background-color: #7030A0;
+}
+
+.download-nav-item:hover{
+    cursor: pointer;
+    font-weight: bolder;
+    background: rgba(0,0,0,0.3);
+}
+

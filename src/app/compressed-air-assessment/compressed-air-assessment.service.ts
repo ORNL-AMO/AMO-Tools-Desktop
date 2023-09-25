@@ -27,6 +27,7 @@ export class CompressedAirAssessmentService {
   selectedModificationId: BehaviorSubject<string>;
   showModificationListModal: BehaviorSubject<boolean>;
   showAddModificationModal: BehaviorSubject<boolean>;
+  showExportModal: BehaviorSubject<boolean>;
   setupTabs: Array<string> = [
     'system-basics',
     'system-information',
@@ -51,6 +52,7 @@ export class CompressedAirAssessmentService {
     this.selectedModificationId = new BehaviorSubject<string>(undefined);
     this.showModificationListModal = new BehaviorSubject<boolean>(false);
     this.showAddModificationModal = new BehaviorSubject<boolean>(false);
+    this.showExportModal = new BehaviorSubject<boolean>(false);
   }
 
   updateCompressedAir(compressedAirAssessment: CompressedAirAssessment, isBaselineChange: boolean) {

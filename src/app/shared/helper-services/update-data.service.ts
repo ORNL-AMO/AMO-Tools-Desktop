@@ -16,37 +16,22 @@ export class UpdateDataService {
 
     constructor(private convertUnitsService: ConvertUnitsService) { }
 
-    checkAssessment(assessment: Assessment): Assessment {
-        if (this.checkAssessmentVersionDifferent(assessment) === false) {
-            return assessment;
-        } else {
-            if (assessment.type === 'PSAT') {
-                return this.updatePsat(assessment);
-            }
-            if (assessment.type === 'FSAT') {
-                return this.updateFsat(assessment);
-            } else if (assessment.type === 'PHAST') {
-                return this.updatePhast(assessment);
-            } else if (assessment.type == 'SSMT') {
-                return this.updateSSMT(assessment);
-            } else if (assessment.type === 'TreasureHunt') {
-                return this.updateTreasureHunt(assessment);
-            } else if (assessment.type === 'WasteWater') {
-                return this.updateWasteWater(assessment);
-            } else if (assessment.type === 'CompressedAir') {
-                return this.updateCompressedAir(assessment);
-            } else {
-                return assessment;
-            }
-        }
-    }
-
-    checkAssessmentVersionDifferent(assessment: Assessment): boolean {
-        if (assessment.appVersion !== environment.version) {
-            return true;
-        } else {
-            return false;
-        }
+    updateAssessmentVersion(assessment: Assessment): Assessment {
+        if (assessment.type === 'PSAT') {
+            return this.updatePsat(assessment);
+        } else if (assessment.type === 'FSAT') {
+            return  this.updateFsat(assessment);
+        } else if (assessment.type === 'PHAST') {
+            return  this.updatePhast(assessment);
+        } else if (assessment.type == 'SSMT') {
+            return  this.updateSSMT(assessment);
+        } else if (assessment.type === 'TreasureHunt') {
+            return  this.updateTreasureHunt(assessment);
+        } else if (assessment.type === 'WasteWater') {
+            return  this.updateWasteWater(assessment);
+        } else if (assessment.type === 'CompressedAir') {
+            return  this.updateCompressedAir(assessment);
+        } 
     }
 
     updateWasteWater(assessment: Assessment): Assessment {
@@ -346,6 +331,7 @@ export class UpdateDataService {
     }
 
     updateSSMT(assessment: Assessment): Assessment {
+        assessment.appVersion = environment.version;
         assessment.ssmt = this.updateHeaders(assessment.ssmt);
         if (assessment.ssmt.modifications) {
             assessment.ssmt.modifications.forEach(mod => {
@@ -368,6 +354,7 @@ export class UpdateDataService {
         return ssmt;
     }
     updateTreasureHunt(assessment: Assessment): Assessment {
+        assessment.appVersion = environment.version;
         if (assessment.treasureHunt) {
             if (assessment.treasureHunt.lightingReplacements) {
                 assessment.treasureHunt.lightingReplacements.forEach(replacement => {

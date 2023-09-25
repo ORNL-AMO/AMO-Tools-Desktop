@@ -28,6 +28,7 @@ export class WasteWaterService {
   modifyConditionsTab: BehaviorSubject<string>;
   selectedModificationId: BehaviorSubject<string>;
   focusedField: BehaviorSubject<string>;
+  showExportModal: BehaviorSubject<boolean>;
 
   //system setup tabs
   setupTabs: Array<string> = [
@@ -55,6 +56,7 @@ export class WasteWaterService {
     this.modifyConditionsTab = new BehaviorSubject<string>('activated-sludge');
     this.selectedModificationId = new BehaviorSubject<string>(undefined);
     this.focusedField = new BehaviorSubject<string>('default');
+    this.showExportModal = new BehaviorSubject<boolean>(false);
   }
 
   updateWasteWater(wasteWater: WasteWater) {

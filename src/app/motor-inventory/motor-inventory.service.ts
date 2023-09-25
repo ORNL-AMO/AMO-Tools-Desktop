@@ -16,6 +16,7 @@ export class MotorInventoryService {
   settings: BehaviorSubject<Settings>;
   helpPanelTab: BehaviorSubject<string>;
   filterInventorySummary: BehaviorSubject<FilterInventorySummary>;
+  showExportModal: BehaviorSubject<boolean>;
   constructor() {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
     this.mainTab = new BehaviorSubject<string>('setup');
@@ -27,6 +28,7 @@ export class MotorInventoryService {
     this.summaryTab = new BehaviorSubject<string>('overview');
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.helpPanelTab = new BehaviorSubject<string>(undefined);
+    this.showExportModal = new BehaviorSubject<boolean>(false);
     this.filterInventorySummary = new BehaviorSubject({
       selectedDepartmentIds: new Array(),
       efficiencyClasses: new Array(),

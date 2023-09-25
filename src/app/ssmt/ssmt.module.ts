@@ -48,6 +48,7 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { RouterModule } from '@angular/router';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
+import { ImportExportModule } from '../shared/import-export/import-export.module';
 
 @NgModule({
   imports: [
@@ -78,7 +79,8 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
     SharedPipesModule,
     RouterModule,
     SsmtSankeyModule,
-    UpdateUnitsModalModule
+    UpdateUnitsModalModule,    
+    ImportExportModule
   ],
   declarations: [
     SsmtComponent,

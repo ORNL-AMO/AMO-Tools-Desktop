@@ -25,6 +25,8 @@ export class FsatService {
   modalOpen: BehaviorSubject<boolean>;
   updateData: BehaviorSubject<boolean>;
   calculatorTab: BehaviorSubject<string>;
+  showExportModal: BehaviorSubject<boolean>;
+
   //system setup tabs
   stepTabs: Array<string> = [
     'system-basics',
@@ -49,6 +51,7 @@ export class FsatService {
     this.openModificationModal = new BehaviorSubject<boolean>(false);
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.updateData = new BehaviorSubject<boolean>(false);
+    this.showExportModal = new BehaviorSubject<boolean>(false);
   }
 
   continue() {

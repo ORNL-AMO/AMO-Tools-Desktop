@@ -4,7 +4,7 @@ import { Settings } from '../shared/models/settings';
 import { PumpInventoryData, PumpInventoryDepartment, PumpItem, PumpPropertyDisplayOptions, ValidPump } from './pump-inventory';
 import * as _ from 'lodash';
 import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
-import { MotorIntegrationService } from '../shared/assessment-integration/motor-integration.service';
+import { MotorIntegrationService } from '../shared/connected-inventory/motor-integration.service';
 import { FieldMeasurementsCatalogService } from './pump-inventory-setup/pump-catalog/field-measurements-catalog/field-measurements-catalog.service';
 import { PumpEquipmentCatalogService } from './pump-inventory-setup/pump-catalog/pump-equipment-catalog/pump-equipment-catalog.service';
 import { UntypedFormGroup } from '@angular/forms';
@@ -22,6 +22,7 @@ export class PumpInventoryService {
   modalOpen: BehaviorSubject<boolean>;
   settings: BehaviorSubject<Settings>;
   helpPanelTab: BehaviorSubject<string>;
+  showExportModal: BehaviorSubject<boolean>;
   currentInventoryId: number;
 
   filterInventorySummary: BehaviorSubject<FilterInventorySummary>;
@@ -41,6 +42,7 @@ export class PumpInventoryService {
     this.summaryTab = new BehaviorSubject<string>('overview');
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.helpPanelTab = new BehaviorSubject<string>(undefined);
+    this.showExportModal = new BehaviorSubject<boolean>(false);
     this.filterInventorySummary = new BehaviorSubject({
       selectedDepartmentIds: new Array(),
       pumpTypes: new Array(),

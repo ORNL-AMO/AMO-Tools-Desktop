@@ -6,7 +6,7 @@ import { DirectoryDashboardService } from '../directory-dashboard.service';
 import * as _ from 'lodash';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
-import { ExportService } from '../../import-export/export.service';
+import { ExportService } from '../../../shared/import-export/export.service';
 import { DashboardService } from '../../dashboard.service';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
@@ -42,6 +42,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
       this.breadCrumbs = new Array();
       this.directory = this.directoryDbService.getById(id);
       this.isAllSelected = false;
+      this.setSelectedStatus();
       this.getBreadcrumbs(id);
     });
 
@@ -50,9 +51,11 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     });
 
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
-      this.directory = this.directoryDbService.getById(this.directory.id);  
-      if(this.directory){
+      this.directory = this.directoryDbService.getById(this.directory.id); 
+      if (this.directory){
         this.directory.selected = false;    
+        this.isAllSelected = false;
+        this.setSelectedStatus();
       }
     });
 
@@ -89,7 +92,8 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     });
     this.directory.inventories.forEach(inventory => {
       inventory.selected = this.isAllSelected;
-    });
+    });    
+    this.setSelectedStatus();
   }
 
   updateSelectedStatus() {
@@ -117,7 +121,8 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     if (this.directory.calculators) {
       hasCalculatorUnselected = _.find(this.directory.calculators, (value) => { return value.selected == false });
     }
-    this.isAllSelected = hasAssessmentUnselected !== undefined && hasDirUnselected !== undefined && hasInventoryUnselected !== undefined && hasCalculatorUnselected !== undefined;
+    this.isAllSelected = hasAssessmentUnselected == undefined && hasDirUnselected == undefined && hasInventoryUnselected == undefined && hasCalculatorUnselected == undefined;
+    this.directory.selected = this.isAllSelected;
   }
 
   checkReport() {

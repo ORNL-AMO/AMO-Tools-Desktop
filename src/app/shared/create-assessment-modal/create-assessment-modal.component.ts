@@ -14,9 +14,9 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../models/assessment';
 import { Directory } from '../models/directory';
 import { Settings } from '../models/settings';
-import { ConnectedInventoryData, ConnectedItem } from '../assessment-integration/integrations';
-import { PsatIntegrationService } from '../assessment-integration/psat-integration.service';
-import { IntegrationStateService } from '../assessment-integration/integration-state.service';
+import { ConnectedInventoryData, ConnectedItem } from '../connected-inventory/integrations';
+import { PsatIntegrationService } from '../connected-inventory/psat-integration.service';
+import { IntegrationStateService } from '../connected-inventory/integration-state.service';
 import { SettingsService } from '../../settings/settings.service';
 
 @Component({

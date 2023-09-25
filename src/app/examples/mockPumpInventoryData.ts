@@ -403,5 +403,6 @@ export const MockPumpInventory: InventoryItem = {
     "type": "pumpInventory",
     "name": "Pump Inventory Example",
     "appVersion": "0.10.0-beta",
+    "selected": false,
     "isExample": true,
 }

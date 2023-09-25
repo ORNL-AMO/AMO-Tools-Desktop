@@ -15,7 +15,7 @@ import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { MotorInventoryService } from '../../../../motor-inventory/motor-inventory.service';
 import { PumpInventoryService } from '../../../../pump-inventory/pump-inventory.service';
-import { MotorIntegrationService } from '../../../../shared/assessment-integration/motor-integration.service';
+import { MotorIntegrationService } from '../../../../shared/connected-inventory/motor-integration.service';
 
 @Component({
   selector: 'app-inventory-item',

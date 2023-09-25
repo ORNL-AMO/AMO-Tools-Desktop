@@ -15,3 +15,5 @@
         </div>
     </div>
 </div>
+
+<app-export-modal *ngIf="showExportModal" [inAssessment]="true" [inventoryItem]="pumpInventoryItem" (close)="closeExportModal($event)"></app-export-modal>
