@@ -114,7 +114,8 @@ export class PsatIntegrationService {
             assessmentSettings.id = assessmentSettingsId;
             assessmentSettings.assessmentId = assessmentId;
 
-            let allSettings = await firstValueFrom(this.settingsDbService.updateWithObservable(assessmentSettings))
+            await firstValueFrom(this.settingsDbService.updateWithObservable(assessmentSettings));
+            let allSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
             this.settingsDbService.setAll(allSettings);
             connectedInventoryData.canConnect = true;
           } else {
@@ -183,7 +184,8 @@ export class PsatIntegrationService {
         })
       });
 
-      let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(pumpInventory));
+      await firstValueFrom(this.inventoryDbService.updateWithObservable(pumpInventory));
+      let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
       this.inventoryDbService.setAll(updatedInventoryItems);
       this.integrationStateService.connectedInventoryData.next(connectedInventoryData);
     }
@@ -258,8 +260,10 @@ export class PsatIntegrationService {
           })
         });
   
-        let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(motorInventory));
-        this.inventoryDbService.setAll(updatedInventoryItems);
+        await firstValueFrom(this.inventoryDbService.updateWithObservable(motorInventory));
+        let allInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
+        this.inventoryDbService.setAll(allInventoryItems);
+
         this.integrationStateService.connectedInventoryData.next(connectedInventoryData);
       }
     }
@@ -280,8 +284,9 @@ export class PsatIntegrationService {
       // item or inventory was deleted
       delete psat.connectedItem;
       this.integrationStateService.assessmentIntegrationState.next(this.integrationStateService.getEmptyIntegrationState());
-      let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
-      this.assessmentDbService.setAll(assessments);
+      await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
+      let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+      this.assessmentDbService.setAll(allAssessments);
     }
   }
 
@@ -339,7 +344,8 @@ export class PsatIntegrationService {
       });
     });
 
-    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(pumpInventory));
+    await firstValueFrom(this.inventoryDbService.updateWithObservable(pumpInventory));
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);
     this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
     this.integrationStateService.assessmentIntegrationState.next(this.integrationStateService.getEmptyIntegrationState());
@@ -362,8 +368,10 @@ export class PsatIntegrationService {
           });
         }
       });
-      let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(motorInventoryItem));
-      this.inventoryDbService.setAll(updatedInventoryItems);
+      await firstValueFrom(this.inventoryDbService.updateWithObservable(motorInventoryItem));
+      let allInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
+      this.inventoryDbService.setAll(allInventoryItems);
+
       this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
       this.integrationStateService.assessmentIntegrationState.next(this.integrationStateService.getEmptyIntegrationState());
     }

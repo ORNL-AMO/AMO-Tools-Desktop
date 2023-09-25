@@ -83,7 +83,8 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
     newSettings.id = id;
     newSettings.createdDate = createdDate;
     newSettings.assessmentId = assessmentId;
-    let settings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
+    await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
+    let settings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(settings);
     this.wasteWaterService.settings.next(newSettings);
 

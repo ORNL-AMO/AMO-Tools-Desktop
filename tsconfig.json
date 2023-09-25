@@ -11,10 +11,10 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "types": ["node"],
-    "target": "es2015",
+    "target": "es2022",
     "module": "esnext",
     "lib": [
-      "es2018",
+      "es2019",
       "dom"
     ]
   }

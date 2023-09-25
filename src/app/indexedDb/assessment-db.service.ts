@@ -64,7 +64,7 @@ export class AssessmentDbService {
     return this.dbService.bulkDelete(this.storeName, assessmentIds);
   }
 
-  updateWithObservable(assessment: Assessment): Observable<any> {
+  updateWithObservable(assessment: Assessment): Observable<Assessment> {
     assessment.modifiedDate = new Date();
     return this.dbService.update(this.storeName, assessment);
   }

@@ -114,8 +114,9 @@ export class AirFlowConversionComponent implements OnInit {
   async saveAssessmentCalculator(){
     if (!this.saving) {
       if (this.assessmentCalculator.id) {
-        let assessments: Assessment[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(this.assessmentCalculator));
-        this.calculatorDbService.setAll(assessments);
+        await firstValueFrom(this.calculatorDbService.updateWithObservable(this.assessmentCalculator));
+        let calculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());  
+        this.calculatorDbService.setAll(calculators);
       } else {
         this.saving = true;
         this.assessmentCalculator.assessmentId = this.assessment.id;

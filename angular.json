@@ -3,29 +3,6 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "amo-tools-desktop-e2e": {
-      "root": "e2e",
-      "sourceRoot": "e2e",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "amo-tools-desktop:serve"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "e2e/tsconfig.e2e.json"
-            ],
-            "exclude": []
-          }
-        }
-      }
-    },
     "amo-tools-desktop": {
       "root": "",
       "sourceRoot": "src",
@@ -85,10 +62,9 @@
             ],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json",
-            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
-            "production": {
+            "web": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -100,7 +76,23 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "with": "src/environments/environment.web.ts"
+                }
+              ]
+            },
+            "desktop": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.desktop.ts"
                 }
               ]
             },
@@ -121,8 +113,8 @@
             "browserTarget": "amo-tools-desktop:build"
           },
           "configurations": {
-            "production": {
-              "browserTarget": "amo-tools-desktop:build:production"
+            "web": {
+              "browserTarget": "amo-tools-desktop:build:web"
             },
             "development": {
               "browserTarget": "amo-tools-desktop:build:development"
@@ -167,7 +159,6 @@
               },
               "src/manifest.webmanifest"
             ],
-            "webWorkerTsConfig": "tsconfig.worker.json"
           }
         },
         "lint": {

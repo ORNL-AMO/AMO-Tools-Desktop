@@ -281,7 +281,8 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
         equipmentCurveFormView: this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue()
       }
 
-      let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(calculator)) 
+      await firstValueFrom(this.calculatorDbService.updateWithObservable(calculator));
+      let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators()); 
       this.calculatorDbService.setAll(updatedCalculators);
     } else {
       calculator = {

@@ -6,7 +6,7 @@ import { PumpInventoryService } from '../../pump-inventory.service';
 import { InventorySummaryData, InventorySummaryTableService } from './inventory-summary-table.service';
 
 @Component({
-  selector: 'app-inventory-summary-table',
+  selector: 'app-pump-inventory-summary-table',
   templateUrl: './inventory-summary-table.component.html',
   styleUrls: ['./inventory-summary-table.component.css']
 })
