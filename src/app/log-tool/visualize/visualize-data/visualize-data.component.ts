@@ -27,7 +27,6 @@ export class VisualizeDataComponent implements OnInit {
   axisRanges: { xMin: number, xMax: number, yMin: number, yMax: number, y2Min: number, y2Max: number };
   axisRangesSub: Subscription;
 
-  worker: Worker;
   calculatingSummaries: any;
   onUpdateGraphEventsSubscription: Subscription;
   constructor(private visualizeService: VisualizeService, private cd: ChangeDetectorRef, private logToolDataService: LogToolDataService) { }

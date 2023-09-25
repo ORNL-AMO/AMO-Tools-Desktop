@@ -251,7 +251,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   async save(compressedAirAssessment: CompressedAirAssessment) {
     this.assessment.compressedAirAssessment = compressedAirAssessment;
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
   }
 
@@ -293,7 +294,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableCompressedAirTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.compressedAirAssessmentService.modalOpen.next(false);

@@ -116,7 +116,8 @@ export class MoveItemsComponent implements OnInit {
         if (this.directory.assessments[i].selected) {
           this.directoryDbService.setIsMovedExample(this.directory.assessments[i], this.moveForm);
           this.directory.assessments[i].directoryId = this.moveForm.controls.directoryId.value;
-          updatedAssessments = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.directory.assessments[i]));
+          await firstValueFrom(this.assessmentDbService.updateWithObservable(this.directory.assessments[i]));
+          updatedAssessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
         }
       }
       this.assessmentDbService.setAll(updatedAssessments);
@@ -132,7 +133,8 @@ export class MoveItemsComponent implements OnInit {
         let calculator: Calculator = this.directory.calculators[i];
         if (calculator.selected) {
           calculator.directoryId = this.moveForm.controls.directoryId.value;
-          updatedCalculators = await firstValueFrom(this.calculatorDbService.updateWithObservable(calculator))
+          await firstValueFrom(this.calculatorDbService.updateWithObservable(calculator));
+          updatedCalculators = await firstValueFrom(this.calculatorDbService.getAllCalculators()); 
           calculator.selected = false;
         }
       };
@@ -151,7 +153,8 @@ export class MoveItemsComponent implements OnInit {
           if (inventory.selected) {
             this.directoryDbService.setIsMovedExample(inventory, this.moveForm);
             inventory.directoryId = this.moveForm.controls.directoryId.value;
-            updatedInventoryItems = await firstValueFrom(this.inventoryDbService.updateWithObservable(inventory));
+            await firstValueFrom(this.inventoryDbService.updateWithObservable(inventory));
+            updatedInventoryItems = await firstValueFrom(this.inventoryDbService.getAllInventory());
             inventory.selected = false;
           }
         }
@@ -170,7 +173,8 @@ export class MoveItemsComponent implements OnInit {
           if (subDir.selected) {
             if (subDir.parentDirectoryId !== this.moveForm.controls.directoryId.value) {
               subDir.parentDirectoryId = this.moveForm.controls.directoryId.value;
-              updatedDirectories = await firstValueFrom(this.directoryDbService.updateWithObservable(subDir));
+              await firstValueFrom(this.directoryDbService.updateWithObservable(subDir));
+              let updatedDirectories: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories()); 
               this.directoryDbService.setAll(updatedDirectories);
             } else {
               this.hideMoveModal();

@@ -127,7 +127,8 @@ export class PumpInventoryComponent implements OnInit {
     this.pumpInventoryItem.pumpInventoryData = inventoryData;
     this.pumpInventoryItem.pumpInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
     this.pumpInventoryItem.pumpInventoryData.hasConnectedPsat = this.psatIntegrationService.getHasConnectedPSAT(this.pumpInventoryItem);
-    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.pumpInventoryItem));
+    await firstValueFrom(this.inventoryDbService.updateWithObservable(this.pumpInventoryItem));
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);
   }
 

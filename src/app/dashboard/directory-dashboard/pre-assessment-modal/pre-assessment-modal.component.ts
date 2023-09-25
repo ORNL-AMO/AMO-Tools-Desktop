@@ -72,7 +72,8 @@ export class PreAssessmentModalComponent implements OnInit {
       this.dashboardService.updateDashboardData.next(true);
       this.hidePreAssessmentModal();
     } else {
-      let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(this.preAssessmentCalculator)); 
+      await firstValueFrom(this.calculatorDbService.updateWithObservable(this.preAssessmentCalculator));
+      let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators()); 
       this.calculatorDbService.setAll(updatedCalculators);
       this.dashboardService.updateDashboardData.next(true);
       this.hidePreAssessmentModal();

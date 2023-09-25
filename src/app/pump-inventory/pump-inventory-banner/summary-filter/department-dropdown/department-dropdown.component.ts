@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-department-dropdown',
+  selector: 'app-pump-department-dropdown',
   templateUrl: './department-dropdown.component.html',
   styleUrls: ['./department-dropdown.component.css']
 })

@@ -420,7 +420,8 @@ export class PhastComponent implements OnInit {
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     //update our assessment in the iDb
     
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment))
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
   }
 
@@ -562,7 +563,8 @@ export class PhastComponent implements OnInit {
 
   async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disablePhastTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.phastService.modalOpen.next(false);

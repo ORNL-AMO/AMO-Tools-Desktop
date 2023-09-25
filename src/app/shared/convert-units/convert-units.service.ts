@@ -49,7 +49,6 @@ import { hourlyHeatCapacity } from './definitions/hourlyHeatCapacity';
 import { torque } from './definitions/torque';
 
 import * as _ from 'lodash';
-import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
 import { Settings } from '../models/settings';
 @Injectable()
@@ -60,7 +59,7 @@ export class ConvertUnitsService {
     mass: mass,
     massFlux: massFlux,
     volume: volume,
-    each: each,
+    each: _.each,
     temperature: temperature,
     time: time,
     digital: digital,
@@ -201,12 +200,12 @@ export class ConvertUnitsService {
   getUnit(abbr: string) {
     var found;
 
-    each(this._measures, function (systems, measure) {
-      each(systems, function (units, system) {
+    _.each(this._measures, function (systems, measure) {
+      _.each(systems, function (units, system) {
         if (system === '_anchors')
           return false;
 
-        each(units, function (unit, testAbbr) {
+        _.each(units, function (unit, testAbbr: string) {
           if (testAbbr === abbr) {
             found = {
               abbr: abbr
@@ -231,12 +230,12 @@ export class ConvertUnitsService {
 
   throwUnsupportedUnitError(what: any) {
     var validUnits = [];
-    each(this._measures, function (systems, measure) {
-      each(systems, function (units, system) {
+    _.each(this._measures, function (systems, measure) {
+      _.each(systems, function (units, system) {
         if (system === '_anchors')
           return false;
 
-        validUnits = validUnits.concat(keys(units));
+        validUnits = validUnits.concat(_.keys(units));
       });
     });
 
@@ -246,21 +245,21 @@ export class ConvertUnitsService {
   possibilities(measure) {
     var possibilities = [];
     if (!this.origin && !measure) {
-      each(keys(this._measures), function (measure) {
-        each(this._measures[measure], function (units, system) {
+      _.each(_.keys(this._measures), function (measure) {
+        _.each(this._measures[measure], function (units, system) {
           if (system === '_anchors')
             return false;
 
-          possibilities = possibilities.concat(keys(units));
+          possibilities = possibilities.concat(_.keys(units));
         });
       });
     } else {
       measure = measure || this.origin.measure;
-      each(this._measures[measure], function (units, system) {
+      _.each(this._measures[measure], function (units, system) {
         if (system === '_anchors')
           return false;
 
-        possibilities = possibilities.concat(keys(units));
+        possibilities = possibilities.concat(_.keys(units));
       });
     }
 
@@ -271,33 +270,8 @@ export class ConvertUnitsService {
     return Number((Math.round(val * 100) / 100).toFixed(digits));
   }
 
-  // list(measure?) {
-  //   var list = [];
-
-  //   each(this._measures, function (systems, testMeasure) {
-  //     if (measure && measure !== testMeasure)
-  //       return;
-
-  //     each(systems, function (units, system) {
-  //       if (system == '_anchors')
-  //         return false;
-
-  //       each(units, function (unit, abbr) {
-  //         list = list.concat(this.describe({
-  //           abbr: abbr,
-  //           measure: testMeasure
-  //           , system: system
-  //           , unit: unit
-  //         }));
-  //       });
-  //     });
-  //   });
-
-  //   return list;
-  // }
-
   measures() {
-    return keys(this._measures);
+    return _.keys(this._measures);
   }
 
   

@@ -17,12 +17,11 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     CoreModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
+      enabled: environment.production && environment.useServiceWorker,
       // registrationStrategy: 'registerImmediately',
       registrationStrategy: 'registerWhenStable:30000'
     }),
   ],
-  entryComponents: [AppComponent],
   bootstrap: [AppComponent],
   providers: [
    {

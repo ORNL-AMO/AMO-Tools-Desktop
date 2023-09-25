@@ -213,6 +213,7 @@ export class PsatComponent implements OnInit {
     this.checkShowWelcomeScreen();
   }
 
+
   redirectFromConnectedInventory() {
     this.psatTabService.mainTab.next('system-setup');
     this.psatTabService.stepTab.next('motor');
@@ -338,8 +339,9 @@ export class PsatComponent implements OnInit {
     if (this.assessment.psat.connectedItem && this.assessment.psat.connectedItem.inventoryType === 'pump') {
       this.psatIntegrationService.checkConnectedInventoryDiffers(this.assessment);
     }
-    
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
     this.psatService.getResults.next(true);
     this.cd.detectChanges();
@@ -487,7 +489,8 @@ export class PsatComponent implements OnInit {
 
   async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disablePsatTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.psatService.modalOpen.next(false);
