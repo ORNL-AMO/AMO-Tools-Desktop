@@ -61,7 +61,7 @@
     "rxjs": "^7.5.5",
     "rxjs-compat": "6.6.3",
     "uuid": "^9.0.0",
-    "xlsx": "^0.18.5",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz",
     "zone.js": "0.13.1"
   },
   "build": {
