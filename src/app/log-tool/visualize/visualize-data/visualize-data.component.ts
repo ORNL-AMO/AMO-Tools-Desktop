@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
-import { LogToolField, GraphObj, GraphDataSummary, GraphDataOption } from '../../log-tool-models';
+import { LogToolField, GraphObj, GraphDataSummary, XAxisDataOption } from '../../log-tool-models';
 import { VisualizeService } from '../visualize.service';
 import * as _ from 'lodash';
 import { combineLatestWith, debounce, interval, Observable, Subscription } from 'rxjs';
@@ -87,7 +87,7 @@ export class VisualizeDataComponent implements OnInit {
   }
 
   setTimeSeriesSummary() {
-    let allDataByAxisField: Array<GraphDataOption> = this.visualizeService.allDataByAxisField;
+    let allDataByAxisField: Array<XAxisDataOption> = this.visualizeService.allDataByAxisField;
     if (allDataByAxisField) {
       allDataByAxisField.forEach((dataItem) => {
         if (dataItem.dataField.isDateField) {

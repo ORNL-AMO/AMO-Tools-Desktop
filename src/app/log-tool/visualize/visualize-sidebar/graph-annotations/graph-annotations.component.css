@@ -1,8 +1,22 @@
+.btn{
+    padding: 6px;
+}
 
-.sidebar{
-    height: 100%;
-    background: white;
-    padding: .5rem;
+
+.btn:hover{
+    color: white;
+    background: #117A65;
+}
+
+.fa-times-circle:hover {
+    cursor: pointer;
+    color: gray;
+}
+
+span.fa.fa-chevron-circle-left,
+span.fa.fa-chevron-circle-right {
+    cursor: pointer;
+    color: #117A65;
 }
 
 .custom-control-input:checked ~ .custom-control-label::before {
@@ -11,7 +25,7 @@
 }
 
 .custom-control.custom-switch{
-    border-bottom: #117A65 solid 2px
+    border-bottom: #c0c0c0 solid 1px;
 }
 
 .custom-switch .custom-control-label::before,
@@ -25,16 +39,11 @@
     box-shadow: none;
 }
 
-
-label {
-    font-size: 18px; 
-}
-
-
-label.group-label.toggle-label {
-    font-size: 18px; 
+label.group-label {
+    font-size: 14px; 
     display: inline-block;
     width: 100%;
+    border-bottom: #c0c0c0 solid 1px;
 }
 
 label.group-label:hover, .checkbox:hover{
@@ -47,29 +56,6 @@ label.group-label:hover{
     background-color: #D5D8DC;
 }
 
-a:not([href]):not([tabindex]).danger.click-link{
-    color: red;
-}
-
-
-.sidebar{
-    width: 325px;
-}
-
-.sidebar.collapse-sidebar{
-    width: 50px;
-}
-
-.link-padding{
-    padding-left: .2rem;
-}
-
-
-span.fa.fa-chevron-circle-left,
-span.fa.fa-chevron-circle-right {
-    cursor: pointer;
-    color: #117A65;
-}
 
 
 .detail-tooltip {
@@ -82,23 +68,12 @@ span.fa.fa-chevron-circle-right {
     right: 0px;
 }
 
-.fa{
-    font-size: larger;
-    padding-top: 3px;
+li.card {
+    border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
-
-.options-border {
-    border-bottom: #117A65 solid 2px;
-}
-
-.btn-primary {
-    color: white;
-    background: #117A65;
-}
-
-.btn-primary:hover:enabled,
-.btn-primary:focus:enabled {
-    color: white;
-    background: #447f73 !important;
+.annotations {
+    max-height: 225px;
+    padding-right: .5rem;
+    overflow-y: auto;
 }

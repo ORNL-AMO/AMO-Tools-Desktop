@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, EventEmitter, Output, Renderer2, Inject } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { debounce, interval, Subscription } from 'rxjs';
-import { AnnotationData, GraphLayout, GraphObj, LoadingSpinner, VisualizerGraphData } from '../../log-tool-models';
-import { LogToolDbService } from '../../log-tool-db.service';
+import { AnnotationData, GraphObj, LoadingSpinner, VisualizerGraphData } from '../../log-tool-models';
 import { PlotlyService } from 'angular-plotly.js';
 import { LogToolDataService } from '../../log-tool-data.service';
 import * as _ from 'lodash';
@@ -23,7 +22,7 @@ export class VisualizeGraphComponent implements OnInit {
   @ViewChild('graphContainer', { static: false }) graphContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-      this.emitHeight.emit(this.graphContainer.nativeElement.offsetHeight);
+    this.emitHeight.emit(this.graphContainer.nativeElement.offsetHeight);
   }
 
   selectedGraphDataSubscription: Subscription;
@@ -57,9 +56,7 @@ export class VisualizeGraphComponent implements OnInit {
         let userInputDelay: number = this.visualizeService.userInputDelay.getValue();
         return interval(userInputDelay);
       })
-      ).subscribe((graphObj: GraphObj) => {
-      // todo 6284 save data is creating zone.js lag
-      // this.logToolDbService.saveData();
+    ).subscribe((graphObj: GraphObj) => {
       this.selectedGraphObj = graphObj;
       this.updateGraphObjects();
       this.renderUserInputEvents();
@@ -72,7 +69,7 @@ export class VisualizeGraphComponent implements OnInit {
     });
 
     // if navigating from map data/time without day type analysis
-    this.logToolDataService.loadingSpinner.next({show: false, msg: 'Finalizing Data Setup...'});
+    this.logToolDataService.loadingSpinner.next({ show: false, msg: 'Finalizing Data Setup...' });
     window.dispatchEvent(new Event("resize"));
   }
 
@@ -173,7 +170,9 @@ export class VisualizeGraphComponent implements OnInit {
     }
   }
 
-
+  focusGraph() {
+    this.visualizeService.focusedPanel.next('visualize-graph');
+  }
 
 
 

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import * as _ from 'lodash';
-import { LogToolField, GraphObj, AnnotationData, GraphDataOption } from '../log-tool-models';
+import { LogToolField, GraphObj, AnnotationData, XAxisDataOption } from '../log-tool-models';
 import { LogToolService } from '../log-tool.service';
 
 @Injectable()
 export class VisualizeService {
 
   allDataByAxisFieldsInitialized: boolean = false;
-  allDataByAxisField: Array<GraphDataOption>;
+  allDataByAxisField: Array<XAxisDataOption>;
   graphObjects: BehaviorSubject<Array<GraphObj>>;
   selectedGraphObj: BehaviorSubject<GraphObj>;
   shouldRenderGraph: BehaviorSubject<boolean>;
@@ -258,7 +258,7 @@ export class VisualizeService {
       mode: 'markers',
       yaxis: undefined,
       marker: {
-        color: undefined
+        color: '#351e76'
       },
       line: {
         color: undefined,

@@ -1,0 +1,57 @@
+<div class="sidebar scroll-item pt-2" [ngClass]="{'collapse-sidebar': !showSidebar}">
+  <div class="mx-2 pb-5 h-100">
+    <div class="d-flex flex-row p-0 justify-content-between">
+      <form *ngIf="selectedGraphObj && showSidebar" class="pt-1 pr-3 w-100">
+        <div class="form-group">
+          <input class="form-control w-100" type="text" name="graphName"
+            [(ngModel)]="selectedGraphObj.layout.title.text" (input)="saveChanges()">
+        </div>
+      </form>
+      <span *ngIf="!showSidebar" class="elevated-button fa fa-chevron-circle-right pt-1 mb-0"
+        (click)="toggleSidebar()"></span>
+      <span *ngIf="showSidebar" class="elevated-button fa fa-chevron-circle-left pt-1 mb-0"
+        (click)="toggleSidebar()"></span>
+    </div>
+    <div class="sidebar-content" [ngClass]="{'d-none': !showSidebar}">
+     
+      <ul class="nav nav-tabs mt-3 justify-content-start flex-nowrap">
+        <li class="nav-item">
+          <a class="nav-link px-2" (click)="setSidebarTab('graph-data')" [ngClass]="{'active': selectedSidebarTab === 'graph-data'}" >Data</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-2" (click)="setSidebarTab('other-series')" [ngClass]="{'active': selectedSidebarTab === 'other-series', 'disabled': selectedGraphObj.data[0].type === 'bar'}">Other Series</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-2" (click)="setSidebarTab('annotations')" [ngClass]="{'active': selectedSidebarTab === 'annotations'}">Annotations</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link p-2 fa fa-tab fa-cog" (click)="setSidebarTab('settings')" 
+          [ngClass]="{'active': selectedSidebarTab === 'settings'}"></a>
+        </li>
+      </ul>
+
+      <div class="d-flex flex-column justify-content-between flex-grow-1">
+        <app-graph-data-selection *ngIf="selectedSidebarTab === 'graph-data'"></app-graph-data-selection>
+        <app-graph-series-management *ngIf="selectedSidebarTab === 'other-series'"
+          [selectedGraphObj]="selectedGraphObj"></app-graph-series-management>
+        <app-graph-annotations *ngIf="selectedSidebarTab === 'annotations'"></app-graph-annotations>
+        <div *ngIf="selectedSidebarTab === 'settings'" class="mt-3">
+          <button [ngClass]="{'disabled': numberOfGraphs == 1}" class="btn btn-danger small px-3 w-100 my-2 mr-2" (click)="deleteGraph()">Delete Graph</button>
+        </div>
+      
+        <ng-container *ngIf="selectedSidebarTab !== 'settings'">
+          <button [disabled]="!selectedGraphObj.hasChanges" [ngClass]="{'disabled': !selectedGraphObj.hasChanges}"
+            class="btn btn-primary small px-3 w-100 my-2 mr-2" (click)="renderGraph()">
+            <span *ngIf="!selectedGraphObj.isGraphInitialized">
+              Create Graph
+            </span>
+            <span *ngIf="selectedGraphObj.isGraphInitialized">
+              <span class="fa fa-refresh pt-0 pr-3"></span><span>Apply Graph Changes</span>
+            </span>
+          </button>
+        </ng-container>
+      </div>
+      
+    </div>
+  </div>
+</div>

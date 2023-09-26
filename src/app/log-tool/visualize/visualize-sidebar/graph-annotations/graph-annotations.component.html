@@ -1,0 +1,133 @@
+<div class="d-flex w-100 mt-3">
+    <div class="d-flex flex-fill">
+        <label class="group-label mb-2" (focus)="focusField()">
+            <div class="pull-left">
+                Manage Annotations
+            </div>
+            <span class="detail-tooltip-box" *ngIf="showTooltipHover || showTooltipClick"
+                (mouseenter)="displayTooltipHover(true)" (mouseleave)="hideTooltipHover()"
+                (click)="toggleClickTooltip()">
+                <div class="detail-tooltip down"><span class="detail-tooltip-arrow tooltip-arrow-left"></span>
+                    <div class="p-2">
+                        Create and manage annotations.
+                        Toggle this feature off to increase graph performance on large datasets.
+                        <a class="click-link" (click)="visualizeService.displayAnnotationHelp()">Learn more</a>
+                    </div>
+                </div>
+            </span>
+        </label>
+    </div>
+
+    <div class="custom-control custom-switch mb-2">
+        <input type="checkbox" class="custom-control-input" (change)="toggleAnnotateGraph()"
+            [(ngModel)]="isGraphInteractive" name="isGraphInteractive" id="isGraphInteractive">
+        <label class="custom-control-label" for="isGraphInteractive"></label>
+        <span class="pull-right">
+            <span class="tooltip-icon fa fa-question-circle" (mouseenter)="displayTooltipHover()"
+                (mouseleave)="hideTooltipHover()" (click)="toggleClickTooltip()"></span>
+        </span>
+    </div>
+</div>
+
+
+<div *ngIf="selectedGraphObj.graphInteractivity.showDefaultPerformanceWarning"
+    class="text-left alert alert-warning small mb-1 p-2 px-3">
+    <b>Annotation management is off to increase graph performance.</b> Existing annotations will remain visible and will
+    not affect performance.
+    <a class="click-link" (click)="visualizeService.displayAnnotationHelp()">Learn More</a>
+    <div class="d-flex flex-row justify-content-start mt-2">
+        <a class="click-link" (click)="dismissPerformanceWarning()">Dismiss</a>
+    </div>
+</div>
+
+<ng-container *ngIf="isGraphInteractive">
+    <div *ngIf="selectedGraphObj.graphInteractivity.showUserToggledPerformanceWarning"
+        class="text-left alert alert-warning small mb-1 p-2 px-3">
+        <b>Annotation management is on.</b> Toggle this feature off for faster graph performance.
+        <a class="click-link" (click)="visualizeService.displayAnnotationHelp()">Learn More</a>
+        <div class="d-flex flex-row justify-content-start mt-2">
+            <a class="click-link" (click)="dismissUserToggledPerformanceWarning()">Dismiss</a>
+        </div>
+    </div>
+    <div *ngIf="!annotateDataPoint" class="small p-2 m-0 mt-1 alert alert-warning">
+        Click on a data point to annotate.
+    </div>
+    <form *ngIf="annotateDataPoint">
+        <div class="form-group">
+            <label>Selected Series</label>
+            <div class="small">{{annotateDataPoint.seriesName}}</div>
+        </div>
+        <div class="form-group">
+            <label>Selected X Point:</label>
+            <div class="small">{{annotateDataPoint.x}}</div>
+        </div>
+        <div class="form-group">
+            <label>Selected Y Point:</label>
+            <div class="small">{{annotateDataPoint.y}}</div>
+        </div>
+        <div class="form-group">
+            <label class="w-100">Annotation</label>
+            <textarea rows="3" class="form-control w-100" [(ngModel)]="annotateDataPoint.text" name="annotation"
+                id="annotaion" (input)="setAnnotation()" (focus)="focusField()" (blur)="focusOut()"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Font Size</label>
+            <select class="form-control" [(ngModel)]="annotateDataPoint.font.size" name="fontSize"
+                (change)="setAnnotation()" (focus)="focusField()" (blur)="focusOut()">
+                <option *ngFor="let fontSize of fontSizes" [ngValue]="fontSize">{{fontSize}}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Font Color</label>
+            <input class="w-50 form-control color-picker" type="color" name="{{'fontColor'}}"
+                [(ngModel)]="annotateDataPoint.font.color"
+                [ngStyle]="{'background-color': annotateDataPoint.font.color}" (input)="setAnnotation()"
+                (focus)="focusField()" (blur)="focusOut()">
+        </div>
+
+        <div class="form-group">
+            <label>Background Color</label>
+            <input class="w-50 form-control color-picker" type="color" name="backgroundColor"
+                [(ngModel)]="annotateDataPoint.bgcolor" [ngStyle]="{'background-color': annotateDataPoint.bgcolor}"
+                (input)="setAnnotation()" (focus)="focusField()" (blur)="focusOut()">
+        </div>
+        <div class="form-group">
+            <label>Arrow Color</label>
+            <input class="w-50 form-control color-picker" type="color" name="arrowColor"
+                [(ngModel)]="annotateDataPoint.arrowcolor"
+                [ngStyle]="{'background-color': annotateDataPoint.arrowcolor}" (input)="setAnnotation()"
+                (focus)="focusField()" (blur)="focusOut()">
+        </div>
+
+        <div class="form-group">
+            <label>Arrow Size</label>
+            <select class="form-control" [(ngModel)]="annotateDataPoint.arrowsize" name="arrowsize"
+                (change)="setAnnotation()" (focus)="focusField()" (blur)="focusOut()">
+                <option *ngFor="let arrowSize of arrowSizes" [ngValue]="arrowSize">{{arrowSize}}</option>
+            </select>
+        </div>
+        <div class="pt-2">
+            <div class="btn-group small w-100">
+                <button class="btn btn-sm" (click)="moveLeft()"><span class="fa fa-chevron-left"></span></button>
+                <button class="btn btn-sm" (click)="moveUp()"><span class="fa fa-chevron-up"></span></button>
+                <button class="btn btn-sm" (click)="moveDown()"><span class="fa fa-chevron-down"></span></button>
+                <button class="btn btn-sm" (click)="moveRight()"><span class="fa fa-chevron-right"></span></button>
+            </div>
+        </div>
+    </form>
+</ng-container>
+
+<div class="pt-4" *ngIf="selectedGraphObj.layout.annotations && selectedGraphObj.layout.annotations.length != 0">
+    <label class="group-label small">
+        Existing Annotations
+    </label>
+    <ul class="annotations pl-0">
+        <li class="card pl-2 mt-2" *ngFor="let annotation of selectedGraphObj.layout.annotations">
+            <div class="card-body p-1">
+                <a class="click-link small" (click)="selectAnnotation(annotation)">{{annotation.text}}</a>
+                <span class="fa fa-times-circle pull-right pt-1" (click)="deleteAnnotation(annotation)"></span>
+            </div>
+        </li>
+    </ul>
+</div>

@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
-import { GraphObj, LogToolField, AnnotationData, GraphDataOption } from '../../log-tool-models';
+import { AnnotationData, GraphObj, LogToolField, XAxisDataOption } from '../../log-tool-models';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
 
-@Injectable()
-export class VisualizeMenuService {
+@Injectable({
+  providedIn: 'root'
+})
+export class VisualizeSidebarService {
   selectedGraphObj: any;
   constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
 
@@ -39,18 +41,46 @@ export class VisualizeMenuService {
 
   setGraphData(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
     if (selectedGraphObj.isTimeSeries || selectedGraphObj.data[0].type == 'scattergl') {
-      this.setScatterGraphDataOptions(selectedGraphObj, shouldRenderGraph);
+      this.setScatterXAxisDataOptions(selectedGraphObj, shouldRenderGraph);
     } else if (selectedGraphObj.data[0].type == 'bar') {
       this.setBarChartDataOptions(selectedGraphObj, shouldRenderGraph);
     }
   }
 
-  setScatterGraphDataOptions(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
+  setScatterXAxisDataOptions(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
     this.setXAxisDataOptions(selectedGraphObj);
     this.setSelectedXAxisDataOption(selectedGraphObj);
 
     this.setSelectedYAxisDataOption(selectedGraphObj);
     this.setGraphYAxisData(selectedGraphObj, shouldRenderGraph);
+  }
+
+  changeSelectedGraphData(selectedGraphObj: GraphObj, isSelectedGraphChange?: boolean) {
+    selectedGraphObj.isTimeSeries = false;
+    if (selectedGraphObj.data[0].type == 'bar') {
+      this.checkBarHistogramData(selectedGraphObj);
+    } else if (selectedGraphObj.data[0].type == 'time-series') {
+      selectedGraphObj.isTimeSeries = true;
+      selectedGraphObj.selectedYAxisDataOptions.map(selectedYOption => selectedYOption.linesOrMarkers = 'lines');
+      // plotly type for time-series == scattergl
+      selectedGraphObj.data[0].type = 'scattergl';
+    }
+    if (!isSelectedGraphChange) {
+      // We don't need to reset because we're changing to an entirely different graph
+      this.resetLayoutRelatedData(selectedGraphObj);
+      // reset series any added series related data
+      let graphType = selectedGraphObj.data[0].type;
+      selectedGraphObj.data = this.visualizeService.getEmptyGraphData();
+      selectedGraphObj.data[0].type = graphType;
+      selectedGraphObj.selectedYAxisDataOptions = [selectedGraphObj.selectedYAxisDataOptions[0]];
+    }
+    this.setGraphData(selectedGraphObj);
+  }
+
+  checkBarHistogramData(selectedGraphObj: GraphObj) {
+    if (selectedGraphObj.binnedField == undefined || selectedGraphObj.binnedField.fieldName != selectedGraphObj.selectedXAxisDataOption.dataField.fieldName || selectedGraphObj.bins == undefined) {
+      selectedGraphObj = this.initializeBinData(selectedGraphObj);
+    }
   }
 
   setSelectedYAxisDataOption(selectedGraphObj: GraphObj) {
@@ -72,13 +102,14 @@ export class VisualizeMenuService {
       selectedGraphObj.selectedYAxisDataOptions = tmpSelectedYAxisDataOptions;
     } else {
       let defaultColor: string = '#351e76';
+      let defaultMarkerType: string = selectedGraphObj.isTimeSeries? 'lines' : 'markers';
       selectedGraphObj.selectedYAxisDataOptions = [{
         index: 0,
         dataOption: selectedGraphObj.yAxisDataOptions[0],
         seriesColor: defaultColor,
         seriesName: this.getSeriesName(selectedGraphObj.yAxisDataOptions[0].dataField),
         yaxis: 'y',
-        linesOrMarkers: 'markers'
+        linesOrMarkers: defaultMarkerType
       }];
     }
   }
@@ -105,8 +136,8 @@ export class VisualizeMenuService {
 
   setXAxisDataOptions(selectedGraphObj: GraphObj) {
     let dataFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
-    selectedGraphObj.isTimeSeries = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
-    if (selectedGraphObj.isTimeSeries) {
+    let canRunDayTypeAnalysis: boolean = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
+    if (selectedGraphObj.isTimeSeries && canRunDayTypeAnalysis) {
       dataFields.push({
         fieldName: 'Time Series',
         alias: 'Time Series',
@@ -201,7 +232,7 @@ export class VisualizeMenuService {
       }
       else if (selectedGraphObj.data[0].type == 'scattergl') {
         let data = this.visualizeService.getGraphDataByField(field.fieldName);
-        let yAxisOption: GraphDataOption = {
+        let yAxisOption: XAxisDataOption = {
           data: data,
           dataField: field
         }
@@ -209,7 +240,7 @@ export class VisualizeMenuService {
       }
     });
     selectedGraphObj.selectedYAxisDataOptions.forEach(selectedOption => {
-      let optionFound: GraphDataOption;
+      let optionFound: XAxisDataOption;
       if (selectedOption.dataOption) {
       optionFound = selectedGraphObj.yAxisDataOptions.find(option => { 
           return option.dataField.fieldName == selectedOption.dataOption.dataField.fieldName 
@@ -222,37 +253,36 @@ export class VisualizeMenuService {
   }
 
   setGraphYAxisData(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
-    let index: number = 0;
-    selectedGraphObj.selectedYAxisDataOptions.forEach(selectedDataOption => {
-      selectedGraphObj.data[index].mode = selectedDataOption.linesOrMarkers;
-      if (selectedGraphObj.isTimeSeries) {
-        let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(selectedDataOption.dataOption.dataField);
-        if (timeData) {
-          selectedGraphObj.data[index].x = timeData;
-          selectedGraphObj.data[index].mode = 'lines';
+    selectedGraphObj.selectedYAxisDataOptions.forEach((selectedDataOption, index) => {
+      if (selectedGraphObj.data[index]) {
+        if (selectedGraphObj.isTimeSeries) {
+          let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(selectedDataOption.dataOption.dataField);
+          if (timeData) {
+            selectedGraphObj.data[index].x = timeData;
+            selectedGraphObj.data[index].mode = selectedDataOption.linesOrMarkers;
+          }
+        } else {
+          // Lines not a valid mode for non-time series
+          selectedGraphObj.data[index].mode = 'markers';
+          selectedDataOption.linesOrMarkers = 'markers';
         }
+        selectedGraphObj.isTimeSeries = selectedGraphObj.isTimeSeries;
+        selectedGraphObj = this.visualizeService.setDefaultGraphInteractivity(selectedGraphObj, selectedGraphObj.data[index].x.length);
+        selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
+        selectedGraphObj.data[index].name = selectedDataOption.seriesName;
+        selectedGraphObj.data[index].dataSeriesId = Math.random().toString(36).substr(2, 9);
+        selectedGraphObj.data[index].marker.color = selectedDataOption.seriesColor;
+        selectedGraphObj.data[index].line.color = selectedDataOption.seriesColor;
+        selectedGraphObj.data[index].yaxis = selectedDataOption.yaxis;
       }
-      else {
-        // Lines not a valid mode for non-time series
-        selectedDataOption.linesOrMarkers = 'markers';
-      }
-      selectedGraphObj.isTimeSeries = selectedGraphObj.isTimeSeries;
-      selectedGraphObj = this.visualizeService.setDefaultGraphInteractivity(selectedGraphObj, selectedGraphObj.data[index].x.length);
-      selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
-      selectedGraphObj.data[index].name = selectedDataOption.seriesName;
-      selectedGraphObj.data[index].dataSeriesId = Math.random().toString(36).substr(2, 9);
-      selectedGraphObj.data[index].marker.color = selectedDataOption.seriesColor;
-      selectedGraphObj.data[index].line.color = selectedDataOption.seriesColor;
-      selectedGraphObj.data[index].yaxis = selectedDataOption.yaxis;
-      index++;
     })
-
-      if (shouldRenderGraph) {
-        this.saveGraphDataChange(selectedGraphObj);
-        this.visualizeService.shouldRenderGraph.next(true)
-      } else {
-        this.saveGraphDataChange(selectedGraphObj);
-      }
+    console.log(selectedGraphObj);
+    if (shouldRenderGraph) {
+      this.saveGraphDataChange(selectedGraphObj);
+      this.visualizeService.shouldRenderGraph.next(true)
+    } else {
+      this.saveGraphDataChange(selectedGraphObj);
+    }
   }
 
   setBarChartDataOptions(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {

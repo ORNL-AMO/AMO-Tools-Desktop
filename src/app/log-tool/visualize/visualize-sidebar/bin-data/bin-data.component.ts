@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { GraphObj } from '../../../log-tool-models';
 import { Subscription } from 'rxjs';
 import { VisualizeService } from '../../visualize.service';
-import { VisualizeMenuService } from '../visualize-menu.service';
 import * as _ from 'lodash';
+import { VisualizeSidebarService } from '../visualize-sidebar.service';
 @Component({
   selector: 'app-bin-data',
   templateUrl: './bin-data.component.html',
@@ -15,7 +15,7 @@ export class BinDataComponent implements OnInit {
   selectedGraphObj: GraphObj;
   calculatingData: any;
   binError: string;
-  constructor(private visualizeService: VisualizeService, private visualizeMenuService: VisualizeMenuService) { }
+  constructor(private visualizeService: VisualizeService, private visualizeSidebarService: VisualizeSidebarService) { }
 
   ngOnInit(): void {
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
@@ -43,7 +43,7 @@ export class BinDataComponent implements OnInit {
       this.checkBinError();
       if (this.binError == undefined) {
         this.calculatingData = setTimeout(() => {
-          this.selectedGraphObj = this.visualizeMenuService.setNumberOfBins(this.selectedGraphObj, this.selectedGraphObj.bins[0].min);
+          this.selectedGraphObj = this.visualizeSidebarService.setNumberOfBins(this.selectedGraphObj, this.selectedGraphObj.bins[0].min);
           this.save();
         }, 500);
       }
@@ -58,7 +58,7 @@ export class BinDataComponent implements OnInit {
       this.checkBinError();
       if (this.binError == undefined) {
         this.calculatingData = setTimeout(() => {
-          this.selectedGraphObj = this.visualizeMenuService.setBins(this.selectedGraphObj, this.selectedGraphObj.bins[0].min);
+          this.selectedGraphObj = this.visualizeSidebarService.setBins(this.selectedGraphObj, this.selectedGraphObj.bins[0].min);
           this.save();
         }, 500);
       }
@@ -75,7 +75,7 @@ export class BinDataComponent implements OnInit {
         this.checkBinError();
         if (this.binError == undefined) {
           this.calculatingData = setTimeout(() => {
-            this.selectedGraphObj = this.visualizeMenuService.setBins(this.selectedGraphObj, this.selectedGraphObj.bins[0].min);
+            this.selectedGraphObj = this.visualizeSidebarService.setBins(this.selectedGraphObj, this.selectedGraphObj.bins[0].min);
             this.save();
           }, 500);
         }
@@ -84,7 +84,7 @@ export class BinDataComponent implements OnInit {
   }
 
   save() {
-    this.visualizeMenuService.setBarHistogramData(this.selectedGraphObj);
+    this.visualizeSidebarService.setBarHistogramData(this.selectedGraphObj);
   }
 
   checkBinError() {
