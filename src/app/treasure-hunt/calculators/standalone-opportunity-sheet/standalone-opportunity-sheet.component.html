@@ -32,23 +32,24 @@
   </div>
   <div class="panel-group">
     <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
-      <div class="d-flex flex-column m-2">
+      [ngClass]="{'small-screen-tab w-100': smallScreenTab === 'form'}">
+      <div class="d-block m-2">
         <app-general-details-form class="w-100" [(opportunitySheet)]="opportunitySheet"
           (emitChangeField)="changeField($event)"></app-general-details-form>
+
         <div class="col-12">
           <div class="header">
             <h3 class="ml-0">Energy Use</h3>
           </div>
         </div>
-        <div class="d-block d-lg-flex">
+
+        <div class="d-block d-lg-flex col-12">
           <div class="p-2">
             <label class="group-label">Baseline</label>
             <app-energy-use-form [(energyItems)]="opportunitySheet.baselineEnergyUseItems" [settings]="settings"
               (emitSave)="saveBaseline($event)" (emitChangeField)="changeField($event)">
             </app-energy-use-form>
           </div>
-          <!-- Modifications Start -->
           <div class="p-2">
             <label class="group-label">Modification</label>
             <app-energy-use-form *ngIf="opportunitySheet.modificationEnergyUseItems.length != 0"
@@ -62,9 +63,6 @@
               <button type="button" class="btn btn-primary">Add Modified Condition</button>
               <p>Data will be copied from your current baseline condition.</p>
             </div>
-            <!-- <div class="p-3 w-100 justify-content-center" *ngIf="modificationEnergyUse.length == 0">
-            <button class="btn btn-primary btn-sm" (click)="addModification()">Add Modification</button>
-          </div> -->
           </div>
         </div>
         <app-costs-form class="w-100" [(opportunityCost)]="opportunitySheet.opportunityCost"
@@ -72,7 +70,7 @@
       </div>
     </div>
     <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+      [ngClass]="{'small-screen-tab w-100': smallScreenTab === 'details'}">
       <div class="d-flex flex-wrap tabs primary sticky-top">
         <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
           <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
