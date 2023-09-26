@@ -78,6 +78,7 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   }
 
   ngOnDestroy() {
+    this.airLeakService.currentLeakIndex.next(0);
     this.currentFieldSub.unsubscribe();
     this.airLeakInputSub.unsubscribe();
   }
