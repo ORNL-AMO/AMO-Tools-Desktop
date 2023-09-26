@@ -26,7 +26,7 @@ export class DirectoryItemComponent implements OnInit {
 
   ngOnInit() {
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
-      if(this.directory){
+      if (this.directory){
         this.directory = this.directoryDbService.getById(this.directory.id);
         this.directoryItems = this.directoryDashboardService.getDirectoryItems(this.directory);
       }

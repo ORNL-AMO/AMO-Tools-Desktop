@@ -44,9 +44,7 @@ export class DirectoryDashboardComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.directoryId = Number(params['id']);
       this.directoryDashboardService.selectedDirectoryId.next(this.directoryId);
-      
-      this.directory = this.directoryDbService.getById(this.directoryId);
-      this.setDirectoryItems();
+      this.setDirectory();
 
       let showPreAssessmentIndex = this.activatedRoute.snapshot.queryParamMap.get('showPreAssessmentIndex');
       if (showPreAssessmentIndex) {
@@ -58,12 +56,14 @@ export class DirectoryDashboardComponent implements OnInit {
     });
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       if (val) {
-        this.directory = this.directoryDbService.getById(this.directoryId);
-        this.setDirectoryItems();
+        this.setDirectory();
       }
     });
-    this.showDeleteItemsModalSub = this.directoryDashboardService.showDeleteItemsModal.subscribe(val => {
-      this.showDeleteItemsModal = val;
+    this.showDeleteItemsModalSub = this.directoryDashboardService.showDeleteItemsModal.subscribe(shouldShow => {
+      if (!shouldShow) {
+        this.setDirectory();
+      }
+      this.showDeleteItemsModal = shouldShow;
     });
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
       this.dashboardView = val;
@@ -92,7 +92,8 @@ export class DirectoryDashboardComponent implements OnInit {
     this.sortBySub.unsubscribe();
   }
 
-  setDirectoryItems() {
+  setDirectory() {
+    this.directory = this.directoryDbService.getById(this.directoryId);
     this.directoryItems = this.directoryDashboardService.getDirectoryItems(this.directory);
     let preAssessmentExists = this.directoryItems.find((item) => { return item.type == 'calculator' });
     if (preAssessmentExists == undefined) {
