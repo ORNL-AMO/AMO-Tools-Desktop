@@ -4,14 +4,15 @@ import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
 import { ActivatedSludgeData, AeratorPerformanceData, CalculationsTableRow, WasteWater, WasteWaterData, WasteWaterOperations, WasteWaterResults, WasteWaterTreatmentInputData, WasteWaterValid } from '../shared/models/waste-water';
+import { WasteWaterSuiteApiService } from '../tools-suite-api/waste-water-suite-api.service';
 import { ActivatedSludgeFormService } from './activated-sludge-form/activated-sludge-form.service';
 import { AeratorPerformanceFormService } from './aerator-performance-form/aerator-performance-form.service';
 import { ConvertWasteWaterService } from './convert-waste-water.service';
+import { SystemBasicsService } from './system-basics/system-basics.service';
 import { WasteWaterOperationsService } from './waste-water-operations/waste-water-operations.service';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 
-declare var wasteWaterAddon: any;
 @Injectable()
 export class WasteWaterService {
 
@@ -38,7 +39,9 @@ export class WasteWaterService {
   ];
 
   constructor(private activatedSludgeFormService: ActivatedSludgeFormService,
+    private systemBasicsService: SystemBasicsService,
     private assessmentCo2Service: AssessmentCo2SavingsService,
+    private wasteWaterApiService: WasteWaterSuiteApiService,
     private aeratorPerformanceFormService: AeratorPerformanceFormService,
     private convertWasteWaterService: ConvertWasteWaterService, private convertUnitsService: ConvertUnitsService, private operationsService: WasteWaterOperationsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
@@ -128,12 +131,12 @@ export class WasteWaterService {
   }
 
   calculateResultsDefinedMLSS(inputData: WasteWaterTreatmentInputData): WasteWaterResults {
-    let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatment(inputData);
+    let wasteWaterResults: WasteWaterResults = this.wasteWaterApiService.wasteWaterTreatment(inputData);
     return wasteWaterResults;
   }
 
   calculateResultsDefinedSRT(inputData: WasteWaterTreatmentInputData): WasteWaterResults {
-    let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatmentGivenSRT(inputData);
+    let wasteWaterResults: WasteWaterResults = this.wasteWaterApiService.wasteWaterTreatment(inputData, true);
     return wasteWaterResults;
   }
 

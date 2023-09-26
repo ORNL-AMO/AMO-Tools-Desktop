@@ -8,7 +8,7 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import { FlueGasHeatingValue, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { FeedwaterEconomizerInput } from '../../../../shared/models/steam/feedwaterEconomizer';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { FeedwaterEconomizerFormService, FeedwaterEconomizerWarnings } from '../feedwater-economizer-form.service';
 import { FeedwaterEconomizerService } from '../feedwater-economizer.service';
 
@@ -49,7 +49,7 @@ export class FeedwaterEconomizerFormComponent implements OnInit {
   fuelOptions: Array<FlueGasMaterial>;
 
   constructor(private feedwaterEconomizerService: FeedwaterEconomizerService, 
-    private suiteDbService: SuiteDbService,
+    private sqlDbApiService: SqlDbApiService,
     private phastService: PhastService,
     private feedwaterEconomizerFormService: FeedwaterEconomizerFormService) { }
 
@@ -81,7 +81,7 @@ export class FeedwaterEconomizerFormComponent implements OnInit {
   initForm() {
     let feedwaterEconomizerInput: FeedwaterEconomizerInput = this.feedwaterEconomizerService.feedwaterEconomizerInput.getValue();
     this.form = this.feedwaterEconomizerFormService.getFeedwaterEconomizerForm(feedwaterEconomizerInput, this.settings);
-    this.fuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
+    this.fuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
     this.setMaterialProperties();
     this.setCalcMethod();
     this.calcExcessAir();
@@ -129,7 +129,7 @@ export class FeedwaterEconomizerFormComponent implements OnInit {
   }
 
   setMaterialProperties() {
-    let material = this.suiteDbService.selectGasFlueGasMaterialById(this.form.controls.materialTypeId.value);
+    let material = this.sqlDbApiService.selectGasFlueGasMaterialById(this.form.controls.materialTypeId.value);
 
     let flueGasMaterialHeatingValue: FlueGasHeatingValue = this.phastService.flueGasByVolumeCalculateHeatingValue(material);
     this.form.controls.higherHeatingVal.patchValue(this.feedwaterEconomizerService.roundVal(flueGasMaterialHeatingValue.heatingValueVolume, 2));
@@ -204,7 +204,7 @@ export class FeedwaterEconomizerFormComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.fuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
+      this.fuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
       let newMaterial: FlueGasMaterial = this.fuelOptions.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.form.patchValue({

@@ -124,7 +124,8 @@ export class PreAssessmentItemComponent implements OnInit {
   async save() {
     this.calculator.name = this.editForm.controls.name.value;
     this.calculator.directoryId = this.editForm.controls.directoryId.value;
-    let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(this.calculator)) 
+    await firstValueFrom(this.calculatorDbService.updateWithObservable(this.calculator));
+    let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators()); 
     this.calculatorDbService.setAll(updatedCalculators);
     this.dashboardService.updateDashboardData.next(true);
     this.hideEditModal();

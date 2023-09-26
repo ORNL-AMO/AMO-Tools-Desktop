@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
-import { ActivatedRoute } from '@angular/router';
- 
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { SsmtService } from './ssmt.service';
 import { Settings } from '../shared/models/settings';
@@ -91,7 +90,7 @@ export class SsmtComponent implements OnInit {
   constructor(
     private egridService: EGridService,
     private activatedRoute: ActivatedRoute,
-      
+    private router: Router,
     private ssmtService: SsmtService,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
@@ -107,27 +106,31 @@ export class SsmtComponent implements OnInit {
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
-      if (this.assessment.ssmt.modifications) {
-        if (this.assessment.ssmt.modifications.length !== 0) {
-          this.modificationExists = true;
-          this.modificationIndex = 0;
-          this.compareService.setCompareVals(this.assessment.ssmt, 0);
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'SSMT')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' } });
+      } else {
+        this.assessment.ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
+        if (this.assessment.ssmt.modifications) {
+          if (this.assessment.ssmt.modifications.length !== 0) {
+            this.modificationExists = true;
+            this.modificationIndex = 0;
+            this.compareService.setCompareVals(this.assessment.ssmt, 0);
+          } else {
+            this.modificationExists = false;
+            this.compareService.setCompareVals(this.assessment.ssmt);
+          }
         } else {
+          this.assessment.ssmt.modifications = new Array<Modification>();
           this.modificationExists = false;
           this.compareService.setCompareVals(this.assessment.ssmt);
         }
-      } else {
-        this.assessment.ssmt.modifications = new Array<Modification>();
-        this.modificationExists = false;
-        this.compareService.setCompareVals(this.assessment.ssmt);
-      }
-      this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
-
-      this.getSettings();
-      this.initSankeyList();
-      let tmpTab = this.assessmentService.getTab();
-      if (tmpTab) {
-        this.ssmtService.mainTab.next(tmpTab);
+        this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
+        this.getSettings();
+        this.initSankeyList();
+        let tmpTab = this.assessmentService.getTab();
+        if (tmpTab) {
+          this.ssmtService.mainTab.next(tmpTab);
+        }
       }
     });
     this.subscribeTabs();
@@ -232,7 +235,8 @@ export class SsmtComponent implements OnInit {
 
   async saveSettings(newSettings: Settings) {
     this.settings = newSettings;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
   }
 
@@ -276,7 +280,8 @@ export class SsmtComponent implements OnInit {
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
     this.initSankeyList();
 
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
     this.ssmtService.updateData.next(true);
   }
@@ -530,7 +535,8 @@ export class SsmtComponent implements OnInit {
 
   async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableSteamTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.ssmtService.modalOpen.next(false);

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { WallLossesSurface } from '../../../../shared/models/materials';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-wall-summary',
@@ -34,7 +34,9 @@ export class WallSummaryComponent implements OnInit {
   conditionFactorDiff: Array<boolean>;
   emissivityDiff: Array<boolean>;
   numMods: number = 0;
-  constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
+  constructor(
+    private sqlDbApiService: SqlDbApiService,
+    private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.correctionFactorDifferent = new Array();
@@ -46,7 +48,7 @@ export class WallSummaryComponent implements OnInit {
     this.conditionFactorDiff = new Array();
     this.emissivityDiff = new Array();
     //get substances
-    this.surfaceOrientationOptions = this.suiteDbService.selectWallLossesSurface();
+    this.surfaceOrientationOptions = this.sqlDbApiService.selectWallLossesSurface();
     //init array
     this.lossData = new Array();
     if (this.phast.losses) {

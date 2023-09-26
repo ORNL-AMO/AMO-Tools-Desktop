@@ -20,7 +20,7 @@ export class WeatherDataIdbService {
     return this.dbService.add(this.storeName, data);
   }
 
-  updateWithObservable(data: WeatherDataDbData): Observable<any> {
+  updateWithObservable(data: WeatherDataDbData): Observable<WeatherDataDbData> {
     data.modifiedDate = new Date(new Date().toLocaleDateString());
     return this.dbService.update(this.storeName, data);
   }

@@ -1,9 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
 import { SuiteDbMotor } from '../../../../../shared/models/materials';
 import { MotorCatalogService } from '../../motor-catalog.service';
 import { FilterMotorOptions } from '../filter-motor-options.pipe';
 import { Subscription } from 'rxjs';
+import { SqlDbApiService } from '../../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-motor-options-table',
@@ -17,10 +17,10 @@ export class MotorOptionsTableComponent implements OnInit {
   motorOptions: Array<SuiteDbMotor>;
   filterMotorOptions: FilterMotorOptions;
   filterMotorOptionsSub: Subscription;
-  constructor(private suiteDbService: SuiteDbService, private motorCatalogService: MotorCatalogService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private motorCatalogService: MotorCatalogService) { }
 
   ngOnInit(): void {
-    this.motorOptions = this.suiteDbService.selectMotors();
+    this.motorOptions = this.sqlDbApiService.selectMotors();
     this.filterMotorOptionsSub = this.motorCatalogService.filterMotorOptions.subscribe(val => {
       this.filterMotorOptions = val;
       this.motorOptions = Array.from(this.motorOptions);

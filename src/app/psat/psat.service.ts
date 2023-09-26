@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ExploreOpportunitiesResults, PsatInputs, PsatOutputs, PsatValid } from '../shared/models/psat';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-declare var psatAddon: any;
 import { BehaviorSubject } from 'rxjs';
 import { UntypedFormGroup } from '@angular/forms';
 import { MotorService } from './motor/motor.service';
@@ -11,7 +10,9 @@ import { PumpFluidService } from './pump-fluid/pump-fluid.service';
 import * as _ from 'lodash';
 import { pumpTypesConstant, motorEfficiencyConstants, driveConstants } from './psatConstants';
 import { PSAT } from '../shared/models/psat';
+import { MotorPerformanceResults } from '../calculator/motors/motor-performance/motor-performance.service';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { PumpsSuiteApiService } from '../tools-suite-api/pumps-suite-api.service';
 
 @Injectable()
 export class PsatService {
@@ -22,17 +23,17 @@ export class PsatService {
 
   getResults: BehaviorSubject<boolean>;
   modalOpen: BehaviorSubject<boolean>;
-  constructor(private convertUnitsService: ConvertUnitsService, 
+  constructor(
+    private pumpsSuiteApiService: PumpsSuiteApiService,
+    private convertUnitsService: ConvertUnitsService, 
     private assessmentCo2Service: AssessmentCo2SavingsService, 
     private pumpFluidService: PumpFluidService,
-    private motorService: MotorService, private fieldDataService: FieldDataService) {
+    private motorService: MotorService, 
+    private fieldDataService: FieldDataService
+    ) {
     this.getResults = new BehaviorSubject<boolean>(true);
     this.modalOpen = new BehaviorSubject<boolean>(true);
 
-  }
-
-  test() {
-    console.log(psatAddon);
   }
 
   roundVal(val: number, digits: number) {
@@ -81,8 +82,7 @@ export class PsatService {
     let valid: PsatValid = this.isPsatValid(psatInputs, true)
     if (valid.isValid) {
       let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
-      //call results existing
-      let psatOutputs: PsatOutputs = psatAddon.resultsExisting(tmpInputs);
+      let psatOutputs: PsatOutputs = this.pumpsSuiteApiService.resultsExisting(tmpInputs);
       psatOutputs = this.setCo2SavingsEmissionsResult(psatInputs, psatOutputs, settings);
       psatOutputs = this.convertOutputs(psatOutputs, settings);
       psatOutputs = this.roundResults(psatOutputs);
@@ -97,7 +97,7 @@ export class PsatService {
     if (valid.isValid) {
       let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
       tmpInputs.margin = 1;
-      let psatOutputs: PsatOutputs = psatAddon.resultsModified(tmpInputs);
+      let psatOutputs: PsatOutputs = this.pumpsSuiteApiService.resultsModified(tmpInputs);
       psatOutputs = this.setCo2SavingsEmissionsResult(psatInputs, psatOutputs, settings);
       psatOutputs = this.convertOutputs(psatOutputs, settings);
       psatOutputs = this.roundResults(psatOutputs);
@@ -197,20 +197,8 @@ export class PsatService {
       flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
     }
 
-    let inputs: any = {
-      specificGravity: specificGravity,
-      flowRate: flowRate,
-      suctionPipeDiameter: suctionPipeDiameter,
-      suctionTankGasOverPressure: suctionTankGasOverPressure,
-      suctionTankFluidSurfaceElevation: suctionTankFluidSurfaceElevation,
-      suctionLineLossCoefficients: suctionLineLossCoefficients,
-      dischargePipeDiameter: dischargePipeDiameter,
-      dischargeGaugePressure: dischargeGaugePressure,
-      dischargeGaugeElevation: dischargeGaugeElevation,
-      dischargeLineLossCoefficients: dischargeLineLossCoefficients
-    }
-
-    let tmpResults = psatAddon.headToolSuctionTank(inputs);
+    let tmpResults = this.pumpsSuiteApiService.headToolSuctionTank(specificGravity, flowRate, suctionPipeDiameter, suctionTankGasOverPressure, suctionTankFluidSurfaceElevation, suctionLineLossCoefficients,
+      dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
     if (settings.distanceMeasurement != 'ft') {
       tmpResults.differentialElevationHead = this.convertUnitsService.value(tmpResults.differentialElevationHead).from('ft').to(settings.distanceMeasurement);
       tmpResults.differentialPressureHead = this.convertUnitsService.value(tmpResults.differentialPressureHead).from('ft').to(settings.distanceMeasurement);
@@ -267,20 +255,8 @@ export class PsatService {
       suctionGaugePressure = this.convertUnitsService.value(suctionGaugePressure).from(settings.pressureMeasurement).to('psi');
     }
 
-    let inputs: any = {
-      specificGravity: specificGravity,
-      flowRate: flowRate,
-      suctionPipeDiameter: suctionPipeDiameter,
-      suctionGaugePressure: suctionGaugePressure,
-      suctionGaugeElevation: suctionGaugeElevation,
-      suctionLineLossCoefficients: suctionLineLossCoefficients,
-      dischargePipeDiameter: dischargePipeDiameter,
-      dischargeGaugePressure: dischargeGaugePressure,
-      dischargeGaugeElevation: dischargeGaugeElevation,
-      dischargeLineLossCoefficients: dischargeLineLossCoefficients
-    }
-
-    let tmpResults = psatAddon.headTool(inputs);
+    let tmpResults = this.pumpsSuiteApiService.headTool(specificGravity, flowRate, suctionPipeDiameter, suctionGaugePressure, suctionGaugeElevation, suctionLineLossCoefficients,
+      dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
     if (settings.distanceMeasurement != 'ft') {
       tmpResults.differentialElevationHead = this.convertUnitsService.value(tmpResults.differentialElevationHead).from('ft').to(settings.distanceMeasurement);
       tmpResults.differentialPressureHead = this.convertUnitsService.value(tmpResults.differentialPressureHead).from('ft').to(settings.distanceMeasurement);
@@ -301,7 +277,7 @@ export class PsatService {
   }
 
   estFLA(
-    horsePower: number,
+    motorRatedPower: number,
     motorRPM: number,
     frequency: number,
     efficiencyClass: number,
@@ -310,19 +286,11 @@ export class PsatService {
     settings: Settings
   ) {
     if (settings.powerMeasurement != 'hp') {
-      // horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
-      horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
+      motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
     }
     if (motorRPM > 0) {
-      let inputs: any = {
-        motor_rated_power: horsePower,
-        motor_rated_speed: motorRPM,
-        line_frequency: frequency,
-        efficiency_class: efficiencyClass,
-        efficiency: efficiency,
-        motor_rated_voltage: motorVoltage
-      }
-      return this.roundVal(psatAddon.estFLA(inputs), 2);
+      let estimatedFLA: number = this.pumpsSuiteApiService.estimateFla(motorRatedPower, motorRPM, frequency, efficiencyClass, efficiency, motorVoltage);
+      return this.roundVal(estimatedFLA, 2);
     } else {
       return 0;
     }
@@ -331,7 +299,7 @@ export class PsatService {
 
 
   estFanFLA(
-    horsePower: number,
+    motorRatedPower: number,
     motorRPM: number,
     frequency: number,
     efficiencyClass: number,
@@ -340,18 +308,10 @@ export class PsatService {
     settings: Settings
   ) {
     if (settings.fanPowerMeasurement != 'hp') {
-      // horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
-      horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
+      motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.fanPowerMeasurement).to('hp');
     }
-    let inputs: any = {
-      motor_rated_power: horsePower,
-      motor_rated_speed: motorRPM,
-      line_frequency: frequency,
-      efficiency_class: efficiencyClass,
-      efficiency: efficiency,
-      motor_rated_voltage: motorVoltage
-    }
-    return this.roundVal(psatAddon.estFLA(inputs), 2);
+    let estimatedFLA: number = this.pumpsSuiteApiService.estimateFla(motorRatedPower, motorRPM, frequency, efficiencyClass, efficiency, motorVoltage);
+    return this.roundVal(estimatedFLA, 2);
   }
   getFlaRange() {
     return this.flaRange;
@@ -362,11 +322,8 @@ export class PsatService {
     pumpStyle: number,
     specificSpeed: number
   ) {
-    let inputs: any = {
-      pump_style: pumpStyle,
-      specific_speed: specificSpeed
-    }
-    return this.roundVal(psatAddon.achievableEfficiency(inputs), 2);
+    let achievableEfficiency: number = this.pumpsSuiteApiService.achievableEfficiency(pumpStyle, specificSpeed);
+    return this.roundVal(achievableEfficiency, 2);
   }
 
   ///achievable pump efficiency
@@ -379,14 +336,10 @@ export class PsatService {
     if (settings.flowMeasurement != 'gpm') {
       flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
     }
-    let inputs: any = {
-      pump_style: pumpStyle,
-      flow_rate: flowRate
-    }
-    let tmpResults = psatAddon.pumpEfficiency(inputs);
+    let pumpEfficiency: { average: number, max: number } = this.pumpsSuiteApiService.pumpEfficiency(pumpStyle, flowRate);
     let results = {
-      average: this.roundVal(tmpResults.average, 2),
-      max: this.roundVal(tmpResults.max, 2)
+      average: this.roundVal(pumpEfficiency.average, 2),
+      max: this.roundVal(pumpEfficiency.max, 2)
     }
     return results;
   }
@@ -394,33 +347,23 @@ export class PsatService {
   motorPerformance(
     lineFreq: number,
     efficiencyClass: number,
-    horsePower: number,
+    motorRatedPower: number,
     motorRPM: number,
-    efficiency: number,
-    motorVoltage: number,
+    specifiedEfficiency: number,
+    motorRatedVoltage: number,
     fullLoadAmps: number,
     loadFactor: number,
     settings: Settings
   ) {
 
     if (settings.powerMeasurement != 'hp') {
-      horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
+      motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
     }
-    let tmpInputs: any = {
-      line_frequency: lineFreq,
-      efficiency_class: efficiencyClass,
-      motor_rated_power: horsePower,
-      motor_rated_speed: motorRPM,
-      efficiency: efficiency || 90,
-      load_factor: loadFactor,
-      motor_rated_voltage: motorVoltage,
-      motor_rated_fla: fullLoadAmps
-    }
-    let tmpResults = psatAddon.motorPerformance(tmpInputs);
-    let results = {
-      efficiency: this.roundVal(tmpResults.efficiency, 2),
-      motor_current: this.roundVal(tmpResults.motor_current, 2),
-      motor_power_factor: this.roundVal(tmpResults.motor_power_factor, 2)
+    let motorPerformanceResults: MotorPerformanceResults = this.pumpsSuiteApiService.motorPerformance(lineFreq, efficiencyClass, motorRatedPower, motorRPM, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, loadFactor);
+    let results: MotorPerformanceResults = {
+      efficiency: this.roundVal(motorPerformanceResults.efficiency, 2),
+      current: this.roundVal(motorPerformanceResults.current, 2),
+      powerFactor: this.roundVal(motorPerformanceResults.powerFactor, 2)
     }
     return results;
   }
@@ -431,21 +374,14 @@ export class PsatService {
     motorRPM: number,
     efficiencyClass: number,
     efficiency: number,
-    horsePower: number,
+    motorRatedPower: number,
     settings: Settings
   ) {
     if (settings.powerMeasurement != 'hp') {
-      horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
+      motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
     }
-    let tmpInputs = {
-      line_frequency: lineFreq,
-      motor_rated_speed: motorRPM,
-      efficiency_class: efficiencyClass,
-      efficiency: efficiency || 90,
-      motor_rated_power: horsePower,
-      load_factor: 1
-    };
-    return this.roundVal(psatAddon.nema(tmpInputs), 2);
+    let motorEfficiency: number = this.pumpsSuiteApiService.nema(lineFreq, motorRPM, efficiencyClass, efficiency, motorRatedPower);
+    return this.roundVal(motorEfficiency, 2);
   }
 
   //motor efficiency (nema without hard coded load factor)
@@ -454,24 +390,16 @@ export class PsatService {
     motorRPM: number,
     efficiencyClass: number,
     efficiency: number,
-    motorPower: number,
+    motorRatedPower: number,
     loadFactor: number,
     settings: Settings
   ): number {
-    if (motorPower != undefined && lineFreq != undefined && motorRPM != undefined && efficiencyClass != undefined && loadFactor != undefined) {
+    if (motorRatedPower != undefined && lineFreq != undefined && motorRPM != undefined && efficiencyClass != undefined && loadFactor != undefined) {
       if (settings.unitsOfMeasure != 'Imperial') {
-        motorPower = this.convertUnitsService.value(motorPower).from(settings.powerMeasurement).to('hp');
+        motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
       }
-      //efficiency unused, calced from efficiencyClass
-      let tmpInputs = {
-        line_frequency: lineFreq,
-        motor_rated_speed: motorRPM,
-        efficiency_class: efficiencyClass,
-        efficiency: efficiency,
-        motor_rated_power: motorPower,
-        load_factor: loadFactor
-      };
-      return this.roundVal(psatAddon.nema(tmpInputs), 2);
+      let motorEfficiency: number = this.pumpsSuiteApiService.motorEfficiency(lineFreq, motorRPM, efficiencyClass, efficiency, motorRatedPower, loadFactor);
+      return this.roundVal(motorEfficiency, 2);
     } else {
       return 0;
     }
@@ -485,19 +413,12 @@ export class PsatService {
     ratedVoltage: number,
     settings: Settings
   ): number {
-    if (settings.unitsOfMeasure != 'Imperial') {
-      motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
-    }
     if (motorRatedPower && motorCurrent && ratedVoltage) {
-      //efficiency and load factor need to be decimal
-      let inp = {
-        motorRatedPower: motorRatedPower,
-        loadFactor: loadFactor / 100,
-        motorCurrent: motorCurrent,
-        motorEfficiency: motorEfficiency / 100,
-        ratedVoltage: ratedVoltage
-      };
-      return this.roundVal(psatAddon.motorPowerFactor(inp), 2);
+      if (settings.unitsOfMeasure != 'Imperial') {
+        motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
+      }
+      let powerFactor: number = this.pumpsSuiteApiService.motorPowerFactor(motorRatedPower, (loadFactor / 100), motorCurrent, (motorEfficiency / 100), ratedVoltage);
+      return this.roundVal(powerFactor, 2);
     } else {
       return 0;
     }
@@ -514,21 +435,12 @@ export class PsatService {
     specifiedEfficiency: number,
     settings: Settings
   ): number {
-    if (settings.unitsOfMeasure != 'Imperial') {
-      motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
-    }
     if (motorRatedPower && motorRpm && ratedVoltage && fullLoadAmps) {
-      let inp = {
-        motorRatedPower: motorRatedPower,
-        loadFactor: loadFactor,
-        motorRPM: motorRpm,
-        line_frequency: lineFrequency,
-        efficiency_class: efficiencyClass,
-        fullLoadAmps: fullLoadAmps,
-        ratedVoltage: ratedVoltage,
-        specifiedEfficiency: specifiedEfficiency
-      };
-      return this.roundVal(psatAddon.motorCurrent(inp), 2);
+      if (settings.unitsOfMeasure != 'Imperial') {
+        motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
+      }
+      let motorCurrent: number = this.pumpsSuiteApiService.motorCurrent(motorRatedPower, motorRpm, lineFrequency, efficiencyClass, specifiedEfficiency, loadFactor, ratedVoltage, fullLoadAmps)
+      return this.roundVal(motorCurrent, 2);
     } else {
       return 0;
     }

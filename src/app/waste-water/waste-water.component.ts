@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UntypedFormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentService } from '../dashboard/assessment.service';
@@ -66,6 +66,7 @@ export class WasteWaterComponent implements OnInit {
   showWelcomeScreen: boolean;
   smallScreenTab: string = 'form';
   constructor(private activatedRoute: ActivatedRoute,   
+    private router: Router,
     private egridService: EGridService,
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
     private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService,
@@ -76,17 +77,22 @@ export class WasteWaterComponent implements OnInit {
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
-      this.wasteWaterService.updateWasteWater(this.assessment.wasteWater);
-      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-      if (!settings) {
-        settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
-        this.addSettings(settings);
-      } else {
-        this.settings = settings;
-        this.wasteWaterService.settings.next(settings);
-      }
-      if (this.assessmentService.tab) {
-        this.wasteWaterService.mainTab.next(this.assessmentService.tab);
+
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'WasteWater')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else {  
+        this.wasteWaterService.updateWasteWater(this.assessment.wasteWater);
+        let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+        if (!settings) {
+          settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+          this.addSettings(settings);
+        } else {
+          this.settings = settings;
+          this.wasteWaterService.settings.next(settings);
+        }
+        if (this.assessmentService.tab) {
+          this.wasteWaterService.mainTab.next(this.assessmentService.tab);
+        }
       }
     });
 
@@ -173,7 +179,8 @@ export class WasteWaterComponent implements OnInit {
   async saveWasteWater(wasteWater: WasteWater) {
     wasteWater = this.updateModificationCO2Savings(wasteWater);
     this.assessment.wasteWater = wasteWater;
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment)) 
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
   }
 
@@ -282,7 +289,8 @@ export class WasteWaterComponent implements OnInit {
 
  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableWasteWaterTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.wasteWaterService.isModalOpen.next(false);

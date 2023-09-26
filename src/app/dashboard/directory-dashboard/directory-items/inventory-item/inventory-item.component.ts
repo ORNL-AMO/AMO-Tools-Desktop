@@ -109,7 +109,8 @@ export class InventoryItemComponent implements OnInit {
     this.inventoryItem.name = this.editForm.controls.name.value;
     this.directoryDbService.setIsMovedExample(this.inventoryItem, this.editForm);
     this.inventoryItem.directoryId = this.editForm.controls.directoryId.value;
-    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.inventoryItem));
+    await firstValueFrom(this.inventoryDbService.updateWithObservable(this.inventoryItem));
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);
     this.dashboardService.updateDashboardData.next(true);
     this.hideEditModal();

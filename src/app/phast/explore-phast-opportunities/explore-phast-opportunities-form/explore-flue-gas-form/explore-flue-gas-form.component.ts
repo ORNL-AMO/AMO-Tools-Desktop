@@ -4,9 +4,9 @@ import { Settings } from '../../../../shared/models/settings';
 import { FlueGasByMass, FlueGasByVolume, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { LossTab } from '../../../tabs';
 import { PhastService } from '../../../phast.service';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-explore-flue-gas-form',
@@ -41,8 +41,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
 
   baselineWarnings: FlueGasWarnings;
   modificationWarnings: FlueGasWarnings;
-  constructor(private phastService: PhastService, private suiteDbService: SuiteDbService,
-    private flueGasFormService: FlueGasFormService,
+  constructor(private phastService: PhastService, private flueGasFormService: FlueGasFormService, private sqlDbApiService: SqlDbApiService
   ) { }
 
   ngOnInit() {
@@ -203,7 +202,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
   }
 
   buildInput(loss: FlueGasByMass | FlueGasByVolume): MaterialInputProperties {
-    let tmpFlueGas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(loss.gasTypeId);
+    let tmpFlueGas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(loss.gasTypeId);
     let input: MaterialInputProperties;
     if (tmpFlueGas) {
       input = {

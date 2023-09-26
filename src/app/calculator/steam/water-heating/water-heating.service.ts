@@ -4,9 +4,8 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
 import { WaterHeatingInput, WaterHeatingOutput } from '../../../shared/models/steam/waterHeating';
+import { ProcessHeatingApiService } from '../../../tools-suite-api/process-heating-api.service';
 import { WaterHeatingFormService } from './water-heating-form.service';
-
-declare var processHeatAddon;
 
 @Injectable()
 export class WaterHeatingService {
@@ -19,7 +18,8 @@ export class WaterHeatingService {
   currentField: BehaviorSubject<string>;
 
   operatingHours: OperatingHours;
-  constructor(private convertUnitsService: ConvertUnitsService, private waterHeatingFormService: WaterHeatingFormService) { 
+  constructor(private convertUnitsService: ConvertUnitsService, 
+    private processHeatingApiService: ProcessHeatingApiService, private waterHeatingFormService: WaterHeatingFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.waterHeatingInput = new BehaviorSubject<WaterHeatingInput>(undefined);
     this.waterHeatingOutput = new BehaviorSubject<WaterHeatingOutput>(undefined);
@@ -84,7 +84,7 @@ export class WaterHeatingService {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       inputCopy = this.convertPercentInputs(inputCopy);
 
-      let waterHeatingOutput: WaterHeatingOutput = processHeatAddon.waterHeatingUsingSteam(inputCopy);
+      let waterHeatingOutput: WaterHeatingOutput = this.processHeatingApiService.waterHeatingUsingSteam(inputCopy);
       waterHeatingOutput = this.convertResultUnits(waterHeatingOutput, settings);
       
       waterHeatingOutput.energySavedTotal = waterHeatingOutput.energySavedBoiler +  waterHeatingOutput.energySavedDWH;

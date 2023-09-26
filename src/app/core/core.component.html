@@ -1,4 +1,4 @@
-<app-update-toast *ngIf="showUpdateToast && info" (emitCloseToast)="hideUpdateToast()" [info]="info"></app-update-toast>
+<app-update-toast *ngIf="showUpdateToast &&  releaseData" (emitCloseToast)="hideUpdateToast()" [releaseData]="releaseData"></app-update-toast>
 <app-browsing-data-toast *ngIf="showBrowsingDataToast" (emitClose)="hideBrowsingDataToast()"></app-browsing-data-toast>
 <div *ngIf="idbStarted" [ngClass]="{'modal-open': isModalOpen == true}" >
     <div *ngIf="!hideTutorial" class="opening-tutorial">

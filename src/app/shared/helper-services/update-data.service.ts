@@ -9,7 +9,7 @@ import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { FlueGasByMass, FlueGasByVolume } from '../models/phast/losses/flueGas';
-declare const packageJson;
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class UpdateDataService {
@@ -36,7 +36,7 @@ export class UpdateDataService {
 
     updateWasteWater(assessment: Assessment): Assessment {
         //logic for updating wastewater data
-        assessment.appVersion = packageJson.version;
+        assessment.appVersion = environment.version;
         if (assessment.wasteWater.baselineData && !assessment.wasteWater.baselineData.operations) {
             assessment.wasteWater.baselineData.operations = {
                 MaxDays: 100,
@@ -70,7 +70,7 @@ export class UpdateDataService {
     }
 
     updateCompressedAir(assessment: Assessment): Assessment {
-        assessment.appVersion = packageJson.version;
+        assessment.appVersion = environment.version;
         if (assessment.compressedAirAssessment && assessment.compressedAirAssessment.compressorInventoryItems
             && assessment.compressedAirAssessment.compressorInventoryItems.length > 0) {
             assessment.compressedAirAssessment.compressorInventoryItems.forEach(item => {
@@ -150,8 +150,9 @@ export class UpdateDataService {
 
     updatePsat(assessment: Assessment): Assessment {
         //logic for updating psat data
-        assessment.appVersion = packageJson.version;
-        if (assessment.psat.inputs.line_frequency === 0) {
+        assessment.appVersion = environment.version;
+
+        if (assessment.psat.inputs.line_frequency === 0){
             assessment.psat.inputs.line_frequency = 50;
         }
         if (assessment.psat.inputs.line_frequency === 1) {
@@ -181,7 +182,7 @@ export class UpdateDataService {
 
     updateFsat(assessment: Assessment): Assessment {
         //logic for updating fsat data
-        assessment.appVersion = packageJson.version;
+        assessment.appVersion = environment.version;
         if (assessment.fsat.fieldData && !assessment.fsat.fieldData.inletVelocityPressure) {
             assessment.fsat.fieldData.inletVelocityPressure = 0;
             assessment.fsat.fieldData.usingStaticPressure = true;
@@ -267,6 +268,7 @@ export class UpdateDataService {
             });
         }
 
+        assessment.appVersion = environment.version;
         assessment.phast = this.updateEnergyInputExhaustGasLoss(assessment.phast);
         if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
             assessment.phast.modifications.forEach(mod => {
@@ -274,7 +276,6 @@ export class UpdateDataService {
             });
         }
 
-        assessment.appVersion = packageJson.version;
         return assessment;
     }
 
@@ -330,7 +331,7 @@ export class UpdateDataService {
     }
 
     updateSSMT(assessment: Assessment): Assessment {
-        assessment.appVersion = packageJson.version;
+        assessment.appVersion = environment.version;
         assessment.ssmt = this.updateHeaders(assessment.ssmt);
         if (assessment.ssmt.modifications) {
             assessment.ssmt.modifications.forEach(mod => {
@@ -353,7 +354,7 @@ export class UpdateDataService {
         return ssmt;
     }
     updateTreasureHunt(assessment: Assessment): Assessment {
-        assessment.appVersion = packageJson.version;
+        assessment.appVersion = environment.version;
         if (assessment.treasureHunt) {
             if (assessment.treasureHunt.lightingReplacements) {
                 assessment.treasureHunt.lightingReplacements.forEach(replacement => {

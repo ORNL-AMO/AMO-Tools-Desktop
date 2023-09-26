@@ -1,11 +1,13 @@
-export const FanTypes: Array<{ value: number, display: string }> = [
+declare var Module: any;
+
+export const FanTypes: Array<{ value: number, display: string, enumVal?: any }> = [
   {
     value: 5,
     display: 'Airfoil (DWDI)',
   },
   {
     value: 0,
-    display: 'Airfoil (SWSI)'
+    display: 'Airfoil (SWSI)',
   },
   {
     value: 6,

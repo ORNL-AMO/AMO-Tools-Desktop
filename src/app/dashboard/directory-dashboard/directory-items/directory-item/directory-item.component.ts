@@ -123,7 +123,9 @@ export class DirectoryItemComponent implements OnInit {
   async save() {
     this.directory.name = this.editForm.controls.name.value;
     this.directory.parentDirectoryId = this.editForm.controls.directoryId.value;
-    let updatedDirectories: Directory[] = await firstValueFrom(this.directoryDbService.updateWithObservable(this.directory));
+    await firstValueFrom(this.directoryDbService.updateWithObservable(this.directory));
+    let updatedDirectories: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories()); 
+
     this.directoryDbService.setAll(updatedDirectories);
     this.dashboardService.updateDashboardData.next(true);
     this.hideEditModal();

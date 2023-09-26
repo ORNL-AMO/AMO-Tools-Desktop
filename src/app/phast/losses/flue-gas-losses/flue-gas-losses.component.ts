@@ -5,11 +5,12 @@ import { FlueGas, FlueGasByVolumeSuiteResults, MaterialInputProperties } from '.
 import { Losses } from '../../../shared/models/phast/phast';
 import { FlueGasCompareService } from './flue-gas-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 import { UntypedFormGroup } from '@angular/forms';
 import { FlueGasService } from '../../../calculator/furnaces/flue-gas/flue-gas.service';
 import { FlueGasFormService } from '../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
-import { SuiteDbService } from '../../../suiteDb/suite-db.service';
+import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 @Component({
   selector: 'app-flue-gas-losses',
   templateUrl: './flue-gas-losses.component.html',
@@ -50,7 +51,7 @@ export class FlueGasLossesComponent implements OnInit {
               private flueGasFormService: FlueGasFormService, 
               private cd: ChangeDetectorRef,
               private flueGasCompareService: FlueGasCompareService,
-              private suiteDbService: SuiteDbService) { }
+              private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -189,7 +190,7 @@ export class FlueGasLossesComponent implements OnInit {
         loss.grossHeat = (heatInput / availableHeat) - sumAdditionalHeat;
         loss.systemLosses = (loss.grossHeat + sumAdditionalHeat) * (1 - availableHeat);
 
-        let gases: Array<SolidLiquidFlueGasMaterial> = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+        let gases: Array<SolidLiquidFlueGasMaterial> = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
         let selectedGas: SolidLiquidFlueGasMaterial = gases.find(gas => { return gas.id == tmpLoss.flueGasByMass.gasTypeId });
         if (tmpLoss.flueGasByMass.oxygenCalculationMethod == 'Excess Air' && selectedGas) {
           loss.calculatedExcessAir = tmpLoss.flueGasByMass.excessAirPercentage;

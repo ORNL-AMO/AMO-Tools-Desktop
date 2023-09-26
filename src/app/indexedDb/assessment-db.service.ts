@@ -5,6 +5,7 @@ import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { firstValueFrom, map, mergeMap, Observable } from 'rxjs';
 import { AssessmentStoreMeta } from './dbConfig';
 import { UpdateDataService } from '../shared/helper-services/update-data.service';
+import { environment } from '../../environments/environment';
 declare const packageJson;
 
 @Injectable()
@@ -29,7 +30,7 @@ export class AssessmentDbService {
     return this.dbService.getAll(this.storeName).pipe(
       mergeMap(async (assessments: Array<Assessment>) => {
         for await (let assessment of assessments) {
-          if (assessment.appVersion !== packageJson.version) {
+          if (assessment.appVersion !== environment.version) {
             this.updateDataService.updateAssessmentVersion(assessment);
             await firstValueFrom(this.updateWithObservable(assessment));
           }
@@ -70,7 +71,7 @@ export class AssessmentDbService {
     return this.dbService.bulkDelete(this.storeName, assessmentIds);
   }
 
-  updateWithObservable(assessment: Assessment): Observable<any> {
+  updateWithObservable(assessment: Assessment): Observable<Assessment> {
     assessment.modifiedDate = new Date();
     return this.dbService.update(this.storeName, assessment);
   }

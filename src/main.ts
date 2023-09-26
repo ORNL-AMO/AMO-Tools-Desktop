@@ -7,4 +7,13 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule);
+platformBrowserDynamic().bootstrapModule(AppModule).then((() => {
+  if ('serviceWorker' in navigator && environment.production && environment.useServiceWorker) {
+    navigator.serviceWorker.register('ngsw-worker.js');
+  }
+})).catch(err => {
+  const loadingSpinnerElement = document.getElementById('loadingSpinner');
+  const loadingErrorElement = document.getElementById('loadingError');
+  loadingErrorElement.setAttribute('style', 'display: block;');
+  loadingSpinnerElement.setAttribute('style', 'display: none;');
+});

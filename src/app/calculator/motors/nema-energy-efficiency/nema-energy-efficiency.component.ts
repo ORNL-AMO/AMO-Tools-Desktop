@@ -173,11 +173,11 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     this.nemaForm = this.nemaEnergyEfficiencyService.resetForm();
     if (this.settings.powerMeasurement === 'hp') {
       this.nemaForm.patchValue({
-        horsePower: '200'
+        horsePower: 200
       });
     } else if (this.settings.unitsOfMeasure === 'Metric' && this.settings.powerMeasurement !== 'hp') {
       this.nemaForm.patchValue({
-        horsePower: '150'
+        horsePower: 150
       });
     }
     this.calculate();
@@ -187,11 +187,11 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
     if (this.settings.powerMeasurement === 'hp') {
       this.nemaForm.patchValue({
-        horsePower: '200'
+        horsePower: 200
       });
     } else if (this.settings.unitsOfMeasure === 'Metric' && this.settings.powerMeasurement !== 'hp') {
       this.nemaForm.patchValue({
-        horsePower: '150'
+        horsePower: 150
       });
     }
     this.calculate();

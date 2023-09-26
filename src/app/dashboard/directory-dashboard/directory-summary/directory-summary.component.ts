@@ -235,7 +235,8 @@ export class DirectorySummaryComponent implements OnInit {
     this.directorySettings.directoryId = this.directory.id;
     this.directorySettings.id = id;
     this.directorySettings.facilityInfo = facilityInfo;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.directorySettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.directorySettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.calculateSummary();
     this.settingsModal.hide();

@@ -100,3 +100,9 @@ export interface MotorPerformanceInputs {
   sizeMargin: number;
   efficiency: number;
 }
+
+export interface MotorPerformanceResults {
+  efficiency: number,
+  current: number,
+  powerFactor: number
+}

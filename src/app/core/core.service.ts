@@ -16,8 +16,8 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
-import { ElectronService } from 'ngx-electron';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
+import { ElectronService } from '../electron/electron.service';
 import { MockPumpInventory } from '../examples/mockPumpInventoryData';
 @Injectable()
 export class CoreService {
@@ -51,7 +51,7 @@ export class CoreService {
   }
 
   relaunchApp(){
-    this.electronService.ipcRenderer.send("relaunch");
+    this.electronService.sendAppRelaunch();
   }
 
   getAllAppData() {

@@ -105,8 +105,8 @@ import { ChillerStagingComponent } from '../calculator/process-cooling/chiller-s
 import { WaterHeatingComponent } from '../calculator/steam/water-heating/water-heating.component';
 import { CompressedAirAssessmentComponent } from '../compressed-air-assessment/compressed-air-assessment.component';
 import { FanSystemChecklistComponent } from '../calculator/fans/fan-system-checklist/fan-system-checklist.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 import { FullLoadAmpsComponent } from '../calculator/motors/full-load-amps/full-load-amps.component';
-
 import { AltitudeCorrectionComponent } from '../calculator/utilities/altitude-correction/altitude-correction.component';
 import { FeedwaterEconomizerComponent } from '../calculator/steam/feedwater-economizer/feedwater-economizer.component';
 import { CondensingEconomizerComponent } from '../calculator/steam/condensing-economizer/condensing-economizer.component';
@@ -132,59 +132,6 @@ export const coreRoutes: Routes = [
       {
         component: DirectoryDashboardComponent,
         path: 'directory-dashboard/:id',
-      },
-      {
-        path: 'phast/:id',
-        component: PhastComponent
-      },
-      {
-        path: 'psat/:id',
-        component: PsatComponent
-      },
-      {
-        path: 'fsat/:id',
-        component: FsatComponent
-      },
-      {
-        path: 'ssmt/:id',
-        component: SsmtComponent
-      },
-      {
-        path: 'treasure-hunt/:id',
-        component: TreasureHuntComponent
-      },
-      {
-        path: 'compressed-air/:id',
-        component: CompressedAirAssessmentComponent
-      },
-      {
-        path: 'report-rollup',
-        component: ReportRollupComponent,
-        children: [
-          {
-            path: '',
-            component: AssessmentReportsComponent
-          }
-        ]
-      },
-      {
-        path: 'log-tool',
-        component: LogToolComponent,
-        children: logToolRoutes
-      },
-      {
-        component: MotorInventoryComponent,
-        path: 'motor-inventory/:id',
-        children: motorInventoryRoutes
-      },
-      {
-        component: PumpInventoryComponent,
-        path: 'pump-inventory/:id',
-        children: pumpInventoryRoutes
-      },
-      {
-        component: WasteWaterComponent,
-        path: 'waste-water/:id',
       },
       {
         component: TutorialsComponent,
@@ -219,7 +166,6 @@ export const coreRoutes: Routes = [
         path: 'calculators',
         children: [
           {
-
             path: 'calculators-list',
             component: CalculatorsListComponent
           },
@@ -588,4 +534,62 @@ export const coreRoutes: Routes = [
     pathMatch: 'full',
     redirectTo: ''
   },
+  {
+    path: 'phast/:id',
+    component: PhastComponent
+  },
+  {
+    path: 'psat/:id',
+    component: PsatComponent
+  },
+  {
+    path: 'fsat/:id',
+    component: FsatComponent
+  },
+  {
+    path: 'ssmt/:id',
+    component: SsmtComponent
+  },
+  {
+    path: 'treasure-hunt/:id',
+    component: TreasureHuntComponent
+  },
+  {
+    path: 'compressed-air/:id',
+    component: CompressedAirAssessmentComponent
+  },
+  {
+    path: 'report-rollup',
+    component: ReportRollupComponent,
+    children: [
+      {
+        path: '',
+        component: AssessmentReportsComponent
+      },
+    ]
+  },
+  {
+    path: 'log-tool',
+    component: LogToolComponent,
+    children: logToolRoutes
+  },
+  {
+    component: MotorInventoryComponent,
+    path: 'motor-inventory/:id',
+    children: motorInventoryRoutes
+  },
+  {
+    component: PumpInventoryComponent,
+    path: 'pump-inventory/:id',
+    children: pumpInventoryRoutes
+  },
+  {
+    component: WasteWaterComponent,
+    path: 'waste-water/:id',
+  },
+  { 
+    path: '**', 
+    component: NotFoundComponent 
+  },  
+
 ];

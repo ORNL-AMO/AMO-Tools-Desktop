@@ -4,9 +4,8 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { CoolingTowerFanInput, CoolingTowerFanOutput } from '../../../shared/models/chillers';
 import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
+import { ChillersSuiteApiService } from '../../../tools-suite-api/chillers-suite-api.service';
 import { CoolingTowerFanFormService } from './cooling-tower-fan-form.service';
-
-declare var chillersAddon: any;
 
 @Injectable()
 export class CoolingTowerFanService {
@@ -19,7 +18,9 @@ export class CoolingTowerFanService {
   currentField: BehaviorSubject<string>;
 
   operatingHours: OperatingHours;
-  constructor(private convertUnitsService: ConvertUnitsService, private coolingTowerFanFormService: CoolingTowerFanFormService) { 
+  constructor(private convertUnitsService: ConvertUnitsService, 
+    private chillersSuiteApiService: ChillersSuiteApiService,
+    private coolingTowerFanFormService: CoolingTowerFanFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.coolingTowerFanInput = new BehaviorSubject<CoolingTowerFanInput>(undefined);
     this.coolingTowerFanOutput = new BehaviorSubject<CoolingTowerFanOutput>(undefined);
@@ -75,7 +76,7 @@ export class CoolingTowerFanService {
       this.initDefaultEmptyOutputs();
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
-      let coolingTowerFanOutput: CoolingTowerFanOutput = chillersAddon.coolingTowerFanEnergyConsumption(inputCopy);
+      let coolingTowerFanOutput: CoolingTowerFanOutput = this.chillersSuiteApiService.fanEnergyConsumption(inputCopy);
       if (coolingTowerFanOutput.savingsEnergy < 100) {
         coolingTowerFanOutput.savingsEnergy = Number(coolingTowerFanOutput.savingsEnergy.toFixed(3));
       } else {

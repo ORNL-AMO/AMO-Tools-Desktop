@@ -105,7 +105,8 @@ export class SystemBasicsComponent implements OnDestroy {
     if (this.showSuccessMessage == true) {
       this.showSuccessMessage = false;
     }
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.updateSettings.emit(true);
   }

@@ -8,7 +8,7 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 import { FixtureLoss, FixtureLossOutput, FixtureLossResults } from '../../../../shared/models/phast/losses/fixtureLoss';
 import { Settings } from '../../../../shared/models/settings';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { FixtureFormService } from '../fixture-form.service';
 import { FixtureService } from '../fixture.service';
 
@@ -54,7 +54,7 @@ export class FixtureFormComponent implements OnInit {
   outputSubscription: Subscription;
 
   constructor(private fixtureFormService: FixtureFormService,
-    private suiteDbService: SuiteDbService,
+    private sqlDbApiService: SqlDbApiService, 
     private convertUnitsService: ConvertUnitsService,
     private cd: ChangeDetectorRef,
     private fixtureService: FixtureService) { }
@@ -68,7 +68,7 @@ export class FixtureFormComponent implements OnInit {
     }
     this.trackingEnergySource = this.index > 0 || !this.isBaseline;
 
-    this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
+    this.materialTypes = this.sqlDbApiService.selectSolidLoadChargeMaterials();
     this.initSubscriptions();
     this.energyUnit = this.fixtureService.getAnnualEnergyUnit(this.fixtureForm.controls.energySourceType.value, this.settings);
     if (this.isBaseline) {
@@ -143,13 +143,13 @@ export class FixtureFormComponent implements OnInit {
     if (this.selected == false) {
       this.fixtureForm.disable();
     } else {
-      this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
+      this.materialTypes = this.sqlDbApiService.selectSolidLoadChargeMaterials();
       this.fixtureForm.enable();
     }
   }
 
   setSpecificHeat() {
-    let tmpMaterial: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.fixtureForm.controls.materialName.value);
+    let tmpMaterial: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.fixtureForm.controls.materialName.value);
     if (tmpMaterial) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         tmpMaterial.specificHeatSolid = this.convertUnitsService.value(tmpMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
@@ -163,7 +163,7 @@ export class FixtureFormComponent implements OnInit {
 
   checkSpecificHeat() {
     if (this.fixtureForm.controls.materialName.value) {
-      let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.fixtureForm.controls.materialName.value);
+      let material: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.fixtureForm.controls.materialName.value);
       if (material) {
         let val = material.specificHeatSolid;
         if (this.settings.unitsOfMeasure === 'Metric') {
@@ -182,7 +182,7 @@ export class FixtureFormComponent implements OnInit {
   }
 
   setProperties() {
-    let selectedMaterial: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.fixtureForm.controls.materialName.value);
+    let selectedMaterial: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.fixtureForm.controls.materialName.value);
     if (selectedMaterial) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
@@ -262,7 +262,7 @@ export class FixtureFormComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
+      this.materialTypes = this.sqlDbApiService.selectSolidLoadChargeMaterials();
       let newMaterial: SolidLoadChargeMaterial = this.materialTypes.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.fixtureForm.patchValue({

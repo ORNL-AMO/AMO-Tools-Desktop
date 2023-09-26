@@ -1,13 +1,13 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { GasLoadChargeMaterial } from '../../shared/models/materials';
-import { SuiteDbService } from '../suite-db.service';
- 
-import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { GasLoadMaterialDbService } from '../../indexedDb/gas-load-material-db.service';
+import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 import { firstValueFrom } from 'rxjs';
+import { GasLoadMaterialDbService } from '../../indexedDb/gas-load-material-db.service';
+import * as _ from 'lodash';
+
 @Component({
   selector: 'app-gas-load-charge-material',
   templateUrl: './gas-load-charge-material.component.html',
@@ -41,7 +41,7 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   canAdd: boolean;
   idbEditMaterialId: number;
   sdbEditMaterialId: number;
-  constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private gasLoadMaterialDbService: GasLoadMaterialDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private settingsDbService: SettingsDbService, private gasLoadMaterialDbService: GasLoadMaterialDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -52,7 +52,7 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   }
 
   getMaterials() {
-    this.allMaterials = this.suiteDbService.selectGasLoadChargeMaterials();
+    this.allMaterials = this.sqlDbApiService.selectGasLoadChargeMaterials();
 
     if (this.editExistingMaterial) {
       this.setAllMaterials();
@@ -78,7 +78,7 @@ export class GasLoadChargeMaterialComponent implements OnInit {
       if (this.settings.unitsOfMeasure == 'Metric') {
         this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
       }
-      let suiteDbResult = this.suiteDbService.insertGasLoadChargeMaterial(this.newMaterial);
+      let suiteDbResult = this.sqlDbApiService.insertGasLoadChargeMaterial(this.newMaterial);
       if (suiteDbResult == true) {
         await firstValueFrom(this.gasLoadMaterialDbService.addWithObservable(this.newMaterial));
         this.closeModal.emit(this.newMaterial);
@@ -91,7 +91,7 @@ export class GasLoadChargeMaterialComponent implements OnInit {
       this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
     }
     this.newMaterial.id = this.sdbEditMaterialId;
-    let suiteDbResult = this.suiteDbService.updateGasLoadChargeMaterial(this.newMaterial);
+    let suiteDbResult = this.sqlDbApiService.updateGasLoadChargeMaterial(this.newMaterial);
     if (suiteDbResult == true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
@@ -102,7 +102,7 @@ export class GasLoadChargeMaterialComponent implements OnInit {
 
   async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
-      let suiteDbResult = this.suiteDbService.deleteGasLoadChargeMaterial(this.sdbEditMaterialId);
+      let suiteDbResult = this.sqlDbApiService.deleteGasLoadChargeMaterial(this.sdbEditMaterialId);
       if (suiteDbResult == true) {
         await firstValueFrom(this.gasLoadMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
         this.closeModal.emit(this.newMaterial);

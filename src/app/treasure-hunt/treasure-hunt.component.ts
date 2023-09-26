@@ -3,7 +3,7 @@ import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../dashboard/assessment.service';
  
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { firstValueFrom, Subscription } from 'rxjs';
@@ -57,7 +57,7 @@ export class TreasureHuntComponent implements OnInit {
   showExportModalSub: Subscription;
   constructor(
     private assessmentService: AssessmentService,
-      
+    private router: Router,
     private activatedRoute: ActivatedRoute,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
@@ -74,7 +74,10 @@ export class TreasureHuntComponent implements OnInit {
   ngOnInit() {
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
+      this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
+      if (this.assessment && this.assessment.type !== 'TreasureHunt') {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else { 
         if (!this.assessment.treasureHunt) {
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
@@ -105,6 +108,7 @@ export class TreasureHuntComponent implements OnInit {
           this.treasureHuntService.mainTab.next(tmpTab);
         }
         this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
+      }
     });
 
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
@@ -188,7 +192,8 @@ export class TreasureHuntComponent implements OnInit {
     this.assessment.treasureHunt = treasureHunt;
     this.assessment.treasureHunt.setupDone = this.checkSetupDone();
 
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
     this.treasureHuntService.getResults.next(true);
   }
@@ -279,7 +284,8 @@ export class TreasureHuntComponent implements OnInit {
 
  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableTreasureHuntTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.treasureHuntService.modalOpen.next(false);

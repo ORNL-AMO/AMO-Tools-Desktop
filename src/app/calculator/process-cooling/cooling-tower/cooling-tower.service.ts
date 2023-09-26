@@ -8,7 +8,6 @@ import { CoolingTowerData, CoolingTowerOutput, CoolingTowerResult, CoolingTowerI
 import { ChillerService } from '../chiller.service';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
-declare var chillersAddon: any;
 
 @Injectable()
 export class CoolingTowerService {

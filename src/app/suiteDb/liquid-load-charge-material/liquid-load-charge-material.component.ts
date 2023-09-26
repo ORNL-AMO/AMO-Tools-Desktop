@@ -1,13 +1,12 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { LiquidLoadChargeMaterial } from '../../shared/models/materials';
-import { SuiteDbService } from '../suite-db.service';
- 
-import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { LiquidLoadMaterialDbService } from '../../indexedDb/liquid-load-material-db.service';
+import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 import { firstValueFrom } from 'rxjs';
+import * as _ from 'lodash';
+import { LiquidLoadMaterialDbService } from '../../indexedDb/liquid-load-material-db.service';
 
 @Component({
   selector: 'app-liquid-load-charge-material',
@@ -45,7 +44,7 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
   canAdd: boolean;
   idbEditMaterialId: number;
   sdbEditMaterialId: number;
-  constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private liquidLoadMaterialDbService: LiquidLoadMaterialDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private settingsDbService: SettingsDbService, private liquidLoadMaterialDbService: LiquidLoadMaterialDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -57,13 +56,13 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
     }
     else {
       this.canAdd = true;
-      this.allMaterials = this.suiteDbService.selectLiquidLoadChargeMaterials();
+      this.allMaterials = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
       this.checkMaterialName();
     }
   }
 
   async setAllMaterials() {
-    this.allMaterials = this.suiteDbService.selectLiquidLoadChargeMaterials();
+    this.allMaterials = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
     this.allCustomMaterials = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
     this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
     this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id; this.setExisting();
@@ -78,7 +77,7 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
         this.newMaterial.specificHeatLiquid = this.convertUnitsService.value(this.newMaterial.specificHeatLiquid).from('kJkgC').to('btulbF');
         this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
       }
-      let suiteDbResult = this.suiteDbService.insertLiquidLoadChargeMaterial(this.newMaterial);
+      let suiteDbResult = this.sqlDbApiService.insertLiquidLoadChargeMaterial(this.newMaterial);
       if (suiteDbResult == true) {
         await firstValueFrom(this.liquidLoadMaterialDbService.addWithObservable(this.newMaterial))
         this.closeModal.emit(this.newMaterial);
@@ -94,7 +93,7 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
       this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
     }
     this.newMaterial.id = this.sdbEditMaterialId;
-    let suiteDbResult = this.suiteDbService.updateLiquidLoadChargeMaterial(this.newMaterial);
+    let suiteDbResult = this.sqlDbApiService.updateLiquidLoadChargeMaterial(this.newMaterial);
     if (suiteDbResult == true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
@@ -105,7 +104,7 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
 
   async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
-      let suiteDbResult = this.suiteDbService.deleteLiquidLoadChargeMaterial(this.sdbEditMaterialId);
+      let suiteDbResult = this.sqlDbApiService.deleteLiquidLoadChargeMaterial(this.sdbEditMaterialId);
       if (suiteDbResult == true) {
         await firstValueFrom(this.liquidLoadMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
         this.closeModal.emit(this.newMaterial);

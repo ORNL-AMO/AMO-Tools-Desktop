@@ -184,8 +184,9 @@ export class AssessmentItemComponent implements OnInit {
     this.assessment.name = this.editForm.controls.name.value;
     this.directoryDbService.setIsMovedExample(this.assessment, this.editForm);
     this.assessment.directoryId = this.editForm.controls.directoryId.value;
-    
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+
     this.assessmentDbService.setAll(assessments);
     this.dashboardService.updateDashboardData.next(true);
     this.hideEditModal();

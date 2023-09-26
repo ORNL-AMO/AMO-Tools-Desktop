@@ -6,10 +6,10 @@ import { DesignedEnergyResults } from '../../../shared/models/phast/designedEner
 import { MeteredEnergyService } from '../../metered-energy/metered-energy.service';
 import { DesignedEnergyService } from '../../designed-energy/designed-energy.service';
 import { PhastResultsService } from '../../phast-results.service';
-import { SuiteDbService } from '../../../suiteDb/suite-db.service';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
+import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 @Component({
   selector: 'app-energy-used',
   templateUrl: './energy-used.component.html',
@@ -76,7 +76,7 @@ export class EnergyUsedComponent implements OnInit {
   constructor(private designedEnergyService: DesignedEnergyService, 
     private meteredEnergyService: MeteredEnergyService, 
     private phastResultsService: PhastResultsService, 
-    private suiteDbService: SuiteDbService, 
+    private sqlDbApiService: SqlDbApiService,
     private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -178,13 +178,13 @@ export class EnergyUsedComponent implements OnInit {
 
     if (this.phast.losses.flueGasLosses) {
       if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
-        let gas: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
+        let gas: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
         if (gas) {
           this.fuelHeatingValue = gas.heatingValue;
           this.fuelName = gas.substance;
         }
       } else if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
-        let gas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
+        let gas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
         if (gas) {
           this.fuelHeatingValue = gas.heatingValue;
           this.fuelName = gas.substance;

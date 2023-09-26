@@ -115,7 +115,8 @@ export class MoveItemsComponent implements OnInit {
       for await (let selectedAssessment of selectedAssessments) { 
         this.directoryDbService.setIsMovedExample(selectedAssessment, this.moveForm);
         selectedAssessment.directoryId = this.moveForm.controls.directoryId.value;
-        updatedAssessments = await firstValueFrom(this.assessmentDbService.updateWithObservable(selectedAssessment));
+        await firstValueFrom(this.assessmentDbService.updateWithObservable(selectedAssessment));
+        updatedAssessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
         selectedAssessment.selected = false;
       }
       this.assessmentDbService.setAll(updatedAssessments);
@@ -129,7 +130,8 @@ export class MoveItemsComponent implements OnInit {
       let updatedCalculators: Calculator[] = [];
       for await (let calculator of selectedCalculators) { 
         calculator.directoryId = this.moveForm.controls.directoryId.value;
-        updatedCalculators = await firstValueFrom(this.calculatorDbService.updateWithObservable(calculator))
+        await firstValueFrom(this.calculatorDbService.updateWithObservable(calculator));
+        updatedCalculators = await firstValueFrom(this.calculatorDbService.getAllCalculators()); 
         calculator.selected = false;
       };
       this.calculatorDbService.setAll(updatedCalculators);
@@ -144,7 +146,8 @@ export class MoveItemsComponent implements OnInit {
       for await (let inventory of selectedInventories) {
         this.directoryDbService.setIsMovedExample(inventory, this.moveForm);
         inventory.directoryId = this.moveForm.controls.directoryId.value;
-        updatedInventoryItems = await firstValueFrom(this.inventoryDbService.updateWithObservable(inventory));
+        await firstValueFrom(this.inventoryDbService.updateWithObservable(inventory));
+        updatedInventoryItems = await firstValueFrom(this.inventoryDbService.getAllInventory());
         inventory.selected = false;
       }
       this.inventoryDbService.setAll(updatedInventoryItems);
@@ -159,7 +162,8 @@ export class MoveItemsComponent implements OnInit {
       for await (let directory of selectedDirectories) {
         if (directory.parentDirectoryId !== this.moveForm.controls.directoryId.value) {
           directory.parentDirectoryId = this.moveForm.controls.directoryId.value;
-          updatedDirectories = await firstValueFrom(this.directoryDbService.updateWithObservable(directory));
+          await firstValueFrom(this.directoryDbService.updateWithObservable(directory));
+          let updatedDirectories: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories()); 
           this.directoryDbService.setAll(updatedDirectories);
         } else {
           this.hideMoveModal();

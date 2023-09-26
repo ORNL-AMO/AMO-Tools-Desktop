@@ -4,8 +4,7 @@ import { AssessmentService } from '../dashboard/assessment.service';
 import { PSAT, Modification, PsatOutputs, PsatInputs } from '../shared/models/psat';
 import { PsatService } from './psat.service';
 import * as _ from 'lodash';
- 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { CompareService } from './compare.service';
 import { firstValueFrom, Subscription } from 'rxjs';
@@ -88,6 +87,7 @@ export class PsatComponent implements OnInit {
   showExportModalSub: Subscription;
   constructor(
     private assessmentService: AssessmentService,
+    private router: Router,
     private psatService: PsatService,
     private psatIntegrationService: PsatIntegrationService,
     private integrationStateService: IntegrationStateService,
@@ -111,34 +111,37 @@ export class PsatComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       this.getSettings();
-      this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
-      
-      let fromConnectedItem = this.activatedRoute.snapshot.queryParamMap.get('fromConnectedItem');
-      if (fromConnectedItem) {
-        this.redirectFromConnectedInventory();
-      } else {
-        this.psatIntegrationService.setPSATConnectedInventoryData(this.assessment, this.settings);
-      }
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'PSAT')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else { 
+        this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
 
-      let connectedInventory = this.activatedRoute.snapshot.queryParamMap.get('connectedInventory');
-      if (connectedInventory) {
-        this.save();
-      }
-
-      if (this._psat.modifications) {
-        if (this._psat.modifications.length != 0) {
-          this.modificationExists = true;
-          this.modificationIndex = 0;
+        let fromConnectedItem = this.activatedRoute.snapshot.queryParamMap.get('fromConnectedItem');
+        if (fromConnectedItem) {
+          this.redirectFromConnectedInventory();
+        } else {
+          this.psatIntegrationService.setPSATConnectedInventoryData(this.assessment, this.settings);
         }
 
-        if (this._psat.setupDone) {
-          this.compareService.setCompareVals(this._psat, 0);
+        let connectedInventory = this.activatedRoute.snapshot.queryParamMap.get('connectedInventory');
+        if (connectedInventory) {
+          this.save();
         }
-      } else {
-        this._psat.modifications = new Array();
-        this.modificationExists = false;
+
+        if (this._psat.modifications) {
+          if (this._psat.modifications.length != 0) {
+            this.modificationExists = true;
+            this.modificationIndex = 0;
+          }
+          if (this._psat.setupDone) {
+            this.compareService.setCompareVals(this._psat, 0);
+          }
+        } else {
+          this._psat.modifications = new Array();
+          this.modificationExists = false;
+        }
+        this.initSankeyList();
       }
-      this.initSankeyList();
     })
     let tmpTab = this.assessmentService.getTab();
     if (tmpTab) {
@@ -215,6 +218,7 @@ export class PsatComponent implements OnInit {
 
     this.checkShowWelcomeScreen();
   }
+
 
   redirectFromConnectedInventory() {
     this.psatTabService.mainTab.next('system-setup');
@@ -342,8 +346,9 @@ export class PsatComponent implements OnInit {
     if (this.assessment.psat.connectedItem && this.assessment.psat.connectedItem.inventoryType === 'pump') {
       this.psatIntegrationService.checkConnectedInventoryDiffers(this.assessment);
     }
-    
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
     this.psatService.getResults.next(true);
     this.cd.detectChanges();
@@ -491,7 +496,8 @@ export class PsatComponent implements OnInit {
 
   async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disablePsatTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.psatService.modalOpen.next(false);

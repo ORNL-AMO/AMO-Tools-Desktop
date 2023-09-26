@@ -2,8 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, HostListener, ChangeDetectorR
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { PhastService } from './phast.service';
- 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
 import { LossesService } from './losses/losses.service';
@@ -90,6 +89,7 @@ export class PhastComponent implements OnInit {
     private phastValidService: PhastValidService,
       
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private lossesService: LossesService,
     private phastCompareService: PhastCompareService,
     private cd: ChangeDetectorRef,
@@ -113,8 +113,11 @@ export class PhastComponent implements OnInit {
     //get assessmentId from route phast/:id
     this.actvatedRouteSubscription = this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
-      //use copy of phast object of as modal provided to forms
-      this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'PHAST')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else { 
+        //use copy of phast object of as modal provided to forms
+        this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
       if (this._phast.modifications) {
         if (this._phast.modifications.length !== 0) {
           this._phast.modifications.forEach(modification => {
@@ -130,6 +133,7 @@ export class PhastComponent implements OnInit {
       }
       this.getSettings();
       this.initSankeyList();
+    } 
     });
     //check to see if we need to start on a specified tab
     let tmpTab = this.assessmentService.getTab();
@@ -424,7 +428,8 @@ export class PhastComponent implements OnInit {
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     //update our assessment in the iDb
     
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment))
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
   }
 
@@ -566,7 +571,8 @@ export class PhastComponent implements OnInit {
 
   async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disablePhastTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.phastService.modalOpen.next(false);

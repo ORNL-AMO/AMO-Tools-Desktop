@@ -12,9 +12,9 @@ import { MotorIntegrationService } from '../shared/connected-inventory/motor-int
 import { PsatIntegrationService } from '../shared/connected-inventory/psat-integration.service';
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
 import { ConnectedInventoryData } from '../shared/connected-inventory/integrations';
+import { environment } from '../../environments/environment';
 
 declare const packageJson;
-
 @Component({
   selector: 'app-pump-inventory',
   templateUrl: './pump-inventory.component.html',
@@ -131,11 +131,12 @@ export class PumpInventoryComponent implements OnInit {
   async saveDbData() {
     let inventoryData: PumpInventoryData = this.pumpInventoryService.pumpInventoryData.getValue();
     this.pumpInventoryItem.modifiedDate = new Date();
-    this.pumpInventoryItem.appVersion = packageJson.version;
+    this.pumpInventoryItem.appVersion = environment.version;
     this.pumpInventoryItem.pumpInventoryData = inventoryData;
     this.pumpInventoryItem.pumpInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
     this.pumpInventoryItem.pumpInventoryData.hasConnectedPsat = this.psatIntegrationService.getHasConnectedPSAT(this.pumpInventoryItem);
-    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.pumpInventoryItem));
+    await firstValueFrom(this.inventoryDbService.updateWithObservable(this.pumpInventoryItem));
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);
   }
 

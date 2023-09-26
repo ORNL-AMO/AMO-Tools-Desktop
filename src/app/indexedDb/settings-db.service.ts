@@ -53,9 +53,10 @@ export class SettingsDbService {
     return this.dbService.bulkDelete(this.storeName, calculatorIds);
   }
 
-  updateWithObservable(settings: Settings): Observable<any> {
+  updateWithObservable(settings: Settings): Observable<Settings> {
     settings.modifiedDate = new Date();
-    return this.dbService.update(this.storeName, settings);
+    let result = this.dbService.update(this.storeName, settings);
+    return result;
   }
 
   findById(id: number): Settings {

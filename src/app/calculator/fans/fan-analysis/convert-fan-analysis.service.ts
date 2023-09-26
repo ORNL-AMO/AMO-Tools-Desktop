@@ -2,36 +2,36 @@ import { Injectable } from '@angular/core';
 import { Fan203Inputs, FanRatedInfo, BaseGasDensity, Plane, PlaneData, Fan203Results, PlaneResults, PlaneResult, PsychrometricResults, FanShaftPower } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-declare var fanAddon: any;
+
 
 @Injectable()
 export class ConvertFanAnalysisService {
 
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
-  fan203(input: Fan203Inputs, settings: Settings): Fan203Results {
-    let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
-    inputCpy = this.convertFan203DataForCalculations(inputCpy, settings);
-    inputCpy.FanShaftPower.sumSEF = inputCpy.PlaneData.inletSEF + inputCpy.PlaneData.outletSEF;
-    inputCpy = this.updateInputDataForCalcs(inputCpy);
-    let results: Fan203Results = fanAddon.fan203(inputCpy);
-    results = this.convertFan203Results(results, settings);
-    return results;
-  }
+  // fan203(input: Fan203Inputs, settings: Settings): Fan203Results {
+  //   let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
+  //   inputCpy = this.convertFan203DataForCalculations(inputCpy, settings);
+  //   inputCpy.FanShaftPower.sumSEF = inputCpy.PlaneData.inletSEF + inputCpy.PlaneData.outletSEF;
+  //   inputCpy = this.updateInputDataForCalcs(inputCpy);
+  //   let results: Fan203Results = this.fansSuiteApiService.fan203(inputCpy);
+  //   results = this.convertFan203Results(results, settings);
+  //   return results;
+  // }
 
-  getPlaneResults(input: Fan203Inputs, settings: Settings): PlaneResults {
-    let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
-    inputCpy = this.convertFan203DataForCalculations(inputCpy, settings);
-    inputCpy = this.updateInputDataForCalcs(inputCpy);
-    let results: PlaneResults = {};
-    try {
-      results = fanAddon.getPlaneResults(inputCpy);
-      results = this.convertPlaneResults(results, settings);
-    } catch (err) {
-      results.error = true;
-    }
-    return results;
-  }
+  // getPlaneResults(input: Fan203Inputs, settings: Settings): PlaneResults {
+  //   let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
+  //   inputCpy = this.convertFan203DataForCalculations(inputCpy, settings);
+  //   inputCpy = this.updateInputDataForCalcs(inputCpy);
+  //   let results: PlaneResults = {};
+  //   try {
+  //     results = this.fansSuiteApiService.getPlaneResults(inputCpy);
+  //     results = this.convertPlaneResults(results, settings);
+  //   } catch(err) {
+  //     results.error = true;
+  //   }
+  //   return results;
+  // }
 
   updateInputDataForCalcs(inputCpy: Fan203Inputs): Fan203Inputs {
     if (!inputCpy.BaseGasDensity.barometricPressure || inputCpy.BaseGasDensity.inputType == 'custom') {

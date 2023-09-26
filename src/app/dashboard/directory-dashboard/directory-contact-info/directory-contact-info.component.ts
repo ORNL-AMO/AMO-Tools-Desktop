@@ -66,7 +66,8 @@ export class DirectoryContactInfoComponent implements OnInit {
       this.dashboardService.updateDashboardData.next(true);
       this.hideFacilityModal()
     } else {
-      let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+      await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
+      let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
       this.settingsDbService.setAll(updatedSettings);
       this.checkShow();
       this.dashboardService.updateDashboardData.next(true);

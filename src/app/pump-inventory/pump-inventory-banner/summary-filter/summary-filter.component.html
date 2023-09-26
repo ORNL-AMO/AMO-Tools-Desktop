@@ -1,10 +1,10 @@
 <nav class="navbar d-none d-lg-flex justify-content-start" #navbar>
-    <app-department-dropdown></app-department-dropdown>
+    <app-pump-department-dropdown></app-pump-department-dropdown>
     <div class="pl-1">
         <app-pump-types-dropdown></app-pump-types-dropdown>
     </div>
     <div class="pl-1">
-        <app-rated-power-dropdown></app-rated-power-dropdown>
+        <app-pump-rated-power-dropdown></app-pump-rated-power-dropdown>
     </div>
     <div class="pl-1">
         <app-status-dropdown></app-status-dropdown>
@@ -21,13 +21,13 @@
         </span>
     </div>
     <div class="flex-fill pl-1 pt-1" [ngClass]="{'collapse': filtersCollaped}">
-        <app-department-dropdown></app-department-dropdown>
+        <app-pump-department-dropdown></app-pump-department-dropdown>
     </div>
     <div class="flex-fill pl-1 pt-1" [ngClass]="{'collapse': filtersCollaped}">
         <app-pump-types-dropdown></app-pump-types-dropdown>
     </div>
     <div class="flex-fill pl-1 pt-1" [ngClass]="{'collapse': filtersCollaped}">
-        <app-rated-power-dropdown></app-rated-power-dropdown>
+        <app-pump-rated-power-dropdown></app-pump-rated-power-dropdown>
     </div>
     <div class="flex-fill pl-1 pt-1" [ngClass]="{'collapse': filtersCollaped}">
         <app-status-dropdown></app-status-dropdown>

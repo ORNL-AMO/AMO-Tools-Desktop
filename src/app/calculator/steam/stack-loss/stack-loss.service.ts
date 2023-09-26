@@ -5,7 +5,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { Settings } from '../../../shared/models/settings';
 import { StackLossInput } from '../../../shared/models/steam/steam-inputs';
 import { BehaviorSubject } from 'rxjs';
-declare var phastAddon: any;
+import { ProcessHeatingApiService } from '../../../tools-suite-api/process-heating-api.service';
 
 @Injectable()
 export class StackLossService {
@@ -17,7 +17,10 @@ export class StackLossService {
   };
 
   modalOpen: BehaviorSubject<boolean>;
-  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) {
+  constructor(
+    private processHeatingApiService: ProcessHeatingApiService,  
+    private formBuilder: UntypedFormBuilder, 
+    private convertUnitsService: ConvertUnitsService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
@@ -191,7 +194,7 @@ export class StackLossService {
     inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from(settings.temperatureMeasurement).to('F');
-    let results: FlueGasByVolumeSuiteResults = phastAddon.flueGasLossesByVolume(inputs);
+    let results: FlueGasByVolumeSuiteResults = this.processHeatingApiService.flueGasLossesByVolume(inputs);
     return results;
   }
   
@@ -206,7 +209,8 @@ export class StackLossService {
     inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.ashDischargeTemperature = this.convertUnitsService.value(inputs.ashDischargeTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from(settings.temperatureMeasurement).to('F');
-    let results = phastAddon.flueGasLossesByMass(inputs);
+    inputs.ambientAirTempF = this.convertUnitsService.value(inputs.ambientAirTempF).from(settings.temperatureMeasurement).to('F');
+    let results = this.processHeatingApiService.flueGasLossesByMass(inputs);
     return results;
   }
 

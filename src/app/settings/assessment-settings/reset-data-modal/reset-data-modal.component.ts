@@ -9,7 +9,6 @@ import { AssessmentDbService } from '../../../indexedDb/assessment-db.service';
 import { Directory } from '../../../shared/models/directory';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { CoreService } from '../../../core/core.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { MockSsmt, MockSsmtSettings } from '../../../examples/mockSsmt';
 import { MockTreasureHunt, MockTreasureHuntSettings } from '../../../examples/mockTreasureHunt';
@@ -29,6 +28,7 @@ import { GasLoadMaterialDbService } from '../../../indexedDb/gas-load-material-d
 import { LiquidLoadMaterialDbService } from '../../../indexedDb/liquid-load-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
 import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-material-db.service';
+import { ElectronService } from '../../../electron/electron.service';
 import { MockPumpInventory } from '../../../examples/mockPumpInventoryData';
 
 @Component({
@@ -49,8 +49,8 @@ export class ResetDataModalComponent implements OnInit {
   deleting: boolean = false;
   hidingModal: any;
   constructor(private dashboardService: DashboardService, 
+    private electronService: ElectronService,
     private calculatorDbService: CalculatorDbService,
-    private coreService: CoreService, 
     private directoryDbService: DirectoryDbService, 
     private settingsDbService: SettingsDbService, 
     private dbService: NgxIndexedDBService,
@@ -152,7 +152,8 @@ export class ResetDataModalComponent implements OnInit {
     defaultSettings.disableTutorial = this.settingsDbService.globalSettings.disableTutorial;
     defaultSettings.printAll = this.settingsDbService.globalSettings.printAll;
     delete defaultSettings.facilityInfo;
-    let settings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(defaultSettings));
+    await firstValueFrom(this.settingsDbService.updateWithObservable(defaultSettings));
+    let settings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(settings);
     this.hideResetSystemSettingsModal();
   }
@@ -341,8 +342,11 @@ async resetAllExampleAssessments(dirId: number) {
   }
 
   finishDelete() {
-    // TODO if not in electron, do location.reload()
-    this.coreService.relaunchApp();
+    if (this.electronService.isElectron) {
+      this.electronService.sendAppRelaunch();
+    } else {
+      location.reload()
+    }
   }
 
 

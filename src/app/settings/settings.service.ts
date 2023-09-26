@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../shared/models/settings';
 import { BehaviorSubject } from 'rxjs';
-declare const packageJson;
-
+import { environment } from '../../environments/environment';
 @Injectable()
 export class SettingsService {
 
@@ -221,7 +220,7 @@ export class SettingsService {
       energyResultUnit: form.controls.energyResultUnit.value,
       customFurnaceName: form.controls.customFurnaceName.value,
       temperatureMeasurement: form.controls.temperatureMeasurement.value,
-      appVersion: packageJson.version,
+      appVersion: environment.version,
       fanCurveType: form.controls.fanCurveType.value,
       fanConvertedConditions: form.controls.fanConvertedConditions.value,
       phastRollupUnit: form.controls.phastRollupUnit.value,

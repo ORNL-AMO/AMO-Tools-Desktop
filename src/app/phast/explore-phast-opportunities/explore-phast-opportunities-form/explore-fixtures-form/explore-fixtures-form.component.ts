@@ -3,10 +3,10 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { LossTab } from '../../../tabs';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FixtureFormService } from '../../../../calculator/furnaces/fixture/fixture-form.service';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-explore-fixtures-form',
@@ -34,10 +34,10 @@ export class ExploreFixturesFormComponent implements OnInit {
   baselineWarnings: Array<{ specificHeatWarning: string, feedRateWarning: string }>;
   modificationWarnings: Array<{ specificHeatWarning: string, feedRateWarning: string }>;
   showInitialTemp: Array<boolean>;
-  constructor(private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService, private fixtureFormService: FixtureFormService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private convertUnitsService: ConvertUnitsService, private fixtureFormService: FixtureFormService) { }
 
   ngOnInit() {
-    this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
+    this.materials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
     this.initData();
     this.initTempData();
   }
@@ -178,7 +178,7 @@ export class ExploreFixturesFormComponent implements OnInit {
 
 
   setSpecificHeat(loss: FixtureLoss) {
-    let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(loss.materialName);
+    let material: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(loss.materialName);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         material.specificHeatSolid = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');

@@ -3,9 +3,9 @@ import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { ChillerStagingInput, ChillerStagingOutput } from '../../../shared/models/chillers';
 import { Settings } from '../../../shared/models/settings';
+import { ChillersSuiteApiService } from '../../../tools-suite-api/chillers-suite-api.service';
 import { ChillerStagingFormService } from './chiller-staging-form.service';
 
-declare var chillersAddon;
 
 @Injectable()
 export class ChillerStagingService {
@@ -16,7 +16,10 @@ export class ChillerStagingService {
   generateExample: BehaviorSubject<boolean>;
   currentField: BehaviorSubject<string>;
 
-  constructor(private convertUnitsService: ConvertUnitsService, private chillerStagingFormService: ChillerStagingFormService) { 
+  constructor(
+    private chillersSuiteApiService: ChillersSuiteApiService,
+    private convertUnitsService: ConvertUnitsService,
+    private chillerStagingFormService: ChillerStagingFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.chillerStagingInput = new BehaviorSubject<ChillerStagingInput>(undefined);
     this.chillerStagingOutput = new BehaviorSubject<ChillerStagingOutput>(undefined);
@@ -76,7 +79,7 @@ export class ChillerStagingService {
       this.initDefaultEmptyOutputs();
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
-      let chillerStagingOutput: ChillerStagingOutput = chillersAddon.chillerStaging(inputCopy);
+      let chillerStagingOutput: ChillerStagingOutput = this.chillersSuiteApiService.chillerStagingEfficiency(inputCopy);
       if (chillerStagingOutput.baselinePowerList && chillerStagingOutput.modPowerList) {
         chillerStagingOutput.chillerLoadResults = [];
         chillerStagingOutput.baselinePowerList.forEach((baselineLoad: number, index) => {

@@ -2,12 +2,12 @@ import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges, ElementR
 import { SsmtService } from '../../../ssmt.service';
 import { SSMT, BoilerInput } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { BoilerService } from '../../../boiler/boiler.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { StackLossInput } from '../../../../shared/models/steam/steam-inputs';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { Co2SavingsData } from '../../../../calculator/utilities/co2-savings/co2-savings.service';
 import { AssessmentCo2SavingsService, Co2SavingsDifferent } from '../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { OtherFuel, otherFuels } from '../../../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
@@ -67,7 +67,7 @@ export class BoilerFormComponent implements OnInit {
   constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, 
     private convertUnitsService: ConvertUnitsService,
     private compareService: CompareService,
-    private assessmentCo2SavingsService: AssessmentCo2SavingsService, private suiteDbService: SuiteDbService, private boilerService: BoilerService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService, private sqlDbApiService: SqlDbApiService, private boilerService: BoilerService,
     private ssmtService: SsmtService) { }
 
   ngOnInit() {

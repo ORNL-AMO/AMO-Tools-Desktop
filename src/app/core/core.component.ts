@@ -1,33 +1,22 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { filter, firstValueFrom, Subscription } from 'rxjs';
-import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
 import { NavigationEnd, Router } from '../../../node_modules/@angular/router';
-import { trigger, state, style, animate, transition } from '@angular/animations';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
+import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
+import { ElectronService, ReleaseData } from '../electron/electron.service';
 
-declare var google: any;
 @Component({
   selector: 'app-core',
   templateUrl: './core.component.html',
   styleUrls: ['./core.component.css'],
-  animations: [
-    trigger('translate', [
-      state('show', style({
-        top: '40px'
-      })),
-      transition('hide => show', animate('.5s ease-in')),
-      transition('show => hide', animate('.5s ease-out'))
-    ])
-  ]
 })
 
 export class CoreComponent implements OnInit {
@@ -40,19 +29,26 @@ export class CoreComponent implements OnInit {
   inTutorialsView: boolean;
   updateError: boolean = false;
   isOnline: boolean;
-  info: any;
-  updateAvailableSubscription: Subscription;
+  releaseData: ReleaseData;
+
+  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
+  showToast: boolean;
+  showWebDisclaimerToast: boolean = false;
   routerSubscription: Subscription;
+  analyticsSessionId: string;
   modalOpenSub: Subscription;
   showSecurityAndPrivacyModalSub: Subscription;
   isModalOpen: boolean;
   showSecurityAndPrivacyModal: boolean;
+  electronUpdateAvailableSub: Subscription;
+  assessmentUpdateAvailableSub: Subscription;
+  updateAvailable: boolean;
+  releaseDataSub: Subscription;
 
 
-  constructor(private electronService: ElectronService, 
+  constructor(private electronService: ElectronService , 
     private assessmentService: AssessmentService, 
     private changeDetectorRef: ChangeDetectorRef,
-    private suiteDbService: SuiteDbService, 
     private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, 
     private directoryDbService: DirectoryDbService,
@@ -61,34 +57,47 @@ export class CoreComponent implements OnInit {
     private coreService: CoreService, 
     private router: Router,
     private securityAndPrivacyService: SecurityAndPrivacyService,
-    private inventoryDbService: InventoryDbService) {
+    private inventoryDbService: InventoryDbService, private sqlDbApiService: SqlDbApiService) {
   }
 
   ngOnInit() {
     if (!window.navigator.cookieEnabled) {
       this.showBrowsingDataToast = true;
     }
-   this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-     .subscribe((event: NavigationEnd) => {
-      if (this.idbStarted) {
-        this.analyticsService.sendAnalyticsPageView(event.urlAfterRedirects);
-      }
-     });
 
-    this.electronService.ipcRenderer.once('available', (event, arg) => {
-      if (arg === true) {
+    if (this.electronService.isElectron) {
+      this.electronService.sendAppReady('ready');
+
+      if (this.electronService.isElectron) {
+        this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+          .subscribe((event: NavigationEnd) => {
+              this.analyticsService.sendAnalyticsPageView(event.urlAfterRedirects);
+            });
+      }
+
+
+      this.electronUpdateAvailableSub = this.electronService.updateAvailable.subscribe(val => {
+        this.updateAvailable = val;
+        if (this.updateAvailable) {
+          this.showUpdateToast = true;
+          this.assessmentService.updateAvailable.next(true);
+          this.changeDetectorRef.detectChanges();
+        }
+      });
+
+      this.releaseDataSub = this.electronService.releaseData.subscribe(val => {
+        this.releaseData = val;
+      });
+
+    }
+
+    this.assessmentUpdateAvailableSub = this.assessmentService.updateAvailable.subscribe(val => {
+      if (val == true) {
         this.showUpdateToast = true;
-        this.assessmentService.updateAvailable.next(true);
         this.changeDetectorRef.detectChanges();
       }
     });
 
-    //send signal to main.js to check for update
-    this.electronService.ipcRenderer.send('ready', null);
-
-    this.electronService.ipcRenderer.once('release-info', (event, info) => {
-      this.info = info;
-    })
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
       this.inTutorialsView = (this.router.url === '/tutorials');
@@ -99,21 +108,7 @@ export class CoreComponent implements OnInit {
       }
     });
 
-    if (this.suiteDbService.hasStarted === false) {
-      this.suiteDbService.startup();
-    }
-
-    window.indexedDB.databases().then(db => {
-      this.initData();
-    });
-
-
-    this.updateAvailableSubscription = this.assessmentService.updateAvailable.subscribe(val => {
-      if (val == true) {
-        this.showUpdateToast = true;
-        this.changeDetectorRef.detectChanges();
-      }
-    });
+    this.initData();
 
     this.modalOpenSub = this.securityAndPrivacyService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
@@ -125,20 +120,21 @@ export class CoreComponent implements OnInit {
 
   }
 
+
   ngOnDestroy() {
-    if (this.openingTutorialSub) {
-      this.openingTutorialSub.unsubscribe();
+    if (this.electronService.isElectron) {
+      this.routerSubscription.unsubscribe();
+      this.electronUpdateAvailableSub.unsubscribe();
+      this.releaseDataSub.unsubscribe();
     }
-    this.routerSubscription.unsubscribe();
-    this.updateAvailableSubscription.unsubscribe();
+    this.assessmentUpdateAvailableSub.unsubscribe();
+    this.openingTutorialSub.unsubscribe();
     this.showSecurityAndPrivacyModalSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
   }
 
   async initData() {
     let existingDirectories: number = await firstValueFrom(this.directoryDbService.count());
-
-    // let existingDirectories = 0;
     if (existingDirectories === 0) {
       await this.coreService.createDefaultDirectories();
       await this.coreService.createExamples();
@@ -156,12 +152,19 @@ export class CoreComponent implements OnInit {
       this.assessmentDbService.setAll(initializedData.assessments);
       this.calculatorDbService.setAll(initializedData.calculators);
       this.inventoryDbService.setAll(initializedData.inventoryItems);
-      if (this.suiteDbService.hasStarted == true) {
-        this.suiteDbService.initCustomDbMaterials();
-      }
       this.idbStarted = true;
       this.changeDetectorRef.detectChanges();
     });
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    };
+    this.changeDetectorRef.detectChanges();
   }
 
   hideUpdateToast() {
@@ -178,7 +181,6 @@ export class CoreComponent implements OnInit {
     this.assessmentService.tutorialShown = true;
     this.hideTutorial = true;
   }
-
 
   closeNoticeModal(isClosedEvent?: boolean) {
     this.securityAndPrivacyService.modalOpen.next(false)
