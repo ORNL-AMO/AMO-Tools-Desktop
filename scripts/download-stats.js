@@ -30,7 +30,6 @@ async function main() {
     }
 
     const headers = getHeaders();
-    debugger;
     const releases = await getReleases(headers, API_URL_MEASUR, 'raw_MEASUR_data.json');
     // const releases = require('./download-stats/raw-data.json');
     const csv = parseReleases(releases);
@@ -82,7 +81,6 @@ async function getReleases(reqHeaders, URL, jsonURL) {
     }
 
     console.log(`Found ${releases.length} releases in total.`);
-    debugger;
     let outPath = path.join(OUTPUT_DIR, jsonURL);
     await fs.writeFileSync(outPath, JSON.stringify(releases));
     // await fs.writeFileSync(outPath, JSON.stringify(releases), { encoding: 'utf-8' });
