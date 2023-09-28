@@ -547,6 +547,7 @@
 
 .log-tool-container  
 .btn-primary:hover:enabled,
+.log-tool-container  
 .btn-primary:focus:enabled {
     color: white;
     background: #447f73 !important;
