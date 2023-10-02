@@ -18,7 +18,7 @@ import pptxgen from 'pptxgenjs';
 import * as _ from 'lodash';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { TreasureHuntPptService } from './treasure-hunt-ppt.service';
+import { TreasureHuntPptService } from './treasure-hunt-ppt/treasure-hunt-ppt.service';
 @Component({
   selector: 'app-treasure-hunt-report',
   templateUrl: './treasure-hunt-report.component.html',
