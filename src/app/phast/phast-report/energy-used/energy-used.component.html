@@ -13,16 +13,16 @@
       <tbody>
         <tr>
           <td>
-            <span *ngIf="fuelName">{{fuelName}}</span>
-            <span *ngIf="!fuelName">Fuel</span>
+            <span *ngIf="energyUsed.fuelName">{{energyUsed.fuelName}}</span>
+            <span *ngIf="!energyUsed.fuelName">Fuel</span>
           </td>
           <td>
-            <span *ngIf="fuelEnergyUsed">{{fuelEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
-            <span *ngIf="!fuelEnergyUsed">&mdash; &mdash;</span>
+            <span *ngIf="energyUsed.fuelEnergyUsed">{{energyUsed.fuelEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
+            <span *ngIf="!energyUsed.fuelEnergyUsed">&mdash; &mdash;</span>
           </td>
           <td>
-            <span *ngIf="fuelHeatingValue">{{fuelHeatingValue | sigFigs:'5'}} {{energyPerMassUnit}}</span>
-            <span *ngIf="!fuelHeatingValue">&mdash; &mdash;</span>
+            <span *ngIf="energyUsed.fuelHeatingValue">{{energyUsed.fuelHeatingValue | sigFigs:'5'}} {{energyPerMassUnit}}</span>
+            <span *ngIf="!energyUsed.fuelHeatingValue">&mdash; &mdash;</span>
           </td>
           <td>{{phast.operatingCosts.fuelCost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}</td>
         </tr>
@@ -69,20 +69,20 @@
             <td>{{phast.operatingCosts.otherFuelCost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}</td>
           </tr>
         </ng-container>
-        <tr>
+        <tr *ngIf="settings.energySourceType === 'Electricity'">
           <td>Electricity</td>
           <td>
-            <span *ngIf="electricEnergyUsed">{{electricEnergyUsed | sigFigs:'5'}} kW</span>
-            <span *ngIf="!electricEnergyUsed">&mdash; &mdash;</span>
+            <span *ngIf="energyUsed.electricEnergyUsed">{{energyUsed.electricEnergyUsed | sigFigs:'5'}} kW</span>
+            <span *ngIf="!energyUsed.electricEnergyUsed">&mdash; &mdash;</span>
           </td>
-          <td>{{electricityHeatingValue | sigFigs:'5'}} {{energyPerTimeUnit}}</td>
+          <td>{{energyUsed.electricityHeatingValue | sigFigs:'5'}} {{energyPerTimeUnit}}</td>
           <td>{{phast.operatingCosts.electricityCost | currency:'USD':'symbol':'1.2-2'}} /kWh</td>
         </tr>
         <tr>
           <td>Steam</td>
           <td>
-            <span *ngIf="steamEnergyUsed">{{steamEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
-            <span *ngIf="!steamEnergyUsed">&mdash; &mdash;</span>
+            <span *ngIf="energyUsed.steamEnergyUsed">{{energyUsed.steamEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
+            <span *ngIf="!energyUsed.steamEnergyUsed">&mdash; &mdash;</span>
           </td>
           <td>
             <span *ngIf="steamHeatingValue">{{steamHeatingValue | sigFigs:'5'}} {{energyPerMassUnit}}</span>

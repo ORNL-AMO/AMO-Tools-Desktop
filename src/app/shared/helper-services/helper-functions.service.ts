@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
 
+// todo move to non ng service file
 @Injectable()
 export class HelperFunctionsService {
 
@@ -17,5 +18,9 @@ export class HelperFunctionsService {
     } else {
       return text;
     }
+  }
+
+  getNewIdString() {
+   return Math.random().toString(36).substr(2, 9);
   }
 }

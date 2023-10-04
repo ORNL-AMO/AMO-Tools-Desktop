@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { CalculatorsService } from './calculators.service';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, TreasureHuntOpportunity, OpportunitySheet, Treasure } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, TreasureHuntOpportunity, OpportunitySheet, Treasure, AssessmentOpportunity } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -28,7 +28,7 @@ export class CalculatorsComponent implements OnInit {
   mainTab: string;
   mainTabSub: Subscription;
   currentOpportunity: TreasureHuntOpportunity;
-  standaloneOpportunitySheet: OpportunitySheet;
+  customOpportunity: OpportunitySheet | AssessmentOpportunity;
 
   constructor(private calculatorsService: CalculatorsService, 
     private treasureHuntOpportunityService: TreasureHuntOpportunityService,
@@ -46,6 +46,7 @@ export class CalculatorsComponent implements OnInit {
       this.mainTab = val;
     });
   }
+
   ngOnDestroy() {
     this.selectedCalcSubscription.unsubscribe();
     this.treasureHuntSub.unsubscribe();
@@ -53,86 +54,60 @@ export class CalculatorsComponent implements OnInit {
     this.mainTabSub.unsubscribe();
   }
 
-  showSaveCalcModal() {
-    this.saveCalcModal.show();
-  }
-  hideSaveCalcModal() {
-    this.saveCalcModal.hide();
-  }
   showOpportunitySheetModal() {
     this.calculatorOpportunitySheet = this.calculatorsService.calcOpportunitySheet;
     this.opportunitySheetModal.show();
   }
+
   hideOpportunitySheetModal() {
     this.opportunitySheetModal.hide();
+  }
+
+  hideSaveCalcModal() {
+    this.saveCalcModal.hide();
   }
 
   saveItemOpportunitySheet(updatedOpportunitySheet: OpportunitySheet) {
     this.calculatorOpportunitySheet = updatedOpportunitySheet;
     this.calculatorsService.calcOpportunitySheet = updatedOpportunitySheet;
     this.hideOpportunitySheetModal();
-    if (this.mainTab == 'find-treasure') {
-      this.confirmSaveCalc();
-    }
+    this.confirmSaveCalc();
   }
 
+  saveCustomOpportunity(customOpportunity: OpportunitySheet | AssessmentOpportunity) {
+    this.customOpportunity = customOpportunity;
+    this.calculatorOpportunitySheet = this.calculatorsService.calcOpportunitySheet;
+    this.confirmSaveCalc();
+  }
 
   saveOpportunity(treasureHuntOpportunity: TreasureHuntOpportunity) {
     this.currentOpportunity = treasureHuntOpportunity;
     this.calculatorOpportunitySheet = this.calculatorsService.calcOpportunitySheet;
-    if (this.mainTab == 'find-treasure' && this.selectedCalc !== Treasure.opportunitySheet) {
+    if (this.mainTab == 'find-treasure') {
       this.showOpportunitySheetModal();
     } else {
-      this.showSaveCalcModal();
+      this.saveCalcModal.show();
     }
-  }
-
-  confirmSaveCalc() {
-    if (this.selectedCalc === Treasure.opportunitySheet) {
-      this.standaloneOpportunitySheet.selected = true;
-    } else {
-      this.currentOpportunity.opportunitySheet = this.calculatorsService.calcOpportunitySheet;
-      this.currentOpportunity.selected = true;
-    }
-
-    if (this.calculatorsService.isNewOpportunity == true) {
-      this.saveTreasureHuntOpportunity();
-    } else {
-      this.updateTreasureHuntOpportunity();
-    }
-    this.finishSaveCalc();
-  }
-
-  initSaveCalc() {
-    this.calculatorOpportunitySheet = this.calculatorsService.calcOpportunitySheet;
-    if (this.mainTab == 'find-treasure' && this.selectedCalc !== Treasure.opportunitySheet) {
-      this.showOpportunitySheetModal();
-    } else {
-      this.showSaveCalcModal();
-    }
-  }
-
-  finishSaveCalc() {
-    this.hideSaveCalcModal();
-    this.calculatorsService.selectedCalc.next('none');
-  }
-
-  saveTreasureHuntOpportunity() {
-    this.treasureHuntOpportunityService.saveTreasureHuntOpportunity(this.currentOpportunity, this.selectedCalc, this.standaloneOpportunitySheet)
   }
 
   cancelTreasureHuntOpportunity() {
     this.treasureHuntOpportunityService.cancelTreasureHuntOpportunity(this.selectedCalc);
   }
 
-  updateTreasureHuntOpportunity() {
-    this.treasureHuntOpportunityService.updateTreasureHuntOpportunity(this.currentOpportunity, this.selectedCalc, this.settings, this.standaloneOpportunitySheet);
+  confirmSaveCalc() {
+    if (this.selectedCalc === Treasure.opportunitySheet || this.selectedCalc === Treasure.assessmentOpportunity) {
+      this.customOpportunity.selected = true;
+    } else {
+      this.currentOpportunity.opportunitySheet = this.calculatorsService.calcOpportunitySheet;
+      this.currentOpportunity.selected = true;
+    }
+    if (this.calculatorsService.isNewOpportunity == true) {
+      this.treasureHuntOpportunityService.saveTreasureHuntOpportunity(this.currentOpportunity, this.selectedCalc, this.customOpportunity)
+    } else {
+      this.treasureHuntOpportunityService.updateTreasureHuntOpportunity(this.currentOpportunity, this.selectedCalc, this.settings, this.customOpportunity);
+    }
+    this.saveCalcModal.hide(); 
+    this.calculatorsService.selectedCalc.next('none');
   }
-
-  saveStandaloneOpportunitySheet(opportunitySheet: OpportunitySheet) {
-    this.standaloneOpportunitySheet = opportunitySheet;
-    this.initSaveCalc();
-  }
-
 
 }

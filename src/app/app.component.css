@@ -212,7 +212,6 @@ select.form-control:not([size]):not([multiple]) {
     width: 50%;
   }
 
-
   .inheritWidth {
     width: inherit;
   }

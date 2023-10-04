@@ -971,4 +971,3 @@ export class PhastService {
     return sumAdditionalHeat;
   }
 }
-

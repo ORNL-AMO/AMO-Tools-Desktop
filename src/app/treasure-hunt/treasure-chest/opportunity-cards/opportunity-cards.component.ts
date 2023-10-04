@@ -42,6 +42,8 @@ export class OpportunityCardsComponent implements OnInit {
         this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
         this.opportunityCardList = this.opportunityCardsService.getOpportunityCardsData(this.treasureHunt, this.settings);
         this.opportunityCardsService.opportunityCards.next(this.opportunityCardList);
+        
+        // todo 6453 this does nothing?
         this.opportunityCardsService.updateOpportunityCards.next(false);
       }
     });
@@ -139,6 +141,12 @@ export class OpportunityCardsComponent implements OnInit {
   }
 
   editOpportunitySheet(cardData: OpportunityCardData) {
+    this.modifyDataIndex = cardData.index;
+    this.editOpportunitySheetCardData = cardData;
+    this.showOpportunitySheetModal();
+  }
+
+  editAssessmentOpportunity(cardData: OpportunityCardData) {
     this.modifyDataIndex = cardData.index;
     this.editOpportunitySheetCardData = cardData;
     this.showOpportunitySheetModal();

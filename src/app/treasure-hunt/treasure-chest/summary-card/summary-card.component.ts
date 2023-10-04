@@ -150,7 +150,6 @@ export class SummaryCardComponent implements OnInit {
     let additionalAnnualSavings: number = 0;
     opportunityCards.forEach(card => {
       if (card.selected && card.opportunitySheet.opportunityCost.additionalAnnualSavings) {
-
         additionalAnnualSavings += card.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
       }
     });

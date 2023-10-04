@@ -18,6 +18,7 @@ export class EnergyUseFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
   }
 
   addEnergyField() {

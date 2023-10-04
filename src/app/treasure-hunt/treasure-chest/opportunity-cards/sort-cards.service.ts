@@ -5,7 +5,7 @@ import { SortCardsData } from './sort-cards-by.pipe';
 import * as _ from 'lodash';
 import {
   TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt,
-  CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, FlueGasTreasureHunt, WallLossTreasureHunt, OpportunitySummary, Treasure, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt
+  CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, FlueGasTreasureHunt, WallLossTreasureHunt, OpportunitySummary, Treasure, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity
 } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 
@@ -367,8 +367,16 @@ export class SortCardsService {
 
   sortOpportunitySheets(items: Array<OpportunitySheet>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<OpportunitySheet> {
     return items.filter(item => {
-      // let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getOpportunitySheetCardData(item, settings, 0, treasureHunt.currentEnergyUsage);
+      let cardItem: OpportunityCardData = this.opportunityCardsService.getCustomOpportunityCardData(item, settings, 0, treasureHunt.currentEnergyUsage);
+      cardItem.opportunityType = Treasure.opportunitySheet;
+      return this.checkCardItemIncluded(cardItem, sortBy);
+    });
+  }
+
+  sortAssessmentOpportunities(items: Array<AssessmentOpportunity>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<OpportunitySheet> {
+    return items.filter(item => {
+      let cardItem: OpportunityCardData = this.opportunityCardsService.getCustomOpportunityCardData(item, settings, 0, treasureHunt.currentEnergyUsage);
+      cardItem.opportunityType = Treasure.assessmentOpportunity;
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }

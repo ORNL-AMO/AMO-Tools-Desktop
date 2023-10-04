@@ -1,0 +1,112 @@
+<div class="custom-opportunity calculator-container modify-conditions general standalone-calculator" #contentContainer>
+    <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center justify-content-between">
+      <div class="pl-2 align-items-center d-none d-sm-flex">
+        <img src="assets/images/app-icon.png" class="assessment-opp-icon">
+      </div>
+      <div class="mx-auto">
+        <h3>Assessment Savings opportunity</h3>
+      </div>
+      <div class="d-flex pr-2 pl-2">
+        <div class="d-none d-lg-flex help-holder">
+          <p class="help-text treasure-hunt-help">Once you've found some treasure, click the save icon to add the
+            treasure to your chest!
+            Click cancel to discard changes and return to method selection.</p>
+        </div>
+        <div class="pl-2 pr-2 border-right action-item" (click)="save()">
+          <span class="fa fa-save"></span>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+          <span class="fa fa-times"></span>
+        </div>
+      </div>
+    </div>
+    <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+      <div class="nav-item" (click)="setSmallScreenTab('form')"
+        [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+        <a class="nav-link">Assessment Savings opportunity</a>
+      </div>
+      <div class="nav-item" (click)="setSmallScreenTab('details')"
+        [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+        <a class="nav-link">Details</a>
+      </div>
+    </div>
+    <div class="panel-group">
+      <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
+        [ngClass]="{'small-screen-tab w-100': smallScreenTab === 'form'}">
+        <div class="d-block m-2">
+
+          <div class="col-12">
+            <div class="header">
+              <h3 class="ml-0">Integrate Data From Assessment</h3>
+            </div>
+            <div class="d-block">
+              <app-assessment-integration
+                [settings]="settings"
+                [existingIntegrationData]="assessmentOpportunity.existingIntegrationData"
+                (integratedAssessmentSelected)="setIntegratedAssessment($event)"></app-assessment-integration>              
+            </div>
+          </div>
+
+          <app-general-details-form class="w-100" [(opportunitySheet)]="assessmentOpportunity"
+            (emitChangeField)="changeField($event)"></app-general-details-form>
+
+          <div class="col-12">
+            <div class="header">
+              <h3 class="ml-0">Energy Use</h3>
+            </div>
+          </div>
+
+          <div class="d-block d-lg-flex col-12">
+            <div class="p-2 flex-grow-1">
+              <label class="group-label">Baseline</label>
+              <!-- todo inject assessment energy results here -->
+              <app-energy-use-form [(energyItems)]="assessmentOpportunity.baselineEnergyUseItems" [settings]="settings"
+                (emitSave)="saveBaseline($event)" (emitChangeField)="changeField($event)">
+              </app-energy-use-form>
+            </div>
+            <!-- Modifications Start -->
+            <div class="p-2 flex-grow-1">
+              <label class="group-label">Modification</label>
+              <app-energy-use-form *ngIf="assessmentOpportunity.modificationEnergyUseItems.length != 0"
+                [(energyItems)]="assessmentOpportunity.modificationEnergyUseItems" [settings]="settings"
+                (emitSave)="saveModification($event)" (emitChangeField)="changeField($event)">
+              </app-energy-use-form>
+              <div class="p-3 no-data" (click)="addModification()"
+                *ngIf="assessmentOpportunity.modificationEnergyUseItems.length == 0">
+                <h3>Once you've added your baseline energy use.
+                </h3>
+                <button type="button" class="btn btn-primary">Add Modified Condition</button>
+                <p>Data will be copied from your current baseline condition.</p>
+              </div>
+            </div>
+          </div>
+
+          <app-costs-form class="w-100" [(opportunityCost)]="assessmentOpportunity.opportunityCost"
+            (emitChangeField)="changeField($event)"></app-costs-form>
+
+        </div>
+      </div>
+      <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
+        [ngClass]="{'small-screen-tab w-100': smallScreenTab === 'details'}">
+        <div class="d-flex flex-wrap tabs primary sticky-top">
+          <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+            <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+              <div>Results</div>
+            </a>
+          </div>
+          <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+            <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+              <div>Help</div>
+            </a>
+          </div>
+        </div>
+        <div class="d-flex pl-2 pr-2">
+          <app-opportunity-sheet-help *ngIf="tabSelect == 'help'" [currentField]="currentField">
+          </app-opportunity-sheet-help>
+          <app-opportunity-sheet-results *ngIf="tabSelect == 'results'" class="w-100"
+            [opportunitySheetResults]="assessmentOpportunityResults" [opportunitySheet]="assessmentOpportunity">
+          </app-opportunity-sheet-results>
+        </div>
+      </div>
+    </div>
+  </div>

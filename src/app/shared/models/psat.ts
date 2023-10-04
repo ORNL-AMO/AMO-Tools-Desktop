@@ -109,6 +109,7 @@ export interface PsatCalcResults {
 export interface Modification {
   notes?: Notes;
   psat?: PSAT;
+  id: string,
   exploreOpportunities?: boolean;
   exploreOppsShowVfd?: SavingsOpportunity,
   exploreOppsShowMotorDrive?: SavingsOpportunity;

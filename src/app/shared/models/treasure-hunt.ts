@@ -18,11 +18,13 @@ import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savin
 import { ChillerPerformanceInput, CoolingTowerBasinInput, CoolingTowerData, CoolingTowerFanInput } from "./chillers";
 import { ChillerStagingInput } from "./chillers";
 import { WeatherBinsInput } from "../../calculator/utilities/weather-bins/weather-bins.service";
+import { ExistingIntegrationData } from "../assessment-integration/assessment-integration.service";
 
 export interface TreasureHunt {
     name: string,
     lightingReplacements?: Array<LightingReplacementTreasureHunt>;
     opportunitySheets?: Array<OpportunitySheet>;
+    assessmentOpportunities?: Array<AssessmentOpportunity>;
     replaceExistingMotors?: Array<ReplaceExistingMotorTreasureHunt>;
     motorDrives?: Array<MotorDriveInputsTreasureHunt>;
     naturalGasReductions?: Array<NaturalGasReductionTreasureHunt>;
@@ -82,7 +84,8 @@ export enum Treasure {
     chillerStaging = 'chiller-staging',
     chillerPerformance = 'chiller-performance',
     coolingTowerFan = 'cooling-tower-fan',
-    coolingTowerBasin = 'cooling-tower-basin'
+    coolingTowerBasin = 'cooling-tower-basin',
+    assessmentOpportunity ='assessment-opportunity'
 }
 
 export interface FilterOption {
@@ -167,15 +170,33 @@ export interface OpportunitySheet extends TreasureHuntOpportunity {
     date: Date,
     owner?: string,
     businessUnits?: string,
+    iconString?: string,
     opportunityCost: OpportunityCost,
     baselineEnergyUseItems?: Array<EnergyUseItem>,
     modificationEnergyUseItems?: Array<EnergyUseItem>,
     selected?: boolean
 }
 
+export interface AssessmentOpportunity extends TreasureHuntOpportunity {
+    name: string,
+    existingIntegrationData: ExistingIntegrationData,
+    equipment: string,
+    description: string,
+    originator?: string,
+    date: Date,
+    owner?: string,
+    iconString?: string,
+    businessUnits?: string,
+    opportunityCost: OpportunityCost,
+    baselineEnergyUseItems?: Array<EnergyUseItem>,
+    modificationEnergyUseItems?: Array<EnergyUseItem>,
+    selected?: boolean,
+}
+
 export interface EnergyUseItem {
     type: string, 
-    amount: number
+    amount: number,
+    integratedModificationId?: string
 }
 
 export interface OpportunityCost {
@@ -397,6 +418,32 @@ export interface OpportunitySheetResults {
     totalEnergySavings: number,
     totalCostSavings: number,
     totalImplementationCost: number
+}
+
+// todo 6453
+export interface AssessmentOpportunityResults {
+    electricityResults: AssessmentOpportunityResult,
+    gasResults: AssessmentOpportunityResult,
+    compressedAirResults: AssessmentOpportunityResult,
+    otherFuelResults: AssessmentOpportunityResult,
+    steamResults: AssessmentOpportunityResult,
+    waterResults: AssessmentOpportunityResult,
+    wasteWaterResults: AssessmentOpportunityResult,
+    totalEnergySavings: number,
+    totalCostSavings: number,
+    totalImplementationCost: number
+}
+
+// todo 6453
+export interface AssessmentOpportunityResult {
+    baselineEnergyUse: number,
+    baselineEnergyCost: number,
+    baselineItems: number,
+    modificationEnergyUse: number,
+    modificationEnergyCost: number,
+    modificationItems: number,
+    energySavings: number,
+    energyCostSavings: number,
 }
 
 export interface OpportunitySheetResult {

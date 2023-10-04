@@ -1,25 +1,26 @@
 import { Injectable } from '@angular/core';
-import { OpportunitySheet, OpportunitySheetResult, OpportunitySheetResults, EnergyUseItem, OpportunityCost, Treasure } from '../../../shared/models/treasure-hunt';
-import { Settings } from '../../../shared/models/settings';
-import * as _ from 'lodash';
+import { AssessmentOpportunity, AssessmentOpportunityResult, AssessmentOpportunityResults, EnergyUseItem, OpportunityCost, OpportunitySheetResults, Treasure, TreasureHunt } from '../../shared/models/treasure-hunt';
+import { Settings } from '../../shared/models/settings';
 
-@Injectable()
-export class OpportunitySheetService {
+@Injectable({
+  providedIn: 'root'
+})
+export class AssessmentOpportunityService {
 
   defaultSheetName: string = 'New Opportunity';
-  opportunitySheet: OpportunitySheet;
+  assessmentOpportunity: AssessmentOpportunity;
   constructor() { }
-
-  initOpportunitySheet(): OpportunitySheet {
+  
+  initAssessmentOpportunity(): AssessmentOpportunity {
     return {
       name: this.defaultSheetName,
-      equipment: '',
+      equipment: 'pump',
       description: '',
       originator: '',
       date: new Date(),
       owner: '',
       businessUnits: '',
-      iconString: "assets/images/calculator-icons/opportunity-sheet-icon.png",
+      iconString: 'assets/images/app-icon.png',
       opportunityCost: {
         engineeringServices: 0,
         material: 0,
@@ -33,38 +34,39 @@ export class OpportunitySheetService {
         amount: 0
       }],
       modificationEnergyUseItems: [],
-      opportunityType: Treasure.opportunitySheet
+      opportunityType: Treasure.assessmentOpportunity,
+      existingIntegrationData: undefined
     };
   }
 
-  getResults(opportunitySheet: OpportunitySheet, settings: Settings): OpportunitySheetResults {
+  getResults(opportunitySheet: AssessmentOpportunity, settings: Settings): OpportunitySheetResults {
     let baselineElectricityResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.electricityCost, 'Electricity');
     let modificationElectricityResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.electricityCost, 'Electricity');
-    let electricityResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineElectricityResult, modificationElectricityResult);
+    let electricityResults: AssessmentOpportunityResult = this.getAssessmentOpportunityResult(baselineElectricityResult, modificationElectricityResult);
 
     let baselineGasResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.fuelCost, 'Gas');
     let modificationGasResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.fuelCost, 'Gas');
-    let gasResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineGasResult, modificationGasResult);
+    let gasResults: AssessmentOpportunityResult = this.getAssessmentOpportunityResult(baselineGasResult, modificationGasResult);
 
     let baselineCompressedAirResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.compressedAirCost, 'Compressed Air');
     let modificationCompressedAirResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.compressedAirCost, 'Compressed Air');
-    let compressedAirResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineCompressedAirResult, modificationCompressedAirResult);
+    let compressedAirResults: AssessmentOpportunityResult = this.getAssessmentOpportunityResult(baselineCompressedAirResult, modificationCompressedAirResult);
 
     let baselineOtherFuelResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.otherFuelCost, 'Other Fuel');
     let modificationOtherFuelResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.otherFuelCost, 'Other Fuel');
-    let otherFuelResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineOtherFuelResult, modificationOtherFuelResult);
+    let otherFuelResults: AssessmentOpportunityResult = this.getAssessmentOpportunityResult(baselineOtherFuelResult, modificationOtherFuelResult);
 
     let baselineSteamResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.steamCost, 'Steam');
     let modificationSteamResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.steamCost, 'Steam');
-    let steamResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineSteamResult, modificationSteamResult);
+    let steamResults: AssessmentOpportunityResult = this.getAssessmentOpportunityResult(baselineSteamResult, modificationSteamResult);
 
     let baselineWaterResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.waterCost, 'Water');
     let modificationWaterResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.waterCost, 'Water');
-    let waterResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineWaterResult, modificationWaterResult);
+    let waterResults: AssessmentOpportunityResult = this.getAssessmentOpportunityResult(baselineWaterResult, modificationWaterResult);
 
     let baselineWasterWaterResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.waterWasteCost, 'WWT');
     let modificationWasteWaterResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.waterWasteCost, 'WWT');
-    let wasteWaterResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineWasterWaterResult, modificationWasteWaterResult);
+    let wasteWaterResults: AssessmentOpportunityResult = this.getAssessmentOpportunityResult(baselineWasterWaterResult, modificationWasteWaterResult);
 
     let totalCostSavings: number = electricityResults.energyCostSavings + gasResults.energyCostSavings + compressedAirResults.energyCostSavings + otherFuelResults.energyCostSavings + steamResults.energyCostSavings + waterResults.energyCostSavings + wasteWaterResults.energyCostSavings;
     let totalImplementationCost: number = this.getOppSheetImplementationCost(opportunitySheet.opportunityCost);
@@ -99,7 +101,7 @@ export class OpportunitySheetService {
     }
   }
 
-  getOpportunitySheetResult(baseline: { energyUse: number, energyCost: number, numItems: number }, modification: { energyUse: number, energyCost: number, numItems: number }): OpportunitySheetResult {
+  getAssessmentOpportunityResult(baseline: { energyUse: number, energyCost: number, numItems: number }, modification: { energyUse: number, energyCost: number, numItems: number }): AssessmentOpportunityResult {
     return {
       baselineEnergyUse: baseline.energyUse,
       baselineEnergyCost: baseline.energyCost,
@@ -126,5 +128,18 @@ export class OpportunitySheetService {
       }
     }
     return implementationCost;
+  }
+
+  saveTreasureHuntOpportunity(assessmentOpportunity: AssessmentOpportunity, treasureHunt: TreasureHunt): TreasureHunt {
+    if (!treasureHunt.assessmentOpportunities) {
+      treasureHunt.assessmentOpportunities = new Array();
+    }
+    treasureHunt.assessmentOpportunities.push(assessmentOpportunity);
+    return treasureHunt;
+  }
+ 
+  deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
+    treasureHunt.assessmentOpportunities.splice(index, 1);
+    return treasureHunt;
   }
 }

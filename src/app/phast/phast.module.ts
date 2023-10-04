@@ -42,6 +42,7 @@ import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { SigFigsPipe } from '../shared/shared-pipes/sig-figs.pipe';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
     PhastValidService,
     PhastResultsService,
     ConvertPhastService,
-    PhastCompareService
+    PhastCompareService,
+    SigFigsPipe
   ]
 })
 

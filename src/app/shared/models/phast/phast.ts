@@ -13,7 +13,7 @@ import { AuxiliaryPowerLoss } from './losses/auxiliaryPowerLoss';
 import { EnergyInputEAF } from './losses/energyInputEAF';
 import { ExhaustGasEAF } from './losses/exhaustGasEAF';
 import { AuxEquipment } from './auxEquipment';
-import { MeteredEnergy } from './meteredEnergy';
+import { MeteredEnergy, MeteredEnergyResults } from './meteredEnergy';
 import { DesignedEnergy } from './designedEnergy';
 import { EnergyInputExhaustGasLoss } from './losses/energyInputExhaustGasLosses';
 import { OperatingHours, OperatingCosts } from '../operations';
@@ -67,6 +67,7 @@ export interface Losses {
 
 export interface Modification {
   phast?: PHAST;
+  id: string,
   notes?: Notes;
   exploreOpportunities?: boolean;
   exploreOppsShowFlueGas?: SavingsOpportunity;
@@ -140,6 +141,16 @@ export interface PhastResults {
   availableHeatPercent: number;
   electricalHeatDelivered?: number;
   co2EmissionsOutput?: PhastCo2EmissionsOutput
+}
+
+export interface EnergyUseReportData {
+  fuelName: string,
+  fuelEnergyUsed: number,
+  fuelHeatingValue: number,
+  energyPerMassUnit: string,
+  electricEnergyUsed?: number,
+  baseEnergyUnit: string,
+  steamEnergyUsed: number
 }
 
 export interface EAFResults {

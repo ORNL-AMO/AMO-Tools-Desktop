@@ -429,6 +429,7 @@ export class PsatComponent implements OnInit {
       psat: {
         name: modName,
       },
+      id: this.helperFunctionService.getNewIdString(),
       notes: {
         fieldDataNotes: '',
         motorNotes: '',
