@@ -120,7 +120,7 @@
     "@types/node": "^14.18.12",
     "angular-plotly.js": "^5.2.1",
     "axios": "^1.4.0",
-    "electron": "20.3.12",
+    "electron": "22.3.25",
     "electron-builder": "^24.6.3",
     "electron-download-tf": "^4.3.4",
     "electron-packager": "^17.1.1",
