@@ -74,9 +74,9 @@ export class TreasureHuntPptPropertiesService {
             firstSliceAng: 0,
             showTitle: false,
             legendFontSize: 14,
-            legendFontFace: 'Arial',
+            legendFontFace: 'Arial (Body)',
             titleFontSize: 18,
-            titleFontFace: 'Arial',
+            titleFontFace: 'Arial (Body)',
         };
         return doughnutChartOptions;
     }
@@ -134,7 +134,7 @@ export class TreasureHuntPptPropertiesService {
 
     getOppSlideProperties(): pptxgen.TextPropsOptions {
         let textProps: pptxgen.TextPropsOptions = {
-            x: 0,
+            x: 0.32,
             y: 1.2,
             w: 8,
             h: 4,

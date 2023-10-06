@@ -45,6 +45,55 @@ export class TreasureHuntPptService {
     slide1.addText(pptTitle, { x: 0.3, y: 2.1, w: 5.73, h: 1.21, align: 'center', bold: true, color: '1D428A', fontSize: 26, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
     slide1.addText(date, { x: 0.3, y: 4.19, w: 4.34, h: 0.74, align: 'left', color: '8B93B1', fontSize: 20, fontFace: 'Arial (Body)', valign: 'top', isTextBox: true, autoFit: true });
 
+    let thBackground = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    thBackground.addText('Energy Treasure Hunt Background', slideTitleProperties);
+    thBackground.addText(
+      "An Energy Treasure Hunt is a 2 - 3 day event focusing on day-to-day operational energy efficiency improvements\nProcess involves observing the facility during idle/partially idle times (frequently a Sunday) to identify energy waste\n{COMPANY/FACILITY} awarded treasure hunt through a competitive process",
+      { x: 0.67, y: 1.4, w: 12, h: 2.8, margin: .25, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
+    );
+    thBackground.addText(
+      "Operational Efficiency Improvements",
+      { x: 7.27, y: 3.89, w: 5.72, h: 0.47, margin: .25, align: 'left', color: '000000', fontSize: 22, fontFace: 'Arial (Body)', valign: 'top' }
+    );
+    thBackground.addText(
+      "Turn off equipment when not in use\nChanging set points\nAutomating shutdowns\nReducing load on the equipment\nRecover wasted energy",
+      { x: 7.27, y: 4.35, w: 5.72, h: 2.76, margin: .25, align: 'left', color: '000000', fontSize: 22, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
+    );
+    thBackground.addImage({ data: betterPlantsPPTimg.energyTHFocusChart, x: 1.8, y: 3.8, w: 4.8, h: 3 });
+    thBackground.addText(
+      "Areas of Energy Efficiency Improvement",
+      { x: 4.5, y: 6.3, w: 1.9, h: 0.5, margin: .25, align: 'left', color: '000000', fontSize: 10, fontFace: 'Arial (Body)', valign: 'top' }
+    );
+
+    let thConcept = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    thConcept.addText('Energy Treasure Hunt Concept', slideTitleProperties);
+    thConcept.addText(
+      "Cross-functional teams engage employees and outside personnel to brainstorm ways to reduce energy use throughout the plant\nFinding low cost/no cost actions to reduce energy consumption\nLearning a repeatable process to continuously improve and reduce energy consumption\nParticipants learn skills to quantify opportunities using standard methodologies, tools, and calculations",
+      { x: 0.67, y: 1.4, w: 12, h: 3.7, margin: .25, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
+    );
+    thConcept.addText(
+      "Employees implement the Treasure Hunt process!",
+      { x: 2.54, y: 5.34, w: 8.25, h: 0.6, margin: .25, align: 'left', color: '#2F5597', fontSize: 24, fontFace: 'Arial (Body)', valign: 'top' }
+    );
+
+    let previousResults = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    previousResults.addText('Previous DOE Energy Treasure Hunt Results', slideTitleProperties);
+    previousResults.addImage({ data: betterPlantsPPTimg.previousTHChart, x: 1.22, y: 1.57, w: 10.9, h: 5.08 });
+
+    let thOverview = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    thOverview.addText('{FACILITY NAME} Treasure Hunt Overview', slideTitleProperties);
+    thOverview.addText(
+      "{TREASURE HUNT DATES}\nLocation: {FACILITY LOCATION}\nAfter kickoff, safety briefing,  and tool training, we will employ the treasure hunt process\nConclude with report out to plant management",
+      { x: 0.3, y: 1.4, w: 5.9, h: 2.14, margin: .25, align: 'left', color: '000000', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
+    );
+    thOverview.addImage({ data: betterPlantsPPTimg.thOverviewFlowChart, x: 1.69, y: 3.96, w: 2.97, h: 2.63 });
+    thOverview.addText('Placeholder for agenda day 1', { x: 6.3, y: 1.3, w: 6.9, h: 1.5, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 10, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+    thOverview.addText('Placeholder for agenda day 2', { x: 6.3, y: 2.85, w: 6.9, h: 2, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 10, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+    thOverview.addText('Placeholder for agenda day 3', { x: 6.3, y: 4.9, w: 6.9, h: 1.9, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 10, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+
+    let facilitySlide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    facilitySlide.addText('{Facility Name} Hunt Overview', slideTitleProperties);
+    facilitySlide.addText('Placeholder for group picture', { x: 2.17, y: 1.34, w: 9, h: 6, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 18, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
 
     let slide2 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide2.addText('Cost Summary', slideTitleProperties);
@@ -53,8 +102,8 @@ export class TreasureHuntPptService {
     doughnutChartOptions = this.treasureHuntPptPropertiesService.getDoughnutChartProperties();
     slide2.addChart("doughnut", costSavingsData, doughnutChartOptions);
     let totalCurrentCost: string = this.treasureHuntPptTableService.roundValToCurrency(treasureHuntResults.totalBaselineCost);
-    slide2.addText("Total Current Cost", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
-    slide2.addText(`${totalCurrentCost}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    slide2.addText("Total Current Cost", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+    slide2.addText(`${totalCurrentCost}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
 
 
     let slide3 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
@@ -73,8 +122,8 @@ export class TreasureHuntPptService {
       let electricitySavingsData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getElectricitySavingsData(treasureHuntResults);
       slide5.addChart("doughnut", electricitySavingsData, doughnutChartOptions);
       let totalElectricity: string = this.treasureHuntPptTableService.returnValAsString(treasureHuntResults.electricity.baselineEnergyUsage);
-      slide5.addText("Total Current Electricity Usage (kWh)", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
-      slide5.addText(`${totalElectricity}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+      slide5.addText("Total Current Electricity Usage (kWh)", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+      slide5.addText(`${totalElectricity}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
     }
     if (treasureHuntResults.naturalGas.energySavings) {
       let naturalGasSavingsData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getNaturalGasSavingsData(treasureHuntResults);
@@ -83,8 +132,8 @@ export class TreasureHuntPptService {
       slide5.addChart("doughnut", naturalGasSavingsData, doughnutChartOptions);
       let totalNaturalGas: string = this.treasureHuntPptTableService.returnValAsString(treasureHuntResults.naturalGas.baselineEnergyUsage);
       let unit: string = this.treasureHuntPptTableService.getUtilityUnit('Natural Gas', settings);
-      slide5.addText("Total Current Natural Gas Usage (" + `${unit}` + ")", { w: 2.27, h: 0.57, x: 8.81, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
-      slide5.addText(`${totalNaturalGas}`, { w: 2, h: 0.34, x: 8.95, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+      slide5.addText("Total Current Natural Gas Usage (" + `${unit}` + ")", { w: 2.27, h: 0.57, x: 8.81, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+      slide5.addText(`${totalNaturalGas}`, { w: 2, h: 0.34, x: 8.95, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
     }
 
     let slide6 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
@@ -103,8 +152,8 @@ export class TreasureHuntPptService {
       slide6.addChart("doughnut", waterSavingsData, doughnutChartOptions);
       let totalWater: string = this.treasureHuntPptTableService.returnValAsString(treasureHuntResults.water.baselineEnergyUsage);
       let unit: string = this.treasureHuntPptTableService.getUtilityUnit('Water', settings);
-      slide6.addText("Total Current Water Usage (" + `${unit}` + ")", { w: 2.27, h: 0.57, x: 4.39, y: 1.3, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
-      slide6.addText(`${totalWater}`, { w: 2, h: 0.34, x: 4.53, y: 1.98, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+      slide6.addText("Total Current Water Usage (" + `${unit}` + ")", { w: 2.27, h: 0.57, x: 4.39, y: 1.3, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+      slide6.addText(`${totalWater}`, { w: 2, h: 0.34, x: 4.53, y: 1.98, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
     }
     if (treasureHuntResults.wasteWater.energySavings) {
       let wastewaterSavingsData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getWastewaterSavingsData(treasureHuntResults);
@@ -120,8 +169,8 @@ export class TreasureHuntPptService {
       slide6.addChart("doughnut", wastewaterSavingsData, doughnutChartOptions);
       let totalWastewater: string = this.treasureHuntPptTableService.returnValAsString(treasureHuntResults.wasteWater.baselineEnergyUsage);
       let unit: string = this.treasureHuntPptTableService.getUtilityUnit('Waste Water', settings);
-      slide6.addText("Total Current Wastewater Usage (" + `${unit}` + ")", { w: 2.27, h: 0.57, x: 11.06, y: 1.3, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
-      slide6.addText(`${totalWastewater}`, { w: 2, h: 0.34, x: 11.19, y: 1.98, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+      slide6.addText("Total Current Wastewater Usage (" + `${unit}` + ")", { w: 2.27, h: 0.57, x: 11.06, y: 1.3, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+      slide6.addText(`${totalWastewater}`, { w: 2, h: 0.34, x: 11.19, y: 1.98, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
     }
     if (treasureHuntResults.compressedAir.energySavings) {
       let compressedAirSavingsData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getCompAirSavingsData(treasureHuntResults);
@@ -137,8 +186,8 @@ export class TreasureHuntPptService {
       slide6.addChart("doughnut", compressedAirSavingsData, doughnutChartOptions);
       let totalCompressedAir: string = this.treasureHuntPptTableService.returnValAsString(treasureHuntResults.compressedAir.baselineEnergyUsage);
       let unit: string = this.treasureHuntPptTableService.getUtilityUnit('Compressed Air', settings);
-      slide6.addText("Total Current Compressed Air Usage (" + `${unit}` + ")", { w: 2.27, h: 0.57, x: 4.39, y: 4.2, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
-      slide6.addText(`${totalCompressedAir}`, { w: 2, h: 0.34, x: 4.53, y: 4.88, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+      slide6.addText("Total Current Compressed Air Usage (" + `${unit}` + ")", { w: 2.27, h: 0.57, x: 4.39, y: 4.2, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+      slide6.addText(`${totalCompressedAir}`, { w: 2, h: 0.34, x: 4.53, y: 4.88, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
     }
     if (treasureHuntResults.steam.energySavings) {
       let steamSavingsData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getSteamSavingsData(treasureHuntResults);
@@ -154,8 +203,8 @@ export class TreasureHuntPptService {
       slide6.addChart("doughnut", steamSavingsData, doughnutChartOptions);
       let totalSteam: string = this.treasureHuntPptTableService.returnValAsString(treasureHuntResults.steam.baselineEnergyUsage);
       let unit: string = this.treasureHuntPptTableService.getUtilityUnit('Steam', settings);
-      slide6.addText("Total Current Steam Usage (" + `${unit}` + ")", { w: 2.27, h: 0.57, x: 11.06, y: 4.2, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
-      slide6.addText(`${totalSteam}`, { w: 2, h: 0.34, x: 11.19, y: 4.88, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+      slide6.addText("Total Current Steam Usage (" + `${unit}` + ")", { w: 2.27, h: 0.57, x: 11.06, y: 4.2, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+      slide6.addText(`${totalSteam}`, { w: 2, h: 0.34, x: 11.19, y: 4.88, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
     }
 
 
@@ -168,8 +217,8 @@ export class TreasureHuntPptService {
     let carbonSavingsData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getCarbonSavingsData(treasureHuntResults.co2EmissionsResults);
     slide7.addChart("doughnut", carbonSavingsData, doughnutChartOptions);
     let totalEmissions: string = this.treasureHuntPptTableService.roundValToFormatString(treasureHuntResults.co2EmissionsResults.totalCO2CurrentUse);
-    slide7.addText("Total Current CO2 Emissions", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
-    slide7.addText(`${totalEmissions}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial', valign: 'middle', isTextBox: true, autoFit: true });
+    slide7.addText("Total Current CO2 Emissions", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+    slide7.addText(`${totalEmissions}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
 
 
     if (this.treasureHuntReportService.getTeamData(opportunityCardsData).length > 0) {
@@ -182,16 +231,15 @@ export class TreasureHuntPptService {
       let slideTextProps = this.treasureHuntPptPropertiesService.getOppSlideProperties();
       teamData = _.orderBy(teamData, 'team', 'asc');
       teamData.forEach(team => {
-        let slideTeamSummary = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-        slideTeamSummary.addText('Team ' + team.team, slideTitleProperties);
-        slideTeamSummary.addText('Placeholder for picture', { x: 8.45, y: 1.2, w: 4.43, h: 2.81, align: 'center', fill: { color: '4d94ff' }, color: 'BFBFBF', fontSize: 18, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
-        slideTeamSummary.addText('Team Members:', slideTextProps);
+        let teamTitle = pptx.addSlide();
+        teamTitle.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
+        teamTitle.addText('Team ' + team.team, { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
 
         let slideTeamTopOpps = pptx.addSlide({ masterName: "MASTER_SLIDE" });
         slideTeamTopOpps.addText('Team ' + team.team + ' - Top Opportunities', slideTitleProperties);
         slideTeamTopOpps.addText(
           "additional notes here",
-          { x: 2.17, y: 6, w: 9, h: 1, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial', valign: 'top', bullet: true }
+          { x: 2.17, y: 6, w: 9, h: 1, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
         );
         let teamOpportunities: OpportunitySummary[] = [];
         treasureHuntResults.opportunitySummaries.forEach(teamOpp => {
@@ -221,6 +269,48 @@ export class TreasureHuntPptService {
         }
         slideTeamTopOpps.addTable(rows, { x: 0.14, y: 2.5, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
 
+        let slideTeamSummary = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+        slideTeamSummary.addText('Team ' + team.team, slideTitleProperties);
+        slideTeamSummary.addText('Placeholder for picture', { x: 8.32, y: 1.8, w: 4.43, h: 2.81, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 18, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+        slideTeamSummary.addText('Team Members:', slideTextProps);
+
+        let counter: number = 0;
+        opportunityCardsData.forEach(opp => {
+          if (opp.opportunitySheet.owner == team.team) {
+            let newSlide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+            newSlide.addText('Opportunity: ' + opp.name, slideTitleProperties);
+            let slideText: { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } = this.getOpportunitySlideText(opp.opportunitySheet);
+            newSlide.addText(slideText.text, slideText.options);
+            newSlide.addText('Placeholder for picture', { x: 8.32, y: 1.8, w: 4.43, h: 2.81, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 18, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+            let rows = [];
+            rows.push([
+              { text: "Utility", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Energy Savings", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Unit", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Cost Saving", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Material Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Labor Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Other Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Total Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
+            ]);
+            let x: OpportunitySummary = treasureHuntResults.opportunitySummaries[counter];
+            let utilityUnit: string;
+            if (x.mixedIndividualResults) {
+              x.mixedIndividualResults.forEach(x => {
+                utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(x.utilityType, settings);
+                rows.push([x.utilityType, this.treasureHuntPptTableService.roundValToFormatString(x.totalEnergySavings), utilityUnit, this.treasureHuntPptTableService.roundValToCurrency(x.costSavings), this.treasureHuntPptTableService.roundValToCurrency(x.opportunityCost.material), this.treasureHuntPptTableService.roundValToCurrency(x.opportunityCost.labor), this.treasureHuntPptTableService.getOtherCost(x.opportunityCost), this.treasureHuntPptTableService.roundValToCurrency(x.totalCost), this.treasureHuntPptTableService.roundValToFormatString(x.payback)]);
+              });
+            } else {
+              utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(x.utilityType, settings);
+              rows.push([x.utilityType, this.treasureHuntPptTableService.roundValToFormatString(x.totalEnergySavings), utilityUnit, this.treasureHuntPptTableService.roundValToCurrency(x.costSavings), this.treasureHuntPptTableService.roundValToCurrency(x.opportunityCost.material), this.treasureHuntPptTableService.roundValToCurrency(x.opportunityCost.labor), this.treasureHuntPptTableService.getOtherCost(x.opportunityCost), this.treasureHuntPptTableService.roundValToCurrency(x.totalCost), this.treasureHuntPptTableService.roundValToFormatString(x.payback)]);
+            }
+
+            newSlide.addTable(rows, { x: 1.14, y: 5.2, w: 11.05, colW: [1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
+          }
+          counter++;
+        });
+
         let slideTeamAllOpps = pptx.addSlide({ masterName: "MASTER_SLIDE" });
         slideTeamAllOpps.addText('Team ' + team.team + ' - All Opportunities', slideTitleProperties);
         for (let i = 3; i < teamOpportunities.length; i++) {
@@ -229,19 +319,22 @@ export class TreasureHuntPptService {
             rows = this.treasureHuntPptTableService.getOpportunityTableRows(rows, x, settings);
           }
         }
-        slideTeamAllOpps.addTable(rows, { x: 0.14, y: 1.2, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
+        slideTeamAllOpps.addTable(rows, { x: 0.14, y: 1.5, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
 
         let slideTeamBestPractices = pptx.addSlide({ masterName: "MASTER_SLIDE" });
         slideTeamBestPractices.addText('Team ' + team.team + ' - Best Practices', slideTitleProperties);
         slideTeamBestPractices.addText(
           "Outline key best practices identified in Treasure Hunt here\ntype here\ntype here",
-          { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial', valign: 'top', bullet: true }
+          { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
         );
 
       });
 
     }
 
+    let summaryTransition = pptx.addSlide();
+    summaryTransition.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
+    summaryTransition.addText('Summary', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
 
 
     let slide9 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
@@ -253,58 +346,32 @@ export class TreasureHuntPptService {
     slide10.addText('Best Practices', slideTitleProperties);
     slide10.addText(
       "Outline key best practices identified in Treasure Hunt here\ntype here\ntype here",
-      { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial', valign: 'top', bullet: true }
+      { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
     );
 
     let slide11 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
     slide11.addText('Other Opportunities Not Evaluated', slideTitleProperties);
     slide11.addText(
       "Outline any major opportunities identified, but not evaluated here\ntype here\ntype here",
-      { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial', valign: 'top', bullet: true }
+      { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
     );
 
-    let slide12 = pptx.addSlide();
-    slide12.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
-    slide12.addText('Opportunity Summaries', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
+    let slide12 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide12.addText('{FACILITY NAME} Next Actions', slideTitleProperties);
+    slide12.addText(
+      "Outline the next stpes for the facility here\ntype here\ntype here",
+      { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
+    );
 
-    let counter: number = 0;
-    opportunityCardsData.forEach(opp => {
-      let newSlide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-      newSlide.addText('Opportunity: ' + opp.name, slideTitleProperties);
-      let slideText: { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } = this.getOpportunitySlideText(opp.opportunitySheet);
-      newSlide.addText(slideText.text, slideText.options);
-      newSlide.addText('Placeholder for picture', { x: 8.45, y: 1.2, w: 4.43, h: 2.81, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 18, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
-      let rows = [];
-      rows.push([
-        { text: "Utility", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-        { text: "Energy Savings", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-        { text: "Unit", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-        { text: "Cost Saving", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-        { text: "Material Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-        { text: "Labor Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-        { text: "Other Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-        { text: "Total Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-        { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
-      ]);
-      let x: OpportunitySummary = treasureHuntResults.opportunitySummaries[counter];
-      let utilityUnit: string;
-      if (x.mixedIndividualResults) {
-        x.mixedIndividualResults.forEach(x => {
-          utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(x.utilityType, settings);
-          rows.push([x.utilityType, this.treasureHuntPptTableService.roundValToFormatString(x.totalEnergySavings), utilityUnit, this.treasureHuntPptTableService.roundValToCurrency(x.costSavings), this.treasureHuntPptTableService.roundValToCurrency(x.opportunityCost.material), this.treasureHuntPptTableService.roundValToCurrency(x.opportunityCost.labor), this.treasureHuntPptTableService.getOtherCost(x.opportunityCost), this.treasureHuntPptTableService.roundValToCurrency(x.totalCost), this.treasureHuntPptTableService.roundValToFormatString(x.payback)]);
-        });
-      } else {
-        utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(x.utilityType, settings);
-        rows.push([x.utilityType, this.treasureHuntPptTableService.roundValToFormatString(x.totalEnergySavings), utilityUnit, this.treasureHuntPptTableService.roundValToCurrency(x.costSavings), this.treasureHuntPptTableService.roundValToCurrency(x.opportunityCost.material), this.treasureHuntPptTableService.roundValToCurrency(x.opportunityCost.labor), this.treasureHuntPptTableService.getOtherCost(x.opportunityCost), this.treasureHuntPptTableService.roundValToCurrency(x.totalCost), this.treasureHuntPptTableService.roundValToFormatString(x.payback)]);
-      }
-
-      newSlide.addTable(rows, { x: 1.14, y: 5.2, w: 11.05, colW: [1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
-      counter++;
-    });
+    let slide13 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    slide13.addText('{COMPANY NAME}/DOE Partnership Future Actions', slideTitleProperties);
+    slide13.addText(
+      "Outline the next steps for the company and DOE/Better Plants here\ntype here\ntype here",
+      { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
+    );
 
     return pptx;
   }
-
 
 
   getOpportunitySlideText(opportunityData: OpportunitySheet): { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } {
@@ -318,10 +385,10 @@ export class TreasureHuntPptService {
       owner = opportunityData.businessUnits;
     }
     let slideText: pptxgen.TextProps[] = [
-      { text: "Process / Equipment: " + equipmentName, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
-      { text: "Team: " + team, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
-      { text: "Owner/Lead: " + owner, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
-      { text: "Description: " + opportunityData.description, options: { bullet: { code: '25A0' }, color: "1D428A", breakLine: true, autoFit: true } },
+      { text: "Process / Equipment: " + equipmentName, options: { bullet: true, color: "1D428A", breakLine: true, autoFit: true } },
+      { text: "Team: " + team, options: { bullet: true, color: "1D428A", breakLine: true, autoFit: true } },
+      { text: "Owner/Lead: " + owner, options: { bullet: true, color: "1D428A", breakLine: true, autoFit: true } },
+      { text: "Description: " + opportunityData.description, options: { bullet: true, color: "1D428A", breakLine: true, autoFit: true } },
     ];
     let slideTextProps = this.treasureHuntPptPropertiesService.getOppSlideProperties();
     return { text: slideText, options: slideTextProps };
