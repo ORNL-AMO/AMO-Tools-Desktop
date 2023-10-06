@@ -211,6 +211,7 @@ export interface GraphInteractivity {
 
 export interface AxisObj {
     autorange: boolean,
+    rangeslider?: any,
     type: string,
     spikemode?: string,
     title: {
