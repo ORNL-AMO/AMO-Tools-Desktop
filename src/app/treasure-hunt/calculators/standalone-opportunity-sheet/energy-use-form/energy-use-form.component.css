@@ -1,4 +1,13 @@
+.units.remove-item {
+    margin-left: .5rem;
+    border-left: 1px solid #9c9c9c;
+}
+
 .units.remove-item:hover{
     cursor: pointer;
     background-color: #efefef;
+}
+
+.fa.fa-times {
+    font-size: 16px;
 }
