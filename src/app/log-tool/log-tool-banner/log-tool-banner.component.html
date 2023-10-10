@@ -1,5 +1,5 @@
 <nav class="log-tool navbar banner d-flex mr-auto pt-2 pb-2 pl-0 pr-0 flex-nowrap">
-    <div class="d-flex align-items-center p-1">
+    <div class="d-none d-lg-flex align-items-center p-1">
         <div class="img-col col-sm-auto col-md-auto col-lg-auto">
             <img class="img-icon" src="assets/images/data-explorer-icon.png">
         </div>
@@ -9,7 +9,35 @@
             </div>
         </div>
     </div>
-    <div class="d-flex nav-pills nav-fill flex-wrap mx-auto">
+    <div class="d-block d-lg-none align-items-center p-1">
+        <div class="img-col col-sm-auto col-md-auto col-lg-auto" [ngClass]="{'collapse': bannerCollapsed}">
+            <img class="img-icon" src="assets/images/data-explorer-icon.png">
+        </div>
+        <div class="d-flex flex-column pl-2">
+            <div class="h2-name">
+                Data Exploration
+            </div>
+        </div>
+    </div>
+    <div class="d-flex nav-pills nav-fill flex-wrap mx-auto d-none d-lg-inline-block">
+        <div class="nav-item d-none d-lg-inline-block">
+            <a class="nav-link" [routerLink]="['/log-tool/data-setup']" routerLinkActive="active">Setup</a>
+        </div>
+        <div class="nav-item d-none d-lg-inline-block">
+            <a class="nav-link" [routerLink]="['/log-tool/day-type-analysis']" 
+                [ngClass]="{'disabled': !explorerData.isSetupDone || !explorerData.canRunDayTypeAnalysis}"
+                routerLinkActive="active">Day Type Analysis</a>
+        </div>
+        <div class="nav-item d-none d-lg-inline-block">
+            <a class="nav-link" 
+            [routerLink]="['/log-tool/visualize']"
+            [ngClass]="{'disabled': !explorerData.isSetupDone}"
+                routerLinkActive="active">Visualization</a>
+        </div>
+        
+    </div>
+
+    <div *ngIf="!bannerCollapsed" class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">
         <div class="nav-item">
             <a class="nav-link" [routerLink]="['/log-tool/data-setup']" routerLinkActive="active">Setup</a>
         </div>
@@ -26,7 +54,35 @@
         </div>
         
     </div>
-    <div class="d-flex ml-auto pr-2 h-100">
+
+    <div class="d-flex ml-auto pr-2 h-100 d-none d-lg-inline-block">
+        <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" (click)="showSecurityAndPrivacyModal()">
+            <span class="fa fa-lock"></span>
+        </div>
+        <div [ngClass]="{'disabled': !explorerData.isSetupDone}" class="pl-2 pr-2 download-nav-item home-nav-item d-none d-lg-inline-block"
+            (click)="openExportData()">
+            <span class="fa fa-download"></span>
+        </div>
+		<div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block">
+			<a class="user-manual" href="assets/user-manuals/Data-Explorer-User-Manual.pdf" target="_blank">
+				<span class="fa fa-book"></span>
+			</a>
+		</div>
+        <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" [routerLink]="['/landing-screen']">
+            <span class="fa fa-home"></span>
+        </div>
+    </div>
+
+    <div *ngIf="bannerCollapsed" class="d-block d-lg-none ml-2 pr-2 h-100 flex-wrap">
+		<div class="pl-2 border-left home-nav-item d-block" (click)="collapseBanner()">
+			<span class="fa fa-bars"></span>
+		</div>
+	</div>
+
+    <div *ngIf="!bannerCollapsed" class="d-block d-lg-none ml-auto pr-2 h-100 flex-wrap">
+        <div class="pl-2 pr-2 home-nav-item d-block" (click)="collapseBanner()">
+			<span class="fa fa-bars"></span>
+		</div>
         <div class="pl-2 pr-2 home-nav-item" (click)="showSecurityAndPrivacyModal()">
             <span class="fa fa-lock"></span>
         </div>
