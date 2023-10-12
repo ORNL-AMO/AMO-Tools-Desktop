@@ -46,3 +46,15 @@
     opacity: .6;
     cursor: inherit;
 }
+
+span.fa.fa-download{
+    padding: 0px !important;
+}
+
+.btn.chevron-btn{
+    border: none !important;
+    width: 20px;
+    height: 28px;
+    color: white;
+    box-shadow: none !important;
+}
