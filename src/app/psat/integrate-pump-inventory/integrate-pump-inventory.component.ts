@@ -36,9 +36,11 @@ export class IntegratePumpInventoryComponent {
     private integrationStateService: IntegrationStateService) { }
 
   ngOnInit() {
-    this.psatIntegrationService.setPSATConnectedInventoryData(this.assessment, this.settings);
-    this.savePsat.emit(this.assessment.psat);
-    this.saved.emit(true);
+    if (this.assessment.psat.connectedItem) {
+      this.psatIntegrationService.setPSATConnectedInventoryData(this.assessment, this.settings);
+      this.savePsat.emit(this.assessment.psat);
+      this.saved.emit(true);
+    }
     this.setInventorySelectOptions();
     this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
         this.handleConnectedInventoryEvents(connectedInventoryData);
