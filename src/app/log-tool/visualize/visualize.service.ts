@@ -131,11 +131,16 @@ export class VisualizeService {
 
   // Need to filter by unique identifiers for data fields here
   getTimeSeriesData(field: LogToolField): Array<number | string> {
-    let data: Array<number | string> = _.find(this.allDataByAxisField, (dataItem) => { 
+    let timeSeriesData: Array<number | string> = [];
+    let xOption: XAxisDataOption = _.find(this.allDataByAxisField, (dataItem) => { 
       let fieldData = dataItem.dataField.csvId == field.csvId && dataItem.dataField.isDateField
       return fieldData;
-    }).data;
-    return data;
+    });
+
+    if (xOption && xOption.data) {
+      timeSeriesData = xOption.data;
+    }
+    return timeSeriesData;
   }
 
   setDefaultGraphInteractivity(graphObj: GraphObj, dataPoints: number) {
@@ -166,6 +171,7 @@ export class VisualizeService {
       shouldRenderNewPlot: true,
       hasChanges: false,
       isTimeSeries: true,
+      invalidState: undefined,
       hasSecondYAxis: false,
       numberOfBins: undefined,
       bins: undefined,

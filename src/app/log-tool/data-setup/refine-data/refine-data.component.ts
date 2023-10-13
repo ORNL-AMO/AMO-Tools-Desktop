@@ -34,7 +34,6 @@ export class RefineDataComponent implements OnInit {
       await this.createDataSetsFromFileData();
     }
     this.setSelectedDataSet(0);
-    this.applySelectionsToAll(this.selectedDataSet);
     this.changeStepSub = this.logToolDataService.changeStep.subscribe(changeStep => {
       if (changeStep) {
         let changeStepIndex: number = this.logToolDataService.getNewStepIndex(changeStep, this.selectedDataSetIndex, this.explorerData.datasets.length - 1);
@@ -126,7 +125,6 @@ export class RefineDataComponent implements OnInit {
       field.useField = this.selectedDataSet.fields[i].useField;
       field.unit = this.selectedDataSet.fields[i].unit;
     })
-    return dataSet;
   }
 
   setSelectedDataSet(index: number) {

@@ -139,14 +139,14 @@ export interface VisualizerGraphData {
 export interface GraphObj {
     name: string,
     data: VisualizerGraphData[],
-    layout: GraphLayout
+    layout: GraphLayout,
     mode: {
         modeBarButtonsToRemove?: string[],
         plotGlPixelRatio?: number,
         responsive?: boolean,
         displaylogo?: boolean,
         displayModeBar?: boolean
-      },
+    },
     selectedXAxisDataOption: XAxisDataOption,
     selectedYAxisDataOptions: Array<YAxisDataOption>,
     hasSecondYAxis: boolean,
@@ -161,6 +161,7 @@ export interface GraphObj {
     isTimeSeries?: boolean,
     shouldRenderNewPlot?: boolean,
     isGraphInitialized?: boolean,
+    invalidState: string,
     hasChanges?: boolean,
     showDefaultPerformanceWarning?: boolean,
     binSize: number,

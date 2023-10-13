@@ -6,6 +6,8 @@ import { PlotlyService } from 'angular-plotly.js';
 import { LogToolDataService } from '../../log-tool-data.service';
 import * as _ from 'lodash';
 import { DOCUMENT } from '@angular/common';
+import { Router } from '@angular/router';
+import * as Plotly from 'plotly.js-dist';
 
 
 @Component({
@@ -24,12 +26,11 @@ export class VisualizeGraphComponent implements OnInit {
   onResize(event) {
     this.emitHeight.emit(this.graphContainer.nativeElement.offsetHeight);
   }
-
   selectedGraphDataSubscription: Subscription;
   selectedGraphObj: GraphObj;
   timeSeriesSegments: Array<TimeSeriesSegment> = [];
   selectedTimeSeriesSegment: TimeSeriesSegment;
-
+  hasPlot: boolean;
   loadingSpinner: LoadingSpinner;
   toolTipHoldTimeout;
   showTooltipHover: boolean = false;
@@ -39,6 +40,7 @@ export class VisualizeGraphComponent implements OnInit {
   constructor(private visualizeService: VisualizeService,
     @Inject(DOCUMENT) private document: Document,
     private logToolDataService: LogToolDataService,
+    private router: Router,
     private plotlyService: PlotlyService) {
   }
 
@@ -58,6 +60,7 @@ export class VisualizeGraphComponent implements OnInit {
       })
     ).subscribe((graphObj: GraphObj) => {
       this.selectedGraphObj = graphObj;
+      this.checkValidGraph();
       this.updateGraphObjects();
       this.renderUserInputEvents();
     });
@@ -71,6 +74,12 @@ export class VisualizeGraphComponent implements OnInit {
     // if navigating from map data/time without day type analysis
     this.logToolDataService.loadingSpinner.next({ show: false, msg: 'Finalizing Data Setup...' });
     window.dispatchEvent(new Event("resize"));
+  }
+  async checkValidGraph() {
+    if (this.selectedGraphObj.invalidState) {
+      Plotly.purge('plotlyDiv');
+      this.hasPlot = false;
+    }
   }
 
   renderUserInputEvents() {
@@ -89,12 +98,17 @@ export class VisualizeGraphComponent implements OnInit {
     }
   }
 
+  navigateToSetupTab(tabUrl: string) {
+    let url = '/log-tool/data-setup/' + tabUrl;
+    this.router.navigate([url]);
+
+  }
+
   renderGraph() {
     // * For banner events (add New Graph, select graph) need to grab updated value due to race condition --> selectedGraphObj event vs shouldRenderGraph event
     this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
     this.setTimeSeriesRangeSlider();
 
-    // this.setTimeSeriesSegments(this.selectedGraphObj);
     if (this.visualizeGraph && this.selectedGraphObj) {
       this.setGraphInteractivity();
       if (this.selectedGraphObj.shouldRenderNewPlot) {
@@ -102,6 +116,7 @@ export class VisualizeGraphComponent implements OnInit {
       } else if (this.visualizeGraph.nativeElement.data) {
         this.relayoutGraph();
       }
+      this.hasPlot = true;
       this.visualizeService.selectedGraphObj.next(this.selectedGraphObj);
     }
   }
@@ -176,11 +191,15 @@ export class VisualizeGraphComponent implements OnInit {
     this.visualizeService.focusedPanel.next('visualize-graph');
   }
   setTimeSeriesRangeSlider() {
+    if (this.selectedGraphObj.isTimeSeries) {
       this.selectedGraphObj.layout.xaxis.rangeslider = {
         autorange: true,
         visible: true
       }
     this.selectedGraphObj.layout.xaxis.type = 'date';
+  } else {
+    this.selectedGraphObj.layout.xaxis.rangeslider = undefined;
+  }
   }
 
   getRestyleRanges(layout: any): PlotlyAxisRanges {

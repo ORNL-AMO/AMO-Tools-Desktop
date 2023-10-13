@@ -36,8 +36,40 @@ export class VisualizeSidebarService {
     this.visualizeService.userInputDelay.next(0);
     selectedGraphObj.shouldRenderNewPlot = true;
     selectedGraphObj.hasChanges = true;
+    this.checkValidData(selectedGraphObj);
     this.visualizeService.selectedGraphObj.next(selectedGraphObj);
   }
+
+  checkValidData(selectedGraphObj: GraphObj) {
+    let isScatterPlot: boolean = selectedGraphObj.data[0].type == 'scattergl' && !selectedGraphObj.isTimeSeries;
+    let hasValidData = selectedGraphObj.data.every(series => {
+      if (series) {
+        let hasValidX = series.x.length !== 0 && typeof series.x[0] === 'number' || (typeof series.x[0] === 'string' && selectedGraphObj.data[0].type == 'bar') || (typeof series.x[0] === 'string' && selectedGraphObj.isTimeSeries);
+        let hasValidY = series.y.length !== 0 && typeof series.y[0] === 'number';
+        return hasValidX && hasValidY;
+      } else {
+        return false;
+      }
+    }); 
+    
+    if (!hasValidData) {
+      let invalidState: string = 'invalid-data-selected';
+      let canRunDayTypeAnalysis = this.logToolDataService.explorerData.getValue().canRunDayTypeAnalysis;
+      if (canRunDayTypeAnalysis) {
+        
+      } else if (!canRunDayTypeAnalysis) {
+        if (selectedGraphObj.isTimeSeries) {
+          invalidState = 'invalid-date-setup';
+        } else if (isScatterPlot) {
+          invalidState = 'invalid-scatter-selected';
+        }
+      }
+      selectedGraphObj.invalidState = invalidState;
+    } else {
+      selectedGraphObj.invalidState = undefined;
+    }
+  }
+
 
   setGraphData(selectedGraphObj: GraphObj, shouldRenderGraph?: boolean) {
     if (selectedGraphObj.isTimeSeries || selectedGraphObj.data[0].type == 'scattergl') {
@@ -57,14 +89,23 @@ export class VisualizeSidebarService {
 
   changeSelectedGraphData(selectedGraphObj: GraphObj, isSelectedGraphChange?: boolean) {
     selectedGraphObj.isTimeSeries = false;
+    let validSelection: boolean = true;
     if (selectedGraphObj.data[0].type == 'bar') {
-      this.checkBarHistogramData(selectedGraphObj);
+      validSelection = typeof selectedGraphObj.selectedXAxisDataOption.data[0] === 'number'; 
+
+      if (validSelection) {
+        this.checkBarHistogramData(selectedGraphObj);
+        selectedGraphObj.invalidState = undefined;
+      } else {
+        selectedGraphObj.invalidState = 'invalid-data-selected';
+      }
     } else if (selectedGraphObj.data[0].type == 'time-series') {
       selectedGraphObj.isTimeSeries = true;
       selectedGraphObj.selectedYAxisDataOptions.map(selectedYOption => selectedYOption.linesOrMarkers = 'lines');
       // plotly type for time-series == scattergl
       selectedGraphObj.data[0].type = 'scattergl';
     }
+
     if (!isSelectedGraphChange) {
       // We don't need to reset because we're changing to an entirely different graph
       this.resetLayoutRelatedData(selectedGraphObj);
@@ -74,11 +115,17 @@ export class VisualizeSidebarService {
       selectedGraphObj.data[0].type = graphType;
       selectedGraphObj.selectedYAxisDataOptions = [selectedGraphObj.selectedYAxisDataOptions[0]];
     }
-    this.setGraphData(selectedGraphObj);
+
+    if (validSelection) {
+      this.setGraphData(selectedGraphObj);
+    } else {
+      // graph data unchanged, message state set above
+      this.saveExistingPlotChange(selectedGraphObj, false);
+    }
   }
 
   checkBarHistogramData(selectedGraphObj: GraphObj) {
-    if (selectedGraphObj.binnedField == undefined || selectedGraphObj.binnedField.fieldName != selectedGraphObj.selectedXAxisDataOption.dataField.fieldName || selectedGraphObj.bins == undefined) {
+    if (typeof selectedGraphObj.selectedXAxisDataOption.data[0] === 'number' && (selectedGraphObj.binnedField == undefined || selectedGraphObj.binnedField.fieldName != selectedGraphObj.selectedXAxisDataOption.dataField.fieldName || selectedGraphObj.bins == undefined)) {
       selectedGraphObj = this.initializeBinData(selectedGraphObj);
     }
   }
@@ -169,9 +216,16 @@ export class VisualizeSidebarService {
       this.setYAxisDataOptions(selectedGraphObj);
       this.setTimeSeriesData(selectedGraphObj);
     } else if (selectedGraphObj.data[0].type == 'bar') {
-      selectedGraphObj.layout.xaxis.type = 'category';
-      this.setYAxisDataOptions(selectedGraphObj);
-      this.setBarHistogramData(selectedGraphObj);
+      let validSelection = typeof selectedGraphObj.selectedXAxisDataOption.data[0] === 'number'; 
+      if (validSelection) {
+        selectedGraphObj.layout.xaxis.type = 'category';
+        this.setYAxisDataOptions(selectedGraphObj);
+        this.setBarHistogramData(selectedGraphObj);
+        selectedGraphObj.invalidState = undefined;
+      } else {
+        selectedGraphObj.invalidState = 'invalid-data-selected';
+        this.saveExistingPlotChange(selectedGraphObj, false);
+      }
     } else {
       selectedGraphObj.data.map(series => {
         series.type = 'scattergl'
@@ -220,24 +274,22 @@ export class VisualizeSidebarService {
     let dataFields: Array<LogToolField> = this.visualizeService.getDataFieldOptions();
     selectedGraphObj.yAxisDataOptions = new Array();
     dataFields.forEach(field => {
+      let yAxisOption: XAxisDataOption;
+      let yData: (string | number)[];
       if (selectedGraphObj.isTimeSeries) {
         let timeData: Array<string | number> = this.visualizeService.getTimeSeriesData(field);
         if (timeData) {
-          let data: (string | number)[] = this.visualizeService.getGraphDataByField(field.fieldName);
-          selectedGraphObj.yAxisDataOptions.push({
-            data: data,
-            dataField: field
-          });
+          yData = this.visualizeService.getGraphDataByField(field.fieldName);
         }
       }
       else if (selectedGraphObj.data[0].type == 'scattergl') {
-        let data = this.visualizeService.getGraphDataByField(field.fieldName);
-        let yAxisOption: XAxisDataOption = {
-          data: data,
-          dataField: field
-        }
-        selectedGraphObj.yAxisDataOptions.push(yAxisOption);
+        yData = this.visualizeService.getGraphDataByField(field.fieldName);
       }
+      yAxisOption = {
+        data: yData,
+        dataField: field
+      }
+      selectedGraphObj.yAxisDataOptions.push(yAxisOption);
     });
     selectedGraphObj.selectedYAxisDataOptions.forEach(selectedOption => {
       let optionFound: XAxisDataOption;
@@ -276,7 +328,6 @@ export class VisualizeSidebarService {
         selectedGraphObj.data[index].yaxis = selectedDataOption.yaxis;
       }
     })
-    console.log(selectedGraphObj);
     if (shouldRenderGraph) {
       this.saveGraphDataChange(selectedGraphObj);
       this.visualizeService.shouldRenderGraph.next(true)
@@ -338,12 +389,12 @@ export class VisualizeSidebarService {
     this.saveGraphDataChange(selectedGraphObj);
   }
 
-  removeAxis(selectedGraphObj: GraphObj) {
+  removeAxis(selectedGraphObj: GraphObj, shouldRender?: boolean) {
     selectedGraphObj.hasSecondYAxis = false;
     selectedGraphObj.selectedYAxisDataOptions.forEach(option => {
       option.yaxis = 'y';
     });
-    this.setGraphYAxisData(selectedGraphObj);
+    this.setGraphYAxisData(selectedGraphObj, shouldRender);
   }
 
   addDataSeries(selectedGraphObj: GraphObj) {
@@ -370,19 +421,25 @@ export class VisualizeSidebarService {
   }
 
   removeYAxisData(index: number, selectedGraphObj: GraphObj) {
-    let removeDataSeriesId: string = selectedGraphObj.data[index].dataSeriesId;
-    selectedGraphObj.selectedYAxisDataOptions.splice(index, 1);
-    selectedGraphObj.data.splice(index, 1);
-    if (selectedGraphObj.data.length == 1 && selectedGraphObj.hasSecondYAxis == true) {
-      this.removeAxis(selectedGraphObj);
-    } else {
-      selectedGraphObj.layout.annotations.forEach((annotation: AnnotationData) => {
-        if (annotation.dataSeriesId === removeDataSeriesId) {
-          this.deleteAnnotation(annotation, selectedGraphObj);
-        }
-      });
-      this.setGraphYAxisData(selectedGraphObj);
-    }
+    this.logToolDataService.loadingSpinner.next({
+      show: true, msg: `Graphing Data. This may take a moment
+        depending on the amount of data you have supplied...`});
+    setTimeout(() => {
+      let removeDataSeriesId: string = selectedGraphObj.data[index].dataSeriesId;
+      selectedGraphObj.selectedYAxisDataOptions.splice(index, 1);
+      selectedGraphObj.data.splice(index, 1);
+      if (selectedGraphObj.data.length == 1 && selectedGraphObj.hasSecondYAxis == true) {
+        this.removeAxis(selectedGraphObj, true);
+      } else {
+        selectedGraphObj.layout.annotations.forEach((annotation: AnnotationData) => {
+          if (annotation.dataSeriesId === removeDataSeriesId) {
+            this.deleteAnnotation(annotation, selectedGraphObj);
+          }
+        });
+        this.setGraphYAxisData(selectedGraphObj, true);
+      }
+    }, 100);
+
   }
 
   setAnnotation(annotateDataPoint: AnnotationData, selectedGraphObj: GraphObj) {
