@@ -43,7 +43,7 @@
     <div class="form-group">
       <label class="small" for="{{'materialVaporizingTemperature_'+idString}}">Vaporizing Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different-db': checkVaporizingTempDiff(), 'invalid': chargeMaterialForm.controls.materialVaporizingTemperature.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'materialVaporizingTemperature_'+lossIndex}}" type="10" step="10" class="form-control"
+        <input [readonly]="!baselineSelected" name="{{'materialVaporizingTemperature_'+lossIndex}}" type="number" step="10" class="form-control"
           formControlName="materialVaporizingTemperature" id="{{'materialVaporizingTemperature_'+idString}}" onfocus="this.select();" (input)="save()"
           (focus)="focusField('materialVaporizingTemperature')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
