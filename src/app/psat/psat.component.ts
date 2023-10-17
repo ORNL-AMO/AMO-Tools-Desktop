@@ -173,7 +173,7 @@ export class PsatComponent implements OnInit {
         this.modificationIndex = _.findIndex(this._psat.modifications, (val) => {
           return val.psat.name == mod.name
         })
-      } else {
+      } else {  
         this.modificationIndex = undefined;
       }
     })
@@ -240,6 +240,7 @@ export class PsatComponent implements OnInit {
     this.psatTabService.mainTab.next('system-setup');
     this.psatTabService.stepTab.next('system-basics');
     this.psatTabService.modifyConditionsTab.next('pump-fluid');
+    this.compareService.selectedModification.next(undefined);
     this.connectedInventoryDataSub.unsubscribe();
     this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
   }

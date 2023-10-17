@@ -219,18 +219,10 @@ export class ModifyConditionsTabsComponent implements OnInit {
   checkOperationsInputError(){
     let hasWarning: boolean = false;
     let baselineOperationsWarnings: OperationsWarnings = this.psatWarningService.checkPumpOperations(this.compareService.baselinePSAT, this.settings, true);
-    for (var key in baselineOperationsWarnings) {
-      if (baselineOperationsWarnings[key] !== null) {
-        hasWarning = true;
-      }
-    }
+    hasWarning = this.psatWarningService.checkWarningsExist(baselineOperationsWarnings);
     if (this.compareService.modifiedPSAT && !hasWarning) {
       let modifiedOperationsWarnings: OperationsWarnings = this.psatWarningService.checkPumpOperations(this.compareService.modifiedPSAT, this.settings);
-      for (var key in modifiedOperationsWarnings) {
-        if (modifiedOperationsWarnings[key] !== null) {
-          hasWarning = true;
-        }
-      }
+      hasWarning = this.psatWarningService.checkWarningsExist(modifiedOperationsWarnings);
     }
     return hasWarning;
   }

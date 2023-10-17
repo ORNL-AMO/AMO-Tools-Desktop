@@ -405,11 +405,11 @@ export class PsatWarningService {
     }
   }
 
-  //Iterates warnings objects to see if any warnings are not null
+  //Iterates warnings objects to see if any warnings are not null/undefined
   checkWarningsExist(warnings: FieldDataWarnings | MotorWarnings | PumpFluidWarnings | OperationsWarnings): boolean {
     let hasWarning: boolean = false;
     for (var key in warnings) {
-      if (warnings[key] !== null && warnings[key] !== undefined) {
+      if (warnings[key]) {
         hasWarning = true;
       }
     }
