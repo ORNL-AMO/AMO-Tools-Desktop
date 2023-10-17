@@ -7,6 +7,7 @@ import { PumpInventoryService } from '../pump-inventory.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import _ from 'lodash';
+import { DashboardService } from '../../dashboard/dashboard.service';
 
 @Component({
   selector: 'app-pump-inventory-banner',
@@ -33,7 +34,7 @@ export class PumpInventoryBannerComponent implements OnInit {
   bannerCollapsed: boolean = true;
   // hasInvalidPumpItem: boolean;
     constructor(private pumpInventoryService: PumpInventoryService, private integrationStateService: IntegrationStateService, 
-      private pumpCatalogService: PumpCatalogService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
+      private pumpCatalogService: PumpCatalogService, private securityAndPrivacyService: SecurityAndPrivacyService, private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
     this.mainTabSub = this.pumpInventoryService.mainTab.subscribe(val => {
@@ -168,5 +169,9 @@ export class PumpInventoryBannerComponent implements OnInit {
 
   openExportModal(){
     this.pumpInventoryService.showExportModal.next(true);
+  }
+
+  navigateHome() {
+    this.dashboardService.navigateWithSidebarOptions('/landing-screen', {shouldCollapse: false});
   }
 }
