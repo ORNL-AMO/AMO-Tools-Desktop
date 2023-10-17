@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, HostListener, ElementRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { PipeInsulationReductionInput, PipeInsulationReductionResult } from '../../../../shared/models/standalone';
-import { UntypedFormGroup } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { PipeInsulationReductionService } from '../pipe-insulation-reduction.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 
@@ -123,6 +123,7 @@ export class PipeInsulationReductionFormComponent implements OnInit {
     }
     if (changes.heatedOrChilled && !changes.heatedOrChilled.firstChange) {
       this.form.patchValue({ heatedOrChilled: this.heatedOrChilled });
+      this.updateHeatedOrChill();
     }
   }
 
@@ -145,6 +146,16 @@ export class PipeInsulationReductionFormComponent implements OnInit {
     }
     this.energyUnit = this.pipeInsulationReductionService.getEnergyUnit(this.form.controls.utilityType.value, this.settings);
     this.form.controls.utilityCost.setValue(tmpCost);
+    this.calculate();
+  }
+
+  updateHeatedOrChill(){
+    if (this.form.controls.heatedOrChilled.value == 0) {
+      this.form.controls.systemEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+    } else if (this.form.controls.heatedOrChilled.value == 1){
+      this.form.controls.systemEfficiency.clearValidators();
+      this.form.controls.systemEfficiency.setValidators([Validators.required, Validators.min(0)]);
+    }
     this.calculate();
   }
 

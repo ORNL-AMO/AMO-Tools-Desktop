@@ -56,7 +56,7 @@ export class TankInsulationReductionService {
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       utilityType: [{ value: obj.utilityType, disabled: !isBaseline }],
       utilityCost: [obj.utilityCost, [Validators.required, Validators.min(0)]],
-      systemEfficiency: [obj.systemEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
+      systemEfficiency: [obj.systemEfficiency],
       tankHeight: [obj.tankHeight, [Validators.required, Validators.min(0)]],
       tankDiameter: [obj.tankDiameter, [Validators.required, Validators.min(0)]],
       tankThickness: [obj.tankThickness, [Validators.required, Validators.min(0)]],
@@ -72,6 +72,13 @@ export class TankInsulationReductionService {
       heatedOrChilled: [{ value: obj.heatedOrChilled, disabled: !isBaseline }],
       surfaceTemperature: [obj.surfaceTemperature, [Validators.required, GreaterThanValidator.greaterThan(obj.ambientTemperature), LessThanValidator.lessThan(obj.tankTemperature)]]
     });
+
+    if (obj.heatedOrChilled == 0) {
+      form.controls.systemEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+    } else {
+      form.controls.systemEfficiency.clearValidators();
+      form.controls.systemEfficiency.setValidators([Validators.required, Validators.min(0)]);
+    }
 
     if (obj.insulationMaterialSelection != 0) {
       form.controls.insulationThickness.setValidators([Validators.required, Validators.min(0), Validators.max(1000000)]);
