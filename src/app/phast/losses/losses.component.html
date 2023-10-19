@@ -222,9 +222,11 @@
 
       </ng-container>
 
-      <div *ngIf="phast.modifications.length == 0 && !inSetup">
+      <div class="no-data assessment-panel-container" *ngIf="phast.modifications.length == 0 && !inSetup">
         <h3>Now that your baseline set up, click below to start adding scenarios.</h3>
-        <button type="button" (click)="newModification()">Add Scenario</button>
+        <div class="w-100 justify-content-center p-2 d-flex">
+          <button type="button" class="btn btn-primary" (click)="newModification()">Add Scenario</button>
+        </div>
         <p>The Modify All Conditions section is an expert view, allowing you to change any input. You can create many
           different scenarios,
           to compare changes to your system. Notes for each loss page can be added in the right tab (NOTES), these will
