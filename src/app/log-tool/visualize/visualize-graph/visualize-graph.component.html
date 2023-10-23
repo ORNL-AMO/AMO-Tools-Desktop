@@ -29,14 +29,36 @@
     </ng-container>
 
     <div #visualizeGraph id="plotlyDiv"></div>
-    <ng-container *ngIf="!selectedGraphObj || (selectedGraphObj && !selectedGraphObj.isGraphInitialized)">
+    <ng-container *ngIf="!selectedGraphObj || selectedGraphObj && !selectedGraphObj.invalidState && !hasPlot">
         <div class="data-explorer-visualizer graph-card m-0 p-0 justify-content-center" style="height: 450px;">
-            <div class="alert alert-info align-items-center mx-auto my-0 w-75 pr-2">
+            <div class="alert alert-info align-items-center mx-auto my-0 w-75 pr-2 small">
                 <ul class="placeholder mt-1 mx-auto">
                     <li>Choose plot type (Scatter Plot, Time Series, or Histogram)</li>
                     <li>Select x and y axis data</li>
-                    <li>Click <span class="bold">Create Graph</span> to begin</li>
+                    <li>Click<span class="bold">Create Graph</span> or <span class="bold">Apply Graph Changes</span> to begin</li>
                 </ul>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="selectedGraphObj && selectedGraphObj.invalidState">
+        <div class="data-explorer-visualizer graph-card m-0 p-0 justify-content-center" style="height: 450px;">
+            <div *ngIf="selectedGraphObj.invalidState === 'invalid-data-selected'" class="alert alert-danger align-items-center mx-auto my-0 w-75 p-3 small">
+                <span class="bold">Invalid axis data selected.</span>
+                <div class="mt-2">
+                    Change graph data options or visit <a class="click-link" (click)="navigateToSetupTab('refine-data')">Setup</a> to ensure that all relevant form fields have been completed.  
+                </div>
+            </div>
+            <div *ngIf="selectedGraphObj.invalidState === 'invalid-date-setup'" class="alert alert-danger align-items-center mx-auto my-0 w-75 p-3 small">
+                <span class="bold">No time series data available.</span>
+                <div class="mt-2">
+                    Visit <a class="click-link" (click)="navigateToSetupTab('map-time-data')">Map Date and Time</a> to select a date column and ensure form fields have been completed.  
+                </div>
+            </div>
+            <div *ngIf="selectedGraphObj.invalidState === 'invalid-scatter-selected'" class="alert alert-danger align-items-center mx-auto my-0 w-75 p-3 small">
+                <span class="bold">Selected axis scatter data must contain number values only.</span>
+                <div class="mt-2">
+                    Change graph data options or visit <a class="click-link" (click)="navigateToSetupTab('refine-data')">Setup</a> to ensure that all relevant form fields have been completed.  
+                </div>
             </div>
         </div>
     </ng-container>

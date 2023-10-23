@@ -56,9 +56,15 @@ export class VisualizeDataComponent implements OnInit {
     this.axisSummaries = new Array();
     let graphObj: GraphObj = this.visualizeService.selectedGraphObj.getValue();
     if (graphObj.data[0].type == 'bar') {
+      let xMin: number = 0;
+      let xMax: number = 0;
+      if (graphObj.bins && graphObj.bins.length !== 0) {
+        xMin = graphObj.bins[0].min;
+        xMax = graphObj.bins[graphObj.bins.length - 1].min;
+      }
       this.axisRanges = {
-        xMin: graphObj.bins[0].min,
-        xMax: graphObj.bins[graphObj.bins.length - 1].min,
+        xMin: xMin,
+        xMax: xMax,
         yMin: undefined,
         yMax: undefined,
         y2Min: undefined,

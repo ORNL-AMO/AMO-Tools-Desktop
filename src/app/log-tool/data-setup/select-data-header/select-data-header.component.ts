@@ -85,8 +85,10 @@ export class SelectDataHeaderComponent implements OnInit {
         fileData.headerRowIndex = this.selectedFileData.headerRowIndex;
         fileData.headerRowVisited = true;
       });
-      this.updateCompletionStatus();
+    } else {
+      this.selectedFileData.headerRowVisited = true;
     }
+    this.updateCompletionStatus();
   }
 
       
@@ -96,7 +98,6 @@ export class SelectDataHeaderComponent implements OnInit {
     if (this.selectedFileData.fileType === '.xlsx') {
       this.selectedSheet = this.selectedFileData.selectedSheet;
     }
-    this.explorerData.fileData[index].headerRowVisited = true;
     this.updateCompletionStatus();
   }
 

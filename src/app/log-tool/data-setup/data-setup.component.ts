@@ -1,6 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, map } from 'rxjs';
 import { MeasurMessageData } from '../../shared/models/utilities';
 import { DayTypeAnalysisService } from '../day-type-analysis/day-type-analysis.service';
 import { DayTypeGraphService } from '../day-type-analysis/day-type-graph/day-type-graph.service';
@@ -8,6 +6,8 @@ import { LogToolDataService } from '../log-tool-data.service';
 import { ExplorerData, LoadingSpinner } from '../log-tool-models';
 import { LogToolService } from '../log-tool.service';
 import { VisualizeService } from '../visualize/visualize.service';
+import { ActivatedRoute, NavigationEnd, Router, RouterState } from '@angular/router';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-data-setup',
@@ -52,21 +52,27 @@ export class DataSetupComponent implements OnInit {
   ngOnInit() {
     this.loadingSpinner = this.logToolDataService.loadingSpinner.getValue();
     this.explorerDataSub = this.logToolDataService.explorerData.subscribe(data => {
-      // only emits updates if multiple files
       this.explorerData = data;
-      this.setContinueButton();
-      this.cd.detectChanges();
-      this.setDisableNext();
+      this.updatePageState()
     });
+    
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        let segments = event.urlAfterRedirects.split('/');
+        this.dataSetupTab = segments[segments.length -1];
+        this.updatePageState()
+      }
+    });
+
+    this.activatedRoute.params.subscribe(params => {
+        let url: string = this.router.routerState.snapshot.url;
+        let segments = url.split('/');
+        this.dataSetupTab = segments[segments.length -1];
+        this.updatePageState();
+    });  
 
     this.isModalOpenSub = this.logToolService.isModalOpen.subscribe(val => {
       this.isModalOpen = val;
-    });
-    
-    this.activatedRoute.url.subscribe(url => {
-      this.dataSetupTab = this.activatedRoute.firstChild.routeConfig.path;
-      this.setContinueButton();
-      this.cd.detectChanges();
     });
 
     this.loadingSpinnerSub = this.logToolDataService.loadingSpinner.subscribe(loadingSpinner => {
@@ -83,6 +89,12 @@ export class DataSetupComponent implements OnInit {
       this.setupContainerHeight = setupContainerHeight
       this.getContainerHeight();
     });
+  }
+
+  updatePageState() {
+    this.setContinueButton();
+    this.setDisableNext();
+    this.cd.detectChanges();
   }
 
   ngAfterViewInit() {
@@ -159,7 +171,11 @@ export class DataSetupComponent implements OnInit {
         this.disableNext = true;
       }
     } else if (this.dataSetupTab == 'select-header-data') {
-      this.disableNext = false;
+      if (this.explorerData.isStepHeaderRowComplete) {
+        this.disableNext = false;
+      } else {
+        this.disableNext = true;
+      }
     } else if (this.dataSetupTab == 'refine-data') {
       if (this.explorerData.refineDataStepStatus.isComplete || this.explorerData.refineDataStepStatus.currentDatasetValid) {
         this.disableNext = false;

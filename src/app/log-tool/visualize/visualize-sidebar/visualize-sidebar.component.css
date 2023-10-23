@@ -19,12 +19,13 @@
     cursor: pointer !important;
 }
 
-.disabled {
+.disabled,
+.btn-primary.disabled, 
+.btn-primary:disabled {
     background: #c5c5c5 !important;
     border-color: #d8d8d8 !important;
     box-shadow: none;
 }
-
 
 label {
     font-size: 18px; 

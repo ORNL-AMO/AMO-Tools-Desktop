@@ -19,14 +19,14 @@
           <a class="nav-link px-2" (click)="setSidebarTab('graph-data')" [ngClass]="{'active': selectedSidebarTab === 'graph-data'}" >Data</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link px-2" (click)="setSidebarTab('other-series')" [ngClass]="{'active': selectedSidebarTab === 'other-series', 'disabled': selectedGraphObj.data[0].type === 'bar'}">Other Series</a>
+          <a class="nav-link px-2" (click)="setSidebarTab('other-series')" [ngClass]="{'active': selectedSidebarTab === 'other-series', 'disabled': selectedGraphObj.data[0].type === 'bar' || selectedGraphObj.invalidState}">Other Series</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link px-2" (click)="setSidebarTab('annotations')" [ngClass]="{'active': selectedSidebarTab === 'annotations'}">Annotations</a>
+          <a class="nav-link px-2" (click)="setSidebarTab('annotations')" [ngClass]="{'active': selectedSidebarTab === 'annotations', 'disabled': selectedGraphObj.invalidState}">Annotations</a>
         </li>
         <li class="nav-item">
           <a class="nav-link p-2 fa fa-tab fa-cog" (click)="setSidebarTab('settings')" 
-          [ngClass]="{'active': selectedSidebarTab === 'settings'}"></a>
+          [ngClass]="{'active': selectedSidebarTab === 'settings', 'disabled': selectedGraphObj.invalidState}"></a>
         </li>
       </ul>
 
@@ -40,7 +40,7 @@
         </div>
       
         <ng-container *ngIf="selectedSidebarTab !== 'settings'">
-          <button [disabled]="!selectedGraphObj.hasChanges" [ngClass]="{'disabled': !selectedGraphObj.hasChanges}"
+          <button [disabled]="!selectedGraphObj.hasChanges || selectedGraphObj.invalidState" [ngClass]="{'disabled': !selectedGraphObj.hasChanges || selectedGraphObj.invalidState}"
             class="btn btn-primary small px-3 w-100 my-2 mr-2" (click)="renderGraph()">
             <span *ngIf="!selectedGraphObj.isGraphInitialized">
               Create Graph
