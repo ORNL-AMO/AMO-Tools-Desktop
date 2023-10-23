@@ -73,12 +73,7 @@ export class TankInsulationReductionService {
       surfaceTemperature: [obj.surfaceTemperature, [Validators.required, GreaterThanValidator.greaterThan(obj.ambientTemperature), LessThanValidator.lessThan(obj.tankTemperature)]]
     });
 
-    if (obj.heatedOrChilled == 0) {
-      form.controls.systemEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
-    } else {
-      form.controls.systemEfficiency.clearValidators();
-      form.controls.systemEfficiency.setValidators([Validators.required, Validators.min(0)]);
-    }
+    form = this.updateFormValidators(obj.heatedOrChilled, form);
 
     if (obj.insulationMaterialSelection != 0) {
       form.controls.insulationThickness.setValidators([Validators.required, Validators.min(0), Validators.max(1000000)]);
@@ -93,6 +88,17 @@ export class TankInsulationReductionService {
       form.controls.customInsulationConductivity.clearValidators();
       form.controls.jacketMaterialSelection.disable();
       form.controls.surfaceTemperature.clearValidators();
+    }
+
+    return form;
+  }
+
+  updateFormValidators(heatedOrChilled: number, form: UntypedFormGroup) : UntypedFormGroup{
+    if (heatedOrChilled == 0) {
+      form.controls.systemEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+    } else if (heatedOrChilled == 1){
+      form.controls.systemEfficiency.clearValidators();
+      form.controls.systemEfficiency.setValidators([Validators.required, Validators.min(0)]);
     }
 
     return form;

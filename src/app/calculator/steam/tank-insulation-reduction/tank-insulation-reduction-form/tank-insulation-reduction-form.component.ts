@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, Input, ViewChild, HostListener, ElementRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { TankInsulationReductionService } from '../tank-insulation-reduction.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
@@ -177,12 +177,7 @@ export class TankInsulationReductionFormComponent implements OnInit {
   }
 
   updateHeatedOrChill(){
-    if (this.form.controls.heatedOrChilled.value == 0) {
-      this.form.controls.systemEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
-    } else if (this.form.controls.heatedOrChilled.value == 1){
-      this.form.controls.systemEfficiency.clearValidators();
-      this.form.controls.systemEfficiency.setValidators([Validators.required, Validators.min(0)]);
-    }
+    this.form = this.tankInsulationReductionService.updateFormValidators(this.form.controls.heatedOrChilled.value, this.form);
     this.calculate();
   }
 
