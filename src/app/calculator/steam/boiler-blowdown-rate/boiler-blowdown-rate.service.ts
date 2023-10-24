@@ -27,15 +27,15 @@ export class BoilerBlowdownRateService {
     this.operatingHours = new BehaviorSubject<OperatingHours>(undefined);
   }
 
-  getDefaultInputs(): BoilerBlowdownRateInputs {
+  getDefaultInputs(settings: Settings): BoilerBlowdownRateInputs {
     return {
       steamFlow: 0,
       steamTemperature: 0,
       feedwaterConductivity: 0,
       blowdownConductivity: 0,
       makeupWaterTemperature: 0,
-      fuelCost: 0,
-      waterCost: 0,
+      fuelCost: settings.fuelCost,
+      waterCost: settings.waterCost,
       operatingHours: 0,
       boilerEfficiency: 0
     }
@@ -148,7 +148,7 @@ export class BoilerBlowdownRateService {
   calculateResults(inputs: BoilerBlowdownRateInputs, settings: Settings, calcBoilerVals: boolean, calcCostVals: boolean): BoilerBlowdownRateResults {
     //always
     let blowdownRate: number = this.calculateBlowdownRate(inputs.feedwaterConductivity, inputs.blowdownConductivity);
-    let feedwaterFlowRate: number
+    let feedwaterFlowRate: number;
     let blowdownFlowRate: number = 0;
     let blowdownEnthalpy: number = 0;
     let makeupWaterProperties: { enthalpy: number, specificVolume: number } = { enthalpy: 0, specificVolume: 0 };

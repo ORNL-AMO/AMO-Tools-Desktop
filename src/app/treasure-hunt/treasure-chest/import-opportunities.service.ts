@@ -184,6 +184,13 @@ export class ImportOpportunitiesService {
       this.updateLegacyOpportunities(data.coolingTowerBasinOpportunities, Treasure.coolingTowerBasin);
       treasureHunt.coolingTowerBasinOpportunities = treasureHunt.coolingTowerBasinOpportunities.concat(data.coolingTowerBasinOpportunities);
     }
+    if (data.boilerBlowdownRateOpportunities) {
+      if (treasureHunt.boilerBlowdownRateOpportunities == undefined) {
+        treasureHunt.boilerBlowdownRateOpportunities = new Array();
+      }
+      this.updateLegacyOpportunities(data.boilerBlowdownRateOpportunities, Treasure.boilerBlowdownRate);
+      treasureHunt.boilerBlowdownRateOpportunities = treasureHunt.boilerBlowdownRateOpportunities.concat(data.boilerBlowdownRateOpportunities);
+    }
     return treasureHunt;
   }
 

@@ -319,6 +319,22 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.boilerBlowdownRateOpportunities">
+                        <label>Boiler Blowdown Rate</label>
+                        <ul>
+                            <li
+                                *ngFor="let boiler of exportOpportunities.boilerBlowdownRateOpportunities; let index = index;">
+                                <span
+                                    *ngIf="!boiler.opportunitySheet || !boiler.opportunitySheet.name">
+                                    Boiler Blowdown Rate #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="boiler.opportunitySheet && boiler.opportunitySheet.name">
+                                    {{boiler.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="col-6 p-2" *ngIf="exportOpportunities.coolingTowerMakeupOpportunities">
                         <label>Cooling Tower Makeup Water </label>
                         <ul>

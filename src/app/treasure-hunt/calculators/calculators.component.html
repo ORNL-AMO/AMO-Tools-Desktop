@@ -118,6 +118,11 @@
 [settings]="settings">
 </app-cooling-tower-basin>
 
+<app-boiler-blowdown-rate *ngIf="selectedCalc == 'boiler-blowdown-rate'" [inTreasureHunt]="true"
+(emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)"
+[settings]="settings">
+</app-boiler-blowdown-rate>
+
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog">
