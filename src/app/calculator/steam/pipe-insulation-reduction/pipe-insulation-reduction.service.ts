@@ -59,7 +59,7 @@ export class PipeInsulationReductionService {
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       utilityType: [{ value: obj.utilityType, disabled: !isBaseline }],
       utilityCost: [{ value: obj.utilityCost, disabled: !isBaseline }, [Validators.required, Validators.min(0)]],
-      systemEfficiency: [obj.systemEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
+      systemEfficiency: [obj.systemEfficiency],
       pipeLength: [obj.pipeLength, [Validators.required, Validators.min(0)]],
       pipeDiameterSelection: [obj.pipeDiameterSelection],
       windVelocity: [obj.windVelocity, [Validators.required, Validators.min(0)]],
@@ -72,11 +72,24 @@ export class PipeInsulationReductionService {
       heatedOrChilled: [{ value: obj.heatedOrChilled, disabled: !isBaseline }]
     });
 
+    form = this.updateFormValidators(obj.heatedOrChilled, form);
+
     if (obj.insulationMaterialSelection != 0) {
       form.controls.insulationThickness.setValidators([Validators.required, Validators.min(0), Validators.max(1000000)]);
     } else {
       form.controls.insulationThickness.clearValidators();
       form.controls.pipeJacketMaterialSelection.disable();
+    }
+
+    return form;
+  }
+
+  updateFormValidators(heatedOrChilled: number, form: UntypedFormGroup) : UntypedFormGroup{
+    if (heatedOrChilled == 0) {
+      form.controls.systemEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+    } else if (heatedOrChilled == 1){
+      form.controls.systemEfficiency.clearValidators();
+      form.controls.systemEfficiency.setValidators([Validators.required, Validators.min(0)]);
     }
 
     return form;
