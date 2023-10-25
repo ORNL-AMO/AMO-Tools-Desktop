@@ -556,6 +556,7 @@ export class PhastService {
   //energy input for non-EAF Electric process heating
   energyInputExhaustGasLosses(input: EnergyInputExhaustGasLoss, settings: Settings): EnergyExhaustGasOutput {
     let inputs = this.createInputCopy(input);
+    debugger;
     let results: EnergyExhaustGasOutput = {
       heatDelivered: 0,
       exhaustGasLosses: 0,
@@ -568,7 +569,6 @@ export class PhastService {
       inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('MMBtu').to('Btu');
       results = this.calcEnergyInputExhaustGasLosses(inputs);
     }
-    results = this.processHeatingApiService.energyInputExhaustGasLosses(inputs);
     results.heatDelivered = this.convertResult(results.heatDelivered, settings.energyResultUnit);
     results.exhaustGasLosses = this.convertResult(results.exhaustGasLosses, settings.energyResultUnit);
 
@@ -577,7 +577,7 @@ export class PhastService {
 
   calcEnergyInputExhaustGasLosses(input: EnergyInputExhaustGasLoss){
     let heatDelivered: number = (input.totalHeatInput * input.availableHeat)/100;
-    let exhaustGasLosses: number = heatDelivered*(100 - input.availableHeat) / input.availableHeat;
+    let exhaustGasLosses: number = heatDelivered *(100 - input.availableHeat) / input.availableHeat;
     let results = {
       availableHeat: input.availableHeat,
       heatDelivered: heatDelivered,

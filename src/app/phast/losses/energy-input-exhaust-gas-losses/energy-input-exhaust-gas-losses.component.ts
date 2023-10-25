@@ -79,6 +79,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
 
 
   initForms() {
+    debugger;
     if (this.losses.energyInputExhaustGasLoss) {
       let lossIndex = 1;
       this.losses.energyInputExhaustGasLoss.forEach(loss => {
@@ -95,6 +96,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
         }    
         lossIndex++;
         this.calculate(tmpLoss);
+        debugger;
         this._exhaustGasLosses.push(tmpLoss);
       });
     }
@@ -117,6 +119,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
 
   calculate(loss: EnInputExGasObj) {
     let tmpLoss = this.energyInputExhaustGasService.getLossFromForm(loss.form);
+    debugger;
     if (loss.form.status === 'VALID') {
       let results = this.phastService.energyInputExhaustGasLosses(tmpLoss, this.settings);
       loss.heatLoss = results.heatDelivered;
