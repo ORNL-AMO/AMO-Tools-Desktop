@@ -83,7 +83,7 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
   checkLossData(): { invalid: boolean, hasWarning: boolean } {
     let baselineValid = true;
     let baselineWarning: boolean = false;
-    if (this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses) {
+    if (this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses && this.phast.losses) {
       let baselineResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
       this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses.some(loss => {
         baselineValid = this.isLossValid(loss)
