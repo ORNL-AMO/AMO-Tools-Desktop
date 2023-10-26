@@ -81,10 +81,11 @@ export class EnergyInputTabComponent implements OnInit {
     let baselineWarning: boolean = false;
     if (this.energyInputCompareService.baselineEnergyInput) {
       let baselineResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
-      this.energyInputCompareService.baselineEnergyInput.forEach(loss => {
+      this.energyInputCompareService.baselineEnergyInput.some(loss => {
         baselineValid = this.isLossValid(loss, this.phast, baselineResults);
         let warnings = this.energyInputService.checkWarnings(this.phast, baselineResults, this.settings);
         baselineWarning = Boolean(warnings.electricityInputWarning || warnings.energyInputHeatDelivered);
+        return !baselineValid || baselineWarning;
       });
     }
 
@@ -93,14 +94,16 @@ export class EnergyInputTabComponent implements OnInit {
     if (this.energyInputCompareService.modifiedEnergyInput && !this.inSetup) {
       let selectedModificationPhast: PHAST = this.phastCompareService.selectedModification.getValue();
       let modPhastResults: PhastResults = this.phastResultsService.getResults(selectedModificationPhast, this.settings);
-      this.energyInputCompareService.modifiedEnergyInput.forEach(loss => {
+      this.energyInputCompareService.modifiedEnergyInput.some(loss => {
         modificationValid = this.isLossValid(loss, selectedModificationPhast, modPhastResults);
         let warnings = this.energyInputService.checkWarnings(selectedModificationPhast, modPhastResults, this.settings);
         modificationWarning = Boolean(warnings.electricityInputWarning || warnings.energyInputHeatDelivered);
+        return !modificationValid || modificationWarning;
       });
     }
 
-    return { invalid: !baselineValid || !modificationValid, hasWarning: baselineWarning || modificationWarning };
+    let lossStatus = { invalid: !baselineValid || !modificationValid, hasWarning: baselineWarning || modificationWarning };
+    return lossStatus;
   }
 
 
