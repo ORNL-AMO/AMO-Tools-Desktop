@@ -8,7 +8,7 @@ import { ExhaustGasService } from './losses/exhaust-gas/exhaust-gas.service';
 import { EnergyInputExhaustGasService } from './losses/energy-input-exhaust-gas-losses/energy-input-exhaust-gas.service';
 import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
 
-import { PHAST, PhastValid } from '../shared/models/phast/phast';
+import { PHAST, PhastResults, PhastValid } from '../shared/models/phast/phast';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { SlagService } from './losses/slag/slag.service';
 import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
@@ -327,7 +327,8 @@ export class PhastValidService {
     if (phast.losses.energyInputEAF) {
       let minElectricityInput: number;
       if (phast.losses) {
-        minElectricityInput = this.phastResultsService.getMinElectricityInputRequirement(phast, settings);
+        let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
+        minElectricityInput = this.energyInputService.getMinElectricityInputRequirement(phast, phastResults, settings);
       }
       phast.losses.energyInputEAF.forEach(loss => {
         let energyInputForm: UntypedFormGroup = this.energyInputService.getFormFromLoss(loss, minElectricityInput)

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
-import { Settings } from '../../../shared/models/settings';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 @Injectable()
 export class EnergyInputExhaustGasService {
@@ -36,25 +35,17 @@ export class EnergyInputExhaustGasService {
     return tmpExhaustGas;
   }
 
-  checkWarnings(energyInputExhaustGas: EnergyInputExhaustGasLoss, settings: Settings): {heatWarning: string } {
+  checkWarnings(energyInputHeatDelivered: number): {energyInputHeatDelivered: string } {
     return {
-      heatWarning: this.checkHeatInput(energyInputExhaustGas, settings)
+      energyInputHeatDelivered: this.checkEnergyInputHeatDelivered(energyInputHeatDelivered)
     };
   }
-  checkHeatInput(energyInputExhaustGas: EnergyInputExhaustGasLoss, settings: Settings): string {
-    if (settings.unitsOfMeasure === 'Imperial') {
-      if (energyInputExhaustGas.totalHeatInput > 0 && energyInputExhaustGas.exhaustGasTemp < 40) {
-        return 'Exhaust Gas Temperature cannot be less than 40 ';
-      } else {
-        return null;
-      }
-    }
-    if (settings.unitsOfMeasure === 'Metric') {
-      if (energyInputExhaustGas.totalHeatInput > 0 && energyInputExhaustGas.exhaustGasTemp < 4) {
-        return 'Exhaust Gas Temperature cannot be less than 4 ';
-      } else {
-        return null;
-      }
+
+  checkEnergyInputHeatDelivered(energyInputHeatDelivered: number): string {
+    if (energyInputHeatDelivered < 0) {
+      return 'More heat than necessary is being delivered via burners. Check fuel inputs or estimate other losses.';
+    } else {
+      return null;
     }
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
-import { Losses, PHAST } from '../../../../shared/models/phast/phast';
+import { Losses, PHAST, PhastResults } from '../../../../shared/models/phast/phast';
 import { UntypedFormGroup } from '@angular/forms';
 import { EnergyInputService } from '../../energy-input/energy-input.service';
 import { EnergyInputCompareService } from '../../energy-input/energy-input-compare.service';
@@ -8,7 +8,7 @@ import { EnergyInputEAF } from '../../../../shared/models/phast/losses/energyInp
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastCompareService } from '../../../phast-compare.service';
-import { PhastResultsService } from '../../../phast-results.service';
+import { EnergyInputWarnings, PhastResultsService } from '../../../phast-results.service';
 
 @Component({
   selector: 'app-energy-input-tab',
@@ -26,9 +26,11 @@ export class EnergyInputTabComponent implements OnInit {
   badgeHover: boolean;
   displayTooltip: boolean;
 
-  inputError: string;
+  warnings: EnergyInputWarnings = {energyInputHeatDelivered: null, electricityInputWarning: null};
+  lossDataStatus: { invalid: boolean, hasWarning: boolean };
+  
   numLosses: number = 0;
-  missingData: boolean;
+  isValid: boolean;
   isDifferent: boolean;
   badgeClass: Array<string> = [];
   enInput1Done: boolean;
@@ -42,9 +44,8 @@ export class EnergyInputTabComponent implements OnInit {
     this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
       this.enInput1Done = this.lossesService.enInput1Done;
-      this.missingData = this.checkMissingData();
+      this.lossDataStatus = this.checkLossData();
       this.isDifferent = this.checkDifferent();
-      this.inputError = this.phastResultsService.checkElectricityInputWarning(this.phast, this.settings);
       this.setBadgeClass();
     });
     this.badgeHover = false;
@@ -56,9 +57,9 @@ export class EnergyInputTabComponent implements OnInit {
 
   setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if (this.missingData || !this.enInput1Done) {
+    if (this.lossDataStatus.invalid || !this.enInput1Done) {
       badgeStr = ['missing-data'];
-    } else if (this.inputError) {
+    } else if (this.lossDataStatus.hasWarning) {
       badgeStr = ['input-error'];
     }else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
@@ -74,31 +75,39 @@ export class EnergyInputTabComponent implements OnInit {
       }
     }
   }
-  checkMissingData(): boolean {
-    let testVal = false;
+
+  checkLossData(): { invalid: boolean, hasWarning: boolean } {
+    let baselineValid = true;
+    let baselineWarning: boolean = false;
     if (this.energyInputCompareService.baselineEnergyInput) {
+      let baselineResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
       this.energyInputCompareService.baselineEnergyInput.forEach(loss => {
-        if (this.checkLossValid(loss, this.phast) === false) {
-          testVal = true;
-        }
+        baselineValid = this.isLossValid(loss, this.phast, baselineResults);
+        let warnings = this.energyInputService.checkWarnings(this.phast, baselineResults, this.settings);
+        baselineWarning = Boolean(warnings.electricityInputWarning || warnings.energyInputHeatDelivered);
       });
     }
+
+    let modificationValid = true;
+    let modificationWarning = false;
     if (this.energyInputCompareService.modifiedEnergyInput && !this.inSetup) {
-      let selectedModification: PHAST = this.phastCompareService.selectedModification.getValue();
+      let selectedModificationPhast: PHAST = this.phastCompareService.selectedModification.getValue();
+      let modPhastResults: PhastResults = this.phastResultsService.getResults(selectedModificationPhast, this.settings);
       this.energyInputCompareService.modifiedEnergyInput.forEach(loss => {
-        if (this.checkLossValid(loss, selectedModification) === false) {
-          testVal = true;
-        }
+        modificationValid = this.isLossValid(loss, selectedModificationPhast, modPhastResults);
+        let warnings = this.energyInputService.checkWarnings(selectedModificationPhast, modPhastResults, this.settings);
+        modificationWarning = Boolean(warnings.electricityInputWarning || warnings.energyInputHeatDelivered);
       });
     }
-    return testVal;
+
+    return { invalid: !baselineValid || !modificationValid, hasWarning: baselineWarning || modificationWarning };
   }
 
 
-  checkLossValid(loss: EnergyInputEAF, phast: PHAST) {
+  isLossValid(loss: EnergyInputEAF, phast: PHAST, phastResults: PhastResults) {
     let minElectricityInput: number;
     if (phast) {
-      minElectricityInput = this.phastResultsService.getMinElectricityInputRequirement(phast, this.settings);
+      minElectricityInput = this.energyInputService.getMinElectricityInputRequirement(phast, phastResults, this.settings);
     }
     let tmpForm: UntypedFormGroup = this.energyInputService.getFormFromLoss(loss, minElectricityInput);
     if (tmpForm.status === 'VALID') {

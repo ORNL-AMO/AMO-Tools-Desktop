@@ -495,29 +495,6 @@ export class ProcessHeatingApiService {
     return output;
   }
 
-  energyInputExhaustGasLosses(input: EnergyInputExhaustGasLoss): EnergyExhaustGasOutput {
-
-    // todo fix phast 4855
-    input.excessAir = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.excessAir);
-    input.combustionAirTemp = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.combustionAirTemp);
-    input.exhaustGasTemp = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.exhaustGasTemp);
-    input.totalHeatInput = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.totalHeatInput);
-
-    let EnergyInputExhaustGasInstance = new Module.EnergyInputExhaustGasLosses(
-      input.excessAir, input.combustionAirTemp,
-      input.exhaustGasTemp, input.totalHeatInput,
-    );
-
-    let output: EnergyExhaustGasOutput = {
-      heatDelivered: EnergyInputExhaustGasInstance.getHeatDelivered(),
-      exhaustGasLosses: EnergyInputExhaustGasInstance.getExhaustGasLosses(),
-      availableHeat: EnergyInputExhaustGasInstance.getAvailableHeat(),
-    }
-
-    EnergyInputExhaustGasInstance.delete();
-    return output;
-  }
-
   efficiencyImprovement(input: EfficiencyImprovementInputs): EfficiencyImprovementOutputs {
     input.currentFlueGasOxygen = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.currentFlueGasOxygen)
     input.newFlueGasOxygen = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.newFlueGasOxygen)

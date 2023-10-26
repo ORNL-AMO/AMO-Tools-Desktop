@@ -1,12 +1,15 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
-import { PHAST } from '../../../../shared/models/phast/phast';
+import { PHAST, PhastResults } from '../../../../shared/models/phast/phast';
 import { UntypedFormGroup } from '@angular/forms';
 import { EnergyInputExhaustGasService } from '../../energy-input-exhaust-gas-losses/energy-input-exhaust-gas.service';
 import { EnergyInputExhaustGasCompareService } from '../../energy-input-exhaust-gas-losses/energy-input-exhaust-gas-compare.service';
 import { EnergyInputExhaustGasLoss } from '../../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
+import { PhastResultsService } from '../../../phast-results.service';
+import { PhastService } from '../../../phast.service';
+import { PhastCompareService } from '../../../phast-compare.service';
 @Component({
   selector: 'app-energy-input-exhaust-gas-tab',
   templateUrl: './energy-input-exhaust-gas-tab.component.html',
@@ -30,17 +33,22 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
   badgeClass: Array<string> = [];
   enInput2Done: boolean;
   lossSubscription: Subscription;
-  constructor(private lossesService: LossesService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService, private cd: ChangeDetectorRef) { }
+  dataCheck: { invalid: boolean, hasWarning: boolean };
+  constructor(private lossesService: LossesService, 
+    private phastResultsService: PhastResultsService, 
+    private phastService: PhastService,
+    private energyInputExhaustGasService: EnergyInputExhaustGasService, 
+    private phastCompareService: PhastCompareService,
+    private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService, 
+    private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setNumLosses();
     this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
       this.enInput2Done = this.lossesService.enInput2Done;
-      let dataCheck: { missingData: boolean, hasWarning: boolean } = this.checkLossData();
-      this.missingData = dataCheck.missingData;
+      this.dataCheck = this.checkLossData();
       this.isDifferent = this.checkDifferent();
-      this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
     });
 
@@ -52,9 +60,9 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
 
   setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if (this.missingData || !this.enInput2Done) {
+    if (this.dataCheck.invalid || !this.enInput2Done) {
       badgeStr = ['missing-data'];
-    } else if (this.inputError) {
+    } else if (this.dataCheck.hasWarning) {
       badgeStr = ['input-error'];
     } else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
@@ -71,36 +79,45 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
     }
   }
 
-  checkLossData(): { missingData: boolean, hasWarning: boolean } {
-    let missingData = false;
-    let hasWarning: boolean = false;
+
+  checkLossData(): { invalid: boolean, hasWarning: boolean } {
+    let baselineValid = true;
+    let baselineWarning: boolean = false;
     if (this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses) {
-      this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses.forEach(loss => {
-        if (this.checkLossValid(loss) === false) {
-          missingData = true;
-        }
-        let warnings: { heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(loss, this.settings);
-        if (warnings.heatWarning != null) {
-          hasWarning = true;
-        }
+      let baselineResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
+      this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses.some(loss => {
+        baselineValid = this.isLossValid(loss)
+        let lossResults = this.phastService.energyInputExhaustGasLosses(loss, this.settings);
+        baselineWarning = this.checkHasWarnings(baselineResults, loss, lossResults);
+        return !baselineValid || baselineWarning;
       });
     }
-    if (this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses && !this.inSetup) {
-      this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses.forEach(loss => {
-        if (this.checkLossValid(loss) === false) {
-          missingData = true;
-        }
-        let warnings: { heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(loss, this.settings);
-        if (warnings.heatWarning != null) {
-          hasWarning = true;
-        }
+
+    let modificationValid = true;
+    let modificationWarning = false;
+    if (!this.inSetup && this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses) {
+      let modifiedPhast: PHAST = this.phastCompareService.selectedModification.getValue();
+      let modificationResults: PhastResults = this.phastResultsService.getResults(modifiedPhast, this.settings);
+      this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses.some(loss => {
+          modificationValid = this.isLossValid(loss)
+          let lossResults = this.phastService.energyInputExhaustGasLosses(loss, this.settings);
+          modificationWarning = this.checkHasWarnings(modificationResults, loss, lossResults);
+          return !modificationValid || modificationWarning;
       });
-    }
-    return { missingData: missingData, hasWarning: hasWarning };
+    } 
+
+    return { invalid: !baselineValid || !modificationValid, hasWarning: baselineWarning || modificationWarning };
+  }
+  
+  checkHasWarnings(phastResults: PhastResults, loss: EnergyInputExhaustGasLoss, lossResults): boolean {
+    let energyInputTotal = phastResults.grossHeatInput;
+    let electricalHeatDelivered = energyInputTotal - lossResults.heatDelivered - lossResults.exhaustGasLosses;
+    let warnings: { energyInputHeatDelivered: string } = this.energyInputExhaustGasService.checkWarnings(electricalHeatDelivered);
+    return warnings.energyInputHeatDelivered != null;
   }
 
 
-  checkLossValid(loss: EnergyInputExhaustGasLoss) {
+  isLossValid(loss: EnergyInputExhaustGasLoss) {
     let tmpForm: UntypedFormGroup = this.energyInputExhaustGasService.getFormFromLoss(loss);
     if (tmpForm.status === 'VALID') {
       return true;

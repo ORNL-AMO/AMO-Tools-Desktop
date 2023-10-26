@@ -393,36 +393,6 @@ export class PhastResultsService {
     }
   }
 
-  getMinElectricityInputRequirement(phast: PHAST, settings: Settings): number {
-    if (phast.losses) {
-      let results: PhastResults = this.getResults(phast, settings);
-      return results.totalInput + results.exothermicHeat - results.energyInputTotalChemEnergy;
-    } else {
-      return undefined;
-    }
-  }
-
-  checkEnergyInputWarnings(energyInputHeatDelivered: number): string {
-    if (energyInputHeatDelivered < 0) {
-      return 'More heat than necessary is being delivered via burners. Check fuel inputs or estimate other losses.';
-    } else {
-      return null;
-    }
-  }
-
-  checkElectricityInputWarning(phast: PHAST, settings: Settings): string {
-    if (phast.losses) {
-      let results: PhastResults = this.getResults(phast, settings);
-      if( results.totalExhaustGasEAF >= results.energyInputTotalChemEnergy){
-        return 'Exhaust Gas Losses must be less than Chemical Energy Delivered. Please check Electricity Input value.';
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
-    
-  }
 
 }
 

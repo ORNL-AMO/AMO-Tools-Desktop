@@ -556,7 +556,6 @@ export class PhastService {
   //energy input for non-EAF Electric process heating
   energyInputExhaustGasLosses(input: EnergyInputExhaustGasLoss, settings: Settings): EnergyExhaustGasOutput {
     let inputs = this.createInputCopy(input);
-    debugger;
     let results: EnergyExhaustGasOutput = {
       heatDelivered: 0,
       exhaustGasLosses: 0,

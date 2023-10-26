@@ -65,7 +65,6 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   }
 
   save() {
-    debugger;
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
