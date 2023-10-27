@@ -163,6 +163,8 @@ export class OpportunitySummaryService {
     let opportunityMetaData: OpportunityMetaData = this.getOpportunityMetaData(thOpportunity.opportunitySheet);
     if (thOpportunity.opportunityType === Treasure.waterHeating){      
       oppSummary = this.getWaterHeatingOpportunitySummary(results, opportunityMetaData, thOpportunity, settings);
+    } else if (thOpportunity.opportunityType === Treasure.boilerBlowdownRate){      
+      oppSummary = this.getBoilerBlowdownRateOpportunitySummary(results, opportunityMetaData, thOpportunity, settings);
     } else {
       oppSummary = this.getNewOpportunitySummary(opportunityMetaData, results);
     }
@@ -175,6 +177,22 @@ export class OpportunitySummaryService {
     let waterHeatingOpportunity = thOpportunity as WaterHeatingTreasureHunt;
     let waterResults: TreasureHuntOpportunityResults = this.waterHeatingTreasureHuntService.getWaterOpportunityResults(waterHeatingOpportunity, settings);
     let gasResults: TreasureHuntOpportunityResults = this.waterHeatingTreasureHuntService.getGasOpportunityResults(waterHeatingOpportunity, settings);
+    let mixedIndividualSummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
+    let waterOppSum: OpportunitySummary = this.getNewOpportunitySummary(opportunityMetaData, waterResults);
+    mixedIndividualSummaries.push(waterOppSum);
+    let gasOppSum: OpportunitySummary = this.getNewOpportunitySummary(opportunityMetaData, gasResults);
+    mixedIndividualSummaries.push(gasOppSum);
+    opSum = this.getNewOpportunitySummary(opportunityMetaData, results, mixedIndividualSummaries);
+
+    return opSum;
+
+  }
+
+  getBoilerBlowdownRateOpportunitySummary(results: TreasureHuntOpportunityResults, opportunityMetaData: OpportunityMetaData, thOpportunity: TreasureHuntOpportunity, settings: Settings): OpportunitySummary {
+    let opSum: OpportunitySummary;
+    let boilerBlowdownRateOpportunity = thOpportunity as BoilerBlowdownRateTreasureHunt;
+    let waterResults: TreasureHuntOpportunityResults = this.boilerBlowdownRateTreasureHuntService.getWaterOpportunityResults(boilerBlowdownRateOpportunity, settings);
+    let gasResults: TreasureHuntOpportunityResults = this.boilerBlowdownRateTreasureHuntService.getGasOpportunityResults(boilerBlowdownRateOpportunity, settings);
     let mixedIndividualSummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
     let waterOppSum: OpportunitySummary = this.getNewOpportunitySummary(opportunityMetaData, waterResults);
     mixedIndividualSummaries.push(waterOppSum);

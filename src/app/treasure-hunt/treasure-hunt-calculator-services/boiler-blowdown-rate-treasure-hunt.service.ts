@@ -22,7 +22,7 @@ export class BoilerBlowdownRateTreasureHuntService {
     }
 
     deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
-        treasureHunt.steamReductions.splice(index, 1);
+        treasureHunt.boilerBlowdownRateOpportunities.splice(index, 1);
         return treasureHunt;
     }
 
@@ -39,13 +39,15 @@ export class BoilerBlowdownRateTreasureHuntService {
         this.boilerBlowdownRateService.modificationInputs.next(undefined);
     }
 
-
-    getTreasureHuntOpportunityResults(boilerBlowdownRate: BoilerBlowdownRateTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
+    getWaterOpportunityResults(boilerBlowdownRate: BoilerBlowdownRateTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
+        this.setCalculatorInputFromOpportunity(boilerBlowdownRate);
         let baselineResults: BoilerBlowdownRateResults = this.boilerBlowdownRateService.calculateResults(boilerBlowdownRate.baseline, settings, true, true);
         let modificationResults: BoilerBlowdownRateResults = this.boilerBlowdownRateService.calculateResults(boilerBlowdownRate.modification, settings, true, true);
+        let costSavings: number = baselineResults.makeupWaterCost - modificationResults.makeupWaterCost;
+        let energySavings: number = baselineResults.makeupWaterUse - baselineResults.makeupWaterUse;
         let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
-            costSavings: baselineResults.makeupWaterCost - modificationResults.makeupWaterCost,
-            energySavings: (baselineResults.makeupWaterCost - modificationResults.makeupWaterCost) / settings.waterCost,
+            costSavings: costSavings,
+            energySavings: energySavings,
             baselineCost: baselineResults.makeupWaterCost,
             modificationCost: modificationResults.makeupWaterCost,
             utilityType: 'Water',
@@ -54,13 +56,42 @@ export class BoilerBlowdownRateTreasureHuntService {
         return treasureHuntOpportunityResults;
     }
 
-    getBoilerBlowdownRateCardData(opportunity: BoilerBlowdownRateTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-        let unitStr: string = 'm3';
-        if (settings.unitsOfMeasure == 'Imperial') {
-            unitStr = 'kgal';
+    getGasOpportunityResults(boilerBlowdownRate: BoilerBlowdownRateTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
+        this.setCalculatorInputFromOpportunity(boilerBlowdownRate);
+        let baselineResults: BoilerBlowdownRateResults = this.boilerBlowdownRateService.calculateResults(boilerBlowdownRate.baseline, settings, true, true);
+        let modificationResults: BoilerBlowdownRateResults = this.boilerBlowdownRateService.calculateResults(boilerBlowdownRate.modification, settings, true, true);
+        let costSavings: number = baselineResults.boilerFuelCost - modificationResults.boilerFuelCost;
+        let energySavings: number = baselineResults.boilerFuelUse - baselineResults.boilerFuelUse;
+        let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
+            costSavings: costSavings,
+            energySavings: energySavings,
+            baselineCost: baselineResults.boilerFuelCost,
+            modificationCost: modificationResults.boilerFuelCost,
+            utilityType: boilerBlowdownRate.baseline.boilerUtilityType,
         }
-        let utilityCost: number = currentEnergyUsage.waterCosts;
+        return treasureHuntOpportunityResults;
+    }
 
+
+    getTreasureHuntOpportunityResults(boilerBlowdownRate: BoilerBlowdownRateTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
+        let baselineResults: BoilerBlowdownRateResults = this.boilerBlowdownRateService.calculateResults(boilerBlowdownRate.baseline, settings, true, true);
+        let modificationResults: BoilerBlowdownRateResults = this.boilerBlowdownRateService.calculateResults(boilerBlowdownRate.modification, settings, true, true);
+        let costSavings: number = baselineResults.totalCost - modificationResults.totalCost;
+        let energySavings: number = baselineResults.makeupWaterUse - baselineResults.makeupWaterUse;
+        let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
+            costSavings: costSavings,
+            energySavings: energySavings,
+            baselineCost: baselineResults.totalCost,
+            modificationCost: modificationResults.totalCost,
+            utilityType: 'Mixed',
+        }
+
+        return treasureHuntOpportunityResults;
+    }
+
+    getBoilerBlowdownRateCardData(opportunity: BoilerBlowdownRateTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
+        let energyData = this.getEnergyData(opportunity, settings, currentEnergyUsage, opportunitySummary,);
+    
         let cardData: OpportunityCardData = {
             implementationCost: opportunitySummary.totalCost,
             paybackPeriod: opportunitySummary.payback,
@@ -68,41 +99,99 @@ export class BoilerBlowdownRateTreasureHuntService {
             opportunityType: 'boiler-blowdown-rate',
             opportunityIndex: index,
             annualCostSavings: opportunitySummary.costSavings,
-            annualEnergySavings: [{
-                savings: opportunitySummary.totalEnergySavings,
-                energyUnit: unitStr,
-                label: opportunitySummary.utilityType
-            }],
-            utilityType: [opportunitySummary.utilityType],
-            percentSavings: [{
-                percent: (opportunitySummary.costSavings / utilityCost) * 100,
-                label: opportunitySummary.utilityType,
-                baselineCost: opportunitySummary.baselineCost,
-                modificationCost: opportunitySummary.modificationCost,
-            }],
+            annualEnergySavings: energyData.annualEnergySavings,
+            percentSavings: energyData.percentSavings,
+            utilityType: energyData.utilityTypes,
             boilerBlowdownRate: opportunity,
             name: opportunitySummary.opportunityName,
             opportunitySheet: opportunity.opportunitySheet,
             iconString: 'assets/images/calculator-icons/steam-icons/blowdown-rate.png',
-            teamName: opportunity.opportunitySheet ? opportunity.opportunitySheet.owner : undefined
+            teamName: opportunity.opportunitySheet ? opportunity.opportunitySheet.owner : undefined,
+            iconCalcType: 'steam',
+            needBackground: true
         }
         return cardData;
+    }
+
+    getEnergyData(boilerBlowdownRate: BoilerBlowdownRateTreasureHunt, settings: Settings, currentEnergyUsage: EnergyUsage, opportunitySummary: OpportunitySummary): {
+        annualEnergySavings: Array<{
+            savings: number,
+            label: string,
+            energyUnit: string
+        }>,
+        percentSavings: Array<{ percent: number, label: string, baselineCost: number, modificationCost: number }>,
+        utilityTypes: Array<string>
+    } {
+        let annualEnergySavings: Array<{ savings: number, label: string, energyUnit: string }> = new Array();
+        let percentSavings: Array<{ percent: number, label: string, baselineCost: number, modificationCost: number }> = new Array();
+        let utilityTypes: Array<string> = new Array();
+        let baselineResults: BoilerBlowdownRateResults = this.boilerBlowdownRateService.calculateResults(boilerBlowdownRate.baseline, settings, true, true);
+        let modificationResults: BoilerBlowdownRateResults = this.boilerBlowdownRateService.calculateResults(boilerBlowdownRate.modification, settings, true, true);
+        
+        let currentCosts: number = 0;
+        if (boilerBlowdownRate.baseline.boilerUtilityType == 'Natural Gas') {
+            currentCosts = currentEnergyUsage.naturalGasCosts;
+        } else if (boilerBlowdownRate.baseline.boilerUtilityType == 'Other Fuel') {
+            currentCosts = currentEnergyUsage.otherFuelCosts;
+        }
+
+        let fuelUnit: string = 'MMBTu/yr';
+        if (settings.unitsOfMeasure == 'Metric') {
+            fuelUnit = 'MJ/yr';
+        }
+        annualEnergySavings.push({
+            savings: baselineResults.boilerFuelUse - modificationResults.boilerFuelUse,
+            label: boilerBlowdownRate.baseline.boilerUtilityType,
+            energyUnit: fuelUnit
+        });
+        percentSavings.push(
+            {
+                percent: ((baselineResults.boilerFuelCost - modificationResults.boilerFuelCost) / currentCosts) * 100,
+                label: boilerBlowdownRate.baseline.boilerUtilityType,
+                baselineCost: baselineResults.boilerFuelCost,
+                modificationCost: modificationResults.boilerFuelCost
+            }
+        )
+        utilityTypes.push(boilerBlowdownRate.baseline.boilerUtilityType);
+
+        let waterUnit: string = 'L/yr';
+        if (settings.unitsOfMeasure == 'Metric') {
+            waterUnit = 'gal/yr';
+        }
+        annualEnergySavings.push({
+            savings: baselineResults.makeupWaterUse - modificationResults.makeupWaterUse,
+            label: 'Water',
+            energyUnit: waterUnit
+        });
+        percentSavings.push(
+            {
+                percent: ((baselineResults.makeupWaterCost - modificationResults.makeupWaterCost) / currentEnergyUsage.waterCosts) * 100,
+                label: 'Water',
+                baselineCost: baselineResults.makeupWaterCost,
+                modificationCost: modificationResults.makeupWaterCost
+            }
+        )
+        utilityTypes.push('Water');
+
+        return { annualEnergySavings: annualEnergySavings, percentSavings: percentSavings, utilityTypes: utilityTypes }
+
     }
 
     convertBoilerBlowdownRates(boilerBlowdownRate: Array<BoilerBlowdownRateTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<BoilerBlowdownRateTreasureHunt> {
         boilerBlowdownRate.forEach(boiler => {
             boiler.baseline = this.convertBoilerBlowdownRate(boiler.baseline, oldSettings, newSettings);
-         
-            if (boiler.modification) {               
+
+            if (boiler.modification) {
                 boiler.modification = this.convertBoilerBlowdownRate(boiler.modification, oldSettings, newSettings);
-             
             }
-        })
+        });
         return boilerBlowdownRate;
     }
 
     convertBoilerBlowdownRate(boiler: BoilerBlowdownRateInputs, oldSettings: Settings, newSettings: Settings): BoilerBlowdownRateInputs {
-      
+        boiler.steamFlow = this.convertUnitsService.value(boiler.steamFlow).from(oldSettings.steamMassFlowMeasurement).to(newSettings.steamMassFlowMeasurement);
+        boiler.steamTemperature = this.convertUnitsService.value(boiler.steamTemperature).from(oldSettings.steamTemperatureMeasurement).to(newSettings.steamTemperatureMeasurement);
+        boiler.makeupWaterTemperature = this.convertUnitsService.value(boiler.makeupWaterTemperature).from(oldSettings.steamTemperatureMeasurement).to(newSettings.steamTemperatureMeasurement);
         return boiler;
     }
 

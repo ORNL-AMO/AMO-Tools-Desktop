@@ -50,7 +50,7 @@
             <div class="d-flex flex-column mx-4 mb-4">
                 <!-- app form -->
                 <app-blowdown-rate-form [settings]="settings" [isBaseline]="true"
-                    [disabled]="baselineSelected == false"></app-blowdown-rate-form>
+                    [disabled]="baselineSelected == false" [inTreasureHunt]="inTreasureHunt"></app-blowdown-rate-form>
                 <div class="w-100 justify content-center btn-group btn-group-sm">
                     <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form"
                         (click)="btnResetData()">
@@ -75,7 +75,7 @@
             <!-- forms -->
             <div class="d-flex flex-column mx-4 mb-4" *ngIf="modificationExists">
                 <app-blowdown-rate-form [settings]="settings" [isBaseline]="false"
-                    [disabled]="baselineSelected == true"></app-blowdown-rate-form>
+                    [disabled]="baselineSelected == true" [inTreasureHunt]="inTreasureHunt"></app-blowdown-rate-form>
             </div>
             <!-- no content message -->
             <div class="panel-column modification" *ngIf="!modificationExists" (click)="setModificationSelected()"

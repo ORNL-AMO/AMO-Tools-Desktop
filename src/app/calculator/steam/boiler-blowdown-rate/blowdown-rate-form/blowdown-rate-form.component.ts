@@ -17,6 +17,8 @@ export class BlowdownRateFormComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   disabled: boolean;
+  @Input()
+  inTreasureHunt: boolean;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -51,10 +53,18 @@ export class BlowdownRateFormComponent implements OnInit {
       this.setForm();
     });
     this.showBoilerSubscription = this.boilerBlowdownRateService.showBoiler.subscribe(val => {
-      this.showBoiler = val;
+      if (this.inTreasureHunt){
+        this.showBoiler = true;
+      } else {
+        this.showBoiler = val;
+      }
     });
     this.showOperationsSubscription = this.boilerBlowdownRateService.showOperations.subscribe(val => {
-      this.showOperations = val;
+      if (this.inTreasureHunt){
+        this.showOperations = true;
+      } else {
+        this.showOperations = val;
+      }
     });
     this.operatingHoursSubscription = this.boilerBlowdownRateService.operatingHours.subscribe(val => {
       this.operatingHours = val;
@@ -201,5 +211,18 @@ export class BlowdownRateFormComponent implements OnInit {
     this.saveOperations();
     this.closeOperatingHoursModal();
     this.boilerBlowdownRateService.operatingHours.next(updatedHours);
+  }
+
+  setUtilityType() {
+    if (this.inTreasureHunt) {
+      this.setTreasureHuntFuelCost(this.operationsForm.controls.boilerUtilityType.value);
+    }
+    this.saveOperations();
+  }
+
+  setTreasureHuntFuelCost(energySourceType: string) {
+    let treasureHuntFuelCost = this.boilerBlowdownRateService.getTreasureHuntFuelCost(energySourceType, this.settings);
+    this.operationsForm.patchValue({fuelCost: treasureHuntFuelCost});
+    this.saveOperations();
   }
 }

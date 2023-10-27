@@ -34,6 +34,7 @@ export class BoilerBlowdownRateComponent implements OnInit {
   modificationInputs: BoilerBlowdownRateInputs;
   modificationExists: boolean = false;
   modificationSub: Subscription;
+  baselineSub: Subscription;
   baselineSelected: boolean = true;
   tabSelect: string = 'results';
   headerHeight: number;
@@ -49,13 +50,9 @@ export class BoilerBlowdownRateComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
     this.initData();
-    this.modificationSub = this.boilerBlowdownRateService.modificationInputs.subscribe(val => {
-      if (val) {
-        this.modificationExists = true;
-      } else {
-        this.modificationExists = false;
-      }
-    })
+
+    this.initSubscriptions();
+    
   }
 
   ngAfterViewInit() {
@@ -72,17 +69,34 @@ export class BoilerBlowdownRateComponent implements OnInit {
       this.boilerBlowdownRateService.baselineInputs.next(undefined);
       this.boilerBlowdownRateService.modificationInputs.next(undefined);
     }
+    this.baselineSub.unsubscribe();
     this.modificationSub.unsubscribe();
   }
 
   initData() {
     let baselineInputs: BoilerBlowdownRateInputs = this.boilerBlowdownRateService.baselineInputs.getValue();
-    if (baselineInputs == undefined) {
+    if (!baselineInputs) {
       baselineInputs = this.boilerBlowdownRateService.getDefaultInputs(this.settings);
     } else {
       this.baselineInputs = this.boilerBlowdownRateService.baselineInputs.getValue();
     }
     this.boilerBlowdownRateService.baselineInputs.next(baselineInputs);
+  }
+
+  initSubscriptions() {
+    this.baselineSub = this.boilerBlowdownRateService.baselineInputs.subscribe(value => {
+      this.baselineInputs = value;
+      //this.boilerBlowdownRateService.calculate(this.settings);
+    });
+    
+    this.modificationSub = this.boilerBlowdownRateService.modificationInputs.subscribe(val => {
+      if (val) {
+        this.modificationInputs = val;
+        this.modificationExists = true;
+      } else {
+        this.modificationExists = false;
+      }
+    });
   }
 
   createModification() {
