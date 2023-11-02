@@ -78,7 +78,8 @@ export class EnergyInputComponent implements OnInit {
   initForms() {
     if (this.losses.energyInputEAF) {
       let lossIndex = 1;
-      let minElectricityRequirement: number = this.getMinElectricityRequirement();
+      let phastResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
+      let minElectricityRequirement: number = this.getMinElectricityRequirement(phastResults);
       this.losses.energyInputEAF.forEach(loss => {
         let tmpLoss = {
           form: this.energyInputService.getFormFromLoss(loss, minElectricityRequirement),
@@ -101,8 +102,8 @@ export class EnergyInputComponent implements OnInit {
     }
   }
 
-  getMinElectricityRequirement(): number {
-    let minElectricityRequirement: number = this.phastResultsService.getMinElectricityInputRequirement(this.phast, this.settings);
+  getMinElectricityRequirement(phastResults: PhastResults): number {
+    let minElectricityRequirement: number = this.energyInputService.getMinElectricityInputRequirement(this.phast, phastResults, this.settings);
     return minElectricityRequirement;
   }
 
@@ -127,16 +128,17 @@ export class EnergyInputComponent implements OnInit {
   collapseLoss(loss: EnInputObj) {
     loss.collapse = !loss.collapse;
   }
+
   calculate(loss: EnInputObj) {
     if (loss.form.status === 'VALID') {
-      let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
+      let phastResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
       loss.results = {
-        energyInputHeatDelivered: tmpResults.energyInputHeatDelivered,
-        energyInputTotalChemEnergy: tmpResults.energyInputTotalChemEnergy,
-        grossHeatInput: tmpResults.energyInputTotal
+        energyInputHeatDelivered: phastResults.energyInputHeatDelivered,
+        energyInputTotalChemEnergy: phastResults.energyInputTotalChemEnergy,
+        grossHeatInput: phastResults.energyInputTotal
       };
-      this.warnings.energyInputHeatDelivered = this.phastResultsService.checkEnergyInputWarnings(loss.results.energyInputHeatDelivered);
-      this.warnings.electricityInputWarning = this.phastResultsService.checkElectricityInputWarning(this.phast, this.settings);
+
+      this.warnings = this.energyInputService.checkWarnings(this.phast, phastResults, this.settings);
     } else {
       loss.results = {
         energyInputHeatDelivered: null,
@@ -160,7 +162,9 @@ export class EnergyInputComponent implements OnInit {
       tmpEnergyInputs.push(tmpEnergyInput);
     });
     this.losses.energyInputEAF = tmpEnergyInputs;
-    let minEnergyRequirement: number = this.getMinElectricityRequirement();
+    
+    let phastResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
+    let minEnergyRequirement: number = this.getMinElectricityRequirement(phastResults);
     let updatedValidators = this.energyInputService.getElectricityInputValidators(minEnergyRequirement);
     this._energyInputs.forEach(loss => {
       loss.form.controls.electricityInput.setValidators(updatedValidators);
