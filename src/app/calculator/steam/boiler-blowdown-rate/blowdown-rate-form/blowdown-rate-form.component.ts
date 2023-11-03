@@ -214,15 +214,9 @@ export class BlowdownRateFormComponent implements OnInit {
   }
 
   setUtilityType() {
-    if (this.inTreasureHunt) {
-      this.setTreasureHuntFuelCost(this.operationsForm.controls.boilerUtilityType.value);
-    }
-    this.saveOperations();
-  }
-
-  setTreasureHuntFuelCost(energySourceType: string) {
-    let treasureHuntFuelCost = this.boilerBlowdownRateService.getTreasureHuntFuelCost(energySourceType, this.settings);
+    let treasureHuntFuelCost = this.boilerBlowdownRateService.getTreasureHuntFuelCost(this.operationsForm.controls.boilerUtilityType.value, this.settings);
     this.operationsForm.patchValue({fuelCost: treasureHuntFuelCost});
-    this.saveOperations();
+    this.saveOperations();    
   }
+  
 }

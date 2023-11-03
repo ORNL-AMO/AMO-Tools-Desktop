@@ -154,9 +154,9 @@ export class BoilerBlowdownRateTreasureHuntService {
         )
         utilityTypes.push(boilerBlowdownRate.baseline.boilerUtilityType);
 
-        let waterUnit: string = 'L/yr';
+        let waterUnit: string = 'gal/yr';
         if (settings.unitsOfMeasure == 'Metric') {
-            waterUnit = 'gal/yr';
+            waterUnit = 'L/yr';
         }
         annualEnergySavings.push({
             savings: baselineResults.makeupWaterUse - modificationResults.makeupWaterUse,
