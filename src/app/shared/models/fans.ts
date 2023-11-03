@@ -44,6 +44,7 @@ export interface FsatValid {
 export interface Modification {
   notes?: Notes;
   fsat?: FSAT;
+  id: string,
   exploreOpportunities?: boolean;
   exploreOppsShowVfd?: SavingsOpportunity,
   exploreOppsShowDrive?: SavingsOpportunity,

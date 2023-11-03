@@ -18,6 +18,7 @@ import { PhastValidService } from './phast-valid.service';
 import { SavingsOpportunity } from '../shared/models/explore-opps';
 import { ConvertPhastService } from './convert-phast.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
+import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
 
 @Component({
   selector: 'app-phast',
@@ -82,12 +83,13 @@ export class PhastComponent implements OnInit {
   smallScreenTab: string = 'form';
   showExportModal: boolean = false;
   showExportModalSub: Subscription;
+
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
     private convertPhastService: ConvertPhastService,
     private phastValidService: PhastValidService,
-      
+    private helperFunctions: HelperFunctionsService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private lossesService: LossesService,
@@ -108,9 +110,8 @@ export class PhastComponent implements OnInit {
     this.tab1Status = '';
     this.tab2Status = '';
 
-    //initialize booleans indicating assessment setup or 'done'
     this.lossesService.initDone();
-    //get assessmentId from route phast/:id
+
     this.actvatedRouteSubscription = this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       if (!this.assessment || (this.assessment && this.assessment.type !== 'PHAST')) {
@@ -135,38 +136,28 @@ export class PhastComponent implements OnInit {
       this.initSankeyList();
     } 
     });
-    //check to see if we need to start on a specified tab
-    let tmpTab = this.assessmentService.getTab();
-    if (tmpTab) {
-      //set that tab
-      this.phastService.mainTab.next(tmpTab);
+    let startingTab = this.assessmentService.getStartingTab();
+    if (startingTab) {
+      this.phastService.mainTab.next(startingTab);
     }
-    //subscription for mainTab
     this.mainTabSubscription = this.phastService.mainTab.subscribe(val => {
       this.mainTab = val;
-      //on tab change get container height
       this.getContainerHeight();
     });
-    //subscription for stepTab
     this.stepTabSubscription = this.phastService.stepTab.subscribe(val => {
       this.stepTab = val;
-      //on tab change get container height
       this.getContainerHeight();
     });
-    //specTab used for: system basics, operating hours and operating costs
     this.specTabSubscription = this.phastService.specTab.subscribe(val => {
       this.specTab = val;
     });
-    //tabs used for heat balance
     this.lossesTabSubscription = this.lossesService.lossesTab.subscribe(tab => {
       this.selectedLossTab = this.lossesService.getTab(tab);
     });
-    //modify conditions or explore opps tab
     this.assessmentTabSubscription = this.phastService.assessmentTab.subscribe(tab => {
       this.assessmentTab = tab;
       this.getContainerHeight();
     });
-    //calculator tab
     this.calcTabSubscription = this.phastService.calcTab.subscribe(val => {
       this.calcTab = val;
     });
@@ -264,6 +255,7 @@ export class PhastComponent implements OnInit {
 
   ngOnDestroy() {
     //reset tabs when leaving phast assessment
+    this.phastService.mainTab.next(undefined);
     this.mainTabSubscription.unsubscribe();
     this.actvatedRouteSubscription.unsubscribe();
     this.stepTabSubscription.unsubscribe();
@@ -492,6 +484,7 @@ export class PhastComponent implements OnInit {
         energyInputExhaustGasNotes: '',
         operationsNotes: ''
       },
+      id: this.helperFunctions.getNewIdString(),
       exploreOppsShowFlueGas: exploreOppsDefault,
       exploreOppsShowAirTemp: exploreOppsDefault,
       exploreOppsShowMaterial: exploreOppsDefault,

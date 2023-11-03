@@ -90,8 +90,8 @@ export class WasteWaterComponent implements OnInit {
           this.settings = settings;
           this.wasteWaterService.settings.next(settings);
         }
-        if (this.assessmentService.tab) {
-          this.wasteWaterService.mainTab.next(this.assessmentService.tab);
+        if (this.assessmentService.startingTab) {
+          this.wasteWaterService.mainTab.next(this.assessmentService.startingTab);
         }
       }
     });

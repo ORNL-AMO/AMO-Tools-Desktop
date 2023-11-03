@@ -47,7 +47,6 @@ export class ModifyConditionsComponent implements OnInit {
     if (tmpTab) {
       this.psatTabService.modifyConditionsTab.next(tmpTab);
     }
-
     this.modifyConditionsSub = this.psatTabService.modifyConditionsTab.subscribe(val => {
       this.modifyTab = val;
     })

@@ -15,6 +15,11 @@ export class EnergyUseFormComponent implements OnInit {
   emitSave = new EventEmitter<Array<{ type: string, amount: number }>>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
+  @Input()
+  isAssessmentOpportunity: boolean;
+  @Input()
+  allowCreateModifiedEnergy: boolean;
+  
   constructor() { }
 
   ngOnInit() {

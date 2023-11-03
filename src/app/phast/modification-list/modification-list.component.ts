@@ -6,6 +6,7 @@ import { PhastService } from '../phast.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { SavingsOpportunity } from '../../shared/models/explore-opps';
+import { HelperFunctionsService } from '../../shared/helper-services/helper-functions.service';
 
 @Component({
   selector: 'app-modification-list',
@@ -30,7 +31,7 @@ export class ModificationListComponent implements OnInit {
   deleteArr: Array<boolean>;
   asssessmentTab: string;
   assessmentTabSubscription: Subscription;
-  constructor(private phastCompareService: PhastCompareService, private lossesService: LossesService, private phastService: PhastService) { }
+    constructor(private phastCompareService: PhastCompareService, private helperFunctions: HelperFunctionsService, private lossesService: LossesService, private phastService: PhastService) { }
 
   ngOnInit() {
     this.initDropdown();
@@ -162,6 +163,7 @@ export class ModificationListComponent implements OnInit {
         energyInputExhaustGasNotes: '',
         operationsNotes: ''
       },
+      id: this.helperFunctions.getNewIdString(),
       exploreOppsShowFlueGas: exploreOppsDefault,
       exploreOppsShowAirTemp: exploreOppsDefault,
       exploreOppsShowMaterial: exploreOppsDefault,

@@ -94,7 +94,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
         this.setDisableNext();
       }
     })
-    let tmpTab: string = this.assessmentService.getTab();
+    let tmpTab: string = this.assessmentService.getStartingTab();
     if (tmpTab) {
       this.compressedAirAssessmentService.mainTab.next(tmpTab);
     }

@@ -1,0 +1,51 @@
+
+.table {
+    font-size: small;
+}
+ .table th {
+    border: none;
+    padding: 0px 10px;
+}
+.table td {
+    padding: 2px 8px;
+    vertical-align: middle;
+}
+
+tr > td:not(:first-child),
+tr > th:not(:first-child){
+    text-align: center;
+}
+
+
+.graph-col{
+    padding-left: 0px;
+}
+
+.selected-modification{
+    z-index: 2;
+    background: #e5efe9;
+}
+
+.row-stripe{
+    border-bottom: solid;
+}
+
+
+div.integration-container {
+    overflow-x: auto;
+}
+
+
+
+.modal-dialog{
+    max-width: 100vw;
+    margin: 10px;
+    top: 0px;
+}
+
+.modal-body{
+    height: 75vh;
+    overflow: auto;
+    padding: 0px;
+  }
+  

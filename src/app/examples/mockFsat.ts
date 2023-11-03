@@ -143,6 +143,7 @@ export const MockFsat: Assessment = {
                         measuredVoltage: 460
                     }
                 },
+                id: 'lorol3dhb',
                 exploreOpportunities: true
             },
             {
@@ -214,6 +215,7 @@ export const MockFsat: Assessment = {
                         measuredVoltage: 460
                     }
                 },
+                id: 'usbnl3dhb',
                 exploreOpportunities: true
             }
         ]

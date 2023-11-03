@@ -52,8 +52,9 @@ export const MockPsat: Assessment = {
             }
         },
         "modifications": [{
+            "id": "wjrol3dhb",              
             "psat": {
-                "name": "New Pump and Motor",                
+                "name": "New Pump and Motor",
                 "inputs": {
                     "pump_style": 6,
                     "pump_specified": 87.52,
@@ -106,6 +107,7 @@ export const MockPsat: Assessment = {
                 "systemBasicsNotes": ""
             }            
         }, {
+            "id": "uk0olxdjb",
             "psat": {
                 "name": "VFD reduce speed to 90%",
                 "inputs": {

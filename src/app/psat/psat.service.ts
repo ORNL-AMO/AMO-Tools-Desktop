@@ -13,6 +13,8 @@ import { PSAT } from '../shared/models/psat';
 import { MotorPerformanceResults } from '../calculator/motors/motor-performance/motor-performance.service';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { PumpsSuiteApiService } from '../tools-suite-api/pumps-suite-api.service';
+import { IntegratedAssessment, IntegratedEnergyOptions, ModificationEnergyOption } from '../shared/assessment-integration/assessment-integration.service';
+import { EnergyUseItem } from '../shared/models/treasure-hunt';
 
 @Injectable()
 export class PsatService {
@@ -106,6 +108,73 @@ export class PsatService {
       return this.emptyResults();
     }
   }
+
+  setIntegratedAssessmentData(integratedAssessment: IntegratedAssessment, settings: Settings) {
+    let energyOptions: IntegratedEnergyOptions = {
+      baseline: undefined,
+      modifications: []
+    }
+
+    let psat: PSAT = integratedAssessment.assessment.psat;
+    let baselineOutputs: PsatOutputs = this.resultsExisting(psat.inputs, settings);
+    baselineOutputs.annual_energy = this.convertUnitsService.value(baselineOutputs.annual_energy).from('MWh').to('kWh');
+    baselineOutputs.annual_energy = this.convertUnitsService.roundVal(baselineOutputs.annual_energy, 0)
+    
+    energyOptions.baseline = {
+      name: psat.name,
+      annualEnergy: baselineOutputs.annual_energy,
+      annualCost: baselineOutputs.annual_cost,
+      co2EmissionsOutput: baselineOutputs.co2EmissionsOutput,
+    };
+
+    let baselineEnergy: EnergyUseItem = {
+      type: 'Electricity',
+      amount: baselineOutputs.annual_energy,
+      integratedEnergyCost: baselineOutputs.annual_cost,
+      integratedEmissionRate: baselineOutputs.co2EmissionsOutput
+    };
+
+    integratedAssessment.hasModifications = integratedAssessment.assessment.psat.modifications && integratedAssessment.assessment.psat.modifications.length !== 0;
+    if (integratedAssessment.hasModifications) {
+      let modificationEnergyOptions: Array<ModificationEnergyOption> = [];
+      psat.modifications.forEach(modification => {
+        let modificationOutputs = this.resultsModified(modification.psat.inputs, settings);
+        modificationOutputs.annual_energy = this.convertUnitsService.value(modificationOutputs.annual_energy).from('MWh').to('kWh');
+        modificationOutputs.annual_energy = this.convertUnitsService.roundVal(modificationOutputs.annual_energy, 0);
+        
+        energyOptions.modifications.push({
+          name: modification.psat.name,
+          annualEnergy: modificationOutputs.annual_energy,
+          annualCost: modificationOutputs.annual_cost,
+          modificationId: modification.id,
+          co2EmissionsOutput: modificationOutputs.co2EmissionsOutput
+        });
+
+        let modificationEnergy: EnergyUseItem = {
+          type: 'Electricity',
+          amount: modificationOutputs.annual_energy,
+          integratedEnergyCost: modificationOutputs.annual_cost,
+          integratedEmissionRate: modificationOutputs.co2EmissionsOutput
+        }
+        modificationEnergyOptions.push(
+          {
+            modificationId: modification.id,
+            energies: [modificationEnergy]
+          })
+        });
+        integratedAssessment.modificationEnergyUseItems = modificationEnergyOptions;
+    }
+
+    integratedAssessment.assessmentType = 'PSAT';
+    integratedAssessment.baselineEnergyUseItems = [baselineEnergy];
+    integratedAssessment.energyOptions = energyOptions; 
+    integratedAssessment.thEquipmentType = 'pump';
+    integratedAssessment.navigation = {
+      queryParams: undefined,
+      url: '/psat/' + integratedAssessment.assessment.id
+    }
+  }
+  
 
   setCo2SavingsEmissionsResult(psatInputs: PsatInputs, psatOutputs: PsatOutputs, settings: Settings): PsatOutputs {
     if (psatInputs.co2SavingsData) {

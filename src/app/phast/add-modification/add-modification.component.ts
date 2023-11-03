@@ -3,6 +3,7 @@ import { PHAST, Modification } from '../../shared/models/phast/phast';
 import { PhastService } from '../phast.service';
 import { Subscription } from 'rxjs';
 import { SavingsOpportunity } from '../../shared/models/explore-opps';
+import { HelperFunctionsService } from '../../shared/helper-services/helper-functions.service';
 
 @Component({
   selector: 'app-add-modification',
@@ -24,7 +25,7 @@ export class AddModificationComponent implements OnInit {
   newModificationName: string;
   currentTab: string;
   tabSubscription: Subscription;
-  constructor(private phastService: PhastService) { }
+  constructor(private phastService: PhastService, private helperFunctions: HelperFunctionsService) { }
 
   ngOnInit() {
     if (this.modifications) {
@@ -48,6 +49,7 @@ export class AddModificationComponent implements OnInit {
         losses: {},
         name: this.newModificationName,
       },
+      id: this.helperFunctions.getNewIdString(),
       notes: {
         chargeNotes: '',
         wallNotes: '',
@@ -65,6 +67,7 @@ export class AddModificationComponent implements OnInit {
         energyInputExhaustGasNotes: '',
         operationsNotes: ''
       },
+
       exploreOppsShowFlueGas: exploreOppsDefault,
       exploreOppsShowAirTemp: exploreOppsDefault,
       exploreOppsShowMaterial: exploreOppsDefault,
