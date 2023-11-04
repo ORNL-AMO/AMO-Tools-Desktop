@@ -91,7 +91,7 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
     PhastValidService,
     PhastResultsService,
     ConvertPhastService,
-    PhastCompareService
+    PhastCompareService,
   ]
 })
 

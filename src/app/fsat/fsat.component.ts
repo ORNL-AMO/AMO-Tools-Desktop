@@ -126,7 +126,7 @@ export class FsatComponent implements OnInit {
       }
       this.getSettings();
       this.initSankeyList();
-      let tmpTab: string = this.assessmentService.tab;
+      let tmpTab: string = this.assessmentService.getStartingTab();
       if (tmpTab) {
         this.fsatService.mainTab.next(tmpTab);
       }

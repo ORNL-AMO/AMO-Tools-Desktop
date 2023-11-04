@@ -17,7 +17,7 @@ import { DashboardService } from './dashboard.service';
 export class AssessmentService {
 
   workingAssessment: Assessment;
-  tab: string;
+  startingTab: string;
   subTab: string;
   showLandingScreen: boolean = true;
 
@@ -31,9 +31,9 @@ export class AssessmentService {
 
   goToAssessment(assessment: Assessment, mainTab?: string, subTab?: string) {
     if (mainTab) {
-      this.tab = mainTab;
+      this.startingTab = mainTab;
     } else {
-      this.tab = 'system-setup';
+      this.startingTab = 'system-setup';
     }
 
     if (subTab) {
@@ -43,37 +43,37 @@ export class AssessmentService {
     let itemSegment: string;
     if (assessment.type === 'PSAT') {
       if (assessment.psat.setupDone && !mainTab && (!assessment.isExample)) {
-        this.tab = 'assessment';
+        this.startingTab = 'assessment';
       }
       itemSegment = '/psat/';
     } else if (assessment.type === 'PHAST') {
       if (assessment.phast.setupDone && !mainTab && (!assessment.isExample)) {
-        this.tab = 'assessment';
+        this.startingTab = 'assessment';
       }
       itemSegment = '/phast/';
     } else if (assessment.type === 'FSAT') {
       if (assessment.fsat.setupDone && !mainTab && !assessment.isExample) {
-        this.tab = 'assessment';
+        this.startingTab = 'assessment';
       }
       itemSegment = '/fsat/';
     } else if (assessment.type === 'SSMT') {
       if (assessment.ssmt.setupDone && !mainTab && !assessment.isExample) {
-        this.tab = 'assessment';
+        this.startingTab = 'assessment';
       }
       itemSegment = '/ssmt/';
     } else if (assessment.type == 'TreasureHunt') {
       if (assessment.treasureHunt.setupDone && !mainTab && !assessment.isExample) {
-        this.tab = 'treasure-chest';
+        this.startingTab = 'treasure-chest';
       }
       itemSegment = '/treasure-hunt/';
     } else if (assessment.type == 'WasteWater') {
       if (assessment.wasteWater.setupDone && !mainTab && !assessment.isExample) {
-        this.tab = 'assessment';
+        this.startingTab = 'assessment';
       }
       itemSegment = '/waste-water/';
     } else if (assessment.type == 'CompressedAir') {
       if (assessment.compressedAirAssessment.setupDone && !mainTab && !assessment.isExample) {
-        this.tab = 'assessment';
+        this.startingTab = 'assessment';
       }
       itemSegment = '/compressed-air/';
     }
@@ -158,8 +158,8 @@ export class AssessmentService {
     return this.workingAssessment;
   }
 
-  getTab() {
-    return this.tab;
+  getStartingTab() {
+    return this.startingTab;
   }
 
   getSubTab() {
@@ -174,9 +174,8 @@ export class AssessmentService {
     this.showLandingScreen = bool;
   }
 
-  setWorkingAssessment(assessment: Assessment, str?: string) {
-    this.tab = str;
-    this.workingAssessment = assessment;
+  setStartingTab(startingTab?: string) {
+    this.startingTab = startingTab;
   }
 
   getNewFsat(settings: Settings): FSAT {

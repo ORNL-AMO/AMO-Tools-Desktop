@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { OpportunitySheet } from '../../../../shared/models/treasure-hunt';
 import { processEquipmentOptions } from './processEquipmentOptions';
 
@@ -12,13 +12,15 @@ export class GeneralDetailsFormComponent implements OnInit {
   opportunitySheet: OpportunitySheet;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
+  @Input()
+  isAssessmentOpportunity: boolean;
 
   processEquipmentOptions: Array<{ value: string, display: string }>;
   constructor() { 
-    this.processEquipmentOptions = processEquipmentOptions;
   }
-
+  
   ngOnInit() {
+    this.processEquipmentOptions = processEquipmentOptions;
   }
 
   focusField(str: string) {

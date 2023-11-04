@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, OpportunitySheet, EnergyUseItem, EnergyUsage, HeatCascadingTreasureHunt,  } from '../shared/models/treasure-hunt';
+import { TreasureHunt, OpportunitySheet, EnergyUseItem, EnergyUsage, HeatCascadingTreasureHunt, AssessmentOpportunity,  } from '../shared/models/treasure-hunt';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
 import { AirLeakTreasureHuntService } from './treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
@@ -59,7 +59,12 @@ export class ConvertInputDataService {
   convertTreasureHuntInputData(treasureHunt: TreasureHunt, oldSettings: Settings, newSettings: Settings): TreasureHunt {
     //no conversion for lighting needed..
     if (treasureHunt.opportunitySheets != undefined) {
-      treasureHunt.opportunitySheets = this.convertOpportunitySheets(treasureHunt.opportunitySheets, oldSettings, newSettings);
+      let opportunitySheets = this.convertCustomOpportunity(treasureHunt.opportunitySheets, oldSettings, newSettings);
+      treasureHunt.opportunitySheets = opportunitySheets as OpportunitySheet[];
+    }
+    if (treasureHunt.assessmentOpportunities != undefined) {
+      let assessmentOpportunities = this.convertCustomOpportunity(treasureHunt.assessmentOpportunities, oldSettings, newSettings);
+      treasureHunt.assessmentOpportunities = assessmentOpportunities as AssessmentOpportunity[];
     }
     if (treasureHunt.replaceExistingMotors != undefined) {
       treasureHunt.replaceExistingMotors = this.replaceExistingTreasureService.convertReplaceExistingMotors(treasureHunt.replaceExistingMotors, oldSettings, newSettings);
@@ -134,7 +139,7 @@ export class ConvertInputDataService {
   }
 
 
-  convertOpportunitySheets(opportunitySheets: Array<OpportunitySheet>, oldSettings: Settings, newSettings: Settings): Array<OpportunitySheet> {
+  convertCustomOpportunity(opportunitySheets: Array<OpportunitySheet | AssessmentOpportunity>, oldSettings: Settings, newSettings: Settings): Array<OpportunitySheet | AssessmentOpportunity> {
     opportunitySheets.forEach(sheet => {
       sheet.baselineEnergyUseItems.forEach(item => {
         item = this.convertEnergyUseItem(item, oldSettings, newSettings);
@@ -148,7 +153,7 @@ export class ConvertInputDataService {
 
   convertEnergyUseItem(energyUseItem: EnergyUseItem, oldSettings: Settings, newSettings: Settings): EnergyUseItem {
     if (energyUseItem.type == 'Gas' || energyUseItem.type == 'Other Fuel') {
-      //imperial: MMBtu, metric: MJ
+      //imperial: MMBtu, metric: GJ
       energyUseItem.amount = this.convertUnitsService.convertMMBtuAndGJValue(energyUseItem.amount, oldSettings, newSettings);
     } else if (energyUseItem.type == 'Water' || energyUseItem.type == 'WWT') {
       //imperial: gal, metric: L 

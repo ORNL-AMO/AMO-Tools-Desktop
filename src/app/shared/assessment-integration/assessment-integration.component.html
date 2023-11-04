@@ -1,0 +1,241 @@
+<div class="integration-container p-3">
+    <div *ngIf="hasUpdatedEnergyData" class="d-flex flex-row alert alert-info p-2">
+        <label class="w-50">
+            <span class="integration-label border-0 pr-3">
+                Updated energy use data can be retrieved from changes made to the integrated assessment.
+            </span>
+        </label>
+        <div class="w-50 input-group justify-content-center m-1 mt-2 mb-0">
+            <div>
+                <button class="btn btn-primary p-2" (click)="updateExistingIntegrationData()">
+                    Update Energy Use Data
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <form [formGroup]="assessmentIntegrationForm" (click)="focusField('')">
+        <div class="form-group">
+            <label>Assessment Type</label>
+            <select class="form-control type-select" name="assessmentType" id="assessmentType"
+                formControlName="assessmentType" (change)="setAssessmentOptions()">
+                <option [ngValue]="'PSAT'">Pump</option>
+                <option [ngValue]="'PHAST'">Process Heating</option>
+                <option [ngValue]="'FSAT'">Fan</option>
+                <!-- <option [ngValue]="'SSMT'">Steam</option>
+                <option [ngValue]="'WasteWater'">Wastewater</option>
+                <option [ngValue]="'CompressedAir'">Compressed Air</option> -->
+            </select>
+        </div>
+
+        <div *ngIf="!existingIntegrationData" class="form-group">
+            <label for="integratedAssessment">Select Assessment</label>
+            <select formControlName="integratedAssessment" class="form-control" id="integratedAssessment"
+                (change)="setNewIntegratedAssessment()">
+                <option selected [ngValue]="null">Select Assessment</option>
+                <option *ngFor="let assessment of assessmentOptions" [ngValue]="assessment.id">
+                    {{assessment.display}}</option>
+            </select>
+        </div>
+
+
+        <div *ngIf="existingIntegrationData && integratedAssessment" class="d-flex flex-row">
+            <ng-container *ngIf="integratedAssessment.assessment">
+                <label class="w-50">
+                    <span>Selected Assessment</span>
+                </label>
+                <div class="w-50 input-group justify-content-between">
+                    <div>
+                        <a class="click-link connected-inventory p-1 small" (click)="goToAssessment()">
+                            <span>{{integratedAssessment.assessment.name}}</span>
+                        </a>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!integratedAssessment.assessment">
+                <div class="w-100 alert alert-warning text-center p-2 small">
+                    {{integratedAssessment.name}} no longer exists
+                </div>
+            </ng-container>
+        </div>
+
+
+        <ng-container *ngIf="!existingIntegrationData && integratedAssessment && integratedAssessment.assessment">
+            <hr>
+            <ng-container *ngIf="integratedAssessment.energyOptions.modifications">
+                <div class="d-flex flex-row mb-3">
+                    <label *ngIf="integratedAssessment.hasModifications" class="w-50">
+                        <span>Select a Modification to use for the opportunity:</span>
+                    </label>
+                    <div class="w-50 text-right">
+                        <a class="click-link small" (click)="showReportModal()">
+                            View Assessment Report
+                        </a>
+                    </div>
+                </div>
+
+                <div class="integration-container pt-2 m-0 pb-0">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th
+                                    [ngStyle]="{'width.%': 100 / (integratedAssessment.energyOptions.modifications.length+2)}">
+                                </th>
+                                <th
+                                    [ngStyle]="{'width.%': 100 / (integratedAssessment.energyOptions.modifications.length+2)}">
+                                    Baseline</th>
+                                <th [ngStyle]="{'width.%': 100 /(integratedAssessment.energyOptions.modifications.length+2)}"
+                                    *ngFor="let modification of integratedAssessment.energyOptions.modifications;"
+                                    [ngClass]="{'selected-modification': modification.modificationId === integratedAssessment.selectedModificationId}">
+                                    {{modification.name}}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="bold">Use for Opportunity</td>
+                                <td></td>
+                                <td *ngFor="let modification of integratedAssessment.energyOptions.modifications; let i = index;"
+                                    [ngClass]="{'selected-modification': modification.modificationId === integratedAssessment.selectedModificationId}">
+                                    <input name="selectedModificationId" type="radio"
+                                        (change)="setSelectedModification()" value="{{modification.modificationId}}"
+                                        formControlName="selectedModificationId">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Annual Energy (MWh)</td>
+                                <td>
+                                    {{integratedAssessment.energyOptions.baseline.annualEnergy | number:'2.0-0'}}</td>
+                                <td *ngFor="let modification of integratedAssessment.energyOptions.modifications;"
+                                    [ngClass]="{'selected-modification': modification.modificationId == integratedAssessment.selectedModificationId}">
+                                    <span *ngIf="modification.annualEnergy">{{modification.annualEnergy |
+                                        number:'2.0-0'}}</span>
+                                    <span *ngIf="!modification.annualEnergy">&mdash;</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Annual CO2 Emissions (tonne CO<sub>2</sub>)</td>
+                                <td>
+                                    {{integratedAssessment.energyOptions.baseline.co2EmissionsOutput | number:'1.1-1'}}
+                                </td>
+                                <td *ngFor="let modification of integratedAssessment.energyOptions.modifications;"
+                                    [ngClass]="{'selected-modification': modification.modificationId == integratedAssessment.selectedModificationId}">
+                                    <span *ngIf="modification.co2EmissionsOutput">{{modification.co2EmissionsOutput |
+                                        number:'1.1-1'}}</span>
+                                    <span *ngIf="!modification.co2EmissionsOutput">&mdash;</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Annual Cost ({{settings.currency}})</td>
+                                <td>
+                                    {{integratedAssessment.energyOptions.baseline.annualCost | number: '2.0-0'}}</td>
+                                <td *ngFor="let modification of integratedAssessment.energyOptions.modifications;"
+                                    [ngClass]="{'selected-modification': modification.modificationId == integratedAssessment.selectedModificationId}">
+                                    <span *ngIf="modification.annualCost">{{modification.annualCost | number:
+                                        '2.0-0'}}</span>
+                                    <span *ngIf="!modification.annualCost">&mdash;</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </ng-container>
+
+        </ng-container>
+
+        <ng-container *ngIf="existingIntegrationData">
+            <div class="integration-container pt-2 mb-0 pb-0">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th
+                                [ngStyle]="{'width.%': 100 / (existingIntegrationData.energyOptions.modifications.length+2)}">
+                            </th>
+                            <th
+                                [ngStyle]="{'width.%': 100 / (existingIntegrationData.energyOptions.modifications.length+2)}">
+                                Baseline</th>
+                            <th [ngStyle]="{'width.%': 100 /(existingIntegrationData.energyOptions.modifications.length+2)}"
+                                *ngFor="let modification of existingIntegrationData.energyOptions.modifications;">
+                                {{modification.name}}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="bold">Annual Energy (MWh)</td>
+                            <td>
+                                {{existingIntegrationData.energyOptions.baseline.annualEnergy | number:'2.0-0'}}</td>
+                            <td *ngFor="let modification of existingIntegrationData.energyOptions.modifications;">
+                                <span *ngIf="modification.annualEnergy">{{modification.annualEnergy |
+                                    number:'2.0-0'}}</span>
+                                <span *ngIf="!modification.annualEnergy">&mdash;</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bold">Annual CO2 Emissions (tonne CO<sub>2</sub>)</td>
+                            <td>
+                                {{existingIntegrationData.energyOptions.baseline.co2EmissionsOutput | number:'1.1-1'}}
+                            </td>
+                            <td *ngFor="let modification of existingIntegrationData.energyOptions.modifications;">
+                                <span *ngIf="modification.co2EmissionsOutput">{{modification.co2EmissionsOutput |
+                                    number:'1.1-1'}}</span>
+                                <span *ngIf="!modification.co2EmissionsOutput">&mdash;</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bold">Annual Cost ({{settings.currency}})</td>
+                            <td>
+                                {{existingIntegrationData.energyOptions.baseline.annualCost | number: '2.0-0'}}</td>
+                            <td *ngFor="let modification of existingIntegrationData.energyOptions.modifications;">
+                                <span *ngIf="modification.annualCost">{{modification.annualCost | number:
+                                    '2.0-0'}}</span>
+                                <span *ngIf="!modification.annualCost">&mdash;</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </ng-container>
+    </form>
+</div>
+
+
+
+
+
+
+<div bsModal #reportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div #modalDialog class="modal-content">
+            <div class="modal-header p-2">
+                <button class="close pull-right" (click)="hideReportModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body scroll-item" *ngIf="showReport">
+                <!-- <div class="modal-body scroll-item" *ngIf="showReport" [ngStyle]="{'width.px': modalDialogWidth}"> -->
+                <app-phast-report *ngIf="integratedAssessment.assessmentType === 'PHAST'"
+                    [assessment]="integratedAssessment.assessment" [settings]="settings"
+                    [phast]="integratedAssessment.assessment.phast" [inRollup]="false" [inPhast]="true"
+                    [quickReport]="true"></app-phast-report>
+
+                <app-psat-report *ngIf="integratedAssessment.assessmentType === 'PSAT'"
+                    [assessment]="integratedAssessment.assessment" [settings]="settings" [inRollup]="false"
+                    [inPsat]="true" [quickReport]="true"></app-psat-report>
+
+                <app-fsat-report *ngIf="integratedAssessment.assessmentType === 'FSAT'"
+                    [assessment]="integratedAssessment.assessment" [settings]="settings" [inRollup]="false"
+                    [inFsat]="true" [quickReport]="true"></app-fsat-report>
+
+                <!-- <app-compressed-air-report *ngIf="integratedAssessment.assessmentType === 'CompressedAir'" [assessment]="assessment" [inAssessment]="false" [inRollup]="false"
+                    [quickReport]="true"></app-compressed-air-report>
+
+                <app-waste-water-report *ngIf="integratedAssessment.assessmentType === 'WasteWater'" [assessment]="assessment" [quickReport]="true"></app-waste-water-report>
+
+                <app-ssmt-report *ngIf="integratedAssessment.assessmentType === 'SSMT'" [assessment]="assessment" [settings]="settings"></app-ssmt-report> -->
+
+            </div>
+        </div>
+    </div>
+</div>

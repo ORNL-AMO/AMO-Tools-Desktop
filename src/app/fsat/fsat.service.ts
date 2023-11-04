@@ -13,6 +13,9 @@ import { ConvertFanAnalysisService } from '../calculator/fans/fan-analysis/conve
 import { FansSuiteApiService } from '../tools-suite-api/fans-suite-api.service';
 import { OperationsService } from './operations/operations.service';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service'
+import { IntegratedAssessment, IntegratedEnergyOptions, ModificationEnergyOption } from '../shared/assessment-integration/assessment-integration.service';
+import { EnergyUseItem } from '../shared/models/treasure-hunt';
+import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
 
 
 @Injectable()
@@ -37,7 +40,8 @@ export class FsatService {
   ];
 
   constructor
-  (private convertFsatService: ConvertFsatService, private fansSuiteApiService: FansSuiteApiService, private assessmentCo2Service: AssessmentCo2SavingsService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private convertFanAnalysisService: ConvertFanAnalysisService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService, private fanOperationsService: OperationsService) {
+  (private convertFsatService: ConvertFsatService, 
+    private helperFunctions: HelperFunctionsService, private fansSuiteApiService: FansSuiteApiService, private assessmentCo2Service: AssessmentCo2SavingsService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private convertFanAnalysisService: ConvertFanAnalysisService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService, private fanOperationsService: OperationsService) {
     this.initData();
   }
 
@@ -252,6 +256,74 @@ export class FsatService {
     }
   }
 
+  setIntegratedAssessmentData(integratedAssessment: IntegratedAssessment, settings: Settings) {
+    let energyOptions: IntegratedEnergyOptions = {
+      baseline: undefined,
+      modifications: []
+    }
+
+    let fsat: FSAT = integratedAssessment.assessment.fsat;
+    let baselineOutputs: FsatOutput = this.getResults(fsat, true, settings);
+    baselineOutputs.annualEnergy = this.convertUnitsService.value(baselineOutputs.annualEnergy).from('MWh').to('kWh');
+    baselineOutputs.annualEnergy = this.convertUnitsService.roundVal(baselineOutputs.annualEnergy, 0)
+
+    energyOptions.baseline = {
+      name: fsat.name,
+      annualEnergy: baselineOutputs.annualEnergy,
+      annualCost: baselineOutputs.annualCost,
+      co2EmissionsOutput: baselineOutputs.co2EmissionsOutput,
+    };
+
+    let baselineEnergy: EnergyUseItem = {
+      type: 'Electricity',
+      amount: baselineOutputs.annualEnergy,
+      integratedEnergyCost: baselineOutputs.annualCost,
+      integratedEmissionRate: baselineOutputs.co2EmissionsOutput
+    };
+
+    integratedAssessment.hasModifications = integratedAssessment.assessment.fsat.modifications && integratedAssessment.assessment.fsat.modifications.length !== 0;
+    if (integratedAssessment.hasModifications) {
+      let modificationEnergyOptions: Array<ModificationEnergyOption> = [];
+      fsat.modifications.forEach(modification => {
+        let modificationOutputs: FsatOutput = this.getResults(modification.fsat, false, settings);
+        modificationOutputs.annualEnergy = this.convertUnitsService.value(modificationOutputs.annualEnergy).from('MWh').to('kWh');
+        modificationOutputs.annualEnergy = this.convertUnitsService.roundVal(modificationOutputs.annualEnergy, 0)
+
+        energyOptions.modifications.push({
+          name: modification.fsat.name,
+          annualEnergy: modificationOutputs.annualEnergy,
+          annualCost: modificationOutputs.annualCost,
+          modificationId: modification.id,
+          co2EmissionsOutput: modificationOutputs.co2EmissionsOutput
+        });
+
+
+        let modificationEnergy: EnergyUseItem = {
+          type: 'Electricity',
+          amount: modificationOutputs.annualEnergy,
+          integratedEnergyCost: modificationOutputs.annualCost,
+          integratedEmissionRate: modificationOutputs.co2EmissionsOutput
+        }
+
+        modificationEnergyOptions.push(
+          {
+            modificationId: modification.id,
+            energies: [modificationEnergy]
+          })
+      });
+      integratedAssessment.modificationEnergyUseItems = modificationEnergyOptions;
+    }
+    integratedAssessment.assessmentType = 'FSAT';
+    integratedAssessment.baselineEnergyUseItems = [baselineEnergy];
+    integratedAssessment.thEquipmentType = 'fan';
+    integratedAssessment.energyOptions = energyOptions; 
+    integratedAssessment.navigation = {
+      queryParams: undefined,
+      url: '/fsat/' + integratedAssessment.assessment.id
+    }
+
+  }
+
   getFan203InputForPlaneResults(fsat: FSAT): Fan203Inputs {
     let hasFanRatedInfo: boolean = fsat.fieldData.fanRatedInfo !== undefined;
     let hasBaseGasDensity: boolean = fsat.baseGasDensity !== undefined;
@@ -371,6 +443,7 @@ export class FsatService {
           fluidNotes: ''
         }
       },
+      id: this.helperFunctions.getNewIdString(),
       exploreOpportunities: (this.assessmentTab.value === 'explore-opportunities')
     };
     let tmpBaselineResults: FsatOutput = this.getResults(fsat, true, settings);

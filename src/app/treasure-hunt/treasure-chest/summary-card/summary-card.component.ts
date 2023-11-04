@@ -101,19 +101,22 @@ export class SummaryCardComponent implements OnInit {
   }
 
 
-  setUtilityTotal(utilityUsed: boolean, baselineCost: number, utilityType: string): UtilityTotal {
+  setUtilityTotal(utilityUsed: boolean, baselineTHCost: number, utilityType: string): UtilityTotal {
     let opportunityCards: Array<OpportunityCardData> = this.opportunityCards;
     opportunityCards = this.sortCardsService.sortCards(opportunityCards, this.sortCardsData);
     if (utilityUsed) {
-      let utilityData: UtilityTotal = this.getSavingsByUtilityType(opportunityCards, utilityType);
+      let treasureHuntCards: Array<OpportunityCardData> = _.filter(opportunityCards, (card) => { 
+          return _.includes(card.utilityType, utilityType);
+      });
+      let utilityTotals: UtilityTotal = this.getCardSavingsByUtilityType(treasureHuntCards, utilityType);
       if (this.currCurrency !== this.settings.currency) {
-        baselineCost = this.convertUnitsService.convertValue(baselineCost, this.currCurrency, this.settings.currency);
+        baselineTHCost = this.convertUnitsService.convertValue(baselineTHCost, this.currCurrency, this.settings.currency);
       }
       return {
-        baselineCost: baselineCost,
-        modificationCost: baselineCost - utilityData.totalCostSavings,
-        totalCostSavings: utilityData.totalCostSavings,
-        totalPercentSavings: utilityData.totalPercentSavings
+        baselineCost: baselineTHCost,
+        modificationCost: baselineTHCost - utilityTotals.totalCostSavings,
+        totalCostSavings: utilityTotals.totalCostSavings,
+        totalPercentSavings: utilityTotals.totalPercentSavings
       }
     } else {
       return {
@@ -126,13 +129,12 @@ export class SummaryCardComponent implements OnInit {
   }
 
 
-  getSavingsByUtilityType(opportunityCards: Array<OpportunityCardData>, utilityType: string): UtilityTotal {
-    let filteredCards: Array<OpportunityCardData> = _.filter(opportunityCards, (data) => { return _.includes(data.utilityType, utilityType) });
+  getCardSavingsByUtilityType(opportunityCards: Array<OpportunityCardData>, utilityType: string): UtilityTotal {
     let totalPercentSavings: number = 0;
     let totalCostSavings: number = 0;
     let baselineCost: number = 0;
     let modificationCost: number = 0;
-    filteredCards.forEach(card => {
+    opportunityCards.forEach(card => {
       if (card.selected == true) {
         let percentSavings = _.find(card.percentSavings, (card) => { return card.label == utilityType });
         if (percentSavings) {
@@ -150,7 +152,6 @@ export class SummaryCardComponent implements OnInit {
     let additionalAnnualSavings: number = 0;
     opportunityCards.forEach(card => {
       if (card.selected && card.opportunitySheet.opportunityCost.additionalAnnualSavings) {
-
         additionalAnnualSavings += card.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
       }
     });
