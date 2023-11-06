@@ -30,6 +30,7 @@ export class VisualizeComponent implements OnInit {
   loadingSpinnerSub: Subscription;
   tabSelectSubscription: Subscription;
   loadingSpinner: LoadingSpinner;
+  scrollPadding: number = 50;
 
   ngOnInit() {
     this.loadingSpinnerSub = this.logToolDataService.loadingSpinner.subscribe(loadingSpinner => {
@@ -70,7 +71,7 @@ export class VisualizeComponent implements OnInit {
 
   setResultsTabheight() {
     if (this.graphContainerHeight !== undefined && this.contentContainer && this.tabHeaders) {
-      this.resultsHelpTabHeight = this.contentContainer.nativeElement.offsetHeight - this.graphContainerHeight - this.tabHeaders.nativeElement.offsetHeight - 50;
+      this.resultsHelpTabHeight = this.contentContainer.nativeElement.offsetHeight - this.scrollPadding - this.graphContainerHeight - this.tabHeaders.nativeElement.offsetHeight - 50;
     }
   }
 

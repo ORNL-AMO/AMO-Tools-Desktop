@@ -3,7 +3,7 @@
         <span class="fa fa-times remove-series" (click)="removeYAxisData()"></span>
     </div>
 
-    <div class="card-body p-2 scroll-item">
+    <div class="card-body p-2">
         <form>
             <!-- Time Series, Scatter -->
             <ng-container *ngIf="selectedGraphObj.data[0].type !== 'bar'">
@@ -90,7 +90,6 @@
                     of data points within bin
                 </span>
 
-<!-- *ngIf="(showHistogramBins && !selectedGraphObj.useStandardDeviation) || (showGraphBasics && selectedGraphObj.useStandardDeviation)" -->
                 <app-bin-data></app-bin-data>
             </ng-container>
 
