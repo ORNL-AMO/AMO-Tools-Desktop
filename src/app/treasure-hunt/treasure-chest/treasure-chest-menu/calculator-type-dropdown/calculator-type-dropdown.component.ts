@@ -88,6 +88,8 @@ export class CalculatorTypeDropdownComponent implements OnInit {
         return 'Lighting Replacement';
       case Treasure.opportunitySheet:
         return 'Opportunity Sheet';
+      case Treasure.assessmentOpportunity:
+        return 'Assessment Opportunity';
       case Treasure.replaceExisting:
         return 'Replace Existing Motor';
       case Treasure.motorDrive:

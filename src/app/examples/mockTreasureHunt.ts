@@ -1156,6 +1156,7 @@ export const MockTreasureHunt: Assessment = {
             "date": new Date(),
             "owner": "Utilities",
             "businessUnits": "Reyes",
+            "iconString": "assets/images/calculator-icons/opportunity-sheet-icon.png",
             "opportunityCost": {
                 "engineeringServices": 100,
                 "material": 0,

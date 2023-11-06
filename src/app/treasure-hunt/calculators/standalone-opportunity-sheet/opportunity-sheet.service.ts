@@ -19,6 +19,7 @@ export class OpportunitySheetService {
       date: new Date(),
       owner: '',
       businessUnits: '',
+      iconString: "assets/images/calculator-icons/opportunity-sheet-icon.png",
       opportunityCost: {
         engineeringServices: 0,
         material: 0,

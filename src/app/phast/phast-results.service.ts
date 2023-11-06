@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PHAST, PhastResults, ShowResultsCategories, CalculatedByPhast, EAFResults } from '../shared/models/phast/phast';
+import { PHAST, PhastResults, ShowResultsCategories, CalculatedByPhast, EAFResults, EnergyUseReportData } from '../shared/models/phast/phast';
 import { PhastService } from './phast.service';
 import { Settings } from '../shared/models/settings';
 import { AuxEquipmentService } from './aux-equipment/aux-equipment.service';
@@ -10,9 +10,9 @@ import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-for
 import { Co2SavingsPhastService } from './losses/operations/co2-savings-phast/co2-savings-phast.service';
 import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
 import { FlueGasByVolumeSuiteResults, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
-import { SolidLiquidFlueGasMaterial } from '../shared/models/materials';
-import { EnInputResultsObj } from './losses/energy-input/energy-input.component';
 import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
+import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
+
 
 
 @Injectable()
@@ -254,6 +254,69 @@ export class PhastResultsService {
 
     return results;
   }
+
+  
+  getEnergyUseReportData(phast: PHAST, phastResults: PhastResults, settings: Settings): EnergyUseReportData {
+    let energyUseReportData: EnergyUseReportData = {
+      fuelName: undefined,
+      fuelEnergyUsed: undefined,
+      fuelHeatingValue: undefined,
+      energyPerMassUnit: undefined,
+      electricEnergyUsed: undefined,
+      baseEnergyUnit: undefined,
+      steamEnergyUsed: undefined
+    };
+
+    if (settings.energySourceType === 'Electricity') {
+      energyUseReportData.electricEnergyUsed = phastResults.electricalHeatDelivered;
+      if (settings.furnaceType === 'Electric Arc Furnace (EAF)') {
+        energyUseReportData.fuelName = 'Natural Gas';
+        energyUseReportData.electricEnergyUsed = phastResults.hourlyEAFResults.electricEnergyUsed;
+        energyUseReportData.fuelHeatingValue = phastResults.hourlyEAFResults.naturalGasHeatingValue;
+        energyUseReportData.fuelEnergyUsed = phastResults.hourlyEAFResults.naturalGasUsed;
+        if (settings.unitsOfMeasure == 'Imperial') {
+          energyUseReportData.energyPerMassUnit = 'Btu/lb';
+          energyUseReportData.baseEnergyUnit = 'MMBtu';
+        } else {
+          energyUseReportData.energyPerMassUnit = 'kJ/kg';
+          energyUseReportData.baseEnergyUnit = 'GJ';
+        }
+      } else {
+        energyUseReportData.fuelEnergyUsed = phastResults.energyInputHeatDelivered + phastResults.totalExhaustGas;
+      }
+    } else if (settings.energySourceType === 'Steam') {
+      energyUseReportData.steamEnergyUsed = phastResults.grossHeatInput;
+    } else { 
+      energyUseReportData.fuelEnergyUsed = phastResults.grossHeatInput;
+    }
+
+    if (phast.losses.flueGasLosses) {
+      if (phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
+        let gas: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
+        if (gas) {
+          energyUseReportData.fuelHeatingValue = gas.heatingValue;
+          energyUseReportData.fuelName = gas.substance;
+        }
+      } else if (phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
+        let gas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
+        if (gas) {
+          energyUseReportData.fuelHeatingValue = gas.heatingValue;
+          energyUseReportData.fuelName = gas.substance;
+        }
+      }
+
+      if (settings.unitsOfMeasure === 'Metric') {
+        energyUseReportData.fuelHeatingValue = this.convertUnitsService.value(energyUseReportData.fuelHeatingValue).from('kJ').to(settings.energyResultUnit);
+      } else {
+        energyUseReportData.fuelHeatingValue = this.convertUnitsService.value(energyUseReportData.fuelHeatingValue).from('Btu').to(settings.energyResultUnit);
+      }
+    }
+
+    return energyUseReportData;
+  }  
+
+
+
   setEAFResults(phast: PHAST, phastResults: PhastResults, settings: Settings): PhastResults {
     let EAFInputs: EnergyInputEAF = JSON.parse(JSON.stringify(phast.losses.energyInputEAF[0]));
     let naturalGasHeatingValue: number = 22030.7;
@@ -393,36 +456,6 @@ export class PhastResultsService {
     }
   }
 
-  getMinElectricityInputRequirement(phast: PHAST, settings: Settings): number {
-    if (phast.losses) {
-      let results: PhastResults = this.getResults(phast, settings);
-      return results.totalInput + results.exothermicHeat - results.energyInputTotalChemEnergy;
-    } else {
-      return undefined;
-    }
-  }
-
-  checkEnergyInputWarnings(energyInputHeatDelivered: number): string {
-    if (energyInputHeatDelivered < 0) {
-      return 'More heat than necessary is being delivered via burners. Check fuel inputs or estimate other losses.';
-    } else {
-      return null;
-    }
-  }
-
-  checkElectricityInputWarning(phast: PHAST, settings: Settings): string {
-    if (phast.losses) {
-      let results: PhastResults = this.getResults(phast, settings);
-      if( results.totalExhaustGasEAF >= results.energyInputTotalChemEnergy){
-        return 'Exhaust Gas Losses must be less than Chemical Energy Delivered. Please check Electricity Input value.';
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
-    
-  }
 
 }
 

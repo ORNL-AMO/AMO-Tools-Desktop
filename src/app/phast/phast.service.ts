@@ -568,7 +568,6 @@ export class PhastService {
       inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('MMBtu').to('Btu');
       results = this.calcEnergyInputExhaustGasLosses(inputs);
     }
-    results = this.processHeatingApiService.energyInputExhaustGasLosses(inputs);
     results.heatDelivered = this.convertResult(results.heatDelivered, settings.energyResultUnit);
     results.exhaustGasLosses = this.convertResult(results.exhaustGasLosses, settings.energyResultUnit);
 
@@ -577,7 +576,7 @@ export class PhastService {
 
   calcEnergyInputExhaustGasLosses(input: EnergyInputExhaustGasLoss){
     let heatDelivered: number = (input.totalHeatInput * input.availableHeat)/100;
-    let exhaustGasLosses: number = heatDelivered*(100 - input.availableHeat) / input.availableHeat;
+    let exhaustGasLosses: number = heatDelivered *(100 - input.availableHeat) / input.availableHeat;
     let results = {
       availableHeat: input.availableHeat,
       heatDelivered: heatDelivered,

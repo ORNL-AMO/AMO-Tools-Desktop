@@ -127,7 +127,7 @@ export class SsmtComponent implements OnInit {
         this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
         this.getSettings();
         this.initSankeyList();
-        let tmpTab = this.assessmentService.getTab();
+        let tmpTab = this.assessmentService.getStartingTab();
         if (tmpTab) {
           this.ssmtService.mainTab.next(tmpTab);
         }

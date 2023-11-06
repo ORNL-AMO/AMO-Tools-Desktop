@@ -332,6 +332,47 @@ export class TreasureHuntPptService {
 
     }
 
+    let oppsWithNoTeam = pptx.addSlide();
+    oppsWithNoTeam.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
+    oppsWithNoTeam.addText('Other Opportunities', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
+
+    let counter: number = 0;
+        opportunityCardsData.forEach(opp => {
+          if (!opp.opportunitySheet.owner) {
+            let newSlide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+            newSlide.addText('Opportunity: ' + opp.name, slideTitleProperties);
+            let slideText: { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } = this.getOpportunitySlideText(opp.opportunitySheet);
+            newSlide.addText(slideText.text, slideText.options);
+            newSlide.addText('Placeholder for picture', { x: 8.32, y: 1.8, w: 4.43, h: 2.81, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 18, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+            let rows = [];
+            rows.push([
+              { text: "Utility", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Energy Savings", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Unit", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Cost Saving", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Material Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Labor Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Other Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Total Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+              { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
+            ]);
+            let x: OpportunitySummary = treasureHuntResults.opportunitySummaries[counter];
+            let utilityUnit: string;
+            if (x.mixedIndividualResults) {
+              x.mixedIndividualResults.forEach(x => {
+                utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(x.utilityType, settings);
+                rows.push([x.utilityType, this.treasureHuntPptTableService.roundValToFormatString(x.totalEnergySavings), utilityUnit, this.treasureHuntPptTableService.roundValToCurrency(x.costSavings), this.treasureHuntPptTableService.roundValToCurrency(x.opportunityCost.material), this.treasureHuntPptTableService.roundValToCurrency(x.opportunityCost.labor), this.treasureHuntPptTableService.getOtherCost(x.opportunityCost), this.treasureHuntPptTableService.roundValToCurrency(x.totalCost), this.treasureHuntPptTableService.roundValToFormatString(x.payback)]);
+              });
+            } else {
+              utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(x.utilityType, settings);
+              rows.push([x.utilityType, this.treasureHuntPptTableService.roundValToFormatString(x.totalEnergySavings), utilityUnit, this.treasureHuntPptTableService.roundValToCurrency(x.costSavings), this.treasureHuntPptTableService.roundValToCurrency(x.opportunityCost.material), this.treasureHuntPptTableService.roundValToCurrency(x.opportunityCost.labor), this.treasureHuntPptTableService.getOtherCost(x.opportunityCost), this.treasureHuntPptTableService.roundValToCurrency(x.totalCost), this.treasureHuntPptTableService.roundValToFormatString(x.payback)]);
+            }
+
+            newSlide.addTable(rows, { x: 1.14, y: 5.2, w: 11.05, colW: [1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
+          }
+          counter++;
+        });
+
     let summaryTransition = pptx.addSlide();
     summaryTransition.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
     summaryTransition.addText('Summary', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, BoilerBlowdownRateTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity, AssessmentOpportunityResults, Treasure, BoilerBlowdownRateTreasureHunt } from '../../../shared/models/treasure-hunt';
 import *  as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -31,6 +31,7 @@ import { ChillerStagingTreasureHuntService } from '../../treasure-hunt-calculato
 import { ChillerPerformanceTreasureHuntService } from '../../treasure-hunt-calculator-services/chiller-performance-treasure-hunt.service';
 import { CoolingTowerFanTreasureHuntService } from '../../treasure-hunt-calculator-services/cooling-tower-fan-treasure-hunt.service';
 import { CoolingTowerBasinTreasureHuntService } from '../../treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
+import { AssessmentOpportunityService } from '../../treasure-hunt-calculator-services/assessment-opportunity.service';
 import { BoilerBlowdownRateTreasureHuntService } from '../../treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
 
 @Injectable()
@@ -39,8 +40,8 @@ export class OpportunityCardsService {
   updatedOpportunityCard: BehaviorSubject<OpportunityCardData>;
   opportunityCards: BehaviorSubject<Array<OpportunityCardData>>;
   updateOpportunityCards: BehaviorSubject<boolean>;
-  currCurrency: string = "$"; 
-  constructor(private opportunitySheetService: OpportunitySheetService, 
+  currCurrency: string = "$";
+  constructor(private opportunitySheetService: OpportunitySheetService,
     private opportunitySummaryService: OpportunitySummaryService,
     private airLeakTreasureService: AirLeakTreasureHuntService,
     private tankInsulationTreasureHuntService: TankInsulationTreasureHuntService,
@@ -65,11 +66,12 @@ export class OpportunityCardsService {
     private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService,
     private coolingTowerMakeupTreasureHuntService: CoolingTowerMakeupTreasureHuntService,
     private chillerStagingTreasureHuntService: ChillerStagingTreasureHuntService,
-    private chillerPerformanceTreasureHuntService : ChillerPerformanceTreasureHuntService,
+    private chillerPerformanceTreasureHuntService: ChillerPerformanceTreasureHuntService,
     private coolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService,
     private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService,
+    private assessmentOpportunityService: AssessmentOpportunityService,
     private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService
-    ) {
+  ) {
     this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
     this.opportunityCards = new BehaviorSubject(new Array());
     this.updateOpportunityCards = new BehaviorSubject<boolean>(true);
@@ -85,7 +87,6 @@ export class OpportunityCardsService {
     let compressedAirReductionData: Array<OpportunityCardData> = this.getCompressedAirReductions(treasureHunt.compressedAirReductions, treasureHunt.currentEnergyUsage, settings);
     let compressedAirPressureReductionData: Array<OpportunityCardData> = this.getCompressedAirPressureReductions(treasureHunt.compressedAirPressureReductions, treasureHunt.currentEnergyUsage, settings);
     let waterReductionData: Array<OpportunityCardData> = this.getWaterReductions(treasureHunt.waterReductions, treasureHunt.currentEnergyUsage, settings);
-    let standaloneOpportunitySheetData: Array<OpportunityCardData> = this.getStandaloneOpportunitySheets(treasureHunt.opportunitySheets, treasureHunt.currentEnergyUsage, settings)
     let steamReductionData: Array<OpportunityCardData> = this.getSteamReductions(treasureHunt.steamReductions, treasureHunt.currentEnergyUsage, settings);
     let pipeInsulationReductionData: Array<OpportunityCardData> = this.getPipeInsulationReductions(treasureHunt.pipeInsulationReductions, treasureHunt.currentEnergyUsage, settings);
     let tankInsulationReductionData: Array<OpportunityCardData> = this.getTankInsulationReductions(treasureHunt.tankInsulationReductions, treasureHunt.currentEnergyUsage, settings);
@@ -103,21 +104,24 @@ export class OpportunityCardsService {
     let chillerPerformance: Array<OpportunityCardData> = this.getChillerPerformanceOpportunities(treasureHunt.chillerPerformanceOpportunities, treasureHunt.currentEnergyUsage, settings);
     let coolingTowerFan: Array<OpportunityCardData> = this.getCoolingTowerFanOpportunities(treasureHunt.coolingTowerFanOpportunities, treasureHunt.currentEnergyUsage, settings);
     let coolingTowerBasin: Array<OpportunityCardData> = this.getCoolingTowerBasinOpportunities(treasureHunt.coolingTowerBasinOpportunities, treasureHunt.currentEnergyUsage, settings);
+
+    let standaloneOpportunitySheetData: Array<OpportunityCardData> = this.getStandaloneOpportunitySheets(treasureHunt.opportunitySheets, treasureHunt.currentEnergyUsage, settings)
+    let assessmentOpportunityData: Array<OpportunityCardData> = this.getAssessmentOpportunities(treasureHunt.assessmentOpportunities, treasureHunt.currentEnergyUsage, settings)
     let boilerBlowdownRate: Array<OpportunityCardData> = this.getBoilerBlowdownRateOpportunities(treasureHunt.boilerBlowdownRateOpportunities, treasureHunt.currentEnergyUsage, settings);
 
     opportunityCardsData = _.union(
-      lightingReplacementsCardData, 
-      replaceExistingData, 
-      naturalGasReductionData, 
-      electricityReductionData, 
-      compressedAirReductionData, 
-      compressedAirPressureReductionData, 
-      waterReductionData, 
-      standaloneOpportunitySheetData, 
-      steamReductionData, 
-      motorDrivesCardData, 
-      pipeInsulationReductionData, 
-      tankInsulationReductionData, 
+      lightingReplacementsCardData,
+      replaceExistingData,
+      naturalGasReductionData,
+      electricityReductionData,
+      compressedAirReductionData,
+      compressedAirPressureReductionData,
+      waterReductionData,
+      standaloneOpportunitySheetData,
+      steamReductionData,
+      motorDrivesCardData,
+      pipeInsulationReductionData,
+      tankInsulationReductionData,
       airLeakSurveyData,
       openingLossData,
       wallLossData,
@@ -132,8 +136,9 @@ export class OpportunityCardsService {
       chillerPerformance,
       coolingTowerFan,
       coolingTowerBasin,
+      assessmentOpportunityData,
       boilerBlowdownRate
-      );
+    );
     let index: number = 0;
     opportunityCardsData.forEach(card => {
       card.index = index;
@@ -144,11 +149,10 @@ export class OpportunityCardsService {
         card.percentSavings.forEach(saving => {
           saving.baselineCost = this.convertUnitsService.convertValue(saving.baselineCost, this.currCurrency, settings.currency);
           saving.modificationCost = this.convertUnitsService.convertValue(saving.modificationCost, this.currCurrency, settings.currency);
-        }); 
+        });
       }
     });
-    // this.currCurrency = settings.currency;
-    // this.opportunityCards.next(opportunityCardsData);
+
 
     return opportunityCardsData;
   }
@@ -175,6 +179,7 @@ export class OpportunityCardsService {
       let index: number = 0;
       opportunitySheets.forEach(oppSheet => {
         let cardData: OpportunityCardData = this.getOpportunitySheetCardData(oppSheet, settings, index, currentEnergyUsage);
+        cardData.opportunityType = Treasure.opportunitySheet;
         opportunityCardsData.push(cardData);
         index++;
       })
@@ -182,24 +187,80 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
-  getOpportunitySheetCardData(oppSheet: OpportunitySheet, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    let results: OpportunitySheetResults = this.opportunitySheetService.getResults(oppSheet, settings);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getOpportunitySheetSummary(oppSheet, settings);
+  getAssessmentOpportunities(assessmentOpportunities: Array<AssessmentOpportunity>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (assessmentOpportunities) {
+      let index: number = 0;
+      assessmentOpportunities.forEach(opp => {
+        let results: OpportunitySheetResults = this.assessmentOpportunityService.getResults(opp, settings);
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getOpportunitySheetSummary(opp, settings);
+        let energyData = this.getOpportunitySheetEnergySavings(results, currentEnergyUsage, settings);
+        let cardData: OpportunityCardData = {
+          implementationCost: opportunitySummary.totalCost,
+          paybackPeriod: opportunitySummary.payback,
+          selected: opp.selected,
+          opportunityType: Treasure.assessmentOpportunity,
+          assessmentOpportunity: opp,
+          opportunityIndex: index,
+          annualCostSavings: results.totalCostSavings,
+          annualEnergySavings: energyData.annualEnergySavings,
+          percentSavings: energyData.percentSavings,
+          opportunitySheet: opp as OpportunitySheet,
+          name: opportunitySummary.opportunityName,
+          iconString: opp.iconString,
+          utilityType: energyData.utilityTypes,
+          teamName: this.getTeamName(opp)
+        }
+        opportunityCardsData.push(cardData);
+        index++;
+      })
+    }
+
+    return opportunityCardsData;
+  }
+
+
+  getOpportunitySheetCardData(opportunity: OpportunitySheet, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
+    let results: OpportunitySheetResults = this.opportunitySheetService.getResults(opportunity, settings);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getOpportunitySheetSummary(opportunity, settings);
     let energyData = this.getOpportunitySheetEnergySavings(results, currentEnergyUsage, settings);
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
-      selected: oppSheet.selected,
-      opportunityType: 'opportunity-sheet',
+      selected: opportunity.selected,
+      opportunityType: Treasure.opportunitySheet,
       opportunityIndex: index,
       annualCostSavings: results.totalCostSavings,
       annualEnergySavings: energyData.annualEnergySavings,
       percentSavings: energyData.percentSavings,
-      opportunitySheet: oppSheet,
+      opportunitySheet: opportunity,
       name: opportunitySummary.opportunityName,
-      iconString: 'assets/images/calculator-icons/opportunity-sheet-icon.png',
+      iconString: opportunity.iconString,
       utilityType: energyData.utilityTypes,
-      teamName: this.getTeamName(oppSheet)
+      teamName: this.getTeamName(opportunity)
+    }
+    return cardData;
+  }
+
+  getAssessmentOpportunityCardData(opportunity: AssessmentOpportunity, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
+    let results: AssessmentOpportunityResults = this.assessmentOpportunityService.getResults(opportunity, settings);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getOpportunitySheetSummary(opportunity, settings);
+    let energyData = this.getOpportunitySheetEnergySavings(results, currentEnergyUsage, settings);
+    let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
+      paybackPeriod: opportunitySummary.payback,
+      selected: opportunity.selected,
+      opportunityType: Treasure.assessmentOpportunity,
+      opportunityIndex: index,
+      annualCostSavings: results.totalCostSavings,
+      annualEnergySavings: energyData.annualEnergySavings,
+      percentSavings: energyData.percentSavings,
+      assessmentOpportunity: opportunity,
+      opportunitySheet: opportunity as OpportunitySheet,
+      name: opportunitySummary.opportunityName,
+      iconString: opportunity.iconString,
+      utilityType: energyData.utilityTypes,
+      teamName: this.getTeamName(opportunity)
     }
     return cardData;
   }
@@ -753,15 +814,11 @@ export interface OpportunityCardData {
     label: string,
     energyUnit: string
   }>;
-  percentSavings: Array<{
-    percent: number,
-    label: string,
-    baselineCost: number,
-    modificationCost: number,
-  }>;
+  percentSavings: Array<PercentEnergySavings>;
   utilityType: Array<string>;
   name: string;
   opportunitySheet: OpportunitySheet,
+  assessmentOpportunity?: AssessmentOpportunity;
   iconString: string,
   lightingReplacement?: LightingReplacementTreasureHunt;
   opportunitySheets?: OpportunitySheet;
@@ -792,4 +849,11 @@ export interface OpportunityCardData {
   boilerBlowdownRate?: BoilerBlowdownRateTreasureHunt;
   iconCalcType?: string;
   needBackground?: boolean;
+}
+
+export interface PercentEnergySavings {
+  percent: number,
+  label: string,
+  baselineCost: number,
+  modificationCost: number,
 }

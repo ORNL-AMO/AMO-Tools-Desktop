@@ -10,11 +10,12 @@ import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { FlueGasByMass, FlueGasByVolume } from '../models/phast/losses/flueGas';
 import { environment } from '../../../environments/environment';
+import { HelperFunctionsService } from './helper-functions.service';
 
 @Injectable()
 export class UpdateDataService {
 
-    constructor(private convertUnitsService: ConvertUnitsService) { }
+    constructor(private convertUnitsService: ConvertUnitsService, private helperFunctions: HelperFunctionsService) { }
 
     updateAssessmentVersion(assessment: Assessment): Assessment {
         if (assessment.type === 'PSAT') {
@@ -149,7 +150,13 @@ export class UpdateDataService {
 
 
     updatePsat(assessment: Assessment): Assessment {
-        //logic for updating psat data
+        if (assessment.psat.modifications && assessment.psat.modifications.length > 0) {
+            assessment.psat.modifications.map(mod => {
+                if (mod.id === undefined || mod.id === null) {
+                    mod.id = this.helperFunctions.getNewIdString();
+                }
+            });
+        }
         assessment.appVersion = environment.version;
 
         if (assessment.psat.inputs.line_frequency === 0){
@@ -181,7 +188,13 @@ export class UpdateDataService {
     }
 
     updateFsat(assessment: Assessment): Assessment {
-        //logic for updating fsat data
+        if (assessment.fsat.modifications && assessment.fsat.modifications.length > 0) {
+            assessment.fsat.modifications.map(mod => {
+                if (mod.id === undefined || mod.id === null) {
+                    mod.id = this.helperFunctions.getNewIdString();
+                }
+            });
+        }
         assessment.appVersion = environment.version;
         if (assessment.fsat.fieldData && !assessment.fsat.fieldData.inletVelocityPressure) {
             assessment.fsat.fieldData.inletVelocityPressure = 0;
@@ -235,7 +248,14 @@ export class UpdateDataService {
     }
 
     updatePhast(assessment: Assessment): Assessment {
-        //logic for updating phast data
+        if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
+            assessment.phast.modifications.map(mod => {
+                if (mod.id === undefined || mod.id === null) {
+                    mod.id = this.helperFunctions.getNewIdString();
+                }
+            });
+        }
+
         if (!assessment.phast.operatingHours) {
             assessment.phast.operatingHours = {
                 weeksPerYear: 52.14,

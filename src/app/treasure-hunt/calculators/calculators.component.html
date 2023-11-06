@@ -90,9 +90,14 @@
 [operatingHours]="treasureHunt.operatingHours"></app-water-reduction>
 
 <app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'"
-  (emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveStandaloneOpportunitySheet($event)"
+  (emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveCustomOpportunity($event)"
   [settings]="settings">
 </app-standalone-opportunity-sheet>
+
+<app-assessment-opportunity *ngIf="selectedCalc == 'assessment-opportunity'"
+  (emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveCustomOpportunity($event)"
+  [settings]="settings">
+</app-assessment-opportunity>
 
 <app-cooling-tower *ngIf="selectedCalc == 'cooling-tower-makeup'"
   [inTreasureHunt]="true" (emitSave)="saveOpportunity($event)" 
@@ -133,7 +138,7 @@
           <span aria-hidden="true">&times;</span>
         </button> -->
       </div>
-      <div class="modal-body text-center" *ngIf="selectedCalc != 'opportunity-sheet'">
+      <div class="modal-body text-center">
         <p class="help-text" *ngIf="!calculatorOpportunitySheet">There is no opportunity sheet filled out for this
           opportunity. Would you like to add one
           before saving?</p>

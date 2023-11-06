@@ -654,7 +654,7 @@
             {{baselineExecutiveSummary.annualElectricityCost | currency:'USD':'symbol':'1.0-0'}}</td>
           <td *ngFor="let mod of modExecutiveSummaries; let index = index;"
             [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-            <span *ngIf="mod.annualElectricityCost">{{baselineExecutiveSummary.annualElectricityCost |
+            <span *ngIf="mod.annualElectricityCost">{{mod.annualElectricityCost |
               currency:'USD':'symbol':'1.0-0'}}</span>
             <span *ngIf="!mod.annualElectricityCost">&mdash; &mdash;</span>
           </td>
@@ -665,7 +665,7 @@
             {{baselineExecutiveSummary.annualNaturalGasCost | currency:'USD':'symbol':'1.0-0'}}</td>
           <td *ngFor="let mod of modExecutiveSummaries; let index = index;"
             [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-            <span *ngIf="mod.annualNaturalGasCost">{{baselineExecutiveSummary.annualNaturalGasCost |
+            <span *ngIf="mod.annualNaturalGasCost">{{mod.annualNaturalGasCost |
               currency:'USD':'symbol':'1.0-0'}}</span>
             <span *ngIf="!mod.annualNaturalGasCost">&mdash; &mdash;</span>
           </td>
@@ -677,7 +677,7 @@
             {{baselineExecutiveSummary.annualTotalFuelCost | currency:'USD':'symbol':'1.0-0'}}</td>
           <td *ngFor="let mod of modExecutiveSummaries; let index = index;"
             [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-            <span *ngIf="mod.annualTotalFuelCost">{{baselineExecutiveSummary.annualTotalFuelCost |
+            <span *ngIf="mod.annualTotalFuelCost">{{mod.annualTotalFuelCost |
               currency:'USD':'symbol':'1.0-0'}}</span>
             <span *ngIf="!mod.annualTotalFuelCost">&mdash; &mdash;</span>
           </td>
@@ -701,7 +701,7 @@
               {{baselineExecutiveSummary.annualElectrodeCost | currency:'USD':'symbol':'1.0-0'}}</td>
             <td *ngFor="let mod of modExecutiveSummaries; let index = index;"
               [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-              <span *ngIf="mod.annualElectrodeCost">{{baselineExecutiveSummary.annualElectrodeCost |
+              <span *ngIf="mod.annualElectrodeCost">{{mod.annualElectrodeCost |
                 currency:'USD':'symbol':'1.0-0'}}</span>
               <span *ngIf="!mod.annualElectrodeCost">&mdash; &mdash;</span>
             </td>
@@ -712,7 +712,7 @@
               {{baselineExecutiveSummary.annualOtherFuelCost | currency:'USD':'symbol':'1.0-0'}}</td>
             <td *ngFor="let mod of modExecutiveSummaries; let index = index;"
               [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-              <span *ngIf="mod.annualOtherFuelCost">{{baselineExecutiveSummary.annualOtherFuelCost |
+              <span *ngIf="mod.annualOtherFuelCost">{{mod.annualOtherFuelCost |
                 currency:'USD':'symbol':'1.0-0'}}</span>
               <span *ngIf="!mod.annualOtherFuelCost">&mdash; &mdash;</span>
             </td>

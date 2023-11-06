@@ -150,6 +150,7 @@ export class TankInsulationReductionFormComponent implements OnInit {
     }
     if (changes.heatedOrChilled && !changes.heatedOrChilled.firstChange) {
       this.form.patchValue({ heatedOrChilled: this.heatedOrChilled });
+      this.updateHeatedOrChill();
     }
   }
 
@@ -172,6 +173,11 @@ export class TankInsulationReductionFormComponent implements OnInit {
     }
     this.energyUnit = this.tankInsulationReductionService.getEnergyUnit(this.form.controls.utilityType.value, this.settings);
     this.form.controls.utilityCost.setValue(tmpCost);
+    this.calculate();
+  }
+
+  updateHeatedOrChill(){
+    this.form = this.tankInsulationReductionService.updateFormValidators(this.form.controls.heatedOrChilled.value, this.form);
     this.calculate();
   }
 

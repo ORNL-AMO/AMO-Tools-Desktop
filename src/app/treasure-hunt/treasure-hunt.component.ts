@@ -103,7 +103,7 @@ export class TreasureHuntComponent implements OnInit {
           }
         }
         this.getSettings();
-        let tmpTab = this.assessmentService.getTab();
+        let tmpTab = this.assessmentService.getStartingTab();
         if (tmpTab) {
           this.treasureHuntService.mainTab.next(tmpTab);
         }

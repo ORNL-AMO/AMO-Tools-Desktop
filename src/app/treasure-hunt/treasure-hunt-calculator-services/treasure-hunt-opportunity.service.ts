@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { AirHeatingTreasureHunt, AirLeakSurveyTreasureHunt, BoilerBlowdownRateTreasureHunt, ChillerPerformanceTreasureHunt, ChillerStagingTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, CoolingTowerBasinTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ElectricityReductionTreasureHunt, FlueGasTreasureHunt, HeatCascadingTreasureHunt, LeakageLossTreasureHunt, LightingReplacementTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, OpeningLossTreasureHunt, OpportunitySheet, OpportunitySummary, PipeInsulationReductionTreasureHunt, ReplaceExistingMotorTreasureHunt, SteamReductionTreasureHunt, TankInsulationReductionTreasureHunt, Treasure, TreasureHunt, TreasureHuntOpportunity, WallLossTreasureHunt, WasteHeatTreasureHunt, WaterHeatingTreasureHunt, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { AirHeatingTreasureHunt, AirLeakSurveyTreasureHunt, AssessmentOpportunity, BoilerBlowdownRateTreasureHunt, ChillerPerformanceTreasureHunt, ChillerStagingTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, CoolingTowerBasinTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ElectricityReductionTreasureHunt, FlueGasTreasureHunt, HeatCascadingTreasureHunt, LeakageLossTreasureHunt, LightingReplacementTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, OpeningLossTreasureHunt, OpportunitySheet, OpportunitySummary, PipeInsulationReductionTreasureHunt, ReplaceExistingMotorTreasureHunt, SteamReductionTreasureHunt, TankInsulationReductionTreasureHunt, Treasure, TreasureHunt, TreasureHuntOpportunity, WallLossTreasureHunt, WasteHeatTreasureHunt, WaterHeatingTreasureHunt, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { CalculatorsService } from '../calculators/calculators.service';
 import { OpportunityCardData, OpportunityCardsService } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 import { OpportunitySummaryService } from '../treasure-hunt-report/opportunity-summary.service';
@@ -31,6 +31,7 @@ import { WaterReductionTreasureHuntService } from './water-reduction-treasure-hu
 import { ChillerPerformanceTreasureHuntService } from './chiller-performance-treasure-hunt.service';
 import { CoolingTowerFanTreasureHuntService } from './cooling-tower-fan-treasure-hunt.service';
 import { CoolingTowerBasinTreasureHuntService } from './cooling-tower-basin-treasure-hunt.service';
+import { AssessmentOpportunityService } from './assessment-opportunity.service';
 import { BoilerBlowdownRateTreasureHuntService } from './boiler-blowdown-rate-treasure-hunt.service';
 
 @Injectable()
@@ -39,6 +40,7 @@ export class TreasureHuntOpportunityService {
   constructor(
     private opportunityCardsService: OpportunityCardsService,
     private opportunitySummaryService: OpportunitySummaryService,
+    private assessmentOpportunityService: AssessmentOpportunityService,
     private airLeakTreasureHuntService: AirLeakTreasureHuntService,
     private tankInsulationTreasureHuntService: TankInsulationTreasureHuntService,
     private standaloneOpportunitySheetService: StandaloneOpportunitySheetService,
@@ -70,16 +72,18 @@ export class TreasureHuntOpportunityService {
     private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService
   ) { }
 
-  saveTreasureHuntOpportunity(currentOpportunity: TreasureHuntOpportunity, selectedCalc: string, standaloneOppSheet: OpportunitySheet) {
+  saveTreasureHuntOpportunity(currentOpportunity: TreasureHuntOpportunity, selectedCalc: string, customOpportunity: OpportunitySheet | AssessmentOpportunity) {
     let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+    
     if (selectedCalc === Treasure.airLeak) {
       let airLeakSurveyOpportunity = currentOpportunity as AirLeakSurveyTreasureHunt;
       treasureHunt = this.airLeakTreasureHuntService.saveTreasureHuntOpportunity(airLeakSurveyOpportunity, treasureHunt);
     } else if (selectedCalc === Treasure.tankInsulation) {
       let tankInsulationReductionTreasureHunt = currentOpportunity as TankInsulationReductionTreasureHunt;
       treasureHunt = this.tankInsulationTreasureHuntService.saveTreasureHuntOpportunity(tankInsulationReductionTreasureHunt, treasureHunt);
-    } else if (selectedCalc === Treasure.opportunitySheet && standaloneOppSheet) {
-      treasureHunt = this.standaloneOpportunitySheetService.saveTreasureHuntOpportunity(standaloneOppSheet, treasureHunt);
+    } else if (selectedCalc === Treasure.opportunitySheet && customOpportunity) {
+      let opportunitySheet = customOpportunity as OpportunitySheet;
+      treasureHunt = this.standaloneOpportunitySheetService.saveTreasureHuntOpportunity(opportunitySheet, treasureHunt);
     } else if (selectedCalc === Treasure.lightingReplacement) {
       let lightingReplacementTreasureHunt = currentOpportunity as LightingReplacementTreasureHunt;
       treasureHunt = this.lightingReplacementTreasureHuntService.saveTreasureHuntOpportunity(lightingReplacementTreasureHunt, treasureHunt);
@@ -149,6 +153,9 @@ export class TreasureHuntOpportunityService {
     } else if (selectedCalc === Treasure.coolingTowerBasin) {
       let coolingTowerBasin = currentOpportunity as CoolingTowerBasinTreasureHunt;
       treasureHunt = this.coolingTowerBasinTreasureHuntService.saveTreasureHuntOpportunity(coolingTowerBasin, treasureHunt);
+    } else if (selectedCalc === Treasure.assessmentOpportunity && customOpportunity) {
+      let assessmentOpportunity = customOpportunity as AssessmentOpportunity;
+      treasureHunt = this.assessmentOpportunityService.saveTreasureHuntOpportunity(assessmentOpportunity, treasureHunt);
     } else if (selectedCalc === Treasure.boilerBlowdownRate) {
       let boilerBlowdownRate = currentOpportunity as BoilerBlowdownRateTreasureHunt;
       treasureHunt = this.boilerBlowdownRateTreasureHuntService.saveTreasureHuntOpportunity(boilerBlowdownRate, treasureHunt);
@@ -212,6 +219,8 @@ export class TreasureHuntOpportunityService {
       this.coolingTowerFanTreasureHuntService.resetCalculatorInputs();
     } else if (selectedCalc === Treasure.coolingTowerBasin) {
       this.coolingTowerBasinTreasureHuntService.resetCalculatorInputs();
+    } else if (selectedCalc === Treasure.assessmentOpportunity) {
+      this.calculatorsService.cancelOpportunitySheet();
     } else if (selectedCalc === Treasure.boilerBlowdownRate) {
       this.boilerBlowdownRateTreasureHuntService.resetCalculatorInputs();
     }
@@ -220,7 +229,7 @@ export class TreasureHuntOpportunityService {
     this.calculatorsService.selectedCalc.next('none');
   }
 
-  updateTreasureHuntOpportunity(currentOpportunity: TreasureHuntOpportunity, selectedCalc: string, settings: Settings, standaloneOpportunitySheet: OpportunitySheet) {
+  updateTreasureHuntOpportunity(currentOpportunity: TreasureHuntOpportunity, selectedCalc: string, settings: Settings, customOpportunity: OpportunitySheet | AssessmentOpportunity) {
     let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
     let updatedCard: OpportunityCardData;
     if (selectedCalc === Treasure.airLeak) {
@@ -235,10 +244,12 @@ export class TreasureHuntOpportunityService {
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(tankInsulationOpportunity, settings);
       updatedCard = this.tankInsulationTreasureHuntService.getTankInsulationReductionCardData(tankInsulationOpportunity, opportunitySummary, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
     
-    } else if (selectedCalc === Treasure.opportunitySheet && standaloneOpportunitySheet) {
-      treasureHunt.opportunitySheets[this.calculatorsService.itemIndex] = standaloneOpportunitySheet;
-      updatedCard = this.opportunityCardsService.getOpportunitySheetCardData(standaloneOpportunitySheet, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
-   
+    } else if (selectedCalc === Treasure.opportunitySheet && customOpportunity) {
+      let opportunitySheet = customOpportunity as OpportunitySheet;
+      treasureHunt.opportunitySheets[this.calculatorsService.itemIndex] = opportunitySheet;
+      updatedCard = this.opportunityCardsService.getOpportunitySheetCardData(opportunitySheet, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
+      updatedCard.opportunityType = Treasure.opportunitySheet;
+      
     } else if (selectedCalc === Treasure.lightingReplacement) {
       let lightingReplacementOpportunity = currentOpportunity as LightingReplacementTreasureHunt;
       treasureHunt.lightingReplacements[this.calculatorsService.itemIndex] = lightingReplacementOpportunity;
@@ -377,6 +388,13 @@ export class TreasureHuntOpportunityService {
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(coolingTowerBasinOpportunity, settings);
       updatedCard = this.coolingTowerBasinTreasureHuntService.getCoolingTowerBasinCardData(coolingTowerBasinOpportunity, opportunitySummary, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage, settings);
     
+    } else if (selectedCalc === Treasure.assessmentOpportunity) {
+      let assessmentOpportunity = customOpportunity as AssessmentOpportunity;
+      treasureHunt.assessmentOpportunities[this.calculatorsService.itemIndex] = assessmentOpportunity;
+      updatedCard = this.opportunityCardsService.getAssessmentOpportunityCardData(assessmentOpportunity, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
+      updatedCard.opportunitySheet = assessmentOpportunity as OpportunitySheet;
+      updatedCard.assessmentOpportunity = assessmentOpportunity;
+      updatedCard.opportunityType = Treasure.assessmentOpportunity;
     }
     else if (selectedCalc === Treasure.boilerBlowdownRate) {
       let boilerBlowdownRateOpportunity = currentOpportunity as BoilerBlowdownRateTreasureHunt;

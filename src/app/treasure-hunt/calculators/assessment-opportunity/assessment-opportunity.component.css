@@ -1,0 +1,31 @@
+.assessment-opp-icon {
+    width: 40px;
+}
+
+.calculator-panel-container.modification {
+    width: 60%;
+}
+
+.calculator-panel-container.help-panel {
+    width: 40%;
+}
+
+@media screen and (max-width: 1024) {
+    .fa-save, .fa-times, .fa-edit {
+        font-size: 18px;
+    }
+    .calculator-container .header h3 {
+        font-size: 14px !important;
+    }
+
+}
+
+span.fa.fa-save:hover,
+span.fa.fa-times:hover {
+    cursor: pointer;
+}
+
+
+.modal-open {
+    z-index: initial !important;
+}

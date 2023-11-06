@@ -45,7 +45,10 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   electricalHeatDelivered: number = 0;
   energyInputTotal: number = 0;
   warnings: EnergyInputWarnings = {energyInputHeatDelivered: null };
-  constructor(private phastService: PhastService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private phastResultsService: PhastResultsService) { }
+  constructor(private phastService: PhastService, 
+    private energyInputExhaustGasService: EnergyInputExhaustGasService, 
+    private phastResultsService: PhastResultsService
+    ) { }
 
   ngOnInit() {
     if (this.settings.energyResultUnit !== 'kWh') {
@@ -124,7 +127,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
       let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
       this.energyInputTotal = tmpResults.grossHeatInput;
       this.electricalHeatDelivered = this.energyInputTotal - loss.heatLoss - loss.exhaustGas;
-      this.warnings.energyInputHeatDelivered = this.phastResultsService.checkEnergyInputWarnings(this.electricalHeatDelivered);
+      this.warnings.energyInputHeatDelivered = this.energyInputExhaustGasService.checkEnergyInputHeatDelivered(this.electricalHeatDelivered);
     } else {
       loss.heatLoss = 0;
       loss.exhaustGas = 0;
