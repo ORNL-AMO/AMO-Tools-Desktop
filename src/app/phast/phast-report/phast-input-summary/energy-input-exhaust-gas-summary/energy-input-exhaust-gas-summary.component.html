@@ -35,7 +35,7 @@
                 {{data.baseline.name}}
               </th>
               <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of data.modifications">
-                <div class="alert-danger" *ngIf="!mod.phast.valid.inputExhaustValid && lossData.length == 1">
+                <div class="alert-danger" *ngIf="!mod.phast.valid && !mod.phast.valid.inputExhaustValid && lossData.length == 1">
                   Invalid Modification<br>
                   <span>Errors found in Energy Input Exhaust Gas<br></span>
                 </div>
@@ -46,7 +46,18 @@
           <tbody>
             <tr>
               <td>
-                Total Heat Input for Burners
+                Electrical Heater Efficiency
+              </td>
+              <td>
+                {{data.baseline.electricalHeaterEfficiency}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.electricalHeaterEfficiency}}
+              </td>
+            </tr> 
+            <tr>
+              <td>
+                Total Additional Fuel Heat
               </td>
               <td>
                 {{data.baseline.totalHeatInput}}
@@ -57,7 +68,7 @@
             </tr>          
             <tr>
               <td>
-                Fuel Heater Efficiency
+                Available Heat of Fuel
               </td>
               <td>
                 {{data.baseline.availableHeat}}

@@ -175,7 +175,7 @@
         </td>
       </tr>
       <tr>
-        <td>Total Net Heat Required</td>
+        <td>Total Available Heat Required</td>
         <td *ngIf="baseLineResults.totalInput" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           {{baseLineResults.totalInput | number: decimalCount}}</td>
         <td *ngIf="!baseLineResults.totalInput" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
@@ -290,7 +290,6 @@
           <span *ngIf="!mod.totalSystemLosses">&mdash; &mdash;</span>
         </td>
       </tr>
-
       <tr *ngIf="showResultsCats.showHeatDelivered">
         <td>Fuel Heat Delivered</td>
         <td *ngIf="baseLineResults.energyInputHeatDelivered"
@@ -304,19 +303,20 @@
           <span *ngIf="!mod.energyInputHeatDelivered">&mdash; &mdash;</span>
         </td>
       </tr>
-      <tr *ngIf="showResultsCats.showElectricalDelivered && settings.furnaceType !== 'Electric Arc Furnace (EAF)'">
-        <td>Electrical Heat Delivered</td>
-        <td *ngIf="baseLineResults.electricalHeatDelivered"
+      <tr *ngIf="showResultsCats.showEnInput2">
+        <td>Total Additional Fuel Heat</td>
+        <td *ngIf="baseLineResults.totalAdditionalFuelHeat"
           [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{baseLineResults.electricalHeatDelivered | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.electricalHeatDelivered"
+          {{baseLineResults.totalAdditionalFuelHeat | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalAdditionalFuelHeat"
           [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
         <td *ngFor="let mod of modificationResults; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="mod.electricalHeatDelivered">{{mod.electricalHeatDelivered | number: decimalCount}}</span>
-          <span *ngIf="!mod.electricalHeatDelivered">&mdash; &mdash;</span>
+          <span *ngIf="mod.totalAdditionalFuelHeat">{{mod.totalAdditionalFuelHeat | number: decimalCount}}</span>
+          <span *ngIf="!mod.totalAdditionalFuelHeat">&mdash; &mdash;</span>
         </td>
       </tr>
+
       <tr *ngIf="showResultsCats.showElectricalDelivered && settings.furnaceType === 'Electric Arc Furnace (EAF)'">
         <td>Electrical Heat Delivered</td>
         <td *ngIf="baseLineResults.energyInputHeatDelivered"
@@ -343,6 +343,52 @@
           <span *ngIf="!mod.energyInputTotalChemEnergy">&mdash; &mdash;</span>
         </td>
       </tr>
+
+      <tr class="tr-border" *ngIf="showResultsCats.showElectricalDelivered && settings.furnaceType !== 'Electric Arc Furnace (EAF)'">
+        <td>Electrical Heat Delivered</td>
+        <td *ngIf="baseLineResults.electricalHeatDelivered"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.electricalHeatDelivered | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.electricalHeatDelivered"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="mod.electricalHeatDelivered">{{mod.electricalHeatDelivered | number: decimalCount}}</span>
+          <span *ngIf="!mod.electricalHeatDelivered">&mdash; &mdash;</span>
+        </td>
+      </tr>
+
+      <ng-container *ngIf="showResultsCats.showEnInput2">
+        <tr>
+          <td>Electrical Heater Losses</td>
+          <td *ngIf="baseLineResults.electricalHeaterLosses"
+            [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+            {{baseLineResults.electricalHeaterLosses | number: decimalCount}}</td>
+          <td *ngIf="!baseLineResults.electricalHeaterLosses"
+            [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+          <td *ngFor="let mod of modificationResults; let index = index;"
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            <span *ngIf="mod.electricalHeaterLosses">{{mod.electricalHeaterLosses | number: decimalCount}}</span>
+            <span *ngIf="!mod.electricalHeaterLosses">&mdash; &mdash;</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Total Provided Electrical Heat</td>
+          <td *ngIf="baseLineResults.totalProvidedElectricalHeat"
+            [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+            {{baseLineResults.totalProvidedElectricalHeat | number: decimalCount}}</td>
+          <td *ngIf="!baseLineResults.totalProvidedElectricalHeat"
+            [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+          <td *ngFor="let mod of modificationResults; let index = index;"
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            <span *ngIf="mod.totalProvidedElectricalHeat">{{mod.totalProvidedElectricalHeat | number:
+              decimalCount}}</span>
+            <span *ngIf="!mod.totalProvidedElectricalHeat">&mdash; &mdash;</span>
+          </td>
+        </tr>
+      </ng-container>
+
+
       <tr class="tr-border">
         <td style="font-weight: bold;">Gross Heat Input</td>
         <td *ngIf="baseLineResults.grossHeatInput" style="font-weight: bold;"
@@ -439,63 +485,69 @@
       </thead>
 
       <tbody>
-        <tr >
+        <tr>
           <td>Electrical </td>
           <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
             {{baseLineResults.annualEAFResults.electricEnergyUsed
             | number:'1.0-0'}}</td>
           <td *ngFor="let mod of modificationResults; let index = index;"
             [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-            <span *ngIf="mod.annualEAFResults.electricEnergyUsed">{{mod.annualEAFResults.electricEnergyUsed | number:'1.0-0'}}</span>
+            <span *ngIf="mod.annualEAFResults.electricEnergyUsed">{{mod.annualEAFResults.electricEnergyUsed |
+              number:'1.0-0'}}</span>
             <span *ngIf="!mod.annualEAFResults.electricEnergyUsed">&mdash; &mdash;</span>
           </td>
         </tr>
         <tr>
           <td>Natural Gas </td>
-          <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.annualEAFResults.naturalGasUsed
+          <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+            {{baseLineResults.annualEAFResults.naturalGasUsed
             |
             sigFigs:'3'}}</td>
           <td *ngFor="let mod of modificationResults; let index = index;"
             [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-            <span *ngIf="mod.annualEAFResults.naturalGasUsed">{{mod.annualEAFResults.naturalGasUsed | number:'1.0-0'}}</span>
+            <span *ngIf="mod.annualEAFResults.naturalGasUsed">{{mod.annualEAFResults.naturalGasUsed |
+              number:'1.0-0'}}</span>
             <span *ngIf="!mod.annualEAFResults.naturalGasUsed">&mdash; &mdash;</span>
           </td>
         </tr>
-          <tr>
-            <td>Coal Carbon  </td>
-            <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-              {{baseLineResults.annualEAFResults.coalCarbonUsed |
-              sigFigs:'3'}}</td>
-            <td *ngFor="let mod of modificationResults; let index = index;"
-              [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-              <span *ngIf="mod.annualEAFResults.coalCarbonUsed">{{mod.annualEAFResults.coalCarbonUsed | number:'1.0-0'}}</span>
-              <span *ngIf="!mod.annualEAFResults.coalCarbonUsed">&mdash; &mdash;</span>
-            </td>
-          </tr>
+        <tr>
+          <td>Coal Carbon </td>
+          <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+            {{baseLineResults.annualEAFResults.coalCarbonUsed |
+            sigFigs:'3'}}</td>
+          <td *ngFor="let mod of modificationResults; let index = index;"
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            <span *ngIf="mod.annualEAFResults.coalCarbonUsed">{{mod.annualEAFResults.coalCarbonUsed |
+              number:'1.0-0'}}</span>
+            <span *ngIf="!mod.annualEAFResults.coalCarbonUsed">&mdash; &mdash;</span>
+          </td>
+        </tr>
 
-          <tr>
-            <td>Electrode  </td>
-            <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-              {{baseLineResults.annualEAFResults.electrodeEnergyUsed |
-              sigFigs:'3'}}</td>
-            <td *ngFor="let mod of modificationResults; let index = index;"
-              [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-              <span *ngIf="mod.annualEAFResults.electrodeEnergyUsed">{{mod.annualEAFResults.electrodeEnergyUsed | number:'1.0-0'}}</span>
-              <span *ngIf="!mod.annualEAFResults.electrodeEnergyUsed">&mdash; &mdash;</span>
-            </td>
-          </tr>
+        <tr>
+          <td>Electrode </td>
+          <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+            {{baseLineResults.annualEAFResults.electrodeEnergyUsed |
+            sigFigs:'3'}}</td>
+          <td *ngFor="let mod of modificationResults; let index = index;"
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            <span *ngIf="mod.annualEAFResults.electrodeEnergyUsed">{{mod.annualEAFResults.electrodeEnergyUsed |
+              number:'1.0-0'}}</span>
+            <span *ngIf="!mod.annualEAFResults.electrodeEnergyUsed">&mdash; &mdash;</span>
+          </td>
+        </tr>
 
-          <tr>
-            <td>Other Fuel  </td>
-            <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-              {{baseLineResults.annualEAFResults.otherFuelUsed |
-              sigFigs:'3'}}</td>
-            <td *ngFor="let mod of modificationResults; let index = index;"
-              [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-              <span *ngIf="mod.annualEAFResults.otherFuelUsed">{{mod.annualEAFResults.otherFuelUsed | number:'1.0-0'}}</span>
-              <span *ngIf="!mod.annualEAFResults.otherFuelUsed">&mdash; &mdash;</span>
-            </td>
-          </tr>
+        <tr>
+          <td>Other Fuel </td>
+          <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+            {{baseLineResults.annualEAFResults.otherFuelUsed |
+            sigFigs:'3'}}</td>
+          <td *ngFor="let mod of modificationResults; let index = index;"
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            <span *ngIf="mod.annualEAFResults.otherFuelUsed">{{mod.annualEAFResults.otherFuelUsed |
+              number:'1.0-0'}}</span>
+            <span *ngIf="!mod.annualEAFResults.otherFuelUsed">&mdash; &mdash;</span>
+          </td>
+        </tr>
 
       </tbody>
     </ng-container>
@@ -565,7 +617,7 @@
           </td>
         </tr>
 
-      
+
         <ng-container *ngIf="settings.furnaceType === 'Electric Arc Furnace (EAF)'">
           <tr>
             <td> Coal Carbon CO<sub>2</sub> Emissions </td>
@@ -602,7 +654,9 @@
               number:'1.0-2'}}</td>
             <td *ngFor="let mod of modificationResults; let index = index;"
               [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-              <span *ngIf="mod.co2EmissionsOutput.otherFuelEmissionsOutput">{{mod.co2EmissionsOutput.otherFuelEmissionsOutput | number:'1.0-2'}}</span>
+              <span
+                *ngIf="mod.co2EmissionsOutput.otherFuelEmissionsOutput">{{mod.co2EmissionsOutput.otherFuelEmissionsOutput
+                | number:'1.0-2'}}</span>
               <span *ngIf="!mod.co2EmissionsOutput.otherFuelEmissionsOutput">&mdash; &mdash;</span>
             </td>
           </tr>

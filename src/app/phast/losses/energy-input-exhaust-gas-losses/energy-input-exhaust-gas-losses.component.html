@@ -33,31 +33,31 @@
   <div class="d-flex flex-column loss-total" [ngClass]="{'input-error': showError == true}">
     <div class="form-group">
       <label class="bold">Fuel Heat Delivered</label>
-      <div *ngIf="loss.heatLoss" class="text-center bold">
-        {{loss.heatLoss | sigFigs:'5'}}
+      <div *ngIf="energyExhaustGasOutput.fuelHeatDelivered" class="text-center bold">
+        {{energyExhaustGasOutput.fuelHeatDelivered | sigFigs:'5'}}
         <span>{{resultsUnit}}</span>
       </div>
-      <div *ngIf="!loss.heatLoss" class="text-center bold">
+      <div *ngIf="!energyExhaustGasOutput.fuelHeatDelivered" class="text-center bold">
         &mdash; &mdash;
       </div>
     </div>
     <div class="form-group">
       <label class="bold">Exhaust Gas Losses</label>
-      <div *ngIf="loss.exhaustGas" class="text-center bold">
-        {{loss.exhaustGas | sigFigs:'6'}}
+      <div *ngIf="energyExhaustGasOutput.exhaustGasLosses" class="text-center bold">
+        {{energyExhaustGasOutput.exhaustGasLosses | sigFigs:'6'}}
         <span>{{resultsUnit}}</span>
       </div>
-      <div *ngIf="!loss.exhaustGas" class="text-center bold">
+      <div *ngIf="!energyExhaustGasOutput.exhaustGasLosses" class="text-center bold">
         &mdash; &mdash;
       </div>
     </div>
     <div class="form-group">
       <label class="bold">Electrical Heat Delivered</label>
-      <div *ngIf="electricalHeatDelivered > 0" class="text-center bold">
-        {{electricalHeatDelivered | sigFigs:'6'}}
+      <div *ngIf="energyExhaustGasOutput.phastElectricalHeatDelivered > 0" class="text-center bold">
+        {{energyExhaustGasOutput.phastElectricalHeatDelivered | sigFigs:'6'}}
         <span>{{resultsUnit}}</span>
       </div>
-      <div *ngIf="!electricalHeatDelivered || electricalHeatDelivered <= 0" class="text-center bold">
+      <div *ngIf="!energyExhaustGasOutput.phastElectricalHeatDelivered || energyExhaustGasOutput.phastElectricalHeatDelivered <= 0" class="text-center bold">
         &mdash; &mdash;
       </div>
      <div *ngIf="warnings.energyInputHeatDelivered !== null" class="text-alert alert-warning">
@@ -65,13 +65,25 @@
       </div>
     </div>
 
+     <div class="form-group">
+      <label class="bold">Electrical Heater losses</label>
+      <div *ngIf="energyExhaustGasOutput.electricalHeaterLosses > 0" class="text-center bold">
+        {{energyExhaustGasOutput.electricalHeaterLosses | sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
+        
+      </div>
+      <div *ngIf="!energyExhaustGasOutput.electricalHeaterLosses || energyExhaustGasOutput.electricalHeaterLosses <= 0" class="text-center bold">
+        &mdash; &mdash;
+      </div>
+    </div>
+
     <div class="form-group">
       <label class="bold">Energy Input Total</label>
-      <div *ngIf="energyInputTotal" class="text-center bold">
-        {{energyInputTotal | sigFigs:'6'}}
+      <div *ngIf="energyExhaustGasOutput.phastEnergyInputTotal" class="text-center bold">
+        {{energyExhaustGasOutput.phastEnergyInputTotal | sigFigs:'6'}}
         <span>{{resultsUnit}}</span>
       </div>
-      <div *ngIf="!energyInputTotal" class="text-center bold">
+      <div *ngIf="!energyExhaustGasOutput.phastEnergyInputTotal" class="text-center bold">
         &mdash; &mdash;
       </div>
     </div>

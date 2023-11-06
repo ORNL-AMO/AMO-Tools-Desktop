@@ -931,9 +931,13 @@ export interface EnergyEAFOutput {
 }
 
 export interface EnergyExhaustGasOutput {
-  heatDelivered: number,
+  fuelHeatDelivered: number,
   exhaustGasLosses: number,
-  availableHeat: number
+  availableHeat: number,
+  electricalEfficiency: number,
+  electricalHeaterLosses?: number,
+  phastElectricalHeatDelivered?: number,
+  phastEnergyInputTotal?: number
 }
 
 export interface HeatingValueByVolumeOutput {

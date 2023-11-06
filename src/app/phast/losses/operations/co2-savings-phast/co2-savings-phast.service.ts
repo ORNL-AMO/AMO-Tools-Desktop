@@ -194,8 +194,6 @@ export class Co2SavingsPhastService {
     };
 
     if (settings.energySourceType == 'Electricity') { 
-      phastCopy.co2SavingsData.electricityUse = resultsCopy.electricalHeatDelivered;
-      let hourlyElectricityEmissionOutput = this.getCo2EmissionsResult(phastCopy.co2SavingsData, settings);
       if (settings.furnaceType == 'Electric Arc Furnace (EAF)') { 
         if (settings.unitsOfMeasure != 'Imperial') {
           co2EmissionsOutput.fuelEmissionOutput = this.convertUnitsService.value(co2EmissionsOutput.fuelEmissionOutput).from('GJ').to('MMBtu');
@@ -203,7 +201,7 @@ export class Co2SavingsPhastService {
         }
 
         // 1tonne / 1000kW * 1Mw/1000kW
-        hourlyElectricityEmissionOutput = phastCopy.co2SavingsData.totalEmissionOutputRate * 1/1000 * resultsCopy.hourlyEAFResults.electricEnergyUsed * 1/1000;
+        let hourlyElectricityEmissionOutput: number = phastCopy.co2SavingsData.totalEmissionOutputRate * 1/1000 * resultsCopy.hourlyEAFResults.electricEnergyUsed * 1/1000;
         // 1tonne / 1000kW or 1tonne / 1000kg
         let hourlyFuelEmissionOutput = resultsCopy.hourlyEAFResults.naturalGasUsed * phastCopy.co2SavingsData.totalNaturalGasEmissionOutputRate * 1/1000;
         let hourlyElectrodeUse: number = resultsCopy.hourlyEAFResults.electrodeUse;
@@ -230,6 +228,10 @@ export class Co2SavingsPhastService {
             fuelHeatInputTotal += exGas.totalHeatInput;
           });
         }
+
+        phastCopy.co2SavingsData.electricityUse = resultsCopy.electricalHeatDelivered + resultsCopy.electricalHeaterLosses;
+        let hourlyElectricityEmissionOutput: number = this.getCo2EmissionsResult(phastCopy.co2SavingsData, settings);
+
         let hourlyFuelEmissionOutput = fuelHeatInputTotal * phastCopy.co2SavingsData.totalFuelEmissionOutputRate;
         co2EmissionsOutput.hourlyTotalEmissionOutput = hourlyElectricityEmissionOutput + hourlyFuelEmissionOutput;
         // 1tonne / 1000kW or 1tonne / 1000kg
