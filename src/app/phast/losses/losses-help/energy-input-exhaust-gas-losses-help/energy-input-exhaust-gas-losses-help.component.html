@@ -36,14 +36,38 @@
   <!-- All -->
   <div class="my-2" *ngIf="currentField == 'totalHeatInput'">
     <h6>
-      Total Heat Input
+      Total Additional Fuel Heat
       <br>
       <small class="text-muted">
-        Give value of total heat input to the heating system (furnace/oven) from all sources of heat supplied.
+        Additional heat supplied per hour by fuel burners. This value is zero for most electrotechnologies. This can be calculated from the fuel's higher heating value and volumetric flow rate.
         <hr>
       </small>
     </h6>
   </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'availableHeat'">
+    <h6>
+      Available Heat of Fuel
+      <br>
+      <small class="text-muted">
+        Fraction of heating value of the fuel available for use. This can be calculated from estimating the flue gas losses with the "Calculate" button.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'electricalHeaterEfficiency'">
+    <h6>
+      Electrical Heater Efficiency
+      <br>
+      <small class="text-muted">
+        Efficiency of the conversion of electrical energy into heat, this is often close to 100%.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
 
   <div class="my-2" *ngIf="currentField == 'excessAir'">
     <h6>

@@ -7,6 +7,7 @@ import { EnergyInputExhaustGasService } from './energy-input-exhaust-gas.service
 import { Settings } from '../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 import { EnergyInputWarnings, PhastResultsService } from '../../phast-results.service';
+import { EnergyExhaustGasOutput } from '../../../tools-suite-api/process-heating-api.service';
 
 @Component({
   selector: 'app-energy-input-exhaust-gas-losses',
@@ -38,12 +39,11 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   phast: PHAST;
 
   _exhaustGasLosses: Array<EnInputExGasObj>;
+  energyExhaustGasOutput: EnergyExhaustGasOutput;
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
   showError: boolean = false;
-  electricalHeatDelivered: number = 0;
-  energyInputTotal: number = 0;
   warnings: EnergyInputWarnings = {energyInputHeatDelivered: null };
   constructor(private phastService: PhastService, 
     private energyInputExhaustGasService: EnergyInputExhaustGasService, 
@@ -85,20 +85,18 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     if (this.losses.energyInputExhaustGasLoss) {
       let lossIndex = 1;
       this.losses.energyInputExhaustGasLoss.forEach(loss => {
-        let tmpLoss = {
+        let lossDisplay: EnInputExGasObj = {
           form: this.energyInputExhaustGasService.getFormFromLoss(loss),
-          heatLoss: 0.0,
           collapse: false,
-          exhaustGas: 0.0
         };
-        if (!tmpLoss.form.controls.name.value) {
-          tmpLoss.form.patchValue({
+        if (!lossDisplay.form.controls.name.value) {
+          lossDisplay.form.patchValue({
             name: 'Loss #' + lossIndex
           });
         }    
         lossIndex++;
-        this.calculate(tmpLoss);
-        this._exhaustGasLosses.push(tmpLoss);
+        this.calculate(lossDisplay);
+        this._exhaustGasLosses.push(lossDisplay);
       });
     }
   }
@@ -106,8 +104,6 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   addLoss() {
     this._exhaustGasLosses.push({
       form: this.energyInputExhaustGasService.initForm(this._exhaustGasLosses.length + 1),
-      heatLoss: 0.0,
-      exhaustGas: 0.0,
       collapse: false
     });
     this.saveLosses();
@@ -118,22 +114,26 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     this.saveLosses();
   }
 
-  calculate(loss: EnInputExGasObj) {
-    let tmpLoss = this.energyInputExhaustGasService.getLossFromForm(loss.form);
-    if (loss.form.status === 'VALID') {
-      let results = this.phastService.energyInputExhaustGasLosses(tmpLoss, this.settings);
-      loss.heatLoss = results.heatDelivered;
-      loss.exhaustGas = results.exhaustGasLosses;
-      let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
-      this.energyInputTotal = tmpResults.grossHeatInput;
-      this.electricalHeatDelivered = this.energyInputTotal - loss.heatLoss - loss.exhaustGas;
-      this.warnings.energyInputHeatDelivered = this.energyInputExhaustGasService.checkEnergyInputHeatDelivered(this.electricalHeatDelivered);
-    } else {
-      loss.heatLoss = 0;
-      loss.exhaustGas = 0;
-      this.energyInputTotal = 0;
-      this.electricalHeatDelivered = 0;
+
+  calculate(lossDisplay: EnInputExGasObj) {
+    this.energyExhaustGasOutput = {
+      fuelHeatDelivered: 0,
+      exhaustGasLosses: 0,
+      availableHeat: 0,
+      electricalEfficiency: 0,
+      electricalHeaterLosses: 0,
+      phastElectricalHeatDelivered: 0,
+      phastEnergyInputTotal: 0
     }
+    if (lossDisplay.form.status === 'VALID') {
+      let phastResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
+      this.energyExhaustGasOutput.fuelHeatDelivered = phastResults.energyInputHeatDelivered;
+      this.energyExhaustGasOutput.exhaustGasLosses = phastResults.totalExhaustGas;
+      this.energyExhaustGasOutput.electricalHeaterLosses = phastResults.electricalHeaterLosses;
+      this.energyExhaustGasOutput.phastElectricalHeatDelivered = phastResults.electricalHeatDelivered;
+      this.energyExhaustGasOutput.phastEnergyInputTotal = phastResults.grossHeatInput;
+      this.warnings.energyInputHeatDelivered = this.energyInputExhaustGasService.checkEnergyInputHeatDelivered(this.energyExhaustGasOutput.phastElectricalHeatDelivered);
+    } 
   }
 
   collapseLoss(loss: EnInputExGasObj) {
@@ -169,7 +169,5 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
 
 export interface EnInputExGasObj {
   form: UntypedFormGroup;
-  heatLoss: number;
-  exhaustGas: number;
   collapse: boolean;
 }

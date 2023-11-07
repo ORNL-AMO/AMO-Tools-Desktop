@@ -4,7 +4,7 @@ import { EnergyEquivalencyElectric, EnergyEquivalencyElectricOutput, EnergyEquiv
 import { O2Enrichment, RawO2Output } from '../shared/models/phast/o2Enrichment';
 import { FlowCalculations, FlowCalculationsOutput } from '../shared/models/phast/flowCalculations';
 import { ExhaustGasEAF } from '../shared/models/phast/losses/exhaustGasEAF';
-import { Losses } from '../shared/models/phast/phast';
+import { Losses, PhastResults } from '../shared/models/phast/phast';
 import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
 import { GasCoolingLoss, LiquidCoolingLoss, CoolingLoss } from '../shared/models/phast/losses/coolingLoss';
 import { GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial, ChargeMaterial } from '../shared/models/phast/losses/chargeMaterial';
@@ -555,34 +555,28 @@ export class PhastService {
 
   //energy input for non-EAF Electric process heating
   energyInputExhaustGasLosses(input: EnergyInputExhaustGasLoss, settings: Settings): EnergyExhaustGasOutput {
-    let inputs = this.createInputCopy(input);
-    let results: EnergyExhaustGasOutput = {
-      heatDelivered: 0,
-      exhaustGasLosses: 0,
-      availableHeat: 0
-    };
+    input = this.createInputCopy(input);
     if (settings.unitsOfMeasure === 'Metric') {
-      inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('GJ').to('Btu');
-      results = this.calcEnergyInputExhaustGasLosses(inputs);
+      input.totalHeatInput = this.convertUnitsService.value(input.totalHeatInput).from('GJ').to('Btu');
     } else {
-      inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('MMBtu').to('Btu');
-      results = this.calcEnergyInputExhaustGasLosses(inputs);
+      input.totalHeatInput = this.convertUnitsService.value(input.totalHeatInput).from('MMBtu').to('Btu');
     }
-    results.heatDelivered = this.convertResult(results.heatDelivered, settings.energyResultUnit);
-    results.exhaustGasLosses = this.convertResult(results.exhaustGasLosses, settings.energyResultUnit);
+    let fuelHeatDelivered: number = (input.totalHeatInput * input.availableHeat) / 100;
+    let exhaustGasLosses: number = fuelHeatDelivered * (100 - input.availableHeat) / input.availableHeat;
 
-    return results;
-  }
+    fuelHeatDelivered = this.convertResult(fuelHeatDelivered, settings.energyResultUnit);
+    exhaustGasLosses = this.convertResult(exhaustGasLosses, settings.energyResultUnit);
 
-  calcEnergyInputExhaustGasLosses(input: EnergyInputExhaustGasLoss){
-    let heatDelivered: number = (input.totalHeatInput * input.availableHeat)/100;
-    let exhaustGasLosses: number = heatDelivered *(100 - input.availableHeat) / input.availableHeat;
-    let results = {
+    let electricalEfficiency: number = input.electricalHeaterEfficiency / 100;
+    
+    let results: EnergyExhaustGasOutput = {
       availableHeat: input.availableHeat,
-      heatDelivered: heatDelivered,
-      exhaustGasLosses: exhaustGasLosses
+      fuelHeatDelivered: fuelHeatDelivered,
+      electricalEfficiency: electricalEfficiency,
+      exhaustGasLosses: exhaustGasLosses,
     }
-    return results
+    
+    return results;
   }
 
   efficiencyImprovement(input: EfficiencyImprovementInputs, settings: Settings): EfficiencyImprovementOutputs {
@@ -811,7 +805,7 @@ export class PhastService {
     let sum = 0;
     losses.forEach(loss => {
       let result = this.energyInputExhaustGasLosses(loss, settings);
-      sum += result.heatDelivered;
+      sum += result.fuelHeatDelivered;
     });
     return sum;
   }

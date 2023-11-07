@@ -13,6 +13,7 @@ import { FlueGasByVolumeSuiteResults, MaterialInputProperties } from '../shared/
 import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 
+import { EnergyExhaustGasOutput } from '../tools-suite-api/process-heating-api.service';
 
 
 @Injectable()
@@ -56,6 +57,7 @@ export class PhastResultsService {
       totalEnergyInputEAF: 0,
       totalEnergyInput: 0,
       totalExhaustGas: 0,
+      electricalHeaterLosses: 0,
       totalExhaustGasEAF: 0,
       totalSystemLosses: 0,
       exothermicHeat: 0,
@@ -109,7 +111,6 @@ export class PhastResultsService {
     let results: PhastResults = this.initResults();
     results.exothermicHeat = 0 - Math.abs(this.phastService.sumChargeMaterialExothermic(phast.losses.chargeMaterials, settings));
     results.totalInput = this.phastService.sumHeatInput(phast.losses, settings);
-    results.grossHeatInput = results.totalInput;
     if (this.checkLoss(phast.losses.wallLosses)) {
       results.totalWallLoss = this.phastService.sumWallLosses(phast.losses.wallLosses, settings);
     }
@@ -167,12 +168,23 @@ export class PhastResultsService {
     if (resultCats.showEnInput2 && this.checkLoss(phast.losses.energyInputExhaustGasLoss)) {
       let tmpForm = this.energyInputExhaustGasService.getFormFromLoss(phast.losses.energyInputExhaustGasLoss[0]);
       if (tmpForm.status === 'VALID') {
-        let tmpResults = this.phastService.energyInputExhaustGasLosses(phast.losses.energyInputExhaustGasLoss[0], settings);
-        results.energyInputHeatDelivered = tmpResults.heatDelivered;
-        results.totalExhaustGas = tmpResults.exhaustGasLosses;
-        results.grossHeatInput = results.totalInput - Math.abs(results.exothermicHeat) + tmpResults.exhaustGasLosses;
-        results.availableHeatPercent = tmpResults.availableHeat;
-        results.electricalHeatDelivered = results.grossHeatInput - results.energyInputHeatDelivered - results.totalExhaustGas;
+        let energyInputResults: EnergyExhaustGasOutput = this.phastService.energyInputExhaustGasLosses(phast.losses.energyInputExhaustGasLoss[0], settings);
+        results.energyInputHeatDelivered = energyInputResults.fuelHeatDelivered;
+        results.totalExhaustGas = energyInputResults.exhaustGasLosses;
+        results.availableHeatPercent = energyInputResults.availableHeat;
+        results.electricalHeatDelivered = results.totalInput - energyInputResults.fuelHeatDelivered;
+        results.electricalHeaterLosses = results.electricalHeatDelivered * ((1 / energyInputResults.electricalEfficiency) - 1);
+
+        let kWTotalAdditionalFuelHeat: number;
+        if (settings.unitsOfMeasure == 'Imperial') {
+          kWTotalAdditionalFuelHeat = this.convertUnitsService.value(phast.losses.energyInputExhaustGasLoss[0].totalHeatInput).from('MMBtu').to(settings.energyResultUnit);
+        } else {
+          kWTotalAdditionalFuelHeat = this.convertUnitsService.value(phast.losses.energyInputExhaustGasLoss[0].totalHeatInput).from('GJ').to(settings.energyResultUnit);
+        }
+        
+        results.totalAdditionalFuelHeat = kWTotalAdditionalFuelHeat;
+        results.totalProvidedElectricalHeat = results.electricalHeatDelivered + results.electricalHeaterLosses;
+        results.grossHeatInput = results.totalInput - Math.abs(results.exothermicHeat) + energyInputResults.exhaustGasLosses + results.electricalHeaterLosses;
       }
     }
 
@@ -180,7 +192,6 @@ export class PhastResultsService {
       results.heatingSystemEfficiency = phast.systemEfficiency;
       let grossHeatInput = (results.totalInput / (phast.systemEfficiency / 100));
       results.totalSystemLosses = grossHeatInput * (1 - (phast.systemEfficiency / 100));
-
       results.grossHeatInput = results.totalInput + results.totalSystemLosses - Math.abs(results.exothermicHeat);
     }
 

@@ -140,6 +140,9 @@ export interface PhastResults {
   calculatedFlueGasO2: number;
   availableHeatPercent: number;
   electricalHeatDelivered?: number;
+  electricalHeaterLosses?: number;
+  totalAdditionalFuelHeat?: number;
+  totalProvidedElectricalHeat?: number;
   co2EmissionsOutput?: PhastCo2EmissionsOutput
 }
 
