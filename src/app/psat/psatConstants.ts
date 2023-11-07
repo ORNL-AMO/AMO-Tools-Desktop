@@ -45,22 +45,6 @@ export const pumpTypesConstant: Array<{ value: number, display: string }> = [
         value: 10,
         display: 'Large End Suction',
     },
-    {
-        value: 11,
-        display: 'Specified Optimal Efficiency'
-    },
-    { 
-        value: 12, 
-        display: 'Direct Drive' 
-    },
-    { 
-        value: 13, 
-        display: 'Belt Drive' 
-    },
-    { 
-        value: 14, 
-        display: 'Gear Box/Transmission' 
-    },
     // When user selects below they need a way to provide the optimal efficiency
     // 'Specified Optimal Efficiency'
 ];
