@@ -12,6 +12,8 @@ export class CompressedAirSankeyComponent implements OnInit {
   assessment: Assessment;
   @Input()
   inReport: boolean;
+  @Input()
+  showPrintView: boolean;
 
   
   sankeyTab: 'airflow' | 'power' = 'power';

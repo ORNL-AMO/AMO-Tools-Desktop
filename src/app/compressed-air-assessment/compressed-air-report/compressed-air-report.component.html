@@ -157,7 +157,7 @@
         <div class="results scroll-item print-height page-break-before"
             *ngIf="(currentTab == 'reportSankey' && !showPrintView) || (showPrintView && printOptions.printReportSankey)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-compressed-air-sankey [inReport]="true" [assessment]="assessment"></app-compressed-air-sankey>
+            <app-compressed-air-sankey [inReport]="true" [assessment]="assessment" [showPrintView]="showPrintView"></app-compressed-air-sankey>
         </div>
         <div class="print-height page-break-before" [ngClass]="{'results scroll-item':!showPrintView}"
             *ngIf="(currentTab == 'systemProfiles' && !showPrintView) || (showPrintView && printOptions.printSystemProfiles)"
