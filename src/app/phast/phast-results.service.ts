@@ -174,7 +174,15 @@ export class PhastResultsService {
         results.availableHeatPercent = energyInputResults.availableHeat;
         results.electricalHeatDelivered = results.totalInput - energyInputResults.fuelHeatDelivered;
         results.electricalHeaterLosses = results.electricalHeatDelivered * ((1 / energyInputResults.electricalEfficiency) - 1);
-        results.totalAdditionalFuelHeat = phast.losses.energyInputExhaustGasLoss[0].totalHeatInput;
+
+        let kWTotalAdditionalFuelHeat: number;
+        if (settings.unitsOfMeasure == 'Imperial') {
+          kWTotalAdditionalFuelHeat = this.convertUnitsService.value(phast.losses.energyInputExhaustGasLoss[0].totalHeatInput).from('MMBtu').to(settings.energyResultUnit);
+        } else {
+          kWTotalAdditionalFuelHeat = this.convertUnitsService.value(phast.losses.energyInputExhaustGasLoss[0].totalHeatInput).from('GJ').to(settings.energyResultUnit);
+        }
+        
+        results.totalAdditionalFuelHeat = kWTotalAdditionalFuelHeat;
         results.totalProvidedElectricalHeat = results.electricalHeatDelivered + results.electricalHeaterLosses;
         results.grossHeatInput = results.totalInput - Math.abs(results.exothermicHeat) + energyInputResults.exhaustGasLosses + results.electricalHeaterLosses;
       }

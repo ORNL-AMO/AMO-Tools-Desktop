@@ -225,8 +225,8 @@
           <span *ngIf="!mod.exothermicHeat">&mdash; &mdash;</span>
         </td>
       </tr>
-      <tr *ngIf="showResultsCats.showEnInput2">
-        <td>Energy Input Available Heat</td>
+      <tr *ngIf="showResultsCats.showEnInput2" class="tr-border">
+        <td>Fuel Input Available Heat</td>
         <td *ngIf="baseLineResults.availableHeatPercent"
           [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           {{baseLineResults.availableHeatPercent | number:'1.0-0'}}%</td>
