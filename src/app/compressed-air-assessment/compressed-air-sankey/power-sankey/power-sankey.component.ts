@@ -21,8 +21,6 @@ export class PowerSankeyComponent implements OnInit {
   @Input()
   appBackground: boolean = true;
   @Input()
-  printView: boolean;
-  @Input()
   inReport: boolean;
   @ViewChild("powerChart", { static: false }) 
   ngChart: ElementRef;
@@ -71,6 +69,7 @@ export class PowerSankeyComponent implements OnInit {
   dayTypeSetupServiceSubscription: Subscription;
   dayTypeLeakRate: number;
   showPrintViewSub: Subscription;
+  printView: boolean;
 
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
@@ -93,15 +92,14 @@ export class PowerSankeyComponent implements OnInit {
     this.baselineResults = this.resultsService.calculateBaselineResults(this.compressedAirAssessment, this.settings, this.dayTypeBaselineProfileSummaries);
     this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(showPrintView => {
       this.printView = showPrintView;
+      this.checkShouldPrint();
     });
   }
 
   async ngAfterViewInit() {
     if (!this.airPropertiesService.airPropertiesData || this.airPropertiesService.airPropertiesData.length === 0) {
       await this.airPropertiesService.initAirPropertiesData();
-      if (this.printView) {
-        this.printOptionsMenuService.isPowerSankeyPrintViewReady.next(true);
-      }
+      this.checkShouldPrint();
     }
     this.dayTypeSetupServiceSubscription = this.dayTypeSetupService.endUseDayTypeSetup.subscribe(endUseDayTypeSetup => {
       if (endUseDayTypeSetup) {
@@ -112,6 +110,13 @@ export class PowerSankeyComponent implements OnInit {
         this.renderSankey();
       }
     });
+  }
+
+  checkShouldPrint() {
+    let hasPrintSankeyOption = this.printOptionsMenuService.printOptions.getValue().printReportSankey;
+    if (this.printView && hasPrintSankeyOption && !this.printOptionsMenuService.isPowerSankeyPrintViewReady.getValue()) {
+        this.printOptionsMenuService.isPowerSankeyPrintViewReady.next(true);
+    }
   }
 
   ngOnDestroy() {

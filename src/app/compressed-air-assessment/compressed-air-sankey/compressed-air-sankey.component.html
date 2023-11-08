@@ -17,8 +17,7 @@
   </div>
 </ng-container>
 
-
-<div *ngIf="inReport" class="output-summary d-none d-lg-block">
+<div *ngIf="inReport" class="output-summary" [ngClass]="{'d-none d-lg-block': !showPrintView}">
   <div class="d-flex flex-column">
     <div class="d-flex">
       <div class="w-100 m-3">
