@@ -60,7 +60,7 @@ export class MotorComponent implements OnInit {
     private motorIntegrationService: MotorIntegrationService,
     private motorService: MotorService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.efficiencyClasses = motorEfficiencyConstants;
     if (!this.baseline) {
       this.idString = 'psat_modification_' + this.modificationIndex;
@@ -68,8 +68,8 @@ export class MotorComponent implements OnInit {
     else {
       this.idString = 'psat_baseline';
     }
-    this.initPsatMotorForm();
-    this.setInventorySelectOptions();
+    await this.initPsatMotorForm();
+    await this.setInventorySelectOptions();
     this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
       this.handleConnectedInventoryEvents(connectedInventoryData);
     });
