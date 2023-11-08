@@ -27,7 +27,7 @@ app.on('ready', function () {
     height: 600,
     webPreferences: {
       contextIsolation: true,
-      nodeIntegration: true,
+      nodeIntegration: false,
       preload: path.join(__dirname, 'preload.js')
     }
   });
