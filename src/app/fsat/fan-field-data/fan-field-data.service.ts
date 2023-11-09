@@ -26,7 +26,7 @@ export class FanFieldDataService {
       ductArea: [obj.ductArea],
       inletVelocityPressure: [obj.inletVelocityPressure, [Validators.required]],
       usingStaticPressure: [obj.usingStaticPressure],
-      outletPressure: [obj.outletPressure, [Validators.required, Validators.min(obj.inletPressure)]],
+      outletPressure: [obj.outletPressure, [Validators.required]],
       loadEstimatedMethod: [obj.loadEstimatedMethod, Validators.required],
       motorPower: [obj.motorPower, Validators.required],
       compressibilityFactor: [obj.compressibilityFactor, [Validators.required, Validators.min(0)]],
