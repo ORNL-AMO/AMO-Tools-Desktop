@@ -129,6 +129,10 @@ export class PercentLoadEstimationService {
     let percentLoadVoltage: number = averageVoltage / data.ratedVoltage;
 
     let percentLoad: number = percentLoadVoltage * percentLoadCurrent * 100;
+
+    if (isNaN(percentLoad) || percentLoad == Infinity) {
+      percentLoad = 0
+    }
     return percentLoad;
   }
 
