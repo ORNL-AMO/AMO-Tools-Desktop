@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
@@ -138,18 +138,7 @@ export class FanFieldDataComponent implements OnInit {
     if (!usingModalVelocityPressure) {
       this.setInletVelocityPressure();
     }
-    this.updateOutletPressureValidation();
-    let tmpInletPressureData: InletPressureData = this.fieldData.inletPressureData;
-    let tmpOutletPressureData: OutletPressureData = this.fieldData.outletPressureData;
-    let tmpPlaneData: PlaneData = this.fieldData.planeData;
-    let tmpfanRatedInfo: FanRatedInfo = this.fieldData.fanRatedInfo;
-    let tmpCalcType: string = this.fieldData.pressureCalcResultType;
     this.fieldData = this.fanFieldDataService.getObjFromForm(this.fieldDataForm);
-    this.fieldData.inletPressureData = tmpInletPressureData;
-    this.fieldData.outletPressureData = tmpOutletPressureData;
-    this.fieldData.planeData = tmpPlaneData;
-    this.fieldData.fanRatedInfo = tmpfanRatedInfo;
-    this.fieldData.pressureCalcResultType = tmpCalcType;
     this.emitSave.emit(this.fieldData);
     this.checkForWarnings();
   }
@@ -185,7 +174,7 @@ export class FanFieldDataComponent implements OnInit {
     if (this.fieldDataForm.controls.usingStaticPressure.value == true && !this.fieldDataForm.controls.userDefinedVelocityPressure.value) {
       if (this.fieldDataForm.controls.flowRate.valid) {
         this.setInletVelocityPressureInputs();
-        let calculatedInletVelocityPressure: number = this.fsatService.calculateInletVelocityPressure(this.inletVelocityPressureInputs);
+        let calculatedInletVelocityPressure: number = this.fsatService.calculateInletVelocityPressure(this.inletVelocityPressureInputs, this.settings);
         this.fieldDataForm.patchValue({inletVelocityPressure: calculatedInletVelocityPressure});
       } 
     } else if (this.fieldDataForm.controls.usingStaticPressure.value == false) {
@@ -306,11 +295,6 @@ export class FanFieldDataComponent implements OnInit {
 
   updateFsatWithModalData(modalFieldData: FieldData) {
     this.fsat.modalFieldData = JSON.parse(JSON.stringify(modalFieldData));
-  }
-
-  updateOutletPressureValidation() {
-    this.fieldDataForm.controls.outletPressure.setValidators([Validators.required, Validators.min(this.fieldDataForm.controls.inletPressure.value)]);
-    this.fieldDataForm.controls.outletPressure.updateValueAndValidity();
   }
 
   setCalcInvalid(isCalcValid: boolean) {

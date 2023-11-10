@@ -64,6 +64,14 @@ export class ConvertFsatService {
       if (inputCpy.fieldData.outletPressureData) {
         inputCpy.fieldData.outletPressureData = this.convertOutletPressureData(inputCpy.fieldData.outletPressureData, oldSettings, newSettings);
       }
+      
+      if (inputCpy.fieldData.ductArea) {
+        if (oldSettings.unitsOfMeasure === 'Imperial') {
+          inputCpy.fieldData.ductArea = this.convertNum(inputCpy.fieldData.ductArea, 'ft2', 'm2');
+        } else {
+          inputCpy.fieldData.ductArea = this.convertNum(inputCpy.fieldData.ductArea, 'm2', 'ft2');
+        }
+      }
     }
     if (oldSettings.fanFlowRate !== newSettings.fanFlowRate) {
       inputCpy.fieldData.flowRate = this.convertNum(inputCpy.fieldData.flowRate, oldSettings.fanFlowRate, newSettings.fanFlowRate);

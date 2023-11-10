@@ -62,7 +62,7 @@ export class CalculateOutletPressureComponent implements OnInit {
   setInletVelocityPressure() {
     if (!this.outletPressureData.userDefinedVelocityPressure && !this.usingStaticPressure) {
       this.inletVelocityPressureInputs.ductArea = this.outletPressureData.fanOutletArea;
-      let calculatedInletVelocityPressure: number = this.fsatService.calculateInletVelocityPressure(this.inletVelocityPressureInputs);
+      let calculatedInletVelocityPressure: number = this.fsatService.calculateInletVelocityPressure(this.inletVelocityPressureInputs, this.settings);
       this.outletPressureData.inletVelocityPressure = calculatedInletVelocityPressure;
       this.calcInletVelocityPressureError = this.fsatWarningService.checkCalcInletVelocityPressureError(this.inletVelocityPressureInputs.flowRate);
     } else {

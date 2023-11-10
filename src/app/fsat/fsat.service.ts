@@ -414,10 +414,20 @@ export class FsatService {
     return emptyResults;
   }
 
-  calculateInletVelocityPressure(calculationInputs: InletVelocityPressureInputs): number {
-    let inletVelocityPressure: number;
-    let flowRateCalc: number = (1 / 1096) * (calculationInputs.flowRate / calculationInputs.ductArea);
-    inletVelocityPressure = calculationInputs.gasDensity * Math.pow(flowRateCalc, 2);
+  calculateInletVelocityPressure(calculationInputs: InletVelocityPressureInputs, settings: Settings): number {
+    let flowRate: number = this.convertUnitsService.value(calculationInputs.flowRate).from(settings.fanFlowRate).to('m3/s');
+    let ductArea: number = calculationInputs.ductArea;
+
+    if (settings.unitsOfMeasure === 'Imperial') {
+      ductArea = this.convertUnitsService.value(calculationInputs.ductArea).from('ft2').to('m2');
+    }
+    let gasDensity: number = this.convertUnitsService.value(calculationInputs.gasDensity).from(settings.densityMeasurement).to('kgNm3');
+    let flowVelocity: number = (flowRate / ductArea);
+
+    // units == Pa
+    let inletVelocityPressure: number = .5 * gasDensity * Math.pow(flowVelocity, 2);
+    inletVelocityPressure = this.convertUnitsService.value(inletVelocityPressure).from('Pa').to(settings.fanPressureMeasurement);
+
     if (isNaN(inletVelocityPressure) || !isFinite(inletVelocityPressure)) {
       inletVelocityPressure = undefined;
     } else {
