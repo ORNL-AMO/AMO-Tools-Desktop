@@ -21,8 +21,9 @@ export class PercentGraphComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
-
+  ngOnInit() {
+  }
+  
   ngAfterViewInit() {
     this.initChart();
   }
@@ -35,6 +36,9 @@ export class PercentGraphComponent implements OnInit {
 
   updateChart() {
     if (this.chart) {
+      // * important: work-around for billboardjs logic where value greater than max will reset chart max
+      // * ex. our previous value was 150% --> new max = 150%
+      this.chart.config("gauge.max", 100)
       this.chart.load({
         columns: [
           ['data', this.value],
@@ -61,8 +65,13 @@ export class PercentGraphComponent implements OnInit {
       oninit: () => {},
       gauge: {
         label: {
-          extents: function() { return ""; }
-        }
+          extents: function() { return ""; },
+          format: function (value, ratio) {
+            // important: support values over 100
+            return value.toFixed(1) + "%"; 
+          }
+        },
+        max: 100
       },
       color: {
         pattern: [
