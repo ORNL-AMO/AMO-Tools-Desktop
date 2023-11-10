@@ -5,7 +5,7 @@ import { SortCardsData } from './sort-cards-by.pipe';
 import * as _ from 'lodash';
 import {
   TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt,
-  CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, FlueGasTreasureHunt, WallLossTreasureHunt, OpportunitySummary, Treasure, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity
+  CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, FlueGasTreasureHunt, WallLossTreasureHunt, OpportunitySummary, Treasure, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity, BoilerBlowdownRateTreasureHunt
 } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 
@@ -36,6 +36,7 @@ import { ChillerStagingTreasureHuntService } from '../../treasure-hunt-calculato
 import { ChillerPerformanceTreasureHuntService } from '../../treasure-hunt-calculator-services/chiller-performance-treasure-hunt.service';
 import { CoolingTowerFanTreasureHuntService } from '../../treasure-hunt-calculator-services/cooling-tower-fan-treasure-hunt.service';
 import { CoolingTowerBasinTreasureHuntService } from '../../treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
+import { BoilerBlowdownRateTreasureHuntService } from '../../treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
 
 @Injectable()
 export class SortCardsService {
@@ -66,8 +67,9 @@ export class SortCardsService {
     private coolingTowerMakeupTreasureHuntService: CoolingTowerMakeupTreasureHuntService,
     private chillerStagingTreasureHuntService: ChillerStagingTreasureHuntService,
     private chillerPerformanceTreasureHuntService : ChillerPerformanceTreasureHuntService,
-    private ccoolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService,
-    private ccoolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService,
+    private coolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService,
+    private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService,
+    private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService
     ) { }
 
   sortCards(value: Array<OpportunityCardData>, sortByData: SortCardsData): Array<OpportunityCardData> {
@@ -135,6 +137,7 @@ export class SortCardsService {
     let hasChillerPerformance: boolean = calculatorTypes.includes(Treasure.chillerPerformance);
     let hasCoolingTowerFan: boolean = calculatorTypes.includes(Treasure.coolingTowerFan);
     let hasCoolingTowerBasin: boolean = calculatorTypes.includes(Treasure.coolingTowerBasin);
+    let hasBoilerBlowdownRate: boolean = calculatorTypes.includes(Treasure.boilerBlowdownRate);
 
     let lightingReplacements: Array<LightingReplacementTreasureHunt> = [];
     if (allCalcTypes || hasLightingReplacement) {
@@ -298,6 +301,12 @@ export class SortCardsService {
         coolingTowerBasinOpportunities = this.sortCoolingTowerBasinOpportunities(treasureHunt.coolingTowerBasinOpportunities, sortBy, treasureHunt, settings);
       }
     }
+    let boilerBlowdownRateOpportunities: Array<BoilerBlowdownRateTreasureHunt> = [];
+    if (allCalcTypes || hasBoilerBlowdownRate) {
+      if (treasureHunt.boilerBlowdownRateOpportunities && treasureHunt.boilerBlowdownRateOpportunities.length !=0) {
+        boilerBlowdownRateOpportunities = this.sortBoilerBlowdownRateOpportunities(treasureHunt.boilerBlowdownRateOpportunities, sortBy, treasureHunt, settings);
+      }
+    }
 
     let filteredTreasureHunt: TreasureHunt = {
       name: treasureHunt.name,
@@ -328,6 +337,7 @@ export class SortCardsService {
       chillerPerformanceOpportunities: chillerPerformanceOpportunities,
       coolingTowerFanOpportunities: coolingTowerFanOpportunities,
       coolingTowerBasinOpportunities: coolingTowerBasinOpportunities,
+      boilerBlowdownRateOpportunities: boilerBlowdownRateOpportunities,
       operatingHours: treasureHunt.operatingHours,
       currentEnergyUsage: treasureHunt.currentEnergyUsage,
       setupDone: treasureHunt.setupDone
@@ -556,7 +566,7 @@ sortAirHeatingOpportunities(items: Array<AirHeatingTreasureHunt>, sortBy: SortCa
   sortCoolingTowerFanOpportunities(items: Array<CoolingTowerFanTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<CoolingTowerFanTreasureHunt> {
     return items.filter(item => {
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
-      let cardItem: OpportunityCardData = this.ccoolingTowerFanTreasureHuntService.getCoolingTowerFanCardData(item, opportunitySummary, 0, treasureHunt.currentEnergyUsage, settings);
+      let cardItem: OpportunityCardData = this.coolingTowerFanTreasureHuntService.getCoolingTowerFanCardData(item, opportunitySummary, 0, treasureHunt.currentEnergyUsage, settings);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
@@ -564,7 +574,15 @@ sortAirHeatingOpportunities(items: Array<AirHeatingTreasureHunt>, sortBy: SortCa
   sortCoolingTowerBasinOpportunities(items: Array<CoolingTowerBasinTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<CoolingTowerBasinTreasureHunt> {
     return items.filter(item => {
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
-      let cardItem: OpportunityCardData = this.ccoolingTowerBasinTreasureHuntService.getCoolingTowerBasinCardData(item, opportunitySummary, 0, treasureHunt.currentEnergyUsage, settings);
+      let cardItem: OpportunityCardData = this.coolingTowerBasinTreasureHuntService.getCoolingTowerBasinCardData(item, opportunitySummary, 0, treasureHunt.currentEnergyUsage, settings);
+      return this.checkCardItemIncluded(cardItem, sortBy);
+    });
+  }
+
+  sortBoilerBlowdownRateOpportunities(items: Array<BoilerBlowdownRateTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<BoilerBlowdownRateTreasureHunt> {
+    return items.filter(item => {
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.boilerBlowdownRateTreasureHuntService.getBoilerBlowdownRateCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }

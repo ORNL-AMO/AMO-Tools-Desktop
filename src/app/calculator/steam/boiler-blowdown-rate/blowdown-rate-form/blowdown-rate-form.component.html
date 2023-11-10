@@ -39,7 +39,8 @@
     </div>
 </form>
 <!--boiler form-->
-<label class="group-label w-100" (click)="toggleBoiler()">Boiler
+<label *ngIf="inTreasureHunt" class="group-label w-100">Boiler</label>
+<label *ngIf="!inTreasureHunt" class="group-label w-100" (click)="toggleBoiler()">Boiler
     <span *ngIf="showBoiler == true && isBaseline" class="remove-curve fa fa-minus pull-right"></span>
     <span *ngIf="showBoiler == false && isBaseline" class="add-curve fa fa-plus pull-right"></span>
 </label>
@@ -107,7 +108,8 @@
     </div>
 </form>
 <!--operations form-->
-<label class="group-label w-100" (click)="toggleOperations()">Operations
+<label *ngIf="inTreasureHunt" class="group-label w-100">Operations</label>
+<label *ngIf="!inTreasureHunt" class="group-label w-100" (click)="toggleOperations()">Operations
     <span *ngIf="showOperations == true && isBaseline" class="remove-curve fa fa-minus pull-right"></span>
     <span *ngIf="showOperations == false && isBaseline" class="add-curve fa fa-plus pull-right"></span>
 </label>
@@ -132,6 +134,17 @@
                 {{operationsForm.controls.operatingHours.errors.min.min}}.</span>
         </span>
     </div>
+
+    <div *ngIf="inTreasureHunt" class="form-group">
+        <label class="small" for="boilerUtilityType">Boiler Utility Type
+        </label>
+        <select name="boilerUtilityType" class="form-control" formControlName="boilerUtilityType" id="boilerUtilityType"
+          (change)="setUtilityType()" (focus)="focusField('boilerUtilityType')" >
+          <option for="boilerUtilityType" [ngValue]="'Natural Gas'">Natural Gas</option>
+          <option for="boilerUtilityType" [ngValue]="'Other Fuel'">Other Gas</option>
+        </select>
+      </div>
+
     <!--fuel cost-->
     <div class="form-group">
         <label class="small" for="{{idString+'fuelCost'}}">Fuel Cost</label>

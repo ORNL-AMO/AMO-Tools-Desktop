@@ -19,6 +19,7 @@ import { ChillerPerformanceInput, CoolingTowerBasinInput, CoolingTowerData, Cool
 import { ChillerStagingInput } from "./chillers";
 import { WeatherBinsInput } from "../../calculator/utilities/weather-bins/weather-bins.service";
 import { ExistingIntegrationData } from "../assessment-integration/assessment-integration.service";
+import { BoilerBlowdownRateInputs } from "../../calculator/steam/boiler-blowdown-rate/boiler-blowdown-rate.service";
 
 export interface TreasureHunt {
     name: string,
@@ -50,6 +51,7 @@ export interface TreasureHunt {
     chillerPerformanceOpportunities?: Array<ChillerPerformanceTreasureHunt>;
     coolingTowerFanOpportunities?: Array<CoolingTowerFanTreasureHunt>;
     coolingTowerBasinOpportunities?: Array<CoolingTowerBasinTreasureHunt>;
+    boilerBlowdownRateOpportunities?: Array<BoilerBlowdownRateTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     existingDataUnits?: string;
@@ -85,7 +87,8 @@ export enum Treasure {
     chillerPerformance = 'chiller-performance',
     coolingTowerFan = 'cooling-tower-fan',
     coolingTowerBasin = 'cooling-tower-basin',
-    assessmentOpportunity ='assessment-opportunity'
+    assessmentOpportunity ='assessment-opportunity',
+    boilerBlowdownRate = 'boiler-blowdown-rate'
 }
 
 export interface FilterOption {
@@ -500,6 +503,13 @@ export interface CoolingTowerBasinTreasureHunt extends TreasureHuntOpportunity {
     selected?: boolean;
 }
 
+export interface BoilerBlowdownRateTreasureHunt extends TreasureHuntOpportunity {
+    baseline: BoilerBlowdownRateInputs;
+    modification: BoilerBlowdownRateInputs;
+    opportunitySheet?: OpportunitySheet
+    selected?: boolean;
+}
+
 export interface TreasureHuntResults {
     totalSavings: number;
     percentSavings: number;
@@ -598,4 +608,5 @@ export interface ImportExportOpportunities {
     chillerPerformanceOpportunities?: Array<ChillerPerformanceTreasureHunt>;
     coolingTowerFanOpportunities?: Array<CoolingTowerFanTreasureHunt>;
     coolingTowerBasinOpportunities?: Array<CoolingTowerBasinTreasureHunt>;
+    boilerBlowdownRateOpportunities?: Array<BoilerBlowdownRateTreasureHunt>;
 }
