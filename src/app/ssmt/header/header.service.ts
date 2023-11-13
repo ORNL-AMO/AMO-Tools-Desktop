@@ -1,6 +1,6 @@
 import { Injectable, Input } from '@angular/core';
 import { HeaderInput, HeaderNotHighestPressure, HeaderWithHighestPressure, BoilerInput, SSMT } from '../../shared/models/steam/ssmt';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn, AbstractControl, Validator } from '@angular/forms';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
 import { SteamService } from '../../calculator/steam/steam.service';
@@ -56,13 +56,27 @@ export class HeaderService {
 
     form.controls.pressure.addValidators(this.getPressureMinValidators(pressureMin, boilerInput.deaeratorPressure, ranges, settings));
     form.controls.pressure.updateValueAndValidity()
-    
+
     for (let key in form.controls) {
       if (form.controls[key]) {
         form.controls[key].markAsDirty();
       }
     }
     return form;
+  }
+
+
+  updateHighestPressureHeaderFormValidation(form: UntypedFormGroup, settings: Settings, boilerInput: BoilerInput, pressureMin?: number) {
+    let ranges: HeaderRanges = this.getRanges(settings, pressureMin, undefined);
+    form.controls.pressure.setValidators([Validators.required, LessThanValidator.lessThan(ranges.pressureMax), this.boilerTempValidator(boilerInput.steamTemperature, settings)]);
+    form.controls.pressure.addValidators(this.getPressureMinValidators(pressureMin, boilerInput.deaeratorPressure, ranges, settings));
+    form.controls.pressure.updateValueAndValidity();
+
+    form.controls.processSteamUsage.setValidators([Validators.required, Validators.min(ranges.processUsageMin)]);
+    form.controls.condensateReturnTemperature.updateValueAndValidity();
+
+    form.controls.condensateReturnTemperature.setValidators([Validators.required, Validators.min(ranges.condensateReturnTempMin)]);
+    form.controls.condensateReturnTemperature.updateValueAndValidity();
   }
 
   getHighestPressureObjFromForm(form: UntypedFormGroup): HeaderWithHighestPressure {
@@ -135,6 +149,31 @@ export class HeaderService {
     return form;
   }
 
+  updateNotHighestPressureHeaderForm(form: UntypedFormGroup, settings: Settings, pressureMin: number, pressureMax: number, deaeratorPressure?: number) {
+    let ranges: HeaderRanges = this.getRanges(settings, pressureMin, pressureMax, form.controls.pressure.value);
+
+    let pressureValidators: Array<ValidatorFn> = this.getPressureMinValidators(pressureMin, deaeratorPressure, ranges, settings);
+    pressureValidators.push(Validators.required);
+    if (pressureMax != undefined) {
+      pressureValidators.push(LessThanValidator.lessThan(ranges.pressureMax))
+    }
+    form.controls.pressure.setValidators(pressureValidators);
+    form.controls.pressure.updateValueAndValidity()
+
+    form.controls.processSteamUsage.setValidators([Validators.required, Validators.min(ranges.processUsageMin)])
+    form.controls.processSteamUsage.updateValueAndValidity()
+    
+    let tmpDesuperheatSteamTemperatureValidators: Array<ValidatorFn>;
+    if (form.controls.desuperheatSteamIntoNextHighest.value) {
+      tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
+    } else {
+      tmpDesuperheatSteamTemperatureValidators = [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
+    }
+    
+    form.controls.desuperheatSteamTemperature.setValidators(tmpDesuperheatSteamTemperatureValidators);
+    form.controls.desuperheatSteamTemperature.updateValueAndValidity();
+  }
+
   getPressureMinValidators(pressureMin: number, deaeratorPressure: number, ranges: HeaderRanges, settings: Settings): Array<ValidatorFn> {
     let validators: Array<ValidatorFn> = [];
     if (pressureMin != undefined && deaeratorPressure != undefined) {
@@ -148,7 +187,7 @@ export class HeaderService {
     } else if (deaeratorPressure != undefined) {
       validators.push(this.deaeratorPressureValidator(deaeratorPressure, settings))
     }
-    
+
     return validators;
   }
 
@@ -228,7 +267,7 @@ export class HeaderService {
       } else if (headerInput.numberOfHeaders == 3 && headerInput.lowPressureHeader && headerInput.mediumPressureHeader) {
         let lowPressureMax: number = headerInput.mediumPressureHeader.pressure;
         isLowPressureHeaderValid = this.getHeaderFormFromObj(headerInput.lowPressureHeader, settings, undefined, lowPressureMax, ssmt.boilerInput.deaeratorPressure).valid;
-        
+
         let mediumPressureMax: number = headerInput.highPressureHeader.pressure;
         isMediumPressureHeaderValid = this.getHeaderFormFromObj(headerInput.mediumPressureHeader, settings, headerInput.lowPressureHeader.pressure, mediumPressureMax, ssmt.boilerInput.deaeratorPressure).valid;
         highPressureMin = headerInput.mediumPressureHeader.pressure;
@@ -236,8 +275,8 @@ export class HeaderService {
       isHighPressureHeaderValid = this.getHighestPressureHeaderFormFromObj(headerInput.highPressureHeader, settings, boilerInput, highPressureMin).valid;
 
       isHeaderValid = isHighPressureHeaderValid && isMediumPressureHeaderValid && isLowPressureHeaderValid;
-   
-    } 
+
+    }
     return isHeaderValid;
   }
 
@@ -362,14 +401,14 @@ export class HeaderService {
     }
     let tmpCondensateReturnTempMax: number;
     if (lowPressureHeaderPressure != undefined) {
-      let satPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(
-        {
-          saturatedPressure: lowPressureHeaderPressure
-        },
-        0,
-        settings
-      );
-      tmpCondensateReturnTempMax = this.convertUnitsService.roundVal(satPropertiesOutput.saturatedTemperature, 0);
+      // let satPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(
+      //   {
+      //     saturatedPressure: lowPressureHeaderPressure
+      //   },
+      //   0,
+      //   settings
+      // );
+      // tmpCondensateReturnTempMax = this.convertUnitsService.roundVal(satPropertiesOutput.saturatedTemperature, 0);
     }
     if (tmpCondensateReturnTempMax != undefined) {
       if (tmpCondensateReturnTempMax && ssmt.headerInput.highPressureHeader && ssmt.headerInput.highPressureHeader.condensateReturnTemperature) {
