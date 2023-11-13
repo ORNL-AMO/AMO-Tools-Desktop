@@ -7,6 +7,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import {Assessment} from '../../../shared/models/assessment';
 import {Calculator} from '../../../shared/models/calculators';
 import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 
 @Component({
@@ -43,10 +44,12 @@ export class PipeSizingComponent implements OnInit {
   assessmentCalculator: Calculator;
 
   constructor(private standaloneService: StandaloneService, private pipeSizingService: PipeSizingService, private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService) {
+    private calculatorDbService: CalculatorDbService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-pipe-sizing');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

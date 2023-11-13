@@ -138,7 +138,7 @@ export class AnalyticsService {
     return pathWithoutId;
   }
 
-  sendEvent(eventName: AnalyticsEventString, path: string) {
+  sendEvent(eventName: AnalyticsEventString, path?: string) {
     if (environment.production) {
       if (!this.electronService.isElectron) {
         //gtag handles a bunch of the session related content automatically
@@ -196,7 +196,21 @@ export type AnalyticsEventString = 'page_view' |
   'view-compressed-air-assessment' |
   'create-inventory' |
   'view-motor-inventory'|
-  'view-pump-inventory';
+  'view-pump-inventory' | 
+  'use-data-exporation' | 
+  'run-day-type-analysis' | 
+  'calculator-air-flow-conversion' | 
+  'calculator-air-leak' | 
+  'calculator-air-velocity' | 
+  'calculator-bag-method' | 
+  'calculator-bleed-test' | 
+  'calculator-CA-pressure-reduction' |
+  'calculator-CA-reduction' |
+  'calculator-operating-cost' |
+  'calculator-pipe-sizing' |
+  'calculator-pneumatic-air' |
+  'calculator-receiver-tank' | 
+  'calculator-system-capacity';
 
 
 export type MeasurPlatformString = 'measur-desktop' | 'measur-web';

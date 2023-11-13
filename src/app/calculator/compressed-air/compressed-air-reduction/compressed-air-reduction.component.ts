@@ -5,6 +5,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { CompressedAirReductionService } from './compressed-air-reduction.service';
 import { CompressedAirReductionData } from '../../../shared/models/standalone';
 import { CompressedAirReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-compressed-air-reduction',
@@ -46,9 +47,11 @@ export class CompressedAirReductionComponent implements OnInit {
   baselineData: Array<CompressedAirReductionData>;
   modificationData: Array<CompressedAirReductionData>;
 
-  constructor(private settingsDbService: SettingsDbService, private compressedAirReductionService: CompressedAirReductionService) { }
+  constructor(private settingsDbService: SettingsDbService, private compressedAirReductionService: CompressedAirReductionService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-CA-reduction');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

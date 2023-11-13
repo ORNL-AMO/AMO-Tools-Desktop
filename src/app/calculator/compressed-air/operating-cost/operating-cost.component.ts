@@ -4,6 +4,7 @@ import { OperatingCostInput, OperatingCostOutput } from "../../../shared/models/
 import { Settings } from '../../../shared/models/settings';
 import { OperatingCostService } from './operating-cost.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-operating-cost',
@@ -32,9 +33,11 @@ export class OperatingCostComponent implements OnInit {
   inputs: OperatingCostInput;
   outputs: OperatingCostOutput;
   currentField: string = 'default';
-  constructor(private standaloneService: StandaloneService, private operatingCostService: OperatingCostService, private settingsDbService: SettingsDbService) { }
+  constructor(private standaloneService: StandaloneService, private operatingCostService: OperatingCostService, private settingsDbService: SettingsDbService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-operating-cost');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

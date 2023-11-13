@@ -7,6 +7,7 @@ import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
  
 import { Calculator } from '../../../shared/models/calculators';
 import { Assessment } from '../../../shared/models/assessment';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-air-flow-conversion',
@@ -39,9 +40,11 @@ export class AirFlowConversionComponent implements OnInit {
 
   
   constructor(private airFlowConversionService: AirFlowConversionService, private calculatorDbService: CalculatorDbService, 
-       private settingsDbService: SettingsDbService) { }
+       private settingsDbService: SettingsDbService,
+       private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('calculator-air-flow-conversion');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
