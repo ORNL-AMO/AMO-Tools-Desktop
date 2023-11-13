@@ -195,22 +195,40 @@ export type AnalyticsEventString = 'page_view' |
   'view-waste-water-assessment' |
   'view-compressed-air-assessment' |
   'create-inventory' |
-  'view-motor-inventory'|
-  'view-pump-inventory' | 
-  'use-data-exporation' | 
-  'run-day-type-analysis' | 
-  'calculator-air-flow-conversion' | 
-  'calculator-air-leak' | 
-  'calculator-air-velocity' | 
-  'calculator-bag-method' | 
-  'calculator-bleed-test' | 
+  'view-motor-inventory' |
+  'view-pump-inventory' |
+  'use-data-exporation' |
+  'run-day-type-analysis' |
+  'calculator-air-flow-conversion' |
+  'calculator-air-leak' |
+  'calculator-air-velocity' |
+  'calculator-bag-method' |
+  'calculator-bleed-test' |
   'calculator-CA-pressure-reduction' |
   'calculator-CA-reduction' |
   'calculator-operating-cost' |
   'calculator-pipe-sizing' |
   'calculator-pneumatic-air' |
-  'calculator-receiver-tank' | 
-  'calculator-system-capacity';
+  'calculator-receiver-tank' |
+  'calculator-system-capacity' |
+  'calculator-fan-analysis' |
+  'calculator-fan-efficiency' |
+  'calculator-fan-system-checklist' |
+  'calculator-air-heating' |
+  'calculator-atmosphere' |
+  'calculator-charge-material' |
+  'calculator-cooling' |
+  'calculator-efficiency-improvement' |
+  'calculator-energy-equivalency' |
+  'calculator-energy-use' |
+  'calculator-fixture' |
+  'calculator-flue-gas' |
+  'calculator-heat-cascading' |
+  'calculator-leakage' |
+  'calculator-o2-enrichment' |
+  'calculator-opening' |
+  'calculator-wall' |
+  'calculator-waste-heat';
 
 
 export type MeasurPlatformString = 'measur-desktop' | 'measur-web';

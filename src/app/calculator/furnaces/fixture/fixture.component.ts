@@ -5,6 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { FixtureLoss } from '../../../shared/models/phast/losses/fixtureLoss';
 import { Settings } from '../../../shared/models/settings';
 import { FixtureService } from './fixture.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-fixture',
@@ -44,9 +45,11 @@ export class FixtureComponent implements OnInit {
   smallScreenTab: string = 'baseline';
 
   constructor(private settingsDbService: SettingsDbService, 
-              private fixtureService: FixtureService) { }
+              private fixtureService: FixtureService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-fixture');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

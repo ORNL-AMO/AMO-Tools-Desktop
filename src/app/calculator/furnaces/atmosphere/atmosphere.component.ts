@@ -5,6 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { AtmosphereLoss, AtmosphereLossOutput } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../shared/models/settings';
 import { AtmosphereService } from './atmosphere.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-atmosphere',
@@ -46,9 +47,11 @@ export class AtmosphereComponent implements OnInit {
   smallScreenTab: string = 'baseline';
 
   constructor(private settingsDbService: SettingsDbService, 
-              private atmosphereService: AtmosphereService) { }
+              private atmosphereService: AtmosphereService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-atmosphere');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

@@ -13,6 +13,7 @@ import { GasDensityFormService } from './fan-analysis-form/gas-density-form/gas-
 import { FanShaftPowerFormService } from './fan-analysis-form/fan-shaft-power-form/fan-shaft-power-form.service';
 import { FanInfoFormService } from './fan-analysis-form/fan-info-form/fan-info-form.service';
 import { ConvertFanAnalysisService } from './convert-fan-analysis.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 @Component({
   selector: 'app-fan-analysis',
   templateUrl: './fan-analysis.component.html',
@@ -55,9 +56,11 @@ export class FanAnalysisComponent implements OnInit {
   setupDone: boolean = false;
   constructor(private settingsDbService: SettingsDbService, private fanAnalysisService: FanAnalysisService, private convertFanAnalysisService: ConvertFanAnalysisService,
     private planeDataFormService: PlaneDataFormService, private calculatorDbService: CalculatorDbService,
-    private fanInfoFormService: FanInfoFormService, private gasDensityFormService: GasDensityFormService, private fanShaftPowerFormService: FanShaftPowerFormService ) { }
+    private fanInfoFormService: FanInfoFormService, private gasDensityFormService: GasDensityFormService, private fanShaftPowerFormService: FanShaftPowerFormService,
+     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-fan-analysis');
     this.calculatorDbService.isSaving = false;
     this.fanAnalysisService.inAssessmentModal = false;
     if (!this.settings) {

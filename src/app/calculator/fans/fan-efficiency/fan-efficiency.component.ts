@@ -8,6 +8,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-fan-efficiency',
@@ -48,9 +49,11 @@ export class FanEfficiencyComponent implements OnInit {
   calculator: Calculator;
   originalCalculator: Calculator;
   constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService, private fanEfficiencyService: FanEfficiencyService,
-    private calculatorDbService: CalculatorDbService) { }
+    private calculatorDbService: CalculatorDbService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-fan-efficiency');
     this.calculatorDbService.isSaving = false;
     if (this.inAssessment) {
       this.getCalculator();

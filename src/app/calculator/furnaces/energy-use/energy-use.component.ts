@@ -8,6 +8,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
  
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-energy-use',
@@ -52,9 +53,12 @@ export class EnergyUseComponent implements OnInit {
   saving: boolean;
   calculator: Calculator;
   originalCalculator: Calculator;
-  constructor(private phastService: PhastService, private energyUseService: EnergyUseService, private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService) { }
+  constructor(private phastService: PhastService, private energyUseService: EnergyUseService, 
+    private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-energy-use');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

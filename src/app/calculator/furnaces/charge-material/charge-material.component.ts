@@ -6,6 +6,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { ChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../shared/models/settings';
 import { ChargeMaterialService } from './charge-material.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-charge-material',
@@ -52,9 +53,11 @@ export class ChargeMaterialComponent implements OnInit {
   smallScreenTab: string = 'baseline';
 
   constructor(private settingsDbService: SettingsDbService, 
-              private chargeMaterialService: ChargeMaterialService) { }
+              private chargeMaterialService: ChargeMaterialService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('calculator-charge-material');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

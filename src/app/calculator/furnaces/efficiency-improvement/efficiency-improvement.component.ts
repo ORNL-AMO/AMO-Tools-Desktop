@@ -9,6 +9,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { UntypedFormGroup } from '@angular/forms';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-efficiency-improvement',
@@ -45,10 +46,12 @@ export class EfficiencyImprovementComponent implements OnInit {
   calculator: Calculator;
   efficiencyImprovementForm: UntypedFormGroup;
   constructor(private phastService: PhastService, private efficiencyImprovementService: EfficiencyImprovementService, private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService,  ) { }
+    private calculatorDbService: CalculatorDbService,
+    private analyticsService: AnalyticsService) { }
 
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-efficiency-improvement');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

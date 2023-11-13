@@ -7,6 +7,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Treasure, WallLossTreasureHunt } from '../../../shared/models/treasure-hunt';
 import { FlueGasService } from '../flue-gas/flue-gas.service';
 import { WallService } from './wall.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: "app-wall",
@@ -54,10 +55,12 @@ export class WallComponent implements OnInit {
   constructor(
     private settingsDbService: SettingsDbService,
     private wallService: WallService,
-    private flueGasService: FlueGasService
+    private flueGasService: FlueGasService,
+    private analyticsService: AnalyticsService
   ) {}
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-wall');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
