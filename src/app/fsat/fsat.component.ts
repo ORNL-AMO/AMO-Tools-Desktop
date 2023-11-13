@@ -20,6 +20,7 @@ import { ConvertFsatService } from './convert-fsat.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import * as _ from 'lodash';
 import { OperationsService } from './operations/operations.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-fsat',
@@ -99,10 +100,12 @@ export class FsatComponent implements OnInit {
     private settingsService: SettingsService,
     private egridService: EGridService,
     private convertFsatService: ConvertFsatService,
-    private fsatOperationsService: OperationsService) {
+    private fsatOperationsService: OperationsService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-fan-assessment', undefined);
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']))

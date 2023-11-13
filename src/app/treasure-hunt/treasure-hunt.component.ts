@@ -16,6 +16,7 @@ import { SettingsService } from '../settings/settings.service';
 import { ConvertInputDataService } from './convert-input-data.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-treasure-hunt',
@@ -68,10 +69,12 @@ export class TreasureHuntComponent implements OnInit {
     private treasureChestMenuService: TreasureChestMenuService,
     private settingsService: SettingsService,
     private convertUnitsService: ConvertUnitsService,
-    private egridService: EGridService
+    private egridService: EGridService,
+    private analyticsService: AnalyticsService
   ) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-treasure-hunt-assessment', undefined);
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));

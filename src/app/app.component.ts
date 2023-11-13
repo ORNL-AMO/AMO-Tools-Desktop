@@ -17,21 +17,17 @@ export class AppComponent {
     private analyticsService: AnalyticsService,
     private router: Router) {
     this.viewContainerRef = viewContainerRef;
-    // analytics handled through gatg() automatically manages sessions, visits, clicks, etc
-    gtag('config', 'G-EEHE8GEBH4');
-    gtag('event', 'measur_app_open', {
-      'measur_platform': 'measur-web'
-    });
-    
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        let path: string = environment.production? event.urlAfterRedirects : 'testing-web';
-        path = this.analyticsService.getPageWithoutId(path);
-        gtag('event', 'page_view', {
-          'page_path': path,
-          'measur_platform': 'measur-web',
-        });
-      }
-    });
+    if (environment.production) {
+      // analytics handled through gatg() automatically manages sessions, visits, clicks, etc
+      gtag('config', 'G-EEHE8GEBH4');
+      this.analyticsService.sendEvent('measur_app_open', undefined);
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          let path: string = environment.production ? event.urlAfterRedirects : 'testing-web';
+          path = this.analyticsService.getPageWithoutId(path);
+          this.analyticsService.sendEvent('page_view', path);
+        }
+      });
+    }
   }
 }

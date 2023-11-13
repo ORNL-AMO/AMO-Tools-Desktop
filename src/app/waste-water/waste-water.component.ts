@@ -17,6 +17,7 @@ import { SystemBasicsService } from './system-basics/system-basics.service';
 import { WasteWaterService } from './waste-water.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import { WasteWaterOperationsService } from './waste-water-operations/waste-water-operations.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-waste-water',
@@ -71,9 +72,11 @@ export class WasteWaterComponent implements OnInit {
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
     private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService,
     private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
-    private systemBasicsService: SystemBasicsService, private assessmentService: AssessmentService, private wasteWaterOperationsService: WasteWaterOperationsService) { }
+    private systemBasicsService: SystemBasicsService, private assessmentService: AssessmentService, private wasteWaterOperationsService: WasteWaterOperationsService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('view-waste-water-assessment', undefined);
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));

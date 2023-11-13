@@ -15,6 +15,7 @@ import { SettingsService, SteamImperialDefaults, SteamMetricDefaults } from '../
 import { ConvertSsmtService } from './convert-ssmt.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import { SteamService } from '../calculator/steam/steam.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -99,10 +100,12 @@ export class SsmtComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private settingsService: SettingsService,
     private steamService: SteamService,
-    private convertSsmtService: ConvertSsmtService
+    private convertSsmtService: ConvertSsmtService,
+    private analyticsService: AnalyticsService
   ) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-steam-assessment', undefined);
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']))

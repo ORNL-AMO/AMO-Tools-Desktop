@@ -46,15 +46,15 @@ export class CoreComponent implements OnInit {
   releaseDataSub: Subscription;
 
 
-  constructor(private electronService: ElectronService , 
-    private assessmentService: AssessmentService, 
+  constructor(private electronService: ElectronService,
+    private assessmentService: AssessmentService,
     private changeDetectorRef: ChangeDetectorRef,
     private assessmentDbService: AssessmentDbService,
-    private settingsDbService: SettingsDbService, 
+    private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private analyticsService: AnalyticsService,
-    private calculatorDbService: CalculatorDbService, 
-    private coreService: CoreService, 
+    private calculatorDbService: CalculatorDbService,
+    private coreService: CoreService,
     private router: Router,
     private securityAndPrivacyService: SecurityAndPrivacyService,
     private inventoryDbService: InventoryDbService, private sqlDbApiService: SqlDbApiService) {
@@ -68,12 +68,10 @@ export class CoreComponent implements OnInit {
     if (this.electronService.isElectron) {
       this.electronService.sendAppReady('ready');
 
-      if (this.electronService.isElectron) {
-        this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-          .subscribe((event: NavigationEnd) => {
-              this.analyticsService.sendAnalyticsPageView(event.urlAfterRedirects);
-            });
-      }
+      // this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+      //   .subscribe((event: NavigationEnd) => {
+      //     this.analyticsService.sendAnalyticsPageView(event.urlAfterRedirects);
+      //   });
 
 
       this.electronUpdateAvailableSub = this.electronService.updateAvailable.subscribe(val => {
@@ -123,7 +121,7 @@ export class CoreComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.electronService.isElectron) {
-      this.routerSubscription.unsubscribe();
+      // this.routerSubscription.unsubscribe();
       this.electronUpdateAvailableSub.unsubscribe();
       this.releaseDataSub.unsubscribe();
     }
