@@ -46,7 +46,7 @@ export class PrvComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-steam-prv');
+    this.analyticsService.sendEvent('calculator-STEAM-prv');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

@@ -55,7 +55,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-nema-energy-efficiency');
+    this.analyticsService.sendEvent('calculator-MOTOR-nema-energy-efficiency');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

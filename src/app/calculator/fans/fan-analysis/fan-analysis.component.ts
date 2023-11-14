@@ -60,7 +60,7 @@ export class FanAnalysisComponent implements OnInit {
      private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-fan-analysis');
+    this.analyticsService.sendEvent('calculator-FAN-analysis');
     this.calculatorDbService.isSaving = false;
     this.fanAnalysisService.inAssessmentModal = false;
     if (!this.settings) {

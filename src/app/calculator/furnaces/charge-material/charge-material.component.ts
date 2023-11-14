@@ -57,7 +57,7 @@ export class ChargeMaterialComponent implements OnInit {
               private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
-    this.analyticsService.sendEvent('calculator-charge-material');
+    this.analyticsService.sendEvent('calculator-PH-charge-material');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

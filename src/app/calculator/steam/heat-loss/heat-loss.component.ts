@@ -40,7 +40,7 @@ export class HeatLossComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-steam-heat-loss');
+    this.analyticsService.sendEvent('calculator-STEAM-heat-loss');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

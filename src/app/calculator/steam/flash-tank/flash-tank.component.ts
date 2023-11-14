@@ -40,7 +40,7 @@ export class FlashTankComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-steam-flash-tank');
+    this.analyticsService.sendEvent('calculator-STEAM-flash-tank');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

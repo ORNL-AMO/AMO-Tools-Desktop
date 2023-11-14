@@ -44,7 +44,7 @@ export class CondensingEconomizerComponent implements OnInit {
               private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
-    this.analyticsService.sendEvent('calculator-steam-condensing-economizer');
+    this.analyticsService.sendEvent('calculator-STEAM-condensing-economizer');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

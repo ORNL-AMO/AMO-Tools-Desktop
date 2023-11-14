@@ -56,7 +56,7 @@ export class SpecificSpeedComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-specific-speed');
+    this.analyticsService.sendEvent('calculator-PUMP-specific-speed');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

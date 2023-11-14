@@ -55,7 +55,7 @@ export class LeakageComponent implements OnInit {
               private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-leakage');
+    this.analyticsService.sendEvent('calculator-PH-leakage');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

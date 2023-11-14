@@ -51,7 +51,7 @@ export class AtmosphereComponent implements OnInit {
               private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-atmosphere');
+    this.analyticsService.sendEvent('calculator-PH-atmosphere');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

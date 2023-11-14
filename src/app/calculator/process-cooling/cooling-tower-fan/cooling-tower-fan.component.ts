@@ -45,7 +45,7 @@ export class CoolingTowerFanComponent implements OnInit {
               private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-cooling-tower-fan');
+    this.analyticsService.sendEvent('calculator-PC-cooling-tower-fan');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

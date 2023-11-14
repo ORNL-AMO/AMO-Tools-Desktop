@@ -66,7 +66,7 @@ export class HeadToolComponent implements OnInit {
        private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-head-tool');
+    this.analyticsService.sendEvent('calculator-PUMP-head-tool');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

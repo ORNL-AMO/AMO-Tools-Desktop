@@ -37,7 +37,7 @@ export class OperatingCostComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-operating-cost');
+    this.analyticsService.sendEvent('calculator-CA-operating-cost');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

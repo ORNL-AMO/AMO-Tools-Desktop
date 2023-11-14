@@ -55,7 +55,7 @@ export class ElectricityReductionComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-util-electricity-reduction');
+    this.analyticsService.sendEvent('calculator-UTIL-electricity-reduction');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

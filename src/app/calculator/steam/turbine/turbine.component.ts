@@ -45,7 +45,7 @@ export class TurbineComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-steam-turbine');
+    this.analyticsService.sendEvent('calculator-STEAM-turbine');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

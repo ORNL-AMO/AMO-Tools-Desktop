@@ -45,7 +45,7 @@ export class AltitudeCorrectionComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-util-altitude-correction');
+    this.analyticsService.sendEvent('calculator-UTIL-altitude-correction');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

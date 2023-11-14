@@ -37,7 +37,7 @@ export class PneumaticAirComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-pneumatic-air');
+    this.analyticsService.sendEvent('calculator-CA-pneumatic-air');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

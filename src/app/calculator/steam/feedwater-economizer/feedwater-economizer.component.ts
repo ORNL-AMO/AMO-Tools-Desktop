@@ -44,7 +44,7 @@ export class FeedwaterEconomizerComponent implements OnInit {
               private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
-    this.analyticsService.sendEvent('calculator-steam-feedwater-economizer');
+    this.analyticsService.sendEvent('calculator-STEAM-feedwater-economizer');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

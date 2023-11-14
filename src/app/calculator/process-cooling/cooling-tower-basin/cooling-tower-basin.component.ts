@@ -56,7 +56,7 @@ export class CoolingTowerBasinComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-cooling-tower-basin');
+    this.analyticsService.sendEvent('calculator-PC-cooling-tower-basin');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

@@ -61,7 +61,7 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
               private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
-    this.analyticsService.sendEvent('calculator-air-leak');
+    this.analyticsService.sendEvent('calculator-CA-air-leak');
     this.calculatorDbService.isSaving = false;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;

@@ -60,7 +60,7 @@ export class WallComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-wall');
+    this.analyticsService.sendEvent('calculator-PH-wall');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

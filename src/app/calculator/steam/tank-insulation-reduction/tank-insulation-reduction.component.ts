@@ -57,7 +57,7 @@ export class TankInsulationReductionComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-steam-tank-insulation-reduction');
+    this.analyticsService.sendEvent('calculator-STEAM-tank-insulation-reduction');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

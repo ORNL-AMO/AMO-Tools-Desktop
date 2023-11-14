@@ -56,7 +56,7 @@ export class ChillerPerformanceComponent implements OnInit {
               private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
-    this.analyticsService.sendEvent('calculator-chiller-performance');
+    this.analyticsService.sendEvent('calculator-PC-chiller-performance');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

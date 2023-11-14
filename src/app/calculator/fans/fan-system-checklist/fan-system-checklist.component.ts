@@ -48,7 +48,7 @@ export class FanSystemChecklistComponent implements OnInit {
               private analyticsService: AnalyticsService) { }
 
     ngOnInit() {
-      this.analyticsService.sendEvent('calculator-fan-system-checklist');
+      this.analyticsService.sendEvent('calculator-FAN-system-checklist');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

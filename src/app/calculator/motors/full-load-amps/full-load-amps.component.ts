@@ -51,7 +51,7 @@ export class FullLoadAmpsComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-full-load-amps');
+    this.analyticsService.sendEvent('calculator-MOTOR-full-load-amps');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

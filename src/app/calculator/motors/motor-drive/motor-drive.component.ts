@@ -50,7 +50,7 @@ export class MotorDriveComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-motor-drive');
+    this.analyticsService.sendEvent('calculator-MOTOR-drive');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

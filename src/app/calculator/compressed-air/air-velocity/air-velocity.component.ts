@@ -48,7 +48,7 @@ export class AirVelocityComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-air-velocity');
+    this.analyticsService.sendEvent('calculator-CA-air-velocity');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

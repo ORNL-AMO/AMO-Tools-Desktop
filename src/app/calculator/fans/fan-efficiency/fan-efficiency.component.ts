@@ -53,7 +53,7 @@ export class FanEfficiencyComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-fan-efficiency');
+    this.analyticsService.sendEvent('calculator-FAN-efficiency');
     this.calculatorDbService.isSaving = false;
     if (this.inAssessment) {
       this.getCalculator();

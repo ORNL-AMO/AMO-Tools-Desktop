@@ -51,7 +51,7 @@ export class StackLossComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-steam-stack-loss');
+    this.analyticsService.sendEvent('calculator-STEAM-stack-loss');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

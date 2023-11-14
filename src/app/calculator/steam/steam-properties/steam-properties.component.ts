@@ -58,7 +58,7 @@ export class SteamPropertiesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-steam-properties');
+    this.analyticsService.sendEvent('calculator-STEAM-properties');
     this.graphToggleForm = this.formBuilder.group({
       'graphToggle': [0, Validators.required]
     });

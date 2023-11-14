@@ -40,7 +40,7 @@ export class FanPsychrometricComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-psychrometric');
+    this.analyticsService.sendEvent('calculator-PC-psychrometric');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

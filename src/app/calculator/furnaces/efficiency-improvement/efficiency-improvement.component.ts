@@ -51,7 +51,7 @@ export class EfficiencyImprovementComponent implements OnInit {
 
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-efficiency-improvement');
+    this.analyticsService.sendEvent('calculator-PH-efficiency-improvement');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

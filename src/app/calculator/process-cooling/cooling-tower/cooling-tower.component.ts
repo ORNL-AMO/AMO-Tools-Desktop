@@ -55,7 +55,7 @@ export class CoolingTowerComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-cooling-tower');
+    this.analyticsService.sendEvent('calculator-PC-cooling-tower');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

@@ -14,80 +14,91 @@ export type AnalyticsEventString = 'page_view' |
     'view-pump-inventory' |
     'use-data-exporation' |
     'run-day-type-analysis' |
-    'calculator-air-flow-conversion' |
-    'calculator-air-leak' |
-    'calculator-air-velocity' |
-    'calculator-bag-method' |
-    'calculator-bleed-test' |
+
+    'calculator-CA-air-flow-conversion' |
+    'calculator-CA-air-leak' |
+    'calculator-CA-air-velocity' |
+    'calculator-CA-bag-method' |
+    'calculator-CA-bleed-test' |
     'calculator-CA-pressure-reduction' |
     'calculator-CA-reduction' |
-    'calculator-operating-cost' |
-    'calculator-pipe-sizing' |
-    'calculator-pneumatic-air' |
-    'calculator-receiver-tank' |
-    'calculator-system-capacity' |
-    'calculator-fan-analysis' |
-    'calculator-fan-efficiency' |
-    'calculator-fan-system-checklist' |
-    'calculator-air-heating' |
-    'calculator-atmosphere' |
-    'calculator-charge-material' |
-    'calculator-cooling' |
-    'calculator-efficiency-improvement' |
-    'calculator-energy-equivalency' |
-    'calculator-energy-use' |
-    'calculator-fixture' |
-    'calculator-flue-gas' |
-    'calculator-heat-cascading' |
-    'calculator-leakage' |
-    'calculator-o2-enrichment' |
-    'calculator-opening' |
-    'calculator-wall' |
-    'calculator-waste-heat' |
+    'calculator-CA-operating-cost' |
+    'calculator-CA-pipe-sizing' |
+    'calculator-CA-pneumatic-air' |
+    'calculator-CA-receiver-tank' |
+    'calculator-CA-system-capacity' |
+
+    'calculator-FAN-analysis' |
+    'calculator-FAN-efficiency' |
+    'calculator-FAN-system-checklist' |
+
+    'calculator-PH-air-heating' |
+    'calculator-PH-atmosphere' |
+    'calculator-PH-charge-material' |
+    'calculator-PH-cooling' |
+    'calculator-PH-efficiency-improvement' |
+    'calculator-PH-energy-equivalency' |
+    'calculator-PH-energy-use' |
+    'calculator-PH-fixture' |
+    'calculator-PH-flue-gas' |
+    'calculator-PH-heat-cascading' |
+    'calculator-PH-leakage' |
+    'calculator-PH-o2-enrichment' |
+    'calculator-PH-opening' |
+    'calculator-PH-wall' |
+    'calculator-PH-waste-heat' |
+
     'calculator-lighting-replacement' |
-    'calculator-full-load-amps' |
-    'calculator-motor-drive' |
-    'calculator-motor-performance' |
-    'calculator-nema-energy-efficiency' |
-    'calculator-percent-load-estimation' |
-    'calculator-replace-existing' |
-    'calculator-chiller-performance' |
-    'calculator-chiller-staging' |
-    'calculator-cooling-tower' |
-    'calculator-cooling-tower-basin' |
-    'calculator-cooling-tower-fan' |
-    'calculator-psychrometric' |
-    'calculator-achievable-efficiency' |
-    'calculator-head-tool' |
-    'calculator-specific-speed' |
-    'calculator-steam-boiler' |
-    'calculator-steam-boiler-blowdown-rate' |
-    'calculator-steam-condensing-economizer' |
-    'calculator-steam-deaerator' |
-    'calculator-steam-feedwater-economizer' |
-    'calculator-steam-flash-tank' |
-    'calculator-steam-header' |
-    'calculator-steam-heat-loss' |
-    'calculator-steam-pipe-insulation-reduction' |
-    'calculator-steam-prv' |
-    'calculator-steam-saturated-properties' |
-    'calculator-steam-stack-loss' |
-    'calculator-steam-properties' |
-    'calculator-steam-reduction' |
-    'calculator-steam-tank-insulation-reduction' |
-    'calculator-steam-turbine' |
-    'calculator-steam-water-heating' |
+
+    'calculator-MOTOR-full-load-amps' |
+    'calculator-MOTOR-drive' |
+    'calculator-MOTOR-performance' |
+    'calculator-MOTOR-nema-energy-efficiency' |
+    'calculator-MOTOR-percent-load-estimation' |
+    'calculator-MOTOR-replace-existing' |
+
+    'calculator-PC-chiller-performance' |
+    'calculator-PC-chiller-staging' |
+    'calculator-PC-cooling-tower' |
+    'calculator-PC-cooling-tower-basin' |
+    'calculator-PC-cooling-tower-fan' |
+    'calculator-PC-psychrometric' |
+
+    'calculator-PUMP-achievable-efficiency' |
+    'calculator-PUMP-head-tool' |
+    'calculator-PUMP-specific-speed' |
+
+    'calculator-STEAM-boiler' |
+    'calculator-STEAM-boiler-blowdown-rate' |
+    'calculator-STEAM-condensing-economizer' |
+    'calculator-STEAM-deaerator' |
+    'calculator-STEAM-feedwater-economizer' |
+    'calculator-STEAM-flash-tank' |
+    'calculator-STEAM-header' |
+    'calculator-STEAM-heat-loss' |
+    'calculator-STEAM-pipe-insulation-reduction' |
+    'calculator-STEAM-prv' |
+    'calculator-STEAM-saturated-properties' |
+    'calculator-STEAM-stack-loss' |
+    'calculator-STEAM-properties' |
+    'calculator-STEAM-reduction' |
+    'calculator-STEAM-tank-insulation-reduction' |
+    'calculator-STEAM-turbine' |
+    'calculator-STEAM-water-heating' |
+
     'calculator-system-equipment-curve' |
-    'calculator-util-altitude-correction' |
-    'calculator-util-cash-flow' |
-    'calculator-util-co2-savings' |
-    'calculator-util-combined-heat-power' |
-    'calculator-util-electricity-reduction' |
-    'calculator-util-natural-gas-reduction' |
-    'calculator-util-power-factor-correction' |
-    'calculator-util-pre-assessment' |
-    'calculator-util-unit-converter' |
-    'calculator-util-weather-bins' |
+    
+    'calculator-UTIL-altitude-correction' |
+    'calculator-UTIL-cash-flow' |
+    'calculator-UTIL-co2-savings' |
+    'calculator-UTIL-combined-heat-power' |
+    'calculator-UTIL-electricity-reduction' |
+    'calculator-UTIL-natural-gas-reduction' |
+    'calculator-UTIL-power-factor-correction' |
+    'calculator-UTIL-pre-assessment' |
+    'calculator-UTIL-unit-converter' |
+    'calculator-UTIL-weather-bins' |
+    
     'calculator-WW-o2-utilization-rate' |
     'calculator-WW-state-point-analysis' |
     'calculator-WW-water-reduction';

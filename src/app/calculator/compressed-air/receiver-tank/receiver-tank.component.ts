@@ -72,7 +72,7 @@ export class ReceiverTankComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-receiver-tank');
+    this.analyticsService.sendEvent('calculator-CA-receiver-tank');
     this.calculatorDbService.isSaving = false;
     if (this.calcType == undefined) {
       this.setCalcType();

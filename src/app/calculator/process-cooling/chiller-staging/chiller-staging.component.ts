@@ -51,7 +51,7 @@ export class ChillerStagingComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-chiller-staging');
+    this.analyticsService.sendEvent('calculator-PC-chiller-staging');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

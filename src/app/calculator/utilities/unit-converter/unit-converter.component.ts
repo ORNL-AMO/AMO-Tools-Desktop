@@ -146,7 +146,7 @@ export class UnitConverterComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-util-unit-converter');
+    this.analyticsService.sendEvent('calculator-UTIL-unit-converter');
     this.initMeasures();
   }
 

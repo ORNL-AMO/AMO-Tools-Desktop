@@ -60,7 +60,7 @@ export class CombinedHeatPowerComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-util-combined-heat-power');
+    this.analyticsService.sendEvent('calculator-UTIL-combined-heat-power');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

@@ -48,7 +48,7 @@ export class AchievableEfficiencyComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-achievable-efficiency');
+    this.analyticsService.sendEvent('calculator-PUMP-achievable-efficiency');
     //if stand alone calculator use system settings
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

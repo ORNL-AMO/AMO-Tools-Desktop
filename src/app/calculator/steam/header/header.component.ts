@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-steam-header');
+    this.analyticsService.sendEvent('calculator-STEAM-header');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

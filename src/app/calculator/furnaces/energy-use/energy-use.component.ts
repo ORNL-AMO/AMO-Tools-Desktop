@@ -58,7 +58,7 @@ export class EnergyUseComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-energy-use');
+    this.analyticsService.sendEvent('calculator-PH-energy-use');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

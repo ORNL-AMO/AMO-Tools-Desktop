@@ -55,7 +55,7 @@ export class PipeInsulationReductionComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-steam-pipe-insulation-reduction');
+    this.analyticsService.sendEvent('calculator-STEAM-pipe-insulation-reduction');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

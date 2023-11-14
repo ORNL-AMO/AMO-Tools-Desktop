@@ -39,7 +39,7 @@ export class CashFlowComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-util-cash-flow');
+    this.analyticsService.sendEvent('calculator-UTIL-cash-flow');
     if (!this.cashFlowService.inputData) {
       this.cashFlowForm = {
         lifeYears: 10,

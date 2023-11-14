@@ -49,7 +49,7 @@ export class WasteHeatComponent implements OnInit {
               private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
-    this.analyticsService.sendEvent('calculator-waste-heat');
+    this.analyticsService.sendEvent('calculator-PH-waste-heat');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

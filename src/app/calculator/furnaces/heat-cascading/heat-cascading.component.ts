@@ -47,7 +47,7 @@ export class HeatCascadingComponent implements OnInit {
               private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
-    this.analyticsService.sendEvent('calculator-heat-cascading');
+    this.analyticsService.sendEvent('calculator-PH-heat-cascading');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

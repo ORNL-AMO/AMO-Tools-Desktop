@@ -45,7 +45,7 @@ export class BoilerBlowdownRateComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-steam-boiler-blowdown-rate');
+    this.analyticsService.sendEvent('calculator-STEAM-boiler-blowdown-rate');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

@@ -45,7 +45,7 @@ export class BagMethodComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-bag-method');
+    this.analyticsService.sendEvent('calculator-CA-bag-method');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

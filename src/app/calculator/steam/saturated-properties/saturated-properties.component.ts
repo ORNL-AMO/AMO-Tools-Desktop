@@ -57,7 +57,7 @@ export class SaturatedPropertiesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-steam-saturated-properties');
+    this.analyticsService.sendEvent('calculator-STEAM-saturated-properties');
     this.graphToggleForm = this.formBuilder.group({
       'graphToggle': [0, Validators.required]
     });

@@ -55,7 +55,7 @@ export class O2EnrichmentComponent implements OnInit {
    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-o2-enrichment');
+    this.analyticsService.sendEvent('calculator-PH-o2-enrichment');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

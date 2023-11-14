@@ -44,7 +44,7 @@ export class AirFlowConversionComponent implements OnInit {
        private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
-    this.analyticsService.sendEvent('calculator-air-flow-conversion');
+    this.analyticsService.sendEvent('calculator-CA-air-flow-conversion');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

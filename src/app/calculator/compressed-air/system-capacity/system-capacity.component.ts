@@ -54,7 +54,7 @@ export class SystemCapacityComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-system-capacity');
+    this.analyticsService.sendEvent('calculator-CA-system-capacity');
     this.calculatorDbService.isSaving = false;
     this.outputs = this.systemCapacityService.getDefaultEmptyOutput();
     if (!this.settings) {

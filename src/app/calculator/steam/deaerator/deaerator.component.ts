@@ -41,7 +41,7 @@ export class DeaeratorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-steam-deaerator');
+    this.analyticsService.sendEvent('calculator-STEAM-deaerator');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

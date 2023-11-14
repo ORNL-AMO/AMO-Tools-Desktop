@@ -61,7 +61,7 @@ export class FlueGasComponent implements OnInit {
               private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-flue-gas');
+    this.analyticsService.sendEvent('calculator-PH-flue-gas');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

@@ -49,7 +49,7 @@ export class ReplaceExistingComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-replace-existing');
+    this.analyticsService.sendEvent('calculator-MOTOR-replace-existing');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

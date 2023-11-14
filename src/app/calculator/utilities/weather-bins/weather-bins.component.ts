@@ -31,7 +31,7 @@ export class WeatherBinsComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
-    this.analyticsService.sendEvent('calculator-util-weather-bins');
+    this.analyticsService.sendEvent('calculator-UTIL-weather-bins');
     this.settings = this.settingsDbService.globalSettings;
     this.weatherDataSourceView = this.weatherBinsService.weatherDataSourceView.getValue();
   }

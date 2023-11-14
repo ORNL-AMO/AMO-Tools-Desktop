@@ -52,7 +52,7 @@ export class NaturalGasReductionComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-util-natural-gas-reduction');
+    this.analyticsService.sendEvent('calculator-UTIL-natural-gas-reduction');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

@@ -36,7 +36,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-util-power-factor-correction');
+    this.analyticsService.sendEvent('calculator-UTIL-power-factor-correction');
     this.calculate(this.inputData);
     if (this.powerFactorCorrectionService.inputData) {
       this.inputData = this.powerFactorCorrectionService.inputData;

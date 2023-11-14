@@ -43,7 +43,7 @@ export class WaterHeatingComponent implements OnInit {
               private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
-    this.analyticsService.sendEvent('calculator-steam-water-heating');
+    this.analyticsService.sendEvent('calculator-STEAM-water-heating');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

@@ -48,7 +48,7 @@ export class BleedTestComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
-    this.analyticsService.sendEvent('calculator-bleed-test');
+    this.analyticsService.sendEvent('calculator-CA-bleed-test');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

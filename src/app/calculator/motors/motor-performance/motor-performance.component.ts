@@ -53,7 +53,7 @@ export class MotorPerformanceComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-motor-performance');
+    this.analyticsService.sendEvent('calculator-MOTOR-performance');
     this.calculatorDbService.isSaving = false;
     if (this.inAssessment) {
       this.getCalculator();

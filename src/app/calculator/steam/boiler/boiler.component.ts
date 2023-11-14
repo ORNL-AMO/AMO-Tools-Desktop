@@ -44,7 +44,7 @@ export class BoilerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-steam-boiler');
+    this.analyticsService.sendEvent('calculator-STEAM-boiler');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

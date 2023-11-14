@@ -39,7 +39,7 @@ export class PercentLoadEstimationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-percent-load-estimation');
+    this.analyticsService.sendEvent('calculator-MOTOR-percent-load-estimation');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

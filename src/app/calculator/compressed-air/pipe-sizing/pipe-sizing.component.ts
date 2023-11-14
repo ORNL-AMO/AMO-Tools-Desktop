@@ -49,7 +49,7 @@ export class PipeSizingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-pipe-sizing');
+    this.analyticsService.sendEvent('calculator-CA-pipe-sizing');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

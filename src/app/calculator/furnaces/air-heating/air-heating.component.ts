@@ -48,7 +48,7 @@ export class AirHeatingComponent implements OnInit {
               private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
-    this.analyticsService.sendEvent('calculator-air-heating');
+    this.analyticsService.sendEvent('calculator-PH-air-heating');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

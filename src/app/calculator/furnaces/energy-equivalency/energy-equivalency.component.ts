@@ -57,7 +57,7 @@ export class EnergyEquivalencyComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-energy-equivalency');
+    this.analyticsService.sendEvent('calculator-PH-energy-equivalency');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

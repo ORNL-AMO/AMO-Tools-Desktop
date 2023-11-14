@@ -64,7 +64,7 @@ export class PreAssessmentComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('calculator-util-pre-assessment');
+    this.analyticsService.sendEvent('calculator-UTIL-pre-assessment');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       if (this.inModal) {
