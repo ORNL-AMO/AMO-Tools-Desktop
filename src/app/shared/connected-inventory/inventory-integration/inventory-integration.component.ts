@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { InventorySelectOptions, ConnectedInventoryData, ConnectedItem, InventoryType } from '../integrations';
 import { IntegrationStateService } from '../integration-state.service';
@@ -21,14 +21,27 @@ export class InventoryIntegrationComponent {
   connectedItems: Array<ConnectedItem>;
   @Input()
   connectedInventoryType: InventoryType;
+  @Input()
+  allowChanges: boolean = true;
+  @Input() 
+  inPsat: boolean;
 
   @Output('focusedField')
   focusedField = new EventEmitter();
+  @ViewChild('integrationContainer', { static: false }) integrationContainer: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    setTimeout(() => {
+      this.setIntegrationOffsetHeight();
+    }, 50);
+  }
 
   connectedInventoryData: ConnectedInventoryData;
   inventoryIntegrationForm: FormGroup;
   integrationStateSub: Subscription;
   connectedInventoryDataSub: Subscription;
+  isCollapsed: boolean = false;
   constructor(private integrationStateService: IntegrationStateService, private router: Router) { }
 
   ngOnInit() {
@@ -51,6 +64,10 @@ export class InventoryIntegrationComponent {
     });
   }
 
+  ngAfterViewInit() {
+    this.setIntegrationOffsetHeight();
+  }
+
   ngOnDestroy() {
     this.integrationStateSub.unsubscribe();
     this.connectedInventoryDataSub.unsubscribe();
@@ -61,8 +78,15 @@ export class InventoryIntegrationComponent {
       selectedInventoryId: new FormControl<number>(undefined),
       selectedCatalogItem: new FormControl<any>({ value: undefined, disabled: true })
     });
+    this.setPlaceholderOption();
+  }
+
+  setPlaceholderOption() {
     if (this.selectOptions && this.selectOptions.inventoryOptions) {
-      this.selectOptions.inventoryOptions.unshift({display: 'Select Inventory', id: null, catalogItemOptions: null});
+      let hasPlaceholder: boolean = Boolean(this.selectOptions.inventoryOptions.find(option => option.id === null));
+      if (!hasPlaceholder) {
+        this.selectOptions.inventoryOptions.unshift({ display: 'Select Inventory', id: null, catalogItemOptions: null });
+      }
     }
   }
 
@@ -113,6 +137,13 @@ export class InventoryIntegrationComponent {
     this.integrationStateService.connectedInventoryData.next(this.connectedInventoryData);
   }
 
+  toggleCollapse() {
+    this.isCollapsed = !this.isCollapsed;
+    setTimeout(() => {
+      this.setIntegrationOffsetHeight();
+    }, 100);
+  }
+
   focusField(focusedField: string) {
     this.focusedField.emit(focusedField);
   }
@@ -122,6 +153,7 @@ export class InventoryIntegrationComponent {
     this.inventoryIntegrationForm.controls.selectedCatalogItem.patchValue(null);
     this.inventoryIntegrationForm.controls.selectedCatalogItem.disable();
     this.inventoryIntegrationForm.controls.selectedCatalogItem.updateValueAndValidity();
+    this.setPlaceholderOption();
   }
 
   setCatalogItemOptionsFromInventory() {
@@ -150,6 +182,13 @@ export class InventoryIntegrationComponent {
       isConnected: false,
     }
     this.integrationStateService.connectedInventoryData.next(connectedInventoryData);
+  }
+
+  setIntegrationOffsetHeight() {
+    if (this.integrationContainer) {
+      let integrationContainerYMargin: number = 16;
+      this.integrationStateService.integrationContainerOffsetHeight.next(this.integrationContainer.nativeElement.offsetHeight + integrationContainerYMargin);
+    }
   }
 
 }
