@@ -87,8 +87,7 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
       let baselineResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
       this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses.some(loss => {
         baselineValid = this.isLossValid(loss)
-        let lossResults = this.phastService.energyInputExhaustGasLosses(loss, this.settings);
-        baselineWarning = this.checkHasWarnings(baselineResults, loss, lossResults);
+        baselineWarning = this.checkHasWarnings(baselineResults);
         return !baselineValid || baselineWarning;
       });
     }
@@ -100,19 +99,15 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
       let modificationResults: PhastResults = this.phastResultsService.getResults(modifiedPhast, this.settings);
       this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses.some(loss => {
           modificationValid = this.isLossValid(loss)
-          let lossResults = this.phastService.energyInputExhaustGasLosses(loss, this.settings);
-          modificationWarning = this.checkHasWarnings(modificationResults, loss, lossResults);
+          modificationWarning = this.checkHasWarnings(modificationResults);
           return !modificationValid || modificationWarning;
       });
     } 
-
     return { invalid: !baselineValid || !modificationValid, hasWarning: baselineWarning || modificationWarning };
   }
   
-  checkHasWarnings(phastResults: PhastResults, loss: EnergyInputExhaustGasLoss, lossResults): boolean {
-    let energyInputTotal = phastResults.grossHeatInput;
-    let electricalHeatDelivered = energyInputTotal - lossResults.heatDelivered - lossResults.exhaustGasLosses;
-    let warnings: { energyInputHeatDelivered: string } = this.energyInputExhaustGasService.checkWarnings(electricalHeatDelivered);
+  checkHasWarnings(phastResults: PhastResults): boolean {
+    let warnings: { energyInputHeatDelivered: string } = this.energyInputExhaustGasService.checkWarnings(phastResults.electricalHeatDelivered);
     return warnings.energyInputHeatDelivered != null;
   }
 
