@@ -8,6 +8,16 @@
       <input name="modificatonName" type="text" id="modificatonName" class="form-control"
         [(ngModel)]="phast.modifications[exploreModIndex].phast.name" (input)="calculate()" />
     </div>
+    <form [formGroup]="modifyImplementationCostForm" class="w-100 p-0">
+      <div class="form-group group-name">
+        <label for="implementationCost">Implementation Costs</label>
+        <div class="input-group">
+          <input name="implementationCost" type="number" min="0" step="any" class="form-control"
+            id="implementationCost" formControlName="implementationCost" (input)="calculate()">
+          <span class="units">$</span>
+        </div>
+      </div>
+    </form>
 
     <app-explore-flue-gas-form *ngIf="resultsCategories.showFlueGas" [(phast)]="phast"
       (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"

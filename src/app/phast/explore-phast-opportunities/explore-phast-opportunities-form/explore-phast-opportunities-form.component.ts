@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PHAST, ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { PhastResultsService } from '../../phast-results.service';
 import { LossTab } from '../../tabs';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-explore-phast-opportunities-form',
@@ -35,9 +36,11 @@ export class ExplorePhastOpportunitiesFormComponent implements OnInit {
   showSlag: boolean = false;
   showCooling: boolean = false;
   showAtmosphere: boolean = false;
-  constructor(private phastResultsService: PhastResultsService) { }
+  modifyImplementationCostForm: UntypedFormGroup;
+  constructor(private phastResultsService: PhastResultsService, private formBuilder: UntypedFormBuilder) { }
 
   ngOnInit() {
+    this.initForms();
     this.resultsCategories = this.phastResultsService.getResultCategories(this.settings);
 
     if (this.phast.losses.chargeMaterials && this.phast.losses.chargeMaterials.length !== 0) {
@@ -63,7 +66,7 @@ export class ExplorePhastOpportunitiesFormComponent implements OnInit {
     }
     if (this.phast.losses.coolingLosses && this.phast.losses.coolingLosses.length !== 0) {
       this.showCooling = true;
-    }
+    }    
   }
 
   ngOnDestroy() {
@@ -73,8 +76,23 @@ export class ExplorePhastOpportunitiesFormComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {
+        this.initForms();
+      }
+    }
+  }
+
+  initForms() {
+    this.modifyImplementationCostForm = this.formBuilder.group({
+      implementationCost: [this.phast.modifications[this.exploreModIndex].phast.implementationCost],
+    });
+  }
+
 
   calculate() {
+    this.phast.modifications[this.exploreModIndex].phast.implementationCost = this.modifyImplementationCostForm.controls.implementationCost.value;    
     this.emitCalculate.emit(true);
   }
 

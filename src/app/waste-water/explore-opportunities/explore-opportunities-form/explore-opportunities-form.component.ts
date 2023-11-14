@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WasteWater, WasteWaterData } from '../../../shared/models/waste-water';
 import { WasteWaterService } from '../../waste-water.service';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-explore-opportunities-form',
@@ -12,14 +13,30 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   modification: WasteWaterData;
   selectedModificationIdSub: Subscription;
-  constructor(private wasteWaterService: WasteWaterService) { }
+  modifyOperatingCostsForm: UntypedFormGroup;
+  constructor(private wasteWaterService: WasteWaterService, private formBuilder: UntypedFormBuilder) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(val => {
       if(val){
         this.modification = this.wasteWaterService.getModificationFromId();
       }       
     });
+    this.initForms();
+  }
+
+  initForms() {
+    this.modifyOperatingCostsForm = this.formBuilder.group({
+      implementationCosts: [this.modification.operations.implementationCosts],
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {
+        this.initForms();
+      }
+    }
   }
 
   ngOnDestroy() {
@@ -30,6 +47,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     let modificationIndex: number = wasteWater.modifications.findIndex(modification => { return modification.id == this.modification.id });
     wasteWater.modifications[modificationIndex] = this.modification;
+    wasteWater.modifications[modificationIndex].operations.implementationCosts = this.modifyOperatingCostsForm.controls.implementationCosts.value;
     this.wasteWaterService.updateWasteWater(wasteWater);
   }
 
