@@ -5,22 +5,21 @@
     </div>
   </div>
 
-  <div class="mx-3 my-0">
-    <app-connected-assessment-status
-      [connectedToType]="'inventory'" [connectedFormGroupName]="'motor'">
+  <div *ngIf="inSetup || baseline" class="d-flex justify-content-center flex-column my-0 mx-3">
+    <app-connected-assessment-status class="w-100" *ngIf="hasConnectedPumpInventory" [connectedToType]="'inventory'"
+      [connectedFormGroupName]="'motor'">
     </app-connected-assessment-status>
+
+      <app-inventory-integration class="w-100" (focusedField)="focusField($event, true)"
+        *ngIf="inventorySelectOptions || psat.connectedItem" [inPsat]="true" [allowChanges]="inSetup"
+        [connectedInventoryType]="connectedInventoryType"
+        [selectOptions]="inventorySelectOptions">
+      </app-inventory-integration>
+      <app-integration-status *ngIf="inSetup" class="w-100"></app-integration-status>
   </div>
 
-  <div class="mx-3 my-0" *ngIf="!hasConnectedPumpInventory && (inSetup || baseline)">
-    <app-inventory-integration class="mx-3" *ngIf="inventorySelectOptions" (focusedField)="focusField($event, true)"
-      [connectedInventoryType]="'motor'" [selectOptions]="inventorySelectOptions">
-    </app-inventory-integration>
-    <app-integration-status></app-integration-status>
-  </div>
-
-  <div [ngClass]="{'p-4': inSetup && hasConnectedPumpInventory, 
-                   'px-4 pb-4 pt-0': inSetup && !hasConnectedPumpInventory, 
-                   'p-3': !inSetup }">
+  <div [ngClass]="{'px-4 pb-4 pt-0': inSetup, 'p-3': !inSetup}"
+    [ngStyle]="{'margin-top.px': integrationContainerOffsetHeight}">
     <div class="form-group" [ngClass]="{'indicate-different': isLineFreqDifferent()}">
       <label for="{{'frequency_'+idString}}">Line Frequency</label>
       <select name="frequency" class="form-control number-input-field" id="{{'frequency_'+idString}}"
@@ -128,6 +127,6 @@
       </span>
       <span class="alert-warning small pull-right"
         *ngIf="motorWarnings.flaError !== null && !psatForm.controls.fullLoadAmps.invalid">{{motorWarnings.flaError}}</span>
-      </div>
+    </div>
   </div>
 </form>

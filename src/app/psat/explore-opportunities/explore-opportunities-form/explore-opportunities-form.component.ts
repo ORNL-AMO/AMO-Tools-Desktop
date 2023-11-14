@@ -9,6 +9,8 @@ import { MotorService } from '../../motor/motor.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PsatService } from '../../psat.service';
 import { PumpOperationsService } from '../../pump-operations/pump-operations.service';
+import { IntegrationStateService } from '../../../shared/connected-inventory/integration-state.service';
+import { ConnectedInventoryData } from '../../../shared/connected-inventory/integrations';
 @Component({
   selector: 'app-explore-opportunities-form',
   templateUrl: './explore-opportunities-form.component.html',
@@ -66,7 +68,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   modificationOperationsaWarnings: OperationsWarnings;
 
   showHeadTool: boolean = false;
-  constructor(private psatService: PsatService, private fieldDataService: FieldDataService, private pumpFluidService: PumpFluidService, private psatWarningService: PsatWarningService, private motorService: MotorService, private pumpOperationsService: PumpOperationsService) { }
+  connectedInventoryData: ConnectedInventoryData;
+  constructor(private psatService: PsatService,
+    private integrationStateService: IntegrationStateService,
+    private fieldDataService: FieldDataService, private pumpFluidService: PumpFluidService, private psatWarningService: PsatWarningService, private motorService: MotorService, private pumpOperationsService: PumpOperationsService) { }
 
 
   ngOnInit() {
@@ -90,6 +95,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   initForms() {
+    this.connectedInventoryData = this.integrationStateService.connectedInventoryData.getValue();
+
     if (this.psat.modifications[this.exploreModIndex].psat.inputs.isVFD) {
       this.psat.modifications[this.exploreModIndex].exploreOppsShowVfd = {hasOpportunity: true, display: "Install VFD"};
       delete this.psat.modifications[this.exploreModIndex].psat.inputs.isVFD;

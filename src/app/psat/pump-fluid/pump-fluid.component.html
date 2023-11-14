@@ -5,7 +5,7 @@
     </div>
   </div>
 
-  <div *ngIf="hasConnectedPumpInventory && inSetup" class="mx-3 my-0">
+  <div *ngIf="hasConnectedPumpInventory" class="mx-3 my-0">
     <app-connected-assessment-status class="p-3" [connectedToType]="'inventory'" 
     [connectedFormGroupName]="'pump'"></app-connected-assessment-status>
   </div>
@@ -31,7 +31,7 @@
           *ngIf="psatForm.controls.pumpType.value != 11">Known Efficiency</a>
       </label>
       <div class="input-group" *ngIf="psatForm.controls.pumpType.value == 11">
-        <input [readonly]="!selected" name="specifiedPumpEfficiency" type="number" min="0" step="any" max="100"
+        <input  name="specifiedPumpEfficiency" type="number" min="0" step="any" max="100"
           class="form-control" formControlName="specifiedPumpEfficiency" id="{{'specifiedPumpEfficiency_'+idString}}"
           onfocus="this.select();" (input)="save()" (focus)="focusField('specifiedPumpEfficiency')">
         <span class="input-group-addon units">%</span>
@@ -64,7 +64,7 @@
       [ngClass]="{'indicate-different': isPumpRpmDifferent(),'error': pumpFluidWarnings.rpmError !== null, 'invalid':psatForm.controls.pumpRPM.invalid}">
       <label for="{{'pumpRPM_'+idString}}">Pump Speed</label>
       <div class="input-group">
-        <input [readonly]="!selected" type="number" name="pumpRPM" min="0" step="100" class="form-control"
+        <input  type="number" name="pumpRPM" min="0" step="100" class="form-control"
           formControlName="pumpRPM" id="{{'pumpRPM_'+idString}}" (input)="save()" (focus)="focusField('pumpRPM')"
           onfocus="this.select();">
         <span class="input-group-addon units">rpm</span>
@@ -89,7 +89,7 @@
       [ngClass]="{'indicate-different': isSpecifiedDriveEfficiencyDifferent(), 'invalid':psatForm.controls.specifiedDriveEfficiency.invalid}">
       <label for="{{'specifiedDriveEfficiency_'+idString}}">Drive Efficiency</label>
       <div class="input-group">
-        <input [readonly]="!selected" type="number" name="specifiedDriveEfficiency" step="any" class="form-control"
+        <input  type="number" name="specifiedDriveEfficiency" step="any" class="form-control"
           formControlName="specifiedDriveEfficiency" id="{{'specifiedDriveEfficiency_'+idString}}" (input)="save()"
           (focus)="focusField('specifiedDriveEfficiency')" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
@@ -128,7 +128,7 @@
       [ngClass]="{'indicate-different': isFluidTempDifferent(),'error': pumpFluidWarnings.temperatureError !== null, 'invalid':psatForm.controls.fluidTemperature.invalid}">
       <label for="{{'fluidTemperature_'+idString}}">Fluid Temperature</label>
       <div class="input-group">
-        <input [readonly]="!selected" type="number" name="fluidTemperature" step="any" class="form-control"
+        <input  type="number" name="fluidTemperature" step="any" class="form-control"
           formControlName="fluidTemperature" id="{{'fluidTemperature_'+idString}}" (input)="calculateSpecificGravity()"
           (focus)="focusField('fluidTemperature')" onfocus="this.select();">
         <span class="input-group-addon units" [innerHTML]="settings.temperatureMeasurement | settingsLabel"></span>
@@ -145,7 +145,7 @@
     <div class="form-group"
       [ngClass]="{'indicate-different': isSpecificGravityDifferent(), 'invalid':psatForm.controls.gravity.invalid}">
       <label for="{{'gravity_'+idString}}">Specific Gravity</label>
-      <input [readonly]="!selected" type="number" min="0" name="gravity" step="0.1" class="form-control"
+      <input  type="number" min="0" name="gravity" step="0.1" class="form-control"
         formControlName="gravity" id="{{'gravity_'+idString}}" (input)="save()" (focus)="focusField('specificGravity')"
         onfocus="this.select();">
       <span class="alert-danger pull-right small"
@@ -160,7 +160,7 @@
       [ngClass]="{'indicate-different': isKinematicViscosityDifferent(), 'invalid':psatForm.controls.viscosity.invalid}">
       <label for="{{'viscosity_'+idString}}">Kinematic Viscosity</label>
       <div class="input-group">
-        <input [readonly]="!selected" type="number" min="0" name="viscosity" step="0.1" class="form-control"
+        <input  type="number" min="0" name="viscosity" step="0.1" class="form-control"
           formControlName="viscosity" id="{{'viscosity_'+idString}}" (input)="save()" (focus)="focusField('viscosity')"
           onfocus="this.select();">
         <span class="input-group-addon units">cSt</span>
@@ -183,7 +183,7 @@
         <button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('stages')">
           <i class="fa fa-plus"></i>
         </button>
-        <input [readonly]="!selected" type="number" min="1" step="any" class="form-control" formControlName="stages"
+        <input  type="number" min="1" step="any" class="form-control" formControlName="stages"
           id="{{'stages_'+idString}}" (input)="save()" (focus)="focusField('stages')" onfocus="this.select();">
       </div>
       <span class="alert-danger pull-right small"

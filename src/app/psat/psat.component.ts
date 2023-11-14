@@ -115,6 +115,7 @@ export class PsatComponent implements OnInit {
         this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
       } else { 
         this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
+        this.initModificationState();
 
         let fromConnectedItem = this.activatedRoute.snapshot.queryParamMap.get('fromConnectedItem');
         if (fromConnectedItem) {
@@ -128,21 +129,10 @@ export class PsatComponent implements OnInit {
           this.save();
         }
 
-        if (this._psat.modifications) {
-          if (this._psat.modifications.length != 0) {
-            this.modificationExists = true;
-            this.modificationIndex = 0;
-          }
-          if (this._psat.setupDone) {
-            this.compareService.setCompareVals(this._psat, 0);
-          }
-        } else {
-          this._psat.modifications = new Array();
-          this.modificationExists = false;
-        }
         this.initSankeyList();
       }
-    })
+    });
+    
     let tmpTab = this.assessmentService.getStartingTab();
     if (tmpTab) {
       this.psatTabService.mainTab.next(tmpTab);
@@ -219,12 +209,6 @@ export class PsatComponent implements OnInit {
     this.checkShowWelcomeScreen();
   }
 
-
-  redirectFromConnectedInventory() {
-    this.psatTabService.mainTab.next('system-setup');
-    this.psatTabService.stepTab.next('motor');
-  }
-
   ngOnDestroy() {
     this.compareService.baselinePSAT = undefined;
     this.compareService.modifiedPSAT = undefined;
@@ -251,6 +235,12 @@ export class PsatComponent implements OnInit {
     }, 100);
   }
 
+  
+  redirectFromConnectedInventory() {
+    this.psatTabService.mainTab.next('system-setup');
+    this.psatTabService.stepTab.next('motor');
+  }
+
   getContainerHeight() {
     if (this.content) {
       setTimeout(() => {
@@ -265,6 +255,22 @@ export class PsatComponent implements OnInit {
           this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
         }
       }, 100);
+    }
+  }
+
+  initModificationState() {
+    if (this._psat.modifications) {
+      if (this._psat.modifications.length != 0) {
+        this.modificationExists = true;
+        this.modificationIndex = 0;
+      }
+      if (this._psat.setupDone) {
+        this.compareService.setCompareVals(this._psat, 0);
+      }
+    } else {
+      this._psat.modifications = new Array();
+      this.modificationExists = false;
+      this.compareService.setCompareVals(this._psat);
     }
   }
 
@@ -344,6 +350,7 @@ export class PsatComponent implements OnInit {
     this.compareService.setCompareVals(this._psat, this.modificationIndex);
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
     this.psatIntegrationService.setPSATConnectedInventoryData(this.assessment, this.settings);
+    this.hasConnectedMotorItem = this._psat.connectedItem && this._psat.connectedItem.inventoryType === 'motor';
     if (this.assessment.psat.connectedItem && this.assessment.psat.connectedItem.inventoryType === 'pump') {
       this.psatIntegrationService.checkConnectedInventoryDiffers(this.assessment);
     }
