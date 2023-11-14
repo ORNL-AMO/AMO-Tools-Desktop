@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { AnalyticsDataIdbService } from '../../indexedDb/analytics-data-idb.service';
 import { v4 as uuidv4 } from 'uuid';
 import { ElectronService } from '../../electron/electron.service';
+import { AnalyticsEventString } from './analyticsEventTypes';
 declare let gtag: Function;
 
 @Injectable()
@@ -183,86 +184,6 @@ export interface EventParameters {
   session_id: string,
   engagement_time_msec?: string
 }
-
-export type AnalyticsEventString = 'page_view' |
-  'measur_app_open' |
-  'create-assessment' |
-  'view-pump-assessment' |
-  'view-process-heating-assessment' |
-  'view-fan-assessment' |
-  'view-steam-assessment' |
-  'view-treasure-hunt-assessment' |
-  'view-waste-water-assessment' |
-  'view-compressed-air-assessment' |
-  'create-inventory' |
-  'view-motor-inventory' |
-  'view-pump-inventory' |
-  'use-data-exporation' |
-  'run-day-type-analysis' |
-  'calculator-air-flow-conversion' |
-  'calculator-air-leak' |
-  'calculator-air-velocity' |
-  'calculator-bag-method' |
-  'calculator-bleed-test' |
-  'calculator-CA-pressure-reduction' |
-  'calculator-CA-reduction' |
-  'calculator-operating-cost' |
-  'calculator-pipe-sizing' |
-  'calculator-pneumatic-air' |
-  'calculator-receiver-tank' |
-  'calculator-system-capacity' |
-  'calculator-fan-analysis' |
-  'calculator-fan-efficiency' |
-  'calculator-fan-system-checklist' |
-  'calculator-air-heating' |
-  'calculator-atmosphere' |
-  'calculator-charge-material' |
-  'calculator-cooling' |
-  'calculator-efficiency-improvement' |
-  'calculator-energy-equivalency' |
-  'calculator-energy-use' |
-  'calculator-fixture' |
-  'calculator-flue-gas' |
-  'calculator-heat-cascading' |
-  'calculator-leakage' |
-  'calculator-o2-enrichment' |
-  'calculator-opening' |
-  'calculator-wall' |
-  'calculator-waste-heat' |
-  'calculator-lighting-replacement' |
-  'calculator-full-load-amps' |
-  'calculator-motor-drive' |
-  'calculator-motor-performance' |
-  'calculator-nema-energy-efficiency' |
-  'calculator-percent-load-estimation' |
-  'calculator-replace-existing' |
-  'calculator-chiller-performance' |
-  'calculator-chiller-staging' |
-  'calculator-cooling-tower' |
-  'calculator-cooling-tower-basin' |
-  'calculator-cooling-tower-fan' |
-  'calculator-psychrometric' |
-  'calculator-achievable-efficiency' |
-  'calculator-head-tool' |
-  'calculator-specific-speed' |
-  'calculator-steam-boiler' |
-  'calculator-steam-boiler-blowdown-rate' |
-  'calculator-steam-condensing-economizer' |
-  'calculator-steam-deaerator' |
-  'calculator-steam-feedwater-economizer' |
-  'calculator-steam-flash-tank' |
-  'calculator-steam-header' |
-  'calculator-steam-heat-loss' |
-  'calculator-steam-pipe-insulation-reduction' |
-  'calculator-steam-prv' |
-  'calculator-steam-saturated-properties' |
-  'calculator-steam-stack-loss' |
-  'calculator-steam-properties' |
-  'calculator-steam-reduction' |
-  'calculator-steam-tank-insulation-reduction' |
-  'calculator-steam-turbine' |
-  'calculator-steam-water-heating';
-
 
 export type MeasurPlatformString = 'measur-desktop' | 'measur-web';
 

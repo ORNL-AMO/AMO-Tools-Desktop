@@ -5,8 +5,8 @@ import { Treasure, WaterReductionTreasureHunt } from '../../../shared/models/tre
 import { WaterReductionData, WaterReductionResults } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { WaterReductionService } from './water-reduction.service';
-import { FormGroup, UntypedFormBuilder } from '@angular/forms';
 import { Assessment } from '../../../shared/models/assessment';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-water-reduction',
@@ -53,9 +53,12 @@ export class WaterReductionComponent implements OnInit {
   baselineData: Array<WaterReductionData>;
   modificationData: Array<WaterReductionData>;
 
-  constructor(private settingsDbService: SettingsDbService, private waterReductionService: WaterReductionService, private formBuilder: UntypedFormBuilder) { }
+  constructor(private settingsDbService: SettingsDbService, 
+    private waterReductionService: WaterReductionService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-WW-water-reduction');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

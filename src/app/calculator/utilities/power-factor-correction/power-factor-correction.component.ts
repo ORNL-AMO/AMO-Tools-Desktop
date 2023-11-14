@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { PowerFactorCorrectionService } from './power-factor-correction.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-power-factor-correction',
@@ -31,9 +32,11 @@ export class PowerFactorCorrectionComponent implements OnInit {
   currentField: string;
   toggleCalculate: boolean = false;
   tabSelect: string = 'results';
-  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService) { }
+  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-util-power-factor-correction');
     this.calculate(this.inputData);
     if (this.powerFactorCorrectionService.inputData) {
       this.inputData = this.powerFactorCorrectionService.inputData;

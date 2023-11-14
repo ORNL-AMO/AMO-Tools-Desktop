@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { WeatherBinsService, WeatherDataSourceView } from './weather-bins.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-weather-bins',
@@ -19,16 +20,18 @@ export class WeatherBinsComponent implements OnInit {
       this.resizeTabs();
     }, 100);
   }
-  
+
   smallScreenTab: string = 'form';
   containerHeight: number;
   settings: Settings;
   tabSelect: string = 'results';
   headerHeight: number;
   weatherDataSourceView: WeatherDataSourceView;
-  constructor(private settingsDbService: SettingsDbService, private weatherBinsService: WeatherBinsService) { }
+  constructor(private settingsDbService: SettingsDbService, private weatherBinsService: WeatherBinsService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('calculator-util-weather-bins');
     this.settings = this.settingsDbService.globalSettings;
     this.weatherDataSourceView = this.weatherBinsService.weatherDataSourceView.getValue();
   }

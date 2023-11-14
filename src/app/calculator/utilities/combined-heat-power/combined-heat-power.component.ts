@@ -4,6 +4,7 @@ import { CombinedHeatPower, CombinedHeatPowerOutput } from '../../../shared/mode
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { CombinedHeatPowerService } from './combined-heat-power.service';
 import { Settings } from '../../../shared/models/settings';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-combined-heat-power',
@@ -54,9 +55,12 @@ export class CombinedHeatPowerComponent implements OnInit {
   };
   currentField: string = 'annualOperatingHours';
   tabSelect: string = 'results';
-  constructor(private settingsDbService: SettingsDbService, private combinedHeatPowerService: CombinedHeatPowerService, private standaloneService: StandaloneService) { }
+  constructor(private settingsDbService: SettingsDbService, 
+    private combinedHeatPowerService: CombinedHeatPowerService, private standaloneService: StandaloneService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-util-combined-heat-power');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

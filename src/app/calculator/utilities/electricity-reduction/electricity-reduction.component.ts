@@ -5,6 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { ElectricityReductionResults, ElectricityReductionData } from '../../../shared/models/standalone';
 import { ElectricityReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../../shared/models/operations';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-electricity-reduction',
@@ -49,9 +50,12 @@ export class ElectricityReductionComponent implements OnInit {
   electricityReductionResults: ElectricityReductionResults;
   baselineData: Array<ElectricityReductionData>;
   modificationData: Array<ElectricityReductionData>;
-  constructor(private settingsDbService: SettingsDbService, private electricityReductionService: ElectricityReductionService) { }
+  constructor(private settingsDbService: SettingsDbService, 
+    private electricityReductionService: ElectricityReductionService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-util-electricity-reduction');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
