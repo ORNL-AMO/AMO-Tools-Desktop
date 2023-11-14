@@ -285,7 +285,8 @@
       </div>
     </div>
 
-    <div
+    <!-- Hiding the Boiler Blowdown Rate calc in TH for now. Issue 5538 -->
+    <!-- <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Water' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Other Fuel') &&
       (treasureHunt.currentEnergyUsage.waterUsed == true || treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
       class="card calc-card-item m-2" (click)="openCalculator('boiler-blowdown-rate')">
@@ -298,7 +299,7 @@
           Calculate the blowdown rate of a boiler.
         </p>
       </div>
-    </div>
+    </div> -->
 
     <!--compressed air reduction-->
     <div
