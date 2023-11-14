@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FieldMeasurementInputs, FieldMeasurementOutputs, PercentLoadEstimationService } from './percent-load-estimation.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-percent-load-estimation',
@@ -33,10 +34,12 @@ export class PercentLoadEstimationComponent implements OnInit {
   fieldMeasurementData: FieldMeasurementInputs;
   fieldMeasurementResults: FieldMeasurementOutputs;
 
-  constructor(private percentLoadEstimationService: PercentLoadEstimationService, private settingsDbService: SettingsDbService) {
+  constructor(private percentLoadEstimationService: PercentLoadEstimationService, private settingsDbService: SettingsDbService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-percent-load-estimation');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

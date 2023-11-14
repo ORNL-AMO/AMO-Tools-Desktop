@@ -6,6 +6,7 @@ import { ReplaceExistingData, ReplaceExistingResults } from '../../../shared/mod
 import { UntypedFormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../shared/models/operations';
 import { ReplaceExistingMotorTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-replace-existing',
@@ -44,9 +45,11 @@ export class ReplaceExistingComponent implements OnInit {
 
   replaceExistingForm: UntypedFormGroup;
 
-  constructor(private replaceExistingService: ReplaceExistingService, private settingsDbService: SettingsDbService) { }
+  constructor(private replaceExistingService: ReplaceExistingService, private settingsDbService: SettingsDbService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-replace-existing');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

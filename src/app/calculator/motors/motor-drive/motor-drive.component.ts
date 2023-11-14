@@ -5,6 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { MotorDriveInputs, MotorDriveOutputs } from '../../../shared/models/calculators';
 import { UntypedFormGroup } from '@angular/forms';
 import { MotorDriveInputsTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-motor-drive',
@@ -44,10 +45,12 @@ export class MotorDriveComponent implements OnInit {
   containerHeight: number;
   smallScreenTab: string = 'form';
 
-  constructor(private motorDriveService: MotorDriveService, private settingsDbService: SettingsDbService) {
+  constructor(private motorDriveService: MotorDriveService, private settingsDbService: SettingsDbService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-motor-drive');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

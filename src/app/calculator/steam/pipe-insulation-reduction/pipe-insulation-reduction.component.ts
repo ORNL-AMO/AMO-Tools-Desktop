@@ -6,6 +6,7 @@ import { PipeInsulationReductionService } from './pipe-insulation-reduction.serv
 import { PipeInsulationReductionResults } from '../../../shared/models/standalone';
 import { UntypedFormGroup } from '@angular/forms';
 import { PipeInsulationReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-pipe-insulation-reduction',
@@ -49,9 +50,12 @@ export class PipeInsulationReductionComponent implements OnInit {
   smallScreenTab: string = 'baseline';
 
 
-  constructor(private settingsDbService: SettingsDbService, private pipeInsulationReductionService: PipeInsulationReductionService) { }
+  constructor(private settingsDbService: SettingsDbService, 
+    private pipeInsulationReductionService: PipeInsulationReductionService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-steam-pipe-insulation-reduction');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

@@ -228,7 +228,40 @@ export type AnalyticsEventString = 'page_view' |
   'calculator-o2-enrichment' |
   'calculator-opening' |
   'calculator-wall' |
-  'calculator-waste-heat';
+  'calculator-waste-heat' |
+  'calculator-lighting-replacement' |
+  'calculator-full-load-amps' |
+  'calculator-motor-drive' |
+  'calculator-motor-performance' |
+  'calculator-nema-energy-efficiency' |
+  'calculator-percent-load-estimation' |
+  'calculator-replace-existing' |
+  'calculator-chiller-performance' |
+  'calculator-chiller-staging' |
+  'calculator-cooling-tower' |
+  'calculator-cooling-tower-basin' |
+  'calculator-cooling-tower-fan' |
+  'calculator-psychrometric' |
+  'calculator-achievable-efficiency' |
+  'calculator-head-tool' |
+  'calculator-specific-speed' |
+  'calculator-steam-boiler' |
+  'calculator-steam-boiler-blowdown-rate' |
+  'calculator-steam-condensing-economizer' |
+  'calculator-steam-deaerator' |
+  'calculator-steam-feedwater-economizer' |
+  'calculator-steam-flash-tank' |
+  'calculator-steam-header' |
+  'calculator-steam-heat-loss' |
+  'calculator-steam-pipe-insulation-reduction' |
+  'calculator-steam-prv' |
+  'calculator-steam-saturated-properties' |
+  'calculator-steam-stack-loss' |
+  'calculator-steam-properties' |
+  'calculator-steam-reduction' |
+  'calculator-steam-tank-insulation-reduction' |
+  'calculator-steam-turbine' |
+  'calculator-steam-water-heating';
 
 
 export type MeasurPlatformString = 'measur-desktop' | 'measur-web';

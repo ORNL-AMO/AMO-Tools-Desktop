@@ -7,6 +7,7 @@ import { Settings } from '../../../shared/models/settings';
 import { ChillerPerformanceTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { WeatherBinsService, WeatherDataSourceView } from '../../utilities/weather-bins/weather-bins.service';
 import { ChillerPerformanceService } from './chiller-performance.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-chiller-performance',
@@ -51,9 +52,11 @@ export class ChillerPerformanceComponent implements OnInit {
   weatherDataSourceView: WeatherDataSourceView;
 
   constructor(private chillerPerformanceService: ChillerPerformanceService, private weatherBinsService: WeatherBinsService, private cd: ChangeDetectorRef,
-              private settingsDbService: SettingsDbService) { }
+              private settingsDbService: SettingsDbService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('calculator-chiller-performance');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

@@ -7,6 +7,7 @@ import {SpecificSpeedService} from './specific-speed.service';
 import {Assessment} from '../../../shared/models/assessment';
 import {Calculator, SpecificSpeedInputs} from '../../../shared/models/calculators';
 import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-specific-speed',
@@ -50,10 +51,12 @@ export class SpecificSpeedComponent implements OnInit {
   calculator: Calculator;
 
   constructor(private specificSpeedService: SpecificSpeedService, private settingsDbService: SettingsDbService,
-              private calculatorDbService: CalculatorDbService) {
+              private calculatorDbService: CalculatorDbService,
+              private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-specific-speed');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

@@ -7,6 +7,7 @@ import {SteamService} from '../steam.service';
 import {BoilerService} from './boiler.service';
 import {BoilerOutput} from '../../../shared/models/steam/steam-outputs';
 import { Subscription } from 'rxjs';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-boiler-calculator',
@@ -37,10 +38,13 @@ export class BoilerComponent implements OnInit {
   results: BoilerOutput;
   isModalOpen: boolean;
   modalOpenSub: Subscription;
-  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private boilerService: BoilerService) {
+  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, 
+    private boilerService: BoilerService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-steam-boiler');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

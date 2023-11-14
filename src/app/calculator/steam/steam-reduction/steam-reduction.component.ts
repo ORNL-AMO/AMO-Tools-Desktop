@@ -5,6 +5,7 @@ import { SteamReductionResults, SteamReductionData } from '../../../shared/model
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamReductionService } from './steam-reduction.service';
 import { SteamReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-steam-reduction',
@@ -50,9 +51,12 @@ export class SteamReductionComponent implements OnInit {
   naturalGasUtilityCost: number;
   otherUtilityCost: number;
 
-  constructor(private settingsDbService: SettingsDbService, private steamReductionService: SteamReductionService) { }
+  constructor(private settingsDbService: SettingsDbService, 
+    private steamReductionService: SteamReductionService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-steam-reduction');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

@@ -6,6 +6,7 @@ import { SaturatedPropertiesInput } from '../../../shared/models/steam/steam-inp
 import { SteamService } from '../steam.service';
 import { SaturatedPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-saturated-properties-calculator',
@@ -49,11 +50,14 @@ export class SaturatedPropertiesComponent implements OnInit {
   toggleResetData: boolean = true;
   toggleExampleData: boolean = true;
 
-  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) {
+  constructor(private formBuilder: UntypedFormBuilder, 
+    private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService, 
+    private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
-
+    this.analyticsService.sendEvent('calculator-steam-saturated-properties');
     this.graphToggleForm = this.formBuilder.group({
       'graphToggle': [0, Validators.required]
     });

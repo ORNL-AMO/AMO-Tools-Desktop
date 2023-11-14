@@ -6,6 +6,7 @@ import { CoolingTowerService } from './cooling-tower.service';
 import { Subscription } from 'rxjs';
 import { CoolingTowerOutput, CoolingTowerData } from '../../../shared/models/chillers';
 import { CoolingTowerMakeupWaterTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-cooling-tower',
@@ -25,9 +26,9 @@ export class CoolingTowerComponent implements OnInit {
   @Input()
   operatingHours: OperatingHours;
 
-  
+
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;  
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -35,24 +36,26 @@ export class CoolingTowerComponent implements OnInit {
       this.resizeTabs();
     }, 100);
   }
-  
+
   smallScreenTab: string = 'baseline';
   containerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
   baselineSelected = true;
   modificationExists = false;
-  
+
   coolingTowerResults: CoolingTowerOutput;
   baselineData: Array<CoolingTowerData>;
   modificationData: Array<CoolingTowerData>;
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
 
-  constructor(private settingsDbService: SettingsDbService, 
-              private coolingTowerService: CoolingTowerService) { }
+  constructor(private settingsDbService: SettingsDbService,
+    private coolingTowerService: CoolingTowerService,
+    private analyticsService: AnalyticsService) { }
 
-    ngOnInit() {
+  ngOnInit() {
+    this.analyticsService.sendEvent('calculator-cooling-tower');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
@@ -61,11 +64,11 @@ export class CoolingTowerComponent implements OnInit {
     }
 
     let existingInputs = this.coolingTowerService.baselineData.getValue();
-    if(!existingInputs) {
+    if (!existingInputs) {
       this.coolingTowerService.initDefaultEmptyInputs(0, this.settings, this.operatingHours);
     }
     this.initSubscriptions();
-    if(this.modificationData) {
+    if (this.modificationData) {
       this.modificationExists = true;
     }
   }
@@ -129,7 +132,7 @@ export class CoolingTowerComponent implements OnInit {
     this.coolingTowerService.createModification();
     this.modificationExists = true;
     this.setModificationSelected();
-   }
+  }
 
   btnResetData() {
     this.coolingTowerService.resetData.next(true);
@@ -139,9 +142,9 @@ export class CoolingTowerComponent implements OnInit {
   }
 
   btnGenerateExample() {
-      this.coolingTowerService.generateExampleData(this.settings);
-      this.modificationExists = true;
-      this.baselineSelected = true;
+    this.coolingTowerService.generateExampleData(this.settings);
+    this.modificationExists = true;
+    this.baselineSelected = true;
   }
 
   setBaselineSelected() {

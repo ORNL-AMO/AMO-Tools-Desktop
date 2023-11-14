@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { BoilerBlowdownRateTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-boiler-blowdown-rate',
@@ -40,9 +41,11 @@ export class BoilerBlowdownRateComponent implements OnInit {
   headerHeight: number;
   containerHeight: number;
   smallScreenTab: string = 'baseline';
-  constructor(private boilerBlowdownRateService: BoilerBlowdownRateService, private settingsDbService: SettingsDbService) { }
+  constructor(private boilerBlowdownRateService: BoilerBlowdownRateService, private settingsDbService: SettingsDbService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-steam-boiler-blowdown-rate');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

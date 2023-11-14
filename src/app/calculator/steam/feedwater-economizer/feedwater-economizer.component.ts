@@ -5,6 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
 import { FeedwaterEconomizerTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { FeedwaterEconomizerService } from './feedwater-economizer.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-feedwater-economizer',
@@ -39,9 +40,11 @@ export class FeedwaterEconomizerComponent implements OnInit {
   smallScreenTab: string = 'form';
   
   constructor(private feedwaterEconomizerService: FeedwaterEconomizerService,
-              private settingsDbService: SettingsDbService) { }
+              private settingsDbService: SettingsDbService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('calculator-steam-feedwater-economizer');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

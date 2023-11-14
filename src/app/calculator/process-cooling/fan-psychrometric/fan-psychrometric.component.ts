@@ -5,6 +5,7 @@ import { FanPsychrometricService } from './fan-psychrometric.service';
 import { Subscription } from 'rxjs';
 import { BaseGasDensity } from '../../../shared/models/fans';
 import { SettingsService } from '../../../settings/settings.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-fan-psychrometric',
@@ -12,7 +13,7 @@ import { SettingsService } from '../../../settings/settings.service';
   styleUrls: ['./fan-psychrometric.component.css']
 })
 export class FanPsychrometricComponent implements OnInit {
-  
+
   @Input()
   settings: Settings;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
@@ -24,7 +25,7 @@ export class FanPsychrometricComponent implements OnInit {
       this.resizeTabs();
     }, 100);
   }
-  
+
   tabSelect: string = 'results';
   headerHeight: any;
   containerHeight: number;
@@ -32,12 +33,14 @@ export class FanPsychrometricComponent implements OnInit {
 
   baseGasDensityDataSub: Subscription;
 
-  constructor(private settingsDbService: SettingsDbService, 
-              private fanPsychrometricService: FanPsychrometricService,
-              private settingsService: SettingsService
-              ) { }
+  constructor(private settingsDbService: SettingsDbService,
+    private fanPsychrometricService: FanPsychrometricService,
+    private settingsService: SettingsService,
+    private analyticsService: AnalyticsService
+  ) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-psychrometric');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -61,20 +64,20 @@ export class FanPsychrometricComponent implements OnInit {
   ngOnDestroy() {
     this.baseGasDensityDataSub.unsubscribe();
   }
-  
+
   initSubscriptions() {
     this.baseGasDensityDataSub = this.fanPsychrometricService.baseGasDensityData.subscribe(value => {
       this.fanPsychrometricService.calculateBaseGasDensity(this.settings);
     });
   }
 
-  btnGenerateExample(){
+  btnGenerateExample() {
     let exampleData: BaseGasDensity = this.fanPsychrometricService.getExampleData(this.settings);
     this.fanPsychrometricService.baseGasDensityData.next(exampleData);
     this.fanPsychrometricService.generateExample.next(true);
   }
 
-  btnResetData(){
+  btnResetData() {
     let defaultData: BaseGasDensity = this.fanPsychrometricService.getDefaultData(this.settings);
     this.fanPsychrometricService.baseGasDensityData.next(defaultData);
     this.fanPsychrometricService.resetData.next(true);

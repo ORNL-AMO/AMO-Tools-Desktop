@@ -6,6 +6,7 @@ import { CoolingTowerBasinService } from './cooling-tower-basin.service';
 import { WeatherBinsInput, WeatherBinsService, WeatherDataSourceView } from '../../utilities/weather-bins/weather-bins.service';
 import { CoolingTowerBasinTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { CoolingTowerBasinInput } from '../../../shared/models/chillers';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-cooling-tower-basin',
@@ -51,9 +52,11 @@ export class CoolingTowerBasinComponent implements OnInit {
   weatherDataSourceView: WeatherDataSourceView;
   
   constructor(private coolingTowerBasinService: CoolingTowerBasinService, private weatherBinService: WeatherBinsService,
-    private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
+    private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-cooling-tower-basin');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

@@ -5,6 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
 import { CondensingEconTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { CondensingEconomizerService } from './condensing-economizer.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-condensing-economizer',
@@ -39,9 +40,11 @@ export class CondensingEconomizerComponent implements OnInit {
   smallScreenTab: string = 'form';
 
   constructor(private condensingEconomizerService: CondensingEconomizerService,
-              private settingsDbService: SettingsDbService) { }
+              private settingsDbService: SettingsDbService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('calculator-steam-condensing-economizer');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

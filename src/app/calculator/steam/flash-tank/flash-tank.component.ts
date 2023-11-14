@@ -6,6 +6,7 @@ import { SteamService } from '../steam.service';
 import { Settings } from '../../../shared/models/settings';
 import { FlashTankService } from './flash-tank.service';
 import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-flash-tank-calculator',
@@ -34,9 +35,12 @@ export class FlashTankComponent implements OnInit {
   flashTankForm: FormGroup;
   input: FlashTankInput;
   results: FlashTankOutput;
-  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private flashTankService: FlashTankService) { }
+  constructor(private settingsDbService: SettingsDbService, 
+    private steamService: SteamService, private flashTankService: FlashTankService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-steam-flash-tank');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

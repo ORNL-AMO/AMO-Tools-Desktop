@@ -8,6 +8,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { FSAT } from '../../../shared/models/fans';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-motor-performance',
@@ -47,10 +48,12 @@ export class MotorPerformanceComponent implements OnInit {
   saving: boolean;
   containerHeight: number;
   smallScreenTab: string = 'form';
-  constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService, private calculatorDbService: CalculatorDbService) {
+  constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService, private calculatorDbService: CalculatorDbService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-motor-performance');
     this.calculatorDbService.isSaving = false;
     if (this.inAssessment) {
       this.getCalculator();
