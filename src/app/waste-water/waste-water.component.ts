@@ -76,7 +76,7 @@ export class WasteWaterComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
-    this.analyticsService.sendEvent('view-waste-water-assessment', undefined);
+    this.analyticsService.sendEvent('view-waste-water-assessment');
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));

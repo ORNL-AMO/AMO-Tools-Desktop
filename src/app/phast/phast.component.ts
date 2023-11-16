@@ -104,7 +104,7 @@ export class PhastComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('view-process-heating-assessment', undefined);
+    this.analyticsService.sendEvent('view-process-heating-assessment');
     this.egridService.processCSVData().then(result => {
       this.hasEgridDataInit = true;
     }).catch(err => {

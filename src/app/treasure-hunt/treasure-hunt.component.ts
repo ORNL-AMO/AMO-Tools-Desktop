@@ -74,7 +74,7 @@ export class TreasureHuntComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('view-treasure-hunt-assessment', undefined);
+    this.analyticsService.sendEvent('view-treasure-hunt-assessment');
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));

@@ -105,7 +105,7 @@ export class SsmtComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('view-steam-assessment', undefined);
+    this.analyticsService.sendEvent('view-steam-assessment');
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']))

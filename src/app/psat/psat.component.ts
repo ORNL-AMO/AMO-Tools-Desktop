@@ -109,7 +109,7 @@ export class PsatComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('view-pump-assessment', undefined);
+    this.analyticsService.sendEvent('view-pump-assessment');
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));

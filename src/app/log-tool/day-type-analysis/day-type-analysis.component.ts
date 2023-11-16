@@ -156,7 +156,7 @@ export class DayTypeAnalysisComponent implements OnInit {
     this.loadingSpinner = {show: true, msg: `Calculating Day Types. This may take a moment
     depending on the amount of data you have supplied.`};
     setTimeout(() => {
-      this.analyticsService.sendEvent('run-day-type-analysis', undefined);
+      this.analyticsService.sendEvent('run-day-type-analysis');
       this.logToolDataService.setLogToolDays();
       this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
       this.dayTypeAnalysisService.initDayTypes();

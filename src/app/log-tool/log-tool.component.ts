@@ -33,7 +33,7 @@ export class LogToolComponent implements OnInit {
      ) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('use-data-exporation', undefined);
+    this.analyticsService.sendEvent('use-data-exporation');
     this.activatedRoute.url.subscribe(url => {
       this.getContainerHeight();
     });

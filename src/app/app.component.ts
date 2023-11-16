@@ -20,7 +20,7 @@ export class AppComponent {
     if (environment.production) {
       // analytics handled through gatg() automatically manages sessions, visits, clicks, etc
       gtag('config', 'G-EEHE8GEBH4');
-      this.analyticsService.sendEvent('measur_app_open', undefined);
+      this.analyticsService.sendEvent('measur_app_open');
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
           let path: string = environment.production ? event.urlAfterRedirects : 'testing-web';
@@ -28,7 +28,7 @@ export class AppComponent {
           this.analyticsService.sendEvent('page_view', path);
         }
       });
-      
+
       //need to subscribe for events from other pieces of app.
       this.analyticsService.eventItem.subscribe(eventItem => {
         if (eventItem) {

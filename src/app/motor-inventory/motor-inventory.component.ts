@@ -54,7 +54,7 @@ export class MotorInventoryComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    this.analyticsService.sendEvent('view-motor-inventory', undefined);
+    this.analyticsService.sendEvent('view-motor-inventory');
     this.activatedRoute.params.subscribe(params => {
       let tmpItemId = Number(params['id']);
       this.motorInventoryItem = this.inventoryDbService.getById(tmpItemId);
