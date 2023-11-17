@@ -25,6 +25,16 @@
       <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="psat.modifications[exploreModIndex].psat.name"
         (input)="calculate()" />
     </div>
+    <form [formGroup]="modificationFieldDataForm" class="w-100 p-0">
+      <div class="form-group group-name">
+        <label for="implementationCosts">Implementation Costs</label>
+        <div class="input-group">
+          <input name="implementationCosts" type="number" step="any" class="form-control"
+            id="implementationCosts" formControlName="implementationCosts" (input)="calculate()">
+          <span class="units">$</span>
+        </div>
+      </div>
+    </form>
     <div class="checkbox">
       <label class="group-label" for="modifyCalculationMethod">
         <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')" [(ngModel)]="psat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity"

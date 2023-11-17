@@ -8,6 +8,16 @@
             <input name="modificatonName" type="text" id="modificatonName" class="form-control"
                 [(ngModel)]="modification.name" (input)="save()" />
         </div>
+        <form [formGroup]="modifyOperatingCostsForm" class="w-100 p-0">
+            <div class="form-group group-name">
+              <label for="implementationCosts">Implementation Costs</label>
+              <div class="input-group">
+                <input name="implementationCosts" type="number" step="any" class="form-control"
+                  id="implementationCosts" formControlName="implementationCosts" (input)="save()">
+                <span class="units">$</span>
+              </div>
+            </div>
+          </form>
         <app-explore-activated-sludge-form></app-explore-activated-sludge-form>
         <app-explore-aerator-form></app-explore-aerator-form>
     </div>

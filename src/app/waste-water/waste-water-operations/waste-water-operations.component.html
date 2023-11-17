@@ -90,4 +90,21 @@
       (emitUpdateCo2SavingsData)="updateCo2SavingsData($event)"
       ></app-assessment-co2-savings>
     </div>
+
+    <form [formGroup]="operationsForm" class="pl-3 pr-3" *ngIf="isModification">
+        <div class="form-group mt-4">
+            <label for="implementationCosts">Implementation Cost
+            </label>
+            <div class="input-group">
+                <input name="implementationCosts" min="0" type="number" step="any" class="form-control number-input-field"
+                    id="implementationCosts" (input)="saveOperations()" formControlName="implementationCosts"
+                    (focus)="focusField('implementationCosts')">
+                <span class="units input-group-addon">$</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="operationsForm.controls.implementationCosts.invalid && !operationsForm.controls.implementationCosts.pristine">
+                <span *ngIf="operationsForm.controls.implementationCosts.errors.min">Value must be greater than 0 $.</span>
+            </span>
+        </div>
+    </form>
 </div>

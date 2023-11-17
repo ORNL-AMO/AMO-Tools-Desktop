@@ -203,6 +203,34 @@
           </span>
         </th>
       </tr>
+      <tr>
+        <td>
+          Implementation Cost
+        </td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          &mdash;
+        </td>
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modification.fsat.implementationCosts">{{modification.fsat.implementationCosts|
+            number:'2.0-0'}}</span>
+          <span *ngIf="!modification.fsat.implementationCosts">&mdash;</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Payback Period (months)
+        </td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          &mdash;
+        </td>
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modification.fsat.implementationCosts">{{getPaybackPeriod(modification.fsat) |
+            sigFigs:'5'}}</span>
+          <span *ngIf="!modification.fsat.implementationCosts">0</span>
+        </td>
+      </tr>
       <!--  -->
       <tr>
         <th>Selected Energy Projects</th>

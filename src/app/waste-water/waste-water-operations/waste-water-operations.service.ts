@@ -12,7 +12,8 @@ export class WasteWaterOperationsService {
       MaxDays: [obj.MaxDays, [Validators.required, Validators.min(0)]],
       TimeIncrement: [obj.TimeIncrement, [Validators.required, Validators.min(0)]],
       operatingMonths: [obj.operatingMonths, [Validators.min(1), Validators.max(12)]],
-      EnergyCostUnit: [obj.EnergyCostUnit, [Validators.required, Validators.min(0)]]
+      EnergyCostUnit: [obj.EnergyCostUnit, [Validators.required, Validators.min(0)]],
+      implementationCosts: [obj.implementationCosts, [Validators.min(0)]]
     });
     return form;
   }
@@ -22,7 +23,8 @@ export class WasteWaterOperationsService {
       MaxDays: form.controls.MaxDays.value,
       TimeIncrement: form.controls.TimeIncrement.value,
       operatingMonths: form.controls.operatingMonths.value,
-      EnergyCostUnit: form.controls.EnergyCostUnit.value
+      EnergyCostUnit: form.controls.EnergyCostUnit.value,      
+      implementationCosts: form.controls.implementationCosts.value
     }
   }
 }

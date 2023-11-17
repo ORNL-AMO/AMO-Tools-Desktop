@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SSMT } from '../../../shared/models/steam/ssmt';
 import { SsmtService } from '../../ssmt.service';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-explore-opportunities-form',
@@ -22,9 +23,17 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   emitAddNewMod = new EventEmitter<boolean>();
 
   showSizeMargin: boolean;
-  constructor(private ssmtService: SsmtService) { }
+  modifyOperatingCostsForm: UntypedFormGroup;
+  constructor(private ssmtService: SsmtService, private formBuilder: UntypedFormBuilder) { }
 
   ngOnInit() {
+    this.initForms();
+  }
+
+  initForms() {
+    this.modifyOperatingCostsForm = this.formBuilder.group({
+      implementationCosts: [this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.implementationCosts],
+    });
   }
 
   ngOnDestroy() {
@@ -34,8 +43,19 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
 
-  save(newSSMT: SSMT) {
-    this.ssmt = newSSMT;
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {
+        this.initForms();
+      }
+    }
+  }
+
+  save(newSSMT?: SSMT) {
+    if(newSSMT){
+      this.ssmt = newSSMT;
+    }
+    this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.implementationCosts = this.modifyOperatingCostsForm.controls.implementationCosts.value;    
     this.emitSave.emit(this.ssmt);
   }
 

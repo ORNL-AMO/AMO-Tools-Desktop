@@ -8,6 +8,16 @@
       <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.name"
         (input)="save(ssmt)" />
     </div>
+    <form [formGroup]="modifyOperatingCostsForm" class="w-100 p-0">
+      <div class="form-group group-name">
+        <label for="implementationCosts">Implementation Costs</label>
+        <div class="input-group">
+          <input name="implementationCosts" type="number" step="any" class="form-control"
+            id="implementationCosts" formControlName="implementationCosts" (input)="save()">
+          <span class="units">$</span>
+        </div>
+      </div>
+    </form>
     <app-operations-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save($event)"></app-operations-form>
     <app-boiler-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save($event)"></app-boiler-form>
     <app-header-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save($event)"></app-header-form>
