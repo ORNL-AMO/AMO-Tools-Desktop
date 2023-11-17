@@ -40,37 +40,88 @@ export class AssessmentOpportunityService {
   }
 
   getResults(assessmentOpportunity: AssessmentOpportunity, settings: Settings): AssessmentOpportunityResults {
-    let baselineElectricityResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Electricity');
-    let modificationElectricityResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Electricity');
-    let electricityResults: AssessmentOpportunityResult = this.getAssessmentOpportunityResult(baselineElectricityResult, modificationElectricityResult);
+    let energyTypes: Set<string> =  new Set(assessmentOpportunity.baselineEnergyUseItems.map(energyItem => energyItem.type));
 
-    let baselineGasResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Gas');
-    let modificationGasResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Gas');
-    let gasResults: AssessmentOpportunityResult = this.getAssessmentOpportunityResult(baselineGasResult, modificationGasResult);
+    let totalCostSavings: number = 0;
+    let baselineElectricityResult: { energyUse: number, energyCost: number, numItems: number };
+    let modificationElectricityResult: { energyUse: number, energyCost: number, numItems: number };
+    let electricityResults: AssessmentOpportunityResult;
 
-    let baselineCompressedAirResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Compressed Air');
-    let modificationCompressedAirResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Compressed Air');
-    let compressedAirResults: AssessmentOpportunityResult = this.getAssessmentOpportunityResult(baselineCompressedAirResult, modificationCompressedAirResult);
+    let baselineGasResult: { energyUse: number, energyCost: number, numItems: number };
+    let modificationGasResult: { energyUse: number, energyCost: number, numItems: number };
+    let gasResults: AssessmentOpportunityResult;
 
-    let baselineOtherFuelResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Other Fuel');
-    let modificationOtherFuelResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Other Fuel');
-    let otherFuelResults: AssessmentOpportunityResult = this.getAssessmentOpportunityResult(baselineOtherFuelResult, modificationOtherFuelResult);
+    let baselineCompressedAirResult: { energyUse: number, energyCost: number, numItems: number };
+    let modificationCompressedAirResult: { energyUse: number, energyCost: number, numItems: number };
+    let compressedAirResults: AssessmentOpportunityResult;
 
-    let baselineSteamResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Steam');
-    let modificationSteamResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Steam');
-    let steamResults: AssessmentOpportunityResult = this.getAssessmentOpportunityResult(baselineSteamResult, modificationSteamResult);
+    let baselineOtherFuelResult: { energyUse: number, energyCost: number, numItems: number };
+    let modificationOtherFuelResult: { energyUse: number, energyCost: number, numItems: number };
+    let otherFuelResults: AssessmentOpportunityResult;
 
-    let baselineWaterResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Water');
-    let modificationWaterResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Water');
-    let waterResults: AssessmentOpportunityResult = this.getAssessmentOpportunityResult(baselineWaterResult, modificationWaterResult);
+    let baselineSteamResult: { energyUse: number, energyCost: number, numItems: number };
+    let modificationSteamResult: { energyUse: number, energyCost: number, numItems: number };
+    let steamResults: AssessmentOpportunityResult;
 
-    let baselineWasterWaterResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'WWT');
-    let modificationWasteWaterResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'WWT');
-    let wasteWaterResults: AssessmentOpportunityResult = this.getAssessmentOpportunityResult(baselineWasterWaterResult, modificationWasteWaterResult);
+    let baselineWaterResult: { energyUse: number, energyCost: number, numItems: number };
+    let modificationWaterResult: { energyUse: number, energyCost: number, numItems: number };
+    let waterResults: AssessmentOpportunityResult;
 
-    let totalCostSavings: number = electricityResults.energyCostSavings + gasResults.energyCostSavings + compressedAirResults.energyCostSavings + otherFuelResults.energyCostSavings + steamResults.energyCostSavings + waterResults.energyCostSavings + wasteWaterResults.energyCostSavings;
+    let baselineWasterWaterResult: { energyUse: number, energyCost: number, numItems: number };
+    let modificationWasteWaterResult: { energyUse: number, energyCost: number, numItems: number };
+    let wasteWaterResults: AssessmentOpportunityResult;
+
+    if (energyTypes.has('Electricity')) {
+      baselineElectricityResult = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Electricity');
+      modificationElectricityResult = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Electricity');
+      electricityResults = this.getAssessmentOpportunityResult(baselineElectricityResult, modificationElectricityResult);
+      totalCostSavings = electricityResults.energyCostSavings;
+    }
+
+    if (energyTypes.has('Gas')) {
+      baselineGasResult = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Gas');
+      modificationGasResult = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Gas');
+      gasResults = this.getAssessmentOpportunityResult(baselineGasResult, modificationGasResult);
+      totalCostSavings = gasResults.energyCostSavings;
+    }
+
+    if (energyTypes.has('Compressed Air')) {
+      baselineCompressedAirResult = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Compressed Air');
+      modificationCompressedAirResult = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Compressed Air');
+      compressedAirResults = this.getAssessmentOpportunityResult(baselineCompressedAirResult, modificationCompressedAirResult);
+      totalCostSavings = compressedAirResults.energyCostSavings;
+    }
+
+    if (energyTypes.has('Other Fuel')) {
+      baselineOtherFuelResult = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Other Fuel');
+      modificationOtherFuelResult = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Other Fuel');
+      otherFuelResults = this.getAssessmentOpportunityResult(baselineOtherFuelResult, modificationOtherFuelResult);
+      totalCostSavings = otherFuelResults.energyCostSavings;
+    }
+
+    if (energyTypes.has('Steam')) {
+      baselineSteamResult = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Steam');
+      modificationSteamResult = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Steam');
+      steamResults = this.getAssessmentOpportunityResult(baselineSteamResult, modificationSteamResult);
+      totalCostSavings = steamResults.energyCostSavings;
+    }
+
+    if (energyTypes.has('Water')) {
+      baselineWaterResult = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Water');
+      modificationWaterResult = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Water');
+      waterResults = this.getAssessmentOpportunityResult(baselineWaterResult, modificationWaterResult);
+      totalCostSavings = waterResults.energyCostSavings;
+    }
+
+    if (energyTypes.has('WWT')) {
+      baselineWasterWaterResult = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'WWT');
+      modificationWasteWaterResult = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'WWT');
+      wasteWaterResults = this.getAssessmentOpportunityResult(baselineWasterWaterResult, modificationWasteWaterResult);
+      totalCostSavings = wasteWaterResults.energyCostSavings;
+    }
+
     let totalImplementationCost: number = this.getOppSheetImplementationCost(assessmentOpportunity.opportunityCost);
-    
+
     return {
       electricityResults: electricityResults,
       gasResults: gasResults,

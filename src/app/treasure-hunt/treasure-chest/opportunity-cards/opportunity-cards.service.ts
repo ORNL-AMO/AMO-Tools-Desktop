@@ -193,7 +193,7 @@ export class OpportunityCardsService {
       let index: number = 0;
       assessmentOpportunities.forEach(opp => {
         let results: OpportunitySheetResults = this.assessmentOpportunityService.getResults(opp, settings);
-        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getOpportunitySheetSummary(opp, settings);
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getAssessmentOpportunitySummary(opp, settings);
         let energyData = this.getOpportunitySheetEnergySavings(results, currentEnergyUsage, settings);
         let cardData: OpportunityCardData = {
           implementationCost: opportunitySummary.totalCost,
@@ -244,7 +244,7 @@ export class OpportunityCardsService {
 
   getAssessmentOpportunityCardData(opportunity: AssessmentOpportunity, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     let results: AssessmentOpportunityResults = this.assessmentOpportunityService.getResults(opportunity, settings);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getOpportunitySheetSummary(opportunity, settings);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getAssessmentOpportunitySummary(opportunity, settings);
     let energyData = this.getOpportunitySheetEnergySavings(results, currentEnergyUsage, settings);
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
@@ -278,7 +278,7 @@ export class OpportunityCardsService {
     let percentSavings: Array<{ percent: number, label: string, baselineCost: number, modificationCost: number }> = new Array();
     let utilityTypes: Array<string> = new Array();
 
-    if (results.electricityResults.energySavings != 0) {
+    if (results.electricityResults && results.electricityResults.energySavings != 0) {
       annualEnergySavings.push({
         savings: results.electricityResults.energySavings,
         label: 'Electricity',
@@ -294,7 +294,7 @@ export class OpportunityCardsService {
       )
       utilityTypes.push('Electricity');
     };
-    if (results.gasResults.energySavings != 0) {
+    if (results.gasResults && results.gasResults.energySavings != 0) {
       let unit: string = 'MMBTu/yr';
       if (settings.unitsOfMeasure == 'Metric') {
         unit = 'MJ/yr';
@@ -314,7 +314,7 @@ export class OpportunityCardsService {
       )
       utilityTypes.push('Natural Gas');
     };
-    if (results.compressedAirResults.energySavings != 0) {
+    if (results.compressedAirResults && results.compressedAirResults.energySavings != 0) {
       let unit: string = 'SCF/yr';
       if (settings.unitsOfMeasure == 'Metric') {
         unit = 'm3/yr';
@@ -334,7 +334,7 @@ export class OpportunityCardsService {
       );
       utilityTypes.push('Compressed Air');
     };
-    if (results.otherFuelResults.energySavings != 0) {
+    if (results.otherFuelResults && results.otherFuelResults.energySavings != 0) {
       let unit: string = 'MMBTu/yr';
       if (settings.unitsOfMeasure == 'Metric') {
         unit = 'MJ/yr';
@@ -354,7 +354,7 @@ export class OpportunityCardsService {
       )
       utilityTypes.push('Other Fuel');
     };
-    if (results.steamResults.energySavings != 0) {
+    if (results.steamResults && results.steamResults.energySavings != 0) {
       let unit: string = 'klb/yr';
       if (settings.unitsOfMeasure == 'Metric') {
         unit = 'tonne/yr';
@@ -374,7 +374,7 @@ export class OpportunityCardsService {
       )
       utilityTypes.push('Steam');
     };
-    if (results.waterResults.energySavings != 0) {
+    if (results.waterResults && results.waterResults.energySavings != 0) {
       let unit: string = 'L/yr';
       if (settings.unitsOfMeasure == 'Metric') {
         unit = 'gal/yr';
@@ -395,7 +395,7 @@ export class OpportunityCardsService {
       utilityTypes.push('Water');
     };
 
-    if (results.wasteWaterResults.energySavings != 0) {
+    if (results.wasteWaterResults && results.wasteWaterResults.energySavings != 0) {
       let unit: string = 'L/yr';
       if (settings.unitsOfMeasure == 'Metric') {
         unit = 'gal/yr';
