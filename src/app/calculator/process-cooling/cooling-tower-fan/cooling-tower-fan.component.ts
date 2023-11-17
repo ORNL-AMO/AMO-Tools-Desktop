@@ -5,6 +5,7 @@ import { CoolingTowerFanInput } from '../../../shared/models/chillers';
 import { Settings } from '../../../shared/models/settings';
 import { CoolingTowerFanTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { CoolingTowerFanService } from './cooling-tower-fan.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-cooling-tower-fan',
@@ -40,9 +41,11 @@ export class CoolingTowerFanComponent implements OnInit {
   tabSelect: string = 'results';
   
   constructor(private coolingTowerFanService: CoolingTowerFanService,
-              private settingsDbService: SettingsDbService) { }
+              private settingsDbService: SettingsDbService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-PC-cooling-tower-fan');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

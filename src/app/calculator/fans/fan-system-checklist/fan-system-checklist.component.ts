@@ -6,6 +6,7 @@ import { FanSystemChecklistInput, FanSystemChecklistOutput } from '../../../shar
 import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
 import { FanSystemChecklistService } from './fan-system-checklist.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-fan-system-checklist',
@@ -43,9 +44,11 @@ export class FanSystemChecklistComponent implements OnInit {
   modificationDataSub: Subscription;
 
   constructor(private settingsDbService: SettingsDbService, 
-              private fanSystemChecklistService: FanSystemChecklistService) { }
+              private fanSystemChecklistService: FanSystemChecklistService,
+              private analyticsService: AnalyticsService) { }
 
     ngOnInit() {
+      this.analyticsService.sendEvent('calculator-FAN-system-checklist');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

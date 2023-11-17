@@ -5,6 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
 import { BagMethodService } from './bag-method.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-bag-method',
@@ -40,9 +41,11 @@ export class BagMethodComponent implements OnInit {
   showOperatingHoursModal: boolean = false;
   currentField: string = 'default';
   formWidth: number;
-  constructor(private standaloneService: StandaloneService, private bagMethodService: BagMethodService, private settingsDbService: SettingsDbService) { }
+  constructor(private standaloneService: StandaloneService, private bagMethodService: BagMethodService, private settingsDbService: SettingsDbService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-CA-bag-method');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

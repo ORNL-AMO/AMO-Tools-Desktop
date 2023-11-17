@@ -6,6 +6,7 @@ import {SteamService} from '../steam.service';
 import {TurbineInput} from '../../../shared/models/steam/steam-inputs';
 import {TurbineService} from './turbine.service';
 import {TurbineOutput} from '../../../shared/models/steam/steam-outputs';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-turbine-calculator',
@@ -38,10 +39,13 @@ export class TurbineComponent implements OnInit {
 
   warning: string;
 
-  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private turbineService: TurbineService) {
+  constructor(private settingsDbService: SettingsDbService, 
+    private steamService: SteamService, private turbineService: TurbineService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-STEAM-turbine');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

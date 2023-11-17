@@ -6,6 +6,7 @@ import { WasteHeatInput } from '../../../shared/models/phast/wasteHeat';
 import { Settings } from '../../../shared/models/settings';
 import { Treasure, WasteHeatTreasureHunt } from '../../../shared/models/treasure-hunt';
 import { WasteHeatService } from './waste-heat.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-waste-heat',
@@ -44,9 +45,11 @@ export class WasteHeatComponent implements OnInit {
   headerHeight: number;
   
   constructor(private wasteHeatService: WasteHeatService,
-              private settingsDbService: SettingsDbService) { }
+              private settingsDbService: SettingsDbService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('calculator-PH-waste-heat');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

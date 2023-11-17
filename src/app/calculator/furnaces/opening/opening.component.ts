@@ -7,6 +7,7 @@ import { Settings } from '../../../shared/models/settings';
 import { OpeningLossTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { FlueGasService } from '../flue-gas/flue-gas.service';
 import { OpeningService } from './opening.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-opening',
@@ -49,9 +50,11 @@ export class OpeningComponent implements OnInit {
   smallScreenTab: string = 'baseline';
 
   constructor(private settingsDbService: SettingsDbService, private flueGasService: FlueGasService,
-              private openingService: OpeningService) { }
+              private openingService: OpeningService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-PH-opening');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

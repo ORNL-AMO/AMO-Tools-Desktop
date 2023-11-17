@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-receiver-tank',
@@ -66,10 +67,12 @@ export class ReceiverTankComponent implements OnInit {
   currentFieldSub: Subscription;
   constructor(public receiverTankService: ReceiverTankService, 
     private calculatorDbService: CalculatorDbService,
-    private settingsDbService: SettingsDbService, private router: Router) {
+    private settingsDbService: SettingsDbService, private router: Router,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-CA-receiver-tank');
     this.calculatorDbService.isSaving = false;
     if (this.calcType == undefined) {
       this.setCalcType();

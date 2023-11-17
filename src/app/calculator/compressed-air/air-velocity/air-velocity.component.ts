@@ -7,6 +7,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import {Assessment} from '../../../shared/models/assessment';
 import {Calculator} from '../../../shared/models/calculators';
 import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 
 @Component({
@@ -43,9 +44,11 @@ export class AirVelocityComponent implements OnInit {
   assessmentCalculator: Calculator;
 
   constructor(private airVelocityService: AirVelocityService, private standaloneService: StandaloneService, private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService) { }
+    private calculatorDbService: CalculatorDbService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-CA-air-velocity');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

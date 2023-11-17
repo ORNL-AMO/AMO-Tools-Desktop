@@ -5,6 +5,7 @@ import { FormGroup } from '../../../../../node_modules/@angular/forms';
 import { FlueGasByVolume, FlueGasByMass, FlueGasByVolumeSuiteResults } from '../../../shared/models/phast/losses/flueGas';
 import { StackLossService } from './stack-loss.service';
 import { Subscription } from 'rxjs';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-stack-loss-calculator',
@@ -44,10 +45,13 @@ export class StackLossComponent implements OnInit {
   isModalOpen: boolean = false;
   smallScreenTab: string = 'form';
 
-  constructor(private settingsDbService: SettingsDbService, private stackLossService: StackLossService, private cd: ChangeDetectorRef) {
+  constructor(private settingsDbService: SettingsDbService,
+     private stackLossService: StackLossService, private cd: ChangeDetectorRef,
+     private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-STEAM-stack-loss');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

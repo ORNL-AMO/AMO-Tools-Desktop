@@ -6,6 +6,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
 import { AltitudeCorrectionService } from './altitude-correction.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-altitude-correction',
@@ -40,9 +41,11 @@ export class AltitudeCorrectionComponent implements OnInit {
 
   constructor(private settingsDbService: SettingsDbService, 
     private calculatorDbService: CalculatorDbService, 
-    private altitudeCorrectionService: AltitudeCorrectionService) { }
+    private altitudeCorrectionService: AltitudeCorrectionService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-UTIL-altitude-correction');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

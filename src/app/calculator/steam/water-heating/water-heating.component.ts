@@ -5,6 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
 import { Treasure, WaterHeatingTreasureHunt } from '../../../shared/models/treasure-hunt';
 import { WaterHeatingService } from './water-heating.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-water-heating',
@@ -38,9 +39,11 @@ export class WaterHeatingComponent implements OnInit {
   smallScreenTab: string = 'form';
   
   constructor(private waterHeatingService: WaterHeatingService,
-              private settingsDbService: SettingsDbService) { }
+              private settingsDbService: SettingsDbService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('calculator-STEAM-water-heating');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

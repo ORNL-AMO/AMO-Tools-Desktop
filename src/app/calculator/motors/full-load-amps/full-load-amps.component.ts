@@ -6,6 +6,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
 import { FullLoadAmpsService } from './full-load-amps.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-full-load-amps',
@@ -46,9 +47,11 @@ export class FullLoadAmpsComponent implements OnInit {
 
   constructor(private settingsDbService: SettingsDbService, 
     private calculatorDbService: CalculatorDbService, 
-    private fullLoadAmpsService: FullLoadAmpsService) { }
+    private fullLoadAmpsService: FullLoadAmpsService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-MOTOR-full-load-amps');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

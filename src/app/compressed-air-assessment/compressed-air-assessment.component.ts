@@ -19,6 +19,7 @@ import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { InventoryService } from './inventory/inventory.service';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
 import { DayTypeSetupService } from './end-uses/day-type-setup-form/day-type-setup.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-compressed-air-assessment',
@@ -70,9 +71,11 @@ export class CompressedAirAssessmentComponent implements OnInit {
     private egridService: EGridService,
     private endUseService: EndUsesService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
-    private exploreOpportunitiesService: ExploreOpportunitiesService, private assessmentService: AssessmentService) { }
+    private exploreOpportunitiesService: ExploreOpportunitiesService, private assessmentService: AssessmentService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-compressed-air-assessment', undefined);
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));

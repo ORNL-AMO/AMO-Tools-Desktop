@@ -8,6 +8,7 @@ import { Output, EventEmitter } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
  
 
 @Component({
@@ -48,10 +49,12 @@ export class SystemCapacityComponent implements OnInit {
   currentField: string = 'default';
 
   constructor(private standaloneService: StandaloneService,
-     private calculatorDbService: CalculatorDbService, private systemCapacityService: SystemCapacityService, private settingsDbService: SettingsDbService) {
+     private calculatorDbService: CalculatorDbService, private systemCapacityService: SystemCapacityService, private settingsDbService: SettingsDbService,
+     private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-CA-system-capacity');
     this.calculatorDbService.isSaving = false;
     this.outputs = this.systemCapacityService.getDefaultEmptyOutput();
     if (!this.settings) {

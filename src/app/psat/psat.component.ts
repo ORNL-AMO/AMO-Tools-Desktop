@@ -22,6 +22,7 @@ import { PumpOperationsService } from './pump-operations/pump-operations.service
 import { PsatIntegrationService } from '../shared/connected-inventory/psat-integration.service';
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
 import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-psat',
@@ -103,10 +104,12 @@ export class PsatComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private egridService: EGridService,
     private helperFunctionService: HelperFunctionsService,
-    private settingsService: SettingsService) {
+    private settingsService: SettingsService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-pump-assessment');
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { UnitConverterService } from './unit-converter.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-unit-converter',
@@ -140,9 +141,12 @@ export class UnitConverterComponent implements OnInit {
     }
   ];
 
-  constructor(private convertUnitsService: ConvertUnitsService, private unitConverterService: UnitConverterService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, 
+    private unitConverterService: UnitConverterService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-UTIL-unit-converter');
     this.initMeasures();
   }
 

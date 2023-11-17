@@ -5,6 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { CoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
 import { Settings } from '../../../shared/models/settings';
 import { CoolingService } from './cooling.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-cooling',
@@ -46,9 +47,11 @@ export class CoolingComponent implements OnInit {
   smallScreenTab: string = 'baseline';
 
   constructor(private settingsDbService: SettingsDbService, 
-              private coolingService: CoolingService) { }
+              private coolingService: CoolingService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-PH-cooling');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

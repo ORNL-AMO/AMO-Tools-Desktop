@@ -6,6 +6,7 @@ import {SteamService} from '../steam.service';
 import {DeaeratorInput} from '../../../shared/models/steam/steam-inputs';
 import {DeaeratorService} from './deaerator.service';
 import {DeaeratorOutput} from '../../../shared/models/steam/steam-outputs';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-deaerator-calculator',
@@ -34,10 +35,13 @@ export class DeaeratorComponent implements OnInit {
   input: DeaeratorInput;
   results: DeaeratorOutput;
 
-  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private deaeratorService: DeaeratorService) {
+  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, 
+    private deaeratorService: DeaeratorService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-STEAM-deaerator');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

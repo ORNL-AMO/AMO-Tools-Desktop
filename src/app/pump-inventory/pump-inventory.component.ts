@@ -13,6 +13,7 @@ import { PsatIntegrationService } from '../shared/connected-inventory/psat-integ
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
 import { ConnectedInventoryData } from '../shared/connected-inventory/integrations';
 import { environment } from '../../environments/environment';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 declare const packageJson;
 @Component({
@@ -51,9 +52,11 @@ export class PumpInventoryComponent implements OnInit {
     private motorIntegrationService: MotorIntegrationService,
     private integrationStateService: IntegrationStateService,
     private psatIntegrationService: PsatIntegrationService,
-    private cd: ChangeDetectorRef) { }
+    private cd: ChangeDetectorRef,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-pump-inventory');
     this.activatedRoute.params.subscribe(params => {
       let tmpItemId = Number(params['id']);
       this.pumpInventoryItem = this.inventoryDbService.getById(tmpItemId);

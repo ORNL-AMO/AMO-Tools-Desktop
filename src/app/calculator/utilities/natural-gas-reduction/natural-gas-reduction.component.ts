@@ -5,6 +5,7 @@ import { NaturalGasReductionService } from './natural-gas-reduction.service';
 import { NaturalGasReductionResults, NaturalGasReductionData } from '../../../shared/models/standalone';
 import { NaturalGasReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../../shared/models/operations';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-natural-gas-reduction',
@@ -46,9 +47,12 @@ export class NaturalGasReductionComponent implements OnInit {
   naturalGasReductionResults: NaturalGasReductionResults;
   baselineData: Array<NaturalGasReductionData>;
   modificationData: Array<NaturalGasReductionData>;
-  constructor(private settingsDbService: SettingsDbService, private naturalGasReductionService: NaturalGasReductionService) { }
+  constructor(private settingsDbService: SettingsDbService, 
+    private naturalGasReductionService: NaturalGasReductionService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-UTIL-natural-gas-reduction');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

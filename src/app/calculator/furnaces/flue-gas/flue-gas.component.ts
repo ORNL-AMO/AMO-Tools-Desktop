@@ -7,6 +7,7 @@ import { Settings } from '../../../shared/models/settings';
 import { FlueGasTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { FlueGasEnergyData } from './energy-form.service';
 import { FlueGasService } from './flue-gas.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-flue-gas',
@@ -56,9 +57,11 @@ export class FlueGasComponent implements OnInit {
 
   constructor(private settingsDbService: SettingsDbService, 
               private cd: ChangeDetectorRef,
-              private flueGasService: FlueGasService) { }
+              private flueGasService: FlueGasService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-PH-flue-gas');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

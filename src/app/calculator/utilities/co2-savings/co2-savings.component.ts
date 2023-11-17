@@ -4,6 +4,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Co2SavingsService, Co2SavingsData } from './co2-savings.service';
 import * as _ from 'lodash';
 import { EGridService } from '../../../shared/helper-services/e-grid.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-co2-savings',
@@ -44,12 +45,14 @@ export class Co2SavingsComponent implements OnInit {
 
   smallScreenTab: string = 'baseline';
 
-  constructor(private settingsDbService: SettingsDbService, 
+  constructor(private settingsDbService: SettingsDbService,
     private egridService: EGridService,
-    private co2SavingsService: Co2SavingsService) { }
+    private co2SavingsService: Co2SavingsService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-      this.egridService.getAllSubRegions();
+    this.analyticsService.sendEvent('calculator-UTIL-co2-savings');
+    this.egridService.getAllSubRegions();
     this.settings = this.settingsDbService.globalSettings;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;

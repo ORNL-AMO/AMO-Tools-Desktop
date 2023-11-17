@@ -10,6 +10,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
  
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-air-leak',
@@ -56,9 +57,11 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   }
 
   constructor(private airLeakService: AirLeakService, private calculatorDbService: CalculatorDbService,
-              private settingsDbService: SettingsDbService) { }
+              private settingsDbService: SettingsDbService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('calculator-CA-air-leak');
     this.calculatorDbService.isSaving = false;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;

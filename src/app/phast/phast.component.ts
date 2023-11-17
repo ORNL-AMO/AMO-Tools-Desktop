@@ -19,6 +19,7 @@ import { SavingsOpportunity } from '../shared/models/explore-opps';
 import { ConvertPhastService } from './convert-phast.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-phast',
@@ -98,10 +99,12 @@ export class PhastComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
     private settingsService: SettingsService,
-    private egridService: EGridService) {
+    private egridService: EGridService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-process-heating-assessment');
     this.egridService.processCSVData().then(result => {
       this.hasEgridDataInit = true;
     }).catch(err => {
