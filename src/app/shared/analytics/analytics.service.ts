@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { AnalyticsDataIdbService } from '../../indexedDb/analytics-data-idb.service';
 import { v4 as uuidv4 } from 'uuid';
 import { ElectronService } from '../../electron/electron.service';
 import { AnalyticsEventString } from './analyticsEventTypes';
+declare let gtag: Function;
 
 @Injectable()
 export class AnalyticsService {
@@ -18,11 +19,8 @@ export class AnalyticsService {
     })
   };
 
-  eventItem: BehaviorSubject<{eventName: AnalyticsEventString, path?: string}>;
-
   constructor(private httpClient: HttpClient, private analyticsDataIdbService: AnalyticsDataIdbService,
     private electronService: ElectronService) {
-    this.eventItem = new BehaviorSubject<{eventName: AnalyticsEventString, path?: string}>(undefined);
     this.analyticsSessionId = uuidv4();
   }
 
@@ -144,8 +142,13 @@ export class AnalyticsService {
   sendEvent(eventName: AnalyticsEventString, path?: string) {
     if (environment.production) {
       if (!this.electronService.isElectron) {
-        this.eventItem.next({eventName: eventName, path: path})
-
+        //gtag handles a bunch of the session related content automatically
+        let eventParams: EventParameters = {
+          page_path: path,
+          measur_platform: 'measur-web',
+          session_id: undefined
+        }
+        gtag('event', eventName, eventParams);
       } else if (path) {
         this.sendAnalyticsPageView(path)
       } else {
