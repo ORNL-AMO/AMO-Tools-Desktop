@@ -59,7 +59,7 @@ export class BoilerBlowdownRateService {
     if (!settings.waterCost){
       waterCost = 0.0025;
     }
-    let steamFlow: number = this.convertUnitsService.value(1000).from('klb').to(settings.steamMassFlowMeasurement);
+    let steamFlow: number = this.convertUnitsService.value(100).from('klb').to(settings.steamMassFlowMeasurement);
     steamFlow = this.convertUnitsService.roundVal(steamFlow, 0);
     let steamTemp: number = this.convertUnitsService.value(500).from('F').to(settings.steamTemperatureMeasurement);
     steamTemp = this.convertUnitsService.roundVal(steamTemp, 0);
@@ -85,7 +85,7 @@ export class BoilerBlowdownRateService {
     }
     let modificationInputs: BoilerBlowdownRateInputs = JSON.parse(JSON.stringify(baselineInputs));
     modificationInputs.blowdownConductivity = 6000;
-    modificationInputs.feedwaterConductivity = 200;
+    modificationInputs.feedwaterConductivity = 400;
     return { baseline: baselineInputs, modification: modificationInputs };
   }
 
