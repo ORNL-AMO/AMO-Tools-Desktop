@@ -60,14 +60,14 @@
             <div class="p-2 flex-grow-1">
               <label class="group-label">Baseline</label>
               <app-energy-use-form [(energyItems)]="assessmentOpportunity.baselineEnergyUseItems" [settings]="settings"
-              [isAssessmentOpportunity]="true" (emitSave)="saveBaseline($event)" (emitChangeField)="changeField($event)">
+               (emitSave)="saveBaseline($event)" (emitChangeField)="changeField($event)">
               </app-energy-use-form>
             </div>
             <!-- Modifications Start -->
             <div class="p-2 flex-grow-1">
               <label class="group-label">Modification</label>
               <app-energy-use-form *ngIf="assessmentOpportunity.modificationEnergyUseItems.length != 0"
-              [isAssessmentOpportunity]="true" [allowCreateModifiedEnergy]="allowCreateModifiedEnergy" [(energyItems)]="assessmentOpportunity.modificationEnergyUseItems" [settings]="settings"
+               [(energyItems)]="assessmentOpportunity.modificationEnergyUseItems" [settings]="settings"
                 (emitSave)="saveModification($event)" (emitChangeField)="changeField($event)">
               </app-energy-use-form>
               <div class="p-3 no-data" (click)="addModification()"

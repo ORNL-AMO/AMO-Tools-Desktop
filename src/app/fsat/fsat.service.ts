@@ -272,6 +272,7 @@ export class FsatService {
       annualEnergy: baselineOutputs.annualEnergy,
       annualCost: baselineOutputs.annualCost,
       co2EmissionsOutput: baselineOutputs.co2EmissionsOutput,
+      energyThDisplayUnits: 'kWh'
     };
 
     let baselineEnergy: EnergyUseItem = {

@@ -125,6 +125,7 @@ export class PsatService {
       annualEnergy: baselineOutputs.annual_energy,
       annualCost: baselineOutputs.annual_cost,
       co2EmissionsOutput: baselineOutputs.co2EmissionsOutput,
+      energyThDisplayUnits: 'kWh'
     };
 
     let baselineEnergy: EnergyUseItem = {

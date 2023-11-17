@@ -4,7 +4,7 @@
     <label class="pl-2">Utility Consumption</label>
   </div>
   <div class="form-group" *ngFor="let energyItem of energyItems; let index = index;">
-    <select class="form-control" [(ngModel)]="energyItem.type" name="{{'type_'+index}}" (change)="save()" [disabled]="isAssessmentOpportunity && !allowCreateModifiedEnergy"
+    <select class="form-control" [(ngModel)]="energyItem.type" name="{{'type_'+index}}" (change)="save()"np
       (focus)="focusField('energyUseType')">
       <option [ngValue]="'Electricity'">Electricity</option>
       <option [ngValue]="'Gas'">Gas</option>
@@ -15,15 +15,15 @@
       <option [ngValue]="'WWT'">WWT</option>
     </select>
     <div class="input-group pl-2">
-      <input type="number" class="form-control" [(ngModel)]="energyItem.amount" name="{{'amount_'+index}}" [disabled]="isAssessmentOpportunity && !allowCreateModifiedEnergy"
+      <input type="number" class="form-control" [(ngModel)]="energyItem.amount" name="{{'amount_'+index}}"
         (input)="save()" (focus)="focusField('energyUseAmount')">
       <span class="input-group-addon units" [innerHTML]="getEnergyUnit(energyItem.type) + '/yr'"></span>
-      <span class="input-group-addon units remove-item" *ngIf="!isAssessmentOpportunity || allowCreateModifiedEnergy" (click)="removeEnergyItem(index)">
+      <span class="input-group-addon units remove-item" (click)="removeEnergyItem(index)">
         <span class="fa fa-times"></span>
       </span>
     </div>
   </div>
-  <div *ngIf="!isAssessmentOpportunity || allowCreateModifiedEnergy" class="w-100 text-center p-2">
+  <div  class="w-100 text-center p-2">
     <a class="click-link small" (click)="addEnergyField()">+Add Energy Use</a>
   </div>
 </form>

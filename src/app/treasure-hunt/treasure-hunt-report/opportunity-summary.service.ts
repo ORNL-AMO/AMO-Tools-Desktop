@@ -96,7 +96,6 @@ export class OpportunitySummaryService {
     opportunitySummaries = this.getOpportunitySheetSummaries(treasureHunt.opportunitySheets, opportunitySummaries, settings);
     opportunitySummaries = this.getAssessmentOpportunitySummaries(treasureHunt.assessmentOpportunities, opportunitySummaries, settings);
 
-
     return opportunitySummaries;
   }
 
@@ -371,61 +370,58 @@ export class OpportunitySummaryService {
       }
 
       let treasureHuntOpportunityResults: TreasureHuntOpportunityResults;
-      for (let key in oppSheetResults) {
-        if (oppSheetResults[key].baselineItems != 0 || oppSheetResults[key].modificationItems != 0 && oppSheetResults[key].baselineItems != undefined) {
-          numEnergyTypes = numEnergyTypes + 1;
+      for (let energyResultProperty in oppSheetResults) {
+        let isEnergyResultType: boolean = !['totalEnergySavings', 'totalCostSavings', 'totalImplementationCost'].includes(energyResultProperty);
+        if (oppSheetResults[energyResultProperty] && isEnergyResultType) {
+          if (oppSheetResults[energyResultProperty].baselineItems != 0 || oppSheetResults[energyResultProperty].modificationItems != 0 && oppSheetResults[energyResultProperty].baselineItems != undefined) {
+            numEnergyTypes += 1;
+          }
         }
       }
-      //electricity
-      if (oppSheetResults.electricityResults.baselineItems != 0 || oppSheetResults.electricityResults.modificationItems != 0) {
+
+      if (oppSheetResults.electricityResults && (oppSheetResults.electricityResults.baselineItems != 0 || oppSheetResults.electricityResults.modificationItems != 0)) {
         energyTypeLabel = 'Electricity';
         totalEnergySavings = totalEnergySavings + oppSheetResults.electricityResults.energySavings;
         treasureHuntOpportunityResults = this.setResultsFromOppSheet(oppSheetResults.electricityResults, energyTypeLabel);
         let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(opportunityMetaData, treasureHuntOpportunityResults);
         mixedIndividualSummaries.push(oppSummary);
       }
-      //compressed air
-      if (oppSheetResults.compressedAirResults.baselineItems != 0 || oppSheetResults.compressedAirResults.modificationItems != 0) {
+      if (oppSheetResults.compressedAirResults && (oppSheetResults.compressedAirResults.baselineItems != 0 || oppSheetResults.compressedAirResults.modificationItems != 0)) {
         energyTypeLabel = 'Compressed Air';
         totalEnergySavings = totalEnergySavings + oppSheetResults.compressedAirResults.energySavings;
         treasureHuntOpportunityResults = this.setResultsFromOppSheet(oppSheetResults.compressedAirResults, energyTypeLabel);
         let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(opportunityMetaData, treasureHuntOpportunityResults);
         mixedIndividualSummaries.push(oppSummary);
       }
-      //natural gas
-      if (oppSheetResults.gasResults.baselineItems != 0 || oppSheetResults.gasResults.modificationItems != 0) {
+      if (oppSheetResults.gasResults && (oppSheetResults.gasResults.baselineItems != 0 || oppSheetResults.gasResults.modificationItems != 0)) {
         energyTypeLabel = 'Natural Gas';
         totalEnergySavings = totalEnergySavings + oppSheetResults.gasResults.energySavings;
         treasureHuntOpportunityResults = this.setResultsFromOppSheet(oppSheetResults.gasResults, energyTypeLabel);
         let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(opportunityMetaData, treasureHuntOpportunityResults);
         mixedIndividualSummaries.push(oppSummary);
       }
-      //water
-      if (oppSheetResults.waterResults.baselineItems != 0 || oppSheetResults.waterResults.modificationItems != 0) {
+      if (oppSheetResults.waterResults && (oppSheetResults.waterResults.baselineItems != 0 || oppSheetResults.waterResults.modificationItems != 0)) {
         energyTypeLabel = 'Water';
         totalEnergySavings = totalEnergySavings + oppSheetResults.waterResults.energySavings;
         treasureHuntOpportunityResults = this.setResultsFromOppSheet(oppSheetResults.waterResults, energyTypeLabel);
         let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(opportunityMetaData, treasureHuntOpportunityResults);
         mixedIndividualSummaries.push(oppSummary);
       }
-      //waste water
-      if (oppSheetResults.wasteWaterResults.baselineItems != 0 || oppSheetResults.wasteWaterResults.modificationItems != 0) {
+      if (oppSheetResults.wasteWaterResults && (oppSheetResults.wasteWaterResults.baselineItems != 0 || oppSheetResults.wasteWaterResults.modificationItems != 0)) {
         energyTypeLabel = 'Waste Water';
         totalEnergySavings = totalEnergySavings + oppSheetResults.wasteWaterResults.energySavings;
         treasureHuntOpportunityResults = this.setResultsFromOppSheet(oppSheetResults.wasteWaterResults, energyTypeLabel);
         let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(opportunityMetaData, treasureHuntOpportunityResults);
         mixedIndividualSummaries.push(oppSummary);
       }
-      //steam
-      if (oppSheetResults.steamResults.baselineItems != 0 || oppSheetResults.steamResults.modificationItems != 0) {
+      if (oppSheetResults.steamResults && (oppSheetResults.steamResults.baselineItems != 0 || oppSheetResults.steamResults.modificationItems != 0)) {
         energyTypeLabel = 'Steam';
         totalEnergySavings = totalEnergySavings + oppSheetResults.steamResults.energySavings;
         treasureHuntOpportunityResults = this.setResultsFromOppSheet(oppSheetResults.steamResults, energyTypeLabel);
         let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(opportunityMetaData, treasureHuntOpportunityResults);
         mixedIndividualSummaries.push(oppSummary);
       }
-      //other fuel
-      if (oppSheetResults.otherFuelResults.baselineItems != 0 || oppSheetResults.otherFuelResults.modificationItems != 0) {
+      if (oppSheetResults.otherFuelResults && (oppSheetResults.otherFuelResults.baselineItems != 0 || oppSheetResults.otherFuelResults.modificationItems != 0)) {
         energyTypeLabel = 'Other Fuel';
         totalEnergySavings = totalEnergySavings + oppSheetResults.otherFuelResults.energySavings;
         treasureHuntOpportunityResults = this.setResultsFromOppSheet(oppSheetResults.otherFuelResults, energyTypeLabel);
@@ -433,7 +429,6 @@ export class OpportunitySummaryService {
         mixedIndividualSummaries.push(oppSummary);
       }
       let oppSummary: OpportunitySummary;
-      //if only one energy source in opp sheet
       if (numEnergyTypes == 1) {
         oppSummary = mixedIndividualSummaries[0];
       } else if (numEnergyTypes > 1) {
@@ -445,7 +440,7 @@ export class OpportunitySummaryService {
         oppSummary = this.getNewOpportunitySummary(opportunityMetaData, treasureHuntOpportunityResults, mixedIndividualSummaries);
       } else {
         //no energy savings
-        treasureHuntOpportunityResults.utilityType = 'None';
+        treasureHuntOpportunityResults.utilityType = '';
         treasureHuntOpportunityResults.costSavings = 0;
         treasureHuntOpportunityResults.energySavings = 0;
         treasureHuntOpportunityResults.baselineCost = 0;
@@ -453,6 +448,7 @@ export class OpportunitySummaryService {
         opportunityMetaData.opportunityCost = undefined;
         oppSummary = this.getNewOpportunitySummary(opportunityMetaData, treasureHuntOpportunityResults);
       }
+      oppSummary.isAssessmentOpportunity = true;
       return oppSummary;
     }
   
