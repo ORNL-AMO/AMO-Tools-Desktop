@@ -429,6 +429,20 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.assessmentOpportunities">
+                        <label>Assessment Opportunities</label>
+                        <ul>
+                            <li
+                                *ngFor="let assessmentOpportunity of exportOpportunities.assessmentOpportunities; let index = index;">
+                                <span *ngIf="!assessmentOpportunity.name">
+                                    Assessment Opportunity #{{index+1}}
+                                </span>
+                                <span *ngIf="assessmentOpportunity.name">
+                                    {{assessmentOpportunity.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-between">

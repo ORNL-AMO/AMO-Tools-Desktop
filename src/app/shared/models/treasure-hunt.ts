@@ -584,6 +584,7 @@ export interface OpportunitiesPaybackDetails {
 export interface ImportExportOpportunities {
     lightingReplacements?: Array<LightingReplacementTreasureHunt>;
     opportunitySheets?: Array<OpportunitySheet>;
+    assessmentOpportunities?: Array<AssessmentOpportunity>;
     replaceExistingMotors?: Array<ReplaceExistingMotorTreasureHunt>;
     motorDrives?: Array<MotorDriveInputsTreasureHunt>;
     naturalGasReductions?: Array<NaturalGasReductionTreasureHunt>;
