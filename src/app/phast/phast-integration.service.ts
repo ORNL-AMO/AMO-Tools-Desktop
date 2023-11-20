@@ -26,9 +26,13 @@ export class PhastIntegrationService {
     
     let energyUsed: EnergyUseReportData = this.phastResultService.getEnergyUseReportData(phast, baselinePhastResults, settings);
     let baselineExecutiveSummary = this.executiveSummaryService.getSummary(phast, false, settings, phast);
-    let baselineEnergies: EnergyUseItem[] = this.setEnergyUseItems(energyUsed, baselinePhastResults, baselineExecutiveSummary, settings, treasureHuntSettings);
+    let baselineEnergies: EnergyUseItem[] = this.setEnergyUseItems(phast, energyUsed, baselinePhastResults, baselineExecutiveSummary, settings, treasureHuntSettings);
     let {energyValue, treasureHuntUnit} = this.checkConvertEnergy(baselinePhastResults.grossHeatInput, settings, treasureHuntSettings);
-    
+
+    if (settings.furnaceType !== 'Electric Arc Furnace (EAF)') {
+      energyValue = energyValue * phast.operatingHours.hoursPerYear;
+    }
+
     energyOptions.baseline = {
       name: phast.name,
       annualEnergy: energyValue,
@@ -45,8 +49,12 @@ export class PhastIntegrationService {
         let modificationPhastResults: PhastResults = this.phastResultService.getResults(modification.phast, settings);
         let energyUsed: EnergyUseReportData = this.phastResultService.getEnergyUseReportData(modification.phast, modificationPhastResults, settings);
         let modificationExecutiveSummary: ExecutiveSummary = this.executiveSummaryService.getSummary(modification.phast, true, settings, phast);
-        let modificationEnergyUseItems: EnergyUseItem[] = this.setEnergyUseItems(energyUsed, modificationPhastResults, modificationExecutiveSummary, settings, treasureHuntSettings);
+        let modificationEnergyUseItems: EnergyUseItem[] = this.setEnergyUseItems(modification.phast, energyUsed, modificationPhastResults, modificationExecutiveSummary, settings, treasureHuntSettings);
         let {energyValue, treasureHuntUnit} = this.checkConvertEnergy(modificationPhastResults.grossHeatInput, settings, treasureHuntSettings);
+
+        if (settings.furnaceType !== 'Electric Arc Furnace (EAF)') {
+          energyValue = energyValue * phast.operatingHours.hoursPerYear;
+        }
 
         energyOptions.modifications.push({
           name: modification.phast.name,
@@ -87,72 +95,91 @@ export class PhastIntegrationService {
       // EAF and electro - phast grossHeatInput results already in kWh
       treasureHuntUnit = 'kWh';
     }
+
+    treasureHuntUnit = treasureHuntUnit +'/yr'
     return {energyValue, treasureHuntUnit};
   }
 
-  setEnergyUseItems(energyUsed: EnergyUseReportData, phastResults: PhastResults, executiveSummary: ExecutiveSummary, settings: Settings, treasureHuntSettings: Settings) {
+  setEnergyUseItems(phast: PHAST, energyUsed: EnergyUseReportData, phastResults: PhastResults, executiveSummary: ExecutiveSummary, settings: Settings, treasureHuntSettings: Settings) {
     let energies: EnergyUseItem[] = [];
-    
     if (settings.energySourceType === 'Electricity') {
       if (energyUsed.fuelEnergyUsed) {
+        let annualFuelEnergyUsed: number = energyUsed.fuelEnergyUsed * phast.operatingHours.hoursPerYear;
+        let annualGasCost: number;
+
+        if(settings.furnaceType !== 'Electric Arc Furnace (EAF)') {
+          // fuelEnergyUsed result is already in MMBtu in EAF
+          let treasureHuntUnit: string = treasureHuntSettings.unitsOfMeasure === "Imperial"? 'MMBtu' : 'GJ';
+          annualFuelEnergyUsed = this.convertUnitsService.convertValue(annualFuelEnergyUsed, 'kWh', treasureHuntUnit);
+          annualGasCost = executiveSummary.annualTotalFuelCost;
+        } else {
+          annualGasCost = executiveSummary.annualNaturalGasCost;
+        }
 
         let energyUseItem: EnergyUseItem = {
           type: 'Gas',
-          amount: this.checkConvertEnergy(energyUsed.fuelEnergyUsed, settings, treasureHuntSettings).energyValue,
-          integratedEnergyCost: executiveSummary.annualNaturalGasCost,
+          amount: this.checkConvertEnergy(annualFuelEnergyUsed, settings, treasureHuntSettings).energyValue,
+          integratedEnergyCost: annualGasCost,
           integratedEmissionRate: phastResults.co2EmissionsOutput.fuelEmissionOutput
         }
         energies.push(energyUseItem);
       }
+
+      let annualElectricityEnergyUsed: number = phastResults.electricalHeatDelivered * phast.operatingHours.hoursPerYear;
       // units in kW only
       let electricity: EnergyUseItem = {
         type: 'Electricity',
-        amount: phastResults.electricalHeatDelivered,
+        amount: annualElectricityEnergyUsed,
         integratedEnergyCost: executiveSummary.annualElectricityCost,
         integratedEmissionRate: phastResults.co2EmissionsOutput.electricityEmissionOutput
       };
-        
       if (settings.furnaceType === 'Electric Arc Furnace (EAF)') {
-        electricity.amount = phastResults.hourlyEAFResults.electricEnergyUsed;
+        let annualEAFElectricityEnergyUsed: number = phastResults.hourlyEAFResults.electricEnergyUsed * phast.operatingHours.hoursPerYear;
+        electricity.amount = annualEAFElectricityEnergyUsed;
 
+        let annualCoalCarbonEnergyUsed: number = phastResults.hourlyEAFResults.coalCarbonUsed * phast.operatingHours.hoursPerYear;
         let coalCarbon: EnergyUseItem = {
           type: 'Other Fuel',
-          amount: this.checkConvertEnergy(phastResults.hourlyEAFResults.coalCarbonUsed, settings, treasureHuntSettings).energyValue,
+          amount: this.checkConvertEnergy(annualCoalCarbonEnergyUsed, settings, treasureHuntSettings).energyValue,
           integratedEnergyCost: executiveSummary.annualCarbonCoalCost,
           integratedEmissionRate: phastResults.co2EmissionsOutput.coalCarbonEmissionsOutput
         };
 
+        let annualElectrodeEnergyUsed: number = phastResults.hourlyEAFResults.electrodeEnergyUsed * phast.operatingHours.hoursPerYear;
         let electrodeEnergy: EnergyUseItem = {
           type: 'Other Fuel',
-          amount: this.checkConvertEnergy(phastResults.hourlyEAFResults.electrodeEnergyUsed, settings, treasureHuntSettings).energyValue,
+          amount: this.checkConvertEnergy(annualElectrodeEnergyUsed, settings, treasureHuntSettings).energyValue,
           integratedEnergyCost: executiveSummary.annualElectrodeCost,
           integratedEmissionRate: phastResults.co2EmissionsOutput.electrodeEmissionsOutput
         };
-        
+        let annualOtherFuelEnergyUsed: number = phastResults.hourlyEAFResults.otherFuelUsed * phast.operatingHours.hoursPerYear;
         let otherFuel: EnergyUseItem = {
           type: 'Other Fuel',
-          amount: this.checkConvertEnergy(phastResults.hourlyEAFResults.otherFuelUsed, settings, treasureHuntSettings).energyValue,
+          amount: this.checkConvertEnergy(annualOtherFuelEnergyUsed, settings, treasureHuntSettings).energyValue,
           integratedEnergyCost: executiveSummary.annualOtherFuelCost,
           integratedEmissionRate: phastResults.co2EmissionsOutput.otherFuelEmissionsOutput
         };
         energies.push(coalCarbon, electrodeEnergy, otherFuel);
-      } 
+      }
       energies.push(electricity);
 
     } else if (settings.energySourceType === 'Steam') {
       // in steam assesment energy used is === grossHeatInput ... 
+      let annualSteamEnergyUsed: number = energyUsed.steamEnergyUsed * phast.operatingHours.hoursPerYear;
+
       let steam: EnergyUseItem = {
-        type: 'Steam',
-        amount: this.checkConvertEnergy(energyUsed.steamEnergyUsed, settings, treasureHuntSettings).energyValue,
+        type: 'Gas',
+        amount: this.checkConvertEnergy(annualSteamEnergyUsed, settings, treasureHuntSettings).energyValue,
         integratedEnergyCost: executiveSummary.annualCost,
-        integratedEmissionRate: undefined
+        integratedEmissionRate: phastResults.co2EmissionsOutput.totalEmissionOutput
       };
       energies.push(steam);
     } else {
+      let annualFuelEnergyUsed: number = energyUsed.fuelEnergyUsed * phast.operatingHours.hoursPerYear;
 
       let energyUseItem: EnergyUseItem = {
         type: 'Gas',
-        amount: this.checkConvertEnergy(energyUsed.fuelEnergyUsed, settings, treasureHuntSettings).energyValue,
+        amount: this.checkConvertEnergy(annualFuelEnergyUsed, settings, treasureHuntSettings).energyValue,
         integratedEnergyCost: executiveSummary.annualCost,
         // * if fuel-fired natural gas - PHAST results doesn't itemize emissions output by energy type
         integratedEmissionRate: phastResults.co2EmissionsOutput.totalEmissionOutput,
@@ -163,5 +190,4 @@ export class PhastIntegrationService {
     return energies;
   }
 
-  
 }
