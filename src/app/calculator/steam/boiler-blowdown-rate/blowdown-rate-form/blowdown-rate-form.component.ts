@@ -39,7 +39,8 @@ export class BlowdownRateFormComponent implements OnInit {
   operatingHoursSubscription: Subscription;
   operatingHours: OperatingHours;
   showOperatingHoursModal: boolean = false;
-  idString: string;
+  idString: string;  
+  showBoilerEfficiencyModal: boolean = false;
   constructor(private boilerBlowdownRateService: BoilerBlowdownRateService) { }
 
   ngOnInit() {
@@ -217,6 +218,21 @@ export class BlowdownRateFormComponent implements OnInit {
     let treasureHuntFuelCost = this.boilerBlowdownRateService.getTreasureHuntFuelCost(this.operationsForm.controls.boilerUtilityType.value, this.settings);
     this.operationsForm.patchValue({fuelCost: treasureHuntFuelCost});
     this.saveOperations();    
+  }
+
+  openBoilerEfficiencyModal() {
+    this.showBoilerEfficiencyModal = true;
+    this.boilerBlowdownRateService.modalOpen.next(this.showBoilerEfficiencyModal);
+  }
+
+  closeBoilerEfficiencyModal() {
+    this.showBoilerEfficiencyModal = false;
+    this.boilerBlowdownRateService.modalOpen.next(this.showBoilerEfficiencyModal)
+  }
+
+  setBoilerEfficiencyAndClose(efficiency: number) {
+    this.boilerForm.controls.steamFlow.patchValue(efficiency);
+    this.closeBoilerEfficiencyModal();
   }
   
 }

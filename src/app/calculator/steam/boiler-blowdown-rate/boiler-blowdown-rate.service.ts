@@ -17,6 +17,7 @@ export class BoilerBlowdownRateService {
   showBoiler: BehaviorSubject<boolean>;
   showOperations: BehaviorSubject<boolean>;
   operatingHours: BehaviorSubject<OperatingHours>;
+  modalOpen: BehaviorSubject<boolean>;
   constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) {
     this.baselineInputs = new BehaviorSubject<BoilerBlowdownRateInputs>(undefined);
     this.modificationInputs = new BehaviorSubject<BoilerBlowdownRateInputs>(undefined);
@@ -25,6 +26,7 @@ export class BoilerBlowdownRateService {
     this.showBoiler = new BehaviorSubject<boolean>(false);
     this.showOperations = new BehaviorSubject<boolean>(false);
     this.operatingHours = new BehaviorSubject<OperatingHours>(undefined);
+    this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
   getDefaultInputs(settings: Settings): BoilerBlowdownRateInputs {
