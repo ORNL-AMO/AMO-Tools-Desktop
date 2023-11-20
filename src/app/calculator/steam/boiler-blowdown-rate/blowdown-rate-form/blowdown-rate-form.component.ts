@@ -231,7 +231,7 @@ export class BlowdownRateFormComponent implements OnInit {
   }
 
   setBoilerEfficiencyAndClose(efficiency: number) {
-    this.boilerForm.controls.steamFlow.patchValue(efficiency);
+    this.boilerForm.controls.boilerEfficiency.patchValue(efficiency);
     this.closeBoilerEfficiencyModal();
   }
   

@@ -41,7 +41,7 @@
     <div class="panel-group">
         <!-- baseline -->
         <div class="calculator-panel-container px-3" (click)="setBaselineSelected()"
-            [ngClass]="{'disabled': baselineSelected == false, 'small-screen-tab': smallScreenTab === 'baseline'}"
+            [ngClass]="{'modal-open': isModalOpen == true, 'disabled': baselineSelected == false, 'small-screen-tab': smallScreenTab === 'baseline'}"
             [ngStyle]="{'height.px': containerHeight}">
             <div class="header mx-2 mb-4">
                 <h3>Baseline</h3>
@@ -67,7 +67,7 @@
         <!-- modification -->
         <div class="calculator-panel-container px-3 panel-column modification" (click)="setModificationSelected()"
             [ngStyle]="{'height.px': containerHeight}"
-            [ngClass]="{'disabled': baselineSelected == true, 'small-screen-tab': smallScreenTab === 'modification'}">
+            [ngClass]="{'modal-open': isModalOpen == true, 'disabled': baselineSelected == true, 'small-screen-tab': smallScreenTab === 'modification'}">
             <!-- modification header -->
             <div class="header mx-2 mb-4">
                 <h3>Modification</h3>

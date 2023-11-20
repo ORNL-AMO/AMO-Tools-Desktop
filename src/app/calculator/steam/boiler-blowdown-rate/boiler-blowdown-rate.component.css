@@ -95,3 +95,7 @@
 .btn-edit-name:hover {
     cursor: pointer;
 }
+
+.modal-open{
+    z-index: initial !important;
+}
