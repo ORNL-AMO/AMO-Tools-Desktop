@@ -16,6 +16,7 @@ import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/as
 import { IntegratedAssessment, IntegratedEnergyOptions, ModificationEnergyOption } from '../shared/assessment-integration/assessment-integration.service';
 import { EnergyUseItem } from '../shared/models/treasure-hunt';
 import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
+import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 
 
 @Injectable()
@@ -384,7 +385,10 @@ export class FsatService {
       fsatInputs.cO2SavingsData.electricityUse = fsatOutputs.annualEnergy;
       fsatOutputs.co2EmissionsOutput = this.assessmentCo2Service.getCo2EmissionsResult(fsatInputs.cO2SavingsData, settings);
     } else {
-      fsatOutputs.co2EmissionsOutput = 0;
+      let co2SavingsData: Co2SavingsData = this.assessmentCo2Service.getCo2SavingsDataFromSettingsObject(settings);
+      fsatInputs.cO2SavingsData = co2SavingsData;
+      fsatInputs.cO2SavingsData.electricityUse = fsatOutputs.annualEnergy;
+      fsatOutputs.co2EmissionsOutput = this.assessmentCo2Service.getCo2EmissionsResult(fsatInputs.cO2SavingsData, settings);
     }
     return fsatOutputs;
   }
