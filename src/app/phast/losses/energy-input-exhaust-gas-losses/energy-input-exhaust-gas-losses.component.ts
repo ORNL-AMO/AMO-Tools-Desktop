@@ -51,6 +51,15 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+    this.energyExhaustGasOutput = {
+      fuelHeatDelivered: 0,
+      exhaustGasLosses: 0,
+      availableHeat: 0,
+      electricalEfficiency: 0,
+      electricalHeaterLosses: 0,
+      phastElectricalHeatDelivered: 0,
+      phastEnergyInputTotal: 0
+    }
     if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
