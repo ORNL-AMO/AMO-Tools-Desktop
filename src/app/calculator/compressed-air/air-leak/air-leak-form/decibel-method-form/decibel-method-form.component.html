@@ -25,7 +25,7 @@
             <input name="decibels" class="form-control" type="number" step="any"
               formControlName="decibels" id="decibels" onfocus="this.select();"
               (input)="save()"
-              (focus)="changeField('supplyPressure')">
+              (focus)="changeField('leakDecibels')">
               <span class="input-group-addon units">Db</span>
               <span class="alert-danger pull-right small"
               *ngIf="decibelsMethodForm.controls.decibels.invalid && !decibelsMethodForm.controls.decibels.pristine">
@@ -38,7 +38,7 @@
     
     <div class=" pt-1">
         <label class="group-label">
-          Estimated Free Air Flow Table
+          Estimated Free Air Flow Table <span class="small">(Table for Interpolation)</span>
         </label>
         <div class="form-group d-flex justify-content-end">
           <label class="text-center">
