@@ -371,4 +371,61 @@
       </table>
     </div>
   </div>
+  <div class="my-2" *ngIf="currentField == 'linePressure'">
+    <h6>
+      Line Pressure
+      <small class="text-muted">
+        <br>
+        The pressure that is delivered at the leak site by the distribution piping.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'leakDecibels'">
+    <h6>
+      Leak Decibels
+      <small class="text-muted">
+        <br>
+        Audible volume of the leak read by the leak detector (in decibels).
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'pressureA' || currentField == 'pressureB'">
+    <h6>
+      Pressures
+      <small class="text-muted">
+        <br>
+        This calculator works by using linear interpolation when the measurement lies between two points in the leak detector
+        manual. A table with ranges of line pressures and leak volume can be found in the leak detector's user manual. Enter
+        values from the table for the line pressure below and above the system.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'decibelRatingA' || currentField == 'decibelRatingB'">
+    <h6>
+      Decibel Ratings
+      <small class="text-muted">
+        <br>
+        This calculator works by using linear interpolation when the measurement lies between two points in the leak detector
+        manual. A table with ranges of line pressures and leak volume can be found in the leak detector's user manual. Enter
+        values from the table for the decibel reading below and above what was found by the leak detector.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'firstFlowA' || currentField == 'secondFlowA' || currentField == 'firstFlowB' || currentField == 'secondFlowB'">
+    <h6>
+      Air Flows
+      <small class="text-muted">
+        <br>
+        This calculator works by using linear interpolation when the measurement lies between two points in the leak detector
+        manual. A table with ranges of line pressures and leak volume can be found in the leak detector's user manual. Enter
+        values from the table for the air flow for the decibel ratings and pressures above and below those for the system.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
 </div>
