@@ -40,6 +40,8 @@ export class BoilerBlowdownRateComponent implements OnInit {
   headerHeight: number;
   containerHeight: number;
   smallScreenTab: string = 'baseline';
+  isModalOpen: boolean;
+  modalOpenSub: Subscription;
   constructor(private boilerBlowdownRateService: BoilerBlowdownRateService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
@@ -71,6 +73,7 @@ export class BoilerBlowdownRateComponent implements OnInit {
     }
     this.baselineSub.unsubscribe();
     this.modificationSub.unsubscribe();
+    this.modalOpenSub.unsubscribe();
   }
 
   initData() {
@@ -96,6 +99,10 @@ export class BoilerBlowdownRateComponent implements OnInit {
       } else {
         this.modificationExists = false;
       }
+    });
+
+    this.modalOpenSub = this.boilerBlowdownRateService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
     });
   }
 
