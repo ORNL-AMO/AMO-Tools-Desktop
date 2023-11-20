@@ -9,6 +9,7 @@ import { PreAssessmentService } from './pre-assessment.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { DirectoryDashboardService } from '../../../dashboard/directory-dashboard/directory-dashboard.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-pre-assessment',
@@ -59,9 +60,11 @@ export class PreAssessmentComponent implements OnInit {
   type: string = 'furnace';
   saving: boolean;
   constructor(private preAssessmentService: PreAssessmentService, private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService, private directoryDashboardService: DirectoryDashboardService) { }
+    private calculatorDbService: CalculatorDbService, private directoryDashboardService: DirectoryDashboardService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-UTIL-pre-assessment');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       if (this.inModal) {

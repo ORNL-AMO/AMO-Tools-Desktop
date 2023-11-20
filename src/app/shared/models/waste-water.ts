@@ -13,7 +13,8 @@ export interface WasteWaterOperations {
     MaxDays: number,
     TimeIncrement?: number,
     operatingMonths: number,
-    EnergyCostUnit: number
+    EnergyCostUnit: number,
+    implementationCosts?: number
 }
 
 export interface SystemBasics {

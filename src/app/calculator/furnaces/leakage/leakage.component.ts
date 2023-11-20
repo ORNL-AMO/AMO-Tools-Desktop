@@ -7,6 +7,7 @@ import { Settings } from '../../../shared/models/settings';
 import { LeakageLossTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { FlueGasService } from '../flue-gas/flue-gas.service';
 import { LeakageService } from './leakage.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-leakage',
@@ -50,9 +51,11 @@ export class LeakageComponent implements OnInit {
   smallScreenTab: string = 'baseline';
 
   constructor(private settingsDbService: SettingsDbService, private flueGasService: FlueGasService, 
-              private leakageService: LeakageService) { }
+              private leakageService: LeakageService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-PH-leakage');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

@@ -9,6 +9,7 @@ import { LogToolDbService } from '../log-tool-db.service';
 import { VisualizeService } from '../visualize/visualize.service';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { LogToolService } from '../log-tool.service';
+import { AnalyticsService } from '../../shared/analytics/analytics.service';
 @Component({
   selector: 'app-day-type-analysis',
   templateUrl: './day-type-analysis.component.html',
@@ -49,7 +50,8 @@ export class DayTypeAnalysisComponent implements OnInit {
     private logToolService: LogToolService,
     private visualizeService: VisualizeService,
     private logToolDataService: LogToolDataService, 
-    private logToolDbService: LogToolDbService) { }
+    private logToolDbService: LogToolDbService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
     this.initForm();
@@ -154,6 +156,7 @@ export class DayTypeAnalysisComponent implements OnInit {
     this.loadingSpinner = {show: true, msg: `Calculating Day Types. This may take a moment
     depending on the amount of data you have supplied.`};
     setTimeout(() => {
+      this.analyticsService.sendEvent('run-day-type-analysis');
       this.logToolDataService.setLogToolDays();
       this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
       this.dayTypeAnalysisService.initDayTypes();

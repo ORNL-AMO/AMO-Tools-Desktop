@@ -6,6 +6,7 @@ import {SteamService} from '../steam.service';
 import {HeaderService} from './header.service';
 import {Settings} from '../../../shared/models/settings';
 import {HeaderOutput} from '../../../shared/models/steam/steam-outputs';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-header-calculator',
@@ -37,10 +38,13 @@ export class HeaderComponent implements OnInit {
   numInletOptions: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   inletThermoQuantity: number = 0;
 
-  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private headerService: HeaderService) {
+  constructor(private settingsDbService: SettingsDbService, 
+    private steamService: SteamService, private headerService: HeaderService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-STEAM-header');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

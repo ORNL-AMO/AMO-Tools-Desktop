@@ -103,7 +103,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="bold">Annual Energy (MWh)</td>
+                                <td class="bold">Annual Energy ({{integratedAssessment.energyOptions.baseline.energyThDisplayUnits}})</td>
                                 <td>
                                     {{integratedAssessment.energyOptions.baseline.annualEnergy | number:'2.0-0'}}</td>
                                 <td *ngFor="let modification of integratedAssessment.energyOptions.modifications;"
@@ -162,7 +162,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="bold">Annual Energy (MWh)</td>
+                            <td class="bold">Annual Energy ({{existingIntegrationData.energyOptions.baseline.energyThDisplayUnits}})</td>
                             <td>
                                 {{existingIntegrationData.energyOptions.baseline.annualEnergy | number:'2.0-0'}}</td>
                             <td *ngFor="let modification of existingIntegrationData.energyOptions.modifications;">

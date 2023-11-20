@@ -103,8 +103,7 @@ export class PumpsSuiteApiService {
     let flowRate = psatInput.flow_rate;
     let head = psatInput.head;
     let loadEstimationMethod = this.suiteApiHelperService.getLoadEstimationMethod(psatInput.load_estimation_method);
-    let motorPower = psatInput.motor_field_power;
-    // TODO motorAmps null for sys setup
+    let motorPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.motor_field_power);
     let motorAmps = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.motor_field_current);
     let voltage = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.motor_field_voltage);
 

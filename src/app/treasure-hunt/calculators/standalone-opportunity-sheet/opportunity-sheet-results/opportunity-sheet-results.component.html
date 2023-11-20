@@ -8,26 +8,29 @@
       <td class="bold text-center energy-item">Modification</td>
       <td class="bold text-center energy-item">Savings</td>
     </tr>
-    <!--electricity-->
-    <tr
-      *ngIf="opportunitySheetResults.electricityResults.baselineEnergyUse || opportunitySheetResults.electricityResults.modificationEnergyUse">
-      <td colspan="4" class="bold">Electricity</td>
-    </tr>
-    <tr
+    
+    <ng-container *ngIf="opportunitySheetResults.electricityResults">
+        <tr
+        *ngIf="opportunitySheetResults.electricityResults.baselineEnergyUse || opportunitySheetResults.electricityResults.modificationEnergyUse">
+        <td colspan="4" class="bold">Electricity</td>
+      </tr>
+      <tr
       *ngIf="opportunitySheetResults.electricityResults.baselineEnergyUse || opportunitySheetResults.electricityResults.modificationEnergyUse">
       <td class="pl-3">Utility Use</td>
-      <td>{{opportunitySheetResults.electricityResults.baselineEnergyUse | number:'1.0-0'}}</td>
-      <td>{{opportunitySheetResults.electricityResults.modificationEnergyUse | number:'1.0-0'}}</td>
-      <td>{{opportunitySheetResults.electricityResults.energySavings | number:'1.0-0'}}</td>
-    </tr>
-    <tr
-      *ngIf="opportunitySheetResults.electricityResults.baselineEnergyUse || opportunitySheetResults.electricityResults.modificationEnergyUse">
-      <td class="pl-3">Utility Costs</td>
-      <td>{{opportunitySheetResults.electricityResults.baselineEnergyCost | currency: 'USD': 'symbol': '1.0-0'}}</td>
-      <td>{{opportunitySheetResults.electricityResults.modificationEnergyCost | currency: 'USD': 'symbol': '1.0-0'}}</td>
-      <td>{{opportunitySheetResults.electricityResults.energyCostSavings | currency: 'USD': 'symbol': '1.0-0'}}</td>
-    </tr>
-    <!--gas-->
+        <td>{{opportunitySheetResults.electricityResults.baselineEnergyUse | number:'1.0-0'}}</td>
+        <td>{{opportunitySheetResults.electricityResults.modificationEnergyUse | number:'1.0-0'}}</td>
+        <td>{{opportunitySheetResults.electricityResults.energySavings | number:'1.0-0'}}</td>
+      </tr>
+      <tr
+        *ngIf="opportunitySheetResults.electricityResults.baselineEnergyUse || opportunitySheetResults.electricityResults.modificationEnergyUse">
+        <td class="pl-3">Utility Costs</td>
+        <td>{{opportunitySheetResults.electricityResults.baselineEnergyCost | currency: 'USD': 'symbol': '1.0-0'}}</td>
+        <td>{{opportunitySheetResults.electricityResults.modificationEnergyCost | currency: 'USD': 'symbol': '1.0-0'}}</td>
+        <td>{{opportunitySheetResults.electricityResults.energyCostSavings | currency: 'USD': 'symbol': '1.0-0'}}</td>
+      </tr>
+  </ng-container>
+
+    <ng-container *ngIf="opportunitySheetResults.gasResults">
     <tr
       *ngIf="opportunitySheetResults.gasResults.baselineEnergyUse || opportunitySheetResults.gasResults.modificationEnergyUse">
       <td colspan="4" class="bold">Natural Gas</td>
@@ -46,7 +49,9 @@
       <td>{{opportunitySheetResults.gasResults.modificationEnergyCost | currency: 'USD': 'symbol': '1.0-0'}}</td>
       <td>{{opportunitySheetResults.gasResults.energyCostSavings | currency: 'USD': 'symbol': '1.0-0'}}</td>
     </tr>
-    <!--Compressed Air-->
+  </ng-container>
+    
+    <ng-container *ngIf="opportunitySheetResults.compressedAirResults">
     <tr
       *ngIf="opportunitySheetResults.compressedAirResults.baselineEnergyUse || opportunitySheetResults.compressedAirResults.modificationEnergyUse">
       <td colspan="4" class="bold">Compressed Air</td>
@@ -65,7 +70,10 @@
       <td>{{opportunitySheetResults.compressedAirResults.modificationEnergyCost | currency: 'USD': 'symbol': '1.0-0'}}</td>
       <td>{{opportunitySheetResults.compressedAirResults.energyCostSavings | currency: 'USD': 'symbol': '1.0-0'}}</td>
     </tr>
-    <!--Other Fuel-->
+  </ng-container>
+
+   
+    <ng-container *ngIf="opportunitySheetResults.otherFuelResults">
     <tr
       *ngIf="opportunitySheetResults.otherFuelResults.baselineEnergyUse || opportunitySheetResults.otherFuelResults.modificationEnergyUse">
       <td colspan="4" class="bold">Other Gas</td>
@@ -84,7 +92,9 @@
       <td>{{opportunitySheetResults.otherFuelResults.modificationEnergyCost | currency:'USD': 'symbol': '1.0-0'}}</td>
       <td>{{opportunitySheetResults.otherFuelResults.energyCostSavings | currency:'USD': 'symbol': '1.0-0'}}</td>
     </tr>
-    <!--Steam-->
+  </ng-container>
+    
+    <ng-container *ngIf="opportunitySheetResults.steamResults">
     <tr
       *ngIf="opportunitySheetResults.steamResults.baselineEnergyUse || opportunitySheetResults.steamResults.modificationEnergyUse">
       <td colspan="4" class="bold">Steam</td>
@@ -103,7 +113,10 @@
       <td>{{opportunitySheetResults.steamResults.modificationEnergyCost | currency:'USD': 'symbol': '1.0-0'}}</td>
       <td>{{opportunitySheetResults.steamResults.energyCostSavings | currency:'USD': 'symbol': '1.0-0'}}</td>
     </tr>
-    <!--Water-->
+  </ng-container>
+
+    
+    <ng-container *ngIf="opportunitySheetResults.waterResults">
     <tr
       *ngIf="opportunitySheetResults.waterResults.baselineEnergyUse || opportunitySheetResults.waterResults.modificationEnergyUse">
       <td colspan="4" class="bold">Water</td>
@@ -122,7 +135,10 @@
       <td>{{opportunitySheetResults.waterResults.modificationEnergyCost | currency:'USD': 'symbol': '1.0-0'}}</td>
       <td>{{opportunitySheetResults.waterResults.energyCostSavings | currency:'USD': 'symbol': '1.0-0'}}</td>
     </tr>
-    <!--Waste Water-->
+  </ng-container>
+
+
+    <ng-container *ngIf="opportunitySheetResults.wasteWaterResults">
     <tr
       *ngIf="opportunitySheetResults.wasteWaterResults.baselineEnergyUse || opportunitySheetResults.wasteWaterResults.modificationEnergyUse">
       <td colspan="4" class="bold">Wastewater</td>
@@ -141,6 +157,8 @@
       <td>{{opportunitySheetResults.wasteWaterResults.modificationEnergyCost | currency:'USD': 'symbol': '1.0-0'}}</td>
       <td>{{opportunitySheetResults.wasteWaterResults.energyCostSavings | currency:'USD': 'symbol': '1.0-0'}}</td>
     </tr>
+    </ng-container>
+
     <tr>
       <td class="bold" colspan="3">Total Utility Cost Savings</td>
       <td>{{opportunitySheetResults.totalCostSavings | currency:'USD': 'symbol': '1.0-0'}}</td>

@@ -10,7 +10,7 @@ import { ExploreOpeningFormComponent } from './explore-phast-opportunities-form/
 import { ExploreOperationsFormComponent } from './explore-phast-opportunities-form/explore-operations-form/explore-operations-form.component';
 import { ExploreFlueGasFormComponent } from './explore-phast-opportunities-form/explore-flue-gas-form/explore-flue-gas-form.component';
 import { ExploreSystemEfficiencyFormComponent } from './explore-phast-opportunities-form/explore-system-efficiency-form/explore-system-efficiency-form.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LossesModule } from '../losses/losses.module';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ExploreSlagFormComponent } from './explore-phast-opportunities-form/explore-slag-form/explore-slag-form.component';
@@ -30,7 +30,8 @@ import { PhastSankeyModule } from '../../shared/phast-sankey/phast-sankey.module
     OperatingHoursModalModule,
     ToastModule,
     SharedPipesModule,
-    PhastSankeyModule
+    PhastSankeyModule,    
+    ReactiveFormsModule
   ],
   declarations: [
     ExplorePhastOpportunitiesFormComponent,

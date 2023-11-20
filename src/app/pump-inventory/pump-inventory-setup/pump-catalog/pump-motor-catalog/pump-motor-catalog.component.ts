@@ -44,15 +44,11 @@ export class PumpMotorCatalogComponent implements OnInit {
     private motorIntegrationService: MotorIntegrationService,
     private pumpMotorCatalogService: PumpMotorCatalogService) { }
 
-  ngOnInit(): void {
-    this.setInventorySelectOptions();
+  async ngOnInit() {
     this.motorEfficiencyClasses = motorEfficiencyConstants;
+   
     this.settingsSub = this.pumpInventoryService.settings.subscribe(val => {
       this.settings = val;
-    });
-
-    this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
-      this.handleConnectedInventoryEvents(connectedInventoryData);
     });
 
     this.selectedPumpItemSub = this.pumpCatalogService.selectedPumpItem.subscribe(selectedPump => {
@@ -61,12 +57,20 @@ export class PumpMotorCatalogComponent implements OnInit {
       }
     });
     this.displayOptions = this.pumpInventoryService.pumpInventoryData.getValue()?.displayOptions.pumpMotorPropertiesOptions;
+    await this.initConnectedInventory();
   }
 
   ngOnDestroy() {
     this.selectedPumpItemSub.unsubscribe();
     this.settingsSub.unsubscribe();
     this.connectedInventoryDataSub.unsubscribe();
+  }
+
+  async initConnectedInventory() {
+    await this.setInventorySelectOptions();
+    this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
+      this.handleConnectedInventoryEvents(connectedInventoryData);
+    });
   }
 
   async setInventorySelectOptions() {

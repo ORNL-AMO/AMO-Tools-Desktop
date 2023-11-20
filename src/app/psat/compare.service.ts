@@ -21,9 +21,9 @@ export class CompareService {
     this.totalEmissionOutputRateDifferent = new BehaviorSubject<boolean>(false);
   }
 
-  setCompareVals(psat: PSAT, selectedModIndex: number) {
+  setCompareVals(psat: PSAT, selectedModIndex?: number) {
     this.baselinePSAT = psat;
-    if (psat.modifications) {
+    if (psat.modifications && selectedModIndex !== undefined) {
       if (psat.modifications.length != 0) {
         this.selectedModification.next(psat.modifications[selectedModIndex].psat);
         this.modifiedPSAT = this.selectedModification.value;

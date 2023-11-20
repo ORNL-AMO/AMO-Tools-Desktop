@@ -9,6 +9,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { PsatService } from '../../../psat/psat.service';
 import { FSAT } from '../../../shared/models/fans';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-nema-energy-efficiency',
@@ -49,9 +50,12 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   calculator: Calculator;
   tefcValue: number;
 
-  constructor(private settingsDbService: SettingsDbService, private psatService: PsatService, private nemaEnergyEfficiencyService: NemaEnergyEfficiencyService, private calculatorDbService: CalculatorDbService) { }
+  constructor(private settingsDbService: SettingsDbService, private psatService: PsatService, private nemaEnergyEfficiencyService: NemaEnergyEfficiencyService, 
+    private calculatorDbService: CalculatorDbService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-MOTOR-nema-energy-efficiency');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

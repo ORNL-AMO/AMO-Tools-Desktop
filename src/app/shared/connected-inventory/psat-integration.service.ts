@@ -286,7 +286,7 @@ export class PsatIntegrationService {
       this.integrationStateService.connectedAssessmentState.next(this.integrationStateService.getEmptyIntegrationState());
       await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
       let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
-      this.assessmentDbService.setAll(allAssessments);
+      await this.assessmentDbService.setAll(allAssessments);
     }
   }
 
@@ -357,7 +357,7 @@ export class PsatIntegrationService {
       motorInventoryItem.motorInventoryData.departments.find(department => {
         if (department.id === connectedItem.departmentId) {
           department.catalog.map(motorItem => {
-            if (motorItem.id === connectedItem.id) {
+            if (motorItem.connectedItems && motorItem.id === connectedItem.id) {
               // connected items undefied
               let connectedPumpIndex = motorItem.connectedItems.findIndex(item => item.assessmentId === connectedItem.assessmentId);
               motorItem.connectedItems.splice(connectedPumpIndex, 1);

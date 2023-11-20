@@ -74,11 +74,12 @@ export class PumpFluidComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    let hasConnectedPumpItem: boolean = this.psat.connectedItem && this.psat.connectedItem.inventoryType === 'pump' && this.integrationStateService.connectedInventoryData.getValue()?.isConnected;
     if (changes.selected && !changes.selected.isFirstChange()) {
       if (!this.selected) {
         this.disableForm();
       } else {
-        this.enableForm();
+        this.enableForm(hasConnectedPumpItem);
       }
     }
     if (changes.modificationIndex && !changes.modificationIndex.isFirstChange() ||
@@ -88,22 +89,29 @@ export class PumpFluidComponent implements OnInit {
   }
 
   initForm() {
+    this.psatForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
     let connectedInventoryData = this.integrationStateService.connectedInventoryData.getValue();
     this.hasConnectedPumpInventory = connectedInventoryData.connectedItem && connectedInventoryData.connectedItem.inventoryType === 'pump';
-    this.psatForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
     this.checkWarnings();
   }
 
   disableForm() {
-    this.psatForm.controls.pumpType.disable();
-    this.psatForm.controls.drive.disable();
-    this.psatForm.controls.fluidType.disable();
+    this.psatForm.disable();
   }
 
-  enableForm() {
-    this.psatForm.controls.pumpType.enable();
-    this.psatForm.controls.drive.enable();
+  enableForm(hasConnectedPumpItem: boolean = false) {
+    if (!hasConnectedPumpItem) {
+      this.psatForm.controls.pumpType.enable();
+      this.psatForm.controls.pumpRPM.enable();
+      this.psatForm.controls.drive.enable();
+    }
+    this.psatForm.controls.specifiedPumpEfficiency.enable();
+    this.psatForm.controls.specifiedDriveEfficiency.enable();
     this.psatForm.controls.fluidType.enable();
+    this.psatForm.controls.fluidTemperature.enable();
+    this.psatForm.controls.gravity.enable();
+    this.psatForm.controls.viscosity.enable();
+    this.psatForm.controls.stages.enable();
   }
 
   addNum(str: string) {

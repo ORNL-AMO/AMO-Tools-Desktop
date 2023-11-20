@@ -106,6 +106,7 @@ export class PhastResultsService {
     return results;
   }
 
+  // * Important see comments within
   getResults(phast: PHAST, settings: Settings): PhastResults {
     let resultCats: ShowResultsCategories = this.getResultCategories(settings);
     let results: PhastResults = this.initResults();
@@ -263,6 +264,11 @@ export class PhastResultsService {
       results.co2EmissionsOutput = this.co2SavingPhastService.setCo2EmissionsResults(phast, results, settings);   
     } 
 
+    // * IMPORTANT - grossHeatInput is in differing units/time depending on energy source type.
+    // Electrotech (non -eaf) - kWh/hr
+    // EAF - kWh/yr
+    // fuel fired / steam - MMBtu/hr
+    
     return results;
   }
 

@@ -207,7 +207,6 @@ export interface UtilityTypeTreasureHuntEmissions {
     compressedAirEmissions: number,
     steamEmissions: number,
 }
-
 export interface EnergyUseItem {
     type: string, 
     amount: number,
@@ -530,11 +529,12 @@ export interface TreasureHuntResults {
     other: UtilityUsageData,
     opportunitySummaries: Array<OpportunitySummary>,
     hasMixed?: boolean,
-    co2EmissionsResults?: TreasureHuntCo2EmissionsResults
+    co2EmissionsResults?: TreasureHuntCo2EmissionsResults,
 }
 
 export interface OpportunitySummary {
     opportunityName: string,
+    isAssessmentOpportunity?: boolean,
     utilityType: string,
     costSavings: number,
     totalCost: number,

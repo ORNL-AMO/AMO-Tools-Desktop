@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { CashFlowForm, CashFlowResults } from './cash-flow';
 import { CashFlowService } from './cash-flow.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-cash-flow',
@@ -33,10 +34,12 @@ export class CashFlowComponent implements OnInit {
   headerHeight: number;
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
-  constructor(private cashFlowService: CashFlowService, private settingsDbService: SettingsDbService) {
+  constructor(private cashFlowService: CashFlowService, private settingsDbService: SettingsDbService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-UTIL-cash-flow');
     if (!this.cashFlowService.inputData) {
       this.cashFlowForm = {
         lifeYears: 10,

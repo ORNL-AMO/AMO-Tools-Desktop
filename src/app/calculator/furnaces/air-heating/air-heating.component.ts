@@ -5,6 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
 import { AirHeatingTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { AirHeatingService } from './air-heating.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-air-heating',
@@ -43,9 +44,11 @@ export class AirHeatingComponent implements OnInit {
   tabSelect: string = 'help';
   
   constructor(private airHeatingService: AirHeatingService,
-              private settingsDbService: SettingsDbService) { }
+              private settingsDbService: SettingsDbService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('calculator-PH-air-heating');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

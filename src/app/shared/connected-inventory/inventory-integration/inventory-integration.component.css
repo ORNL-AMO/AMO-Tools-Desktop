@@ -12,3 +12,17 @@
     font-size: 15px;
     cursor: pointer;
 }
+
+.integration-label:hover
+.integration-label:hover {
+    cursor:pointer;
+}
+
+.fa-chevron-right,
+.fa-chevron-down {
+    padding-right: .25rem;
+}
+
+.collapsed {
+    border: none;
+}

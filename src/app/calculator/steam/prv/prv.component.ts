@@ -7,6 +7,7 @@ import { PrvService, FeedwaterRanges } from './prv.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PrvOutput } from '../../../shared/models/steam/steam-outputs';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-prv-calculator',
@@ -40,9 +41,12 @@ export class PrvComponent implements OnInit {
   isSuperHeating: boolean = false;
 
   warning: string = null;
-  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private prvService: PrvService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, 
+    private prvService: PrvService, private convertUnitsService: ConvertUnitsService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-STEAM-prv');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

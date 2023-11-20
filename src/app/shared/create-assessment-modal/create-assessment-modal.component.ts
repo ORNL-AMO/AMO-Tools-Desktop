@@ -18,6 +18,7 @@ import { ConnectedInventoryData, ConnectedItem } from '../connected-inventory/in
 import { PsatIntegrationService } from '../connected-inventory/psat-integration.service';
 import { IntegrationStateService } from '../connected-inventory/integration-state.service';
 import { SettingsService } from '../../settings/settings.service';
+import { AnalyticsService } from '../analytics/analytics.service';
 
 @Component({
   selector: 'app-create-assessment-modal',
@@ -48,6 +49,7 @@ export class CreateAssessmentModalComponent {
     private psatIntegrationService: PsatIntegrationService,
     private integrationStateService: IntegrationStateService,
     private settingsService: SettingsService,
+    private analyticsService: AnalyticsService
     ) { }
 
   ngOnInit() {
@@ -98,6 +100,7 @@ export class CreateAssessmentModalComponent {
     if (this.newAssessmentForm.valid) {
       this.assessmentService.startingTab = 'system-setup';
       if (this.newAssessmentForm.controls.assessmentType.value === 'Pump') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
         let psatAssessment: Assessment = this.assessmentService.getNewAssessment('PSAT');
         psatAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         let newPsat = this.assessmentService.getNewPsat(this.settings);
@@ -114,6 +117,7 @@ export class CreateAssessmentModalComponent {
         this.finishAndNavigate(createdAssessment, navigationUrl, queryParams);
       }
       else if (this.newAssessmentForm.controls.assessmentType.value === 'Furnace') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('PHAST');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         let tmpPhast = this.assessmentService.getNewPhast(this.settings);
@@ -124,6 +128,7 @@ export class CreateAssessmentModalComponent {
         this.finishAndNavigate(createdAssessment, '/phast/' + createdAssessment.id);
       }
       else if (this.newAssessmentForm.controls.assessmentType.value === 'Fan') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('FSAT');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
@@ -133,6 +138,7 @@ export class CreateAssessmentModalComponent {
         this.finishAndNavigate(createdAssessment, '/fsat/' + createdAssessment.id);
       }
       else if (this.newAssessmentForm.controls.assessmentType.value === 'Steam') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('SSMT');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
@@ -141,6 +147,7 @@ export class CreateAssessmentModalComponent {
         this.finishAndNavigate(createdAssessment, '/ssmt/' + createdAssessment.id);
       }
       else if (this.newAssessmentForm.controls.assessmentType.value == 'TreasureHunt') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('TreasureHunt');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
@@ -148,6 +155,7 @@ export class CreateAssessmentModalComponent {
         this.finishAndNavigate(createdAssessment, '/treasure-hunt/' + createdAssessment.id);
       } 
       else if (this.newAssessmentForm.controls.assessmentType.value == 'WasteWater') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
         let tmpAssessment = this.assessmentService.getNewAssessment('WasteWater');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
@@ -156,6 +164,7 @@ export class CreateAssessmentModalComponent {
         this.finishAndNavigate(createdAssessment, '/waste-water/' + createdAssessment.id);
       }
       else if (this.newAssessmentForm.controls.assessmentType.value == 'CompressedAir') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
         let tmpAssessment = this.assessmentService.getNewAssessment('CompressedAir');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;

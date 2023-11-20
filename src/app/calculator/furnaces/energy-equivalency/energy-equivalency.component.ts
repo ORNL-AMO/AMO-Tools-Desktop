@@ -8,6 +8,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { UntypedFormGroup } from '@angular/forms';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-energy-equivalency',
@@ -52,9 +53,11 @@ export class EnergyEquivalencyComponent implements OnInit {
   formElectric: UntypedFormGroup;
   formFuel: UntypedFormGroup;
   constructor(private phastService: PhastService, private energyEquivalencyService: EnergyEquivalencyService, private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService) { }
+    private calculatorDbService: CalculatorDbService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-PH-energy-equivalency');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

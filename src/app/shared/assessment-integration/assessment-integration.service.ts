@@ -137,7 +137,8 @@ export interface AssessmentEnergyOption {
   modificationId?: string,
   annualEnergy: number,
   co2EmissionsOutput: number,
-  annualCost: number
+  annualCost: number,
+  energyThDisplayUnits?: string
 }
 
 export interface ModificationEnergyOption {

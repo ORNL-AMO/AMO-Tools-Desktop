@@ -26,12 +26,19 @@ export class PhastIntegrationService {
     
     let energyUsed: EnergyUseReportData = this.phastResultService.getEnergyUseReportData(phast, baselinePhastResults, settings);
     let baselineExecutiveSummary = this.executiveSummaryService.getSummary(phast, false, settings, phast);
-    let baselineEnergies: EnergyUseItem[] = this.setEnergyUseItems(energyUsed, baselinePhastResults, baselineExecutiveSummary, settings, treasureHuntSettings);
+    let baselineEnergies: EnergyUseItem[] = this.setEnergyUseItems(phast, energyUsed, baselinePhastResults, baselineExecutiveSummary, settings, treasureHuntSettings);
+    let {energyValue, treasureHuntUnit} = this.checkConvertEnergy(baselinePhastResults.grossHeatInput, settings, treasureHuntSettings);
+
+    if (settings.furnaceType !== 'Electric Arc Furnace (EAF)') {
+      energyValue = energyValue * phast.operatingHours.hoursPerYear;
+    }
+
     energyOptions.baseline = {
       name: phast.name,
-      annualEnergy: baselinePhastResults.grossHeatInput,
+      annualEnergy: energyValue,
       annualCost: baselineExecutiveSummary.annualCost,
       co2EmissionsOutput: baselineExecutiveSummary.co2EmissionsOutput.totalEmissionOutput,
+      energyThDisplayUnits: treasureHuntUnit
     };
 
     integratedAssessment.hasModifications = integratedAssessment.assessment.phast.modifications && integratedAssessment.assessment.phast.modifications.length !== 0;
@@ -42,11 +49,16 @@ export class PhastIntegrationService {
         let modificationPhastResults: PhastResults = this.phastResultService.getResults(modification.phast, settings);
         let energyUsed: EnergyUseReportData = this.phastResultService.getEnergyUseReportData(modification.phast, modificationPhastResults, settings);
         let modificationExecutiveSummary: ExecutiveSummary = this.executiveSummaryService.getSummary(modification.phast, true, settings, phast);
-        let modificationEnergyUseItems: EnergyUseItem[] = this.setEnergyUseItems(energyUsed, modificationPhastResults, modificationExecutiveSummary, settings, treasureHuntSettings);
+        let modificationEnergyUseItems: EnergyUseItem[] = this.setEnergyUseItems(modification.phast, energyUsed, modificationPhastResults, modificationExecutiveSummary, settings, treasureHuntSettings);
+        let {energyValue, treasureHuntUnit} = this.checkConvertEnergy(modificationPhastResults.grossHeatInput, settings, treasureHuntSettings);
+
+        if (settings.furnaceType !== 'Electric Arc Furnace (EAF)') {
+          energyValue = energyValue * phast.operatingHours.hoursPerYear;
+        }
 
         energyOptions.modifications.push({
           name: modification.phast.name,
-          annualEnergy: modificationPhastResults.grossHeatInput,
+          annualEnergy: energyValue,
           annualCost: modificationExecutiveSummary.annualCost,
           modificationId: modification.id,
           co2EmissionsOutput: modificationExecutiveSummary.co2EmissionsOutput.totalEmissionOutput,
@@ -71,105 +83,111 @@ export class PhastIntegrationService {
     }
   }
 
-  setEnergyUseItems(energyUsed: EnergyUseReportData, phastResults: PhastResults, executiveSummary: ExecutiveSummary, settings: Settings, treasureHuntSettings: Settings) {
-    let energies: EnergyUseItem[] = [];
+  checkConvertEnergy(energyValue: number, settings: Settings, treasureHuntSettings: Settings) {
     let treasureHuntUnit: string = treasureHuntSettings.unitsOfMeasure === "Imperial"? 'MMBtu' : 'GJ';
     let assessmentUnit: string = settings.unitsOfMeasure === "Imperial"? 'MMBtu' : 'GJ';
     let shouldConvert: boolean = settings.unitsOfMeasure !== treasureHuntSettings.unitsOfMeasure;
     
+    if (shouldConvert && settings.energySourceType !== 'Electricity') {
+      // fuel- fired and steam - phast grossHeatInput results in MMBTU/GJ 
+      energyValue = this.convertUnitsService.convertValue(energyValue, assessmentUnit, treasureHuntUnit);
+    } else if (settings.energySourceType === 'Electricity') {
+      // EAF and electro - phast grossHeatInput results already in kWh
+      treasureHuntUnit = 'kWh';
+    }
+
+    treasureHuntUnit = treasureHuntUnit +'/yr'
+    return {energyValue, treasureHuntUnit};
+  }
+
+  setEnergyUseItems(phast: PHAST, energyUsed: EnergyUseReportData, phastResults: PhastResults, executiveSummary: ExecutiveSummary, settings: Settings, treasureHuntSettings: Settings) {
+    let energies: EnergyUseItem[] = [];
     if (settings.energySourceType === 'Electricity') {
       if (energyUsed.fuelEnergyUsed) {
-        let fuelEnergyUsed: number = energyUsed.fuelEnergyUsed;
-        if (shouldConvert) {
-          fuelEnergyUsed = this.convertUnitsService.convertValue(energyUsed.fuelEnergyUsed, assessmentUnit, treasureHuntUnit);
+        let annualFuelEnergyUsed: number = energyUsed.fuelEnergyUsed * phast.operatingHours.hoursPerYear;
+        let annualGasCost: number;
+
+        if(settings.furnaceType !== 'Electric Arc Furnace (EAF)') {
+          // fuelEnergyUsed result is already in MMBtu in EAF
+          let treasureHuntUnit: string = treasureHuntSettings.unitsOfMeasure === "Imperial"? 'MMBtu' : 'GJ';
+          annualFuelEnergyUsed = this.convertUnitsService.convertValue(annualFuelEnergyUsed, 'kWh', treasureHuntUnit);
+          annualGasCost = executiveSummary.annualTotalFuelCost;
+        } else {
+          annualGasCost = executiveSummary.annualNaturalGasCost;
         }
+
         let energyUseItem: EnergyUseItem = {
           type: 'Gas',
-          amount: fuelEnergyUsed,
-          integratedEnergyCost: executiveSummary.annualNaturalGasCost,
+          amount: this.checkConvertEnergy(annualFuelEnergyUsed, settings, treasureHuntSettings).energyValue,
+          integratedEnergyCost: annualGasCost,
           integratedEmissionRate: phastResults.co2EmissionsOutput.fuelEmissionOutput
         }
         energies.push(energyUseItem);
       }
+
+      let annualElectricityEnergyUsed: number = phastResults.electricalHeatDelivered * phast.operatingHours.hoursPerYear;
       // units in kW only
       let electricity: EnergyUseItem = {
         type: 'Electricity',
-        amount: phastResults.electricalHeatDelivered,
+        amount: annualElectricityEnergyUsed,
         integratedEnergyCost: executiveSummary.annualElectricityCost,
         integratedEmissionRate: phastResults.co2EmissionsOutput.electricityEmissionOutput
       };
-        
       if (settings.furnaceType === 'Electric Arc Furnace (EAF)') {
-        electricity.amount = phastResults.hourlyEAFResults.electricEnergyUsed;
+        let annualEAFElectricityEnergyUsed: number = phastResults.hourlyEAFResults.electricEnergyUsed * phast.operatingHours.hoursPerYear;
+        electricity.amount = annualEAFElectricityEnergyUsed;
 
-
-        let coalCarbonUsed: number = phastResults.hourlyEAFResults.coalCarbonUsed
-        if (shouldConvert) {
-          coalCarbonUsed = this.convertUnitsService.convertValue(coalCarbonUsed, assessmentUnit, treasureHuntUnit);
-        }
-
+        let annualCoalCarbonEnergyUsed: number = phastResults.hourlyEAFResults.coalCarbonUsed * phast.operatingHours.hoursPerYear;
         let coalCarbon: EnergyUseItem = {
           type: 'Other Fuel',
-          amount: coalCarbonUsed,
+          amount: this.checkConvertEnergy(annualCoalCarbonEnergyUsed, settings, treasureHuntSettings).energyValue,
           integratedEnergyCost: executiveSummary.annualCarbonCoalCost,
           integratedEmissionRate: phastResults.co2EmissionsOutput.coalCarbonEmissionsOutput
         };
 
-        let electrodeEnergyUsed: number = phastResults.hourlyEAFResults.electrodeEnergyUsed;
-        if (shouldConvert) {
-          electrodeEnergyUsed = this.convertUnitsService.convertValue(electrodeEnergyUsed, assessmentUnit, treasureHuntUnit);
-        }
+        let annualElectrodeEnergyUsed: number = phastResults.hourlyEAFResults.electrodeEnergyUsed * phast.operatingHours.hoursPerYear;
         let electrodeEnergy: EnergyUseItem = {
           type: 'Other Fuel',
-          amount: electrodeEnergyUsed,
+          amount: this.checkConvertEnergy(annualElectrodeEnergyUsed, settings, treasureHuntSettings).energyValue,
           integratedEnergyCost: executiveSummary.annualElectrodeCost,
           integratedEmissionRate: phastResults.co2EmissionsOutput.electrodeEmissionsOutput
         };
-        
-
-        let otherFuelUsed: number = phastResults.hourlyEAFResults.otherFuelUsed;
-        if (shouldConvert) {
-          otherFuelUsed = this.convertUnitsService.convertValue(otherFuelUsed, assessmentUnit, treasureHuntUnit);
-        }
+        let annualOtherFuelEnergyUsed: number = phastResults.hourlyEAFResults.otherFuelUsed * phast.operatingHours.hoursPerYear;
         let otherFuel: EnergyUseItem = {
           type: 'Other Fuel',
-          amount: otherFuelUsed,
+          amount: this.checkConvertEnergy(annualOtherFuelEnergyUsed, settings, treasureHuntSettings).energyValue,
           integratedEnergyCost: executiveSummary.annualOtherFuelCost,
           integratedEmissionRate: phastResults.co2EmissionsOutput.otherFuelEmissionsOutput
         };
         energies.push(coalCarbon, electrodeEnergy, otherFuel);
-      } 
+      }
       energies.push(electricity);
 
     } else if (settings.energySourceType === 'Steam') {
-      treasureHuntUnit = treasureHuntSettings.unitsOfMeasure === "Imperial"? 'klb' : 'tonne';
-      let steamUsed: number = energyUsed.steamEnergyUsed;
-      if (shouldConvert) {
-        steamUsed = this.convertUnitsService.convertValue(steamUsed, assessmentUnit, treasureHuntUnit);
-        this.convertUnitsService.convertValue(steamUsed, assessmentUnit, treasureHuntUnit);
-      }
       // in steam assesment energy used is === grossHeatInput ... 
+      let annualSteamEnergyUsed: number = energyUsed.steamEnergyUsed * phast.operatingHours.hoursPerYear;
+
       let steam: EnergyUseItem = {
-        type: 'Steam',
-        amount: steamUsed,
+        type: 'Gas',
+        amount: this.checkConvertEnergy(annualSteamEnergyUsed, settings, treasureHuntSettings).energyValue,
         integratedEnergyCost: executiveSummary.annualCost,
-        integratedEmissionRate: undefined
+        integratedEmissionRate: phastResults.co2EmissionsOutput.totalEmissionOutput
       };
       energies.push(steam);
-      
     } else {
-      treasureHuntUnit = treasureHuntSettings.unitsOfMeasure === "Imperial"? 'MMBtu' : 'GJ';
-      assessmentUnit = settings.unitsOfMeasure === "Imperial"? 'MMBtu' : 'GJ';
+      let annualFuelEnergyUsed: number = energyUsed.fuelEnergyUsed * phast.operatingHours.hoursPerYear;
+
       let energyUseItem: EnergyUseItem = {
         type: 'Gas',
-        amount: energyUsed.fuelEnergyUsed,
+        amount: this.checkConvertEnergy(annualFuelEnergyUsed, settings, treasureHuntSettings).energyValue,
         integratedEnergyCost: executiveSummary.annualCost,
-        integratedEmissionRate: phastResults.co2EmissionsOutput.fuelEmissionOutput,
+        // * if fuel-fired natural gas - PHAST results doesn't itemize emissions output by energy type
+        integratedEmissionRate: phastResults.co2EmissionsOutput.totalEmissionOutput,
       };
       energies.push(energyUseItem);
     }
+
     return energies;
   }
 
-  
 }

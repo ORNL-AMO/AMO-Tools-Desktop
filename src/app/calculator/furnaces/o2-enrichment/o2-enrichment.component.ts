@@ -9,6 +9,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { O2EnrichmentFormService } from './o2-enrichment-form.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-o2-enrichment',
@@ -50,9 +51,11 @@ export class O2EnrichmentComponent implements OnInit {
   smallScreenTab: string = 'form';
 
   constructor(private settingsDbService: SettingsDbService, private o2EnrichmentService: O2EnrichmentService, private o2FormService: O2EnrichmentFormService,
-   private calculatorDbService: CalculatorDbService) { }
+   private calculatorDbService: CalculatorDbService,
+   private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-PH-o2-enrichment');
     this.calculatorDbService.isSaving = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

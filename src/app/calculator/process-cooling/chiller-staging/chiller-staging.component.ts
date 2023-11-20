@@ -6,6 +6,7 @@ import { ChillerStagingInput } from '../../../shared/models/chillers';
 import { Settings } from '../../../shared/models/settings';
 import { ChillerStagingTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { ChillerStagingService } from './chiller-staging.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-chiller-staging',
@@ -46,10 +47,11 @@ export class ChillerStagingComponent implements OnInit {
 
   constructor(private chillerStagingService: ChillerStagingService,
     private settingsDbService: SettingsDbService,
-    // private calculatorDragBarService: CalculatorDragBarService
+    private analyticsService: AnalyticsService
     ) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-PC-chiller-staging');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

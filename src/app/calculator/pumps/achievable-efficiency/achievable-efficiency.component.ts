@@ -6,6 +6,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { UntypedFormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { AchievableEfficiencyService } from './achievable-efficiency.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 @Component({
   selector: 'app-achievable-efficiency',
   templateUrl: './achievable-efficiency.component.html',
@@ -32,18 +33,22 @@ export class AchievableEfficiencyComponent implements OnInit {
 
   headerHeight: number;
 
-  currentField:string;
+  currentField: string;
   efficiencyForm: UntypedFormGroup;
   toggleCalculate: boolean = true;
   toggleResetData: boolean = true;
   toggleExampleData: boolean = true;
   tabSelect: string = 'results';
-  
+
   containerHeight: number;
   smallScreenTab: string = 'form';
 
-  constructor(private achievableEfficiencyService: AchievableEfficiencyService, private psatService: PsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private achievableEfficiencyService: AchievableEfficiencyService, private psatService: PsatService, private settingsDbService: SettingsDbService,
+    private convertUnitsService: ConvertUnitsService,
+    private analyticsService: AnalyticsService) { }
+
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-PUMP-achievable-efficiency');
     //if stand alone calculator use system settings
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

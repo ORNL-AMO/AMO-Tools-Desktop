@@ -12,6 +12,7 @@ import { MotorCatalogService } from './motor-inventory-setup/motor-catalog/motor
 import { BatchAnalysisService, BatchAnalysisSettings } from './batch-analysis/batch-analysis.service';
 import { environment } from '../../environments/environment';
 import { MotorIntegrationService } from '../shared/connected-inventory/motor-integration.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 
 @Component({
@@ -49,9 +50,11 @@ export class MotorInventoryComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private motorCatalogService: MotorCatalogService, 
     private motorIntegrationService: MotorIntegrationService,
-    private batchAnalysisService: BatchAnalysisService, private cd: ChangeDetectorRef) { }
+    private batchAnalysisService: BatchAnalysisService, private cd: ChangeDetectorRef,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-motor-inventory');
     this.activatedRoute.params.subscribe(params => {
       let tmpItemId = Number(params['id']);
       this.motorInventoryItem = this.inventoryDbService.getById(tmpItemId);

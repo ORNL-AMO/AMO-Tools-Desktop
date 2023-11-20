@@ -3,11 +3,38 @@
     <button class="btn btn-primary" (click)="addNewMod()">Add New Scenario</button>
   </div>
   <div class="d-flex flex-column">
+    <div *ngIf="connectedInventoryData.connectedItem" class="form-group group-name">
+      <label for="modificatonName">Baseline Connected Inventory</label>
+    </div>
+
+    <div *ngIf="connectedInventoryData.connectedItem" class="d-flex justify-content-center flex-column my-0 mx-3">
+      <ng-container *ngIf="connectedInventoryData.connectedItem.inventoryType === 'pump'">
+        <app-connected-assessment-status class="w-100" [connectedToType]="'inventory'" [connectedFormGroupName]="'motor'">
+        </app-connected-assessment-status>
+        <app-connected-assessment-status class="w-100" [connectedToType]="'inventory'" [connectedFormGroupName]="'fluid'">
+        </app-connected-assessment-status>
+      </ng-container>
+
+      <app-inventory-integration class="w-100" (focusedField)="focusField($event)"
+      [inPsat]="true" [allowChanges]="false">
+      </app-inventory-integration>
+    </div>
+
     <div class="form-group group-name">
       <label for="modificatonName">Modification Name</label>
       <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="psat.modifications[exploreModIndex].psat.name"
         (input)="calculate()" />
     </div>
+    <form [formGroup]="modificationFieldDataForm" class="w-100 p-0">
+      <div class="form-group group-name">
+        <label for="implementationCosts">Implementation Costs</label>
+        <div class="input-group">
+          <input name="implementationCosts" type="number" step="any" class="form-control"
+            id="implementationCosts" formControlName="implementationCosts" (input)="calculate()">
+          <span class="units">$</span>
+        </div>
+      </div>
+    </form>
     <div class="checkbox">
       <label class="group-label" for="modifyCalculationMethod">
         <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')" [(ngModel)]="psat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity"

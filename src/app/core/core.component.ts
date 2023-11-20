@@ -1,12 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { filter, firstValueFrom, Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
-import { NavigationEnd, Router } from '../../../node_modules/@angular/router';
+import { Router } from '../../../node_modules/@angular/router';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
@@ -46,15 +46,15 @@ export class CoreComponent implements OnInit {
   releaseDataSub: Subscription;
 
 
-  constructor(private electronService: ElectronService , 
-    private assessmentService: AssessmentService, 
+  constructor(private electronService: ElectronService,
+    private assessmentService: AssessmentService,
     private changeDetectorRef: ChangeDetectorRef,
     private assessmentDbService: AssessmentDbService,
-    private settingsDbService: SettingsDbService, 
+    private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private analyticsService: AnalyticsService,
-    private calculatorDbService: CalculatorDbService, 
-    private coreService: CoreService, 
+    private calculatorDbService: CalculatorDbService,
+    private coreService: CoreService,
     private router: Router,
     private securityAndPrivacyService: SecurityAndPrivacyService,
     private inventoryDbService: InventoryDbService, private sqlDbApiService: SqlDbApiService) {
@@ -67,15 +67,6 @@ export class CoreComponent implements OnInit {
 
     if (this.electronService.isElectron) {
       this.electronService.sendAppReady('ready');
-
-      if (this.electronService.isElectron) {
-        this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-          .subscribe((event: NavigationEnd) => {
-              this.analyticsService.sendAnalyticsPageView(event.urlAfterRedirects);
-            });
-      }
-
-
       this.electronUpdateAvailableSub = this.electronService.updateAvailable.subscribe(val => {
         this.updateAvailable = val;
         if (this.updateAvailable) {
@@ -123,7 +114,6 @@ export class CoreComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.electronService.isElectron) {
-      this.routerSubscription.unsubscribe();
       this.electronUpdateAvailableSub.unsubscribe();
       this.releaseDataSub.unsubscribe();
     }

@@ -5,6 +5,7 @@ import { LightingReplacementService } from './lighting-replacement.service';
 import { LightingReplacementData, LightingReplacementResults } from '../../../shared/models/lighting';
 import { LightingReplacementTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../../shared/models/operations';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 @Component({
   selector: 'app-lighting-replacement',
   templateUrl: './lighting-replacement.component.html',
@@ -48,9 +49,11 @@ export class LightingReplacementComponent implements OnInit {
 
   smallScreenTab: string = 'baseline';
 
-  constructor(private settingsDbService: SettingsDbService, private lightingReplacementService: LightingReplacementService) { }
+  constructor(private settingsDbService: SettingsDbService, private lightingReplacementService: LightingReplacementService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-lighting-replacement');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
