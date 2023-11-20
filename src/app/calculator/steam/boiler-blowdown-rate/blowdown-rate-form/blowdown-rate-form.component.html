@@ -52,8 +52,8 @@
             <input class="form-control" name="steamFlow" id="{{idString+'steamFlow'}}" formControlName="steamFlow"
                 type="number" (input)="saveBoiler()" (focus)="focusField('steamFlow')" 
                 onfocus="this.select();">
-            <span class="input-group-addon units"
-                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
+            <span class="input-group-addon units">
+                <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="boilerForm.controls.steamFlow.invalid && !boilerForm.controls.steamFlow.pristine">
@@ -90,6 +90,7 @@
     <!--boiler efficiency-->
     <div class="form-group">
         <label class="small" for="{{idString+'boilerEfficiency'}}">Boiler Efficiency
+            <a class="form-text small click-link" (click)="openBoilerEfficiencyModal()">Calculate Efficiency</a>
         </label>
         <div class="input-group">
             <input class="form-control" name="boilerEfficiency" id="{{idString+'boilerEfficiency'}}"
@@ -210,3 +211,7 @@
     (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
     [operatingHours]="operatingHours">
 </app-operating-hours-modal>
+
+<app-boiler-efficiency-modal *ngIf="showBoilerEfficiencyModal" [settings]="settings"
+  (emitClose)="closeBoilerEfficiencyModal()" (emitSave)="setBoilerEfficiencyAndClose($event)">
+</app-boiler-efficiency-modal>
