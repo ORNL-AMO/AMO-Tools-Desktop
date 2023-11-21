@@ -15,6 +15,7 @@ import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/as
 import { PumpsSuiteApiService } from '../tools-suite-api/pumps-suite-api.service';
 import { IntegratedAssessment, IntegratedEnergyOptions, ModificationEnergyOption } from '../shared/assessment-integration/assessment-integration.service';
 import { EnergyUseItem } from '../shared/models/treasure-hunt';
+import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 
 @Injectable()
 export class PsatService {
@@ -182,7 +183,10 @@ export class PsatService {
       psatInputs.co2SavingsData.electricityUse = psatOutputs.annual_energy;
       psatOutputs.co2EmissionsOutput = this.assessmentCo2Service.getCo2EmissionsResult(psatInputs.co2SavingsData, settings);
     } else {
-      psatOutputs.co2EmissionsOutput = 0;
+      let co2SavingsData: Co2SavingsData = this.assessmentCo2Service.getCo2SavingsDataFromSettingsObject(settings);
+      psatInputs.co2SavingsData = co2SavingsData;
+      psatInputs.co2SavingsData.electricityUse = psatOutputs.annual_energy;
+      psatOutputs.co2EmissionsOutput = this.assessmentCo2Service.getCo2EmissionsResult(psatInputs.co2SavingsData, settings);
     }
     return psatOutputs;
   }

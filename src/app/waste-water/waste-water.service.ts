@@ -125,7 +125,10 @@ export class WasteWaterService {
       co2SavingsData.electricityUse = wasteWaterResults.AeEnergyAnnual;
       wasteWaterResults.co2EmissionsOutput = this.assessmentCo2Service.getCo2EmissionsResult(co2SavingsData, settings);
     } else {
-      wasteWaterResults.co2EmissionsOutput = 0;
+      let co2SavingsDefultData: Co2SavingsData = this.assessmentCo2Service.getCo2SavingsDataFromSettingsObject(settings);
+      co2SavingsData = co2SavingsDefultData;
+      co2SavingsData.electricityUse = wasteWaterResults.AeEnergyAnnual;
+      wasteWaterResults.co2EmissionsOutput = this.assessmentCo2Service.getCo2EmissionsResult(co2SavingsDefultData, settings);
     }
     return wasteWaterResults;
   }
