@@ -87,6 +87,7 @@ export class MotorComponent implements OnInit {
   ngOnDestroy() {
     this.connectedInventoryDataSub.unsubscribe();
     if (!this.baseline) {
+      this.integrationStateService.integrationContainerOffsetHeight.next(undefined);
       this.integrationContainerOffsetHeightSub.unsubscribe();
     }
   }
