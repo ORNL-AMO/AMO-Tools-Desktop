@@ -28,16 +28,20 @@ export class ReportSummaryPieChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    if (!this.printView) {
-      this.drawPlot();
-    } else {
-      this.drawPrintPlot();
-    }
+      if (!this.printView) {
+        this.drawPlot();
+      } else {
+        this.drawPrintPlot();
+      }
   }
 
   ngOnChanges() {
     if (this.reportSummaryPieChart) {
-      this.drawPlot();
+      if (!this.printView) {
+        this.drawPlot();
+      } else {
+        this.drawPrintPlot();
+      }
     }
   }
 

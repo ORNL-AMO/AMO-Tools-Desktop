@@ -75,49 +75,49 @@ export class AssessmentOpportunityService {
       baselineElectricityResult = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Electricity');
       modificationElectricityResult = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Electricity');
       electricityResults = this.getAssessmentOpportunityResult(baselineElectricityResult, modificationElectricityResult);
-      totalCostSavings = electricityResults.energyCostSavings;
+      totalCostSavings += electricityResults.energyCostSavings;
     }
 
     if (energyTypes.has('Gas')) {
       baselineGasResult = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Gas');
       modificationGasResult = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Gas');
       gasResults = this.getAssessmentOpportunityResult(baselineGasResult, modificationGasResult);
-      totalCostSavings = gasResults.energyCostSavings;
+      totalCostSavings += gasResults.energyCostSavings;
     }
 
     if (energyTypes.has('Compressed Air')) {
       baselineCompressedAirResult = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Compressed Air');
       modificationCompressedAirResult = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Compressed Air');
       compressedAirResults = this.getAssessmentOpportunityResult(baselineCompressedAirResult, modificationCompressedAirResult);
-      totalCostSavings = compressedAirResults.energyCostSavings;
+      totalCostSavings += compressedAirResults.energyCostSavings;
     }
 
     if (energyTypes.has('Other Fuel')) {
       baselineOtherFuelResult = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Other Fuel');
       modificationOtherFuelResult = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Other Fuel');
       otherFuelResults = this.getAssessmentOpportunityResult(baselineOtherFuelResult, modificationOtherFuelResult);
-      totalCostSavings = otherFuelResults.energyCostSavings;
+      totalCostSavings += otherFuelResults.energyCostSavings;
     }
 
     if (energyTypes.has('Steam')) {
       baselineSteamResult = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Steam');
       modificationSteamResult = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Steam');
       steamResults = this.getAssessmentOpportunityResult(baselineSteamResult, modificationSteamResult);
-      totalCostSavings = steamResults.energyCostSavings;
+      totalCostSavings += steamResults.energyCostSavings;
     }
 
     if (energyTypes.has('Water')) {
       baselineWaterResult = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'Water');
       modificationWaterResult = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'Water');
       waterResults = this.getAssessmentOpportunityResult(baselineWaterResult, modificationWaterResult);
-      totalCostSavings = waterResults.energyCostSavings;
+      totalCostSavings += waterResults.energyCostSavings;
     }
 
     if (energyTypes.has('WWT')) {
       baselineWasterWaterResult = this.getEnergyUseData(assessmentOpportunity.baselineEnergyUseItems, 'WWT');
       modificationWasteWaterResult = this.getEnergyUseData(assessmentOpportunity.modificationEnergyUseItems, 'WWT');
       wasteWaterResults = this.getAssessmentOpportunityResult(baselineWasterWaterResult, modificationWasteWaterResult);
-      totalCostSavings = wasteWaterResults.energyCostSavings;
+      totalCostSavings += wasteWaterResults.energyCostSavings;
     }
 
     let totalImplementationCost: number = this.getOppSheetImplementationCost(assessmentOpportunity.opportunityCost);
@@ -144,7 +144,9 @@ export class AssessmentOpportunityService {
     if (items) {
       items.forEach(item => {
         energyUse = energyUse + item.amount;
-        integratedCost = integratedCost + item.integratedEnergyCost? item.integratedEnergyCost : 0;
+        if (item.integratedEnergyCost) {
+          integratedCost = integratedCost + item.integratedEnergyCost;
+        }
       });
       numItems = items.length;
     }

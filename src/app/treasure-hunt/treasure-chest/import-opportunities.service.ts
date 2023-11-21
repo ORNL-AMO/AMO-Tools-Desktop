@@ -21,6 +21,13 @@ export class ImportOpportunitiesService {
       this.updateLegacyOpportunities(data.opportunitySheets, Treasure.opportunitySheet);
       treasureHunt.opportunitySheets = treasureHunt.opportunitySheets.concat(data.opportunitySheets);
     }
+    if (data.assessmentOpportunities) {
+      if (treasureHunt.assessmentOpportunities == undefined) {
+        treasureHunt.assessmentOpportunities = new Array();
+      }
+      this.updateLegacyOpportunities(data.assessmentOpportunities, Treasure.assessmentOpportunity);
+      treasureHunt.assessmentOpportunities = treasureHunt.assessmentOpportunities.concat(data.assessmentOpportunities);
+    }
     if (data.replaceExistingMotors) {
       if (treasureHunt.replaceExistingMotors == undefined) {
         treasureHunt.replaceExistingMotors = new Array();
