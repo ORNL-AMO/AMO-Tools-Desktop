@@ -71,6 +71,8 @@ export class InventoryIntegrationComponent {
   ngOnDestroy() {
     this.integrationStateSub.unsubscribe();
     this.connectedInventoryDataSub.unsubscribe();
+    this.integrationStateService.integrationContainerOffsetHeight.next(undefined);
+
   }
 
   setInventoryOptions() {
