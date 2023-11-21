@@ -263,11 +263,13 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
     let otherLoss = this.results.totalOtherLoss;
     let slagLoss = this.results.totalSlag;
     let exhaustLoss = this.results.totalExhaustGas;
+    let electricalHeaterLosses = this.results.totalElectricalHeaterLosses
     let chargeMaterialLoss = this.results.totalChargeMaterialLoss;
 
     let losses = {
       'Flue Gas': flueGasLoss,
       'Exhaust': exhaustLoss,
+      'Electrical': electricalHeaterLosses,
       'System': systemLoss,
       'Water Cooling': waterCoolingLoss,
       'Wall': wallLoss,

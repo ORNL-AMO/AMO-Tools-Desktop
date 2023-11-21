@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IntegrationState, InventorySelectOptions, InventoryOption, ConnectedInventoryData, ConnectedItem } from '../../shared/assessment-integration/integrations';
-import { PsatIntegrationService } from '../../shared/assessment-integration/psat-integration.service';
+import { IntegrationState, InventorySelectOptions, InventoryOption, ConnectedInventoryData, ConnectedItem } from '../../shared/connected-inventory/integrations';
+import { PsatIntegrationService } from '../../shared/connected-inventory/psat-integration.service';
 import { Subscription } from 'rxjs';
-import { IntegrationStateService } from '../../shared/assessment-integration/integration-state.service';
+import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { Assessment } from '../../shared/models/assessment';
 import { PSAT } from '../../shared/models/psat';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-integrate-pump-inventory',
@@ -16,13 +17,17 @@ export class IntegratePumpInventoryComponent {
   @Input()
   assessment: Assessment;
   @Input()
+  settings: Settings;
+  @Input()
   psat: PSAT;
   @Output('saved')
   saved = new EventEmitter<boolean>();
+  @Output('savePsat')
+  savePsat = new EventEmitter<PSAT>();
   @Input()
   selected: boolean;
 
-  assessmentIntegrationState: IntegrationState;
+  connectedAssessmentState: IntegrationState;
   inventorySelectOptions: InventorySelectOptions;
   connectedInventoryDataSub: Subscription;
 
@@ -31,8 +36,11 @@ export class IntegratePumpInventoryComponent {
     private integrationStateService: IntegrationStateService) { }
 
   ngOnInit() {
-    this.psatIntegrationService.setPumpConnectedInventoryData(this.assessment);
-    this.saved.emit(true)
+    if (this.assessment.psat.connectedItem) {
+      this.psatIntegrationService.setPSATConnectedInventoryData(this.assessment, this.settings);
+      this.savePsat.emit(this.assessment.psat);
+      this.saved.emit(true);
+    }
     this.setInventorySelectOptions();
     this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
         this.handleConnectedInventoryEvents(connectedInventoryData);
@@ -58,7 +66,7 @@ export class IntegratePumpInventoryComponent {
     }
 
     if (connectedInventoryData.shouldDisconnect) {
-      this.psatIntegrationService.removeConnectedInventory(connectedInventoryData.connectedItem, connectedInventoryData.ownerAssessmentId);
+      this.psatIntegrationService.removeConnectedPumpInventory(connectedInventoryData.connectedItem, connectedInventoryData.ownerAssessmentId);
       delete this.psat.connectedItem;
       this.saved.emit(true);
     }

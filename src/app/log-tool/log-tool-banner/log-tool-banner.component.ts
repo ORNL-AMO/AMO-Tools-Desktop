@@ -14,6 +14,7 @@ export class LogToolBannerComponent implements OnInit {
 
   explorerDataSub: Subscription;
   explorerData: ExplorerData;
+  bannerCollapsed: boolean = true;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit() {
@@ -33,6 +34,11 @@ export class LogToolBannerComponent implements OnInit {
   showSecurityAndPrivacyModal() {
     this.securityAndPrivacyService.modalOpen.next(true);
     this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+  }
+
+  collapseBanner() {
+    this.bannerCollapsed = !this.bannerCollapsed;
+    window.dispatchEvent(new Event("resize"));
   }
 
 }

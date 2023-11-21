@@ -19,6 +19,7 @@ import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { InventoryService } from './inventory/inventory.service';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
 import { DayTypeSetupService } from './end-uses/day-type-setup-form/day-type-setup.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-compressed-air-assessment',
@@ -29,6 +30,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   containerHeight: number;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -56,6 +58,9 @@ export class CompressedAirAssessmentComponent implements OnInit {
   assessmentTab: string;
   assessmentTabSub: Subscription;
   showWelcomeScreen: boolean = false;
+  smallScreenTab: string = 'form';
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
     private airPropertiesService: AirPropertiesCsvService,
     private endUseDayTypeSetupService: DayTypeSetupService,
@@ -66,9 +71,11 @@ export class CompressedAirAssessmentComponent implements OnInit {
     private egridService: EGridService,
     private endUseService: EndUsesService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
-    private exploreOpportunitiesService: ExploreOpportunitiesService, private assessmentService: AssessmentService) { }
+    private exploreOpportunitiesService: ExploreOpportunitiesService, private assessmentService: AssessmentService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-compressed-air-assessment', undefined);
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
@@ -90,7 +97,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
         this.setDisableNext();
       }
     })
-    let tmpTab: string = this.assessmentService.getTab();
+    let tmpTab: string = this.assessmentService.getStartingTab();
     if (tmpTab) {
       this.compressedAirAssessmentService.mainTab.next(tmpTab);
     }
@@ -128,10 +135,15 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.assessmentTabSub = this.compressedAirAssessmentService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
     });
+
+    this.showExportModalSub = this.compressedAirAssessmentService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
+
     this.checkShowWelcomeScreen();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy() {    
     this.mainTabSub.unsubscribe();
     this.setupTabSub.unsubscribe();
     this.profileTabSub.unsubscribe();
@@ -140,6 +152,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.assessmentTabSub.unsubscribe();
     this.showAddModificationSub.unsubscribe();
     this.showModificationListSub.unsubscribe();
+    this.showExportModalSub.unsubscribe();
     this.compressedAirAssessmentService.mainTab.next('system-setup');
     this.compressedAirAssessmentService.setupTab.next('system-basics');
     this.compressedAirAssessmentService.profileTab.next('setup');
@@ -240,13 +253,17 @@ export class CompressedAirAssessmentComponent implements OnInit {
           footerHeight = this.footer.nativeElement.offsetHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
+        if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+          this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+        }
       }, 100);
     }
   }
 
   async save(compressedAirAssessment: CompressedAirAssessment) {
     this.assessment.compressedAirAssessment = compressedAirAssessment;
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
   }
 
@@ -288,9 +305,18 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableCompressedAirTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.compressedAirAssessmentService.modalOpen.next(false);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
+  closeExportModal(input: boolean){
+    this.compressedAirAssessmentService.showExportModal.next(input);
   }
 }

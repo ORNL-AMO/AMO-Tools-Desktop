@@ -87,8 +87,8 @@ export class SelectAssessmentModalComponent implements OnInit {
 
   async selectAssessment(assessment: Assessment) {
     assessment.compressedAirAssessment = this.setDayTypesFromLogTool(assessment.compressedAirAssessment)
-    
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
     this.compressedAirAssessmentService.mainTab.next('system-setup');
     this.compressedAirAssessmentService.setupTab.next('day-types');

@@ -9,6 +9,7 @@ import { InventoryItem } from '../shared/models/inventory/inventory';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { combineLatestWith, firstValueFrom, Observable } from 'rxjs';
 import { SettingsStoreMeta } from './dbConfig';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class SettingsDbService {
@@ -28,6 +29,9 @@ export class SettingsDbService {
     }
     this.globalSettings = this.getByDirectoryId(1);
     this.globalSettings = this.checkSettings(this.globalSettings);
+    if (!environment.production) {
+      this.setTutorialsOff();
+    }
   }
 
   getAllSettings(): Observable<Array<Settings>> {
@@ -49,9 +53,10 @@ export class SettingsDbService {
     return this.dbService.bulkDelete(this.storeName, calculatorIds);
   }
 
-  updateWithObservable(settings: Settings): Observable<any> {
+  updateWithObservable(settings: Settings): Observable<Settings> {
     settings.modifiedDate = new Date();
-    return this.dbService.update(this.storeName, settings);
+    let result = this.dbService.update(this.storeName, settings);
+    return result;
   }
 
   findById(id: number): Settings {
@@ -191,6 +196,20 @@ export class SettingsDbService {
       }
     }
     return settings;
+  }
+
+  setTutorialsOff() {
+    this.globalSettings.disableTutorial = true;
+    this.globalSettings.disableDashboardTutorial = true;
+    this.globalSettings.disablePsatTutorial = true;
+    this.globalSettings.disableFansTutorial = true;
+    this.globalSettings.disablePhastTutorial = true;
+    this.globalSettings.disableWasteWaterTutorial = true;
+    this.globalSettings.disableSteamTutorial = true;
+    this.globalSettings.disableMotorInventoryTutorial = true;
+    this.globalSettings.disableTreasureHuntTutorial = true;
+    this.globalSettings.disableDataExplorerTutorial = true;
+    this.globalSettings.disableCompressedAirTutorial = true;  
   }
 
 

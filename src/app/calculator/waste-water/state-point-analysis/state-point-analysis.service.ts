@@ -3,8 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { StatePointAnalysisInput, StatePointAnalysisOutput, StatePointAnalysisResults } from '../../../shared/models/waste-water';
+import { SviSuiteApiService } from '../../../tools-suite-api/svi-suite-api.service';
 import { StatePointAnalysisFormService } from './state-point-analysis-form.service';
-declare var sviAddon: any;
 
 @Injectable()
 export class StatePointAnalysisService {
@@ -20,6 +20,7 @@ export class StatePointAnalysisService {
 
   constructor(private convertUnitsService: ConvertUnitsService,
               private statePointAnalysisFormService: StatePointAnalysisFormService,
+              private sviSuiteApiService: SviSuiteApiService
               ) {
     this.baselineData = new BehaviorSubject<StatePointAnalysisInput>(undefined);
     this.modificationData = new BehaviorSubject<StatePointAnalysisInput>(undefined);
@@ -62,20 +63,20 @@ export class StatePointAnalysisService {
     
     let validBaseline = this.statePointAnalysisFormService.getFormFromInput(baselineInputs).valid;
     if (validBaseline) {
-      let baselineInputCopy = JSON.parse(JSON.stringify(baselineInputs));
+      let baselineInputCopy: StatePointAnalysisInput = JSON.parse(JSON.stringify(baselineInputs));
       baselineInputCopy = this.convertStatePointAnalysisInput(baselineInputCopy, settings);
       
-      let baselineResults: StatePointAnalysisResults = sviAddon.svi(baselineInputCopy);
+      let baselineResults: StatePointAnalysisResults = this.sviSuiteApiService.svi(baselineInputCopy);
       baselineResults = this.convertStatePointAnalysisResults(baselineResults, settings);
       output.baseline = baselineResults;
       output.sviParameterName = this.sviParameters[baselineInputs.sviParameter].display;
       if (modificationInputs) {
         let validModification = this.statePointAnalysisFormService.getFormFromInput(modificationInputs).valid;
         if (validModification) {
-          let modificationInputCopy = JSON.parse(JSON.stringify(modificationInputs));
+          let modificationInputCopy: StatePointAnalysisInput = JSON.parse(JSON.stringify(modificationInputs));
           modificationInputCopy = this.convertStatePointAnalysisInput(modificationInputCopy, settings);
           
-          let modificationResults: StatePointAnalysisResults = sviAddon.svi(modificationInputCopy);
+          let modificationResults: StatePointAnalysisResults = this.sviSuiteApiService.svi(modificationInputCopy);
           modificationResults = this.convertStatePointAnalysisResults(modificationResults, settings);
           output.modification = modificationResults;
         }

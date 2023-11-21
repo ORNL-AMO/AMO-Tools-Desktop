@@ -9,7 +9,7 @@ import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { pumpTypesConstant, driveConstants, fluidProperties, fluidTypes } from '../psatConstants';
 import { PsatWarningService } from '../psat-warning.service';
 import { PumpFluidService } from './pump-fluid.service';
-import { IntegrationStateService } from '../../shared/assessment-integration/integration-state.service';
+import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 
 @Component({
   selector: 'app-pump-fluid',
@@ -33,7 +33,6 @@ export class PumpFluidComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modificationIndex: number;
-  hasConnectedInventories: boolean;
 
   //Arrays holding <select> form data
   pumpTypes: Array<{ display: string, value: number }>;
@@ -45,6 +44,7 @@ export class PumpFluidComponent implements OnInit {
   psatForm: UntypedFormGroup;
   idString: string;
   pumpFluidWarnings: { rpmError: string, temperatureError: string };
+  hasConnectedPumpInventory: boolean;
   constructor(private psatService: PsatService, 
               private psatWarningService: PsatWarningService, 
               private compareService: CompareService, 
@@ -74,11 +74,12 @@ export class PumpFluidComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    let hasConnectedPumpItem: boolean = this.psat.connectedItem && this.psat.connectedItem.inventoryType === 'pump' && this.integrationStateService.connectedInventoryData.getValue()?.isConnected;
     if (changes.selected && !changes.selected.isFirstChange()) {
       if (!this.selected) {
         this.disableForm();
       } else {
-        this.enableForm();
+        this.enableForm(hasConnectedPumpItem);
       }
     }
     if (changes.modificationIndex && !changes.modificationIndex.isFirstChange() ||
@@ -88,21 +89,29 @@ export class PumpFluidComponent implements OnInit {
   }
 
   initForm() {
-    this.hasConnectedInventories = this.integrationStateService.assessmentIntegrationState.getValue().hasThreeWayConnection;
     this.psatForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
+    let connectedInventoryData = this.integrationStateService.connectedInventoryData.getValue();
+    this.hasConnectedPumpInventory = connectedInventoryData.connectedItem && connectedInventoryData.connectedItem.inventoryType === 'pump';
     this.checkWarnings();
   }
 
   disableForm() {
-    this.psatForm.controls.pumpType.disable();
-    this.psatForm.controls.drive.disable();
-    this.psatForm.controls.fluidType.disable();
+    this.psatForm.disable();
   }
 
-  enableForm() {
-    this.psatForm.controls.pumpType.enable();
-    this.psatForm.controls.drive.enable();
+  enableForm(hasConnectedPumpItem: boolean = false) {
+    if (!hasConnectedPumpItem) {
+      this.psatForm.controls.pumpType.enable();
+      this.psatForm.controls.pumpRPM.enable();
+      this.psatForm.controls.drive.enable();
+    }
+    this.psatForm.controls.specifiedPumpEfficiency.enable();
+    this.psatForm.controls.specifiedDriveEfficiency.enable();
     this.psatForm.controls.fluidType.enable();
+    this.psatForm.controls.fluidTemperature.enable();
+    this.psatForm.controls.gravity.enable();
+    this.psatForm.controls.viscosity.enable();
+    this.psatForm.controls.stages.enable();
   }
 
   addNum(str: string) {
@@ -199,11 +208,8 @@ export class PumpFluidComponent implements OnInit {
 
 
   save() {
-    //update object values from form values
     this.psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
-    //check warnings
     this.checkWarnings();
-    //save
     this.saved.emit(this.selected);
   }
 

@@ -26,8 +26,9 @@ app.on('ready', function () {
     width: 1000,
     height: 600,
     webPreferences: {
-      contextIsolation: false,
-      nodeIntegration: true
+      contextIsolation: true,
+      nodeIntegration: false,
+      preload: path.join(__dirname, 'preload.js')
     }
   });
   win.maximize();

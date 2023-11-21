@@ -15,7 +15,7 @@ import { DashboardService } from '../../../dashboard.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
-import { PsatIntegrationService } from '../../../../shared/assessment-integration/psat-integration.service';
+import { PsatIntegrationService } from '../../../../shared/connected-inventory/psat-integration.service';
 
 @Component({
   selector: 'app-assessment-item',
@@ -184,8 +184,9 @@ export class AssessmentItemComponent implements OnInit {
     this.assessment.name = this.editForm.controls.name.value;
     this.directoryDbService.setIsMovedExample(this.assessment, this.editForm);
     this.assessment.directoryId = this.editForm.controls.directoryId.value;
-    
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+
     this.assessmentDbService.setAll(assessments);
     this.dashboardService.updateDashboardData.next(true);
     this.hideEditModal();
@@ -224,7 +225,11 @@ export class AssessmentItemComponent implements OnInit {
 
   deleteConnectedInventoryItem(assessment: Assessment) {
     if (assessment.psat && assessment.psat.connectedItem) {
-      this.psatIntegrationService.removeConnectedInventory(assessment.psat.connectedItem, assessment.id);
+      if (assessment.psat.connectedItem.inventoryType === 'pump') {
+        this.psatIntegrationService.removeConnectedPumpInventory(assessment.psat.connectedItem, assessment.id);
+      } else if (assessment.psat.connectedItem.inventoryType === 'motor') {
+        this.psatIntegrationService.removeMotorConnectedItem(assessment.psat.connectedItem);
+      }
     }
   }
 

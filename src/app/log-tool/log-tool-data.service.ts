@@ -541,17 +541,23 @@ getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean
   }
 
   checkStepSelectedHeaderComplete(explorerFileData?: Array<ExplorerFileData>): boolean {
-    if (!explorerFileData) {
-      explorerFileData = this.explorerData.getValue().fileData;
-    }
+    let explorerData = this.explorerData.getValue();
     let stepIncomplete: boolean = false;
-    if (explorerFileData.length !== 0) {
+    
+    if (!explorerFileData) {
+      explorerFileData = explorerData.fileData;
+    }
+
+    if (explorerData.isExample) {
+      stepIncomplete = false;
+    } else if (explorerFileData.length !== 0) {
       stepIncomplete = explorerFileData.some(data => {
         return !data.headerRowVisited;
       });
     } else {
       stepIncomplete = true;
     }
+    
     return !stepIncomplete;
   } 
 

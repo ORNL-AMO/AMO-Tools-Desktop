@@ -110,7 +110,7 @@
               Heating Value Volume:
             </td>
             <td>
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{flueGasMaterial.heatingValueVolume | sigFigs:'6'}} Btu/SCF</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{flueGasMaterial.heatingValueVolume | sigFigs:'6'}} Btu/scf</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'">{{flueGasMaterial.heatingValueVolume | sigFigs:'6'}} kJ/Nm
                 <sup>3</sup>
               </span>

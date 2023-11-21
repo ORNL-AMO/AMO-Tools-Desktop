@@ -180,3 +180,39 @@ img.treasure-hunt-image {
     width: 250px;
     height: 140px;
 }
+
+@media screen and (max-width: 1024px) {
+
+	p.welcome-text {	
+		font-size: 18px;	
+	}
+
+	p.welcome-help-text {	
+		font-size: 12px;	
+	}
+
+	a.home-link-text {
+		display: none;
+	}
+
+	.assessment-block {
+		width: 90px;
+		height: 90px;
+		text-align: center;
+		border: 1px solid rgba(0, 0, 0, 0);
+		border-radius: .25rem;
+		margin: 10px;
+		padding: 10px;
+		box-shadow: 6px 8px 18px 1px rgba(0, 0, 0, 0);
+		background-color: #ffffff00;
+	}
+
+	.icon-block{
+		width: 100%;
+		align-items: center;
+		justify-content: center;
+		display: flex;
+		height: 85px;
+	}
+		
+}

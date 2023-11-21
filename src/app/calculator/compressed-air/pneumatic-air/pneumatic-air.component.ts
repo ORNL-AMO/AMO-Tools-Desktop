@@ -4,6 +4,7 @@ import { PneumaticAirRequirementInput, PneumaticAirRequirementOutput } from "../
 import { Settings } from '../../../shared/models/settings';
 import { PneumaticAirService } from './pneumatic-air.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-pneumatic-air',
@@ -32,9 +33,11 @@ export class PneumaticAirComponent implements OnInit {
   inputs: PneumaticAirRequirementInput;
   outputs: PneumaticAirRequirementOutput;
   currentField: string = 'default';
-  constructor(private standaloneService: StandaloneService, private pneumaticAirService: PneumaticAirService, private settingsDbService: SettingsDbService) { }
+  constructor(private standaloneService: StandaloneService, private pneumaticAirService: PneumaticAirService, private settingsDbService: SettingsDbService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-CA-pneumatic-air');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

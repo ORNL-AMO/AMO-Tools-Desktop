@@ -43,6 +43,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   showToast: boolean = false;
   isModalOpen: boolean = false;
   modalOpenSubscription: Subscription;
+  smallScreenTab: string = 'form';
   constructor(private lossesService: LossesService) {
   }
 
@@ -135,5 +136,9 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
       body: '',
       setTimeoutVal: undefined
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

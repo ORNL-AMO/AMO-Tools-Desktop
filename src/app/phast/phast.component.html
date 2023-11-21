@@ -14,20 +14,31 @@
     <app-phast-calculator-tabs *ngIf="mainTab =='calculators'"></app-phast-calculator-tabs>
   </div>
 
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'system-setup' && stepTab.step == 1">
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link" >Assessment Settings</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Help</a>
+    </div>
+  </div>
+
   <!--Furnace Setup -->
   <div *ngIf="mainTab == 'system-setup' && stepTab.step == 1" class="assessment-container tab-content">
     <div class="assessment-panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'modal-open': isModalOpen || showUpdateUnitsModal}">
+      [ngClass]="{'modal-open': isModalOpen || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}">
       <!--Step: 1 System Basics (Settings)-->
       <app-system-basics *ngIf="specTab.step == 1" [phast]="_phast" [settings]="settings" [assessment]="assessment"
         (updateSettings)="getSettings()" (save)="saveDb()" (openUpdateUnitsModal)="initUpdateUnitsModal($event)">
       </app-system-basics>
     </div>
-    <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <div class="assessment-panel-container scroll-item" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}" [ngStyle]="{'height.px': containerHeight}">
       <app-help-panel [settingsTab]="specTab"></app-help-panel>
     </div>
   </div>
-  <div *ngIf="mainTab == 'system-setup' && stepTab.step != 1" class="tab-content">
+  <div *ngIf="mainTab == 'system-setup' && stepTab.step != 1" class="assessment-tab-container tab-content">
     <!--Step: 4 Heat Balance-->
     <app-losses *ngIf="stepTab.step  == 2 && hasEgridDataInit" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="true"
       [containerHeight]="containerHeight"></app-losses>
@@ -43,7 +54,7 @@
   </div>
 
   <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" class="assessment-tab-container tab-content" [ngStyle]="{'height.px': containerHeight}">
     <div *ngIf="assessmentTab == 'explore-opportunities'">
       <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings"
         [assessment]="assessment" (save)="saveDb()" [exploreModIndex]="modificationIndex" (emitAddNewMod)="addNewMod()">
@@ -55,12 +66,12 @@
     </div>
   </div>
   <!--Report-->
-  <div *ngIf="mainTab == 'report'" class="report-container mx-0">
+  <div *ngIf="mainTab == 'report'" class="assessment-tab-container report-container mx-0">
       <app-phast-report [phast]="_phast" [settings]="settings" [assessment]="assessment" [inPhast]="true"
         [containerHeight]="containerHeight"></app-phast-report>
   </div>
   <!--Sankey-->
-  <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item"
+  <div *ngIf="mainTab == 'sankey'" class="d-flex flex-column scroll-item"
     [ngStyle]="{'height.px': containerHeight}">
     <nav class="navbar phast">
       <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-start align-items-center w-100 flex-wrap">
@@ -88,12 +99,12 @@
   </div>
 
   <!--Diagram-->
-  <div *ngIf="mainTab =='diagram'" class="tab-content">
+  <div *ngIf="mainTab =='diagram'" class="assessment-tab-container tab-content">
     <app-phast-diagram></app-phast-diagram>
   </div>
 
   <!--Calculators-->
-  <div *ngIf="mainTab =='calculators'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab =='calculators'" class="assessment-tab-container tab-content" [ngStyle]="{'height.px': containerHeight}">
     <app-energy-equivalency *ngIf="calcTab == 'energy-equivalency'" [inAssessment]="true" [assessment]="assessment"
       [settings]="settings"></app-energy-equivalency>
     <app-energy-use *ngIf="calcTab == 'energy-use'" [inAssessment]="true" [assessment]="assessment" [settings]="settings"></app-energy-use>
@@ -162,3 +173,5 @@
 
 
 <app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>
+
+<app-export-modal *ngIf="showExportModal" [inAssessment]="true" [assessment]="assessment" (close)="closeExportModal($event)"></app-export-modal>

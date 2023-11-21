@@ -48,6 +48,7 @@ export class PreAssessmentItemComponent implements OnInit {
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private directoryDbService: DirectoryDbService) { }
 
   ngOnInit() {
+    this.calculator.selected = false;
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.directory = this.directoryDbService.getById(this.calculator.directoryId);
       this.setDirectories();
@@ -67,6 +68,10 @@ export class PreAssessmentItemComponent implements OnInit {
 
   async setDirectories() {
     this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
+  }
+
+  updateSelectedStatus() {
+    this.directoryDashboardService.updateSelectedStatus.next(true);
   }
 
 
@@ -119,7 +124,8 @@ export class PreAssessmentItemComponent implements OnInit {
   async save() {
     this.calculator.name = this.editForm.controls.name.value;
     this.calculator.directoryId = this.editForm.controls.directoryId.value;
-    let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(this.calculator)) 
+    await firstValueFrom(this.calculatorDbService.updateWithObservable(this.calculator));
+    let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators()); 
     this.calculatorDbService.setAll(updatedCalculators);
     this.dashboardService.updateDashboardData.next(true);
     this.hideEditModal();

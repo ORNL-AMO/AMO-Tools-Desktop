@@ -1,9 +1,9 @@
 <div class="visualize-height-wrapper">
     <app-visualize-tabs></app-visualize-tabs>
     <div class="d-flex w-100 h-100 tab-content">
-        <app-visualize-menu></app-visualize-menu>
+        <app-visualize-sidebar></app-visualize-sidebar>
 
-        <div class="w-100 scroll-item pb-3" #contentContainer>
+        <div class="w-100 scroll-item" #contentContainer [ngStyle]="{'padding-bottom.px': scrollPadding}">
             <div class="spinner-overlay align-items-center w-100 text-center" *ngIf="loadingSpinner && loadingSpinner.show == true">
                 <div class="spinner mt-5 w-75">
                     <div class="bounce1"></div>
@@ -12,9 +12,7 @@
                 </div>
                 <div class="importing-text w-75">{{loadingSpinner.msg}}</div>
             </div>
-
                 <app-visualize-graph (emitHeight)="setGraphHeight($event)"></app-visualize-graph>
-            
                 <div class="row no-gutters tabs primary mx-2" #tabHeaders>
                     <div class="col-6 panel-tab-item h-100 p2" [ngClass]="{'active': tabSelect == 'results'}">
                         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">

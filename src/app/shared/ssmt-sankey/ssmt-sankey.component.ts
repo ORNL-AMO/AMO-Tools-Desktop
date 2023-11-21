@@ -263,8 +263,6 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let turbineGeneration = this.losses.condensingTurbineUsefulEnergy + this.losses.highToLowTurbineUsefulEnergy + this.losses.highToMediumTurbineUsefulEnergy + this.losses.mediumToLowTurbineUsefulEnergy;
     let processUsage = this.losses.highPressureProcessUsage + this.losses.mediumPressureProcessUsage + this.losses.lowPressureProcessUsage;
     let unreturnedCondensate = this.losses.lowPressureProcessLoss + this.losses.highPressureProcessLoss + this.losses.mediumPressureProcessLoss;
-    
-
     let otherLosses = this.losses.highPressureHeader + this.losses.mediumPressureHeader + this.losses.lowPressureHeader + this.losses.condensateLosses + this.losses.deaeratorVentLoss + this.losses.condensateFlashTankLoss;
     this.hasLowPressureVentLoss = !isNaN(this.losses.lowPressureVentLoss);
     if (this.hasLowPressureVentLoss) {
@@ -276,8 +274,8 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let originalEnergyInput = energyInput;
     let energyInputValue = (energyInput / originalEnergyInput) * 100;
     
-    if (this.results.outputData && !this.results.outputData.hasSteamModelerError && this.results.outputData.deaeratorOutput.feedwaterEnergyFlow) {
-      returnedCondensate = this.results.outputData.deaeratorOutput.feedwaterEnergyFlow;
+    if (this.results.outputData && !this.results.outputData.hasSteamModelerError && this.losses.returnedSteamAndCondensate) {
+      returnedCondensate = this.losses.returnedSteamAndCondensate;
       returnedCondensateValue = (returnedCondensate / energyInput) * 100;
     }
     // Return condensate loops back into energyInput
@@ -594,7 +592,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       if (returnedCondensateValue > this.minPlotlyDisplayValue) {
         this.nodes.push(
           {
-            name: this.getNameLabel("Returned Condensate", returnedCondensate, returnedCondensateValue),
+            name: this.getNameLabel("Returned Steam and Condensate", returnedCondensate, returnedCondensateValue),
             value: returnedCondensateValue,
             x: .8,
             y: .95,
@@ -628,7 +626,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       } else {
         this.minLosses.push(
           {
-            name: 'Returned Condensate',
+            name: 'Returned Steam and Condensate',
             text: `${this.decimalPipe.transform(returnedCondensate, '1.0-0')} ${this.units}/hr (${this.decimalPipe.transform(returnedCondensateValue, '1.1-2')}%)`,
           }
         );

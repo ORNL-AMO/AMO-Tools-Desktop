@@ -68,7 +68,7 @@ export class InventoryDbService {
     return this.dbService.delete(this.storeName, inventoryId);
   }
 
-  updateWithObservable(inventory: InventoryItem): Observable<any> {
+  updateWithObservable(inventory: InventoryItem): Observable<InventoryItem> {
     inventory.modifiedDate = new Date();
     return this.dbService.update(this.storeName, inventory);
   }
@@ -77,5 +77,10 @@ export class InventoryDbService {
     inventory.createdDate = new Date();
     inventory.modifiedDate = new Date();
     return this.dbService.add(this.storeName, inventory);
+  }
+
+  bulkDeleteWithObservable(inventoryIds: Array<number>): Observable<any> {
+    // ngx-indexed-db returns Array<Array<T>>
+    return this.dbService.bulkDelete(this.storeName, inventoryIds);
   }
 }

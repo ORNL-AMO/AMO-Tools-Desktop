@@ -12,7 +12,7 @@ import { MeasurComponent } from './landing-screen/measur/measur.component';
 import { AboutPageComponent } from './about-page/about-page.component';
 import { AcknowledgmentsPageComponent } from './acknowledgments-page/acknowledgments-page.component';
 import { ContactPageComponent } from './contact-page/contact-page.component';
-import { ImportExportModule } from './import-export/import-export.module';
+import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { DirectoryDashboardModule } from './directory-dashboard/directory-dashboard.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { DragBarComponent } from './drag-bar/drag-bar.component';

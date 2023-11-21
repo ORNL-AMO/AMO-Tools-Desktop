@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ReportRollupService } from '../../report-rollup.service';
-import { SuiteDbService } from '../../../suiteDb/suite-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { PhastResults, PHAST } from '../../../shared/models/phast/phast';
@@ -9,6 +8,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { PhastResultsData } from '../../report-rollup-models';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { PhastReportRollupService } from '../../phast-report-rollup.service';
+import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-phast-rollup-energy-table',
@@ -28,8 +28,8 @@ export class PhastRollupEnergyTableComponent implements OnInit {
   energyCostUnit: string;
   energyPerMassUnit: string;
   energyPerTimeUnit: string;
-  constructor(private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService, private suiteDbService: SuiteDbService,
-    private phastReportRollupService: PhastReportRollupService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService,
+    private phastReportRollupService: PhastReportRollupService, private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {
     this.settings = this.reportRollupService.checkSettings(this.settings);
@@ -146,13 +146,13 @@ export class PhastRollupEnergyTableComponent implements OnInit {
       rollupEnergyItem.energyUsed = resultsData.baselineResultData.grossHeatInput;
 
       if (resultsData.assessment.phast.losses.flueGasLosses && resultsData.assessment.phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
-        let gas: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(resultsData.assessment.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
+        let gas: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(resultsData.assessment.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
         if (gas) {
           rollupEnergyItem.name = gas.substance;
           rollupEnergyItem.hhv = this.convertHHV(gas.heatingValue, resultsData.settings);
         }
       } else if (resultsData.assessment.phast.losses.flueGasLosses && resultsData.assessment.phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
-        let gas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(resultsData.assessment.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
+        let gas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(resultsData.assessment.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
         if (gas) {
           rollupEnergyItem.name = gas.substance;
           rollupEnergyItem.hhv = this.convertHHV(gas.heatingValue, resultsData.settings);

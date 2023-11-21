@@ -1,13 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { AssessmentService } from '../assessment.service';
-declare const packageJson;
 import { Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 import { DashboardService } from '../dashboard.service';
 import { CoreService } from '../../core/core.service';
-declare var google: any;
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -38,7 +37,7 @@ export class SidebarComponent implements OnInit {
     private coreService: CoreService) { }
 
   ngOnInit() {
-    this.versionNum = packageJson.version;
+    this.versionNum = environment.version;
     this.updateSub = this.assessmentService.updateAvailable.subscribe(val => {
       this.isUpdateAvailable = val;
     });

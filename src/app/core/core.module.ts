@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgxElectronModule } from 'ngx-electron';
 import { PhastModule } from '../phast/phast.module';
 import { PsatModule } from '../psat/psat.module';
 import { CalculatorModule } from '../calculator/calculator.module';
@@ -35,6 +34,8 @@ import { LogToolModule } from '../log-tool/log-tool.module';
 import { MotorInventoryModule } from '../motor-inventory/motor-inventory.module';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { WasteWaterModule } from '../waste-water/waste-water.module';
+import { ToolsSuiteApiModule } from '../tools-suite-api/tools-suite-api.module';
+import { NotFoundComponent } from './not-found/not-found.component';
 import { CompressedAirAssessmentModule } from '../compressed-air-assessment/compressed-air-assessment.module';
 import { PlotlyViaWindowModule } from 'angular-plotly.js';
 import { IndexedDbModule } from '../indexedDb/indexed-db.module';
@@ -46,7 +47,8 @@ import { PumpInventoryModule } from '../pump-inventory/pump-inventory.module';
 @NgModule({
   declarations: [
     CoreComponent,
-    UpdateToastComponent
+    UpdateToastComponent,
+    NotFoundComponent,
   ],
   imports: [
     CommonModule,
@@ -55,7 +57,7 @@ import { PumpInventoryModule } from '../pump-inventory/pump-inventory.module';
     PhastModule,
     CalculatorModule,
     ModalModule,
-    NgxElectronModule,
+    // NgxElectronModule,
     FormsModule,
     ReactiveFormsModule,
     SettingsModule,
@@ -73,6 +75,7 @@ import { PumpInventoryModule } from '../pump-inventory/pump-inventory.module';
     MotorInventoryModule,
     PumpInventoryModule,
     WasteWaterModule,
+    ToolsSuiteApiModule,
     CompressedAirAssessmentModule,
     PlotlyViaWindowModule,
     IndexedDbModule,

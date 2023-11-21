@@ -7,8 +7,7 @@ import { WeatherBinsInput, WeatherBinsService } from '../../utilities/weather-bi
 import { CoolingTowerBasinFormService } from './cooling-tower-basin-form.service';
 import * as _ from 'lodash';
 import { CoolingChartData } from '../../../shared/cooling-weather-chart/cooling-weather-chart.component';
-
-declare var chillersAddon;
+import { ChillersSuiteApiService } from '../../../tools-suite-api/chillers-suite-api.service';
 
 @Injectable()
 export class CoolingTowerBasinService {
@@ -24,6 +23,7 @@ export class CoolingTowerBasinService {
   hasWeatherBinsData: BehaviorSubject<boolean>;
 
   constructor(private convertUnitsService: ConvertUnitsService,
+    private chillersSuiteApiService: ChillersSuiteApiService,
     private weatherBinsService: WeatherBinsService, private coolingTowerBasinFormService: CoolingTowerBasinFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.coolingTowerBasinInput = new BehaviorSubject<CoolingTowerBasinInput>(undefined);
@@ -121,7 +121,7 @@ export class CoolingTowerBasinService {
         this.coolingTowerBasinOutput.next(coolingTowerBasinOutput);
         return coolingTowerBasinOutput;
       } else {
-        let coolingTowerBasinResult: CoolingTowerBasinResult = chillersAddon.coolingTowerBasinHeaterEnergyConsumption(inputCopy);
+        let coolingTowerBasinResult: CoolingTowerBasinResult = this.chillersSuiteApiService.basinHeaterEnergyConsumption(inputCopy);
         let coolingTowerBasinOutput: CoolingTowerBasinOutput = {results: undefined};
         coolingTowerBasinResult.baselineEnergyCost = coolingTowerBasinResult.baselineEnergy * inputCopy.electricityCost;
         coolingTowerBasinResult.modEnergyCost = coolingTowerBasinResult.modEnergy * inputCopy.electricityCost;
@@ -187,7 +187,7 @@ export class CoolingTowerBasinService {
 
           input.operatingHours = weatherCase.totalNumberOfDataPoints;
           input.operatingTempDryBulb = dryBulbTemp;
-          let coolingTowerBasinResult: CoolingTowerBasinResult = chillersAddon.coolingTowerBasinHeaterEnergyConsumption(input);
+          let coolingTowerBasinResult: CoolingTowerBasinResult = this.chillersSuiteApiService.basinHeaterEnergyConsumption(input);
           coolingTowerBasinResult = this.convertResultUnits(coolingTowerBasinResult, settings);
           weatherBinnedResult.results = coolingTowerBasinResult;
           output.weatherBinnedResults.push(weatherBinnedResult);

@@ -4,9 +4,9 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { OperatingHours } from '../../../shared/models/operations';
 import { HeatCascadingInput, HeatCascadingOutput } from '../../../shared/models/phast/heatCascading';
 import { Settings } from '../../../shared/models/settings';
+import { ProcessHeatingApiService } from '../../../tools-suite-api/process-heating-api.service';
 import { HeatCascadingFormService } from './heat-cascading-form.service';
 
-declare var processHeatAddon;
 
 @Injectable()
 export class HeatCascadingService {
@@ -20,7 +20,9 @@ export class HeatCascadingService {
   modalOpen: BehaviorSubject<boolean>;
 
   operatingHours: OperatingHours;
-  constructor(private convertUnitsService: ConvertUnitsService, private heatCascadingFormService: HeatCascadingFormService) {
+  constructor(private convertUnitsService: ConvertUnitsService,
+    private processHeatingApiService: ProcessHeatingApiService, 
+    private heatCascadingFormService: HeatCascadingFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.heatCascadingInput = new BehaviorSubject<HeatCascadingInput>(undefined);
     this.heatCascadingOutput = new BehaviorSubject<HeatCascadingOutput>(undefined);
@@ -86,6 +88,7 @@ export class HeatCascadingService {
       effOppHours: 0,
       energySavings: 0,
       costSavings: 0,
+      hourlySavings: 0,
       priExcessAir: 0,
       priAvailableHeat: 0,
       secExcessAir: 0,
@@ -105,7 +108,7 @@ export class HeatCascadingService {
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       inputCopy = this.convertPercentInputs(inputCopy);
-      let heatCascadingOutput: HeatCascadingOutput = processHeatAddon.cascadeHeatHighToLow(inputCopy);
+      let heatCascadingOutput: HeatCascadingOutput = this.processHeatingApiService.cascadeHeatHighToLow(inputCopy);
       heatCascadingOutput = this.convertResultUnits(heatCascadingOutput, settings);
       heatCascadingOutput.priAvailableHeat = heatCascadingOutput.priAvailableHeat * 100;
       heatCascadingOutput.secAvailableHeat = heatCascadingOutput.secAvailableHeat * 100;
@@ -211,7 +214,7 @@ export class HeatCascadingService {
     input.secFiringRate = this.roundVal(input.secFiringRate, 2);
 
     //kJNm3?
-    input.fuelHV = this.convertUnitsService.value(input.fuelHV).from('btuSCF').to('MJNm3');
+    input.fuelHV = this.convertUnitsService.value(input.fuelHV).from('btuscf').to('MJNm3');
     input.fuelHV = this.roundVal(input.fuelHV, 2);
 
     return input;
@@ -244,7 +247,7 @@ export class HeatCascadingService {
       input.ambientAirTempF = this.roundVal(input.ambientAirTempF, 2);
 
       //kJNm3?
-      input.fuelHV = this.convertUnitsService.value(input.fuelHV).from('MJNm3').to('btuSCF');
+      input.fuelHV = this.convertUnitsService.value(input.fuelHV).from('MJNm3').to('btuscf');
       input.fuelHV = this.roundVal(input.fuelHV, 2);
 
     }

@@ -1,33 +1,26 @@
 // @ts-ignore
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-declare var standaloneAddon: any;
-declare var calculatorAddon: any;
-declare var compressorAddon: any;
 import {
   CombinedHeatPower, CombinedHeatPowerOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput,
   ReceiverTankGeneral, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankMeteredStorage,
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
-  PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity,
+  PipeSizingOutput, PipeSizingInput, BagMethodInput, BagMethodOutput, CalculateUsableCapacity,
   ElectricityReductionInput, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult,
   CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult,
   CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, SteamReductionInput, PipeInsulationReductionInput,
-  PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult, CompEEM_kWAdjustedInput } from '../shared/models/standalone';
+  PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult, CompEEM_kWAdjustedInput, SteamReductionOutput, SteamReductionResult
+} from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { StandaloneSuiteApiService } from '../tools-suite-api/standalone-suite-api.service';
+import { CalculatorSuiteApiService } from '../tools-suite-api/calculator-suite-api.service';
 
 @Injectable()
 export class StandaloneService {
 
 
-  constructor(private convertUnitsService: ConvertUnitsService) { }
-  // for use with PneumaticAirRequirement
-  getPistonType(pistonType: string) {
-    if (pistonType === 'Single Acting') {
-      return 0;
-    }
-    return 1; // Double Acting
-  }
+  constructor(private convertUnitsService: ConvertUnitsService, private standaloneSuiteApiService: StandaloneSuiteApiService, private calculatorSuiteApiService: CalculatorSuiteApiService) { }
 
   pneumaticAirRequirement(input: PneumaticAirRequirementInput, settings: Settings): PneumaticAirRequirementOutput {
     const inputCpy: PneumaticAirRequirementInput = JSON.parse(JSON.stringify(input));
@@ -38,7 +31,7 @@ export class StandaloneService {
       inputCpy.pistonRodDiameter = this.convertUnitsService.value(inputCpy.pistonRodDiameter).from('cm').to('in');
       //metric: kPa imperial: psi
       inputCpy.airPressure = this.convertUnitsService.value(inputCpy.airPressure).from('kPa').to('psi');
-      let output: PneumaticAirRequirementOutput = standaloneAddon.pneumaticAirRequirement(inputCpy);
+      let output: PneumaticAirRequirementOutput = this.standaloneSuiteApiService.pneumaticAirRequirement(inputCpy);
       //metric: m3 imperial: ft3
       output.airRequirementPneumaticCylinder = this.convertUnitsService.value(output.airRequirementPneumaticCylinder).from('ft3').to('m3');
       //metric: m3 imperial: ft3
@@ -46,19 +39,8 @@ export class StandaloneService {
       return output;
     }
     else {
-      return standaloneAddon.pneumaticAirRequirement(inputCpy);
+      return this.standaloneSuiteApiService.pneumaticAirRequirement(inputCpy);
     }
-  }
-
-  getReceiverTankCalculationMethod(method: string) {
-    if (method === 'General') {
-      return 0;
-    } else if (method === 'Dedicated Storage') {
-      return 1;
-    } else if (method === 'Bridging Compressor Reaction Delay') {
-      return 2;
-    }
-    return 3; // Metered Storage
   }
 
   receiverTankSizeGeneral(input: ReceiverTankGeneral, settings: Settings): number {
@@ -70,12 +52,12 @@ export class StandaloneService {
       inputCpy.allowablePressureDrop = this.convertUnitsService.value(inputCpy.allowablePressureDrop).from('kPa').to('psi');
       //metric:kpaa imperial:psia
       inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPaa').to('psia');
-      let requiredStorage: number = standaloneAddon.receiverTank(inputCpy);
+      let requiredStorage: number = this.standaloneSuiteApiService.receiverTankGeneral(inputCpy);
       //metric:m3 imperial:gal
       requiredStorage = this.convertUnitsService.value(requiredStorage).from('gal').to('m3');
       return requiredStorage;
     } else {
-      return standaloneAddon.receiverTank(inputCpy);
+      return this.standaloneSuiteApiService.receiverTankGeneral(inputCpy);
     }
   }
 
@@ -90,11 +72,11 @@ export class StandaloneService {
       inputCpy.initialTankPressure = this.convertUnitsService.value(inputCpy.initialTankPressure).from('kPa').to('psi');
       inputCpy.finalTankPressure = this.convertUnitsService.value(inputCpy.finalTankPressure).from('kPa').to('psi');
       //metric:m3 imperial:gal
-      let calcVolume: number = standaloneAddon.receiverTank(inputCpy);
+      let calcVolume: number = this.standaloneSuiteApiService.receiverTankDedicatedStorage(inputCpy);
       calcVolume = this.convertUnitsService.value(calcVolume).from('gal').to('m3');
       return calcVolume;
     } else {
-      return standaloneAddon.receiverTank(inputCpy);
+      return this.standaloneSuiteApiService.receiverTankDedicatedStorage(inputCpy);
     }
   }
 
@@ -111,11 +93,11 @@ export class StandaloneService {
       //metric:kpaa imperial:psia
       inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPaa').to('psia');
       //metric: m3 imperial: gal
-      let calcVolume: number = standaloneAddon.receiverTank(inputCpy);
+      let calcVolume: number = this.standaloneSuiteApiService.receiverTankSizeBridgingCompressor(inputCpy);
       calcVolume = this.convertUnitsService.value(calcVolume).from('gal').to('m3');
       return calcVolume;
     } else {
-      return standaloneAddon.receiverTank(inputCpy);
+      return this.standaloneSuiteApiService.receiverTankSizeBridgingCompressor(inputCpy);
     }
   }
 
@@ -131,11 +113,11 @@ export class StandaloneService {
       inputCpy.initialTankPressure = this.convertUnitsService.value(inputCpy.initialTankPressure).from('kPa').to('psi');
       inputCpy.finalTankPressure = this.convertUnitsService.value(inputCpy.finalTankPressure).from('kPa').to('psi');
       //metric: m3 imperial: gal
-      let calcVolume: number = standaloneAddon.receiverTank(inputCpy);
+      let calcVolume: number = this.standaloneSuiteApiService.receiverTankSizeMeteredStorage(inputCpy);
       calcVolume = this.convertUnitsService.value(calcVolume).from('gal').to('m3');
       return calcVolume;
     } else {
-      return standaloneAddon.receiverTank(inputCpy);
+      return this.standaloneSuiteApiService.receiverTankSizeMeteredStorage(inputCpy);
     }
   }
 
@@ -144,7 +126,7 @@ export class StandaloneService {
     if (settings.unitsOfMeasure === 'Metric') {
       inputCpy.motorBhp = this.convertUnitsService.value(inputCpy.motorBhp).from('kW').to('hp');
     }
-    return standaloneAddon.operatingCost(inputCpy);
+    return this.standaloneSuiteApiService.operatingCost(inputCpy);
   }
 
   airSystemCapacity(input: AirSystemCapacityInput, settings: Settings): AirSystemCapacityOutput {
@@ -173,7 +155,7 @@ export class StandaloneService {
           );
         });
       inputCpy.receiverCapacities = tmpCapacities;
-      outputs = standaloneAddon.airSystemCapacity(inputCpy);
+      outputs = this.standaloneSuiteApiService.airSystemCapacity(inputCpy);
       outputs.totalCapacityOfCompressedAirSystem += customPipeVolume;
       outputs.totalPipeVolume += customPipeVolume;
       outputs.totalReceiverVolume = this.convertUnitsService.value(outputs.totalReceiverVolume).from('ft3').to('m3');
@@ -184,7 +166,7 @@ export class StandaloneService {
       inputCpy.customPipes.forEach((pipe: { pipeSize: number, pipeLength: number }) => {
         customPipeVolume += this.calculatePipeVolume(pipe.pipeSize, pipe.pipeLength);
       });
-      outputs = standaloneAddon.airSystemCapacity(inputCpy);
+      outputs = this.standaloneSuiteApiService.airSystemCapacity(inputCpy);
       outputs.totalCapacityOfCompressedAirSystem += customPipeVolume;
       outputs.totalPipeVolume += customPipeVolume;
     }
@@ -239,14 +221,14 @@ export class StandaloneService {
       inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPaa').to('psia');
       //metric: kPa imperial: psi
       inputCpy.pipePressure = this.convertUnitsService.value(inputCpy.pipePressure).from('kPa').to('psi');
-      let output: PipeSizes = standaloneAddon.airVelocity(inputCpy);
+      let output: PipeSizes = this.standaloneSuiteApiService.airVelocity(inputCpy);
       //all sizes metric: cm imperial: in
       for (let key in output) {
         output[key] = this.convertUnitsService.value(output[key]).from('ft').to('m');
       }
       return output;
     }
-    return standaloneAddon.airVelocity(inputCpy);
+    return this.standaloneSuiteApiService.airVelocity(inputCpy);
   }
 
   pipeSizing(input: PipeSizingInput, settings: Settings): PipeSizingOutput {
@@ -260,46 +242,46 @@ export class StandaloneService {
       inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPaa').to('psia');
       //metric: m imperial: ft
       inputCpy.designVelocity = this.convertUnitsService.value(inputCpy.designVelocity).from('m').to('ft');
-      let outputs: PipeSizingOutput = standaloneAddon.pipeSizing(inputCpy);
+      let outputs: PipeSizingOutput = this.standaloneSuiteApiService.pipeSizing(inputCpy);
       //metric: cm2 imperial: in2
       outputs.crossSectionalArea = this.convertUnitsService.value(outputs.crossSectionalArea).from('in2').to('cm2');
       //metric: cm imperial: in
       outputs.pipeDiameter = this.convertUnitsService.value(outputs.pipeDiameter).from('in').to('cm');
       return outputs;
     } else {
-      return standaloneAddon.pipeSizing(inputCpy);
+      return this.standaloneSuiteApiService.pipeSizing(inputCpy);
     }
   }
 
   // calculate flow rate
-  pneumaticValveCalculateFlowRate(inletPressure: number, outletPressure: number, settings: Settings): number {
-    let inletPressureCpy: number = JSON.parse(JSON.stringify(inletPressure));
-    let outletPressureCpy: number = JSON.parse(JSON.stringify(outletPressure));
-    if (settings.unitsOfMeasure === 'Metric') {
-      inletPressureCpy = this.convertUnitsService.value(inletPressureCpy).from('kPa').to('psi');
-      outletPressureCpy = this.convertUnitsService.value(outletPressureCpy).from('kPa').to('psi');
-      let flowRate: number = standaloneAddon.pneumaticValve({ inletPressure: inletPressureCpy, outletPressure: outletPressureCpy }).flowRate;
-      flowRate = this.convertUnitsService.value(flowRate).from('ft3').to('m3');
-      return flowRate;
-    } else {
-      return standaloneAddon.pneumaticValve({ inletPressure: inletPressureCpy, outletPressure: outletPressureCpy }).flowRate;
-    }
-  }
+  // pneumaticValveCalculateFlowRate(inletPressure: number, outletPressure: number, settings: Settings): number {
+  //   let inletPressureCpy: number = JSON.parse(JSON.stringify(inletPressure));
+  //   let outletPressureCpy: number = JSON.parse(JSON.stringify(outletPressure));
+  //   if (settings.unitsOfMeasure === 'Metric') {
+  //     inletPressureCpy = this.convertUnitsService.value(inletPressureCpy).from('kPa').to('psi');
+  //     outletPressureCpy = this.convertUnitsService.value(outletPressureCpy).from('kPa').to('psi');
+  //     let flowRate: number = this.standaloneSuiteApiService.pneumaticValveCalculateFlowRate({ inletPressure: inletPressureCpy, outletPressure: outletPressureCpy }).flowRate;
+  //     flowRate = this.convertUnitsService.value(flowRate).from('ft3').to('m3');
+  //     return flowRate;
+  //   } else {
+  //     return this.standaloneSuiteApiService.pneumaticValveCalculateFlowRate({ inletPressure: inletPressureCpy, outletPressure: outletPressureCpy }).flowRate;
+  //   }
+  // }
 
-  // calculate flow coefficient
-  pneumaticValve(input: PneumaticValve, settings: Settings): number {
-    let inputCpy: PneumaticValve = JSON.parse(JSON.stringify(input));
-    if (settings.unitsOfMeasure === 'Metric') {
-      inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from('kPa').to('psi');
-      inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from('kPa').to('psi');
-      inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from('m3').to('ft3');
-      let flowCoefficient: number = standaloneAddon.pneumaticValve(inputCpy).flowCoefficient;
-      flowCoefficient = this.convertUnitsService.value(flowCoefficient).from('ft3').to('m3');
-      return flowCoefficient;
-    } else {
-      return standaloneAddon.pneumaticValve(inputCpy).flowCoefficient;
-    }
-  }
+  // // calculate flow coefficient
+  // pneumaticValve(input: PneumaticValve, settings: Settings): number {
+  //   let inputCpy: PneumaticValve = JSON.parse(JSON.stringify(input));
+  //   if (settings.unitsOfMeasure === 'Metric') {
+  //     inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from('kPa').to('psi');
+  //     inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from('kPa').to('psi');
+  //     inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from('m3').to('ft3');
+  //     let flowCoefficient: number = this.standaloneSuiteApiService.pneumaticValve(inputCpy).flowCoefficient;
+  //     flowCoefficient = this.convertUnitsService.value(flowCoefficient).from('ft3').to('m3');
+  //     return flowCoefficient;
+  //   } else {
+  //     return this.standaloneSuiteApiService.pneumaticValve(inputCpy).flowCoefficient;
+  //   }
+  // }
 
   bagMethod(input: BagMethodInput, settings: Settings): BagMethodOutput {
     let inputCpy: BagMethodInput = JSON.parse(JSON.stringify(input));
@@ -307,13 +289,13 @@ export class StandaloneService {
       //metric: cm imperial: in
       inputCpy.heightOfBag = this.convertUnitsService.value(inputCpy.heightOfBag).from('cm').to('in');
       inputCpy.diameterOfBag = this.convertUnitsService.value(inputCpy.diameterOfBag).from('cm').to('in');
-      let results: BagMethodOutput = standaloneAddon.bagMethod(inputCpy);
+      let results: BagMethodOutput = this.standaloneSuiteApiService.bagMethod(inputCpy);
       //metric: m3 imperial: ft3
       results.flowRate = this.convertUnitsService.value(results.flowRate).from('ft3').to('m3');
       results.annualConsumption = this.convertUnitsService.value(results.annualConsumption).from('ft3').to('m3');
       return results;
     } else {
-      return standaloneAddon.bagMethod(inputCpy);
+      return this.standaloneSuiteApiService.bagMethod(inputCpy);
     }
   }
 
@@ -326,7 +308,7 @@ export class StandaloneService {
       inputCpy.CHPfuelCosts = inputCpy.CHPfuelCosts / fuelCostHelper;
       inputCpy.annualThermalDemand = this.convertUnitsService.value(inputCpy.annualThermalDemand).from('GJ').to('MMBtu');
     }
-    return standaloneAddon.CHPcalculator(inputCpy);
+    return this.standaloneSuiteApiService.CHPcalculator(inputCpy);
   }
 
   usableAirCapacity(input: CalculateUsableCapacity, settings: Settings): number {
@@ -338,69 +320,46 @@ export class StandaloneService {
       inputCpy.airPressureIn = this.convertUnitsService.value(inputCpy.airPressureIn).from('kPa').to('psig');
       inputCpy.airPressureOut = this.convertUnitsService.value(inputCpy.airPressureOut).from('kPa').to('psig');
       //metric: m3 imperial: ft3
-      let calcTankCapacity: number = standaloneAddon.usableAirCapacity(inputCpy);
+      let calcTankCapacity: number = this.standaloneSuiteApiService.usableAirCapacity(inputCpy);
       calcTankCapacity = this.convertUnitsService.value(calcTankCapacity).from('ft3').to('m3');
       return calcTankCapacity;
     } else {
-      return standaloneAddon.usableAirCapacity(inputCpy);
+      return this.standaloneSuiteApiService.usableAirCapacity(inputCpy);
     }
   }
 
   electricityReduction(inputObj: ElectricityReductionInput): ElectricityReductionResult {
-    return calculatorAddon.electricityReduction(inputObj);
+    return this.calculatorSuiteApiService.electricityReduction(inputObj);
   }
 
   naturalGasReduction(inputObj: NaturalGasReductionInput): NaturalGasReductionResult {
-    return calculatorAddon.naturalGasReduction(inputObj);
+    return this.calculatorSuiteApiService.naturalGasReduction(inputObj);
   }
 
   compressedAirReduction(inputObj: CompressedAirReductionInput): CompressedAirReductionResult {
-    let results: CompressedAirReductionResult = calculatorAddon.compressedAirReduction(inputObj);
+    let results: CompressedAirReductionResult = this.calculatorSuiteApiService.compressedAirReduction(inputObj);
     return results;
   }
 
   airLeakSurvey(inputObj: AirLeakSurveyInput): AirLeakSurveyResult {
-    let results: AirLeakSurveyResult = calculatorAddon.compressedAirLeakSurvey(inputObj);
+    let results: AirLeakSurveyResult = this.calculatorSuiteApiService.compressedAirLeakSurvey(inputObj);
     return results;
   }
 
-  compressedAirPressureReduction(inputObj: CompressedAirPressureReductionInput): CompressedAirPressureReductionResult {
-    if(inputObj.compressedAirPressureReductionInputVec && inputObj.compressedAirPressureReductionInputVec.length > 0){
-      let input: CompEEM_kWAdjustedInput = {
-        kW_fl_rated: inputObj.compressedAirPressureReductionInputVec[0].compressorPower,
-        P_fl_rated: inputObj.compressedAirPressureReductionInputVec[0].pressureRated,
-        P_discharge: inputObj.compressedAirPressureReductionInputVec[0].pressure,
-        P_alt: inputObj.compressedAirPressureReductionInputVec[0].atmosphericPressure,
-        P_atm: 14.7
-      }
-      let result: { kW_adjusted: number } = compressorAddon.CompEEM_kWAdjusted(input);
-      let annualEnergyUsage: number = result.kW_adjusted * inputObj.compressedAirPressureReductionInputVec[0].hoursPerYear;
-      let annualEnergyCost: number = annualEnergyUsage * inputObj.compressedAirPressureReductionInputVec[0].electricityCost;
-      return {
-        energyCost: annualEnergyCost,
-        energyUse: annualEnergyUsage
-      }
-    }
-    return {
-      energyCost: 0,
-      energyUse: 0
-    }
-  }
-
   waterReduction(inputObj: WaterReductionInput): WaterReductionResult {
-    return calculatorAddon.waterReduction(inputObj);
+    return this.calculatorSuiteApiService.waterReduction(inputObj);
   }
 
-  steamReduction(inputObj: SteamReductionInput): any {
-    let result = calculatorAddon.steamReduction(inputObj);
+  steamReduction(inputObj: SteamReductionInput): SteamReductionResult {
+    let result: SteamReductionResult = this.calculatorSuiteApiService.steamReduction(inputObj);
     return result;
   }
 
   pipeInsulationReduction(inputObj: PipeInsulationReductionInput): PipeInsulationReductionResult {
-    return calculatorAddon.pipeInsulationReduction(inputObj);
+    return this.calculatorSuiteApiService.pipeInsulationReduction(inputObj);
   }
 
   tankInsulationReduction(inputObj: TankInsulationReductionInput): TankInsulationReductionResult {
-    return calculatorAddon.tankInsulationReduction(inputObj);
+    return this.calculatorSuiteApiService.tankInsulationReduction(inputObj);
   }
 }

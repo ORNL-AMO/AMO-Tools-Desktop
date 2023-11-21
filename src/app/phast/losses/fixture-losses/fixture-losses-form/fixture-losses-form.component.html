@@ -24,7 +24,7 @@
     <div class="form-group">
       <label class="small" for="{{'specificHeat'+idString}}">Average Specific Heat of Material</label>
       <div class="input-group" [ngClass]="{'indicate-different-db':checkSpecificHeat(), 'invalid': lossesForm.controls.specificHeat.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'specificHeat_'+lossIndex}}" type="number" step="any" min="0"
+        <input [readonly]="!baselineSelected" name="{{'specificHeat_'+lossIndex}}" type="number" step="0.1" min="0"
           class="form-control" formControlName="specificHeat" id="{{'specificHeat'+idString}}" onfocus="this.select();"
           (input)="save()" (focus)="focusField('specificHeat')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
@@ -41,7 +41,7 @@
     <div class="form-group">
       <label class="small" for="{{'feedRate'+idString}}">Fixture Feed Rate</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareFeedRate(), 'invalid': lossesForm.controls.feedRate.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'feedRate_'+lossIndex}}" type="number" step="any" min="0" class="form-control"
+        <input [readonly]="!baselineSelected" name="{{'feedRate_'+lossIndex}}" type="number" step="100" min="0" class="form-control"
           formControlName="feedRate" id="{{'feedRate'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('feedRate')"
           >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
@@ -58,7 +58,7 @@
     <div class="form-group">
       <label class="small" for="{{'initialTemp'+idString}}">Inlet Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareInitialTemperature(), 'invalid': lossesForm.controls.initialTemp.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'initialTemp_'+lossIndex}}" type="number" step="any" class="form-control"
+        <input [readonly]="!baselineSelected" name="{{'initialTemp_'+lossIndex}}" type="number" step="10" class="form-control"
           formControlName="initialTemp" id="{{'initialTemp'+idString}}" onfocus="this.select();" (input)="save()"
           (focus)="focusField('initialTemp')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -73,7 +73,7 @@
     <div class="form-group">
       <label class="small" for="{{'finalTemp'+idString}}">Outlet Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareFinalTemperature(), 'invalid': lossesForm.controls.finalTemp.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'finalTemp_'+lossIndex}}" type="number" step="any" class="form-control"
+        <input [readonly]="!baselineSelected" name="{{'finalTemp_'+lossIndex}}" type="number" step="10" class="form-control"
           formControlName="finalTemp" id="{{'finalTemp'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('finalTemp')"
           >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>

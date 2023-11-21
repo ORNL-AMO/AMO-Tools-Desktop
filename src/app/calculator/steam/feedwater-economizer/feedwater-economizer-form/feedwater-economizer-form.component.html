@@ -36,7 +36,7 @@
     <div class="input-group">
       <input name="higherHeatingVal" type="number" step="10" class="form-control" formControlName="higherHeatingVal"
         id="higherHeatingVal" onfocus="this.select();" (input)="calculate()" (focus)="focusField('fuelHV')">
-      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/SCF</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/scf</span>
       <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/Nm<sup>3</sup>
       </span>
     </div>
@@ -310,6 +310,11 @@
     <span class="alert-danger pull-right small"
       *ngIf="form.controls.feedWaterTemperature.invalid && !form.controls.feedWaterTemperature.pristine">
       <span *ngIf="form.controls.feedWaterTemperature.errors.required">Value Required</span>
+      <span *ngIf="form.controls.feedWaterTemperature.errors.min">Value can't be less than
+        {{form.controls.feedWaterTemperature.errors.min.min}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+    </span>
     </span>
   </div>
 

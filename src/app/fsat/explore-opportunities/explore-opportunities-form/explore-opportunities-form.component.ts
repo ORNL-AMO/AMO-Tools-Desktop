@@ -3,7 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { FSAT, InletPressureData, OutletPressureData, PlaneData, FanRatedInfo, FsatOutput, CompressibilityFactor } from '../../../shared/models/fans';
 import { HelpPanelService } from '../../help-panel/help-panel.service';
 import { ModifyConditionsService } from '../../modify-conditions/modify-conditions.service';
-import { UntypedFormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FanFieldDataService } from '../../fan-field-data/fan-field-data.service';
 import { FanMotorService } from '../../fan-motor/fan-motor.service';
 import { FanSetupService } from '../../fan-setup/fan-setup.service';
@@ -67,9 +67,11 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   inletVelocityPressureInputs: InletVelocityPressureInputs;
 
+  modifyFieldDataForm: UntypedFormGroup;
+
   constructor(private helpPanelService: HelpPanelService, private modifyConditionsService: ModifyConditionsService, private fanFieldDataService: FanFieldDataService,
     private fanMotorService: FanMotorService, private fanSetupService: FanSetupService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService,
-    private fsatWarningService: FsatWarningService, private fanOperationsService: OperationsService) { }
+    private fsatWarningService: FsatWarningService, private fanOperationsService: OperationsService, private formBuilder: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.initForms();
@@ -100,6 +102,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   save() {
     this.saveFieldData();
+    this.fsat.modifications[this.exploreModIndex].fsat.implementationCosts = this.modifyFieldDataForm.controls.implementationCosts.value;
     this.fsat.modifications[this.exploreModIndex].fsat.fsatOperations = this.fanOperationsService.getObjFromForm(this.modificationOperationsForm);    
     this.fsat.modifications[this.exploreModIndex].fsat.fanMotor = this.fanMotorService.getObjFromForm(this.modificationMotorForm);
     this.fsat.modifications[this.exploreModIndex].fsat.fanSetup = this.fanSetupService.getObjFromForm(this.modificationFanSetupForm);
@@ -154,6 +157,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
     this.baselineFanEfficiency = this.fsatService.getResults(this.fsat, true, this.settings).fanEfficiency;
     this.baselineFanEfficiency = this.convertUnitsService.roundVal(this.baselineFanEfficiency, 2);
+
+    this.modifyFieldDataForm = this.formBuilder.group({
+      implementationCosts: [this.fsat.modifications[this.exploreModIndex].fsat.implementationCosts],
+    });
   }
 
   checkWarnings() {

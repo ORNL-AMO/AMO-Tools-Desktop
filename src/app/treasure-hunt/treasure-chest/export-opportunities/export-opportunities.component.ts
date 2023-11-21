@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, WaterHeatingTreasureHunt, HeatCascadingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, WaterHeatingTreasureHunt, HeatCascadingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, BoilerBlowdownRateTreasureHunt, AssessmentOpportunity } from '../../../shared/models/treasure-hunt';
 import * as _ from 'lodash';
-import { ImportExportService } from '../../../dashboard/import-export/import-export.service';
+import { ImportExportService } from '../../../shared/import-export/import-export.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { TreasureChestMenuService } from '../treasure-chest-menu/treasure-chest-menu.service';
 @Component({
@@ -50,6 +50,7 @@ export class ExportOpportunitiesComponent implements OnInit {
     this.exportOpportunities = {
       lightingReplacements: this.getSelectedLighting(this.treasureHunt.lightingReplacements),
       opportunitySheets: this.getSelectedOpportunities(this.treasureHunt.opportunitySheets),
+      assessmentOpportunities: this.getSelectedAssessmentOpportunities(this.treasureHunt.assessmentOpportunities),
       replaceExistingMotors: this.getSelectedReplaceExistingMotors(this.treasureHunt.replaceExistingMotors),
       motorDrives: this.getSelectedMotorDrives(this.treasureHunt.motorDrives),
       naturalGasReductions: this.getSelectedNgReductions(this.treasureHunt.naturalGasReductions),
@@ -73,7 +74,8 @@ export class ExportOpportunitiesComponent implements OnInit {
       chillerStagingOpportunities: this.getChillerStagingOpportunities(this.treasureHunt.chillerStagingOpportunities),
       chillerPerformanceOpportunities: this.getChillerPerformanceOpportunities(this.treasureHunt.chillerPerformanceOpportunities),
       coolingTowerFanOpportunities: this.getCoolingTowerFanOpportunities(this.treasureHunt.coolingTowerFanOpportunities),
-      coolingTowerBasinOpportunities: this.getCoolingTowerBasinOpportunities(this.treasureHunt.coolingTowerBasinOpportunities)
+      coolingTowerBasinOpportunities: this.getCoolingTowerBasinOpportunities(this.treasureHunt.coolingTowerBasinOpportunities),
+      boilerBlowdownRateOpportunities: this.getBoilerBlowdownRateOpportunities(this.treasureHunt.boilerBlowdownRateOpportunities)
     }
   }
   getSelectedLighting(lightingReplacements: Array<LightingReplacementTreasureHunt>): Array<LightingReplacementTreasureHunt> {
@@ -119,6 +121,13 @@ export class ExportOpportunitiesComponent implements OnInit {
   }
 
   getSelectedOpportunities(opportunities: Array<OpportunitySheet>): Array<OpportunitySheet> {
+    if (opportunities) {
+      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
+
+  getSelectedAssessmentOpportunities(opportunities: Array<AssessmentOpportunity>): Array<AssessmentOpportunity> {
     if (opportunities) {
       return _.filter(opportunities, (opportunity) => { return opportunity.selected });
     }
@@ -244,6 +253,13 @@ export class ExportOpportunitiesComponent implements OnInit {
   }
 
   getCoolingTowerBasinOpportunities(opportunities: Array<CoolingTowerBasinTreasureHunt>): Array<CoolingTowerBasinTreasureHunt> {
+    if (opportunities) {
+      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
+
+  getBoilerBlowdownRateOpportunities(opportunities: Array<BoilerBlowdownRateTreasureHunt>): Array<BoilerBlowdownRateTreasureHunt> {
     if (opportunities) {
       return _.filter(opportunities, (opportunity) => { return opportunity.selected });
     }

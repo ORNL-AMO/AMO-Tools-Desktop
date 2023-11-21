@@ -94,6 +94,14 @@
     border-bottom: #84b641 groove 6px;
     border-image: linear-gradient(to right,#F0F3F4, #84b641) 80 / 2;
   }
+
+  .list-row {
+    padding: 14px;
+    background: white;
+    border-radius: .25rem;
+    margin-top: .5rem;
+    box-shadow: 3px 0px 5px 2px grey;
+  }
   
   .pump-row{
     border-bottom: #2980b9 groove 6px;

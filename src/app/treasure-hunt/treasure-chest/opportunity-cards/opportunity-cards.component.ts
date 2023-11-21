@@ -144,6 +144,12 @@ export class OpportunityCardsComponent implements OnInit {
     this.showOpportunitySheetModal();
   }
 
+  editAssessmentOpportunity(cardData: OpportunityCardData) {
+    this.modifyDataIndex = cardData.index;
+    this.editOpportunitySheetCardData = cardData;
+    this.showOpportunitySheetModal();
+  }
+
   showOpportunitySheetModal() {
     this.opportunitySheetModal.show();
   }

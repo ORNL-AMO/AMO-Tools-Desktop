@@ -20,6 +20,7 @@ export class MotorInventorySetupComponent implements OnInit {
   isModalOpen: boolean;
   helpPanelTabSub: Subscription;
   initPlantSetup: boolean = false;
+  smallScreenTab: string = 'form';
   constructor(private motorInventoryService: MotorInventoryService, private egridService: EGridService,
     private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
 
@@ -53,5 +54,9 @@ export class MotorInventorySetupComponent implements OnInit {
 
   setTab(str: string) {
     this.motorInventoryService.helpPanelTab.next(str);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

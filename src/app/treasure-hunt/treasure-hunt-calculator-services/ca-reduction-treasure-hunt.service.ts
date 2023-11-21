@@ -64,7 +64,7 @@ export class CaReductionTreasureHuntService {
 
   getCompressedAirReductionCardData(reduction: CompressedAirReductionTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, currentEnergyUsage: EnergyUsage, index: number): OpportunityCardData {
     let utilityCost: number = currentEnergyUsage.compressedAirCosts;
-    let unitStr: string = 'kSCF'
+    let unitStr: string = 'kscf'
     //electricity utility
     if (reduction.baseline[0].utilityType == 1) {
       utilityCost = currentEnergyUsage.electricityCosts;
@@ -115,13 +115,13 @@ export class CaReductionTreasureHuntService {
   }
 
   convertCompressedAirReduction(reduction: CompressedAirReductionData, oldSettings: Settings, newSettings: Settings): CompressedAirReductionData {
-    // imperial: $/SCF, metric: $/m3
+    // imperial: $/scf, metric: $/m3
     reduction.compressedAirCost = this.convertUnitsService.convertDollarsPerFt3AndM3(reduction.compressedAirCost, oldSettings, newSettings);
     //I believe utility cost is just set before sending to calculations so it does not need a conversion,
     //will use electrity cost or compressed air cost
     // reduction.utilityCost
 
-    //imperial: SCF/min, metric: m3/min
+    //imperial: scf/min, metric: m3/min
     reduction.flowMeterMethodData.meterReading = this.convertUnitsService.convertFt3AndM3Value(reduction.flowMeterMethodData.meterReading, oldSettings, newSettings);
     //imperial: in, metric: cm
     reduction.bagMethodData.height = this.convertUnitsService.convertInAndCmValue(reduction.bagMethodData.height, oldSettings, newSettings);
@@ -129,9 +129,9 @@ export class CaReductionTreasureHuntService {
     reduction.bagMethodData.diameter = this.convertUnitsService.convertInAndCmValue(reduction.bagMethodData.diameter, oldSettings, newSettings);
     //imperial: psig, metric: barg
     reduction.pressureMethodData.supplyPressure = this.convertUnitsService.convertPsigAndBargValue(reduction.pressureMethodData.supplyPressure, oldSettings, newSettings);
-    //imperial: kSCF/yr, metric: m3/yr
-    reduction.otherMethodData.consumption = this.convertUnitsService.convertKSCFAndM3Value(reduction.otherMethodData.consumption, oldSettings, newSettings);
-    //imperial: kW/SCFM, metric: kW/(m3/min)
+    //imperial: kscf/yr, metric: m3/yr
+    reduction.otherMethodData.consumption = this.convertUnitsService.convertKscfAndM3Value(reduction.otherMethodData.consumption, oldSettings, newSettings);
+    //imperial: kW/scfM, metric: kW/(m3/min)
     reduction.compressorElectricityData.compressorSpecificPower = this.convertUnitsService.convertDollarsPerFt3AndM3(reduction.compressorElectricityData.compressorSpecificPower, oldSettings, newSettings);
 
     return reduction;

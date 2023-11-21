@@ -1,0 +1,34 @@
+
+.error-template {padding: 40px 15px;text-align: center;}
+.error-actions {margin-top:15px;margin-bottom:15px;}
+.error-actions .btn { margin-right:10px; }
+
+.app-icon {
+  max-width: 500px;
+}
+
+ul{
+    padding-left: 0px;
+}
+.text li {
+  float: left;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 2em;
+  color:#156739;
+  opacity: 1;
+  transition: all 1.5s ease-in-out;
+   max-width: 2em;
+}
+.text.hidden-text li.spaced {
+  padding-left: 0;
+}
+
+.text.hidden-text .capitol{
+    /* animation-name: capitol;
+    animation-duration: 5s; */
+      font-size: 5rem; 
+    /* text-shadow: 5px 5px #196F3D; */
+    animation-name: capitol;
+    transition: all 2s ease-in-out !important;
+}

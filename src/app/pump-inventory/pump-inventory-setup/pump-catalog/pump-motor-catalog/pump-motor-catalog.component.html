@@ -4,7 +4,7 @@
     Motor
 </label>
 
-<app-assessment-integration-status *ngIf="displayForm" [connectedToType]="'assessment'" [hasConnectedInventories]="hasConnectedInventories" [connectedFormGroupName]="'motor'"></app-assessment-integration-status>
+<app-connected-assessment-status *ngIf="displayForm" [connectedToType]="'assessment'" [connectedFormGroupName]="'motor'"></app-connected-assessment-status>
 
 <app-inventory-integration *ngIf="displayForm && inventorySelectOptions" 
     (focusedField)="focusField($event, true)"

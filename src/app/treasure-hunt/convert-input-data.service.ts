@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, OpportunitySheet, EnergyUseItem, EnergyUsage, HeatCascadingTreasureHunt,  } from '../shared/models/treasure-hunt';
+import { TreasureHunt, OpportunitySheet, EnergyUseItem, EnergyUsage, HeatCascadingTreasureHunt, AssessmentOpportunity,  } from '../shared/models/treasure-hunt';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
 import { AirLeakTreasureHuntService } from './treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
@@ -26,6 +26,7 @@ import { ChillerStagingTreasureHuntService } from './treasure-hunt-calculator-se
 import { ChillerPerformanceTreasureHuntService } from './treasure-hunt-calculator-services/chiller-performance-treasure-hunt.service';
 import { CoolingTowerFanTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-fan-treasure-hunt.service';
 import { CoolingTowerBasinTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
+import { BoilerBlowdownRateTreasureHuntService } from './treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
 
 @Injectable()
 export class ConvertInputDataService {
@@ -54,12 +55,18 @@ export class ConvertInputDataService {
     private chillerPerformanceTreasureHuntService: ChillerPerformanceTreasureHuntService,
     private coolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService,
     private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService,
+    private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService
     ) { }
 
   convertTreasureHuntInputData(treasureHunt: TreasureHunt, oldSettings: Settings, newSettings: Settings): TreasureHunt {
     //no conversion for lighting needed..
     if (treasureHunt.opportunitySheets != undefined) {
-      treasureHunt.opportunitySheets = this.convertOpportunitySheets(treasureHunt.opportunitySheets, oldSettings, newSettings);
+      let opportunitySheets = this.convertCustomOpportunity(treasureHunt.opportunitySheets, oldSettings, newSettings);
+      treasureHunt.opportunitySheets = opportunitySheets as OpportunitySheet[];
+    }
+    if (treasureHunt.assessmentOpportunities != undefined) {
+      let assessmentOpportunities = this.convertCustomOpportunity(treasureHunt.assessmentOpportunities, oldSettings, newSettings);
+      treasureHunt.assessmentOpportunities = assessmentOpportunities as AssessmentOpportunity[];
     }
     if (treasureHunt.replaceExistingMotors != undefined) {
       treasureHunt.replaceExistingMotors = this.replaceExistingTreasureService.convertReplaceExistingMotors(treasureHunt.replaceExistingMotors, oldSettings, newSettings);
@@ -127,6 +134,9 @@ export class ConvertInputDataService {
     if (treasureHunt.coolingTowerBasinOpportunities != undefined) {
       treasureHunt.coolingTowerBasinOpportunities = this.coolingTowerBasinTreasureHuntService.convertCoolingTowerBasinOpportunities(treasureHunt.coolingTowerBasinOpportunities, oldSettings, newSettings);
     }
+    if (treasureHunt.boilerBlowdownRateOpportunities != undefined) {
+      treasureHunt.boilerBlowdownRateOpportunities = this.boilerBlowdownRateTreasureHuntService.convertBoilerBlowdownRates(treasureHunt.boilerBlowdownRateOpportunities, oldSettings, newSettings);
+    }
     if (treasureHunt.currentEnergyUsage != undefined) {
       treasureHunt.currentEnergyUsage = this.convertCurrentEnergyUsage(treasureHunt.currentEnergyUsage, oldSettings, newSettings);
     }
@@ -134,7 +144,7 @@ export class ConvertInputDataService {
   }
 
 
-  convertOpportunitySheets(opportunitySheets: Array<OpportunitySheet>, oldSettings: Settings, newSettings: Settings): Array<OpportunitySheet> {
+  convertCustomOpportunity(opportunitySheets: Array<OpportunitySheet | AssessmentOpportunity>, oldSettings: Settings, newSettings: Settings): Array<OpportunitySheet | AssessmentOpportunity> {
     opportunitySheets.forEach(sheet => {
       sheet.baselineEnergyUseItems.forEach(item => {
         item = this.convertEnergyUseItem(item, oldSettings, newSettings);
@@ -148,13 +158,13 @@ export class ConvertInputDataService {
 
   convertEnergyUseItem(energyUseItem: EnergyUseItem, oldSettings: Settings, newSettings: Settings): EnergyUseItem {
     if (energyUseItem.type == 'Gas' || energyUseItem.type == 'Other Fuel') {
-      //imperial: MMBtu, metric: MJ
+      //imperial: MMBtu, metric: GJ
       energyUseItem.amount = this.convertUnitsService.convertMMBtuAndGJValue(energyUseItem.amount, oldSettings, newSettings);
     } else if (energyUseItem.type == 'Water' || energyUseItem.type == 'WWT') {
       //imperial: gal, metric: L 
       energyUseItem.amount = this.convertUnitsService.convertGalAndLiterValue(energyUseItem.amount, oldSettings, newSettings);
     } else if (energyUseItem.type == 'Compressed Air') {
-      //imperial: SCF, metric: m3
+      //imperial: scf, metric: m3
       energyUseItem.amount = this.convertUnitsService.convertFt3AndM3Value(energyUseItem.amount, oldSettings, newSettings);
     } else if (energyUseItem.type == 'Steam') {
       //imperial: klb, metric: tonne
@@ -173,8 +183,8 @@ export class ConvertInputDataService {
     currentEnergyUsage.waterUsage = this.convertUnitsService.convertKGalAndLiterValue(currentEnergyUsage.waterUsage, oldSettings, newSettings);
     //imperial: kgal/yr, metric: L/yr
     currentEnergyUsage.wasteWaterUsage = this.convertUnitsService.convertKGalAndLiterValue(currentEnergyUsage.wasteWaterUsage, oldSettings, newSettings);
-    //imperial: kSCF/yr , metric: m3/yr
-    currentEnergyUsage.compressedAirUsage = this.convertUnitsService.convertKSCFAndM3Value(currentEnergyUsage.compressedAirUsage, oldSettings, newSettings);
+    //imperial: kscf/yr , metric: m3/yr
+    currentEnergyUsage.compressedAirUsage = this.convertUnitsService.convertKscfAndM3Value(currentEnergyUsage.compressedAirUsage, oldSettings, newSettings);
     //imperial: klb/yr, metric: tonne/yr
     currentEnergyUsage.steamUsage = this.convertUnitsService.convertKlbAndTonneValue(currentEnergyUsage.steamUsage, oldSettings, newSettings);
     
@@ -183,7 +193,7 @@ export class ConvertInputDataService {
     if (oldSettings.unitsOfMeasure === 'Imperial') {
       currentEnergyUsage.waterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.waterCO2OutputRate, 'kgal', 'L');
       currentEnergyUsage.wasteWaterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.wasteWaterCO2OutputRate, 'kgal', 'L');
-      currentEnergyUsage.compressedAirCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.compressedAirCO2OutputRate, 'kSCF', 'm3');
+      currentEnergyUsage.compressedAirCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.compressedAirCO2OutputRate, 'kscf', 'm3');
       currentEnergyUsage.steamCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.steamCO2OutputRate, 'klb', 'tonne');
     
     } else {
@@ -191,7 +201,7 @@ export class ConvertInputDataService {
       newFuelUnit = 'MMBtu';
       currentEnergyUsage.waterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.waterCO2OutputRate, 'L', 'kgal');
       currentEnergyUsage.wasteWaterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.wasteWaterCO2OutputRate, 'L', 'kgal');
-      currentEnergyUsage.compressedAirCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.compressedAirCO2OutputRate, 'm3', 'kSCF');
+      currentEnergyUsage.compressedAirCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.compressedAirCO2OutputRate, 'm3', 'kscf');
       currentEnergyUsage.steamCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.steamCO2OutputRate, 'tonne', 'klb');
     }
 

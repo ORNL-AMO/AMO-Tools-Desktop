@@ -48,13 +48,15 @@ export class AssessmentSettingsComponent implements OnInit {
     tmpSettings.id = this.settings.id;
     tmpSettings.appVersion = this.settings.appVersion;
     tmpSettings.disableTutorial = this.settings.disableTutorial;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(tmpSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(tmpSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.settings = this.settingsDbService.findById(this.settings.id);
   }
 
   async saveSettings() {
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.settings = this.settingsDbService.getByDirectoryId(this.settings.id);
   }

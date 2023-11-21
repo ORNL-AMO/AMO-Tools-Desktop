@@ -47,3 +47,19 @@
   overflow-y: auto;
 }
 
+.spinner-overlay {
+  height: 100%;
+  z-index: 999;
+  position: absolute;
+  background: white;
+}
+
+.spinner > div {
+  width: 25px;
+  height: 25px;
+  background-color: #117A65;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}

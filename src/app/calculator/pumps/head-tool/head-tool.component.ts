@@ -9,6 +9,7 @@ import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { HeadToolService } from './head-tool.service';
 import { firstValueFrom } from 'rxjs';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 @Component({
   selector: 'app-head-tool',
   templateUrl: './head-tool.component.html',
@@ -61,9 +62,11 @@ export class HeadToolComponent implements OnInit {
   isSavedCalc: boolean = false;
   calculator: Calculator;
   constructor(private headToolService: HeadToolService, private psatService: PsatService, private calculatorDbService: CalculatorDbService, 
-       private settingsDbService: SettingsDbService, private cd: ChangeDetectorRef) { }
+       private settingsDbService: SettingsDbService, private cd: ChangeDetectorRef,
+       private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-PUMP-head-tool');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -162,7 +165,8 @@ export class HeadToolComponent implements OnInit {
         this.calculator.headToolSuction = this.headToolService.getHeadToolSuctionFromForm(this.headToolSuctionForm);
         this.calculator.headToolType = this.headToolType;
 
-        let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(this.calculator)) 
+        await firstValueFrom(this.calculatorDbService.updateWithObservable(this.calculator));
+        let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators()); 
         this.calculatorDbService.setAll(updatedCalculators);
         this.closeTool();
       } else {

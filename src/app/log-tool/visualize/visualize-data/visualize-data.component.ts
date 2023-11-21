@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
-import { LogToolField, GraphObj, GraphDataSummary, GraphDataOption } from '../../log-tool-models';
+import { LogToolField, GraphObj, GraphDataSummary, XAxisDataOption } from '../../log-tool-models';
 import { VisualizeService } from '../visualize.service';
 import * as _ from 'lodash';
 import { combineLatestWith, debounce, interval, Observable, Subscription } from 'rxjs';
@@ -27,7 +27,6 @@ export class VisualizeDataComponent implements OnInit {
   axisRanges: { xMin: number, xMax: number, yMin: number, yMax: number, y2Min: number, y2Max: number };
   axisRangesSub: Subscription;
 
-  worker: Worker;
   calculatingSummaries: any;
   onUpdateGraphEventsSubscription: Subscription;
   constructor(private visualizeService: VisualizeService, private cd: ChangeDetectorRef, private logToolDataService: LogToolDataService) { }
@@ -57,9 +56,15 @@ export class VisualizeDataComponent implements OnInit {
     this.axisSummaries = new Array();
     let graphObj: GraphObj = this.visualizeService.selectedGraphObj.getValue();
     if (graphObj.data[0].type == 'bar') {
+      let xMin: number = 0;
+      let xMax: number = 0;
+      if (graphObj.bins && graphObj.bins.length !== 0) {
+        xMin = graphObj.bins[0].min;
+        xMax = graphObj.bins[graphObj.bins.length - 1].min;
+      }
       this.axisRanges = {
-        xMin: graphObj.bins[0].min,
-        xMax: graphObj.bins[graphObj.bins.length - 1].min,
+        xMin: xMin,
+        xMax: xMax,
         yMin: undefined,
         yMax: undefined,
         y2Min: undefined,
@@ -88,7 +93,7 @@ export class VisualizeDataComponent implements OnInit {
   }
 
   setTimeSeriesSummary() {
-    let allDataByAxisField: Array<GraphDataOption> = this.visualizeService.allDataByAxisField;
+    let allDataByAxisField: Array<XAxisDataOption> = this.visualizeService.allDataByAxisField;
     if (allDataByAxisField) {
       allDataByAxisField.forEach((dataItem) => {
         if (dataItem.dataField.isDateField) {

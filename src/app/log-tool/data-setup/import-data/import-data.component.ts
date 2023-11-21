@@ -126,7 +126,6 @@ export class ImportDataComponent implements OnInit {
           name: fileReference.name, 
           workSheets: workSheets,
           workBook: workBook,
-          headerRowIndex: 0,
           selectedSheet: selectedSheet,
           data: xlsxRows,
           previewData: xlsxPreviewData,
@@ -153,7 +152,6 @@ export class ImportDataComponent implements OnInit {
           dataSetId: this.logToolDataService.getUniqueId(), 
           fileType: '.csv',
           name: fileReference.name,
-          headerRowIndex: 0,
           data: fileImportData,
           previewData: csvFileData,
         });

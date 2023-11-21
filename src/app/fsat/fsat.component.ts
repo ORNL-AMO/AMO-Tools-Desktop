@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
  
 import { Assessment } from '../shared/models/assessment';
 import { FsatService } from './fsat.service';
@@ -9,17 +9,18 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData, FsatOperations } from '../shared/models/fans';
-import * as _ from 'lodash';
 import { CompareService } from './compare.service';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
-import { FanImperialDefaults, FanMetricDefaults, SettingsService } from '../settings/settings.service';
+import { FanImperialDefaults, SettingsService } from '../settings/settings.service';
 import { ConvertFsatService } from './convert-fsat.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
+import * as _ from 'lodash';
 import { OperationsService } from './operations/operations.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-fsat',
@@ -33,6 +34,7 @@ export class FsatComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
 
   @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
   containerHeight: number;
@@ -80,8 +82,11 @@ export class FsatComponent implements OnInit {
   showToast: boolean = false;
   showWelcomeScreen: boolean = false;
   modificationModalOpen: boolean = false;
+  smallScreenTab: string = 'form';
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
-      
+    private router: Router,
     private fsatService: FsatService,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
@@ -95,16 +100,21 @@ export class FsatComponent implements OnInit {
     private settingsService: SettingsService,
     private egridService: EGridService,
     private convertFsatService: ConvertFsatService,
-    private fsatOperationsService: OperationsService) {
+    private fsatOperationsService: OperationsService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-fan-assessment');
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
-      this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));
-      if (this._fsat.modifications) {
-        if (this._fsat.modifications.length !== 0) {
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'FSAT')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else { 
+        this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));
+        if (this._fsat.modifications) {
+          if (this._fsat.modifications.length !== 0) {
           this.modificationExists = true;
           this.modificationIndex = 0;
           this.compareService.setCompareVals(this._fsat, 0);
@@ -119,10 +129,11 @@ export class FsatComponent implements OnInit {
       }
       this.getSettings();
       this.initSankeyList();
-      let tmpTab: string = this.assessmentService.tab;
+      let tmpTab: string = this.assessmentService.getStartingTab();
       if (tmpTab) {
         this.fsatService.mainTab.next(tmpTab);
       }
+    }
     });
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
       this.mainTab = val;
@@ -164,6 +175,9 @@ export class FsatComponent implements OnInit {
     this.calcTabSubscription = this.fsatService.calculatorTab.subscribe(val => {
       this.calcTab = val;
     });
+    this.showExportModalSub = this.fsatService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
     this.checkShowWelcomeScreen();
   }
 
@@ -180,6 +194,7 @@ export class FsatComponent implements OnInit {
     this.fsatService.initData();
     this.modalOpenSubscription.unsubscribe();
     this.calcTabSubscription.unsubscribe();
+    this.showExportModalSub.unsubscribe();
   }
   ngAfterViewInit() {
     setTimeout(() => {
@@ -216,13 +231,17 @@ export class FsatComponent implements OnInit {
           footerHeight = this.footer.nativeElement.clientHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
+        if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+          this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+        }
       }, 100);
     }
   }
 
   async saveSettings(newSettings: Settings) {
     this.settings = newSettings;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
   }
 
@@ -295,8 +314,8 @@ export class FsatComponent implements OnInit {
     this.compareService.setCompareVals(this._fsat, this.modificationIndex);
     this._fsat.setupDone = this.checkSetupDone(this._fsat);
     this.assessment.fsat = (JSON.parse(JSON.stringify(this._fsat)));
-
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment))
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
     this.fsatService.updateData.next(true);
   }
@@ -475,9 +494,18 @@ export class FsatComponent implements OnInit {
 
   async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableFansTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.fsatService.modalOpen.next(false);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
+  closeExportModal(input: boolean){
+    this.fsatService.showExportModal.next(input);
   }
 }

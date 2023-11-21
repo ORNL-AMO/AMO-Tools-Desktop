@@ -41,7 +41,7 @@ export class CalculatorDbService {
     return this.dbService.add(this.storeName, calculator);
   }
 
-  updateWithObservable(calculator: Calculator): Observable<any> {
+  updateWithObservable(calculator: Calculator): Observable<Calculator> {
     calculator.modifiedDate = new Date(new Date().toLocaleDateString());
     return this.dbService.update(this.storeName, calculator);
   }
@@ -58,8 +58,9 @@ export class CalculatorDbService {
   async saveAssessmentCalculator(assessment: Assessment, assessmentCalculator: Calculator){
     if (!this.isSaving) {
       if (assessmentCalculator.id) {
-        let calculators: Calculator[] = await firstValueFrom(this.updateWithObservable(assessmentCalculator));
-        this.setAll(calculators);
+        await firstValueFrom(this.updateWithObservable(assessmentCalculator));
+        let allCalculators: Calculator[] = await firstValueFrom(this.getAllCalculators());
+        this.setAll(allCalculators);
       } else {
         this.isSaving = true;
         assessmentCalculator.assessmentId = assessment.id;

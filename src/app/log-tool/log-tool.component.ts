@@ -6,6 +6,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Settings } from '../shared/models/settings';
 import { LogToolDbService } from './log-tool-db.service';
 import { LogToolService } from './log-tool.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-log-tool',
@@ -28,9 +29,11 @@ export class LogToolComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute, 
     private logToolDbService: LogToolDbService, private logToolService: LogToolService,
     private settingsDbService: SettingsDbService,
+    private analyticsService: AnalyticsService
      ) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('use-data-exporation');
     this.activatedRoute.url.subscribe(url => {
       this.getContainerHeight();
     });
@@ -71,7 +74,8 @@ export class LogToolComponent implements OnInit {
 
   async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableDataExplorerTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.logToolService.isModalOpen.next(false);

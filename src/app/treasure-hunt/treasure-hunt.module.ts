@@ -59,6 +59,9 @@ import { ChillerStagingTreasureHuntService } from './treasure-hunt-calculator-se
 import { ChillerPerformanceTreasureHuntService } from './treasure-hunt-calculator-services/chiller-performance-treasure-hunt.service';
 import { CoolingTowerFanTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-fan-treasure-hunt.service';
 import { CoolingTowerBasinTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
+import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { AssessmentIntegrationModule } from '../shared/assessment-integration/assessment-integration.module';
+import { BoilerBlowdownRateTreasureHuntService } from './treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
 
 @NgModule({
   imports: [
@@ -76,7 +79,8 @@ import { CoolingTowerBasinTreasureHuntService } from './treasure-hunt-calculator
     UpdateUnitsModalModule,
     AssessmentCo2SavingsModule,
     MixedCo2EmissionsModule,
-    Co2HelpTextModule
+    ImportExportModule,
+    Co2HelpTextModule,
   ],
   declarations: [
     TreasureHuntComponent, 
@@ -125,7 +129,8 @@ import { CoolingTowerBasinTreasureHuntService } from './treasure-hunt-calculator
     ChillerStagingTreasureHuntService,
     ChillerPerformanceTreasureHuntService,
     CoolingTowerFanTreasureHuntService,
-    CoolingTowerBasinTreasureHuntService
+    CoolingTowerBasinTreasureHuntService,
+    BoilerBlowdownRateTreasureHuntService
   ]
 })
 export class TreasureHuntModule { }

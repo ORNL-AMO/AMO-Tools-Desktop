@@ -12,7 +12,7 @@
             <div class="form-group">
               <label class="small" for="{{'avgSpecificHeat'+idString}}">Average Specific Heat of Liquid</label>
               <div class="input-group" >
-                <input  name="{{'avgSpecificHeat_'+idString}}" type="number" step="any" class="form-control"
+                <input  name="{{'avgSpecificHeat_'+idString}}" type="number" step="0.1" class="form-control"
                   formControlName="avgSpecificHeat" id="{{'avgSpecificHeat'+idString}}" onfocus="this.select();" (input)="calculate()"
                   (focus)="focusField('avgSpecificHeatLiquid')" >
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
@@ -29,7 +29,7 @@
               <div class="form-group">
               <label class="small" for="{{'density'+idString}}">Density</label>
               <div class="input-group" >
-                <input  name="{{'density_'+idString}}" type="number" step="any" class="form-control"
+                <input  name="{{'density_'+idString}}" type="number" step="0.1" class="form-control"
                 formControlName="density" id="{{'density'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('density')"
                 >
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/gal</span>
@@ -46,7 +46,7 @@
             <div class="form-group">
               <label class="small" for="{{'liquidFlow'+idString}}">Liquid Flow</label>
               <div class="input-group">
-                <input  name="{{'liquidFlow_'+idString}}" type="number" step="any" class="form-control"
+                <input  name="{{'liquidFlow_'+idString}}" type="number" step="10" class="form-control"
                 formControlName="liquidFlow" id="{{'liquidFlow'+idString}}" onfocus="this.select();" (input)="calculate()"
                 (focus)="focusField('liquidFlow')" >
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">gal/min</span>
@@ -63,7 +63,7 @@
           <div class="form-group">
             <label class="small" for="{{'inletTemp'+idString}}">Inlet Temperature</label>
             <div class="input-group">
-              <input  name="{{'inletTemp_'+idString}}" type="number" step="any" class="form-control"
+              <input  name="{{'inletTemp_'+idString}}" type="number" step="10" class="form-control"
                 formControlName="inletTemp" id="{{'inletTemp'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('inletTemp')"
                 >
               <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -79,7 +79,7 @@
           <div class="form-group">
             <label class="small" for="{{'outletTemp'+idString}}">Outlet Temperature</label>
             <div class="input-group">
-              <input  name="{{'outletTemp_'+idString}}" type="number" step="any" class="form-control"
+              <input  name="{{'outletTemp_'+idString}}" type="number" step="10" class="form-control"
                 formControlName="outletTemp" id="{{'outletTemp'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('outletTemp')"
                 >
               <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>

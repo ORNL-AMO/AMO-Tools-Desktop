@@ -3,6 +3,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { O2UtilizationDataPoints, O2UtilizationRateService } from './o2-utilization-rate.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-o2-utilization-rate',
@@ -32,9 +33,12 @@ export class O2UtilizationRateComponent implements OnInit {
 
   tabSelect: string = 'help';
 
-  constructor(private settingsDbService: SettingsDbService, private o2UtilizationRateService: O2UtilizationRateService) { }
+  constructor(private settingsDbService: SettingsDbService, 
+    private o2UtilizationRateService: O2UtilizationRateService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('calculator-WW-o2-utilization-rate');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

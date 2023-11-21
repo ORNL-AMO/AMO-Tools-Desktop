@@ -5,9 +5,9 @@ import { PumpInventoryService } from '../../pump-inventory.service';
 import { PumpCatalogService } from './pump-catalog.service';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { FormGroup } from '@angular/forms';
-import { PsatIntegrationService } from '../../../shared/assessment-integration/psat-integration.service';
-import { IntegrationStateService } from '../../../shared/assessment-integration/integration-state.service';
-import { ConnectedItem } from '../../../shared/assessment-integration/integrations';
+import { PsatIntegrationService } from '../../../shared/connected-inventory/psat-integration.service';
+import { IntegrationStateService } from '../../../shared/connected-inventory/integration-state.service';
+import { ConnectedItem } from '../../../shared/connected-inventory/integrations';
 
 @Component({
   selector: 'app-pump-catalog',

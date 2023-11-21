@@ -4,9 +4,8 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { ChillerPerformanceInput, ChillerPerformanceOutput } from '../../../shared/models/chillers';
 import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
+import { ChillersSuiteApiService } from '../../../tools-suite-api/chillers-suite-api.service';
 import { ChillerPerformanceFormService } from './chiller-performance-form.service';
-
-declare var chillersAddon: any;
 
 @Injectable()
 export class ChillerPerformanceService {
@@ -24,6 +23,7 @@ export class ChillerPerformanceService {
   operatingHours: OperatingHours;
 
   constructor(private convertUnitsService: ConvertUnitsService, 
+    private chillersSuiteApiService: ChillersSuiteApiService,
     private chillerPerformanceFormService: ChillerPerformanceFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.chillerPerformanceInput = new BehaviorSubject<ChillerPerformanceInput>(undefined);
@@ -88,7 +88,7 @@ export class ChillerPerformanceService {
       this.initDefaultEmptyOutputs();
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
-      let chillerPerformanceOutput: ChillerPerformanceOutput = chillersAddon.chillerCapacityEfficiency(inputCopy);
+      let chillerPerformanceOutput: ChillerPerformanceOutput = this.chillersSuiteApiService.chillerCapacityEfficiency(inputCopy);
       chillerPerformanceOutput = this.convertResultUnits(chillerPerformanceOutput, settings);
       chillerPerformanceOutput.baselineEnergyCost = chillerPerformanceOutput.baselineEnergy * inputCopy.electricityCost;
       chillerPerformanceOutput.modEnergyCost = chillerPerformanceOutput.modEnergy * inputCopy.electricityCost;

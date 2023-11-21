@@ -9,7 +9,6 @@ import { AssessmentDbService } from '../../../indexedDb/assessment-db.service';
 import { Directory } from '../../../shared/models/directory';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { CoreService } from '../../../core/core.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { MockSsmt, MockSsmtSettings } from '../../../examples/mockSsmt';
 import { MockTreasureHunt, MockTreasureHuntSettings } from '../../../examples/mockTreasureHunt';
@@ -29,6 +28,7 @@ import { GasLoadMaterialDbService } from '../../../indexedDb/gas-load-material-d
 import { LiquidLoadMaterialDbService } from '../../../indexedDb/liquid-load-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
 import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-material-db.service';
+import { ElectronService } from '../../../electron/electron.service';
 import { MockPumpInventory } from '../../../examples/mockPumpInventoryData';
 
 @Component({
@@ -43,14 +43,14 @@ export class ResetDataModalComponent implements OnInit {
 
   resetAll: boolean = false;
   resetAppSettings: boolean = false;
-  resetExampleAssessments: boolean = false;
+  resetExampleItems: boolean = false;
   resetUserAssessments: boolean = false;
   resetCustomMaterials: boolean = false;
   deleting: boolean = false;
   hidingModal: any;
   constructor(private dashboardService: DashboardService, 
+    private electronService: ElectronService,
     private calculatorDbService: CalculatorDbService,
-    private coreService: CoreService, 
     private directoryDbService: DirectoryDbService, 
     private settingsDbService: SettingsDbService, 
     private dbService: NgxIndexedDBService,
@@ -87,13 +87,13 @@ export class ResetDataModalComponent implements OnInit {
         this.resetAll = !this.resetAll;
         if (this.resetAll) {
           this.resetAppSettings = true;
-          this.resetExampleAssessments = true;
+          this.resetExampleItems = true;
           this.resetUserAssessments = true;
           this.resetCustomMaterials = true;
         }
         else {
           this.resetAppSettings = false;
-          this.resetExampleAssessments = false;
+          this.resetExampleItems = false;
           this.resetUserAssessments = false;
           this.resetCustomMaterials = false;
         }
@@ -103,8 +103,8 @@ export class ResetDataModalComponent implements OnInit {
         this.resetAppSettings = !this.resetAppSettings;
         break;
       }
-      case "example-assessments": {
-        this.resetExampleAssessments = !this.resetExampleAssessments;
+      case "example-items": {
+        this.resetExampleItems = !this.resetExampleItems;
         break;
       }
       case "user-assessments": {
@@ -129,8 +129,8 @@ export class ResetDataModalComponent implements OnInit {
       this.resetAllUserAssessments();
     } else if (this.resetAppSettings) {
       this.resetFactorySystemSettings();
-    } else if (this.resetExampleAssessments) {
-      this.resetFactoryExampleAssessments();
+    } else if (this.resetExampleItems) {
+      this.resetFactoryExampleItems();
     } else if (this.resetCustomMaterials) {
       this.resetFactoryCustomMaterials();
     }
@@ -152,12 +152,13 @@ export class ResetDataModalComponent implements OnInit {
     defaultSettings.disableTutorial = this.settingsDbService.globalSettings.disableTutorial;
     defaultSettings.printAll = this.settingsDbService.globalSettings.printAll;
     delete defaultSettings.facilityInfo;
-    let settings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(defaultSettings));
+    await firstValueFrom(this.settingsDbService.updateWithObservable(defaultSettings));
+    let settings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(settings);
     this.hideResetSystemSettingsModal();
   }
 
-  async resetFactoryExampleAssessments() {
+  async resetFactoryExampleItems() {
     let exampleDirectory: Directory = this.directoryDbService.getExample();
     if (exampleDirectory) {
       this.resetAllExampleAssessments(exampleDirectory.id);
@@ -216,13 +217,10 @@ async resetAllExampleAssessments(dirId: number) {
   
   let updatedInventoryItems: Array<InventoryItem> = await firstValueFrom(this.inventoryDbService.getAllInventory());
   this.inventoryDbService.setAll(updatedInventoryItems);
-  let exampleInventory: InventoryItem = this.inventoryDbService.allInventoryItems.find(item => { return item.isExample && item.directoryId === dirId});
-  if (exampleInventory) {
-    let allInventoryItems: Array<InventoryItem> = await firstValueFrom(this.inventoryDbService.deleteByIdWithObservable(exampleInventory.id));
-    this.inventoryDbService.setAll(allInventoryItems);
-  }
+  let exampleInventories: Array<InventoryItem> = this.inventoryDbService.allInventoryItems.filter(item => { return item.isExample && item.directoryId === dirId});
+  let allInventoryItems: Array<InventoryItem[]> = await firstValueFrom(this.inventoryDbService.bulkDeleteWithObservable(exampleInventories.map(inventory => inventory.id)));
 
-
+  this.inventoryDbService.setAll(allInventoryItems[0]);
   this.assessmentDbService.setAll(allAssessments[0]);
   this.settingsDbService.setAll(allSettings[0]);
   this.calculatorDbService.setAll(allCalculators[0]);
@@ -344,8 +342,11 @@ async resetAllExampleAssessments(dirId: number) {
   }
 
   finishDelete() {
-    // TODO if not in electron, do location.reload()
-    this.coreService.relaunchApp();
+    if (this.electronService.isElectron) {
+      this.electronService.sendAppRelaunch();
+    } else {
+      location.reload()
+    }
   }
 
 

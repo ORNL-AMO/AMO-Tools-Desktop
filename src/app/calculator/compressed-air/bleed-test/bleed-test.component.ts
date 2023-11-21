@@ -7,6 +7,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
 import { BleedTestInput } from '../../../shared/models/standalone';
 import { BleedTestService } from './bleed-test.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-bleed-test',
@@ -43,9 +44,11 @@ export class BleedTestComponent implements OnInit {
   constructor(
     private bleedTestService: BleedTestService,
     private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService) { }
+    private calculatorDbService: CalculatorDbService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('calculator-CA-bleed-test');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

@@ -4,7 +4,7 @@
     <label class="pl-2">Utility Consumption</label>
   </div>
   <div class="form-group" *ngFor="let energyItem of energyItems; let index = index;">
-    <select class="form-control" [(ngModel)]="energyItem.type" name="{{'type_'+index}}" (change)="save()"
+    <select class="form-control" [(ngModel)]="energyItem.type" name="{{'type_'+index}}" (change)="save()"np
       (focus)="focusField('energyUseType')">
       <option [ngValue]="'Electricity'">Electricity</option>
       <option [ngValue]="'Gas'">Gas</option>
@@ -23,7 +23,7 @@
       </span>
     </div>
   </div>
-  <div class="w-100 text-center p-2">
+  <div  class="w-100 text-center p-2">
     <a class="click-link small" (click)="addEnergyField()">+Add Energy Use</a>
   </div>
 </form>

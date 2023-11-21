@@ -11,7 +11,7 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { ConvertMotorInventoryService } from '../../convert-motor-inventory.service';
 import * as _ from 'lodash';
-import { IntegrationStateService } from '../../../shared/assessment-integration/integration-state.service';
+import { IntegrationStateService } from '../../../shared/connected-inventory/integration-state.service';
 
 
 @Component({
@@ -99,7 +99,8 @@ export class PlantSetupComponent implements OnInit {
     this.settings.createdDate = createdDate;
     this.settings.inventoryId = inventoryId;
     this.motorInventoryService.settings.next(this.settings);
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
   }
 

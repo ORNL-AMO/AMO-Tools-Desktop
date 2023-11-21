@@ -8,6 +8,7 @@ import { CompressedAirPressureReductionTreasureHunt, Treasure } from '../../../s
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
  
 
 @Component({
@@ -58,9 +59,11 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   smallScreenTab: string = 'baseline';
 
   constructor(private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService,   
-    private compressedAirPressureReductionService: CompressedAirPressureReductionService) { }
+    private compressedAirPressureReductionService: CompressedAirPressureReductionService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-CA-pressure-reduction');
     this.calculatorDbService.isSaving = false;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;

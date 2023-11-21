@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
-import { ActivatedRoute } from '@angular/router';
- 
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { SsmtService } from './ssmt.service';
 import { Settings } from '../shared/models/settings';
@@ -16,6 +15,7 @@ import { SettingsService, SteamImperialDefaults, SteamMetricDefaults } from '../
 import { ConvertSsmtService } from './convert-ssmt.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import { SteamService } from '../calculator/steam/steam.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -33,6 +33,7 @@ export class SsmtComponent implements OnInit {
   @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
   @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
 
   showUpdateUnitsModal: boolean = false;
   oldSettings: Settings;
@@ -84,10 +85,13 @@ export class SsmtComponent implements OnInit {
   showSankeyLabelOptions: boolean;
   showWelcomeScreen: boolean = false;
   modificationModalOpen: boolean = false;
+  smallScreenTab: string = 'form';
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
   constructor(
     private egridService: EGridService,
     private activatedRoute: ActivatedRoute,
-      
+    private router: Router,
     private ssmtService: SsmtService,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
@@ -96,34 +100,40 @@ export class SsmtComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private settingsService: SettingsService,
     private steamService: SteamService,
-    private convertSsmtService: ConvertSsmtService
+    private convertSsmtService: ConvertSsmtService,
+    private analyticsService: AnalyticsService
   ) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-steam-assessment');
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
-      if (this.assessment.ssmt.modifications) {
-        if (this.assessment.ssmt.modifications.length !== 0) {
-          this.modificationExists = true;
-          this.modificationIndex = 0;
-          this.compareService.setCompareVals(this.assessment.ssmt, 0);
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'SSMT')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' } });
+      } else {
+        this.assessment.ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
+        if (this.assessment.ssmt.modifications) {
+          if (this.assessment.ssmt.modifications.length !== 0) {
+            this.modificationExists = true;
+            this.modificationIndex = 0;
+            this.compareService.setCompareVals(this.assessment.ssmt, 0);
+          } else {
+            this.modificationExists = false;
+            this.compareService.setCompareVals(this.assessment.ssmt);
+          }
         } else {
+          this.assessment.ssmt.modifications = new Array<Modification>();
           this.modificationExists = false;
           this.compareService.setCompareVals(this.assessment.ssmt);
         }
-      } else {
-        this.assessment.ssmt.modifications = new Array<Modification>();
-        this.modificationExists = false;
-        this.compareService.setCompareVals(this.assessment.ssmt);
-      }
-      this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
-
-      this.getSettings();
-      this.initSankeyList();
-      let tmpTab = this.assessmentService.getTab();
-      if (tmpTab) {
-        this.ssmtService.mainTab.next(tmpTab);
+        this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
+        this.getSettings();
+        this.initSankeyList();
+        let tmpTab = this.assessmentService.getStartingTab();
+        if (tmpTab) {
+          this.ssmtService.mainTab.next(tmpTab);
+        }
       }
     });
     this.subscribeTabs();
@@ -171,6 +181,11 @@ export class SsmtComponent implements OnInit {
         this.saveSsmt(newSSMT);
       }
     });
+
+    this.showExportModalSub = this.ssmtService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
+
     this.checkShowWelcomeScreen();
   }
 
@@ -197,6 +212,7 @@ export class SsmtComponent implements OnInit {
     this.ssmtService.saveSSMT.next(undefined);
     this.saveSsmtSub.unsubscribe();
     this.steamModelerErrorSubscription.unsubscribe();
+    this.showExportModalSub.unsubscribe();
   }
 
   subscribeTabs() {
@@ -222,7 +238,8 @@ export class SsmtComponent implements OnInit {
 
   async saveSettings(newSettings: Settings) {
     this.settings = newSettings;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
   }
 
@@ -266,7 +283,8 @@ export class SsmtComponent implements OnInit {
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
     this.initSankeyList();
 
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
     this.ssmtService.updateData.next(true);
   }
@@ -419,6 +437,9 @@ export class SsmtComponent implements OnInit {
           footerHeight = this.footer.nativeElement.clientHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
+        if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+          this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+        }
       }, 100);
     }
   }
@@ -517,7 +538,8 @@ export class SsmtComponent implements OnInit {
 
   async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableSteamTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.ssmtService.modalOpen.next(false);
@@ -536,6 +558,14 @@ export class SsmtComponent implements OnInit {
       body: '',
       setTimeoutVal: undefined
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
+  closeExportModal(input: boolean){
+    this.ssmtService.showExportModal.next(input);
   }
 
 }

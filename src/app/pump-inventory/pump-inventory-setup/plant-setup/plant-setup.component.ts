@@ -10,8 +10,8 @@ import { PumpInventoryData } from '../../pump-inventory';
 import { PumpInventoryService } from '../../pump-inventory.service';
 import * as _ from 'lodash';
 import { ConvertPumpInventoryService } from '../../convert-pump-inventory.service';
-import { IntegrationStateService } from '../../../shared/assessment-integration/integration-state.service';
-import { IntegrationState } from '../../../shared/assessment-integration/integrations';
+import { IntegrationStateService } from '../../../shared/connected-inventory/integration-state.service';
+import { IntegrationState } from '../../../shared/connected-inventory/integrations';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class PlantSetupComponent implements OnInit {
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
   oldSettings: Settings;
-  assessmentIntegrationState: IntegrationState;
+  connectedAssessmentState: IntegrationState;
 
   constructor(private settingsDbService: SettingsDbService, private settingsService: SettingsService,
     private convertPumpInventoryService: ConvertPumpInventoryService,
@@ -50,7 +50,6 @@ export class PlantSetupComponent implements OnInit {
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
 
     if (this.pumpInventoryData.existingDataUnits && this.pumpInventoryData.existingDataUnits != this.oldSettings.unitsOfMeasure) {
-      
       this.oldSettings = this.getExistingDataSettings();
       this.showUpdateDataReminder = true;
     }
@@ -63,19 +62,19 @@ export class PlantSetupComponent implements OnInit {
 
   setConnectedItemInfo() {
     if (this.pumpInventoryData.hasConnectedInventoryItems && this.pumpInventoryData.hasConnectedPsat) {
-        this.assessmentIntegrationState = {
-          assessmentIntegrationStatus: 'three-way-connected'
+        this.connectedAssessmentState = {
+          connectedAssessmentStatus: 'three-way-connected'
         }
     } else if (this.pumpInventoryData.hasConnectedInventoryItems) {
       this.integrationStateService.integrationState.next({status: 'connected-to-inventory'});
 
     } else if (this.pumpInventoryData.hasConnectedPsat) {
-      this.assessmentIntegrationState = {
-        assessmentIntegrationStatus: 'connected-to-assessment'
+      this.connectedAssessmentState = {
+        connectedAssessmentStatus: 'connected-to-assessment'
       }
     } else {
-      this.assessmentIntegrationState = {
-        assessmentIntegrationStatus: undefined
+      this.connectedAssessmentState = {
+        connectedAssessmentStatus: undefined
       }
       
     }
@@ -105,7 +104,8 @@ export class PlantSetupComponent implements OnInit {
     this.settings.inventoryId = inventoryId;
     this.pumpInventoryService.settings.next(this.settings);
     
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
   }
 

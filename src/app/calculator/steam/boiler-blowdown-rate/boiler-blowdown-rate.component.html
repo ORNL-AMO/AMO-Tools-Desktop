@@ -1,11 +1,26 @@
 <div class="calculator-container modify-conditions steam standalone-calculator" #contentContainer>
-    <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center">
+    <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
+        [ngClass]="{'justify-content-between': inTreasureHunt}">
         <div class="d-flex pl-2 align-items-center">
             <div class="calc-icon-header icon-steam">
                 <img src="assets/images/calculator-icons/steam-icons/blowdown-rate.png">
             </div>
             <div class="pl-2">
                 <h3>Boiler Blowdown Rate</h3>
+            </div>
+        </div>
+        <div class="d-flex pr-2 pl-2" *ngIf="inTreasureHunt">
+            <div class="d-none d-lg-flex help-holder">
+                <p class="help-text treasure-hunt-help">Click the save icon to add the
+                    treasure to your chest! Click cancel to discard the opportunity and return
+                    to method selection.
+                </p>
+            </div>
+            <div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
+                <span class="fa fa-save"></span>
+            </div>
+            <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+                <span class="fa fa-times"></span>
             </div>
         </div>
     </div>
@@ -26,7 +41,7 @@
     <div class="panel-group">
         <!-- baseline -->
         <div class="calculator-panel-container px-3" (click)="setBaselineSelected()"
-            [ngClass]="{'disabled': baselineSelected == false, 'small-screen-tab': smallScreenTab === 'baseline'}"
+            [ngClass]="{'modal-open': isModalOpen == true, 'disabled': baselineSelected == false, 'small-screen-tab': smallScreenTab === 'baseline'}"
             [ngStyle]="{'height.px': containerHeight}">
             <div class="header mx-2 mb-4">
                 <h3>Baseline</h3>
@@ -35,7 +50,7 @@
             <div class="d-flex flex-column mx-4 mb-4">
                 <!-- app form -->
                 <app-blowdown-rate-form [settings]="settings" [isBaseline]="true"
-                    [disabled]="baselineSelected == false"></app-blowdown-rate-form>
+                    [disabled]="baselineSelected == false" [inTreasureHunt]="inTreasureHunt"></app-blowdown-rate-form>
                 <div class="w-100 justify content-center btn-group btn-group-sm">
                     <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form"
                         (click)="btnResetData()">
@@ -52,7 +67,7 @@
         <!-- modification -->
         <div class="calculator-panel-container px-3 panel-column modification" (click)="setModificationSelected()"
             [ngStyle]="{'height.px': containerHeight}"
-            [ngClass]="{'disabled': baselineSelected == true, 'small-screen-tab': smallScreenTab === 'modification'}">
+            [ngClass]="{'modal-open': isModalOpen == true, 'disabled': baselineSelected == true, 'small-screen-tab': smallScreenTab === 'modification'}">
             <!-- modification header -->
             <div class="header mx-2 mb-4">
                 <h3>Modification</h3>
@@ -60,7 +75,7 @@
             <!-- forms -->
             <div class="d-flex flex-column mx-4 mb-4" *ngIf="modificationExists">
                 <app-blowdown-rate-form [settings]="settings" [isBaseline]="false"
-                    [disabled]="baselineSelected == true"></app-blowdown-rate-form>
+                    [disabled]="baselineSelected == true" [inTreasureHunt]="inTreasureHunt"></app-blowdown-rate-form>
             </div>
             <!-- no content message -->
             <div class="panel-column modification" *ngIf="!modificationExists" (click)="setModificationSelected()"

@@ -43,7 +43,7 @@ export class VisualizeHelpComponent implements OnInit {
   focusedPanelSub: Subscription;
   onUpdateGraphEventsSubscription: Subscription
   graphInteractivity: GraphInteractivity;
-  annotationHelpStrings: string[] = ['annotation','large-dataset-annotation','highlight-performance-info']
+  annotationHelpStrings: string[] = ['annotations','large-dataset-annotation','highlight-performance-info']
   constructor(private visualizeService: VisualizeService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -55,6 +55,7 @@ export class VisualizeHelpComponent implements OnInit {
       if (focusedPanel) {
         this.focusedPanel = focusedPanel;
       }
+      // todo what?
       selectedGraphObj = selectedGraphObj? selectedGraphObj : this.visualizeService.selectedGraphObj.getValue();
       this.updateHelpInformation(selectedGraphObj);
     });

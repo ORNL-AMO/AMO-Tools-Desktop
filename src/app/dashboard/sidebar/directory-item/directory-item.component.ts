@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { Directory } from '../../../shared/models/directory';
 import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';
 import { DirectoryItem, FilterDashboardBy } from '../../../shared/models/directory-dashboard';
@@ -22,45 +22,44 @@ export class DirectoryItemComponent implements OnInit {
   sortBy: { value: string, direction: string };
   updateDashboardDataSub: Subscription;
   selectedDirectoryId: number;
-  selectedDirectoryIdSub: Subscription;
-  constructor(private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private directoryDbService: DirectoryDbService) { }
+  constructor(private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private cd: ChangeDetectorRef, private directoryDbService: DirectoryDbService) { }
 
   ngOnInit() {
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
-      if(this.directory){
+      if (this.directory){
         this.directory = this.directoryDbService.getById(this.directory.id);
         this.directoryItems = this.directoryDashboardService.getDirectoryItems(this.directory);
       }
     });
+
+    this.selectedDirectoryId = this.directoryDashboardService.selectedDirectoryId.getValue();
+    this.checkSubDirectorySelected();
+
     this.filterDashboardBySub = this.directoryDashboardService.filterDashboardBy.subscribe(val => {
       this.filterDashboardBy = val;
     });
     this.sortBySub = this.directoryDashboardService.sortBy.subscribe(val => {
       this.sortBy = val;
     });
-    this.selectedDirectoryIdSub = this.directoryDashboardService.selectedDirectoryId.subscribe(val => {
-      this.selectedDirectoryId = val;
-      this.checkSubDirectorySelected();
-    })
   }
 
   ngOnDestroy() {
     this.sortBySub.unsubscribe();
     this.filterDashboardBySub.unsubscribe();
     this.updateDashboardDataSub.unsubscribe();
-    this.selectedDirectoryIdSub.unsubscribe();
   }
 
   async toggleDirectoryCollapse(directory: Directory) {
     directory.collapsed = !directory.collapsed;
-    let updatedDirectories: Directory[] = await firstValueFrom(this.directoryDbService.updateWithObservable(this.directory));
+    await firstValueFrom(this.directoryDbService.updateWithObservable(this.directory));
+    let updatedDirectories: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories()); 
     this.directoryDbService.setAll(updatedDirectories);
   }
 
-  checkSubDirectorySelected() {
+ checkSubDirectorySelected() {
     if(this.directory.collapsed == true && this.directory.id == this.selectedDirectoryId){
       this.toggleDirectoryCollapse(this.directory);
-    }else if (this.directory.collapsed == true && this.directory.subDirectory) {
+    } else if (this.directory.collapsed == true && this.directory.subDirectory) {
       this.checkSubDirectories(this.directory);
     }
   }

@@ -4,8 +4,7 @@ import { AssessmentService } from '../dashboard/assessment.service';
 import { PSAT, Modification, PsatOutputs, PsatInputs } from '../shared/models/psat';
 import { PsatService } from './psat.service';
 import * as _ from 'lodash';
- 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { CompareService } from './compare.service';
 import { firstValueFrom, Subscription } from 'rxjs';
@@ -20,9 +19,10 @@ import { FieldDataService } from './field-data/field-data.service';
 import { SettingsService } from '../settings/settings.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import { PumpOperationsService } from './pump-operations/pump-operations.service';
-import { PsatIntegrationService } from '../shared/assessment-integration/psat-integration.service';
-import { IntegrationStateService } from '../shared/assessment-integration/integration-state.service';
+import { PsatIntegrationService } from '../shared/connected-inventory/psat-integration.service';
+import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
 import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-psat',
@@ -37,6 +37,7 @@ export class PsatComponent implements OnInit {
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
   @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
 
   showUpdateUnitsModal: boolean = false;
   oldSettings: Settings;
@@ -81,8 +82,13 @@ export class PsatComponent implements OnInit {
   showToast: boolean = false;
   showWelcomeScreen: boolean = false;
   modificationModalOpen: boolean = false;
+  smallScreenTab: string = 'form';
+  hasConnectedMotorItem: boolean;
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
   constructor(
     private assessmentService: AssessmentService,
+    private router: Router,
     private psatService: PsatService,
     private psatIntegrationService: PsatIntegrationService,
     private integrationStateService: IntegrationStateService,
@@ -98,37 +104,39 @@ export class PsatComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private egridService: EGridService,
     private helperFunctionService: HelperFunctionsService,
-    private settingsService: SettingsService) {
+    private settingsService: SettingsService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-pump-assessment');
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       this.getSettings();
-      this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
-      
-      let connectedInventory = this.activatedRoute.snapshot.queryParamMap.get('connectedInventory');
-      if (connectedInventory) {
-        this.save();
-      }
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'PSAT')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else { 
+        this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
+        this.initModificationState();
 
-      if (this._psat.modifications) {
-        if (this._psat.modifications.length != 0) {
-          this.modificationExists = true;
-          this.modificationIndex = 0;
+        let fromConnectedItem = this.activatedRoute.snapshot.queryParamMap.get('fromConnectedItem');
+        if (fromConnectedItem) {
+          this.redirectFromConnectedInventory();
+        } else {
+          this.psatIntegrationService.setPSATConnectedInventoryData(this.assessment, this.settings);
         }
 
-        if (this._psat.setupDone) {
-          this.compareService.setCompareVals(this._psat, 0);
+        let connectedInventory = this.activatedRoute.snapshot.queryParamMap.get('connectedInventory');
+        if (connectedInventory) {
+          this.save();
         }
-      } else {
-        this._psat.modifications = new Array();
-        this.modificationExists = false;
+
+        this.initSankeyList();
       }
-      this.initSankeyList();
-    })
-    let tmpTab = this.assessmentService.getTab();
+    });
+    
+    let tmpTab = this.assessmentService.getStartingTab();
     if (tmpTab) {
       this.psatTabService.mainTab.next(tmpTab);
     }
@@ -158,7 +166,7 @@ export class PsatComponent implements OnInit {
         this.modificationIndex = _.findIndex(this._psat.modifications, (val) => {
           return val.psat.name == mod.name
         })
-      } else {
+      } else {  
         this.modificationIndex = undefined;
       }
     })
@@ -178,22 +186,27 @@ export class PsatComponent implements OnInit {
     });
 
     this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
-      if (connectedInventoryData.shouldRestoreConnectedValues) {
-        let updatedPsat: PSAT = this.psatIntegrationService.restoreConnectedAssessmentValues(connectedInventoryData, this._psat);
-        this._psat = this.helperFunctionService.copyObject(updatedPsat);
-        this.save();
-      }
+      this.hasConnectedMotorItem = this._psat.connectedItem && this._psat.connectedItem.inventoryType === 'motor';
+        if (connectedInventoryData.shouldRestoreConnectedValues) {
+          let updatedPsat: PSAT = this.psatIntegrationService.restoreConnectedAssessmentValues(connectedInventoryData, this._psat);
+          this._psat = this.helperFunctionService.copyObject(updatedPsat);
+          this.save();
+        }
     });
 
     this.stepTabSubscription = this.psatTabService.stepTab.subscribe(val => {
       this.stepTab = val;
-      if (this.assessment.psat.connectedItem) {
+      if (this.assessment.psat.connectedItem && this.assessment.psat.connectedItem.inventoryType === 'pump') {
         this.psatIntegrationService.checkConnectedInventoryDiffers(this.assessment);
       }
     })
 
     this.modalOpenSub = this.psatService.modalOpen.subscribe(isOpen => {
       this.isModalOpen = isOpen;
+    });
+
+    this.showExportModalSub = this.psatTabService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
     });
 
     this.checkShowWelcomeScreen();
@@ -208,11 +221,13 @@ export class PsatComponent implements OnInit {
     if (this.calcTabSub) this.calcTabSub.unsubscribe();
     if (this.secondaryTabSub) this.secondaryTabSub.unsubscribe();
     if (this.mainTabSub) this.mainTabSub.unsubscribe();
-    if (this.stepTabSubscription) this.stepTabSubscription.unsubscribe()
+    if (this.stepTabSubscription) this.stepTabSubscription.unsubscribe();    
+    this.showExportModalSub.unsubscribe();
     this.psatTabService.secondaryTab.next('explore-opportunities');
     this.psatTabService.mainTab.next('system-setup');
     this.psatTabService.stepTab.next('system-basics');
     this.psatTabService.modifyConditionsTab.next('pump-fluid');
+    this.compareService.selectedModification.next(undefined);
     this.connectedInventoryDataSub.unsubscribe();
     this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
   }
@@ -221,6 +236,12 @@ export class PsatComponent implements OnInit {
     setTimeout(() => {
       this.getContainerHeight();
     }, 100);
+  }
+
+  
+  redirectFromConnectedInventory() {
+    this.psatTabService.mainTab.next('system-setup');
+    this.psatTabService.stepTab.next('motor');
   }
 
   getContainerHeight() {
@@ -233,7 +254,26 @@ export class PsatComponent implements OnInit {
           footerHeight = this.footer.nativeElement.clientHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
+        if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+          this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+        }
       }, 100);
+    }
+  }
+
+  initModificationState() {
+    if (this._psat.modifications) {
+      if (this._psat.modifications.length != 0) {
+        this.modificationExists = true;
+        this.modificationIndex = 0;
+      }
+      if (this._psat.setupDone) {
+        this.compareService.setCompareVals(this._psat, 0);
+      }
+    } else {
+      this._psat.modifications = new Array();
+      this.modificationExists = false;
+      this.compareService.setCompareVals(this._psat);
     }
   }
 
@@ -293,7 +333,6 @@ export class PsatComponent implements OnInit {
 
   async save() {
     this.checkSetupDone();
-
     if (this._psat.modifications) {
       if (this._psat.modifications.length == 0) {
         this.modificationExists = false;
@@ -313,12 +352,14 @@ export class PsatComponent implements OnInit {
     }
     this.compareService.setCompareVals(this._psat, this.modificationIndex);
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
-    this.psatIntegrationService.setPumpConnectedInventoryData(this.assessment);
-    if (this.assessment.psat.connectedItem) {
+    this.psatIntegrationService.setPSATConnectedInventoryData(this.assessment, this.settings);
+    this.hasConnectedMotorItem = this._psat.connectedItem && this._psat.connectedItem.inventoryType === 'motor';
+    if (this.assessment.psat.connectedItem && this.assessment.psat.connectedItem.inventoryType === 'pump') {
       this.psatIntegrationService.checkConnectedInventoryDiffers(this.assessment);
     }
 
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
     this.psatService.getResults.next(true);
     this.cd.detectChanges();
@@ -399,6 +440,7 @@ export class PsatComponent implements OnInit {
       psat: {
         name: modName,
       },
+      id: this.helperFunctionService.getNewIdString(),
       notes: {
         fieldDataNotes: '',
         motorNotes: '',
@@ -466,9 +508,18 @@ export class PsatComponent implements OnInit {
 
   async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disablePsatTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.psatService.modalOpen.next(false);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
+  closeExportModal(input: boolean){
+    this.psatTabService.showExportModal.next(input);
   }
 }

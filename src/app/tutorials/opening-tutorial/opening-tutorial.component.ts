@@ -12,8 +12,6 @@ import { Settings } from '../../shared/models/settings';
 export class OpeningTutorialComponent implements OnInit {
   @Output('closeTutorial')
   closeTutorial = new EventEmitter<boolean>();
-  @Input()
-  idbStarted: boolean;
 
   showItem: Array<boolean> = [true, false, false, false, false, false, false];
 
@@ -48,7 +46,8 @@ export class OpeningTutorialComponent implements OnInit {
 
   async sendDontShow() {
       this.settingsDbService.globalSettings.disableTutorial = this.dontShow;
-      let settings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+      await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+      let settings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
       this.settingsDbService.setAll(settings);
   }
 }

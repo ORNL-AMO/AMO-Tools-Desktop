@@ -15,7 +15,7 @@ import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { MotorInventoryService } from '../../../../motor-inventory/motor-inventory.service';
 import { PumpInventoryService } from '../../../../pump-inventory/pump-inventory.service';
-import { MotorIntegrationService } from '../../../../shared/assessment-integration/motor-integration.service';
+import { MotorIntegrationService } from '../../../../shared/connected-inventory/motor-integration.service';
 
 @Component({
   selector: 'app-inventory-item',
@@ -109,7 +109,8 @@ export class InventoryItemComponent implements OnInit {
     this.inventoryItem.name = this.editForm.controls.name.value;
     this.directoryDbService.setIsMovedExample(this.inventoryItem, this.editForm);
     this.inventoryItem.directoryId = this.editForm.controls.directoryId.value;
-    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.inventoryItem));
+    await firstValueFrom(this.inventoryDbService.updateWithObservable(this.inventoryItem));
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);
     this.dashboardService.updateDashboardData.next(true);
     this.hideEditModal();

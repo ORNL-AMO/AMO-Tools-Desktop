@@ -6,9 +6,10 @@ import { SystemAndEquipmentCurveService } from './system-and-equipment-curve.ser
 import { firstValueFrom, Subscription } from 'rxjs';
 import { Calculator } from '../../shared/models/calculators';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
- 
+
 import { CurveDataService } from './curve-data.service';
 import { Router } from '@angular/router';
+import { AnalyticsService } from '../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-system-and-equipment-curve',
@@ -48,10 +49,12 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
   systemCurveCollapsedSub: Subscription;
   maxFlowRate: number = 0;
   constructor(private settingsDbService: SettingsDbService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
-    private calculatorDbService: CalculatorDbService,    private curveDataService: CurveDataService,
-    private router: Router) { }
+    private calculatorDbService: CalculatorDbService, private curveDataService: CurveDataService,
+    private router: Router,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-system-equipment-curve');
     if (!this.equipmentType) {
       this.setEquipmentType();
     }
@@ -180,7 +183,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     this.updateEquipmentCurveResultData();
     this.systemAndEquipmentCurveService.updateGraph.next(true);
   }
-  
+
 
   updateEquipmentCurveResultData() {
     if (this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue() == 'Data') {
@@ -281,7 +284,8 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
         equipmentCurveFormView: this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue()
       }
 
-      let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(calculator)) 
+      await firstValueFrom(this.calculatorDbService.updateWithObservable(calculator));
+      let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
       this.calculatorDbService.setAll(updatedCalculators);
     } else {
       calculator = {

@@ -3,7 +3,7 @@ import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../dashboard/assessment.service';
  
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { firstValueFrom, Subscription } from 'rxjs';
@@ -16,6 +16,7 @@ import { SettingsService } from '../settings/settings.service';
 import { ConvertInputDataService } from './convert-input-data.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-treasure-hunt',
@@ -26,6 +27,7 @@ export class TreasureHuntComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   containerHeight: number;
   oldSettings: Settings;
   showUpdateUnitsModal: boolean;
@@ -51,9 +53,12 @@ export class TreasureHuntComponent implements OnInit {
   selectedCalcSub: Subscription;
   selectedCalc: string;
   showWelcomeScreen: boolean = false;
+  smallScreenTab: string = 'form';
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
   constructor(
     private assessmentService: AssessmentService,
-      
+    private router: Router,
     private activatedRoute: ActivatedRoute,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
@@ -64,13 +69,18 @@ export class TreasureHuntComponent implements OnInit {
     private treasureChestMenuService: TreasureChestMenuService,
     private settingsService: SettingsService,
     private convertUnitsService: ConvertUnitsService,
-    private egridService: EGridService
+    private egridService: EGridService,
+    private analyticsService: AnalyticsService
   ) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-treasure-hunt-assessment');
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
+      this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
+      if (this.assessment && this.assessment.type !== 'TreasureHunt') {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else { 
         if (!this.assessment.treasureHunt) {
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
@@ -96,11 +106,12 @@ export class TreasureHuntComponent implements OnInit {
           }
         }
         this.getSettings();
-        let tmpTab = this.assessmentService.getTab();
+        let tmpTab = this.assessmentService.getStartingTab();
         if (tmpTab) {
           this.treasureHuntService.mainTab.next(tmpTab);
         }
         this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
+      }
     });
 
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
@@ -127,6 +138,10 @@ export class TreasureHuntComponent implements OnInit {
       this.getContainerHeight();
     });
 
+    this.showExportModalSub = this.treasureHuntService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
+
     this.checkShowWelcomeScreen();
   }
 
@@ -140,7 +155,8 @@ export class TreasureHuntComponent implements OnInit {
     this.treasureHuntSub.unsubscribe();
     this.selectedCalcSub.unsubscribe();
     let defaultData: SortCardsData = this.treasureChestMenuService.getDefaultSortByData();
-    this.treasureChestMenuService.sortBy.next(defaultData);
+    this.treasureChestMenuService.sortBy.next(defaultData); 
+    this.showExportModalSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -168,6 +184,9 @@ export class TreasureHuntComponent implements OnInit {
           footerHeight = this.footer.nativeElement.clientHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
+        if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+          this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+        }
       }, 100);
     }
   }
@@ -176,7 +195,8 @@ export class TreasureHuntComponent implements OnInit {
     this.assessment.treasureHunt = treasureHunt;
     this.assessment.treasureHunt.setupDone = this.checkSetupDone();
 
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
     this.treasureHuntService.getResults.next(true);
   }
@@ -267,9 +287,18 @@ export class TreasureHuntComponent implements OnInit {
 
  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableTreasureHuntTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.treasureHuntService.modalOpen.next(false);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
+  closeExportModal(input: boolean){
+    this.treasureHuntService.showExportModal.next(input);
   }
 }

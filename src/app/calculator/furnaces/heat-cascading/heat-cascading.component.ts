@@ -5,6 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
 import { HeatCascadingTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { HeatCascadingService } from './heat-cascading.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-heat-cascading',
@@ -42,9 +43,11 @@ export class HeatCascadingComponent implements OnInit {
   smallScreenTab: string = 'form';
   
   constructor(private heatCascadingService: HeatCascadingService,
-              private settingsDbService: SettingsDbService) { }
+              private settingsDbService: SettingsDbService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('calculator-PH-heat-cascading');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

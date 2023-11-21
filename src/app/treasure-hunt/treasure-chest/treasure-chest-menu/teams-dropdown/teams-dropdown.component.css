@@ -1,6 +1,7 @@
 .nav-item .dropdown-toggle{
     color: white;
     background: #2E4053;
+    border: 1px solid #5b7591;
 }
 
 .nav-link{
@@ -45,7 +46,7 @@ a.list-group-item.active:hover{
   }
 
   .teams-dropdown{
-      left: auto;
-      right: 0;
+      left: 0;
+      right: auto;
       
   }

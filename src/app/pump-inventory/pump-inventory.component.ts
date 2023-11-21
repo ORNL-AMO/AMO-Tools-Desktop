@@ -8,13 +8,14 @@ import { Settings } from '../shared/models/settings';
 import { PumpCatalogService } from './pump-inventory-setup/pump-catalog/pump-catalog.service';
 import { PumpInventoryData, PumpInventoryDepartment, PumpItem } from './pump-inventory';
 import { PumpInventoryService } from './pump-inventory.service';
-import { MotorIntegrationService } from '../shared/assessment-integration/motor-integration.service';
-import { PsatIntegrationService } from '../shared/assessment-integration/psat-integration.service';
-import { IntegrationStateService } from '../shared/assessment-integration/integration-state.service';
-import { ConnectedInventoryData } from '../shared/assessment-integration/integrations';
+import { MotorIntegrationService } from '../shared/connected-inventory/motor-integration.service';
+import { PsatIntegrationService } from '../shared/connected-inventory/psat-integration.service';
+import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
+import { ConnectedInventoryData } from '../shared/connected-inventory/integrations';
+import { environment } from '../../environments/environment';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 declare const packageJson;
-
 @Component({
   selector: 'app-pump-inventory',
   templateUrl: './pump-inventory.component.html',
@@ -41,6 +42,8 @@ export class PumpInventoryComponent implements OnInit {
   pumpInventoryDataSub: Subscription;
   pumpInventoryItem: InventoryItem;
   integrationStateSub: Subscription;
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
   constructor(private pumpInventoryService: PumpInventoryService, 
     private activatedRoute: ActivatedRoute,
     private settingsDbService: SettingsDbService, 
@@ -49,9 +52,11 @@ export class PumpInventoryComponent implements OnInit {
     private motorIntegrationService: MotorIntegrationService,
     private integrationStateService: IntegrationStateService,
     private psatIntegrationService: PsatIntegrationService,
-    private cd: ChangeDetectorRef) { }
+    private cd: ChangeDetectorRef,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-pump-inventory');
     this.activatedRoute.params.subscribe(params => {
       let tmpItemId = Number(params['id']);
       this.pumpInventoryItem = this.inventoryDbService.getById(tmpItemId);
@@ -91,6 +96,10 @@ export class PumpInventoryComponent implements OnInit {
       this.isModalOpen = val;
       this.cd.detectChanges();
     });
+
+    this.showExportModalSub = this.pumpInventoryService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
   }
 
   ngOnDestroy() {
@@ -100,7 +109,8 @@ export class PumpInventoryComponent implements OnInit {
     this.integrationStateSub.unsubscribe();
     this.pumpCatalogService.selectedPumpItem.next(undefined);
     this.pumpCatalogService.selectedDepartmentId.next(undefined);
-    this.modalOpenSub.unsubscribe();
+    this.modalOpenSub.unsubscribe();   
+    this.showExportModalSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -124,11 +134,12 @@ export class PumpInventoryComponent implements OnInit {
   async saveDbData() {
     let inventoryData: PumpInventoryData = this.pumpInventoryService.pumpInventoryData.getValue();
     this.pumpInventoryItem.modifiedDate = new Date();
-    this.pumpInventoryItem.appVersion = packageJson.version;
+    this.pumpInventoryItem.appVersion = environment.version;
     this.pumpInventoryItem.pumpInventoryData = inventoryData;
     this.pumpInventoryItem.pumpInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
     this.pumpInventoryItem.pumpInventoryData.hasConnectedPsat = this.psatIntegrationService.getHasConnectedPSAT(this.pumpInventoryItem);
-    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.updateWithObservable(this.pumpInventoryItem));
+    await firstValueFrom(this.inventoryDbService.updateWithObservable(this.pumpInventoryItem));
+    let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);
   }
 
@@ -176,5 +187,9 @@ export class PumpInventoryComponent implements OnInit {
     this.pumpCatalogService.selectedPumpItem.next(selectedItem);
     this.pumpInventoryService.mainTab.next('setup');
     this.pumpInventoryService.setupTab.next('pump-catalog');
+  }
+  
+  closeExportModal(input: boolean){
+    this.pumpInventoryService.showExportModal.next(input);
   }
 }

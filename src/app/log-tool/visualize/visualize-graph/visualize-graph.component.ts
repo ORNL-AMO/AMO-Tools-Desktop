@@ -1,15 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, EventEmitter, Output, Renderer2, Inject } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { debounce, interval, Subscription } from 'rxjs';
-import { AnnotationData, GraphLayout, GraphObj, LoadingSpinner, VisualizerGraphData } from '../../log-tool-models';
-import { LogToolDbService } from '../../log-tool-db.service';
+import { AnnotationData, GraphObj, LoadingSpinner, VisualizerGraphData } from '../../log-tool-models';
 import { PlotlyService } from 'angular-plotly.js';
 import { LogToolDataService } from '../../log-tool-data.service';
 import * as _ from 'lodash';
 import { DOCUMENT } from '@angular/common';
-import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysis.service';
-import { HelperFunctionsService } from '../../../shared/helper-services/helper-functions.service';
-import { VisualizeMenuService } from '../visualize-menu/visualize-menu.service';
+import { Router } from '@angular/router';
+import * as Plotly from 'plotly.js-dist';
+
 
 @Component({
   selector: 'app-visualize-graph',
@@ -25,14 +24,13 @@ export class VisualizeGraphComponent implements OnInit {
   @ViewChild('graphContainer', { static: false }) graphContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-      this.emitHeight.emit(this.graphContainer.nativeElement.offsetHeight);
+    this.emitHeight.emit(this.graphContainer.nativeElement.offsetHeight);
   }
-
   selectedGraphDataSubscription: Subscription;
   selectedGraphObj: GraphObj;
   timeSeriesSegments: Array<TimeSeriesSegment> = [];
   selectedTimeSeriesSegment: TimeSeriesSegment;
-
+  hasPlot: boolean;
   loadingSpinner: LoadingSpinner;
   toolTipHoldTimeout;
   showTooltipHover: boolean = false;
@@ -42,10 +40,12 @@ export class VisualizeGraphComponent implements OnInit {
   constructor(private visualizeService: VisualizeService,
     @Inject(DOCUMENT) private document: Document,
     private logToolDataService: LogToolDataService,
+    private router: Router,
     private plotlyService: PlotlyService) {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   ngOnDestroy() {
     this.selectedGraphDataSubscription.unsubscribe();
@@ -59,9 +59,8 @@ export class VisualizeGraphComponent implements OnInit {
         return interval(userInputDelay);
       })
     ).subscribe((graphObj: GraphObj) => {
-      // todo 6284 save data is creating zone.js lag
-      // this.logToolDbService.saveData();
       this.selectedGraphObj = graphObj;
+      this.checkValidGraph();
       this.updateGraphObjects();
       this.renderUserInputEvents();
     });
@@ -71,7 +70,16 @@ export class VisualizeGraphComponent implements OnInit {
         this.renderGraph();
       }
     });
+
+    // if navigating from map data/time without day type analysis
+    this.logToolDataService.loadingSpinner.next({ show: false, msg: 'Finalizing Data Setup...' });
     window.dispatchEvent(new Event("resize"));
+  }
+  async checkValidGraph() {
+    if (this.selectedGraphObj.invalidState) {
+      Plotly.purge('plotlyDiv');
+      this.hasPlot = false;
+    }
   }
 
   renderUserInputEvents() {
@@ -90,10 +98,17 @@ export class VisualizeGraphComponent implements OnInit {
     }
   }
 
+  navigateToSetupTab(tabUrl: string) {
+    let url = '/log-tool/data-setup/' + tabUrl;
+    this.router.navigate([url]);
+
+  }
+
   renderGraph() {
     // * For banner events (add New Graph, select graph) need to grab updated value due to race condition --> selectedGraphObj event vs shouldRenderGraph event
     this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
-    // this.setTimeSeriesSegments(this.selectedGraphObj);
+    this.setTimeSeriesRangeSlider();
+
     if (this.visualizeGraph && this.selectedGraphObj) {
       this.setGraphInteractivity();
       if (this.selectedGraphObj.shouldRenderNewPlot) {
@@ -101,6 +116,7 @@ export class VisualizeGraphComponent implements OnInit {
       } else if (this.visualizeGraph.nativeElement.data) {
         this.relayoutGraph();
       }
+      this.hasPlot = true;
       this.visualizeService.selectedGraphObj.next(this.selectedGraphObj);
     }
   }
@@ -171,239 +187,20 @@ export class VisualizeGraphComponent implements OnInit {
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // setSelectedTimeSeriesSegment(segment: TimeSeriesSegment) {
-  //   this.selectedTimeSeriesSegment = segment;
-  //   this.selectedGraphObj.data.forEach((graphDataSeries, seriesIndex) => {
-  //     this.selectedGraphObj.data[seriesIndex] = this.selectedTimeSeriesSegment.data[seriesIndex];
-  //   });
-
-  //   let resetLayoutRanges: GraphLayout = this.visualizeService.selectedGraphObj.getValue().layout;
-  //   // let resetLayoutRanges: GraphLayout = this.helperFunctionService.copyObject(this.visualizeService.selectedGraphObj.getValue().layout);
-  //   this.selectedGraphObj.layout.xaxis = resetLayoutRanges.xaxis;
-  //   this.selectedGraphObj.layout.yaxis = resetLayoutRanges.yaxis;
-  //   this.selectedGraphObj.layout.yaxis2 = resetLayoutRanges.yaxis2;
-
-  //   this.setGraphInteractivity();
-  //   // 90-120 ms
-  //   let graphObj: GraphObj = this.selectedGraphObj;
-  //   // let graphObj: GraphObj = this.helperFunctionService.copyObject(this.selectedGraphObj);
-  //   graphObj.layout.annotations = this.setAnnotationsInCurrentRange(graphObj);
-  //   if (this.selectedTimeSeriesSegment.segmentText === 'All Datapoints' && this.selectedGraphObj.graphInteractivity.hasLargeDataset) {
-  //     this.setInteractivityOffAndUpdate(graphObj);
-  //   } 
-  //   this.plotGraph(graphObj);
-  // }
-
-  // setInteractivityOffAndUpdate(graphObj: GraphObj) {
-  //   this.logToolDataService.loadingSpinner.next({show: true, msg: `Graphing Data. This may take a moment depending on the amount of data you have supplied...`});
-  //   graphObj.graphInteractivity.isGraphInteractive = false;
-  //   graphObj.graphInteractivity.showUserToggledPerformanceWarning = false;
-  //   graphObj.graphInteractivity.showDefaultPerformanceWarning = true;
-
-  //   this.visualizeService.selectedGraphObj.next(graphObj);
-  // }
-
-  // setTimeSeriesSegments(graphObj: GraphObj) {
-  //   this.timeSeriesSegments = [];
-  //   if (this.selectedGraphObj.graphInteractivity.hasLargeDataset) {
-  //       this.timeSeriesSegments = this.createTimeSeriesSegments(graphObj);
-  //     if (this.selectedTimeSeriesSegment) {
-  //       this.selectedGraphObj.data = this.selectedTimeSeriesSegment.data;
-  //     } else {
-  //       this.selectedTimeSeriesSegment = this.timeSeriesSegments[0];
-  //     }
-  //   }
-  // }
-
-
-  // // * this method creates time series segments for ANY axis selection, 'Time series' or not
-  // createTimeSeriesSegments(graphObj: GraphObj): Array<TimeSeriesSegment> {
-  //   this.selectedTimeSeriesSegment = undefined;
-  //   let config: SegmentConfig = {
-  //     dataSetLength: graphObj.data[0].y.length,
-  //     // * .15 arbitrary value set to create the number of segments
-  //     segmentSize: Math.floor(graphObj.data[0].y.length * .15),
-  //     allDataMinDate: this.dayTypeAnalysisService.allDataMinDate,
-  //     allDataMaxDate: this.dayTypeAnalysisService.allDataMaxDate,
-  //   }
-  //   let segmentDays: Array<TimeSeriesSegment> = [];
-
-  //   graphObj.data.forEach((graphDataSeries: VisualizerGraphData, seriesIndex) => {
-  //     // * 83 ms
-  //     let currentDayData: VisualizerGraphData = this.helperFunctionService.copyObject(graphDataSeries);
-  //     currentDayData.x = [];
-  //     currentDayData.y = [];
-  //     let timeSeriesDataX: Array<string | number> = graphDataSeries.x;
-  //     if (this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName !== 'Time Series') {
-  //       // * A non time-series axis is selected - get x dates to use as range for each segment
-  //       timeSeriesDataX = this.visualizeService.getTimeSeriesData(graphObj.selectedXAxisDataOption.dataField);
-  //     }
-
-  //     // * if multiple data series how does non time series data change? 
-  //     let currentDayText: string = moment(timeSeriesDataX[0]).format("MMM Do");
-  //     // 6225 not needed anymore? check if series differ in length.. when were these concattenated?
-  //     // timeSeriesDataX = this.filterTimeSeriesForSelectedY(graphObj, seriesIndex, timeSeriesDataX);
-
-  //     for (let coordinateIndex = 0; coordinateIndex < timeSeriesDataX.length; coordinateIndex++) {
-  //       let dateStamp: number | string = timeSeriesDataX[coordinateIndex];
-  //       let xValue: string | number = dateStamp;
-  //       if (this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName !== 'Time Series') {
-  //         // * graph actual x data, not datetime values
-  //         xValue = graphDataSeries.x[coordinateIndex];
-  //       }  
-  //       // * .02 ms * N  -> currently 4-5 seconds
-  //       let monthDay: string = moment(dateStamp).format("MMM Do");
-  //       let isLastDay: boolean = coordinateIndex === timeSeriesDataX.length - 1;
-  //       if (monthDay !== currentDayText || isLastDay) {
-  //         if (isLastDay) {
-  //           // * add remaining coordinates to last series
-  //           currentDayData.x.push(xValue);
-  //           currentDayData.y.push(graphDataSeries.y[coordinateIndex]);
-  //         } 
-  //         // * 1ms
-  //         let existingSegmentDayIndex = segmentDays.findIndex(day => day.segmentText === currentDayText);
-  //         if (seriesIndex === 0) {
-  //           // * add segment day
-  //           segmentDays.push({
-  //             segmentText: currentDayText,
-  //             data: [currentDayData]
-  //           });
-  //         } 
-  //         else {
-  //           let existingSegment: TimeSeriesSegment = segmentDays[existingSegmentDayIndex];
-  //           existingSegment.data.push(currentDayData);
-  //         }
-
-  //         currentDayText = monthDay;
-  //         // * 30 ms each
-  //         currentDayData = this.helperFunctionService.copyObject(graphDataSeries);
-  //         currentDayData.x = [];
-  //         currentDayData.y = [];
-
-  //       } else {
-  //         currentDayData.x.push(xValue);
-  //         currentDayData.y.push(graphDataSeries.y[coordinateIndex]);
-  //       }
-  //     }
-  //   });
-
-  //   // Group day segments into reasonable amount of segments until day selection is implemented
-
-  //   // * 4 ms
-  //   let segments = this.groupTimeSeriesDaySegments(segmentDays, graphObj, config);
-
-  //   // *4.5 secs total
-  //   return segments;
-  // }
-
-  // //  6225 this method may no longer be needed
-  // filterTimeSeriesForSelectedY(graphObj: GraphObj, seriesIndex: number, timeSeriesData: Array<string | number>) {
-  //   //======
-  //     // 6040 band aid until file/dataset processing supports multi files better
-  //     // use only the time series data for the selected series (y axis), DE logic currently concats all time series data. 
-  //     let previousSeriesEnd: number = 0;
-  //     if (seriesIndex !== 0) {
-  //       previousSeriesEnd = graphObj.data[seriesIndex - 1].y.length - 1;
-  //     }
-  //     timeSeriesData = timeSeriesData.slice(previousSeriesEnd, previousSeriesEnd + graphObj.data[seriesIndex].y.length);
-  //     return timeSeriesData;
-  //     //======
-  // }
-
-  // // create groupings, ex Jun 20 - Jul 2
-  // groupTimeSeriesDaySegments(segmentDays: Array<TimeSeriesSegment>, graphObj: GraphObj, config: SegmentConfig): Array<TimeSeriesSegment> {
-  //   let timeSeriesSegments: Array<TimeSeriesSegment> = [{segmentText: 'All Datapoints', data: [...graphObj.data]}];
-  //   let groupedSegment: TimeSeriesSegment = {segmentText: undefined, data: []}
-
-  //   let startDate: string = segmentDays[0].segmentText;
-  //   let endDate: string;
-
-  //   segmentDays.forEach((daySegment, index) => {
-  //     if (!startDate) {
-  //       startDate = daySegment.segmentText
-  //     }
-
-  //     daySegment.data.forEach((dataSeries, index) => {
-  //       if (!groupedSegment.data[index]) {
-  //         groupedSegment.data.push(dataSeries);
-  //       } else {
-  //         groupedSegment.data[index].x = groupedSegment.data[index].x.concat(dataSeries.x);
-  //         groupedSegment.data[index].y = groupedSegment.data[index].y.concat(dataSeries.y);
-  //       }
-  //     });
-
-  //     let isSegmentLengthLimit: boolean = groupedSegment.data[0].y.length >= config.segmentSize;
-  //     if (isSegmentLengthLimit || index === segmentDays.length - 1) {
-  //       endDate = daySegment.segmentText;
-  //       let segmentText: string = `${startDate} - ${endDate}`;
-  //       groupedSegment.segmentText = segmentText;
-  //       startDate = undefined;
-  //       timeSeriesSegments.push(groupedSegment);
-  //       groupedSegment = {
-  //         segmentText: undefined,
-  //         data: []
-  //       }
-  //     } 
-  //   });
-
-  //   return timeSeriesSegments;
-  // }
-
-  // setAnnotationsInCurrentRange(graphObj: GraphObj): AnnotationData[] {
-  //   if (graphObj.layout.annotations && graphObj.layout.annotations.length > 0) {
-  //     let annotationsInRange: AnnotationData[] = []
-  //     graphObj.layout.annotations.forEach(annotation => {
-  //       graphObj.data.forEach((dataSeries, index) => {
-  //         let matchingYIndicies: number[] = [];
-  //         for (let i = 0; i < dataSeries.y.length; i++) {
-  //           let yVal: number | string = dataSeries.y[i];
-  //           if (yVal === annotation.y) {
-  //             matchingYIndicies.push(i);
-  //           };
-  //         }
-  //         let timeSeriesData: Array<string | number> = dataSeries.x;
-  //         if (this.selectedTimeSeriesSegment.segmentText === 'All Datapoints') {
-  //           timeSeriesData = this.filterTimeSeriesForSelectedY(graphObj, index, dataSeries.x);
-  //         }
-  //         matchingYIndicies.forEach(i => {
-  //           // see if it's x pair === annotaiton x
-  //           if (timeSeriesData[i] === annotation.x) {
-  //             let existingAnnotation = annotationsInRange.find(existing => {
-  //               if (existing.x === annotation.x && existing.y === annotation.y) {
-  //                 return true;
-  //               } else {
-  //                 return false;
-  //               }
-  //             });
-  //             // Only add point once - some annotation point values/intersecitons appear many times in data
-  //             if (!existingAnnotation) {
-  //               annotationsInRange.push(annotation);
-  //             }
-  //           }
-  //         });
-  //       });
-  //     })
-
-  //     graphObj.layout.annotations = annotationsInRange;
-  //   }
-  //   return graphObj.layout.annotations;
-  // }
-
-
+  focusGraph() {
+    this.visualizeService.focusedPanel.next('visualize-graph');
+  }
+  setTimeSeriesRangeSlider() {
+    if (this.selectedGraphObj.isTimeSeries) {
+      this.selectedGraphObj.layout.xaxis.rangeslider = {
+        autorange: true,
+        visible: true
+      }
+    this.selectedGraphObj.layout.xaxis.type = 'date';
+  } else {
+    this.selectedGraphObj.layout.xaxis.rangeslider = undefined;
+  }
+  }
 
   getRestyleRanges(layout: any): PlotlyAxisRanges {
     let xMin: number;

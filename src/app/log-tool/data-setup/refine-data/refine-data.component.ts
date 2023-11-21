@@ -125,7 +125,6 @@ export class RefineDataComponent implements OnInit {
       field.useField = this.selectedDataSet.fields[i].useField;
       field.unit = this.selectedDataSet.fields[i].unit;
     })
-    return dataSet;
   }
 
   setSelectedDataSet(index: number) {

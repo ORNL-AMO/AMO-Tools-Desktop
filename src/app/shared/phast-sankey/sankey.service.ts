@@ -31,7 +31,7 @@ export class SankeyService {
     if (phast.losses.energyInputExhaustGasLoss && !resultCats.showFlueGas && resultCats.showEnInput2) {
       if (phast.losses.energyInputExhaustGasLoss.length > 0) {
         this.setFuelEnergy(phast.losses.energyInputExhaustGasLoss, settings.unitsOfMeasure);
-        this.electricalEnergy = phastResults.electricalHeatDelivered;
+        this.electricalEnergy = phastResults.totalProvidedElectricalHeat;
       }
     }
 
@@ -89,13 +89,14 @@ export class SankeyService {
     if (resultCats.showEnInput2 && phastResults.totalExhaustGas) {
       results.totalExhaustGas = phastResults.totalExhaustGas;
     }
+    if (resultCats.showEnInput2 && phastResults.electricalHeaterLosses) {
+      results.totalElectricalHeaterLosses = phastResults.electricalHeaterLosses;
+    }
     if (phastResults.totalSystemLosses && resultCats.showSystemEff) {
       results.totalSystemLosses = phastResults.totalSystemLosses;
     }
     results.totalInput = phastResults.grossHeatInput;
-
     results.availableHeatPercent = (1 - ((results.totalSystemLosses + results.totalFlueGas + results.totalExhaustGas) / results.totalInput)) * 100;
-
 
     return results;
   }
@@ -118,6 +119,7 @@ export class SankeyService {
       totalEnergyInputEAF: 0,
       totalEnergyInput: 0,
       totalExhaustGas: 0,
+      totalElectricalHeaterLosses: 0,
       totalSystemLosses: 0,
       availableHeatPercent: 0,
       nodes: new Array<PhastSankeyNode>()
@@ -183,6 +185,7 @@ export interface FuelResults {
   totalEnergyInputEAF: number;
   totalEnergyInput: number;
   totalExhaustGas: number;
+  totalElectricalHeaterLosses: number,
   totalSystemLosses: number;
   availableHeatPercent: number;
   nodes?: Array<PhastSankeyNode>;

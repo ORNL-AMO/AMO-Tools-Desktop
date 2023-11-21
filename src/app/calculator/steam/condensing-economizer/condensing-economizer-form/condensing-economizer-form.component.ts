@@ -8,7 +8,7 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import { MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { CondensingEconomizerInput } from '../../../../shared/models/steam/condensingEconomizer';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { CondensingEconomizerFormService, CondensingEconomizerWarnings } from '../condensing-economizer-form.service';
 import { CondensingEconomizerService } from '../condensing-economizer.service';
 
@@ -49,8 +49,8 @@ export class CondensingEconomizerFormComponent implements OnInit {
   fuelOptions: Array<FlueGasMaterial>;
 
   constructor(private condensingEconomizerService: CondensingEconomizerService, 
-    private suiteDbService: SuiteDbService,
     private phastService: PhastService,
+    private sqlDbApiService: SqlDbApiService,
     private condensingEconomizerFormService: CondensingEconomizerFormService) { }
 
   ngOnInit() {
@@ -82,7 +82,7 @@ export class CondensingEconomizerFormComponent implements OnInit {
     let condensingEconomizerInput: CondensingEconomizerInput = this.condensingEconomizerService.condensingEconomizerInput.getValue();
     this.form = this.condensingEconomizerFormService.getCondensingEconomizerForm(condensingEconomizerInput, this.settings);
     this.form.controls.oxygenCalculationMethod.disable();
-    this.fuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
+    this.fuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
     this.setMaterialProperties();
     this.setCalcMethod();
     this.calcExcessAir();
@@ -130,7 +130,7 @@ export class CondensingEconomizerFormComponent implements OnInit {
   }
 
   setMaterialProperties() {
-    let material = this.suiteDbService.selectGasFlueGasMaterialById(this.form.controls.materialTypeId.value);
+    let material = this.sqlDbApiService.selectGasFlueGasMaterialById(this.form.controls.materialTypeId.value);
     this.form.patchValue({
       CH4: this.condensingEconomizerService.roundVal(material.CH4, 4),
       C2H6: this.condensingEconomizerService.roundVal(material.C2H6, 4),
@@ -193,7 +193,7 @@ export class CondensingEconomizerFormComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.fuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
+      this.fuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
       let newMaterial = this.fuelOptions.filter(material => { return material.substance === event.substance; });
       if (newMaterial.length !== 0) {
         this.form.patchValue({

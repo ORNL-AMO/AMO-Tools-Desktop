@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FieldMeasurementInputs, FieldMeasurementOutputs, PercentLoadEstimationService } from './percent-load-estimation.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-percent-load-estimation',
@@ -33,10 +34,12 @@ export class PercentLoadEstimationComponent implements OnInit {
   fieldMeasurementData: FieldMeasurementInputs;
   fieldMeasurementResults: FieldMeasurementOutputs;
 
-  constructor(private percentLoadEstimationService: PercentLoadEstimationService, private settingsDbService: SettingsDbService) {
+  constructor(private percentLoadEstimationService: PercentLoadEstimationService, private settingsDbService: SettingsDbService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-MOTOR-percent-load-estimation');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -72,11 +75,6 @@ export class PercentLoadEstimationComponent implements OnInit {
     this.fieldMeasurementData = data;
     this.percentLoadEstimationService.fieldMeasurementInputs = this.fieldMeasurementData;
     this.fieldMeasurementResults = this.percentLoadEstimationService.getResults(data);
-    if (isNaN(this.fieldMeasurementResults.percentLoad) == false && this.fieldMeasurementResults.percentLoad != Infinity) {
-      this.percentLoadEstimation = this.fieldMeasurementResults.percentLoad;
-    } else {
-      this.percentLoadEstimation = 0;
-    }
   }
 
   btnResetData() {

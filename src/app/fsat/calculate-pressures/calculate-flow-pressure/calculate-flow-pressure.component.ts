@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { FieldData, FSAT, PlaneResults } from '../../../shared/models/fans';
 import { FanInfoFormService } from '../../../calculator/fans/fan-analysis/fan-analysis-form/fan-info-form/fan-info-form.service';
 import { PlaneDataFormService } from '../../../calculator/fans/fan-analysis/fan-analysis-form/plane-data-form/plane-data-form.service';
+import { FsatService } from '../../fsat.service';
 
 @Component({
   selector: 'app-calculate-flow-pressure',
@@ -31,6 +32,7 @@ export class CalculateFlowPressureComponent implements OnInit {
               private convertFanAnalysisService: ConvertFanAnalysisService, 
               private fanInfoFormService: FanInfoFormService, 
               private planeDataFormService: PlaneDataFormService,
+              private fsatService: FsatService
               ) { }
 
   ngOnInit() {
@@ -92,7 +94,7 @@ export class CalculateFlowPressureComponent implements OnInit {
     let fanInfoDone: boolean = this.fanInfoFormService.getBasicsFormFromObject(this.fanAnalysisService.inputData.FanRatedInfo, this.settings).valid;
     let planeDataDone: boolean = this.planeDataFormService.checkPlaneDataValid(this.fanAnalysisService.inputData.PlaneData, this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
     if (planeDataDone && fanInfoDone) {
-      let planeResults: PlaneResults = this.convertFanAnalysisService.getPlaneResults(this.fanAnalysisService.inputData, this.settings);
+      let planeResults: PlaneResults = this.fsatService.getPlaneResults(this.fanAnalysisService.inputData, this.settings);
       this.fsat.fieldData.flowRate = Number(planeResults.FanInletFlange.gasVolumeFlowRate.toFixed(3));
       this.fsat.fieldData.usingStaticPressure = this.fanAnalysisService.pressureCalcResultType == 'static'? true: false;
       if (this.fanAnalysisService.pressureCalcResultType == 'static') {

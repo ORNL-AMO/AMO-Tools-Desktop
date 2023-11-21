@@ -67,6 +67,7 @@ export interface Losses {
 
 export interface Modification {
   phast?: PHAST;
+  id: string,
   notes?: Notes;
   exploreOpportunities?: boolean;
   exploreOppsShowFlueGas?: SavingsOpportunity;
@@ -139,7 +140,20 @@ export interface PhastResults {
   calculatedFlueGasO2: number;
   availableHeatPercent: number;
   electricalHeatDelivered?: number;
+  electricalHeaterLosses?: number;
+  totalAdditionalFuelHeat?: number;
+  totalProvidedElectricalHeat?: number;
   co2EmissionsOutput?: PhastCo2EmissionsOutput
+}
+
+export interface EnergyUseReportData {
+  fuelName: string,
+  fuelEnergyUsed: number,
+  fuelHeatingValue: number,
+  energyPerMassUnit: string,
+  electricEnergyUsed?: number,
+  baseEnergyUnit: string,
+  steamEnergyUsed: number
 }
 
 export interface EAFResults {

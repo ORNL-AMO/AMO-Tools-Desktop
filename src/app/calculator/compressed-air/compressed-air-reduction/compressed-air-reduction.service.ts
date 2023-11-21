@@ -82,7 +82,7 @@ export class CompressedAirReductionService {
     let defaultData: CompressedAirReductionData = {
       name: 'Equipment #1',
       hoursPerYear: 8760,
-      utilityType: 0,
+      utilityType: 1,
       utilityCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
       compressedAirCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
       electricityCost: settings && settings.electricityCost ? settings.electricityCost : 0.066,
@@ -105,7 +105,7 @@ export class CompressedAirReductionService {
       },
       compressorElectricityData: {
         compressorControl: 8,
-        compressorControlAdjustment: 0,
+        compressorControlAdjustment: 25,
         compressorSpecificPowerControl: 0,
         compressorSpecificPower: 16
       },

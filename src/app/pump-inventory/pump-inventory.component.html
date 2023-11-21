@@ -2,16 +2,18 @@
     <div #header class="w-100 hide-print sticky-top">
         <app-pump-inventory-banner [pumpInventoryItem]="pumpInventoryItem"></app-pump-inventory-banner>
     </div>
-        <div class="d-flex tab-content" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'scroll-item': mainTab == 'summary' || mainTab == 'analysis'}">
+        <div class="assessment-container" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'scroll-item': mainTab == 'summary' || mainTab == 'analysis'}">
         <div class="w-100" [ngClass]="{'modal-open': isModalOpen == true}">
             <app-pump-inventory-setup *ngIf="mainTab == 'setup'" [containerHeight]="containerHeight"></app-pump-inventory-setup>
             <app-pump-inventory-summary *ngIf="mainTab == 'summary'"></app-pump-inventory-summary>
         </div>
     </div>
-    <div *ngIf="mainTab == 'setup'" #footer id="pumpInventoryFooter" class="footer hide-print">
+    <div *ngIf="mainTab == 'setup'" #footer id="pumpInventoryFooter" class="footer d-lg-block d-none hide-print">
         <div class="d-flex w-100 justify-content-between">
             <button class="btn btn-default" (click)="back()" [disabled]="setupTab == 'plant-setup'">Back</button>
             <button class="btn btn-primary" (click)="continue()">Next</button>
         </div>
     </div>
 </div>
+
+<app-export-modal *ngIf="showExportModal" [inAssessment]="true" [inventoryItem]="pumpInventoryItem" (close)="closeExportModal($event)"></app-export-modal>

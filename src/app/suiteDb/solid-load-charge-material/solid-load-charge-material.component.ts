@@ -1,10 +1,10 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { SolidLoadChargeMaterial } from '../../shared/models/materials';
-import { SuiteDbService } from '../suite-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 import { SolidLoadMaterialDbService } from '../../indexedDb/solid-load-material-db.service';
 import { firstValueFrom } from 'rxjs';
 
@@ -45,7 +45,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   idbEditMaterialId: number;
   sdbEditMaterialId: number;
   currentField: string = 'selectedMaterial';
-  constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private solidLoadMaterialDbService: SolidLoadMaterialDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private settingsDbService: SettingsDbService, private solidLoadMaterialDbService: SolidLoadMaterialDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -56,13 +56,13 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
     }
     else {
       this.canAdd = true;
-      this.allMaterials = this.suiteDbService.selectSolidLoadChargeMaterials();
+      this.allMaterials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
       this.checkMaterialName();
     }
   }
 
   async setAllMaterials() {
-    this.allMaterials = this.suiteDbService.selectSolidLoadChargeMaterials();
+    this.allMaterials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
     this.allCustomMaterials = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
     this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance === material.substance; }).id;
     this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance === material.substance; }).id;
@@ -78,7 +78,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
         this.newMaterial.specificHeatSolid = this.convertUnitsService.value(this.newMaterial.specificHeatSolid).from('kJkgC').to('btulbF');
         this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('kJkg').to('btuLb');
       }
-      let suiteDbResult = this.suiteDbService.insertSolidLoadChargeMaterial(this.newMaterial);
+      let suiteDbResult = this.sqlDbApiService.insertSolidLoadChargeMaterial(this.newMaterial);
       if (suiteDbResult === true) {
         await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(this.newMaterial));
         this.closeModal.emit(this.newMaterial);
@@ -94,7 +94,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
       this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('kJkg').to('btuLb');
     }
     this.newMaterial.id = this.sdbEditMaterialId;
-    let suiteDbResult = this.suiteDbService.updateSolidLoadChargeMaterial(this.newMaterial);
+    let suiteDbResult = this.sqlDbApiService.updateSolidLoadChargeMaterial(this.newMaterial);
     if (suiteDbResult === true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
@@ -105,7 +105,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
 
   async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
-      let suiteDbResult = this.suiteDbService.deleteSolidLoadChargeMaterial(this.sdbEditMaterialId);
+      let suiteDbResult = this.sqlDbApiService.deleteSolidLoadChargeMaterial(this.sdbEditMaterialId);
       if (suiteDbResult === true) {
         await firstValueFrom(this.solidLoadMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
         this.closeModal.emit(this.newMaterial);

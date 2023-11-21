@@ -1,7 +1,7 @@
 import { OperatingHours } from "./operations";
 import { SavingsOpportunity } from "./explore-opps";
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
-import { ConnectedItem } from "../assessment-integration/integrations";
+import { ConnectedItem } from "../connected-inventory/integrations";
 
 export interface PSAT {
   inputs?: PsatInputs;
@@ -109,6 +109,7 @@ export interface PsatCalcResults {
 export interface Modification {
   notes?: Notes;
   psat?: PSAT;
+  id: string,
   exploreOpportunities?: boolean;
   exploreOppsShowVfd?: SavingsOpportunity,
   exploreOppsShowMotorDrive?: SavingsOpportunity;

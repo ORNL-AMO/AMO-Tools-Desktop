@@ -6,6 +6,7 @@ import { SteamService } from '../steam.service';
 import { HeatLossService } from './heat-loss.service';
 import { HeatLossInput } from '../../../shared/models/steam/steam-inputs';
 import { HeatLossOutput } from '../../../shared/models/steam/steam-outputs';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-heat-loss-calculator',
@@ -34,9 +35,12 @@ export class HeatLossComponent implements OnInit {
   heatLossForm: UntypedFormGroup;
   input: HeatLossInput;
   results: HeatLossOutput;
-  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private heatLossService: HeatLossService) { }
+  constructor(private settingsDbService: SettingsDbService, 
+    private steamService: SteamService, private heatLossService: HeatLossService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-STEAM-heat-loss');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

@@ -25,7 +25,7 @@
             <input name="decibels" class="form-control" type="number" step="any"
               formControlName="decibels" id="decibels" onfocus="this.select();"
               (input)="save()"
-              (focus)="changeField('supplyPressure')">
+              (focus)="changeField('leakDecibels')">
               <span class="input-group-addon units">Db</span>
               <span class="alert-danger pull-right small"
               *ngIf="decibelsMethodForm.controls.decibels.invalid && !decibelsMethodForm.controls.decibels.pristine">
@@ -38,7 +38,7 @@
     
     <div class=" pt-1">
         <label class="group-label">
-          Estimated Free Air Flow Table
+          Estimated Free Air Flow Table <span class="small">(Table for Interpolation)</span>
         </label>
         <div class="form-group d-flex justify-content-end">
           <label class="text-center">
@@ -111,7 +111,7 @@
                 formControlName="firstFlowA" id="firstFlowA" onfocus="this.select();"
                 (input)="save()"
                 (focus)="changeField('firstFlowA')">
-              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">scfm</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
               <span class="alert-danger pull-right small"
               *ngIf="decibelsMethodForm.controls.firstFlowA.invalid && !decibelsMethodForm.controls.firstFlowA.pristine">
@@ -127,7 +127,7 @@
                 formControlName="secondFlowA" id="secondFlowA" onfocus="this.select();"
                 (input)="save()"
                 (focus)="changeField('secondFlowA')">
-              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">scfm</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
               <span class="alert-danger pull-right small"
               *ngIf="decibelsMethodForm.controls.secondFlowA.invalid && !decibelsMethodForm.controls.secondFlowA.pristine">
@@ -161,7 +161,7 @@
                 formControlName="firstFlowB" id="firstFlowB" onfocus="this.select();"
                 (input)="save()"
                 (focus)="changeField('firstFlowB')">
-              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">scfm</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
               <span class="alert-danger pull-right small"
               *ngIf="decibelsMethodForm.controls.firstFlowB.invalid && !decibelsMethodForm.controls.firstFlowB.pristine">
@@ -177,7 +177,7 @@
                 formControlName="secondFlowB" id="secondFlowB" onfocus="this.select();"
                 (input)="save()"
                 (focus)="changeField('secondFlowB')">
-              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">scfm</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
               <span class="alert-danger pull-right small"
               *ngIf="decibelsMethodForm.controls.secondFlowB.invalid && !decibelsMethodForm.controls.secondFlowB.pristine">

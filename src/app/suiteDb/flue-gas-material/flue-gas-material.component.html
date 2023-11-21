@@ -170,7 +170,7 @@
                 <!--<a id="setHHV" class="form-text text-help" (click)="setHHV()">Calculate from Gas Composition</a>-->
               </label>
               <div class="text-center small">
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{newMaterial.heatingValueVolume | sigFigs:'6'}} Btu/SCF</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{newMaterial.heatingValueVolume | sigFigs:'6'}} Btu/scf</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'">{{newMaterial.heatingValueVolume | sigFigs:'6'}} kJ/Nm
                   <sup>3</sup>
                 </span>
@@ -224,8 +224,8 @@
     </div>
     <div class="modal-btn-container">
       <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
-      <button *ngIf="!editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
-      <button *ngIf="editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
+      <button *ngIf="!editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValidHHVResult || !isNameValid || !isValidForm">Submit</button>
+      <button *ngIf="editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()" [disabled]="!isValidHHVResult || !isNameValid || !isValidForm">Submit</button>
       <button *ngIf="deletingMaterial" type="button" class="btn btn-danger btn-sm modal-btn" (click)="deleteMaterial()">Delete</button>
     </div>
   </div>

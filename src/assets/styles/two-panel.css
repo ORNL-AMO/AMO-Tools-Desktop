@@ -335,6 +335,15 @@
     border-bottom: #84b641 solid 2px;
 }
 
+.motor-inventory app-motor-catalog .group-label,
+.motor-inventory app-motor-properties .group-label,
+.pump-inventory app-pump-catalog .group-label,
+.pump-inventory app-pump-properties .group-label
+{
+    width: 100%;
+}
+
+
 .pump-inventory .group-label{
     border-bottom: #2980b9 solid 2px;
 }
@@ -538,4 +547,17 @@
 
 .compressed-air .scroll-item::-webkit-scrollbar-thumb{
 	background-color: #7030A0;
+}
+
+.log-tool-container .btn-primary {
+    color: white;
+    background: #117A65;
+}
+
+.log-tool-container  
+.btn-primary:hover:enabled,
+.log-tool-container  
+.btn-primary:focus:enabled {
+    color: white;
+    background: #447f73 !important;
 }

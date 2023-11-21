@@ -1,0 +1,66 @@
+<ng-container *ngIf="showIntegrationStatus">
+    <div *ngIf="integrationState.connectedAssessmentStatus === 'settings-differ'" class="integration-status alert-warning small">
+        <div class="text-right mt-0 pr-3">
+            <a (click)="clearIntegrationState()"><span class="fa fa-times"></span></a>
+        </div>
+        <div *ngIf="integrationState.msgHTML" class="text-center mx-auto w-75 message"
+            [innerHTML]="integrationState.msgHTML">
+        </div>
+        <div class="d-flex flex-row justify-content-end my-2">
+            <button class="btn btn-link p-2" (click)="clearIntegrationState()">Cancel</button>
+            <button class="btn btn-primary p-2 mx-3" (click)="convertItemUnits()">Convert Item Units</button>
+        </div>
+    </div>
+
+    <div *ngIf="integrationState.connectedAssessmentStatus === 'invalid'" class="integration-status alert-danger small">
+        <div class="text-right mt-0 pr-3">
+            <a (click)="clearIntegrationState()"><span class="fa fa-times"></span></a>
+        </div>
+        <div *ngIf="integrationState.msgHTML" class="text-center mx-auto w-75 message"
+            [innerHTML]="integrationState.msgHTML">
+        </div>
+        <div class="d-flex flex-row justify-content-end my-2">
+            <button class="btn btn-link p-2" (click)="clearIntegrationState()">Dismiss</button>
+        </div>
+    </div>
+
+    <div *ngIf="integrationState.connectedAssessmentStatus === 'connected-assessment-differs'"
+        class="integration-status alert-danger small">
+        <div class="text-right mt-1 pr-3">
+            <a (click)="dismiss()"><span class="fa fa-times"></span></a>
+        </div>
+        <div *ngIf="connectedFieldMsgHTML" class="text-center mx-auto w-75 message"
+            [innerHTML]="connectedFieldMsgHTML">
+        </div>
+        <div class="d-flex flex-row justify-content-end my-2">
+            <button class="btn btn-link p-2" (click)="dismiss()">Dismiss</button>
+            <button class="btn btn-primary p-2 mx-3" (click)="restoreConnectedValues()">Restore Connected
+                Values</button>
+        </div>
+    </div>
+
+    <div *ngIf="integrationState.connectedAssessmentStatus === 'connected-to-inventory'" class="integration-status alert-info small">
+        <div class=" text-center mx-auto w-75 message">
+            This assessment is connected to an inventory.
+            <br>
+            Settings changes will <b>not</b> be applied to the connected inventory.
+        </div>
+    </div>
+
+    <div *ngIf="integrationState.connectedAssessmentStatus === 'connected-to-assessment'" class="integration-status alert-info small">
+        <div class=" text-center mx-auto w-75 message">
+            This inventory is connected to an assessment.
+            <br>
+            Settings changes will <b>not</b> be applied to the connected assessment.
+        </div>
+    </div>
+
+    <div *ngIf="integrationState.connectedAssessmentStatus === 'three-way-connected'" class="integration-status alert-info small">
+        <div class=" text-center mx-auto w-75 message">
+            This inventory is connected to an assessment and another inventory.
+            <br>
+            Settings changes will <b>not</b> be applied to the connected items.
+        </div>
+    </div>
+
+</ng-container>

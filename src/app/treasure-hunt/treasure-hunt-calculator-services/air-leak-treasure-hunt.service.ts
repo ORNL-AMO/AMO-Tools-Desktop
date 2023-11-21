@@ -21,7 +21,8 @@ export class AirLeakTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(airLeakSurvey: AirLeakSurveyTreasureHunt) {
-    this.airLeakService.airLeakInput.next(_.cloneDeep(airLeakSurvey.airLeakSurveyInput));
+    let airLeakInput: AirLeakSurveyInput = _.cloneDeep(airLeakSurvey.airLeakSurveyInput)
+    this.airLeakService.airLeakInput.next(airLeakInput);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
@@ -72,7 +73,7 @@ export class AirLeakTreasureHuntService {
       currentCosts = currentEnergyUsage.compressedAirCosts;
       unitStr = 'm3';
       if (settings.unitsOfMeasure == 'Imperial') {
-        unitStr = 'kSCF';
+        unitStr = 'kscf';
       }
     } else if (airLeakSurvey.airLeakSurveyInput.facilityCompressorData.utilityType == 1) {
       currentCosts = currentEnergyUsage.electricityCosts;

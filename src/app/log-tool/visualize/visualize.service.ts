@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import * as _ from 'lodash';
-import { LogToolField, GraphObj, AnnotationData, GraphDataOption } from '../log-tool-models';
+import { LogToolField, GraphObj, AnnotationData, XAxisDataOption } from '../log-tool-models';
 import { LogToolService } from '../log-tool.service';
 
 @Injectable()
 export class VisualizeService {
 
   allDataByAxisFieldsInitialized: boolean = false;
-  allDataByAxisField: Array<GraphDataOption>;
+  allDataByAxisField: Array<XAxisDataOption>;
   graphObjects: BehaviorSubject<Array<GraphObj>>;
   selectedGraphObj: BehaviorSubject<GraphObj>;
   shouldRenderGraph: BehaviorSubject<boolean>;
@@ -106,7 +106,7 @@ export class VisualizeService {
     this.logToolService.individualDataFromCsv.forEach(individualDataItem => {
       let foundData = individualDataItem.csvImportData.meta.fields.find(field => { return field == fieldName });
       // 6108 continue to concat time, don't allow concat of other data fields (breaks time segment display in non time-series visualizer)
-      if (foundData && fieldName === individualDataItem.dateField.fieldName) {
+      if (foundData && individualDataItem.dateField && fieldName === individualDataItem.dateField.fieldName) {
         data = _.concat(data, individualDataItem.csvImportData.data);
       }
       if (foundData) {
@@ -131,11 +131,16 @@ export class VisualizeService {
 
   // Need to filter by unique identifiers for data fields here
   getTimeSeriesData(field: LogToolField): Array<number | string> {
-    let data: Array<number | string> = _.find(this.allDataByAxisField, (dataItem) => { 
+    let timeSeriesData: Array<number | string> = [];
+    let xOption: XAxisDataOption = _.find(this.allDataByAxisField, (dataItem) => { 
       let fieldData = dataItem.dataField.csvId == field.csvId && dataItem.dataField.isDateField
       return fieldData;
-    }).data;
-    return data;
+    });
+
+    if (xOption && xOption.data) {
+      timeSeriesData = xOption.data;
+    }
+    return timeSeriesData;
   }
 
   setDefaultGraphInteractivity(graphObj: GraphObj, dataPoints: number) {
@@ -166,6 +171,7 @@ export class VisualizeService {
       shouldRenderNewPlot: true,
       hasChanges: false,
       isTimeSeries: true,
+      invalidState: undefined,
       hasSecondYAxis: false,
       numberOfBins: undefined,
       bins: undefined,
@@ -258,7 +264,7 @@ export class VisualizeService {
       mode: 'markers',
       yaxis: undefined,
       marker: {
-        color: undefined
+        color: '#351e76'
       },
       line: {
         color: undefined,

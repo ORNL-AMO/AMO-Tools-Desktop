@@ -6,7 +6,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { GasLoadChargeMaterial } from '../../../../shared/models/materials';
 import { ChargeMaterial, ChargeMaterialOutput, ChargeMaterialResult } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { ChargeMaterialService } from '../charge-material.service';
 import { GasMaterialFormService } from './gas-material-form.service';
 
@@ -42,8 +42,9 @@ export class GasMaterialFormComponent implements OnInit {
   collapseMaterial: boolean = false;
   chargeMaterialType: string;
 
-  constructor(private suiteDbService: SuiteDbService,
+  constructor(
     private chargeMaterialService: ChargeMaterialService,
+    private sqlDbApiService: SqlDbApiService,  
     private convertUnitsService: ConvertUnitsService,
     private gasMaterialFormService: GasMaterialFormService,
   ) { }
@@ -58,7 +59,7 @@ export class GasMaterialFormComponent implements OnInit {
       let baselineData: Array<ChargeMaterial> = this.chargeMaterialService.baselineData.getValue();
       this.chargeMaterialType = baselineData[this.index].chargeMaterialType;
     }
-    this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
+    this.materialTypes = this.sqlDbApiService.selectGasLoadChargeMaterials();
     if (this.chargeMaterialForm) {
       if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
         if (this.chargeMaterialForm.controls.materialSpecificHeat.value === '') {
@@ -138,7 +139,7 @@ export class GasMaterialFormComponent implements OnInit {
     if (this.selected == false) {
       this.chargeMaterialForm.disable();
     } else {
-      this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
+      this.materialTypes = this.sqlDbApiService.selectGasLoadChargeMaterials();
       this.chargeMaterialForm.enable();
     }
   }
@@ -159,7 +160,7 @@ export class GasMaterialFormComponent implements OnInit {
   }
 
   checkMaterialValues() {
-    let material: GasLoadChargeMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let material: GasLoadChargeMaterial = this.sqlDbApiService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC');
@@ -174,7 +175,7 @@ export class GasMaterialFormComponent implements OnInit {
   }
 
   setProperties() {
-    let selectedMaterial: GasLoadChargeMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let selectedMaterial: GasLoadChargeMaterial = this.sqlDbApiService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (selectedMaterial) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
@@ -194,7 +195,7 @@ export class GasMaterialFormComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
+      this.materialTypes = this.sqlDbApiService.selectGasLoadChargeMaterials();
       let newMaterial = this.materialTypes.filter(material => { return material.substance === event.substance; });
       if (newMaterial.length !== 0) {
         this.chargeMaterialForm.patchValue({

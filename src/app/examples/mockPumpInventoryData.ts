@@ -401,7 +401,8 @@ export const MockPumpInventory: InventoryItem = {
     "createdDate": new Date(),
     "modifiedDate": new Date(),
     "type": "pumpInventory",
-    "name": "Example Pump Inventory",
+    "name": "Pump Inventory Example",
     "appVersion": "0.10.0-beta",
+    "selected": false,
     "isExample": true,
 }

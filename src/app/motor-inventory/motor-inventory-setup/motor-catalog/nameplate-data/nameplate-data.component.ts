@@ -8,8 +8,8 @@ import { NameplateDataService } from './nameplate-data.service';
 import { Settings } from '../../../../shared/models/settings';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 import { PsatService } from '../../../../psat/psat.service';
-import { ConnectedItem } from '../../../../shared/assessment-integration/integrations';
-import { MotorIntegrationService } from '../../../../shared/assessment-integration/motor-integration.service';
+import { ConnectedItem } from '../../../../shared/connected-inventory/integrations';
+import { MotorIntegrationService } from '../../../../shared/connected-inventory/motor-integration.service';
 
 @Component({
   selector: 'app-nameplate-data',
@@ -43,7 +43,7 @@ export class NameplateDataComponent implements OnInit {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
         this.motorForm = this.nameplateDataService.getFormFromNameplateData(selectedMotor.nameplateData);
-        this.motorIntegrationService.setConnectedPumpItems(selectedMotor);
+        this.motorIntegrationService.setConnectedItems(selectedMotor);
         this.connectedItems = selectedMotor.connectedItems;
       }
     });

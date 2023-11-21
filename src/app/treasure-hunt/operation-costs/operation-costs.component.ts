@@ -169,7 +169,7 @@ export class OperationCostsComponent implements OnInit {
 
   save() {
     if (this.treasureHuntResults){
-      this.treasureHuntResults.co2EmissionsResults = this.treasureHuntReportService.getCO2EmissionsResults(this.treasureHunt.currentEnergyUsage, this.treasureHuntResults, this.settings);
+      this.treasureHuntResults.co2EmissionsResults = this.treasureHuntReportService.getCO2EmissionsResults(this.treasureHunt, this.treasureHuntResults, this.settings);
     }   
     this.treasureHuntService.treasureHunt.next(this.treasureHunt);
   }
@@ -260,7 +260,8 @@ export class OperationCostsComponent implements OnInit {
   }
 
   async saveSettings() {
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.updateSettings.emit(true);
   }

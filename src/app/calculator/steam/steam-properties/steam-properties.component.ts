@@ -7,6 +7,7 @@ import { SteamService } from '../steam.service';
 import { SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { LessThanValidator } from '../../../shared/validators/less-than';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 
 @Component({
@@ -49,10 +50,15 @@ export class SteamPropertiesComponent implements OnInit {
   toggleResetData: boolean = false;
   toggleExampleData: boolean = false;
 
-  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) {
+  constructor(private formBuilder: UntypedFormBuilder,
+     private convertUnitsService: ConvertUnitsService, 
+     private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, 
+     private steamService: SteamService,
+     private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-STEAM-properties');
     this.graphToggleForm = this.formBuilder.group({
       'graphToggle': [0, Validators.required]
     });

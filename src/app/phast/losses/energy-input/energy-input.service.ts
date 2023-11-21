@@ -3,6 +3,8 @@ import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { PHAST, PhastResults } from '../../../shared/models/phast/phast';
+import { EnergyInputWarnings, PhastResultsService } from '../../phast-results.service';
 
 @Injectable()
 export class EnergyInputService {
@@ -77,5 +79,43 @@ export class EnergyInputService {
       let convertedHeatInput: number = this.convertUnitsService.value(heatInput).from('MMBtu').to('GJ');
       return this.convertUnitsService.roundVal(convertedHeatInput, 3);
     }
+  }
+  
+
+  getMinElectricityInputRequirement(phast: PHAST, results: PhastResults, settings: Settings): number {
+    if (phast.losses) {
+      return results.totalInput + results.exothermicHeat - results.energyInputTotalChemEnergy;
+    } else {
+      return undefined;
+    }
+  }
+
+  checkWarnings(phast: PHAST, results: PhastResults, settings: Settings): EnergyInputWarnings {
+    return {
+      electricityInputWarning: this.checkElectricityInputWarning(phast, results),
+      energyInputHeatDelivered: this.checkEnergyInputWarnings(results.energyInputHeatDelivered)
+    };
+  }
+
+  checkEnergyInputWarnings(energyInputHeatDelivered: number): string {
+    if (energyInputHeatDelivered < 0) {
+      return 'More heat than necessary is being delivered via burners. Check fuel inputs or estimate other losses.';
+    } else {
+      return null;
+    }
+  }
+
+
+  checkElectricityInputWarning(phast: PHAST, results: PhastResults): string {
+    if (phast.losses) {
+      if( results.totalExhaustGasEAF >= results.energyInputTotalChemEnergy){
+        return 'Exhaust Gas Losses must be less than Chemical Energy Delivered. Please check Electricity Input value.';
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+    
   }
 }

@@ -83,6 +83,15 @@ export interface HeadTool {
     dischargeLineLossCoefficients: number;
 }
 
+export interface HeadToolResults {
+    differentialElevationHead: number,
+    differentialPressureHead: number,
+    differentialVelocityHead: number,
+    estimatedSuctionFrictionHead: number,
+    estimatedDischargeFrictionHead: number,
+    pumpHead: number
+}
+
 export interface SystemCurve {
     specificGravity?: number;
     systemLossExponent?: number;

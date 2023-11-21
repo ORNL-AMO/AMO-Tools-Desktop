@@ -15,6 +15,7 @@ export class EnergyUseFormComponent implements OnInit {
   emitSave = new EventEmitter<Array<{ type: string, amount: number }>>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
+  
   constructor() { }
 
   ngOnInit() {
@@ -50,7 +51,7 @@ export class EnergyUseFormComponent implements OnInit {
       } else if (str == 'Water' || str == 'WWT') {
         return 'gal';
       } else if (str == 'Compressed Air') {
-        return 'SCF';
+        return 'scf';
       } else if (str == 'Steam') {
         return 'klb';
       }

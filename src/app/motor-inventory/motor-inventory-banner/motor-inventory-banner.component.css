@@ -28,3 +28,36 @@
 .gray-badge{
     background-color: #84b641;
 }
+
+
+.btn.chevron-btn{
+    border: none !important;
+    width: 20px;
+    height: 28px;
+    color: white;
+    box-shadow: none !important;
+}
+
+.fa.fa-chevron-right,
+.fa.fa-chevron-left {
+    font-size: 28px;
+}
+
+li.page-item{
+    background-color:#ECECEC !important;
+}
+
+span.fa.fa-download{
+    padding: 0px !important;
+}
+
+.download-nav-item .fa.fa-download{
+    border: none !important;
+    background-color: inherit;
+    opacity: 1;
+}
+
+.download-nav-item{
+    border: none !important;
+    background-color: #84b641;
+}

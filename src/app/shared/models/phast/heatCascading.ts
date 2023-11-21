@@ -55,6 +55,7 @@ export interface HeatCascadingOutput {
 	secAvailableHeat: number,
 
     energySavings: number,
+    hourlySavings: number,
     costSavings: number
     baselineEnergy?: number,
     modificationEnergy?: number

@@ -39,7 +39,8 @@
     </div>
 </form>
 <!--boiler form-->
-<label class="group-label w-100" (click)="toggleBoiler()">Boiler
+<label *ngIf="inTreasureHunt" class="group-label w-100">Boiler</label>
+<label *ngIf="!inTreasureHunt" class="group-label w-100" (click)="toggleBoiler()">Boiler
     <span *ngIf="showBoiler == true && isBaseline" class="remove-curve fa fa-minus pull-right"></span>
     <span *ngIf="showBoiler == false && isBaseline" class="add-curve fa fa-plus pull-right"></span>
 </label>
@@ -51,8 +52,8 @@
             <input class="form-control" name="steamFlow" id="{{idString+'steamFlow'}}" formControlName="steamFlow"
                 type="number" (input)="saveBoiler()" (focus)="focusField('steamFlow')" 
                 onfocus="this.select();">
-            <span class="input-group-addon units"
-                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
+            <span class="input-group-addon units">
+                <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="boilerForm.controls.steamFlow.invalid && !boilerForm.controls.steamFlow.pristine">
@@ -89,6 +90,7 @@
     <!--boiler efficiency-->
     <div class="form-group">
         <label class="small" for="{{idString+'boilerEfficiency'}}">Boiler Efficiency
+            <a class="form-text small click-link" (click)="openBoilerEfficiencyModal()">Calculate Efficiency</a>
         </label>
         <div class="input-group">
             <input class="form-control" name="boilerEfficiency" id="{{idString+'boilerEfficiency'}}"
@@ -107,7 +109,8 @@
     </div>
 </form>
 <!--operations form-->
-<label class="group-label w-100" (click)="toggleOperations()">Operations
+<label *ngIf="inTreasureHunt" class="group-label w-100">Operations</label>
+<label *ngIf="!inTreasureHunt" class="group-label w-100" (click)="toggleOperations()">Operations
     <span *ngIf="showOperations == true && isBaseline" class="remove-curve fa fa-minus pull-right"></span>
     <span *ngIf="showOperations == false && isBaseline" class="add-curve fa fa-plus pull-right"></span>
 </label>
@@ -132,6 +135,17 @@
                 {{operationsForm.controls.operatingHours.errors.min.min}}.</span>
         </span>
     </div>
+
+    <div *ngIf="inTreasureHunt" class="form-group">
+        <label class="small" for="boilerUtilityType">Boiler Utility Type
+        </label>
+        <select name="boilerUtilityType" class="form-control" formControlName="boilerUtilityType" id="boilerUtilityType"
+          (change)="setUtilityType()" (focus)="focusField('boilerUtilityType')" >
+          <option for="boilerUtilityType" [ngValue]="'Natural Gas'">Natural Gas</option>
+          <option for="boilerUtilityType" [ngValue]="'Other Fuel'">Other Gas</option>
+        </select>
+      </div>
+
     <!--fuel cost-->
     <div class="form-group">
         <label class="small" for="{{idString+'fuelCost'}}">Fuel Cost</label>
@@ -197,3 +211,7 @@
     (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
     [operatingHours]="operatingHours">
 </app-operating-hours-modal>
+
+<app-boiler-efficiency-modal *ngIf="showBoilerEfficiencyModal" [settings]="settings"
+  (emitClose)="closeBoilerEfficiencyModal()" (emitSave)="setBoilerEfficiencyAndClose($event)">
+</app-boiler-efficiency-modal>

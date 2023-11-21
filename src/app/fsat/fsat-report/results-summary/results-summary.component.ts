@@ -123,6 +123,26 @@ export class ResultsSummaryComponent implements OnInit {
     return modificationScenario;
   }
 
+  getPaybackPeriod(modification: FSAT) {
+    let result = 0;
+    let annualCostSavings = this.getDiff(this.fsat.outputs.annualCost, modification.outputs.annualCost);
+    if (isNaN(annualCostSavings) == false) {
+      if (annualCostSavings > 1) {
+        result = (modification.implementationCosts / annualCostSavings) * 12;
+      }
+    }
+    return result;
+  }
+
+  getDiff(num1: number, num2: number) {
+    let diff = num1 - num2;
+    if ((diff < .005) && (diff > -.005)) {
+      return null;
+    } else {
+      return diff;
+    }
+  }
+
 }
 
 export interface SummaryNote {

@@ -5,7 +5,7 @@
       <div class="input-group">
         <input name="airFlow" class="form-control" type="number" step="any" [(ngModel)]="inputs.airFlow" id="airFlow"
           (input)="emitChange()" onfocus="this.select();" (focus)="changeField('airFlow')">
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Metric'">scfm</span>
         <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup>/min</span>
       </div>
     </div>

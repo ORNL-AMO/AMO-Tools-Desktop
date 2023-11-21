@@ -33,7 +33,7 @@ export class FeedwaterEconomizerFormService {
       steamPressure: [inputObj.steamPressure, [Validators.required, Validators.min(0)]],
       steamCondition: [inputObj.steamCondition],
       steamTemperature: [inputObj.steamTemperature, steamTemperatureValidators],
-      feedWaterTemperature: [inputObj.feedWaterTemperature, this.getTemperatureValidators(32, settings)],
+      feedWaterTemperature: [inputObj.feedWaterTemperature, this.getMinTemperatureValidators(32, settings)],
       percBlowdown: [inputObj.percBlowdown, [Validators.required, Validators.min(0)]],
       hxEfficiency: [inputObj.hxEfficiency, [Validators.required, Validators.min(0)]],
       higherHeatingVal: [inputObj.higherHeatingVal, Validators.required],
@@ -48,7 +48,7 @@ export class FeedwaterEconomizerFormService {
       CO2: [inputObj.CO2, Validators.required],
       SO2: [inputObj.SO2, Validators.required],
       O2: [inputObj.O2, Validators.required],
-
+      substance: [inputObj.substance, Validators.required],
     });
 
     return form;
@@ -69,7 +69,7 @@ export class FeedwaterEconomizerFormService {
     return steamTemperatureValidators;
   }
 
-  getTemperatureValidators(tempMin: number, settings: Settings): Array<ValidatorFn> {
+  getMinTemperatureValidators(tempMin: number, settings: Settings): Array<ValidatorFn> {
     let minTempConverted: number;
     if (settings.unitsOfMeasure != 'Imperial') {
       tempMin = this.convertUnitsService.value(tempMin).from('F').to('C');
@@ -110,7 +110,8 @@ export class FeedwaterEconomizerFormService {
       CO: form.controls.CO.value,
       CO2: form.controls.CO2.value,
       SO2: form.controls.SO2.value,
-      O2: form.controls.O2.value
+      O2: form.controls.O2.value,
+      substance: form.controls.substance.value
     };
     return obj;
   }

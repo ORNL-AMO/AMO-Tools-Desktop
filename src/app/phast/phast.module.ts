@@ -41,6 +41,7 @@ import { FlueGasModule } from '../calculator/furnaces/flue-gas/flue-gas.module';
 import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
+import { ImportExportModule } from '../shared/import-export/import-export.module';
 
 @NgModule({
   declarations: [
@@ -82,14 +83,15 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
     ToastModule,
     UnitConverterModule,
     PhastSankeyModule,
-    UpdateUnitsModalModule
+    UpdateUnitsModalModule,    
+    ImportExportModule
   ],
   providers: [
     PhastService,
     PhastValidService,
     PhastResultsService,
     ConvertPhastService,
-    PhastCompareService
+    PhastCompareService,
   ]
 })
 

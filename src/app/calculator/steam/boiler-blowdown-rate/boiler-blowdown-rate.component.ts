@@ -1,8 +1,10 @@
-import { Component, OnInit, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener, Input, Output, EventEmitter } from '@angular/core';
 import { BoilerBlowdownRateService, BoilerBlowdownRateInputs } from './boiler-blowdown-rate.service';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
+import { BoilerBlowdownRateTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-boiler-blowdown-rate',
@@ -12,6 +14,12 @@ import { Settings } from '../../../shared/models/settings';
 export class BoilerBlowdownRateComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<BoilerBlowdownRateTreasureHunt>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -27,14 +35,19 @@ export class BoilerBlowdownRateComponent implements OnInit {
   modificationInputs: BoilerBlowdownRateInputs;
   modificationExists: boolean = false;
   modificationSub: Subscription;
+  baselineSub: Subscription;
   baselineSelected: boolean = true;
   tabSelect: string = 'results';
   headerHeight: number;
   containerHeight: number;
   smallScreenTab: string = 'baseline';
-  constructor(private boilerBlowdownRateService: BoilerBlowdownRateService, private settingsDbService: SettingsDbService) { }
+  isModalOpen: boolean;
+  modalOpenSub: Subscription;
+  constructor(private boilerBlowdownRateService: BoilerBlowdownRateService, private settingsDbService: SettingsDbService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-STEAM-boiler-blowdown-rate');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
@@ -42,13 +55,9 @@ export class BoilerBlowdownRateComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
     this.initData();
-    this.modificationSub = this.boilerBlowdownRateService.modificationInputs.subscribe(val => {
-      if (val) {
-        this.modificationExists = true;
-      } else {
-        this.modificationExists = false;
-      }
-    })
+
+    this.initSubscriptions();
+    
   }
 
   ngAfterViewInit() {
@@ -58,15 +67,46 @@ export class BoilerBlowdownRateComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    if (!this.inTreasureHunt) {
+      this.boilerBlowdownRateService.baselineInputs.next(this.baselineInputs);
+      this.boilerBlowdownRateService.modificationInputs.next(this.modificationInputs);
+    } else {
+      this.boilerBlowdownRateService.baselineInputs.next(undefined);
+      this.boilerBlowdownRateService.modificationInputs.next(undefined);
+    }
+    this.baselineSub.unsubscribe();
     this.modificationSub.unsubscribe();
+    this.modalOpenSub.unsubscribe();
   }
 
   initData() {
     let baselineInputs: BoilerBlowdownRateInputs = this.boilerBlowdownRateService.baselineInputs.getValue();
-    if (baselineInputs == undefined) {
-      baselineInputs = this.boilerBlowdownRateService.getDefaultInputs();
+    if (!baselineInputs) {
+      baselineInputs = this.boilerBlowdownRateService.getDefaultInputs(this.settings);
+    } else {
+      this.baselineInputs = this.boilerBlowdownRateService.baselineInputs.getValue();
     }
     this.boilerBlowdownRateService.baselineInputs.next(baselineInputs);
+  }
+
+  initSubscriptions() {
+    this.baselineSub = this.boilerBlowdownRateService.baselineInputs.subscribe(value => {
+      this.baselineInputs = value;
+      //this.boilerBlowdownRateService.calculate(this.settings);
+    });
+    
+    this.modificationSub = this.boilerBlowdownRateService.modificationInputs.subscribe(val => {
+      if (val) {
+        this.modificationInputs = val;
+        this.modificationExists = true;
+      } else {
+        this.modificationExists = false;
+      }
+    });
+
+    this.modalOpenSub = this.boilerBlowdownRateService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    });
   }
 
   createModification() {
@@ -99,7 +139,7 @@ export class BoilerBlowdownRateComponent implements OnInit {
 
   btnResetData() {
     this.boilerBlowdownRateService.modificationInputs.next(undefined);
-    let baselineInputs: BoilerBlowdownRateInputs = this.boilerBlowdownRateService.getDefaultInputs();
+    let baselineInputs: BoilerBlowdownRateInputs = this.boilerBlowdownRateService.getDefaultInputs(this.settings);
     this.boilerBlowdownRateService.baselineInputs.next(baselineInputs);
     this.boilerBlowdownRateService.showBoiler.next(false);
     this.boilerBlowdownRateService.showOperations.next(false);
@@ -115,7 +155,7 @@ export class BoilerBlowdownRateComponent implements OnInit {
     this.boilerBlowdownRateService.showOperations.next(true);
     this.boilerBlowdownRateService.setForms.next(true);
   }
-  
+
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
     if (this.smallScreenTab === 'baseline') {
@@ -124,4 +164,13 @@ export class BoilerBlowdownRateComponent implements OnInit {
       this.setModificationSelected();
     }
   }
+
+  save() {
+    this.emitSave.emit({ baseline: this.baselineInputs, modification: this.modificationInputs, opportunityType: Treasure.boilerBlowdownRate });
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
+  }
+
 }

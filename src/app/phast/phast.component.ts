@@ -2,8 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, HostListener, ChangeDetectorR
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { PhastService } from './phast.service';
- 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
 import { LossesService } from './losses/losses.service';
@@ -19,6 +18,8 @@ import { PhastValidService } from './phast-valid.service';
 import { SavingsOpportunity } from '../shared/models/explore-opps';
 import { ConvertPhastService } from './convert-phast.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
+import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-phast',
@@ -33,6 +34,7 @@ export class PhastComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   containerHeight: number;
   sankeyLabelStyle: string = 'both';
   phastOptions: Array<{ name: string, phast: PHAST }>;
@@ -79,23 +81,30 @@ export class PhastComponent implements OnInit {
   showToast: boolean = false;
   showWelcomeScreen: boolean = false;
   modificationModalOpen: boolean = false;
+  smallScreenTab: string = 'form';
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
+
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
     private convertPhastService: ConvertPhastService,
     private phastValidService: PhastValidService,
-      
+    private helperFunctions: HelperFunctionsService,
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private lossesService: LossesService,
     private phastCompareService: PhastCompareService,
     private cd: ChangeDetectorRef,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
     private settingsService: SettingsService,
-    private egridService: EGridService) {
+    private egridService: EGridService,
+    private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('view-process-heating-assessment');
     this.egridService.processCSVData().then(result => {
       this.hasEgridDataInit = true;
     }).catch(err => {
@@ -104,13 +113,15 @@ export class PhastComponent implements OnInit {
     this.tab1Status = '';
     this.tab2Status = '';
 
-    //initialize booleans indicating assessment setup or 'done'
     this.lossesService.initDone();
-    //get assessmentId from route phast/:id
+
     this.actvatedRouteSubscription = this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
-      //use copy of phast object of as modal provided to forms
-      this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'PHAST')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else { 
+        //use copy of phast object of as modal provided to forms
+        this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
       if (this._phast.modifications) {
         if (this._phast.modifications.length !== 0) {
           this._phast.modifications.forEach(modification => {
@@ -126,39 +137,30 @@ export class PhastComponent implements OnInit {
       }
       this.getSettings();
       this.initSankeyList();
+    } 
     });
-    //check to see if we need to start on a specified tab
-    let tmpTab = this.assessmentService.getTab();
-    if (tmpTab) {
-      //set that tab
-      this.phastService.mainTab.next(tmpTab);
+    let startingTab = this.assessmentService.getStartingTab();
+    if (startingTab) {
+      this.phastService.mainTab.next(startingTab);
     }
-    //subscription for mainTab
     this.mainTabSubscription = this.phastService.mainTab.subscribe(val => {
       this.mainTab = val;
-      //on tab change get container height
       this.getContainerHeight();
     });
-    //subscription for stepTab
     this.stepTabSubscription = this.phastService.stepTab.subscribe(val => {
       this.stepTab = val;
-      //on tab change get container height
       this.getContainerHeight();
     });
-    //specTab used for: system basics, operating hours and operating costs
     this.specTabSubscription = this.phastService.specTab.subscribe(val => {
       this.specTab = val;
     });
-    //tabs used for heat balance
     this.lossesTabSubscription = this.lossesService.lossesTab.subscribe(tab => {
       this.selectedLossTab = this.lossesService.getTab(tab);
     });
-    //modify conditions or explore opps tab
     this.assessmentTabSubscription = this.phastService.assessmentTab.subscribe(tab => {
       this.assessmentTab = tab;
       this.getContainerHeight();
     });
-    //calculator tab
     this.calcTabSubscription = this.phastService.calcTab.subscribe(val => {
       this.calcTab = val;
     });
@@ -187,6 +189,11 @@ export class PhastComponent implements OnInit {
         this.showAddNewModal();
       }
     });
+
+    this.showExportModalSub = this.phastService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
+
     this.checkShowWelcomeScreen();
   }
 
@@ -251,6 +258,7 @@ export class PhastComponent implements OnInit {
 
   ngOnDestroy() {
     //reset tabs when leaving phast assessment
+    this.phastService.mainTab.next(undefined);
     this.mainTabSubscription.unsubscribe();
     this.actvatedRouteSubscription.unsubscribe();
     this.stepTabSubscription.unsubscribe();
@@ -260,7 +268,8 @@ export class PhastComponent implements OnInit {
     this.calcTabSubscription.unsubscribe();
     this.openModListSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
-    this.addNewSubscription.unsubscribe();
+    this.addNewSubscription.unsubscribe();   
+    this.showExportModalSub.unsubscribe();
 
     //reset services
     this.lossesService.lossesTab.next(1);
@@ -281,6 +290,9 @@ export class PhastComponent implements OnInit {
           // footerHeight = this.footer.nativeElement.clientHeight + 1;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
+        if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+          this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+        }
       }, 100);
     }
   }
@@ -411,7 +423,8 @@ export class PhastComponent implements OnInit {
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     //update our assessment in the iDb
     
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment))
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
   }
 
@@ -474,6 +487,7 @@ export class PhastComponent implements OnInit {
         energyInputExhaustGasNotes: '',
         operationsNotes: ''
       },
+      id: this.helperFunctions.getNewIdString(),
       exploreOppsShowFlueGas: exploreOppsDefault,
       exploreOppsShowAirTemp: exploreOppsDefault,
       exploreOppsShowMaterial: exploreOppsDefault,
@@ -553,10 +567,19 @@ export class PhastComponent implements OnInit {
 
   async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disablePhastTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.phastService.modalOpen.next(false);
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
+  closeExportModal(input: boolean){
+    this.phastService.showExportModal.next(input);
   }
 
 }

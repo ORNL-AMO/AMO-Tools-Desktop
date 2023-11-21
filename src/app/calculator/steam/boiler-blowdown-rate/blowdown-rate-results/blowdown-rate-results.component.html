@@ -22,6 +22,28 @@
             <td *ngIf="modificationExists">{{modificationResults.feedwaterFlowRate | number:'1.0-2'}}</td>
         </tr>
         <tr *ngIf="showOperations">
+            <td>Fuel Use</td>
+            <td>{{baselineResults.boilerFuelUse | number:'1.0-0'}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+            </td>
+            <td *ngIf="modificationExists">{{modificationResults.boilerFuelUse | number:'1.0-0'}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+            </td>
+        </tr>
+        <tr *ngIf="showOperations">
+            <td>Makeup Water Use</td>
+            <td>{{baselineResults.makeupWaterUse | number:'1.0-0'}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+            </td>
+            <td *ngIf="modificationExists">{{modificationResults.makeupWaterUse | number:'1.0-0'}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+            </td>
+        </tr>
+        <tr *ngIf="showOperations">
             <td>Fuel Cost</td>
             <td>${{baselineResults.boilerFuelCost | number:'1.0-0'}}</td>
             <td *ngIf="modificationExists">${{modificationResults.boilerFuelCost | number:'1.0-0'}}</td>

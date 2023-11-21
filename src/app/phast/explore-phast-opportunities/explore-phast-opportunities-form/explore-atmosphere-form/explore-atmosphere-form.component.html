@@ -32,7 +32,7 @@
         <div class="text-center">
           <label for="{{'flowRate_'+index}}" class="baseline-value-label">Flow Rate</label>
           <div class="text-muted text-center baseline-value-input ">{{ loss.flowRate }} 
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF/hr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">scf/hr</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm
               <sup>3</sup>
             </span>
@@ -48,7 +48,7 @@
             <input name="{{'flowRateRateMod_'+index}}" type="number" step="any" min="0" class="form-control" id="{{'feedRateMod_'+index}}"
               onfocus="this.select();" (input)="checkModificationWarnings(index)"
               (focus)="focusField('flowRate')" (blur)="focusOut()" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.atmosphereLosses[index].flowRate">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCF/hr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">scf/hr</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm
               <sup>3</sup>
             </span>

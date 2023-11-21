@@ -1,12 +1,50 @@
-<nav class="navbar d-block d-lg-flex" #navbar>
+<nav class="navbar d-block d-lg-flex" [ngClass]="{'justify-content-around': inReport}" #navbar>
   <div class="d-lg-none nav-item dropdown">
-    <button type="button" class="nav-btn" (click)="collapseBanner()">Sort & Filter 
+    <button type="button" class="export-btn" (click)="openExportModal()">Export Opportunities</button>
+    <button type="button" class="nav-btn" (click)="collapseBanner()">Options 
       <span *ngIf="!bannerCollapsed" class="fa fa-chevron-up"></span>
       <span *ngIf="bannerCollapsed" class="fa fa-chevron-down"></span>
     </button>
   </div>
-  <div class="nav-item dropdown" *ngIf="!inReport" [ngClass]="{'collapse': bannerCollapsed}">
-    <!--sort by (order in which cards are displayed)-->
+
+  <div class="d-lg-block d-none nav-item dropdown" *ngIf="!inReport">
+    <button type="button" class="nav-btn" (click)="collapseDropdown()">Sort & Filter 
+      <span *ngIf="dropdownShown" class="fa fa-chevron-up"></span>
+      <span *ngIf="!dropdownShown" class="fa fa-chevron-down"></span>
+    </button>
+    <div class="dropdown-menu p-0" [ngClass]="{'show': dropdownShown == true}">
+      <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-center" (click)="toggleSortBy()">
+          Sort By ({{sortByLabel}})
+        </a>
+        <div class="dropdown-menu p-0" [ngClass]="{'show': sortByDropdown == true}">
+          <div class="list-group">
+            <a class="list-group-item list-group-item-action"
+              [ngClass]="{'active': sortCardsData.sortBy == 'annualCostSavings'}"
+              (click)="setSortBy('annualCostSavings')">Annual Savings</a>
+            <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortCardsData.sortBy == 'teamName'}"
+              (click)="setSortBy('teamName')">Team (A-Z)</a>
+            <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortCardsData.sortBy == 'name'}"
+              (click)="setSortBy('name')">Equipment (A-Z)</a>
+            <a class="list-group-item list-group-item-action"
+              [ngClass]="{'active': sortCardsData.sortBy == 'implementationCost'}"
+              (click)="setSortBy('implementationCost')">Implementation Cost</a>
+            <a class="list-group-item list-group-item-action"
+              [ngClass]="{'active': sortCardsData.sortBy == 'paybackPeriod'}" (click)="setSortBy('paybackPeriod')">Payback
+              Period</a>
+          </div>
+        </div>
+      </div>
+      <app-utility-type-dropdown [ngStyle]="{'font-size': 'medium'}" [settings]="settings" [dropdownShown]="dropdownShown"></app-utility-type-dropdown>
+      <app-calculator-type-dropdown [ngStyle]="{'font-size': 'medium'}" [settings]="settings" [dropdownShown]="dropdownShown"></app-calculator-type-dropdown>
+      <div class="nav-item dropdown">
+        <button type="button" class="nav-btn btn-block" (click)="toggleAdditionalFilters()">Add'l Filters</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="nav-item dropdown d-lg-none" *ngIf="!inReport" [ngClass]="{'collapse': !dropdownShown}">
     <a class="nav-link dropdown-toggle text-center" (click)="toggleSortBy()">
       Sort By ({{sortByLabel}})
     </a>
@@ -28,66 +66,58 @@
       </div>
     </div>
   </div>
-  <!--filter by utility type dropdown-->
-  <app-utility-type-dropdown [settings]="settings" [ngClass]="{'collapse': bannerCollapsed}"></app-utility-type-dropdown>
-  <!--filter by calculator type dropdown-->
-  <app-calculator-type-dropdown [settings]="settings" [ngClass]="{'collapse': bannerCollapsed}"></app-calculator-type-dropdown>
-  <!--additional features when not in report-->
-  <div *ngIf="!inReport" class="nav-item dropdown" [ngClass]="{'collapse': bannerCollapsed}">
+
+  <app-utility-type-dropdown class="d-lg-none" [settings]="settings" [dropdownShown]="!bannerCollapsed" [ngClass]="{'collapse': bannerCollapsed}"></app-utility-type-dropdown>
+  
+  <app-calculator-type-dropdown class="d-lg-none" [settings]="settings" [dropdownShown]="!bannerCollapsed" [ngClass]="{'collapse': bannerCollapsed}"></app-calculator-type-dropdown>
+
+  <div *ngIf="!inReport" class="nav-item dropdown d-lg-none" [ngClass]="{'collapse': bannerCollapsed}">
     <button type="button" class="nav-btn" (click)="toggleAdditionalFilters()">Add'l Filters</button>
   </div>
   
-  <!--teams use dropdown in report-->
-  <app-teams-dropdown *ngIf="inReport" [inReport]="inReport" [settings]="settings" [ngClass]="{'collapse': bannerCollapsed}"></app-teams-dropdown>
+  <app-teams-dropdown *ngIf="inReport" [inReport]="inReport" [settings]="settings"></app-teams-dropdown>
   
-  <!--equipment. use dropdown in report-->
-  <app-equipments-dropdown *ngIf="inReport" [inReport]="inReport" [settings]="settings" [ngClass]="{'collapse': bannerCollapsed}"></app-equipments-dropdown>
-  
-  <div class="nav-item" [ngClass]="{'collapse': bannerCollapsed}">
-    <button class="nav-btn" (click)="clearAllFilters()">Clear All</button>
-  </div>
-  
-  <!--manage cards button group-->
+  <app-equipments-dropdown *ngIf="inReport" [inReport]="inReport" [settings]="settings"></app-equipments-dropdown>
+    
   <div class="nav-item" *ngIf="!inReport" [ngClass]="{'collapse': bannerCollapsed}">
     <div class="btn-group d-none d-lg-flex">
-      <button type="button" class="nav-btn" (click)="selectAll()">Select All</button>
-      <button type="button" class="nav-btn middle" (click)="deselectAll()">Deselect All</button>
-      <button type="button" class="nav-btn middle" (click)="openImportModal()">Import</button>
-      <button type="button" class="nav-btn" (click)="openExportModal()">Export</button>
+      <button type="button" class="nav-btn btn-manage" (click)="selectAll()">Select All</button>
+      <button type="button" class="nav-btn middle btn-manage" (click)="deselectAll()">Deselect All</button>
+      <button type="button" class="nav-btn middle btn-manage" (click)="openImportModal()">Import</button>
+      <button type="button" class="nav-btn btn-manage" (click)="openExportModal()">Export</button>
     </div>
     <div class="btn-group-vertical d-lg-none w-100">
       <button type="button" class="nav-btn" (click)="selectAll()">Select All</button>
       <button type="button" class="nav-btn middle" (click)="deselectAll()">Deselect All</button>
-      <button type="button" class="nav-btn middle" (click)="openImportModal()">Import</button>
-      <button type="button" class="nav-btn" (click)="openExportModal()">Export</button>
+      <button type="button" class="nav-btn" (click)="openImportModal()">Import</button>
     </div>
   </div>
-
-
+  
 </nav>
-<!--displays selected filter options-->
+
 <nav class="navbar second-nav d-block d-lg-flex" [ngClass]="{'collapse': bannerCollapsed}"
   *ngIf="(sortCardsData.teams.length != 0 || sortCardsData.equipments.length != 0 || sortCardsData.calculatorTypes.length != 0 || sortCardsData.utilityTypes.length != 0)">
   <div [ngClass]="{'collapse': bannerCollapsed}" class="nav-item" *ngFor="let team of sortCardsData.teams; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeTeam(index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn-selections" (click)="removeTeam(index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{team.display}}</button>
   </div>
   <div [ngClass]="{'collapse': bannerCollapsed}" class="nav-item" *ngFor="let equipment of sortCardsData.equipments; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeEquipment(index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn-selections" (click)="removeEquipment(index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{equipment.display}}</button>
   </div>
   <div [ngClass]="{'collapse': bannerCollapsed}" class="nav-item" *ngFor="let calculator of sortCardsData.calculatorTypes; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeCalculator(index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn-selections" (click)="removeCalculator(index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{calculator.display}}</button>
   </div>
   <div [ngClass]="{'collapse': bannerCollapsed}" class="nav-item" *ngFor="let utilityType of sortCardsData.utilityTypes; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeUtilityType( index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn-selections" (click)="removeUtilityType( index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{utilityType.display}}</button>
+  </div>
+  <div class="nav-item" [ngClass]="{'collapse': bannerCollapsed}">
+    <button class="nav-btn-selections" (click)="clearAllFilters()">Clear All</button>
   </div>
 </nav>
 
-
-<!--additional features modal-->
 <div class="card menu-modal" [@menuModal]="displayAdditionalFiltersDropdown" [ngStyle]="{'width.px': navbarWidth}"
   *ngIf="!inReport">
   <div class="card-header p-2">

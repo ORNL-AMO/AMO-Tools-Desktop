@@ -14,6 +14,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   modificationExists: boolean;
   selectedModificationIdSub: Subscription;
+  smallScreenTab: string = 'form';
 
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
@@ -72,5 +73,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
       body: '',
       setTimeoutVal: undefined
     }
+  }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
   }
 }

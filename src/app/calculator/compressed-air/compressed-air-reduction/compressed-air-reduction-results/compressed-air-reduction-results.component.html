@@ -18,7 +18,7 @@
       <td class="bold w-50">Flow Rate</td>
       <td class="text-center w-50">
         {{results.baselineAggregateResults.flowRate | number:'1.0-0'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">scfm</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
       </td>
     </tr>
@@ -26,7 +26,7 @@
       <td class="bold w-50">Consumption</td>
       <td class="text-center w-50">
         {{results.baselineAggregateResults.consumption | number:'1.0-0'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kSCF</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kscf</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
       </td>
     </tr>
@@ -59,7 +59,7 @@
       <td class="bold w-50">Flow Rate</td>
       <td class="text-center w-50">
         {{results.modificationAggregateResults.flowRate | number:'1.0-0'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">scfm</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
       </td>
     </tr>
@@ -67,7 +67,7 @@
       <td class="bold w-50">Consumption</td>
       <td class="text-center w-50">
         {{results.modificationAggregateResults.consumption | number:'1.0-0'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kSCF</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kscf</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
       </td>
     </tr>
@@ -90,14 +90,14 @@
     <tr>
       <td class="bold w-50">Flow Rate Reduction</td>
       <td class="text-center w-50">{{results.annualFlowRateReduction | number: '1.0-0'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">scfm</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Annual Consumption Reduction</td>
       <td class="text-center w-50">{{results.annualConsumptionReduction | number: '1.0-0'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kSCF</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kscf</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
       </td>
     </tr>

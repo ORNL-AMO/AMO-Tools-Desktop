@@ -17,6 +17,7 @@ import { SettingsService } from '../../settings/settings.service';
 import { MotorInventoryService } from '../../motor-inventory/motor-inventory.service';
 import { firstValueFrom } from 'rxjs';
 import { PumpInventoryService } from '../../pump-inventory/pump-inventory.service';
+import { AnalyticsService } from '../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-create-inventory',
@@ -46,7 +47,8 @@ export class CreateInventoryComponent implements OnInit {
     private inventoryService: InventoryService,
     private settingsService: SettingsService,
     private motorInventoryService: MotorInventoryService,
-    private pumpInventoryService: PumpInventoryService) { }
+    private pumpInventoryService: PumpInventoryService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
     this.setDirectories();
@@ -104,12 +106,14 @@ export class CreateInventoryComponent implements OnInit {
         let inventoryRoute: string;
         let inventoryItem: InventoryItem;
         if (this.newInventoryItemForm.controls.inventoryType.value === 'motorInventory') {
+          this.analyticsService.sendEvent('create-inventory', undefined);
           this.motorInventoryService.mainTab.next('setup');
           this.motorInventoryService.setupTab.next('plant-setup');
           inventoryItem = this.inventoryService.getNewMotorInventoryItem();
           inventoryRoute = 'motor-inventory';
         }
         if (this.newInventoryItemForm.controls.inventoryType.value === 'pumpInventory') {
+          this.analyticsService.sendEvent('create-inventory', undefined);
           this.pumpInventoryService.mainTab.next('setup');
           this.pumpInventoryService.setupTab.next('plant-setup');
           inventoryItem = this.inventoryService.getNewPumpInventoryItem();

@@ -8,6 +8,7 @@ import { DirectoryDashboardService } from './directory-dashboard/directory-dashb
 import { DashboardService } from './dashboard.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { PrintOptionsMenuService } from '../shared/print-options-menu/print-options-menu.service';
+import { ImportExportService } from '../shared/import-export/import-export.service';
 
 
 @Component({
@@ -64,6 +65,8 @@ export class DashboardComponent implements OnInit {
     'waste-water'
   ];
   showPrintViewSub: Subscription;
+  exportInProgressSub: Subscription;
+  showExportInProgress: boolean;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -72,6 +75,7 @@ export class DashboardComponent implements OnInit {
   constructor(private dashboardService: DashboardService, 
     private router: Router,
     private printOptionsMenuService: PrintOptionsMenuService,
+    private importExportService: ImportExportService,
     private directoryDashboardService: DirectoryDashboardService, private cd: ChangeDetectorRef) {
   }
 
@@ -131,6 +135,10 @@ export class DashboardComponent implements OnInit {
     this.showCreateInventorySub = this.dashboardService.showCreateInventory.subscribe(showCreateInventory => {
       this.showCreateInventory = showCreateInventory;
     })
+
+    this.exportInProgressSub = this.importExportService.exportInProgress.subscribe(inProgress => {
+      this.showExportInProgress = inProgress;
+    })
   }
 
   ngOnDestroy() {
@@ -144,6 +152,10 @@ export class DashboardComponent implements OnInit {
     this.copyItemsSub.unsubscribe();
     this.routerSubscription.unsubscribe();
     this.showPrintViewSub.unsubscribe();
+    this.exportInProgressSub.unsubscribe();
+    if (this.importExportService.removeDownloadListener) {
+      this.importExportService.removeDownloadListener();
+    }
   }
 
   ngAfterViewInit() {

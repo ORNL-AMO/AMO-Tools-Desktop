@@ -17,6 +17,7 @@ export class BoilerBlowdownRateService {
   showBoiler: BehaviorSubject<boolean>;
   showOperations: BehaviorSubject<boolean>;
   operatingHours: BehaviorSubject<OperatingHours>;
+  modalOpen: BehaviorSubject<boolean>;
   constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) {
     this.baselineInputs = new BehaviorSubject<BoilerBlowdownRateInputs>(undefined);
     this.modificationInputs = new BehaviorSubject<BoilerBlowdownRateInputs>(undefined);
@@ -25,34 +26,52 @@ export class BoilerBlowdownRateService {
     this.showBoiler = new BehaviorSubject<boolean>(false);
     this.showOperations = new BehaviorSubject<boolean>(false);
     this.operatingHours = new BehaviorSubject<OperatingHours>(undefined);
+    this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
-  getDefaultInputs(): BoilerBlowdownRateInputs {
+  getDefaultInputs(settings: Settings): BoilerBlowdownRateInputs {
+    let fuelCost: number = settings.fuelCost;
+    if (!settings.fuelCost){
+      fuelCost = 4.99;
+    }
+    let waterCost: number = settings.waterCost;
+    if (!settings.waterCost){
+      waterCost = 0.0025;
+    }
     return {
       steamFlow: 0,
       steamTemperature: 0,
       feedwaterConductivity: 0,
       blowdownConductivity: 0,
       makeupWaterTemperature: 0,
-      fuelCost: 0,
-      waterCost: 0,
+      fuelCost: fuelCost,
+      waterCost: waterCost,
       operatingHours: 0,
-      boilerEfficiency: 0
+      boilerEfficiency: 0,
+      boilerUtilityType: 'Natural Gas',
     }
   }
 
   getExampleInputs(settings: Settings): { baseline: BoilerBlowdownRateInputs, modification: BoilerBlowdownRateInputs } {
-    let steamFlow: number = this.convertUnitsService.value(1000).from('klb').to(settings.steamMassFlowMeasurement);
+    let fuelCost: number = settings.fuelCost;
+    if (!settings.fuelCost){
+      fuelCost = 4.99;
+    }
+    let waterCost: number = settings.waterCost;
+    if (!settings.waterCost){
+      waterCost = 0.0025;
+    }
+    let steamFlow: number = this.convertUnitsService.value(100).from('klb').to(settings.steamMassFlowMeasurement);
     steamFlow = this.convertUnitsService.roundVal(steamFlow, 0);
     let steamTemp: number = this.convertUnitsService.value(500).from('F').to(settings.steamTemperatureMeasurement);
     steamTemp = this.convertUnitsService.roundVal(steamTemp, 0);
     let makeupWaterTemp: number = this.convertUnitsService.value(50).from('F').to(settings.steamTemperatureMeasurement);
     makeupWaterTemp = this.convertUnitsService.roundVal(makeupWaterTemp, 0);
     let fuelCostConversionHelper: number = this.convertUnitsService.value(1).from('MMBtu').to(settings.steamEnergyMeasurement);
-    let convertedFuelCost: number = 4.99 / fuelCostConversionHelper;
+    let convertedFuelCost: number = fuelCost / fuelCostConversionHelper;
     // convertedFuelCost = this.convertUnitsService.roundVal(convertedFuelCost, 4);
     let makeupWaterConversionHelper: number = this.convertUnitsService.value(1).from('gal').to(settings.steamVolumeMeasurement);
-    let convertedMakupeWaterCost: number = .0025 / makeupWaterConversionHelper;
+    let convertedMakupeWaterCost: number = waterCost / makeupWaterConversionHelper;
     // convertedMakupeWaterCost = this.convertUnitsService.roundVal(convertedMakupeWaterCost, 4);
     let baselineInputs: BoilerBlowdownRateInputs = {
       steamFlow: steamFlow,
@@ -63,11 +82,12 @@ export class BoilerBlowdownRateService {
       fuelCost: convertedFuelCost,
       waterCost: convertedMakupeWaterCost,
       operatingHours: 8760,
-      boilerEfficiency: 85
+      boilerEfficiency: 85,
+      boilerUtilityType: 'Natural Gas',
     }
     let modificationInputs: BoilerBlowdownRateInputs = JSON.parse(JSON.stringify(baselineInputs));
     modificationInputs.blowdownConductivity = 6000;
-    modificationInputs.feedwaterConductivity = 200;
+    modificationInputs.feedwaterConductivity = 400;
     return { baseline: baselineInputs, modification: modificationInputs };
   }
 
@@ -96,7 +116,8 @@ export class BoilerBlowdownRateService {
       makeupWaterTemperature: [obj.makeupWaterTemperature, [Validators.required, Validators.min(ranges.makeupWaterMin), Validators.max(ranges.makeupWaterMax)]],
       fuelCost: [obj.fuelCost, [Validators.required, Validators.min(0)]],
       waterCost: [obj.waterCost, [Validators.required, Validators.min(0)]],
-      operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]]
+      operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
+      boilerUtilityType: [obj.boilerUtilityType]
     });
     return form;
   }
@@ -119,6 +140,7 @@ export class BoilerBlowdownRateService {
     obj.fuelCost = form.controls.fuelCost.value;
     obj.waterCost = form.controls.waterCost.value;
     obj.operatingHours = form.controls.operatingHours.value;
+    obj.boilerUtilityType = form.controls.boilerUtilityType.value;
     return obj;
   }
 
@@ -148,12 +170,14 @@ export class BoilerBlowdownRateService {
   calculateResults(inputs: BoilerBlowdownRateInputs, settings: Settings, calcBoilerVals: boolean, calcCostVals: boolean): BoilerBlowdownRateResults {
     //always
     let blowdownRate: number = this.calculateBlowdownRate(inputs.feedwaterConductivity, inputs.blowdownConductivity);
-    let feedwaterFlowRate: number
+    let feedwaterFlowRate: number;
     let blowdownFlowRate: number = 0;
     let blowdownEnthalpy: number = 0;
     let makeupWaterProperties: { enthalpy: number, specificVolume: number } = { enthalpy: 0, specificVolume: 0 };
     let boilerFuelCost: number = 0;
     let makeupWaterCost: number = 0;
+    let boilerFuelUse: number = 0;
+    let makeupWaterUse: number = 0;
     //boiler
     if (calcBoilerVals == true) {
       feedwaterFlowRate = this.calculateFeedwaterFlowRate(blowdownRate, inputs);
@@ -165,6 +189,8 @@ export class BoilerBlowdownRateService {
       makeupWaterProperties = this.calculateMakeupWaterProperties(inputs.makeupWaterTemperature, settings);
       boilerFuelCost = this.calculateBoilerFuelCost(blowdownRate, blowdownEnthalpy, makeupWaterProperties.enthalpy, inputs, settings);
       makeupWaterCost = this.calculateWaterCost(inputs, blowdownRate, makeupWaterProperties.specificVolume, settings);
+      boilerFuelUse = this.calculateBoilerFuelUse(blowdownRate, blowdownEnthalpy, makeupWaterProperties.enthalpy, inputs, settings);
+      makeupWaterUse = this.calculateWaterUse(inputs, blowdownRate, makeupWaterProperties.specificVolume, settings);
     }// blowdownRate = this.convertUnitsService.roundVal(blowdownRate, 3) * 100;
     return {
       blowdownRate: blowdownRate * 100,
@@ -172,7 +198,9 @@ export class BoilerBlowdownRateService {
       makeupWaterCost: makeupWaterCost,
       totalCost: boilerFuelCost + makeupWaterCost,
       feedwaterFlowRate: feedwaterFlowRate,
-      blowdownFlowRate: blowdownFlowRate
+      blowdownFlowRate: blowdownFlowRate,
+      boilerFuelUse: boilerFuelUse,
+      makeupWaterUse: makeupWaterUse
     }
   }
 
@@ -214,6 +242,16 @@ export class BoilerBlowdownRateService {
     return blowdownRate * convertedSteamFlow * (convertedBlowdownEnthalpy - convertedMakeupWaterEnthalpy) * inputs.operatingHours * convertedFuelCost / (1000 * (inputs.boilerEfficiency / 100));
   }
 
+  calculateBoilerFuelUse(blowdownRate: number, blowdownEnthalpy: number, makeupWaterEnthalpy: number, inputs: BoilerBlowdownRateInputs, settings: Settings): number {
+    //steam flow klb/hr
+    let convertedSteamFlow: number = this.convertUnitsService.value(inputs.steamFlow).from(settings.steamMassFlowMeasurement).to('klb');
+    // enthalpy btu/lb
+    let convertedBlowdownEnthalpy: number = this.convertUnitsService.value(blowdownEnthalpy).from(settings.steamSpecificEnthalpyMeasurement).to('btuLb');
+    let convertedMakeupWaterEnthalpy: number = this.convertUnitsService.value(makeupWaterEnthalpy).from(settings.steamSpecificEnthalpyMeasurement).to('btuLb');
+    // fuel cost $/mmbtu
+    return blowdownRate * convertedSteamFlow * (convertedBlowdownEnthalpy - convertedMakeupWaterEnthalpy) * inputs.operatingHours / (1000 * (inputs.boilerEfficiency / 100));
+  }
+
   calculateWaterCost(inputs: BoilerBlowdownRateInputs, blowdownRate: number, makeupWaterSpecificVolume: number, settings: Settings): number {
     //steam flow klb/hr
     let convertedSteamFlow: number = this.convertUnitsService.value(inputs.steamFlow).from(settings.steamMassFlowMeasurement).to('klb');
@@ -224,6 +262,24 @@ export class BoilerBlowdownRateService {
     let convertedMakeupWaterSpecificVolume: number = this.convertUnitsService.value(makeupWaterSpecificVolume).from(settings.steamSpecificVolumeMeasurement).to('gallb');
     return ((convertedSteamFlow * blowdownRate) / (1 - blowdownRate)) * inputs.operatingHours * convertedMakupeWaterCost * convertedMakeupWaterSpecificVolume * 1000;
   }
+
+  calculateWaterUse(inputs: BoilerBlowdownRateInputs, blowdownRate: number, makeupWaterSpecificVolume: number, settings: Settings): number {
+    //steam flow klb/hr
+    let convertedSteamFlow: number = this.convertUnitsService.value(inputs.steamFlow).from(settings.steamMassFlowMeasurement).to('klb');
+    //specific volume gal/lb
+    let convertedMakeupWaterSpecificVolume: number = this.convertUnitsService.value(makeupWaterSpecificVolume).from(settings.steamSpecificVolumeMeasurement).to('gallb');
+    return ((convertedSteamFlow * blowdownRate) / (1 - blowdownRate)) * inputs.operatingHours * convertedMakeupWaterSpecificVolume * 1000;
+  }
+
+  getTreasureHuntFuelCost(energySourceType: string, settings: Settings) {
+    switch(energySourceType) {
+      case 'Natural Gas':
+        return settings.fuelCost;
+      case 'Other Fuel':
+        return settings.otherFuelCost;
+    }
+  }
+
 }
 
 export interface BoilerBlowdownRateInputs {
@@ -235,7 +291,8 @@ export interface BoilerBlowdownRateInputs {
   fuelCost: number,
   waterCost: number,
   operatingHours: number,
-  boilerEfficiency: number
+  boilerEfficiency: number,
+  boilerUtilityType: string
 }
 
 
@@ -254,4 +311,6 @@ export interface BoilerBlowdownRateResults {
   totalCost: number;
   blowdownFlowRate: number;
   feedwaterFlowRate: number;
+  boilerFuelUse: number;
+  makeupWaterUse: number;
 }

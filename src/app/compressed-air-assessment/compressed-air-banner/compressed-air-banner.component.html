@@ -1,5 +1,13 @@
 <nav class="compressed-air navbar banner d-flex mr-auto p-0 flex-nowrap">
-    <div class="d-flex align-items-center p-1">
+    <div class="d-block d-lg-none mr-0 mr-2 pl-2 h-100">
+        <div class="pr-2 border-right home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
+            <button type="button" class="btn chevron-btn p-0" (click)="back()"
+                [disabled]="(!assessment.compressedAirAssessment.setupDone || mainTab == 'system-setup')">
+                <span class="fa fa-chevron-left"></span>
+            </button>
+        </div>
+    </div>
+    <div class="d-none d-lg-flex align-items-center p-1">
         <div class="img-col col-sm-auto col-md-auto col-lg-auto">
             <img class="img-icon" src="assets/images/ca-icon.png">
         </div>
@@ -14,7 +22,50 @@
             </div>
         </div>
     </div>
-    <div class="d-flex nav-pills nav-fill flex-wrap mx-auto">
+    <div class="d-block d-lg-none align-items-center p-1">
+        <div class="img-col col-sm-auto col-md-auto col-lg-auto" [ngClass]="{'collapse': bannerCollapsed}">
+            <img class="img-icon" src="assets/images/ca-icon.png">
+        </div>
+        <div class="d-flex flex-column pl-2">
+            <div class="h2-name">
+                {{assessment.name}}
+            </div>
+            <div class="h2-name" [ngClass]="{'collapse': bannerCollapsed}">
+                <span class="small">
+                    Last modified: {{assessment.modifiedDate | date:'mediumDate'}}
+                </span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="d-flex nav-pills nav-fill flex-wrap mx-auto d-none d-lg-inline-block">
+        <div class="nav-item d-none d-lg-inline-block">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup'}"
+                (click)="changeTab('system-setup')">System Basics</a>
+        </div>
+        <div class="nav-item d-none d-lg-inline-block">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid}"
+                (click)="changeTab('assessment')">Assessment</a>
+        </div>
+        <div class="nav-item d-none d-lg-inline-block">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram'}" (click)="changeTab('diagram')">Diagram</a>
+        </div>
+        <div class="nav-item d-none d-lg-inline-block">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !isBaselineValid}"
+                (click)="changeTab('report')">Report</a>
+        </div>
+        <div class="nav-item d-none d-lg-inline-block">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !isBaselineValid}"
+                (click)="changeTab('sankey')">Sankey</a>
+        </div>
+        <div class="nav-item d-none d-lg-inline-block">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators', 'disabled': !isBaselineValid}"
+                (click)="changeTab('calculators')">Calculators</a>
+        </div>
+    </div>
+
+    <div *ngIf="!bannerCollapsed" class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">
         <div class="nav-item">
             <a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup'}"
                 (click)="changeTab('system-setup')">System Basics</a>
@@ -39,26 +90,74 @@
                 (click)="changeTab('calculators')">Calculators</a>
         </div>
     </div>
-    <div class="d-flex ml-auto pr-2 h-100">
-        <div class="pl-2 pr-2 home-nav-item" (click)="showSecurityAndPrivacyModal()">
+
+
+    <div class="d-flex ml-auto pr-2 h-100 d-none d-lg-inline-block">
+        <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" (click)="showSecurityAndPrivacyModal()">
             <span class="fa fa-lock"></span>
         </div>
-		<div class="pl-2 pr-2 home-nav-item">
-			<a class="user-manual" href="assets/user-manuals/Compressed-Air-User-Manual.pdf" target="_blank">
-				<span class="fa fa-book"></span>
-			</a>
-		</div>
-        <div class="pl-2 pr-2 home-nav-item" [routerLink]="['/settings']">
-          <span class="fa fa-cog"></span>
-      </div>
-        <div class="pl-2 pr-2 home-nav-item"
+        <div class="pl-2 pr-2 download-nav-item home-nav-item d-none d-lg-inline-block" (click)="openExportModal()">
+            <span class="fa fa-download"></span>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block">
+            <a class="user-manual" href="assets/user-manuals/Compressed-Air-User-Manual.pdf" target="_blank">
+                <span class="fa fa-book"></span>
+            </a>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" [routerLink]="['/settings']">
+            <span class="fa fa-cog"></span>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block"
             [routerLink]="['/directory-dashboard', assessment.directoryId]">
             <span class="fa fa-folder-open"></span>
         </div>
-        <div class="pl-2 pr-2 home-nav-item" (click)="navigateHome()">
+        <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" (click)="navigateHome()">
             <span class="fa fa-home"></span>
         </div>
     </div>
+
+    <div class="d-block d-lg-none ml-2 mr-0 pr-1 h-100">
+        <div class="pl-2 border-left home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
+            <button type="button" class="btn chevron-btn p-0" (click)="continue()"
+                [disabled]="(!assessment.compressedAirAssessment.setupDone || mainTab == 'calculators')">
+                <span class="fa fa-chevron-right"></span>
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="bannerCollapsed" class="d-block d-lg-none ml-2 pr-2 h-100 flex-wrap">
+        <div class="pl-2 border-left home-nav-item d-block" (click)="collapseBanner()">
+            <span class="fa fa-bars"></span>
+        </div>
+    </div>
+
+    <div *ngIf="!bannerCollapsed" class="d-block d-lg-none ml-auto pr-2 h-100 flex-wrap">
+        <div class="pl-2 pr-2 home-nav-item d-block" (click)="collapseBanner()">
+            <span class="fa fa-bars"></span>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-block" (click)="showSecurityAndPrivacyModal()">
+            <span class="fa fa-lock"></span>
+        </div>
+        <div class="pl-2 pr-2 download-nav-item home-nav-item d-block" (click)="openExportModal()">
+            <span class="fa fa-download"></span>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-block">
+            <a class="user-manual" href="assets/user-manuals/Compressed-Air-User-Manual.pdf" target="_blank">
+                <span class="fa fa-book"></span>
+            </a>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-block" [routerLink]="['/settings']">
+            <span class="fa fa-cog"></span>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-block" [routerLink]="['/directory-dashboard', assessment.directoryId]">
+            <span class="fa fa-folder-open"></span>
+        </div>
+        <div class="pl-2 pr-2 home-nav-item d-block" (click)="navigateHome()">
+            <span class="fa fa-home"></span>
+        </div>
+    </div>
+
+
 </nav>
 
 
@@ -67,7 +166,7 @@
 
 
 <div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
-    <ul class="h-100 tabs subtabs progress-tabs compressed-air">
+    <ul class="h-100 tabs subtabs progress-tabs compressed-air d-none d-lg-block">
         <li [ngClass]="{'active': secondaryAssessmentTab == 'modifications'}">
             <a (click)="changeSecondaryAssessmentTab('modifications')">Setup Profile</a>
         </li>
@@ -78,10 +177,8 @@
             <a (click)="changeSecondaryAssessmentTab('graphs')">Profile Summary Graphs</a>
         </li>
     </ul>
-
-
-
-    <div class="d-flex align-items-center tabs subtabs waste-water ml-auto"
+    
+    <div class="d-lg-flex d-none align-items-center tabs subtabs compressed-air ml-auto"
         [ngClass]="{'br-color-white': selectedModification}">
         <div class="mod-name active border-right" *ngIf="selectedModification">
             <a>{{selectedModification.name}}
@@ -100,6 +197,52 @@
                 Scenarios</button>
         </div>
     </div>
-</div>
 
+    <div class="d-lg-none d-flex flex-column flex-fill">
+        <div class="d-flex d-lg-none flex-fill align-items-center justify-content-center tabs subtabs compressed-air"
+            [ngClass]="{'br-color-white': selectedModification}">
+            <div class="mod-name active border-right flex-fill" *ngIf="selectedModification">
+                <a>{{selectedModification.name}}
+                    <br>
+                    <span class="help-text">Selected Scenario</span>
+                </a>
+            </div>
+            <div class="mod-name border-right flex-fill" *ngIf="!selectedModification">
+                <a>&mdash; &mdash;
+                    <br>
+                    <span class="help-text">Selected Scenario</span>
+                </a>
+            </div>
+            <div class="pl-2 pr-2 flex-fill">
+                <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add
+                    Scenarios</button>
+            </div>
+        </div>
+        
+        <ul class="pagination d-flex d-lg-none justify-content-between tabs subtabs progress-tabs flex-fill compressed-air">
+            <li class="page-item" [ngClass]="{'disabled': secondaryAssessmentTab == 'modifications'}">
+                <a class="nav-link small" (click)="backAssessmentTab()" [ngClass]="{'disabled': secondaryAssessmentTab == 'modifications'}">
+                    <span class="fa fa-chevron-left"></span></a>
+            </li>
+            <li class="page-item" [ngClass]="{'active': secondaryAssessmentTab == 'modifications'}" *ngIf="secondaryAssessmentTab == 'modifications'">
+                <a class="nav-link small" (click)="changeSecondaryAssessmentTab('modifications')">Setup Profile</a>
+            </li>
+            <li class="page-item" [ngClass]="{'active': secondaryAssessmentTab == 'table', 'disabled': !selectedModification}" *ngIf="secondaryAssessmentTab == 'table'">
+                <a class="nav-link small" (click)="changeSecondaryAssessmentTab('table')">Profile Summary Table</a>
+            </li>
+            <li class="page-item" [ngClass]="{'active': secondaryAssessmentTab == 'graphs', 'disabled': !selectedModification}" *ngIf="secondaryAssessmentTab == 'graphs'">
+                <a class="nav-link small" (click)="changeSecondaryAssessmentTab('graphs')">Profile Summary Graphs</a>
+            </li>
+            <li class="page-item" [ngClass]="{'disabled': secondaryAssessmentTab == 'graphs' || !selectedModification}">
+                <a class="nav-link small" (click)="continueAssessmentTab()" [ngClass]="{'disabled': secondaryAssessmentTab == 'graphs' || !selectedModification}">
+                    <span class="fa fa-chevron-right"></span></a>
+            </li>
+        </ul>
+        
+        <div class="alert alert-info d-lg-none p-1 m-1 small">
+            This page is optimized to be viewed on a tablet-sized device or larger.
+        </div>
+    </div>
+    
+</div>
 

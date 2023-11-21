@@ -104,7 +104,7 @@
     <label class="small" for="isentropicEfficiency">Isentropic Efficiency</label>
     <div class="input-group">
       <input class="form-control" name="isentropicEfficiency" id="isentropicEfficiency"
-        formControlName="isentropicEfficiency" type="number" (input)="calculate()"
+        formControlName="isentropicEfficiency" type="number" step="1" (input)="calculate()"
         (focus)="focusField('isentropicEfficiency')"  onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
@@ -122,7 +122,7 @@
     <label class="small" for="generatorEfficiency">Generator Efficiency</label>
     <div class="input-group">
       <input class="form-control" name="generatorEfficiency" id="generatorEfficiency"
-        formControlName="generatorEfficiency" type="number" (input)="calculate()"
+        formControlName="generatorEfficiency" type="number" step="1" (input)="calculate()"
         (focus)="focusField('generatorEfficiency')"  onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
@@ -141,7 +141,7 @@
     <label class="small" for="outletSteamPressure">Pressure</label>
     <div class="input-group">
       <input class="form-control" name="outletSteamPressure" id="outletSteamPressure"
-        formControlName="outletSteamPressure" type="number" (input)="calculate()"
+        formControlName="outletSteamPressure" type="number" step="1" (input)="calculate()"
         (focus)="focusField('outletSteamPressure')"  onfocus="this.select();">
       <span class="input-group-addon units"><span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>

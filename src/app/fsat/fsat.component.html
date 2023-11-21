@@ -4,10 +4,26 @@
     <app-fsat-tabs [settings]="settings" [fsat]="_fsat"></app-fsat-tabs>
   </div>
 
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'system-setup'">
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link" *ngIf="stepTab == 'system-basics'">Assessment Settings</a>
+      <a class="nav-link" *ngIf="stepTab == 'fan-operations'">Operations</a>
+      <a class="nav-link" *ngIf="stepTab == 'fan-setup'">Fan and Fluid</a>
+      <a class="nav-link" *ngIf="stepTab == 'fan-motor'">Motor</a>
+      <a class="nav-link" *ngIf="stepTab == 'fan-field-data'">Field Data</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link" *ngIf="stepTab != 'fan-setup' && stepTab != 'fan-field-data'">Help</a>
+      <a class="nav-link" *ngIf="stepTab == 'fan-setup' || stepTab == 'fan-field-data'">Details</a>
+    </div>
+  </div>
+
   <!--system setup-->
   <div *ngIf="mainTab == 'system-setup'" class="assessment-container tab-content">
     <div class="assessment-panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
+      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
         (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)"
         (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
@@ -29,7 +45,7 @@
         [fieldData]="_fsat.fieldData" [baseline]="true" (emitSave)="saveFieldData($event)" [fsat]="_fsat">
       </app-fan-field-data>
     </div>
-    <div class="assessment-panel-container scroll-item" [ngClass]="{'pl-0': stepTab == 'fan-field-data'}" [ngStyle]="{'height.px': containerHeight}">
+    <div class="assessment-panel-container scroll-item" [ngClass]="{'pl-0': stepTab == 'fan-field-data', 'small-screen-tab': smallScreenTab === 'details'}" [ngStyle]="{'height.px': containerHeight}">
       <app-help-panel [modificationIndex]="modificationIndex" [settings]="settings" [inSetup]="true" [fsat]="_fsat">
       </app-help-panel>
     </div>
@@ -37,7 +53,7 @@
 
 
   <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" class="assessment-tab-container tab-content" [ngStyle]="{'height.px': containerHeight}">
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [fsat]="_fsat" [assessment]="assessment"
       [settings]="settings" (emitSave)="saveFsat($event)" [containerHeight]="containerHeight"
       [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()">
@@ -48,16 +64,16 @@
   </div>
 
   <!--report-->
-  <div class="report-container mx-0" *ngIf="mainTab == 'report'">
+  <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
       <app-fsat-report [settings]="settings" [assessment]="assessment" [inFsat]="true" (closeReport)="closeReport()"
         [containerHeight]="containerHeight"></app-fsat-report>
   </div>
 
-  <div class="tab-content" *ngIf="mainTab == 'diagram'">
+  <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'diagram'">
     <app-fsat-diagram></app-fsat-diagram>
   </div>
 
-  <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
+  <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
     <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'" [inAssessment]="true" [assessment]="assessment"
       [fsat]="_fsat" [settings]="settings"></app-fan-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [settings]="settings" [inAssessment]="true"
@@ -67,7 +83,7 @@
     <app-system-and-equipment-curve *ngIf="calcTab == 'fan-curve'" [settings]="settings" [equipmentType]="'fan'"
       [assessment]="assessment"></app-system-and-equipment-curve>
   </div>
-  <div *ngIf="mainTab == 'sankey'" class="d-flex flex-column scroll-item w-100"
+  <div *ngIf="mainTab == 'sankey'" class="assessment-tab-container tab-content"
     [ngStyle]="{'height.px': containerHeight}">
     <nav class="navbar fsat">
       <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-start align-items-center w-100 flex-wrap">
@@ -150,3 +166,6 @@
 
  
 <app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>
+
+
+<app-export-modal *ngIf="showExportModal" [inAssessment]="true" [assessment]="assessment" (close)="closeExportModal($event)"></app-export-modal>

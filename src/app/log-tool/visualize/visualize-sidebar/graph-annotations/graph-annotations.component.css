@@ -1,0 +1,79 @@
+.btn{
+    padding: 6px;
+}
+
+
+.btn:hover{
+    color: white;
+    background: #117A65;
+}
+
+.fa-times-circle:hover {
+    cursor: pointer;
+    color: gray;
+}
+
+span.fa.fa-chevron-circle-left,
+span.fa.fa-chevron-circle-right {
+    cursor: pointer;
+    color: #117A65;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #117A65;
+    background-color: #117A65;
+}
+
+.custom-control.custom-switch{
+    border-bottom: #c0c0c0 solid 1px;
+}
+
+.custom-switch .custom-control-label::before,
+.custom-switch .custom-control-label::after {
+    cursor: pointer !important;
+}
+
+.disabled {
+    background: #c5c5c5 !important;
+    border-color: #d8d8d8 !important;
+    box-shadow: none;
+}
+
+label.group-label {
+    font-size: 14px; 
+    display: inline-block;
+    width: 100%;
+    border-bottom: #c0c0c0 solid 1px;
+}
+
+label.group-label:hover, .checkbox:hover{
+    background-color: #efefef;
+    cursor: pointer;
+}
+
+label.group-label:hover{
+    cursor: pointer;
+    background-color: #D5D8DC;
+}
+
+
+
+.detail-tooltip {
+    background-color: white;
+    border-color: #117A65;
+    color: black;
+    left: 360px;
+    z-index: 999;
+    width: 300px;
+    right: 0px;
+}
+
+li.card {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.annotations {
+    max-height: 225px;
+    padding-right: .5rem;
+    overflow-y: auto;
+}

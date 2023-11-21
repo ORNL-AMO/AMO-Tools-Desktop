@@ -156,7 +156,7 @@ export class ReportGraphsComponent implements OnInit {
     if (this.treasureHuntResults.compressedAir.energySavings) {
       let unitLabel: string;
       if (this.settings.unitsOfMeasure === 'Imperial') {
-        unitLabel = 'kSCF';
+        unitLabel = 'kscf';
       } else {
         unitLabel = 'Nm<sup>3</sup>';
       }

@@ -2,7 +2,7 @@
   <div class="form-group">
     <label for="kwRating">kW Rating for all sections</label>
     <div class="input-group">
-      <input name="kwRating" type="number" step="any" id="heatingValue" class="form-control"
+      <input name="kwRating" type="number" step="10" id="heatingValue" class="form-control"
         (focus)="changeField('electricitykwRating')" [(ngModel)]="inputs.kwRating" (input)="calculate()"
         onfocus="this.select();" />
       <span class="input-group-addon units">kW</span>
@@ -23,7 +23,7 @@
       <span class="input-group-addon op-hour-addon units">
         <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
       </span>
-      <input name="operatingHours" type="number" step="any" id="operatingHours" class="form-control"
+      <input name="operatingHours" type="number" step="10" id="operatingHours" class="form-control"
         (focus)="changeField('operatingHours')" [(ngModel)]="inputs.operatingHours" (input)="calculate()"
         onfocus="this.select();" />
       <span class="input-group-addon units">hrs/yr</span>

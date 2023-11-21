@@ -30,7 +30,7 @@ export class TreasureHuntReportRollupService {
     thuntItems.forEach(item => {
       if (item.assessment.treasureHunt) {
         let opportunitySummaries: Array<OpportunitySummary> = this.opportunitySummaryService.getOpportunitySummaries(item.assessment.treasureHunt, item.settings)
-        let thuntResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, item.assessment.treasureHunt.currentEnergyUsage, item.settings);
+        let thuntResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, item.assessment.treasureHunt, item.settings);
         let opportunityCardsData: Array<OpportunityCardData> = this.opportunityCardsService.getOpportunityCardsData(item.assessment.treasureHunt, item.settings);
         let opportunitiesPaybackDetails: OpportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(thuntResults.opportunitySummaries, settings);
         tmpResultsArr.push(

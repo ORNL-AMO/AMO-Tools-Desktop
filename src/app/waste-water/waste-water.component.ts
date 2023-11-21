@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UntypedFormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentService } from '../dashboard/assessment.service';
@@ -17,6 +17,7 @@ import { SystemBasicsService } from './system-basics/system-basics.service';
 import { WasteWaterService } from './waste-water.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import { WasteWaterOperationsService } from './waste-water-operations/waste-water-operations.service';
+import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-waste-water',
@@ -27,6 +28,7 @@ export class WasteWaterComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
+  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   containerHeight: number;
 
   @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;
@@ -57,31 +59,43 @@ export class WasteWaterComponent implements OnInit {
   isModalOpenSub: Subscription;
   disableNext: boolean;
 
+  showExportModal: boolean = false;
+  showExportModalSub: Subscription;
+
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   showWelcomeScreen: boolean;
+  smallScreenTab: string = 'form';
   constructor(private activatedRoute: ActivatedRoute,   
+    private router: Router,
     private egridService: EGridService,
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
     private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService,
     private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
-    private systemBasicsService: SystemBasicsService, private assessmentService: AssessmentService, private wasteWaterOperationsService: WasteWaterOperationsService) { }
+    private systemBasicsService: SystemBasicsService, private assessmentService: AssessmentService, private wasteWaterOperationsService: WasteWaterOperationsService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
+    this.analyticsService.sendEvent('view-waste-water-assessment');
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
-      this.wasteWaterService.updateWasteWater(this.assessment.wasteWater);
-      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-      if (!settings) {
-        settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
-        this.addSettings(settings);
-      } else {
-        this.settings = settings;
-        this.wasteWaterService.settings.next(settings);
-      }
-      if (this.assessmentService.tab) {
-        this.wasteWaterService.mainTab.next(this.assessmentService.tab);
+
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'WasteWater')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else {  
+        this.wasteWaterService.updateWasteWater(this.assessment.wasteWater);
+        let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+        if (!settings) {
+          settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+          this.addSettings(settings);
+        } else {
+          this.settings = settings;
+          this.wasteWaterService.settings.next(settings);
+        }
+        if (this.assessmentService.startingTab) {
+          this.wasteWaterService.mainTab.next(this.assessmentService.startingTab);
+        }
       }
     });
 
@@ -123,6 +137,10 @@ export class WasteWaterComponent implements OnInit {
       this.isModalOpen = val;
     });
 
+    this.showExportModalSub = this.wasteWaterService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
+
     this.checkShowWelcomeScreen();
   }
 
@@ -135,6 +153,7 @@ export class WasteWaterComponent implements OnInit {
     this.showAddModificationSub.unsubscribe();
     this.showModificationListSub.unsubscribe();
     this.isModalOpenSub.unsubscribe();
+    this.showExportModalSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -153,6 +172,9 @@ export class WasteWaterComponent implements OnInit {
           footerHeight = this.footer.nativeElement.offsetHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
+        if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+          this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+        }
       }, 100);
     }
   }
@@ -160,7 +182,8 @@ export class WasteWaterComponent implements OnInit {
   async saveWasteWater(wasteWater: WasteWater) {
     wasteWater = this.updateModificationCO2Savings(wasteWater);
     this.assessment.wasteWater = wasteWater;
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment)) 
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
   }
 
@@ -269,9 +292,19 @@ export class WasteWaterComponent implements OnInit {
 
  async closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableWasteWaterTutorial = true;
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings))
+    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.wasteWaterService.isModalOpen.next(false);
   }
+
+  setSmallScreenTab(selectedTab: string) {
+    this.smallScreenTab = selectedTab;
+  }
+
+  closeExportModal(input: boolean){
+    this.wasteWaterService.showExportModal.next(input);
+  }
+
 }

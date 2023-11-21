@@ -389,7 +389,9 @@ export class PsatWarningService {
 
   checkPumpOperations(psat: PSAT, settings: Settings, isBaseline?: boolean): OperationsWarnings {
     let warnings: OperationsWarnings = {
-      cost: this.checkCost(psat),
+      // 5994 
+      // cost: this.checkCost(psat),
+      cost: undefined,
     };
 
     return warnings;
@@ -403,11 +405,11 @@ export class PsatWarningService {
     }
   }
 
-  //Iterates warnings objects to see if any warnings are not null
+  //Iterates warnings objects to see if any warnings are not null/undefined
   checkWarningsExist(warnings: FieldDataWarnings | MotorWarnings | PumpFluidWarnings | OperationsWarnings): boolean {
     let hasWarning: boolean = false;
     for (var key in warnings) {
-      if (warnings[key] !== null) {
+      if (warnings[key]) {
         hasWarning = true;
       }
     }

@@ -37,6 +37,7 @@ export const MockPhast: Assessment = {
         },
         modifications: [
             {
+                id: "wjrkhj3dgb",              
                 phast: {
                     losses: {
                         chargeMaterials: [
@@ -217,6 +218,7 @@ export const MockPhast: Assessment = {
                 }
             },
             {
+                id: "ncokyj3dgb",              
                 phast: {
                     losses: {
                         chargeMaterials: [
@@ -397,6 +399,7 @@ export const MockPhast: Assessment = {
                 }
             },
             {
+                id: "nnrkhj3aji",
                 phast: {
                     losses: {
                         chargeMaterials: [
@@ -577,6 +580,7 @@ export const MockPhast: Assessment = {
                 }
             },
             {
+                id: "wjzkhj3mmc",
                 phast: {
                     losses: {
                         chargeMaterials: [
@@ -757,6 +761,7 @@ export const MockPhast: Assessment = {
                 }
             },
             {
+                id: "wjrk77sdgb",
                 phast: {
                     losses: {
                         chargeMaterials: [

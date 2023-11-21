@@ -27,7 +27,7 @@
           [assessment]="assessment"></app-pump-operations>
         <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()"
           [settings]="settings" [baseline]="true"></app-pump-fluid>
-        <app-motor *ngIf="modifyTab == 'motor'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()"
+        <app-motor [assessment]="assessment" *ngIf="modifyTab == 'motor'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()"
           [settings]="settings" [baseline]="true"></app-motor>
         <app-field-data *ngIf="modifyTab == 'field-data'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()"
           [settings]="settings" (saved)="save()" [settings]="settings" [baseline]="true" [assessment]="assessment">

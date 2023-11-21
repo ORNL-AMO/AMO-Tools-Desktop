@@ -1,82 +1,76 @@
+declare var Module: any;
+
 export const pumpTypesConstant: Array<{ value: number, display: string }> = [
     {
         value: 0,
-        display: 'End Suction Slurry'
+        display: 'End Suction Slurry',
     },
     {
         value: 1,
-        display: 'End Suction Sewage'
+        display: 'End Suction Sewage',
     },
     {
         value: 2,
-        display: 'End Suction Stock'
+        display: 'End Suction Stock',
     },
     {
         value: 3,
-        display: 'End Suction Submersible Sewage'
+        display: 'End Suction Submersible Sewage',
     },
     {
         value: 4,
-        display: 'API Double Suction'
+        display: 'API Double Suction',
     },
     {
         value: 5,
-        display: 'Multistage Boiler Feed'
+        display: 'Multistage Boiler Feed',
     },
     {
         value: 6,
-        display: 'End Suction ANSI/API'
+        display: 'End Suction ANSI/API',
     },
     {
         value: 7,
-        display: 'Axial Flow'
+        display: 'Axial Flow',
     },
     {
         value: 8,
-        display: 'Double Suction'
+        display: 'Double Suction',
     },
     {
         value: 9,
-        display: 'Vertical Turbine'
+        display: 'Vertical Turbine',
     },
     {
         value: 10,
-        display: 'Large End Suction'
+        display: 'Large End Suction',
     },
-    {
-        value: 11,
-        display: 'Specified Optimal Efficiency'
-    },
-    { value: 12, display: 'Direct Drive' },
-    { value: 13, display: 'Belt Drive' },
-    { value: 14, display: 'Gear Box/Transmission' }, 
     // When user selects below they need a way to provide the optimal efficiency
     // 'Specified Optimal Efficiency'
 ];
 
-export const driveConstants: Array<{ value: number, display: string }> = [
+export const driveConstants: Array<{ value: number, display: string, enumVal?: any }> = [
     {
         value: 0,
-        display: 'Direct Drive'
+        display: 'Direct Drive',
     },
     {
         value: 1,
-        display: 'V-Belt Drive'
+        display: 'V-Belt Drive',
     },
     {
         value: 2,
-        display: 'Notched V-Belt Drive'
+        display: 'Notched V-Belt Drive',
     },
     {
         value: 3,
-        display: 'Synchronous Belt Drive'
+        display: 'Synchronous Belt Drive',
     },
     {
         value: 4,
-        display: 'Specified Efficiency'
+        display: 'Specified Efficiency',
     }
 ];
-
 export const fluidProperties = {
     'Acetone': { beta: 0.00079, tref: 77, density: 49, kinViscosity: 0.41, boiling: 132.89, melting: -138.5 },
     'Ammonia': { beta: 0.00136, tref: 77, density: 51.4, kinViscosity: 0.3, boiling: -28.01, melting: -107.91 },
@@ -107,22 +101,22 @@ export const fluidTypes: Array<string> = [
     'Water'
 ];
 
-export const motorEfficiencyConstants: Array<{ value: number, display: string }> = [
+export const motorEfficiencyConstants: Array<{ value: number, display: string, enumVal?: any }> = [
     {
         value: 0,
-        display: 'Standard Efficiency'
+        display: 'Standard Efficiency',
     },
     {
         value: 1,
-        display: 'Energy Efficient'
+        display: 'Energy Efficient',
     },
     {
         value: 2,
-        display: 'Premium Efficient'
+        display: 'Premium Efficient',
     },
     {
         value: 3,
-        display: 'Specified'
+        display: 'Specified',
     }
 ];
 
@@ -140,54 +134,54 @@ export const statusTypes: Array<{value: number, display: string}> = [
   ];
 
 // Ordered by pumpTypeConstants
-export const pumpTypeRanges: Array<{ range: {min: number, max: number}, value: number }> = [
+export const pumpTypeRanges: Array<{ range: { min: number, max: number }, value: number }> = [
     {
         value: 0,
-        range: {min: 100, max: 20000}
+        range: { min: 100, max: 20000 }
     },
     {
         value: 1,
-        range: {min: 100, max: 22500}
+        range: { min: 100, max: 22500 }
     },
     {
         value: 2,
-        range: {min: 400, max: 22000}
+        range: { min: 400, max: 22000 }
     },
     {
         value: 3,
-        range: {min: 100, max: 22500}
+        range: { min: 100, max: 22500 }
     },
     {
         value: 4,
-        range: {min: 400, max: 22000}
+        range: { min: 400, max: 22000 }
     },
     {
         value: 5,
-        range: {min: 100, max: 4000}
+        range: { min: 100, max: 4000 }
     },
     {
         value: 6,
-        range: {min: 10, max: 5000}
+        range: { min: 10, max: 5000 }
     },
     {
         value: 7,
-        range: {min: 200, max: 40000}
+        range: { min: 200, max: 40000 }
     },
     {
         value: 8,
-        range: {min: 200, max: 100000}
+        range: { min: 200, max: 100000 }
     },
     {
         value: 9,
-        range: {min: 200, max: 40000}
+        range: { min: 200, max: 40000 }
     },
     {
         value: 10,
-        range: {min: 5000, max: 100000}
+        range: { min: 5000, max: 100000 }
     },
     {
         value: 11,
-        range: {min: 100, max: 100000}
+        range: { min: 100, max: 100000 }
     }
 
 ];

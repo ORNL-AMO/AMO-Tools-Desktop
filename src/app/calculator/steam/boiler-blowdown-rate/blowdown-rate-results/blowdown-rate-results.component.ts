@@ -59,7 +59,9 @@ export class BlowdownRateResultsComponent implements OnInit {
       makeupWaterCost: 0,
       totalCost: 0,
       blowdownFlowRate: 0,
-      feedwaterFlowRate: 0
+      feedwaterFlowRate: 0,
+      boilerFuelUse: 0,
+      makeupWaterUse: 0
     }
   }
 

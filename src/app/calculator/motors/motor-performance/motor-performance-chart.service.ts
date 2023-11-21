@@ -4,6 +4,7 @@ import { PsatService } from '../../../psat/psat.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { BehaviorSubject } from 'rxjs';
+import { MotorPerformanceResults } from './motor-performance.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,9 +32,9 @@ export class MotorPerformanceChartService {
 
     for (let i = .001; i <= 1.2; i = i + .01) {
       let performanceResults = this.calculateMotorPerformance(i, performanceForm, settings);
-      let current = performanceResults.motor_current;
-      let efficiency = performanceResults.efficiency;
-      let powerFactor = performanceResults.motor_power_factor;
+      let current: number = performanceResults.current;
+      let efficiency: number = performanceResults.efficiency;
+      let powerFactor: number = performanceResults.powerFactor;
 
       if (current >= 0) {
         currentData.x.push(i);
@@ -51,9 +52,9 @@ export class MotorPerformanceChartService {
     return [currentData, powerData, efficiencyData];
   }
 
-  calculateMotorPerformance(loadFactor: number, performanceForm: UntypedFormGroup, settings: Settings) {
+  calculateMotorPerformance(loadFactor: number, performanceForm: UntypedFormGroup, settings: Settings): MotorPerformanceResults {
       if (performanceForm.valid) {
-        let results = this.psatService.motorPerformance(
+        let results: MotorPerformanceResults = this.psatService.motorPerformance(
           performanceForm.controls.frequency.value,
           performanceForm.controls.efficiencyClass.value,
           performanceForm.controls.horsePower.value,
@@ -66,6 +67,11 @@ export class MotorPerformanceChartService {
         );
         return results;
       }
+      return {
+        current: 0,
+        efficiency: 0,
+        powerFactor: 0
+      };
   }
 
   

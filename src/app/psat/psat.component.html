@@ -10,27 +10,49 @@
   </div>
   <!--end header-->
 
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'system-setup'">
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link" *ngIf="stepTab == 'system-basics'">Assessment Settings</a>
+      <a class="nav-link" *ngIf="stepTab == 'operations'">Operations</a>
+      <a class="nav-link" *ngIf="stepTab == 'pump-fluid'">Pump & Fluid</a>
+      <a class="nav-link" *ngIf="stepTab == 'motor'">Motor</a>
+      <a class="nav-link" *ngIf="stepTab == 'field-data'">Field Data</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link" *ngIf="stepTab != 'field-data'">Help</a>
+      <a class="nav-link" *ngIf="stepTab == 'field-data'">Details</a>
+    </div>
+  </div>
+
   <!--system setup-->
   <div *ngIf="mainTab == 'system-setup'" class="assessment-container tab-content">
     <div class="assessment-panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
+      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}">
       <ng-container *ngIf="stepTab == 'system-basics'">
         <app-system-basics [settings]="settings" [assessmentPsat]="assessment.psat" [assessment]="assessment" (updateSettings)="getSettings($event)"
           (updateAssessment)="savePsat($event)" (openModal)="modalOpen()" (closeModal)="modalClose()"
           (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
-        <app-integrate-pump-inventory [(assessment)]="assessment" [(psat)]="_psat" (saved)="saveAndUpdateSettings()" [settings]="settings"></app-integrate-pump-inventory>
+        <app-integrate-pump-inventory *ngIf="!hasConnectedMotorItem"
+          [(assessment)]="assessment" 
+          [(psat)]="_psat" 
+          (savePsat)="savePsat($event)"
+          (saved)="saveAndUpdateSettings()" 
+          [settings]="settings">
+        </app-integrate-pump-inventory>
       </ng-container>
       <app-pump-operations *ngIf="stepTab == 'operations'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
       <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
-      <app-motor *ngIf="stepTab == 'motor'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
+      <app-motor *ngIf="stepTab == 'motor'" [(assessment)]="assessment" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
         [baseline]="true" [inSetup]="true"></app-motor>
       <app-field-data *ngIf="stepTab == 'field-data'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data>
     </div>
     <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'pl-0': stepTab == 'field-data'}">
+      [ngClass]="{'pl-0': stepTab == 'field-data', 'small-screen-tab': smallScreenTab === 'details'}">
       <app-help-panel [psat]="_psat" [settings]="settings" [modificationIndex]="modificationIndex"
         [currentTab]="stepTab" [inSetup]="true" [containerHeight]="containerHeight"
         [showResults]="stepTab == 'field-data'"></app-help-panel>
@@ -39,7 +61,7 @@
   <!--End system-setup-->
 
   <!--assessment tab-->
-  <div class="tab-content"
+  <div class="assessment-tab-container tab-content"
     *ngIf="mainTab == 'assessment' && !modificationModalOpen && (currentTab == 'explore-opportunities' || currentTab == 'modify-conditions')"
     [ngStyle]="{'height.px': containerHeight}">
     <!--Explore opportunities-->
@@ -55,7 +77,7 @@
   <!--end assessment-->
 
   <!--calculators tab-->
-  <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
+  <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
     <app-achievable-efficiency *ngIf="calcTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings"
       [psat]="_psat"></app-achievable-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [inAssessment]="true" [assessment]="assessment"
@@ -71,7 +93,7 @@
   <!--end calculators-->
 
   <!--Diagram-->
-  <div class="tab-content" *ngIf="mainTab =='diagram'">
+  <div class="assessment-tab-container tab-content" *ngIf="mainTab =='diagram'">
     <app-psat-diagram [psat]="_psat" [settings]="settings"></app-psat-diagram>
   </div>
   <!--end diagram-->
@@ -107,7 +129,7 @@
   <!--end sankey-->
 
   <!--report-->
-  <div class="report-container mx-0" *ngIf="mainTab == 'report'">
+  <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
       <app-psat-report [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
         [containerHeight]="containerHeight"></app-psat-report>
   </div>
@@ -176,3 +198,5 @@
 
 
 <app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>
+
+<app-export-modal *ngIf="showExportModal" [inAssessment]="true" [assessment]="assessment" (close)="closeExportModal($event)"></app-export-modal>

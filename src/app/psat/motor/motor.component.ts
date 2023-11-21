@@ -8,13 +8,20 @@ import { MotorWarnings, PsatWarningService } from '../psat-warning.service';
 import { MotorService } from './motor.service';
 import { motorEfficiencyConstants } from '../psatConstants';
 import { PsatService } from '../psat.service';
-import { IntegrationStateService } from '../../shared/assessment-integration/integration-state.service';
+import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
+import { ConnectedInventoryData, InventoryOption, InventorySelectOptions } from '../../shared/connected-inventory/integrations';
+import { MotorIntegrationService } from '../../shared/connected-inventory/motor-integration.service';
+import { Subscription } from 'rxjs';
+import { PsatIntegrationService } from '../../shared/connected-inventory/psat-integration.service';
+import { Assessment } from '../../shared/models/assessment';
 @Component({
   selector: 'app-motor',
   templateUrl: './motor.component.html',
   styleUrls: ['./motor.component.css']
 })
 export class MotorComponent implements OnInit {
+  @Input()
+  assessment: Assessment;
   @Input()
   psat: PSAT;
   @Output('saved')
@@ -39,50 +46,126 @@ export class MotorComponent implements OnInit {
   psatForm: UntypedFormGroup;
   motorWarnings: MotorWarnings;
   //disableFLAOptimized: boolean = false;
+  hasConnectedPumpInventory: boolean;
   idString: string;
-  hasConnectedInventories: boolean;
+  inventorySelectOptions: InventorySelectOptions;
+  connectedInventoryDataSub: Subscription;
+  connectedInventoryType: string;
+  integrationContainerOffsetHeight: number = 0;
+  integrationContainerOffsetHeightSub: Subscription;
 
   constructor(private psatWarningService: PsatWarningService, 
     private psatService: PsatService, 
+    private psatIntegrationService: PsatIntegrationService, 
     private integrationStateService: IntegrationStateService,
     private compareService: CompareService, 
     private helpPanelService: HelpPanelService, 
+    private motorIntegrationService: MotorIntegrationService,
     private motorService: MotorService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.efficiencyClasses = motorEfficiencyConstants;
     if (!this.baseline) {
       this.idString = 'psat_modification_' + this.modificationIndex;
+      this.integrationContainerOffsetHeightSub = this.integrationStateService.integrationContainerOffsetHeight.subscribe(height => {
+        this.integrationContainerOffsetHeight = height;
+      })
     }
     else {
       this.idString = 'psat_baseline';
     }
-    this.init();
+    await this.initPsatMotorForm();
+    this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
+      this.handleConnectedInventoryEvents(connectedInventoryData);
+    });
 
     if (!this.selected) {
-      this.disableForm();
+      this.psatForm.disable();
+    }
+  }
+
+  ngOnDestroy() {
+    this.connectedInventoryDataSub.unsubscribe();
+    if (!this.baseline) {
+      this.integrationStateService.integrationContainerOffsetHeight.next(undefined);
+      this.integrationContainerOffsetHeightSub.unsubscribe();
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    let connectedItem = this.psat.connectedItem && this.integrationStateService.connectedInventoryData.getValue()?.isConnected;
     if (changes.selected && !changes.selected.isFirstChange()) {
-      if (!this.selected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
+      if (!this.selected || connectedItem) {
+        this.psatForm.disable();
+      } else if (!connectedItem) {
+        this.psatForm.enable();
       }
     }
     if (changes.modificationIndex && !changes.modificationIndex.isFirstChange() ||
       changes.psat && !changes.psat.isFirstChange()) {
-      this.init();
+      this.initPsatMotorForm();
     }
   }
 
-  init() {
-    this.hasConnectedInventories = this.integrationStateService.assessmentIntegrationState.getValue().hasThreeWayConnection;
+  async setInventorySelectOptions() {
+    let motorInventoryOptions: Array<InventoryOption> = await this.motorIntegrationService.initInventoriesAndOptions();
+    this.inventorySelectOptions = {
+      label: 'Connect an Existing Motor Inventory',
+      itemName: 'Motor',
+      inventoryOptions: motorInventoryOptions,
+      shouldResetForm: false
+    }
+    this.connectedInventoryType = 'motor';
+  }
+
+  async initPsatMotorForm() {
+    let connectedInventoryData = this.integrationStateService.connectedInventoryData.getValue();
+    this.hasConnectedPumpInventory = connectedInventoryData.connectedItem && connectedInventoryData.connectedItem.inventoryType === 'pump';
+    if (this.hasConnectedPumpInventory) {
+      this.connectedInventoryType = 'pump';
+    }
+
+    if (this.psat.connectedItem && this.psat.connectedItem.inventoryType === 'motor') {
+      await this.psatIntegrationService.setFromConnectedMotorItem(this.psat, this.assessment, this.settings);
+    }
+
     this.psatForm = this.motorService.getFormFromObj(this.psat.inputs);
+    if (connectedInventoryData.connectedItem && (this.baseline || this.inSetup)) {
+      this.psatForm.disable();
+    } else {
+      this.psatForm.enable();
+    }
     this.helpPanelService.currentField.next('lineFrequency');
     this.checkWarnings();
+
+    if (this.inSetup) {
+      await this.setInventorySelectOptions();
+    }
+  }
+
+  async handleConnectedInventoryEvents(connectedInventoryData: ConnectedInventoryData) {
+    if (!connectedInventoryData.isConnected) {
+      if (connectedInventoryData.canConnect || connectedInventoryData.shouldConvertItemUnits) {
+        await this.psatIntegrationService.setPSATFromExistingMotorItem(connectedInventoryData, this.psat, this.assessment);
+        if (connectedInventoryData.isConnected) {
+          this.initPsatMotorForm();
+          this.saved.emit(true);
+        }
+      }
+    }
+
+    if (connectedInventoryData.shouldDisconnect) {
+      if (this.psat.connectedItem.inventoryType === 'motor') {
+        await this.psatIntegrationService.removeMotorConnectedItem(connectedInventoryData.connectedItem);
+      } else if (this.psat.connectedItem.inventoryType === 'pump') {
+        await this.psatIntegrationService.removeConnectedPumpInventory(connectedInventoryData.connectedItem, this.assessment.id);  
+      }
+      delete this.psat.connectedItem;
+      // delete assessment.psat item = allow integrate-pump-inventory to appear in system-basics again
+      delete this.assessment.psat.connectedItem;
+      this.psatForm.enable();
+      this.saved.emit(true);
+    }
   }
 
   checkWarnings() {
@@ -120,19 +203,6 @@ export class MotorComponent implements OnInit {
 
   disableFLA() {
     return this.motorService.disableFLA(this.psatForm);
-  }
-
-  disableForm() {
-    this.psatForm.controls.frequency.disable();
-    this.psatForm.controls.horsePower.disable();
-    this.psatForm.controls.efficiencyClass.disable();
-    //this.psatForm.disable();
-  }
-
-  enableForm() {
-    this.psatForm.controls.frequency.enable();
-    this.psatForm.controls.horsePower.enable();
-    this.psatForm.controls.efficiencyClass.enable();
   }
 
   focusField(str: string) {

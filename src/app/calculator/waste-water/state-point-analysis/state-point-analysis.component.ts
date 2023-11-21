@@ -5,6 +5,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { StatePointAnalysisInput, StatePointAnalysisOutput } from '../../../shared/models/waste-water';
 import { StatePointAnalysisService } from './state-point-analysis.service';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-state-point-analysis',
@@ -46,9 +47,11 @@ export class StatePointAnalysisComponent implements OnInit {
 
 
   constructor(private settingsDbService: SettingsDbService, 
-              private statePointAnalysisService: StatePointAnalysisService) { }
+              private statePointAnalysisService: StatePointAnalysisService,
+              private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-WW-state-point-analysis');
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

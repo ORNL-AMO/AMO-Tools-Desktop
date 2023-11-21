@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
 import { SuiteDbMotor } from '../../../../../shared/models/materials';
 import * as _ from 'lodash';
 import { FilterMotorOptions } from '../filter-motor-options.pipe';
 import { MotorCatalogService } from '../../motor-catalog.service';
+import { SqlDbApiService } from '../../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-filter-motors',
@@ -20,10 +20,10 @@ export class FilterMotorsComponent implements OnInit {
   filterMotorOptions: FilterMotorOptions;
   minLabel: string = 'Min';
   maxLabel: string = 'Max';
-  constructor(private suiteDbService: SuiteDbService, private motorCatalogService: MotorCatalogService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private motorCatalogService: MotorCatalogService) { }
 
   ngOnInit(): void {
-    let motorOptions: Array<SuiteDbMotor> = this.suiteDbService.selectMotors();
+    let motorOptions: Array<SuiteDbMotor> = this.sqlDbApiService.selectMotors();
 
     let uniqMotorsByType = _.uniqBy(motorOptions, 'enclosureType');
     this.enclosureTypeOptions = _.map(uniqMotorsByType, (motor) => { return motor.enclosureType });
@@ -58,7 +58,7 @@ export class FilterMotorsComponent implements OnInit {
   }
 
   resetFilters(){
-    let motorOptions: Array<SuiteDbMotor> = this.suiteDbService.selectMotors();
+    let motorOptions: Array<SuiteDbMotor> = this.sqlDbApiService.selectMotors();
     this.initFilterMotorOptions(motorOptions);
   }
 

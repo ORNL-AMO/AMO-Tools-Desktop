@@ -42,7 +42,7 @@
     <div class="form-group">
       <label class="small" for="{{'leakageGasTemperature'+idString}}">Temperature of Leaking Gases</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareLeakageGasTemperature(), 'error': warnings.temperatureWarning !== null, 'invalid': lossesForm.controls.leakageGasTemperature.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'leakageGasTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="leakageGasTemperature"
+        <input [readonly]="!baselineSelected" name="{{'leakageGasTemperature_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="leakageGasTemperature"
           id="{{'leakageGasTemperature'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('leakageGasTemperature')"
           >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -71,7 +71,7 @@
     <div class="form-group">
       <label class="small" for="{{'ambientTemperature'+idString}}">Ambient Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareAmbientTemperature(), 'error': warnings.temperatureWarning !== null, 'invalid': lossesForm.controls.ambientTemperature.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'ambientTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemperature"
+        <input [readonly]="!baselineSelected" name="{{'ambientTemperature_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="ambientTemperature"
           id="{{'ambientTemperature'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('ambientTemperature')"
           >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>

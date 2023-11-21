@@ -10,7 +10,6 @@ import { UtilitiesModule } from './utilities/utilities.module';
 import { StandaloneService } from './standalone.service';
 import { CompressedAirModule } from './compressed-air/compressed-air.module';
 import { FansModule } from './fans/fans.module';
-import { CalculatorService } from './calculator.service';
 import { LightingModule } from './lighting/lighting.module';
 import { RouterModule } from '@angular/router';
 import { CalculatorsListComponent } from './calculators-list/calculators-list.component';
@@ -40,8 +39,7 @@ import { WasteWaterModule } from './waste-water/waste-water.module';
     WasteWaterModule
   ],
   providers: [
-    StandaloneService,
-    CalculatorService
+    StandaloneService
   ]
 })
 

@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { MeteredEnergyFuel } from '../../../shared/models/phast/meteredEnergy';
-import { SuiteDbService } from '../../../suiteDb/suite-db.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertPhastService } from '../../convert-phast.service';
 import { PhastService } from "../../phast.service";
 import { OperatingHours } from '../../../shared/models/operations';
+import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-metered-fuel-form',
@@ -40,7 +40,8 @@ export class MeteredFuelFormComponent implements OnInit {
   fuelTypes: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
   setMeteredEnergy: boolean;
 
-  constructor(private suiteDbService: SuiteDbService, private convertPhastService: ConvertPhastService, private phastService: PhastService) { }
+  constructor(private convertPhastService: ConvertPhastService, private phastService: PhastService,
+    private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {
     this.getFuelTypes(true);
@@ -51,9 +52,9 @@ export class MeteredFuelFormComponent implements OnInit {
   }
   getFuelTypes(bool?: boolean) {
     if (this.inputs.fuelDescription === 'gas') {
-      this.fuelTypes = this.suiteDbService.selectGasFlueGasMaterials();
+      this.fuelTypes = this.sqlDbApiService.selectGasFlueGasMaterials();
     } else if (this.inputs.fuelDescription === 'solidLiquid') {
-      this.fuelTypes = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.fuelTypes = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     }
     if (!bool) {
       this.inputs.fuelType = undefined;
@@ -74,15 +75,15 @@ export class MeteredFuelFormComponent implements OnInit {
 
   setProperties() {
     if (this.inputs.fuelDescription === 'gas') {
-      let fuel: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(this.inputs.fuelType);
+      let fuel: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(this.inputs.fuelType);
       if (fuel) {
         if (this.settings.unitsOfMeasure === 'Metric') {
-          fuel.heatingValueVolume = this.convertPhastService.convertVal(fuel.heatingValueVolume, 'btuSCF', 'kJNm3');
+          fuel.heatingValueVolume = this.convertPhastService.convertVal(fuel.heatingValueVolume, 'btuscf', 'kJNm3');
         }
         this.inputs.heatingValue = fuel.heatingValueVolume;
       }
     } else {
-      let fuel: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.inputs.fuelType);
+      let fuel: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.inputs.fuelType);
       if (fuel) {
         let heatingVal = this.phastService.flueGasByMassCalculateHeatingValue(fuel);
         if (this.settings.unitsOfMeasure === 'Metric') {

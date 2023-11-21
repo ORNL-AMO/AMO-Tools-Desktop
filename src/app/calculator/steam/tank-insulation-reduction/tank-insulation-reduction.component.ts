@@ -6,6 +6,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { TankInsulationReductionService } from './tank-insulation-reduction.service';
 import { TankInsulationReductionResults } from '../../../shared/models/standalone';
 import { TankInsulationReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
   selector: 'app-tank-insulation-reduction',
@@ -51,9 +52,12 @@ export class TankInsulationReductionComponent implements OnInit {
   baselineForm: UntypedFormGroup;
   modificationForm: UntypedFormGroup;
 
-  constructor(private settingsDbService: SettingsDbService, private tankInsulationReductionService: TankInsulationReductionService) { }
+  constructor(private settingsDbService: SettingsDbService, 
+    private tankInsulationReductionService: TankInsulationReductionService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.sendEvent('calculator-STEAM-tank-insulation-reduction');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

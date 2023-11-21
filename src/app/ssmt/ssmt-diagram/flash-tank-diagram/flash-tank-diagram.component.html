@@ -11,7 +11,7 @@
         (mouseenter)="hoverInlet()" (mouseleave)="hoverCondensate()"></span>
     </div>
 
-    <div class="d-flex align-self-end align-items-center flex-fill w-100">
+    <div *ngIf="flashTank" class="d-flex align-self-end align-items-center flex-fill w-100">
       <div class="d-flex outletGas w-100 justify-content-center" [ngClass]="steamPressureClasses" (mouseenter)="hoverHeader()"
         (mouseleave)="hoverEquipment('default')" (click)="selectHeader()">
         <span class="fa fa-chevron-left" (mouseenter)="hoverOutletGas()" (mouseleave)="hoverHeader()"></span>

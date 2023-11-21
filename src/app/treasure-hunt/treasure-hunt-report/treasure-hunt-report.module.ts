@@ -28,8 +28,11 @@ import { EffortSavingsChartComponent } from './report-graphs/effort-savings-char
 import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
 import { CarbonEmissionsSummaryTableComponent } from './executive-summary/carbon-emissions-summary-table/carbon-emissions-summary-table.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { TreasureHuntPptService } from './treasure-hunt-ppt.service';
+import { TreasureHuntPptService } from './treasure-hunt-ppt/treasure-hunt-ppt.service';
 import { CarbonEmissionsSummaryPieChartComponent } from './executive-summary/carbon-emissions-summary-pie-chart/carbon-emissions-summary-pie-chart.component';
+import { TreasureHuntPptPropertiesService } from './treasure-hunt-ppt/treasure-hunt-ppt-properties.service';
+import { TreasureHuntPptDataService } from './treasure-hunt-ppt/treasure-hunt-ppt-data.service';
+import { TreasureHuntPptTableService } from './treasure-hunt-ppt/treasure-hunt-ppt-table.service';
 
 @NgModule({
   imports: [
@@ -65,6 +68,6 @@ import { CarbonEmissionsSummaryPieChartComponent } from './executive-summary/car
     CarbonEmissionsSummaryPieChartComponent
   ],
   exports: [TreasureHuntReportComponent, CostPieChartComponent, UtilityBarChartComponent, ExecutiveSummaryTableComponent, TeamSummaryPieChartComponent, OpportunityPaybackBarChartComponent],
-  providers: [OpportunityPaybackService, OpportunitySummaryService, CurrencyPipe, TreasureHuntPptService]
+  providers: [OpportunityPaybackService, OpportunitySummaryService, CurrencyPipe, TreasureHuntPptService, TreasureHuntPptPropertiesService, TreasureHuntPptDataService, TreasureHuntPptTableService]
 })
 export class TreasureHuntReportModule { }

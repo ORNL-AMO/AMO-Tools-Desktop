@@ -4,22 +4,26 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { AnalyticsDataIdbService } from '../../indexedDb/analytics-data-idb.service';
 import { v4 as uuidv4 } from 'uuid';
+import { ElectronService } from '../../electron/electron.service';
+import { AnalyticsEventString } from './analyticsEventTypes';
+declare let gtag: Function;
 
 @Injectable()
 export class AnalyticsService {
-  
+
   private clientId: string;
   analyticsSessionId: string;
   httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type':  'application/json',
+      'Content-Type': 'application/json',
     })
   };
-  
-  constructor(private httpClient: HttpClient, private analyticsDataIdbService: AnalyticsDataIdbService) {
+
+  constructor(private httpClient: HttpClient, private analyticsDataIdbService: AnalyticsDataIdbService,
+    private electronService: ElectronService) {
     this.analyticsSessionId = uuidv4();
   }
-    
+
   async setClientAnalyticsId() {
     let appAnalyticsData: Array<AppAnalyticsData> = await firstValueFrom(this.analyticsDataIdbService.getAppAnalyticsData());
     let clientId: string;
@@ -44,6 +48,7 @@ export class AnalyticsService {
         session_id: this.analyticsSessionId,
         // engagement_time_msec required to begin an analytics session but not used again
         engagement_time_msec: '100',
+
       }
     };
     this.postEventToMeasurementProtocol(measurOpenEvent);
@@ -68,11 +73,24 @@ export class AnalyticsService {
     }
   }
 
+  async sendAnalyticsEvent(eventName: AnalyticsEventString, eventParams: EventParameters) {
+    if (!this.clientId) {
+      await this.initAnalyticsSession(undefined);
+    } else {
+      eventParams.session_id = this.analyticsSessionId;
+      let pageViewEvent: GAEvent = {
+        name: eventName,
+        params: eventParams
+      }
+      this.postEventToMeasurementProtocol(pageViewEvent)
+    }
+  }
+
   postEventToMeasurementProtocol(gaEvent: GAEvent) {
     if (gaEvent.name === 'page_view') {
       this.setPageViewEventUrl(gaEvent);
     }
-      
+
     let callDebuggingEndpoint = environment.production ? false : true;
     let postBody = {
       isDebugging: callDebuggingEndpoint,
@@ -86,17 +104,17 @@ export class AnalyticsService {
     }
 
     let url: string = environment.measurUtilitiesApi + 'gamp';
-    if (environment.production) { 
+    if (environment.production) {
       this.httpClient.post<any>(url, postBody, this.httpOptions)
-      .pipe(catchError(error => [])).subscribe({
-        next: (resp) => {
-          // GA Debugging endpoint returns response
-          // GA prod endpoint returns null on success
-        },
-        error: (error: AnalyticsHttpError) => {
-          // for now all errors fail silently
-        }
-      });
+        .pipe(catchError(error => [])).subscribe({
+          next: (resp) => {
+            // GA Debugging endpoint returns response
+            // GA prod endpoint returns null on success
+          },
+          error: (error: AnalyticsHttpError) => {
+            // for now all errors fail silently
+          }
+        });
     }
   }
 
@@ -121,19 +139,42 @@ export class AnalyticsService {
     return pathWithoutId;
   }
 
+  sendEvent(eventName: AnalyticsEventString, path?: string) {
+    if (environment.production) {
+      if (!this.electronService.isElectron) {
+        //gtag handles a bunch of the session related content automatically
+        let eventParams: EventParameters = {
+          page_path: path,
+          measur_platform: 'measur-web',
+          session_id: undefined
+        }
+        gtag('event', eventName, eventParams);
+      } else if (path) {
+        this.sendAnalyticsPageView(path)
+      } else {
+        let eventParams: EventParameters = {
+          page_path: path,
+          measur_platform: 'measur-desktop',
+          session_id: undefined
+        }
+        this.sendAnalyticsEvent(eventName, eventParams);
+      }
+    }
+  }
+
 }
 
-export class AnalyticsHttpError extends Error {}
+export class AnalyticsHttpError extends Error { }
 
 export interface AnalyticsPayload {
   client_id: string,
   user_id?: string,
   non_personalized_ads: boolean,
-  events: Array<{name: string, params: object}>
+  events: Array<{ name: string, params: object }>
 }
 
 export interface GAEvent {
-  name: AnalyticsEventString, 
+  name: AnalyticsEventString,
   params: EventParameters
 }
 
@@ -141,10 +182,9 @@ export interface EventParameters {
   page_path?: string,
   measur_platform?: MeasurPlatformString,
   session_id: string,
-  engagement_time_msec?: string,
+  engagement_time_msec?: string
 }
 
-export type AnalyticsEventString = 'page_view' | 'measur_app_open';
 export type MeasurPlatformString = 'measur-desktop' | 'measur-web';
 
 export interface AppAnalyticsData {

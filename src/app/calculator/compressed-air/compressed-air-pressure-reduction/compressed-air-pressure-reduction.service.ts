@@ -5,6 +5,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { StandaloneService } from '../../standalone.service';
 import { Settings } from '../../../shared/models/settings';
+import { CompressedAirSuiteApiService } from '../../../tools-suite-api/compressed-air-suite-api.service';
 
 @Injectable()
 export class CompressedAirPressureReductionService {
@@ -12,7 +13,7 @@ export class CompressedAirPressureReductionService {
   baselineData: Array<CompressedAirPressureReductionData>;
   modificationData: Array<CompressedAirPressureReductionData>;
   operatingHours: OperatingHours;
-  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private compressedAirSuiteApiService: CompressedAirSuiteApiService) { }
 
 
   initObject(index: number, settings: Settings, isBaseline: boolean, operatingHours: OperatingHours): CompressedAirPressureReductionData {
@@ -122,7 +123,7 @@ export class CompressedAirPressureReductionService {
     let inputObj: CompressedAirPressureReductionInput = {
       compressedAirPressureReductionInputVec: inputArray
     };
-    let results: CompressedAirPressureReductionResult = this.standaloneService.compressedAirPressureReduction(inputObj);
+    let results: CompressedAirPressureReductionResult = this.compressedAirSuiteApiService.compressedAirPressureReduction(inputObj);
     return results;
   }
 
@@ -132,7 +133,7 @@ export class CompressedAirPressureReductionService {
     let inputObj: CompressedAirPressureReductionInput = {
       compressedAirPressureReductionInputVec: inputArray
     };
-    let results: CompressedAirPressureReductionResult = this.standaloneService.compressedAirPressureReduction(inputObj);
+    let results: CompressedAirPressureReductionResult = this.compressedAirSuiteApiService.compressedAirPressureReduction(inputObj);
     return results;
   }
 

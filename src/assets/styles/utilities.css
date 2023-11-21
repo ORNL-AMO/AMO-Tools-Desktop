@@ -471,3 +471,26 @@ a:not([href]):not([tabindex]).disabled-link:hover {
     background-color: #efefef;
     cursor: pointer;
 }
+
+
+
+.general .fa-pie-chart{
+    font-size: large;
+    color: #145A32;
+}
+
+.phast .fa-pie-chart{
+    font-size: large;
+    color: #BF3D00;
+  }
+      
+  .psat .fa-pie-chart{
+    font-size: large;
+    color: #2980b9;
+  }
+    
+
+  .fsat .fa-pie-chart{
+    font-size: large;
+    color: #FFE400;
+  }    

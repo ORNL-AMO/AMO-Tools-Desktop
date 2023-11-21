@@ -3,7 +3,6 @@ import { BehaviorSubject } from 'rxjs';
 import { FsatService } from '../../../fsat/fsat.service';
 import { Fan203Inputs, FanShaftPowerResults, Plane, PlaneResults, VelocityResults } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
-import { ConvertFanAnalysisService } from './convert-fan-analysis.service';
 import { FanInfoFormService } from './fan-analysis-form/fan-info-form/fan-info-form.service';
 import { GasDensityFormService } from './fan-analysis-form/gas-density-form/gas-density-form.service';
 import { PlaneDataFormService } from './fan-analysis-form/plane-data-form/plane-data-form.service';
@@ -27,8 +26,7 @@ export class FanAnalysisService {
   constructor(private fsatService: FsatService, 
       private fanInfoFormService: FanInfoFormService, 
       private planeDataFormService: PlaneDataFormService,
-      private gasDensityFormService: GasDensityFormService,
-      private convertFanAnalysisService: ConvertFanAnalysisService
+      private gasDensityFormService: GasDensityFormService
       ) {
     this.mainTab = new BehaviorSubject<string>('fan-setup');
     this.stepTab = new BehaviorSubject<string>('fan-info');
@@ -52,7 +50,7 @@ export class FanAnalysisService {
     let fanBaseGasDensityDataDone: boolean = this.gasDensityFormService.getGasDensityFormFromObj(this.inputData.BaseGasDensity, settings).valid;
     let planeDataDone: boolean = this.planeDataFormService.checkPlaneDataValid(this.inputData.PlaneData, this.inputData.FanRatedInfo, settings);
     if (planeDataDone && fanInfoDone && fanBaseGasDensityDataDone) {
-      planeResults = this.convertFanAnalysisService.getPlaneResults(this.inputData, settings);
+      planeResults = this.fsatService.getPlaneResults(this.inputData, settings);
     }
 
     return planeResults;

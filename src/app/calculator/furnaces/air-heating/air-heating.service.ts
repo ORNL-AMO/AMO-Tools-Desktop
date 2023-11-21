@@ -4,9 +4,9 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { OperatingHours } from '../../../shared/models/operations';
 import { AirHeatingInput, AirHeatingOutput } from '../../../shared/models/phast/airHeating';
 import { Settings } from '../../../shared/models/settings';
+import { ProcessHeatingApiService } from '../../../tools-suite-api/process-heating-api.service';
 import { AirHeatingFormService } from './air-heating-form.service';
 
-declare var processHeatAddon;
 
 @Injectable()
 export class AirHeatingService {
@@ -20,7 +20,7 @@ export class AirHeatingService {
   modalOpen: BehaviorSubject<boolean>;
 
   operatingHours: OperatingHours;
-  constructor(private convertUnitsService: ConvertUnitsService, private airHeatingFormService: AirHeatingFormService) { 
+  constructor(private convertUnitsService: ConvertUnitsService, private processHeatingApiService: ProcessHeatingApiService, private airHeatingFormService: AirHeatingFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.airHeatingInput = new BehaviorSubject<AirHeatingInput>(undefined);
     this.airHeatingOutput = new BehaviorSubject<AirHeatingOutput>(undefined);
@@ -87,7 +87,7 @@ export class AirHeatingService {
     } else {
         inputCopy = this.convertInputUnits(inputCopy, settings);
         inputCopy = this.convertPercentInputs(inputCopy);
-        let airHeatingOutput: AirHeatingOutput = processHeatAddon.airHeatingUsingExhaust(inputCopy);
+        let airHeatingOutput: AirHeatingOutput = this.processHeatingApiService.airHeatingUsingExhaust(inputCopy);
         airHeatingOutput = this.convertResultUnits(airHeatingOutput, settings);
         let conversionHelper: number;
         if (settings.unitsOfMeasure == "Metric"){

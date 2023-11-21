@@ -17351,7 +17351,7 @@ export const MockCompressedAirAssessment: Assessment =  {
         }
     },
     "id": 71,
-    "selected": true,
+    "selected": false,
     "appVersion": "1.1.0"
 }
 

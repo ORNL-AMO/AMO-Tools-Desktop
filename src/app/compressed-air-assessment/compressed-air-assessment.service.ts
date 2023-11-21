@@ -27,6 +27,15 @@ export class CompressedAirAssessmentService {
   selectedModificationId: BehaviorSubject<string>;
   showModificationListModal: BehaviorSubject<boolean>;
   showAddModificationModal: BehaviorSubject<boolean>;
+  showExportModal: BehaviorSubject<boolean>;
+  setupTabs: Array<string> = [
+    'system-basics',
+    'system-information',
+    'inventory',
+    'day-types',
+    'system-profile',
+    'end-uses'
+  ];
   constructor(private systemInformationFormService: SystemInformationFormService, private convertUnitsService: ConvertUnitsService, private inventoryService: InventoryService,
     private dayTypeService: DayTypeService) {
     this.settings = new BehaviorSubject<Settings>(undefined);
@@ -43,6 +52,7 @@ export class CompressedAirAssessmentService {
     this.selectedModificationId = new BehaviorSubject<string>(undefined);
     this.showModificationListModal = new BehaviorSubject<boolean>(false);
     this.showAddModificationModal = new BehaviorSubject<boolean>(false);
+    this.showExportModal = new BehaviorSubject<boolean>(false);
   }
 
   updateCompressedAir(compressedAirAssessment: CompressedAirAssessment, isBaselineChange: boolean) {
@@ -323,6 +333,28 @@ export class CompressedAirAssessmentService {
     return isDayTypeValid;
   }
 
+
+  continue() {
+    let tmpSetupTab: string = this.setupTab.getValue();
+    if (tmpSetupTab === 'end-uses') {
+      this.mainTab.next('assessment');
+    } else {
+      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
+      let nextTab: string = this.setupTabs[assessmentTabIndex + 1];
+      this.setupTab.next(nextTab);
+    }
+  }
+
+  back() {
+    let tmpSetupTab: string = this.setupTab.getValue();
+    if (tmpSetupTab !== 'system-basics' && this.mainTab.getValue() == 'system-setup') {
+      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
+      let nextTab: string = this.setupTabs[assessmentTabIndex - 1];
+      this.setupTab.next(nextTab);
+    } else if (this.mainTab.getValue() == 'assessment') {
+      this.mainTab.next('system-setup');
+    }
+  }
 
 }
 

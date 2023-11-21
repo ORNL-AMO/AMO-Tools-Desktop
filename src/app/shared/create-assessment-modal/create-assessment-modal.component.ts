@@ -14,10 +14,11 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../models/assessment';
 import { Directory } from '../models/directory';
 import { Settings } from '../models/settings';
-import { ConnectedInventoryData, ConnectedItem } from '../assessment-integration/integrations';
-import { PsatIntegrationService } from '../assessment-integration/psat-integration.service';
-import { IntegrationStateService } from '../assessment-integration/integration-state.service';
+import { ConnectedInventoryData, ConnectedItem } from '../connected-inventory/integrations';
+import { PsatIntegrationService } from '../connected-inventory/psat-integration.service';
+import { IntegrationStateService } from '../connected-inventory/integration-state.service';
 import { SettingsService } from '../../settings/settings.service';
+import { AnalyticsService } from '../analytics/analytics.service';
 
 @Component({
   selector: 'app-create-assessment-modal',
@@ -48,6 +49,7 @@ export class CreateAssessmentModalComponent {
     private psatIntegrationService: PsatIntegrationService,
     private integrationStateService: IntegrationStateService,
     private settingsService: SettingsService,
+    private analyticsService: AnalyticsService
     ) { }
 
   ngOnInit() {
@@ -96,8 +98,9 @@ export class CreateAssessmentModalComponent {
 
   async createAssessment() {
     if (this.newAssessmentForm.valid) {
-      this.assessmentService.tab = 'system-setup';
+      this.assessmentService.startingTab = 'system-setup';
       if (this.newAssessmentForm.controls.assessmentType.value === 'Pump') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
         let psatAssessment: Assessment = this.assessmentService.getNewAssessment('PSAT');
         psatAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         let newPsat = this.assessmentService.getNewPsat(this.settings);
@@ -114,6 +117,7 @@ export class CreateAssessmentModalComponent {
         this.finishAndNavigate(createdAssessment, navigationUrl, queryParams);
       }
       else if (this.newAssessmentForm.controls.assessmentType.value === 'Furnace') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('PHAST');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         let tmpPhast = this.assessmentService.getNewPhast(this.settings);
@@ -124,6 +128,7 @@ export class CreateAssessmentModalComponent {
         this.finishAndNavigate(createdAssessment, '/phast/' + createdAssessment.id);
       }
       else if (this.newAssessmentForm.controls.assessmentType.value === 'Fan') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('FSAT');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
@@ -133,6 +138,7 @@ export class CreateAssessmentModalComponent {
         this.finishAndNavigate(createdAssessment, '/fsat/' + createdAssessment.id);
       }
       else if (this.newAssessmentForm.controls.assessmentType.value === 'Steam') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('SSMT');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
@@ -141,6 +147,7 @@ export class CreateAssessmentModalComponent {
         this.finishAndNavigate(createdAssessment, '/ssmt/' + createdAssessment.id);
       }
       else if (this.newAssessmentForm.controls.assessmentType.value == 'TreasureHunt') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('TreasureHunt');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
@@ -148,6 +155,7 @@ export class CreateAssessmentModalComponent {
         this.finishAndNavigate(createdAssessment, '/treasure-hunt/' + createdAssessment.id);
       } 
       else if (this.newAssessmentForm.controls.assessmentType.value == 'WasteWater') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
         let tmpAssessment = this.assessmentService.getNewAssessment('WasteWater');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
@@ -156,6 +164,7 @@ export class CreateAssessmentModalComponent {
         this.finishAndNavigate(createdAssessment, '/waste-water/' + createdAssessment.id);
       }
       else if (this.newAssessmentForm.controls.assessmentType.value == 'CompressedAir') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
         let tmpAssessment = this.assessmentService.getNewAssessment('CompressedAir');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
@@ -186,7 +195,9 @@ export class CreateAssessmentModalComponent {
     await firstValueFrom(this.settingsDbService.addWithObservable(settings));
     let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
     await this.settingsDbService.setAll(updatedSettings);
-    let allAssessments = await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
+    let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    this.assessmentDbService.setAll(allAssessments);
   }
 
   async finishAndNavigate(assessment: Assessment, navigationUrl: string, queryParams?) {

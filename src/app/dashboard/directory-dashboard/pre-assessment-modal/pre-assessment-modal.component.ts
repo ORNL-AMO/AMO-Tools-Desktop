@@ -11,6 +11,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { PreAssessment } from '../../../calculator/utilities/pre-assessment/pre-assessment';
 import { DashboardService } from '../../dashboard.service';
 import { firstValueFrom } from 'rxjs';
+import { ShowPreAssessmentModalState } from '../../../shared/models/directory-dashboard';
 
 @Component({
   selector: 'app-pre-assessment-modal',
@@ -31,9 +32,16 @@ export class PreAssessmentModalComponent implements OnInit {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     this.directory = this.directoryDbService.getById(directoryId);
     this.directorySettings = this.settingsDbService.getByDirectoryId(directoryId);
-    let preAssessmentCalculatorIndex: { index: number, isNew: boolean } = this.directoryDashboardService.showPreAssessmentModalIndex.getValue();
+    let preAssessmentCalculatorIndex: ShowPreAssessmentModalState = this.directoryDashboardService.showPreAssessmentModalIndex.getValue();
     if (preAssessmentCalculatorIndex.isNew == false) {
-      this.preAssessmentCalculator = this.directory.calculators[preAssessmentCalculatorIndex.index];
+      if (preAssessmentCalculatorIndex.subDirectoryId !== undefined) {
+        let subDirectory = this.directory.subDirectory.find(dir => dir.id === preAssessmentCalculatorIndex.subDirectoryId);
+        if (subDirectory && subDirectory.calculators?.length != 0) {
+          this.preAssessmentCalculator = subDirectory.calculators[preAssessmentCalculatorIndex.index];
+        }
+      } else {
+        this.preAssessmentCalculator = this.directory.calculators[preAssessmentCalculatorIndex.index];
+      }
     } else {
       this.preAssessmentCalculator = {
         directoryId: this.directory.id,
@@ -55,7 +63,7 @@ export class PreAssessmentModalComponent implements OnInit {
       this.modalShown = true;
     })
   }
-
+  
   hidePreAssessmentModal() {
     this.preAssessmentModal.hide();
     this.preAssessmentModal.onHidden.subscribe(val => {
@@ -72,7 +80,8 @@ export class PreAssessmentModalComponent implements OnInit {
       this.dashboardService.updateDashboardData.next(true);
       this.hidePreAssessmentModal();
     } else {
-      let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.updateWithObservable(this.preAssessmentCalculator)); 
+      await firstValueFrom(this.calculatorDbService.updateWithObservable(this.preAssessmentCalculator));
+      let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators()); 
       this.calculatorDbService.setAll(updatedCalculators);
       this.dashboardService.updateDashboardData.next(true);
       this.hidePreAssessmentModal();

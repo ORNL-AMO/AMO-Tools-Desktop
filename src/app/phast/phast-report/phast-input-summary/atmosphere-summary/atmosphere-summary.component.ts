@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { AtmosphereSpecificHeat } from '../../../../shared/models/materials';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-atmosphere-summary',
@@ -34,7 +34,7 @@ export class AtmosphereSummaryComponent implements OnInit {
   flowRateDiff: Array<boolean>;
   correctionFactorDiff: Array<boolean>;
   numMods: number = 0;
-  constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.atmosphereGasDiff = new Array();
@@ -44,7 +44,7 @@ export class AtmosphereSummaryComponent implements OnInit {
     this.flowRateDiff = new Array();
     this.correctionFactorDiff = new Array();
 
-    this.gasOptions = this.suiteDbService.selectAtmosphereSpecificHeat();
+    this.gasOptions = this.sqlDbApiService.selectAtmosphereSpecificHeat();
     this.lossData = new Array();
     if (this.phast.losses) {
       if (this.phast.modifications) {
@@ -99,7 +99,7 @@ export class AtmosphereSummaryComponent implements OnInit {
   }
 
   checkSpecificHeat(loss: AtmosphereLoss) {
-    let material: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(loss.atmosphereGas);
+    let material: AtmosphereSpecificHeat = this.sqlDbApiService.selectAtmosphereSpecificHeatById(loss.atmosphereGas);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         let val = this.convertUnitsService.value(material.specificHeat).from('btulbF').to('kJkgC');

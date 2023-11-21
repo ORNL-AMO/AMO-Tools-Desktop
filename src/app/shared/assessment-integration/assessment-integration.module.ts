@@ -1,42 +1,32 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MotorIntegrationService } from './motor-integration.service';
+import { AssessmentIntegrationComponent } from './assessment-integration.component';
+import { AssessmentIntegrationService } from './assessment-integration.service';
 import { ReactiveFormsModule } from '@angular/forms';
-import { InventoryIntegrationComponent } from './inventory-integration/inventory-integration.component';
-import { IntegrationStateComponent } from './integration-status/integration-status.component';
-import { IntegrationStateService } from './integration-state.service';
-import { IntegrationHelpComponent } from './integration-help/integration-help.component';
-import { PsatIntegrationService } from './psat-integration.service';
-import { AssessmentIntegrationComponent } from './assessment-integration/assessment-integration.component';
-import { AssessmentIntegrationStatusComponent } from './assessment-integration-status/assessment-integration-status.component';
-import { CreateAssessmentModalModule } from '../create-assessment-modal/create-assessment-modal.module';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { PhastReportModule } from '../../phast/phast-report/phast-report.module';
+import { PsatModule } from '../../psat/psat.module';
+import { FsatReportModule } from '../../fsat/fsat-report/fsat-report.module';
 
 
 
 @NgModule({
   declarations: [
-    InventoryIntegrationComponent,
-    IntegrationStateComponent,
-    IntegrationHelpComponent,
-    AssessmentIntegrationComponent,
-    AssessmentIntegrationStatusComponent,
+    AssessmentIntegrationComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    CreateAssessmentModalModule
+    ModalModule,
+    PhastReportModule,
+    PsatModule,
+    FsatReportModule
   ],
   providers: [
-    MotorIntegrationService,
-    PsatIntegrationService,
-    IntegrationStateService
+    AssessmentIntegrationService
   ],
   exports: [
-    IntegrationStateComponent, 
-    InventoryIntegrationComponent,
-    IntegrationHelpComponent,
-    AssessmentIntegrationComponent,
-    AssessmentIntegrationStatusComponent
+    AssessmentIntegrationComponent
   ]
 })
 export class AssessmentIntegrationModule { }

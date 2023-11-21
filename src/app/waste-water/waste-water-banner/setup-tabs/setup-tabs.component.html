@@ -38,28 +38,24 @@
             <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': setupTab == 'system-basics'}">
                 <span class="fa fa-chevron-left"></span></a>
         </li>
-        <li class="page-item" [ngClass]="{'active': setupTab == 'system-basics'}">
+        <li class="page-item" [ngClass]="{'active': setupTab == 'system-basics'}" *ngIf="setupTab == 'system-basics'">
             <a class="nav-link small" (click)="changeSetupTab('system-basics')" [ngClass]="systemBasicsClassStatus">
-                <span *ngIf="setupTab != 'system-basics'" class="step-number">1</span>
-                <span *ngIf="setupTab == 'system-basics'">Assessment Basics</span>
+                <span class="step-number">1</span>Assessment Basics
             </a>
         </li>
-        <li class="page-item" [ngClass]="{'active': setupTab == 'operations'}">
+        <li class="page-item" [ngClass]="{'active': setupTab == 'operations'}" *ngIf="setupTab == 'operations'">
             <a class="nav-link small" (click)="changeSetupTab('operations')" [ngClass]="operationsClassStatus">
-                <span *ngIf="setupTab != 'operations'" class="step-number">2</span>
-                <span *ngIf="setupTab == 'operations'">Operations</span>
+                <span class="step-number">2</span>Operations
             </a>
         </li>
-        <li class="page-item" [ngClass]="{'active': setupTab == 'activated-sludge'}">
+        <li class="page-item" [ngClass]="{'active': setupTab == 'activated-sludge'}" *ngIf="setupTab == 'activated-sludge'">
             <a class="nav-link small" (click)="changeSetupTab('activated-sludge')" [ngClass]="activatedSludgeClassStatus">
-                <span *ngIf="setupTab != 'activated-sludge'" class="step-number">3</span>
-                <span *ngIf="setupTab == 'activated-sludge'">Activated Sludge</span>
+                <span class="step-number">3</span>Activated Sludge
             </a>
         </li>
-        <li class="page-item" [ngClass]="{'active': setupTab == 'aerator-performance'}">
+        <li class="page-item" [ngClass]="{'active': setupTab == 'aerator-performance'}" *ngIf="setupTab == 'aerator-performance'">
             <a class="nav-link small" (click)="changeSetupTab('aerator-performance')" [ngClass]="aeratorPerformanceClassStatus">
-                <span *ngIf="setupTab != 'aerator-performance'" class="step-number">4</span>
-                <span *ngIf="setupTab == 'aerator-performance'">Aeration Performance</span>
+                <span class="step-number">4</span>Aeration Performance
             </a>
         </li>
         <li class="page-item" [ngClass]="{'disabled': !canContinue}">
