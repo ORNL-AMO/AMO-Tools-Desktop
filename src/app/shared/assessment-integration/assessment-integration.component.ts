@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { Settings } from '../models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { TreasureHuntService } from '../../treasure-hunt/treasure-hunt.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-assessment-integration',
@@ -30,7 +31,7 @@ export class AssessmentIntegrationComponent implements OnInit {
   @ViewChild('modalDialog', { static: false }) public modalDialog: ElementRef;
   showReport: boolean;
 
-
+  reportSub: Subscription;
   constructor(private assessmentIntegrationService: AssessmentIntegrationService, private treasureHuntService: TreasureHuntService) { }
 
   async ngOnInit() {
@@ -45,12 +46,20 @@ export class AssessmentIntegrationComponent implements OnInit {
     } else {
       await this.setAssessmentOptions();
     }
-  }  
-  
+
+    this.reportSub = this.reportModal.onShown.subscribe(val => {
+      this.showReport = true;
+    })
+  }
+
+  ngOnDestroy() {
+    this.reportSub.unsubscribe();
+  }
+
   async setAssessmentOptions() {
     this.assessmentOptions = await this.assessmentIntegrationService.getAssessmentOptionsByType(this.assessmentIntegrationForm.controls.assessmentType.value);
   }
-  
+
   async setExistingIntegratedAssessment() {
     this.integratedAssessment = await this.assessmentIntegrationService.setIntegratedAssessment(this.existingIntegrationData.assessmentId, this.existingIntegrationData.assessmentType, this.settings);
     this.integratedAssessment.selectedModificationId = this.existingIntegrationData.selectedModificationId;
@@ -94,19 +103,18 @@ export class AssessmentIntegrationComponent implements OnInit {
     this.integratedAssessment.selectedModificationId = this.assessmentIntegrationForm.controls.selectedModificationId.value;
     this.integratedAssessmentSelected.emit(this.integratedAssessment);
   }
-  
+
   goToAssessment() {
     this.assessmentIntegrationService.navigateToIntegratedAssessment(this.integratedAssessment);
   }
 
-  focusField(focusedField: string) {}
+  focusField(focusedField: string) { }
 
   showReportModal() {
-    this.showReport = true;
     this.reportModal.show();
     this.treasureHuntService.modalOpen.next(true);
   }
-  
+
   hideReportModal() {
     this.reportModal.hide();
     this.treasureHuntService.modalOpen.next(false)
