@@ -41,6 +41,7 @@ import { CoolingTowerBasinModule } from '../../calculator/process-cooling/coolin
 import { AssessmentOpportunityComponent } from './assessment-opportunity/assessment-opportunity.component';
 import { AssessmentIntegrationModule } from '../../shared/assessment-integration/assessment-integration.module';
 import { BoilerBlowdownRateModule } from '../../calculator/steam/boiler-blowdown-rate/boiler-blowdown-rate.module';
+import { AssessmentOpportunityHelpComponent } from './assessment-opportunity/assessment-opportunity-help/assessment-opportunity-help.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { BoilerBlowdownRateModule } from '../../calculator/steam/boiler-blowdown
     CostsFormComponent,
     GeneralDetailsFormComponent,
     OpportunitySheetComponent,
-    AssessmentOpportunityComponent
+    AssessmentOpportunityComponent,
+    AssessmentOpportunityHelpComponent
   ],
   imports: [
     CommonModule,
