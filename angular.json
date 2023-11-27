@@ -18,7 +18,9 @@
               "regression",
               "xlsx",
               "exceljs",
-              "pptxgenjs"
+              "pptxgenjs",
+              "jstat",
+              "nerdamer"
             ],
             "outputPath": "dist",
             "index": "src/index.html",
@@ -61,7 +63,7 @@
               "node_modules/plotly.js-dist/plotly.js"
             ],
             "serviceWorker": true,
-            "ngswConfigPath": "ngsw-config.json",
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "web": {
@@ -158,7 +160,7 @@
                 "output": "./assets/"
               },
               "src/manifest.webmanifest"
-            ],
+            ]
           }
         },
         "lint": {
