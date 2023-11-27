@@ -1,0 +1,193 @@
+<div class="pr-2 pl-2 pt-3 d-flex flex-column help-info">
+    <h5>
+      Assessment Opportunity
+      <br>
+      <small class="text-muted">
+        Use this calculator to import energy use information from an existing assessment. 
+        Energy cost savings and CO2 savings results are calculated with 
+        the respective baseline and modification values from the selected assessment. 
+        Energy usage will still count toward treasure hunt opportunity totals and 
+        values will be converted to current treasure hunt units.
+      </small>
+    </h5>
+  
+    <div class="my-2" *ngIf="currentField == 'engineeringServices'">
+      <h6>
+        Engineering Services
+        <small class="text-muted">
+          <br>
+          Approximate cost of engineering services associated with implementing the opportunity.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'material'">
+      <h6>
+        Material Costs
+        <small class="text-muted">
+          <br>
+          Approximate cost of new materials / equipment associated with implementing opportunity.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'labor'">
+      <h6>
+        Labor Costs
+        <small class="text-muted">
+          <br>
+          Approximate cost of labor associated with implementing the opportunity.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'otherCostDescription'">
+      <h6>
+        Other Cost Description
+        <small class="text-muted">
+          <br>
+          Provide a name to describe the additional cost.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'otherCost'">
+      <h6>
+        Other Cost
+        <small class="text-muted">
+          <br>
+          Approximate addtional costs associated with implementing the opportunity.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'additionalSavingsDescription'">
+      <h6>
+        Additional Savings Description
+        <small class="text-muted">
+          <br>
+          Provide a name to describe the additional savings.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'additionalSavingsCost'">
+      <h6>
+        Additional Savings
+        <small class="text-muted">
+          <br>
+          Approximate additional cost savings associated with implementing the opportunity.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'costDescription'">
+      <h6>
+        Opportunity Notes
+        <small class="text-muted">
+          <br>
+          Use this field for any other notes on the opportunity during analysis or later in implementation.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  
+    <div class="my-2" *ngIf="currentField == 'opportunitySheetName'">
+      <h6>
+        Project Title
+        <small class="text-muted">
+          <br>
+          Provide a short, descriptive name for the opportunity.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  
+    <div class="my-2" *ngIf="currentField == 'opportunitySheetEquipment'">
+      <h6>
+        Process / Equipment
+        <small class="text-muted">
+          <br>
+          Set from the selected assessment
+          <hr>
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'opportunitySheetOwner'">
+      <h6>
+        Project Owner / Lead
+        <small class="text-muted">
+          <br>
+          Provide a name for the owner of the project where the opportunity is located.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'opportunitySheetBusinessUnits'">
+      <h6>
+        Owner / Lead
+        <small class="text-muted">
+          <br>
+          Provide the name for the business unit that will own the opportunity or
+          provide a name for the facility or portion of the facility where the opportunity is located.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'opportunitySheetDescription'">
+      <h6>
+        Description
+        <small class="text-muted">
+          <br>
+          Provide details about the opportunity for use during implementation.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'energyUseAmount'">
+      <h6>
+        Utility Consumption
+        <small class="text-muted">
+          <br>
+          Annual utility consumption from the selected assessment or added as additional usage.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'energyUseType'">
+      <h6>
+        Utility Type
+        <small class="text-muted">
+          <br>
+          Type of utility that this opportunity will impact.
+          <hr>
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'implementationEffort'">
+      <h6>
+        Effort to Implement
+        <small class="text-muted">
+          <br>
+          The amount of effort the savings opportunity will take to implement on a scales of 1-10
+          <hr>
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'additionalAnnualSavings'">
+      <h6>
+        Other Annual Savings
+        <small class="text-muted">
+          <br>
+          Approximate additional annual cost savings associated with implementing the opportunity, such as reduced
+          maintenance and labor cost.
+          <br>
+          Provide a name for the savings and a savings amount.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  
+  
+  
+  </div>
