@@ -44,7 +44,7 @@ export class BoilerBlowdownRateTreasureHuntService {
         let baselineResults: BoilerBlowdownRateResults = this.boilerBlowdownRateService.calculateResults(boilerBlowdownRate.baseline, settings, true, true);
         let modificationResults: BoilerBlowdownRateResults = this.boilerBlowdownRateService.calculateResults(boilerBlowdownRate.modification, settings, true, true);
         let costSavings: number = baselineResults.makeupWaterCost - modificationResults.makeupWaterCost;
-        let energySavings: number = baselineResults.makeupWaterUse - baselineResults.makeupWaterUse;
+        let energySavings: number = baselineResults.makeupWaterUse - modificationResults.makeupWaterUse;
         let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
             costSavings: costSavings,
             energySavings: energySavings,
@@ -61,7 +61,7 @@ export class BoilerBlowdownRateTreasureHuntService {
         let baselineResults: BoilerBlowdownRateResults = this.boilerBlowdownRateService.calculateResults(boilerBlowdownRate.baseline, settings, true, true);
         let modificationResults: BoilerBlowdownRateResults = this.boilerBlowdownRateService.calculateResults(boilerBlowdownRate.modification, settings, true, true);
         let costSavings: number = baselineResults.boilerFuelCost - modificationResults.boilerFuelCost;
-        let energySavings: number = baselineResults.boilerFuelUse - baselineResults.boilerFuelUse;
+        let energySavings: number = baselineResults.boilerFuelUse - modificationResults.boilerFuelUse;
         let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
             costSavings: costSavings,
             energySavings: energySavings,

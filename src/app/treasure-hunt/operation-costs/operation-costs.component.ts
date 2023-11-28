@@ -473,48 +473,84 @@ export class OperationCostsComponent implements OnInit {
   }
   
   calculateWaterUnitCosts(){
-    this.settings.waterCost = this.treasureHunt.currentEnergyUsage.waterCosts / this.treasureHunt.currentEnergyUsage.waterUsage;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      this.settings.waterCost = this.treasureHunt.currentEnergyUsage.waterCosts / (this.treasureHunt.currentEnergyUsage.waterUsage * 1000);
+    } else {
+      this.settings.waterCost = this.treasureHunt.currentEnergyUsage.waterCosts / this.treasureHunt.currentEnergyUsage.waterUsage;
+    }
     this.save();
   }
 
   calculateWaterAnnualConsumption(){
-    this.treasureHunt.currentEnergyUsage.waterUsage = this.treasureHunt.currentEnergyUsage.waterCosts/ this.settings.waterCost;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      this.treasureHunt.currentEnergyUsage.waterUsage = (this.treasureHunt.currentEnergyUsage.waterCosts / this.settings.waterCost) / 1000;
+    } else {
+      this.treasureHunt.currentEnergyUsage.waterUsage = this.treasureHunt.currentEnergyUsage.waterCosts / this.settings.waterCost;
+    }
     this.save();
   }
 
   calculateWaterAnnualCosts(){
-    this.treasureHunt.currentEnergyUsage.waterCosts = this.settings.waterCost * this.treasureHunt.currentEnergyUsage.waterUsage;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      this.treasureHunt.currentEnergyUsage.waterCosts = this.settings.waterCost * (this.treasureHunt.currentEnergyUsage.waterUsage * 1000);
+    } else {
+      this.treasureHunt.currentEnergyUsage.waterCosts = this.settings.waterCost * this.treasureHunt.currentEnergyUsage.waterUsage;
+    }
 
     this.save();
   }
 
   calculateWastewaterUnitCosts(){
-    this.settings.waterWasteCost = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.treasureHunt.currentEnergyUsage.wasteWaterUsage;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      this.settings.waterWasteCost = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / (this.treasureHunt.currentEnergyUsage.wasteWaterUsage * 1000);
+    } else {
+      this.settings.waterWasteCost = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.treasureHunt.currentEnergyUsage.wasteWaterUsage;
+    }
     this.save();
   }
 
   calculateWastewaterAnnualConsumption(){
-    this.treasureHunt.currentEnergyUsage.wasteWaterUsage = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.settings.waterWasteCost;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      this.treasureHunt.currentEnergyUsage.wasteWaterUsage = (this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.settings.waterWasteCost) / 1000;
+    } else {
+      this.treasureHunt.currentEnergyUsage.wasteWaterUsage = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.settings.waterWasteCost;
+    }
     this.save();
   }
 
   calculateWastewaterAnnualCosts(){
-    this.treasureHunt.currentEnergyUsage.wasteWaterCosts = this.treasureHunt.currentEnergyUsage.wasteWaterUsage * this.settings.waterWasteCost;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      this.treasureHunt.currentEnergyUsage.wasteWaterCosts = (this.treasureHunt.currentEnergyUsage.wasteWaterUsage * 1000) * this.settings.waterWasteCost;
+    } else {
+      this.treasureHunt.currentEnergyUsage.wasteWaterCosts = this.treasureHunt.currentEnergyUsage.wasteWaterUsage * this.settings.waterWasteCost;
+    }
     this.save();
   }
 
   calculateCompressedAirUnitCosts(){
-    this.settings.compressedAirCost = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.treasureHunt.currentEnergyUsage.compressedAirUsage;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      this.settings.compressedAirCost = this.treasureHunt.currentEnergyUsage.compressedAirCosts / (this.treasureHunt.currentEnergyUsage.compressedAirUsage * 1000);
+    } else {
+      this.settings.compressedAirCost = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.treasureHunt.currentEnergyUsage.compressedAirUsage;
+    }
     this.save();
   }
 
   calculateCompressedAirAnnualConsumption(){
-    this.treasureHunt.currentEnergyUsage.compressedAirUsage = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.settings.compressedAirCost;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      this.treasureHunt.currentEnergyUsage.compressedAirUsage = (this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.settings.compressedAirCost) / 1000;
+    } else {
+      this.treasureHunt.currentEnergyUsage.compressedAirUsage = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.settings.compressedAirCost;
+    }
     this.save();
   }
 
   calculateCompressedAirAnnualCosts(){
-    this.treasureHunt.currentEnergyUsage.compressedAirCosts = this.treasureHunt.currentEnergyUsage.compressedAirUsage * this.settings.compressedAirCost;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      this.treasureHunt.currentEnergyUsage.compressedAirCosts = (this.treasureHunt.currentEnergyUsage.compressedAirUsage * 1000) * this.settings.compressedAirCost;
+    } else {
+      this.treasureHunt.currentEnergyUsage.compressedAirCosts = this.treasureHunt.currentEnergyUsage.compressedAirUsage * this.settings.compressedAirCost;
+    }
     this.save();
   }
 

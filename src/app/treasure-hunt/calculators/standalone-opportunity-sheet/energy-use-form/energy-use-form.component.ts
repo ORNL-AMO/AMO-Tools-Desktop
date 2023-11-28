@@ -49,9 +49,9 @@ export class EnergyUseFormComponent implements OnInit {
       if (str == 'Gas' || str == 'Other Fuel') {
         return 'MMBtu';
       } else if (str == 'Water' || str == 'WWT') {
-        return 'gal';
+        return 'kgal';
       } else if (str == 'Compressed Air') {
-        return 'scf';
+        return 'kscf';
       } else if (str == 'Steam') {
         return 'klb';
       }
