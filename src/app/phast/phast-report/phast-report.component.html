@@ -155,23 +155,23 @@
             </app-executive-summary>
         </div>
         <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height"
-            *ngIf="(currentTab == 'results-data' && !showPrintView) || (printOptions.printResultsData && showPrintView)">
+            *ngIf="(currentTab == 'results-data' && !showPrintView) || (printOptions.printResults && showPrintView)">
             <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="inPhast"
                 [inReport]="true"></app-results-data>
         </div>
         <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height"
-            *ngIf="(currentTab == 'input-summary' && !showPrintView) || (printOptions.printInputSummary && showPrintView)">
-            <app-phast-input-summary [phast]="phast" [settings]="settings" [showPrint]="printOptions.printInputSummary">
+            *ngIf="(currentTab == 'input-summary' && !showPrintView) || (printOptions.printInputData && showPrintView)">
+            <app-phast-input-summary [phast]="phast" [settings]="settings" [showPrint]="printOptions.printInputData">
             </app-phast-input-summary>
         </div>
         <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height"
-            *ngIf="(currentTab == 'report-graphs' && !showPrintView) || ((printOptions.printReportGraphs || printOptions.printReportSankey) && showPrintView)">
+            *ngIf="(currentTab == 'report-graphs' && !showPrintView) || (printOptions.printReportGraphs && showPrintView)">
             <app-report-graphs [phast]="phast" [settings]="settings" [showPrint]="showPrintView"
                 [printGraphs]="printOptions.printReportGraphs" [printSankey]="printOptions.printReportSankey" [settings] = "settings">
             </app-report-graphs>
         </div>
         <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height"
-            *ngIf="(currentTab == 'report-sankey' && !showPrintView) && !showPrintView">
+            *ngIf="(currentTab == 'report-sankey' && !showPrintView) || (printOptions.printReportSankey && showPrintView)">
             <app-report-sankey [phast]="phast" [settings]="settings" [assessment]="assessment"></app-report-sankey>
         </div>
     </div>
