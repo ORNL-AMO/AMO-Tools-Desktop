@@ -7,6 +7,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { PhastReportModule } from '../../phast/phast-report/phast-report.module';
 import { PsatModule } from '../../psat/psat.module';
 import { FsatReportModule } from '../../fsat/fsat-report/fsat-report.module';
+import { CompressedAirReportModule } from '../../compressed-air-assessment/compressed-air-report/compressed-air-report.module';
 
 
 
@@ -20,7 +21,8 @@ import { FsatReportModule } from '../../fsat/fsat-report/fsat-report.module';
     ModalModule,
     PhastReportModule,
     PsatModule,
-    FsatReportModule
+    FsatReportModule,
+    CompressedAirReportModule
   ],
   providers: [
     AssessmentIntegrationService

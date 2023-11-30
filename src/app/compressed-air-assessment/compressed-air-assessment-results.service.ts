@@ -6,6 +6,8 @@ import { PerformancePointCalculationsService } from './inventory/performance-poi
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { IntegratedAssessment, IntegratedEnergyOptions, ModificationEnergyOption } from '../shared/assessment-integration/assessment-integration.service';
+import { EnergyUseItem } from '../shared/models/treasure-hunt';
 
 @Injectable()
 export class CompressedAirAssessmentResultsService {
@@ -247,6 +249,73 @@ export class CompressedAirAssessmentResultsService {
       totalCostPower: _.sumBy(modificationResults, (result) => { return result.allSavingsResults.savings.power }),
       modification: modification
     }
+  }
+
+  setIntegratedAssessmentData(integratedAssessment: IntegratedAssessment, settings: Settings) {
+    let energyOptions: IntegratedEnergyOptions = {
+      baseline: undefined,
+      modifications: []
+    }
+
+    let compressedAirAssessment: CompressedAirAssessment = integratedAssessment.assessment.compressedAirAssessment;
+    let baselineOutputs: BaselineResults = this.calculateBaselineResults(compressedAirAssessment, settings);
+    baselineOutputs.total.energyUse = this.convertUnitsService.roundVal(baselineOutputs.total.energyUse, 0);
+        
+    energyOptions.baseline = {
+      name: compressedAirAssessment.name,
+      annualEnergy: baselineOutputs.total.energyUse,
+      annualCost: baselineOutputs.total.cost,
+      co2EmissionsOutput: baselineOutputs.total.annualEmissionOutput,
+      energyThDisplayUnits: 'kWh'
+    };
+
+    let baselineEnergy: EnergyUseItem = {
+      type: 'Electricity',
+      amount: baselineOutputs.total.energyUse,
+      integratedEnergyCost: baselineOutputs.total.cost,
+      integratedEmissionRate: baselineOutputs.total.annualEmissionOutput
+    };
+
+    integratedAssessment.hasModifications = integratedAssessment.assessment.compressedAirAssessment.modifications && integratedAssessment.assessment.compressedAirAssessment.modifications.length !== 0;
+    if (integratedAssessment.hasModifications) {
+      let modificationEnergyOptions: Array<ModificationEnergyOption> = [];
+      compressedAirAssessment.modifications.forEach(modification => {
+        let modificationOutputs: CompressedAirAssessmentResult = this.calculateModificationResults(compressedAirAssessment, modification, settings);
+        modificationOutputs.totalModificationPower = this.convertUnitsService.roundVal(modificationOutputs.totalModificationPower, 0);
+
+        energyOptions.modifications.push({
+          name: modification.name,
+          annualEnergy: modificationOutputs.totalModificationPower,
+          annualCost: modificationOutputs.totalModificationCost,
+          modificationId: modification.modificationId,
+          co2EmissionsOutput: modificationOutputs.totalModificationPower
+        });
+
+
+        let modificationEnergy: EnergyUseItem = {
+          type: 'Electricity',
+          amount: modificationOutputs.totalModificationPower,
+          integratedEnergyCost: modificationOutputs.totalModificationCost,
+          integratedEmissionRate: modificationOutputs.totalModificationPower
+        }
+
+        modificationEnergyOptions.push(
+          {
+            modificationId: modification.modificationId,
+            energies: [modificationEnergy]
+          })
+      });
+      integratedAssessment.modificationEnergyUseItems = modificationEnergyOptions;
+    }
+    integratedAssessment.assessmentType = 'CompressedAir';
+    integratedAssessment.baselineEnergyUseItems = [baselineEnergy];
+    integratedAssessment.thEquipmentType = 'compressedAir';
+    integratedAssessment.energyOptions = energyOptions; 
+    integratedAssessment.navigation = {
+      queryParams: undefined,
+      url: '/compressed-air-assessment/' + integratedAssessment.assessment.id
+    }
+
   }
 
   getTotalImplementationCost(modification: Modification): number {
