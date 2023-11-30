@@ -3,12 +3,10 @@ import { PHAST, PhastResults, ShowResultsCategories, Modification, ExecutiveSumm
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PhastResultsService } from '../../phast-results.service';
-import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { Subscription } from 'rxjs';
 import { PhastValidService } from '../../phast-valid.service';
 import { PhastReportRollupService } from '../../../report-rollup/phast-report-rollup.service';
 import { ExecutiveSummaryService } from '../executive-summary.service';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { ConvertPhastService } from '../../convert-phast.service';
 
 @Component({
@@ -44,8 +42,6 @@ export class ResultsDataComponent implements OnInit {
   lossUnit: string;
   selectedModificationIndex: number;
   decimalCount: string;
-  baselineExecutiveSummary: ExecutiveSummary;
-  modExecutiveSummaries: Array<ExecutiveSummary>;
   numMods: number = 0;
   selectedPhastsSub: Subscription;
   constructor(private phastResultsService: PhastResultsService, 
@@ -107,19 +103,15 @@ export class ResultsDataComponent implements OnInit {
       if (this.settings.furnaceType == "Electric Arc Furnace (EAF)") {
         this.baseLineResults = this.convertPhastService.convertEAFEnergyUsed(this.baseLineResults, this.settings);
       }
-      this.baselineExecutiveSummary = this.executiveSummaryService.getSummary(this.phast, false, this.settings, this.phast);
       if (this.phast.modifications && this.inReport) {
         this.phastMods = this.phast.modifications;
         if (this.phast.modifications.length !== 0) {
-          this.modExecutiveSummaries = new Array<ExecutiveSummary>();
           this.phast.modifications.forEach(mod => {
             mod.phast.valid = this.phastValidService.checkValid(mod.phast, this.settings);
             let modResults: PhastResults = this.phastResultsService.getResults(mod.phast, this.settings);
             if (this.settings.furnaceType == "Electric Arc Furnace (EAF)") {
               modResults = this.convertPhastService.convertEAFEnergyUsed(modResults, this.settings);
             }
-            let executiveSummary: ExecutiveSummary = this.executiveSummaryService.getSummary(mod.phast, false, this.settings, this.phast, this.baselineExecutiveSummary);
-            this.modExecutiveSummaries.push(executiveSummary);
             modResults.co2EmissionsOutput.emissionsSavings = this.baseLineResults.co2EmissionsOutput.hourlyTotalEmissionOutput - modResults.co2EmissionsOutput.hourlyTotalEmissionOutput;
             this.modificationResults.push(modResults);
           });

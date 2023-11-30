@@ -1,11 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PHAST, ExecutiveSummary } from '../../../shared/models/phast/phast';
+import { PHAST, ExecutiveSummary, PhastResults } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { ExecutiveSummaryService, SummaryNote } from '../executive-summary.service';
 import * as _ from 'lodash';
 import { PhastCompareService } from '../../phast-compare.service';
 import { PhastReportRollupService } from '../../../report-rollup/phast-report-rollup.service';
+import { PhastResultsService } from '../../phast-results.service';
 
 @Component({
   selector: 'app-executive-summary',
@@ -22,9 +23,10 @@ export class ExecutiveSummaryComponent implements OnInit {
   @Input()
   inPhast: boolean;
 
-  baseline: ExecutiveSummary;
-
-  modifications: Array<ExecutiveSummary>;
+  baselineSummary: ExecutiveSummary;
+  baselinePhastResults: PhastResults;
+  modificationSummaries: Array<ExecutiveSummary>;
+  modificationPhastResults: Array<PhastResults>;
   phastMods: Array<any>;
   selectedModificationIndex: number;
   notes: Array<SummaryNote>;
@@ -35,22 +37,27 @@ export class ExecutiveSummaryComponent implements OnInit {
   //percent graph variables
   unit: string;
   titlePlacement: string;
-  constructor(private executiveSummaryService: ExecutiveSummaryService, private phastReportRollupService: PhastReportRollupService, private compareService: PhastCompareService) { }
+  constructor(private executiveSummaryService: ExecutiveSummaryService,
+    private phastResultsService: PhastResultsService, private phastReportRollupService: PhastReportRollupService, private compareService: PhastCompareService) { }
 
   ngOnInit() {
     this.unit = '%';
     this.titlePlacement = 'top';
     this.notes = new Array();
-    this.baseline = this.executiveSummaryService.getSummary(this.phast, false, this.settings, this.phast);
-    this.modifications = new Array<ExecutiveSummary>();
+    this.baselinePhastResults = this.phastResultsService.getResults(this.phast, this.settings);
+    this.baselineSummary = this.executiveSummaryService.getSummary(this.phast, false, this.settings, this.phast, undefined, this.baselinePhastResults);
+    this.modificationSummaries = new Array<ExecutiveSummary>();
+    this.modificationPhastResults = new Array<PhastResults>();
     if (this.phast.modifications) {
       this.phastMods = this.phast.modifications;
       this.phast.modifications.forEach(mod => {
-        let modSummary = this.executiveSummaryService.getSummary(mod.phast, true, this.settings, this.phast, this.baseline);
-        if (modSummary) {
-          modSummary.co2EmissionsOutput.emissionsSavings = this.baseline.co2EmissionsOutput.totalEmissionOutput - modSummary.co2EmissionsOutput.totalEmissionOutput;
+        let modPhastResults: PhastResults = this.phastResultsService.getResults(mod.phast, this.settings);
+        let modSummary: ExecutiveSummary = this.executiveSummaryService.getSummary(mod.phast, true, this.settings, this.phast, this.baselineSummary, modPhastResults);
+        if (modSummary.co2EmissionsOutput) {
+          modSummary.co2EmissionsOutput.emissionsSavings = this.baselineSummary.co2EmissionsOutput.totalEmissionOutput - modSummary.co2EmissionsOutput.totalEmissionOutput;
         }
-        this.modifications.push(modSummary);
+        this.modificationSummaries.push(modSummary);
+        this.modificationPhastResults.push(modPhastResults);
       });
       // this.initMaxAnnualSavings();
       this.notes = this.executiveSummaryService.buildSummaryNotes(this.phast.modifications);
