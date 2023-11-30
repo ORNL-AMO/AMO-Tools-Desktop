@@ -280,15 +280,16 @@ export class CompressedAirAssessmentResultsService {
     if (integratedAssessment.hasModifications) {
       let modificationEnergyOptions: Array<ModificationEnergyOption> = [];
       compressedAirAssessment.modifications.forEach(modification => {
-        let modificationOutputs: CompressedAirAssessmentResult = this.calculateModificationResults(compressedAirAssessment, modification, settings);
+        let modificationOutputs: CompressedAirAssessmentResult = this.calculateModificationResults(compressedAirAssessment, modification, settings, undefined, baselineOutputs);
         modificationOutputs.totalModificationPower = this.convertUnitsService.roundVal(modificationOutputs.totalModificationPower, 0);
+        let combineDayTypeResults: DayTypeModificationResult = this.combineDayTypeResults(modificationOutputs, baselineOutputs);
 
         energyOptions.modifications.push({
           name: modification.name,
           annualEnergy: modificationOutputs.totalModificationPower,
           annualCost: modificationOutputs.totalModificationCost,
           modificationId: modification.modificationId,
-          co2EmissionsOutput: modificationOutputs.totalModificationPower
+          co2EmissionsOutput: combineDayTypeResults.annualEmissionOutput
         });
 
 
@@ -296,7 +297,7 @@ export class CompressedAirAssessmentResultsService {
           type: 'Electricity',
           amount: modificationOutputs.totalModificationPower,
           integratedEnergyCost: modificationOutputs.totalModificationCost,
-          integratedEmissionRate: modificationOutputs.totalModificationPower
+          integratedEmissionRate: combineDayTypeResults.annualEmissionOutput
         }
 
         modificationEnergyOptions.push(
@@ -313,7 +314,7 @@ export class CompressedAirAssessmentResultsService {
     integratedAssessment.energyOptions = energyOptions; 
     integratedAssessment.navigation = {
       queryParams: undefined,
-      url: '/compressed-air-assessment/' + integratedAssessment.assessment.id
+      url: '/compressed-air/' + integratedAssessment.assessment.id
     }
 
   }

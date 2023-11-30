@@ -105,7 +105,6 @@ export class AssessmentIntegrationComponent implements OnInit {
   }
 
   goToAssessment() {
-    console.log('url: ' + this.integratedAssessment.navigation.url);
     this.assessmentIntegrationService.navigateToIntegratedAssessment(this.integratedAssessment);
   }
 
