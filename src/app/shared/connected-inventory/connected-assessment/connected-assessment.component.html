@@ -60,5 +60,8 @@
     </ng-container>
 </div>
 
-<app-create-assessment-modal *ngIf="displayCreateAssessmentModal" [connectedInventoryItem]="connectedInventoryItem" [integratedCreateType]="'Pump'"></app-create-assessment-modal>
+<app-create-assessment-modal *ngIf="displayCreateAssessmentModal" 
+[connectedInventoryItem]="connectedInventoryItem" 
+[integratedCreateType]="'Pump'"
+(onClose)="hideCreateAssessmentModal()"></app-create-assessment-modal>
 
