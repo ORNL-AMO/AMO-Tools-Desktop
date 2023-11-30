@@ -474,7 +474,8 @@ export class OperationCostsComponent implements OnInit {
   
   calculateWaterUnitCosts(){
     if (this.settings.unitsOfMeasure == 'Imperial') {
-      this.settings.waterCost = this.treasureHunt.currentEnergyUsage.waterCosts / (this.treasureHunt.currentEnergyUsage.waterUsage * 1000);
+      let waterUsageInGal: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.waterUsage).from('kgal').to('gal');
+      this.settings.waterCost = this.treasureHunt.currentEnergyUsage.waterCosts / waterUsageInGal;
     } else {
       this.settings.waterCost = this.treasureHunt.currentEnergyUsage.waterCosts / this.treasureHunt.currentEnergyUsage.waterUsage;
     }
@@ -483,7 +484,8 @@ export class OperationCostsComponent implements OnInit {
 
   calculateWaterAnnualConsumption(){
     if (this.settings.unitsOfMeasure == 'Imperial') {
-      this.treasureHunt.currentEnergyUsage.waterUsage = (this.treasureHunt.currentEnergyUsage.waterCosts / this.settings.waterCost) / 1000;
+      let waterUsageInGal: number = this.treasureHunt.currentEnergyUsage.waterCosts / this.settings.waterCost;
+      this.treasureHunt.currentEnergyUsage.waterUsage = this.convertUnitsService.value(waterUsageInGal).from('gal').to('kgal');
     } else {
       this.treasureHunt.currentEnergyUsage.waterUsage = this.treasureHunt.currentEnergyUsage.waterCosts / this.settings.waterCost;
     }
@@ -492,7 +494,8 @@ export class OperationCostsComponent implements OnInit {
 
   calculateWaterAnnualCosts(){
     if (this.settings.unitsOfMeasure == 'Imperial') {
-      this.treasureHunt.currentEnergyUsage.waterCosts = this.settings.waterCost * (this.treasureHunt.currentEnergyUsage.waterUsage * 1000);
+      let waterUsageInGal: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.waterUsage).from('kgal').to('gal');
+      this.treasureHunt.currentEnergyUsage.waterCosts = this.settings.waterCost * waterUsageInGal;
     } else {
       this.treasureHunt.currentEnergyUsage.waterCosts = this.settings.waterCost * this.treasureHunt.currentEnergyUsage.waterUsage;
     }
@@ -502,7 +505,8 @@ export class OperationCostsComponent implements OnInit {
 
   calculateWastewaterUnitCosts(){
     if (this.settings.unitsOfMeasure == 'Imperial') {
-      this.settings.waterWasteCost = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / (this.treasureHunt.currentEnergyUsage.wasteWaterUsage * 1000);
+      let wasteWaterUsageInGal: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.wasteWaterUsage).from('kgal').to('gal');
+      this.settings.waterWasteCost = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / wasteWaterUsageInGal;
     } else {
       this.settings.waterWasteCost = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.treasureHunt.currentEnergyUsage.wasteWaterUsage;
     }
@@ -510,8 +514,9 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateWastewaterAnnualConsumption(){
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      this.treasureHunt.currentEnergyUsage.wasteWaterUsage = (this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.settings.waterWasteCost) / 1000;
+    if (this.settings.unitsOfMeasure == 'Imperial') {      
+      let wasteWaterUsageInGal: number = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.settings.waterWasteCost;
+      this.treasureHunt.currentEnergyUsage.wasteWaterUsage = this.convertUnitsService.value(wasteWaterUsageInGal).from('gal').to('kgal');
     } else {
       this.treasureHunt.currentEnergyUsage.wasteWaterUsage = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.settings.waterWasteCost;
     }
@@ -520,7 +525,8 @@ export class OperationCostsComponent implements OnInit {
 
   calculateWastewaterAnnualCosts(){
     if (this.settings.unitsOfMeasure == 'Imperial') {
-      this.treasureHunt.currentEnergyUsage.wasteWaterCosts = (this.treasureHunt.currentEnergyUsage.wasteWaterUsage * 1000) * this.settings.waterWasteCost;
+      let wasteWaterUsageInGal: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.wasteWaterUsage).from('kgal').to('gal');
+      this.treasureHunt.currentEnergyUsage.wasteWaterCosts = wasteWaterUsageInGal * this.settings.waterWasteCost;
     } else {
       this.treasureHunt.currentEnergyUsage.wasteWaterCosts = this.treasureHunt.currentEnergyUsage.wasteWaterUsage * this.settings.waterWasteCost;
     }
@@ -529,7 +535,8 @@ export class OperationCostsComponent implements OnInit {
 
   calculateCompressedAirUnitCosts(){
     if (this.settings.unitsOfMeasure == 'Imperial') {
-      this.settings.compressedAirCost = this.treasureHunt.currentEnergyUsage.compressedAirCosts / (this.treasureHunt.currentEnergyUsage.compressedAirUsage * 1000);
+      let compressedAirUsageInSCF: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.compressedAirUsage).from('kscf').to('ft3');
+      this.settings.compressedAirCost = this.treasureHunt.currentEnergyUsage.compressedAirCosts / compressedAirUsageInSCF;
     } else {
       this.settings.compressedAirCost = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.treasureHunt.currentEnergyUsage.compressedAirUsage;
     }
@@ -537,8 +544,9 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateCompressedAirAnnualConsumption(){
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      this.treasureHunt.currentEnergyUsage.compressedAirUsage = (this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.settings.compressedAirCost) / 1000;
+    if (this.settings.unitsOfMeasure == 'Imperial') {   
+      let compressedAirUsageInSCF: number = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.settings.compressedAirCost;
+      this.treasureHunt.currentEnergyUsage.compressedAirUsage = this.convertUnitsService.value(compressedAirUsageInSCF).from('ft3').to('kscf');
     } else {
       this.treasureHunt.currentEnergyUsage.compressedAirUsage = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.settings.compressedAirCost;
     }
@@ -546,8 +554,9 @@ export class OperationCostsComponent implements OnInit {
   }
 
   calculateCompressedAirAnnualCosts(){
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      this.treasureHunt.currentEnergyUsage.compressedAirCosts = (this.treasureHunt.currentEnergyUsage.compressedAirUsage * 1000) * this.settings.compressedAirCost;
+    if (this.settings.unitsOfMeasure == 'Imperial') {      
+      let compressedAirUsageInSCF: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.compressedAirUsage).from('kscf').to('ft3');
+      this.treasureHunt.currentEnergyUsage.compressedAirCosts = compressedAirUsageInSCF * this.settings.compressedAirCost;
     } else {
       this.treasureHunt.currentEnergyUsage.compressedAirCosts = this.treasureHunt.currentEnergyUsage.compressedAirUsage * this.settings.compressedAirCost;
     }

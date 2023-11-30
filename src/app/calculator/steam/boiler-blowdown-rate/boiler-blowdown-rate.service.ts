@@ -270,7 +270,7 @@ export class BoilerBlowdownRateService {
     let convertedMakeupWaterSpecificVolume: number = this.convertUnitsService.value(makeupWaterSpecificVolume).from(settings.steamSpecificVolumeMeasurement).to('gallb');
     let waterUse: number = ((convertedSteamFlow * blowdownRate) / (1 - blowdownRate)) * inputs.operatingHours * convertedMakeupWaterSpecificVolume * 1000;
     if (settings.unitsOfMeasure == 'Imperial') {
-      waterUse = waterUse / 1000;
+      waterUse = this.convertUnitsService.value(waterUse).from('gal').to('kgal');
     }
     return waterUse;
   }

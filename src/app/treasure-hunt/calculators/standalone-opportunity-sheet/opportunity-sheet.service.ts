@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { OpportunitySheet, OpportunitySheetResult, OpportunitySheetResults, EnergyUseItem, OpportunityCost, Treasure } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import * as _ from 'lodash';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class OpportunitySheetService {
 
   defaultSheetName: string = 'New Opportunity';
   opportunitySheet: OpportunitySheet;
-  constructor() { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   initOpportunitySheet(): OpportunitySheet {
     return {
@@ -93,11 +94,16 @@ export class OpportunitySheetService {
       });
       numItems = items.length;
     }
-    if ( settings.unitsOfMeasure == 'Imperial' && (type == 'Water' || type == 'WWT' || type == 'Compressed Air')) {
-      energyCost = (energyUse * 1000) * unitCost; 
-    } else {
-      energyCost = energyUse * unitCost; 
+    let convertEnergyUse: number = energyUse;
+    if (settings.unitsOfMeasure == 'Imperial') {
+      if (type == 'Water' || type == 'WWT') {
+        convertEnergyUse = this.convertUnitsService.value(convertEnergyUse).from('kgal').to('gal');
+      } else if (type == 'Compressed Air') {
+        convertEnergyUse = this.convertUnitsService.value(convertEnergyUse).from('kscf').to('ft3');
+      }      
     }
+    energyCost = convertEnergyUse * unitCost; 
+   
     return {
       energyUse: energyUse,
       energyCost: energyCost,
