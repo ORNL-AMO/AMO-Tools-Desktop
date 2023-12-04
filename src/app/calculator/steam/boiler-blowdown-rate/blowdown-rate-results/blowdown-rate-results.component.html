@@ -35,11 +35,11 @@
         <tr *ngIf="showOperations">
             <td>Makeup Water Use</td>
             <td>{{baselineResults.makeupWaterUse | number:'1.0-0'}}
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
             </td>
             <td *ngIf="modificationExists">{{modificationResults.makeupWaterUse | number:'1.0-0'}}
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
             </td>
         </tr>
