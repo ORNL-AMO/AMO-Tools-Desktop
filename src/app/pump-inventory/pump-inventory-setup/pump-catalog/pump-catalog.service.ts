@@ -28,13 +28,13 @@ export class PumpCatalogService {
     //operatingFlowRate, pumpType
     let flowError: string = this.psatWarningService.checkFlowRate(pump.pumpEquipment.pumpType, pump.fieldMeasurements.operatingFlowRate, settings);
     let voltageError: string = this.psatWarningService.checkVoltage(pump.fieldMeasurements.measuredVoltage);
-    let ratedPowerError: string = this.psatWarningService.checkRatedPower(pump.fieldMeasurements.measuredPower, pump.fieldMeasurements.measuredCurrent, pump.pumpMotor.motorRatedPower, pump.fieldMeasurements.loadEstimationMethod, true);
+    let measuredPowerOrCurrentError: string = this.psatWarningService.checkMeasuredPowerOrCurrent(pump.fieldMeasurements.measuredPower, pump.fieldMeasurements.measuredCurrent, pump.pumpMotor.motorRatedPower, pump.fieldMeasurements.loadEstimationMethod, true);
     let rpmError: string = this.psatWarningService.checkPumpRpm(pump.systemProperties.driveType, pump.fieldMeasurements.pumpSpeed);
   
     return {
       flowError: flowError,
       voltageError: voltageError,
-      ratedPowerError: ratedPowerError,
+      measuredPowerOrCurrentError: measuredPowerOrCurrentError,
       rpmError: rpmError
     }
   }
