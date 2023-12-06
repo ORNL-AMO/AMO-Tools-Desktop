@@ -30,15 +30,14 @@ export class EmailMeasurDataService {
 
   setEmailData(measurEmailForm: FormGroup) {
     if (measurEmailForm.valid) {
-      let measurItemAttachment: ImportExportData = this.exportService.getSelectedAssessment(this.measurItemAttachment.itemData);
-      measurItemAttachment.origin = "AMO-TOOLS-DESKTOP";
+      let attachmentExportData: ImportExportData = this.exportService.getSelectedAssessment(this.measurItemAttachment.itemData);
+      attachmentExportData.origin = "AMO-TOOLS-DESKTOP";
       // todo eventually handle list of receivers/ attachments
       this.measurEmailData = {
         emailTo: measurEmailForm.controls.emailTo.value,
         emailSender: measurEmailForm.controls.emailSender.value,
-        attachments: [
-          measurItemAttachment
-        ],
+        fileName: this.measurItemAttachment.itemName,
+        attachment: attachmentExportData,
         isProduction: environment.production
       }
     } else {
@@ -48,7 +47,7 @@ export class EmailMeasurDataService {
 
   sendEmail() {
     // todo start spinner
-    let url: string = environment.measurUtilitiesApi + 'sendEmail';
+    let url: string = environment.measurUtilitiesApi + 'sendemail';
     if (this.measurEmailData) {
       this.httpClient.post(url, this.measurEmailData, this.httpOptions).subscribe({
           next: (resp) => {
@@ -81,7 +80,8 @@ export class SendEmailHttpError extends Error { }
 export interface MeasurEmailData {
   emailTo: string
   emailSender: string,
-  attachments?: any[],
+  fileName: string,
+  attachment: ImportExportData,
   isProduction?: boolean;
 }
 
