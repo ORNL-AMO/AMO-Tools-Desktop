@@ -28,12 +28,15 @@ export class CopyItemsComponent implements OnInit {
 
   @ViewChild('copyModal', { static: false }) public copyModal: ModalDirective;
   copyForm: UntypedFormGroup;
-  allDirectories: Array<Directory>;
+  destinationDirectoryOptions: Array<Directory>;
   directory: Directory;
-  assessmentCopy: boolean = false;
-  folderSelected: boolean = false;
+  selectedAssessments: Array<Assessment> = [];
+  selectedInventories: Array<InventoryItem> = [];
+  selectedCalculators: Array<Calculator> = [];
+  selectedDirData: SelectedDirectoryData;
   showNewFolder: boolean = false;
   newFolderForm: UntypedFormGroup;
+  showItems: boolean = true;
 
   constructor(
     private directoryDbService: DirectoryDbService,
@@ -47,48 +50,83 @@ export class CopyItemsComponent implements OnInit {
     private inventoryDbService: InventoryDbService,
     private settingsDbService: SettingsDbService) { }
 
-  ngOnInit() {
-    this.setDirectories();
+  async ngOnInit() {
+    this.selectedDirData = this.getResetSelectedDirData();
+    await this.setDirectories();
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     this.directory = this.directoryDbService.getById(directoryId);
-    this.copyForm = this.initForm();
-    this.newFolderForm = this.initFolderForm();
+    this.initCopyForm();
+    this.initFolderForm();
+    this.setSelectedCopyItems(this.directory);
+    this.setSelectedCopyDirectories();
   }
 
   async setDirectories() {
-    this.allDirectories = await firstValueFrom(this.directoryDbService.getAllDirectories());
+    this.destinationDirectoryOptions = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
-
-  initForm() {
-    this.directory.assessments.forEach(assessment => {
+  setSelectedCopyItems(directory: Directory, userSelectedParentDirectoryId?: number) {
+    directory.assessments.forEach(assessment => {
       if (assessment.selected) {
-        this.assessmentCopy = true;
+        this.selectedAssessments.push(assessment);
+      } else if (userSelectedParentDirectoryId != undefined) {
+        this.selectedDirData.assessments.push(assessment);
+        this.selectedDirData.assessmentToDirectoryIdMap[assessment.id] = userSelectedParentDirectoryId;
       }
     });
 
-    this.directory.subDirectory.forEach(subDir => {
-      if (subDir.selected) {
-        this.folderSelected = true;
-        _.remove(this.allDirectories, (dir) => { return dir.id === subDir.id; });
-        _.remove(this.allDirectories, (dir) => { return dir.parentDirectoryId === subDir.id; });
+    directory.calculators.forEach(calculator => {
+      if (calculator.selected) {
+        this.selectedCalculators.push(calculator);
+      } else if (userSelectedParentDirectoryId != undefined) {
+        this.selectedDirData.calculators.push(calculator);
+        this.selectedDirData.calculatorToDirectoryIdMap[calculator.id] = userSelectedParentDirectoryId;
       }
     });
 
-    if (this.folderSelected) {
-      return this.formBuilder.group({
-        'directoryId': [this.directory.parentDirectoryId, Validators.required],
+    directory.inventories.forEach(inventory => {
+      if (inventory.selected) {
+        this.selectedInventories.push(inventory);
+      } else if (userSelectedParentDirectoryId != undefined) {
+        this.selectedDirData.inventories.push(inventory);
+        this.selectedDirData.inventoryToDirectoryIdMap[inventory.id] = userSelectedParentDirectoryId;
+      }
+    });
+  }
+
+  setSelectedCopyDirectories() {
+    this.directory.subDirectory.forEach(dir => {
+      if (dir.selected) {
+        this.setSelectedCopyItems(dir, dir.id);
+        let selectedDirectory = {
+          directory: dir,
+          subDirectories: []
+        }
+        dir.subDirectory.forEach(subDir => {
+          this.setSelectedCopyItems(subDir, subDir.id);
+          selectedDirectory.subDirectories.push(subDir);
+        });
+        this.selectedDirData.selectedDirectories.push(selectedDirectory);
+        _.remove(this.destinationDirectoryOptions, (dirOption) => { return dirOption.id === dir.id; });
+        _.remove(this.destinationDirectoryOptions, (dirOption) => { return dirOption.parentDirectoryId === dir.id; });
+      }
+    });
+  }
+
+  initCopyForm() {
+    if (this.selectedDirData.selectedDirectories.length !== 0) {
+      this.copyForm = this.formBuilder.group({
+        'destinationDirectoryId': [this.directory.parentDirectoryId, Validators.required],
         'copyModifications': [true],
         'copyCalculators': [false]
       });
     } else {
-      return this.formBuilder.group({
-        'directoryId': [this.directory.id, Validators.required],
+      this.copyForm = this.formBuilder.group({
+        'destinationDirectoryId': [this.directory.id, Validators.required],
         'copyModifications': [true],
         'copyCalculators': [false]
       });
     }
-
   }
 
   ngAfterViewInit() {
@@ -96,32 +134,99 @@ export class CopyItemsComponent implements OnInit {
   }
 
   showCopyModal() {
+    this.showItems = true;
     this.copyModal.show();
   }
 
   hideCopyModal() {
-    this.assessmentCopy = false;
-    this.folderSelected = false;
+    this.selectedAssessments = undefined;
+    this.selectedCalculators = undefined;
+    this.selectedInventories = undefined;
+    this.selectedDirData = this.getResetSelectedDirData();
     this.copyModal.hide();
+    // todo this changes selected items? Should update another way?
     this.directoryDbService.setAll();
     this.dashboardService.copyItems.next(false);
   }
 
   getParentDirStr(id: number) {
-    let parentDir = _.find(this.allDirectories, (dir) => { return dir.id === id; });
-    let str = parentDir.name + '/';
-    while (parentDir.parentDirectoryId) {
-      parentDir = _.find(this.allDirectories, (dir) => { return dir.id === parentDir.parentDirectoryId; });
-      str = parentDir.name + '/' + str;
+      let parentDir = _.find(this.destinationDirectoryOptions, (dir) => { return dir.id === id; });
+      let str = parentDir.name + '/';
+      if (parentDir.parentDirectoryId !== undefined) {
+        parentDir = _.find(this.destinationDirectoryOptions, (dir) => { return dir.id === parentDir.parentDirectoryId; });
+        if (parentDir) {
+          str = parentDir.name + '/' + str;
+        }
+      }
+      return str;
+  }
+
+  async copyDirectories() {
+    for await (const originalDir of this.selectedDirData.selectedDirectories) { 
+      let newDirectoryId: number = await this.copyDirectory(originalDir.directory);
+      for await (const subDir of originalDir.subDirectories) {
+        await this.copyDirectory(subDir, newDirectoryId);
+      } 
     }
-    return str;
+
+    let allSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(allSettings);
+    this.setDirectories();
+    this.directoryDbService.setAll(this.destinationDirectoryOptions);
+  }
+
+  async createCopy(){
+    this.showItems = false;
+    // * copy directories first to set new id for items within
+    if (this.selectedDirData.selectedDirectories.length !== 0) {
+      await this.copyDirectories();
+      
+      let allDirectories: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories());
+      this.directoryDbService.setAll(allDirectories);
+
+      let allSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+      this.settingsDbService.setAll(allSettings);
+
+      this.selectedAssessments.push(...this.selectedDirData.assessments);
+      this.selectedInventories.push(...this.selectedDirData.inventories);
+      this.selectedCalculators.push(...this.selectedDirData.calculators);
+    }
+
+    await this.copyDirectoryAssessmentsAndSettings();
+    await this.copyDirectoryCalculators();
+    await this.copyDirectoryInventory();
+    this.hideCopyModal();
+  }
+
+  async copyDirectory(originalDirectory: Directory, selectedParentDirId?: number) {
+      let oldDirectoryId: number = originalDirectory.id;
+      delete originalDirectory.id;
+      if (selectedParentDirId !== undefined) {
+        originalDirectory.parentDirectoryId = selectedParentDirId;
+      } else {
+        originalDirectory.parentDirectoryId = this.copyForm.controls.destinationDirectoryId.value
+      }
+      originalDirectory.name = originalDirectory.name + ' (copy)';
+      let newDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(originalDirectory));
+      this.selectedDirData.newDirectoryIdMap[oldDirectoryId] = newDirectory.id;
+
+      let originalSettings: Settings = this.settingsDbService.getByDirectoryId(originalDirectory.id);
+      originalSettings.directoryId = newDirectory.id;
+      delete originalSettings.id;
+      await firstValueFrom(this.settingsDbService.addWithObservable(originalSettings));
+
+      return newDirectory.id;
   }
 
   async copyDirectoryAssessmentsAndSettings() {
-    let selectedAssessments: Assessment[] = this.directory.assessments.filter(assessment => assessment.selected);
-    if (selectedAssessments.length !== 0) {
-      for await (let assessment of selectedAssessments) {
+    if (this.selectedAssessments.length !== 0) {
+      for await (let assessment of this.selectedAssessments) {
           let assessmentCopy: Assessment = JSON.parse(JSON.stringify(assessment));
+
+          // * if item is member of selected directory
+          let originalDirectoryId: number = this.selectedDirData.assessmentToDirectoryIdMap[assessmentCopy.id];
+          let destinationDirectoryId: number = this.selectedDirData.newDirectoryIdMap[originalDirectoryId];
+
           delete assessmentCopy.id;
           let tempCalculator: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
           let assessmentCalculatorCopy: Calculator;
@@ -132,9 +237,14 @@ export class CopyItemsComponent implements OnInit {
           let tempSettings: Settings = this.settingsDbService.getByAssessmentId(assessment);
           let settingsCopy: Settings = JSON.parse(JSON.stringify(tempSettings));
           delete settingsCopy.id;
+
           assessmentCopy.name = assessment.name + ' (copy)';
           assessmentCopy.isExample = false;
-          assessmentCopy.directoryId = this.copyForm.controls.directoryId.value;
+          if (destinationDirectoryId !== undefined) {
+            assessmentCopy.directoryId = destinationDirectoryId;
+          } else {
+            assessmentCopy.directoryId = this.copyForm.controls.destinationDirectoryId.value;
+          }
           assessmentCopy.createdDate = new Date();
           assessmentCopy.modifiedDate = new Date();
 
@@ -156,9 +266,7 @@ export class CopyItemsComponent implements OnInit {
 
           let addedAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(assessmentCopy));
           settingsCopy.assessmentId = addedAssessment.id;
-
           await firstValueFrom(this.settingsDbService.addWithObservable(settingsCopy));
-
           if (this.copyForm.controls.copyCalculators.value === true) {
             assessmentCalculatorCopy.assessmentId = addedAssessment.id;
             await firstValueFrom(this.calculatorDbService.addWithObservable(assessmentCalculatorCopy));
@@ -175,14 +283,22 @@ export class CopyItemsComponent implements OnInit {
   }
 
   async copyDirectoryCalculators() {
-    let selectedCalculators: Calculator[] = this.directory.calculators.filter(calculator => calculator.selected);
-    if (selectedCalculators.length !== 0) {
-      for await (let calculator of selectedCalculators) {
+    if (this.selectedCalculators.length !== 0) {
+      for await (let calculator of this.selectedCalculators) {
           let calculatorCopy: Calculator = JSON.parse(JSON.stringify(calculator));
+
+          // * if item is member of selected directory
+          let originalDirectoryId: number = this.selectedDirData.calculatorToDirectoryIdMap[calculatorCopy.id];
+          let destinationDirectoryId: number = this.selectedDirData.newDirectoryIdMap[originalDirectoryId];
+
           delete calculatorCopy.id;
           calculatorCopy.selected = false;
           calculatorCopy.name = calculator.name + ' (copy)';
-          calculatorCopy.directoryId = this.copyForm.controls.directoryId.value;
+          if (destinationDirectoryId !== undefined) {
+            calculatorCopy.directoryId = destinationDirectoryId;
+          } else {
+            calculatorCopy.directoryId = this.copyForm.controls.destinationDirectoryId.value;
+          }
           
           await firstValueFrom(this.calculatorDbService.addWithObservable(calculatorCopy));
           calculator.selected = false;
@@ -194,10 +310,14 @@ export class CopyItemsComponent implements OnInit {
   }
 
   async copyDirectoryInventory() {
-    let selectedInventories: InventoryItem[] = this.directory.inventories.filter(inventory => inventory.selected);
-    if (selectedInventories.length !== 0) {
-      for await (let inventory of selectedInventories) {
+    if (this.selectedInventories.length !== 0) {
+      for await (let inventory of this.selectedInventories) {
           let inventoryCopy: InventoryItem = JSON.parse(JSON.stringify(inventory));
+
+          // * if item is member of selected directory
+          let originalDirectoryId: number = this.selectedDirData.inventoryToDirectoryIdMap[inventoryCopy.id];
+          let destinationDirectoryId: number = this.selectedDirData.newDirectoryIdMap[originalDirectoryId];
+
           delete inventoryCopy.id;
           let tmpSettings: Settings = this.settingsDbService.getByInventoryId(inventory);
           let settingsCopy: Settings = JSON.parse(JSON.stringify(tmpSettings));
@@ -210,7 +330,11 @@ export class CopyItemsComponent implements OnInit {
 
           inventoryCopy.selected = false;
           inventoryCopy.name = inventory.name + ' (copy)';
-          inventoryCopy.directoryId = this.copyForm.controls.directoryId.value;
+          if (destinationDirectoryId !== undefined) {
+            inventoryCopy.directoryId = destinationDirectoryId;
+          } else {
+            inventoryCopy.directoryId = this.copyForm.controls.destinationDirectoryId.value;
+          }
 
           let newInventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(inventoryCopy));
           settingsCopy.inventoryId = newInventory.id;
@@ -225,13 +349,6 @@ export class CopyItemsComponent implements OnInit {
     }
   }
 
-  async createCopy(){
-    await this.copyDirectoryAssessmentsAndSettings();
-    await this.copyDirectoryCalculators();
-    await this.copyDirectoryInventory();
-    this.hideCopyModal();
-  }
-
   addFolder() {
     this.showNewFolder = true;
   }
@@ -241,7 +358,7 @@ export class CopyItemsComponent implements OnInit {
   }
 
   initFolderForm() {
-    return this.formBuilder.group({
+    this.newFolderForm = this.formBuilder.group({
       'folderName': ['', Validators.required],
       'companyName': [''],
       'facilityName': [''],
@@ -249,13 +366,50 @@ export class CopyItemsComponent implements OnInit {
     });
   }
 
-  async createFolder() {
+  async createDirectory() {
     let newDirectoryId: number = await this.directoryDashboardService.addDirectoryAndSettings(this.newFolderForm);
     this.setDirectories();
+    // * Added folder becomes new starting directory and copy-to-destination dir
     this.newFolderForm.patchValue({
       'directoryId': newDirectoryId
+    });
+    this.copyForm.patchValue({
+      'destinationDirectoryId': newDirectoryId
     });
     this.cancelNewFolder();
   }
 
+  getResetSelectedDirData(): SelectedDirectoryData  {
+    return {
+      directories: [],
+      assessments: [],
+      inventories: [],
+      calculators: [],
+      subDirectories: [],
+      selectedDirectories: [],
+      assessmentToDirectoryIdMap: {},
+      inventoryToDirectoryIdMap: {},
+      calculatorToDirectoryIdMap: {},
+      newDirectoryIdMap: {},
+    }
+  }
+}
+
+export interface SelectedDirectoryData {
+  directories: Array<Directory>;
+  assessments: Array<Assessment>;
+  inventories: Array<InventoryItem>;
+  calculators: Array<Calculator>;
+  selectedDirectories: Array<SelectedDirectory>;
+  subDirectories: Array<Directory>;
+  // * map items from a selected directory to move with copied directory
+  assessmentToDirectoryIdMap: { [itemId: number]: number };
+  inventoryToDirectoryIdMap: { [itemId: number]: number };
+  calculatorToDirectoryIdMap: { [itemId: number]: number };
+  newDirectoryIdMap: { [oldDirId: number]: number };
+}
+
+export interface SelectedDirectory {
+  directory: Directory,
+  subDirectories: Array<Directory>
 }

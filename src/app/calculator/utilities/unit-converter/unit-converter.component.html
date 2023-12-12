@@ -13,7 +13,7 @@
         <div class="row measure-row">
           <div class="col-12">
             <select class="form-control" id="type" [(ngModel)]="measure" (change)="getMeasures()">
-              <option *ngFor="let option of options | sortBy : 'display' " [ngValue]="option.measure">{{option.display}}</option>
+              <option *ngFor="let option of options | sortBy : 'display' : 'asc' " [ngValue]="option.measure">{{option.display}}</option>
             </select>
           </div>
         </div>
@@ -22,7 +22,7 @@
             <input type="number" step="any" class="form-control text-center input-field" id="value1" [(ngModel)]="value1"
               (input)="getValue2()">
             <select class="form-control" id="from" [(ngModel)]="from" (change)="getValue2()">
-              <option *ngFor="let possibility of possibilities | sortBy : 'display'" [value]="possibility.unit">{{possibility.display}}
+              <option *ngFor="let possibility of possibilities | sortBy : 'display' : 'asc'" [value]="possibility.unit">{{possibility.display}}
                 <span [innerHTML]="possibility.displayUnit"></span>
               </option>
             </select>
@@ -33,7 +33,7 @@
               <strong>{{value2 | number:'.0-6'}}</strong>
             </small>
             <select class="form-control" id="to" [(ngModel)]="to" (change)="getValue2()">
-              <option *ngFor="let possibility of possibilities | sortBy : 'display'" [value]="possibility.unit">{{possibility.display}}
+              <option *ngFor="let possibility of possibilities | sortBy : 'display' : 'asc'" [value]="possibility.unit">{{possibility.display}}
                 <span [innerHTML]="possibility.displayUnit"></span>
               </option>
             </select>
