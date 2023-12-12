@@ -52,17 +52,13 @@ export class CopyItemsComponent implements OnInit {
 
   async ngOnInit() {
     this.selectedDirData = this.getResetSelectedDirData();
-    await this.setDirectories();
+    this.destinationDirectoryOptions = await firstValueFrom(this.directoryDbService.getAllDirectories());
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     this.directory = this.directoryDbService.getById(directoryId);
     this.initCopyForm();
     this.initFolderForm();
     this.setSelectedCopyItems(this.directory);
     this.setSelectedCopyDirectories();
-  }
-
-  async setDirectories() {
-    this.destinationDirectoryOptions = await firstValueFrom(this.directoryDbService.getAllDirectories());
   }
 
   setSelectedCopyItems(directory: Directory, userSelectedParentDirectoryId?: number) {
@@ -144,8 +140,6 @@ export class CopyItemsComponent implements OnInit {
     this.selectedInventories = undefined;
     this.selectedDirData = this.getResetSelectedDirData();
     this.copyModal.hide();
-    // todo this changes selected items? Should update another way?
-    this.directoryDbService.setAll();
     this.dashboardService.copyItems.next(false);
   }
 
@@ -168,11 +162,10 @@ export class CopyItemsComponent implements OnInit {
         await this.copyDirectory(subDir, newDirectoryId);
       } 
     }
-
     let allSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(allSettings);
-    this.setDirectories();
-    this.directoryDbService.setAll(this.destinationDirectoryOptions);
+    let allDirectories: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories());
+    this.directoryDbService.setAll(allDirectories);
   }
 
   async createCopy(){
@@ -180,13 +173,6 @@ export class CopyItemsComponent implements OnInit {
     // * copy directories first to set new id for items within
     if (this.selectedDirData.selectedDirectories.length !== 0) {
       await this.copyDirectories();
-      
-      let allDirectories: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories());
-      this.directoryDbService.setAll(allDirectories);
-
-      let allSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
-      this.settingsDbService.setAll(allSettings);
-
       this.selectedAssessments.push(...this.selectedDirData.assessments);
       this.selectedInventories.push(...this.selectedDirData.inventories);
       this.selectedCalculators.push(...this.selectedDirData.calculators);
@@ -368,7 +354,8 @@ export class CopyItemsComponent implements OnInit {
 
   async createDirectory() {
     let newDirectoryId: number = await this.directoryDashboardService.addDirectoryAndSettings(this.newFolderForm);
-    this.setDirectories();
+    this.destinationDirectoryOptions = await firstValueFrom(this.directoryDbService.getAllDirectories());
+    
     // * Added folder becomes new starting directory and copy-to-destination dir
     this.newFolderForm.patchValue({
       'directoryId': newDirectoryId
