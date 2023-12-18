@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef, HostListener } from '@angular/core';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
-import { SimpleChart, TraceData } from '../../../shared/models/plotting';
+import { DataPoint, SimpleChart, TraceData } from '../../../shared/models/plotting';
 import { Settings } from '../../../shared/models/settings';
 import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
 import { SystemAndEquipmentCurveGraphService, HoverGroupData, SystemCurveDataPoint } from './system-and-equipment-curve-graph.service';
@@ -340,6 +340,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
   drawSystemCurve() {
     let curveTraceData: Array<any> = this.systemAndEquipmentCurveService.systemCurveRegressionData;
+    console.log('systemCurveRegressionData', this.systemAndEquipmentCurveService.systemCurveRegressionData)
     let xTmp = [];
     let yTmp = [];
     let fluidTmp = [];
@@ -354,23 +355,26 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.fluidPowerData = fluidTmp;
 
     let precision = this.imperialFanPrecision ? this.imperialFanPrecision : '.0f';
-    let template = `${'System Curve'} ${this.yName}: %{y:${precision}} ${this.yUnits}`;
+    // let template = `${'System Curve'} ${this.yName}: %{y:${precision}} ${this.yUnits}`;
+    let template = `${'System Curve'} ${this.yName}: %{y} ${this.yUnits}`;
     this.curveEquipmentChart.data[this.traces.system].hovertemplate = template;
   }
 
-  drawEquipmentCurve(systemCurveData: Array<SystemCurveDataPoint>, traceIndex: number, traceTitle: string) {
+  drawEquipmentCurve(equipmentCurvedata: Array<DataPoint>, traceIndex: number, traceTitle: string) {
     let xTmp = [];
     let yTmp = [];
-    systemCurveData.forEach(coordinate => {
+    equipmentCurvedata.forEach(coordinate => {
       xTmp.push(coordinate.x);
       yTmp.push(coordinate.y);
     });
+
     this.curveEquipmentChart.data[traceIndex].x = xTmp;
     this.curveEquipmentChart.data[traceIndex].y = yTmp;
     this.curveEquipmentChart.data[traceIndex].line.color = this.pointColors[traceIndex - 1];
 
     let precision = this.imperialFanPrecision ? this.imperialFanPrecision : '.0f';
-    let template = `${traceTitle} ${this.yName}: %{y:${precision}} ${this.yUnits}<br>`;
+    // let template = `${traceTitle} ${this.yName}: %{y:${precision}} ${this.yUnits}<br>`;
+    let template = `${traceTitle} ${this.yName}: %{y} ${this.yUnits}<br>`;
     this.curveEquipmentChart.data[traceIndex].hovertemplate = template;
   }
 
@@ -397,7 +401,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   }
 
   addIntersectionPoints() {
-    let baselineIntersectionPoint: SystemCurveDataPoint = this.systemAndEquipmentCurveGraphService.getBaselineIntersectionPoint(this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs, this.equipmentType, this.settings);
+    let baselineIntersectionPoint: SystemCurveDataPoint = this.systemAndEquipmentCurveGraphService.getBaselineIntersectionPoint(this.equipmentType, this.settings);
     if (baselineIntersectionPoint != undefined && this.isSystemCurveShown) {
       this.defaultPointCount = 1;
       this.setIntersectionTrace(baselineIntersectionPoint, this.traces.baselineIntersect, 'Baseline');
@@ -479,7 +483,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
   displayHoverData(plotlyHoverEvent, onPowerChart: boolean = false) {
     this.buildHoverGroupData(plotlyHoverEvent);
-
     let hoveredPoint = plotlyHoverEvent.points[0];
     let hoveredPointIndex: number = this.powerChart.data[0].x.findIndex(x => x == hoveredPoint.x);
     let flowValue = this.powerChart.data[0].x[hoveredPointIndex];
@@ -489,6 +492,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     if (hoveredPoint.curveNumber == this.traces.modification) {
       // Hovering on equipment mod
       // Round up or down to nearest 10 - (mod x coordinates are offset by the base/mod speed ratio)
+      // todo 3998
       let pointX = Math.round(hoveredPoint.x / 10) * 10;
       hoveredPointIndex = this.powerChart.data[0].x.findIndex(x => x == pointX);
       hoverTraces[0].pointNumber = hoveredPointIndex;
@@ -497,7 +501,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     if (!onPowerChart && this.powerChart.data[1]) {
       // hovertag for power chart modification
       if (hoveredPoint.curveNumber != this.traces.modification) {
-        let matchFunction = JSON.parse(JSON.stringify(this.powerChart.data[1].x)).map(x => Math.round(x / 10) * 10);
+      // todo 3998
+      let matchFunction = JSON.parse(JSON.stringify(this.powerChart.data[1].x)).map(x => Math.round(x / 10) * 10);
         hoveredPointIndex = matchFunction.findIndex(x => x == flowValue);
       } else {
         // Modification lines are same length - use index
@@ -535,7 +540,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     intersectionTrace.x = [point.x];
     intersectionTrace.y = [point.y];
     let precision = this.imperialFanPrecision ? this.imperialFanPrecision : '.0f';
-    intersectionTrace.hovertemplate = `${name} Intersection<br>Flow: %{x:.0f} ${this.xUnits}<br>${this.yName}: %{y:${precision}} ${this.yUnits}`;
+    // intersectionTrace.hovertemplate = `${name} Intersection<br>Flow: %{x:.0f} ${this.xUnits}<br>${this.yName}: %{y:${precision}} ${this.yUnits}`;
+    intersectionTrace.hovertemplate = `${name} Intersection<br>Flow: %{x} ${this.xUnits}<br>${this.yName}: %{y} ${this.yUnits}`;
     this.curveEquipmentChart.data[traceDataIndex] = intersectionTrace;
 
     point.pointColor = this.defaultPointBackgroundColor;

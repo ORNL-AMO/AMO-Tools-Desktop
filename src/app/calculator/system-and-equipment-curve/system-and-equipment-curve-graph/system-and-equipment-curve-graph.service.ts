@@ -50,17 +50,22 @@ export class SystemAndEquipmentCurveGraphService {
     }
   }
 
-  getBaselineIntersectionPoint(curveDataPairs: Array<{ x: number, y: number }>, equipmentType: string, settings: Settings): SystemCurveDataPoint {
-    let calculatedIntersection = this.systemAndEquipmentCurveService.calculateBaselineIntersectionPoint(curveDataPairs);
-    let intersection: SystemCurveDataPoint = {
+  // todo 3998 reconcile diffs between these two methods
+  getBaselineIntersectionPoint(equipmentType: string, settings: Settings): SystemCurveDataPoint {
+    let isFanEquipment = equipmentType == 'fan'? true: false;
+    let calculatedIntersection: DataPoint = this.systemAndEquipmentCurveService.calculateIntersectionPoint(isFanEquipment);
+    let intersection: DataPoint = {
       x: 0, 
       y: 0,
     };
+
     if (calculatedIntersection) {
       intersection.x = calculatedIntersection.x; 
       intersection.y = calculatedIntersection.y;
       let baselinePowerPairs = this.systemAndEquipmentCurveService.baselinePowerDataPairs;
-      if (equipmentType == 'fan') {
+ 
+      // todo Adds add SystemCurveDataPoint properties to point - see where this is used
+      if (isFanEquipment) {
         intersection = this.systemAndEquipmentCurveService.calculateFanEfficiency(baselinePowerPairs, intersection, settings);
       } else {
         intersection = this.systemAndEquipmentCurveService.calculatePumpEfficiency(baselinePowerPairs, intersection, settings);
@@ -70,35 +75,16 @@ export class SystemAndEquipmentCurveGraphService {
   }
 
   calculateModificationIntersectionPoint(equipmentType: string, settings: Settings): SystemCurveDataPoint {
-    let intersection: SystemCurveDataPoint = {
-      x: 0,
-      y: 0
-    }
-
-    let closestSystemCurvePoint;
-    let closestModifiedDataPoint;
-    let smallestDistanceBetweenPoints = Infinity;
-    this.systemAndEquipmentCurveService.systemCurveRegressionData.forEach(systemCurveDataPoint => {
-      this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.forEach((modifiedDataPoint, index) => {
-        //distance = (p1.x - p2.x)^2 + (p1.y - p2.y)^2
-        let distanceBetweenCurrentPoint = Math.pow((systemCurveDataPoint.x - modifiedDataPoint.x), 2) + Math.pow((systemCurveDataPoint.y - modifiedDataPoint.y), 2)
-        if (smallestDistanceBetweenPoints > distanceBetweenCurrentPoint) {
-          smallestDistanceBetweenPoints = distanceBetweenCurrentPoint;
-          closestSystemCurvePoint = systemCurveDataPoint;
-          closestModifiedDataPoint = modifiedDataPoint;
-          this.modifiedIntersectionIndex = index;
-        }
-      })
-    });
-    //find average between points
-    if (closestModifiedDataPoint && closestSystemCurvePoint) {
-      intersection.x = (closestModifiedDataPoint.x + closestSystemCurvePoint.x) / 2;
-      intersection.y = (closestModifiedDataPoint.y + closestSystemCurvePoint.y) / 2;
+    let isFanEquipment = equipmentType == 'fan'? true : false; 
+    let calculatedIntersection: SystemCurveDataPoint = this.systemAndEquipmentCurveService.calculateIntersectionPoint(isFanEquipment, true);
+    
+    let intersection: SystemCurveDataPoint;
+    if (calculatedIntersection) {
       let baselinePowerPairs = this.systemAndEquipmentCurveService.baselinePowerDataPairs;
-      if (equipmentType == 'fan') {
-        intersection = this.systemAndEquipmentCurveService.calculateFanEfficiency(baselinePowerPairs, intersection, settings, true);
+      if (isFanEquipment) {
+        intersection = this.systemAndEquipmentCurveService.calculateFanEfficiency(baselinePowerPairs, calculatedIntersection, settings, true);
       } else {
-        intersection = this.systemAndEquipmentCurveService.calculatePumpEfficiency(baselinePowerPairs, intersection, settings, true);
+        intersection = this.systemAndEquipmentCurveService.calculatePumpEfficiency(baselinePowerPairs, calculatedIntersection, settings, true);
       }
     } 
     return intersection;
