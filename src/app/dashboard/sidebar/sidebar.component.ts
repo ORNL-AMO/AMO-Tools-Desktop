@@ -33,8 +33,7 @@ export class SidebarComponent implements OnInit {
   expandedXWidth: number = 300;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
-    private cd: ChangeDetectorRef,
-    private coreService: CoreService) { }
+    private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.versionNum = environment.version;
@@ -64,6 +63,7 @@ export class SidebarComponent implements OnInit {
     this.updateSub.unsubscribe();
     this.updateDashboardDataSub.unsubscribe();
     this.selectedDirectoryIdSub.unsubscribe();
+    this.collapseSidebarSub.unsubscribe();
   }
 
   showCreateAssessment() {
@@ -122,7 +122,6 @@ export class SidebarComponent implements OnInit {
       this.dashboardService.sidebarX.next(this.expandedXWidth);
     }
     window.dispatchEvent(new Event("resize"));
-
   }
 
   openUpdateModal() {

@@ -44,9 +44,6 @@ export interface PsatInputs {
   load_estimation_method?: number;
   motor_rated_fla?: number;
   margin?: number;
-  //TODO: remove operatingFraction support
-  //removed from suit v0.3.2
-  operating_fraction?: number;
   operating_hours: number;
   flow_rate?: number;
   head?: number;

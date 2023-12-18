@@ -22,9 +22,9 @@
                 <option [ngValue]="'PSAT'">Pump</option>
                 <option [ngValue]="'PHAST'">Process Heating</option>
                 <option [ngValue]="'FSAT'">Fan</option>
+                <option [ngValue]="'CompressedAir'">Compressed Air</option>
                 <!-- <option [ngValue]="'SSMT'">Steam</option>
-                <option [ngValue]="'WasteWater'">Wastewater</option>
-                <option [ngValue]="'CompressedAir'">Compressed Air</option> -->
+                <option [ngValue]="'WasteWater'">Wastewater</option> -->
             </select>
         </div>
 
@@ -228,10 +228,11 @@
                     [assessment]="integratedAssessment.assessment" [settings]="settings" [inRollup]="false"
                     [inFsat]="true" [quickReport]="true"></app-fsat-report>
 
-                <!-- <app-compressed-air-report *ngIf="integratedAssessment.assessmentType === 'CompressedAir'" [assessment]="assessment" [inAssessment]="false" [inRollup]="false"
+               <app-compressed-air-report *ngIf="integratedAssessment.assessmentType === 'CompressedAir'" 
+                    [assessment]="integratedAssessment.assessment" [inAssessment]="false" [inRollup]="false"
                     [quickReport]="true"></app-compressed-air-report>
 
-                <app-waste-water-report *ngIf="integratedAssessment.assessmentType === 'WasteWater'" [assessment]="assessment" [quickReport]="true"></app-waste-water-report>
+                <!--<app-waste-water-report *ngIf="integratedAssessment.assessmentType === 'WasteWater'" [assessment]="assessment" [quickReport]="true"></app-waste-water-report>
 
                 <app-ssmt-report *ngIf="integratedAssessment.assessmentType === 'SSMT'" [assessment]="assessment" [settings]="settings"></app-ssmt-report> -->
 

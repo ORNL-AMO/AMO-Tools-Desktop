@@ -100,8 +100,8 @@
           </div>
         </div>
         <div class="d-flex pl-2 pr-2">
-          <app-opportunity-sheet-help *ngIf="tabSelect == 'help'" [currentField]="currentField">
-          </app-opportunity-sheet-help>
+          <app-assessment-opportunity-help *ngIf="tabSelect == 'help'" [currentField]="currentField">
+          </app-assessment-opportunity-help>
           <app-opportunity-sheet-results *ngIf="tabSelect == 'results'" class="w-100"
             [opportunitySheetResults]="assessmentOpportunityResults" [opportunitySheet]="assessmentOpportunity">
           </app-opportunity-sheet-results>

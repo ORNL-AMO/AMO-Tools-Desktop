@@ -138,7 +138,7 @@
           <span *ngIf="!point.power">&mdash; &mdash;</span>
         </td>
         <td class='delete-row text-center'>
-          <a *ngIf="index >= defaultPointCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point, index)">
+          <a *ngIf="index >= defaultPointCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point)">
             Delete
           </a>
         </td>

@@ -112,14 +112,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "amo-tools-desktop:build"
+            "buildTarget": "amo-tools-desktop:build"
           },
           "configurations": {
             "web": {
-              "browserTarget": "amo-tools-desktop:build:web"
+              "buildTarget": "amo-tools-desktop:build:web"
             },
             "development": {
-              "browserTarget": "amo-tools-desktop:build:development"
+              "buildTarget": "amo-tools-desktop:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -127,7 +127,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "amo-tools-desktop:build"
+            "buildTarget": "amo-tools-desktop:build"
           }
         },
         "test": {

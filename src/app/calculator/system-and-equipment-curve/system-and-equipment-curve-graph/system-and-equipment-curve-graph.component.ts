@@ -9,6 +9,7 @@ import { graphColors } from '../../../phast/phast-report/report-graphs/graphColo
 import { CurveDataService } from '../curve-data.service';
 import { PlotlyService } from 'angular-plotly.js';
 import * as Plotly from 'plotly.js-dist';
+import { HelperFunctionsService } from '../../../shared/helper-services/helper-functions.service';
 
 @Component({
   selector: 'app-system-and-equipment-curve-graph',
@@ -92,13 +93,13 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   fluidPowerData: Array<number>;
   hoverChartElement: ElementRef;
   imperialFanPrecision: string;
-  dataPointTraces: Array<TraceData>;
   constructor(
     private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
     private systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService,
     private curveDataService: CurveDataService,
     private cd: ChangeDetectorRef,
-    private plotlyService: PlotlyService
+    private plotlyService: PlotlyService,
+    private helperService: HelperFunctionsService
   ) { }
 
   ngOnInit(): void {
@@ -190,7 +191,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   // Every update is newPlot to force resize
   initRenderChart(isResize = false) {
     this.setDisplayDataOptions();
-    this.dataPointTraces = new Array();
     this.selectedDataPoints = new Array();
     this.initChartSetup(isResize);
     this.drawTraceData();
@@ -204,8 +204,11 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.curveEquipmentChart.data.forEach((trace, i) => {
       traceData.push(trace);
     });
-    this.dataPointTraces.forEach(trace => {
-      traceData.push(trace);
+    this.selectedDataPoints.forEach(point => {
+      if (point.isUserPoint) {
+        let selectedPointTrace: TraceData = this.systemAndEquipmentCurveGraphService.getTraceDataFromPoint(point);
+        traceData.push(selectedPointTrace);
+      }
     })
     if (this.expanded && this.expandedSystemChartDiv) {
       this.plotlyService.newPlot(this.expandedSystemChartDiv.nativeElement, traceData, chartLayout, this.curveEquipmentChart.config)
@@ -265,7 +268,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
 
   initChartSetup(isResize) {
-    this.pointColors = graphColors;
+    this.pointColors = JSON.parse(JSON.stringify(graphColors));
     this.resetHoverData();
     this.fluidPowerData = [];
 
@@ -577,11 +580,20 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       fluidPower = this.fluidPowerData[pointIndex];
     }
 
+    let pointId: string = this.helperService.getNewIdString();
+    if (this.pointColors.length === 0) {
+      this.pointColors = JSON.parse(JSON.stringify(graphColors));
+    } 
+    let nextColorIndex: number = (this.selectedDataPoints.filter(point => point.isUserPoint).length + 1) % this.pointColors.length;
+    let nextColor: string = this.pointColors[nextColorIndex];  
+    this.pointColors.splice(nextColorIndex, 1);
+
     let selectedPoint: SystemCurveDataPoint = {
-      pointColor: this.pointColors[(this.dataPointTraces.length + 1) % this.pointColors.length],
+      pointColor: nextColor,
       x: graphData.points[0].x,
       y: graphData.points[0].y,
       fluidPower: fluidPower,
+      id: pointId,
       power: 0,
       efficiency: 0,
       isUserPoint: true
@@ -593,22 +605,20 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       isModification = false;
     }
     selectedPoint = this.systemAndEquipmentCurveGraphService.getSelectedDataPointEfficiency(selectedPoint, this.equipmentType, this.settings, isModification);
-    let selectedPointTrace = this.systemAndEquipmentCurveGraphService.getTraceDataFromPoint(selectedPoint);
-    this.dataPointTraces.push(selectedPointTrace);
     this.selectedDataPoints.push(selectedPoint);
     this.newPlot();
     this.cd.detectChanges();
     this.save();
   }
 
-  deleteDataPoint(point: SystemCurveDataPoint, index: number) {
+  deleteDataPoint(point: SystemCurveDataPoint) {
     let traceCount: number = this.curveEquipmentChart.data.length;
-    let deleteTraceIndex: number = this.curveEquipmentChart.data.findIndex(trace => trace.x[0] == point.x && trace.y[0] == point.y);
     // ignore default traces
-    if (traceCount > this.defaultPointCount && deleteTraceIndex != -1) {
-      // Plotly.deleteTraces(this.currentSystemChartId, [deleteTraceIndex]);
-      this.selectedDataPoints.splice(index, 1);
+    if (traceCount > this.defaultPointCount && point.isUserPoint) {
+      let deleteTraceIndex: number = this.selectedDataPoints.findIndex(trace => trace.id === point.id);
+      this.selectedDataPoints.splice(deleteTraceIndex, 1);
       this.cd.detectChanges();
+      this.newPlot();
       this.save();
     }
   }

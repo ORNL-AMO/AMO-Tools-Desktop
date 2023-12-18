@@ -10,26 +10,83 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div *ngFor="let assessment of directory.assessments">
-                    <span *ngIf="assessment.selected">
-                        {{assessment.name}} <br>
-                    </span>
+                <div *ngIf="showItems" class="export-content scroll-item">
+                    <ul class="pl-0">
+                        <li *ngIf="selectedCalculators.length != 0">
+                            <span class="bold">Pre-Assessments</span>
+                            <ul>
+                                <li *ngFor="let calculator of selectedCalculators">
+                                    <span class="fa fa-pie-chart"></span>
+                                    {{calculator.name}}
+                                </li>
+                            </ul>
+                        </li>
+                        <li *ngIf="selectedAssessments.length != 0">
+                            <span class="bold">Assessments</span>
+                            <ul>
+                                <li *ngFor="let assessment of selectedAssessments">
+                                    <div class="d-flex align-items-center"
+                                        [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT',
+                                             'treasure-hunt': assessment.type == 'TreasureHunt', 'ssmt': assessment.type == 'SSMT', 
+                                             'compressedAir': assessment.type == 'CompressedAir', 'wasteWater': assessment.type == 'WasteWater'}">
+                                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
+                                            <img *ngIf="assessment.type == 'PSAT'" class="icon"
+                                                src="assets/images/pump-icon.png">
+                                            <img *ngIf="assessment.type == 'PHAST'" class="icon"
+                                                src="assets/images/ico-phast-diagram.png">
+                                            <img *ngIf="assessment.type == 'FSAT'" class="icon"
+                                                src="assets/images/ico-fsat-diagram.png">
+                                            <img *ngIf="assessment.type == 'SSMT'" class="icon"
+                                                src="assets/images/ico-ssmt-diagram.png">
+                                            <img *ngIf="assessment.type == 'TreasureHunt'" class="icon"
+                                                src="assets/images/treasure-hunt.png">
+                                            <img *ngIf="assessment.type == 'CompressedAir'" class="icon"
+                                                src="assets/images/ca-icon.png">
+                                            <img *ngIf="assessment.type == 'WasteWater'" class="icon"
+                                                src="assets/images/waste-water-icon.png">
+                                        </span>
+                                        <span class="p-1">
+                                            {{assessment.name}}
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li *ngIf="selectedInventories.length != 0">
+                            <span class="bold">Inventories</span>
+                            <ul>
+                                <li *ngFor="let inventory of selectedInventories">
+                                    <div class="d-flex align-items-center">
+                                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
+                                            <img *ngIf="inventory.type == 'pumpInventory'" class="icon"
+                                                src="assets/images/pump-inventory-icon.png">
+                                            <img *ngIf="inventory.type == 'motorInventory'" class="icon"
+                                                src="assets/images/motor-inventory-icon.png">
+                                        </span>
+                                        <span class="p-1">
+                                            {{inventory.name}}
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li *ngIf="selectedDirData.selectedDirectories.length != 0">
+                            <span class="bold">Directories</span>
+                            <ul>
+                                <li *ngFor="let dir of selectedDirData.selectedDirectories">
+                                    <span class="fa fa-folder p-1"></span>{{dir.directory.name}}
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
                 </div>
-                <div *ngFor="let calculator of directory.calculators">
-                    <span *ngIf="calculator.selected">
-                        {{calculator.name}} <br>
-                    </span>
-                </div>
-                <div *ngFor="let inventory of directory.inventories">
-                    <span *ngIf="inventory.selected">
-                        {{inventory.name}} <br>
-                    </span>
-                </div>
+
                 <form [formGroup]="copyForm" *ngIf="!showNewFolder">
-                    <div class="form-group" *ngIf="allDirectories">
+                    <div class="form-group" *ngIf="destinationDirectoryOptions">
                         <label>Copy Item(s) to Different Location</label>
-                        <select class="form-control w-100" formControlName="directoryId">
-                            <option *ngFor="let dir of allDirectories" [ngValue]="dir.id">
+                        <select class="form-control w-100" formControlName="destinationDirectoryId">
+                            <option *ngFor="let dir of destinationDirectoryOptions" [ngValue]="dir.id">
                                 <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
                                 <span class="bold">{{dir.name}}/</span>
                             </option>
@@ -38,12 +95,12 @@
                             <a class="click-link" (click)="addFolder()">Add a new folder for selected item(s)</a>
                         </div>
                     </div>
-                    <div class="form-group" *ngIf="assessmentCopy">
+                    <div class="form-group" *ngIf="selectedAssessments.length > 0">
                         <label>
                             <input type="checkbox" class="pr-2" formControlName="copyModifications">Include
                             modifications?</label>
                     </div>
-                    <div class="form-group" *ngIf="assessmentCalculatorCopy">
+                    <div class="form-group" *ngIf="selectedCalculators.length > 0">
                         <label>
                             <input type="checkbox" class="pr-2" formControlName="copyCalculators">Include
                             calculators?</label>
@@ -72,10 +129,10 @@
                                     id="facilityName" />
                             </div>
                         </div>
-                        <div class="form-group" *ngIf="allDirectories">
+                        <div class="form-group" *ngIf="destinationDirectoryOptions">
                             <label>New Folder Location</label>
                             <select class="form-control w-100" formControlName="directoryId">
-                                <option *ngFor="let dir of allDirectories" [ngValue]="dir.id">
+                                <option *ngFor="let dir of destinationDirectoryOptions" [ngValue]="dir.id">
                                     <span
                                         *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
                                     <span class="bold">{{dir.name}}/</span>
@@ -91,7 +148,7 @@
 
                             <div class="p-2">
                                 <button class="btn btn-primary" type="button" [disabled]="!newFolderForm.valid"
-                                    (click)="createFolder()">Create Folder</button>
+                                    (click)="createDirectory()">Create Folder</button>
                             </div>
                         </div>
                     </div>

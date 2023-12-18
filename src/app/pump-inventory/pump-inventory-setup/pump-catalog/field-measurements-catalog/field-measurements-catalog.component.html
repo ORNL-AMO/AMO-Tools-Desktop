@@ -134,7 +134,7 @@
         <span *ngIf="form.controls.measuredPower.errors.required">Value Required</span>
       </span>
       <span class="alert-warning pull-right small"
-        *ngIf="fieldDataWarnings.ratedPowerError !== null && !form.controls.measuredPower.invalid && !form.controls.measuredPower.pristine">{{fieldDataWarnings.ratedPowerError}}</span>
+        *ngIf="fieldDataWarnings.measuredPowerOrCurrentError !== null && !form.controls.measuredPower.invalid && !form.controls.measuredPower.pristine">{{fieldDataWarnings.measuredPowerOrCurrentError}}</span>
     </div>
   </div>
 
@@ -149,7 +149,7 @@
         <span *ngIf="form.controls.measuredCurrent.errors.required">Value Required</span>
       </span>
       <span class="alert-warning pull-right small"
-        *ngIf="fieldDataWarnings.ratedPowerError !== null && !form.controls.measuredCurrent.invalid && !form.controls.measuredCurrent.pristine">{{fieldDataWarnings.ratedPowerError}}</span>
+        *ngIf="fieldDataWarnings.measuredPowerOrCurrentError !== null && !form.controls.measuredCurrent.invalid && !form.controls.measuredCurrent.pristine">{{fieldDataWarnings.measuredPowerOrCurrentError}}</span>
     </div>
   </div>
 

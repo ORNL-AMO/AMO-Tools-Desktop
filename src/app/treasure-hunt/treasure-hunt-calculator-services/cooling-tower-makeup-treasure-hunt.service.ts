@@ -59,7 +59,7 @@ export class CoolingTowerMakeupTreasureHuntService {
 
   getCoolingTowerMakeupCardData(coolingTowerMakeupWaterTreasureHunt: CoolingTowerMakeupWaterTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     let utilityCost: number = currentEnergyUsage.waterCosts;
-    let unitStr: string = 'kGal'
+    let unitStr: string = 'kgal'
     if (settings.unitsOfMeasure == 'Metric') {
       unitStr = 'm3'
     }

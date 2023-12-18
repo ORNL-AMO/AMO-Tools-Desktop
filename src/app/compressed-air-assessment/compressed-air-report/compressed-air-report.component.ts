@@ -95,6 +95,11 @@ export class CompressedAirReportComponent implements OnInit {
       this.compressedAirAssessmentService.settings.next(this.settings);
     }
 
+    if (this.quickReport) {
+      this.compressedAirAssessmentService.compressedAirAssessment.next(this.assessment.compressedAirAssessment);
+      this.compressedAirAssessmentService.settings.next(this.settings);
+    }
+
     this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
       this.printOptions = this.printOptionsMenuService.printOptions.getValue();
       this.showPrintDiv = val;

@@ -10,9 +10,12 @@ export class ExecutiveSummaryService {
 
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService, private co2SavingPhastService: Co2SavingsPhastService) { }
 
-  getSummary(phast: PHAST, isMod: boolean, settings: Settings, baseline: PHAST, baselineSummary?: ExecutiveSummary): ExecutiveSummary {
+  getSummary(phast: PHAST, isMod: boolean, settings: Settings, baseline: PHAST, baselineSummary?: ExecutiveSummary, existingPhastResults?: PhastResults): ExecutiveSummary {
     let executiveSummary: ExecutiveSummary = this.initSummary();
-    let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
+    let phastResults: PhastResults = existingPhastResults;
+    if (!phastResults) {
+      phastResults = this.phastResultsService.getResults(phast, settings);
+    }
     executiveSummary.annualEnergyUsed = this.calcAnnualEnergy(phastResults, phast);
     executiveSummary.energyPerMass = this.calcEnergyPer(phast, settings, phastResults.grossHeatInput);
     executiveSummary = this.calcAnnualCosts(executiveSummary, phastResults, settings, phast);

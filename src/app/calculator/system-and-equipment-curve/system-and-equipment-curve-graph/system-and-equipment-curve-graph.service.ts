@@ -323,6 +323,7 @@ export interface HoverGroupData {
 
 export interface SystemCurveDataPoint extends DataPoint {
   power?: number,
+  id?: string,
   efficiency?: number,
   fluidPower?: number,
   isUserPoint?: boolean
