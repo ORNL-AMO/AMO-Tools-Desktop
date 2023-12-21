@@ -57,6 +57,23 @@ export interface SystemAndEquipmentCurveData {
     powerFlowFive: number,
     powerFlowSix: number,
   }
+
+  export interface ByEquationOutput {
+    baselineRegressionEquation: string,
+    modificationRegressionEquation: string,
+    baselineDataPairs: Array<{ x: number, y: number }>,
+    modifiedDataPairs: Array<{ x: number, y: number }>,
+    modificationEquipment: ModificationEquipment
+  }
+
+  export interface ByDataOutput {
+    baselinePolynomialCurve: any,
+    baselineRegressionEquation: string,
+    baselineDataPairs: Array<{ x: number, y: number }>,
+    baselineRSquared: number,
+  }
+
+  
   
   export interface EquipmentInputs {
     measurementOption: number,

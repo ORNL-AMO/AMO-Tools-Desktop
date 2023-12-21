@@ -343,7 +343,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
   drawSystemCurve() {
     let curveTraceData: Array<any> = this.systemAndEquipmentCurveService.systemCurveRegressionData;
-    console.log('systemCurveRegressionData', this.systemAndEquipmentCurveService.systemCurveRegressionData)
     let xTmp = [];
     let yTmp = [];
     let fluidTmp = [];
@@ -357,9 +356,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.curveEquipmentChart.data[this.traces.system].y = yTmp;
     this.fluidPowerData = fluidTmp;
 
-    let precision = this.imperialFanPrecision ? this.imperialFanPrecision : '.0f';
-    // let template = `${'System Curve'} ${this.yName}: %{y:${precision}} ${this.yUnits}`;
-    let template = `${'System Curve'} ${this.yName}: %{y} ${this.yUnits}`;
+    let precision = this.imperialFanPrecision ? this.imperialFanPrecision : '.1f';
+    let template = `${'System Curve'} ${this.yName}: %{y:${precision}} ${this.yUnits}`;
     this.curveEquipmentChart.data[this.traces.system].hovertemplate = template;
   }
 
@@ -375,9 +373,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.curveEquipmentChart.data[traceIndex].y = yTmp;
     this.curveEquipmentChart.data[traceIndex].line.color = this.pointColors[traceIndex - 1];
 
-    let precision = this.imperialFanPrecision ? this.imperialFanPrecision : '.0f';
-    // let template = `${traceTitle} ${this.yName}: %{y:${precision}} ${this.yUnits}<br>`;
-    let template = `${traceTitle} ${this.yName}: %{y} ${this.yUnits}<br>`;
+    let precision = this.imperialFanPrecision ? this.imperialFanPrecision : '.1f';
+    let template = `${traceTitle} ${this.yName}: %{y:${precision}} ${this.yUnits}<br>`;
     this.curveEquipmentChart.data[traceIndex].hovertemplate = template;
   }
 
@@ -542,9 +539,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     let intersectionTrace = this.curveEquipmentChart.data[traceDataIndex];
     intersectionTrace.x = [point.x];
     intersectionTrace.y = [point.y];
-    let precision = this.imperialFanPrecision ? this.imperialFanPrecision : '.0f';
-    // intersectionTrace.hovertemplate = `${name} Intersection<br>Flow: %{x:.0f} ${this.xUnits}<br>${this.yName}: %{y:${precision}} ${this.yUnits}`;
-    intersectionTrace.hovertemplate = `${name} Intersection<br>Flow: %{x} ${this.xUnits}<br>${this.yName}: %{y} ${this.yUnits}`;
+    let precision = this.imperialFanPrecision ? this.imperialFanPrecision : '.1f';
+    intersectionTrace.hovertemplate = `${name} Intersection<br>Flow: %{x:.1f} ${this.xUnits}<br>${this.yName}: %{y:${precision}} ${this.yUnits}`;
     this.curveEquipmentChart.data[traceDataIndex] = intersectionTrace;
 
     point.pointColor = this.defaultPointBackgroundColor;

@@ -176,6 +176,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     }
   }
 
+  //  * 1s
   updateSystemCurveResultData() {
     let newMaxFlow: number = this.systemAndEquipmentCurveService.getMaxFlowRate(this.equipmentType);
     this.systemAndEquipmentCurveService.calculateSystemCurveRegressionData(this.equipmentType, this.settings, newMaxFlow);
@@ -204,9 +205,10 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     }
   }
 
+  // * 1e - Can happen concurrently with updateSystemCurveResultData or triggered by BS
   updateByDataResultData() {
     let newMaxFlow: number = this.systemAndEquipmentCurveService.getMaxFlowRate(this.equipmentType);
-    this.systemAndEquipmentCurveService.calculateByDataRegression(this.equipmentType, newMaxFlow);
+    this.systemAndEquipmentCurveService.calculateByDataRegression(this.equipmentType, newMaxFlow, this.settings);
     if (newMaxFlow != this.maxFlowRate) {
       this.maxFlowRate = newMaxFlow;
       this.updateSystemCurveResultData();
