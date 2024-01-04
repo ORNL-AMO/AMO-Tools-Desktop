@@ -57,7 +57,6 @@
     "ngx-indexed-db": "^16.0.0",
     "pako": "^2.1.0",
     "pptxgenjs": "^3.10.0",
-    "nerdamer": "^1.1.6",
     "regression": "^2.0.0",
     "rxjs": "^7.5.5",
     "rxjs-compat": "6.6.3",
