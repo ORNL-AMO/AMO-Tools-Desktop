@@ -18,9 +18,7 @@
               "regression",
               "xlsx",
               "exceljs",
-              "pptxgenjs",
-              "jstat",
-              "nerdamer"
+              "pptxgenjs"
             ],
             "outputPath": "dist",
             "index": "src/index.html",

@@ -21,6 +21,11 @@
             <span [innerHTML]="settings.powerMeasurement | settingsLabel"></span>
           )
         </th>
+        <th class="small">Power
+          (
+            <span [innerHTML]="settings.powerMeasurement | settingsLabel"></span>
+          )
+        </th>
       </tr>
 
       <tr *ngIf="currentHoverData" 
@@ -39,9 +44,14 @@
           <span *ngIf="!imperialFanPrecision && currentHoverData.baseline.y < 100">{{currentHoverData.baseline.y | number: '1.1-1'}}</span>
         </td>
         <td>
-          <span *ngIf="currentHoverData.fluidPower === undefined">&mdash; &mdash;</span>
-          <span *ngIf="currentHoverData.fluidPower >= 100">{{currentHoverData.fluidPower | number: '1.0-0'}}</span>
-          <span *ngIf="currentHoverData.fluidPower < 100">{{currentHoverData.fluidPower | number: '1.1-1'}}</span>
+          <span *ngIf="currentHoverData.baseline.fluidPower === undefined">&mdash; &mdash;</span>
+          <span *ngIf="currentHoverData.baseline.fluidPower >= 100">{{currentHoverData.baseline.fluidPower | number: '1.0-0'}}</span>
+          <span *ngIf="currentHoverData.baseline.fluidPower < 100">{{currentHoverData.baseline.fluidPower | number: '1.1-1'}}</span>
+        </td>
+        <td>
+          <span *ngIf="currentHoverData.baselinePower === undefined">&mdash; &mdash;</span>
+          <span *ngIf="currentHoverData.baselinePower >= 100">{{currentHoverData.baselinePower | number: '1.0-0'}}</span>
+          <span *ngIf="currentHoverData.baselinePower < 100">{{currentHoverData.baselinePower | number: '1.1-1'}}</span>
         </td>
       </tr>
 
@@ -61,11 +71,16 @@
           <span *ngIf="!imperialFanPrecision && currentHoverData.modification.y < 100">{{currentHoverData.modification.y | number: '1.1-1'}}</span>
         </td>
         <td>
-          <span *ngIf="currentHoverData.modification.x !== undefined && currentHoverData.fluidPower !== undefined">
-            <span *ngIf="currentHoverData.fluidPower >= 100">{{currentHoverData.fluidPower | number: '1.0-0'}}</span>
-            <span *ngIf="currentHoverData.fluidPower < 100">{{currentHoverData.fluidPower | number: '1.1-1'}}</span>
+          <span *ngIf="currentHoverData.modification.x === undefined || currentHoverData.modification.fluidPower === undefined">&mdash; &mdash;</span>
+          <span *ngIf="currentHoverData.modification.x !== undefined && currentHoverData.modification.fluidPower !== undefined">
+            <span *ngIf="currentHoverData.modification.fluidPower >= 100">{{currentHoverData.modification.fluidPower | number: '1.0-0'}}</span>
+            <span *ngIf="currentHoverData.modification.fluidPower < 100">{{currentHoverData.modification.fluidPower | number: '1.1-1'}}</span>
           </span>
-          <span *ngIf="currentHoverData.modification.x === undefined || currentHoverData.fluidPower === undefined">&mdash; &mdash;</span>
+        </td>
+        <td>
+          <span *ngIf="currentHoverData.modificationPower === undefined">&mdash; &mdash;</span>
+          <span *ngIf="currentHoverData.modificationPower >= 100">{{currentHoverData.modificationPower | number: '1.0-0'}}</span>
+          <span *ngIf="currentHoverData.modificationPower < 100">{{currentHoverData.modificationPower | number: '1.1-1'}}</span>
         </td>
       </tr>
 
@@ -79,12 +94,13 @@
           <span *ngIf="currentHoverData.system.x < 100">{{currentHoverData.system.x | number: '1.1-1'}}</span>
         </td>
         <td>
-          <span *ngIf="currentHoverData.system.y !== undefined">
-            <span *ngIf="imperialFanPrecision"> {{currentHoverData.system.y | number: '1.2-2'}}</span>
-            <span *ngIf="!imperialFanPrecision && currentHoverData.system.y >= 100">{{currentHoverData.system.y | number: '1.0-0'}}</span>
-            <span *ngIf="!imperialFanPrecision && currentHoverData.system.y < 100">{{currentHoverData.system.y | number: '1.1-1'}}</span>
-          </span>
           <span *ngIf="currentHoverData.system.y === undefined">&mdash; &mdash;</span>
+          <span *ngIf="imperialFanPrecision"> {{currentHoverData.system.y | number: '1.2-2'}}</span>
+          <span *ngIf="!imperialFanPrecision && currentHoverData.system.y >= 100">{{currentHoverData.system.y | number: '1.0-0'}}</span>
+          <span *ngIf="!imperialFanPrecision && currentHoverData.system.y < 100">{{currentHoverData.system.y | number: '1.1-1'}}</span>
+        </td>
+        <td>
+          <span>&mdash; &mdash;</span>
         </td>
         <td>
           <span>&mdash; &mdash;</span>
