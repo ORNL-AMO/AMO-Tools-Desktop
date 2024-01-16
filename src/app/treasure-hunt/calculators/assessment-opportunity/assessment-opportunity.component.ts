@@ -3,9 +3,9 @@ import { Settings } from '../../../shared/models/settings';
 import { AssessmentOpportunity, OpportunitySheetResults } from '../../../shared/models/treasure-hunt';
 import { AssessmentOpportunityService } from '../../treasure-hunt-calculator-services/assessment-opportunity.service';
 import { AssessmentEnergyOption, IntegratedAssessment, ModificationEnergyOption } from '../../../shared/assessment-integration/assessment-integration.service';
-import { HelperFunctionsService } from '../../../shared/helper-services/helper-functions.service';
 import { Subscription } from 'rxjs';
 import { TreasureHuntService } from '../../treasure-hunt.service';
+import { copyObject } from '../../../shared/helperFunctions';
 
 @Component({
   selector: 'app-assessment-opportunity',
@@ -41,11 +41,11 @@ export class AssessmentOpportunityComponent {
   isModalOpen: boolean;
   modalOpenSub: Subscription;
   allowCreateModifiedEnergy: boolean = false;
-  constructor(private assessmentOpportunityService: AssessmentOpportunityService, private treasureHuntService: TreasureHuntService, private helperFunctions: HelperFunctionsService) { }
+  constructor(private assessmentOpportunityService: AssessmentOpportunityService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
     if (this.assessmentOpportunityService.assessmentOpportunity) {
-      this.assessmentOpportunity = this.helperFunctions.copyObject(this.assessmentOpportunityService.assessmentOpportunity);
+      this.assessmentOpportunity = copyObject(this.assessmentOpportunityService.assessmentOpportunity);
     } else {
       this.assessmentOpportunity = this.assessmentOpportunityService.initAssessmentOpportunity();
     }

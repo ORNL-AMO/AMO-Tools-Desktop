@@ -9,7 +9,7 @@ import { graphColors } from '../../../phast/phast-report/report-graphs/graphColo
 import { CurveDataService } from '../curve-data.service';
 import { PlotlyService } from 'angular-plotly.js';
 import * as Plotly from 'plotly.js-dist';
-import { HelperFunctionsService } from '../../../shared/helper-services/helper-functions.service';
+import { getNewIdString } from '../../../shared/helperFunctions';
 
 @Component({
   selector: 'app-system-and-equipment-curve-graph',
@@ -98,8 +98,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     private systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService,
     private curveDataService: CurveDataService,
     private cd: ChangeDetectorRef,
-    private plotlyService: PlotlyService,
-    private helperService: HelperFunctionsService
+    private plotlyService: PlotlyService
   ) { }
 
   ngOnInit(): void {
@@ -574,7 +573,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       fluidPower = this.fluidPowerData[pointIndex];
     }
 
-    let pointId: string = this.helperService.getNewIdString();
+    let pointId: string = getNewIdString();
     if (this.pointColors.length === 0) {
       this.pointColors = JSON.parse(JSON.stringify(graphColors));
     } 

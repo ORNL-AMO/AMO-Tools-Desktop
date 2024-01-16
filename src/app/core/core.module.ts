@@ -16,12 +16,7 @@ import { ReportRollupModule } from '../report-rollup/report-rollup.module';
 import { FsatModule } from '../fsat/fsat.module';
 import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
 import { WindowRefService } from '../indexedDb/window-ref.service';
- 
-import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { DirectoryDbService } from '../indexedDb/directory-db.service';
-import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { CalculatorDbService } from '../indexedDb/calculator-db.service';
-import { DeleteDataService } from '../indexedDb/delete-data.service';
+
 import { CoreService } from './core.service';
 import { SsmtModule } from '../ssmt/ssmt.module';
 import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';
@@ -32,7 +27,6 @@ import { DashboardModule } from '../dashboard/dashboard.module';
 import { UpdateToastComponent } from '../update-toast/update-toast.component';
 import { LogToolModule } from '../log-tool/log-tool.module';
 import { MotorInventoryModule } from '../motor-inventory/motor-inventory.module';
-import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { WasteWaterModule } from '../waste-water/waste-water.module';
 import { ToolsSuiteApiModule } from '../tools-suite-api/tools-suite-api.module';
 import { NotFoundComponent } from './not-found/not-found.component';
