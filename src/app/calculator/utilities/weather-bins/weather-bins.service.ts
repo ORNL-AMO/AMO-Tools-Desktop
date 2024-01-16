@@ -71,8 +71,11 @@ export class WeatherBinsService {
       endDay: 31,
       endMonth: 11,
       cases: new Array(),
-      autoBinParameter: 'Dry-bulb (C)',
-      autoBinRangeValue: 10
+      binParameters: [{
+        name: 'Dry-bulb (C)',
+        range: 10,
+        startingValue: undefined,
+      }]
     }
   }
 
@@ -98,6 +101,7 @@ export class WeatherBinsService {
     let dataInRange: Array<any> = this.getDataInDateRange(inputData);
     inputData.cases.forEach(weatherCase => {
       let convertedCaseParameters: Array<CaseParameter> = this.convertCaseParameters(weatherCase.caseParameters, settings);
+      // todo 6657 may be no longer relevant with dual bin params?
       weatherCase.totalNumberOfDataPoints = this.calculateNumberOfParameterDataPoints(dataInRange, convertedCaseParameters);
     });
     let total = _.sumBy(inputData.cases, 'totalNumberOfDataPoints')
@@ -196,27 +200,41 @@ export class WeatherBinsService {
     return dataInDateRange;
   }
 
-
   setAutoBinCases(inputData: WeatherBinsInput, settings: Settings): WeatherBinsInput {
-    let minAndMax: { min: number, max: number } = this.getParameterMinMax(inputData, inputData.autoBinParameter, settings);
-    let lowerBound: number = Math.floor(minAndMax.min);
-    let maxValue: number = Math.ceil(minAndMax.max);
+    let binParametersCases: WeatherBinCase[]  = []
     inputData.cases = new Array();
-    let caseIndex: number = 1;
-    for (lowerBound; lowerBound <= maxValue; lowerBound += inputData.autoBinRangeValue) {
-      inputData.cases.push({
-        caseName: 'Bin #' + caseIndex,
-        caseParameters: [{
-          field: inputData.autoBinParameter,
+    inputData.binParameters.forEach((binParam, binParametersIndex) => {
+      let lowerBound = binParam.startingValue;
+      let caseIndex: number = 0;
+      for (lowerBound; lowerBound <= binParam.max; lowerBound += binParam.range) {
+        let isSecondBinParameter: boolean = binParametersIndex > 0;
+        let caseParameter: CaseParameter = {
+          field: binParam.name,
           lowerBound: lowerBound,
-          upperBound: lowerBound + inputData.autoBinRangeValue
-        }],
-        totalNumberOfDataPoints: 0
-      });
-      caseIndex++;
-    };
+          upperBound: lowerBound + binParam.range
+        }
+        if (isSecondBinParameter) {
+          let existingCase = binParametersCases[caseIndex];
+          if (existingCase) {
+            binParametersCases[caseIndex].caseParameters.push(caseParameter);
+          } else {
+            // debugger;
+          }
+        } else {
+          binParametersCases.push({
+            caseName: `Bin #${caseIndex + 1}`,
+            caseParameters: [caseParameter],
+            totalNumberOfDataPoints: 0
+          });
+        }
+        caseIndex++;
+      };
+    });
+    inputData.cases = binParametersCases;
     return inputData;
   }
+
+  
 
   getTotalCaseDataPoints(inputData: WeatherBinsInput) {
     let totalCaseDataPoints: number = 0;
@@ -246,7 +264,7 @@ export class WeatherBinsService {
         max = this.convertUnitsService.value(max).from('mm').to('in');
       }
     }
-    return { min: min, max: max }
+    return { min: Math.floor(min), max: Math.ceil(max) }
   }
 }
 
@@ -258,8 +276,15 @@ export interface WeatherBinsInput {
   endMonth: number,
   cases: Array<WeatherBinCase>,
   fileName: string,
-  autoBinParameter: string,
-  autoBinRangeValue: number
+  binParameters?: BinParameter[],
+}
+
+export interface BinParameter {
+  name: string,
+  min?: number,
+  max?: number,
+  range: number,
+  startingValue: number,
 }
 
 

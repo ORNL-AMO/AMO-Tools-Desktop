@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WeatherBinsComponent } from './weather-bins.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WeatherBinsService } from './weather-bins.service';
 import { WeatherBinsFormComponent } from './weather-bins-form/weather-bins-form.component';
 import { WeatherBinsHelpComponent } from './weather-bins-help/weather-bins-help.component';
@@ -22,6 +22,7 @@ import { WeatherStationLookupModule } from '../../../shared/weather-station-look
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     ExportableResultsTableModule,
     WeatherStationLookupModule
   ],

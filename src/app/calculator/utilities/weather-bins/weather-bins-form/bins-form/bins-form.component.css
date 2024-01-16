@@ -20,3 +20,8 @@
 .btn-form {
     border-radius: 4px !important;
 }   
+
+.form-section{
+    border-bottom: #bbb dashed 1px;
+    padding-bottom: .5rem;
+}

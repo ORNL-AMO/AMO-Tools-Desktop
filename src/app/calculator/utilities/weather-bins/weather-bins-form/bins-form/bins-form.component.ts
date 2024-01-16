@@ -4,6 +4,8 @@ import { Subscription } from 'rxjs';
 import {  WeatherBinsInput, WeatherBinsService } from '../../weather-bins.service';
 import { CsvImportData } from '../../../../../shared/helper-services/csv-to-json.service';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
+import { WeatherBinsFormService } from '../weather-bins-form.service';
 
 @Component({
   selector: 'app-bins-form',
@@ -14,9 +16,7 @@ export class BinsFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  inputData: WeatherBinsInput;
-  inputDataSub: Subscription;
-  importDataFromCsvSub: Subscription;
+  weatherBinsInput: WeatherBinsInput;
   importDataFromCsv: CsvImportData;
   parameterMin: number;
   parameterMax: number;
@@ -31,54 +31,69 @@ export class BinsFormComponent implements OnInit {
     {display: "Pressure", value: "Pressure (mbar)"},
   ];
   hasIntegratedCalculatorParameter: boolean = false;
+  weatherBinsInputSub: Subscription;
+  importDataFromCsvSub: Subscription;
   integratedCalculatorSub: Subscription;
-  constructor(private weatherBinsService: WeatherBinsService, private convertUnitsService: ConvertUnitsService) { }
+  binParametersForms: FormGroup[];
+
+  constructor(private weatherBinsService: WeatherBinsService, private weatherBinFormService: WeatherBinsFormService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit(): void {
-    this.inputDataSub = this.weatherBinsService.inputData.subscribe(val => {
-      this.inputData = val;
-      this.setParameterMinMax();
+    this.weatherBinsInputSub = this.weatherBinsService.inputData.subscribe(val => {
+      this.weatherBinsInput = val;
     });
-
+    
     this.importDataFromCsvSub = this.weatherBinsService.importDataFromCsv.subscribe(importData => {
       this.importDataFromCsv = importData;
-      this.setParameterMinMax();
+      this.initForm();
     });
-
     this.integratedCalculatorSub = this.weatherBinsService.integratedCalculator.subscribe(integratedCalculator => {
       if (integratedCalculator) {
         this.parameterOptions.filter(option => option.value === integratedCalculator.binningParameters[0]);
         this.hasIntegratedCalculatorParameter = true;
+        // todo 6657 disable parameter name field when integrated (it defalts to dry bulb)
       }
-  });
+    });
+    this.initForm();
   }
 
   ngOnDestroy() {
-    this.inputDataSub.unsubscribe();
+    this.weatherBinsInputSub.unsubscribe();
     this.importDataFromCsvSub.unsubscribe();
     this.integratedCalculatorSub.unsubscribe();
+  }
+  initForm() {
+    if (this.weatherBinsInput && this.importDataFromCsv) {
+      this.binParametersForms = this.weatherBinFormService.getBinParametersForms(this.weatherBinsInput, this.settings);
+    }
   }
 
   focusField(str: string) {
     this.weatherBinsService.currentField.next(str);
   }
+  addBinParameter() {
+    this.weatherBinFormService.addBinParameter(this.binParametersForms, this.weatherBinsInput, this.settings);
+  }
 
   save() {
-    this.inputData.cases = [];
-    this.inputData = this.weatherBinsService.setAutoBinCases(this.inputData, this.settings);
-    this.weatherBinsService.save(this.inputData, this.settings);
+    this.weatherBinsInput.cases = [];
+    this.weatherBinFormService.setBinParameters(this.binParametersForms, this.weatherBinsInput)
+    this.weatherBinsInput = this.weatherBinsService.setAutoBinCases(this.weatherBinsInput, this.settings);
+    this.weatherBinsService.save(this.weatherBinsInput, this.settings);
   }
 
   deleteAllCase(){    
-    this.inputData.cases = [];
-    this.weatherBinsService.inputData.next(this.inputData)
+    this.weatherBinsInput.cases = [];
+    this.weatherBinsService.inputData.next(this.weatherBinsInput)
   }
 
-  setParameterMinMax() {
-    if (this.importDataFromCsv) {
-      let minAndMax: { min: number, max: number } = this.weatherBinsService.getParameterMinMax(this.inputData, this.inputData.autoBinParameter, this.settings);
-      this.parameterMin = Math.floor(minAndMax.min);
-      this.parameterMax = Math.ceil(minAndMax.max);
-    }
+  changeParameter(form: FormGroup) {
+    this.setParameterMinMax(form);
+    this.weatherBinFormService.setStartingValueValidator(form);
+    form.controls.startingValue.patchValue(form.controls.min.value)
+  }
+
+  setParameterMinMax(form: FormGroup) {
+   this.weatherBinFormService.setParameterMinMax(form, this.weatherBinsInput, this.settings);
   }
 }
