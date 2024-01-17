@@ -3,12 +3,13 @@ import { Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, View
 import { UntypedFormGroup } from '@angular/forms';
 import { PlotlyService } from 'angular-plotly.js';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
+import { DataPoint, SimpleChart, TraceData } from '../../../../shared/models/plotting';
 import { Settings } from '../../../../shared/models/settings';
 import { FanPsychrometricService } from '../fan-psychrometric.service';
 import { Subscription } from 'rxjs';
 import { BaseGasDensity, PsychrometricResults } from '../../../../shared/models/fans';
 import { GasDensityFormService } from '../../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
+import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 
 @Component({
   selector: 'app-fan-psychrometric-chart',
@@ -40,11 +41,15 @@ export class FanPsychrometricChartComponent implements OnInit {
   humidityRatioUnits: string;
   wetBulbAxisText: Array<string>;
   lineCreationData: LineCreationData;
+  dataPointTraces: Array<TraceData>;
+  graphColors: Array<string>;
 
   constructor(private plotlyService: PlotlyService, private psychrometricService: FanPsychrometricService, private convertUnitsService: ConvertUnitsService,
     private gasDensityFormService: GasDensityFormService) { }
 
   ngOnInit() {
+    this.graphColors = graphColors;
+    this.dataPointTraces = new Array();
     this.triggerInitialResize();
     this.setChartUnits();
     this.calculatedBaseGasDensitySubscription = this.psychrometricService.calculatedBaseGasDensity.subscribe(results => {
@@ -60,7 +65,10 @@ export class FanPsychrometricChartComponent implements OnInit {
 
 
   initRenderChart() {
-    this.chart = this.getEmptyChart();
+    this.chart = this.getEmptyChart();      
+    this.dataPointTraces.forEach(trace => {
+      this.chart.data.push(trace);
+    });
     let form: UntypedFormGroup = this.gasDensityFormService.getGasDensityFormFromObj(this.inputData, this.settings);
     if (form.valid && this.psychrometricResults) {
       let relativeHumiditiesCurves: Array<TraceData> = this.addRelativeHumidityCurves();
@@ -75,10 +83,30 @@ export class FanPsychrometricChartComponent implements OnInit {
     
     if (this.expanded && this.expandedChartDiv) {
       this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.chart.data, this.chart.layout, this.chart.config)
+      .then(chart => {
+        chart.on('plotly_click', chartData => {
+          this.addSelectedPointTraces(chartData);
+        });
+      });
 
     } else if (!this.expanded && this.panelChartDiv) {
       this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.chart.data, this.chart.layout, this.chart.config)
+      .then(chart => {
+        chart.on('plotly_click', chartData => {
+          this.addSelectedPointTraces(chartData);
+        });
+      });
     }
+  }
+
+  addSelectedPointTraces(graphData) {
+    let pointColor: string = this.graphColors[(this.dataPointTraces.length + 2) % this.graphColors.length];
+    let userPointTrace: TraceData = this.getEmptyPointTrace('', pointColor);
+    userPointTrace.x.push(graphData.points[0].x);
+    userPointTrace.y.push(graphData.points[0].y);
+    this.dataPointTraces.push(userPointTrace);   
+
+    this.initRenderChart();
   }
 
   addRelativeHumidityCurves(): Array<TraceData> {

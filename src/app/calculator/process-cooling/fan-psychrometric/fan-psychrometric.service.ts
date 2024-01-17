@@ -6,6 +6,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { FsatService } from '../../../fsat/fsat.service';
 import { GasDensityFormService } from '../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 import { ConvertFanAnalysisService } from '../../fans/fan-analysis/convert-fan-analysis.service';
+import { DataPoint, TraceData } from '../../../shared/models/plotting';
 
 @Injectable()
 export class FanPsychrometricService {
