@@ -13,6 +13,12 @@ export function truncate(text: string, specifiedLimit?: number) {
     }
 }
 
+
+export function roundVal(val: number, places: number): number {
+    let rounded = Number(val.toFixed(places));
+    return rounded;
+  }
+
 export function getNewIdString() {
     return Math.random().toString(36).substr(2, 9);
 }

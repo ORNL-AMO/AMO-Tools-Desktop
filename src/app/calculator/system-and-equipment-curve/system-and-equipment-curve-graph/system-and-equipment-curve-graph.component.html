@@ -71,7 +71,7 @@
 
   <!--  Power chart -->
   <div class="w-100" [ngClass]="{'tab-panel-background': displayPowerChart}">
-    <div class="w-100" #powerPanelChartDiv id="powerPanelChartDiv">
+    <div class="w-100" #powerChartPanelDiv id="powerChartPanelDiv">
     </div>
     <div>
       <div *ngIf="displayPowerChart" class="col-md-12">
@@ -111,6 +111,11 @@
             <span *ngIf="equipmentType == 'pump'" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
           )
         </th>
+        <th class="bold w-25">Fluid Power 
+          (
+            <span [innerHTML]="settings.powerMeasurement | settingsLabel"></span>
+          )
+        </th>
         <th class="bold w-25">Efficiency (%)</th>
         <th class="bold w-25">Power 
           (
@@ -126,16 +131,25 @@
                       'border': '4px solid ' + point.pointOutlineColor}">
         </div>
         </td>
-        <td class="text-center">{{point.x | number: '1.0-0'}}</td>
+        <td *ngIf="point.x < 100" class="text-center">{{point.x | number: '1.1-1'}}</td>
+        <td *ngIf="point.x >= 100" class="text-center">{{point.x | number: '1.0-0'}}</td>
+        
         <td *ngIf="imperialFanPrecision" class="text-center">{{point.y | number: '1.2-2'}}</td>
-        <td *ngIf="!imperialFanPrecision" class="text-center">{{point.y | number: '1.0-0'}}</td>
+        <td *ngIf="!imperialFanPrecision && point.y < 100" class="text-center">{{point.y | number: '1.1-1'}}</td>
+        <td *ngIf="!imperialFanPrecision && point.y >= 100" class="text-center">{{point.y | number: '1.0-0'}}</td>
         <td class="text-center">
-          <span *ngIf="point.efficiency">{{point.efficiency | number: '1.0-1'}}</span>
-          <span *ngIf="!point.efficiency">&mdash; &mdash;</span>
+          <span *ngIf="point.fluidPower === undefined">&mdash; &mdash;</span>
+          <span *ngIf="point.fluidPower < 100" class="text-center">{{point.fluidPower | number: '1.1-1'}}</span>
+          <span *ngIf="point.fluidPower >= 100" class="text-center">{{point.fluidPower | number: '1.0-0'}}</span>
         </td>
         <td class="text-center">
-          <span *ngIf="point.power">{{point.power | number: '1.1-1'}}</span>
-          <span *ngIf="!point.power">&mdash; &mdash;</span>
+          <span *ngIf="point.efficiency === undefined">&mdash; &mdash;</span>
+          <span *ngIf="point.efficiency !== undefined" class="text-center">{{point.efficiency | number: '1.0-1'}}</span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="point.power === undefined">&mdash; &mdash;</span>
+          <span *ngIf="point.power < 100" class="text-center">{{point.power | number: '1.1-1'}}</span>
+          <span *ngIf="point.power >= 100" class="text-center">{{point.power | number: '1.0-0'}}</span>
         </td>
         <td class='delete-row text-center'>
           <a *ngIf="index >= defaultPointCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point)">
@@ -177,11 +191,18 @@
         </th>
       </tr>
       <tr *ngFor="let point of selectedDataPoints; let index = index">
-        <td class="text-center">{{point.x}}</td>
+        <td *ngIf="point.x < 100" class="text-center">{{point.efficiency | number: '1.1-1'}}</td>
+        <td *ngIf="point.x >= 100" class="text-center">{{point.efficiency | number: '1.0-0'}}</td>
+
         <td *ngIf="imperialFanPrecision" class="text-center">{{point.y | number: '1.2-2'}}</td>
-        <td *ngIf="!imperialFanPrecision" class="text-center">{{point.y | number: '1.0-0'}}</td>
-        <td class="text-center">{{point.efficiency | number: '1.1-1'}}</td>
-        <td class="text-center">{{point.power | number: '1.1-1'}}</td>
+        <td *ngIf="!imperialFanPrecision && point.y < 100" class="text-center">{{point.y | number: '1.1-1'}}</td>
+        <td *ngIf="!imperialFanPrecision && point.y >= 100" class="text-center">{{point.y | number: '1.0-0'}}</td>
+
+        <td *ngIf="point.efficiency < 100" class="text-center">{{point.efficiency | number: '1.1-1'}}</td>
+        <td *ngIf="point.efficiency >= 100" class="text-center">{{point.efficiency | number: '1.0-0'}}</td>
+
+        <td *ngIf="point.power < 100" class="text-center">{{point.power | number: '1.1-1'}}</td>
+        <td *ngIf="point.power >= 100" class="text-center">{{point.power | number: '1.0-0'}}</td>
       </tr>
     </tbody>
   </table>

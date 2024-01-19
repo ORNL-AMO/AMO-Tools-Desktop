@@ -162,6 +162,7 @@ export interface DataPoint {
     name?: string;
     x: number;
     y: number;
+    fluidPower?: number
 }
 
 

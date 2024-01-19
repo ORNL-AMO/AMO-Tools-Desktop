@@ -57,6 +57,22 @@ export interface SystemAndEquipmentCurveData {
     powerFlowFive: number,
     powerFlowSix: number,
   }
+
+  export interface ByEquationOutput {
+    baselineDataPairs: Array<CurveCoordinatePairs>,
+    modifiedDataPairs: Array<CurveCoordinatePairs>,
+    modificationEquipment: ModificationEquipment,
+    ratio?: number
+  }
+
+  export interface ByDataOutput {
+    baselinePolynomialCurve: any,
+    baselineDataPairs: Array<{ x: number, y: number }>,
+  }
+
+  export interface CurveCoordinatePairs {
+    x: number, y: number, fluidPower?: number 
+  }
   
   export interface EquipmentInputs {
     measurementOption: number,
