@@ -11,6 +11,11 @@ export class HelperFunctionsService {
     return cloneDeep(object);
   }
 
+  roundVal(val: number, places: number): number {
+    let rounded = Number(val.toFixed(places));
+    return rounded;
+  }
+
   truncate(text: string, specifiedLimit?: number) {
     let limit = specifiedLimit? specifiedLimit : 50;
     if (text.length > limit) {
