@@ -9,8 +9,8 @@ import { graphColors } from '../../../phast/phast-report/report-graphs/graphColo
 import { CurveDataService } from '../curve-data.service';
 import { PlotlyService } from 'angular-plotly.js';
 import * as Plotly from 'plotly.js-dist';
-import { HelperFunctionsService } from '../../../shared/helper-services/helper-functions.service';
-import { CurveCoordinatePairs, FanSystemCurveData, PumpSystemCurveData } from '../../../shared/models/system-and-equipment-curve';
+import { copyObject, getNewIdString, roundVal } from '../../../shared/helperFunctions';
+import { FanSystemCurveData, PumpSystemCurveData } from '../../../shared/models/system-and-equipment-curve';
 import { RegressionEquationsService } from '../regression-equations.service';
 
 
@@ -106,8 +106,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     private regressionEquationsService: RegressionEquationsService,
     private curveDataService: CurveDataService,
     private cd: ChangeDetectorRef,
-    private plotlyService: PlotlyService,
-    private helperService: HelperFunctionsService
+    private plotlyService: PlotlyService
   ) { }
 
   ngOnInit(): void {
@@ -207,7 +206,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   }
 
   newPlot() {
-    let chartLayout = this.helperService.copyObject(this.curveEquipmentChart.layout);
+    let chartLayout = copyObject(this.curveEquipmentChart.layout);
     let traceData: Array<TraceData> = new Array();
     this.curveEquipmentChart.data.forEach((trace, i) => {
       traceData.push(trace);
@@ -249,7 +248,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     }
 
     if (this.displayPowerChart) {
-      let powerChartLayout = this.helperService.copyObject(this.powerChart.layout);
+      let powerChartLayout = copyObject(this.powerChart.layout);
       if (this.powerExpanded && this.expandedPowerChartDiv) {
         this.plotlyService.newPlot(this.expandedPowerChartDiv.nativeElement, this.powerChart.data, powerChartLayout, this.powerChart.config)
           .then(chart => {
@@ -276,7 +275,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
 
   initChartSetup(isResize) {
-    this.pointColors = this.helperService.copyObject(graphColors);
+    this.pointColors = copyObject(graphColors);
     this.resetHoverData();
     this.fluidPowerData = {};
 
@@ -453,19 +452,19 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
   getRoundedYCoordinate(y: number) {
     if (this.imperialFanPrecision) {
-      return this.helperService.roundVal(y, 2);
+      return roundVal(y, 2);
     } else if (y >= 100) {
-      return this.helperService.roundVal(y, 0);
+      return roundVal(y, 0);
     } else {
-      return this.helperService.roundVal(y, 1);
+      return roundVal(y, 1);
     }
   }
 
   getRoundedXCoordinate(x: number) {
     if (x >= 100) {
-      return this.helperService.roundVal(x, 0);
+      return roundVal(x, 0);
      } else {
-      return this.helperService.roundVal(x, 1);
+      return roundVal(x, 1);
    }
   }
 
@@ -533,7 +532,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
     let hoverBaselineIntersect = plotlyHoverEvent.points[0].curveNumber == this.traces.baselineIntersect;
     let hoverModificationIntersect = plotlyHoverEvent.points[0].curveNumber == this.traces.modificationIntersect;
-    let hoverColors = this.helperService.copyObject(graphColors);
+    let hoverColors = copyObject(graphColors);
     if (!hoverBaselineIntersect) {
       let x: number = Number(baselineX[currentPointIndex]);
       let y: number = Number(baselineY[currentPointIndex]);
@@ -647,9 +646,9 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       fluidPower = this.fluidPowerData.modification[pointIndex];
     }
 
-    let pointId: string = this.helperService.getNewIdString();
+    let pointId: string = getNewIdString();
     if (this.pointColors.length === 0) {
-      this.pointColors = this.helperService.copyObject(graphColors);
+      this.pointColors = copyObject(graphColors);
     } 
     let nextColorIndex: number = (this.selectedDataPoints.filter(point => point.isUserPoint).length + 1) % this.pointColors.length;
     let nextColor: string = this.pointColors[nextColorIndex];  

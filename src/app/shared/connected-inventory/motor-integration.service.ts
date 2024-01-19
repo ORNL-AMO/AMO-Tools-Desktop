@@ -10,9 +10,9 @@ import { ConnectedInventoryData, ConnectedItem, IntegrationState, InventoryOptio
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { IntegrationStateService } from './integration-state.service';
 import { ConvertMotorInventoryService } from '../../motor-inventory/convert-motor-inventory.service';
-import { HelperFunctionsService } from '../helper-services/helper-functions.service';
 import { PSAT } from '../models/psat';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
+import { copyObject } from '../helperFunctions';
 
 @Injectable()
 export class MotorIntegrationService {
@@ -20,7 +20,6 @@ export class MotorIntegrationService {
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
     private convertMotorInventoryService: ConvertMotorInventoryService,
-    private helperService: HelperFunctionsService,
     private integrationStateService: IntegrationStateService) { }
 
   async initInventoriesAndOptions(): Promise<Array<InventoryOption>> {
@@ -76,7 +75,7 @@ export class MotorIntegrationService {
 
       if (selectedPump.connectedAssessments && selectedPump.connectedAssessments.length > 0) {
         selectedPump.connectedAssessments.map(connectedAssessment => {
-            let newConnectedFromState: MotorItem = this.helperService.copyObject(selectedMotorItem);
+            let newConnectedFromState: MotorItem = copyObject(selectedMotorItem);
             connectedAssessment.connectedFromState.pumpMotor = this.setPumpFieldsFromMotor(connectedAssessment.connectedFromState.pumpMotor, newConnectedFromState);
         });
       }
@@ -128,7 +127,7 @@ export class MotorIntegrationService {
         if (motorItem) {
           let motorInventorySettings: Settings = this.settingsDbService.getByInventoryId(motorInventoryItem);  
           if (motorInventorySettings.unitsOfMeasure !== currentSettings.unitsOfMeasure) {
-            motorItem = this.helperService.copyObject(motorItem);
+            motorItem = copyObject(motorItem);
             motorItem.nameplateData = this.convertMotorInventoryService.convertNameplateData(motorItem.nameplateData, motorInventorySettings, currentSettings);
           }
         }
@@ -195,7 +194,7 @@ export class MotorIntegrationService {
   // updated connectedFromState (values at assessmnet to inventory connection)
   updateConnectedFromState(selectedPump: PumpItem, connectedMotorItem: MotorItem) {
     selectedPump.connectedAssessments.map(connectedAssessment => {
-        let newConnectedFromState: MotorItem = this.helperService.copyObject(connectedMotorItem);
+        let newConnectedFromState: MotorItem = copyObject(connectedMotorItem);
         connectedAssessment.connectedFromState.pumpMotor = this.setPumpFieldsFromMotor(connectedAssessment.connectedFromState.pumpMotor, newConnectedFromState);
         });
   }

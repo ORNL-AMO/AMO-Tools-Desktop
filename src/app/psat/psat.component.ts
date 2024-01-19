@@ -21,8 +21,8 @@ import { EGridService } from '../shared/helper-services/e-grid.service';
 import { PumpOperationsService } from './pump-operations/pump-operations.service';
 import { PsatIntegrationService } from '../shared/connected-inventory/psat-integration.service';
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
-import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
+import { copyObject, getNewIdString } from '../shared/helperFunctions';
 
 @Component({
   selector: 'app-psat',
@@ -103,7 +103,6 @@ export class PsatComponent implements OnInit {
     private fieldDataService: FieldDataService,
     private cd: ChangeDetectorRef,
     private egridService: EGridService,
-    private helperFunctionService: HelperFunctionsService,
     private settingsService: SettingsService,
     private analyticsService: AnalyticsService) {
   }
@@ -189,7 +188,7 @@ export class PsatComponent implements OnInit {
       this.hasConnectedMotorItem = this._psat.connectedItem && this._psat.connectedItem.inventoryType === 'motor';
         if (connectedInventoryData.shouldRestoreConnectedValues) {
           let updatedPsat: PSAT = this.psatIntegrationService.restoreConnectedAssessmentValues(connectedInventoryData, this._psat);
-          this._psat = this.helperFunctionService.copyObject(updatedPsat);
+          this._psat = copyObject(updatedPsat);
           this.save();
         }
     });
@@ -440,7 +439,7 @@ export class PsatComponent implements OnInit {
       psat: {
         name: modName,
       },
-      id: this.helperFunctionService.getNewIdString(),
+      id: getNewIdString(),
       notes: {
         fieldDataNotes: '',
         motorNotes: '',

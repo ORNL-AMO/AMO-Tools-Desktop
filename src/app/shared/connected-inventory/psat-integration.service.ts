@@ -9,7 +9,6 @@ import { InventoryDbService } from '../../indexedDb/inventory-db.service';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import * as _ from 'lodash';
 import { IntegrationStateService } from './integration-state.service';
-import { HelperFunctionsService } from '../helper-services/helper-functions.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Settings } from '../models/settings';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -17,9 +16,9 @@ import { SettingsService } from '../../settings/settings.service';
 import { PsatService } from '../../psat/psat.service';
 import { PumpInventoryService } from '../../pump-inventory/pump-inventory.service';
 import { MotorInventoryDepartment, MotorItem } from '../../motor-inventory/motor-inventory';
-import { MotorInventoryService } from '../../motor-inventory/motor-inventory.service';
 import { ConvertMotorInventoryService } from '../../motor-inventory/convert-motor-inventory.service';
 import { MotorIntegrationService } from './motor-integration.service';
+import { copyObject } from '../helperFunctions';
 
 @Injectable()
 export class PsatIntegrationService {
@@ -29,7 +28,6 @@ export class PsatIntegrationService {
   constructor(private assessmentDbService: AssessmentDbService,
     private integrationStateService: IntegrationStateService,
     private inventoryDbService: InventoryDbService,
-    private helperService: HelperFunctionsService,
     private settingsDbService: SettingsDbService,
     private psatService: PsatService,
     private pumpInventoryService: PumpInventoryService,
@@ -163,7 +161,7 @@ export class PsatIntegrationService {
       pumpInventory.pumpInventoryData.departments.forEach(dept => {
         dept.catalog.map(pumpItem => {
           if (pumpItem.id === connectedInventoryData.connectedItem.id) {
-            let connectedFromState = this.helperService.copyObject(selectedPumpItem);
+            let connectedFromState = copyObject(selectedPumpItem);
             let connectedAsssessment: ConnectedItem = {
               assessmentId: assessment.id,
               name: assessment.name,
@@ -214,7 +212,7 @@ export class PsatIntegrationService {
         if (motorInventorySettings.unitsOfMeasure !== assessmentSettings.unitsOfMeasure) {
           if (connectedInventoryData.shouldConvertItemUnits) {
             connectedInventoryData.shouldConvertItemUnits = false;
-            selectedMotoritem = this.helperService.copyObject(selectedMotoritem);
+            selectedMotoritem = copyObject(selectedMotoritem);
             selectedMotoritem.nameplateData = this.convertMotorInventoryService.convertNameplateData(selectedMotoritem.nameplateData, motorInventorySettings, assessmentSettings);
             connectedInventoryData.canConnect = true;
           } else {

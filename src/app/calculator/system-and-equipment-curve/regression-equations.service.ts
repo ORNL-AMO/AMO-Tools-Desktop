@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
 import { EquipmentCurveService } from './equipment-curve/equipment-curve.service';
-import { HelperFunctionsService } from '../../shared/helper-services/helper-functions.service';
+import { copyObject } from '../../shared/helperFunctions';
 
 @Injectable()
 export class RegressionEquationsService {
@@ -20,7 +20,7 @@ export class RegressionEquationsService {
 
   systemCurveRegressionEquation: BehaviorSubject<string>;
   dataPairCoordinateIncrement: number = 1;
-  constructor(private convertUnitsService: ConvertUnitsService, private equipmentCurveService: EquipmentCurveService, private helperService: HelperFunctionsService) {
+  constructor(private convertUnitsService: ConvertUnitsService, private equipmentCurveService: EquipmentCurveService) {
     this.baselineEquipmentCurveByDataRegressionEquation = new BehaviorSubject<string>(undefined);
     this.baselineEquipmentCurveByDataRSquared = new BehaviorSubject<number>(undefined);
 
@@ -56,7 +56,7 @@ export class RegressionEquationsService {
         baselineEquationInputs = this.equipmentCurveService.getFanByEquationDefault(flowUnit, yValueUnit, yImperialUnit);
       }
       
-      let baselineEquationCoefficients = this.helperService.copyObject(baselineRegressionOutput.baselinePolynomialCurve.equation);
+      let baselineEquationCoefficients = copyObject(baselineRegressionOutput.baselinePolynomialCurve.equation);
       let flowCoefficientIndex: number = baselineEquationCoefficients.length - 2;
       let flowAndConstant: number[] = baselineEquationCoefficients.splice(flowCoefficientIndex, 2);
       baselineEquationInputs.flow = flowAndConstant[0];
@@ -124,7 +124,7 @@ export class RegressionEquationsService {
     // still use value regardless of is speed or diameter
     let modificationSpeed: number = ratio * equipmentInputs.baselineMeasurement;
 
-    let modificationByEquationInputs: ByEquationInputs = this.helperService.copyObject(baselineEquationInputs);
+    let modificationByEquationInputs: ByEquationInputs = copyObject(baselineEquationInputs);
     modificationByEquationInputs.constant = baselineEquationInputs.constant * Math.pow(ratio, 2);
     modificationByEquationInputs.flow = baselineEquationInputs.flow * ratio;
     modificationByEquationInputs.equationOrder = baselineEquationInputs.equationOrder;
@@ -212,7 +212,7 @@ export class RegressionEquationsService {
     if (modificationEquipment) {
       let baselineEquationInputs: ByEquationInputs = this.equipmentCurveService.getResetByEquationInputs();
 
-      let baselineEquationCoefficients = this.helperService.copyObject(baselineRegressionOutput.baselinePolynomialCurve.equation);
+      let baselineEquationCoefficients = copyObject(baselineRegressionOutput.baselinePolynomialCurve.equation);
       let flowCoefficientIndex: number = baselineEquationCoefficients.length - 2;
       let flowAndConstant: number[] = baselineEquationCoefficients.splice(flowCoefficientIndex, 2);
       baselineEquationInputs.powerFlow = flowAndConstant[0];
@@ -301,7 +301,7 @@ export class RegressionEquationsService {
   }
 
   getModificationPowerByEquationInputs(baselineEquationInputs: ByEquationInputs, ratio: number): ByEquationInputs {
-    let modificationByEquationInputs: ByEquationInputs = this.helperService.copyObject(baselineEquationInputs);
+    let modificationByEquationInputs: ByEquationInputs = copyObject(baselineEquationInputs);
     modificationByEquationInputs.powerConstant = baselineEquationInputs.powerConstant * Math.pow(ratio, 3);
     modificationByEquationInputs.powerFlow = baselineEquationInputs.powerFlow * Math.pow(ratio, 2);
     modificationByEquationInputs.powerFlowTwo = baselineEquationInputs.powerFlowTwo * ratio;
