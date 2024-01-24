@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import * as _ from 'lodash';
 @Component({
@@ -30,14 +30,8 @@ export class CompressorOrderingTableComponent implements OnInit {
         this.inventoryItems = val.compressorInventoryItems;
         this.selectedDayTypeId = val.systemProfile.systemProfileSetup.dayTypeId;
         this.hasMissingTrimSelection = false;
-        val.systemInformation.trimSelections.forEach(selection => {
-          if(selection.dayTypeId == this.selectedDayTypeId){
-            this.trimSelection = selection.compressorId;
-          }
-          if(selection.compressorId == undefined){
-            this.hasMissingTrimSelection = true;
-          }
-        });
+        this.setSelectedTrimCompressorForm(val);
+        this.hasMissingTrimSelection = this.compressedAirAssessmentService.getHasMissingTrimSelection(val);
         this.multiCompressorSystemControls = val.systemInformation.multiCompressorSystemControls;
         this.profileSummary = val.systemProfile.profileSummary;
         this.hourIntervals = this.compressedAirAssessmentService.getHourIntervals(val.systemProfile.systemProfileSetup);
@@ -106,17 +100,23 @@ export class CompressorOrderingTableComponent implements OnInit {
     this.isFormChange = true;
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
-    compressedAirAssessment.systemInformation.trimSelections.forEach(selection => {
-      if(selection.dayTypeId == this.selectedDayTypeId){
-        selection.compressorId = this.trimSelection;
-      }
-      if(selection.compressorId == undefined){
-        this.hasMissingTrimSelection = true;
-      }
-    });
+    this.setSelectedTrimCompressorFromForm(compressedAirAssessment);
+    this.hasMissingTrimSelection = this.compressedAirAssessmentService.getHasMissingTrimSelection(compressedAirAssessment);
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
+  setSelectedTrimCompressorForm(compressedAirAssessment: CompressedAirAssessment) {
+    compressedAirAssessment.systemInformation.trimSelections.forEach(selection => {
+      if(selection.dayTypeId == this.selectedDayTypeId){
+        this.trimSelection = selection.compressorId;
+      }
+    });
+  }
+
+  setSelectedTrimCompressorFromForm(compressedAirAssessment: CompressedAirAssessment) {
+    let updateIndex = compressedAirAssessment.systemInformation.trimSelections.findIndex(selection => this.selectedDayTypeId === selection.dayTypeId);
+    compressedAirAssessment.systemInformation.trimSelections[updateIndex].compressorId = this.trimSelection;
+  }
 
   toggleOn(summaryData: ProfileSummary, hourIndex: number) {
     if (summaryData.profileSummaryData[hourIndex].order != 0) {
