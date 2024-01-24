@@ -175,11 +175,9 @@ export class CompressedAirAssessmentService {
       }
     });
     if (compressedAirAssessment.systemInformation && compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
-      let undefinedSelections = compressedAirAssessment.systemInformation.trimSelections.find(selection => {return selection.compressorId == undefined});
-      profileSummaryValid.trimSelection = (undefinedSelections == undefined);
-      if (profileSummaryValid.trimSelection == false) {
-        profileSummaryValid.isValid = false;
-      }
+      profileSummaryValid.trimSelection = !this.getHasMissingTrimSelection(compressedAirAssessment);
+      profileSummaryValid.isValid = profileSummaryValid.trimSelection;
+      
     } else {
       profileSummaryValid.trimSelection = false;
     }
@@ -269,7 +267,7 @@ export class CompressedAirAssessmentService {
     return powerFactorInputValidationData;
   }
 
-  checkDayTypesDataValid(compressedAirAssessment: CompressedAirAssessment, dayTypeId: string): boolean {
+  checkDayTypeProfileSummaryValid(compressedAirAssessment: CompressedAirAssessment, dayTypeId: string): boolean {
     let isDayTypeValid: boolean;
     let profileSummaryValid: ProfileSummaryValid = this.getDefaultProfileSummaryValid();
     let profileSummary = compressedAirAssessment.systemProfile.profileSummary;   
@@ -324,13 +322,32 @@ export class CompressedAirAssessmentService {
       }
     });
     if (compressedAirAssessment.systemInformation && compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
-      let undefinedSelections = compressedAirAssessment.systemInformation.trimSelections.find(selection => {return selection.compressorId == undefined});
-      profileSummaryValid.trimSelection = (undefinedSelections == undefined);
-      if (profileSummaryValid.trimSelection == false) {
-        isDayTypeValid = false;
-      }
+      profileSummaryValid.trimSelection = !this.getHasMissingTrimSelection(compressedAirAssessment);
+      isDayTypeValid = this.checkDayTypeValidTrimSelection(compressedAirAssessment, dayTypeId);
     } 
     return isDayTypeValid;
+  }
+
+  checkDayTypeValidTrimSelection(compressedAirAssessment: CompressedAirAssessment, daytypeId: string): boolean {
+    let dayTypeIndex: number = compressedAirAssessment.systemInformation.trimSelections.findIndex(selection => daytypeId === selection.dayTypeId);
+    let hasValidTrimSelection: boolean = compressedAirAssessment.systemInformation.trimSelections[dayTypeIndex].compressorId !== undefined;
+    return hasValidTrimSelection;
+  }
+
+  getHasMissingTrimSelection(compressedAirAssessment: CompressedAirAssessment): boolean {
+    let dayTypesInUse: CompressedAirDayType[] = compressedAirAssessment.compressedAirDayTypes;
+    let hasMissingTrimSelection: boolean = true;
+    dayTypesInUse.forEach(dayType => {
+      hasMissingTrimSelection = !compressedAirAssessment.systemInformation.trimSelections.some(selection => {
+        if (selection.dayTypeId == dayType.dayTypeId && selection.compressorId) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+    });
+    return hasMissingTrimSelection;
   }
 
 

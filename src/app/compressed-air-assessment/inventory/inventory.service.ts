@@ -525,7 +525,6 @@ export class InventoryService {
       profileDataType: "percentCapacity"
     };
     compressedAirAssessment.compressedAirDayTypes.push(newDayType);
-
     let reduceRuntimeData: ReduceRuntimeData;
     compressedAirAssessment.compressorInventoryItems.forEach(item => {
       let profileSummary: ProfileSummary = {
