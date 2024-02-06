@@ -10,10 +10,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
+      - name: Get Node version
+        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> $GITHUB_ENV
       - name: Node setup
         uses: actions/setup-node@v3
         with:
-          node-version: 16.14.2
+          node-version: ${{ env.BUILD_NODE_VER }}
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
