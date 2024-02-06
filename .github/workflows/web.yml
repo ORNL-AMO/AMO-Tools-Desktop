@@ -29,9 +29,29 @@ jobs:
         with:
           name: dist
           path: ./dist
+
+  deploy-dev:
+    if: github.ref_name == 'develop'
+    runs-on: [self-hosted, dev]
+    needs: build
+    env:
+      APACHE_DIR: /var/www/html
+      BACKUP_DIR: /opt/actions-runner/backups
+    steps:
+      - name: Get artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+      - name: Deploy
+        run: |
+          tar -czf $BACKUP_DIR/measur_$(printf '%(%Y-%m-%d)T\n' -1)_${GITHUB_SHA::7}.tar.gz $APACHE_DIR/measur
+          rm -rf $APACHE_DIR/measur/*
+          chgrp -R apache ./
+          mv -v ./* $APACHE_DIR/measur/
   
-  deploy:
-    runs-on: [self-hosted, amo-tools]
+  deploy-prod:
+    if: github.ref_name == 'master'
+    runs-on: [self-hosted, prod]
     needs: build
     env:
       APACHE_DIR: /var/www/html
