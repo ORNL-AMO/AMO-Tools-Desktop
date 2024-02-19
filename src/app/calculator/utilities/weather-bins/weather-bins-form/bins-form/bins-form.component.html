@@ -1,37 +1,70 @@
-<div class="form-section mx-3 p-2" *ngIf="importDataFromCsv != undefined">
-    <h2 class="my-2 h6">Manage Bins</h2>
-    <form>
-        <div class="form-group">
-            <label for="autoBinParameter">Auto-bin Parameter</label>
-            <select class="form-control" name="autoBinParameter" id="autoBinParameter" [disabled]="hasIntegratedCalculatorParameter"
-            [(ngModel)]="inputData.autoBinParameter" (change)="setParameterMinMax()" (focus)="focusField('autoBinParameter')">
-            <option *ngFor="let option of parameterOptions" [ngValue]="option.value">{{option.display}}</option>
-          </select>
-        </div>
- 
-        <div class="form-group">
-            <label>Parameter Data Range</label>
-            <div class="small text-center">
-                ({{parameterMin}} <app-parameter-unit [settings]="settings" [parameter]="inputData.autoBinParameter">
-                </app-parameter-unit>) - ({{parameterMax}} <app-parameter-unit [settings]="settings"
-                    [parameter]="inputData.autoBinParameter"></app-parameter-unit>)
-            </div>
-        </div>
+<div class="form-section mx-3 p-2 pb-2 mb-3" *ngIf="importDataFromCsv != undefined">
+  <h2 class="my-2 h6">Manage Bins</h2>
 
-        <div class="form-group">
-            <label for="autoBinRangeValue">Bin Size</label>
-            <div class="input-group">
-                <input name="autoBinRangeValue" type="number" class="form-control" id="autoBinRangeValue"
-                    [(ngModel)]="inputData.autoBinRangeValue" (focus)="focusField('autoBinRangeValue')">
-                <span class="input-group-addon units">
-                    <app-parameter-unit [settings]="settings" [parameter]="inputData.autoBinParameter">
-                    </app-parameter-unit>
-                </span>
-            </div>
+  <div class="form-group form-section py-2" *ngFor="let form of binParametersForms; let i = index">
+    <form [formGroup]="form">
+      <div class="form-group">
+        <label for="name">Bin Parameter {{i + 1}}</label>
+        <select class="form-control" id="name" formControlName="name" (change)="changeParameter(form)"
+          (focus)="focusField('name')">
+          <option *ngFor="let option of parameterOptions" [ngValue]="option.value">{{option.display}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Parameter Data Range</label>
+        <div class="small text-center">
+          ({{form.controls.min.value}} <app-parameter-unit [settings]="settings" [parameter]="form.controls.name.value">
+          </app-parameter-unit>) - ({{form.controls.max.value}} <app-parameter-unit [settings]="settings"
+            [parameter]="form.controls.name.value"></app-parameter-unit>)
         </div>
+      </div>
+      <div class="form-group">
+        <label for="binStartingValue">Bin Starting Value</label>
+        <div class="input-group">
+          <input type="number" class="form-control" id="startingValue" formControlName="startingValue"
+            (focus)="focusField('startingValue')">
+          <span class="input-group-addon units">
+            <app-parameter-unit [settings]="settings" [parameter]="form.controls.name.value">
+            </app-parameter-unit>
+          </span>
+          <span class="alert-danger pull-right small"
+          *ngIf="form.controls.startingValue.invalid && !form.controls.startingValue.pristine">
+          <span *ngIf="form.controls.startingValue.errors.greaterThan">Value must be greater than
+            {{form.controls.startingValue.errors.greaterThan}}.</span>
+            <span *ngIf="form.controls.startingValue.errors.lessThan">Value must be less than
+              {{form.controls.startingValue.errors.lessThan}}.</span>
+        </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="range">Bin Size</label>
+        <div class="input-group">
+          <input name="range" type="number" class="form-control" id="range" formControlName="range"
+            (focus)="focusField('range')">
+          <span class="input-group-addon units">
+            <app-parameter-unit [settings]="settings" [parameter]="form.controls.name.value">
+            </app-parameter-unit>
+          </span>
+        </div>
+      </div>
+
     </form>
-    <div class="w-100 justify-content-center btn-group btn-group-sm">
-        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="save()">Set Bins</button>
-        <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form btn-margin-10" (click)="deleteAllCase()">Clear Bins</button>
+  </div>
+
+  <div class="row">
+    <div class="col-12 text-center">
+      <a class="click-link small" (click)="addBinParameter()">Add Bin Parameter</a>
     </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col-12 btn-group btn-group-sm">
+      <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="save()">Set Bins</button>
+      <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form btn-margin-10"
+      (click)="deleteAllCase()">Clear Bins</button>
+    </div>
+  </div>
+
 </div>

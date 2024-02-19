@@ -40,18 +40,6 @@
             </div>
 
             <div class="form-group">
-                <label for="{{'upperBound'+parameterIndex}}">Upper Bound</label>
-                <div class="input-group">
-                    <input name="{{'upperBound'+parameterIndex}}" type="number" class="form-control"
-                        id="{{'upperBound'+parameterIndex}}" [(ngModel)]="parameter.upperBound" (input)="save()" (focus)="focusField('upperBound')">
-                    <span class="input-group-addon units">
-                        <app-parameter-unit [settings]="settings" [parameter]="parameter.field">
-                        </app-parameter-unit>
-                    </span>
-                </div>
-            </div>
-
-            <div class="form-group">
                 <label for="{{'lowerBound'+parameterIndex}}">Lower Bound</label>
                 <div class="input-group">
                     <input name="{{'lowerBound'+parameterIndex}}" type="number" class="form-control"
@@ -62,6 +50,19 @@
                     </span>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label for="{{'upperBound'+parameterIndex}}">Upper Bound</label>
+                <div class="input-group">
+                    <input name="{{'upperBound'+parameterIndex}}" type="number" class="form-control"
+                        id="{{'upperBound'+parameterIndex}}" [(ngModel)]="parameter.upperBound" (input)="save()" (focus)="focusField('upperBound')">
+                    <span class="input-group-addon units">
+                        <app-parameter-unit [settings]="settings" [parameter]="parameter.field">
+                        </app-parameter-unit>
+                    </span>
+                </div>
+            </div>
+            
             <div class="form-group text-right">
                 <a class="click-link delete small" (click)="deleteParameter(caseIndex, parameterIndex)">Delete
                     Parameter</a>
