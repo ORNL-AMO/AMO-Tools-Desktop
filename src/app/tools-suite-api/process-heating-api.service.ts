@@ -432,7 +432,6 @@ export class ProcessHeatingApiService {
       input.o2,
       input.moisture,
       input.nitrogen);
-    output = output * 100;
 
     SolidLiquidFlueGasMaterial.delete();
     return output;
