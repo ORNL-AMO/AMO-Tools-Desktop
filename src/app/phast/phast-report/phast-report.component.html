@@ -172,7 +172,7 @@
         </div>
         <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height"
             *ngIf="(currentTab == 'report-sankey' && !showPrintView) || (printOptions.printReportSankey && showPrintView)">
-            <app-report-sankey [phast]="phast" [settings]="settings" [assessment]="assessment"></app-report-sankey>
+            <app-report-sankey [phast]="phast" [settings]="settings" [assessment]="assessment" [showPrint]="showPrintView"></app-report-sankey>
         </div>
     </div>
     <div *ngIf="!phast.setupDone">
