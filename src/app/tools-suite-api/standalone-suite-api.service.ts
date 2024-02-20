@@ -82,7 +82,7 @@ export class StandaloneSuiteApiService {
   operatingCost(input: OperatingCostInput): OperatingCostOutput {
     input.motorBhp = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.motorBhp);
     input.bhpUnloaded = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bhpUnloaded);
-    input.annualOperatingHours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.motorBhp);
+    input.annualOperatingHours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.annualOperatingHours);
     input.runTimeLoaded = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.runTimeLoaded);
     input.efficiencyLoaded = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.efficiencyLoaded);
     input.efficiencyUnloaded = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.efficiencyUnloaded);

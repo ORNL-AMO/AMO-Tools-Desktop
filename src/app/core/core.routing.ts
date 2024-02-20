@@ -361,6 +361,7 @@ export const coreRoutes: Routes = [
             path: 'full-load-amps',
             component: FullLoadAmpsComponent
           },
+          //  issue 3007 Efficiency Improvement is hidden
           {
             path: 'efficiency-improvement',
             component: EfficiencyImprovementComponent

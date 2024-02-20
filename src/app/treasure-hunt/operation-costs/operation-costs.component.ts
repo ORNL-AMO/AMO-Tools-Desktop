@@ -473,48 +473,93 @@ export class OperationCostsComponent implements OnInit {
   }
   
   calculateWaterUnitCosts(){
-    this.settings.waterCost = this.treasureHunt.currentEnergyUsage.waterCosts / this.treasureHunt.currentEnergyUsage.waterUsage;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      let waterUsageInGal: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.waterUsage).from('kgal').to('gal');
+      this.settings.waterCost = this.treasureHunt.currentEnergyUsage.waterCosts / waterUsageInGal;
+    } else {
+      this.settings.waterCost = this.treasureHunt.currentEnergyUsage.waterCosts / this.treasureHunt.currentEnergyUsage.waterUsage;
+    }
     this.save();
   }
 
   calculateWaterAnnualConsumption(){
-    this.treasureHunt.currentEnergyUsage.waterUsage = this.treasureHunt.currentEnergyUsage.waterCosts/ this.settings.waterCost;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      let waterUsageInGal: number = this.treasureHunt.currentEnergyUsage.waterCosts / this.settings.waterCost;
+      this.treasureHunt.currentEnergyUsage.waterUsage = this.convertUnitsService.value(waterUsageInGal).from('gal').to('kgal');
+    } else {
+      this.treasureHunt.currentEnergyUsage.waterUsage = this.treasureHunt.currentEnergyUsage.waterCosts / this.settings.waterCost;
+    }
     this.save();
   }
 
   calculateWaterAnnualCosts(){
-    this.treasureHunt.currentEnergyUsage.waterCosts = this.settings.waterCost * this.treasureHunt.currentEnergyUsage.waterUsage;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      let waterUsageInGal: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.waterUsage).from('kgal').to('gal');
+      this.treasureHunt.currentEnergyUsage.waterCosts = this.settings.waterCost * waterUsageInGal;
+    } else {
+      this.treasureHunt.currentEnergyUsage.waterCosts = this.settings.waterCost * this.treasureHunt.currentEnergyUsage.waterUsage;
+    }
 
     this.save();
   }
 
   calculateWastewaterUnitCosts(){
-    this.settings.waterWasteCost = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.treasureHunt.currentEnergyUsage.wasteWaterUsage;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      let wasteWaterUsageInGal: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.wasteWaterUsage).from('kgal').to('gal');
+      this.settings.waterWasteCost = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / wasteWaterUsageInGal;
+    } else {
+      this.settings.waterWasteCost = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.treasureHunt.currentEnergyUsage.wasteWaterUsage;
+    }
     this.save();
   }
 
   calculateWastewaterAnnualConsumption(){
-    this.treasureHunt.currentEnergyUsage.wasteWaterUsage = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.settings.waterWasteCost;
+    if (this.settings.unitsOfMeasure == 'Imperial') {      
+      let wasteWaterUsageInGal: number = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.settings.waterWasteCost;
+      this.treasureHunt.currentEnergyUsage.wasteWaterUsage = this.convertUnitsService.value(wasteWaterUsageInGal).from('gal').to('kgal');
+    } else {
+      this.treasureHunt.currentEnergyUsage.wasteWaterUsage = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.settings.waterWasteCost;
+    }
     this.save();
   }
 
   calculateWastewaterAnnualCosts(){
-    this.treasureHunt.currentEnergyUsage.wasteWaterCosts = this.treasureHunt.currentEnergyUsage.wasteWaterUsage * this.settings.waterWasteCost;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      let wasteWaterUsageInGal: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.wasteWaterUsage).from('kgal').to('gal');
+      this.treasureHunt.currentEnergyUsage.wasteWaterCosts = wasteWaterUsageInGal * this.settings.waterWasteCost;
+    } else {
+      this.treasureHunt.currentEnergyUsage.wasteWaterCosts = this.treasureHunt.currentEnergyUsage.wasteWaterUsage * this.settings.waterWasteCost;
+    }
     this.save();
   }
 
   calculateCompressedAirUnitCosts(){
-    this.settings.compressedAirCost = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.treasureHunt.currentEnergyUsage.compressedAirUsage;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      let compressedAirUsageInSCF: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.compressedAirUsage).from('kscf').to('ft3');
+      this.settings.compressedAirCost = this.treasureHunt.currentEnergyUsage.compressedAirCosts / compressedAirUsageInSCF;
+    } else {
+      this.settings.compressedAirCost = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.treasureHunt.currentEnergyUsage.compressedAirUsage;
+    }
     this.save();
   }
 
   calculateCompressedAirAnnualConsumption(){
-    this.treasureHunt.currentEnergyUsage.compressedAirUsage = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.settings.compressedAirCost;
+    if (this.settings.unitsOfMeasure == 'Imperial') {   
+      let compressedAirUsageInSCF: number = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.settings.compressedAirCost;
+      this.treasureHunt.currentEnergyUsage.compressedAirUsage = this.convertUnitsService.value(compressedAirUsageInSCF).from('ft3').to('kscf');
+    } else {
+      this.treasureHunt.currentEnergyUsage.compressedAirUsage = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.settings.compressedAirCost;
+    }
     this.save();
   }
 
   calculateCompressedAirAnnualCosts(){
-    this.treasureHunt.currentEnergyUsage.compressedAirCosts = this.treasureHunt.currentEnergyUsage.compressedAirUsage * this.settings.compressedAirCost;
+    if (this.settings.unitsOfMeasure == 'Imperial') {      
+      let compressedAirUsageInSCF: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.compressedAirUsage).from('kscf').to('ft3');
+      this.treasureHunt.currentEnergyUsage.compressedAirCosts = compressedAirUsageInSCF * this.settings.compressedAirCost;
+    } else {
+      this.treasureHunt.currentEnergyUsage.compressedAirCosts = this.treasureHunt.currentEnergyUsage.compressedAirUsage * this.settings.compressedAirCost;
+    }
     this.save();
   }
 

@@ -110,7 +110,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
       hasCalculatorSelected = _.find(this.directory.calculators, (value) => { return value.selected == true });
     }
     this.hasSelectedItem = hasAssessmentSelected != undefined || hasDirectorySelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined;
-    this.canCopyItem = (hasAssessmentSelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined) && hasDirectorySelected == undefined;
+    this.canCopyItem = hasAssessmentSelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined || hasDirectorySelected != undefined;
   }
   
   setIsAllSelected() {

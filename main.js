@@ -3,12 +3,10 @@ const path = require('path');
 const url = require('url');
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
-const { electron } = require('process');
-// const Menu = require('menu');
 
 
 function isDev() {
-  return process.mainModule.filename.indexOf('app.asar') === -1;
+  return require.main.filename.indexOf('app.asar') === -1;
 };
 
 app.allowRendererProcessReuse = false

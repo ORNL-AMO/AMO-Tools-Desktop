@@ -16,7 +16,7 @@ import { ReportRollupModule } from '../report-rollup/report-rollup.module';
 import { FsatModule } from '../fsat/fsat.module';
 import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
 import { WindowRefService } from '../indexedDb/window-ref.service';
- 
+
 import { CoreService } from './core.service';
 import { SsmtModule } from '../ssmt/ssmt.module';
 import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';

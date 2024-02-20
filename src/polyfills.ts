@@ -19,7 +19,7 @@ import 'core-js/es/map';
 import 'core-js/es/set';
 import 'core-js/es/reflect';
 import './zone-flags';
-import 'zone.js/dist/zone';
+import 'zone.js';
 
 // Expose global for use by third party libs
 (window as any).global = window;

@@ -160,15 +160,19 @@ export class ConvertInputDataService {
     if (energyUseItem.type == 'Gas' || energyUseItem.type == 'Other Fuel') {
       //imperial: MMBtu, metric: GJ
       energyUseItem.amount = this.convertUnitsService.convertMMBtuAndGJValue(energyUseItem.amount, oldSettings, newSettings);
+      energyUseItem.amount = this.roundVal(energyUseItem.amount);
     } else if (energyUseItem.type == 'Water' || energyUseItem.type == 'WWT') {
       //imperial: gal, metric: L 
       energyUseItem.amount = this.convertUnitsService.convertGalAndLiterValue(energyUseItem.amount, oldSettings, newSettings);
+      energyUseItem.amount = this.roundVal(energyUseItem.amount);
     } else if (energyUseItem.type == 'Compressed Air') {
       //imperial: scf, metric: m3
       energyUseItem.amount = this.convertUnitsService.convertFt3AndM3Value(energyUseItem.amount, oldSettings, newSettings);
+      energyUseItem.amount = this.roundVal(energyUseItem.amount);
     } else if (energyUseItem.type == 'Steam') {
       //imperial: klb, metric: tonne
       energyUseItem.amount = this.convertUnitsService.convertKlbAndTonneValue(energyUseItem.amount, oldSettings, newSettings);
+      energyUseItem.amount = this.roundVal(energyUseItem.amount);
     }
     return energyUseItem;
   }
@@ -177,44 +181,73 @@ export class ConvertInputDataService {
   convertCurrentEnergyUsage(currentEnergyUsage: EnergyUsage, oldSettings: Settings, newSettings: Settings): EnergyUsage {
     //imperial: MMBtu/yr, metric: GJ/yr
     currentEnergyUsage.naturalGasUsage = this.convertUnitsService.convertMMBtuAndGJValue(currentEnergyUsage.naturalGasUsage, oldSettings, newSettings);
+    currentEnergyUsage.naturalGasUsage = this.roundVal(currentEnergyUsage.naturalGasUsage);
     //imperial: MMBtu/yr, metric: GJ/yr
     currentEnergyUsage.otherFuelUsage = this.convertUnitsService.convertMMBtuAndGJValue(currentEnergyUsage.otherFuelUsage, oldSettings, newSettings);
+    currentEnergyUsage.otherFuelUsage = this.roundVal(currentEnergyUsage.otherFuelUsage);
     //imperial: kgal/yr, metric: L/yr
     currentEnergyUsage.waterUsage = this.convertUnitsService.convertKGalAndLiterValue(currentEnergyUsage.waterUsage, oldSettings, newSettings);
+    currentEnergyUsage.waterUsage = this.roundVal(currentEnergyUsage.waterUsage);
     //imperial: kgal/yr, metric: L/yr
     currentEnergyUsage.wasteWaterUsage = this.convertUnitsService.convertKGalAndLiterValue(currentEnergyUsage.wasteWaterUsage, oldSettings, newSettings);
+    currentEnergyUsage.wasteWaterUsage = this.roundVal(currentEnergyUsage.wasteWaterUsage);
     //imperial: kscf/yr , metric: m3/yr
     currentEnergyUsage.compressedAirUsage = this.convertUnitsService.convertKscfAndM3Value(currentEnergyUsage.compressedAirUsage, oldSettings, newSettings);
+    currentEnergyUsage.compressedAirUsage = this.roundVal(currentEnergyUsage.compressedAirUsage);
     //imperial: klb/yr, metric: tonne/yr
     currentEnergyUsage.steamUsage = this.convertUnitsService.convertKlbAndTonneValue(currentEnergyUsage.steamUsage, oldSettings, newSettings);
+    currentEnergyUsage.steamUsage = this.roundVal(currentEnergyUsage.steamUsage);
     
     let oldFuelUnit: string = 'MMBtu'; 
     let newFuelUnit: string = 'GJ';
     if (oldSettings.unitsOfMeasure === 'Imperial') {
       currentEnergyUsage.waterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.waterCO2OutputRate, 'kgal', 'L');
+      currentEnergyUsage.waterCO2OutputRate = this.roundVal(currentEnergyUsage.waterCO2OutputRate);
+
       currentEnergyUsage.wasteWaterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.wasteWaterCO2OutputRate, 'kgal', 'L');
+      currentEnergyUsage.wasteWaterCO2OutputRate = this.roundVal(currentEnergyUsage.wasteWaterCO2OutputRate);
+
       currentEnergyUsage.compressedAirCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.compressedAirCO2OutputRate, 'kscf', 'm3');
+      currentEnergyUsage.compressedAirCO2OutputRate = this.roundVal(currentEnergyUsage.compressedAirCO2OutputRate);
+
       currentEnergyUsage.steamCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.steamCO2OutputRate, 'klb', 'tonne');
-    
+      currentEnergyUsage.steamCO2OutputRate = this.roundVal(currentEnergyUsage.steamCO2OutputRate);    
     } else {
       oldFuelUnit = 'GJ';
       newFuelUnit = 'MMBtu';
       currentEnergyUsage.waterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.waterCO2OutputRate, 'L', 'kgal');
+      currentEnergyUsage.waterCO2OutputRate = this.roundVal(currentEnergyUsage.waterCO2OutputRate);
+
       currentEnergyUsage.wasteWaterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.wasteWaterCO2OutputRate, 'L', 'kgal');
+      currentEnergyUsage.wasteWaterCO2OutputRate = this.roundVal(currentEnergyUsage.wasteWaterCO2OutputRate);
+
       currentEnergyUsage.compressedAirCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.compressedAirCO2OutputRate, 'm3', 'kscf');
+      currentEnergyUsage.compressedAirCO2OutputRate = this.roundVal(currentEnergyUsage.compressedAirCO2OutputRate);
+
       currentEnergyUsage.steamCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.steamCO2OutputRate, 'tonne', 'klb');
+      currentEnergyUsage.steamCO2OutputRate = this.roundVal(currentEnergyUsage.steamCO2OutputRate);
     }
 
     currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate, oldFuelUnit, newFuelUnit);
+    currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate = this.roundVal(currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate);
+
     currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate, oldFuelUnit, newFuelUnit);
+    currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = this.roundVal(currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate);
+
     if(currentEnergyUsage.otherFuelMixedCO2SavingsData && currentEnergyUsage.otherFuelMixedCO2SavingsData.length != 0){
       currentEnergyUsage.otherFuelMixedCO2SavingsData.forEach(fuel => {
         fuel.totalEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(fuel.totalEmissionOutputRate, oldFuelUnit, newFuelUnit);
+        fuel.totalEmissionOutputRate = this.roundVal(fuel.totalEmissionOutputRate);
+
       });
     }
     
 
     return currentEnergyUsage;
+  }
+
+  roundVal(num: number): number {
+    return Number(num.toFixed(3));
   }
 
 }

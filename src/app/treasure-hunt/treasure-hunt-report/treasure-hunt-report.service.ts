@@ -7,12 +7,11 @@ import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportu
 import { TreasureChestMenuService } from '../treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
-import { HelperFunctionsService } from '../../shared/helper-services/helper-functions.service';
 
 @Injectable()
 export class TreasureHuntReportService {
 
-  constructor(private opportunitySummaryService: OpportunitySummaryService, private helperService: HelperFunctionsService, private treasureChestMenuService: TreasureChestMenuService, private convertUnitsService: ConvertUnitsService) {
+  constructor(private opportunitySummaryService: OpportunitySummaryService, private treasureChestMenuService: TreasureChestMenuService, private convertUnitsService: ConvertUnitsService) {
   }
 
   calculateTreasureHuntResults(treasureHunt: TreasureHunt, settings: Settings): TreasureHuntResults {

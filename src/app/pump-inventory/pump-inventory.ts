@@ -221,7 +221,7 @@ export interface PumpInventoryMotorWarnings {
 export interface PumpInventoryFieldWarnings {
   flowError: string,
   voltageError: string,
-  ratedPowerError: string,
+  measuredPowerOrCurrentError: string,
   rpmError: string,
 }
 

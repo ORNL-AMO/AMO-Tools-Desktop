@@ -57,6 +57,11 @@ export class ConnectedAssessmentComponent {
     this.displayCreateAssessmentModal = true;
   }
 
+  hideCreateAssessmentModal() {
+    this.modalOpen.emit(false);
+    this.displayCreateAssessmentModal = false;
+  }
+
   goToAssessment(assessment: Assessment) {
       let url: string;
       switch(this.assessmentType) {

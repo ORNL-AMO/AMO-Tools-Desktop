@@ -85,8 +85,6 @@ export class MoveItemsComponent implements OnInit {
   async hideMoveModal() {
     this.folderSelected = false;
     this.moveModal.hide();
-    let updatedDirectories: Array<Directory> = await firstValueFrom(this.directoryDbService.getAllDirectories());
-    this.directoryDbService.setAll(updatedDirectories);
     this.dashboardService.moveItems.next(false);
   }
 
@@ -105,6 +103,8 @@ export class MoveItemsComponent implements OnInit {
     await this.saveCalculators();
     await this.saveDirectories();
     await this.saveInventories();
+    let updatedDirectories: Array<Directory> = await firstValueFrom(this.directoryDbService.getAllDirectories());
+    this.directoryDbService.setAll(updatedDirectories);
     await this.hideMoveModal();
   }
 

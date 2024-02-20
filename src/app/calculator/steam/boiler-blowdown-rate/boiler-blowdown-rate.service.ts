@@ -268,7 +268,11 @@ export class BoilerBlowdownRateService {
     let convertedSteamFlow: number = this.convertUnitsService.value(inputs.steamFlow).from(settings.steamMassFlowMeasurement).to('klb');
     //specific volume gal/lb
     let convertedMakeupWaterSpecificVolume: number = this.convertUnitsService.value(makeupWaterSpecificVolume).from(settings.steamSpecificVolumeMeasurement).to('gallb');
-    return ((convertedSteamFlow * blowdownRate) / (1 - blowdownRate)) * inputs.operatingHours * convertedMakeupWaterSpecificVolume * 1000;
+    let waterUse: number = ((convertedSteamFlow * blowdownRate) / (1 - blowdownRate)) * inputs.operatingHours * convertedMakeupWaterSpecificVolume * 1000;
+    if (settings.unitsOfMeasure == 'Imperial') {
+      waterUse = this.convertUnitsService.value(waterUse).from('gal').to('kgal');
+    }
+    return waterUse;
   }
 
   getTreasureHuntFuelCost(energySourceType: string, settings: Settings) {

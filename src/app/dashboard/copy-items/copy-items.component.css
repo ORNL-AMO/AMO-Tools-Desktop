@@ -51,3 +51,15 @@ margin-bottom: 6px;
     transition: all .5s ease-in-out;
 }
 
+.icon-image{
+    width: 26px;
+  }
+  
+  .icon{
+    width: 100%;
+  }
+
+ li {
+    list-style: none;
+}
+
