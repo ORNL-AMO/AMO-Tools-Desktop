@@ -121,6 +121,7 @@ export class CoreComponent implements OnInit {
     this.assessmentUpdateAvailableSub.unsubscribe();
     this.openingTutorialSub.unsubscribe();
     this.showSecurityAndPrivacyModalSub.unsubscribe();
+    this.showEmailMeasurDataModalSub.unsubscribe();
   }
 
   async initData() {

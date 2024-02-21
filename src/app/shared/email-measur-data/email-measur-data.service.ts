@@ -32,7 +32,6 @@ export class EmailMeasurDataService {
     if (measurEmailForm.valid) {
       let attachmentExportData: ImportExportData = this.exportService.getSelectedAssessment(this.measurItemAttachment.itemData);
       attachmentExportData.origin = "AMO-TOOLS-DESKTOP";
-      // todo eventually handle list of receivers/ attachments
       this.measurEmailData = {
         emailTo: measurEmailForm.controls.emailTo.value,
         emailSender: measurEmailForm.controls.emailSender.value,

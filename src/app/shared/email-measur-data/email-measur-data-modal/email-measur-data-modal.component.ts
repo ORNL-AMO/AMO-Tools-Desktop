@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { EmailMeasurDataService, EmailSentStatus } from '../email-measur-data.service';
-import { HelperFunctionsService } from '../../helper-services/helper-functions.service';
+import { truncate } from '../../helperFunctions';
 
 @Component({
   selector: 'app-email-measur-data-modal',
@@ -19,13 +19,12 @@ export class EmailMeasurDataModalComponent {
   emailSentStatus: EmailSentStatus;
   emailSentStatusSubscription: Subscription;
 
-  constructor(private emailMeasurDataService: EmailMeasurDataService, private helperFunctions: HelperFunctionsService) {}
+  constructor(private emailMeasurDataService: EmailMeasurDataService) {}
 
   ngOnInit() {
     this.measurItemName = 'assessment';
     if (this.emailMeasurDataService.measurItemAttachment) {
-      this.measurItemName = this.helperFunctions.truncate(this.emailMeasurDataService.measurItemAttachment.itemName);
-      console.log(this.emailMeasurDataService.measurItemAttachment)
+      this.measurItemName = truncate(this.emailMeasurDataService.measurItemAttachment.itemName);
     };
 
     this.emailSentStatusSubscription = this.emailMeasurDataService.emailSentStatus.subscribe(sentStatus => {
