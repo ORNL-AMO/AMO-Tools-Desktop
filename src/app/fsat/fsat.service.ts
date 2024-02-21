@@ -15,8 +15,8 @@ import { OperationsService } from './operations/operations.service';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service'
 import { IntegratedAssessment, IntegratedEnergyOptions, ModificationEnergyOption } from '../shared/assessment-integration/assessment-integration.service';
 import { EnergyUseItem } from '../shared/models/treasure-hunt';
-import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
+import { getNewIdString } from '../shared/helperFunctions';
 
 
 @Injectable()
@@ -42,7 +42,7 @@ export class FsatService {
 
   constructor
   (private convertFsatService: ConvertFsatService, 
-    private helperFunctions: HelperFunctionsService, private fansSuiteApiService: FansSuiteApiService, private assessmentCo2Service: AssessmentCo2SavingsService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private convertFanAnalysisService: ConvertFanAnalysisService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService, private fanOperationsService: OperationsService) {
+    private fansSuiteApiService: FansSuiteApiService, private assessmentCo2Service: AssessmentCo2SavingsService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private convertFanAnalysisService: ConvertFanAnalysisService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService, private fanOperationsService: OperationsService) {
     this.initData();
   }
 
@@ -458,7 +458,7 @@ export class FsatService {
           fluidNotes: ''
         }
       },
-      id: this.helperFunctions.getNewIdString(),
+      id: getNewIdString(),
       exploreOpportunities: (this.assessmentTab.value === 'explore-opportunities')
     };
     let tmpBaselineResults: FsatOutput = this.getResults(fsat, true, settings);

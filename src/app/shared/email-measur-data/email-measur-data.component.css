@@ -1,0 +1,9 @@
+i.fa.fa-chevron-up:hover,
+i.fa.fa-chevron-down:hover,
+.preview {
+  cursor: pointer;
+}
+
+.card-header {
+    font-size: 16px;
+}

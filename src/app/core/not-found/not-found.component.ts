@@ -8,7 +8,7 @@ import { ImportExportService } from '../../shared/import-export/import-export.se
   styleUrls: ['./not-found.component.css']
 })
 export class NotFoundComponent implements OnInit {
-  measurItemType: 'page' | 'assessment' | 'motor inventory' = 'page';
+  measurItemType: 'page' | 'assessment' | 'inventory' = 'page';
   constructor(
     private activatedRoute: ActivatedRoute,
     private importExportService: ImportExportService,
@@ -16,7 +16,6 @@ export class NotFoundComponent implements OnInit {
     // private settingsDbService: SettingsDbService
     ) { }
 
-    // TODO may need route resolver to properly shutoff survey monkey
   ngOnInit(): void {
     // this.settingsDbService.globalSettings.disableSurveyMonkey = true;
     // this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {

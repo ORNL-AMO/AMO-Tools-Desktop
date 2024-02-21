@@ -14,30 +14,17 @@ export class RegressionEquationsComponent implements OnInit {
   @Input()
   isEquipmentCurvePrimary: boolean;
 
-
-  //subs
-  baselineEquipmentCurveByDataRegressionEquationSub: Subscription;
   baselineEquipmentCurveByDataRSquaredSub: Subscription;
-  modificationEquipmentCurveByDataRegressionEquationSub: Subscription;
-  modificationEquipmentCurveRSquaredSub: Subscription;
+  modificationEquipmentRegressionEquationSub: Subscription;
   selectedEquipmentCurveFormViewSub: Subscription;
-  baselineEquipmentCurveByEquationRegressionEquationSub: Subscription;
-  modificationEquipmentCurveByEquationRegressionEquationSub: Subscription;
+  baselineEquipmentRegressionEquationSub: Subscription;
   systemCurveRegressionEquationSub: Subscription;
-
   equipmentCurveCollapsedSub: Subscription;
   systemCurveCollapsedSub: Subscription;
 
-  //data
-  baselineEquipmentCurveByDataRegressionEquation: string;
   baselineEquipmentCurveByDataRSquared: number;
-
-  modificationEquipmentCurveByDataRegressionEquation: string;
-  modificationEquipmentCurveRSquared: number;
-
-  baselineEquipmentCurveByEquationRegressionEquation: string;
-  modificationEquipmentCurveByEquationRegressionEquation: string;
-
+  modificationEquipmentRegressionEquation: string;
+  baselineEquipmentRegressionEquation: string;
   systemCurveRegressionEquation: string;
   selectedEquipmentCurveFormView: string;
   equipmentCurveCollapsed: string;
@@ -64,9 +51,8 @@ export class RegressionEquationsComponent implements OnInit {
     this.systemCurveCollapsedSub = this.systemAndEquipmentCurveService.systemCurveCollapsed.subscribe(val => {
       this.systemCurveCollapsed = val;
     });
-
-    this.baselineEquipmentCurveByDataRegressionEquationSub = this.regressionEquationsService.baselineEquipmentCurveByDataRegressionEquation.subscribe(val => {
-      this.baselineEquipmentCurveByDataRegressionEquation = val;
+    this.baselineEquipmentRegressionEquationSub = this.regressionEquationsService.baselineEquipmentRegressionEquation.subscribe(val => {
+      this.baselineEquipmentRegressionEquation = val;
       this.cd.detectChanges();
     });
     this.baselineEquipmentCurveByDataRSquaredSub = this.regressionEquationsService.baselineEquipmentCurveByDataRSquared.subscribe(val => {
@@ -74,23 +60,11 @@ export class RegressionEquationsComponent implements OnInit {
       this.cd.detectChanges();
     });
 
-    this.modificationEquipmentCurveByDataRegressionEquationSub = this.regressionEquationsService.modificationEquipmentCurveByDataRegressionEquation.subscribe(val => {
-      this.modificationEquipmentCurveByDataRegressionEquation = val;
-      this.cd.detectChanges();
-    });
-    this.modificationEquipmentCurveRSquaredSub = this.regressionEquationsService.modificationEquipmentCurveRSquared.subscribe(val => {
-      this.modificationEquipmentCurveRSquared = val;
+    this.modificationEquipmentRegressionEquationSub = this.regressionEquationsService.modificationEquipmentRegressionEquation.subscribe(val => {
+      this.modificationEquipmentRegressionEquation = val;
       this.cd.detectChanges();
     });
 
-    this.baselineEquipmentCurveByEquationRegressionEquationSub = this.regressionEquationsService.baselineEquipmentCurveByEquationRegressionEquation.subscribe(val => {
-      this.baselineEquipmentCurveByEquationRegressionEquation = val;
-      this.cd.detectChanges();
-    });
-    this.modificationEquipmentCurveByEquationRegressionEquationSub = this.regressionEquationsService.modificationEquipmentCurveByEquationRegressionEquation.subscribe(val => {
-      this.modificationEquipmentCurveByEquationRegressionEquation = val;
-      this.cd.detectChanges();
-    });
 
     this.systemCurveRegressionEquationSub = this.regressionEquationsService.systemCurveRegressionEquation.subscribe(val => {
       this.systemCurveRegressionEquation = val;
@@ -99,12 +73,9 @@ export class RegressionEquationsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.baselineEquipmentCurveByDataRegressionEquationSub.unsubscribe();
     this.baselineEquipmentCurveByDataRSquaredSub.unsubscribe();
-    this.modificationEquipmentCurveByDataRegressionEquationSub.unsubscribe();
-    this.modificationEquipmentCurveRSquaredSub.unsubscribe();
-    this.baselineEquipmentCurveByEquationRegressionEquationSub.unsubscribe();
-    this.modificationEquipmentCurveByEquationRegressionEquationSub.unsubscribe();
+    this.modificationEquipmentRegressionEquationSub.unsubscribe();
+    this.baselineEquipmentRegressionEquationSub.unsubscribe();
     this.systemCurveRegressionEquationSub.unsubscribe();
     this.selectedEquipmentCurveFormViewSub.unsubscribe();
     this.equipmentCurveCollapsedSub.unsubscribe();

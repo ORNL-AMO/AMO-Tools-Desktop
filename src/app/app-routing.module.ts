@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExtraOptions, RouterModule, Routes } from '@angular/router';
+import { ExtraOptions, RouterModule, Routes, provideRouter, withDebugTracing, withRouterConfig } from '@angular/router';
 import { CoreComponent } from './core/core.component';
 import { coreRoutes } from './core/core.routing';
 
@@ -22,10 +22,9 @@ const routerOptions: ExtraOptions = {
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forRoot(appRoutes, routerOptions)
   ],
   exports: [RouterModule],
-  providers: []
+  providers: [provideRouter(appRoutes, withRouterConfig(routerOptions))]
 })
 export class AppRoutingModule { }
 
