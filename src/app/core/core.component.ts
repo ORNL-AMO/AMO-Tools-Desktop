@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { firstValueFrom, merge, Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
@@ -9,9 +9,9 @@ import { CoreService } from './core.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
-import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 import { ElectronService, ReleaseData } from '../electron/electron.service';
+import { EmailMeasurDataService } from '../shared/email-measur-data/email-measur-data.service';
 
 @Component({
   selector: 'app-core',
@@ -38,12 +38,13 @@ export class CoreComponent implements OnInit {
   analyticsSessionId: string;
   modalOpenSub: Subscription;
   showSecurityAndPrivacyModalSub: Subscription;
-  isModalOpen: boolean;
   showSecurityAndPrivacyModal: boolean;
+  showEmailMeasurDataModal: boolean;
   electronUpdateAvailableSub: Subscription;
   assessmentUpdateAvailableSub: Subscription;
   updateAvailable: boolean;
   releaseDataSub: Subscription;
+  showEmailMeasurDataModalSub: Subscription;
 
 
   constructor(private electronService: ElectronService,
@@ -52,11 +53,11 @@ export class CoreComponent implements OnInit {
     private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
-    private analyticsService: AnalyticsService,
     private calculatorDbService: CalculatorDbService,
     private coreService: CoreService,
     private router: Router,
     private securityAndPrivacyService: SecurityAndPrivacyService,
+    private emailMeasurDataService: EmailMeasurDataService,
     private inventoryDbService: InventoryDbService, private sqlDbApiService: SqlDbApiService) {
   }
 
@@ -101,12 +102,12 @@ export class CoreComponent implements OnInit {
 
     this.initData();
 
-    this.modalOpenSub = this.securityAndPrivacyService.modalOpen.subscribe(val => {
-      this.isModalOpen = val;
-    });
-
     this.showSecurityAndPrivacyModalSub = this.securityAndPrivacyService.showSecurityAndPrivacyModal.subscribe(showSecurityAndPrivacyModal => {
       this.showSecurityAndPrivacyModal = showSecurityAndPrivacyModal;
+    });
+
+    this.showEmailMeasurDataModalSub = this.emailMeasurDataService.showEmailMeasurDataModal.subscribe(showModal => {
+      this.showEmailMeasurDataModal = showModal;
     });
 
   }
@@ -120,7 +121,7 @@ export class CoreComponent implements OnInit {
     this.assessmentUpdateAvailableSub.unsubscribe();
     this.openingTutorialSub.unsubscribe();
     this.showSecurityAndPrivacyModalSub.unsubscribe();
-    this.modalOpenSub.unsubscribe();
+    this.showEmailMeasurDataModalSub.unsubscribe();
   }
 
   async initData() {
@@ -175,6 +176,11 @@ export class CoreComponent implements OnInit {
   closeNoticeModal(isClosedEvent?: boolean) {
     this.securityAndPrivacyService.modalOpen.next(false)
     this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(false);
+  }
+
+  closeEmailModal(isClosedEvent?: boolean) {
+    this.emailMeasurDataService.modalOpen.next(false)
+    this.emailMeasurDataService.showEmailMeasurDataModal.next(false);
   }
 
 }

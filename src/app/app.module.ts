@@ -69,7 +69,6 @@ export function initializeWasmScript(): Promise<any> {
         resolve(module);
 			}
 		}
-
     // load client.js, ensure module created before app init
     loadScriptFromPath('wasmClient', `client.js`)
       .then(() => {

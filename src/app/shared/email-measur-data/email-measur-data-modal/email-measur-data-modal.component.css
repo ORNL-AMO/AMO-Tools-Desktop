@@ -1,0 +1,7 @@
+span.measur-item-type::first-letter {
+    text-transform: capitalize;
+  }
+  
+  .card-header-text{
+    font-size: 20px;
+}
