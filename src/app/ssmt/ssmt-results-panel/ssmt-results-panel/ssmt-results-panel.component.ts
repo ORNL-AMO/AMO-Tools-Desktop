@@ -37,6 +37,7 @@ export class SsmtResultsPanelComponent implements OnInit {
   percentSavings: number;
   annualSavings: number;
   modValid: boolean;
+  modificationResultsValid: boolean;
   baselineValid: boolean;
 
   currCurrency: string = "$";
@@ -44,7 +45,9 @@ export class SsmtResultsPanelComponent implements OnInit {
     private steamService: SteamService, private calculateLossesService: CalculateLossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.updateDataSub = this.ssmtService.updateData.subscribe(() => { this.getResults(); });
+    this.updateDataSub = this.ssmtService.updateData.subscribe(() => { 
+      this.getResults(); 
+    });
   }
 
   ngOnDestroy() {
@@ -67,21 +70,22 @@ export class SsmtResultsPanelComponent implements OnInit {
     
     if (this.baselineValid) {
       this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputs, this.settings, this.ssmt);
+
       let modificationSsmtCopy: SSMT = JSON.parse(JSON.stringify(this.ssmt.modifications[this.modificationIndex].ssmt));
       this.modValid = this.ssmtService.checkValid(modificationSsmtCopy, this.settings).isValid;
+      this.modificationResultsValid = false;
       let modificationResults: SSMTResults = { inputData: undefined, outputData: this.steamService.getEmptyResults() }
-      this.modificationInputs = modificationResults.inputData;
-      this.modificationOutput = modificationResults.outputData;
-
       if (this.modValid) {
         modificationResults = this.ssmtService.calculateModificationModel(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, this.baselineOutput);
-        this.modificationInputs = modificationResults.inputData;
-        this.modificationOutput = modificationResults.outputData;
-        
-        this.percentSavings = Number(Math.round(((((this.baselineOutput.operationsOutput.totalOperatingCost - this.modificationOutput.operationsOutput.totalOperatingCost) * 100) / this.baselineOutput.operationsOutput.totalOperatingCost) * 100) / 100).toFixed(0));
-        this.annualSavings = this.baselineOutput.operationsOutput.totalOperatingCost - this.modificationOutput.operationsOutput.totalOperatingCost;
-        this.modificationLosses = this.calculateLossesService.calculateLosses(this.modificationOutput, this.modificationInputs, this.settings, this.ssmt.modifications[this.modificationIndex].ssmt);
+        this.modificationResultsValid = modificationResults.outputData.operationsOutput !== undefined; 
+        if (this.modificationResultsValid) {
+          this.percentSavings = Number(Math.round(((((this.baselineOutput.operationsOutput.totalOperatingCost - modificationResults.outputData.operationsOutput.totalOperatingCost) * 100) / this.baselineOutput.operationsOutput.totalOperatingCost) * 100) / 100).toFixed(0));
+          this.annualSavings = this.baselineOutput.operationsOutput.totalOperatingCost - modificationResults.outputData.operationsOutput.totalOperatingCost;
+          this.modificationLosses = this.calculateLossesService.calculateLosses(modificationResults.outputData, modificationResults.inputData, this.settings, this.ssmt.modifications[this.modificationIndex].ssmt);
+        }
       }
+      this.modificationInputs = modificationResults.inputData;
+      this.modificationOutput = modificationResults.outputData;
     }
   }
 
