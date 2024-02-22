@@ -22,8 +22,6 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   @Input()
   phast: PHAST;
   @Input()
-  printView: boolean;
-  @Input()
   appBackground: boolean;
   @Input()
   assessment: Assessment;
@@ -151,7 +149,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       },
       arrangement: 'freeform',
       node: {
-        pad: 50,
+        pad: 260,
         line: {
           color: this.gradientStartColor,
         },
@@ -166,7 +164,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
             size: 14,
             color: 'rgba(255, 255, 255)'
           },
-          align: 'auto',
+          align: 'justify',
         },
         showgrid: false,
       },
@@ -181,7 +179,8 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       margin: {
         l: 50,
         t: 25,
-        pad: 10,
+        r: 50,
+        pad: 20,
       },
       xaxis: {
         showgrid: false,
