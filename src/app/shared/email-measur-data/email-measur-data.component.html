@@ -29,8 +29,7 @@
 </ng-container>
 
   <div *ngIf="emailSentStatus === 'success'" class="alert-success small mx-2 px-3 py-2">
-    An email has been sent to <span class="bold">{{emailDataForm.controls.emailTo.value}}</span>. If the email has not
-    been received within 10 minutes please check the spam folder.
+    An email has been sent to <span class="bold">{{emailDataForm.controls.emailTo.value}}</span>. If the email is not received, please check the spam folder.
   </div>
   
   <div *ngIf="emailSentStatus === 'error'" class="alert-danger small mx-2 px-3 py-2">
@@ -41,8 +40,18 @@
     <span>This item is too large to send as an email attachment. Please try sharing using the export feature.</span>
   </div>
 
+  <ng-container *ngIf="emailSentStatus === 'sending'">
+    <div class="spinner-overlay align-items-center w-100 text-center">
+      <div class="spinner mt-2 w-100">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+      </div>
+      <div class="importing-text w-100">Sending Email...</div>
+  </div>
+  </ng-container>
 
-<ng-container *ngIf="emailSentStatus !== 'success'">
+<ng-container *ngIf="!['success', 'sending'].includes(emailSentStatus)">
   <div class="alert-info small mx-2 px-3 py-2">
     Emails are delivered from sender <span class="bold">no-reply-measur&#64;ornl.gov</span>
   </div>

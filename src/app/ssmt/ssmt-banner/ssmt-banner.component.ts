@@ -4,6 +4,7 @@ import { SsmtService } from '../ssmt.service';
 import { Subscription } from 'rxjs';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
+import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
   selector: 'app-ssmt-banner',
@@ -19,6 +20,7 @@ export class SsmtBannerComponent implements OnInit {
   bannerCollapsed: boolean = true;
   
   constructor(private ssmtService: SsmtService,
+    private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService,  private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit() {
@@ -84,5 +86,14 @@ export class SsmtBannerComponent implements OnInit {
 
   openExportModal(){
     this.ssmtService.showExportModal.next(true);
+  }
+
+  emailTreasureHuntData() {
+    this.emailMeasurDataService.measurItemAttachment = {
+      itemType: 'assessment',
+      itemName: this.assessment.name,
+      itemData: this.assessment
+    }
+    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 }
