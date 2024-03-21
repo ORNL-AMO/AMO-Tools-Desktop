@@ -5,3 +5,8 @@ span.measur-item-type::first-letter {
   .card-header-text{
     font-size: 20px;
 }
+
+
+.modal-lg {
+  max-width: 40%;
+}
