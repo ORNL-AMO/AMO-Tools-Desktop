@@ -94,6 +94,9 @@
 
   
   <div class="d-lg-flex ml-auto pr-2 h-100 flex-wrap d-none d-lg-inline-block">
+    <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" (click)="emailTreasureHuntData()">
+			<span class="fa fa-share-square-o"></span>
+		</div>
     <div class="pl-2 pr-2 home-nav-item" (click)="showSecurityAndPrivacyModal()">
 			<span class="fa fa-lock"></span>
 		</div>
@@ -134,6 +137,9 @@
   <div *ngIf="!bannerCollapsed" class="d-block d-lg-none ml-auto pr-2 h-100 flex-wrap">
 		<div class="pl-2 pr-2 border-left home-nav-item d-block" (click)="collapseBanner()">
 			<span class="fa fa-bars"></span>
+		</div>
+    <div class="pl-2 pr-2 home-nav-item d-block" (click)="emailTreasureHuntData()">
+			<span class="fa fa-share-square-o"></span>
 		</div>
     <div class="pl-2 pr-2 home-nav-item d-block" 
     (click)="showSecurityAndPrivacyModal()">

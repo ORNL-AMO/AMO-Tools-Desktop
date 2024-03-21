@@ -5,6 +5,7 @@ import { PsatTabService } from '../psat-tab.service';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
+import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
   selector: 'app-psat-banner',
@@ -23,6 +24,7 @@ export class PsatBannerComponent implements OnInit {
 
   constructor(private psatTabService: PsatTabService, 
     private integrationStateService: IntegrationStateService,
+    private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit() {
@@ -94,5 +96,14 @@ export class PsatBannerComponent implements OnInit {
 
   openExportModal(){
     this.psatTabService.showExportModal.next(true);
+  }
+
+  emailTreasureHuntData() {
+    this.emailMeasurDataService.measurItemAttachment = {
+      itemType: 'assessment',
+      itemName: this.assessment.name,
+      itemData: this.assessment
+    }
+    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 }

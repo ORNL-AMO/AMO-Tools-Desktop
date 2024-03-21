@@ -5,6 +5,8 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { FormGroup } from '@angular/forms';
 import { ExportService } from '../import-export/export.service';
 import { ImportExportData } from '../import-export/importExportModel';
+import { MeasurItemType } from '../models/app';
+import { LogToolDbData } from '../../log-tool/log-tool-models';
 
 @Injectable({
   providedIn: 'root'
@@ -29,9 +31,20 @@ export class EmailMeasurDataService {
   }
 
   setEmailData(measurEmailForm: FormGroup) {
-    if (measurEmailForm.valid) {
-      let attachmentExportData: ImportExportData = this.exportService.getSelectedAssessment(this.measurItemAttachment.itemData);
-      attachmentExportData.origin = "AMO-TOOLS-DESKTOP";
+    if (measurEmailForm.valid && this.measurItemAttachment) {
+      let attachmentExportData: ImportExportData | LogToolDbData;
+      if (this.measurItemAttachment.itemType === 'assessment') {
+        attachmentExportData = this.exportService.getSelectedAssessment(this.measurItemAttachment.itemData);
+        attachmentExportData['origin'] = "AMO-TOOLS-DESKTOP";
+      } else if (this.measurItemAttachment.itemType === 'inventory') {
+        attachmentExportData = this.exportService.getSelectedInventory(this.measurItemAttachment.itemData);
+        attachmentExportData['origin'] = "AMO-TOOLS-DESKTOP";
+      } else if (this.measurItemAttachment.itemType === 'data-explorer') {
+        attachmentExportData = this.measurItemAttachment.itemData;
+        attachmentExportData['origin'] = "AMO-LOG-TOOL-DATA";
+      }
+
+
       this.measurEmailData = {
         emailTo: measurEmailForm.controls.emailTo.value,
         emailSender: measurEmailForm.controls.emailSender.value,
@@ -45,14 +58,18 @@ export class EmailMeasurDataService {
   }
 
   sendEmail() {
-    // todo start spinner
+    this.emailSentStatus.next('sending');
+
     let url: string = environment.measurUtilitiesApi + 'sendemail';
     if (this.measurEmailData) {
+      const size = new TextEncoder().encode(JSON.stringify(this.measurEmailData)).length
+      const kiloBytes = size / 1024;
+      console.log('sending file size (kb)', kiloBytes);
       this.httpClient.post(url, this.measurEmailData, this.httpOptions).subscribe({
           next: (resp) => {
             this.setStatus(resp);
           },
-          error: (error: HttpErrorResponse) => {
+          error: (error: any) => {
             this.setStatus(undefined, error);
           }
         });
@@ -60,7 +77,7 @@ export class EmailMeasurDataService {
     
   }
 
-  setStatus(resp, error?: HttpErrorResponse) {
+  setStatus(resp, error?: any) {
     if (resp == "OK") {
       this.emailSentStatus.next('success');
     } else if (error && error.status === 413) {
@@ -68,7 +85,6 @@ export class EmailMeasurDataService {
     } else {
       this.emailSentStatus.next('error');
     }
-    // todo end spinner
   }
 
 }
@@ -80,14 +96,14 @@ export interface MeasurEmailData {
   emailTo: string
   emailSender: string,
   fileName: string,
-  attachment: ImportExportData,
+  attachment: ImportExportData | LogToolDbData,
   isProduction?: boolean;
 }
 
 export interface MeasurItemAttachment {
-  itemType: string,
+  itemType: MeasurItemType,
   itemName: string,
   itemData: any,
 }
 
-export type EmailSentStatus = "success" | "error" | "content-too-large";
+export type EmailSentStatus = "success" | "error" | "content-too-large" | 'sending';
