@@ -289,13 +289,14 @@ export class SteamReductionService {
 
   convertInput(inputArray: Array<SteamReductionData>, settings: Settings): Array<SteamReductionData> {
     for (let i = 0; i < inputArray.length; i++) {
-      let tmp: SteamReductionData;
+      let convertedReductionData: SteamReductionData;
       if (settings.unitsOfMeasure == 'Imperial') {
-        tmp = this.convertImperialInput(inputArray[i]);
+        convertedReductionData = this.convertImperialInput(inputArray[i]);
       } else if (settings.unitsOfMeasure == 'Metric') {
-        tmp = this.convertMetricInput(inputArray[i], settings);
+        convertedReductionData = this.convertMetricInput(inputArray[i], settings);
       }
-      inputArray[i] = tmp;
+      convertedReductionData.systemEfficiency = convertedReductionData.systemEfficiency / 100;
+      inputArray[i] = convertedReductionData;
     }
     return inputArray;
   }

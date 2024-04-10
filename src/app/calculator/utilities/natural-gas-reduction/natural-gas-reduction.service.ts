@@ -291,54 +291,57 @@ export class NaturalGasReductionService {
   convertInput(inputArray: Array<NaturalGasReductionData>, settings: Settings): Array<NaturalGasReductionData> {
     //need loop to support conversion
     for (let i = 0; i < inputArray.length; i++) {
-      let tmpFlowMeterMethodData: FlowMeterMethodData = inputArray[i].flowMeterMethodData;
-      let tmpAirMassFlowMeasuredData: AirMassFlowMeasuredData = inputArray[i].airMassFlowData.airMassFlowMeasuredData;
-      let tmpAirMassFlowNameplateData: AirMassFlowNameplateData = inputArray[i].airMassFlowData.airMassFlowNameplateData;
-      let tmpAirMassFlowData: AirMassFlowData = inputArray[i].airMassFlowData;
-      let tmpWaterMassFlowData: WaterMassFlowData = inputArray[i].waterMassFlowData;
-      let tmpOtherMethodData: NaturalGasOtherMethodData = inputArray[i].otherMethodData;
+      let convertedFlowMeterMethodData: FlowMeterMethodData = inputArray[i].flowMeterMethodData;
+      let convertedAirMassFlowMeasuredData: AirMassFlowMeasuredData = inputArray[i].airMassFlowData.airMassFlowMeasuredData;
+      let convertedAirMassFlowNameplateData: AirMassFlowNameplateData = inputArray[i].airMassFlowData.airMassFlowNameplateData;
+      let convertedAirMassFlowData: AirMassFlowData = inputArray[i].airMassFlowData;
+      let convertedWaterMassFlowData: WaterMassFlowData = inputArray[i].waterMassFlowData;
+      let convertedOtherMethodData: NaturalGasOtherMethodData = inputArray[i].otherMethodData;
       let tmp = inputArray[i];
       if (settings.unitsOfMeasure == 'Metric') {
-        tmpFlowMeterMethodData = {
+        convertedFlowMeterMethodData = {
           flowRate: this.convertUnitsService.value(tmp.flowMeterMethodData.flowRate).from('m3/h').to('ft3/h')
         };
-        tmpAirMassFlowMeasuredData = {
+        convertedAirMassFlowMeasuredData = {
           areaOfDuct: this.convertUnitsService.value(tmp.airMassFlowData.airMassFlowMeasuredData.areaOfDuct).from('cm2').to('ft2'),
           airVelocity: this.convertUnitsService.value(tmp.airMassFlowData.airMassFlowMeasuredData.airVelocity).from('m').to('ft')
         };
-        tmpAirMassFlowNameplateData = {
+        convertedAirMassFlowNameplateData = {
           airFlow: this.convertUnitsService.value(tmp.airMassFlowData.airMassFlowNameplateData.airFlow).from('L/s').to('ft3/min')
         };
-        tmpAirMassFlowData = {
+        convertedAirMassFlowData = {
           isNameplate: tmp.airMassFlowData.isNameplate,
-          airMassFlowMeasuredData: tmpAirMassFlowMeasuredData,
-          airMassFlowNameplateData: tmpAirMassFlowNameplateData,
+          airMassFlowMeasuredData: convertedAirMassFlowMeasuredData,
+          airMassFlowNameplateData: convertedAirMassFlowNameplateData,
           inletTemperature: this.convertUnitsService.value(tmp.airMassFlowData.inletTemperature).from('C').to('F'),
           outletTemperature: this.convertUnitsService.value(tmp.airMassFlowData.outletTemperature).from('C').to('F'),
           systemEfficiency: tmp.airMassFlowData.systemEfficiency
         }
-        tmpWaterMassFlowData = {
+        convertedWaterMassFlowData = {
           waterFlow: this.convertUnitsService.value(tmp.waterMassFlowData.waterFlow).from('L/s').to('gpm'),
           inletTemperature: this.convertUnitsService.value(tmp.waterMassFlowData.inletTemperature).from('C').to('F'),
           outletTemperature: this.convertUnitsService.value(tmp.waterMassFlowData.outletTemperature).from('C').to('F'),
-          systemEfficiency: tmpWaterMassFlowData.systemEfficiency
+          systemEfficiency: convertedWaterMassFlowData.systemEfficiency
         };
-        tmpOtherMethodData = {
+        convertedOtherMethodData = {
           consumption: this.convertUnitsService.value(tmp.otherMethodData.consumption).from('GJ').to('MMBtu')
         };
         let fuelCostConversionHelper: number = this.convertUnitsService.value(1).from('GJ').to('MMBtu')
         tmp.fuelCost = tmp.fuelCost / fuelCostConversionHelper;
       }
 
+      convertedAirMassFlowData.systemEfficiency = convertedAirMassFlowData.systemEfficiency / 100;
+      convertedWaterMassFlowData.systemEfficiency = convertedWaterMassFlowData.systemEfficiency / 100;
+
       inputArray[i] = {
         name: tmp.name,
         operatingHours: tmp.operatingHours,
         fuelCost: tmp.fuelCost,
         measurementMethod: tmp.measurementMethod,
-        flowMeterMethodData: tmpFlowMeterMethodData,
-        otherMethodData: tmpOtherMethodData,
-        airMassFlowData: tmpAirMassFlowData,
-        waterMassFlowData: tmpWaterMassFlowData,
+        flowMeterMethodData: convertedFlowMeterMethodData,
+        otherMethodData: convertedOtherMethodData,
+        airMassFlowData: convertedAirMassFlowData,
+        waterMassFlowData: convertedWaterMassFlowData,
         units: tmp.units
       };
     }
