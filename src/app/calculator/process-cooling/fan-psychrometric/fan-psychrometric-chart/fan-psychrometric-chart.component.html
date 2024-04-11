@@ -23,3 +23,32 @@
     </div>
   </div>
 </div>
+
+<div>
+  <label class="group-label bold">Data Summary</label>
+  <table class="table pt-2 d-flex">
+    <tbody class="w-100">
+      <tr class="bold small text-center no-border">
+        <th class="bold w-25">Key</th>
+        <th class="bold w-25">Dry Bulb Temperature</th>
+        <th class="bold w-25">Humidity Metric</th>
+        <th class="bold w-25">Humidity Ratio</th>
+      </tr>
+      <tr *ngFor="let point of selectedDataPoints; let index = index">
+        <td class="text-center">
+          <div class="point-key-circle"
+            [ngStyle]="{'background': point.line.color}">
+          </div>
+        </td>
+        <td class="text-center">{{point.x}}</td>
+        <td class="text-center">{{point.name}}</td>
+        <td class="text-center">{{point.y}}</td>
+        <td class='delete-row text-center'>
+          <a class="click-link m-2 text-danger" (click)="deleteDataPoint(index)">
+            Delete
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

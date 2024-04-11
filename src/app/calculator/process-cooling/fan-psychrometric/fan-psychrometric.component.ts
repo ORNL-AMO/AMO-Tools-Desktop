@@ -3,9 +3,10 @@ import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FanPsychrometricService } from './fan-psychrometric.service';
 import { Subscription } from 'rxjs';
-import { BaseGasDensity } from '../../../shared/models/fans';
+import { BaseGasDensity, PsychrometricResults } from '../../../shared/models/fans';
 import { SettingsService } from '../../../settings/settings.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
+import { TraceData } from '../../../shared/models/plotting';
 
 @Component({
   selector: 'app-fan-psychrometric',
@@ -32,6 +33,13 @@ export class FanPsychrometricComponent implements OnInit {
   smallScreenTab: string = 'form';
 
   baseGasDensityDataSub: Subscription;
+  
+  resultData: Array<PsychrometricResults>;
+  resetFormSubscription: Subscription;
+  calculatedBaseGasDensitySubscription: Subscription;
+  psychrometricResults: PsychrometricResults;  
+  selectedDataPoints: Array<TraceData>;
+  selectedDataPointsSubscription: Subscription;
 
   constructor(private settingsDbService: SettingsDbService,
     private fanPsychrometricService: FanPsychrometricService,
@@ -63,11 +71,30 @@ export class FanPsychrometricComponent implements OnInit {
 
   ngOnDestroy() {
     this.baseGasDensityDataSub.unsubscribe();
+    this.resetFormSubscription.unsubscribe();
+    this.calculatedBaseGasDensitySubscription.unsubscribe();
+    this.selectedDataPointsSubscription.unsubscribe();
   }
 
   initSubscriptions() {
     this.baseGasDensityDataSub = this.fanPsychrometricService.baseGasDensityData.subscribe(value => {
       this.fanPsychrometricService.calculateBaseGasDensity(this.settings);
+    });
+    this.resetFormSubscription = this.fanPsychrometricService.resetData.subscribe(val => {
+      this.resultData = [];
+      this.psychrometricResults = undefined;
+      this.selectedDataPoints = new Array();
+    });
+    this.calculatedBaseGasDensitySubscription = this.fanPsychrometricService.calculatedBaseGasDensity.subscribe(results => {
+      if (results) {
+        this.psychrometricResults = results;
+        let inputData: BaseGasDensity = this.fanPsychrometricService.baseGasDensityData.getValue();
+        this.psychrometricResults.barometricPressure = inputData.barometricPressure;
+        this.psychrometricResults.dryBulbTemp = inputData.dryBulbTemp;
+      }
+    });
+    this.selectedDataPointsSubscription = this.fanPsychrometricService.selectedDataPoints.subscribe(value => {
+      this.selectedDataPoints = value;
     });
   }
 

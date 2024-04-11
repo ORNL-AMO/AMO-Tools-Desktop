@@ -21,6 +21,8 @@ export class FanPsychrometricChartComponent implements OnInit {
   gasDensityForm: UntypedFormGroup;
   @Input()
   settings: Settings;
+  @Input()  
+  selectedDataPoints: Array<TraceData>;
 
   @ViewChild("expandedChartDiv", { static: false }) expandedChartDiv: ElementRef;
   @ViewChild("panelChartDiv", { static: false }) panelChartDiv: ElementRef;
@@ -41,7 +43,6 @@ export class FanPsychrometricChartComponent implements OnInit {
   humidityRatioUnits: string;
   wetBulbAxisText: Array<string>;
   lineCreationData: LineCreationData;
-  dataPointTraces: Array<TraceData>;
   graphColors: Array<string>;
 
   constructor(private plotlyService: PlotlyService, private psychrometricService: FanPsychrometricService, private convertUnitsService: ConvertUnitsService,
@@ -49,7 +50,6 @@ export class FanPsychrometricChartComponent implements OnInit {
 
   ngOnInit() {
     this.graphColors = graphColors;
-    this.dataPointTraces = new Array();
     this.triggerInitialResize();
     this.setChartUnits();
     this.calculatedBaseGasDensitySubscription = this.psychrometricService.calculatedBaseGasDensity.subscribe(results => {
@@ -66,7 +66,7 @@ export class FanPsychrometricChartComponent implements OnInit {
 
   initRenderChart() {
     this.chart = this.getEmptyChart();      
-    this.dataPointTraces.forEach(trace => {
+    this.selectedDataPoints.forEach(trace => {
       this.chart.data.push(trace);
     });
     let form: UntypedFormGroup = this.gasDensityFormService.getGasDensityFormFromObj(this.inputData, this.settings);
@@ -99,13 +99,25 @@ export class FanPsychrometricChartComponent implements OnInit {
     }
   }
 
+  roundVal(num: number): number {
+    return Number(num.toFixed(3));
+  }
+
   addSelectedPointTraces(graphData) {
-    let pointColor: string = this.graphColors[(this.dataPointTraces.length + 2) % this.graphColors.length];
+    let pointColor: string = this.graphColors[(this.selectedDataPoints.length + 2) % this.graphColors.length];
     let userPointTrace: TraceData = this.getEmptyPointTrace('', pointColor);
     userPointTrace.x.push(graphData.points[0].x);
-    userPointTrace.y.push(graphData.points[0].y);
-    this.dataPointTraces.push(userPointTrace);   
+    userPointTrace.y.push(this.roundVal(graphData.points[0].y));
+    userPointTrace.name = graphData.points[0].fullData.name;
+    this.selectedDataPoints.push(userPointTrace);   
+    this.psychrometricService.selectedDataPoints.next(this.selectedDataPoints);
 
+    this.initRenderChart();
+  }
+
+  deleteDataPoint(index: number) {
+    this.selectedDataPoints.splice(index, 1);   
+    this.psychrometricService.selectedDataPoints.next(this.selectedDataPoints);
     this.initRenderChart();
   }
 

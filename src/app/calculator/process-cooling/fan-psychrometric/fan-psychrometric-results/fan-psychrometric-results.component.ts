@@ -12,6 +12,10 @@ import { FanPsychrometricService, FanPsychrometricWarnings } from '../fan-psychr
 export class FanPsychrometricResultsComponent implements OnInit {
 
   @Input() settings: Settings;
+  @Input()
+  resultDataTable: Array<PsychrometricResults>;
+  @Input()
+  psychrometricResultsTable: PsychrometricResults;
 
   resultData: Array<PsychrometricResults>;
   hasValidResults: boolean; 

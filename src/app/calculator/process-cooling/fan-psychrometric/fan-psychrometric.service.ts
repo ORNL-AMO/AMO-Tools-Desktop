@@ -12,7 +12,8 @@ import { DataPoint, TraceData } from '../../../shared/models/plotting';
 export class FanPsychrometricService {
   currentField: BehaviorSubject<string>;
   resetData: BehaviorSubject<boolean>;
-  generateExample: BehaviorSubject<boolean>;
+  generateExample: BehaviorSubject<boolean>;  
+  selectedDataPoints: BehaviorSubject<Array<TraceData>>;
 
   baseGasDensityData: BehaviorSubject<BaseGasDensity>;
   calculatedBaseGasDensity: BehaviorSubject<PsychrometricResults>;
@@ -24,6 +25,7 @@ export class FanPsychrometricService {
     this.currentField = new BehaviorSubject<string>('default');
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
+    this.selectedDataPoints = new BehaviorSubject<Array<TraceData>>([]);
 
     this.psychrometricResults = new BehaviorSubject<Array<PsychrometricResults>>(undefined);
     this.baseGasDensityData = new BehaviorSubject<BaseGasDensity>(undefined);

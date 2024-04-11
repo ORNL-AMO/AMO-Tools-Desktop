@@ -13,35 +13,39 @@ import { BaseGasDensity, PsychrometricResults } from '../../../../shared/models/
 export class FanPsychrometricTableComponent implements OnInit {
   @Input()
   settings: Settings
+  @Input()
+  resultData: Array<PsychrometricResults>;
+  @Input()
+  psychrometricResults: PsychrometricResults;
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
-  resultData: Array<PsychrometricResults>;
-  resetFormSubscription: Subscription;
-  calculatedBaseGasDensitySubscription: Subscription;
-  psychrometricResults: PsychrometricResults;
+  // resultData: Array<PsychrometricResults>;
+  // resetFormSubscription: Subscription;
+  // calculatedBaseGasDensitySubscription: Subscription;
+  // psychrometricResults: PsychrometricResults;
 
 
   constructor(private fanPsychrometricService: FanPsychrometricService) { }
 
   ngOnInit() {
-    this.resetFormSubscription = this.fanPsychrometricService.resetData.subscribe(val => {
-      this.resultData = [];
-      this.psychrometricResults = undefined;
-    });
-    this.calculatedBaseGasDensitySubscription = this.fanPsychrometricService.calculatedBaseGasDensity.subscribe(results => {
-      if(results) {
-        this.psychrometricResults = results;
-        let inputData: BaseGasDensity = this.fanPsychrometricService.baseGasDensityData.getValue();
-        this.psychrometricResults.barometricPressure = inputData.barometricPressure;
-        this.psychrometricResults.dryBulbTemp = inputData.dryBulbTemp;
-      }
-    });
+    // this.resetFormSubscription = this.fanPsychrometricService.resetData.subscribe(val => {
+    //   this.resultData = [];
+    //   this.psychrometricResults = undefined;
+    // });
+    // this.calculatedBaseGasDensitySubscription = this.fanPsychrometricService.calculatedBaseGasDensity.subscribe(results => {
+    //   if(results) {
+    //     this.psychrometricResults = results;
+    //     let inputData: BaseGasDensity = this.fanPsychrometricService.baseGasDensityData.getValue();
+    //     this.psychrometricResults.barometricPressure = inputData.barometricPressure;
+    //     this.psychrometricResults.dryBulbTemp = inputData.dryBulbTemp;
+    //   }
+    // });
   }
 
   ngOnDestroy() {
-    this.resetFormSubscription.unsubscribe();
-    this.calculatedBaseGasDensitySubscription.unsubscribe();
+    // this.resetFormSubscription.unsubscribe();
+    // this.calculatedBaseGasDensitySubscription.unsubscribe();
   }
 
   addResult() {
