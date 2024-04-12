@@ -26,6 +26,8 @@ export class FanPsychrometricChartComponent implements OnInit {
 
   @ViewChild("expandedChartDiv", { static: false }) expandedChartDiv: ElementRef;
   @ViewChild("panelChartDiv", { static: false }) panelChartDiv: ElementRef;
+  @ViewChild('dataSummaryTable', { static: false }) dataSummaryTable: ElementRef;
+  dataSummaryTableString: any;
   ngChartContainer: ElementRef;
   chart: SimpleChart;
 
@@ -109,16 +111,19 @@ export class FanPsychrometricChartComponent implements OnInit {
     userPointTrace.x.push(graphData.points[0].x);
     userPointTrace.y.push(this.roundVal(graphData.points[0].y));
     userPointTrace.name = graphData.points[0].fullData.name;
-    this.selectedDataPoints.push(userPointTrace);   
-    this.psychrometricService.selectedDataPoints.next(this.selectedDataPoints);
-
+    this.selectedDataPoints.push(userPointTrace);    
     this.initRenderChart();
+    this.save();
+  }
+
+  save(){      
+    this.psychrometricService.selectedDataPoints.next(this.selectedDataPoints);
   }
 
   deleteDataPoint(index: number) {
-    this.selectedDataPoints.splice(index, 1);   
-    this.psychrometricService.selectedDataPoints.next(this.selectedDataPoints);
+    this.selectedDataPoints.splice(index, 1); 
     this.initRenderChart();
+    this.save();  
   }
 
   addRelativeHumidityCurves(): Array<TraceData> {
@@ -542,6 +547,11 @@ export class FanPsychrometricChartComponent implements OnInit {
       }
     }
   }
+
+  updateTableString() {
+    this.dataSummaryTableString = this.dataSummaryTable.nativeElement.innerText;
+  }
+
 }
 
 

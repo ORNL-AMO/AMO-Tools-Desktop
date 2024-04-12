@@ -83,7 +83,7 @@ export class FanPsychrometricComponent implements OnInit {
     this.resetFormSubscription = this.fanPsychrometricService.resetData.subscribe(val => {
       this.resultData = [];
       this.psychrometricResults = undefined;
-      this.selectedDataPoints = new Array();
+      this.selectedDataPoints = new Array<TraceData>();
     });
     this.calculatedBaseGasDensitySubscription = this.fanPsychrometricService.calculatedBaseGasDensity.subscribe(results => {
       if (results) {
