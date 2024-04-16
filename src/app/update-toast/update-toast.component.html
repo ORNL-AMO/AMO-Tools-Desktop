@@ -1,6 +1,8 @@
-<div class="card toasty-card update-toast" [@toast]="showUpdateToast" *ngIf="!destroyToast">
+<div class="card toasty-card update-toast" [@toast]="showUpdateToast || updatePwa" *ngIf="!destroyToast">
+
+  <ng-container *ngIf="!updatePwa">
   <div class="card-header">
-    {{releaseName}} is now available!!
+    MEASUR {{releaseName}} is now available!
     <button class="close pull-right" (click)="closeToast()" *ngIf="!downloadingUpdate">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -18,13 +20,32 @@
     </div>
     <span class="help-text">Downloading Update. This may take a few minutes.</span>
   </div>
-  <div class="card-body d-flex flex-column text-center" *ngIf="updateDownloaded">
+  <div class="card-body d-flex flex-column text-center" *ngIf="updateDownloaded || updatePwa">
     <a class="click-link" (click)="quitAndInstall()">Quit and Install Update</a>
   </div>
   <div class="card-body d-flex flex-column text-center" *ngIf="error">
     An error has occured. Please restart your application and try again. If the error persists, please use the
     "Feedback" page to notify ORNL of your issue.
   </div>
+</ng-container>
+
+<ng-container *ngIf="updatePwa">
+  <div class="card-header">
+    A new version of MEASUR is available!
+    <button class="close pull-right" (click)="closeToast()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="card-body d-flex flex-column text-center">
+    <a class="click-link" (click)="quitAndInstall()">Install Update</a>
+  </div>
+  <div class="card-body d-flex flex-column text-center" *ngIf="error">
+    The application could not be updated. Please uninstall, then reinstall the newest version. If the problem persists, see the 
+    "Feedback" page to notify ORNL of your issue.
+  </div>
+</ng-container>
+
+
 </div>
 
 
