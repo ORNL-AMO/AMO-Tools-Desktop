@@ -13,7 +13,8 @@ export class FanPsychrometricService {
   currentField: BehaviorSubject<string>;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;  
-  selectedDataPoints: BehaviorSubject<Array<TraceData>>;
+  selectedDataPoints: BehaviorSubject<Array<TraceData>>;  
+  disabledChartTab: BehaviorSubject<boolean>;  
 
   baseGasDensityData: BehaviorSubject<BaseGasDensity>;
   calculatedBaseGasDensity: BehaviorSubject<PsychrometricResults>;
@@ -30,6 +31,7 @@ export class FanPsychrometricService {
     this.psychrometricResults = new BehaviorSubject<Array<PsychrometricResults>>(undefined);
     this.baseGasDensityData = new BehaviorSubject<BaseGasDensity>(undefined);
     this.calculatedBaseGasDensity = new BehaviorSubject<PsychrometricResults>(undefined);
+    this.disabledChartTab = new BehaviorSubject<boolean>(true);
   }
 
   getDefaultData(settings: Settings): BaseGasDensity {

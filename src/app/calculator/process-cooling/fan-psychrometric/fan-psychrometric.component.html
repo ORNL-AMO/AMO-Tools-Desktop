@@ -47,9 +47,9 @@
 						<div>Results</div>
 					</a>
 				</div>
-				<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'chart'}">
+				<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'chart', 'isDisabled': disabledChartTab }">
 					<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
-						(click)="setTab('chart')">
+						(click)="setTab('chart')"  [ngClass]="{'isDisabled': disabledChartTab }">
 						<div>Chart</div>
 					</a>
 				</div>

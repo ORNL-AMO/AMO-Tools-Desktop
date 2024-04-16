@@ -18,3 +18,10 @@
     z-index: initial !important;
   }
   
+  .isDisabled {
+    color: currentColor;
+    cursor: not-allowed !important;
+    opacity: 0.5;
+    text-decoration: none !important;
+    pointer-events: none !important;
+  }

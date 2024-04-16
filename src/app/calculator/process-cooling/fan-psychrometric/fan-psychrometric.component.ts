@@ -41,6 +41,9 @@ export class FanPsychrometricComponent implements OnInit {
   selectedDataPoints: Array<TraceData>;
   selectedDataPointsSubscription: Subscription;
 
+  disabledChartTab: boolean;
+  disabledChartTabSubscription: Subscription;
+
   constructor(private settingsDbService: SettingsDbService,
     private fanPsychrometricService: FanPsychrometricService,
     private settingsService: SettingsService,
@@ -96,18 +99,25 @@ export class FanPsychrometricComponent implements OnInit {
     this.selectedDataPointsSubscription = this.fanPsychrometricService.selectedDataPoints.subscribe(value => {
       this.selectedDataPoints = value;
     });
+    this.disabledChartTabSubscription = this.fanPsychrometricService.disabledChartTab.subscribe(val => {
+      this.disabledChartTab = val;
+    });
   }
 
   btnGenerateExample() {
     let exampleData: BaseGasDensity = this.fanPsychrometricService.getExampleData(this.settings);
     this.fanPsychrometricService.baseGasDensityData.next(exampleData);
     this.fanPsychrometricService.generateExample.next(true);
+    this.fanPsychrometricService.disabledChartTab.next(false);
+    this.setTab('results');
   }
 
   btnResetData() {
     let defaultData: BaseGasDensity = this.fanPsychrometricService.getDefaultData(this.settings);
     this.fanPsychrometricService.baseGasDensityData.next(defaultData);
-    this.fanPsychrometricService.resetData.next(true);
+    this.fanPsychrometricService.resetData.next(true);    
+    this.fanPsychrometricService.disabledChartTab.next(true);
+    this.setTab('results');
   }
 
   resizeTabs() {
