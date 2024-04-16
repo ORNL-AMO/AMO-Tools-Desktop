@@ -12,6 +12,7 @@ import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 import { ElectronService, ReleaseData } from '../electron/electron.service';
 import { EmailMeasurDataService } from '../shared/email-measur-data/email-measur-data.service';
+import { PwaService } from '../shared/pwa/pwa.service';
 
 @Component({
   selector: 'app-core',
@@ -20,7 +21,8 @@ import { EmailMeasurDataService } from '../shared/email-measur-data/email-measur
 })
 
 export class CoreComponent implements OnInit {
-  showUpdateToast: boolean;
+  updateDesktop: boolean;
+  updatePwa: boolean;
   showBrowsingDataToast: boolean;
   hideTutorial: boolean = true;
   openingTutorialSub: Subscription;
@@ -45,6 +47,7 @@ export class CoreComponent implements OnInit {
   updateAvailable: boolean;
   releaseDataSub: Subscription;
   showEmailMeasurDataModalSub: Subscription;
+  pwaUpdateAvailableSubscription: Subscription;
 
 
   constructor(private electronService: ElectronService,
@@ -58,6 +61,7 @@ export class CoreComponent implements OnInit {
     private router: Router,
     private securityAndPrivacyService: SecurityAndPrivacyService,
     private emailMeasurDataService: EmailMeasurDataService,
+    private pwaService: PwaService,
     private inventoryDbService: InventoryDbService, private sqlDbApiService: SqlDbApiService) {
   }
 
@@ -71,7 +75,7 @@ export class CoreComponent implements OnInit {
       this.electronUpdateAvailableSub = this.electronService.updateAvailable.subscribe(val => {
         this.updateAvailable = val;
         if (this.updateAvailable) {
-          this.showUpdateToast = true;
+          this.updateDesktop = true;
           this.assessmentService.updateAvailable.next(true);
           this.changeDetectorRef.detectChanges();
         }
@@ -85,10 +89,14 @@ export class CoreComponent implements OnInit {
 
     this.assessmentUpdateAvailableSub = this.assessmentService.updateAvailable.subscribe(val => {
       if (val == true) {
-        this.showUpdateToast = true;
+        this.updateDesktop = true;
         this.changeDetectorRef.detectChanges();
       }
     });
+
+    this.pwaUpdateAvailableSubscription = this.pwaService.displayUpdateToast.subscribe(updatePwa => {
+      this.updatePwa = updatePwa;
+    })
 
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
@@ -122,6 +130,7 @@ export class CoreComponent implements OnInit {
     this.openingTutorialSub.unsubscribe();
     this.showSecurityAndPrivacyModalSub.unsubscribe();
     this.showEmailMeasurDataModalSub.unsubscribe();
+    this.pwaUpdateAvailableSubscription.unsubscribe();
   }
 
   async initData() {
@@ -159,7 +168,8 @@ export class CoreComponent implements OnInit {
   }
 
   hideUpdateToast() {
-    this.showUpdateToast = false;
+    this.updateDesktop = false;
+    this.updatePwa = false;
     this.changeDetectorRef.detectChanges();
   }
 
