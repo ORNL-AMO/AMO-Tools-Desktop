@@ -5,6 +5,7 @@ import { FanPsychrometricService } from '../fan-psychrometric.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Subscription } from 'rxjs';
 import { GasDensityFormService } from '../../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
+import { TraceData } from '../../../../shared/models/plotting';
 
 @Component({
   selector: 'app-fan-psychrometric-form',
@@ -81,6 +82,8 @@ export class FanPsychrometricFormComponent implements OnInit {
     if(this.gasDensityForm.valid){
       this.fanPsychrometricService.disabledChartTab.next(false);
     }
+    let newArray = new Array<TraceData>();
+    this.fanPsychrometricService.selectedDataPoints.next(newArray);
     let currentData = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
     this.fanPsychrometricService.baseGasDensityData.next(currentData);
   }
