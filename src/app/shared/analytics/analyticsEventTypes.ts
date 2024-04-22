@@ -101,5 +101,7 @@ export type AnalyticsEventString = 'page_view' |
     
     'calculator-WW-o2-utilization-rate' |
     'calculator-WW-state-point-analysis' |
-    'calculator-WW-water-reduction';
+    'calculator-WW-water-reduction'|
+
+    'sent-email';
 

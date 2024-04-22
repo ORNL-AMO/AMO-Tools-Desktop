@@ -7,6 +7,7 @@ import { ExportService } from '../import-export/export.service';
 import { ImportExportData } from '../import-export/importExportModel';
 import { MeasurItemType } from '../models/app';
 import { LogToolDbData } from '../../log-tool/log-tool-models';
+import { AnalyticsService } from '../analytics/analytics.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class EmailMeasurDataService {
     })
   };
   
-  constructor(private httpClient: HttpClient, private exportService: ExportService) {
+  constructor(private httpClient: HttpClient, private exportService: ExportService, private analyticsService: AnalyticsService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.emailSentStatus = new BehaviorSubject<EmailSentStatus>(undefined);
     this.showEmailMeasurDataModal = new BehaviorSubject<boolean>(undefined);
@@ -74,7 +75,7 @@ export class EmailMeasurDataService {
           }
         });
     }
-    
+    this.analyticsService.sendEvent('sent-email');    
   }
 
   setStatus(resp, error?: any) {
