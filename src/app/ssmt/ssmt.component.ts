@@ -306,7 +306,6 @@ export class SsmtComponent implements OnInit {
             }
           }
         }
-        console.log('set');
         mod.ssmt.generalSteamOperations.sitePowerImport = ssmt.generalSteamOperations.sitePowerImport;
       });
     }
