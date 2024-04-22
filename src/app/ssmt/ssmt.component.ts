@@ -79,7 +79,7 @@ export class SsmtComponent implements OnInit {
   showToast: boolean = false;
 
   ssmtOptions: Array<any>;
-  selectedSSMT: {ssmt: SSMT, name};
+  selectedSSMT: { ssmt: SSMT, name };
 
   sankeyLabelStyle: string = 'both';
   showSankeyLabelOptions: boolean;
@@ -168,7 +168,7 @@ export class SsmtComponent implements OnInit {
       }
     });
 
-      this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(val => {
+    this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     });
 
@@ -239,7 +239,7 @@ export class SsmtComponent implements OnInit {
   async saveSettings(newSettings: Settings) {
     this.settings = newSettings;
     await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
   }
 
@@ -268,7 +268,7 @@ export class SsmtComponent implements OnInit {
   }
 
   async save() {
-    this._ssmt = this.updateModificationCO2Savings(this._ssmt);
+    this._ssmt = this.updateModificationWithBaseline(this._ssmt);
     if (this._ssmt.modifications) {
       if (this._ssmt.modifications.length === 0) {
         this.modificationExists = false;
@@ -289,21 +289,25 @@ export class SsmtComponent implements OnInit {
     this.ssmtService.updateData.next(true);
   }
 
-  updateModificationCO2Savings(ssmt: SSMT) {
-    if (ssmt.co2SavingsData && ssmt.modifications) {
+  updateModificationWithBaseline(ssmt: SSMT) {
+    if (ssmt.modifications) {
       ssmt.modifications.forEach(mod => {
-        if (!mod.ssmt.co2SavingsData) {
-          mod.ssmt.co2SavingsData = ssmt.co2SavingsData;
-        } else {
-          mod.ssmt.co2SavingsData.zipcode = ssmt.co2SavingsData.zipcode;
-          mod.ssmt.co2SavingsData.eGridSubregion = ssmt.co2SavingsData.eGridSubregion;
-          if (!mod.ssmt.co2SavingsData.totalEmissionOutputRate) {
-            mod.ssmt.co2SavingsData.totalEmissionOutputRate = ssmt.co2SavingsData.totalEmissionOutputRate;
-          }
-          if (!mod.ssmt.co2SavingsData.totalFuelEmissionOutputRate) {
-            mod.ssmt.co2SavingsData.totalFuelEmissionOutputRate = ssmt.co2SavingsData.totalFuelEmissionOutputRate;
+        if (ssmt.co2SavingsData) {
+          if (!mod.ssmt.co2SavingsData) {
+            mod.ssmt.co2SavingsData = ssmt.co2SavingsData;
+          } else {
+            mod.ssmt.co2SavingsData.zipcode = ssmt.co2SavingsData.zipcode;
+            mod.ssmt.co2SavingsData.eGridSubregion = ssmt.co2SavingsData.eGridSubregion;
+            if (!mod.ssmt.co2SavingsData.totalEmissionOutputRate) {
+              mod.ssmt.co2SavingsData.totalEmissionOutputRate = ssmt.co2SavingsData.totalEmissionOutputRate;
+            }
+            if (!mod.ssmt.co2SavingsData.totalFuelEmissionOutputRate) {
+              mod.ssmt.co2SavingsData.totalFuelEmissionOutputRate = ssmt.co2SavingsData.totalFuelEmissionOutputRate;
+            }
           }
         }
+        console.log('set');
+        mod.ssmt.generalSteamOperations.sitePowerImport = ssmt.generalSteamOperations.sitePowerImport;
       });
     }
     return ssmt;
@@ -443,7 +447,7 @@ export class SsmtComponent implements OnInit {
       }, 100);
     }
   }
-  
+
   async addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
     newSettings = this.setSettingsUnitType(newSettings);
@@ -483,15 +487,15 @@ export class SsmtComponent implements OnInit {
 
 
     let hasMatchingUnitTypes: boolean = hasMatchingTemperatureMeasurement
-    && hasMatchingPressureMeasurement
-    && hasMatchingSpecificEnthalpyMeasurement
-    && hasMatchingSpecificEntropyMeasurement
-    && hasMatchingSpecificVolumeMeasurement
-    && hasMatchingMassFlowMeasurement
-    && hasMatchingPowerMeasurement
-    && hasMatchingVolumeMeasurement
-    && hasMatchingVolumeFlowMeasurement
-    && hasMatchingVacuumPressure
+      && hasMatchingPressureMeasurement
+      && hasMatchingSpecificEnthalpyMeasurement
+      && hasMatchingSpecificEntropyMeasurement
+      && hasMatchingSpecificVolumeMeasurement
+      && hasMatchingMassFlowMeasurement
+      && hasMatchingPowerMeasurement
+      && hasMatchingVolumeMeasurement
+      && hasMatchingVolumeFlowMeasurement
+      && hasMatchingVacuumPressure
 
     return hasMatchingUnitTypes;
   }
@@ -512,7 +516,7 @@ export class SsmtComponent implements OnInit {
   }
 
   selectUpdateAction(shouldUpdateData: boolean) {
-    if(shouldUpdateData == true) {
+    if (shouldUpdateData == true) {
       this.updateData();
     }
     else {
@@ -528,7 +532,7 @@ export class SsmtComponent implements OnInit {
     this.getSettings();
   }
 
-  
+
   checkShowWelcomeScreen() {
     if (!this.settingsDbService.globalSettings.disableSteamTutorial) {
       this.showWelcomeScreen = true;
@@ -564,7 +568,7 @@ export class SsmtComponent implements OnInit {
     this.smallScreenTab = selectedTab;
   }
 
-  closeExportModal(input: boolean){
+  closeExportModal(input: boolean) {
     this.ssmtService.showExportModal.next(input);
   }
 

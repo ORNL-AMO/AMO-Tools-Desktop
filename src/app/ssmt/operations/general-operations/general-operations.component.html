@@ -25,7 +25,7 @@
       <label for="{{idString+'sitePowerImport'}}">Site Power Import</label>
       <div class="input-group" *ngIf="isBaseline">
         <input name="sitePowerImport" type="number" step="100" class="form-control" id="{{idString+'sitePowerImport'}}"
-          (input)="save()" formControlName="sitePowerImport" (focus)="focusField('sitePowerImport')">
+          (input)="changeSitePowerImport()" formControlName="sitePowerImport" (focus)="focusField('sitePowerImport')">
         <span class="units input-group-addon" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small"
