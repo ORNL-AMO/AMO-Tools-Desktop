@@ -104,6 +104,7 @@ export class PsatBannerComponent implements OnInit {
       itemName: this.assessment.name,
       itemData: this.assessment
     }
+    this.emailMeasurDataService.emailItemType.next('PSAT');
     this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 }

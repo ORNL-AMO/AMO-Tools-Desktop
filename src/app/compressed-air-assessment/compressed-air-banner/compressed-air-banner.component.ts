@@ -159,6 +159,7 @@ export class CompressedAirBannerComponent implements OnInit {
       itemName: this.assessment.name,
       itemData: this.assessment
     }
+    this.emailMeasurDataService.emailItemType.next('CompressedAir');
     this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 }

@@ -176,6 +176,7 @@ export class MotorInventoryBannerComponent implements OnInit {
       itemName: this.motorInventoryItem.name,
       itemData: this.motorInventoryItem
     }
+    this.emailMeasurDataService.emailItemType.next('MOTOR-inventory');
     this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 

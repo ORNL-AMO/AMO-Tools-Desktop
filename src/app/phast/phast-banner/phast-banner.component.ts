@@ -95,6 +95,7 @@ export class PhastBannerComponent implements OnInit {
       itemName: this.assessment.name,
       itemData: this.assessment
     }
+    this.emailMeasurDataService.emailItemType.next('PHAST');
     this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 }

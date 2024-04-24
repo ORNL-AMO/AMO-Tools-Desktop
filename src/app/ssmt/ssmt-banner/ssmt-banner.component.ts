@@ -94,6 +94,7 @@ export class SsmtBannerComponent implements OnInit {
       itemName: this.assessment.name,
       itemData: this.assessment
     }
+    this.emailMeasurDataService.emailItemType.next('STEAM');
     this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 }

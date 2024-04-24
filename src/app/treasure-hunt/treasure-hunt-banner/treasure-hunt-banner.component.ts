@@ -124,6 +124,7 @@ export class TreasureHuntBannerComponent implements OnInit {
       itemName: this.assessment.name,
       itemData: this.assessment
     }
+    this.emailMeasurDataService.emailItemType.next('TreasureHunt');
     this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 
