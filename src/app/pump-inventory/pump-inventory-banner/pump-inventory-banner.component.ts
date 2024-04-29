@@ -184,6 +184,7 @@ export class PumpInventoryBannerComponent implements OnInit {
       itemName: this.pumpInventoryItem.name,
       itemData: this.pumpInventoryItem
     }
+    this.emailMeasurDataService.emailItemType.next('PUMP-inventory');
     this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 }

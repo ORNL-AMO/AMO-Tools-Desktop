@@ -131,6 +131,7 @@ export class WasteWaterBannerComponent implements OnInit {
       itemName: this.assessment.name,
       itemData: this.assessment
     }
+    this.emailMeasurDataService.emailItemType.next('WasteWater');
     this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 }

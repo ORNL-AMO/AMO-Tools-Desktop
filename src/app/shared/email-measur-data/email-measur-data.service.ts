@@ -7,6 +7,7 @@ import { ExportService } from '../import-export/export.service';
 import { ImportExportData } from '../import-export/importExportModel';
 import { MeasurItemType } from '../models/app';
 import { LogToolDbData } from '../../log-tool/log-tool-models';
+import { AnalyticsService } from '../analytics/analytics.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class EmailMeasurDataService {
   measurItemAttachment: MeasurItemAttachment;
   measurEmailData: MeasurEmailData;
   showEmailMeasurDataModal: BehaviorSubject<boolean>;
+  emailItemType: BehaviorSubject<string>;
   httpOptions = {
     responseType: 'text' as const,
     headers: new HttpHeaders({
@@ -24,10 +26,11 @@ export class EmailMeasurDataService {
     })
   };
   
-  constructor(private httpClient: HttpClient, private exportService: ExportService) {
+  constructor(private httpClient: HttpClient, private exportService: ExportService, private analyticsService: AnalyticsService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.emailSentStatus = new BehaviorSubject<EmailSentStatus>(undefined);
     this.showEmailMeasurDataModal = new BehaviorSubject<boolean>(undefined);
+    this.emailItemType = new BehaviorSubject<string>(undefined);
   }
 
   setEmailData(measurEmailForm: FormGroup) {
@@ -74,7 +77,39 @@ export class EmailMeasurDataService {
           }
         });
     }
-    
+
+    if (this.emailItemType.getValue()) {
+      let emailItemType: string = this.emailItemType.getValue();
+
+      if (emailItemType === 'PSAT') {
+        this.analyticsService.sendEvent('sent-email-PSAT');
+
+      } else if (emailItemType === 'FSAT') {
+        this.analyticsService.sendEvent('sent-email-FSAT');
+
+      } else if (emailItemType === 'TreasureHunt') {
+        this.analyticsService.sendEvent('sent-email-TH');
+
+      } else if (emailItemType === 'PHAST') {
+        this.analyticsService.sendEvent('sent-email-PHAST');
+
+      } else if (emailItemType === 'STEAM') {
+        this.analyticsService.sendEvent('sent-email-STEAM');
+
+      } else if (emailItemType === 'PUMP-inventory') {
+        this.analyticsService.sendEvent('sent-email-PUMP-inventory');
+
+      } else if (emailItemType === 'MOTOR-inventory') {
+        this.analyticsService.sendEvent('sent-email-MOTOR-inventory');
+
+      } else if (emailItemType === 'WasteWater') {
+        this.analyticsService.sendEvent('sent-email-WW');
+
+      } else if (emailItemType === 'CompressedAir') {
+        this.analyticsService.sendEvent('sent-email-CA');
+      }
+
+    }
   }
 
   setStatus(resp, error?: any) {

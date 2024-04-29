@@ -93,6 +93,7 @@ export class FsatBannerComponent implements OnInit {
       itemName: this.assessment.name,
       itemData: this.assessment
     }
+    this.emailMeasurDataService.emailItemType.next('FSAT');
     this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 }
