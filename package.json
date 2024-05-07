@@ -12,11 +12,12 @@
     "npm": "10.2.4"
   },
   "scripts": {
-    "start": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng serve",
-    "build": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href .",
+    "start": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng serve --live-reload",
+    "build": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href .",
+    "build-mfe": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development",
     "build-watch": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --watch",
-    "build-prod-desktop": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --configuration desktop",
-    "build-prod-web": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href / --configuration web",
+    "build-prod-desktop": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=production && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --configuration desktop",
+    "build-prod-web": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=production && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href / --configuration web",
     "clean": "rm -rf node_modules && rm -rf dist && rm -f package-lock.json",
     "windows-clean": "powershell Remove-Item -Path \"package-lock.json\" && powershell Remove-Item -Path \"node_modules\", \"dist\" -Recurse",
     "electron": "electron .",
@@ -73,7 +74,8 @@
     },
     "files": [
       "!**/.angular",
-      "!.travis.yml"
+      "!.travis.yml",
+      "!./process-flow-diagram-component"
     ],
     "win": {
       "target": "nsis",
@@ -112,12 +114,12 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "17.3.6",
+    "@angular-builders/custom-webpack": "^17.0.2",
     "@angular-devkit/core": "17.0.7",
     "@angular-devkit/schematics": "17.0.7",
     "@angular/cli": "17.0.7",
     "@types/jasmine": "~3.6.0",
     "@types/lodash": "4.14.100",
-    "@types/node": "^14.18.12",
     "angular-plotly.js": "^5.2.1",
     "axios": "^1.4.0",
     "electron": "^27.1.3",
@@ -142,6 +144,27 @@
     "plotly.js-dist": "^2.9.0",
     "ts-node": "8.0.3",
     "tslint": "^6.1.3",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "css-loader": "^7.1.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "mini-css-extract-plugin": "^2.9.0",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.1",
+    "webpack-cli": "^5.1.4",
+    "html-to-image": "^1.11.11",
+    "path": "^0.12.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-shadow-dom-retarget-events": "^1.1.0",
+    "reactflow": "^11.11.2",
+    "webpack": "^5.91.0",
+    "webpack-dev-server": "^5.0.4"
   }
 }

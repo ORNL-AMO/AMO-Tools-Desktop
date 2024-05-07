@@ -2,6 +2,8 @@
 
 # compiled output
 /dist
+/process-flow-diagram-component/dist
+/process-flow-diagram-component/node_modules
 /tmp
 .angular
 
