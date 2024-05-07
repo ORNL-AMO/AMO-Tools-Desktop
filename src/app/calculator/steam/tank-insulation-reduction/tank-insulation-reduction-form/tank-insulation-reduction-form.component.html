@@ -339,15 +339,15 @@
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.surfaceTemperature.invalid && !form.controls.surfaceTemperature.pristine">
                 <span *ngIf="form.controls.surfaceTemperature.errors.required">Value required.</span>
-                <span *ngIf="form.controls.surfaceTemperature.errors.greaterThan">Value must be greater than Average Ambient Temperature
-                    ({{form.controls.surfaceTemperature.errors.greaterThan}}
+                <span *ngIf="form.controls.surfaceTemperature.errors.min">
+                    {{surfaceTemperatureGreaterThanWarning}}
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">&#8451;</span>)
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">&#8451;</span>
                 </span>
-                <span *ngIf="form.controls.surfaceTemperature.errors.lessThan">Value must be less than Internal Tank Temperature
-                    ({{form.controls.surfaceTemperature.errors.lessThan}}
+                <span *ngIf="form.controls.surfaceTemperature.errors.max">
+                    {{surfaceTemperatureLessThanWarning}}
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">&#8451;</span>)
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">&#8451;</span>
                 </span>
             </span>
         </div>
