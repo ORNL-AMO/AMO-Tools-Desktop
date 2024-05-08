@@ -81,33 +81,42 @@ export class EquipmentCurveService {
   }
 
   //example/default same
-  getPumpByEquationDefault(flowUnit: string, yValueUnit: string, yImperial: string): ByEquationInputs {
-    let tmpMaxFlow = 1020;
-    let tmpConstant = 356.96;
-    let powerConstant = 47.68;
+  getPumpByEquationDefault(settings: Settings): ByEquationInputs {
+    let maxFlow = 1020;
+    let constant = 357.02595478256984;
+    let flow = - 0.06993099587341044;
+    let flowTwo = 0.000010825931568798886;
+    let flowThree = -8.482672009106605e-8;
 
-    if (flowUnit !== 'gpm') {
-      tmpMaxFlow = Math.round(this.convertUnitsService.value(tmpMaxFlow).from('gpm').to(flowUnit) * 100) / 100;
-    }
-    if (yValueUnit !== yImperial) {
-      tmpConstant = Math.round(this.convertUnitsService.value(tmpConstant).from(yImperial).to(yValueUnit) * 100) / 100;
+    let powerConstant = 46.8;
+    let powerFlow = .00104;
+
+    if (settings.unitsOfMeasure !== 'Imperial') {
+      maxFlow = 231.67;
+      constant = 108.81815885580232;
+      flow = -0.09403496052228517;
+      flowTwo = 0.00006603589701907377;
+      flowThree = -0.0000022121905496834693;
+
+      powerConstant = 34.867598732612265;
+      powerFlow = 0.003407767151145659;
     }
 
     return {
-      maxFlow: tmpMaxFlow,
+      maxFlow: maxFlow,
       equationOrder: 3,
-      constant: tmpConstant,
-      flow: -0.0686,
-      flowTwo: 0.000005,
-      flowThree: -0.00000008,
+      constant: constant,
+      flow: flow,
+      flowTwo: flowTwo,
+      flowThree: flowThree,
       flowFour: 0,
       flowFive: 0,
       flowSix: 0,
       powerConstant: powerConstant,
       powerOrder: 1,
-      powerFlow: -0.00702,
-      powerFlowTwo: 0.0000104,
-      powerFlowThree: -0.00000000282,
+      powerFlow: powerFlow,
+      powerFlowTwo: 0,
+      powerFlowThree: 0,
       powerFlowFour: 0,
       powerFlowFive: 0,
       powerFlowSix: 0,
@@ -115,34 +124,44 @@ export class EquipmentCurveService {
   }
 
   // * is example
-  getFanByEquationDefault(flowUnit: string, yValueUnit: string, yImperial: string): ByEquationInputs {
+  getFanByEquationDefault(settings: Settings): ByEquationInputs {
+    // acfm /ft3/min
     let maxFlow = 187300;
+    // inH2o 
     let constant = 22.103;
+    let flow = 0.000025404415393103896;
+    let flowTwo = -6.47500274437936e-10;
 
-    if (flowUnit !== 'acfm') {
-      maxFlow = Math.round(this.convertUnitsService.value(maxFlow).from('ft3/min').to(flowUnit) * 100) / 100;
+    let powerConstant = 21.968;
+    let powerFlow = .00433;
+
+    if (settings.unitsOfMeasure !== 'Imperial') {
+      maxFlow = Math.round(this.convertUnitsService.value(maxFlow).from('ft3/min').to(settings.fanFlowRate) * 100) / 100;
+      constant = Math.round(this.convertUnitsService.value(constant).from('inH2o').to(settings.fanPressureMeasurement) * 100) / 100;
+      flow = 13.388477637275829;
+      flowTwo = -0.7233065798221425;
+      powerConstant = 16.38006579523656;
+      powerFlow = 6.854168950854409;
     }
-    if (yValueUnit !== yImperial) {
-      constant = Math.round(this.convertUnitsService.value(constant).from(yValueUnit).to(yImperial) * 100) / 100;
-    }
+    
     return {
       maxFlow: maxFlow,
       equationOrder: 2,
       // constant: 22.10324798599227,
       constant: constant,
       // flow: 0.000025404415393103896,
-      flow: 2.5e-5,
-      flowTwo: -6.47500274437936e-10,
+      flow: flow,
+      flowTwo: flowTwo,
       // flowTwo: -6.0e-10,
       flowThree: 0,
       flowFour: 0,
       flowFive: 0,
       flowSix: 0,
       // powerConstant: 21.968136727246897,
-      powerConstant: 21.968,
+      powerConstant: powerConstant,
       powerOrder: 1,
       // powerFlow: .004337961997619517,
-      powerFlow: .00433,
+      powerFlow: powerFlow,
       powerFlowTwo: 0,
       powerFlowThree: 0,
       powerFlowFour: 0,
