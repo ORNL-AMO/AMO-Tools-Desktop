@@ -25,7 +25,6 @@ export class HeatCascadingFormService {
       secExhaustTemperature: [inputObj.secExhaustTemperature, Validators.required],
       secExhaustO2: [inputObj.secExhaustO2, [Validators.required, Validators.min(0), Validators.max(100)]],
       secCombAirTemperature: [inputObj.secCombAirTemperature, Validators.required],
-      secAvailableHeat: [inputObj.secAvailableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]],
       secOpHours: [inputObj.secOpHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       fuelCost: [inputObj.fuelCost, Validators.required],
 
@@ -66,7 +65,6 @@ export class HeatCascadingFormService {
       secExhaustTemperature: form.controls.secExhaustTemperature.value,
       secExhaustO2: form.controls.secExhaustO2.value,
       secCombAirTemperature: form.controls.secCombAirTemperature.value,
-      secAvailableHeat: form.controls.secAvailableHeat.value,
       secOpHours: form.controls.secOpHours.value,
       fuelCost: form.controls.fuelCost.value,
       
