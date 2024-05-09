@@ -5,6 +5,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import { ElectronService, ReleaseData } from '../electron/electron.service';
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: 'app-update-toast',
@@ -25,10 +26,11 @@ export class UpdateToastComponent implements OnInit {
   emitCloseToast = new EventEmitter<boolean>();
   @Input()
   releaseData: ReleaseData
+  @Input()
+  updatePwa: boolean;
 
 
   error: any;
-
   showUpdateToast: string = 'hide';
   showReleaseNotesCard: string = 'hide';
   destroyToast: boolean = false;
@@ -41,18 +43,22 @@ export class UpdateToastComponent implements OnInit {
   updateErrorSub: Subscription;
   updateError: boolean;
   updateDownloadedSub: Subscription;
-  constructor(private electronService: ElectronService, private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService,  ) { }
+  constructor(private electronService: ElectronService, 
+    private cd: ChangeDetectorRef, 
+    private updates: SwUpdate,
+    private settingsDbService: SettingsDbService,) { }
 
   ngOnInit() {
-    this.releaseName = this.releaseData.releaseName;
-    this.releaseNotes = this.releaseData.releaseNotes.substring(this.releaseData.releaseNotes.indexOf('</h1>') + 5);
-    this.version = this.releaseData.version;
-
+    if (!this.updatePwa) {
+      this.releaseName = this.releaseData.releaseName;
+      this.releaseNotes = this.releaseData.releaseNotes.substring(this.releaseData.releaseNotes.indexOf('</h1>') + 5);
+      this.version = this.releaseData.version;
+    }
+    
     this.updateDownloadedSub = this.electronService.updateDownloaded.subscribe(val => {
       this.updateDownloaded = val;
       this.cd.detectChanges();
     })
-
     
     this.updateErrorSub = this.electronService.updateError.subscribe(val => {
       this.updateError = val;
@@ -107,7 +113,21 @@ export class UpdateToastComponent implements OnInit {
     }, 120000)
   }
 
-  quitAndInstall() {
-    this.electronService.sendQuitAndInstall();
+  async quitAndInstall() {
+    if (this.updatePwa) {
+      this.updates.activateUpdate()
+        .then((success) => {
+          console.log('MEASUR updated successfully')
+          window.location.reload();
+        })
+        .catch(error => {
+          console.log('error during MEASUR update')
+          this.error = true;
+        });
+    } else {
+      this.electronService.sendQuitAndInstall();
+    }
   }
+
+
 }

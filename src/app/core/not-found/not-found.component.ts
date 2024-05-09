@@ -8,20 +8,15 @@ import { ImportExportService } from '../../shared/import-export/import-export.se
   styleUrls: ['./not-found.component.css']
 })
 export class NotFoundComponent implements OnInit {
-  measurItemType: 'page' | 'assessment' | 'motor inventory' = 'page';
+  measurItemType: MeasurRoutingType = 'page';
   constructor(
     private activatedRoute: ActivatedRoute,
     private importExportService: ImportExportService,
-    // private indexedDbService: IndexedDbService, 
-    // private settingsDbService: SettingsDbService
+
     ) { }
 
-    // TODO may need route resolver to properly shutoff survey monkey
   ngOnInit(): void {
-    // this.settingsDbService.globalSettings.disableSurveyMonkey = true;
-    // this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      //   this.settingsDbService.setAll();
-      // });
+
       this.activatedRoute.queryParams.subscribe(qp => {
          if (qp['measurItemType']) {
           this.measurItemType = qp['measurItemType'];
@@ -30,10 +25,6 @@ export class NotFoundComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    // this.settingsDbService.globalSettings.disableSurveyMonkey = false;
-    // this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-    //   this.settingsDbService.setAll();
-    // });
   }
 
   sendMail() {
@@ -42,3 +33,5 @@ export class NotFoundComponent implements OnInit {
 
 }
 
+
+export type MeasurRoutingType = 'page' | 'assessment' | 'inventory';

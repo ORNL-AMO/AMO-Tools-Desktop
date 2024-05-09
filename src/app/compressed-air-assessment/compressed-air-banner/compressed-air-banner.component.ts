@@ -5,6 +5,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { CompressedAirAssessment, Modification } from '../../shared/models/compressed-air-assessment';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
+import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
   selector: 'app-compressed-air-banner',
@@ -27,6 +28,7 @@ export class CompressedAirBannerComponent implements OnInit {
   compresssedAirAssessmentSub: Subscription;
   bannerCollapsed: boolean = true;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService,  private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit(): void {
@@ -151,4 +153,13 @@ export class CompressedAirBannerComponent implements OnInit {
     this.compressedAirAssessmentService.showExportModal.next(true);
   }
 
+  emailTreasureHuntData() {
+    this.emailMeasurDataService.measurItemAttachment = {
+      itemType: 'assessment',
+      itemName: this.assessment.name,
+      itemData: this.assessment
+    }
+    this.emailMeasurDataService.emailItemType.next('CompressedAir');
+    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
+  }
 }

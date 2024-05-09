@@ -6,12 +6,15 @@ import { UntypedFormGroup } from '@angular/forms';
 import { FsatService } from '../../../fsat/fsat.service';
 import { GasDensityFormService } from '../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 import { ConvertFanAnalysisService } from '../../fans/fan-analysis/convert-fan-analysis.service';
+import { DataPoint, TraceData } from '../../../shared/models/plotting';
 
 @Injectable()
 export class FanPsychrometricService {
   currentField: BehaviorSubject<string>;
   resetData: BehaviorSubject<boolean>;
-  generateExample: BehaviorSubject<boolean>;
+  generateExample: BehaviorSubject<boolean>;  
+  selectedDataPoints: BehaviorSubject<Array<TraceData>>;  
+  disabledChartTab: BehaviorSubject<boolean>;  
 
   baseGasDensityData: BehaviorSubject<BaseGasDensity>;
   calculatedBaseGasDensity: BehaviorSubject<PsychrometricResults>;
@@ -23,10 +26,12 @@ export class FanPsychrometricService {
     this.currentField = new BehaviorSubject<string>('default');
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
+    this.selectedDataPoints = new BehaviorSubject<Array<TraceData>>([]);
 
     this.psychrometricResults = new BehaviorSubject<Array<PsychrometricResults>>(undefined);
     this.baseGasDensityData = new BehaviorSubject<BaseGasDensity>(undefined);
     this.calculatedBaseGasDensity = new BehaviorSubject<PsychrometricResults>(undefined);
+    this.disabledChartTab = new BehaviorSubject<boolean>(true);
   }
 
   getDefaultData(settings: Settings): BaseGasDensity {

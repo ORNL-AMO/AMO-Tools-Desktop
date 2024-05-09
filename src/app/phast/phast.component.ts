@@ -18,8 +18,8 @@ import { PhastValidService } from './phast-valid.service';
 import { SavingsOpportunity } from '../shared/models/explore-opps';
 import { ConvertPhastService } from './convert-phast.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
-import { HelperFunctionsService } from '../shared/helper-services/helper-functions.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
+import { getNewIdString } from '../shared/helperFunctions';
 
 @Component({
   selector: 'app-phast',
@@ -90,7 +90,6 @@ export class PhastComponent implements OnInit {
     private phastService: PhastService,
     private convertPhastService: ConvertPhastService,
     private phastValidService: PhastValidService,
-    private helperFunctions: HelperFunctionsService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private lossesService: LossesService,
@@ -487,7 +486,7 @@ export class PhastComponent implements OnInit {
         energyInputExhaustGasNotes: '',
         operationsNotes: ''
       },
-      id: this.helperFunctions.getNewIdString(),
+      id: getNewIdString(),
       exploreOppsShowFlueGas: exploreOppsDefault,
       exploreOppsShowAirTemp: exploreOppsDefault,
       exploreOppsShowMaterial: exploreOppsDefault,

@@ -10,10 +10,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
+      - name: Get Node version
+        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> $GITHUB_ENV
       - name: Node setup
         uses: actions/setup-node@v3
         with:
-          node-version: 16.14.2
+          node-version: ${{ env.BUILD_NODE_VER }}
+      - name: Attach SHA to build
+        if: github.ref_name == 'develop'
+        run: |
+          BUILD_VERSION=$(grep -o -P -m 1 '(?<=version":\s").*(?=")' package.json)
+          sed -i "s/$BUILD_VERSION/$BUILD_VERSION-${GITHUB_SHA::7}/g" package.json
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
@@ -21,7 +28,7 @@ jobs:
           key: npm-${{ hashFiles('package-lock.json') }}
           restore-keys: npm-
       - name: Install dependencies
-        run: npm ci
+        run: npm install --legacy-peer-deps
       - name: Build
         run: npm run build-prod-web
       - name: Upload artifact
@@ -29,9 +36,29 @@ jobs:
         with:
           name: dist
           path: ./dist
+
+  deploy-dev:
+    if: github.ref_name == 'develop'
+    runs-on: [self-hosted, dev]
+    needs: build
+    env:
+      APACHE_DIR: /var/www/html
+      BACKUP_DIR: /opt/actions-runner/backups
+    steps:
+      - name: Get artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+      - name: Deploy
+        run: |
+          tar -czf $BACKUP_DIR/measur_$(printf '%(%Y-%m-%d)T\n' -1)_${GITHUB_SHA::7}.tar.gz $APACHE_DIR/measur
+          rm -rf $APACHE_DIR/measur/*
+          chgrp -R apache ./
+          mv -v ./* $APACHE_DIR/measur/
   
-  deploy:
-    runs-on: [self-hosted, amo-tools]
+  deploy-prod:
+    if: github.ref_name == 'master'
+    runs-on: [self-hosted, prod]
     needs: build
     env:
       APACHE_DIR: /var/www/html

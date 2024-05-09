@@ -60,7 +60,6 @@ import { ChillerPerformanceTreasureHuntService } from './treasure-hunt-calculato
 import { CoolingTowerFanTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-fan-treasure-hunt.service';
 import { CoolingTowerBasinTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
-import { AssessmentIntegrationModule } from '../shared/assessment-integration/assessment-integration.module';
 import { BoilerBlowdownRateTreasureHuntService } from './treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
 
 @NgModule({

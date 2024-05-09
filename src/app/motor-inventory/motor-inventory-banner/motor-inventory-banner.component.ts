@@ -7,6 +7,7 @@ import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import _ from 'lodash';
+import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
   selector: 'app-motor-inventory-banner',
@@ -29,6 +30,7 @@ export class MotorInventoryBannerComponent implements OnInit {
   selectedDepartmentIdSub: Subscription;
   bannerCollapsed: boolean = true;
   constructor(private motorInventoryService: MotorInventoryService, 
+    private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService, private motorCatalogService: MotorCatalogService, private securityAndPrivacyService: SecurityAndPrivacyService ) { }
 
   ngOnInit(): void {
@@ -166,6 +168,16 @@ export class MotorInventoryBannerComponent implements OnInit {
   
   openExportModal(){
     this.motorInventoryService.showExportModal.next(true);
+  }
+
+  emailTreasureHuntData() {
+    this.emailMeasurDataService.measurItemAttachment = {
+      itemType: 'inventory',
+      itemName: this.motorInventoryItem.name,
+      itemData: this.motorInventoryItem
+    }
+    this.emailMeasurDataService.emailItemType.next('MOTOR-inventory');
+    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 
 }

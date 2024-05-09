@@ -282,6 +282,7 @@ async resetAllExampleAssessments(dirId: number) {
   await firstValueFrom(this.settingsDbService.addWithObservable(MockPsatSettings));
 
   let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+  let directories: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories());
   let settings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
   let calculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
   let inventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
@@ -289,6 +290,7 @@ async resetAllExampleAssessments(dirId: number) {
   this.settingsDbService.setAll(settings);
   this.calculatorDbService.setAll(calculators);
   this.inventoryDbService.setAll(inventoryItems);
+  this.directoryDbService.setAll(directories);
   this.hideResetSystemSettingsModal();
 }
 
