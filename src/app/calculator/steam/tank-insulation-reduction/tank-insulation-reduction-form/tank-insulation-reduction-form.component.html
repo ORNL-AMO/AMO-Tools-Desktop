@@ -337,7 +337,7 @@
                 <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">&#8451;</span>
             </div>
             <span class="alert-danger pull-right small"
-                *ngIf="form.controls.surfaceTemperature.invalid && !form.controls.surfaceTemperature.pristine">
+                *ngIf="form.controls.surfaceTemperature.invalid">
                 <span *ngIf="form.controls.surfaceTemperature.errors.required">Value required.</span>
                 <span *ngIf="form.controls.surfaceTemperature.errors.min">
                     {{surfaceTemperatureGreaterThanWarning}}
