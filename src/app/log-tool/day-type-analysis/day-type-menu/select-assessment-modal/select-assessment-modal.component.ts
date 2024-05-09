@@ -114,6 +114,7 @@ export class SelectAssessmentModalComponent implements OnInit {
       delete summary.data
     });
     compressedAirAssessment.compressedAirDayTypes = new Array();
+    compressedAirAssessment.systemInformation.trimSelections = new Array();
 
     compressedAirAssessment.logToolData.dayTypeSummaries.forEach(dayTypeSummary => {
       if (dayTypeSummary.dayType.useDayType && dayTypeSummary.dayType.label != 'Excluded') {

@@ -86,7 +86,7 @@
                 {{baselineInputData.operationsInput.sitePowerImport}}
               </td>
               <td *ngFor="let mod of modificationInputData"
-                [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.operationsInput.sitePowerImport, mod.inputData.operationsInput.sitePowerImport, 'sitePowerImport', 0)}">
+                [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.operationsInput.sitePowerImport, mod.inputData.operationsInput.sitePowerImport, 'sitePowerImportDiff', 0)}">
                 {{mod.inputData.operationsInput.sitePowerImport}}
               </td>
             </tr>

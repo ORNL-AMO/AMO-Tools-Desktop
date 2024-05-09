@@ -45,6 +45,7 @@ export class AnalyticsService {
       name: 'measur_app_open',
       params: {
         measur_platform: 'measur-desktop',
+        measur_version: environment.version,
         session_id: this.analyticsSessionId,
         // engagement_time_msec required to begin an analytics session but not used again
         engagement_time_msec: '100',
@@ -65,6 +66,7 @@ export class AnalyticsService {
         name: 'page_view',
         params: {
           measur_platform: 'measur-desktop',
+          measur_version: environment.version,
           page_path: path,
           session_id: this.analyticsSessionId
         }
@@ -146,6 +148,7 @@ export class AnalyticsService {
         let eventParams: EventParameters = {
           page_path: path,
           measur_platform: 'measur-web',
+          measur_version: environment.version,
           session_id: undefined
         }
         gtag('event', eventName, eventParams);
@@ -155,6 +158,7 @@ export class AnalyticsService {
         let eventParams: EventParameters = {
           page_path: path,
           measur_platform: 'measur-desktop',
+          measur_version: environment.version,
           session_id: undefined
         }
         this.sendAnalyticsEvent(eventName, eventParams);
@@ -181,6 +185,7 @@ export interface GAEvent {
 export interface EventParameters {
   page_path?: string,
   measur_platform?: MeasurPlatformString,
+  measur_version?: string,
   session_id: string,
   engagement_time_msec?: string
 }

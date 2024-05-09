@@ -2,8 +2,8 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { AnnotationData, GraphInteractivity, GraphObj } from '../../../log-tool-models';
 import { VisualizeService } from '../../visualize.service';
 import { Subscription } from 'rxjs';
-import { HelperFunctionsService } from '../../../../shared/helper-services/helper-functions.service';
 import { VisualizeSidebarService } from '../visualize-sidebar.service';
+import { truncate } from '../../../../shared/helperFunctions';
 
 @Component({
   selector: 'app-graph-annotations',
@@ -26,7 +26,7 @@ export class GraphAnnotationsComponent {
   showTooltipClick: boolean = false;
   showUserGraphOptions: boolean = true;
 
-  constructor(private visualizeService: VisualizeService, private helperFunctionService: HelperFunctionsService, private cd: ChangeDetectorRef, private visualizeSidebarService: VisualizeSidebarService) { }
+  constructor(private visualizeService: VisualizeService, private cd: ChangeDetectorRef, private visualizeSidebarService: VisualizeSidebarService) { }
 
   ngOnInit(): void {
     this.visualizeService.focusedPanel.next('annotations');
@@ -41,7 +41,7 @@ export class GraphAnnotationsComponent {
     this.annotateDataPointSub = this.visualizeService.annotateDataPoint.subscribe(point => {
       this.annotateDataPoint = point;
       if (this.annotateDataPoint) {
-        this.annotateDataPoint.seriesName = this.helperFunctionService.truncate(this.annotateDataPoint.seriesName, 30);  
+        this.annotateDataPoint.seriesName = truncate(this.annotateDataPoint.seriesName, 30);  
       }
       this.cd.detectChanges();
     });  

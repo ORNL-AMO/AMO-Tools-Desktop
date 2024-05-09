@@ -5,7 +5,7 @@
 - Node.js LTS (https://nodejs.org/en/)
     - Due to legacy dependencies required by MEASUR and the dependent AMO-Tool-Suite, **MEASUR's targeted Node version must be used**. This version can be found in package.json "engines".
 ## Build for Development
-- To remove node modules, dist, and related package-lock: `npm run clean` from the root project directory
+- To remove node modules, dist, and related package-lock: `npm run clean` from the root project directory.
 - To install all required packages: `npm install`
 - To build for electron development with hot-reload: `npm run build-watch`
     - To start the electron app: `npm run electron`

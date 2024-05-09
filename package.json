@@ -8,8 +8,8 @@
   "repository": "https://github.com/ORNL-AMO/AMO-Tools-Desktop.git",
   "angular-cli": {},
   "engines": {
-    "node": "20.10.0",
-    "npm": "10.2.3"
+    "node": "20.11.1",
+    "npm": "10.2.4"
   },
   "scripts": {
     "start": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng serve",
@@ -111,7 +111,7 @@
     }
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "17.0.7",
+    "@angular-devkit/build-angular": "17.3.6",
     "@angular-devkit/core": "17.0.7",
     "@angular-devkit/schematics": "17.0.7",
     "@angular/cli": "17.0.7",
@@ -121,7 +121,7 @@
     "angular-plotly.js": "^5.2.1",
     "axios": "^1.4.0",
     "electron": "^27.1.3",
-    "electron-builder": "^24.9.1",
+    "electron-builder": "^24.13.3",
     "electron-download-tf": "^4.3.4",
     "electron-packager": "^17.1.2",
     "jasmine-spec-reporter": "~5.0.0",

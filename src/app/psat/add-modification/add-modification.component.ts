@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { PsatTabService } from '../psat-tab.service';
 import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
-import { HelperFunctionsService } from '../../shared/helper-services/helper-functions.service';
+import { getNewIdString } from '../../shared/helperFunctions';
 
 @Component({
   selector: 'app-add-modification',
@@ -29,7 +29,7 @@ export class AddModificationComponent implements OnInit {
   newModificationName: string;
   currentTab: string;
   tabSubscription: Subscription;
-  constructor(private psatTabService: PsatTabService, private helperFunctions: HelperFunctionsService, private psatService: PsatService) { }
+  constructor(private psatTabService: PsatTabService, private psatService: PsatService) { }
 
   ngOnInit() {
     if (this.modifications) {
@@ -52,7 +52,7 @@ export class AddModificationComponent implements OnInit {
       psat: {
         name: this.newModificationName,
       },
-      id: this.helperFunctions.getNewIdString(),
+      id: getNewIdString(),
       notes: {
         fieldDataNotes: '',
         motorNotes: '',

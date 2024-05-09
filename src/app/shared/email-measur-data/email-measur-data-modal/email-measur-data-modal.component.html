@@ -1,0 +1,25 @@
+<div bsModal #emailMeasurDataModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="emailMeasurDataModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header p-2">
+                    <span class="card-header-text">
+                        Email <span class="measur-item-type font-italic">{{measurItemName}}</span> as Attachment
+                    </span>
+                    <button class="close" aria-label="Close" (click)="close()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                    <app-email-measur-data [inModal]="true" (formStatus)="onFormValid($event)" class="p-2"></app-email-measur-data>
+                <div class="modal-footer justify-content-between px-3 p-2">
+                    <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="close()">
+                        <span *ngIf="!emailSentStatus">Cancel</span>
+                        <span *ngIf="emailSentStatus">Close</span>
+                    </button>
+                    <button type="button" class="btn btn-primary ml-2" [disabled]="!isFormValid || emailSentStatus" (click)="sendEmail()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

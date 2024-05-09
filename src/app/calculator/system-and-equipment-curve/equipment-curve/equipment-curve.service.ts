@@ -104,7 +104,7 @@ export class EquipmentCurveService {
       flowFive: 0,
       flowSix: 0,
       powerConstant: powerConstant,
-      powerOrder: 3,
+      powerOrder: 1,
       powerFlow: -0.00702,
       powerFlowTwo: 0.0000104,
       powerFlowThree: -0.00000000282,
@@ -114,20 +114,35 @@ export class EquipmentCurveService {
     }
   }
 
+  // * is example
   getFanByEquationDefault(flowUnit: string, yValueUnit: string, yImperial: string): ByEquationInputs {
+    let maxFlow = 187300;
+    let constant = 22.103;
+
+    if (flowUnit !== 'acfm') {
+      maxFlow = Math.round(this.convertUnitsService.value(maxFlow).from('ft3/min').to(flowUnit) * 100) / 100;
+    }
+    if (yValueUnit !== yImperial) {
+      constant = Math.round(this.convertUnitsService.value(constant).from(yValueUnit).to(yImperial) * 100) / 100;
+    }
     return {
-      maxFlow: 0,
-      equationOrder: 1,
-      constant: 0,
-      flow: 0,
-      flowTwo: 0,
+      maxFlow: maxFlow,
+      equationOrder: 2,
+      // constant: 22.10324798599227,
+      constant: constant,
+      // flow: 0.000025404415393103896,
+      flow: 2.5e-5,
+      flowTwo: -6.47500274437936e-10,
+      // flowTwo: -6.0e-10,
       flowThree: 0,
       flowFour: 0,
       flowFive: 0,
       flowSix: 0,
-      powerConstant: 0,
+      // powerConstant: 21.968136727246897,
+      powerConstant: 21.968,
       powerOrder: 1,
-      powerFlow: 0,
+      // powerFlow: .004337961997619517,
+      powerFlow: .00433,
       powerFlowTwo: 0,
       powerFlowThree: 0,
       powerFlowFour: 0,

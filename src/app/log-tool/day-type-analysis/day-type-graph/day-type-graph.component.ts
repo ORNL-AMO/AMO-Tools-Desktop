@@ -2,11 +2,11 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DayTypeGraphService } from './day-type-graph.service';
 import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import { Subscription } from 'rxjs';
-import { DayTypeGraphItem, GraphObj, LogToolField } from '../../log-tool-models';
+import { DayTypeGraphItem, LogToolField } from '../../log-tool-models';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PlotlyService } from 'angular-plotly.js';
 import { LogToolDataService } from '../../log-tool-data.service';
-import { HelperFunctionsService } from '../../../shared/helper-services/helper-functions.service';
+import { truncate } from '../../../shared/helperFunctions';
 @Component({
   selector: 'app-day-type-graph',
   templateUrl: './day-type-graph.component.html',
@@ -28,7 +28,6 @@ export class DayTypeGraphComponent implements OnInit {
     private dayTypeAnalysisService: DayTypeAnalysisService, 
     private convertUnitsService: ConvertUnitsService,
     private logToolDataService: LogToolDataService,
-    private helperFunctionService: HelperFunctionsService,
     private plotlyService: PlotlyService) { }
 
   ngOnInit() {
@@ -65,7 +64,7 @@ export class DayTypeGraphComponent implements OnInit {
   setGraphData() {
     this.graph = this.getDefaultGraph()
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
-    let labelStr: string = this.helperFunctionService.truncate(selectedDataField.alias);
+    let labelStr: string = truncate(selectedDataField.alias);
     if (selectedDataField.unit) {
       let displayUnit: string = this.getUnitDisplay(selectedDataField.unit);
       labelStr = labelStr + ' ' + displayUnit;

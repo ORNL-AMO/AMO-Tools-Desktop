@@ -53,9 +53,6 @@ export class ReportSankeyComponent implements OnInit {
       this.phast2 = this.phastOptions[1];
     }
 
-    // this.phastReportService.showPrint.subscribe(printVal => {
-    //   this.showPrint = printVal;
-    // });
     this.energySavingsUnit = this.settings.energyResultUnit + "/yr";
     this.getPhast1Savings();
     this.getPhast2Savings();

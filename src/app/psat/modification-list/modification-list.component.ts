@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import { Modification } from '../../shared/models/psat';
 import { PsatTabService } from '../psat-tab.service';
 import { Settings } from '../../shared/models/settings';
-import { HelperFunctionsService } from '../../shared/helper-services/helper-functions.service';
+import { getNewIdString } from '../../shared/helperFunctions';
 
 @Component({
   selector: 'app-modification-list',
@@ -33,7 +33,7 @@ export class ModificationListComponent implements OnInit {
   asssessmentTab: string;
   assessmentTabSubscription: Subscription;
   
-  constructor(private compareService: CompareService, private helperFunctions: HelperFunctionsService, 
+  constructor(private compareService: CompareService, 
     private psatService: PsatService, private psatTabService: PsatTabService) { }
 
   ngOnInit() {
@@ -148,7 +148,7 @@ export class ModificationListComponent implements OnInit {
       psat: {
         name: this.newModificationName,
       },
-      id: this.helperFunctions.getNewIdString(),
+      id: getNewIdString(),
       notes: {
         fieldDataNotes: '',
         motorNotes: '',
