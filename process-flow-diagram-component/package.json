@@ -1,0 +1,38 @@
+{
+  "name": "process-flow-diagram-component",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "webpack serve --config ./webpack.config.js",
+    "build": "webpack build --config ./webpack.config.js",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "html-to-image": "^1.11.11",
+    "html-webpack-plugin": "^5.6.0",
+    "path": "^0.12.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-shadow-dom-retarget-events": "^1.1.0",
+    "reactflow": "^11.11.2",
+    "webpack": "^5.91.0",
+    "webpack-dev-server": "^5.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "css-loader": "^7.1.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "mini-css-extract-plugin": "^2.9.0",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "5.2.2",
+    "webpack-cli": "^5.1.4"
+  }
+}

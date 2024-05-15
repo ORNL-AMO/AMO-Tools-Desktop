@@ -114,6 +114,7 @@ import { BleedTestComponent } from '../calculator/compressed-air/bleed-test/blee
 import { DisclaimerComponent } from '../dashboard/disclaimer/disclaimer.component';
 import { PumpInventoryComponent } from '../pump-inventory/pump-inventory.component';
 import { pumpInventoryRoutes } from '../pump-inventory/pump-inventory.routing';
+import { ProcessFlowDiagramWrapperComponent } from '../shared/process-flow-diagram-wrapper/process-flow-diagram-wrapper.component';
 
 export const coreRoutes: Routes = [
   {
@@ -573,6 +574,10 @@ export const coreRoutes: Routes = [
     path: 'log-tool',
     component: LogToolComponent,
     children: logToolRoutes
+  },
+  {
+    path: 'process-flow-diagram',
+    component: ProcessFlowDiagramWrapperComponent,
   },
   {
     component: MotorInventoryComponent,

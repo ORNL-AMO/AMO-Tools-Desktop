@@ -1,0 +1,68 @@
+/* * NOTE duplicate of index.css */
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+.test-app {
+  color: black;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.wc-app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.wc-app-header {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding: 0 1rem;
+}
+
+
+/* todo from flow.module.css */
+
+.flow {
+  flex-grow: 1;
+  font-size: 12px;
+}
+
+.customNode {
+  border: 1px solid #555;
+  padding: 10px;
+  width: 200px;
+  border-radius: 5px;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: white;
+    background: black;
+  }
+}
