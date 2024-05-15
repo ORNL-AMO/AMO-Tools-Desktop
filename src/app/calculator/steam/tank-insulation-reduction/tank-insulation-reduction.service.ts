@@ -77,7 +77,6 @@ export class TankInsulationReductionService {
 
     if (obj.insulationMaterialSelection != 0) {
       form.controls.insulationThickness.setValidators([Validators.required, Validators.min(0), Validators.max(1000000)]);
-      form = this.setSurfaceTempValidators(form);
       if (obj.insulationMaterialSelection == 1) {
         form.controls.customInsulationConductivity.setValidators([Validators.required, Validators.min(0)]);
       } else {
@@ -87,7 +86,6 @@ export class TankInsulationReductionService {
       form.controls.insulationThickness.clearValidators();
       form.controls.customInsulationConductivity.clearValidators();
       form.controls.jacketMaterialSelection.disable();
-      form.controls.surfaceTemperature.clearValidators();
     }
 
     return form;
@@ -104,6 +102,21 @@ export class TankInsulationReductionService {
     return form;
   }
 
+  updateSurfaceTemperatureFormValidators(heatedOrChilled: number, form: UntypedFormGroup, obj: TankInsulationReductionInput) : UntypedFormGroup{
+    if (form.controls.insulationMaterialSelection.value != 0) {
+      if (heatedOrChilled == 0) {                  
+        form.controls.surfaceTemperature.clearValidators();
+        form.controls.surfaceTemperature.setValidators([Validators.required, Validators.min(obj.ambientTemperature), Validators.max(obj.tankTemperature)]);
+      } else if (heatedOrChilled == 1){
+        form.controls.surfaceTemperature.clearValidators();
+        form.controls.surfaceTemperature.setValidators([Validators.required, Validators.max(obj.ambientTemperature), Validators.min(obj.tankTemperature)]);
+      }
+    } else {
+      form.controls.surfaceTemperature.clearValidators();
+    }
+    return form;
+  }
+
   getObjFromForm(form: UntypedFormGroup, data: TankInsulationReductionInput, settings: Settings): TankInsulationReductionInput {
     let naturalGasUtilityCost = data.naturalGasUtilityCost;
     let otherUtilityCost = data.otherUtilityCost;
@@ -117,7 +130,6 @@ export class TankInsulationReductionService {
       insulationThickness = 0;
     } else {
       insulationThickness = form.controls.insulationThickness.value;
-      form = this.setSurfaceTempValidators(form);
     }
     let obj: TankInsulationReductionInput = {
       operatingHours: form.controls.operatingHours.value,
@@ -151,15 +163,6 @@ export class TankInsulationReductionService {
       }
     }
     return obj;
-  }
-
-  setSurfaceTempValidators(form: UntypedFormGroup): UntypedFormGroup {
-    if (form.controls.insulationMaterialSelection.value != 0) {
-      form.controls.surfaceTemperature.setValidators([Validators.required, GreaterThanValidator.greaterThan(form.controls.ambientTemperature.value), LessThanValidator.lessThan(form.controls.tankTemperature.value)]);  
-    } else {
-      form.controls.surfaceTemperature.clearValidators();
-    }
-    return form;  
   }
 
   generateExample(settings: Settings, isBaseline: boolean): TankInsulationReductionInput {
