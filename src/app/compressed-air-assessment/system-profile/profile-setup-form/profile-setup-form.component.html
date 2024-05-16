@@ -10,7 +10,7 @@
                         <label for="dayType">Select Day Type</label>
                         <select class="form-control" id="dayTypeId" formControlName="dayTypeId"
                             (focus)="focusField('dayType')" (change)="changeDayType()">
-                            <option [ngClass]="{'alert alert-danger': dayType.hasValidData == false}" *ngFor="let dayType of dayTypes" [ngValue]="dayType.dayTypeId">{{dayType.name}}
+                            <option [ngClass]="{'alert-danger text-left': dayType.hasValidData == false}" *ngFor="let dayType of dayTypes" [ngValue]="dayType.dayTypeId">{{dayType.name}}
                             </option>
                         </select>
                     </div>
