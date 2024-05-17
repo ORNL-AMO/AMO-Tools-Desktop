@@ -33,15 +33,6 @@ a {
   flex-direction: column;
 }
 
-.wc-app-header {
-  height: 40px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #eee;
-  padding: 0 1rem;
-}
-
-
 /* todo from flow.module.css */
 
 .flow {

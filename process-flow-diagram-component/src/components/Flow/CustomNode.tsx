@@ -8,7 +8,6 @@ const sourceHandleStyleB: CSSProperties = {
 };
 
 const CustomNode: FC<NodeProps> = ({ data, xPos, yPos }) => {
-  console.log(data);
   return (
     <>
       <NodeResizer />

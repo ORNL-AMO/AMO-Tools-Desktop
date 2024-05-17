@@ -1,22 +1,19 @@
+import { useEffect, useRef, useState } from 'react';
 import './App.css'
 import { ProcessFlowDiagramWrapperProps } from './AppWebComponent';
 import Flow from './components/Flow';
 
 function App(props?: ProcessFlowDiagramWrapperProps) {
-  if (!props.measurStateHandlers) {
-    // todo get default examle data
-    props = {
-      diagramData: undefined,
-      measurStateHandlers: {
-        clickEvent: () => {}
-    }
-  }
+  const ref = useRef(null)
+  const [height, setHeight] = useState(null);
 
-  }
+  useEffect(() => {
+    setHeight(ref.current.clientHeight)
+  })
+  
   return (
-    <div className={'wc-app-container'}>
-      <header className={'wc-app-header'}>Process Flow Diagram - React Flow</header>
-      <Flow {...props}/>
+    <div ref={ref} className={'wc-app-container'}>
+      <Flow {...props} height={height}/>
     </div>
   );
 }

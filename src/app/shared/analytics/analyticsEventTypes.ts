@@ -12,6 +12,7 @@ export type AnalyticsEventString = 'page_view' |
     'create-inventory' |
     'view-motor-inventory' |
     'view-pump-inventory' |
+    'view-water-diagram' |
     'use-data-exporation' |
     'run-day-type-analysis' |
 
