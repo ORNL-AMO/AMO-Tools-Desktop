@@ -367,11 +367,9 @@ export class OpportunitySummaryService {
         owner: oppSheet.businessUnits,
         opportunityCost: oppSheet.opportunityCost
       }
-      
       let treasureHuntOpportunityResults: TreasureHuntOpportunityResults;
       let numEnergyTypes: number = this.getNumberOfEnergyTypes(oppSheetResults);
       
-
       if (oppSheetResults.electricityResults && (oppSheetResults.electricityResults.baselineItems != 0 || oppSheetResults.electricityResults.modificationItems != 0)) {
         energyTypeLabel = 'Electricity';
         totalEnergySavings = totalEnergySavings + oppSheetResults.electricityResults.energySavings;
@@ -432,12 +430,9 @@ export class OpportunitySummaryService {
         treasureHuntOpportunityResults.modificationCost = 0;
         oppSummary = this.getNewOpportunitySummary(opportunityMetaData, treasureHuntOpportunityResults, mixedIndividualSummaries);
       } else {
-        //no energy savings
-        treasureHuntOpportunityResults.utilityType = '';
-        treasureHuntOpportunityResults.costSavings = 0;
-        treasureHuntOpportunityResults.energySavings = 0;
-        treasureHuntOpportunityResults.baselineCost = 0;
-        treasureHuntOpportunityResults.modificationCost = 0;
+        if (!treasureHuntOpportunityResults) {
+          treasureHuntOpportunityResults = this.setResultsFromOppSheet(oppSheetResults.electricityResults, energyTypeLabel);
+        }
         opportunityMetaData.opportunityCost = undefined;
         oppSummary = this.getNewOpportunitySummary(opportunityMetaData, treasureHuntOpportunityResults);
       }
@@ -530,11 +525,9 @@ export class OpportunitySummaryService {
         oppSummary = this.getNewOpportunitySummary(opportunityMetaData, treasureHuntOpportunityResults, mixedIndividualSummaries);
       } else {
         //no energy savings
-        treasureHuntOpportunityResults.utilityType = 'None';
-        treasureHuntOpportunityResults.costSavings = 0;
-        treasureHuntOpportunityResults.energySavings = 0;
-        treasureHuntOpportunityResults.baselineCost = 0;
-        treasureHuntOpportunityResults.modificationCost = 0;
+        if (!treasureHuntOpportunityResults) {
+          treasureHuntOpportunityResults = this.setResultsFromOppSheet(oppSheetResults.electricityResults, energyTypeLabel);
+        }
         opportunityMetaData.opportunityCost = undefined;
         oppSummary = this.getNewOpportunitySummary(opportunityMetaData, treasureHuntOpportunityResults);
       }
@@ -547,7 +540,7 @@ export class OpportunitySummaryService {
         energySavings: 0,
         baselineCost: 0,
         modificationCost: 0,
-        utilityType: '',
+        utilityType: 'None',
       }
 
       treasureHuntOpportunityResults.baselineCost = sheetResults.baselineEnergyCost;
