@@ -14,6 +14,10 @@
     #### Build with Process Flow Diagram microfrontend
     This project includes a "microfrontend" web component which wraps React/ReactFlow so MEASUR can leverage it's diagramming library.
     - All build scripts execute a pre-angular webpack build for the microfrontend, copying the web component script into the project /dist output. The microfrontend build is NOT updated for build-watch.
+    - Develop web server with MFE:
+        - `npm run start-concurrent-watch`
+    - Develop electron build with MFE:
+        - `npm run build-concurrent-watch`
     - Standalone build or re-build of the MFE:
         - `npm run build-mfe`
         - If rebuilding, manually copy process-flow-diagram-component/dist files from mfe into AMO-Tools-Desktop/dist

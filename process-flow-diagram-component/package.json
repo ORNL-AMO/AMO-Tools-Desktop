@@ -14,7 +14,6 @@
     "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-shadow-dom-retarget-events": "^1.1.0",
     "reactflow": "^11.11.2",
     "webpack": "^5.91.0",
     "webpack-dev-server": "^5.0.4"

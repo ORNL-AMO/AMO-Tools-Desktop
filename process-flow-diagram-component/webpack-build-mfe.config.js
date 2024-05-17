@@ -12,6 +12,7 @@ module.exports = options => {
             static: path.join(__dirname, EXPORT_DIR),
             port: 3000,
           },
+    watch: true,
     module: {
       rules: [
         {
