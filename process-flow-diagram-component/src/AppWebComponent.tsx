@@ -6,10 +6,11 @@ class AppWebComponent extends HTMLElement {
   mountPoint!: HTMLDivElement;
   appRef!: Root;
   name!: string;
+  shadowRoot;
   static observedAttributes = ['diagramstate']; 
 
   renderDiagramComponent(diagramState) {
-    this.appRef.render(<App diagramData={diagramState} diagramStateHandlers={{clickEvent: this.handleClickEvent}}/>)
+    this.appRef.render(<App diagramData={diagramState} shadowRoot={this.shadowRoot} diagramStateHandlers={{clickEvent: this.handleClickEvent}}/>)
   }
 
   connectedCallback() {
@@ -17,21 +18,38 @@ class AppWebComponent extends HTMLElement {
     this.style.display = 'block';
     this.style.height = '100%';
 
-    const shadowRoot = this.attachShadow({ mode: 'open' });
+    this.shadowRoot = this.attachShadow({ mode: 'open' });
     this.mountPoint = document.createElement('div');
     this.mountPoint.id = 'root';
-    shadowRoot.appendChild(this.mountPoint);
+    this.shadowRoot.appendChild(this.mountPoint);
     
     // todo using link ref in this way may require polyfill - check if required
     const link = document.createElement("link");
     link.setAttribute("rel", "stylesheet");
     link.setAttribute("href", "process-flow-diagram-component.css");
-    shadowRoot.appendChild(link);
+    this.shadowRoot.appendChild(link);
 
     this.appRef = createRoot(this.mountPoint!);
-    this.renderDiagramComponent(this.diagramstate)
+    this.renderDiagramComponent(this.diagramstate);
+
+    // * only a test for diagram to parent events
+    // setTimeout(() => {
+    //   this.emitUpdateParentStateEvent();
+    // }, 5000);
   }
 
+  // emitUpdateParentStateEvent() {
+  //   const detail = {
+  //     processFlowDiagramState: {test: true, name: 'Update parent state from diagram'}
+  //   }
+  //   const event = new CustomEvent("updateParentStateDetailEvent", {
+  //     composed: true,
+  //     bubbles: true,
+  //     detail: detail,
+  //   });
+  //   this.dispatchEvent(event);
+  // }
+  
   disconnectedCallback() {
     this.appRef.unmount();
   }
@@ -46,11 +64,6 @@ class AppWebComponent extends HTMLElement {
   set diagramstate(newValue) {
     // const newValue = coerceType(value);
     this.setAttribute("diagramstate", JSON.stringify(newValue));
-
-    setTimeout(() => {
-      this.emitUpdateParentStateEvent();
-    }, 5000);
-
   }
 
   attributeChangedCallback(attrName) {
@@ -59,25 +72,11 @@ class AppWebComponent extends HTMLElement {
     }
   }
 
-  // todo test event
-  emitUpdateParentStateEvent() {
-    const detail = {
-      processFlowDiagramState: {test: true, name: 'Update parent state from diagram'}
-    }
-    const event = new CustomEvent("updateParentStateDetailEvent", {
-      composed: true,
-      bubbles: true,
-      detail: detail,
-    });
-    this.dispatchEvent(event);
-  }
+
 
   handleClickEvent = (...args) => {
-
-    console.log('WC click event', args);
   }
 
 }
 
 export default AppWebComponent;
-export interface ProcessFlowDiagramWrapperProps extends FlowProps {};

@@ -5,6 +5,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription, firstValueFrom } from 'rxjs';
 import { WaterProcess, WaterProcessDiagramService } from './water-process-diagram.service';
+import { ProcessFlowDiagramService } from '../shared/process-flow-diagram-wrapper/process-flow-diagram.service';
 
 @Component({
   selector: 'app-water-process-diagram',
@@ -32,6 +33,7 @@ export class WaterProcessDiagramComponent {
     private activatedRoute: ActivatedRoute,
     private waterProcessService: WaterProcessDiagramService,
     private settingsDbService: SettingsDbService, 
+    private processFlowDiagramService: ProcessFlowDiagramService,
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
@@ -84,6 +86,11 @@ export class WaterProcessDiagramComponent {
           footerHeight = this.footer.nativeElement.clientHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
+        this.processFlowDiagramService.parentContainer.next({
+          height: contentHeight,
+          headerHeight: headerHeight,
+          footerHeight: footerHeight
+        })
       }, 100);
     }
   }

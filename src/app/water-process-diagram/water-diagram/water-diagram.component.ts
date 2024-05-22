@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ProcessFlowDiagramService } from '../../shared/process-flow-diagram-wrapper/process-flow-diagram.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-water-diagram',
@@ -7,13 +8,26 @@ import { ProcessFlowDiagramService } from '../../shared/process-flow-diagram-wra
   styleUrl: './water-diagram.component.css'
 })
 export class WaterDiagramComponent {
+  parentContainerSub: Subscription;
   constructor(private processFlowDiagramService: ProcessFlowDiagramService) {}
 
-  ngOnInit() {
-    console.log('in water diagram')
-  }
+  ngOnInit() {}
   
   ngAfterViewInit() {
-    this.processFlowDiagramService.processFlowDiagramData.next({context: 'water', parentHeight: 0,  waterProcess: undefined})
+    this.parentContainerSub = this.processFlowDiagramService.parentContainer.subscribe(parentContainerDimensions => {
+      this.initWaterDiagram();
+    });
+  }
+
+  ngOnDestroy() {
+    this.parentContainerSub.unsubscribe();
+  }
+
+  initWaterDiagram() {
+    this.processFlowDiagramService.processFlowDiagramData.next({
+      context: 'water', 
+      parentContainer: this.processFlowDiagramService.parentContainer.getValue(), 
+      waterProcess: undefined
+    })
   }
 }

@@ -57,3 +57,19 @@ a {
     background: black;
   }
 }
+
+
+/*  Download Image */
+.process-flow-diagram .download-btn {
+  border: 1px solid #eee;
+  background: #ebf8ff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.process-flow-diagram .download-btn:hover {
+  opacity: 0.9;
+}
+

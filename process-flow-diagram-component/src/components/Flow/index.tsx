@@ -7,16 +7,22 @@ import ReactFlow, {
   Connection,
   Edge,
   ConnectionLineType,
+  MiniMap,
+  Controls,
+  Background,
+  Position,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import CustomNode from './CustomNode';
+import DownloadButton from '../DownloadButton';
 
 const initialNodes: Node[] = [
   {
     id: '1',
     type: 'input',
     data: { label: 'Node 1' },
+    sourcePosition: Position.Right,
     position: { x: 250, y: 5 },
   },
   {
@@ -53,17 +59,20 @@ const defaultEdgeOptions = {
   type: 'smoothstep',
 };
 
+const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
+
 const Flow = (props: FlowProps) => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const ref = useRef(null)
+  const ref = useRef(null);
   const onConnect = useCallback(
     (params: Connection | Edge) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
+  const nodeClassName = (node) => node.type;
 
   useEffect(() => {
-      console.log('Flow init', props)
+      console.log('Flow props', props)
   });
 
   return (
@@ -80,17 +89,25 @@ const Flow = (props: FlowProps) => {
         onClick={() => props.diagramStateHandlers.clickEvent('Some info from flow component onclick')}
         nodeTypes={nodeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
+        defaultViewport={defaultViewport}
         connectionLineType={ConnectionLineType.SmoothStep}
         fitView
-      />
+        className="process-flow-diagram"
+      >
+      {/* <MiniMap zoomable pannable nodeClassName={nodeClassName} /> */}
+      <Controls />
+      <DownloadButton shadowRoot={props.shadowRoot}/>
+      <Background />
+      </ReactFlow>
     </div>
   );
 }
 
 export default Flow;
 export interface FlowProps {
+  shadowRoot,
   height?: number,
-  diagramData?: any,
+  diagramData: any,
   diagramStateHandlers?: {
     clickEvent: (...args) => void;
   }
