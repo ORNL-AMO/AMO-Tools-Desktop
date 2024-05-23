@@ -1,0 +1,59 @@
+.water-process-diagram-container{
+    height: 100vh;
+    background: #ececec;
+}
+
+.water-process-diagram-container div#waterProcessDiagramFooter.footer {
+    position: relative;
+}
+
+.water-process-diagram .btn-primary{
+    background: #2980b9;
+    color: white;
+}
+
+@media print{
+    .scroll-item{
+        overflow-y: visible;
+    }
+}
+
+.modal-open{
+    z-index: initial !important;
+}
+
+.water-process-diagram .assessment-panel-container::-webkit-scrollbar-thumb{
+    background-color: #2980B9;
+}
+
+/* Screens above  1024 */
+.assessment-container {
+    display: flex;
+    height: 100%;
+}
+
+.assessment-panel-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+ /* Screens below 1024 */
+@media screen and (max-width: 1024px) {
+    .assessment-container {
+        display: block;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .assessment-panel-container {
+        display: block;
+        width: 100%;
+    }
+
+    .lookup-form {
+        height: 100%;
+    }
+
+}
+

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import ReactFlow, {
   Node,
   useNodesState,
@@ -11,8 +11,6 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 
 import CustomNode from './CustomNode';
-
-// import styles from './Flow.module.css';
 
 const initialNodes: Node[] = [
   {
@@ -56,25 +54,30 @@ const defaultEdgeOptions = {
 };
 
 const Flow = (props: FlowProps) => {
-  console.log('Flow diagramData', props.diagramData)
-
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const ref = useRef(null)
   const onConnect = useCallback(
     (params: Connection | Edge) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
 
+  useEffect(() => {
+      console.log('Flow init', props)
+  });
+
   return (
-    <div className={'flow'}>
-    {/* <div className={styles.flow}> */}
+    // * only render after anguler view init and parent height defined
+    props.height && 
+    <div className={'flow'} style={{height: props.height}}>
       <ReactFlow
         nodes={nodes}
         onNodesChange={onNodesChange}
         edges={edges}
+        ref={ref}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        onClick={() => props.measurStateHandlers.clickEvent('Some info from flow component onclick')}
+        onClick={() => props.diagramStateHandlers.clickEvent('Some info from flow component onclick')}
         nodeTypes={nodeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
         connectionLineType={ConnectionLineType.SmoothStep}
@@ -86,8 +89,9 @@ const Flow = (props: FlowProps) => {
 
 export default Flow;
 export interface FlowProps {
+  height?: number,
   diagramData?: any,
-  measurStateHandlers?: {
+  diagramStateHandlers?: {
     clickEvent: (...args) => void;
   }
 }
