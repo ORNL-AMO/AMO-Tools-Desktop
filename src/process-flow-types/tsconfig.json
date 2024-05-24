@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+      "outDir": "../../process-flow-diagram-component/lib",
+      "rootDir": ".",
+      "declaration": true,
+      "composite": true,
+      "target": "es2020",
+      "module": "esnext",
+      "moduleResolution": "node",
+    },
+  }

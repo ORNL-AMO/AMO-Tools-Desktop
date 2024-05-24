@@ -16,7 +16,12 @@ module.exports = options => {
       rules: [
         {
           test: /.tsx?$/,
-          use: "ts-loader",
+          use: {
+            loader: "ts-loader",
+            options: {
+              projectReferences: true,
+            },
+          },
           exclude: /node_modules/,
         },
         // todo fix css module loading

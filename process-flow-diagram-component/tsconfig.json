@@ -20,8 +20,13 @@
     "noImplicitAny": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "paths": {
+    "process-flow-types": ["./lib/process-flow-types"]
+  },
+  "references": [
+    { "path": "../src/process-flow-types" }
+  ]
 }
