@@ -4,8 +4,9 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription, firstValueFrom } from 'rxjs';
-import { WaterProcess, WaterProcessDiagramService } from './water-process-diagram.service';
+import { WaterProcessDiagramService } from './water-process-diagram.service';
 import { ProcessFlowDiagramService } from '../shared/process-flow-diagram-wrapper/process-flow-diagram.service';
+import { WaterProcess } from '../../process-flow-types/process-flow-types';
 
 @Component({
   selector: 'app-water-process-diagram',

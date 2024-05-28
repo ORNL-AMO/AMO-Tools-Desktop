@@ -4,7 +4,6 @@ import { toPng } from 'html-to-image';
 
 function downloadImage(dataUrl) {
   const a = document.createElement('a');
-
   a.setAttribute('download', 'reactflow.png');
   a.setAttribute('href', dataUrl);
   a.click();
@@ -16,9 +15,6 @@ const imageHeight = 768;
 function DownloadButton(props: DownloadProps) {
   const { getNodes } = useReactFlow();
   const onClick = () => {
-    // we calculate a transform for the nodes so that all nodes are visible
-    // we then overwrite the transform of the `.react-flow__viewport` element
-    // with the style option of the html-to-image library
     const nodesBounds = getNodesBounds(getNodes());
     const transform: {x: number, y: number, zoom: number} = getViewportForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
 
@@ -38,7 +34,7 @@ function DownloadButton(props: DownloadProps) {
   };
 
   return (
-    <Panel position="top-right">
+    <Panel position="bottom-left" className="controls-offset-space">
       <button className="download-btn" onClick={onClick}>
         Download Image
       </button>

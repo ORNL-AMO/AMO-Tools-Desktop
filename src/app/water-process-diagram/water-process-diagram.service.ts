@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
+import { WaterProcess } from '../../process-flow-types/process-flow-types';
 
 @Injectable({
   providedIn: 'root'
@@ -30,12 +31,4 @@ export class WaterProcessDiagramService {
 
     }
   }
-}
-
-
-export interface WaterProcess {
-  id: number;
-  name: string;
-  isValid: boolean,
-  directoryId: number
 }

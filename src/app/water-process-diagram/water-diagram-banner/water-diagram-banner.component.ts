@@ -3,7 +3,8 @@ import { Subscription } from 'rxjs';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import _ from 'lodash';
 import { DashboardService } from '../../dashboard/dashboard.service';
-import { WaterProcess, WaterProcessDiagramService } from '../water-process-diagram.service';
+import { WaterProcessDiagramService } from '../water-process-diagram.service';
+import { WaterProcess } from '../../../process-flow-types/process-flow-types';
 
 
 @Component({

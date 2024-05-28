@@ -35,7 +35,7 @@ a {
 
 /* todo from flow.module.css */
 
-.flow {
+.flow-wrapper {
   flex-grow: 1;
   font-size: 12px;
 }
@@ -62,7 +62,7 @@ a {
 /*  Download Image */
 .process-flow-diagram .download-btn {
   border: 1px solid #eee;
-  background: #ebf8ff;
+  background: #ffffff;
   padding: 10px 20px;
   border-radius: 5px;
   font-weight: 700;
@@ -73,3 +73,71 @@ a {
   opacity: 0.9;
 }
 
+.react-flow__panel.left.controls-offset-space {
+  left: 50px;
+}
+
+
+
+.process-flow-diagram {
+  flex-direction: column;
+  display: flex;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.process-flow-diagram aside {
+  border-right: 1px solid #eee;
+  padding: 15px 10px;
+  font-size: 12px;
+  background: #fcfcfc;
+}
+
+.process-flow-diagram aside .description {
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.process-flow-diagram .dndnode {
+  height: 32px;
+  padding: 4px;
+  border: 1px solid #1a192b;
+  border-radius: 2px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+}
+
+.process-flow-diagram .dndnode:hover {
+  background: #efefef
+}
+
+.process-flow-diagram .dndnode.input {
+  border-color: #75a1ff;
+}
+
+.process-flow-diagram .dndnode.output {
+  border-color: #b4ffff;
+}
+
+.process-flow-diagram .reactflow-wrapper {
+  flex-grow: 1;
+  height: 100%;
+}
+
+.process-flow-diagram .selectall {
+  margin-top: 10px;
+}
+
+@media screen and (min-width: 768px) {
+  .process-flow-diagram {
+    flex-direction: row-reverse;
+  }
+
+  .process-flow-diagram aside {
+    width: 20%;
+    max-width: 250px;
+  }
+}

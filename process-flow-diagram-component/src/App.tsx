@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css'
 import Flow, { FlowProps } from './components/Flow';
+import { WaterProcess } from '../lib/process-flow-types';
 
 function App(props?: ProcessFlowDiagramWrapperProps) {
   const ref = useRef(null)
@@ -33,10 +34,3 @@ export interface ProcessFlowDiagramWrapperProps extends FlowProps {
       waterProcess?: WaterProcess;
   }
 };
-
-export interface WaterProcess {
-  id: number;
-  name: string;
-  isValid: boolean,
-  directoryId: number
-}

@@ -24,7 +24,7 @@ export class WaterDiagramComponent {
   }
 
   initWaterDiagram() {
-    this.processFlowDiagramService.processFlowDiagramData.next({
+    this.processFlowDiagramService.processFlowParentState.next({
       context: 'water', 
       parentContainer: this.processFlowDiagramService.parentContainer.getValue(), 
       waterProcess: undefined

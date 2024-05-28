@@ -7,7 +7,7 @@ class AppWebComponent extends HTMLElement {
   appRef!: Root;
   name!: string;
   shadowRoot;
-  static observedAttributes = ['diagramstate']; 
+  static observedAttributes = ['parentstate']; 
 
   renderDiagramComponent(diagramState) {
     this.appRef.render(<App diagramData={diagramState} shadowRoot={this.shadowRoot} diagramStateHandlers={{clickEvent: this.handleClickEvent}}/>)
@@ -30,7 +30,7 @@ class AppWebComponent extends HTMLElement {
     this.shadowRoot.appendChild(link);
 
     this.appRef = createRoot(this.mountPoint!);
-    this.renderDiagramComponent(this.diagramstate);
+    this.renderDiagramComponent(this.parentstate);
 
     // * only a test for diagram to parent events
     // setTimeout(() => {
@@ -40,7 +40,7 @@ class AppWebComponent extends HTMLElement {
 
   // emitUpdateParentStateEvent() {
   //   const detail = {
-  //     processFlowDiagramState: {test: true, name: 'Update parent state from diagram'}
+  //     processFlowParentState: {test: true, name: 'Update parent state from diagram'}
   //   }
   //   const event = new CustomEvent("updateParentStateDetailEvent", {
   //     composed: true,
@@ -55,20 +55,20 @@ class AppWebComponent extends HTMLElement {
   }
 
 
-  get diagramstate() {
-    const attrString = this.getAttribute("diagramstate");
+  get parentstate() {
+    const attrString = this.getAttribute("parentstate");
     const diagramStateProperty = JSON.parse(attrString);
     return diagramStateProperty;
   }
 
-  set diagramstate(newValue) {
+  set parentstate(newValue) {
     // const newValue = coerceType(value);
-    this.setAttribute("diagramstate", JSON.stringify(newValue));
+    this.setAttribute("parentstate", JSON.stringify(newValue));
   }
 
   attributeChangedCallback(attrName) {
-    if (attrName === 'diagramstate') {
-      this.renderDiagramComponent(this.diagramstate)
+    if (attrName === 'parentstate') {
+      this.renderDiagramComponent(this.parentstate)
     }
   }
 
