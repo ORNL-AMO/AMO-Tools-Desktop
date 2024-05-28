@@ -36,7 +36,7 @@
 	</div>
 	<div class="panel-group" [ngStyle]="{'height.px': containerHeight}">
 		<div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
-			[ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+			[ngClass]="{'small-screen-tab': smallScreenTab === 'form', 'modal-open': isModalOpen == true}">
 			<div class="d-flex flex-column m-4">
 				<app-waste-heat-form [settings]="settings" [inModal]="isModalOpen"></app-waste-heat-form>
 				<div class="w-100 justify content-center btn-group btn-group-sm">
