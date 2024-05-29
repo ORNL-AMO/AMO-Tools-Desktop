@@ -218,7 +218,7 @@ export class EffortSavingsChartComponent implements OnInit {
 
   buildTrace() {
     this.treasureHuntResults.opportunitySummaries.forEach((summary, index) => {
-      if (summary.opportunityCost.implementationEffort) {
+      if (summary.opportunityCost && summary.opportunityCost.implementationEffort) {
         let currentColor = graphColors[index % graphColors.length];
         let trace: TraceData = {
           x: [summary.payback],
