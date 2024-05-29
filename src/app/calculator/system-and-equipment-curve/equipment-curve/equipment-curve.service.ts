@@ -81,33 +81,49 @@ export class EquipmentCurveService {
   }
 
   //example/default same
-  getPumpByEquationDefault(flowUnit: string, yValueUnit: string, yImperial: string): ByEquationInputs {
-    let tmpMaxFlow = 1020;
-    let tmpConstant = 356.96;
-    let powerConstant = 47.68;
+  getPumpByEquationDefault(settings: Settings): ByEquationInputs {
+// todo    1. imperial by equation is looping infinitely but correct
+// todo 2. Also order select dropdowns are not being filled
+    let maxFlow = 240;
+    let constant = 108.81815885580232;
+    let flow = -0.09403496052228517;
+    let flowTwo = 0.00006603589701907377;
+    let flowThree = -0.0000022121905496834693;
 
-    if (flowUnit !== 'gpm') {
-      tmpMaxFlow = Math.round(this.convertUnitsService.value(tmpMaxFlow).from('gpm').to(flowUnit) * 100) / 100;
-    }
-    if (yValueUnit !== yImperial) {
-      tmpConstant = Math.round(this.convertUnitsService.value(tmpConstant).from(yImperial).to(yValueUnit) * 100) / 100;
+    // let powerConstant = 34.867598732612265;
+    // let powerFlow = 0.003407767151145659;
+    let powerConstant = 47.68;
+    let powerFlow = -.00702;
+
+    if (settings.unitsOfMeasure !== 'Imperial') {
+      maxFlow = 231.67;
+      // * from dev??
+      // maxFlow = 1020;
+      // maxFlow = 52.617;
+      constant = 108.81815885580232;
+      flow = -0.09403496052228517;
+      flowTwo = 0.00006603589701907377;
+      flowThree = -0.0000022121905496834693;
+
+      powerConstant = 47.68;
+      powerFlow = -.00702;
     }
 
     return {
-      maxFlow: tmpMaxFlow,
+      maxFlow: maxFlow,
       equationOrder: 3,
-      constant: tmpConstant,
-      flow: -0.0686,
-      flowTwo: 0.000005,
-      flowThree: -0.00000008,
+      constant: constant,
+      flow: flow,
+      flowTwo: flowTwo,
+      flowThree: flowThree,
       flowFour: 0,
       flowFive: 0,
       flowSix: 0,
       powerConstant: powerConstant,
       powerOrder: 1,
-      powerFlow: -0.00702,
-      powerFlowTwo: 0.0000104,
-      powerFlowThree: -0.00000000282,
+      powerFlow: powerFlow,
+      powerFlowTwo: 0,
+      powerFlowThree: 0,
       powerFlowFour: 0,
       powerFlowFive: 0,
       powerFlowSix: 0,
@@ -115,34 +131,39 @@ export class EquipmentCurveService {
   }
 
   // * is example
-  getFanByEquationDefault(flowUnit: string, yValueUnit: string, yImperial: string): ByEquationInputs {
+  getFanByEquationDefault(settings: Settings): ByEquationInputs {
+    // acfm /ft3/min
     let maxFlow = 187300;
+    // inH2o 
     let constant = 22.103;
+    let flow = 0.000025404415393103896;
+    let flowTwo = -6.47500274437936e-10;
 
-    if (flowUnit !== 'acfm') {
-      maxFlow = Math.round(this.convertUnitsService.value(maxFlow).from('ft3/min').to(flowUnit) * 100) / 100;
+    let powerConstant = 21.968;
+    let powerFlow = .00433;
+
+    if (settings.unitsOfMeasure !== 'Imperial') {
+      maxFlow = 88.4;
+      constant = 5500.23;
+      flow = 13.388;
+      flowTwo = -0.7233;
+      powerConstant = 0;
+      powerFlow = 7.077;
     }
-    if (yValueUnit !== yImperial) {
-      constant = Math.round(this.convertUnitsService.value(constant).from(yValueUnit).to(yImperial) * 100) / 100;
-    }
+    
     return {
       maxFlow: maxFlow,
       equationOrder: 2,
-      // constant: 22.10324798599227,
       constant: constant,
-      // flow: 0.000025404415393103896,
-      flow: 2.5e-5,
-      flowTwo: -6.47500274437936e-10,
-      // flowTwo: -6.0e-10,
+      flow: flow,
+      flowTwo: flowTwo,
       flowThree: 0,
       flowFour: 0,
       flowFive: 0,
       flowSix: 0,
-      // powerConstant: 21.968136727246897,
-      powerConstant: 21.968,
+      powerConstant: powerConstant,
       powerOrder: 1,
-      // powerFlow: .004337961997619517,
-      powerFlow: .00433,
+      powerFlow: powerFlow,
       powerFlowTwo: 0,
       powerFlowThree: 0,
       powerFlowFour: 0,
@@ -151,6 +172,7 @@ export class EquipmentCurveService {
     }
 
   }
+
 
   getResetByEquationInputs(): ByEquationInputs {
     return {

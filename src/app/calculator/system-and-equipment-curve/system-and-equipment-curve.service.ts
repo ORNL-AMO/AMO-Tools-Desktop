@@ -95,13 +95,12 @@ export class SystemAndEquipmentCurveService {
         && this.equipmentInputs.getValue().baselineMeasurement > 0
         && (this.equipmentInputs.getValue().baselineMeasurement < this.modificationEquipment.getValue().speed)) {
 
-        // Use spacing buffer 
+          // Use spacing buffer 
         let graphSpacing = this.modificationEquipment.getValue().flow * .25;
         maxFlowRate = this.modificationEquipment.getValue().flow + graphSpacing;
       }
     }
 
-    // maxFlowRate = _.max([maxFlowRate, maxEquipmentCurve, maxSystemCurve]) * ratio;
     maxFlowRate = _.max([maxFlowRate, maxEquipmentCurve, maxSystemCurve]);
     return maxFlowRate;
   }

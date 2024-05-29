@@ -26,6 +26,7 @@ export class CurveDataService {
 
   setExample(settings: Settings, equipmentType: string) {
     if (equipmentType == 'pump') {
+      // todo run these resets when by equation changes?
       let byDataInputs: ByDataInputs = this.equipmentCurveService.getPumpByDataExample(settings);
       this.systemAndEquipmentCurveService.byDataInputs.next(byDataInputs);
       this.systemAndEquipmentCurveService.pumpModificationCollapsed.next('open');
@@ -40,22 +41,13 @@ export class CurveDataService {
       this.systemAndEquipmentCurveService.resetModificationEquipment();
       this.systemAndEquipmentCurveService.fanSystemCurveData.next(fanSystemCurveData);
     }
-    let flowUnit: string;
-    let yValueUnit: string;
-    let yImperialUnit: string;
     let exampleByEquationInputs: ByEquationInputs;
     let exampleEquipment;
     if (equipmentType == 'fan') {
-      flowUnit = settings.fanFlowRate;
-      yValueUnit = settings.fanPressureMeasurement;
-      yImperialUnit = 'inH2o';
-      exampleByEquationInputs = this.equipmentCurveService.getFanByEquationDefault(flowUnit, yValueUnit, yImperialUnit);
+      exampleByEquationInputs = this.equipmentCurveService.getFanByEquationDefault(settings);
       this.systemAndEquipmentCurveService.byEquationInputs.next(exampleByEquationInputs);
     } else {
-      flowUnit = settings.flowMeasurement;
-      yValueUnit = settings.distanceMeasurement;
-      yImperialUnit = 'ft';
-      exampleByEquationInputs = this.equipmentCurveService.getPumpByEquationDefault(flowUnit, yValueUnit, yImperialUnit);
+      exampleByEquationInputs = this.equipmentCurveService.getPumpByEquationDefault(settings);
     }
     
     exampleEquipment = this.equipmentCurveService.getEquipmentCurveExample();

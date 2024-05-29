@@ -45,15 +45,12 @@ export class RegressionEquationsService {
     let modificationRatio: number;
 
     if (modificationEquipment) {
-      let flowUnit = settings.flowMeasurement;
-      let yValueUnit = settings.distanceMeasurement;
-      let yImperialUnit = 'ft';
       let baselineEquationInputs: ByEquationInputs;
 
       if (yValueLabel === "Head") {
-        baselineEquationInputs = this.equipmentCurveService.getPumpByEquationDefault(flowUnit, yValueUnit, yImperialUnit);
+        baselineEquationInputs = this.equipmentCurveService.getPumpByEquationDefault(settings);
       } else {
-        baselineEquationInputs = this.equipmentCurveService.getFanByEquationDefault(flowUnit, yValueUnit, yImperialUnit);
+        baselineEquationInputs = this.equipmentCurveService.getFanByEquationDefault(settings);
       }
       
       let baselineEquationCoefficients = copyObject(baselineRegressionOutput.baselinePolynomialCurve.equation);
@@ -89,7 +86,6 @@ export class RegressionEquationsService {
           baselineEquationInputs.flowTwo = baselineEquationCoefficients[0];
         }
       }
-
       modificationRegressionOutput = this.getEquipmentRegressionByEquation(baselineEquationInputs, equipmentInputs, modificationEquipment, yValueLabel, maxFlowRate, fluidPowerMultiplier, settings);
       modifiedPairs = modificationRegressionOutput.modifiedDataPairs;
       modificationRatio = modificationRegressionOutput.ratio;
@@ -119,10 +115,18 @@ export class RegressionEquationsService {
       (baselineEquationInputs.flowFour * Math.pow(modificationEquipment.flow, 4)) +
       (baselineEquationInputs.flowFive * Math.pow(modificationEquipment.flow, 5)) +
       (baselineEquationInputs.flowSix * Math.pow(modificationEquipment.flow, 6)) - modifiedYValue;
+
+      // * all 0 under by data
     let ratio = (-quadraticEquationB + Math.pow((Math.pow(quadraticEquationB, 2) - 4 * quadraticEquationA * quadraticEquationC), .5)) / (2 * quadraticEquationA)
+    console.log('modificationEquipment', modificationEquipment)
+    console.log('ratio', ratio);
+    console.log('quadraticEquationB, quadraticEquationA, quadraticEquationC', quadraticEquationB, quadraticEquationA, quadraticEquationC);
 
     // still use value regardless of is speed or diameter
     let modificationSpeed: number = ratio * equipmentInputs.baselineMeasurement;
+    if (modificationSpeed > 0) {
+      debugger;
+    }
 
     let modificationByEquationInputs: ByEquationInputs = copyObject(baselineEquationInputs);
     modificationByEquationInputs.constant = baselineEquationInputs.constant * Math.pow(ratio, 2);
@@ -180,6 +184,10 @@ export class RegressionEquationsService {
       // * modification by equation inputs are constructed from BL
       modificationByEquation = this.getModificationEquipmentByEquationInputs(baselineEquationInputs, equipmentInputs, modificationEquipment, yValueLabel);
       modificationEquipment.speed = modificationByEquation.modificationSpeed;
+      if (modificationEquipment.speed > 0) {
+        debugger;
+      }
+  
       modificationRatio = modificationByEquation.ratio;
       modifiedData = this.calculateModifiedEquipmentByEquation(modificationByEquation.modificationByEquationInputs, fluidPowerMultiplier, maxFlowRate, yValueLabel, settings);
       if (modifiedData) {
@@ -191,6 +199,7 @@ export class RegressionEquationsService {
       modificationRegressionEquation = this.formatRegressionEquation(modificationResults.string, baselineEquationInputs.equationOrder, yValueLabel);
     } 
 
+    debugger;
     this.baselineEquipmentRegressionEquation.next(baselineRegressionEquation);
     this.modificationEquipmentRegressionEquation.next(modificationRegressionEquation);
 
