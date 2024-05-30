@@ -20,10 +20,13 @@ export class SsmtResultsPanelComponent implements OnInit {
   settings: Settings;
   @Input()
   modificationIndex: number;
+  @Input()
+  inModifyConditions: boolean;  
+  @Input()
+  inSetup: boolean;
+  
   @Output('saveOutputCalculated')
   saveOutputCalculated = new EventEmitter<SSMT>();
-  @Input()
-  inModifyConditions: boolean;
 
   baselineOutput: SSMTOutput;
   baselineInputs: SSMTInputs;
@@ -67,20 +70,26 @@ export class SsmtResultsPanelComponent implements OnInit {
     
     if (this.baselineValid) {
       this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputs, this.settings, this.ssmt);
-      let modificationSsmtCopy: SSMT = JSON.parse(JSON.stringify(this.ssmt.modifications[this.modificationIndex].ssmt));
-      this.modValid = this.ssmtService.checkValid(modificationSsmtCopy, this.settings).isValid;
-      let modificationResults: SSMTResults = { inputData: undefined, outputData: this.steamService.getEmptyResults() }
-      this.modificationInputs = modificationResults.inputData;
-      this.modificationOutput = modificationResults.outputData;
-
-      if (this.modValid) {
-        modificationResults = this.ssmtService.calculateModificationModel(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, this.baselineOutput);
+      if (!this.inSetup && this.ssmt.modifications && this.ssmt.modifications.length !== 0){
+        let modificationSsmtCopy: SSMT = JSON.parse(JSON.stringify(this.ssmt.modifications[this.modificationIndex].ssmt));
+        this.modValid = this.ssmtService.checkValid(modificationSsmtCopy, this.settings).isValid;
+        let modificationResults: SSMTResults = { inputData: undefined, outputData: this.steamService.getEmptyResults() }
         this.modificationInputs = modificationResults.inputData;
         this.modificationOutput = modificationResults.outputData;
-        
-        this.percentSavings = Number(Math.round(((((this.baselineOutput.operationsOutput.totalOperatingCost - this.modificationOutput.operationsOutput.totalOperatingCost) * 100) / this.baselineOutput.operationsOutput.totalOperatingCost) * 100) / 100).toFixed(0));
-        this.annualSavings = this.baselineOutput.operationsOutput.totalOperatingCost - this.modificationOutput.operationsOutput.totalOperatingCost;
-        this.modificationLosses = this.calculateLossesService.calculateLosses(this.modificationOutput, this.modificationInputs, this.settings, this.ssmt.modifications[this.modificationIndex].ssmt);
+  
+        if (this.modValid) {
+          modificationResults = this.ssmtService.calculateModificationModel(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, this.baselineOutput);
+          this.modificationInputs = modificationResults.inputData;
+          this.modificationOutput = modificationResults.outputData;
+          
+          this.percentSavings = Number(Math.round(((((this.baselineOutput.operationsOutput.totalOperatingCost - this.modificationOutput.operationsOutput.totalOperatingCost) * 100) / this.baselineOutput.operationsOutput.totalOperatingCost) * 100) / 100).toFixed(0));
+          this.annualSavings = this.baselineOutput.operationsOutput.totalOperatingCost - this.modificationOutput.operationsOutput.totalOperatingCost;
+          this.modificationLosses = this.calculateLossesService.calculateLosses(this.modificationOutput, this.modificationInputs, this.settings, this.ssmt.modifications[this.modificationIndex].ssmt);
+        }
+
+      } else {
+        this.modificationOutput = this.steamService.getEmptyResults();
+        this.modificationLosses = this.steamService.getEmptyLosses();
       }
     }
   }
