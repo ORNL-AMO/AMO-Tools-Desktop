@@ -44,7 +44,9 @@ import { ClipboardModule } from 'ngx-clipboard';
     WeatherBinsHelpComponent,
     WeatherBinsBarChartComponent,
     WeatherBinsHeatMapComponent,
-    WeatherBinsTableComponent
+    WeatherBinsTableComponent,
+    DataSetupFormComponent,
+    BinsFormComponent
   ],
   providers: [
     WeatherDbService,

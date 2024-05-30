@@ -1,5 +1,6 @@
 <div class="plotly-bg">
   <div #weatherBinsHeatMap id="weatherBinsHeatMap"></div>
+  <ng-container *ngIf="heatMap">
   <div class="d-flex w-100 justify-content-center pl-2 pr-2">
     <span class="input-group-btn">
       <button class="btn-copy-table" type="button" ngxClipboard [cbContent]="heatmapCSVstring"
@@ -17,4 +18,5 @@
       </span>
     </div>
   </div>
+</ng-container>
 </div>

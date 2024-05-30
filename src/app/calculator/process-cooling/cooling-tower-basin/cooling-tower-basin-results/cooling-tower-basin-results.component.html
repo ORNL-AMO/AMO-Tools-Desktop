@@ -167,7 +167,8 @@
     </tbody>
   </table>
 
-    <form *ngIf="weatherBinnedResults" class="w-75 pt-3 pb-1 mx-auto">
+  <ng-container *ngIf="weatherBinnedResults && selectedWeatherBinResult">
+    <form class="w-75 pt-3 pb-1 mx-auto">
       <div class="form-group">
         <div class="input-group">
           <select class="form-control" name="selectedWeatherBinResult" id="selectedWeatherBinResult"
@@ -181,8 +182,7 @@
     </form>
 
     <div class="header bold">
-      <span [innerHTML]="selectedWeatherBinResult.caseName"></span>
-      - {{selectedWeatherBinResult.operatingHours}} hrs
+      <span [innerHTML]="selectedWeatherBinResult.caseName"></span> - {{selectedWeatherBinResult.operatingHours}} hrs
     </div>
 
     <label class="group-label">Baseline</label>
@@ -253,5 +253,6 @@
         </tr>
       </tbody>
     </table>
+  </ng-container>
 
 </ng-container>

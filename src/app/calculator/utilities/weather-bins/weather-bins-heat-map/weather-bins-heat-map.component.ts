@@ -47,7 +47,7 @@ export class WeatherBinsHeatMapComponent {
   }
 
   createHeatMap() {
-    if (this.weatherBinsHeatMap && this.weatherBinsInput.binParameters.length > 1) {
+    if (this.weatherBinsHeatMap && this.weatherBinsInput.binParameters.length > 1 && this.weatherBinsInput.cases.length > 0) {
       let yParamTitle = this.weatherBinsService.getParameterLabelFromCSVName(this.weatherBinsInput.binParameters[0].name, this.settings);
       let xParamTitle = this.weatherBinsService.getParameterLabelFromCSVName(this.weatherBinsInput.binParameters[1].name, this.settings);
       let yLabels = this.weatherBinsInput.cases.map(yParam => this.weatherBinsService.getfilledLabelRangeString(this.settings, yParam.field, yParam.lowerBound, yParam.upperBound, true));

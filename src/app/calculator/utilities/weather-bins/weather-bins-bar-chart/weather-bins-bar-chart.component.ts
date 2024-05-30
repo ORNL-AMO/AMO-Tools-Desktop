@@ -45,7 +45,6 @@ export class WeatherBinsBarChartComponent implements OnInit {
     if (this.weatherBinsBarChart) {
       let xData: Array<string> = this.weatherBinsInput.cases.map((caseData: WeatherBinCase) => { return this.weatherBinsService.getfilledLabelRangeString(this.settings, caseData.field, caseData.lowerBound, caseData.upperBound, true) });
       let yData: Array<number> = this.weatherBinsInput.cases.map(caseData => { return caseData.totalNumberOfDataPoints });
-
       let xParamTitle = this.weatherBinsService.getParameterLabelFromCSVName(this.weatherBinsInput.binParameters[0].name, this.settings);
 
       let traces = [{
