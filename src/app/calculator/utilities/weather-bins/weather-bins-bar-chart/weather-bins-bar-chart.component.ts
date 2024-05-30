@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input, HostListener } from '@angular/core';
-import { WeatherBinsService, WeatherBinsInput } from '../weather-bins.service';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input, HostListener, SimpleChanges } from '@angular/core';
+import { WeatherBinsService, WeatherBinsInput, WeatherBinCase } from '../weather-bins.service';
 import * as Plotly from 'plotly.js-dist';
 import { Settings } from '../../../../shared/models/settings';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-weather-bins-bar-chart',
@@ -13,42 +13,41 @@ export class WeatherBinsBarChartComponent implements OnInit {
   @ViewChild('weatherBinsBarChart', { static: false }) weatherBinsBarChart: ElementRef;
   @Input() settings: Settings;
 
-  tableData: WeatherBinsInput;
-  inputDataSub: Subscription;
+  weatherBinsInput: WeatherBinsInput;
   totalNumberOfDataPoints: number;
+  weatherBinsInputSub: Subscription;
 
   constructor(private weatherBinsService: WeatherBinsService) { }
 
   ngOnInit(): void {
     this.triggerInitialResize();
-    this.totalNumberOfDataPoints = this.weatherBinsService.getTotalCaseDataPoints(this.weatherBinsService.inputData.getValue());
+    this.weatherBinsInputSub = this.weatherBinsService.inputData.subscribe(val => {
+      this.weatherBinsInput = val;
+      this.createBarChart();
+    });
   }
 
   triggerInitialResize() {
     window.dispatchEvent(new Event("resize"));
     setTimeout(() => {
       // Resize
-      this.createBarChart(this.tableData);
+      this.createBarChart();
     }, 20);
   }
 
-  ngAfterViewInit() {
-    this.inputDataSub = this.weatherBinsService.inputData.subscribe(inputData => {      
-      this.tableData = inputData;
-      this.createBarChart(this.tableData);
-    });
-  }
 
   ngOnDestroy() {
     window.dispatchEvent(new Event("resize"));
-    this.inputDataSub.unsubscribe();
+    this.weatherBinsInputSub.unsubscribe();
   }
 
-  createBarChart(inputData: WeatherBinsInput) {
-    this.totalNumberOfDataPoints = this.weatherBinsService.getTotalCaseDataPoints(inputData);
-    if (this.weatherBinsBarChart && this.totalNumberOfDataPoints != 0) {
-      let xData: Array<string> = inputData.cases.map(caseData => { return caseData.caseName });
-      let yData: Array<number> = inputData.cases.map(caseData => { return caseData.totalNumberOfDataPoints });
+  createBarChart() {
+    if (this.weatherBinsBarChart) {
+      let xData: Array<string> = this.weatherBinsInput.cases.map((caseData: WeatherBinCase) => { return this.weatherBinsService.getfilledLabelRangeString(this.settings, caseData.field, caseData.lowerBound, caseData.upperBound, true) });
+      let yData: Array<number> = this.weatherBinsInput.cases.map(caseData => { return caseData.totalNumberOfDataPoints });
+
+      let xParamTitle = this.weatherBinsService.getParameterLabelFromCSVName(this.weatherBinsInput.binParameters[0].name, this.settings);
+
       let traces = [{
         x: xData,
         y: yData,
@@ -75,6 +74,13 @@ export class WeatherBinsBarChartComponent implements OnInit {
         },
         xaxis: {
           // rangemode: 'tozero'
+          title: {
+            text: xParamTitle,
+            font: {
+              family: 'Arial',
+              size: 16
+            }
+          },
           automargin: true
         },
         margin: { t: 50, b: 50, l: 50, r: 50 }

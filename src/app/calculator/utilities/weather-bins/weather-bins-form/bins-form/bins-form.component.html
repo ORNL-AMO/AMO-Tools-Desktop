@@ -1,11 +1,16 @@
 <div class="form-section mx-3 p-2 pb-2 mb-3" *ngIf="importDataFromCsv != undefined">
-  <h2 class="my-2 h6">Manage Bins</h2>
-
-  <div class="form-group form-section py-2" *ngFor="let form of binParametersForms; let i = index">
-    <form [formGroup]="form">
+  <div class="form-section py-2" *ngFor="let binForm of binParametersForms; let parameterIndex = index">
+    <div class="d-flex">
+      <label class="group-label w-100">
+        <span>Bin Parameter {{parameterIndex + 1}}</span>
+        <span *ngIf="parameterIndex > 0" class="fa fa-times-circle pr-2 delete click-link pull-right"
+          (click)="deleteBinParameter(parameterIndex)"></span>
+      </label>
+    </div>
+    <form [formGroup]="binForm">
       <div class="form-group">
-        <label for="name">Bin Parameter {{i + 1}}</label>
-        <select class="form-control" id="name" formControlName="name" (change)="changeParameter(form)"
+        <label for="name">Parameter</label>
+        <select class="form-control" id="name" formControlName="name" (change)="changeParameter(binForm)"
           (focus)="focusField('name')">
           <option *ngFor="let option of parameterOptions" [ngValue]="option.value">{{option.display}}</option>
         </select>
@@ -14,46 +19,76 @@
       <div class="form-group">
         <label>Parameter Data Range</label>
         <div class="small text-center">
-          ({{form.controls.min.value}} <app-parameter-unit [settings]="settings" [parameter]="form.controls.name.value">
-          </app-parameter-unit>) - ({{form.controls.max.value}} <app-parameter-unit [settings]="settings"
-            [parameter]="form.controls.name.value"></app-parameter-unit>)
+          ({{binForm.controls.min.value}} <app-parameter-unit [settings]="settings"
+            [parameter]="binForm.controls.name.value">
+          </app-parameter-unit>) - ({{binForm.controls.max.value}} <app-parameter-unit [settings]="settings"
+            [parameter]="binForm.controls.name.value"></app-parameter-unit>)
         </div>
       </div>
-      <div class="form-group">
-        <label for="binStartingValue">Bin Starting Value</label>
-        <div class="input-group">
-          <input type="number" class="form-control" id="startingValue" formControlName="startingValue"
-            (focus)="focusField('startingValue')">
-          <span class="input-group-addon units">
-            <app-parameter-unit [settings]="settings" [parameter]="form.controls.name.value">
-            </app-parameter-unit>
-          </span>
-          <span class="alert-danger pull-right small"
-          *ngIf="form.controls.startingValue.invalid && !form.controls.startingValue.pristine">
-          <span *ngIf="form.controls.startingValue.errors.greaterThan">Value must be greater than
-            {{form.controls.startingValue.errors.greaterThan}}.</span>
-            <span *ngIf="form.controls.startingValue.errors.lessThan">Value must be less than
-              {{form.controls.startingValue.errors.lessThan}}.</span>
-        </span>
-        </div>
-      </div>
-
       <div class="form-group">
         <label for="range">Bin Size</label>
         <div class="input-group">
           <input name="range" type="number" class="form-control" id="range" formControlName="range"
             (focus)="focusField('range')">
           <span class="input-group-addon units">
-            <app-parameter-unit [settings]="settings" [parameter]="form.controls.name.value">
+            <app-parameter-unit [settings]="settings" [parameter]="binForm.controls.name.value">
             </app-parameter-unit>
+          </span>
+
+          <span class="alert-danger pull-right small"
+            *ngIf="binForm.controls.range.invalid && !binForm.controls.range.pristine">
+            <span *ngIf="binForm.controls.range.errors.required">Value required.</span>
+            <span *ngIf="binForm.controls.range.errors.greaterThan !== undefined">Value must be greater than
+              {{binForm.controls.range.errors.greaterThan}}.</span>
+          </span>
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="binStartingValue">Starting Value</label>
+        <div class="input-group">
+          <input type="number" class="form-control" id="startingValue" formControlName="startingValue"
+            (focus)="focusField('startingValue')">
+          <span class="input-group-addon units">
+            <app-parameter-unit [settings]="settings" [parameter]="binForm.controls.name.value">
+            </app-parameter-unit>
+          </span>
+          <span class="alert-danger pull-right small"
+            *ngIf="binForm.controls.startingValue.invalid && !binForm.controls.startingValue.pristine">
+            <span *ngIf="binForm.controls.startingValue.errors.greaterThan">Value must be greater than
+              {{binForm.controls.startingValue.errors.greaterThan}}.</span>
+            <span *ngIf="binForm.controls.startingValue.errors.lessThan">Value must be less than
+              {{binForm.controls.startingValue.errors.lessThan}}.</span>
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="binEndValue">End Value</label>
+        <div class="input-group">
+          <input type="number" class="form-control" id="endValue" formControlName="endValue"
+            (focus)="focusField('endValue')">
+          <span class="input-group-addon units">
+            <app-parameter-unit [settings]="settings" [parameter]="binForm.controls.name.value">
+            </app-parameter-unit>
+          </span>
+          <span class="alert-danger pull-right small"
+            *ngIf="binForm.controls.endValue.invalid && !binForm.controls.endValue.pristine">
+            <span *ngIf="binForm.controls.endValue.errors.greaterThan">Value must be greater than
+              {{binForm.controls.endValue.errors.greaterThan}}.</span>
+            <span *ngIf="binForm.controls.endValue.errors.lessThan">Value must be less than
+              {{binForm.controls.endValue.errors.lessThan}}.</span>
           </span>
         </div>
       </div>
 
+      <app-bin-detail-form *ngIf="weatherBinsInput.cases.length > 0" [parameterIndex]="parameterIndex"
+        [settings]="settings">
+      </app-bin-detail-form>
+
     </form>
   </div>
 
-  <div class="row">
+  <div class="row" *ngIf="binParametersForms.length < 2">
     <div class="col-12 text-center">
       <a class="click-link small" (click)="addBinParameter()">Add Bin Parameter</a>
     </div>
@@ -63,7 +98,7 @@
     <div class="col-12 btn-group btn-group-sm">
       <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="save()">Set Bins</button>
       <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form btn-margin-10"
-      (click)="deleteAllCase()">Clear Bins</button>
+        (click)="deleteAllCase()">Clear Bins</button>
     </div>
   </div>
 

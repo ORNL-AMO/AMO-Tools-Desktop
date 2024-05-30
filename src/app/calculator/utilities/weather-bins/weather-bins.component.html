@@ -37,7 +37,8 @@
                 </div>
             </div>
             <app-weather-station-lookup></app-weather-station-lookup>
-            <app-weather-bins-form [settings]="settings"></app-weather-bins-form>
+            <app-data-setup-form [settings]="settings"></app-data-setup-form>
+            <app-bins-form [settings]="settings"></app-bins-form>
         </div>
         <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
             [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
@@ -57,8 +58,14 @@
             <div class="p-2">
                 <app-weather-bins-help *ngIf="tabSelect == 'help'" [settings]="settings"></app-weather-bins-help>
                 <ng-container *ngIf="tabSelect == 'results'">
-                    <app-weather-bins-bar-chart></app-weather-bins-bar-chart>
-                    <app-weather-bins-table [settings]="settings"></app-weather-bins-table>
+                    <div class="p-2 alert-warning" *ngIf="weatherBinsInput.totalDataPoints === 0">
+                        Add weather data from ZIP code lookup or file. Add a binning parameter to view hours occuring in each bin case. Add a second bin parameter to view a heatmap of bin cases. 
+                    </div>
+                    <ng-container *ngIf="weatherBinsInput.totalDataPoints > 0">
+                        <app-weather-bins-bar-chart *ngIf="weatherBinsInput.binParameters.length === 1" [settings]="settings"></app-weather-bins-bar-chart>
+                        <app-weather-bins-heat-map *ngIf="weatherBinsInput.binParameters.length > 1" [settings]="settings"></app-weather-bins-heat-map>
+                        <app-weather-bins-table [settings]="settings"></app-weather-bins-table>
+                    </ng-container>
                 </ng-container>
             </div>
         </div>

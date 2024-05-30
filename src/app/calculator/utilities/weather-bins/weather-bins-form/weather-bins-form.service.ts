@@ -4,13 +4,16 @@ import { AbstractControl, FormBuilder, FormGroup, UntypedFormArray, UntypedFormG
 import { Settings } from '../../../../shared/models/settings';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 import { LessThanValidator } from '../../../../shared/validators/less-than';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WeatherBinsFormService {
-
-  constructor(private formBuilder: FormBuilder, private weatherBinsService: WeatherBinsService) { }
+  updateBinParametersForm: BehaviorSubject<boolean>;
+  constructor(private formBuilder: FormBuilder, private weatherBinsService: WeatherBinsService) {
+    this.updateBinParametersForm = new BehaviorSubject<boolean>(undefined);
+   }
 
   setBinParameters(binParameterForms: FormGroup[], weatherBinsInput: WeatherBinsInput) {
     weatherBinsInput.binParameters = []
@@ -21,6 +24,7 @@ export class WeatherBinsFormService {
         min: binParameterForm.controls.min.value,
         max: binParameterForm.controls.max.value,
         startingValue: binParameterForm.controls.startingValue.value,
+        endValue: binParameterForm.controls.endValue.value,
       })
     })
   }
@@ -33,7 +37,11 @@ export class WeatherBinsFormService {
       if (form.controls.startingValue.value == undefined) {
         form.controls.startingValue.patchValue(form.controls.min.value);
       }
+      if (form.controls.endValue.value == undefined) {
+        form.controls.endValue.patchValue(form.controls.max.value);
+      }
       this.setStartingValueValidator(form)
+      this.setRangeValidator(form);
       binParametersForms.push(form)
     });
     return binParametersForms;
@@ -43,11 +51,15 @@ export class WeatherBinsFormService {
     let defaultParamForm:FormGroup = this.getBinParameterForm({
       name: 'Dry-bulb (C)',
       range: 10,
-      startingValue: undefined
+      startingValue: undefined,
+      endValue: undefined
     });
     this.setParameterMinMax(defaultParamForm, weatherBinsInput, settings);
     defaultParamForm.controls.startingValue.patchValue(defaultParamForm.controls.min.value);
-    this.setStartingValueValidator(defaultParamForm)
+    defaultParamForm.controls.endValue.patchValue(defaultParamForm.controls.max.value);
+    this.setStartingValueValidator(defaultParamForm);
+    this.setEndValueValidator(defaultParamForm);
+    this.setRangeValidator(defaultParamForm);
     binParameterForms.push(defaultParamForm);
   }
 
@@ -60,7 +72,15 @@ export class WeatherBinsFormService {
   }
 
   setStartingValueValidator(form: FormGroup) {
-    form.controls.startingValue.setValidators([GreaterThanValidator.greaterThan(form.controls.min.value), LessThanValidator.lessThan(form.controls.max.value)])
+    form.controls.startingValue.setValidators([GreaterThanValidator.greaterThan(form.controls.min.value - 1), LessThanValidator.lessThan(form.controls.endValue.value)])
+  }
+
+  setEndValueValidator(form: FormGroup) {
+    form.controls.endValue.setValidators([GreaterThanValidator.greaterThan(form.controls.startingValue.value), LessThanValidator.lessThan(form.controls.max.value + 1)])
+  }
+
+  setRangeValidator(form: FormGroup) {
+    form.controls.range.setValidators([GreaterThanValidator.greaterThan(0)])
   }
 
   getBinParameterForm(binParameter: BinParameter): FormGroup {
@@ -70,6 +90,7 @@ export class WeatherBinsFormService {
       min: [binParameter.min],
       max: [binParameter.max],
       startingValue: [binParameter.startingValue],
+      endValue: [binParameter.endValue],
     });
   }
 }

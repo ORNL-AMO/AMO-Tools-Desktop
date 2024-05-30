@@ -1,29 +1,18 @@
-<div *ngIf="inputData && totalCaseDataPoints > 0" style="margin-top: 30px;">
+<div *ngIf="inputData && inputData.binParameters.length === 1 && inputData.totalDataPoints > 0" style="margin-top: 30px;">
     <table #copyTable class="table table-hover table-striped">
         <thead>
             <tr>
-                <th class="text-center bold w-25">Bin #</th>
-                <th class="text-center bold w-25">Lower Bound
-                    (<app-parameter-unit [settings]="settings" [parameter]="inputData.autoBinParameter">
-                    </app-parameter-unit>)
-                </th>
-                <th class="text-center bold w-25">Upper Bound
-                    (<app-parameter-unit [settings]="settings" [parameter]="inputData.autoBinParameter">
-                    </app-parameter-unit>)
-                </th>
+                <th class="text-center bold w-25">Bin </th>
                 <th class="text-center bold w-25">Hours</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let case of inputData.cases;">
-                <td class="text-center bold">{{case.caseName}}</td>
-                <td class="text-center">{{case.caseParameters[0].lowerBound}}</td>
-                <td class="text-center">{{case.caseParameters[0].upperBound}}</td>
+                <td class="text-left bold">{{case.caseName}}</td>
                 <td class="text-center">{{case.totalNumberOfDataPoints}}</td>
             </tr>
         </tbody>
     </table>
-    <!-- export table component -->
     <app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
     </app-exportable-results-table>
 </div>
