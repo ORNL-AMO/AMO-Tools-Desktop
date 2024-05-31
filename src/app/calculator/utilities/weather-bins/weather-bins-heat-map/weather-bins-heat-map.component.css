@@ -1,0 +1,68 @@
+.plotly-bg {
+    background-color: white;
+}
+
+.export-button {
+    background: #145A32;
+    color: white;
+}
+
+
+
+/* * from exportable-results-table */
+.btn-copy-table {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+    height: 30px;
+    opacity: 0.7;
+    background-color: #17202A;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    color: white;
+    transition: ease-in-out 0.2s all;
+}
+
+.btn-copy-table:hover {
+    opacity: 1;
+    border-color: #b0b5b9;
+    cursor: pointer;
+}
+
+.clipboard-text {
+    display: none;
+}
+
+.clipboard-notification {
+    position: absolute;
+    display: none;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: 280px;
+    border: 2px solid #00B52D;
+    border-radius: 6px;
+    background-color: rgba(0, 181, 45, 0.1);
+    opacity: 0;
+    transition: ease-in-out 0.3s opacity;
+}
+
+.clipboard-notification.show-notification {
+    display: initial;
+    opacity: 1;
+    transition: ease-in-out 0.3s opacity;
+}
+
+.clipboard-notification.text-container {
+    /* display: inline-block; */
+    /* float: right; */
+    width: 70%;
+}
+
+.clipboard-notification.checkmark-container {
+    /* display: inline-block; */
+    /* float: left; */
+    width: 30%;
+}
