@@ -4,7 +4,7 @@ import { CsvImportData } from '../../../shared/helper-services/csv-to-json.servi
 import * as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { WeatherStation } from '../../../shared/weather-station-lookup/weather-station-lookup.service';
+import { copyObject } from '../../../shared/helperFunctions';
 /*
 WEATHER BINS FIELD OPTIONS FROM "TMY3" CSV DATA FOUND AT
 https://rredc.nrel.gov/solar/old_data/nsrdb/1991-2005/tmy3/by_state_and_city.html
@@ -24,7 +24,6 @@ Pressure (mbar)
 @Injectable()
 export class WeatherBinsService {
 
-  // dataFields: BehaviorSubject<Array<string>>;
   inputData: BehaviorSubject<WeatherBinsInput>;
   importDataFromCsv: BehaviorSubject<CsvImportData>;
   dataInDateRange: Array<any>;
@@ -51,19 +50,11 @@ export class WeatherBinsService {
 
   save(newInputData: WeatherBinsInput, settings: Settings) {
     newInputData = this.calculateBins(newInputData, settings);
+    this.setGraphType(newInputData);
     this.inputData.next(newInputData);
   }
 
-  // setDataFields(csvImportData: CsvImportData) {
-  //   let dataFields: Array<string> = JSON.parse(JSON.stringify(csvImportData.meta.fields));
-  //   console.log(dataFields);
-  //   dataFields.shift();
-  //   dataFields.shift();
-  //   this.dataFields.next(dataFields);
-  // }
-
   initInputData(): WeatherBinsInput {
-    // let initCase: WeatherBinCase = this.getNewCase(1);
     return {
       fileName: '',
       startDay: 1,
@@ -71,8 +62,14 @@ export class WeatherBinsService {
       endDay: 31,
       endMonth: 11,
       cases: new Array(),
-      autoBinParameter: 'Dry-bulb (C)',
-      autoBinRangeValue: 10
+      graphType: undefined,
+      binParameters: [{
+        name: 'Dry-bulb (C)',
+        range: 10,
+        startingValue: undefined,
+        endValue: undefined
+      }],
+      totalDataPoints: 0,
     }
   }
 
@@ -95,66 +92,164 @@ export class WeatherBinsService {
   }
 
   calculateBins(inputData: WeatherBinsInput, settings: Settings): WeatherBinsInput {
-    let dataInRange: Array<any> = this.getDataInDateRange(inputData);
-    inputData.cases.forEach(weatherCase => {
-      let convertedCaseParameters: Array<CaseParameter> = this.convertCaseParameters(weatherCase.caseParameters, settings);
-      weatherCase.totalNumberOfDataPoints = this.calculateNumberOfParameterDataPoints(dataInRange, convertedCaseParameters);
+    let dataInDateRange: Array<any> = this.getDataInDateRange(inputData);
+    let zCaseHours = [];
+    let flattenedHours = [];
+
+    // todo on delete ignore changes to customized
+    inputData.cases.map((yParameterCase: WeatherBinCase, index) => {
+     yParameterCase.lowerBoundWarnings = this.getLowerBoundWarnings(yParameterCase, index, inputData.cases);
+     yParameterCase.upperBoundWarnings = this.getUpperBoundWarnings(yParameterCase, index, inputData.cases);
+      let yCases = [];
+      let yConvertedParameter: CaseParameter = {
+        field: yParameterCase.field,
+        lowerBound: yParameterCase.lowerBound,
+        upperBound: yParameterCase.upperBound,
+      };
+      yConvertedParameter = this.convertParameterFields(yConvertedParameter, settings);
+      if (yParameterCase.caseParameters.length !== 0) {
+        yParameterCase.caseParameters.map((xParameter, xIndex) => {
+          let caseMatchingHours: number = 0;
+          xParameter.lowerBoundWarnings = this.getLowerBoundWarnings(xParameter, xIndex, yParameterCase.caseParameters);
+          xParameter.upperBoundWarnings = this.getUpperBoundWarnings(xParameter, xIndex, yParameterCase.caseParameters);
+          let xConvertedParameter = this.convertParameterFields(xParameter, settings);
+          dataInDateRange.map(dataPoint => {
+            let yMatches = dataPoint[yConvertedParameter.field] > yConvertedParameter.lowerBound && dataPoint[yConvertedParameter.field] <= yConvertedParameter.upperBound;
+            let xMatches = dataPoint[xConvertedParameter.field] > xConvertedParameter.lowerBound && dataPoint[xConvertedParameter.field] <= xConvertedParameter.upperBound;
+            if (xMatches && yMatches) {
+              caseMatchingHours++;
+            }
+          });
+          xParameter.totalNumberOfDataPoints = caseMatchingHours;
+          yCases.push(caseMatchingHours);
+          flattenedHours.push(caseMatchingHours);
+        });
+        yParameterCase.totalNumberOfDataPoints = yParameterCase.caseParameters.reduce((total, current) => total + current.totalNumberOfDataPoints, 0);
+      } else {
+        let caseMatchingHours: number = 0;
+        dataInDateRange.map(dataPoint => {
+          let yMatches = dataPoint[yConvertedParameter.field] > yConvertedParameter.lowerBound && dataPoint[yConvertedParameter.field] <= yConvertedParameter.upperBound;
+          if (yMatches) {
+            caseMatchingHours++;
+          }
+        });
+        yParameterCase.totalNumberOfDataPoints = caseMatchingHours;
+      }
+
+      zCaseHours.push(yCases);
+      inputData.heatMapHoursMatrix = zCaseHours;
+
+      inputData.multiBinDetails = {
+        min: Math.min(...flattenedHours), 
+        max: Math.max(...flattenedHours), 
+      }
     });
-    let total = _.sumBy(inputData.cases, 'totalNumberOfDataPoints')
+
+    inputData.totalDataPoints = inputData.cases.reduce((total, current) => total + current.totalNumberOfDataPoints, 0)
     return inputData;
   }
 
-  convertCaseParameters(caseParameters: Array<CaseParameter>, settings: Settings): Array<CaseParameter> {
-    let caseParametersCopy: Array<CaseParameter> = JSON.parse(JSON.stringify(caseParameters));
-    if (settings.unitsOfMeasure == 'Imperial') {
-      caseParametersCopy.forEach(parameter => {
-        if (parameter.lowerBound != undefined && parameter.upperBound) {
-          if (parameter.field == 'Dry-bulb (C)' || parameter.field == 'Dew-point (C)'|| parameter.field == 'Wet Bulb (C)') {
-            parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('F').to('C');
-            parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('F').to('C');
-          } else if (parameter.field == 'Wspd (m/s)') {
-            parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('ft').to('m');
-            parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('ft').to('m');
-          } else if (parameter.field == 'Pressure (mbar)') {
-            parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('inHg').to('mbar');
-            parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('inHg').to('mbar');
-          } else if (parameter.field == 'Lprecip depth (mm)') {
-            parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('in').to('mm');
-            parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('in').to('mm');
-          }
-        }
-      })
+    getUpperBoundWarnings(currentBin: WeatherBinCase | CaseParameter, currentIndex: number, binCases: Array<WeatherBinCase | CaseParameter>) {
+    let warnings: BoundWarnings;
+    let nextBin: WeatherBinCase | CaseParameter;
+
+    if (currentIndex < binCases.length - 1) {
+      nextBin = binCases[currentIndex + 1]
     }
-    return caseParametersCopy;
+
+    if (currentBin.upperBound !== undefined && currentBin.upperBound !== null) {
+      if (nextBin && currentBin.upperBound > nextBin.lowerBound) {
+        warnings = {...warnings, nextLowerBound: nextBin.lowerBound}
+      }
+      if (currentBin.upperBound < currentBin.lowerBound) {
+        warnings = {
+          greaterThan: currentBin.lowerBound
+        }
+      }
+    } else {
+      warnings = {
+        requiredWarning: true
+      }
+    }
+    return warnings;
   }
 
-  calculateNumberOfParameterDataPoints(dataInDateRange: Array<any>, caseParameters: Array<CaseParameter>): number {
-    let checkCaseValid: boolean = true;
-    caseParameters.forEach(parameter => {
-      if (parameter.field == undefined || parameter.upperBound == undefined || parameter.lowerBound == undefined) {
-        checkCaseValid = false;
-      }
-    });
-    let numDataPointsInParameters: number = 0;
-    if (checkCaseValid == true) {
-      dataInDateRange.forEach(dataPoint => {
-        let doesDataFitParameters: boolean = this.checkDataPointFitsParameters(dataPoint, caseParameters);
-        if (doesDataFitParameters == true) {
-          numDataPointsInParameters++;
-        }
-      })
+  getLowerBoundWarnings(currentBin: WeatherBinCase | CaseParameter, currentIndex: number, binCases: Array<WeatherBinCase | CaseParameter>) {
+    let warnings: BoundWarnings;
+    let previousBin: WeatherBinCase | CaseParameter;
+
+    if (currentIndex > 0) {
+      previousBin = binCases[currentIndex - 1];
     }
-    return numDataPointsInParameters;
+
+    if (currentBin.lowerBound !== undefined && currentBin.lowerBound !== null) {
+      if (previousBin && currentBin.lowerBound < previousBin.upperBound) {
+        warnings = {
+          prevUpperBound: previousBin.upperBound
+        }
+      }
+      if (currentBin.lowerBound > currentBin.upperBound) {
+        warnings = {
+          lessThan: currentBin.upperBound
+        }
+      }
+    } else {
+      warnings = {
+        requiredWarning: true
+      }
+    }
+    return warnings;
   }
 
-  checkDataPointFitsParameters(dataPoint: any, caseParameters: Array<CaseParameter>): boolean {
-    let fitsParameters: boolean = false;
-    caseParameters.forEach(parameter => {
-      if (dataPoint[parameter.field] > parameter.lowerBound && dataPoint[parameter.field] <= parameter.upperBound) {
-        fitsParameters = true;
+  getfilledLabelRangeString(settings: Settings, fieldName: string, lowerBound: number, upperBound: number, rangeOnly? : boolean) {
+    let lower = lowerBound < 0? `(${lowerBound})`: lowerBound;
+    let upper = upperBound < 0? `(${upperBound})`: upperBound;
+    let paramRange = `${lower} - ${upper}`;
+    if (rangeOnly) {
+      return paramRange;
+    }
+    fieldName = this.getParameterLabelFromCSVName(fieldName, settings);
+    return `${fieldName} ${paramRange}`;
+  }
+
+  convertParameterFields(parameter: CaseParameter, settings: Settings) {
+    let convertedParameter: CaseParameter = {
+      field: parameter.field,
+      lowerBound: parameter.lowerBound,
+      upperBound: parameter.upperBound
+    }
+
+    if (settings.unitsOfMeasure != 'Metric') {
+      if (parameter.lowerBound != undefined && parameter.upperBound !== undefined) {
+        if (parameter.field == 'Dry-bulb (C)' || parameter.field == 'Dew-point (C)' || parameter.field == 'Wet Bulb (C)') {
+          convertedParameter.lowerBound = this.convertUnitsService.value(convertedParameter.lowerBound).from('F').to('C');
+          convertedParameter.upperBound = this.convertUnitsService.value(convertedParameter.upperBound).from('F').to('C');
+        } else if (parameter.field == 'Wspd (m/s)') {
+          convertedParameter.lowerBound = this.convertUnitsService.value(convertedParameter.lowerBound).from('ft').to('m');
+          convertedParameter.upperBound = this.convertUnitsService.value(convertedParameter.upperBound).from('ft').to('m');
+        } else if (parameter.field == 'Pressure (mbar)') {
+          convertedParameter.lowerBound = this.convertUnitsService.value(convertedParameter.lowerBound).from('inHg').to('mbar');
+          convertedParameter.upperBound = this.convertUnitsService.value(convertedParameter.upperBound).from('inHg').to('mbar');
+        } else if (parameter.field == 'Lprecip depth (mm)') {
+          convertedParameter.lowerBound = this.convertUnitsService.value(convertedParameter.lowerBound).from('in').to('mm');
+          convertedParameter.upperBound = this.convertUnitsService.value(convertedParameter.upperBound).from('in').to('mm');
+        }
       }
-    });
-    return fitsParameters;
+    }
+    return convertedParameter;
+  }
+
+  setGraphType(weatherBinsInput: WeatherBinsInput) {
+    if (weatherBinsInput.binParameters.length === 1 || (weatherBinsInput.binParameters.length > 1
+      && weatherBinsInput.cases.length > 0 && weatherBinsInput.cases[0].caseParameters.length === 0)) {
+      weatherBinsInput.graphType = 'bar';
+    }
+
+    if (weatherBinsInput.binParameters.length > 1
+      && weatherBinsInput.cases.length > 0
+      && weatherBinsInput.cases[0].caseParameters.length > 0) {
+      weatherBinsInput.graphType = 'heatmap';
+    }
   }
 
   getDataInDateRange(inputData: WeatherBinsInput): Array<any> {
@@ -196,34 +291,76 @@ export class WeatherBinsService {
     return dataInDateRange;
   }
 
-
   setAutoBinCases(inputData: WeatherBinsInput, settings: Settings): WeatherBinsInput {
-    let minAndMax: { min: number, max: number } = this.getParameterMinMax(inputData, inputData.autoBinParameter, settings);
-    let lowerBound: number = Math.floor(minAndMax.min);
-    let maxValue: number = Math.ceil(minAndMax.max);
     inputData.cases = new Array();
-    let caseIndex: number = 1;
-    for (lowerBound; lowerBound <= maxValue; lowerBound += inputData.autoBinRangeValue) {
-      inputData.cases.push({
-        caseName: 'Bin #' + caseIndex,
-        caseParameters: [{
-          field: inputData.autoBinParameter,
+    inputData.binParameters.map((binParam, binParametersIndex) => {
+      let isParentBinParameter: boolean = binParametersIndex === 0;
+      let lowerBound = binParam.startingValue;
+      let caseIndex: number = 0;
+      let upperBound = 0;
+      
+      for (lowerBound; upperBound <= binParam.endValue; lowerBound += binParam.range) {
+        upperBound = lowerBound + binParam.range;
+        let caseParameter: CaseParameter = {
+          field: binParam.name,
           lowerBound: lowerBound,
-          upperBound: lowerBound + inputData.autoBinRangeValue
-        }],
-        totalNumberOfDataPoints: 0
-      });
-      caseIndex++;
-    };
+          upperBound: upperBound
+        }
+
+        if (isParentBinParameter) {
+          let yParameterBin: WeatherBinCase = {
+            caseName: this.getfilledLabelRangeString(settings, binParam.name, lowerBound, upperBound),
+            field: binParam.name,
+            lowerBound: lowerBound,
+            upperBound: upperBound,
+            caseParameters: [],
+            totalNumberOfDataPoints: 0
+          }
+          inputData.cases.push(yParameterBin);
+        } else {
+          inputData.cases.map(yParameterBin => {
+            yParameterBin.caseParameters.push(caseParameter)
+          })
+        }
+
+        caseIndex++;
+      };
+    });
+
     return inputData;
   }
 
-  getTotalCaseDataPoints(inputData: WeatherBinsInput) {
-    let totalCaseDataPoints: number = 0;
-    if (this.inputData && inputData.cases) {
-      totalCaseDataPoints = inputData.cases.reduce((total, caseItem) => total + caseItem.totalNumberOfDataPoints, 0);
+  setAutoSubBins(inputData: WeatherBinsInput): WeatherBinsInput {
+    let xBinParam = inputData.binParameters[1];
+    if (xBinParam) {
+      let lowerBound = xBinParam.startingValue;
+      let caseIndex: number = 0;
+      let upperBound = 0;
+
+      for (lowerBound; upperBound <= xBinParam.endValue; lowerBound += xBinParam.range) {
+        upperBound = lowerBound + xBinParam.range;
+        let caseParameter: CaseParameter = {
+          field: xBinParam.name,
+          lowerBound: lowerBound,
+          upperBound: upperBound
+        }
+        inputData.cases.map(yParameterBin => {
+          yParameterBin.caseParameters.push(caseParameter)
+        })
+        caseIndex++;
+      };
     }
-    return totalCaseDataPoints;
+
+    return inputData;
+  }
+
+  getParameterOptions(settings: Settings) {
+    return settings.unitsOfMeasure === 'Metric'? copyObject(MetricParameterOptions) : copyObject(ImperialParameterOptions);
+  }
+
+  getParameterLabelFromCSVName(csvDataLabel:string, settings: Settings): string {
+    let parameterOptions = this.getParameterOptions(settings);
+    return parameterOptions.find(option => option.value === csvDataLabel).display;
   }
   getParameterMinMax(inputData: WeatherBinsInput, parameter: string, settings: Settings): { min: number, max: number } {
     let dataInDateRange: Array<any> = this.getDataInDateRange(inputData);
@@ -231,22 +368,22 @@ export class WeatherBinsService {
     let maxValueObj: any = _.maxBy(dataInDateRange, parameter);
     let min: number = minValueObj[parameter];
     let max: number = maxValueObj[parameter];
-    if (settings.unitsOfMeasure != 'Metric') {
-      if (parameter == 'Dry-bulb (C)' || parameter == 'Wet Bulb (C)' || parameter == 'Dew-point (C)') {
-        min = this.convertUnitsService.value(min).from('C').to('F');
-        max = this.convertUnitsService.value(max).from('C').to('F');
-      } else if (parameter == 'Wspd (m/s)') {
-        min = this.convertUnitsService.value(min).from('m').to('ft');
-        max = this.convertUnitsService.value(max).from('m').to('ft');
-      } else if (parameter == 'Pressure (mbar)') {
-        min = this.convertUnitsService.value(min).from('mbar').to('inHg');
-        max = this.convertUnitsService.value(max).from('mbar').to('inHg');
-      } else if (parameter == 'Lprecip depth (mm)') {
-        min = this.convertUnitsService.value(min).from('mm').to('in');
-        max = this.convertUnitsService.value(max).from('mm').to('in');
+      if (settings.unitsOfMeasure != 'Metric') {
+        if (parameter == 'Dry-bulb (C)' || parameter == 'Wet Bulb (C)' || parameter == 'Dew-point (C)') {
+          min = this.convertUnitsService.value(min).from('C').to('F');
+          max = this.convertUnitsService.value(max).from('C').to('F');
+        } else if (parameter == 'Wspd (m/s)') {
+          min = this.convertUnitsService.value(min).from('m').to('ft');
+          max = this.convertUnitsService.value(max).from('m').to('ft');
+        } else if (parameter == 'Pressure (mbar)') {
+          min = this.convertUnitsService.value(min).from('mbar').to('inHg');
+          max = this.convertUnitsService.value(max).from('mbar').to('inHg');
+        } else if (parameter == 'Lprecip depth (mm)') {
+          min = this.convertUnitsService.value(min).from('mm').to('in');
+          max = this.convertUnitsService.value(max).from('mm').to('in');
+        }
       }
-    }
-    return { min: min, max: max }
+    return { min: Math.floor(min), max: Math.ceil(max) }
   }
 }
 
@@ -257,23 +394,54 @@ export interface WeatherBinsInput {
   endDay: number,
   endMonth: number,
   cases: Array<WeatherBinCase>,
+  multiBinDetails?: {
+    min: number, max: number
+  }
+  heatMapHoursMatrix?: Array<Array<any>>,
   fileName: string,
-  autoBinParameter: string,
-  autoBinRangeValue: number
+  totalDataPoints: number,
+  graphType: 'heatmap' | 'bar' | undefined,
+  binParameters?: BinParameter[],
+}
+
+export interface BinParameter {
+  name: string,
+  min?: number,
+  max?: number,
+  range: number,
+  startingValue: number,
+  endValue: number,
 }
 
 
 export interface WeatherBinCase {
   caseName: string,
+  field?: string,
+  lowerBound?: number,
+  upperBound?: number
   caseParameters: Array<CaseParameter>,
-  totalNumberOfDataPoints: number
+  totalNumberOfDataPoints: number,
+  lowerBoundWarnings?: BoundWarnings,
+  upperBoundWarnings?: BoundWarnings
 }
+
 
 
 export interface CaseParameter {
   field: string,
   lowerBound: number,
-  upperBound: number
+  upperBound: number,
+  totalNumberOfDataPoints?: number,
+  lowerBoundWarnings?: BoundWarnings,
+  upperBoundWarnings?: BoundWarnings
+}
+
+export interface BoundWarnings {
+  requiredWarning?: boolean,
+  greaterThan?: number,
+  lessThan?: number,
+  prevUpperBound?: number,
+  nextLowerBound?: number,
 }
 
 export interface WeatherIntegratedCalculatorData {
@@ -281,3 +449,25 @@ export interface WeatherIntegratedCalculatorData {
 }
 
 export type WeatherDataSourceView = "both" | "lookup" | "file";
+
+export const ImperialParameterOptions: Array<{display: string, value: string}> = [
+  {display: "Dry-bulb Temperature (F)", value: "Dry-bulb (C)"},
+  {display: "Wet-bulb Temperature (F)", value: "Wet Bulb (C)"},
+  {display: "Relative Humidity (%)", value: "RHum (%)"},
+  {display: "Dew-point (F)", value: "Dew-point (C)"},
+  {display: "Wind Speed (ft/s)", value: "Wspd (m/s)"},
+  {display: "Wind Direction (degrees)", value: "Wdir (degrees)"},
+  {display: "Liquid Precipitation Depth (in)", value: "Lprecip depth (mm)"},
+  {display: "Pressure (in Hg)", value: "Pressure (mbar)"},
+];
+
+export const MetricParameterOptions: Array<{display: string, value: string}> = [
+  {display: "Dry-bulb Temperature (C)", value: "Dry-bulb (C)"},
+  {display: "Wet-bulb Temperature (C)", value: "Wet Bulb (C)"},
+  {display: "Relative Humidity (%)", value: "RHum (%)"},
+  {display: "Dew-point (C)", value: "Dew-point (C)"},
+  {display: "Wind Speed (m/s)", value: "Wspd (m/s)"},
+  {display: "Wind Direction (degrees)", value: "Wdir (degrees)"},
+  {display: "Liquid Precipitation Depth (mm)", value: "Lprecip depth (mm)"},
+  {display: "Pressure (mbar)", value: "Pressure (mbar)"},
+];

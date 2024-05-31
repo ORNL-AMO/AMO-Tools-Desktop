@@ -35,10 +35,10 @@
       </div>
     </form>
 
-    <app-pressure-readings-form *ngIf="!showUserPressurePlaneA" [planeNum]="planeStep" [pressureType]="'Static'">
+    <app-pressure-readings-form class="pressure-readings-array" *ngIf="!showUserPressurePlaneA" [planeNum]="planeStep" [pressureType]="'Static'">
     </app-pressure-readings-form>
     
-    <app-pressure-readings-form [planeNum]="planeStep">
+    <app-pressure-readings-form class="pressure-readings-array" [planeNum]="planeStep">
     </app-pressure-readings-form>
 
 </div>
@@ -79,10 +79,10 @@
       </div>
     </form>
 
-    <app-pressure-readings-form *ngIf="!showUserPressurePlaneB" [planeNum]="planeStep" [pressureType]="'Static'">
+    <app-pressure-readings-form class="pressure-readings-array" *ngIf="!showUserPressurePlaneB" [planeNum]="planeStep" [pressureType]="'Static'">
     </app-pressure-readings-form>
 
-    <app-pressure-readings-form [planeNum]="planeStep">
+    <app-pressure-readings-form class="pressure-readings-array" [planeNum]="planeStep">
     </app-pressure-readings-form>
 </div>
 
@@ -123,10 +123,10 @@
       </div>
     </form>
 
-    <app-pressure-readings-form *ngIf="!showUserPressurePlaneC" [planeNum]="planeStep" [pressureType]="'Static'">
+    <app-pressure-readings-form class="pressure-readings-array" *ngIf="!showUserPressurePlaneC" [planeNum]="planeStep" [pressureType]="'Static'">
     </app-pressure-readings-form>
 
-    <app-pressure-readings-form [planeNum]="planeStep">
+    <app-pressure-readings-form class="pressure-readings-array" [planeNum]="planeStep">
     </app-pressure-readings-form>
 </div>
 

@@ -1,0 +1,71 @@
+<div class="py-2 mb-2 form-card">
+    <div class="d-flex w-100">
+        <label class="group-label my-1 w-50" (click)="toggleCollapse()"
+            [ngClass]="{'collapsed-border': isCollapsed === true}">
+            <span *ngIf="isCollapsed" class="fa fa-chevron-right collapse-icon"></span>
+            <span *ngIf="!isCollapsed" class="fa fa-chevron-down collapse-icon"></span>
+            Manage Bins
+        </label>
+    </div>
+
+    <ng-container *ngIf="!isCollapsed && parameterBins">
+        <div *ngFor="let bin of parameterBins; let binIndex = index;" class="d-block d-lg-flex w-100 mt-2">
+            <div class="col-12 col-lg-6 d-flex flex-column mx-lg-1 mb-2">
+                <form>
+                    <div class="form-group">
+                        <label for="{{'lowerBound'+binIndex}}">Lower Bound</label>
+                        <div class="input-group">
+                            <input name="{{'lowerBound'+binIndex}}" type="number" class="form-control"
+                                id="{{'lowerBound'+binIndex}}" [(ngModel)]="bin.lowerBound" (input)="save(bin, index)"
+                                (focus)="focusField('lowerBound')">
+                            <span class="input-group-addon units">
+                                <app-parameter-unit [settings]="settings" [parameter]="bin.field">
+                                </app-parameter-unit>
+                            </span>
+                        </div>
+                        <ng-container *ngIf="bin.lowerBoundWarnings">
+                            <span class="alert alert-danger pull-right small" *ngIf="bin.lowerBoundWarnings.requiredWarning">
+                                <span>Value required</span>
+                            </span>
+                            <span class="alert alert-warning pull-right small" *ngIf="bin.lowerBoundWarnings.prevUpperBound">
+                                <span>Value should not be less than the upper bound of the previous bin: {{bin.lowerBoundWarnings.prevUpperBound}}<app-parameter-unit [settings]="settings" [parameter]="bin.field"></app-parameter-unit>.</span>
+                            </span>
+                            <span class="alert alert-warning pull-right small" *ngIf="bin.lowerBoundWarnings.lessThan">
+                                <span>Value should not be greater than the upper bound: {{bin.lowerBoundWarnings.lessThan}}<app-parameter-unit [settings]="settings" [parameter]="bin.field"></app-parameter-unit>.</span>
+                            </span>
+                        </ng-container>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-12 col-lg-6 d-flex flex-column mx-lg-1 mb-2">
+                <form>
+                    <div class="form-group">
+                        <label for="{{'upperBound'+binIndex}}">Upper Bound</label>
+                        <div class="input-group">
+                            <input name="{{'upperBound'+binIndex}}" type="number" class="form-control"
+                                id="{{'upperBound'+binIndex}}" [(ngModel)]="bin.upperBound" (input)="save(bin, index)"
+                                (focus)="focusField('upperBound')">
+                            <span class="input-group-addon units">
+                                <app-parameter-unit [settings]="settings" [parameter]="bin.field">
+                                </app-parameter-unit>
+                            </span>
+                        </div>
+                        <ng-container *ngIf="bin.upperBoundWarnings">
+                            <span class="alert alert-danger pull-right small" *ngIf="bin.upperBoundWarnings.requiredWarning">
+                                <span>Value required</span>
+                            </span>
+                            <span class="alert alert-warning pull-right small" *ngIf="bin.upperBoundWarnings.nextLowerBound">
+                                <span>Value should not be greater than the lower bound of next bin: {{bin.upperBoundWarnings.nextLowerBound}}<app-parameter-unit [settings]="settings" [parameter]="bin.field"></app-parameter-unit>.</span>
+                            </span>
+                            <span class="alert alert-warning pull-right small" *ngIf="bin.upperBoundWarnings.greaterThan">
+                                <span>Value should be greater than lower bound: {{bin.upperBoundWarnings.greaterThan}}<app-parameter-unit [settings]="settings" [parameter]="bin.field"></app-parameter-unit>.</span>
+                            </span>
+                        </ng-container>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </ng-container>
+</div>

@@ -52,7 +52,9 @@ export class WeatherStationLookupComponent implements OnInit {
   getStationsList() {
     this.weatherLookupError = undefined;
     this.weatherStationLookupService.getStations().subscribe({
-      next: stations => this.weatherStationLookupService.stations = stations,
+      next: (stations: WeatherStation[]) => {
+        this.weatherStationLookupService.stations = stations
+      },
       error: (error: MeasurHttpError) => {
         // Ignore connectivity error if the user has already assigned data
         if (!this.weatherBinsService.importDataFromCsv.getValue() && this.weatherDataSourceView == 'lookup') {
