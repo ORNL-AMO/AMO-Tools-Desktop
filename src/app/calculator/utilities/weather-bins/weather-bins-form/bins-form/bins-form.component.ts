@@ -76,21 +76,34 @@ export class BinsFormComponent implements OnInit {
     this.weatherBinFormService.addBinParameter(this.binParametersForms, this.weatherBinsInput, this.settings);
   }
 
-  save() {
-    this.weatherBinsInput.cases = [];
+  save(parameterIndex: number) {
     this.weatherBinFormService.setBinParameters(this.binParametersForms, this.weatherBinsInput)
-    this.weatherBinsInput = this.weatherBinsService.setAutoBinCases(this.weatherBinsInput, this.settings);
+    if (parameterIndex === 0) {
+      this.weatherBinsInput = this.weatherBinsService.setAutoBinCases(this.weatherBinsInput, this.settings);
+    } else if (parameterIndex === 1 && this.weatherBinsInput.cases.length !== 0) {
+      this.weatherBinsInput.cases.map(yParameterBin => {
+        yParameterBin.caseParameters = []
+      });
+      this.weatherBinsInput = this.weatherBinsService.setAutoSubBins(this.weatherBinsInput);
+    }
     this.weatherBinsService.save(this.weatherBinsInput, this.settings);
   }
 
-  deleteAllCase(){    
-    this.weatherBinsInput.cases = [];
-    this.weatherBinsService.inputData.next(this.weatherBinsInput)
+  clearBins(parameterIndex: number){   
+    if (parameterIndex === 0) {
+      this.weatherBinsInput.cases = [];
+    } else if (parameterIndex === 1 && this.weatherBinsInput.cases.length !== 0){
+      this.weatherBinsInput.cases.map(yParameterBin => {
+        yParameterBin.caseParameters = []
+      });
+    }
+    this.weatherBinsService.save(this.weatherBinsInput, this.settings);
   }
 
   deleteBinParameter(index: number) {
     this.weatherBinsInput.binParameters.splice(index, 1);
-    this.weatherBinsService.inputData.next(this.weatherBinsInput)
+    this.weatherBinsService.setGraphType(this.weatherBinsInput);
+    this.weatherBinsService.inputData.next(this.weatherBinsInput);
     this.weatherBinFormService.updateBinParametersForm.next(true);
   }
 

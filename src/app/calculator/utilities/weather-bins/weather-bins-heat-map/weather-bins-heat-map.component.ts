@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { WeatherBinsInput, WeatherBinsService } from '../weather-bins.service';
 import { Subscription } from 'rxjs';
 import * as Plotly from 'plotly.js-dist';
@@ -24,12 +24,14 @@ export class WeatherBinsHeatMapComponent {
   activateCheckmark: boolean = false;
   showNotification: boolean = false;
 
-  constructor(private weatherBinsService: WeatherBinsService, private windowRefService: WindowRefService) { }
+  constructor(private weatherBinsService: WeatherBinsService, private windowRefService: WindowRefService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.triggerInitialResize();
     this.weatherBinsInputSub = this.weatherBinsService.inputData.subscribe(val => {
       this.weatherBinsInput = val;
+      this.heatMap = undefined;
+      this.cd.detectChanges();
       this.createHeatMap();
     });
   }
@@ -47,7 +49,10 @@ export class WeatherBinsHeatMapComponent {
   }
 
   createHeatMap() {
-    if (this.weatherBinsHeatMap && this.weatherBinsInput.binParameters.length > 1 && this.weatherBinsInput.cases.length > 0) {
+    if (this.weatherBinsHeatMap 
+      && this.weatherBinsInput.binParameters.length > 1 
+      && this.weatherBinsInput.cases.length > 0
+      && this.weatherBinsInput.cases[0].caseParameters.length > 0) {
       let yParamTitle = this.weatherBinsService.getParameterLabelFromCSVName(this.weatherBinsInput.binParameters[0].name, this.settings);
       let xParamTitle = this.weatherBinsService.getParameterLabelFromCSVName(this.weatherBinsInput.binParameters[1].name, this.settings);
       let yLabels = this.weatherBinsInput.cases.map(yParam => this.weatherBinsService.getfilledLabelRangeString(this.settings, yParam.field, yParam.lowerBound, yParam.upperBound, true));

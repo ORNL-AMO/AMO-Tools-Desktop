@@ -62,9 +62,9 @@
                         Add weather data from ZIP code lookup or file. Add a binning parameter to view hours occuring in each bin case. Add a second bin parameter to view a heatmap of bin cases. 
                     </div>
                     <ng-container *ngIf="weatherBinsInput.totalDataPoints > 0">
-                        <app-weather-bins-bar-chart *ngIf="weatherBinsInput.binParameters.length === 1" [settings]="settings"></app-weather-bins-bar-chart>
-                        <app-weather-bins-heat-map *ngIf="weatherBinsInput.binParameters.length > 1" [settings]="settings"></app-weather-bins-heat-map>
-                        <app-weather-bins-table [settings]="settings"></app-weather-bins-table>
+                        <app-weather-bins-bar-chart *ngIf="weatherBinsInput.graphType === 'bar'" [settings]="settings"></app-weather-bins-bar-chart>
+                        <app-weather-bins-table *ngIf="weatherBinsInput.graphType === 'bar'" [settings]="settings"></app-weather-bins-table>
+                        <app-weather-bins-heat-map *ngIf="weatherBinsInput.graphType === 'heatmap'" [settings]="settings"></app-weather-bins-heat-map>
                     </ng-container>
                 </ng-container>
             </div>

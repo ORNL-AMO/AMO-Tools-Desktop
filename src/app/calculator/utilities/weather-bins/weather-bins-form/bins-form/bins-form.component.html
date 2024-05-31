@@ -1,4 +1,4 @@
-<div class="form-section mx-3 p-2 pb-2 mb-3" *ngIf="importDataFromCsv != undefined">
+<div class="mx-3 p-2 pb-2 mb-3" *ngIf="importDataFromCsv != undefined">
   <div class="form-section py-2" *ngFor="let binForm of binParametersForms; let parameterIndex = index">
     <div class="d-flex">
       <label class="group-label w-100">
@@ -81,24 +81,26 @@
         </div>
       </div>
 
-      <app-bin-detail-form *ngIf="weatherBinsInput.cases.length > 0" [parameterIndex]="parameterIndex"
+      <app-bin-detail-form *ngIf="(parameterIndex === 0 && weatherBinsInput.cases.length > 0) || (parameterIndex > 0 && weatherBinsInput.cases.length > 0 && weatherBinsInput.cases[0].caseParameters.length > 0)" [parameterIndex]="parameterIndex"
         [settings]="settings">
       </app-bin-detail-form>
 
+
+      <div class="row mt-2">
+        <div class="col-12 btn-group btn-group-sm">
+          <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" 
+          [ngClass]="{'disabled': parameterIndex !== 0 && weatherBinsInput.cases.length === 0}"
+          [disabled]="parameterIndex !== 0 && weatherBinsInput.cases.length === 0" (click)="save(parameterIndex)">Auto-calculate Bins</button>
+          <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form btn-margin-10"
+            (click)="clearBins(parameterIndex)">Clear Bins</button>
+        </div>
+      </div>
     </form>
   </div>
 
   <div class="row" *ngIf="binParametersForms.length < 2">
     <div class="col-12 text-center">
       <a class="click-link small" (click)="addBinParameter()">Add Bin Parameter</a>
-    </div>
-  </div>
-
-  <div class="row mt-2">
-    <div class="col-12 btn-group btn-group-sm">
-      <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="save()">Set Bins</button>
-      <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form btn-margin-10"
-        (click)="deleteAllCase()">Clear Bins</button>
     </div>
   </div>
 

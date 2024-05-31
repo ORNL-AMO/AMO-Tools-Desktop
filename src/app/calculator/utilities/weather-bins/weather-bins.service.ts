@@ -50,6 +50,7 @@ export class WeatherBinsService {
 
   save(newInputData: WeatherBinsInput, settings: Settings) {
     newInputData = this.calculateBins(newInputData, settings);
+    this.setGraphType(newInputData);
     this.inputData.next(newInputData);
   }
 
@@ -61,6 +62,7 @@ export class WeatherBinsService {
       endDay: 31,
       endMonth: 11,
       cases: new Array(),
+      graphType: undefined,
       binParameters: [{
         name: 'Dry-bulb (C)',
         range: 10,
@@ -237,6 +239,18 @@ export class WeatherBinsService {
     return convertedParameter;
   }
 
+  setGraphType(weatherBinsInput: WeatherBinsInput) {
+    if (weatherBinsInput.binParameters.length === 1 || (weatherBinsInput.binParameters.length > 1
+      && weatherBinsInput.cases.length > 0 && weatherBinsInput.cases[0].caseParameters.length === 0)) {
+      weatherBinsInput.graphType = 'bar';
+    }
+
+    if (weatherBinsInput.binParameters.length > 1
+      && weatherBinsInput.cases.length > 0
+      && weatherBinsInput.cases[0].caseParameters.length > 0) {
+      weatherBinsInput.graphType = 'heatmap';
+    }
+  }
 
   getDataInDateRange(inputData: WeatherBinsInput): Array<any> {
     let dataInDateRange: Array<any> = new Array();
@@ -277,11 +291,8 @@ export class WeatherBinsService {
     return dataInDateRange;
   }
 
-
   setAutoBinCases(inputData: WeatherBinsInput, settings: Settings): WeatherBinsInput {
     inputData.cases = new Array();
-
-    // todo on delete check if existing customized params
     inputData.binParameters.map((binParam, binParametersIndex) => {
       let isParentBinParameter: boolean = binParametersIndex === 0;
       let lowerBound = binParam.startingValue;
@@ -297,25 +308,48 @@ export class WeatherBinsService {
         }
 
         if (isParentBinParameter) {
-          let yParameterCase: WeatherBinCase = {
+          let yParameterBin: WeatherBinCase = {
             caseName: this.getfilledLabelRangeString(settings, binParam.name, lowerBound, upperBound),
-            // caseName: `Bin #${caseIndex + 1}`,
             field: binParam.name,
             lowerBound: lowerBound,
             upperBound: upperBound,
             caseParameters: [],
             totalNumberOfDataPoints: 0
           }
-          inputData.cases.push(yParameterCase);
+          inputData.cases.push(yParameterBin);
         } else {
-          inputData.cases.map(yParameterCase => {
-            yParameterCase.caseParameters.push(caseParameter)
+          inputData.cases.map(yParameterBin => {
+            yParameterBin.caseParameters.push(caseParameter)
           })
         }
 
         caseIndex++;
       };
     });
+
+    return inputData;
+  }
+
+  setAutoSubBins(inputData: WeatherBinsInput): WeatherBinsInput {
+    let xBinParam = inputData.binParameters[1];
+    if (xBinParam) {
+      let lowerBound = xBinParam.startingValue;
+      let caseIndex: number = 0;
+      let upperBound = 0;
+
+      for (lowerBound; upperBound <= xBinParam.endValue; lowerBound += xBinParam.range) {
+        upperBound = lowerBound + xBinParam.range;
+        let caseParameter: CaseParameter = {
+          field: xBinParam.name,
+          lowerBound: lowerBound,
+          upperBound: upperBound
+        }
+        inputData.cases.map(yParameterBin => {
+          yParameterBin.caseParameters.push(caseParameter)
+        })
+        caseIndex++;
+      };
+    }
 
     return inputData;
   }
@@ -334,21 +368,21 @@ export class WeatherBinsService {
     let maxValueObj: any = _.maxBy(dataInDateRange, parameter);
     let min: number = minValueObj[parameter];
     let max: number = maxValueObj[parameter];
-    if (settings.unitsOfMeasure != 'Metric') {
-      if (parameter == 'Dry-bulb (C)' || parameter == 'Wet Bulb (C)' || parameter == 'Dew-point (C)') {
-        min = this.convertUnitsService.value(min).from('C').to('F');
-        max = this.convertUnitsService.value(max).from('C').to('F');
-      } else if (parameter == 'Wspd (m/s)') {
-        min = this.convertUnitsService.value(min).from('m').to('ft');
-        max = this.convertUnitsService.value(max).from('m').to('ft');
-      } else if (parameter == 'Pressure (mbar)') {
-        min = this.convertUnitsService.value(min).from('mbar').to('inHg');
-        max = this.convertUnitsService.value(max).from('mbar').to('inHg');
-      } else if (parameter == 'Lprecip depth (mm)') {
-        min = this.convertUnitsService.value(min).from('mm').to('in');
-        max = this.convertUnitsService.value(max).from('mm').to('in');
+      if (settings.unitsOfMeasure != 'Metric') {
+        if (parameter == 'Dry-bulb (C)' || parameter == 'Wet Bulb (C)' || parameter == 'Dew-point (C)') {
+          min = this.convertUnitsService.value(min).from('C').to('F');
+          max = this.convertUnitsService.value(max).from('C').to('F');
+        } else if (parameter == 'Wspd (m/s)') {
+          min = this.convertUnitsService.value(min).from('m').to('ft');
+          max = this.convertUnitsService.value(max).from('m').to('ft');
+        } else if (parameter == 'Pressure (mbar)') {
+          min = this.convertUnitsService.value(min).from('mbar').to('inHg');
+          max = this.convertUnitsService.value(max).from('mbar').to('inHg');
+        } else if (parameter == 'Lprecip depth (mm)') {
+          min = this.convertUnitsService.value(min).from('mm').to('in');
+          max = this.convertUnitsService.value(max).from('mm').to('in');
+        }
       }
-    }
     return { min: Math.floor(min), max: Math.ceil(max) }
   }
 }
@@ -366,6 +400,7 @@ export interface WeatherBinsInput {
   heatMapHoursMatrix?: Array<Array<any>>,
   fileName: string,
   totalDataPoints: number,
+  graphType: 'heatmap' | 'bar' | undefined,
   binParameters?: BinParameter[],
 }
 
