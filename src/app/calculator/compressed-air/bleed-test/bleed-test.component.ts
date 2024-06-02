@@ -106,7 +106,7 @@ export class BleedTestComponent implements OnInit {
       }
     } else {
       this.assessmentCalculator = this.initNewAssessmentCalculator();
-      await await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
   }
 
