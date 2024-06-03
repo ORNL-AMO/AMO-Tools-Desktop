@@ -11,14 +11,14 @@ export class CalculateLossesService {
 
   constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService, private ssmtService: SsmtService) { }
 
-  calculateLosses(ssmtResults: SSMTOutput, inputData: SSMTInputs, settings: Settings, ssmt: SSMT): SSMTLosses {
+  calculateLosses(ssmtResults: SSMTOutput, inputData: SSMTInputs, settings: Settings, ssmt: SSMT, inReport?: boolean): SSMTLosses {
     let inputCpy: SSMTInputs = JSON.parse(JSON.stringify(inputData));
     let resultsCpy: SSMTOutput = JSON.parse(JSON.stringify(ssmtResults));
     let ssmtCpy: SSMT = JSON.parse(JSON.stringify(ssmt));
     let ssmtLosses: SSMTLosses = this.initLosses();
     let ssmtValid: SsmtValid = this.ssmtService.checkValid(ssmtCpy, settings);
     if (ssmtValid.isValid && !resultsCpy.hasSteamModelerError) {
-      ssmtLosses.stack = this.calculateStack(resultsCpy);
+      ssmtLosses.stack = this.calculateStack(resultsCpy, inputCpy.operationsInput.operatingHoursPerYear, inReport);
       ssmtLosses.deaeratorVentLoss = this.calculateDeaeratorVentLoss(resultsCpy.deaeratorOutput, settings);
       ssmtLosses.highPressureProcessLoss = this.calculateProcessLoss(resultsCpy.highPressureProcessSteamUsage, resultsCpy.highPressureCondensate, settings);
       ssmtLosses.highPressureProcessUsage = resultsCpy.highPressureProcessSteamUsage.processUsage;
@@ -88,8 +88,13 @@ export class CalculateLossesService {
     return ssmtLosses;
   }
 
-  calculateStack(ssmtResults: SSMTOutput): number {
-    let loss: number = ssmtResults.boilerOutput.fuelEnergy - ssmtResults.boilerOutput.boilerEnergy;
+  calculateStack(ssmtResults: SSMTOutput, operatingHoursPerYear: number, inReport?: boolean): number {
+    let loss: number = 0;
+    if (inReport){
+      loss = (ssmtResults.boilerOutput.fuelEnergy - ssmtResults.boilerOutput.boilerEnergy) * operatingHoursPerYear;
+    } else {
+      loss = ssmtResults.boilerOutput.fuelEnergy - ssmtResults.boilerOutput.boilerEnergy;
+    }
     return loss;
   }
 
