@@ -79,22 +79,27 @@ export class WeatherBinsFormService {
   }
 
 
-  setValidators(form: FormGroup) {
+  setValidators(form: FormGroup, forceChangeDetection?: boolean) {
     this.setStartingValueValidator(form);
     this.setEndValueValidator(form);
     this.setRangeValidator(form);
       // this.setBinCountValidator(form);
+      if (forceChangeDetection) {
+        form.controls.startingValue.updateValueAndValidity();
+        form.controls.endValue.updateValueAndValidity();
+        form.controls.range.updateValueAndValidity();
+      }
   }
 
-  setStartingValueValidator(form: FormGroup) {
+  setStartingValueValidator(form: FormGroup, forceChangeDetection?: boolean) {
     form.controls.startingValue.setValidators([GreaterThanValidator.greaterThan(form.controls.min.value - 1), LessThanValidator.lessThan(form.controls.endValue.value), Validators.required])
   }
 
-  setEndValueValidator(form: FormGroup) {
+  setEndValueValidator(form: FormGroup, forceChangeDetection?: boolean) {
     form.controls.endValue.setValidators([GreaterThanValidator.greaterThan(form.controls.startingValue.value), LessThanValidator.lessThan(form.controls.max.value + 1), Validators.required])
   }
-  
-  setRangeValidator(form: FormGroup) {
+
+  setRangeValidator(form: FormGroup, forceChangeDetection?: boolean) {
     form.controls.range.setValidators([GreaterThanValidator.greaterThan(0)])
   }
 
