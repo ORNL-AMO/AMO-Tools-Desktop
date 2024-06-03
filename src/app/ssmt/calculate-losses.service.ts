@@ -78,11 +78,11 @@ export class CalculateLossesService {
 
       ssmtLosses.fuelEnergy = resultsCpy.boilerOutput.fuelEnergy;
       ssmtLosses.makeupWaterEnergy = this.calculateMakeupWaterEnergy(resultsCpy.makeupWater, settings);
-      ssmtLosses.allProcessUsageUsefulEnergy = this.calculateUsefulProcessUsage(resultsCpy, inputCpy.headerInput.numberOfHeaders);
-      ssmtLosses.totalProcessLosses = this.calculateTotalProcessLoss(ssmtLosses);
-      ssmtLosses.totalVentLosses = this.calculateTotalVentLoss(ssmtLosses);
-      ssmtLosses.totalOtherLosses = this.calculateTotalOtherLosses(ssmtLosses);
-      ssmtLosses.totalTurbineLosses = this.calculateTotalTurbineLosses(ssmtLosses);
+      ssmtLosses.allProcessUsageUsefulEnergy = this.calculateUsefulProcessUsage(resultsCpy, inputCpy.headerInput.numberOfHeaders)*inputCpy.operationsInput.operatingHoursPerYear;
+      ssmtLosses.totalProcessLosses = this.calculateTotalProcessLoss(ssmtLosses)*inputCpy.operationsInput.operatingHoursPerYear;
+      ssmtLosses.totalVentLosses = this.calculateTotalVentLoss(ssmtLosses)*inputCpy.operationsInput.operatingHoursPerYear;
+      ssmtLosses.totalOtherLosses = this.calculateTotalOtherLosses(ssmtLosses)*inputCpy.operationsInput.operatingHoursPerYear;
+      ssmtLosses.totalTurbineLosses = this.calculateTotalTurbineLosses(ssmtLosses)*inputCpy.operationsInput.operatingHoursPerYear;
       ssmtLosses.returnedSteamAndCondensate = this.calculateReturnedSteamAndCondensate(resultsCpy.deaeratorOutput, ssmtLosses, settings);
     }
     return ssmtLosses;
