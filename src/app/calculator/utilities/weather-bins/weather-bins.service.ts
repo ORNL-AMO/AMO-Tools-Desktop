@@ -298,11 +298,10 @@ export class WeatherBinsService {
       let upperBound = lowerBound;
       let remainingBinIncrements = binParam.endValue - binParam.startingValue;
 
-      for (lowerBound; remainingBinIncrements >= binParam.range; lowerBound += binParam.range) {
+      for (lowerBound; upperBound < binParam.endValue; lowerBound += binParam.range) {
         upperBound = lowerBound + binParam.range;
-        remainingBinIncrements = binParam.endValue - upperBound;
         if (remainingBinIncrements < binParam.range) {
-          upperBound = lowerBound + binParam.range + remainingBinIncrements;
+           upperBound = lowerBound + remainingBinIncrements;
         }
         let caseParameter: CaseParameter = {
           field: binParam.name,
@@ -325,7 +324,7 @@ export class WeatherBinsService {
             yParameterBin.caseParameters.push(caseParameter)
           })
         }
-
+        remainingBinIncrements = binParam.endValue - upperBound;
         caseIndex++;
       };
     });
