@@ -152,13 +152,13 @@ export class UpdateDataService {
         if (assessmentCalculators) {
             if (assessmentCalculators.bleedTestInputs) {
                 if (assessmentCalculators.bleedTestInputs.atmosphericPressure === undefined || assessmentCalculators.bleedTestInputs.atmosphericPressure === null) {
-                    assessmentCalculators.bleedTestInputs.atmosphericPressure = 0;
+                    assessmentCalculators.bleedTestInputs.atmosphericPressure = 14.7;
                 }
             }
     
-            if (assessmentCalculators.receiverTankInput.airCapacityInputs && assessmentCalculators.receiverTankInput.airCapacityInputs.leakRateInput) {
-                if (assessmentCalculators.receiverTankInput.airCapacityInputs.leakRateInput.dischargeTime) {
-                    assessmentCalculators.receiverTankInput.airCapacityInputs.leakRateInput.dischargeTime = assessmentCalculators.receiverTankInput.airCapacityInputs.leakRateInput.dischargeTime / 60; 
+            if (assessmentCalculators.airSystemCapacityInputs && assessmentCalculators.airSystemCapacityInputs.leakRateInput) {
+                if (assessmentCalculators.airSystemCapacityInputs.leakRateInput.dischargeTime) {
+                    assessmentCalculators.airSystemCapacityInputs.leakRateInput.dischargeTime = assessmentCalculators.airSystemCapacityInputs.leakRateInput.dischargeTime / 60; 
                 }
             }
     
