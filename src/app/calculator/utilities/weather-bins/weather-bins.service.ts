@@ -95,8 +95,6 @@ export class WeatherBinsService {
     let dataInDateRange: Array<any> = this.getDataInDateRange(inputData);
     let zCaseHours = [];
     let flattenedHours = [];
-
-    // todo on delete ignore changes to customized
     inputData.cases.map((yParameterCase: WeatherBinCase, index) => {
      yParameterCase.lowerBoundWarnings = this.getLowerBoundWarnings(yParameterCase, index, inputData.cases);
      yParameterCase.upperBoundWarnings = this.getUpperBoundWarnings(yParameterCase, index, inputData.cases);
@@ -297,10 +295,15 @@ export class WeatherBinsService {
       let isParentBinParameter: boolean = binParametersIndex === 0;
       let lowerBound = binParam.startingValue;
       let caseIndex: number = 0;
-      let upperBound = 0;
-      
-      for (lowerBound; upperBound <= binParam.endValue; lowerBound += binParam.range) {
+      let upperBound = lowerBound;
+      let remainingBinIncrements = binParam.endValue - binParam.startingValue;
+
+      for (lowerBound; remainingBinIncrements >= binParam.range; lowerBound += binParam.range) {
         upperBound = lowerBound + binParam.range;
+        remainingBinIncrements = binParam.endValue - upperBound;
+        if (remainingBinIncrements < binParam.range) {
+          upperBound = lowerBound + binParam.range + remainingBinIncrements;
+        }
         let caseParameter: CaseParameter = {
           field: binParam.name,
           lowerBound: lowerBound,
@@ -409,8 +412,10 @@ export interface BinParameter {
   min?: number,
   max?: number,
   range: number,
+  // binCount?: number,
   startingValue: number,
   endValue: number,
+  // useBinCount?: boolean
 }
 
 

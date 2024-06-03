@@ -27,7 +27,7 @@ export class BinsFormComponent implements OnInit {
   binParametersForms: FormGroup[];
   updateBinParametersForm: any;
 
-  constructor(private weatherBinsService: WeatherBinsService, 
+  constructor(private weatherBinsService: WeatherBinsService,
     private weatherBinFormService: WeatherBinsFormService) { }
 
   ngOnInit(): void {
@@ -68,6 +68,10 @@ export class BinsFormComponent implements OnInit {
       this.binParametersForms = this.weatherBinFormService.getBinParametersForms(this.weatherBinsInput, this.settings);
     }
   }
+  
+  getIsDisabled(parameterIndex: number, casesLength: number, binForm: FormGroup): boolean {
+    return (parameterIndex !== 0 && casesLength === 0) || (binForm && !binForm.valid);
+  }
 
   focusField(str: string) {
     this.weatherBinsService.currentField.next(str);
@@ -77,16 +81,19 @@ export class BinsFormComponent implements OnInit {
   }
 
   save(parameterIndex: number) {
-    this.weatherBinFormService.setBinParameters(this.binParametersForms, this.weatherBinsInput)
-    if (parameterIndex === 0) {
-      this.weatherBinsInput = this.weatherBinsService.setAutoBinCases(this.weatherBinsInput, this.settings);
-    } else if (parameterIndex === 1 && this.weatherBinsInput.cases.length !== 0) {
-      this.weatherBinsInput.cases.map(yParameterBin => {
-        yParameterBin.caseParameters = []
-      });
-      this.weatherBinsInput = this.weatherBinsService.setAutoSubBins(this.weatherBinsInput);
+    this.weatherBinFormService.setBinParameters(this.binParametersForms, this.weatherBinsInput);
+    let parametersValid = this.weatherBinFormService.getFormValid(this.binParametersForms);
+    if (parametersValid) {
+      if (parameterIndex === 0) {
+        this.weatherBinsInput = this.weatherBinsService.setAutoBinCases(this.weatherBinsInput, this.settings);
+      } else if (parameterIndex === 1 && this.weatherBinsInput.cases.length !== 0) {
+        this.weatherBinsInput.cases.map(yParameterBin => {
+          yParameterBin.caseParameters = []
+        });
+        this.weatherBinsInput = this.weatherBinsService.setAutoSubBins(this.weatherBinsInput);
+      }
+      this.weatherBinsService.save(this.weatherBinsInput, this.settings);
     }
-    this.weatherBinsService.save(this.weatherBinsInput, this.settings);
   }
 
   clearBins(parameterIndex: number){   

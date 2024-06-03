@@ -29,6 +29,11 @@ export class WeatherBinsFormService {
     })
   }
 
+  getFormValid(binParameterForms: FormGroup[]): boolean {
+    let hasInValidParameters = binParameterForms.some(binParameterForm => !binParameterForm.valid);
+    return !hasInValidParameters;
+  }
+
   getBinParametersForms(weatherBinsInput: WeatherBinsInput, settings: Settings): FormGroup[] {
     let binParametersForms: Array<FormGroup> = [];
     weatherBinsInput.binParameters.forEach(param => {
@@ -41,7 +46,9 @@ export class WeatherBinsFormService {
         form.controls.endValue.patchValue(form.controls.max.value);
       }
       this.setStartingValueValidator(form)
+      this.setEndValueValidator(form)
       this.setRangeValidator(form);
+      // this.setBinCountValidator(form);
       binParametersForms.push(form)
     });
     return binParametersForms;
@@ -60,6 +67,7 @@ export class WeatherBinsFormService {
     this.setStartingValueValidator(defaultParamForm);
     this.setEndValueValidator(defaultParamForm);
     this.setRangeValidator(defaultParamForm);
+    // this.setBinCountValidator(defaultParamForm);
     binParameterForms.push(defaultParamForm);
   }
 
@@ -72,16 +80,33 @@ export class WeatherBinsFormService {
   }
 
   setStartingValueValidator(form: FormGroup) {
-    form.controls.startingValue.setValidators([GreaterThanValidator.greaterThan(form.controls.min.value - 1), LessThanValidator.lessThan(form.controls.endValue.value)])
+    form.controls.startingValue.setValidators([GreaterThanValidator.greaterThan(form.controls.min.value - 1), LessThanValidator.lessThan(form.controls.endValue.value), Validators.required])
   }
 
   setEndValueValidator(form: FormGroup) {
-    form.controls.endValue.setValidators([GreaterThanValidator.greaterThan(form.controls.startingValue.value), LessThanValidator.lessThan(form.controls.max.value + 1)])
+    form.controls.endValue.setValidators([GreaterThanValidator.greaterThan(form.controls.startingValue.value), LessThanValidator.lessThan(form.controls.max.value + 1), Validators.required])
   }
 
+  
   setRangeValidator(form: FormGroup) {
     form.controls.range.setValidators([GreaterThanValidator.greaterThan(0)])
   }
+
+  // setRangeValidator(form: FormGroup) {
+  //   if (form.controls.useBinCount) {
+  //     form.controls.range.setValidators([])
+  //   } else {
+  //     form.controls.binCount.setValidators([GreaterThanValidator.greaterThan(0), Validators.required])
+  //   }
+  // }
+
+  // setBinCountValidator(form: FormGroup) {
+  //   if (form.controls.useBinCount) {
+  //     form.controls.binCount.setValidators([GreaterThanValidator.greaterThan(0), Validators.required])
+  //   } else {
+  //     form.controls.binCount.setValidators([])
+  //   }
+  // }
 
   getBinParameterForm(binParameter: BinParameter): FormGroup {
     return this.formBuilder.group({
@@ -91,6 +116,8 @@ export class WeatherBinsFormService {
       max: [binParameter.max],
       startingValue: [binParameter.startingValue],
       endValue: [binParameter.endValue],
+      // binCount: [binParameter.binCount],
+      // useBinCount: [binParameter.useBinCount]
     });
   }
 }
