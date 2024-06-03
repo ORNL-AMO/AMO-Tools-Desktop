@@ -117,7 +117,7 @@ export class BinsFormComponent implements OnInit {
   changeParameter(form: FormGroup, parameterIndex: number) {
     this.weatherBinFormService.setParameterMinMax(form, this.weatherBinsInput, this.settings);
     this.weatherBinFormService.setFormDefaultBounds(form, true)
-    this.weatherBinFormService.setValidators(form)
+    this.weatherBinFormService.setValidators(form, true)
     this.clearBins(parameterIndex);
   }
 
