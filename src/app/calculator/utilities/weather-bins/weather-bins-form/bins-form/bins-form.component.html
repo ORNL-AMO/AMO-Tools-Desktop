@@ -41,7 +41,6 @@
             <span *ngIf="binForm.controls.range.errors.greaterThan !== undefined">Value must be greater than
               {{binForm.controls.range.errors.greaterThan}}.</span>
           </span>
-
         </div>
       </div>
       <div class="form-group">
@@ -55,6 +54,7 @@
           </span>
           <span class="alert-danger pull-right small"
             *ngIf="binForm.controls.startingValue.invalid && !binForm.controls.startingValue.pristine">
+            <span *ngIf="binForm.controls.startingValue.errors.required">Value required.</span>
             <span *ngIf="binForm.controls.startingValue.errors.greaterThan">Value must be greater than
               {{binForm.controls.startingValue.errors.greaterThan}}.</span>
             <span *ngIf="binForm.controls.startingValue.errors.lessThan">Value must be less than
@@ -63,7 +63,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="binEndValue">End Value</label>
+        <label for="endValue">End Value</label>
         <div class="input-group">
           <input type="number" class="form-control" id="endValue" formControlName="endValue"
             (focus)="focusField('endValue')">
@@ -73,6 +73,7 @@
           </span>
           <span class="alert-danger pull-right small"
             *ngIf="binForm.controls.endValue.invalid && !binForm.controls.endValue.pristine">
+            <span *ngIf="binForm.controls.endValue.errors.required">Value required.</span>
             <span *ngIf="binForm.controls.endValue.errors.greaterThan">Value must be greater than
               {{binForm.controls.endValue.errors.greaterThan}}.</span>
             <span *ngIf="binForm.controls.endValue.errors.lessThan">Value must be less than
@@ -84,8 +85,8 @@
       <div class="row mt-2">
         <div class="col-12 btn-group btn-group-sm">
           <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" 
-          [ngClass]="{'disabled': parameterIndex !== 0 && weatherBinsInput.cases.length === 0}"
-          [disabled]="parameterIndex !== 0 && weatherBinsInput.cases.length === 0" (click)="save(parameterIndex)">Generate Bins</button>
+          [ngClass]="{'disabled': getIsDisabled(parameterIndex, weatherBinsInput.cases.length, binForm)}"
+          [disabled]="getIsDisabled(parameterIndex, weatherBinsInput.cases.length, binForm)" (click)="save(parameterIndex)">Generate Bins</button>
           <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form btn-margin-10"
             (click)="clearBins(parameterIndex)">Clear Bins</button>
         </div>
