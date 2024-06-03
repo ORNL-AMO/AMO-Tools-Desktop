@@ -177,7 +177,9 @@ export class WeatherBinsHeatMapComponent {
       data: heatMapData
     }
 
-    const csv = Papa.unparse(csvData);
+    const csv = Papa.unparse(csvData, {
+      delimiter: "\t",
+    });
     this.heatmapCSVstring = csv;
   }
 
