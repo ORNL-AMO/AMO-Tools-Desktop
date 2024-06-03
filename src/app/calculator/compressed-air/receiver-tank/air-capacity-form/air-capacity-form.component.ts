@@ -38,7 +38,6 @@ export class AirCapacityFormComponent implements OnInit {
   getAirCapacity() {
     this.airCapacity = this.standaloneService.usableAirCapacity(this.inputs, this.settings);
     this.getTankSize();
-    this.getLeakRate();
     
   }
 
@@ -54,11 +53,6 @@ export class AirCapacityFormComponent implements OnInit {
     }
   }
   
-  getLeakRate() {
-    let numerator = this.airCapacity * (this.inputs.airPressureIn - this.inputs.airPressureOut);
-    let denominator = (this.inputs.leakRateInput.dischargeTime / 60) * this.inputs.leakRateInput.atmosphericPressure;
-    this.leakRate = numerator/denominator;
-  }
 
   changeField(str: string) {
     this.receiverTankService.currentField.next(str);

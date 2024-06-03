@@ -11,6 +11,7 @@ import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { FlueGasByMass, FlueGasByVolume } from '../models/phast/losses/flueGas';
 import { environment } from '../../../environments/environment';
 import { getNewIdString } from '../helperFunctions';
+import { Calculator } from '../models/calculators';
 
 @Injectable()
 export class UpdateDataService {
@@ -144,10 +145,27 @@ export class UpdateDataService {
             }
         }
 
-
         return assessment;
     }
+    
+    updateAssessmentCalculatorVersion(assessmentCalculators: Calculator) {
+        if (assessmentCalculators) {
+            if (assessmentCalculators.bleedTestInputs) {
+                if (assessmentCalculators.bleedTestInputs.atmosphericPressure === undefined || assessmentCalculators.bleedTestInputs.atmosphericPressure === null) {
+                    assessmentCalculators.bleedTestInputs.atmosphericPressure = 0;
+                }
+            }
+    
+            if (assessmentCalculators.receiverTankInput.airCapacityInputs && assessmentCalculators.receiverTankInput.airCapacityInputs.leakRateInput) {
+                if (assessmentCalculators.receiverTankInput.airCapacityInputs.leakRateInput.dischargeTime) {
+                    assessmentCalculators.receiverTankInput.airCapacityInputs.leakRateInput.dischargeTime = assessmentCalculators.receiverTankInput.airCapacityInputs.leakRateInput.dischargeTime / 60; 
+                }
+            }
+    
+        }
+        return assessmentCalculators;
 
+    }
 
     updatePsat(assessment: Assessment): Assessment {
         if (assessment.psat.modifications && assessment.psat.modifications.length > 0) {

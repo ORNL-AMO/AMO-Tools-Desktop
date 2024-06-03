@@ -154,6 +154,7 @@ export interface BleedTestInputs {
     totalSystemVolume: number;
     normalOperatingPressure: number;
     testPressure: number;
+    atmosphericPressure: number;
     time: number;
   }
 
