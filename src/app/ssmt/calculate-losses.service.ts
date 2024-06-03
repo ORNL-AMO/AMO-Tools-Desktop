@@ -83,7 +83,7 @@ export class CalculateLossesService {
       ssmtLosses.totalVentLosses = this.calculateTotalVentLoss(ssmtLosses)*inputCpy.operationsInput.operatingHoursPerYear;
       ssmtLosses.totalOtherLosses = this.calculateTotalOtherLosses(ssmtLosses)*inputCpy.operationsInput.operatingHoursPerYear;
       ssmtLosses.totalTurbineLosses = this.calculateTotalTurbineLosses(ssmtLosses)*inputCpy.operationsInput.operatingHoursPerYear;
-      ssmtLosses.returnedSteamAndCondensate = this.calculateReturnedSteamAndCondensate(resultsCpy.deaeratorOutput, ssmtLosses, settings)*inputCpy.operationsInput.operatingHoursPerYear;
+      ssmtLosses.returnedSteamAndCondensate = this.calculateReturnedSteamAndCondensate(resultsCpy.deaeratorOutput, ssmtLosses, settings);
     }
     return ssmtLosses;
   }
