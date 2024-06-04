@@ -338,9 +338,14 @@ export class WeatherBinsService {
       let lowerBound = xBinParam.startingValue;
       let caseIndex: number = 0;
       let upperBound = 0;
+      let remainingBinIncrements = xBinParam.endValue - xBinParam.startingValue;
 
-      for (lowerBound; upperBound <= xBinParam.endValue; lowerBound += xBinParam.range) {
+
+      for (lowerBound; upperBound < xBinParam.endValue; lowerBound += xBinParam.range) {
         upperBound = lowerBound + xBinParam.range;
+        if (remainingBinIncrements < xBinParam.range) {
+          upperBound = lowerBound + remainingBinIncrements;
+       }
         let caseParameter: CaseParameter = {
           field: xBinParam.name,
           lowerBound: lowerBound,
@@ -349,6 +354,7 @@ export class WeatherBinsService {
         inputData.cases.map(yParameterBin => {
           yParameterBin.caseParameters.push(caseParameter)
         })
+        remainingBinIncrements = xBinParam.endValue - upperBound;
         caseIndex++;
       };
     }
