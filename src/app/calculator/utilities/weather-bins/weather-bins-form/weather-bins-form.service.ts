@@ -100,7 +100,7 @@ export class WeatherBinsFormService {
   }
 
   setRangeValidator(form: FormGroup, forceChangeDetection?: boolean) {
-    form.controls.range.setValidators([GreaterThanValidator.greaterThan(0)])
+    form.controls.range.setValidators([GreaterThanValidator.greaterThan(0), Validators.required])
   }
 
   // setRangeValidator(form: FormGroup) {
