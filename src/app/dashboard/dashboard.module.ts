@@ -24,6 +24,7 @@ import { CopyItemsComponent } from './copy-items/copy-items.component';
 import { DisclaimerComponent } from './disclaimer/disclaimer.component';
 import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/security-and-privacy.module';
 import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/create-assessment-modal.module';
+import { AppErrorModule } from '../shared/errors/app-error.module';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/c
     DirectoryDashboardModule,
     ToastModule,
     SecurityAndPrivacyModule,
-    CreateAssessmentModalModule
+    CreateAssessmentModalModule,
+    AppErrorModule
   ],
   providers: [
     DashboardService,

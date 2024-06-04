@@ -1,2 +1,4 @@
 
 <router-outlet></router-outlet>
+<app-error-modal *ngIf="showAppErrorModal"
+(emitModalClosed)="closeErrorModal($event)"></app-error-modal>

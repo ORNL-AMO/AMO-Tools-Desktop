@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { firstValueFrom, merge, Subscription } from 'rxjs';
+import { catchError, firstValueFrom, merge, Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
@@ -13,6 +13,7 @@ import { SecurityAndPrivacyService } from '../shared/security-and-privacy/securi
 import { ElectronService, ReleaseData } from '../electron/electron.service';
 import { EmailMeasurDataService } from '../shared/email-measur-data/email-measur-data.service';
 import { PwaService } from '../shared/pwa/pwa.service';
+import { AppErrorService } from '../shared/errors/app-error.service';
 
 @Component({
   selector: 'app-core',
@@ -49,7 +50,6 @@ export class CoreComponent implements OnInit {
   showEmailMeasurDataModalSub: Subscription;
   pwaUpdateAvailableSubscription: Subscription;
 
-
   constructor(private electronService: ElectronService,
     private assessmentService: AssessmentService,
     private changeDetectorRef: ChangeDetectorRef,
@@ -62,7 +62,8 @@ export class CoreComponent implements OnInit {
     private securityAndPrivacyService: SecurityAndPrivacyService,
     private emailMeasurDataService: EmailMeasurDataService,
     private pwaService: PwaService,
-    private inventoryDbService: InventoryDbService, private sqlDbApiService: SqlDbApiService) {
+    private appErrorService: AppErrorService,
+    private inventoryDbService: InventoryDbService) {
   }
 
   ngOnInit() {
@@ -96,8 +97,7 @@ export class CoreComponent implements OnInit {
 
     this.pwaUpdateAvailableSubscription = this.pwaService.displayUpdateToast.subscribe(updatePwa => {
       this.updatePwa = updatePwa;
-    })
-
+    });
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
       this.inTutorialsView = (this.router.url === '/tutorials');
@@ -117,7 +117,6 @@ export class CoreComponent implements OnInit {
     this.showEmailMeasurDataModalSub = this.emailMeasurDataService.showEmailMeasurDataModal.subscribe(showModal => {
       this.showEmailMeasurDataModal = showModal;
     });
-
   }
 
 
@@ -134,27 +133,35 @@ export class CoreComponent implements OnInit {
   }
 
   async initData() {
-    let existingDirectories: number = await firstValueFrom(this.directoryDbService.count());
-    if (existingDirectories === 0) {
-      await this.coreService.createDefaultDirectories();
-      await this.coreService.createExamples();
-      await this.coreService.createDirectorySettings();
-      this.setAllDbData();
-    } else {
-      this.setAllDbData();
-    }
+      let existingDirectories: number = await firstValueFrom(this.directoryDbService.count());
+      if (existingDirectories === 0) {
+        try {
+          await this.coreService.createDefaultDirectories();
+          await this.coreService.createExamples();
+          await this.coreService.createDirectorySettings();
+        } catch (e) {
+          this.appErrorService.handleAppError(e, 'Error creating MEASUR database');
+        }
+        this.setAllDbData();
+      } else {
+        this.setAllDbData();
+      }
   }
 
   setAllDbData() {
-    this.coreService.getAllAppData().subscribe(initializedData => {
-      this.directoryDbService.setAll(initializedData.directories);
-      this.settingsDbService.setAll(initializedData.settings);
-      this.assessmentDbService.setAll(initializedData.assessments);
-      this.calculatorDbService.setAll(initializedData.calculators);
-      this.inventoryDbService.setAll(initializedData.inventoryItems);
-      this.idbStarted = true;
-      this.changeDetectorRef.detectChanges();
-    });
+      this.coreService.getAllAppData()
+      .pipe(catchError(error => this.appErrorService.handleObservableAppError('Error loading MEASUR database', error))).subscribe({
+        next: (initializedData) => {
+          this.directoryDbService.setAll(initializedData.directories);
+          this.settingsDbService.setAll(initializedData.settings);
+          this.assessmentDbService.setAll(initializedData.assessments);
+          this.calculatorDbService.setAll(initializedData.calculators);
+          this.inventoryDbService.setAll(initializedData.inventoryItems);
+          this.idbStarted = true;
+          this.changeDetectorRef.detectChanges();
+        },
+        error: (error) => {}
+      });
   }
 
   hideToast() {

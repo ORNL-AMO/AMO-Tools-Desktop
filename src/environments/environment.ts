@@ -10,6 +10,7 @@ import packageInfo from '../../package.json';
 
 export const environment = {
   production: false,
+  name: 'development',
   version: packageInfo.version,
   useServiceWorker: false,
   measurWeatherApi: 'https://weather.ornl.gov/',

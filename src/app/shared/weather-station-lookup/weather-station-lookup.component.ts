@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MeasurHttpError, WeatherStation, WeatherStationLookupService, ZipGeoData } from './weather-station-lookup.service';
+import { WeatherStation, WeatherStationLookupService } from './weather-station-lookup.service';
 import * as Papa from 'papaparse';
 import { CsvImportData } from '../helper-services/csv-to-json.service';
 import { WeatherBinsService, WeatherDataSourceView,  } from '../../calculator/utilities/weather-bins/weather-bins.service';
@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import US_ZIPCODES from '../../../assets/us-zipcodes-lat-lon.json';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { Subscription } from 'rxjs';
+import { MeasurHttpError } from '../errors/errors';
 
 @Component({
   selector: 'app-weather-station-lookup',
@@ -95,8 +96,6 @@ export class WeatherStationLookupComponent implements OnInit {
       },
       error: (error: MeasurHttpError) => {
         // Ignore connectivity error if the user has already assigned data
-        let a = !this.weatherBinsService.importDataFromCsv
-        let b = this.weatherDataSourceView == 'lookup'
         if (!this.weatherBinsService.importDataFromCsv.getValue() && this.weatherDataSourceView == 'lookup') {
           this.weatherLookupError = error
         }

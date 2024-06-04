@@ -1,0 +1,28 @@
+<div bsModal #appErrorModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="appErrorModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-75">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header p-2">
+                    <span class="card-header-text">
+                        MEASUR Error
+                    </span>
+                    <button class="close" aria-label="Close" (click)="close()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div>
+                    <div class="alert alert-danger p-3 text-left">
+                        <h2 class="h4">{{measurFormattedError.message}}</h2>
+                    </div>
+                    <app-error-reporting [measurFormattedError]="measurFormattedError"></app-error-reporting>
+                </div>
+                <div class="modal-footer justify-content-between px-3 p-2">
+                    <button type="button" class="btn btn-secondary pull-right btn-sm mr-2" (click)="close()">
+                        <span>Close</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
