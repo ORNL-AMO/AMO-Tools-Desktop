@@ -193,7 +193,7 @@ export const otherFuels: Array<OtherFuel> = [
         energySource: 'Mixed Fuels',
         fuelTypes: [
             {
-                fuelType: '',
+                fuelType: 'Mixed',
                 outputRate: 0
             }
         ]

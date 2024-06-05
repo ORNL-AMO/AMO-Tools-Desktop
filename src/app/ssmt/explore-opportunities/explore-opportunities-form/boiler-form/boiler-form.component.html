@@ -101,7 +101,7 @@
   </li>
 
   <li class="explore-opps-item mb-2">
-    <div class="explore-opps-form">
+    <div *ngIf="baselineCo2SavingsData.energySource != 'Mixed Fuels'" class="explore-opps-form">
       <div class="text-center">
         <label for="fuelType" class="baseline-value-label">Fuel Type</label>
         <div class="text-muted text-center baseline-value-input">
@@ -110,7 +110,7 @@
       </div>
     </div>
     
-  <div class="explore-opps-form">
+  <div *ngIf="modificationCo2SavingsData.energySource != 'Mixed Fuels'" class="explore-opps-form">
     <div class="form-group explore-opps-formgroup">
       <label for="fuelType" class="mod-value-label">Fuel Type</label>
       <div class="input-group">
