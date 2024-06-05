@@ -13,6 +13,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompareService } from '../compare.service';
 import { Subscription } from 'rxjs';
+import { copyObject } from '../../shared/helperFunctions';
 
 
 @Component({
@@ -191,7 +192,6 @@ export class OperationsComponent implements OnInit {
 
   initForm(){
     this.operationsForm = this.operationsService.getForm(this.ssmt, this.settings);
-    
   }
 
   disableForm() {
@@ -237,7 +237,7 @@ export class OperationsComponent implements OnInit {
     this.ssmt.operatingCosts = newData.operatingCosts;
     this.ssmt.operatingHours.hoursPerYear = newData.operatingHours.hoursPerYear;
     this.ssmt.generalSteamOperations = newData.generalSteamOperations;
-    this.ssmt.co2SavingsData = this.co2SavingsData;
+    this.ssmt.co2SavingsData = copyObject(this.co2SavingsData);
     this.emitSave.emit(this.ssmt);
     this.isCo2SavingsDifferent();
   }
