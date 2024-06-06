@@ -38,6 +38,7 @@ import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/securit
 import { BrowsingDataToastModule } from '../shared/browsing-data-toast/browsing-data-toast.module';
 import { PumpInventoryModule } from '../pump-inventory/pump-inventory.module';
 import { EmailMeasurDataModule } from '../shared/email-measur-data/email-measur-data.module';
+import { CompressedAirInventoryModule } from '../compressed-air-inventory/compressed-air-inventory.module';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { EmailMeasurDataModule } from '../shared/email-measur-data/email-measur-
     SecurityAndPrivacyModule,
     BrowsingDataToastModule,
     AnalyticsModule,
-    EmailMeasurDataModule
+    EmailMeasurDataModule,
+    CompressedAirInventoryModule
   ],
   providers: [
     AssessmentService,

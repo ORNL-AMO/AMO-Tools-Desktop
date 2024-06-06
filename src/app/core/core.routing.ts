@@ -114,6 +114,7 @@ import { BleedTestComponent } from '../calculator/compressed-air/bleed-test/blee
 import { DisclaimerComponent } from '../dashboard/disclaimer/disclaimer.component';
 import { PumpInventoryComponent } from '../pump-inventory/pump-inventory.component';
 import { pumpInventoryRoutes } from '../pump-inventory/pump-inventory.routing';
+import { CompressedAirInventoryComponent } from '../compressed-air-inventory/compressed-air-inventory.component';
 
 export const coreRoutes: Routes = [
   {
@@ -592,5 +593,10 @@ export const coreRoutes: Routes = [
     path: '**', 
     component: NotFoundComponent 
   },  
+  {
+    component: CompressedAirInventoryComponent,
+    path: 'compressed-air-inventory',
+    //children: pumpInventoryRoutes
+  },
 
 ];
