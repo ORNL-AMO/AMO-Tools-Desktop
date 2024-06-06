@@ -1,0 +1,12 @@
+span.measur-item-type::first-letter {
+    text-transform: capitalize;
+  }
+  
+  .card-header-text{
+    font-size: 20px;
+}
+
+
+.modal-lg {
+  max-width: 40%;
+}

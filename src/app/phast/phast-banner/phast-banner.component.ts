@@ -5,6 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
+import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 @Component({
   selector: 'app-phast-banner',
   templateUrl: './phast-banner.component.html',
@@ -20,6 +21,7 @@ export class PhastBannerComponent implements OnInit {
   mainTabSub: Subscription;
   bannerCollapsed: boolean = true;
   constructor(private phastService: PhastService,
+    private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService,  private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit() {
@@ -85,5 +87,15 @@ export class PhastBannerComponent implements OnInit {
 
   openExportModal(){
     this.phastService.showExportModal.next(true);
+  }
+
+  emailTreasureHuntData() {
+    this.emailMeasurDataService.measurItemAttachment = {
+      itemType: 'assessment',
+      itemName: this.assessment.name,
+      itemData: this.assessment
+    }
+    this.emailMeasurDataService.emailItemType.next('PHAST');
+    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 }

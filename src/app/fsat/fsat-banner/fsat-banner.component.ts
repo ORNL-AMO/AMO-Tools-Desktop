@@ -4,6 +4,7 @@ import { FsatService } from '../fsat.service';
 import { Subscription } from 'rxjs';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
+import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
   selector: 'app-fsat-banner',
@@ -18,6 +19,7 @@ export class FsatBannerComponent implements OnInit {
   mainTabSubscription: Subscription;
   bannerCollapsed: boolean = true;
   constructor(private fsatService: FsatService, 
+    private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit() {
@@ -83,5 +85,15 @@ export class FsatBannerComponent implements OnInit {
 
   openExportModal(){
     this.fsatService.showExportModal.next(true);
+  }
+
+  emailTreasureHuntData() {
+    this.emailMeasurDataService.measurItemAttachment = {
+      itemType: 'assessment',
+      itemName: this.assessment.name,
+      itemData: this.assessment
+    }
+    this.emailMeasurDataService.emailItemType.next('FSAT');
+    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 }

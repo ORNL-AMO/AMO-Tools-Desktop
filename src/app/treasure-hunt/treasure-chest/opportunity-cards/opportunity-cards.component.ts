@@ -199,7 +199,9 @@ export class OpportunityCardsComponent implements OnInit {
     let newOpportunityCard: OpportunityCardData = JSON.parse(JSON.stringify(cardData));
     let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
     newOpportunityCard = this.calculatorsService.copyOpportunity(newOpportunityCard, treasureHunt, this.settings);
-    this.opportunityCardList.push(newOpportunityCard);
+    let opportunityCardList: OpportunityCardData[] = Array.from(this.opportunityCardList);
+    opportunityCardList.push(newOpportunityCard);
+    this.opportunityCardList = opportunityCardList;
     this.treasureHuntService.treasureHunt.next(treasureHunt);
     this.updateAllIndexes();
     this.updateopportunityCardList();

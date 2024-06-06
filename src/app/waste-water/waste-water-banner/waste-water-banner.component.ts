@@ -5,6 +5,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { WasteWaterData } from '../../shared/models/waste-water';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { WasteWaterService } from '../waste-water.service';
+import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
   selector: 'app-waste-water-banner',
@@ -27,6 +28,7 @@ export class WasteWaterBannerComponent implements OnInit {
   tabsCollapsed: boolean = true;
   
   constructor(private wasteWaterService: WasteWaterService, 
+    private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
 
   ngOnInit(): void {
@@ -121,5 +123,15 @@ export class WasteWaterBannerComponent implements OnInit {
 
   openExportModal(){
     this.wasteWaterService.showExportModal.next(true);
+  }
+
+  emailTreasureHuntData() {
+    this.emailMeasurDataService.measurItemAttachment = {
+      itemType: 'assessment',
+      itemName: this.assessment.name,
+      itemData: this.assessment
+    }
+    this.emailMeasurDataService.emailItemType.next('WasteWater');
+    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 }

@@ -101,23 +101,27 @@
           </div>
           <div class="my-2" *ngIf="currentField == 'airPressureIn'">
             <h6>
-              Air Pressure - High
+              Normal Operating Pressure
               <br>
               <small class="text-muted">
-                Pressure of air entering the tank in psi.
+                The is the system pressure when you start recording for the test. The system should be
+                pumped up to normal operating pressure before starting the test.
                 <hr>
               </small>
             </h6>
           </div>
           <div class="my-2" *ngIf="currentField == 'airPressureOut'">
             <h6>
-              Air Pressure - Low
+              Test Pressure
               <br>
               <small class="text-muted">
-                Pressure of air leaving the tank in psi.
+                The is the pressure that the system will decay to during the recorded time. The ideal
+                test
+                pressure should be about half of the normal operating pressure.
                 <hr>
               </small>
             </h6>
+            <img class="bleed-test-help" src="assets/images/bleedTest-help.png">
           </div>
           <div class="my-2" *ngIf="currentField == 'atmosphericPressure'">
             <h6>
@@ -133,12 +137,14 @@
           </div>
           <div class="my-2" *ngIf="currentField == 'dischargeTime'">
             <h6>
-              Discharge Time
+              Time (in minutes)
               <br>
               <small class="text-muted">
-                Time required to fully discharge the system.
+                The recorded time it takes for the normal operating pressure to reach the lower test
+                pressure while the system is not operating.
                 <hr>
               </small>
+              <img class="bleed-test-help" src="assets/images/bleedTest-help.png">
             </h6>
           </div>
         </div>

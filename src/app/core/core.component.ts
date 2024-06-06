@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { catchError, firstValueFrom, merge, Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
@@ -9,9 +9,11 @@ import { CoreService } from './core.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
-import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 import { ElectronService, ReleaseData } from '../electron/electron.service';
+import { EmailMeasurDataService } from '../shared/email-measur-data/email-measur-data.service';
+import { PwaService } from '../shared/pwa/pwa.service';
+import { AppErrorService } from '../shared/errors/app-error.service';
 
 @Component({
   selector: 'app-core',
@@ -20,7 +22,8 @@ import { ElectronService, ReleaseData } from '../electron/electron.service';
 })
 
 export class CoreComponent implements OnInit {
-  showUpdateToast: boolean;
+  updateDesktop: boolean;
+  updatePwa: boolean;
   showBrowsingDataToast: boolean;
   hideTutorial: boolean = true;
   openingTutorialSub: Subscription;
@@ -38,13 +41,14 @@ export class CoreComponent implements OnInit {
   analyticsSessionId: string;
   modalOpenSub: Subscription;
   showSecurityAndPrivacyModalSub: Subscription;
-  isModalOpen: boolean;
   showSecurityAndPrivacyModal: boolean;
+  showEmailMeasurDataModal: boolean;
   electronUpdateAvailableSub: Subscription;
   assessmentUpdateAvailableSub: Subscription;
   updateAvailable: boolean;
   releaseDataSub: Subscription;
-
+  showEmailMeasurDataModalSub: Subscription;
+  pwaUpdateAvailableSubscription: Subscription;
 
   constructor(private electronService: ElectronService,
     private assessmentService: AssessmentService,
@@ -52,12 +56,14 @@ export class CoreComponent implements OnInit {
     private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
-    private analyticsService: AnalyticsService,
     private calculatorDbService: CalculatorDbService,
     private coreService: CoreService,
     private router: Router,
     private securityAndPrivacyService: SecurityAndPrivacyService,
-    private inventoryDbService: InventoryDbService, private sqlDbApiService: SqlDbApiService) {
+    private emailMeasurDataService: EmailMeasurDataService,
+    private pwaService: PwaService,
+    private appErrorService: AppErrorService,
+    private inventoryDbService: InventoryDbService) {
   }
 
   ngOnInit() {
@@ -70,7 +76,7 @@ export class CoreComponent implements OnInit {
       this.electronUpdateAvailableSub = this.electronService.updateAvailable.subscribe(val => {
         this.updateAvailable = val;
         if (this.updateAvailable) {
-          this.showUpdateToast = true;
+          this.updateDesktop = true;
           this.assessmentService.updateAvailable.next(true);
           this.changeDetectorRef.detectChanges();
         }
@@ -84,11 +90,14 @@ export class CoreComponent implements OnInit {
 
     this.assessmentUpdateAvailableSub = this.assessmentService.updateAvailable.subscribe(val => {
       if (val == true) {
-        this.showUpdateToast = true;
+        this.updateDesktop = true;
         this.changeDetectorRef.detectChanges();
       }
     });
 
+    this.pwaUpdateAvailableSubscription = this.pwaService.displayUpdateToast.subscribe(updatePwa => {
+      this.updatePwa = updatePwa;
+    });
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
       this.inTutorialsView = (this.router.url === '/tutorials');
@@ -101,14 +110,13 @@ export class CoreComponent implements OnInit {
 
     this.initData();
 
-    this.modalOpenSub = this.securityAndPrivacyService.modalOpen.subscribe(val => {
-      this.isModalOpen = val;
-    });
-
     this.showSecurityAndPrivacyModalSub = this.securityAndPrivacyService.showSecurityAndPrivacyModal.subscribe(showSecurityAndPrivacyModal => {
       this.showSecurityAndPrivacyModal = showSecurityAndPrivacyModal;
     });
 
+    this.showEmailMeasurDataModalSub = this.emailMeasurDataService.showEmailMeasurDataModal.subscribe(showModal => {
+      this.showEmailMeasurDataModal = showModal;
+    });
   }
 
 
@@ -120,31 +128,40 @@ export class CoreComponent implements OnInit {
     this.assessmentUpdateAvailableSub.unsubscribe();
     this.openingTutorialSub.unsubscribe();
     this.showSecurityAndPrivacyModalSub.unsubscribe();
-    this.modalOpenSub.unsubscribe();
+    this.showEmailMeasurDataModalSub.unsubscribe();
+    this.pwaUpdateAvailableSubscription.unsubscribe();
   }
 
   async initData() {
-    let existingDirectories: number = await firstValueFrom(this.directoryDbService.count());
-    if (existingDirectories === 0) {
-      await this.coreService.createDefaultDirectories();
-      await this.coreService.createExamples();
-      await this.coreService.createDirectorySettings();
-      this.setAllDbData();
-    } else {
-      this.setAllDbData();
-    }
+      let existingDirectories: number = await firstValueFrom(this.directoryDbService.count());
+      if (existingDirectories === 0) {
+        try {
+          await this.coreService.createDefaultDirectories();
+          await this.coreService.createExamples();
+          await this.coreService.createDirectorySettings();
+        } catch (e) {
+          this.appErrorService.handleAppError(e, 'Error creating MEASUR database');
+        }
+        this.setAllDbData();
+      } else {
+        this.setAllDbData();
+      }
   }
 
   setAllDbData() {
-    this.coreService.getAllAppData().subscribe(initializedData => {
-      this.directoryDbService.setAll(initializedData.directories);
-      this.settingsDbService.setAll(initializedData.settings);
-      this.assessmentDbService.setAll(initializedData.assessments);
-      this.calculatorDbService.setAll(initializedData.calculators);
-      this.inventoryDbService.setAll(initializedData.inventoryItems);
-      this.idbStarted = true;
-      this.changeDetectorRef.detectChanges();
-    });
+      this.coreService.getAllAppData()
+      .pipe(catchError(error => this.appErrorService.handleObservableAppError('Error loading MEASUR database', error))).subscribe({
+        next: (initializedData) => {
+          this.directoryDbService.setAll(initializedData.directories);
+          this.settingsDbService.setAll(initializedData.settings);
+          this.assessmentDbService.setAll(initializedData.assessments);
+          this.calculatorDbService.setAll(initializedData.calculators);
+          this.inventoryDbService.setAll(initializedData.inventoryItems);
+          this.idbStarted = true;
+          this.changeDetectorRef.detectChanges();
+        },
+        error: (error) => {}
+      });
   }
 
   hideToast() {
@@ -158,7 +175,8 @@ export class CoreComponent implements OnInit {
   }
 
   hideUpdateToast() {
-    this.showUpdateToast = false;
+    this.updateDesktop = false;
+    this.updatePwa = false;
     this.changeDetectorRef.detectChanges();
   }
 
@@ -175,6 +193,11 @@ export class CoreComponent implements OnInit {
   closeNoticeModal(isClosedEvent?: boolean) {
     this.securityAndPrivacyService.modalOpen.next(false)
     this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(false);
+  }
+
+  closeEmailModal(isClosedEvent?: boolean) {
+    this.emailMeasurDataService.modalOpen.next(false)
+    this.emailMeasurDataService.showEmailMeasurDataModal.next(false);
   }
 
 }

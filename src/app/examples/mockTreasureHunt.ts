@@ -62,7 +62,7 @@ export const MockTreasureHunt: Assessment = {
                 "userEnteredModificationEmissions": false,
                 "zipcode": '',
             },
-            "waterUsage": 40000000,
+            "waterUsage": 40000,
             "waterCosts": 100000,
             "waterUsed": true,
             "waterCO2OutputRate": 0,
@@ -1171,7 +1171,7 @@ export const MockTreasureHunt: Assessment = {
             },
             {
                 "type": "Water",
-                "amount": 3000000
+                "amount": 3000
             }],
             "modificationEnergyUseItems": [{
                 "type": "Gas",
@@ -1179,7 +1179,7 @@ export const MockTreasureHunt: Assessment = {
             },
             {
                 "type": "Water",
-                "amount": 1400000
+                "amount": 1400
             }],
             "opportunityType": "opportunity-sheet",
             "selected": true

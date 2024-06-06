@@ -23,6 +23,7 @@ export class BleedTestService {
   initDefaultEmptyInputs() {
     let emptyBleedTest: BleedTestInput = {
       totalSystemVolume: 0,
+      atmosphericPressure: 0,
       normalOperatingPressure: 150,
       testPressure: 0,
       time: 0
@@ -34,6 +35,7 @@ export class BleedTestService {
   getExampleData(settings: Settings): BleedTestInput {
     let emptyBleedTest: BleedTestInput = {
       totalSystemVolume: 100,
+      atmosphericPressure: 14.7,
       normalOperatingPressure: 150,
       testPressure: 75,
       time: 120
@@ -49,6 +51,7 @@ export class BleedTestService {
       copyInputs.totalSystemVolume = Math.round(this.convertUnitsService.value(copyInputs.totalSystemVolume).from('ft3').to('m3') * 100) / 100;
       copyInputs.normalOperatingPressure = Math.round(this.convertUnitsService.value(copyInputs.normalOperatingPressure).from('psig').to('barg') * 100) / 100;
       copyInputs.testPressure = Math.round(this.convertUnitsService.value(copyInputs.testPressure).from('psig').to('barg') * 100) / 100;
+      copyInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(copyInputs.atmosphericPressure).from('psia').to('kPaa') * 100) / 100;
     }
     return copyInputs;
   }
@@ -68,7 +71,7 @@ export class BleedTestService {
       }
       
       let leakageNumerator: number = copyInputs.totalSystemVolume * (copyInputs.normalOperatingPressure - copyInputs.testPressure);
-      let leakageDenominator: number = copyInputs.time * 14.7;
+      let leakageDenominator: number = copyInputs.time * copyInputs.atmosphericPressure;
       // ft3/min
       let leakageResult: number = (leakageNumerator / leakageDenominator) * 1.25;
 
@@ -83,6 +86,7 @@ export class BleedTestService {
     let form: UntypedFormGroup = this.formBuilder.group({
       totalSystemVolume: [inputObj.totalSystemVolume],
       normalOperatingPressure: [inputObj.normalOperatingPressure],
+      atmosphericPressure: [inputObj.atmosphericPressure],
       testPressure: [inputObj.testPressure],
       time: [inputObj.time]
 
@@ -95,6 +99,7 @@ export class BleedTestService {
     form = this.setValidators(form);
     let bleedTestInput: BleedTestInput = {
       totalSystemVolume: form.controls.totalSystemVolume.value,
+      atmosphericPressure: form.controls.atmosphericPressure.value,
       normalOperatingPressure: form.controls.normalOperatingPressure.value,
       testPressure: form.controls.testPressure.value,
       time: form.controls.time.value
@@ -105,6 +110,7 @@ export class BleedTestService {
   setValidators(form: UntypedFormGroup): UntypedFormGroup {
     form.controls.totalSystemVolume.setValidators([Validators.required, Validators.min(0)]);
     form.controls.normalOperatingPressure.setValidators([Validators.required, Validators.min(0)]);
+    form.controls.atmosphericPressure.setValidators([Validators.required, Validators.min(0)]);
     form.controls.testPressure.setValidators([Validators.required, Validators.min(0), Validators.max(form.controls.normalOperatingPressure.value)]);
     form.controls.time.setValidators([Validators.required, Validators.min(0)]);
     return form;

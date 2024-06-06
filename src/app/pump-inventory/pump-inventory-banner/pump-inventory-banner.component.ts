@@ -8,6 +8,7 @@ import { IntegrationStateService } from '../../shared/connected-inventory/integr
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import _ from 'lodash';
 import { DashboardService } from '../../dashboard/dashboard.service';
+import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
   selector: 'app-pump-inventory-banner',
@@ -33,7 +34,9 @@ export class PumpInventoryBannerComponent implements OnInit {
   catalogClassStatus: string[];
   bannerCollapsed: boolean = true;
   // hasInvalidPumpItem: boolean;
-    constructor(private pumpInventoryService: PumpInventoryService, private integrationStateService: IntegrationStateService, 
+    constructor(private pumpInventoryService: PumpInventoryService, 
+    private emailMeasurDataService: EmailMeasurDataService,
+    private integrationStateService: IntegrationStateService, 
       private pumpCatalogService: PumpCatalogService, private securityAndPrivacyService: SecurityAndPrivacyService, private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
@@ -173,5 +176,15 @@ export class PumpInventoryBannerComponent implements OnInit {
 
   navigateHome() {
     this.dashboardService.navigateWithSidebarOptions('/landing-screen', {shouldCollapse: false});
+  }
+
+  emailTreasureHuntData() {
+    this.emailMeasurDataService.measurItemAttachment = {
+      itemType: 'inventory',
+      itemName: this.pumpInventoryItem.name,
+      itemData: this.pumpInventoryItem
+    }
+    this.emailMeasurDataService.emailItemType.next('PUMP-inventory');
+    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 }

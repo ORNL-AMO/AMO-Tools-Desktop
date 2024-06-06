@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import _ from 'lodash';
@@ -19,6 +19,7 @@ import { PsatIntegrationService } from '../connected-inventory/psat-integration.
 import { IntegrationStateService } from '../connected-inventory/integration-state.service';
 import { SettingsService } from '../../settings/settings.service';
 import { AnalyticsService } from '../analytics/analytics.service';
+import { PumpItem } from '../../pump-inventory/pump-inventory';
 
 @Component({
   selector: 'app-create-assessment-modal',
@@ -31,6 +32,9 @@ export class CreateAssessmentModalComponent {
   connectedInventoryItem: ConnectedItem;
   @Input() 
   integratedCreateType: string;
+  @Output('onClose')
+  onClose = new EventEmitter<boolean>();
+
   newAssessmentForm: UntypedFormGroup;
   directories: Array<Directory>;
   showNewFolder: boolean = false;
@@ -75,9 +79,10 @@ export class CreateAssessmentModalComponent {
   }
 
   initForm() {
-    let defaultName: string = 'New Assessment';
     let defaultType: string = this.integratedCreateType? this.integratedCreateType : 'Pump';
     let disableAssessmentType: boolean = Boolean(this.integratedCreateType);
+    let defaultName: string = this.getAssessmentName(defaultType);
+
     return this.formBuilder.group({
       'assessmentName': [defaultName, Validators.required],
       'assessmentType': [{ value: defaultType, disabled: disableAssessmentType }, Validators.required],
@@ -94,6 +99,22 @@ export class CreateAssessmentModalComponent {
     this.createModal.hide();
     this.dashboardService.newAssessmentType = undefined;
     this.dashboardService.createAssessment.next(false);
+    this.onClose.emit(true);
+  }
+
+  getAssessmentName(assessmentType: string) {
+    let assessmentName: string = 'New Assessment';
+
+    if (this.connectedInventoryItem) {
+      let connectedInventoryData: ConnectedInventoryData = this.getConnectedInventoryData();
+      if (assessmentType === 'Pump') {
+        let selectedPumpItem: PumpItem = this.psatIntegrationService.getConnectedPumpItem(connectedInventoryData.connectedItem);
+        let currentDate = new Date();
+        const dateStr = (currentDate.getMonth() + 1) + '-' + currentDate.getDate() + '-' + currentDate.getFullYear();
+        assessmentName = `${selectedPumpItem.name}_${dateStr}`;
+      }
+    }
+    return assessmentName;
   }
 
   async createAssessment() {
@@ -175,10 +196,15 @@ export class CreateAssessmentModalComponent {
     }
   }
 
-  async createFromPumpInventoryItem(createdAssessment: Assessment) {
+  getConnectedInventoryData(): ConnectedInventoryData {
     let connectedInventoryData: ConnectedInventoryData = this.integrationStateService.connectedInventoryData.getValue();
     connectedInventoryData.connectedItem = this.connectedInventoryItem;
     connectedInventoryData.canConnect = true;
+    return connectedInventoryData;
+  }
+
+  async createFromPumpInventoryItem(createdAssessment: Assessment) {
+    let connectedInventoryData: ConnectedInventoryData = this.getConnectedInventoryData();
 
     let assessmentSettings = this.settingsDbService.getByAssessmentId(createdAssessment, false);
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(assessmentSettings);

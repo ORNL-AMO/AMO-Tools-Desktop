@@ -49,7 +49,7 @@ export class ByEquationFormComponent implements OnInit {
     let defaultData: ByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
     if (defaultData == undefined) {
       if (this.equipmentType == 'fan') {
-        defaultData = this.equipmentCurveService.getFanByEquationDefault(this.flowUnit, this.settings.fanPressureMeasurement, 'inH2o');
+        defaultData = this.equipmentCurveService.getFanByEquationDefault(this.settings);
       } else if (this.equipmentType == 'pump') {
         defaultData = this.equipmentCurveService.getResetByEquationInputs();
       }

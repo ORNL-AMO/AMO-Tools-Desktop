@@ -12,6 +12,7 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { FsatService } from '../../fsat/fsat.service';
 import { PhastIntegrationService } from '../../phast/phast-integration.service';
 import { AssessmentService } from '../../dashboard/assessment.service';
+import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment/compressed-air-assessment-results.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,7 @@ export class AssessmentIntegrationService {
     private psatService: PsatService,
     private fsatService: FsatService,
     private phastIntegrationService: PhastIntegrationService,
+    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
     ) { }
 
   async getExistingIntegratedAssessment(existingIntegrationData: ExistingIntegrationData) {
@@ -55,10 +57,11 @@ export class AssessmentIntegrationService {
         this.psatService.setIntegratedAssessmentData(integratedAssessment, assessmentSettings);
       } else if (assessmentType === 'FSAT') {
         this.fsatService.setIntegratedAssessmentData(integratedAssessment, assessmentSettings);
+      } else if (assessmentType === 'CompressedAir') {
+        this.compressedAirAssessmentResultsService.setIntegratedAssessmentData(integratedAssessment, assessmentSettings);
       } else if (assessmentType === 'SSMT') {
       } else if (assessmentType === 'WasteWater') {
-      } else if (assessmentType === 'CompressedAir') {
-      }
+      } 
     }
 
     return integratedAssessment;

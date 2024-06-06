@@ -10,12 +10,13 @@ import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { FlueGasByMass, FlueGasByVolume } from '../models/phast/losses/flueGas';
 import { environment } from '../../../environments/environment';
-import { HelperFunctionsService } from './helper-functions.service';
+import { getNewIdString } from '../helperFunctions';
+import { Calculator } from '../models/calculators';
 
 @Injectable()
 export class UpdateDataService {
 
-    constructor(private convertUnitsService: ConvertUnitsService, private helperFunctions: HelperFunctionsService) { }
+    constructor(private convertUnitsService: ConvertUnitsService) { }
 
     updateAssessmentVersion(assessment: Assessment): Assessment {
         if (assessment.type === 'PSAT') {
@@ -144,16 +145,33 @@ export class UpdateDataService {
             }
         }
 
-
         return assessment;
     }
+    
+    updateAssessmentCalculatorVersion(assessmentCalculators: Calculator) {
+        if (assessmentCalculators) {
+            if (assessmentCalculators.bleedTestInputs) {
+                if (assessmentCalculators.bleedTestInputs.atmosphericPressure === undefined || assessmentCalculators.bleedTestInputs.atmosphericPressure === null) {
+                    assessmentCalculators.bleedTestInputs.atmosphericPressure = 14.7;
+                }
+            }
+    
+            if (assessmentCalculators.airSystemCapacityInputs && assessmentCalculators.airSystemCapacityInputs.leakRateInput) {
+                if (assessmentCalculators.airSystemCapacityInputs.leakRateInput.dischargeTime) {
+                    assessmentCalculators.airSystemCapacityInputs.leakRateInput.dischargeTime = assessmentCalculators.airSystemCapacityInputs.leakRateInput.dischargeTime / 60; 
+                }
+            }
+    
+        }
+        return assessmentCalculators;
 
+    }
 
     updatePsat(assessment: Assessment): Assessment {
         if (assessment.psat.modifications && assessment.psat.modifications.length > 0) {
             assessment.psat.modifications.map(mod => {
                 if (mod.id === undefined || mod.id === null) {
-                    mod.id = this.helperFunctions.getNewIdString();
+                    mod.id = getNewIdString();
                 }
             });
         }
@@ -191,7 +209,7 @@ export class UpdateDataService {
         if (assessment.fsat.modifications && assessment.fsat.modifications.length > 0) {
             assessment.fsat.modifications.map(mod => {
                 if (mod.id === undefined || mod.id === null) {
-                    mod.id = this.helperFunctions.getNewIdString();
+                    mod.id = getNewIdString();
                 }
             });
         }
@@ -251,7 +269,7 @@ export class UpdateDataService {
         if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
             assessment.phast.modifications.map(mod => {
                 if (mod.id === undefined || mod.id === null) {
-                    mod.id = this.helperFunctions.getNewIdString();
+                    mod.id = getNewIdString();
                 }
             });
         }

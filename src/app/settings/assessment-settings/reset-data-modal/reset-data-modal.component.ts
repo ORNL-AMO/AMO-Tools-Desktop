@@ -30,6 +30,7 @@ import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-ma
 import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-material-db.service';
 import { ElectronService } from '../../../electron/electron.service';
 import { MockPumpInventory } from '../../../examples/mockPumpInventoryData';
+import { AppErrorService } from '../../../shared/errors/app-error.service';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -62,6 +63,7 @@ export class ResetDataModalComponent implements OnInit {
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private atmosphereDbService: AtmosphereDbService,
+    private appErrorService: AppErrorService,
     private inventoryDbService: InventoryDbService) { }
 
   ngOnInit() {
@@ -123,16 +125,21 @@ export class ResetDataModalComponent implements OnInit {
 
   async resetSystemSettingsAccept() {
     this.deleting = true;
-    if (this.resetAll) {
-      this.resetAllData();
-    } else if (this.resetUserAssessments) {
-      this.resetAllUserAssessments();
-    } else if (this.resetAppSettings) {
-      this.resetFactorySystemSettings();
-    } else if (this.resetExampleItems) {
-      this.resetFactoryExampleItems();
-    } else if (this.resetCustomMaterials) {
-      this.resetFactoryCustomMaterials();
+    try {
+      throw new Error();
+      if (this.resetAll) {
+        this.resetAllData();
+      } else if (this.resetUserAssessments) {
+        this.resetAllUserAssessments();
+      } else if (this.resetAppSettings) {
+        this.resetFactorySystemSettings();
+      } else if (this.resetExampleItems) {
+        this.resetFactoryExampleItems();
+      } else if (this.resetCustomMaterials) {
+        this.resetFactoryCustomMaterials();
+      }
+    } catch(e) {
+      this.appErrorService.handleAppError('Error restoring system settings', e)
     }
 }
 
@@ -282,6 +289,7 @@ async resetAllExampleAssessments(dirId: number) {
   await firstValueFrom(this.settingsDbService.addWithObservable(MockPsatSettings));
 
   let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+  let directories: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories());
   let settings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
   let calculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
   let inventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
@@ -289,6 +297,7 @@ async resetAllExampleAssessments(dirId: number) {
   this.settingsDbService.setAll(settings);
   this.calculatorDbService.setAll(calculators);
   this.inventoryDbService.setAll(inventoryItems);
+  this.directoryDbService.setAll(directories);
   this.hideResetSystemSettingsModal();
 }
 
@@ -319,9 +328,8 @@ async resetAllExampleAssessments(dirId: number) {
     try {
       this.dbService.deleteDatabase()
         .pipe(
-          catchError(err => {
-            throw new Error(`Database error`);
-          })
+          catchError(e => this.appErrorService.handleObservableAppError('Error Resetting Data', e
+        ))
         )
         .subscribe(
           {

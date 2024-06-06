@@ -24,15 +24,15 @@ export class PsatWarningService {
     let flowError: string = this.checkFlowRate(psat.inputs.pump_style, psat.inputs.flow_rate, settings);
     let voltageError: string = this.checkVoltage(psat.inputs.motor_field_voltage);
     let suggestedVoltage: string = this.checkSuggestedVoltage(psat, isBaseline);
-    let ratedPowerError: string = null;
+    let measuredPowerOrCurrentError: string = null;
     if (isBaseline) {
-      ratedPowerError = this.checkRatedPower(psat.inputs.motor_field_power, psat.inputs.motor_field_current, psat.inputs.motor_rated_power, psat.inputs.load_estimation_method);
+      measuredPowerOrCurrentError = this.checkMeasuredPowerOrCurrent(psat.inputs.motor_field_power, psat.inputs.motor_field_current, psat.inputs.motor_rated_power, psat.inputs.load_estimation_method);
     }
     return {
       flowError: flowError,
       voltageError: voltageError,
       suggestedVoltage: suggestedVoltage,
-      ratedPowerError: ratedPowerError,
+      measuredPowerOrCurrentError: measuredPowerOrCurrentError,
     }
   }
   //Field data warning: flowError
@@ -126,27 +126,24 @@ export class PsatWarningService {
       return null;
     }
   }
-  //Field Data Warning: ratedPowerError
-  checkRatedPower(measuredPower: number, measuredCurrent: number, motorRatedPower: number, loadEstimationMethod: number, inInventory = false) {
-    let tmpVal: number;
+
+  checkMeasuredPowerOrCurrent(measuredPower: number, measuredCurrent: number, motorRatedPower: number, loadEstimationMethod: number, inInventory = false) {
+    let measuredField: number;
     let field: string;
     if (loadEstimationMethod == 0) {
-      tmpVal = measuredPower;
+      measuredField = measuredPower;
       field = inInventory? 'Measured Power' : 'Motor Power';
     } else {
-      tmpVal = measuredCurrent;
+      measuredField = measuredCurrent;
       field = inInventory? 'Measured Current' : 'Motor Current';
     }
 
-    if (motorRatedPower && tmpVal) {
-      let val, compare;
-      val = tmpVal;
-      compare = motorRatedPower;
-      compare = compare * 1.5;
-      if (val > compare) {
+    if (motorRatedPower && measuredField) {
+      let fieldMax = motorRatedPower * 1.5;
+      if (measuredField > fieldMax) {
         return `The Field Data ${field} is too high compared to the Rated Motor Power, please adjust the input values.`;
       } else {
-        return null
+        return null;
       }
     } else {
       return null;
@@ -421,7 +418,7 @@ export class PsatWarningService {
 export interface FieldDataWarnings {
   flowError: string;
   voltageError: string;
-  ratedPowerError: string;
+  measuredPowerOrCurrentError: string;
   suggestedVoltage: string;
 }
 

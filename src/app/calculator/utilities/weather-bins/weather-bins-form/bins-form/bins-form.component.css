@@ -20,3 +20,26 @@
 .btn-form {
     border-radius: 4px !important;
 }   
+
+.form-section{
+    border-bottom: #bbb dashed 1px;
+    padding-bottom: .5rem;
+}
+
+.group-label{
+	font-size: 16px;
+    text-transform: none;
+	letter-spacing: 1px;
+	padding-top: 6.5px;
+	padding-bottom: 6.5px;
+    font-weight: bold;
+    margin-bottom: .25rem;
+}
+
+.click-link.delete{
+    color: red !important;
+}
+
+.delete:hover{
+    cursor: pointer;
+}

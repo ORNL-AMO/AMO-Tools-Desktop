@@ -63,7 +63,7 @@ export class PipeInsulationReductionService {
       pipeLength: [obj.pipeLength, [Validators.required, Validators.min(0)]],
       pipeDiameterSelection: [obj.pipeDiameterSelection],
       windVelocity: [obj.windVelocity, [Validators.required, Validators.min(0)]],
-      pipeTemperature: [obj.pipeTemperature, [Validators.required, Validators.min(0), Validators.max(maxPipeTemperature)]],
+      pipeTemperature: [obj.pipeTemperature, [Validators.required, Validators.min(-200), Validators.max(maxPipeTemperature)]],
       ambientTemperature: [obj.ambientTemperature, [Validators.required]],
       pipeBaseMaterialSelection: [obj.pipeBaseMaterialSelection],
       insulationMaterialSelection: [obj.insulationMaterialSelection],

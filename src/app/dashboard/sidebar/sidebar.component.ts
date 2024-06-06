@@ -7,6 +7,7 @@ import { DirectoryDashboardService } from '../directory-dashboard/directory-dash
 import { DashboardService } from '../dashboard.service';
 import { CoreService } from '../../core/core.service';
 import { environment } from '../../../environments/environment';
+import { ExportService } from '../../shared/import-export/export.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -32,9 +33,9 @@ export class SidebarComponent implements OnInit {
   collapsedXWidth: number = 40;
   expandedXWidth: number = 300;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
+    private exportService: ExportService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
-    private cd: ChangeDetectorRef,
-    private coreService: CoreService) { }
+    private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.versionNum = environment.version;
@@ -64,6 +65,12 @@ export class SidebarComponent implements OnInit {
     this.updateSub.unsubscribe();
     this.updateDashboardDataSub.unsubscribe();
     this.selectedDirectoryIdSub.unsubscribe();
+    this.collapseSidebarSub.unsubscribe();
+  }
+
+  downloadData() {
+    this.exportService.exportAll = true;
+    this.directoryDashboardService.showExportModal.next(true);
   }
 
   showCreateAssessment() {
@@ -122,7 +129,6 @@ export class SidebarComponent implements OnInit {
       this.dashboardService.sidebarX.next(this.expandedXWidth);
     }
     window.dispatchEvent(new Event("resize"));
-
   }
 
   openUpdateModal() {

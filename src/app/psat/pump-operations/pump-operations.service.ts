@@ -8,10 +8,6 @@ export class PumpOperationsService {
     constructor(private formBuilder: UntypedFormBuilder) { }
 
   getFormFromObj(psatInputs: PsatInputs): UntypedFormGroup {
-    if (!psatInputs.operating_hours && psatInputs.operating_fraction) {
-      psatInputs.operating_hours = psatInputs.operating_fraction * 8760;
-    }
-
     let form: UntypedFormGroup = this.formBuilder.group({
       operatingHours: [psatInputs.operating_hours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       costKwHr: [psatInputs.cost_kw_hour, [Validators.required, Validators.min(0)]]

@@ -163,6 +163,7 @@ export interface AirVelocityInput {
 
 export interface BleedTestInput {
   totalSystemVolume: number;
+  atmosphericPressure: number;
   normalOperatingPressure: number;
   testPressure: number;
   time: number;
