@@ -15,7 +15,7 @@
         <div class="d-flex flex-column pl-2">
             <div class="h2-name">
                 Water Process Diagram Example
-                <!-- {{waterProcess.name}} -->
+                <!-- {{waterDiagram.name}} -->
             </div>
             <div class="h2-name">
                 <span class="small">
@@ -33,7 +33,8 @@
         </div>
         <div class="d-flex flex-column pl-2">
             <div class="h2-name">
-                {{waterProcess.name}}
+                Water Process Diagram Example
+                <!-- {{waterDiagram.name}} -->
             </div>
             <div class="h2-name" [ngClass]="{'collapse': bannerCollapsed}">
                 <span class="small">
@@ -50,7 +51,7 @@
                 Setup</a>
         </div>
          <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" (click)="setMainTab('diagram')" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !waterProcess.isValid}" >
+            <a class="nav-link" (click)="setMainTab('diagram')" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !waterDiagram || (waterDiagram && !waterDiagram.isValid)}" >
              Diagram </a>
         </div>
     </div>
@@ -60,7 +61,7 @@
                 Setup</a>
         </div>
          <div class="nav-item">
-            <a class="nav-link" (click)="setMainTab('diagram')" [ngClass]="{'active': mainTab == 'summary', 'disabled': !waterProcess.isValid}" >
+            <a class="nav-link" (click)="setMainTab('diagram')" [ngClass]="{'active': mainTab == 'summary', 'disabled': !waterDiagram || (waterDiagram && !waterDiagram.isValid)}" >
                 Diagram</a>
         </div>
     </div>
@@ -74,10 +75,11 @@
         <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" [routerLink]="['/settings']">
      	   <span class="fa fa-cog"></span>
   	  </div>
-        <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block"
-            [routerLink]="['/directory-dashboard', waterProcess.directoryId]">
+      <!--  todo directory id -->
+        <!-- <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block"
+            [routerLink]="['/directory-dashboard', waterDiagram.directoryId]">
             <span class="fa fa-folder-open"></span>
-        </div>
+        </div> -->
         <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" (click)="navigateHome()">
             <span class="fa fa-home"></span>
         </div>
@@ -107,10 +109,11 @@
         <div class="pl-2 pr-2 home-nav-item d-block" [routerLink]="['/settings']">
             <span class="fa fa-cog"></span>
         </div>
-        <div class="pl-2 pr-2 home-nav-item d-block"
+        <!-- todo dir id -->
+        <!-- <div class="pl-2 pr-2 home-nav-item d-block"
             [routerLink]="['/directory-dashboard', waterProcess.directoryId]">
             <span class="fa fa-folder-open"></span>
-        </div>
+        </div> -->
         <div class="pl-2 pr-2 home-nav-item d-block" (click)="navigateHome()">
             <span class="fa fa-home"></span>
         </div>

@@ -1,33 +1,37 @@
 import { Injectable } from '@angular/core';
-import { WaterProcess } from '../../water-process-diagram/water-process-diagram.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { FlowDiagramData, ParentContainerDimensions, ProcessFlowDiagramState, ProcessFlowParentState } from '../../../process-flow-types/process-flow-types';
+import { WaterProcessDiagramService } from '../../water-process-diagram/water-process-diagram.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProcessFlowDiagramService {
-  processFlowDiagramData: BehaviorSubject<ProcessFlowDiagramState>;
-  processFlowParentData: BehaviorSubject<ProcessFlowParentData>;
-  constructor() { 
-    this.processFlowDiagramData = new BehaviorSubject<ProcessFlowDiagramState>(undefined)
-    this.processFlowParentData = new BehaviorSubject<ProcessFlowParentData>(undefined)
+  processFlowParentState: BehaviorSubject<ProcessFlowParentState>;
+  flowDiagramData: BehaviorSubject<FlowDiagramData>;
+
+  constructor(
+    private waterProcessDiagramService: WaterProcessDiagramService) { 
+    this.processFlowParentState = new BehaviorSubject<ProcessFlowParentState>(undefined);
+    this.flowDiagramData = new BehaviorSubject<FlowDiagramData>(undefined);
   }
-}
 
-// todo 6783 move interfaces to a shared lib/ in wc mfe
-export interface ProcessFlowDiagramState {
-  context: string;
-  parentHeight: number;
-  waterProcess?: WaterProcess;
-}
-
-export interface ProcessFlowParentData {
-  context: string;
-  waterProcess?: WaterProcess;
-}
-
-export interface ProcessFlowDiagramEventDetail {
-  processFlowParentData: {
-    test: boolean, name: string
+  getNewDiagram(): FlowDiagramData {
+    return {
+      nodes: [],
+      edges: [],
+      
+    }
   }
+
+  async updateFlowDiagramData(diagramState: ProcessFlowDiagramState) {
+    if (diagramState && diagramState.context === 'water') {
+      let waterDiagram = this.waterProcessDiagramService.selectedWaterDiagram.getValue();
+      waterDiagram.flowDiagramData = diagramState.flowDiagramData;
+      // todo need to update selected waterdiagram bS?
+      await this.waterProcessDiagramService.updateWaterDiagram(waterDiagram);
+    }
+
+  }
+
 }

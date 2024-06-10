@@ -240,6 +240,16 @@ export const AnalyticStoreMeta = {
   ]
 };
 
+export const WaterDiagramStoreMeta = {
+  store: 'waterProcess',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'id', keypath: 'id', options: {unique: false } },
+    { name: 'modifiedDate', keypath: 'modifiedDate', options: {unique: false } },
+  ]
+};
+
+
 
 export const GasLoadMaterialStoreMeta = {
   store: 'gasLoadChargeMaterial',
@@ -358,5 +368,6 @@ export const dbConfig: DBConfig = {
     WallLossesSurfaceStoreMeta,
     FlueGasMaterialStoreMeta,
     SolidLiquidFlueGasMaterialStoreMeta,
+    WaterDiagramStoreMeta
   ]
 };

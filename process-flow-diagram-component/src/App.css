@@ -35,18 +35,10 @@ a {
 
 /* todo from flow.module.css */
 
-.flow {
+.flow-wrapper {
   flex-grow: 1;
   font-size: 12px;
 }
-
-.customNode {
-  border: 1px solid #555;
-  padding: 10px;
-  width: 200px;
-  border-radius: 5px;
-}
-
 
 @media (prefers-color-scheme: dark) {
   html {
@@ -57,3 +49,154 @@ a {
     background: black;
   }
 }
+
+
+/*  Download Image */
+.process-flow-diagram .download-btn {
+  border: 1px solid #191919;
+  background: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.process-flow-diagram .download-btn:hover {
+  opacity: 0.9;
+}
+
+.react-flow__panel.left.controls-offset-space {
+  position: unset
+}
+
+
+
+.process-flow-diagram {
+  flex-direction: column;
+  display: flex;
+  flex-grow: 1;
+  height: 100%;
+}
+
+
+/* Sidebar */
+.process-flow-diagram aside {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #eee;
+  padding: 15px 10px;
+  font-size: 12px;
+  background: #fcfcfc;
+
+}
+
+.process-flow-diagram aside .description {
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.process-flow-diagram .dndnode {
+  height: 32px;
+  padding: 4px;
+  border: 1px solid #1a192b;
+  border-radius: 2px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+}
+
+.process-flow-diagram .dndnode:hover {
+  background: #efefef
+}
+
+.process-flow-diagram .dndnode.waterIntake {
+  border-color: #75a1ff;
+}
+
+.process-flow-diagram .dndnode.waterDischarge {
+  border-color: #b4ffff;
+}
+
+.process-flow-diagram .reactflow-wrapper {
+  flex-grow: 1;
+  height: 100%;
+}
+
+.process-flow-diagram .selectall {
+  margin-top: 10px;
+}
+
+.sidebar-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  height: 100%;
+}
+
+.sidebar-actions label {
+  cursor: pointer;
+  margin: .25rem;
+}
+
+.sidebar-action-buttons {
+  margin-top: .5rem;
+  display: flex;
+  align-self: center;
+  width: 100%;
+}
+
+.sidebar-action-buttons .download-btn {
+  width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .process-flow-diagram {
+    flex-direction: row-reverse;
+  }
+
+  .process-flow-diagram aside {
+    width: 20%;
+    max-width: 250px;
+  }
+}
+
+/* End Sidebar */
+
+
+
+/* Custom Node Begin */
+.react-flow__node-waterIntake,
+.react-flow__node-processUse,
+.react-flow__node-waterDischarge,
+.react-flow__node-group {
+  padding: 10px;
+  border-radius: 3px;
+  width: 150px;
+  font-size: 12px;
+  color: #222;
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #1a192b;
+  background-color: white;
+}
+.react-flow__node-waterIntake.selectable:hover, .react-flow__node-processUse.selectable:hover, .react-flow__node-waterDischarge.selectable:hover, .react-flow__node-group.selectable:hover {
+      box-shadow: 0 1px 4px 1px rgba(0, 0, 0, 0.08);
+    }
+.react-flow__node-waterIntake.selectable.selected,
+    .react-flow__node-waterIntake.selectable:focus,
+    .react-flow__node-waterIntake.selectable:focus-visible,
+    .react-flow__node-processUse.selectable.selected,
+    .react-flow__node-processUse.selectable:focus,
+    .react-flow__node-processUse.selectable:focus-visible,
+    .react-flow__node-waterDischarge.selectable.selected,
+    .react-flow__node-waterDischarge.selectable:focus,
+    .react-flow__node-waterDischarge.selectable:focus-visible,
+    .react-flow__node-group.selectable.selected,
+    .react-flow__node-group.selectable:focus,
+    .react-flow__node-group.selectable:focus-visible {
+      box-shadow: 0 0 0 0.5px #1a192b;
+    }
+/* Custom Node End */
