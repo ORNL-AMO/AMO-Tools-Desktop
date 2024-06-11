@@ -1,10 +1,12 @@
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { Settings } from '../shared/models/settings';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription, firstValueFrom } from 'rxjs';
-import { WaterProcess, WaterProcessDiagramService } from './water-process-diagram.service';
+import { Subscription } from 'rxjs';
+import { WaterProcessDiagramService } from './water-process-diagram.service';
+import { ProcessFlowDiagramService } from '../shared/process-flow-diagram-wrapper/process-flow-diagram.service';
+import { WaterDiagram, WaterDiagramOption } from '../../process-flow-types/process-flow-types';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-water-process-diagram',
@@ -22,43 +24,34 @@ export class WaterProcessDiagramComponent {
   containerHeight: number;
   mainTabSub: Subscription;
   modalOpenSub: Subscription;
-  waterProcessSub: Subscription;
+  waterDiagramSub: Subscription;
+  waterDiagramOptions: Array<WaterDiagramOption>;
   
   mainTab: string;
-  waterProcess: WaterProcess;
+  waterDiagram: WaterDiagram;
   isModalOpen: boolean;
   
   constructor( 
-    private activatedRoute: ActivatedRoute,
-    private waterProcessService: WaterProcessDiagramService,
+    private waterProcessDiagramService: WaterProcessDiagramService,
     private settingsDbService: SettingsDbService, 
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-water-diagram');
-    this.activatedRoute.params.subscribe(params => {
-      let waterProcessId = Number(params['id']);
-      this.waterProcess = this.waterProcessService.getDefaultWaterProcess();
-      // todo __dbservice get by id
-      // let settings: Settings = this.settingsDbService.getByInventoryId();
-      // this.waterProcessService.settings.next(settings);
-      // todo set isValid
-      // todo next BS
-
-      // let connectedId = this.activatedRoute.snapshot.queryParamMap.get('connectedId');
-      // if (connectedId) {
-      //   this.redirectFromConnected(connectedId);
-      // }
+    this.waterProcessDiagramService.setWaterDiagrams();
+    this.waterDiagramSub = this.waterProcessDiagramService.selectedWaterDiagram.subscribe(selectedWaterDiagram => {
+        this.waterDiagram = selectedWaterDiagram;
     });
-    this.mainTabSub = this.waterProcessService.mainTab.subscribe(val => {
+    // let settings: Settings = this.settingsDbService.getByWaterId();
+    // this.waterProcessService.settings.next(settings);
+
+    this.mainTabSub = this.waterProcessDiagramService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
     });
 
-    this.waterProcessSub = this.waterProcessService.waterProcess.subscribe(waterProcess => {
-      this.saveDbData();
-    });
-    this.modalOpenSub = this.waterProcessService.modalOpen.subscribe(val => {
+
+    this.modalOpenSub = this.waterProcessDiagramService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     });
 
@@ -66,13 +59,14 @@ export class WaterProcessDiagramComponent {
 
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
-    this.waterProcessSub.unsubscribe();
+    this.waterDiagramSub.unsubscribe();
     this.modalOpenSub.unsubscribe();   
   }
 
   ngAfterViewInit() {
     this.getContainerHeight();
   }
+
 
   getContainerHeight() {
     if (this.content) {
@@ -84,21 +78,24 @@ export class WaterProcessDiagramComponent {
           footerHeight = this.footer.nativeElement.clientHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
+        this.waterProcessDiagramService.parentContainer.next({
+          height: contentHeight,
+          headerHeight: headerHeight,
+          footerHeight: footerHeight
+        })
       }, 100);
     }
   }
 
-  async saveDbData() { }
-
   continue() {
     if (this.mainTab == 'setup') {
-      this.waterProcessService.mainTab.next('diagram');
+      this.waterProcessDiagramService.mainTab.next('diagram');
     }
   }
 
   back(){
     if (this.mainTab == 'diagram') {
-      this.waterProcessService.mainTab.next('setup');
+      this.waterProcessDiagramService.mainTab.next('setup');
     }
   }
 

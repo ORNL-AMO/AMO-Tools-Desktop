@@ -1,83 +1,91 @@
 import { Root, createRoot } from 'react-dom/client';
-import { FlowProps } from './components/Flow';
 import App from './App';
+import { FlowDiagramData, ProcessFlowDiagramState, ProcessFlowParentState } from '../../src/process-flow-types/process-flow-types';
 
 class AppWebComponent extends HTMLElement {
   mountPoint!: HTMLDivElement;
   appRef!: Root;
   name!: string;
-  static observedAttributes = ['diagramstate']; 
+  static observedAttributes = ['parentstate']; 
+  // * NOTE: 
+  // * 1. shadowRoot is typically a scoped variable only used for attaching shadow and setting mount point
+  // * it was changed to be a class property here so it could be passed to DownloadImage, which requires a dom ref.
+  // * 2. Due to this change, events must now be dispatched from shadowRoot, instead of 'this' (AppWebComponent)
+  shadowRoot;
 
-  renderDiagramComponent(diagramState) {
-    this.appRef.render(<App diagramData={diagramState} diagramStateHandlers={{clickEvent: this.handleClickEvent}}/>)
+  renderDiagramComponent(parentState: ProcessFlowParentState) {
+    this.appRef.render(
+    <App parentContainer={parentState.parentContainer} 
+    context={parentState.context}
+    flowDiagramData={parentState.waterDiagram.flowDiagramData}
+    shadowRoot={this.shadowRoot} 
+    clickEvent={this.handleClickEvent}
+    saveFlowDiagramData={this.emitFlowDiagramDataUpdate}
+    />)
   }
 
   connectedCallback() {
-    console.log('PROCESS-FLOW-DIAGRAM init connectedCallback')
     this.style.display = 'block';
     this.style.height = '100%';
 
-    const shadowRoot = this.attachShadow({ mode: 'open' });
+    this.shadowRoot = this.attachShadow({ mode: 'open' });
     this.mountPoint = document.createElement('div');
     this.mountPoint.id = 'root';
-    shadowRoot.appendChild(this.mountPoint);
+    this.shadowRoot.appendChild(this.mountPoint);
     
-    // todo using link ref in this way may require polyfill - check if required
+    // * using link ref in this way may require polyfill - check if required
     const link = document.createElement("link");
     link.setAttribute("rel", "stylesheet");
     link.setAttribute("href", "process-flow-diagram-component.css");
-    shadowRoot.appendChild(link);
+    this.shadowRoot.appendChild(link);
 
     this.appRef = createRoot(this.mountPoint!);
-    this.renderDiagramComponent(this.diagramstate)
-  }
-
-  disconnectedCallback() {
-    this.appRef.unmount();
-  }
-
-
-  get diagramstate() {
-    const attrString = this.getAttribute("diagramstate");
-    const diagramStateProperty = JSON.parse(attrString);
-    return diagramStateProperty;
-  }
-
-  set diagramstate(newValue) {
-    // const newValue = coerceType(value);
-    this.setAttribute("diagramstate", JSON.stringify(newValue));
-
-    setTimeout(() => {
-      this.emitUpdateParentStateEvent();
-    }, 5000);
-
-  }
-
-  attributeChangedCallback(attrName) {
-    if (attrName === 'diagramstate') {
-      this.renderDiagramComponent(this.diagramstate)
+    if (this.parentstate) {
+      this.renderDiagramComponent(this.parentstate);
     }
   }
 
-  // todo test event
-  emitUpdateParentStateEvent() {
-    const detail = {
-      processFlowDiagramState: {test: true, name: 'Update parent state from diagram'}
+  emitFlowDiagramDataUpdate(flowDiagramData: FlowDiagramData) {
+    const detail: ProcessFlowDiagramState = {
+      // todo 6387 set context on 'this' when parent is passed
+      context: 'water',  
+      flowDiagramData: flowDiagramData
     }
-    const event = new CustomEvent("updateParentStateDetailEvent", {
+
+    const event = new CustomEvent("updateDiagramDetailEvent", {
       composed: true,
       bubbles: true,
       detail: detail,
     });
-    this.dispatchEvent(event);
+
+    // * see note at shadowRoot decl
+    this.shadowRoot.dispatchEvent(event);
+  }
+  
+  disconnectedCallback() {
+    this.appRef.unmount();
+  }
+
+  get parentstate() {
+    const attrString = this.getAttribute("parentstate");
+    const diagramStateProperty = JSON.parse(attrString);
+    return diagramStateProperty;
+  }
+
+  set parentstate(newValue) {
+    // const newValue = coerceType(value);
+    this.setAttribute("parentstate", JSON.stringify(newValue));
+  }
+
+  attributeChangedCallback(attrName) {
+    if (attrName === 'parentstate') {
+      this.renderDiagramComponent(this.parentstate)
+    }
   }
 
   handleClickEvent = (...args) => {
-
-    console.log('WC click event', args);
+    console.log(...args)
   }
-
 }
 
 export default AppWebComponent;
-export interface ProcessFlowDiagramWrapperProps extends FlowProps {};
