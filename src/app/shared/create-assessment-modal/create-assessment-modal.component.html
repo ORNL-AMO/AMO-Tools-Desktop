@@ -27,6 +27,7 @@
               <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'TreasureHunt'">Example: "Treasure Hunt 1" or "ORNL T-Hunt 3"</p>
               <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'WasteWater'">Example: "Wastewater 1" or "ORNL Wastewater 3"</p>
               <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'CompressedAir'">Example: "Compressed Air 1" or "ORNL CA 3"</p>
+              <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'Water'">Example: "Water 1" or "ORNL Water 3"</p>
 
             </div>
           </div>
@@ -42,6 +43,7 @@
               <option [ngValue]="'TreasureHunt'">Treasure Hunt</option>
               <option [ngValue]="'WasteWater'">Wastewater</option>
               <option [ngValue]="'CompressedAir'">Compressed Air</option>
+              <option [ngValue]="'Water'">Water</option>
             </select>
           </div>
 
@@ -67,7 +69,8 @@
           'ssmt': newAssessmentForm.controls.assessmentType.value == 'Steam',
           'treasure-hunt': newAssessmentForm.controls.assessmentType.value == 'TreasureHunt',
           'waste-water': newAssessmentForm.controls.assessmentType.value == 'WasteWater',
-          'compressed-air': newAssessmentForm.controls.assessmentType.value == 'CompressedAir'}">
+          'compressed-air': newAssessmentForm.controls.assessmentType.value == 'CompressedAir',
+          'water': newAssessmentForm.controls.assessmentType.value == 'Water'}">
           <div class="p-2">
             <button class="btn btn-secondary" type="button" (click)="hideCreateModal()">Close</button>
           </div>

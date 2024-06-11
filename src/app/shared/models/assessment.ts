@@ -5,6 +5,7 @@ import { SSMT } from './steam/ssmt';
 import { TreasureHunt } from './treasure-hunt';
 import { WasteWater } from './waste-water';
 import { CompressedAirAssessment } from './compressed-air-assessment';
+import { WaterAssessment } from './water-assessment';
 
 export interface Assessment {
   id?: number,
@@ -15,6 +16,7 @@ export interface Assessment {
   ssmt?: SSMT,
   treasureHunt?: TreasureHunt,
   wasteWater?: WasteWater,
+  water?: WaterAssessment,
   compressedAirAssessment?: CompressedAirAssessment,
   createdDate?: Date,
   modifiedDate?: Date,

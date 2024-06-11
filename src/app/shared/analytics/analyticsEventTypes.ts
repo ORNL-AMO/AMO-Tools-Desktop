@@ -9,6 +9,7 @@ export type AnalyticsEventString = 'page_view' |
     'view-treasure-hunt-assessment' |
     'view-waste-water-assessment' |
     'view-compressed-air-assessment' |
+    'view-water-assessment' |
     'create-inventory' |
     'view-motor-inventory' |
     'view-pump-inventory' |

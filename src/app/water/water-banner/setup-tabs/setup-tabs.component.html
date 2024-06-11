@@ -1,0 +1,27 @@
+<ul class="tabs subtabs progress-tabs water-assessmentone d-lg-block">
+    <li [ngClass]="systemBasicsClassStatus">
+        <a (click)="changeSetupTab('system-basics')">
+            <span (mouseenter)="showTooltip(systemBasicsBadge)" (mouseleave)="hideTooltip(systemBasicsBadge)"
+                class="step-number">1</span>Assessment Basics</a>
+        <!-- <app-tabs-tooltip [badgeClass]="systemBasicsClassStatus[0]" [reveal]="systemBasicsBadge.display"
+            [display]="systemBasicsBadge.hover"></app-tabs-tooltip> -->
+    </li>
+</ul>
+
+<nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs water-assessment flex-wrap flex-fill">
+    <ul class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill water-assessment">
+        <li class="page-item" [ngClass]="{'disabled': setupTab == 'system-basics' || !canContinue}">
+            <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': setupTab == 'system-basics' || !canContinue}">
+                <span class="fa fa-chevron-left"></span></a>
+        </li>
+        <li class="page-item" [ngClass]="systemBasicsClassStatus" *ngIf="setupTab == 'system-basics'">
+            <a class="nav-link small" (click)="changeSetupTab('system-basics')">
+                <span (mouseenter)="showTooltip(systemBasicsBadge)" (mouseleave)="hideTooltip(systemBasicsBadge)"
+                    class="step-number">1</span>Assessment Basics</a>
+        </li>
+        <li class="page-item" [ngClass]="{'disabled': !canContinue}">
+            <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled': !canContinue}">
+                <span class="fa fa-chevron-right"></span></a>
+        </li>
+    </ul>
+</nav>

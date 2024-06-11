@@ -115,6 +115,7 @@ import { DisclaimerComponent } from '../dashboard/disclaimer/disclaimer.componen
 import { PumpInventoryComponent } from '../pump-inventory/pump-inventory.component';
 import { pumpInventoryRoutes } from '../pump-inventory/pump-inventory.routing';
 import { WaterProcessDiagramComponent } from '../water-process-diagram/water-process-diagram.component';
+import { WaterAssessmentComponent } from '../water/water-assessment.component';
 
 export const coreRoutes: Routes = [
   {
@@ -592,6 +593,10 @@ export const coreRoutes: Routes = [
   {
     component: WasteWaterComponent,
     path: 'waste-water/:id',
+  },
+  {
+    path: 'water/:id',
+    component: WaterAssessmentComponent
   },
   { 
     path: '**', 

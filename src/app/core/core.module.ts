@@ -39,6 +39,7 @@ import { BrowsingDataToastModule } from '../shared/browsing-data-toast/browsing-
 import { PumpInventoryModule } from '../pump-inventory/pump-inventory.module';
 import { EmailMeasurDataModule } from '../shared/email-measur-data/email-measur-data.module';
 import { WaterProcessDiagramModule } from '../water-process-diagram/water-process-diagram.module';
+import { WaterModule } from '../water/water.module';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { WaterProcessDiagramModule } from '../water-process-diagram/water-proces
     BrowsingDataToastModule,
     AnalyticsModule,
     EmailMeasurDataModule,
-    WaterProcessDiagramModule
+    WaterProcessDiagramModule,
+    WaterModule
   ],
   providers: [
     AssessmentService,

@@ -59,6 +59,7 @@ export interface Settings {
     disableTreasureHuntTutorial?: boolean,
     disableDataExplorerTutorial?: boolean,
     disableCompressedAirTutorial?: boolean,
+    disableWaterTutorial?: boolean,
 
     //costs
     electricityCost?: number,
