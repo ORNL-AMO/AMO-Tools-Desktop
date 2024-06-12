@@ -8,7 +8,7 @@
 }
 
 .water-process-diagram .btn-primary{
-    background: #2980b9;
+    background: #3055cf;
     color: white;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .water-process-diagram .assessment-panel-container::-webkit-scrollbar-thumb{
-    background-color: #2980B9;
+    background-color: #3055cf;
 }
 
 /* Screens above  1024 */

@@ -12,8 +12,14 @@
 
     <div #footer id="waterProcessDiagramFooter" class="footer d-lg-block d-none hide-print">
         <div class="d-flex w-100 justify-content-between">
-            <button class="btn btn-default" (click)="back()" [disabled]="mainTab == 'setup'">Back</button>
-            <button class="btn btn-primary" (click)="continue()" [disabled]="mainTab == 'diagram'">Next</button>
+            <button class="btn btn-default" (click)="back()" [disabled]="mainTab === 'setup'">Back</button>
+            <button *ngIf="mainTab == 'setup'" class="btn btn-primary pull-right" (click)="continue()">Next</button>
+            <button *ngIf="mainTab == 'diagram'" class="btn btn-primary" (click)="createAssessment()">Create Assessment</button>
         </div>
     </div>
 </div>
+
+<app-create-assessment-modal *ngIf="displayCreateAssessmentModal" 
+[waterDiagram]="waterDiagram" 
+[integratedCreateType]="'Water'"
+(onClose)="hideCreateAssessmentModal()"></app-create-assessment-modal>

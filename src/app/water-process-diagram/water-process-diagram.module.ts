@@ -6,6 +6,7 @@ import { WaterDiagramBannerComponent } from './water-diagram-banner/water-diagra
 import { WaterDiagramSetupComponent } from './water-diagram-setup/water-diagram-setup.component';
 import { WaterDiagramComponent } from './water-diagram/water-diagram.component';
 import { RouterModule } from '@angular/router';
+import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/create-assessment-modal.module';
 
 
 
@@ -20,6 +21,7 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     ProcessFlowDiagramWrapperModule,
     RouterModule,
+    CreateAssessmentModalModule
   ]
 })
 export class WaterProcessDiagramModule { }

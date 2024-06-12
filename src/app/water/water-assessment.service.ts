@@ -7,6 +7,8 @@ import { InventoryService } from '../dashboard/inventory.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
 import { WaterAssessment } from '../shared/models/water-assessment';
+import { WaterDiagram } from '../../../process-flow-diagram-component/lib/process-flow-types';
+import { Assessment } from '../shared/models/assessment';
 
 @Injectable({
   providedIn: 'root'
@@ -60,6 +62,10 @@ export class WaterAssessmentService {
       // waterAssessment.setupDone = (hasValidSystemInformation && hasValidCompressors && hasValidDayTypes && profileSummaryValid.isValid);
     }
     this.waterAssessment.next(waterAssessment);
+  }
+
+  setWaterAssessmentFromDiagram(waterDiagram: WaterDiagram, waterAssessment: Assessment, newSettings: Settings) {
+    console.log('setWaterAssessmentFromDiagram', waterDiagram, waterAssessment)
   }
 
   continue() {
