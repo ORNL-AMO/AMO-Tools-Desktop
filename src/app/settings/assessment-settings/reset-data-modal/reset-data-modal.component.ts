@@ -30,6 +30,7 @@ import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-ma
 import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-material-db.service';
 import { ElectronService } from '../../../electron/electron.service';
 import { MockPumpInventory } from '../../../examples/mockPumpInventoryData';
+import { MockWaterAssessment, MockWaterAssessmentSettings } from '../../../examples/mockWaterAssessment';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -266,6 +267,12 @@ async resetAllExampleAssessments(dirId: number) {
   let createdCompressedAir: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockCompressedAirAssessment));
   MockCompressedAirAssessmentSettings.assessmentId = createdCompressedAir.id;
   await firstValueFrom(this.settingsDbService.addWithObservable(MockCompressedAirAssessmentSettings));
+
+
+  MockWaterAssessment.directoryId = dirId;
+  let createdWater: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockWaterAssessment));
+  MockWaterAssessmentSettings.assessmentId = createdWater.id;
+  await firstValueFrom(this.settingsDbService.addWithObservable(MockWaterAssessmentSettings));
 
   MockMotorInventory.directoryId = dirId;
   let motorInventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(MockMotorInventory));

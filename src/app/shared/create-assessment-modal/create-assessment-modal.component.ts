@@ -192,6 +192,14 @@ export class CreateAssessmentModalComponent {
         tmpAssessment.compressedAirAssessment = this.assessmentService.getNewCompressedAirAssessment(this.settings);
         let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
         this.finishAndNavigate(createdAssessment, '/compressed-air/' + createdAssessment.id);
+      } else if (this.newAssessmentForm.controls.assessmentType.value == 'Water') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
+        let tmpAssessment = this.assessmentService.getNewAssessment('Water');
+        tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
+        tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
+        tmpAssessment.water = this.assessmentService.getNewWaterAssessment(this.settings);
+        let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
+        this.finishAndNavigate(createdAssessment, '/water/' + createdAssessment.id);
       }
     }
   }

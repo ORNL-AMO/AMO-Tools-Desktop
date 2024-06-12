@@ -12,6 +12,7 @@ import { CompressedAirAssessment } from '../shared/models/compressed-air-assessm
 import { environment } from '../../environments/environment';
 
 import { DashboardService } from './dashboard.service';
+import { WaterAssessment } from '../shared/models/water-assessment';
 
 @Injectable()
 export class AssessmentService {
@@ -76,6 +77,11 @@ export class AssessmentService {
         this.startingTab = 'assessment';
       }
       itemSegment = '/compressed-air/';
+    } else if (assessment.type == 'Water') {
+      if (assessment.water.setupDone && !mainTab && !assessment.isExample) {
+        this.startingTab = 'assessment';
+      }
+      itemSegment = '/water/';
     }
 
     this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, {shouldCollapse: true})
@@ -355,6 +361,20 @@ export class AssessmentService {
       modifications: new Array(),
       systemBasics: {
         equipmentNotes: ''
+      }
+    }
+  }
+
+  
+  getNewWaterAssessment(settings: Settings): WaterAssessment {
+    return {
+      name: 'Baseline',
+      modifications: new Array(),
+      setupDone: false,
+      systemBasics: {
+        utilityType: 'Electricity',
+        electricityCost: settings.electricityCost,
+        notes: undefined
       }
     }
   }
