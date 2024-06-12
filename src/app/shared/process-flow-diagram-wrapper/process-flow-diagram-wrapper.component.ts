@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { ProcessFlowDiagramService, ProcessFlowDiagramEventDetail, ProcessFlowDiagramState } from './process-flow-diagram.service';
+import { ProcessFlowDiagramService } from './process-flow-diagram.service';
 import { Subscription } from 'rxjs';
+import { ProcessFlowDiagramState, ProcessFlowParentState } from '../../../process-flow-types/process-flow-types';
 
 @Component({
     selector: 'app-process-flow-diagram-wrapper',
@@ -14,13 +15,11 @@ export class ProcessFlowDiagramWrapperComponent {
 
     constructor(private processFlowDiagramService: ProcessFlowDiagramService) { }
 
-    ngOnInit() {}
-
     ngAfterViewInit() {
         if (this.processFlowDiagramElement) {
-            this.processFlowDiagramDataSub = this.processFlowDiagramService.processFlowDiagramData.subscribe(data => {
+            this.processFlowDiagramDataSub = this.processFlowDiagramService.processFlowParentState.subscribe(data => {
                 if (data) {
-                    this.updateDiagramState(data);
+                    this.updateDiagramParentState(data);
                 }
             });
         }
@@ -30,13 +29,13 @@ export class ProcessFlowDiagramWrapperComponent {
         this.processFlowDiagramDataSub.unsubscribe();
     }
 
-    updateDiagramState(state: ProcessFlowDiagramState) {
-        this.processFlowDiagramElement.nativeElement.diagramstate = state;
+    updateDiagramParentState(state: ProcessFlowParentState) {
+        this.processFlowDiagramElement.nativeElement.parentstate = state;
     }
 
-    updateParentState(event) {
-        let eventDetail = event.detail as ProcessFlowDiagramEventDetail
-        this.processFlowDiagramService.processFlowParentData.next(undefined)
+    async onUpdateDiagramState(event) {
+        let diagramState = event.detail as ProcessFlowDiagramState;
+        await this.processFlowDiagramService.updateFlowDiagramData(diagramState);
     }
 
 }

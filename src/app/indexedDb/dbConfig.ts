@@ -240,6 +240,16 @@ export const AnalyticStoreMeta = {
   ]
 };
 
+export const WaterDiagramStoreMeta = {
+  store: 'waterProcess',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'id', keypath: 'id', options: {unique: false } },
+    { name: 'modifiedDate', keypath: 'modifiedDate', options: {unique: false } },
+  ]
+};
+
+
 
 export const GasLoadMaterialStoreMeta = {
   store: 'gasLoadChargeMaterial',
@@ -341,7 +351,7 @@ export const SolidLiquidFlueGasMaterialStoreMeta = {
 
 export const dbConfig: DBConfig = {
   name: 'CrudDB',
-  version: 7,
+  version: 8,
   objectStoresMeta: [
     AssessmentStoreMeta,
     DirectoryStoreMeta,
@@ -358,5 +368,6 @@ export const dbConfig: DBConfig = {
     WallLossesSurfaceStoreMeta,
     FlueGasMaterialStoreMeta,
     SolidLiquidFlueGasMaterialStoreMeta,
+    WaterDiagramStoreMeta
   ]
 };

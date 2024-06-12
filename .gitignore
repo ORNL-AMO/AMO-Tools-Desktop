@@ -4,8 +4,11 @@
 /dist
 /process-flow-diagram-component/dist
 /process-flow-diagram-component/node_modules
+/process-flow-diagram-component/lib
 /tmp
 .angular
+
+*.tsbuildinfo
 
 # dependencies
 /node_modules

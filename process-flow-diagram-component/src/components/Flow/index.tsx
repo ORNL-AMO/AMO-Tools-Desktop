@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactFlow, {
   Node,
   useNodesState,
@@ -7,91 +7,153 @@ import ReactFlow, {
   Connection,
   Edge,
   ConnectionLineType,
+  MiniMap,
+  Controls,
+  Background,
+  Position,
+  ReactFlowProvider,
+  NodeTypes,
+  DefaultEdgeOptions,
+  OnConnect,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import CustomNode from './CustomNode';
+import Sidebar from '../Sidebar/Sidebar';
+import { nodeDefaultLabels, nodeTypes } from './nodeConstants';
+import { FlowDiagramData } from '../../../../src/process-flow-types/process-flow-types';
+import useDiagramStateDebounce from '../../hooks/useSaveDebounce';
+import { getNewIdString } from '../../utils';
 
-const initialNodes: Node[] = [
-  {
-    id: '1',
-    type: 'input',
-    data: { label: 'Node 1' },
-    position: { x: 250, y: 5 },
-  },
-  {
-    id: '2',
-    data: { label: 'Node 2' },
-    position: { x: 100, y: 100 },
-  },
-  {
-    id: '3',
-    data: { label: 'Node 3' },
-    position: { x: 400, y: 100 },
-  },
-  {
-    id: '4',
-    data: { label: 'Node 4' },
-    position: { x: 400, y: 200 },
-    type: 'custom',
-    // className: styles.customNode,
-    className: 'customNode',
-  },
-];
-
-const initialEdges: Edge[] = [
-  { id: 'e1-2', source: '1', target: '2' },
-  { id: 'e1-3', source: '1', target: '3' },
-];
-
-const nodeTypes = {
-  custom: CustomNode,
-};
-
-const defaultEdgeOptions = {
+const defaultEdgeOptions: DefaultEdgeOptions  = {
   animated: true,
   type: 'smoothstep',
 };
 
+const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
+
+const getId = () => `dndnode_${getNewIdString()}`;
+
 const Flow = (props: FlowProps) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const ref = useRef(null)
-  const onConnect = useCallback(
+  let existingNodes = props.flowDiagramData? props.flowDiagramData.nodes : [];
+  let existingEdges = props.flowDiagramData? props.flowDiagramData.edges : [];
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>(existingNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(existingEdges);
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [minimapVisible, setMinimapVisible] = useState(false);
+  const [controlsVisible, setControlsVisible] = useState(false);
+  
+  const ref = useRef(null);
+  const onConnect: OnConnect = useCallback(
     (params: Connection | Edge) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
+  const nodeClassName = (node) => node.type;
 
   useEffect(() => {
-      console.log('Flow init', props)
-  });
+    console.log('First render flow nodes', nodes);
+    console.log('First render flow edges', edges);
+  }, []);
+
+  const {debouncedNodes, debouncedEdges} = useDiagramStateDebounce(nodes, edges);
+
+  useEffect(() => {
+    props.saveFlowDiagramData({
+      nodes: nodes,
+      edges: edges,
+    });
+  }, [debouncedNodes, debouncedEdges]);
+
+  const onDragOver = useCallback((event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  const onDrop = useCallback(
+    (event) => {
+      event.preventDefault();
+      const nodeType = event.dataTransfer.getData('application/reactflow');
+      if (typeof nodeType === 'undefined' || !nodeType || (!nodeTypes[nodeType] && nodeType !== 'default')) {
+        return;
+      }
+      const type = nodeType;
+
+      const position = reactFlowInstance.screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+
+      // todo 6387 get Node, data/contexts from custom nodes
+      const newNode: Node = {
+        id: getId(),
+        type,
+        position,
+        // className: 'customNode',
+        data: { label: `${nodeDefaultLabels[type]}` },
+      };
+
+      setNodes((nds) => nds.concat(newNode));
+    },
+    [reactFlowInstance],
+  );
+
+  const updateMinimap = useCallback((enabled) => {
+    setMinimapVisible(enabled);
+  }, []);
+
+  const updateControls = useCallback((enabled) => {
+    setControlsVisible(enabled);
+  }, []);
+
+
 
   return (
-    // * only render after anguler view init and parent height defined
-    props.height && 
-    <div className={'flow'} style={{height: props.height}}>
-      <ReactFlow
-        nodes={nodes}
-        onNodesChange={onNodesChange}
-        edges={edges}
-        ref={ref}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        onClick={() => props.diagramStateHandlers.clickEvent('Some info from flow component onclick')}
-        nodeTypes={nodeTypes}
-        defaultEdgeOptions={defaultEdgeOptions}
-        connectionLineType={ConnectionLineType.SmoothStep}
-        fitView
-      />
+    props.height &&
+    <div className="process-flow-diagram">
+    {/* // * wrap with ReactFlowProvider to access ReactFlow context in   */}
+    <ReactFlowProvider>
+      <div className={'flow-wrapper'} style={{ height: props.height }}>
+        <ReactFlow
+          nodes={nodes}
+          onNodesChange={onNodesChange}
+          edges={edges}
+          ref={ref}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          onInit={setReactFlowInstance}
+          onClick={() => props.clickEvent('onClick')}
+          nodeTypes={nodeTypes}
+          defaultEdgeOptions={defaultEdgeOptions}
+          defaultViewport={defaultViewport}
+          connectionLineType={ConnectionLineType.SmoothStep}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+          fitView
+          className="flow"
+        >
+          {minimapVisible &&
+            <MiniMap zoomable pannable nodeClassName={nodeClassName} />
+          }
+          {controlsVisible &&
+            <Controls />
+          }
+          <Background />
+        </ReactFlow>
+      </div>
+      <Sidebar 
+        minimapVisibleCallback={updateMinimap}
+        controlsVisibleCallback={updateControls}
+        shadowRoot={props.shadowRoot}
+        />
+    </ReactFlowProvider>
     </div>
   );
 }
 
 export default Flow;
 export interface FlowProps {
+  shadowRoot,
   height?: number,
-  diagramData?: any,
-  diagramStateHandlers?: {
-    clickEvent: (...args) => void;
-  }
+  flowDiagramData: FlowDiagramData;
+  clickEvent: (...args) => void;
+  saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
 }
