@@ -19,10 +19,11 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 
 import Sidebar from '../Sidebar/Sidebar';
-import { nodeDefaultLabels, nodeTypes } from './nodeConstants';
-import { FlowDiagramData } from '../../../../src/process-flow-types/process-flow-types';
+import { FlowDiagramData } from '../../../../src/process-flow-types/shared-process-flow-types';
 import useDiagramStateDebounce from '../../hooks/useSaveDebounce';
 import { getNewIdString } from '../../utils';
+import { ProcessFlowPart, nodeTypes } from './process-flow-types-and-constants';
+import { getPropDataFromPartNode } from './process-flow-utils';
 
 const defaultEdgeOptions: DefaultEdgeOptions  = {
   animated: true,
@@ -68,27 +69,29 @@ const Flow = (props: FlowProps) => {
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
+
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
       const nodeType = event.dataTransfer.getData('application/reactflow');
-      if (typeof nodeType === 'undefined' || !nodeType || (!nodeTypes[nodeType] && nodeType !== 'default')) {
+      if (typeof nodeType === 'undefined' || !nodeType) {
         return;
       }
-      const type = nodeType;
-
+      
       const position = reactFlowInstance.screenToFlowPosition({
         x: event.clientX,
         y: event.clientY,
-      });
-
-      // todo 6387 get Node, data/contexts from custom nodes
+        });
+        
+      const type = nodeType;
+      // todo use callback?
+      const propData: ProcessFlowPart = getPropDataFromPartNode(nodeType);
       const newNode: Node = {
         id: getId(),
         type,
         position,
-        // className: 'customNode',
-        data: { label: `${nodeDefaultLabels[type]}` },
+        className: propData.className,
+        data: propData
       };
 
       setNodes((nds) => nds.concat(newNode));

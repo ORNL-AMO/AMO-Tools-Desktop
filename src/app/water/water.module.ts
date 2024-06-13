@@ -22,6 +22,9 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { SetupTabsComponent } from './water-banner/setup-tabs/setup-tabs.component';
+import { IntakeSourceComponent } from './intake-source/intake-source.component';
+import { DischargeOutletComponent } from './discharge-outlet/discharge-outlet.component';
+import { ProcessUseComponent } from './process-use/process-use.component';
 
 
 
@@ -32,7 +35,10 @@ import { SetupTabsComponent } from './water-banner/setup-tabs/setup-tabs.compone
     ResultsPanelComponent,
     SystemBasicsComponent,
     WaterBannerComponent,
-    SetupTabsComponent
+    SetupTabsComponent,
+    IntakeSourceComponent,
+    DischargeOutletComponent,
+    ProcessUseComponent
   ],
   imports: [
     CommonModule,

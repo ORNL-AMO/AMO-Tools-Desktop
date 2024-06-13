@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
-import { WaterAssessmentService } from '../../water-assessment.service';
+import { WaterAssessmentService, WaterSetupTabString } from '../../water-assessment.service';
 import { WaterAssessment } from '../../../shared/models/water-assessment';
 
 @Component({
@@ -12,13 +12,19 @@ import { WaterAssessment } from '../../../shared/models/water-assessment';
 export class SetupTabsComponent {
 
   setupTabSub: Subscription;
-  setupTab: string;
+  setupTab: WaterSetupTabString;
   disabledSetupTabs: Array<string>;
   disableTabs: boolean;
   canContinue: boolean;
 
   systemBasicsClassStatus: Array<string> = [];
+  intakeSourceClassStatus: Array<string> = [];
+  processUseClassStatus: Array<string> = [];
+  dischargeOutletClassStatus: Array<string> = [];
   systemBasicsBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
+  intakeSourceBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
+  processUseBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
+  dischargeOutletBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   waterAssessmentSub: Subscription;
   settingsSub: Subscription;
   settings: Settings;
@@ -54,6 +60,9 @@ export class SetupTabsComponent {
 
     }
     this.setSystemBasicsStatus();
+    this.setIntakeSourceStatus();
+    this.setProcessUseStatus();
+    this.setDischargeOutletStatus();
 
     if ((hasValidSystemBasics) || (this.setupTab == 'system-basics')) {
       this.canContinue = true;
@@ -69,7 +78,7 @@ export class SetupTabsComponent {
     this.settingsSub.unsubscribe();
   }
 
-  changeSetupTab(str: string) {
+  changeSetupTab(str: WaterSetupTabString) {
     if (!this.disabledSetupTabs.includes(str)) {
       this.waterAssessmentService.setupTab.next(str);
     }
@@ -80,6 +89,28 @@ export class SetupTabsComponent {
       this.systemBasicsClassStatus = ["active"];
     } else {
       this.systemBasicsClassStatus = [];
+    }
+  }
+
+  setIntakeSourceStatus() {
+    if (this.setupTab == "intake-source") {
+      this.intakeSourceClassStatus = ["active"];
+    } else {
+      this.intakeSourceClassStatus = [];
+    }
+  }
+  setProcessUseStatus() {
+    if (this.setupTab == "process-use") {
+      this.processUseClassStatus = ["active"];
+    } else {
+      this.processUseClassStatus = [];
+    }
+  }
+  setDischargeOutletStatus() {
+    if (this.setupTab == "discharge-outlet") {
+      this.dischargeOutletClassStatus = ["active"];
+    } else {
+      this.dischargeOutletClassStatus = [];
     }
   }
 

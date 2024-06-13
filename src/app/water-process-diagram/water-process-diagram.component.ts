@@ -3,7 +3,7 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Subscription } from 'rxjs';
 import { WaterProcessDiagramService } from './water-process-diagram.service';
-import { WaterDiagram, WaterDiagramOption } from '../../process-flow-types/process-flow-types';
+import { WaterDiagram, WaterDiagramOption } from '../../process-flow-types/shared-process-flow-types';
 import * as _ from 'lodash';
 
 @Component({

@@ -20,9 +20,9 @@ import { IntegrationStateService } from '../connected-inventory/integration-stat
 import { SettingsService } from '../../settings/settings.service';
 import { AnalyticsService } from '../analytics/analytics.service';
 import { PumpItem } from '../../pump-inventory/pump-inventory';
-import { WaterDiagram } from '../../../../process-flow-diagram-component/lib/process-flow-types';
 import { getNameDateString } from '../helperFunctions';
 import { WaterAssessmentService } from '../../water/water-assessment.service';
+import { WaterDiagram } from '../../../process-flow-types/shared-process-flow-types';
 
 @Component({
   selector: 'app-create-assessment-modal',

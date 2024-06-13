@@ -3,7 +3,7 @@ import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { WaterDiagramStoreMeta } from './dbConfig';
 import { Observable } from 'rxjs';
 import * as _ from 'lodash';
-import { WaterDiagram } from '../../process-flow-types/process-flow-types';
+import { WaterDiagram } from '../../process-flow-types/shared-process-flow-types';
 
 @Injectable({
   providedIn: 'root'

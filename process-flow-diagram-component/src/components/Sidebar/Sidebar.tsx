@@ -1,5 +1,7 @@
 import React, { useCallback } from 'react';
 import DownloadButton from '../DownloadButton';
+import { ProcessFlowPart } from '../Flow/process-flow-types-and-constants';
+import { processFlowDiagramParts } from '../Flow/process-flow-utils';
 
 const Sidebar = (props: SidebarProps) => {
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
@@ -7,22 +9,19 @@ const Sidebar = (props: SidebarProps) => {
     event.dataTransfer.effectAllowed = 'move';
   };
 
+  const processFlowParts: ProcessFlowPart[] = [...processFlowDiagramParts];
+
   return (
-    // todo 6387 programmatically list component types
     <aside>
       <div className="alert alert-info description ">Drag water process components to the pane on the right</div>
-      <div className="dndnode waterIntake" onDragStart={(event) => onDragStart(event, 'waterIntake')} draggable>
-        Water Intake
-      </div>
-      <div className="dndnode" onDragStart={(event) => onDragStart(event, 'processUse')} draggable>
-        Process Use
-      </div>
-      <div className="dndnode waterDischarge" onDragStart={(event) => onDragStart(event, 'waterDischarge')} draggable>
-        Water Discharge
-      </div>
-      <div className="dndnode" onDragStart={(event) => onDragStart(event, 'default')} draggable>
-        Default
-      </div>
+      {processFlowParts.map((part: ProcessFlowPart) => {
+        return (
+          <div key={part.nodeType} className={`dndnode ${part.nodeType}`} onDragStart={(event) => onDragStart(event, part.nodeType)} draggable>
+              {part.defaultLabel}
+            </div>
+        );
+      })}
+
       <div className="sidebar-actions">
         <label>
           <input

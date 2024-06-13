@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css'
 import Flow, { FlowProps } from './components/Flow';
-import { WaterDiagram } from '../../src/process-flow-types/process-flow-types';
+import { WaterDiagram } from '../../src/process-flow-types/shared-process-flow-types';
 
 function App(props?: ProcessFlowDiagramWrapperProps) {
   const ref = useRef(null)

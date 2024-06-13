@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { ParentContainerDimensions, WaterDiagram, WaterDiagramOption } from '../../process-flow-types/process-flow-types';
+import { ParentContainerDimensions, WaterDiagram, WaterDiagramOption } from '../../process-flow-types/shared-process-flow-types';
 import { WaterProcessIdbService } from '../indexedDb/water-process-idb.service';
 import * as _ from 'lodash';
 import { getNameDateString, getNewIdString } from '../shared/helperFunctions';
