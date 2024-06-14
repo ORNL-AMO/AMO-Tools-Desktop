@@ -119,7 +119,7 @@ export class CreateAssessmentModalComponent {
       }
     }
     if (this.waterDiagram) {
-        assessmentName = `${this.waterDiagram.name}_${getNameDateString(currentDate)}`;
+      assessmentName = `${this.waterDiagram.name}_Assessment_${getNameDateString(currentDate)}`;
     }
     return assessmentName;
   }
@@ -239,7 +239,7 @@ export class CreateAssessmentModalComponent {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(assessmentSettings);
     // todo set settings/units match
     // newSettings = this.settingsService.setPumpSettingsUnitType(newSettings);
-    await this.waterAssessmentService.setWaterAssessmentFromDiagram(this.waterDiagram, createdAssessment, newSettings);
+    await this.waterAssessmentService.setNewWaterAssessmentFromDiagram(this.waterDiagram, createdAssessment, newSettings);
     await this.saveAssessmentAndSettings(newSettings, createdAssessment)
   }
 

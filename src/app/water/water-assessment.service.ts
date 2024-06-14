@@ -3,9 +3,10 @@ import { BehaviorSubject } from 'rxjs';
 import { SystemInformationFormService } from '../compressed-air-assessment/system-information/system-information-form.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
-import { WaterAssessment } from '../shared/models/water-assessment';
+import { DischargeOutlet, IntakeSource, ProcessUse, WaterAssessment } from '../shared/models/water-assessment';
 import { Assessment } from '../shared/models/assessment';
-import { WaterDiagram } from '../../process-flow-types/shared-process-flow-types';
+import { ProcessFlowPart, WaterDiagram } from '../../process-flow-types/shared-process-flow-types';
+import { Node } from 'reactflow';
 
 @Injectable({
   providedIn: 'root'
@@ -61,10 +62,32 @@ export class WaterAssessmentService {
     this.waterAssessment.next(waterAssessment);
   }
 
-  setWaterAssessmentFromDiagram(waterDiagram: WaterDiagram, waterAssessment: Assessment, newSettings: Settings) {
-    console.log('setWaterAssessmentFromDiagram', waterDiagram, waterAssessment);
-    console.log('setWaterAssessmentFromDiagram nodes', waterDiagram.flowDiagramData.nodes);
-    console.log('setWaterAssessmentFromDiagram edges', waterDiagram.flowDiagramData.edges);
+  setNewWaterAssessmentFromDiagram(waterDiagram: WaterDiagram, assessment: Assessment, newSettings: Settings) {
+    let intakeSources = [];
+    let processUses = [];
+    let dischargeOutlets = [];
+    waterDiagram.flowDiagramData.nodes.map((waterDiagramNode: Node) => {
+      const waterSystemPart = waterDiagramNode.data as ProcessFlowPart;
+      if (waterSystemPart.nodeType === 'waterIntake') {
+        intakeSources.push(waterSystemPart as IntakeSource)
+      }
+      if (waterSystemPart.nodeType === 'processUse') {
+        processUses.push(waterSystemPart as ProcessUse)
+      }
+      if (waterSystemPart.nodeType === 'waterDischarge') {
+        dischargeOutlets.push(waterSystemPart as DischargeOutlet)
+      }
+
+    })
+    assessment.water.intakeSources = intakeSources.length > 0? intakeSources : undefined;
+    assessment.water.processUses = processUses.length > 0? processUses : undefined;
+    assessment.water.dischargeOutlets = dischargeOutlets.length > 0? dischargeOutlets : undefined;
+    // setConnectedPartsFromEdges()
+
+  }
+
+  setConnectedPartsFromEdges() {
+
   }
 
   continue() {

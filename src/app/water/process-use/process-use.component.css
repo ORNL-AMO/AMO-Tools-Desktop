@@ -1,0 +1,21 @@
+.collapsed-border {
+    border-bottom: none;
+}
+
+.group-label {
+    font-size: 16px;
+    text-transform: none;
+    letter-spacing: 1px;
+    padding-top: 6.5px;
+    padding-bottom: 6.5px;
+}
+
+.group-label:hover {
+    cursor: pointer;
+}
+
+.form-card {
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 20px 0 grey;
+}

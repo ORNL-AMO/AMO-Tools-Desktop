@@ -48,7 +48,7 @@ export class WaterProcessDiagramService {
     // let defaultName = `Water Diagram ${getNameDateString(currentDate)}`;
     return {
       modifiedDate: new Date(),
-      name: 'test' + defaultName,
+      name: 'Water_Diagram_' + String(defaultName).slice(0,2),
       isValid: true,
       // todo will we need dir id?
       // directoryId: 1,

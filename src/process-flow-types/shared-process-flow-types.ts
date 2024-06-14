@@ -1,4 +1,6 @@
 import { CSSProperties, ReactNode } from "react";
+import { Edge, Node } from 'reactflow';
+
 
 // * passed down to diagram
 export interface ProcessFlowParentState {
@@ -36,8 +38,8 @@ export interface ProcessFlowParentState {
 
 // * nodes/edges at reactflow/dist nodes.d.ts and edges.d.ts
   export interface FlowDiagramData {
-    nodes: any[],
-    edges: any[],
+    nodes: Node[],
+    edges: Edge[],
   }
 
 
