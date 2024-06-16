@@ -4,6 +4,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { TankInsulationReductionService } from '../tank-insulation-reduction.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { TankInsulationReductionInput } from '../../../../shared/models/standalone';
 
 @Component({
   selector: 'app-tank-insulation-reduction-form',
@@ -33,6 +34,9 @@ export class TankInsulationReductionFormComponent implements OnInit {
   showOperatingHoursModal: boolean;
   tankThicknessWarning: string = null;
   insulationThicknessWarning: string = null;
+
+  surfaceTemperatureGreaterThanWarning: string = "Value must be greater than Average Ambient Temperature ";
+  surfaceTemperatureLessThanWarning: string = "Value must be less than Internal Tank Temperature " ;  
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -181,6 +185,23 @@ export class TankInsulationReductionFormComponent implements OnInit {
     this.calculate();
   }
 
+  updateValidators(){
+    let inputData: TankInsulationReductionInput;
+    if (this.isBaseline == true) {
+      inputData = this.tankInsulationReductionService.getObjFromForm(this.form, this.tankInsulationReductionService.baselineData, this.settings);
+    } else {
+      inputData = this.tankInsulationReductionService.getObjFromForm(this.form, this.tankInsulationReductionService.modificationData, this.settings);
+    }
+    this.form = this.tankInsulationReductionService.updateSurfaceTemperatureFormValidators(this.form.controls.heatedOrChilled.value, this.form, inputData);
+    if (this.form.controls.heatedOrChilled.value === 0 ){
+      this.surfaceTemperatureGreaterThanWarning = "Value must be greater than Average Ambient Temperature " + inputData.ambientTemperature;
+      this.surfaceTemperatureLessThanWarning = "Value must be less than Internal Tank Temperature " + inputData.tankTemperature;       
+    } else if (this.form.controls.heatedOrChilled.value === 1 ){
+      this.surfaceTemperatureGreaterThanWarning = "Value must be greater than Internal Tank Temperature " + inputData.tankTemperature;
+      this.surfaceTemperatureLessThanWarning = "Value must be less than Average Ambient Temperature " + inputData.ambientTemperature;     
+    }
+  }
+
   changeInsulationMaterial() {
     if (this.form.controls.insulationMaterialSelection.value == 0) {
       this.form.controls.jacketMaterialSelection.patchValue(0);
@@ -192,8 +213,8 @@ export class TankInsulationReductionFormComponent implements OnInit {
   }
 
   calculate() {
+    this.updateValidators();
     //this.checkWarnings();
-    this.form = this.tankInsulationReductionService.setSurfaceTempValidators(this.form);
     if (this.form.valid) {
       if (this.isBaseline == true) {
         this.tankInsulationReductionService.baselineData = this.tankInsulationReductionService.getObjFromForm(this.form, this.tankInsulationReductionService.baselineData, this.settings);

@@ -6,6 +6,8 @@ import { firstValueFrom, map, mergeMap, Observable } from 'rxjs';
 import { AssessmentStoreMeta } from './dbConfig';
 import { UpdateDataService } from '../shared/helper-services/update-data.service';
 import { environment } from '../../environments/environment';
+import { CalculatorDbService } from './calculator-db.service';
+import { Calculator } from '../shared/models/calculators';
 declare const packageJson;
 
 @Injectable()
@@ -15,7 +17,7 @@ export class AssessmentDbService {
   storeName: string = AssessmentStoreMeta.store;
 
   constructor(
-    private dbService: NgxIndexedDBService, private updateDataService: UpdateDataService) {
+    private dbService: NgxIndexedDBService, private updateDataService: UpdateDataService, private calculatorDbService: CalculatorDbService) {
   }
   
   async setAll(assessments?: Array<Assessment>) {
@@ -33,6 +35,11 @@ export class AssessmentDbService {
           if (assessment.appVersion !== environment.version) {
             this.updateDataService.updateAssessmentVersion(assessment);
             await firstValueFrom(this.updateWithObservable(assessment));
+            let assessmentCalculators: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
+            let updatedAssessmentCalculators = this.updateDataService.updateAssessmentCalculatorVersion(assessmentCalculators);
+            if (updatedAssessmentCalculators) {
+              this.calculatorDbService.saveAssessmentCalculator(assessment, updatedAssessmentCalculators);
+            }
           }
         }
         return assessments;

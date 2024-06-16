@@ -1,8 +1,9 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { WeatherBinsService, WeatherDataSourceView } from './weather-bins.service';
+import { WeatherBinsInput, WeatherBinsService, WeatherDataSourceView } from './weather-bins.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-weather-bins',
@@ -27,13 +28,22 @@ export class WeatherBinsComponent implements OnInit {
   tabSelect: string = 'results';
   headerHeight: number;
   weatherDataSourceView: WeatherDataSourceView;
+  weatherBinsInputSubscription: Subscription;
+  weatherBinsInput: WeatherBinsInput;
   constructor(private settingsDbService: SettingsDbService, private weatherBinsService: WeatherBinsService,
     private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
     this.analyticsService.sendEvent('calculator-UTIL-weather-bins');
     this.settings = this.settingsDbService.globalSettings;
+    this.weatherBinsInputSubscription = this.weatherBinsService.inputData.subscribe(data => {
+      this.weatherBinsInput = data;
+    })
     this.weatherDataSourceView = this.weatherBinsService.weatherDataSourceView.getValue();
+  }
+
+  ngOnDestroy(): void {
+    this.weatherBinsInputSubscription.unsubscribe();
   }
 
   setTab(str: string) {

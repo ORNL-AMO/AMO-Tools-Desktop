@@ -1,7 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, JsonpClientBackend } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { AppErrorService } from '../errors/app-error.service';
 
 @Injectable()
 export class WeatherStationLookupService {
@@ -10,7 +11,7 @@ export class WeatherStationLookupService {
   weatherStationTimeSeriesData: Array<TimeSeriesWeatherData>;
   weatherDataStationName: BehaviorSubject<string>;
   selectedStation: BehaviorSubject<WeatherStation>;
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private appErrorService: AppErrorService) {
     this.weatherDataStationName = new BehaviorSubject(undefined);
     this.selectedStation = new BehaviorSubject(undefined);
    }
@@ -31,7 +32,7 @@ export class WeatherStationLookupService {
           County: ws["County"], 
           Zip: ws["Zip"] 
       } as WeatherStation))),
-      catchError(error => this.handleError(error, 'getStations')));
+      catchError(error => this.appErrorService.handleHttpError(error, 'getStations')));
   }
 
   getCSV(stationCsvId: number) {
@@ -44,17 +45,7 @@ export class WeatherStationLookupService {
     return this.httpClient
       .get<string>(url, httpOptions)
       .pipe(
-        catchError(error => this.handleError(error, 'getCSV')));
-  }
-
-  handleError(error: HttpErrorResponse, callOrigin: string) {
-    let customError: MeasurHttpError = new MeasurHttpError('An error occured. Please try again');
-    if (error.error instanceof ErrorEvent) {
-      customError.message = 'An error occured trying to retrieve data from the sercer. Please try again.';
-    } else if (error.error instanceof ProgressEvent && error.status === 0) {
-      customError.message = 'A network error occured. Please check your internet connection.';
-    } 
-    return throwError(() => customError);
+        catchError(error => this.appErrorService.handleHttpError(error, 'getCSV')));
   }
   
   setWeatherStationTimeSeriesData(csvResults: Array<any>) {
@@ -144,5 +135,3 @@ export interface ZipGeoData {
 // Wdir (degrees): 170
 // Wet Bulb (C): -7
 // Wspd (m/s): 1.5
-
-export class MeasurHttpError extends Error  {}
