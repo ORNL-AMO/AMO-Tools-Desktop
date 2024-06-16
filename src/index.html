@@ -58,6 +58,12 @@
 			text-align: center;
 		}
 
+		#errorMessage {
+			color: #721c24;
+    		background-color: #f8d7da;
+    		border-color: #f5c6cb;
+		}
+
 		.spinner>div {
 			width: 18px;
 			height: 18px;
@@ -150,22 +156,27 @@
 					<div id="loadingError" class="loading-error">
 						<div class="text-center">
 							<img src="assets/images/MEASUR.png" class="app-icon">
-							<h1 id="errorMessage" class="text-center bold m-0">Unable to load MEASUR successfully</h1>
-							
+							<h1 id="errorMessage" class="text-center bold m-0 p-3">Unable to load MEASUR</h1>
 							<div class="mx-auto text-left mt-5 w-50">
-								<h2 class="bold h6">Troubleshooting:</h2>
+								<h2 class="bold h2">Troubleshooting:</h2>
 								<ul class="ml-5 pl-2">
-									<li>Check your internet connection and try again: <a href="https://measur.ornl.gov">https://measur.ornl.gov</a>
-									</li>
+									<li>Check your internet connection and try again: <a href="https://measur.ornl.gov">https://measur.ornl.gov</a></li>
 									<li>Perform a hard refresh on the page in your browser or open MEASUR from a private/incognito window</li>
 									<li>If using a VPN or Proxy, try temporarily disabling it or accessing MEASUR from a different network</li>
 								</ul>
-								<div class="mt-2 small">
-									If you continue to experience problems, please provide feedback to Gina Accawi at accawigk@ornl.gov.
-									Please include your operating system (e.g., Windows 10, Mac OS 10.12), a screenshot of the issue, and an export
-									of
-									your current data set.
-								</div>
+							</div>
+							<div class="mx-auto text-left mt-5 w-50">
+								<h4 class="bold h4">Submit a Bug Report</h4>
+								<h5 class="h6">To submit an issue, please send the information below to 
+									<a id="supportEmail" href="mailto:measur-help@ornl.gov?subject=AMO Tools Support Request">measur-help&#64;ornl.gov</a></h5>
+								<ul class="ml-5 pl-2">
+									<li>A screenshot of the error message, issue, or unexpected outcome with a detailed description of the
+										behavior. For example: I visited Data Explorer and uploaded a single xlsx. I selected a header row and
+										clicked the “Next” tab which caused an error.</li>
+									<li>The assessment, Treasure Hunt, Data Explorer data or other MEASUR exported data with .json or .gz file
+										extensions that the team may use to reproduce the issue.</li>
+									<li>MEASUR version number (v<span id="indexAppVersion"></span>) and platform used: Web, Desktop, PWA installed from the browser</li>
+								</ul>
 							</div>
 						</div>
 					</div>

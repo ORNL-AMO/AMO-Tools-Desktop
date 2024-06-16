@@ -19,6 +19,27 @@
                     </span>
                 </div>
             </div>
+
+        <div class="form-group">
+            <label class="small" for="atmosphericPressure">Atmospheric Pressure</label>
+            <div class="input-group">
+                <input class="form-control" name="atmosphericPressure" type="number"
+                    formControlName="atmosphericPressure" id="atmosphericPressure" (input)="save()"
+                    onfocus="this.select();" (focus)="changeField('atmosphericPressure')">
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+                <span class="alert-danger pull-right small"
+                    *ngIf="bleedForm.controls.atmosphericPressure.invalid && !bleedForm.controls.atmosphericPressure.pristine">
+                    <span *ngIf="bleedForm.controls.atmosphericPressure.errors.required">Value required.</span>
+                    <span *ngIf="bleedForm.controls.atmosphericPressure.errors.min"> Value can't be less than
+                        {{bleedForm.controls.atmosphericPressure.errors.min.min}}.</span>
+                </span>
+            </div>
+        </div>
+
+
+
+        
             <div class="form-group">
                 <label class="small" for="normalOperatingPressure">Normal Operating Pressure</label>
                 <div class="input-group">

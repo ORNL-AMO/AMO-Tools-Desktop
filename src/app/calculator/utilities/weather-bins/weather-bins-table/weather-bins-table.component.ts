@@ -20,7 +20,6 @@ export class WeatherBinsTableComponent implements OnInit {
   ngOnInit(): void {   
     this.inputDataSub = this.weatherBinsService.inputData.subscribe(inputData => {      
       this.inputData = inputData;
-      this.totalCaseDataPoints = this.weatherBinsService.getTotalCaseDataPoints(inputData);
     }); 
   }
 

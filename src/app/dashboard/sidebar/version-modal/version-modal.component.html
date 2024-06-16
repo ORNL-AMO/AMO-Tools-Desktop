@@ -34,148 +34,16 @@
             not be available.</li>
         </ul>
 
-        <label>What's New?</label>
-        <ul>
-          <li>Added the ability to import an assessment as a Treasure Hunt opportunity</li>
-          <li>Added the Blowdown calculator as a Treasure Hunt opportunity</li>
-          <li>Added a field for Implementation Cost to all Explore Opportunities Forms</li>
-          <li>Added better Team support for the Treasure Hunt PowerPoint Report</li>
-          <li>Added export buttons to the header of each module</li>
-          <li>Added support for exporting large assessments or groups of assessments </li>
-          <li>Added the ability to connect a motor inventory entry to a pump assessment</li>
-          <li>Continued adding support for viewing on mobile devices</li>
-          <li>Bug Fixes</li>
-        </ul>
-
-      <label>Here are the details of what's new in version 1.4.0:</label>
+      <label>Here are the details of what's new in version 1.5.1:</label>
         <br>
         <label>Application</label>
         <ul>
-         <li>Added: Ability to download MEASUR as a progressive web application</li>
-         <li>Added: Enhanced data analytics tags</li>
-         <li>Added: Export buttons to the header of each module</li>
-         <li>Added: Field for Implementation Cost to all Explore Opportunities Forms for the calculation of simple payback</li>
-         <li>Added: package.json script for "clean" on Windows</li>
-         <li>Added: Persistence to changes made to assessments in update-data.service to improve processing</li>
-         <li>Enhancement: Added support for exporting large assessments or groups of assessments as .gz instead of .json and importing .gz</li>
-         <li>Enhancement: Cleaned up home page for mobile UI</li>
-         <li>Enhancement: Overhauled how data export modal displays files to be exported</li>
-         <li>Enhancement: Standardized display of results for mobile viewing</li>
-         <li>Enhancement: Standardized navigation within assessments for mobile view</li>
-         <li>Fixed: Issues with gauge diagram for values over 100%</li>
-         <li>Fixed: New assessment modal not adapting to screen dimensions properly</li>
-         <li>Fixed: Several issues related to assessment folder directory system (moving, copying, deleting, etc.)</li>
-         <li>Fixed: Styling of list view in dashboard</li>
-         <li>Removed: Navigation sidebar in assessments</li>
-         <li>Removed: Validation related to maximum unit cost of electricity</li>
-         <li>Updated: Consolidated import/export functionality </li>
-         <li>Updated: Dependencies required for operation (updated Nodejs, removed ngx-electron)</li>
-         <li>Updated: Moved contributor Mark Root to Oak Ridge National Lab (congratulations!)</li>
-         <li>Updated: ReadMe</li>
-         <li>Updated: Replaced NAN bindings with Web Assembly bindings</li>
+          <li>Fixed: Windows auto-updater issue displaying error even though update download and install are successful</li>
         </ul>
-
-        <label>Calculators</label>
-        <ul>
-           <li>Added: Improved help text for lighting calculator - ballast factor</li>
-           <li>Fixed: Issue in Percent Load Estimation calculator where results were not updated properly with changes</li>
-           <li>Removed: Data validation maximum for insulation calculators' system efficiency for chilled systems</li>
-        </ul>
-
-        <label>Data Explorer</label>
-        <ul>
-          <li>Added: Messaging and validation to insure graphs will render properly or not attempt when not possible (e.g., stops rendering of a time series graph if no column has been identified as a datetime)</li>
-          <li>Added: Plotly date range slider to time series graphs</li>
-          <li>Enhanced: Improved UI for mobile devices for Data Explorer module</li>
-          <li>Enhancement: Redesigned Visualization graph sidebar workflow to simplify process of creating graphic</li>
-          <li>Fixed: Issue where sidebar form was not fully visible on small (but not mobile) screens</li>
-          <li>Fixed: Various issues introduced during processing and UX overhaul</li>
-          <li>Removed: Data range selector is no longer needed with performance optimization</li>
-        </ul>
-
-        <label>Compressed Air</label>
-        <ul>
-          <li>Enhanced: Improved UI for mobile devices for Compressed Air module</li>
-          <li>Enhanced: Improved help text for Air Leak Survey - Decibel method</li>
-          <li>Enhanced: Set default utility type to Electricity for Compressed Air Reduction and Air Leak Survey Calculators</li>
-          <li>Fixed: Multiple bugs relating to Air Leak Survey</li>
-        </ul>
-
-        <label>Pumps</label>
-        <ul>
-          <li>Added: Functionality to connect data from motor inventory in pump assessment</li>
-          <li>Fixed: Bug relating to CO2 emissions not calculating with default electrical emission factor</li>
-          <li>Fixed: Issue relating to entering data related to current instead of power in Field Data</li>
-          <li>Fixed: Issue where pump type dropdown included enum of drive types</li>
-          <li>Fixed: Motor Badge falsely indicated minor error in form</li>
-        </ul>
-
-        <label>Fans</label>
-        <ul>
-          <li>Fixed: Bug relating to CO2 emissions not calculating with default electrical emission factor</li>
-          <li>Fixed: Calculation of velocity pressure was only valid for imperial units (updated to include unit conversions and improved calculation)</li>
-          <li>Fixed: Removed incorrect validation message from outlet pressure</li>
-        </ul>
-
-
-        <label>Process Heating</label>
-        <ul>
-          <li>Added: Electric heater losses to sankey</li>
-          <li>Added: Field and calculations relating to electrical heating efficiency and losses</li>
-          <li>Fixed: Bug relating to the initialization of electrotechnology Energy Inputs form</li>
-          <li>Fixed: Calculation of fuel-related losses for hybrid-electrotechnology process heaters</li>
-          <li>Fixed: Improper validation warning for solid charge material's heat of reaction not allowing 0</li>
-          <li>Fixed: Issue where MEASUR was unable to print (to pdf or other)</li>
-          <li>Fixed: Issues related to badges not reflecting validation warnings</li>
-          <li>Fixed: Several issues related to how moisture in combustion air was utilized</li>
-          <li>Fixed: SQL error related to custom materials</li>
-          <li>Fixed: Styles related to Sankey width</li>
-          <li>Fixed: Styling of new scenarios</li>
-          <li>Fixed: Unit conversion issue related to calculated higher heating value</li>
-          <li>Updated: Changed name of "Net Heat" in process heating results to "Available Heat"</li>
-        </ul>
-
-        <label>Steam</label>
-        <ul>
-          <li>Enhancement: Removed moisture data input from stack loss calculator (assumed dry air)</li>
-          <li>Fixed: Issue related to entering a decimal place in the header form</li>
-          <li>Fixed: Issue relating to which methods were called for available heat in stack loss calculator</li>
-          <li>Fixed: Reduced values for Blowdown calculator example</li>
-          <li>Fixed: Sankey was using wrong value for recovered condensate energy loop</li>
-        </ul>
-
-        <label>Treasure Hunt</label>
-        <ul>
-          <li>Added: Ability to import pump, fan, or process heating assessment as an opportunity</li>
-          <li>Added: Steam Blowdown calculator as a steam, natural gas, and other fuel opportunity</li>
-          <li>Enhancement: Improved the accessibility of the opportunities export functionality for standard screens and mobile</li>
-          <li>Enhancement: Redesigned the treasure chest menu to better feature import/export and rearrange sort/filter functions</li>
-          <li>Enhancement: Several enhancements to PowerPoint Report, including organizing opportunities by team and adding specific slides for each team</li>
-          <li>Fixed: Removed large white space in Custom Opportunity page</li>
-          <li>Fixed: Styling issue related to off-centered charts</li>
-          <li>Fixed: Zip code for electricity CO2e emissions was hidden</li>
-        </ul>
-
-        <label>Inventories</label>
-        <ul>
-          <li>Added: Functionality to connect data from motor inventory in pump assessment</li>
-          <li>Added: Functionality to connect data from motor inventory in pump inventory</li>
-          <li>Added: Pump Inventory Manual</li>
-          <li>Enhanced: Improved UI for mobile devices for Motor Inventory module</li>
-          <li>Enhanced: Improved UI for mobile devices for Pump Inventory module</li>
-          <li>Fixed: CSS bug cutting off header widths </li>
-          <li>Fixed: Issue where resetting Examples added extra inventories</li>
-        </ul>
-
-        <label>Wastewater</label>
-        <ul>
-          <li>Added: Field for Implementation Cost modification forms and result for simple payback</li>
-          <li>Fixed: Bug relating to CO2 emissions not calculating with default electrical emission factor</li>
-        </ul>
-
 
         <label>Known Issues</label>
         <ul>
+          <li>The Auto-update feature is currently unavailable for the Mac version</li>
           <li>The Linux release does not support Auto-updating</li>
           <li>Renaming an export in Windows Download menu can delete the file extension (.json, or .gz)</li>
           <li>Assessments made in a previous major release may experience errors</li>
@@ -183,19 +51,87 @@
           <li>We have observed cases where if MEASUR is open for a long period of time while many assessments are present, MEASUR performance can become slow. If experienced, close and reopen MEASUR</li>
         </ul>
 
-        <label>Here are the details of what's new in version 1.3.1:</label>
+
+      <label>Here are the details of what's new in version 1.5.0:</label>
         <br>
+        <label>Application</label>
+        <ul>
+          <li>Added: Ability to email assessment exports directly from assessment</li>
+          <li>Added: Google Analytics Events for new features</li>
+          <li>Added: New dedicated support email support-measur&#64;ornl.gov</li>
+          <li>Enhancement: Added ability to copy entire folders in dashboard</li>
+          <li>Enhancement: Better internal error handling and messaging for critical failures of application</li>
+          <li>Enhancement: More guidance for helping users provide bug reports and feedback</li>
+          <li>Enhancement: Updates and upgrades for the web-assembly module</li>
+          <li>Enhancement: Web-version users will get a notification that there is a update to the tool</li>
+          <li>Fixed: Google Chrome users should no longer have to do a "hard refresh" to see updates in web version</li>
+          <li>Fixed: Issues regarding persistence selecting directories after opening/closing modals</li>
+        </ul>
+
+        <label>Calculators</label>
+        <ul>
+          <li>Enhancement: Ability to click in Psychrometric Chart graph to create a table</li>
+          <li>Enhancement: Improved 2-parameter binning and heatmap graph for Weather Binning calculator</li>
+          <li>Fixed: Instances of user entry fields for percent not being divided by 100 for use in suite (Steam & Natural Gas Reduction)</li>
+          <li>Fixed: Minor bugs relating to Natural Gas Reduction Calc</li>
+        </ul>
+
+        <!-- <label>Data Explorer</label> -->
+
+        <label>Compressed Air</label>
+        <ul>
+          <li>Fixed: Issue where trim compressor selection validation for non-existent daytypes was stopping progress</li>
+        </ul>
+
+        <label>Pumps</label>
+        <ul>
+          <li>Fixed: Errors in Generated Example for Pump Curve calculator</li>
+        </ul>
+
+        <label>Fans</label>
+        <ul>
+          <li>Fixed: Errors in Generated Example for Fan Curve calculator</li>
+        </ul>
+
+
+        <label>Process Heating</label>
+        <ul>
+          <li>Fixed: Bugs relating to Heat Cascading calculator not initializing unless "Generate Example" is clicked and using the incorrect values for available heat</li>
+          <li>Fixed: Issue where calculation for custom solid/liquid fuels HHV</li>
+          <li>Fixed: Issue with the Available Heat Modal in Waste Heat for Absorption Chillers calculator not undarkening</li>
+          <li>Fixed: Printing of Report & Sankeys</li>
+        </ul>
+
+        <label>Steam</label>
+        <ul>
+          <li>Enhancement: Steam results will be shown in System Setup once minimum data is entered</li>
+          <li>Fixed: Bug relating to Site Import Power and CO2 Emissions Calculations</li>
+        </ul>
+
         <label>Treasure Hunt</label>
         <ul>
-          <li>Fixed: Bug related to downloading PowerPoint report</li>
+          <li>Added: Treasure Hunt bring in Compressed Air Assessments</li>
+          <li>Enhancement: Allow users to create a Custom Opp without energy data</li>
+          <li>Fixed: Issues where Water/Wastewater and Compressed Air units did not match unit conversions and math</li>
+        </ul>
+
+        <!-- <label>Inventories</label> -->
+
+        <!-- <label>Wastewater</label> -->
+        
+        <label>Process Cooling</label>
+        <ul>
+          <li>Fixed: Validation to allow Tank and Pipe Insulation to have Surface Temp warmer than internal temperature when "Chilled" is selected</li>
         </ul>
 
         <label>Known Issues</label>
         <ul>
+          <li>The Auto-update feature is currently unavailable for the Mac version</li>
           <li>The Linux release does not support Auto-updating</li>
-          <li>Renaming an export in Windows Download menu can delete the file extension (.json)</li>
+          <li>Renaming an export in Windows Download menu can delete the file extension (.json, or .gz)</li>
           <li>Assessments made in a previous major release may experience errors</li>
           <li>Import files made in a previous major release may not be useable due to field additions/removals</li>
+          <li>We have observed cases where if MEASUR is open for a long period of time while many assessments are present, MEASUR performance can become slow. If experienced, close and reopen MEASUR</li>
         </ul>
 
       </div>

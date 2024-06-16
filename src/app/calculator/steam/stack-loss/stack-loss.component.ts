@@ -33,7 +33,7 @@ export class StackLossComponent implements OnInit {
   containerHeight: number;
 
   currentField: string = 'default';
-  method: number = 0;
+  method: number = 1;
   tabSelect: string = 'results';
   stackLossForm: FormGroup;
   flueGasByVolume: FlueGasByVolume;

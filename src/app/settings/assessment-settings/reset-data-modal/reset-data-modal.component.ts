@@ -31,6 +31,7 @@ import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-materi
 import { ElectronService } from '../../../electron/electron.service';
 import { MockPumpInventory } from '../../../examples/mockPumpInventoryData';
 import { MockWaterAssessment, MockWaterAssessmentSettings } from '../../../examples/mockWaterAssessment';
+import { AppErrorService } from '../../../shared/errors/app-error.service';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -63,6 +64,7 @@ export class ResetDataModalComponent implements OnInit {
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private atmosphereDbService: AtmosphereDbService,
+    private appErrorService: AppErrorService,
     private inventoryDbService: InventoryDbService) { }
 
   ngOnInit() {
@@ -124,16 +126,21 @@ export class ResetDataModalComponent implements OnInit {
 
   async resetSystemSettingsAccept() {
     this.deleting = true;
-    if (this.resetAll) {
-      this.resetAllData();
-    } else if (this.resetUserAssessments) {
-      this.resetAllUserAssessments();
-    } else if (this.resetAppSettings) {
-      this.resetFactorySystemSettings();
-    } else if (this.resetExampleItems) {
-      this.resetFactoryExampleItems();
-    } else if (this.resetCustomMaterials) {
-      this.resetFactoryCustomMaterials();
+    try {
+      throw new Error();
+      if (this.resetAll) {
+        this.resetAllData();
+      } else if (this.resetUserAssessments) {
+        this.resetAllUserAssessments();
+      } else if (this.resetAppSettings) {
+        this.resetFactorySystemSettings();
+      } else if (this.resetExampleItems) {
+        this.resetFactoryExampleItems();
+      } else if (this.resetCustomMaterials) {
+        this.resetFactoryCustomMaterials();
+      }
+    } catch(e) {
+      this.appErrorService.handleAppError('Error restoring system settings', e)
     }
 }
 
@@ -328,9 +335,8 @@ async resetAllExampleAssessments(dirId: number) {
     try {
       this.dbService.deleteDatabase()
         .pipe(
-          catchError(err => {
-            throw new Error(`Database error`);
-          })
+          catchError(e => this.appErrorService.handleObservableAppError('Error Resetting Data', e
+        ))
         )
         .subscribe(
           {

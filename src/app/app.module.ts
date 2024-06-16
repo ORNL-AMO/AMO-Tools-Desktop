@@ -1,11 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 
 import { CoreModule } from './core/core.module';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { MeasurErrorHandler } from './shared/errors/MeasurErrorHandler';
+import { MeasurAppError } from './shared/errors/errors';
+import { AppErrorModule } from './shared/errors/app-error.module';
 
 
 @NgModule({
@@ -14,16 +17,17 @@ import { ServiceWorkerModule } from '@angular/service-worker';
   ],
   imports: [
     BrowserModule,
+    AppErrorModule,
     CoreModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production && environment.useServiceWorker,
-      // registrationStrategy: 'registerImmediately',
       registrationStrategy: 'registerWhenStable:30000'
     }),
   ],
   bootstrap: [AppComponent],
   providers: [
+   {provide: ErrorHandler, useClass: MeasurErrorHandler},
    {
     provide: APP_INITIALIZER,
     useFactory: () => initializeWasmScript,
@@ -43,8 +47,6 @@ export function loadScriptFromPath(id: string, url: string): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     script = document.createElement("script");
     document.body.appendChild(script);
-    // TEST main.ts error
-    // throw new WebAssembly.RuntimeError('TESTING - MODULE RUNTIME ERROR');
     script.onload = () => {
       resolve()
     };
@@ -67,7 +69,10 @@ export function initializeWasmScript(): Promise<any> {
         window['dbInstance'] = new window['Module'].SQLite(":memory:", true);
         console.log('AMO Tools Suite module initialized');
         resolve(module);
-			}
+			},
+      onAbort: function () {
+        new MeasurAppError('Error occured in MEASUR Tools Suite', undefined)
+      } 
 		}
     // load client.js, ensure module created before app init
     loadScriptFromPath('wasmClient', `client.js`)
@@ -75,7 +80,7 @@ export function initializeWasmScript(): Promise<any> {
         const module = <any>{ locateFile: (file: string) => { } };
       })
       .catch(err => {
-        reject(err)
+        reject(new MeasurAppError('Unable to load MEASUR Tools Suite', err))
       });
   });
 }

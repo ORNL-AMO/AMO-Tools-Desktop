@@ -45,15 +45,12 @@ export class RegressionEquationsService {
     let modificationRatio: number;
 
     if (modificationEquipment) {
-      let flowUnit = settings.flowMeasurement;
-      let yValueUnit = settings.distanceMeasurement;
-      let yImperialUnit = 'ft';
       let baselineEquationInputs: ByEquationInputs;
 
       if (yValueLabel === "Head") {
-        baselineEquationInputs = this.equipmentCurveService.getPumpByEquationDefault(flowUnit, yValueUnit, yImperialUnit);
+        baselineEquationInputs = this.equipmentCurveService.getPumpByEquationDefault(settings);
       } else {
-        baselineEquationInputs = this.equipmentCurveService.getFanByEquationDefault(flowUnit, yValueUnit, yImperialUnit);
+        baselineEquationInputs = this.equipmentCurveService.getFanByEquationDefault(settings);
       }
       
       let baselineEquationCoefficients = copyObject(baselineRegressionOutput.baselinePolynomialCurve.equation);
@@ -89,7 +86,6 @@ export class RegressionEquationsService {
           baselineEquationInputs.flowTwo = baselineEquationCoefficients[0];
         }
       }
-
       modificationRegressionOutput = this.getEquipmentRegressionByEquation(baselineEquationInputs, equipmentInputs, modificationEquipment, yValueLabel, maxFlowRate, fluidPowerMultiplier, settings);
       modifiedPairs = modificationRegressionOutput.modifiedDataPairs;
       modificationRatio = modificationRegressionOutput.ratio;

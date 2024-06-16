@@ -15,7 +15,7 @@ export interface HeatCascadingInput {
     secExhaustTemperature: number,
     secExhaustO2: number,
     secCombAirTemperature: number,
-    secAvailableHeat: number,
+    secAvailableHeat?: number,
     secOpHours: number,
     fuelCost: number,
     

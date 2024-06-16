@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SaturatedPropertiesInput, SteamPropertiesInput, BoilerInput, DeaeratorInput, FlashTankInput, HeaderInput, HeatLossInput, TurbineInput, PrvInput, HeatExchangerInput } from "../../shared/models/steam/steam-inputs";
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
 import { Settings } from "../../shared/models/settings";
-import { BoilerOutput, SaturatedPropertiesOutput, SteamPropertiesOutput, DeaeratorOutput, FlashTankOutput, HeaderOutput, HeatLossOutput, TurbineOutput, PrvOutput, HeatExchangerOutput, SSMTOutput } from '../../shared/models/steam/steam-outputs';
+import { BoilerOutput, SaturatedPropertiesOutput, SteamPropertiesOutput, DeaeratorOutput, FlashTankOutput, HeaderOutput, HeatLossOutput, TurbineOutput, PrvOutput, HeatExchangerOutput, SSMTOutput, SSMTLosses } from '../../shared/models/steam/steam-outputs';
 import { SSMTInputs } from '../../shared/models/steam/ssmt';
 import { ConvertSteamService } from './convert-steam.service';
 import { SteamSuiteApiService } from '../../tools-suite-api/steam-suite-api.service';
@@ -377,6 +377,48 @@ export class SteamService {
       heatExchanger: undefined,
       operationsOutput: undefined,
       co2EmissionsOutput: undefined,
+    }
+    
+  }
+
+  getEmptyLosses(): SSMTLosses {
+    return {
+      fuelEnergy: undefined,
+      makeupWaterEnergy: undefined,
+      stack: undefined,
+      blowdown: undefined,
+      highPressureHeader: undefined,
+      mediumPressureHeader: undefined,
+      lowPressureHeader: undefined,
+      condensingTurbineEfficiencyLoss: undefined,
+      highToMediumTurbineEfficiencyLoss: undefined,
+      highToLowTurbineEfficiencyLoss: undefined,
+      mediumToLowTurbineEfficiencyLoss: undefined,
+      showCondensingTurbine: undefined,
+      showHighToMediumTurbine: undefined,
+      showHighToLowTurbine: undefined,
+      showMediumToLowTurbine: undefined,
+      condensingLosses: undefined,
+      condensateLosses: undefined,
+      lowPressureVentLoss: undefined,
+      condensateFlashTankLoss: undefined,
+      deaeratorVentLoss: undefined,
+      highPressureProcessLoss: undefined,
+      mediumPressureProcessLoss: undefined,
+      lowPressureProcessLoss: undefined,
+      condensingTurbineUsefulEnergy: undefined,
+      highToMediumTurbineUsefulEnergy: undefined,
+      highToLowTurbineUsefulEnergy: undefined,
+      mediumToLowTurbineUsefulEnergy: undefined,
+      highPressureProcessUsage: undefined,
+      mediumPressureProcessUsage: undefined,
+      lowPressureProcessUsage: undefined,
+      allProcessUsageUsefulEnergy: undefined,
+      totalProcessLosses: undefined,
+      totalVentLosses: undefined,
+      totalTurbineLosses: undefined,
+      totalOtherLosses: undefined,
+      returnedSteamAndCondensate: undefined,
     }
     
   }

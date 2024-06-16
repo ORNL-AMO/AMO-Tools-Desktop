@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "1.4.0",
+  "version": "1.5.1",
   "main": "main.js",
   "license": "MIT",
   "description": "MEASUR",
@@ -104,8 +104,17 @@
     },
     "mac": {
       "target": [
-        "dmg",
-        "zip"
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        },{
+          "target": "zip",
+          "arch": [
+            "universal"
+          ]
+        }
       ],
       "icon": "src/assets/icons/mac/icon.icns",
       "hardenedRuntime": true,

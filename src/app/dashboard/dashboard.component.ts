@@ -163,9 +163,11 @@ export class DashboardComponent implements OnInit {
   }
 
   setContentWidth() {
-    this.dashboardService.totalScreenWidth.next(this.dashboardContent.nativeElement.clientWidth);
-    this.contentWidth = this.dashboardContent.nativeElement.clientWidth - this.sidebarWidth;
-    this.cd.detectChanges();
+    if (this.dashboardContent) {
+      this.dashboardService.totalScreenWidth.next(this.dashboardContent.nativeElement.clientWidth);
+      this.contentWidth = this.dashboardContent.nativeElement.clientWidth - this.sidebarWidth;
+      this.cd.detectChanges();
+    }
   }
 
   //TOAST HERE

@@ -244,6 +244,8 @@ export class ReceiverTankService {
       tmpInputs.tankSize = Math.round(this.convertUnitsService.value(tmpInputs.tankSize).from('gal').to('m3') * 100) / 100;
       tmpInputs.airPressureIn = Math.round(this.convertUnitsService.value(tmpInputs.airPressureIn).from('psi').to('kPa') * 100) / 100;
       tmpInputs.airPressureOut = Math.round(this.convertUnitsService.value(tmpInputs.airPressureOut).from('psi').to('kPa') * 100) / 100;
+      tmpInputs.leakRateInput.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.leakRateInput.atmosphericPressure).from('psia').to('kPaa') * 100) / 100;
+      
     }
     return tmpInputs;
   }

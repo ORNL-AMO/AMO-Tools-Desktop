@@ -201,6 +201,14 @@ export class ImportService {
       assessment.assessment.directoryId = workingDirectoryId;
 
       let newAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(assessment.assessment));
+      if (assessment.calculator) {
+        assessment.calculator.assessmentId = newAssessment.id;
+        delete assessment.calculator.id;
+        await firstValueFrom(this.calculatorDbService.addWithObservable(assessment.calculator));
+        let allCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+        this.calculatorDbService.setAll(allCalculators);
+      }
+
       let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
       this.assessmentDbService.setAll(allAssessments);
 
@@ -210,14 +218,6 @@ export class ImportService {
       await firstValueFrom(this.settingsDbService.addWithObservable(assessment.settings));
       let allSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
       this.settingsDbService.setAll(allSettings);
-
-      if (assessment.calculator) {
-        assessment.calculator.assessmentId = newAssessment.id;
-        delete assessment.calculator.id;
-        await firstValueFrom(this.calculatorDbService.addWithObservable(assessment.calculator));
-        let allCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
-        this.calculatorDbService.setAll(allCalculators);
-      }
     }
   }
 
