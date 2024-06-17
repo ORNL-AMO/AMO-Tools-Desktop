@@ -80,17 +80,21 @@ export class CoolingTowerService {
     return coolingTowerData;
   }
 
-  initObject(index: number, settings: Settings, operatingHours: OperatingHours): CoolingTowerData {
+  initObject(index: number, settings: Settings, operatingHours: OperatingHours, inTreasureHunt: boolean): CoolingTowerData {
     let hoursPerYear: number = 8760;
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
+    }
+    let waterCost: number = 0
+    if (settings && inTreasureHunt) {
+        waterCost = settings.waterCost;
     }
     let obj: CoolingTowerData = {
       name: 'Case #' + (index + 1),
       operationalHours: hoursPerYear,
       flowRate: 1,
       userDefinedCoolingLoad: true,
-      waterCost: 0,
+      waterCost: waterCost,
       temperatureDifference: 0,
       coolingLoad: 0,
       lossCorrectionFactor: 85,
@@ -101,8 +105,8 @@ export class CoolingTowerService {
     return obj;
   }
 
-  initDefaultEmptyInputs(index: number, settings: Settings, operatingHours: OperatingHours) {
-    let emptyBaselineData: CoolingTowerData = this.initObject(index, settings, operatingHours);
+  initDefaultEmptyInputs(index: number, settings: Settings, operatingHours: OperatingHours, inTreasureHunt: boolean) {
+    let emptyBaselineData: CoolingTowerData = this.initObject(index, settings, operatingHours, inTreasureHunt);
     let baselineData: Array<CoolingTowerData> = [emptyBaselineData];
     this.baselineData.next(baselineData);
   }
@@ -137,6 +141,7 @@ export class CoolingTowerService {
     }
     dataArray[index].name = data.name;
     dataArray[index].operationalHours = data.operationalHours;
+    dataArray[index].waterCost = data.waterCost;
     dataArray[index].flowRate = data.flowRate;
     dataArray[index].coolingLoad = data.coolingLoad;
     dataArray[index].lossCorrectionFactor = data.lossCorrectionFactor;
@@ -146,8 +151,9 @@ export class CoolingTowerService {
     let currentModificationData = this.modificationData.getValue();
      if (isBaseline && currentModificationData) {
       currentModificationData[index].operationalHours = data.operationalHours;
-      currentModificationData[index].coolingLoad = data.coolingLoad;
+      currentModificationData[index].waterCost = data.waterCost;
       currentModificationData[index].flowRate = data.flowRate;
+      currentModificationData[index].coolingLoad = data.coolingLoad;
       currentModificationData[index].temperatureDifference = data.temperatureDifference;
       currentModificationData[index].userDefinedCoolingLoad = data.userDefinedCoolingLoad;
       this.modificationData.next(currentModificationData);
@@ -158,16 +164,16 @@ export class CoolingTowerService {
     }
   }
 
-  addCase(settings: Settings, operatingHours: OperatingHours, modificationExists: boolean) {
+  addCase(settings: Settings, operatingHours: OperatingHours, modificationExists: boolean, inTreasureHunt: boolean) {
       let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
       let index = currentBaselineData.length;
-      let baselineObj: CoolingTowerData = this.initObject(index, settings, operatingHours);
+      let baselineObj: CoolingTowerData = this.initObject(index, settings, operatingHours, inTreasureHunt);
       currentBaselineData.push(baselineObj)
       this.baselineData.next(currentBaselineData);
       
       if (modificationExists) {
         let currentModificationData: Array<CoolingTowerData> = this.modificationData.getValue();
-        let modificationObj: CoolingTowerData = this.initObject(index, settings, operatingHours);
+        let modificationObj: CoolingTowerData = this.initObject(index, settings, operatingHours, inTreasureHunt);
         
         // Set case operational constants
         modificationObj.flowRate = currentBaselineData[index].flowRate;
