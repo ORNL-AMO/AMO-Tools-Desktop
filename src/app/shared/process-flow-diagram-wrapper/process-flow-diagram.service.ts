@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
-import { FlowDiagramData, ParentContainerDimensions, ProcessFlowDiagramState, ProcessFlowParentState } from '../../../process-flow-types/process-flow-types';
+import { FlowDiagramData, ParentContainerDimensions, ProcessFlowDiagramState, ProcessFlowParentState } from '../../../process-flow-types/shared-process-flow-types';
 import { WaterProcessDiagramService } from '../../water-process-diagram/water-process-diagram.service';
 
 @Injectable({

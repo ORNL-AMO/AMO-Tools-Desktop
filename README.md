@@ -11,15 +11,15 @@
 - To build for electron development with hot-reload: `npm run build-watch`
     - To start the electron app: `npm run electron`
 
-    #### Build with Process Flow Diagram microfrontend
+    #### Build with Process Flow Diagram Microfrontend (MFE)
     This project includes a "microfrontend" web component which wraps React/ReactFlow so MEASUR can leverage it's diagramming library.
     - All build scripts execute a pre-angular webpack build for the microfrontend, copying the web component script into the project /dist output. The microfrontend build is NOT updated for build-watch.
     - Develop web server with MFE:
-        - `npm run start-concurrent-watch`
+        - `npm run start-diagram-watch`
     - Develop electron build with MFE:
-        - `npm run build-concurrent-watch`
+        - `npm run build-diagram-watch`
     - Standalone build or re-build of the MFE:
-        - `npm run build-mfe`
+        - `npm run build-diagram`
         - If rebuilding, manually copy process-flow-diagram-component/dist files from mfe into AMO-Tools-Desktop/dist
 
 ## Build Production Package

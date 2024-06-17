@@ -189,14 +189,24 @@ export class WaterAssessmentComponent {
 
   next() {
     if (this.setupTab == 'system-basics') {
-      this.waterAssessmentService.setupTab.next('system-information');
+      this.waterAssessmentService.setupTab.next('intake-source');
+    } else if (this.setupTab == 'intake-source') {
+      this.waterAssessmentService.setupTab.next('process-use');
+    } else if (this.setupTab == 'process-use') {
+      this.waterAssessmentService.setupTab.next('discharge-outlet');
+    } else if (this.setupTab == 'discharge-outlet') {
+      this.waterAssessmentService.mainTab.next('assessment');
     } 
   }
 
   back() {
-    // if (this.setupTab == 'system-information') {
+    if (this.setupTab == 'discharge-outlet') {
+      this.waterAssessmentService.setupTab.next('process-use');
+    } else if (this.setupTab == 'process-use') {
+      this.waterAssessmentService.setupTab.next('intake-source');
+    } else if (this.setupTab == 'intake-source') {
       this.waterAssessmentService.setupTab.next('system-basics');
-    // } 
+    } 
   }
 
   setContainerHeight() {

@@ -1,5 +1,6 @@
 import { memo, FC, CSSProperties } from 'react';
 import { Handle, Position, NodeProps, NodeResizer } from 'reactflow';
+import { ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
 
 const targetHandleStyleA: CSSProperties = { 
   // left: 50 
@@ -9,21 +10,19 @@ const sourceHandleStyleB: CSSProperties = {
   // left: 'auto',
 };
 
-const CustomNode: FC<NodeProps> = ({ data, xPos, yPos }) => {
+export interface FlowPartProps extends ProcessFlowPart {
+}
+
+// * note the type of NodeProps is automagically accessible via the 'data' property 
+const ProcessFlowPartNode: FC<NodeProps<FlowPartProps>> = (props) => {
   return (
     <>
       {/* <NodeResizer /> */}
       <Handle type="target" position={Position.Left} />
       <div>
         <div>
-          {data.label}
+          {props.data.defaultLabel}
         </div>
-        {/* <div>
-          Position:{' '}
-          <strong>
-            {xPos.toFixed(2)},{yPos.toFixed(2)}
-          </strong>
-        </div> */}
       </div>
 
       <Handle
@@ -42,4 +41,4 @@ const CustomNode: FC<NodeProps> = ({ data, xPos, yPos }) => {
   );
 };
 
-export default memo(CustomNode);
+export default memo(ProcessFlowPartNode);

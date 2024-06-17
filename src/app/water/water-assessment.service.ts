@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { isNull, isUndefined } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
-import { DayTypeService } from '../compressed-air-assessment/day-types/day-type.service';
 import { SystemInformationFormService } from '../compressed-air-assessment/system-information/system-information-form.service';
-import { InventoryService } from '../dashboard/inventory.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
-import { WaterAssessment } from '../shared/models/water-assessment';
+import { DischargeOutlet, IntakeSource, ProcessUse, WaterAssessment } from '../shared/models/water-assessment';
+import { Assessment } from '../shared/models/assessment';
+import { ProcessFlowPart, WaterDiagram } from '../../process-flow-types/shared-process-flow-types';
+import { Node } from 'reactflow';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class WaterAssessmentService {
 
   settings: BehaviorSubject<Settings>;
   mainTab: BehaviorSubject<string>;
-  setupTab: BehaviorSubject<string>;
+  setupTab: BehaviorSubject<WaterSetupTabString>;
   focusedField: BehaviorSubject<string>;
   helpTextField: BehaviorSubject<string>;
   calcTab: BehaviorSubject<string>;
@@ -27,7 +27,7 @@ export class WaterAssessmentService {
   showModificationListModal: BehaviorSubject<boolean>;
   showAddModificationModal: BehaviorSubject<boolean>;
   showExportModal: BehaviorSubject<boolean>;
-  setupTabs: Array<string> = [
+  setupTabs: Array<WaterSetupTabString> = [
     'system-basics',
   ];
   constructor(
@@ -35,7 +35,7 @@ export class WaterAssessmentService {
     private convertUnitsService: ConvertUnitsService) {
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.mainTab = new BehaviorSubject<string>('system-setup');
-    this.setupTab = new BehaviorSubject<string>('system-basics');
+    this.setupTab = new BehaviorSubject<WaterSetupTabString>('system-basics');
     this.focusedField = new BehaviorSubject<string>('default');
     this.helpTextField = new BehaviorSubject<string>('default');
     // this.calcTab = new BehaviorSubject<string>('air-flow-conversion');
@@ -62,18 +62,46 @@ export class WaterAssessmentService {
     this.waterAssessment.next(waterAssessment);
   }
 
+  setNewWaterAssessmentFromDiagram(waterDiagram: WaterDiagram, assessment: Assessment, newSettings: Settings) {
+    let intakeSources = [];
+    let processUses = [];
+    let dischargeOutlets = [];
+    waterDiagram.flowDiagramData.nodes.map((waterDiagramNode: Node) => {
+      const waterSystemPart = waterDiagramNode.data as ProcessFlowPart;
+      if (waterSystemPart.nodeType === 'waterIntake') {
+        intakeSources.push(waterSystemPart as IntakeSource)
+      }
+      if (waterSystemPart.nodeType === 'processUse') {
+        processUses.push(waterSystemPart as ProcessUse)
+      }
+      if (waterSystemPart.nodeType === 'waterDischarge') {
+        dischargeOutlets.push(waterSystemPart as DischargeOutlet)
+      }
+
+    })
+    assessment.water.intakeSources = intakeSources.length > 0? intakeSources : undefined;
+    assessment.water.processUses = processUses.length > 0? processUses : undefined;
+    assessment.water.dischargeOutlets = dischargeOutlets.length > 0? dischargeOutlets : undefined;
+    // setConnectedPartsFromEdges()
+
+  }
+
+  setConnectedPartsFromEdges() {
+
+  }
+
   continue() {
-    let tmpSetupTab: string = this.setupTab.getValue();
+    let tmpSetupTab: WaterSetupTabString = this.setupTab.getValue();
     let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
-    let nextTab: string = this.setupTabs[assessmentTabIndex + 1];
+    let nextTab: WaterSetupTabString = this.setupTabs[assessmentTabIndex + 1];
     this.setupTab.next(nextTab);
   }
 
   back() {
-    let tmpSetupTab: string = this.setupTab.getValue();
+    let tmpSetupTab: WaterSetupTabString = this.setupTab.getValue();
     if (tmpSetupTab !== 'system-basics' && this.mainTab.getValue() == 'system-setup') {
       let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
-      let nextTab: string = this.setupTabs[assessmentTabIndex - 1];
+      let nextTab: WaterSetupTabString = this.setupTabs[assessmentTabIndex - 1];
       this.setupTab.next(nextTab);
     } else if (this.mainTab.getValue() == 'assessment') {
       this.mainTab.next('system-setup');
@@ -81,3 +109,5 @@ export class WaterAssessmentService {
   }
 
 }
+
+export type WaterSetupTabString = 'system-basics' | 'intake-source' | 'discharge-outlet' | 'process-use';

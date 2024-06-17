@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { WaterDiagram, WaterDiagramOption } from '../../../process-flow-types/process-flow-types';
+import { WaterDiagram, WaterDiagramOption } from '../../../process-flow-types/shared-process-flow-types';
 import { WaterProcessDiagramService } from '../water-process-diagram.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';

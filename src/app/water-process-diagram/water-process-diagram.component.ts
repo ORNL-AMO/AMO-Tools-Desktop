@@ -1,11 +1,9 @@
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { WaterProcessDiagramService } from './water-process-diagram.service';
-import { ProcessFlowDiagramService } from '../shared/process-flow-diagram-wrapper/process-flow-diagram.service';
-import { WaterDiagram, WaterDiagramOption } from '../../process-flow-types/process-flow-types';
+import { WaterDiagram, WaterDiagramOption } from '../../process-flow-types/shared-process-flow-types';
 import * as _ from 'lodash';
 
 @Component({
@@ -30,6 +28,7 @@ export class WaterProcessDiagramComponent {
   mainTab: string;
   waterDiagram: WaterDiagram;
   isModalOpen: boolean;
+  displayCreateAssessmentModal: boolean;
   
   constructor( 
     private waterProcessDiagramService: WaterProcessDiagramService,
@@ -66,6 +65,21 @@ export class WaterProcessDiagramComponent {
   ngAfterViewInit() {
     this.getContainerHeight();
   }
+
+  createAssessment() {
+    this.showCreateAssessmentModal();
+  }
+
+  showCreateAssessmentModal() {
+    this.isModalOpen = true;
+    this.displayCreateAssessmentModal = true;
+  }
+
+  hideCreateAssessmentModal() {
+    this.isModalOpen = false;
+    this.displayCreateAssessmentModal = false;
+  }
+
 
 
   getContainerHeight() {
