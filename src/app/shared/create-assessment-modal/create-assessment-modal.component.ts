@@ -20,6 +20,9 @@ import { IntegrationStateService } from '../connected-inventory/integration-stat
 import { SettingsService } from '../../settings/settings.service';
 import { AnalyticsService } from '../analytics/analytics.service';
 import { PumpItem } from '../../pump-inventory/pump-inventory';
+import { getNameDateString } from '../helperFunctions';
+import { WaterAssessmentService } from '../../water/water-assessment.service';
+import { WaterDiagram } from '../../../process-flow-types/shared-process-flow-types';
 
 @Component({
   selector: 'app-create-assessment-modal',
@@ -30,6 +33,8 @@ export class CreateAssessmentModalComponent {
   @ViewChild('createModal', { static: false }) public createModal: ModalDirective;
   @Input()
   connectedInventoryItem: ConnectedItem;
+  @Input()
+  waterDiagram: WaterDiagram;
   @Input() 
   integratedCreateType: string;
   @Output('onClose')
@@ -50,6 +55,7 @@ export class CreateAssessmentModalComponent {
     private directoryDashboardService: DirectoryDashboardService,
     private dashboardService: DashboardService,
     private convertFanAnalysisService: ConvertFanAnalysisService,
+    private waterAssessmentService: WaterAssessmentService,
     private psatIntegrationService: PsatIntegrationService,
     private integrationStateService: IntegrationStateService,
     private settingsService: SettingsService,
@@ -104,15 +110,16 @@ export class CreateAssessmentModalComponent {
 
   getAssessmentName(assessmentType: string) {
     let assessmentName: string = 'New Assessment';
-
+    let currentDate = new Date();
     if (this.connectedInventoryItem) {
       let connectedInventoryData: ConnectedInventoryData = this.getConnectedInventoryData();
       if (assessmentType === 'Pump') {
         let selectedPumpItem: PumpItem = this.psatIntegrationService.getConnectedPumpItem(connectedInventoryData.connectedItem);
-        let currentDate = new Date();
-        const dateStr = (currentDate.getMonth() + 1) + '-' + currentDate.getDate() + '-' + currentDate.getFullYear();
-        assessmentName = `${selectedPumpItem.name}_${dateStr}`;
+        assessmentName = `${selectedPumpItem.name}_${getNameDateString(currentDate)}`;
       }
+    }
+    if (this.waterDiagram) {
+      assessmentName = `${this.waterDiagram.name}_Assessment_${getNameDateString(currentDate)}`;
     }
     return assessmentName;
   }
@@ -199,7 +206,13 @@ export class CreateAssessmentModalComponent {
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         tmpAssessment.water = this.assessmentService.getNewWaterAssessment(this.settings);
         let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
-        this.finishAndNavigate(createdAssessment, '/water/' + createdAssessment.id);
+        let queryParams;
+
+        if (this.waterDiagram) {
+          await this.createFromWaterDiagram(createdAssessment);
+          queryParams = { connectedWaterDiagram: true };
+        }
+        this.finishAndNavigate(createdAssessment, '/water/' + createdAssessment.id, queryParams);
       }
     }
   }
@@ -218,6 +231,15 @@ export class CreateAssessmentModalComponent {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(assessmentSettings);
     newSettings = this.settingsService.setPumpSettingsUnitType(newSettings);
     await this.psatIntegrationService.setPSATFromExistingPumpItem(connectedInventoryData, createdAssessment.psat, createdAssessment, newSettings);
+    await this.saveAssessmentAndSettings(newSettings, createdAssessment)
+  }
+
+  async createFromWaterDiagram(createdAssessment: Assessment) {
+    let assessmentSettings = this.settingsDbService.getByAssessmentId(createdAssessment, false);
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(assessmentSettings);
+    // todo set settings/units match
+    // newSettings = this.settingsService.setPumpSettingsUnitType(newSettings);
+    await this.waterAssessmentService.setNewWaterAssessmentFromDiagram(this.waterDiagram, createdAssessment, newSettings);
     await this.saveAssessmentAndSettings(newSettings, createdAssessment)
   }
 

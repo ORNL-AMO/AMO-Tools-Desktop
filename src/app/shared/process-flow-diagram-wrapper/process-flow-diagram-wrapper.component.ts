@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ProcessFlowDiagramService } from './process-flow-diagram.service';
 import { Subscription } from 'rxjs';
-import { ProcessFlowDiagramState, ProcessFlowParentState } from '../../../process-flow-types/process-flow-types';
+import { ProcessFlowDiagramState, ProcessFlowParentState } from '../../../process-flow-types/shared-process-flow-types';
 
 @Component({
     selector: 'app-process-flow-diagram-wrapper',

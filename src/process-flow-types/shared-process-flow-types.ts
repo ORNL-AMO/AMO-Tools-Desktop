@@ -1,3 +1,7 @@
+import { CSSProperties, ReactNode } from "react";
+import { Edge, Node } from 'reactflow';
+
+
 // * passed down to diagram
 export interface ProcessFlowParentState {
     context: string;
@@ -32,10 +36,10 @@ export interface ProcessFlowParentState {
     flowDiagramData: FlowDiagramData
   }
 
-
+// * nodes/edges at reactflow/dist nodes.d.ts and edges.d.ts
   export interface FlowDiagramData {
-    nodes: any,
-    edges: any,
+    nodes: Node[],
+    edges: Edge[],
   }
 
 
@@ -43,3 +47,15 @@ export interface ProcessFlowParentState {
     display: string,
     id: number,
   }
+
+
+  export interface ProcessFlowPart {
+    nodeType: ProcessFlowPartNode,
+    defaultLabel: string,
+    className: ProcessFlowPartStyleClass,
+    // todo this will hold any contextual data about connections to other parts, etc
+    partContext?: any;
+  }
+  
+  export type ProcessFlowPartNode = 'waterIntake' | 'waterDischarge' | 'processUse'
+  export type ProcessFlowPartStyleClass = 'water-intake' | 'water-discharge' | 'process-use';
