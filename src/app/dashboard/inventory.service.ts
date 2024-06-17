@@ -33,4 +33,16 @@ export class InventoryService {
       isExample: false
     }
   }
+
+  getNewCompressedAirInventoryItem(): InventoryItem {
+    return {
+      //TODO compressedAirInventoryData: this.compressedAirInventoryService.initInventoryData(),
+      createdDate: new Date(),
+      modifiedDate: new Date(),
+      type: 'compressedAirInventory',
+      name: null,
+      appVersion:  environment.version,
+      isExample: false
+    }
+  }
 }

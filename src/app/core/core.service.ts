@@ -19,6 +19,7 @@ import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 import { ElectronService } from '../electron/electron.service';
 import { MockPumpInventory } from '../examples/mockPumpInventoryData';
+import { MockCompressedAirInventory } from '../examples/mockCompressedAirInventoryData';
 @Injectable()
 export class CoreService {
 
@@ -33,6 +34,7 @@ export class CoreService {
   exampleMotorInventoryId: number;
   examplePumpInventoryId: number;
   exampleCompressedAirAssessmentId: number;
+  exampleCompressedAirInventoryId: number;
   constructor(
     private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService,
@@ -94,6 +96,7 @@ export class CoreService {
     MockPumpInventory.directoryId = this.exampleDirectoryId;
     MockWasteWater.directoryId = this.exampleDirectoryId;
     MockCompressedAirAssessment.directoryId = this.exampleDirectoryId;
+    MockCompressedAirInventory.directoryId = this.exampleDirectoryId;
 
     let examplePhast: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockPhast));
     let exampleSsmt: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockSsmt));
@@ -104,6 +107,8 @@ export class CoreService {
     let exampleCompressedAirAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockCompressedAirAssessment));
     let examplePsat: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockPsat));
     let exampleFsat: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockFsat));
+    let exampleCompressedAirInventory: Assessment = await firstValueFrom(this.inventoryDbService.addWithObservable(MockCompressedAirInventory));
+    
 
     this.examplePhastId = examplePhast.id;
     this.exampleSsmtId = exampleSsmt.id;
@@ -114,6 +119,7 @@ export class CoreService {
     this.exampleCompressedAirAssessmentId = exampleCompressedAirAssessment.id;
     this.examplePsatId = examplePsat.id;
     this.exampleFsatId = exampleFsat.id
+    this.exampleCompressedAirInventoryId = exampleCompressedAirInventory.id;
 
     MockPsatCalculator.assessmentId = this.examplePsatId;
     await firstValueFrom(this.calculatorDbService.addWithObservable(MockPsatCalculator));
@@ -165,5 +171,8 @@ export class CoreService {
 
     MockCompressedAirAssessmentSettings.assessmentId = this.exampleCompressedAirAssessmentId;
     await firstValueFrom(this.settingsDbService.addWithObservable(MockCompressedAirAssessmentSettings));
+
+    // TODO MockCompressedAirSettings.inventoryId = this.exampleCompressedAirInventoryId;
+    // await firstValueFrom(this.settingsDbService.addWithObservable(MockPsatSettings));
   }
 }
