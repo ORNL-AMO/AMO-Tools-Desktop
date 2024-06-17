@@ -85,7 +85,8 @@
 					</div>
 				</div>
 				<app-weather-station-lookup></app-weather-station-lookup>
-				<app-weather-bins-form [settings]="settings"></app-weather-bins-form>
+				<app-data-setup-form [settings]="settings"></app-data-setup-form>
+				<app-bins-form [settings]="settings"></app-bins-form>
 			</div>
 		</div>
 
@@ -123,12 +124,26 @@
 				<app-cooling-tower-basin-help class="p-2" *ngIf="tabSelect == 'help'" [settings]="settings">
 				</app-cooling-tower-basin-help>
 			</div>
-			<div *ngIf="displayWeatherTab" class="d-flex mr-2 ml-2">
+			<div *ngIf="displayWeatherTab" class="mr-2 ml-2">
 				<app-weather-bins-help *ngIf="tabSelect == 'help'" [settings]="settings"></app-weather-bins-help>
-				<app-weather-bins-bar-chart class="w-100 p-2" *ngIf="tabSelect == 'results'">
-				</app-weather-bins-bar-chart>
+				<ng-container *ngIf="tabSelect == 'results'">
+			
+					<div class="p-2 alert alert-warning small" *ngIf="weatherData.totalDataPoints === 0">
+						Add weather data from ZIP code lookup or file. Add a binning parameter to view hours occuring in each bin
+						case. Add a second bin parameter to view a heatmap of bin cases.
+					</div>
+					<div *ngIf="weatherData.totalDataPoints > 0">
+						<app-weather-bins-bar-chart class="w-100 p-2"
+							*ngIf="tabSelect == 'results' && weatherData.binParameters.length === 1"
+							[settings]="settings"></app-weather-bins-bar-chart>
+						<app-weather-bins-heat-map class="w-100 p-2" *ngIf="weatherData.binParameters.length > 1"
+							[settings]="settings"></app-weather-bins-heat-map>
+						<app-weather-bins-table [settings]="settings"></app-weather-bins-table>
+					</div>
+				</ng-container>
+			
 			</div>
-		</div>
+			</div>
 
 	</div>
 

@@ -144,7 +144,7 @@ export class SystemCapacityService {
       leakRateInput: {
         airPressureIn: 119,
         airPressureOut: 110,
-        dischargeTime: 120,
+        dischargeTime: 2,
         atmosphericPressure: 14.7
       }
     };

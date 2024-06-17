@@ -104,14 +104,13 @@ export class CoolingTowerBasinComponent implements OnInit {
     });
     this.hasWeatherBinsDataSub = this.coolingTowerBasinService.hasWeatherBinsData.subscribe(value => {
       this.hasWeatherBinsData = value;
-      if(!this.hasWeatherBinsData){
+      if (!this.hasWeatherBinsData){
         this.isShowingWeatherResults = false;
       }
     });
     this.weatherBinSub = this.weatherBinService.inputData.subscribe(value => {
       this.weatherData = value;
-      let getCaseLength = this.weatherBinService.inputData.getValue().cases.length;
-      if(getCaseLength < 1){
+      if(this.weatherData.totalDataPoints === 0){
         this.isShowingWeatherResults = false;
         this.coolingTowerBasinService.isShowingWeatherResults.next(false);
         this.calculate();

@@ -1,4 +1,4 @@
-<div class="d-flex flex-column w-100 fsat position-sticky" *ngIf="!inSetup" #resultTabs>
+<div class="d-flex flex-column w-100 fsat position-sticky" *ngIf="!inSetup ||  stepTab == 'turbine'" #resultTabs>
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
         <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
             <a class="border-left-0" (click)="setTab('results')">Results</a>
@@ -33,8 +33,7 @@
         </div>
     </div>
 
-    <div *ngIf="tabSelect == 'results' && !inSetup">
-        <app-ssmt-results-panel [ssmt]="ssmt" [settings]="settings" [modificationIndex]="modificationIndex" [inModifyConditions]="true"></app-ssmt-results-panel>
-        <!-- <app-fsat-results-panel [fsat]="fsat" [settings]="settings" [modificationIndex]="modificationIndex" [inSetup]="inSetup"></app-fsat-results-panel> -->
+    <div *ngIf="tabSelect == 'results' && !inSetup || (tabSelect == 'results' && stepTab == 'turbine')">
+        <app-ssmt-results-panel [ssmt]="ssmt" [settings]="settings" [modificationIndex]="modificationIndex" [inModifyConditions]="true" [inSetup]="inSetup"></app-ssmt-results-panel>
     </div>
 </div>

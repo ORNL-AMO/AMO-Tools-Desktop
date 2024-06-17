@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { CoolingTowerBasinInput, CoolingTowerBasinOutput, CoolingTowerBasinResult, WeatherBinnedResult } from '../../../shared/models/chillers';
 import { Settings } from '../../../shared/models/settings';
-import { WeatherBinsInput, WeatherBinsService } from '../../utilities/weather-bins/weather-bins.service';
+import { WeatherBinCase, WeatherBinsInput, WeatherBinsService } from '../../utilities/weather-bins/weather-bins.service';
 import { CoolingTowerBasinFormService } from './cooling-tower-basin-form.service';
 import * as _ from 'lodash';
 import { CoolingChartData } from '../../../shared/cooling-weather-chart/cooling-weather-chart.component';
@@ -36,7 +36,7 @@ export class CoolingTowerBasinService {
 
   setHasWeatherBinsData() {
     let weatherBinsData = this.weatherBinsService.inputData.getValue();
-    let hasWeatherBinsData = weatherBinsData && weatherBinsData.cases.length > 0;
+    let hasWeatherBinsData = weatherBinsData && weatherBinsData.totalDataPoints > 0;
     if (!this.hasWeatherBinsData) {
       this.hasWeatherBinsData = new BehaviorSubject<boolean>(hasWeatherBinsData);
     } else {
@@ -94,17 +94,17 @@ export class CoolingTowerBasinService {
     this.coolingTowerBasinOutput.next(emptyOutput);
   }
 
-  calculate(settings: Settings, inputs?: CoolingTowerBasinInput, weatherData?: WeatherBinsInput) {
-    if(weatherData){
-      this.weatherBinsService.inputData.next(weatherData);
+  calculate(settings: Settings, treasureHuntInputs?: CoolingTowerBasinInput, treasureHuntWeatherData?: WeatherBinsInput) {
+    if (treasureHuntWeatherData){
+      this.weatherBinsService.inputData.next(treasureHuntWeatherData);
     }
     let coolingTowerBasinInput: CoolingTowerBasinInput;
     let inputCopy: CoolingTowerBasinInput;
-    if(!inputs) {
+    if(!treasureHuntInputs) {
       coolingTowerBasinInput = this.coolingTowerBasinInput.getValue();
       inputCopy = JSON.parse(JSON.stringify(coolingTowerBasinInput));
     } else {
-      inputCopy = JSON.parse(JSON.stringify(inputs));
+      inputCopy = JSON.parse(JSON.stringify(treasureHuntInputs));
     }
     
     let validInput: boolean;
@@ -115,7 +115,7 @@ export class CoolingTowerBasinService {
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       this.setHasWeatherBinsData();
-      if ((this.hasWeatherBinsData.getValue() == true && this.isShowingWeatherResults.getValue() == true) || weatherData) {
+      if ((this.hasWeatherBinsData.getValue() == true && this.isShowingWeatherResults.getValue() == true) || treasureHuntWeatherData) {
         let weatherBinsData = this.weatherBinsService.inputData.getValue();
         let coolingTowerBasinOutput: CoolingTowerBasinOutput = this.getWeatherBinnedOutput(inputCopy, weatherBinsData, settings);
         this.coolingTowerBasinOutput.next(coolingTowerBasinOutput);
@@ -168,21 +168,20 @@ export class CoolingTowerBasinService {
 
     }
     weatherData.cases.forEach(weatherBinCase => {
-      let weatherCase = JSON.parse(JSON.stringify(weatherBinCase));
+      let weatherCase: WeatherBinCase = JSON.parse(JSON.stringify(weatherBinCase));
       let weatherBinnedResult: WeatherBinnedResult = {
         caseName: weatherCase.caseName,
         operatingHours: weatherCase.totalNumberOfDataPoints,
         results: undefined
       };
 
-      let label = `${weatherCase.caseParameters[0].lowerBound} to ${weatherCase.caseParameters[0].upperBound}`;
+      let label = `${weatherCase.lowerBound} to ${weatherCase.upperBound}`;
       weatherBinnedResult.caseName = `${weatherCase.caseName} (${label} &#8457;)`;
       baselineBarData.barChartLabels.push(label);
       modBarData.barChartLabels.push(label);
 
-      weatherCase.caseParameters.forEach(parameter => {
-        if (parameter.field == 'Dry-bulb (C)') {
-          let paramDataRange: Array<number> = _.range(parameter.lowerBound, parameter.upperBound + 1);
+        if (weatherCase.field == 'Dry-bulb (C)') {
+          let paramDataRange: Array<number> = _.range(weatherCase.lowerBound, weatherCase.upperBound + 1);
           let dryBulbTemp = this.getMedianParameterValue(paramDataRange);
 
           input.operatingHours = weatherCase.totalNumberOfDataPoints;
@@ -200,7 +199,6 @@ export class CoolingTowerBasinService {
           modBarData.barChartValues.push(coolingTowerBasinResult.modEnergy);
           modBarData.chartHourValues.push(weatherCase.totalNumberOfDataPoints);
         }
-      });
     });
 
     output.totalResults.savingsEnergy = output.totalResults.baselineEnergy - output.totalResults.modEnergy;

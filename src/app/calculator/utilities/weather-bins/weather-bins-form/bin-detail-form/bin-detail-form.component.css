@@ -1,0 +1,50 @@
+
+.collapsed-border {
+    border-bottom: none;
+}
+
+.group-label{
+	font-size: 14px;
+    text-transform: none;
+	letter-spacing: 1px;
+	padding-top: 6.5px;
+	padding-bottom: 6.5px;
+    border: none;
+}
+
+.group-label:hover {
+    cursor: pointer;
+}
+
+.label-offset {
+    margin-top: 2.5rem;
+}
+
+
+.form-section {
+    padding-bottom: .25rem;
+    border-bottom: 1px dashed;
+}
+
+.form-row-pad-fix {
+    margin-left: -15px !important;
+}
+
+.form-card {
+    /* border-radius: 10px; */
+    /* background-color: #fff; */
+    /* box-shadow: 0 4px 20px 0 grey; */
+}
+
+.btn-edit-name:hover {
+    cursor: pointer;
+}
+
+
+.btn-group .btn-sm {
+    font-size: small !important;
+}
+
+.btn {
+    padding: 1rem;
+}

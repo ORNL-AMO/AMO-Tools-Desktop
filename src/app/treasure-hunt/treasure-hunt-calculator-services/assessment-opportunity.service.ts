@@ -45,7 +45,16 @@ export class AssessmentOpportunityService {
     let totalCostSavings: number = 0;
     let baselineElectricityResult: { energyUse: number, energyCost: number, numItems: number };
     let modificationElectricityResult: { energyUse: number, energyCost: number, numItems: number };
-    let electricityResults: AssessmentOpportunityResult;
+    let electricityResults: AssessmentOpportunityResult = {
+      baselineEnergyUse: 0,
+      baselineEnergyCost: 0,
+      baselineItems: 0,
+      modificationEnergyUse: 0,
+      modificationEnergyCost: 0,
+      modificationItems: 0,
+      energySavings: 0,
+      energyCostSavings: 0
+    };
 
     let baselineGasResult: { energyUse: number, energyCost: number, numItems: number };
     let modificationGasResult: { energyUse: number, energyCost: number, numItems: number };

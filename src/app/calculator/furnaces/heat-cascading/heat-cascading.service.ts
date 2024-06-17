@@ -58,7 +58,6 @@ export class HeatCascadingService {
       secExhaustTemperature: undefined,
       secExhaustO2: undefined,
       secCombAirTemperature: undefined,
-      secAvailableHeat: undefined,
       secOpHours: undefined,
       fuelCost: undefined,
 
@@ -152,7 +151,6 @@ export class HeatCascadingService {
       secExhaustTemperature: 225,
       secExhaustO2: 17.5,
       secCombAirTemperature: 80,
-      secAvailableHeat: 100,
       secOpHours: 7000,
       fuelCost: 5,
 
@@ -183,7 +181,6 @@ export class HeatCascadingService {
     inputs.priExhaustO2 = inputs.priExhaustO2 > 0 ? inputs.priExhaustO2 / 100 : inputs.priExhaustO2;
     inputs.secExhaustO2 = inputs.secExhaustO2 > 0 ? inputs.secExhaustO2 / 100 : inputs.secExhaustO2;
     inputs.combAirMoisturePerc = inputs.combAirMoisturePerc > 0 ? inputs.combAirMoisturePerc / 100 : inputs.combAirMoisturePerc;
-    inputs.secAvailableHeat = inputs.secAvailableHeat > 0 ? inputs.secAvailableHeat / 100 : inputs.secAvailableHeat;
     return inputs;
   }
 
