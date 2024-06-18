@@ -1,9 +1,7 @@
 <div #content class="water-assessment-container water-assessment d-flex flex-column" *ngIf="settings && assessment">
-    <!--header-->
     <div #header class="w-100 hide-print sticky-top" id="waterAssessmentBanner">
       <app-water-banner [assessment]="assessment"></app-water-banner>
     </div>
-    <!--end header-->
   
     <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'system-setup'">
       <div class="nav-item" (click)="setSmallScreenTab('form')"
@@ -25,7 +23,6 @@
           [assessment]="assessment"></app-system-basics>
         <app-intake-source *ngIf="setupTab == 'intake-source'" [assessment]="assessment"></app-intake-source>
         <app-process-use *ngIf="setupTab == 'process-use'" [assessment]="assessment"></app-process-use>
-        <app-discharge-outlet *ngIf="setupTab == 'discharge-outlet'" [assessment]="assessment"></app-discharge-outlet>
       </div>
       <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
         [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
@@ -35,17 +32,11 @@
   
     <div *ngIf="mainTab == 'assessment' && !showModificationList" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
       class="assessment-tab-container tab-content">
-      <!-- <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight">
-      </app-explore-opportunities> -->
+
     </div>
-    <!-- <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'diagram'">
-      <app-water-diagram></app-water-diagram>
+    <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'diagram'">
+      <app-water-process-diagram></app-water-process-diagram>
     </div>
-   -->
-    <!-- <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'sankey'">
-      <app-water-sankey [assessment]="assessment"></app-water-sankey>
-    </div> -->
-  
   
     <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
         <app-water-report [assessment]="assessment" [inAssessment]="true" [containerHeight]="containerHeight">
@@ -57,19 +48,17 @@
     </div> -->
   
   
-    <!--footer-->
     <div #footer id="waterAssessmentFooter" class="footer hide-print d-none d-lg-block" *ngIf="mainTab == 'system-setup'">
       <div class="pull-left">
         <button class="btn btn-default" [disabled]="setupTab == 'system-basics'" (click)="back()">Back</button>
       </div>
       <div class="pull-right">
         <button class="btn btn-primary" [disabled]="disableNext" (click)="next()">
-          <span *ngIf="setupTab != 'discharge-outlet'">Next</span>
-          <span *ngIf="setupTab == 'discharge-outlet'">Go To Assessment</span>
+          <span *ngIf="setupTab != 'system-balance-results'">Next</span>
+          <span *ngIf="setupTab == 'system-balance-results'">Go To Assessment</span>
         </button>
       </div>
     </div>
-    <!--end footer-->
   </div>
   
   <app-modification-list-modal *ngIf="showModificationList"></app-modification-list-modal>
@@ -80,7 +69,5 @@
   </app-update-units-modal>
   
   <!-- <app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen> -->
-  
-  
   <app-export-modal *ngIf="showExportModal" [inAssessment]="true" [assessment]="assessment" (close)="closeExportModal($event)"></app-export-modal>
   

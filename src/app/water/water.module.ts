@@ -23,8 +23,10 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { SetupTabsComponent } from './water-banner/setup-tabs/setup-tabs.component';
 import { IntakeSourceComponent } from './intake-source/intake-source.component';
-import { DischargeOutletComponent } from './discharge-outlet/discharge-outlet.component';
 import { ProcessUseComponent } from './process-use/process-use.component';
+import { WaterComponentTableComponent } from './results-panel/water-component-table/water-component-table.component';
+import { WaterProcessComponentService } from './water-system-component.service';
+import { WaterProcessDiagramModule } from '../water-process-diagram/water-process-diagram.module';
 
 
 
@@ -37,8 +39,8 @@ import { ProcessUseComponent } from './process-use/process-use.component';
     WaterBannerComponent,
     SetupTabsComponent,
     IntakeSourceComponent,
-    DischargeOutletComponent,
-    ProcessUseComponent
+    ProcessUseComponent,
+    WaterComponentTableComponent
   ],
   imports: [
     CommonModule,
@@ -55,10 +57,12 @@ import { ProcessUseComponent } from './process-use/process-use.component';
     ExportableResultsTableModule,
     AssessmentCo2SavingsModule,
     Co2HelpTextModule,
-    ImportExportModule
+    ImportExportModule,
+    WaterProcessDiagramModule
   ],
   providers: [
     WaterAssessmentService,
+    WaterProcessComponentService,
     WaterAssessmentResultsService,
     ConvertWaterAssessmentService
   ]

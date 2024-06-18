@@ -1,0 +1,44 @@
+<div class="card p-2">
+    <div class="card-body p-0">
+        <span class="alert-danger pull-right small" *ngIf="hasInvalidComponents">
+            One or more water system component is invalid - Review components and make changes to continue
+        </span>
+        <table class="table table-sm table-striped table-hover mb-0" *ngIf="selectedComponent && selectedViewComponents">
+            <thead>
+                <tr>
+                    <th>
+                        System Component Name
+                    </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let processComponent of selectedViewComponents"
+                    [ngClass]="{'selected-component':processComponent.diagramNodeId == selectedComponent.diagramNodeId,
+                                'invalid-component': !processComponent.isValid}">
+                    <td>
+                        <span *ngIf="processComponent.dataId == selectedComponent.dataId"
+                            class="fa fa-chevron-right danger"></span>
+                        <a class="click-link"
+                            (click)="selectItem(processComponent)">{{processComponent.name}}</a>
+                    </td>
+                    <td>
+                        <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(processComponent)"></a>
+                        
+                    </td>
+                    <td>
+                        <a class="fa fa-copy" (click)="createCopy(processComponent)"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="w-100 text-right">
+            <a class="click-link small" (click)="addNewComponent()">Add New Component</a>
+        </div>
+    </div>
+</div>
+
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteData" (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>

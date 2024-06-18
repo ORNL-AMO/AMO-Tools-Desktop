@@ -1,23 +1,24 @@
-<div *ngFor="let intake of intakeSources; let index = i">
-
-    <!-- todo each should be like CA inventory form and table lookup -->
-    <div class="m-2 p-2 form-card">
-        <div class="d-flex w-100">
-            <label class="group-label bold my-1 mx-2 w-100" (click)="toggleCollapse()"
-                [ngClass]="{'collapsed-border': isCollapsed === true}">
-                <span *ngIf="isCollapsed" class="fa fa-chevron-right collapse-icon"></span>
-                <span *ngIf="!isCollapsed" class="fa fa-chevron-down collapse-icon"></span>
-                {{intake.defaultLabel}}
-                <a class="click-link pull-right text-danger small px-3" (click)="removeIntake()">Remove</a>
-            </label>
-        </div>
-
-        <ng-container *ngIf="!isCollapsed">
-            <div>
-
-                Water Intake Source Form
-            </div>
-        </ng-container>
+<div class="d-flex flex-column panel-container pb-4">
+    <div class="header mr-2 ml-2">
+        <h3>Water Intake and Discharge Sources
+        </h3>
+        <br>
     </div>
 
+    @if (!intakeSources) {
+    <div class="p-3 ">
+        <button type="button" class="btn btn-primary active" disabled (click)="addIntakeSource()">
+            Add Water Intake Source
+        </button>
+    </div>
+    }
+    @else if (form) {
+    <form [formGroup]="form">
+        <div class="form-group">
+            <label for="name">Intake Source Name</label>
+            <input type="text" class="form-control" name="name" formControlName="name"
+                (focus)="focusField('intakeSourceName')" (input)="save()" />
+        </div>
+    </form>
+    }
 </div>

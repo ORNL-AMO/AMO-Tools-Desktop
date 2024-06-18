@@ -14,6 +14,6 @@ export class SystemBasicsComponent {
   ngOnInit() {
     this.settings = this.waterAssessmentService.settings.getValue();
     let waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-    // todo set forms
+    console.log(waterAssessment);
   }
 }

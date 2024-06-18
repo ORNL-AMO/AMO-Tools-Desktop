@@ -21,9 +21,8 @@ import 'reactflow/dist/style.css';
 import Sidebar from '../Sidebar/Sidebar';
 import { FlowDiagramData } from '../../../../src/process-flow-types/shared-process-flow-types';
 import useDiagramStateDebounce from '../../hooks/useSaveDebounce';
-import { getNewIdString } from '../../utils';
 import { ProcessFlowPart, nodeTypes } from './process-flow-types-and-constants';
-import { getPropDataFromPartNode } from './process-flow-utils';
+import { getNewProcessComponent } from './process-flow-utils';
 
 const defaultEdgeOptions: DefaultEdgeOptions  = {
   animated: true,
@@ -31,8 +30,6 @@ const defaultEdgeOptions: DefaultEdgeOptions  = {
 };
 
 const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
-
-const getId = () => `dndnode_${getNewIdString()}`;
 
 const Flow = (props: FlowProps) => {
   let existingNodes = props.flowDiagramData? props.flowDiagramData.nodes : [];
@@ -84,17 +81,20 @@ const Flow = (props: FlowProps) => {
         });
         
       const type = nodeType;
-      // todo use callback?
-      const propData: ProcessFlowPart = getPropDataFromPartNode(nodeType);
+      // todo useCallback?
+      const newProcessComponentNode = getNewProcessComponent(nodeType);
+
       const newNode: Node = {
-        id: getId(),
+        id: newProcessComponentNode.diagramNodeId,
         type,
         position,
-        className: propData.className,
-        data: propData
+        className: newProcessComponentNode.className,
+        data: newProcessComponentNode
       };
 
-      setNodes((nds) => nds.concat(newNode));
+      setNodes((nds) => {
+        return nds.concat(newNode)
+      });
     },
     [reactFlowInstance],
   );

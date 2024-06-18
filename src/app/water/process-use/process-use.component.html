@@ -1,23 +1,24 @@
-<div *ngFor="let process of processUses; let index = i">
-
-    <!-- todo each should be like CA inventory form and table lookup-->
-    <div class="m-2 p-2 form-card">
-        <div class="d-flex w-100">
-            <label class="group-label bold my-1 mx-2 w-100" (click)="toggleCollapse()"
-                [ngClass]="{'collapsed-border': isCollapsed === true}">
-                <span *ngIf="isCollapsed" class="fa fa-chevron-right collapse-icon"></span>
-                <span *ngIf="!isCollapsed" class="fa fa-chevron-down collapse-icon"></span>
-                {{process.defaultLabel}}
-                <a class="click-link pull-right text-danger small px-3" (click)="removeProcess()">Remove</a>
-            </label>
-        </div>
-
-        <ng-container *ngIf="!isCollapsed">
-            <div>
-
-                Water Process Use Form
-            </div>
-        </ng-container>
+<div class="d-flex flex-column panel-container pb-4">
+    <div class="header mr-2 ml-2">
+        <h3>Water Process Use
+        </h3>
+        <br>
     </div>
 
+    @if (!processUses) {
+    <div class="p-3 align-self-center">
+        <button type="button" class="btn btn-primary active" disabled (click)="addProcessUse()">
+            Add Water Process Use
+        </button>
+    </div>
+    }
+    @else if (form) {
+    <form [formGroup]="form">
+        <div class="form-group">
+            <label for="name">Process Name</label>
+            <input type="text" class="form-control" name="name" formControlName="name"
+                (focus)="focusField('waterProcessUseName')" (input)="save()" />
+        </div>
+    </form>
+    }
 </div>

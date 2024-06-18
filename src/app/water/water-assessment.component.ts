@@ -55,7 +55,6 @@ export class WaterAssessmentComponent {
     private cd: ChangeDetectorRef, 
     private settingsDbService: SettingsDbService, 
     private waterAssessmentService: WaterAssessmentService,
-    // private exploreOpportunitiesService: ExploreOpportunitiesService, 
     private assessmentService: AssessmentService,
     private analyticsService: AnalyticsService) { }
 
@@ -71,7 +70,7 @@ export class WaterAssessmentComponent {
         this.settings = settings;
         this.waterAssessmentService.settings.next(settings);
       }
-      this.waterAssessmentService.updateWaterAssessment(this.assessment.water, false);
+      this.waterAssessmentService.updateWaterAssessment(this.assessment.water);
     });
 
     this.waterAssessmentSub = this.waterAssessmentService.waterAssessment.subscribe(val => {
@@ -134,15 +133,11 @@ export class WaterAssessmentComponent {
     this.showExportModalSub.unsubscribe();
     this.waterAssessmentService.mainTab.next('system-setup');
     this.waterAssessmentService.setupTab.next('system-basics');
-    // this.endUseService.endUses.next(undefined);
-    // this.exploreOpportunitiesService.modificationResults.next(undefined);
-    // this.exploreOpportunitiesService.selectedDayType.next(undefined);
     this.waterAssessmentService.waterAssessment.next(undefined);
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
-      // this.disclaimerToast();
       this.setContainerHeight();
     }, 100);
   }
@@ -164,45 +159,18 @@ export class WaterAssessmentComponent {
     this.waterAssessmentService.settings.next(this.settings);
   }
 
-  setDisableNext() {
-    // let compressedAirAssessment: WaterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-    // let hasValidCompressors: boolean = this.inventoryService.hasValidCompressors(compressedAirAssessment);
-    // let hasValidSystemInformation: boolean = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, this.settings).valid;
-    // let hasValidDayTypes: boolean = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
-    // if (this.setupTab == 'system-information' && !hasValidSystemInformation) {
-    //   this.disableNext = true;
-    // } else if (this.setupTab == 'day-types' && !hasValidDayTypes) {
-    //   this.disableNext = true;
-    // } else if (hasValidCompressors == false && this.setupTab != 'system-basics' && this.setupTab != 'system-information') {
-    //   this.disableNext = true;
-    // } else if (this.setupTab == 'system-profile') {
-    //   let hasValidSystemProfile: boolean = this.waterAssessmentService.hasValidProfileSummaryData(compressedAirAssessment).isValid;
-    //   if (hasValidSystemProfile) {
-    //     this.disableNext = false;
-    //   } else {
-    //     this.disableNext = true;
-    //   }
-    // } else {
-    //   this.disableNext = false;
-    // }
-  }
+  setDisableNext() {}
 
   next() {
     if (this.setupTab == 'system-basics') {
       this.waterAssessmentService.setupTab.next('intake-source');
     } else if (this.setupTab == 'intake-source') {
       this.waterAssessmentService.setupTab.next('process-use');
-    } else if (this.setupTab == 'process-use') {
-      this.waterAssessmentService.setupTab.next('discharge-outlet');
-    } else if (this.setupTab == 'discharge-outlet') {
-      this.waterAssessmentService.mainTab.next('assessment');
     } 
   }
 
   back() {
-    if (this.setupTab == 'discharge-outlet') {
-      this.waterAssessmentService.setupTab.next('process-use');
-    } else if (this.setupTab == 'process-use') {
+    if (this.setupTab == 'process-use') {
       this.waterAssessmentService.setupTab.next('intake-source');
     } else if (this.setupTab == 'intake-source') {
       this.waterAssessmentService.setupTab.next('system-basics');

@@ -1,4 +1,3 @@
-import { CSSProperties, ReactNode } from "react";
 import { Edge, Node } from 'reactflow';
 
 
@@ -50,12 +49,20 @@ export interface ProcessFlowParentState {
 
 
   export interface ProcessFlowPart {
-    nodeType: ProcessFlowPartNode,
-    defaultLabel: string,
+    name: string,
+    processComponentType: ProcessFlowNodeType,
     className: ProcessFlowPartStyleClass,
+    isValid: boolean,
+    // * id for diagram targetting/sourcing
+    diagramNodeId?: string,
+    modifiedDate?: Date,
     // todo this will hold any contextual data about connections to other parts, etc
-    partContext?: any;
+    processComponentContext?: any;
   }
   
-  export type ProcessFlowPartNode = 'waterIntake' | 'waterDischarge' | 'processUse'
+  export type ProcessFlowNodeType = WaterProcessComponentType | undefined;
   export type ProcessFlowPartStyleClass = 'water-intake' | 'water-discharge' | 'process-use';
+  
+  export type WaterProcessComponentType = 'waterIntake' | 'waterDischarge' | 'processUse'
+
+  

@@ -16,8 +16,8 @@ const Sidebar = (props: SidebarProps) => {
       <div className="alert alert-info description ">Drag water process components to the pane on the right</div>
       {processFlowParts.map((part: ProcessFlowPart) => {
         return (
-          <div key={part.nodeType} className={`dndnode ${part.nodeType}`} onDragStart={(event) => onDragStart(event, part.nodeType)} draggable>
-              {part.defaultLabel}
+          <div key={part.processComponentType} className={`dndnode ${part.processComponentType}`} onDragStart={(event) => onDragStart(event, part.processComponentType)} draggable>
+              {part.name}
             </div>
         );
       })}
