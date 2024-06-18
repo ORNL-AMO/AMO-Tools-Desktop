@@ -20,11 +20,9 @@ export class SetupTabsComponent {
   systemBasicsClassStatus: Array<string> = [];
   intakeSourceClassStatus: Array<string> = [];
   processUseClassStatus: Array<string> = [];
-  dischargeOutletClassStatus: Array<string> = [];
   systemBasicsBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   intakeSourceBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   processUseBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
-  dischargeOutletBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   waterAssessmentSub: Subscription;
   settingsSub: Subscription;
   settings: Settings;
@@ -62,7 +60,6 @@ export class SetupTabsComponent {
     this.setSystemBasicsStatus();
     this.setIntakeSourceStatus();
     this.setProcessUseStatus();
-    this.setDischargeOutletStatus();
 
     if ((hasValidSystemBasics) || (this.setupTab == 'system-basics')) {
       this.canContinue = true;
@@ -104,13 +101,6 @@ export class SetupTabsComponent {
       this.processUseClassStatus = ["active"];
     } else {
       this.processUseClassStatus = [];
-    }
-  }
-  setDischargeOutletStatus() {
-    if (this.setupTab == "discharge-outlet") {
-      this.dischargeOutletClassStatus = ["active"];
-    } else {
-      this.dischargeOutletClassStatus = [];
     }
   }
 

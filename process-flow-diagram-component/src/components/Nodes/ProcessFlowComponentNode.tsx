@@ -14,14 +14,14 @@ export interface FlowPartProps extends ProcessFlowPart {
 }
 
 // * note the type of NodeProps is automagically accessible via the 'data' property 
-const ProcessFlowPartNode: FC<NodeProps<FlowPartProps>> = (props) => {
+const ProcessFlowComponentNode: FC<NodeProps<FlowPartProps>> = (props) => {
   return (
     <>
       {/* <NodeResizer /> */}
       <Handle type="target" position={Position.Left} />
       <div>
         <div>
-          {props.data.defaultLabel}
+          {props.data.name}
         </div>
       </div>
 
@@ -41,4 +41,4 @@ const ProcessFlowPartNode: FC<NodeProps<FlowPartProps>> = (props) => {
   );
 };
 
-export default memo(ProcessFlowPartNode);
+export default memo(ProcessFlowComponentNode);

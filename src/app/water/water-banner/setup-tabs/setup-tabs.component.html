@@ -7,21 +7,15 @@
     <li [ngClass]="intakeSourceClassStatus">
         <a (click)="changeSetupTab('intake-source')">
             <span (mouseenter)="showTooltip(intakeSourceBadge)" (mouseleave)="hideTooltip(intakeSourceBadge)"
-                class="step-number">2</span>Intake Sources</a>
+                class="step-number">2</span>Intake and Discharge</a>
     </li>
     <li [ngClass]="processUseClassStatus">
         <a (click)="changeSetupTab('process-use')">
             <span (mouseenter)="showTooltip(processUseBadge)" (mouseleave)="hideTooltip(processUseBadge)"
                 class="step-number">3</span>Process Use</a>
     </li>
-    <li [ngClass]="dischargeOutletClassStatus">
-        <a (click)="changeSetupTab('discharge-outlet')">
-            <span (mouseenter)="showTooltip(dischargeOutletBadge)" (mouseleave)="hideTooltip(dischargeOutletBadge)"
-                class="step-number">4</span>Discharge Outlets</a>
-    </li>
 </ul>
 
-<!--  todo mobile -->
 <nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs water-assessment flex-wrap flex-fill">
     <ul class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill water-assessment">
         <li class="page-item" [ngClass]="{'disabled': setupTab == 'system-basics' || !canContinue}">
@@ -32,6 +26,16 @@
             <a class="nav-link small" (click)="changeSetupTab('system-basics')">
                 <span (mouseenter)="showTooltip(systemBasicsBadge)" (mouseleave)="hideTooltip(systemBasicsBadge)"
                     class="step-number">1</span>Assessment Basics</a>
+        </li>
+        <li class="page-item" [ngClass]="intakeSourceClassStatus" *ngIf="setupTab == 'intake-source'">
+            <a class="nav-link small" (click)="changeSetupTab('intake-source')">
+                <span (mouseenter)="showTooltip(intakeSourceBadge)" (mouseleave)="hideTooltip(intakeSourceBadge)"
+                    class="step-number">2</span>Intake and Discharge </a>
+        </li>
+        <li class="page-item" [ngClass]="processUseClassStatus" *ngIf="setupTab == 'process-use'">
+            <a class="nav-link small" (click)="changeSetupTab('process-use')">
+                <span (mouseenter)="showTooltip(processUseBadge)" (mouseleave)="hideTooltip(processUseBadge)"
+                    class="step-number">3</span>Process Use</a>
         </li>
         <li class="page-item" [ngClass]="{'disabled': !canContinue}">
             <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled': !canContinue}">

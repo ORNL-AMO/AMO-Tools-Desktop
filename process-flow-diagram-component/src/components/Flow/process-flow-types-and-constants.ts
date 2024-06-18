@@ -1,31 +1,34 @@
 import { NodeTypes } from "reactflow";
-import ProcessFlowPartNode from "../Nodes/ProcessFlowPartNode";
 import { ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
+import ProcessFlowComponentNode from "../Nodes/ProcessFlowComponentNode";
 
 
 export const nodeTypes: NodeTypes = {
-  waterIntake: ProcessFlowPartNode,
-  processUse: ProcessFlowPartNode,
-  waterDischarge: ProcessFlowPartNode
+  waterIntake: ProcessFlowComponentNode,
+  processUse: ProcessFlowComponentNode,
+  waterDischarge: ProcessFlowComponentNode
 };
 
 
 // * Assign innate behaviors and context for Diagram parts
 export const processFlowDiagramParts: ProcessFlowPart[] = [
   {
-    nodeType: "waterIntake",
-    defaultLabel: 'Water Intake',
-    className: 'water-intake'
+    processComponentType: "waterIntake",
+    name: 'Water Intake',
+    className: 'water-intake',
+    isValid: true,
   },
   {
-    nodeType: "processUse",
-    defaultLabel: 'Process Use',
-    className: 'process-use'
+    processComponentType: "processUse",
+    name: 'Process Use',
+    className: 'process-use',
+    isValid: true,
   },
   {
-    nodeType: "waterDischarge",
-    defaultLabel: 'Water Discharge',
-    className: 'water-discharge'
+    processComponentType: "waterDischarge",
+    name: 'Water Discharge',
+    className: 'water-discharge',
+    isValid: true,
   }
 ];
 

@@ -24,15 +24,9 @@ export interface WaterSystemBasics {
     notes: string
 }
 
-export interface IntakeSource extends ProcessFlowPart {}
-export interface ProcessUse extends ProcessFlowPart {}
-export interface DischargeOutlet extends ProcessFlowPart {}
+export interface IntakeSource extends WaterProcessComponent {}
+export interface ProcessUse extends WaterProcessComponent {}
+export interface DischargeOutlet extends WaterProcessComponent {}
+export interface WaterProcessComponent extends ProcessFlowPart {}
 
-// export interface WaterSystemPart {
-//     // dataId differentiate between diagram id
-//     dataId: string,
-// }
-
-export interface WaterAssessmentResults {
-    
-}
+export interface WaterAssessmentResults {}
