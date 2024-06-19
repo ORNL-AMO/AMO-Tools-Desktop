@@ -30,6 +30,7 @@ export class ProcessFlowDiagramService {
       waterDiagram.flowDiagramData = diagramState.flowDiagramData;
       // todo need to update selected waterdiagram bS?
       await this.waterProcessDiagramService.updateWaterDiagram(waterDiagram);
+      console.log('=== updateFlowDiagramData await')
     }
 
   }

@@ -22,7 +22,6 @@ export class WaterDiagramSetupComponent {
   constructor(private waterProcessDiagramService: WaterProcessDiagramService) { }
 
   ngOnInit() {
-    
     this.allWaterDiagramsSub = this.waterProcessDiagramService.allDiagrams.subscribe((allDiagrams: WaterDiagram[]) => {
       if (allDiagrams && allDiagrams.length > 0) {
         this.getWaterDiagramSelectOptions();
@@ -58,9 +57,9 @@ export class WaterDiagramSetupComponent {
       return diagramOption;
     });
 
-    if (!this.selectedWaterDiagram && this.waterDiagramOptions && this.waterDiagramOptions.length > 0) {
-      this.waterProcessDiagramService.setSelectedDiagram(this.waterDiagramOptions[0].id);
-    }
+    // if (!this.selectedWaterDiagram && this.waterDiagramOptions && this.waterDiagramOptions.length > 0) {
+    //   this.waterProcessDiagramService.setSelectedDiagram(this.waterDiagramOptions[0].id);
+    // }
   }
 
   async createDiagram() {

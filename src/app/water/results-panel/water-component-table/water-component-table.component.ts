@@ -5,8 +5,8 @@ import { Settings } from '../../../shared/models/settings';
 import { WaterAssessment, WaterProcessComponent } from '../../../shared/models/water-assessment';
 import { WaterAssessmentService } from '../../water-assessment.service';
 import { WaterProcessComponentService } from '../../water-system-component.service';
-// import { getNewNodeId } from '../../../../../process-flow-diagram-component/src/components/Flow/process-flow-utils';
-// todo 6875 measur compiler doesn't like pulling in this module because it's from jsx
+import { WaterProcessComponentType, getNewNodeId } from '../../../../process-flow-types/shared-process-flow-types';
+import { copyObject } from '../../../shared/helperFunctions';
 
 @Component({
   selector: 'app-water-component-table',
@@ -25,6 +25,7 @@ export class WaterComponentTableComponent {
   deleteSelectedId: string;
   hasInvalidComponents: boolean = false;
   confirmDeleteData: ConfirmDeleteData;
+  activeComponentType: WaterProcessComponentType;
 
   settings: Settings;
   constructor(private waterAssessmentService: WaterAssessmentService, private waterProcessComponentService: WaterProcessComponentService) { }
@@ -33,12 +34,12 @@ export class WaterComponentTableComponent {
     this.settings = this.waterAssessmentService.settings.getValue();
     this.selectedComponentSub = this.waterProcessComponentService.selectedComponent.subscribe(val => {
       this.selectedComponent = val;
+      this.activeComponentType = this.selectedComponent? this.selectedComponent.processComponentType : undefined;
       console.log('table selectedComponent', this.selectedComponent)
     })
 
     this.selectedViewComponentsSub = this.waterProcessComponentService.selectedViewComponents.subscribe(viewComponents => {
       this.selectedViewComponents = viewComponents;
-      // todo get waterComponent type
       // todo set isValid
     });
   }
@@ -53,11 +54,13 @@ export class WaterComponentTableComponent {
     this.waterProcessComponentService.selectedComponent.next(item);
   }
 
-  addNewComponent() {
-    // let waterAssessment: WaterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-    // let updated: { newComponent: WaterProcessComponent, waterAssessment: WaterAssessment } = this.waterAssessmentService.addNewProcessComponent(waterAssessment);
-    // this.waterAssessmentService.updateWaterAssessment(updated.waterAssessment);
-    // this.waterProcessComponentService.selectedComponent.next(updated.newComponent);
+  async addNewComponent() {
+    let updated: { 
+      newComponent: WaterProcessComponent, 
+      waterAssessment: WaterAssessment 
+    } = await this.waterAssessmentService.addNewProcessComponent(this.activeComponentType);
+    this.waterAssessmentService.updateWaterAssessment(updated.waterAssessment);
+    this.waterProcessComponentService.selectedComponent.next(updated.newComponent);
   }
 
   deleteItem() {
@@ -89,10 +92,10 @@ export class WaterComponentTableComponent {
 
   createCopy(component: WaterProcessComponent) {
     let waterAssessment: WaterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-    let copiedComponent: WaterProcessComponent = JSON.parse(JSON.stringify(component));
+    let copiedComponent: WaterProcessComponent = copyObject(component);
     // todo 6875 better shared methods
-    // copiedComponent.diagramNodeId = getNewNodeId();
+    copiedComponent.diagramNodeId = getNewNodeId();
     copiedComponent.name = copiedComponent.name + ' (copy)';
-    this.waterAssessmentService.addNewProcessComponent(waterAssessment, copiedComponent);
+    this.waterAssessmentService.addNewProcessComponent(this.activeComponentType, copiedComponent);
   }
 }

@@ -65,6 +65,8 @@ export class IntakeSourceComponent {
     this.waterAssessmentService.focusedField.next(str);
   }
 
-  addIntakeSource() {}
+  addIntakeSource() {
+    this.waterAssessmentService.addNewProcessComponent('waterIntake');
+  }
 
 }

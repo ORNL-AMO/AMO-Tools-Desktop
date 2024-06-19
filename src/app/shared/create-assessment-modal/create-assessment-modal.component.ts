@@ -23,6 +23,7 @@ import { PumpItem } from '../../pump-inventory/pump-inventory';
 import { getNameDateString } from '../helperFunctions';
 import { WaterAssessmentService } from '../../water/water-assessment.service';
 import { WaterDiagram } from '../../../process-flow-types/shared-process-flow-types';
+import { WaterProcessDiagramService } from '../../water-process-diagram/water-process-diagram.service';
 
 @Component({
   selector: 'app-create-assessment-modal',
@@ -55,6 +56,7 @@ export class CreateAssessmentModalComponent {
     private directoryDashboardService: DirectoryDashboardService,
     private dashboardService: DashboardService,
     private convertFanAnalysisService: ConvertFanAnalysisService,
+    private waterDiagramService: WaterProcessDiagramService,
     private waterAssessmentService: WaterAssessmentService,
     private psatIntegrationService: PsatIntegrationService,
     private integrationStateService: IntegrationStateService,
@@ -239,7 +241,9 @@ export class CreateAssessmentModalComponent {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(assessmentSettings);
     // todo set settings/units match
     // newSettings = this.settingsService.setPumpSettingsUnitType(newSettings);
-    await this.waterAssessmentService.setNewWaterAssessmentFromDiagram(this.waterDiagram, createdAssessment, newSettings);
+    this.waterAssessmentService.setNewWaterAssessmentFromDiagram(this.waterDiagram, createdAssessment, newSettings);
+    this.waterDiagram.assessmentId = createdAssessment.id;
+    await this.waterDiagramService.updateWaterDiagram(this.waterDiagram);
     await this.saveAssessmentAndSettings(newSettings, createdAssessment)
   }
 

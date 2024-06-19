@@ -5,17 +5,16 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { Settings } from '../shared/models/settings';
 import { DischargeOutlet, IntakeSource, ProcessUse, WaterAssessment, WaterProcessComponent } from '../shared/models/water-assessment';
 import { Assessment } from '../shared/models/assessment';
-import { WaterDiagram } from '../../process-flow-types/shared-process-flow-types';
+import { WaterDiagram, WaterProcessComponentType, getNewNode, getNewProcessComponent } from '../../process-flow-types/shared-process-flow-types';
 import { Node } from 'reactflow';
 import { WaterProcessDiagramService } from '../water-process-diagram/water-process-diagram.service';
-// import { getNewProcessComponent } from '../../../process-flow-diagram-component/src/components/Flow/process-flow-utils';
 // todo 6875 measur compiler doesn't like pulling in this module because it's from jsx
 
 @Injectable({
   providedIn: 'root'
 })
 export class WaterAssessmentService {
-
+  assessmentId: number;
   settings: BehaviorSubject<Settings>;
   mainTab: BehaviorSubject<string>;
   setupTab: BehaviorSubject<WaterSetupTabString>;
@@ -55,12 +54,26 @@ export class WaterAssessmentService {
 
   updateWaterAssessment(waterAssessment: WaterAssessment) {
     console.log('updateWaterAssessment', waterAssessment);
-    // this.updateWaterDiagram(waterAssessment);
+    // this.updateWaterDiagramFromAssessment(waterAssessment);
     this.waterAssessment.next(waterAssessment);
   }
-  updateWaterDiagram(assessment: WaterAssessment) {
+  
+  updateWaterDiagramFromAssessment(waterAssessment: WaterAssessment) {
     // todo add waterProcessDiagramService method to get diagrams form assessment id
     let waterDiagram: WaterDiagram;
+    let newDiagramNodes: Node[];
+    waterAssessment.intakeSources.forEach((intake: WaterProcessComponent) => {
+      waterDiagram.flowDiagramData.nodes.map((waterDiagramNode: Node) => {
+        let nodeComponentData = waterDiagramNode.data as WaterProcessComponent;
+        if (nodeComponentData.diagramNodeId === intake.diagramNodeId) {
+          return waterDiagramNode;
+        } else {
+          let newDiagramNode = getNewNode(intake.processComponentType, intake);
+          newDiagramNodes.push(newDiagramNode)
+        }
+      });
+    })
+
     // todo iterate over component types on assessment
     // todo each find id in nodes and map update
     // todo save method on waterProcessDiagramService
@@ -97,13 +110,25 @@ export class WaterAssessmentService {
 
   }
 
-  addNewProcessComponent(waterAssessment: WaterAssessment, fromComponent?: WaterProcessComponent) {
-    // todo 6875 better shared methods
-    // let newComponent = getNewProcessComponent('waterIntake');
-    
+  async addNewProcessComponent(componentType: WaterProcessComponentType, newComponent?: WaterProcessComponent) {
+    let waterAssessment: WaterAssessment = this.waterAssessment.getValue();
+    if (!newComponent) {
+      newComponent = getNewProcessComponent(componentType);
+    }
+    if (componentType === 'waterIntake') {
+      waterAssessment.intakeSources.push(newComponent);
+    } else if (componentType === 'waterDischarge') {
+      waterAssessment.dischargeOutlets.push(newComponent);
+    } else if (componentType === 'processUse') {
+      waterAssessment.processUses.push(newComponent);
+    }
+
+    // todo hold explicit add, let update method take care of all
+    // await this.waterProcessDiagramService.addAssessmentWaterComponent(this.assessmentId, componentType, newComponent);
+
     return {
-      newComponent: undefined,
-      waterAssessment: waterAssessment
+      newComponent,
+      waterAssessment
     }
   }
 

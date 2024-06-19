@@ -36,6 +36,7 @@ export class ProcessFlowDiagramWrapperComponent {
     async onUpdateDiagramState(event) {
         let diagramState = event.detail as ProcessFlowDiagramState;
         await this.processFlowDiagramService.updateFlowDiagramData(diagramState);
+        console.log('onUpdateDiagramState await finish');
     }
 
 }

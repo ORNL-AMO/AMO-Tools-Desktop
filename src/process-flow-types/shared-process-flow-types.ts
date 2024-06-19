@@ -28,6 +28,7 @@ export interface ProcessFlowParentState {
 
   export interface WaterDiagram {
     id?: number;
+    assessmentId?: number,
     directoryId?: number,
     name: string;
     modifiedDate: Date,
@@ -62,7 +63,70 @@ export interface ProcessFlowParentState {
   
   export type ProcessFlowNodeType = WaterProcessComponentType | undefined;
   export type ProcessFlowPartStyleClass = 'water-intake' | 'water-discharge' | 'process-use';
-  
   export type WaterProcessComponentType = 'waterIntake' | 'waterDischarge' | 'processUse'
 
   
+
+  // =============================
+// todo break into utils
+
+  export function getNewIdString() {
+    return Math.random().toString(36).substr(2, 9);
+}
+  
+  // * Assign innate behaviors and context for Diagram parts
+  export const processFlowDiagramParts: ProcessFlowPart[] = [
+    {
+      processComponentType: "waterIntake",
+      name: 'Water Intake',
+      className: 'water-intake',
+      isValid: true,
+    },
+    {
+      processComponentType: "processUse",
+      name: 'Process Use',
+      className: 'process-use',
+      isValid: true,
+    },
+    {
+      processComponentType: "waterDischarge",
+      name: 'Water Discharge',
+      className: 'water-discharge',
+      isValid: true,
+    }
+  ];
+
+
+export const getNewProcessComponent = (processComponentType): ProcessFlowPart => {
+  let diagramComponent: ProcessFlowPart = processFlowDiagramParts.find(part => part.processComponentType === processComponentType);
+  let newProcessComponent = {
+    processComponentType: diagramComponent.processComponentType,
+    name: diagramComponent.name,
+    className: diagramComponent.className,
+    isValid: diagramComponent.isValid,
+    diagramNodeId: getNewNodeId(),
+    modifiedDate: new Date()
+  };
+
+  return newProcessComponent;
+}
+
+
+export const getNewNodeId = () => {
+  let nodeId = `dndnode_${getNewIdString()}`;
+  return nodeId;
+}
+
+
+export const getNewNode = (type: any, newProcessComponent: ProcessFlowPart, position?: {x: number, y: number}): Node => {
+  const newNode: Node = {
+    id: newProcessComponent.diagramNodeId,
+    type,
+    position,
+    className: newProcessComponent.className,
+    data: newProcessComponent
+  };
+
+  return newNode;
+}
+

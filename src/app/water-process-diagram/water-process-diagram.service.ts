@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { ParentContainerDimensions, WaterDiagram, WaterDiagramOption } from '../../process-flow-types/shared-process-flow-types';
+import { ParentContainerDimensions, WaterDiagram, WaterProcessComponentType, getNewNode } from '../../process-flow-types/shared-process-flow-types';
 import { WaterProcessIdbService } from '../indexedDb/water-process-idb.service';
 import * as _ from 'lodash';
-import { getNameDateString, getNewIdString } from '../shared/helperFunctions';
+import { getNewIdString } from '../shared/helperFunctions';
+import { WaterProcessComponent } from '../shared/models/water-assessment';
+import { Node } from 'reactflow';
 
 @Injectable({
   providedIn: 'root'
@@ -29,11 +31,13 @@ export class WaterProcessDiagramService {
 
   async setWaterDiagrams() {
     let allDiagrams: Array<WaterDiagram> = await firstValueFrom(this.waterDiagramIdbService.getAllDiagrams());
+    console.log('___ setWaterDiagrams', allDiagrams)
     this.allDiagrams.next(allDiagrams);
   }
 
   setSelectedDiagram(id: number) {
     let selectedDiagram = this.waterDiagramIdbService.findById(id, this.allDiagrams.getValue());
+    console.log('___ setSelectedDiagram', selectedDiagram)
     this.selectedWaterDiagram.next(selectedDiagram);
   }
   
@@ -61,7 +65,19 @@ export class WaterProcessDiagramService {
 
   async updateWaterDiagram(waterDiagram: WaterDiagram) {
     await firstValueFrom(this.waterDiagramIdbService.updateWithObservable(waterDiagram));
+    console.log('=== updateWaterDiagram firstValueFrom', waterDiagram);
     await this.setWaterDiagrams();
+  }
+
+  async addAssessmentWaterComponent(assessmentId: number, componentType: WaterProcessComponentType, newComponent: WaterProcessComponent) {
+    let waterDiagrams = this.allDiagrams.getValue();
+    let assessmentDiagram: WaterDiagram;
+    if (waterDiagrams) {
+      assessmentDiagram = waterDiagrams.find(diagram => diagram.assessmentId === assessmentId);  
+      let newDiagramNode = getNewNode(componentType, newComponent);
+      assessmentDiagram.flowDiagramData.nodes.push(newDiagramNode);
+      await this.updateWaterDiagram(assessmentDiagram);
+    }
   }
   
 }

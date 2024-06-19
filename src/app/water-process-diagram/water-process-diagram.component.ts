@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { WaterProcessDiagramService } from './water-process-diagram.service';
 import { WaterDiagram, WaterDiagramOption } from '../../process-flow-types/shared-process-flow-types';
 import * as _ from 'lodash';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-water-process-diagram',
@@ -33,11 +34,14 @@ export class WaterProcessDiagramComponent {
   constructor( 
     private waterProcessDiagramService: WaterProcessDiagramService,
     private settingsDbService: SettingsDbService, 
+    private router: Router,
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-water-diagram');
     this.waterProcessDiagramService.setWaterDiagrams();
+    this.setSelectedWaterDiagram();
+
     this.waterDiagramSub = this.waterProcessDiagramService.selectedWaterDiagram.subscribe(selectedWaterDiagram => {
         this.waterDiagram = selectedWaterDiagram;
     });
@@ -60,27 +64,21 @@ export class WaterProcessDiagramComponent {
     this.mainTabSub.unsubscribe();
     this.waterDiagramSub.unsubscribe();
     this.modalOpenSub.unsubscribe();   
+    this.waterProcessDiagramService.selectedWaterDiagram.next(undefined);
   }
 
   ngAfterViewInit() {
     this.getContainerHeight();
   }
 
-  createAssessment() {
-    this.showCreateAssessmentModal();
+  
+  setSelectedWaterDiagram() {
+    let selectedDiagram = this.waterProcessDiagramService.selectedWaterDiagram.getValue();
+    if (!selectedDiagram) {
+      let lastModified = _.maxBy(this.waterProcessDiagramService.allDiagrams.getValue(), 'modifiedDate');
+      this.waterProcessDiagramService.selectedWaterDiagram.next(lastModified);
+    }
   }
-
-  showCreateAssessmentModal() {
-    this.isModalOpen = true;
-    this.displayCreateAssessmentModal = true;
-  }
-
-  hideCreateAssessmentModal() {
-    this.isModalOpen = false;
-    this.displayCreateAssessmentModal = false;
-  }
-
-
 
   getContainerHeight() {
     if (this.content) {
@@ -111,6 +109,25 @@ export class WaterProcessDiagramComponent {
     if (this.mainTab == 'diagram') {
       this.waterProcessDiagramService.mainTab.next('setup');
     }
+  }
+
+  createAssessment() {
+    this.showCreateAssessmentModal();
+  }
+
+  goToAssessment() {
+      let url: string = `/water/${this.waterDiagram.assessmentId}`;
+      this.router.navigate([url]);
+  }
+
+  showCreateAssessmentModal() {
+    this.isModalOpen = true;
+    this.displayCreateAssessmentModal = true;
+  }
+
+  hideCreateAssessmentModal() {
+    this.isModalOpen = false;
+    this.displayCreateAssessmentModal = false;
   }
 
 }

@@ -61,7 +61,9 @@ export class WaterAssessmentComponent {
   ngOnInit() {
     this.analyticsService.sendEvent('view-water-assessment', undefined);
     this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
+      let assessmentId = parseInt(params['id']);
+      this.assessment = this.assessmentDbService.findById(assessmentId);
+      this.waterAssessmentService.assessmentId = assessmentId;
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       if (!settings) {
         settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
