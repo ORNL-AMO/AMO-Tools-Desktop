@@ -14,14 +14,16 @@ class AppWebComponent extends HTMLElement {
   shadowRoot;
 
   renderDiagramComponent(parentState: ProcessFlowParentState) {
-    this.appRef.render(
-    <App parentContainer={parentState.parentContainer} 
-    context={parentState.context}
-    flowDiagramData={parentState.waterDiagram.flowDiagramData}
-    shadowRoot={this.shadowRoot} 
-    clickEvent={this.handleClickEvent}
-    saveFlowDiagramData={this.emitFlowDiagramDataUpdate}
-    />)
+    if (parentState.parentContainer) {
+      this.appRef.render(
+        <App parentContainer={parentState.parentContainer}
+        context={parentState.context}
+        flowDiagramData={parentState.waterDiagram.flowDiagramData}
+        shadowRoot={this.shadowRoot}
+        clickEvent={this.handleClickEvent}
+        saveFlowDiagramData={this.emitFlowDiagramDataUpdate}
+        />)
+    }
   }
 
   connectedCallback() {

@@ -29,6 +29,9 @@
                 <button class="btn btn-secondary action-btn menu-btn" (click)="showAddInventory()" type="button">
                     Add Inventory
                 </button>
+                <button class="btn btn-secondary action-btn menu-btn" (click)="showAddDiagram()" type="button">
+                    Add Diagram
+                </button>
                 <button class="btn btn-secondary action-btn menu-btn" [disabled]="!hasSelectedItem" type="button"
                     (click)="moveToFolder()">Move Items</button>
                 <button class="btn btn-secondary action-btn menu-btn" [disabled]="!canCopyItem" type="button"

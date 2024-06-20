@@ -1,0 +1,45 @@
+
+.modal.create-diagram-modal {
+    margin-top: 7%;
+  }
+  
+  .create-diagram-modal label {
+    font-weight: bold;
+  }
+  .create-diagram-modal .form-check {
+    margin-bottom: 0;
+  }
+  .create-diagram-modal label.form-check-label {
+    font-weight: normal;
+  }
+  
+  .create-diagram-modal input[type=text] {
+    width: 100%;
+    margin-bottom: 2px;
+  }
+  
+  .create-diagram-modal .form-group {
+    margin-bottom: 10px;
+  }
+  
+  .create-diagram-modal select {
+    margin-bottom: 6px;
+  }
+  
+  .create-diagram-modal .help-text {
+    margin-bottom: 10px;
+  }
+  .create-diagram-modal .help-text p {
+    margin-bottom: 0;
+  }
+  
+  .btn {
+    padding: 6px;
+  }
+  
+
+@media screen and (max-width: 1024px) {
+  .modal {
+    width: 100vw;
+  }
+}

@@ -2,6 +2,7 @@
 export type AnalyticsEventString = 'page_view' |
     'measur_app_open' |
     'create-assessment' |
+    'create-water-diagram' |
     'view-pump-assessment' |
     'view-process-heating-assessment' |
     'view-fan-assessment' |

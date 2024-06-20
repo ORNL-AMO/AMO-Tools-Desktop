@@ -5,6 +5,7 @@ export interface Settings {
     assessmentId?: number,
     directoryId?: number,
     inventoryId?: number,
+    diagramId?: number,
     createdDate?: Date,
     modifiedDate?: Date
     flowMeasurement?: string,

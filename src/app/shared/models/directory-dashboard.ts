@@ -2,6 +2,7 @@ import { Calculator } from "./calculators";
 import { Directory } from "./directory";
 import { Assessment } from "./assessment";
 import { InventoryItem } from "./inventory/inventory";
+import { Diagram } from "./app";
 
 export interface DirectoryItem {
     calculator?: Calculator;
@@ -9,6 +10,7 @@ export interface DirectoryItem {
     subDirectory?: Directory;
     assessment?: Assessment;
     inventoryItem?: InventoryItem,
+    diagram?: Diagram;
     type: string;
     isShown: boolean;
     createdDate: Date,
@@ -28,7 +30,8 @@ export interface FilterDashboardBy {
     showPhast: boolean,
     showMotorInventory: boolean,
     showWasteWater: boolean,
-    showCompressedAir: boolean
+    showCompressedAir: boolean,
+    showDiagrams: boolean
 }
 
 

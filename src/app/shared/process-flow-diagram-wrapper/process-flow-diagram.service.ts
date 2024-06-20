@@ -24,12 +24,11 @@ export class ProcessFlowDiagramService {
     }
   }
 
-  async updateFlowDiagramData(diagramState: ProcessFlowDiagramState) {
+  updateFlowDiagramData(diagramState: ProcessFlowDiagramState) {
     if (diagramState && diagramState.context === 'water') {
-      let waterDiagram = this.waterProcessDiagramService.selectedWaterDiagram.getValue();
+      let waterDiagram = this.waterProcessDiagramService.waterDiagram.getValue();
       waterDiagram.flowDiagramData = diagramState.flowDiagramData;
-      // todo need to update selected waterdiagram bS?
-      await this.waterProcessDiagramService.updateWaterDiagram(waterDiagram);
+      this.waterProcessDiagramService.updateWaterDiagram(waterDiagram);
     }
 
   }

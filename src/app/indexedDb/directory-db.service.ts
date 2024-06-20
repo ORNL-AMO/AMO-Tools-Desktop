@@ -10,6 +10,7 @@ import { DirectoryStoreMeta } from './dbConfig';
 import { Assessment } from '../shared/models/assessment';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { FormGroup } from '@angular/forms';
+import { DiagramIdbService } from './diagram-idb.service';
 @Injectable()
 export class DirectoryDbService {
 
@@ -18,6 +19,7 @@ export class DirectoryDbService {
   constructor(
     private dbService: NgxIndexedDBService,
     private assessmentDbService: AssessmentDbService, private calculatorDbService: CalculatorDbService,
+    private diagramIdbService: DiagramIdbService,
     private inventoryDbService: InventoryDbService) {
   }
 
@@ -53,6 +55,7 @@ export class DirectoryDbService {
       selectedDirectory.subDirectory = this.getSubDirectoriesById(id);
       selectedDirectory.calculators = this.calculatorDbService.getByDirectoryId(id);
       selectedDirectory.inventories = this.inventoryDbService.getByDirectoryId(id);
+      selectedDirectory.diagrams = this.diagramIdbService.getByDirectoryId(id);
     }
     return selectedDirectory;
   }

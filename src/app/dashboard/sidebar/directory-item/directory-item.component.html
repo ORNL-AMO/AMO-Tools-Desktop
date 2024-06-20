@@ -17,5 +17,7 @@
     </app-directory-item>
     <app-inventory-item *ngIf="directoryItem.type == 'inventory'" [inventoryItem]="directoryItem.inventoryItem">
     </app-inventory-item>
+    <app-diagram-item *ngIf="directoryItem.type == 'diagram'" [diagram]="directoryItem.diagram">
+    </app-diagram-item>
   </div>
 </div>

@@ -41,7 +41,8 @@ export class DirectoryDashboardService {
       showAll: true,
       showMotorInventory: true,
       showWasteWater: true,
-      showCompressedAir: true
+      showCompressedAir: true,
+      showDiagrams: true
     });
 
     this.sortBy = new BehaviorSubject<{ value: string, direction: string }>({ value: 'modifiedDate', direction: 'desc' });
@@ -75,6 +76,17 @@ export class DirectoryDashboardService {
           modifiedDate: assessment.modifiedDate,
           name: assessment.name,
           assessmentType: assessment.type
+        })
+      });
+
+      directory.diagrams.forEach(diagram => {
+        directoryItems.push({
+          type: 'diagram',
+          diagram: diagram,
+          isShown: true,
+          createdDate: diagram.createdDate,
+          modifiedDate: diagram.modifiedDate,
+          name: diagram.name,
         })
       });
       

@@ -20,6 +20,7 @@ import { SecurityAndPrivacyService } from '../shared/security-and-privacy/securi
 import { ElectronService } from '../electron/electron.service';
 import { MockPumpInventory } from '../examples/mockPumpInventoryData';
 import { MockWaterAssessment, MockWaterAssessmentSettings } from '../examples/mockWaterAssessment';
+import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 @Injectable()
 export class CoreService {
 
@@ -41,6 +42,7 @@ export class CoreService {
     private assessmentDbService: AssessmentDbService,
     private inventoryDbService: InventoryDbService,
     private electronService: ElectronService,
+    private diagramIdbService: DiagramIdbService,
     private securityAndPrivacyService: SecurityAndPrivacyService,
     private directoryDbService: DirectoryDbService) {
   }
@@ -60,6 +62,7 @@ export class CoreService {
     let initializedAppData = {
       directories: this.directoryDbService.getAllDirectories(),
       assessments: this.assessmentDbService.getAllAssessments(),
+      diagrams: this.diagramIdbService.getAllDiagrams(),
       settings: this.settingsDbService.getAllSettings(),
       calculators: this.calculatorDbService.getAllCalculators(),
       inventoryItems: this.inventoryDbService.getAllInventory(),

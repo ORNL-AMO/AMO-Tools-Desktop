@@ -577,10 +577,6 @@ export const coreRoutes: Routes = [
     children: logToolRoutes
   },
   {
-    path: 'process-flow-diagram',
-    component: WaterProcessDiagramComponent,
-  },
-  {
     component: MotorInventoryComponent,
     path: 'motor-inventory/:id',
     children: motorInventoryRoutes
@@ -597,6 +593,10 @@ export const coreRoutes: Routes = [
   {
     path: 'water/:id',
     component: WaterAssessmentComponent
+  },
+  {
+    path: 'process-flow-diagram/:id',
+    component: WaterProcessDiagramComponent,
   },
   { 
     path: '**', 

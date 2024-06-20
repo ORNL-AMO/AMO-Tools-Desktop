@@ -31,6 +31,9 @@
             <a class="list-group-item list-group-item-action" (click)="showCreateInventory()">
               Add New Inventory
             </a>
+            <a class="list-group-item list-group-item-action" (click)="showCreateDiagram()">
+              Add New Diagram
+            </a>
             <a class="list-group-item list-group-item-action" (click)="showCreateFolder()">
               Add New Folder
             </a>
@@ -52,9 +55,6 @@
   <span routerLinkActive="selected" class="sidebar-item" (click)="navigateWithSidebarOptions('/log-tool', true)">Data Exploration</span>
 </div>
 
-<div class="sidebar-group secondary">
-  <span routerLinkActive="selected" class="sidebar-item" (click)="navigateWithSidebarOptions('/process-flow-diagram', true)">Water Process Diagram</span>
-</div>
 
 <div class="sidebar-group secondary">
   <app-calculator-list></app-calculator-list>

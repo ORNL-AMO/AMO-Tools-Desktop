@@ -48,8 +48,8 @@ const Flow = (props: FlowProps) => {
   const nodeClassName = (node) => node.type;
 
   useEffect(() => {
-    console.log('First render flow nodes', nodes);
-    console.log('First render flow edges', edges);
+    // console.log('First render flow nodes', nodes);
+    // console.log('First render flow edges', edges);
   }, []);
 
   const {debouncedNodes, debouncedEdges} = useDiagramStateDebounce(nodes, edges);
@@ -106,9 +106,7 @@ const Flow = (props: FlowProps) => {
   const updateControls = useCallback((enabled) => {
     setControlsVisible(enabled);
   }, []);
-
-
-
+  console.log('index props.height', props.height)
   return (
     props.height &&
     <div className="process-flow-diagram">

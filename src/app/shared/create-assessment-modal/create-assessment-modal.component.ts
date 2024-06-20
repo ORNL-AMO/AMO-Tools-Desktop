@@ -118,9 +118,6 @@ export class CreateAssessmentModalComponent {
         assessmentName = `${selectedPumpItem.name}_${getNameDateString(currentDate)}`;
       }
     }
-    if (this.waterDiagram) {
-      assessmentName = `${this.waterDiagram.name}_Assessment_${getNameDateString(currentDate)}`;
-    }
     return assessmentName;
   }
 

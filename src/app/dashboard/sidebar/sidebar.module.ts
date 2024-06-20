@@ -10,6 +10,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { DashboardPipeModule } from '../dashboard-pipe/dashboard-pipe.module';
 import { InventoryItemComponent } from './inventory-item/inventory-item.component';
 import { PreAssessmentItemComponent } from './pre-assessment-item/pre-assessment-item.component';
+import { DiagramItemComponent } from './diagram-item/diagram-item.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { PreAssessmentItemComponent } from './pre-assessment-item/pre-assessment
     DirectoryItemComponent,
     VersionModalComponent,
     InventoryItemComponent,
-    PreAssessmentItemComponent
+    PreAssessmentItemComponent,
+    DiagramItemComponent,
   ],
   imports: [
     CommonModule,

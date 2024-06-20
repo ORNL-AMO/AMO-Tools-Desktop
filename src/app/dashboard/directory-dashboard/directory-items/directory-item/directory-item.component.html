@@ -46,6 +46,11 @@
                             src="assets/images/motor-inventory-icon.png">
                         <a (click)="navigateWithSidebarOptions(directoryItem.inventoryItem)">{{directoryItem.inventoryItem.name}}</a>
                     </span>
+                    <span *ngIf="directoryItem.type == 'diagram'">
+                        <img *ngIf="directoryItem.diagram.type === 'Water'" class="icon-image pl-1 pr-1"
+                            src="assets/images/water-process-diagram-icon.png">
+                        <a (click)="navigateWithSidebarOptions(directoryItem.diagram)">{{directoryItem.diagram.name}}</a>
+                    </span>
                 </li>
             </ul>
     </div>
