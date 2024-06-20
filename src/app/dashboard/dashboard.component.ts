@@ -67,6 +67,8 @@ export class DashboardComponent implements OnInit {
   showPrintViewSub: Subscription;
   exportInProgressSub: Subscription;
   showExportInProgress: boolean;
+  showCreateDiagramSub: Subscription;
+  showCreateDiagram: boolean;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -96,6 +98,10 @@ export class DashboardComponent implements OnInit {
     });
     this.createAssessmentSub = this.dashboardService.createAssessment.subscribe(val => {
       this.createAssessment = val;
+    });
+
+    this.showCreateDiagramSub = this.dashboardService.showCreateDiagram.subscribe(val => {
+      this.showCreateDiagram = val;
     });
 
     this.moveItemsSub = this.dashboardService.moveItems.subscribe(val => {

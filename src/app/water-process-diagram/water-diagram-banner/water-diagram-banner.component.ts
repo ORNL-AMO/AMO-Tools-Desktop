@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import _ from 'lodash';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { WaterProcessDiagramService } from '../water-process-diagram.service';
-import { WaterDiagram } from '../../../process-flow-types/shared-process-flow-types';
+import { Diagram } from '../../shared/models/app';
 
 
 @Component({
@@ -13,10 +13,11 @@ import { WaterDiagram } from '../../../process-flow-types/shared-process-flow-ty
   styleUrl: './water-diagram-banner.component.css'
 })
 export class WaterDiagramBannerComponent {
+  @Input()
+  diagram: Diagram;
+  
   mainTab: string;
   mainTabSub: Subscription;
-  waterDiagram: WaterDiagram;
-  waterDiagramSub: Subscription;
   bannerCollapsed: boolean = true;
 
     constructor(private waterProcessService: WaterProcessDiagramService, 
@@ -27,15 +28,9 @@ export class WaterDiagramBannerComponent {
     this.mainTabSub = this.waterProcessService.mainTab.subscribe(val => {
       this.mainTab = val;
     });
-
-    this.waterDiagramSub = this.waterProcessService.selectedWaterDiagram.subscribe(val => {
-      this.waterDiagram = val;
-    });
-
   }
 
   ngOnDestroy() {
-    this.waterDiagramSub.unsubscribe();
     this.mainTabSub.unsubscribe();
   }
 

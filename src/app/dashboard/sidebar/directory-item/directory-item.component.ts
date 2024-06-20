@@ -22,7 +22,7 @@ export class DirectoryItemComponent implements OnInit {
   sortBy: { value: string, direction: string };
   updateDashboardDataSub: Subscription;
   selectedDirectoryId: number;
-  constructor(private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private cd: ChangeDetectorRef, private directoryDbService: DirectoryDbService) { }
+  constructor(private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private directoryDbService: DirectoryDbService) { }
 
   ngOnInit() {
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {

@@ -13,6 +13,7 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { DirectoryItem, FilterDashboardBy } from '../../../../shared/models/directory-dashboard';
 import { InventoryItem } from '../../../../shared/models/inventory/inventory';
+import { Diagram } from '../../../../shared/models/app';
 
 @Component({
   selector: 'app-directory-item',
@@ -111,12 +112,15 @@ export class DirectoryItemComponent implements OnInit {
     }
   }
 
-  navigateWithSidebarOptions(item: InventoryItem) {
+  navigateWithSidebarOptions(item: InventoryItem | Diagram) {
     if (item.type === 'pumpInventory') {
       this.dashboardService.navigateWithSidebarOptions('/pump-inventory/' + item.id, {shouldCollapse: true})
     }
     if (item.type === 'motorInventory') {
       this.dashboardService.navigateWithSidebarOptions('/motor-inventory/' + item.id, {shouldCollapse: true})
+    }
+    if (item.type === 'diagram') {
+      this.dashboardService.navigateWithSidebarOptions('/process-flow-diagram/' + item.id, {shouldCollapse: true})
     }
   }
 

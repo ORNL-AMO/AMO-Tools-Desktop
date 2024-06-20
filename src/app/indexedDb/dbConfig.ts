@@ -22,6 +22,24 @@ export const AssessmentStoreMeta = {
   ]
 };
 
+
+export const DiagramStoreMeta = {
+  store: 'diagrams',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'modifiedDate', keypath: 'modifiedDate', options: {unique: false } },
+    { name: 'waterDiagram', keypath: 'waterDiagram', options: {unique: false } },
+    { name: 'directoryId', keypath: 'directoryId', options: { unique: false } },
+    { name: 'createdDate', keypath: 'createdDate', options: { unique: false } },
+    { name: 'type', keypath: 'type', options: { unique: false } },
+    { name: 'name', keypath: 'name', options: { unique: false } },
+    { name: 'selected', keypath: 'selected', options: { unique: false } },
+    { name: 'appVersion', keypath: 'appVersion', options: { unique: false } },
+    { name: 'isexample', keypath: 'isexample', options: { unique: false } },
+  ]
+};
+
+
 export const DirectoryStoreMeta = {
   store: 'directories',
   storeConfig: { keyPath: 'id', autoIncrement: true },
@@ -240,17 +258,6 @@ export const AnalyticStoreMeta = {
   ]
 };
 
-export const WaterDiagramStoreMeta = {
-  store: 'waterProcess',
-  storeConfig: { keyPath: 'id', autoIncrement: true },
-  storeSchema: [
-    { name: 'id', keypath: 'id', options: {unique: false } },
-    { name: 'modifiedDate', keypath: 'modifiedDate', options: {unique: false } },
-  ]
-};
-
-
-
 export const GasLoadMaterialStoreMeta = {
   store: 'gasLoadChargeMaterial',
   storeConfig: { keyPath: 'id', autoIncrement: true },
@@ -368,6 +375,6 @@ export const dbConfig: DBConfig = {
     WallLossesSurfaceStoreMeta,
     FlueGasMaterialStoreMeta,
     SolidLiquidFlueGasMaterialStoreMeta,
-    WaterDiagramStoreMeta
+    DiagramStoreMeta
   ]
 };

@@ -25,12 +25,7 @@ export interface ProcessFlowParentState {
     flowDiagramData: FlowDiagramData;
   }
   
-
   export interface WaterDiagram {
-    id?: number;
-    directoryId?: number,
-    name: string;
-    modifiedDate: Date,
     isValid: boolean,
     flowDiagramData: FlowDiagramData
   }

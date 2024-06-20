@@ -10,6 +10,7 @@ import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { combineLatestWith, firstValueFrom, Observable } from 'rxjs';
 import { SettingsStoreMeta } from './dbConfig';
 import { environment } from '../../environments/environment';
+import { Diagram } from '../shared/models/app';
 
 @Injectable()
 export class SettingsDbService {
@@ -106,6 +107,21 @@ export class SettingsDbService {
     }
     return selectedSettings;
   }
+
+  getByDiagramId(diagram: Diagram, neededFromDiagram?: boolean): Settings {
+    let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.diagramId === diagram.id; });
+    if (!selectedSettings && !neededFromDiagram) {
+      selectedSettings = this.getByDirectoryId(diagram.directoryId);
+    }
+    if (!selectedSettings && !neededFromDiagram) {
+      selectedSettings = this.globalSettings;
+    }
+    if (selectedSettings) {
+      selectedSettings = this.checkSettings(selectedSettings);
+    }
+    return selectedSettings;
+  }
+
 
 
   checkSettings(settings: Settings, assessment?: Assessment): Settings {

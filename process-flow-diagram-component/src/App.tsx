@@ -5,22 +5,16 @@ import { WaterDiagram } from '../../src/process-flow-types/shared-process-flow-t
 
 function App(props?: ProcessFlowDiagramWrapperProps) {
   const ref = useRef(null)
-  const [flowContainerHeight, setFlowContainerHeight] = useState(null);
-
-  useEffect(() => {
-    let availableHeight = ref.current.clientHeight;
-    availableHeight = props.parentContainer.height - props.parentContainer.headerHeight - props.parentContainer.footerHeight;
-    setFlowContainerHeight(availableHeight)
-  })
-  
+  let availableHeight = props.parentContainer.height - props.parentContainer.headerHeight - props.parentContainer.footerHeight;
   return (
-    <div ref={ref} className={'wc-app-container'} style={{height: flowContainerHeight}}>
-      <Flow {...props} height={flowContainerHeight}/>
+    availableHeight &&
+    <div ref={ref} className={'wc-app-container'} style={{height: availableHeight}}>
+      <Flow {...props} height={availableHeight}/>
     </div>
   );
 }
 
-export default App
+export default App;
 
 export interface ProcessFlowDiagramWrapperProps extends FlowProps {
     context: string;

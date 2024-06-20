@@ -25,6 +25,7 @@ import { DisclaimerComponent } from './disclaimer/disclaimer.component';
 import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/security-and-privacy.module';
 import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/create-assessment-modal.module';
 import { AppErrorModule } from '../shared/errors/app-error.module';
+import { CreateDiagramModalModule } from '../shared/create-diagram-modal/create-diagram-modal.module';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { AppErrorModule } from '../shared/errors/app-error.module';
     ToastModule,
     SecurityAndPrivacyModule,
     CreateAssessmentModalModule,
-    AppErrorModule
+    AppErrorModule,
+    CreateDiagramModalModule
   ],
   providers: [
     DashboardService,

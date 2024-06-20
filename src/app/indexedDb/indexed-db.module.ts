@@ -18,7 +18,7 @@ import { SolidLiquidMaterialDbService } from './solid-liquid-material-db.service
 import { FlueGasMaterialDbService } from './flue-gas-material-db.service';
 import { AtmosphereDbService } from './atmosphere-db.service';
 import { WeatherDataIdbService } from './weather-data-idb.service';
-import { WaterProcessIdbService } from './water-process-idb.service';
+import { DiagramIdbService } from './diagram-idb.service';
 
 
 
@@ -44,7 +44,7 @@ import { WaterProcessIdbService } from './water-process-idb.service';
     FlueGasMaterialDbService,
     AtmosphereDbService,
     WeatherDataIdbService,
-    WaterProcessIdbService
+    DiagramIdbService
   ]
 })
 export class IndexedDbModule { }
