@@ -3,7 +3,7 @@
   <ng-container *ngIf="!updatePwa">
   <div class="card-header">
     MEASUR {{releaseName}} is now available!
-    <button class="close pull-right" (click)="closeToast()" *ngIf="!downloadingUpdate">
+    <button class="close pull-right" (click)="closeToast()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -27,6 +27,9 @@
     An error has occured. Please restart your application and try again. If the error persists, please use the
     "Feedback" page to notify ORNL of your issue.
   </div>
+  <div class="card-body d-flex flex-column text-center" *ngIf="error">
+    MEASUR {{version}} can also be downloaded and installed from <a href="https://ornl-amo.github.io/">https://ornl-amo.github.io/</a>
+  </div>
 </ng-container>
 
 <ng-container *ngIf="updatePwa">
@@ -42,6 +45,9 @@
   <div class="card-body d-flex flex-column text-center" *ngIf="error">
     The application could not be updated. Please uninstall, then reinstall the newest version. If the problem persists, see the 
     "Feedback" page to notify ORNL of your issue.
+  </div>
+  <div class="card-body d-flex flex-column text-center" *ngIf="error">
+    MEASUR {{version}} Desktop can also be downloaded and installed from <a href="https://ornl-amo.github.io/">https://ornl-amo.github.io/</a>
   </div>
 </ng-container>
 
