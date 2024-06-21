@@ -12,7 +12,14 @@ export class PowerFactorCorrectionComponent implements OnInit {
   inputData: PowerFactorCorrectionInputs = {
     existingDemand: 100,
     currentPowerFactor: 0.5,
-    proposedPowerFactor: 0.95
+    proposedPowerFactor: 0.95,
+    billedForDemand: 0,
+    minimumPowerFactor: 0.95,
+    targetPowerFactor: 0.95,
+    adjustedOrActual: 0,
+    marginalCostOfDemand: 8.15,
+    costOfStaticCapacitance: 50,
+    costOfDynamicCapacitance: 70,
   };
   results: PowerFactorCorrectionOutputs;
 
@@ -107,6 +114,13 @@ export interface PowerFactorCorrectionInputs {
   existingDemand: number;
   currentPowerFactor: number;
   proposedPowerFactor: number;
+  billedForDemand: number;
+  minimumPowerFactor: number;
+  targetPowerFactor: number;
+  adjustedOrActual: number;
+  marginalCostOfDemand: number;
+  costOfStaticCapacitance: number;
+  costOfDynamicCapacitance: number;
 }
 
 

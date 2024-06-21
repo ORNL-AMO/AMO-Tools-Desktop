@@ -2,12 +2,12 @@
   <div class="form-group">
     <label for="currentDemand">Existing Demand</label>
     <div class="input-group">
-      <input name="currentDemand" class="form-control" type="number" step="any" [(ngModel)]="data.existingDemand" id="currentDemand"
-             (input)="calculate()" onfocus="this.select();" (focus)="focusField('existingDemand')">
+      <input name="currentDemand" class="form-control" type="number" step="any" [(ngModel)]="data.existingDemand"
+        id="currentDemand" (input)="calculate()" onfocus="this.select();" (focus)="focusField('existingDemand')">
       <span class="input-group-addon units">kW</span>
     </div>
   </div>
-<!--
+  <!--
   <div class="form-group">
     <label for="lineFrequency">Line Frequency</label>
     <select class="form-control" name="lineFrequency" id="lineFrequency" [(ngModel)]="data.lineFrequency" (change)="calculate()" (focus)="focusField('lineFrequency')">
@@ -27,15 +27,193 @@
 -->
   <div class="form-group">
     <label for="currentPowerFactor">Existing Power Factor</label>
-    <input name="currentPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.currentPowerFactor" id="currentPowerFactor"
-      (input)="calculate()" onfocus="this.select();" (focus)="focusField('currentPowerFactor')">
+    <input name="currentPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.currentPowerFactor"
+      id="currentPowerFactor" (input)="calculate()" onfocus="this.select();" (focus)="focusField('currentPowerFactor')">
   </div>
 
   <div class="form-group">
     <label for="proposedPowerFactor">Proposed Power Factor</label>
-    <input name="proposedPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.proposedPowerFactor" id="proposedPowerFactor"
-      (input)="calculate()" onfocus="this.select();" (focus)="focusField('proposedPowerFactor')">
+    <input name="proposedPowerFactor" class="form-control" type="number" step="any"
+      [(ngModel)]="data.proposedPowerFactor" id="proposedPowerFactor" (input)="calculate()" onfocus="this.select();"
+      (focus)="focusField('proposedPowerFactor')">
   </div>
 
 
 </form>
+
+<form>
+
+  <div class="form-group">
+    <label for="billedForDemand">How are you billed for Demand</label>
+    <select id="billedForDemand" name="billedForDemand" class="form-control" [(ngModel)]="data.billedForDemand"
+      (focus)="focusField('billedForDemand')" (change)="setBilledForDemand()">
+      <option *ngFor="let option of billedOptions" [ngValue]="option.value">{{option.name}}</option>
+    </select>
+  </div>
+
+  <div *ngIf="data.billedForDemand == 0" class="form-group">
+    <label for="minimumPowerFactor">Minimum Required Power Factor</label>
+    <input name="minimumPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.minimumPowerFactor"
+      id="minimumPowerFactor" (input)="calculate()" onfocus="this.select();" (focus)="focusField('minimumPowerFactor')">
+  </div>
+
+  <div *ngIf="data.billedForDemand == 1" class="form-group">
+    <label for="targetPowerFactor">Target Power Factor</label>
+    <input name="targetPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.targetPowerFactor"
+      id="targetPowerFactor" (input)="calculate()" onfocus="this.select();" (focus)="focusField('targetPowerFactor')">
+  </div>
+
+  <div class="form-group">
+    <label for="adjustedOrActual">PF Adjusted or Actual Demand</label>
+    <select id="adjustedOrActual" name="adjustedOrActual" class="form-control" [(ngModel)]="data.adjustedOrActual"
+      (focus)="focusField('adjustedOrActual')" (change)="setAdjustedOrActual()">
+      <option *ngFor="let option of demandOptions" [ngValue]="option.value">{{option.name}}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="marginalCostOfDemand">Marginal Cost of Demand</label>
+    <input name="marginalCostOfDemand" class="form-control" type="number" step="any"
+      [(ngModel)]="data.marginalCostOfDemand" id="marginalCostOfDemand" (input)="calculate()" onfocus="this.select();"
+      (focus)="focusField('marginalCostOfDemand')">
+  </div>
+
+  <div class="form-group">
+    <label for="costOfStaticCapacitance">Cost of Static Capacitance</label>
+    <input name="costOfStaticCapacitance" class="form-control" type="number" step="any"
+      [(ngModel)]="data.costOfStaticCapacitance" id="costOfStaticCapacitance" (input)="calculate()"
+      onfocus="this.select();" (focus)="focusField('costOfStaticCapacitance')">
+  </div>
+
+  <div class="form-group">
+    <label for="costOfDynamicCapacitance">Cost of Dynamic Capacitance</label>
+    <input name="costOfDynamicCapacitance" class="form-control" type="number" step="any"
+      [(ngModel)]="data.costOfDynamicCapacitance" id="costOfDynamicCapacitance" (input)="calculate()"
+      onfocus="this.select();" (focus)="focusField('costOfDynamicCapacitance')">
+  </div>
+
+</form>
+
+<table>
+  <tr>
+    <th>
+      Month
+    </th>
+    <th>
+      PF Adjusted Demand (kW) or Apparent Power (kVA)
+    </th>
+    <th>
+      Power Factor or Real Demand (kW)
+    </th>
+
+    <th>
+      PF Adjusted Demand (kW) or Proposed Apparent Power or Real Demand
+    </th>
+    <th>
+      Demand Penalty
+    </th>
+    <th>
+      Penalty Cost
+    </th>
+    <th>
+      Current Reactive Power
+    </th>
+    <th>
+      Proposed Reactive Power
+    </th>
+    <th>
+      Proposed Capacitance
+    </th>
+  </tr>
+
+  <tr>
+    <td>
+      Jan - 23
+    </td>
+    <td>
+      <input type="number">
+    </td>
+    <td>
+      <input type="number">
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      Feb - 23
+    </td>
+    <td>
+      <input type="number">
+    </td>
+    <td>
+      <input type="number">
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      March - 23
+    </td>
+    <td>
+      <input type="number">
+    </td>
+    <td>
+      <input type="number">
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+    <td>
+      --
+    </td>
+  </tr>
+
+</table>

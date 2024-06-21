@@ -10,7 +10,14 @@ export class PowerFactorCorrectionService {
     return {
       existingDemand: 286,
       currentPowerFactor: 0.88,
-      proposedPowerFactor: 0.95
+      proposedPowerFactor: 0.95,
+      billedForDemand: 0,
+      minimumPowerFactor: 0.95,
+      targetPowerFactor: 0.95,
+      adjustedOrActual: 0,
+      marginalCostOfDemand: 8.15,
+      costOfStaticCapacitance: 50,
+      costOfDynamicCapacitance: 70,
     };
   }
 
@@ -18,7 +25,14 @@ export class PowerFactorCorrectionService {
     return {
       existingDemand: 0,
       currentPowerFactor: 0,
-      proposedPowerFactor: 0
+      proposedPowerFactor: 0,
+      billedForDemand: 0,
+      minimumPowerFactor: 0,
+      targetPowerFactor: 0,
+      adjustedOrActual: 0,
+      marginalCostOfDemand: 0,
+      costOfStaticCapacitance: 0,
+      costOfDynamicCapacitance: 0,
     };
   }
 

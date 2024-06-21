@@ -21,6 +21,27 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
   //to emit a change, we need to define an EventEmitter<Type>() to be able
   //to call .emit()
 
+ 
+  billedOptions: any = [
+    {
+      name: 'Real Power (kW)',
+      value: 0,
+    }, {
+      name: 'Apperent Power (kVA)',
+      value: 1,
+    }
+  ];
+
+  demandOptions: any = [
+    {
+      name: 'PF Adjusted',
+      value: 0,
+    }, {
+      name: 'Actual Demand',
+      value: 1,
+    }
+  ];
+
   constructor() { }
 
   ngOnInit() {
@@ -36,4 +57,19 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
+
+  setBilledForDemand(){
+    if (this.data.billedForDemand === 0) {
+      this.data.minimumPowerFactor = 0.95;
+    } else if (this.data.billedForDemand === 1) {
+      this.data.targetPowerFactor = 0.95;
+    }
+    this.calculate();
+  }
+
+  setAdjustedOrActual(){
+    
+  }
+
+  
 }
