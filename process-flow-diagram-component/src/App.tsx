@@ -4,11 +4,10 @@ import Flow, { FlowProps } from './components/Flow';
 import { WaterDiagram } from '../../src/process-flow-types/shared-process-flow-types';
 
 function App(props?: ProcessFlowDiagramWrapperProps) {
-  const ref = useRef(null)
   let availableHeight = props.parentContainer.height - props.parentContainer.headerHeight - props.parentContainer.footerHeight;
   return (
     availableHeight &&
-    <div ref={ref} className={'wc-app-container'} style={{height: availableHeight}}>
+    <div className={'wc-app-container'} style={{height: availableHeight}}>
       <Flow {...props} height={availableHeight}/>
     </div>
   );

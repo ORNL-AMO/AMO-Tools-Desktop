@@ -14,7 +14,7 @@ class AppWebComponent extends HTMLElement {
   shadowRoot;
 
   renderDiagramComponent(parentState: ProcessFlowParentState) {
-    if (parentState.parentContainer) {
+    if (parentState && parentState.parentContainer) {
       this.appRef.render(
         <App parentContainer={parentState.parentContainer}
         context={parentState.context}
@@ -70,8 +70,12 @@ class AppWebComponent extends HTMLElement {
 
   get parentstate() {
     const attrString = this.getAttribute("parentstate");
-    const diagramStateProperty = JSON.parse(attrString);
-    return diagramStateProperty;
+    if (attrString !== 'undefined' && attrString != null) {
+      const diagramStateProperty = JSON.parse(attrString);
+      return diagramStateProperty;
+    } else {
+      return undefined;
+    }
   }
 
   set parentstate(newValue) {
