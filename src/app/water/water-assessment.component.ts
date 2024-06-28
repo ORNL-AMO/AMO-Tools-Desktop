@@ -10,6 +10,9 @@ import { WaterAssessmentService } from './water-assessment.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
 import { WaterAssessment } from '../shared/models/water-assessment';
+import { ParentContainerDimensions } from '../../process-flow-types/shared-process-flow-types';
+import { IntegratedAssessmentDiagram } from '../shared/models/diagram';
+import { WaterAssessmentConnectionsService } from './water-assessment-connections.service';
 
 @Component({
   selector: 'app-water-assessment',
@@ -27,6 +30,10 @@ export class WaterAssessmentComponent {
     this.setContainerHeight();
   }
 
+  
+  diagramId: number;
+  diagramContainerDimensions: ParentContainerDimensions;
+  integratedDiagram: IntegratedAssessmentDiagram;
   assessment: Assessment;
   settings: Settings;
   showUpdateUnitsModal: boolean = false;
@@ -51,6 +58,7 @@ export class WaterAssessmentComponent {
   showExportModalSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
     private convertWaterAssessmentService: ConvertWaterAssessmentService, 
+    private waterAssessmentConnectionsService: WaterAssessmentConnectionsService,
     private assessmentDbService: AssessmentDbService, 
     private cd: ChangeDetectorRef, 
     private settingsDbService: SettingsDbService, 
@@ -61,16 +69,8 @@ export class WaterAssessmentComponent {
   ngOnInit() {
     this.analyticsService.sendEvent('view-water-assessment', undefined);
     this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
-      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-      if (!settings) {
-        settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
-        this.addSettings(settings);
-      } else {
-        this.settings = settings;
-        this.waterAssessmentService.settings.next(settings);
-      }
-      this.waterAssessmentService.updateWaterAssessment(this.assessment.water);
+      let assessmentId = parseInt(params['id']);
+      this.initAssessment(assessmentId);
     });
 
     this.waterAssessmentSub = this.waterAssessmentService.waterAssessment.subscribe(val => {
@@ -85,8 +85,11 @@ export class WaterAssessmentComponent {
       this.waterAssessmentService.mainTab.next(startingTab);
     }
 
-    this.mainTabSub = this.waterAssessmentService.mainTab.subscribe(val => {
-      this.mainTab = val;
+    this.mainTabSub = this.waterAssessmentService.mainTab.subscribe(newMainTab => {
+      if (this.mainTab === 'diagram') {
+        this.updateAssessmentFromDiagram();
+      }
+      this.mainTab = newMainTab;
       this.setContainerHeight();
     });
 
@@ -142,6 +145,21 @@ export class WaterAssessmentComponent {
     }, 100);
   }
 
+  async initAssessment(assessmentId: number) {
+    this.assessment = this.assessmentDbService.findById(assessmentId);
+    this.waterAssessmentService.assessmentId = assessmentId;
+    let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    if (!settings) {
+      settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+      this.addSettings(settings);
+    } else {
+      this.settings = settings;
+      this.waterAssessmentService.settings.next(settings);
+    }
+    await this.setDiagram();
+    this.waterAssessmentService.updateWaterAssessment(this.assessment.water);
+  }
+
  async addSettings(settings: Settings) {
     delete settings.id;
     delete settings.directoryId;
@@ -159,20 +177,50 @@ export class WaterAssessmentComponent {
     this.waterAssessmentService.settings.next(this.settings);
   }
 
-  setDisableNext() {}
+  async setDiagram() {
+    if (this.assessment.diagramId) {
+      this.diagramId = this.assessment.diagramId;
+      await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
+    } else {
+      await this.waterAssessmentConnectionsService.createAssesmentDiagram(this.assessment, this.settings);
+    }
+
+    this.integratedDiagram = {
+      diagramId: this.assessment.diagramId,
+      assessment: this.assessment,
+      parentDimensions: undefined
+    }
+
+  }
+
+  async save(waterAssessment: WaterAssessment) {
+    this.assessment.water = waterAssessment;
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    this.assessmentDbService.setAll(assessments);
+  }
+
+  async updateAssessmentFromDiagram() {
+    await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
+    this.save(this.assessment.water);
+  }
+
+  setDisableNext() {
+    
+  }
 
   next() {
     if (this.setupTab == 'system-basics') {
-      this.waterAssessmentService.setupTab.next('intake-source');
-    } else if (this.setupTab == 'intake-source') {
+      this.waterAssessmentService.setupTab.next('water-intake');
+    } else if (this.setupTab == 'water-intake') {
       this.waterAssessmentService.setupTab.next('process-use');
     } 
   }
 
   back() {
     if (this.setupTab == 'process-use') {
-      this.waterAssessmentService.setupTab.next('intake-source');
-    } else if (this.setupTab == 'intake-source') {
+      this.waterAssessmentService.setupTab.next('water-intake');
+    } else if (this.setupTab == 'water-intake') {
       this.waterAssessmentService.setupTab.next('system-basics');
     } 
   }
@@ -187,18 +235,19 @@ export class WaterAssessmentComponent {
           footerHeight = this.footer.nativeElement.offsetHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
+        if (this.integratedDiagram) {
+
+          this.integratedDiagram.parentDimensions = {
+            height: contentHeight,
+            headerHeight: headerHeight,
+            footerHeight: footerHeight
+          }
+        }
         if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
           this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
         }
       }, 100);
     }
-  }
-
-  async save(waterAssessment: WaterAssessment) {
-    this.assessment.water = waterAssessment;
-    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
-    this.assessmentDbService.setAll(assessments);
   }
 
   initUpdateUnitsModal(oldSettings: Settings) {

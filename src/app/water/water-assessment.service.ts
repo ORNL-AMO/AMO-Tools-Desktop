@@ -1,21 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { SystemInformationFormService } from '../compressed-air-assessment/system-information/system-information-form.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
-import { DischargeOutlet, IntakeSource, ProcessUse, WaterAssessment, WaterProcessComponent } from '../shared/models/water-assessment';
-import { Assessment } from '../shared/models/assessment';
-import { WaterDiagram } from '../../process-flow-types/shared-process-flow-types';
-import { Node } from 'reactflow';
-import { WaterProcessDiagramService } from '../water-process-diagram/water-process-diagram.service';
-// import { getNewProcessComponent } from '../../../process-flow-diagram-component/src/components/Flow/process-flow-utils';
+import {  WaterAssessment, WaterProcessComponent } from '../shared/models/water-assessment';
+import { WaterProcessComponentType, getComponentNameFromType, getNewProcessComponent } from '../../process-flow-types/shared-process-flow-types';
+import { WaterProcessComponentService } from './water-system-component.service';
 // todo 6875 measur compiler doesn't like pulling in this module because it's from jsx
 
 @Injectable({
   providedIn: 'root'
 })
 export class WaterAssessmentService {
-
+  assessmentId: number;
   settings: BehaviorSubject<Settings>;
   mainTab: BehaviorSubject<string>;
   setupTab: BehaviorSubject<WaterSetupTabString>;
@@ -34,8 +30,7 @@ export class WaterAssessmentService {
     'system-basics',
   ];
   constructor(
-    private systemInformationFormService: SystemInformationFormService,
-    private waterProcessDiagramService: WaterProcessDiagramService, 
+    private waterProcessComponentService: WaterProcessComponentService,
     private convertUnitsService: ConvertUnitsService) {
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.mainTab = new BehaviorSubject<string>('system-setup');
@@ -55,55 +50,52 @@ export class WaterAssessmentService {
 
   updateWaterAssessment(waterAssessment: WaterAssessment) {
     console.log('updateWaterAssessment', waterAssessment);
-    // this.updateWaterDiagram(waterAssessment);
     this.waterAssessment.next(waterAssessment);
-  }
-  updateWaterDiagram(assessment: WaterAssessment) {
-    // todo add waterProcessDiagramService method to get diagrams form assessment id
-    let waterDiagram: WaterDiagram;
-    // todo iterate over component types on assessment
-    // todo each find id in nodes and map update
-    // todo save method on waterProcessDiagramService
-    // waterDiagram.flowDiagramData.nodes.map((waterDiagramNode: Node) => {})
-  }
-
-  setNewWaterAssessmentFromDiagram(waterDiagram: WaterDiagram, assessment: Assessment, newSettings: Settings) {
-    let intakeSources = [];
-    let processUses = [];
-    let dischargeOutlets = [];
-
-    waterDiagram.flowDiagramData.nodes.map((waterDiagramNode: Node) => {
-      const waterProcessComponent = waterDiagramNode.data as WaterProcessComponent;
-      if (waterProcessComponent.processComponentType === 'waterIntake') {
-        const intakeSource = waterProcessComponent as IntakeSource;
-        intakeSources.push(intakeSource);
-      }
-      if (waterProcessComponent.processComponentType === 'processUse') {
-        processUses.push(waterProcessComponent as ProcessUse)
-      }
-      if (waterProcessComponent.processComponentType === 'waterDischarge') {
-        dischargeOutlets.push(waterProcessComponent as DischargeOutlet)
-      }
-
-    })
-    assessment.water.intakeSources = intakeSources.length > 0? intakeSources : undefined;
-    assessment.water.processUses = processUses.length > 0? processUses : undefined;
-    assessment.water.dischargeOutlets = dischargeOutlets.length > 0? dischargeOutlets : undefined;
-    // setConnectedPartsFromEdges()
-
   }
 
   setConnectedPartsFromEdges() {
 
   }
 
-  addNewProcessComponent(waterAssessment: WaterAssessment, fromComponent?: WaterProcessComponent) {
-    // todo 6875 better shared methods
-    // let newComponent = getNewProcessComponent('waterIntake');
+  setWaterProcessComponentTitle(componentType: WaterProcessComponentType) {
+    return getComponentNameFromType(componentType);
+  }
+
+  addNewWaterComponent(componentType: WaterProcessComponentType, newComponent?: WaterProcessComponent) {
+    let waterAssessment: WaterAssessment = this.waterAssessment.getValue();
+    if (!newComponent) {
+      newComponent = getNewProcessComponent(componentType);
+    }
+
+    if (componentType === 'water-intake') {
+      waterAssessment.intakeSources? waterAssessment.intakeSources.push(newComponent) : waterAssessment.intakeSources = [newComponent];
+    } else if (componentType === 'process-use') {
+      waterAssessment.processUses? waterAssessment.processUses.push(newComponent) : waterAssessment.processUses = [newComponent];
+    }
+
+    this.updateWaterAssessment(waterAssessment);
+    this.waterProcessComponentService.selectedComponent.next(newComponent);
+  }
+
+  deleteWaterComponent(componentType: WaterProcessComponentType, deleteId: string, isSelectedComponent?: boolean) {
+    let waterAssessment: WaterAssessment = this.waterAssessment.getValue();
+    let updatedViewComponents: WaterProcessComponent[];
+    let deleteIndex: number;
+
+    if (componentType === 'water-intake') {
+      deleteIndex = waterAssessment.intakeSources.findIndex(component => component.diagramNodeId === deleteId);
+      waterAssessment.intakeSources.splice(deleteIndex, 1);
+      updatedViewComponents = waterAssessment.intakeSources;
+    } else if (componentType === 'process-use') {
+      deleteIndex = waterAssessment.processUses.findIndex(component => component.diagramNodeId === deleteId);
+      waterAssessment.processUses.splice(deleteIndex, 1);
+      updatedViewComponents = waterAssessment.processUses;
+    }
     
-    return {
-      newComponent: undefined,
-      waterAssessment: waterAssessment
+    this.updateWaterAssessment(waterAssessment);
+    this.waterProcessComponentService.selectedViewComponents.next(updatedViewComponents);
+    if (isSelectedComponent) {
+      this.waterProcessComponentService.selectedComponent.next(updatedViewComponents[0]);
     }
   }
 
@@ -127,4 +119,4 @@ export class WaterAssessmentService {
 
 }
 
-export type WaterSetupTabString = 'system-basics' | 'intake-source' | 'process-use' | 'system-balance-results';
+export type WaterSetupTabString = WaterProcessComponentType | 'system-basics' | 'system-balance-results';

@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import DownloadButton from '../DownloadButton';
-import { ProcessFlowPart } from '../Flow/process-flow-types-and-constants';
-import { processFlowDiagramParts } from '../Flow/process-flow-utils';
+import { ProcessFlowPart, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
 
 const Sidebar = (props: SidebarProps) => {
   const onDragStart = (event: React.DragEvent, nodeType: string) => {

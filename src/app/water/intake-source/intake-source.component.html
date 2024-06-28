@@ -1,21 +1,20 @@
 <div class="d-flex flex-column panel-container pb-4">
     <div class="header mr-2 ml-2">
-        <h3>Water Intake and Discharge Sources
-        </h3>
+        <h3>{{componentFormTitle}}</h3>
         <br>
     </div>
 
-    @if (!intakeSources) {
-    <div class="p-3 ">
-        <button type="button" class="btn btn-primary active" disabled (click)="addIntakeSource()">
-            Add Water Intake Source
+    @if (waterAssessment.intakeSources.length === 0) {
+    <div class="p-3 align-self-center">
+        <button type="button" class="btn btn-primary active" (click)="addIntakeSource()">
+            Add {{componentFormTitle}}
         </button>
     </div>
     }
     @else if (form) {
     <form [formGroup]="form">
         <div class="form-group">
-            <label for="name">Intake Source Name</label>
+            <label for="name">Name</label>
             <input type="text" class="form-control" name="name" formControlName="name"
                 (focus)="focusField('intakeSourceName')" (input)="save()" />
         </div>

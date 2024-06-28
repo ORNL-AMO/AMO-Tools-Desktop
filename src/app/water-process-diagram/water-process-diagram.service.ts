@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { ParentContainerDimensions, WaterDiagram } from '../../process-flow-types/shared-process-flow-types';
 import * as _ from 'lodash';
-import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
-import { Diagram } from '../shared/models/app';
+import { ParentContainerDimensions, WaterDiagram, } from '../../process-flow-types/shared-process-flow-types';
+import { Assessment } from '../shared/models/assessment';
+import { DischargeOutlet, IntakeSource, ProcessUse, WaterProcessComponent } from '../shared/models/water-assessment';
+import { Node } from 'reactflow';
+import { Diagram } from '../shared/models/diagram';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class WaterProcessDiagramService {
   mainTab: BehaviorSubject<string>;
   diagram: BehaviorSubject<Diagram>;
@@ -17,7 +17,7 @@ export class WaterProcessDiagramService {
   modalOpen: BehaviorSubject<boolean>;
   settings: BehaviorSubject<Settings>;
 
-  constructor(private diagramidbService: DiagramIdbService) { 
+  constructor() { 
     this.mainTab = new BehaviorSubject<string>('diagram');
     this.parentContainer = new BehaviorSubject<ParentContainerDimensions>(undefined);
     this.diagram = new BehaviorSubject<Diagram>(undefined);
@@ -39,5 +39,27 @@ export class WaterProcessDiagramService {
       }
     }
   }
-  
+
+  setNewWaterAssessmentFromDiagram(waterDiagram: WaterDiagram, assessment: Assessment, newSettings: Settings) {
+    let intakeSources = [];
+    let processUses = [];
+    let dischargeOutlets = [];
+
+    waterDiagram.flowDiagramData.nodes.forEach((waterDiagramNode: Node) => {
+      const waterProcessComponent = waterDiagramNode.data as WaterProcessComponent;
+      if (waterProcessComponent.processComponentType === 'water-intake') {
+        const intakeSource = waterProcessComponent as IntakeSource;
+        intakeSources.push(intakeSource);
+      }
+      if (waterProcessComponent.processComponentType === 'process-use') {
+        processUses.push(waterProcessComponent as ProcessUse)
+      }
+      if (waterProcessComponent.processComponentType === 'water-discharge') {
+        dischargeOutlets.push(waterProcessComponent as DischargeOutlet);
+      }
+    })
+    assessment.water.intakeSources = intakeSources;
+    assessment.water.processUses = processUses;
+    assessment.water.dischargeOutlets = dischargeOutlets;
+  }
 }

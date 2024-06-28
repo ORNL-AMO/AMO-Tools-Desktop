@@ -33,6 +33,9 @@
 
 .img-icon{
     width: 65px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 5px;
 }
 
 

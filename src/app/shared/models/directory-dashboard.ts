@@ -2,7 +2,7 @@ import { Calculator } from "./calculators";
 import { Directory } from "./directory";
 import { Assessment } from "./assessment";
 import { InventoryItem } from "./inventory/inventory";
-import { Diagram } from "./app";
+import { Diagram } from "./diagram";
 
 export interface DirectoryItem {
     calculator?: Calculator;

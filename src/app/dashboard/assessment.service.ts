@@ -375,7 +375,9 @@ export class AssessmentService {
         utilityType: 'Electricity',
         electricityCost: settings.electricityCost,
         notes: undefined
-      }
+      },
+      intakeSources: [],
+      processUses: []
     }
   }
 

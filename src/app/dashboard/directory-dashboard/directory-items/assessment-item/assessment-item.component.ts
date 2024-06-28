@@ -16,6 +16,7 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { PsatIntegrationService } from '../../../../shared/connected-inventory/psat-integration.service';
+import { WaterAssessmentConnectionsService } from '../../../../water/water-assessment-connections.service';
 
 @Component({
   selector: 'app-assessment-item',
@@ -41,6 +42,7 @@ export class AssessmentItemComponent implements OnInit {
        private formBuilder: UntypedFormBuilder,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService,
+    private waterAssessmentConnectionsService: WaterAssessmentConnectionsService,
     private psatIntegrationService: PsatIntegrationService,
     private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService) { }
 
@@ -208,6 +210,7 @@ export class AssessmentItemComponent implements OnInit {
     let deleteSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
 
     this.deleteConnectedInventoryItem(this.assessment);
+    this.removeDiagramConnection();
     let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.deleteByIdWithObservable(this.assessment.id)); 
     this.assessmentDbService.setAll(assessments);
     let settings: Settings[] = await firstValueFrom(this.settingsDbService.deleteByIdWithObservable(deleteSettings.id)); 
@@ -221,6 +224,14 @@ export class AssessmentItemComponent implements OnInit {
 
     this.dashboardService.updateDashboardData.next(true);
     this.hideDeleteModal();
+  }
+
+  removeDiagramConnection() {
+    if (this.assessment.diagramId) {
+      if (this.assessment.type === 'Water') {
+        this.waterAssessmentConnectionsService.disconnectDiagram(this.assessment.diagramId);
+      } 
+    }
   }
 
   deleteConnectedInventoryItem(assessment: Assessment) {

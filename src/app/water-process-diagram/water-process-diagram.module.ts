@@ -6,7 +6,9 @@ import { WaterDiagramBannerComponent } from './water-diagram-banner/water-diagra
 import { WaterDiagramSetupComponent } from './water-diagram-setup/water-diagram-setup.component';
 import { WaterDiagramComponent } from './water-diagram/water-diagram.component';
 import { RouterModule } from '@angular/router';
+import { WaterProcessDiagramService } from './water-process-diagram.service';
 import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/create-assessment-modal.module';
+import { WaterDiagramConnectionsService } from './water-diagram-connections.service';
 
 
 
@@ -22,6 +24,13 @@ import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/c
     ProcessFlowDiagramWrapperModule,
     RouterModule,
     CreateAssessmentModalModule
+  ],
+  exports: [
+    WaterProcessDiagramComponent
+  ],
+  providers: [
+    WaterProcessDiagramService,
+    WaterDiagramConnectionsService
   ]
 })
 export class WaterProcessDiagramModule { }

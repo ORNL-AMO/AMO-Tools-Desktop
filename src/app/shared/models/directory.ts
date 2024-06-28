@@ -2,7 +2,7 @@ import { Assessment } from './assessment';
 import { Calculator } from './calculators';
 import { TreasureHunt } from './treasure-hunt';
 import { InventoryItem } from './inventory/inventory';
-import { Diagram } from './app';
+import { Diagram } from './diagram';
 export interface Directory {
   name: string;
   assessments?: Assessment[];

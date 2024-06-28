@@ -90,7 +90,7 @@ export class SetupTabsComponent {
   }
 
   setIntakeSourceStatus() {
-    if (this.setupTab == "intake-source") {
+    if (this.setupTab == "water-intake") {
       this.intakeSourceClassStatus = ["active"];
     } else {
       this.intakeSourceClassStatus = [];

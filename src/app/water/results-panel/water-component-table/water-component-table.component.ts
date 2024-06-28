@@ -1,12 +1,14 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { Settings } from '../../../shared/models/settings';
-import { WaterAssessment, WaterProcessComponent } from '../../../shared/models/water-assessment';
+import { WaterProcessComponent } from '../../../shared/models/water-assessment';
 import { WaterAssessmentService } from '../../water-assessment.service';
 import { WaterProcessComponentService } from '../../water-system-component.service';
-// import { getNewNodeId } from '../../../../../process-flow-diagram-component/src/components/Flow/process-flow-utils';
-// todo 6875 measur compiler doesn't like pulling in this module because it's from jsx
+import { WaterProcessComponentType, getNewNodeId } from '../../../../process-flow-types/shared-process-flow-types';
+import { copyObject } from '../../../shared/helperFunctions';
+import * as _ from 'lodash';
+
 
 @Component({
   selector: 'app-water-component-table',
@@ -14,39 +16,61 @@ import { WaterProcessComponentService } from '../../water-system-component.servi
   styleUrl: './water-component-table.component.css'
 })
 export class WaterComponentTableComponent {
-  
-  waterAssessmentSub: Subscription;
   selectedComponent: WaterProcessComponent;
   selectedComponentSub: Subscription;
   selectedViewComponentsSub: Subscription;
   selectedViewComponents: Array<WaterProcessComponent>;
+  waterProcessComponentTitle: string;
 
   showConfirmDeleteModal: boolean = false;
   deleteSelectedId: string;
   hasInvalidComponents: boolean = false;
   confirmDeleteData: ConfirmDeleteData;
+  activeComponentType: WaterProcessComponentType;
 
   settings: Settings;
+  setupTabSub: Subscription;
+  mainTabSub: Subscription;
   constructor(private waterAssessmentService: WaterAssessmentService, private waterProcessComponentService: WaterProcessComponentService) { }
 
   ngOnInit(): void {
     this.settings = this.waterAssessmentService.settings.getValue();
     this.selectedComponentSub = this.waterProcessComponentService.selectedComponent.subscribe(val => {
       this.selectedComponent = val;
-      console.log('table selectedComponent', this.selectedComponent)
-    })
+    });
+    this.setupTabSub = this.waterAssessmentService.setupTab.subscribe(setupTab => {
+      this.activeComponentType = setupTab as WaterProcessComponentType;
+      if (this.activeComponentType) {
+        this.waterProcessComponentTitle = this.waterAssessmentService.setWaterProcessComponentTitle(this.activeComponentType);
+      }
+    });
+
+    this.mainTabSub = this.waterAssessmentService.mainTab.subscribe(newMainTab => {
+      if (newMainTab === 'diagram') {
+        this.waterProcessComponentService.selectedComponent.next(undefined)
+      }
+    });
 
     this.selectedViewComponentsSub = this.waterProcessComponentService.selectedViewComponents.subscribe(viewComponents => {
-      this.selectedViewComponents = viewComponents;
-      // todo get waterComponent type
+      this.selectedViewComponents = _.orderBy(viewComponents, 'modifiedDate', 'desc');
       // todo set isValid
     });
+
+    this.setDefaultSelectedComponent();
   }
 
   ngOnDestroy() {
     this.selectedComponentSub.unsubscribe();
     this.selectedViewComponentsSub.unsubscribe();
+    this.mainTabSub.unsubscribe();
+    this.setupTabSub.unsubscribe();
+  }
 
+  setDefaultSelectedComponent() {
+    if (!this.selectedComponent) {
+      let lastModified: WaterProcessComponent = _.maxBy(this.selectedViewComponents, 'modifiedDate');
+      this.waterProcessComponentService.selectedComponent.next(lastModified);
+    }
   }
 
   selectItem(item: WaterProcessComponent) {
@@ -54,18 +78,12 @@ export class WaterComponentTableComponent {
   }
 
   addNewComponent() {
-    // let waterAssessment: WaterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-    // let updated: { newComponent: WaterProcessComponent, waterAssessment: WaterAssessment } = this.waterAssessmentService.addNewProcessComponent(waterAssessment);
-    // this.waterAssessmentService.updateWaterAssessment(updated.waterAssessment);
-    // this.waterProcessComponentService.selectedComponent.next(updated.newComponent);
+    this.waterAssessmentService.addNewWaterComponent(this.activeComponentType);
   }
 
-  deleteItem() {
-    // let waterAssessment: WaterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-    // todo delete, splice out
-    // this.waterAssessmentService.updateWaterAssessment(waterAssessment);
-    // todo set new default
-    // this.waterProcessComponentService.selectedComponent.next(waterAssessment.waterProcessComponents[0]);
+  deleteComponent() {
+    let isSelectedComponent: boolean = this.deleteSelectedId === this.selectedComponent.diagramNodeId;
+    this.waterAssessmentService.deleteWaterComponent(this.activeComponentType, this.deleteSelectedId, isSelectedComponent);
   }
 
   openConfirmDeleteModal(component: WaterProcessComponent) {
@@ -78,21 +96,18 @@ export class WaterComponentTableComponent {
     this.waterAssessmentService.modalOpen.next(true);
   }
 
-  onConfirmDeleteClose(deleteInventoryItem: boolean) {
-    if (deleteInventoryItem) {
-      this.deleteItem();
+  onConfirmDeleteClose(deleteWaterComponent: boolean) {
+    if (deleteWaterComponent) {
+      this.deleteComponent();
     }
     this.showConfirmDeleteModal = false;
     this.waterAssessmentService.modalOpen.next(false);
   }
 
-
   createCopy(component: WaterProcessComponent) {
-    let waterAssessment: WaterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-    let copiedComponent: WaterProcessComponent = JSON.parse(JSON.stringify(component));
-    // todo 6875 better shared methods
-    // copiedComponent.diagramNodeId = getNewNodeId();
+    let copiedComponent: WaterProcessComponent = copyObject(component);
+    copiedComponent.diagramNodeId = getNewNodeId();
     copiedComponent.name = copiedComponent.name + ' (copy)';
-    this.waterAssessmentService.addNewProcessComponent(waterAssessment, copiedComponent);
+    this.waterAssessmentService.addNewWaterComponent(this.activeComponentType, copiedComponent);
   }
 }

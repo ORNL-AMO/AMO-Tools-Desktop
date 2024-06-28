@@ -11,7 +11,7 @@ import { DashboardService } from '../../dashboard.service';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
 import { Subscription } from 'rxjs';
-import { Diagram } from '../../../shared/models/app';
+import { Diagram } from '../../../shared/models/diagram';
 
 @Component({
   selector: 'app-directory-dashboard-menu',

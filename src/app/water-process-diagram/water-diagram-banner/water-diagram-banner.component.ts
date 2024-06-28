@@ -4,7 +4,7 @@ import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/sec
 import _ from 'lodash';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { WaterProcessDiagramService } from '../water-process-diagram.service';
-import { Diagram } from '../../shared/models/app';
+import { Diagram } from '../../shared/models/diagram';
 
 
 @Component({
