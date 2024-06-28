@@ -145,7 +145,7 @@ export class WaterAssessmentComponent {
     }, 100);
   }
 
-  async initAssessment(assessmentId: number) {
+  initAssessment(assessmentId: number) {
     this.assessment = this.assessmentDbService.findById(assessmentId);
     this.waterAssessmentService.assessmentId = assessmentId;
     let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
@@ -156,7 +156,7 @@ export class WaterAssessmentComponent {
       this.settings = settings;
       this.waterAssessmentService.settings.next(settings);
     }
-    await this.setDiagram();
+    this.setDiagram();
     this.waterAssessmentService.updateWaterAssessment(this.assessment.water);
   }
 
@@ -177,12 +177,12 @@ export class WaterAssessmentComponent {
     this.waterAssessmentService.settings.next(this.settings);
   }
 
-  async setDiagram() {
+  setDiagram() {
     if (this.assessment.diagramId) {
       this.diagramId = this.assessment.diagramId;
-      await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
+      this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
     } else {
-      await this.waterAssessmentConnectionsService.createAssesmentDiagram(this.assessment, this.settings);
+      this.waterAssessmentConnectionsService.createAssesmentDiagram(this.assessment, this.settings);
     }
 
     this.integratedDiagram = {
@@ -200,8 +200,8 @@ export class WaterAssessmentComponent {
     this.assessmentDbService.setAll(assessments);
   }
 
-  async updateAssessmentFromDiagram() {
-    await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
+  updateAssessmentFromDiagram() {
+    this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
     this.save(this.assessment.water);
   }
 

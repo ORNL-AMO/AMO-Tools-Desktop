@@ -6,6 +6,7 @@ import { Assessment } from '../shared/models/assessment';
 import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { WaterAssessment, WaterProcessComponent } from '../shared/models/water-assessment';
 import { Node } from 'reactflow';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class WaterDiagramConnectionsService {
@@ -25,7 +26,7 @@ export class WaterDiagramConnectionsService {
       if (integratedAssessment && diagram.modifiedDate < integratedAssessment.modifiedDate) {
         console.log('=== DIAGRAM STALE -> syncing to assessment')
         this.updateDiagramFromAssessment(diagram, integratedAssessment.water);
-        await this.diagramIdbService.updateWithObservable(diagram);
+        await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
       }
     }
   }
@@ -67,7 +68,7 @@ export class WaterDiagramConnectionsService {
     let assessment = this.assessmentIdbService.findById(assessmentId);
     if (assessment && assessment.diagramId) {
       delete assessment.diagramId;
-      await this.assessmentIdbService.updateWithObservable(assessment);
+      await firstValueFrom(this.assessmentIdbService.updateWithObservable(assessment));
     }
   }
 

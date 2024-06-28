@@ -33,14 +33,13 @@ export class WaterAssessmentConnectionsService {
     if (integratedDiagram && assessment.modifiedDate < integratedDiagram.modifiedDate) {
       console.log('=== ASSESSMENT STALE -> syncing to diagram')
       this.updateAssessmentWithDiagram(integratedDiagram, assessment);
-      await this.assessmentIdbService.updateWithObservable(assessment);
+      await firstValueFrom(this.assessmentIdbService.updateWithObservable(assessment));
     }
   }
 
-  updateAssessmentWithDiagram(diagram: Diagram, assessment: Assessment): Observable<Assessment> {
+  updateAssessmentWithDiagram(diagram: Diagram, assessment: Assessment) {
     this.updateAssessmentWaterComponents(diagram, assessment.water);
     console.log('=== updated assessment', assessment.water);
-    return this.assessmentIdbService.updateWithObservable(assessment);
   }
 
   updateAssessmentWaterComponents(diagram: Diagram, waterAssessment: WaterAssessment) {
@@ -66,7 +65,7 @@ export class WaterAssessmentConnectionsService {
     let diagram = this.diagramIdbService.findById(diagramId);
     if (diagram && diagram.waterDiagram.assessmentId) {
       delete diagram.waterDiagram.assessmentId;
-      await this.diagramIdbService.updateWithObservable(diagram);
+      await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
     }
   }
 
