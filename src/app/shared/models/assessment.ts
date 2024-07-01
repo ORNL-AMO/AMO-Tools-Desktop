@@ -10,6 +10,7 @@ import { WaterAssessment } from './water-assessment';
 export interface Assessment {
   id?: number,
   directoryId?: number,
+  diagramId?: number,
   psat?: PSAT,
   phast?: PHAST,
   fsat?: FSAT,

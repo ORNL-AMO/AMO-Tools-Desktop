@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { DiagramStoreMeta } from './dbConfig';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { Observable, firstValueFrom } from 'rxjs';
-import { Diagram } from '../shared/models/app';
 import * as _ from 'lodash';
 import { getNewIdString } from '../shared/helperFunctions';
 import { environment } from '../../environments/environment';
+import { Diagram } from '../shared/models/diagram';
 
 @Injectable({
   providedIn: 'root'

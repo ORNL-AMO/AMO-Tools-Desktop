@@ -1,4 +1,3 @@
-/* * NOTE duplicate of index.css */
 
 html,
 body {
@@ -48,6 +47,18 @@ a {
   }
 }
 
+/* todo showing not defined */
+:root {
+  --water-intake: #0792c0;
+  --process-use: #84c9f1;
+  --water-discharge: #666666;
+  --water-treatment: #B8B3BE;
+  --waster-water-treatment: #BBDB9B;
+  --metered-data: black;
+  --estimated-data: black;
+}
+
+
 
 /*  Download Image */
 .process-flow-diagram .download-btn {
@@ -94,9 +105,9 @@ a {
 }
 
 .process-flow-diagram .dndnode {
-  height: 32px;
-  padding: 4px;
-  border: 1px solid #1a192b;
+  height: 36px;
+  padding: 6px;
+  border: 4px solid #1a192b;
   border-radius: 2px;
   margin-bottom: 10px;
   display: flex;
@@ -109,12 +120,16 @@ a {
   background: #efefef
 }
 
-.process-flow-diagram .dndnode.waterIntake {
+.process-flow-diagram .dndnode.water-intake {
   border-color: #75a1ff;
 }
 
-.process-flow-diagram .dndnode.waterDischarge {
+.process-flow-diagram .dndnode.process-use {
   border-color: #b4ffff;
+}
+
+.process-flow-diagram .dndnode.water-discharge {
+  border-color:  #666666;
 }
 
 .process-flow-diagram .reactflow-wrapper {
@@ -171,7 +186,7 @@ a {
 .react-flow__node-group {
   padding: 10px;
   border-radius: 3px;
-  width: 150px;
+  min-width: 150px;
   font-size: 12px;
   color: #222;
   text-align: center;
@@ -180,9 +195,29 @@ a {
   border-color: #1a192b;
   background-color: white;
 }
+
+.react-flow__node-waterIntake,
+.react-flow__node-group {
+  /* background-color: var(--water-intake); */
+  background-color: #75a1ff;
+}
+
+.react-flow__node-processUse,
+.react-flow__node-group {
+  /* background-color: var(--process-use); */
+  background-color: #b4ffff;
+}
+
+.react-flow__node-waterDischarge,
+.react-flow__node-group {
+  /* background-color: var(--water-discharge); */
+  background-color: #666666;
+}
+
 .react-flow__node-waterIntake.selectable:hover, .react-flow__node-processUse.selectable:hover, .react-flow__node-waterDischarge.selectable:hover, .react-flow__node-group.selectable:hover {
       box-shadow: 0 1px 4px 1px rgba(0, 0, 0, 0.08);
-    }
+}
+
 .react-flow__node-waterIntake.selectable.selected,
     .react-flow__node-waterIntake.selectable:focus,
     .react-flow__node-waterIntake.selectable:focus-visible,
@@ -196,5 +231,15 @@ a {
     .react-flow__node-group.selectable:focus,
     .react-flow__node-group.selectable:focus-visible {
       box-shadow: 0 0 0 0.5px #1a192b;
-    }
+}
+
+
+.node-inner-input {
+  /* background: rgba(255, 255, 255, 0.5); */
+  flex-grow: 1;
+  position: relative;
+  padding: 10px;
+  border-radius: 4px;
+  height: 100%;
+}
 /* Custom Node End */

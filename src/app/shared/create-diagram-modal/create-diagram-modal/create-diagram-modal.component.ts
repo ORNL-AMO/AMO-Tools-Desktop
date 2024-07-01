@@ -14,7 +14,7 @@ import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { getNameDateString } from '../../helperFunctions';
 import { WaterProcessDiagramService } from '../../../water-process-diagram/water-process-diagram.service';
 import { DiagramIdbService } from '../../../indexedDb/diagram-idb.service';
-import { Diagram } from '../../models/app';
+import { Diagram } from '../../models/diagram';
 
 @Component({
   selector: 'app-create-diagram-modal',

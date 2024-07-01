@@ -36,12 +36,15 @@ export class WaterBannerComponent {
       this.mainTab = val;
     });
 
-    this.selectedModificationSub = this.waterAssessmentService.selectedModificationId.subscribe(val => {
+    this.selectedModificationSub = this.waterAssessmentService.selectedModificationId.subscribe(selectedModificationId => {
       let waterAssessment: WaterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-      if (!val && this.secondaryAssessmentTab && this.secondaryAssessmentTab != 'modifications') {
+      if (!selectedModificationId && this.secondaryAssessmentTab && this.secondaryAssessmentTab != 'modifications') {
         this.changeSecondaryAssessmentTab('modifications');
       }
-      this.selectedModification = waterAssessment.modifications.find(modification => { return modification.modificationId == val });
+      
+      if (waterAssessment) {
+        this.selectedModification = waterAssessment.modifications.find(modification => { return modification.modificationId == selectedModificationId });
+      }
     });
 
     this.assessmentTabSub = this.waterAssessmentService.assessmentTab.subscribe(val => {
@@ -54,7 +57,8 @@ export class WaterBannerComponent {
 
     this.waterAssessmentSub = this.waterAssessmentService.waterAssessment.subscribe(val => {
       if (val) {
-        this.isBaselineValid = val.setupDone;
+        this.isBaselineValid = false;
+        // this.isBaselineValid = val.setupDone;
       }
     });
   }

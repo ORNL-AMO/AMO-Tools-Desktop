@@ -1,21 +1,20 @@
 <div class="d-flex flex-column panel-container pb-4">
     <div class="header mr-2 ml-2">
-        <h3>Water Process Use
-        </h3>
+        <h3>{{componentFormTitle}}</h3>
         <br>
     </div>
 
-    @if (!processUses) {
+    @if (waterAssessment.processUses.length === 0) {
     <div class="p-3 align-self-center">
-        <button type="button" class="btn btn-primary active" disabled (click)="addProcessUse()">
-            Add Water Process Use
+        <button type="button" class="btn btn-primary active" (click)="addProcessUse()">
+            Add {{componentFormTitle}}
         </button>
     </div>
     }
     @else if (form) {
     <form [formGroup]="form">
         <div class="form-group">
-            <label for="name">Process Name</label>
+            <label for="name">Name</label>
             <input type="text" class="form-control" name="name" formControlName="name"
                 (focus)="focusField('waterProcessUseName')" (input)="save()" />
         </div>

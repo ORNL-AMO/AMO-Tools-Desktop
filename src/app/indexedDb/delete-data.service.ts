@@ -13,8 +13,8 @@ import { InventoryItem } from '../shared/models/inventory/inventory';
 import { InventoryDbService } from './inventory-db.service';
 import { firstValueFrom } from 'rxjs';
 import { PsatIntegrationService } from '../shared/connected-inventory/psat-integration.service';
-import { Diagram } from '../shared/models/app';
 import { DiagramIdbService } from './diagram-idb.service';
+import { Diagram } from '../shared/models/diagram';
 @Injectable()
 export class DeleteDataService {
 

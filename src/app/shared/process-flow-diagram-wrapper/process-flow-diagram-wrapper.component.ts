@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { ProcessFlowDiagramService } from './process-flow-diagram.service';
 import { Subscription } from 'rxjs';
 import { ProcessFlowDiagramState, ProcessFlowParentState } from '../../../process-flow-types/shared-process-flow-types';
@@ -12,30 +12,25 @@ import { ProcessFlowDiagramState, ProcessFlowParentState } from '../../../proces
 export class ProcessFlowDiagramWrapperComponent {
     @ViewChild('pfdComponent', { static: false }) processFlowDiagramElement: ElementRef;
     processFlowDiagramDataSub: Subscription;
+    @Input()
+    processFlowParentState: ProcessFlowParentState;
 
     constructor(private processFlowDiagramService: ProcessFlowDiagramService) { }
 
-    ngAfterViewInit() {
+    ngOnChanges(changes: SimpleChanges) {
+        this.updateDiagramParentState();
+    }
+
+    updateDiagramParentState() {
         if (this.processFlowDiagramElement) {
-            this.processFlowDiagramDataSub = this.processFlowDiagramService.processFlowParentState.subscribe(data => {
-                if (data) {
-                    this.updateDiagramParentState(data);
-                }
-            });
+            this.processFlowDiagramElement.nativeElement.parentstate = this.processFlowParentState;
         }
-    }
-
-    ngOnDestroy() {
-        this.processFlowDiagramDataSub.unsubscribe();
-    }
-
-    updateDiagramParentState(state: ProcessFlowParentState) {
-        this.processFlowDiagramElement.nativeElement.parentstate = state;
     }
 
     async onUpdateDiagramState(event) {
         let diagramState = event.detail as ProcessFlowDiagramState;
         await this.processFlowDiagramService.updateFlowDiagramData(diagramState);
     }
+
 
 }

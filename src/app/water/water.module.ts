@@ -27,6 +27,7 @@ import { ProcessUseComponent } from './process-use/process-use.component';
 import { WaterComponentTableComponent } from './results-panel/water-component-table/water-component-table.component';
 import { WaterProcessComponentService } from './water-system-component.service';
 import { WaterProcessDiagramModule } from '../water-process-diagram/water-process-diagram.module';
+import { WaterAssessmentConnectionsService } from './water-assessment-connections.service';
 
 
 
@@ -64,7 +65,8 @@ import { WaterProcessDiagramModule } from '../water-process-diagram/water-proces
     WaterAssessmentService,
     WaterProcessComponentService,
     WaterAssessmentResultsService,
-    ConvertWaterAssessmentService
+    ConvertWaterAssessmentService,
+    WaterAssessmentConnectionsService
   ]
 })
 export class WaterModule { }

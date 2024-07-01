@@ -1,5 +1,5 @@
 <div #content class="water-process-diagram-container water-process-diagram d-flex flex-column">
-    <div #header class="w-100 hide-print sticky-top">
+    <div #header *ngIf="!integratedDiagram" class="w-100 hide-print sticky-top">
         <app-water-diagram-banner [diagram]="diagram"></app-water-diagram-banner>
     </div>
     <div class="assessment-container" [ngStyle]="{'height.px': containerHeight}"
@@ -10,11 +10,12 @@
         </div>
     </div>
 
-    <div #footer id="waterProcessDiagramFooter" class="footer d-lg-block d-none hide-print">
+    <div #footer *ngIf="!integratedDiagram" id="waterProcessDiagramFooter" class="footer d-lg-block d-none hide-print">
         <div class="w-100">
             <!-- <button class="btn btn-default" (click)="back()" [disabled]="mainTab === 'setup'">Back</button> -->
             <!-- <button *ngIf="mainTab == 'setup'" class="btn btn-primary pull-right" (click)="continue()">Next</button> -->
-            <button *ngIf="mainTab == 'diagram'" class="btn btn-primary pull-right" (click)="createAssessment()">Create Assessment</button>
+            <button *ngIf="mainTab == 'diagram' && diagram.waterDiagram.assessmentId === undefined" class="btn btn-primary pull-right" (click)="createAssessment()">Create Assessment</button>
+            <button *ngIf="mainTab == 'diagram' && diagram.waterDiagram.assessmentId !== undefined" class="btn btn-primary pull-right" (click)="goToAssessment()">Go To Assessment</button>
         </div>
     </div>
 </div>

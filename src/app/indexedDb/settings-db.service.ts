@@ -10,7 +10,7 @@ import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { combineLatestWith, firstValueFrom, Observable } from 'rxjs';
 import { SettingsStoreMeta } from './dbConfig';
 import { environment } from '../../environments/environment';
-import { Diagram } from '../shared/models/app';
+import { Diagram } from '../shared/models/diagram';
 
 @Injectable()
 export class SettingsDbService {

@@ -14,7 +14,8 @@ import { Subscription } from 'rxjs';
 })
 export class IntakeSourceComponent {
   settings: Settings;
-  intakeSources: IntakeSource[];
+  componentFormTitle: string;
+  waterAssessment: WaterAssessment;
   selectedIntakeSource: IntakeSource;
   form: FormGroup;
   selectedComponentSub: Subscription;
@@ -22,35 +23,32 @@ export class IntakeSourceComponent {
 
   ngOnInit() {
     this.settings = this.waterAssessmentService.settings.getValue();
-    let waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-    this.intakeSources = waterAssessment.intakeSources;
-    this.setSelectedComponent();
-    if (this.intakeSources) {
-      this.waterProcessComponentService.selectedViewComponents.next(this.intakeSources);
-    }
+    this.componentFormTitle = this.waterAssessmentService.setWaterProcessComponentTitle('water-intake');
 
-    this.selectedComponentSub = this.waterProcessComponentService.selectedComponent.subscribe(val => {
-      this.selectedIntakeSource = val;
-      console.log('intake selectedIntakeSource', this.selectedIntakeSource)
-      this.initForm();
+    this.selectedComponentSub = this.waterProcessComponentService.selectedComponent.subscribe(selectedComponent => {
+      this.selectedIntakeSource = selectedComponent;
+      this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
+      this.waterProcessComponentService.selectedViewComponents.next(this.waterAssessment.intakeSources);
+      if (this.selectedIntakeSource) {
+        this.initForm();
+      }
     });
-    
+    this.setDefaultSelectedComponent();
   }
 
   ngOnDestroy() {
     this.selectedComponentSub.unsubscribe();
   }
 
-  setSelectedComponent() {
-    let selectedComponent: WaterProcessComponent = this.waterProcessComponentService.selectedComponent.getValue();
-    if (!selectedComponent || (selectedComponent && selectedComponent.processComponentType !== 'waterIntake')) {
-      let lastModified: WaterProcessComponent = _.maxBy(this.intakeSources, 'modifiedDate');
+  setDefaultSelectedComponent() {
+    if (!this.selectedIntakeSource || (this.selectedIntakeSource && this.selectedIntakeSource.processComponentType !== 'water-intake')) {
+      let lastModified: WaterProcessComponent = _.maxBy(this.waterAssessment.intakeSources, 'modifiedDate');
       this.waterProcessComponentService.selectedComponent.next(lastModified);
     }
   }
 
   initForm() {
-   this.form = this.waterProcessComponentService.getIntakeFormFromSource(this.selectedIntakeSource);
+   this.form = this.waterProcessComponentService.getIntakeSourceForm(this.selectedIntakeSource);
   }
 
   save() {
@@ -65,6 +63,8 @@ export class IntakeSourceComponent {
     this.waterAssessmentService.focusedField.next(str);
   }
 
-  addIntakeSource() {}
+  addIntakeSource() {
+    this.waterAssessmentService.addNewWaterComponent('water-intake');
+  }
 
 }

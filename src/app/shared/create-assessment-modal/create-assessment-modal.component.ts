@@ -21,8 +21,8 @@ import { SettingsService } from '../../settings/settings.service';
 import { AnalyticsService } from '../analytics/analytics.service';
 import { PumpItem } from '../../pump-inventory/pump-inventory';
 import { getNameDateString } from '../helperFunctions';
-import { WaterAssessmentService } from '../../water/water-assessment.service';
-import { WaterDiagram } from '../../../process-flow-types/shared-process-flow-types';
+import { WaterProcessDiagramService } from '../../water-process-diagram/water-process-diagram.service';
+import { Diagram } from '../models/diagram';
 
 @Component({
   selector: 'app-create-assessment-modal',
@@ -34,7 +34,7 @@ export class CreateAssessmentModalComponent {
   @Input()
   connectedInventoryItem: ConnectedItem;
   @Input()
-  waterDiagram: WaterDiagram;
+  diagram: Diagram;
   @Input() 
   integratedCreateType: string;
   @Output('onClose')
@@ -55,7 +55,7 @@ export class CreateAssessmentModalComponent {
     private directoryDashboardService: DirectoryDashboardService,
     private dashboardService: DashboardService,
     private convertFanAnalysisService: ConvertFanAnalysisService,
-    private waterAssessmentService: WaterAssessmentService,
+    private waterDiagramService: WaterProcessDiagramService,
     private psatIntegrationService: PsatIntegrationService,
     private integrationStateService: IntegrationStateService,
     private settingsService: SettingsService,
@@ -205,7 +205,7 @@ export class CreateAssessmentModalComponent {
         let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
         let queryParams;
 
-        if (this.waterDiagram) {
+        if (this.diagram && this.diagram.waterDiagram) {
           await this.createFromWaterDiagram(createdAssessment);
           queryParams = { connectedWaterDiagram: true };
         }
@@ -236,7 +236,10 @@ export class CreateAssessmentModalComponent {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(assessmentSettings);
     // todo set settings/units match
     // newSettings = this.settingsService.setPumpSettingsUnitType(newSettings);
-    await this.waterAssessmentService.setNewWaterAssessmentFromDiagram(this.waterDiagram, createdAssessment, newSettings);
+    this.waterDiagramService.setNewWaterAssessmentFromDiagram(this.diagram.waterDiagram, createdAssessment, newSettings);
+    this.diagram.waterDiagram.assessmentId = createdAssessment.id;
+    createdAssessment.diagramId = this.diagram.id;
+    await this.waterDiagramService.updateWaterDiagram(this.diagram.waterDiagram);
     await this.saveAssessmentAndSettings(newSettings, createdAssessment)
   }
 

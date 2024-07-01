@@ -19,6 +19,8 @@ export const MockWaterAssessment: Assessment =  {
             "electricityCost": 0.066,
             "notes": undefined
         },
+        "intakeSources": [],
+        "processUses": []
     },
     "selected": false,
     "appVersion": "1.5.1"

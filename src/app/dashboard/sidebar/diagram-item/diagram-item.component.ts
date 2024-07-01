@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Diagram } from '../../../shared/models/app';
 import { DashboardService } from '../../dashboard.service';
+import { Diagram } from '../../../shared/models/diagram';
 
 @Component({
   selector: 'app-diagram-item',

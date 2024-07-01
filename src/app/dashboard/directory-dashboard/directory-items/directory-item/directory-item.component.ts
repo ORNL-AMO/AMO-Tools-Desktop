@@ -6,14 +6,13 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as _ from 'lodash';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
-import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
 import { AssessmentService } from '../../../assessment.service';
 import { DashboardService } from '../../../dashboard.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { DirectoryItem, FilterDashboardBy } from '../../../../shared/models/directory-dashboard';
 import { InventoryItem } from '../../../../shared/models/inventory/inventory';
-import { Diagram } from '../../../../shared/models/app';
+import { Diagram } from '../../../../shared/models/diagram';
 
 @Component({
   selector: 'app-directory-item',

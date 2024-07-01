@@ -2,12 +2,12 @@
     <li [ngClass]="systemBasicsClassStatus">
         <a (click)="changeSetupTab('system-basics')">
             <span (mouseenter)="showTooltip(systemBasicsBadge)" (mouseleave)="hideTooltip(systemBasicsBadge)"
-                class="step-number">1</span>Assessment Basics</a>
+                class="step-number">1</span>Assessment Settings</a>
     </li>
     <li [ngClass]="intakeSourceClassStatus">
-        <a (click)="changeSetupTab('intake-source')">
+        <a (click)="changeSetupTab('water-intake')">
             <span (mouseenter)="showTooltip(intakeSourceBadge)" (mouseleave)="hideTooltip(intakeSourceBadge)"
-                class="step-number">2</span>Intake and Discharge</a>
+                class="step-number">2</span>Water Intake</a>
     </li>
     <li [ngClass]="processUseClassStatus">
         <a (click)="changeSetupTab('process-use')">
@@ -27,10 +27,10 @@
                 <span (mouseenter)="showTooltip(systemBasicsBadge)" (mouseleave)="hideTooltip(systemBasicsBadge)"
                     class="step-number">1</span>Assessment Basics</a>
         </li>
-        <li class="page-item" [ngClass]="intakeSourceClassStatus" *ngIf="setupTab == 'intake-source'">
-            <a class="nav-link small" (click)="changeSetupTab('intake-source')">
+        <li class="page-item" [ngClass]="intakeSourceClassStatus" *ngIf="setupTab == 'water-intake'">
+            <a class="nav-link small" (click)="changeSetupTab('water-intake')">
                 <span (mouseenter)="showTooltip(intakeSourceBadge)" (mouseleave)="hideTooltip(intakeSourceBadge)"
-                    class="step-number">2</span>Intake and Discharge </a>
+                    class="step-number">2</span>Water Intake </a>
         </li>
         <li class="page-item" [ngClass]="processUseClassStatus" *ngIf="setupTab == 'process-use'">
             <a class="nav-link small" (click)="changeSetupTab('process-use')">

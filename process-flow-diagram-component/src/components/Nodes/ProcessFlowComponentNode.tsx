@@ -1,8 +1,8 @@
 import { memo, FC, CSSProperties } from 'react';
-import { Handle, Position, NodeProps, NodeResizer } from 'reactflow';
+import { Handle, Position, NodeProps, NodeResizer, useReactFlow, Node } from 'reactflow';
 import { ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
 
-const targetHandleStyleA: CSSProperties = { 
+const targetHandleStyleA: CSSProperties = {
   // left: 50 
 };
 const sourceHandleStyleB: CSSProperties = {
@@ -15,14 +15,37 @@ export interface FlowPartProps extends ProcessFlowPart {
 
 // * note the type of NodeProps is automagically accessible via the 'data' property 
 const ProcessFlowComponentNode: FC<NodeProps<FlowPartProps>> = (props) => {
+  const { setNodes } = useReactFlow();
+
+  const updateNodeName = (event, diagramNodeId) => {
+    setNodes((nds) =>
+      nds.map((n: Node) => {
+        const processFlowPart: ProcessFlowPart = n.data as ProcessFlowPart;
+        if (processFlowPart.diagramNodeId === diagramNodeId) {
+          return {
+            ...n,
+            data: {
+              ...processFlowPart,
+              name: event.target.value
+            }
+          };
+        }
+        return n;
+      }),
+    );
+  };
+
   return (
     <>
-      {/* <NodeResizer /> */}
       <Handle type="target" position={Position.Left} />
-      <div>
-        <div>
-          {props.data.name}
-        </div>
+      <div className="node-inner-input">
+        <input
+          type="text"
+          value={props.data.name}
+          onChange={evt => updateNodeName(evt, props.data.diagramNodeId)}
+          className="nodrag"
+          disabled={false}
+        />
       </div>
 
       <Handle

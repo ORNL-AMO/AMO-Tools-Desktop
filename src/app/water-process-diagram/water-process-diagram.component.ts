@@ -1,14 +1,15 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Subscription, firstValueFrom } from 'rxjs';
 import { WaterProcessDiagramService } from './water-process-diagram.service';
-import { ParentContainerDimensions, WaterDiagram, WaterDiagramOption } from '../../process-flow-types/shared-process-flow-types';
+import { ParentContainerDimensions, WaterDiagram } from '../../process-flow-types/shared-process-flow-types';
 import * as _ from 'lodash';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
-import { Diagram } from '../shared/models/app';
 import { Settings } from '../shared/models/settings';
+import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
+import { WaterDiagramConnectionsService } from './water-diagram-connections.service';
 
 @Component({
   selector: 'app-water-process-diagram',
@@ -20,6 +21,10 @@ export class WaterProcessDiagramComponent {
   onResize(event) {
     this.getContainerHeight();
   }
+
+  @Input()
+  integratedDiagram: IntegratedAssessmentDiagram;
+
   @ViewChild('header', { static: false }) header: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
   @ViewChild('footer', { static: false }) footer: ElementRef;
@@ -36,18 +41,22 @@ export class WaterProcessDiagramComponent {
   
   constructor( 
     private waterProcessDiagramService: WaterProcessDiagramService,
+    private waterDiagramConnectionsService: WaterDiagramConnectionsService,
     private diagramIdbService: DiagramIdbService,
     private settingsDbService: SettingsDbService, 
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-water-diagram');
-    this.activatedRoute.params.subscribe(params => {
-      this.diagram = this.diagramIdbService.findById(parseInt(params['id']));
-      this.setSettings();
-      this.waterProcessDiagramService.updateWaterDiagram(this.diagram.waterDiagram);
-    });
+    if (this.integratedDiagram) {
+      this.initDiagram(this.integratedDiagram.diagramId)
+    } else {
+      this.activatedRoute.params.subscribe(params => {
+        this.initDiagram(parseInt(params['id']));
+      });
+    }
     this.waterDiagramSub = this.waterProcessDiagramService.waterDiagram.subscribe(waterDiagram => {
       if (waterDiagram && this.diagram) {
         this.save(waterDiagram);
@@ -71,6 +80,13 @@ export class WaterProcessDiagramComponent {
 
   ngAfterViewInit() {
     this.getContainerHeight();
+  }
+
+  async initDiagram(id: number) {
+    this.diagram = this.diagramIdbService.findById(id);
+    this.setSettings();
+    this.waterDiagramConnectionsService.syncDiagramToAssessment(this.diagram, this.integratedDiagram)
+    this.waterProcessDiagramService.updateWaterDiagram(this.diagram.waterDiagram);
   }
 
   async save(waterDiagram: WaterDiagram) {
@@ -127,17 +143,28 @@ export class WaterProcessDiagramComponent {
   getContainerHeight() {
     if (this.content) {
       setTimeout(() => {
+        let parentContainerDimensions: ParentContainerDimensions;
         let contentHeight = this.content.nativeElement.clientHeight;
-        let headerHeight = this.header.nativeElement.clientHeight;
+        let headerHeight = 0;
         let footerHeight = 0;
+        if (this.header) {
+          headerHeight = this.header.nativeElement.clientHeight;
+        }
         if (this.footer) {
           footerHeight = this.footer.nativeElement.clientHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
-        let parentContainerDimensions: ParentContainerDimensions = {
+        parentContainerDimensions = {
           height: contentHeight,
           headerHeight: headerHeight,
           footerHeight: footerHeight
+        }
+        if (this.integratedDiagram) {
+          parentContainerDimensions = {
+            height: this.integratedDiagram.parentDimensions.height,
+            headerHeight: this.integratedDiagram.parentDimensions.headerHeight,
+            footerHeight: this.integratedDiagram.parentDimensions.footerHeight
+          }
         }
         this.waterProcessDiagramService.parentContainer.next(parentContainerDimensions)
       }, 100);
@@ -155,5 +182,12 @@ export class WaterProcessDiagramComponent {
       this.waterProcessDiagramService.mainTab.next('setup');
     }
   }
+
+
+  goToAssessment() {
+      let url: string = `/water/${this.diagram.waterDiagram.assessmentId}`;
+      this.router.navigate([url]);
+  }
+
 
 }
