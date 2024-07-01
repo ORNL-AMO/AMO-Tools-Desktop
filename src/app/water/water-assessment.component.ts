@@ -177,12 +177,12 @@ export class WaterAssessmentComponent {
     this.waterAssessmentService.settings.next(this.settings);
   }
 
-  setDiagram() {
+  async setDiagram() {
     if (this.assessment.diagramId) {
       this.diagramId = this.assessment.diagramId;
-      this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
+      await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
     } else {
-      this.waterAssessmentConnectionsService.createAssesmentDiagram(this.assessment, this.settings);
+      await this.waterAssessmentConnectionsService.createAssesmentDiagram(this.assessment, this.settings);
     }
 
     this.integratedDiagram = {
@@ -200,8 +200,8 @@ export class WaterAssessmentComponent {
     this.assessmentDbService.setAll(assessments);
   }
 
-  updateAssessmentFromDiagram() {
-    this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
+  async updateAssessmentFromDiagram() {
+    await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
     this.save(this.assessment.water);
   }
 
@@ -213,12 +213,12 @@ export class WaterAssessmentComponent {
     if (this.setupTab == 'system-basics') {
       this.waterAssessmentService.setupTab.next('water-intake');
     } else if (this.setupTab == 'water-intake') {
-      this.waterAssessmentService.setupTab.next('process-use');
+      this.waterAssessmentService.setupTab.next('water-using-system');
     } 
   }
 
   back() {
-    if (this.setupTab == 'process-use') {
+    if (this.setupTab == 'water-using-system') {
       this.waterAssessmentService.setupTab.next('water-intake');
     } else if (this.setupTab == 'water-intake') {
       this.waterAssessmentService.setupTab.next('system-basics');

@@ -58,7 +58,7 @@ export interface ProcessFlowParentState {
   
   // * union future diagram types into ProcessFlowNodeType
   export type ProcessFlowNodeType = WaterProcessComponentType | undefined;
-  export type WaterProcessComponentType = 'water-intake' | 'water-discharge' | 'process-use';
+  export type WaterProcessComponentType = 'water-intake' | 'water-discharge' | 'water-using-system';
   export type ProcessFlowPartStyleClass = WaterProcessComponentType;
 
   
@@ -79,9 +79,9 @@ export interface ProcessFlowParentState {
       isValid: true,
     },
     {
-      processComponentType: 'process-use',
-      name: 'Process Use',
-      className: 'process-use',
+      processComponentType: 'water-using-system',
+      name: 'Water Using System',
+      className: 'water-using-system',
       isValid: true,
     },
     {

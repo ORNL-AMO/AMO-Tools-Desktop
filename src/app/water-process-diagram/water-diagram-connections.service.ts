@@ -35,7 +35,7 @@ export class WaterDiagramConnectionsService {
     let assessmentNodes: Node[] = [];
     assessmentNodes = assessmentNodes.concat(
       this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.intakeSources, 'water-intake'),
-      this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.processUses, 'process-use')
+      this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.waterUsingSystems, 'water-using-system')
     );
 
     diagram.waterDiagram.flowDiagramData.nodes = assessmentNodes;

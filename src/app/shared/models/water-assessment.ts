@@ -7,7 +7,7 @@ export interface WaterAssessment {
     selected?: boolean;
     systemBasics: WaterSystemBasics,
     intakeSources?: IntakeSource[],
-    processUses?: ProcessUse[],
+    waterUsingSystems?: WaterUsingSystem[],
     dischargeOutlets?: DischargeOutlet[],
     setupDone: boolean
 }
@@ -25,7 +25,7 @@ export interface WaterSystemBasics {
 }
 
 export interface IntakeSource extends WaterProcessComponent {}
-export interface ProcessUse extends WaterProcessComponent {}
+export interface WaterUsingSystem extends WaterProcessComponent {}
 export interface DischargeOutlet extends WaterProcessComponent {}
 export interface WaterProcessComponent extends ProcessFlowPart {}
 

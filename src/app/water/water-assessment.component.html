@@ -8,7 +8,7 @@
         [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
         <a class="nav-link" *ngIf="setupTab == 'system-basics'">Assessment Settings</a>
         <a class="nav-link" *ngIf="setupTab == 'water-intake'">Water Intake</a>
-        <a class="nav-link" *ngIf="setupTab == 'process-use'">Process use</a>
+        <a class="nav-link" *ngIf="setupTab == 'water-using-system'">Water Using System</a>
       </div>
       <div class="nav-item" (click)="setSmallScreenTab('details')"
         [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
@@ -24,7 +24,7 @@
         <app-system-basics *ngIf="setupTab == 'system-basics'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
           [assessment]="assessment"></app-system-basics>
         <app-intake-source *ngIf="setupTab == 'water-intake'" [assessment]="assessment"></app-intake-source>
-        <app-process-use *ngIf="setupTab == 'process-use'" [assessment]="assessment"></app-process-use>
+        <app-water-using-system *ngIf="setupTab == 'water-using-system'" [assessment]="assessment"></app-water-using-system>
       </div>
       <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
         [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">

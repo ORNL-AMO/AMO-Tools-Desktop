@@ -4,9 +4,9 @@
         <br>
     </div>
 
-    @if (waterAssessment.processUses.length === 0) {
+    @if (waterAssessment.waterUsingSystems.length === 0) {
     <div class="p-3 align-self-center">
-        <button type="button" class="btn btn-primary active" (click)="addProcessUse()">
+        <button type="button" class="btn btn-primary active" (click)="addWaterUsingSystem()">
             Add {{componentFormTitle}}
         </button>
     </div>
@@ -16,7 +16,7 @@
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" class="form-control" name="name" formControlName="name"
-                (focus)="focusField('waterProcessUseName')" (input)="save()" />
+                (focus)="focusField('waterWaterUsingSystemName')" (input)="save()" />
         </div>
     </form>
     }

@@ -69,8 +69,8 @@ export class WaterAssessmentService {
 
     if (componentType === 'water-intake') {
       waterAssessment.intakeSources? waterAssessment.intakeSources.push(newComponent) : waterAssessment.intakeSources = [newComponent];
-    } else if (componentType === 'process-use') {
-      waterAssessment.processUses? waterAssessment.processUses.push(newComponent) : waterAssessment.processUses = [newComponent];
+    } else if (componentType === 'water-using-system') {
+      waterAssessment.waterUsingSystems? waterAssessment.waterUsingSystems.push(newComponent) : waterAssessment.waterUsingSystems = [newComponent];
     }
 
     this.updateWaterAssessment(waterAssessment);
@@ -86,10 +86,10 @@ export class WaterAssessmentService {
       deleteIndex = waterAssessment.intakeSources.findIndex(component => component.diagramNodeId === deleteId);
       waterAssessment.intakeSources.splice(deleteIndex, 1);
       updatedViewComponents = waterAssessment.intakeSources;
-    } else if (componentType === 'process-use') {
-      deleteIndex = waterAssessment.processUses.findIndex(component => component.diagramNodeId === deleteId);
-      waterAssessment.processUses.splice(deleteIndex, 1);
-      updatedViewComponents = waterAssessment.processUses;
+    } else if (componentType === 'water-using-system') {
+      deleteIndex = waterAssessment.waterUsingSystems.findIndex(component => component.diagramNodeId === deleteId);
+      waterAssessment.waterUsingSystems.splice(deleteIndex, 1);
+      updatedViewComponents = waterAssessment.waterUsingSystems;
     }
     
     this.updateWaterAssessment(waterAssessment);

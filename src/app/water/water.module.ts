@@ -23,11 +23,11 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { SetupTabsComponent } from './water-banner/setup-tabs/setup-tabs.component';
 import { IntakeSourceComponent } from './intake-source/intake-source.component';
-import { ProcessUseComponent } from './process-use/process-use.component';
 import { WaterComponentTableComponent } from './results-panel/water-component-table/water-component-table.component';
 import { WaterProcessComponentService } from './water-system-component.service';
 import { WaterProcessDiagramModule } from '../water-process-diagram/water-process-diagram.module';
 import { WaterAssessmentConnectionsService } from './water-assessment-connections.service';
+import { WaterUsingSystemComponent } from './water-using-system/water-using-system.component';
 
 
 
@@ -40,7 +40,7 @@ import { WaterAssessmentConnectionsService } from './water-assessment-connection
     WaterBannerComponent,
     SetupTabsComponent,
     IntakeSourceComponent,
-    ProcessUseComponent,
+    WaterUsingSystemComponent,
     WaterComponentTableComponent
   ],
   imports: [

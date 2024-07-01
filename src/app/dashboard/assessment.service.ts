@@ -377,7 +377,7 @@ export class AssessmentService {
         notes: undefined
       },
       intakeSources: [],
-      processUses: []
+      waterUsingSystems: []
     }
   }
 

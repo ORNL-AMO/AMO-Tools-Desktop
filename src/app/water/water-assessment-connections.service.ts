@@ -4,7 +4,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
 import { Diagram } from '../shared/models/diagram';
-import { WaterAssessment, WaterProcessComponent, IntakeSource, ProcessUse } from '../shared/models/water-assessment';
+import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem } from '../shared/models/water-assessment';
 import { WaterProcessDiagramService } from '../water-process-diagram/water-process-diagram.service';
 import { Settings } from '../shared/models/settings';
 import { Node } from 'reactflow';
@@ -44,7 +44,7 @@ export class WaterAssessmentConnectionsService {
 
   updateAssessmentWaterComponents(diagram: Diagram, waterAssessment: WaterAssessment) {
     let intakeSources = [];
-    let processUses = [];
+    let waterUsingSystems = [];
 
     diagram.waterDiagram.flowDiagramData.nodes.forEach((waterDiagramNode: Node) => {
       const waterProcessComponent = waterDiagramNode.data as WaterProcessComponent;
@@ -52,13 +52,13 @@ export class WaterAssessmentConnectionsService {
         const intakeSource = waterProcessComponent as IntakeSource;
         intakeSources.push(intakeSource);
       }
-      if (waterProcessComponent.processComponentType === 'process-use') {
-        processUses.push(waterProcessComponent as ProcessUse)
+      if (waterProcessComponent.processComponentType === 'water-using-system') {
+        waterUsingSystems.push(waterProcessComponent as WaterUsingSystem)
       }
     });
 
     waterAssessment.intakeSources = intakeSources;
-    waterAssessment.processUses = processUses;
+    waterAssessment.waterUsingSystems = waterUsingSystems;
   }
 
   async disconnectDiagram(diagramId: number) {
