@@ -1,0 +1,24 @@
+tr:nth-child(even) {
+    background-color: #d9f1cf;
+}
+
+tr {
+    font-size: small;
+}
+
+.btn-group {
+    display: block;
+    text-align: center;
+}
+
+.btn-group .btn-sm {
+    font-size: small !important;
+}
+
+.btn-margin-10 {
+    margin: 10px 0px;
+}
+
+.btn-form {
+    border-radius: 4px !important;
+}

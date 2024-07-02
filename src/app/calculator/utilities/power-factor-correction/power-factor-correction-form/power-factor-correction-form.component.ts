@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PowerFactorCorrectionInputs } from '../power-factor-correction.component';
+import { PowerDemandInputs, PowerFactorCorrectionInputs } from '../power-factor-correction.component';
 
 @Component({
   selector: 'app-power-factor-correction-form',
@@ -34,7 +34,7 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
 
   demandOptions: any = [
     {
-      name: 'PF Adjusted',
+      name: 'Power Factor',
       value: 0,
     }, {
       name: 'Actual Demand',
@@ -69,6 +69,18 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
 
   setAdjustedOrActual(){
     
+  }
+
+  btnAddMonth(){
+    let newPowerDemandInputs: PowerDemandInputs = {
+      input1: 0,
+      input2: 0
+    }
+    this.data.powerDemandInputs.push(newPowerDemandInputs);
+  }
+
+  btnDeleteMonth(index: number){
+    this.data.powerDemandInputs.splice(index, 1);
   }
 
   

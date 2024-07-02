@@ -1,4 +1,4 @@
-<form>
+<!-- <form>
   <div class="form-group">
     <label for="currentDemand">Existing Demand</label>
     <div class="input-group">
@@ -7,24 +7,7 @@
       <span class="input-group-addon units">kW</span>
     </div>
   </div>
-  <!--
-  <div class="form-group">
-    <label for="lineFrequency">Line Frequency</label>
-    <select class="form-control" name="lineFrequency" id="lineFrequency" [(ngModel)]="data.lineFrequency" (change)="calculate()" (focus)="focusField('lineFrequency')">
-      <option [ngValue]="50">50 Hz</option>
-      <option [ngValue]="60">60 Hz</option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label for="ratedVoltage">Rated Voltage</label>
-    <div class="input-group">
-      <input name="ratedVoltage" class="form-control" type="number" step="any" [(ngModel)]="data.ratedVoltage" id="ratedVoltage"
-        (input)="calculate()" onfocus="this.select();" (focus)="focusField('ratedVoltage')">
-      <span class="input-group-addon units">V</span>
-    </div>
-  </div>
--->
+  
   <div class="form-group">
     <label for="currentPowerFactor">Existing Power Factor</label>
     <input name="currentPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.currentPowerFactor"
@@ -39,7 +22,7 @@
   </div>
 
 
-</form>
+</form> -->
 
 <form>
 
@@ -94,18 +77,36 @@
 
 </form>
 
-<table>
+<table style="width: 100%">
   <tr>
     <th>
       Month
     </th>
+
     <th>
-      PF Adjusted Demand (kW) or Apparent Power (kVA)
-    </th>
-    <th>
-      Power Factor or Real Demand (kW)
+      <span *ngIf="data.billedForDemand == 0 && data.adjustedOrActual == 0">
+        PF Adjusted Demand (kW)
+      </span>
+      <span  *ngIf="data.billedForDemand == 0 && data.adjustedOrActual == 1">
+        Actual Demand (kW)
+      </span>
+      <span *ngIf="data.billedForDemand == 1 && (data.adjustedOrActual == 0 || data.adjustedOrActual == 1)">
+        Apparent Power (kVA)
+      </span>
     </th>
 
+    <th>
+      <span *ngIf="(data.billedForDemand == 0 && data.adjustedOrActual == 0) || (data.billedForDemand == 0 && data.adjustedOrActual == 1) || (data.billedForDemand == 1 && data.adjustedOrActual == 0)">
+        Power Factor
+      </span>
+      <span *ngIf="data.billedForDemand == 1 && data.adjustedOrActual == 1">
+        Real Demand (kW)
+      </span>
+    </th>
+    <th>
+
+    </th>
+<!-- 
     <th>
       PF Adjusted Demand (kW) or Proposed Apparent Power or Real Demand
     </th>
@@ -123,97 +124,35 @@
     </th>
     <th>
       Proposed Capacitance
-    </th>
+    </th> -->
   </tr>
 
-  <tr>
+  <tr *ngFor="let input of data.powerDemandInputs; let i = index;">
     <td>
-      Jan - 23
+      Month {{i + 1}}
     </td>
     <td>
-      <input type="number">
+      <input name="{{'input1_'+i}}" class="form-control" type="number" step="any"
+        [(ngModel)]="input.input1" id="{{'input1_'+i}}" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('input1')">      
     </td>
     <td>
-      <input type="number">
+      <input name="{{'input2_'+i}}" class="form-control" type="number" step="any"
+        [(ngModel)]="input.input2" id="{{'input2_'+i}}" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('input2')">   
     </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-      Feb - 23
-    </td>
-    <td>
-      <input type="number">
-    </td>
-    <td>
-      <input type="number">
-    </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-      March - 23
-    </td>
-    <td>
-      <input type="number">
-    </td>
-    <td>
-      <input type="number">
-    </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
-    </td>
-    <td>
-      --
+    <td class="btn-group btn-group-sm">
+      <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnDeleteMonth(i)">
+        Delete
+      </button>
     </td>
   </tr>
 
 </table>
+
+<div class="w-100 justify-content-center btn-group btn-group-sm"> 
+  <button type="button" class="btn btn-primary pull-left btn-sm m-2 btn-form" (click)="btnAddMonth()">
+    Add Month
+  </button>
+  
+</div>

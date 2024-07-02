@@ -20,6 +20,56 @@ export class PowerFactorCorrectionComponent implements OnInit {
     marginalCostOfDemand: 8.15,
     costOfStaticCapacitance: 50,
     costOfDynamicCapacitance: 70,
+    powerDemandInputs: [
+      {
+        input1: 462,
+        input2: 0.8
+      },
+      {
+        input1: 528,
+        input2: 0.8
+      },
+      {
+        input1: 492,
+        input2: 0.8
+      },
+      {
+        input1: 474,
+        input2: 0.8
+      },
+      {
+        input1: 499,
+        input2: 0.8
+      },
+      {
+        input1: 513,
+        input2: 0.8
+      },
+      {
+        input1: 530,
+        input2: 0.8
+      },
+      {
+        input1: 523,
+        input2: 0.8
+      },
+      {
+        input1: 547,
+        input2: 0.8
+      },
+      {
+        input1: 589,
+        input2: 0.8
+      },
+      {
+        input1: 621,
+        input2: 0.8
+      },
+      {
+        input1: 607,
+        input2: 0.8
+      },
+    ]
   };
   results: PowerFactorCorrectionOutputs;
 
@@ -121,6 +171,12 @@ export interface PowerFactorCorrectionInputs {
   marginalCostOfDemand: number;
   costOfStaticCapacitance: number;
   costOfDynamicCapacitance: number;
+  powerDemandInputs: Array<PowerDemandInputs>;
+}
+
+export interface PowerDemandInputs {
+  input1: number;
+  input2: number;
 }
 
 

@@ -18,6 +18,56 @@ export class PowerFactorCorrectionService {
       marginalCostOfDemand: 8.15,
       costOfStaticCapacitance: 50,
       costOfDynamicCapacitance: 70,
+      powerDemandInputs: [
+        {
+          input1: 462,
+          input2: 0.8
+        },
+        {
+          input1: 528,
+          input2: 0.8
+        },
+        {
+          input1: 492,
+          input2: 0.8
+        },
+        {
+          input1: 474,
+          input2: 0.8
+        },
+        {
+          input1: 499,
+          input2: 0.8
+        },
+        {
+          input1: 513,
+          input2: 0.8
+        },
+        {
+          input1: 530,
+          input2: 0.8
+        },
+        {
+          input1: 523,
+          input2: 0.8
+        },
+        {
+          input1: 547,
+          input2: 0.8
+        },
+        {
+          input1: 589,
+          input2: 0.8
+        },
+        {
+          input1: 621,
+          input2: 0.8
+        },
+        {
+          input1: 607,
+          input2: 0.8
+        },
+      ]
     };
   }
 
@@ -33,6 +83,20 @@ export class PowerFactorCorrectionService {
       marginalCostOfDemand: 0,
       costOfStaticCapacitance: 0,
       costOfDynamicCapacitance: 0,
+      powerDemandInputs: [
+        {
+          input1: 0,
+          input2: 0
+        },
+        {
+          input1: 0,
+          input2: 0
+        },
+        {
+          input1: 0,
+          input2: 0
+        },
+      ]
     };
   }
 
