@@ -1,5 +1,5 @@
 import { memo, FC, CSSProperties } from 'react';
-import { Handle, Position, NodeProps, NodeResizer, useReactFlow, Node } from 'reactflow';
+import { Handle, Position, NodeProps, useReactFlow, Node } from 'reactflow';
 import { ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
 
 const targetHandleStyleA: CSSProperties = {
