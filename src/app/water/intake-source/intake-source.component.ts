@@ -6,6 +6,8 @@ import { WaterProcessComponentService } from '../water-system-component.service'
 import * as _ from 'lodash';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { copyObject } from '../../shared/helperFunctions';
+import { intakeSourceTypeOptions } from '../waterConstants';
 
 @Component({
   selector: 'app-intake-source',
@@ -19,9 +21,13 @@ export class IntakeSourceComponent {
   selectedIntakeSource: IntakeSource;
   form: FormGroup;
   selectedComponentSub: Subscription;
+  intakeSourceTypeOptions: {value: number, display: string}[];
+
+  idString: string;
   constructor(private waterAssessmentService: WaterAssessmentService, private waterProcessComponentService: WaterProcessComponentService) {}
 
   ngOnInit() {
+    this.intakeSourceTypeOptions = copyObject(intakeSourceTypeOptions);
     this.settings = this.waterAssessmentService.settings.getValue();
     this.componentFormTitle = this.waterAssessmentService.setWaterProcessComponentTitle('water-intake');
 
@@ -30,6 +36,7 @@ export class IntakeSourceComponent {
       this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
       this.waterProcessComponentService.selectedViewComponents.next(this.waterAssessment.intakeSources);
       if (this.selectedIntakeSource) {
+        this.idString = this.componentFormTitle + this.selectedIntakeSource.diagramNodeId;
         this.initForm();
       }
     });
@@ -41,10 +48,7 @@ export class IntakeSourceComponent {
   }
 
   setDefaultSelectedComponent() {
-    if (!this.selectedIntakeSource || (this.selectedIntakeSource && this.selectedIntakeSource.processComponentType !== 'water-intake')) {
-      let lastModified: WaterProcessComponent = _.maxBy(this.waterAssessment.intakeSources, 'modifiedDate');
-      this.waterProcessComponentService.selectedComponent.next(lastModified);
-    }
+    this.waterProcessComponentService.setDefaultSelectedComponent(this.waterAssessment.intakeSources, this.selectedIntakeSource, 'water-intake')
   }
 
   initForm() {
@@ -56,6 +60,10 @@ export class IntakeSourceComponent {
     let updateIndex: number = this.waterAssessment.intakeSources.findIndex(intake => intake.diagramNodeId === updated.diagramNodeId);
     this.waterAssessment.intakeSources[updateIndex] = updated;
     this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
+  }
+
+  setIntakeSourceType() {
+    this.save();
   }
 
   focusField(str: string) {

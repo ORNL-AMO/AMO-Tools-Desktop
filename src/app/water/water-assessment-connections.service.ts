@@ -4,11 +4,10 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
 import { Diagram } from '../shared/models/diagram';
-import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem } from '../shared/models/water-assessment';
+import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem, DischargeOutlet } from '../shared/models/water-assessment';
 import { WaterProcessDiagramService } from '../water-process-diagram/water-process-diagram.service';
 import { Settings } from '../shared/models/settings';
 import { Node } from 'reactflow';
-import { Observable } from 'rxjs';
 
 @Injectable()
 export class WaterAssessmentConnectionsService {
@@ -44,13 +43,19 @@ export class WaterAssessmentConnectionsService {
 
   updateAssessmentWaterComponents(diagram: Diagram, waterAssessment: WaterAssessment) {
     let intakeSources = [];
+    let dischargeOutlets = [];
     let waterUsingSystems = [];
 
+    // todo 6771 for nodes added in diagram, set null or defaults
     diagram.waterDiagram.flowDiagramData.nodes.forEach((waterDiagramNode: Node) => {
       const waterProcessComponent = waterDiagramNode.data as WaterProcessComponent;
       if (waterProcessComponent.processComponentType === 'water-intake') {
         const intakeSource = waterProcessComponent as IntakeSource;
         intakeSources.push(intakeSource);
+      }
+      if (waterProcessComponent.processComponentType === 'water-discharge') {
+        const dischargeOutlet = waterProcessComponent as DischargeOutlet;
+        dischargeOutlets.push(dischargeOutlet);
       }
       if (waterProcessComponent.processComponentType === 'water-using-system') {
         waterUsingSystems.push(waterProcessComponent as WaterUsingSystem)
@@ -58,6 +63,7 @@ export class WaterAssessmentConnectionsService {
     });
 
     waterAssessment.intakeSources = intakeSources;
+    waterAssessment.dischargeOutlets = dischargeOutlets;
     waterAssessment.waterUsingSystems = waterUsingSystems;
   }
 

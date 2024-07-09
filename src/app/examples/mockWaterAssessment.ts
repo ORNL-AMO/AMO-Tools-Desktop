@@ -19,8 +19,32 @@ export const MockWaterAssessment: Assessment =  {
             "electricityCost": 0.066,
             "notes": undefined
         },
-        "intakeSources": [],
-        "waterUsingSystems": []
+        "intakeSources": [
+            {
+              "processComponentType": "water-intake",
+              "name": "City Intake",
+              "className": "water-intake",
+              "isValid": true,
+              "diagramNodeId": "dndnode_a7czeo5fx",
+              "modifiedDate": new Date("2024-07-09T16:47:48.232Z"),
+              "sourceType": 0,
+              "annualUse": 100
+          }
+        ],
+        "dischargeOutlets": [
+            {
+              "processComponentType": "water-discharge",
+              "name": "Municipal Outlet",
+              "className": "water-discharge",
+              "isValid": true,
+              "diagramNodeId": "dndnode_l4mvses3w",
+              "modifiedDate": new Date("2024-07-09T19:23:52.173Z"),
+              "outletType": 0,
+              "annualUse": 200
+          }
+        ],
+        "waterUsingSystems": [],
+
     },
     "selected": false,
     "appVersion": "1.5.1"

@@ -42,10 +42,7 @@ export class WaterUsingSystemComponent {
   }
 
   setDefaultSelectedComponent() {
-    if (!this.selectedWaterUsingSystem || (this.selectedWaterUsingSystem && this.selectedWaterUsingSystem.processComponentType !== 'water-using-system')) {
-      let lastModified: WaterProcessComponent = _.maxBy(this.waterAssessment.waterUsingSystems, 'modifiedDate');
-      this.waterProcessComponentService.selectedComponent.next(lastModified);
-    }
+    this.waterProcessComponentService.setDefaultSelectedComponent(this.waterAssessment.waterUsingSystems, this.selectedWaterUsingSystem, 'water-using-system')
   }
 
   initForm() {
@@ -54,10 +51,9 @@ export class WaterUsingSystemComponent {
 
   save() {
     let updated: WaterUsingSystem = this.waterProcessComponentService.getWaterUsingSystemFromForm(this.form, this.selectedWaterUsingSystem);
-    let waterAssessment: WaterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-    let updateIndex: number = waterAssessment.waterUsingSystems.findIndex(process => process.diagramNodeId === updated.diagramNodeId);
-    waterAssessment.waterUsingSystems[updateIndex] = updated;
-    this.waterAssessmentService.waterAssessment.next(waterAssessment);
+    let updateIndex: number = this.waterAssessment.waterUsingSystems.findIndex(system => system.diagramNodeId === updated.diagramNodeId);
+    this.waterAssessment.waterUsingSystems[updateIndex] = updated;
+    this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
   }
 
   focusField(str: string) {
