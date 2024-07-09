@@ -8,7 +8,7 @@ import SplitterNodeEight from "../Nodes/SplitterNodeEight";
 
 export const nodeTypes: NodeTypes = {
   waterIntake: ProcessFlowComponentNode,
-  processUse: ProcessFlowComponentNode,
+  waterUsingSystem: ProcessFlowComponentNode,
   waterDischarge: ProcessFlowComponentNode,
   splitterNode: SplitterNode,
   splitterNodeFour: SplitterNodeFour,

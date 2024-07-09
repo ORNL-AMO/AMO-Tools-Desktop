@@ -93,8 +93,8 @@ export const getAdaptedTypeString = (nodeType: string) => {
         case 'water-intake':
             adaptedString = 'waterIntake';
             break;
-        case 'process-use':
-            adaptedString = 'processUse'
+        case 'water-using-system':
+            adaptedString = 'waterUsingSystem'
             break;
         case 'water-discharge':
             adaptedString = 'waterDischarge'

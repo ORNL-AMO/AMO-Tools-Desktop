@@ -50,7 +50,7 @@ a {
 /* todo showing not defined */
 :root {
   --water-intake: #0792c0;
-  --process-use: #84c9f1;
+  --water-using-system: #84c9f1;
   --water-discharge: #666666;
   --water-treatment: #B8B3BE;
   --waster-water-treatment: #BBDB9B;
@@ -128,7 +128,7 @@ a {
   border-color: #75a1ff;
 }
 
-.process-flow-diagram .dndnode.process-use {
+.process-flow-diagram .dndnode.water-using-system {
   border-color: #b4ffff;
 }
 
@@ -185,7 +185,7 @@ a {
 
 /* Custom Node Begin */
 .react-flow__node-waterIntake,
-.react-flow__node-processUse,
+.react-flow__node-waterUsingSystem,
 .react-flow__node-waterDischarge,
 .react-flow__node-group {
   padding: 10px;
@@ -219,9 +219,9 @@ a {
   background-color: #75a1ff;
 }
 
-.react-flow__node-processUse,
+.react-flow__node-waterUsingSystem,
 .react-flow__node-group {
-  /* background-color: var(--process-use); */
+  /* background-color: var(--water-using-system); */
   background-color: #b4ffff;
 }
 
@@ -231,7 +231,7 @@ a {
   background-color: #666666;
 }
 
-.react-flow__node-waterIntake.selectable:hover, .react-flow__node-processUse.selectable:hover, .react-flow__node-waterDischarge.selectable:hover, .react-flow__node-group.selectable:hover {
+.react-flow__node-waterIntake.selectable:hover, .react-flow__node-waterUsingSystem.selectable:hover, .react-flow__node-waterDischarge.selectable:hover, .react-flow__node-group.selectable:hover {
       box-shadow: 0 1px 4px 1px rgba(0, 0, 0, 0.08);
 }
 
@@ -241,9 +241,9 @@ a {
 .react-flow__node-waterIntake.selectable.selected,
 .react-flow__node-waterIntake.selectable:focus,
 .react-flow__node-waterIntake.selectable:focus-visible,
-.react-flow__node-processUse.selectable.selected,
-.react-flow__node-processUse.selectable:focus,
-.react-flow__node-processUse.selectable:focus-visible,
+.react-flow__node-waterUsingSystem.selectable.selected,
+.react-flow__node-waterUsingSystem.selectable:focus,
+.react-flow__node-waterUsingSystem.selectable:focus-visible,
 .react-flow__node-waterDischarge.selectable.selected,
 .react-flow__node-waterDischarge.selectable:focus,
 .react-flow__node-waterDischarge.selectable:focus-visible,
@@ -252,7 +252,6 @@ a {
 .react-flow__node-group.selectable:focus-visible {
   box-shadow: 0 0 0 0.5px #1a192b;
 }
-
 
 .node-inner-input {
   /* background: rgba(255, 255, 255, 0.5); */

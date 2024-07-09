@@ -9,10 +9,10 @@
             <span (mouseenter)="showTooltip(intakeSourceBadge)" (mouseleave)="hideTooltip(intakeSourceBadge)"
                 class="step-number">2</span>Water Intake</a>
     </li>
-    <li [ngClass]="processUseClassStatus">
-        <a (click)="changeSetupTab('process-use')">
-            <span (mouseenter)="showTooltip(processUseBadge)" (mouseleave)="hideTooltip(processUseBadge)"
-                class="step-number">3</span>Process Use</a>
+    <li [ngClass]="waterUsingSystemClassStatus">
+        <a (click)="changeSetupTab('water-using-system')">
+            <span (mouseenter)="showTooltip(waterUsingSystemBadge)" (mouseleave)="hideTooltip(waterUsingSystemBadge)"
+                class="step-number">3</span>Water Using System</a>
     </li>
 </ul>
 
@@ -32,10 +32,10 @@
                 <span (mouseenter)="showTooltip(intakeSourceBadge)" (mouseleave)="hideTooltip(intakeSourceBadge)"
                     class="step-number">2</span>Water Intake </a>
         </li>
-        <li class="page-item" [ngClass]="processUseClassStatus" *ngIf="setupTab == 'process-use'">
-            <a class="nav-link small" (click)="changeSetupTab('process-use')">
-                <span (mouseenter)="showTooltip(processUseBadge)" (mouseleave)="hideTooltip(processUseBadge)"
-                    class="step-number">3</span>Process Use</a>
+        <li class="page-item" [ngClass]="waterUsingSystemClassStatus" *ngIf="setupTab == 'water-using-system'">
+            <a class="nav-link small" (click)="changeSetupTab('water-using-system')">
+                <span (mouseenter)="showTooltip(waterUsingSystemBadge)" (mouseleave)="hideTooltip(waterUsingSystemBadge)"
+                    class="step-number">3</span>Water Using System</a>
         </li>
         <li class="page-item" [ngClass]="{'disabled': !canContinue}">
             <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled': !canContinue}">

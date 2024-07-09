@@ -108,6 +108,6 @@ export class WaterComponentTableComponent {
     let copiedComponent: WaterProcessComponent = copyObject(component);
     copiedComponent.diagramNodeId = getNewNodeId();
     copiedComponent.name = copiedComponent.name + ' (copy)';
-    this.waterAssessmentService.addNewWaterComponent(this.activeComponentType, copiedComponent);
+    this.waterAssessmentService.copyWaterComponent(this.activeComponentType, copiedComponent);
   }
 }

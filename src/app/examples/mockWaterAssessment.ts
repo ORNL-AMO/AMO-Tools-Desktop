@@ -20,7 +20,7 @@ export const MockWaterAssessment: Assessment =  {
             "notes": undefined
         },
         "intakeSources": [],
-        "processUses": []
+        "waterUsingSystems": []
     },
     "selected": false,
     "appVersion": "1.5.1"

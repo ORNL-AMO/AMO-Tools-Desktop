@@ -84,8 +84,8 @@ export class WaterProcessDiagramComponent {
 
   async initDiagram(id: number) {
     this.diagram = this.diagramIdbService.findById(id);
-    this.setSettings();
     this.waterDiagramConnectionsService.syncDiagramToAssessment(this.diagram, this.integratedDiagram)
+    this.setSettings();
     this.waterProcessDiagramService.updateWaterDiagram(this.diagram.waterDiagram);
   }
 

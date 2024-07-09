@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { IntakeSource, ProcessUse, WaterProcessComponent } from '../shared/models/water-assessment';
+import { IntakeSource, WaterUsingSystem, WaterProcessComponent, WaterAssessment } from '../shared/models/water-assessment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { getNewProcessComponent } from '../../process-flow-types/shared-process-flow-types';
 
 @Injectable({
   providedIn: 'root'
@@ -27,18 +28,39 @@ export class WaterProcessComponentService {
     return intakeSource;
   }
 
-  getProcessUseForm(ProcessUse: ProcessUse): FormGroup {
+  addNewIntakeSource(): IntakeSource {
+    let intakeSource: IntakeSource;
+    let newComponent = getNewProcessComponent('water-intake') as IntakeSource;
+    intakeSource = {
+      ...newComponent,
+      sourceType: 'city',
+    };
+     return intakeSource;
+  }
+
+  getWaterUsingSystemForm(WaterUsingSystem: WaterUsingSystem): FormGroup {
     let form: FormGroup = this.formBuilder.group({
-      name: [ProcessUse.name, Validators.required],
+      name: [WaterUsingSystem.name, Validators.required],
     });
     this.markFormDirtyToDisplayValidation(form);
     return form;
   }
 
-  getProcessUseFromForm(form: FormGroup, ProcessUse: ProcessUse) {
-    ProcessUse.name = form.controls.name.value
-    return ProcessUse;
+  getWaterUsingSystemFromForm(form: FormGroup, WaterUsingSystem: WaterUsingSystem) {
+    WaterUsingSystem.name = form.controls.name.value
+    return WaterUsingSystem;
   }
+
+  addNewWaterUsingSystem(): WaterUsingSystem {
+    let waterUsingSystem: WaterUsingSystem;
+    let newComponent = getNewProcessComponent('water-using-system') as WaterUsingSystem;
+    waterUsingSystem = {
+      ...newComponent,
+      systemType: 'something',
+    };
+     return waterUsingSystem;
+  }
+
 
   markFormDirtyToDisplayValidation(form: FormGroup) {
     for (let key in form.controls) {
