@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
-import {  WaterAssessment, WaterProcessComponent } from '../shared/models/water-assessment';
-import { WaterProcessComponentType, getComponentNameFromType, getNewProcessComponent } from '../../process-flow-types/shared-process-flow-types';
+import {  IntakeSource, WaterAssessment, WaterProcessComponent, WaterUsingSystem } from '../shared/models/water-assessment';
+import { ProcessFlowPart, WaterProcessComponentType, getComponentNameFromType, getNewProcessComponent } from '../../process-flow-types/shared-process-flow-types';
 import { WaterProcessComponentService } from './water-system-component.service';
 // todo 6875 measur compiler doesn't like pulling in this module because it's from jsx
 
@@ -61,21 +61,38 @@ export class WaterAssessmentService {
     return getComponentNameFromType(componentType);
   }
 
-  addNewWaterComponent(componentType: WaterProcessComponentType, newComponent?: WaterProcessComponent) {
+  addNewWaterComponent(componentType: WaterProcessComponentType) {
     let waterAssessment: WaterAssessment = this.waterAssessment.getValue();
-    if (!newComponent) {
-      newComponent = getNewProcessComponent(componentType);
-    }
-
+    let newComponent: WaterProcessComponent;
     if (componentType === 'water-intake') {
-      waterAssessment.intakeSources? waterAssessment.intakeSources.push(newComponent) : waterAssessment.intakeSources = [newComponent];
+      let newIntakeSource = this.waterProcessComponentService.addNewIntakeSource();
+      waterAssessment.intakeSources? waterAssessment.intakeSources.push(newIntakeSource) : waterAssessment.intakeSources = [newIntakeSource];
+      newComponent = newIntakeSource;
     } else if (componentType === 'water-using-system') {
-      waterAssessment.waterUsingSystems? waterAssessment.waterUsingSystems.push(newComponent) : waterAssessment.waterUsingSystems = [newComponent];
+      let newWaterUsingSystem = this.waterProcessComponentService.addNewWaterUsingSystem();
+      waterAssessment.waterUsingSystems? waterAssessment.waterUsingSystems.push(newWaterUsingSystem) : waterAssessment.waterUsingSystems = [newWaterUsingSystem];
+      newComponent = newWaterUsingSystem;
     }
 
     this.updateWaterAssessment(waterAssessment);
     this.waterProcessComponentService.selectedComponent.next(newComponent);
   }
+
+  copyWaterComponent(componentType: WaterProcessComponentType, copiedComponent: WaterProcessComponent) {
+    let waterAssessment: WaterAssessment = this.waterAssessment.getValue();
+
+    if (componentType === 'water-intake') {
+      copiedComponent = copiedComponent as IntakeSource;
+      waterAssessment.intakeSources? waterAssessment.intakeSources.push(copiedComponent) : waterAssessment.intakeSources = [copiedComponent];
+    } else if (componentType === 'water-using-system') {
+      copiedComponent = copiedComponent as WaterUsingSystem;
+      waterAssessment.waterUsingSystems? waterAssessment.waterUsingSystems.push(copiedComponent) : waterAssessment.waterUsingSystems = [copiedComponent];
+    }
+
+    this.updateWaterAssessment(waterAssessment);
+    this.waterProcessComponentService.selectedComponent.next(copiedComponent);
+  }
+
 
   deleteWaterComponent(componentType: WaterProcessComponentType, deleteId: string, isSelectedComponent?: boolean) {
     let waterAssessment: WaterAssessment = this.waterAssessment.getValue();

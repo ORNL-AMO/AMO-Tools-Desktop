@@ -27,9 +27,9 @@ export class WaterUsingSystemComponent {
     this.componentFormTitle = this.waterAssessmentService.setWaterProcessComponentTitle('water-using-system');
     
     this.selectedComponentSub = this.waterProcessComponentService.selectedComponent.subscribe(selectedComponent => {
-      this.selectedWaterUsingSystem = selectedComponent;
+      this.selectedWaterUsingSystem = selectedComponent as WaterUsingSystem;
       this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-      this.waterProcessComponentService.selectedViewComponents.next(this.waterAssessment.waterUsingSystems);
+      this.waterProcessComponentService.selectedViewComponents.next(this.waterAssessment.waterUsingSystems as WaterProcessComponent[]);
       if (this.selectedWaterUsingSystem) {
         this.initForm();
       }

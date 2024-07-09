@@ -26,7 +26,7 @@ export class IntakeSourceComponent {
     this.componentFormTitle = this.waterAssessmentService.setWaterProcessComponentTitle('water-intake');
 
     this.selectedComponentSub = this.waterProcessComponentService.selectedComponent.subscribe(selectedComponent => {
-      this.selectedIntakeSource = selectedComponent;
+      this.selectedIntakeSource = selectedComponent as IntakeSource;
       this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
       this.waterProcessComponentService.selectedViewComponents.next(this.waterAssessment.intakeSources);
       if (this.selectedIntakeSource) {
@@ -53,10 +53,9 @@ export class IntakeSourceComponent {
 
   save() {
     let updated: IntakeSource = this.waterProcessComponentService.getIntakeSourceFromForm(this.form, this.selectedIntakeSource);
-    let waterAssessment: WaterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-    let updateIndex: number = waterAssessment.intakeSources.findIndex(intake => intake.diagramNodeId === updated.diagramNodeId);
-    waterAssessment.intakeSources[updateIndex] = updated;
-    this.waterAssessmentService.waterAssessment.next(waterAssessment);
+    let updateIndex: number = this.waterAssessment.intakeSources.findIndex(intake => intake.diagramNodeId === updated.diagramNodeId);
+    this.waterAssessment.intakeSources[updateIndex] = updated;
+    this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
   }
 
   focusField(str: string) {
@@ -64,7 +63,6 @@ export class IntakeSourceComponent {
   }
 
   addIntakeSource() {
-    this.waterAssessmentService.addNewWaterComponent('water-intake');
+    this.waterAssessmentService.addNewWaterComponent('water-intake')
   }
-
 }
