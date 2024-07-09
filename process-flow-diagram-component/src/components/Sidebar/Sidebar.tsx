@@ -12,7 +12,7 @@ const Sidebar = (props: SidebarProps) => {
 
   return (
     <aside>
-      <div className="alert alert-info description ">Drag water process components to the pane on the right</div>
+      <div className="alert alert-info description ">Drag water components into the pane</div>
       {processFlowParts.map((part: ProcessFlowPart) => {
         return (
           <div key={part.processComponentType} className={`dndnode ${part.processComponentType}`} onDragStart={(event) => onDragStart(event, part.processComponentType)} draggable>
@@ -20,6 +20,17 @@ const Sidebar = (props: SidebarProps) => {
             </div>
         );
       })}
+
+      {/* <div className={`dndnode splitterNode`} onDragStart={(event) => onDragStart(event, 'splitter-node')} draggable>
+            Custom Splitter
+      </div> */}
+      <div className={`dndnode splitterNode`} onDragStart={(event) => onDragStart(event, 'splitter-node-4')} draggable>
+            4-way Splitter
+      </div>
+      <div className={`dndnode splitterNode`} onDragStart={(event) => onDragStart(event, 'splitter-node-8')} draggable>
+            8-way Splitter
+      </div>
+      <hr/>
 
       <div className="sidebar-actions">
         <label>

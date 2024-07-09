@@ -3,7 +3,6 @@ import ReactFlow, {
   Node,
   useNodesState,
   useEdgesState,
-  addEdge,
   Connection,
   Edge,
   ConnectionLineType,
@@ -20,8 +19,8 @@ import 'reactflow/dist/style.css';
 
 import Sidebar from '../Sidebar/Sidebar';
 import { FlowDiagramData } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { setDroppedNode, updateStaleNodes } from './FlowUtils';
-import { nodeTypes } from './FlowTypes';
+import { setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
+import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useSaveDebounce';
 
 const defaultEdgeOptions: DefaultEdgeOptions = {
@@ -52,10 +51,6 @@ const Flow = (props: FlowProps) => {
   const [minimapVisible, setMinimapVisible] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(false);
   const ref = useRef(null);
-  const onConnect: OnConnect = useCallback(
-    (params: Connection | Edge) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
-  );
 
   useEffect(() => {
     if (reactFlowInstance && props.height && staleNodes) {
@@ -85,6 +80,11 @@ const Flow = (props: FlowProps) => {
     [reactFlowInstance],
   );
 
+  const onConnect: OnConnect = useCallback(
+    (params: Connection | Edge) => setCustomEdges(params, setEdges),
+    [setEdges]
+  );
+
   const updateMinimap = useCallback((enabled) => {
     setMinimapVisible(enabled);
   }, []);
@@ -92,7 +92,7 @@ const Flow = (props: FlowProps) => {
   const updateControls = useCallback((enabled) => {
     setControlsVisible(enabled);
   }, []);
-  
+
   return (
     props.height &&
     <div className="process-flow-diagram">
@@ -108,6 +108,7 @@ const Flow = (props: FlowProps) => {
             onConnect={onConnect}
             onInit={setReactFlowInstance}
             nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
             defaultEdgeOptions={defaultEdgeOptions}
             defaultViewport={defaultViewport}
             connectionLineType={ConnectionLineType.SmoothStep}

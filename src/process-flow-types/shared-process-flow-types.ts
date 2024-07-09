@@ -52,13 +52,14 @@ export interface ProcessFlowParentState {
     // * id for diagram targetting/sourcing
     diagramNodeId?: string,
     modifiedDate?: Date,
+    splitterTargets?: Array<string>;
     // todo this will hold any contextual data about connections to other parts, etc
     processComponentContext?: any;
   }
   
   // * union future diagram types into ProcessFlowNodeType
   export type ProcessFlowNodeType = WaterProcessComponentType | undefined;
-  export type WaterProcessComponentType = 'water-intake' | 'water-discharge' | 'water-using-system';
+  export type WaterProcessComponentType = 'water-intake' | 'water-discharge' | 'water-using-system' | 'splitter-node';
   export type ProcessFlowPartStyleClass = WaterProcessComponentType;
 
   
@@ -89,7 +90,13 @@ export interface ProcessFlowParentState {
       name: 'Water Discharge',
       className: 'water-discharge',
       isValid: true,
-    }
+    },
+    // {
+    //   processComponentType: 'splitter-node',
+    //   name: 'Junction Connector',
+    //   className: 'splitter-node',
+    //   isValid: true,
+    // }
   ];
 
 

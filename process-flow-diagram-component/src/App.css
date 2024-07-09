@@ -116,6 +116,10 @@ a {
   cursor: grab;
 }
 
+.process-flow-diagram .dndnode.splitterNode {
+  border: 4px solid #c0c0c0;
+}
+
 .process-flow-diagram .dndnode:hover {
   background: #efefef
 }
@@ -196,6 +200,19 @@ a {
   background-color: white;
 }
 
+.react-flow__node-splitterNode
+{
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #c0c0c0;
+  padding: 2px;
+  min-width: 150px;
+  font-size: 0;
+  color: #c0c0c0;
+  background-color: #c0c0c0;
+}
+
 .react-flow__node-waterIntake,
 .react-flow__node-group {
   /* background-color: var(--water-intake); */
@@ -218,21 +235,23 @@ a {
       box-shadow: 0 1px 4px 1px rgba(0, 0, 0, 0.08);
 }
 
+.react-flow__node-splitterNode.selectable.selected,
+.react-flow__node-splitterNode.selectable:focus,
+.react-flow__node-splitterNode.selectable:focus-visible,
 .react-flow__node-waterIntake.selectable.selected,
-    .react-flow__node-waterIntake.selectable:focus,
-    .react-flow__node-waterIntake.selectable:focus-visible,
-    .react-flow__node-waterUsingSystem.selectable.selected,
-    .react-flow__node-waterUsingSystem.selectable:focus,
-    .react-flow__node-waterUsingSystem.selectable:focus-visible,
-    .react-flow__node-waterDischarge.selectable.selected,
-    .react-flow__node-waterDischarge.selectable:focus,
-    .react-flow__node-waterDischarge.selectable:focus-visible,
-    .react-flow__node-group.selectable.selected,
-    .react-flow__node-group.selectable:focus,
-    .react-flow__node-group.selectable:focus-visible {
-      box-shadow: 0 0 0 0.5px #1a192b;
+.react-flow__node-waterIntake.selectable:focus,
+.react-flow__node-waterIntake.selectable:focus-visible,
+.react-flow__node-waterUsingSystem.selectable.selected,
+.react-flow__node-waterUsingSystem.selectable:focus,
+.react-flow__node-waterUsingSystem.selectable:focus-visible,
+.react-flow__node-waterDischarge.selectable.selected,
+.react-flow__node-waterDischarge.selectable:focus,
+.react-flow__node-waterDischarge.selectable:focus-visible,
+.react-flow__node-group.selectable.selected,
+.react-flow__node-group.selectable:focus,
+.react-flow__node-group.selectable:focus-visible {
+  box-shadow: 0 0 0 0.5px #1a192b;
 }
-
 
 .node-inner-input {
   /* background: rgba(255, 255, 255, 0.5); */
