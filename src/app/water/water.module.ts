@@ -28,6 +28,7 @@ import { WaterProcessComponentService } from './water-system-component.service';
 import { WaterProcessDiagramModule } from '../water-process-diagram/water-process-diagram.module';
 import { WaterAssessmentConnectionsService } from './water-assessment-connections.service';
 import { WaterUsingSystemComponent } from './water-using-system/water-using-system.component';
+import { DischargeOutletComponent } from './discharge-outlet/discharge-outlet.component';
 
 
 
@@ -41,7 +42,8 @@ import { WaterUsingSystemComponent } from './water-using-system/water-using-syst
     SetupTabsComponent,
     IntakeSourceComponent,
     WaterUsingSystemComponent,
-    WaterComponentTableComponent
+    WaterComponentTableComponent,
+    DischargeOutletComponent
   ],
   imports: [
     CommonModule,

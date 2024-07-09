@@ -100,11 +100,10 @@ export interface ProcessFlowParentState {
   ];
 
 
-  export const getComponentNameFromType = (componentType) => {
-    let component = processFlowDiagramParts.find(part => part.processComponentType === componentType);
-    return component? component.name : '';
-  }
-
+export const getComponentNameFromType = (componentType) => {
+  let component = processFlowDiagramParts.find(part => part.processComponentType === componentType);
+  return component? component.name : '';
+}
 
 export const getNewProcessComponent = (processComponentType): ProcessFlowPart => {
   let diagramComponent: ProcessFlowPart = processFlowDiagramParts.find(part => part.processComponentType === processComponentType);

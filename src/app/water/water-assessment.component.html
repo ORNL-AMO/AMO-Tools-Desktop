@@ -24,6 +24,7 @@
         <app-system-basics *ngIf="setupTab == 'system-basics'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
           [assessment]="assessment"></app-system-basics>
         <app-intake-source *ngIf="setupTab == 'water-intake'" [assessment]="assessment"></app-intake-source>
+        <app-discharge-outlet *ngIf="setupTab == 'water-discharge'" [assessment]="assessment"></app-discharge-outlet>
         <app-water-using-system *ngIf="setupTab == 'water-using-system'" [assessment]="assessment"></app-water-using-system>
       </div>
       <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"

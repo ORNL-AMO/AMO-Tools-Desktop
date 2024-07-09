@@ -4,9 +4,9 @@
         <br>
     </div>
 
-    @if (waterAssessment.intakeSources.length === 0) {
+    @if (waterAssessment.dischargeOutlets.length === 0) {
     <div class="p-3 align-self-center">
-        <button type="button" class="btn btn-primary active" (click)="addIntakeSource()">
+        <button type="button" class="btn btn-primary active" (click)="addDischargeOutlet()">
             Add {{componentFormTitle}}
         </button>
     </div>
@@ -16,15 +16,15 @@
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" class="form-control" name="name" formControlName="name"
-                (focus)="focusField('intakeSourceName')" (input)="save()" />
+                (focus)="focusField('dischargeOutletName')" (input)="save()" />
         </div>
 
         <div class="form-group">
-            <label for="sourceType">Source Type</label>
-            <select class="form-control" id="sourceType" formControlName="sourceType" (change)="setIntakeSourceType()"
-              (focus)="focusField('sourceType')">
-              <option *ngFor="let sourceType of intakeSourceTypeOptions"
-                [ngValue]="sourceType.value">{{sourceType.display}}
+            <label for="outletType">Outlet Type</label>
+            <select class="form-control" id="outletType" formControlName="outletType" (change)="setDischargeOutletType()"
+              (focus)="focusField('outletType')">
+              <option *ngFor="let outletType of dischargeOutletTypeOptions"
+                [ngValue]="outletType.value">{{outletType.display}}
               </option>
             </select>
           </div>
@@ -42,7 +42,7 @@
                 <span class="alert-danger pull-right small" *ngIf="form.controls.annualUse.errors.required">Value
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.annualUse.errors.min">Value can't be
-                    less than {{form.controls.annualUse.errors.min.min}}</span>
+                    less than {{form.controls.annualUse.errors.min.min}} </span>
             </span>
         </div>
     </form>

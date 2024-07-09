@@ -27,13 +27,15 @@ export interface WaterSystemBasics {
 
 export interface WaterAssessmentResults {}
 
+// * Plant level intakes
 export interface IntakeSource extends ProcessFlowPart {
-    sourceType: string,
+    sourceType: number,
     annualUse: number
 }
 
+// * Plant level discharge
 export interface DischargeOutlet extends ProcessFlowPart {
-    sourceType: string,
+    outletType: number,
     annualUse: number
 }
 
@@ -42,7 +44,7 @@ export interface WaterUsingSystem extends ProcessFlowPart {
     
 }
 
-export type WaterProcessComponent = IntakeSource | WaterUsingSystem;
+export type WaterProcessComponent = IntakeSource | DischargeOutlet | WaterUsingSystem;
 
 
 export interface WaterBalanceResults {
