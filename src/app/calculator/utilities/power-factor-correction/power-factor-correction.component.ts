@@ -112,18 +112,20 @@ export class PowerFactorCorrectionComponent implements OnInit {
 
   btnResetData() {
     this.inputData = this.powerFactorCorrectionService.getResetData();
+    this.results = this.powerFactorCorrectionService.getResetOutput();
     this.powerFactorCorrectionService.inputData = this.inputData;
-    this.calculate(this.inputData);
+    //this.calculate(this.inputData);
   }
 
   generateExample() {
     this.inputData = this.powerFactorCorrectionService.generateExample();
+    this.results = this.powerFactorCorrectionService.generateExampleOutput();
     this.powerFactorCorrectionService.inputData = this.inputData;
   }
 
   btnGenerateExample() {
     this.generateExample();
-    this.calculate(this.inputData);
+    //this.calculate(this.inputData);
   }
 
   resizeTabs() {
@@ -150,7 +152,24 @@ export class PowerFactorCorrectionComponent implements OnInit {
       existingReactivePower: this.powerFactorCorrectionService.existingReactivePower(data),
       proposedApparentPower: this.powerFactorCorrectionService.proposedApparentPower(data),
       proposedReactivePower: this.powerFactorCorrectionService.proposedReactivePower(data),
-      capacitancePowerRequired: this.powerFactorCorrectionService.capacitancePowerRequired(data)
+      capacitancePowerRequired: this.powerFactorCorrectionService.capacitancePowerRequired(data),
+      annualPFPenalty: 0,
+      proposedFixedCapacitance: 0,
+      proposedVariableCapacitance: 0,
+      capitalCost: 0,
+      simplePayback: 0,
+      monthlyOutputs: [
+        {
+          realDemand: 0,
+          pfAdjustedDemand: 0,
+          proposedApparentPower: 0,
+          demandPenalty: 0,
+          penaltyCost: 0,
+          currentReactivePower: 0,
+          proposedReactivePower: 0,
+          proposedCapacitance: 0,
+        }
+      ]
     };
   }
 
@@ -186,4 +205,22 @@ export interface PowerFactorCorrectionOutputs {
   proposedApparentPower: number;
   proposedReactivePower: number;
   capacitancePowerRequired: number;
+
+  annualPFPenalty: number;
+  proposedFixedCapacitance: number;
+  proposedVariableCapacitance: number;
+  capitalCost: number;
+  simplePayback: number;
+  monthlyOutputs: Array<PFMonthlyOutputs>;
+}
+
+export interface PFMonthlyOutputs {
+  realDemand: number;
+  pfAdjustedDemand: number;
+  proposedApparentPower: number;
+  demandPenalty: number;
+  penaltyCost: number;
+  currentReactivePower: number;
+  proposedReactivePower: number;
+  proposedCapacitance: number;
 }

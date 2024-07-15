@@ -1,4 +1,4 @@
-<table #copyTable class="table table-hover table-striped">
+<!-- <table #copyTable class="table table-hover table-striped">
   <tbody>
     <tr>
       <td class="bold w-50">Existing Apparent Power</td>
@@ -36,5 +36,126 @@
       </td>
     </tr>
   </tbody>
+</table> -->
+<table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <th>
+        Month
+      </th>
+      <th *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 0">
+        Real Demand (kW)
+      </th>
+      <th *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 1">
+        PF Adjusted Demand (kW)
+      </th>
+      <th *ngIf="inputs.billedForDemand == 1 && (inputs.adjustedOrActual == 0 || inputs.adjustedOrActual == 1)">
+        Proposed Apparent Power (kW)
+      </th>
+
+      <th *ngIf="inputs.billedForDemand == 0">
+        Demand Penalty (kW)
+      </th>
+      <th *ngIf="inputs.billedForDemand == 1">
+        Demand Penalty (kVA)
+      </th>
+
+      <th>
+        Penalty Cost ($)
+      </th>
+
+      <th>
+        Current Reactive Power (kVAr)
+      </th>
+
+      <th>
+        Proposed Reactive Power (kVAr)
+      </th>
+
+      <th>
+        Proposed Capacitance (kVAr)
+      </th>
+    </tr>
+    
+    <tr *ngFor="let output of results.monthlyOutputs; let i = index;">
+      <td>
+        Month {{i + 1}}
+      </td>
+
+      <td *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 0">
+        {{output.realDemand}}
+      </td>
+      <td *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 1">
+       {{output.pfAdjustedDemand}}
+      </td>
+      <td *ngIf="inputs.billedForDemand == 1 && (inputs.adjustedOrActual == 0 || inputs.adjustedOrActual == 1)">
+        {{output.proposedApparentPower}}
+      </td>
+
+      <td>
+        {{output.demandPenalty}}
+      </td>
+
+      <td>
+        {{output.penaltyCost}}
+      </td>
+
+      <td>
+        {{output.currentReactivePower}}
+      </td>
+
+      <td>
+        {{output.proposedReactivePower}}
+      </td>
+
+      <td>
+        {{output.proposedCapacitance}}
+      </td>
+
+
+    </tr>
+
+  </tbody>
 </table>
+
+<table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="bold w-50">Annual Power Factor Penalty</td>
+      <td class="text-center w-50">
+        {{results.annualPFPenalty | number:'1.2-2'}} /yr
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Proposed Fixed Capacitance</td>
+      <td class="text-center w-50">
+
+        {{results.proposedFixedCapacitance | number:'1.2-2'}} kVAr
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Proposed Variable Capacitance</td>
+      <td class="text-center w-50">
+
+        {{results.proposedVariableCapacitance | number:'1.2-2'}} kVAr
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">
+        Capital Cost
+      </td>
+      <td class="text-center w-50">
+
+        ${{results.capitalCost | number:'1.2-2'}}
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50"> Simple Payback</td>
+      <td class="text-center w-50">
+        {{results.simplePayback | number:'1.2-2'}} years
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 <app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()"></app-exportable-results-table>

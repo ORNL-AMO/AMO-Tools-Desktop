@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { PowerFactorCorrectionOutputs } from '../power-factor-correction.component';
+import { PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs } from '../power-factor-correction.component';
 
 @Component({
   selector: 'app-power-factor-correction-results',
@@ -9,6 +9,8 @@ import { PowerFactorCorrectionOutputs } from '../power-factor-correction.compone
 export class PowerFactorCorrectionResultsComponent implements OnInit {
   @Input()
   results: PowerFactorCorrectionOutputs;
+  @Input()
+  inputs: PowerFactorCorrectionInputs;
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
