@@ -1,0 +1,81 @@
+<label class="group-label" (click)="toggleCollapse()">
+    <span class="fa fa-chevron-right"
+        [ngClass]="{'fa-chevron-right': isCollapsed, 'fa-chevron-down': !isCollapsed}"></span>
+    Heat Energy in Discharge
+    <span *ngIf="!form.valid" class="pull-right">
+        <span class="fa fa-exclamation-circle"></span>
+    </span>
+</label>
+<form *ngIf="!isCollapsed" [formGroup]="form">
+    <!-- <label class="group-label secondary-group">Incoming Water</label> -->
+    <div class="form-group" [ngClass]="{'invalid': form.controls.incomingTemp.invalid}">
+        <label for="incomingTemp">Incoming Water Temperature</label>
+        <div class="input-group">
+            <input name="incomingTemp" type="number" class="form-control" id="incomingTemp"
+                formControlName="incomingTemp" (input)="save()" (focus)="focusField('incomingTemp')">
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.incomingTemp.invalid && !form.controls.incomingTemp.pristine">
+            <span *ngIf="form.controls.incomingTemp.errors.required">Value Required</span>
+        </span>
+    </div>
+    <div class="form-group" [ngClass]="{'invalid': form.controls.outgoingTemp.invalid}">
+        <label for="outgoingTemp">Outgoing Water Temperature</label>
+        <div class="input-group">
+            <input name="outgoingTemp" type="number" class="form-control" id="outgoingTemp"
+                formControlName="outgoingTemp" (input)="save()" (focus)="focusField('outgoingTemp')">
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.outgoingTemp.invalid && !form.controls.outgoingTemp.pristine">
+            <span *ngIf="form.controls.outgoingTemp.errors.required">Value Required</span>
+        </span>
+    </div>
+
+    <div class="form-group">
+        <label for="heatingFuelType">Fuel Type</label>
+        <select class="form-control" id="heatingFuelType" formControlName="heatingFuelType" (change)="save()"
+            (focus)="focusField('heatingFuelType')">
+            <option [ngValue]="0">Electricity</option>
+            <option [ngValue]="1">Fuel</option>
+        </select>
+    </div>
+
+    <div class="form-group" [ngClass]="{'invalid': form.controls.heaterEfficiency.invalid}">
+        <label for="heaterEfficiency">Heater Efficiency
+            <a class="form-text small click-link" (click)="openBoilerEfficiencyModal()">Calculate Heater Efficiency</a>
+        </label>  
+        <div class="input-group">
+            <input name="heaterEfficiency" type="number" class="form-control" id="heaterEfficiency"
+                formControlName="heaterEfficiency" (input)="save()" (focus)="focusField('heaterEfficiency')">
+            <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.heaterEfficiency.invalid && !form.controls.heaterEfficiency.pristine">
+            <span *ngIf="form.controls.heaterEfficiency.errors.required">Value Required</span>
+            <span *ngIf="form.controls.heaterEfficiency.errors.min">Value can't be less than
+                {{form.controls.heaterEfficiency.errors.min.min}} </span>
+            <span *ngIf="form.controls.heaterEfficiency.errors.max">Value can't be greater than
+                {{form.controls.heaterEfficiency.errors.max.max}}</span>
+        </span>
+    </div>
+
+    <div (click)="focusField('wasteWaterDischarge')" class="form-group">
+        <label for="wasteWaterDischarge">Waste Water Discharge</label>
+        <div class="text-center small bold">
+            <span *ngIf="heatEnergy.wasteWaterDischarge">{{wasteWaterDischarge | number}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+            </span>
+            <span *ngIf="!heatEnergy.wasteWaterDischarge">&mdash; &mdash;</span>
+        </div>
+    </div>
+</form>
+
+
+<app-boiler-efficiency-modal *ngIf="showBoilerEfficiencyModal" [settings]="settings"
+  (emitClose)="closeBoilerEfficiencyModal()" (emitSave)="setBoilerEfficiencyAndClose($event)">
+</app-boiler-efficiency-modal>

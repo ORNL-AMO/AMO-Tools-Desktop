@@ -20,3 +20,11 @@ export const dischargeOutletTypeOptions: {value: number, display: string}[] = [
     // Water not used in any processes
     {value: 6, display: 'Stormwater to Municipal Sewer'},
 ]
+
+export const waterUsingSystemTypeOptions: {value: number, display: string}[] = [
+    {value: 0, display: 'Process Use'},
+    {value: 1, display: 'Cooling Tower'},
+    {value: 2, display: 'Boiler Water'},
+    {value: 3, display: 'Kitchen and Restroom'},
+    {value: 4, display: 'Landscaping and Irrigation'},
+]

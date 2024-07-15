@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { IntakeSource, WaterUsingSystem, WaterProcessComponent, WaterAssessment, DischargeOutlet } from '../shared/models/water-assessment';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IntakeSource, WaterProcessComponent, DischargeOutlet } from '../shared/models/water-assessment';
+import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { WaterProcessComponentType, getNewProcessComponent } from '../../process-flow-types/shared-process-flow-types';
 import * as _ from 'lodash';
 
@@ -31,7 +31,7 @@ export class WaterProcessComponentService {
     let form: FormGroup = this.formBuilder.group({
       name: [intakeSource.name, Validators.required],
       sourceType: [intakeSource.sourceType],
-      annualUse: [intakeSource.annualUse, [Validators.required, Validators.min]],
+      annualUse: [intakeSource.annualUse, [Validators.required, Validators.min(0)]],
     });
     this.markFormDirtyToDisplayValidation(form);
     return form;
@@ -59,7 +59,7 @@ export class WaterProcessComponentService {
     let form: FormGroup = this.formBuilder.group({
       name: [dischargeOutlet.name, Validators.required],
       outletType: [dischargeOutlet.outletType],
-      annualUse: [dischargeOutlet.annualUse, [Validators.required, Validators.min]],
+      annualUse: [dischargeOutlet.annualUse, [Validators.required, Validators.min(0)]],
     });
     this.markFormDirtyToDisplayValidation(form);
     return form;
@@ -83,33 +83,9 @@ export class WaterProcessComponentService {
     return dischargeOutlet;
   }
 
-  getWaterUsingSystemForm(WaterUsingSystem: WaterUsingSystem): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
-      name: [WaterUsingSystem.name, Validators.required],
-    });
-    this.markFormDirtyToDisplayValidation(form);
-    return form;
-  }
-
-  getWaterUsingSystemFromForm(form: FormGroup, WaterUsingSystem: WaterUsingSystem) {
-    WaterUsingSystem.name = form.controls.name.value
-    return WaterUsingSystem;
-  }
-
-  addNewWaterUsingSystem(): WaterUsingSystem {
-    let waterUsingSystem: WaterUsingSystem;
-    let newComponent = getNewProcessComponent('water-using-system') as WaterUsingSystem;
-    waterUsingSystem = {
-      ...newComponent,
-      systemType: 'test',
-    };
-    return waterUsingSystem;
-  }
-
-
-  markFormDirtyToDisplayValidation(form: FormGroup) {
+  markFormDirtyToDisplayValidation(form: UntypedFormGroup) {
     for (let key in form.controls) {
-      if (form.controls[key] && form.controls[key].value != undefined) {
+      if (form.controls[key]) {
         form.controls[key].markAsDirty();
       }
     }

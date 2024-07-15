@@ -27,8 +27,9 @@ export interface WaterSystemBasics {
 
 export interface WaterAssessmentResults {}
 
-// * Plant level intakes
-export interface IntakeSource extends ProcessFlowPart {
+// * Plant level intakes AND system level intakes
+// * IMPORTANT Partial - use in WaterUsingSystem without type check for diagram component properties
+export interface IntakeSource extends Partial<ProcessFlowPart> {
     sourceType: number,
     annualUse: number
 }
@@ -40,8 +41,13 @@ export interface DischargeOutlet extends ProcessFlowPart {
 }
 
 export interface WaterUsingSystem extends ProcessFlowPart {
-    systemType: string,
-    
+    systemType: number,
+    sourceWater: number,
+    recycledWater: number,
+    recirculatedWater: number,
+    intakeSources: IntakeSource[],
+    heatEnergy?: HeatEnergy,
+    addedMotorEquipment: MotorEnergy[],
 }
 
 export type WaterProcessComponent = IntakeSource | DischargeOutlet | WaterUsingSystem;
@@ -63,6 +69,7 @@ export interface ProcessUse  {
     fractionGrossWaterRecirculated: number,
 }
 
+// * grossWaterUse, waterConsumed, waterLoss are added on MEASUR side
 export interface ProcessUseResults {
     grossWaterUse: number,
     waterConsumed: number,
@@ -132,11 +139,11 @@ export interface LandscapingResults {
 }
 
 
-export interface HeatEnergyInputs {
+export interface HeatEnergy {
     incomingTemp: number,
     outgoingTemp: number,
     heaterEfficiency: number,
-    heatingFuelType: string,
+    heatingFuelType: number,
     wasteWaterDischarge: number
 }
 
@@ -146,10 +153,12 @@ export interface HeatEnergyResults {
 }
 
 export interface MotorEnergy {
+    name: string,
     numberUnits: number,
     hoursPerYear: number,
+    loadFactor: number,
     ratedPower: number,
-    systemEfficiency: string,
+    systemEfficiency: number,
 }
 
 export interface MotorEnergyResults {
