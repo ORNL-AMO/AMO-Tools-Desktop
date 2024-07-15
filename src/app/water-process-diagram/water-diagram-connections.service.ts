@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
-import { WaterDiagram, WaterProcessComponentType, getNewNode } from '../../process-flow-types/shared-process-flow-types';
+import { ProcessFlowPart, WaterDiagram, WaterProcessComponentType, getNewNode } from '../../process-flow-types/shared-process-flow-types';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
@@ -59,10 +59,12 @@ export class WaterDiagramConnectionsService {
       }
     });
     // * add new nodes
-    components.forEach(component => {
+    components.forEach((component: WaterProcessComponent) => {
       let existingComponentIndex: number = componentTypeNodes.findIndex(node => node.data.diagramNodeId === component.diagramNodeId);
       if (existingComponentIndex === -1) {
-        let newNode = getNewNode(component.processComponentType, component);
+        // * Assert as ProcessFlowPart (ignores type WaterUsingSystem-->IntakeSource)
+        let processFlowPart = component as ProcessFlowPart;
+        let newNode = getNewNode(component.processComponentType, processFlowPart);
         updatedNodes.push(newNode);
       }
     });

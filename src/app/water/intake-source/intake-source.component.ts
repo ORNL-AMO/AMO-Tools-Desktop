@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { WaterAssessmentService } from '../water-assessment.service';
-import { IntakeSource, WaterAssessment, WaterProcessComponent } from '../../shared/models/water-assessment';
+import { IntakeSource, WaterAssessment } from '../../shared/models/water-assessment';
 import { WaterProcessComponentService } from '../water-system-component.service';
 import * as _ from 'lodash';
 import { FormGroup } from '@angular/forms';
@@ -15,6 +15,10 @@ import { intakeSourceTypeOptions } from '../waterConstants';
   styleUrl: './intake-source.component.css'
 })
 export class IntakeSourceComponent {
+  // * intake source supplied as part of a water using system
+  @Input()
+  systemIntakeSource: IntakeSource;
+
   settings: Settings;
   componentFormTitle: string;
   waterAssessment: WaterAssessment;
@@ -31,20 +35,24 @@ export class IntakeSourceComponent {
     this.settings = this.waterAssessmentService.settings.getValue();
     this.componentFormTitle = this.waterAssessmentService.setWaterProcessComponentTitle('water-intake');
 
-    this.selectedComponentSub = this.waterProcessComponentService.selectedComponent.subscribe(selectedComponent => {
-      this.selectedIntakeSource = selectedComponent as IntakeSource;
-      this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-      this.waterProcessComponentService.selectedViewComponents.next(this.waterAssessment.intakeSources);
-      if (this.selectedIntakeSource) {
-        this.idString = this.componentFormTitle + this.selectedIntakeSource.diagramNodeId;
-        this.initForm();
-      }
-    });
-    this.setDefaultSelectedComponent();
+    if (!this.systemIntakeSource) {
+      this.selectedComponentSub = this.waterProcessComponentService.selectedComponent.subscribe(selectedComponent => {
+        this.selectedIntakeSource = selectedComponent as IntakeSource;
+        this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
+        this.waterProcessComponentService.selectedViewComponents.next(this.waterAssessment.intakeSources);
+        if (this.selectedIntakeSource) {
+          this.idString = this.componentFormTitle + this.selectedIntakeSource.diagramNodeId;
+          this.initForm();
+        }
+      });
+      this.setDefaultSelectedComponent();
+    }
   }
 
   ngOnDestroy() {
-    this.selectedComponentSub.unsubscribe();
+    if (this.selectedComponentSub) {
+      this.selectedComponentSub.unsubscribe();
+    }
   }
 
   setDefaultSelectedComponent() {

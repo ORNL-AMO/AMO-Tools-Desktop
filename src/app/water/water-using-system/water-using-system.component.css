@@ -2,14 +2,6 @@
     border-bottom: none;
 }
 
-.group-label {
-    font-size: 16px;
-    text-transform: none;
-    letter-spacing: 1px;
-    padding-top: 6.5px;
-    padding-bottom: 6.5px;
-}
-
 .group-label:hover {
     cursor: pointer;
 }
@@ -18,4 +10,41 @@
     border-radius: 10px;
     background-color: #fff;
     box-shadow: 0 4px 20px 0 grey;
+}
+
+/*  */
+
+.secondary-group{
+    width: auto;
+    text-transform: none;
+    padding-bottom: 0px;
+}
+
+.group-label:hover:not(.secondary-group){
+    cursor: pointer;
+    background-color: lightgray;
+}
+
+.fa-exclamation-circle {
+    color: red !important;
+    font-size: .75rem;
+    padding-right: .5rem;
+}
+
+.click-link.delete {
+    color: red !important;
+}
+
+
+.small {
+    font-size: 75%;
+}
+
+.form-section {
+    padding-bottom: .25rem;
+    border-bottom: 1px dashed;
+}
+
+.motor-equipment {
+    border-top: 1px solid;
 }

@@ -20,7 +20,7 @@
         </div>
 
         <div class="form-group">
-            <label for="outletType">Outlet Type</label>
+            <label for="outletType">Outlet</label>
             <select class="form-control" id="outletType" formControlName="outletType" (change)="setDischargeOutletType()"
               (focus)="focusField('outletType')">
               <option *ngFor="let outletType of dischargeOutletTypeOptions"
@@ -36,13 +36,16 @@
                     id="{{'annualUse_'+idString}}" (focus)="focusField('annualUse')" (input)="save()"
                     formControlName="annualUse">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
-                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup></span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
             </div>
             <span *ngIf="form.controls.annualUse.invalid && !form.controls.annualUse.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.annualUse.errors.required">Value
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.annualUse.errors.min">Value can't be
-                    less than {{form.controls.annualUse.errors.min.min}} </span>
+                    less than {{form.controls.annualUse.errors.min.min}} 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+                </span>
             </span>
         </div>
     </form>
