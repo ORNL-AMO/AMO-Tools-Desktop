@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs } from './power-factor-correction.component';
+import { PFMonthlyOutputs, PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs } from './power-factor-correction.component';
 
 @Injectable()
 export class PowerFactorCorrectionService {
@@ -18,7 +18,7 @@ export class PowerFactorCorrectionService {
       marginalCostOfDemand: 8.15,
       costOfStaticCapacitance: 50,
       costOfDynamicCapacitance: 70,
-      powerDemandInputs: [
+      monthyInputs: [
         {
           input1: 462,
           input2: 0.8
@@ -73,12 +73,6 @@ export class PowerFactorCorrectionService {
 
   generateExampleOutput(): PowerFactorCorrectionOutputs {
     return {
-      existingApparentPower: 0,
-      existingReactivePower: 0,
-      proposedApparentPower: 0,
-      proposedReactivePower: 0,
-      capacitancePowerRequired: 0,
-
       annualPFPenalty: 8216,
       proposedFixedCapacitance: 164,
       proposedVariableCapacitance: 56,
@@ -221,7 +215,7 @@ export class PowerFactorCorrectionService {
       marginalCostOfDemand: 0,
       costOfStaticCapacitance: 0,
       costOfDynamicCapacitance: 0,
-      powerDemandInputs: [
+      monthyInputs: [
         {
           input1: 0,
           input2: 0
@@ -240,12 +234,6 @@ export class PowerFactorCorrectionService {
 
   getResetOutput(): PowerFactorCorrectionOutputs {
     return {
-      existingApparentPower: 0,
-      existingReactivePower: 0,
-      proposedApparentPower: 0,
-      proposedReactivePower: 0,
-      capacitancePowerRequired: 0,
-
       annualPFPenalty: 0,
       proposedFixedCapacitance: 0,
       proposedVariableCapacitance: 0,
@@ -305,4 +293,214 @@ export class PowerFactorCorrectionService {
   capacitancePowerRequired(data: PowerFactorCorrectionInputs): number {
     return this.existingReactivePower(data) - this.proposedReactivePower(data);
   }
+
+  getEmptyMonthyOutput(): PFMonthlyOutputs{
+    return {
+      realDemand: 0,
+      pfAdjustedDemand: 0,
+      proposedApparentPower: 0,
+      demandPenalty: 0,
+      penaltyCost: 0,
+      currentReactivePower: 0,
+      proposedReactivePower: 0,
+      proposedCapacitance: 0,
+    }
+  }
+
+  getEmptyPowerFactorCorrectionOutputs(): PowerFactorCorrectionOutputs{
+    return {
+      annualPFPenalty: 0,
+      proposedFixedCapacitance: 0,
+      proposedVariableCapacitance: 0,
+      capitalCost: 0,
+      simplePayback: 0,
+      monthlyOutputs: [
+        {
+          realDemand: 0,
+          pfAdjustedDemand: 0,
+          proposedApparentPower: 0,
+          demandPenalty: 0,
+          penaltyCost: 0,
+          currentReactivePower: 0,
+          proposedReactivePower: 0,
+          proposedCapacitance: 0,
+        }
+      ]
+    }
+  }
+
+  calculateRealPowerAndPowerFactor(inputData: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
+    let outputData: PowerFactorCorrectionOutputs = this.getEmptyPowerFactorCorrectionOutputs();
+    let monthlyOutputs: Array<PFMonthlyOutputs> = new Array();
+    let annualPFPenalty: number = 0;
+    let proposedFixedCapacitance: number = 0;
+    let proposedVariableCapacitance: number = 0;
+    let capitalCost: number = 0;
+    let simplePayback: number = 0;
+    if (inputData.monthyInputs.length >= 3){
+      inputData.monthyInputs.forEach( input => {
+        let monthOutput: PFMonthlyOutputs = this.getEmptyMonthyOutput();
+        monthOutput.realDemand = input.input1 * input.input2 / inputData.minimumPowerFactor;    
+        monthOutput.demandPenalty = input.input1 - monthOutput.realDemand; 
+        monthOutput.penaltyCost = monthOutput.demandPenalty * inputData.marginalCostOfDemand;
+        monthOutput.currentReactivePower = monthOutput.realDemand * Math.tan(Math.acos(input.input2));  
+        monthOutput.proposedReactivePower = monthOutput.realDemand * Math.tan(Math.acos(inputData.minimumPowerFactor));
+        monthOutput.proposedCapacitance = monthOutput.currentReactivePower - monthOutput.proposedReactivePower;
+        monthlyOutputs.push(monthOutput);
+      });      
+  
+      let proposedCapacitanceList: Array<number> = new Array();
+  
+      if(monthlyOutputs.length > 0){
+        monthlyOutputs.forEach(output =>{
+          annualPFPenalty += output.penaltyCost;
+          proposedCapacitanceList.push(output.proposedCapacitance);
+        });
+      }
+  
+      proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
+      proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
+      capitalCost = proposedFixedCapacitance * inputData.costOfStaticCapacitance + proposedVariableCapacitance * inputData.costOfDynamicCapacitance;
+      simplePayback = capitalCost / annualPFPenalty;  
+      
+    }
+    outputData.annualPFPenalty = annualPFPenalty;
+    outputData.proposedFixedCapacitance = proposedFixedCapacitance;
+    outputData.proposedVariableCapacitance = proposedVariableCapacitance;
+    outputData.capitalCost = capitalCost;
+    outputData.simplePayback = simplePayback;
+    outputData.monthlyOutputs = monthlyOutputs; 
+    return outputData;
+  }
+
+
+  calculateRealPowerAndActualDemand(inputData: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
+    let outputData: PowerFactorCorrectionOutputs = this.getEmptyPowerFactorCorrectionOutputs();
+    let monthlyOutputs: Array<PFMonthlyOutputs> = new Array();
+    let annualPFPenalty: number = 0;
+    let proposedFixedCapacitance: number = 0;
+    let proposedVariableCapacitance: number = 0;
+    let capitalCost: number = 0;
+    let simplePayback: number = 0;
+    if (inputData.monthyInputs.length >= 3){
+      inputData.monthyInputs.forEach( input => {
+        let monthOutput: PFMonthlyOutputs = this.getEmptyMonthyOutput();
+        monthOutput.pfAdjustedDemand = input.input1 * inputData.minimumPowerFactor / input.input2;    
+        monthOutput.demandPenalty = monthOutput.pfAdjustedDemand - input.input1;
+        monthOutput.penaltyCost = monthOutput.demandPenalty * inputData.marginalCostOfDemand;
+        monthOutput.currentReactivePower = input.input1 * Math.tan(Math.acos(input.input2));      
+        monthOutput.proposedReactivePower = input.input1 * Math.tan(Math.acos(inputData.minimumPowerFactor));
+        monthOutput.proposedCapacitance = monthOutput.currentReactivePower - monthOutput.proposedReactivePower;
+        monthlyOutputs.push(monthOutput);
+      });      
+  
+      let proposedCapacitanceList: Array<number> = new Array();
+  
+      monthlyOutputs.forEach(output =>{
+        annualPFPenalty += output.penaltyCost
+        proposedCapacitanceList.push(output.proposedCapacitance);
+      });
+  
+      proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
+      proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
+      capitalCost = proposedFixedCapacitance * inputData.costOfStaticCapacitance + proposedVariableCapacitance * inputData.costOfDynamicCapacitance;
+      simplePayback = capitalCost / annualPFPenalty;  
+      
+    }
+    outputData.annualPFPenalty = annualPFPenalty;
+    outputData.proposedFixedCapacitance = proposedFixedCapacitance;
+    outputData.proposedVariableCapacitance = proposedVariableCapacitance;
+    outputData.capitalCost = capitalCost;
+    outputData.simplePayback = simplePayback;
+    outputData.monthlyOutputs = monthlyOutputs; 
+    return outputData;
+  }
+
+  calculateApparentPowerAndActualDemand(inputData: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
+    let outputData: PowerFactorCorrectionOutputs = this.getEmptyPowerFactorCorrectionOutputs();
+    let monthlyOutputs: Array<PFMonthlyOutputs> = new Array();
+    let annualPFPenalty: number = 0;
+    let proposedFixedCapacitance: number = 0;
+    let proposedVariableCapacitance: number = 0;
+    let capitalCost: number = 0;
+    let simplePayback: number = 0;
+    if (inputData.monthyInputs.length >= 3){
+      inputData.monthyInputs.forEach( input => {
+        let monthOutput: PFMonthlyOutputs = this.getEmptyMonthyOutput();
+        monthOutput.proposedApparentPower = input.input2 / inputData.targetPowerFactor;    
+        monthOutput.demandPenalty =  input.input1 - monthOutput.proposedApparentPower;
+        monthOutput.penaltyCost = monthOutput.demandPenalty * inputData.marginalCostOfDemand;
+        monthOutput.currentReactivePower = input.input1 * Math.sin(Math.acos(input.input2/input.input1));      
+        monthOutput.proposedReactivePower = input.input2 * Math.tan(Math.acos(inputData.targetPowerFactor));
+        monthOutput.proposedCapacitance = monthOutput.currentReactivePower - monthOutput.proposedReactivePower;
+        monthlyOutputs.push(monthOutput);
+      });      
+  
+      let proposedCapacitanceList: Array<number> = new Array();
+  
+      monthlyOutputs.forEach(output =>{
+        annualPFPenalty += output.penaltyCost
+        proposedCapacitanceList.push(output.proposedCapacitance);
+      });
+  
+      proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
+      proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
+      capitalCost = proposedFixedCapacitance * inputData.costOfStaticCapacitance + proposedVariableCapacitance * inputData.costOfDynamicCapacitance;
+      simplePayback = capitalCost / annualPFPenalty;  
+      
+    }
+    outputData.annualPFPenalty = annualPFPenalty;
+    outputData.proposedFixedCapacitance = proposedFixedCapacitance;
+    outputData.proposedVariableCapacitance = proposedVariableCapacitance;
+    outputData.capitalCost = capitalCost;
+    outputData.simplePayback = simplePayback;
+    outputData.monthlyOutputs = monthlyOutputs; 
+    return outputData;
+  }
+
+  calculateApparentPowerAndPowerFactor(inputData: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
+    let outputData: PowerFactorCorrectionOutputs = this.getEmptyPowerFactorCorrectionOutputs();
+    let monthlyOutputs: Array<PFMonthlyOutputs> = new Array();
+    let annualPFPenalty: number = 0;
+    let proposedFixedCapacitance: number = 0;
+    let proposedVariableCapacitance: number = 0;
+    let capitalCost: number = 0;
+    let simplePayback: number = 0;
+    if (inputData.monthyInputs.length >= 3){
+      inputData.monthyInputs.forEach( input => {
+        let monthOutput: PFMonthlyOutputs = this.getEmptyMonthyOutput();
+        monthOutput.proposedApparentPower = input.input1 * input.input2 / inputData.targetPowerFactor;    
+        monthOutput.demandPenalty =  input.input1 - monthOutput.proposedApparentPower;
+        monthOutput.penaltyCost = monthOutput.demandPenalty * inputData.marginalCostOfDemand;
+        monthOutput.currentReactivePower = input.input1 * Math.sin(Math.acos(input.input2));      
+        monthOutput.proposedReactivePower = monthOutput.proposedApparentPower * Math.sin(Math.acos(inputData.targetPowerFactor));
+        monthOutput.proposedCapacitance = monthOutput.currentReactivePower - monthOutput.proposedReactivePower;
+        monthlyOutputs.push(monthOutput);
+      });      
+  
+      let proposedCapacitanceList: Array<number> = new Array();
+  
+      monthlyOutputs.forEach(output =>{
+        annualPFPenalty += output.penaltyCost
+        proposedCapacitanceList.push(output.proposedCapacitance);
+      });
+  
+      proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
+      proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
+      capitalCost = proposedFixedCapacitance * inputData.costOfStaticCapacitance + proposedVariableCapacitance * inputData.costOfDynamicCapacitance;
+      simplePayback = capitalCost / annualPFPenalty;  
+      
+    }
+    outputData.annualPFPenalty = annualPFPenalty;
+    outputData.proposedFixedCapacitance = proposedFixedCapacitance;
+    outputData.proposedVariableCapacitance = proposedVariableCapacitance;
+    outputData.capitalCost = capitalCost;
+    outputData.simplePayback = simplePayback;
+    outputData.monthlyOutputs = monthlyOutputs; 
+    return outputData;
+  }
+
+
+
+
 }

@@ -56,28 +56,37 @@
 
   <div class="form-group">
     <label for="marginalCostOfDemand">Marginal Cost of Demand</label>
-    <input name="marginalCostOfDemand" class="form-control" type="number" step="any"
-      [(ngModel)]="data.marginalCostOfDemand" id="marginalCostOfDemand" (input)="calculate()" onfocus="this.select();"
-      (focus)="focusField('marginalCostOfDemand')">
+    <div class="input-group  calc-addon-group">
+      <input name="marginalCostOfDemand" class="form-control" type="number" step="any"
+        [(ngModel)]="data.marginalCostOfDemand" id="marginalCostOfDemand" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('marginalCostOfDemand')">
+        <span class="input-group-addon units">$/kVA</span>
+    </div>
   </div>
 
   <div class="form-group">
     <label for="costOfStaticCapacitance">Cost of Static Capacitance</label>
-    <input name="costOfStaticCapacitance" class="form-control" type="number" step="any"
-      [(ngModel)]="data.costOfStaticCapacitance" id="costOfStaticCapacitance" (input)="calculate()"
-      onfocus="this.select();" (focus)="focusField('costOfStaticCapacitance')">
+    <div class="input-group  calc-addon-group">
+      <input name="costOfStaticCapacitance" class="form-control" type="number" step="any"
+        [(ngModel)]="data.costOfStaticCapacitance" id="costOfStaticCapacitance" (input)="calculate()"
+        onfocus="this.select();" (focus)="focusField('costOfStaticCapacitance')">
+        <span class="input-group-addon units">$/kVAr</span>
+    </div>
   </div>
 
   <div class="form-group">
     <label for="costOfDynamicCapacitance">Cost of Dynamic Capacitance</label>
-    <input name="costOfDynamicCapacitance" class="form-control" type="number" step="any"
-      [(ngModel)]="data.costOfDynamicCapacitance" id="costOfDynamicCapacitance" (input)="calculate()"
-      onfocus="this.select();" (focus)="focusField('costOfDynamicCapacitance')">
+    <div class="input-group  calc-addon-group">
+      <input name="costOfDynamicCapacitance" class="form-control" type="number" step="any"
+        [(ngModel)]="data.costOfDynamicCapacitance" id="costOfDynamicCapacitance" (input)="calculate()"
+        onfocus="this.select();" (focus)="focusField('costOfDynamicCapacitance')">
+        <span class="input-group-addon units">$/kVAr</span>
+    </div>
   </div>
 
 </form>
 
-<table style="width: 100%">
+<table class="table table-hover" style="width: 100%">
   <tr>
     <th>
       Month
@@ -106,28 +115,9 @@
     <th>
 
     </th>
-<!-- 
-    <th>
-      PF Adjusted Demand (kW) or Proposed Apparent Power or Real Demand
-    </th>
-    <th>
-      Demand Penalty
-    </th>
-    <th>
-      Penalty Cost
-    </th>
-    <th>
-      Current Reactive Power
-    </th>
-    <th>
-      Proposed Reactive Power
-    </th>
-    <th>
-      Proposed Capacitance
-    </th> -->
   </tr>
 
-  <tr *ngFor="let input of data.powerDemandInputs; let i = index;">
+  <tr *ngFor="let input of data.monthyInputs; let i = index;">
     <td>
       Month {{i + 1}}
     </td>
@@ -142,7 +132,7 @@
         (focus)="focusField('input2')">   
     </td>
     <td class="btn-group btn-group-sm">
-      <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnDeleteMonth(i)">
+      <button type="button" class="btn btn-danger pull-right btn-sm btn-form" (click)="btnDeleteMonth(i)">
         Delete
       </button>
     </td>

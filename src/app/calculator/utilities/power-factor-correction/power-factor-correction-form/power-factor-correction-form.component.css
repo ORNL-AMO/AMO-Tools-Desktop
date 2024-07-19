@@ -1,5 +1,5 @@
-tr:nth-child(even) {
-    background-color: #d9f1cf;
+tr:nth-child(odd) {
+    background-color: lightgray;
 }
 
 tr {
@@ -15,10 +15,11 @@ tr {
     font-size: small !important;
 }
 
-.btn-margin-10 {
-    margin: 10px 0px;
-}
-
 .btn-form {
     border-radius: 4px !important;
+}
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
 }

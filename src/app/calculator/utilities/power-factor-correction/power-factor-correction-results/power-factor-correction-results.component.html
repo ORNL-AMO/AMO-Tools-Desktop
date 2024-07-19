@@ -83,33 +83,33 @@
       </td>
 
       <td *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 0">
-        {{output.realDemand}}
+        {{output.realDemand | number:'1.2-2'}}
       </td>
       <td *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 1">
-       {{output.pfAdjustedDemand}}
+       {{output.pfAdjustedDemand | number:'1.2-2'}}
       </td>
       <td *ngIf="inputs.billedForDemand == 1 && (inputs.adjustedOrActual == 0 || inputs.adjustedOrActual == 1)">
-        {{output.proposedApparentPower}}
+        {{output.proposedApparentPower | number:'1.2-2'}}
       </td>
 
       <td>
-        {{output.demandPenalty}}
+        {{output.demandPenalty | number:'1.2-2'}}
       </td>
 
       <td>
-        {{output.penaltyCost}}
+        {{output.penaltyCost | number:'1.2-2'}}
       </td>
 
       <td>
-        {{output.currentReactivePower}}
+        {{output.currentReactivePower | number:'1.2-2'}}
       </td>
 
       <td>
-        {{output.proposedReactivePower}}
+        {{output.proposedReactivePower | number:'1.2-2'}}
       </td>
 
       <td>
-        {{output.proposedCapacitance}}
+        {{output.proposedCapacitance | number:'1.2-2'}}
       </td>
 
 

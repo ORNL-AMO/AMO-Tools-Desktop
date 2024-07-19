@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PowerDemandInputs, PowerFactorCorrectionInputs } from '../power-factor-correction.component';
+import { MonthyInputs, PowerFactorCorrectionInputs } from '../power-factor-correction.component';
 
 @Component({
   selector: 'app-power-factor-correction-form',
@@ -67,20 +67,22 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     this.calculate();
   }
 
-  setAdjustedOrActual(){
-    
+  setAdjustedOrActual(){    
+    this.calculate();
   }
 
   btnAddMonth(){
-    let newPowerDemandInputs: PowerDemandInputs = {
+    let newMonthyInputs: MonthyInputs = {
       input1: 0,
       input2: 0
     }
-    this.data.powerDemandInputs.push(newPowerDemandInputs);
+    this.data.monthyInputs.push(newMonthyInputs);    
+    this.calculate();
   }
 
   btnDeleteMonth(index: number){
-    this.data.powerDemandInputs.splice(index, 1);
+    this.data.monthyInputs.splice(index, 1);    
+    this.calculate();
   }
 
   
