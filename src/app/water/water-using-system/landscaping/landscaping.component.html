@@ -1,1 +1,45 @@
-<p>landscaping works!</p>
+<form [formGroup]="form">
+
+    <div class="form-group" [ngClass]="{'invalid': form.controls.areaIrrigated.invalid}">
+        <label for="areaIrrigated">Area of Land Irrigated</label>
+        <div class="input-group">
+            <input name="areaIrrigated" type="number" class="form-control" id="areaIrrigated"
+                formControlName="areaIrrigated" (input)="save()" (focus)="focusField('areaIrrigated')">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft<sup>2</sup></span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>2</sup></span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.areaIrrigated.invalid && !form.controls.areaIrrigated.pristine">
+            <span *ngIf="form.controls.areaIrrigated.errors.required">Value Required</span>
+            <span *ngIf="form.controls.areaIrrigated.errors.min">Value can't be less than
+                {{form.controls.areaIrrigated.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>2</sup></span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>2</sup></span>
+            </span>
+        </span>
+    </div>
+
+    <div class="form-group" [ngClass]="{'invalid': form.controls.yearlyInchesIrrigated.invalid}">
+        <label for="yearlyInchesIrrigated">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Inches</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">Centimeters</span>
+            of Irrigation Water Per Year
+        </label>
+        <div class="input-group">
+            <input name="yearlyInchesIrrigated" type="number" class="form-control" id="yearlyInchesIrrigated"
+                formControlName="yearlyInchesIrrigated" (input)="save()" (focus)="focusField('yearlyInchesIrrigated')">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">cm</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.yearlyInchesIrrigated.invalid && !form.controls.yearlyInchesIrrigated.pristine">
+            <span *ngIf="form.controls.yearlyInchesIrrigated.errors.required">Value Required</span>
+            <span *ngIf="form.controls.yearlyInchesIrrigated.errors.min">Value can't be less than
+                {{form.controls.yearlyInchesIrrigated.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">cm</span>
+            </span>
+        </span>
+    </div>
+
+</form>

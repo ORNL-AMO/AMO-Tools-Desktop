@@ -22,25 +22,32 @@
             <div class="form-group">
                 <label for="systemType">System Type</label>
                 <select class="form-control" id="systemType" formControlName="systemType" (change)="setSystemType()"
-                  (focus)="focusField('systemType')">
-                  <option *ngFor="let systemType of systemTypeOptions"
-                    [ngValue]="systemType.value">{{systemType.display}}
-                  </option>
+                    (focus)="focusField('systemType')">
+                    <option *ngFor="let systemType of systemTypeOptions" [ngValue]="systemType.value">
+                        {{systemType.display}}
+                    </option>
                 </select>
-              </div>    
+            </div>
+            <div class="form-group" [ngClass]="{'invalid': form.controls.hoursPerYear.invalid}">
+                <label for="hoursPerYear">Hours Water Used Per Year</label>
+                <div class="input-group">
+                    <span class="input-group-addon op-hour-addon units">
+                        <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+                    </span>
+                    <input name="hoursPerYear" type="number" class="form-control" id="hoursPerYear" formControlName="hoursPerYear"
+                        (input)="save()" (focus)="focusField('hoursPerYear')">
+                    <span class="input-group-addon units">hrs/yr</span>
+                </div>
+                <span class="alert-danger pull-right small"
+                    *ngIf="form.controls.hoursPerYear.invalid && !form.controls.hoursPerYear.pristine">
+                    <span *ngIf="form.controls.hoursPerYear.errors.required">Value Required</span>
+                    <span *ngIf="form.controls.hoursPerYear.errors.max">Value can't be greater than
+                        {{form.controls.hoursPerYear.errors.max.max}} hrs/yr.</span>
+                    <span *ngIf="form.controls.hoursPerYear.errors.min">Value can't be less than
+                        {{form.controls.hoursPerYear.errors.min.min}} hrs/yr.</span>
+                </span>
+            </div>
         </form>
-
-        @if(form.controls.systemType.value === 0) {
-            <!-- <app-process-use></app-process-use> -->
-        } @else if (form.controls.systemType.value === 1) {
-            <app-cooling-tower></app-cooling-tower>
-        } @else if (form.controls.systemType.value === 2) {
-            <app-boiler-water></app-boiler-water>
-        } @else if (form.controls.systemType.value === 3) {
-            <app-kitchen-restroom></app-kitchen-restroom>
-        } @else if (form.controls.systemType.value === 4) {
-            <app-landscaping></app-landscaping>   
-        }
 
         <label class="group-label" (click)="toggleCollapse('waterFlows')">
             <span class="fa fa-chevron-right"
@@ -50,8 +57,18 @@
                 <span class="fa fa-exclamation-circle"></span>
             </span>
         </label>
+
+        <ng-container *ngIf="!isCollapsed.waterFlows">
+            <a class="form-text click-link text-center small mt-3" (click)="openWaterSystemDataModal()">Estimate System Water
+                Flows</a>
+            <app-water-system-data-modal *ngIf="showWaterSystemDataModal" [settings]="settings"
+                [waterUsingSystem]="selectedWaterUsingSystem" [systemType]="selectedSystemType"
+                (emitClose)="closeWaterSystemDataModal()" (emitSave)="saveWaterSystemData($event)">
+            </app-water-system-data-modal>
+        </ng-container>
+
         <form [formGroup]="form" *ngIf="!isCollapsed.waterFlows">
-            <!-- <label class="group-label secondary-group">Incoming Water</label> -->
+            <label class="group-label secondary-group">Incoming Water</label>
             <div class="form-group" [ngClass]="{'invalid': form.controls.sourceWater.invalid}">
                 <label for="sourceWater">Source Water</label>
                 <div class="input-group">
@@ -90,7 +107,10 @@
                     </span>
                 </span>
             </div>
+        </form>
 
+
+        <form [formGroup]="form" *ngIf="!isCollapsed.waterFlows">
             <div class="form-group" [ngClass]="{'invalid': form.controls.recirculatedWater.invalid}">
                 <label for="recirculatedWater">Recirculated Water</label>
                 <div class="input-group">
@@ -114,11 +134,11 @@
             <div (click)="focusField('grossWaterUse')" class="form-group">
                 <label for="grossWaterUse">Gross Water Use</label>
                 <div class="text-center small bold">
-                    <span *ngIf="waterUsingSystemResults.grossWaterUse">{{waterUsingSystemResults | number}}
+                    <span *ngIf="waterSystemResults">{{waterSystemResults.grossWaterUse | number}}
                         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
                         <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
                     </span>
-                    <span *ngIf="!waterUsingSystemResults.grossWaterUse">&mdash; &mdash;</span>
+                    <span *ngIf="!waterSystemResults">&mdash; &mdash;</span>
                 </div>
             </div>
         </form>
@@ -155,16 +175,18 @@
             <div class="form-group my-2 px-2 d-flex justify-content-end">
                 <div class="btn-group btn-group-sm pull-right">
                     <button type="button" disabled id="motorEnergyMethod_from"
-                        class="btn btn-secondary btn-sm py-1 px-2 mx-2 small" (click)="addMotorEnergyFromInventory()">Add From
+                        class="btn btn-secondary btn-sm py-1 px-2 mx-2 small"
+                        (click)="addMotorEnergyFromInventory()">Add From
                         Inventory</button>
                     <button type="button" id="motorEnergyMethod_add" class="btn btn-primary btn-sm py-1 px-2 small mx-2"
                         (click)="addNewMotorEnergy()">Add New
                         Motor Energy</button>
                 </div>
             </div>
-        
+
             <div class="motor-equipment">
-                <div class="form-section" *ngFor="let motorEquipment of selectedWaterUsingSystem.addedMotorEquipment; let i = index">
+                <div class="form-section"
+                    *ngFor="let motorEquipment of selectedWaterUsingSystem.addedMotorEquipment; let i = index">
                     <app-motor-energy [motorEnergy]="motorEquipment" (updateMotorEnergy)="saveMotorEnergy($event, i)">
                     </app-motor-energy>
                     <div class="text-center">
@@ -180,5 +202,11 @@
 </div>
 
 
-<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteData" (emitShouldDelete)="onConfirmDeleteClose($event)">
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteData"
+    (emitShouldDelete)="onConfirmDeleteClose($event)">
 </app-confirm-delete-modal>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+(emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+[operatingHours]="operatingHours">
+</app-operating-hours-modal>

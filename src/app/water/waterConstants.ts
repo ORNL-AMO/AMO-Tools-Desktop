@@ -28,3 +28,12 @@ export const waterUsingSystemTypeOptions: {value: number, display: string}[] = [
     {value: 3, display: 'Kitchen and Restroom'},
     {value: 4, display: 'Landscaping and Irrigation'},
 ]
+
+export const waterFlowMetricOptions: {value: number, display: string}[] = [
+    {value: 0, display: 'Annual Flow'},
+    {value: 1, display: 'Hourly Flow'},
+    {value: 2, display: 'Water Intensity'},
+    {value: 3, display: 'Fraction of Gross Water Use'},
+    {value: 4, display: 'Fraction of Incoming Water'},
+]
+

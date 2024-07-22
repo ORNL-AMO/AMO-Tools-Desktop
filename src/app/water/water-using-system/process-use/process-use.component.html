@@ -1,1 +1,119 @@
+ <form [formGroup]="form">
+    <div class="form-group mb-2" [ngClass]="{'invalid': form.controls.fractionGrossWaterRecirculated.invalid}">
+        <label for="fractionGrossWaterRecirculated">Fraction of Gross Water Use Recirculated</label>
+        <div class="input-group">
+            <input name="fractionGrossWaterRecirculated" type="number" class="form-control" id="fractionGrossWaterRecirculated"
+                formControlName="fractionGrossWaterRecirculated" (input)="save()" (focus)="focusField('fractionGrossWaterRecirculated')">
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.fractionGrossWaterRecirculated.invalid && !form.controls.fractionGrossWaterRecirculated.pristine">
+            <span *ngIf="form.controls.fractionGrossWaterRecirculated.errors.required">Value Required</span>
+            <span *ngIf="form.controls.fractionGrossWaterRecirculated.errors.min">Value can't be less than
+                {{form.controls.fractionGrossWaterRecirculated.errors.min.min}}
+            </span>
+        </span>
+    </div>
+
+    <div class="form-group mb-2" [ngClass]="{'invalid': form.controls.annualProduction.invalid}">
+      <label for="annualProduction">Annual Production Units</label>
+      <div class="input-group">
+          <input name="annualProduction" type="number" class="form-control" id="annualProduction"
+              formControlName="annualProduction" (input)="save()" (focus)="focusField('annualProduction')">
+      </div>
+      <span class="alert-danger pull-right small"
+          *ngIf="form.controls.annualProduction.invalid && !form.controls.annualProduction.pristine">
+          <span *ngIf="form.controls.annualProduction.errors.required">Value Required</span>
+          <span *ngIf="form.controls.annualProduction.errors.min">Value can't be less than
+              {{form.controls.annualProduction.errors.min.min}}
+          </span>
+      </span>
+  </div>
+    
+    <div class="form-section"> 
+    <label class="group-label secondary-group mb-2">Water Required for Processing</label>
+    <div class="form-group">
+        <label for="waterRequiredMetric">Flow Metric</label>
+        <select class="form-control" id="waterRequiredMetric" formControlName="waterRequiredMetric" (change)="save()"
+            (focus)="focusField('waterRequiredMetric')">
+            <option *ngFor="let waterFlowMetric of waterRequiredFlowMetricOptions" [ngValue]="waterFlowMetric.value">
+                {{waterFlowMetric.display}}
+            </option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label *ngIf="form.controls.waterRequiredMetric.value == FlowMetric.ANNUAL" for="waterRequiredMetricValue">Annual Flow</label>
+        <label *ngIf="form.controls.waterRequiredMetric.value == FlowMetric.HOURLY" for="waterRequiredMetricValue">Hourly Flow</label>
+        <label *ngIf="form.controls.waterRequiredMetric.value == FlowMetric.INTENSITY" for="waterRequiredMetricValue">Water Intensity</label>
+        <div class="input-group calc-addon-group">
+            <input name="waterRequiredMetricValue" type="number" class="form-control" id="waterRequiredMetricValue"
+            formControlName="waterRequiredMetricValue" (input)="save()" (focus)="focusField('waterRequiredMetricValue')">
+            <span class="input-group-addon units" [innerHTML]="inputUnitMap[form.controls.waterRequiredMetric.value]"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.waterRequiredMetricValue.invalid && !form.controls.waterRequiredMetricValue.pristine">
+          <span *ngIf="form.controls.waterRequiredMetricValue.errors.required">Value Required</span>
+        </span>
+      </div>
+
+
+    <label class="group-label secondary-group mb-2">Process Water Consumed in Process</label>
+    <div class="form-group">
+        <label for="waterConsumedMetric">Flow Metric</label>
+        <select class="form-control" id="waterConsumedMetric" formControlName="waterConsumedMetric" (change)="setWaterFlowMetric(form.controls.waterConsumedMetric.value)"
+            (focus)="focusField('waterConsumedMetric')">
+            <option *ngFor="let waterFlowMetric of waterFlowMetricOptions" [ngValue]="waterFlowMetric.value">
+                {{waterFlowMetric.display}}
+            </option>
+        </select>
+    </div>
+
+      <div class="form-group">
+        <label *ngIf="form.controls.waterConsumedMetric.value == FlowMetric.ANNUAL" for="waterConsumedMetricValue">Annual Flow</label>
+        <label *ngIf="form.controls.waterConsumedMetric.value == FlowMetric.HOURLY" for="waterConsumedMetricValue">Hourly Flow</label>
+        <label *ngIf="form.controls.waterConsumedMetric.value == FlowMetric.INTENSITY" for="waterConsumedMetricValue">Water Intensity</label>
+        <label *ngIf="form.controls.waterConsumedMetric.value == FlowMetric.FRACTION_GROSS" for="waterConsumedMetricValue">Fraction of Gross Water Use</label>
+        <label *ngIf="form.controls.waterConsumedMetric.value == FlowMetric.FRACTION_INCOMING" for="waterConsumedMetricValue">Fraction of Incoming Water</label>
+        <div class="input-group calc-addon-group">
+            <input name="waterConsumedMetricValue" type="number" class="form-control" id="waterConsumedMetricValue"
+            formControlName="waterConsumedMetricValue" (input)="save()" (focus)="focusField('waterConsumedMetricValue')">
+            <span *ngIf="form.controls.waterConsumedMetric.value != FlowMetric.FRACTION_INCOMING && form.controls.waterConsumedMetric.value != FlowMetric.FRACTION_GROSS" 
+                class="input-group-addon units" [innerHTML]="inputUnitMap[form.controls.waterConsumedMetric.value]"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.waterConsumedMetricValue.invalid && !form.controls.waterConsumedMetricValue.pristine">
+          <span *ngIf="form.controls.waterConsumedMetricValue.errors.required">Value Required</span>
+        </span>
+      </div>
+
+    <label class="group-label secondary-group mb-2">Process Water Losses</label>
+    <div class="form-group">
+        <label for="waterLossMetric">Flow Metric</label>
+        <select class="form-control" id="waterLossMetric" formControlName="waterLossMetric" (change)="setWaterFlowMetric(form.controls.waterLossMetric.value)"
+            (focus)="focusField('waterLossMetric')">
+            <option *ngFor="let waterFlowMetric of waterFlowMetricOptions" [ngValue]="waterFlowMetric.value">
+                {{waterFlowMetric.display}}
+            </option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label *ngIf="form.controls.waterLossMetric.value == FlowMetric.ANNUAL" for="waterLossMetricValue">Annual Flow</label>
+        <label *ngIf="form.controls.waterLossMetric.value == FlowMetric.HOURLY" for="waterLossMetricValue">Hourly Flow</label>
+        <label *ngIf="form.controls.waterLossMetric.value == FlowMetric.INTENSITY" for="waterLossMetricValue">Water Intensity</label>
+        <label *ngIf="form.controls.waterLossMetric.value == FlowMetric.FRACTION_GROSS" for="waterLossMetricValue">Fraction of Gross Water Use</label>
+        <label *ngIf="form.controls.waterLossMetric.value == FlowMetric.FRACTION_INCOMING" for="waterLossMetricValue">Fraction of Incoming Water</label>
+        <div class="input-group calc-addon-group">
+            <input name="waterLossMetricValue" type="number" class="form-control" id="waterLossMetricValue"
+            formControlName="waterConsumedMetricValue" (input)="save()" (focus)="focusField('waterLossMetricValue')">
+            <span class="input-group-addon units"*ngIf="form.controls.waterLossMetric.value != FlowMetric.FRACTION_INCOMING && form.controls.waterLossMetric.value != FlowMetric.FRACTION_GROSS" 
+             [innerHTML]="inputUnitMap[form.controls.waterLossMetric.value]"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.waterLossMetricValue.invalid && !form.controls.waterLossMetricValue.pristine">
+          <span *ngIf="form.controls.waterLossMetricValue.errors.required">Value Required</span>
+        </span>
+      </div>
+    </div>
+</form>
 

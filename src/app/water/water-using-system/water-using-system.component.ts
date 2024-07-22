@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { HeatEnergy, MotorEnergy, WaterAssessment, WaterProcessComponent, WaterUsingSystem } from '../../shared/models/water-assessment';
+import { HeatEnergy, MotorEnergy, WaterAssessment, WaterAssessmentResults, WaterProcessComponent, WaterSystemResults, WaterUsingSystem } from '../../shared/models/water-assessment';
 import { Subscription } from 'rxjs';
 import { WaterAssessmentService } from '../water-assessment.service';
 import { FormGroup } from '@angular/forms';
@@ -11,6 +11,8 @@ import { copyObject } from '../../shared/helperFunctions';
 import { waterUsingSystemTypeOptions } from '../waterConstants';
 import { MotorEnergyService } from './motor-energy/motor-energy.service';
 import { ConfirmDeleteData } from '../../shared/confirm-delete-modal/confirmDeleteData';
+import { WaterAssessmentResultsService } from '../water-assessment-results.service';
+import { OperatingHours } from '../../shared/models/operations';
 
 
 @Component({
@@ -19,15 +21,15 @@ import { ConfirmDeleteData } from '../../shared/confirm-delete-modal/confirmDele
   styleUrl: './water-using-system.component.css'
 })
 export class WaterUsingSystemComponent {
-  settings: Settings;
   selectedWaterUsingSystem: WaterUsingSystem;
+  selectedSystemType: number;
+  waterAssessment: WaterAssessment;
+  settings: Settings;
   componentFormTitle: string;
   form: FormGroup;
   selectedComponentSub: Subscription;
-  isModalOpen: boolean = false;
   modalOpenSub: Subscription;
-
-  waterAssessment: WaterAssessment;
+  isModalOpen: boolean = false;
 
   isCollapsed: Record<WaterSystemGroupString, boolean> = {
     waterFlows: false,
@@ -35,19 +37,24 @@ export class WaterUsingSystemComponent {
     motorEnergy: true,
     processUse: true
   };
-
-  waterUsingSystemResults = {
-    grossWaterUse: undefined,
-  }
-
   systemTypeOptions: {value: number, display: string}[];
-
-
   showConfirmDeleteModal: boolean = false;
   deleteIndex: number;
   confirmDeleteData: ConfirmDeleteData;
+  showWaterSystemDataModal: boolean = false;
+  showOperatingHoursModal: boolean = false;
 
+  waterSystemResults: WaterSystemResults;
+  
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+  formWidth: number;
+  
   constructor(private waterAssessmentService: WaterAssessmentService, 
+    private waterAssessmentResultsService: WaterAssessmentResultsService,
     private waterProcessComponentService: WaterProcessComponentService,
     private motorEnergyService: MotorEnergyService,
     private waterUsingSystemService: WaterUsingSystemService) {}
@@ -63,6 +70,7 @@ export class WaterUsingSystemComponent {
       this.waterProcessComponentService.selectedViewComponents.next(this.waterAssessment.waterUsingSystems as WaterProcessComponent[]);
       if (this.selectedWaterUsingSystem) {
         this.initForm();
+        this.setSystemType();
       }
     });
 
@@ -86,6 +94,10 @@ export class WaterUsingSystemComponent {
    this.form = this.waterUsingSystemService.getWaterUsingSystemForm(this.selectedWaterUsingSystem);
   }
 
+  /**
+ * Update selectedWaterUsingSystem in water assessment
+ * @param updatedWaterUsingSystem Pass when sub-form (ProcessUse, MotorEnergy, etc) updates system data.
+ */
   save(updatedWaterUsingSystem?: WaterUsingSystem) {
     if (!updatedWaterUsingSystem) {
       updatedWaterUsingSystem = this.waterUsingSystemService.getWaterUsingSystemFromForm(this.form, this.selectedWaterUsingSystem);
@@ -93,6 +105,11 @@ export class WaterUsingSystemComponent {
     let updateIndex: number = this.waterAssessment.waterUsingSystems.findIndex(system => system.diagramNodeId === updatedWaterUsingSystem.diagramNodeId);
     this.waterAssessment.waterUsingSystems[updateIndex] = updatedWaterUsingSystem;
     this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
+    this.waterSystemResults = this.waterAssessmentResultsService.getWaterSystemResults(updatedWaterUsingSystem);
+  }
+
+  saveWaterSystemData(selectedWaterUsingSystem: WaterUsingSystem) {
+    this.save(selectedWaterUsingSystem);
   }
 
   saveHeatEnergy(updatedHeatEnergy: HeatEnergy) {
@@ -115,7 +132,7 @@ export class WaterUsingSystemComponent {
   }
 
   setSystemType() {
-
+    this.selectedSystemType = this.form.controls.systemType.value;
   }
 
   addNewMotorEnergy() {
@@ -152,6 +169,38 @@ export class WaterUsingSystemComponent {
   deleteMotorEnergy() {
     this.selectedWaterUsingSystem.addedMotorEquipment.splice(this.deleteIndex, 1);
     this.save(this.selectedWaterUsingSystem);
+  }
+
+  openWaterSystemDataModal() {
+    this.showWaterSystemDataModal = true;
+    this.waterAssessmentService.modalOpen.next(this.showWaterSystemDataModal);
+  }
+
+  closeWaterSystemDataModal() {
+    this.showWaterSystemDataModal = false;
+    this.waterAssessmentService.modalOpen.next(this.showWaterSystemDataModal)
+  }
+
+  closeOperatingHoursModal() {
+    this.showOperatingHoursModal = false;
+  }
+
+  openOperatingHoursModal() {
+    this.showOperatingHoursModal = true;
+  }
+
+  updateOperatingHours(oppHours: OperatingHours) {
+    this.waterUsingSystemService.operatingHours = oppHours;
+    this.form.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
+    this.save();
+    this.closeOperatingHoursModal();
+  }
+
+  
+  setOpHoursModalWidth() {
+    if (this.formElement && this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 
 
