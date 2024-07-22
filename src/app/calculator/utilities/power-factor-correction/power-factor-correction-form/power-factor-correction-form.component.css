@@ -1,0 +1,25 @@
+tr:nth-child(odd) {
+    background-color: lightgray;
+}
+
+tr {
+    font-size: small;
+}
+
+.btn-group {
+    display: block;
+    text-align: center;
+}
+
+.btn-group .btn-sm {
+    font-size: small !important;
+}
+
+.btn-form {
+    border-radius: 4px !important;
+}
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+}

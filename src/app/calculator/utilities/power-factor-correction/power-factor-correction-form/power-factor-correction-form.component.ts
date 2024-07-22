@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PowerFactorCorrectionInputs } from '../power-factor-correction.component';
+import { MonthyInputs, PowerFactorCorrectionInputs } from '../power-factor-correction.component';
 
 @Component({
   selector: 'app-power-factor-correction-form',
@@ -21,6 +21,27 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
   //to emit a change, we need to define an EventEmitter<Type>() to be able
   //to call .emit()
 
+ 
+  billedOptions: any = [
+    {
+      name: 'Real Power (kW)',
+      value: 0,
+    }, {
+      name: 'Apperent Power (kVA)',
+      value: 1,
+    }
+  ];
+
+  demandOptions: any = [
+    {
+      name: 'Power Factor',
+      value: 0,
+    }, {
+      name: 'Actual Demand',
+      value: 1,
+    }
+  ];
+
   constructor() { }
 
   ngOnInit() {
@@ -36,4 +57,33 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
+
+  setBilledForDemand(){
+    if (this.data.billedForDemand === 0) {
+      this.data.minimumPowerFactor = 0.95;
+    } else if (this.data.billedForDemand === 1) {
+      this.data.targetPowerFactor = 0.95;
+    }
+    this.calculate();
+  }
+
+  setAdjustedOrActual(){    
+    this.calculate();
+  }
+
+  btnAddMonth(){
+    let newMonthyInputs: MonthyInputs = {
+      input1: 0,
+      input2: 0
+    }
+    this.data.monthyInputs.push(newMonthyInputs);    
+    this.calculate();
+  }
+
+  btnDeleteMonth(index: number){
+    this.data.monthyInputs.splice(index, 1);    
+    this.calculate();
+  }
+
+  
 }

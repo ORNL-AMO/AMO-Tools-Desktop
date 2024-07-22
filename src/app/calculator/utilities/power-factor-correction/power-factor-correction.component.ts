@@ -12,7 +12,64 @@ export class PowerFactorCorrectionComponent implements OnInit {
   inputData: PowerFactorCorrectionInputs = {
     existingDemand: 100,
     currentPowerFactor: 0.5,
-    proposedPowerFactor: 0.95
+    proposedPowerFactor: 0.95,
+    billedForDemand: 0,
+    minimumPowerFactor: 0.95,
+    targetPowerFactor: 0.95,
+    adjustedOrActual: 0,
+    marginalCostOfDemand: 8.15,
+    costOfStaticCapacitance: 50,
+    costOfDynamicCapacitance: 70,
+    monthyInputs: [
+      {
+        input1: 462,
+        input2: 0.8
+      },
+      {
+        input1: 528,
+        input2: 0.8
+      },
+      {
+        input1: 492,
+        input2: 0.8
+      },
+      {
+        input1: 474,
+        input2: 0.8
+      },
+      {
+        input1: 499,
+        input2: 0.8
+      },
+      {
+        input1: 513,
+        input2: 0.8
+      },
+      {
+        input1: 530,
+        input2: 0.8
+      },
+      {
+        input1: 523,
+        input2: 0.8
+      },
+      {
+        input1: 547,
+        input2: 0.8
+      },
+      {
+        input1: 589,
+        input2: 0.8
+      },
+      {
+        input1: 621,
+        input2: 0.8
+      },
+      {
+        input1: 607,
+        input2: 0.8
+      },
+    ]
   };
   results: PowerFactorCorrectionOutputs;
 
@@ -37,10 +94,12 @@ export class PowerFactorCorrectionComponent implements OnInit {
 
   ngOnInit() {
     this.analyticsService.sendEvent('calculator-UTIL-power-factor-correction');
-    this.calculate(this.inputData);
-    if (this.powerFactorCorrectionService.inputData) {
+    if (!this.powerFactorCorrectionService.inputData) {
+      this.generateExample();
+    } else{
       this.inputData = this.powerFactorCorrectionService.inputData;
     }
+    this.calculate(this.inputData);
   }
 
   ngAfterViewInit() {
@@ -55,12 +114,14 @@ export class PowerFactorCorrectionComponent implements OnInit {
 
   btnResetData() {
     this.inputData = this.powerFactorCorrectionService.getResetData();
+    this.results = this.powerFactorCorrectionService.getResetOutput();
     this.powerFactorCorrectionService.inputData = this.inputData;
-    this.calculate(this.inputData);
+    //this.calculate(this.inputData);
   }
 
   generateExample() {
     this.inputData = this.powerFactorCorrectionService.generateExample();
+    //this.results = this.powerFactorCorrectionService.generateExampleOutput();
     this.powerFactorCorrectionService.inputData = this.inputData;
   }
 
@@ -88,13 +149,42 @@ export class PowerFactorCorrectionComponent implements OnInit {
 
   calculate(data: PowerFactorCorrectionInputs) {
     this.inputData = data;
-    this.results = {
-      existingApparentPower: this.powerFactorCorrectionService.existingApparentPower(data),
-      existingReactivePower: this.powerFactorCorrectionService.existingReactivePower(data),
-      proposedApparentPower: this.powerFactorCorrectionService.proposedApparentPower(data),
-      proposedReactivePower: this.powerFactorCorrectionService.proposedReactivePower(data),
-      capacitancePowerRequired: this.powerFactorCorrectionService.capacitancePowerRequired(data)
-    };
+    if (data.billedForDemand == 0){
+      if (data.adjustedOrActual == 0) {
+        this.results = this.powerFactorCorrectionService.calculateRealPowerAndPowerFactor(data);
+      } else if (data.adjustedOrActual == 1) {
+        this.results = this.powerFactorCorrectionService.calculateRealPowerAndActualDemand(data);
+      }
+    } else if (data.billedForDemand == 1){
+      if (data.adjustedOrActual == 0) {
+        this.results = this.powerFactorCorrectionService.calculateApparentPowerAndPowerFactor(data);
+      } else if (data.adjustedOrActual == 1) {
+        this.results = this.powerFactorCorrectionService.calculateApparentPowerAndActualDemand(data);
+      }
+    } else {
+      this.results = {
+        annualPFPenalty: 0,
+        proposedFixedCapacitance: 0,
+        proposedVariableCapacitance: 0,
+        capitalCost: 0,
+        simplePayback: 0,
+        monthlyOutputs: [
+          {
+            realDemand: 0,
+            pfAdjustedDemand: 0,
+            proposedApparentPower: 0,
+            demandPenalty: 0,
+            penaltyCost: 0,
+            currentReactivePower: 0,
+            proposedReactivePower: 0,
+            proposedCapacitance: 0,
+          }
+        ]
+      };
+
+    }
+
+
   }
 
   setSmallScreenTab(selectedTab: string) {
@@ -107,13 +197,38 @@ export interface PowerFactorCorrectionInputs {
   existingDemand: number;
   currentPowerFactor: number;
   proposedPowerFactor: number;
+  billedForDemand: number;
+  minimumPowerFactor: number;
+  targetPowerFactor: number;
+  adjustedOrActual: number;
+  marginalCostOfDemand: number;
+  costOfStaticCapacitance: number;
+  costOfDynamicCapacitance: number;
+  monthyInputs: Array<MonthyInputs>;
+}
+
+export interface MonthyInputs {
+  input1: number;
+  input2: number;
 }
 
 
 export interface PowerFactorCorrectionOutputs {
-  existingApparentPower: number;
-  existingReactivePower: number;
+  annualPFPenalty: number;
+  proposedFixedCapacitance: number;
+  proposedVariableCapacitance: number;
+  capitalCost: number;
+  simplePayback: number;
+  monthlyOutputs: Array<PFMonthlyOutputs>;
+}
+
+export interface PFMonthlyOutputs {
+  realDemand: number;
+  pfAdjustedDemand: number;
   proposedApparentPower: number;
+  demandPenalty: number;
+  penaltyCost: number;
+  currentReactivePower: number;
   proposedReactivePower: number;
-  capacitancePowerRequired: number;
+  proposedCapacitance: number;
 }

@@ -60,4 +60,93 @@
       </small>
     </h6>
   </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'billedForDemand'">
+    <h6>
+      How are you billed for Demand?
+      <br>
+      <small class="text-muted">
+       Real Power (kW) OR Apparent Power (kVA)
+        
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'minimumPowerFactor'">
+    <h6>
+      Minimum Required Power Factor
+      <br>
+      <small class="text-muted">
+        What is the minimum required PF required by your utility?
+        <br>
+        <hr>
+        See your electricity rate structure for this value.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'targetPowerFactor'">
+    <h6>
+      Target Power Factor
+      <br>
+      <small class="text-muted">
+        What is your target power factor? Overcorrecting low PF can casue other gride issues, 0.95 is a good target for most manufacturers.
+        
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'adjustedOrActual'">
+    <h6>
+      PF Adjucsted or Actual Demand
+      <br>
+      <small class="text-muted">
+        Real Power:
+        Does the demand on your bill already include the low PF adjustment?
+        <br>
+        Apparent Power:
+        What other measure of demand is included in your bill?
+        
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'marginalCostOfDemand'">
+    <h6>
+      Marginal Cost Of Demand
+      <br>
+      <small class="text-muted">
+        How mush are you charged for demand?
+        <br>
+        <hr>
+        See your electricity rate structure to calculate this value.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'costOfStaticCapacitance'">
+    <h6>
+      Cost of Static Capacitance
+      <br>
+      <small class="text-muted">
+        What is the capital cost to install static capacitance in your area?
+        
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'costOfDynamicCapacitance'">
+    <h6>
+      Cost of Dynamic Capacitance
+      <br>
+      <small class="text-muted">
+        What is the capital cost to install dynamic capacitance in your area?
+        <hr>
+      </small>
+    </h6>
+  </div>
+
 </div>
