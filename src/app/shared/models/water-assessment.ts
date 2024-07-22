@@ -25,7 +25,41 @@ export interface WaterSystemBasics {
 }
 
 
-export interface WaterAssessmentResults {}
+export enum WaterSystemTypeEnum {
+    PROCESS = 0,
+    COOLINGTOWER = 1,
+    BOILER = 2,
+    KITCHEN = 3,
+    LANDSCAPING = 4
+}
+
+export interface WaterAssessmentResults {
+    waterBalance: WaterBalanceResults,
+    aggregatedSystemResults: AggregatedSystemResults
+}
+
+export interface WaterBalanceResults {
+    sourceWater: number,
+    recirculatedWater: number,
+    grossWaterUse: number,
+}
+
+export interface AggregatedSystemResults {
+    processUseAggregatedResults: ProcessUseAggregatedResults,
+    coolingtowerAggregatedResults: CoolingTowerAggregatedResults,
+}
+
+export interface WaterSystemResults {
+    grossWaterUse: number,
+    waterBalance: WaterBalanceResults,
+    processUseResults?: ProcessUseResults,
+    coolingTowerResults?: CoolingTowerResults,
+    boilerWaterResults?: BoilerWaterResults,
+    kitchenRestroomResults?: KitchenRestroomResults,
+    landscapingResults?: LandscapingResults,
+    heatEnergyResults?: HeatEnergyResults,
+    motorEnergyResults?: MotorEnergyResults[]
+}
 
 // * Plant level intakes AND system level intakes
 // * IMPORTANT Partial - use in WaterUsingSystem without type check for diagram component properties
@@ -41,31 +75,42 @@ export interface DischargeOutlet extends ProcessFlowPart {
 }
 
 export interface WaterUsingSystem extends ProcessFlowPart {
+    isValid: boolean,
+    hoursPerYear: number,
     systemType: number,
     sourceWater: number,
     recycledWater: number,
     recirculatedWater: number,
+    processUse?: ProcessUse,
+    coolingTower?: CoolingTower,
+    boilerWater?: BoilerWater,
     intakeSources: IntakeSource[],
     heatEnergy?: HeatEnergy,
+    kitchenRestroom?: KitchenRestroom,
+    landscaping?: Landscaping,
     addedMotorEquipment: MotorEnergy[],
 }
 
 export type WaterProcessComponent = IntakeSource | DischargeOutlet | WaterUsingSystem;
 
+export type WaterSystemTypeData = ProcessUse | CoolingTower | BoilerWater | KitchenRestroom | Landscaping;
 
-export interface WaterBalanceResults {
-    sourceWater: number,
-    recirculatedWater: number,
-    grossWaterUse: number,
+export enum FlowMetric {
+    ANNUAL = 0,
+    HOURLY = 1,
+    INTENSITY = 2,
+    FRACTION_GROSS = 3,
+    FRACTION_INCOMING = 4
 }
 
 export interface ProcessUse  {
-    waterRequired: number,
-    waterConsumed: number,
-    waterLossInput: number,
-    hoursPerYear: number,
-    // annual production units
-    annualProduction: number
+    waterRequiredMetric: number,
+    waterRequiredMetricValue: number,
+    waterConsumedMetric: number,
+    waterConsumedMetricValue: number,
+    waterLossMetric: number,
+    waterLossMetricValue: number,
+    annualProduction: number,
     fractionGrossWaterRecirculated: number,
 }
 
@@ -79,9 +124,18 @@ export interface ProcessUseResults {
     wasteDischargedAndRecycledOther: number,
 }
 
+export interface ProcessUseAggregatedResults {
+    processUseResults: ProcessUseResults[],
+    grossWaterUse: number,
+    waterConsumed: number,
+    waterLoss: number,
+    recirculatedWater: number,
+    incomingWater: number,
+    wasteDischargedAndRecycledOther: number,
+}
 
 export interface CoolingTower {
-    hoursPerYear: number,
+    // hoursPerYear: number,
     tonnage: number
     loadFactor: number,
     evaporationRateDegree: number,
@@ -98,8 +152,17 @@ export interface CoolingTowerResults {
     blowdownLoss: number,
 }
 
+export interface CoolingTowerAggregatedResults {
+    coolingTowerResults: CoolingTowerResults[],
+    grossWaterUse: number,
+    evaporationLoss: number,
+    cycleOfConcentration: number,
+    makeupWater: number,
+    blowdownLoss: number,
+}
+
 export interface BoilerWater {
-    hoursPerYear: number,
+    // hoursPerYear: number,
     power: number
     loadFactor: number,
     steamPerPower: number,
@@ -109,7 +172,7 @@ export interface BoilerWater {
 }
 
 export interface BoilerWaterResults {
-    cyclesOfConcentration: number,
+    cycleOfConcentration: number,
     grossWaterUse: number,
     makeupWater: number,
     blowdownLoss: number,

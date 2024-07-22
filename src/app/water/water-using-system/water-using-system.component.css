@@ -17,6 +17,7 @@
 .secondary-group{
     width: auto;
     text-transform: none;
+    letter-spacing: 2px;;
     padding-bottom: 0px;
 }
 
@@ -37,7 +38,7 @@
 
 
 .small {
-    font-size: 75%;
+    font-size: 85%;
 }
 
 .form-section {

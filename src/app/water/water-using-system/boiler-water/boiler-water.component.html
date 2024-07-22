@@ -1,1 +1,115 @@
-<p>boiler-water works!</p>
+<form [formGroup]="form">
+    <div class="form-group" [ngClass]="{'invalid': form.controls.power.invalid}">
+        <label for="power">Boiler 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Horsepower</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">Megawatts</span>
+        </label>
+        <div class="input-group">
+            <input name="power" type="number" class="form-control" id="power"
+                formControlName="power" (input)="save()" (focus)="focusField('power')">
+                <span class="input-group-addon units">hp</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.power.invalid && !form.controls.power.pristine">
+            <span *ngIf="form.controls.power.errors.required">Value Required</span>
+            <span *ngIf="form.controls.power.errors.min">Value can't be less than
+                {{form.controls.power.errors.min.min}}
+                <span>hp</span>
+            </span>
+        </span>
+    </div>
+
+    <div class="form-group" [ngClass]="{'invalid': form.controls.loadFactor.invalid}">
+        <label for="loadFactor">Load Factor</label>
+        <div class="input-group">
+            <input name="loadFactor" type="number" class="form-control" id="loadFactor"
+                formControlName="loadFactor" (input)="save()" (focus)="focusField('loadFactor')">
+                <span class="input-group-addon units">hp</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.loadFactor.invalid && !form.controls.loadFactor.pristine">
+            <span *ngIf="form.controls.loadFactor.errors.required">Value Required</span>
+            <span *ngIf="form.controls.loadFactor.errors.min">Value can't be less than
+                {{form.controls.loadFactor.errors.min.min}}
+                <span>hp</span>
+            </span>
+        </span>
+    </div>
+
+    <div class="form-group" [ngClass]="{'invalid': form.controls.steamPerPower.invalid}">
+        <label for="steamPerPower">Steam Generation per 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">BHP</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">MW</span>
+        </label>
+        <div class="input-group">
+            <input name="steamPerPower" type="number" class="form-control" id="steamPerPower"
+                formControlName="steamPerPower" (input)="save()" (focus)="focusField('steamPerPower')">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr/BHP</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">kg/hr/MW</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.steamPerPower.invalid && !form.controls.steamPerPower.pristine">
+            <span *ngIf="form.controls.steamPerPower.errors.required">Value Required</span>
+            <span *ngIf="form.controls.steamPerPower.errors.min">Value can't be less than
+                {{form.controls.steamPerPower.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/hr/BHP</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/hr/MW</span>
+            </span>
+        </span>
+    </div>
+
+    <!--  todo change increment depending on settings? -->
+    <div class="form-group" [ngClass]="{'invalid': form.controls.feedwaterConductivity.invalid}">
+        <label for="feedwaterConductivity">Feedwater Conductivity
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'"></span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'"></span>
+        </label>
+        <div class="input-group">
+            <input name="feedwaterConductivity" type="number" class="form-control" id="feedwaterConductivity"
+                formControlName="feedwaterConductivity" (input)="save()" (focus)="focusField('feedwaterConductivity')">
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units"></span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.feedwaterConductivity.invalid && !form.controls.feedwaterConductivity.pristine">
+            <span *ngIf="form.controls.feedwaterConductivity.errors.required">Value Required</span>
+            <span *ngIf="form.controls.feedwaterConductivity.errors.min">Value can't be less than
+                {{form.controls.feedwaterConductivity.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+            </span>
+        </span>
+    </div>
+
+    <div class="form-group" [ngClass]="{'invalid': form.controls.makeupConductivity.invalid}">
+        <label for="makeupConductivity">Makeup Water Conductivity</label>
+        <div class="input-group">
+            <input name="makeupConductivity" type="number" class="form-control" id="makeupConductivity"
+                formControlName="makeupConductivity" (input)="save()" (focus)="focusField('makeupConductivity')">
+
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.makeupConductivity.invalid && !form.controls.makeupConductivity.pristine">
+            <span *ngIf="form.controls.makeupConductivity.errors.required">Value Required</span>
+            <span *ngIf="form.controls.makeupConductivity.errors.min">Value can't be less than
+                {{form.controls.makeupConductivity.errors.min.min}}
+            </span>
+        </span>
+    </div>
+
+    <div class="form-group" [ngClass]="{'invalid': form.controls.blowdownConductivity.invalid}">
+        <label for="blowdownConductivity">Blowdown Conductivity</label>
+        <div class="input-group">
+            <input name="blowdownConductivity" type="number" class="form-control" id="blowdownConductivity"
+                formControlName="blowdownConductivity" (input)="save()" (focus)="focusField('blowdownConductivity')">
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.blowdownConductivity.invalid && !form.controls.blowdownConductivity.pristine">
+            <span *ngIf="form.controls.blowdownConductivity.errors.required">Value Required</span>
+            <span *ngIf="form.controls.blowdownConductivity.errors.min">Value can't be less than
+                {{form.controls.blowdownConductivity.errors.min.min}}
+            </span>
+        </span>
+    </div>
+
+</form>

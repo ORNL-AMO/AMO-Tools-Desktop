@@ -1,0 +1,28 @@
+.btn{
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.modal-dialog{
+  top: 0px;
+}
+
+.modal-content{
+  background-color: #efefef;
+  /* height: 95vh; */
+}
+
+.btn-margin{
+  margin-right: .5rem;
+  margin-left: .5rem;
+}
+
+.small {
+  font-size: 85%;
+}
+
+.btn-col{
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  border-top: 2px inset gray;
+}

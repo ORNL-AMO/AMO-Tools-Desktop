@@ -5,7 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 
 @Injectable()
 export class MotorEnergyService {
-  operatingHours: OperatingHours
+  operatingHours: OperatingHours;
   constructor(private formBuilder: FormBuilder) { }
 
   getMotorEnergyForm(motorEnergy: MotorEnergy): FormGroup {

@@ -35,7 +35,6 @@ import { HeatEnergyService } from './water-using-system/heat-energy/heat-energy.
 import { MotorEnergyService } from './water-using-system/motor-energy/motor-energy.service';
 import { MotorEnergyComponent } from './water-using-system/motor-energy/motor-energy.component';
 import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
-import { CoolingTowerService } from './water-using-system/cooling-tower/cooling-tower.service';
 import { CoolingTowerComponent } from './water-using-system/cooling-tower/cooling-tower.component';
 import { ProcessUseComponent } from './water-using-system/process-use/process-use.component';
 import { KitchenRestroomComponent } from './water-using-system/kitchen-restroom/kitchen-restroom.component';
@@ -43,6 +42,7 @@ import { BoilerWaterComponent } from './water-using-system/boiler-water/boiler-w
 import { LandscapingComponent } from './water-using-system/landscaping/landscaping.component';
 import { PercentLoadEstimationModule } from '../calculator/motors/percent-load-estimation/percent-load-estimation.module';
 import { StackLossModule } from '../calculator/steam/stack-loss/stack-loss.module';
+import { WaterSystemDataModalComponent } from './water-using-system/water-system-data-modal/water-system-data-modal.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +62,8 @@ import { StackLossModule } from '../calculator/steam/stack-loss/stack-loss.modul
     ProcessUseComponent,
     KitchenRestroomComponent,
     BoilerWaterComponent,
-    LandscapingComponent
+    LandscapingComponent,
+    WaterSystemDataModalComponent,
   ],
   imports: [
     CommonModule,
@@ -95,7 +96,6 @@ import { StackLossModule } from '../calculator/steam/stack-loss/stack-loss.modul
     WaterUsingSystemService,
     HeatEnergyService,
     MotorEnergyService,
-    CoolingTowerService,
   ]
 })
 export class WaterModule { }
