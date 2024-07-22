@@ -1,43 +1,4 @@
-<!-- <table #copyTable class="table table-hover table-striped">
-  <tbody>
-    <tr>
-      <td class="bold w-50">Existing Apparent Power</td>
-      <td class="text-center w-50">
-        {{results.existingApparentPower | number:'1.2-2'}} kVA
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Existing Reactive Power</td>
-      <td class="text-center w-50">
-
-        {{results.existingReactivePower | number:'1.2-2'}} kVAR
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Proposed Apparent Power</td>
-      <td class="text-center w-50">
-
-        {{results.proposedApparentPower | number:'1.2-2'}} kVA
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">
-        Proposed Reactive Power
-      </td>
-      <td class="text-center w-50">
-
-        {{results.proposedReactivePower | number:'1.2-2'}} kVAR
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50"> Capacitance Power Required</td>
-      <td class="text-center w-50">
-        {{results.capacitancePowerRequired | number:'1.2-2'}} kVAR
-      </td>
-    </tr>
-  </tbody>
-</table> -->
-<table class="table table-hover table-striped">
+<table #copyChart class="table table-hover table-striped">
   <tbody>
     <tr>
       <th>
@@ -118,7 +79,9 @@
   </tbody>
 </table>
 
-<table class="table table-hover table-striped">
+<app-exportable-results-table [tableString]="chartString" (updateTableString)="updateChartString()"></app-exportable-results-table>
+
+<table #copyTable class="table table-hover table-striped">
   <tbody>
     <tr>
       <td class="bold w-50">Annual Power Factor Penalty</td>

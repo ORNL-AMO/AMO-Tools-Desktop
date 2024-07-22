@@ -13,7 +13,9 @@ export class PowerFactorCorrectionResultsComponent implements OnInit {
   inputs: PowerFactorCorrectionInputs;
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  @ViewChild('copyChart', { static: false }) copyChart: ElementRef;
   tableString: any;
+  chartString: any;
 
   constructor() { }
 
@@ -22,5 +24,9 @@ export class PowerFactorCorrectionResultsComponent implements OnInit {
 
   updateTableString() {
     this.tableString = this.copyTable.nativeElement.innerText;
+  }
+
+  updateChartString() {
+    this.chartString = this.copyChart.nativeElement.innerText;
   }
 }
