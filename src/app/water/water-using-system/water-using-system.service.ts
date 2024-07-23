@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { BoilerWater, CoolingTower, FlowMetric, KitchenRestroom, Landscaping, ProcessUse, WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from '../../shared/models/water-assessment';
-import { getNewProcessComponent } from '../../../process-flow-types/shared-process-flow-types';
+import { BoilerWater, CoolingTower, FlowMetric, KitchenRestroom, Landscaping, ProcessUse, WaterProcessComponent, WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from '../../shared/models/water-assessment';
+import { getNewProcessComponent, ProcessFlowPart } from '../../../process-flow-types/shared-process-flow-types';
 import { BehaviorSubject } from 'rxjs';
 import { OperatingHours } from '../../shared/models/operations';
 
@@ -48,11 +48,21 @@ export class WaterUsingSystemService {
     }
   }
 
-  addNewWaterUsingSystem(): WaterUsingSystem {
+   /**
+ * Add new component or return component based from a diagram component
+ * @param processFlowPart Build from diagram component
+ */
+  addWaterUsingSystem(processFlowPart?: WaterProcessComponent): WaterUsingSystem {
     let waterUsingSystem: WaterUsingSystem;
-    let newComponent = getNewProcessComponent('water-using-system') as WaterUsingSystem;
+    let newComponent: WaterProcessComponent;
+    if (!processFlowPart) {
+      newComponent = getNewProcessComponent('water-using-system') as WaterUsingSystem;
+    } else {
+      newComponent = processFlowPart as WaterUsingSystem;
+    }
     waterUsingSystem = {
       ...newComponent,
+      hasAssessmentData: true,
       systemType: 0,
       hoursPerYear: 8760,
       intakeSources: [

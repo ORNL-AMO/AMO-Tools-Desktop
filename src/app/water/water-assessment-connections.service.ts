@@ -8,12 +8,19 @@ import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem,
 import { WaterProcessDiagramService } from '../water-process-diagram/water-process-diagram.service';
 import { Settings } from '../shared/models/settings';
 import { Node } from 'reactflow';
+import { WaterDiagram } from '../../process-flow-types/shared-process-flow-types';
+import { WaterAssessmentService } from './water-assessment.service';
+import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
+import { WaterProcessComponentService } from './water-system-component.service';
 
 @Injectable()
 export class WaterAssessmentConnectionsService {
 
   constructor(private diagramIdbService: DiagramIdbService,
     private waterDiagramService: WaterProcessDiagramService,
+    private waterAssessmentService: WaterAssessmentService,
+    private waterComponentService: WaterProcessComponentService,
+    private waterUsingSystemService: WaterUsingSystemService,
     private assessmentIdbService: AssessmentDbService) { }
 
   async createAssesmentDiagram(assessment: Assessment, settings: Settings) {
@@ -41,7 +48,7 @@ export class WaterAssessmentConnectionsService {
     console.log('=== updated assessment', assessment.water);
   }
 
-  updateAssessmentWaterComponents(diagram: Diagram, waterAssessment: WaterAssessment) {
+  updateAssessmentWaterComponents(diagram: Diagram, waterAssessment: WaterAssessment, settings?: Settings) {
     let intakeSources = [];
     let dischargeOutlets = [];
     let waterUsingSystems = [];
@@ -50,15 +57,31 @@ export class WaterAssessmentConnectionsService {
     diagram.waterDiagram.flowDiagramData.nodes.forEach((waterDiagramNode: Node) => {
       const waterProcessComponent = waterDiagramNode.data as WaterProcessComponent;
       if (waterProcessComponent.processComponentType === 'water-intake') {
-        const intakeSource = waterProcessComponent as IntakeSource;
+        let intakeSource: IntakeSource;
+        if (!waterProcessComponent.hasAssessmentData) {
+          intakeSource = this.waterComponentService.addIntakeSource(waterProcessComponent);
+        } else {
+          intakeSource = waterProcessComponent as IntakeSource;
+        }
         intakeSources.push(intakeSource);
       }
       if (waterProcessComponent.processComponentType === 'water-discharge') {
-        const dischargeOutlet = waterProcessComponent as DischargeOutlet;
+        let dischargeOutlet: DischargeOutlet;
+        if (!waterProcessComponent.hasAssessmentData) {
+          dischargeOutlet = this.waterComponentService.addDischargeOutlet(waterProcessComponent);
+        } else {
+          dischargeOutlet = waterProcessComponent as DischargeOutlet
+        }
         dischargeOutlets.push(dischargeOutlet);
       }
       if (waterProcessComponent.processComponentType === 'water-using-system') {
-        waterUsingSystems.push(waterProcessComponent as WaterUsingSystem)
+        let waterUsingSystem: WaterUsingSystem;
+        if (!waterProcessComponent.hasAssessmentData) {
+          waterUsingSystem = this.waterUsingSystemService.addWaterUsingSystem(waterProcessComponent);
+        } else {
+          waterUsingSystem = waterProcessComponent as WaterUsingSystem;
+        }
+        waterUsingSystems.push(waterUsingSystem);
       }
     });
 

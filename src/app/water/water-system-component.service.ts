@@ -44,11 +44,21 @@ export class WaterProcessComponentService {
     return intakeSource;
   }
 
-  addNewIntakeSource(): IntakeSource {
+/**
+ * Add new component or return component based from a diagram component
+ * @param processFlowPart Build from diagram component
+ */
+  addIntakeSource(processFlowPart?: WaterProcessComponent): IntakeSource {
     let intakeSource: IntakeSource;
-    let newComponent = getNewProcessComponent('water-intake') as IntakeSource;
+    let newComponent: WaterProcessComponent;
+    if (!processFlowPart) {
+      newComponent = getNewProcessComponent('water-intake') as IntakeSource;
+    } else {
+      newComponent = processFlowPart as IntakeSource;
+    }
     intakeSource = {
       ...newComponent,
+      hasAssessmentData: true,
       sourceType: 0,
       annualUse: 0,
     };
@@ -72,11 +82,22 @@ export class WaterProcessComponentService {
     return dischargeOutlet;
   }
 
-  addNewDischargeOutlet(): DischargeOutlet {
+/**
+ * Add new component or return component based from a diagram component
+ * @param processFlowPart Build from diagram component
+ */
+  addDischargeOutlet(processFlowPart?: WaterProcessComponent): DischargeOutlet {
     let dischargeOutlet: DischargeOutlet;
-    let newComponent = getNewProcessComponent('water-discharge') as DischargeOutlet;
+    let newComponent: WaterProcessComponent;
+    if (!processFlowPart) {
+      newComponent = getNewProcessComponent('water-discharge') as DischargeOutlet;
+    } else {
+      newComponent = processFlowPart as DischargeOutlet;
+    }
+    
     dischargeOutlet = {
       ...newComponent,
+      hasAssessmentData: true,
       outletType: 0,
       annualUse: 0,
     };

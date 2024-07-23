@@ -43,12 +43,16 @@ export interface ProcessFlowParentState {
     id: number,
   }
 
-
+ /**
+ * Respresents a diagram node. is extended by Water Process Component types which hold assessment data
+ * @param hasAssessmentData If WaterProcessComponent properties have been initialized - assessment form properties etc...
+ */
   export interface ProcessFlowPart {
     name: string,
     processComponentType: ProcessFlowNodeType,
     className: ProcessFlowPartStyleClass,
     isValid: boolean,
+    hasAssessmentData: boolean,
     // * id for diagram targetting/sourcing
     diagramNodeId?: string,
     modifiedDate?: Date,
@@ -78,18 +82,21 @@ export interface ProcessFlowParentState {
       name: 'Water Intake',
       className: 'water-intake',
       isValid: true,
+      hasAssessmentData: false,
     },
     {
       processComponentType: 'water-using-system',
       name: 'Water Using System',
       className: 'water-using-system',
       isValid: true,
+      hasAssessmentData: false,
     },
     {
       processComponentType: 'water-discharge',
       name: 'Water Discharge',
       className: 'water-discharge',
       isValid: true,
+      hasAssessmentData: false,
     },
     // {
     //   processComponentType: 'splitter-node',
@@ -107,13 +114,14 @@ export const getComponentNameFromType = (componentType) => {
 
 export const getNewProcessComponent = (processComponentType): ProcessFlowPart => {
   let diagramComponent: ProcessFlowPart = processFlowDiagramParts.find(part => part.processComponentType === processComponentType);
-  let newProcessComponent = {
+  let newProcessComponent: ProcessFlowPart = {
     processComponentType: diagramComponent.processComponentType,
+    hasAssessmentData: false,
     name: diagramComponent.name,
     className: diagramComponent.className,
     isValid: diagramComponent.isValid,
     diagramNodeId: getNewNodeId(),
-    modifiedDate: new Date()
+    modifiedDate: new Date(),
   };
 
   return newProcessComponent;
