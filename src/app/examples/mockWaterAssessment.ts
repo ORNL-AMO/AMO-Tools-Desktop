@@ -28,7 +28,8 @@ export const MockWaterAssessment: Assessment =  {
               "diagramNodeId": "dndnode_a7czeo5fx",
               "modifiedDate": new Date("2024-07-09T16:47:48.232Z"),
               "sourceType": 0,
-              "annualUse": 100
+              "annualUse": 100,
+              "hasAssessmentData": true
           }
         ],
         "dischargeOutlets": [
@@ -40,7 +41,8 @@ export const MockWaterAssessment: Assessment =  {
               "diagramNodeId": "dndnode_l4mvses3w",
               "modifiedDate": new Date("2024-07-09T19:23:52.173Z"),
               "outletType": 0,
-              "annualUse": 200
+              "annualUse": 200,
+              "hasAssessmentData": true
           }
         ],
         "waterUsingSystems": [],

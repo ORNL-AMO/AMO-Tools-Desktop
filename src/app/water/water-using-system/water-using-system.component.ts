@@ -91,6 +91,7 @@ export class WaterUsingSystemComponent {
   }
 
   initForm() {
+   console.log(this.selectedWaterUsingSystem)
    this.form = this.waterUsingSystemService.getWaterUsingSystemForm(this.selectedWaterUsingSystem);
   }
 

@@ -67,15 +67,15 @@ export class WaterAssessmentService {
     let waterAssessment: WaterAssessment = this.waterAssessment.getValue();
     let newComponent: WaterProcessComponent;
     if (componentType === 'water-intake') {
-      let newIntakeSource = this.waterProcessComponentService.addNewIntakeSource();
+      let newIntakeSource = this.waterProcessComponentService.addIntakeSource();
       waterAssessment.intakeSources? waterAssessment.intakeSources.push(newIntakeSource) : waterAssessment.intakeSources = [newIntakeSource];
       newComponent = newIntakeSource;
     } else if (componentType === 'water-discharge') {
-      let newDischargeOutlet = this.waterProcessComponentService.addNewDischargeOutlet();
+      let newDischargeOutlet = this.waterProcessComponentService.addDischargeOutlet();
       waterAssessment.dischargeOutlets? waterAssessment.dischargeOutlets.push(newDischargeOutlet) : waterAssessment.dischargeOutlets = [newDischargeOutlet];
       newComponent = newDischargeOutlet;
     } else if (componentType === 'water-using-system') {
-      let newWaterUsingSystem = this.waterUsingSystemService.addNewWaterUsingSystem();
+      let newWaterUsingSystem = this.waterUsingSystemService.addWaterUsingSystem();
       waterAssessment.waterUsingSystems? waterAssessment.waterUsingSystems.push(newWaterUsingSystem) : waterAssessment.waterUsingSystems = [newWaterUsingSystem];
       newComponent = newWaterUsingSystem;
     }

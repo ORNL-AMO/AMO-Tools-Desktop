@@ -23,6 +23,7 @@ export class WaterAssessmentResultsService {
       boilerWaterResults: undefined,
       kitchenRestroomResults: undefined,
       landscapingResults: undefined,
+      motorEnergyResults: []
     }
 
     if (waterSystem.processUse) {
