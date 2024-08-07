@@ -59,16 +59,30 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <label for="startMonth">Starting Month</label>
+    <select id="startMonth" name="startMonth" class="form-control" [(ngModel)]="data.startMonth"
+      (focus)="focusField('startMonth')" (change)="setMonthNames()">
+      <option *ngFor="let option of monthList" [ngValue]="option.value">{{option.name}}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="startYear">Starting Year</label>
+    <input name="startYear" class="form-control" type="number" step="any" [(ngModel)]="data.startYear"
+      id="startYear" (input)="calculate()" onfocus="this.select();" (focus)="focusField('startYear')">
+  </div>
+
 </form>
 
-<table class="table table-hover" style="width: 100%">
+<table class="table table-hover">
   <tr>
     <th>
       Month
     </th>
 
     <th>
-      <span *ngIf="data.billedForDemand == 0 && data.adjustedOrActual == 0">
+      <span *ngIf="data.billedForDemand == 0 && (data.adjustedOrActual == 0 || data.adjustedOrActual == 2)">
         PF Adjusted Demand (kW)
       </span>
       <span  *ngIf="data.billedForDemand == 0 && data.adjustedOrActual == 1">
@@ -80,11 +94,16 @@
     </th>
 
     <th>
-      <span *ngIf="(data.billedForDemand == 0 && data.adjustedOrActual == 0) || (data.billedForDemand == 0 && data.adjustedOrActual == 1) || (data.billedForDemand == 1 && data.adjustedOrActual == 0)">
+      <span *ngIf="(data.billedForDemand == 0 && data.adjustedOrActual == 0) || (data.billedForDemand == 0 && data.adjustedOrActual == 1) || (data.billedForDemand == 0 && data.adjustedOrActual == 2) || (data.billedForDemand == 1 && data.adjustedOrActual == 0)">
         Power Factor
       </span>
       <span *ngIf="data.billedForDemand == 1 && data.adjustedOrActual == 1">
         Real Demand (kW)
+      </span>
+    </th>
+    <th *ngIf="data.billedForDemand == 0 && data.adjustedOrActual == 2">
+      <span>
+        Actual Demand (kW)
       </span>
     </th>
     <th>
@@ -94,23 +113,29 @@
 
   <tr *ngFor="let input of data.monthyInputs; let i = index;">
     <td>
-      Month {{i + 1}}
+      <input name="{{'month_'+i}}" type="text" step="any"
+        [(ngModel)]="input.month" id="{{'month_'+i}}" (input)="calculate()" onfocus="this.select();">
     </td>
     <td>
-      <input name="{{'input1_'+i}}" class="form-control" type="number" step="any"
+      <input name="{{'input1_'+i}}" type="number" step="any"
         [(ngModel)]="input.input1" id="{{'input1_'+i}}" (input)="calculate()" onfocus="this.select();"
         (focus)="focusField('input1')">      
     </td>
     <td>
-      <input name="{{'input2_'+i}}" class="form-control" type="number" step="any"
+      <input name="{{'input2_'+i}}" type="number" step="any"
         [(ngModel)]="input.input2" id="{{'input2_'+i}}" (input)="calculate()" onfocus="this.select();"
         (focus)="focusField('input2')">   
     </td>
-    <td class="btn-group btn-group-sm">
-      <button type="button" class="btn btn-danger pull-right btn-sm btn-form" (click)="btnDeleteMonth(i)">
+    <td *ngIf="data.billedForDemand == 0 && data.adjustedOrActual == 2">
+      <input name="{{'input3_'+i}}" type="number" step="any"
+        [(ngModel)]="input.input3" id="{{'input3_'+i}}" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('input3')">   
+    </td>
+    <td class="btn-group btn-group-sm" *ngIf="i+1 == data.monthyInputs.length">
+      <button type="button" class="btn btn-danger pull-right btn-sm btn-form" (click)="btnDeleteMonth(i)" [disabled]="data.monthyInputs.length == 3">
         Delete
       </button>
-    </td>
+    </td>    
   </tr>
 
 </table>

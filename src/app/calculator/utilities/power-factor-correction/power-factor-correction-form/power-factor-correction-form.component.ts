@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MonthyInputs, PowerFactorCorrectionInputs } from '../power-factor-correction.component';
+import { PowerFactorCorrectionService } from '../power-factor-correction.service';
 
 @Component({
   selector: 'app-power-factor-correction-form',
@@ -39,10 +40,28 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     }, {
       name: 'Actual Demand',
       value: 1,
+    }, {
+      name: 'Both',
+      value: 2,
     }
   ];
 
-  constructor() { }
+  monthList: Array<{ value: number, name: string }> = [
+    { value: 1, name: 'January' },
+    { value: 2, name: 'February' },
+    { value: 3, name: 'March' },
+    { value: 4, name: 'April' },
+    { value: 5, name: 'May' },
+    { value: 6, name: 'June' },
+    { value: 7, name: 'July' },
+    { value: 8, name: 'August' },
+    { value: 9, name: 'September' },
+    { value: 10, name: 'October' },
+    { value: 11, name: 'November' },
+    { value: 12, name: 'December' }
+  ];
+
+  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService) { }
 
   ngOnInit() {
   }
@@ -68,15 +87,21 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
   }
 
   setAdjustedOrActual(){    
+    if (this.data.adjustedOrActual === 2){
+      this.data.billedForDemand = 0;
+    }
     this.calculate();
   }
 
-  btnAddMonth(){
+  btnAddMonth(){;
     let newMonthyInputs: MonthyInputs = {
+      month: "new month",
       input1: 0,
-      input2: 0
+      input2: 0,
+      input3: 0
     }
     this.data.monthyInputs.push(newMonthyInputs);    
+    this.setMonthNames();
     this.calculate();
   }
 
@@ -85,5 +110,18 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     this.calculate();
   }
 
+  setMonthNames(){
+    let year = this.data.startYear;
+    let monthNumber = this.data.startMonth;
+    this.data.monthyInputs.forEach(month => {
+      let monthName: string = this.monthList[monthNumber - 1].name;
+      month.month = monthName + ' ' + year;
+      monthNumber += 1;
+      if(monthNumber == 13){
+        monthNumber = 1;
+        year += 1;
+      }
+    });
+  }
   
 }

@@ -22,54 +22,80 @@ export class PowerFactorCorrectionComponent implements OnInit {
     costOfDynamicCapacitance: 70,
     monthyInputs: [
       {
+        month: 'January 2024',
         input1: 462,
-        input2: 0.8
+        input2: 0.8,
+        input3: 0
       },
       {
+        month: 'February 2024',
         input1: 528,
-        input2: 0.8
+        input2: 0.8,
+        input3: 0
       },
       {
+        month: 'March 2024',
         input1: 492,
-        input2: 0.8
+        input2: 0.8,
+        input3: 0
       },
       {
+        month: 'April 2024',
         input1: 474,
-        input2: 0.8
+        input2: 0.8,
+        input3: 0
       },
       {
+        month: 'May 2024',
         input1: 499,
-        input2: 0.8
+        input2: 0.8,
+        input3: 0
       },
       {
+        month: 'June 2024',
         input1: 513,
-        input2: 0.8
+        input2: 0.8,
+        input3: 0
       },
       {
+        month: 'July 2024',
         input1: 530,
-        input2: 0.8
+        input2: 0.8,
+        input3: 0
       },
       {
+        month: 'August 2024',
         input1: 523,
-        input2: 0.8
+        input2: 0.8,
+        input3: 0
       },
       {
+        month: 'September 2024',
         input1: 547,
-        input2: 0.8
+        input2: 0.8,
+        input3: 0
       },
       {
+        month: 'October 2024',
         input1: 589,
-        input2: 0.8
+        input2: 0.8,
+        input3: 0
       },
       {
+        month: 'November 2024',
         input1: 621,
-        input2: 0.8
+        input2: 0.8,
+        input3: 0
       },
       {
+        month: 'December 2024',
         input1: 607,
-        input2: 0.8
+        input2: 0.8,
+        input3: 0
       },
-    ]
+    ],    
+    startMonth: 1,
+    startYear: 2024,
   };
   results: PowerFactorCorrectionOutputs;
 
@@ -154,6 +180,8 @@ export class PowerFactorCorrectionComponent implements OnInit {
         this.results = this.powerFactorCorrectionService.calculateRealPowerAndPowerFactor(data);
       } else if (data.adjustedOrActual == 1) {
         this.results = this.powerFactorCorrectionService.calculateRealPowerAndActualDemand(data);
+      } else if (data.adjustedOrActual == 2) {
+        this.results = this.powerFactorCorrectionService.calculateRealPowerAndBoth(data);
       }
     } else if (data.billedForDemand == 1){
       if (data.adjustedOrActual == 0) {
@@ -205,11 +233,15 @@ export interface PowerFactorCorrectionInputs {
   costOfStaticCapacitance: number;
   costOfDynamicCapacitance: number;
   monthyInputs: Array<MonthyInputs>;
+  startMonth: number;
+  startYear: number;
 }
 
 export interface MonthyInputs {
+  month: string;
   input1: number;
   input2: number;
+  input3: number;
 }
 
 

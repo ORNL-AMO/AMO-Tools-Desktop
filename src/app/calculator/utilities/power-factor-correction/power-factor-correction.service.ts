@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PFMonthlyOutputs, PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs } from './power-factor-correction.component';
+import { MonthyInputs, PFMonthlyOutputs, PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs } from './power-factor-correction.component';
 
 @Injectable()
 export class PowerFactorCorrectionService {
@@ -20,54 +20,80 @@ export class PowerFactorCorrectionService {
       costOfDynamicCapacitance: 70,
       monthyInputs: [
         {
+          month: 'January 2024',
           input1: 462,
-          input2: 0.8
+          input2: 0.8,
+          input3: 0
         },
         {
+          month: 'February 2024',
           input1: 528,
-          input2: 0.8
+          input2: 0.8,
+          input3: 0
         },
         {
+          month: 'March 2024',
           input1: 492,
-          input2: 0.8
+          input2: 0.8,
+          input3: 0
         },
         {
+          month: 'April 2024',
           input1: 474,
-          input2: 0.8
+          input2: 0.8,
+          input3: 0
         },
         {
+          month: 'May 2024',
           input1: 499,
-          input2: 0.8
+          input2: 0.8,
+          input3: 0
         },
         {
+          month: 'June 2024',
           input1: 513,
-          input2: 0.8
+          input2: 0.8,
+          input3: 0
         },
         {
+          month: 'July 2024',
           input1: 530,
-          input2: 0.8
+          input2: 0.8,
+          input3: 0
         },
         {
+          month: 'August 2024',
           input1: 523,
-          input2: 0.8
+          input2: 0.8,
+          input3: 0
         },
         {
+          month: 'September 2024',
           input1: 547,
-          input2: 0.8
+          input2: 0.8,
+          input3: 0
         },
         {
+          month: 'October 2024',
           input1: 589,
-          input2: 0.8
+          input2: 0.8,
+          input3: 0
         },
         {
+          month: 'November 2024',
           input1: 621,
-          input2: 0.8
+          input2: 0.8,
+          input3: 0
         },
         {
+          month: 'December 2024',
           input1: 607,
-          input2: 0.8
+          input2: 0.8,
+          input3: 0
         },
-      ]
+      ],    
+      startMonth: 1,
+      startYear: 2024,
     };
   }
 
@@ -217,18 +243,26 @@ export class PowerFactorCorrectionService {
       costOfDynamicCapacitance: 0,
       monthyInputs: [
         {
+          month: 'January 2024',
           input1: 0,
-          input2: 0
+          input2: 0,
+          input3: 0
         },
         {
+          month: 'February 2024',
           input1: 0,
-          input2: 0
+          input2: 0,
+          input3: 0
         },
         {
+          month: 'March 2024',
           input1: 0,
-          input2: 0
+          input2: 0,
+          input3: 0
         },
-      ]
+      ],    
+      startMonth: 1,
+      startYear: 2024,
     };
   }
 
@@ -353,8 +387,12 @@ export class PowerFactorCorrectionService {
   
       if(monthlyOutputs.length > 0){
         monthlyOutputs.forEach(output =>{
-          annualPFPenalty += output.penaltyCost;
-          proposedCapacitanceList.push(output.proposedCapacitance);
+          if (output.penaltyCost !== 0){
+            annualPFPenalty += output.penaltyCost;
+          } 
+          if (output.proposedCapacitance !== 0) {
+            proposedCapacitanceList.push(output.proposedCapacitance);
+          }
         });
       }
   
@@ -396,10 +434,16 @@ export class PowerFactorCorrectionService {
   
       let proposedCapacitanceList: Array<number> = new Array();
   
-      monthlyOutputs.forEach(output =>{
-        annualPFPenalty += output.penaltyCost
-        proposedCapacitanceList.push(output.proposedCapacitance);
-      });
+      if(monthlyOutputs.length > 0){
+        monthlyOutputs.forEach(output =>{
+          if (output.penaltyCost !== 0){
+            annualPFPenalty += output.penaltyCost;
+          } 
+          if (output.proposedCapacitance !== 0) {
+            proposedCapacitanceList.push(output.proposedCapacitance);
+          }
+        });
+      }
   
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
       proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
@@ -438,10 +482,16 @@ export class PowerFactorCorrectionService {
   
       let proposedCapacitanceList: Array<number> = new Array();
   
-      monthlyOutputs.forEach(output =>{
-        annualPFPenalty += output.penaltyCost
-        proposedCapacitanceList.push(output.proposedCapacitance);
-      });
+      if(monthlyOutputs.length > 0){
+        monthlyOutputs.forEach(output =>{
+          if (output.penaltyCost !== 0){
+            annualPFPenalty += output.penaltyCost;
+          } 
+          if (output.proposedCapacitance !== 0) {
+            proposedCapacitanceList.push(output.proposedCapacitance);
+          }
+        });
+      }
   
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
       proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
@@ -480,10 +530,63 @@ export class PowerFactorCorrectionService {
   
       let proposedCapacitanceList: Array<number> = new Array();
   
-      monthlyOutputs.forEach(output =>{
-        annualPFPenalty += output.penaltyCost
-        proposedCapacitanceList.push(output.proposedCapacitance);
-      });
+      if(monthlyOutputs.length > 0){
+        monthlyOutputs.forEach(output =>{
+          if (output.penaltyCost !== 0){
+            annualPFPenalty += output.penaltyCost;
+          } 
+          if (output.proposedCapacitance !== 0) {
+            proposedCapacitanceList.push(output.proposedCapacitance);
+          }
+        });
+      }
+  
+      proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
+      proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
+      capitalCost = proposedFixedCapacitance * inputData.costOfStaticCapacitance + proposedVariableCapacitance * inputData.costOfDynamicCapacitance;
+      simplePayback = capitalCost / annualPFPenalty;  
+      
+    }
+    outputData.annualPFPenalty = annualPFPenalty;
+    outputData.proposedFixedCapacitance = proposedFixedCapacitance;
+    outputData.proposedVariableCapacitance = proposedVariableCapacitance;
+    outputData.capitalCost = capitalCost;
+    outputData.simplePayback = simplePayback;
+    outputData.monthlyOutputs = monthlyOutputs; 
+    return outputData;
+  }
+
+  calculateRealPowerAndBoth(inputData: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
+    let outputData: PowerFactorCorrectionOutputs = this.getEmptyPowerFactorCorrectionOutputs();
+    let monthlyOutputs: Array<PFMonthlyOutputs> = new Array();
+    let annualPFPenalty: number = 0;
+    let proposedFixedCapacitance: number = 0;
+    let proposedVariableCapacitance: number = 0;
+    let capitalCost: number = 0;
+    let simplePayback: number = 0;
+    if (inputData.monthyInputs.length >= 3){
+      inputData.monthyInputs.forEach( input => {
+        let monthOutput: PFMonthlyOutputs = this.getEmptyMonthyOutput();
+        monthOutput.demandPenalty = input.input1 - input.input3; 
+        monthOutput.penaltyCost = monthOutput.demandPenalty * inputData.marginalCostOfDemand;
+        monthOutput.currentReactivePower = input.input3 * Math.tan(Math.acos(input.input2));  
+        monthOutput.proposedReactivePower = input.input3 * Math.tan(Math.acos(inputData.minimumPowerFactor));
+        monthOutput.proposedCapacitance = monthOutput.currentReactivePower - monthOutput.proposedReactivePower;
+        monthlyOutputs.push(monthOutput);
+      });      
+  
+      let proposedCapacitanceList: Array<number> = new Array();
+  
+      if(monthlyOutputs.length > 0){
+        monthlyOutputs.forEach(output =>{
+          if (output.penaltyCost !== 0){
+            annualPFPenalty += output.penaltyCost;
+          } 
+          if (output.proposedCapacitance !== 0) {
+            proposedCapacitanceList.push(output.proposedCapacitance);
+          }
+        });
+      }
   
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
       proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
