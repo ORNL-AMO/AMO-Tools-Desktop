@@ -111,7 +111,7 @@
     </th>
   </tr>
 
-  <tr *ngFor="let input of data.monthyInputs; let i = index;">
+  <tr *ngFor="let input of data.monthyInputs; let i = index; let last = last">
     <td>
       <input name="{{'month_'+i}}" type="text" step="any"
         [(ngModel)]="input.month" id="{{'month_'+i}}" (input)="calculate()" onfocus="this.select();">
@@ -131,7 +131,7 @@
         [(ngModel)]="input.input3" id="{{'input3_'+i}}" (input)="calculate()" onfocus="this.select();"
         (focus)="focusField('input3')">   
     </td>
-    <td class="btn-group btn-group-sm" *ngIf="i+1 == data.monthyInputs.length">
+    <td class="btn-group btn-group-sm" *ngIf="last">
       <button type="button" class="btn btn-danger pull-right btn-sm btn-form" (click)="btnDeleteMonth(i)" [disabled]="data.monthyInputs.length == 3">
         Delete
       </button>
