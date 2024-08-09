@@ -92,6 +92,11 @@
         Apparent Power (kVA)
       </span>
     </th>
+    <th *ngIf="data.billedForDemand == 0 && data.adjustedOrActual == 2">
+      <span>
+        Actual Demand (kW)
+      </span>
+    </th>
 
     <th>
       <span *ngIf="(data.billedForDemand == 0 && data.adjustedOrActual == 0) || (data.billedForDemand == 0 && data.adjustedOrActual == 1) || (data.billedForDemand == 0 && data.adjustedOrActual == 2) || (data.billedForDemand == 1 && data.adjustedOrActual == 0)">
@@ -101,41 +106,29 @@
         Real Demand (kW)
       </span>
     </th>
-    <th *ngIf="data.billedForDemand == 0 && data.adjustedOrActual == 2">
-      <span>
-        Actual Demand (kW)
-      </span>
-    </th>
-    <th>
-
-    </th>
+   
   </tr>
 
   <tr *ngFor="let input of data.monthyInputs; let i = index; let last = last">
     <td>
       <input name="{{'month_'+i}}" type="text" step="any"
         [(ngModel)]="input.month" id="{{'month_'+i}}" (input)="calculate()" onfocus="this.select();">
-    </td>
-    <td>
-      <input name="{{'input1_'+i}}" type="number" step="any"
-        [(ngModel)]="input.input1" id="{{'input1_'+i}}" (input)="calculate()" onfocus="this.select();"
-        (focus)="focusField('input1')">      
-    </td>
-    <td>
-      <input name="{{'input2_'+i}}" type="number" step="any"
-        [(ngModel)]="input.input2" id="{{'input2_'+i}}" (input)="calculate()" onfocus="this.select();"
-        (focus)="focusField('input2')">   
-    </td>
+    </td> 
     <td *ngIf="data.billedForDemand == 0 && data.adjustedOrActual == 2">
       <input name="{{'input3_'+i}}" type="number" step="any"
         [(ngModel)]="input.input3" id="{{'input3_'+i}}" (input)="calculate()" onfocus="this.select();"
         (focus)="focusField('input3')">   
     </td>
-    <td class="btn-group btn-group-sm" *ngIf="last">
-      <button type="button" class="btn btn-danger pull-right btn-sm btn-form" (click)="btnDeleteMonth(i)" [disabled]="data.monthyInputs.length == 3">
-        Delete
-      </button>
-    </td>    
+    <td>
+      <input name="{{'input1_'+i}}" type="number" step="any"
+        [(ngModel)]="input.input1" id="{{'input1_'+i}}" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('input1')">      
+    </td>   
+    <td>
+      <input name="{{'input2_'+i}}" type="number" step="any"
+        [(ngModel)]="input.input2" id="{{'input2_'+i}}" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('input2')">   
+    </td>
   </tr>
 
 </table>
@@ -143,6 +136,9 @@
 <div class="w-100 justify-content-center btn-group btn-group-sm"> 
   <button type="button" class="btn btn-primary pull-left btn-sm m-2 btn-form" (click)="btnAddMonth()">
     Add Month
+  </button>
+  <button type="button" class="btn btn-danger pull-left btn-sm m-2 btn-form" (click)="btnDeleteLastMonth()" [disabled]="data.monthyInputs.length == 3">
+    Delete Last Month
   </button>
   
 </div>
