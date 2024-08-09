@@ -110,6 +110,11 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     this.calculate();
   }
 
+  btnDeleteLastMonth(){
+    this.data.monthyInputs.pop();    
+    this.calculate();
+  }
+
   setMonthNames(){
     let year = this.data.startYear;
     let monthNumber = this.data.startMonth;
