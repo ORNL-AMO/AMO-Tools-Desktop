@@ -1,6 +1,8 @@
 import { Root, createRoot } from 'react-dom/client';
 import App from './App';
 import { FlowDiagramData, ProcessFlowDiagramState, ProcessFlowParentState } from '../../src/process-flow-types/shared-process-flow-types';
+import { CacheProvider } from '@emotion/react';
+import createCache from "@emotion/cache";
 
 class AppWebComponent extends HTMLElement {
   mountPoint!: HTMLDivElement;
@@ -12,17 +14,22 @@ class AppWebComponent extends HTMLElement {
   // * it was changed to be a class property here so it could be passed to DownloadImage, which requires a dom ref.
   // * 2. Due to this change, events must now be dispatched from shadowRoot, instead of 'this' (AppWebComponent)
   shadowRoot;
+  // * make MUI library styles available too shadowDom
+  MUIStylesCache;
 
   renderDiagramComponent(parentState: ProcessFlowParentState) {
     if (parentState && parentState.parentContainer) {
       this.appRef.render(
-        <App parentContainer={parentState.parentContainer}
-        context={parentState.context}
-        flowDiagramData={parentState.waterDiagram.flowDiagramData}
-        shadowRoot={this.shadowRoot}
-        clickEvent={this.handleClickEvent}
-        saveFlowDiagramData={this.emitFlowDiagramDataUpdate}
-        />)
+        <CacheProvider value={this.MUIStylesCache}>
+          <App parentContainer={parentState.parentContainer}
+            context={parentState.context}
+            flowDiagramData={parentState.waterDiagram.flowDiagramData}
+            shadowRoot={this.shadowRoot}
+            clickEvent={this.handleClickEvent}
+            saveFlowDiagramData={this.emitFlowDiagramDataUpdate}
+            />
+        </CacheProvider>
+        )
     }
   }
 
@@ -42,6 +49,13 @@ class AppWebComponent extends HTMLElement {
     this.shadowRoot.appendChild(link);
 
     this.appRef = createRoot(this.mountPoint!);
+
+    this.MUIStylesCache = createCache({
+      key: 'css',
+      prepend: true,
+      container: this.shadowRoot,
+    });
+
     if (this.parentstate) {
       this.renderDiagramComponent(this.parentstate);
     }

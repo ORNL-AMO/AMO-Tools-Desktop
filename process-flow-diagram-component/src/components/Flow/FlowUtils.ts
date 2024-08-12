@@ -1,6 +1,7 @@
-import { Edge, MarkerType, Node, ReactFlowInstance, addEdge } from "reactflow";
+import { Connection, Edge, MarkerType, Node, ReactFlowInstance, addEdge } from "reactflow";
 import { nodeTypes } from "./FlowTypes";
 import { getNewNode, getNewNodeId, getNewProcessComponent } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { DefaultEdgeOptions } from "@xyflow/react";
 
 export const getRandomCoordinates = (height: number, width: number): {x: number, y: number} => {
     const screenWidth = window.innerWidth;
@@ -37,10 +38,9 @@ const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Nod
       y: screenPoint.y,
     });
     node.position = position;
-    // todo 6876 assign class highlighting new node
 }
 
-export const setDroppedNode = (event, reactFlowInstance: ReactFlowInstance, setNodes) => {
+  export const setDroppedNode = (event, reactFlowInstance: ReactFlowInstance, setNodes) => {
     event.preventDefault();
     const nodeType = event.dataTransfer.getData('application/reactflow');
     if (typeof nodeType === 'undefined' || !nodeType) {
@@ -71,21 +71,38 @@ export const setDroppedNode = (event, reactFlowInstance: ReactFlowInstance, setN
     });
   }
 
-export const setCustomEdges = (params, setEdges) => {
+export const setCustomEdges = (setEdges, connectedParams:  Connection | Edge) => {
   setEdges((eds) => {
-    params = params as Edge;
-    if (params.source === params.target) {
-      params.type = 'selfconnecting';
-    }
-    params.markerEnd = { 
-      type: MarkerType.ArrowClosed,
-      width: 25,
-      height: 25
-    }
-    return addEdge(params, eds);
-  })
-  }
+      connectedParams = connectedParams as Edge;
+      if (connectedParams.source === connectedParams.target) {
+        connectedParams.type = 'selfconnecting';
+      }
+      connectedParams.markerEnd = { 
+        type: MarkerType.ArrowClosed,
+        width: 25,
+        height: 25
+      }
 
+      if (connectedParams.style === undefined) {
+        connectedParams.style = {
+          stroke: '#6c757d'
+        }
+      }
+
+      return addEdge(connectedParams, eds);
+  })
+}
+
+export const changeExistingEdgesType = (setEdges, diagramEdgeType: string) => {
+  setEdges((eds) => {
+    return eds.map((edge: Edge) => {
+      if (edge.source !== edge.target) {
+        edge.type = diagramEdgeType;
+      }
+      return edge;
+    });
+  });
+}
 
 export const getAdaptedTypeString = (nodeType: string) => {
     let adaptedString: string;
@@ -117,3 +134,11 @@ export const getAdaptedTypeString = (nodeType: string) => {
     }
     return adaptedString;
 }
+
+
+export const getEdgeDefaultOptions = (): DefaultEdgeOptions => {
+  return {
+    animated: true,
+    type: 'default',
+  }
+};

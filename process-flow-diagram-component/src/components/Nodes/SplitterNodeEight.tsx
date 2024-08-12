@@ -1,13 +1,10 @@
 import { memo, FC } from 'react';
-import { Handle, Position, NodeProps, NodeResizer } from 'reactflow';
 import { ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { DiagramNode } from './ProcessFlowComponentNode';
+import { Handle, NodeProps, NodeResizer, Position } from '@xyflow/react';
 
-export interface FlowPartProps extends ProcessFlowPart {
 
-}
-
-// * note the type of NodeProps is automagically accessible via the 'data' property 
-const SplitterNodeEight: FC<NodeProps<FlowPartProps>> = (props) => {
+const SplitterNodeEight = (id, { data }: NodeProps<DiagramNode>) => {
     return (
         <>
             <Handle type="target" id={'a'} position={Position.Left} />

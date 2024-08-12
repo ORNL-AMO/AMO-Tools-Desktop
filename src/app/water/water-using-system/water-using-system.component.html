@@ -68,7 +68,7 @@
         </ng-container>
 
         <form [formGroup]="form" *ngIf="!isCollapsed.waterFlows">
-            <label class="group-label secondary-group">Incoming Water</label>
+            <label class="group-label secondary-group pt-2">Incoming Water</label>
             <div class="form-group" [ngClass]="{'invalid': form.controls.sourceWater.invalid}">
                 <label for="sourceWater">Source Water</label>
                 <div class="input-group">
@@ -107,10 +107,7 @@
                     </span>
                 </span>
             </div>
-        </form>
 
-
-        <form [formGroup]="form" *ngIf="!isCollapsed.waterFlows">
             <div class="form-group" [ngClass]="{'invalid': form.controls.recirculatedWater.invalid}">
                 <label for="recirculatedWater">Recirculated Water</label>
                 <div class="input-group">
@@ -130,6 +127,106 @@
                 </span>
             </div>
 
+        </form>
+
+
+        <form [formGroup]="form" *ngIf="!isCollapsed.waterFlows">
+            <div (click)="focusField('grossWaterUse')" class="form-group">
+                <label for="grossWaterUse">Gross Water Use</label>
+                <div class="text-center small bold">
+                    <span *ngIf="waterSystemResults">{{waterSystemResults.grossWaterUse | number}}
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+                    </span>
+                    <span *ngIf="!waterSystemResults">&mdash; &mdash;</span>
+                </div>
+            </div>
+        </form>
+
+
+        <!-- Outgoing water -->
+        <form [formGroup]="form" *ngIf="!isCollapsed.waterFlows">
+            <label class="group-label secondary-group">Outgoing Water</label>
+            <div class="form-group" [ngClass]="{'invalid': form.controls.dischargeWater.invalid}">
+                <label for="dischargeWater">Discharge Water</label>
+                <div class="input-group">
+                    <input name="dischargeWater" type="number" class="form-control" id="dischargeWater"
+                        formControlName="dischargeWater" (input)="save()" (focus)="focusField('dischargeWater')">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'"
+                        class="input-group-addon units">m<sup>3</sup>/yr</span>
+                </div>
+                <span class="alert-danger pull-right small"
+                    *ngIf="form.controls.dischargeWater.invalid && !form.controls.dischargeWater.pristine">
+                    <span *ngIf="form.controls.dischargeWater.errors.required">Value Required</span>
+                    <span *ngIf="form.controls.dischargeWater.errors.min">Value can't be less than
+                        {{form.controls.dischargeWater.errors.min.min}}
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+                    </span>
+                </span>
+            </div>
+
+            <div class="form-group" [ngClass]="{'invalid': form.controls.dischargeWaterRecycled.invalid}">
+                <label for="dischargeWaterRecycled">Recycled Water</label>
+                <div class="input-group">
+                    <input name="dischargeWaterRecycled" type="number" class="form-control" id="dischargeWaterRecycled"
+                        formControlName="dischargeWaterRecycled" (input)="save()" (focus)="focusField('dischargeWaterRecycled')">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'"
+                        class="input-group-addon units">m<sup>3</sup>/yr</span>
+                </div>
+                <span class="alert-danger pull-right small"
+                    *ngIf="form.controls.dischargeWaterRecycled.invalid && !form.controls.dischargeWaterRecycled.pristine">
+                    <span *ngIf="form.controls.dischargeWaterRecycled.errors.min">Value can't be less than
+                        {{form.controls.dischargeWaterRecycled.errors.min.min}}
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+                    </span>
+                </span>
+            </div>
+
+            <div class="form-group" [ngClass]="{'invalid': form.controls.knownLosses.invalid}">
+                <label for="knownLosses">Known Losses</label>
+                <div class="input-group">
+                    <input name="knownLosses" type="number" class="form-control" id="knownLosses"
+                        formControlName="knownLosses" (input)="save()" (focus)="focusField('knownLosses')">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'"
+                        class="input-group-addon units">m<sup>3</sup>/yr</span>
+                </div>
+                <span class="alert-danger pull-right small"
+                    *ngIf="form.controls.knownLosses.invalid && !form.controls.knownLosses.pristine">
+                    <span *ngIf="form.controls.knownLosses.errors.min">Value can't be less than
+                        {{form.controls.knownLosses.errors.min.min}}
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+                    </span>
+                </span>
+            </div>
+
+            <div class="form-group" [ngClass]="{'invalid': form.controls.waterInProduct.invalid}">
+                <label for="waterInProduct">Water In Product</label>
+                <div class="input-group">
+                    <input name="waterInProduct" type="number" class="form-control" id="waterInProduct"
+                        formControlName="waterInProduct" (input)="save()" (focus)="focusField('waterInProduct')">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'"
+                        class="input-group-addon units">m<sup>3</sup>/yr</span>
+                </div>
+                <span class="alert-danger pull-right small"
+                    *ngIf="form.controls.waterInProduct.invalid && !form.controls.waterInProduct.pristine">
+                    <span *ngIf="form.controls.waterInProduct.errors.min">Value can't be less than
+                        {{form.controls.waterInProduct.errors.min.min}}
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+                    </span>
+                </span>
+            </div>
+        </form>
+
+
+        <form [formGroup]="form" *ngIf="!isCollapsed.waterFlows">
 
             <div (click)="focusField('grossWaterUse')" class="form-group">
                 <label for="grossWaterUse">Gross Water Use</label>

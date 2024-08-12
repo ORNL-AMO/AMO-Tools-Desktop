@@ -1,27 +1,25 @@
 import { memo, FC, CSSProperties, useState, useRef, useEffect } from 'react';
-import { Handle, Position, NodeProps, NodeResizer, NodeResizeControl, useUpdateNodeInternals, Node, useReactFlow, updateEdge, Edge } from 'reactflow';
 import { ProcessFlowPart, getNewIdString } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { DiagramNode } from './ProcessFlowComponentNode';
+import { Edge, Handle, Node, NodeProps, NodeResizer, Position, useReactFlow, useUpdateNodeInternals } from '@xyflow/react';
 
-export interface FlowPartProps extends ProcessFlowPart {
-
-}
 
 // * note the type of NodeProps is automagically accessible via the 'data' property 
-const SplitterNode: FC<NodeProps<FlowPartProps>> = (props) => {
+const SplitterNode= (id, { data }: NodeProps<DiagramNode>) => {
   const updateNodeInternals = useUpdateNodeInternals();
   const { setNodes, setEdges } = useReactFlow();
   
   // todo accessing .data , should just treat as processflowpart?
   const splitterRef = useRef(null);
-  const initialNodes = props.data.splitterTargets? props.data.splitterTargets : [getNewIdString()];
+  const initialNodes = data.splitterTargets? data.splitterTargets : [getNewIdString()];
   const [showInnerNode, setShowInnerNode] = useState(true);
   const [targetHandles, setTargetHandles] = useState<Array<string>>(initialNodes);
 
   const updateNodes = () => {
-    updateNodeInternals(props.id);
-    setNodes((nds) =>
-      nds.map((n: Node) => {
-        if (n.id === props.id) {
+    updateNodeInternals(id);
+    setNodes((nds: Node[]) => {
+      return nds.map((n: Node) => {
+        if (n.id === id) {
           return {
             ...n,
             data: {
@@ -30,7 +28,7 @@ const SplitterNode: FC<NodeProps<FlowPartProps>> = (props) => {
           };
         }
         return n;
-      }),
+      })},
     );
   };
 

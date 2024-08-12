@@ -1,5 +1,4 @@
-import { Edge, Node } from 'reactflow';
-
+import { Edge, Node } from '@xyflow/react';
 
 // * passed down to diagram
 export interface ProcessFlowParentState {
@@ -47,7 +46,7 @@ export interface ProcessFlowParentState {
  * Respresents a diagram node. is extended by Water Process Component types which hold assessment data
  * @param hasAssessmentData If WaterProcessComponent properties have been initialized - assessment form properties etc...
  */
-  export interface ProcessFlowPart {
+  export interface ProcessFlowPart extends Record<string, unknown>{
     name: string,
     processComponentType: ProcessFlowNodeType,
     className: ProcessFlowPartStyleClass,
@@ -63,10 +62,12 @@ export interface ProcessFlowParentState {
   
   // * union future diagram types into ProcessFlowNodeType
   export type ProcessFlowNodeType = WaterProcessComponentType | undefined;
-  export type WaterProcessComponentType = 'water-intake' | 'water-discharge' | 'water-using-system' | 'splitter-node';
+  export type WaterProcessComponentType = 'water-intake' | 'water-discharge' | 'water-using-system' | 'splitter-node' | 'water-treatment' | 'waste-water-treatment';
   export type ProcessFlowPartStyleClass = WaterProcessComponentType;
 
-  
+  export interface EdgeData {
+    color: string
+  }
 
   // =============================
 // todo break into utils
@@ -79,7 +80,7 @@ export interface ProcessFlowParentState {
   export const processFlowDiagramParts: ProcessFlowPart[] = [
     {
       processComponentType: 'water-intake',
-      name: 'Water Intake',
+      name: 'Intake Source',
       className: 'water-intake',
       isValid: true,
       hasAssessmentData: false,
@@ -93,8 +94,22 @@ export interface ProcessFlowParentState {
     },
     {
       processComponentType: 'water-discharge',
-      name: 'Water Discharge',
+      name: 'Discharge Outlet',
       className: 'water-discharge',
+      isValid: true,
+      hasAssessmentData: false,
+    },
+    {
+      processComponentType: 'water-treatment',
+      name: 'Water Treatment',
+      className: 'water-treatment',
+      isValid: true,
+      hasAssessmentData: false,
+    },
+    {
+      processComponentType: 'waste-water-treatment',
+      name: 'Waste Water Treatment',
+      className: 'waste-water-treatment',
       isValid: true,
       hasAssessmentData: false,
     },

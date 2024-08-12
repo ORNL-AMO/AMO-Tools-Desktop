@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import ReactFlow, {
-  Node,
-  useNodesState,
-  useEdgesState,
+import {
+  ReactFlow,
   Connection,
-  Edge,
   ConnectionLineType,
   MiniMap,
   Controls,
@@ -14,19 +11,21 @@ import ReactFlow, {
   NodeTypes,
   DefaultEdgeOptions,
   OnConnect,
-} from 'reactflow';
-import 'reactflow/dist/style.css';
+  applyEdgeChanges,
+  type Node,
+  useNodesState,
+  useEdgesState,
+  Edge,
+} from '@xyflow/react';
+ 
+import '@xyflow/react/dist/style.css';
 
 import Sidebar from '../Sidebar/Sidebar';
-import { FlowDiagramData } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
+import { FlowDiagramData, ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { changeExistingEdgesType, getEdgeDefaultOptions, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
 import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useSaveDebounce';
-
-const defaultEdgeOptions: DefaultEdgeOptions = {
-  animated: true,
-  type: 'smoothstep',
-};
+import { NodeContextMenu, NodeContextMenuProps } from '../ContextMenu/NodeContextMenu';
 
 const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
 const nodeClassName = (node: Node) => node.type;
@@ -41,15 +40,15 @@ const Flow = (props: FlowProps) => {
     existingEdges = props.flowDiagramData.edges;
   }
 
-  
-  // todo 6876 you have unplaced nodes from the assessment notif
-  
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [staleNodes, setStaleNodes] = useState<Node[]>(staleParentNodes);
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>(existingNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(existingEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState(existingNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(existingEdges);
   const [minimapVisible, setMinimapVisible] = useState(false);
-  const [controlsVisible, setControlsVisible] = useState(false);
+  const [controlsVisible, setControlsVisible] = useState(true);
+  const [diagramEdgeType, setDiagramEdgeType] = useState('default');
+  const [selectedSidebarTab, setSelectedSidebarTab] = useState(0);
+  const [menu, setMenu] = useState(null);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -81,7 +80,9 @@ const Flow = (props: FlowProps) => {
   );
 
   const onConnect: OnConnect = useCallback(
-    (params: Connection | Edge) => setCustomEdges(params, setEdges),
+    (connectedParams: Connection | Edge) => {
+      setCustomEdges(setEdges, connectedParams);
+    },
     [setEdges]
   );
 
@@ -93,29 +94,75 @@ const Flow = (props: FlowProps) => {
     setControlsVisible(enabled);
   }, []);
 
+  const updateEdgeType = useCallback((edgeType) => {
+    setDiagramEdgeType(edgeType);
+    changeExistingEdgesType(setEdges, edgeType);
+  }, []);
+
+  const onNodeContextMenu = useCallback(
+    (event, node: Node) => {
+      event.preventDefault();
+      
+      // * Calculate position of the context menu. We want to make sure it
+      // * doesn't get positioned off-screen.
+      const pane = ref.current.getBoundingClientRect();
+
+      // * MEASUR CONTAINER element
+      // todo get element size from shadow dom
+      const parentContainerHeaderOffset = 70;
+      const sidebarOffset = 400;
+
+      let insideTopBounds = event.clientY < pane.height - 200;
+      let insideLeftBounds = event.clientX < pane.width - 200;
+      let insideRightBounds = event.clientX >= pane.width - 200;
+      let insideBottomBounds = event.clientY >= pane.height - 200;
+      const top =  insideTopBounds && event.clientY - parentContainerHeaderOffset
+      const left = insideLeftBounds && event.clientX - sidebarOffset
+      const right = insideRightBounds && pane.width - event.clientX + sidebarOffset
+      const bottom = insideBottomBounds && pane.height - event.clientY + parentContainerHeaderOffset
+
+      // todo needs v12 redo type
+      const processflowPartData = node.data as ProcessFlowPart;
+      const menuConfig: NodeContextMenuProps = {
+        id: node.id,
+        processFlowPartData: processflowPartData,
+        top: top,
+        left: left,
+        right: right,
+        bottom: bottom
+      }
+      setMenu(menuConfig);
+    },
+    [setMenu],
+  );
+
+  const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
+
   return (
     props.height &&
     <div className="process-flow-diagram">
-      {/* // * wrap with ReactFlowProvider to access ReactFlow context in   */}
       <ReactFlowProvider>
-        <div className={'flow-wrapper'} style={{ height: props.height }}>
+        <div className={'flow-wrapper'} style={{ height: props.height }}
+            >
           <ReactFlow
             nodes={nodes}
             onNodesChange={onNodesChange}
             edges={edges}
-            ref={ref}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onInit={setReactFlowInstance}
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
-            defaultEdgeOptions={defaultEdgeOptions}
+            defaultEdgeOptions={getEdgeDefaultOptions()}
             defaultViewport={defaultViewport}
-            connectionLineType={ConnectionLineType.SmoothStep}
+            connectionLineType={ConnectionLineType.Bezier}
             onDrop={onDrop}
             onDragOver={onDragOver}
+            onPaneClick={onPaneClick}
+            onNodeContextMenu={onNodeContextMenu}
             fitView
             className="flow"
+            ref={ref}
           >
             {minimapVisible &&
               <MiniMap zoomable pannable nodeClassName={nodeClassName} />
@@ -124,11 +171,17 @@ const Flow = (props: FlowProps) => {
               <Controls />
             }
             <Background />
+            {menu && <NodeContextMenu onClick={onPaneClick} {...menu} />}
           </ReactFlow>
         </div>
         <Sidebar
+          edges={edges}
           minimapVisibleCallback={updateMinimap}
+          controlsVisible={controlsVisible}
           controlsVisibleCallback={updateControls}
+          edgeTypeChangeCallback={updateEdgeType}
+          selectedTab={selectedSidebarTab}
+          setSelectedTab={setSelectedSidebarTab}
           shadowRoot={props.shadowRoot}
         />
       </ReactFlowProvider>

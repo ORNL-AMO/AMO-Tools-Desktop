@@ -7,11 +7,10 @@ import { Diagram } from '../shared/models/diagram';
 import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem, DischargeOutlet } from '../shared/models/water-assessment';
 import { WaterProcessDiagramService } from '../water-process-diagram/water-process-diagram.service';
 import { Settings } from '../shared/models/settings';
-import { Node } from 'reactflow';
-import { WaterDiagram } from '../../process-flow-types/shared-process-flow-types';
 import { WaterAssessmentService } from './water-assessment.service';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
 import { WaterProcessComponentService } from './water-system-component.service';
+import { Node } from '@xyflow/react';
 
 @Injectable()
 export class WaterAssessmentConnectionsService {

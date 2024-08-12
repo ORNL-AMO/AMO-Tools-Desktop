@@ -128,6 +128,10 @@ export class WaterUsingSystemService {
       sourceWater: [waterUsingSystem.sourceWater, [Validators.required, Validators.min(0)]],
       recycledWater: [waterUsingSystem.recycledWater, [Validators.min(0)]],
       recirculatedWater: [waterUsingSystem.recirculatedWater, [Validators.min(0)]],
+      dischargeWater: [waterUsingSystem.dischargeWater, [Validators.required, Validators.min(0)]],
+      dischargeWaterRecycled: [waterUsingSystem.dischargeWaterRecycled, [Validators.required, Validators.min(0)]],
+      knownLosses: [waterUsingSystem.knownLosses, [Validators.required, Validators.min(0)]],
+      waterInProduct: [waterUsingSystem.waterInProduct, [Validators.required, Validators.min(0)]],
     });
     this.markFormDirtyToDisplayValidation(form);
     return form;
@@ -140,6 +144,11 @@ export class WaterUsingSystemService {
     waterUsingSystem.sourceWater = form.controls.sourceWater.value;
     waterUsingSystem.recycledWater = form.controls.recycledWater.value;
     waterUsingSystem.recirculatedWater = form.controls.recirculatedWater.value;
+    waterUsingSystem.dischargeWater = form.controls.dischargeWater.value;
+    waterUsingSystem.dischargeWaterRecycled = form.controls.dischargeWaterRecycled.value;
+    waterUsingSystem.knownLosses = form.controls.knownLosses.value;
+    waterUsingSystem.waterInProduct = form.controls.waterInProduct.value;
+    waterUsingSystem.recycledWater = form.controls.recycledWater.value;
     return waterUsingSystem;
   }
 

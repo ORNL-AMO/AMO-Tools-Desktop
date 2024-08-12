@@ -1,6 +1,6 @@
 import React from 'react';
-import { Panel, useReactFlow, getNodesBounds, getViewportForBounds } from 'reactflow';
 import { toJpeg, toPng, toSvg } from 'html-to-image';
+import { getNodesBounds, getViewportForBounds, useReactFlow } from '@xyflow/react';
 
 function downloadImage(dataUrl) {
   const a = document.createElement('a');
@@ -16,7 +16,7 @@ function DownloadButton(props: DownloadProps) {
   const { getNodes } = useReactFlow();
   const onClick = () => {
     const nodesBounds = getNodesBounds(getNodes());
-    const transform: {x: number, y: number, zoom: number} = getViewportForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
+    const transform: {x: number, y: number, zoom: number} = getViewportForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2, 0);
 
     // * access shadowDom in place of document
     const viewPortObject = props.shadowRoot.querySelector('.react-flow__viewport');
