@@ -1,26 +1,29 @@
-import { memo, FC, CSSProperties } from 'react';
-import { Handle, Position, NodeProps, useReactFlow, Node } from 'reactflow';
-import { ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { memo, CSSProperties } from 'react';
+import { Handle, Position, NodeProps, useReactFlow, Node } from '@xyflow/react';
+import { ProcessFlowNodeType, ProcessFlowPartStyleClass } from '../../../../src/process-flow-types/shared-process-flow-types';
+import SettingsIcon from '@mui/icons-material/Settings';
 
-const targetHandleStyleA: CSSProperties = {
-  // left: 50 
-};
-const sourceHandleStyleB: CSSProperties = {
-  // right: 50,
-  // left: 'auto',
-};
 
-export interface FlowPartProps extends ProcessFlowPart {
-}
+const targetHandleStyleA: CSSProperties = {};
+const sourceHandleStyleB: CSSProperties = {};
 
-// * note the type of NodeProps is automagically accessible via the 'data' property 
-const ProcessFlowComponentNode: FC<NodeProps<FlowPartProps>> = (props) => {
+// * patches v11 -> v12 typing changes
+export type DiagramNode = Node<{name: string,
+  processComponentType: ProcessFlowNodeType,
+  className: ProcessFlowPartStyleClass,
+  isValid: boolean,
+  hasAssessmentData: boolean,
+  diagramNodeId?: string,
+  modifiedDate?: Date,
+  splitterTargets?: Array<string>;
+  processComponentContext?: any;}, 'processFlowPart'>;
+ 
+const ProcessFlowComponentNode = ({ data, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const { setNodes } = useReactFlow();
-
   const updateNodeName = (event, diagramNodeId) => {
     setNodes((nds) =>
       nds.map((n: Node) => {
-        const processFlowPart: ProcessFlowPart = n.data as ProcessFlowPart;
+        const processFlowPart = n.data;
         if (processFlowPart.diagramNodeId === diagramNodeId) {
           return {
             ...n,
@@ -35,14 +38,31 @@ const ProcessFlowComponentNode: FC<NodeProps<FlowPartProps>> = (props) => {
     );
   };
 
+
+  const transformString = `translate(0%, 0%) translate(185px, -32px)`;
+
   return (
     <>
-      <Handle type="target" position={Position.Left} />
       <div className="node-inner-input">
+        <div
+          style={{
+            position: 'absolute',
+            transform: transformString,
+            fontSize: 16,
+            pointerEvents: 'all',
+          }}
+          className="nodrag nopan"
+          >
+          {selected &&
+          <button className="customize-button">
+            <SettingsIcon sx={{width: 'unset', height: 'unset'}} />
+          </button>
+          }
+        </div>
         <input
           type="text"
-          value={props.data.name}
-          onChange={evt => updateNodeName(evt, props.data.diagramNodeId)}
+          value={data.name}
+          onChange={evt => updateNodeName(evt, data.diagramNodeId)}
           className="nodrag"
           disabled={false}
         />

@@ -5,7 +5,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { WaterAssessment, WaterProcessComponent } from '../shared/models/water-assessment';
-import { Node } from 'reactflow';
+import { Node } from '@xyflow/react';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()

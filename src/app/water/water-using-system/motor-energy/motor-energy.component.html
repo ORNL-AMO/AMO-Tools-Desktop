@@ -66,8 +66,7 @@
 
         <div class="form-group" [ngClass]="{'invalid': form.controls.systemEfficiency.invalid}">
             <label for="systemEfficiency">System Efficiency
-                <a class="click-link" disabled (click)="calculateSystemEfficiency()"></a>
-
+                <a class="click-link" (click)="calculateSystemEfficiency()"></a>
             </label>
             <div class="input-group">
                 <input name="systemEfficiency" type="number" class="form-control" id="systemEfficiency"
