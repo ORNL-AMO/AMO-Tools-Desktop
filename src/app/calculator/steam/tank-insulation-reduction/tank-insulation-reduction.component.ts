@@ -107,8 +107,6 @@ export class TankInsulationReductionComponent implements OnInit {
     if (this.tankInsulationReductionService.modificationData) {
       this.modificationForm = this.tankInsulationReductionService.getFormFromObj(this.tankInsulationReductionService.modificationData, false);
       this.modificationExists = true;
-      this.modificationForm.controls.energySourceType.disable();
-      this.modificationForm.controls.heatedOrChilled.disable();
     }
   }
 
