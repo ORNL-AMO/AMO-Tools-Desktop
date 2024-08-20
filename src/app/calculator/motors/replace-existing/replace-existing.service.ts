@@ -132,12 +132,15 @@ export class ReplaceExistingService {
     if (co2SavingsData) {
       co2SavingsData.electricityUse = results.existingEnergyUse;
       results.existingEmissionOutput = this.assessmentCo2Service.getCo2EmissionsResult(co2SavingsData, settings);
+      results.existingEmissionOutput /= 1000;
 
       co2SavingsData.electricityUse = results.rewoundEnergyUse;
       results.rewoundEmissionOutput = this.assessmentCo2Service.getCo2EmissionsResult(co2SavingsData, settings);
+      results.rewoundEmissionOutput /= 1000;
 
       co2SavingsData.electricityUse = results.newEnergyUse;
       results.newEmissionOutput = this.assessmentCo2Service.getCo2EmissionsResult(co2SavingsData, settings);
+      results.newEmissionOutput /= 1000;
     }
     return results;
   }
