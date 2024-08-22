@@ -416,13 +416,13 @@ export class SteamReductionService {
   convertSteamReductionResult(results: SteamReductionResult, settings: Settings): SteamReductionResult {
     if (settings.unitsOfMeasure == 'Metric') {
       results.energyUse = this.convertUnitsService.value(results.energyUse).from('kJ').to('GJ');
-      results.steamUse = this.convertUnitsService.value(results.steamUse).from('lb').to('kg') / 1000;
+      results.steamUse = this.convertUnitsService.value(results.steamUse).from('lb').to('kg');
       let energyCostConversionHelper = this.convertUnitsService.value(1).from('kJ').to('GJ');
       results.energyCost = results.energyCost / energyCostConversionHelper;
     }
     else if (settings.unitsOfMeasure == 'Imperial') {      
       results.energyUse = this.convertUnitsService.value(results.energyUse).from('kJ').to('MMBtu');
-      results.steamUse = this.convertUnitsService.value(results.steamUse).from('kg').to('klb') / 1000;      
+      results.steamUse = this.convertUnitsService.value(results.steamUse).from('kg').to('klb');      
       let energyCostConversionHelper = this.convertUnitsService.value(1).from('kJ').to('MMBtu');
       results.energyCost = results.energyCost / energyCostConversionHelper;
     }
