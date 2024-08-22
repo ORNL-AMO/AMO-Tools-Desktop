@@ -142,6 +142,7 @@ export interface GraphObj {
     layout: GraphLayout,
     mode: {
         modeBarButtonsToRemove?: string[],
+        modeBarButtonsToAdd?: any[],
         plotGlPixelRatio?: number,
         responsive?: boolean,
         displaylogo?: boolean,
