@@ -55,6 +55,13 @@ export class SteamReductionFormComponent implements OnInit {
     { value: 2, name: 'Other' }
   ];
 
+  steamVariableOptions: Array<{ value: number, name: string }> = [
+    { value: 0, name: 'Temperature' },
+    { value: 1, name: 'Enthalpy' },
+    { value: 2, name: 'Entropy' },
+    { value: 3, name: 'Quality' }
+  ];
+
   idString: string;
   individualResults: SteamReductionResult;
   isEditingName: boolean = false;
@@ -124,6 +131,27 @@ export class SteamReductionFormComponent implements OnInit {
     this.calculate();
   }
 
+  changeSteamVariableOption(){
+    
+  }
+
+  getOptionDisplayUnit(quantity: number) {
+    let displayUnit: string;
+    if (quantity === 0) {
+      displayUnit = this.settings.steamTemperatureMeasurement;
+      return displayUnit;
+    } else if (quantity === 1) {
+      displayUnit = this.settings.steamSpecificEnthalpyMeasurement;
+      return displayUnit;
+    } else if (quantity === 2) {
+      displayUnit = this.settings.steamSpecificEntropyMeasurement;
+      return displayUnit;
+    } else if (quantity === 3) {
+      return displayUnit;
+    }
+  }
+
+
   calculate() {
     let tmpObj = this.steamReductionService.getObjFromForm(this.form, this.data);
     this.data = tmpObj;
@@ -133,6 +161,9 @@ export class SteamReductionFormComponent implements OnInit {
 
   calculateIndividualResult() {
     this.individualResults = this.steamReductionService.calculateIndividualEquipment(this.data, this.settings);
+    if (this.individualResults == undefined){
+      this.individualResults.energyCost = 0;
+    }
   }
 
   removeEquipment() {
