@@ -83,23 +83,7 @@
             {{form.controls.pressure.errors.min.min}}.</span>
         </span>
       </div>
-
-      <div class="form-group">
-        <label class="small" for="{{'boilerEfficiency_'+idString}}">Boiler Efficiency</label>
-        <div class="input-group">
-          <input class="form-control" name="boilerEfficiency" id="{{'boilerEfficiency_'+idString}}" formControlName="boilerEfficiency"
-            type="number" (input)="calculate()" (focus)="focusField('boilerEfficiency')" 
-            onfocus="this.select();">
-            <span class="units input-group-addon">%</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.boilerEfficiency.invalid && !form.controls.boilerEfficiency.pristine">
-          <span *ngIf="form.controls.boilerEfficiency.errors.required">Value required.</span>
-          <span *ngIf="form.controls.boilerEfficiency.errors.min">Value can't be less than
-            {{form.controls.boilerEfficiency.errors.min.min}}.</span>
-        </span>
-      </div>
-
+     
       <div class="form-group">
         <label class="small" for="{{'steamVariableOption_'+idString}}">Known Steam Variable</label>
         <select class="form-control" name="steamVariableOption" id="{{'steamVariableOption_'+idString}}" formControlName="steamVariableOption"
@@ -171,6 +155,22 @@
             {{form.controls.systemEfficiency.errors.min.min}}.</span>
           <span *ngIf="form.controls.systemEfficiency.errors.max">Value can't be more than
             {{form.controls.systemEfficiency.errors.max.max}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'boilerEfficiency_'+idString}}">Boiler Efficiency</label>
+        <div class="input-group">
+          <input class="form-control" name="boilerEfficiency" id="{{'boilerEfficiency_'+idString}}" formControlName="boilerEfficiency"
+            type="number" (input)="calculate()" (focus)="focusField('boilerEfficiency')" 
+            onfocus="this.select();">
+            <span class="units input-group-addon">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.boilerEfficiency.invalid && !form.controls.boilerEfficiency.pristine">
+          <span *ngIf="form.controls.boilerEfficiency.errors.required">Value required.</span>
+          <span *ngIf="form.controls.boilerEfficiency.errors.min">Value can't be less than
+            {{form.controls.boilerEfficiency.errors.min.min}}.</span>
         </span>
       </div>
 
