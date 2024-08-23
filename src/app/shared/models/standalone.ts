@@ -606,6 +606,10 @@ export interface SteamReductionData {
   measurementMethod: number,
   systemEfficiency: number,
   pressure: number,
+  boilerEfficiency: number;
+  steamVariableOption: number;
+  steamVariable: number;
+  feedWaterTemperature: number;
   flowMeterMethodData: SteamFlowMeterMethodData,
   airMassFlowMethodData: SteamMassFlowMethodData,
   waterMassFlowMethodData: SteamMassFlowMethodData,

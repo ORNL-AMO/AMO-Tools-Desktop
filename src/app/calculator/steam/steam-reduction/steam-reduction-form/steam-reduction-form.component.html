@@ -84,6 +84,77 @@
         </span>
       </div>
 
+      <div class="form-group">
+        <label class="small" for="{{'boilerEfficiency_'+idString}}">Boiler Efficiency</label>
+        <div class="input-group">
+          <input class="form-control" name="boilerEfficiency" id="{{'boilerEfficiency_'+idString}}" formControlName="boilerEfficiency"
+            type="number" (input)="calculate()" (focus)="focusField('boilerEfficiency')" 
+            onfocus="this.select();">
+            <span class="units input-group-addon">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.boilerEfficiency.invalid && !form.controls.boilerEfficiency.pristine">
+          <span *ngIf="form.controls.boilerEfficiency.errors.required">Value required.</span>
+          <span *ngIf="form.controls.boilerEfficiency.errors.min">Value can't be less than
+            {{form.controls.boilerEfficiency.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'steamVariableOption_'+idString}}">Known Steam Variable</label>
+        <select class="form-control" name="steamVariableOption" id="{{'steamVariableOption_'+idString}}" formControlName="steamVariableOption"
+          (change)="changeSteamVariableOption()" (focus)="focusField('steamVariableOption')" >
+          <option *ngFor="let option of steamVariableOptions" [ngValue]="option.value">{{option.name}}</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label *ngIf="form.controls.steamVariableOption.value === 0"
+          for="{{'steamVariable_'+idString}}">Temperature</label>
+        <label *ngIf="form.controls.steamVariableOption.value === 1" for="{{'steamVariable_'+idString}}">Specific
+          Enthalpy</label>
+        <label *ngIf="form.controls.steamVariableOption.value === 2" for="{{'steamVariable_'+idString}}">Specific
+          Entropy</label>
+        <label *ngIf="form.controls.steamVariableOption.value === 3" for="{{'steamVariable_'+idString}}">Quality</label>
+        <div class="input-group calc-addon-group">
+          <input type="number" step="1" class="form-control" formControlName="steamVariable" id="{{'steamVariable_'+idString}}"
+            onfocus="this.select();" (input)="calculate()" (focus)="focusField('steamVariable')" autofocus>
+          <span class="input-group-addon units" *ngIf="form.controls.steamVariableOption.value != 3"
+            [innerHTML]="getOptionDisplayUnit(form.controls.steamVariableOption.value) | settingsLabel"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.steamVariable.invalid && !form.controls.quantsteamVariableityValue.pristine">
+          <span *ngIf="form.controls.steamVariable.errors.required">Value Required</span>
+          <span *ngIf="form.controls.steamVariable.errors.max">Value can't be greater than
+            {{form.controls.steamVariable.errors.max.max}}
+            <span *ngIf="form.controls.steamVariableOption.value != 3"
+              [innerHTML]="getOptionDisplayUnit(form.controls.steamVariableOption.value) | settingsLabel"></span>
+            .</span>
+          <span *ngIf="form.controls.steamVariable.errors.min">Value can't be less than
+            {{form.controls.steamVariable.errors.min.min}}
+            <span *ngIf="form.controls.steamVariableOption.value != 3"
+              [innerHTML]="getOptionDisplayUnit(form.controls.steamVariableOption.value) | settingsLabel"></span>.
+          </span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'feedWaterTemperature_'+idString}}">Feedwater Temperature</label>
+        <div class="input-group">
+          <input class="form-control" name="feedWaterTemperature" id="{{'feedWaterTemperature_'+idString}}" formControlName="feedWaterTemperature"
+            type="number" (input)="calculate()" (focus)="focusField('feedWaterTemperature')" 
+            onfocus="this.select();">
+            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.feedWaterTemperature.invalid && !form.controls.feedWaterTemperature.pristine">
+          <span *ngIf="form.controls.feedWaterTemperature.errors.required">Value required.</span>
+          <span *ngIf="form.controls.feedWaterTemperature.errors.min">Value can't be less than
+            {{form.controls.feedWaterTemperature.errors.min.min}}.</span>
+        </span>
+      </div>
+
 
       <div class="form-group">
         <label class="small" for="{{'systemEfficiency_'+idString}}">System Efficiency</label>

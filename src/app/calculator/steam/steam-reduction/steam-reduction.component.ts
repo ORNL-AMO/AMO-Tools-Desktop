@@ -111,7 +111,7 @@ export class SteamReductionComponent implements OnInit {
     if (this.steamReductionService.baselineData) {
       this.baselineData = this.steamReductionService.baselineData;
     } else {
-      let tmpObj: SteamReductionData = this.steamReductionService.initObject(0, this.settings, this.operatingHours, 1, this.steamUtilityCost, this.naturalGasUtilityCost, this.otherUtilityCost);
+      let tmpObj: SteamReductionData = this.steamReductionService.emptyObject(0, this.settings, this.operatingHours, 0, this.steamUtilityCost, this.naturalGasUtilityCost, this.otherUtilityCost);
       this.baselineData = [tmpObj];
     }
     if (this.steamReductionService.modificationData) {
@@ -187,7 +187,7 @@ export class SteamReductionComponent implements OnInit {
   }
 
   btnResetData() {
-    let tmpObj: SteamReductionData = this.steamReductionService.initObject(0, this.settings, this.operatingHours, 1, this.steamUtilityCost, this.naturalGasUtilityCost, this.otherUtilityCost);
+    let tmpObj: SteamReductionData = this.steamReductionService.emptyObject(0, this.settings, this.operatingHours, 0, this.steamUtilityCost, this.naturalGasUtilityCost, this.otherUtilityCost);
     this.baselineData = [tmpObj];
     this.modificationData = new Array<SteamReductionData>();
     this.modificationExists = false;
