@@ -366,6 +366,8 @@ export class CalculatorSuiteApiService {
 
       let OtherMethodData = new Module.SteamOffsheetMethodData(steamReduction.otherMethodData.consumption);
 
+      let steamVariableOptionThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(steamReduction.steamVariableOption)
+
       let wasmConvertedInput = new Module.SteamReductionInput(
         steamReduction.hoursPerYear,
         steamReduction.utilityType,
@@ -379,7 +381,7 @@ export class CalculatorSuiteApiService {
         OtherMethodData, 
         steamReduction.units, 
         steamReduction.boilerEfficiency, 
-        steamReduction.steamVariableOption,
+        steamVariableOptionThermodynamicQuantity,
         steamReduction.steamVariable,
         steamReduction.feedWaterTemperature);
       inputs.push_back(wasmConvertedInput);
