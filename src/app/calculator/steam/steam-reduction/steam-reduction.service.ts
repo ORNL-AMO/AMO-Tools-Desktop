@@ -157,13 +157,26 @@ export class SteamReductionService {
     return defaultSteamReduction;
   }
 
-  getFormFromObj(obj: SteamReductionData, index: number, isBaseline: boolean): UntypedFormGroup {
+  getFormFromObj(obj: SteamReductionData, index: number, isBaseline: boolean, settings: Settings): UntypedFormGroup {
     //if utilityType 0 = steam, utilityType 1 = naturalGas, utilityType 2 = other
     let utilityCost: number = obj.steamUtilityCost;
     if (obj.utilityType == 1) {
       utilityCost = obj.naturalGasUtilityCost
     } else if (obj.utilityType == 2) {
       utilityCost = obj.otherUtilityCost;
+    }
+    let tempMin: number = 0;
+    let steamVariableMin: number = 0;
+    if (settings.unitsOfMeasure == 'Imperial') {
+      tempMin = 32;
+      steamVariableMin = 32;
+    } else if (settings.unitsOfMeasure == 'Metric') {
+      tempMin = 0;
+      steamVariableMin = 0;
+    }
+
+    if (obj.steamVariableOption != 0){
+      steamVariableMin = 0;
     }
 
     let form: UntypedFormGroup = this.fb.group({
@@ -176,8 +189,8 @@ export class SteamReductionService {
       pressure: [obj.pressure, [Validators.required, Validators.min(0)]],
       boilerEfficiency: [obj.boilerEfficiency, [Validators.required, Validators.min(0)]],
       steamVariableOption: [obj.steamVariableOption, [Validators.required, Validators.min(0)]],
-      steamVariable: [obj.steamVariable, [Validators.required, Validators.min(0)]],
-      feedWaterTemperature: [obj.feedWaterTemperature, [Validators.required, Validators.min(0)]],
+      steamVariable: [obj.steamVariable, [Validators.required, Validators.min(steamVariableMin)]],
+      feedWaterTemperature: [obj.feedWaterTemperature, [Validators.required, Validators.min(tempMin)]],
 
       //flow meter method
       flowMeterFlowRate: [obj.flowMeterMethodData.flowRate],
@@ -361,9 +374,7 @@ export class SteamReductionService {
     };
     let results: SteamReductionResult = this.standaloneService.steamReduction(inputObj);
     results = this.convertSteamReductionResult(results, settings);
-    if (settings.unitsOfMeasure == 'Imperial') {
-      results.steamUse = results.steamUse;
-    }
+    
     return results;
   }
 
@@ -396,14 +407,8 @@ export class SteamReductionService {
     if(input.steamVariableOption === 0){      
       convertedInput.steamVariable = this.convertUnitsService.value(input.steamVariable).from('C').to('K');
     }
-    //convertedInput.flowMeterMethodData.flowRate = this.convertUnitsService.value(input.flowMeterMethodData.flowRate).from('kg').to('lb');
     convertedInput.airMassFlowMethodData.massFlowNameplateData.flowRate = this.convertUnitsService.value(input.airMassFlowMethodData.massFlowNameplateData.flowRate).from('L/s').to('m3/min');
     convertedInput.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct = this.convertUnitsService.value(input.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct).from('cm2').to('m2');
-    // convertedInput.airMassFlowMethodData.massFlowMeasuredData.airVelocity = this.convertUnitsService.value(input.airMassFlowMethodData.massFlowMeasuredData.airVelocity).from('m').to('ft');
-    // convertedInput.airMassFlowMethodData.inletTemperature = this.convertUnitsService.value(input.airMassFlowMethodData.inletTemperature).from('C').to('F');
-    // convertedInput.airMassFlowMethodData.outletTemperature = this.convertUnitsService.value(input.airMassFlowMethodData.outletTemperature).from('C').to('F');
-    // convertedInput.waterMassFlowMethodData.inletTemperature = this.convertUnitsService.value(input.waterMassFlowMethodData.inletTemperature).from('C').to('F');
-    // convertedInput.waterMassFlowMethodData.outletTemperature = this.convertUnitsService.value(input.waterMassFlowMethodData.outletTemperature).from('C').to('F');
     convertedInput.waterMassFlowMethodData.massFlowNameplateData.flowRate = this.convertUnitsService.value(input.waterMassFlowMethodData.massFlowNameplateData.flowRate).from('L/s').to('m3/min');
     convertedInput.otherMethodData.consumption = this.convertUnitsService.value(input.otherMethodData.consumption).from('GJ').to('kJ');
     return convertedInput;
@@ -441,16 +446,11 @@ export class SteamReductionService {
   convertSteamReductionResult(results: SteamReductionResult, settings: Settings): SteamReductionResult {
     if (settings.unitsOfMeasure == 'Metric') {
       results.energyUse = this.convertUnitsService.value(results.energyUse).from('kJ').to('GJ');
-      //results.steamUse = this.convertUnitsService.value(results.steamUse).from('lb').to('kg');
-      // let energyCostConversionHelper = this.convertUnitsService.value(1).from('kJ').to('GJ');
-      // results.energyCost = results.energyCost / energyCostConversionHelper;
       results.energyCost = results.energyCost;
     }
     else if (settings.unitsOfMeasure == 'Imperial') {      
       results.energyUse = this.convertUnitsService.value(results.energyUse).from('kJ').to('MMBtu');
-      results.steamUse = this.convertUnitsService.value(results.steamUse).from('kg').to('klb');      
-      // let energyCostConversionHelper = this.convertUnitsService.value(1).from('kJ').to('MMBtu');
-      // results.energyCost = results.energyCost / energyCostConversionHelper;
+      results.steamUse = this.convertUnitsService.value(results.steamUse).from('kg').to('klb');    
       results.energyCost = results.energyCost;
     }
     return results;

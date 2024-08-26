@@ -107,7 +107,7 @@
             [innerHTML]="getOptionDisplayUnit(form.controls.steamVariableOption.value) | settingsLabel"></span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.steamVariable.invalid && !form.controls.quantsteamVariableityValue.pristine">
+          *ngIf="form.controls.steamVariable.invalid && !form.controls.steamVariable.pristine">
           <span *ngIf="form.controls.steamVariable.errors.required">Value Required</span>
           <span *ngIf="form.controls.steamVariable.errors.max">Value can't be greater than
             {{form.controls.steamVariable.errors.max.max}}
