@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { UntypedFormGroup } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { SteamReductionService } from '../steam-reduction.service';
 import { SteamReductionResult, SteamReductionData } from '../../../../shared/models/standalone';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -57,8 +57,8 @@ export class SteamReductionFormComponent implements OnInit {
 
   steamVariableOptions: Array<{ value: number, name: string }> = [
     { value: 0, name: 'Temperature' },
-    { value: 1, name: 'Enthalpy' },
-    { value: 2, name: 'Entropy' },
+    //{ value: 1, name: 'Enthalpy' },
+    //{ value: 2, name: 'Entropy' },
     { value: 3, name: 'Quality' }
   ];
 
@@ -76,7 +76,7 @@ export class SteamReductionFormComponent implements OnInit {
     else {
       this.idString = 'modification_' + this.index;
     }
-    this.form = this.steamReductionService.getFormFromObj(this.data, this.index, this.isBaseline);
+    this.form = this.steamReductionService.getFormFromObj(this.data, this.index, this.isBaseline, this.settings);
     if (this.selected == false) {
       this.form.disable();
     }
@@ -113,6 +113,8 @@ export class SteamReductionFormComponent implements OnInit {
 
   changeMeasurementMethod() {
     this.steamReductionService.setValidators(this.form);
+    this.form.patchValue({ systemEfficiency: 100 });
+    this.data.systemEfficiency = 100;
     this.calculate();
   }
 
@@ -132,7 +134,21 @@ export class SteamReductionFormComponent implements OnInit {
   }
 
   changeSteamVariableOption(){
-    
+    let steamVariableMin: number = 0;
+    let steamVariableMax: number = 1472;
+    if (this.form.controls.utilityType.value == 0){
+      if (this.settings.unitsOfMeasure == 'Imperial') {
+        steamVariableMin = 32;
+        steamVariableMax = 1472;
+      } else if (this.settings.unitsOfMeasure == 'Metric') {
+        steamVariableMin = 0;        
+        steamVariableMax = 800;
+      }
+    } else if (this.form.controls.utilityType.value == 3){
+      steamVariableMin = 0;      
+      steamVariableMax = 1;
+    }
+    this.form.controls.steamVariable.setValidators([Validators.required, Validators.min(steamVariableMin), Validators.max(steamVariableMax)]);
   }
 
   getOptionDisplayUnit(quantity: number) {
@@ -155,8 +171,10 @@ export class SteamReductionFormComponent implements OnInit {
   calculate() {
     let tmpObj = this.steamReductionService.getObjFromForm(this.form, this.data);
     this.data = tmpObj;
-    this.calculateIndividualResult();
-    this.emitCalculate.emit(tmpObj);
+    if (this.form.valid){
+      this.calculateIndividualResult();
+      this.emitCalculate.emit(tmpObj);
+    }
   }
 
   calculateIndividualResult() {

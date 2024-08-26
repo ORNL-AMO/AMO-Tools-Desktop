@@ -180,6 +180,10 @@ export class SteamReductionComponent implements OnInit {
     dataArray[index].otherUtilityCost = data.otherUtilityCost;
     dataArray[index].steamUtilityCost = data.steamUtilityCost;
     dataArray[index].naturalGasUtilityCost = data.naturalGasUtilityCost;
+    dataArray[index].boilerEfficiency = data.boilerEfficiency;
+    dataArray[index].feedWaterTemperature = data.feedWaterTemperature;
+    dataArray[index].steamVariableOption = data.steamVariableOption;
+    dataArray[index].steamVariable = data.steamVariable;
   }
 
   getResults() {
