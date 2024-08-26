@@ -113,6 +113,8 @@ export class SteamReductionFormComponent implements OnInit {
 
   changeMeasurementMethod() {
     this.steamReductionService.setValidators(this.form);
+    this.form.patchValue({ systemEfficiency: 100 });
+    this.data.systemEfficiency = 100;
     this.calculate();
   }
 

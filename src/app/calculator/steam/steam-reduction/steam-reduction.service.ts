@@ -59,7 +59,7 @@ export class SteamReductionService {
       airMassFlowMethodData: {
         isNameplate: false,
         massFlowMeasuredData: {
-          areaOfDuct: 100,
+          areaOfDuct: 2,
           airVelocity: 5
         },
         massFlowNameplateData: {
@@ -127,7 +127,7 @@ export class SteamReductionService {
       airMassFlowMethodData: {
         isNameplate: false,
         massFlowMeasuredData: {
-          areaOfDuct: 100,
+          areaOfDuct: 2,
           airVelocity: 5
         },
         massFlowNameplateData: {
@@ -338,8 +338,6 @@ export class SteamReductionService {
     if (modification) {
       let modificationInpCpy: Array<SteamReductionData> = JSON.parse(JSON.stringify(modification));
       modificationResults = this.calculate(modificationInpCpy, settings);
-    }else{
-      modificationResults = baselineResults;
     }
     let steamReductionResults: SteamReductionResults = {
       baselineResults: baselineResults,
@@ -368,7 +366,7 @@ export class SteamReductionService {
 
   calculateIndividualEquipment(input: SteamReductionData, settings: Settings): SteamReductionResult {
     let inputArray: Array<SteamReductionData> = JSON.parse(JSON.stringify([input]));
-    inputArray = this.convertInput(inputArray, settings);
+    inputArray = this.convertInput(inputArray, settings);    
     let inputObj: SteamReductionInput = {
       steamReductionInputVec: inputArray
     };
@@ -430,14 +428,20 @@ export class SteamReductionService {
     convertedInput.pressure = this.convertUnitsService.value(input.pressure).from('psig').to('MPaa');
 
     convertedInput.flowMeterMethodData.flowRate = this.convertUnitsService.value(input.flowMeterMethodData.flowRate).from('lb').to('kg');
+
     convertedInput.airMassFlowMethodData.massFlowNameplateData.flowRate = this.convertUnitsService.value(input.airMassFlowMethodData.massFlowNameplateData.flowRate).from('ft3/min').to('m3/min');
+
     convertedInput.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct = this.convertUnitsService.value(input.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct).from('ft2').to('m2');
     convertedInput.airMassFlowMethodData.massFlowMeasuredData.airVelocity = this.convertUnitsService.value(input.airMassFlowMethodData.massFlowMeasuredData.airVelocity).from('ft').to('m');
+
     convertedInput.airMassFlowMethodData.inletTemperature = this.convertUnitsService.value(input.airMassFlowMethodData.inletTemperature).from('F').to('C');
     convertedInput.airMassFlowMethodData.outletTemperature = this.convertUnitsService.value(input.airMassFlowMethodData.outletTemperature).from('F').to('C');
+
     convertedInput.waterMassFlowMethodData.inletTemperature = this.convertUnitsService.value(input.waterMassFlowMethodData.inletTemperature).from('F').to('C');
     convertedInput.waterMassFlowMethodData.outletTemperature = this.convertUnitsService.value(input.waterMassFlowMethodData.outletTemperature).from('F').to('C');
+
     convertedInput.waterMassFlowMethodData.massFlowNameplateData.flowRate = this.convertUnitsService.value(input.waterMassFlowMethodData.massFlowNameplateData.flowRate).from('gpm').to('m3/min');
+
     convertedInput.otherMethodData.consumption = this.convertUnitsService.value(input.otherMethodData.consumption).from('MMBtu').to('kJ');
 
     return convertedInput;

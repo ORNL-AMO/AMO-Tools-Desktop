@@ -140,7 +140,7 @@
       </div>
 
 
-      <div class="form-group">
+      <div class="form-group" *ngIf="form.controls.measurementMethod.value != 3">
         <label class="small" for="{{'systemEfficiency_'+idString}}">System Efficiency</label>
         <div class="input-group">
           <input class="form-control" name="systemEfficiency" id="{{'systemEfficiency_'+idString}}"
