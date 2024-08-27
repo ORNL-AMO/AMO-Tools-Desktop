@@ -519,7 +519,7 @@ export class SystemProfileGraphsComponent implements OnInit {
   getCompressorName(compressorId: string): string {
     let compressor: CompressorInventoryItem = this.inventoryItems.find(item => { return item.itemId == compressorId });
 
-    if (compressor) {
+    if (compressor && this.selectedDayType) {
       if (this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
         let selection = this.compressedAirAssessment.systemInformation.trimSelections.find(selection => { return selection.dayTypeId == this.selectedDayType.dayTypeId && selection.compressorId == compressorId });
         if (selection != undefined) {
