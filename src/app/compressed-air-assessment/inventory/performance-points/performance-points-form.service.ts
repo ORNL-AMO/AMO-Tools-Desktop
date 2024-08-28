@@ -325,6 +325,8 @@ export class PerformancePointsFormService {
       max = performancePoints.maxFullFlow.dischargePressure;
     } else if (controlType == 7 || controlType == 9) {
       max = performancePoints.blowoff.dischargePressure;
+    } else if (controlType == 11) {
+      max = performancePoints.turndown.dischargePressure;
     }
     return { min: min, max: max };
   }
