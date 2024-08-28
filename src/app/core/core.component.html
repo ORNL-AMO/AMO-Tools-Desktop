@@ -5,14 +5,13 @@
         <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" (closeTutorial)="closeTutorial()">
         </app-opening-tutorial>
         <app-dashboard-tutorial *ngIf="tutorialType == 'dashboard-tutorial'" (closeTutorial)="closeTutorial()"
-            [inTutorials]="inTutorialsView"></app-dashboard-tutorial>
+        [inTutorials]="inTutorialsView"></app-dashboard-tutorial>
     </div>
     <router-outlet></router-outlet>
 </div>
 
+<app-import-backup-modal *ngIf="showImportBackupModal === true"></app-import-backup-modal>
 <app-security-and-privacy-modal *ngIf="showSecurityAndPrivacyModal === true" 
 (emitModalClosed)="closeNoticeModal($event)"></app-security-and-privacy-modal>
-
-
 <app-email-measur-data-modal *ngIf="showEmailMeasurDataModal === true" 
 (emitModalClosed)="closeEmailModal($event)"></app-email-measur-data-modal>

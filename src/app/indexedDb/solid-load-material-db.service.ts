@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { SolidLoadChargeMaterial } from '../shared/models/materials';
 import { SolidLoadMaterialStoreMeta } from './dbConfig';
 
 @Injectable()
 export class SolidLoadMaterialDbService {
   storeName: string = SolidLoadMaterialStoreMeta.store;
+  dbSolidLoadChargeMaterials: BehaviorSubject<Array<SolidLoadChargeMaterial>>;
+
   constructor(private dbService: NgxIndexedDBService) {
+    this.dbSolidLoadChargeMaterials = new BehaviorSubject<Array<SolidLoadChargeMaterial>>([]);
+
   }
 
   getAllWithObservable(): Observable<Array<SolidLoadChargeMaterial>> {

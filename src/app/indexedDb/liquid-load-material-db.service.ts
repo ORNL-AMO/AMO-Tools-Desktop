@@ -7,7 +7,11 @@ import { LiquidLoadMaterialStoreMeta } from './dbConfig';
 @Injectable()
 export class LiquidLoadMaterialDbService {
   storeName: string = LiquidLoadMaterialStoreMeta.store;
-  constructor(private dbService: NgxIndexedDBService) {}
+  dbLiquidLoadChargeMaterials: BehaviorSubject<Array<LiquidLoadChargeMaterial>>;
+
+  constructor(private dbService: NgxIndexedDBService) {
+    this.dbLiquidLoadChargeMaterials = new BehaviorSubject<Array<LiquidLoadChargeMaterial>>([]);
+  }
 
   getAllWithObservable(): Observable<Array<LiquidLoadChargeMaterial>> {
     return this.dbService.getAll(this.storeName);

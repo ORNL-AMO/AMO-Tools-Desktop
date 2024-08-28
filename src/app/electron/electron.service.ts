@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { MeasurBackupFile } from '../shared/backup-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,9 @@ export class ElectronService {
   releaseData: BehaviorSubject<ReleaseData>;
   updateError: BehaviorSubject<boolean>;
   updateDownloaded: BehaviorSubject<boolean>;
+  backupFilePath: BehaviorSubject<string>;
+  fileExists: BehaviorSubject<boolean>;
+  accountLatestBackupFile: BehaviorSubject<MeasurBackupFile>;
   isElectron: boolean;
   constructor() {
 
@@ -16,6 +20,11 @@ export class ElectronService {
     this.releaseData = new BehaviorSubject<ReleaseData>(undefined);
     this.updateError = new BehaviorSubject<boolean>(false);
     this.updateDownloaded = new BehaviorSubject<boolean>(false);
+    this.backupFilePath = new BehaviorSubject<string>(undefined);
+    this.accountLatestBackupFile = new BehaviorSubject<MeasurBackupFile>(undefined);
+    this.fileExists = new BehaviorSubject<boolean>(false);
+
+
     this.isElectron = window["electronAPI"]
     if (this.isElectron) {
       this.listen();
@@ -49,6 +58,22 @@ export class ElectronService {
       console.log(data)
       this.updateDownloaded.next(true);
     });
+
+    window["electronAPI"].on("backup-file-path", (filePath) => {
+      if (filePath) {
+        this.backupFilePath.next(filePath);
+      }
+    });
+
+    window["electronAPI"].on("file-exists", (data) => {
+      this.fileExists.next(data == 'file');
+    });
+
+    window["electronAPI"].on("data-file", (data) => {
+      //todo 6925
+      // this.accountLatestBackupFile.next(data);
+    });
+
   }
 
   //Used to tell electron that app is ready
@@ -83,6 +108,63 @@ export class ElectronService {
     console.log('quit and install');
     window["electronAPI"].send("quit-and-install");
   }
+
+  saveToFileSystem(backupFile: any) {
+    if (!window["electronAPI"] || !backupFile) {
+      return;
+    }
+    let args: { fileName: string, fileData: any } = {
+      fileName: undefined,
+      fileData: backupFile
+    }
+    if (backupFile.dataBackupFilePath) {
+      args.fileName = backupFile.dataBackupFilePath;
+    } else {
+      args.fileName = backupFile.name + '.json';
+    }
+    console.log('filedata', args.fileData);
+    console.log('saveToFileSystem args.filename', args.fileName)
+    window["electronAPI"].send("saveFile", args);
+  }
+
+  checkFileExists(dataBackupFilePath: string) {
+    if (!window["electronAPI"] || !dataBackupFilePath) {
+      return;
+    }
+    let args: { fileName: string } = {
+      fileName: dataBackupFilePath
+    }
+    window["electronAPI"].send("fileExists", args);
+  }
+
+  openDialog(backupFile: MeasurBackupFile) {
+    if (!window["electronAPI"]) {
+      return;
+    }
+    let args: { fileName: string, fileData: any } = {
+      fileName: undefined,
+      fileData: backupFile
+    }
+    if (backupFile.dataBackupFilePath) {
+      args.fileName = backupFile.dataBackupFilePath;
+    } else {
+      args.fileName = backupFile.filename + '.json';
+    }
+    console.log('selectAutomaticBackupPath openDialog', args);
+    window["electronAPI"].send("openDialog", args);
+  }
+
+  // todo gets most recent data file, or specified path
+  getDataFile(dataBackupFilePath: string){
+    if (!window["electronAPI"]) {
+      return;
+    }
+    let args: { fileName: string } = {
+      fileName: dataBackupFilePath
+    }
+    window["electronAPI"].send("getDataFile", args);
+  }
+
 
 }
 

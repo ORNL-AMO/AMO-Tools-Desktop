@@ -127,6 +127,8 @@ export class FlueGasMaterialComponent implements OnInit {
       let suiteDbResult = this.sqlDbApiService.insertGasFlueGasMaterial(this.newMaterial);
       if (suiteDbResult == true) {
         await firstValueFrom(this.flueGasMaterialDbService.addWithObservable(this.newMaterial));
+        let materials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+        this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
         this.closeModal.emit(this.newMaterial);
       }
     }
@@ -143,6 +145,8 @@ export class FlueGasMaterialComponent implements OnInit {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
       await firstValueFrom(this.flueGasMaterialDbService.updateWithObservable(this.newMaterial));
+      let materials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+      this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
       this.closeModal.emit(this.newMaterial);
     }
   }
@@ -152,6 +156,8 @@ export class FlueGasMaterialComponent implements OnInit {
       let suiteDbResult = this.sqlDbApiService.deleteGasFlueGasMaterial(this.sdbEditMaterialId);
       if (suiteDbResult == true) {
         await firstValueFrom(this.flueGasMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
+        let materials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+        this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
         this.closeModal.emit(this.newMaterial);
       }
     }

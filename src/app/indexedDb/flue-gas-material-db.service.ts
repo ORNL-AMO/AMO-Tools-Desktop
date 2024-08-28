@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { FlueGasMaterial } from '../shared/models/materials';
 import { FlueGasMaterialStoreMeta } from './dbConfig';
 
 @Injectable()
 export class FlueGasMaterialDbService {
   storeName: string = FlueGasMaterialStoreMeta.store;
+  dbFlueGasMaterials: BehaviorSubject<Array<FlueGasMaterial>>;
+
   constructor(private dbService: NgxIndexedDBService) {
+    this.dbFlueGasMaterials = new BehaviorSubject<Array<FlueGasMaterial>>([]);
+
   }
 
  

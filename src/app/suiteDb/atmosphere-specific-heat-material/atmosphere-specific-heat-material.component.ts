@@ -72,7 +72,9 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
       }
       let suiteDbResult = this.sqlDbApiService.insertAtmosphereSpecificHeat(this.newMaterial);
       if (suiteDbResult === true) {
-        let material: AtmosphereSpecificHeat = await firstValueFrom(this.atmosphereDbService.addWithObservable(this.newMaterial))
+        await firstValueFrom(this.atmosphereDbService.addWithObservable(this.newMaterial))
+        let materials: AtmosphereSpecificHeat[] = await firstValueFrom(this.atmosphereDbService.getAllWithObservable())
+        this.atmosphereDbService.dbAtmospherSpecificHeatMaterials.next(materials);
         this.closeModal.emit(this.newMaterial);
       }
     }
@@ -87,7 +89,9 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
     if (suiteDbResult === true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
-      await firstValueFrom(this.atmosphereDbService.updateWithObservable(this.newMaterial))
+      await firstValueFrom(this.atmosphereDbService.updateWithObservable(this.newMaterial));
+      let materials: AtmosphereSpecificHeat[] = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
+      this.atmosphereDbService.dbAtmospherSpecificHeatMaterials.next(materials);
       this.closeModal.emit(this.newMaterial);
     }
   }
@@ -97,6 +101,8 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
       let suiteDbResult = this.sqlDbApiService.deleteAtmosphereSpecificHeat(this.sdbEditMaterialId);
       if (suiteDbResult === true) {
         await firstValueFrom(this.atmosphereDbService.deleteByIdWithObservable(this.idbEditMaterialId));
+        let materials: AtmosphereSpecificHeat[] = await firstValueFrom(this.atmosphereDbService.getAllWithObservable())
+        this.atmosphereDbService.dbAtmospherSpecificHeatMaterials.next(materials);
         this.closeModal.emit(this.newMaterial);
       }
     }

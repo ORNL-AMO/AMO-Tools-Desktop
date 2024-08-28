@@ -81,6 +81,8 @@ export class GasLoadChargeMaterialComponent implements OnInit {
       let suiteDbResult = this.sqlDbApiService.insertGasLoadChargeMaterial(this.newMaterial);
       if (suiteDbResult == true) {
         await firstValueFrom(this.gasLoadMaterialDbService.addWithObservable(this.newMaterial));
+        let materials: GasLoadChargeMaterial[] = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
+        this.gasLoadMaterialDbService.dbGasLoadChargeMaterials.next(materials);
         this.closeModal.emit(this.newMaterial);
       }
     }
@@ -96,6 +98,8 @@ export class GasLoadChargeMaterialComponent implements OnInit {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
       await firstValueFrom(this.gasLoadMaterialDbService.updateWithObservable(this.newMaterial))
+      let materials: GasLoadChargeMaterial[] = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
+        this.gasLoadMaterialDbService.dbGasLoadChargeMaterials.next(materials);
       this.closeModal.emit(this.newMaterial);
     }
   }
@@ -105,6 +109,8 @@ export class GasLoadChargeMaterialComponent implements OnInit {
       let suiteDbResult = this.sqlDbApiService.deleteGasLoadChargeMaterial(this.sdbEditMaterialId);
       if (suiteDbResult == true) {
         await firstValueFrom(this.gasLoadMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
+        let materials: GasLoadChargeMaterial[] = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
+        this.gasLoadMaterialDbService.dbGasLoadChargeMaterials.next(materials);
         this.closeModal.emit(this.newMaterial);
       }
     }

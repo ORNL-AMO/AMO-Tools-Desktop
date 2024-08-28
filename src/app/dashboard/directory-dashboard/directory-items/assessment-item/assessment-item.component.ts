@@ -163,6 +163,7 @@ export class AssessmentItemComponent implements OnInit {
       assessmentCalculatorCopy.assessmentId = addedAssessment.id;
       await firstValueFrom(this.calculatorDbService.addWithObservable(assessmentCalculatorCopy));
       let allCalculators: Calculator[] =  await firstValueFrom(this.calculatorDbService.getAllCalculators());
+      console.log('asessmentItem', allCalculators);
       this.calculatorDbService.setAll(allCalculators);
     } 
     

@@ -175,6 +175,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   save() {
+    console.log('======= save material')
     this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);

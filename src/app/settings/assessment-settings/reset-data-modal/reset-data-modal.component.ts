@@ -31,6 +31,7 @@ import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-materi
 import { ElectronService } from '../../../electron/electron.service';
 import { MockPumpInventory } from '../../../examples/mockPumpInventoryData';
 import { AppErrorService } from '../../../shared/errors/app-error.service';
+import { ManageAppDataService } from '../../../shared/manage-app-data.service';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -64,7 +65,9 @@ export class ResetDataModalComponent implements OnInit {
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private atmosphereDbService: AtmosphereDbService,
     private appErrorService: AppErrorService,
-    private inventoryDbService: InventoryDbService) { }
+    private inventoryDbService: InventoryDbService,
+    private manageAppDataService: ManageAppDataService,
+  ) { }
 
   ngOnInit() {
   }
@@ -126,7 +129,6 @@ export class ResetDataModalComponent implements OnInit {
   async resetSystemSettingsAccept() {
     this.deleting = true;
     try {
-      throw new Error();
       if (this.resetAll) {
         this.resetAllData();
       } else if (this.resetUserAssessments) {
@@ -302,6 +304,7 @@ async resetAllExampleAssessments(dirId: number) {
 }
 
   async resetAllUserAssessments() {
+    // todo 6925 aren't these all stored within the directory as well?
     let directoryDataIds: DirectoryDataIds = this.getAssessmentsAndDataIds();
     let assessments: Array<Assessment[]> = await firstValueFrom(this.assessmentDbService.bulkDeleteWithObservable(directoryDataIds.assessments));
     let settings: Array<Settings[]> = await firstValueFrom(this.settingsDbService.bulkDeleteWithObservable(directoryDataIds.settings));

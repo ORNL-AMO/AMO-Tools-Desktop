@@ -7,7 +7,7 @@ import { DirectoryDbService } from './directory-db.service';
 import { Directory } from '../shared/models/directory';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { combineLatestWith, firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatestWith, firstValueFrom, Observable } from 'rxjs';
 import { SettingsStoreMeta } from './dbConfig';
 import { environment } from '../../environments/environment';
 
@@ -16,10 +16,14 @@ export class SettingsDbService {
   allSettings: Array<Settings>;
   globalSettings: Settings;
   storeName: string = SettingsStoreMeta.store;
+  dbSettings: BehaviorSubject<Array<Settings>>;
+
   constructor(
     private settingService: SettingsService, 
     private dbService: NgxIndexedDBService,
-    private directoryDbService: DirectoryDbService) { }
+    private directoryDbService: DirectoryDbService) {
+      this.dbSettings = new BehaviorSubject<Array<Settings>>([]);
+     }
 
   async setAll(settings?: Array<Settings>) {
     if (settings) {
@@ -32,6 +36,7 @@ export class SettingsDbService {
     if (!environment.production) {
       this.setTutorialsOff();
     }
+    this.dbSettings.next(this.allSettings);
   }
 
   getAllSettings(): Observable<Array<Settings>> {
@@ -51,6 +56,11 @@ export class SettingsDbService {
   bulkDeleteWithObservable(calculatorIds: Array<number>): Observable<any> {
     // ngx-indexed-db returns Array<Array<T>>
     return this.dbService.bulkDelete(this.storeName, calculatorIds);
+  }
+
+  clearAllWithObservable(): Observable<any> {
+    // ngx-indexed-db returns Array<Array<T>>
+    return this.dbService.clear(this.storeName);
   }
 
   updateWithObservable(settings: Settings): Observable<Settings> {
@@ -96,6 +106,9 @@ export class SettingsDbService {
   getByAssessmentId(assessment: Assessment, neededFromAssessment?: boolean): Settings {
     let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.assessmentId === assessment.id; });
     if (!selectedSettings && !neededFromAssessment) {
+      // todo 6925 - instead of adding assessment settings at create we're using this method to create them if not exists 
+      // - why was this done?
+      // - how many assessments do it this way
       selectedSettings = this.getByDirectoryId(assessment.directoryId);
     }
     if (!selectedSettings && !neededFromAssessment) {
