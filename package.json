@@ -16,6 +16,7 @@
     "build": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href .",
     "build-watch": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --watch",
     "build-prod-desktop": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --configuration desktop",
+    "build-prod-desktop-ci": "node --max_old_space_size=16000 ./node_modules/@angular/cli/bin/ng build --base-href . --configuration desktop",
     "build-prod-web": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href / --configuration web",
     "clean": "rm -rf node_modules && rm -rf dist && rm -f package-lock.json",
     "windows-clean": "powershell Remove-Item -Path \"package-lock.json\" && powershell Remove-Item -Path \"node_modules\", \"dist\" -Recurse",
@@ -105,7 +106,8 @@
           "arch": [
             "universal"
           ]
-        },{
+        },
+        {
           "target": "zip",
           "arch": [
             "universal"
@@ -116,7 +118,9 @@
       "hardenedRuntime": true,
       "entitlements": "entitlements.mac.inherit.plist",
       "entitlementsInherit": "entitlements.mac.inherit.plist",
-      "gatekeeperAssess": false
+      "gatekeeperAssess": false,
+      "artifactName": "${productName}-${version}.${ext}",
+      "provisioningProfile": "embedded.provisionprofile"
     }
   },
   "devDependencies": {
