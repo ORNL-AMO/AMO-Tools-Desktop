@@ -1,0 +1,116 @@
+name: Electron
+
+on:
+  workflow_call:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.ref_name == 'master'
+    runs-on: [self-hosted, build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Get Node version
+        run: echo "BUILD_NODE_VER=$(ggrep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> "$GITHUB_ENV"
+      - name: Node setup
+        run: source ~/load_nvm.sh && nvm install ${{ env.BUILD_NODE_VER }}
+      - name: Cache setup
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+      - name: Dependency setup
+        run: |
+          PROV_PROF_PATH=$RUNNER_TEMP/embedded.provisionprofile
+          echo -n "${{ secrets.APPLE_PROV_PROF_BASE64 }}" | base64 --decode -o $PROV_PROF_PATH &&
+          cp "$PROV_PROF_PATH" ./embedded.provisionprofile
+          npm ci --legacy-peer-deps &&
+          security -v unlock-keychain -p "${{ secrets.KC_SECRET }}" ~/Library/Keychains/login.keychain-db
+      - name: Build
+        run: npm run build-prod-desktop-ci
+      - name: Package
+        run: |
+          (node ./node_modules/.bin/electron-builder --mac --universal --publish never &&
+          xcrun notarytool submit --wait \
+            --apple-id "${{ secrets.APPLE_ID }}" \
+            --password "${{ secrets.APPLE_APP_SECRET }}" \
+            --team-id "${{ secrets.APPLE_TEAM_ID }}" \
+            $(find ../output -name "MEASUR-*.*.*.dmg")) &
+          node ./node_modules/.bin/electron-builder --win --x64 --publish never &
+          node ./node_modules/.bin/electron-builder --linux --x64 --publish never
+      - name: Prepare output
+        id: output
+        run: |
+          VERSION=$(ggrep -A3 'version:' ../output/latest-mac.yml | head -n1 | awk '{print $2}')
+          echo "BUILD_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+          OUTPUTS_DIR=$(cd ../output/ && pwd)
+          echo "RUNNER_OUTDIR=$OUTPUTS_DIR" >> "$GITHUB_ENV"
+          ls -lah
+      - name: Upload notarization artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: d-output
+          path: |
+            ${{ env.RUNNER_OUTDIR }}/*.dmg
+          if-no-files-found: error
+          retention-days: 3
+      - name: Upload remaining artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: o-output
+          path: |
+            ${{ env.RUNNER_OUTDIR }}/*
+            !${{ env.RUNNER_OUTDIR }}/*-unpacked
+            !${{ env.RUNNER_OUTDIR }}/*-universal
+            !${{ env.RUNNER_OUTDIR }}/*.dmg
+            !${{ env.RUNNER_OUTDIR }}/builder-debug.yml
+          if-no-files-found: error
+          retention-days: 3
+    outputs:
+      BUILD_VERSION: ${{ steps.output.outputs.BUILD_VERSION }}
+
+  notarization:
+    if: github.ref_name == 'master'
+    runs-on: macos-13
+    needs: [build]
+    steps:
+      - name: Get artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: d-output
+      - name: Notarize
+        run: xcrun stapler staple $(find ./ -name "MEASUR-*.*.*.dmg")
+      - name: Upload notarized artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: d-output
+          path: ./*.dmg
+          if-no-files-found: error
+          retention-days: 3
+
+  release:
+    if: github.ref_name == 'master'
+    runs-on: ubuntu-22.04
+    needs: [build]
+    env:
+      VERSION: ${{ needs.build.outputs.BUILD_VERSION }}
+    steps:
+      - name: Get artifacts
+        uses: actions/download-artifact@v3
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        # if: startsWith(github.ref, 'refs/tags/') # Uncomment if enabling tag gating
+        with:
+          name: MEASUR v${{ env.VERSION }}
+          tag_name: v${{ env.VERSION }}
+          draft: true # Comment out if enabling tag gating and publishing via action
+          generate_release_notes: false
+          files: |
+            d-output/*
+            o-output/*
