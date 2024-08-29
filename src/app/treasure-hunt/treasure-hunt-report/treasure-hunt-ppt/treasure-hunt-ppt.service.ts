@@ -274,9 +274,23 @@ export class TreasureHuntPptService {
         slideTeamSummary.addText('Placeholder for picture', { x: 8.32, y: 1.8, w: 4.43, h: 2.81, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 18, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
         slideTeamSummary.addText('Team Members:', slideTextProps);
 
-    // todo next time we're in here opportunityCardsData should be filtered by opportunitySummaries that exist in it, otherwise we iterate over all 
+        // todo next time we're in here opportunityCardsData should be filtered by opportunitySummaries that exist in it, otherwise we iterate over all 
+
+
+        debugger;
+        // ** BUG - ln 286-287 - This is what's causing 6923 opportunities data to mismatch
+        // ** below we were using a 'counter', and now an index to index into two different arrays opportunityCardsData, and treasureHuntResults.opportunitySummaries.
+        // ** Unless it's absolutely known that both arrays are ordered the same - this is a red flag 
+
+        // ** Solution - Area of method should be rewritten to have access to all data (cards and summary) as one array of objects
+        // ** OR rewrite so that TH opportunities are now assigned a string index that can be compared to find a match
+        // ** also check out previously written todo above
         opportunityCardsData.forEach((opp, index) => {
           let opportunitySummary: OpportunitySummary = treasureHuntResults.opportunitySummaries[index];
+          // let opportunitySummary: OpportunitySummary = treasureHuntResults.opportunitySummaries[index];
+          if (opp.name === 'Compressed Air Leaks') {
+            debugger;
+          }
           if (opportunitySummary && opp.opportunitySheet.owner == team.team) {
             let newSlide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
             newSlide.addText('Opportunity: ' + opp.name, slideTitleProperties);
