@@ -42,7 +42,7 @@ export class AnalyticsService {
   async initAnalyticsSession(path: string) {
     await this.setClientAnalyticsId();
     let measurOpenEvent: GAEvent = {
-      name: 'measur_app_open',
+      name: 'measur_app_open_v2',
       params: {
         measur_platform: 'measur-desktop',
         measur_version: environment.version,
