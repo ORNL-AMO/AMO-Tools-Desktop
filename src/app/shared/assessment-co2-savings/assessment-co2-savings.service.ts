@@ -127,8 +127,8 @@ export class AssessmentCo2SavingsService {
     }
     
     if (totalEmissionOutputRate && dataCpy.electricityUse) {
-      //set results on original obj
-      totalEmissionsResult = (totalEmissionOutputRate) * (dataCpy.electricityUse / 1000);
+      // * converts emission rate to tonne, electricity use to MWh
+      totalEmissionsResult = (totalEmissionOutputRate / 1000) * (dataCpy.electricityUse / 1000);
     } else {
       totalEmissionsResult = 0;
     }

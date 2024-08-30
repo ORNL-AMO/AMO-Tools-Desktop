@@ -34,100 +34,69 @@
             not be available.</li>
         </ul>
 
-      <label>Here are the details of what's new in version 1.5.1:</label>
+      <label>Here are the details of what's new in version 1.5.2:</label>
         <br>
         <label>Application</label>
         <ul>
-          <li>Fixed: Windows auto-updater issue displaying error even though update download and install are successful</li>
-        </ul>
-
-        <label>Known Issues</label>
-        <ul>
-          <li>The Auto-update feature is currently unavailable for the Mac version</li>
-          <li>The Linux release does not support Auto-updating</li>
-          <li>Renaming an export in Windows Download menu can delete the file extension (.json, or .gz)</li>
-          <li>Assessments made in a previous major release may experience errors</li>
-          <li>Import files made in a previous major release may not be useable due to field additions/removals</li>
-          <li>We have observed cases where if MEASUR is open for a long period of time while many assessments are present, MEASUR performance can become slow. If experienced, close and reopen MEASUR</li>
-        </ul>
-
-
-      <label>Here are the details of what's new in version 1.5.0:</label>
-        <br>
-        <label>Application</label>
-        <ul>
-          <li>Added: Ability to email assessment exports directly from assessment</li>
-          <li>Added: Google Analytics Events for new features</li>
-          <li>Added: New dedicated support email support-measur&#64;ornl.gov</li>
-          <li>Enhancement: Added ability to copy entire folders in dashboard</li>
-          <li>Enhancement: Better internal error handling and messaging for critical failures of application</li>
-          <li>Enhancement: More guidance for helping users provide bug reports and feedback</li>
-          <li>Enhancement: Updates and upgrades for the web-assembly module</li>
-          <li>Enhancement: Web-version users will get a notification that there is a update to the tool</li>
-          <li>Fixed: Google Chrome users should no longer have to do a "hard refresh" to see updates in web version</li>
-          <li>Fixed: Issues regarding persistence selecting directories after opening/closing modals</li>
+          <li>Added: Link to download to the Download Error Message Toast</li>
+          <li>Enhancement: Cursor now changes when hover over checkbox</li>
+          <li>Fixed: Issue causing error generation when the Reset Data button is used</li>
+          <li>Fixed: Issue generating error reports when backspacing or having NULL inputs</li>
+          <li>Fixed: Issue regarding the calculation of CO2 emissions for mixed fuels</li>
+          <li>Updated: Adjusted analytics to be more accurate</li>
         </ul>
 
         <label>Calculators</label>
         <ul>
-          <li>Enhancement: Ability to click in Psychrometric Chart graph to create a table</li>
-          <li>Enhancement: Improved 2-parameter binning and heatmap graph for Weather Binning calculator</li>
-          <li>Fixed: Instances of user entry fields for percent not being divided by 100 for use in suite (Steam & Natural Gas Reduction)</li>
-          <li>Fixed: Minor bugs relating to Natural Gas Reduction Calc</li>
+          <li>Enhancement: Stack Loss calculator defaults (Fuel Type is now Gas, Fuel is now Natural Gas)</li>
+          <li>Fixed: Bug relating to pipe and tank insulation calculators in metric conversion</li>
+          <li>Fixed: Issue causing data entered in the Receiver Tanks fields for the System Capacity calculator to be slightly higher in Results</li>
+          <li>Updated: Fixed several issues regarding the Steam Reduction Calculator and updated its algorithm to accommodate Fuel consumption better</li>
+          <li>Updated: Power Factor Calculator now uses monthly data to estimate the capacitance required to improve power factor and the cost savings</li>
         </ul>
 
-        <!-- <label>Data Explorer</label> -->
+        <label>Data Explorer</label>
+        <ul>
+          <li>Enhancement: Graphs in Data Explorer can now have vertical and horizontal trace lines turned on in Plotly settings</li>
+        </ul>
 
         <label>Compressed Air</label>
         <ul>
-          <li>Fixed: Issue where trim compressor selection validation for non-existent daytypes was stopping progress</li>
+          <li>Enhancement: EEMs now have the "Fill Right" functionality where appropriate</li>
+          <li>Enhancement: The flow and power graphs now have a line to illustrate the peak</li>
+          <li>Fixed: Compressors now use numeric ordering for the base/trim system control type</li>
+          <li>Fixed: Issue regarding the display of Pressure Range for compressors with the VFD Control Type</li>
+          <li>Fixed: Issue with CO2 emissions having tonne label but reported in kg</li>
         </ul>
-
-        <label>Pumps</label>
-        <ul>
-          <li>Fixed: Errors in Generated Example for Pump Curve calculator</li>
-        </ul>
-
-        <label>Fans</label>
-        <ul>
-          <li>Fixed: Errors in Generated Example for Fan Curve calculator</li>
-        </ul>
-
 
         <label>Process Heating</label>
         <ul>
-          <li>Fixed: Bugs relating to Heat Cascading calculator not initializing unless "Generate Example" is clicked and using the incorrect values for available heat</li>
-          <li>Fixed: Issue where calculation for custom solid/liquid fuels HHV</li>
-          <li>Fixed: Issue with the Available Heat Modal in Waste Heat for Absorption Chillers calculator not undarkening</li>
-          <li>Fixed: Printing of Report & Sankeys</li>
+         <li>Fixed: Issue where emissions were calculated incorrectly if not using MMBtu or GJ for energy reporting</li>
         </ul>
 
         <label>Steam</label>
         <ul>
-          <li>Enhancement: Steam results will be shown in System Setup once minimum data is entered</li>
-          <li>Fixed: Bug relating to Site Import Power and CO2 Emissions Calculations</li>
+          <li>Fixed: Bug causing flashed condensate into LP header to not work</li>
         </ul>
 
         <label>Treasure Hunt</label>
         <ul>
-          <li>Added: Treasure Hunt bring in Compressed Air Assessments</li>
-          <li>Enhancement: Allow users to create a Custom Opp without energy data</li>
-          <li>Fixed: Issues where Water/Wastewater and Compressed Air units did not match unit conversions and math</li>
+          <li>Fixed: Issue where energy units were not converted if not using MMBtu or GJ for energy reporting</li>
         </ul>
 
-        <!-- <label>Inventories</label> -->
-
-        <!-- <label>Wastewater</label> -->
+        <label>Inventories</label>
+        <ul>
+          <li>Fixed: Error where Emissions were reported in kg but labeled as tonne</li>
+        </ul>
         
         <label>Process Cooling</label>
         <ul>
-          <li>Fixed: Validation to allow Tank and Pipe Insulation to have Surface Temp warmer than internal temperature when "Chilled" is selected</li>
+          <li>Fixed: Issue where water cost was not pulled in from TH settings and was not saving</li>
         </ul>
 
         <label>Known Issues</label>
         <ul>
-          <li>The Auto-update feature is currently unavailable for the Mac version</li>
-          <li>The Linux release does not support Auto-updating</li>
+          <li>The Auto-update feature is currently unavailable for the Mac and Linux versions</li>
           <li>Renaming an export in Windows Download menu can delete the file extension (.json, or .gz)</li>
           <li>Assessments made in a previous major release may experience errors</li>
           <li>Import files made in a previous major release may not be useable due to field additions/removals</li>

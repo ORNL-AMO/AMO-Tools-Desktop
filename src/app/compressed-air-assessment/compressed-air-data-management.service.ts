@@ -219,7 +219,8 @@ export class CompressedAirDataManagementService {
       }
     });
     //TODO: Recalculate other control types??
-    if (recalculateOrdering && compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'cascading') {
+    //issue 6969 updated to include baseTrim
+    if (recalculateOrdering && (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'cascading' || compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim')) {
       let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
@@ -230,7 +231,6 @@ export class CompressedAirDataManagementService {
       compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingIsentropicEfficiency(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals, compressedAirAssessment.compressorInventoryItems, settings, compressedAirAssessment.systemInformation);
       })
-
     }
     //update assessment
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);

@@ -49,6 +49,14 @@
     </div>
 
     <div class="scroll-item">
+        <div class="w-100 d-flex justify-content-start mb-1 mt-1">
+            <div class="pl-2 pr-2" *ngIf="reduceRuntime.runtimeData && reduceRuntime.runtimeData.length > 0">
+                <label class="small" for="fillRightHourInterval">
+                    <input type="checkbox" [(ngModel)]="fillRightHourInterval" name="fillRightHourInterval" id="fillRightHourInterval">
+                    Fill right on change
+                </label>
+            </div>
+        </div>
         <table class="table bg-white">
             <thead>
                 <tr>
@@ -89,7 +97,7 @@
                     <td class="text-center" *ngFor="let data of rData.intervalData; let dataIndex = index;">
                         <input type="checkbox" id="{{'isCompressorOn_'+rDataIndex+dataIndex}}"
                             name="{{'isCompressorOn_'+rDataIndex+dataIndex}}" [(ngModel)]="data.isCompressorOn"
-                            (focus)="helpTextField('checkbox')" (change)="save(false)"
+                            (focus)="helpTextField('checkbox')" (change)="setHourIntervalState(rData.intervalData, data, dataIndex)"
                             [disabled]="rData.compressorId == trimCompressorId">
                     </td>
                 </tr>

@@ -84,7 +84,13 @@ export class CompressorOrderingTableComponent implements OnInit {
             } else if (dayTypeSummaries[compressorOrderIndex].adjustedIsentropicEfficiency == dayTypeSummaries[compressorIndex].adjustedIsentropicEfficiency && compressorOrderIndex < compressorIndex) {
               order++;
             }
-          }
+          } else if (this.multiCompressorSystemControls == 'baseTrim') {
+            if (dayTypeSummaries[compressorIndex].fullLoadPressure < dayTypeSummaries[compressorOrderIndex].fullLoadPressure) {
+              order++;
+            } else if (dayTypeSummaries[compressorOrderIndex].fullLoadPressure == dayTypeSummaries[compressorIndex].fullLoadPressure && compressorOrderIndex < compressorIndex) {
+              order++;
+            }
+          } 
         }
       }
       let summaryIndex: number = this.profileSummary.findIndex(summary => { return summary.compressorId == dayTypeSummaries[compressorIndex].compressorId && summary.dayTypeId == dayTypeSummaries[compressorIndex].dayTypeId })

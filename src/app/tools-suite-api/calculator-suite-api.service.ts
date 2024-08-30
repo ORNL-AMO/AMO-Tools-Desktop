@@ -364,7 +364,9 @@ export class CalculatorSuiteApiService {
         MassFlowMeasuredData, MassFlowNameplateData,
         steamReduction.waterMassFlowMethodData.inletTemperature, steamReduction.waterMassFlowMethodData.outletTemperature);
 
-      let OtherMethodData = new Module.SteamOtherMethodData(steamReduction.otherMethodData.consumption);
+      let OtherMethodData = new Module.SteamOffsheetMethodData(steamReduction.otherMethodData.consumption);
+
+      let steamVariableOptionThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(steamReduction.steamVariableOption)
 
       let wasmConvertedInput = new Module.SteamReductionInput(
         steamReduction.hoursPerYear,
@@ -373,7 +375,15 @@ export class CalculatorSuiteApiService {
         steamReduction.measurementMethod,
         steamReduction.systemEfficiency,
         steamReduction.pressure,
-        FlowMeterMethodData, AirMassFlowMethodData, WaterMassFlowMethodData, OtherMethodData, steamReduction.units);
+        FlowMeterMethodData, 
+        AirMassFlowMethodData, 
+        WaterMassFlowMethodData, 
+        OtherMethodData, 
+        steamReduction.units, 
+        steamReduction.boilerEfficiency, 
+        steamVariableOptionThermodynamicQuantity,
+        steamReduction.steamVariable,
+        steamReduction.feedWaterTemperature);
       inputs.push_back(wasmConvertedInput);
 
       wasmConvertedInput.delete();

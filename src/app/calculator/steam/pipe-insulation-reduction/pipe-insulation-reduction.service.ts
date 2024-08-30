@@ -233,7 +233,7 @@ export class PipeInsulationReductionService {
     results.heatedOrChilled = convertedInput.heatedOrChilled;
     results = this.convertResults(results, settings);
     if (results.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial') {
-      results.energyCost = results.annualHeatLoss * input.utilityCost / 1000;
+      results.energyCost = results.annualHeatLoss * input.utilityCost;
     } else {
       results.energyCost = results.annualHeatLoss * input.utilityCost;
     }         
@@ -259,7 +259,7 @@ export class PipeInsulationReductionService {
     if ( results.energySourceType != 2 && settings.unitsOfMeasure == 'Imperial') {
       results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('Wh').to('MMBtu');
     } else if( results.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial'){
-      results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('Wh').to('MJ');
+      results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('Wh').to('GJ');
     } else {
       results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('Wh').to('kWh');
     }
@@ -455,7 +455,7 @@ export class PipeInsulationReductionService {
     if (utilityType === 2) {
       energyUnit = "kWh";
     } else {
-      if (settings.unitsOfMeasure == 'Meteric'){
+      if (settings.unitsOfMeasure == 'Metric'){
         energyUnit = "GJ"
       } else {
         energyUnit = "MMBtu"

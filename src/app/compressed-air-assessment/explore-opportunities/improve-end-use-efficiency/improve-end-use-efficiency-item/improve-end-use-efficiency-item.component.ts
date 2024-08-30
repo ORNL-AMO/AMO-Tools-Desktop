@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormGroup, AbstractControl } from '@angular/forms';
+import { UntypedFormGroup, AbstractControl, FormGroup } from '@angular/forms';
 import { CompressedAirAssessment, CompressedAirDayType, EndUseEfficiencyItem, ProfileSummary, ProfileSummaryTotal, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { BaselineResults } from '../../../compressed-air-assessment-results.service';
@@ -30,6 +30,8 @@ export class ImproveEndUseEfficiencyItemComponent implements OnInit {
   baselineResults: BaselineResults;
   @Input()
   systemProfileSetup: SystemProfileSetup;
+
+  fillRightHourInterval: boolean;
 
   form: UntypedFormGroup;
   dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: UntypedFormGroup }>;
@@ -79,6 +81,19 @@ export class ImproveEndUseEfficiencyItemComponent implements OnInit {
   changeAuxiliaryEquipment() {
     this.form = this.improveEndUseEfficiencyService.setFormValidators(this.form, this.baselineResults);
     this.save();
+  }
+
+  setHourIntervalState(form: FormGroup, formControlName: string, controlIndex: number) {
+    if (this.fillRightHourInterval) {
+      let changedValue = form.get(formControlName).value;
+      let currentIndex = 0
+      for (const [key, value] of Object.entries(form.controls)) {
+        if (currentIndex > controlIndex)
+        form.get(key).patchValue(changedValue);
+        currentIndex++;
+      }
+    } 
+    this.saveDataForm();
   }
 
   saveDataForm() {

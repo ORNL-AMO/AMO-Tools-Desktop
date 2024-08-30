@@ -32,7 +32,10 @@ export class AppComponent {
     if (environment.production) {
       // analytics handled through gatg() automatically manages sessions, visits, clicks, etc
       gtag('config', 'G-EEHE8GEBH4');
-      this.analyticsService.sendEvent('measur_app_open');
+
+      if (!this.electronService.isElectron) {
+        this.analyticsService.sendEvent('measur_app_open_v2');
+      }
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
           let path: string = environment.production ? event.urlAfterRedirects : 'testing-web';

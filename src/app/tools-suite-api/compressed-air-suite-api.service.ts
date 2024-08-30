@@ -90,44 +90,201 @@ export class CompressedAirSuiteApiService {
   }
 
   compressorsCalcModulationWOUnload(input: CompressorsCalcInput) {
-    return new Module.Compressors_ModulationWOUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.powerAtNoLoad);
+    let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtFullLoad); 
+    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtFullLoad); 
+    let powerAtNoLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtNoLoad); 
+    return new Module.Compressors_ModulationWOUnload(
+      powerAtFullLoad,
+      capacityAtFullLoad, 
+      powerAtNoLoad
+      );
   }
 
   compressorsCalcStartStop(input: CompressorsCalcInput) {
-    return new Module.Compressors_StartStop(input.powerAtFullLoad, input.capacityAtFullLoad, input.powerMaxPercentage, input.powerAtFullLoadPercentage);
+    let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtFullLoad); 
+    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtFullLoad); 
+    let powerMaxPercentage = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerMaxPercentage); 
+    let powerAtFullLoadPercentage = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtFullLoadPercentage); 
+    return new Module.Compressors_StartStop(
+      powerAtFullLoad, 
+      capacityAtFullLoad, 
+      powerMaxPercentage, 
+      powerAtFullLoadPercentage
+    );
   }
 
   compressorsCalcVFD(input: CompressorsCalcInput) {
+    let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtFullLoad); 
+    let midTurndownPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.midTurndownPower); 
+    let turndownPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.turndownPower); 
+    let powerAtNoLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtNoLoad); 
+    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtFullLoad); 
+    let midTurndownAirflow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.midTurndownAirflow); 
+    let turndownAirflow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.turndownAirflow); 
     return new Module.Compressor_VFD(
-      input.powerAtFullLoad, 
-      input.midTurndownPower, 
-      input.turndownPower, 
-      input.powerAtNoLoad, 
-      input.capacityAtFullLoad, 
-      input.midTurndownAirflow,
-      input.turndownAirflow);
+      powerAtFullLoad, 
+      midTurndownPower, 
+      turndownPower, 
+      powerAtNoLoad, 
+      capacityAtFullLoad, 
+      midTurndownAirflow,
+      turndownAirflow);
   }  
 
   compressorsCalcLoadUnload(input: CompressorsCalcInput) {
-    return new Module.Compressors_LoadUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.receiverVolume, input.powerMax,
-      input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.loadFactorUnloaded, input.atmosphericPsi,
-      input.compressorType, input.lubricantType, input.controlType, input.powerAtNoLoad, input.unloadPointCapacity, input.blowdownTime,
-      input.unloadSumpPressure, input.noLoadPowerFM);
+
+    let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtFullLoad); 
+    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtFullLoad); 
+    let receiverVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.receiverVolume); 
+    let powerMax = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerMax);
+    let dischargePsiFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.dischargePsiFullLoad); 
+    let dischargePsiMax = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.dischargePsiMax); 
+    let modulatingPsi = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.modulatingPsi); 
+    let loadFactorUnloaded = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.loadFactorUnloaded); 
+    let atmosphericPsi = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPsi);
+    let compressorType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.compressorType); 
+    let lubricantType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.lubricantType); 
+    let controlType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.controlType); 
+    let powerAtNoLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtNoLoad); 
+    let unloadPointCapacity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.unloadPointCapacity); 
+    let blowdownTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.blowdownTime);
+    let unloadSumpPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.unloadSumpPressure); 
+    let noLoadPowerFM = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.noLoadPowerFM);
+    
+    return new Module.Compressors_LoadUnload(powerAtFullLoad, 
+      capacityAtFullLoad, 
+      receiverVolume, 
+      powerMax,
+      dischargePsiFullLoad, 
+      dischargePsiMax, 
+      modulatingPsi, 
+      loadFactorUnloaded, 
+      atmosphericPsi,
+      compressorType, 
+      lubricantType, 
+      controlType, 
+      powerAtNoLoad, 
+      unloadPointCapacity, 
+      blowdownTime,
+      unloadSumpPressure, 
+      noLoadPowerFM
+    );
   }
 
   compressorsCalcModulationWithUnload(input: CompressorsCalcInput) {
-    return new Module.Compressors_ModulationWithUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.receiverVolume, input.powerMax, input.powerAtNoLoad, input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.atmosphericPsi, input.unloadPointCapacity, input.controlType, input.blowdownTime, input.unloadSumpPressure, input.noLoadPowerFM, input.powerAtUnload, input.pressureAtUnload, input.capacityAtUnload);
+    let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtFullLoad); 
+    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtFullLoad); 
+    let receiverVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.receiverVolume); 
+    let powerMax = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerMax); 
+    let powerAtNoLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtNoLoad); 
+    let dischargePsiFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.dischargePsiFullLoad); 
+    let dischargePsiMax = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.dischargePsiMax); 
+    let modulatingPsi = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.modulatingPsi); 
+    let atmosphericPsi = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPsi); 
+    let unloadPointCapacity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.unloadPointCapacity); 
+    let controlType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.controlType); 
+    let blowdownTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.blowdownTime); 
+    let unloadSumpPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.unloadSumpPressure); 
+    let noLoadPowerFM = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.noLoadPowerFM); 
+    let powerAtUnload = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtUnload); 
+    let pressureAtUnload = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.pressureAtUnload); 
+    let capacityAtUnload = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+
+    return new Module.Compressors_ModulationWithUnload(
+      powerAtFullLoad, 
+      capacityAtFullLoad, 
+      receiverVolume, 
+      powerMax, 
+      powerAtNoLoad, 
+      dischargePsiFullLoad, 
+      dischargePsiMax, 
+      modulatingPsi, 
+      atmosphericPsi, 
+      unloadPointCapacity, 
+      controlType, 
+      blowdownTime, 
+      unloadSumpPressure, 
+      noLoadPowerFM, 
+      powerAtUnload, 
+      pressureAtUnload, 
+      capacityAtUnload
+    );
   }
 
   compressorsCalcVariableDisplacement(input: CompressorsCalcInput) {
-    return new Module.Compressors_ModulationWithUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.receiverVolume, input.powerMax, input.powerAtNoLoad, input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.atmosphericPsi, input.unloadPointCapacity, input.controlType, input.blowdownTime, input.unloadSumpPressure, input.noLoadPowerFM, 0, 0, 0);
+    let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let receiverVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let powerMax = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let powerAtNoLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let dischargePsiFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let dischargePsiMax = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let modulatingPsi = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let atmosphericPsi = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let unloadPointCapacity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let controlType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let blowdownTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let unloadSumpPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let noLoadPowerFM = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+
+    return new Module.Compressors_ModulationWithUnload(
+      powerAtFullLoad, 
+      capacityAtFullLoad, 
+      receiverVolume, 
+      powerMax, 
+      powerAtNoLoad, 
+      dischargePsiFullLoad, 
+      dischargePsiMax, 
+      modulatingPsi, 
+      atmosphericPsi, 
+      unloadPointCapacity, 
+      controlType, 
+      blowdownTime, 
+      unloadSumpPressure, 
+      noLoadPowerFM, 
+      0, 
+      0, 
+      0
+    );
   }
 
   compressorsCalcMultiStepUnloading(input: CompressorsCalcInput) {
-    return new Module.Compressors_LoadUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.receiverVolume, input.powerMax,
-      input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.loadFactorUnloaded, input.atmosphericPsi,
-      input.compressorType, input.lubricantType, input.controlType, input.powerAtNoLoad, input.unloadPointCapacity, input.blowdownTime,
-      input.unloadSumpPressure, input.noLoadPowerFM);
+    let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let receiverVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let powerMax = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let dischargePsiFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let dischargePsiMax = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let modulatingPsi = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let loadFactorUnloaded = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let atmosphericPsi = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let compressorType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let lubricantType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let controlType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let powerAtNoLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let unloadPointCapacity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let blowdownTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let unloadSumpPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let noLoadPowerFM = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    return new Module.Compressors_LoadUnload(
+      powerAtFullLoad, 
+      capacityAtFullLoad, 
+      receiverVolume, 
+      powerMax,
+      dischargePsiFullLoad, 
+      dischargePsiMax, 
+      modulatingPsi, 
+      loadFactorUnloaded, 
+      atmosphericPsi,
+      compressorType, 
+      lubricantType, 
+      controlType, 
+      powerAtNoLoad, 
+      unloadPointCapacity, 
+      blowdownTime,
+      unloadSumpPressure, 
+      noLoadPowerFM
+    );
   }
 
   compressorCalcCentrifugal(inputData: CentrifugalInput): CompressorCalcResult {
@@ -197,15 +354,43 @@ export class CompressedAirSuiteApiService {
   }
 
   compressorsCalcCentrifugalLoadUnload(inputData: CentrifugalInput) {
-    return new Module.Compressors_Centrifugal_LoadUnload(inputData.powerAtFullLoad, inputData.capacityAtFullLoad, inputData.powerAtNoLoad);
+    let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.powerAtFullLoad); 
+    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.capacityAtFullLoad); 
+    let powerAtNoLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.powerAtNoLoad); 
+    return new Module.Compressors_Centrifugal_LoadUnload(
+      powerAtFullLoad, 
+      capacityAtFullLoad, 
+      powerAtNoLoad
+    );
   }
 
   compressorsCalcCentrifugalModulationUnload(inputData: CentrifugalInput) {
-    return new Module.Compressors_Centrifugal_ModulationUnload(inputData.powerAtFullLoad, inputData.capacityAtFullLoad,
-      inputData.powerAtNoLoad, inputData.capacityAtMaxFullFlow, inputData.powerAtUnload, inputData.capacityAtUnload);
+    let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.powerAtFullLoad)
+    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.capacityAtFullLoad)
+    let powerAtNoLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.powerAtNoLoad)
+    let capacityAtMaxFullFlow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.capacityAtMaxFullFlow)
+    let powerAtUnload = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.powerAtUnload)
+    let capacityAtUnload = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.capacityAtUnload)
+    return new Module.Compressors_Centrifugal_ModulationUnload(
+      powerAtFullLoad, 
+      capacityAtFullLoad,
+      powerAtNoLoad, 
+      capacityAtMaxFullFlow, 
+      powerAtUnload, 
+      capacityAtUnload
+    );
   }
 
   compressorsCalcCentrifugalBlowoff(inputData: CentrifugalInput) {
-    return new Module.Compressors_Centrifugal_BlowOff(inputData.powerAtFullLoad, inputData.capacityAtFullLoad, inputData.powerAtBlowOff, inputData.surgeFlow);
+    let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.powerAtFullLoad)
+    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.capacityAtFullLoad)
+    let powerAtBlowOff = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.powerAtBlowOff)
+    let surgeFlow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.surgeFlow)
+    return new Module.Compressors_Centrifugal_BlowOff(
+      powerAtFullLoad, 
+      capacityAtFullLoad, 
+      powerAtBlowOff, 
+      surgeFlow
+    );
   }
 }

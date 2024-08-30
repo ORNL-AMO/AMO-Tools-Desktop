@@ -1,41 +1,144 @@
+
 <form>
+
   <div class="form-group">
-    <label for="currentDemand">Existing Demand</label>
-    <div class="input-group">
-      <input name="currentDemand" class="form-control" type="number" step="any" [(ngModel)]="data.existingDemand" id="currentDemand"
-             (input)="calculate()" onfocus="this.select();" (focus)="focusField('existingDemand')">
-      <span class="input-group-addon units">kW</span>
-    </div>
+    <label for="billedForDemand">How are you billed for Demand</label>
+    <select id="billedForDemand" name="billedForDemand" class="form-control" [(ngModel)]="data.billedForDemand"
+      (focus)="focusField('billedForDemand')" (change)="setBilledForDemand()">
+      <option *ngFor="let option of billedOptions" [ngValue]="option.value">{{option.name}}</option>
+    </select>
   </div>
-<!--
+
+  <div *ngIf="data.billedForDemand == 0" class="form-group">
+    <label for="minimumPowerFactor">Minimum Required Power Factor</label>
+    <input name="minimumPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.minimumPowerFactor"
+      id="minimumPowerFactor" (input)="calculate()" onfocus="this.select();" (focus)="focusField('minimumPowerFactor')">
+  </div>
+
+  <div *ngIf="data.billedForDemand == 1" class="form-group">
+    <label for="targetPowerFactor">Target Power Factor</label>
+    <input name="targetPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.targetPowerFactor"
+      id="targetPowerFactor" (input)="calculate()" onfocus="this.select();" (focus)="focusField('targetPowerFactor')">
+  </div>
+
   <div class="form-group">
-    <label for="lineFrequency">Line Frequency</label>
-    <select class="form-control" name="lineFrequency" id="lineFrequency" [(ngModel)]="data.lineFrequency" (change)="calculate()" (focus)="focusField('lineFrequency')">
-      <option [ngValue]="50">50 Hz</option>
-      <option [ngValue]="60">60 Hz</option>
+    <label for="adjustedOrActual">PF Adjusted or Actual Demand</label>
+    <select id="adjustedOrActual" name="adjustedOrActual" class="form-control" [(ngModel)]="data.adjustedOrActual"
+      (focus)="focusField('adjustedOrActual')" (change)="setAdjustedOrActual()">
+      <option *ngFor="let option of demandOptions" [ngValue]="option.value">{{option.name}}</option>
     </select>
   </div>
 
   <div class="form-group">
-    <label for="ratedVoltage">Rated Voltage</label>
-    <div class="input-group">
-      <input name="ratedVoltage" class="form-control" type="number" step="any" [(ngModel)]="data.ratedVoltage" id="ratedVoltage"
-        (input)="calculate()" onfocus="this.select();" (focus)="focusField('ratedVoltage')">
-      <span class="input-group-addon units">V</span>
+    <label for="marginalCostOfDemand">Marginal Cost of Demand</label>
+    <div class="input-group  calc-addon-group">
+      <input name="marginalCostOfDemand" class="form-control" type="number" step="any"
+        [(ngModel)]="data.marginalCostOfDemand" id="marginalCostOfDemand" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('marginalCostOfDemand')">
+        <span class="input-group-addon units">$/kVA</span>
     </div>
   </div>
--->
+
   <div class="form-group">
-    <label for="currentPowerFactor">Existing Power Factor</label>
-    <input name="currentPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.currentPowerFactor" id="currentPowerFactor"
-      (input)="calculate()" onfocus="this.select();" (focus)="focusField('currentPowerFactor')">
+    <label for="costOfStaticCapacitance">Cost of Static Capacitance</label>
+    <div class="input-group  calc-addon-group">
+      <input name="costOfStaticCapacitance" class="form-control" type="number" step="any"
+        [(ngModel)]="data.costOfStaticCapacitance" id="costOfStaticCapacitance" (input)="calculate()"
+        onfocus="this.select();" (focus)="focusField('costOfStaticCapacitance')">
+        <span class="input-group-addon units">$/kVAr</span>
+    </div>
   </div>
 
   <div class="form-group">
-    <label for="proposedPowerFactor">Proposed Power Factor</label>
-    <input name="proposedPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.proposedPowerFactor" id="proposedPowerFactor"
-      (input)="calculate()" onfocus="this.select();" (focus)="focusField('proposedPowerFactor')">
+    <label for="costOfDynamicCapacitance">Cost of Dynamic Capacitance</label>
+    <div class="input-group  calc-addon-group">
+      <input name="costOfDynamicCapacitance" class="form-control" type="number" step="any"
+        [(ngModel)]="data.costOfDynamicCapacitance" id="costOfDynamicCapacitance" (input)="calculate()"
+        onfocus="this.select();" (focus)="focusField('costOfDynamicCapacitance')">
+        <span class="input-group-addon units">$/kVAr</span>
+    </div>
   </div>
 
+  <div class="form-group">
+    <label for="startMonth">Starting Month</label>
+    <select id="startMonth" name="startMonth" class="form-control" [(ngModel)]="data.startMonth"
+      (focus)="focusField('startMonth')" (change)="setMonthNames()">
+      <option *ngFor="let option of monthList" [ngValue]="option.value">{{option.name}}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="startYear">Starting Year</label>
+    <input name="startYear" class="form-control" type="number" step="any" [(ngModel)]="data.startYear"
+      id="startYear" (input)="calculate()" onfocus="this.select();" (focus)="focusField('startYear')">
+  </div>
 
 </form>
+
+<table class="table table-hover">
+  <tr>
+    <th>
+      Month
+    </th>
+
+    <th>
+      <span *ngIf="data.billedForDemand == 0 && (data.adjustedOrActual == 0 || data.adjustedOrActual == 2)">
+        PF Adjusted Demand (kW)
+      </span>
+      <span  *ngIf="data.billedForDemand == 0 && data.adjustedOrActual == 1">
+        Actual Demand (kW)
+      </span>
+      <span *ngIf="data.billedForDemand == 1 && (data.adjustedOrActual == 0 || data.adjustedOrActual == 1)">
+        Apparent Power (kVA)
+      </span>
+    </th>
+    <th *ngIf="data.billedForDemand == 0 && data.adjustedOrActual == 2">
+      <span>
+        Actual Demand (kW)
+      </span>
+    </th>
+
+    <th>
+      <span *ngIf="(data.billedForDemand == 0 && data.adjustedOrActual == 0) || (data.billedForDemand == 0 && data.adjustedOrActual == 1) || (data.billedForDemand == 0 && data.adjustedOrActual == 2) || (data.billedForDemand == 1 && data.adjustedOrActual == 0)">
+        Power Factor
+      </span>
+      <span *ngIf="data.billedForDemand == 1 && data.adjustedOrActual == 1">
+        Real Demand (kW)
+      </span>
+    </th>
+   
+  </tr>
+
+  <tr *ngFor="let input of data.monthyInputs; let i = index; let last = last">
+    <td>
+      <input name="{{'month_'+i}}" type="text" step="any"
+        [(ngModel)]="input.month" id="{{'month_'+i}}" (input)="calculate()" onfocus="this.select();">
+    </td> 
+    <td *ngIf="data.billedForDemand == 0 && data.adjustedOrActual == 2">
+      <input name="{{'input3_'+i}}" type="number" step="any"
+        [(ngModel)]="input.input3" id="{{'input3_'+i}}" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('input3')">   
+    </td>
+    <td>
+      <input name="{{'input1_'+i}}" type="number" step="any"
+        [(ngModel)]="input.input1" id="{{'input1_'+i}}" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('input1')">      
+    </td>   
+    <td>
+      <input name="{{'input2_'+i}}" type="number" step="any"
+        [(ngModel)]="input.input2" id="{{'input2_'+i}}" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('input2')">   
+    </td>
+  </tr>
+
+</table>
+
+<div class="w-100 justify-content-center btn-group btn-group-sm"> 
+  <button type="button" class="btn btn-primary pull-left btn-sm m-2 btn-form" (click)="btnAddMonth()">
+    Add Month
+  </button>
+  <button type="button" class="btn btn-danger pull-left btn-sm m-2 btn-form" (click)="btnDeleteLastMonth()" [disabled]="data.monthyInputs.length == 3">
+    Delete Last Month
+  </button>
+  
+</div>
