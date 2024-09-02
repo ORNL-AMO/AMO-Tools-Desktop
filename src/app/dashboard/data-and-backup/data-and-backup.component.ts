@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { ElectronService } from '../../electron/electron.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { BackupDataService, MeasurBackupFile } from '../../shared/backup-data.service';
@@ -21,6 +21,9 @@ export class DataAndBackupComponent {
   dataBackupFilePath: string;
   selectImportFileError: string;
   isAutomaticBackupOn: boolean = false;
+
+  @ViewChild('importFileRef', { static: false }) importFileRef: ElementRef;
+
 
   constructor(public electronService: ElectronService,
     private backupDataService: BackupDataService,
@@ -81,6 +84,9 @@ export class DataAndBackupComponent {
 
   async importBackupFile() {
     await this.importBackupService.importBackupFile();
+    this.selectedImportFile = undefined;
+    this.importFileRef.nativeElement.value = "";
+
   }
 
 

@@ -1,4 +1,4 @@
-#importFile, #backupFile {
+#importFileRef, #backupFile {
     font-size: 14px;
 }
 
@@ -32,6 +32,7 @@ label, .desc-text {
 
 .disabled {
     color: gray;
+    pointer-events: none;
 }
 
 .select-folder {
