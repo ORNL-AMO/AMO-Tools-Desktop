@@ -55,6 +55,7 @@
     "exceljs": "^4.3.0",
     "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
+    "fs-jetpack": "^5.1.0",
     "ngx-indexed-db": "^16.0.0",
     "pako": "^2.1.0",
     "pptxgenjs": "^3.10.0",

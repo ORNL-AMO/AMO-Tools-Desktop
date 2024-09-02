@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AtmosphereSpecificHeat } from '../shared/models/materials';
 import { AtmosphereStoreMeta } from './dbConfig';
 
 @Injectable()
 export class AtmosphereDbService {
   storeName: string = AtmosphereStoreMeta.store;
+  dbAtmospherSpecificHeatMaterials: BehaviorSubject<Array<AtmosphereSpecificHeat>>;
+
   constructor(private dbService: NgxIndexedDBService) {
+    this.dbAtmospherSpecificHeatMaterials = new BehaviorSubject<Array<AtmosphereSpecificHeat>>([]);
   }
 
   getAllWithObservable(): Observable<Array<AtmosphereSpecificHeat>> {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { WallLossesSurface } from '../shared/models/materials';
 import { WallLossesSurfaceStoreMeta } from './dbConfig';
 
@@ -8,7 +8,11 @@ import { WallLossesSurfaceStoreMeta } from './dbConfig';
 export class WallLossesSurfaceDbService {
 
   storeName: string = WallLossesSurfaceStoreMeta.store;
+  dbWallLossesSurfaceMaterials: BehaviorSubject<Array<WallLossesSurface>>;
+
   constructor(private dbService: NgxIndexedDBService) {
+    this.dbWallLossesSurfaceMaterials = new BehaviorSubject<Array<WallLossesSurface>>([]);
+
   }
 
   getAllWithObservable(): Observable<Array<WallLossesSurface>> {
