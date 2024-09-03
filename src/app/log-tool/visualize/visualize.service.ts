@@ -157,6 +157,7 @@ export class VisualizeService {
       layout: this.getEmptyLayout(),
       mode: {
         modeBarButtonsToRemove: ['lasso2d'],
+        modeBarButtonsToAdd: ['toggleSpikelines'],
         // plotGlPixelRatio: 3,
         responsive: true,
         displaylogo: false,

@@ -65,7 +65,7 @@ export class CoolingTowerComponent implements OnInit {
 
     let existingInputs = this.coolingTowerService.baselineData.getValue();
     if (!existingInputs) {
-      this.coolingTowerService.initDefaultEmptyInputs(0, this.settings, this.operatingHours);
+      this.coolingTowerService.initDefaultEmptyInputs(0, this.settings, this.operatingHours, this.inTreasureHunt);
     }
     this.initSubscriptions();
     if (this.modificationData) {
@@ -117,7 +117,7 @@ export class CoolingTowerComponent implements OnInit {
   }
 
   addCase() {
-    this.coolingTowerService.addCase(this.settings, this.operatingHours, this.modificationExists);
+    this.coolingTowerService.addCase(this.settings, this.operatingHours, this.modificationExists, this.inTreasureHunt);
   }
 
   save() {
@@ -136,7 +136,7 @@ export class CoolingTowerComponent implements OnInit {
 
   btnResetData() {
     this.coolingTowerService.resetData.next(true);
-    this.coolingTowerService.initDefaultEmptyInputs(0, this.settings, this.operatingHours);
+    this.coolingTowerService.initDefaultEmptyInputs(0, this.settings, this.operatingHours, this.inTreasureHunt);
     this.coolingTowerService.modificationData.next(undefined);
     this.modificationExists = false;
   }

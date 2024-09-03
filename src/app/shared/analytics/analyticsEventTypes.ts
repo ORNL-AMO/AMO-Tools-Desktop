@@ -1,6 +1,6 @@
 
 export type AnalyticsEventString = 'page_view' |
-    'measur_app_open' |
+    'measur_app_open_v2' |
     'create-assessment' |
     'create-water-diagram' |
     'view-pump-assessment' |

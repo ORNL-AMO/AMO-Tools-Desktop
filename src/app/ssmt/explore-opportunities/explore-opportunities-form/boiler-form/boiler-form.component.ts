@@ -128,7 +128,7 @@ export class BoilerFormComponent implements OnInit {
     }
     this.modificationCo2SavingsData = modificationCo2SavingsData;
     let shouldSetOutputRate: boolean = false;
-    if(this.modificationCo2SavingsData.totalFuelEmissionOutputRate === undefined || !this.modificationCo2SavingsData.fuelType) {
+    if(this.modificationCo2SavingsData.totalFuelEmissionOutputRate === undefined || (this.modificationCo2SavingsData.energySource !== 'Mixed Fuels' && !this.modificationCo2SavingsData.fuelType)) {
       shouldSetOutputRate = true;
     } 
     this.setEnergySource(shouldSetOutputRate);

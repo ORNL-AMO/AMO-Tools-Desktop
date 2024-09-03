@@ -134,11 +134,10 @@
                 <td class="input-cell"
                     *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">
                     <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
-                        class="btn btn-sm" *ngIf="summaryData.order == 0"
-                        (click)="toggleOn(summary, orderIndex)">Off</button>
+                        class="btn btn-sm" *ngIf="summaryData.order == 0" (click)="toggleOn(summary, orderIndex)">Off</button>
                     <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
                         class="btn btn-sm btn-active" *ngIf="summaryData.order != 0"
-                        (click)="toggleOn(summary, orderIndex)">On</button>
+                        (click)="toggleOn(summary, orderIndex)">{{summaryData.order}}</button>
                 </td>
             </tr>
         </tbody>

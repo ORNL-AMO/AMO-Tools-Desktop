@@ -39,10 +39,10 @@ export class AnalyticsService {
     this.setClientId(clientId);
   }
 
-  async initAnalyticsSession(path: string) {
+  async initAnalyticsSession(path?: string) {
     await this.setClientAnalyticsId();
     let measurOpenEvent: GAEvent = {
-      name: 'measur_app_open',
+      name: 'measur_app_open_v2',
       params: {
         measur_platform: 'measur-desktop',
         measur_version: environment.version,
@@ -54,14 +54,6 @@ export class AnalyticsService {
     };
     this.postEventToMeasurementProtocol(measurOpenEvent);
     if (path) {
-      this.sendAnalyticsPageView(path);
-    }
-  }
-
-  async sendAnalyticsPageView(path: string) {
-    if (!this.clientId) {
-      await this.initAnalyticsSession(path);
-    } else {
       let pageViewEvent: GAEvent = {
         name: 'page_view',
         params: {
@@ -71,13 +63,13 @@ export class AnalyticsService {
           session_id: this.analyticsSessionId
         }
       }
-      this.postEventToMeasurementProtocol(pageViewEvent)
+      this.sendAnalyticsEvent(pageViewEvent.name, pageViewEvent.params);
     }
   }
 
   async sendAnalyticsEvent(eventName: AnalyticsEventString, eventParams: EventParameters) {
     if (!this.clientId) {
-      await this.initAnalyticsSession(undefined);
+      await this.initAnalyticsSession();
     } else {
       eventParams.session_id = this.analyticsSessionId;
       let pageViewEvent: GAEvent = {
@@ -152,8 +144,6 @@ export class AnalyticsService {
           session_id: undefined
         }
         gtag('event', eventName, eventParams);
-      } else if (path) {
-        this.sendAnalyticsPageView(path)
       } else {
         let eventParams: EventParameters = {
           page_path: path,

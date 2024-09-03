@@ -609,6 +609,17 @@ export class SteamSuiteApiService {
         lowPressureCondensate.delete();
       }
 
+      let lowPressureFlashedSteamIntoHeaderCalculatorDomain = lowPressureHeaderCalculationsDomain.lowPressureFlashedSteamIntoHeaderCalculatorDomain;
+      if (lowPressureFlashedSteamIntoHeaderCalculatorDomain) {
+        let mediumPressureCondensateFlashTank = lowPressureFlashedSteamIntoHeaderCalculatorDomain.mediumPressureCondensateFlashTank;
+        ssmtOutput.mediumPressureCondensateFlashTank = this.getFlashTankOutput(mediumPressureCondensateFlashTank);
+        if (mediumPressureCondensateFlashTank) {
+          mediumPressureCondensateFlashTank.delete();
+        }
+  
+        lowPressureFlashedSteamIntoHeaderCalculatorDomain.delete();
+      }
+
       lowPressureHeaderCalculationsDomain.delete();
     }
 
@@ -653,16 +664,7 @@ export class SteamSuiteApiService {
       mediumPressureHeaderCalculationsDomain.delete();
     }
 
-    let LowPressureFlashedSteamIntoHeaderCalculatorDomain = wasmOutput.LowPressureFlashedSteamIntoHeaderCalculatorDomain;
-    if (LowPressureFlashedSteamIntoHeaderCalculatorDomain) {
-      let mediumPressureCondensateFlashTank = LowPressureFlashedSteamIntoHeaderCalculatorDomain.mediumPressureCondensateFlashTank;
-      ssmtOutput.mediumPressureCondensateFlashTank = this.getFlashTankOutput(mediumPressureCondensateFlashTank);
-      if (mediumPressureCondensateFlashTank) {
-        mediumPressureCondensateFlashTank.delete();
-      }
 
-      LowPressureFlashedSteamIntoHeaderCalculatorDomain.delete();
-    }
 
     let operationsOutput: SSMTOperationsOutput;
 

@@ -84,18 +84,13 @@ export class PhastIntegrationService {
   }
 
   checkConvertEnergy(energyValue: number, settings: Settings, treasureHuntSettings: Settings) {
-    let treasureHuntUnit: string = treasureHuntSettings.unitsOfMeasure === "Imperial"? 'MMBtu' : 'GJ';
-    let assessmentUnit: string = settings.unitsOfMeasure === "Imperial"? 'MMBtu' : 'GJ';
-    let shouldConvert: boolean = settings.unitsOfMeasure !== treasureHuntSettings.unitsOfMeasure;
-    
-    if (shouldConvert && settings.energySourceType !== 'Electricity') {
-      // fuel- fired and steam - phast grossHeatInput results in MMBTU/GJ 
-      energyValue = this.convertUnitsService.convertValue(energyValue, assessmentUnit, treasureHuntUnit);
-    } else if (settings.energySourceType === 'Electricity') {
-      // EAF and electro - phast grossHeatInput results already in kWh
-      treasureHuntUnit = 'kWh';
-    }
+    let treasureHuntUnit: string = treasureHuntSettings.energyResultUnit;
+    let assessmentUnit: string = settings.energyResultUnit;
+    let shouldConvert: boolean = settings.energyResultUnit !== treasureHuntSettings.energyResultUnit;
 
+    if (shouldConvert) {
+      energyValue = this.convertUnitsService.convertValue(energyValue, assessmentUnit, treasureHuntUnit);
+    }
     treasureHuntUnit = treasureHuntUnit +'/yr'
     return {energyValue, treasureHuntUnit};
   }

@@ -2,7 +2,7 @@ name: CI/CD
 
 on:
   push:
-    branches: 
+    branches:
       - 'master'
       - 'develop'
   workflow_dispatch:
@@ -11,6 +11,6 @@ jobs:
   web:
     uses: ./.github/workflows/web.yml
 
-  # Do not enable yet - not yet implemented
-  # electron:
-  #   uses: ./.github/workflows/electron.yml
+  electron:
+    uses: ./.github/workflows/electron.yml
+    secrets: inherit
