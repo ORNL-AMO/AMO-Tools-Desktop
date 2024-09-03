@@ -46,7 +46,7 @@ jobs:
       BACKUP_DIR: /opt/actions-runner/backups
     steps:
       - name: Get artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: dist
       - name: Deploy
@@ -65,7 +65,7 @@ jobs:
       BACKUP_DIR: /opt/actions-runner/backups
     steps:
       - name: Get artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: dist
       - name: Deploy

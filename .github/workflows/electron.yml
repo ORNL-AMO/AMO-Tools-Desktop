@@ -81,7 +81,7 @@ jobs:
     needs: [build]
     steps:
       - name: Get artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: d-output
       - name: Notarize
@@ -102,7 +102,7 @@ jobs:
       VERSION: ${{ needs.build.outputs.BUILD_VERSION }}
     steps:
       - name: Get artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
       - name: Release
         uses: softprops/action-gh-release@v1
         # if: startsWith(github.ref, 'refs/tags/') # Uncomment if enabling tag gating
