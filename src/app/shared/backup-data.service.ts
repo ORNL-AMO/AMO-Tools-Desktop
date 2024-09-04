@@ -100,20 +100,13 @@ export class BackupDataService {
   }
 
   async setCustomMaterials(backupFile: MeasurBackupFile) {
-    let gasLoadChargeMaterials: GasLoadChargeMaterial[] = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
-    let liquidLoadChargeMaterials: LiquidLoadChargeMaterial[] = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
-    let solidLoadChargeMaterials: SolidLoadChargeMaterial[] = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
-    let atmosphereSpecificHeats: AtmosphereSpecificHeat[] = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
-    let wallLossesSurfaces: WallLossesSurface[] = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
-    let flueGasMaterials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-    let solidLiquidFlueGasMaterials: SolidLiquidFlueGasMaterial[] = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
-    backupFile.gasLoadChargeMaterials = gasLoadChargeMaterials? gasLoadChargeMaterials : [];
-    backupFile.liquidLoadChargeMaterials = liquidLoadChargeMaterials? liquidLoadChargeMaterials : [];
-    backupFile.solidLoadChargeMaterials = solidLoadChargeMaterials? solidLoadChargeMaterials : [];
-    backupFile.atmosphereSpecificHeats = atmosphereSpecificHeats? atmosphereSpecificHeats : [];
-    backupFile.wallLossesSurfaces = wallLossesSurfaces? wallLossesSurfaces : [];
-    backupFile.flueGasMaterials = flueGasMaterials? flueGasMaterials : [];
-    backupFile.solidLiquidFlueGasMaterials = solidLiquidFlueGasMaterials? solidLiquidFlueGasMaterials : [];
+    backupFile.gasLoadChargeMaterials = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
+    backupFile.liquidLoadChargeMaterials = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
+    backupFile.solidLoadChargeMaterials = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
+    backupFile.atmosphereSpecificHeats = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
+    backupFile.wallLossesSurfaces = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
+    backupFile.flueGasMaterials = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+    backupFile.solidLiquidFlueGasMaterials = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
   }
   
   async downloadBackupFile() {

@@ -77,7 +77,6 @@ export class AutomaticBackupService {
       );
 
       this.observableDataChanges.subscribe(dataChanges => {
-        console.log('** changes observed **')
         this.saveBackup();
       });
   }
@@ -100,7 +99,10 @@ export class AutomaticBackupService {
   }
   
   setVersionedFileName(backupFile: MeasurBackupFile, applicationInstanceData: ApplicationInstanceData) {
-    let filename: string = applicationInstanceData.dataBackupFilePath.substring(0, applicationInstanceData.dataBackupFilePath.length - 5);
+    let filename: string = applicationInstanceData.dataBackupFilePath;
+    if (applicationInstanceData.dataBackupFilePath.includes('.json')) {
+      filename = applicationInstanceData.dataBackupFilePath.substring(0, applicationInstanceData.dataBackupFilePath.length - 5);
+    }
     const versionedBackupName = this.getTimeStampedFileName(filename)
     backupFile.filename = versionedBackupName;
     backupFile.dataBackupFilePath = versionedBackupName;

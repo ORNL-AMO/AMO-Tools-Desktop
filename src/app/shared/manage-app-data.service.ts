@@ -39,7 +39,6 @@ export class ManageAppDataService {
       // "All Assessments"  directory
       let mainDirectory: Directory;
       let allDirectoryIds: number[] = allDirectories.filter(dir => {
-        console.log(dir.id);
         if (dir.id === 1) {
           mainDirectory = dir;
           return false;
