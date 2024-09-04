@@ -127,7 +127,6 @@ export class ResetDataModalComponent implements OnInit {
   async resetSystemSettingsAccept() {
     this.deleting = true;
     try {
-      throw new Error();
       if (this.resetAll) {
         this.resetAllData();
       } else if (this.resetUserAssessments) {
