@@ -28,6 +28,9 @@ jobs:
       - name: Dependency setup
         run: |
           PROV_PROF_PATH=$RUNNER_TEMP/embedded.provisionprofile
+          WIN_CERT_PATH=$RUNNER_TEMP/wincert.pem
+          echo -n "${{ secrets.WIN_CERT_BASE64 }}" | base64 --decode -o $WIN_CERT_PATH &&
+          cp "$WIN_CERT_PATH" ./wincert.pem
           echo -n "${{ secrets.APPLE_PROV_PROF_BASE64 }}" | base64 --decode -o $PROV_PROF_PATH &&
           cp "$PROV_PROF_PATH" ./embedded.provisionprofile
           npm ci --legacy-peer-deps &&
@@ -37,12 +40,22 @@ jobs:
       - name: Package
         run: |
           (node ./node_modules/.bin/electron-builder --mac --universal --publish never &&
-          xcrun notarytool submit --wait \
-            --apple-id "${{ secrets.APPLE_ID }}" \
-            --password "${{ secrets.APPLE_APP_SECRET }}" \
-            --team-id "${{ secrets.APPLE_TEAM_ID }}" \
-            $(find ../output -name "MEASUR-*.*.*.dmg")) &
-          node ./node_modules/.bin/electron-builder --win --x64 --publish never &
+            xcrun notarytool submit --wait \
+              --apple-id "${{ secrets.APPLE_ID }}" \
+              --password "${{ secrets.APPLE_APP_SECRET }}" \
+              --team-id "${{ secrets.APPLE_TEAM_ID }}" \
+              $(find ../output -name "MEASUR-*.*.*.dmg")) &
+          (node ./node_modules/.bin/electron-builder --win --x64 --publish never &&
+            EXE_PATH=$(find ../output -name "MEASUR-Setup-*.*.*.exe") &&
+            java -jar ~/jsign.jar \
+              --storetype "${{ secrets.WIN_STORE_TYPE }}" \
+              --storepass "${{ secrets.WIN_STORE_SECRET }}" \
+              --tsaurl "http://timestamp.sectigo.com"
+              --certfile ./wincert.pem \
+              $EXE_PATH &&
+            (OLD_HASH=$(grep -o -P -m 1 '(?<=sha512:\s).*' ../output/latest.yml) &
+            NEW_HASH=$(node ~/gen_hash.js -f $EXE_PATH)) &&
+            sed 's|'$OLD_HASH'|'$NEW_HASH'|g' ../output/latest.yml) &
           node ./node_modules/.bin/electron-builder --linux --x64 --publish never
       - name: Prepare output
         id: output
@@ -51,7 +64,6 @@ jobs:
           echo "BUILD_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
           OUTPUTS_DIR=$(cd ../output/ && pwd)
           echo "RUNNER_OUTDIR=$OUTPUTS_DIR" >> "$GITHUB_ENV"
-          ls -lah
       - name: Upload notarization artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -97,7 +109,7 @@ jobs:
   release:
     if: github.ref_name == 'master'
     runs-on: ubuntu-22.04
-    needs: [notarization]
+    needs: [build,notarization]
     env:
       VERSION: ${{ needs.build.outputs.BUILD_VERSION }}
     steps:
