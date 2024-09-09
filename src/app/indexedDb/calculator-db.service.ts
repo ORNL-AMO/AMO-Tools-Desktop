@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Calculator } from '../shared/models/calculators';
 import * as _ from 'lodash';
-import { firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { CalculatorStoreMeta } from './dbConfig';
 import { Assessment } from '../shared/models/assessment';
@@ -11,7 +11,11 @@ export class CalculatorDbService {
   allCalculators: Array<Calculator>;
   isSaving: boolean = false;
   storeName: string = CalculatorStoreMeta.store;
-  constructor(private dbService: NgxIndexedDBService) {}
+  dbCalculators: BehaviorSubject<Array<Calculator>>;
+
+  constructor(private dbService: NgxIndexedDBService) {
+    this.dbCalculators = new BehaviorSubject<Array<Calculator>>([]);
+  }
 
   async setAll(calculators?: Array<Calculator>) {
     if (calculators) {
@@ -19,6 +23,7 @@ export class CalculatorDbService {
     } else {
       this.allCalculators = await firstValueFrom(this.getAllCalculators());
     }
+    this.dbCalculators.next(this.allCalculators);
   }
 
   getAllCalculators(): Observable<Array<Calculator>> {
@@ -70,5 +75,10 @@ export class CalculatorDbService {
         this.isSaving = false;
       }
     }
+  }
+
+  clearAllWithObservable(): Observable<any> {
+    // ngx-indexed-db returns Array<Array<T>>
+    return this.dbService.clear(this.storeName);
   }
 }

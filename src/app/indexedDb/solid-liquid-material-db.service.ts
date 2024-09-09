@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { SolidLiquidFlueGasMaterialStoreMeta } from './dbConfig';
 
 @Injectable()
 export class SolidLiquidMaterialDbService {
   storeName: string = SolidLiquidFlueGasMaterialStoreMeta.store;
-  constructor(private dbService: NgxIndexedDBService) {}
+  dbSolidLiquidFlueGasMaterials: BehaviorSubject<Array<SolidLiquidFlueGasMaterial>>;
 
+  constructor(private dbService: NgxIndexedDBService) {
+    this.dbSolidLiquidFlueGasMaterials = new BehaviorSubject<Array<SolidLiquidFlueGasMaterial>>([]);
+  }
 
   getAllWithObservable(): Observable<Array<SolidLiquidFlueGasMaterial>> {
     return this.dbService.getAll(this.storeName);

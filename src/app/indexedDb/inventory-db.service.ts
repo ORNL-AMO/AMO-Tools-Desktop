@@ -2,15 +2,18 @@ import { Injectable } from '@angular/core';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import * as _ from 'lodash';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { InventoryStoreMeta } from './dbConfig';
 
 @Injectable()
 export class InventoryDbService {
 
   allInventoryItems: Array<InventoryItem>;
+  dbInventories: BehaviorSubject<Array<InventoryItem>>;
   storeName: string = InventoryStoreMeta.store;
-  constructor(private dbService: NgxIndexedDBService) { }
+  constructor(private dbService: NgxIndexedDBService) { 
+    this.dbInventories = new BehaviorSubject<Array<InventoryItem>>([]);
+  }
 
   async setAll(inventoryItems?: Array<InventoryItem>) {
     if (inventoryItems) {
@@ -18,6 +21,7 @@ export class InventoryDbService {
     } else {
       this.allInventoryItems = await firstValueFrom(this.getAllInventory());
     }
+    this.dbInventories.next(this.allInventoryItems);
   }
 
   getAllInventory(): Observable<any> {
@@ -82,5 +86,11 @@ export class InventoryDbService {
   bulkDeleteWithObservable(inventoryIds: Array<number>): Observable<any> {
     // ngx-indexed-db returns Array<Array<T>>
     return this.dbService.bulkDelete(this.storeName, inventoryIds);
+  }
+
+
+  clearAllWithObservable(): Observable<any> {
+    // ngx-indexed-db returns Array<Array<T>>
+    return this.dbService.clear(this.storeName);
   }
 }

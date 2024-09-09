@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import * as _ from 'lodash';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { firstValueFrom, map, mergeMap, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, map, mergeMap, Observable } from 'rxjs';
 import { AssessmentStoreMeta } from './dbConfig';
 import { UpdateDataService } from '../shared/helper-services/update-data.service';
 import { environment } from '../../environments/environment';
@@ -14,10 +14,12 @@ declare const packageJson;
 export class AssessmentDbService {
 
   allAssessments: Array<Assessment>;
+  dbAssessments: BehaviorSubject<Array<Assessment>>;
   storeName: string = AssessmentStoreMeta.store;
 
   constructor(
     private dbService: NgxIndexedDBService, private updateDataService: UpdateDataService, private calculatorDbService: CalculatorDbService) {
+      this.dbAssessments = new BehaviorSubject<Array<Assessment>>([]);
   }
   
   async setAll(assessments?: Array<Assessment>) {
@@ -26,6 +28,7 @@ export class AssessmentDbService {
     } else {
       this.allAssessments = await firstValueFrom(this.getAllAssessments());
     }
+    this.dbAssessments.next(this.allAssessments);
   }
 
   getAllAssessments(): Observable<Assessment[]> {
@@ -76,6 +79,12 @@ export class AssessmentDbService {
   bulkDeleteWithObservable(assessmentIds: Array<number>): Observable<any> {
     // ngx-indexed-db returns Array<Array<T>>
     return this.dbService.bulkDelete(this.storeName, assessmentIds);
+  }
+
+  
+  clearAllWithObservable(): Observable<any> {
+    // ngx-indexed-db returns Array<Array<T>>
+    return this.dbService.clear(this.storeName);
   }
 
   updateWithObservable(assessment: Assessment): Observable<Assessment> {

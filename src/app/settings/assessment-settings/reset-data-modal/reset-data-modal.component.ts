@@ -64,7 +64,8 @@ export class ResetDataModalComponent implements OnInit {
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private atmosphereDbService: AtmosphereDbService,
     private appErrorService: AppErrorService,
-    private inventoryDbService: InventoryDbService) { }
+    private inventoryDbService: InventoryDbService,
+  ) { }
 
   ngOnInit() {
   }
@@ -301,6 +302,7 @@ async resetAllExampleAssessments(dirId: number) {
 }
 
   async resetAllUserAssessments() {
+    // todo 6925 aren't these all stored within the directory as well?
     let directoryDataIds: DirectoryDataIds = this.getAssessmentsAndDataIds();
     let assessments: Array<Assessment[]> = await firstValueFrom(this.assessmentDbService.bulkDeleteWithObservable(directoryDataIds.assessments));
     let settings: Array<Settings[]> = await firstValueFrom(this.settingsDbService.bulkDeleteWithObservable(directoryDataIds.settings));

@@ -1,0 +1,44 @@
+#importFileRef, #backupFile {
+    font-size: 14px;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #156739;
+    background-color: #156739;
+}
+
+.custom-switch .custom-control-label::before,
+.custom-switch .custom-control-label::after {
+    cursor: pointer !important;
+}
+
+.checkbox:hover{
+    background-color: #efefef;
+    cursor: pointer;
+}
+
+.feature-action {
+    border: 2px solid #efefef;
+    font-size: 16px;
+}
+
+label, .desc-text {
+    font-size: 16px;
+}
+
+.file-path {
+    font-size: 14px;
+}
+
+.disabled {
+    color: gray;
+    pointer-events: none;
+}
+
+.select-folder {
+    margin-bottom: 1rem;
+}
+
+.click-link.disabled{
+    color: gray !important;
+}
