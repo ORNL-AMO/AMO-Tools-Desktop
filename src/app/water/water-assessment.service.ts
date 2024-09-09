@@ -16,6 +16,7 @@ export class WaterAssessmentService {
   settings: BehaviorSubject<Settings>;
   mainTab: BehaviorSubject<string>;
   setupTab: BehaviorSubject<WaterSetupTabString>;
+  waterUsingSystemTab: BehaviorSubject<WaterUsingSystemTabString>;
   focusedField: BehaviorSubject<string>;
   helpTextField: BehaviorSubject<string>;
   calcTab: BehaviorSubject<string>;
@@ -37,6 +38,7 @@ export class WaterAssessmentService {
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.setupTab = new BehaviorSubject<WaterSetupTabString>('system-basics');
+    this.waterUsingSystemTab = new BehaviorSubject<WaterUsingSystemTabString>('system');
     this.focusedField = new BehaviorSubject<string>('default');
     this.helpTextField = new BehaviorSubject<string>('default');
     // this.calcTab = new BehaviorSubject<string>('air-flow-conversion');
@@ -61,6 +63,21 @@ export class WaterAssessmentService {
 
   setWaterProcessComponentTitle(componentType: WaterProcessComponentType) {
     return getComponentNameFromType(componentType);
+  }
+
+  setWaterSystemTabTitle(tabString: WaterUsingSystemTabString) {
+    switch (tabString) {
+      case 'system':
+        return 'Water System Data'
+      case 'added-energy':
+        return 'Added Heat and Motor Energy'
+      case 'water-treatment':
+        return 'Water Treatment'
+      case 'waste-water-treatment':
+        return 'Waste Water Treatment'
+      default:
+         return 'Water System Data'
+    }
   }
 
   addNewWaterComponent(componentType: WaterProcessComponentType) {
@@ -151,3 +168,4 @@ export class WaterAssessmentService {
 }
 
 export type WaterSetupTabString = WaterProcessComponentType | 'system-basics' | 'system-balance-results';
+export type WaterUsingSystemTabString = 'system' | 'added-energy' | 'water-treatment' | 'waste-water-treatment' ;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
-import { MotorEnergy } from '../../../shared/models/water-assessment';
-import { OperatingHours } from '../../../shared/models/operations';
+import { OperatingHours } from '../../../../shared/models/operations';
+import { MotorEnergy } from '../../../../shared/models/water-assessment';
 
 @Injectable()
 export class MotorEnergyService {
@@ -50,7 +50,7 @@ export class MotorEnergyService {
       name:`Motor Energy ${lastIndex + 1}`,
       numberUnits: 1,
       hoursPerYear: 8760,
-      loadFactor: 8760,
+      loadFactor: null,
       ratedPower: null,
       systemEfficiency: null,
     };

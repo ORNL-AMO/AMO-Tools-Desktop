@@ -1,21 +1,20 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
-import { CoolingTower } from '../../../shared/models/water-assessment';
-import { Settings } from '../../../shared/models/settings';
+import { BoilerWater } from '../../../../shared/models/water-assessment';
+import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { OperatingHours } from '../../../shared/models/operations';
-import { WaterUsingSystemService } from '../water-using-system.service';
-import { WaterAssessmentService } from '../../water-assessment.service';
+import { WaterAssessmentService } from '../../../water-assessment.service';
+import { WaterUsingSystemService } from '../../water-using-system.service';
 
 @Component({
-  selector: 'app-cooling-tower',
-  templateUrl: './cooling-tower.component.html',
-  styleUrl: './cooling-tower.component.css'
+  selector: 'app-boiler-water',
+  templateUrl: './boiler-water.component.html',
+  styleUrl: './boiler-water.component.css'
 })
-export class CoolingTowerComponent {
+export class BoilerWaterComponent {
   @Input()
-  coolingTower: CoolingTower;
+  boilerWater: BoilerWater;
   @Output()
-  updateCoolingTower = new EventEmitter<CoolingTower>();
+  updateBoilerWater = new EventEmitter<BoilerWater>();
 
   settings: Settings;
   form: FormGroup;
@@ -43,12 +42,12 @@ export class CoolingTowerComponent {
   ngOnDestroy() {}
   
   initForm() {
-    this.form = this.waterUsingSystemService.getCoolingTowerForm(this.coolingTower);
+    this.form = this.waterUsingSystemService.getBoilerWaterForm(this.boilerWater);
   }
   
   save() {
-    let coolingTower = this.waterUsingSystemService.getCoolingTowerFromForm(this.form);
-    this.updateCoolingTower.emit(coolingTower);
+    let boilerWater = this.waterUsingSystemService.getBoilerWaterFromForm(this.form);
+    this.updateBoilerWater.emit(boilerWater);
   }
   
   focusField(str: string) {
@@ -60,6 +59,7 @@ export class CoolingTowerComponent {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
   }
+
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
   }

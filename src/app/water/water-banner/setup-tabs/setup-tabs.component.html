@@ -53,3 +53,44 @@
         </li>
     </ul>
 </nav>
+
+
+<ul *ngIf="setupTab == 'water-using-system'" class="tabs subtabs progress-tabs water-assessment d-none d-lg-block">
+    <li [ngClass]="{'active': waterUsingSystemTab == 'system'}">
+        <a (click)="changeWaterUsingSystemTab('system')">System Data</a>
+    </li>
+    <li [ngClass]="{'active': waterUsingSystemTab == 'added-energy'}">
+        <a (click)="changeWaterUsingSystemTab('added-energy')">Added Energy</a>
+    </li>
+    <li [ngClass]="{'active': waterUsingSystemTab == 'water-treatment', 'disabled': true}">
+        <a (click)="changeWaterUsingSystemTab('water-treatment')">Water Treatment</a>
+    </li>
+    <li [ngClass]="{'active': waterUsingSystemTab == 'waste-water-treatment', 'disabled': true}">
+        <a (click)="changeWaterUsingSystemTab('waste-water-treatment')">Waste Water Treatment</a>
+    </li>
+</ul>
+
+<nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs compressed-air flex-wrap flex-fill">
+    <ul *ngIf="setupTab == 'water-using-system'" class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill water-assessment">
+        <li class="page-item" [ngClass]="{'disabled': waterUsingSystemTab == 'system'}">
+            <a class="nav-link small" (click)="backWaterUsingSystemTab()" [ngClass]="{'disabled': waterUsingSystemTab == 'system'}">
+                <span class="fa fa-chevron-left"></span></a>
+        </li>
+        <li [ngClass]="{'active': waterUsingSystemTab == 'system'}" *ngIf="waterUsingSystemTab == 'system'">
+            <a (click)="changeWaterUsingSystemTab('system')">System Data</a>
+        </li>
+        <li [ngClass]="{'active': waterUsingSystemTab == 'added-energy'}" *ngIf="waterUsingSystemTab == 'added-energy'">
+            <a (click)="changeWaterUsingSystemTab('added-energy')">Added Energy</a>
+        </li>
+        <li [ngClass]="{'active': waterUsingSystemTab == 'water-treatment', 'disabled': true}" *ngIf="waterUsingSystemTab == 'water-treatment'">
+            <a (click)="changeWaterUsingSystemTab('water-treatment')">Water Treatment</a>
+        </li>
+        <li [ngClass]="{'active': waterUsingSystemTab == 'waste-water-treatment', 'disabled': true}" *ngIf="waterUsingSystemTab == 'waste-water-treatment'" >
+            <a (click)="changeWaterUsingSystemTab('waste-water-treatment')">Waste Water Treatment</a>
+        </li>
+        <li class="page-item" [ngClass]="{'disabled': waterUsingSystemTab == 'waste-water-treatment'}">
+            <a class="nav-link small" (click)="continueWaterUsingSystemTab()">
+                <span class="fa fa-chevron-right"></span></a>
+        </li>
+    </ul>
+</nav>

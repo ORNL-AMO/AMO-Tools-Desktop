@@ -1,12 +1,12 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
-import { FlowMetric, ProcessUse } from '../../../shared/models/water-assessment';
-import { WaterUsingSystemService } from '../water-using-system.service';
-import { WaterAssessmentService } from '../../water-assessment.service';
-import { Settings } from '../../../shared/models/settings';
+import { FlowMetric, ProcessUse } from '../../../../shared/models/water-assessment';
+import { WaterUsingSystemService } from '../../water-using-system.service';
+import { WaterAssessmentService } from '../../../water-assessment.service';
+import { Settings } from '../../../../shared/models/settings';
 import { FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { OperatingHours } from '../../../shared/models/operations';
-import { copyObject } from '../../../shared/helperFunctions';
-import { waterFlowMetricOptions } from '../../waterConstants';
+import { OperatingHours } from '../../../../shared/models/operations';
+import { copyObject } from '../../../../shared/helperFunctions';
+import { waterFlowMetricOptions } from '../../../waterConstants';
 
 @Component({
   selector: 'app-process-use',
