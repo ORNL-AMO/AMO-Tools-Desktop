@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
-import { Settings } from '../../../shared/models/settings';
+import { Settings } from '../../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from '../../../shared/models/water-assessment';
-import { WaterUsingSystemService } from '../water-using-system.service';
+import { WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from '../../../../shared/models/water-assessment';
+import { WaterUsingSystemService } from '../../water-using-system.service';
 
 @Component({
   selector: 'app-water-system-data-modal',

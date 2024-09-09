@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
-import { HeatEnergy } from '../../../shared/models/water-assessment';
+import { HeatEnergy } from '../../../../shared/models/water-assessment';
 
 @Injectable()
 export class HeatEnergyService {

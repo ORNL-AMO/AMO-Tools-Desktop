@@ -27,22 +27,26 @@ import { WaterComponentTableComponent } from './results-panel/water-component-ta
 import { WaterProcessComponentService } from './water-system-component.service';
 import { WaterProcessDiagramModule } from '../water-process-diagram/water-process-diagram.module';
 import { WaterAssessmentConnectionsService } from './water-assessment-connections.service';
-import { WaterUsingSystemComponent } from './water-using-system/water-using-system.component';
 import { DischargeOutletComponent } from './discharge-outlet/discharge-outlet.component';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
-import { HeatEnergyComponent } from './water-using-system/heat-energy/heat-energy.component';
-import { HeatEnergyService } from './water-using-system/heat-energy/heat-energy.service';
-import { MotorEnergyService } from './water-using-system/motor-energy/motor-energy.service';
-import { MotorEnergyComponent } from './water-using-system/motor-energy/motor-energy.component';
+import { HeatEnergyComponent } from './water-using-system/added-energy/heat-energy/heat-energy.component';
+import { HeatEnergyService } from './water-using-system/added-energy/heat-energy/heat-energy.service';
 import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
-import { CoolingTowerComponent } from './water-using-system/cooling-tower/cooling-tower.component';
-import { ProcessUseComponent } from './water-using-system/process-use/process-use.component';
-import { KitchenRestroomComponent } from './water-using-system/kitchen-restroom/kitchen-restroom.component';
-import { BoilerWaterComponent } from './water-using-system/boiler-water/boiler-water.component';
-import { LandscapingComponent } from './water-using-system/landscaping/landscaping.component';
+import { CoolingTowerComponent } from './water-using-system/water-system-data/cooling-tower/cooling-tower.component';
+import { ProcessUseComponent } from './water-using-system/water-system-data/process-use/process-use.component';
+import { KitchenRestroomComponent } from './water-using-system/water-system-data/kitchen-restroom/kitchen-restroom.component';
+import { BoilerWaterComponent } from './water-using-system/water-system-data/boiler-water/boiler-water.component';
+import { LandscapingComponent } from './water-using-system/water-system-data/landscaping/landscaping.component';
 import { PercentLoadEstimationModule } from '../calculator/motors/percent-load-estimation/percent-load-estimation.module';
 import { StackLossModule } from '../calculator/steam/stack-loss/stack-loss.module';
-import { WaterSystemDataModalComponent } from './water-using-system/water-system-data-modal/water-system-data-modal.component';
+import { WaterSystemDataModalComponent } from './water-using-system/water-system-data/water-system-data-modal/water-system-data-modal.component';
+import { WaterSystemDataComponent } from './water-using-system/water-system-data/water-system-data.component';
+import { AddedEnergyComponent } from './water-using-system/added-energy/added-energy.component';
+import { WaterTreatmentComponent } from './water-using-system/water-treatment/water-treatment.component';
+import { WasteWaterTreatmentComponent } from './water-using-system/waste-water-treatment/waste-water-treatment.component';
+import { WaterUsingSystemComponent } from './water-using-system/water-using-system.component';
+import { MotorEnergyComponent } from './water-using-system/added-energy/motor-energy/motor-energy.component';
+import { MotorEnergyService } from './water-using-system/added-energy/motor-energy/motor-energy.service';
 
 @NgModule({
   declarations: [
@@ -64,6 +68,10 @@ import { WaterSystemDataModalComponent } from './water-using-system/water-system
     BoilerWaterComponent,
     LandscapingComponent,
     WaterSystemDataModalComponent,
+    WaterSystemDataComponent,
+    AddedEnergyComponent,
+    WaterTreatmentComponent,
+    WasteWaterTreatmentComponent
   ],
   imports: [
     CommonModule,

@@ -6,6 +6,12 @@
     cursor: pointer;
 }
 
+.form-card {
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 20px 0 grey;
+}
+
 /*  */
 
 .secondary-group{
@@ -26,8 +32,20 @@
     padding-right: .5rem;
 }
 
+.click-link.delete {
+    color: red !important;
+}
 
 
 .small {
     font-size: 85%;
+}
+
+.form-section {
+    padding-bottom: .25rem;
+    border-bottom: 1px dashed;
+}
+
+.motor-equipment {
+    border-top: 1px solid;
 }

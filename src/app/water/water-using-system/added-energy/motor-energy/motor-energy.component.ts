@@ -1,13 +1,12 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
-import { MotorEnergy } from '../../../shared/models/water-assessment';
-import { WaterAssessmentService } from '../../water-assessment.service';
-import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
-import { MotorEnergyService } from './motor-energy.service';
-import { OperatingHours } from '../../../shared/models/operations';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { PercentLoadEstimationService } from '../../../calculator/motors/percent-load-estimation/percent-load-estimation.service';
-import { copyObject } from '../../../shared/helperFunctions';
+import { Output, ViewChild, HostListener, Component, Input, EventEmitter, ElementRef } from "@angular/core";
+import { FormGroup } from "@angular/forms";
+import { ModalDirective } from "ngx-bootstrap/modal";
+import { PercentLoadEstimationService } from "../../../../calculator/motors/percent-load-estimation/percent-load-estimation.service";
+import { OperatingHours } from "../../../../shared/models/operations";
+import { WaterAssessmentService } from "../../../water-assessment.service";
+import { MotorEnergyService } from "./motor-energy.service";
+import { MotorEnergy } from "../../../../shared/models/water-assessment";
+import { Settings } from "../../../../shared/models/settings";
 
 @Component({
   selector: 'app-motor-energy',
@@ -31,7 +30,6 @@ export class MotorEnergyComponent {
   }
 
   @ViewChild('loadFactorModal', { static: false }) public loadFactorModal: ModalDirective;
-
 
   constructor(private waterAssessmentService: WaterAssessmentService, 
     private percentLoadEstimationService: PercentLoadEstimationService,
