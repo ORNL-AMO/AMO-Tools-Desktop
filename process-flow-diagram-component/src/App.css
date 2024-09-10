@@ -114,11 +114,11 @@ a {
   /* margin-bottom: 10px; */
   /* display: flex; */
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   justify-content: center;
   align-items: center;
   cursor: grab;
-  color: #000;
+  color: #fff;
 }
 
 .process-flow-diagram .dndnode.splitterNode {
@@ -126,35 +126,24 @@ a {
   background: #c0c0c0;
 }
 
-.process-flow-diagram .dndnode:hover {
-  background: unset !important;
-}
-
 .process-flow-diagram .dndnode.water-intake {
-  border-color: #75a1ff;
-  background: rgba(117, 161, 255, .15);
+  border: none;
+  background: rgba(117, 161, 255, 1);
 }
 
 .process-flow-diagram .dndnode.water-using-system {
-  border-color: rgb(149, 228, 255);
-  background: rgba(180, 255, 255, .15);
+  border: none;
+  background: rgba(0, 187, 255, 1);
 }
 
 .process-flow-diagram .dndnode.water-discharge {
-  border-color:  rgb(2, 10, 216);
-  background: rgba(2, 10, 216, .15);
-}
-
-.process-flow-diagram .dndnode.water-treatment {
-  border-color:  rgb(34, 160, 133);
-  background: rgba(34, 160, 133, .15);
-  opacity: .25;
+  border: none;
+  background: rgba(127, 127, 255, 1);
 }
 
 .process-flow-diagram .dndnode.waste-water-treatment {
-  border-color:  #e29301;
-  background: rgba(226, 147, 1, .15);
-  opacity: .25;
+  border-color:  #e28000;
+  background: #e28000;
 }
 
 .process-flow-diagram .reactflow-wrapper {
@@ -196,8 +185,8 @@ a {
 
   .process-flow-diagram aside {
     /* todo retrieve width for context menu offsets */
-    width: 400px;
-    max-width: 400px;
+    width: 375px;
+    max-width: 375;
   }
 }
 
@@ -244,13 +233,17 @@ a {
 .react-flow__node-waterUsingSystem,
 .react-flow__node-group {
   /* background-color: var(--water-using-system); */
-  background-color: rgb(149, 228, 255);
+  background-color: rgb(0, 187, 255);
 }
 
 .react-flow__node-waterDischarge,
 .react-flow__node-group {
   /* background-color: var(--water-discharge); */
-  background-color: rgb(2, 10, 216);
+  background-color: rgb(127, 127, 255);
+}
+
+.color-underlay {
+  background-color: #ececec;
 }
 
 .react-flow__node-waterIntake.selectable:hover, .react-flow__node-waterUsingSystem.selectable:hover, .react-flow__node-waterDischarge.selectable:hover, .react-flow__node-group.selectable:hover {

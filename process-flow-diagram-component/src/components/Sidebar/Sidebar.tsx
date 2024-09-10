@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
-import DownloadButton from '../DownloadButton';
 import { ProcessFlowPart, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
-import { Box, Grid, Paper, styled, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, Grid, Paper, styled, Tab, Tabs, Typography } from '@mui/material';
 import { Edge, Node, useOnSelectionChange } from '@xyflow/react';
 import CustomizeEdge from './CustomizeEdge';
+import DownloadButton from './DownloadButton';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -15,15 +15,33 @@ interface TabPanelProps {
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
+  let styleProps;
+  let sxProps: any = {
+    p: 1,
+  }; 
+
+  if (value === index && value === 0) {
+    styleProps = { height: '100%', display: 'flex', justifyContent: 'space-between' };
+    sxProps = {
+      p: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+    }
+  } else {
+    styleProps = undefined
+  }
+
   return (
     <div
       role="tabpanel"
       hidden={value !== index}
       id={`diagram-tabpanel-${index}`}
       aria-labelledby={`diagram-tab-${index}`}
+      style={styleProps}
       {...other}
     >
-      {value === index && <Box sx={{ p: 1 }}>{children}</Box>}
+      {value === index && <Box sx={sxProps}>{children}</Box>}
     </div>
   );
 }
@@ -38,7 +56,6 @@ const WaterComponent = styled(Paper)(({ theme }) => ({
 const Sidebar = (props: SidebarProps) => {
   const processFlowParts: ProcessFlowPart[] = [...processFlowDiagramParts];
   const [selectedEdge, setSelectedEdge] = useState(null);
-  
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
@@ -47,12 +64,11 @@ const Sidebar = (props: SidebarProps) => {
     props.setSelectedTab(newValue);
   };
 
-  const onSelectedNodeOrEdge = useCallback((selectedParts: {nodes: Node[], edges: Edge[]}) => {
+  const onSelectedNodeOrEdge = useCallback((selectedParts: { nodes: Node[], edges: Edge[] }) => {
     // todo 6905 set for multiple selected, or allow only one selected
     const lastSelectedEdge = selectedParts.edges[0];
-    
     setSelectedEdge(lastSelectedEdge);
-    const switchTab = lastSelectedEdge? 1 : props.selectedTab;
+    const switchTab = lastSelectedEdge ? 1 : props.selectedTab;
     props.setSelectedTab(switchTab);
   }, []);
 
@@ -66,50 +82,53 @@ const Sidebar = (props: SidebarProps) => {
 
   return (
     <aside>
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column'}}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={props.selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
             <Tab sx={tabStyles} label="System Parts" />
             <Tab sx={tabStyles} label="Customize" />
-            <Tab sx={tabStyles} label="Options"  />
+            <Tab sx={tabStyles} label="Options" />
           </Tabs>
         </Box>
 
         {/* SYSTEM PARTS */}
         <CustomTabPanel value={props.selectedTab} index={0} >
-        <Typography variant='body1' component={'i'} sx={{fontWeight: '500', fontSize: '14px'}}>Drag plant water system components into the pane</Typography>
 
-          <Box sx={{ flexGrow: 1, paddingY: '1rem' }}>
-            <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 3, sm: 8, md: 12 }}>
-              {processFlowParts.map((part: ProcessFlowPart) => (
-                <Grid item xs={2} sm={4} md={4} key={part.processComponentType}>
-                  <WaterComponent className={`dndnode ${part.processComponentType}`} 
-                  onDragStart={(event) => onDragStart(event, part.processComponentType)} 
-                  draggable={part.processComponentType != 'water-treatment' && part.processComponentType != 'waste-water-treatment'}>{part.name}</WaterComponent>
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
-
-          <hr/>
-          <Box sx={{ flexGrow: 1, paddingY: '1rem' }}>
-            <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 3, sm: 8, md: 12 }}>
-                <Grid item xs={2} sm={4} md={4}>
-                  <WaterComponent className={`dndnode splitterNode`} 
-                  onDragStart={(event) => onDragStart(event, 'splitter-node-4')} draggable> 4-way Splitter</WaterComponent>
+          <div>
+            <Typography variant='body1' component={'i'} sx={{ fontWeight: '500', fontSize: '14px' }}>Drag plant water system components into the pane</Typography>
+            <Box sx={{ flexGrow: 1, paddingY: '1rem' }}>
+              <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 3, sm: 8, md: 12 }}>
+                {processFlowParts.map((part: ProcessFlowPart) => (
+                  <Grid item xs={2} sm={4} md={4} key={part.processComponentType}>
+                    <WaterComponent className={`dndnode ${part.processComponentType}`}
+                      onDragStart={(event) => onDragStart(event, part.processComponentType)}
+                      draggable={part.processComponentType != 'waste-water-treatment'}>
+                      {part.name}
+                    </WaterComponent>
+                  </Grid>
+                ))}
+                   <Grid item xs={2} sm={4} md={4}>
+                  <WaterComponent className={`dndnode splitterNode`}
+                    onDragStart={(event) => onDragStart(event, 'splitter-node-4')} draggable> 4-way Connection</WaterComponent>
                 </Grid>
                 <Grid item xs={2} sm={4} md={4}>
-                  <WaterComponent className={`dndnode splitterNode`} 
-                  onDragStart={(event) => onDragStart(event, 'splitter-node-8')} draggable> 8-way Splitter</WaterComponent>
+                  <WaterComponent className={`dndnode splitterNode`}
+                    onDragStart={(event) => onDragStart(event, 'splitter-node-8')} draggable> 8-way Connection</WaterComponent>
                 </Grid>
-            </Grid>
-          </Box>
+              </Grid>
+              
+            </Box>
+          </div>
 
+
+          {!props.hasAssessment &&
+            <Button variant="outlined" onClick={() => props.setIsDialogOpen(true)}>Reset Diagram</Button>
+          }
         </CustomTabPanel>
 
         {/* CUSTOMIZE */}
         <CustomTabPanel value={props.selectedTab} index={1}>
-          <Typography variant='body1' component={'i'} sx={{fontWeight: '500', fontSize: '14px'}}>Select components and connecting lines to customize</Typography>
+          <Typography variant='body1' component={'i'} sx={{ fontWeight: '500', fontSize: '14px' }}>Select components and connecting lines to customize</Typography>
           {selectedEdge &&
             <CustomizeEdge edge={selectedEdge}></CustomizeEdge>
           }
@@ -118,7 +137,7 @@ const Sidebar = (props: SidebarProps) => {
 
         {/* DIAGRAM OPTION */}
         <CustomTabPanel value={props.selectedTab} index={2}>
-          <Typography variant='body1' component={'i'} sx={{fontWeight: '500', fontSize: '14px'}}>Set diagram view options</Typography>
+          <Typography variant='body1' component={'i'} sx={{ fontWeight: '500', fontSize: '14px' }}>Set diagram view options</Typography>
           <div className="sidebar-actions">
             <label htmlFor="edgeType">Connecting Line Type</label>
             <select className="form-control" id="edgeType" name="edgeType" onChange={(e) => props.edgeTypeChangeCallback(e.target.value)}>
@@ -166,7 +185,10 @@ export interface SidebarProps {
   controlsVisible: boolean;
   controlsVisibleCallback: (enabled: boolean) => void;
   edgeTypeChangeCallback: (edgeTypeOption: string) => void;
+  resetDiagramCallback: () => void;
   setSelectedTab: (tab: number) => void;
+  setIsDialogOpen: (boolean) => void;
   selectedTab: number;
+  hasAssessment: boolean;
   shadowRoot;
 }

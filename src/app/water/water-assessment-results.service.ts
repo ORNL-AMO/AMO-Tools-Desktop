@@ -47,7 +47,9 @@ export class WaterAssessmentResultsService {
       waterSystemResults.grossWaterUse = waterSystemResults.landscapingResults.grossWaterUse;
     }
 
-    waterSystemResults.heatEnergyResults = this.waterSuiteApiService.calculateHeatEnergy(waterSystem.heatEnergy);
+    if (waterSystem.heatEnergy) {
+      waterSystemResults.heatEnergyResults = this.waterSuiteApiService.calculateHeatEnergy(waterSystem.heatEnergy);
+    }
     waterSystem.addedMotorEquipment.forEach(motorEnergy => {
       waterSystemResults.motorEnergyResults.push(this.waterSuiteApiService.calculateMotorEnergy(motorEnergy))
      });
