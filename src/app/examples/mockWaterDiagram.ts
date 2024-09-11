@@ -31,6 +31,9 @@ export const MockWaterdiagram: Diagram =
                         "annualUse": 100,
                         "hasAssessmentData": true
                     },
+                    "style": {
+                        backgroundColor: '#75a1ff'
+                    },
                     "position": {
                         "x": -28.094686485743182,
                         "y": 201.03209583403844
@@ -61,6 +64,9 @@ export const MockWaterdiagram: Diagram =
                         "sourceType": 0,
                         "annualUse": 0
                     },
+                    "style": {
+                        backgroundColor: '#75a1ff'
+                      },
                     "measured": {
                         "width": 219,
                         "height": 63
@@ -83,6 +89,9 @@ export const MockWaterdiagram: Diagram =
                         "annualUse": 200,
                         "hasAssessmentData": true
                     },
+                    "style": {
+                        backgroundColor: '#7f7fff'
+                      },
                     "position": {
                         "x": 852.2043883258892,
                         "y": 183.9824047039503
@@ -140,6 +149,9 @@ export const MockWaterdiagram: Diagram =
                         "waterInProduct": 75,
                         "knownLosses": 15
                     },
+                    style: {
+                        backgroundColor: '#00bbff'
+                      },
                     "position": {
                         "x": 369.4698724818088,
                         "y": 247.85415607284884
@@ -189,6 +201,9 @@ export const MockWaterdiagram: Diagram =
                         },
                         "addedMotorEquipment": []
                     },
+                    style: {
+                        backgroundColor: '#00bbff'
+                      },
                     "measured": {
                         "width": 219,
                         "height": 63
@@ -234,6 +249,9 @@ export const MockWaterdiagram: Diagram =
                         },
                         "addedMotorEquipment": []
                     },
+                    "style": {
+                        backgroundColor: '#00bbff'
+                      },
                     "measured": {
                         "width": 219,
                         "height": 63

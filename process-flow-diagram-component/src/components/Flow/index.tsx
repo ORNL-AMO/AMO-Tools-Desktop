@@ -26,7 +26,7 @@ import { changeExistingEdgesType, getEdgeDefaultOptions, setCustomEdges, setDrop
 import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useSaveDebounce';
 import { NodeContextMenu, NodeContextMenuProps } from '../ContextMenu/NodeContextMenu';
-import WarningDialog from '../Sidebar/WarningDialog';
+import WarningDialog from './WarningDialog';
 
 const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
 const nodeClassName = (node: Node) => node.type;

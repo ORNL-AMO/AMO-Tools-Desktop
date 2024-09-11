@@ -7,11 +7,11 @@ import MuiAccordionSummary, {
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import { Box, Breadcrumbs } from '@mui/material';
+import { Box, Breadcrumbs, Button } from '@mui/material';
 import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
 import { PresetColorPicker } from './PresetColorPicker';
 import { Edge, Node, useReactFlow } from '@xyflow/react';
-import SettingsIcon from '@mui/icons-material/Settings';
+import EditIcon from '@mui/icons-material/Edit';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
 
@@ -49,13 +49,14 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
-export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
+export default function EditEdge({ edge }: EditEdgeProps) {
   const { setEdges, getNodes } = useReactFlow();
   const [expanded, setExpanded] = React.useState<boolean>(true);
 
   const handleAccordianChange =
     (panel: boolean) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-      setExpanded(!expanded);
+      // * disallow change until we have multiple instances implemented
+      // setExpanded(!expanded);
     };
 
   const handleEdgeTypeChange = (edgeId: string, newEdgeType: string) => {
@@ -80,6 +81,10 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
     });
   }
 
+  const onDeleteEdge = () => {
+    setEdges((edges) => edges.filter((edg) => edg.id !== edge.id));
+  };
+
   const presetColors = [
     "#cd9323", "#1a53d8", "#9a2151", "#0d6416", "#8d2808",
   ];
@@ -89,28 +94,30 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
   const source: ProcessFlowPart = nodes.find((node: Node) => node.id === edge.source).data as ProcessFlowPart;
   const target: ProcessFlowPart = nodes.find(node => node.id === edge.target).data as ProcessFlowPart;
   const relationships = [
-    <Typography key="1" color="text.secondary" fontSize={'.75rem'}>
+    <Typography key="1" color="text.primary" fontSize={'.75rem'}>
       {source.name}
     </Typography>,
-    <Typography key="2" color="text.secondary" fontSize={'.75rem'}>
+    <Typography key="2" color="text.primary" fontSize={'.75rem'}>
       {target.name}
-    </Typography>,
+    </Typography>
   ]
 
   return (
     <Box sx={{ marginTop: 1 }}>
       <Accordion key={edge.id} expanded={expanded} onChange={handleAccordianChange(expanded)}>
         <AccordionSummary aria-controls={`${edge.id}-content`} id={`${edge.id}-header`}>
-          <Typography variant="h6" component="h6" sx={{ fontSize: '1rem' }}>Connecting Line</Typography>
-          <button className="customize-button editing">
-            <SettingsIcon sx={{width: 'unset', height: 'unset'}} />
+            <Breadcrumbs
+              separator={<NavigateNextIcon fontSize="small" />}
+              aria-label="breadcrumb"
+            >
+              {relationships}
+            </Breadcrumbs>
+          <button className="edit-button editing">
+            <EditIcon sx={{width: 'unset', height: 'unset'}} />
           </button>
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-          >
-            {relationships}
-          </Breadcrumbs>
+          <Typography variant="subtitle1" color="text.secondary" fontSize={'.75rem'}>
+            Connecting Line
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Box display={'flex'} justifyContent={'space-between'} width={'100%'}>
@@ -132,12 +139,14 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
               onChangeHandler={handleEdgeColorChange}
               label={'Pick Line Color'} />
           </Box>
+          <Button sx={{width: '100%', marginTop: 1}} variant="outlined" onClick={onDeleteEdge}>Delete Line</Button>
+
         </AccordionDetails>
       </Accordion>
     </Box>
   );
 }
 
-export interface CustomizeEdgeProps {
+export interface EditEdgeProps {
   edge: Edge;
 }

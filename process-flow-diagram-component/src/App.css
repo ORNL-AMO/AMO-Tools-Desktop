@@ -122,28 +122,29 @@ a {
 }
 
 .process-flow-diagram .dndnode.splitterNode {
-  border: 2px solid #c0c0c0;
-  background: #c0c0c0;
+  border: none;
+  background: #757575;
 }
 
 .process-flow-diagram .dndnode.water-intake {
   border: none;
-  background: rgba(117, 161, 255, 1);
+  background: #75a1ff;
 }
 
 .process-flow-diagram .dndnode.water-using-system {
   border: none;
-  background: rgba(0, 187, 255, 1);
+  background: #00bbff;
 }
 
 .process-flow-diagram .dndnode.water-discharge {
   border: none;
-  background: rgba(127, 127, 255, 1);
+  background: #7f7fff;
 }
 
 .process-flow-diagram .dndnode.waste-water-treatment {
-  border-color:  #e28000;
-  background: #e28000;
+  border: none;
+  background: #c0c0c0;
+  /* background: #e28000; */
 }
 
 .process-flow-diagram .reactflow-wrapper {
@@ -278,9 +279,9 @@ a {
 }
 /* Custom Node End */
 
-.customize-button {
-  width: 24px;
-  height: 24px;
+.edit-button {
+  width: 28px;
+  height: 28px;
   background: #fff;
   border: none;
   cursor: pointer;
@@ -288,14 +289,14 @@ a {
   border-radius: 50%;
   font-size: 12px;
   line-height: 1;
-  padding: 0;
+  padding: 2px;
 }
 
-.customize-button:hover {
+.edit-button:hover {
   box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
 }
 
-.customize-button.editing {
+.edit-button.editing {
   font-size: 16px;
   width: 32px;
   height: 32px;

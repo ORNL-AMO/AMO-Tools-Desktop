@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { CSSProperties, useCallback, useState } from 'react';
 import { ProcessFlowPart, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
 import { Box, Button, Grid, Paper, styled, Tab, Tabs, Typography } from '@mui/material';
 import { Edge, Node, useOnSelectionChange } from '@xyflow/react';
-import CustomizeEdge from './CustomizeEdge';
 import DownloadButton from './DownloadButton';
+import EditNode from './EditNode';
+import EditEdge from './EditEdge';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -15,22 +16,21 @@ interface TabPanelProps {
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
-  let styleProps;
+  let styleProps: CSSProperties = { height: '100%'};
   let sxProps: any = {
     p: 1,
   }; 
 
   if (value === index && value === 0) {
-    styleProps = { height: '100%', display: 'flex', justifyContent: 'space-between' };
+    styleProps.display = 'flex'
+    styleProps.justifyContent = 'space-between' ;
     sxProps = {
       p: 1,
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
     }
-  } else {
-    styleProps = undefined
-  }
+  } 
 
   return (
     <div
@@ -56,6 +56,7 @@ const WaterComponent = styled(Paper)(({ theme }) => ({
 const Sidebar = (props: SidebarProps) => {
   const processFlowParts: ProcessFlowPart[] = [...processFlowDiagramParts];
   const [selectedEdge, setSelectedEdge] = useState(null);
+  const [selectedNode, setSelectedNode] = useState(null);
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
@@ -65,10 +66,14 @@ const Sidebar = (props: SidebarProps) => {
   };
 
   const onSelectedNodeOrEdge = useCallback((selectedParts: { nodes: Node[], edges: Edge[] }) => {
-    // todo 6905 set for multiple selected, or allow only one selected
+    // todo 6905 needs to be changed to allow multiple selected, or enforce only one selected
+
     const lastSelectedEdge = selectedParts.edges[0];
+    const lastSelectedNode = selectedParts.nodes[0];
     setSelectedEdge(lastSelectedEdge);
-    const switchTab = lastSelectedEdge ? 1 : props.selectedTab;
+    setSelectedNode(lastSelectedNode);
+    const switchTab = lastSelectedEdge || lastSelectedNode? 1 : props.selectedTab;
+
     props.setSelectedTab(switchTab);
   }, []);
 
@@ -130,7 +135,10 @@ const Sidebar = (props: SidebarProps) => {
         <CustomTabPanel value={props.selectedTab} index={1}>
           <Typography variant='body1' component={'i'} sx={{ fontWeight: '500', fontSize: '14px' }}>Select components and connecting lines to customize</Typography>
           {selectedEdge &&
-            <CustomizeEdge edge={selectedEdge}></CustomizeEdge>
+            <EditEdge edge={selectedEdge}></EditEdge>
+          }
+          {selectedNode &&
+            <EditNode node={selectedNode}></EditNode>
           }
         </CustomTabPanel>
 
