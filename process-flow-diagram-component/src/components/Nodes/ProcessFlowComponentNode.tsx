@@ -1,7 +1,8 @@
 import { memo, CSSProperties } from 'react';
 import { Handle, Position, NodeProps, useReactFlow, Node } from '@xyflow/react';
 import { ProcessFlowNodeType, ProcessFlowPartStyleClass } from '../../../../src/process-flow-types/shared-process-flow-types';
-import SettingsIcon from '@mui/icons-material/Settings';
+import EditIcon from '@mui/icons-material/Edit';
+
 
 
 const targetHandleStyleA: CSSProperties = {};
@@ -18,7 +19,7 @@ export type DiagramNode = Node<{name: string,
   splitterTargets?: Array<string>;
   processComponentContext?: any;}, 'processFlowPart'>;
  
-const ProcessFlowComponentNode = ({ data, isConnectable, selected }: NodeProps<DiagramNode>) => {
+const ProcessFlowComponentNode = ({ data, isConnectable, selected}: NodeProps<DiagramNode>) => {
   const { setNodes } = useReactFlow();
   const updateNodeName = (event, diagramNodeId) => {
     setNodes((nds) =>
@@ -38,24 +39,24 @@ const ProcessFlowComponentNode = ({ data, isConnectable, selected }: NodeProps<D
     );
   };
 
-
   const transformString = `translate(0%, 0%) translate(185px, -32px)`;
+  const customStyle: CSSProperties = {
+    position: 'absolute',
+    transform: transformString,
+    fontSize: 16,
+    pointerEvents: 'all',
+  }
 
   return (
     <>
       <div className="node-inner-input">
         <div
-          style={{
-            position: 'absolute',
-            transform: transformString,
-            fontSize: 16,
-            pointerEvents: 'all',
-          }}
+          style={customStyle}
           className="nodrag nopan"
           >
           {selected &&
-          <button className="customize-button">
-            <SettingsIcon sx={{width: 'unset', height: 'unset'}} />
+          <button className="edit-button">
+            <EditIcon sx={{width: 'unset', height: 'unset'}} />
           </button>
           }
         </div>

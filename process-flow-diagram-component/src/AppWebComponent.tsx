@@ -23,7 +23,7 @@ class AppWebComponent extends HTMLElement {
         <CacheProvider value={this.MUIStylesCache}>
           <App parentContainer={parentState.parentContainer}
             context={parentState.context}
-            flowDiagramData={parentState.waterDiagram.flowDiagramData}
+            processDiagram={parentState.waterDiagram}
             shadowRoot={this.shadowRoot}
             clickEvent={this.handleClickEvent}
             saveFlowDiagramData={this.emitFlowDiagramDataUpdate}

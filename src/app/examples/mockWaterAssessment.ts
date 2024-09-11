@@ -20,17 +20,28 @@ export const MockWaterAssessment: Assessment =  {
             "notes": undefined
         },
         "intakeSources": [
-            {
-              "processComponentType": "water-intake",
-              "name": "City Intake",
-              "className": "water-intake",
-              "isValid": true,
-              "diagramNodeId": "dndnode_a7czeo5fx",
-              "modifiedDate": new Date("2024-07-09T16:47:48.232Z"),
-              "sourceType": 0,
-              "annualUse": 100,
-              "hasAssessmentData": true
-          }
+           {
+                  "processComponentType": "water-intake",
+                  "name": "City Municipal Intake",
+                  "className": "water-intake",
+                  "isValid": true,
+                  "diagramNodeId": "dndnode_a7czeo5fx",
+                  "modifiedDate": new Date("2024-07-09T16:47:48.232Z"),
+                  "sourceType": 0,
+                  "annualUse": 100,
+                  "hasAssessmentData": true
+              },
+              {
+                  "processComponentType": "water-intake",
+                  "hasAssessmentData": true,
+                  "name": "Reservoir",
+                  "className": "water-intake",
+                  "isValid": true,
+                  "diagramNodeId": "dndnode_x5sqp862d",
+                  "modifiedDate": new Date("2024-07-09T16:47:48.232Z"),
+                  "sourceType": 0,
+                  "annualUse": 0
+              }
         ],
         "dischargeOutlets": [
             {
@@ -53,7 +64,95 @@ export const MockWaterAssessment: Assessment =  {
             "className": "water-using-system",
             "isValid": true,
             "diagramNodeId": "dndnode_vq0ms2jky",
-            "modifiedDate": new Date("2024-07-29T12:58:19.498Z"),
+            "modifiedDate": new Date("2024-07-09T16:47:48.232Z"),
+            "systemType": 0,
+            "hoursPerYear": 8760,
+            "intakeSources": [
+                {
+                    "sourceType": 0,
+                    "annualUse": 0
+                }
+            ],
+            "processUse": {
+                "waterRequiredMetric": 0,
+                "waterRequiredMetricValue": 0,
+                "waterConsumedMetric": 0,
+                "waterConsumedMetricValue": 0,
+                "waterLossMetric": 0,
+                "waterLossMetricValue": 0,
+                "annualProduction": 0,
+                "fractionGrossWaterRecirculated": 0
+            },
+            "heatEnergy": {
+                "heatingFuelType": 0,
+                "incomingTemp": 0,
+                "outgoingTemp": 0,
+                "heaterEfficiency": 0,
+                "wasteWaterDischarge": 0
+            },
+            "addedMotorEquipment": [],
+            "sourceWater": 500,
+            "recycledWater": 200,
+            "recirculatedWater": 100,
+            "dischargeWater": 100,
+            "dischargeWaterRecycled": 25,
+            "waterInProduct": 75,
+            "knownLosses": 15
+        },
+        {
+            "processComponentType": "water-using-system",
+            "hasAssessmentData": true,
+            "name": "Cooling Tower 1",
+            "className": "water-using-system",
+            "isValid": true,
+            "diagramNodeId": "dndnode_82iznjpgf",
+            "modifiedDate": new Date("2024-07-09T16:47:48.232Z"),
+            "systemType": 0,
+            "hoursPerYear": 8760,
+            "intakeSources": [
+                {
+                    "sourceType": 0,
+                    "annualUse": 0
+                }
+            ],
+            "processUse": {
+               "waterRequiredMetric": 0,
+                "waterRequiredMetricValue": 0,
+                "waterConsumedMetric": 0,
+                "waterConsumedMetricValue": 0,
+                "waterLossMetric": 0,
+                "waterLossMetricValue": 0,
+                "annualProduction": 0,
+                "fractionGrossWaterRecirculated": 0,
+            },
+            "coolingTower": undefined,
+            "boilerWater": undefined,
+            "kitchenRestroom": undefined,
+            "landscaping": undefined,
+            "heatEnergy": {
+              "heatingFuelType": 0,
+              "incomingTemp": 0,
+              "outgoingTemp": 0,
+              "heaterEfficiency": 0,
+              "wasteWaterDischarge": 0
+            },
+            "addedMotorEquipment": [],
+            "sourceWater": 500,
+            "recycledWater": 200,
+            "recirculatedWater": 100,
+            "dischargeWater": 100,
+            "dischargeWaterRecycled": 25,
+            "waterInProduct": 75,
+            "knownLosses": 15
+        },
+        {
+            "processComponentType": "water-using-system",
+            "hasAssessmentData": true,
+            "name": "Cooling Tower 2",
+            "className": "water-using-system",
+            "isValid": true,
+            "diagramNodeId": "dndnode_nltvr1zs8",
+            "modifiedDate": new Date("2024-09-09T19:38:57.117Z"),
             "systemType": 0,
             "hoursPerYear": 8760,
             "intakeSources": [
@@ -77,11 +176,11 @@ export const MockWaterAssessment: Assessment =  {
             "kitchenRestroom": undefined,
             "landscaping": undefined,
             "heatEnergy": {
-                "heatingFuelType": 0,
-                "incomingTemp": 0,
-                "outgoingTemp": 0,
-                "heaterEfficiency": 0,
-                "wasteWaterDischarge": 0
+              "heatingFuelType": 0,
+              "incomingTemp": 0,
+              "outgoingTemp": 0,
+              "heaterEfficiency": 0,
+              "wasteWaterDischarge": 0
             },
             "addedMotorEquipment": [],
             "sourceWater": 500,
@@ -96,7 +195,7 @@ export const MockWaterAssessment: Assessment =  {
 
     },
     "selected": false,
-    "appVersion": "1.5.1"
+    "appVersion": "1.5.3"
 }
 
 

@@ -1,4 +1,5 @@
 import { Edge, Node } from '@xyflow/react';
+import { CSSProperties } from 'react';
 
 // * passed down to diagram
 export interface ProcessFlowParentState {
@@ -65,6 +66,27 @@ export interface ProcessFlowParentState {
   export type WaterProcessComponentType = 'water-intake' | 'water-discharge' | 'water-using-system' | 'splitter-node' | 'water-treatment' | 'waste-water-treatment';
   export type ProcessFlowPartStyleClass = WaterProcessComponentType;
 
+  export const CustomNodeStyleMap: Record<WaterProcessComponentType, CSSProperties> = {
+    'water-intake': {
+      backgroundColor: '#75a1ff'
+    },
+    'water-discharge': {
+      backgroundColor: '#7f7fff'
+    },
+    'water-using-system': {
+      backgroundColor: '#00bbff'
+    },
+    'splitter-node': {
+      backgroundColor: '#75a1ff'
+    },
+    'water-treatment': {
+      backgroundColor: '#e28000'
+    },
+    'waste-water-treatment': {
+      backgroundColor: '#75a1ff'
+    }
+  };
+
   export interface EdgeData {
     color: string
   }
@@ -99,13 +121,13 @@ export interface ProcessFlowParentState {
       isValid: true,
       hasAssessmentData: false,
     },
-    {
-      processComponentType: 'water-treatment',
-      name: 'Water Treatment',
-      className: 'water-treatment',
-      isValid: true,
-      hasAssessmentData: false,
-    },
+    // {
+    //   processComponentType: 'water-treatment',
+    //   name: 'Water Treatment',
+    //   className: 'water-treatment',
+    //   isValid: true,
+    //   hasAssessmentData: false,
+    // },
     {
       processComponentType: 'waste-water-treatment',
       name: 'Waste Water Treatment',
@@ -155,7 +177,8 @@ export const getNewNode = (nodeType: WaterProcessComponentType, newProcessCompon
     type: nodeType,
     position: position,
     className: newProcessComponent.className,
-    data: newProcessComponent
+    data: newProcessComponent,
+    style: CustomNodeStyleMap[nodeType]
   };
 
   return newNode;

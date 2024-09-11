@@ -6,7 +6,7 @@ export const PresetColorPicker = ({ color, updateId, onChangeHandler, presetColo
             <div className={'picker-wrapper'}>
                 <div className={'picker'}>
                     <label htmlFor={'color'}>{label}</label>
-                    <input type="color" id="edgeColor"
+                    <input type="color" id="colorPicker"
                         name="color"
                         className={'color-input'}
                         value={color}

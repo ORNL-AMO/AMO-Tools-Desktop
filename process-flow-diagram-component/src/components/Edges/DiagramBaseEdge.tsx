@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
-import SettingsIcon from '@mui/icons-material/Settings';
+import EditIcon from '@mui/icons-material/Edit';
+
 import { BaseEdge, BezierEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, SmoothStepEdge, StepEdge, StraightEdge, useReactFlow } from '@xyflow/react';
 
 export default function DiagramBaseEdge(props: DiagramEdgeProps) {
@@ -60,8 +61,8 @@ const renderBaseEdgeComponent = (props, edgePath: string) => {
           }}
           className="nodrag nopan"
           >
-          <button className="customize-button">
-            <SettingsIcon sx={{width: 'unset', height: 'unset'}} />
+          <button className="edit-button">
+            <EditIcon sx={{width: 'unset', height: 'unset'}} />
           </button>
         </div>
       </EdgeLabelRenderer>

@@ -21,11 +21,12 @@ import {
 import '@xyflow/react/dist/style.css';
 
 import Sidebar from '../Sidebar/Sidebar';
-import { FlowDiagramData, ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { FlowDiagramData, ProcessFlowPart, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { changeExistingEdgesType, getEdgeDefaultOptions, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
 import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useSaveDebounce';
 import { NodeContextMenu, NodeContextMenuProps } from '../ContextMenu/NodeContextMenu';
+import WarningDialog from './WarningDialog';
 
 const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
 const nodeClassName = (node: Node) => node.type;
@@ -34,10 +35,10 @@ const Flow = (props: FlowProps) => {
   let staleParentNodes = [];
   let existingNodes = [];
   let existingEdges = [];
-  if (props.flowDiagramData) {
-    staleParentNodes = props.flowDiagramData.nodes.filter(node => !node.position);
-    existingNodes = props.flowDiagramData.nodes.filter(node => node.position);
-    existingEdges = props.flowDiagramData.edges;
+  if (props.processDiagram) {
+    staleParentNodes = props.processDiagram.flowDiagramData.nodes.filter(node => !node.position);
+    existingNodes = props.processDiagram.flowDiagramData.nodes.filter(node => node.position);
+    existingEdges = props.processDiagram.flowDiagramData.edges;
   }
 
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
@@ -48,6 +49,7 @@ const Flow = (props: FlowProps) => {
   const [controlsVisible, setControlsVisible] = useState(true);
   const [diagramEdgeType, setDiagramEdgeType] = useState('default');
   const [selectedSidebarTab, setSelectedSidebarTab] = useState(0);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [menu, setMenu] = useState(null);
   const ref = useRef(null);
 
@@ -92,6 +94,16 @@ const Flow = (props: FlowProps) => {
 
   const updateControls = useCallback((enabled) => {
     setControlsVisible(enabled);
+  }, []);
+
+  
+  const resetDiagram = useCallback(() => {
+    setNodes(nds => []);
+    setEdges(eds => []);
+    props.saveFlowDiagramData({
+      nodes: [],
+      edges: [],
+    });
   }, []);
 
   const updateEdgeType = useCallback((edgeType) => {
@@ -141,6 +153,13 @@ const Flow = (props: FlowProps) => {
   return (
     props.height &&
     <div className="process-flow-diagram">
+      {isDialogOpen &&
+          <WarningDialog 
+          isDialogOpen={isDialogOpen} 
+          handleDialogCloseCallback={setIsDialogOpen}
+          handleResetDiagramCallback={resetDiagram}/>
+        }
+
       <ReactFlowProvider>
         <div className={'flow-wrapper'} style={{ height: props.height }}
             >
@@ -179,10 +198,13 @@ const Flow = (props: FlowProps) => {
           minimapVisibleCallback={updateMinimap}
           controlsVisible={controlsVisible}
           controlsVisibleCallback={updateControls}
+          resetDiagramCallback={resetDiagram}
           edgeTypeChangeCallback={updateEdgeType}
           selectedTab={selectedSidebarTab}
           setSelectedTab={setSelectedSidebarTab}
           shadowRoot={props.shadowRoot}
+          setIsDialogOpen={setIsDialogOpen}
+          hasAssessment={props.processDiagram.assessmentId !== undefined}
         />
       </ReactFlowProvider>
     </div>
@@ -193,7 +215,7 @@ export default Flow;
 export interface FlowProps {
   shadowRoot,
   height?: number,
-  flowDiagramData: FlowDiagramData;
+  processDiagram?: WaterDiagram;
   clickEvent: (...args) => void;
   saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
 }

@@ -32,6 +32,9 @@ import { ElectronService } from '../../../electron/electron.service';
 import { MockPumpInventory } from '../../../examples/mockPumpInventoryData';
 import { MockWaterAssessment, MockWaterAssessmentSettings } from '../../../examples/mockWaterAssessment';
 import { AppErrorService } from '../../../shared/errors/app-error.service';
+import { DiagramIdbService } from '../../../indexedDb/diagram-idb.service';
+import { Diagram } from '../../../shared/models/diagram';
+import { MockWaterdiagram, MockWaterDiagramSettings } from '../../../examples/mockWaterDiagram';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -64,6 +67,7 @@ export class ResetDataModalComponent implements OnInit {
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private atmosphereDbService: AtmosphereDbService,
+    private diagramIdbService: DiagramIdbService,
     private appErrorService: AppErrorService,
     private inventoryDbService: InventoryDbService) { }
 
@@ -227,10 +231,18 @@ async resetAllExampleAssessments(dirId: number) {
   let exampleInventories: Array<InventoryItem> = this.inventoryDbService.allInventoryItems.filter(item => { return item.isExample && item.directoryId === dirId});
   let allInventoryItems: Array<InventoryItem[]> = await firstValueFrom(this.inventoryDbService.bulkDeleteWithObservable(exampleInventories.map(inventory => inventory.id)));
 
+
+  let updatedDiagrams: Array<Diagram> = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
+  this.diagramIdbService.setAll(updatedInventoryItems);
+  let exampleDiagrams: Array<Diagram> = updatedDiagrams.filter(diagram => { return diagram.isExample && diagram.directoryId === dirId});
+  let allDiagrams: Array<Diagram[]> = await firstValueFrom(this.diagramIdbService.bulkDeleteWithObservable(exampleDiagrams.map(diagram => diagram.id)));
+
+
   this.inventoryDbService.setAll(allInventoryItems[0]);
   this.assessmentDbService.setAll(allAssessments[0]);
   this.settingsDbService.setAll(allSettings[0]);
   this.calculatorDbService.setAll(allCalculators[0]);
+  this.diagramIdbService.setAll(allDiagrams[0]);
 
   // Set new examples/mock and add
   MockPsatSettings.facilityInfo.date = new Date().toDateString();
@@ -280,6 +292,15 @@ async resetAllExampleAssessments(dirId: number) {
   MockWaterAssessmentSettings.assessmentId = createdWater.id;
   await firstValueFrom(this.settingsDbService.addWithObservable(MockWaterAssessmentSettings));
 
+  MockWaterdiagram.directoryId = dirId;
+  MockWaterdiagram.waterDiagram.assessmentId = createdWater.id
+  let createdWaterDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(MockWaterdiagram));
+  createdWater.diagramId = createdWaterDiagram.id;
+  await firstValueFrom(this.assessmentDbService.updateWithObservable(createdWater));
+
+  MockWaterDiagramSettings.diagramId = createdWaterDiagram.id;
+  await firstValueFrom(this.settingsDbService.addWithObservable(MockWaterDiagramSettings));
+
   MockMotorInventory.directoryId = dirId;
   let motorInventory: InventoryItem = await firstValueFrom(this.inventoryDbService.addWithObservable(MockMotorInventory));
   delete MockPsatSettings.directoryId;
@@ -299,11 +320,13 @@ async resetAllExampleAssessments(dirId: number) {
   let settings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
   let calculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
   let inventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
+  let diagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
   this.assessmentDbService.setAll(assessments);
   this.settingsDbService.setAll(settings);
   this.calculatorDbService.setAll(calculators);
   this.inventoryDbService.setAll(inventoryItems);
   this.directoryDbService.setAll(directories);
+  this.diagramIdbService.setAll(diagrams);
   this.hideResetSystemSettingsModal();
 }
 
