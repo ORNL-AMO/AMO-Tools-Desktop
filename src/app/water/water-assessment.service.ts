@@ -53,7 +53,7 @@ export class WaterAssessmentService {
   }
 
   updateWaterAssessment(waterAssessment: WaterAssessment) {
-    console.log('updateWaterAssessment', waterAssessment);
+    // console.log('updateWaterAssessment', waterAssessment);
     this.waterAssessment.next(waterAssessment);
   }
 

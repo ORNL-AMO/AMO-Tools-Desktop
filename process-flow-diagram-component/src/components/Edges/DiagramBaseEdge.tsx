@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import EditIcon from '@mui/icons-material/Edit';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { BaseEdge, BezierEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, SmoothStepEdge, StepEdge, StraightEdge, useReactFlow } from '@xyflow/react';
 
@@ -10,6 +10,7 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
   const targetX = props.targetX;
   const targetY = props.targetY;
   const targetPosition = props.targetPosition;
+  const {setEdges} = useReactFlow();
   
   let [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
@@ -26,9 +27,11 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
     labelY = props.selfConnectingPath.labelY;
   }
 
+  const onDeleteEdge = () => {
+    setEdges((edges) => edges.filter((edg) => edg.id !== props.id));
+  };
   
-const renderBaseEdgeComponent = (props, edgePath: string) => {
-
+const renderBaseEdgeComponent = (props: DiagramEdgeProps, edgePath: string) => {
   const customStyle = {
     ...props.style,
   }
@@ -61,8 +64,8 @@ const renderBaseEdgeComponent = (props, edgePath: string) => {
           }}
           className="nodrag nopan"
           >
-          <button className="edit-button">
-            <EditIcon sx={{width: 'unset', height: 'unset'}} />
+          <button className="close-button hover-highlight" onClick={onDeleteEdge}>
+            <CloseIcon sx={{width: 'unset', height: 'unset'}} />
           </button>
         </div>
       </EdgeLabelRenderer>
@@ -75,6 +78,10 @@ export interface DiagramEdgeProps extends EdgeProps {
     selfConnectingPath?: SelfConnectingPath;
     baseEdgeComponent?: ReactFlowEdgeElement;
     reactFlowRef?: any;
+}
+
+export interface CustomEdgeData extends Record<string, unknown> {
+  flowPercent: number
 }
 
 interface SelfConnectingPath {

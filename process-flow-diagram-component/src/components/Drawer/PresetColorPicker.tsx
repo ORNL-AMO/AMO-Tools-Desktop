@@ -1,6 +1,6 @@
 import React from "react";
 
-export const PresetColorPicker = ({ color, updateId, onChangeHandler, presetColors, label }) => {
+export const PresetColorPicker = ({ color, onChangeHandler, presetColors, label, showPresets }) => {
     return (
         <>
             <div className={'picker-wrapper'}>
@@ -11,24 +11,26 @@ export const PresetColorPicker = ({ color, updateId, onChangeHandler, presetColo
                         className={'color-input'}
                         value={color}
                         onChange={(event) => {
-                            onChangeHandler(updateId, event.target.value)
+                            onChangeHandler(event.target.value)
                         }} 
                         style={{marginLeft: '16px'}}
                         />
                 </div>
-                <div className="presets-wrapper">
-                    <label htmlFor={'preset-color'} style={{marginLeft: '4px'}}>Color Presets</label>
-                    <div className="presets" style={{marginLeft: '16px'}}>
-                        {presetColors.map((presetColor, index) => (
-                            <button
+                {showPresets && 
+                    <div className="presets-wrapper">
+                        <label htmlFor={'preset-color'}>Color Presets</label>
+                        <div className="presets" style={{marginLeft: '16px'}}>
+                            {presetColors.map((presetColor, index) => (
+                                <button
                                 key={presetColor + index}
                                 className="preset"
                                 style={{ background: presetColor }}
-                                onClick={() => onChangeHandler(updateId, presetColor)}
-                            />
-                        ))}
+                                onClick={() => onChangeHandler(presetColor)}
+                                />
+                            ))}
+                        </div>
                     </div>
-                </div>
+                }
             </div>
         </>
     );

@@ -5,8 +5,9 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { WaterAssessment, WaterProcessComponent } from '../shared/models/water-assessment';
-import { Node } from '@xyflow/react';
+import { Edge, Node } from '@xyflow/react';
 import { firstValueFrom } from 'rxjs';
+import * as _ from 'lodash';
 
 @Injectable()
 export class WaterDiagramConnectionsService {
@@ -24,7 +25,7 @@ export class WaterDiagramConnectionsService {
       }
 
       if (integratedAssessment && diagram.modifiedDate < integratedAssessment.modifiedDate) {
-        console.log('=== DIAGRAM STALE -> syncing to assessment')
+        // console.log('=== DIAGRAM STALE -> syncing to assessment')
         this.updateDiagramFromAssessment(diagram, integratedAssessment.water);
         await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
       }
@@ -39,6 +40,7 @@ export class WaterDiagramConnectionsService {
       this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.dischargeOutlets, 'water-discharge'),
       this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.waterUsingSystems, 'water-using-system')
     );
+    this.updateEdgesFromAssessment(diagram.waterDiagram, assessmentNodes);
 
     diagram.waterDiagram.flowDiagramData.nodes = assessmentNodes;
   }
@@ -69,8 +71,19 @@ export class WaterDiagramConnectionsService {
       }
     });
 
-    console.log(`***Assessment Synced ${componentType} nodes`, updatedNodes);
+    // console.log(`***Assessment Synced ${componentType} nodes`, updatedNodes);
     return updatedNodes;
+  }
+
+  // Throw away edges that relate to deleted nodes (this is handled automatically by diagram)
+  updateEdgesFromAssessment(waterDiagram: WaterDiagram, assessmentNodes: Node[]) {
+    const nodeIds = new Set();
+    assessmentNodes.forEach((node) => {
+      nodeIds.add(node.id);
+    });
+  
+    let updatedEdges = waterDiagram.flowDiagramData.edges.filter((edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target));
+    waterDiagram.flowDiagramData.edges = updatedEdges;
   }
 
   async disconnectAssessment(assessmentId: number) {
