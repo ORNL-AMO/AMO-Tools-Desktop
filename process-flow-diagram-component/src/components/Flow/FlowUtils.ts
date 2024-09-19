@@ -1,6 +1,6 @@
 import { Connection, Edge, MarkerType, Node, ReactFlowInstance, addEdge } from "reactflow";
 import { nodeTypes } from "./FlowTypes";
-import { getNewNode, getNewNodeId, getNewProcessComponent } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { DefaultEdgeOptions } from "@xyflow/react";
 
 export const getRandomCoordinates = (height: number, width: number): {x: number, y: number} => {
@@ -40,7 +40,7 @@ const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Nod
     node.position = position;
 }
 
-  export const setDroppedNode = (event, reactFlowInstance: ReactFlowInstance, setNodes) => {
+  export const setDroppedNode = (event, reactFlowInstance: ReactFlowInstance, setNodes, setManageDataId, setIsDrawerOpen) => {
     event.preventDefault();
     const nodeType = event.dataTransfer.getData('application/reactflow');
     if (typeof nodeType === 'undefined' || !nodeType) {
@@ -62,6 +62,8 @@ const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Nod
       };
     } else {
       const newProcessComponent = getNewProcessComponent(nodeType);
+      newProcessComponent.setManageDataId = setManageDataId;
+      newProcessComponent.openEditData = setIsDrawerOpen;
       newNode = getNewNode(nodeType, newProcessComponent, position);
       newNode.type = getAdaptedTypeString(newNode.type);  
     }
@@ -83,9 +85,13 @@ export const setCustomEdges = (setEdges, connectedParams:  Connection | Edge) =>
         height: 25
       }
 
+      connectedParams.data = {
+        flowPercent: 0
+      }
+
       if (connectedParams.style === undefined) {
         connectedParams.style = {
-          stroke: '#6c757d'
+          stroke: '#6c757d',
         }
       }
 
@@ -102,6 +108,23 @@ export const changeExistingEdgesType = (setEdges, diagramEdgeType: string) => {
       return edge;
     });
   });
+}
+
+export const getEdgeSourceAndTarget = (edge: Edge, nodes: Node[]) => {
+  let target: ProcessFlowPart;
+  let source: ProcessFlowPart; 
+  
+  nodes.forEach((node: Node) => {
+    if (node.id === edge.source) {
+      source = node.data;
+    }
+    if (node.id === edge.target) {
+      target = node.data;
+    }
+  });
+
+  return {source, target};
+
 }
 
 export const getAdaptedTypeString = (nodeType: string) => {

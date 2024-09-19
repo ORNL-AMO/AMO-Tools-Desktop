@@ -57,6 +57,8 @@ export interface ProcessFlowParentState {
     diagramNodeId?: string,
     modifiedDate?: Date,
     splitterTargets?: Array<string>;
+    setManageDataId?: (id: number) => void; 
+    openEditData?: (boolean) => void;
     // todo this will hold any contextual data about connections to other parts, etc
     processComponentContext?: any;
   }

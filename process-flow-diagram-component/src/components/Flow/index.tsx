@@ -6,16 +6,13 @@ import {
   MiniMap,
   Controls,
   Background,
-  Position,
   ReactFlowProvider,
-  NodeTypes,
-  DefaultEdgeOptions,
   OnConnect,
-  applyEdgeChanges,
   type Node,
   useNodesState,
   useEdgesState,
   Edge,
+  OnBeforeDelete,
 } from '@xyflow/react';
  
 import '@xyflow/react/dist/style.css';
@@ -24,20 +21,33 @@ import Sidebar from '../Sidebar/Sidebar';
 import { FlowDiagramData, ProcessFlowPart, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { changeExistingEdgesType, getEdgeDefaultOptions, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
 import { edgeTypes, nodeTypes } from './FlowTypes';
-import useDiagramStateDebounce from '../../hooks/useSaveDebounce';
-import { NodeContextMenu, NodeContextMenuProps } from '../ContextMenu/NodeContextMenu';
+import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
+import ManageDataContextDrawer from '../Drawer/ManageDataContextDrawer';
 
 const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
 const nodeClassName = (node: Node) => node.type;
 
 const Flow = (props: FlowProps) => {
+  const [manageDataId, setManageDataId] = useState(undefined);
+  const [isDataDrawerOpen, setIsDataDrawerOpen] = useState(false);
+
   let staleParentNodes = [];
   let existingNodes = [];
   let existingEdges = [];
+  
   if (props.processDiagram) {
-    staleParentNodes = props.processDiagram.flowDiagramData.nodes.filter(node => !node.position);
-    existingNodes = props.processDiagram.flowDiagramData.nodes.filter(node => node.position);
+    existingNodes = props.processDiagram.flowDiagramData.nodes.map((node: Node<ProcessFlowPart> )=> {
+      if (node.data.processComponentType !== 'splitter-node') {
+        node.data.setManageDataId = setManageDataId;
+        node.data.openEditData = setIsDataDrawerOpen;
+      }
+      if (!node.position) {
+        staleParentNodes.push(node);
+      } else {
+        return node;
+      }
+    });
     existingEdges = props.processDiagram.flowDiagramData.edges;
   }
 
@@ -47,11 +57,7 @@ const Flow = (props: FlowProps) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(existingEdges);
   const [minimapVisible, setMinimapVisible] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(true);
-  const [diagramEdgeType, setDiagramEdgeType] = useState('default');
-  const [selectedSidebarTab, setSelectedSidebarTab] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [menu, setMenu] = useState(null);
-  const ref = useRef(null);
 
   useEffect(() => {
     if (reactFlowInstance && props.height && staleNodes) {
@@ -65,8 +71,20 @@ const Flow = (props: FlowProps) => {
 
   useEffect(() => {
     if (!staleNodes) {
+      const dbSafeNodes = nodes.map((node: Node<ProcessFlowPart>) => {
+        // * IMPORTANT - removes handler functions before db save
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            setManageDataId: undefined,
+            openEditData: undefined,
+          }
+        }
+      });
+
       props.saveFlowDiagramData({
-        nodes: nodes,
+        nodes: dbSafeNodes,
         edges: edges,
       });
     }
@@ -77,7 +95,7 @@ const Flow = (props: FlowProps) => {
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
-  const onDrop = useCallback((event) => setDroppedNode(event, reactFlowInstance, setNodes),
+  const onDrop = useCallback((event) => setDroppedNode(event, reactFlowInstance, setNodes, setManageDataId, setIsDataDrawerOpen),
     [reactFlowInstance],
   );
 
@@ -87,6 +105,12 @@ const Flow = (props: FlowProps) => {
     },
     [setEdges]
   );
+
+  const onBeforeDelete: OnBeforeDelete = useCallback(async ({ nodes, edges }) => {
+    // todo global confirm
+    return { nodes, edges };
+  }, []);
+  
 
   const updateMinimap = useCallback((enabled) => {
     setMinimapVisible(enabled);
@@ -107,48 +131,9 @@ const Flow = (props: FlowProps) => {
   }, []);
 
   const updateEdgeType = useCallback((edgeType) => {
-    setDiagramEdgeType(edgeType);
     changeExistingEdgesType(setEdges, edgeType);
   }, []);
 
-  const onNodeContextMenu = useCallback(
-    (event, node: Node) => {
-      event.preventDefault();
-      
-      // * Calculate position of the context menu. We want to make sure it
-      // * doesn't get positioned off-screen.
-      const pane = ref.current.getBoundingClientRect();
-
-      // * MEASUR CONTAINER element
-      // todo get element size from shadow dom
-      const parentContainerHeaderOffset = 70;
-      const sidebarOffset = 400;
-
-      let insideTopBounds = event.clientY < pane.height - 200;
-      let insideLeftBounds = event.clientX < pane.width - 200;
-      let insideRightBounds = event.clientX >= pane.width - 200;
-      let insideBottomBounds = event.clientY >= pane.height - 200;
-      const top =  insideTopBounds && event.clientY - parentContainerHeaderOffset
-      const left = insideLeftBounds && event.clientX - sidebarOffset
-      const right = insideRightBounds && pane.width - event.clientX + sidebarOffset
-      const bottom = insideBottomBounds && pane.height - event.clientY + parentContainerHeaderOffset
-
-      // todo needs v12 redo type
-      const processflowPartData = node.data as ProcessFlowPart;
-      const menuConfig: NodeContextMenuProps = {
-        id: node.id,
-        processFlowPartData: processflowPartData,
-        top: top,
-        left: left,
-        right: right,
-        bottom: bottom
-      }
-      setMenu(menuConfig);
-    },
-    [setMenu],
-  );
-
-  const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
 
   return (
     props.height &&
@@ -161,8 +146,7 @@ const Flow = (props: FlowProps) => {
         }
 
       <ReactFlowProvider>
-        <div className={'flow-wrapper'} style={{ height: props.height }}
-            >
+        <div className={'flow-wrapper'} style={{ height: props.height }}>
           <ReactFlow
             nodes={nodes}
             onNodesChange={onNodesChange}
@@ -176,12 +160,10 @@ const Flow = (props: FlowProps) => {
             defaultViewport={defaultViewport}
             connectionLineType={ConnectionLineType.Bezier}
             onDrop={onDrop}
+            // onBeforeDelete={onBeforeDelete}
             onDragOver={onDragOver}
-            onPaneClick={onPaneClick}
-            onNodeContextMenu={onNodeContextMenu}
             fitView
             className="flow"
-            ref={ref}
           >
             {minimapVisible &&
               <MiniMap zoomable pannable nodeClassName={nodeClassName} />
@@ -190,22 +172,26 @@ const Flow = (props: FlowProps) => {
               <Controls />
             }
             <Background />
-            {menu && <NodeContextMenu onClick={onPaneClick} {...menu} />}
           </ReactFlow>
         </div>
         <Sidebar
-          edges={edges}
-          minimapVisibleCallback={updateMinimap}
-          controlsVisible={controlsVisible}
-          controlsVisibleCallback={updateControls}
-          resetDiagramCallback={resetDiagram}
-          edgeTypeChangeCallback={updateEdgeType}
-          selectedTab={selectedSidebarTab}
-          setSelectedTab={setSelectedSidebarTab}
-          shadowRoot={props.shadowRoot}
-          setIsDialogOpen={setIsDialogOpen}
-          hasAssessment={props.processDiagram.assessmentId !== undefined}
-        />
+            minimapVisibleCallback={updateMinimap}
+            controlsVisible={controlsVisible}
+            controlsVisibleCallback={updateControls}
+            resetDiagramCallback={resetDiagram}
+            edgeTypeChangeCallback={updateEdgeType}
+            shadowRoot={props.shadowRoot}
+            setIsDialogOpen={setIsDialogOpen}
+            hasAssessment={props.processDiagram.assessmentId !== undefined}
+          />
+      {isDataDrawerOpen &&
+        <ManageDataContextDrawer
+         isDrawerOpen={isDataDrawerOpen}
+         manageDataId={manageDataId}
+         setIsDataDrawerOpen={setIsDataDrawerOpen}
+         setIsDialogOpen={setIsDialogOpen}
+         />
+      }
       </ReactFlowProvider>
     </div>
   );

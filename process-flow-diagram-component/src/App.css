@@ -187,7 +187,6 @@ a {
   .process-flow-diagram aside {
     /* todo retrieve width for context menu offsets */
     width: 375px;
-    max-width: 375;
   }
 }
 
@@ -275,13 +274,14 @@ a {
   position: relative;
   padding: 10px;
   border-radius: 4px;
+  width: 197px;
   height: 100%;
 }
 /* Custom Node End */
 
 .edit-button {
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   background: #fff;
   border: none;
   cursor: pointer;
@@ -292,8 +292,9 @@ a {
   padding: 2px;
 }
 
-.edit-button:hover {
+.hover-highlight:hover {
   box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
+  background-color: rgb(48 85 207 / 25%);
 }
 
 .edit-button.editing {
@@ -304,24 +305,17 @@ a {
   transform: translate(275px, -5px);
 }
 
-.context-menu {
-  background: white;
-  border-style: solid;
-  box-shadow: 10px 19px 20px rgba(0, 0, 0, 10%);
-  position: absolute;
-  z-index: 10;
-}
-
-.context-menu button {
+.close-button {
+  width: 20px;
+  height: 20px;
+  background: #fff;
   border: none;
-  display: block;
-  padding: 0.5em;
-  text-align: left;
-  width: 100%;
-}
-
-.context-menu button:hover {
-  background: white;
+  cursor: pointer;
+  /* box-shadow: 0 1px 2px rgba(0, 0, 0, 0.33), 0 3px 6px rgba(0, 0, 0, 0.23); */
+  border-radius: 50%;
+  font-size: 10px;
+  line-height: 1;
+  padding: 2px;
 }
 
 .edge-color-picker {
@@ -361,7 +355,6 @@ a {
 .presets {
   display: flex;
   padding: 0;
-  width: 50%;
   flex-wrap: wrap;
 }
 
@@ -377,3 +370,18 @@ a {
 }
 
 
+.selected-list-item {
+  background-color: rgb(48 85 207 / 33%);
+}
+
+
+.diagram-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.diagram-checkbox-label {
+  display: flex;
+  align-items: center;
+}

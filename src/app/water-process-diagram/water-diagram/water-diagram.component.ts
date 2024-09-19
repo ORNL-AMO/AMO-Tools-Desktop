@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ProcessFlowDiagramService } from '../../shared/process-flow-diagram-wrapper/process-flow-diagram.service';
 import { Subscription } from 'rxjs';
 import { WaterProcessDiagramService } from '../water-process-diagram.service';
 import { ProcessFlowParentState, WaterDiagram } from '../../../process-flow-types/shared-process-flow-types';

@@ -30,7 +30,7 @@
     "postinstall": "electron-builder install-app-deps",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "build:stats": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --stats-json",
+    "build:stats": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --stats-json",
     "analyze": "webpack-bundle-analyzer dist/stats.json",
     "download-stats": "node scripts/download-stats.js"
   },
