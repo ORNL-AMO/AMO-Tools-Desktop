@@ -23,13 +23,19 @@ export class SetupTabsComponent {
   intakeSourceClassStatus: Array<string> = [];
   dischargeOutletClassStatus: Array<string> = [];
   waterUsingSystemClassStatus: Array<string> = [];
+  wasteTreatmentClassStatus: Array<string> = [];
+  
   systemBasicsBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   intakeSourceBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   dischargeOutletBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   waterUsingSystemBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
+  wasteTreatmentBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   waterAssessmentSub: Subscription;
   settingsSub: Subscription;
   settings: Settings;
+
+  hasWaterTreatments: boolean;
+  hasWasteWaterTreatments: boolean;
   constructor(private waterAssessmentService: WaterAssessmentService) { }
 
   ngOnInit(): void {
@@ -63,12 +69,14 @@ export class SetupTabsComponent {
     if (waterAssessment && this.settings) {
       // hasValidSystemBasics = _____
       // canView_____
-
+      this.hasWaterTreatments = this.waterAssessmentService.getHasWaterTreatments();
+      this.hasWasteWaterTreatments = this.waterAssessmentService.getHasWasteWaterTreatments();
     }
     this.setSystemBasicsStatus();
     this.setIntakeSourceStatus();
     this.setDischargeOutletStatus();
     this.setWaterUsingSystemStatus();
+    this.setWasteTreatmentStatus();
 
     if ((hasValidSystemBasics) || (this.setupTab == 'system-basics')) {
       this.canContinue = true;
@@ -85,15 +93,17 @@ export class SetupTabsComponent {
     this.settingsSub.unsubscribe();
   }
 
-  changeSetupTab(str: WaterSetupTabString) {
-    if (!this.disabledSetupTabs.includes(str)) {
-      this.waterAssessmentService.setupTab.next(str);
+  changeSetupTab(tab: WaterSetupTabString) {
+    let canDisplayTab: boolean = tab !== 'waste-water-treatment' || (tab === 'waste-water-treatment' && this.hasWasteWaterTreatments);
+    if (canDisplayTab) {
+      this.waterAssessmentService.setupTab.next(tab);
     }
   }
 
-  changeWaterUsingSystemTab(str: WaterUsingSystemTabString) {
-    if (str !== 'water-treatment' && str !== 'waste-water-treatment') {
-      this.waterAssessmentService.waterUsingSystemTab.next(str);
+  changeWaterUsingSystemTab(tab: WaterUsingSystemTabString) {
+    let canDisplayTab: boolean = tab !== 'water-treatment' || (tab === 'water-treatment' && this.hasWaterTreatments);
+    if (canDisplayTab) {
+      this.waterAssessmentService.waterUsingSystemTab.next(tab);
     }
   }
 
@@ -102,15 +112,11 @@ export class SetupTabsComponent {
       this.changeWaterUsingSystemTab('added-energy');
     } else if (this.waterUsingSystemTab == 'added-energy') {      
       this.changeWaterUsingSystemTab('water-treatment');
-    } else if (this.waterUsingSystemTab == 'water-treatment') {
-      this.changeWaterUsingSystemTab('waste-water-treatment');
-    } 
+    }
   }
 
   backWaterUsingSystemTab() {
-    if(this.waterUsingSystemTab == 'waste-water-treatment') {
-      this.changeWaterUsingSystemTab('water-treatment');
-    } else if (this.waterUsingSystemTab == 'water-treatment') {      
+    if (this.waterUsingSystemTab == 'water-treatment') {      
       this.changeWaterUsingSystemTab('added-energy');
     } else if (this.waterUsingSystemTab == 'added-energy') {
       this.changeWaterUsingSystemTab('system');
@@ -147,6 +153,14 @@ export class SetupTabsComponent {
       this.waterUsingSystemClassStatus = ["active"];
     } else {
       this.waterUsingSystemClassStatus = [];
+    }
+  }
+
+  setWasteTreatmentStatus() {
+    if (this.setupTab == "waste-water-treatment") {
+      this.wasteTreatmentClassStatus = ["active"];
+    } else {
+      this.wasteTreatmentClassStatus = [];
     }
   }
 

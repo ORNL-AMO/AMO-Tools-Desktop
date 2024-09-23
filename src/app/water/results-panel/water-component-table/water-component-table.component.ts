@@ -4,7 +4,7 @@ import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmD
 import { Settings } from '../../../shared/models/settings';
 import { WaterProcessComponent } from '../../../shared/models/water-assessment';
 import { WaterAssessmentService } from '../../water-assessment.service';
-import { WaterProcessComponentService } from '../../water-system-component.service';
+import { WaterSystemComponentService } from '../../water-system-component.service';
 import { WaterProcessComponentType, getNewNodeId } from '../../../../process-flow-types/shared-process-flow-types';
 import { copyObject } from '../../../shared/helperFunctions';
 import * as _ from 'lodash';
@@ -31,11 +31,11 @@ export class WaterComponentTableComponent {
   settings: Settings;
   setupTabSub: Subscription;
   mainTabSub: Subscription;
-  constructor(private waterAssessmentService: WaterAssessmentService, private waterProcessComponentService: WaterProcessComponentService) { }
+  constructor(private waterAssessmentService: WaterAssessmentService, private waterSystemComponentService: WaterSystemComponentService) { }
 
   ngOnInit(): void {
     this.settings = this.waterAssessmentService.settings.getValue();
-    this.selectedComponentSub = this.waterProcessComponentService.selectedComponent.subscribe(val => {
+    this.selectedComponentSub = this.waterSystemComponentService.selectedComponent.subscribe(val => {
       this.selectedComponent = val;
     });
     this.setupTabSub = this.waterAssessmentService.setupTab.subscribe(setupTab => {
@@ -47,11 +47,11 @@ export class WaterComponentTableComponent {
 
     this.mainTabSub = this.waterAssessmentService.mainTab.subscribe(newMainTab => {
       if (newMainTab === 'diagram') {
-        this.waterProcessComponentService.selectedComponent.next(undefined)
+        this.waterSystemComponentService.selectedComponent.next(undefined)
       }
     });
 
-    this.selectedViewComponentsSub = this.waterProcessComponentService.selectedViewComponents.subscribe(viewComponents => {
+    this.selectedViewComponentsSub = this.waterSystemComponentService.selectedViewComponents.subscribe(viewComponents => {
       this.selectedViewComponents = _.orderBy(viewComponents, 'modifiedDate', 'desc');
       // todo set isValid
     });
@@ -69,12 +69,12 @@ export class WaterComponentTableComponent {
   setDefaultSelectedComponent() {
     if (!this.selectedComponent) {
       let lastModified: WaterProcessComponent = _.maxBy(this.selectedViewComponents, 'modifiedDate');
-      this.waterProcessComponentService.selectedComponent.next(lastModified);
+      this.waterSystemComponentService.selectedComponent.next(lastModified);
     }
   }
 
   selectItem(item: WaterProcessComponent) {
-    this.waterProcessComponentService.selectedComponent.next(item);
+    this.waterSystemComponentService.selectedComponent.next(item);
   }
 
   addNewComponent() {

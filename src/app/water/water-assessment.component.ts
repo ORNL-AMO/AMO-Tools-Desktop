@@ -9,10 +9,11 @@ import { Assessment } from '../shared/models/assessment';
 import { WaterAssessmentService } from './water-assessment.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
-import { WaterAssessment } from '../shared/models/water-assessment';
+import { WasteWaterTreatment, WaterAssessment } from '../shared/models/water-assessment';
 import { ParentContainerDimensions } from '../../process-flow-types/shared-process-flow-types';
 import { IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { WaterAssessmentConnectionsService } from './water-assessment-connections.service';
+import { WasteWasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
 
 @Component({
   selector: 'app-water-assessment',
@@ -58,6 +59,7 @@ export class WaterAssessmentComponent {
   showExportModalSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
     private convertWaterAssessmentService: ConvertWaterAssessmentService, 
+    private wasteWaterTreatmentService: WasteWasteWaterTreatmentService,
     private waterAssessmentConnectionsService: WaterAssessmentConnectionsService,
     private assessmentDbService: AssessmentDbService, 
     private cd: ChangeDetectorRef, 
@@ -190,7 +192,6 @@ export class WaterAssessmentComponent {
       assessment: this.assessment,
       parentDimensions: undefined
     }
-
   }
 
   async save(waterAssessment: WaterAssessment) {
@@ -203,6 +204,17 @@ export class WaterAssessmentComponent {
   async updateAssessmentFromDiagram() {
     await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
     this.save(this.assessment.water);
+  }
+
+  saveWasteWaterTreatment(updatedWasteWaterTreatment: WasteWaterTreatment, index: number) {
+    this.wasteWaterTreatmentService.updateWasteWaterTreatment(this.assessment.water.wasteWaterTreatments, updatedWasteWaterTreatment, index)
+    this.waterAssessmentService.updateWaterAssessment(this.assessment.water);
+  }
+
+  addNewWasteWaterTreatment() {
+    this.assessment.water.wasteWaterTreatments.push(
+      this.wasteWaterTreatmentService.getDefaultWasteWaterTreatment()
+    );
   }
 
   setDisableNext() {

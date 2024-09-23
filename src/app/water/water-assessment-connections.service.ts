@@ -9,7 +9,7 @@ import { WaterProcessDiagramService } from '../water-process-diagram/water-proce
 import { Settings } from '../shared/models/settings';
 import { WaterAssessmentService } from './water-assessment.service';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
-import { WaterProcessComponentService } from './water-system-component.service';
+import { WaterSystemComponentService } from './water-system-component.service';
 import { Node } from '@xyflow/react';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class WaterAssessmentConnectionsService {
   constructor(private diagramIdbService: DiagramIdbService,
     private waterDiagramService: WaterProcessDiagramService,
     private waterAssessmentService: WaterAssessmentService,
-    private waterComponentService: WaterProcessComponentService,
+    private waterComponentService: WaterSystemComponentService,
     private waterUsingSystemService: WaterUsingSystemService,
     private assessmentIdbService: AssessmentDbService) { }
 

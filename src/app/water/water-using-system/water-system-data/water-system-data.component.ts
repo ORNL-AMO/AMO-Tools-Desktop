@@ -5,7 +5,7 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { WaterAssessmentService } from '../../water-assessment.service';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
-import { WaterProcessComponentService } from '../../water-system-component.service';
+import { WaterSystemComponentService } from '../../water-system-component.service';
 import { WaterUsingSystemService } from '../water-using-system.service';
 import { copyObject } from '../../../shared/helperFunctions';
 import { waterUsingSystemTypeOptions } from '../../waterConstants';
@@ -48,7 +48,7 @@ export class WaterSystemDataComponent {
   
   constructor(private waterAssessmentService: WaterAssessmentService, 
     private waterAssessmentResultsService: WaterAssessmentResultsService,
-    private waterProcessComponentService: WaterProcessComponentService,
+    private waterSystemComponentService: WaterSystemComponentService,
     private waterUsingSystemService: WaterUsingSystemService
   ) {}
 
@@ -56,10 +56,10 @@ export class WaterSystemDataComponent {
     this.systemTypeOptions = copyObject(waterUsingSystemTypeOptions);
     this.settings = this.waterAssessmentService.settings.getValue();
     
-    this.selectedComponentSub = this.waterProcessComponentService.selectedComponent.subscribe(selectedComponent => {
+    this.selectedComponentSub = this.waterSystemComponentService.selectedComponent.subscribe(selectedComponent => {
       this.selectedWaterUsingSystem = selectedComponent as WaterUsingSystem;
       this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-      this.waterProcessComponentService.selectedViewComponents.next(this.waterAssessment.waterUsingSystems as WaterProcessComponent[]);
+      this.waterSystemComponentService.selectedViewComponents.next(this.waterAssessment.waterUsingSystems as WaterProcessComponent[]);
       if (this.selectedWaterUsingSystem) {
         this.initForm();
         this.setSystemType();
@@ -79,7 +79,7 @@ export class WaterSystemDataComponent {
   }
 
   setDefaultSelectedComponent() {
-    this.waterProcessComponentService.setDefaultSelectedComponent(this.waterAssessment.waterUsingSystems, this.selectedWaterUsingSystem, 'water-using-system')
+    this.waterSystemComponentService.setDefaultSelectedComponent(this.waterAssessment.waterUsingSystems, this.selectedWaterUsingSystem, 'water-using-system')
   }
 
   initForm() {

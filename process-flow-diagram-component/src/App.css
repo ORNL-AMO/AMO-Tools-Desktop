@@ -47,8 +47,8 @@ a {
   }
 }
 
-/* todo showing not defined */
-:root {
+/* todo showing not defined - potentially due to shadow dom styles*/
+/* :root {
   --water-intake: #0792c0;
   --water-using-system: #84c9f1;
   --water-discharge: rgb(2 10 216);
@@ -56,7 +56,7 @@ a {
   --waster-water-treatment: #BBDB9B;
   --metered-data: black;
   --estimated-data: black;
-}
+} */
 
 
 
@@ -141,10 +141,14 @@ a {
   background: #7f7fff;
 }
 
+.process-flow-diagram .dndnode.water-treatment {
+  border: none;
+  background: #00dfcc;
+}
+
 .process-flow-diagram .dndnode.waste-water-treatment {
   border: none;
-  background: #c0c0c0;
-  /* background: #e28000; */
+  background: #e28000;
 }
 
 .process-flow-diagram .reactflow-wrapper {
@@ -241,6 +245,14 @@ a {
   /* background-color: var(--water-discharge); */
   background-color: rgb(127, 127, 255);
 }
+
+.react-flow__node-waterTreatment,
+.react-flow__node-group {
+  background-color: #00dfcc;
+}
+
+
+
 
 .color-underlay {
   background-color: #ececec;

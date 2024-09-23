@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { copyObject } from '../../shared/helperFunctions';
 import { WaterAssessment, DischargeOutlet, WaterProcessComponent } from '../../shared/models/water-assessment';
 import { WaterAssessmentService } from '../water-assessment.service';
-import { WaterProcessComponentService } from '../water-system-component.service';
+import { WaterSystemComponentService } from '../water-system-component.service';
 import { dischargeOutletTypeOptions } from '../waterConstants';
 
 @Component({
@@ -25,17 +25,17 @@ export class DischargeOutletComponent {
 
   idString: string;
   constructor(private waterAssessmentService: WaterAssessmentService, 
-    private waterProcessComponentService: WaterProcessComponentService) {}
+    private waterSystemComponentService: WaterSystemComponentService) {}
 
   ngOnInit() {
     this.dischargeOutletTypeOptions = copyObject(dischargeOutletTypeOptions);
     this.settings = this.waterAssessmentService.settings.getValue();
     this.componentFormTitle = this.waterAssessmentService.setWaterProcessComponentTitle('water-discharge');
 
-    this.selectedComponentSub = this.waterProcessComponentService.selectedComponent.subscribe(selectedComponent => {
+    this.selectedComponentSub = this.waterSystemComponentService.selectedComponent.subscribe(selectedComponent => {
       this.selectedDischargeOutlet = selectedComponent as DischargeOutlet;
       this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-      this.waterProcessComponentService.selectedViewComponents.next(this.waterAssessment.dischargeOutlets);
+      this.waterSystemComponentService.selectedViewComponents.next(this.waterAssessment.dischargeOutlets);
       if (this.selectedDischargeOutlet) {
         this.idString = this.componentFormTitle + this.selectedDischargeOutlet.diagramNodeId;
         this.initForm();
@@ -49,15 +49,15 @@ export class DischargeOutletComponent {
   }
 
   setDefaultSelectedComponent() {
-    this.waterProcessComponentService.setDefaultSelectedComponent(this.waterAssessment.dischargeOutlets, this.selectedDischargeOutlet, 'water-discharge')
+    this.waterSystemComponentService.setDefaultSelectedComponent(this.waterAssessment.dischargeOutlets, this.selectedDischargeOutlet, 'water-discharge')
   }
 
   initForm() {
-   this.form = this.waterProcessComponentService.getDischargeOutletForm(this.selectedDischargeOutlet);
+   this.form = this.waterSystemComponentService.getDischargeOutletForm(this.selectedDischargeOutlet);
   }
 
   save() {
-    let updated: DischargeOutlet = this.waterProcessComponentService.getDischargeOutletFromForm(this.form, this.selectedDischargeOutlet);
+    let updated: DischargeOutlet = this.waterSystemComponentService.getDischargeOutletFromForm(this.form, this.selectedDischargeOutlet);
     let updateIndex: number = this.waterAssessment.dischargeOutlets.findIndex(discharge => discharge.diagramNodeId === updated.diagramNodeId);
     this.waterAssessment.dischargeOutlets[updateIndex] = updated;
     this.waterAssessmentService.waterAssessment.next(this.waterAssessment);

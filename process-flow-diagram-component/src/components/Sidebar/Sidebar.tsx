@@ -4,10 +4,13 @@ import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
 import { Box, Button, Divider, Grid, Paper, styled, Typography } from '@mui/material';
 import DownloadButton from './DownloadButton';
 
-const WaterComponent = styled(Paper)(({ theme }) => ({
+const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
+  '&:hover': {
+    cursor: props.draggable? 'grab' : 'no-drop',
+  },
   color: theme.palette.text.secondary,
 }));
 
@@ -30,7 +33,7 @@ const Sidebar = (props: SidebarProps) => {
                 <Grid item xs={2} sm={4} md={4} key={part.processComponentType}>
                   <WaterComponent className={`dndnode ${part.processComponentType}`}
                     onDragStart={(event) => onDragStart(event, part.processComponentType)}
-                    draggable={part.processComponentType != 'waste-water-treatment'}>
+                    draggable={part.processComponentType != 'water-treatment'}>
                     {part.name}
                   </WaterComponent>
                 </Grid>

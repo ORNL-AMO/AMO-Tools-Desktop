@@ -443,7 +443,9 @@ export const MockWaterAssessment: Assessment = {
                 "waterInProduct": undefined,
                 "knownLosses": undefined
             }
-        ]
+        ],
+        "waterTreatments": [],
+        "wasteWaterTreatments": []
     },
     "selected": false,
     "appVersion": "1.5.3"

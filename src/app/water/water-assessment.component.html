@@ -13,7 +13,7 @@
       <div class="nav-item" (click)="setSmallScreenTab('details')"
         [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
         <a class="nav-link" *ngIf="setupTab == 'system-basics'">Help</a>
-        <a class="nav-link" *ngIf="setupTab != 'system-basics'">Details</a>
+        <a class="nav-link" *ngIf="setupTab != 'system-basics' && setupTab != 'waste-water-treatment'">Details</a>
       </div>
     </div>
   
@@ -26,6 +26,9 @@
         <app-intake-source *ngIf="setupTab == 'water-intake'" [assessment]="assessment"></app-intake-source>
         <app-discharge-outlet *ngIf="setupTab == 'water-discharge'" [assessment]="assessment"></app-discharge-outlet>
         <app-water-using-system *ngIf="setupTab == 'water-using-system'" [assessment]="assessment"></app-water-using-system>
+        <ng-container *ngIf="setupTab === 'waste-water-treatment'">
+          <app-waste-water-treatment-wrapper [waterAssessment]="assessment.water"></app-waste-water-treatment-wrapper>
+          </ng-container>
       </div>
       <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
         [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">

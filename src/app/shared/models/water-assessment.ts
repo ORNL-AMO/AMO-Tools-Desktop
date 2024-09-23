@@ -8,6 +8,8 @@ export interface WaterAssessment {
     systemBasics: WaterSystemBasics,
     intakeSources?: IntakeSource[],
     waterUsingSystems?: WaterUsingSystem[],
+    waterTreatments?: WaterTreatment[],
+    wasteWaterTreatments?: WasteWaterTreatment[],
     dischargeOutlets?: DischargeOutlet[],
     setupDone: boolean
 }
@@ -95,7 +97,19 @@ export interface WaterUsingSystem extends ProcessFlowPart {
     addedMotorEquipment: MotorEnergy[],
 }
 
-export type WaterProcessComponent = IntakeSource | DischargeOutlet | WaterUsingSystem;
+export interface WasteWaterTreatment extends ProcessFlowPart {
+    flowPercent: number
+}
+
+export interface WaterTreatment extends ProcessFlowPart {
+    treatmentType: number,
+    customType: string,
+    cost: number,
+    flowValue: number
+}
+
+
+export type WaterProcessComponent = IntakeSource | DischargeOutlet | WaterUsingSystem | WaterTreatment | WasteWaterTreatment;
 
 export type WaterSystemTypeData = ProcessUse | CoolingTower | BoilerWater | KitchenRestroom | Landscaping;
 
