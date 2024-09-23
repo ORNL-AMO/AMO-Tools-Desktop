@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
-import {  DischargeOutlet, IntakeSource, WaterAssessment, WaterProcessComponent, WaterUsingSystem } from '../shared/models/water-assessment';
+import {  DischargeOutlet, IntakeSource, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterTreatment, WaterUsingSystem } from '../shared/models/water-assessment';
 import { ProcessFlowPart, WaterProcessComponentType, getComponentNameFromType, getNewProcessComponent } from '../../process-flow-types/shared-process-flow-types';
-import { WaterProcessComponentService } from './water-system-component.service';
+import { WaterSystemComponentService } from './water-system-component.service';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
 // todo 6875 measur compiler doesn't like pulling in this module because it's from jsx
 
@@ -31,8 +31,9 @@ export class WaterAssessmentService {
   setupTabs: Array<WaterSetupTabString> = [
     'system-basics',
   ];
+
   constructor(
-    private waterProcessComponentService: WaterProcessComponentService,
+    private waterSystemComponentService: WaterSystemComponentService,
     private waterUsingSystemService: WaterUsingSystemService,
     private convertUnitsService: ConvertUnitsService) {
     this.settings = new BehaviorSubject<Settings>(undefined);
@@ -73,8 +74,6 @@ export class WaterAssessmentService {
         return 'Added Heat and Motor Energy'
       case 'water-treatment':
         return 'Water Treatment'
-      case 'waste-water-treatment':
-        return 'Waste Water Treatment'
       default:
          return 'Water System Data'
     }
@@ -84,22 +83,25 @@ export class WaterAssessmentService {
     let waterAssessment: WaterAssessment = this.waterAssessment.getValue();
     let newComponent: WaterProcessComponent;
     if (componentType === 'water-intake') {
-      let newIntakeSource = this.waterProcessComponentService.addIntakeSource();
+      let newIntakeSource = this.waterSystemComponentService.addIntakeSource();
       waterAssessment.intakeSources? waterAssessment.intakeSources.push(newIntakeSource) : waterAssessment.intakeSources = [newIntakeSource];
       newComponent = newIntakeSource;
     } else if (componentType === 'water-discharge') {
-      let newDischargeOutlet = this.waterProcessComponentService.addDischargeOutlet();
+      let newDischargeOutlet = this.waterSystemComponentService.addDischargeOutlet();
       waterAssessment.dischargeOutlets? waterAssessment.dischargeOutlets.push(newDischargeOutlet) : waterAssessment.dischargeOutlets = [newDischargeOutlet];
       newComponent = newDischargeOutlet;
     } else if (componentType === 'water-using-system') {
       let newWaterUsingSystem = this.waterUsingSystemService.addWaterUsingSystem();
       waterAssessment.waterUsingSystems? waterAssessment.waterUsingSystems.push(newWaterUsingSystem) : waterAssessment.waterUsingSystems = [newWaterUsingSystem];
       newComponent = newWaterUsingSystem;
+    } else if (componentType === 'waste-water-treatment') {
+      // let newWasteTreatment = this.waterSystemComponentService.addWasteWaterTreatment();
+      // waterAssessment.wasteWaterTreatments? waterAssessment.wasteWaterTreatments.push(newWasteTreatment) : waterAssessment.wasteWaterTreatments = [newWasteTreatment];
+      // newComponent = newWasteTreatment;
     }
 
-
     this.updateWaterAssessment(waterAssessment);
-    this.waterProcessComponentService.selectedComponent.next(newComponent);
+    this.waterSystemComponentService.selectedComponent.next(newComponent);
   }
 
   copyWaterComponent(componentType: WaterProcessComponentType, copiedComponent: WaterProcessComponent) {
@@ -114,10 +116,13 @@ export class WaterAssessmentService {
     } else if (componentType === 'water-using-system') {
       copiedComponent = copiedComponent as WaterUsingSystem;
       waterAssessment.waterUsingSystems? waterAssessment.waterUsingSystems.push(copiedComponent) : waterAssessment.waterUsingSystems = [copiedComponent];
+    } else if (componentType === 'waste-water-treatment') {
+      copiedComponent = copiedComponent as WasteWaterTreatment;
+      waterAssessment.waterUsingSystems? waterAssessment.wasteWaterTreatments.push(copiedComponent) : waterAssessment.wasteWaterTreatments = [copiedComponent];
     } 
 
     this.updateWaterAssessment(waterAssessment);
-    this.waterProcessComponentService.selectedComponent.next(copiedComponent);
+    this.waterSystemComponentService.selectedComponent.next(copiedComponent);
   }
 
 
@@ -138,12 +143,16 @@ export class WaterAssessmentService {
       deleteIndex = waterAssessment.waterUsingSystems.findIndex(component => component.diagramNodeId === deleteId);
       waterAssessment.waterUsingSystems.splice(deleteIndex, 1);
       updatedViewComponents = waterAssessment.waterUsingSystems;
+    } else if (componentType === 'waste-water-treatment') {
+      deleteIndex = waterAssessment.wasteWaterTreatments.findIndex(component => component.diagramNodeId === deleteId);
+      waterAssessment.wasteWaterTreatments.splice(deleteIndex, 1);
+      updatedViewComponents = waterAssessment.wasteWaterTreatments;
     }
     
     this.updateWaterAssessment(waterAssessment);
-    this.waterProcessComponentService.selectedViewComponents.next(updatedViewComponents);
+    this.waterSystemComponentService.selectedViewComponents.next(updatedViewComponents);
     if (isSelectedComponent) {
-      this.waterProcessComponentService.selectedComponent.next(updatedViewComponents[0]);
+      this.waterSystemComponentService.selectedComponent.next(updatedViewComponents[0]);
     }
   }
 
@@ -165,7 +174,30 @@ export class WaterAssessmentService {
     }
   }
 
+  getHasWaterTreatments(waterAssessment?: WaterAssessment) {
+    // todo and valid
+    if (!waterAssessment) {
+      waterAssessment = this.waterAssessment.getValue();
+    }
+    return waterAssessment.waterTreatments && waterAssessment.waterTreatments.length > 0;
+  }
+
+  getHasWasteWaterTreatments(waterAssessment?: WaterAssessment) {
+    // todo and valid
+    if (!waterAssessment) {
+      waterAssessment = this.waterAssessment.getValue();
+    }
+    return waterAssessment.wasteWaterTreatments && waterAssessment.wasteWaterTreatments.length > 0;
+  }
+
+  // todo 6927 this will need work to check which treatment is requesting options
+  getAvailableTreatmentOptions(treatments: WaterTreatment[] | WasteWaterTreatment[], treatmentOptions: {display: string, value: number}[]) {
+    // let existingTreatmentTypes = treatments.filter(treatment => treatment.customType !== 15).map((treatment: WaterTreatment | WasteWaterTreatment) => treatment.treatmentType);
+    // treatmentOptions = treatmentOptions.filter(option => !existingTreatmentTypes.includes(option.value));
+    return treatmentOptions;
+  }
+
 }
 
 export type WaterSetupTabString = WaterProcessComponentType | 'system-basics' | 'system-balance-results';
-export type WaterUsingSystemTabString = 'system' | 'added-energy' | 'water-treatment' | 'waste-water-treatment' ;
+export type WaterUsingSystemTabString = 'system' | 'added-energy' | 'water-treatment';

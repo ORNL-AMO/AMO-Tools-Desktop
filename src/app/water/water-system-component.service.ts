@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { IntakeSource, WaterProcessComponent, DischargeOutlet } from '../shared/models/water-assessment';
+import { IntakeSource, WaterProcessComponent, DischargeOutlet, WasteWaterTreatment } from '../shared/models/water-assessment';
 import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { WaterProcessComponentType, getNewProcessComponent } from '../../process-flow-types/shared-process-flow-types';
 import * as _ from 'lodash';
@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 @Injectable({
   providedIn: 'root'
 })
-export class WaterProcessComponentService {
+export class WaterSystemComponentService {
   selectedComponent: BehaviorSubject<WaterProcessComponent>;
   selectedViewComponents: BehaviorSubject<WaterProcessComponent[]>;
 
@@ -81,6 +81,7 @@ export class WaterProcessComponentService {
     dischargeOutlet.annualUse = form.controls.annualUse.value;
     return dischargeOutlet;
   }
+
 
 /**
  * Add new component or return component based from a diagram component

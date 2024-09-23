@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { WaterAssessmentService } from '../water-assessment.service';
 import { IntakeSource, WaterAssessment } from '../../shared/models/water-assessment';
-import { WaterProcessComponentService } from '../water-system-component.service';
+import { WaterSystemComponentService } from '../water-system-component.service';
 import * as _ from 'lodash';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -28,7 +28,7 @@ export class IntakeSourceComponent {
   intakeSourceTypeOptions: {value: number, display: string}[];
 
   idString: string;
-  constructor(private waterAssessmentService: WaterAssessmentService, private waterProcessComponentService: WaterProcessComponentService) {}
+  constructor(private waterAssessmentService: WaterAssessmentService, private waterSystemComponentService: WaterSystemComponentService) {}
 
   ngOnInit() {
     this.intakeSourceTypeOptions = copyObject(intakeSourceTypeOptions);
@@ -36,10 +36,10 @@ export class IntakeSourceComponent {
     this.componentFormTitle = this.waterAssessmentService.setWaterProcessComponentTitle('water-intake');
 
     if (!this.systemIntakeSource) {
-      this.selectedComponentSub = this.waterProcessComponentService.selectedComponent.subscribe(selectedComponent => {
+      this.selectedComponentSub = this.waterSystemComponentService.selectedComponent.subscribe(selectedComponent => {
         this.selectedIntakeSource = selectedComponent as IntakeSource;
         this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-        this.waterProcessComponentService.selectedViewComponents.next(this.waterAssessment.intakeSources);
+        this.waterSystemComponentService.selectedViewComponents.next(this.waterAssessment.intakeSources);
         if (this.selectedIntakeSource) {
           this.idString = this.componentFormTitle + this.selectedIntakeSource.diagramNodeId;
           this.initForm();
@@ -56,15 +56,15 @@ export class IntakeSourceComponent {
   }
 
   setDefaultSelectedComponent() {
-    this.waterProcessComponentService.setDefaultSelectedComponent(this.waterAssessment.intakeSources, this.selectedIntakeSource, 'water-intake')
+    this.waterSystemComponentService.setDefaultSelectedComponent(this.waterAssessment.intakeSources, this.selectedIntakeSource, 'water-intake')
   }
 
   initForm() {
-   this.form = this.waterProcessComponentService.getIntakeSourceForm(this.selectedIntakeSource);
+   this.form = this.waterSystemComponentService.getIntakeSourceForm(this.selectedIntakeSource);
   }
 
   save() {
-    let updated: IntakeSource = this.waterProcessComponentService.getIntakeSourceFromForm(this.form, this.selectedIntakeSource);
+    let updated: IntakeSource = this.waterSystemComponentService.getIntakeSourceFromForm(this.form, this.selectedIntakeSource);
     let updateIndex: number = this.waterAssessment.intakeSources.findIndex(intake => intake.diagramNodeId === updated.diagramNodeId);
     this.waterAssessment.intakeSources[updateIndex] = updated;
     this.waterAssessmentService.waterAssessment.next(this.waterAssessment);

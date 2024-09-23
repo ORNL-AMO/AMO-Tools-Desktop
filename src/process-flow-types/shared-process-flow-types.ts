@@ -123,13 +123,13 @@ export interface ProcessFlowParentState {
       isValid: true,
       hasAssessmentData: false,
     },
-    // {
-    //   processComponentType: 'water-treatment',
-    //   name: 'Water Treatment',
-    //   className: 'water-treatment',
-    //   isValid: true,
-    //   hasAssessmentData: false,
-    // },
+    {
+      processComponentType: 'water-treatment',
+      name: 'Water Treatment',
+      className: 'water-treatment',
+      isValid: true,
+      hasAssessmentData: false,
+    },
     {
       processComponentType: 'waste-water-treatment',
       name: 'Waste Water Treatment',

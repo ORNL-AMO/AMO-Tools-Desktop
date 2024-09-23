@@ -24,7 +24,7 @@ import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { SetupTabsComponent } from './water-banner/setup-tabs/setup-tabs.component';
 import { IntakeSourceComponent } from './intake-source/intake-source.component';
 import { WaterComponentTableComponent } from './results-panel/water-component-table/water-component-table.component';
-import { WaterProcessComponentService } from './water-system-component.service';
+import { WaterSystemComponentService } from './water-system-component.service';
 import { WaterProcessDiagramModule } from '../water-process-diagram/water-process-diagram.module';
 import { WaterAssessmentConnectionsService } from './water-assessment-connections.service';
 import { DischargeOutletComponent } from './discharge-outlet/discharge-outlet.component';
@@ -42,18 +42,22 @@ import { StackLossModule } from '../calculator/steam/stack-loss/stack-loss.modul
 import { WaterSystemDataModalComponent } from './water-using-system/water-system-data/water-system-data-modal/water-system-data-modal.component';
 import { WaterSystemDataComponent } from './water-using-system/water-system-data/water-system-data.component';
 import { AddedEnergyComponent } from './water-using-system/added-energy/added-energy.component';
-import { WaterTreatmentComponent } from './water-using-system/water-treatment/water-treatment.component';
-import { WasteWaterTreatmentComponent } from './water-using-system/waste-water-treatment/waste-water-treatment.component';
 import { WaterUsingSystemComponent } from './water-using-system/water-using-system.component';
 import { MotorEnergyComponent } from './water-using-system/added-energy/motor-energy/motor-energy.component';
 import { MotorEnergyService } from './water-using-system/added-energy/motor-energy/motor-energy.service';
+import { WasteWaterTreatmentComponent } from './waste-water-treatment/waste-water-treatment.component';
+import { SystemBasicsService } from './system-basics/system-basics.service';
+import { WaterTreatmentService } from './water-treatment/water-treatment.service';
+import { WaterTreatmentComponent } from './water-treatment/water-treatment.component';
+import { WasteWasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
+import { WaterTreatmentWrapperComponent } from './water-treatment/water-treatment-wrapper/water-treatment-wrapper.component';
+import { WasteWaterTreatmentWrapperComponent } from './waste-water-treatment/waste-water-treatment-wrapper/waste-water-treatment-wrapper.component';
 
 @NgModule({
   declarations: [
     WaterAssessmentComponent,
     WaterReportComponent,
     ResultsPanelComponent,
-    SystemBasicsComponent,
     WaterBannerComponent,
     SetupTabsComponent,
     IntakeSourceComponent,
@@ -71,7 +75,10 @@ import { MotorEnergyService } from './water-using-system/added-energy/motor-ener
     WaterSystemDataComponent,
     AddedEnergyComponent,
     WaterTreatmentComponent,
-    WasteWaterTreatmentComponent
+    WasteWaterTreatmentComponent,
+    SystemBasicsComponent,
+    WaterTreatmentWrapperComponent,
+    WasteWaterTreatmentWrapperComponent
   ],
   imports: [
     CommonModule,
@@ -97,13 +104,16 @@ import { MotorEnergyService } from './water-using-system/added-energy/motor-ener
   ],
   providers: [
     WaterAssessmentService,
-    WaterProcessComponentService,
+    WaterSystemComponentService,
     WaterAssessmentResultsService,
     ConvertWaterAssessmentService,
     WaterAssessmentConnectionsService,
     WaterUsingSystemService,
     HeatEnergyService,
     MotorEnergyService,
+    SystemBasicsService,
+    WaterTreatmentService,
+    WasteWasteWaterTreatmentService
   ]
 })
 export class WaterModule { }

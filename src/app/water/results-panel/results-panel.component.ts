@@ -19,7 +19,7 @@ export class ResultsPanelComponent {
   ngOnInit(): void {
     this.setupTabSub = this.waterAssessmentService.setupTab.subscribe(val => {
       this.setupTab = val;
-      if (this.setupTab !== 'system-basics') {
+      if (this.setupTab !== 'system-basics' && this.setupTab !== 'waste-water-treatment') {
         this.panelTabSelect = 'component-table'
       } else {
         this.panelTabSelect = 'help';

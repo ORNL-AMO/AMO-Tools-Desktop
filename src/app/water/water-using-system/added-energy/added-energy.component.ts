@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { MotorEnergyService } from './motor-energy/motor-energy.service';
 import { WaterUsingSystemService } from '../water-using-system.service';
 import { WaterAssessmentService } from '../../water-assessment.service';
-import { WaterProcessComponentService } from '../../water-system-component.service';
+import { WaterSystemComponentService } from '../../water-system-component.service';
 import { HeatEnergy, MotorEnergy, WaterAssessment, WaterUsingSystem } from '../../../shared/models/water-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { Subscription } from 'rxjs';
@@ -26,11 +26,11 @@ export class AddedEnergyComponent {
   constructor(
     private motorEnergyService: MotorEnergyService,
     private waterAssessmentService: WaterAssessmentService, 
-    private waterProcessComponentService: WaterProcessComponentService,
+    private waterSystemComponentService: WaterSystemComponentService,
   ) {}
 
   ngOnInit() {
-    this.selectedComponentSub = this.waterProcessComponentService.selectedComponent.subscribe(selectedComponent => {
+    this.selectedComponentSub = this.waterSystemComponentService.selectedComponent.subscribe(selectedComponent => {
       this.selectedWaterUsingSystem = selectedComponent as WaterUsingSystem;
       this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
     });

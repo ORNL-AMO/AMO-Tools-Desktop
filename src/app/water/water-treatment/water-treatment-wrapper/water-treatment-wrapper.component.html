@@ -1,0 +1,20 @@
+<div *ngIf="inSystemBasics" class="form-group my-2 px-2 d-flex justify-content-center">
+    <div class="btn-group btn-group-sm pull-right w-50">
+        <button type="button" id="addWaterTreatment_add" class="btn btn-primary btn-sm py-1 px-2 small mx-2"
+            (click)="addNewWaterTreatment()">Add Water Treatment Type</button>
+    </div>
+</div>
+
+<div class="p-2" *ngFor="let waterTreatment of waterAssessment.waterTreatments; let i = index"
+    [ngClass]="{'form-section': i !== 0}">
+    <app-water-treatment [waterTreatment]="waterTreatment" [inSystemBasics]="inSystemBasics" (updateWaterTreatment)="saveWaterTreatment($event, i)">
+    </app-water-treatment>
+    <div *ngIf="inSystemBasics" class="text-center">
+        <a class="click-link delete small" (click)="openConfirmDeleteModal(waterTreatment, i)">Delete Treatment Type</a>
+    </div>
+</div>
+
+
+<app-confirm-delete-modal *ngIf="inSystemBasics && showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteData"
+    (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>

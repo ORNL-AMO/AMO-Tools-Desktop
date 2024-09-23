@@ -1,15 +1,6 @@
-.collapsed-border {
-    border-bottom: none;
-}
-
-.group-label:hover {
-    cursor: pointer;
-}
-
 .secondary-group{
     width: auto;
     text-transform: none;
-    letter-spacing: 2px;;
     padding-bottom: 0px;
 }
 
@@ -17,3 +8,8 @@
     cursor: pointer;
     background-color: lightgray;
 }
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+  }

@@ -9,7 +9,7 @@
                             <div>Results</div>
                         </a>
                     </div> -->
-                    <div *ngIf="setupTab !== 'system-basics'" class="panel-tab-item h-100 flex-fill" 
+                    <div *ngIf="setupTab !== 'system-basics' && setupTab != 'waste-water-treatment'" class="panel-tab-item h-100 flex-fill" 
                         [ngClass]="{'active': panelTabSelect == 'component-table'}">
                         <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('component-table')">
                             <div>Components</div>
