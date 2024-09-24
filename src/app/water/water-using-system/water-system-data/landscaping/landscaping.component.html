@@ -36,8 +36,8 @@
             <span *ngIf="form.controls.yearlyInchesIrrigated.errors.required">Value Required</span>
             <span *ngIf="form.controls.yearlyInchesIrrigated.errors.min">Value can't be less than
                 {{form.controls.yearlyInchesIrrigated.errors.min.min}}
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
-                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">cm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">cm</span>
             </span>
         </span>
     </div>

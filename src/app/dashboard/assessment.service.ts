@@ -374,7 +374,8 @@ export class AssessmentService {
       systemBasics: {
         utilityType: 'Electricity',
         electricityCost: settings.electricityCost,
-        notes: undefined
+        notes: undefined,
+        conductivityUnit: 'MuS/cm'
       },
       intakeSources: [],
       dischargeOutlets: [],

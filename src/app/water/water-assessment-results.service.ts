@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CoolingTower, CoolingTowerResults, FlowMetric, ProcessUse, ProcessUseResults, WaterAssessmentResults, WaterSystemResults, WaterUsingSystem } from '../shared/models/water-assessment';
 import { WaterSuiteApiService } from '../tools-suite-api/water-suite-api.service';
+import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
+import { Settings } from '../shared/models/settings';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +11,12 @@ import { WaterSuiteApiService } from '../tools-suite-api/water-suite-api.service
 export class WaterAssessmentResultsService {
 
   waterAssessmentResults: BehaviorSubject<WaterAssessmentResults>;
-  constructor(private waterSuiteApiService: WaterSuiteApiService) { 
+  constructor(private waterSuiteApiService: WaterSuiteApiService, private convertWaterAssessmentService: ConvertWaterAssessmentService) { 
     this.waterAssessmentResults = new BehaviorSubject<WaterAssessmentResults>(undefined);
   }
 
   // todo 6879 - needs conversion coming out of the suite
-  getWaterSystemResults(waterSystem: WaterUsingSystem): WaterSystemResults {
+  getWaterSystemResults(waterSystem: WaterUsingSystem, settings: Settings): WaterSystemResults {
     let waterSystemResults: WaterSystemResults = {
       waterBalance: undefined,
       grossWaterUse: undefined,
@@ -43,7 +45,9 @@ export class WaterAssessmentResultsService {
       waterSystemResults.grossWaterUse = waterSystemResults.kitchenRestroomResults.grossWaterUse;
     }
     if (waterSystem.landscaping) {
+      waterSystem.landscaping = this.convertWaterAssessmentService.convertLandscapingSuiteInput(waterSystem.landscaping, settings);
       waterSystemResults.landscapingResults = this.waterSuiteApiService.calculateLandscapingResults(waterSystem.landscaping);
+      waterSystemResults.landscapingResults = this.convertWaterAssessmentService.convertLandscapingResults(waterSystemResults.landscapingResults, settings);
       waterSystemResults.grossWaterUse = waterSystemResults.landscapingResults.grossWaterUse;
     }
 

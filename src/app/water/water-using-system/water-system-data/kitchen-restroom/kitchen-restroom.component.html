@@ -33,12 +33,16 @@
         <div class="input-group">
             <input name="dailyUsePerEmployee" type="number" class="form-control" id="dailyUsePerEmployee"
                 formControlName="dailyUsePerEmployee" (input)="save()" (focus)="focusField('dailyUsePerEmployee')">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.dailyUsePerEmployee.invalid && !form.controls.dailyUsePerEmployee.pristine">
             <span *ngIf="form.controls.dailyUsePerEmployee.errors.required">Value Required</span>
             <span *ngIf="form.controls.dailyUsePerEmployee.errors.min">Value can't be less than
                 {{form.controls.dailyUsePerEmployee.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
             </span>
         </span>
     </div>

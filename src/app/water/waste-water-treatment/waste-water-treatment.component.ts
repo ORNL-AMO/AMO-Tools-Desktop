@@ -31,6 +31,7 @@ export class WasteWaterTreatmentComponent {
   waterAssessment: WaterAssessment;
   selectedWasteWaterTreatment: WasteWaterTreatment;
   selectedComponentSub: Subscription;
+  settingsSub: Subscription;
 
   constructor(
     private waterAssessmentService: WaterAssessmentService,
@@ -39,7 +40,10 @@ export class WasteWaterTreatmentComponent {
   ) { }
 
   ngOnInit() {
-    this.settings = this.waterAssessmentService.settings.getValue();
+    this.settingsSub = this.waterAssessmentService.settings.subscribe(settings => {
+      this.settings = settings;
+    });
+
     this.waterAssessmentSub = this.waterAssessmentService.waterAssessment.subscribe(waterAssessment => {
       this.wasteWaterTreatmentOptions = this.waterAssessmentService.getAvailableTreatmentOptions(waterAssessment.wasteWaterTreatments, copyObject(wasteWaterTreatmentTypeOptions));
     });
@@ -58,6 +62,10 @@ export class WasteWaterTreatmentComponent {
     this.initForm();
   }
 
+  ngOnDestroy() {
+    this.waterAssessmentSub.unsubscribe();
+    this.settingsSub.unsubscribe();
+  }
   //   setDefaultSelectedComponent() {
   //   this.waterSystemComponentService.setDefaultSelectedComponent(this.waterAssessment.wasteWaterTreatments, this.selectedWasteWaterTreatment, 'waste-water-treatment')
   // }
@@ -74,9 +82,6 @@ export class WasteWaterTreatmentComponent {
     } 
    }
 
-  ngOnDestroy() {
-    this.waterAssessmentSub.unsubscribe();
-  }
 
   save() {
     let updatedWasteWaterTreatment: WasteWaterTreatment = this.wasteTreatmentService.getWasteWaterTreatmentFromForm(this.form, this.wasteWaterTreatment);

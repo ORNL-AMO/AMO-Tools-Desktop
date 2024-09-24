@@ -23,6 +23,7 @@ export interface Modification {
 export interface WaterSystemBasics {
     utilityType: string,
     electricityCost: number,
+    conductivityUnit: string,
     notes: string
 }
 
@@ -98,7 +99,7 @@ export interface WaterUsingSystem extends ProcessFlowPart {
 }
 
 export interface WasteWaterTreatment extends ProcessFlowPart {
-    flowPercent: number
+    flowValue: number
 }
 
 export interface WaterTreatment extends ProcessFlowPart {
@@ -180,7 +181,6 @@ export interface CoolingTowerAggregatedResults {
 }
 
 export interface BoilerWater {
-    // hoursPerYear: number,
     power: number
     loadFactor: number,
     steamPerPower: number,
