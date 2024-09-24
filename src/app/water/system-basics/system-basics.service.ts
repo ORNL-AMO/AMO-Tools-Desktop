@@ -14,15 +14,17 @@ export class SystemBasicsService {
       notes: [obj.notes],
       utilityType: [obj.utilityType],
       electricityCost: [obj.electricityCost],
+      conductivityUnit: [obj.conductivityUnit],
     });
     return form;
   }
 
   getObjFromForm(form: UntypedFormGroup): WaterSystemBasics {
     return {    
-      notes: form.controls.equipmentNotes.value,
+      notes: form.controls.notes.value,
       electricityCost: form.controls.electricityCost.value,
-      utilityType: form.controls.utilityType.value
+      utilityType: form.controls.utilityType.value,
+      conductivityUnit: form.controls.conductivityUnit.value,
     }
   }
 }

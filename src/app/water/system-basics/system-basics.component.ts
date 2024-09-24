@@ -5,13 +5,11 @@ import { UntypedFormGroup } from "@angular/forms";
 import { SettingsService } from "../../settings/settings.service";
 import { WaterAssessmentService } from "../water-assessment.service";
 import { SettingsDbService } from "../../indexedDb/settings-db.service";
-import { WasteWaterTreatment, WaterAssessment, WaterSystemBasics, WaterTreatment } from "../../shared/models/water-assessment";
+import { WaterAssessment, WaterSystemBasics } from "../../shared/models/water-assessment";
 import { firstValueFrom } from "rxjs";
 import { SystemBasicsService } from "./system-basics.service";
 import * as _ from 'lodash';
-import { WaterTreatmentService } from "../water-treatment/water-treatment.service";
-import { WasteWasteWaterTreatmentService } from "../waste-water-treatment/waste-water-treatment.service";
-
+import { ConvertWaterAssessmentService } from "../convert-water-assessment.service";
 @Component({
   selector: 'app-system-basics',
   templateUrl: './system-basics.component.html',
@@ -38,6 +36,7 @@ export class SystemBasicsComponent implements OnInit {
     private waterAssessmentService: WaterAssessmentService,
     private settingsDbService: SettingsDbService,
     private systemBasicsService: SystemBasicsService,
+    private convertWaterAssessmentService: ConvertWaterAssessmentService
   ) { }
 
 
@@ -98,13 +97,13 @@ export class SystemBasicsComponent implements OnInit {
     if(showSuccess) {
       this.initSuccessMessage();
     }
-    // let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    // let waterAssessment: WaterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-    // // waterAssessment = this.convertWaterService.convertWater(waterAssessment, this.oldSettings, newSettings);
-    // this.showUpdateDataReminder = false;
-    // waterAssessment.existingDataUnits = newSettings.unitsOfMeasure;
-    // this.waterAssessmentService.updateWater(waterAssessment, true);
-    // this.oldSettings = newSettings;
+    let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    let waterAssessment: WaterAssessment = this.waterAssessmentService.waterAssessment.getValue();
+    waterAssessment = this.convertWaterAssessmentService.convertWaterAssessment(waterAssessment, this.oldSettings, newSettings);
+    this.showUpdateDataReminder = false;
+    waterAssessment.existingDataUnits = newSettings.unitsOfMeasure;
+    this.waterAssessmentService.updateWaterAssessment(waterAssessment);
+    this.oldSettings = newSettings;
   }
 
   toggleCollapse(group: SystemBasicsGroupString) {

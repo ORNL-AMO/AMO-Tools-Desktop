@@ -17,7 +17,8 @@ export const MockWaterAssessment: Assessment = {
         "systemBasics": {
             "utilityType": "Electricity",
             "electricityCost": 0.066,
-            "notes": undefined
+            "notes": undefined,
+            "conductivityUnit": "MuS/cm"
         },
         "intakeSources": [
             {
@@ -94,10 +95,31 @@ export const MockWaterAssessment: Assessment = {
                     "annualProduction": 0,
                     "fractionGrossWaterRecirculated": 0,
                 },
-                "coolingTower": undefined,
-                "boilerWater": undefined,
-                "kitchenRestroom": undefined,
-                "landscaping": undefined,
+                "coolingTower": {
+                    "tonnage": undefined,
+                    "loadFactor": undefined,
+                    "evaporationRateDegree": undefined,
+                    "temperatureDrop": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "boilerWater": {
+                    "power": undefined,
+                    "loadFactor": undefined,
+                    "steamPerPower": undefined,
+                    "feedwaterConductivity": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "kitchenRestroom": {
+                    "employeeCount": undefined,
+                    "workdaysPerYear": undefined,
+                    "dailyUsePerEmployee": undefined
+                },
+                "landscaping": {
+                    "areaIrrigated": undefined,
+                    "yearlyInchesIrrigated": undefined,
+                },
                 "heatEnergy": {
                     "heatingFuelType": 0,
                     "incomingTemp": 0,
@@ -141,10 +163,31 @@ export const MockWaterAssessment: Assessment = {
                     "annualProduction": 0,
                     "fractionGrossWaterRecirculated": 0,
                 },
-                "coolingTower": undefined,
-                "boilerWater": undefined,
-                "kitchenRestroom": undefined,
-                "landscaping": undefined,
+                "coolingTower": {
+                    "tonnage": undefined,
+                    "loadFactor": undefined,
+                    "evaporationRateDegree": undefined,
+                    "temperatureDrop": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "boilerWater": {
+                    "power": undefined,
+                    "loadFactor": undefined,
+                    "steamPerPower": undefined,
+                    "feedwaterConductivity": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "kitchenRestroom": {
+                    "employeeCount": undefined,
+                    "workdaysPerYear": undefined,
+                    "dailyUsePerEmployee": undefined
+                },
+                "landscaping": {
+                    "areaIrrigated": undefined,
+                    "yearlyInchesIrrigated": undefined,
+                },
                 "heatEnergy": {
                     "heatingFuelType": 0,
                     "incomingTemp": 0,
@@ -188,10 +231,31 @@ export const MockWaterAssessment: Assessment = {
                     "annualProduction": 0,
                     "fractionGrossWaterRecirculated": 0,
                 },
-                "coolingTower": undefined,
-                "boilerWater": undefined,
-                "kitchenRestroom": undefined,
-                "landscaping": undefined,
+                "coolingTower": {
+                    "tonnage": undefined,
+                    "loadFactor": undefined,
+                    "evaporationRateDegree": undefined,
+                    "temperatureDrop": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "boilerWater": {
+                    "power": undefined,
+                    "loadFactor": undefined,
+                    "steamPerPower": undefined,
+                    "feedwaterConductivity": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "kitchenRestroom": {
+                    "employeeCount": undefined,
+                    "workdaysPerYear": undefined,
+                    "dailyUsePerEmployee": undefined
+                },
+                "landscaping": {
+                    "areaIrrigated": undefined,
+                    "yearlyInchesIrrigated": undefined,
+                },
                 "heatEnergy": {
                     "heatingFuelType": 0,
                     "incomingTemp": 0,
@@ -235,10 +299,31 @@ export const MockWaterAssessment: Assessment = {
                     "annualProduction": 0,
                     "fractionGrossWaterRecirculated": 0,
                 },
-                "coolingTower": undefined,
-                "boilerWater": undefined,
-                "kitchenRestroom": undefined,
-                "landscaping": undefined,
+                "coolingTower": {
+                    "tonnage": undefined,
+                    "loadFactor": undefined,
+                    "evaporationRateDegree": undefined,
+                    "temperatureDrop": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "boilerWater": {
+                    "power": undefined,
+                    "loadFactor": undefined,
+                    "steamPerPower": undefined,
+                    "feedwaterConductivity": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "kitchenRestroom": {
+                    "employeeCount": undefined,
+                    "workdaysPerYear": undefined,
+                    "dailyUsePerEmployee": undefined
+                },
+                "landscaping": {
+                    "areaIrrigated": undefined,
+                    "yearlyInchesIrrigated": undefined,
+                },
                 "heatEnergy": {
                     "heatingFuelType": 0,
                     "incomingTemp": 0,
@@ -282,10 +367,31 @@ export const MockWaterAssessment: Assessment = {
                     "annualProduction": 0,
                     "fractionGrossWaterRecirculated": 0,
                 },
-                "coolingTower": undefined,
-                "boilerWater": undefined,
-                "kitchenRestroom": undefined,
-                "landscaping": undefined,
+                "coolingTower": {
+                    "tonnage": undefined,
+                    "loadFactor": undefined,
+                    "evaporationRateDegree": undefined,
+                    "temperatureDrop": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "boilerWater": {
+                    "power": undefined,
+                    "loadFactor": undefined,
+                    "steamPerPower": undefined,
+                    "feedwaterConductivity": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "kitchenRestroom": {
+                    "employeeCount": undefined,
+                    "workdaysPerYear": undefined,
+                    "dailyUsePerEmployee": undefined
+                },
+                "landscaping": {
+                    "areaIrrigated": undefined,
+                    "yearlyInchesIrrigated": undefined,
+                },
                 "heatEnergy": {
                     "heatingFuelType": 0,
                     "incomingTemp": 0,
@@ -329,10 +435,31 @@ export const MockWaterAssessment: Assessment = {
                     "annualProduction": 0,
                     "fractionGrossWaterRecirculated": 0,
                 },
-                "coolingTower": undefined,
-                "boilerWater": undefined,
-                "kitchenRestroom": undefined,
-                "landscaping": undefined,
+                "coolingTower": {
+                    "tonnage": undefined,
+                    "loadFactor": undefined,
+                    "evaporationRateDegree": undefined,
+                    "temperatureDrop": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "boilerWater": {
+                    "power": undefined,
+                    "loadFactor": undefined,
+                    "steamPerPower": undefined,
+                    "feedwaterConductivity": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "kitchenRestroom": {
+                    "employeeCount": undefined,
+                    "workdaysPerYear": undefined,
+                    "dailyUsePerEmployee": undefined
+                },
+                "landscaping": {
+                    "areaIrrigated": undefined,
+                    "yearlyInchesIrrigated": undefined,
+                },
                 "heatEnergy": {
                     "heatingFuelType": 0,
                     "incomingTemp": 0,
@@ -376,10 +503,31 @@ export const MockWaterAssessment: Assessment = {
                     "annualProduction": 0,
                     "fractionGrossWaterRecirculated": 0,
                 },
-                "coolingTower": undefined,
-                "boilerWater": undefined,
-                "kitchenRestroom": undefined,
-                "landscaping": undefined,
+                "coolingTower": {
+                    "tonnage": undefined,
+                    "loadFactor": undefined,
+                    "evaporationRateDegree": undefined,
+                    "temperatureDrop": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "boilerWater": {
+                    "power": undefined,
+                    "loadFactor": undefined,
+                    "steamPerPower": undefined,
+                    "feedwaterConductivity": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "kitchenRestroom": {
+                    "employeeCount": undefined,
+                    "workdaysPerYear": undefined,
+                    "dailyUsePerEmployee": undefined
+                },
+                "landscaping": {
+                    "areaIrrigated": undefined,
+                    "yearlyInchesIrrigated": undefined,
+                },
                 "heatEnergy": {
                     "heatingFuelType": 0,
                     "incomingTemp": 0,
@@ -423,10 +571,31 @@ export const MockWaterAssessment: Assessment = {
                     "annualProduction": 0,
                     "fractionGrossWaterRecirculated": 0,
                 },
-                "coolingTower": undefined,
-                "boilerWater": undefined,
-                "kitchenRestroom": undefined,
-                "landscaping": undefined,
+                "coolingTower": {
+                    "tonnage": undefined,
+                    "loadFactor": undefined,
+                    "evaporationRateDegree": undefined,
+                    "temperatureDrop": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "boilerWater": {
+                    "power": undefined,
+                    "loadFactor": undefined,
+                    "steamPerPower": undefined,
+                    "feedwaterConductivity": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "kitchenRestroom": {
+                    "employeeCount": undefined,
+                    "workdaysPerYear": undefined,
+                    "dailyUsePerEmployee": undefined
+                },
+                "landscaping": {
+                    "areaIrrigated": undefined,
+                    "yearlyInchesIrrigated": undefined,
+                },
                 "heatEnergy": {
                     "heatingFuelType": 0,
                     "incomingTemp": 0,

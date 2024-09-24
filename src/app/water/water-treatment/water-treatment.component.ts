@@ -27,6 +27,7 @@ export class WaterTreatmentComponent {
   formWidth: number;
   showOperatingHoursModal: boolean = false;
   waterAssessmentSub: Subscription;
+  settingsSub: Subscription;
 
   constructor(
     private waterAssessmentService: WaterAssessmentService,
@@ -34,7 +35,10 @@ export class WaterTreatmentComponent {
   ) { }
 
   ngOnInit() {
-    this.settings = this.waterAssessmentService.settings.getValue();
+    this.settingsSub = this.waterAssessmentService.settings.subscribe(settings => {
+      this.settings = settings;
+    });
+    
     this.waterAssessmentSub = this.waterAssessmentService.waterAssessment.subscribe(waterAssessment => {
       this.waterTreatmentOptions = this.waterAssessmentService.getAvailableTreatmentOptions(waterAssessment.waterTreatments, copyObject(waterTreatmentTypeOptions));
     });
@@ -43,7 +47,6 @@ export class WaterTreatmentComponent {
   }
 
   initForm() {
-    debugger;
     this.form = this.waterTreatmentService.getFormFromObj(this.waterTreatment);
     if (!this.inSystemBasics) {
       this.form.controls.treatmentType.disable();
@@ -53,6 +56,7 @@ export class WaterTreatmentComponent {
 
   ngOnDestroy() {
     this.waterAssessmentSub.unsubscribe();
+    this.settingsSub.unsubscribe();
   }
 
   save() {

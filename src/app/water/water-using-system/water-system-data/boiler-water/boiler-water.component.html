@@ -7,14 +7,17 @@
         <div class="input-group">
             <input name="power" type="number" class="form-control" id="power"
                 formControlName="power" (input)="save()" (focus)="focusField('power')">
-                <span class="input-group-addon units">hp</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">MW</span>
+
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.power.invalid && !form.controls.power.pristine">
             <span *ngIf="form.controls.power.errors.required">Value Required</span>
             <span *ngIf="form.controls.power.errors.min">Value can't be less than
                 {{form.controls.power.errors.min.min}}
-                <span>hp</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">MW</span>
             </span>
         </span>
     </div>
@@ -24,14 +27,16 @@
         <div class="input-group">
             <input name="loadFactor" type="number" class="form-control" id="loadFactor"
                 formControlName="loadFactor" (input)="save()" (focus)="focusField('loadFactor')">
-                <span class="input-group-addon units">hp</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">MW</span>
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.loadFactor.invalid && !form.controls.loadFactor.pristine">
             <span *ngIf="form.controls.loadFactor.errors.required">Value Required</span>
             <span *ngIf="form.controls.loadFactor.errors.min">Value can't be less than
                 {{form.controls.loadFactor.errors.min.min}}
-                <span>hp</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">MW</span>
             </span>
         </span>
     </div>
@@ -61,22 +66,19 @@
     <!--  todo change increment depending on settings? -->
     <div class="form-group" [ngClass]="{'invalid': form.controls.feedwaterConductivity.invalid}">
         <label for="feedwaterConductivity">Feedwater Conductivity
-            <span *ngIf="settings.unitsOfMeasure != 'Metric'"></span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'"></span>
         </label>
         <div class="input-group">
             <input name="feedwaterConductivity" type="number" class="form-control" id="feedwaterConductivity"
                 formControlName="feedwaterConductivity" (input)="save()" (focus)="focusField('feedwaterConductivity')">
-            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units"></span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units"></span>
+            <span *ngIf="conductivityUnit === 'MuS/cm'" class="input-group-addon units"><span>&#x3BC;</span>S/cm</span>
+            <span *ngIf="conductivityUnit !== 'MuS/cm'" class="input-group-addon units">{{conductivityUnit}}</span>
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.feedwaterConductivity.invalid && !form.controls.feedwaterConductivity.pristine">
             <span *ngIf="form.controls.feedwaterConductivity.errors.required">Value Required</span>
             <span *ngIf="form.controls.feedwaterConductivity.errors.min">Value can't be less than
                 {{form.controls.feedwaterConductivity.errors.min.min}}
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
-                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+                
             </span>
         </span>
     </div>
@@ -86,7 +88,8 @@
         <div class="input-group">
             <input name="makeupConductivity" type="number" class="form-control" id="makeupConductivity"
                 formControlName="makeupConductivity" (input)="save()" (focus)="focusField('makeupConductivity')">
-
+                <span *ngIf="conductivityUnit === 'MuS/cm'" class="input-group-addon units"><span>&#x3BC;</span>S/cm</span>
+            <span *ngIf="conductivityUnit !== 'MuS/cm'" class="input-group-addon units">{{conductivityUnit}}</span>
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.makeupConductivity.invalid && !form.controls.makeupConductivity.pristine">
@@ -102,7 +105,9 @@
         <div class="input-group">
             <input name="blowdownConductivity" type="number" class="form-control" id="blowdownConductivity"
                 formControlName="blowdownConductivity" (input)="save()" (focus)="focusField('blowdownConductivity')">
-        </div>
+                <span *ngIf="conductivityUnit === 'MuS/cm'" class="input-group-addon units"><span>&#x3BC;</span>S/cm</span>
+            <span *ngIf="conductivityUnit !== 'MuS/cm'" class="input-group-addon units">{{conductivityUnit}}</span>
+            </div>
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.blowdownConductivity.invalid && !form.controls.blowdownConductivity.pristine">
             <span *ngIf="form.controls.blowdownConductivity.errors.required">Value Required</span>

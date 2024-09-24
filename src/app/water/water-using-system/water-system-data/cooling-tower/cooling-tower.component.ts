@@ -20,6 +20,7 @@ export class CoolingTowerComponent {
   settings: Settings;
   form: FormGroup;
   smallScreenTab: string = 'form';
+  conductivityUnit: string;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
@@ -36,6 +37,8 @@ export class CoolingTowerComponent {
 
   ngOnInit() {
     this.settings = this.waterAssessmentService.settings.getValue();
+    this.conductivityUnit = this.waterAssessmentService.waterAssessment.getValue().systemBasics.conductivityUnit;
+
     this.initForm();
     this.save();
   }

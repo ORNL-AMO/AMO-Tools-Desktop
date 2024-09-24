@@ -82,7 +82,8 @@
         <div class="input-group">
             <input name="makeupConductivity" type="number" class="form-control" id="makeupConductivity"
                 formControlName="makeupConductivity" (input)="save()" (focus)="focusField('makeupConductivity')">
-
+                <span *ngIf="conductivityUnit === 'MuS/cm'" class="input-group-addon units"><span>&#x3BC;</span>S/cm</span>
+                <span *ngIf="conductivityUnit !== 'MuS/cm'" class="input-group-addon units">{{conductivityUnit}}</span>
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.makeupConductivity.invalid && !form.controls.makeupConductivity.pristine">
@@ -98,6 +99,8 @@
         <div class="input-group">
             <input name="blowdownConductivity" type="number" class="form-control" id="blowdownConductivity"
                 formControlName="blowdownConductivity" (input)="save()" (focus)="focusField('blowdownConductivity')">
+                <span *ngIf="conductivityUnit === 'MuS/cm'" class="input-group-addon units"><span>&#x3BC;</span>S/cm</span>
+            <span *ngIf="conductivityUnit !== 'MuS/cm'" class="input-group-addon units">{{conductivityUnit}}</span>
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.blowdownConductivity.invalid && !form.controls.blowdownConductivity.pristine">

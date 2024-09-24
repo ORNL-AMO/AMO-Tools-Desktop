@@ -44,6 +44,19 @@
           {{systemBasicsForm.controls.electricityCost.errors.min.min}} $/kWh.</span>
       </span>
     </div>
+
+    <div class="form-group">
+      <label for="conductivityUnit">Conductivity Unit</label>
+      <div class="input-group">
+        <select class="form-control" id="conductivityUnit" formControlName="conductivityUnit" (change)="saveSystemBasics()"
+        (focus)="focusField('conductivityUnit')">
+        <option [ngValue]="'mmho'">mmho</option>
+        <option [ngValue]="'TDS ppm'">TDS ppm</option>
+        <option [ngValue]="'MuS/cm'"><span>&#x3BC;</span>S/cm</option>
+        <option [ngValue]="'mS/cm'">mS/cm</option>
+      </select>
+      </div>
+    </div>
   </form>
 
   <div class="mx-2 pt-3">
@@ -74,7 +87,7 @@
     <div class="form-group pt-4">
       <label class="group-label w-100">Equipment Notes</label>
       <textarea name="notes" rows="4" id="notes" (input)="saveSystemBasics()" formControlName="notes"
-        placeholder="Add additional information for your equipment" (focus)="focusField('equipmentNotes')"
+        placeholder="Add additional information for your equipment" (focus)="focusField('notes')"
         class="w-100"></textarea>
     </div>
   </form>
