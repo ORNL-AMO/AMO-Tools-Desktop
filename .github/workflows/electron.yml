@@ -70,6 +70,7 @@ jobs:
           name: init-mac-output
           path: |
             ${{ env.RUNNER_OUTDIR }}/*.dmg
+          compression-level: 1
           if-no-files-found: error
           retention-days: 1
       - name: Upload remaining artifacts
@@ -82,8 +83,9 @@ jobs:
             !${{ env.RUNNER_OUTDIR }}/*-universal
             !${{ env.RUNNER_OUTDIR }}/*.dmg
             !${{ env.RUNNER_OUTDIR }}/builder-debug.yml
+          compression-level: 1
           if-no-files-found: error
-          retention-days: 3
+          retention-days: 1
     outputs:
       BUILD_VERSION: ${{ steps.output.outputs.BUILD_VERSION }}
 
@@ -103,8 +105,9 @@ jobs:
         with:
           name: final-mac-output
           path: ./*.dmg
+          compression-level: 1
           if-no-files-found: error
-          retention-days: 3
+          retention-days: 1
 
   release:
     if: github.ref_name == 'master'
