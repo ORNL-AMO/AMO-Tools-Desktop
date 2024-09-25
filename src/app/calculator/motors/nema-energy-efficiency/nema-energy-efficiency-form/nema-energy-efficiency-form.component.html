@@ -60,7 +60,7 @@
       <label for="efficiency">Efficiency</label>
       <div class="input-group calc-addon-group">
         <input type="number" min="0" step="any" max="100" class="form-control addon-input" id="efficiency"
-          formControlName="efficiency" onfocus="this.select();" (focus)="focusField('efficiencyClass')" (input)="calculate()">
+          formControlName="efficiency" onfocus="this.select();" (focus)="focusField('efficiency')" (input)="calculate()">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="nemaForm.controls.efficiency.invalid && !nemaForm.controls.efficiency.pristine">
