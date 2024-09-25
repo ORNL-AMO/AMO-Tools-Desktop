@@ -22,12 +22,12 @@
         <div class="form-group">
             <label for="sourceType">Source</label>
             <select class="form-control" id="sourceType" formControlName="sourceType" (change)="setIntakeSourceType()"
-              (focus)="focusField('sourceType')">
-              <option *ngFor="let sourceType of intakeSourceTypeOptions"
-                [ngValue]="sourceType.value">{{sourceType.display}}
-              </option>
+                (focus)="focusField('sourceType')">
+                <option *ngFor="let sourceType of intakeSourceTypeOptions" [ngValue]="sourceType.value">
+                    {{sourceType.display}}
+                </option>
             </select>
-          </div>
+        </div>
 
         <div class="form-group" [ngClass]="{'invalid': form.controls.annualUse.invalid}">
             <label for="{{idString}}">Annual Use</label>
@@ -36,7 +36,8 @@
                     id="{{'annualUse_'+idString}}" (focus)="focusField('annualUse')" (input)="save()"
                     formControlName="annualUse">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
-                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'"
+                    class="input-group-addon units">m<sup>3</sup>/yr</span>
             </div>
             <span *ngIf="form.controls.annualUse.invalid && !form.controls.annualUse.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.annualUse.errors.required">Value
@@ -49,5 +50,48 @@
             </span>
         </div>
     </form>
+
+    <div class="px-2">
+        <label class="group-label header h3" (click)="toggleCollapseMotorEnergy()">
+            <span class="fa fa-chevron-right"
+                [ngClass]="{'fa-chevron-right': isMotorEnergyCollapsed, 'fa-chevron-down': !isMotorEnergyCollapsed}"></span>
+            Added Motor Energy
+            <span *ngIf="!form.valid" class="pull-right">
+                <span class="fa fa-exclamation-circle"></span>
+            </span>
+        </label>
+
+        <ng-container *ngIf="!isMotorEnergyCollapsed">
+            <div class="form-group my-2 px-2 d-flex justify-content-end">
+                <div class="btn-group btn-group-sm pull-right">
+                    <button type="button" disabled id="motorEnergyMethod_from"
+                        class="btn btn-secondary btn-sm py-1 px-2 mx-2 small"
+                        (click)="addMotorEnergyFromInventory()">Add From
+                        Inventory</button>
+                    <button type="button" id="motorEnergyMethod_add" class="btn btn-primary btn-sm py-1 px-2 small mx-2"
+                        (click)="addNewMotorEnergy()">Add New
+                        Motor Energy</button>
+                </div>
+            </div>
+
+            <div class="motor-equipment">
+                <div class="form-section"
+                    *ngFor="let motorEnergy of selectedIntakeSource.addedMotorEnergy; let i = index">
+                    <app-motor-energy [motorEnergy]="motorEnergy" (updateMotorEnergy)="saveMotorEnergy($event, i)">
+                    </app-motor-energy>
+                    <div class="text-center">
+                        <a class="click-link delete small" (click)="openConfirmDeleteModal(motorEnergy, i)">Delete
+                            {{motorEnergy.name}}</a>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
     }
 </div>
+
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteData"
+    (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>

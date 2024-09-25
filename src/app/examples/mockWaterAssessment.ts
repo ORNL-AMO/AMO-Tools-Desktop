@@ -30,7 +30,8 @@ export const MockWaterAssessment: Assessment = {
                 "diagramNodeId": "dndnode_sz5ulomtz",
                 "modifiedDate": new Date("2024-09-19T13:06:19.098Z"),
                 "sourceType": 0,
-                "annualUse": 0
+                "annualUse": 0,
+                "addedMotorEnergy": []
             },
             {
                 "processComponentType": "water-intake",
@@ -41,7 +42,8 @@ export const MockWaterAssessment: Assessment = {
                 "diagramNodeId": "dndnode_mxk12ss2u",
                 "modifiedDate": new Date("2024-09-19T13:06:20.542Z"),
                 "sourceType": 0,
-                "annualUse": 0
+                "annualUse": 0,
+                "addedMotorEnergy": []
             }
         ],
         "dischargeOutlets": [
@@ -54,7 +56,8 @@ export const MockWaterAssessment: Assessment = {
                 "diagramNodeId": "dndnode_krrdnugeq",
                 "modifiedDate": new Date("2024-09-19T13:06:38.666Z"),
                 "outletType": 0,
-                "annualUse": 0
+                "annualUse": 0,
+                "addedMotorEnergy": []
             },
             {
                 "processComponentType": "water-discharge",
@@ -65,7 +68,8 @@ export const MockWaterAssessment: Assessment = {
                 "diagramNodeId": "dndnode_mkjkxrzz0",
                 "modifiedDate": new Date("2024-09-19T13:06:40.504Z"),
                 "outletType": 0,
-                "annualUse": 0
+                "annualUse": 0,
+                "addedMotorEnergy": []
             }
         ],
         "waterUsingSystems": [

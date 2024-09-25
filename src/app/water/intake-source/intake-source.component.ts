@@ -1,13 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { WaterAssessmentService } from '../water-assessment.service';
-import { IntakeSource, WaterAssessment } from '../../shared/models/water-assessment';
+import { IntakeSource, MotorEnergy, WaterAssessment } from '../../shared/models/water-assessment';
 import { WaterSystemComponentService } from '../water-system-component.service';
 import * as _ from 'lodash';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { copyObject } from '../../shared/helperFunctions';
 import { intakeSourceTypeOptions } from '../waterConstants';
+import { MotorEnergyService } from '../water-using-system/added-energy/motor-energy/motor-energy.service';
+import { ConfirmDeleteData } from '../../shared/confirm-delete-modal/confirmDeleteData';
 
 @Component({
   selector: 'app-intake-source',
@@ -27,8 +29,15 @@ export class IntakeSourceComponent {
   selectedComponentSub: Subscription;
   intakeSourceTypeOptions: {value: number, display: string}[];
 
+  showConfirmDeleteModal: boolean = false;
+  deleteIndex: number;
+  confirmDeleteData: ConfirmDeleteData;
+  isMotorEnergyCollapsed: boolean;
+
   idString: string;
-  constructor(private waterAssessmentService: WaterAssessmentService, private waterSystemComponentService: WaterSystemComponentService) {}
+  constructor(private waterAssessmentService: WaterAssessmentService, 
+    private motorEnergyService: MotorEnergyService,
+    private waterSystemComponentService: WaterSystemComponentService) {}
 
   ngOnInit() {
     this.intakeSourceTypeOptions = copyObject(intakeSourceTypeOptions);
@@ -70,15 +79,58 @@ export class IntakeSourceComponent {
     this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
   }
 
+  
   setIntakeSourceType() {
     this.save();
   }
-
+  
   focusField(str: string) {
     this.waterAssessmentService.focusedField.next(str);
   }
-
+  
   addIntakeSource() {
     this.waterAssessmentService.addNewWaterComponent('water-intake')
   }
+ 
+  toggleCollapseMotorEnergy() {
+    this.isMotorEnergyCollapsed = !this.isMotorEnergyCollapsed;
+  }
+  
+  saveMotorEnergy(updatedMotorEnergy: MotorEnergy, index: number) {
+    this.motorEnergyService.updateMotorEnergy(this.selectedIntakeSource.addedMotorEnergy, updatedMotorEnergy, index)
+    this.save();
+  }
+  
+  addNewMotorEnergy() {
+    this.selectedIntakeSource.addedMotorEnergy.push(
+      this.motorEnergyService.getDefaultMotorEnergy(this.selectedIntakeSource.addedMotorEnergy.length)
+    );
+    this.save();
+  }
+
+  deleteMotorEnergy() {
+    this.selectedIntakeSource.addedMotorEnergy.splice(this.deleteIndex, 1);
+    this.save();
+  }
+
+  addMotorEnergyFromInventory () {}
+
+  openConfirmDeleteModal(item: MotorEnergy, index: number) {
+    this.confirmDeleteData = {
+      modalTitle: 'Delete Added Motor Energy',
+      confirmMessage: `Are you sure you want to delete '${item.name}'?`
+    }
+    this.showConfirmDeleteModal = true;
+    this.deleteIndex = index;
+    this.waterAssessmentService.modalOpen.next(true);
+  }
+
+  onConfirmDeleteClose(shouldDelete: boolean) {
+    if (shouldDelete) {
+      this.deleteMotorEnergy();
+    }
+    this.showConfirmDeleteModal = false;
+    this.waterAssessmentService.modalOpen.next(false);
+  }
+
 }

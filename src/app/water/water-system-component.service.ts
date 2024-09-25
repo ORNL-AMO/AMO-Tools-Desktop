@@ -61,6 +61,7 @@ export class WaterSystemComponentService {
       hasAssessmentData: true,
       sourceType: 0,
       annualUse: 0,
+      addedMotorEnergy: []
     };
     return intakeSource;
   }
@@ -101,6 +102,7 @@ export class WaterSystemComponentService {
       hasAssessmentData: true,
       outletType: 0,
       annualUse: 0,
+      addedMotorEnergy: []
     };
     return dischargeOutlet;
   }

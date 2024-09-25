@@ -1,21 +1,29 @@
+
+
+.form-card {
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 20px 0 grey;
+}
+
 .collapsed-border {
     border-bottom: none;
 }
 
-.group-label {
-    font-size: 16px;
-    text-transform: none;
-    letter-spacing: 1px;
-    padding-top: 6.5px;
-    padding-bottom: 6.5px;
+.motor-equipment {
+    border-top: 1px solid;
 }
 
 .group-label:hover {
     cursor: pointer;
 }
 
-.form-card {
-    border-radius: 10px;
-    background-color: #fff;
-    box-shadow: 0 4px 20px 0 grey;
+.group-label:hover:not(.secondary-group){
+    cursor: pointer;
+    background-color: lightgray;
+}
+
+.form-section {
+    padding-bottom: .25rem;
+    border-bottom: 1px dashed;
 }
