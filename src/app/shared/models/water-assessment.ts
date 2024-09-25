@@ -68,13 +68,15 @@ export interface WaterSystemResults {
 // * IMPORTANT Partial - use in WaterUsingSystem without type check for diagram component properties
 export interface IntakeSource extends Partial<ProcessFlowPart> {
     sourceType: number,
-    annualUse: number
+    annualUse: number,
+    addedMotorEnergy?: MotorEnergy[]
 }
 
 // * Plant level discharge
 export interface DischargeOutlet extends ProcessFlowPart {
     outletType: number,
-    annualUse: number
+    annualUse: number,
+    addedMotorEnergy: MotorEnergy[]
 }
 
 export interface WaterUsingSystem extends ProcessFlowPart {

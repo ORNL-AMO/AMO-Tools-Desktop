@@ -4,10 +4,12 @@ import { FormGroup } from '@angular/forms';
 import _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { copyObject } from '../../shared/helperFunctions';
-import { WaterAssessment, DischargeOutlet, WaterProcessComponent } from '../../shared/models/water-assessment';
+import { WaterAssessment, DischargeOutlet, WaterProcessComponent, MotorEnergy } from '../../shared/models/water-assessment';
 import { WaterAssessmentService } from '../water-assessment.service';
 import { WaterSystemComponentService } from '../water-system-component.service';
 import { dischargeOutletTypeOptions } from '../waterConstants';
+import { ConfirmDeleteData } from '../../shared/confirm-delete-modal/confirmDeleteData';
+import { MotorEnergyService } from '../water-using-system/added-energy/motor-energy/motor-energy.service';
 
 @Component({
   selector: 'app-discharge-outlet',
@@ -23,8 +25,13 @@ export class DischargeOutletComponent {
   selectedComponentSub: Subscription;
   dischargeOutletTypeOptions: {value: number, display: string}[];
 
+  showConfirmDeleteModal: boolean = false;
+  deleteIndex: number;
+  confirmDeleteData: ConfirmDeleteData;
+  isMotorEnergyCollapsed: boolean;
   idString: string;
-  constructor(private waterAssessmentService: WaterAssessmentService, 
+  constructor(private waterAssessmentService: WaterAssessmentService,
+    private motorEnergyService: MotorEnergyService, 
     private waterSystemComponentService: WaterSystemComponentService) {}
 
   ngOnInit() {
@@ -74,4 +81,47 @@ export class DischargeOutletComponent {
   addDischargeOutlet() {
     this.waterAssessmentService.addNewWaterComponent('water-discharge')
   }
+
+  
+  toggleCollapseMotorEnergy() {
+    this.isMotorEnergyCollapsed = !this.isMotorEnergyCollapsed;
+  }
+  
+  saveMotorEnergy(updatedMotorEnergy: MotorEnergy, index: number) {
+    this.motorEnergyService.updateMotorEnergy(this.selectedDischargeOutlet.addedMotorEnergy, updatedMotorEnergy, index)
+    this.save();
+  }
+  
+  addNewMotorEnergy() {
+    this.selectedDischargeOutlet.addedMotorEnergy.push(
+      this.motorEnergyService.getDefaultMotorEnergy(this.selectedDischargeOutlet.addedMotorEnergy.length)
+    );
+    this.save();
+  }
+
+  deleteMotorEnergy() {
+    this.selectedDischargeOutlet.addedMotorEnergy.splice(this.deleteIndex, 1);
+    this.save();
+  }
+
+  addMotorEnergyFromInventory () {}
+
+  openConfirmDeleteModal(item: MotorEnergy, index: number) {
+    this.confirmDeleteData = {
+      modalTitle: 'Delete Added Motor Energy',
+      confirmMessage: `Are you sure you want to delete '${item.name}'?`
+    }
+    this.showConfirmDeleteModal = true;
+    this.deleteIndex = index;
+    this.waterAssessmentService.modalOpen.next(true);
+  }
+
+  onConfirmDeleteClose(shouldDelete: boolean) {
+    if (shouldDelete) {
+      this.deleteMotorEnergy();
+    }
+    this.showConfirmDeleteModal = false;
+    this.waterAssessmentService.modalOpen.next(false);
+  }
+
 }
