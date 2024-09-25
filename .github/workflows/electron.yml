@@ -65,17 +65,17 @@ jobs:
           OUTPUTS_DIR=$(cd ../output/ && pwd)
           echo "RUNNER_OUTDIR=$OUTPUTS_DIR" >> "$GITHUB_ENV"
       - name: Upload notarization artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: d-output
+          name: init-mac-output
           path: |
             ${{ env.RUNNER_OUTDIR }}/*.dmg
           if-no-files-found: error
-          retention-days: 3
+          retention-days: 1
       - name: Upload remaining artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: o-output
+          name: final-winux-output
           path: |
             ${{ env.RUNNER_OUTDIR }}/*
             !${{ env.RUNNER_OUTDIR }}/*-unpacked
@@ -93,15 +93,15 @@ jobs:
     needs: [build]
     steps:
       - name: Get artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: d-output
+          name: init-mac-output
       - name: Notarize
         run: xcrun stapler staple $(find ./ -name "MEASUR-*.*.*.dmg")
       - name: Upload notarized artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: d-output
+          name: final-mac-output
           path: ./*.dmg
           if-no-files-found: error
           retention-days: 3
@@ -114,7 +114,9 @@ jobs:
       VERSION: ${{ needs.build.outputs.BUILD_VERSION }}
     steps:
       - name: Get artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
+        with:
+          pattern: final-*
       - name: Release
         uses: softprops/action-gh-release@v1
         # if: startsWith(github.ref, 'refs/tags/') # Uncomment if enabling tag gating
@@ -124,5 +126,5 @@ jobs:
           draft: true # Comment out if enabling tag gating and publishing via action
           generate_release_notes: false
           files: |
-            d-output/*
-            o-output/*
+            final-mac-output/*
+            final-winux-output/*
