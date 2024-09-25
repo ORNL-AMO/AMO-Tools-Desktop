@@ -20,7 +20,7 @@ jobs:
       - name: Node setup
         run: source ~/load_nvm.sh && nvm install ${{ env.BUILD_NODE_VER }}
       - name: Cache setup
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: npm-${{ hashFiles('package-lock.json') }}
