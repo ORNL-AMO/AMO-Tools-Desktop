@@ -75,11 +75,12 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
 
   async addMaterial() {
     if (this.canAdd) {
-      this.convertDecimals();
       this.canAdd = false;
       if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
       }
+
+      // * db insert converts user input percentage to fraction
       let suiteDbResult = this.sqlDbApiService.insertSolidLiquidFlueGasMaterial(this.newMaterial);
       if (suiteDbResult == true) {
         await firstValueFrom(this.solidLiquidMaterialDbService.addWithObservable(this.newMaterial))
