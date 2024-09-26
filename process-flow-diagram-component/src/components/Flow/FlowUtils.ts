@@ -128,34 +128,38 @@ export const getEdgeSourceAndTarget = (edge: Edge, nodes: Node[]) => {
 }
 
 export const getAdaptedTypeString = (nodeType: string) => {
-    let adaptedString: string;
-    switch (nodeType) {
-        case 'water-intake':
-            adaptedString = 'waterIntake';
-            break;
-        case 'water-using-system':
-            adaptedString = 'waterUsingSystem'
-            break;
-        case 'water-discharge':
-            adaptedString = 'waterDischarge'
-            break;
-        case 'splitter-node':
-          adaptedString = 'splitterNode'
-            break;
-        case 'splitter-node-4':
-          adaptedString = 'splitterNodeFour'
-            break;
-        case 'splitter-node-8':
-          adaptedString = 'splitterNodeEight'
-            break;
-        default:
-          adaptedString = 'default'
-    }
+  let adaptedString: string;
+  switch (nodeType) {
+    case 'water-intake':
+      adaptedString = 'waterIntake';
+      break;
+    case 'water-using-system':
+      adaptedString = 'waterUsingSystem'
+      break;
+    case 'water-discharge':
+      adaptedString = 'waterDischarge'
+      break;
+    case 'waste-water-treatment':
+      adaptedString = 'wasteWaterTreatment'
+      break;
+    case 'splitter-node':
+      adaptedString = 'splitterNode'
+      break;
+    case 'splitter-node-4':
+      adaptedString = 'splitterNodeFour'
+      break;
+    case 'splitter-node-8':
+      adaptedString = 'splitterNodeEight'
+      break;
+    default:
+      console.log('No nodeType string detected - using default')
+      adaptedString = 'default'
+  }
 
-    if (adaptedString !== 'default' && !nodeTypes[adaptedString]) {
-        throw new Error('ProcessFlowNodeType string must be adapted to fit nodeTypes (custom React-Flow NodeTypes)');
-    }
-    return adaptedString;
+  if (adaptedString !== 'default' && !nodeTypes[adaptedString]) {
+    throw new Error('ProcessFlowNodeType string must be adapted to fit nodeTypes (custom React-Flow NodeTypes)');
+  }
+  return adaptedString;
 }
 
 

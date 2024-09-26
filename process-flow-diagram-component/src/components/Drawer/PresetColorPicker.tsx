@@ -6,7 +6,7 @@ export const PresetColorPicker = ({ color, onChangeHandler, presetColors, label,
             <div className={'picker-wrapper'}>
                 <div className={'picker'}>
                     <label htmlFor={'color'}>{label}</label>
-                    <input type="color" id="colorPicker"
+                    <input type="color" id="color"
                         name="color"
                         className={'color-input'}
                         value={color}

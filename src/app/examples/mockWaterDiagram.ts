@@ -17,7 +17,7 @@ export const MockWaterdiagram: Diagram =
         "flowDiagramData": {
             "nodes": [
                 {
-                    "id": "dndnode_sz5ulomtz",
+                    "id": "n_sz5ulomtz",
                     "type": "waterIntake",
                     "position": {
                         "x": -330.2982632836129,
@@ -30,7 +30,7 @@ export const MockWaterdiagram: Diagram =
                         "name": "Municipal Water A",
                         "className": "water-intake",
                         "isValid": true,
-                        "diagramNodeId": "dndnode_sz5ulomtz",
+                        "diagramNodeId": "n_sz5ulomtz",
                         "modifiedDate": "2024-09-19T13:06:19.098Z"
                     },
                     "style": {
@@ -44,7 +44,7 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "dndnode_mxk12ss2u",
+                    "id": "n_mxk12ss2u",
                     "type": "waterIntake",
                     "position": {
                         "x": -311.4014730547056,
@@ -57,7 +57,7 @@ export const MockWaterdiagram: Diagram =
                         "name": "Municipal Water B",
                         "className": "water-intake",
                         "isValid": true,
-                        "diagramNodeId": "dndnode_mxk12ss2u",
+                        "diagramNodeId": "n_mxk12ss2u",
                         "modifiedDate": "2024-09-19T13:06:20.542Z"
                     },
                     "style": {
@@ -71,7 +71,7 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "dndnode_ry7pcg7y1",
+                    "id": "n_ry7pcg7y1",
                     "type": "waterUsingSystem",
                     "position": {
                         "x": 241.77588576605717,
@@ -84,7 +84,7 @@ export const MockWaterdiagram: Diagram =
                         "name": "Cooling Tower",
                         "className": "water-using-system",
                         "isValid": true,
-                        "diagramNodeId": "dndnode_ry7pcg7y1",
+                        "diagramNodeId": "n_ry7pcg7y1",
                         "modifiedDate": "2024-09-19T13:06:23.744Z"
                     },
                     "style": {
@@ -98,7 +98,7 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "dndnode_l731t9dli",
+                    "id": "n_l731t9dli",
                     "type": "waterUsingSystem",
                     "position": {
                         "x": 235.75335547823067,
@@ -111,7 +111,7 @@ export const MockWaterdiagram: Diagram =
                         "name": "Process Loop",
                         "className": "water-using-system",
                         "isValid": true,
-                        "diagramNodeId": "dndnode_l731t9dli",
+                        "diagramNodeId": "n_l731t9dli",
                         "modifiedDate": "2024-09-19T13:06:25.303Z"
                     },
                     "style": {
@@ -125,7 +125,7 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "dndnode_dakkr4b7i",
+                    "id": "n_dakkr4b7i",
                     "type": "waterUsingSystem",
                     "position": {
                         "x": 246.56002264222468,
@@ -138,7 +138,7 @@ export const MockWaterdiagram: Diagram =
                         "name": "Quench Tank",
                         "className": "water-using-system",
                         "isValid": true,
-                        "diagramNodeId": "dndnode_dakkr4b7i",
+                        "diagramNodeId": "n_dakkr4b7i",
                         "modifiedDate": "2024-09-19T13:06:27.080Z"
                     },
                     "style": {
@@ -152,7 +152,7 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "dndnode_innffif3i",
+                    "id": "n_innffif3i",
                     "type": "waterUsingSystem",
                     "position": {
                         "x": 303.8896656742626,
@@ -165,7 +165,7 @@ export const MockWaterdiagram: Diagram =
                         "name": "Wash Bay",
                         "className": "water-using-system",
                         "isValid": true,
-                        "diagramNodeId": "dndnode_innffif3i",
+                        "diagramNodeId": "n_innffif3i",
                         "modifiedDate": "2024-09-19T13:06:28.668Z"
                     },
                     "style": {
@@ -179,7 +179,7 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "dndnode_wgkadbp9x",
+                    "id": "n_wgkadbp9x",
                     "type": "waterUsingSystem",
                     "position": {
                         "x": 300.73979573914335,
@@ -192,7 +192,7 @@ export const MockWaterdiagram: Diagram =
                         "name": "Sanitary",
                         "className": "water-using-system",
                         "isValid": true,
-                        "diagramNodeId": "dndnode_wgkadbp9x",
+                        "diagramNodeId": "n_wgkadbp9x",
                         "modifiedDate": "2024-09-19T13:06:30.641Z"
                     },
                     "style": {
@@ -206,7 +206,7 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "dndnode_jlq55u5pt",
+                    "id": "n_jlq55u5pt",
                     "type": "waterUsingSystem",
                     "position": {
                         "x": 594.5488526257843,
@@ -219,7 +219,7 @@ export const MockWaterdiagram: Diagram =
                         "name": "Chillers",
                         "className": "water-using-system",
                         "isValid": true,
-                        "diagramNodeId": "dndnode_jlq55u5pt",
+                        "diagramNodeId": "n_jlq55u5pt",
                         "modifiedDate": "2024-09-19T13:06:35.060Z"
                     },
                     "style": {
@@ -234,7 +234,7 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "dndnode_5yxu1fhwv",
+                    "id": "n_5yxu1fhwv",
                     "type": "waterUsingSystem",
                     "position": {
                         "x": 682.9384196711303,
@@ -247,7 +247,7 @@ export const MockWaterdiagram: Diagram =
                         "name": "Blending",
                         "className": "water-using-system",
                         "isValid": true,
-                        "diagramNodeId": "dndnode_5yxu1fhwv",
+                        "diagramNodeId": "n_5yxu1fhwv",
                         "modifiedDate": "2024-09-19T13:06:37.043Z"
                     },
                     "style": {
@@ -262,7 +262,7 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "dndnode_krrdnugeq",
+                    "id": "n_krrdnugeq",
                     "type": "waterDischarge",
                     "position": {
                         "x": 866.6568907343953,
@@ -275,7 +275,7 @@ export const MockWaterdiagram: Diagram =
                         "name": "Municipal Sewer",
                         "className": "water-discharge",
                         "isValid": true,
-                        "diagramNodeId": "dndnode_krrdnugeq",
+                        "diagramNodeId": "n_krrdnugeq",
                         "modifiedDate": "2024-09-19T13:06:38.666Z"
                     },
                     "style": {
@@ -290,7 +290,7 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "dndnode_mkjkxrzz0",
+                    "id": "n_mkjkxrzz0",
                     "type": "waterDischarge",
                     "position": {
                         "x": 814.5076680194097,
@@ -303,7 +303,7 @@ export const MockWaterdiagram: Diagram =
                         "name": "Municipal Sewer",
                         "className": "water-discharge",
                         "isValid": true,
-                        "diagramNodeId": "dndnode_mkjkxrzz0",
+                        "diagramNodeId": "n_mkjkxrzz0",
                         "modifiedDate": "2024-09-19T13:06:40.504Z"
                     },
                     "style": {
@@ -318,7 +318,7 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "dndnode_xfb32zunn",
+                    "id": "n_xfb32zunn",
                     "type": "waterUsingSystem",
                     "position": {
                         "x": 250.8696261721974,
@@ -331,7 +331,7 @@ export const MockWaterdiagram: Diagram =
                         "name": "Vacuum Pumps",
                         "className": "water-using-system",
                         "isValid": true,
-                        "diagramNodeId": "dndnode_xfb32zunn",
+                        "diagramNodeId": "n_xfb32zunn",
                         "modifiedDate": "2024-09-19T13:07:06.789Z"
                     },
                     "style": {
@@ -349,9 +349,9 @@ export const MockWaterdiagram: Diagram =
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "dndnode_mxk12ss2u",
+                    "source": "n_mxk12ss2u",
                     "sourceHandle": "b",
-                    "target": "dndnode_innffif3i",
+                    "target": "n_innffif3i",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -364,14 +364,14 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-dndnode_mxk12ss2ub-dndnode_innffif3ia"
+                    "id": "reactflow__edge-n_mxk12ss2ub-n_innffif3ia"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "dndnode_mxk12ss2u",
+                    "source": "n_mxk12ss2u",
                     "sourceHandle": "b",
-                    "target": "dndnode_wgkadbp9x",
+                    "target": "n_wgkadbp9x",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -384,14 +384,14 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-dndnode_mxk12ss2ub-dndnode_wgkadbp9xa"
+                    "id": "reactflow__edge-n_mxk12ss2ub-n_wgkadbp9xa"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "dndnode_sz5ulomtz",
+                    "source": "n_sz5ulomtz",
                     "sourceHandle": "b",
-                    "target": "dndnode_xfb32zunn",
+                    "target": "n_xfb32zunn",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -404,14 +404,14 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-dndnode_sz5ulomtzb-dndnode_xfb32zunna"
+                    "id": "reactflow__edge-n_sz5ulomtzb-n_xfb32zunna"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "dndnode_sz5ulomtz",
+                    "source": "n_sz5ulomtz",
                     "sourceHandle": "b",
-                    "target": "dndnode_dakkr4b7i",
+                    "target": "n_dakkr4b7i",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -424,14 +424,14 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-dndnode_sz5ulomtzb-dndnode_dakkr4b7ia"
+                    "id": "reactflow__edge-n_sz5ulomtzb-n_dakkr4b7ia"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "dndnode_sz5ulomtz",
+                    "source": "n_sz5ulomtz",
                     "sourceHandle": "b",
-                    "target": "dndnode_l731t9dli",
+                    "target": "n_l731t9dli",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -444,14 +444,14 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-dndnode_sz5ulomtzb-dndnode_l731t9dlia"
+                    "id": "reactflow__edge-n_sz5ulomtzb-n_l731t9dlia"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "dndnode_sz5ulomtz",
+                    "source": "n_sz5ulomtz",
                     "sourceHandle": "b",
-                    "target": "dndnode_ry7pcg7y1",
+                    "target": "n_ry7pcg7y1",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -464,14 +464,14 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-dndnode_sz5ulomtzb-dndnode_ry7pcg7y1a"
+                    "id": "reactflow__edge-n_sz5ulomtzb-n_ry7pcg7y1a"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "dndnode_ry7pcg7y1",
+                    "source": "n_ry7pcg7y1",
                     "sourceHandle": "b",
-                    "target": "dndnode_jlq55u5pt",
+                    "target": "n_jlq55u5pt",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -484,14 +484,14 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-dndnode_ry7pcg7y1b-dndnode_jlq55u5pta"
+                    "id": "reactflow__edge-n_ry7pcg7y1b-n_jlq55u5pta"
                 },
                 {
                     "animated": true,
                     "type": "step",
-                    "source": "dndnode_jlq55u5pt",
+                    "source": "n_jlq55u5pt",
                     "sourceHandle": "b",
-                    "target": "dndnode_ry7pcg7y1",
+                    "target": "n_ry7pcg7y1",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -504,14 +504,14 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-dndnode_jlq55u5ptb-dndnode_ry7pcg7y1a"
+                    "id": "reactflow__edge-n_jlq55u5ptb-n_ry7pcg7y1a"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "dndnode_5yxu1fhwv",
+                    "source": "n_5yxu1fhwv",
                     "sourceHandle": "b",
-                    "target": "dndnode_jlq55u5pt",
+                    "target": "n_jlq55u5pt",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -524,14 +524,14 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-dndnode_5yxu1fhwvb-dndnode_jlq55u5pta"
+                    "id": "reactflow__edge-n_5yxu1fhwvb-n_jlq55u5pta"
                 },
                 {
                     "animated": true,
                     "type": "step",
-                    "source": "dndnode_l731t9dli",
+                    "source": "n_l731t9dli",
                     "sourceHandle": "b",
-                    "target": "dndnode_jlq55u5pt",
+                    "target": "n_jlq55u5pt",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -544,14 +544,14 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-dndnode_l731t9dlib-dndnode_jlq55u5pta"
+                    "id": "reactflow__edge-n_l731t9dlib-n_jlq55u5pta"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "dndnode_xfb32zunn",
+                    "source": "n_xfb32zunn",
                     "sourceHandle": "b",
-                    "target": "dndnode_krrdnugeq",
+                    "target": "n_krrdnugeq",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -564,14 +564,14 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-dndnode_xfb32zunnb-dndnode_krrdnugeqa"
+                    "id": "reactflow__edge-n_xfb32zunnb-n_krrdnugeqa"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "dndnode_dakkr4b7i",
+                    "source": "n_dakkr4b7i",
                     "sourceHandle": "b",
-                    "target": "dndnode_krrdnugeq",
+                    "target": "n_krrdnugeq",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -584,14 +584,14 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-dndnode_dakkr4b7ib-dndnode_krrdnugeqa"
+                    "id": "reactflow__edge-n_dakkr4b7ib-n_krrdnugeqa"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "dndnode_wgkadbp9x",
+                    "source": "n_wgkadbp9x",
                     "sourceHandle": "b",
-                    "target": "dndnode_mkjkxrzz0",
+                    "target": "n_mkjkxrzz0",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -604,14 +604,14 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#000000"
                     },
-                    "id": "reactflow__edge-dndnode_wgkadbp9xb-dndnode_mkjkxrzz0a"
+                    "id": "reactflow__edge-n_wgkadbp9xb-n_mkjkxrzz0a"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "dndnode_innffif3i",
+                    "source": "n_innffif3i",
                     "sourceHandle": "b",
-                    "target": "dndnode_mkjkxrzz0",
+                    "target": "n_mkjkxrzz0",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -624,7 +624,7 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-dndnode_innffif3ib-dndnode_mkjkxrzz0a"
+                    "id": "reactflow__edge-n_innffif3ib-n_mkjkxrzz0a"
                 }
             ]
         },

@@ -85,7 +85,7 @@ export interface ProcessFlowParentState {
       backgroundColor: '#e28000'
     },
     'waste-water-treatment': {
-      backgroundColor: '#75a1ff'
+      backgroundColor: '#e28000'
     }
   };
 
@@ -97,7 +97,7 @@ export interface ProcessFlowParentState {
 // todo break into utils
 
   export function getNewIdString() {
-    return Math.random().toString(36).substr(2, 9);
+    return Math.random().toString(36).substring(2, 9);
 }
   
   // * Assign innate behaviors and context for Diagram parts
@@ -168,7 +168,7 @@ export const getNewProcessComponent = (processComponentType): ProcessFlowPart =>
 
 
 export const getNewNodeId = () => {
-  let nodeId = `dndnode_${getNewIdString()}`;
+  let nodeId = `n_${getNewIdString()}`;
   return nodeId;
 }
 
