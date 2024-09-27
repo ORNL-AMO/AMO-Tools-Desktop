@@ -93,7 +93,7 @@ export class PumpsSuiteApiService {
     let motorRatedPower = psatInput.motor_rated_power;
     let motorRpm = psatInput.motor_rated_speed;
     let efficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(psatInput.efficiency_class);
-    let specifiedMotorEfficiency = psatInput.efficiency / 100;
+    let specifiedMotorEfficiency = psatInput.efficiency;
     let motorRatedVoltage = psatInput.motor_rated_voltage;
     let fullLoadAmps = psatInput.motor_rated_fla;
     // TODO New assessment, no margin. What should default margin be. Applied on backend?
@@ -108,7 +108,6 @@ export class PumpsSuiteApiService {
     let voltage = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.motor_field_voltage);
     let operating_hours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.operating_hours);
     let cost_kw_hour = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.cost_kw_hour);
-
     let fieldData = new Module.PumpFieldData(flowRate, head, loadEstimationMethod, motorPower, motorAmps, voltage);
     let psat = new Module.PSAT(pumpInput, motor, fieldData, operating_hours, cost_kw_hour);
     fieldData.delete();
