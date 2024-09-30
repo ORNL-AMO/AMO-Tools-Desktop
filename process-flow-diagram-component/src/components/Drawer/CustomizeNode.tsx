@@ -2,17 +2,21 @@ import { Box } from '@mui/material';
 import { PresetColorPicker } from './PresetColorPicker';
 import { Node, useReactFlow } from '@xyflow/react';
 import { ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { CSSProperties, useEffect, useState } from 'react';
+import useUserEventDebounce from '../../hooks/useUserEventDebounce';
 
 
 export default function CustomizeNode({ node }: CustomizeNodeProps) {
   const { setNodes } = useReactFlow();
+  const [nodeStyle, setNodeStyle] = useState(node.style);
+  const debouncedNodeStyle = useUserEventDebounce<CSSProperties>(nodeStyle, 50);
 
   const handleBackgroundColorChange = (backgroundColor: string) => {
     const nodeStyle = {
       ...node.style,
       backgroundColor: backgroundColor
     }
-    updateNodes(nodeStyle);
+    setNodeStyle(nodeStyle);
   }
 
   const handleTextColorChange = (color: string) => {
@@ -20,24 +24,24 @@ export default function CustomizeNode({ node }: CustomizeNodeProps) {
       ...node.style,
       color: color
     }
-    updateNodes(nodeStyle);
+    setNodeStyle(nodeStyle);
   }
 
-  const updateNodes = (style) => {
+  useEffect(() => {
     setNodes((nds) =>
       nds.map((n: Node<ProcessFlowPart>) => {
         if (n.data.diagramNodeId === node.id) {
           return {
             ...n,
             style: {
-              ...style,
+              ...debouncedNodeStyle,
             }
           };
         }
         return n;
       }),
     );
-  }
+  }, [debouncedNodeStyle]);
 
   const presetColors = [
     "#cd9323", "#1a53d8", "#9a2151", "#0d6416", "#8d2808",

@@ -1,10 +1,26 @@
-import { Box, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Box } from '@mui/material';
 import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
 import { PresetColorPicker } from './PresetColorPicker';
 import { Edge, useReactFlow } from '@xyflow/react';
+import { useEffect, useState } from 'react';
+import useUserEventDebounce from '../../hooks/useUserEventDebounce';
 
 export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
   const { setEdges } = useReactFlow();
+  const [edgeColor, setEdgeColor] = useState(edge.style.stroke);
+  const debouncedEdgeColor = useUserEventDebounce<string>(edgeColor, 50);
+
+  useEffect(() => {
+    setEdges((eds) => {
+          return eds.map((e: Edge) => {
+            if (e.id === edge.id) {
+              e.style.stroke = debouncedEdgeColor;
+            }
+            return e;
+          });
+        });
+  }, [debouncedEdgeColor]);
+
 
   const handleEdgeTypeChange = (newEdgeType: string) => {
     edge.type = newEdgeType;
@@ -22,22 +38,12 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
     });
   }
 
-  const handleEdgeColorChange = (color: string) => {
-    setEdges((eds) => {
-      return eds.map((e: Edge) => {
-        if (e.id === edge.id) {
-          e.style.stroke = color;
-        }
-        return e;
-      });
-    });
-  }
-
   const presetColors = [
     "#cd9323", "#1a53d8", "#9a2151", "#0d6416", "#8d2808",
   ];
 
   const selectId = `edgeType_${edge.id}`;
+
   return (
     <Box sx={{ marginTop: 1 }}>
           <Box display={'flex'} sx={{fontSize: '.75rem', marginTop: 2}} justifyContent={'space-between'} width={'100%'}>
@@ -57,7 +63,7 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
             <PresetColorPicker
               color={edge.style.stroke}
               presetColors={presetColors}
-              onChangeHandler={handleEdgeColorChange}
+              onChangeHandler={setEdgeColor}
               showPresets={true}
               label={'Pick Line Color'} />
           </Box>

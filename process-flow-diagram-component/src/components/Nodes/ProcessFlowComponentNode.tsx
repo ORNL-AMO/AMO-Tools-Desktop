@@ -55,6 +55,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected}: NodeProp
   const customStyle: CSSProperties = {
     position: 'absolute',
     transform: transformString,
+    color: '#fff',
     fontSize: 16,
     pointerEvents: 'all',
   }

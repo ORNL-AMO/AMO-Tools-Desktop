@@ -202,12 +202,14 @@ a {
 .react-flow__node-waterIntake,
 .react-flow__node-waterUsingSystem,
 .react-flow__node-waterDischarge,
+.react-flow__node-waterTreatment,
+.react-flow__node-wasteWaterTreatment,
 .react-flow__node-group {
   padding: 10px;
   border-radius: 3px;
   min-width: 150px;
   font-size: 12px;
-  color: #222;
+  color: #fff;
   text-align: center;
   border-width: 1px;
   border-style: solid;
@@ -251,14 +253,22 @@ a {
   background-color: #00dfcc;
 }
 
-
+.react-flow__node-wasteWaterTreatment,
+.react-flow__node-group {
+  background-color: #e28000;
+}
 
 
 .color-underlay {
   background-color: #ececec;
 }
 
-.react-flow__node-waterIntake.selectable:hover, .react-flow__node-waterUsingSystem.selectable:hover, .react-flow__node-waterDischarge.selectable:hover, .react-flow__node-group.selectable:hover {
+.react-flow__node-waterIntake.selectable:hover, 
+.react-flow__node-waterUsingSystem.selectable:hover, 
+.react-flow__node-waterDischarge.selectable:hover, 
+.react-flow__node-waterTreatment.selectable:hover, 
+.react-flow__node-wasteWaterTreatment.selectable:hover, 
+.react-flow__node-group.selectable:hover {
       box-shadow: 0 1px 4px 1px rgba(0, 0, 0, 0.08);
 }
 
@@ -274,6 +284,12 @@ a {
 .react-flow__node-waterDischarge.selectable.selected,
 .react-flow__node-waterDischarge.selectable:focus,
 .react-flow__node-waterDischarge.selectable:focus-visible,
+.react-flow__node-waterTreatment.selectable.selected,
+.react-flow__node-waterTreatment.selectable:focus,
+.react-flow__node-waterTreatment.selectable:focus-visible,
+.react-flow__node-wasteWaterTreatment.selectable.selected,
+.react-flow__node-wasteWaterTreatment.selectable:focus,
+.react-flow__node-wasteWaterTreatment.selectable:focus-visible,
 .react-flow__node-group.selectable.selected,
 .react-flow__node-group.selectable:focus,
 .react-flow__node-group.selectable:focus-visible {

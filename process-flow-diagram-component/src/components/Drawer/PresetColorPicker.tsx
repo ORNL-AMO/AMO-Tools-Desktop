@@ -6,12 +6,12 @@ export const PresetColorPicker = ({ color, onChangeHandler, presetColors, label,
             <div className={'picker-wrapper'}>
                 <div className={'picker'}>
                     <label htmlFor={'color'}>{label}</label>
-                    <input type="color" id="colorPicker"
+                    <input type="color" id="color"
                         name="color"
                         className={'color-input'}
                         value={color}
                         onChange={(event) => {
-                            onChangeHandler(event.target.value)
+                            onChangeHandler(event.target.value);
                         }} 
                         style={{marginLeft: '16px'}}
                         />

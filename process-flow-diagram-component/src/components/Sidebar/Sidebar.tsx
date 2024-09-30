@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { memo } from 'react';
 import { ProcessFlowPart, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
 import { Box, Button, Divider, Grid, Paper, styled, Typography } from '@mui/material';
@@ -14,7 +14,7 @@ const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Sidebar = (props: SidebarProps) => {
+const Sidebar = memo((props: SidebarProps) => {
   const processFlowParts: ProcessFlowPart[] = [...processFlowDiagramParts];
 
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
@@ -33,7 +33,7 @@ const Sidebar = (props: SidebarProps) => {
                 <Grid item xs={2} sm={4} md={4} key={part.processComponentType}>
                   <WaterComponent className={`dndnode ${part.processComponentType}`}
                     onDragStart={(event) => onDragStart(event, part.processComponentType)}
-                    draggable={part.processComponentType != 'water-treatment'}>
+                    draggable={part.processComponentType != 'water-treatment' && part.processComponentType != 'waste-water-treatment'}>
                     {part.name}
                   </WaterComponent>
                 </Grid>
@@ -63,17 +63,19 @@ const Sidebar = (props: SidebarProps) => {
               })}
             </select>
             <div style={{ margin: '1rem 0' }}>
-              <label className="diagram-checkbox-label">
+              <label htmlFor="minimap-visible" className="diagram-checkbox-label">
                 <input
                   type="checkbox"
+                  id={"minimap-visible"}
                   className={'diagram-checkbox'}
                   onChange={(e) => props.minimapVisibleCallback(e.target.checked)}
                 />
                 <span>Show Minimap</span>
               </label>
-              <label className="diagram-checkbox-label">
+              <label htmlFor='controls-visible' className="diagram-checkbox-label">
                 <input
                   type="checkbox"
+                  id='controls-visible'
                   checked={props.controlsVisible}
                   className={'diagram-checkbox'}
                   onChange={(e) => props.controlsVisibleCallback(e.target.checked)}
@@ -97,8 +99,7 @@ const Sidebar = (props: SidebarProps) => {
       </Box>
     </aside>
   );
-};
-
+});
 export default Sidebar;
 
 export interface SidebarProps {

@@ -60,6 +60,7 @@ const Flow = (props: FlowProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
+    // * on reactFlowInstance initialize with assessment added nodes
     if (reactFlowInstance && props.height && staleNodes) {
       let updatedNodes = updateStaleNodes(reactFlowInstance, [...staleNodes], props.height);
       setStaleNodes(undefined);
@@ -68,10 +69,11 @@ const Flow = (props: FlowProps) => {
   }, [reactFlowInstance]);
 
   const { debouncedNodes, debouncedEdges } = useDiagramStateDebounce(nodes, edges);
+  // todo test could use useUserEventDebounce if copied/splices/map?
 
   useEffect(() => {
     if (!staleNodes) {
-      const dbSafeNodes = nodes.map((node: Node<ProcessFlowPart>) => {
+      const dbSafeNodes = debouncedNodes.map((node: Node<ProcessFlowPart>) => {
         // * IMPORTANT - removes handler functions before db save
         return {
           ...node,
@@ -85,7 +87,7 @@ const Flow = (props: FlowProps) => {
 
       props.saveFlowDiagramData({
         nodes: dbSafeNodes,
-        edges: edges,
+        edges: debouncedEdges,
       });
     }
   }, [debouncedNodes, debouncedEdges]);
@@ -96,14 +98,14 @@ const Flow = (props: FlowProps) => {
   }, []);
 
   const onDrop = useCallback((event) => setDroppedNode(event, reactFlowInstance, setNodes, setManageDataId, setIsDataDrawerOpen),
-    [reactFlowInstance],
+    [reactFlowInstance, setManageDataId, setIsDataDrawerOpen],
   );
 
   const onConnect: OnConnect = useCallback(
     (connectedParams: Connection | Edge) => {
       setCustomEdges(setEdges, connectedParams);
     },
-    [setEdges]
+    []
   );
 
   const onBeforeDelete: OnBeforeDelete = useCallback(async ({ nodes, edges }) => {
@@ -128,7 +130,7 @@ const Flow = (props: FlowProps) => {
       nodes: [],
       edges: [],
     });
-  }, []);
+  }, [setNodes, setEdges]);
 
   const updateEdgeType = useCallback((edgeType) => {
     changeExistingEdgesType(setEdges, edgeType);

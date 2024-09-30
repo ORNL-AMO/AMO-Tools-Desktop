@@ -14,6 +14,8 @@ export const nodeTypes: NodeTypes = {
   waterIntake: ProcessFlowComponentNode,
   waterUsingSystem: ProcessFlowComponentNode,
   waterDischarge: ProcessFlowComponentNode,
+  waterTreatment: ProcessFlowComponentNode,
+  wasteWaterTreatment: ProcessFlowComponentNode,
   // custom
   // splitterNode: SplitterNode,
   splitterNodeFour: SplitterNodeFour,
