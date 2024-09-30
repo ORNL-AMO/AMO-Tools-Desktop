@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { ProcessFlowPart, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
 import { Box, Button, Divider, Grid, Paper, styled, Typography } from '@mui/material';
@@ -14,7 +14,7 @@ const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Sidebar = (props: SidebarProps) => {
+const Sidebar = memo((props: SidebarProps) => {
   const processFlowParts: ProcessFlowPart[] = [...processFlowDiagramParts];
 
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
@@ -99,8 +99,7 @@ const Sidebar = (props: SidebarProps) => {
       </Box>
     </aside>
   );
-};
-
+});
 export default Sidebar;
 
 export interface SidebarProps {

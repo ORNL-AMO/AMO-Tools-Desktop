@@ -194,7 +194,7 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
         </Drawer>
     );
 
-}
+};
 
 
 export interface ManageDataContextDrawerProps {
