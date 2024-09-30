@@ -72,6 +72,7 @@ export class CoreComponent implements OnInit {
     private automaticBackupService: AutomaticBackupService,
     private applicationInstanceDbService: ApplicationInstanceDbService,
     private importBackupModalService: ImportBackupModalService,
+    private sqlDbApiService: SqlDbApiService,
     private inventoryDbService: InventoryDbService) {
   }
 
@@ -186,6 +187,7 @@ export class CoreComponent implements OnInit {
           this.calculatorDbService.setAll(initializedData.calculators);
           this.inventoryDbService.setAll(initializedData.inventoryItems);
           this.idbStarted = true;
+          this.sqlDbApiService.initCustomDbMaterials();
           this.changeDetectorRef.detectChanges();
           if (this.electronService.isElectron) {
             this.automaticBackupService.saveVersionedBackup();
