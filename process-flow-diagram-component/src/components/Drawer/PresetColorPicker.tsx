@@ -11,7 +11,7 @@ export const PresetColorPicker = ({ color, onChangeHandler, presetColors, label,
                         className={'color-input'}
                         value={color}
                         onChange={(event) => {
-                            onChangeHandler(event.target.value)
+                            onChangeHandler(event.target.value);
                         }} 
                         style={{marginLeft: '16px'}}
                         />

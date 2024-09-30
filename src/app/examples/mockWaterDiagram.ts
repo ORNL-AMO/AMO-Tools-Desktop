@@ -34,7 +34,8 @@ export const MockWaterdiagram: Diagram =
                         "modifiedDate": "2024-09-19T13:06:19.098Z"
                     },
                     "style": {
-                        "backgroundColor": "#75a1ff"
+                        "backgroundColor": "#75a1ff",
+                        "color": "#ffffff"
                     },
                     "measured": {
                         "width": 219,
@@ -61,7 +62,8 @@ export const MockWaterdiagram: Diagram =
                         "modifiedDate": "2024-09-19T13:06:20.542Z"
                     },
                     "style": {
-                        "backgroundColor": "#75a1ff"
+                        "backgroundColor": "#75a1ff",
+                        "color": "#ffffff"
                     },
                     "measured": {
                         "width": 219,
@@ -88,7 +90,8 @@ export const MockWaterdiagram: Diagram =
                         "modifiedDate": "2024-09-19T13:06:23.744Z"
                     },
                     "style": {
-                        "backgroundColor": "#00bbff"
+                        "backgroundColor": "#00bbff",
+                        "color": "#ffffff"
                     },
                     "measured": {
                         "width": 219,
@@ -115,7 +118,8 @@ export const MockWaterdiagram: Diagram =
                         "modifiedDate": "2024-09-19T13:06:25.303Z"
                     },
                     "style": {
-                        "backgroundColor": "#cd9323"
+                        "backgroundColor": "#cd9323",
+                        "color": "#ffffff"
                     },
                     "measured": {
                         "width": 219,
@@ -142,7 +146,8 @@ export const MockWaterdiagram: Diagram =
                         "modifiedDate": "2024-09-19T13:06:27.080Z"
                     },
                     "style": {
-                        "backgroundColor": "#cd9323"
+                        "backgroundColor": "#cd9323",
+                        "color": "#ffffff"
                     },
                     "measured": {
                         "width": 219,
@@ -169,7 +174,8 @@ export const MockWaterdiagram: Diagram =
                         "modifiedDate": "2024-09-19T13:06:28.668Z"
                     },
                     "style": {
-                        "backgroundColor": "#00bbff"
+                        "backgroundColor": "#00bbff",
+                        "color": "#ffffff"
                     },
                     "measured": {
                         "width": 219,
@@ -196,7 +202,8 @@ export const MockWaterdiagram: Diagram =
                         "modifiedDate": "2024-09-19T13:06:30.641Z"
                     },
                     "style": {
-                        "backgroundColor": "#00bbff"
+                        "backgroundColor": "#00bbff",
+                        "color": "#ffffff"
                     },
                     "measured": {
                         "width": 219,
@@ -224,7 +231,8 @@ export const MockWaterdiagram: Diagram =
                     },
                     "style": {
                         "backgroundColor": "#7a7a7a",
-                        "color": "#ebebeb"
+                        "color": "#ffffff"
+
                     },
                     "measured": {
                         "width": 219,
@@ -335,7 +343,8 @@ export const MockWaterdiagram: Diagram =
                         "modifiedDate": "2024-09-19T13:07:06.789Z"
                     },
                     "style": {
-                        "backgroundColor": "#cd9323"
+                        "backgroundColor": "#cd9323",
+                        "color": "#ffffff"
                     },
                     "measured": {
                         "width": 219,
@@ -602,7 +611,7 @@ export const MockWaterdiagram: Diagram =
                         "flowPercent": ".078"
                     },
                     "style": {
-                        "stroke": "#000000"
+                        "stroke": "#6c757d"
                     },
                     "id": "reactflow__edge-n_wgkadbp9xb-n_mkjkxrzz0a"
                 },

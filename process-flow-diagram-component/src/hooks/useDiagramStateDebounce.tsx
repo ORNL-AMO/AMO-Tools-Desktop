@@ -2,18 +2,17 @@ import { useEffect, useRef, useState } from "react";
 
 
 const useDiagramStateDebounce = (nodes, edges, delay = 100) => {
-    const timerRef = useRef<any>(null);
     const [debouncedNodes, setDebouncedNodes] = useState([]);
     const [debouncedEdges, setDebouncedEdges] = useState([]);
   
     useEffect(() => {
-      timerRef.current = setTimeout(() => {
+      const stateUpdateDelay = setTimeout(() => {
         setDebouncedNodes(nodes);
         setDebouncedEdges(edges);
       }, delay);
   
       return () => {
-        clearTimeout(timerRef.current);
+        clearTimeout(stateUpdateDelay);
       };
     }, [nodes, edges, delay]);
 
