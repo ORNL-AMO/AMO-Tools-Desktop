@@ -43,10 +43,10 @@ export class MotorCatalogService {
     return motorItem;
   }
 
-  estimateEfficiency(loadFactor: number, useNominalEfficiency: boolean): number {
+  estimateEfficiency(loadFactorPercent: number, useNominalEfficiency: boolean): number {
     let selectedMotorItem: MotorItem = this.getUpdatedSelectedMotorItem();
     let efficiencyClass: number = selectedMotorItem.nameplateData.efficiencyClass;
-    let efficiency: number = selectedMotorItem.nameplateData.nominalEfficiency;
+    let nominalEfficiencyPercent: number = selectedMotorItem.nameplateData.nominalEfficiency;
     if (useNominalEfficiency) {
       efficiencyClass = 3;
     }
@@ -55,12 +55,12 @@ export class MotorCatalogService {
     let lineFreq: number = selectedMotorItem.nameplateData.lineFrequency;
     let motorRPM: number = selectedMotorItem.nameplateData.fullLoadSpeed;
     let motorPower: number = selectedMotorItem.nameplateData.ratedMotorPower;
-    //load factor comes in as %, /100 to convert to decimal
-    return this.psatService.motorEfficiency(lineFreq, motorRPM, efficiencyClass, efficiency, motorPower, (loadFactor / 100), settings);
+    let estimatedEfficiencyPercent = this.psatService.motorEfficiency(lineFreq, motorRPM, efficiencyClass, nominalEfficiencyPercent, motorPower, loadFactorPercent, settings);
+    return estimatedEfficiencyPercent;
   }
 
   
-  estimateCurrent(loadFactor: number, motorEfficiency?: number) {
+  estimateCurrent(loadFactorPercent: number, motorEfficiency?: number) {
     let estimatedCurrent: number;
     let settings: Settings = this.motorInventoryService.settings.getValue();
     let selectedMotorItem = this.getUpdatedSelectedMotorItem();
@@ -77,7 +77,16 @@ export class MotorCatalogService {
       efficiency = motorEfficiency;
     }
     let fullLoadAmps: number = selectedMotorItem.nameplateData.fullLoadAmps;
-    estimatedCurrent = this.psatService.motorCurrent(motorPower, motorRpm, lineFrequency, efficiencyClass, (loadFactor / 100), ratedVoltage, fullLoadAmps, efficiency, settings);
+    estimatedCurrent = this.psatService.motorCurrent(
+      motorPower, 
+      motorRpm, 
+      lineFrequency, 
+      efficiencyClass, 
+      loadFactorPercent, 
+      ratedVoltage, 
+      fullLoadAmps, 
+      efficiency, 
+      settings);
     return estimatedCurrent;
   }
 }

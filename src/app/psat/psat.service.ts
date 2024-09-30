@@ -452,7 +452,12 @@ export class PsatService {
     return this.roundVal(motorEfficiency, 2);
   }
 
-  //motor efficiency (nema without hard coded load factor)
+   /**
+ * Getet Motor efficiency (nema without hard coded load factor)
+ *
+ * @param {number} efficiency - as percent
+ * @returns {number} motorEfficiency (as percent)
+ */
   motorEfficiency(
     lineFreq: number,
     motorRPM: number,
@@ -475,9 +480,9 @@ export class PsatService {
 
   motorPowerFactor(
     motorRatedPower: number,
-    loadFactor: number,
+    loadFactorPercent: number,
     motorCurrent: number,
-    motorEfficiency: number,
+    motorEfficiencyPercent: number,
     ratedVoltage: number,
     settings: Settings
   ): number {
@@ -485,7 +490,7 @@ export class PsatService {
       if (settings.unitsOfMeasure != 'Imperial') {
         motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
       }
-      let powerFactor: number = this.pumpsSuiteApiService.motorPowerFactor(motorRatedPower, (loadFactor / 100), motorCurrent, (motorEfficiency / 100), ratedVoltage);
+      let powerFactor: number = this.pumpsSuiteApiService.motorPowerFactor(motorRatedPower, loadFactorPercent, motorCurrent, motorEfficiencyPercent, ratedVoltage);
       return this.roundVal(powerFactor, 2);
     } else {
       return 0;
@@ -497,17 +502,17 @@ export class PsatService {
     motorRpm: number,
     lineFrequency: number,
     efficiencyClass: number,
-    loadFactor: number,
+    loadFactorPercent: number,
     ratedVoltage: number,
     fullLoadAmps: number,
-    specifiedEfficiency: number,
+    specifiedEfficiencyPercent: number,
     settings: Settings
   ): number {
     if (motorRatedPower && motorRpm && ratedVoltage && fullLoadAmps) {
       if (settings.unitsOfMeasure != 'Imperial') {
         motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
       }
-      let motorCurrent: number = this.pumpsSuiteApiService.motorCurrent(motorRatedPower, motorRpm, lineFrequency, efficiencyClass, specifiedEfficiency, loadFactor, ratedVoltage, fullLoadAmps)
+      let motorCurrent: number = this.pumpsSuiteApiService.motorCurrent(motorRatedPower, motorRpm, lineFrequency, efficiencyClass, specifiedEfficiencyPercent, loadFactorPercent, ratedVoltage, fullLoadAmps)
       return this.roundVal(motorCurrent, 2);
     } else {
       return 0;

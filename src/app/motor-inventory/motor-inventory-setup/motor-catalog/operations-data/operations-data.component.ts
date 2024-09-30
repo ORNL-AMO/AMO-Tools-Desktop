@@ -88,16 +88,17 @@ export class OperationsDataComponent implements OnInit {
 
 
   calculateEfficiency() {
-    let loadFactor: number = this.motorForm.controls.averageLoadFactor.value;
-    let efficiency: number = this.motorCatalogService.estimateEfficiency(loadFactor, true);
+    let loadFactorPercent: number = this.motorForm.controls.averageLoadFactor.value;
+    let efficiency: number = this.motorCatalogService.estimateEfficiency(loadFactorPercent, true);
     this.motorForm.controls.efficiencyAtAverageLoad.patchValue(efficiency);
     this.save();
   }
 
   calculateCurrent() {
     if (!this.disableEstimateCurrent) {
-      let loadFactor: number = this.motorForm.controls.averageLoadFactor.value;
-      this.motorCatalogService.estimateCurrent(loadFactor);
+      let loadFactorPercent: number = this.motorForm.controls.averageLoadFactor.value;
+      let estimatedCurrentAtLoad = this.motorCatalogService.estimateCurrent(loadFactorPercent);
+      this.motorForm.controls.currentAtLoad.patchValue(estimatedCurrentAtLoad);
     }
   }
 

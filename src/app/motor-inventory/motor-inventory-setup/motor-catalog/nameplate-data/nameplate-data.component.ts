@@ -76,7 +76,7 @@ export class NameplateDataComponent implements OnInit {
 
 
 
-  estimateEfficiency() {
+  estimateNominalEfficiency() {
     if (this.displayOptions.fullLoadSpeed) {
       let efficiency: number = this.motorCatalogService.estimateEfficiency(100, false);
       this.motorForm.controls.nominalEfficiency.patchValue(efficiency);
