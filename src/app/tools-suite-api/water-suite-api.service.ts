@@ -15,7 +15,9 @@ export class WaterSuiteApiService {
     hoursPerYear = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(hoursPerYear);
     inputData.tonnage = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.tonnage);
     inputData.loadFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.loadFactor);
+    inputData.loadFactor = inputData.loadFactor / 100;
     inputData.evaporationRateDegree = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.evaporationRateDegree);
+    inputData.evaporationRateDegree = inputData.evaporationRateDegree / 100;
     inputData.temperatureDrop = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.temperatureDrop);
     inputData.makeupConductivity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.makeupConductivity);
     inputData.blowdownConductivity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.blowdownConductivity);
@@ -51,6 +53,7 @@ export class WaterSuiteApiService {
     hoursPerYear = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(hoursPerYear);
     inputData.power = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.power);
     inputData.loadFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.loadFactor);
+    inputData.loadFactor = inputData.loadFactor / 100;
     inputData.steamPerPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.steamPerPower);
     inputData.feedwaterConductivity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.feedwaterConductivity);
     inputData.makeupConductivity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.makeupConductivity);

@@ -121,19 +121,14 @@ export class ConvertWaterAssessmentService {
   convertCoolingTower(coolingTower: CoolingTower, oldSettings: Settings, newSettings: Settings) {
     if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       coolingTower.tonnage = this.convertUnitsService.value(coolingTower.tonnage).from('Mgal').to('m3');
-      coolingTower.loadFactor = this.convertUnitsService.value(coolingTower.loadFactor).from('hp').to('kW');
-      coolingTower.evaporationRateDegree = this.convertUnitsService.value(coolingTower.evaporationRateDegree).from('F').to('C');
       coolingTower.temperatureDrop = this.convertUnitsService.value(coolingTower.temperatureDrop).from('F').to('C');
     } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       coolingTower.tonnage = this.convertUnitsService.value(coolingTower.tonnage).from('m3').to('Mgal');
-      coolingTower.loadFactor = this.convertUnitsService.value(coolingTower.loadFactor).from('kW').to('hp');
-      coolingTower.evaporationRateDegree = this.convertUnitsService.value(coolingTower.evaporationRateDegree).from('C').to('F');
       coolingTower.temperatureDrop = this.convertUnitsService.value(coolingTower.temperatureDrop).from('C').to('F');
     }
 
     coolingTower.tonnage = this.convertUnitsService.roundVal(coolingTower.tonnage, 2);
     coolingTower.loadFactor = this.convertUnitsService.roundVal(coolingTower.loadFactor, 2);
-    coolingTower.evaporationRateDegree = this.convertUnitsService.roundVal(coolingTower.evaporationRateDegree, 2);
     coolingTower.temperatureDrop = this.convertUnitsService.roundVal(coolingTower.temperatureDrop, 2);
     coolingTower.makeupConductivity = this.convertUnitsService.roundVal(coolingTower.makeupConductivity, 2);
     coolingTower.blowdownConductivity = this.convertUnitsService.roundVal(coolingTower.blowdownConductivity, 2);
@@ -264,6 +259,15 @@ export class ConvertWaterAssessmentService {
       results.heatEnergy = this.convertUnitsService.value(results.heatEnergy).from('MMBtu').to('GJ');
     } 
     return results;
+  }
+
+  convertAnnualFlowResult(flowValue: number, settings: Settings) {
+    let annualFlowResult = this.convertUnitsService.value(flowValue).from('gal').to('Mgal');
+    if (settings.unitsOfMeasure == 'Imperial') {
+      return annualFlowResult
+    } else if (settings.unitsOfMeasure == 'Metric') {
+      return this.convertUnitsService.value(annualFlowResult).from('Mgal').to('m3');
+    }
   }
 
 

@@ -27,16 +27,13 @@
         <div class="input-group">
             <input name="loadFactor" type="number" class="form-control" id="loadFactor"
                 formControlName="loadFactor" (input)="save()" (focus)="focusField('loadFactor')">
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">MW</span>
+                <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.loadFactor.invalid && !form.controls.loadFactor.pristine">
             <span *ngIf="form.controls.loadFactor.errors.required">Value Required</span>
             <span *ngIf="form.controls.loadFactor.errors.min">Value can't be less than
                 {{form.controls.loadFactor.errors.min.min}}
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">MW</span>
             </span>
         </span>
     </div>

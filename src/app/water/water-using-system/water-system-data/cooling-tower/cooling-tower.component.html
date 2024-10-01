@@ -23,7 +23,7 @@
         <div class="input-group">
             <input name="loadFactor" type="number" class="form-control" id="loadFactor"
                 formControlName="loadFactor" (input)="save()" (focus)="focusField('loadFactor')">
-                <span class="input-group-addon units">hp</span>
+                <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.loadFactor.invalid && !form.controls.loadFactor.pristine">
@@ -44,16 +44,14 @@
         <div class="input-group">
             <input name="evaporationRateDegree" type="number" class="form-control" id="evaporationRateDegree"
                 formControlName="evaporationRateDegree" (input)="save()" (focus)="focusField('evaporationRateDegree')">
-            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">&#8457;</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+                <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.evaporationRateDegree.invalid && !form.controls.evaporationRateDegree.pristine">
             <span *ngIf="form.controls.evaporationRateDegree.errors.required">Value Required</span>
             <span *ngIf="form.controls.evaporationRateDegree.errors.min">Value can't be less than
                 {{form.controls.evaporationRateDegree.errors.min.min}}
-                <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+                <span>%</span>
             </span>
         </span>
     </div>

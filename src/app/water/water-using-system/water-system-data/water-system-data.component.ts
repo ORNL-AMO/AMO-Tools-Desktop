@@ -97,7 +97,7 @@ export class WaterSystemDataComponent {
     let updateIndex: number = this.waterAssessment.waterUsingSystems.findIndex(system => system.diagramNodeId === updatedWaterUsingSystem.diagramNodeId);
     this.waterAssessment.waterUsingSystems[updateIndex] = updatedWaterUsingSystem;
     this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
-    this.waterSystemResults = this.waterAssessmentResultsService.getWaterSystemResults(updatedWaterUsingSystem, this.settings);
+    this.waterSystemResults = this.waterAssessmentResultsService.getWaterSystemResults(updatedWaterUsingSystem, this.selectedSystemType, this.settings);
   }
 
   saveWaterSystemData(selectedWaterUsingSystem: WaterUsingSystem) {
