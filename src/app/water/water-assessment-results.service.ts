@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CoolingTower, CoolingTowerResults, FlowMetric, ProcessUse, ProcessUseResults, WaterAssessmentResults, WaterSystemResults, WaterUsingSystem } from '../shared/models/water-assessment';
+import { CoolingTower, CoolingTowerResults, FlowMetric, ProcessUse, ProcessUseResults, WaterAssessmentResults, WaterSystemResults, WaterSystemTypeEnum, WaterUsingSystem } from '../shared/models/water-assessment';
 import { WaterSuiteApiService } from '../tools-suite-api/water-suite-api.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
@@ -16,7 +16,7 @@ export class WaterAssessmentResultsService {
   }
 
   // todo 6879 - needs conversion coming out of the suite
-  getWaterSystemResults(waterSystem: WaterUsingSystem, settings: Settings): WaterSystemResults {
+  getWaterSystemResults(waterSystem: WaterUsingSystem, selectedSystemType: number, settings: Settings): WaterSystemResults {
     let waterSystemResults: WaterSystemResults = {
       waterBalance: undefined,
       grossWaterUse: undefined,
@@ -28,26 +28,43 @@ export class WaterAssessmentResultsService {
       motorEnergyResults: []
     }
 
-    if (waterSystem.processUse) {
+    if (selectedSystemType === WaterSystemTypeEnum.PROCESS && waterSystem.processUse) {
       waterSystemResults.processUseResults = this.calculateProcessUseResults(waterSystem.processUse, waterSystem.hoursPerYear);
+      waterSystemResults.processUseResults.incomingWater = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.processUseResults.incomingWater, settings);
+      waterSystemResults.processUseResults.recirculatedWater = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.processUseResults.recirculatedWater, settings);
+      waterSystemResults.processUseResults.wasteDischargedAndRecycledOther = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.processUseResults.wasteDischargedAndRecycledOther, settings);
+      waterSystemResults.processUseResults.waterConsumed = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.processUseResults.waterConsumed, settings);
+      waterSystemResults.processUseResults.waterLoss = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.processUseResults.waterLoss, settings);
+      waterSystemResults.processUseResults.grossWaterUse = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.processUseResults.grossWaterUse, settings);
       waterSystemResults.grossWaterUse = waterSystemResults.processUseResults.grossWaterUse;
     }
-    if (waterSystem.coolingTower) {
+    if (selectedSystemType === WaterSystemTypeEnum.COOLINGTOWER && waterSystem.coolingTower) {
       waterSystemResults.coolingTowerResults = this.waterSuiteApiService.calculateCoolingTowerResults(waterSystem.coolingTower, waterSystem.hoursPerYear);
+      waterSystemResults.coolingTowerResults.blowdownLoss = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.coolingTowerResults.blowdownLoss, settings);
+      waterSystemResults.coolingTowerResults.evaporationLoss = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.coolingTowerResults.evaporationLoss, settings);
+      waterSystemResults.coolingTowerResults.makeupWater = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.coolingTowerResults.makeupWater, settings);
+      waterSystemResults.coolingTowerResults.grossWaterUse = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.coolingTowerResults.grossWaterUse, settings);
       waterSystemResults.grossWaterUse = waterSystemResults.coolingTowerResults.grossWaterUse;
     }
-    if (waterSystem.boilerWater) {
+    if (selectedSystemType === WaterSystemTypeEnum.BOILER && waterSystem.boilerWater) {
       waterSystemResults.boilerWaterResults = this.waterSuiteApiService.calculateBoilerWaterResults(waterSystem.boilerWater, waterSystem.hoursPerYear);
+      waterSystemResults.boilerWaterResults.blowdownLoss = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.boilerWaterResults.blowdownLoss, settings);
+      waterSystemResults.boilerWaterResults.condensateReturn = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.boilerWaterResults.condensateReturn, settings);
+      waterSystemResults.boilerWaterResults.makeupWater = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.boilerWaterResults.makeupWater, settings);
+      waterSystemResults.boilerWaterResults.steamLoss = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.boilerWaterResults.steamLoss, settings);
+      waterSystemResults.boilerWaterResults.grossWaterUse = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.boilerWaterResults.grossWaterUse, settings);
       waterSystemResults.grossWaterUse = waterSystemResults.boilerWaterResults.grossWaterUse;
     }
-    if (waterSystem.kitchenRestroom) {
+    if (selectedSystemType === WaterSystemTypeEnum.KITCHEN && waterSystem.kitchenRestroom) {
       waterSystemResults.kitchenRestroomResults = this.waterSuiteApiService.calculateKitchenRestroomResults(waterSystem.kitchenRestroom);
+      waterSystemResults.kitchenRestroomResults.grossWaterUse = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.kitchenRestroomResults.grossWaterUse, settings);
       waterSystemResults.grossWaterUse = waterSystemResults.kitchenRestroomResults.grossWaterUse;
     }
-    if (waterSystem.landscaping) {
+    if (selectedSystemType === WaterSystemTypeEnum.LANDSCAPING && waterSystem.landscaping) {
       waterSystem.landscaping = this.convertWaterAssessmentService.convertLandscapingSuiteInput(waterSystem.landscaping, settings);
       waterSystemResults.landscapingResults = this.waterSuiteApiService.calculateLandscapingResults(waterSystem.landscaping);
       waterSystemResults.landscapingResults = this.convertWaterAssessmentService.convertLandscapingResults(waterSystemResults.landscapingResults, settings);
+      waterSystemResults.landscapingResults.grossWaterUse = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.landscapingResults.grossWaterUse, settings);
       waterSystemResults.grossWaterUse = waterSystemResults.landscapingResults.grossWaterUse;
     }
 

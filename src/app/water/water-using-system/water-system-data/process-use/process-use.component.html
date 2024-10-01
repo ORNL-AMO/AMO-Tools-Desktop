@@ -105,7 +105,7 @@
         <label *ngIf="form.controls.waterLossMetric.value == FlowMetric.FRACTION_INCOMING" for="waterLossMetricValue">Fraction of Incoming Water</label>
         <div class="input-group calc-addon-group">
             <input name="waterLossMetricValue" type="number" class="form-control" id="waterLossMetricValue"
-            formControlName="waterConsumedMetricValue" (input)="save()" (focus)="focusField('waterLossMetricValue')">
+            formControlName="waterLossMetricValue" (input)="save()" (focus)="focusField('waterLossMetricValue')">
             <span class="input-group-addon units"*ngIf="form.controls.waterLossMetric.value != FlowMetric.FRACTION_INCOMING && form.controls.waterLossMetric.value != FlowMetric.FRACTION_GROSS" 
              [innerHTML]="inputUnitMap[form.controls.waterLossMetric.value]"></span>
         </div>
