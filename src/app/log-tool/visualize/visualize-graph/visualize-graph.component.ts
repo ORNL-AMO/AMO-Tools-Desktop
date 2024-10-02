@@ -107,9 +107,11 @@ export class VisualizeGraphComponent implements OnInit {
   renderGraph() {
     // * For banner events (add New Graph, select graph) need to grab updated value due to race condition --> selectedGraphObj event vs shouldRenderGraph event
     this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
+    let toggleRangeButtonName = 'Toggle Range Slider';
 
     this.setTimeSeriesRangeSlider(this.selectedGraphObj);
-    if (this.selectedGraphObj.isTimeSeries) {
+    let hasToggleRangeButton = this.selectedGraphObj.mode.modeBarButtonsToAdd.find(button => button.name === toggleRangeButtonName);
+    if (this.selectedGraphObj.isTimeSeries && !hasToggleRangeButton) {
       this.selectedGraphObj.mode.modeBarButtonsToAdd.push({
         name: 'Toggle Range Slider',
         icon: RangeSliderIcon,
@@ -118,7 +120,7 @@ export class VisualizeGraphComponent implements OnInit {
           this.setTimeSeriesRangeSlider(this.selectedGraphObj, isOn)
           Plotly.relayout(gd, this.selectedGraphObj.layout)
         }});
-    } else {
+    } else if (!this.selectedGraphObj.isTimeSeries) {
       this.selectedGraphObj.mode.modeBarButtonsToAdd = ['toggleSpikelines'];
     }
 
