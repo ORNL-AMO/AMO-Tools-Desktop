@@ -73,7 +73,7 @@
                 <div class="btn-group pt-2 pb-2 w-100">
                     <button type="button" [disabled]="selectedGraphObj.invalidState" class="btn btn-secondary w-50" (click)="setHistogramUsePercent(true)"
                         [ngClass]="{'active': selectedGraphObj.usePercentForBins == true}">% of Points</button>
-                    <button type="button" [disabled]="!selectedGraphObj.invalidState"  class="btn btn-secondary w-50" (click)="setHistogramUsePercent(false)"
+                    <button type="button" [disabled]="selectedGraphObj.invalidState"  class="btn btn-secondary w-50" (click)="setHistogramUsePercent(false)"
                         [ngClass]="{'active': selectedGraphObj.usePercentForBins == false}"># of Points</button>
                 </div>
                 <!--std deviation vs bins if histogram-->
