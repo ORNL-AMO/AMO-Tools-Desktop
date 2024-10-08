@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ChillerStagingInput } from '../../../shared/models/chillers';
 
 @Injectable()
@@ -23,6 +23,8 @@ export class ChillerStagingFormService {
       baselineLoadList: this.formBuilder.array(inputObj.baselineLoadList),
       modLoadList: this.formBuilder.array(inputObj.modLoadList),
       electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]]
+    }, {
+      validators: this.setTotalLoadEqualityValidator
     });
 
     form = this.setWaterTempValidators(form);
@@ -30,6 +32,7 @@ export class ChillerStagingFormService {
     let modLoadList: UntypedFormArray = this.getLoadFormArray(form.controls.modLoadList);
     this.setLoadValidators(baselineLoadList);
     this.setLoadValidators(modLoadList);
+    this.setTotalLoadEqualityValidator(form)
     return form;
   }
 
@@ -75,6 +78,35 @@ export class ChillerStagingFormService {
     return form;
   }
 
+  setTotalLoadEqualityValidator: ValidatorFn = (
+    form: AbstractControl,
+  ): ValidationErrors | null => {
+    let baselineLoadList: UntypedFormArray = this.getLoadFormArray(form.get('baselineLoadList'));
+    let modificationLoadList: UntypedFormArray = this.getLoadFormArray(form.get('modLoadList'));
+
+    if (baselineLoadList.controls.length > 0 && modificationLoadList && modificationLoadList.controls.length > 0) {
+      const baselineLoadTotal = baselineLoadList.controls.reduce((total, currentControl: AbstractControl) => total + currentControl.value, 0);
+      const modificationLoadTotal = modificationLoadList.controls.reduce((total, currentControl: AbstractControl) => total + currentControl.value, 0);
+      let difference = Math.abs(baselineLoadTotal - modificationLoadTotal);
+      try {
+        if (difference === 0) {
+          return null;
+        }
+      }
+      catch (e) {
+        console.log(e);
+        return {
+          totalLoadEquality: difference
+        };
+      }
+      return {
+        totalLoadEquality: difference 
+      };
+    }
+    else {
+      return null;
+    }
+  };
 
   getChillerStagingInput(form: UntypedFormGroup): ChillerStagingInput {
     let obj: ChillerStagingInput = {
