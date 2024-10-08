@@ -7,6 +7,7 @@
 </label>
 
 <div class="form-group my-2" *ngIf="selectedGraphObj.hasSecondYAxis">
+    <label for="yAxisLabel2">Y Axis 2 Label</label>
     <textarea rows="1" class="form-control w-100" type="text" name="yAxisLabel2"
         [(ngModel)]="selectedGraphObj.layout.yaxis2.title.text" (input)="saveUserInput()" (focus)="focusField()"
         (blur)="focusOut()"></textarea>

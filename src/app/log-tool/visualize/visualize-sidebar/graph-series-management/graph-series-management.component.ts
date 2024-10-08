@@ -39,6 +39,10 @@ export class GraphSeriesManagementComponent {
     this.visualizeService.focusedPanel.next('default');
   }
 
+  saveUserInput() {
+    this.visualizeSidebarService.saveExistingPlotChange(this.selectedGraphObj);
+  }
+
   addAxis() {
     this.selectedGraphObj.hasSecondYAxis = true;
     this.visualizeSidebarService.saveExistingPlotChange(this.selectedGraphObj);
