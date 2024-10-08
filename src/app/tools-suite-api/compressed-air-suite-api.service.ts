@@ -249,23 +249,23 @@ export class CompressedAirSuiteApiService {
   }
 
   compressorsCalcMultiStepUnloading(input: CompressorsCalcInput) {
-    let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let receiverVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let powerMax = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let dischargePsiFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let dischargePsiMax = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let modulatingPsi = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let loadFactorUnloaded = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let atmosphericPsi = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let compressorType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let lubricantType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let controlType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let powerAtNoLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let unloadPointCapacity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let blowdownTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let unloadSumpPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
-    let noLoadPowerFM = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
+    let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtFullLoad);
+    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtFullLoad);
+    let receiverVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.receiverVolume);
+    let powerMax = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerMax);
+    let dischargePsiFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.dischargePsiFullLoad);
+    let dischargePsiMax = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.dischargePsiMax);
+    let modulatingPsi = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.modulatingPsi);
+    let loadFactorUnloaded = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.loadFactorUnloaded);
+    let atmosphericPsi = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPsi);
+    let compressorType = input.compressorType;
+    let lubricantType = input.lubricantType;
+    let controlType = input.controlType;
+    let powerAtNoLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtNoLoad);
+    let unloadPointCapacity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.unloadPointCapacity);
+    let blowdownTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.blowdownTime);
+    let unloadSumpPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.unloadSumpPressure);
+    let noLoadPowerFM = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.noLoadPowerFM);
     return new Module.Compressors_LoadUnload(
       powerAtFullLoad, 
       capacityAtFullLoad, 
