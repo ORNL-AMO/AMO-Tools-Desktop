@@ -92,7 +92,7 @@ export class ControlDataComponent implements OnInit {
     }
 
     if (this.form.controls.controlType.value == 2 || this.form.controls.controlType.value == 3
-      || this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 5) {
+      || this.form.controls.controlType.value == 4) {
       this.form.controls.numberOfUnloadSteps.disable();
     } else {
       this.form.controls.numberOfUnloadSteps.enable();

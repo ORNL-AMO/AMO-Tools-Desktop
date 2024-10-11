@@ -1,5 +1,16 @@
 import { DBConfig } from "ngx-indexed-db";
 
+export const ApplicationInstanceDataStoreMeta = {
+  store: 'application',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'dataBackupFilePath', keypath: 'dataBackupFilePath', options: {unique: false } },
+    { name: 'useVersionedBackup', keypath: 'useVersionedBackup', options: {unique: false } },
+    { name: 'createdDate', keypath: 'createdDate', options: { unique: false } },
+    { name: 'modifiedDate', keypath: 'modifiedDate', options: { unique: false } },
+  ]
+}
+
 export const AssessmentStoreMeta = {
   store: 'assessments',
   storeConfig: { keyPath: 'id', autoIncrement: true },
@@ -338,11 +349,11 @@ export const SolidLiquidFlueGasMaterialStoreMeta = {
 }
 
 
-
 export const dbConfig: DBConfig = {
   name: 'CrudDB',
-  version: 7,
+  version: 8,
   objectStoresMeta: [
+    ApplicationInstanceDataStoreMeta,
     AssessmentStoreMeta,
     DirectoryStoreMeta,
     CalculatorStoreMeta,

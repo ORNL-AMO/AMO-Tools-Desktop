@@ -1,0 +1,60 @@
+<!-- <div bsModal #importBackupModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="importBackupModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header p-2">
+                    <span class="card-header-text">
+                        Import Backup File
+                    </span>
+                    <button class="close" aria-label="Close" (click)="close()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                    <p>Select backup file</p>
+                    <input type="file" #importFile id="importFile" (input)="setImportFile($event.target)" accept=".json">
+                    <p class="alert alert-danger" *ngIf="backupFileError">
+                        {{backupFileError}}
+                    </p>
+            
+                    <div class="d-flex flex-column pt-3"
+                        *ngIf="backupFile != undefined && backupFileError == undefined">
+                        <div class="input-group">
+                            <label class="w-50 ps-0 bold">
+                                Import Name
+                            </label>
+                            <div class="w-50">
+                                {{backupName}}
+                            </div>
+                        </div>
+                        <div class="input-group pt-2" *ngIf="selectedAccount">
+                            <label class="w-50 ps-0 bold">Overwrite current MEASUR data? </label>
+                            <select class="form-select" [(ngModel)]="overwriteData" name="overwriteData">
+                                <option [ngValue]="true">Overwrite Data</option>
+                                <option [ngValue]="false">Cancel</option>
+                            </select>
+                        </div>
+                        <p class="alert alert-warning mt-3" *ngIf="overwriteData">
+                            Existing MEASUR data will be overwritten. This includes saved assessments, inventories, treasure hunts, and calculators.
+                        </p>
+                    </div>
+                <div class="modal-footer justify-content-between px-3 p-2">
+                    <button class="btn btn-secondary" (click)="close()">Cancel</button>
+                    <button class="btn btn-primary" (click)="importBackupFile()"
+                        [disabled]="backupFile == undefined || backupFileError != undefined">Import Backup File</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+
+
+
+
+
+
+
+

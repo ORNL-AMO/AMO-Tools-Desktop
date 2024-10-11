@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "main": "main.js",
   "license": "MIT",
   "description": "MEASUR",
@@ -46,7 +46,7 @@
     "@ng-bootstrap/ng-bootstrap": "16.0.0",
     "@popperjs/core": "^2.11.2",
     "ajv": "8.12.0",
-    "amo-tools-suite": "1.0.6",
+    "amo-tools-suite": "latest",
     "billboard.js": "^3.7.2",
     "bootstrap": "4.3.1",
     "core-js": "3.21.1",
@@ -55,6 +55,7 @@
     "exceljs": "^4.3.0",
     "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
+    "fs-jetpack": "^5.1.0",
     "ngx-indexed-db": "^16.0.0",
     "pako": "^2.1.0",
     "pptxgenjs": "^3.10.0",
@@ -124,7 +125,7 @@
     }
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "17.3.6",
+    "@angular-devkit/build-angular": "17.3.9",
     "@angular-devkit/core": "17.0.7",
     "@angular-devkit/schematics": "17.0.7",
     "@angular/cli": "17.0.7",

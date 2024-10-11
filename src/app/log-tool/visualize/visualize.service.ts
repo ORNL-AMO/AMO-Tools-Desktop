@@ -234,7 +234,7 @@ export class VisualizeService {
         autorange: true,
         type: undefined,
         title: {
-          text: 'Y Axis 2 Label'
+          text: 'Right Y Axis Label'
         },
         side: 'right',
         overlaying: 'y',

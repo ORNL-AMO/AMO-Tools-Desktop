@@ -29,32 +29,11 @@
             Motor Operating Hours
         </label>
     </div>
-    <div class="checkbox" (mouseenter)="focusField('averageLoadFactor')">
-        <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="operationDataOptions.averageLoadFactor"
-                name="averageLoadFactor" id="averageLoadFactor">
-            Average Load Factor
-        </label>
-    </div>
     <div class="checkbox" (mouseenter)="focusField('utilizationFactor')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="operationDataOptions.utilizationFactor"
                 name="utilizationFactor" id="utilizationFactor">
             Utilization Factor
-        </label>
-    </div>
-    <div class="checkbox" (mouseenter)="focusField('efficiencyAtAverageLoad')">
-        <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="operationDataOptions.efficiencyAtAverageLoad" name="efficiencyAtAverageLoad"
-                id="efficiencyAtAverageLoad">
-            Efficiency at Average Load
-        </label>
-    </div>
-    <div class="checkbox" (mouseenter)="focusField('currentAtLoad')">
-        <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="operationDataOptions.currentAtLoad"
-                name="currentAtLoad" id="currentAtLoad">
-            Current at Load
         </label>
     </div>
     <div class="checkbox" (mouseenter)="focusField('powerFactorAtLoad')">

@@ -51,8 +51,8 @@
             <span *ngIf="form.controls.numberOfUnloadSteps.errors.required">Value Required</span>
             <span *ngIf="form.controls.numberOfUnloadSteps.errors.min">Value can't be less than
                 {{form.controls.numberOfUnloadSteps.errors.min.min}}</span>
-            <span *ngIf="form.controls.numberOfUnloadSteps.errors.max">Value can't be less than
-                {{form.controls.numberOfUnloadSteps.errors.min.min}} </span>
+            <span *ngIf="form.controls.numberOfUnloadSteps.errors.max">Value can't be greater than
+                {{form.controls.numberOfUnloadSteps.errors.max.max}} </span>
         </span>
     </div>
     <!-- automaticShutdown -->

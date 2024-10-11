@@ -75,14 +75,17 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
 
   async addMaterial() {
     if (this.canAdd) {
-      this.convertDecimals();
       this.canAdd = false;
       if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
       }
+
+      // * db insert converts user input percentage to fraction
       let suiteDbResult = this.sqlDbApiService.insertSolidLiquidFlueGasMaterial(this.newMaterial);
       if (suiteDbResult == true) {
         await firstValueFrom(this.solidLiquidMaterialDbService.addWithObservable(this.newMaterial))
+        let materials: SolidLiquidFlueGasMaterial[] = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
+        this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials.next(materials);
         this.closeModal.emit(this.newMaterial);
       }
     }
@@ -99,6 +102,8 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
       await firstValueFrom(this.solidLiquidMaterialDbService.updateWithObservable(this.newMaterial));
+      let materials: SolidLiquidFlueGasMaterial[] = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
+      this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials.next(materials);
       this.closeModal.emit(this.newMaterial);
     }
   }
@@ -108,6 +113,8 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
       let suiteDbResult = this.sqlDbApiService.deleteSolidLiquidFlueGasMaterial(this.sdbEditMaterialId);
       if (suiteDbResult == true) {
         await firstValueFrom(this.solidLiquidMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
+        let materials: SolidLiquidFlueGasMaterial[] = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
+        this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials.next(materials);
         this.closeModal.emit(this.newMaterial);
       }
     }

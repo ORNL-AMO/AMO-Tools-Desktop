@@ -34,64 +34,69 @@
             not be available.</li>
         </ul>
 
-      <label>Here are the details of what's new in version 1.5.2:</label>
+      <label>Here are the details of what's new in version 1.5.3:</label>
         <br>
         <label>Application</label>
         <ul>
-          <li>Added: Link to download to the Download Error Message Toast</li>
-          <li>Enhancement: Cursor now changes when hover over checkbox</li>
-          <li>Fixed: Issue causing error generation when the Reset Data button is used</li>
-          <li>Fixed: Issue generating error reports when backspacing or having NULL inputs</li>
-          <li>Fixed: Issue regarding the calculation of CO2 emissions for mixed fuels</li>
-          <li>Updated: Adjusted analytics to be more accurate</li>
+          <li>Added: Information regarding data storage to "Data Storage and Backup" Page</li>
+          <li>Added: Information regarding open-source licensing to About Page</li>
+          <li>Added: Information regarding citing MEASUR, our DOI, and our OSTI page to the About Page</li>
+          <li>Enhancement: Optional Auto-backup feature for installed MEASUR</li>
+          <li>Enhancement: Replaced "Download Backup Data" with "Data Storage and Backup"</li>
+          <li>Fixed: Issue causing custom materials to be returned as fractions instead of percents</li>
+          <li>Fixed: Issue preventing custom materials from saving</li>
+          <li>Fixed: Issue preventing the deletion of custom materials via the "Delete Material" button</li>
+          <li>Fixed: Auto Updater message showing "MEASUR MEASUR v__"</li>
         </ul>
 
         <label>Calculators</label>
         <ul>
-          <li>Enhancement: Stack Loss calculator defaults (Fuel Type is now Gas, Fuel is now Natural Gas)</li>
-          <li>Fixed: Bug relating to pipe and tank insulation calculators in metric conversion</li>
-          <li>Fixed: Issue causing data entered in the Receiver Tanks fields for the System Capacity calculator to be slightly higher in Results</li>
-          <li>Updated: Fixed several issues regarding the Steam Reduction Calculator and updated its algorithm to accommodate Fuel consumption better</li>
-          <li>Updated: Power Factor Calculator now uses monthly data to estimate the capacitance required to improve power factor and the cost savings</li>
+          <li>Added: Validation to Chiller Staging regarding chiller load</li>
+          <li>Fixed: Issue in Power Factor Correction where choosing "Both" for "PF Adjusted or Actual Demand" then switching to "Apparent Power" caused bugs</li>
         </ul>
 
         <label>Data Explorer</label>
         <ul>
-          <li>Enhancement: Graphs in Data Explorer can now have vertical and horizontal trace lines turned on in Plotly settings</li>
+          <li>Added: Automatic estimation of data interval and warning message relating to it</li>
+          <li>Added: Field name labels for various user inputs</li>
+          <li>Fixed: Bug relating to axis labels not updating</li>
+          <li>Fixed: Issue where the histogram option "# of points" was disabled</li>
         </ul>
 
         <label>Compressed Air</label>
         <ul>
-          <li>Enhancement: EEMs now have the "Fill Right" functionality where appropriate</li>
-          <li>Enhancement: The flow and power graphs now have a line to illustrate the peak</li>
-          <li>Fixed: Compressors now use numeric ordering for the base/trim system control type</li>
-          <li>Fixed: Issue regarding the display of Pressure Range for compressors with the VFD Control Type</li>
-          <li>Fixed: Issue with CO2 emissions having tonne label but reported in kg</li>
+          <li>Fixed: Bug relating to Multi-step Unloading</li>
+        </ul>
+
+        <label>Pumps</label>
+        <ul>
+         <li>Enhancement: Added help text to motor efficiency class and efficiency fields</li>
+        </ul>
+
+        <label>Fans</label>
+        <ul>
+         <li>Enhancement: Added help text to motor efficiency class and efficiency fields</li>
         </ul>
 
         <label>Process Heating</label>
         <ul>
-         <li>Fixed: Issue where emissions were calculated incorrectly if not using MMBtu or GJ for energy reporting</li>
+         <li>Fixed: Various bugs relating to custom materials</li>
         </ul>
 
         <label>Steam</label>
         <ul>
-          <li>Fixed: Bug causing flashed condensate into LP header to not work</li>
-        </ul>
-
-        <label>Treasure Hunt</label>
-        <ul>
-          <li>Fixed: Issue where energy units were not converted if not using MMBtu or GJ for energy reporting</li>
+          <li>Fixed: Issue where steam GHG emissions were reported in units different than label</li>
+          <li>Fixed: Various bugs relating to custom materials</li>
         </ul>
 
         <label>Inventories</label>
         <ul>
-          <li>Fixed: Error where Emissions were reported in kg but labeled as tonne</li>
+          <li>Enhancement: Added help text to motor efficiency class and efficiency fields</li>
         </ul>
         
         <label>Process Cooling</label>
         <ul>
-          <li>Fixed: Issue where water cost was not pulled in from TH settings and was not saving</li>
+          <li>Added: Validation to Chiller Staging regarding chiller load</li>
         </ul>
 
         <label>Known Issues</label>

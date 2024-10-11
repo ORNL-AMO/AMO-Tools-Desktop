@@ -229,6 +229,9 @@
   </div>
 </div>
 <div class="row">
+  <div class="alert-danger p-2 small" *ngIf="form.hasError('totalLoadEquality') && (form.touched || form.dirty)">
+        Sum of all baseline chiller loads must be equal to that of modification chiller loads.
+  </div>
   <div class="col-12 text-center">
     <a class="click-link small" (click)="addChiller()">Add Chiller</a>
   </div>
