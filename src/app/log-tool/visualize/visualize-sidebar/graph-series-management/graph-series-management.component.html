@@ -1,13 +1,13 @@
 <label class="group-label d-flex flex-row p-0 justify-content-between mt-3 mb-2">
     <span>Additional Data Series</span>
     <ng-container *ngIf="selectedGraphObj.selectedYAxisDataOptions.length != 1">
-    <a *ngIf="!selectedGraphObj.hasSecondYAxis" class="pt-1 click-link" (click)="addAxis()">Add Y Axis</a>
-    <a *ngIf="selectedGraphObj.hasSecondYAxis" class="pt-1 click-link" (click)="removeAxis()">Remove Y Axis</a>
+    <a *ngIf="!selectedGraphObj.hasSecondYAxis" class="pt-1 click-link" (click)="addAxis()">Add Right Y Axis</a>
+    <a *ngIf="selectedGraphObj.hasSecondYAxis" class="pt-1 click-link" (click)="removeAxis()">Remove Right Y Axis</a>
 </ng-container>
 </label>
 
 <div class="form-group my-2" *ngIf="selectedGraphObj.hasSecondYAxis">
-    <label for="yAxisLabel2">Y Axis 2 Label</label>
+    <label for="yAxisLabel2">Right Y Axis Label</label>
     <textarea rows="1" class="form-control w-100" type="text" name="yAxisLabel2"
         [(ngModel)]="selectedGraphObj.layout.yaxis2.title.text" (input)="saveUserInput()" (focus)="focusField()"
         (blur)="focusOut()"></textarea>
