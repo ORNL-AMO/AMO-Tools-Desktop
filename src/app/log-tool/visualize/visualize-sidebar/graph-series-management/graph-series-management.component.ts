@@ -2,6 +2,7 @@ import { Component, Input, SimpleChanges } from '@angular/core';
 import { VisualizeService } from '../../visualize.service';
 import { GraphObj, YAxisDataOption } from '../../../log-tool-models';
 import { VisualizeSidebarService } from '../visualize-sidebar.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-graph-series-management',
@@ -9,22 +10,26 @@ import { VisualizeSidebarService } from '../visualize-sidebar.service';
   styleUrls: ['./graph-series-management.component.css']
 })
 export class GraphSeriesManagementComponent {
-  @Input()
   selectedGraphObj: GraphObj;
-  @Input()
   selectedYAxisDataOptions: YAxisDataOption[];
+  selectedGraphObjSubscription: Subscription;
 
   constructor(private visualizeService: VisualizeService,
     private visualizeSidebarService: VisualizeSidebarService) { }
 
   ngOnInit() {
+    this.selectedGraphObjSubscription = this.visualizeService.selectedGraphObj.subscribe((selectedGraphObj: GraphObj) => {
+      if (selectedGraphObj) {
+        this.selectedGraphObj = selectedGraphObj;
+        this.selectedYAxisDataOptions = this.selectedGraphObj.selectedYAxisDataOptions;
+      }
+    });
+
     this.visualizeService.focusedPanel.next('other-series');
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.selectedGraphObj) {
-      this.selectedYAxisDataOptions = this.selectedGraphObj.selectedYAxisDataOptions;
-    }
+  ngOnDestroy() {
+    this.selectedGraphObjSubscription.unsubscribe();
   }
 
   addDataSeries() {
@@ -40,12 +45,24 @@ export class GraphSeriesManagementComponent {
   }
 
   saveUserInput() {
-    this.visualizeSidebarService.saveExistingPlotChange(this.selectedGraphObj);
+    this.visualizeSidebarService.saveUserInputChange(this.selectedGraphObj);
   }
 
   addAxis() {
     this.selectedGraphObj.hasSecondYAxis = true;
-    this.visualizeSidebarService.saveExistingPlotChange(this.selectedGraphObj);
+    if (this.selectedGraphObj.selectedYAxisDataOptions && this.selectedGraphObj.selectedYAxisDataOptions.length > 1) {
+      this.selectedGraphObj.selectedYAxisDataOptions = this.selectedGraphObj.selectedYAxisDataOptions.map((option, index) => {
+        if (index != 0) {
+          return {
+            ...option,
+            yaxis: 'y2'
+          }
+        } else {
+          return option;
+        }
+      });
+    }
+    this.visualizeSidebarService.setGraphYAxisData(this.selectedGraphObj, true);
   }
 
   removeAxis() {
