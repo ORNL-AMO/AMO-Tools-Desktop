@@ -10,7 +10,7 @@
                 <div class="form-group">
                     <label>Series Name</label>
                     <input class="form-control" type="text" name="{{'seriesName'+yAxisOptionIndex}}"
-                        [(ngModel)]="currentYAxisOption.seriesName" (input)="saveUserInput()"
+                        [(ngModel)]="currentYAxisOption.seriesName" (input)="saveSeriesNameChange()"
                         (focus)="focusField()" (blur)="focusOut()">
                 </div>
                 <div class="form-group"
