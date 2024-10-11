@@ -93,7 +93,7 @@ export class PumpsSuiteApiService {
     let motorRatedPower = psatInput.motor_rated_power;
     let motorRpm = psatInput.motor_rated_speed;
     let efficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(psatInput.efficiency_class);
-    let specifiedMotorEfficiency = psatInput.efficiency;
+    let specifiedMotorEfficiency = psatInput.efficiency / 100;
     let motorRatedVoltage = psatInput.motor_rated_voltage;
     let fullLoadAmps = psatInput.motor_rated_fla;
     // TODO New assessment, no margin. What should default margin be. Applied on backend?
@@ -170,9 +170,10 @@ export class PumpsSuiteApiService {
     return results;
   }
 
-  estimateFla(motorRatedPower: number, motorRPM: number, frequency: number, efficiencyClass: number, efficiency: number, motorVoltage: number): number {
+  estimateFla(motorRatedPower: number, motorRPM: number, frequency: number, efficiencyClass: number, efficiencyPercent: number, motorVoltage: number): number {
     let lineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(frequency);
     let motorEfficiencyEnum = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
+    let efficiency = efficiencyPercent / 100;
     let instance = new Module.EstimateFLA(motorRatedPower, motorRPM, lineFrequency, motorEfficiencyEnum, efficiency, motorVoltage);
     let estimatedFLA: number = instance.getEstimatedFLA();
     instance.delete();
@@ -217,9 +218,10 @@ export class PumpsSuiteApiService {
     let lineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
     let efficiencyClassEnum = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
     let instance = new Module.MotorEfficiency(lineFrequency, motorRPM, efficiencyClassEnum, motorRatedPower);
-
+    
+    let efficiency = efficiencyPercent / 100;
     // * if efficiency class 0,1,2 (Standard, EE, Prem), efficiency input is not used and result is returned in decimal
-    let motorEfficiency: number = instance.calculate(loadFactorPercent / 100, efficiencyPercent);
+    let motorEfficiency: number = instance.calculate(loadFactorPercent / 100, efficiency);
     motorEfficiency = motorEfficiency * 100;
     instance.delete();
     return motorEfficiency;
