@@ -53,7 +53,7 @@ jobs:
               --tsaurl "http://timestamp.sectigo.com"
               --certfile ./wincert.pem \
               $EXE_PATH &&
-            (OLD_HASH=$(grep -o -P -m 1 '(?<=sha512:\s).*' ../output/latest.yml) &
+            (OLD_HASH=$(ggrep -o -P -m 1 '(?<=sha512:\s).*' ../output/latest.yml) &
             NEW_HASH=$(node ~/gen_hash.js -f $EXE_PATH)) &&
             sed 's|'$OLD_HASH'|'$NEW_HASH'|g' ../output/latest.yml) &
           node ./node_modules/.bin/electron-builder --linux --x64 --publish never
