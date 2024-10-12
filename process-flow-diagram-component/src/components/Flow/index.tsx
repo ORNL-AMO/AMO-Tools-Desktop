@@ -13,6 +13,7 @@ import {
   useEdgesState,
   Edge,
   OnBeforeDelete,
+  MarkerType,
 } from '@xyflow/react';
  
 import '@xyflow/react/dist/style.css';
@@ -57,6 +58,7 @@ const Flow = (props: FlowProps) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(existingEdges);
   const [minimapVisible, setMinimapVisible] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(true);
+  const [directionalArrowsVisible, setDirectionalArrowsVisible] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
@@ -122,6 +124,24 @@ const Flow = (props: FlowProps) => {
     setControlsVisible(enabled);
   }, []);
 
+  const handleShowMarkerEndArrows = useCallback((showArrows: boolean) => {
+    setDirectionalArrowsVisible(showArrows);
+    setEdges((eds) => {
+      let updatedEdges = eds.map((e: Edge) => {
+        let updatedEdge = {
+          ...e,
+          markerEnd: showArrows? { 
+            type: MarkerType.ArrowClosed,
+            width: 25,
+            height: 25
+          } : ''
+        }
+        return updatedEdge;
+      });
+      return updatedEdges;
+    });
+  }, []);
+
   
   const resetDiagram = useCallback(() => {
     setNodes(nds => []);
@@ -178,6 +198,8 @@ const Flow = (props: FlowProps) => {
         </div>
         <Sidebar
             minimapVisibleCallback={updateMinimap}
+            handleShowMarkerEndArrows={handleShowMarkerEndArrows}
+            directionalArrowsVisible={directionalArrowsVisible}
             controlsVisible={controlsVisible}
             controlsVisibleCallback={updateControls}
             resetDiagramCallback={resetDiagram}

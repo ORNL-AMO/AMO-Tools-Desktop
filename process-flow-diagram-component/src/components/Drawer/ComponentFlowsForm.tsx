@@ -60,7 +60,7 @@ const ComponentFlowsForm = (props: ComponentFlowsFormProps) => {
     const handleFlowChange = (event, updateId: string) => {
         const updatedEdges = props.connectedEdges.map((edge: Edge<CustomEdgeData>) => {
             if (edge.id === updateId) {
-                edge.data.flowPercent = event.target.value;
+                edge.data.flowPercent = Number(event.target.value);
             }
             return edge;
         });

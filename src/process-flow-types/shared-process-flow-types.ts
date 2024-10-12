@@ -89,10 +89,6 @@ export interface ProcessFlowParentState {
     }
   };
 
-  export interface EdgeData {
-    color: string
-  }
-
   // =============================
 // todo break into utils
 
