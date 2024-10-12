@@ -13,6 +13,8 @@ import {
   useEdgesState,
   Edge,
   OnBeforeDelete,
+  MarkerType,
+  OnDelete,
 } from '@xyflow/react';
  
 import '@xyflow/react/dist/style.css';
@@ -57,6 +59,7 @@ const Flow = (props: FlowProps) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(existingEdges);
   const [minimapVisible, setMinimapVisible] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(true);
+  const [directionalArrowsVisible, setDirectionalArrowsVisible] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
@@ -108,18 +111,36 @@ const Flow = (props: FlowProps) => {
     []
   );
 
-  const onBeforeDelete: OnBeforeDelete = useCallback(async ({ nodes, edges }) => {
-    // todo global confirm
-    return { nodes, edges };
-  }, []);
+  // const onBeforeDelete: OnBeforeDelete = useCallback(async ({ nodes, edges }) => {
+  //   // todo global confirm
+  //   debugger;
+  //   return { nodes, edges };
+  // }, []);
   
-
   const updateMinimap = useCallback((enabled) => {
     setMinimapVisible(enabled);
   }, []);
 
   const updateControls = useCallback((enabled) => {
     setControlsVisible(enabled);
+  }, []);
+
+  const handleShowMarkerEndArrows = useCallback((showArrows: boolean) => {
+    setDirectionalArrowsVisible(showArrows);
+    setEdges((eds) => {
+      let updatedEdges = eds.map((e: Edge) => {
+        let updatedEdge = {
+          ...e,
+          markerEnd: showArrows? { 
+            type: MarkerType.ArrowClosed,
+            width: 25,
+            height: 25
+          } : ''
+        }
+        return updatedEdge;
+      });
+      return updatedEdges;
+    });
   }, []);
 
   
@@ -178,6 +199,8 @@ const Flow = (props: FlowProps) => {
         </div>
         <Sidebar
             minimapVisibleCallback={updateMinimap}
+            handleShowMarkerEndArrows={handleShowMarkerEndArrows}
+            directionalArrowsVisible={directionalArrowsVisible}
             controlsVisible={controlsVisible}
             controlsVisibleCallback={updateControls}
             resetDiagramCallback={resetDiagram}

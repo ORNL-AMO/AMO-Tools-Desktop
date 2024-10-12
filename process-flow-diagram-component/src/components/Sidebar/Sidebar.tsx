@@ -1,8 +1,10 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { ProcessFlowPart, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
 import { Box, Button, Divider, Grid, Paper, styled, Typography } from '@mui/material';
 import DownloadButton from './DownloadButton';
+import ContinuousSlider from '../Drawer/ContinuousSlider';
+import { Edge, useReactFlow } from '@xyflow/react';
 
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
@@ -16,10 +18,31 @@ const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
 
 const Sidebar = memo((props: SidebarProps) => {
   const processFlowParts: ProcessFlowPart[] = [...processFlowDiagramParts];
+  const { getEdges, setEdges } = useReactFlow();
+  const edges = getEdges();
+  const currentEdgeThickness: number = Number(edges.length > 0 && edges[0].style.strokeWidth);
+  const [edgeLineThickness, setEdgeLineThickness] = useState<number | number[]>(currentEdgeThickness);
 
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleEdgeThicknessChange = (event: Event, newValue: number) => {
+    setEdgeLineThickness(newValue);
+    setEdges((eds) => {
+      let updatedEdges = eds.map((e: Edge) => {
+        let updatedEdge = {
+          ...e,
+          style: {
+            ...e.style,
+            strokeWidth: newValue
+          }
+        }
+        return updatedEdge;
+      });
+      return updatedEdges;
+    });
   };
 
   return (
@@ -54,7 +77,8 @@ const Sidebar = memo((props: SidebarProps) => {
         <Divider></Divider>
         <Box sx={{marginTop: 1}}>
           <div className="sidebar-actions">
-            <label htmlFor="edgeType">Global Connecting Line Type</label>
+            <Box display={'flex'} flexDirection={'column'}  sx={{fontSize: '.75rem'}}>
+            <label htmlFor="edgeType">Set Line Type</label>
             <select className="form-control" id="edgeType" name="edgeType" onChange={(e) => props.edgeTypeChangeCallback(e.target.value)}>
               {edgeTypeOptions.map((option: SelectListOption) => {
                 return (
@@ -62,7 +86,24 @@ const Sidebar = memo((props: SidebarProps) => {
                 )
               })}
             </select>
+          </Box>
+
+            <Box display={'flex'} flexDirection={'column'} sx={{fontSize: '.75rem', marginTop: '1rem'}}>
+            <label htmlFor={'edgeThickness'} >Set Line Thickness</label>
+            <ContinuousSlider setSliderValue={handleEdgeThicknessChange} value={edgeLineThickness}/>
+          </Box>
+          
             <div style={{ margin: '1rem 0' }}>
+            <label htmlFor="directional-arrows" className="diagram-checkbox-label">
+                <input
+                  type="checkbox"
+                  id={"directional-arrows"}
+                  checked={props.directionalArrowsVisible}
+                  className={'diagram-checkbox'}
+                  onChange={(e) => props.handleShowMarkerEndArrows(e.target.checked)}
+                />
+                <span>Show Directional Arrows</span>
+              </label>
               <label htmlFor="minimap-visible" className="diagram-checkbox-label">
                 <input
                   type="checkbox"
@@ -104,7 +145,9 @@ export default Sidebar;
 
 export interface SidebarProps {
   minimapVisibleCallback: (enabled: boolean) => void;
+  handleShowMarkerEndArrows: (enabled: boolean) => void;
   controlsVisible: boolean;
+  directionalArrowsVisible: boolean;
   controlsVisibleCallback: (enabled: boolean) => void;
   edgeTypeChangeCallback: (edgeTypeOption: string) => void;
   resetDiagramCallback: () => void;
