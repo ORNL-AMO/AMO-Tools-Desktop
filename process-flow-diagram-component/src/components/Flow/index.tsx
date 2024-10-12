@@ -14,6 +14,7 @@ import {
   Edge,
   OnBeforeDelete,
   MarkerType,
+  OnDelete,
 } from '@xyflow/react';
  
 import '@xyflow/react/dist/style.css';
@@ -110,12 +111,12 @@ const Flow = (props: FlowProps) => {
     []
   );
 
-  const onBeforeDelete: OnBeforeDelete = useCallback(async ({ nodes, edges }) => {
-    // todo global confirm
-    return { nodes, edges };
-  }, []);
+  // const onBeforeDelete: OnBeforeDelete = useCallback(async ({ nodes, edges }) => {
+  //   // todo global confirm
+  //   debugger;
+  //   return { nodes, edges };
+  // }, []);
   
-
   const updateMinimap = useCallback((enabled) => {
     setMinimapVisible(enabled);
   }, []);
