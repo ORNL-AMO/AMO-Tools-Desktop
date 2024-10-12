@@ -79,9 +79,13 @@ export class CoreService {
     this.applicationDataService.applicationInstanceData.next(applicationInstanceData);
   }
 
-  async setExistingApplicationInstanceData() {
+  async setApplicationInstanceData() {
     let existingApplicationData: Array<ApplicationInstanceData> = await firstValueFrom(this.applicationDataService.getApplicationInstanceData());
-    this.applicationDataService.applicationInstanceData.next(existingApplicationData[0]);
+    if (existingApplicationData.length === 0) {
+      await this.setNewApplicationInstanceData();
+    } else {
+      this.applicationDataService.applicationInstanceData.next(existingApplicationData[0]);
+    }
   }
 
   async createDefaultDirectories() {
