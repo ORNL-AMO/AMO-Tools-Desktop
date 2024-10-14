@@ -51,7 +51,7 @@ jobs:
             java -jar ~/jsign.jar \
               --storetype "${{ secrets.WIN_STORE_TYPE }}" \
               --storepass "${{ secrets.WIN_STORE_SECRET }}" \
-              --tsaurl "http://timestamp.sectigo.com"
+              --tsaurl "http://timestamp.sectigo.com" \
               --certfile ./wincert.pem \
               $EXE_PATH &&
             (OLD_HASH=$(ggrep -o -P -m 1 '(?<=sha512:\s).*' ../output/latest.yml) &
