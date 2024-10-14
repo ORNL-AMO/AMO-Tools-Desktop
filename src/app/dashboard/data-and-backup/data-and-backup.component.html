@@ -32,7 +32,7 @@
             <div class="card-header bold">
                 Automatic Backup
             </div>
-            <div *ngIf="electronService.isElectron" class="card-body">
+            <div *ngIf="electronService.isElectron && applicationInstanceData" class="card-body">
                 <div class="d-flex w-100 alert feature-action">
                     <div class="d-flex flex-fill">
                         <label>

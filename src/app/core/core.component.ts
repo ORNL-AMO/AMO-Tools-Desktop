@@ -143,7 +143,9 @@ export class CoreComponent implements OnInit {
     if (this.electronService.isElectron) {
       this.electronUpdateAvailableSub.unsubscribe();
       this.releaseDataSub.unsubscribe();
-      this.applicationInstanceDataSubscription.unsubscribe();
+      if (this.applicationInstanceDataSubscription) {
+        this.applicationInstanceDataSubscription.unsubscribe();
+      }
     }
     this.assessmentUpdateAvailableSub.unsubscribe();
     this.openingTutorialSub.unsubscribe();
@@ -166,7 +168,7 @@ export class CoreComponent implements OnInit {
       }
       this.setAllDbData();
     } else {
-      await this.coreService.setExistingApplicationInstanceData();
+      await this.coreService.setApplicationInstanceData();
       this.setAllDbData();
     }
 
