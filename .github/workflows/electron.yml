@@ -40,12 +40,7 @@ jobs:
         run: npm run build-prod-desktop-ci
       - name: Package
         run: |
-          (node ./node_modules/.bin/electron-builder --mac --universal --publish never &&
-            xcrun notarytool submit --wait \
-              --apple-id "${{ secrets.APPLE_ID }}" \
-              --password "${{ secrets.APPLE_APP_SECRET }}" \
-              --team-id "${{ secrets.APPLE_TEAM_ID }}" \
-              $(find ../output -name "MEASUR-*.*.*.dmg")) &
+          node ./node_modules/.bin/electron-builder --mac --universal --publish never &
           (node ./node_modules/.bin/electron-builder --win --x64 --publish never &&
             EXE_PATH=$(find ../output -name "MEASUR-Setup-*.*.*.exe") &&
             java -jar ~/jsign.jar \
@@ -100,7 +95,10 @@ jobs:
         with:
           name: init-mac-output
       - name: Notarize
-        run: xcrun stapler staple $(find ./ -name "MEASUR-*.*.*.dmg")
+        run: |
+          xcrun notarytool submit --wait --apple-id "${{ secrets.APPLE_ID }}" --password "${{ secrets.APPLE_APP_SECRET }}" --team-id "${{ secrets.APPLE_TEAM_ID }}" $(find ./ -name "MEASUR-*.*.*.dmg") &&
+          sleep 60 &&
+          xcrun stapler staple $(find ./ -name "MEASUR-*.*.*.dmg")
       - name: Upload notarized artifact
         uses: actions/upload-artifact@v4
         with:
