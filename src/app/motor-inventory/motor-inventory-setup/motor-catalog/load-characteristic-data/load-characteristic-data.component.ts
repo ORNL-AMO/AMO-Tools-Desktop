@@ -146,12 +146,12 @@ export class LoadCharacteristicDataComponent implements OnInit {
   }
 
 
-  getPowerFactorInput(loadFactor: number, motorEfficiency: number) {
+  getPowerFactorInput(loadFactorPercent: number, motorEfficiency: number) {
     let settings = this.motorInventoryService.settings.getValue();
-    let motorCurrent: number = this.motorCatalogService.estimateCurrent(loadFactor, motorEfficiency);
+    let motorCurrent: number = this.motorCatalogService.estimateCurrent(loadFactorPercent, motorEfficiency);
     return {
       motorRatedPower: this.selectedMotorItem.nameplateData.ratedMotorPower,
-      loadFactor: loadFactor,
+      loadFactor: loadFactorPercent,
       motorEfficiency: motorEfficiency,
       motorCurrent: motorCurrent,
       ratedVoltage: this.selectedMotorItem.nameplateData.ratedVoltage,

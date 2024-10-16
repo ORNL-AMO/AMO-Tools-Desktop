@@ -145,6 +145,7 @@ export class CustomMaterialsComponent implements OnInit {
 
 
   deleteData() {
+    // todo update bs
     this.customMaterialService.deleteSelected(this.selectedMaterialData);
     this.importing = true;
     setTimeout(() => {

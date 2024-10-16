@@ -43,13 +43,6 @@
             Enclosure Type
         </label>
     </div>
-    <div class="checkbox" (mouseenter)="focusField('ratedVoltage')">
-        <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.ratedVoltage" name="ratedVoltage"
-                id="ratedVoltage">
-            Voltage Rating
-        </label>
-    </div>
     <div class="checkbox" (mouseenter)="focusField('serviceFactor')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.serviceFactor"
@@ -75,20 +68,6 @@
             <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.numberOfPhases"
                 name="numberOfPhases" id="numberOfPhases">
             Number of Phases
-        </label>
-    </div>
-    <div class="checkbox" (mouseenter)="focusField('fullLoadSpeed')">
-        <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.fullLoadSpeed"
-                name="fullLoadSpeed" id="fullLoadSpeed">
-            Full Load Speed
-        </label>
-    </div>
-    <div class="checkbox" (mouseenter)="focusField('fullLoadAmps')">
-        <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.fullLoadAmps"
-                name="fullLoadAmps" id="fullLoadAmps">
-            Full Load Amps
         </label>
     </div>
 </form>

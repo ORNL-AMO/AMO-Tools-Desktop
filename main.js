@@ -1,8 +1,9 @@
-const { app, BrowserWindow, ipcMain, crashReporter, Menu, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, crashReporter, Menu, shell, dialog } = require('electron');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
+const jetpack = require('fs-jetpack');
 
 
 function isDev() {
@@ -48,7 +49,6 @@ app.on('ready', function () {
   win.on('closed', function () {
     win = null;
   });
-
   //signal from core.component to check for update
   ipcMain.on('ready', (coreCompEvent, arg) => {
     if (!isDev()) {
@@ -122,6 +122,10 @@ app.on('ready', function () {
   });
 });
 
+app.on('window-all-closed', function () {
+  app.quit();
+});
+
 // Listen for message from core.component to either download updates or not
 ipcMain.once('update', (event, arg) => {
   log.info('update')
@@ -139,6 +143,21 @@ ipcMain.once('relaunch', () => {
 });
 
 
-app.on('window-all-closed', function () {
-  app.quit();
+ipcMain.on("saveFile", (event, arg) => {
+  delete arg.fileData.dataBackupFilePath;
+  jetpack.writeAsync(arg.fileName, arg.fileData);
 });
+
+ipcMain.on("openDialog", (event, arg) => {
+  let saveDialogOptions = {
+    filters: [{
+      name: "JSON Files",
+      extensions: ["json"]
+    }],
+    defaultPath: arg.fileName
+  }
+  dialog.showSaveDialog(win, saveDialogOptions).then(results => {
+    win.webContents.send('backup-file-path', results.filePath);
+  });
+});
+

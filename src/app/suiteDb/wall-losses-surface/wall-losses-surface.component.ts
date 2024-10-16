@@ -71,6 +71,8 @@ export class WallLossesSurfaceComponent implements OnInit {
       let suiteDbResult = this.sqlDbApiService.insertWallLossesSurface(this.newMaterial);
       if (suiteDbResult === true) {
         await firstValueFrom(this.wallLossesSurfaceDbService.addWithObservable(this.newMaterial));
+        let materials: WallLossesSurface[] = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
+        this.wallLossesSurfaceDbService.dbWallLossesSurfaceMaterials.next(materials);
         this.closeModal.emit(this.newMaterial);
 
       }
@@ -84,6 +86,8 @@ export class WallLossesSurfaceComponent implements OnInit {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
       await firstValueFrom(this.wallLossesSurfaceDbService.updateWithObservable(this.newMaterial));
+      let materials: WallLossesSurface[] = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
+      this.wallLossesSurfaceDbService.dbWallLossesSurfaceMaterials.next(materials);
       this.closeModal.emit(this.newMaterial);
     }
   }
@@ -93,6 +97,8 @@ export class WallLossesSurfaceComponent implements OnInit {
       let suiteDbResult = this.sqlDbApiService.deleteWallLossesSurface(this.sdbEditMaterialId);
       if (suiteDbResult === true) {
         await firstValueFrom(this.wallLossesSurfaceDbService.deleteByIdWithObservable(this.idbEditMaterialId));
+        let materials: WallLossesSurface[] = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
+        this.wallLossesSurfaceDbService.dbWallLossesSurfaceMaterials.next(materials);
         this.closeModal.emit(this.newMaterial);
       }
     }

@@ -19,6 +19,7 @@ import { FlueGasMaterialDbService } from './flue-gas-material-db.service';
 import { AtmosphereDbService } from './atmosphere-db.service';
 import { WeatherDataIdbService } from './weather-data-idb.service';
 import { DiagramIdbService } from './diagram-idb.service';
+import { ApplicationInstanceDbService } from './application-instance-db.service';
 
 
 
@@ -44,7 +45,8 @@ import { DiagramIdbService } from './diagram-idb.service';
     FlueGasMaterialDbService,
     AtmosphereDbService,
     WeatherDataIdbService,
-    DiagramIdbService
+    DiagramIdbService,
+    ApplicationInstanceDbService
   ]
 })
 export class IndexedDbModule { }

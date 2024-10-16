@@ -51,7 +51,7 @@ class="mb-2 d-flex" [ngClass]="{'justify-content-between': baselineForm.controls
         <label for="modificationMotorEfficiency" class="mod-value-label">Modification Motor Efficiency</label>
         <div class="input-group w-100 mod-max-width">
           <input name="modificationMotorEfficiency" type="number" step="any" id="modificationMotorEfficiency" class="form-control"
-          (focus)="focusField('motorEfficiency')" formControlName="specifiedEfficiency" (input)="calculate()" />
+          (focus)="focusField('specifiedEfficiency')" formControlName="specifiedEfficiency" (input)="calculate()" />
           <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.specifiedEfficiency.invalid && !modificationForm.controls.specifiedEfficiency.pristine">

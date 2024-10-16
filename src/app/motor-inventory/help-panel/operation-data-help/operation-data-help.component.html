@@ -110,16 +110,16 @@
                 <li>
                     Nominal Efficiency
                 </li>
-                <li [ngClass]="{'missing-option':!displayOptions.operationDataOptions.averageLoadFactor}">
+                <li >
                     Average Load Factor
                 </li>
-                <li [ngClass]="{'missing-option':!displayOptions.nameplateDataOptions.fullLoadSpeed}">
+                <li >
                     Full-Load Speed
                 </li>
                 <li>
                     Rated Motor Power
                 </li>
-                <li [ngClass]="{'missing-option':!displayOptions.nameplateDataOptions.lineFrequency}">
+                <li>
                     Line Frequency
                 </li>
             </ul>
@@ -161,13 +161,13 @@
                 <li>
                     Rated Motor Power
                 </li>
-                <li [ngClass]="{'missing-option':!displayOptions.nameplateDataOptions.ratedVoltage}">
+                <li >
                     Rated Voltage
                 </li>
-                <li [ngClass]="{'missing-option':!displayOptions.nameplateDataOptions.fullLoadSpeed}">
+                <li>
                     Full-Load Speed
                 </li>
-                <li [ngClass]="{'missing-option':!displayOptions.operationDataOptions.averageLoadFactor}">
+                <li >
                     Average Load-Factor
                 </li>
                 <li>
@@ -176,7 +176,7 @@
                 <li>
                     Estimated Nominal Efficiency
                 </li>
-                <li [ngClass]="{'missing-option':!displayOptions.nameplateDataOptions.fullLoadAmps}">
+                <li >
                     Full-Load Amps
                 </li>
             </ul>
@@ -215,19 +215,19 @@
             <u>"Estimate Power Factor"</u> will predict the power factor at the average load using standard electrical
             engineering equations. The equations use:
             <ul>
-                <li [ngClass]="{'missing-option':!displayOptions.operationDataOptions.averageLoadFactor}">
+                <li>
                     Average Load Factor
                 </li>
                 <li>
                     Rated Motor Power
                 </li>
-                <li [ngClass]="{'missing-option':!displayOptions.nameplateDataOptions.ratedVoltage}">
+                <li >
                     Rated Voltage
                 </li>
-                <li [ngClass]="{'missing-option':!displayOptions.operationDataOptions.efficiencyAtAverageLoad}">
+                <li >
                     Efficiency at Average Load
                 </li>
-                <li [ngClass]="{'missing-option':!displayOptions.operationDataOptions.currentAtLoad}">
+                <li>
                     Current at Load
                 </li>
             </ul>

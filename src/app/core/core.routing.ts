@@ -116,6 +116,7 @@ import { PumpInventoryComponent } from '../pump-inventory/pump-inventory.compone
 import { pumpInventoryRoutes } from '../pump-inventory/pump-inventory.routing';
 import { WaterProcessDiagramComponent } from '../water-process-diagram/water-process-diagram.component';
 import { WaterAssessmentComponent } from '../water/water-assessment.component';
+import { DataAndBackupComponent } from '../dashboard/data-and-backup/data-and-backup.component';
 
 export const coreRoutes: Routes = [
   {
@@ -142,6 +143,10 @@ export const coreRoutes: Routes = [
       {
         component: AboutPageComponent,
         path: 'about'
+      },
+      {
+        component: DataAndBackupComponent,
+        path: 'data-and-backup'
       },
       {
         component: DisclaimerComponent,

@@ -23,6 +23,7 @@ import { MockWaterAssessment, MockWaterAssessmentSettings } from '../examples/mo
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { MockWaterdiagram } from '../examples/mockWaterDiagram';
 import { Diagram } from '../shared/models/diagram';
+import { ApplicationInstanceDbService, ApplicationInstanceData } from '../indexedDb/application-instance-db.service';
 @Injectable()
 export class CoreService {
 
@@ -47,6 +48,7 @@ export class CoreService {
     private electronService: ElectronService,
     private diagramIdbService: DiagramIdbService,
     private securityAndPrivacyService: SecurityAndPrivacyService,
+    private applicationDataService: ApplicationInstanceDbService,
     private directoryDbService: DirectoryDbService) {
   }
 
@@ -71,6 +73,27 @@ export class CoreService {
       inventoryItems: this.inventoryDbService.getAllInventory(),
     };
     return forkJoin(initializedAppData);
+  }
+
+  async setNewApplicationInstanceData() {
+    let newInstanceData: ApplicationInstanceData = {
+      dataBackupFilePath: undefined,
+      createVersionedBackups: false,
+      isAutomaticBackupOn: false,
+      createdDate: new Date(),
+      modifiedDate: new Date(),
+    };
+    let applicationInstanceData = await firstValueFrom(this.applicationDataService.addWithObservable(newInstanceData));
+    this.applicationDataService.applicationInstanceData.next(applicationInstanceData);
+  }
+
+  async setApplicationInstanceData() {
+    let existingApplicationData: Array<ApplicationInstanceData> = await firstValueFrom(this.applicationDataService.getApplicationInstanceData());
+    if (existingApplicationData.length === 0) {
+      await this.setNewApplicationInstanceData();
+    } else {
+      this.applicationDataService.applicationInstanceData.next(existingApplicationData[0]);
+    }
   }
 
   async createDefaultDirectories() {

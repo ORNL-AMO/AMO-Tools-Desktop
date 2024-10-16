@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { MeasurBackupFile } from '../shared/backup-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,8 @@ export class ElectronService {
   releaseData: BehaviorSubject<ReleaseData>;
   updateError: BehaviorSubject<boolean>;
   updateDownloaded: BehaviorSubject<boolean>;
+  backupFilePath: BehaviorSubject<string>;
+  accountLatestBackupFile: BehaviorSubject<MeasurBackupFile>;
   isElectron: boolean;
   constructor() {
 
@@ -16,6 +19,8 @@ export class ElectronService {
     this.releaseData = new BehaviorSubject<ReleaseData>(undefined);
     this.updateError = new BehaviorSubject<boolean>(false);
     this.updateDownloaded = new BehaviorSubject<boolean>(false);
+    this.backupFilePath = new BehaviorSubject<string>(undefined);
+
     this.isElectron = window["electronAPI"]
     if (this.isElectron) {
       this.listen();
@@ -49,6 +54,13 @@ export class ElectronService {
       console.log(data)
       this.updateDownloaded.next(true);
     });
+
+    window["electronAPI"].on("backup-file-path", (filePath) => {
+      if (filePath) {
+        this.backupFilePath.next(filePath);
+      }
+    });
+
   }
 
   //Used to tell electron that app is ready
@@ -83,6 +95,39 @@ export class ElectronService {
     console.log('quit and install');
     window["electronAPI"].send("quit-and-install");
   }
+
+  saveToFileSystem(backupFile: any) {
+    if (!window["electronAPI"] || !backupFile) {
+      return;
+    }
+    let args: { fileName: string, fileData: any } = {
+      fileName: undefined,
+      fileData: backupFile
+    }
+    if (backupFile.dataBackupFilePath) {
+      args.fileName = backupFile.dataBackupFilePath;
+    } else {
+      args.fileName = backupFile.name + '.json';
+    }
+    window["electronAPI"].send("saveFile", args);
+  }
+
+  openDialog(backupFile: MeasurBackupFile) {
+    if (!window["electronAPI"]) {
+      return;
+    }
+    let args: { fileName: string, fileData: any } = {
+      fileName: undefined,
+      fileData: backupFile
+    }
+    if (backupFile.dataBackupFilePath) {
+      args.fileName = backupFile.dataBackupFilePath;
+    } else {
+      args.fileName = backupFile.filename + '.json';
+    }
+    window["electronAPI"].send("openDialog", args);
+  }
+
 
 }
 
