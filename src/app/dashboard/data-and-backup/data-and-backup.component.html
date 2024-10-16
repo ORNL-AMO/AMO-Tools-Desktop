@@ -1,0 +1,116 @@
+<div class="col-10  mx-auto">
+    <div class="content-container p-0 border-0">
+        <div class="card">
+            <div class="card-header bold">
+                Data Storage
+            </div>
+            <div class="card-body">
+                <div class="desc-text mb-2">
+                    <p *ngIf="electronService.isElectron">
+                        <b class="bold">MEASUR data is managed internally by the application and is not accessible to users through the operating system or local machine</b>. For greater control of application data, the MEASUR team recommends that users take advantage of the automatic backup feature (below). 
+                        <br><br>
+                        Users can still create manual backups or export data as needed. These features are available in the <a [routerLink]="['/directory-dashboard', 1]">MEASUR dashboard</a>, as well as in the header of assessments, inventories, and treasure hunts.
+                    </p>
+                    <p *ngIf="!electronService.isElectron">
+                        <b class="bold">MEASUR data is managed internally by the browser, is unique to each browser (Chrome, Firefox, Edge), and is only accessible through exported files and backup files. </b>
+                        For example, user data created while working in Chrome will not be reflected in Edge, nor in the desktop version of the application and vice-versa. For greater control of application data, the MEASUR team recommends that users take advantage of the automatic backup feature (below). 
+                        <br><br>
+                        Users can still create manual backups or export data as needed. These features are available in the <a [routerLink]="['/directory-dashboard', 1]">MEASUR dashboard</a>, as well as in the header of assessments, inventories, and treasure hunts.
+                    </p>
+                    <p>
+                        For more information on data storage and collection, please view the 
+                        <a [routerLink]="['/privacy']">privacy notice</a>
+                    </p>
+                    <hr>
+                </div>
+                <button class="btn-primary btn-sm small pull-right" (click)="createBackupFile()">
+                    Create Backup File
+                </button>
+            </div>
+
+
+            <div class="card-header bold">
+                Automatic Backup
+            </div>
+            <div *ngIf="electronService.isElectron && applicationInstanceData" class="card-body">
+                <div class="d-flex w-100 alert feature-action">
+                    <div class="d-flex flex-fill">
+                        <label>
+                            Automatically save my MEASUR data to a backup file
+                        </label>
+                    </div>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" (change)="saveAutomaticBackupSettings()"
+                            [(ngModel)]="applicationInstanceData.isAutomaticBackupOn" name="isAutomaticBackupOn"
+                            id="isAutomaticBackupOn">
+                        <label class="custom-control-label" for="isAutomaticBackupOn"></label>
+                    </div>
+                </div>
+
+                <div *ngIf="applicationInstanceData.isAutomaticBackupOn" class="d-flex flex-row desc-text" >
+                    <div class="w-50 px-3" [ngClass]="{'disabled': !applicationInstanceData.dataBackupFilePath}" >
+                            <div class="checkbox">
+                                <label for="versionedBackups">
+                                    <input type="checkbox" [(ngModel)]="applicationInstanceData.createVersionedBackups"
+                                    [disabled]="!applicationInstanceData.dataBackupFilePath"
+                                    name="createVersionedBackups"
+                                    id="createVersionedBackups" (input)="saveAutomaticBackupSettings()">
+                                    <span class="ml-2">Create versioned backups</span>
+                                </label>
+                            </div>
+                            <p class="small">
+                                Create a time-stamped backup file at every application startup
+                            </p>
+                    </div>
+                    <div class="d-flex flex-column w-50 px-3">
+
+                        <button *ngIf="!applicationInstanceData.dataBackupFilePath"
+                            class="btn-primary btn-sm select-folder" (click)="selectAutomaticBackupLocation()">
+                            Select Backup File Location
+                        </button>
+                        <p *ngIf="!applicationInstanceData.dataBackupFilePath" class="alert alert-info small p-2">
+                            Note: selected file-system locations <b class="bold">should not</b> be cloud-synced or <b class="bold">simultaneously accessed by other users</b> (ex. shared network files)
+                        </p>
+                        <p *ngIf="applicationInstanceData.dataBackupFilePath" class="mb-3">
+                            Backup files will be saved to this location:
+                            <br>
+                            <a class="click-link file-path" (click)="changeAutomaticBackupLocation()">{{applicationInstanceData.dataBackupFilePath}}</a>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            <div *ngIf="!electronService.isElectron" class="card-body">
+                <div class="d-flex w-100">
+                    <div class="alert alert-info w-100 text-center">
+                        This feature is available on MEASUR desktop only
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-header bold">
+                Restore From Backup
+            </div>
+            <div class="card-body">
+                <p class="desc-text">
+                    Restore MEASUR data from a backup file. This will overwrite <b>all</b> current MEASUR data,
+                    including assessments, inventories, calculators, and settings.
+                </p>
+                <div class="d-flex w-100 alert feature-action justify-content-between">
+                    <div>
+                        <input type="file" #importFileRef id="importFileRef" (input)="selectImportFile($event.target)"
+                        accept=".json">
+                        <p class="alert alert-danger" *ngIf="selectImportFileError">
+                            {{selectImportFileError}}
+                        </p>
+                    </div>
+                    <button [disabled]="!selectedImportFile"
+                    class="btn-primary btn-sm select-folder" (click)="importBackupFile()">
+                    Import Selected File
+                </button>
+                </div>
+            </div>
+
+        </div>
+    </div>

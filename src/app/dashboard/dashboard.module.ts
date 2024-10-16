@@ -26,6 +26,7 @@ import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/securit
 import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/create-assessment-modal.module';
 import { AppErrorModule } from '../shared/errors/app-error.module';
 import { CreateDiagramModalModule } from '../shared/create-diagram-modal/create-diagram-modal.module';
+import { DataAndBackupComponent } from './data-and-backup/data-and-backup.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { CreateDiagramModalModule } from '../shared/create-diagram-modal/create-
     MoveItemsComponent,
     CopyItemsComponent,
     DisclaimerComponent,
+    DataAndBackupComponent,
   ],
   imports: [
     CommonModule,

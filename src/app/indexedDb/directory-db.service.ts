@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { AssessmentDbService } from './assessment-db.service';
 import { CalculatorDbService } from './calculator-db.service';
 import { InventoryDbService } from './inventory-db.service';
-import { firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { DirectoryStoreMeta } from './dbConfig';
 import { Assessment } from '../shared/models/assessment';
@@ -16,11 +16,15 @@ export class DirectoryDbService {
 
   allDirectories: Array<Directory>;
   storeName: string = DirectoryStoreMeta.store;
+  dbDirectories: BehaviorSubject<Array<Directory>>;
+
   constructor(
     private dbService: NgxIndexedDBService,
     private assessmentDbService: AssessmentDbService, private calculatorDbService: CalculatorDbService,
     private diagramIdbService: DiagramIdbService,
     private inventoryDbService: InventoryDbService) {
+      this.dbDirectories = new BehaviorSubject<Array<Directory>>([]);
+
   }
 
   count(): Observable<number> {
@@ -33,6 +37,7 @@ export class DirectoryDbService {
     } else {
       this.allDirectories = await firstValueFrom(this.getAllDirectories());
     }
+    this.dbDirectories.next(this.allDirectories);
   }
 
   setIsMovedExample(item: Assessment | InventoryItem, form: FormGroup) {
@@ -90,8 +95,9 @@ export class DirectoryDbService {
     return this.dbService.delete(this.storeName, id);
   }
 
-  clearWallLossesSurface(): void {
-    this.dbService.clear(this.storeName);
+  bulkDeleteWithObservable(dirIds: Array<number>): Observable<any> {
+    // ngx-indexed-db returns Array<Array<T>>
+    return this.dbService.bulkDelete(this.storeName, dirIds);
   }
 
 }

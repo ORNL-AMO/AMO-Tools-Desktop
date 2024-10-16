@@ -22,29 +22,6 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
   //to emit a change, we need to define an EventEmitter<Type>() to be able
   //to call .emit()
 
- 
-  billedOptions: any = [
-    {
-      name: 'Real Power (kW)',
-      value: 0,
-    }, {
-      name: 'Apperent Power (kVA)',
-      value: 1,
-    }
-  ];
-
-  demandOptions: any = [
-    {
-      name: 'Power Factor',
-      value: 0,
-    }, {
-      name: 'Actual Demand',
-      value: 1,
-    }, {
-      name: 'Both',
-      value: 2,
-    }
-  ];
 
   monthList: Array<{ value: number, name: string }> = [
     { value: 1, name: 'January' },

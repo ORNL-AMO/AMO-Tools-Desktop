@@ -40,6 +40,7 @@ import { PumpInventoryModule } from '../pump-inventory/pump-inventory.module';
 import { EmailMeasurDataModule } from '../shared/email-measur-data/email-measur-data.module';
 import { WaterProcessDiagramModule } from '../water-process-diagram/water-process-diagram.module';
 import { WaterModule } from '../water/water.module';
+import { ImportBackupModalModule } from '../shared/import-backup-modal/import-backup-modal.module';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { WaterModule } from '../water/water.module';
     AnalyticsModule,
     EmailMeasurDataModule,
     WaterProcessDiagramModule,
-    WaterModule
+    WaterModule,
+    ImportBackupModalModule
   ],
   providers: [
     AssessmentService,

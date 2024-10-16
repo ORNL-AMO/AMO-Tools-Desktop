@@ -79,7 +79,9 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
       }
       let suiteDbResult = this.sqlDbApiService.insertLiquidLoadChargeMaterial(this.newMaterial);
       if (suiteDbResult == true) {
-        await firstValueFrom(this.liquidLoadMaterialDbService.addWithObservable(this.newMaterial))
+        await firstValueFrom(this.liquidLoadMaterialDbService.addWithObservable(this.newMaterial));
+        let materials: LiquidLoadChargeMaterial[] = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
+        this.liquidLoadMaterialDbService.dbLiquidLoadChargeMaterials.next(materials);
         this.closeModal.emit(this.newMaterial);
       }
     }
@@ -98,6 +100,8 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
       await firstValueFrom(this.liquidLoadMaterialDbService.updateWithObservable(this.newMaterial));
+      let materials: LiquidLoadChargeMaterial[] = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
+      this.liquidLoadMaterialDbService.dbLiquidLoadChargeMaterials.next(materials);
       this.closeModal.emit(this.newMaterial);
     }
   }
@@ -107,6 +111,8 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
       let suiteDbResult = this.sqlDbApiService.deleteLiquidLoadChargeMaterial(this.sdbEditMaterialId);
       if (suiteDbResult == true) {
         await firstValueFrom(this.liquidLoadMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
+        let materials: LiquidLoadChargeMaterial[] = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
+        this.liquidLoadMaterialDbService.dbLiquidLoadChargeMaterials.next(materials);
         this.closeModal.emit(this.newMaterial);
       }
     }

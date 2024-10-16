@@ -135,6 +135,17 @@ export class MapTimeDataComponent implements OnInit {
       return dataset;
     });
 
+    if (this.selectedDataSet.hasDateField) {
+      let secondsInterval = this.logToolDataService.getSecondsIntervalDifference(this.selectedDataSet);
+      if (secondsInterval != undefined) {
+        let selectedInterval = this.dataCollectionIntervalOptions.find(option => option.value === secondsInterval);
+        if (selectedInterval) {
+          this.selectedDataSet.dataCollectionInterval = selectedInterval.value;
+        }
+      }
+    }
+
+
     if (this.applyToAll) {
       this.explorerData.isStepMapTimeDataComplete = this.logToolDataService.checkStepMapDatesComplete(this.explorerData.datasets);
     }

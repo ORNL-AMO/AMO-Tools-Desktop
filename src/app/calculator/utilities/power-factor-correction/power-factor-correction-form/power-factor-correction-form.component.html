@@ -5,7 +5,9 @@
     <label for="billedForDemand">How are you billed for Demand</label>
     <select id="billedForDemand" name="billedForDemand" class="form-control" [(ngModel)]="data.billedForDemand"
       (focus)="focusField('billedForDemand')" (change)="setBilledForDemand()">
-      <option *ngFor="let option of billedOptions" [ngValue]="option.value">{{option.name}}</option>
+      <!-- <option *ngFor="let option of billedOptions" [ngValue]="option.value" [disabled]="true">{{option.name}}</option> -->
+      <option value="0">Real Power (kW)</option>
+      <option value="1" *ngIf="data.adjustedOrActual != 2">Apperent Power (kVA)</option>
     </select>
   </div>
 
@@ -25,7 +27,10 @@
     <label for="adjustedOrActual">PF Adjusted or Actual Demand</label>
     <select id="adjustedOrActual" name="adjustedOrActual" class="form-control" [(ngModel)]="data.adjustedOrActual"
       (focus)="focusField('adjustedOrActual')" (change)="setAdjustedOrActual()">
-      <option *ngFor="let option of demandOptions" [ngValue]="option.value">{{option.name}}</option>
+      <!-- <option *ngFor="let option of demandOptions" [ngValue]="option.value">{{option.name}}</option> -->
+      <option value="0">Power Factor</option>
+      <option value="1">Actual Demand</option>
+      <option *ngIf="data.billedForDemand != 1" value="2">Both</option>
     </select>
   </div>
 

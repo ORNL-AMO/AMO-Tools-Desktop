@@ -2,7 +2,7 @@
     <div *ngIf="explorerData.datasets" class="w-100 px-5 mt-3">
         <div class="text-left alert alert-info small my-2 mx-auto p-0">
             <div class="p-1">
-                <ul class="m-2">
+                <ul class="m-2 pl-3">
                     <li>Timestamps are required for Day Type Analysis and time series data visualizations.
                         Advance ahead if you won't be working with time data.
                     </li>
@@ -91,15 +91,24 @@
                 <hr>
             </div>
             <div *ngIf="!explorerData.isExample" class="form-group mt-1 mb-3">
+                <div class="text-left alert alert-info small my-2 mx-auto p-0">
+                    <div class="p-1">
+                        <ul class="m-2 pl-3">
+                            <li>MEASUR will try to detect your data collection interval. Please ensure the detected interval is correct.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
                 <div class="mx-2">
                     <label>Data Collection Interval</label>
                     <select class="form-control" name="dataCollectionInterval" 
-                    [disabled]="!selectedDataSet.hasDateField && !selectedDataSet.hasTimeField" 
+
+                    [disabled]="!selectedDataSet.hasDateField && !selectedDataSet.hasTimeField"
                     (change)="setDataCollectionInterval(option)" 
                     [(ngModel)]="selectedDataSet.dataCollectionInterval">
-                        <option  *ngFor="let option of dataCollectionIntervalOptions" [ngValue]="option.value">
-                            {{option.display}}</option>
-                        </select>
+                    <option  *ngFor="let option of dataCollectionIntervalOptions" [ngValue]="option.value">
+                        {{option.display}}</option>
+                    </select>
                 </div>
             </div>
         </div>

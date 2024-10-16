@@ -393,14 +393,18 @@ getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean
   }
 
   checkIntervalSeconds(dataset: ExplorerDataSet) {
-    let firstRowDate = new Date(dataset.csvImportData.data[0][dataset.dateField.fieldName]);
-    let secondRowDate = new Date(dataset.csvImportData.data[1][dataset.dateField.fieldName]);
-    let intervalDifference: number = (secondRowDate.getTime() - firstRowDate.getTime()) / 1000;
+    let intervalDifference = this.getSecondsIntervalDifference(dataset);
     let intervalIncrement: number = dataset.dataCollectionInterval;
     if (intervalIncrement !== undefined && intervalDifference <= 0) {
       dataset.csvImportData.data = this.addLostSecondsBack(dataset, intervalIncrement);
     }
     return dataset;
+  }
+
+  getSecondsIntervalDifference(dataSet: ExplorerDataSet): number {
+    let firstRowDate = new Date(dataSet.csvImportData.data[0][dataSet.dateField.fieldName]);
+    let secondRowDate = new Date(dataSet.csvImportData.data[1][dataSet.dateField.fieldName]);
+    return (secondRowDate.getTime() - firstRowDate.getTime()) / 1000;
   }
 
   addLostSecondsBack(csvData: IndividualDataFromCsv, intervalIncrement: number) {
