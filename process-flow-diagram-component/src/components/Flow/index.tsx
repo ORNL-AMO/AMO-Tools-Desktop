@@ -53,8 +53,6 @@ const Flow = (props: FlowProps) => {
 
     
     existingEdges = props.processDiagram.flowDiagramData.edges;
-    console.log('existingNodes', existingNodes);
-    console.log('existingEdges', existingEdges);
   }
 
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
